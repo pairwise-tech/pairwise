@@ -1,13 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
-const App: React.FC = () => {
+class App extends React.Component {
+  iFrame: any;
+
+  componentDidMount() {
+    const js = `console.log([1,2,3]);`;
+    const doc = `
+      <html>
+        <head><style></style></head>
+        <body>
+          <div>
+          <h1>Hi yay</h1>
+          </div>
+          <script>${js}</script>
+        </body>
+      </html>
+    `;
+
+    this.iFrame.srcdoc = doc;
+  }
+
+  render() {
   return (
-    <div className="App">
-      <iframe width={500} height={500} src="https://www.tutorialrepublic.com/html-tutorial/html-iframes.php"></iframe>
-    </div>
-  );
+      <div className="App">
+        <iframe width={500} height={500} ref={this.setRef} title="code-preview" />
+      </div>
+    );
+  }
+
+  setRef = (r: any) => {
+    this.iFrame = r;
+  }
 }
 
 export default App;
