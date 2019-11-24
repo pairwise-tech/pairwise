@@ -20,6 +20,13 @@ import * as Babel from "@babel/standalone";
  * to be fetched to run the code.
  *
  * - TODO: Monaco editor needs to support JSX syntax...!!!???
+ *
+ * - TODO: Enable some way to run a suite of tests against the user provided
+ * code and render the test results.
+ *
+ * - TODO: Add a content area to display the content for a given question.
+ *
+ * - TODO: Console ideally will allow the user to type in it...
  * ============================================================================
  */
 
@@ -34,11 +41,11 @@ interface IState {
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
-const ORANGE = "rgb(253, 72, 45)";
-const DARK_MILD = "rgb(44, 40, 37)";
+const BLUE = "#2ee3ff";
 const DARK_HEADER = "rgb(29, 26, 26)";
-const DARK_CONSOLE = "rgb(36, 36, 36)";
 const DARK_EDITOR = "rgb(35, 35, 35)";
+const DARK_CONSOLE = "rgb(36, 36, 36)";
+const DARK_DRAGGABLE = "rgb(44, 40, 37)";
 
 /** ===========================================================================
  * Component
@@ -55,7 +62,7 @@ class App extends React.Component<{}, IState> {
 
     this.state = {
       logs: DEFAULT_LOGS,
-      code: DEFAULT_CODE,
+      code: getStarterCode(),
       updatedQueued: false,
     };
   }
@@ -70,6 +77,8 @@ class App extends React.Component<{}, IState> {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
+
+    window.removeEventListener("message", this.receiveMessage);
   }
 
   handleEditorDidMount = (_: any, editor: any) => {
@@ -169,7 +178,9 @@ class App extends React.Component<{}, IState> {
         try {
           const HTML_DOCUMENT = getHTML(this.transformCode());
           this.iFrame.srcdoc = HTML_DOCUMENT;
-          this.setState({ updatedQueued: false });
+          this.setState({ updatedQueued: false }, () =>
+            saveCode(this.state.code),
+          );
         } catch (err) {
           this.setState({ updatedQueued: false });
         }
@@ -221,10 +232,10 @@ const Header = styled.div`
 `;
 
 const Title = styled.p`
-  color: ${ORANGE};
+  color: ${BLUE};
   margin: 0;
   padding: 0;
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const WorkspaceContainer = styled.div`
@@ -247,7 +258,7 @@ const consoleRowStyles = {
 
 const separatorProps = {
   style: {
-    backgroundColor: DARK_MILD,
+    backgroundColor: DARK_DRAGGABLE,
   },
 };
 
@@ -255,6 +266,28 @@ const separatorProps = {
  * Code Utils
  * ============================================================================
  */
+
+const CODE_KEY = "LOCAL_STORAGE_CODE_KEY";
+
+const getStarterCode = () => {
+  try {
+    const storedCode = localStorage.getItem(CODE_KEY);
+    if (storedCode) {
+      const code = JSON.parse(storedCode);
+      if (code) {
+        return code;
+      }
+    }
+  } catch (err) {
+    // noop
+  }
+
+  return DEFAULT_CODE;
+};
+
+const saveCode = (code: string) => {
+  localStorage.setItem(CODE_KEY, JSON.stringify(code));
+};
 
 const DEFAULT_CODE = `
   // import React from "react";
