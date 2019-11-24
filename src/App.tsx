@@ -40,6 +40,7 @@ interface IState {
 }
 
 const BLUE = "#2ee3ff";
+const LIGHT_TEXT = "rgb(155, 155, 155)";
 const DARK_HEADER = "rgb(29, 26, 26)";
 const DARK_EDITOR = "rgb(35, 35, 35)";
 const DARK_CONSOLE = "rgb(36, 36, 36)";
@@ -96,20 +97,42 @@ class App extends React.Component<{}, IState> {
         <WorkspaceContainer>
           <ColsWrapper separatorProps={separatorProps}>
             <Col
-              style={{ background: DARK_EDITOR }}
-              initialHeight={window.innerHeight - 60}
               initialWidth={window.innerWidth * 0.65}
+              initialHeight={window.innerHeight - 60}
             >
-              <div style={{ height: "100%" }}>
-                <ControlledEditor
-                  theme="dark"
-                  height="100%"
-                  language="typescript"
-                  value={this.state.code}
-                  onChange={this.handleEditorTextChange}
-                  editorDidMount={this.handleEditorDidMount}
-                />
-              </div>
+              <RowsWrapper separatorProps={separatorProps}>
+                <Row
+                  style={{ background: DARK_CONSOLE }}
+                  initialHeight={window.innerHeight * 0.32}
+                >
+                  <ContentContainer>
+                    <ContentText>Challenge Content</ContentText>
+                  </ContentContainer>
+                </Row>
+                <Row
+                  style={{ background: DARK_EDITOR }}
+                  initialHeight={window.innerHeight * 0.6 - 60}
+                >
+                  <div style={{ height: "100%" }}>
+                    <ControlledEditor
+                      theme="dark"
+                      height="100%"
+                      language="typescript"
+                      value={this.state.code}
+                      onChange={this.handleEditorTextChange}
+                      editorDidMount={this.handleEditorDidMount}
+                    />
+                  </div>
+                </Row>
+                <Row
+                  style={{ background: DARK_CONSOLE }}
+                  initialHeight={window.innerHeight * 0.08}
+                >
+                  <ContentContainer>
+                    <ContentText>Challenge Tests</ContentText>
+                  </ContentContainer>
+                </Row>
+              </RowsWrapper>
             </Col>
             <Col>
               <RowsWrapper separatorProps={separatorProps}>
@@ -292,6 +315,17 @@ const separatorProps = {
     backgroundColor: DARK_DRAGGABLE,
   },
 };
+
+const ContentContainer = styled.div`
+  padding: 12px;
+`;
+
+const ContentText = styled.p`
+  margin: 0;
+  color: ${LIGHT_TEXT};
+  font-size: 13px;
+  font-weight: 100px;
+`;
 
 /** ===========================================================================
  * Code Utils
