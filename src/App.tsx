@@ -26,15 +26,37 @@ const DEFAULT_CODE = `
 
   class App extends React.Component {
     render(): JSX.Element {
-      const text: string = "Hi yay!!!";
+      const text: string = "Hello from React!!!";
       return (
-        <div>
+        <div style={{
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          padding: 15,
+          position: "fixed",
+          background: "rgb(250, 135, 125)",
+        }}>
           <h1>{text}</h1>
         </div>
       );
     }
   }
+
   ReactDOM.render(<App />, document.getElementById('root'));
+`;
+
+const getHTML = (js: string) => `
+<html>
+  <head>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  </head>
+  <body style={{ margin: 0, padding: 0 }}>
+    <div id="root" />
+    <script>${js}</script>
+  </body>
+</html>
 `;
 
 /** ===========================================================================
@@ -43,9 +65,9 @@ const DEFAULT_CODE = `
  */
 
 class App extends React.Component<{}, IState> {
-  iFrame: Nullable<HTMLIFrameElement> = null;
+  timeout: any = null;
   editorRef: any = null;
-  timeout: any = null; /* Blah, remove later when dependencies are cached */
+  iFrame: Nullable<HTMLIFrameElement> = null;
 
   constructor(props: {}) {
     super(props);
@@ -55,10 +77,6 @@ class App extends React.Component<{}, IState> {
       updatedQueued: false,
     };
   }
-
-  handleEditorDidMount = (_: any, editor: any) => {
-    this.editorRef = editor;
-  };
 
   componentDidMount() {
     this.iFrameRender();
@@ -70,6 +88,10 @@ class App extends React.Component<{}, IState> {
     }
   }
 
+  handleEditorDidMount = (_: any, editor: any) => {
+    this.editorRef = editor;
+  };
+
   iFrameRender = () => {
     /**
      * TODO: Script files should be determined dynamically from the code string
@@ -77,24 +99,11 @@ class App extends React.Component<{}, IState> {
      * iframe should only fetch these dependencies once and not on every
      * render like it does not.
      */
-    const HTML_DOCUMENT = `
-      <html>
-        <head>
-          <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-          <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-        </head>
-        <body>
-          <div id="root" />
-          <script id="code">${this.transformCode()}</script>
-        </body>
-      </html>
-    `;
-
     if (this.iFrame) {
+      const HTML_DOCUMENT = getHTML(this.transformCode());
       this.iFrame.srcdoc = HTML_DOCUMENT;
+      this.setState({ updatedQueued: false });
     }
-
-    this.setState({ updatedQueued: false });
   };
 
   transformCode = () => {
@@ -108,6 +117,9 @@ class App extends React.Component<{}, IState> {
     return output;
   };
 
+  /**
+   * TODO: Editor must support JSX syntax!!!???
+   */
   render() {
     return (
       <Page>
@@ -126,12 +138,16 @@ class App extends React.Component<{}, IState> {
     );
   }
 
-  handleChange = (e: any, value: string | undefined) => {
+  handleChange = (_: any, value: string | undefined) => {
     this.onChange(value || this.state.code);
   };
 
   onChange = async (value: string) => {
     const { updatedQueued } = this.state;
+
+    /**
+     * TODO: Remove these after dependencies are cached.
+     */
     this.setState({ code: value, updatedQueued: true }, () => {
       if (!updatedQueued) {
         this.timeout = setTimeout(this.iFrameRender, 2000);
