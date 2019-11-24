@@ -326,18 +326,18 @@ import ReactDOM from "react-dom";
 
 class App extends React.Component {
   render(): JSX.Element {
-    const text: string = "Hello, React!";
+    const welcome: string = "Hello, React!";
     console.log("Hello from the iframe!");
     return (
       <div>
-        <h1>{text}</h1>
+        <h1>{welcome}</h1>
       </div>
     );
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
-`;
+// Do not edit code below this line
+ReactDOM.render(<App />, document.getElementById('root'));`;
 
 const getHTML = (js: string) => `
 <html>
