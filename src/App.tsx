@@ -40,11 +40,12 @@ interface IState {
 }
 
 const BLUE = "#2ee3ff";
-const LIGHT_TEXT = "rgb(155, 155, 155)";
-const DARK_HEADER = "rgb(29, 26, 26)";
+const TITLE_TEXT = "rgb(200, 200, 200)";
+const CONTENT_TEXT = "rgb(155, 155, 155)";
+const DARK_HEADER = "#010203";
 const DARK_EDITOR = "rgb(35, 35, 35)";
 const DARK_CONSOLE = "rgb(36, 36, 36)";
-const DARK_DRAGGABLE = "rgb(44, 40, 37)";
+const DARK_DRAGGABLE = "#161721";
 
 /** ===========================================================================
  * Component
@@ -106,7 +107,11 @@ class App extends React.Component<{}, IState> {
                   initialHeight={window.innerHeight * 0.32}
                 >
                   <ContentContainer>
-                    <ContentText>Challenge Content</ContentText>
+                    <ContentTitle>Challenge Content</ContentTitle>
+                    <ContentText>
+                      You will find a React component in the code editor. Change
+                      it to render the text "Hello, React!".
+                    </ContentText>
                   </ContentContainer>
                 </Row>
                 <Row
@@ -129,7 +134,7 @@ class App extends React.Component<{}, IState> {
                   initialHeight={window.innerHeight * 0.08}
                 >
                   <ContentContainer>
-                    <ContentText>Challenge Tests</ContentText>
+                    <ContentTitle>Challenge Tests</ContentTitle>
                   </ContentContainer>
                 </Row>
               </RowsWrapper>
@@ -278,12 +283,19 @@ const Page = styled.div`
 
 const Header = styled.div`
   height: 60px;
-  width: 100vw;
-  background: ${DARK_HEADER};
+  width: calc(100vw - 48);
+  padding-left: 24px;
+  padding-right: 24px;
   display: flex;
   align-items: center;
-  padding-left: 12px;
-  padding-right: 12px;
+  justify-content: space-between;
+  background: ${DARK_HEADER};
+  background: linear-gradient(
+    63deg,
+    rgba(2, 6, 10, 1) 25%,
+    rgba(17, 38, 59, 1) 67%,
+    rgba(32, 21, 64, 1) 91%
+  );
 `;
 
 const Title = styled.p`
@@ -299,8 +311,8 @@ const WorkspaceContainer = styled.div`
 `;
 
 const FrameContainer = styled.iframe`
-  flex: 2;
   height: 100%;
+  width: 100%;
   border: none;
 `;
 
@@ -317,14 +329,20 @@ const separatorProps = {
 };
 
 const ContentContainer = styled.div`
-  padding: 12px;
+  padding: 8px;
+`;
+
+const ContentTitle = styled.h3`
+  margin: 0;
+  color: ${TITLE_TEXT};
 `;
 
 const ContentText = styled.p`
   margin: 0;
-  color: ${LIGHT_TEXT};
-  font-size: 13px;
-  font-weight: 100px;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 200px;
+  color: ${CONTENT_TEXT};
 `;
 
 /** ===========================================================================
