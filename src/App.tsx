@@ -1,6 +1,7 @@
-import React from 'react';
+import React from "react";
+import styled from "styled-components";
 
-import './App.css';
+import "./App.css";
 
 class App extends React.Component {
   iFrame: any;
@@ -23,16 +24,38 @@ class App extends React.Component {
   }
 
   render() {
-  return (
-      <div className="App">
-        <iframe width={500} height={500} ref={this.setRef} title="code-preview" />
-      </div>
+    return (
+      <Page>
+        <Editor />
+        <Frame ref={this.setRef} title="code-preview" />
+      </Page>
     );
   }
 
   setRef = (r: any) => {
     this.iFrame = r;
-  }
+  };
 }
+
+const Page = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Editor = styled.div`
+  flex: 2;
+  background: rgb(35, 35, 35);
+`;
+
+const Frame = styled.iframe`
+  flex: 1;
+  height: 100%;
+  border: none;
+`;
 
 export default App;
