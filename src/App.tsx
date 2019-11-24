@@ -1,8 +1,8 @@
+import { ControlledEditor } from "@monaco-editor/react";
+import { Console, Decode } from "console-feed";
 import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import styled from "styled-components";
-import { Console, Decode } from "console-feed";
-import { ControlledEditor } from "@monaco-editor/react";
 
 import * as Babel from "@babel/standalone";
 
@@ -156,7 +156,7 @@ class App extends React.Component<{}, IState> {
     try {
       const { source, message } = event.data;
       if (source === "IFRAME_PREVIEW") {
-        const data = [JSON.parse(message)];
+        const data: ReadonlyArray<any> = [JSON.parse(message)];
         const log = Decode([
           {
             data,
@@ -321,7 +321,7 @@ const getHTML = (js: string) => `
 </html>
 `;
 
-const DEFAULT_LOGS = [
+const DEFAULT_LOGS: ReadonlyArray<any> = [
   {
     method: "warn",
     data: ["console.log output will be rendered here:"],

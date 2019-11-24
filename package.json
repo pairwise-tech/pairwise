@@ -1,12 +1,24 @@
 {
   "name": "prototype-x",
   "version": "0.1.0",
+  "description": "Prototype X",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "jest": "react-scripts test",
+    "eject": "react-scripts eject",
+    "prettier": "prettier --list-different './src/**/*.{ts,tsx,json}'",
+    "prettier:fix": "prettier --write './src/**/*.{ts,tsx,json}'",
+    "tslint": "tslint --project tsconfig.json -c tslint.json",
+    "tslint:fix": "tslint --project tsconfig.json -c tslint.json --fix",
+    "format": "yarn prettier:fix && yarn tslint:fix",
+    "tsc": "tsc",
+    "test:watch": "yarn jest",
+    "test:unit": "yarn jest --watchAll=false",
+    "test:update-snapshots": "yarn jest --updateSnapshot",
+    "lint": "yarn prettier && yarn tslint && yarn tsc",
+    "test": "yarn lint && yarn test:unit"
   },
   "dependencies": {
     "@babel/standalone": "^7.7.4",
@@ -24,6 +36,7 @@
     "react-scripts": "3.2.0",
     "styled-components": "^4.4.1",
     "tslint": "^5.20.1",
+    "tslint-immutable": "^6.0.1",
     "typescript": "3.7.2"
   },
   "eslintConfig": {
