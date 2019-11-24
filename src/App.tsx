@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Editor from "@monaco-editor/react";
 
 import * as Babel from "@babel/standalone";
 
@@ -54,7 +55,9 @@ class App extends React.Component {
   render() {
     return (
       <Page>
-        <Editor />
+        <EditorContainer>
+          <Editor theme="dark" height="100vh" language="javascript" />
+        </EditorContainer>
         <Frame ref={this.setRef} title="code-preview" />
       </Page>
     );
@@ -80,7 +83,7 @@ const Page = styled.div`
   justify-content: space-between;
 `;
 
-const Editor = styled.div`
+const EditorContainer = styled.div`
   flex: 2;
   background: rgb(35, 35, 35);
 `;
