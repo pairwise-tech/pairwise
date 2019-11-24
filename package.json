@@ -18,7 +18,8 @@
     "test:unit": "yarn jest --watchAll=false",
     "test:update-snapshots": "yarn jest --updateSnapshot",
     "lint": "yarn prettier && yarn tslint && yarn tsc",
-    "test": "yarn lint && yarn test:unit"
+    "test": "yarn lint && yarn test:unit",
+    "deploy": "yarn test && yarn build"
   },
   "dependencies": {
     "@babel/standalone": "^7.7.4",
