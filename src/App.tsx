@@ -6,9 +6,7 @@ import styled from "styled-components";
 
 import * as Babel from "@babel/standalone";
 
-/** ===========================================================================
- * Notes:
- *
+/** =========================================================================== *
  * - TODO: Script files should be determined dynamically from the code string
  * import statements, and then fetched from UNPKG and cached. The
  * iframe should only fetch these dependencies once and not on every
@@ -46,7 +44,6 @@ const DARK_HEADER = "rgb(29, 26, 26)";
 const DARK_EDITOR = "rgb(35, 35, 35)";
 const DARK_CONSOLE = "rgb(36, 36, 36)";
 const DARK_DRAGGABLE = "rgb(44, 40, 37)";
-const ERROR_BACKGROUND = "#f21f4d";
 
 /** ===========================================================================
  * Component
@@ -69,9 +66,13 @@ class App extends React.Component<{}, IState> {
   }
 
   componentDidMount() {
-    this.iFrameRender();
+    this.iFrameRenderPreview();
 
-    window.addEventListener("message", this.receiveMessage, false);
+    window.addEventListener(
+      "message",
+      this.handleReceiveMessageFromPreview,
+      false,
+    );
   }
 
   componentWillUnmount() {
@@ -79,7 +80,7 @@ class App extends React.Component<{}, IState> {
       clearTimeout(this.timeout);
     }
 
-    window.removeEventListener("message", this.receiveMessage);
+    window.removeEventListener("message", this.handleReceiveMessageFromPreview);
   }
 
   handleEditorDidMount = (_: any, editor: any) => {
@@ -116,7 +117,7 @@ class App extends React.Component<{}, IState> {
                   <div>
                     <FrameContainer
                       id="iframe"
-                      ref={this.setRef}
+                      ref={this.setIframeRef}
                       title="code-preview"
                     />
                   </div>
@@ -146,14 +147,19 @@ class App extends React.Component<{}, IState> {
     value: string | undefined = this.state.code,
   ) => {
     const { updatedQueued } = this.state;
+    /**
+     * Every time the preview is rendered it fetches libraries from CDNs, so
+     * just delay it with a timer right now until these dependencies can be
+     * cached in a better way.
+     */
     this.setState({ code: value, updatedQueued: true }, () => {
       if (!updatedQueued) {
-        this.timeout = setTimeout(this.iFrameRender, 2000);
+        this.timeout = setTimeout(this.iFrameRenderPreview, 2000);
       }
     });
   };
 
-  receiveMessage = (event: any) => {
+  handleReceiveMessageFromPreview = (event: MessageEvent) => {
     try {
       const { source, message } = event.data;
       if (source === "IFRAME_PREVIEW") {
@@ -164,9 +170,7 @@ class App extends React.Component<{}, IState> {
             method: "log",
           },
         ]);
-        this.setState(({ logs }) => ({
-          logs: logs.concat(log),
-        }));
+        this.updateWorkspaceConsole(log);
       }
     } catch (err) {
       this.setState({ updatedQueued: false }, () =>
@@ -175,14 +179,18 @@ class App extends React.Component<{}, IState> {
     }
   };
 
-  iFrameRender = () => {
+  iFrameRenderPreview = () => {
     this.setState({ logs: DEFAULT_LOGS }, () => {
       if (this.iFrame) {
         try {
+          /**
+           * Compile the user's code with Babel, including dependencies, and
+           * then render the entire thing in the iframe preview.
+           */
           const HTML_DOCUMENT = getHTML(this.transformCode());
           this.iFrame.srcdoc = HTML_DOCUMENT;
           this.setState({ updatedQueued: false }, () =>
-            saveCode(this.state.code),
+            saveCodeToLocalStorage(this.state.code),
           );
         } catch (err) {
           this.setState({ updatedQueued: false }, () =>
@@ -211,10 +219,6 @@ class App extends React.Component<{}, IState> {
     return output;
   };
 
-  setRef = (ref: HTMLIFrameElement) => {
-    this.iFrame = ref;
-  };
-
   recordCompilationError = (error: Error) => {
     const log = Decode([
       {
@@ -222,9 +226,17 @@ class App extends React.Component<{}, IState> {
         method: "error",
       },
     ]);
+    this.updateWorkspaceConsole(log);
+  };
+
+  updateWorkspaceConsole = (log: Log) => {
     this.setState(({ logs }) => ({
       logs: logs.concat(log),
     }));
+  };
+
+  setIframeRef = (ref: HTMLIFrameElement) => {
+    this.iFrame = ref;
   };
 }
 
@@ -304,18 +316,18 @@ const getStarterCode = () => {
   return DEFAULT_CODE;
 };
 
-const saveCode = (code: string) => {
+const saveCodeToLocalStorage = (code: string) => {
   localStorage.setItem(CODE_KEY, JSON.stringify(code));
 };
 
 const DEFAULT_CODE = `
-// import React from "react";
-// import ReactDOM from "react-dom";
+import React from "react";
+import ReactDOM from "react-dom";
 
 class App extends React.Component {
   render(): JSX.Element {
-    const text: string = "Hello from React!!!";
-    console.log("hello from iframe!");
+    const text: string = "Hello, React!";
+    console.log("Hello from the iframe!");
     return (
       <div>
         <h1>{text}</h1>
@@ -340,13 +352,6 @@ const getHTML = (js: string) => `
 </html>
 `;
 
-const DEFAULT_LOGS: ReadonlyArray<any> = [
-  {
-    method: "warn",
-    data: ["console.log output will be rendered here:"],
-  },
-];
-
 const CONSOLE_INTERCEPTOR = `
 const __interceptConsoleMessage = (value) => {
   window.parent.postMessage({
@@ -355,6 +360,18 @@ const __interceptConsoleMessage = (value) => {
   });
 }
 `;
+
+interface Log {
+  data: ReadonlyArray<string>;
+  method: "warn" | "info" | "error" | "log";
+}
+
+const DEFAULT_LOGS: ReadonlyArray<Log> = [
+  {
+    method: "warn",
+    data: ["console.log output will be rendered here:"],
+  },
+];
 
 /**
  * This function is supposed to match all import statements in the code string
@@ -365,6 +382,7 @@ const __interceptConsoleMessage = (value) => {
  * The code may not work 100%:
  */
 const stripAndExtractImportDependencies = (codeString: string) => {
+  // Reference: https://gist.github.com/manekinekko/7e58a17bc62a9be47172
   const regex = new RegExp(
     /import(?:["'\s]*([\w*{}\n\r\t, ]+)from\s*)?["'\s].*([@\w/_-]+)["'\s].*/g,
   );
