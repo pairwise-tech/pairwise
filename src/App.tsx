@@ -46,6 +46,7 @@ const DARK_HEADER = "rgb(29, 26, 26)";
 const DARK_EDITOR = "rgb(35, 35, 35)";
 const DARK_CONSOLE = "rgb(36, 36, 36)";
 const DARK_DRAGGABLE = "rgb(44, 40, 37)";
+const ERROR_BACKGROUND = "#f21f4d";
 
 /** ===========================================================================
  * Component
@@ -168,7 +169,9 @@ class App extends React.Component<{}, IState> {
         }));
       }
     } catch (err) {
-      this.setState({ updatedQueued: false });
+      this.setState({ updatedQueued: false }, () =>
+        this.recordCompilationError(err),
+      );
     }
   };
 
@@ -182,15 +185,23 @@ class App extends React.Component<{}, IState> {
             saveCode(this.state.code),
           );
         } catch (err) {
-          this.setState({ updatedQueued: false });
+          this.setState({ updatedQueued: false }, () =>
+            this.recordCompilationError(err),
+          );
         }
       }
     });
   };
 
   transformCode = () => {
+    /**
+     * Replace all the console.log statements to capture their output and
+     * remove all import statements (so the code will compile) and also to
+     * capture the libraries to then fetch them dynamically from UNPKG.
+     */
     const consoleReplaced = hijackConsoleLog(this.state.code);
-    const output = Babel.transform(consoleReplaced, {
+    const { code } = stripAndExtractImportDependencies(consoleReplaced);
+    const output = Babel.transform(code, {
       presets: [
         "es2015",
         "react",
@@ -202,6 +213,18 @@ class App extends React.Component<{}, IState> {
 
   setRef = (ref: HTMLIFrameElement) => {
     this.iFrame = ref;
+  };
+
+  recordCompilationError = (error: Error) => {
+    const log = Decode([
+      {
+        data: [error.message],
+        method: "error",
+      },
+    ]);
+    this.setState(({ logs }) => ({
+      logs: logs.concat(log),
+    }));
   };
 }
 
@@ -219,11 +242,8 @@ const Page = styled.div`
 `;
 
 const Header = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   height: 60px;
+  width: 100vw;
   background: ${DARK_HEADER};
   display: flex;
   align-items: center;
@@ -239,7 +259,6 @@ const Title = styled.p`
 `;
 
 const WorkspaceContainer = styled.div`
-  padding-top: 60px;
   height: 100%;
   width: 100%;
 `;
@@ -290,22 +309,22 @@ const saveCode = (code: string) => {
 };
 
 const DEFAULT_CODE = `
-  // import React from "react";
-  // import ReactDOM from "react-dom";
+// import React from "react";
+// import ReactDOM from "react-dom";
 
-  class App extends React.Component {
-    render(): JSX.Element {
-      const text: string = "Hello from React!!!";
-      console.log("hello from iframe!");
-      return (
-        <div>
-          <h1>{text}</h1>
-        </div>
-      );
-    }
+class App extends React.Component {
+  render(): JSX.Element {
+    const text: string = "Hello from React!!!";
+    console.log("hello from iframe!");
+    return (
+      <div>
+        <h1>{text}</h1>
+      </div>
+    );
   }
+}
 
-  ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 `;
 
 const getHTML = (js: string) => `
@@ -337,6 +356,47 @@ const __interceptConsoleMessage = (value) => {
 }
 `;
 
+/**
+ * This function is supposed to match all import statements in the code string
+ * and remove them, while also identifying the imported libraries and returning
+ * those in an array by name, so they can be fetched from a CDN and injected
+ * into the code before it is transpiled and run.
+ *
+ * The code may not work 100%:
+ */
+const stripAndExtractImportDependencies = (codeString: string) => {
+  const regex = new RegExp(
+    /import(?:["'\s]*([\w*{}\n\r\t, ]+)from\s*)?["'\s].*([@\w/_-]+)["'\s].*/g,
+  );
+  const result = codeString.match(regex);
+
+  let strippedImports = codeString;
+  let dependencies: ReadonlyArray<string> = [];
+
+  if (result) {
+    for (const importStatement of result) {
+      const libs = importStatement.match(/"(.*?)"/);
+      if (libs) {
+        dependencies = dependencies.concat(libs[0]);
+      }
+
+      strippedImports = strippedImports.replace(importStatement, "");
+    }
+  }
+
+  return {
+    dependencies,
+    code: strippedImports,
+  };
+};
+
+/**
+ * Replace all console.log statements with a call to a custom function which
+ * is injected on the top of the code string before it is run. The custom
+ * function will post a message outside of the iframe to the parent window
+ * object, which is listening to capture these messages and serve them to the
+ * workspace console.
+ */
 const hijackConsoleLog = (codeString: string) => {
   const replaced = codeString.replace(
     /console.log/g,
