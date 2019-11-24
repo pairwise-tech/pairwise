@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Hook, Console, Decode } from "console-feed";
 import { ControlledEditor } from "@monaco-editor/react";
 
 import * as Babel from "@babel/standalone";
@@ -12,6 +13,7 @@ import * as Babel from "@babel/standalone";
 interface IState {
   code: string;
   updatedQueued: boolean;
+  logs: ReadonlyArray<string>;
 }
 
 /**
@@ -35,7 +37,7 @@ const DEFAULT_CODE = `
           bottom: 0,
           padding: 15,
           position: "fixed",
-          background: "rgb(250, 135, 125)",
+          background: "#75e4fa",
         }}>
           <h1>{text}</h1>
         </div>
@@ -73,6 +75,7 @@ class App extends React.Component<{}, IState> {
     super(props);
 
     this.state = {
+      logs: [],
       code: DEFAULT_CODE,
       updatedQueued: false,
     };
@@ -80,6 +83,13 @@ class App extends React.Component<{}, IState> {
 
   componentDidMount() {
     this.iFrameRender();
+
+    /**
+     * TODO: Sort of works? How to only capture logs from user code...?
+     */
+    Hook(window.console, (log: string) => {
+      this.setState(({ logs }) => ({ logs: [...logs, Decode(log)] }));
+    });
   }
 
   componentWillUnmount() {
@@ -133,7 +143,12 @@ class App extends React.Component<{}, IState> {
             editorDidMount={this.handleEditorDidMount}
           />
         </EditorContainer>
-        <Frame id="iframe" ref={this.setRef} title="code-preview" />
+        <PreviewContainer>
+          <Frame id="iframe" ref={this.setRef} title="code-preview" />
+          <ConsoleContainer>
+            <Console logs={this.state.logs} variant="dark" />
+          </ConsoleContainer>
+        </PreviewContainer>
       </Page>
     );
   }
@@ -180,10 +195,22 @@ const EditorContainer = styled.div`
   background: rgb(35, 35, 35);
 `;
 
-const Frame = styled.iframe`
+const PreviewContainer = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Frame = styled.iframe`
+  flex: 2;
   height: 100%;
   border: none;
+`;
+
+const ConsoleContainer = styled.div`
+  max-height: 350px;
+  padding: 12px;
+  background: rgb(36, 36, 36);
 `;
 
 /** ===========================================================================
