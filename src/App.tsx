@@ -1,26 +1,54 @@
 import React from "react";
 import styled from "styled-components";
 
-import "./App.css";
+import * as Babel from "@babel/standalone";
+
+/** ===========================================================================
+ * Component
+ * ============================================================================
+ */
 
 class App extends React.Component {
-  iFrame: any;
+  iFrame: Nullable<HTMLIFrameElement> = null;
 
   componentDidMount() {
-    const js = `console.log([1,2,3]);`;
-    const doc = `
+    const CODE = `
+      class App extends React.Component {
+        render(): JSX.Element {
+          const text: boolean = "Hi yay!!!";
+          return (
+            <div>
+              <h1>{text}</h1>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<App />, document.getElementById('root'));
+    `;
+
+    const output = Babel.transform(CODE, {
+      presets: [
+        "es2015",
+        "react",
+        ["typescript", { isTSX: true, allExtensions: true }],
+      ],
+    }).code;
+
+    const HTML_DOCUMENT = `
       <html>
-        <head><style></style></head>
+        <head />
         <body>
-          <div>
-          <h1>Hi yay</h1>
-          </div>
-          <script>${js}</script>
+          <div id="root" />
+          <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+          <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+          <script>${output}</script>
         </body>
       </html>
     `;
 
-    this.iFrame.srcdoc = doc;
+    if (this.iFrame) {
+      this.iFrame.srcdoc = HTML_DOCUMENT;
+    }
   }
 
   render() {
@@ -32,10 +60,15 @@ class App extends React.Component {
     );
   }
 
-  setRef = (r: any) => {
+  setRef = (r: HTMLIFrameElement) => {
     this.iFrame = r;
   };
 }
+
+/** ===========================================================================
+ * Styled Components
+ * ============================================================================
+ */
 
 const Page = styled.div`
   position: fixed;
@@ -57,5 +90,10 @@ const Frame = styled.iframe`
   height: 100%;
   border: none;
 `;
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default App;
