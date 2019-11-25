@@ -30,7 +30,12 @@ import styled from "styled-components";
  *
  * - Improve test runner UX.
  *
- * - Console ideally will allow the user to type in it...
+ * - Test runner for React challenges.
+ *
+ * - Console ideally will allow the user to type in it... Or logs can also
+ * be forwarded to the browser console to allow full use of devtools there.
+ *
+ * - Expand console overrides to include warn and info methods as well.
  *
  * - Ideally cmd+enter to run code should not enter a new line in the
  * code editor.
@@ -294,6 +299,7 @@ class App extends React.Component<{}, IState> {
   };
 
   iFrameRenderPreview = () => {
+    console.clear();
     this.setState({ logs: DEFAULT_LOGS }, () => {
       if (this.iFrame) {
         try {
@@ -348,9 +354,20 @@ class App extends React.Component<{}, IState> {
   };
 
   updateWorkspaceConsole = (log: Log) => {
-    this.setState(({ logs }) => ({
-      logs: [...logs, log],
-    }));
+    this.setState(
+      ({ logs }) => ({
+        logs: [...logs, log],
+      }),
+      () => {
+        /**
+         * Send logs directly to the browser console as well. This feature
+         * could be toggled on or off, or just on by default.
+         *
+         * TODO: Render error messages as well.
+         */
+        console.log(log.data[0]);
+      },
+    );
   };
 
   handleEditorDidMount = (_: any, editor: any) => {
