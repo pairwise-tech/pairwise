@@ -35,12 +35,14 @@ import * as Babel from "@babel/standalone";
 
 interface IState {
   code: string;
+  nodeJS: boolean;
   updatedQueued: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
 const BLUE = "#2ee3ff";
 const TITLE_TEXT = "rgb(200, 200, 200)";
+const TEXT_HOVER = "rgb(245, 245, 245)";
 const CONTENT_TEXT = "rgb(155, 155, 155)";
 const DARK_HEADER = "#010203";
 const DARK_EDITOR = "rgb(35, 35, 35)";
@@ -64,6 +66,7 @@ class App extends React.Component<{}, IState> {
       logs: DEFAULT_LOGS,
       code: getStarterCode(),
       updatedQueued: false,
+      nodeJS: false,
     };
   }
 
@@ -90,10 +93,17 @@ class App extends React.Component<{}, IState> {
   };
 
   render() {
+    const { nodeJS } = this.state;
     return (
       <Page>
         <Header>
           <Title>Zen Coding School</Title>
+          <ControlsContainer>
+            <Button>Run Tests</Button>
+            <Button onClick={this.toggleChallengeType}>
+              {nodeJS ? "TypeScript" : "NodeJS"} Challenge
+            </Button>
+          </ControlsContainer>
         </Header>
         <WorkspaceContainer>
           <ColsWrapper separatorProps={separatorProps}>
@@ -139,36 +149,61 @@ class App extends React.Component<{}, IState> {
                 </Row>
               </RowsWrapper>
             </Col>
-            <Col>
-              <RowsWrapper separatorProps={separatorProps}>
-                <Row initialHeight={window.innerHeight * 0.6 - 30}>
-                  <div>
-                    <FrameContainer
-                      id="iframe"
-                      ref={this.setIframeRef}
-                      title="code-preview"
-                    />
-                  </div>
-                </Row>
-                <Row
-                  style={consoleRowStyles}
-                  initialHeight={window.innerHeight * 0.4 - 30}
-                >
-                  <div>
-                    <Console
-                      variant="dark"
-                      logs={this.state.logs}
-                      style={{ PADDING: 0 }}
-                    />
-                  </div>
-                </Row>
-              </RowsWrapper>
-            </Col>
+            {nodeJS ? (
+              <Col
+                style={consoleRowStyles}
+                initialHeight={window.innerHeight - 60}
+              >
+                <div>
+                  <FrameContainer
+                    id="iframe"
+                    ref={this.setIframeRef}
+                    title="code-preview"
+                    style={{ visibility: "hidden", height: 0, width: 0 }}
+                  />
+                  <Console
+                    variant="dark"
+                    logs={this.state.logs}
+                    style={{ PADDING: 0 }}
+                  />
+                </div>
+              </Col>
+            ) : (
+              <Col>
+                <RowsWrapper separatorProps={separatorProps}>
+                  <Row initialHeight={window.innerHeight * 0.6 - 30}>
+                    <div>
+                      <FrameContainer
+                        id="iframe"
+                        ref={this.setIframeRef}
+                        title="code-preview"
+                      />
+                    </div>
+                  </Row>
+                  <Row
+                    style={consoleRowStyles}
+                    initialHeight={window.innerHeight * 0.4 - 30}
+                  >
+                    <div>
+                      <Console
+                        variant="dark"
+                        logs={this.state.logs}
+                        style={{ PADDING: 0 }}
+                      />
+                    </div>
+                  </Row>
+                </RowsWrapper>
+              </Col>
+            )}
           </ColsWrapper>
         </WorkspaceContainer>
       </Page>
     );
   }
+
+  toggleChallengeType = () => {
+    this.setState(x => ({ nodeJS: !x.nodeJS }), this.iFrameRenderPreview);
+  };
 
   handleEditorTextChange = (
     _: any,
@@ -343,6 +378,48 @@ const ContentText = styled.p`
   font-size: 15px;
   font-weight: 200px;
   color: ${CONTENT_TEXT};
+`;
+
+const ControlsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+`;
+
+const Button = styled.button`
+  border: none;
+  width: 165px;
+  margin-right: 12px;
+  font-size: 14px;
+  font-weight: 500px;
+  padding: 6px 12px;
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${TITLE_TEXT};
+  background: rgb(11, 79, 147);
+  background: linear-gradient(
+    63deg,
+    rgba(11, 79, 147, 1) 25%,
+    rgba(52, 12, 168, 1) 67%
+  );
+
+  :hover {
+    cursor: pointer;
+    color: ${TEXT_HOVER};
+    background: rgb(23, 94, 164);
+    background: linear-gradient(
+      63deg,
+      rgba(23, 94, 164, 1) 25%,
+      rgba(71, 27, 199, 1) 67%
+    );
+  }
+
+  :focus {
+    outline: none;
+  }
 `;
 
 /** ===========================================================================
