@@ -67,12 +67,12 @@ class App extends React.Component<{}, IState> {
 
     this.state = {
       logs: DEFAULT_LOGS,
-      code: getStarterCode(),
       updatedQueued: false,
       reactJS: false,
       tests: TEST_CASES,
       displayTextResults: false,
       fullScreenEditor: false,
+      code: getStarterCode("typescript"),
     };
   }
 
@@ -240,6 +240,15 @@ class App extends React.Component<{}, IState> {
     );
   }
 
+  updateCode = () => {
+    this.setState(
+      x => ({
+        code: getStarterCode(x.reactJS ? "react" : "typescript"),
+      }),
+      this.iFrameRenderPreview,
+    );
+  };
+
   executeTests = () => {
     this.setState({ displayTextResults: true });
   };
@@ -249,7 +258,7 @@ class App extends React.Component<{}, IState> {
   };
 
   toggleChallengeType = () => {
-    this.setState(x => ({ reactJS: !x.reactJS }), this.iFrameRenderPreview);
+    this.setState(x => ({ reactJS: !x.reactJS }), this.updateCode);
   };
 
   handleEditorTextChange = (
@@ -313,7 +322,10 @@ class App extends React.Component<{}, IState> {
           const HTML_DOCUMENT = getHTML(this.transformCode());
           this.iFrame.srcdoc = HTML_DOCUMENT;
           this.setState({ updatedQueued: false }, () =>
-            saveCodeToLocalStorage(this.state.code),
+            saveCodeToLocalStorage(
+              this.state.code,
+              this.state.reactJS ? "react" : "typescript",
+            ),
           );
         } catch (err) {
           this.setState({ updatedQueued: false }, () =>
@@ -399,6 +411,7 @@ const Title = styled.p`
   color: ${BLUE};
   margin: 0;
   padding: 0;
+  font-size: 18px;
   font-weight: 500;
 `;
 
@@ -489,11 +502,13 @@ const Button = styled.button`
  * ============================================================================
  */
 
-const CODE_KEY = "LOCAL_STORAGE_CODE_KEY";
+const CODE_KEY_REACT = "LOCAL_STORAGE_CODE_KEY_REACT";
+const CODE_KEY_TS = "LOCAL_STORAGE_CODE_KEY_TYPESCRIPT";
 
-const getStarterCode = () => {
+const getStarterCode = (type: "react" | "typescript") => {
   try {
-    const storedCode = localStorage.getItem(CODE_KEY);
+    const KEY = type === "react" ? CODE_KEY_REACT : CODE_KEY_TS;
+    const storedCode = localStorage.getItem(KEY);
     if (storedCode) {
       const code = JSON.parse(storedCode);
       if (code) {
@@ -504,14 +519,15 @@ const getStarterCode = () => {
     // noop
   }
 
-  return DEFAULT_CODE;
+  return type === "react" ? DEFAULT_REACT_CODE : DEFAULT_TYPESCRIPT_CODE;
 };
 
-const saveCodeToLocalStorage = (code: string) => {
-  localStorage.setItem(CODE_KEY, JSON.stringify(code));
+const saveCodeToLocalStorage = (code: string, type: "react" | "typescript") => {
+  const KEY = type === "react" ? CODE_KEY_REACT : CODE_KEY_TS;
+  localStorage.setItem(KEY, JSON.stringify(code));
 };
 
-const DEFAULT_CODE = `
+const DEFAULT_TYPESCRIPT_CODE = `
 const addTwoNumbers = (a: number, b: number) => {
   // Edit code here
 }
@@ -523,24 +539,24 @@ console.log(result);
 const main = addTwoNumbers;
 `;
 
-// const DEFAULT_REACT_CODE = `
-// import React from "react";
-// import ReactDOM from "react-dom";
+const DEFAULT_REACT_CODE = `
+import React from "react";
+import ReactDOM from "react-dom";
 
-// class App extends React.Component {
-//   render(): JSX.Element {
-//     const welcome: string = "Hello, React!";
-//     console.log("Hello from the iframe!");
-//     return (
-//       <div>
-//         <h1>{welcome}</h1>
-//       </div>
-//     );
-//   }
-// }
+class App extends React.Component {
+  render(): JSX.Element {
+    const welcome: string = "Hello, React!";
+    console.log("Hello from the iframe!");
+    return (
+      <div>
+        <h1>{welcome}</h1>
+      </div>
+    );
+  }
+}
 
-// // Do not edit code below this line
-// ReactDOM.render(<App />, document.getElementById('root'));`;
+// Do not edit code below this line
+ReactDOM.render(<App />, document.getElementById('root'));`;
 
 const getHTML = (js: string) => `
 <html>
