@@ -6,26 +6,33 @@ import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import styled from "styled-components";
 
 /** =========================================================================== *
- * - TODO: Script files should be determined dynamically from the code string
+ * - TODO: Things not done yet:
+ *
+ * - Script files should be determined dynamically from the code string
  * import statements, and then fetched from UNPKG and cached. The
  * iframe should only fetch these dependencies once and not on every
  * render like it does not.
  *
- * - TODO: Imports need to be enabled but somehow not cause "module not found"
+ * - Ability to run NodeJS code, e.g. challenges which teach NodeJS APIs or
+ * even run a simple Express server.
+ *
+ * - Possibly a terminal/bash experience to teach bash challenges. I'm not
+ * sure to what extent this is possible in a pure browser environment. It's
+ * possible we could create some emulated fake environment to just teach
+ * very basic commands. Or just totally disregard this.
+ *
+ * - Imports need to be enabled but somehow not cause "module not found"
  * errors. Import statements then need to be dynamically parsed when the
  * code string is executed, and use to define the dependencies which need
  * to be fetched to run the code.
  *
- * - TODO: Monaco editor needs to support JSX syntax...!!!???
+ * - Monaco editor needs to support JSX syntax...!!!???
  *
- * - TODO: Enable some way to run a suite of tests against the user provided
- * code and render the test results.
+ * - Improve test runner UX.
  *
- * - TODO: Add a content area to display the content for a given question.
+ * - Console ideally will allow the user to type in it...
  *
- * - TODO: Console ideally will allow the user to type in it...
- *
- * - TODO: Ideally cmd+enter to run code should not enter a new line in the
+ * - Ideally cmd+enter to run code should not enter a new line in the
  * code editor.
  * ============================================================================
  */
@@ -56,7 +63,7 @@ const BACKGROUND_CONTENT = "#1e1e21";
 const DRAGGABLE_SLIDER = "#161721";
 
 /** ===========================================================================
- * Component
+ * React Component
  * ============================================================================
  */
 
@@ -100,12 +107,10 @@ class App extends React.Component<{}, IState> {
     window.removeEventListener("message", this.handleReceiveMessageFromPreview);
   }
 
-  handleEditorDidMount = (_: any, editor: any) => {
-    this.editorRef = editor;
-  };
-
   render() {
-    const { reactJS, displayTextResults, fullScreenEditor, tests } = this.state;
+    const { tests, reactJS, displayTextResults, fullScreenEditor } = this.state;
+    const IS_TYPESCRIPT_CHALLENGE = !reactJS;
+
     return (
       <Page>
         <Header>
@@ -145,16 +150,7 @@ class App extends React.Component<{}, IState> {
                     style={{ background: BACKGROUND_EDITOR }}
                     initialHeight={window.innerHeight * 0.6 - 60}
                   >
-                    <div style={{ height: "100%" }}>
-                      <ControlledEditor
-                        theme="dark"
-                        height="100%"
-                        language="typescript"
-                        value={this.state.code}
-                        onChange={this.handleEditorTextChange}
-                        editorDidMount={this.handleEditorDidMount}
-                      />
-                    </div>
+                    <div style={{ height: "100%" }}>{this.renderEditor()}</div>
                   </Row>
                   <Row
                     style={{ background: BACKGROUND_CONTENT }}
@@ -180,18 +176,11 @@ class App extends React.Component<{}, IState> {
                 </RowsWrapper>
               ) : (
                 <div style={{ height: "100%", background: BACKGROUND_CONSOLE }}>
-                  <ControlledEditor
-                    theme="dark"
-                    height="100%"
-                    language="typescript"
-                    value={this.state.code}
-                    onChange={this.handleEditorTextChange}
-                    editorDidMount={this.handleEditorDidMount}
-                  />
+                  {this.renderEditor()}
                 </div>
               )}
             </Col>
-            {!reactJS ? (
+            {IS_TYPESCRIPT_CHALLENGE ? (
               <Col
                 style={consoleRowStyles}
                 initialHeight={window.innerHeight - 60}
@@ -239,27 +228,18 @@ class App extends React.Component<{}, IState> {
     );
   }
 
-  updateCode = () => {
-    this.setState(
-      x => ({
-        code: getStarterCode(x.reactJS ? "react" : "typescript"),
-      }),
-      this.iFrameRenderPreview,
+  renderEditor = () => {
+    return (
+      <ControlledEditor
+        theme="dark"
+        height="100%"
+        language="typescript"
+        value={this.state.code}
+        onChange={this.handleEditorTextChange}
+        editorDidMount={this.handleEditorDidMount}
+      />
     );
   };
-
-  executeTests = () => {
-    this.setState({ displayTextResults: true });
-  };
-
-  toggleEditor = () => {
-    this.setState(x => ({ fullScreenEditor: !x.fullScreenEditor }));
-  };
-
-  toggleChallengeType = () => {
-    this.setState(x => ({ reactJS: !x.reactJS }), this.updateCode);
-  };
-
   handleEditorTextChange = (
     _: any,
     value: string | undefined = this.state.code,
@@ -275,12 +255,6 @@ class App extends React.Component<{}, IState> {
         this.timeout = setTimeout(this.iFrameRenderPreview, 2000);
       }
     });
-  };
-
-  handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === "Meta" && event.keyCode === 91) {
-      this.executeTests();
-    }
   };
 
   handleReceiveMessageFromPreview = (event: MessageEvent) => {
@@ -377,6 +351,37 @@ class App extends React.Component<{}, IState> {
     this.setState(({ logs }) => ({
       logs: [...logs, log],
     }));
+  };
+
+  handleEditorDidMount = (_: any, editor: any) => {
+    this.editorRef = editor;
+  };
+
+  handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === "Meta" && event.keyCode === 91) {
+      this.executeTests();
+    }
+  };
+
+  executeTests = () => {
+    this.setState({ displayTextResults: true });
+  };
+
+  toggleEditor = () => {
+    this.setState(x => ({ fullScreenEditor: !x.fullScreenEditor }));
+  };
+
+  toggleChallengeType = () => {
+    this.setState(x => ({ reactJS: !x.reactJS }), this.updateCode);
+  };
+
+  updateCode = () => {
+    this.setState(
+      x => ({
+        code: getStarterCode(x.reactJS ? "react" : "typescript"),
+      }),
+      this.iFrameRenderPreview,
+    );
   };
 
   setIframeRef = (ref: HTMLIFrameElement) => {
