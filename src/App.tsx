@@ -528,8 +528,8 @@ const Button = styled.button`
     background: rgb(23, 94, 164);
     background: linear-gradient(
       63deg,
-      rgba(10, 100, 225, 1) 15%,
-      rgba(17, 195, 240, 0.75) 85%
+      rgba(10, 100, 215, 1) 15%,
+      rgba(17, 195, 240, 0.65) 85%
     );
   }
 
