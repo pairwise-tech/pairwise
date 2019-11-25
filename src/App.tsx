@@ -187,13 +187,13 @@ class App extends React.Component<{}, IState> {
             {IS_TYPESCRIPT_CHALLENGE ? (
               <Col style={consoleRowStyles} initialHeight={H - 60}>
                 <div>
+                  <Console variant="dark" logs={this.state.logs} />
                   <FrameContainer
                     id="iframe"
                     ref={this.setIframeRef}
                     title="code-preview"
                     style={{ visibility: "hidden", height: 0, width: 0 }}
                   />
-                  <Console variant="dark" logs={this.state.logs} />
                 </div>
               </Col>
             ) : (
@@ -468,7 +468,7 @@ const FrameContainer = styled.iframe`
 `;
 
 const consoleRowStyles = {
-  paddingTop: 6,
+  paddingTop: 2,
   paddingBottom: 4,
   background: BACKGROUND_CONSOLE,
 };
@@ -677,7 +677,7 @@ interface Log {
 const DEFAULT_LOGS: ReadonlyArray<Log> = [
   {
     method: "info",
-    data: ["console.log output will be rendered here:"],
+    data: ["console output will be rendered here:"],
   },
 ];
 
