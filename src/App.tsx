@@ -37,6 +37,7 @@ interface IState {
   code: string;
   reactJS: boolean;
   updatedQueued: boolean;
+  fullScreenEditor: boolean;
   displayTextResults: boolean;
   tests: ReadonlyArray<TestCase>;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
@@ -71,6 +72,7 @@ class App extends React.Component<{}, IState> {
       reactJS: false,
       tests: TEST_CASES,
       displayTextResults: false,
+      fullScreenEditor: false,
     };
   }
 
@@ -100,12 +102,15 @@ class App extends React.Component<{}, IState> {
   };
 
   render() {
-    const { reactJS, displayTextResults, tests } = this.state;
+    const { reactJS, displayTextResults, fullScreenEditor, tests } = this.state;
     return (
       <Page>
         <Header>
           <Title>Zen Coding School</Title>
           <ControlsContainer>
+            <Button onClick={this.toggleEditor}>
+              {fullScreenEditor ? "Regular" : "Full Screen"} Editor
+            </Button>
             <Button onClick={this.executeTests}>Run Tests</Button>
             <Button onClick={this.toggleChallengeType}>
               {reactJS ? "TypeScript" : "React"} Challenge
@@ -118,57 +123,70 @@ class App extends React.Component<{}, IState> {
               initialWidth={window.innerWidth * 0.65}
               initialHeight={window.innerHeight - 60}
             >
-              <RowsWrapper separatorProps={separatorProps}>
-                <Row
-                  style={{ background: DARK_CONSOLE }}
-                  initialHeight={window.innerHeight * 0.32}
-                >
-                  <ContentContainer>
-                    <ContentTitle>Challenge Content</ContentTitle>
-                    <ContentText>
-                      There is a function in the editor below. It should add two
-                      numbers and return the result. Try to complete the
-                      function!
-                    </ContentText>
-                  </ContentContainer>
-                </Row>
-                <Row
-                  style={{ background: DARK_EDITOR }}
-                  initialHeight={window.innerHeight * 0.6 - 60}
-                >
-                  <div style={{ height: "100%" }}>
-                    <ControlledEditor
-                      theme="dark"
-                      height="100%"
-                      language="typescript"
-                      value={this.state.code}
-                      onChange={this.handleEditorTextChange}
-                      editorDidMount={this.handleEditorDidMount}
-                    />
-                  </div>
-                </Row>
-                <Row
-                  style={{ background: DARK_CONSOLE }}
-                  initialHeight={window.innerHeight * 0.08}
-                >
-                  <ContentContainer>
-                    <ContentTitle style={{ marginBottom: 12 }}>
-                      Challenge Tests
-                    </ContentTitle>
-                    {displayTextResults && (
-                      <React.Fragment>
-                        {tests.map((t, i) => (
-                          <ContentText key={i}>
-                            <b>Input: </b>
-                            {JSON.stringify(t.input)} <b>Result: </b>
-                            {t.testResult === true ? "Success" : "Failure"}
-                          </ContentText>
-                        ))}
-                      </React.Fragment>
-                    )}
-                  </ContentContainer>
-                </Row>
-              </RowsWrapper>
+              {!fullScreenEditor ? (
+                <RowsWrapper separatorProps={separatorProps}>
+                  <Row
+                    style={{ background: DARK_CONSOLE }}
+                    initialHeight={window.innerHeight * 0.32}
+                  >
+                    <ContentContainer>
+                      <ContentTitle>Challenge Content</ContentTitle>
+                      <ContentText>
+                        There is a function in the editor below. It should add
+                        two numbers and return the result. Try to complete the
+                        function!
+                      </ContentText>
+                    </ContentContainer>
+                  </Row>
+                  <Row
+                    style={{ background: DARK_EDITOR }}
+                    initialHeight={window.innerHeight * 0.6 - 60}
+                  >
+                    <div style={{ height: "100%" }}>
+                      <ControlledEditor
+                        theme="dark"
+                        height="100%"
+                        language="typescript"
+                        value={this.state.code}
+                        onChange={this.handleEditorTextChange}
+                        editorDidMount={this.handleEditorDidMount}
+                      />
+                    </div>
+                  </Row>
+                  <Row
+                    style={{ background: DARK_CONSOLE }}
+                    initialHeight={window.innerHeight * 0.08}
+                  >
+                    <ContentContainer>
+                      <ContentTitle style={{ marginBottom: 12 }}>
+                        Challenge Tests
+                      </ContentTitle>
+                      {displayTextResults && (
+                        <React.Fragment>
+                          {tests.map((t, i) => (
+                            <ContentText key={i}>
+                              <b>Input: </b>
+                              {JSON.stringify(t.input)} <b>Result: </b>
+                              {t.testResult === true ? "Success" : "Failure"}
+                            </ContentText>
+                          ))}
+                        </React.Fragment>
+                      )}
+                    </ContentContainer>
+                  </Row>
+                </RowsWrapper>
+              ) : (
+                <div style={{ height: "100%", background: DARK_CONSOLE }}>
+                  <ControlledEditor
+                    theme="dark"
+                    height="100%"
+                    language="typescript"
+                    value={this.state.code}
+                    onChange={this.handleEditorTextChange}
+                    editorDidMount={this.handleEditorDidMount}
+                  />
+                </div>
+              )}
             </Col>
             {!reactJS ? (
               <Col
@@ -224,6 +242,10 @@ class App extends React.Component<{}, IState> {
 
   executeTests = () => {
     this.setState({ displayTextResults: true });
+  };
+
+  toggleEditor = () => {
+    this.setState(x => ({ fullScreenEditor: !x.fullScreenEditor }));
   };
 
   toggleChallengeType = () => {
