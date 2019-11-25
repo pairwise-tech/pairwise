@@ -25,6 +25,9 @@ import * as Babel from "@babel/standalone";
  * - TODO: Add a content area to display the content for a given question.
  *
  * - TODO: Console ideally will allow the user to type in it...
+ *
+ * - TODO: Ideally cmd+enter to run code should not enter a new line in the
+ * code editor.
  * ============================================================================
  */
 
@@ -287,12 +290,23 @@ class App extends React.Component<{}, IState> {
   handleReceiveMessageFromPreview = (event: MessageEvent) => {
     try {
       const { source, message } = event.data;
-      if (source === "IFRAME_PREVIEW") {
-        const data: ReadonlyArray<any> = [JSON.parse(message)];
+      if (source === "IFRAME_PREVIEW_LOG") {
+        const msg = JSON.parse(message);
+        const data: ReadonlyArray<any> = [msg];
         const log = Decode([
           {
             data,
             method: "log",
+          },
+        ]);
+        this.updateWorkspaceConsole(log);
+      } else if (source === "IFRAME_PREVIEW_ERROR") {
+        const msg = JSON.parse(message);
+        const data: ReadonlyArray<any> = [msg];
+        const log = Decode([
+          {
+            data,
+            method: "error",
           },
         ]);
         this.updateWorkspaceConsole(log);
@@ -305,9 +319,7 @@ class App extends React.Component<{}, IState> {
         this.setState({ tests: testCasesCopy });
       }
     } catch (err) {
-      this.setState({ updatedQueued: false }, () =>
-        this.recordCompilationError(err),
-      );
+      this.setState({ updatedQueued: false });
     }
   };
 
@@ -342,10 +354,10 @@ class App extends React.Component<{}, IState> {
      * remove all import statements (so the code will compile) and also to
      * capture the libraries to then fetch them dynamically from UNPKG.
      */
-    const consoleReplaced = hijackConsoleLog(this.state.code);
-    const { code } = stripAndExtractImportDependencies(consoleReplaced);
-    const finalCodeString = injectTestCode(code);
-    const output = Babel.transform(finalCodeString, {
+    const { code } = stripAndExtractImportDependencies(this.state.code);
+    const codeWithTests = injectTestCode(code);
+    const consoleReplaced = hijackConsole(codeWithTests);
+    const output = Babel.transform(consoleReplaced, {
       presets: [
         "es2015",
         "react",
@@ -356,7 +368,6 @@ class App extends React.Component<{}, IState> {
   };
 
   recordCompilationError = (error: Error) => {
-    console.log(error);
     const log = Decode([
       {
         data: [error.message],
@@ -368,7 +379,7 @@ class App extends React.Component<{}, IState> {
 
   updateWorkspaceConsole = (log: Log) => {
     this.setState(({ logs }) => ({
-      logs: logs.concat(log),
+      logs: [...logs, log],
     }));
   };
 
@@ -603,10 +614,17 @@ window.parent.postMessage({
 });
 `;
 
-const CONSOLE_INTERCEPTOR = `
-const __interceptConsoleMessage = (value) => {
+const CONSOLE_INTERCEPTORS = `
+const __interceptConsoleLog = (value) => {
   window.parent.postMessage({
-    source: "IFRAME_PREVIEW",
+    source: "IFRAME_PREVIEW_LOG",
+    message: JSON.stringify(value),
+  });
+}
+
+const __interceptConsoleError = (value) => {
+  window.parent.postMessage({
+    source: "IFRAME_PREVIEW_ERROR",
     message: JSON.stringify(value),
   });
 }
@@ -666,12 +684,26 @@ const stripAndExtractImportDependencies = (codeString: string) => {
  * object, which is listening to capture these messages and serve them to the
  * workspace console.
  */
-const hijackConsoleLog = (codeString: string) => {
-  const replaced = codeString.replace(
+const hijackConsole = (codeString: string) => {
+  const tryCatchCodeString = `
+  try {
+    ${codeString}
+  } catch (err) {
+    console.error(err.message);
+  }
+  `;
+
+  const replacedLog = tryCatchCodeString.replace(
     /console.log/g,
-    "__interceptConsoleMessage",
+    "__interceptConsoleLog",
   );
-  return `${CONSOLE_INTERCEPTOR}\n${replaced}`;
+
+  const replacedError = replacedLog.replace(
+    /console.error/g,
+    "__interceptConsoleError",
+  );
+
+  return `${CONSOLE_INTERCEPTORS}${replacedError}`;
 };
 
 /** ===========================================================================
