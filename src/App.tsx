@@ -35,8 +35,10 @@ import * as Babel from "@babel/standalone";
 
 interface IState {
   code: string;
-  nodeJS: boolean;
+  reactJS: boolean;
   updatedQueued: boolean;
+  displayTextResults: boolean;
+  tests: ReadonlyArray<TestCase>;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
@@ -66,7 +68,9 @@ class App extends React.Component<{}, IState> {
       logs: DEFAULT_LOGS,
       code: getStarterCode(),
       updatedQueued: false,
-      nodeJS: false,
+      reactJS: false,
+      tests: TEST_CASES,
+      displayTextResults: false,
     };
   }
 
@@ -93,15 +97,15 @@ class App extends React.Component<{}, IState> {
   };
 
   render() {
-    const { nodeJS } = this.state;
+    const { reactJS, displayTextResults, tests } = this.state;
     return (
       <Page>
         <Header>
           <Title>Zen Coding School</Title>
           <ControlsContainer>
-            <Button>Run Tests</Button>
+            <Button onClick={this.executeTests}>Run Tests</Button>
             <Button onClick={this.toggleChallengeType}>
-              {nodeJS ? "TypeScript" : "NodeJS"} Challenge
+              {reactJS ? "TypeScript" : "React"} Challenge
             </Button>
           </ControlsContainer>
         </Header>
@@ -145,11 +149,22 @@ class App extends React.Component<{}, IState> {
                 >
                   <ContentContainer>
                     <ContentTitle>Challenge Tests</ContentTitle>
+                    {displayTextResults && (
+                      <React.Fragment>
+                        {tests.map(t => (
+                          <ContentText>
+                            <b>Input: </b>
+                            {JSON.stringify(t.input)} <b>Result: </b>
+                            {t.testResult === true ? "Success" : "Failure"}
+                          </ContentText>
+                        ))}
+                      </React.Fragment>
+                    )}
                   </ContentContainer>
                 </Row>
               </RowsWrapper>
             </Col>
-            {nodeJS ? (
+            {reactJS ? (
               <Col
                 style={consoleRowStyles}
                 initialHeight={window.innerHeight - 60}
@@ -201,8 +216,12 @@ class App extends React.Component<{}, IState> {
     );
   }
 
+  executeTests = () => {
+    this.setState({ displayTextResults: true });
+  };
+
   toggleChallengeType = () => {
-    this.setState(x => ({ nodeJS: !x.nodeJS }), this.iFrameRenderPreview);
+    this.setState(x => ({ reactJS: !x.reactJS }), this.iFrameRenderPreview);
   };
 
   handleEditorTextChange = (
@@ -234,6 +253,13 @@ class App extends React.Component<{}, IState> {
           },
         ]);
         this.updateWorkspaceConsole(log);
+      } else if (source === "TEST_RESULTS") {
+        const results = JSON.parse(message);
+        const testCasesCopy = this.state.tests.slice();
+        for (let i = 0; i < results.length; i++) {
+          testCasesCopy[i].testResult = results[i];
+        }
+        this.setState({ tests: testCasesCopy });
       }
     } catch (err) {
       this.setState({ updatedQueued: false }, () =>
@@ -272,7 +298,10 @@ class App extends React.Component<{}, IState> {
      */
     const consoleReplaced = hijackConsoleLog(this.state.code);
     const { code } = stripAndExtractImportDependencies(consoleReplaced);
-    const output = Babel.transform(code, {
+    const finalCodeString = injectTestCode(code);
+    console.log(finalCodeString);
+
+    const output = Babel.transform(finalCodeString, {
       presets: [
         "es2015",
         "react",
@@ -283,6 +312,7 @@ class App extends React.Component<{}, IState> {
   };
 
   recordCompilationError = (error: Error) => {
+    console.log(error);
     const log = Decode([
       {
         data: [error.message],
@@ -479,6 +509,38 @@ const getHTML = (js: string) => `
     <script>${js}</script>
   </body>
 </html>
+`;
+
+interface TestCase {
+  input: any;
+  expected: any;
+  testResult?: boolean;
+}
+
+const TEST_CASES: ReadonlyArray<TestCase> = [
+  { input: [1, 2], expected: 3 },
+  { input: [10, 50], expected: 60 },
+];
+
+const injectTestCode = (codeString: string) => {
+  return `
+    ${codeString}
+    ${getSampleTestCode(TEST_CASES)}
+  `;
+};
+
+const getSampleTestCode = (testCases?: ReadonlyArray<TestCase>) => `
+let results = [];
+
+for (const x of ${JSON.stringify(testCases)}) {
+  const { input, expected } = x;
+  results.push(main(...input) === expected);
+}
+
+window.parent.postMessage({
+  source: "TEST_RESULTS",
+  message: JSON.stringify(results),
+});
 `;
 
 const CONSOLE_INTERCEPTOR = `
