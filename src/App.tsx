@@ -5,7 +5,7 @@ import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import styled from "styled-components";
 
-/** =========================================================================== *
+/** ===========================================================================
  * - TODO: Things not done yet:
  *
  * - Script files should be determined dynamically from the code string
@@ -72,6 +72,9 @@ const HEADER_BORDER = "#176191";
 const SUCCESS = "#55f73e";
 const FAILURE = "#fc426d";
 
+const W = window.innerWidth;
+const H = window.innerHeight;
+
 /** ===========================================================================
  * React Component
  * ============================================================================
@@ -137,15 +140,12 @@ class App extends React.Component<{}, IState> {
         </Header>
         <WorkspaceContainer>
           <ColsWrapper separatorProps={separatorProps}>
-            <Col
-              initialWidth={window.innerWidth * 0.65}
-              initialHeight={window.innerHeight - 60}
-            >
+            <Col initialWidth={W * 0.65} initialHeight={H - 60}>
               {!fullScreenEditor ? (
                 <RowsWrapper separatorProps={separatorProps}>
                   <Row
                     style={{ background: BACKGROUND_CONTENT }}
-                    initialHeight={window.innerHeight * 0.32}
+                    initialHeight={H * 0.32}
                   >
                     <ContentContainer>
                       <ContentTitle>Challenge</ContentTitle>
@@ -158,13 +158,13 @@ class App extends React.Component<{}, IState> {
                   </Row>
                   <Row
                     style={{ background: BACKGROUND_EDITOR }}
-                    initialHeight={window.innerHeight * 0.6 - 60}
+                    initialHeight={H * 0.6 - 60}
                   >
                     <div style={{ height: "100%" }}>{this.renderEditor()}</div>
                   </Row>
                   <Row
                     style={{ background: BACKGROUND_CONTENT }}
-                    initialHeight={window.innerHeight * 0.08}
+                    initialHeight={H * 0.08}
                   >
                     <ContentContainer>
                       <ContentTitle style={{ marginBottom: 12 }}>
@@ -185,10 +185,7 @@ class App extends React.Component<{}, IState> {
               )}
             </Col>
             {IS_TYPESCRIPT_CHALLENGE ? (
-              <Col
-                style={consoleRowStyles}
-                initialHeight={window.innerHeight - 60}
-              >
+              <Col style={consoleRowStyles} initialHeight={H - 60}>
                 <div>
                   <FrameContainer
                     id="iframe"
@@ -202,7 +199,7 @@ class App extends React.Component<{}, IState> {
             ) : (
               <Col>
                 <RowsWrapper separatorProps={separatorProps}>
-                  <Row initialHeight={window.innerHeight * 0.6 - 30}>
+                  <Row initialHeight={H * 0.6 - 30}>
                     <div>
                       <FrameContainer
                         id="iframe"
@@ -211,10 +208,7 @@ class App extends React.Component<{}, IState> {
                       />
                     </div>
                   </Row>
-                  <Row
-                    style={consoleRowStyles}
-                    initialHeight={window.innerHeight * 0.4 - 30}
-                  >
+                  <Row style={consoleRowStyles} initialHeight={H * 0.4 - 30}>
                     <div>
                       <Console variant="dark" logs={this.state.logs} />
                     </div>
