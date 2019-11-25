@@ -168,7 +168,7 @@ class App extends React.Component<{}, IState> {
                   >
                     <ContentContainer>
                       <ContentTitle style={{ marginBottom: 12 }}>
-                        Tests
+                        {this.getTestSummaryString()}
                       </ContentTitle>
                       {tests.map(this.renderTestResult)}
                     </ContentContainer>
@@ -231,8 +231,16 @@ class App extends React.Component<{}, IState> {
     );
   };
 
+  getTestSummaryString = () => {
+    const { tests, displayTestResults } = this.state;
+    const passed = tests.filter(t => t.testResult === true);
+    return !displayTestResults
+      ? "Tests"
+      : `Tests: ${passed.length}/${tests.length} Passed`;
+  };
+
   renderTestResult = (t: TestCase, i: number) => {
-    const { displayTestResults: displayTextResults } = this.state;
+    const { displayTestResults } = this.state;
     return (
       <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
         <div style={{ width: 175 }}>
@@ -245,14 +253,14 @@ class App extends React.Component<{}, IState> {
             style={{
               margin: 0,
               marginLeft: 4,
-              color: !displayTextResults
+              color: !displayTestResults
                 ? TEXT_CONTENT
                 : t.testResult
                 ? SUCCESS
                 : FAILURE,
             }}
           >
-            {displayTextResults
+            {displayTestResults
               ? t.testResult === true
                 ? "Success"
                 : "Failure"
