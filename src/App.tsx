@@ -95,7 +95,7 @@ class App extends React.Component<{}, IState> {
       tests: TEST_CASES,
       displayTestResults: false,
       fullScreenEditor: false,
-      code: getStarterCode("typescript"),
+      code: getStarterCodeForChallenge("typescript"),
     };
   }
 
@@ -106,7 +106,7 @@ class App extends React.Component<{}, IState> {
 
     window.addEventListener(
       "message",
-      this.handleReceiveMessageFromPreview,
+      this.handleReceiveMessageFromCodeRunner,
       false,
     );
   }
@@ -117,7 +117,10 @@ class App extends React.Component<{}, IState> {
     }
 
     window.removeEventListener("keydown", this.handleKeyPress);
-    window.removeEventListener("message", this.handleReceiveMessageFromPreview);
+    window.removeEventListener(
+      "message",
+      this.handleReceiveMessageFromCodeRunner,
+    );
   }
 
   render() {
@@ -129,7 +132,7 @@ class App extends React.Component<{}, IState> {
         <Header>
           <Title>Zen Coding School</Title>
           <ControlsContainer>
-            <Button onClick={this.toggleEditor}>
+            <Button onClick={this.toggleEditorType}>
               {fullScreenEditor ? "Regular" : "Full Screen"} Editor
             </Button>
             <Button onClick={this.executeTests}>Run Tests</Button>
@@ -144,8 +147,8 @@ class App extends React.Component<{}, IState> {
               {!fullScreenEditor ? (
                 <RowsWrapper separatorProps={separatorProps}>
                   <Row
-                    style={{ background: BACKGROUND_CONTENT }}
                     initialHeight={H * 0.32}
+                    style={{ background: BACKGROUND_CONTENT }}
                   >
                     <ContentContainer>
                       <ContentTitle>Challenge</ContentTitle>
@@ -157,14 +160,14 @@ class App extends React.Component<{}, IState> {
                     </ContentContainer>
                   </Row>
                   <Row
-                    style={{ background: BACKGROUND_EDITOR }}
                     initialHeight={H * 0.6 - 60}
+                    style={{ background: BACKGROUND_EDITOR }}
                   >
                     <div style={{ height: "100%" }}>{this.renderEditor()}</div>
                   </Row>
                   <Row
-                    style={{ background: BACKGROUND_CONTENT }}
                     initialHeight={H * 0.08}
+                    style={{ background: BACKGROUND_CONTENT }}
                   >
                     <ContentContainer>
                       <ContentTitle style={{ marginBottom: 12 }}>
@@ -288,7 +291,7 @@ class App extends React.Component<{}, IState> {
     });
   };
 
-  handleReceiveMessageFromPreview = (event: MessageEvent) => {
+  handleReceiveMessageFromCodeRunner = (event: MessageEvent) => {
     try {
       const { source, message } = event.data;
       if (source === "IFRAME_PREVIEW_LOG") {
@@ -333,7 +336,7 @@ class App extends React.Component<{}, IState> {
            * Compile the user's code with Babel, including dependencies, and
            * then render the entire thing in the iframe preview.
            */
-          const HTML_DOCUMENT = getHTML(this.transformCode());
+          const HTML_DOCUMENT = getHTML(this.compileAndTransformCodeString());
           this.iFrame.srcdoc = HTML_DOCUMENT;
           this.setState({ updatedQueued: false }, () =>
             saveCodeToLocalStorage(
@@ -343,20 +346,32 @@ class App extends React.Component<{}, IState> {
           );
         } catch (err) {
           this.setState({ updatedQueued: false }, () =>
-            this.recordCompilationError(err),
+            this.handleCompilationError(err),
           );
         }
       }
     });
   };
 
-  transformCode = () => {
+  compileAndTransformCodeString = () => {
     /**
      * Replace all the console.log statements to capture their output and
      * remove all import statements (so the code will compile) and also to
      * capture the libraries to then fetch them dynamically from UNPKG.
      */
-    const { code } = stripAndExtractImportDependencies(this.state.code);
+    const { code, dependencies } = stripAndExtractImportDependencies(
+      this.state.code,
+    );
+
+    /**
+     * These dependencies are the libraries imported in the challenge. This
+     * list can be used to fetch these on demand and then inject their code
+     * into the code runner environment.
+     */
+    if (dependencies.length) {
+      console.log(`Challenge dependencies: ${dependencies}`);
+    }
+
     const codeWithTests = injectTestCode(code);
     const consoleReplaced = hijackConsole(codeWithTests);
     const output = Babel.transform(consoleReplaced, {
@@ -369,7 +384,7 @@ class App extends React.Component<{}, IState> {
     return output;
   };
 
-  recordCompilationError = (error: Error) => {
+  handleCompilationError = (error: Error) => {
     const log = Decode([
       {
         data: [error.message],
@@ -410,18 +425,21 @@ class App extends React.Component<{}, IState> {
     this.setState({ displayTestResults: true });
   };
 
-  toggleEditor = () => {
+  toggleEditorType = () => {
     this.setState(x => ({ fullScreenEditor: !x.fullScreenEditor }));
   };
 
   toggleChallengeType = () => {
-    this.setState(x => ({ reactJS: !x.reactJS }), this.updateCode);
+    this.setState(
+      x => ({ reactJS: !x.reactJS }),
+      this.updateCodeWhenChallengeTypeChanged,
+    );
   };
 
-  updateCode = () => {
+  updateCodeWhenChallengeTypeChanged = () => {
     this.setState(
       x => ({
-        code: getStarterCode(x.reactJS ? "react" : "typescript"),
+        code: getStarterCodeForChallenge(x.reactJS ? "react" : "typescript"),
       }),
       this.iFrameRenderPreview,
     );
@@ -561,7 +579,11 @@ const Button = styled.button`
 const CODE_KEY_REACT = "LOCAL_STORAGE_CODE_KEY_REACT";
 const CODE_KEY_TS = "LOCAL_STORAGE_CODE_KEY_TYPESCRIPT";
 
-const getStarterCode = (type: "react" | "typescript") => {
+/**
+ * Get the initial code for the editor, possibly from localStorage if
+ * anything is saved there.
+ */
+const getStarterCodeForChallenge = (type: "react" | "typescript") => {
   try {
     const KEY = type === "react" ? CODE_KEY_REACT : CODE_KEY_TS;
     const storedCode = localStorage.getItem(KEY);
@@ -578,6 +600,9 @@ const getStarterCode = (type: "react" | "typescript") => {
   return type === "react" ? DEFAULT_REACT_CODE : DEFAULT_TYPESCRIPT_CODE;
 };
 
+/**
+ * Save code to localStorage.
+ */
 const saveCodeToLocalStorage = (code: string, type: "react" | "typescript") => {
   const KEY = type === "react" ? CODE_KEY_REACT : CODE_KEY_TS;
   localStorage.setItem(KEY, JSON.stringify(code));
@@ -614,14 +639,17 @@ class App extends React.Component {
 // Do not edit code below this line
 ReactDOM.render(<App />, document.getElementById('root'));`;
 
+/**
+ * Get the full html content string for the iframe, injected the user code
+ * into it. This currently includes script libraries now.
+ */
 const getHTML = (js: string) => `
 <html>
-  <head>
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-  </head>
+  <head></head>
   <body style={{ margin: 0, padding: 0 }}>
     <div id="root" />
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script>${js}</script>
   </body>
 </html>
@@ -633,6 +661,9 @@ interface TestCase {
   testResult?: boolean;
 }
 
+/**
+ * Sample test cases for the one hard coded test.
+ */
 const TEST_CASES: ReadonlyArray<TestCase> = [
   { input: [1, 2], expected: 3 },
   { input: [10, 50], expected: 60 },
@@ -647,6 +678,9 @@ const TEST_CASES: ReadonlyArray<TestCase> = [
   { input: [2, 50234432], expected: 50234434 },
 ];
 
+/**
+ * Inject test code into a code string.
+ */
 const injectTestCode = (codeString: string) => {
   return `
     ${codeString}
@@ -654,6 +688,10 @@ const injectTestCode = (codeString: string) => {
   `;
 };
 
+/**
+ * Some sample code to run provided tests against a challenge and post
+ * the messages back to the app to render.
+ */
 const getSampleTestCode = (testCases?: ReadonlyArray<TestCase>) => `
 let results = [];
 
@@ -668,6 +706,10 @@ window.parent.postMessage({
 });
 `;
 
+/**
+ * Functions used to intercept console methods and post the messages to
+ * the parent window.
+ */
 const CONSOLE_INTERCEPTORS = `
 const __interceptConsoleLog = (value) => {
   window.parent.postMessage({
