@@ -152,11 +152,13 @@ class App extends React.Component<{}, IState> {
                   initialHeight={window.innerHeight * 0.08}
                 >
                   <ContentContainer>
-                    <ContentTitle>Challenge Tests</ContentTitle>
+                    <ContentTitle style={{ marginBottom: 12 }}>
+                      Challenge Tests
+                    </ContentTitle>
                     {displayTextResults && (
                       <React.Fragment>
-                        {tests.map(t => (
-                          <ContentText>
+                        {tests.map((t, i) => (
+                          <ContentText key={i}>
                             <b>Input: </b>
                             {JSON.stringify(t.input)} <b>Result: </b>
                             {t.testResult === true ? "Success" : "Failure"}
@@ -309,8 +311,6 @@ class App extends React.Component<{}, IState> {
     const consoleReplaced = hijackConsoleLog(this.state.code);
     const { code } = stripAndExtractImportDependencies(consoleReplaced);
     const finalCodeString = injectTestCode(code);
-    console.log(finalCodeString);
-
     const output = Babel.transform(finalCodeString, {
       presets: [
         "es2015",
@@ -501,24 +501,24 @@ console.log(result);
 const main = addTwoNumbers;
 `;
 
-const DEFAULT_REACT_CODE = `
-import React from "react";
-import ReactDOM from "react-dom";
+// const DEFAULT_REACT_CODE = `
+// import React from "react";
+// import ReactDOM from "react-dom";
 
-class App extends React.Component {
-  render(): JSX.Element {
-    const welcome: string = "Hello, React!";
-    console.log("Hello from the iframe!");
-    return (
-      <div>
-        <h1>{welcome}</h1>
-      </div>
-    );
-  }
-}
+// class App extends React.Component {
+//   render(): JSX.Element {
+//     const welcome: string = "Hello, React!";
+//     console.log("Hello from the iframe!");
+//     return (
+//       <div>
+//         <h1>{welcome}</h1>
+//       </div>
+//     );
+//   }
+// }
 
-// Do not edit code below this line
-ReactDOM.render(<App />, document.getElementById('root'));`;
+// // Do not edit code below this line
+// ReactDOM.render(<App />, document.getElementById('root'));`;
 
 const getHTML = (js: string) => `
 <html>
