@@ -77,6 +77,8 @@ class App extends React.Component<{}, IState> {
   componentDidMount() {
     this.iFrameRenderPreview();
 
+    document.addEventListener("keydown", this.handleKeyPress);
+
     window.addEventListener(
       "message",
       this.handleReceiveMessageFromPreview,
@@ -89,6 +91,7 @@ class App extends React.Component<{}, IState> {
       clearTimeout(this.timeout);
     }
 
+    window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener("message", this.handleReceiveMessageFromPreview);
   }
 
@@ -123,8 +126,9 @@ class App extends React.Component<{}, IState> {
                   <ContentContainer>
                     <ContentTitle>Challenge Content</ContentTitle>
                     <ContentText>
-                      You will find a React component in the code editor. Change
-                      it to render the text "Hello, React!".
+                      There is a function in the editor below. It should add two
+                      numbers and return the result. Try to complete the
+                      function!
                     </ContentText>
                   </ContentContainer>
                 </Row>
@@ -164,7 +168,7 @@ class App extends React.Component<{}, IState> {
                 </Row>
               </RowsWrapper>
             </Col>
-            {reactJS ? (
+            {!reactJS ? (
               <Col
                 style={consoleRowStyles}
                 initialHeight={window.innerHeight - 60}
@@ -239,6 +243,12 @@ class App extends React.Component<{}, IState> {
         this.timeout = setTimeout(this.iFrameRenderPreview, 2000);
       }
     });
+  };
+
+  handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === "Meta" && event.keyCode === 91) {
+      this.executeTests();
+    }
   };
 
   handleReceiveMessageFromPreview = (event: MessageEvent) => {
@@ -480,6 +490,18 @@ const saveCodeToLocalStorage = (code: string) => {
 };
 
 const DEFAULT_CODE = `
+const addTwoNumbers = (a: number, b: number) => {
+  // Edit code here
+}
+
+const result = addTwoNumbers(10, 20);
+console.log(result);
+
+// Do not edit code below this line
+const main = addTwoNumbers;
+`;
+
+const DEFAULT_REACT_CODE = `
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -559,7 +581,7 @@ interface Log {
 
 const DEFAULT_LOGS: ReadonlyArray<Log> = [
   {
-    method: "warn",
+    method: "info",
     data: ["console.log output will be rendered here:"],
   },
 ];
