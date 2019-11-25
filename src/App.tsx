@@ -66,6 +66,7 @@ const BACKGROUND_EDITOR = "rgb(35, 35, 35)";
 const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
 const BACKGROUND_CONTENT = "#1e1e21";
 const DRAGGABLE_SLIDER = "#161721";
+const HEADER_BORDER = "#176191";
 
 /** ===========================================================================
  * React Component
@@ -217,11 +218,7 @@ class App extends React.Component<{}, IState> {
                     initialHeight={window.innerHeight * 0.4 - 30}
                   >
                     <div>
-                      <Console
-                        variant="dark"
-                        logs={this.state.logs}
-                        style={{ PADDING: 0 }}
-                      />
+                      <Console variant="dark" logs={this.state.logs} />
                     </div>
                   </Row>
                 </RowsWrapper>
@@ -427,13 +424,13 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #210794;
+  border-bottom: 1px solid ${HEADER_BORDER};
   background: ${BACKGROUND_HEADER};
   background: linear-gradient(
     63deg,
     rgba(2, 6, 10, 1) 25%,
-    rgba(17, 38, 59, 1) 67%,
-    rgba(32, 21, 64, 1) 91%
+    rgba(17, 38, 59, 1) 68%,
+    rgba(30, 20, 55, 1) 92%
   );
 `;
 
@@ -507,8 +504,8 @@ const Button = styled.button`
   background: rgb(11, 79, 147);
   background: linear-gradient(
     63deg,
-    rgba(11, 79, 147, 1) 25%,
-    rgba(52, 12, 168, 1) 67%
+    rgba(11, 79, 147, 1) 15%,
+    rgba(17, 182, 237, 0.5) 85%
   );
 
   :hover {
@@ -517,8 +514,8 @@ const Button = styled.button`
     background: rgb(23, 94, 164);
     background: linear-gradient(
       63deg,
-      rgba(23, 94, 164, 1) 25%,
-      rgba(71, 27, 199, 1) 67%
+      rgba(10, 100, 225, 1) 15%,
+      rgba(17, 195, 240, 0.75) 85%
     );
   }
 
