@@ -1,10 +1,9 @@
+import * as Babel from "@babel/standalone";
 import { ControlledEditor } from "@monaco-editor/react";
 import { Console, Decode } from "console-feed";
 import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import styled from "styled-components";
-
-import * as Babel from "@babel/standalone";
 
 /** =========================================================================== *
  * - TODO: Script files should be determined dynamically from the code string
@@ -46,14 +45,15 @@ interface IState {
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
-const BLUE = "#2ee3ff";
-const TITLE_TEXT = "rgb(200, 200, 200)";
+const PRIMARY_BLUE = "#2ee3ff";
 const TEXT_HOVER = "rgb(245, 245, 245)";
-const CONTENT_TEXT = "rgb(155, 155, 155)";
-const DARK_HEADER = "#010203";
-const DARK_EDITOR = "rgb(35, 35, 35)";
-const DARK_CONSOLE = "rgb(36, 36, 36)";
-const DARK_DRAGGABLE = "#161721";
+const TEXT_TITLE = "rgb(200, 200, 200)";
+const TEXT_CONTENT = "rgb(155, 155, 155)";
+const BACKGROUND_HEADER = "#010203";
+const BACKGROUND_EDITOR = "rgb(35, 35, 35)";
+const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
+const BACKGROUND_CONTENT = "#1e1e21";
+const DRAGGABLE_SLIDER = "#161721";
 
 /** ===========================================================================
  * Component
@@ -129,11 +129,11 @@ class App extends React.Component<{}, IState> {
               {!fullScreenEditor ? (
                 <RowsWrapper separatorProps={separatorProps}>
                   <Row
-                    style={{ background: DARK_CONSOLE }}
+                    style={{ background: BACKGROUND_CONTENT }}
                     initialHeight={window.innerHeight * 0.32}
                   >
                     <ContentContainer>
-                      <ContentTitle>Challenge Content</ContentTitle>
+                      <ContentTitle>Challenge</ContentTitle>
                       <ContentText>
                         There is a function in the editor below. It should add
                         two numbers and return the result. Try to complete the
@@ -142,7 +142,7 @@ class App extends React.Component<{}, IState> {
                     </ContentContainer>
                   </Row>
                   <Row
-                    style={{ background: DARK_EDITOR }}
+                    style={{ background: BACKGROUND_EDITOR }}
                     initialHeight={window.innerHeight * 0.6 - 60}
                   >
                     <div style={{ height: "100%" }}>
@@ -157,12 +157,12 @@ class App extends React.Component<{}, IState> {
                     </div>
                   </Row>
                   <Row
-                    style={{ background: DARK_CONSOLE }}
+                    style={{ background: BACKGROUND_CONTENT }}
                     initialHeight={window.innerHeight * 0.08}
                   >
                     <ContentContainer>
                       <ContentTitle style={{ marginBottom: 12 }}>
-                        Challenge Tests
+                        Tests
                       </ContentTitle>
                       {displayTextResults && (
                         <React.Fragment>
@@ -179,7 +179,7 @@ class App extends React.Component<{}, IState> {
                   </Row>
                 </RowsWrapper>
               ) : (
-                <div style={{ height: "100%", background: DARK_CONSOLE }}>
+                <div style={{ height: "100%", background: BACKGROUND_CONSOLE }}>
                   <ControlledEditor
                     theme="dark"
                     height="100%"
@@ -203,11 +203,7 @@ class App extends React.Component<{}, IState> {
                     title="code-preview"
                     style={{ visibility: "hidden", height: 0, width: 0 }}
                   />
-                  <Console
-                    variant="dark"
-                    logs={this.state.logs}
-                    style={{ PADDING: 0 }}
-                  />
+                  <Console variant="dark" logs={this.state.logs} />
                 </div>
               </Col>
             ) : (
@@ -409,7 +405,8 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: ${DARK_HEADER};
+  border-bottom: 1px solid #210794;
+  background: ${BACKGROUND_HEADER};
   background: linear-gradient(
     63deg,
     rgba(2, 6, 10, 1) 25%,
@@ -419,7 +416,7 @@ const Header = styled.div`
 `;
 
 const Title = styled.p`
-  color: ${BLUE};
+  color: ${PRIMARY_BLUE};
   margin: 0;
   padding: 0;
   font-size: 18px;
@@ -440,12 +437,12 @@ const FrameContainer = styled.iframe`
 const consoleRowStyles = {
   paddingTop: 6,
   paddingBottom: 4,
-  background: DARK_CONSOLE,
+  background: BACKGROUND_CONSOLE,
 };
 
 const separatorProps = {
   style: {
-    backgroundColor: DARK_DRAGGABLE,
+    backgroundColor: DRAGGABLE_SLIDER,
   },
 };
 
@@ -455,7 +452,7 @@ const ContentContainer = styled.div`
 
 const ContentTitle = styled.h3`
   margin: 0;
-  color: ${TITLE_TEXT};
+  color: ${TEXT_TITLE};
 `;
 
 const ContentText = styled.p`
@@ -463,7 +460,7 @@ const ContentText = styled.p`
   margin-top: 8px;
   font-size: 15px;
   font-weight: 200px;
-  color: ${CONTENT_TEXT};
+  color: ${TEXT_CONTENT};
 `;
 
 const ControlsContainer = styled.div`
@@ -484,7 +481,7 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${TITLE_TEXT};
+  color: ${TEXT_TITLE};
   background: rgb(11, 79, 147);
   background: linear-gradient(
     63deg,
