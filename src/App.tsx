@@ -32,6 +32,8 @@ import styled from "styled-components";
  *
  * - Test runner for React challenges.
  *
+ * - Code execution and test environment for React Native.
+ *
  * - Console ideally will allow the user to type in it... Or logs can also
  * be forwarded to the browser console to allow full use of devtools there.
  *
@@ -67,6 +69,8 @@ const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
 const BACKGROUND_CONTENT = "#1e1e21";
 const DRAGGABLE_SLIDER = "#161721";
 const HEADER_BORDER = "#176191";
+const SUCCESS = "#55f73e";
+const FAILURE = "#fc426d";
 
 /** ===========================================================================
  * React Component
@@ -168,13 +172,7 @@ class App extends React.Component<{}, IState> {
                       </ContentTitle>
                       {displayTextResults && (
                         <React.Fragment>
-                          {tests.map((t, i) => (
-                            <ContentText key={i}>
-                              <b>Input: </b>
-                              {JSON.stringify(t.input)} <b>Result: </b>
-                              {t.testResult === true ? "Success" : "Failure"}
-                            </ContentText>
-                          ))}
+                          {tests.map(this.renderTestResult)}
                         </React.Fragment>
                       )}
                     </ContentContainer>
@@ -242,6 +240,28 @@ class App extends React.Component<{}, IState> {
       />
     );
   };
+
+  renderTestResult = (t: TestCase, i: number) => (
+    <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
+      <div style={{ width: 175 }}>
+        <b style={{ color: TEXT_TITLE }}>Input: </b>
+        {JSON.stringify(t.input)}{" "}
+      </div>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <b style={{ color: TEXT_TITLE }}>Result:</b>
+        <p
+          style={{
+            margin: 0,
+            marginLeft: 4,
+            color: t.testResult ? SUCCESS : FAILURE,
+          }}
+        >
+          {t.testResult === true ? "Success" : "Failure"}
+        </p>
+      </div>
+    </ContentText>
+  );
+
   handleEditorTextChange = (
     _: any,
     value: string | undefined = this.state.code,
@@ -607,6 +627,15 @@ interface TestCase {
 const TEST_CASES: ReadonlyArray<TestCase> = [
   { input: [1, 2], expected: 3 },
   { input: [10, 50], expected: 60 },
+  { input: [-10, -50], expected: -60 },
+  { input: [100, 500], expected: 600 },
+  { input: [1123, 532142], expected: 533265 },
+  { input: [-10, 50], expected: 40 },
+  { input: [1, 500], expected: 501 },
+  { input: [842, 124], expected: 966 },
+  { input: [1000, 500], expected: 1500 },
+  { input: [-100, 100], expected: 0 },
+  { input: [2, 50234432], expected: 50234434 },
 ];
 
 const injectTestCode = (codeString: string) => {
