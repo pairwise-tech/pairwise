@@ -49,6 +49,22 @@ import styled from "styled-components";
  * ============================================================================
  */
 
+const SUCCESS = "#55f73e";
+const FAILURE = "#fc426d";
+const PRIMARY_BLUE = "#2ee3ff";
+const HEADER_BORDER = "#176191";
+const TEXT_HOVER = "rgb(245, 245, 245)";
+const TEXT_TITLE = "rgb(200, 200, 200)";
+const TEXT_CONTENT = "rgb(165, 165, 165)";
+const DRAGGABLE_SLIDER = "#161721";
+const BACKGROUND_HEADER = "#010203";
+const BACKGROUND_CONTENT = "#1e1e21";
+const BACKGROUND_EDITOR = "rgb(35, 35, 35)";
+const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
+
+const W = window.innerWidth;
+const H = window.innerHeight;
+
 interface IState {
   code: string;
   reactJS: boolean;
@@ -58,22 +74,6 @@ interface IState {
   tests: ReadonlyArray<TestCase>;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
-
-const PRIMARY_BLUE = "#2ee3ff";
-const TEXT_HOVER = "rgb(245, 245, 245)";
-const TEXT_TITLE = "rgb(200, 200, 200)";
-const TEXT_CONTENT = "rgb(165, 165, 165)";
-const BACKGROUND_HEADER = "#010203";
-const BACKGROUND_EDITOR = "rgb(35, 35, 35)";
-const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
-const BACKGROUND_CONTENT = "#1e1e21";
-const DRAGGABLE_SLIDER = "#161721";
-const HEADER_BORDER = "#176191";
-const SUCCESS = "#55f73e";
-const FAILURE = "#fc426d";
-
-const W = window.innerWidth;
-const H = window.innerHeight;
 
 /** ===========================================================================
  * React Component
