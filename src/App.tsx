@@ -54,7 +54,7 @@ interface IState {
   reactJS: boolean;
   updatedQueued: boolean;
   fullScreenEditor: boolean;
-  displayTextResults: boolean;
+  displayTestResults: boolean;
   tests: ReadonlyArray<TestCase>;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
@@ -62,7 +62,7 @@ interface IState {
 const PRIMARY_BLUE = "#2ee3ff";
 const TEXT_HOVER = "rgb(245, 245, 245)";
 const TEXT_TITLE = "rgb(200, 200, 200)";
-const TEXT_CONTENT = "rgb(155, 155, 155)";
+const TEXT_CONTENT = "rgb(165, 165, 165)";
 const BACKGROUND_HEADER = "#010203";
 const BACKGROUND_EDITOR = "rgb(35, 35, 35)";
 const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
@@ -93,7 +93,7 @@ class App extends React.Component<{}, IState> {
       updatedQueued: false,
       reactJS: false,
       tests: TEST_CASES,
-      displayTextResults: false,
+      displayTestResults: false,
       fullScreenEditor: false,
       code: getStarterCode("typescript"),
     };
@@ -121,7 +121,7 @@ class App extends React.Component<{}, IState> {
   }
 
   render() {
-    const { tests, reactJS, displayTextResults, fullScreenEditor } = this.state;
+    const { tests, reactJS, fullScreenEditor } = this.state;
     const IS_TYPESCRIPT_CHALLENGE = !reactJS;
 
     return (
@@ -170,11 +170,7 @@ class App extends React.Component<{}, IState> {
                       <ContentTitle style={{ marginBottom: 12 }}>
                         Tests
                       </ContentTitle>
-                      {displayTextResults && (
-                        <React.Fragment>
-                          {tests.map(this.renderTestResult)}
-                        </React.Fragment>
-                      )}
+                      {tests.map(this.renderTestResult)}
                     </ContentContainer>
                   </Row>
                 </RowsWrapper>
@@ -235,26 +231,37 @@ class App extends React.Component<{}, IState> {
     );
   };
 
-  renderTestResult = (t: TestCase, i: number) => (
-    <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
-      <div style={{ width: 175 }}>
-        <b style={{ color: TEXT_TITLE }}>Input: </b>
-        {JSON.stringify(t.input)}{" "}
-      </div>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <b style={{ color: TEXT_TITLE }}>Result:</b>
-        <p
-          style={{
-            margin: 0,
-            marginLeft: 4,
-            color: t.testResult ? SUCCESS : FAILURE,
-          }}
-        >
-          {t.testResult === true ? "Success" : "Failure"}
-        </p>
-      </div>
-    </ContentText>
-  );
+  renderTestResult = (t: TestCase, i: number) => {
+    const { displayTestResults: displayTextResults } = this.state;
+    return (
+      <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ width: 175 }}>
+          <b style={{ color: TEXT_TITLE }}>Input: </b>
+          {JSON.stringify(t.input)}{" "}
+        </div>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <b style={{ color: TEXT_TITLE }}>Status:</b>
+          <p
+            style={{
+              margin: 0,
+              marginLeft: 4,
+              color: !displayTextResults
+                ? TEXT_CONTENT
+                : t.testResult
+                ? SUCCESS
+                : FAILURE,
+            }}
+          >
+            {displayTextResults
+              ? t.testResult === true
+                ? "Success"
+                : "Failure"
+              : "n/a"}
+          </p>
+        </div>
+      </ContentText>
+    );
+  };
 
   handleEditorTextChange = (
     _: any,
@@ -392,7 +399,7 @@ class App extends React.Component<{}, IState> {
   };
 
   executeTests = () => {
-    this.setState({ displayTextResults: true });
+    this.setState({ displayTestResults: true });
   };
 
   toggleEditor = () => {
