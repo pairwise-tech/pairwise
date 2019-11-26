@@ -28,7 +28,8 @@ import styled from "styled-components";
  * - Imports need to be enabled but somehow not cause "module not found"
  * errors. Import statements then need to be dynamically parsed when the
  * code string is executed, and use to define the dependencies which need
- * to be fetched to run the code.
+ * to be fetched to run the code. Ideally, we would also be able to fetch and
+ * inject the TypeScript type definition files for imported modules...
  *
  * - Improve test runner UX.
  *
