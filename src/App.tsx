@@ -24,6 +24,7 @@ import styled from "styled-components";
  * [] cmd+enter should run code but not enter a new line in the editor
  * [] Workspace should be generic and just accept a given challenge configuration
  * [] console-feed would allow user to type and run code (if possible)
+ * [] Don't show test console output in workspace console window
  *
  * ============================================================================
  */
