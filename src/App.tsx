@@ -6,7 +6,7 @@ import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import styled from "styled-components";
 
 /** ===========================================================================
- * - TODO: Things not done yet:
+ * - TODO: Things not done yet for the challenge workspace:
  *
  * HARD:
  * [] TSX syntax support in monaco editor
