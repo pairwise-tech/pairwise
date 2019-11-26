@@ -8,31 +8,31 @@ import styled from "styled-components";
 /** ===========================================================================
  * - TODO: Things not done yet:
  *
- * - Script files should be determined dynamically from the code string
- * import statements, and then fetched from UNPKG and cached. The
- * iframe should only fetch these dependencies once and not on every
- * render like it does not.
- *
  * - Ability to run NodeJS code, e.g. challenges which teach NodeJS APIs or
  * even run a simple Express server.
+ *
+ * - Monaco editor needs to support JSX syntax...!!!???
+ *
+ * - Code execution and test environment for React Native.
  *
  * - Possibly a terminal/bash experience to teach bash challenges. I'm not
  * sure to what extent this is possible in a pure browser environment. It's
  * possible we could create some emulated fake environment to just teach
  * very basic commands. Or just totally disregard this.
  *
+ * - Script files should be determined dynamically from the code string
+ * import statements, and then fetched from UNPKG and cached. The
+ * iframe should only fetch these dependencies once and not on every
+ * render like it does not.
+ *
  * - Imports need to be enabled but somehow not cause "module not found"
  * errors. Import statements then need to be dynamically parsed when the
  * code string is executed, and use to define the dependencies which need
  * to be fetched to run the code.
  *
- * - Monaco editor needs to support JSX syntax...!!!???
- *
  * - Improve test runner UX.
  *
  * - Test runner for React challenges.
- *
- * - Code execution and test environment for React Native.
  *
  * - Console ideally will allow the user to type in it... Or logs can also
  * be forwarded to the browser console to allow full use of devtools there.
@@ -41,6 +41,9 @@ import styled from "styled-components";
  *
  * - Ideally cmd+enter to run code should not enter a new line in the
  * code editor.
+ *
+ * - Continue building functionality to support a dynamic list of different
+ * challenge types.
  * ============================================================================
  */
 
