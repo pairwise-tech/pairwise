@@ -233,6 +233,9 @@ class App extends React.Component<{}, IState> {
         value={this.state.code}
         onChange={this.handleEditorTextChange}
         editorDidMount={this.handleEditorDidMount}
+        options={{
+          fixedOverflowWidgets: true,
+        }}
       />
     );
   };
