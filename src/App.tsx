@@ -8,43 +8,23 @@ import styled from "styled-components";
 /** ===========================================================================
  * - TODO: Things not done yet:
  *
- * - Ability to run NodeJS code, e.g. challenges which teach NodeJS APIs or
- * even run a simple Express server.
+ * HARD:
+ * [] TSX syntax support in monaco editor
+ * [] Ability to test React challenges
+ * [] Type definition files provided for imported modules
+ * [] Fetch import modules dynamically and inject in code
+ * [] Ability to run NodeJS challenges (e.g. fs, express, etc.)
+ * [] Ability to run React Native challenges (react-native-web?)
+ * [] Ability to run terminal/shell challenges?
+ * [] Secure iframe environment from infinite loops and other unsafe code
  *
- * - Monaco editor needs to support JSX syntax...!!!???
+ * EASIER:
+ * [] Improve UX for test runner
+ * [] Include console warn and info in console method overrides
+ * [] cmd+enter should run code but not enter a new line in the editor
+ * [] Workspace should be generic and just accept a given challenge configuration
+ * [] console-feed would allow user to type and run code (if possible)
  *
- * - Code execution and test environment for React Native.
- *
- * - Possibly a terminal/bash experience to teach bash challenges. I'm not
- * sure to what extent this is possible in a pure browser environment. It's
- * possible we could create some emulated fake environment to just teach
- * very basic commands. Or just totally disregard this.
- *
- * - Script files should be determined dynamically from the code string
- * import statements, and then fetched from UNPKG and cached. The
- * iframe should only fetch these dependencies once and not on every
- * render like it does not.
- *
- * - Imports need to be enabled but somehow not cause "module not found"
- * errors. Import statements then need to be dynamically parsed when the
- * code string is executed, and use to define the dependencies which need
- * to be fetched to run the code. Ideally, we would also be able to fetch and
- * inject the TypeScript type definition files for imported modules...
- *
- * - Improve test runner UX.
- *
- * - Test runner for React challenges.
- *
- * - Console ideally will allow the user to type in it... Or logs can also
- * be forwarded to the browser console to allow full use of devtools there.
- *
- * - Expand console overrides to include warn and info methods as well.
- *
- * - Ideally cmd+enter to run code should not enter a new line in the
- * code editor.
- *
- * - Continue building functionality to support a dynamic list of different
- * challenge types.
  * ============================================================================
  */
 
