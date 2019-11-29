@@ -1,38 +1,42 @@
 import * as Babel from "@babel/standalone";
-import { ControlledEditor } from "@monaco-editor/react";
+import { monaco } from "@monaco-editor/react";
 import axios from "axios";
 import { Console, Decode } from "console-feed";
+import { pipe } from "ramda";
 import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import styled from "styled-components";
 import { debounce } from "throttle-debounce";
 
+import { types } from "./types/jsx";
+
 /** ===========================================================================
  * - TODO: Things not done yet for the challenge workspace:
  *
  * HARD:
- * [] TSX syntax support in monaco editor
- * [] Ability to test React challenges
- * [] Type definition files provided for imported modules
- * [] Fetch import modules dynamically and inject in code
- * [] Ability to run NodeJS challenges (e.g. fs, express, etc.)
- * [] Ability to run React Native challenges (react-native-web?)
- * [] Ability to run terminal/shell challenges?
- * [] Secure iframe environment from infinite loops and other unsafe code
+ * [x] TSX syntax support in monaco editor
+ * [ ] TSX syntax highlighting
+ * [ ] Ability to test React challenges
+ * [-] Type definition files: need to find type definition files
+ * [-] Fetch import modules dynamically: need to find UNPKG links dynamically
+ * [ ] Ability to run NodeJS challenges (e.g. fs, express, etc.)
+ * [ ] Ability to run React Native challenges (react-native-web?)
+ * [ ] Ability to run terminal/shell challenges?
+ * [ ] Secure iframe environment from infinite loops and other unsafe code
  *
  * EASIER:
- * [] Improve UX for test runner
- * [] Include console warn and info in console method overrides
- * [] cmd+enter should run code but not enter a new line in the editor
- * [] Workspace should be generic and just accept a given challenge configuration
- * [] console-feed would allow user to type and run code (if possible)
- * [] Don't show test console output in workspace console window
+ * [ ] Improve UX for test runner
+ * [x] Include console warn and info in console method overrides
+ * [ ] cmd+enter should run code but not enter a new line in the editor
+ * [ ] Workspace should be generic and just accept a given challenge configuration
+ * [ ] console-feed would allow user to type and run code (if possible)
+ * [x] Don't show test console output in workspace console window
  *
  * ============================================================================
  */
 
 /** ===========================================================================
- * Types & Config
+ * Colors
  * ============================================================================
  */
 
@@ -49,8 +53,20 @@ const BACKGROUND_CONTENT = "#1e1e21";
 const BACKGROUND_EDITOR = "rgb(35, 35, 35)";
 const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
 
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
 const W = window.innerWidth;
 const H = window.innerHeight;
+
+interface IframeMessageEvent extends MessageEvent {
+  data: {
+    message: string;
+    source: IFRAME_MESSAGE_TYPES;
+  };
+}
 
 interface Dependency {
   source: string;
@@ -68,60 +84,14 @@ interface IState {
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
-/**
- * TODO: Find a way to derive this file URLs dynamically from the package
- * name... I'm not sure how to do this as they can be arbitrarily placed
- * within a package and there is no canonical way to find the source file.
- *
- * However, we could just hard code these now for any libraries used within
- * the curriculum. It doesn't make very much sense for people to import other
- * libraries within the workspace itself, and anyway some error/warning could
- * be provided if they tried to do that.
- */
-const CDN_PACKAGE_LINKS = {
-  react: "https://unpkg.com/react@16/umd/react.development.js",
-  "react-dom": "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
-};
-
-class DependencyCacheClass {
-  dependencies: DependencyCache = new Map();
-  cdnLinks = new Map(Object.entries(CDN_PACKAGE_LINKS));
-
-  getDependency = async (packageName: string) => {
-    if (this.dependencies.has(packageName)) {
-      /* The package is cached just return the code */
-      const dependency = this.dependencies.get(packageName) as Dependency;
-      return dependency.source;
-    } else {
-      if (this.cdnLinks.has(packageName)) {
-        try {
-          /* Fetch and cache the package code, and return the source code */
-          const uri = this.cdnLinks.get(packageName) as string;
-          const response = await axios.get(uri);
-          const source = response.data;
-          this.dependencies.set(packageName, { source });
-          return source;
-        } catch (err) {
-          throw new Error(
-            `Could not find dependency source for package ${packageName}`,
-          );
-        }
-      }
-    }
-  };
-}
-
-const DependencyCacheService = new DependencyCacheClass();
-
 /** ===========================================================================
  * React Component
  * ============================================================================
  */
 
-class App extends React.Component<{}, IState> {
-  timeout: any = null;
-  editorRef: any = null;
-  iFrame: Nullable<HTMLIFrameElement> = null;
+class Workspace extends React.Component<{}, IState> {
+  monacoEditor: any = null;
+  iFrameRef: Nullable<HTMLIFrameElement> = null;
   throttledRenderPreviewFunction: () => void;
 
   constructor(props: {}) {
@@ -143,28 +113,83 @@ class App extends React.Component<{}, IState> {
   }
 
   async componentDidMount() {
-    this.iFrameRenderPreview();
-
     document.addEventListener("keydown", this.handleKeyPress);
-
     window.addEventListener(
       "message",
       this.handleReceiveMessageFromCodeRunner,
       false,
     );
+
+    this.initializeMonacoEditor();
+    this.iFrameRenderPreview();
   }
 
   componentWillUnmount() {
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-    }
-
     window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener(
       "message",
       this.handleReceiveMessageFromCodeRunner,
     );
   }
+
+  initializeMonacoEditor = () => {
+    monaco
+      .init()
+      .then(mn => {
+        mn.languages.typescript.typescriptDefaults.setCompilerOptions({
+          noEmit: true,
+          jsx: "react",
+          typeRoots: ["node_modules/@types"],
+          allowNonTsExtensions: true,
+          target: mn.languages.typescript.ScriptTarget.ES2016,
+          module: mn.languages.typescript.ModuleKind.CommonJS,
+          moduleResolution: mn.languages.typescript.ModuleResolutionKind.NodeJs,
+        });
+
+        mn.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+          noSyntaxValidation: false,
+          noSemanticValidation: false,
+        });
+
+        const options = {
+          theme: "vs-dark",
+          automaticLayout: true,
+          fixedOverflowWidgets: true,
+        };
+
+        const model = mn.editor.createModel(
+          this.state.code,
+          "typescript",
+          new mn.Uri.parse("file:///main.tsx"),
+        );
+
+        model.onDidChangeContent(this.handleEditorContentChange);
+
+        mn.editor.create(document.getElementById("monaco-editor"), {
+          ...options,
+          model,
+        });
+
+        /**
+         * This is a separate model which provides JSX type information. See
+         * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
+         */
+        mn.editor.createModel(
+          types,
+          "typescript",
+          mn.Uri.parse("file:///index.d.ts"),
+        );
+
+        this.monacoEditor = mn;
+      })
+      .catch(error => {
+        /* TODO: Handle error state */
+        console.error(
+          "An error occurred during initialization of Monaco: ",
+          error,
+        );
+      });
+  };
 
   render() {
     const { tests, reactJS, fullScreenEditor } = this.state;
@@ -264,22 +289,6 @@ class App extends React.Component<{}, IState> {
     );
   }
 
-  renderEditor = () => {
-    return (
-      <ControlledEditor
-        theme="dark"
-        height="100%"
-        language="typescript"
-        value={this.state.code}
-        onChange={this.handleEditorTextChange}
-        editorDidMount={this.handleEditorDidMount}
-        options={{
-          fixedOverflowWidgets: true,
-        }}
-      />
-    );
-  };
-
   getTestSummaryString = () => {
     const { tests, displayTestResults } = this.state;
     const passed = tests.filter(t => t.testResult === true);
@@ -320,46 +329,86 @@ class App extends React.Component<{}, IState> {
     );
   };
 
-  handleEditorTextChange = (
-    _: any,
-    value: string | undefined = this.state.code,
-  ) => {
-    /**
-     * Delay rendering on changes.
-     */
-    this.setState({ code: value }, this.throttledRenderPreviewFunction);
+  renderEditor = () => {
+    return <div id="monaco-editor" style={{ height: "100%" }} />;
   };
 
-  handleReceiveMessageFromCodeRunner = (event: MessageEvent) => {
+  setMonacoValue = () => {
+    const models = this.monacoEditor.editor.getModels();
+    const model = models[0];
+    model.setValue(this.state.code);
+  };
+
+  provideModuleTypeDefinitionsToMonaco = (
+    packages: ReadonlyArray<string> = [],
+  ) => {
+    /**
+     * TODO: Fetch @types/ package type definitions if they exist or fallback
+     * to the module declaration.
+     */
+    const moduleDeclarations = packages.reduce(
+      (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
+      "",
+    );
+
+    if (this.monacoEditor) {
+      this.monacoEditor.languages.typescript.typescriptDefaults.addExtraLib(
+        moduleDeclarations,
+      );
+    }
+  };
+
+  handleEditorContentChange = (_: any) => {
+    const models = this.monacoEditor.editor.getModels();
+    const model = models[0];
+    const value = model.getValue();
+
+    /**
+     * Delay rendering on changes for performance.
+     */
+    this.setState(ps => ({ code: value }), this.throttledRenderPreviewFunction);
+  };
+
+  handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
+    const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
+      const msg = JSON.parse(message);
+      const data: ReadonlyArray<any> = [msg];
+      const log = Decode([
+        {
+          data,
+          method,
+        },
+      ]);
+      this.updateWorkspaceConsole(log);
+    };
+
     try {
       const { source, message } = event.data;
-      if (source === "IFRAME_PREVIEW_LOG") {
-        const msg = JSON.parse(message);
-        const data: ReadonlyArray<any> = [msg];
-        const log = Decode([
-          {
-            data,
-            method: "log",
-          },
-        ]);
-        this.updateWorkspaceConsole(log);
-      } else if (source === "IFRAME_PREVIEW_ERROR") {
-        const msg = JSON.parse(message);
-        const data: ReadonlyArray<any> = [msg];
-        const log = Decode([
-          {
-            data,
-            method: "error",
-          },
-        ]);
-        this.updateWorkspaceConsole(log);
-      } else if (source === "TEST_RESULTS") {
-        const results = JSON.parse(message);
-        const testCasesCopy = this.state.tests.slice();
-        for (let i = 0; i < results.length; i++) {
-          testCasesCopy[i].testResult = results[i];
+      switch (source) {
+        case IFRAME_MESSAGE_TYPES.LOG: {
+          return handleLogMessage(message, "log");
         }
-        this.setState({ tests: testCasesCopy });
+        case IFRAME_MESSAGE_TYPES.INFO: {
+          return handleLogMessage(message, "info");
+        }
+        case IFRAME_MESSAGE_TYPES.WARN: {
+          return handleLogMessage(message, "warn");
+        }
+        case IFRAME_MESSAGE_TYPES.ERROR: {
+          return handleLogMessage(message, "error");
+        }
+        case IFRAME_MESSAGE_TYPES.TEST_RESULTS: {
+          const results = JSON.parse(message);
+          const testCasesCopy = this.state.tests.slice();
+          for (let i = 0; i < results.length; i++) {
+            testCasesCopy[i].testResult = results[i];
+          }
+          this.setState({ tests: testCasesCopy });
+          break;
+        }
+        default: {
+          assertUnreachable(source);
+        }
       }
     } catch (err) {
       // no-op
@@ -367,19 +416,22 @@ class App extends React.Component<{}, IState> {
   };
 
   iFrameRenderPreview = () => {
-    console.clear();
+    // console.clear();
     this.setState({ logs: DEFAULT_LOGS }, async () => {
-      if (this.iFrame) {
+      if (this.iFrameRef) {
         try {
           /**
-           * Compile the user's code with Babel, including dependencies, and
-           * then render the entire thing in the iframe preview.
+           * Process the code string and create an HTML document to render to
+           * the iframe.
            */
-          const IFRAME_HTML_DOCUMENT = getHTML(
-            await this.compileAndTransformCodeString(),
-          );
+          const code = await this.compileAndTransformCodeString();
+          const IFRAME_HTML_DOCUMENT = getHTML(code);
 
-          this.iFrame.srcdoc = IFRAME_HTML_DOCUMENT;
+          this.iFrameRef.srcdoc = IFRAME_HTML_DOCUMENT;
+
+          /**
+           * Save the current code to local storage.
+           */
           saveCodeToLocalStorage(
             this.state.code,
             this.state.reactJS ? "react" : "typescript",
@@ -392,45 +444,39 @@ class App extends React.Component<{}, IState> {
   };
 
   compileAndTransformCodeString = async () => {
-    /**
-     * What happens here:
-     *
-     * - Extract import statements from code string
-     * - Inject test code in code string
-     * - Hijack all console usages in code string
-     * - Transform code with Babel
-     * - Fetch required npm packages from import statements
-     * - Inject the dependencies in code string
-     */
-
     const { code, dependencies } = stripAndExtractImportDependencies(
       this.state.code,
     );
 
-    const codeWithTests = injectTestCode(code);
-    const consoleReplaced = hijackConsole(codeWithTests);
-    const output = Babel.transform(consoleReplaced, {
-      presets: [
-        "es2015",
-        "react",
-        ["typescript", { isTSX: true, allExtensions: true }],
-      ],
-    }).code;
+    this.provideModuleTypeDefinitionsToMonaco(dependencies);
+
+    const injectModuleDependenciesFn = handleInjectModuleDependencies(
+      dependencies,
+    );
 
     /**
-     * TODO: The following method could throw an error if an imported package
-     * cannot be found, this condition should be handled.
+     * What happens here:
+     *
+     * - Hijack all console usages in code string
+     * - Inject test code in code string
+     * - Transform code with Babel
+     * - Fetch and inject required modules into code string
      */
-    const dependencySourceList = await getRequiredDependencies(dependencies);
-    const codeWithDependencies = addDependencies(output, dependencySourceList);
-    return codeWithDependencies;
+    const processedCodeString = pipe(
+      hijackConsole,
+      injectTestCode,
+      transpileCodeWithBabel,
+      injectModuleDependenciesFn,
+    )(code);
+
+    return processedCodeString;
   };
 
   handleCompilationError = (error: Error) => {
     const log = Decode([
       {
-        data: [error.message],
         method: "error",
+        data: [error.message],
       },
     ]);
     this.updateWorkspaceConsole(log);
@@ -446,15 +492,11 @@ class App extends React.Component<{}, IState> {
          * Send logs directly to the browser console as well. This feature
          * could be toggled on or off, or just on by default.
          *
-         * TODO: Render error messages as well.
+         * TODO: Use the appropriate console method.
          */
         console.log(log.data[0]);
       },
     );
-  };
-
-  handleEditorDidMount = (_: any, editor: any) => {
-    this.editorRef = editor;
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
@@ -483,12 +525,15 @@ class App extends React.Component<{}, IState> {
       x => ({
         code: getStarterCodeForChallenge(x.reactJS ? "react" : "typescript"),
       }),
-      this.iFrameRenderPreview,
+      () => {
+        this.setMonacoValue();
+        this.iFrameRenderPreview();
+      },
     );
   };
 
   setIframeRef = (ref: HTMLIFrameElement) => {
-    this.iFrame = ref;
+    this.iFrameRef = ref;
   };
 }
 
@@ -563,7 +608,7 @@ const ContentTitle = styled.h3`
   color: ${TEXT_TITLE};
 `;
 
-const ContentText = styled.p`
+const ContentText = styled.span`
   margin: 0;
   margin-top: 8px;
   font-size: 15px;
@@ -719,6 +764,19 @@ const TEST_CASES: ReadonlyArray<TestCase> = [
 ];
 
 /**
+ * Try catch code execution.
+ */
+const tryCatchCodeString = (codeString: string) => {
+  return `
+    try {
+      ${codeString}
+    } catch (err) {
+      __interceptConsoleError(err);
+    }
+  `;
+};
+
+/**
  * Inject test code into a code string.
  */
 const injectTestCode = (codeString: string) => {
@@ -767,10 +825,18 @@ for (const x of ${JSON.stringify(testCases)}) {
 }
 
 window.parent.postMessage({
-  source: "TEST_RESULTS",
   message: JSON.stringify(results),
+  source: "TEST_RESULTS",
 });
 `;
+
+enum IFRAME_MESSAGE_TYPES {
+  LOG = "LOG",
+  INFO = "INFO",
+  WARN = "WARN",
+  ERROR = "ERROR",
+  TEST_RESULTS = "TEST_RESULTS",
+}
 
 /**
  * Functions used to intercept console methods and post the messages to
@@ -779,22 +845,38 @@ window.parent.postMessage({
 const CONSOLE_INTERCEPTORS = `
 const __interceptConsoleLog = (value) => {
   window.parent.postMessage({
-    source: "IFRAME_PREVIEW_LOG",
     message: JSON.stringify(value),
+    source: "LOG",
+  });
+}
+
+const __interceptConsoleInfo = (value) => {
+  window.parent.postMessage({
+    message: JSON.stringify(value),
+    source: "INFO",
+  });
+}
+
+const __interceptConsoleWarn = (value) => {
+  window.parent.postMessage({
+    message: JSON.stringify(value),
+    source: "WARN",
   });
 }
 
 const __interceptConsoleError = (value) => {
   window.parent.postMessage({
-    source: "IFRAME_PREVIEW_ERROR",
     message: JSON.stringify(value),
+    source: "ERROR",
   });
 }
 `;
 
+type ConsoleLogMethods = "warn" | "info" | "error" | "log";
+
 interface Log {
   data: ReadonlyArray<string>;
-  method: "warn" | "info" | "error" | "log";
+  method: ConsoleLogMethods;
 }
 
 const DEFAULT_LOGS: ReadonlyArray<Log> = [
@@ -847,30 +929,116 @@ const stripAndExtractImportDependencies = (codeString: string) => {
  * workspace console.
  */
 const hijackConsole = (codeString: string) => {
-  const tryCatchCodeString = `
-  try {
-    ${codeString}
-  } catch (err) {
-    console.error(err.message);
-  }
-  `;
+  const replacedConsole = codeString
+    .replace(/console.log/g, "__interceptConsoleLog")
+    .replace(/console.info/g, "__interceptConsoleInfo")
+    .replace(/console.warn/g, "__interceptConsoleWarn")
+    .replace(/console.error/g, "__interceptConsoleError");
 
-  const replacedLog = tryCatchCodeString.replace(
-    /console.log/g,
-    "__interceptConsoleLog",
-  );
-
-  const replacedError = replacedLog.replace(
-    /console.error/g,
-    "__interceptConsoleError",
-  );
-
-  return `${CONSOLE_INTERCEPTORS}${replacedError}`;
+  return `${CONSOLE_INTERCEPTORS}${replacedConsole}`;
 };
+
+/**
+ * Transpile the code use Babel standalone module.
+ */
+const transpileCodeWithBabel = (codeString: string) => {
+  return Babel.transform(codeString, {
+    presets: [
+      "es2015",
+      "react",
+      ["typescript", { isTSX: true, allExtensions: true }],
+    ],
+  }).code;
+};
+
+/**
+ * Fetch the required module dependencies and inject them into the code string.
+ */
+const handleInjectModuleDependencies = (
+  dependencies: ReadonlyArray<string>,
+) => async (codeString: string) => {
+  /**
+   * TODO: The following method could throw an error if an imported package
+   * cannot be found, this condition should be handled.
+   */
+  const dependencySourceList = await getRequiredDependencies(dependencies);
+  const codeWithDependencies = addDependencies(
+    codeString,
+    dependencySourceList,
+  );
+
+  return codeWithDependencies;
+};
+
+/**
+ * Assert a condition cannot occur. Used for writing exhaustive switch
+ * blocks (e.g. see unwrapOkValueIfExists).
+ */
+export const assertUnreachable = (x: never): never => {
+  throw new Error(
+    `Panic! Received a value which should not exist: ${JSON.stringify(x)}`,
+  );
+};
+
+/** ===========================================================================
+ * Module Caching Service
+ * ============================================================================
+ */
+
+/**
+ * TODO: Find a way to derive this file URLs dynamically from the package
+ * name... I'm not sure how to do this as they can be arbitrarily placed
+ * within a package and there is no canonical way to find the source file.
+ *
+ * However, we could just hard code these now for any libraries used within
+ * the curriculum. It doesn't make very much sense for people to import other
+ * libraries within the workspace itself, and anyway some error/warning could
+ * be provided if they tried to do that.
+ */
+const CDN_PACKAGE_LINKS = {
+  react: "https://unpkg.com/react@16/umd/react.development.js",
+  "react-dom": "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
+};
+
+class DependencyCacheClass {
+  dependencies: DependencyCache = new Map();
+  cdnLinks = new Map(Object.entries(CDN_PACKAGE_LINKS));
+
+  getDependency = async (packageName: string) => {
+    if (this.dependencies.has(packageName)) {
+      /**
+       * The package is cached just return the code.
+       */
+      const dependency = this.dependencies.get(packageName) as Dependency;
+      return dependency.source;
+    } else {
+      if (this.cdnLinks.has(packageName)) {
+        try {
+          /**
+           * TODO: Find a way to fetch the type definitions as well. Or,
+           * hard code them in the CDN_PACKAGE_LINKS constant and just use
+           * the values there.
+           */
+          const uri = this.cdnLinks.get(packageName) as string;
+          const response = await axios.get(uri);
+          const source = response.data;
+          this.dependencies.set(packageName, { source });
+          return source;
+        } catch (err) {
+          throw new Error(
+            `Could not find dependency source for package ${packageName}`,
+          );
+        }
+      }
+    }
+  };
+}
+
+const DependencyCacheService = new DependencyCacheClass();
 
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default App;
+export default Workspace;
