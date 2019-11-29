@@ -1,5 +1,6 @@
 import * as Babel from "@babel/standalone";
 import { ControlledEditor } from "@monaco-editor/react";
+import axios from "axios";
 import { Console, Decode } from "console-feed";
 import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
@@ -50,6 +51,13 @@ const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
 const W = window.innerWidth;
 const H = window.innerHeight;
 
+interface Dependency {
+  source: string;
+  typeDef?: string;
+}
+
+type DependencyCache = Map<string, Dependency>;
+
 interface IState {
   code: string;
   reactJS: boolean;
@@ -59,6 +67,51 @@ interface IState {
   tests: ReadonlyArray<TestCase>;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
+
+/**
+ * TODO: Find a way to derive this file URLs dynamically from the package
+ * name... I'm not sure how to do this as they can be arbitrarily placed
+ * within a package and there is no canonical way to find the source file.
+ *
+ * However, we could just hard code these now for any libraries used within
+ * the curriculum. It doesn't make very much sense for people to import other
+ * libraries within the workspace itself, and anyway some error/warning could
+ * be provided if they tried to do that.
+ */
+const CDN_PACKAGE_LINKS = {
+  react: "https://unpkg.com/react@16/umd/react.development.js",
+  "react-dom": "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
+};
+
+class DependencyCacheClass {
+  dependencies: DependencyCache = new Map();
+  cdnLinks = new Map(Object.entries(CDN_PACKAGE_LINKS));
+
+  getDependency = async (packageName: string) => {
+    if (this.dependencies.has(packageName)) {
+      /* The package is cached just return the code */
+      const dependency = this.dependencies.get(packageName) as Dependency;
+      return dependency.source;
+    } else {
+      if (this.cdnLinks.has(packageName)) {
+        try {
+          /* Fetch and cache the package code, and return the source code */
+          const uri = this.cdnLinks.get(packageName) as string;
+          const response = await axios.get(uri);
+          const source = response.data;
+          this.dependencies.set(packageName, { source });
+          return source;
+        } catch (err) {
+          throw new Error(
+            `Could not find dependency source for package ${packageName}`,
+          );
+        }
+      }
+    }
+  };
+}
+
+const DependencyCacheService = new DependencyCacheClass();
 
 /** ===========================================================================
  * React Component
@@ -84,7 +137,7 @@ class App extends React.Component<{}, IState> {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.iFrameRenderPreview();
 
     document.addEventListener("keydown", this.handleKeyPress);
@@ -268,13 +321,11 @@ class App extends React.Component<{}, IState> {
   ) => {
     const { updatedQueued } = this.state;
     /**
-     * Every time the preview is rendered it fetches libraries from CDNs, so
-     * just delay it with a timer right now until these dependencies can be
-     * cached in a better way.
+     * Delay rendering on changes.
      */
     this.setState({ code: value, updatedQueued: true }, () => {
       if (!updatedQueued) {
-        this.timeout = setTimeout(this.iFrameRenderPreview, 2000);
+        this.timeout = setTimeout(this.iFrameRenderPreview, 250);
       }
     });
   };
@@ -317,15 +368,18 @@ class App extends React.Component<{}, IState> {
 
   iFrameRenderPreview = () => {
     console.clear();
-    this.setState({ logs: DEFAULT_LOGS }, () => {
+    this.setState({ logs: DEFAULT_LOGS }, async () => {
       if (this.iFrame) {
         try {
           /**
            * Compile the user's code with Babel, including dependencies, and
            * then render the entire thing in the iframe preview.
            */
-          const HTML_DOCUMENT = getHTML(this.compileAndTransformCodeString());
-          this.iFrame.srcdoc = HTML_DOCUMENT;
+          const IFRAME_HTML_DOCUMENT = getHTML(
+            await this.compileAndTransformCodeString(),
+          );
+
+          this.iFrame.srcdoc = IFRAME_HTML_DOCUMENT;
           this.setState({ updatedQueued: false }, () =>
             saveCodeToLocalStorage(
               this.state.code,
@@ -341,24 +395,21 @@ class App extends React.Component<{}, IState> {
     });
   };
 
-  compileAndTransformCodeString = () => {
+  compileAndTransformCodeString = async () => {
     /**
-     * Replace all the console.log statements to capture their output and
-     * remove all import statements (so the code will compile) and also to
-     * capture the libraries to then fetch them dynamically from UNPKG.
+     * What happens here:
+     *
+     * - Extract import statements from code string
+     * - Inject test code in code string
+     * - Hijack all console usages in code string
+     * - Transform code with Babel
+     * - Fetch required npm packages from import statements
+     * - Inject the dependencies in code string
      */
+
     const { code, dependencies } = stripAndExtractImportDependencies(
       this.state.code,
     );
-
-    /**
-     * These dependencies are the libraries imported in the challenge. This
-     * list can be used to fetch these on demand and then inject their code
-     * into the code runner environment.
-     */
-    if (dependencies.length) {
-      console.log(`Challenge dependencies: ${dependencies}`);
-    }
 
     const codeWithTests = injectTestCode(code);
     const consoleReplaced = hijackConsole(codeWithTests);
@@ -369,7 +420,14 @@ class App extends React.Component<{}, IState> {
         ["typescript", { isTSX: true, allExtensions: true }],
       ],
     }).code;
-    return output;
+
+    /**
+     * TODO: The following method could throw an error if an imported package
+     * cannot be found, this condition should be handled.
+     */
+    const dependencySourceList = await getRequiredDependencies(dependencies);
+    const codeWithDependencies = addDependencies(output, dependencySourceList);
+    return codeWithDependencies;
   };
 
   handleCompilationError = (error: Error) => {
@@ -636,8 +694,6 @@ const getHTML = (js: string) => `
   <head></head>
   <body style={{ margin: 0, padding: 0 }}>
     <div id="root" />
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script>${js}</script>
   </body>
 </html>
@@ -674,6 +730,32 @@ const injectTestCode = (codeString: string) => {
     ${codeString}
     ${getSampleTestCode(TEST_CASES)}
   `;
+};
+
+/**
+ * Get all imported dependencies from the DependencyCacheService.
+ */
+const getRequiredDependencies = async (dependencies: ReadonlyArray<string>) => {
+  return Promise.all(
+    dependencies.map(d => DependencyCacheService.getDependency(d)),
+  );
+};
+
+/**
+ * Concatenate package source dependencies to code string.
+ */
+const addDependencies = (
+  codeString: string,
+  dependencies: ReadonlyArray<string>,
+) => {
+  let result = "";
+
+  for (const dependency of dependencies) {
+    result += dependency;
+  }
+
+  result += codeString;
+  return result;
 };
 
 /**
@@ -748,7 +830,7 @@ const stripAndExtractImportDependencies = (codeString: string) => {
     for (const importStatement of result) {
       const libs = importStatement.match(/"(.*?)"/);
       if (libs) {
-        dependencies = dependencies.concat(libs[0]);
+        dependencies = dependencies.concat(libs[1]);
       }
 
       strippedImports = strippedImports.replace(importStatement, "");
