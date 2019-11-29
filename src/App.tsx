@@ -5,6 +5,7 @@ import { Console, Decode } from "console-feed";
 import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import styled from "styled-components";
+import { debounce } from "throttle-debounce";
 
 /** ===========================================================================
  * - TODO: Things not done yet for the challenge workspace:
@@ -61,7 +62,6 @@ type DependencyCache = Map<string, Dependency>;
 interface IState {
   code: string;
   reactJS: boolean;
-  updatedQueued: boolean;
   fullScreenEditor: boolean;
   displayTestResults: boolean;
   tests: ReadonlyArray<TestCase>;
@@ -122,13 +122,18 @@ class App extends React.Component<{}, IState> {
   timeout: any = null;
   editorRef: any = null;
   iFrame: Nullable<HTMLIFrameElement> = null;
+  throttledRenderPreviewFunction: () => void;
 
   constructor(props: {}) {
     super(props);
 
+    this.throttledRenderPreviewFunction = debounce(
+      500,
+      this.iFrameRenderPreview,
+    );
+
     this.state = {
       logs: DEFAULT_LOGS,
-      updatedQueued: false,
       reactJS: false,
       tests: TEST_CASES,
       displayTestResults: false,
@@ -319,15 +324,10 @@ class App extends React.Component<{}, IState> {
     _: any,
     value: string | undefined = this.state.code,
   ) => {
-    const { updatedQueued } = this.state;
     /**
      * Delay rendering on changes.
      */
-    this.setState({ code: value, updatedQueued: true }, () => {
-      if (!updatedQueued) {
-        this.timeout = setTimeout(this.iFrameRenderPreview, 250);
-      }
-    });
+    this.setState({ code: value }, this.throttledRenderPreviewFunction);
   };
 
   handleReceiveMessageFromCodeRunner = (event: MessageEvent) => {
@@ -362,7 +362,7 @@ class App extends React.Component<{}, IState> {
         this.setState({ tests: testCasesCopy });
       }
     } catch (err) {
-      this.setState({ updatedQueued: false });
+      // no-op
     }
   };
 
@@ -380,16 +380,12 @@ class App extends React.Component<{}, IState> {
           );
 
           this.iFrame.srcdoc = IFRAME_HTML_DOCUMENT;
-          this.setState({ updatedQueued: false }, () =>
-            saveCodeToLocalStorage(
-              this.state.code,
-              this.state.reactJS ? "react" : "typescript",
-            ),
+          saveCodeToLocalStorage(
+            this.state.code,
+            this.state.reactJS ? "react" : "typescript",
           );
         } catch (err) {
-          this.setState({ updatedQueued: false }, () =>
-            this.handleCompilationError(err),
-          );
+          this.handleCompilationError(err);
         }
       }
     });
