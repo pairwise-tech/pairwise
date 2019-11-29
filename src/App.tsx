@@ -61,6 +61,14 @@ const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
 const W = window.innerWidth;
 const H = window.innerHeight;
 
+enum IFRAME_MESSAGE_TYPES {
+  LOG = "LOG",
+  INFO = "INFO",
+  WARN = "WARN",
+  ERROR = "ERROR",
+  TEST_RESULTS = "TEST_RESULTS",
+}
+
 interface IframeMessageEvent extends MessageEvent {
   data: {
     message: string;
@@ -764,19 +772,6 @@ const TEST_CASES: ReadonlyArray<TestCase> = [
 ];
 
 /**
- * Try catch code execution.
- */
-const tryCatchCodeString = (codeString: string) => {
-  return `
-    try {
-      ${codeString}
-    } catch (err) {
-      __interceptConsoleError(err);
-    }
-  `;
-};
-
-/**
  * Inject test code into a code string.
  */
 const injectTestCode = (codeString: string) => {
@@ -829,14 +824,6 @@ window.parent.postMessage({
   source: "TEST_RESULTS",
 });
 `;
-
-enum IFRAME_MESSAGE_TYPES {
-  LOG = "LOG",
-  INFO = "INFO",
-  WARN = "WARN",
-  ERROR = "ERROR",
-  TEST_RESULTS = "TEST_RESULTS",
-}
 
 /**
  * Functions used to intercept console methods and post the messages to
