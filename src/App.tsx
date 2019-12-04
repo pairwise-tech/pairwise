@@ -22,7 +22,8 @@ import { types } from "./types/jsx";
  * [ ] Ability to run NodeJS challenges (e.g. fs, express, etc.)
  * [ ] Ability to run React Native challenges (react-native-web?)
  * [ ] Ability to run terminal/shell challenges?
- * [ ] Secure iframe environment from infinite loops and other unsafe code
+ * [ ] Secure iframe environment from infinite loops and other unsafe code, e.g.
+ *     remove alert, confirm, and other global functions from the user's code.
  *
  * EASIER:
  * [ ] Improve UX for test runner
@@ -40,7 +41,7 @@ import { types } from "./types/jsx";
  * ============================================================================
  */
 
-const SUCCESS = "#55f73e";
+const SUCCESS = "#18d954";
 const FAILURE = "#fc426d";
 const PRIMARY_BLUE = "#2ee3ff";
 const HEADER_BORDER = "#176191";
@@ -83,11 +84,13 @@ interface Dependency {
 
 type DependencyCache = Map<string, Dependency>;
 
+type CHALLENGE_TYPE = "react" | "typescript";
+
 interface IState {
   code: string;
-  reactJS: boolean;
   fullScreenEditor: boolean;
   displayTestResults: boolean;
+  challengeType: CHALLENGE_TYPE;
   tests: ReadonlyArray<TestCase>;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
@@ -110,13 +113,15 @@ class Workspace extends React.Component<{}, IState> {
       this.iFrameRenderPreview,
     );
 
+    const challengeType = "react";
+
     this.state = {
+      challengeType,
       logs: DEFAULT_LOGS,
-      reactJS: false,
-      tests: TEST_CASES,
       displayTestResults: false,
       fullScreenEditor: false,
-      code: getStarterCodeForChallenge("typescript"),
+      tests: getTestCases(challengeType),
+      code: getStarterCodeForChallenge(challengeType),
     };
   }
 
@@ -200,8 +205,8 @@ class Workspace extends React.Component<{}, IState> {
   };
 
   render() {
-    const { tests, reactJS, fullScreenEditor } = this.state;
-    const IS_TYPESCRIPT_CHALLENGE = !reactJS;
+    const { tests, challengeType, fullScreenEditor } = this.state;
+    const IS_TYPESCRIPT_CHALLENGE = challengeType !== "react";
 
     return (
       <Page>
@@ -213,7 +218,7 @@ class Workspace extends React.Component<{}, IState> {
             </Button>
             <Button onClick={this.executeTests}>Run Tests</Button>
             <Button onClick={this.toggleChallengeType}>
-              {reactJS ? "TypeScript" : "React"} Challenge
+              {!IS_TYPESCRIPT_CHALLENGE ? "TypeScript" : "React"} Challenge
             </Button>
           </ControlsContainer>
         </Header>
@@ -223,7 +228,7 @@ class Workspace extends React.Component<{}, IState> {
               {!fullScreenEditor ? (
                 <RowsWrapper separatorProps={separatorProps}>
                   <Row
-                    initialHeight={H * 0.32}
+                    initialHeight={H * 0.1}
                     style={{ background: BACKGROUND_CONTENT }}
                   >
                     <ContentContainer>
@@ -236,13 +241,13 @@ class Workspace extends React.Component<{}, IState> {
                     </ContentContainer>
                   </Row>
                   <Row
-                    initialHeight={H * 0.6 - 60}
+                    initialHeight={H * 0.7 - 60}
                     style={{ background: BACKGROUND_EDITOR }}
                   >
                     <div style={{ height: "100%" }}>{this.renderEditor()}</div>
                   </Row>
                   <Row
-                    initialHeight={H * 0.08}
+                    initialHeight={H * 0.2}
                     style={{ background: BACKGROUND_CONTENT }}
                   >
                     <ContentContainer>
@@ -306,35 +311,68 @@ class Workspace extends React.Component<{}, IState> {
   };
 
   renderTestResult = (t: TestCase, i: number) => {
-    const { displayTestResults } = this.state;
-    return (
-      <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
-        <div style={{ width: 175 }}>
-          <b style={{ color: TEXT_TITLE }}>Input: </b>
-          {JSON.stringify(t.input)}{" "}
-        </div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <b style={{ color: TEXT_TITLE }}>Status:</b>
-          <p
-            style={{
-              margin: 0,
-              marginLeft: 4,
-              color: !displayTestResults
-                ? TEXT_CONTENT
-                : t.testResult
-                ? SUCCESS
-                : FAILURE,
-            }}
-          >
-            {displayTestResults
-              ? t.testResult === true
-                ? "Success"
-                : "Failure"
-              : "n/a"}
-          </p>
-        </div>
-      </ContentText>
-    );
+    const { displayTestResults, challengeType } = this.state;
+    if (challengeType === "react") {
+      const { message } = t as TestCaseReact;
+      return (
+        <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ width: 450 }}>
+            <b style={{ color: TEXT_TITLE }}>Test: </b>
+            {message}
+          </div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <b style={{ color: TEXT_TITLE }}>Status:</b>
+            <p
+              style={{
+                margin: 0,
+                marginLeft: 4,
+                color: !displayTestResults
+                  ? TEXT_CONTENT
+                  : t.testResult
+                  ? SUCCESS
+                  : FAILURE,
+              }}
+            >
+              {displayTestResults
+                ? t.testResult === true
+                  ? "Success!"
+                  : "Failure..."
+                : "n/a"}
+            </p>
+          </div>
+        </ContentText>
+      );
+    } else {
+      const { input } = t as TestCaseTypeScript;
+      return (
+        <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ width: 450 }}>
+            <b style={{ color: TEXT_TITLE }}>Input: </b>
+            {JSON.stringify(input)}
+          </div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <b style={{ color: TEXT_TITLE }}>Status:</b>
+            <p
+              style={{
+                margin: 0,
+                marginLeft: 4,
+                color: !displayTestResults
+                  ? TEXT_CONTENT
+                  : t.testResult
+                  ? SUCCESS
+                  : FAILURE,
+              }}
+            >
+              {displayTestResults
+                ? t.testResult === true
+                  ? "Success!"
+                  : "Failure..."
+                : "n/a"}
+            </p>
+          </div>
+        </ContentText>
+      );
+    }
   };
 
   renderEditor = () => {
@@ -440,10 +478,7 @@ class Workspace extends React.Component<{}, IState> {
           /**
            * Save the current code to local storage.
            */
-          saveCodeToLocalStorage(
-            this.state.code,
-            this.state.reactJS ? "react" : "typescript",
-          );
+          saveCodeToLocalStorage(this.state.code, this.state.challengeType);
         } catch (err) {
           this.handleCompilationError(err);
         }
@@ -459,20 +494,24 @@ class Workspace extends React.Component<{}, IState> {
     this.provideModuleTypeDefinitionsToMonaco(dependencies);
 
     const injectModuleDependenciesFn = handleInjectModuleDependencies(
-      dependencies,
+      this.state.challengeType === "react"
+        ? [...dependencies, "react-dom-test-utils"]
+        : dependencies,
     );
+
+    const injectTestCodeFn = injectTestCode(this.state.challengeType);
 
     /**
      * What happens here:
      *
-     * - Hijack all console usages in code string
-     * - Inject test code in code string
+     * - Inject test code in code string, and remove any console methods
+     * - Hijack all console usages in user code string
      * - Transform code with Babel
      * - Fetch and inject required modules into code string
      */
     const processedCodeString = pipe(
+      injectTestCodeFn,
       hijackConsole,
-      injectTestCode,
       transpileCodeWithBabel,
       injectModuleDependenciesFn,
     )(code);
@@ -513,7 +552,7 @@ class Workspace extends React.Component<{}, IState> {
     }
   };
 
-  executeTests = () => {
+  executeTests = async () => {
     this.setState({ displayTestResults: true });
   };
 
@@ -522,16 +561,20 @@ class Workspace extends React.Component<{}, IState> {
   };
 
   toggleChallengeType = () => {
-    this.setState(
-      x => ({ reactJS: !x.reactJS }),
-      this.updateCodeWhenChallengeTypeChanged,
-    );
+    this.setState(x => {
+      const challengeType =
+        x.challengeType === "react" ? "typescript" : "react";
+      return {
+        challengeType,
+        tests: getTestCases(challengeType),
+      };
+    }, this.updateCodeWhenChallengeTypeChanged);
   };
 
   updateCodeWhenChallengeTypeChanged = () => {
     this.setState(
       x => ({
-        code: getStarterCodeForChallenge(x.reactJS ? "react" : "typescript"),
+        code: getStarterCodeForChallenge(x.challengeType),
       }),
       () => {
         this.setMonacoValue();
@@ -748,16 +791,27 @@ const getHTML = (js: string) => `
 </html>
 `;
 
-interface TestCase {
+// <script crossorigin src="https://unpkg.com/react@16.8/umd/react.development.js"></script>
+//     <script crossorigin src="https://unpkg.com/react-dom@16.8/umd/react-dom.development.js"></script>
+//     <script crossorigin src="https://unpkg.com/react-dom@16.8/umd/react-dom-test-utils.development.js"></script>
+
+interface TestCaseReact {
+  message: string;
+  testResult?: boolean;
+}
+
+interface TestCaseTypeScript {
   input: any;
   expected: any;
   testResult?: boolean;
 }
 
+type TestCase = TestCaseTypeScript | TestCaseReact;
+
 /**
  * Sample test cases for the one hard coded test.
  */
-const TEST_CASES: ReadonlyArray<TestCase> = [
+const TEST_CASES: ReadonlyArray<TestCaseTypeScript> = [
   { input: [1, 2], expected: 3 },
   { input: [10, 50], expected: 60 },
   { input: [-10, -50], expected: -60 },
@@ -771,14 +825,43 @@ const TEST_CASES: ReadonlyArray<TestCase> = [
   { input: [2, 50234432], expected: 50234434 },
 ];
 
+const TEST_CASES_REACT: ReadonlyArray<TestCaseReact> = [
+  {
+    message: `Renders a <p> tag with the text "Hello, React!"`,
+  },
+];
+
+const getTestCases = (challengeType: "react" | "typescript") => {
+  if (challengeType === "react") {
+    return TEST_CASES_REACT;
+  } else {
+    return TEST_CASES;
+  }
+};
+
 /**
  * Inject test code into a code string.
  */
-const injectTestCode = (codeString: string) => {
-  return `
-    ${codeString}
-    ${getSampleTestCode(TEST_CASES)}
-  `;
+const injectTestCode = (challengeType: "react" | "typescript") => (
+  codeString: string,
+) => {
+  if (challengeType === "react") {
+    return `
+      ${codeString}
+      {
+        ${removeConsole(codeString)}
+        ${getSampleTestCodeReact()}
+      }
+    `;
+  } else {
+    return `
+      ${codeString}
+      {
+        ${removeConsole(codeString)}
+        ${getSampleTestCode(TEST_CASES)}
+      }
+    `;
+  }
 };
 
 /**
@@ -800,7 +883,7 @@ const addDependencies = (
   let result = "";
 
   for (const dependency of dependencies) {
-    result += dependency;
+    result += `${dependency}\n`;
   }
 
   result += codeString;
@@ -811,7 +894,7 @@ const addDependencies = (
  * Some sample code to run provided tests against a challenge and post
  * the messages back to the app to render.
  */
-const getSampleTestCode = (testCases?: ReadonlyArray<TestCase>) => `
+const getSampleTestCode = (testCases: ReadonlyArray<TestCaseTypeScript>) => `
 let results = [];
 
 for (const x of ${JSON.stringify(testCases)}) {
@@ -823,6 +906,38 @@ window.parent.postMessage({
   message: JSON.stringify(results),
   source: "TEST_RESULTS",
 });
+`;
+
+/**
+ * Some sample code to run provided tests against a challenge and post
+ * the messages back to the app to render.
+ */
+const getSampleTestCodeReact = () => `
+{
+  let results = [];
+
+  const consoleOverride = (...args) => {};
+  const __interceptConsoleLog = consoleOverride;
+  const __interceptConsoleInfo = consoleOverride;
+  const __interceptConsoleWarn = consoleOverride;
+  const __interceptConsoleError = consoleOverride;
+
+  function fn() {
+    const container = document.createElement("div");
+    ReactTestUtils.act(() => {
+      ReactDOM.render(<Main />, container);
+    });
+    const label = container.querySelector("h1");
+    return label.textContent === "Hello, React!";
+  }
+
+  results.push(fn());
+
+  window.parent.postMessage({
+    message: JSON.stringify(results),
+    source: "TEST_RESULTS",
+  });
+}
 `;
 
 /**
@@ -925,6 +1040,14 @@ const hijackConsole = (codeString: string) => {
   return `${CONSOLE_INTERCEPTORS}${replacedConsole}`;
 };
 
+const removeConsole = (codeString: string) => {
+  return codeString
+    .replace(/console.log/g, "// ")
+    .replace(/console.info/g, "// ")
+    .replace(/console.warn/g, "// ")
+    .replace(/console.error/g, "// ");
+};
+
 /**
  * Transpile the code use Babel standalone module.
  */
@@ -985,6 +1108,8 @@ export const assertUnreachable = (x: never): never => {
 const CDN_PACKAGE_LINKS = {
   react: "https://unpkg.com/react@16/umd/react.development.js",
   "react-dom": "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
+  "react-dom-test-utils":
+    "https://unpkg.com/react-dom@16.12.0/umd/react-dom-test-utils.development.js",
 };
 
 class DependencyCacheClass {
@@ -992,6 +1117,8 @@ class DependencyCacheClass {
   cdnLinks = new Map(Object.entries(CDN_PACKAGE_LINKS));
 
   getDependency = async (packageName: string) => {
+    console.log("Getting package: ", packageName);
+
     if (this.dependencies.has(packageName)) {
       /**
        * The package is cached just return the code.
@@ -1007,7 +1134,14 @@ class DependencyCacheClass {
            * the values there.
            */
           const uri = this.cdnLinks.get(packageName) as string;
-          const response = await axios.get(uri);
+          console.log(uri);
+
+          const response = await axios.get(uri, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          });
           const source = response.data;
           this.dependencies.set(packageName, { source });
           return source;
