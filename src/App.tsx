@@ -55,12 +55,29 @@ const BACKGROUND_EDITOR = "rgb(35, 35, 35)";
 const BACKGROUND_CONSOLE = "rgb(36, 36, 36)";
 
 /** ===========================================================================
- * Types & Config
+ * Dimensions
  * ============================================================================
  */
 
 const W = window.innerWidth;
 const H = window.innerHeight;
+
+const HEADER_HEIGHT = 60;
+
+const WORKSPACE_HEIGHT = H - HEADER_HEIGHT;
+const EDITOR_PANEL_WIDTH = W * 0.65;
+
+const CHALLENGE_CONTENT_HEIGHT = H * 0.1;
+const EDITOR_HEIGHT = H * 0.7 - HEADER_HEIGHT;
+const TEST_CONTENT_HEIGHT = H * 0.2;
+
+const PREVIEW_HEIGHT = H * 0.6 - HEADER_HEIGHT;
+const CONSOLE_HEIGHT = H * 0.4;
+
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
 
 enum IFRAME_MESSAGE_TYPES {
   LOG = "LOG",
@@ -245,11 +262,14 @@ class Workspace extends React.Component<{}, IState> {
         </Header>
         <WorkspaceContainer>
           <ColsWrapper separatorProps={separatorProps}>
-            <Col initialWidth={W * 0.65} initialHeight={H - 60}>
+            <Col
+              initialWidth={EDITOR_PANEL_WIDTH}
+              initialHeight={WORKSPACE_HEIGHT}
+            >
               {!fullScreenEditor ? (
                 <RowsWrapper separatorProps={separatorProps}>
                   <Row
-                    initialHeight={H * 0.1}
+                    initialHeight={CHALLENGE_CONTENT_HEIGHT}
                     style={{ background: BACKGROUND_CONTENT }}
                   >
                     <ContentContainer>
@@ -262,13 +282,13 @@ class Workspace extends React.Component<{}, IState> {
                     </ContentContainer>
                   </Row>
                   <Row
-                    initialHeight={H * 0.7 - 60}
+                    initialHeight={EDITOR_HEIGHT}
                     style={{ background: BACKGROUND_EDITOR }}
                   >
                     {MONACO_CONTAINER}
                   </Row>
                   <Row
-                    initialHeight={H * 0.2}
+                    initialHeight={TEST_CONTENT_HEIGHT}
                     style={{ background: BACKGROUND_CONTENT }}
                   >
                     <ContentContainer>
@@ -286,13 +306,13 @@ class Workspace extends React.Component<{}, IState> {
               )}
             </Col>
             {IS_TYPESCRIPT_CHALLENGE ? (
-              <Col style={consoleRowStyles} initialHeight={H - 60}>
+              <Col style={consoleRowStyles} initialHeight={WORKSPACE_HEIGHT}>
                 <div>
                   <Console variant="dark" logs={this.state.logs} />
                   <FrameContainer
                     id="iframe"
-                    ref={this.setIframeRef}
                     title="code-preview"
+                    ref={this.setIframeRef}
                     style={{ visibility: "hidden", height: 0, width: 0 }}
                   />
                 </div>
@@ -300,16 +320,16 @@ class Workspace extends React.Component<{}, IState> {
             ) : (
               <Col>
                 <RowsWrapper separatorProps={separatorProps}>
-                  <Row initialHeight={H * 0.6 - 30}>
+                  <Row initialHeight={PREVIEW_HEIGHT}>
                     <div>
                       <FrameContainer
                         id="iframe"
-                        ref={this.setIframeRef}
                         title="code-preview"
+                        ref={this.setIframeRef}
                       />
                     </div>
                   </Row>
-                  <Row style={consoleRowStyles} initialHeight={H * 0.4 - 30}>
+                  <Row style={consoleRowStyles} initialHeight={CONSOLE_HEIGHT}>
                     <div>
                       <Console variant="dark" logs={this.state.logs} />
                     </div>
@@ -598,7 +618,7 @@ const Page = styled.div`
 `;
 
 const Header = styled.div`
-  height: 60px;
+  height: ${HEADER_HEIGHT};
   width: calc(100vw - 48);
   padding-left: 24px;
   padding-right: 24px;
