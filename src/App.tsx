@@ -856,6 +856,9 @@ const TEST_CASES: ReadonlyArray<TestCaseTypeScript> = [
   { input: [2, 50234432], expected: 50234434 },
 ].map(addDefaultTestResults);
 
+/**
+ * Sample test case messages for a React challenge.
+ */
 const TEST_CASES_REACT: ReadonlyArray<TestCaseReact> = [
   {
     message: `Renders a <h1> tag with the text "Hello, React!"`,
@@ -945,6 +948,15 @@ window.parent.postMessage({
 /**
  * Some sample code to run provided tests against a challenge and post
  * the messages back to the app to render.
+ *
+ * NOTE: The test case involves writing functions inline which will then
+ * execute directly against the user's code which will be provided in scope
+ * above.
+ *
+ * Presumably, these functions can be provided using the Workspace CMS™
+ * which will provide an easier way to create and edit these test cases and
+ * then behind the scenes write the tests as strings to some file, which could
+ * then be read like the test cases below:
  */
 const getSampleTestCodeReact = () => `
 {
@@ -1080,6 +1092,12 @@ const hijackConsole = (codeString: string) => {
   return `${CONSOLE_INTERCEPTORS}${replacedConsole}`;
 };
 
+/**
+ * Remove all calls to console methods in a code string. This just removes
+ * them with // to create a comment which will not be evaluated... this could
+ * create problems if the console statement was written inline with some
+ * real code, which would then no longer execute...
+ */
 const removeConsole = (codeString: string) => {
   return codeString
     .replace(/console.log/g, "// ")
