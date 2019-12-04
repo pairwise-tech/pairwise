@@ -36,17 +36,17 @@ import {
  * - TODO: Things not done yet for the challenge workspace:
  *
  * HARD:
- * [ ] TSX syntax highlighting
- * [-] Type definition files: need to find type definition files
- * [-] Fetch import modules dynamically: need to find UNPKG links dynamically
+ * [ ] TSX syntax highlighting!
+ * [~] Type definition files: find a way to use actual type definition files...
+ * [~] Fetch import modules dynamically: need to find UNPKG links dynamically...
  * [x] TSX syntax support in monaco editor
  * [x] Ability to test React challenges
- * [ ] Ability to run React Native challenges (react-native-web?)
- * [ ] Ability to run NodeJS challenges (e.g. fs, express, etc.)
- * [ ] Ability to run database challenges, (e.g. SQL, Mongo, etc.)
- * [ ] Ability to run terminal/shell challenges?
- * [ ] Secure iframe environment from infinite loops and other unsafe code, e.g.
+ * [!] Ability to run React Native challenges (react-native-web?)
+ * [!] Ability to run NodeJS challenges (e.g. fs, express, etc.)
+ * [!] Ability to run database challenges, (e.g. SQL, Mongo, etc.)
+ * [!] Secure iframe environment from infinite loops and other unsafe code, e.g.
  *     remove alert, confirm, and other global functions from the user's code.
+ * [ ] Ability to run terminal/shell challenges?
  *
  * EASIER:
  * [ ] Markdown support in challenge content and test results
