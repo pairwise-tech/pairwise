@@ -16,7 +16,7 @@ import { types } from "./types/jsx";
  * HARD:
  * [x] TSX syntax support in monaco editor
  * [ ] TSX syntax highlighting
- * [ ] Ability to test React challenges
+ * [x] Ability to test React challenges
  * [-] Type definition files: need to find type definition files
  * [-] Fetch import modules dynamically: need to find UNPKG links dynamically
  * [ ] Ability to run NodeJS challenges (e.g. fs, express, etc.)
@@ -30,7 +30,7 @@ import { types } from "./types/jsx";
  * [x] Include console warn and info in console method overrides
  * [ ] cmd+enter should run code but not enter a new line in the editor
  * [ ] Workspace should be generic and just accept a given challenge configuration
- * [ ] console-feed would allow user to type and run code (if possible)
+ * [ ] Markdown support in challenge content and test results
  * [x] Don't show test console output in workspace console window
  *
  * ============================================================================
@@ -91,6 +91,7 @@ interface IState {
   fullScreenEditor: boolean;
   challengeType: CHALLENGE_TYPE;
   tests: ReadonlyArray<TestCase>;
+  monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
@@ -103,7 +104,6 @@ class Workspace extends React.Component<{}, IState> {
   monacoEditor: any = null;
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   throttledRenderPreviewFunction: () => void;
-  monacoContainer = (<div id="monaco-editor" style={{ height: "100%" }} />);
 
   constructor(props: {}) {
     super(props);
@@ -120,6 +120,7 @@ class Workspace extends React.Component<{}, IState> {
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       tests: getTestCases(challengeType),
+      monacoInitializationError: false,
       code: getStarterCodeForChallenge(challengeType),
     };
   }
@@ -171,11 +172,11 @@ class Workspace extends React.Component<{}, IState> {
         this.initializeMonacoEditor();
       })
       .catch(error => {
-        /* TODO: Handle error state */
         console.error(
           "An error occurred during initialization of Monaco: ",
           error,
         );
+        this.setState({ monacoInitializationError: true });
       });
   };
 
@@ -223,7 +224,11 @@ class Workspace extends React.Component<{}, IState> {
     const { tests, challengeType, fullScreenEditor } = this.state;
     const IS_TYPESCRIPT_CHALLENGE = challengeType !== "react";
 
-    const MONACO_CONTAINER = this.monacoContainer;
+    const MONACO_CONTAINER = (
+      <div style={{ height: "100%" }}>
+        <div id="monaco-editor" style={{ height: "100%" }} />
+      </div>
+    );
 
     return (
       <Page>
@@ -260,8 +265,7 @@ class Workspace extends React.Component<{}, IState> {
                     initialHeight={H * 0.7 - 60}
                     style={{ background: BACKGROUND_EDITOR }}
                   >
-                    {/* <div style={{ height: "100%" }}>{this.renderEditor()}</div> */}
-                    <div style={{ height: "100%" }}>{MONACO_CONTAINER}</div>
+                    {MONACO_CONTAINER}
                   </Row>
                   <Row
                     initialHeight={H * 0.2}
@@ -277,8 +281,7 @@ class Workspace extends React.Component<{}, IState> {
                 </RowsWrapper>
               ) : (
                 <div style={{ height: "100%", background: BACKGROUND_CONSOLE }}>
-                  {/* {this.renderEditor()} */}
-                  <div style={{ height: "100%" }}>{MONACO_CONTAINER}</div>
+                  {MONACO_CONTAINER}
                 </div>
               )}
             </Col>
@@ -322,7 +325,7 @@ class Workspace extends React.Component<{}, IState> {
 
   getTestSummaryString = () => {
     const { tests } = this.state;
-    const passed = tests.filter(t => t.testResult === true);
+    const passed = tests.filter(t => t.testResult);
     return `Tests: ${passed.length}/${tests.length} Passed`;
   };
 
@@ -338,15 +341,9 @@ class Workspace extends React.Component<{}, IState> {
           </div>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <b style={{ color: TEXT_TITLE }}>Status:</b>
-            <p
-              style={{
-                margin: 0,
-                marginLeft: 4,
-                color: t.testResult ? SUCCESS : FAILURE,
-              }}
-            >
-              {t.testResult === true ? "Success!" : "Failure..."}
-            </p>
+            <SuccessFailureText testResult={t.testResult}>
+              {t.testResult ? "Success!" : "Failure..."}
+            </SuccessFailureText>
           </div>
         </ContentText>
       );
@@ -360,15 +357,9 @@ class Workspace extends React.Component<{}, IState> {
           </div>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <b style={{ color: TEXT_TITLE }}>Status:</b>
-            <p
-              style={{
-                margin: 0,
-                marginLeft: 4,
-                color: t.testResult ? SUCCESS : FAILURE,
-              }}
-            >
-              {t.testResult === true ? "Success!" : "Failure..."}
-            </p>
+            <SuccessFailureText testResult={t.testResult}>
+              {t.testResult ? "Success!" : "Failure..."}
+            </SuccessFailureText>
           </div>
         </ContentText>
       );
@@ -462,17 +453,20 @@ class Workspace extends React.Component<{}, IState> {
   };
 
   iFrameRenderPreview = () => {
-    // console.clear();
+    console.clear();
     this.setState({ logs: DEFAULT_LOGS }, async () => {
       if (this.iFrameRef) {
         try {
           /**
-           * Process the code string and create an HTML document to render to
-           * the iframe.
+           * Process the code string and create an HTML document to render
+           * to the iframe.
            */
           const code = await this.compileAndTransformCodeString();
           const IFRAME_HTML_DOCUMENT = getHTML(code);
 
+          /**
+           * Insert the HTML document into the iframe.
+           */
           this.iFrameRef.srcdoc = IFRAME_HTML_DOCUMENT;
 
           /**
@@ -712,6 +706,13 @@ const Button = styled.button`
   }
 `;
 
+const SuccessFailureText = styled.p`
+  margin: 0;
+  margin-left: 4px;
+  color: ${(props: { testResult: boolean }) =>
+    props.testResult ? SUCCESS : FAILURE};
+`;
+
 /** ===========================================================================
  * Code Utils
  * ============================================================================
@@ -794,22 +795,20 @@ const getHTML = (js: string) => `
 </html>
 `;
 
-// <script crossorigin src="https://unpkg.com/react@16.8/umd/react.development.js"></script>
-//     <script crossorigin src="https://unpkg.com/react-dom@16.8/umd/react-dom.development.js"></script>
-//     <script crossorigin src="https://unpkg.com/react-dom@16.8/umd/react-dom-test-utils.development.js"></script>
-
 interface TestCaseReact {
   message: string;
-  testResult?: boolean;
+  testResult: boolean;
 }
 
 interface TestCaseTypeScript {
   input: any;
   expected: any;
-  testResult?: boolean;
+  testResult: boolean;
 }
 
 type TestCase = TestCaseTypeScript | TestCaseReact;
+
+const addDefaultTestResults = (x: any) => ({ ...x, testResult: false });
 
 /**
  * Sample test cases for the one hard coded test.
@@ -826,7 +825,7 @@ const TEST_CASES: ReadonlyArray<TestCaseTypeScript> = [
   { input: [1000, 500], expected: 1500 },
   { input: [-100, 100], expected: 0 },
   { input: [2, 50234432], expected: 50234434 },
-];
+].map(addDefaultTestResults);
 
 const TEST_CASES_REACT: ReadonlyArray<TestCaseReact> = [
   {
@@ -835,7 +834,7 @@ const TEST_CASES_REACT: ReadonlyArray<TestCaseReact> = [
   {
     message: `Renders a controlled <input /> using React state`,
   },
-];
+].map(addDefaultTestResults);
 
 const getTestCases = (challengeType: "react" | "typescript") => {
   if (challengeType === "react") {
