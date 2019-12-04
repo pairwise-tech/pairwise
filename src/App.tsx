@@ -41,7 +41,7 @@ import { types } from "./types/jsx";
  * ============================================================================
  */
 
-const SUCCESS = "#18d954";
+const SUCCESS = "#2ee3ff";
 const FAILURE = "#fc426d";
 const PRIMARY_BLUE = "#2ee3ff";
 const HEADER_BORDER = "#176191";
@@ -89,7 +89,6 @@ type CHALLENGE_TYPE = "react" | "typescript";
 interface IState {
   code: string;
   fullScreenEditor: boolean;
-  displayTestResults: boolean;
   challengeType: CHALLENGE_TYPE;
   tests: ReadonlyArray<TestCase>;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
@@ -104,6 +103,7 @@ class Workspace extends React.Component<{}, IState> {
   monacoEditor: any = null;
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   throttledRenderPreviewFunction: () => void;
+  monacoContainer = (<div id="monaco-editor" style={{ height: "100%" }} />);
 
   constructor(props: {}) {
     super(props);
@@ -118,7 +118,6 @@ class Workspace extends React.Component<{}, IState> {
     this.state = {
       challengeType,
       logs: DEFAULT_LOGS,
-      displayTestResults: false,
       fullScreenEditor: false,
       tests: getTestCases(challengeType),
       code: getStarterCodeForChallenge(challengeType),
@@ -133,7 +132,10 @@ class Workspace extends React.Component<{}, IState> {
       false,
     );
 
-    this.initializeMonacoEditor();
+    this.initializeMonaco();
+
+    /* Handle some timing issue with Monaco initialization... */
+    await wait(500);
     this.iFrameRenderPreview();
   }
 
@@ -145,7 +147,7 @@ class Workspace extends React.Component<{}, IState> {
     );
   }
 
-  initializeMonacoEditor = () => {
+  initializeMonaco = () => {
     monaco
       .init()
       .then(mn => {
@@ -164,36 +166,9 @@ class Workspace extends React.Component<{}, IState> {
           noSemanticValidation: false,
         });
 
-        const options = {
-          theme: "vs-dark",
-          automaticLayout: true,
-          fixedOverflowWidgets: true,
-        };
-
-        const model = mn.editor.createModel(
-          this.state.code,
-          "typescript",
-          new mn.Uri.parse("file:///main.tsx"),
-        );
-
-        model.onDidChangeContent(this.handleEditorContentChange);
-
-        mn.editor.create(document.getElementById("monaco-editor"), {
-          ...options,
-          model,
-        });
-
-        /**
-         * This is a separate model which provides JSX type information. See
-         * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
-         */
-        mn.editor.createModel(
-          types,
-          "typescript",
-          mn.Uri.parse("file:///index.d.ts"),
-        );
-
         this.monacoEditor = mn;
+
+        this.initializeMonacoEditor();
       })
       .catch(error => {
         /* TODO: Handle error state */
@@ -204,9 +179,51 @@ class Workspace extends React.Component<{}, IState> {
       });
   };
 
+  initializeMonacoEditor = () => {
+    const mn = this.monacoEditor;
+
+    const options = {
+      theme: "vs-dark",
+      automaticLayout: true,
+      fixedOverflowWidgets: true,
+    };
+
+    const model = mn.editor.createModel(
+      this.state.code,
+      "typescript",
+      new mn.Uri.parse("file:///main.tsx"),
+    );
+
+    model.onDidChangeContent(this.handleEditorContentChange);
+
+    mn.editor.create(document.getElementById("monaco-editor"), {
+      ...options,
+      model,
+    });
+
+    /**
+     * This is a separate model which provides JSX type information. See
+     * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
+     */
+    mn.editor.createModel(
+      types,
+      "typescript",
+      mn.Uri.parse("file:///index.d.ts"),
+    );
+  };
+
+  disposeModels = () => {
+    const models = this.monacoEditor.editor.getModels();
+    for (const model of models) {
+      model.dispose();
+    }
+  };
+
   render() {
     const { tests, challengeType, fullScreenEditor } = this.state;
     const IS_TYPESCRIPT_CHALLENGE = challengeType !== "react";
+
+    const MONACO_CONTAINER = this.monacoContainer;
 
     return (
       <Page>
@@ -216,7 +233,6 @@ class Workspace extends React.Component<{}, IState> {
             <Button onClick={this.toggleEditorType}>
               {fullScreenEditor ? "Regular" : "Full Screen"} Editor
             </Button>
-            <Button onClick={this.executeTests}>Run Tests</Button>
             <Button onClick={this.toggleChallengeType}>
               {!IS_TYPESCRIPT_CHALLENGE ? "TypeScript" : "React"} Challenge
             </Button>
@@ -244,7 +260,8 @@ class Workspace extends React.Component<{}, IState> {
                     initialHeight={H * 0.7 - 60}
                     style={{ background: BACKGROUND_EDITOR }}
                   >
-                    <div style={{ height: "100%" }}>{this.renderEditor()}</div>
+                    {/* <div style={{ height: "100%" }}>{this.renderEditor()}</div> */}
+                    <div style={{ height: "100%" }}>{MONACO_CONTAINER}</div>
                   </Row>
                   <Row
                     initialHeight={H * 0.2}
@@ -260,7 +277,8 @@ class Workspace extends React.Component<{}, IState> {
                 </RowsWrapper>
               ) : (
                 <div style={{ height: "100%", background: BACKGROUND_CONSOLE }}>
-                  {this.renderEditor()}
+                  {/* {this.renderEditor()} */}
+                  <div style={{ height: "100%" }}>{MONACO_CONTAINER}</div>
                 </div>
               )}
             </Col>
@@ -303,15 +321,13 @@ class Workspace extends React.Component<{}, IState> {
   }
 
   getTestSummaryString = () => {
-    const { tests, displayTestResults } = this.state;
+    const { tests } = this.state;
     const passed = tests.filter(t => t.testResult === true);
-    return !displayTestResults
-      ? "Tests"
-      : `Tests: ${passed.length}/${tests.length} Passed`;
+    return `Tests: ${passed.length}/${tests.length} Passed`;
   };
 
   renderTestResult = (t: TestCase, i: number) => {
-    const { displayTestResults, challengeType } = this.state;
+    const { challengeType } = this.state;
     if (challengeType === "react") {
       const { message } = t as TestCaseReact;
       return (
@@ -326,18 +342,10 @@ class Workspace extends React.Component<{}, IState> {
               style={{
                 margin: 0,
                 marginLeft: 4,
-                color: !displayTestResults
-                  ? TEXT_CONTENT
-                  : t.testResult
-                  ? SUCCESS
-                  : FAILURE,
+                color: t.testResult ? SUCCESS : FAILURE,
               }}
             >
-              {displayTestResults
-                ? t.testResult === true
-                  ? "Success!"
-                  : "Failure..."
-                : "n/a"}
+              {t.testResult === true ? "Success!" : "Failure..."}
             </p>
           </div>
         </ContentText>
@@ -356,18 +364,10 @@ class Workspace extends React.Component<{}, IState> {
               style={{
                 margin: 0,
                 marginLeft: 4,
-                color: !displayTestResults
-                  ? TEXT_CONTENT
-                  : t.testResult
-                  ? SUCCESS
-                  : FAILURE,
+                color: t.testResult ? SUCCESS : FAILURE,
               }}
             >
-              {displayTestResults
-                ? t.testResult === true
-                  ? "Success!"
-                  : "Failure..."
-                : "n/a"}
+              {t.testResult === true ? "Success!" : "Failure..."}
             </p>
           </div>
         </ContentText>
@@ -548,16 +548,18 @@ class Workspace extends React.Component<{}, IState> {
 
   handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === "Meta" && event.keyCode === 91) {
-      this.executeTests();
+      this.iFrameRenderPreview();
     }
   };
 
-  executeTests = async () => {
-    this.setState({ displayTestResults: true });
-  };
-
   toggleEditorType = () => {
-    this.setState(x => ({ fullScreenEditor: !x.fullScreenEditor }));
+    this.setState(
+      x => ({ fullScreenEditor: !x.fullScreenEditor }),
+      () => {
+        this.disposeModels();
+        this.initializeMonacoEditor();
+      },
+    );
   };
 
   toggleChallengeType = () => {
@@ -656,6 +658,7 @@ const ContentContainer = styled.div`
 
 const ContentTitle = styled.h3`
   margin: 0;
+  margin-bottom: 12px;
   color: ${TEXT_TITLE};
 `;
 
@@ -827,7 +830,10 @@ const TEST_CASES: ReadonlyArray<TestCaseTypeScript> = [
 
 const TEST_CASES_REACT: ReadonlyArray<TestCaseReact> = [
   {
-    message: `Renders a <p> tag with the text "Hello, React!"`,
+    message: `Renders a <h1> tag with the text "Hello, React!"`,
+  },
+  {
+    message: `Renders a controlled <input /> using React state`,
   },
 ];
 
@@ -916,13 +922,7 @@ const getSampleTestCodeReact = () => `
 {
   let results = [];
 
-  const consoleOverride = (...args) => {};
-  const __interceptConsoleLog = consoleOverride;
-  const __interceptConsoleInfo = consoleOverride;
-  const __interceptConsoleWarn = consoleOverride;
-  const __interceptConsoleError = consoleOverride;
-
-  function fn() {
+  function fn1() {
     const container = document.createElement("div");
     ReactTestUtils.act(() => {
       ReactDOM.render(<Main />, container);
@@ -931,7 +931,19 @@ const getSampleTestCodeReact = () => `
     return label.textContent === "Hello, React!";
   }
 
-  results.push(fn());
+  function fn2() {
+    const container = document.createElement("div");
+    ReactTestUtils.act(() => {
+      ReactDOM.render(<Main />, container);
+    });
+    const inputEl = container.querySelector("input");
+    const testValue = "giraffe";
+    ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });
+    return inputEl.value === testValue;
+  }
+
+  results.push(fn1());
+  results.push(fn2());
 
   window.parent.postMessage({
     message: JSON.stringify(results),
@@ -1054,7 +1066,7 @@ const removeConsole = (codeString: string) => {
 const transpileCodeWithBabel = (codeString: string) => {
   return Babel.transform(codeString, {
     presets: [
-      "es2015",
+      "es2017",
       "react",
       ["typescript", { isTSX: true, allExtensions: true }],
     ],
@@ -1090,6 +1102,13 @@ export const assertUnreachable = (x: never): never => {
   );
 };
 
+/**
+ * Artificially wait the provided amount of time.
+ */
+export const wait = async (time: number = 1000) => {
+  await new Promise((_: any) => setTimeout(_, time));
+};
+
 /** ===========================================================================
  * Module Caching Service
  * ============================================================================
@@ -1117,8 +1136,6 @@ class DependencyCacheClass {
   cdnLinks = new Map(Object.entries(CDN_PACKAGE_LINKS));
 
   getDependency = async (packageName: string) => {
-    console.log("Getting package: ", packageName);
-
     if (this.dependencies.has(packageName)) {
       /**
        * The package is cached just return the code.
@@ -1134,8 +1151,6 @@ class DependencyCacheClass {
            * the values there.
            */
           const uri = this.cdnLinks.get(packageName) as string;
-          console.log(uri);
-
           const response = await axios.get(uri, {
             headers: {
               "Content-Type": "application/json",
