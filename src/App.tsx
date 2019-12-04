@@ -120,15 +120,18 @@ interface IState {
 class Workspace extends React.Component<{}, IState> {
   monacoEditor: any = null;
   iFrameRef: Nullable<HTMLIFrameElement> = null;
-  throttledRenderPreviewFunction: () => void;
+  debouncedSaveCodeFunction: () => void;
+  debouncedRenderPreviewFunction: () => void;
 
   constructor(props: {}) {
     super(props);
 
-    this.throttledRenderPreviewFunction = debounce(
+    this.debouncedRenderPreviewFunction = debounce(
       500,
       this.iFrameRenderPreview,
     );
+
+    this.debouncedSaveCodeFunction = debounce(50, this.saveCodeToLocalStorage);
 
     const challengeType = "react";
 
@@ -421,9 +424,20 @@ class Workspace extends React.Component<{}, IState> {
     const value = model.getValue();
 
     /**
-     * Delay rendering on changes for performance.
+     * Update the code and then call debounced methods to handle saving the
+     * user code to local storage and rendering a preview.
      */
-    this.setState(ps => ({ code: value }), this.throttledRenderPreviewFunction);
+    this.setState({ code: value }, () => {
+      this.debouncedSaveCodeFunction();
+      this.debouncedRenderPreviewFunction();
+    });
+  };
+
+  saveCodeToLocalStorage = () => {
+    /**
+     * Save the current code to local storage.
+     */
+    saveCodeToLocalStorage(this.state.code, this.state.challengeType);
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
@@ -488,11 +502,6 @@ class Workspace extends React.Component<{}, IState> {
            * Insert the HTML document into the iframe.
            */
           this.iFrameRef.srcdoc = IFRAME_HTML_DOCUMENT;
-
-          /**
-           * Save the current code to local storage.
-           */
-          saveCodeToLocalStorage(this.state.code, this.state.challengeType);
         } catch (err) {
           this.handleCompilationError(err);
         }
