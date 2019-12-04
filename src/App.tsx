@@ -618,7 +618,7 @@ const Page = styled.div`
 `;
 
 const Header = styled.div`
-  height: ${HEADER_HEIGHT};
+  height: ${HEADER_HEIGHT}px;
   width: calc(100vw - 48);
   padding-left: 24px;
   padding-right: 24px;
