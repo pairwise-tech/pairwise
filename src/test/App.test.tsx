@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Workspace from "./App";
+
+import Workspace from "../components/Workspace";
 
 it("renders without crashing", () => {
   const div = document.createElement("div");
