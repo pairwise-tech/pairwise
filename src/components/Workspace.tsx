@@ -32,13 +32,18 @@ import {
   wait,
 } from "../tools/utils";
 
+// Import TSX SyntaxHighlightWorker:
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
+
 /** ===========================================================================
  * - TODO: Things not done yet for the challenge workspace:
  *
  * HARD:
- * [ ] TSX syntax highlighting!
  * [~] Type definition files: find a way to use actual type definition files...
  * [~] Fetch import modules dynamically: need to find UNPKG links dynamically...
+ * [x] TSX syntax highlighting
  * [x] TSX syntax support in monaco editor
  * [x] Ability to test React challenges
  * [!] Ability to run React Native challenges (react-native-web?)
@@ -46,7 +51,6 @@ import {
  * [!] Ability to run database challenges, (e.g. SQL, Mongo, etc.)
  * [!] Secure iframe environment from infinite loops and other unsafe code, e.g.
  *     remove alert, confirm, and other global functions from the user's code.
- * [ ] Ability to run terminal/shell challenges?
  *
  * EASIER:
  * [ ] Markdown support in challenge content and test results
@@ -109,6 +113,7 @@ interface IState {
  */
 
 class Workspace extends React.Component<{}, IState> {
+  syntaxWorker: any = null;
   monacoEditor: any = null;
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   debouncedSaveCodeFunction: () => void;
@@ -147,11 +152,14 @@ class Workspace extends React.Component<{}, IState> {
       false,
     );
 
+    /* Initialize Monaco Editor and the SyntaxHighlightWorker */
     this.initializeMonaco();
+    this.initializeSyntaxHighlightWorker();
 
     /* Handle some timing issue with Monaco initialization... */
     await wait(500);
     this.iFrameRenderPreview();
+    this.requestSyntaxHighlighting(this.state.code);
   }
 
   componentWillUnmount() {
@@ -161,6 +169,53 @@ class Workspace extends React.Component<{}, IState> {
       this.handleReceiveMessageFromCodeRunner,
     );
   }
+
+  initializeSyntaxHighlightWorker = () => {
+    this.syntaxWorker = new SyntaxHighlightWorker();
+
+    this.syntaxWorker.addEventListener("message", (event: any) => {
+      const { classifications, identifier } = event.data;
+      if (classifications && identifier) {
+        if (identifier === "TSX_SYNTAX_HIGHLIGHTER") {
+          requestAnimationFrame(() => {
+            this.updateSyntaxDecorations(classifications);
+          });
+        }
+      }
+    });
+  };
+
+  updateSyntaxDecorations = async (classifications: ReadonlyArray<any>) => {
+    const decorations = classifications.map(c => {
+      /**
+       * NOTE: Custom classNames to allow custom styling for the
+       * editor theme:
+       */
+      const inlineClassName = c.type
+        ? `${c.kind} ${c.type}-of-${c.parentKind}`
+        : c.kind;
+
+      return {
+        range: new this.monacoEditor.Range(
+          c.startLine,
+          c.start,
+          c.endLine,
+          c.end,
+        ),
+        options: {
+          inlineClassName,
+        },
+      };
+    });
+
+    const models = this.monacoEditor.editor.getModels();
+    const model = models[0];
+
+    model.decorations = model.deltaDecorations(
+      model.decorations || [],
+      decorations,
+    );
+  };
 
   initializeMonaco = () => {
     monaco
@@ -398,6 +453,9 @@ class Workspace extends React.Component<{}, IState> {
     /**
      * TODO: Fetch @types/ package type definitions if they exist or fallback
      * to the module declaration.
+     *
+     * See this:
+     * https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/workers/fetch-dependency-typings.js
      */
     const moduleDeclarations = packages.reduce(
       (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
@@ -411,16 +469,26 @@ class Workspace extends React.Component<{}, IState> {
     }
   };
 
+  requestSyntaxHighlighting = (code: string) => {
+    if (this.syntaxWorker) {
+      this.syntaxWorker.postMessage({ code });
+    }
+  };
+
   handleEditorContentChange = (_: any) => {
     const models = this.monacoEditor.editor.getModels();
     const model = models[0];
-    const value = model.getValue();
+    const code = model.getValue();
 
     /**
-     * Update the code and then call debounced methods to handle saving the
-     * user code to local storage and rendering a preview.
+     * Update the stored code value and then:
+     *
+     * - Dispatch the syntax highlighting worker
+     * - Save the code to local storage (debounced)
+     * - Render the iframe preview (debounced)
      */
-    this.setState({ code: value }, () => {
+    this.setState({ code }, () => {
+      this.requestSyntaxHighlighting(code);
       this.debouncedSaveCodeFunction();
       this.debouncedRenderPreviewFunction();
     });
@@ -480,7 +548,7 @@ class Workspace extends React.Component<{}, IState> {
   };
 
   iFrameRenderPreview = () => {
-    console.clear();
+    // console.clear();
     this.setState({ logs: DEFAULT_LOGS }, async () => {
       if (this.iFrameRef) {
         try {

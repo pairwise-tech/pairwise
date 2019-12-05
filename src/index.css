@@ -13,3 +13,34 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* Custom editor styles for JSX elements:
+ *
+ * TODO: Improve styling to create a better theme.
+ */
+
+.JsxText {
+  color: #5c6773;
+}
+
+.JsxSelfClosingElement,
+.JsxOpeningElement,
+.JsxClosingElement,
+.tagName-of-JsxOpeningElement,
+.tagName-of-JsxClosingElement,
+.tagName-of-JsxSelfClosingElement {
+  color: #f49255 !important;
+}
+
+.name-of-JsxAttribute {
+  color: #f4cf56 !important;
+}
+
+.name-of-PropertyAssignment {
+  color: #2ed52e !important;
+}
+
+.name-of-MethodDeclaration,
+.name-of-PropertyDeclaration {
+  color: #5ccfe6 !important;
+}
