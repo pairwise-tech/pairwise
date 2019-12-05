@@ -56,6 +56,7 @@ import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highligh
  * [ ] Markdown support in challenge content and test results
  * [ ] cmd+enter should run code but not enter a new line in the editor
  * [ ] Syntax/compilation errors should be reported to the workspace console
+ * [ ] Improve theme styling for code editor (multi theme support?)
  * [x] Include console warn and info in console method overrides
  * [x] Don't show test console output in workspace console window
  *
