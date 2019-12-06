@@ -44,7 +44,14 @@ import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highligh
  * [~] Type definition files: see codesandbox source code which dynamically
  *     fetches and inserts @types/ dependencies for modules.
  * [~] Fetch import modules dynamically: unknown ~
- * [!] Ability to run React Native challenges: should be possible by importing
+ *     - I think on these first two points we should just hard code the
+ *       libraries we support for the challenges. There is no reason for
+ *       someone to import other libraries in the challenges. Hard coding
+ *       these fixed dependencies and their type definitions will be
+ *       dramatically easier than building some generic system to dynamically
+ *       fetch them.
+ *
+ * [ ] Ability to run React Native challenges: should be possible by importing
  *     react-native-web and creating a "mobile-like" preview view
  * [!] Ability to run NodeJS challenges (e.g. fs, express, etc.): may be
  *     possible by mocking the specific functions we want to provide
