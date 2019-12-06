@@ -1,3 +1,6 @@
+/* eslint-disable */
+// See this, ha! ~ https://github.com/facebook/create-react-app/issues/8014
+
 import { ts } from "ts-morph";
 
 /** ===========================================================================
