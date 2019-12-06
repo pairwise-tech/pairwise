@@ -53,6 +53,7 @@ import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highligh
  *     remove alert, confirm, and other global functions from the user's code.
  *
  * EASIER:
+ * [ ] Test async code challenges
  * [ ] Markdown support in challenge content and test results
  * [ ] cmd+enter should run code but not enter a new line in the editor
  * [ ] Syntax/compilation errors should be reported to the workspace console
