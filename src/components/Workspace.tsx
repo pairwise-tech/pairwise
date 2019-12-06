@@ -41,6 +41,7 @@ import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highligh
  * - TODO: Things not done yet for the challenge workspace:
  *
  * HARD:
+ * [ ] Challenge CMS!
  * [~] Type definition files: see codesandbox source code which dynamically
  *     fetches and inserts @types/ dependencies for modules.
  * [~] Fetch import modules dynamically: unknown ~
@@ -159,8 +160,8 @@ class Workspace extends React.Component<{}, IState> {
       challengeType,
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
-      tests: getTestCases(challengeType),
       monacoInitializationError: false,
+      tests: getTestCases(challengeType),
       code: getStarterCodeForChallenge(challengeType),
     };
   }
@@ -640,13 +641,25 @@ class Workspace extends React.Component<{}, IState> {
         logs: [...logs, log],
       }),
       () => {
+        const { method, data } = log;
+        const message = data[0];
+
         /**
          * Send logs directly to the browser console as well. This feature
          * could be toggled on or off, or just on by default.
-         *
-         * TODO: Use the appropriate console method.
          */
-        console.log(log.data[0]);
+        switch (method) {
+          case "log":
+            return console.log(message);
+          case "info":
+            return console.info(message);
+          case "warn":
+            return console.warn(message);
+          case "error":
+            return console.error(message);
+          default:
+            assertUnreachable(method);
+        }
       },
     );
   };
