@@ -34,7 +34,8 @@ import {
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
-import { Challenge } from "./ApplicationContainer";
+
+import challenges from "../challenges/01_programming_fundamental.json";
 
 /** ===========================================================================
  * Types & Config
@@ -807,8 +808,31 @@ const getHTML = (js: string) => `
 `;
 
 /** ===========================================================================
+ * Props
+ * ============================================================================
+ */
+
+export interface Challenge {
+  id: string;
+  title: string;
+  content: string;
+  testCode: string;
+  starterCode: string;
+  solutionCode: string;
+  type: CHALLENGE_TYPE;
+}
+
+const result = challenges.challenges.find(
+  c => c.id === "88cfc98e-27bd-4044-b71e-ca947dc596da",
+);
+
+const challenge = result as Challenge;
+
+const X = () => <Workspace challenge={challenge} />;
+
+/** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default Workspace;
+export default X;
