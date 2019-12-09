@@ -46,7 +46,7 @@ const challengeInitializationEpic: EpicSignature = action$ => {
 const setWorkspaceLoadedEpic: EpicSignature = action$ => {
   return action$.pipe(
     filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
-    delay(500),
+    delay(1000),
     map(() => Actions.setWorkspaceChallengeLoaded()),
   );
 };

@@ -15,6 +15,7 @@ import {
   TestCaseTypeScript,
 } from "../tools/challenges";
 import {
+  COLORS,
   COLORS as C,
   DIMENSIONS as D,
   HEADER_HEIGHT,
@@ -700,7 +701,7 @@ const Title = styled.p`
   margin: 0;
   padding: 0;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 300;
 `;
 
 const WorkspaceContainer = styled.div`
@@ -796,13 +797,25 @@ const SuccessFailureText = styled.p`
 const LoadingOverlay = styled.div`
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
   height: 100vh;
   z-index: 999;
   position: fixed;
-  background: rgba(0, 0, 0, 0.9);
-  display: ${(props: { visible: boolean }) =>
-    props.visible ? "block" : "none"};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.95);
+  visibility: ${(props: { visible: boolean }) =>
+    props.visible ? "visible" : "hidden"};
+`;
+
+const OverlayLoadingText = styled.p`
+  margin: 0;
+  font-size: 42px;
+  font-weight: 200;
+  color: ${COLORS.PRIMARY_BLUE};
 `;
 
 /**
@@ -854,19 +867,27 @@ class WorkspaceLoadingContainer extends React.Component<
   {}
 > {
   render() {
-    const { challenge, workspaceLoading } = this.props;
+    const { challenge } = this.props;
 
     if (!challenge) {
-      return <Page />;
+      return this.renderLoadingOverlay();
     }
 
     return (
       <React.Fragment>
-        <LoadingOverlay visible={workspaceLoading} />
+        {this.renderLoadingOverlay()}
         <Workspace challenge={challenge} />
       </React.Fragment>
     );
   }
+
+  renderLoadingOverlay = () => {
+    return (
+      <LoadingOverlay visible={this.props.workspaceLoading}>
+        <OverlayLoadingText>Initializing Workspace...</OverlayLoadingText>
+      </LoadingOverlay>
+    );
+  };
 }
 
 /** ===========================================================================
