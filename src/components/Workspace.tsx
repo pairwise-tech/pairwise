@@ -7,7 +7,6 @@ import styled from "styled-components";
 import { debounce } from "throttle-debounce";
 
 import {
-  getTestCases,
   TestCase,
   TestCaseReact,
   TestCaseTypeScript,
@@ -27,7 +26,6 @@ import {
 } from "../tools/test-utils";
 import {
   assertUnreachable,
-  getStarterCodeForChallenge,
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
@@ -36,7 +34,7 @@ import {
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
-import { Challenge } from "../App";
+import { Challenge } from "./ApplicationContainer";
 
 /** ===========================================================================
  * Types & Config
