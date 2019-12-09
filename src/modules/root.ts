@@ -8,20 +8,26 @@ import { combineEpics, Epic } from "redux-observable";
  */
 
 import App, { AppActionTypes, AppState } from "./app";
+import Challenges, {
+  ChallengesActionTypes,
+  ChallengesState,
+} from "./challenges";
 
 /** ===========================================================================
  * Root Actions and Selectors
  * ============================================================================
  */
 
-export type ReduxActionTypes = AppActionTypes;
+export type ReduxActionTypes = AppActionTypes | ChallengesActionTypes;
 
 export const selectors = {
   app: App.selector,
+  challenges: Challenges.selector,
 };
 
 export const actions = {
   app: App.actions,
+  challenges: Challenges.actions,
 };
 
 const Modules = {
@@ -36,10 +42,12 @@ const Modules = {
 
 export interface ReduxStoreState {
   app: AppState;
+  challenges: ChallengesState;
 }
 
 const rootReducer = combineReducers({
   app: App.store,
+  challenges: Challenges.store,
 });
 
 /** ===========================================================================
@@ -58,7 +66,7 @@ export type EpicSignature = Epic<
   EpicDependencies
 >;
 
-const rootEpic = combineEpics(App.epics);
+const rootEpic = combineEpics(App.epics, Challenges.epics);
 
 /** ===========================================================================
  * Export

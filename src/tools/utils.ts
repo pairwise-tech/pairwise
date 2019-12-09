@@ -1,4 +1,6 @@
-import { CHALLENGE_TYPE } from "../components/Workspace";
+import { compose } from "redux";
+
+import { CHALLENGE_TYPE } from "modules/challenges/types";
 import { getDefaultChallengeStarterCode } from "./challenges";
 
 /**
@@ -48,4 +50,14 @@ export const getStarterCodeForChallenge = (type: CHALLENGE_TYPE) => {
   }
 
   return getDefaultChallengeStarterCode(type);
+};
+
+/**
+ * A compose function which passes only props information for better
+ * type-checking.
+ */
+export const composeWithProps = <T extends {}>(
+  ...fns: any
+): ((component: any) => (props: T) => any) => {
+  return compose(...fns);
 };

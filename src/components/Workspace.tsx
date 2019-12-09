@@ -3,9 +3,12 @@ import { Console, Decode } from "console-feed";
 import { pipe } from "ramda";
 import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import { debounce } from "throttle-debounce";
 
+import { Challenge } from "modules/challenges/types";
+import Modules, { ReduxStoreState } from "modules/root";
 import {
   TestCase,
   TestCaseReact,
@@ -26,6 +29,7 @@ import {
 } from "../tools/test-utils";
 import {
   assertUnreachable,
+  composeWithProps,
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
@@ -34,8 +38,6 @@ import {
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
-
-import challenges from "../challenges/01_programming_fundamental.json";
 
 /** ===========================================================================
  * Types & Config
@@ -70,8 +72,6 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
     data: ["console output will be rendered here:"],
   },
 ];
-
-export type CHALLENGE_TYPE = "react" | "typescript";
 
 interface IProps {
   challenge: Challenge;
@@ -793,6 +793,18 @@ const SuccessFailureText = styled.p`
     props.testResult ? C.SUCCESS : C.FAILURE};
 `;
 
+const LoadingOverlay = styled.div`
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 999;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.9);
+  display: ${(props: { visible: boolean }) =>
+    props.visible ? "block" : "none"};
+`;
+
 /**
  * Get the full html content string for the iframe, injected the user code
  * into it. This currently includes script libraries now.
@@ -812,27 +824,56 @@ const getHTML = (js: string) => `
  * ============================================================================
  */
 
-export interface Challenge {
-  id: string;
-  title: string;
-  content: string;
-  testCode: string;
-  starterCode: string;
-  solutionCode: string;
-  type: CHALLENGE_TYPE;
+const mapStateToProps = (state: ReduxStoreState) => ({
+  challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
+    state,
+  ),
+});
+
+const dispatchProps = {};
+
+interface ComponentProps {}
+
+type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+
+interface WorkspaceLoadingContainerProps extends ComponentProps, ConnectProps {}
+
+const withProps = connect(mapStateToProps, dispatchProps);
+
+/** ===========================================================================
+ * WorkspaceLoadingContainer
+ * ----------------------------------------------------------------------------
+ * - A container component to wait for a challenge to be fully initialized
+ * before rendering the Workspace, which requires a challenge to exist.
+ * ============================================================================
+ */
+
+class WorkspaceLoadingContainer extends React.Component<
+  WorkspaceLoadingContainerProps,
+  {}
+> {
+  render() {
+    const { challenge, workspaceLoading } = this.props;
+
+    if (!challenge) {
+      return <Page />;
+    }
+
+    return (
+      <React.Fragment>
+        <LoadingOverlay visible={workspaceLoading} />
+        <Workspace challenge={challenge} />
+      </React.Fragment>
+    );
+  }
 }
-
-const result = challenges.challenges.find(
-  c => c.id === "88cfc98e-27bd-4044-b71e-ca947dc596da",
-);
-
-const challenge = result as Challenge;
-
-const X = () => <Workspace challenge={challenge} />;
 
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default X;
+export default composeWithProps<ComponentProps>(withProps)(
+  WorkspaceLoadingContainer,
+);

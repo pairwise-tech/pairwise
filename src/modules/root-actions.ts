@@ -1,4 +1,5 @@
 import App from "./app/actions";
+import Challenges from "./challenges/actions";
 
 /** ===========================================================================
  * All Actions
@@ -7,4 +8,5 @@ import App from "./app/actions";
 
 export const Actions = {
   ...App,
+  ...Challenges,
 };

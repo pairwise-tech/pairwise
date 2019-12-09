@@ -1,4 +1,4 @@
-import { CHALLENGE_TYPE } from "../components/Workspace";
+import { CHALLENGE_TYPE } from "modules/challenges/types";
 
 /** ===========================================================================
  * Starter Code
