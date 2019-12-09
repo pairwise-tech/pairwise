@@ -36,6 +36,7 @@ import {
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
+import { Challenge } from "../App";
 
 /** ===========================================================================
  * Types & Config
@@ -73,10 +74,13 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 
 export type CHALLENGE_TYPE = "react" | "typescript";
 
+interface IProps {
+  challenge: Challenge;
+}
+
 interface IState {
   code: string;
   fullScreenEditor: boolean;
-  challengeType: CHALLENGE_TYPE;
   tests: ReadonlyArray<TestCase>;
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
@@ -87,14 +91,14 @@ interface IState {
  * ============================================================================
  */
 
-class Workspace extends React.Component<{}, IState> {
+class Workspace extends React.Component<IProps, IState> {
   syntaxWorker: any = null;
   monacoEditor: any = null;
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   debouncedSaveCodeFunction: () => void;
   debouncedRenderPreviewFunction: () => void;
 
-  constructor(props: {}) {
+  constructor(props: IProps) {
     super(props);
 
     this.debouncedRenderPreviewFunction = debounce(
@@ -107,15 +111,14 @@ class Workspace extends React.Component<{}, IState> {
       this.handleSaveCodeToLocalStorage,
     );
 
-    const challengeType = "react";
+    const tests = JSON.parse(this.props.challenge.testCode);
 
     this.state = {
-      challengeType,
+      tests,
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
-      tests: getTestCases(challengeType),
-      code: getStarterCodeForChallenge(challengeType),
+      code: props.challenge.starterCode,
     };
   }
 
@@ -134,7 +137,7 @@ class Workspace extends React.Component<{}, IState> {
     /* Handle some timing issue with Monaco initialization... */
     await wait(500);
     this.iFrameRenderPreview();
-    this.requestSyntaxHighlighting(this.state.code);
+    this.requestSyntaxHighlighting(this.props.challenge.starterCode);
   }
 
   componentWillUnmount() {
@@ -265,8 +268,8 @@ class Workspace extends React.Component<{}, IState> {
   };
 
   render() {
-    const { tests, challengeType, fullScreenEditor } = this.state;
-    const IS_TYPESCRIPT_CHALLENGE = challengeType !== "react";
+    const { fullScreenEditor, tests } = this.state;
+    const IS_TYPESCRIPT_CHALLENGE = this.props.challenge.type !== "typescript";
 
     const MONACO_CONTAINER = (
       <div style={{ height: "100%" }}>
@@ -282,9 +285,9 @@ class Workspace extends React.Component<{}, IState> {
             <Button onClick={this.toggleEditorType}>
               {fullScreenEditor ? "Regular" : "Full Screen"} Editor
             </Button>
-            <Button onClick={this.toggleChallengeType}>
+            {/* <Button onClick={this.toggleChallengeType}>
               {!IS_TYPESCRIPT_CHALLENGE ? "TypeScript" : "React"} Challenge
-            </Button>
+            </Button> */}
           </ControlsContainer>
         </Header>
         <WorkspaceContainer>
@@ -382,7 +385,7 @@ class Workspace extends React.Component<{}, IState> {
   };
 
   renderTestResult = (t: TestCase, i: number) => {
-    const { challengeType } = this.state;
+    const challengeType = this.props.challenge.type;
     if (challengeType === "react") {
       const { message } = t as TestCaseReact;
       return (
@@ -399,7 +402,7 @@ class Workspace extends React.Component<{}, IState> {
           </div>
         </ContentText>
       );
-    } else {
+    } else if (challengeType === "typescript") {
       const { input } = t as TestCaseTypeScript;
       return (
         <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
@@ -473,7 +476,7 @@ class Workspace extends React.Component<{}, IState> {
     /**
      * Save the current code to local storage. This method is debounced.
      */
-    saveCodeToLocalStorage(this.state.code, this.state.challengeType);
+    saveCodeToLocalStorage(this.state.code, this.props.challenge.type);
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
@@ -553,12 +556,12 @@ class Workspace extends React.Component<{}, IState> {
     this.addModuleTypeDefinitionsToMonaco(dependencies);
 
     const injectModuleDependenciesFn = handleInjectModuleDependencies(
-      this.state.challengeType === "react"
+      this.props.challenge.type === "react"
         ? [...dependencies, "react-dom-test-utils"]
         : dependencies,
     );
 
-    const injectTestCodeFn = injectTestCode(this.state.challengeType);
+    const injectTestCodeFn = injectTestCode(this.props.challenge.type);
 
     /**
      * What happens here:
@@ -633,28 +636,28 @@ class Workspace extends React.Component<{}, IState> {
     );
   };
 
-  toggleChallengeType = () => {
-    this.setState(x => {
-      const challengeType =
-        x.challengeType === "react" ? "typescript" : "react";
-      return {
-        challengeType,
-        tests: getTestCases(challengeType),
-      };
-    }, this.updateCodeWhenChallengeTypeChanged);
-  };
+  // toggleChallengeType = () => {
+  //   this.setState(x => {
+  //     const challengeType =
+  //       x.challengeType === "react" ? "typescript" : "react";
+  //     return {
+  //       challengeType,
+  //       tests: getTestCases(challengeType),
+  //     };
+  //   }, this.updateCodeWhenChallengeTypeChanged);
+  // };
 
-  updateCodeWhenChallengeTypeChanged = () => {
-    this.setState(
-      x => ({
-        code: getStarterCodeForChallenge(x.challengeType),
-      }),
-      () => {
-        this.setMonacoEditorValue();
-        this.iFrameRenderPreview();
-      },
-    );
-  };
+  // updateCodeWhenChallengeTypeChanged = () => {
+  //   this.setState(
+  //     x => ({
+  //       code: getStarterCodeForChallenge(x.challengeType),
+  //     }),
+  //     () => {
+  //       this.setMonacoEditorValue();
+  //       this.iFrameRenderPreview();
+  //     },
+  //   );
+  // };
 
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;

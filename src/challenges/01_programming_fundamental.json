@@ -1,9 +1,9 @@
 {
-  "uuid": "bf2d6275-e43e-4e35-ba67-0d8c0c721458",
-  "type": "typescript",
+  "id": "bf2d6275-e43e-4e35-ba67-0d8c0c721458",
   "challenges": [
     {
-      "uuid": "88cfc98e-27bd-4044-b71e-ca947dc596da",
+      "id": "88cfc98e-27bd-4044-b71e-ca947dc596da",
+      "type": "typescript",
       "title": "Add Two Numbers",
       "content": "Complete the function body below. The function should receive two numbers as input arguments and return the result of adding these numbers together.",
       "starterCode": "\nconst addTwoNumbers = (a: number, b: number) => {\n  // Edit code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = addTwoNumbers;\n",

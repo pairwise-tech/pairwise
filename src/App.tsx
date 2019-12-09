@@ -1,10 +1,8 @@
 import React from "react";
 
-import Workspace from "./components/Workspace";
+import Workspace, { CHALLENGE_TYPE } from "./components/Workspace";
 
 import challenges from "./challenges/01_programming_fundamental.json";
-
-console.log(challenges);
 
 /** ===========================================================================
  * Types & Config
@@ -16,12 +14,13 @@ interface IState {
 }
 
 export interface Challenge {
-  uuid: string;
+  id: string;
   title: string;
   content: string;
+  testCode: string;
   starterCode: string;
   solutionCode: string;
-  testCode: string;
+  type: CHALLENGE_TYPE;
 }
 
 /** ===========================================================================
@@ -34,13 +33,22 @@ class App extends React.Component<{}, IState> {
     super(props);
 
     this.state = {
-      selectedChallengeUuid: "",
+      selectedChallengeUuid: "88cfc98e-27bd-4044-b71e-ca947dc596da",
     };
   }
 
   render(): JSX.Element {
-    return <Workspace />;
+    const challenge = this.getCurrentChallenge();
+    return <Workspace challenge={challenge} />;
   }
+
+  getCurrentChallenge = () => {
+    const result = challenges.challenges.find(
+      c => c.id === this.state.selectedChallengeUuid,
+    );
+
+    return result as Challenge;
+  };
 
   selectedChallengeById = (id: string) => {
     // implement
