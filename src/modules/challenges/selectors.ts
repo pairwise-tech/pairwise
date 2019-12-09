@@ -68,6 +68,7 @@ export const firstUnfinishedChallenge = createSelector(
   challengesState,
   firstUnfinishedChallengeMeta,
   (challenges, unfinishedChallengeMeta) => {
+    /* TODO: moduleId */
     const { courseId, moduleId, challengeId } = unfinishedChallengeMeta;
 
     const challengeList = challenges.challengeDictionary.get(courseId);
