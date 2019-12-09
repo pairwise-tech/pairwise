@@ -19,6 +19,10 @@ export const CURRENT_ACTIVE_CHALLENGE_IDS = {
   challengeId: "88cfc98e-27bd-4044-b71e-ca947dc596da",
 };
 
+/**
+ * Can also initialize the challenge id from the url to load the first
+ * challenge.
+ */
 const challengeInitializationEpic: EpicSignature = action$ => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
@@ -44,6 +48,21 @@ const setWorkspaceLoadedEpic: EpicSignature = action$ => {
     filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
     delay(500),
     map(() => Actions.setWorkspaceChallengeLoaded()),
+  );
+};
+
+/**
+ * Push the current challenge id into the url.
+ */
+const updateChallengeRouteId: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+    tap(action => {
+      const id = action.payload.currentChallengeId;
+      const { router } = deps;
+      router.push({ pathname: `/workspace/${id}` });
+    }),
+    ignoreElements(),
   );
 };
 
@@ -93,6 +112,7 @@ const setChallengeId: EpicSignature = action$ => {
 
 export default combineEpics(
   setWorkspaceLoadedEpic,
+  updateChallengeRouteId,
   challengeInitializationEpic,
   challengeSkeletonInitializationEpic,
   setChallengeId,

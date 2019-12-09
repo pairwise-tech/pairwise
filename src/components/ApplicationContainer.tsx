@@ -18,7 +18,7 @@ class ApplicationContainer extends React.Component<IProps, {}> {
   render(): JSX.Element {
     return (
       <Switch>
-        <Route key={0} path="/workspace" component={Workspace} />
+        <Route key={0} path="/workspace/:id" component={Workspace} />
         <Route key={1} component={() => <Redirect to="/workspace" />} />
       </Switch>
     );
