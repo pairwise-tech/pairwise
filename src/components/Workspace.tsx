@@ -297,7 +297,7 @@ class Workspace extends React.Component<IProps, IState> {
     return (
       <Page>
         <Header>
-          <Title>Zen Coding School</Title>
+          <Title>Fullstack TypeScript Course</Title>
           <ControlsContainer>
             <Button onClick={this.toggleEditorType}>
               {fullScreenEditor ? "Regular" : "Full Screen"} Editor
@@ -716,6 +716,7 @@ const Title = styled.p`
   color: ${C.PRIMARY_BLUE};
   margin: 0;
   padding: 0;
+  margin-top: 8px;
   font-size: 18px;
   font-weight: 300;
 `;
