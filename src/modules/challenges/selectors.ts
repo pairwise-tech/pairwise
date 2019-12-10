@@ -57,7 +57,13 @@ export const currentChallengeSelector = createSelector(
 export const firstUnfinishedChallengeMeta = createSelector(
   challengesState,
   challenges => {
-    return CURRENT_ACTIVE_CHALLENGE_IDS;
+    const { currentCourseId, currentModuleId, currentChallengeId } = challenges;
+
+    return {
+      currentCourseId,
+      currentModuleId,
+      currentChallengeId,
+    };
   },
 );
 
@@ -69,13 +75,15 @@ export const firstUnfinishedChallenge = createSelector(
   firstUnfinishedChallengeMeta,
   (challenges, unfinishedChallengeMeta) => {
     /* TODO: moduleId */
-    const { courseId, moduleId, challengeId } = unfinishedChallengeMeta;
+    const { currentCourseId, currentChallengeId } = unfinishedChallengeMeta;
 
-    const challengeList = challenges.challengeDictionary.get(courseId);
-    if (challengeList) {
-      const challenge = challengeList.find(c => c.id === challengeId);
-      if (challenge) {
-        return challenge;
+    if (currentCourseId) {
+      const challengeList = challenges.challengeDictionary.get(currentCourseId);
+      if (challengeList) {
+        const challenge = challengeList.find(c => c.id === currentChallengeId);
+        if (challenge) {
+          return challenge;
+        }
       }
     }
 

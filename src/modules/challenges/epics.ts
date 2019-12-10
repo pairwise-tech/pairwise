@@ -23,17 +23,24 @@ export const CURRENT_ACTIVE_CHALLENGE_IDS = {
  * Can also initialize the challenge id from the url to load the first
  * challenge.
  */
-const challengeInitializationEpic: EpicSignature = action$ => {
+const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
     map(() => {
+      /* Ok ... */
+      const maybeId = deps.router.location.pathname.replace("/workspace/", "");
+      const challengeExists = challenges.challenges.find(c => c.id === maybeId);
+      const challengeId = challengeExists
+        ? challengeExists.id
+        : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
+
       /* API to fetch the current active course data ~ */
       const course = challenges as Course;
       return Actions.fetchCurrentActiveCourseSuccess({
         course,
+        currentChallengeId: challengeId,
         currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
         currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
-        currentChallengeId: CURRENT_ACTIVE_CHALLENGE_IDS.challengeId,
       });
     }),
   );

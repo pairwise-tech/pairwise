@@ -179,24 +179,12 @@ export const handleInjectModuleDependencies = (
 /**
  * Inject test code into a code string.
  */
-export const injectTestCode = (challengeType: CHALLENGE_TYPE) => (
-  codeString: string,
-) => {
-  if (challengeType === "react") {
-    return `
-      ${codeString}
-      {
-        ${removeConsole(codeString)}
-        ${getSampleTestCodeReact()}
-      }
-    `;
-  } else {
-    return `
-      ${codeString}
-      {
-        ${removeConsole(codeString)}
-        ${getSampleTestCodeTypeScript(TEST_CASES_TYPESCRIPT)}
-      }
-    `;
-  }
+export const injectTestCode = (testString: string) => (codeString: string) => {
+  return `
+    ${codeString}
+    {
+      ${removeConsole(codeString)}
+      ${getSampleTestCodeTypeScript(JSON.parse(testString))}
+    }
+  `;
 };

@@ -164,6 +164,10 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   updateSyntaxDecorations = async (classifications: ReadonlyArray<any>) => {
+    if (!this.monacoEditor) {
+      return;
+    }
+
     const decorations = classifications.map(c => {
       /**
        * NOTE: Custom classNames to allow custom styling for the
@@ -269,7 +273,7 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { fullScreenEditor, tests } = this.state;
-    const IS_TYPESCRIPT_CHALLENGE = this.props.challenge.type !== "typescript";
+    const IS_TYPESCRIPT_CHALLENGE = this.props.challenge.type === "typescript";
 
     const MONACO_CONTAINER = (
       <div style={{ height: "100%" }}>
@@ -561,7 +565,7 @@ class Workspace extends React.Component<IProps, IState> {
         : dependencies,
     );
 
-    const injectTestCodeFn = injectTestCode(this.props.challenge.type);
+    const injectTestCodeFn = injectTestCode(this.props.challenge.testCode);
 
     /**
      * What happens here:

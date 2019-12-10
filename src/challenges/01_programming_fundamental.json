@@ -9,6 +9,24 @@
       "starterCode": "\nconst addTwoNumbers = (a: number, b: number) => {\n  // Edit code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = addTwoNumbers;\n",
       "solutionCode": "\nconst addTwoNumbers = (a: number, b: number) => {\n  return a + b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = addTwoNumbers;\n",
       "testCode": "[{\"input\":[1,2],\"expected\":3},{\"input\":[10,50],\"expected\":60},{\"input\":[-10,-50],\"expected\":-60},{\"input\":[100,500],\"expected\":600},{\"input\":[1123,532142],\"expected\":533265},{\"input\":[-10,50],\"expected\":40},{\"input\":[1,500],\"expected\":501},{\"input\":[842,124],\"expected\":966},{\"input\":[1000,500],\"expected\":1500},{\"input\":[-100,100],\"expected\":0},{\"input\":[2,50234432],\"expected\":50234434}]"
+    },
+    {
+      "id": "06d48110-5cdd-4656-947c-fcc1c06d18bb",
+      "type": "typescript",
+      "title": "Reverse a String",
+      "content": "Complete the function body below. The function will receive an array as input and should return the number of items in the array.",
+      "starterCode": "\nconst reverseString = (inputString) => {\n  // Edit code here\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
+      "solutionCode": "\nconst reverseString = (inputString) => {\n  return inputString.split().reverse().join();\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
+      "testCode": "[{\"input\":\"hello\",\"expected\":\"olleh\"},{\"input\":\"fantastic\",\"expected\":\"citsatnaf\"},{\"input\":\"superb\",\"expected\":\"brepus\"},{\"input\":\"frustrating\",\"expected\":\"gnitartsurf\"},{\"input\":\"exciting\",\"expected\":\"gniticxe\"},{\"input\":\"happy\",\"expected\":\"yppah\"},{\"input\":\"a\",\"expected\":\"a\"},{\"input\":\"aaaaaaaaaaaaz\",\"expected\":\"zaaaaaaaaaaaa\"},{\"input\":\"jumping\",\"expected\":\"gnipmuj\"},{\"input\":\"silly\",\"expected\":\"yllis\"},{\"input\":\"zombie\",\"expected\":\"eibmoz\"}]"
+    },
+    {
+      "id": "5dff3b95-f91b-4ee2-aca0-b48e2618fb37",
+      "type": "typescript",
+      "title": "Return the Length of an Array",
+      "content": "Complete the function body below. The function should will receive a string and should return the same string in reverse order.",
+      "starterCode": "\nconst lengthOfArray = (array) => {\n  // Edit code here\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
+      "solutionCode": "\nconst lengthOfArray = (array) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
+      "testCode": "[{\"input\":[1,2,3,4],\"expected\":4},{\"input\":[],\"expected\":0},{\"input\":[1,1,1,1,1,1,1,1,1],\"expected\":9},{\"input\":[3,3,3],\"expected\":3},{\"input\":[2],\"expected\":1},{\"input\":[7,7,7,7,7,7,7,7,7,7,7,7,7,7],\"expected\":13}]"
     }
   ]
 }
