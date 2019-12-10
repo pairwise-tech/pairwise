@@ -15,6 +15,7 @@ export interface State {
   currentChallengeId: Nullable<string>;
   challengeDictionary: ChallengeDictionary;
   navigationSkeleton: Nullable<NavigationSkeleton>;
+  displayNavigationMap: boolean;
 }
 
 const initialState = {
@@ -24,12 +25,17 @@ const initialState = {
   currentChallengeId: null,
   navigationSkeleton: null,
   challengeDictionary: new Map(),
+  displayNavigationMap: false,
 };
 
 const challenges = createReducer<State, ActionTypes>(initialState)
   .handleAction(actions.setWorkspaceChallengeLoaded, (state, action) => ({
     ...state,
     workspaceLoading: false,
+  }))
+  .handleAction(actions.setNavigationMapState, (state, action) => ({
+    ...state,
+    displayNavigationMap: action.payload,
   }))
   .handleAction(actions.setChallengeId, (state, action) => ({
     ...state,

@@ -39,6 +39,7 @@ import {
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
+import NavigationOverlay from "./NavigationOverlay";
 
 /** ===========================================================================
  * Types & Config
@@ -73,10 +74,6 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
     data: ["console output will be rendered here:"],
   },
 ];
-
-interface IProps {
-  challenge: Challenge;
-}
 
 interface IState {
   code: string;
@@ -273,7 +270,8 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { fullScreenEditor, tests } = this.state;
-    const IS_TYPESCRIPT_CHALLENGE = this.props.challenge.type === "typescript";
+    const { challenge, overlayVisible } = this.props;
+    const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
 
     const MONACO_CONTAINER = (
       <div style={{ height: "100%" }}>
@@ -289,11 +287,14 @@ class Workspace extends React.Component<IProps, IState> {
             <Button onClick={this.toggleEditorType}>
               {fullScreenEditor ? "Regular" : "Full Screen"} Editor
             </Button>
-            {/* <Button onClick={this.toggleChallengeType}>
-              {!IS_TYPESCRIPT_CHALLENGE ? "TypeScript" : "React"} Challenge
-            </Button> */}
+            <Button
+              onClick={() => this.props.setNavigationMapState(!overlayVisible)}
+            >
+              {overlayVisible ? "Hide" : "Open"} Navigation
+            </Button>
           </ControlsContainer>
         </Header>
+        <NavigationOverlay overlayVisible={overlayVisible} />
         <WorkspaceContainer>
           <ColsWrapper separatorProps={separatorProps}>
             <Col
@@ -843,18 +844,25 @@ const getHTML = (js: string) => `
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),
 });
 
-const dispatchProps = {};
+const dispatchProps = {
+  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
+};
 
 interface ComponentProps {}
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
 interface WorkspaceLoadingContainerProps extends ComponentProps, ConnectProps {}
+
+interface IProps extends WorkspaceLoadingContainerProps {
+  challenge: Challenge;
+}
 
 const withProps = connect(mapStateToProps, dispatchProps);
 
@@ -880,7 +888,7 @@ class WorkspaceLoadingContainer extends React.Component<
     return (
       <React.Fragment>
         {this.renderLoadingOverlay()}
-        <Workspace challenge={challenge} />
+        <Workspace {...this.props} challenge={challenge} />
       </React.Fragment>
     );
   }

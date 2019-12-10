@@ -34,6 +34,10 @@ export const saveCodeToLocalStorage = (code: string, type: CHALLENGE_TYPE) => {
 /**
  * Get the initial code for the editor, possibly from localStorage if
  * anything is saved there.
+ *
+ * TODO: Refactor localStorage to store a flat map of id:codeString for all
+ * challenges so given a loaded challenge any previous code and just be
+ * pulled directly from here.
  */
 export const getStarterCodeForChallenge = (type: CHALLENGE_TYPE) => {
   try {

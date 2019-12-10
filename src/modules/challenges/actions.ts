@@ -11,6 +11,8 @@ enum ActionTypesEnum {
   SET_CHALLENGE_ID = "SET_CHALLENGE_ID",
   WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
 
+  SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
+
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
   FETCH_CURRENT_ACTIVE_COURSE_SUCCESS = "FETCH_CURRENT_ACTIVE_COURSE_SUCCESS",
 }
@@ -30,6 +32,10 @@ const fetchNavigationSkeletonSuccess = createAction(
   ActionTypesEnum.FETCH_NAVIGATION_SKELETON_SUCCESS,
 )<NavigationSkeleton>();
 
+const setNavigationMapState = createAction(
+  ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
+)<boolean>();
+
 const fetchCurrentActiveCourseSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
 )<{
@@ -41,6 +47,7 @@ const fetchCurrentActiveCourseSuccess = createAction(
 
 const actions = {
   setChallengeId,
+  setNavigationMapState,
   setWorkspaceChallengeLoaded,
   fetchNavigationSkeletonSuccess,
   fetchCurrentActiveCourseSuccess,

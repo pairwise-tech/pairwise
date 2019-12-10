@@ -15,6 +15,11 @@ export const challengesState = (state: ReduxStoreState) => {
 
 export const challengesSelector = createSelector([challengesState], identity);
 
+export const navigationOverlayVisible = createSelector(
+  [challengesState],
+  challenges => challenges.displayNavigationMap,
+);
+
 export const workspaceLoadingSelector = createSelector(
   [challengesState],
   challenges => {
@@ -98,6 +103,7 @@ export const firstUnfinishedChallenge = createSelector(
 
 export default {
   challengesSelector,
+  navigationOverlayVisible,
   workspaceLoadingSelector,
   currentChallengeSelector,
   firstUnfinishedChallenge,
