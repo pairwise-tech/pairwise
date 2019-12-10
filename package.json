@@ -6,6 +6,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "cp _redirects build/",
     "jest": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "prettier --list-different './src/**/*.{ts,tsx,json}'",
