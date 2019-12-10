@@ -1,7 +1,6 @@
 import { compose } from "redux";
 
-import { Challenge, CHALLENGE_TYPE } from "modules/challenges/types";
-import { getDefaultChallengeStarterCode } from "./challenges";
+import { Challenge } from "modules/challenges/types";
 
 /**
  * Assert a condition cannot occur. Used for writing exhaustive switch

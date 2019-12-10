@@ -2,7 +2,6 @@ import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 
 import { ReduxStoreState } from "modules/root";
-import { CURRENT_ACTIVE_CHALLENGE_IDS } from "./epics";
 
 /** ===========================================================================
  * Selectors
