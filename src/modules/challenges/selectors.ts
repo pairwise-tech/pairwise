@@ -20,6 +20,11 @@ export const navigationOverlayVisible = createSelector(
   challenges => challenges.displayNavigationMap,
 );
 
+export const navigationSkeleton = createSelector(
+  [challengesState],
+  challenges => challenges.navigationSkeleton,
+);
+
 export const workspaceLoadingSelector = createSelector(
   [challengesState],
   challenges => {
@@ -57,30 +62,12 @@ export const currentChallengeSelector = createSelector(
 );
 
 /**
- * Find the module, course, and challenged ids for the first unfinished challenge.
- */
-export const firstUnfinishedChallengeMeta = createSelector(
-  challengesState,
-  challenges => {
-    const { currentCourseId, currentModuleId, currentChallengeId } = challenges;
-
-    return {
-      currentCourseId,
-      currentModuleId,
-      currentChallengeId,
-    };
-  },
-);
-
-/**
  * Retrieve the actual challenge data from the first unfinished challenge.
  */
 export const firstUnfinishedChallenge = createSelector(
   challengesState,
-  firstUnfinishedChallengeMeta,
-  (challenges, unfinishedChallengeMeta) => {
-    /* TODO: moduleId */
-    const { currentCourseId, currentChallengeId } = unfinishedChallengeMeta;
+  challenges => {
+    const { currentCourseId, currentChallengeId } = challenges;
 
     if (currentCourseId) {
       const challengeList = challenges.challengeDictionary.get(currentCourseId);
@@ -103,9 +90,9 @@ export const firstUnfinishedChallenge = createSelector(
 
 export default {
   challengesSelector,
+  navigationSkeleton,
   navigationOverlayVisible,
   workspaceLoadingSelector,
   currentChallengeSelector,
   firstUnfinishedChallenge,
-  firstUnfinishedChallengeMeta,
 };

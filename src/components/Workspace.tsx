@@ -34,6 +34,7 @@ import {
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
+import { Button } from "./Primitives";
 
 // Import TSX SyntaxHighlightWorker:
 // @ts-ignore
@@ -143,6 +144,16 @@ class Workspace extends React.Component<IProps, IState> {
       "message",
       this.handleReceiveMessageFromCodeRunner,
     );
+  }
+
+  componentWillReceiveProps(nextProps: IProps) {
+    if (this.props.challenge.id !== nextProps.challenge.id) {
+      const { challenge } = nextProps;
+      const tests = JSON.parse(challenge.testCode);
+      this.setState({ code: challenge.starterCode, tests }, () => {
+        this.setMonacoEditorValue();
+      });
+    }
   }
 
   initializeSyntaxHighlightWorker = () => {
@@ -308,12 +319,8 @@ class Workspace extends React.Component<IProps, IState> {
                     style={{ background: C.BACKGROUND_CONTENT }}
                   >
                     <ContentContainer>
-                      <ContentTitle>Challenge</ContentTitle>
-                      <ContentText>
-                        There is a function in the editor below. It should add
-                        two numbers and return the result. Try to complete the
-                        function!
-                      </ContentText>
+                      <ContentTitle>{challenge.title}</ContentTitle>
+                      <ContentText>{challenge.content}</ContentText>
                     </ContentContainer>
                   </Row>
                   <Row
@@ -755,41 +762,6 @@ const ControlsContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: row;
-`;
-
-const Button = styled.button`
-  border: none;
-  width: 165px;
-  margin-right: 12px;
-  font-size: 14px;
-  font-weight: 500px;
-  padding: 6px 12px;
-  border-radius: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${C.TEXT_TITLE};
-  background: rgb(11, 79, 147);
-  background: linear-gradient(
-    63deg,
-    rgba(11, 79, 147, 1) 15%,
-    rgba(17, 182, 237, 0.5) 85%
-  );
-
-  :hover {
-    cursor: pointer;
-    color: ${C.TEXT_HOVER};
-    background: rgb(23, 94, 164);
-    background: linear-gradient(
-      63deg,
-      rgba(10, 100, 215, 1) 15%,
-      rgba(17, 195, 240, 0.65) 85%
-    );
-  }
-
-  :focus {
-    outline: none;
-  }
 `;
 
 const SuccessFailureText = styled.p`

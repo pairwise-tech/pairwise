@@ -25,7 +25,7 @@ type ChallengeList = ReadonlyArray<Challenge>;
 /* Map of course ids to lists of challenges */
 export type ChallengeDictionary = Map<string, ChallengeList>;
 
-interface ChallengeContentSkeleton {
+export interface ChallengeContentSkeleton {
   id: string;
   type: string;
   title: string;
@@ -35,7 +35,7 @@ interface ChallengeContentSkeleton {
 interface CourseContent {
   id: string;
   summaryVideo: any;
-  challengeContent: ChallengeContentSkeleton;
+  challengeContent: ReadonlyArray<ChallengeContentSkeleton>;
   projectContent: any;
   projectSolution: any;
   specialTopics: any;

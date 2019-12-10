@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
+import { Button } from "./Primitives";
 
 /** ===========================================================================
  * React Class
@@ -11,8 +12,30 @@ import { composeWithProps } from "tools/utils";
  */
 
 class NavigationOverlay extends React.Component<IProps, {}> {
-  render(): JSX.Element {
-    return <Overlay visible={this.props.overlayVisible}></Overlay>;
+  render(): Nullable<JSX.Element> {
+    const { navigationSkeleton } = this.props;
+
+    if (!navigationSkeleton) {
+      return null;
+    }
+
+    const course = navigationSkeleton[0];
+
+    return (
+      <Overlay visible={this.props.overlayVisible}>
+        {course.courseContent.challengeContent.map(c => {
+          return (
+            <Button
+              key={c.id}
+              style={{ marginTop: 25, width: 250 }}
+              onClick={() => this.props.selectChallenge(c.id)}
+            >
+              {c.title}
+            </Button>
+          );
+        })}
+      </Overlay>
+    );
   }
 }
 
@@ -25,6 +48,7 @@ const Overlay = styled.div`
   width: 100%;
   height: 100%;
   z-index: 100;
+  padding: 25px;
   position: absolute;
   background: rgba(0, 0, 0, 0.85);
   visibility: ${(props: { visible: boolean }) =>
@@ -36,9 +60,13 @@ const Overlay = styled.div`
  * ============================================================================
  */
 
-const mapStateToProps = (state: ReduxStoreState) => ({});
+const mapStateToProps = (state: ReduxStoreState) => ({
+  navigationSkeleton: Modules.selectors.challenges.navigationSkeleton(state),
+});
 
-const dispatchProps = {};
+const dispatchProps = {
+  selectChallenge: Modules.actions.challenges.setChallengeId,
+};
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
@@ -48,7 +76,7 @@ interface ComponentProps {
   overlayVisible: boolean;
 }
 
-const withProps = connect(null, dispatchProps);
+const withProps = connect(mapStateToProps, dispatchProps);
 
 /** ===========================================================================
  * Export

@@ -63,9 +63,15 @@ const setWorkspaceLoadedEpic: EpicSignature = action$ => {
  */
 const updateChallengeRouteId: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
-    tap(action => {
-      const id = action.payload.currentChallengeId;
+    filter(
+      isActionOf([
+        Actions.setChallengeId,
+        Actions.fetchCurrentActiveCourseSuccess,
+      ]),
+    ),
+    tap(({ payload }) => {
+      const id =
+        typeof payload === "string" ? payload : payload.currentChallengeId;
       const { router } = deps;
       router.push({ pathname: `/workspace/${id}` });
     }),
@@ -78,21 +84,24 @@ const challengeSkeletonInitializationEpic: EpicSignature = action$ => {
     filter(isActionOf(Actions.initializeApp)),
     map(() => {
       /* API to fetch the challenge navigation skeleton ~ */
+
+      const challengeContent = challenges.challenges.map(c => ({
+        id: c.id,
+        type: c.type,
+        title: c.title,
+      }));
+
       const content: NavigationSkeleton = [
         {
           id: "f0aa8f00-5af8-4341-abc1-77051c68d005",
           title: "Fullstack Software Development",
           courseContent: {
-            id: "bf2d6275-e43e-4e35-ba67-0d8c0c721458",
+            challengeContent,
             summaryVideo: null,
-            challengeContent: {
-              id: "88cfc98e-27bd-4044-b71e-ca947dc596da",
-              type: "typescript",
-              title: "Add Two Numbers",
-            },
+            specialTopics: null,
             projectContent: null,
             projectSolution: null,
-            specialTopics: null,
+            id: "bf2d6275-e43e-4e35-ba67-0d8c0c721458",
           },
         },
       ];

@@ -39,6 +39,7 @@ const challenges = createReducer<State, ActionTypes>(initialState)
   }))
   .handleAction(actions.setChallengeId, (state, action) => ({
     ...state,
+    displayNavigationMap: false,
     currentChallengeId: action.payload,
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({

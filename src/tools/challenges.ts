@@ -142,7 +142,11 @@ let results = [];
 
 for (const x of ${JSON.stringify(testCases)}) {
   const { input, expected } = x;
-  results.push(main(input) === expected);
+  if (Array.isArray(input)) {
+    results.push(main(...input) === expected);
+  } else {
+    results.push(main(input) === expected);
+  }
 }
 
 window.parent.postMessage({

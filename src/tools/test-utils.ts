@@ -1,11 +1,6 @@
 import * as Babel from "@babel/standalone";
 
-import { CHALLENGE_TYPE } from "modules/challenges/types";
-import {
-  getSampleTestCodeReact,
-  getSampleTestCodeTypeScript,
-  TEST_CASES_TYPESCRIPT,
-} from "./challenges";
+import { getSampleTestCodeTypeScript } from "./challenges";
 import DependencyCacheService from "./module-service";
 
 /** ===========================================================================
