@@ -31,6 +31,7 @@ import {
 import {
   assertUnreachable,
   composeWithProps,
+  getStarterCodeForChallenge,
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
@@ -116,7 +117,7 @@ class Workspace extends React.Component<IProps, IState> {
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
-      code: props.challenge.starterCode,
+      code: getStarterCodeForChallenge(props.challenge),
     };
   }
 
@@ -135,7 +136,7 @@ class Workspace extends React.Component<IProps, IState> {
     /* Handle some timing issue with Monaco initialization... */
     await wait(500);
     this.iFrameRenderPreview();
-    this.requestSyntaxHighlighting(this.props.challenge.starterCode);
+    this.requestSyntaxHighlighting(this.state.code);
   }
 
   componentWillUnmount() {
@@ -150,9 +151,12 @@ class Workspace extends React.Component<IProps, IState> {
     if (this.props.challenge.id !== nextProps.challenge.id) {
       const { challenge } = nextProps;
       const tests = JSON.parse(challenge.testCode);
-      this.setState({ code: challenge.starterCode, tests }, () => {
-        this.setMonacoEditorValue();
-      });
+      this.setState(
+        { code: getStarterCodeForChallenge(challenge), tests },
+        () => {
+          this.setMonacoEditorValue();
+        },
+      );
     }
   }
 
@@ -488,7 +492,7 @@ class Workspace extends React.Component<IProps, IState> {
     /**
      * Save the current code to local storage. This method is debounced.
      */
-    saveCodeToLocalStorage(this.state.code, this.props.challenge.type);
+    saveCodeToLocalStorage(this.props.challenge.id, this.state.code);
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
@@ -573,7 +577,7 @@ class Workspace extends React.Component<IProps, IState> {
         : dependencies,
     );
 
-    const injectTestCodeFn = injectTestCode(this.props.challenge.testCode);
+    const injectTestCodeFn = injectTestCode(this.props.challenge);
 
     /**
      * What happens here:

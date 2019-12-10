@@ -136,13 +136,14 @@ export const getTestCases = (challengeType: CHALLENGE_TYPE) => {
  * tested with expected input/output values.
  */
 export const getSampleTestCodeTypeScript = (
+  spreadInput: boolean,
   testCases: ReadonlyArray<TestCaseTypeScript>,
 ) => `
 let results = [];
 
 for (const x of ${JSON.stringify(testCases)}) {
   const { input, expected } = x;
-  if (Array.isArray(input)) {
+  if (${spreadInput}) {
     results.push(main(...input) === expected);
   } else {
     results.push(main(input) === expected);

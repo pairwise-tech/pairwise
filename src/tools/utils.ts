@@ -1,6 +1,6 @@
 import { compose } from "redux";
 
-import { CHALLENGE_TYPE } from "modules/challenges/types";
+import { Challenge, CHALLENGE_TYPE } from "modules/challenges/types";
 import { getDefaultChallengeStarterCode } from "./challenges";
 
 /**
@@ -20,40 +20,47 @@ export const wait = async (time: number = 1000) => {
   await new Promise((_: any) => setTimeout(_, time));
 };
 
-const CODE_KEY_REACT = "LOCAL_STORAGE_CODE_KEY_REACT";
-const CODE_KEY_TS = "LOCAL_STORAGE_CODE_KEY_TYPESCRIPT";
+const CHALLENGE_STORE_KEY = "CHALLENGES";
 
 /**
  * Save code to localStorage.
  */
-export const saveCodeToLocalStorage = (code: string, type: CHALLENGE_TYPE) => {
-  const KEY = type === "react" ? CODE_KEY_REACT : CODE_KEY_TS;
-  localStorage.setItem(KEY, JSON.stringify(code));
+export const saveCodeToLocalStorage = (challengeId: string, code: string) => {
+  const challenges = getStoredChallenges();
+  const updatedChallenges = { ...challenges, [challengeId]: code };
+  localStorage.setItem(CHALLENGE_STORE_KEY, JSON.stringify(updatedChallenges));
+};
+
+/**
+ * Get all the stored challenges.
+ */
+const getStoredChallenges = () => {
+  try {
+    const data = localStorage.getItem(CHALLENGE_STORE_KEY);
+    if (data) {
+      const result = JSON.parse(data);
+      if (result) {
+        return result;
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  return {};
 };
 
 /**
  * Get the initial code for the editor, possibly from localStorage if
  * anything is saved there.
- *
- * TODO: Refactor localStorage to store a flat map of id:codeString for all
- * challenges so given a loaded challenge any previous code and just be
- * pulled directly from here.
  */
-export const getStarterCodeForChallenge = (type: CHALLENGE_TYPE) => {
-  try {
-    const KEY = type === "react" ? CODE_KEY_REACT : CODE_KEY_TS;
-    const storedCode = localStorage.getItem(KEY);
-    if (storedCode) {
-      const code = JSON.parse(storedCode);
-      if (code) {
-        return code;
-      }
-    }
-  } catch (err) {
-    // noop
+export const getStarterCodeForChallenge = (challenge: Challenge) => {
+  const challenges = getStoredChallenges();
+  if (challenge.id in challenges) {
+    return challenges[challenge.id];
+  } else {
+    return challenge.starterCode;
   }
-
-  return getDefaultChallengeStarterCode(type);
 };
 
 /**

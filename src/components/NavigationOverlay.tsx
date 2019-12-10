@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 
 import Modules, { ReduxStoreState } from "modules/root";
+import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 import { Button } from "./Primitives";
 
@@ -23,6 +24,7 @@ class NavigationOverlay extends React.Component<IProps, {}> {
 
     return (
       <Overlay visible={this.props.overlayVisible}>
+        <Title>View another challenge:</Title>
         {course.courseContent.challengeContent.map(c => {
           return (
             <Button
@@ -48,11 +50,18 @@ const Overlay = styled.div`
   width: 100%;
   height: 100%;
   z-index: 100;
-  padding: 25px;
+  padding-top: 25px;
+  padding-left: 50px;
   position: absolute;
   background: rgba(0, 0, 0, 0.85);
   visibility: ${(props: { visible: boolean }) =>
     props.visible ? "visible" : "hidden"};
+`;
+
+const Title = styled.p`
+  font-size: 18px;
+  font-weight: 200;
+  color: ${COLORS.TEXT_TITLE};
 `;
 
 /** ===========================================================================

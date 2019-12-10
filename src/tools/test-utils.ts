@@ -1,5 +1,6 @@
 import * as Babel from "@babel/standalone";
 
+import { Challenge } from "modules/challenges/types";
 import { getSampleTestCodeTypeScript } from "./challenges";
 import DependencyCacheService from "./module-service";
 
@@ -174,12 +175,17 @@ export const handleInjectModuleDependencies = (
 /**
  * Inject test code into a code string.
  */
-export const injectTestCode = (testString: string) => (codeString: string) => {
+export const injectTestCode = (challenge: Challenge) => (
+  codeString: string,
+) => {
   return `
     ${codeString}
     {
       ${removeConsole(codeString)}
-      ${getSampleTestCodeTypeScript(JSON.parse(testString))}
+      ${getSampleTestCodeTypeScript(
+        challenge.spreadInput,
+        JSON.parse(challenge.testCode),
+      )}
     }
   `;
 };
