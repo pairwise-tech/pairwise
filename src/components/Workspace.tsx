@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { debounce } from "throttle-debounce";
 
-import { Challenge, CHALLENGE_TYPE } from "modules/challenges/types";
+import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   getSampleTestCodeMarkup,
@@ -24,7 +24,6 @@ import {
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
-  addMarkupTestsToCode,
   handleInjectModuleDependencies,
   hijackConsole,
   injectTestCode,
