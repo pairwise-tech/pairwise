@@ -316,102 +316,115 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     return (
-      <Page>
-        <Header>
-          <Title>Fullstack TypeScript Course</Title>
-          <ControlsContainer>
-            <Button onClick={this.toggleEditorType}>
-              {fullScreenEditor ? "Regular" : "Full Screen"} Editor
-            </Button>
-            <Button
-              onClick={() => this.props.setNavigationMapState(!overlayVisible)}
-            >
-              {overlayVisible ? "Hide" : "Open"} Navigation
-            </Button>
-          </ControlsContainer>
-        </Header>
-        <NavigationOverlay overlayVisible={overlayVisible} />
-        <WorkspaceContainer>
-          <ColsWrapper separatorProps={separatorProps}>
-            <Col
-              initialWidth={D.EDITOR_PANEL_WIDTH}
-              initialHeight={D.WORKSPACE_HEIGHT}
-            >
-              {!fullScreenEditor ? (
-                <RowsWrapper separatorProps={separatorProps}>
-                  <Row
-                    initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
-                    style={{ background: C.BACKGROUND_CONTENT }}
-                  >
-                    <ContentContainer>
-                      <ContentTitle>{challenge.title}</ContentTitle>
-                      <ContentText>{challenge.content}</ContentText>
-                    </ContentContainer>
-                  </Row>
-                  <Row
-                    initialHeight={D.EDITOR_HEIGHT}
-                    style={{ background: C.BACKGROUND_EDITOR }}
+      <React.Fragment>
+        <PageSection>
+          <Header>
+            <Title>Fullstack TypeScript Course</Title>
+            <ControlsContainer>
+              <Button onClick={this.toggleEditorType}>
+                {fullScreenEditor ? "Regular" : "Full Screen"} Editor
+              </Button>
+              <Button
+                onClick={() =>
+                  this.props.setNavigationMapState(!overlayVisible)
+                }
+              >
+                {overlayVisible ? "Hide" : "Open"} Navigation
+              </Button>
+            </ControlsContainer>
+          </Header>
+          <NavigationOverlay overlayVisible={overlayVisible} />
+          <WorkspaceContainer>
+            <ColsWrapper separatorProps={separatorProps}>
+              <Col
+                initialWidth={D.EDITOR_PANEL_WIDTH}
+                initialHeight={D.WORKSPACE_HEIGHT}
+              >
+                {!fullScreenEditor ? (
+                  <RowsWrapper separatorProps={separatorProps}>
+                    <Row
+                      initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
+                      style={{ background: C.BACKGROUND_CONTENT }}
+                    >
+                      <ContentContainer>
+                        <ContentTitle>{challenge.title}</ContentTitle>
+                        <ContentText>{challenge.content}</ContentText>
+                      </ContentContainer>
+                    </Row>
+                    <Row
+                      initialHeight={D.EDITOR_HEIGHT}
+                      style={{ background: C.BACKGROUND_EDITOR }}
+                    >
+                      {MONACO_CONTAINER}
+                    </Row>
+                    <Row
+                      initialHeight={D.TEST_CONTENT_HEIGHT}
+                      style={{ background: C.BACKGROUND_CONTENT }}
+                    >
+                      <ContentContainer>
+                        <ContentTitle style={{ marginBottom: 12 }}>
+                          {this.getTestSummaryString()}
+                        </ContentTitle>
+                        {tests.map(this.renderTestResult)}
+                      </ContentContainer>
+                    </Row>
+                  </RowsWrapper>
+                ) : (
+                  <div
+                    style={{ height: "100%", background: C.BACKGROUND_CONSOLE }}
                   >
                     {MONACO_CONTAINER}
-                  </Row>
-                  <Row
-                    initialHeight={D.TEST_CONTENT_HEIGHT}
-                    style={{ background: C.BACKGROUND_CONTENT }}
-                  >
-                    <ContentContainer>
-                      <ContentTitle style={{ marginBottom: 12 }}>
-                        {this.getTestSummaryString()}
-                      </ContentTitle>
-                      {tests.map(this.renderTestResult)}
-                    </ContentContainer>
-                  </Row>
-                </RowsWrapper>
-              ) : (
-                <div
-                  style={{ height: "100%", background: C.BACKGROUND_CONSOLE }}
+                  </div>
+                )}
+              </Col>
+              {IS_TYPESCRIPT_CHALLENGE ? (
+                <Col
+                  style={consoleRowStyles}
+                  initialHeight={D.WORKSPACE_HEIGHT}
                 >
-                  {MONACO_CONTAINER}
-                </div>
+                  <div>
+                    <Console variant="dark" logs={this.state.logs} />
+                    <FrameContainer
+                      id="iframe"
+                      title="code-preview"
+                      ref={this.setIframeRef}
+                      style={{ visibility: "hidden", height: 0, width: 0 }}
+                    />
+                  </div>
+                </Col>
+              ) : (
+                <Col initialHeight={D.WORKSPACE_HEIGHT}>
+                  <RowsWrapper separatorProps={separatorProps}>
+                    <Row initialHeight={D.PREVIEW_HEIGHT}>
+                      <div>
+                        <FrameContainer
+                          id="iframe"
+                          title="code-preview"
+                          ref={this.setIframeRef}
+                        />
+                      </div>
+                    </Row>
+                    <Row
+                      style={consoleRowStyles}
+                      initialHeight={D.CONSOLE_HEIGHT}
+                    >
+                      <div>
+                        <Console variant="dark" logs={this.state.logs} />
+                      </div>
+                    </Row>
+                  </RowsWrapper>
+                </Col>
               )}
-            </Col>
-            {IS_TYPESCRIPT_CHALLENGE ? (
-              <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
-                <div>
-                  <Console variant="dark" logs={this.state.logs} />
-                  <FrameContainer
-                    id="iframe"
-                    title="code-preview"
-                    ref={this.setIframeRef}
-                    style={{ visibility: "hidden", height: 0, width: 0 }}
-                  />
-                </div>
-              </Col>
-            ) : (
-              <Col>
-                <RowsWrapper separatorProps={separatorProps}>
-                  <Row initialHeight={D.PREVIEW_HEIGHT}>
-                    <div>
-                      <FrameContainer
-                        id="iframe"
-                        title="code-preview"
-                        ref={this.setIframeRef}
-                      />
-                    </div>
-                  </Row>
-                  <Row
-                    style={consoleRowStyles}
-                    initialHeight={D.CONSOLE_HEIGHT}
-                  >
-                    <div>
-                      <Console variant="dark" logs={this.state.logs} />
-                    </div>
-                  </Row>
-                </RowsWrapper>
-              </Col>
-            )}
-          </ColsWrapper>
-        </WorkspaceContainer>
-      </Page>
+            </ColsWrapper>
+          </WorkspaceContainer>
+        </PageSection>
+        <LowerSection>
+          <SupplementaryContentContainer>
+            <ContentTitle>Supplementary Content Area</ContentTitle>
+            <ContentText>{challenge.supplementaryContent}</ContentText>
+          </SupplementaryContentContainer>
+        </LowerSection>
+      </React.Fragment>
     );
   }
 
@@ -716,13 +729,23 @@ class Workspace extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
-const Page = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+const PageSection = styled.div`
+  width: 100vw;
+  height: 100vh;
   background: white;
+`;
+
+const LowerSection = styled.div`
+  width: 100vw;
+  height: 100vh;
+  border-top: 2px solid ${C.HEADER_BORDER};
+  background: ${C.BACKGROUND_LOWER_SECTION};
+`;
+
+const SupplementaryContentContainer = styled.div`
+  padding: 25px;
+  padding-left: 12px;
+  padding-right: 12px;
 `;
 
 const Header = styled.div`
@@ -752,8 +775,8 @@ const Title = styled.p`
 `;
 
 const WorkspaceContainer = styled.div`
-  height: 100%;
-  width: 100%;
+  width: 100vw;
+  height: ${D.WORKSPACE_HEIGHT}px;
 `;
 
 const FrameContainer = styled.iframe`
@@ -887,6 +910,7 @@ class WorkspaceLoadingContainer extends React.Component<
 > {
   render() {
     const { challenge } = this.props;
+    console.log(challenge);
 
     if (!challenge) {
       return this.renderLoadingOverlay();

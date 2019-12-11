@@ -15,9 +15,11 @@ export interface Challenge {
   title: string;
   content: string;
   testCode: string;
+  videoUrl?: string;
   starterCode: string;
   solutionCode: string;
   type: CHALLENGE_TYPE;
+  supplementaryContent: string;
 }
 
 type ChallengeList = ReadonlyArray<Challenge>;

@@ -14,9 +14,9 @@ import challenges from "../../challenges/01_programming_fundamental.json";
  */
 
 export const CURRENT_ACTIVE_CHALLENGE_IDS = {
-  courseId: "bf2d6275-e43e-4e35-ba67-0d8c0c721458",
-  moduleId: "f0aa8f00-5af8-4341-abc1-77051c68d005",
-  challengeId: "88cfc98e-27bd-4044-b71e-ca947dc596da",
+  courseId: "fpvPtNWkC",
+  moduleId: "fIZb6tB0e",
+  challengeId: "9scykDold",
 };
 
 /**
@@ -93,7 +93,7 @@ const challengeSkeletonInitializationEpic: EpicSignature = action$ => {
 
       const content: NavigationSkeleton = [
         {
-          id: "f0aa8f00-5af8-4341-abc1-77051c68d005",
+          id: "fIZb6tB0e",
           title: "Fullstack Software Development",
           courseContent: {
             challengeContent,
@@ -101,7 +101,7 @@ const challengeSkeletonInitializationEpic: EpicSignature = action$ => {
             specialTopics: null,
             projectContent: null,
             projectSolution: null,
-            id: "bf2d6275-e43e-4e35-ba67-0d8c0c721458",
+            id: "fpvPtNWkC",
           },
         },
       ];
