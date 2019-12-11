@@ -1,7 +1,7 @@
 import * as Babel from "@babel/standalone";
 
 import { Challenge } from "modules/challenges/types";
-import { getSampleTestCodeTypeScript } from "./challenges";
+import { getTestCodeTypeScript } from "./challenges";
 import DependencyCacheService from "./module-service";
 
 /** ===========================================================================
@@ -13,7 +13,7 @@ import DependencyCacheService from "./module-service";
  * Functions used to intercept console methods and post the messages to
  * the parent window.
  */
-const CONSOLE_INTERCEPTORS = `
+const CONSOLE_INTERCEPTOR_FUNCTIONS = `
 const __interceptConsoleLog = (value) => {
   window.parent.postMessage({
     message: JSON.stringify(value),
@@ -56,7 +56,7 @@ const __interceptConsoleError = (value) => {
  *
  * The code may not work 100%:
  */
-export const stripAndExtractImportDependencies = (codeString: string) => {
+export const stripAndExtractModuleImports = (codeString: string) => {
   // Reference: https://gist.github.com/manekinekko/7e58a17bc62a9be47172
   const regex = new RegExp(
     /import(?:["'\s]*([\w*{}\n\r\t, ]+)from\s*)?["'\s].*([@\w/_-]+)["'\s].*/g,
@@ -97,7 +97,7 @@ export const hijackConsole = (codeString: string) => {
     .replace(/console.warn/g, "__interceptConsoleWarn")
     .replace(/console.error/g, "__interceptConsoleError");
 
-  return `${CONSOLE_INTERCEPTORS}${replacedConsole}`;
+  return `${CONSOLE_INTERCEPTOR_FUNCTIONS}${replacedConsole}`;
 };
 
 /**
@@ -130,7 +130,9 @@ export const transpileCodeWithBabel = (codeString: string) => {
 /**
  * Get all imported dependencies from the DependencyCacheService.
  */
-const getRequiredDependencies = async (dependencies: ReadonlyArray<string>) => {
+const fetchRequiredDependencies = async (
+  dependencies: ReadonlyArray<string>,
+) => {
   return Promise.all(
     dependencies.map(d => DependencyCacheService.getDependency(d)),
   );
@@ -139,7 +141,7 @@ const getRequiredDependencies = async (dependencies: ReadonlyArray<string>) => {
 /**
  * Concatenate package source dependencies to code string.
  */
-const addDependencies = (
+const injectDependencies = (
   codeString: string,
   dependencies: ReadonlyArray<string>,
 ) => {
@@ -156,15 +158,15 @@ const addDependencies = (
 /**
  * Fetch the required module dependencies and inject them into the code string.
  */
-export const handleInjectModuleDependencies = (
+export const createInjectDependenciesFunction = (
   dependencies: ReadonlyArray<string>,
 ) => async (codeString: string) => {
   /**
    * TODO: The following method could throw an error if an imported package
    * cannot be found, this should be handled somewhere.
    */
-  const dependencySourceList = await getRequiredDependencies(dependencies);
-  const codeWithDependencies = addDependencies(
+  const dependencySourceList = await fetchRequiredDependencies(dependencies);
+  const codeWithDependencies = injectDependencies(
     codeString,
     dependencySourceList,
   );
@@ -182,7 +184,21 @@ export const injectTestCode = (challenge: Challenge) => (
     ${codeString}
     {
       ${removeConsole(codeString)}
-      ${getSampleTestCodeTypeScript(JSON.parse(challenge.testCode))}
+      ${getTestCodeTypeScript(JSON.parse(challenge.testCode))}
     }
   `;
 };
+
+/**
+ * Get the full html content string for the iframe, injected the user code
+ * into it. This currently includes script libraries now.
+ */
+export const getMarkupForCodeChallenge = (scriptString: string) => `
+<html>
+  <head></head>
+  <body>
+    <div id="root" />
+    <script>${scriptString}</script>
+  </body>
+</html>
+`;

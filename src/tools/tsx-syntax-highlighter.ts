@@ -8,7 +8,6 @@ import { ts } from "ts-morph";
  * ----------------------------------------------------------------------------
  * Reference:
  * - https://blog.expo.io/building-a-code-editor-with-monaco-f84b3a06deaf
- * - https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/workers/fetch-dependency-typings.js
  * - https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md
  *
  * TODO:

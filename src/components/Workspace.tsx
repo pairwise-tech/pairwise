@@ -10,7 +10,7 @@ import { debounce } from "throttle-debounce";
 import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
-  getSampleTestCodeMarkup,
+  getTestCodeMarkup,
   TestCase,
   TestCaseMarkup,
   TestCaseReact,
@@ -24,10 +24,11 @@ import {
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
-  handleInjectModuleDependencies,
+  createInjectDependenciesFunction,
+  getMarkupForCodeChallenge,
   hijackConsole,
   injectTestCode,
-  stripAndExtractImportDependencies,
+  stripAndExtractModuleImports,
   transpileCodeWithBabel,
 } from "../tools/test-utils";
 import {
@@ -259,9 +260,11 @@ class Workspace extends React.Component<IProps, IState> {
 
     let model;
 
+    /* Markup challenges: */
     if (this.props.challenge.type === "markup") {
       model = mn.editor.createModel(this.state.code, language);
     } else {
+      /* TypeScript and React challenges: */
       model = mn.editor.createModel(
         this.state.code,
         language,
@@ -436,54 +439,69 @@ class Workspace extends React.Component<IProps, IState> {
 
   renderTestResult = (t: TestCase, i: number) => {
     const challengeType = this.props.challenge.type;
-    if (challengeType === "react") {
-      const { message } = t as TestCaseReact;
-      return (
-        <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
-          <div style={{ width: 450 }}>
-            <b style={{ color: C.TEXT_TITLE }}>Test: </b>
-            {message}
-          </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-            <SuccessFailureText testResult={t.testResult}>
-              {t.testResult ? "Success!" : "Failure..."}
-            </SuccessFailureText>
-          </div>
-        </ContentText>
-      );
-    } else if (challengeType === "typescript") {
-      const { input } = t as TestCaseTypeScript;
-      return (
-        <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
-          <div style={{ width: 450 }}>
-            <b style={{ color: C.TEXT_TITLE }}>Input: </b>
-            {input.map(JSON.stringify).join(", ")}
-          </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-            <SuccessFailureText testResult={t.testResult}>
-              {t.testResult ? "Success!" : "Failure..."}
-            </SuccessFailureText>
-          </div>
-        </ContentText>
-      );
-    } else if (challengeType === "markup") {
-      const { message } = t as TestCaseMarkup;
-      return (
-        <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
-          <div style={{ width: 450 }}>
-            <b style={{ color: C.TEXT_TITLE }}>Input: </b>
-            {message}
-          </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-            <SuccessFailureText testResult={t.testResult}>
-              {t.testResult ? "Success!" : "Failure..."}
-            </SuccessFailureText>
-          </div>
-        </ContentText>
-      );
+    switch (challengeType) {
+      case "react": {
+        const { message } = t as TestCaseReact;
+        return (
+          <ContentText
+            key={i}
+            style={{ display: "flex", flexDirection: "row" }}
+          >
+            <div style={{ width: 450 }}>
+              <b style={{ color: C.TEXT_TITLE }}>Test: </b>
+              {message}
+            </div>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <b style={{ color: C.TEXT_TITLE }}>Status:</b>
+              <SuccessFailureText testResult={t.testResult}>
+                {t.testResult ? "Success!" : "Failure..."}
+              </SuccessFailureText>
+            </div>
+          </ContentText>
+        );
+      }
+      case "typescript": {
+        const { input } = t as TestCaseTypeScript;
+        return (
+          <ContentText
+            key={i}
+            style={{ display: "flex", flexDirection: "row" }}
+          >
+            <div style={{ width: 450 }}>
+              <b style={{ color: C.TEXT_TITLE }}>Input: </b>
+              {input.map(JSON.stringify).join(", ")}
+            </div>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <b style={{ color: C.TEXT_TITLE }}>Status:</b>
+              <SuccessFailureText testResult={t.testResult}>
+                {t.testResult ? "Success!" : "Failure..."}
+              </SuccessFailureText>
+            </div>
+          </ContentText>
+        );
+      }
+      case "markup": {
+        const { message } = t as TestCaseMarkup;
+        return (
+          <ContentText
+            key={i}
+            style={{ display: "flex", flexDirection: "row" }}
+          >
+            <div style={{ width: 450 }}>
+              <b style={{ color: C.TEXT_TITLE }}>Input: </b>
+              {message}
+            </div>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <b style={{ color: C.TEXT_TITLE }}>Status:</b>
+              <SuccessFailureText testResult={t.testResult}>
+                {t.testResult ? "Success!" : "Failure..."}
+              </SuccessFailureText>
+            </div>
+          </ContentText>
+        );
+      }
+      default:
+        assertUnreachable(challengeType);
     }
   };
 
@@ -608,7 +626,7 @@ class Workspace extends React.Component<IProps, IState> {
              * before appending and running the test script.
              */
             await wait(50);
-            const markupTests = getSampleTestCodeMarkup(this.state.tests);
+            const markupTests = getTestCodeMarkup(this.state.tests);
 
             const testScript = this.iFrameRef.contentWindow.document.createElement(
               "script",
@@ -619,7 +637,7 @@ class Workspace extends React.Component<IProps, IState> {
             this.iFrameRef.contentWindow.document.body.appendChild(testScript);
           } else {
             const code = await this.compileAndTransformCodeString();
-            const sourceDocument = getHTML(code);
+            const sourceDocument = getMarkupForCodeChallenge(code);
             this.iFrameRef.srcdoc = sourceDocument;
           }
         } catch (err) {
@@ -630,13 +648,13 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   compileAndTransformCodeString = async () => {
-    const { code, dependencies } = stripAndExtractImportDependencies(
+    const { code, dependencies } = stripAndExtractModuleImports(
       this.state.code,
     );
 
     this.addModuleTypeDefinitionsToMonaco(dependencies);
 
-    const injectModuleDependenciesFn = handleInjectModuleDependencies(
+    const injectModuleDependenciesFn = createInjectDependenciesFunction(
       this.props.challenge.type === "react"
         ? [...dependencies, "react-dom-test-utils"]
         : dependencies,
@@ -851,20 +869,6 @@ const OverlayLoadingText = styled.p`
   font-size: 42px;
   font-weight: 200;
   color: ${COLORS.PRIMARY_BLUE};
-`;
-
-/**
- * Get the full html content string for the iframe, injected the user code
- * into it. This currently includes script libraries now.
- */
-const getHTML = (js: string) => `
-<html>
-  <head></head>
-  <body>
-    <div id="root" />
-    <script>${js}</script>
-  </body>
-</html>
 `;
 
 /** ===========================================================================

@@ -5,18 +5,6 @@ import { CHALLENGE_TYPE } from "modules/challenges/types";
  * ============================================================================
  */
 
-const DEFAULT_TYPESCRIPT_CODE = `
-const addTwoNumbers = (a: number, b: number) => {
-  // Edit code here
-}
-
-const result = addTwoNumbers(10, 20);
-console.log(result);
-
-// Do not edit code below this line
-const main = addTwoNumbers;
-`;
-
 const DEFAULT_REACT_CODE = `
 import React from "react";
 import ReactDOM from "react-dom";
@@ -54,13 +42,17 @@ class App extends React.Component<IState> {
 const Main = App;
 ReactDOM.render(<Main />, document.getElementById('root'));`;
 
-export const getDefaultChallengeStarterCode = (
-  challengeType: CHALLENGE_TYPE,
-) => {
-  return challengeType === "react"
-    ? DEFAULT_REACT_CODE
-    : DEFAULT_TYPESCRIPT_CODE;
-};
+/**
+ * Sample test case messages for a React challenge.
+ */
+export const TEST_CASES_REACT: ReadonlyArray<any> = [
+  {
+    message: `Renders a <h1> tag with the text "Hello, React!"`,
+  },
+  {
+    message: `Renders a controlled <input /> using React state`,
+  },
+];
 
 /** ===========================================================================
  * Test Cases
@@ -84,46 +76,7 @@ export interface TestCaseMarkup {
   testResult: boolean;
 }
 
-export type TestCase = TestCaseTypeScript | TestCaseReact;
-
-const addDefaultTestResults = (x: any) => ({ ...x, testResult: false });
-
-/**
- * Sample test cases for the one hard coded test.
- */
-export const TEST_CASES_TYPESCRIPT: ReadonlyArray<TestCaseTypeScript> = [
-  { input: [1, 2], expected: 3 },
-  { input: [10, 50], expected: 60 },
-  { input: [-10, -50], expected: -60 },
-  { input: [100, 500], expected: 600 },
-  { input: [1123, 532142], expected: 533265 },
-  { input: [-10, 50], expected: 40 },
-  { input: [1, 500], expected: 501 },
-  { input: [842, 124], expected: 966 },
-  { input: [1000, 500], expected: 1500 },
-  { input: [-100, 100], expected: 0 },
-  { input: [2, 50234432], expected: 50234434 },
-].map(addDefaultTestResults);
-
-/**
- * Sample test case messages for a React challenge.
- */
-export const TEST_CASES_REACT: ReadonlyArray<TestCaseReact> = [
-  {
-    message: `Renders a <h1> tag with the text "Hello, React!"`,
-  },
-  {
-    message: `Renders a controlled <input /> using React state`,
-  },
-].map(addDefaultTestResults);
-
-export const getTestCases = (challengeType: CHALLENGE_TYPE) => {
-  if (challengeType === "react") {
-    return TEST_CASES_REACT;
-  } else {
-    return TEST_CASES_TYPESCRIPT;
-  }
-};
+export type TestCase = TestCaseTypeScript | TestCaseReact | TestCaseMarkup;
 
 /**
  * Some sample code to run provided tests against a challenge and post
@@ -132,7 +85,7 @@ export const getTestCases = (challengeType: CHALLENGE_TYPE) => {
  * Regular TypeScript challenges export simple functions which can just be
  * tested with expected input/output values.
  */
-export const getSampleTestCodeTypeScript = (
+export const getTestCodeTypeScript = (
   testCases: ReadonlyArray<TestCaseTypeScript>,
 ) => `
 let results = [];
@@ -151,7 +104,7 @@ window.parent.postMessage({
 /**
  * Get the test code string for a markup challenge.
  */
-export const getSampleTestCodeMarkup = (testCases: ReadonlyArray<any>) => `
+export const getTestCodeMarkup = (testCases: ReadonlyArray<any>) => `
 let results = [];
 
 for (const x of ${JSON.stringify(testCases)}) {
@@ -185,7 +138,7 @@ window.parent.postMessage({
  * then behind the scenes write the tests as strings to some file, which could
  * then be read like the test cases below:
  */
-export const getSampleTestCodeReact = () => `
+export const getTestCodeReact = () => `
 {
   let results = [];
 
