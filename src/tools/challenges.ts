@@ -1,5 +1,3 @@
-import { CHALLENGE_TYPE } from "modules/challenges/types";
-
 /** ===========================================================================
  * Starter Code
  * ============================================================================
@@ -45,7 +43,7 @@ ReactDOM.render(<Main />, document.getElementById('root'));`;
 /**
  * Sample test case messages for a React challenge.
  */
-export const TEST_CASES_REACT: ReadonlyArray<any> = [
+const TEST_CASES_REACT: ReadonlyArray<any> = [
   {
     message: `Renders a <h1> tag with the text "Hello, React!"`,
   },
