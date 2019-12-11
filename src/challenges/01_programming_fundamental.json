@@ -2,14 +2,22 @@
   "id": "bf2d6275-e43e-4e35-ba67-0d8c0c721458",
   "challenges": [
     {
+      "id": "88cfc98e-27bd-4044-b71e-ca947dcf78su",
+      "type": "markup",
+      "title": "Add a h1 Tag in HTML",
+      "content": "There is some HTML below. You should add an <h1> tag with the text \"Hello!\" inside it.",
+      "starterCode": "\n<html>\n  <head></head>\n  <body>\n  </body>\n</html>\n",
+      "solutionCode": "\n<html>\n  <head></head>\n  <body>\n    <h1>Hello!</h1>\n  </body>\n</html>\n",
+      "testCode": "[{\"test\":\"(function() {  const element = document.querySelector('h1');  return element.innerText === 'Hello!';})()\",\"message\":\"There should be an h1 tag with the text 'Hello!'\"}]"
+    },
+    {
       "id": "88cfc98e-27bd-4044-b71e-ca947dc596da",
       "type": "typescript",
       "title": "Add Two Numbers",
       "content": "Complete the function body below. The function should receive two numbers as input arguments and return the result of adding these numbers together.",
       "starterCode": "\nconst addTwoNumbers = (a: number, b: number) => {\n  // Edit code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = addTwoNumbers;\n",
       "solutionCode": "\nconst addTwoNumbers = (a: number, b: number) => {\n  return a + b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = addTwoNumbers;\n",
-      "testCode": "[{\"input\":[1,2],\"expected\":3},{\"input\":[10,50],\"expected\":60},{\"input\":[-10,-50],\"expected\":-60},{\"input\":[100,500],\"expected\":600},{\"input\":[1123,532142],\"expected\":533265},{\"input\":[-10,50],\"expected\":40},{\"input\":[1,500],\"expected\":501},{\"input\":[842,124],\"expected\":966},{\"input\":[1000,500],\"expected\":1500},{\"input\":[-100,100],\"expected\":0},{\"input\":[2,50234432],\"expected\":50234434}]",
-      "spreadInput": true
+      "testCode": "[{\"input\":[1,2],\"expected\":3},{\"input\":[10,50],\"expected\":60},{\"input\":[-10,-50],\"expected\":-60},{\"input\":[100,500],\"expected\":600},{\"input\":[1123,532142],\"expected\":533265},{\"input\":[-10,50],\"expected\":40},{\"input\":[1,500],\"expected\":501},{\"input\":[842,124],\"expected\":966},{\"input\":[1000,500],\"expected\":1500},{\"input\":[-100,100],\"expected\":0},{\"input\":[2,50234432],\"expected\":50234434}]"
     },
     {
       "id": "06d48110-5cdd-4656-947c-fcc1c06d18bb",
@@ -18,8 +26,7 @@
       "content": "Complete the function body below. The function should will receive a string and should return the same string in reverse order.",
       "starterCode": "\nconst reverseString = (inputString) => {\n  // Edit code here\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
       "solutionCode": "\nconst reverseString = (inputString) => {\n  return inputString.split().reverse().join();\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
-      "testCode": "[{\"input\":\"hello\",\"expected\":\"olleh\"},{\"input\":\"fantastic\",\"expected\":\"citsatnaf\"},{\"input\":\"superb\",\"expected\":\"brepus\"},{\"input\":\"frustrating\",\"expected\":\"gnitartsurf\"},{\"input\":\"exciting\",\"expected\":\"gniticxe\"},{\"input\":\"happy\",\"expected\":\"yppah\"},{\"input\":\"a\",\"expected\":\"a\"},{\"input\":\"aaaaaaaaaaaaz\",\"expected\":\"zaaaaaaaaaaaa\"},{\"input\":\"jumping\",\"expected\":\"gnipmuj\"},{\"input\":\"silly\",\"expected\":\"yllis\"},{\"input\":\"zombie\",\"expected\":\"eibmoz\"}]",
-      "spreadInput": false
+      "testCode": "[{\"input\":[\"hello\"],\"expected\":\"olleh\"},{\"input\":[\"fantastic\"],\"expected\":\"citsatnaf\"},{\"input\":[\"superb\"],\"expected\":\"brepus\"},{\"input\":[\"frustrating\"],\"expected\":\"gnitartsurf\"},{\"input\":[\"exciting\"],\"expected\":\"gniticxe\"},{\"input\":[\"happy\"],\"expected\":\"yppah\"},{\"input\":[\"a\"],\"expected\":\"a\"},{\"input\":[\"aaaaaaaaaaaaz\"],\"expected\":\"zaaaaaaaaaaaa\"},{\"input\":[\"jumping\"],\"expected\":\"gnipmuj\"},{\"input\":[\"silly\"],\"expected\":\"yllis\"},{\"input\":[\"zombie\"],\"expected\":\"eibmoz\"}]"
     },
     {
       "id": "5dff3b95-f91b-4ee2-aca0-b48e2618fb37",
@@ -28,8 +35,7 @@
       "content": "Complete the function body below. The function will receive an array as input and should return the number of items in the array.",
       "starterCode": "\nconst lengthOfArray = (array) => {\n  // Edit code here\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
       "solutionCode": "\nconst lengthOfArray = (array) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
-      "testCode": "[{\"input\":[1,2,3,4],\"expected\":4},{\"input\":[],\"expected\":0},{\"input\":[1,1,1,1,1,1,1,1,1],\"expected\":9},{\"input\":[3,3,3],\"expected\":3},{\"input\":[2],\"expected\":1},{\"input\":[7,7,7,7,7,7,7,7,7,7,7,7,7,7],\"expected\":14}]",
-      "spreadInput": false
+      "testCode": "[{\"input\":[[1,2,3,4]],\"expected\":4},{\"input\":[[]],\"expected\":0},{\"input\":[[1,1,1,1,1,1,1,1,1]],\"expected\":9},{\"input\":[[3,3,3]],\"expected\":3},{\"input\":[[2]],\"expected\":1},{\"input\":[[7,7,7,7,7,7,7,7,7,7,7,7,7,7]],\"expected\":14}]"
     }
   ]
 }

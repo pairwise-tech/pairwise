@@ -3,7 +3,7 @@
  * ============================================================================
  */
 
-export type CHALLENGE_TYPE = "react" | "typescript";
+export type CHALLENGE_TYPE = "react" | "typescript" | "markup";
 
 export interface Course {
   id: string;
@@ -15,7 +15,6 @@ export interface Challenge {
   title: string;
   content: string;
   testCode: string;
-  spreadInput: boolean;
   starterCode: string;
   solutionCode: string;
   type: CHALLENGE_TYPE;

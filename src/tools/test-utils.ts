@@ -1,7 +1,10 @@
 import * as Babel from "@babel/standalone";
 
 import { Challenge } from "modules/challenges/types";
-import { getSampleTestCodeTypeScript } from "./challenges";
+import {
+  getSampleTestCodeMarkup,
+  getSampleTestCodeTypeScript,
+} from "./challenges";
 import DependencyCacheService from "./module-service";
 
 /** ===========================================================================
@@ -172,6 +175,16 @@ export const handleInjectModuleDependencies = (
   return codeWithDependencies;
 };
 
+export const addMarkupTestsToCode = (
+  challenge: Challenge,
+  codeString: string,
+) => {
+  return `
+    ${codeString}
+    ${getSampleTestCodeMarkup(JSON.parse(challenge.testCode))}
+  `;
+};
+
 /**
  * Inject test code into a code string.
  */
@@ -182,10 +195,7 @@ export const injectTestCode = (challenge: Challenge) => (
     ${codeString}
     {
       ${removeConsole(codeString)}
-      ${getSampleTestCodeTypeScript(
-        challenge.spreadInput,
-        JSON.parse(challenge.testCode),
-      )}
+      ${getSampleTestCodeTypeScript(JSON.parse(challenge.testCode))}
     }
   `;
 };

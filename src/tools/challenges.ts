@@ -78,6 +78,12 @@ export interface TestCaseTypeScript {
   testResult: boolean;
 }
 
+export interface TestCaseMarkup {
+  test: string;
+  message: string;
+  testResult: boolean;
+}
+
 export type TestCase = TestCaseTypeScript | TestCaseReact;
 
 const addDefaultTestResults = (x: any) => ({ ...x, testResult: false });
@@ -98,15 +104,6 @@ export const TEST_CASES_TYPESCRIPT: ReadonlyArray<TestCaseTypeScript> = [
   { input: [-100, 100], expected: 0 },
   { input: [2, 50234432], expected: 50234434 },
 ].map(addDefaultTestResults);
-
-export const X: ReadonlyArray<any> = [
-  { input: [1, 2, 3, 4], expected: 4 },
-  { input: [], expected: 0 },
-  { input: [1, 1, 1, 1, 1, 1, 1, 1, 1], expected: 9 },
-  { input: [3, 3, 3], expected: 3 },
-  { input: [2], expected: 1 },
-  { input: [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7], expected: 13 },
-];
 
 /**
  * Sample test case messages for a React challenge.
@@ -136,17 +133,33 @@ export const getTestCases = (challengeType: CHALLENGE_TYPE) => {
  * tested with expected input/output values.
  */
 export const getSampleTestCodeTypeScript = (
-  spreadInput: boolean,
   testCases: ReadonlyArray<TestCaseTypeScript>,
 ) => `
 let results = [];
 
 for (const x of ${JSON.stringify(testCases)}) {
   const { input, expected } = x;
-  if (${spreadInput}) {
-    results.push(main(...input) === expected);
-  } else {
-    results.push(main(input) === expected);
+  results.push(main(...input) === expected);
+}
+
+window.parent.postMessage({
+  message: JSON.stringify(results),
+  source: "TEST_RESULTS",
+});
+`;
+
+/**
+ * Get the test code string for a markup challenge.
+ */
+export const getSampleTestCodeMarkup = (testCases: ReadonlyArray<any>) => `
+let results = [];
+
+for (const x of ${JSON.stringify(testCases)}) {
+  const { test } = x;
+  try {
+    results.push(eval(test));
+  } catch (err) {
+    results.push(false);
   }
 }
 

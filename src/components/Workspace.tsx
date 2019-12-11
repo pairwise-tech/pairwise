@@ -7,10 +7,12 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { debounce } from "throttle-debounce";
 
-import { Challenge } from "modules/challenges/types";
+import { Challenge, CHALLENGE_TYPE } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
+  getSampleTestCodeMarkup,
   TestCase,
+  TestCaseMarkup,
   TestCaseReact,
   TestCaseTypeScript,
 } from "../tools/challenges";
@@ -22,6 +24,7 @@ import {
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
+  addMarkupTestsToCode,
   handleInjectModuleDependencies,
   hijackConsole,
   injectTestCode,
@@ -101,7 +104,7 @@ class Workspace extends React.Component<IProps, IState> {
     super(props);
 
     this.debouncedRenderPreviewFunction = debounce(
-      500,
+      200,
       this.iFrameRenderPreview,
     );
 
@@ -154,6 +157,7 @@ class Workspace extends React.Component<IProps, IState> {
       this.setState(
         { code: getStarterCodeForChallenge(challenge), tests },
         () => {
+          this.resetMonacoEditor();
           this.setMonacoEditorValue();
         },
       );
@@ -176,7 +180,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   updateSyntaxDecorations = async (classifications: ReadonlyArray<any>) => {
-    if (!this.monacoEditor) {
+    if (!this.monacoEditor || this.props.challenge.type === "markup") {
       return;
     }
 
@@ -252,11 +256,19 @@ class Workspace extends React.Component<IProps, IState> {
       fixedOverflowWidgets: true,
     };
 
-    const model = mn.editor.createModel(
-      this.state.code,
-      "typescript",
-      new mn.Uri.parse("file:///main.tsx"),
-    );
+    const language = this.getMonacoLanguageFromChallengeType();
+
+    let model;
+
+    if (this.props.challenge.type === "markup") {
+      model = mn.editor.createModel(this.state.code, language);
+    } else {
+      model = mn.editor.createModel(
+        this.state.code,
+        language,
+        new mn.Uri.parse("file:///main.tsx"),
+      );
+    }
 
     model.onDidChangeContent(this.handleEditorContentChange);
 
@@ -274,6 +286,16 @@ class Workspace extends React.Component<IProps, IState> {
       "typescript",
       mn.Uri.parse("file:///index.d.ts"),
     );
+  };
+
+  getMonacoLanguageFromChallengeType = () => {
+    const { type } = this.props.challenge;
+
+    if (type === "react" || type === "typescript") {
+      return "typescript";
+    } else if (type === "markup") {
+      return "html";
+    }
   };
 
   disposeModels = () => {
@@ -424,7 +446,23 @@ class Workspace extends React.Component<IProps, IState> {
         <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
           <div style={{ width: 450 }}>
             <b style={{ color: C.TEXT_TITLE }}>Input: </b>
-            {JSON.stringify(input)}
+            {input.map(JSON.stringify).join(", ")}
+          </div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <b style={{ color: C.TEXT_TITLE }}>Status:</b>
+            <SuccessFailureText testResult={t.testResult}>
+              {t.testResult ? "Success!" : "Failure..."}
+            </SuccessFailureText>
+          </div>
+        </ContentText>
+      );
+    } else if (challengeType === "markup") {
+      const { message } = t as TestCaseMarkup;
+      return (
+        <ContentText key={i} style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ width: 450 }}>
+            <b style={{ color: C.TEXT_TITLE }}>Input: </b>
+            {message}
           </div>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <b style={{ color: C.TEXT_TITLE }}>Status:</b>
@@ -541,22 +579,37 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  iFrameRenderPreview = () => {
-    // console.clear();
+  iFrameRenderPreview = async () => {
+    console.clear();
     this.setState({ logs: DEFAULT_LOGS }, async () => {
-      if (this.iFrameRef) {
+      if (this.iFrameRef && this.iFrameRef.contentWindow) {
         try {
           /**
            * Process the code string and create an HTML document to render
            * to the iframe.
            */
-          const code = await this.compileAndTransformCodeString();
-          const IFRAME_HTML_DOCUMENT = getHTML(code);
+          if (this.props.challenge.type === "markup") {
+            this.iFrameRef.srcdoc = this.state.code;
 
-          /**
-           * Insert the HTML document into the iframe.
-           */
-          this.iFrameRef.srcdoc = IFRAME_HTML_DOCUMENT;
+            /**
+             * Wait to allow the iframe to render the new HTML document
+             * before appending and running the test script.
+             */
+            await wait(50);
+            const markupTests = getSampleTestCodeMarkup(this.state.tests);
+
+            const testScript = this.iFrameRef.contentWindow.document.createElement(
+              "script",
+            );
+            testScript.id = "test-script";
+            testScript.type = "text/javascript";
+            testScript.innerHTML = markupTests;
+            this.iFrameRef.contentWindow.document.body.appendChild(testScript);
+          } else {
+            const code = await this.compileAndTransformCodeString();
+            const sourceDocument = getHTML(code);
+            this.iFrameRef.srcdoc = sourceDocument;
+          }
         } catch (err) {
           this.handleCompilationError(err);
         }
@@ -645,35 +698,14 @@ class Workspace extends React.Component<IProps, IState> {
   toggleEditorType = () => {
     this.setState(
       x => ({ fullScreenEditor: !x.fullScreenEditor }),
-      () => {
-        this.disposeModels();
-        this.initializeMonacoEditor();
-      },
+      this.resetMonacoEditor,
     );
   };
 
-  // toggleChallengeType = () => {
-  //   this.setState(x => {
-  //     const challengeType =
-  //       x.challengeType === "react" ? "typescript" : "react";
-  //     return {
-  //       challengeType,
-  //       tests: getTestCases(challengeType),
-  //     };
-  //   }, this.updateCodeWhenChallengeTypeChanged);
-  // };
-
-  // updateCodeWhenChallengeTypeChanged = () => {
-  //   this.setState(
-  //     x => ({
-  //       code: getStarterCodeForChallenge(x.challengeType),
-  //     }),
-  //     () => {
-  //       this.setMonacoEditorValue();
-  //       this.iFrameRenderPreview();
-  //     },
-  //   );
-  // };
+  resetMonacoEditor = () => {
+    this.disposeModels();
+    this.initializeMonacoEditor();
+  };
 
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
