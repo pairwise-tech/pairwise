@@ -8,7 +8,7 @@
       "content": "There is some HTML below. You should add an <h1> tag with the text \"Hello!\" inside it.",
       "starterCode": "\n<html>\n  <head></head>\n  <body>\n  </body>\n</html>\n",
       "solutionCode": "\n<html>\n  <head></head>\n  <body>\n    <h1>Hello!</h1>\n  </body>\n</html>\n",
-      "testCode": "[{\"test\":\"(function() {  const element = document.querySelector('h1');  return element.innerText === 'Hello!';})()\",\"message\":\"There should be an h1 tag with the text 'Hello!'\"}]"
+      "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('h1');\\n  return element.innerText === 'Hello!';\\n})()\",\"message\":\"There should be an h1 tag with the text 'Hello!'\"}]"
     },
     {
       "id": "88cfc98e-27bd-4044-b71e-ca947dc596da",

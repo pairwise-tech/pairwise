@@ -747,7 +747,6 @@ const Title = styled.p`
   color: ${C.PRIMARY_BLUE};
   margin: 0;
   padding: 0;
-  margin-top: 8px;
   font-size: 18px;
   font-weight: 300;
 `;
