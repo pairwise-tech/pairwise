@@ -5,18 +5,18 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from "react"
-import Helmet from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
-import { SiteMetaQuery } from "../graphql"
+import React from 'react';
+import Helmet from 'react-helmet';
+import { useStaticQuery, graphql } from 'gatsby';
+import { SiteMetaQuery } from '../graphql';
 
-type MetaProps = JSX.IntrinsicElements["meta"]
+type MetaProps = JSX.IntrinsicElements['meta'];
 
 interface SEOProps {
-  description: string
-  lang?: string
-  meta?: MetaProps[]
-  title: string
+  description: string;
+  lang?: string;
+  meta?: MetaProps[];
+  title: string;
 }
 
 function SEO({ description, lang = `en`, meta = [], title }: SEOProps) {
@@ -32,10 +32,10 @@ function SEO({ description, lang = `en`, meta = [], title }: SEOProps) {
         }
       }
     `,
-  )
+  );
 
-  const siteMetadata = site!.siteMetadata!
-  const metaDescription = description || siteMetadata.description!
+  const siteMetadata = site!.siteMetadata!;
+  const metaDescription = description || siteMetadata.description!;
 
   const constantMeta: MetaProps[] = [
     {
@@ -70,7 +70,7 @@ function SEO({ description, lang = `en`, meta = [], title }: SEOProps) {
       name: `twitter:description`,
       content: metaDescription,
     },
-  ]
+  ];
 
   return (
     <Helmet
@@ -81,7 +81,7 @@ function SEO({ description, lang = `en`, meta = [], title }: SEOProps) {
       titleTemplate={`%s | ${siteMetadata.title}`}
       meta={constantMeta.concat(meta)}
     />
-  )
+  );
 }
 
-export default SEO
+export default SEO;

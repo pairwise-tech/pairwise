@@ -1,15 +1,15 @@
-import { Link } from "gatsby"
-import React from "react"
-import styled from "styled-components"
+import { Link } from 'gatsby';
+import React from 'react';
+import styled from 'styled-components';
 
 interface HeaderProps {
-  siteTitle: string
+  siteTitle: string;
 }
 
 const StyledHeader = styled.header`
   background: rebeccapurple;
   margin-bottom: 1.45rem;
-`
+`;
 
 const Header = ({ siteTitle }: HeaderProps) => (
   <StyledHeader>
@@ -33,6 +33,6 @@ const Header = ({ siteTitle }: HeaderProps) => (
       </h1>
     </div>
   </StyledHeader>
-)
+);
 
-export default Header
+export default Header;

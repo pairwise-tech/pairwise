@@ -5,18 +5,19 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import { useStaticQuery, graphql } from "gatsby"
-import Container from "@material-ui/core/Container"
-import React, { ReactNode } from "react"
+import './index.css';
 
-import Header from "./Header"
-import { ThemeProvider } from "@material-ui/core/styles"
+import { ThemeProvider } from '@material-ui/core/styles';
+import { useStaticQuery, graphql } from 'gatsby';
+import Container from '@material-ui/core/Container';
+import React, { ReactNode } from 'react';
 
-import theme from "./theme"
+import Header from './Header';
+import theme from './theme';
 
 interface LayoutProps {
-  children: ReactNode
-  hideHeader: boolean
+  children: ReactNode;
+  hideHeader: boolean;
 }
 
 const Layout = ({ children, hideHeader = false }: LayoutProps) => {
@@ -28,13 +29,13 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
         }
       }
     }
-  `)
+  `);
 
   return (
     <ThemeProvider theme={theme}>
       {!hideHeader && <Header siteTitle={data.site.siteMetadata.title} />}
       {children}
-      <Container>
+      <Container style={{ paddingTop: 40 }}>
         <footer>
           © {new Date().getFullYear()}, Built with
           {` `}
@@ -42,7 +43,7 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
         </footer>
       </Container>
     </ThemeProvider>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

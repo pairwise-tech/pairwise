@@ -1,0 +1,13 @@
+html,
+body {
+  font-family: sans-serif;
+  background: #2d2d2d;
+  color: white;
+}
+
+p,
+ul,
+ol,
+li {
+  line-height: 1.5;
+}
