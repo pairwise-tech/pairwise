@@ -940,7 +940,6 @@ class WorkspaceLoadingContainer extends React.Component<
 > {
   render() {
     const { challenge } = this.props;
-    console.log(challenge);
 
     if (!challenge) {
       return this.renderLoadingOverlay();
