@@ -1,7 +1,7 @@
 import * as Babel from "@babel/standalone";
 
 import { Challenge } from "modules/challenges/types";
-import { getTestCodeTypeScript } from "./challenges";
+import { getTestCodeReact, getTestCodeTypeScript } from "./challenges";
 import DependencyCacheService from "./module-service";
 
 /** ===========================================================================
@@ -180,11 +180,15 @@ export const createInjectDependenciesFunction = (
 export const injectTestCode = (challenge: Challenge) => (
   codeString: string,
 ) => {
+  const { type, testCode } = challenge;
+  const testCodeInjectionFunction =
+    type === "react" ? getTestCodeReact : getTestCodeTypeScript;
+
   return `
     ${codeString}
     {
       ${removeConsole(codeString)}
-      ${getTestCodeTypeScript(JSON.parse(challenge.testCode))}
+      ${testCodeInjectionFunction(JSON.parse(testCode))}
     }
   `;
 };

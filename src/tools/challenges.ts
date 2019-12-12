@@ -1,59 +1,5 @@
 /** ===========================================================================
- * Starter Code
- * ============================================================================
- */
-
-const DEFAULT_REACT_CODE = `
-import React from "react";
-import ReactDOM from "react-dom";
-
-interface IState {
-  value: string;
-}
-
-class App extends React.Component<IState> {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      value: "",
-    };
-  }
-
-  render(): JSX.Element {
-    const welcome: string = "Hello, React!";
-    console.log("Hello from the iframe!!!");
-    return (
-      <div>
-        <h1>{welcome}</h1>
-        <input value={this.state.value} onChange={this.handleChange} />
-      </div>
-    );
-  }
-
-  handleChange = (e) => {
-    this.setState({ value: e.target.value });
-  }
-}
-
-// Do not edit code below this line
-const Main = App;
-ReactDOM.render(<Main />, document.getElementById('root'));`;
-
-/**
- * Sample test case messages for a React challenge.
- */
-const TEST_CASES_REACT: ReadonlyArray<any> = [
-  {
-    message: `Renders a <h1> tag with the text "Hello, React!"`,
-  },
-  {
-    message: `Renders a controlled <input /> using React state`,
-  },
-];
-
-/** ===========================================================================
- * Test Cases
+ * Types
  * ============================================================================
  */
 
@@ -75,6 +21,11 @@ export interface TestCaseMarkup {
 }
 
 export type TestCase = TestCaseTypeScript | TestCaseReact | TestCaseMarkup;
+
+/** ===========================================================================
+ * Challenge Utils
+ * ============================================================================
+ */
 
 /**
  * Some sample code to run provided tests against a challenge and post
@@ -138,30 +89,34 @@ window.parent.postMessage({
  */
 export const getTestCodeReact = () => `
 {
-  let results = [];
-
-  function fn1() {
-    const container = document.createElement("div");
-    ReactTestUtils.act(() => {
-      ReactDOM.render(<Main />, container);
-    });
-    const label = container.querySelector("h1");
-    return label.textContent === "Hello, React!";
-  }
-
-  function fn2() {
-    const container = document.createElement("div");
-    ReactTestUtils.act(() => {
-      ReactDOM.render(<Main />, container);
-    });
-    const inputEl = container.querySelector("input");
-    const testValue = "giraffe";
-    ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });
-    return inputEl.value === testValue;
-  }
-
-  results.push(fn1());
-  results.push(fn2());
+  const results = [
+    (function() {
+      try {
+        const container = document.createElement("div");
+        ReactTestUtils.act(() => {
+          ReactDOM.render(<Main />, container);
+        });
+        const label = container.querySelector("h1");
+        return label.textContent === "Hello, React!";
+      } catch (err) {
+        return false;
+      }
+    })(),
+    (function() {
+      try {
+        const container = document.createElement("div");
+        ReactTestUtils.act(() => {
+          ReactDOM.render(<Main />, container);
+        });
+        const inputEl = container.querySelector("input");
+        const testValue = "giraffe";
+        ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });
+        return inputEl.value === testValue;
+      } catch (err) {
+        return false;
+      }
+    })(),
+  ];
 
   window.parent.postMessage({
     message: JSON.stringify(results),
