@@ -22,7 +22,8 @@
     "@typescript-eslint/no-useless-constructor": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
     "no-useless-constructor": 0,
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "react/no-unescaped-entities": 0
   },
   "settings": {
     "react": {
