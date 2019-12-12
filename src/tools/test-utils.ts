@@ -181,16 +181,23 @@ export const injectTestCode = (challenge: Challenge) => (
   codeString: string,
 ) => {
   const { type, testCode } = challenge;
-  const testCodeInjectionFunction =
-    type === "react" ? getTestCodeReact : getTestCodeTypeScript;
-
-  return `
+  if (type === "react") {
+    return `
     ${codeString}
     {
       ${removeConsole(codeString)}
-      ${testCodeInjectionFunction(JSON.parse(testCode))}
+      ${getTestCodeReact(JSON.parse(testCode))}
     }
   `;
+  } else {
+    return `
+      ${codeString}
+      {
+        ${removeConsole(codeString)}
+        ${getTestCodeTypeScript(JSON.parse(testCode))}
+      }
+    `;
+  }
 };
 
 /**

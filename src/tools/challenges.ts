@@ -5,6 +5,7 @@
 
 export interface TestCaseReact {
   message: string;
+  test: string;
   testResult: boolean;
 }
 
@@ -77,50 +78,18 @@ window.parent.postMessage({
  *
  * This is currently using the React test-utils package for testing,
  * ref: https://reactjs.org/docs/test-utils.html.
- *
- * NOTE: The test case involves writing functions inline which will then
- * execute directly against the user's code which will be provided in scope
- * above.
- *
- * Presumably, these functions can be provided using the Workspace CMS™
- * which will provide an easier way to create and edit these test cases and
- * then behind the scenes write the tests as strings to some file, which could
- * then be read like the test cases below:
  */
-export const getTestCodeReact = () => `
-{
-  const results = [
-    (function() {
-      try {
-        const container = document.createElement("div");
-        ReactTestUtils.act(() => {
-          ReactDOM.render(<Main />, container);
-        });
-        const label = container.querySelector("h1");
-        return label.textContent === "Hello, React!";
-      } catch (err) {
-        return false;
-      }
-    })(),
-    (function() {
-      try {
-        const container = document.createElement("div");
-        ReactTestUtils.act(() => {
-          ReactDOM.render(<Main />, container);
-        });
-        const inputEl = container.querySelector("input");
-        const testValue = "giraffe";
-        ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });
-        return inputEl.value === testValue;
-      } catch (err) {
-        return false;
-      }
-    })(),
-  ];
+export const getTestCodeReact = (testCases: ReadonlyArray<TestCaseReact>) => {
+  const codeString = testCases.map(t => t.test).join(", ");
 
-  window.parent.postMessage({
-    message: JSON.stringify(results),
-    source: "TEST_RESULTS",
-  });
-}
-`;
+  return `
+  {
+    const results = [${codeString}];
+
+    window.parent.postMessage({
+      message: JSON.stringify(results),
+      source: "TEST_RESULTS",
+    });
+  }
+  `;
+};
