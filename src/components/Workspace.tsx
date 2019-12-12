@@ -352,6 +352,7 @@ class Workspace extends React.Component<IProps, IState> {
                       <ContentContainer>
                         <ContentTitle>{challenge.title}</ContentTitle>
                         <ContentText>{challenge.content}</ContentText>
+                        <Spacer height={25} />
                       </ContentContainer>
                     </Row>
                     <Row
@@ -369,6 +370,7 @@ class Workspace extends React.Component<IProps, IState> {
                           {this.getTestSummaryString()}
                         </ContentTitle>
                         {tests.map(this.renderTestResult)}
+                        <Spacer height={50} />
                       </ContentContainer>
                     </Row>
                   </RowsWrapper>
@@ -816,7 +818,14 @@ const separatorProps = {
 };
 
 const ContentContainer = styled.div`
+  height: 100%;
   padding: 8px;
+  padding-bottom: 16px;
+  overflow-y: scroll;
+`;
+
+const Spacer = styled.div`
+  height: ${(props: { height: number }) => props.height}px;
 `;
 
 const ContentTitle = styled.h3`
