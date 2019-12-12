@@ -1,0 +1,26 @@
+# Yarn
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+.pnp.js
+.yarn-integrity
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+node_modules/
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env.development
+
+# gatsby files
+.cache/
+public
+
+# GraphQL generated
+/graphql.json
+/src/graphql.ts

@@ -1,0 +1,95 @@
+{
+  "name": "gatsby-starter-typescript-graphql",
+  "description": "A Gatsby starter with typesafe GraphQL using TypeScript",
+  "version": "0.1.0",
+  "author": "Benedikt Franke <benedikt@franke.tech>",
+  "dependencies": {
+    "gatsby": "^2.10.4",
+    "gatsby-image": "^2.2.3",
+    "gatsby-plugin-manifest": "^2.2.0",
+    "gatsby-plugin-offline": "^2.2.0",
+    "gatsby-plugin-react-helmet": "^3.1.0",
+    "gatsby-plugin-sharp": "^2.2.1",
+    "gatsby-plugin-styled-components": "^3.1.0",
+    "gatsby-plugin-typescript": "^2.1.0",
+    "gatsby-source-filesystem": "^2.1.0",
+    "gatsby-source-graphql": "^2.1.0",
+    "gatsby-transformer-sharp": "^2.2.0",
+    "graphql": "^14.4.0",
+    "graphql-tag": "^2.10.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-helmet": "^5.2.1",
+    "styled-components": "^4.3.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.3.1",
+    "@graphql-codegen/introspection": "^1.3.1",
+    "@graphql-codegen/typescript": "^1.3.1",
+    "@graphql-codegen/typescript-operations": "^1.3.1",
+    "@types/graphql": "^14.2.2",
+    "@types/node": "^12.0.10",
+    "@types/react": "^16.8.22",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-helmet": "^5.0.8",
+    "@types/styled-components": "^4.1.16",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "babel-plugin-styled-components": "^1.10.3",
+    "concurrently": "^4.1.1",
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-standard": "^4.0.0",
+    "husky": "^3.0.0",
+    "lint-staged": "^9.0.1",
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.2",
+    "typescript-styled-plugin": "^0.14.0"
+  },
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "yarn run start",
+    "format": "prettier --write '{__mocks__,src,test}/**/*.{js,ts,tsx}'",
+    "lint": "eslint src/**/*.{js,ts,tsx}",
+    "lint:fix": "yarn run lint --fix",
+    "start": "concurrently \"gatsby develop\" \"yarn run codegen\"",
+    "serve": "gatsby serve",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
+    "codegen": "graphql-codegen --config graphql-codegen.yml"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --ignore-path .gitignore --ignore-path .prettierignore --fix",
+      "git add"
+    ],
+    "*.{md,yaml,yml}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.svg": [
+      "svgo --pretty --indent=2 --config=svgo.yml --multipass",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "keywords": [
+    "gatsby",
+    "typescript",
+    "graphql"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spawnia/gatsby-starter-typescript-graphql"
+  }
+}
