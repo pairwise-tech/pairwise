@@ -52,7 +52,7 @@ const Overlay = styled.div`
   z-index: 100;
   padding-top: 25px;
   padding-left: 50px;
-  position: absolute;
+  position: fixed;
   background: rgba(0, 0, 0, 0.85);
   visibility: ${(props: { visible: boolean }) =>
     props.visible ? "visible" : "hidden"};

@@ -157,6 +157,7 @@ class Workspace extends React.Component<IProps, IState> {
       this.setState(
         { code: getStarterCodeForChallenge(challenge), tests },
         () => {
+          this.unlockVerticalScrolling();
           this.resetMonacoEditor();
           this.setMonacoEditorValue();
         },
@@ -319,7 +320,7 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     return (
-      <React.Fragment>
+      <Container>
         <PageSection>
           <Header>
             <Title>Fullstack TypeScript Course</Title>
@@ -327,11 +328,7 @@ class Workspace extends React.Component<IProps, IState> {
               <Button onClick={this.toggleEditorType}>
                 {fullScreenEditor ? "Regular" : "Full Screen"} Editor
               </Button>
-              <Button
-                onClick={() =>
-                  this.props.setNavigationMapState(!overlayVisible)
-                }
-              >
+              <Button onClick={this.toggleNavigationMap}>
                 {overlayVisible ? "Hide" : "Open"} Navigation
               </Button>
             </ControlsContainer>
@@ -429,7 +426,7 @@ class Workspace extends React.Component<IProps, IState> {
             <ContentText>{challenge.supplementaryContent}</ContentText>
           </SupplementaryContentContainer>
         </LowerSection>
-      </React.Fragment>
+      </Container>
     );
   }
 
@@ -742,12 +739,31 @@ class Workspace extends React.Component<IProps, IState> {
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
   };
+
+  toggleNavigationMap = () => {
+    const { overlayVisible } = this.props;
+    if (overlayVisible) {
+      this.unlockVerticalScrolling();
+    } else {
+      this.lockVerticalScrolling();
+    }
+    this.props.setNavigationMapState(!overlayVisible);
+  };
+
+  /* hi */
+  lockVerticalScrolling = () => (document.body.style.overflowY = "hidden");
+  unlockVerticalScrolling = () => (document.body.style.overflowY = "scroll");
 }
 
 /** ===========================================================================
  * Styled Components
  * ============================================================================
  */
+
+const Container = styled.div`
+  height: 100%;
+  overflow: hidden;
+`;
 
 const PageSection = styled.div`
   width: 100vw;
@@ -773,6 +789,7 @@ const Header = styled.div`
   width: calc(100vw - 48);
   padding-left: 24px;
   padding-right: 24px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
