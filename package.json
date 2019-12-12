@@ -1,8 +1,8 @@
 {
-  "name": "gatsby-starter-typescript-graphql",
-  "description": "A Gatsby starter with typesafe GraphQL using TypeScript",
+  "name": "prototype-x-www",
+  "description": "The website for Prototype X",
   "version": "0.1.0",
-  "author": "Benedikt Franke <benedikt@franke.tech>",
+  "author": "Prototype X Core Team",
   "dependencies": {
     "gatsby": "^2.10.4",
     "gatsby-image": "^2.2.3",
@@ -58,7 +58,7 @@
     "format": "prettier --write '{__mocks__,src,test}/**/*.{js,ts,tsx}'",
     "lint": "eslint src/**/*.{js,ts,tsx}",
     "lint:fix": "yarn run lint --fix",
-    "start": "concurrently \"gatsby develop\" \"yarn run codegen\"",
+    "start": "gatsby develop",
     "serve": "gatsby serve",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
     "codegen": "graphql-codegen --config graphql-codegen.yml"

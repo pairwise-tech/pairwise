@@ -20,7 +20,3 @@ node_modules/
 # gatsby files
 .cache/
 public
-
-# GraphQL generated
-/graphql.json
-/src/graphql.ts
