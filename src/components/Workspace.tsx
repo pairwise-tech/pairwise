@@ -423,7 +423,11 @@ class Workspace extends React.Component<IProps, IState> {
         <LowerSection>
           <SupplementaryContentContainer>
             <ContentTitle>Supplementary Content Area</ContentTitle>
-            <ContentText>{challenge.supplementaryContent}</ContentText>
+            <Text>{challenge.supplementaryContent}</Text>
+            <Text>
+              <b>Video:</b>{" "}
+              {challenge.videoUrl ? challenge.videoUrl : "No video available"}
+            </Text>
           </SupplementaryContentContainer>
         </LowerSection>
       </Container>
@@ -852,6 +856,14 @@ const ContentTitle = styled.h3`
 `;
 
 const ContentText = styled.span`
+  margin: 0;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 200px;
+  color: ${C.TEXT_CONTENT};
+`;
+
+const Text = styled.p`
   margin: 0;
   margin-top: 8px;
   font-size: 15px;
