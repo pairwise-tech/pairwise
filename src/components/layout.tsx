@@ -7,10 +7,11 @@
 
 import './index.css';
 
+import { Link, useStaticQuery, graphql } from 'gatsby';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { useStaticQuery, graphql } from 'gatsby';
 import Container from '@material-ui/core/Container';
 import React, { ReactNode } from 'react';
+import styled from 'styled-components';
 
 import Header from './Header';
 import theme from './theme';
@@ -19,6 +20,12 @@ interface LayoutProps {
   children: ReactNode;
   hideHeader: boolean;
 }
+
+const FooterLink = styled(Link)`
+  display: inline-block;
+  margin-right: 20px;
+  color: white;
+`;
 
 const Layout = ({ children, hideHeader = false }: LayoutProps) => {
   const data = useStaticQuery(graphql`
@@ -35,11 +42,22 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
     <ThemeProvider theme={theme}>
       {!hideHeader && <Header siteTitle={data.site.siteMetadata.title} />}
       {children}
-      <Container style={{ paddingTop: 40 }}>
+      <Container
+        style={{
+          paddingTop: 10,
+          paddingBottom: 10,
+          backgroundColor: '#1d1d1d',
+        }}
+      >
         <footer>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
+          <div style={{ marginBottom: 10 }}>
+            <FooterLink to="/curriculum">Curriculum</FooterLink>
+            <FooterLink to="/faq">FAQ</FooterLink>
+            <FooterLink to="/contact">Contact</FooterLink>
+          </div>
+          <div>
+            <small>© {new Date().getFullYear()} Prototype X</small>
+          </div>
         </footer>
       </Container>
     </ThemeProvider>
