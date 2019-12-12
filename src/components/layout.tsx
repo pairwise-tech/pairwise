@@ -5,17 +5,21 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React, { ReactNode } from "react"
 import { useStaticQuery, graphql } from "gatsby"
+import Container from "@material-ui/core/Container"
+import React, { ReactNode } from "react"
 
-import Header from "./header"
-import { GlobalStyles } from "../globalStyles"
+import Header from "./Header"
+import { ThemeProvider } from "@material-ui/core/styles"
+
+import theme from "./theme"
 
 interface LayoutProps {
   children: ReactNode
+  hideHeader: boolean
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, hideHeader = false }: LayoutProps) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -27,25 +31,17 @@ const Layout = ({ children }: LayoutProps) => {
   `)
 
   return (
-    <>
-      <GlobalStyles />
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0px 1.0875rem 1.45rem`,
-          paddingTop: 0,
-        }}
-      >
-        <main>{children}</main>
+    <ThemeProvider theme={theme}>
+      {!hideHeader && <Header siteTitle={data.site.siteMetadata.title} />}
+      {children}
+      <Container>
         <footer>
           © {new Date().getFullYear()}, Built with
           {` `}
           <a href="https://www.gatsbyjs.org">Gatsby</a>
         </footer>
-      </div>
-    </>
+      </Container>
+    </ThemeProvider>
   )
 }
 
