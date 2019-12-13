@@ -420,7 +420,7 @@ class Workspace extends React.Component<IProps, IState> {
                 </Col>
               ) : IS_MARKUP_CHALLENGE ? (
                 <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                  <div>
+                  <div style={{ height: "100%" }}>
                     <FrameContainer
                       id="iframe"
                       title="code-preview"
