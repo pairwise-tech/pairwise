@@ -12,6 +12,16 @@
       "supplementaryContent": "Placeholder supplementary content..."
     },
     {
+      "id": "ny51KoEI",
+      "type": "markup",
+      "title": "Style some text",
+      "content": "There is some HTML below. Your task is to change the color of the <p> tag to \"red\" and change its text to \"Exciting red text\".",
+      "starterCode": "<!DOCTYPE html>\n<style>\n  /* Your code here */\n</style>\n<p>Just plain text</p>\n",
+      "solutionCode": "<!DOCTYPE html>\n<style>\n  /* Your code here */\n  p {\n    color: red;\n  }\n</style>\n<p>Exciting red text</p>\n",
+      "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('p');\\n  return ['#ff0000', 'rgb(255,0,0)', 'red'].includes(getComputedStyle(element, null).getPropertyValue('color').replace(/ /g, ''));\\n})()\",\"message\":\"There should be a p tag with red text\"},{\"test\":\"(function() {\\n  const element = document.querySelector('p');\\n  return element.innerText === 'Exciting red text';\\n})()\",\"message\":\"There should be a <p> tag with the text 'Exciting red text'\"}]",
+      "supplementaryContent": "Placeholder supplementary content..."
+    },
+    {
       "id": "6T3GXc4ap",
       "type": "typescript",
       "title": "Add Two Numbers",
