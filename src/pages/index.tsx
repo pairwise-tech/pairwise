@@ -4,7 +4,6 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Grid from '@material-ui/core/Grid';
 import Markdown from 'react-markdown';
 import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
@@ -13,16 +12,10 @@ import styled from 'styled-components';
 
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
-
-const Section = styled(Container)`
-  padding-top: 80px;
-  padding-bottom: 80px;
-  background-color: ${(props: { alternate?: boolean }) =>
-    props.alternate ? '#2d2d2d' : '#1d1d1d'};
-`;
+import Section from '../components/Section';
 
 const MainContainer = styled(Section)`
-  margin-top: 40px;
+  margin-top: 0px;
 `;
 
 const ActionButton = styled(Button)`
@@ -36,19 +29,73 @@ const ActionButton = styled(Button)`
   box-shadow: '0 3px 5px 2px rgba(255, 105, 135, .3)';
 `;
 
+const Left = styled.div`
+  flex: 1 100%;
+`;
+
+const Right = styled.div`
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 100%;
+  position: relative;
+  margin-top: 40px;
+
+  @media (min-width: 768px) {
+    width: 40%;
+    margin-top: 0px;
+  }
+`;
+
+const MainImg = styled.img`
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+
+  @media (min-width: 550px) {
+    max-width: 80%;
+  }
+
+  @media (min-width: 768px) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px;
+    max-width: unset;
+    z-index: 9;
+  }
+`;
+
+const MainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+`;
+
 const Main = () => {
   return (
-    <div>
-      <Typography style={{ marginBottom: 40 }} variant="h3">
-        Learn to code with hands-on, immersive, project-based instruction.
-      </Typography>
-      <Typography style={{ marginBottom: 40 }} variant="h5">
-        Want to learn to code? Start learning in seconds—it's free.
-      </Typography>
-      <ActionButton href="https://prototype-x.netlify.com">
-        Get Started
-      </ActionButton>
-    </div>
+    <MainDiv>
+      <Left>
+        <Typography style={{ marginBottom: 40 }} variant="h3">
+          Learn to code with hands-on, immersive, project-based instruction.
+        </Typography>
+        <Typography style={{ marginBottom: 40 }} variant="h5">
+          Want to learn to code? Start learning in seconds—it's free.
+        </Typography>
+        <ActionButton href="https://prototype-x.netlify.com">
+          Get Started
+        </ActionButton>
+      </Left>
+      <Right>
+        <MainImg
+          src={require('../images/code-image.png')}
+          alt="Image of CODE -- HTML"
+        />
+      </Right>
+    </MainDiv>
   );
 };
 

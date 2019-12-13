@@ -5,6 +5,7 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
+import 'normalize.css';
 import './index.css';
 
 import { Link, useStaticQuery, graphql } from 'gatsby';
@@ -41,7 +42,7 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
   return (
     <ThemeProvider theme={theme}>
       {!hideHeader && <Header siteTitle={data.site.siteMetadata.title} />}
-      {children}
+      <div style={{ overflow: 'hidden' }}>{children}</div>
       <Container
         style={{
           paddingTop: 10,
