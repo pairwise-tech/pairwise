@@ -311,6 +311,8 @@ class Workspace extends React.Component<IProps, IState> {
   render() {
     const { fullScreenEditor, tests } = this.state;
     const { challenge, overlayVisible } = this.props;
+    const IS_REACT_CHALLENGE = challenge.type === "react";
+    const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
 
     const MONACO_CONTAINER = (
@@ -379,22 +381,7 @@ class Workspace extends React.Component<IProps, IState> {
                   </div>
                 )}
               </Col>
-              {IS_TYPESCRIPT_CHALLENGE ? (
-                <Col
-                  style={consoleRowStyles}
-                  initialHeight={D.WORKSPACE_HEIGHT}
-                >
-                  <div>
-                    <Console variant="dark" logs={this.state.logs} />
-                    <FrameContainer
-                      id="iframe"
-                      title="code-preview"
-                      ref={this.setIframeRef}
-                      style={{ visibility: "hidden", height: 0, width: 0 }}
-                    />
-                  </div>
-                </Col>
-              ) : (
+              {IS_REACT_CHALLENGE ? (
                 <Col initialHeight={D.WORKSPACE_HEIGHT}>
                   <RowsWrapper separatorProps={separatorProps}>
                     <Row initialHeight={D.PREVIEW_HEIGHT}>
@@ -416,6 +403,34 @@ class Workspace extends React.Component<IProps, IState> {
                     </Row>
                   </RowsWrapper>
                 </Col>
+              ) : IS_TYPESCRIPT_CHALLENGE ? (
+                <Col
+                  style={consoleRowStyles}
+                  initialHeight={D.WORKSPACE_HEIGHT}
+                >
+                  <div>
+                    <Console variant="dark" logs={this.state.logs} />
+                    <FrameContainer
+                      id="iframe"
+                      title="code-preview"
+                      ref={this.setIframeRef}
+                      style={{ visibility: "hidden", height: 0, width: 0 }}
+                    />
+                  </div>
+                </Col>
+              ) : IS_MARKUP_CHALLENGE ? (
+                <Col initialHeight={D.WORKSPACE_HEIGHT}>
+                  <div>
+                    <FrameContainer
+                      id="iframe"
+                      title="code-preview"
+                      ref={this.setIframeRef}
+                    />
+                  </div>
+                </Col>
+              ) : (
+                /* Handle other challenge types ~ */
+                <div />
               )}
             </ColsWrapper>
           </WorkspaceContainer>
