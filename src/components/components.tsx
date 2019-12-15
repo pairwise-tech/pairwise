@@ -4,11 +4,15 @@ import React, { ReactNode } from 'react';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
+interface SectionProps {
+  alternate?: boolean;
+}
+
 export const Section = styled(Container)`
   position: relative;
   padding-top: 80px;
   padding-bottom: 80px;
-  background-color: ${(props: { alternate?: boolean }) =>
+  background-color: ${(props: SectionProps) =>
     props.alternate ? '#2d2d2d' : '#1d1d1d'};
   &:before,
   &:after {
@@ -19,7 +23,7 @@ export const Section = styled(Container)`
     bottom: 0;
     left: 100%;
     width: 1000px;
-    background-color: ${(props: { alternate?: boolean }) =>
+    background-color: ${(props: SectionProps) =>
       props.alternate ? '#2d2d2d' : '#1d1d1d'};
   }
   &:before {
