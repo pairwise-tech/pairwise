@@ -15,18 +15,35 @@ import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 
 const MainContainer = styled(Section)`
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.4);
   margin-top: 0px;
 `;
 
+const MainBackground = styled.div`
+  z-index: 1;
+  background-image: url(${require('../images/cmatrix.jpg')});
+  position: absolute;
+  opacity: 0.1;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  bottom: 0;
+`;
+
 const Left = styled.div`
+  z-index: 1;
+  position: relative;
   flex: 1 100%;
 `;
 
 const Right = styled.div`
+  z-index: 1;
+  position: relative;
   flex-grow: 0;
   flex-shrink: 0;
   width: 100%;
-  position: relative;
   margin-top: 40px;
 
   @media (min-width: 768px) {
@@ -364,6 +381,7 @@ const IndexPage = () => {
         description="Learn to code with hands-on, immersive, project-based instruction."
       />
       <MainContainer>
+        <MainBackground />
         <Main />
       </MainContainer>
       <Section alternate>
