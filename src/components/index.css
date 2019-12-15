@@ -5,6 +5,10 @@ body {
   color: white;
 }
 
+#___gatsby {
+  overflow: hidden;
+}
+
 p,
 ul,
 ol,

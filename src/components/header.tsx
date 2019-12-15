@@ -1,4 +1,5 @@
 import { Link } from 'gatsby';
+import Container from '@material-ui/core/Container';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -13,13 +14,7 @@ const StyledHeader = styled.header`
 
 const Header = ({ siteTitle }: HeaderProps) => (
   <StyledHeader>
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
+    <Container>
       <h1 style={{ margin: 0 }}>
         <Link
           to="/"
@@ -31,7 +26,7 @@ const Header = ({ siteTitle }: HeaderProps) => (
           {siteTitle}
         </Link>
       </h1>
-    </div>
+    </Container>
   </StyledHeader>
 );
 

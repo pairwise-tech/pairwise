@@ -8,13 +8,15 @@ interface SectionProps {
   alternate?: boolean;
 }
 
+const DARK_BG = '#2d2d2d';
+
 export const Section = styled(Container)`
   position: relative;
   padding-top: 80px;
   padding-bottom: 80px;
   background-color: ${(props: SectionProps) =>
-    props.alternate ? 'white' : '#2d2d2d'};
-  color: ${(props: SectionProps) => (props.alternate ? '#2d2d2d' : 'white')};
+    props.alternate ? '#ebf2f5' : DARK_BG};
+  color: ${(props: SectionProps) => (props.alternate ? DARK_BG : 'white')};
   &:before,
   &:after {
     content: '';
@@ -25,7 +27,7 @@ export const Section = styled(Container)`
     left: 100%;
     width: 1000px;
     background-color: ${(props: SectionProps) =>
-      props.alternate ? 'white' : '#2d2d2d'};
+      props.alternate ? '#ebf2f5' : DARK_BG};
   }
   &:before {
     left: auto;

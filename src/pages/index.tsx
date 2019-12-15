@@ -1,11 +1,8 @@
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Markdown from 'react-markdown';
-import React, { useState, ReactNode } from 'react';
+import Paper from '@material-ui/core/Paper';
+import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
@@ -23,7 +20,7 @@ const MainBackground = styled.div`
   z-index: 1;
   background-image: url(${require('../images/cmatrix.jpg')});
   position: absolute;
-  opacity: 0.1;
+  opacity: 0.07;
   top: 0;
   left: 50%;
   width: 100vw;
@@ -363,6 +360,40 @@ const LearningSection = styled.div`
 `;
 
 const WhyLearnThisCourse = () => {
+  const sections: Section[] = [
+    {
+      title: 'Career Opportunity',
+      description: `
+Learning how to program and build software applications is a crucial 21st
+century skill which will give you fantastic professional and career
+opportunities over the coming decades. The US Bureau of Labor Statistics for
+instance forecasts software developers as enjoying 26% job growth through 2018
+with a [median salary of over $100,000](https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm#tab-6(https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm#tab-6)).
+
+Furthermore, programming can put you in an excellent position to manage other
+programmers, if switching to a career in management is our cup of tea, or work
+in other areas of tech, such as product development, design, data science,
+etc.  `,
+    },
+    {
+      title: 'Freedom & Flexibility',
+      description: `
+Work from anywhere, or an office. Whether you prefer working from a desk, a beach or your own bed you can work from anywhere as long as you have a computer and internet.
+
+Work 40 hours a week, 80, or 10. The jobs available for software professionals are so varied that you can find a work schedule to fit any lifestyle.
+
+As a software engineer you have the flexibility to work where you want, when you want, with who you want.
+      `,
+    },
+    {
+      title: 'Build a Business',
+      description: `
+Are there any products you wished existed? Are there any problems you have that others have too? Programming is fundamentally a tool for solving problems, and software can solve problems for many people at once.
+
+With coding skills in your pocket you can start a business and solve problems for yourself and others. You don't even need startup funding because you can build the initial product yourself, and if you want to raise money you will have a much better chance if you already have a prototype you can shop around.
+      `,
+    },
+  ];
   return (
     <div>
       <SectionTitle>Why learn to code?</SectionTitle>
@@ -371,13 +402,40 @@ const WhyLearnThisCourse = () => {
         might want to give it a try.
       </Typography>
       <div>
-        <Typography style={{ marginBottom: 20 }} variant="h4">
-          Career Opportunity
-        </Typography>
+        <div className="sections">
+          {sections.map((x: Section) => {
+            return (
+              <DarkPaper key={x.title}>
+                <Typography style={{ marginBottom: 20 }} variant="h4">
+                  {x.title}
+                </Typography>
+                {x.description && <Markdown source={x.description.trim()} />}
+              </DarkPaper>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 };
+
+const DarkPaper = styled(Paper)`
+  padding: 10px;
+  padding-top: 20px;
+  margin-bottom: 20px;
+  border-bottom: 5px solid #02ffb9;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12),
+    0 4px 4px -3px #23ff2c;
+
+  a {
+    color: #00ffb9;
+  }
+
+  @media (min-width: 768px) {
+    padding: 20px;
+  }
+`;
 
 const WhoIsThisFor = () => {
   return (
@@ -387,9 +445,81 @@ const WhoIsThisFor = () => {
         In short, anyone who doesn't know how to code but is at least a little
         bit curious about it.
       </Typography>
+      <ColRow>
+        <ColRowCard style={{ borderTop: '5px solid #00ffb9' }}>
+          <CardContent>
+            <Typography style={{ marginBottom: 20 }} variant="h4">
+              This course <HL color="rgba(0, 255, 149, 0.49)">is</HL> for you
+              if...
+            </Typography>
+            <Typography style={{ marginBottom: 20 }}>
+              You have any interest in learning to code (regardless of prior
+              experience) or specifically if you want to learn how to program
+              and begin a career as a software developer.
+            </Typography>
+          </CardContent>
+          <Pre>\\\(۶•̀ᴗ•́)۶//／／</Pre>
+        </ColRowCard>
+        <ColRowCard style={{ borderTop: '5px solid rgba(255, 255, 0, 0.53)' }}>
+          <CardContent>
+            <Typography style={{ marginBottom: 20 }} variant="h4">
+              This course <HL>is not</HL> for you if...
+            </Typography>
+            <Typography style={{ marginBottom: 20 }}>
+              You're already a professional software engineer. You might learn
+              almost nothing or you might learn a lot form this course, but at
+              least some of it will be redundant.
+            </Typography>
+          </CardContent>
+          <Pre>(╯°□°）╯︵ ┻━┻</Pre>
+        </ColRowCard>
+      </ColRow>
     </div>
   );
 };
+
+const HL = styled.span`
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+  &:after {
+    z-index: 1;
+    position: absolute;
+    display: block;
+    content: '';
+    background: ${({ color = 'rgba(255, 255, 0, 0.42)' }: { color?: string }) =>
+      color};
+    left: -3px;
+    right: -3px;
+    height: 10px;
+    top: 70%;
+  }
+`;
+
+const Pre = styled.pre`
+  padding: 20px;
+  text-align: center;
+  margin: 0;
+`;
+
+const ColRowCard = styled(Card)`
+  margin-bottom: 20px;
+  background-color: white !important;
+  color: #2d2d2d !important;
+  @media (min-width: 768px) {
+    width: 48%;
+  }
+`;
+
+const ColRow = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`;
 
 const GetEarlyAccess = () => {
   const [email, setEmail] = useState<string>('');

@@ -6,6 +6,7 @@
  */
 
 import 'normalize.css';
+
 import './index.css';
 
 import { Link, useStaticQuery, graphql } from 'gatsby';
@@ -14,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
+import { Section } from './components';
 import Header from './Header';
 import theme from './theme';
 
@@ -47,19 +49,20 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
         style={{
           paddingTop: 10,
           paddingBottom: 10,
-          backgroundColor: '#1d1d1d',
         }}
       >
-        <footer>
-          <div style={{ marginBottom: 10 }}>
-            <FooterLink to="/curriculum">Curriculum</FooterLink>
-            <FooterLink to="/faq">FAQ</FooterLink>
-            <FooterLink to="/contact">Contact</FooterLink>
-          </div>
-          <div>
-            <small>© {new Date().getFullYear()} Prototype X</small>
-          </div>
-        </footer>
+        <Section>
+          <footer>
+            <div style={{ marginBottom: 10 }}>
+              <FooterLink to="/curriculum">Curriculum</FooterLink>
+              <FooterLink to="/faq">FAQ</FooterLink>
+              <FooterLink to="/contact">Contact</FooterLink>
+            </div>
+            <div>
+              <small>© {new Date().getFullYear()} Prototype X</small>
+            </div>
+          </footer>
+        </Section>
       </Container>
     </ThemeProvider>
   );
