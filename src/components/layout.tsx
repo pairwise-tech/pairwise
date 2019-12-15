@@ -19,7 +19,7 @@ import theme from './theme';
 
 interface LayoutProps {
   children: ReactNode;
-  hideHeader: boolean;
+  hideHeader?: boolean;
 }
 
 const FooterLink = styled(Link)`

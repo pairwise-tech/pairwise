@@ -1,8 +1,9 @@
 import Container from '@material-ui/core/Container';
-import React from 'react';
+import React, { ReactNode } from 'react';
+import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
-const Section = styled(Container)`
+export const Section = styled(Container)`
   position: relative;
   padding-top: 80px;
   padding-bottom: 80px;
@@ -26,4 +27,6 @@ const Section = styled(Container)`
   }
 `;
 
-export default Section;
+export const SectionTitle = (props: { children: ReactNode }) => {
+  return <Typography style={{ marginBottom: 40 }} variant="h3" {...props} />;
+};

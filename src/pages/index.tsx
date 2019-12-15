@@ -5,14 +5,14 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Markdown from 'react-markdown';
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
+import { Section, SectionTitle } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
-import Section from '../components/Section';
 
 const MainContainer = styled(Section)`
   margin-top: 0px;
@@ -79,9 +79,9 @@ const Main = () => {
   return (
     <MainDiv>
       <Left>
-        <Typography style={{ marginBottom: 40 }} variant="h3">
+        <SectionTitle>
           Learn to code with hands-on, immersive, project-based instruction.
-        </Typography>
+        </SectionTitle>
         <Typography style={{ marginBottom: 40 }} variant="h5">
           Want to learn to code? Start learning in seconds—it's free.
         </Typography>
@@ -102,6 +102,7 @@ const Main = () => {
 interface Section {
   title: string;
   description?: string;
+  topicList?: string;
 }
 
 const WhatWillYouLearn = () => {
@@ -109,9 +110,11 @@ const WhatWillYouLearn = () => {
     {
       title: 'Programming Fundamentals (100% FREE to everyone)',
       description: `
-After this section you will be able to program. You won't be writing complex
-apps yet but you'll be familiar with everything listed below.
+After this section you will be able to program. You won't be writing complex apps yet but you'll be familiar with everything listed below.
 
+Specifically, you will learn the language TypeScript (a typed version of JavaScript) and basic programming concepts such as data structures and algorithms. This foundational knowledge will be directly transferrable to learning any other programming language in the future.
+      `,
+      topicList: `
 - HTML/CSS + Markup
 - Types and type primitives
 - Type coercion
@@ -140,11 +143,12 @@ apps yet but you'll be familiar with everything listed below.
     },
     {
       title: 'Developer Workflow',
-
       description: `
-Learn about the tools developers use on a daily basis to get work done. Become
-familiar with common workflows and practices.
+Learn about the tools developers use on a daily basis to get work done. Become familiar with common workflows and practices.
 
+You will learn how to use tools developers use to build software, such as VS Code, terminal, and GitHub, and you will learn how to deploy simple websites to the internet. You will use these skills to develop and deploy all of the course projects, which will give you a portfolio of projects to showcase your work to future employers.
+      `,
+      topicList: `
 - Terminal
 - Git/Github/Repos
 - HTML/CSS
@@ -155,10 +159,11 @@ familiar with common workflows and practices.
     {
       title: 'Async Programming',
       description: `
-This section will teach you how computers interact with each other, and how you
-can build full-scale apps by connecting a users computer (a phone for example)
-to a server.
+Learn how to accomplish larger tasks with code and how to tell your code to interact with other programs. Learn about how your phone or laptop can communicate with a server.
 
+This section will serve as the foundation for how your UI (app) will communicate with your server, or how any program you write can communicate with other programs.
+      `,
+      topicList: `
 - Promises/Promise.all
 - async/await
 - fetch API/axios
@@ -168,9 +173,11 @@ to a server.
     {
       title: 'UI Programming',
       description: `
-Now we start diving deep into what building an app for a user looks like. Learn
-how to build the interface that users interact with.
+Now we start diving deep into what building an app for a user looks like. Learn how to build the interface that users interact with.
 
+You will learn ReactJS, a popular tool for building user interfaces, and other frontend skills such as Redux, React Hooks, CSS-in-JS, and Flexbox. This section will give you the skills to build complex single-page web applications (SPAs).
+      `,
+      topicList: `
 - React/JSX
 - Hooks
 - CSS-in-JS
@@ -184,6 +191,9 @@ how to build the interface that users interact with.
       description: `
 In this section learn about servers, what they are used for and how to create one. Hint: Servers are just computers that run a certain type of software.
 
+You will learn NodeJS and Express, popular frameworks for building server applications, and you will learn how to design APIs which support basic CRUD (Create, Read, Update, Delete) functionality.
+      `,
+      topicList: `
 - NodeJS
 - Express
 - Persistent Data
@@ -192,8 +202,11 @@ In this section learn about servers, what they are used for and how to create on
     {
       title: 'Databases',
       description: `
-This section builds on the last, going deep into how large amounts of data are stored and retreived using databases.
+This section builds on the last, going deep into how large amounts of data are stored and retrieved using databases.
 
+You will learn about the two most common types of databases, relational (using PostgreSQL) and non-relational (using MongoDB).
+      `,
+      topicList: `
 - PostgreSQL
 - MongoDB
 - Redis
@@ -203,8 +216,11 @@ This section builds on the last, going deep into how large amounts of data are s
     {
       title: 'Mobile',
       description: `
-In this section we introduce programming a new type of computer: Phones.
+In this section we introduce programming a new type of computer: Mobile phones.
 
+You will learn building cross platform native mobile apps using React Native and other tools for building mobile web experiences.
+      `,
+      topicList: `
 - Progressive Web Apps
 - React Native
 - Expo
@@ -213,9 +229,11 @@ In this section we introduce programming a new type of computer: Phones.
     {
       title: 'Testing & Automation',
       description: `
-Learn about how you can automate tasks, including testing your own apps to make
-sure they don't break when you add new features or update them.
+Learn about how you can automate tasks, including testing your own apps to make sure they don't break when you add new features.
 
+You will learn how to use unit, integration, and end-to-end testing to ensure changes to your software do not introduce new bugs and you will learn how to use libraries such as Jest and Cypress to do this. You will also learn how to use programming to build simple tools to automate tasks and improve your life.
+      `,
+      topicList: `
 - Testing pyramid
 - Jest
 - Cypress
@@ -225,14 +243,21 @@ sure they don't break when you add new features or update them.
       title: 'Debugging & Refactoring',
       description: `
 Here we dive deeper into two vital skills for all programmers: Debugging and refactoring.
+
+You will learn how to find precisely where in a program the code is breaking and how to rework the code (refactor) so that the bug is unlikely to reappear in the future.
+      `,
+      topicList: `
+Here we dive deeper into two vital skills for all programmers: Debugging and refactoring.
       `,
     },
     {
       title: 'Delivery & Deployment',
       description: `
-This is how your apps get online and stay online, even as you're updating the
-code and even when you unintentionally break something by introducing new bugs.
+When you write software you will be doing it on your computer, but eventually you will want to launch that software so a wider audience can use it. This is called "deployment" and this section covers it in detail.
 
+You will learn about common cloud service providers like AWS (Amazon Web Services) and GCP (Google Cloud Platform) and how to build CI/CD (continuous integration and deployment) pipelines to automate your software deployments.
+      `,
+      topicList: `
 - CI/CD
 - Devops
 - CircleCI/GitHub Actions
@@ -243,21 +268,27 @@ code and even when you unintentionally break something by introducing new bugs.
       title: 'Capstone Projects',
       description: `
 The final stretch. At this point we'll walk you through some real world projects after you implement them yourself.
+
+These are real-world projects that you can deploy and use. You will be able to point to these projects during interviews to show that you really know what you're talking about. Best of all, you really will know what you're talking about.
+      `,
+      topicList: `
+The final stretch. At this point we'll walk you through some real world projects after you implement them yourself.
     `,
     },
     {
       title: 'Career & Interview Section',
       description: `
-Now that you have the technical skills, it's time to put them to use and get a job as a software engineer! We'll walk you through the process and what to expect, from interviews to salary offers.
+The final stretch. At this point we'll walk you through some real world projects after you implement them yourself.
+
+These are real-world projects that you can deploy and use. You will be able to point to these projects during interviews to show that you really know what you're talking about. Best of all, you really will know what you're talking about.
       `,
+      topicList: ``,
     },
   ];
 
   return (
     <div>
-      <Typography style={{ marginBottom: 40 }} variant="h3">
-        What You Will Learn
-      </Typography>
+      <SectionTitle>What You Will Learn</SectionTitle>
       {sections.map((x: Section) => {
         return (
           <ExpansionPanel key={x.title}>
@@ -278,6 +309,35 @@ Now that you have the technical skills, it's time to put them to use and get a j
   );
 };
 
+const WhyLearnThisCourse = () => {
+  return (
+    <div>
+      <SectionTitle>Why learn to code?</SectionTitle>
+      <Typography style={{ marginBottom: 20 }} variant="h5">
+        Programming is not for everyone, but here are a few reasons why you
+        might want to give it a try.
+      </Typography>
+      <div>
+        <Typography style={{ marginBottom: 20 }} variant="h4">
+          Career Opportunity
+        </Typography>
+      </div>
+    </div>
+  );
+};
+
+const WhoIsThisFor = () => {
+  return (
+    <div>
+      <SectionTitle>Who is this for?</SectionTitle>
+      <Typography style={{ marginBottom: 20 }} variant="h5">
+        In short, anyone who doesn't know how to code but is at least a little
+        bit curious about it.
+      </Typography>
+    </div>
+  );
+};
+
 const GetEarlyAccess = () => {
   const [email, setEmail] = useState<string>('');
   const handleChange = (e: any) => {
@@ -286,9 +346,7 @@ const GetEarlyAccess = () => {
 
   return (
     <div>
-      <Typography style={{ marginBottom: 40 }} variant="h3">
-        Get Early Access
-      </Typography>
+      <SectionTitle>Get Early Access</SectionTitle>
       <Typography style={{ marginBottom: 20 }}>
         Enter your email and we'll let you know when more modules are released.
         You can also sign up to be a beta tester to get access even sooner.
@@ -309,53 +367,6 @@ const GetEarlyAccess = () => {
   );
 };
 
-const MiniFAQ = () => {
-  const text = `
-- Why should I learn to code?
-    - There are many reasons, but here are a few:
-        - Economic opportunity. Software Engineering is ...
-            - Among highest paid careers
-            - One of the fastest growing job sectors
-            - Upward mobility in both engineering and management
-        - Build a startup/business: Is there anything you wish existed that doesn't? If you  knew how to program you might be able to build it yourself.
-        - Flexibility: You can program from anywhere in the world as long as you have a computer and an internet connection. You can also choose when to work and when to play. Furthermore, you can choose full-time employment or part-time, working only for clients you trust and enjoy working with. If you value being able to choose when you work, where you work, and who you work with then learning to code might be for you.
-        - Solve your own problems: Being able to code opens up new ways you can solve your own problems.
-            - Trying to find a home in a hot area of the city? Write a program to detect when a new listing goes up and automatically send a message to the owner/renter.
-            - Trying to register for a course that's constantly filling up? Write a program to register for you, within seconds of a spot opening up.
-            - Want your coffee maker to automatically start a brew at 7:23 every morning so that there's coffee ready as soon as you roll out of bed? Write a program to do that.
-- Who is this course for?
-    - In short, anyone who doesn't know how to code but is at least a little bit curious about it.
-    - Someone who wants to start their first career as a software developer.
-    - Someone who wants to start a new career as a software developer.
-    - Someone who wants to gain practical engineering skills to build a startup.
-    - Someone who has tried to learn to code but never made substantial progress, drifting from one online tutorial to the next.
-    - Someone who is interested in programming, but not sure if it is the right choice for them as a career.
-    - Someone who knows they want to learn to code, but is unsure what topics, languages, frameworks, etc. to focus on.
-    - Someone who wants to attend a coding bootcamp but for some reason can find the time or money to do so, or doesn't have access to one where they live.
-    - Someone who is trying to learn to code but has a busy life already and can only devote a few hours at a time to their learning process.
-    - Someone who is happy with their current profession but is concerned about future job security as software and automation continue to disrupt many traditional industries and careers.
-    - Someone who already works with software engineers in some capacity and wants to understand their profession in more depth, e.g. recruiters, product managers, project managers, designers, etc.
-- Who is it not for?
-    - People who already know what they are doing? I.e. you're already a software engineer
-    - People already in a bootcamp (might be redundant)
-    - People who are currently in the process of trying to be hired as a developer, i.e. you already have basic programming skills and a portfolio of projects and are currently applying and interviewing at companies.
-    - For any reason, you are more interested in learning to program starting with some other language, e.g. Python, Go, Java, etc.
-    - Data scientists, less SE focused roles, PMs, dev ops.. etc?
-    - You're interested in hardware, gaming, VR, low level, etc...
-    - You have no interest in learning to code
-    - You don't have access to a computer...
-  `.trim();
-
-  return (
-    <div>
-      <Typography style={{ marginBottom: 40 }} variant="h3">
-        FAQ
-      </Typography>
-      <Markdown source={text} />
-    </div>
-  );
-};
-
 const IndexPage = () => {
   return (
     <Layout hideHeader>
@@ -370,10 +381,13 @@ const IndexPage = () => {
         <WhatWillYouLearn />
       </Section>
       <Section>
-        <GetEarlyAccess />
+        <WhyLearnThisCourse />
       </Section>
       <Section alternate>
-        <MiniFAQ />
+        <WhoIsThisFor />
+      </Section>
+      <Section>
+        <GetEarlyAccess />
       </Section>
     </Layout>
   );
