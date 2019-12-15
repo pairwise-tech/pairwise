@@ -10,23 +10,12 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
-import { Section, SectionTitle } from '../components/components';
+import { Section, SectionTitle, ActionButton } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 
 const MainContainer = styled(Section)`
   margin-top: 0px;
-`;
-
-const ActionButton = styled(Button)`
-  background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
-  border-radius: 3px;
-  border: 0;
-  color: white;
-  height: 48px;
-  padding-left: 30px !important;
-  padding-right: 30px !important;
-  box-shadow: '0 3px 5px 2px rgba(255, 105, 135, .3)';
 `;
 
 const Left = styled.div`

@@ -1,3 +1,4 @@
+import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import React, { ReactNode } from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -30,3 +31,14 @@ export const Section = styled(Container)`
 export const SectionTitle = (props: { children: ReactNode }) => {
   return <Typography style={{ marginBottom: 40 }} variant="h3" {...props} />;
 };
+
+export const ActionButton = styled(Button)`
+  background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
+  border-radius: 3px;
+  border: 0;
+  color: white;
+  height: 48px;
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+  box-shadow: '0 3px 5px 2px rgba(255, 105, 135, .3)';
+`;
