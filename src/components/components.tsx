@@ -13,7 +13,8 @@ export const Section = styled(Container)`
   padding-top: 80px;
   padding-bottom: 80px;
   background-color: ${(props: SectionProps) =>
-    props.alternate ? '#2d2d2d' : '#1d1d1d'};
+    props.alternate ? 'white' : '#2d2d2d'};
+  color: ${(props: SectionProps) => (props.alternate ? '#2d2d2d' : 'white')};
   &:before,
   &:after {
     content: '';
@@ -24,7 +25,7 @@ export const Section = styled(Container)`
     left: 100%;
     width: 1000px;
     background-color: ${(props: SectionProps) =>
-      props.alternate ? '#2d2d2d' : '#1d1d1d'};
+      props.alternate ? 'white' : '#2d2d2d'};
   }
   &:before {
     left: auto;

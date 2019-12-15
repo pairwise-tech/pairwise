@@ -16,7 +16,6 @@ import SEO from '../components/SEO';
 
 const MainContainer = styled(Section)`
   position: relative;
-  background-color: rgba(0, 0, 0, 0.4);
   margin-top: 0px;
 `;
 
@@ -36,6 +35,10 @@ const Left = styled.div`
   z-index: 1;
   position: relative;
   flex: 1 100%;
+
+  @media (min-width: 768px) {
+    margin-right: 10px;
+  }
 `;
 
 const Right = styled.div`
@@ -277,9 +280,7 @@ The final stretch. At this point we'll walk you through some real world projects
 
 These are real-world projects that you can deploy and use. You will be able to point to these projects during interviews to show that you really know what you're talking about. Best of all, you really will know what you're talking about.
       `,
-      topicList: `
-The final stretch. At this point we'll walk you through some real world projects after you implement them yourself.
-    `,
+      topicList: ``,
     },
     {
       title: 'Career & Interview Section',
@@ -295,25 +296,71 @@ These are real-world projects that you can deploy and use. You will be able to p
   return (
     <div>
       <SectionTitle>What You Will Learn</SectionTitle>
-      {sections.map((x: Section) => {
+      {sections.map((x: Section, i: number) => {
+        const sectionNum = i + 1;
         return (
-          <ExpansionPanel key={x.title}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMore />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>{x.title}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails style={{ display: 'block' }}>
+          <LearningSection key={x.title}>
+            <div className="num">
+              <span>{'{'}</span>
+              <p>{sectionNum}</p>
+              <span>{'}'}</span>
+            </div>
+            <div>
+              <Typography variant="h5">{x.title}</Typography>
+            </div>
+            <div>
               {x.description && <Markdown source={x.description.trim()} />}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+            </div>
+          </LearningSection>
         );
       })}
     </div>
   );
 };
+
+const LearningSection = styled.div`
+  position: relative;
+  padding-top: 40px;
+  margin-bottom: 60px;
+  max-width: 700px;
+
+  .num {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-family: monospace;
+
+    span {
+      display: block;
+      font-weight: 100;
+      font-family: 'Helvetica Neue', monospace;
+    }
+
+    p {
+      color: #f50057;
+      font-size: 30px;
+      margin: 0;
+      width: 40px;
+      text-align: center;
+    }
+  }
+
+  @media (min-width: 768px) {
+    padding-top: 0;
+    padding-left: 80px;
+
+    .num {
+      top: 0;
+      left: 0;
+      transform: translate(0, 0);
+    }
+  }
+`;
 
 const WhyLearnThisCourse = () => {
   return (
