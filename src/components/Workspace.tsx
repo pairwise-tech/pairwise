@@ -38,7 +38,7 @@ import {
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
-import { Button } from "./Primitives";
+import { Button, SecondaryButton } from "./Primitives";
 
 // Import TSX SyntaxHighlightWorker:
 // @ts-ignore
@@ -337,7 +337,8 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { fullScreenEditor, tests } = this.state;
-    const { challenge, overlayVisible } = this.props;
+    const { challenge, overlayVisible, nextPrevChallenges } = this.props;
+    const { next, prev } = nextPrevChallenges;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
@@ -352,13 +353,28 @@ class Workspace extends React.Component<IProps, IState> {
       <Container>
         <PageSection>
           <Header>
-            <Title>Fullstack TypeScript Course</Title>
             <ControlsContainer>
-              <Button onClick={this.toggleEditorType}>
-                {fullScreenEditor ? "Regular" : "Full Screen"} Editor
-              </Button>
               <Button onClick={this.toggleNavigationMap}>
                 {overlayVisible ? "Hide" : "Open"} Navigation
+              </Button>
+            </ControlsContainer>
+            <ControlsContainer>
+              {prev && (
+                <SecondaryButton
+                  onClick={() => this.props.selectChallenge(prev.id)}
+                >
+                  Previous
+                </SecondaryButton>
+              )}
+              {next && (
+                <SecondaryButton
+                  onClick={() => this.props.selectChallenge(next.id)}
+                >
+                  Next
+                </SecondaryButton>
+              )}
+              <Button onClick={this.toggleEditorType}>
+                {fullScreenEditor ? "Regular" : "Full Screen"} Editor
               </Button>
             </ControlsContainer>
           </Header>
@@ -1003,6 +1019,7 @@ const OverlayLoadingText = styled.p`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
@@ -1010,6 +1027,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
+  selectChallenge: Modules.actions.challenges.setChallengeId,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
 };
 

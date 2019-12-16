@@ -82,6 +82,33 @@ export const firstUnfinishedChallenge = createSelector(
   },
 );
 
+/**
+ * Retrieve the next and previous challenge for a given challenge.
+ */
+export const nextPrevChallenges = createSelector(
+  challengesState,
+  challenges => {
+    let next;
+    let prev;
+    const { currentCourseId, currentChallengeId } = challenges;
+
+    if (currentCourseId) {
+      const challengeList = challenges.challengeDictionary.get(currentCourseId);
+      if (challengeList) {
+        for (let i = 0; i < challengeList.length; i++) {
+          if (challengeList[i].id === currentChallengeId) {
+            prev = challengeList[i - 1];
+            next = challengeList[i + 1];
+            return { next, prev };
+          }
+        }
+      }
+    }
+
+    return { next, prev };
+  },
+);
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -90,6 +117,7 @@ export const firstUnfinishedChallenge = createSelector(
 export default {
   challengesSelector,
   navigationSkeleton,
+  nextPrevChallenges,
   navigationOverlayVisible,
   workspaceLoadingSelector,
   currentChallengeSelector,
