@@ -355,7 +355,7 @@ class Workspace extends React.Component<IProps, IState> {
           <Header>
             <ControlsContainer>
               <Button onClick={this.toggleNavigationMap}>
-                {overlayVisible ? "Hide" : "Open"} Navigation
+                {overlayVisible ? "Hide" : "View"} Navigation
               </Button>
             </ControlsContainer>
             <ControlsContainer>
