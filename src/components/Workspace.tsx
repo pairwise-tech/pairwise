@@ -868,13 +868,13 @@ const Header = styled.div`
   );
 `;
 
-const Title = styled.p`
-  color: ${C.PRIMARY_BLUE};
-  margin: 0;
-  padding: 0;
-  font-size: 18px;
-  font-weight: 300;
-`;
+// const Title = styled.p`
+//   color: ${C.PRIMARY_BLUE};
+//   margin: 0;
+//   padding: 0;
+//   font-size: 18px;
+//   font-weight: 300;
+// `;
 
 const WorkspaceContainer = styled.div`
   width: 100vw;
