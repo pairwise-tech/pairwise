@@ -1,7 +1,7 @@
 import { monaco } from "@monaco-editor/react";
 import { Console, Decode } from "console-feed";
 import { pipe } from "ramda";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -412,8 +412,8 @@ class Workspace extends React.Component<IProps, IState> {
                 <Col initialHeight={D.WORKSPACE_HEIGHT}>
                   <RowsWrapper separatorProps={separatorProps}>
                     <Row initialHeight={D.PREVIEW_HEIGHT}>
-                      <div>
-                        <FrameContainer
+                      <div style={{ height: "100%" }}>
+                        <DragIgnorantFrameContainer
                           id="iframe"
                           title="code-preview"
                           ref={this.setIframeRef}
@@ -437,7 +437,7 @@ class Workspace extends React.Component<IProps, IState> {
                 >
                   <div>
                     <Console variant="dark" logs={this.state.logs} />
-                    <FrameContainer
+                    <DragIgnorantFrameContainer
                       id="iframe"
                       title="code-preview"
                       ref={this.setIframeRef}
@@ -447,8 +447,8 @@ class Workspace extends React.Component<IProps, IState> {
                 </Col>
               ) : IS_MARKUP_CHALLENGE ? (
                 <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                  <div>
-                    <FrameContainer
+                  <div style={{ height: "100%" }}>
+                    <DragIgnorantFrameContainer
                       id="iframe"
                       title="code-preview"
                       ref={this.setIframeRef}
@@ -870,6 +870,48 @@ const FrameContainer = styled.iframe`
   width: 100%;
   border: none;
 `;
+
+/**
+ * Our window resizing library is listening for mouse events on
+ * window.document.body, however, when the mouse enters an iframe those events
+ * fire on document.body _within the iframe_, which causes resizing issues when
+ * the pane in question contains an iframe. This component prevents pointer
+ * events within the iframe during a drag if that drag was started outside the
+ * iframe.
+ *
+ * NOTE: This is currently a very specific case, but could be refactored into a
+ * HOC if it became necessary for other components.
+ */
+const DragIgnorantFrameContainer = React.forwardRef(
+  ({ style = {}, ...props }: any, ref: any) => {
+    const [isDragging, setIsDragging] = useState<boolean>(false);
+
+    useEffect(() => {
+      const onMouseDown = () => {
+        setIsDragging(true);
+      };
+      const onMouseUp = () => {
+        setIsDragging(false);
+      };
+
+      window.document.body.addEventListener("mousedown", onMouseDown);
+      window.document.body.addEventListener("mouseup", onMouseUp);
+
+      return () => {
+        window.document.body.removeEventListener("mousedown", onMouseDown);
+        window.document.body.removeEventListener("mouseup", onMouseUp);
+      };
+    }, []);
+
+    return (
+      <FrameContainer
+        ref={ref}
+        style={{ ...style, pointerEvents: isDragging ? "none" : "all" }}
+        {...props}
+      />
+    );
+  },
+);
 
 const consoleRowStyles = {
   paddingTop: 2,
