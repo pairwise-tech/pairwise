@@ -13,6 +13,17 @@
       "supplementaryContent": "Placeholder supplementary content..."
     },
     {
+      "id": "9scykdziW",
+      "type": "markup",
+      "title": "HTML Heading Tags",
+      "content": "In the last challenge you added an h1 tag, which represents a \"heading 1\" tag in HTML. In total, there are six tags like this. As you might guess, the second heading tag looks like this: <h2>. In the editor below, add one of each heading tag. Each tag should contain some text, feel free to add any text you feel like inside the tags! When you are finished, take a look at the preview to the right to see the results!",
+      "starterCode": "<h1>This is a heading 1 tag</h1>",
+      "solutionCode": "<h1>This is a heading 1 tag</h1>\n<h2>This is a heading 1 tag</h2>\n<h3>This is a heading 1 tag</h3>\n<h4>This is a heading 1 tag</h4>\n<h5>This is a heading 1 tag</h5>\n<h6>This is a heading 1 tag</h6>",
+      "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('h1');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h1 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h2');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h2 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h3');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h3 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h4');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h4 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h5');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h5 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h6');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h6 tag with text inside.\"}]",
+      "videoUrl": "",
+      "supplementaryContent": "Placeholder supplementary content..."
+    },
+    {
       "id": "ny51KoEI",
       "type": "markup",
       "title": "Style some text",
