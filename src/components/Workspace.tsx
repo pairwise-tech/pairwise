@@ -120,6 +120,7 @@ class Workspace extends React.Component<IProps, IState> {
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   debouncedSaveCodeFunction: () => void;
   debouncedRenderPreviewFunction: () => void;
+  debouncedSyntaxHighlightFunction: (code: string) => void;
 
   constructor(props: IProps) {
     super(props);
@@ -127,6 +128,11 @@ class Workspace extends React.Component<IProps, IState> {
     this.debouncedRenderPreviewFunction = debounce(
       200,
       this.iFrameRenderPreview,
+    );
+
+    this.debouncedSyntaxHighlightFunction = debounce(
+      250,
+      this.requestSyntaxHighlighting,
     );
 
     this.debouncedSaveCodeFunction = debounce(
@@ -160,7 +166,7 @@ class Workspace extends React.Component<IProps, IState> {
     /* Handle some timing issue with Monaco initialization... */
     await wait(500);
     this.iFrameRenderPreview();
-    this.requestSyntaxHighlighting(this.state.code);
+    this.debouncedSyntaxHighlightFunction(this.state.code);
   }
 
   componentWillUnmount() {
@@ -592,9 +598,9 @@ class Workspace extends React.Component<IProps, IState> {
      * - Render the iframe preview (debounced)
      */
     this.setState({ code }, () => {
-      this.requestSyntaxHighlighting(code);
       this.debouncedSaveCodeFunction();
       this.debouncedRenderPreviewFunction();
+      this.debouncedSyntaxHighlightFunction(code);
     });
   };
 
