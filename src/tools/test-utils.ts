@@ -12,30 +12,33 @@ import DependencyCacheService from "./module-service";
 /**
  * Functions used to intercept console methods and post the messages to
  * the parent window.
+ *
+ * TODO: Fix this: JSON.stringify([undefined]) -> "[null]", ha!
+ *
  */
 const CONSOLE_INTERCEPTOR_FUNCTIONS = `
-const __interceptConsoleLog = (value) => {
+const __interceptConsoleLog = (...value) => {
   window.parent.postMessage({
     message: JSON.stringify(value),
     source: "LOG",
   });
 }
 
-const __interceptConsoleInfo = (value) => {
+const __interceptConsoleInfo = (...value) => {
   window.parent.postMessage({
     message: JSON.stringify(value),
     source: "INFO",
   });
 }
 
-const __interceptConsoleWarn = (value) => {
+const __interceptConsoleWarn = (...value) => {
   window.parent.postMessage({
     message: JSON.stringify(value),
     source: "WARN",
   });
 }
 
-const __interceptConsoleError = (value) => {
+const __interceptConsoleError = (...value) => {
   window.parent.postMessage({
     message: JSON.stringify(value),
     source: "ERROR",

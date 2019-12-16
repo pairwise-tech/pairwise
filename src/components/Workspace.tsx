@@ -441,7 +441,7 @@ class Workspace extends React.Component<IProps, IState> {
                 </Col>
               ) : IS_MARKUP_CHALLENGE ? (
                 <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                  <div style={{ height: "100%" }}>
+                  <div>
                     <FrameContainer
                       id="iframe"
                       title="code-preview"
@@ -608,7 +608,7 @@ class Workspace extends React.Component<IProps, IState> {
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
-      const data: ReadonlyArray<any> = [msg];
+      const data: ReadonlyArray<any> = [...msg];
       const log = Decode([
         {
           data,
@@ -739,7 +739,7 @@ class Workspace extends React.Component<IProps, IState> {
       }),
       () => {
         const { method, data } = log;
-        const message = data[0];
+        const message = data;
 
         /**
          * Send logs directly to the browser console as well. This feature
@@ -747,7 +747,7 @@ class Workspace extends React.Component<IProps, IState> {
          */
         switch (method) {
           case "log":
-            return console.log(message);
+            return console.log(...message);
           case "info":
             return console.info(message);
           case "warn":
