@@ -93,6 +93,27 @@ interface IState {
  * ============================================================================
  */
 
+interface YoutubeEmbedProps {
+  url: string;
+}
+
+/**
+ * Copied the iframe props form the share sheet on youtube.
+ */
+const YoutubeEmbed = (props: YoutubeEmbedProps) => {
+  return (
+    <iframe
+      title="Youtube Embed"
+      width={560}
+      height={315}
+      src={props.url}
+      frameBorder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  );
+};
+
 class Workspace extends React.Component<IProps, IState> {
   syntaxWorker: any = null;
   monacoEditor: any = null;
@@ -443,6 +464,9 @@ class Workspace extends React.Component<IProps, IState> {
               <b>Video:</b>{" "}
               {challenge.videoUrl ? challenge.videoUrl : "No video available"}
             </Text>
+            {challenge.videoUrl && (
+              <YoutubeEmbed url="https://youtu.be/LMrZDCjO_60" />
+            )}
           </SupplementaryContentContainer>
         </LowerSection>
       </Container>
