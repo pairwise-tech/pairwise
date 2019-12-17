@@ -24,6 +24,17 @@
       "supplementaryContent": "Placeholder supplementary content..."
     },
     {
+      "id": "9scykuYtf",
+      "type": "markup",
+      "title": "Nesting Tags",
+      "content": "So far we have learned how to add some HTML tags to a document. HTML is pretty flexible, and you can also nest tags inside one another. Another tag we have not seen yet is the <b> tag, which makes text... bold! In the editor below, create a <p> tag with some text inside. Then, choose some part of the text and enclose it in a <b> tag to make it bold.",
+      "starterCode": "",
+      "solutionCode": "<p>This is a paragraph tag, <b<this is bold text inside it!</b></p>",
+      "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('p');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an p tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('b');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an b tag with text inside.\"},{\"test\":\"(function() {\\n const element = document.querySelector('p').querySelector('b');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"The p tag should contain a b tag with text inside.\"}]",
+      "videoUrl": "",
+      "supplementaryContent": "Placeholder supplementary content..."
+    },
+    {
       "id": "ny51KoEI",
       "type": "markup",
       "title": "Style some text",
