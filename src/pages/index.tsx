@@ -341,6 +341,10 @@ export const LearningSection = styled.div`
   margin-bottom: 60px;
   max-width: 700px;
 
+  a {
+    color: #00ffb9;
+  }
+
   .num {
     position: absolute;
     top: 0;

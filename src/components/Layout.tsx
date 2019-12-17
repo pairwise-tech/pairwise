@@ -61,8 +61,9 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
             <div style={{ marginBottom: 10 }}>
               {/* TODO: Consider adding a curriculum link: */}
               {/* <FooterLink to="/curriculum">Curriculum</FooterLink> */}
-              <FooterLink to="/contact">Contact</FooterLink>
+              <FooterLink to="/curriculum">Curriculum</FooterLink>
               <FooterLink to="/faq">FAQ</FooterLink>
+              <FooterLink to="/contact">Contact</FooterLink>
             </div>
             <div>
               <small>© {new Date().getFullYear()} Prototype X</small>
