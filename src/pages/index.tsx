@@ -164,9 +164,9 @@ Specifically, you will learn the language TypeScript (a typed version of JavaScr
       `,
     },
     {
-      title: 'Developer Workflow',
+      title: 'Developer Workflow (beginning of paid course content)',
       description: `
-Learn about the tools developers use on a daily basis to get work done. Become familiar with common workflows and practices.
+Learn about the tools developers use on a daily basis to get work done. Become familiar with common workflows and practices and how teams coordinate development on complex software projects.
 
 You will learn how to use tools developers use to build software, such as VS Code, terminal, and GitHub, and you will learn how to deploy simple websites to the internet. You will use these skills to develop and deploy all of the course projects, which will give you a portfolio of projects to showcase your work to future employers.
       `,
@@ -179,11 +179,11 @@ You will learn how to use tools developers use to build software, such as VS Cod
       `,
     },
     {
-      title: 'Async Programming',
+      title: 'Async Programming & APIs',
       description: `
 Learn how to accomplish larger tasks with code and how to tell your code to interact with other programs. Learn about how your phone or laptop can communicate with a server.
 
-This section will serve as the foundation for how your UI (app) will communicate with your server, or how any program you write can communicate with other programs.
+This section will serve as the foundation for how your UI (app) will communicate with your server, or how any program you write can communicate with other programs. This type of communication typically uses an API (Application Programming Interface). Here we will learn what APIs are and how to use them.
       `,
       topicList: `
 - Promises/Promise.all
@@ -287,7 +287,7 @@ You will learn about common cloud service providers like AWS (Amazon Web Service
       `,
     },
     {
-      title: 'Capstone Projects',
+      title: 'Capstone Project',
       description: `
 The final stretch. At this point we'll walk you through some real world projects after you implement them yourself.
 
