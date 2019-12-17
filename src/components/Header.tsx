@@ -8,8 +8,15 @@ interface HeaderProps {
 }
 
 const StyledHeader = styled.header`
-  background: rebeccapurple;
+  padding-top: 10px;
+  padding-bottom: 10px;
   margin-bottom: 1.45rem;
+  background: rgb(61, 209, 168);
+  background: linear-gradient(
+    90deg,
+    rgba(61, 209, 168, 1) 42%,
+    rgba(0, 255, 185, 1) 87%
+  );
 `;
 
 const Header = ({ siteTitle }: HeaderProps) => (

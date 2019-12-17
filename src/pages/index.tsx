@@ -125,7 +125,8 @@ Specifically, you will learn the language TypeScript (a typed version of JavaScr
 - Types and type primitives
 - Type coercion
 - Equivalence
-- Type coercionIDE-like environment
+- Type coercion
+- IDE-like environment
 - Language semantics: syntax, keywords, etc.
 - Code & program execution
 - Language runtime: memory heap, execution flow, etc.
@@ -297,11 +298,7 @@ These are real-world projects that you can deploy and use. You will be able to p
         const sectionNum = i + 1;
         return (
           <LearningSection key={x.title}>
-            <div className="num">
-              <span>{'{'}</span>
-              <p>{sectionNum}</p>
-              <span>{'}'}</span>
-            </div>
+            <CoolCodeBullet text={String(sectionNum)} />
             <div>
               <Typography variant="h5">{x.title}</Typography>
             </div>
@@ -315,7 +312,15 @@ These are real-world projects that you can deploy and use. You will be able to p
   );
 };
 
-const LearningSection = styled.div`
+export const CoolCodeBullet = ({ text }: { text: string }) => (
+  <div className="num">
+    <span>{'{'}</span>
+    <p>{text}</p>
+    <span>{'}'}</span>
+  </div>
+);
+
+export const LearningSection = styled.div`
   position: relative;
   padding-top: 40px;
   margin-bottom: 60px;
