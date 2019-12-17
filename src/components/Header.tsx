@@ -8,8 +8,8 @@ interface HeaderProps {
 }
 
 const StyledHeader = styled.header`
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 13px;
+  padding-bottom: 13px;
   margin-bottom: 1.45rem;
   background: rgb(61, 209, 168);
   background: linear-gradient(

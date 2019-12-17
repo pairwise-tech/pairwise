@@ -1,4 +1,5 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
 import { Section, SectionTitle } from '../components/components';
@@ -160,7 +161,7 @@ const FAQ = () => {
           return (
             <LearningSection key={question.slice(0, 15)}>
               <CoolCodeBullet text="?" />
-              <QuestionTitle>{question}</QuestionTitle>
+              <Typography variant="h5">{question}</Typography>
               <QuestionAnswer>{answer}</QuestionAnswer>
             </LearningSection>
           );
@@ -175,10 +176,7 @@ const FAQ = () => {
  * ============================================================================
  */
 
-const QuestionTitle = styled.h3``;
-
 const QuestionAnswer = styled.p`
-  max-width: 750px;
   font-weight: 100;
 `;
 
