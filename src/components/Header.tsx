@@ -14,8 +14,8 @@ const StyledHeader = styled.header`
   background: rgb(61, 209, 168);
   background: linear-gradient(
     90deg,
-    rgba(61, 209, 168, 1) 42%,
-    rgba(0, 255, 185, 1) 87%
+    rgba(0, 255, 177, 1) 22%,
+    rgba(0, 255, 211, 1) 74%
   );
 `;
 
@@ -26,8 +26,8 @@ const Header = ({ siteTitle }: HeaderProps) => (
         <Link
           to="/"
           style={{
-            color: `white`,
-            textDecoration: `none`,
+            color: 'rgb(55,55,55)',
+            textDecoration: 'none',
           }}
         >
           {siteTitle}

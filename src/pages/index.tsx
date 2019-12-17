@@ -1,4 +1,5 @@
 import Card from '@material-ui/core/Card';
+import { Link } from 'gatsby';
 import CardContent from '@material-ui/core/CardContent';
 import Markdown from 'react-markdown';
 import Paper from '@material-ui/core/Paper';
@@ -10,6 +11,8 @@ import styled from 'styled-components';
 import { Section, SectionTitle, ActionButton } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
+
+const EMAIL_SIGNUP_SECTION_ID = 'email-signup-section';
 
 const MainContainer = styled(Section)`
   position: relative;
@@ -91,7 +94,19 @@ const Main = () => {
         <Typography style={{ marginBottom: 40 }} variant="h5">
           Want to learn to code? Start learning in seconds—it's free.
         </Typography>
-        <ActionButton href="https://prototype-x.netlify.com">
+        <ActionButton
+          onClick={() => {
+            /**
+             * Until the platform is released scroll to the email signup
+             * section.
+             */
+            const element = document.getElementById(EMAIL_SIGNUP_SECTION_ID);
+            element.scrollIntoView({ behavior: 'smooth' });
+
+            /* Later link to the actual platform: */
+            // window.open('https://prototype-x.netlify.com', '_blank');
+          }}
+        >
           Get Started
         </ActionButton>
       </Left>
@@ -278,7 +293,7 @@ The final stretch. At this point we'll walk you through some real world projects
 
 These are real-world projects that you can deploy and use. You will be able to point to these projects during interviews to show that you really know what you're talking about. Best of all, you really will know what you're talking about.
       `,
-      topicList: ``,
+      topicList: '',
     },
     {
       title: 'Career & Interview Section',
@@ -287,7 +302,7 @@ The final stretch. At this point we'll walk you through some real world projects
 
 These are real-world projects that you can deploy and use. You will be able to point to these projects during interviews to show that you really know what you're talking about. Best of all, you really will know what you're talking about.
       `,
-      topicList: ``,
+      topicList: '',
     },
   ];
 
@@ -367,7 +382,7 @@ export const LearningSection = styled.div`
 const WhyLearnThisCourse = () => {
   const sections: Section[] = [
     {
-      title: 'Career Opportunity',
+      title: 'Launch Your Career',
       description: `
 Learning how to program and build software applications is a crucial 21st
 century skill which will give you fantastic professional and career
@@ -378,24 +393,35 @@ with a [median salary of over $100,000](https://www.bls.gov/ooh/computer-and-inf
 Furthermore, programming can put you in an excellent position to manage other
 programmers, if switching to a career in management is our cup of tea, or work
 in other areas of tech, such as product development, design, data science,
-etc.  `,
+etc. In short, learning to code is a fundamental skill required for a
+wide variety of 21st careers.`,
     },
     {
-      title: 'Freedom & Flexibility',
+      title: 'Build a Startup',
       description: `
-Work from anywhere, or an office. Whether you prefer working from a desk, a beach or your own bed you can work from anywhere as long as you have a computer and internet.
+Many of the large companies which have changed our world in the last 25 years
+began as small startups driven by software development. And we have seen
+these companies grow massively and completely change our world - for instance,
+[Apple is now worth more than the entire US energy sector](https://www.businessinsider.sg/apple-market-cap-higher-than-us-energy-sector-baml-analysts-2019-11/?r=US&IR=T).
 
-Work 40 hours a week, 80, or 10. The jobs available for software professionals are so varied that you can find a work schedule to fit any lifestyle.
-
-As a software engineer you have the flexibility to work where you want, when you want, with who you want.
+With coding skills in your pocket you can start a business and solve problems
+for yourself and others. You don't even need startup funding because you can
+build the initial product yourself, and if you want to raise money you will
+have a much better chance if you already have a prototype you can shop around.
       `,
     },
     {
-      title: 'Build a Business',
+      title: 'Achieve Freedom & Flexibility',
       description: `
-Are there any products you wished existed? Are there any problems you have that others have too? Programming is fundamentally a tool for solving problems, and software can solve problems for many people at once.
+Work from anywhere, or an office. Whether you prefer working from a desk, a
+beach or your own bed you can work from anywhere as long as you have a computer
+and internet. Work 40 hours a week, 80, or 10. The jobs available for software professionals
+are so varied that you can find a work schedule to fit any lifestyle.
 
-With coding skills in your pocket you can start a business and solve problems for yourself and others. You don't even need startup funding because you can build the initial product yourself, and if you want to raise money you will have a much better chance if you already have a prototype you can shop around.
+Moreover, software pervades all sectors of the modern economy. Whether you are
+passionate about gaming, travel, education, non-profits, healthcare, renewable
+energy, or space travel, you can find a software career which will let you
+solve the problems you care about the most.
       `,
     },
   ];
@@ -479,9 +505,17 @@ const WhoIsThisFor = () => {
           <Pre>(╯°□°）╯︵ ┻━┻</Pre>
         </ColRowCard>
       </ColRow>
+      <SectionTitle style={{ marginTop: 32 }}>More questions?</SectionTitle>
+      <Typography style={{ marginTop: 40, marginBottom: 20 }} variant="h5">
+        Take a look at our <FaqLink to="/faq">FAQ</FaqLink>.
+      </Typography>
     </div>
   );
 };
+
+const FaqLink = styled(Link)`
+  color: #f50057;
+`;
 
 const HL = styled.span`
   display: inline-block;
@@ -533,11 +567,11 @@ const GetEarlyAccess = () => {
   };
 
   return (
-    <div>
+    <div id={EMAIL_SIGNUP_SECTION_ID}>
       <SectionTitle>Get Early Access</SectionTitle>
       <Typography style={{ marginBottom: 20 }}>
-        Enter your email and we'll let you know when more modules are released.
-        You can also sign up to be a beta tester to get access even sooner.
+        Enter your email below to be selected as an exclusive first user of our
+        platform as we launch the initial lesson modules.
       </Typography>
       <form action="">
         <TextField

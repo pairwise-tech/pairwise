@@ -25,9 +25,14 @@ interface LayoutProps {
 }
 
 const FooterLink = styled(Link)`
-  display: inline-block;
-  margin-right: 20px;
   color: white;
+  font-weight: 100;
+  margin-right: 20px;
+  display: inline-block;
+
+  :hover {
+    color: #00ffb9;
+  }
 `;
 
 const Layout = ({ children, hideHeader = false }: LayoutProps) => {
@@ -54,9 +59,10 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
         <Section>
           <footer>
             <div style={{ marginBottom: 10 }}>
-              <FooterLink to="/curriculum">Curriculum</FooterLink>
-              <FooterLink to="/faq">FAQ</FooterLink>
+              {/* TODO: Consider adding a curriculum link: */}
+              {/* <FooterLink to="/curriculum">Curriculum</FooterLink> */}
               <FooterLink to="/contact">Contact</FooterLink>
+              <FooterLink to="/faq">FAQ</FooterLink>
             </div>
             <div>
               <small>© {new Date().getFullYear()} Prototype X</small>

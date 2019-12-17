@@ -1,8 +1,9 @@
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import React, { ReactNode } from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography, { TypographyProps } from '@material-ui/core/Typography';
 import styled from 'styled-components';
+import { CSSProperties, StyleRules } from '@material-ui/core/styles/withStyles';
 
 interface SectionProps {
   alternate?: boolean;
@@ -35,8 +36,17 @@ export const Section = styled(Container)`
   }
 `;
 
-export const SectionTitle = (props: { children: ReactNode }) => {
-  return <Typography style={{ marginBottom: 40 }} variant="h3" {...props} />;
+export const SectionTitle = (props: {
+  children: ReactNode;
+  style?: React.CSSProperties;
+}) => {
+  return (
+    <Typography
+      variant="h3"
+      style={{ marginBottom: 40, ...props.style }}
+      {...props}
+    />
+  );
 };
 
 export const ActionButton = styled(Button)`
