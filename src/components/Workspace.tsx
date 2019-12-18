@@ -6,6 +6,10 @@ import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { debounce } from "throttle-debounce";
+import IconButton from "@material-ui/core/IconButton";
+import Fullscreen from "@material-ui/icons/Fullscreen";
+import FullscreenExit from "@material-ui/icons/FullscreenExit";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -113,6 +117,28 @@ const YoutubeEmbed = (props: YoutubeEmbedProps) => {
     />
   );
 };
+
+const UpperRight = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+`;
+
+const LowerRight = styled.div`
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  right: 0;
+`;
+
+const StyledTooltip = styled(Tooltip)`
+  opacity: 0.5;
+  transition: opacity 0.2s ease-out;
+  &:hover {
+    opacity: 1;
+  }
+`;
 
 class Workspace extends React.Component<IProps, IState> {
   syntaxWorker: any = null;
@@ -347,7 +373,21 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
 
     const MONACO_CONTAINER = (
-      <div style={{ height: "100%" }}>
+      <div style={{ height: "100%", position: "relative" }}>
+        <LowerRight style={{ right: 10 }}>
+          <StyledTooltip
+            title={fullScreenEditor ? "Regular" : "Full Screen"}
+            placement="top"
+          >
+            <IconButton
+              style={{ color: "white" }}
+              aria-label="add an alarm"
+              onClick={this.toggleEditorType}
+            >
+              {fullScreenEditor ? <FullscreenExit /> : <Fullscreen />}
+            </IconButton>
+          </StyledTooltip>
+        </LowerRight>
         <div id="monaco-editor" style={{ height: "100%" }} />
       </div>
     );
@@ -385,9 +425,6 @@ class Workspace extends React.Component<IProps, IState> {
                   Next
                 </SecondaryButton>
               )}
-              <Button onClick={this.toggleEditorType}>
-                {fullScreenEditor ? "Regular" : "Full Screen"} Editor
-              </Button>
             </ControlsContainer>
           </Header>
           <NavigationOverlay overlayVisible={overlayVisible} />
