@@ -357,6 +357,15 @@ class Workspace extends React.Component<IProps, IState> {
               <Button onClick={this.toggleNavigationMap}>
                 {overlayVisible ? "Hide" : "View"} Navigation
               </Button>
+              <h1
+                style={{
+                  fontFamily: `'Helvetica Neue', Lato, sans-serif`,
+                  fontWeight: 100,
+                  color: "white",
+                }}
+              >
+                Prototype X
+              </h1>
             </ControlsContainer>
             <ControlsContainer>
               {prev && (
@@ -380,13 +389,13 @@ class Workspace extends React.Component<IProps, IState> {
           </Header>
           <NavigationOverlay overlayVisible={overlayVisible} />
           <WorkspaceContainer>
-            <ColsWrapper separatorProps={separatorProps}>
+            <ColsWrapper separatorProps={colSeparatorProps}>
               <Col
                 initialWidth={D.EDITOR_PANEL_WIDTH}
                 initialHeight={D.WORKSPACE_HEIGHT}
               >
                 {!fullScreenEditor ? (
-                  <RowsWrapper separatorProps={separatorProps}>
+                  <RowsWrapper separatorProps={rowSeparatorProps}>
                     <Row
                       initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
                       style={{ background: C.BACKGROUND_CONTENT }}
@@ -426,7 +435,7 @@ class Workspace extends React.Component<IProps, IState> {
               </Col>
               {IS_REACT_CHALLENGE ? (
                 <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                  <RowsWrapper separatorProps={separatorProps}>
+                  <RowsWrapper separatorProps={rowSeparatorProps}>
                     <Row initialHeight={D.PREVIEW_HEIGHT}>
                       <div style={{ height: "100%" }}>
                         <DragIgnorantFrameContainer
@@ -486,9 +495,7 @@ class Workspace extends React.Component<IProps, IState> {
               <b>Video:</b>{" "}
               {challenge.videoUrl ? challenge.videoUrl : "No video available"}
             </Text>
-            {challenge.videoUrl && (
-              <YoutubeEmbed url="https://youtu.be/LMrZDCjO_60" />
-            )}
+            {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
           </SupplementaryContentContainer>
         </LowerSection>
       </Container>
@@ -849,23 +856,37 @@ const SupplementaryContentContainer = styled.div`
   padding-right: 12px;
 `;
 
+const BORDER = 2;
 const Header = styled.div`
-  height: ${HEADER_HEIGHT}px;
-  width: calc(100vw - 48);
-  padding-left: 24px;
-  padding-right: 24px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid ${C.HEADER_BORDER};
-  background: ${C.BACKGROUND_HEADER};
-  background: linear-gradient(
-    63deg,
-    rgba(2, 6, 10, 1) 25%,
-    rgba(17, 38, 59, 1) 68%,
-    rgba(30, 20, 55, 1) 92%
-  );
+
+  position: relative;
+  padding-top: ${BORDER}px;
+  padding-bottom: 0px;
+  padding-left: 24px;
+  padding-right: 24px;
+  margin-bottom: 0;
+  background: #212121;
+  border-bottom: 1px solid #404040;
+
+  height: ${HEADER_HEIGHT}px;
+  width: calc(100vw - 48);
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: ${BORDER}px;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 255, 177, 1) 22%,
+      rgba(0, 255, 211, 1) 74%
+    );
+  }
 `;
 
 // const Title = styled.p`
@@ -935,9 +956,19 @@ const consoleRowStyles = {
   background: C.BACKGROUND_CONSOLE,
 };
 
-const separatorProps = {
+const colSeparatorProps = {
   style: {
     backgroundColor: C.DRAGGABLE_SLIDER,
+    borderLeft: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
+    borderRight: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
+  },
+};
+
+const rowSeparatorProps = {
+  style: {
+    backgroundColor: C.DRAGGABLE_SLIDER,
+    borderTop: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
+    borderBottom: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
   },
 };
 
