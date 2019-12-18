@@ -1,3 +1,10 @@
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import Fullscreen from "@material-ui/icons/Fullscreen";
+import FullscreenExit from "@material-ui/icons/FullscreenExit";
+import Menu from "@material-ui/icons/Menu";
+import SkipNext from "@material-ui/icons/SkipNext";
+import SkipPrevious from "@material-ui/icons/SkipPrevious";
 import { monaco } from "@monaco-editor/react";
 import { Console, Decode } from "console-feed";
 import { pipe } from "ramda";
@@ -6,13 +13,6 @@ import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { debounce } from "throttle-debounce";
-import IconButton from "@material-ui/core/IconButton";
-import Fullscreen from "@material-ui/icons/Fullscreen";
-import FullscreenExit from "@material-ui/icons/FullscreenExit";
-import SkipPrevious from "@material-ui/icons/SkipPrevious";
-import SkipNext from "@material-ui/icons/SkipNext";
-import Tooltip from "@material-ui/core/Tooltip";
-import Menu from "@material-ui/icons/Menu";
 
 import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
