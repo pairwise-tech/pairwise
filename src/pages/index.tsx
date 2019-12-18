@@ -1,5 +1,5 @@
-import Card from '@material-ui/core/Card';
 import { Link } from 'gatsby';
+import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Markdown from 'react-markdown';
 import Paper from '@material-ui/core/Paper';
@@ -8,26 +8,19 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
-import { Section, SectionTitle, ActionButton } from '../components/components';
+import {
+  ActionButton,
+  CodeRainSection,
+  Section,
+  SectionTitle,
+} from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 
 const EMAIL_SIGNUP_SECTION_ID = 'email-signup-section';
 
-const AboveFoldSection = styled(Section)`
+const AboveFoldSection = styled(CodeRainSection)`
   margin-top: 0px;
-`;
-
-const MainBackground = styled.div`
-  z-index: 1;
-  background-image: url(${require('../images/cmatrix.jpg')});
-  position: absolute;
-  opacity: 0.07;
-  top: 0;
-  left: 50%;
-  width: 100vw;
-  transform: translateX(-50%);
-  bottom: 0;
 `;
 
 const Left = styled.div`
@@ -600,7 +593,6 @@ const IndexPage = () => {
         description="Learn to code with hands-on, immersive, project-based instruction."
       />
       <AboveFoldSection>
-        <MainBackground />
         <Main />
       </AboveFoldSection>
       <Section alternate>

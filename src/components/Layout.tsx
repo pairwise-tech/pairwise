@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
-import { Section } from './components';
+import { CodeRainSection, Section } from './components';
 import Header from './Header';
 import theme from './theme';
 
@@ -50,7 +50,14 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
     <ThemeProvider theme={theme}>
       {!hideHeader && <Header siteTitle={data.site.siteMetadata.title} />}
       <div style={{ overflow: 'hidden' }}>{children}</div>
-      <Section>
+      <CodeRainSection
+        style={{
+          paddingTop: 20,
+          paddingBottom: 20,
+          boxShadow: '0 2px 2px black',
+          // borderTop: '1px solid black',
+        }}
+      >
         <footer>
           <div style={{ marginBottom: 10 }}>
             {/* TODO: Consider adding a curriculum link: */}
@@ -63,7 +70,7 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
             <small>© {new Date().getFullYear()} Prototype X</small>
           </div>
         </footer>
-      </Section>
+      </CodeRainSection>
     </ThemeProvider>
   );
 };

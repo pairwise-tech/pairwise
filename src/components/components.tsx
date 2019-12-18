@@ -59,3 +59,24 @@ export const ActionButton = styled(Button)`
   padding-right: 30px !important;
   box-shadow: '0 3px 5px 2px rgba(255, 105, 135, .3)';
 `;
+
+const CodeRainBackground = styled.div`
+  z-index: 1;
+  background-image: url(${require('../images/cmatrix.jpg')});
+  position: absolute;
+  opacity: 0.07;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  bottom: 0;
+`;
+
+export const CodeRainSection = ({ children, ...props }: any) => {
+  return (
+    <Section {...props}>
+      <CodeRainBackground />
+      {children}
+    </Section>
+  );
+};
