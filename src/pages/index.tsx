@@ -3,7 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Markdown from 'react-markdown';
 import Paper from '@material-ui/core/Paper';
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
@@ -554,6 +554,44 @@ const ColRow = styled.div`
   }
 `;
 
+interface RemoteFormProps {
+  name: string;
+  children: React.ReactNode;
+  onSubmit?: (e: FormEvent<HTMLFormElement>) => any;
+  onComplete?: () => void;
+}
+
+/**
+ * Currently this is a netlify form, but we could potentially point it at some
+ * other provider later.
+ */
+const RemoteForm = (props: RemoteFormProps) => {
+  const { onSubmit, onComplete, name, ...rest } = props;
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // @ts-ignore
+    const data = new FormData(e.target);
+
+    fetch(el.action, {
+      method: 'POST',
+      body: data, // Should be auto-formatted by browser
+    }).then(onComplete);
+
+    if (onSubmit) onSubmit(e);
+  };
+
+  return (
+    <form
+      {...rest}
+      name={name}
+      method="POST"
+      data-netlify="true"
+      onSubmit={handleSubmit}
+    />
+  );
+};
+
 const GetEarlyAccess = () => {
   const [email, setEmail] = useState<string>('');
   const handleChange = (e: any) => {
@@ -567,18 +605,19 @@ const GetEarlyAccess = () => {
         Enter your email below to be selected as an exclusive first user of our
         platform as we launch the initial lesson modules.
       </Typography>
-      <form action="">
+      <RemoteForm name="email-access">
         <TextField
           style={{ marginBottom: 20 }}
           fullWidth
           id="email"
+          name="email"
           label="Email"
           variant="outlined"
           value={email}
           onChange={handleChange}
         />
         <ActionButton type="submit">I want!</ActionButton>
-      </form>
+      </RemoteForm>
     </div>
   );
 };
