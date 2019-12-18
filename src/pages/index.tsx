@@ -570,8 +570,8 @@ const RemoteForm = (props: RemoteFormProps) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // @ts-ignore
-    const data = new FormData(e.target);
+    const el = e.currentTarget;
+    const data = new FormData(el);
 
     fetch(el.action, {
       method: 'POST',
