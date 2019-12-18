@@ -581,15 +581,7 @@ const RemoteForm = (props: RemoteFormProps) => {
     if (onSubmit) onSubmit(e);
   };
 
-  return (
-    <form
-      {...rest}
-      name={name}
-      method="POST"
-      data-netlify="true"
-      onSubmit={handleSubmit}
-    />
-  );
+  return <form {...rest} name={name} method="POST" data-netlify="true" />;
 };
 
 const GetEarlyAccess = () => {
