@@ -7,10 +7,41 @@ import { CSSProperties, StyleRules } from '@material-ui/core/styles/withStyles';
 
 interface SectionProps {
   alternate?: boolean;
+  style?: React.CSSProperties;
 }
+
+/**
+ * propName -> prop-name
+ */
+const camelCaseToHpyhenCase = (s: string) => {
+  return s
+    .split(/([A-Z])/g) // Split on caps and capture the letter
+    .reduce((agg, x, i) => agg + (i % 2 === 0 ? x : '-' + x.toLowerCase()));
+};
+
+/**
+ * A helper for forwarding `style` properties from a parent component within the
+ * context of styled components.
+ *
+ * NOTE: For the sake of typing the propName should be a in camelCase but styled
+ * components wants hyphen-case so we need to do that transformation and it
+ * still looks odd including camelCase names within the template. Still, since
+ * TS will yell at you this shouldn't be an issue.
+ */
+const forwardStyleProp = (propName: keyof React.CSSProperties) => (
+  props: SectionProps,
+) => {
+  return props.style && props.style[propName]
+    ? `${camelCaseToHpyhenCase(propName)}: ${props.style.boxShadow};`
+    : null;
+};
 
 const DARK_BG = '#2d2d2d';
 
+/**
+ * The primary reason for this component is to have full-width backgrounds
+ * while still content to be wrapped by a parent component.
+ */
 export const Section = styled(Container)`
   position: relative;
   padding-top: 80px;
@@ -29,6 +60,8 @@ export const Section = styled(Container)`
     width: 1000px;
     background-color: ${(props: SectionProps) =>
       props.alternate ? '#ebf2f5' : DARK_BG};
+    ${forwardStyleProp('boxShadow')}
+    ${forwardStyleProp('border')}
   }
   &:before {
     left: auto;
@@ -76,7 +109,8 @@ export const CodeRainSection = ({ children, ...props }: any) => {
   return (
     <Section {...props}>
       <CodeRainBackground />
-      {children}
+      {/* Wrap the children in a z-higher div so that they don't have to remember this */}
+      <div style={{ position: 'relative', zIndex: 2 }}>{children}</div>
     </Section>
   );
 };

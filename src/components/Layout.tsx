@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
-import { CodeRainSection, Section } from './components';
+import { CodeRainSection } from './components';
 import Header from './Header';
 import theme from './theme';
 
@@ -54,7 +54,7 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
         style={{
           paddingTop: 20,
           paddingBottom: 20,
-          boxShadow: '0 2px 2px black',
+          boxShadow: 'inset rgba(0, 0, 0, 0.31) 0 10px 5px -10px',
           // borderTop: '1px solid black',
         }}
       >
