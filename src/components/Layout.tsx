@@ -48,7 +48,7 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
 
   return (
     <ThemeProvider theme={theme}>
-      {!hideHeader && <Header siteTitle={data.site.siteMetadata.title} />}
+      {!hideHeader && <Header />}
       <div style={{ overflow: 'hidden' }}>{children}</div>
       <CodeRainSection
         style={{
