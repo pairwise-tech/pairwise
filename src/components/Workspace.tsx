@@ -10,6 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";
 import Tooltip from "@material-ui/core/Tooltip";
+import MenuOpen from "@material-ui/icons/MenuOpen";
 
 import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -381,7 +382,7 @@ class Workspace extends React.Component<IProps, IState> {
           >
             <IconButton
               style={{ color: "white" }}
-              aria-label="add an alarm"
+              aria-label="fullscreen editor"
               onClick={this.toggleEditorType}
             >
               {fullScreenEditor ? <FullscreenExit /> : <Fullscreen />}
@@ -397,9 +398,14 @@ class Workspace extends React.Component<IProps, IState> {
         <PageSection>
           <Header>
             <ControlsContainer>
-              <Button onClick={this.toggleNavigationMap}>
-                {overlayVisible ? "Hide" : "View"} Navigation
-              </Button>
+              <IconButton
+                style={{ color: "white", marginRight: 40 }}
+                aria-label="Open navigaton map"
+                onClick={this.toggleNavigationMap}
+              >
+                <MenuOpen />
+                {/* overlayVisible ? "Hide" : "View" */}
+              </IconButton>
               <h1
                 style={{
                   fontFamily: `'Helvetica Neue', Lato, sans-serif`,
@@ -897,6 +903,7 @@ const SupplementaryContentContainer = styled.div`
 `;
 
 const BORDER = 2;
+
 const Header = styled.div`
   display: flex;
   align-items: center;
@@ -905,8 +912,8 @@ const Header = styled.div`
   position: relative;
   padding-top: ${BORDER}px;
   padding-bottom: 0px;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 0px;
+  padding-right: 0px;
   margin-bottom: 0;
   background: #212121;
   border-bottom: 1px solid #404040;
