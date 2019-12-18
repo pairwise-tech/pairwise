@@ -14,8 +14,7 @@ import SEO from '../components/SEO';
 
 const EMAIL_SIGNUP_SECTION_ID = 'email-signup-section';
 
-const MainContainer = styled(Section)`
-  position: relative;
+const AboveFoldSection = styled(Section)`
   margin-top: 0px;
 `;
 
@@ -600,10 +599,10 @@ const IndexPage = () => {
         title="Learn to code"
         description="Learn to code with hands-on, immersive, project-based instruction."
       />
-      <MainContainer>
+      <AboveFoldSection>
         <MainBackground />
         <Main />
-      </MainContainer>
+      </AboveFoldSection>
       <Section alternate>
         <WhatWillYouLearn />
       </Section>

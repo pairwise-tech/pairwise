@@ -50,27 +50,20 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
     <ThemeProvider theme={theme}>
       {!hideHeader && <Header siteTitle={data.site.siteMetadata.title} />}
       <div style={{ overflow: 'hidden' }}>{children}</div>
-      <Container
-        style={{
-          paddingTop: 10,
-          paddingBottom: 10,
-        }}
-      >
-        <Section>
-          <footer>
-            <div style={{ marginBottom: 10 }}>
-              {/* TODO: Consider adding a curriculum link: */}
-              {/* <FooterLink to="/curriculum">Curriculum</FooterLink> */}
-              <FooterLink to="/curriculum">Curriculum</FooterLink>
-              <FooterLink to="/faq">FAQ</FooterLink>
-              <FooterLink to="/contact">Contact</FooterLink>
-            </div>
-            <div>
-              <small>© {new Date().getFullYear()} Prototype X</small>
-            </div>
-          </footer>
-        </Section>
-      </Container>
+      <Section>
+        <footer>
+          <div style={{ marginBottom: 10 }}>
+            {/* TODO: Consider adding a curriculum link: */}
+            {/* <FooterLink to="/curriculum">Curriculum</FooterLink> */}
+            <FooterLink to="/curriculum">Curriculum</FooterLink>
+            <FooterLink to="/faq">FAQ</FooterLink>
+            <FooterLink to="/contact">Contact</FooterLink>
+          </div>
+          <div>
+            <small>© {new Date().getFullYear()} Prototype X</small>
+          </div>
+        </footer>
+      </Section>
     </ThemeProvider>
   );
 };
