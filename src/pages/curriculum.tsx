@@ -57,7 +57,7 @@ React, and NodeJS.**
     `,
     answer: `
 You may not have heard of [TypeScript](https://www.typescriptlang.org/) before,
-but you may have heard of JavaScript, the "language of the web". All website
+but you may have heard of JavaScript, the "language of the web". All websites
 and web applications use JavaScript to deliver high quality, interactive
 experiences and products.
 
@@ -113,7 +113,7 @@ JavaScript ecosystem has grown dramatically and you can use JavaScript to
 develop web applications, servers, mobile applications, and even native
 desktop applications.
 
-And, of course drawing on our first trend, these applications will be 
+And, of course drawing on our first trend, these applications will be
 increasingly written in TypeScript.
     `,
     image: {
