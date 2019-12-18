@@ -9,8 +9,10 @@ import { debounce } from "throttle-debounce";
 import IconButton from "@material-ui/core/IconButton";
 import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";
+import SkipPrevious from "@material-ui/icons/SkipPrevious";
+import SkipNext from "@material-ui/icons/SkipNext";
 import Tooltip from "@material-ui/core/Tooltip";
-import MenuOpen from "@material-ui/icons/MenuOpen";
+import Menu from "@material-ui/icons/Menu";
 
 import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -403,7 +405,7 @@ class Workspace extends React.Component<IProps, IState> {
                 aria-label="Open navigaton map"
                 onClick={this.toggleNavigationMap}
               >
-                <MenuOpen />
+                <Menu />
                 {/* overlayVisible ? "Hide" : "View" */}
               </IconButton>
               <h1
@@ -418,18 +420,26 @@ class Workspace extends React.Component<IProps, IState> {
             </ControlsContainer>
             <ControlsContainer>
               {prev && (
-                <SecondaryButton
-                  onClick={() => this.props.selectChallenge(prev.id)}
-                >
-                  Previous
-                </SecondaryButton>
+                <StyledTooltip title="Previous Challenge">
+                  <IconButton
+                    style={{ color: "white" }}
+                    aria-label="Previous Challenge"
+                    onClick={() => this.props.selectChallenge(prev.id)}
+                  >
+                    <SkipPrevious />
+                  </IconButton>
+                </StyledTooltip>
               )}
               {next && (
-                <SecondaryButton
-                  onClick={() => this.props.selectChallenge(next.id)}
-                >
-                  Next
-                </SecondaryButton>
+                <StyledTooltip title="Next Challenge">
+                  <IconButton
+                    style={{ color: "white" }}
+                    aria-label="Next Challenge"
+                    onClick={() => this.props.selectChallenge(next.id)}
+                  >
+                    <SkipNext />
+                  </IconButton>
+                </StyledTooltip>
               )}
             </ControlsContainer>
           </Header>
