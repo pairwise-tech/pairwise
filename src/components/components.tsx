@@ -10,6 +10,9 @@ interface SectionProps {
   style?: React.CSSProperties;
 }
 
+// Desktop breakpoint, for use in styled components
+export const DESKTOP = '@media (min-width: 768px)';
+
 /**
  * propName -> prop-name
  */

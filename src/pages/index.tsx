@@ -13,6 +13,7 @@ import {
   CodeRainSection,
   Section,
   SectionTitle,
+  DESKTOP,
 } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
@@ -28,7 +29,7 @@ const Left = styled.div`
   position: relative;
   flex: 1 100%;
 
-  @media (min-width: 768px) {
+  ${DESKTOP} {
     margin-right: 10px;
   }
 `;
@@ -41,7 +42,7 @@ const Right = styled.div`
   width: 100%;
   margin-top: 40px;
 
-  @media (min-width: 768px) {
+  ${DESKTOP} {
     width: 40%;
     margin-top: 0px;
   }
@@ -53,11 +54,8 @@ const MainImg = styled.img`
   margin: 0 auto;
   display: block;
 
-  @media (min-width: 550px) {
+  ${DESKTOP} {
     max-width: 80%;
-  }
-
-  @media (min-width: 768px) {
     position: absolute;
     top: 0;
     left: 0;
@@ -71,7 +69,7 @@ const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media (min-width: 768px) {
+  ${DESKTOP} {
     flex-direction: row;
   }
 `;
@@ -363,7 +361,7 @@ export const LearningSection = styled.div`
     }
   }
 
-  @media (min-width: 768px) {
+  ${DESKTOP} {
     padding-top: 0;
     padding-left: 80px;
 
@@ -459,7 +457,7 @@ const DarkPaper = styled(Paper)`
     color: #00ffb9;
   }
 
-  @media (min-width: 768px) {
+  ${DESKTOP} {
     padding: 20px;
   }
 `;
@@ -541,7 +539,7 @@ const ColRowCard = styled(Card)`
   margin-bottom: 20px;
   background-color: white !important;
   color: #2d2d2d !important;
-  @media (min-width: 768px) {
+  ${DESKTOP} {
     width: 48%;
   }
 `;
@@ -550,7 +548,7 @@ const ColRow = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media (min-width: 768px) {
+  ${DESKTOP} {
     flex-direction: row;
     justify-content: space-between;
   }

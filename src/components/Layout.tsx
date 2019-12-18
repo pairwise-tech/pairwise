@@ -54,13 +54,10 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
           paddingTop: 20,
           paddingBottom: 20,
           boxShadow: 'inset rgba(0, 0, 0, 0.31) 0 10px 5px -10px',
-          // borderTop: '1px solid black',
         }}
       >
         <footer>
           <div style={{ marginBottom: 10 }}>
-            {/* TODO: Consider adding a curriculum link: */}
-            {/* <FooterLink to="/curriculum">Curriculum</FooterLink> */}
             <FooterLink to="/curriculum">Curriculum</FooterLink>
             <FooterLink to="/faq">FAQ</FooterLink>
             <FooterLink to="/contact">Contact</FooterLink>
