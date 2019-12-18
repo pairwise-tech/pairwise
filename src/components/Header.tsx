@@ -122,7 +122,7 @@ const Header = ({ siteTitle = 'Prototype X' }: HeaderProps) => (
       <Nav>
         <NavLink to="/curriculum">Curriculum</NavLink>
         <NavLink to="/faq">FAQ</NavLink>
-        <NavLink to="/cotact">Contact</NavLink>
+        <NavLink to="/contact">Contact</NavLink>
       </Nav>
     </Flexbox>
   </StyledHeader>
