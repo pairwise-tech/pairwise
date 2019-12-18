@@ -11,7 +11,6 @@ import './index.css';
 
 import { Link, useStaticQuery, graphql } from 'gatsby';
 import { ThemeProvider } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
