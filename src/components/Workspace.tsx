@@ -282,6 +282,9 @@ class Workspace extends React.Component<IProps, IState> {
       theme: "vs-dark",
       automaticLayout: true,
       fixedOverflowWidgets: true,
+      minimap: {
+        enabled: false,
+      },
     };
 
     const language = this.getMonacoLanguageFromChallengeType();
