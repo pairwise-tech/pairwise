@@ -5,8 +5,8 @@ const theme = responsiveFontSizes(
   createMuiTheme({
     palette: {
       type: 'dark',
-      primary: { main: purple[500] }, // Purple and green play nicely together.
-      secondary: { main: '#11cb5f' }, // This is just green.A700 as hex.
+      primary: { main: 'rgb(0, 255, 185)' }, // Green
+      secondary: { main: '#f50057' }, // Pink-ish
     },
   }),
 );
