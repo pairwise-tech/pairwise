@@ -581,7 +581,7 @@ class Workspace extends React.Component<IProps, IState> {
             <div style={{ display: "flex", flexDirection: "row" }}>
               <b style={{ color: C.TEXT_TITLE }}>Status:</b>
               <SuccessFailureText testResult={t.testResult}>
-                {t.testResult ? "Success!" : "Failure..."}
+                {t.testResult ? "Success!" : "Incomplete..."}
               </SuccessFailureText>
             </div>
           </ContentText>
@@ -601,7 +601,7 @@ class Workspace extends React.Component<IProps, IState> {
             <div style={{ display: "flex", flexDirection: "row" }}>
               <b style={{ color: C.TEXT_TITLE }}>Status:</b>
               <SuccessFailureText testResult={t.testResult}>
-                {t.testResult ? "Success!" : "Failure..."}
+                {t.testResult ? "Success!" : "Incomplete..."}
               </SuccessFailureText>
             </div>
           </ContentText>
@@ -621,7 +621,7 @@ class Workspace extends React.Component<IProps, IState> {
             <div style={{ display: "flex", flexDirection: "row" }}>
               <b style={{ color: C.TEXT_TITLE }}>Status:</b>
               <SuccessFailureText testResult={t.testResult}>
-                {t.testResult ? "Success!" : "Failure..."}
+                {t.testResult ? "Success!" : "Incomplete..."}
               </SuccessFailureText>
             </div>
           </ContentText>
