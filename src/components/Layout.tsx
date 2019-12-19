@@ -9,12 +9,20 @@ import 'normalize.css';
 
 import './index.css';
 
-import { Link, useStaticQuery, graphql } from 'gatsby';
+import { Link, graphql, useStaticQuery } from 'gatsby';
 import { ThemeProvider } from '@material-ui/core/styles';
-import React, { ReactNode } from 'react';
+import Close from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
+import Info from '@material-ui/icons/Info';
+import React, { ReactNode, useEffect, useState } from 'react';
+import Slide from '@material-ui/core/Slide';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 import styled from 'styled-components';
 
-import { CodeRainSection } from './components';
+import { parse as parseQuery, ParsedUrlQuery } from 'querystring';
+
+import { CodeRainSection, GREEN_GRADIENT } from './components';
 import Header from './Header';
 import theme from './theme';
 
@@ -34,6 +42,10 @@ const FooterLink = styled(Link)`
   }
 `;
 
+const StyledSnackbarContent = styled(SnackbarContent)`
+  background: ${GREEN_GRADIENT};
+`;
+
 const Layout = ({ children, hideHeader = false }: LayoutProps) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -44,11 +56,53 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
       }
     }
   `);
+  const [notification, setNotification] = useState<string>('');
+  const handleClose = () => setNotification('');
+
+  useEffect(() => {
+    const query = parseQuery(window.location.search.slice(1));
+    if (typeof query.notify === 'string') {
+      setNotification(query.notify);
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       {!hideHeader && <Header />}
       <div style={{ overflow: 'hidden' }}>{children}</div>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={Boolean(notification)}
+        TransitionComponent={(props: any) => (
+          <Slide {...props} direction="down" />
+        )}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+      >
+        <StyledSnackbarContent
+          aria-describedby="client-snackbar"
+          message={
+            <span
+              id="client-snackbar"
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              <Info style={{ marginRight: 20 }} />
+              {notification}
+            </span>
+          }
+          action={[
+            <IconButton
+              key="close"
+              aria-label="close"
+              color="inherit"
+              onClick={handleClose}
+            >
+              <Close />
+            </IconButton>,
+          ]}
+        />
+      </Snackbar>
       <CodeRainSection
         style={{
           paddingTop: 20,

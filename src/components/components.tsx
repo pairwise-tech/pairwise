@@ -1,9 +1,9 @@
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import React, { ReactNode } from 'react';
-import Typography, { TypographyProps } from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
-import { CSSProperties, StyleRules } from '@material-ui/core/styles/withStyles';
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
 
 interface SectionProps {
   alternate?: boolean;
@@ -12,6 +12,14 @@ interface SectionProps {
 
 // Desktop breakpoint, for use in styled components
 export const DESKTOP = '@media (min-width: 768px)';
+
+export const GREEN_GRADIENT = `
+linear-gradient(
+  90deg,
+  rgba(0, 255, 177, 1) 22%,
+  rgba(0, 255, 211, 1) 74%
+)
+`;
 
 /**
  * propName -> prop-name

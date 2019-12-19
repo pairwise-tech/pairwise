@@ -6,7 +6,7 @@ import { navigate } from 'gatsby';
  */
 export default (): any => {
   useEffect(() => {
-    navigate('/');
+    navigate(`/?notify=${encodeURIComponent("404: That page doesn't exist")}`);
   }, []);
   return null;
 };

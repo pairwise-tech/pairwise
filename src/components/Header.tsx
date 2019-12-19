@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import React from 'react';
 import styled from 'styled-components';
 
-import { DESKTOP } from './components';
+import { DESKTOP, GREEN_GRADIENT } from './components';
 
 interface HeaderProps {
   siteTitle?: string;
@@ -26,11 +26,7 @@ const StyledHeader = styled.header`
     left: 0;
     right: 0;
     height: ${BORDER}px;
-    background: linear-gradient(
-      90deg,
-      rgba(0, 255, 177, 1) 22%,
-      rgba(0, 255, 211, 1) 74%
-    );
+    background: ${GREEN_GRADIENT};
   }
 `;
 
@@ -96,11 +92,7 @@ const NavLink = styled(Link)`
     height: 2px;
     transition: all 0.2s ease-out;
     transform: scale(0);
-    background: linear-gradient(
-      90deg,
-      rgba(0, 255, 177, 1) 22%,
-      rgba(0, 255, 211, 1) 74%
-    );
+    background: ${GREEN_GRADIENT};
   }
   &:hover {
     opacity: 1;
