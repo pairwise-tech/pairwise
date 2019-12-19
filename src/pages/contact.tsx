@@ -18,7 +18,7 @@ const FAQ = () => {
     <Layout>
       <SEO title="Contact" description="Get in touch with us" />
       <Section>
-        <ConstrainWidth center>
+        <ConstrainWidth>
           <SectionTitle>Contact</SectionTitle>
           <Typography variant="h5" style={{ marginBottom: 20 }}>
             Want to get in touch? We'd love to hear from you!
