@@ -80,6 +80,11 @@ export const Section = styled(Container)`
   }
 `;
 
+export const ConstrainWidth = styled.div`
+  max-width: 700px;
+  margin: ${(props: { center?: boolean }) => (props.center ? '0 auto' : '0')};
+`;
+
 export const SectionTitle = (props: {
   children: ReactNode;
   style?: React.CSSProperties;

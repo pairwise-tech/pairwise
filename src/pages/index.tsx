@@ -11,9 +11,10 @@ import styled from 'styled-components';
 import {
   ActionButton,
   CodeRainSection,
+  ConstrainWidth,
+  DESKTOP,
   Section,
   SectionTitle,
-  DESKTOP,
 } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
@@ -325,11 +326,10 @@ export const CoolCodeBullet = ({ text }: { text: string }) => (
   </div>
 );
 
-export const LearningSection = styled.div`
+export const LearningSection = styled(ConstrainWidth)`
   position: relative;
   padding-top: 40px;
   margin-bottom: 60px;
-  max-width: 700px;
 
   a {
     color: #00ffb9;
