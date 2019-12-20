@@ -566,7 +566,7 @@ interface RemoteFormProps {
  * other provider later.
  */
 const RemoteForm = (props: RemoteFormProps) => {
-  const { onSubmit, onComplete, name, ...rest } = props;
+  const { onSubmit, onComplete, name, children, ...rest } = props;
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -581,7 +581,22 @@ const RemoteForm = (props: RemoteFormProps) => {
     if (onSubmit) onSubmit(e);
   };
 
-  return <form {...rest} name={name} method="POST" data-netlify="true" />;
+  return (
+    <form
+      {...rest}
+      name={name}
+      action="/thanks/"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      method="POST"
+    >
+      <input type="hidden" name="form-name" value={name} />
+      <p style={{ display: 'none' }}>
+        <input name="bot-field" />
+      </p>
+      {children}
+    </form>
+  );
 };
 
 const GetEarlyAccess = () => {
