@@ -5,6 +5,7 @@ import FullscreenExit from "@material-ui/icons/FullscreenExit";
 import Menu from "@material-ui/icons/Menu";
 import SkipNext from "@material-ui/icons/SkipNext";
 import SkipPrevious from "@material-ui/icons/SkipPrevious";
+import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
 import { monaco } from "@monaco-editor/react";
 import { Console, Decode } from "console-feed";
 import { pipe } from "ramda";
@@ -221,6 +222,14 @@ class Workspace extends React.Component<IProps, IState> {
     }
   }
 
+  /**
+   * Resest the code editor content to the staretCode
+   */
+  resetCodeWindow = () => {
+    const { challenge } = this.props;
+    this.setState({ code: challenge.starterCode }, this.setMonacoEditorValue);
+  };
+
   initializeSyntaxHighlightWorker = () => {
     this.syntaxWorker = new SyntaxHighlightWorker();
 
@@ -377,10 +386,23 @@ class Workspace extends React.Component<IProps, IState> {
 
     const MONACO_CONTAINER = (
       <div style={{ height: "100%", position: "relative" }}>
-        <LowerRight style={{ right: 10 }}>
+        <LowerRight
+          style={{ right: 10, display: "flex", flexDirection: "column" }}
+        >
+          {this.state.code !== challenge.starterCode && (
+            <StyledTooltip title={"Restor Initial Code"} placement="left">
+              <IconButton
+                style={{ color: "white" }}
+                aria-label="reset editor"
+                onClick={this.resetCodeWindow}
+              >
+                <SettingsBackupRestore />
+              </IconButton>
+            </StyledTooltip>
+          )}
           <StyledTooltip
             title={fullScreenEditor ? "Regular" : "Full Screen"}
-            placement="top"
+            placement="left"
           >
             <IconButton
               style={{ color: "white" }}
