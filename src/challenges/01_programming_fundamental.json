@@ -9,7 +9,7 @@
       "starterCode": "<p>This is an HTML file. Add your code below this line</p>",
       "solutionCode": "<p>This is an HTML file. Add your code below this line</p>\n<h1>Hello!</h1>",
       "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('h1');\\n  return element.innerText === 'Hello!';\\n})()\",\"message\":\"There should be an h1 tag with the text 'Hello!'\"}]",
-      "videoUrl": "https://youtu.be/LMrZDCjO_60",
+      "videoUrl": "https://www.youtube.com/embed/LMrZDCjO_60",
       "supplementaryContent": "Placeholder supplementary content..."
     },
     {
@@ -52,6 +52,7 @@
       "starterCode": "<style>\n  span {\n    /* hm... need some styling in here */\n  }\n</style>\n<p>\n  What a paragraph this is! Let's highlight something.\n</p>",
       "solutionCode": "<style>\n  span {\n    background: yellow;\n  }\n</style>\n<p>What a paragraph this is! Let's <span>highlight</span> something.</p>",
       "testCode": "[{\"test\":\"(function() {\\n  const el = document.querySelector('span');\\n  return el && el.innerText !== '' && ['#ffff00', 'rgb(255,255,0)', 'yellow'].includes(getComputedStyle(el, null).getPropertyValue('background-color').replace(/ /g, ''));\\n})()\",\"message\":\"There should be a <span> tag with a yellow background wrapping some text\"}]",
+      "videoUrl": "https://www.youtube.com/embed/fapBaduhIiY",
       "supplementaryContent": "Placeholder supplementary content..."
     },
     {

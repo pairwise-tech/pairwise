@@ -112,13 +112,13 @@ const YoutubeEmbed = (props: YoutubeEmbedProps) => {
   return (
     <iframe
       title="Youtube Embed"
-      width={560}
-      height={315}
+      width={728}
+      height={410}
       src={props.url}
       frameBorder="0"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
-    />
+    ></iframe>
   );
 };
 
