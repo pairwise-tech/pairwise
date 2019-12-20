@@ -74,7 +74,7 @@
           "id": "WUA8ezECU",
           "type": "typescript",
           "title": "Reverse a String",
-          "content": "Complete the function body below. The function should will receive a string and should return the same string in reverse order.",
+          "content": "Complete the function body below. The function will receive a string and should return the same string in reverse order.",
           "starterCode": "\nconst reverseString = (inputString) => {\n  // Edit code here\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
           "solutionCode": "\nconst reverseString = (inputString) => {\n  return inputString.split().reverse().join();\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
           "testCode": "[{\"input\":[\"hello\"],\"expected\":\"olleh\"},{\"input\":[\"fantastic\"],\"expected\":\"citsatnaf\"},{\"input\":[\"superb\"],\"expected\":\"brepus\"},{\"input\":[\"frustrating\"],\"expected\":\"gnitartsurf\"},{\"input\":[\"exciting\"],\"expected\":\"gniticxe\"},{\"input\":[\"happy\"],\"expected\":\"yppah\"},{\"input\":[\"a\"],\"expected\":\"a\"},{\"input\":[\"aaaaaaaaaaaaz\"],\"expected\":\"zaaaaaaaaaaaa\"},{\"input\":[\"jumping\"],\"expected\":\"gnipmuj\"},{\"input\":[\"silly\"],\"expected\":\"yllis\"},{\"input\":[\"zombie\"],\"expected\":\"eibmoz\"}]",
