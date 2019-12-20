@@ -18,23 +18,29 @@ const obj = {
 };
 
 const main = () => {
-  return {
-    id: shortid.generate(),
-    type: "markup",
-    title: "",
-    content: "Write some **markdown**...",
-    starterCode:
-      "# Write in an editor and use scripts/stringify-clipboard.sh, then copy into here",
-    solutionCode: "",
-    testCode: JSON.stringify([
+  return (
+    JSON.stringify(
       {
-        test:
-          "(function() { const el = document.querySelector('p'); return el.innerText !== ''; })()",
-        message: "There should be a p tag with some text",
+        id: shortid.generate(),
+        type: "markup",
+        title: "[UNTITLED]",
+        content: "Write some **markdown**...",
+        starterCode:
+          "# Write in an editor and use scripts/stringify-clipboard.sh, then copy into here",
+        solutionCode: "",
+        testCode: JSON.stringify([
+          {
+            test:
+              "(function() { const el = document.querySelector('p'); return el.innerText !== ''; })()",
+            message: "There should be a p tag with some text",
+          },
+        ]),
+        supplementaryContent: "Placeholder supplementary content...",
       },
-    ]),
-    supplementaryContent: "Placeholder supplementary content...",
-  };
+      null,
+      2,
+    ) + ","
+  );
 };
 
 console.log(main());
