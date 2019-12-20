@@ -103,18 +103,17 @@ export const nextPrevChallenges = createSelector(
     const { currentCourseId, currentChallengeId } = challenges;
 
     if (currentCourseId && currentChallengeId && challenges.courses) {
-      const challengeList = findCourseById(
-        currentChallengeId,
-        challenges.courses,
-      );
+      const course = findCourseById(currentCourseId, challenges.courses);
 
-      if (challengeList) {
-        const { modules: content } = challengeList;
-        for (let i = 0; i < content.length; i++) {
-          if (content[i].id === currentChallengeId) {
-            prev = content[i - 1];
-            next = content[i + 1];
-            return { next, prev };
+      if (course) {
+        for (const courseModule of course.modules) {
+          const moduleChallenges = courseModule.challenges;
+          for (let i = 0; i < moduleChallenges.length; i++) {
+            if (moduleChallenges[i].id === currentChallengeId) {
+              prev = moduleChallenges[i - 1];
+              next = moduleChallenges[i + 1];
+              return { next, prev };
+            }
           }
         }
       }
