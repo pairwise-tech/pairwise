@@ -1,6 +1,6 @@
 import { ActionType, createAction } from "typesafe-actions";
 
-import { Course, NavigationSkeleton } from "./types";
+import { CourseList } from "./types";
 
 /** ===========================================================================
  * Action Types
@@ -30,7 +30,7 @@ const setWorkspaceChallengeLoaded = createAction(
 
 const fetchNavigationSkeletonSuccess = createAction(
   ActionTypesEnum.FETCH_NAVIGATION_SKELETON_SUCCESS,
-)<NavigationSkeleton>();
+)<CourseList>();
 
 const setNavigationMapState = createAction(
   ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
@@ -39,7 +39,7 @@ const setNavigationMapState = createAction(
 const fetchCurrentActiveCourseSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
 )<{
-  course: Course;
+  courses: CourseList;
   currentModuleId: string;
   currentCourseId: string;
   currentChallengeId: string;

@@ -14,18 +14,19 @@ import { Button } from "./Primitives";
 
 class NavigationOverlay extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { navigationSkeleton } = this.props;
+    const { courseList } = this.props;
 
-    if (!navigationSkeleton) {
+    if (!courseList) {
       return null;
     }
 
-    const course = navigationSkeleton[0];
+    /* Just use the first (only) course! */
+    const course = courseList[0];
 
     return (
       <Overlay visible={this.props.overlayVisible}>
         <Title>View another challenge:</Title>
-        {course.courseContent.challengeContent.map(c => {
+        {course.modules[0].challenges.map(c => {
           return (
             <Button
               key={c.id}
@@ -70,7 +71,7 @@ const Title = styled.p`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  navigationSkeleton: Modules.selectors.challenges.navigationSkeleton(state),
+  courseList: Modules.selectors.challenges.courseList(state),
 });
 
 const dispatchProps = {

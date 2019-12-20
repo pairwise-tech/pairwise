@@ -1,16 +1,39 @@
 /** ===========================================================================
- * Type Definitions
+ * Product Curriculum Hierarchy:
+ *
+ * PRODUCT
+ * - Course List (many courses: {id, title, modules})
+ *   - Module List (many modules: {id, title, challenges})
+ *     - Challenge List (many challenges: {challengeData})
  * ============================================================================
  */
 
-export type CHALLENGE_TYPE = "react" | "typescript" | "markup";
+export type CourseList = ReadonlyArray<Course>;
 
 export interface Course {
   id: string;
+  title: string;
+  modules: ModuleList;
+}
+
+export interface Module {
+  id: string;
+  title: string;
   challenges: ChallengeList;
 }
 
+export type ModuleList = ReadonlyArray<Module>;
+
+export interface Challenges {
+  id: string;
+  type: string;
+  title: string;
+}
+
+export type ChallengeList = ReadonlyArray<Challenge>;
+
 export interface Challenge {
+  type: CHALLENGE_TYPE;
   id: string;
   title: string;
   content: string;
@@ -18,35 +41,7 @@ export interface Challenge {
   videoUrl?: string;
   starterCode: string;
   solutionCode: string;
-  type: CHALLENGE_TYPE;
   supplementaryContent: string;
 }
 
-type ChallengeList = ReadonlyArray<Challenge>;
-
-/* Map of course ids to lists of challenges */
-export type ChallengeDictionary = Map<string, ChallengeList>;
-
-export interface ChallengeContentSkeleton {
-  id: string;
-  type: string;
-  title: string;
-}
-
-/* TODO: Fill in types: */
-interface CourseContent {
-  id: string;
-  summaryVideo: any;
-  challengeContent: ReadonlyArray<ChallengeContentSkeleton>;
-  projectContent: any;
-  projectSolution: any;
-  specialTopics: any;
-}
-
-interface CourseMetaInformation {
-  id: string;
-  title: string;
-  courseContent: CourseContent;
-}
-
-export type NavigationSkeleton = ReadonlyArray<CourseMetaInformation>;
+export type CHALLENGE_TYPE = "react" | "typescript" | "markup";

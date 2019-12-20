@@ -1,99 +1,106 @@
 {
-  "id": "fpvPtNWkC",
-  "challenges": [
+  "id": "fpvPtfu7s",
+  "title": "Fullstack TypeScript",
+  "modules": [
     {
-      "id": "9scykDold",
-      "type": "markup",
-      "title": "Add a h1 Tag in HTML",
-      "content": "There is some HTML below. You should add an <h1> tag with the text \"Hello!\" inside it.",
-      "starterCode": "<p>This is an HTML file. Add your code below this line</p>",
-      "solutionCode": "<p>This is an HTML file. Add your code below this line</p>\n<h1>Hello!</h1>",
-      "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('h1');\\n  return element.innerText === 'Hello!';\\n})()\",\"message\":\"There should be an h1 tag with the text 'Hello!'\"}]",
-      "videoUrl": "https://www.youtube.com/embed/LMrZDCjO_60",
-      "supplementaryContent": "Placeholder supplementary content..."
-    },
-    {
-      "id": "9scykdziW",
-      "type": "markup",
-      "title": "HTML Heading Tags",
-      "content": "In the last challenge you added an h1 tag, which represents a \"heading 1\" tag in HTML. In total, there are six tags like this. As you might guess, the second heading tag looks like this: <h2>. In the editor below, add one of each heading tag. Each tag should contain some text, feel free to add any text you feel like inside the tags! When you are finished, take a look at the preview to the right to see the results!",
-      "starterCode": "<h1>This is a heading 1 tag</h1>",
-      "solutionCode": "<h1>This is a heading 1 tag</h1>\n<h2>This is a heading 1 tag</h2>\n<h3>This is a heading 1 tag</h3>\n<h4>This is a heading 1 tag</h4>\n<h5>This is a heading 1 tag</h5>\n<h6>This is a heading 1 tag</h6>",
-      "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('h1');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h1 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h2');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h2 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h3');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h3 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h4');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h4 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h5');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h5 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h6');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h6 tag with text inside.\"}]",
-      "videoUrl": "",
-      "supplementaryContent": "Placeholder supplementary content..."
-    },
-    {
-      "id": "9scykuYtf",
-      "type": "markup",
-      "title": "Nesting Tags",
-      "content": "So far we have learned how to add some HTML tags to a document. HTML is pretty flexible, and you can also nest tags inside one another. Another tag we have not seen yet is the <b> tag, which makes text... bold! In the editor below, create a <p> tag with some text inside. Then, choose some part of the text and enclose it in a <b> tag to make it bold.",
-      "starterCode": "",
-      "solutionCode": "<p>This is a paragraph tag, <b<this is bold text inside it!</b></p>",
-      "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('p');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an p tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('b');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an b tag with text inside.\"},{\"test\":\"(function() {\\n const element = document.querySelector('p').querySelector('b');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"The p tag should contain a b tag with text inside.\"}]",
-      "videoUrl": "",
-      "supplementaryContent": "Placeholder supplementary content..."
-    },
-    {
-      "id": "ny51KoEI",
-      "type": "markup",
-      "title": "Style some text",
-      "content": "There is some HTML below. Your task is to change the color of the <p> tag to \"red\" and change its text to \"Exciting red text\".",
-      "starterCode": "<style>\n  /* Your code here */\n</style>\n<p>Just plain text</p>\n",
-      "solutionCode": "<!DOCTYPE html>\n<style>\n  /* Your code here */\n  p {\n    color: red;\n  }\n</style>\n<p>Exciting red text</p>\n",
-      "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('p');\\n  return ['#ff0000', 'rgb(255,0,0)', 'red'].includes(getComputedStyle(element, null).getPropertyValue('color').replace(/ /g, ''));\\n})()\",\"message\":\"There should be a p tag with red text\"},{\"test\":\"(function() {\\n  const element = document.querySelector('p');\\n  return element.innerText === 'Exciting red text';\\n})()\",\"message\":\"There should be a <p> tag with the text 'Exciting red text'\"}]",
-      "supplementaryContent": "Placeholder supplementary content..."
-    },
-    {
-      "id": "wCrQh1f4",
-      "type": "markup",
-      "title": "Highliting text",
-      "content": "Use the `<span>` tag to highligh some text within the paragraph.\n\nSometimes you want to style parts of text _inside_ a paragraph or a heading. You can accomplish this with the span tag.",
-      "starterCode": "<style>\n  span {\n    /* hm... need some styling in here */\n  }\n</style>\n<p>\n  What a paragraph this is! Let's highlight something.\n</p>",
-      "solutionCode": "<style>\n  span {\n    background: yellow;\n  }\n</style>\n<p>What a paragraph this is! Let's <span>highlight</span> something.</p>",
-      "testCode": "[{\"test\":\"(function() {\\n  const el = document.querySelector('span');\\n  return el && el.innerText !== '' && ['#ffff00', 'rgb(255,255,0)', 'yellow'].includes(getComputedStyle(el, null).getPropertyValue('background-color').replace(/ /g, ''));\\n})()\",\"message\":\"There should be a <span> tag with a yellow background wrapping some text\"}]",
-      "videoUrl": "https://www.youtube.com/embed/fapBaduhIiY",
-      "supplementaryContent": "Placeholder supplementary content..."
-    },
-    {
-      "id": "6T3GXc4ap",
-      "type": "typescript",
-      "title": "Add Two Numbers",
-      "content": "Complete the function body below. The function should receive two numbers as input arguments and return the result of adding these numbers together.",
-      "starterCode": "\nconst addTwoNumbers = (a: number, b: number) => {\n  // Edit code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = addTwoNumbers;\n",
-      "solutionCode": "\nconst addTwoNumbers = (a: number, b: number) => {\n  return a + b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = addTwoNumbers;\n",
-      "testCode": "[{\"input\":[1,2],\"expected\":3},{\"input\":[10,50],\"expected\":60},{\"input\":[-10,-50],\"expected\":-60},{\"input\":[100,500],\"expected\":600},{\"input\":[1123,532142],\"expected\":533265},{\"input\":[-10,50],\"expected\":40},{\"input\":[1,500],\"expected\":501},{\"input\":[842,124],\"expected\":966},{\"input\":[1000,500],\"expected\":1500},{\"input\":[-100,100],\"expected\":0},{\"input\":[2,50234432],\"expected\":50234434}]",
-      "supplementaryContent": "Placeholder supplementary content..."
-    },
-    {
-      "id": "WUA8ezECU",
-      "type": "typescript",
-      "title": "Reverse a String",
-      "content": "Complete the function body below. The function should will receive a string and should return the same string in reverse order.",
-      "starterCode": "\nconst reverseString = (inputString) => {\n  // Edit code here\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
-      "solutionCode": "\nconst reverseString = (inputString) => {\n  return inputString.split().reverse().join();\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
-      "testCode": "[{\"input\":[\"hello\"],\"expected\":\"olleh\"},{\"input\":[\"fantastic\"],\"expected\":\"citsatnaf\"},{\"input\":[\"superb\"],\"expected\":\"brepus\"},{\"input\":[\"frustrating\"],\"expected\":\"gnitartsurf\"},{\"input\":[\"exciting\"],\"expected\":\"gniticxe\"},{\"input\":[\"happy\"],\"expected\":\"yppah\"},{\"input\":[\"a\"],\"expected\":\"a\"},{\"input\":[\"aaaaaaaaaaaaz\"],\"expected\":\"zaaaaaaaaaaaa\"},{\"input\":[\"jumping\"],\"expected\":\"gnipmuj\"},{\"input\":[\"silly\"],\"expected\":\"yllis\"},{\"input\":[\"zombie\"],\"expected\":\"eibmoz\"}]",
-      "supplementaryContent": "Placeholder supplementary content..."
-    },
-    {
-      "id": "50fxTLRcV",
-      "type": "typescript",
-      "title": "Return the Length of an Array",
-      "content": "Complete the function body below. The function will receive an array as input and should return the number of items in the array.",
-      "starterCode": "\nconst lengthOfArray = (array) => {\n  // Edit code here\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
-      "solutionCode": "\nconst lengthOfArray = (array) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
-      "testCode": "[{\"input\":[[1,2,3,4]],\"expected\":4},{\"input\":[[]],\"expected\":0},{\"input\":[[1,1,1,1,1,1,1,1,1]],\"expected\":9},{\"input\":[[3,3,3]],\"expected\":3},{\"input\":[[2]],\"expected\":1},{\"input\":[[7,7,7,7,7,7,7,7,7,7,7,7,7,7]],\"expected\":14}]",
-      "supplementaryContent": "Placeholder supplementary content..."
-    },
-    {
-      "id": "50f7f8sUV",
-      "type": "react",
-      "title": "Create a Controlled Input",
-      "content": "There is a React Component below. Complete it so in includes a controlled input which allows user's to type.",
-      "starterCode": "\nimport React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface IState {\n  value: string;\n}\n\nclass App extends React.Component<IState> {\n  constructor(props) {\n    super(props);\n\n    this.state = {\n      value: \"\",\n    };\n  }\n\n  render(): JSX.Element {\n    const welcome: string = \"Hello, React!\";\n    console.log(\"Hello from the iframe!!!\");\n    return (\n      <div>\n        <h1>{welcome}</h1>\n        <input />\n      </div>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.getElementById('root'));",
-      "solutionCode": "\nimport React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface IState {\n  value: string;\n}\n\nclass App extends React.Component<IState> {\n  constructor(props) {\n    super(props);\n\n    this.state = {\n      value: \"\",\n    };\n  }\n\n  render(): JSX.Element {\n    const welcome: string = \"Hello, React!\";\n    console.log(\"Hello from the iframe!!!\");\n    return (\n      <div>\n        <h1>{welcome}</h1>\n        <input value={this.state.value} onChange={this.handleChange} />\n      </div>\n    );\n  }\n\n  handleChange = (e) => {\n    this.setState({ value: e.target.value });\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.getElementById('root'));",
-      "testCode": "[{\"message\":\"Renders a <h1> tag with the text 'Hello, React!'\",\"test\":\"(function() {\\n      try {\\n        const container = document.createElement('div');\\n        ReactTestUtils.act(() => {\\n          ReactDOM.render(<Main />, container);\\n        });\\n        const label = container.querySelector('h1');\\n        return label.textContent === 'Hello, React!';\\n      } catch (err) {\\n        return false;\\n      }\\n    })()\"},{\"message\":\"Renders a controlled <input /> using React state\",\"test\":\"(function() {\\n      try {\\n        const container = document.createElement('div');\\n        ReactTestUtils.act(() => {\\n          ReactDOM.render(<Main />, container);\\n        });\\n        const inputEl = container.querySelector('input');\\n        const testValue = 'giraffe';\\n        ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });\\n        return inputEl.value === testValue;\\n      } catch (err) {\\n        return false;\\n      }\\n    })()\"}]",
-      "supplementaryContent": "Placeholder supplementary content..."
+      "id": "fpvPtNWkC",
+      "title": "Programming Fundamentals",
+      "challenges": [
+        {
+          "id": "9scykDold",
+          "type": "markup",
+          "title": "Add a h1 Tag in HTML",
+          "content": "There is some HTML below. You should add an <h1> tag with the text \"Hello!\" inside it.",
+          "starterCode": "<p>This is an HTML file. Add your code below this line</p>",
+          "solutionCode": "<p>This is an HTML file. Add your code below this line</p>\n<h1>Hello!</h1>",
+          "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('h1');\\n  return element.innerText === 'Hello!';\\n})()\",\"message\":\"There should be an h1 tag with the text 'Hello!'\"}]",
+          "videoUrl": "https://www.youtube.com/embed/LMrZDCjO_60",
+          "supplementaryContent": "Placeholder supplementary content..."
+        },
+        {
+          "id": "9scykdziW",
+          "type": "markup",
+          "title": "HTML Heading Tags",
+          "content": "In the last challenge you added an h1 tag, which represents a \"heading 1\" tag in HTML. In total, there are six tags like this. As you might guess, the second heading tag looks like this: <h2>. In the editor below, add one of each heading tag. Each tag should contain some text, feel free to add any text you feel like inside the tags! When you are finished, take a look at the preview to the right to see the results!",
+          "starterCode": "<h1>This is a heading 1 tag</h1>",
+          "solutionCode": "<h1>This is a heading 1 tag</h1>\n<h2>This is a heading 1 tag</h2>\n<h3>This is a heading 1 tag</h3>\n<h4>This is a heading 1 tag</h4>\n<h5>This is a heading 1 tag</h5>\n<h6>This is a heading 1 tag</h6>",
+          "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('h1');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h1 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h2');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h2 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h3');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h3 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h4');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h4 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h5');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h5 tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('h6');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an h6 tag with text inside.\"}]",
+          "videoUrl": "",
+          "supplementaryContent": "Placeholder supplementary content..."
+        },
+        {
+          "id": "9scykuYtf",
+          "type": "markup",
+          "title": "Nesting Tags",
+          "content": "So far we have learned how to add some HTML tags to a document. HTML is pretty flexible, and you can also nest tags inside one another. Another tag we have not seen yet is the <b> tag, which makes text... bold! In the editor below, create a <p> tag with some text inside. Then, choose some part of the text and enclose it in a <b> tag to make it bold.",
+          "starterCode": "",
+          "solutionCode": "<p>This is a paragraph tag, <b<this is bold text inside it!</b></p>",
+          "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('p');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an p tag with text inside.\"},{\"test\":\"(function() {\\n  const element = document.querySelector('b');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"There should be an b tag with text inside.\"},{\"test\":\"(function() {\\n const element = document.querySelector('p').querySelector('b');\\n  return typeof element.innerText === 'string';\\n})()\",\"message\":\"The p tag should contain a b tag with text inside.\"}]",
+          "videoUrl": "",
+          "supplementaryContent": "Placeholder supplementary content..."
+        },
+        {
+          "id": "ny51KoEI",
+          "type": "markup",
+          "title": "Style some text",
+          "content": "There is some HTML below. Your task is to change the color of the <p> tag to \"red\" and change its text to \"Exciting red text\".",
+          "starterCode": "<style>\n  /* Your code here */\n</style>\n<p>Just plain text</p>\n",
+          "solutionCode": "<!DOCTYPE html>\n<style>\n  /* Your code here */\n  p {\n    color: red;\n  }\n</style>\n<p>Exciting red text</p>\n",
+          "testCode": "[{\"test\":\"(function() {\\n  const element = document.querySelector('p');\\n  return ['#ff0000', 'rgb(255,0,0)', 'red'].includes(getComputedStyle(element, null).getPropertyValue('color').replace(/ /g, ''));\\n})()\",\"message\":\"There should be a p tag with red text\"},{\"test\":\"(function() {\\n  const element = document.querySelector('p');\\n  return element.innerText === 'Exciting red text';\\n})()\",\"message\":\"There should be a <p> tag with the text 'Exciting red text'\"}]",
+          "supplementaryContent": "Placeholder supplementary content..."
+        },
+        {
+          "id": "wCrQh1f4",
+          "type": "markup",
+          "title": "Highliting text",
+          "content": "Use the `<span>` tag to highligh some text within the paragraph.\n\nSometimes you want to style parts of text _inside_ a paragraph or a heading. You can accomplish this with the span tag.",
+          "starterCode": "<style>\n  span {\n    /* hm... need some styling in here */\n  }\n</style>\n<p>\n  What a paragraph this is! Let's highlight something.\n</p>",
+          "solutionCode": "<style>\n  span {\n    background: yellow;\n  }\n</style>\n<p>What a paragraph this is! Let's <span>highlight</span> something.</p>",
+          "testCode": "[{\"test\":\"(function() {\\n  const el = document.querySelector('span');\\n  return el && el.innerText !== '' && ['#ffff00', 'rgb(255,255,0)', 'yellow'].includes(getComputedStyle(el, null).getPropertyValue('background-color').replace(/ /g, ''));\\n})()\",\"message\":\"There should be a <span> tag with a yellow background wrapping some text\"}]",
+          "videoUrl": "https://www.youtube.com/embed/fapBaduhIiY",
+          "supplementaryContent": "Placeholder supplementary content..."
+        },
+        {
+          "id": "6T3GXc4ap",
+          "type": "typescript",
+          "title": "Add Two Numbers",
+          "content": "Complete the function body below. The function should receive two numbers as input arguments and return the result of adding these numbers together.",
+          "starterCode": "\nconst addTwoNumbers = (a: number, b: number) => {\n  // Edit code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = addTwoNumbers;\n",
+          "solutionCode": "\nconst addTwoNumbers = (a: number, b: number) => {\n  return a + b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = addTwoNumbers;\n",
+          "testCode": "[{\"input\":[1,2],\"expected\":3},{\"input\":[10,50],\"expected\":60},{\"input\":[-10,-50],\"expected\":-60},{\"input\":[100,500],\"expected\":600},{\"input\":[1123,532142],\"expected\":533265},{\"input\":[-10,50],\"expected\":40},{\"input\":[1,500],\"expected\":501},{\"input\":[842,124],\"expected\":966},{\"input\":[1000,500],\"expected\":1500},{\"input\":[-100,100],\"expected\":0},{\"input\":[2,50234432],\"expected\":50234434}]",
+          "supplementaryContent": "Placeholder supplementary content..."
+        },
+        {
+          "id": "WUA8ezECU",
+          "type": "typescript",
+          "title": "Reverse a String",
+          "content": "Complete the function body below. The function should will receive a string and should return the same string in reverse order.",
+          "starterCode": "\nconst reverseString = (inputString) => {\n  // Edit code here\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
+          "solutionCode": "\nconst reverseString = (inputString) => {\n  return inputString.split().reverse().join();\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
+          "testCode": "[{\"input\":[\"hello\"],\"expected\":\"olleh\"},{\"input\":[\"fantastic\"],\"expected\":\"citsatnaf\"},{\"input\":[\"superb\"],\"expected\":\"brepus\"},{\"input\":[\"frustrating\"],\"expected\":\"gnitartsurf\"},{\"input\":[\"exciting\"],\"expected\":\"gniticxe\"},{\"input\":[\"happy\"],\"expected\":\"yppah\"},{\"input\":[\"a\"],\"expected\":\"a\"},{\"input\":[\"aaaaaaaaaaaaz\"],\"expected\":\"zaaaaaaaaaaaa\"},{\"input\":[\"jumping\"],\"expected\":\"gnipmuj\"},{\"input\":[\"silly\"],\"expected\":\"yllis\"},{\"input\":[\"zombie\"],\"expected\":\"eibmoz\"}]",
+          "supplementaryContent": "Placeholder supplementary content..."
+        },
+        {
+          "id": "50fxTLRcV",
+          "type": "typescript",
+          "title": "Return the Length of an Array",
+          "content": "Complete the function body below. The function will receive an array as input and should return the number of items in the array.",
+          "starterCode": "\nconst lengthOfArray = (array) => {\n  // Edit code here\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
+          "solutionCode": "\nconst lengthOfArray = (array) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
+          "testCode": "[{\"input\":[[1,2,3,4]],\"expected\":4},{\"input\":[[]],\"expected\":0},{\"input\":[[1,1,1,1,1,1,1,1,1]],\"expected\":9},{\"input\":[[3,3,3]],\"expected\":3},{\"input\":[[2]],\"expected\":1},{\"input\":[[7,7,7,7,7,7,7,7,7,7,7,7,7,7]],\"expected\":14}]",
+          "supplementaryContent": "Placeholder supplementary content..."
+        },
+        {
+          "id": "50f7f8sUV",
+          "type": "react",
+          "title": "Create a Controlled Input",
+          "content": "There is a React Component below. Complete it so in includes a controlled input which allows user's to type.",
+          "starterCode": "\nimport React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface IState {\n  value: string;\n}\n\nclass App extends React.Component<IState> {\n  constructor(props) {\n    super(props);\n\n    this.state = {\n      value: \"\",\n    };\n  }\n\n  render(): JSX.Element {\n    const welcome: string = \"Hello, React!\";\n    console.log(\"Hello from the iframe!!!\");\n    return (\n      <div>\n        <h1>{welcome}</h1>\n        <input />\n      </div>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.getElementById('root'));",
+          "solutionCode": "\nimport React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface IState {\n  value: string;\n}\n\nclass App extends React.Component<IState> {\n  constructor(props) {\n    super(props);\n\n    this.state = {\n      value: \"\",\n    };\n  }\n\n  render(): JSX.Element {\n    const welcome: string = \"Hello, React!\";\n    console.log(\"Hello from the iframe!!!\");\n    return (\n      <div>\n        <h1>{welcome}</h1>\n        <input value={this.state.value} onChange={this.handleChange} />\n      </div>\n    );\n  }\n\n  handleChange = (e) => {\n    this.setState({ value: e.target.value });\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.getElementById('root'));",
+          "testCode": "[{\"message\":\"Renders a <h1> tag with the text 'Hello, React!'\",\"test\":\"(function() {\\n      try {\\n        const container = document.createElement('div');\\n        ReactTestUtils.act(() => {\\n          ReactDOM.render(<Main />, container);\\n        });\\n        const label = container.querySelector('h1');\\n        return label.textContent === 'Hello, React!';\\n      } catch (err) {\\n        return false;\\n      }\\n    })()\"},{\"message\":\"Renders a controlled <input /> using React state\",\"test\":\"(function() {\\n      try {\\n        const container = document.createElement('div');\\n        ReactTestUtils.act(() => {\\n          ReactDOM.render(<Main />, container);\\n        });\\n        const inputEl = container.querySelector('input');\\n        const testValue = 'giraffe';\\n        ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });\\n        return inputEl.value === testValue;\\n      } catch (err) {\\n        return false;\\n      }\\n    })()\"}]",
+          "supplementaryContent": "Placeholder supplementary content..."
+        }
+      ]
     }
   ]
 }

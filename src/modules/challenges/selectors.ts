@@ -2,6 +2,7 @@ import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 
 import { ReduxStoreState } from "modules/root";
+import { CourseList } from "./types";
 
 /** ===========================================================================
  * Selectors
@@ -19,9 +20,9 @@ export const navigationOverlayVisible = createSelector(
   challenges => challenges.displayNavigationMap,
 );
 
-export const navigationSkeleton = createSelector(
+export const courseList = createSelector(
   [challengesState],
-  challenges => challenges.navigationSkeleton,
+  challenges => challenges.courses,
 );
 
 export const workspaceLoadingSelector = createSelector(
@@ -31,6 +32,11 @@ export const workspaceLoadingSelector = createSelector(
   },
 );
 
+const findCourseById = (courseId: string, courses: CourseList) => {
+  const course = courses.find(c => c.id === courseId);
+  return course;
+};
+
 /**
  * Find an return the current selected challenge, if it exists. Return
  * null otherwise.
@@ -38,17 +44,18 @@ export const workspaceLoadingSelector = createSelector(
 export const currentChallengeSelector = createSelector(
   [challengesState],
   challenges => {
-    const {
-      currentCourseId,
-      currentChallengeId,
-      challengeDictionary,
-    } = challenges;
+    const { currentCourseId, currentChallengeId } = challenges;
 
-    if (currentCourseId) {
-      const challengeList = challengeDictionary.get(currentCourseId);
+    if (currentCourseId && currentChallengeId && challenges.courses) {
+      const challengeList = findCourseById(
+        currentChallengeId,
+        challenges.courses,
+      );
 
       if (challengeList) {
-        const challenge = challengeList.find(c => c.id === currentChallengeId);
+        const challenge = challengeList.modules.find(
+          c => c.id === currentChallengeId,
+        );
 
         if (challenge) {
           return challenge;
@@ -68,12 +75,15 @@ export const firstUnfinishedChallenge = createSelector(
   challenges => {
     const { currentCourseId, currentChallengeId } = challenges;
 
-    if (currentCourseId) {
-      const challengeList = challenges.challengeDictionary.get(currentCourseId);
-      if (challengeList) {
-        const challenge = challengeList.find(c => c.id === currentChallengeId);
-        if (challenge) {
-          return challenge;
+    if (currentCourseId && currentChallengeId && challenges.courses) {
+      const course = findCourseById(currentCourseId, challenges.courses);
+      if (course) {
+        for (const courseModule of course.modules) {
+          for (const challenge of courseModule.challenges) {
+            if (challenge.id === currentChallengeId) {
+              return challenge;
+            }
+          }
         }
       }
     }
@@ -92,13 +102,18 @@ export const nextPrevChallenges = createSelector(
     let prev;
     const { currentCourseId, currentChallengeId } = challenges;
 
-    if (currentCourseId) {
-      const challengeList = challenges.challengeDictionary.get(currentCourseId);
+    if (currentCourseId && currentChallengeId && challenges.courses) {
+      const challengeList = findCourseById(
+        currentChallengeId,
+        challenges.courses,
+      );
+
       if (challengeList) {
-        for (let i = 0; i < challengeList.length; i++) {
-          if (challengeList[i].id === currentChallengeId) {
-            prev = challengeList[i - 1];
-            next = challengeList[i + 1];
+        const { modules: content } = challengeList;
+        for (let i = 0; i < content.length; i++) {
+          if (content[i].id === currentChallengeId) {
+            prev = content[i - 1];
+            next = content[i + 1];
             return { next, prev };
           }
         }
@@ -115,8 +130,8 @@ export const nextPrevChallenges = createSelector(
  */
 
 export default {
+  courseList,
   challengesSelector,
-  navigationSkeleton,
   nextPrevChallenges,
   navigationOverlayVisible,
   workspaceLoadingSelector,

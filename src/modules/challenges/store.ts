@@ -1,7 +1,7 @@
 import { createReducer } from "typesafe-actions";
 
 import actions, { ActionTypes } from "./actions";
-import { ChallengeDictionary, NavigationSkeleton } from "./types";
+import { CourseList } from "./types";
 
 /** ===========================================================================
  * App Store
@@ -10,21 +10,19 @@ import { ChallengeDictionary, NavigationSkeleton } from "./types";
 
 export interface State {
   workspaceLoading: boolean;
+  displayNavigationMap: boolean;
+  courses: Nullable<CourseList>;
   currentModuleId: Nullable<string>;
   currentCourseId: Nullable<string>;
   currentChallengeId: Nullable<string>;
-  challengeDictionary: ChallengeDictionary;
-  navigationSkeleton: Nullable<NavigationSkeleton>;
-  displayNavigationMap: boolean;
 }
 
 const initialState = {
+  courses: null,
   workspaceLoading: true,
   currentModuleId: null,
   currentCourseId: null,
   currentChallengeId: null,
-  navigationSkeleton: null,
-  challengeDictionary: new Map(),
   displayNavigationMap: false,
 };
 
@@ -44,19 +42,13 @@ const challenges = createReducer<State, ActionTypes>(initialState)
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,
-    navigationSkeleton: action.payload,
+    courses: action.payload,
   }))
   .handleAction(
     actions.fetchCurrentActiveCourseSuccess,
     (state, { payload }) => ({
       ...state,
-      currentModuleId: payload.currentModuleId,
-      currentCourseId: payload.currentCourseId,
-      currentChallengeId: payload.currentChallengeId,
-      challengeDictionary: state.challengeDictionary.set(
-        payload.course.id,
-        payload.course.challenges,
-      ),
+      ...payload,
     }),
   );
 

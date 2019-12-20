@@ -4,9 +4,11 @@ import { isActionOf } from "typesafe-actions";
 
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import { Course, NavigationSkeleton } from "./types";
+import { ChallengeList, Course } from "./types";
 
-import challenges from "../../challenges/01_programming_fundamental.json";
+import FullstackTypeScriptCourseJSON from "../../challenges/01_programming_fundamental.json";
+
+const FullstackTypeScriptCourse = FullstackTypeScriptCourseJSON as Course;
 
 /** ===========================================================================
  * Epics
@@ -14,9 +16,17 @@ import challenges from "../../challenges/01_programming_fundamental.json";
  */
 
 export const CURRENT_ACTIVE_CHALLENGE_IDS = {
-  courseId: "fpvPtNWkC",
-  moduleId: "fIZb6tB0e",
+  courseId: "fpvPtfu7s",
+  moduleId: "fpvPtNWkC",
   challengeId: "9scykDold",
+};
+
+const getAllChallengesInCourse = (course: Course): ChallengeList => {
+  let challenges: ChallengeList = [];
+  course.modules.forEach(module => {
+    challenges = challenges.concat(module.challenges);
+  });
+  return challenges;
 };
 
 /**
@@ -29,15 +39,16 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
     map(() => {
       /* Ok ... */
       const maybeId = deps.router.location.pathname.replace("/workspace/", "");
-      const challengeExists = challenges.challenges.find(c => c.id === maybeId);
+      const challenges = getAllChallengesInCourse(FullstackTypeScriptCourse);
+      const challengeExists = challenges.find(c => c.id === maybeId);
       const challengeId = challengeExists
         ? challengeExists.id
         : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
 
       /* API to fetch the current active course data ~ */
-      const course = challenges as Course;
+      const course = FullstackTypeScriptCourse;
       return Actions.fetchCurrentActiveCourseSuccess({
-        course,
+        courses: [course],
         currentChallengeId: challengeId,
         currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
         currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
@@ -79,38 +90,6 @@ const updateChallengeRouteId: EpicSignature = (action$, state$, deps) => {
   );
 };
 
-const challengeSkeletonInitializationEpic: EpicSignature = action$ => {
-  return action$.pipe(
-    filter(isActionOf(Actions.initializeApp)),
-    map(() => {
-      /* API to fetch the challenge navigation skeleton ~ */
-
-      const challengeContent = challenges.challenges.map(c => ({
-        id: c.id,
-        type: c.type,
-        title: c.title,
-      }));
-
-      const content: NavigationSkeleton = [
-        {
-          id: "fIZb6tB0e",
-          title: "Fullstack Software Development",
-          courseContent: {
-            challengeContent,
-            summaryVideo: null,
-            specialTopics: null,
-            projectContent: null,
-            projectSolution: null,
-            id: "fpvPtNWkC",
-          },
-        },
-      ];
-
-      return Actions.fetchNavigationSkeletonSuccess(content);
-    }),
-  );
-};
-
 const setChallengeId: EpicSignature = action$ => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
@@ -130,6 +109,5 @@ export default combineEpics(
   setWorkspaceLoadedEpic,
   updateChallengeRouteId,
   challengeInitializationEpic,
-  challengeSkeletonInitializationEpic,
   setChallengeId,
 );
