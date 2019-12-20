@@ -39,7 +39,7 @@ perspective.
 
 Our observations of industry trends largely come from several sources:
 
-- [StateOfJS 2019](https://2018.stateofjs.com/introduction)
+- [StateOfJS 2019](https://2019.stateofjs.com/)
 - [HackerNews Hiring Trends data](https://www.hntrends.com/)
 - [StackOverflow 2019 Developer Survey](https://insights.stackoverflow.com/survey/2019)
 
