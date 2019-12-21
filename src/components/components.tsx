@@ -1,9 +1,10 @@
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
-import React, { ReactNode, FormEvent } from 'react';
+import React, { ReactNode, FormEvent, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
 
 interface SectionProps {
   alternate?: boolean;
@@ -96,8 +97,13 @@ export const SectionTitle = (props: {
   );
 };
 
-export const ActionButton = styled(Button)`
-  background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
+interface ActionButtonProps {
+  loading?: boolean | undefined;
+}
+
+export const ActionButton = styled(Button)<ActionButtonProps>`
+  background: ${({ loading }) =>
+    loading ? '#404040' : `linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%)`};
   border-radius: 3px;
   border: 0;
   color: white;
@@ -132,6 +138,7 @@ export const CodeRainSection = ({ children, ...props }: any) => {
 interface RemoteFormProps {
   name: string;
   children: React.ReactNode;
+  submitText?: string;
   onSubmit?: (e: FormEvent<HTMLFormElement>) => any;
   onComplete?: () => void;
 }
@@ -141,7 +148,15 @@ interface RemoteFormProps {
  * other provider later.
  */
 export const RemoteForm = (props: RemoteFormProps) => {
-  const { onSubmit, onComplete, name, children, ...rest } = props;
+  const {
+    onSubmit,
+    onComplete,
+    submitText = 'Submit',
+    name,
+    children,
+    ...rest
+  } = props;
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -149,10 +164,14 @@ export const RemoteForm = (props: RemoteFormProps) => {
     const el = e.currentTarget;
     const data = new FormData(el);
 
+    setLoading(true);
+
     fetch(el.action, {
       method: 'POST',
       body: data, // Should be auto-formatted by browser
-    }).then(onComplete);
+    })
+      .then(onComplete)
+      .finally(() => setLoading(false));
 
     if (onSubmit) onSubmit(e);
   };
@@ -172,6 +191,9 @@ export const RemoteForm = (props: RemoteFormProps) => {
         <input name="bot-field" />
       </p>
       {children}
+      <ActionButton loading={loading} type="submit">
+        {loading ? <CircularProgress size={24} color="primary" /> : submitText}
+      </ActionButton>
     </form>
   );
 };

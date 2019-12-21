@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import {
-  ActionButton,
   ConstrainWidth,
   RemoteForm,
   Section,
@@ -38,7 +37,11 @@ const FAQ = () => {
           <Typography variant="h5" style={{ marginBottom: 20 }}>
             Want to get in touch? We'd love to hear from you!
           </Typography>
-          <RemoteForm name="contact-us" onComplete={handleComplete}>
+          <RemoteForm
+            name="contact-us"
+            onComplete={handleComplete}
+            submitText="Send"
+          >
             <TextField
               style={{ marginBottom: 20 }}
               inputProps={{ style: { background: '#1d1d1d', borderRadius: 4 } }}
@@ -71,7 +74,6 @@ const FAQ = () => {
               disabled={isComplete}
             />
           </RemoteForm>
-          <ActionButton type="submit">Send</ActionButton>
         </ConstrainWidth>
       </Section>
     </Layout>

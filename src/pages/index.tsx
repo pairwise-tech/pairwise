@@ -570,6 +570,7 @@ const GetEarlyAccess = () => {
       </Typography>
       <RemoteForm
         name="email-access"
+        submitText="I want!"
         onComplete={() =>
           navigate(
             `/thanks?notify=${encodeURIComponent(
@@ -589,7 +590,6 @@ const GetEarlyAccess = () => {
           value={email}
           onChange={handleChange}
         />
-        <ActionButton type="submit">I want!</ActionButton>
       </RemoteForm>
     </div>
   );
