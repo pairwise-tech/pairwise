@@ -16,14 +16,14 @@ const FAQ = () => {
   const [email, setEmail] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [isComplete, setIsComplete] = useState(false);
+  const validate = () => email && message;
   const handleComplete = () => {
-    const tmp = email;
-    setEmail('');
-    setMessage('');
     setIsComplete(true);
-    navigate(
+
+    // This sends us to this page but will show a notify message
+    window.location.replace(
       `/contact?notify=${encodeURIComponent(
-        `Thanks ${tmp}! We'll be in touch.`,
+        `Thanks ${email}! We'll be in touch.`,
       )}`,
     );
   };
@@ -41,6 +41,8 @@ const FAQ = () => {
             name="contact-us"
             onComplete={handleComplete}
             submitText="Send"
+            validate={validate}
+            errorText="Please fill out all fields."
           >
             <TextField
               style={{ marginBottom: 20 }}

@@ -2,6 +2,7 @@ import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
+import Error from '@material-ui/icons/Error';
 import React, { ReactNode, FormEvent, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
@@ -141,6 +142,8 @@ interface RemoteFormProps {
   submitText?: string;
   onSubmit?: (e: FormEvent<HTMLFormElement>) => any;
   onComplete?: () => void;
+  errorText?: string;
+  validate?: () => any;
 }
 
 /**
@@ -152,14 +155,26 @@ export const RemoteForm = (props: RemoteFormProps) => {
     onSubmit,
     onComplete,
     submitText = 'Submit',
+    validate = () => true,
+    errorText = 'Please fill out all the fields.',
     name,
     children,
     ...rest
   } = props;
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Some minimal validation
+    if (!validate()) {
+      setError(errorText);
+      return;
+    } else {
+      // Clear error
+      setError('');
+    }
 
     const el = e.currentTarget;
     const data = new FormData(el);
@@ -194,6 +209,25 @@ export const RemoteForm = (props: RemoteFormProps) => {
       <ActionButton loading={loading} type="submit">
         {loading ? <CircularProgress size={24} color="primary" /> : submitText}
       </ActionButton>
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </form>
   );
 };
+
+export const ErrorMessage = styled(({ children, ...props }) => {
+  return (
+    <div {...props}>
+      <Error style={{ marginRight: 20 }} />
+      {children}
+    </div>
+  );
+})`
+  display: flex;
+  align-items: center;
+  background: #d32f2f;
+  color: black;
+  border-radius: 4px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 20px;
+`;

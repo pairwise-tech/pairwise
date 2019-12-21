@@ -571,6 +571,8 @@ const GetEarlyAccess = () => {
       <RemoteForm
         name="email-access"
         submitText="I want!"
+        validate={() => email}
+        errorText="Please enter an email"
         onComplete={() =>
           navigate(
             `/thanks?notify=${encodeURIComponent(
