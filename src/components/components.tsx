@@ -53,13 +53,12 @@ const DARK_BG = '#2d2d2d';
  * The primary reason for this component is to have full-width backgrounds
  * while still content to be wrapped by a parent component.
  */
-export const Section = styled(Container)`
+export const Section = styled(Container)<SectionProps>`
   position: relative;
   padding-top: 80px;
   padding-bottom: 80px;
-  background-color: ${(props: SectionProps) =>
-    props.alternate ? '#ebf2f5' : DARK_BG};
-  color: ${(props: SectionProps) => (props.alternate ? DARK_BG : 'white')};
+  background-color: ${(props) => (props.alternate ? '#ebf2f5' : DARK_BG)};
+  color: ${(props) => (props.alternate ? DARK_BG : 'white')};
   &:before,
   &:after {
     content: '';
@@ -69,8 +68,7 @@ export const Section = styled(Container)`
     bottom: 0;
     left: 100%;
     width: 1000px;
-    background-color: ${(props: SectionProps) =>
-      props.alternate ? '#ebf2f5' : DARK_BG};
+    background-color: ${(props) => (props.alternate ? '#ebf2f5' : DARK_BG)};
     ${forwardStyleProp('boxShadow')}
     ${forwardStyleProp('border')}
   }

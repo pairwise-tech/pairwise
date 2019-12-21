@@ -8,7 +8,13 @@ module.exports = {
   plugins: [
     `gatsby-plugin-typescript`,
     'gatsby-plugin-material-ui',
-    `gatsby-plugin-styled-components`,
+    {
+      resolve: `gatsby-plugin-styled-components`,
+      options: {
+        displayName: true,
+        fileName: true,
+      },
+    },
     `gatsby-plugin-react-helmet`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
