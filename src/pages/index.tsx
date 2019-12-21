@@ -567,6 +567,7 @@ interface RemoteFormProps {
  */
 const RemoteForm = (props: RemoteFormProps) => {
   const { onSubmit, onComplete, name, children, ...rest } = props;
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -589,6 +590,7 @@ const RemoteForm = (props: RemoteFormProps) => {
       data-netlify="true"
       data-netlify-honeypot="bot-field"
       method="POST"
+      onSubmit={handleSubmit}
     >
       <input type="hidden" name="form-name" value={name} />
       <p style={{ display: 'none' }}>
