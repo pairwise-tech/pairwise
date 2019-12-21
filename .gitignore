@@ -22,3 +22,6 @@ node_modules/
 public
 .DS_Store
 *.dump
+
+# Local Netlify folder
+.netlify
