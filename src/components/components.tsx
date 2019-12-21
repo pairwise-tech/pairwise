@@ -1,6 +1,6 @@
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, FormEvent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
@@ -126,5 +126,52 @@ export const CodeRainSection = ({ children, ...props }: any) => {
       {/* Wrap the children in a z-higher div so that they don't have to remember this */}
       <div style={{ position: 'relative', zIndex: 2 }}>{children}</div>
     </Section>
+  );
+};
+
+interface RemoteFormProps {
+  name: string;
+  children: React.ReactNode;
+  onSubmit?: (e: FormEvent<HTMLFormElement>) => any;
+  onComplete?: () => void;
+}
+
+/**
+ * Currently this is a netlify form, but we could potentially point it at some
+ * other provider later.
+ */
+export const RemoteForm = (props: RemoteFormProps) => {
+  const { onSubmit, onComplete, name, children, ...rest } = props;
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const el = e.currentTarget;
+    const data = new FormData(el);
+
+    fetch(el.action, {
+      method: 'POST',
+      body: data, // Should be auto-formatted by browser
+    }).then(onComplete);
+
+    if (onSubmit) onSubmit(e);
+  };
+
+  return (
+    <form
+      {...rest}
+      name={name}
+      action="/thanks/"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      method="POST"
+      onSubmit={handleSubmit}
+    >
+      <input type="hidden" name="form-name" value={name} />
+      <p style={{ display: 'none' }}>
+        <input name="bot-field" />
+      </p>
+      {children}
+    </form>
   );
 };

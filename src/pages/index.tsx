@@ -1,9 +1,9 @@
-import { Link } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Markdown from 'react-markdown';
 import Paper from '@material-ui/core/Paper';
-import React, { FormEvent, useState } from 'react';
+import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
@@ -13,6 +13,7 @@ import {
   CodeRainSection,
   ConstrainWidth,
   DESKTOP,
+  RemoteForm,
   Section,
   SectionTitle,
 } from '../components/components';
@@ -554,53 +555,6 @@ const ColRow = styled.div`
   }
 `;
 
-interface RemoteFormProps {
-  name: string;
-  children: React.ReactNode;
-  onSubmit?: (e: FormEvent<HTMLFormElement>) => any;
-  onComplete?: () => void;
-}
-
-/**
- * Currently this is a netlify form, but we could potentially point it at some
- * other provider later.
- */
-const RemoteForm = (props: RemoteFormProps) => {
-  const { onSubmit, onComplete, name, children, ...rest } = props;
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const el = e.currentTarget;
-    const data = new FormData(el);
-
-    fetch(el.action, {
-      method: 'POST',
-      body: data, // Should be auto-formatted by browser
-    }).then(onComplete);
-
-    if (onSubmit) onSubmit(e);
-  };
-
-  return (
-    <form
-      {...rest}
-      name={name}
-      action="/thanks/"
-      data-netlify="true"
-      data-netlify-honeypot="bot-field"
-      method="POST"
-      onSubmit={handleSubmit}
-    >
-      <input type="hidden" name="form-name" value={name} />
-      <p style={{ display: 'none' }}>
-        <input name="bot-field" />
-      </p>
-      {children}
-    </form>
-  );
-};
-
 const GetEarlyAccess = () => {
   const [email, setEmail] = useState<string>('');
   const handleChange = (e: any) => {
@@ -614,9 +568,19 @@ const GetEarlyAccess = () => {
         Enter your email below to be selected as an exclusive first user of our
         platform as we launch the initial lesson modules.
       </Typography>
-      <RemoteForm name="email-access">
+      <RemoteForm
+        name="email-access"
+        onComplete={() =>
+          navigate(
+            `/thanks?notify=${encodeURIComponent(
+              `${email} has been added to the list!`,
+            )}`,
+          )
+        }
+      >
         <TextField
           style={{ marginBottom: 20 }}
+          inputProps={{ style: { background: '#1d1d1d', borderRadius: 4 } }}
           fullWidth
           id="email"
           name="email"
