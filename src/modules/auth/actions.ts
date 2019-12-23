@@ -1,5 +1,5 @@
-import { ActionType, createAction } from "typesafe-actions";
 import { User } from "modules/user/types";
+import { ActionType, createAction } from "typesafe-actions";
 
 /** ===========================================================================
  * Action Types
