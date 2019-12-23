@@ -24,6 +24,11 @@ const EMAIL_SIGNUP_SECTION_ID = 'email-signup-section';
 
 const AboveFoldSection = styled(CodeRainSection)`
   margin-top: 0px;
+  overflow: hidden;
+
+  ${DESKTOP} {
+    overflow: visible;
+  }
 `;
 
 const Left = styled.div`
@@ -43,6 +48,7 @@ const Right = styled.div`
   flex-shrink: 0;
   width: 100%;
   margin-top: 40px;
+  height: 210px;
 
   ${DESKTOP} {
     width: 40%;
@@ -52,15 +58,15 @@ const Right = styled.div`
 
 const MainImg = styled.img`
   width: auto;
-  max-width: 100%;
   margin: 0 auto;
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 650px;
 
   ${DESKTOP} {
     max-width: 80%;
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 800px;
     max-width: unset;
     z-index: 9;
