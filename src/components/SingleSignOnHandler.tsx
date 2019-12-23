@@ -103,13 +103,13 @@ export const CreateAccountText = styled.h1`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  dialogOpen: Modules.selectors.app.singleSignOnDialogState(state),
+  dialogOpen: Modules.selectors.auth.singleSignOnDialogState(state),
 });
 
 const dispatchProps = {
-  facebookLoginCallback: Modules.actions.app.facebookLogin,
-  facebookLoginFailure: Modules.actions.app.facebookLoginFailure,
-  setSingleSignOnDialogState: Modules.actions.app.setSingleSignOnDialogState,
+  facebookLoginCallback: Modules.actions.auth.facebookLogin,
+  facebookLoginFailure: Modules.actions.auth.facebookLoginFailure,
+  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 
 interface ComponentProps {}

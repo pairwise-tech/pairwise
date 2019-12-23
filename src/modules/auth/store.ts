@@ -1,5 +1,6 @@
 import { createReducer } from "typesafe-actions";
 
+import { getAccessTokenFromLocalStorage } from "tools/utils";
 import actions, { ActionTypes } from "./actions";
 
 /** ===========================================================================
@@ -8,20 +9,24 @@ import actions, { ActionTypes } from "./actions";
  */
 
 export interface State {
-  initialized: boolean;
+  accessToken: string;
+  singleSignOnDialogOpen: boolean;
 }
 
 const initialState = {
-  initialized: false,
+  singleSignOnDialogOpen: false,
+  accessToken: getAccessTokenFromLocalStorage(),
 };
 
-const app = createReducer<State, ActionTypes>(initialState).handleAction(
-  actions.initializeAppSuccess,
-  state => ({
+const app = createReducer<State, ActionTypes>(initialState)
+  .handleAction(actions.setSingleSignOnDialogState, (state, action) => ({
     ...state,
-    initialized: true,
-  }),
-);
+    singleSignOnDialogOpen: action.payload,
+  }))
+  .handleAction(actions.facebookLoginSuccess, (state, action) => ({
+    ...state,
+    accessToken: action.payload.accessToken,
+  }));
 
 /** ===========================================================================
  * Export

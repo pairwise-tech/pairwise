@@ -8,11 +8,25 @@ import { ReduxStoreState } from "modules/root";
  * ============================================================================
  */
 
-export const appState = (state: ReduxStoreState) => {
-  return state.app;
+export const authState = (state: ReduxStoreState) => {
+  return state.auth;
 };
 
-export const appSelector = createSelector([appState], identity);
+export const authSelector = createSelector([authState], identity);
+
+export const singleSignOnDialogState = createSelector(
+  authSelector,
+  authStateResult => {
+    return authStateResult.singleSignOnDialogOpen;
+  },
+);
+
+export const userAuthenticated = createSelector(
+  authSelector,
+  authStateResult => {
+    return Boolean(authStateResult.accessToken);
+  },
+);
 
 /** ===========================================================================
  * Export
@@ -20,5 +34,7 @@ export const appSelector = createSelector([appState], identity);
  */
 
 export default {
-  appSelector,
+  authSelector,
+  userAuthenticated,
+  singleSignOnDialogState,
 };

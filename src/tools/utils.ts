@@ -49,6 +49,34 @@ const getStoredChallenges = () => {
   return {};
 };
 
+export const ACCESS_TOKEN_STORAGE_KEY = "ACCESS_TOKEN_STORAGE_KEY";
+
+/**
+ * Set the access token.
+ */
+export const setAccessTokenInLocalStorage = (accessToken: string) => {
+  localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, accessToken);
+};
+
+/**
+ * Get the access token.
+ */
+export const getAccessTokenFromLocalStorage = () => {
+  try {
+    const result = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+    if (result) {
+      const token = JSON.parse(result);
+      if (token) {
+        return token;
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  return "";
+};
+
 /**
  * Get the initial code for the editor, possibly from localStorage if
  * anything is saved there.

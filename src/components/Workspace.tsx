@@ -419,11 +419,15 @@ class Workspace extends React.Component<IProps, IState> {
                   </IconButton>
                 </StyledTooltip>
               )}
-              <CreateAccountText
-                onClick={() => this.props.setSingleSignOnDialogState(true)}
-              >
-                Create Account
-              </CreateAccountText>
+              {this.props.userAuthenticated ? (
+                <CreateAccountText>Welcome!</CreateAccountText>
+              ) : (
+                <CreateAccountText
+                  onClick={() => this.props.setSingleSignOnDialogState(true)}
+                >
+                  Create Account
+                </CreateAccountText>
+              )}
             </ControlsContainer>
           </Header>
           <SingleSignOnHandler />
@@ -1133,6 +1137,7 @@ const StyledTooltip = styled(Tooltip)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
@@ -1144,7 +1149,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const dispatchProps = {
   selectChallenge: Modules.actions.challenges.setChallengeId,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
-  setSingleSignOnDialogState: Modules.actions.app.setSingleSignOnDialogState,
+  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 
 interface ComponentProps {}
