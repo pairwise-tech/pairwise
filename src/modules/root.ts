@@ -13,6 +13,7 @@ import Challenges, {
   ChallengesActionTypes,
   ChallengesState,
 } from "./challenges";
+import User, { UserActionTypes, UserState } from "./user";
 
 /** ===========================================================================
  * Root Actions and Selectors
@@ -22,17 +23,20 @@ import Challenges, {
 export type ReduxActionTypes =
   | AppActionTypes
   | ChallengesActionTypes
+  | UserActionTypes
   | AuthActionTypes;
 
 export const selectors = {
   app: App.selector,
   auth: Auth.selector,
+  user: User.selector,
   challenges: Challenges.selector,
 };
 
 export const actions = {
   app: App.actions,
   auth: Auth.actions,
+  user: User.actions,
   challenges: Challenges.actions,
 };
 
@@ -49,12 +53,14 @@ const Modules = {
 export interface ReduxStoreState {
   app: AppState;
   auth: AuthState;
+  user: UserState;
   challenges: ChallengesState;
 }
 
 const rootReducer = combineReducers({
   app: App.store,
   auth: Auth.store,
+  user: User.store,
   challenges: Challenges.store,
 });
 
@@ -74,7 +80,12 @@ export type EpicSignature = Epic<
   EpicDependencies
 >;
 
-const rootEpic = combineEpics(App.epics, Challenges.epics, Auth.epics);
+const rootEpic = combineEpics(
+  App.epics,
+  User.epics,
+  Auth.epics,
+  Challenges.epics,
+);
 
 /** ===========================================================================
  * Export

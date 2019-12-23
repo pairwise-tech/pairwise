@@ -1,4 +1,5 @@
 import { ActionType, createAction } from "typesafe-actions";
+import { User } from "modules/user/types";
 
 /** ===========================================================================
  * Action Types
@@ -28,7 +29,7 @@ const facebookLoginFailure = createAction(
 )();
 const facebookLoginSuccess = createAction(
   ActionTypesEnum.FACEBOOK_LOGIN_SUCCESS,
-)<{ accessToken: string }>();
+)<{ user: User; accessToken: string }>();
 
 const actions = {
   facebookLogin,

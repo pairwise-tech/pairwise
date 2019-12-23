@@ -347,7 +347,7 @@ class Workspace extends React.Component<IProps, IState> {
           style={{ right: 10, display: "flex", flexDirection: "column" }}
         >
           {this.state.code !== challenge.starterCode && (
-            <StyledTooltip title={"Restor Initial Code"} placement="left">
+            <StyledTooltip title={"Restore Initial Code"} placement="left">
               <IconButton
                 style={{ color: "white" }}
                 aria-label="reset editor"
@@ -419,8 +419,11 @@ class Workspace extends React.Component<IProps, IState> {
                   </IconButton>
                 </StyledTooltip>
               )}
-              {this.props.userAuthenticated ? (
-                <CreateAccountText>Welcome!</CreateAccountText>
+              {this.props.userAuthenticated && this.props.user ? (
+                <CreateAccountText>
+                  Welcome, {this.props.user.givenName}!
+                  {/* Welcome, {this.props.user ? this.props.user.givenName : ""}! */}
+                </CreateAccountText>
               ) : (
                 <CreateAccountText
                   onClick={() => this.props.setSingleSignOnDialogState(true)}
@@ -1109,12 +1112,12 @@ const YoutubeEmbed = (props: YoutubeEmbedProps) => {
   );
 };
 
-const UpperRight = styled.div`
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  right: 0;
-`;
+// const UpperRight = styled.div`
+//   position: absolute;
+//   z-index: 2;
+//   top: 0;
+//   right: 0;
+// `;
 
 const LowerRight = styled.div`
   position: absolute;
@@ -1137,6 +1140,7 @@ const StyledTooltip = styled(Tooltip)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  user: Modules.selectors.user.userSelector(state),
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),

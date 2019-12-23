@@ -34,14 +34,22 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
         onClose={() => this.setAccountModalState(false)}
       >
         <AccountModal>
-          <CreateAccountText>Login in or Create an Account</CreateAccountText>
-          <FacebookLogin
-            appId="445906999653380"
-            fields="name,email,picture"
-            buttonStyle={{ padding: 6 }}
-            containerStyle={{ marginTop: 18 }}
-            callback={this.handleFacebookResponse}
-          />
+          {this.props.loadingAuth ? (
+            <CreateAccountText>Loading User...</CreateAccountText>
+          ) : (
+            <React.Fragment>
+              <CreateAccountText>
+                Login in or Create an Account
+              </CreateAccountText>
+              <FacebookLogin
+                appId="445906999653380"
+                fields="name,email,picture"
+                buttonStyle={{ padding: 6 }}
+                containerStyle={{ marginTop: 18 }}
+                callback={this.handleFacebookResponse}
+              />
+            </React.Fragment>
+          )}
         </AccountModal>
       </Modal>
     );
@@ -103,6 +111,7 @@ export const CreateAccountText = styled.h1`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  loadingAuth: Modules.selectors.auth.loadingAuth(state),
   dialogOpen: Modules.selectors.auth.singleSignOnDialogState(state),
 });
 

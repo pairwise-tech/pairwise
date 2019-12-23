@@ -1,8 +1,9 @@
 import axios from "axios";
 import { combineEpics } from "redux-observable";
-import { filter, mergeMap, tap } from "rxjs/operators";
+import { filter, ignoreElements, mergeMap, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
+import { User } from "modules/user/types";
 import { setAccessTokenInLocalStorage } from "tools/utils";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
@@ -15,20 +16,18 @@ import { Actions } from "../root-actions";
 const facebookLoginEpic: EpicSignature = action$ => {
   return action$.pipe(
     filter(isActionOf(Actions.facebookLogin)),
-    mergeMap(async response => {
+    mergeMap(async action => {
       try {
-        console.log("Received FB response!");
-        console.log(response);
-        const { accessToken } = response.payload;
-        const authResponse = await axios.get(
+        console.log(action);
+
+        const params = { access_token: action.payload.accessToken };
+        const response = await axios.get<{ user: User; accessToken: string }>(
           "http://localhost:9000/auth/facebook",
-          {
-            params: { access_token: accessToken },
-          },
+          { params },
         );
 
-        console.log(authResponse);
-        return Actions.facebookLoginSuccess({ accessToken });
+        const { accessToken, user } = response.data;
+        return Actions.facebookLoginSuccess({ user, accessToken });
       } catch (err) {
         console.log(err);
         return Actions.facebookLoginFailure();
@@ -44,6 +43,7 @@ const storeAccessTokenEpic: EpicSignature = action$ => {
       const { accessToken } = action.payload;
       setAccessTokenInLocalStorage(accessToken);
     }),
+    ignoreElements(),
   );
 };
 
