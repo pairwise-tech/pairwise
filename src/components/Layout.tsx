@@ -46,6 +46,16 @@ const StyledSnackbarContent = styled(SnackbarContent)`
   background: ${GREEN_GRADIENT};
 `;
 
+const Deemphasize = styled.div`
+  ${FooterLink} {
+    text-decoration: none;
+    opacity: 0.5;
+    &:hover {
+      opacity: 1;
+    }
+  }
+`;
+
 const Layout = ({ children, hideHeader = false }: LayoutProps) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -111,10 +121,16 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
         }}
       >
         <footer>
-          <div style={{ marginBottom: 10 }}>
-            <FooterLink to="/curriculum">Curriculum</FooterLink>
-            <FooterLink to="/faq">FAQ</FooterLink>
-            <FooterLink to="/contact">Contact</FooterLink>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ marginBottom: 10 }}>
+              <FooterLink to="/curriculum">Curriculum</FooterLink>
+              <FooterLink to="/faq">FAQ</FooterLink>
+              <FooterLink to="/contact">Contact</FooterLink>
+            </div>
+            <Deemphasize>
+              <FooterLink to="/terms">Terms of Service</FooterLink>
+              <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
+            </Deemphasize>
           </div>
           <div>
             <small>© {new Date().getFullYear()} Prototype X</small>
