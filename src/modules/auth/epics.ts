@@ -21,7 +21,7 @@ const facebookLoginEpic: EpicSignature = action$ => {
         console.log(response);
         const { accessToken } = response.payload;
         const authResponse = await axios.get(
-          "http://localhost:8080/auth/facebook",
+          "http://localhost:9000/auth/facebook",
           {
             params: { access_token: accessToken },
           },

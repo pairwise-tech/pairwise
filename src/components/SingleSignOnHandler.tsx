@@ -34,7 +34,7 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
         onClose={() => this.setAccountModalState(false)}
       >
         <AccountModal>
-          <CreateAccountText>Login/Create Account</CreateAccountText>
+          <CreateAccountText>Login in or Create an Account</CreateAccountText>
           <FacebookLogin
             appId="445906999653380"
             fields="name,email,picture"

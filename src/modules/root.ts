@@ -74,7 +74,7 @@ export type EpicSignature = Epic<
   EpicDependencies
 >;
 
-const rootEpic = combineEpics(App.epics, Challenges.epics);
+const rootEpic = combineEpics(App.epics, Challenges.epics, Auth.epics);
 
 /** ===========================================================================
  * Export

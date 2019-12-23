@@ -425,7 +425,7 @@ class Workspace extends React.Component<IProps, IState> {
                 <CreateAccountText
                   onClick={() => this.props.setSingleSignOnDialogState(true)}
                 >
-                  Create Account
+                  Login/Signup
                 </CreateAccountText>
               )}
             </ControlsContainer>

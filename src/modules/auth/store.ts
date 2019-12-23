@@ -25,6 +25,7 @@ const app = createReducer<State, ActionTypes>(initialState)
   }))
   .handleAction(actions.facebookLoginSuccess, (state, action) => ({
     ...state,
+    singleSignOnDialogOpen: false,
     accessToken: action.payload.accessToken,
   }));
 
