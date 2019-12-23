@@ -46,7 +46,7 @@ import {
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
-import { Button, SecondaryButton } from "./Primitives";
+import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
 
 // Import TSX SyntaxHighlightWorker:
 // @ts-ignore
@@ -100,49 +100,6 @@ interface IState {
  * React Component
  * ============================================================================
  */
-
-interface YoutubeEmbedProps {
-  url: string;
-}
-
-/**
- * Copied the iframe props form the share sheet on youtube.
- */
-const YoutubeEmbed = (props: YoutubeEmbedProps) => {
-  return (
-    <iframe
-      title="Youtube Embed"
-      width={728}
-      height={410}
-      src={props.url}
-      frameBorder="0"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    ></iframe>
-  );
-};
-
-const UpperRight = styled.div`
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  right: 0;
-`;
-
-const LowerRight = styled.div`
-  position: absolute;
-  z-index: 2;
-  bottom: 0;
-  right: 0;
-`;
-
-const StyledTooltip = styled(Tooltip)`
-  opacity: 0.5;
-  transition: opacity 0.2s ease-out;
-  &:hover {
-    opacity: 1;
-  }
-`;
 
 class Workspace extends React.Component<IProps, IState> {
   syntaxWorker: any = null;
@@ -428,13 +385,12 @@ class Workspace extends React.Component<IProps, IState> {
                 onClick={this.toggleNavigationMap}
               >
                 <Menu />
-                {/* overlayVisible ? "Hide" : "View" */}
               </IconButton>
               <h1
                 style={{
-                  fontFamily: `'Helvetica Neue', Lato, sans-serif`,
                   fontWeight: 100,
                   color: "white",
+                  fontFamily: `'Helvetica Neue', Lato, sans-serif`,
                 }}
               >
                 Prototype X
@@ -463,8 +419,14 @@ class Workspace extends React.Component<IProps, IState> {
                   </IconButton>
                 </StyledTooltip>
               )}
+              <CreateAccountText
+                onClick={() => this.props.setSingleSignOnDialogState(true)}
+              >
+                Create Account
+              </CreateAccountText>
             </ControlsContainer>
           </Header>
+          <SingleSignOnHandler />
           <NavigationOverlay overlayVisible={overlayVisible} />
           <WorkspaceContainer>
             <ColsWrapper separatorProps={colSeparatorProps}>
@@ -759,7 +721,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   iFrameRenderPreview = async () => {
-    console.clear();
+    // console.clear();
     this.setState({ logs: DEFAULT_LOGS }, async () => {
       if (this.iFrameRef && this.iFrameRef.contentWindow) {
         try {
@@ -1122,6 +1084,49 @@ const OverlayLoadingText = styled.p`
   color: ${COLORS.PRIMARY_BLUE};
 `;
 
+interface YoutubeEmbedProps {
+  url: string;
+}
+
+/**
+ * Copied the iframe props form the share sheet on youtube.
+ */
+const YoutubeEmbed = (props: YoutubeEmbedProps) => {
+  return (
+    <iframe
+      title="Youtube Embed"
+      width={728}
+      height={410}
+      src={props.url}
+      frameBorder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    ></iframe>
+  );
+};
+
+const UpperRight = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+`;
+
+const LowerRight = styled.div`
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  right: 0;
+`;
+
+const StyledTooltip = styled(Tooltip)`
+  opacity: 0.5;
+  transition: opacity 0.2s ease-out;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -1139,6 +1144,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const dispatchProps = {
   selectChallenge: Modules.actions.challenges.setChallengeId,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
+  setSingleSignOnDialogState: Modules.actions.app.setSingleSignOnDialogState,
 };
 
 interface ComponentProps {}

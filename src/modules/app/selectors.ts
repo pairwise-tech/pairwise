@@ -14,6 +14,13 @@ export const appState = (state: ReduxStoreState) => {
 
 export const appSelector = createSelector([appState], identity);
 
+export const singleSignOnDialogState = createSelector(
+  appSelector,
+  appStateResult => {
+    return appStateResult.singleSignOnDialogOpen;
+  },
+);
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -21,4 +28,5 @@ export const appSelector = createSelector([appState], identity);
 
 export default {
   appSelector,
+  singleSignOnDialogState,
 };
