@@ -78,6 +78,19 @@ const createInverseChallengeMapping = (
   return result;
 };
 
+interface Ok<T> {
+  result: T;
+  error?: undefined;
+}
+
+interface Err<E> {
+  error: E;
+  result?: undefined;
+}
+
+/* Useful, not? I like it (?) */
+type Result<T, E> = Ok<T> | Err<E>;
+
 /**
  * Can also initialize the challenge id from the url to load the first
  * challenge.
@@ -95,12 +108,15 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
           // course = result.data;
           course = fetchCourseInDevelopment();
         }
-        return { result: course, error: null };
+
+        const result: Ok<Course> = { result: course };
+        return result;
       } catch (err) {
-        return { result: null, error: err };
+        const result: Err<string> = { error: err.message };
+        return result;
       }
     }),
-    mergeMap((data: { result: any; error: any }) => {
+    mergeMap((data: Result<Course, string>) => {
       const { result, error } = data;
       if (result && !error) {
         const course = result;
