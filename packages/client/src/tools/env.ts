@@ -6,6 +6,7 @@ import getenv from "getenv";
  */
 
 const NODE_ENV = getenv.string("NODE_ENV", "");
+const DEV_MODE = getenv.bool("REACT_APP_DEV", false);
 
 const TEST = NODE_ENV === "test";
 const DEVELOPMENT = NODE_ENV === "development";
@@ -15,6 +16,7 @@ const ENV = {
   TEST,
   DEVELOPMENT,
   PRODUCTION,
+  DEV_MODE,
 };
 
 /** ===========================================================================

@@ -1,0 +1,19 @@
+{
+  "name": "@prototype/common",
+  "version": "1.0.0",
+  "description": "Shared code and type definitions",
+  "main": "dist/main.js",
+  "typings": "dist/main.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "global": "^4.4.0",
+    "typescript": "^3.7.4"
+  },
+  "files": [
+    "dist"
+  ]
+}

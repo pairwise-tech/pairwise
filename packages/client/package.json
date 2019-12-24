@@ -1,10 +1,11 @@
 {
-  "name": "prototype-x",
+  "name": "@prototype/client",
   "version": "0.1.0",
   "description": "Prototype X",
   "private": true,
   "scripts": {
     "start": "HTTPS=true react-scripts start",
+    "start:dev": "HTTPS=true REACT_APP_DEV=true react-scripts start",
     "build": "react-scripts build",
     "postbuild": "cp _redirects build/",
     "jest": "react-scripts test",
@@ -38,6 +39,7 @@
     "@types/redux-logger": "^3.0.7",
     "@types/styled-components": "^4.4.0",
     "@types/throttle-debounce": "^2.1.0",
+    "@prototype/common": "^1.0.0",
     "axios": "^0.19.0",
     "console-feed": "^2.8.10",
     "getenv": "^1.0.0",

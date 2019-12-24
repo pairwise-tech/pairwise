@@ -10,18 +10,21 @@ import {
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
+import ENV from "tools/env";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { ChallengeList, Course } from "./types";
-
-import FullstackTypeScriptCourseJSON from "../../challenges/01_programming_fundamental.json";
-
-const FullstackTypeScriptCourse = FullstackTypeScriptCourseJSON as Course;
 
 /** ===========================================================================
  * Epics
  * ============================================================================
  */
+
+const fetchCourseInDevelopment = () => {
+  const Courses = require("@prototype/common").default;
+  const course = Courses.FullstackTypeScript as Course;
+  return course;
+};
 
 export const CURRENT_ACTIVE_CHALLENGE_IDS = {
   courseId: "fpvPtfu7s",
@@ -45,19 +48,29 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
     mergeMap(async () => {
-      /* Ok ... */
-      const maybeId = deps.router.location.pathname.replace("/workspace/", "");
-      const challenges = getAllChallengesInCourse(FullstackTypeScriptCourse);
-      const challengeExists = challenges.find(c => c.id === maybeId);
-      const challengeId = challengeExists
-        ? challengeExists.id
-        : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
-
       try {
-        const result = await axios.get("http://localhost:9000/challenges");
+        let course: Course;
+
+        if (ENV.DEV_MODE) {
+          course = fetchCourseInDevelopment();
+        } else {
+          const result = await axios.get("http://localhost:9000/challenges");
+          course = result.data;
+        }
+
+        /* Ok ... */
+        const maybeId = deps.router.location.pathname.replace(
+          "/workspace/",
+          "",
+        );
+        const challenges = getAllChallengesInCourse(course);
+        const challengeExists = challenges.find(c => c.id === maybeId);
+        const challengeId = challengeExists
+          ? challengeExists.id
+          : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
 
         return Actions.fetchCurrentActiveCourseSuccess({
-          courses: [result.data],
+          courses: [course],
           currentChallengeId: challengeId,
           currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
           currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
