@@ -1,6 +1,7 @@
 import axios from "axios";
 import { combineEpics } from "redux-observable";
 import {
+  catchError,
   delay,
   filter,
   ignoreElements,
@@ -88,45 +89,45 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
     mergeMap(async () => {
       try {
         let course: Course;
-
         if (ENV.DEV_MODE) {
           course = fetchCourseInDevelopment();
         } else {
           const result = await axios.get("http://localhost:9000/challenges");
           course = result.data;
         }
-
+        return { result: course, error: null };
+      } catch (err) {
+        return { result: null, error: err };
+      }
+    }),
+    mergeMap((data: { result: any; error: any }) => {
+      const { result, error } = data;
+      if (result && !error) {
+        const course = result;
         /* Ok ... */
         const maybeId = deps.router.location.pathname.replace(
           "/workspace/",
           "",
         );
 
-        // const challengeMap = createInverseChallengeMapping([course]);
+        const challengeMap = createInverseChallengeMapping([course]);
         const challenges = getAllChallengesInCourse(course);
         const challengeExists = challenges.find(c => c.id === maybeId);
         const challengeId = challengeExists
           ? challengeExists.id
           : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
 
-        return Actions.fetchCurrentActiveCourseSuccess({
-          courses: [course],
-          currentChallengeId: challengeId,
-          currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
-          currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
-        });
-
-        // return from([
-        //   Actions.storeInverseChallengeMapping(challengeMap),
-        //   Actions.fetchCurrentActiveCourseSuccess({
-        //     courses: [course],
-        //     currentChallengeId: challengeId,
-        //     currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
-        //     currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
-        //   }),
-        // ]);
-      } catch (err) {
-        return Actions.fetchCurrentActiveCourseFailure();
+        return from([
+          Actions.storeInverseChallengeMapping(challengeMap),
+          Actions.fetchCurrentActiveCourseSuccess({
+            courses: [course],
+            currentChallengeId: challengeId,
+            currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
+            currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
+          }),
+        ]);
+      } else {
+        return from([Actions.fetchCurrentActiveCourseFailure()]);
       }
     }),
   );
