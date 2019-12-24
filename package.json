@@ -7,6 +7,7 @@
     "client": "cd packages/client && yarn start:run",
     "client:dev": "cd packages/client && yarn start:dev",
     "client:build": "cd packages/client && yarn build",
+    "common:build": "cd packages/common && yarn build",
     "db": "cd packages/server && yarn db",
     "server:setup": "cd packages/server && yarn setup:env && yarn setup:db",
     "server": "cd packages/server && yarn start",

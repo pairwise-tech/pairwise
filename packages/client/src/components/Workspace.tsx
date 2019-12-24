@@ -1,3 +1,8 @@
+// Import TSX SyntaxHighlightWorker:
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
+
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Fullscreen from "@material-ui/icons/Fullscreen";
@@ -8,21 +13,16 @@ import SkipNext from "@material-ui/icons/SkipNext";
 import SkipPrevious from "@material-ui/icons/SkipPrevious";
 import { monaco } from "@monaco-editor/react";
 import { Console, Decode } from "console-feed";
+import { Challenge } from "modules/challenges/types";
+import Modules, { ReduxStoreState } from "modules/root";
 import { pipe } from "ramda";
+import propSatisfies from "ramda/es/propSatisfies";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import Markdown from "react-markdown";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
-
-// Import TSX SyntaxHighlightWorker:
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
-
-import { Challenge } from "modules/challenges/types";
-import Modules, { ReduxStoreState } from "modules/root";
 import {
   getTestCodeMarkup,
   TestCase,
@@ -52,11 +52,9 @@ import {
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
-import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
-
-import propSatisfies from "ramda/es/propSatisfies";
 import EditingToolbar from "./EditingToolbar";
 import NavigationOverlay from "./NavigationOverlay";
+import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
 
 /** ===========================================================================
  * Types & Config
