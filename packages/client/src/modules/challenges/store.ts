@@ -1,7 +1,8 @@
 import { createReducer } from "typesafe-actions";
 
+// import { CourseList } from "./types";
+import { CourseList } from "@prototype/common";
 import actions, { ActionTypes } from "./actions";
-import { CourseList } from "./types";
 
 /** ===========================================================================
  * App Store
