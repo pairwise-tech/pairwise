@@ -1,0 +1,14 @@
+{
+  "name": "mono-prototype",
+  "version": "0.0.0",
+  "description": "Mono Prototype",
+  "private": true,
+  "scripts": {
+    "client": "cd packages/client && yarn start",
+    "db": "cd packages/server && yarn db",
+    "server": "cd packages/client && yarn start:dev"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
