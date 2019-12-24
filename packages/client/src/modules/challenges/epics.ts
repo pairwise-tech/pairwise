@@ -92,8 +92,9 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
         if (ENV.DEV_MODE) {
           course = fetchCourseInDevelopment();
         } else {
-          const result = await axios.get("http://localhost:9000/challenges");
-          course = result.data;
+          // const result = await axios.get("http://localhost:9000/challenges");
+          // course = result.data;
+          course = fetchCourseInDevelopment();
         }
         return { result: course, error: null };
       } catch (err) {
