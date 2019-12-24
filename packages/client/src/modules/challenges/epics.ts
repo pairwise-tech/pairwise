@@ -1,4 +1,5 @@
 // import axios from "axios";
+import { Err, Ok, Result } from "@prototype/common";
 import { combineEpics } from "redux-observable";
 import {
   delay,
@@ -8,10 +9,8 @@ import {
   mergeMap,
   tap,
 } from "rxjs/operators";
-import { isActionOf } from "typesafe-actions";
-
-import { from } from "rxjs";
 import ENV from "tools/env";
+import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import {
@@ -78,19 +77,6 @@ const createInverseChallengeMapping = (
   return result;
 };
 
-interface Ok<T> {
-  result: T;
-  error?: undefined;
-}
-
-interface Err<E> {
-  error: E;
-  result?: undefined;
-}
-
-/* Useful, not? I like it (?) */
-type Result<T, E> = Ok<T> | Err<E>;
-
 /**
  * Can also initialize the challenge id from the url to load the first
  * challenge.
@@ -109,14 +95,12 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
           course = fetchCourseInDevelopment();
         }
 
-        const result: Ok<Course> = { result: course };
-        return result;
+        return new Ok(course);
       } catch (err) {
-        const result: Err<string> = { error: err.message };
-        return result;
+        return new Err(err);
       }
     }),
-    mergeMap((data: Result<Course, string>) => {
+    mergeMap((data: Result<Course, Error>) => {
       const { result, error } = data;
       if (result && !error) {
         const course = result;
@@ -133,7 +117,7 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
           ? challengeExists.id
           : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
 
-        return from([
+        return [
           Actions.storeInverseChallengeMapping(challengeMap),
           Actions.fetchCurrentActiveCourseSuccess({
             courses: [course],
@@ -141,9 +125,9 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
             currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
             currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
           }),
-        ]);
+        ];
       } else {
-        return from([Actions.fetchCurrentActiveCourseFailure()]);
+        return [Actions.fetchCurrentActiveCourseFailure()];
       }
     }),
   );

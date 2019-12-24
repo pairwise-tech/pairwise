@@ -1,6 +1,9 @@
 import { History } from "history";
 import { combineReducers } from "redux";
 import { combineEpics, Epic } from "redux-observable";
+import { Observable } from "rxjs";
+import { fromFetch } from "rxjs/fetch";
+import { map, switchMap } from "rxjs/operators";
 import { CourseList } from "./challenges/types";
 
 /** ===========================================================================
@@ -8,9 +11,6 @@ import { CourseList } from "./challenges/types";
  * ============================================================================
  */
 
-import { Observable, of } from "rxjs";
-import { fromFetch } from "rxjs/fetch";
-import { catchError, map, switchMap } from "rxjs/operators";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
 import Challenges, {

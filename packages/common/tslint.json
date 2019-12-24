@@ -14,6 +14,7 @@
     "arrow-parens": false,
     "no-console": [false],
     "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "max-classes-per-file": false,
     "object-literal-sort-keys": false
   },
   "rulesDirectory": []

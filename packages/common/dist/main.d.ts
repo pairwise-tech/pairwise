@@ -1,4 +1,5 @@
 export * from "./types/courses";
+export * from "./types/result";
 declare const Courses: {
     FullstackTypeScript: {
         "id": string;
