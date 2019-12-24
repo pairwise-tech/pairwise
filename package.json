@@ -4,7 +4,7 @@
   "description": "Mono Prototype",
   "private": true,
   "scripts": {
-    "client": "cd packages/client && yarn start",
+    "client": "cd packages/client && yarn start:run",
     "client:dev": "cd packages/client && yarn start:dev",
     "db": "cd packages/server && yarn db",
     "setup": "cd  packages/server && yarn setup",
