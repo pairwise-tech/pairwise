@@ -1,5 +1,13 @@
+import axios from "axios";
 import { combineEpics } from "redux-observable";
-import { delay, filter, ignoreElements, map, tap } from "rxjs/operators";
+import {
+  delay,
+  filter,
+  ignoreElements,
+  map,
+  mergeMap,
+  tap,
+} from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
 import { EpicSignature } from "../root";
@@ -36,7 +44,7 @@ const getAllChallengesInCourse = (course: Course): ChallengeList => {
 const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
-    map(() => {
+    mergeMap(async () => {
       /* Ok ... */
       const maybeId = deps.router.location.pathname.replace("/workspace/", "");
       const challenges = getAllChallengesInCourse(FullstackTypeScriptCourse);
@@ -45,14 +53,18 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
         ? challengeExists.id
         : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
 
-      /* API to fetch the current active course data ~ */
-      const course = FullstackTypeScriptCourse;
-      return Actions.fetchCurrentActiveCourseSuccess({
-        courses: [course],
-        currentChallengeId: challengeId,
-        currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
-        currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
-      });
+      try {
+        const result = await axios.get("http://localhost:9000/challenges");
+
+        return Actions.fetchCurrentActiveCourseSuccess({
+          courses: [result.data],
+          currentChallengeId: challengeId,
+          currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
+          currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
+        });
+      } catch (err) {
+        return Actions.fetchCurrentActiveCourseFailure();
+      }
     }),
   );
 };

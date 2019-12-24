@@ -15,6 +15,7 @@ enum ActionTypesEnum {
 
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
   FETCH_CURRENT_ACTIVE_COURSE_SUCCESS = "FETCH_CURRENT_ACTIVE_COURSE_SUCCESS",
+  FETCH_CURRENT_ACTIVE_COURSE_FAILURE = "FETCH_CURRENT_ACTIVE_COURSE_FAILURE",
 }
 
 /** ===========================================================================
@@ -45,12 +46,17 @@ const fetchCurrentActiveCourseSuccess = createAction(
   currentChallengeId: string;
 }>();
 
+const fetchCurrentActiveCourseFailure = createAction(
+  ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_FAILURE,
+)();
+
 const actions = {
   setChallengeId,
   setNavigationMapState,
   setWorkspaceChallengeLoaded,
   fetchNavigationSkeletonSuccess,
   fetchCurrentActiveCourseSuccess,
+  fetchCurrentActiveCourseFailure,
 };
 
 /** ===========================================================================
