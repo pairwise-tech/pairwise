@@ -38,7 +38,7 @@ $ yarn install
 
 ```bash
 # Create environment variables file
-$ yarn setup
+$ yarn setup:env
 ```
 
 ## Running the App
@@ -48,6 +48,9 @@ First, run Postgres with Docker (You will need Docker installed):
 ```bash
 # Start Postgres with: docker-compose up
 $ yarn db
+
+# Run database migrations
+$ yarn setup:db
 ```
 
 ```bash

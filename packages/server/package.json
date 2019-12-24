@@ -8,7 +8,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "setup": "cp sample.env .env",
+    "setup:env": "cp sample.env .env",
+    "setup:db": "yarn build && yarn migration:run",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",

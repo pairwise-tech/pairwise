@@ -8,11 +8,11 @@ To run everything, follow these steps:
 # Run the setup with Lerna
 $ lerna bootstrap
 
-# Setup server environment variables
-$ yarn setup
-
 # Start the database (requires Docker)
 $ yarn db
+
+# Run server setup (environment variables and database migrations)
+$ yarn server:setup
 
 # Start the server
 $ yarn server
