@@ -9,11 +9,17 @@ import SkipPrevious from "@material-ui/icons/SkipPrevious";
 import { monaco } from "@monaco-editor/react";
 import { Console, Decode } from "console-feed";
 import { pipe } from "ramda";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
+import Markdown from "react-markdown";
 import { connect } from "react-redux";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
+
+// Import TSX SyntaxHighlightWorker:
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
 import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -48,10 +54,8 @@ import {
 } from "../tools/utils";
 import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
 
-// Import TSX SyntaxHighlightWorker:
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
+import propSatisfies from "ramda/es/propSatisfies";
+import EditingToolbar from "./EditingToolbar";
 import NavigationOverlay from "./NavigationOverlay";
 
 /** ===========================================================================
@@ -95,6 +99,35 @@ interface IState {
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
+
+const NavIconButton = styled(props => (
+  <IconButton aria-label="Open navigaton map" {...props}>
+    <Menu />
+  </IconButton>
+))`
+  color: white;
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+`;
+
+const StyledMarkdown = styled(Markdown)`
+  color: white;
+  line-height: 1.5;
+  font-size: 1.2rem;
+
+  code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1px 3px;
+    display: inline;
+    /* color: #ff4788; */
+    color: rgb(0, 255, 185);
+    border-radius: 3px;
+    line-height: normal;
+    font-size: 85%;
+  }
+`;
 
 /** ===========================================================================
  * React Component
@@ -378,25 +411,26 @@ class Workspace extends React.Component<IProps, IState> {
       <Container>
         <PageSection>
           <Header>
-            <ControlsContainer>
-              <IconButton
+            <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
+              <NavIconButton
                 style={{ color: "white", marginRight: 40 }}
-                aria-label="Open navigaton map"
                 onClick={this.toggleNavigationMap}
-              >
-                <Menu />
-              </IconButton>
+              />
               <h1
                 style={{
                   fontWeight: 100,
                   color: "white",
                   fontFamily: `'Helvetica Neue', Lato, sans-serif`,
+                  margin: 0,
                 }}
               >
                 Prototype X
               </h1>
             </ControlsContainer>
             <ControlsContainer>
+              <EditingToolbar />
+            </ControlsContainer>
+            <ControlsContainer style={{ marginLeft: "auto" }}>
               {prev && (
                 <StyledTooltip title="Previous Challenge">
                   <IconButton
@@ -448,9 +482,7 @@ class Workspace extends React.Component<IProps, IState> {
                       style={{ background: C.BACKGROUND_CONTENT }}
                     >
                       <ContentContainer>
-                        <ContentTitle>{challenge.title}</ContentTitle>
-                        <ContentText>{challenge.content}</ContentText>
-                        <Spacer height={25} />
+                        <ContentViewEdit />
                       </ContentContainer>
                     </Row>
                     <Row
@@ -908,7 +940,7 @@ const BORDER = 2;
 const Header = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   position: relative;
   padding-top: ${BORDER}px;
@@ -1091,27 +1123,6 @@ const OverlayLoadingText = styled.p`
   color: ${COLORS.PRIMARY_BLUE};
 `;
 
-interface YoutubeEmbedProps {
-  url: string;
-}
-
-/**
- * Copied the iframe props form the share sheet on youtube.
- */
-const YoutubeEmbed = (props: YoutubeEmbedProps) => {
-  return (
-    <iframe
-      title="Youtube Embed"
-      width={728}
-      height={410}
-      src={props.url}
-      frameBorder="0"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    ></iframe>
-  );
-};
-
 // const UpperRight = styled.div`
 //   position: absolute;
 //   z-index: 2;
@@ -1212,3 +1223,134 @@ class WorkspaceLoadingContainer extends React.Component<
 export default composeWithProps<ComponentProps>(withProps)(
   WorkspaceLoadingContainer,
 );
+
+const TitleInput = styled.input`
+  outline: none;
+  appearance: none;
+  border: none;
+  font-size: 1.2em;
+  background: transparent;
+  font-weight: bold;
+  color: rgb(200, 200, 200);
+  display: block;
+  width: 100%;
+  line-height: 1.5;
+  transition: all 0.2s ease-out;
+  &:focus {
+    background: black;
+  }
+`;
+
+const ContentInput = styled.textarea`
+  outline: none;
+  appearance: none;
+  border: none;
+  font-size: 1.2em;
+  background: transparent;
+  display: block;
+  color: white;
+  height: 100%;
+  width: 100%;
+  line-height: 1.5;
+  transition: all 0.2s ease-out;
+  &:focus {
+    background: black;
+  }
+`;
+
+const contentMapState = (state: ReduxStoreState) => ({
+  content: Modules.selectors.challenges.getCurrentContent(state) || "",
+  title: Modules.selectors.challenges.getCurrentTitle(state) || "",
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
+});
+
+const contentMapDispatch = {
+  setContent: (x: string) => ({ type: "fake/CONTENT!", payload: x }),
+  setTitle: (x: string) => ({ type: "fake/TITLE", payload: x }),
+};
+
+type ContentViewEditProps = ReturnType<typeof contentMapState> &
+  typeof contentMapDispatch;
+
+const ContentViewEdit = connect(
+  contentMapState,
+  contentMapDispatch,
+)((props: ContentViewEditProps) => {
+  const { isEditMode } = props;
+  const handleChange = (fn: (x: string) => any) => (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    fn(e.target.value);
+  };
+
+  return (
+    <div style={{ height: "100%" }}>
+      <TitleInput
+        type="text"
+        value={props.title}
+        onChange={handleChange(props.setTitle)}
+        disabled={!isEditMode}
+      />
+      {isEditMode ? (
+        <ContentInput
+          value={props.content}
+          onChange={handleChange(props.setContent)}
+        />
+      ) : (
+        <StyledMarkdown source={props.content} />
+      )}
+    </div>
+  );
+});
+
+interface YoutubeEmbedProps {
+  url: string;
+}
+
+/**
+ * Copied the iframe props form the share sheet on youtube.
+ *
+ * NOTE: This iframe can be hidden for ease of development. If not actively
+ * developing video-related features, loading a youtube iframe causes all sorts
+ * of network traffic which both slows down page loads (a big pain in dev) and
+ * clutters up the network panel with a bunch of requests we're not interested
+ * in.
+ */
+const YoutubeEmbed = (props: YoutubeEmbedProps) => {
+  const width = 728;
+  const height = 410;
+
+  if (process.env.REACT_APP_HIDE_EMBEDS) {
+    return (
+      <div
+        style={{
+          width,
+          height,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#999",
+        }}
+      >
+        <h3 style={{ textTransform: "uppercase" }}>Embed Hidden</h3>
+        <p>
+          Restart the app without <code>REACT_APP_HIDE_EMBEDS</code> to view
+          embeds
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <iframe
+      title="Youtube Embed"
+      width={width}
+      height={height}
+      src={props.url}
+      frameBorder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    ></iframe>
+  );
+};

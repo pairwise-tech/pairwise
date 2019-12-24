@@ -2,6 +2,7 @@ import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 
 import { ReduxStoreState } from "modules/root";
+import prop from "ramda/es/prop";
 import { CourseList } from "./types";
 
 /** ===========================================================================
@@ -14,6 +15,8 @@ export const challengesState = (state: ReduxStoreState) => {
 };
 
 export const challengesSelector = createSelector([challengesState], identity);
+
+export const isEditMode = createSelector([challengesState], prop("isEditMode"));
 
 export const navigationOverlayVisible = createSelector(
   [challengesState],
@@ -43,28 +46,23 @@ const findCourseById = (courseId: string, courses: CourseList) => {
  */
 export const currentChallengeSelector = createSelector(
   [challengesState],
-  challenges => {
-    const { currentCourseId, currentChallengeId } = challenges;
-
-    if (currentCourseId && currentChallengeId && challenges.courses) {
-      const challengeList = findCourseById(
-        currentChallengeId,
-        challenges.courses,
-      );
-
-      if (challengeList) {
-        const challenge = challengeList.modules.find(
-          c => c.id === currentChallengeId,
-        );
-
-        if (challenge) {
-          return challenge;
-        }
-      }
-    }
-
-    return null;
+  state => {
+    const { currentCourseId, currentChallengeId, currentModuleId } = state;
+    return state.courses
+      ?.find(x => x.id === currentCourseId)
+      ?.modules?.find(x => x.id === currentModuleId)
+      ?.challenges?.find(x => x.id === currentChallengeId);
   },
+);
+
+export const getCurrentTitle = createSelector(
+  [currentChallengeSelector],
+  challenge => (challenge ? challenge.title : null),
+);
+
+export const getCurrentContent = createSelector(
+  [currentChallengeSelector],
+  challenge => (challenge ? challenge.content : null),
 );
 
 /**
@@ -128,12 +126,14 @@ export const nextPrevChallenges = createSelector(
  * ============================================================================
  */
 
-export default {
-  courseList,
-  challengesSelector,
-  nextPrevChallenges,
-  navigationOverlayVisible,
-  workspaceLoadingSelector,
-  currentChallengeSelector,
-  firstUnfinishedChallenge,
-};
+// export default {
+//   getCurrentContent,
+//   isEditMode,
+//   courseList,
+//   challengesSelector,
+//   nextPrevChallenges,
+//   navigationOverlayVisible,
+//   workspaceLoadingSelector,
+//   currentChallengeSelector,
+//   firstUnfinishedChallenge,
+// };

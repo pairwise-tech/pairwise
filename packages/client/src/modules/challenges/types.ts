@@ -8,7 +8,7 @@
  * ============================================================================
  */
 
-export type CourseList = ReadonlyArray<Course>;
+export type CourseList = readonly Course[];
 
 export interface Course {
   id: string;
@@ -22,7 +22,7 @@ export interface Module {
   challenges: ChallengeList;
 }
 
-export type ModuleList = ReadonlyArray<Module>;
+export type ModuleList = readonly Module[];
 
 export interface Challenges {
   id: string;
@@ -30,7 +30,7 @@ export interface Challenges {
   title: string;
 }
 
-export type ChallengeList = ReadonlyArray<Challenge>;
+export type ChallengeList = readonly Challenge[];
 
 export interface Challenge {
   type: CHALLENGE_TYPE;
@@ -42,6 +42,13 @@ export interface Challenge {
   starterCode: string;
   solutionCode: string;
   supplementaryContent: string;
+}
+
+export interface InverseChallengeMapping {
+  [k: string]: {
+    courseId: string;
+    moduleId: string;
+  };
 }
 
 export type CHALLENGE_TYPE = "react" | "typescript" | "markup";

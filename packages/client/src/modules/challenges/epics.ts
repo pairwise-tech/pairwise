@@ -10,10 +10,16 @@ import {
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
+import { from } from "rxjs";
 import ENV from "tools/env";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import { ChallengeList, Course } from "./types";
+import {
+  ChallengeList,
+  Course,
+  CourseList,
+  InverseChallengeMapping,
+} from "./types";
 
 /** ===========================================================================
  * Epics
@@ -40,6 +46,38 @@ const getAllChallengesInCourse = (course: Course): ChallengeList => {
   return challenges;
 };
 
+const createInverseChallengeMapping = (
+  courses: CourseList,
+): InverseChallengeMapping => {
+  const result = courses.reduce((challengeMap, c) => {
+    const courseId = c.id;
+    const cx = c.modules.reduce((courseChallengeMap, m) => {
+      const moduleId = m.id;
+      const mx = m.challenges.reduce((moduleChallengeMap, challenge) => {
+        return {
+          ...moduleChallengeMap,
+          [challenge.id]: {
+            moduleId,
+            courseId,
+          },
+        };
+      }, {});
+
+      return {
+        ...courseChallengeMap,
+        ...mx,
+      };
+    }, {});
+
+    return {
+      ...challengeMap,
+      ...cx,
+    };
+  }, {});
+
+  return result;
+};
+
 /**
  * Can also initialize the challenge id from the url to load the first
  * challenge.
@@ -63,6 +101,8 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
           "/workspace/",
           "",
         );
+
+        // const challengeMap = createInverseChallengeMapping([course]);
         const challenges = getAllChallengesInCourse(course);
         const challengeExists = challenges.find(c => c.id === maybeId);
         const challengeId = challengeExists
@@ -75,6 +115,16 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
           currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
           currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
         });
+
+        // return from([
+        //   Actions.storeInverseChallengeMapping(challengeMap),
+        //   Actions.fetchCurrentActiveCourseSuccess({
+        //     courses: [course],
+        //     currentChallengeId: challengeId,
+        //     currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
+        //     currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
+        //   }),
+        // ]);
       } catch (err) {
         return Actions.fetchCurrentActiveCourseFailure();
       }

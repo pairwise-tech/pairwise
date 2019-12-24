@@ -1,6 +1,6 @@
 import { ActionType, createAction } from "typesafe-actions";
 
-import { CourseList } from "./types";
+import { CourseList, InverseChallengeMapping } from "./types";
 
 /** ===========================================================================
  * Action Types
@@ -16,12 +16,18 @@ enum ActionTypesEnum {
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
   FETCH_CURRENT_ACTIVE_COURSE_SUCCESS = "FETCH_CURRENT_ACTIVE_COURSE_SUCCESS",
   FETCH_CURRENT_ACTIVE_COURSE_FAILURE = "FETCH_CURRENT_ACTIVE_COURSE_FAILURE",
+
+  SET_EDIT_MODE = "SET_EDIT_MODE",
+
+  STORE_INVERSE_CHALLENGE_MAP = "STORE_INVERSE_CHALLENGE_MAP",
 }
 
 /** ===========================================================================
  * Actions
  * ============================================================================
  */
+
+const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<boolean>();
 
 const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<string>();
 
@@ -50,7 +56,13 @@ const fetchCurrentActiveCourseFailure = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_FAILURE,
 )();
 
+const storeInverseChallengeMapping = createAction(
+  ActionTypesEnum.STORE_INVERSE_CHALLENGE_MAP,
+)<InverseChallengeMapping>();
+
 const actions = {
+  storeInverseChallengeMapping,
+  setEditMode,
   setChallengeId,
   setNavigationMapState,
   setWorkspaceChallengeLoaded,

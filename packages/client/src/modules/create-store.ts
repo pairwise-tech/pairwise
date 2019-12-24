@@ -5,7 +5,13 @@ import { createLogger } from "redux-logger";
 import { createEpicMiddleware } from "redux-observable";
 
 import ENV from "../tools/env";
-import { EpicDependencies, rootEpic, rootReducer } from "./root";
+import {
+  EpicDependencies,
+  makeCourseApi,
+  Modules,
+  rootEpic,
+  rootReducer,
+} from "./root";
 
 /** ===========================================================================
  * Logger
@@ -45,6 +51,7 @@ const history = createBrowserHistory();
 
 const dependencies: EpicDependencies = {
   router: history,
+  course: makeCourseApi("http://localhost:3001"),
 };
 
 const epicMiddleware = createEpicMiddleware({
@@ -80,6 +87,18 @@ const store = configureStore();
  * Export
  * ============================================================================
  */
+
+/**
+ * Meant for dev mode, to manually dispatch actions via the CLI
+ */
+export const exposeGlobals = () => {
+  // @ts-ignore
+  window.Modules = Modules;
+  // @ts-ignore
+  window.getState = store.getState;
+  // @ts-ignore
+  window.dispatch = store.dispatch;
+};
 
 export { history };
 

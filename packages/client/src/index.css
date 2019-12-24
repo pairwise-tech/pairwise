@@ -4,14 +4,18 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-  -webkit-font-smoothing: antialiased;
+
+  /* NOTE: This looks quite bad on non-retina displays. It makes the text overly light and hard to read */
+  /* -webkit-font-smoothing: antialiased; */
+  -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: grayscale;
 
   background: #13141d;
   overflow-x: hidden;
 }
 
-code {
+code,
+pre {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }

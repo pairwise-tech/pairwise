@@ -1,12 +1,16 @@
 import { History } from "history";
 import { combineReducers } from "redux";
 import { combineEpics, Epic } from "redux-observable";
+import { CourseList } from "./challenges/types";
 
 /** ===========================================================================
  * Import Redux Modules
  * ============================================================================
  */
 
+import { Observable, of } from "rxjs";
+import { fromFetch } from "rxjs/fetch";
+import { catchError, map, switchMap } from "rxjs/operators";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
 import Challenges, {
@@ -14,6 +18,25 @@ import Challenges, {
   ChallengesState,
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
+
+/** ===========================================================================
+ * Course / Challenge API
+ * ============================================================================
+ */
+interface CourseAPI {
+  getAll: () => Observable<CourseList>;
+}
+
+export const makeCourseApi = (endpoint: string): CourseAPI => {
+  return {
+    getAll: () => {
+      return fromFetch(`${endpoint}/courses`, { mode: "cors" }).pipe(
+        switchMap((response: any) => response.json()),
+        map((x: any) => x.data),
+      );
+    },
+  };
+};
 
 /** ===========================================================================
  * Root Actions and Selectors
@@ -40,7 +63,7 @@ export const actions = {
   challenges: Challenges.actions,
 };
 
-const Modules = {
+export const Modules = {
   selectors,
   actions,
 };
@@ -71,6 +94,7 @@ const rootReducer = combineReducers({
 
 export interface EpicDependencies {
   router: History<any>;
+  course: CourseAPI;
 }
 
 export type EpicSignature = Epic<

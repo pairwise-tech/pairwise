@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
