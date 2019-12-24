@@ -7,8 +7,8 @@
     "client": "cd packages/client && yarn start",
     "client:dev": "cd packages/client && yarn start:dev",
     "db": "cd packages/server && yarn db",
-    "server": "cd packages/client && yarn start:dev",
-    "server:dev": "cd packages/client && yarn start:dev"
+    "server": "cd packages/server && yarn start",
+    "server:dev": "cd packages/server && yarn start:dev"
   },
   "workspaces": [
     "packages/*"

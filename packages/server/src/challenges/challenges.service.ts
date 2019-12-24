@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 
-import FullstackTypeScriptCourseJSON from "../../../courses/01_programming_fundamental.json";
+import Courses from "@prototype/common";
 
 @Injectable()
 export class ChallengesService {
   fetchCourses() {
-    return FullstackTypeScriptCourseJSON;
+    return Courses.FullstackTypeScript;
   }
 }
