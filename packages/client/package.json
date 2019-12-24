@@ -6,8 +6,8 @@
   "scripts": {
     "devserver": "tsc --lib esnext scripts/*.ts --esModuleInterop -w & nodemon ./scripts/dev-server.js",
     "start": "yarn run devserver & REACT_APP_HIDE_EMBEDS=0 HTTPS=true react-scripts start",
-    "start:dev": "HTTPS=true REACT_APP_DEV=true react-scripts start",
-    "start:run": "HTTPS=true react-scripts start",
+    "start:dev": "REACT_APP_HIDE_EMBEDS=0 REACT_APP_DEV=true react-scripts start",
+    "start:https": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "postbuild": "cp _redirects build/",
     "jest": "react-scripts test",
