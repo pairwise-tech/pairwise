@@ -1,7 +1,6 @@
-import axios from "axios";
+// import axios from "axios";
 import { combineEpics } from "redux-observable";
 import {
-  catchError,
   delay,
   filter,
   ignoreElements,
