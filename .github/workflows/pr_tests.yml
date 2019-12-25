@@ -1,0 +1,22 @@
+name: Pull Request Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - name: Run test suites for all projects
+        run: |
+          npx lerna bootstrap
+          npx lerna run test
+        env:
+          CI: true
