@@ -1,21 +1,12 @@
-#!/usr/bin/env node
-
-// const http = require("http");
-// const cors = require("cors");
-// const express = require("express");
-// const path = require("path");
-// const fs = require("fs");
-// const bodyParser = require("body-parser");
-// const morgan = require("morgan");
-// const util = require("util");
 import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import * as fs from "fs";
-import { createServer } from "http";
 import morgan from "morgan";
 import * as path from "path";
 import { promisify } from "util";
+
+const debug = require("debug")("codepress:app");
 
 const readdir = promisify(fs.readdir);
 const readFile = promisify(fs.readFile);
@@ -29,7 +20,7 @@ const makeCache = data => {
   }, {});
 };
 
-class Course {
+class CourseAPI {
   basedir: string;
   cache: any;
   filepaths: { [k: string]: string };
@@ -41,6 +32,8 @@ class Course {
 
     // Where the course files are saved
     this.basedir = path.resolve(__dirname, basedir);
+
+    debug(`[INFO] Initialized with basedir: ${this.basedir}`);
 
     // A cache to hold on to data once read from disk... this is probably
     // premature optimization though so it might be removed later
@@ -81,7 +74,6 @@ class Course {
   };
 
   get = (id, options = {}) => {
-    debugger;
     return this.getAll(options).then(() => {
       return this.cache[id];
     });
@@ -89,7 +81,7 @@ class Course {
 }
 
 const api = {
-  courses: new Course("../src/challenges"),
+  courses: new CourseAPI("../../../common/src/courses"),
 };
 
 const app = express();
@@ -123,10 +115,4 @@ app.get("/", (req, res) => {
   });
 });
 
-const server = createServer(app);
-
-const PORT = process.env.SERVER_PORT || 3001;
-
-server.listen(PORT, () => {
-  console.log(`[INFO]: Dev server listening at http://localhost:${PORT}`);
-});
+export default app;

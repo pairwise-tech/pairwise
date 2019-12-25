@@ -4,9 +4,10 @@
   "description": "Mono Prototype",
   "private": true,
   "scripts": {
-    "client": "cd packages/client && yarn start:run",
+    "client": "cd packages/client && yarn start",
     "client:dev": "cd packages/client && yarn start:dev",
     "client:build": "cd packages/client && yarn build",
+    "client:codepress": "cd packages/client && yarn start:codepress",
     "common:build": "cd packages/common && yarn build",
     "common:watch": "cd packages/common && yarn watch",
     "db": "cd packages/server && yarn db",
