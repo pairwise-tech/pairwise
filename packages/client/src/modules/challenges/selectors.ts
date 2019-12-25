@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
-import { CourseList } from "./types";
+import { Challenge, CourseList } from "./types";
 
 /** ===========================================================================
  * Selectors
@@ -57,12 +57,17 @@ export const currentChallengeSelector = createSelector(
 
 export const getCurrentTitle = createSelector(
   [currentChallengeSelector],
-  challenge => (challenge ? challenge.title : null),
+  challenge => challenge?.title,
+);
+
+export const getCurrentId = createSelector(
+  [currentChallengeSelector],
+  challenge => challenge?.id,
 );
 
 export const getCurrentContent = createSelector(
   [currentChallengeSelector],
-  challenge => (challenge ? challenge.content : null),
+  challenge => challenge?.content,
 );
 
 /**

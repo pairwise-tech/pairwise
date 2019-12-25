@@ -1259,12 +1259,12 @@ const ContentInput = styled.textarea`
 const contentMapState = (state: ReduxStoreState) => ({
   content: Modules.selectors.challenges.getCurrentContent(state) || "",
   title: Modules.selectors.challenges.getCurrentTitle(state) || "",
+  currentId: Modules.selectors.challenges.getCurrentId(state) || "",
   isEditMode: Modules.selectors.challenges.isEditMode(state),
 });
 
 const contentMapDispatch = {
-  setContent: (x: string) => ({ type: "fake/CONTENT!", payload: x }),
-  setTitle: (x: string) => ({ type: "fake/TITLE", payload: x }),
+  updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
 type ContentViewEditProps = ReturnType<typeof contentMapState> &
@@ -1274,26 +1274,30 @@ const ContentViewEdit = connect(
   contentMapState,
   contentMapDispatch,
 )((props: ContentViewEditProps) => {
-  const { isEditMode } = props;
+  const { isEditMode, currentId } = props;
   const handleChange = (fn: (x: string) => any) => (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     fn(e.target.value);
   };
 
+  const handleTitle = handleChange(title =>
+    props.updateChallenge({ id: currentId, challenge: { title } }),
+  );
+  const handleContent = handleChange(content =>
+    props.updateChallenge({ id: currentId, challenge: { content } }),
+  );
+
   return (
     <div style={{ height: "100%" }}>
       <TitleInput
         type="text"
         value={props.title}
-        onChange={handleChange(props.setTitle)}
+        onChange={handleTitle}
         disabled={!isEditMode}
       />
       {isEditMode ? (
-        <ContentInput
-          value={props.content}
-          onChange={handleChange(props.setContent)}
-        />
+        <ContentInput value={props.content} onChange={handleContent} />
       ) : (
         <StyledMarkdown source={props.content} />
       )}

@@ -1,6 +1,6 @@
 import { ActionType, createAction } from "typesafe-actions";
 
-import { CourseList, InverseChallengeMapping } from "./types";
+import { Challenge, CourseList, InverseChallengeMapping } from "./types";
 
 /** ===========================================================================
  * Action Types
@@ -20,6 +20,10 @@ enum ActionTypesEnum {
   SET_EDIT_MODE = "SET_EDIT_MODE",
 
   STORE_INVERSE_CHALLENGE_MAP = "STORE_INVERSE_CHALLENGE_MAP",
+
+  CREATE_CHALLENGE = "CREATE_CHALLENGE",
+  UPDATE_CHALLENGE = "UPDATE_CHALLENGE",
+  REMOVE_CHALLENGE = "REMOVE_CHALLENGE",
 }
 
 /** ===========================================================================
@@ -60,7 +64,32 @@ const storeInverseChallengeMapping = createAction(
   ActionTypesEnum.STORE_INVERSE_CHALLENGE_MAP,
 )<InverseChallengeMapping>();
 
+interface ChallengeCreationPayload {
+  insertAt: number; // Index at which to insert this new challenge
+  challenge: Challenge;
+}
+
+interface ChallengeUpdatePayload {
+  id: string;
+  challenge: Partial<Challenge>;
+}
+
+const createChallenge = createAction(ActionTypesEnum.CREATE_CHALLENGE)<
+  ChallengeCreationPayload
+>();
+
+const updateChallenge = createAction(ActionTypesEnum.UPDATE_CHALLENGE)<
+  ChallengeUpdatePayload
+>();
+
+const removeChallenge = createAction(ActionTypesEnum.REMOVE_CHALLENGE)<
+  string
+>();
+
 const actions = {
+  createChallenge,
+  updateChallenge,
+  removeChallenge,
   storeInverseChallengeMapping,
   setEditMode,
   setChallengeId,
