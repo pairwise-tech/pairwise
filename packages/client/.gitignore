@@ -23,3 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 scripts/dev-server.js
 codepress/dist
+codepress/src/app.js
+codepress/src/index.js
+codepress/src/modules

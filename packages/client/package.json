@@ -4,8 +4,8 @@
   "description": "Prototype X",
   "private": true,
   "scripts": {
-    "codepress:build": "tsc --lib esnext --outDir codepress/dist --esModuleInterop --skipLibCheck codepress/src/*.ts",
-    "codepress:watch": "concurrently \"yarn run codepress:build -- -w\" \"nodemon ./codepress/dist/index.js\"",
+    "codepress:build": "tsc --lib esnext --esModuleInterop --skipLibCheck codepress/src/*.ts",
+    "codepress:watch": "concurrently \"yarn run codepress:build -- -w\" \"nodemon --inspect ./codepress/src/index.js\"",
     "start": "react-scripts start",
     "start:codepress": "concurrently \"yarn run codepress:watch\" \"REACT_APP_HIDE_EMBEDS=1 HTTPS=0 react-scripts start\"",
     "start:dev": "REACT_APP_HIDE_EMBEDS=0 REACT_APP_DEV=true react-scripts start",

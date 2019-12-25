@@ -122,7 +122,8 @@ app.get("/courses/:id", (req, res) => {
   });
 });
 
-app.post("/courses/:id", (req, res) => {
+app.post("/courses", (req, res) => {
+  debugger;
   api.courses.saveCourse(req.body as Course).then(() => {
     res.send({
       status: "OK",
