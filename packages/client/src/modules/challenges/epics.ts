@@ -199,6 +199,7 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
  */
 
 export default combineEpics(
+  saveCourse,
   setWorkspaceLoadedEpic,
   updateChallengeRouteId,
   challengeInitializationEpic,

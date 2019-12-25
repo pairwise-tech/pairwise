@@ -40,6 +40,10 @@ const findCourseById = (courseId: string, courses: CourseList) => {
   return course;
 };
 
+export const getCurrentCourse = createSelector([challengesState], state => {
+  return state.courses?.find(x => x.id === state.currentCourseId);
+});
+
 /**
  * Find an return the current selected challenge, if it exists. Return
  * null otherwise.

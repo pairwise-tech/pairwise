@@ -52,17 +52,27 @@ class CourseAPI {
   };
 
   saveCourse = (course: Course) => {
-    const filepath = this.filepaths[course.id];
+    return (
+      Promise.resolve(this.filepaths[course.id])
+        // @ts-ignore
+        .then((filepath: string | undefined) => {
+          return filepath || this.getAll();
+        })
+        .then(() => {
+          // At this point filepaths should not be empty
+          const filepath = this.filepaths[course.id];
+          const data = JSON.stringify(course, null, 2);
+
+          return writeFile(filepath, data, { encoding: "utf8" }).then(() => {
+            this.cache[course.id] = course;
+          });
+        })
+    );
 
     // Pretty stringify since we still look at the raw course file sometimes
-    const data = JSON.stringify(course, null, 2);
-
-    return writeFile(filepath, data, { encoding: "utf8" }).then(() => {
-      this.cache[course.id] = course;
-    });
   };
 
-  getAll = ({ useCache = true } = {}) => {
+  getAll = ({ useCache = false } = {}) => {
     if (this.cache && useCache) {
       return this.resolveFromCache();
     }
@@ -123,7 +133,6 @@ app.get("/courses/:id", (req, res) => {
 });
 
 app.post("/courses", (req, res) => {
-  debugger;
   api.courses.saveCourse(req.body as Course).then(() => {
     res.send({
       status: "OK",
