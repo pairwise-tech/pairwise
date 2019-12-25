@@ -6,10 +6,13 @@ import morgan from "morgan";
 import * as path from "path";
 import { promisify } from "util";
 
+import { Course } from "../../src/modules/challenges/types";
+
 const debug = require("debug")("codepress:app");
 
 const readdir = promisify(fs.readdir);
 const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 
 const makeCache = data => {
   return data.reduce((agg, x) => {
@@ -46,6 +49,17 @@ class CourseAPI {
 
   resolveFromCache = () => {
     return Promise.resolve(Object.values(this.cache));
+  };
+
+  saveCourse = (course: Course) => {
+    const filepath = this.filepaths[course.id];
+
+    // Pretty stringify since we still look at the raw course file sometimes
+    const data = JSON.stringify(course, null, 2);
+
+    return writeFile(filepath, data, { encoding: "utf8" }).then(() => {
+      this.cache[course.id] = course;
+    });
   };
 
   getAll = ({ useCache = true } = {}) => {
@@ -102,8 +116,17 @@ app.get("/courses", (req, res) => {
 app.get("/courses/:id", (req, res) => {
   api.courses.get(req.params.id).then(course => {
     res.send({
-      status: "ok",
+      status: "OK",
       data: course,
+    });
+  });
+});
+
+app.post("/courses/:id", (req, res) => {
+  api.courses.saveCourse(req.body as Course).then(() => {
+    res.send({
+      status: "OK",
+      data: null,
     });
   });
 });
