@@ -4,7 +4,7 @@ import { combineEpics, Epic } from "redux-observable";
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
-import { CourseList } from "./challenges/types";
+import { Course, CourseList } from "./challenges/types";
 
 /** ===========================================================================
  * Import Redux Modules
@@ -25,6 +25,7 @@ import User, { UserActionTypes, UserState } from "./user";
  */
 interface CourseAPI {
   getAll: () => Observable<CourseList>;
+  save: (c: Course) => Observable<any>;
 }
 
 export const makeCourseApi = (endpoint: string): CourseAPI => {
@@ -34,6 +35,16 @@ export const makeCourseApi = (endpoint: string): CourseAPI => {
         switchMap((response: any) => response.json()),
         map((x: any) => x.data),
       );
+    },
+    save: (c: Course) => {
+      return fromFetch(`${endpoint}/courses`, {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(c),
+      }).pipe(switchMap((response: any) => response.json()));
     },
   };
 };

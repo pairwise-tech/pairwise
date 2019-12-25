@@ -1,11 +1,15 @@
 // import axios from "axios";
 import { Err, Ok, Result } from "@prototype/common";
 import { combineEpics } from "redux-observable";
+import { of } from "rxjs";
+import { fromFetch } from "rxjs/fetch";
 import {
+  catchError,
   delay,
   filter,
   ignoreElements,
   map,
+  mapTo,
   mergeMap,
   tap,
 } from "rxjs/operators";
@@ -173,6 +177,19 @@ const setChallengeId: EpicSignature = action$ => {
       /* Do something here ~ */
     }),
     ignoreElements(),
+  );
+};
+
+const saveCourse: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.saveCourse)),
+    map(x => x.payload),
+    mergeMap(payload => {
+      return deps.course.save(payload).pipe(
+        map(Actions.saveCourseSuccess),
+        catchError(err => of(Actions.saveCourseFailure(err))),
+      );
+    }),
   );
 };
 

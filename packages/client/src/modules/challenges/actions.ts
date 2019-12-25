@@ -1,6 +1,11 @@
 import { ActionType, createAction } from "typesafe-actions";
 
-import { Challenge, CourseList, InverseChallengeMapping } from "./types";
+import {
+  Challenge,
+  Course,
+  CourseList,
+  InverseChallengeMapping,
+} from "./types";
 
 /** ===========================================================================
  * Action Types
@@ -20,6 +25,10 @@ enum ActionTypesEnum {
   SET_EDIT_MODE = "SET_EDIT_MODE",
 
   STORE_INVERSE_CHALLENGE_MAP = "STORE_INVERSE_CHALLENGE_MAP",
+
+  SAVE_COURSE = "SAVE_COURSE",
+  SAVE_COURSE_SUCCESS = "SAVE_COURSE_SUCCESS",
+  SAVE_COURSE_FAILURE = "SAVE_COURSE_FAILURE",
 
   CREATE_CHALLENGE = "CREATE_CHALLENGE",
   UPDATE_CHALLENGE = "UPDATE_CHALLENGE",
@@ -74,6 +83,12 @@ interface ChallengeUpdatePayload {
   challenge: Partial<Challenge>;
 }
 
+const saveCourse = createAction(ActionTypesEnum.SAVE_COURSE)<Course>();
+const saveCourseSuccess = createAction(ActionTypesEnum.SAVE_COURSE_SUCCESS)();
+const saveCourseFailure = createAction(ActionTypesEnum.SAVE_COURSE_FAILURE)<
+  any
+>();
+
 const createChallenge = createAction(ActionTypesEnum.CREATE_CHALLENGE)<
   ChallengeCreationPayload
 >();
@@ -87,6 +102,9 @@ const removeChallenge = createAction(ActionTypesEnum.REMOVE_CHALLENGE)<
 >();
 
 const actions = {
+  saveCourse,
+  saveCourseSuccess,
+  saveCourseFailure,
   createChallenge,
   updateChallenge,
   removeChallenge,
