@@ -100,10 +100,10 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
         return new Err(err);
       }
     }),
-    mergeMap((data: Result<Course, Error>) => {
-      const { result, error } = data;
-      if (result && !error) {
-        const course = result;
+    mergeMap((result: Result<Course, Error>) => {
+      const { value } = result;
+      if (value) {
+        const course = value;
         /* Ok ... */
         const maybeId = deps.router.location.pathname.replace(
           "/workspace/",

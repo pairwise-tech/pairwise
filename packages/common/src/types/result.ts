@@ -6,26 +6,26 @@
  */
 
 export interface IOk<T> {
-  result: T;
+  value: T;
   error?: undefined;
 }
 
 export interface IErr<E> {
   error: E;
-  result?: undefined;
+  value?: undefined;
 }
 
 export class Ok<T> implements IOk<T> {
-  result: T;
+  value: T;
   error = undefined;
 
-  constructor(result: T) {
-    this.result = result;
+  constructor(value: T) {
+    this.value = value;
   }
 }
 
 export class Err<E> implements IErr<E> {
-  result: undefined;
+  value: undefined;
   error: E;
 
   constructor(error: E) {
