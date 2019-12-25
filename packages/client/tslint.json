@@ -1,6 +1,6 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended", "tslint-immutable"],
+  "extends": ["tslint:recommended"],
   "jsRules": {},
   "rules": {
     "align": [true, "elements"],

@@ -72,7 +72,6 @@
     "throttle-debounce": "^2.1.0",
     "ts-morph": "^5.0.0",
     "tslint": "^5.20.1",
-    "tslint-immutable": "^6.0.1",
     "typesafe-actions": "^5.1.0",
     "typescript": "3.7.2",
     "workerize-loader": "^1.1.0"
