@@ -2,6 +2,7 @@ import { Button, FormControlLabel, Switch } from "@material-ui/core";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components/macro";
 
 const mapToolbarState = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
@@ -34,7 +35,7 @@ const EditingToolbar = connect(
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", alignItems: "center" }}>
       <FormControlLabel
         style={{ color: "white" }}
         control={
@@ -47,13 +48,21 @@ const EditingToolbar = connect(
         }
         label="Edit"
       />
-      {isEditMode && (
+      <SlideOut show={isEditMode}>
         <Button color="primary" onClick={handleSave}>
           Save
         </Button>
-      )}
+      </SlideOut>
     </div>
   );
 });
+
+const SlideOut = styled.div<{ show: boolean }>`
+  display: block;
+  transition: all 0.2s ease-out;
+  opacity: ${props => (props.show ? 1 : 0)};
+  pointer-events: ${props => (props.show ? "all" : "none")};
+  transform: ${props => (props.show ? "translateX(0)" : "translateX(-10px)")};
+`;
 
 export default EditingToolbar;
