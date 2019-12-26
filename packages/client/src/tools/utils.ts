@@ -81,7 +81,7 @@ export const getAccessTokenFromLocalStorage = () => {
  * Get the initial code for the editor, possibly from localStorage if
  * anything is saved there.
  */
-export const getStarterCodeForChallenge = (challenge: Challenge) => {
+export const getStoredCodeForChallenge = (challenge: Challenge) => {
   const challenges = getStoredChallenges();
   if (challenge.id in challenges) {
     return challenges[challenge.id];

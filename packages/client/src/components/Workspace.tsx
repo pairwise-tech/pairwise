@@ -47,7 +47,7 @@ import {
 import {
   assertUnreachable,
   composeWithProps,
-  getStarterCodeForChallenge,
+  getStoredCodeForChallenge,
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
@@ -94,6 +94,7 @@ interface IState {
   fullScreenEditor: boolean;
   tests: ReadonlyArray<TestCase>;
   monacoInitializationError: boolean;
+  adminEditorTab: "starterCode" | "solutionCode";
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
@@ -164,9 +165,22 @@ class Workspace extends React.Component<IProps, IState> {
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
-      code: getStarterCodeForChallenge(props.challenge),
+      adminEditorTab: "starterCode",
+      code: this.getEditorCode(),
     };
   }
+
+  getEditorCode = () => {
+    if (this.props.isEditMode) {
+      return this.props.challenge[this.state.adminEditorTab];
+    } else {
+      return getStoredCodeForChallenge(this.props.challenge);
+    }
+  };
+
+  updateEditorTab = () => {
+    this.setState({ code: this.getEditorCode() }, this.refreshEditor)
+  };
 
   async componentDidMount() {
     document.addEventListener("keydown", this.handleKeyPress);
@@ -194,18 +208,21 @@ class Workspace extends React.Component<IProps, IState> {
     );
   }
 
+  refreshEditor = () => {
+    this.unlockVerticalScrolling();
+    this.resetMonacoEditor();
+    this.setMonacoEditorValue();
+  };
+
   componentWillReceiveProps(nextProps: IProps) {
     if (this.props.challenge.id !== nextProps.challenge.id) {
       const { challenge } = nextProps;
       const tests = JSON.parse(challenge.testCode);
-      this.setState(
-        { code: getStarterCodeForChallenge(challenge), tests },
-        () => {
-          this.unlockVerticalScrolling();
-          this.resetMonacoEditor();
-          this.setMonacoEditorValue();
-        },
-      );
+      this.setState({ code: this.getEditorCode(), tests }, this.refreshEditor);
+    }
+
+    if (this.props.isEditMode !== nextProps.isEditMode) {
+      this.updateEditorTab()
     }
   }
 
@@ -379,8 +396,18 @@ class Workspace extends React.Component<IProps, IState> {
     const MONACO_CONTAINER = (
       <div style={{ height: "100%", position: "relative" }}>
         <TabbedInnerNav show={isEditMode}>
-          <Tab active>Starter Code</Tab>
-          <Tab>Solution</Tab>
+          <Tab
+            onClick={() => this.setState({ adminEditorTab: "starterCode" }, this.updateEditorTab)}
+            active={this.state.adminEditorTab === "starterCode"}
+          >
+            Starter Code
+          </Tab>
+          <Tab
+            onClick={() => this.setState({ adminEditorTab: "solutionCode" }, this.updateEditorTab)}
+            active={this.state.adminEditorTab === "solutionCode"}
+          >
+            Solution
+          </Tab>
         </TabbedInnerNav>
         <LowerRight
           style={{ right: 10, display: "flex", flexDirection: "column" }}
