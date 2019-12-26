@@ -18,6 +18,16 @@ export const challengesSelector = createSelector([challengesState], identity);
 
 export const isEditMode = createSelector([challengesState], prop("isEditMode"));
 
+export const getCurrentModuleId = createSelector(
+  [challengesState],
+  prop("currentModuleId"),
+);
+
+export const getCurrentChallengeId = createSelector(
+  [challengesState],
+  prop("currentChallengeId"),
+);
+
 export const navigationOverlayVisible = createSelector(
   [challengesState],
   challenges => challenges.displayNavigationMap,
@@ -43,6 +53,20 @@ const findCourseById = (courseId: string, courses: CourseList) => {
 export const getCurrentCourse = createSelector([challengesState], state => {
   return state.courses?.find(x => x.id === state.currentCourseId);
 });
+
+export const getCurrentModule = createSelector(
+  [getCurrentCourse, getCurrentModuleId],
+  (course, moduleId) => {
+    return course?.modules.find(x => x.id === moduleId);
+  },
+);
+
+export const getCurrentChallenge = createSelector(
+  [getCurrentModule, getCurrentChallengeId],
+  (m, challengeId) => {
+    return m?.challenges.find(x => x.id === challengeId);
+  },
+);
 
 /**
  * Find an return the current selected challenge, if it exists. Return

@@ -9,6 +9,7 @@ const COLORS = {
   PRIMARY_BLUE: "#2ee3ff",
   PRIMARY_GREEN: "rgb(0, 255, 185)",
   HEADER_BORDER: "#176191",
+  SEPARATOR_BORDER: "#404040",
   TEXT_HOVER: "rgb(245, 245, 245)",
   TEXT_TITLE: "rgb(200, 200, 200)",
   TEXT_CONTENT: "rgb(165, 165, 165)",
@@ -20,6 +21,8 @@ const COLORS = {
   BACKGROUND_CONSOLE: "rgb(36, 36, 36)",
   BACKGROUND_LOWER_SECTION: "rgb(30, 30, 30)",
   BACKGROUND_MODAL: "rgb(25, 25, 25)",
+  GRADIENT_GREEN:
+    "linear-gradient( 90deg, rgba(0, 255, 177, 1) 22%, rgba(0, 255, 211, 1) 74%)",
 };
 
 /** ===========================================================================

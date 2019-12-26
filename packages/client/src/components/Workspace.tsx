@@ -967,11 +967,7 @@ const Header = styled.div`
     left: 0;
     right: 0;
     height: ${BORDER}px;
-    background: linear-gradient(
-      90deg,
-      rgba(0, 255, 177, 1) 22%,
-      rgba(0, 255, 211, 1) 74%
-    );
+    background: ${COLORS.GRADIENT_GREEN};
   }
 `;
 
