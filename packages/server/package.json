@@ -1,13 +1,12 @@
 {
   "name": "@prototype/server",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "license": "MIT",
+  "description": "Prototype X Server Project: NestJS Application",
   "private": true,
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "build:watch": "nest build --watch",
     "setup:env": "cp sample.env .env",
     "setup:db": "yarn build && yarn migration:run",
     "start": "nest start",
@@ -20,12 +19,13 @@
     "tslint": "tslint --project tsconfig.json -c tslint.json",
     "tslint:fix": "tslint --project tsconfig.json -c tslint.json --fix",
     "format": "yarn prettier:fix && yarn tslint:fix",
+    "lint": "yarn prettier && yarn tslint",
     "test:unit": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test": "yarn format && yarn test:unit",
+    "test": "yarn lint && yarn test:unit",
     "typeorm": "ts-node -r tsconfig-paths/register ../../node_modules/typeorm/cli.js",
     "migration:generate": "yarn typeorm migration:generate -n",
     "migration:create": "yarn typeorm migration:create -n",
@@ -34,7 +34,8 @@
     "migration:revert": "yarn typeorm migration:revert",
     "schema:drop": "yarn typeorm schema:drop",
     "schema:sync": "yarn typeorm schema:sync",
-    "schema:log": "yarn typeorm schema:log"
+    "schema:log": "yarn typeorm schema:log",
+    "db:reset": "yarn schema:drop && rm -rf src/migrations && mkdir src/migrations"
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",
@@ -42,13 +43,16 @@
     "@nestjs/core": "^6.7.2",
     "@nestjs/passport": "^6.1.1",
     "@nestjs/platform-express": "^6.7.2",
+    "@nestjs/swagger": "^4.0.9",
     "@nestjs/typeorm": "^6.2.0",
+    "class-validator": "^0.11.0",
     "passport": "^0.4.1",
     "passport-facebook-token": "^3.3.0",
     "pg": "^7.15.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",
+    "swagger-ui-express": "^4.1.2",
     "typeorm": "^0.2.21"
   },
   "devDependencies": {

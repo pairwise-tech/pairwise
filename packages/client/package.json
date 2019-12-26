@@ -1,7 +1,7 @@
 {
   "name": "@prototype/client",
-  "version": "0.1.0",
-  "description": "Prototype X",
+  "version": "0.0.1",
+  "description": "Prototype X Client Project: Create React App Application",
   "private": true,
   "scripts": {
     "codepress:build": "tsc --lib esnext --esModuleInterop --skipLibCheck codepress/src/*.ts",
@@ -24,8 +24,7 @@
     "test:unit": "yarn jest --watchAll=false",
     "test:update-snapshots": "yarn jest --updateSnapshot",
     "lint": "yarn prettier && yarn tslint && yarn tsc",
-    "test": "yarn lint && yarn test:unit",
-    "deploy": "yarn test && yarn build"
+    "test": "yarn lint && yarn test:unit"
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.7.5",
@@ -76,6 +75,14 @@
     "typescript": "3.7.2",
     "workerize-loader": "^1.1.0"
   },
+  "devDependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "nodemon": "^2.0.2",
+    "lerna": "^3.19.0"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -95,14 +102,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "lerna": "^3.19.0",
-    "morgan": "^1.9.1",
-    "nodemon": "^2.0.2"
   },
   "proxy": "http://localhost:9000"
 }

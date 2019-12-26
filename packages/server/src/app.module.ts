@@ -9,6 +9,7 @@ import { UsersModule } from "./user/user.module";
 import { UserService } from "./user/user.service";
 import { ChallengesModule } from "./challenges/challenges.module";
 import { ChallengesController } from "./challenges/challenges.controller";
+import { ProgressModule } from "./progress/progress.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ChallengesController } from "./challenges/challenges.controller";
     AuthModule,
     UsersModule,
     ChallengesModule,
+    ProgressModule,
   ],
   controllers: [AppController, ChallengesController],
   providers: [AppService, UserService],

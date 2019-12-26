@@ -16,7 +16,6 @@ import { Console, Decode } from "console-feed";
 import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
 import { pipe } from "ramda";
-import propSatisfies from "ramda/es/propSatisfies";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import Markdown from "react-markdown";

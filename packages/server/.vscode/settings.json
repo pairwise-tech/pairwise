@@ -1,7 +1,0 @@
-{
-  "editor.rulers": [80],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.tslint": true
-  },
-  "editor.formatOnSave": true
-}

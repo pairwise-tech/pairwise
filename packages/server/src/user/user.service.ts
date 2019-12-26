@@ -3,6 +3,7 @@ import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FacebookProfile } from "src/auth/facebook.strategy";
+import { UserCourseProgress } from "../progress/userCourseProgress.entity";
 
 @Injectable()
 export class UserService {

@@ -13,6 +13,7 @@
     "interface-name": [false],
     "arrow-parens": false,
     "no-console": [false],
+    "max-classes-per-file": false,
     "semicolon": [true, "always", "ignore-bound-class-methods"],
     "object-literal-sort-keys": false
   },

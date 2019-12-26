@@ -1,19 +1,20 @@
 {
   "name": "mono-prototype",
-  "version": "0.0.0",
-  "description": "Mono Prototype",
+  "version": "0.0.1",
+  "description": "Prototype X Lerna Monorepo",
   "private": true,
   "scripts": {
-    "client": "cd packages/client && yarn start",
+    "common:build": "cd packages/common && yarn build",
+    "common:watch": "cd packages/common && yarn watch",
+    "client": "cd packages/client && yarn start:run",
     "client:dev": "cd packages/client && yarn start:dev",
     "client:build": "cd packages/client && yarn build",
     "client:codepress": "cd packages/client && yarn start:codepress",
-    "common:build": "cd packages/common && yarn build",
-    "common:watch": "cd packages/common && yarn watch",
     "db": "cd packages/server && yarn db",
     "server:setup": "cd packages/server && yarn setup:env && yarn setup:db",
     "server": "cd packages/server && yarn start",
-    "server:dev": "cd packages/server && yarn start:dev"
+    "server:dev": "cd packages/server && yarn start:dev",
+    "test": "lerna run test"
   },
   "workspaces": [
     "packages/*"
