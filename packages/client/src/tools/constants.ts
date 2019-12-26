@@ -7,6 +7,7 @@ const COLORS = {
   SUCCESS: "#2ee3ff",
   FAILURE: "#fc426d",
   PRIMARY_BLUE: "#2ee3ff",
+  PRIMARY_GREEN: "rgb(0, 255, 185)",
   HEADER_BORDER: "#176191",
   TEXT_HOVER: "rgb(245, 245, 245)",
   TEXT_TITLE: "rgb(200, 200, 200)",

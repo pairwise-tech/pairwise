@@ -365,7 +365,12 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { fullScreenEditor, tests } = this.state;
-    const { challenge, overlayVisible, nextPrevChallenges } = this.props;
+    const {
+      challenge,
+      overlayVisible,
+      nextPrevChallenges,
+      isEditMode,
+    } = this.props;
     const { next, prev } = nextPrevChallenges;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
@@ -373,6 +378,10 @@ class Workspace extends React.Component<IProps, IState> {
 
     const MONACO_CONTAINER = (
       <div style={{ height: "100%", position: "relative" }}>
+        <TabbedInnerNav show={isEditMode}>
+          <Tab active>Starter Code</Tab>
+          <Tab>Solution</Tab>
+        </TabbedInnerNav>
         <LowerRight
           style={{ right: 10, display: "flex", flexDirection: "column" }}
         >
@@ -1141,6 +1150,40 @@ const StyledTooltip = styled(Tooltip)`
     opacity: 1;
   }
 `;
+const TabbedInnerNav = styled.div<{ show: boolean }>`
+  display: ${props => (props.show ? "flex" : "none")};
+  align-items: center;
+  border-bottom: 1px solid black;
+`;
+
+const Tab = styled.div<{ active?: boolean }>`
+  display: block;
+  padding: 7px 20px;
+  cursor: pointer;
+  position: relative;
+  background: ${props => (props.active ? "#1e1e1e" : "transparent")};
+  color: ${props => (props.active ? "white" : "gray")};
+  border: 1px solid ${props => (props.active ? "black" : "transparent")};
+  border-top: 2px solid
+    ${props => (props.active ? COLORS.PRIMARY_GREEN : "transparent")};
+  border-bottom: none;
+  transition: all 0.2s ease-out;
+
+  &:hover {
+    color: white;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: ${props => (props.active ? "#1e1e1e" : "transparent")};
+  }
+`;
 
 /** ===========================================================================
  * Props
@@ -1152,6 +1195,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
