@@ -52,3 +52,27 @@ export interface InverseChallengeMapping {
 }
 
 export type CHALLENGE_TYPE = "react" | "typescript" | "markup";
+
+export interface ChallengeCreationPayload {
+  insertionIndex: number; // Index at which to insert this new challenge
+  courseId: string;
+  moduleId: string;
+  challenge: Challenge;
+}
+
+export interface ModuleCreationPayload {
+  insertionIndex: number; // Index at which to insert this new challenge
+  courseId: string;
+  module: Module;
+}
+
+export interface ModuleUpdatePayload {
+  id: string; // Module id
+  courseId: string;
+  module: Partial<Module>;
+}
+
+export interface ChallengeUpdatePayload {
+  id: string; // Challenge ID
+  challenge: Partial<Challenge>;
+}

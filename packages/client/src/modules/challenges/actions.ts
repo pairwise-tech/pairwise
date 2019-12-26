@@ -2,10 +2,14 @@ import { ActionType, createAction } from "typesafe-actions";
 
 import {
   Challenge,
+  ChallengeCreationPayload,
+  ChallengeUpdatePayload,
   Course,
   CourseList,
   InverseChallengeMapping,
   Module,
+  ModuleCreationPayload,
+  ModuleUpdatePayload,
 } from "./types";
 
 /** ===========================================================================
@@ -81,30 +85,6 @@ const fetchCurrentActiveCourseFailure = createAction(
 const storeInverseChallengeMapping = createAction(
   ActionTypesEnum.STORE_INVERSE_CHALLENGE_MAP,
 )<InverseChallengeMapping>();
-
-interface ChallengeCreationPayload {
-  insertionIndex: number; // Index at which to insert this new challenge
-  courseId: string;
-  moduleId: string;
-  challenge: Challenge;
-}
-
-interface ModuleCreationPayload {
-  insertionIndex: number; // Index at which to insert this new challenge
-  courseId: string;
-  module: Module;
-}
-
-interface ModuleUpdatePayload {
-  id: string; // Module id
-  courseId: string;
-  module: Partial<Module>;
-}
-
-interface ChallengeUpdatePayload {
-  id: string; // Challenge ID
-  challenge: Partial<Challenge>;
-}
 
 const saveCourse = createAction(ActionTypesEnum.SAVE_COURSE)<Course>();
 const saveCourseSuccess = createAction(ActionTypesEnum.SAVE_COURSE_SUCCESS)();

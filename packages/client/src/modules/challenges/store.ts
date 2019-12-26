@@ -6,10 +6,12 @@ import over from "ramda/es/over";
 import actions, { ActionTypes } from "./actions";
 import {
   Challenge,
+  ChallengeCreationPayload,
   Course,
   CourseList,
   InverseChallengeMapping,
   Module,
+  ModuleCreationPayload,
 } from "./types";
 
 const debug = require("debug")("challenge:store");
@@ -104,9 +106,21 @@ const insertModule = (
   );
 };
 
+const insertChallenge = (
+  courses: CourseList,
+  insertion: ChallengeCreationPayload,
+): CourseList => {
+  const { moduleId, courseId, insertionIndex, challenge } = insertion;
+  const courseIndex = courses.findIndex(x => x.id === courseId);
+  const moduleIndex = courses[courseIndex].modules.findIndex(
+    m => m.id === moduleId,
+  );
+  const lens = lensPath([courseIndex, "modules", moduleIndex, "challenges"]);
+  return over(lens, insert(insertionIndex, challenge), courses);
+};
+
 const challenges = createReducer<State, ActionTypes>(initialState)
-  .handleAction(actions.createCourseModule, (state, action) => {
-    const { module, courseId, insertionIndex } = action.payload;
+  .handleAction(actions.createChallenge, (state, action) => {
     const { courses } = state;
 
     if (!courses) {
@@ -115,7 +129,19 @@ const challenges = createReducer<State, ActionTypes>(initialState)
 
     return {
       ...state,
-      courses: insertModule(courses, { courseId, module, insertionIndex }),
+      courses: insertChallenge(courses, action.payload),
+    };
+  })
+  .handleAction(actions.createCourseModule, (state, action) => {
+    const { courses } = state;
+
+    if (!courses) {
+      return state;
+    }
+
+    return {
+      ...state,
+      courses: insertModule(courses, action.payload),
     };
   })
   .handleAction(actions.updateChallenge, (state, action) => {

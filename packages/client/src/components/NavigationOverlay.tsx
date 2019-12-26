@@ -21,7 +21,7 @@ const generateEmptyChallenge = (): Challenge => ({
   type: "markup",
   title: "[EMPTY...]",
   content: "",
-  testCode: "",
+  testCode: "[]",
   videoUrl: "",
   starterCode: "",
   solutionCode: "",
@@ -102,7 +102,7 @@ class NavigationOverlay extends React.Component<IProps, {}> {
         >
           {module.challenges.map((c: Challenge, i: number) => {
             return (
-              <div style={{ position: "relative" }}>
+              <div key={c.id} style={{ position: "relative" }}>
                 <NavButton
                   active={c.id === challengeId}
                   key={c.id}

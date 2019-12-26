@@ -1,7 +1,7 @@
 // import axios from "axios";
 import { Err, Ok, Result } from "@prototype/common";
 import { combineEpics } from "redux-observable";
-import { Observable, of } from "rxjs";
+import { merge, Observable, of } from "rxjs";
 import {
   catchError,
   delay,
@@ -96,7 +96,7 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
         return fetchCourseInDevelopment();
       }
     }),
-    mergeMap(courses => {
+    map(courses => {
       if (courses) {
         /* Ok ... */
         const maybeId = deps.router.location.pathname.replace(
@@ -104,26 +104,46 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
           "",
         );
 
-        const challengeMap = createInverseChallengeMapping(courses);
         const challenges = getAllChallengesInCourse(courses[0]); // TODO: Not long term code...
         const challengeExists = challenges.find(c => c.id === maybeId);
         const challengeId = challengeExists
           ? challengeExists.id
           : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
 
-        return [
-          Actions.storeInverseChallengeMapping(challengeMap),
-          Actions.fetchCurrentActiveCourseSuccess({
-            courses,
-            currentChallengeId: challengeId,
-            currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
-            currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
-          }),
-        ];
+        return Actions.fetchCurrentActiveCourseSuccess({
+          courses,
+          currentChallengeId: challengeId,
+          currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
+          currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
+        });
       } else {
-        return [Actions.fetchCurrentActiveCourseFailure()];
+        return Actions.fetchCurrentActiveCourseFailure();
       }
     }),
+  );
+};
+
+const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
+  return merge(
+    action$.pipe(
+      filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+      map(({ payload: { courses } }) => {
+        const challengeMap = createInverseChallengeMapping(courses);
+        return challengeMap;
+      }),
+    ),
+    action$.pipe(
+      filter(isActionOf(Actions.createChallenge)),
+      map(() => state$.value.challenges.courses),
+      filter(x => Boolean(x)),
+      map(courses => {
+        return createInverseChallengeMapping(
+          courses as CourseList, // TS doesn't know that this is not null due to filter above
+        );
+      }),
+    ),
+  ).pipe(
+    map(challengeMap => Actions.storeInverseChallengeMapping(challengeMap)),
   );
 };
 
@@ -189,6 +209,7 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
  */
 
 export default combineEpics(
+  inverseChallengeMappingEpic,
   saveCourse,
   setWorkspaceLoadedEpic,
   updateChallengeRouteId,
