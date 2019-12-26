@@ -5,6 +5,7 @@ import {
   Course,
   CourseList,
   InverseChallengeMapping,
+  Module,
 } from "./types";
 
 /** ===========================================================================
@@ -15,6 +16,8 @@ import {
 enum ActionTypesEnum {
   SET_CHALLENGE_ID = "SET_CHALLENGE_ID",
   WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
+
+  SET_MODULE_ID = "SET_MODULE_ID",
 
   SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
 
@@ -33,6 +36,10 @@ enum ActionTypesEnum {
   CREATE_CHALLENGE = "CREATE_CHALLENGE",
   UPDATE_CHALLENGE = "UPDATE_CHALLENGE",
   REMOVE_CHALLENGE = "REMOVE_CHALLENGE",
+
+  CREATE_MODULE = "CREATE_MODULE",
+  UPDATE_MODULE = "UPDATE_MODULE",
+  REMOVE_MODULE = "REMOVE_MODULE",
 }
 
 /** ===========================================================================
@@ -43,6 +50,8 @@ enum ActionTypesEnum {
 const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<boolean>();
 
 const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<string>();
+
+const setCurrentModule = createAction(ActionTypesEnum.SET_MODULE_ID)<string>();
 
 const setWorkspaceChallengeLoaded = createAction(
   ActionTypesEnum.WORKSPACE_CHALLENGE_LOADED,
@@ -74,12 +83,26 @@ const storeInverseChallengeMapping = createAction(
 )<InverseChallengeMapping>();
 
 interface ChallengeCreationPayload {
-  insertAt: number; // Index at which to insert this new challenge
+  insertionIndex: number; // Index at which to insert this new challenge
+  courseId: string;
+  moduleId: string;
   challenge: Challenge;
 }
 
+interface ModuleCreationPayload {
+  insertionIndex: number; // Index at which to insert this new challenge
+  courseId: string;
+  module: Module;
+}
+
+interface ModuleUpdatePayload {
+  id: string; // Module id
+  courseId: string;
+  module: Partial<Module>;
+}
+
 interface ChallengeUpdatePayload {
-  id: string;
+  id: string; // Challenge ID
   challenge: Partial<Challenge>;
 }
 
@@ -101,10 +124,21 @@ const removeChallenge = createAction(ActionTypesEnum.REMOVE_CHALLENGE)<
   string
 >();
 
+const createCourseModule = createAction(ActionTypesEnum.CREATE_MODULE)<
+  ModuleCreationPayload
+>();
+
+const updateCourseModule = createAction(ActionTypesEnum.UPDATE_MODULE)<
+  ModuleUpdatePayload
+>();
+
 const actions = {
+  setCurrentModule,
   saveCourse,
   saveCourseSuccess,
   saveCourseFailure,
+  createCourseModule,
+  updateCourseModule,
   createChallenge,
   updateChallenge,
   removeChallenge,

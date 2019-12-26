@@ -1,13 +1,15 @@
 import { createReducer } from "typesafe-actions";
 
-import over from "ramda/es/over";
+import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
+import over from "ramda/es/over";
 import actions, { ActionTypes } from "./actions";
 import {
   Challenge,
   Course,
   CourseList,
   InverseChallengeMapping,
+  Module,
 } from "./types";
 
 const debug = require("debug")("challenge:store");
@@ -68,7 +70,54 @@ const updateChallenge = (courses: CourseList, update: ChallengeUpdate) => {
   return over(lens, (x: Challenge) => ({ ...x, ...update.challenge }), courses);
 };
 
+interface ModuleUpdate {
+  id: string;
+  courseId: string;
+  module: Partial<Module>;
+}
+
+const updateModule = (courses: CourseList, update: ModuleUpdate) => {
+  const courseIndex = courses.findIndex(c => c.id === update.courseId);
+  const moduleIndex = courses[courseIndex].modules.findIndex(
+    m => m.id === update.id,
+  );
+  const lens = lensPath([courseIndex, "modules", moduleIndex]);
+  return over(lens, (x: Module) => ({ ...x, ...update.module }), courses);
+};
+
+interface ModuleInsertion {
+  courseId: string;
+  insertionIndex: number;
+  module: Module;
+}
+
+const insertModule = (
+  courses: CourseList,
+  insertion: ModuleInsertion,
+): CourseList => {
+  const courseIndex = courses.findIndex(x => x.id === insertion.courseId);
+  const lens = lensPath([courseIndex, "modules"]);
+  return over(
+    lens,
+    insert(insertion.insertionIndex, insertion.module),
+    courses,
+  );
+};
+
 const challenges = createReducer<State, ActionTypes>(initialState)
+  .handleAction(actions.createCourseModule, (state, action) => {
+    const { module, courseId, insertionIndex } = action.payload;
+    const { courses } = state;
+
+    if (!courses) {
+      return state;
+    }
+
+    return {
+      ...state,
+      courses: insertModule(courses, { courseId, module, insertionIndex }),
+    };
+  })
   .handleAction(actions.updateChallenge, (state, action) => {
     const { courses } = state;
     const { id, challenge } = action.payload;
@@ -83,6 +132,18 @@ const challenges = createReducer<State, ActionTypes>(initialState)
     return {
       ...state,
       courses: updateChallenge(courses, { id, moduleId, courseId, challenge }),
+    };
+  })
+  .handleAction(actions.updateCourseModule, (state, action) => {
+    const { courses } = state;
+
+    if (!courses) {
+      return state;
+    }
+
+    return {
+      ...state,
+      courses: updateModule(courses, action.payload),
     };
   })
   .handleAction(actions.setEditMode, (state, action) => ({
@@ -100,6 +161,10 @@ const challenges = createReducer<State, ActionTypes>(initialState)
   .handleAction(actions.storeInverseChallengeMapping, (state, action) => ({
     ...state,
     challengeMap: action.payload,
+  }))
+  .handleAction(actions.setCurrentModule, (state, action) => ({
+    ...state,
+    currentModuleId: action.payload,
   }))
   .handleAction(actions.setChallengeId, (state, action) => ({
     ...state,

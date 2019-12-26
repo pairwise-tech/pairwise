@@ -1,13 +1,32 @@
 import React from "react";
 import { connect } from "react-redux";
+import shortid from "shortid";
 import styled from "styled-components/macro";
 
-import { Challenge } from "@prototype/common";
+import { Challenge, Module } from "@prototype/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 
 const debug = require("debug")("client:NavigationOverlay");
+
+const generateEmptyModule = (): Module => ({
+  id: shortid.generate(),
+  title: "[EMTPY...]",
+  challenges: [],
+});
+
+const generateEmptyChallenge = (): Challenge => ({
+  id: shortid.generate(),
+  type: "markup",
+  title: "[EMPTY...]",
+  content: "",
+  testCode: "",
+  videoUrl: "",
+  starterCode: "",
+  solutionCode: "",
+  supplementaryContent: "",
+});
 
 /** ===========================================================================
  * React Class
@@ -16,7 +35,14 @@ const debug = require("debug")("client:NavigationOverlay");
 
 class NavigationOverlay extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { course, module, challengeId, isEditMode } = this.props;
+    const {
+      course,
+      module,
+      challengeId,
+      isEditMode,
+      updateCourseModule,
+      setCurrentModule,
+    } = this.props;
 
     if (!course || !module) {
       debug("[INFO] No module or course", course, module);
@@ -32,20 +58,34 @@ class NavigationOverlay extends React.Component<IProps, {}> {
           <Title>{course.title}</Title>
           {course.modules.map((m, i) => {
             return (
-              <div style={{ position: "relative" }}>
-                <NavButton
-                  active={m.id === module.id}
-                  onClick={() => console.log(`[INFO] Select module ${m.id}`)}
-                >
-                  <ModuleNumber>{i + 1}</ModuleNumber>
-                  {m.title}
-                </NavButton>
+              <div key={m.id} style={{ position: "relative" }}>
+                {isEditMode ? (
+                  <NavUpdateField
+                    onChange={e => {
+                      updateCourseModule({
+                        id: m.id,
+                        courseId: course.id,
+                        module: { title: e.target.value },
+                      });
+                    }}
+                    defaultValue={m.title}
+                  />
+                ) : (
+                  <NavButton
+                    active={m.id === module.id}
+                    onClick={() => setCurrentModule(m.id)}
+                  >
+                    <ModuleNumber>{i + 1}</ModuleNumber>
+                    {m.title}
+                  </NavButton>
+                )}
                 <AddNavItemButton
                   show={isEditMode}
                   onClick={() =>
                     this.props.createCourseModule({
                       courseId: course.id,
                       insertionIndex: i + 1,
+                      module: generateEmptyModule(),
                     })
                   }
                 />
@@ -77,12 +117,29 @@ class NavigationOverlay extends React.Component<IProps, {}> {
                       courseId: course.id,
                       moduleId: module.id,
                       insertionIndex: i + 1,
+                      challenge: generateEmptyChallenge(),
                     })
                   }
                 />
               </div>
             );
           })}
+          {/* In case of no challenges yet, add a button to add one */}
+          {module.challenges.length === 0 && (
+            <div style={{ position: "relative" }}>
+              <AddNavItemButton
+                show={isEditMode}
+                onClick={() =>
+                  this.props.createChallenge({
+                    courseId: course.id,
+                    moduleId: module.id,
+                    insertionIndex: 0,
+                    challenge: generateEmptyChallenge(),
+                  })
+                }
+              />
+            </div>
+          )}
         </Col>
       </Overlay>
     );
@@ -119,27 +176,48 @@ const AddNavItemButton = styled(props => {
 `;
 
 const ModuleNumber = styled.code`
+  font-size: 12px;
   display: inline-block;
   padding: 5px;
   color: #ea709c;
   background: #3a3a3a;
   width: 24px;
   text-align: center;
-  line-height: 24px;
+  line-height: 12px;
   border-radius: 4px;
   box-shadow: inset 0px 0px 2px 0px #ababab;
-  margin-right: 5px;
+  margin-right: 8px;
 `;
 
-const NavButton = styled.button<{ active?: boolean }>`
-  background: ${props => (props.active ? "red" : "black")};
-  cursor: pointer;
+const NavUpdateField = styled.input`
   padding: 12px;
   font-size: 18px;
   border: 1px solid transparent;
   border-bottom-color: ${COLORS.SEPARATOR_BORDER};
   width: 100%;
   display: block;
+  text-align: left;
+  outline: none;
+  color: white;
+  background: transparent;
+  position: relative;
+
+  &:hover,
+  &:focus {
+    color: white;
+    background: #0d0d0d;
+  }
+`;
+
+const NavButton = styled.button<{ active?: boolean }>`
+  cursor: pointer;
+  padding: 12px;
+  font-size: 18px;
+  border: 1px solid transparent;
+  border-bottom-color: ${COLORS.SEPARATOR_BORDER};
+  width: 100%;
+  display: flex;
+  align-items: center;
   text-align: left;
   outline: none;
   color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
@@ -216,11 +294,10 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   selectChallenge: Modules.actions.challenges.setChallengeId,
-  createCourseModule: (x: any) => ({ type: "FAKE/crate_module", payload: x }),
-  createChallenge: (x: any) => ({
-    type: "FAKE/crate_challenge",
-    payload: x,
-  }),
+  setCurrentModule: Modules.actions.challenges.setCurrentModule,
+  createCourseModule: Modules.actions.challenges.createCourseModule,
+  updateCourseModule: Modules.actions.challenges.updateCourseModule,
+  createChallenge: Modules.actions.challenges.createChallenge,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
