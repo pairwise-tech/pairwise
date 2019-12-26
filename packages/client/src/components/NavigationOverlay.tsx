@@ -16,7 +16,7 @@ const debug = require("debug")("client:NavigationOverlay");
 
 class NavigationOverlay extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { course, module, challengeId } = this.props;
+    const { course, module, challengeId, isEditMode } = this.props;
 
     if (!course || !module) {
       debug("[INFO] No module or course", course, module);
@@ -25,34 +25,62 @@ class NavigationOverlay extends React.Component<IProps, {}> {
 
     return (
       <Overlay visible={this.props.overlayVisible}>
-        <Col>
+        <Col
+          offsetX={this.props.overlayVisible ? 0 : -20}
+          style={{ zIndex: 3 }}
+        >
           <Title>{course.title}</Title>
           {course.modules.map((m, i) => {
             return (
-              <NavButton
-                active={m.id === module.id}
-                onClick={() => console.log(`[INFO] Select module ${m.id}`)}
-              >
-                <ModuleNumber>{i + 1}</ModuleNumber>
-                {m.title}
-              </NavButton>
+              <div style={{ position: "relative" }}>
+                <NavButton
+                  active={m.id === module.id}
+                  onClick={() => console.log(`[INFO] Select module ${m.id}`)}
+                >
+                  <ModuleNumber>{i + 1}</ModuleNumber>
+                  {m.title}
+                </NavButton>
+                <AddNavItemButton
+                  show={isEditMode}
+                  onClick={() =>
+                    this.props.createCourseModule({
+                      courseId: course.id,
+                      insertionIndex: i + 1,
+                    })
+                  }
+                />
+              </div>
             );
           })}
         </Col>
         <Col
+          offsetX={this.props.overlayVisible ? 0 : -40}
           style={{
+            zIndex: 2,
             boxShadow: "inset 20px 0px 20px 0px rgba(0, 0, 0, 0.1)",
           }}
         >
           {module.challenges.map((c: Challenge, i: number) => {
             return (
-              <NavButton
-                active={c.id === challengeId}
-                key={c.id}
-                onClick={() => this.props.selectChallenge(c.id)}
-              >
-                {c.title}
-              </NavButton>
+              <div style={{ position: "relative" }}>
+                <NavButton
+                  active={c.id === challengeId}
+                  key={c.id}
+                  onClick={() => this.props.selectChallenge(c.id)}
+                >
+                  {c.title}
+                </NavButton>
+                <AddNavItemButton
+                  show={isEditMode}
+                  onClick={() =>
+                    this.props.createChallenge({
+                      courseId: course.id,
+                      moduleId: module.id,
+                      insertionIndex: i + 1,
+                    })
+                  }
+                />
+              </div>
             );
           })}
         </Col>
@@ -65,6 +93,30 @@ class NavigationOverlay extends React.Component<IProps, {}> {
  * Styles
  * ============================================================================
  */
+
+interface AddNavItemButtonProps {
+  onClick: () => any;
+  show: boolean;
+}
+
+const AddNavItemButton = styled(props => {
+  return <button {...props}>+</button>;
+})<AddNavItemButtonProps>`
+  position: absolute;
+  z-index: 5;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(${props => (props.show ? 1 : 0)});
+  transition: all 0.15s ease-out;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 100px;
+  &:hover {
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+`;
 
 const ModuleNumber = styled.code`
   display: inline-block;
@@ -84,10 +136,12 @@ const NavButton = styled.button<{ active?: boolean }>`
   cursor: pointer;
   padding: 12px;
   font-size: 18px;
-  border-color: transparent;
+  border: 1px solid transparent;
+  border-bottom-color: ${COLORS.SEPARATOR_BORDER};
   width: 100%;
   display: block;
   text-align: left;
+  outline: none;
   color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
   background: ${({ active }) =>
     active ? COLORS.BACKGROUND_MODAL : "transparent"};
@@ -115,11 +169,15 @@ const NavButton = styled.button<{ active?: boolean }>`
   }
 `;
 
-const Col = styled.div`
+const Col = styled.div<{ offsetX: number }>`
   display: block;
   width: 300px;
   background: ${COLORS.BACKGROUND_CONTENT};
   border-right: 1px solid ${COLORS.SEPARATOR_BORDER};
+  position: relative;
+  z-index: 2;
+  transition: all 0.2s ease-out;
+  transform: translateX(${({ offsetX }) => `${offsetX}px`});
 `;
 
 const Overlay = styled.div<{ visible: boolean }>`
@@ -158,6 +216,11 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   selectChallenge: Modules.actions.challenges.setChallengeId,
+  createCourseModule: (x: any) => ({ type: "FAKE/crate_module", payload: x }),
+  createChallenge: (x: any) => ({
+    type: "FAKE/crate_challenge",
+    payload: x,
+  }),
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
