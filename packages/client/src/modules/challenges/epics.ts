@@ -1,8 +1,7 @@
 // import axios from "axios";
 import { Err, Ok, Result } from "@prototype/common";
 import { combineEpics } from "redux-observable";
-import { of } from "rxjs";
-import { fromFetch } from "rxjs/fetch";
+import { Observable, of } from "rxjs";
 import {
   catchError,
   delay,
@@ -29,10 +28,10 @@ import {
  * ============================================================================
  */
 
-const fetchCourseInDevelopment = () => {
+const fetchCourseInDevelopment = (): Observable<CourseList> => {
   const Courses = require("@prototype/common").default;
-  const course = Courses.FullstackTypeScript as Course;
-  return course;
+  const courses = Object.values(Courses) as CourseList;
+  return of(courses);
 };
 
 export const CURRENT_ACTIVE_CHALLENGE_IDS = {
@@ -88,34 +87,25 @@ const createInverseChallengeMapping = (
 const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
-    mergeMap(async () => {
-      try {
-        let course: Course;
-        if (ENV.DEV_MODE) {
-          course = fetchCourseInDevelopment();
-        } else {
-          // const result = await axios.get("http://localhost:9000/challenges");
-          // course = result.data;
-          course = fetchCourseInDevelopment();
-        }
-
-        return new Ok(course);
-      } catch (err) {
-        return new Err(err);
+    mergeMap(() => {
+      if (ENV.DEV_MODE) {
+        return deps.course.getAll();
+      } else {
+        // const result = await axios.get("http://localhost:9000/challenges");
+        // course = result.data;
+        return fetchCourseInDevelopment();
       }
     }),
-    mergeMap((result: Result<Course, Error>) => {
-      const { value } = result;
-      if (value) {
-        const course = value;
+    mergeMap(courses => {
+      if (courses) {
         /* Ok ... */
         const maybeId = deps.router.location.pathname.replace(
           "/workspace/",
           "",
         );
 
-        const challengeMap = createInverseChallengeMapping([course]);
-        const challenges = getAllChallengesInCourse(course);
+        const challengeMap = createInverseChallengeMapping(courses);
+        const challenges = getAllChallengesInCourse(courses[0]); // TODO: Not long term code...
         const challengeExists = challenges.find(c => c.id === maybeId);
         const challengeId = challengeExists
           ? challengeExists.id
@@ -124,7 +114,7 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
         return [
           Actions.storeInverseChallengeMapping(challengeMap),
           Actions.fetchCurrentActiveCourseSuccess({
-            courses: [course],
+            courses,
             currentChallengeId: challengeId,
             currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
             currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
