@@ -153,10 +153,7 @@ class Workspace extends React.Component<IProps, IState> {
       this.requestSyntaxHighlighting,
     );
 
-    this.debouncedSaveCodeFunction = debounce(
-      50,
-      this.handleSaveCodeToLocalStorage,
-    );
+    this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
     const tests = JSON.parse(this.props.challenge.testCode);
 
@@ -166,20 +163,23 @@ class Workspace extends React.Component<IProps, IState> {
       fullScreenEditor: false,
       monacoInitializationError: false,
       adminEditorTab: "starterCode",
-      code: this.getEditorCode(),
+      code: this.getEditorCode(props.challenge),
     };
   }
 
-  getEditorCode = () => {
+  getEditorCode = (challenge: Challenge) => {
     if (this.props.isEditMode) {
-      return this.props.challenge[this.state.adminEditorTab];
+      return challenge[this.state.adminEditorTab];
     } else {
-      return getStoredCodeForChallenge(this.props.challenge);
+      return getStoredCodeForChallenge(challenge);
     }
   };
 
   updateEditorTab = () => {
-    this.setState({ code: this.getEditorCode() }, this.refreshEditor)
+    this.setState(
+      { code: this.getEditorCode(this.props.challenge) },
+      this.refreshEditor,
+    );
   };
 
   async componentDidMount() {
@@ -218,11 +218,12 @@ class Workspace extends React.Component<IProps, IState> {
     if (this.props.challenge.id !== nextProps.challenge.id) {
       const { challenge } = nextProps;
       const tests = JSON.parse(challenge.testCode);
-      this.setState({ code: this.getEditorCode(), tests }, this.refreshEditor);
+      const newCode = this.getEditorCode(challenge);
+      this.setState({ code: newCode, tests }, this.refreshEditor);
     }
 
     if (this.props.isEditMode !== nextProps.isEditMode) {
-      this.updateEditorTab()
+      this.updateEditorTab();
     }
   }
 
@@ -380,6 +381,12 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
+  handleEditorTabClick = (tab: "starterCode" | "solutionCode") => {
+    if (tab !== this.state.adminEditorTab) {
+      this.setState({ adminEditorTab: tab }, this.updateEditorTab);
+    }
+  };
+
   render() {
     const { fullScreenEditor, tests } = this.state;
     const {
@@ -397,13 +404,13 @@ class Workspace extends React.Component<IProps, IState> {
       <div style={{ height: "100%", position: "relative" }}>
         <TabbedInnerNav show={isEditMode}>
           <Tab
-            onClick={() => this.setState({ adminEditorTab: "starterCode" }, this.updateEditorTab)}
+            onClick={() => this.handleEditorTabClick("starterCode")}
             active={this.state.adminEditorTab === "starterCode"}
           >
             Starter Code
           </Tab>
           <Tab
-            onClick={() => this.setState({ adminEditorTab: "solutionCode" }, this.updateEditorTab)}
+            onClick={() => this.handleEditorTabClick("solutionCode")}
             active={this.state.adminEditorTab === "solutionCode"}
           >
             Solution
@@ -412,7 +419,7 @@ class Workspace extends React.Component<IProps, IState> {
         <LowerRight
           style={{ right: 10, display: "flex", flexDirection: "column" }}
         >
-          {this.state.code !== challenge.starterCode && (
+          {this.state.code !== challenge.starterCode && !isEditMode && (
             <StyledTooltip title={"Restore Initial Code"} placement="left">
               <IconButton
                 style={{ color: "white" }}
@@ -739,7 +746,19 @@ class Workspace extends React.Component<IProps, IState> {
     });
   };
 
-  handleSaveCodeToLocalStorage = () => {
+  handleChangeEditorCode = () => {
+    if (this.props.isEditMode) {
+      const { challenge } = this.props;
+      this.props.updateChallenge({
+        id: challenge.id,
+        challenge: {
+          [this.state.adminEditorTab]: this.state.code,
+        },
+      });
+
+      // Do not store anything to local storage
+      return;
+    }
     /**
      * Save the current code to local storage. This method is debounced.
      */
@@ -1229,6 +1248,7 @@ const dispatchProps = {
   selectChallenge: Modules.actions.challenges.setChallengeId,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
+  updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
 interface ComponentProps {}
