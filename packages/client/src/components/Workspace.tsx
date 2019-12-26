@@ -1288,7 +1288,7 @@ const ContentViewEdit = connect(
   );
 
   return (
-    <div style={{ height: "100%" }}>
+    <StyledInputs isEditMode={isEditMode} style={{ height: "100%" }}>
       <TitleInput
         type="text"
         value={props.title}
@@ -1300,9 +1300,20 @@ const ContentViewEdit = connect(
       ) : (
         <StyledMarkdown source={props.content} />
       )}
-    </div>
+    </StyledInputs>
   );
 });
+
+const StyledInputs = styled.div<{ isEditMode: boolean }>`
+  input,
+  textarea {
+    border: 1px solid transparent;
+    &:hover {
+      border-color: ${props =>
+        props.isEditMode ? "rgb(0, 255, 185)" : "transparent"};
+    }
+  }
+`;
 
 interface YoutubeEmbedProps {
   url: string;
