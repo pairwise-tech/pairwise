@@ -35,8 +35,6 @@ const fetchCourseInDevelopment = (): Observable<CourseList> => {
 };
 
 export const CURRENT_ACTIVE_CHALLENGE_IDS = {
-  courseId: "fpvPtfu7s",
-  moduleId: "fpvPtNWkC",
   challengeId: "9scykDold",
 };
 
@@ -106,15 +104,17 @@ const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
 
         const challenges = getAllChallengesInCourse(courses[0]); // TODO: Not long term code...
         const challengeExists = challenges.find(c => c.id === maybeId);
+        const challengeMap = createInverseChallengeMapping(courses);
         const challengeId = challengeExists
           ? challengeExists.id
           : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
+        const { moduleId, courseId } = challengeMap[challengeId];
 
         return Actions.fetchCurrentActiveCourseSuccess({
           courses,
           currentChallengeId: challengeId,
-          currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
-          currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
+          currentModuleId: moduleId,
+          currentCourseId: courseId,
         });
       } else {
         return Actions.fetchCurrentActiveCourseFailure();
