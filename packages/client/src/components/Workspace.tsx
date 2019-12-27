@@ -172,19 +172,15 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   // This is only to allow a logic split if editting (i.e. via admin edit mode).
-  getEditorCode = (challenge: Challenge) => {
-    if (this.props.isEditMode) {
+  getEditorCode = (
+    challenge: Challenge = this.props.challenge,
+    isEditMode = this.props.isEditMode,
+  ) => {
+    if (isEditMode) {
       return challenge[this.state.adminEditorTab];
     } else {
       return getStoredCodeForChallenge(challenge);
     }
-  };
-
-  updateEditorTab = () => {
-    this.setState(
-      { code: this.getEditorCode(this.props.challenge) },
-      this.refreshEditor,
-    );
   };
 
   async componentDidMount() {
@@ -231,7 +227,10 @@ class Workspace extends React.Component<IProps, IState> {
     // Update in response to toggling admin edit mode. This will only ever
     // happen for us as we use codepress, not for our end users.
     if (this.props.isEditMode !== nextProps.isEditMode) {
-      this.updateEditorTab();
+      this.setState(
+        { code: this.getEditorCode(nextProps.challenge, nextProps.isEditMode) },
+        this.refreshEditor,
+      );
     }
   }
 
@@ -398,7 +397,13 @@ class Workspace extends React.Component<IProps, IState> {
    */
   handleEditorTabClick = (tab: IState["adminEditorTab"]) => {
     if (tab !== this.state.adminEditorTab) {
-      this.setState({ adminEditorTab: tab }, this.updateEditorTab);
+      this.setState(
+        {
+          adminEditorTab: tab,
+          code: this.props.challenge[tab],
+        },
+        this.refreshEditor,
+      );
     }
   };
 
