@@ -1,9 +1,9 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 
+import { CourseList } from "@prototype/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
-import { Challenge, CourseList } from "./types";
 
 /** ===========================================================================
  * Selectors

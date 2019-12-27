@@ -1,16 +1,14 @@
 import { createReducer } from "typesafe-actions";
 
+import { Challenge, CourseList } from "@prototype/common";
+import Module from "module";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
 import over from "ramda/es/over";
 import actions, { ActionTypes } from "./actions";
 import {
-  Challenge,
   ChallengeCreationPayload,
-  Course,
-  CourseList,
   InverseChallengeMapping,
-  Module,
   ModuleCreationPayload,
 } from "./types";
 
@@ -87,15 +85,9 @@ const updateModule = (courses: CourseList, update: ModuleUpdate) => {
   return over(lens, (x: Module) => ({ ...x, ...update.module }), courses);
 };
 
-interface ModuleInsertion {
-  courseId: string;
-  insertionIndex: number;
-  module: Module;
-}
-
 const insertModule = (
   courses: CourseList,
-  insertion: ModuleInsertion,
+  insertion: ModuleCreationPayload,
 ): CourseList => {
   const courseIndex = courses.findIndex(x => x.id === insertion.courseId);
   const lens = lensPath([courseIndex, "modules"]);

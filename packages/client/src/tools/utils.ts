@@ -1,6 +1,5 @@
+import { Challenge } from "@prototype/common";
 import { compose } from "redux";
-
-import { Challenge } from "modules/challenges/types";
 
 /**
  * Assert a condition cannot occur. Used for writing exhaustive switch

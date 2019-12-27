@@ -1,5 +1,5 @@
 // import axios from "axios";
-import { Err, Ok, Result } from "@prototype/common";
+import { ChallengeList, Course, CourseList } from "@prototype/common";
 import { combineEpics } from "redux-observable";
 import { merge, Observable, of } from "rxjs";
 import {
@@ -16,12 +16,7 @@ import ENV from "tools/env";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import {
-  ChallengeList,
-  Course,
-  CourseList,
-  InverseChallengeMapping,
-} from "./types";
+import { InverseChallengeMapping } from "./types";
 
 /** ===========================================================================
  * Epics

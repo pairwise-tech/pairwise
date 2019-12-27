@@ -1,13 +1,9 @@
+import { Challenge, Course, CourseList } from "@prototype/common";
 import { ActionType, createAction } from "typesafe-actions";
-
 import {
-  Challenge,
   ChallengeCreationPayload,
   ChallengeUpdatePayload,
-  Course,
-  CourseList,
   InverseChallengeMapping,
-  Module,
   ModuleCreationPayload,
   ModuleUpdatePayload,
 } from "./types";

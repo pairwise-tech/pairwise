@@ -4,13 +4,13 @@ import { combineEpics, Epic } from "redux-observable";
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
-import { Course, CourseList } from "./challenges/types";
 
 /** ===========================================================================
  * Import Redux Modules
  * ============================================================================
  */
 
+import { Course, CourseList } from "@prototype/common";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
 import Challenges, {

@@ -12,8 +12,8 @@ import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
 import SkipNext from "@material-ui/icons/SkipNext";
 import SkipPrevious from "@material-ui/icons/SkipPrevious";
 import { monaco } from "@monaco-editor/react";
+import { Challenge } from "@prototype/common";
 import { Console, Decode } from "console-feed";
-import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";
 import React, { ChangeEvent, useEffect, useState } from "react";
@@ -743,6 +743,8 @@ class Workspace extends React.Component<IProps, IState> {
           </ContentText>
         );
       }
+      case "media":
+        return null;
       default:
         assertUnreachable(challengeType);
     }

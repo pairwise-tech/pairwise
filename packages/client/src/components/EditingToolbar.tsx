@@ -1,10 +1,14 @@
 import {
   Button,
   FormControlLabel,
+  ListItemIcon,
+  ListItemText,
   Menu,
   MenuItem,
   Switch,
 } from "@material-ui/core";
+import Assignment from "@material-ui/icons/Assignment";
+import Code from "@material-ui/icons/Code";
 import { CHALLENGE_TYPE } from "@prototype/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
@@ -57,6 +61,7 @@ const EditingToolbar = connect(
     { value: "markup", label: "Markup" },
     { value: "typescript", label: "TypeScript" },
     { value: "react", label: "React" },
+    { value: "media", label: "Media" },
   ];
 
   // NOTE: I'm defaulting the challenge id to an empty string simply to get past ts errors.
@@ -107,7 +112,14 @@ const EditingToolbar = connect(
                 handleClose();
               }}
             >
-              {x.label}
+              <ListItemIcon>
+                {x.value === "media" ? (
+                  <Assignment fontSize="small" />
+                ) : (
+                  <Code fontSize="small" />
+                )}
+              </ListItemIcon>
+              <ListItemText primary={x.label} />
             </MenuItem>
           ))}
         </Menu>
