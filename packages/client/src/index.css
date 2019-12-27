@@ -26,6 +26,11 @@ pre {
     monospace;
 }
 
+/* We are decidedly not a mobile site */
+#root {
+  min-width: 820px;
+}
+
 /* Custom editor styles for JSX elements:
  *
  * TODO: Improve styling to create a better theme.
