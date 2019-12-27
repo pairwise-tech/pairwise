@@ -6,7 +6,7 @@ import morgan from "morgan";
 import * as path from "path";
 import { promisify } from "util";
 
-import { Course } from "../../src/modules/challenges/types";
+import { Course } from "@prototype/common";
 
 const debug = require("debug")("codepress:app");
 
