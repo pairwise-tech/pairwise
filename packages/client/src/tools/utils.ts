@@ -63,12 +63,9 @@ export const setAccessTokenInLocalStorage = (accessToken: string) => {
  */
 export const getAccessTokenFromLocalStorage = () => {
   try {
-    const result = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
-    if (result) {
-      const token = JSON.parse(result);
-      if (token) {
-        return token;
-      }
+    const token = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+    if (token) {
+      return token;
     }
   } catch (err) {
     console.log(err);

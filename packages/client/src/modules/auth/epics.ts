@@ -1,10 +1,13 @@
 import axios from "axios";
 import { combineEpics } from "redux-observable";
-import { filter, ignoreElements, mergeMap, tap } from "rxjs/operators";
+import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
-import { User } from "modules/user/types";
-import { setAccessTokenInLocalStorage } from "tools/utils";
+import ENV from "tools/env";
+import {
+  getAccessTokenFromLocalStorage,
+  setAccessTokenInLocalStorage,
+} from "tools/utils";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 
@@ -18,16 +21,13 @@ const facebookLoginEpic: EpicSignature = action$ => {
     filter(isActionOf(Actions.facebookLogin)),
     mergeMap(async action => {
       try {
-        console.log(action);
-
         const params = { access_token: action.payload.accessToken };
-        const response = await axios.get<{ user: User; accessToken: string }>(
-          "http://localhost:9000/auth/facebook",
+        const response = await axios.get<{ accessToken: string }>(
+          `${ENV.HOST}/auth/facebook`,
           { params },
         );
-
-        const { accessToken, user } = response.data;
-        return Actions.facebookLoginSuccess({ user, accessToken });
+        const { accessToken } = response.data;
+        return Actions.storeAccessToken({ accessToken });
       } catch (err) {
         console.log(err);
         return Actions.facebookLoginFailure();
@@ -36,14 +36,23 @@ const facebookLoginEpic: EpicSignature = action$ => {
   );
 };
 
+const initializeAppAuthenticationEpic: EpicSignature = (action$, state$) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.initializeApp)),
+    map(getAccessTokenFromLocalStorage),
+    filter(token => Boolean(token)),
+    map(accessToken => Actions.storeAccessToken({ accessToken })),
+  );
+};
+
 const storeAccessTokenEpic: EpicSignature = action$ => {
   return action$.pipe(
-    filter(isActionOf(Actions.facebookLoginSuccess)),
-    tap(action => {
-      const { accessToken } = action.payload;
+    filter(isActionOf(Actions.storeAccessToken)),
+    tap(({ payload }) => {
+      const { accessToken } = payload;
       setAccessTokenInLocalStorage(accessToken);
     }),
-    ignoreElements(),
+    map(action => Actions.storeAccessTokenSuccess(action.payload)),
   );
 };
 
@@ -52,4 +61,8 @@ const storeAccessTokenEpic: EpicSignature = action$ => {
  * ============================================================================
  */
 
-export default combineEpics(facebookLoginEpic, storeAccessTokenEpic);
+export default combineEpics(
+  facebookLoginEpic,
+  initializeAppAuthenticationEpic,
+  storeAccessTokenEpic,
+);

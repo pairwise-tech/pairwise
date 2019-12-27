@@ -19,6 +19,7 @@ const COLORS = {
   BACKGROUND_CONSOLE: "rgb(36, 36, 36)",
   BACKGROUND_LOWER_SECTION: "rgb(30, 30, 30)",
   BACKGROUND_MODAL: "rgb(25, 25, 25)",
+  BORDER_MODAL: "rgb(100,100,100)",
 };
 
 /** ===========================================================================

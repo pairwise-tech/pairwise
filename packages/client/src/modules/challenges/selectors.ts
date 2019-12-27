@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
-import { Challenge, CourseList } from "./types";
+import { CourseList } from "./types";
 
 /** ===========================================================================
  * Selectors

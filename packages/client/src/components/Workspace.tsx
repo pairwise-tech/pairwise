@@ -53,7 +53,7 @@ import {
 } from "../tools/utils";
 import EditingToolbar from "./EditingToolbar";
 import NavigationOverlay from "./NavigationOverlay";
-import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
+import SingleSignOnHandler from "./SingleSignOnHandler";
 
 /** ===========================================================================
  * Types & Config
@@ -451,16 +451,15 @@ class Workspace extends React.Component<IProps, IState> {
                 </StyledTooltip>
               )}
               {this.props.userAuthenticated && this.props.user ? (
-                <CreateAccountText>
+                <LoginSignupText>
                   Welcome, {this.props.user.givenName}!
-                  {/* Welcome, {this.props.user ? this.props.user.givenName : ""}! */}
-                </CreateAccountText>
+                </LoginSignupText>
               ) : (
-                <CreateAccountText
+                <LoginSignupTextInteractive
                   onClick={() => this.props.setSingleSignOnDialogState(true)}
                 >
                   Login/Signup
-                </CreateAccountText>
+                </LoginSignupTextInteractive>
               )}
             </ControlsContainer>
           </Header>
@@ -1139,6 +1138,22 @@ const StyledTooltip = styled(Tooltip)`
   transition: opacity 0.2s ease-out;
   &:hover {
     opacity: 1;
+  }
+`;
+
+export const LoginSignupText = styled.h1`
+  margin-right: 12px;
+  margin-left: 12px;
+  font-size: 18px;
+  font-weight: 200;
+  color: ${COLORS.TEXT_TITLE};
+  font-family: Helvetica Neue, Lato, sans-serif;
+`;
+
+export const LoginSignupTextInteractive = styled(LoginSignupText)`
+  :hover {
+    cursor: pointer;
+    color: ${COLORS.TEXT_HOVER};
   }
 `;
 

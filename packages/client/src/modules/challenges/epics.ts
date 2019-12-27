@@ -1,19 +1,15 @@
-// import axios from "axios";
-import { Err, Ok, Result } from "@prototype/common";
+import API from "modules/api";
 import { combineEpics } from "redux-observable";
 import { of } from "rxjs";
-import { fromFetch } from "rxjs/fetch";
 import {
   catchError,
   delay,
   filter,
   ignoreElements,
   map,
-  mapTo,
   mergeMap,
   tap,
 } from "rxjs/operators";
-import ENV from "tools/env";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
@@ -28,12 +24,6 @@ import {
  * Epics
  * ============================================================================
  */
-
-const fetchCourseInDevelopment = () => {
-  const Courses = require("@prototype/common").default;
-  const course = Courses.FullstackTypeScript as Course;
-  return course;
-};
 
 export const CURRENT_ACTIVE_CHALLENGE_IDS = {
   courseId: "fpvPtfu7s",
@@ -88,23 +78,8 @@ const createInverseChallengeMapping = (
 const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
-    mergeMap(async () => {
-      try {
-        let course: Course;
-        if (ENV.DEV_MODE) {
-          course = fetchCourseInDevelopment();
-        } else {
-          // const result = await axios.get("http://localhost:9000/challenges");
-          // course = result.data;
-          course = fetchCourseInDevelopment();
-        }
-
-        return new Ok(course);
-      } catch (err) {
-        return new Err(err);
-      }
-    }),
-    mergeMap((result: Result<Course, Error>) => {
+    mergeMap(API.fetchChallenges),
+    mergeMap(result => {
       const { value } = result;
       if (value) {
         const course = value;

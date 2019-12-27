@@ -1,14 +1,9 @@
 import { createReducer } from "typesafe-actions";
 
-import over from "ramda/es/over";
 import lensPath from "ramda/es/lensPath";
+import over from "ramda/es/over";
 import actions, { ActionTypes } from "./actions";
-import {
-  Challenge,
-  Course,
-  CourseList,
-  InverseChallengeMapping,
-} from "./types";
+import { Challenge, CourseList, InverseChallengeMapping } from "./types";
 
 const debug = require("debug")("challenge:store");
 

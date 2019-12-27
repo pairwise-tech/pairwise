@@ -14,7 +14,8 @@
     "server:setup": "cd packages/server && yarn setup:env && yarn setup:db",
     "server": "cd packages/server && yarn start",
     "server:dev": "cd packages/server && yarn start:dev",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "build": "lerna run build"
   },
   "workspaces": [
     "packages/*"

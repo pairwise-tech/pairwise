@@ -62,10 +62,7 @@
     "whitespace": false,
     "no-parameter-reassignment": true,
     "typedef": false,
-    "readonly-array": true,
     "no-object-mutation": false,
-    "no-delete": true,
-    "no-method-signature": true,
     "space-before-function-paren": [
       true,
       {
