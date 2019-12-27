@@ -203,6 +203,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentWillUnmount() {
+    this.disposeModels();
     window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener(
       "message",
@@ -211,7 +212,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   refreshEditor = () => {
-    this.unlockVerticalScrolling();
+    this.props.unlockVerticalScrolling();
     this.resetMonacoEditor();
     this.setMonacoEditorValue();
   };
@@ -422,13 +423,7 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { fullScreenEditor, tests } = this.state;
-    const {
-      challenge,
-      overlayVisible,
-      nextPrevChallenges,
-      isEditMode,
-    } = this.props;
-    const { next, prev } = nextPrevChallenges;
+    const { challenge, isEditMode } = this.props;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
@@ -483,65 +478,6 @@ class Workspace extends React.Component<IProps, IState> {
     return (
       <Container>
         <PageSection>
-          <Header>
-            <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
-              <NavIconButton
-                style={{ color: "white", marginRight: 40 }}
-                onClick={this.toggleNavigationMap}
-              />
-              <h1
-                style={{
-                  fontWeight: 100,
-                  color: "white",
-                  fontFamily: `'Helvetica Neue', Lato, sans-serif`,
-                  margin: 0,
-                }}
-              >
-                Prototype X
-              </h1>
-            </ControlsContainer>
-            <ControlsContainer>
-              <EditingToolbar />
-            </ControlsContainer>
-            <ControlsContainer style={{ marginLeft: "auto" }}>
-              {prev && (
-                <StyledTooltip title="Previous Challenge">
-                  <IconButton
-                    style={{ color: "white" }}
-                    aria-label="Previous Challenge"
-                    onClick={() => this.props.selectChallenge(prev.id)}
-                  >
-                    <SkipPrevious />
-                  </IconButton>
-                </StyledTooltip>
-              )}
-              {next && (
-                <StyledTooltip title="Next Challenge">
-                  <IconButton
-                    style={{ color: "white" }}
-                    aria-label="Next Challenge"
-                    onClick={() => this.props.selectChallenge(next.id)}
-                  >
-                    <SkipNext />
-                  </IconButton>
-                </StyledTooltip>
-              )}
-              {this.props.userAuthenticated && this.props.user ? (
-                <CreateAccountText>
-                  Welcome, {this.props.user.givenName}!
-                  {/* Welcome, {this.props.user ? this.props.user.givenName : ""}! */}
-                </CreateAccountText>
-              ) : (
-                <CreateAccountText
-                  onClick={() => this.props.setSingleSignOnDialogState(true)}
-                >
-                  Login/Signup
-                </CreateAccountText>
-              )}
-            </ControlsContainer>
-          </Header>
-          <SingleSignOnHandler />
-          <NavigationOverlay overlayVisible={overlayVisible} />
           <WorkspaceContainer>
             <ColsWrapper separatorProps={colSeparatorProps}>
               <Col
@@ -658,18 +594,6 @@ class Workspace extends React.Component<IProps, IState> {
             </ColsWrapper>
           </WorkspaceContainer>
         </PageSection>
-        <LowerSection>
-          <SupplementaryContentContainer>
-            <ContentTitle>Supplementary Content Area</ContentTitle>
-            <Text>{challenge.supplementaryContent}</Text>
-            <Text>
-              <b>Video:</b>{" "}
-              {challenge.videoUrl ? challenge.videoUrl : "No video available"}
-            </Text>
-            {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
-          </SupplementaryContentContainer>
-        </LowerSection>
-        <WorkspaceKeyboardShortcuts />
       </Container>
     );
   }
@@ -997,20 +921,6 @@ class Workspace extends React.Component<IProps, IState> {
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
   };
-
-  toggleNavigationMap = () => {
-    const { overlayVisible } = this.props;
-    if (overlayVisible) {
-      this.unlockVerticalScrolling();
-    } else {
-      this.lockVerticalScrolling();
-    }
-    this.props.setNavigationMapState(!overlayVisible);
-  };
-
-  /* hi */
-  lockVerticalScrolling = () => (document.body.style.overflowY = "hidden");
-  unlockVerticalScrolling = () => (document.body.style.overflowY = "scroll");
 }
 
 /** ===========================================================================
@@ -1025,14 +935,15 @@ const Container = styled.div`
 
 const PageSection = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - ${HEADER_HEIGHT}px);
   background: white;
 `;
 
-const LowerSection = styled.div`
+const LowerSection = styled.div<{ withHeader?: boolean }>`
   width: 100vw;
-  height: 100vh;
-  border-top: 2px solid ${C.HEADER_BORDER};
+  height: ${props =>
+    props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
+  border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
   background: ${C.BACKGROUND_LOWER_SECTION};
 `;
 
@@ -1314,6 +1225,7 @@ interface WorkspaceLoadingContainerProps extends ComponentProps, ConnectProps {}
 
 interface IProps extends WorkspaceLoadingContainerProps {
   challenge: Challenge;
+  unlockVerticalScrolling: () => any;
 }
 
 const withProps = connect(mapStateToProps, dispatchProps);
@@ -1330,8 +1242,29 @@ class WorkspaceLoadingContainer extends React.Component<
   WorkspaceLoadingContainerProps,
   {}
 > {
+  toggleNavigationMap = () => {
+    const { overlayVisible } = this.props;
+    if (overlayVisible) {
+      this.unlockVerticalScrolling();
+    } else {
+      this.lockVerticalScrolling();
+    }
+    this.props.setNavigationMapState(!overlayVisible);
+  };
+
+  /* hi */
+  lockVerticalScrolling = () => (document.body.style.overflowY = "hidden");
+
+  unlockVerticalScrolling = () => (document.body.style.overflowY = "scroll");
+
   render() {
-    const { challenge } = this.props;
+    const {
+      challenge,
+      overlayVisible,
+      nextPrevChallenges,
+      isEditMode,
+    } = this.props;
+    const { next, prev } = nextPrevChallenges;
 
     if (!challenge) {
       return this.renderLoadingOverlay();
@@ -1340,7 +1273,85 @@ class WorkspaceLoadingContainer extends React.Component<
     return (
       <React.Fragment>
         {this.renderLoadingOverlay()}
-        <Workspace {...this.props} challenge={challenge} />
+
+        <Header>
+          <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
+            <NavIconButton
+              style={{ color: "white", marginRight: 40 }}
+              onClick={this.toggleNavigationMap}
+            />
+            <h1
+              style={{
+                fontWeight: 100,
+                color: "white",
+                fontFamily: `'Helvetica Neue', Lato, sans-serif`,
+                margin: 0,
+              }}
+            >
+              Prototype X
+            </h1>
+          </ControlsContainer>
+          <ControlsContainer>
+            <EditingToolbar />
+          </ControlsContainer>
+          <ControlsContainer style={{ marginLeft: "auto" }}>
+            {prev && (
+              <StyledTooltip title="Previous Challenge">
+                <IconButton
+                  style={{ color: "white" }}
+                  aria-label="Previous Challenge"
+                  onClick={() => this.props.selectChallenge(prev.id)}
+                >
+                  <SkipPrevious />
+                </IconButton>
+              </StyledTooltip>
+            )}
+            {next && (
+              <StyledTooltip title="Next Challenge">
+                <IconButton
+                  style={{ color: "white" }}
+                  aria-label="Next Challenge"
+                  onClick={() => this.props.selectChallenge(next.id)}
+                >
+                  <SkipNext />
+                </IconButton>
+              </StyledTooltip>
+            )}
+            {this.props.userAuthenticated && this.props.user ? (
+              <CreateAccountText>
+                Welcome, {this.props.user.givenName}!
+                {/* Welcome, {this.props.user ? this.props.user.givenName : ""}! */}
+              </CreateAccountText>
+            ) : (
+              <CreateAccountText
+                onClick={() => this.props.setSingleSignOnDialogState(true)}
+              >
+                Login/Signup
+              </CreateAccountText>
+            )}
+          </ControlsContainer>
+        </Header>
+        <SingleSignOnHandler />
+        <NavigationOverlay overlayVisible={overlayVisible} />
+        {challenge.type !== "media" && (
+          <Workspace
+            {...this.props}
+            challenge={challenge}
+            unlockVerticalScrolling={this.unlockVerticalScrolling}
+          />
+        )}
+        <LowerSection withHeader={challenge.type === "media"}>
+          <SupplementaryContentContainer>
+            <ContentTitle>Supplementary Content Area</ContentTitle>
+            <Text>{challenge.supplementaryContent}</Text>
+            <Text>
+              <b>Video:</b>{" "}
+              {challenge.videoUrl ? challenge.videoUrl : "No video available"}
+            </Text>
+            {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
+          </SupplementaryContentContainer>
+        </LowerSection>
+        <WorkspaceKeyboardShortcuts />
       </React.Fragment>
     );
   }
