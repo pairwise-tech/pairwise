@@ -68,6 +68,11 @@ export const getCurrentChallenge = createSelector(
   },
 );
 
+export const getCurrentChallengeTestCode = createSelector(
+  [getCurrentChallenge],
+  c => c?.testCode,
+);
+
 /**
  * Find an return the current selected challenge, if it exists. Return
  * null otherwise.

@@ -34,6 +34,8 @@ const W = window.innerWidth;
 const H = window.innerHeight;
 const HEADER_HEIGHT = 50;
 
+export const MONACO_EDITOR_THEME = "vs-dark";
+
 const DIMENSIONS = {
   WORKSPACE_HEIGHT: H - HEADER_HEIGHT,
   EDITOR_PANEL_WIDTH: W * 0.65,

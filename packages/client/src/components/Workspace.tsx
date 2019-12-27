@@ -34,6 +34,7 @@ import {
   COLORS as C,
   DIMENSIONS as D,
   HEADER_HEIGHT,
+  MONACO_EDITOR_THEME,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
@@ -51,6 +52,7 @@ import {
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
+import ChallengeTestEditor from "./ChallengeTestEditor";
 import EditingToolbar from "./EditingToolbar";
 import NavigationOverlay from "./NavigationOverlay";
 import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
@@ -95,6 +97,7 @@ interface IState {
   tests: ReadonlyArray<TestCase>;
   monacoInitializationError: boolean;
   adminEditorTab: "starterCode" | "solutionCode";
+  adminTestTab: "testResults" | "testCode";
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
@@ -163,10 +166,12 @@ class Workspace extends React.Component<IProps, IState> {
       fullScreenEditor: false,
       monacoInitializationError: false,
       adminEditorTab: "starterCode",
+      adminTestTab: "testResults",
       code: this.getEditorCode(props.challenge),
     };
   }
 
+  // This is only to allow a logic split if editting (i.e. via admin edit mode).
   getEditorCode = (challenge: Challenge) => {
     if (this.props.isEditMode) {
       return challenge[this.state.adminEditorTab];
@@ -215,6 +220,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   componentWillReceiveProps(nextProps: IProps) {
+    // Update in response to changing challenge
     if (this.props.challenge.id !== nextProps.challenge.id) {
       const { challenge } = nextProps;
       const tests = JSON.parse(challenge.testCode);
@@ -222,13 +228,15 @@ class Workspace extends React.Component<IProps, IState> {
       this.setState({ code: newCode, tests }, this.refreshEditor);
     }
 
+    // Update in response to toggling admin edit mode. This will only ever
+    // happen for us as we use codepress, not for our end users.
     if (this.props.isEditMode !== nextProps.isEditMode) {
       this.updateEditorTab();
     }
   }
 
   /**
-   * Resest the code editor content to the staretCode
+   * Resest the code editor content to the starterCode
    */
   resetCodeWindow = () => {
     const { challenge } = this.props;
@@ -322,7 +330,7 @@ class Workspace extends React.Component<IProps, IState> {
     const mn = this.monacoEditor;
 
     const options = {
-      theme: "vs-dark",
+      theme: MONACO_EDITOR_THEME,
       automaticLayout: true,
       fixedOverflowWidgets: true,
       minimap: {
@@ -381,9 +389,25 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  handleEditorTabClick = (tab: "starterCode" | "solutionCode") => {
+  /**
+   * Switching tabs in the main code area, so that we can edit the starter code and solution code of a challenge.
+   * Doing a check to see if we even need to update state. Normally we would
+   * just do a fire-and-forget state update regardless, but with all the
+   * imperative logic going on with the editor this keeps it from updating
+   * unecessarily.
+   */
+  handleEditorTabClick = (tab: IState["adminEditorTab"]) => {
     if (tab !== this.state.adminEditorTab) {
       this.setState({ adminEditorTab: tab }, this.updateEditorTab);
+    }
+  };
+
+  /**
+   * Switch tabs in the test area of the workspace. So that we can see test results and write tests using different tabs.
+   */
+  handleTestTabClick = (tab: IState["adminTestTab"]) => {
+    if (tab !== this.state.adminTestTab) {
+      this.setState({ adminTestTab: tab });
     }
   };
 
@@ -535,13 +559,32 @@ class Workspace extends React.Component<IProps, IState> {
                       initialHeight={D.TEST_CONTENT_HEIGHT}
                       style={{ background: C.BACKGROUND_CONTENT }}
                     >
-                      <ContentContainer>
-                        <ContentTitle style={{ marginBottom: 12 }}>
-                          {this.getTestSummaryString()}
-                        </ContentTitle>
-                        {tests.map(this.renderTestResult)}
-                        <Spacer height={50} />
-                      </ContentContainer>
+                      <TabbedInnerNav show={isEditMode}>
+                        <Tab
+                          onClick={() => this.handleTestTabClick("testResults")}
+                          active={this.state.adminTestTab === "testResults"}
+                        >
+                          Test Results
+                        </Tab>
+                        <Tab
+                          onClick={() => this.handleTestTabClick("testCode")}
+                          active={this.state.adminTestTab === "testCode"}
+                        >
+                          Test Code
+                        </Tab>
+                      </TabbedInnerNav>
+                      {this.props.isEditMode &&
+                      this.state.adminTestTab === "testCode" ? (
+                        <ChallengeTestEditor />
+                      ) : (
+                        <ContentContainer>
+                          <ContentTitle style={{ marginBottom: 12 }}>
+                            {this.getTestSummaryString()}
+                          </ContentTitle>
+                          {tests.map(this.renderTestResult)}
+                          <Spacer height={50} />
+                        </ContentContainer>
+                      )}
                     </Row>
                   </RowsWrapper>
                 ) : (
