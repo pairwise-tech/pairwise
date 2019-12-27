@@ -1341,15 +1341,7 @@ class WorkspaceLoadingContainer extends React.Component<
           />
         )}
         <LowerSection withHeader={challenge.type === "media"}>
-          <SupplementaryContentContainer>
-            <ContentTitle>Supplementary Content Area</ContentTitle>
-            <Text>{challenge.supplementaryContent}</Text>
-            <Text>
-              <b>Video:</b>{" "}
-              {challenge.videoUrl ? challenge.videoUrl : "No video available"}
-            </Text>
-            {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
-          </SupplementaryContentContainer>
+          <MediaArea />
         </LowerSection>
         <WorkspaceKeyboardShortcuts />
       </React.Fragment>
@@ -1364,6 +1356,70 @@ class WorkspaceLoadingContainer extends React.Component<
     );
   };
 }
+
+const mediaMapState = (state: ReduxStoreState) => ({
+  title: Modules.selectors.challenges.getCurrentTitle(state) || "",
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
+});
+
+const mediaMapDispatch = {
+  updateChallenge: Modules.actions.challenges.updateChallenge,
+};
+
+type MediaAreaProps = ReturnType<typeof mediaMapState> &
+  typeof mediaMapDispatch;
+
+const MediaArea = connect(
+  mediaMapState,
+  mediaMapDispatch,
+)((props: MediaAreaProps) => {
+  const { challenge, title, isEditMode } = props;
+
+  if (!challenge) {
+    return <h1>Loading...</h1>;
+  }
+
+  const handleChange = (fn: (x: string) => any) => (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    fn(e.target.value);
+  };
+
+  const handleTitle = handleChange(title =>
+    props.updateChallenge({ id: challenge.id, challenge: { title } }),
+  );
+  const handleContent = handleChange(supplementaryContent =>
+    props.updateChallenge({
+      id: challenge.id,
+      challenge: { supplementaryContent },
+    }),
+  );
+
+  return (
+    <SupplementaryContentContainer>
+      <TitleInput
+        type="text"
+        value={title}
+        onChange={handleTitle}
+        disabled={!isEditMode}
+      />
+      {isEditMode ? (
+        <ContentInput
+          value={challenge.supplementaryContent}
+          onChange={handleContent}
+        />
+      ) : (
+        <StyledMarkdown source={challenge.supplementaryContent} />
+      )}
+      <Text>
+        <b>Video:</b>{" "}
+        {challenge.videoUrl ? challenge.videoUrl : "No video available"}
+      </Text>
+      {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
+    </SupplementaryContentContainer>
+  );
+});
 
 /** ===========================================================================
  * Export
