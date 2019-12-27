@@ -15,7 +15,7 @@ import { monaco } from "@monaco-editor/react";
 import { Console, Decode } from "console-feed";
 import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
-import { pipe } from "ramda";
+import pipe from "ramda/es/pipe";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import Markdown from "react-markdown";
@@ -54,6 +54,7 @@ import {
 } from "../tools/utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import EditingToolbar from "./EditingToolbar";
+import KeyboardShortcuts from "./KeyboardShortcuts";
 import NavigationOverlay from "./NavigationOverlay";
 import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
 
@@ -221,7 +222,10 @@ class Workspace extends React.Component<IProps, IState> {
       const { challenge } = nextProps;
       const tests = JSON.parse(challenge.testCode);
       const newCode = this.getEditorCode(challenge);
-      this.setState({ code: newCode, tests }, this.refreshEditor);
+      this.setState(
+        { code: newCode, tests, adminTestTab: "testResults" },
+        this.refreshEditor,
+      );
     }
 
     // Update in response to toggling admin edit mode. This will only ever
@@ -665,6 +669,7 @@ class Workspace extends React.Component<IProps, IState> {
             {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
           </SupplementaryContentContainer>
         </LowerSection>
+        <WorkspaceKeyboardShortcuts />
       </Container>
     );
   }
@@ -1449,6 +1454,29 @@ const StyledInputs = styled.div<{ isEditMode: boolean }>`
     }
   }
 `;
+
+const keyboardDispatchProps = {
+  enterEditMode: (e: KeyboardEvent) => {
+    if (process.env.NODE_ENV === "development") {
+      e.preventDefault();
+      return Modules.actions.challenges.setEditMode(true);
+    } else {
+      console.warn("Not in development mode");
+      return { type: "PLACEHOLDER_ACTION" };
+    }
+  },
+};
+
+const WorkspaceKeyboardShortcuts = connect(
+  null,
+  keyboardDispatchProps,
+)((props: typeof keyboardDispatchProps) => (
+  <KeyboardShortcuts
+    keymap={{
+      "cmd+e": props.enterEditMode,
+    }}
+  />
+));
 
 interface YoutubeEmbedProps {
   url: string;
