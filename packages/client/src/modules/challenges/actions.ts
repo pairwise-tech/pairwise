@@ -68,7 +68,7 @@ const setNavigationMapState = createAction(
 const fetchCurrentActiveCourseSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
 )<{
-  courses: CourseList;
+  courses: Course[];
   currentModuleId: string;
   currentCourseId: string;
   currentChallengeId: string;

@@ -1163,6 +1163,22 @@ const Tab = styled.div<{ active?: boolean }>`
   }
 `;
 
+export const LoginSignupText = styled.h1`
+  margin-right: 12px;
+  margin-left: 12px;
+  font-size: 18px;
+  font-weight: 200;
+  color: ${COLORS.TEXT_TITLE};
+  font-family: Helvetica Neue, Lato, sans-serif;
+`;
+
+export const LoginSignupTextInteractive = styled(LoginSignupText)`
+  :hover {
+    cursor: pointer;
+    color: ${COLORS.TEXT_HOVER};
+  }
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================

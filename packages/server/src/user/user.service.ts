@@ -2,8 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FacebookProfile } from "src/auth/facebook.strategy";
-import { UserCourseProgress } from "../progress/userCourseProgress.entity";
+
+export interface GenericUserProfile {
+  email: string;
+  displayName: string;
+  givenName: string;
+  familyName: string;
+}
 
 @Injectable()
 export class UserService {
@@ -12,31 +17,34 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async findOrCreateUser(profile: FacebookProfile) {
+  async findUserByEmail(email: string) {
+    const user = await this.userRepository.findOne({ email });
+    return user;
+  }
+
+  async findOrCreateUser(profile: GenericUserProfile) {
     /**
      * TODO: For multiple SSO providers, check and consolidate login
      * attempts by email address. A single email address is associated
      * with only one user, regardless of which provider a user logins in
      * with.
      */
-    console.log("Handling findOrCreateUser for profile:");
-    console.log(profile);
-
-    const email = profile.emails[0].value;
-    const userExists = await this.userRepository.findOne({ email });
+    const { email } = profile;
+    console.log(`Running findOrCreateUser for email ${email}`);
+    const userExists = await this.findUserByEmail(email);
     if (userExists) {
-      console.log("User exists.");
+      console.log("User exists, returning.");
       return userExists;
     } else {
-      console.log("User does not exist, creating:");
+      console.log("Creating new user.");
       const userData = {
         email,
+        givenName: profile.givenName,
+        familyName: profile.familyName,
         displayName: profile.displayName,
-        givenName: profile.name.givenName,
-        familyName: profile.name.familyName,
       };
       await this.userRepository.insert(userData);
-      return this.userRepository.findOne({ email });
+      return this.findUserByEmail(email);
     }
   }
 }

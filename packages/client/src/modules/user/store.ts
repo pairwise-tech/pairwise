@@ -1,6 +1,5 @@
 import { createReducer } from "typesafe-actions";
 
-import Auth, { AuthActionTypes } from "../auth";
 import actions, { ActionTypes } from "./actions";
 import { User } from "./types";
 
@@ -17,11 +16,11 @@ const initialState = {
   user: null,
 };
 
-const app = createReducer<State, ActionTypes | AuthActionTypes>(initialState)
+const app = createReducer<State, ActionTypes>(initialState)
   .handleAction(actions.updateUser, state => state)
-  .handleAction(Auth.actions.facebookLoginSuccess, (state, action) => ({
+  .handleAction(actions.fetchUserSuccess, (state, action) => ({
     ...state,
-    user: action.payload.user,
+    user: action.payload,
   }));
 
 /** ===========================================================================

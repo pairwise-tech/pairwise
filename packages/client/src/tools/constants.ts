@@ -23,6 +23,7 @@ const COLORS = {
   BACKGROUND_MODAL: "rgb(25, 25, 25)",
   GRADIENT_GREEN:
     "linear-gradient( 90deg, rgba(0, 255, 177, 1) 22%, rgba(0, 255, 211, 1) 74%)",
+  BORDER_MODAL: "rgb(100,100,100)",
 };
 
 /** ===========================================================================

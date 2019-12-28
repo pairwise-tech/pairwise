@@ -10,8 +10,8 @@ import { ProgressHistory } from "./userCourseProgress.dto";
 
 @Entity()
 export class UserCourseProgress {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  uuid: number;
 
   @Index()
   @Column()

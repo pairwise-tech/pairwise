@@ -5,13 +5,8 @@ import { createLogger } from "redux-logger";
 import { createEpicMiddleware } from "redux-observable";
 
 import ENV from "../tools/env";
-import {
-  EpicDependencies,
-  makeCourseApi,
-  Modules,
-  rootEpic,
-  rootReducer,
-} from "./root";
+import { EpicDependencies, Modules, rootEpic, rootReducer } from "./root";
+import API from "./api";
 
 /** ===========================================================================
  * Logger
@@ -51,7 +46,7 @@ const history = createBrowserHistory();
 
 const dependencies: EpicDependencies = {
   router: history,
-  course: makeCourseApi("http://localhost:3001"),
+  api: API,
 };
 
 const epicMiddleware = createEpicMiddleware({

@@ -9,8 +9,8 @@ import { User } from "../user/user.entity";
 
 @Entity()
 export class UserCodeBlob {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  uuid: number;
 
   @Index()
   @Column()

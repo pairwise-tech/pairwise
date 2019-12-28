@@ -10,8 +10,8 @@ import { UserCodeBlob } from "src/progress/userCodeBlob.entity";
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  uuid: string;
 
   @Column({ unique: true })
   email: string;

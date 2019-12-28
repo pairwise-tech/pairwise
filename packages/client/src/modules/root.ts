@@ -18,36 +18,7 @@ import Challenges, {
   ChallengesState,
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
-
-/** ===========================================================================
- * Course / Challenge API
- * ============================================================================
- */
-interface CourseAPI {
-  getAll: () => Observable<CourseList>;
-  save: (c: Course) => Observable<any>;
-}
-
-export const makeCourseApi = (endpoint: string): CourseAPI => {
-  return {
-    getAll: () => {
-      return fromFetch(`${endpoint}/courses`, { mode: "cors" }).pipe(
-        switchMap((response: any) => response.json()),
-        map((x: any) => x.data),
-      );
-    },
-    save: (c: Course) => {
-      return fromFetch(`${endpoint}/courses`, {
-        mode: "cors",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(c),
-      }).pipe(switchMap((response: any) => response.json()));
-    },
-  };
-};
+import API from "./api";
 
 /** ===========================================================================
  * Root Actions and Selectors
@@ -105,7 +76,7 @@ const rootReducer = combineReducers({
 
 export interface EpicDependencies {
   router: History<any>;
-  course: CourseAPI;
+  api: typeof API;
 }
 
 export type EpicSignature = Epic<

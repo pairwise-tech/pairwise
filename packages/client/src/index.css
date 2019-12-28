@@ -31,6 +31,54 @@ pre {
   min-width: 820px;
 }
 
+.social-media-login-button {
+  margin-top: 12px;
+  border: none;
+  padding: 0;
+  width: 235px;
+  height: 43px;
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 2px;
+  text-align: center;
+}
+
+.google-social-login span {
+  font-weight: 500px;
+  font-size: 14px;
+  padding: 0;
+  color: black;
+  text-align: center;
+}
+
+.social-media-login-button:focus {
+  outline: none;
+}
+
+.social-media-login-button:hover {
+  cursor: pointer;
+}
+
+.github-social-login {
+  color: white;
+  background: rgb(51, 51, 51);
+}
+
+.github-social-login:hover {
+  color: white;
+  background: rgb(65, 65, 65);
+}
+
+.facebook-social-login {
+  color: white;
+  background: rgb(63, 89, 161);
+}
+
+.facebook-social-login:hover {
+  color: white;
+  background: rgb(62, 103, 216);
+}
+
 /* Custom editor styles for JSX elements:
  *
  * TODO: Improve styling to create a better theme.
