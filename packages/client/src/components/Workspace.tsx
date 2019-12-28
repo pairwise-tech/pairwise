@@ -12,16 +12,16 @@ import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
 import SkipNext from "@material-ui/icons/SkipNext";
 import SkipPrevious from "@material-ui/icons/SkipPrevious";
 import { monaco } from "@monaco-editor/react";
+import { Challenge } from "@prototype/common";
 import { Console, Decode } from "console-feed";
-import { Challenge } from "modules/challenges/types";
 import Modules, { ReduxStoreState } from "modules/root";
-import { pipe } from "ramda";
+import pipe from "ramda/es/pipe";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
-import Markdown from "react-markdown";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
+import { DEV_MODE } from "tools/env";
 import {
   getTestCodeMarkup,
   TestCase,
@@ -34,6 +34,7 @@ import {
   COLORS as C,
   DIMENSIONS as D,
   HEADER_HEIGHT,
+  MONACO_EDITOR_THEME,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
@@ -47,13 +48,17 @@ import {
 import {
   assertUnreachable,
   composeWithProps,
-  getStarterCodeForChallenge,
+  getStoredCodeForChallenge,
   saveCodeToLocalStorage,
   wait,
 } from "../tools/utils";
+import ChallengeTestEditor from "./ChallengeTestEditor";
 import EditingToolbar from "./EditingToolbar";
+import KeyboardShortcuts from "./KeyboardShortcuts";
+import MediaArea from "./MediaArea";
 import NavigationOverlay from "./NavigationOverlay";
-import SingleSignOnHandler from "./SingleSignOnHandler";
+import { ContentInput, StyledMarkdown, TitleInput } from "./shared";
+import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
 
 /** ===========================================================================
  * Types & Config
@@ -94,6 +99,8 @@ interface IState {
   fullScreenEditor: boolean;
   tests: ReadonlyArray<TestCase>;
   monacoInitializationError: boolean;
+  adminEditorTab: "starterCode" | "solutionCode";
+  adminTestTab: "testResults" | "testCode";
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
@@ -107,23 +114,6 @@ const NavIconButton = styled(props => (
   background: transparent;
   border: none;
   outline: none;
-`;
-
-const StyledMarkdown = styled(Markdown)`
-  color: white;
-  line-height: 1.5;
-  font-size: 1.2rem;
-
-  code {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1px 3px;
-    display: inline;
-    /* color: #ff4788; */
-    color: rgb(0, 255, 185);
-    border-radius: 3px;
-    line-height: normal;
-    font-size: 85%;
-  }
 `;
 
 /** ===========================================================================
@@ -152,10 +142,7 @@ class Workspace extends React.Component<IProps, IState> {
       this.requestSyntaxHighlighting,
     );
 
-    this.debouncedSaveCodeFunction = debounce(
-      50,
-      this.handleSaveCodeToLocalStorage,
-    );
+    this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
     const tests = JSON.parse(this.props.challenge.testCode);
 
@@ -164,9 +151,23 @@ class Workspace extends React.Component<IProps, IState> {
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
-      code: getStarterCodeForChallenge(props.challenge),
+      adminEditorTab: "starterCode",
+      adminTestTab: "testResults",
+      code: this.getEditorCode(props.challenge),
     };
   }
+
+  // This is only to allow a logic split if editting (i.e. via admin edit mode).
+  getEditorCode = (
+    challenge: Challenge = this.props.challenge,
+    isEditMode = this.props.isEditMode,
+  ) => {
+    if (isEditMode) {
+      return challenge[this.state.adminEditorTab];
+    } else {
+      return getStoredCodeForChallenge(challenge);
+    }
+  };
 
   async componentDidMount() {
     document.addEventListener("keydown", this.handleKeyPress);
@@ -187,6 +188,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentWillUnmount() {
+    this.disposeModels();
     window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener(
       "message",
@@ -194,23 +196,36 @@ class Workspace extends React.Component<IProps, IState> {
     );
   }
 
+  refreshEditor = () => {
+    this.props.unlockVerticalScrolling();
+    this.resetMonacoEditor();
+    this.setMonacoEditorValue();
+  };
+
   componentWillReceiveProps(nextProps: IProps) {
+    // Update in response to changing challenge
     if (this.props.challenge.id !== nextProps.challenge.id) {
       const { challenge } = nextProps;
       const tests = JSON.parse(challenge.testCode);
+      const newCode = this.getEditorCode(challenge);
       this.setState(
-        { code: getStarterCodeForChallenge(challenge), tests },
-        () => {
-          this.unlockVerticalScrolling();
-          this.resetMonacoEditor();
-          this.setMonacoEditorValue();
-        },
+        { code: newCode, tests, adminTestTab: "testResults" },
+        this.refreshEditor,
+      );
+    }
+
+    // Update in response to toggling admin edit mode. This will only ever
+    // happen for us as we use codepress, not for our end users.
+    if (this.props.isEditMode !== nextProps.isEditMode) {
+      this.setState(
+        { code: this.getEditorCode(nextProps.challenge, nextProps.isEditMode) },
+        this.refreshEditor,
       );
     }
   }
 
   /**
-   * Resest the code editor content to the staretCode
+   * Resest the code editor content to the starterCode
    */
   resetCodeWindow = () => {
     const { challenge } = this.props;
@@ -304,7 +319,7 @@ class Workspace extends React.Component<IProps, IState> {
     const mn = this.monacoEditor;
 
     const options = {
-      theme: "vs-dark",
+      theme: MONACO_EDITOR_THEME,
       automaticLayout: true,
       fixedOverflowWidgets: true,
       minimap: {
@@ -363,20 +378,61 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
+  /**
+   * Switching tabs in the main code area, so that we can edit the starter code and solution code of a challenge.
+   * Doing a check to see if we even need to update state. Normally we would
+   * just do a fire-and-forget state update regardless, but with all the
+   * imperative logic going on with the editor this keeps it from updating
+   * unecessarily.
+   */
+  handleEditorTabClick = (tab: IState["adminEditorTab"]) => {
+    if (tab !== this.state.adminEditorTab) {
+      this.setState(
+        {
+          adminEditorTab: tab,
+          code: this.props.challenge[tab],
+        },
+        this.refreshEditor,
+      );
+    }
+  };
+
+  /**
+   * Switch tabs in the test area of the workspace. So that we can see test results and write tests using different tabs.
+   */
+  handleTestTabClick = (tab: IState["adminTestTab"]) => {
+    if (tab !== this.state.adminTestTab) {
+      this.setState({ adminTestTab: tab });
+    }
+  };
+
   render() {
     const { fullScreenEditor, tests } = this.state;
-    const { challenge, overlayVisible, nextPrevChallenges } = this.props;
-    const { next, prev } = nextPrevChallenges;
+    const { challenge, isEditMode } = this.props;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
 
     const MONACO_CONTAINER = (
       <div style={{ height: "100%", position: "relative" }}>
+        <TabbedInnerNav show={isEditMode}>
+          <Tab
+            onClick={() => this.handleEditorTabClick("starterCode")}
+            active={this.state.adminEditorTab === "starterCode"}
+          >
+            Starter Code
+          </Tab>
+          <Tab
+            onClick={() => this.handleEditorTabClick("solutionCode")}
+            active={this.state.adminEditorTab === "solutionCode"}
+          >
+            Solution
+          </Tab>
+        </TabbedInnerNav>
         <LowerRight
           style={{ right: 10, display: "flex", flexDirection: "column" }}
         >
-          {this.state.code !== challenge.starterCode && (
+          {this.state.code !== challenge.starterCode && !isEditMode && (
             <StyledTooltip title={"Restore Initial Code"} placement="left">
               <IconButton
                 style={{ color: "white" }}
@@ -407,64 +463,6 @@ class Workspace extends React.Component<IProps, IState> {
     return (
       <Container>
         <PageSection>
-          <Header>
-            <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
-              <NavIconButton
-                style={{ color: "white", marginRight: 40 }}
-                onClick={this.toggleNavigationMap}
-              />
-              <h1
-                style={{
-                  fontWeight: 100,
-                  color: "white",
-                  fontFamily: `'Helvetica Neue', Lato, sans-serif`,
-                  margin: 0,
-                }}
-              >
-                Prototype X
-              </h1>
-            </ControlsContainer>
-            <ControlsContainer>
-              <EditingToolbar />
-            </ControlsContainer>
-            <ControlsContainer style={{ marginLeft: "auto" }}>
-              {prev && (
-                <StyledTooltip title="Previous Challenge">
-                  <IconButton
-                    style={{ color: "white" }}
-                    aria-label="Previous Challenge"
-                    onClick={() => this.props.selectChallenge(prev.id)}
-                  >
-                    <SkipPrevious />
-                  </IconButton>
-                </StyledTooltip>
-              )}
-              {next && (
-                <StyledTooltip title="Next Challenge">
-                  <IconButton
-                    style={{ color: "white" }}
-                    aria-label="Next Challenge"
-                    onClick={() => this.props.selectChallenge(next.id)}
-                  >
-                    <SkipNext />
-                  </IconButton>
-                </StyledTooltip>
-              )}
-              {this.props.userAuthenticated && this.props.user ? (
-                <LoginSignupText>
-                  Welcome, {this.props.user.givenName}!
-                </LoginSignupText>
-              ) : (
-                <LoginSignupTextInteractive
-                  onClick={() => this.props.setSingleSignOnDialogState(true)}
-                >
-                  Login/Signup
-                </LoginSignupTextInteractive>
-              )}
-            </ControlsContainer>
-          </Header>
-          <SingleSignOnHandler />
-          <NavigationOverlay overlayVisible={overlayVisible} />
           <WorkspaceContainer>
             <ColsWrapper separatorProps={colSeparatorProps}>
               <Col
@@ -491,13 +489,32 @@ class Workspace extends React.Component<IProps, IState> {
                       initialHeight={D.TEST_CONTENT_HEIGHT}
                       style={{ background: C.BACKGROUND_CONTENT }}
                     >
-                      <ContentContainer>
-                        <ContentTitle style={{ marginBottom: 12 }}>
-                          {this.getTestSummaryString()}
-                        </ContentTitle>
-                        {tests.map(this.renderTestResult)}
-                        <Spacer height={50} />
-                      </ContentContainer>
+                      <TabbedInnerNav show={isEditMode}>
+                        <Tab
+                          onClick={() => this.handleTestTabClick("testResults")}
+                          active={this.state.adminTestTab === "testResults"}
+                        >
+                          Test Results
+                        </Tab>
+                        <Tab
+                          onClick={() => this.handleTestTabClick("testCode")}
+                          active={this.state.adminTestTab === "testCode"}
+                        >
+                          Test Code
+                        </Tab>
+                      </TabbedInnerNav>
+                      {this.props.isEditMode &&
+                      this.state.adminTestTab === "testCode" ? (
+                        <ChallengeTestEditor />
+                      ) : (
+                        <ContentContainer>
+                          <ContentTitle style={{ marginBottom: 12 }}>
+                            {this.getTestSummaryString()}
+                          </ContentTitle>
+                          {tests.map(this.renderTestResult)}
+                          <Spacer height={50} />
+                        </ContentContainer>
+                      )}
                     </Row>
                   </RowsWrapper>
                 ) : (
@@ -562,17 +579,6 @@ class Workspace extends React.Component<IProps, IState> {
             </ColsWrapper>
           </WorkspaceContainer>
         </PageSection>
-        <LowerSection>
-          <SupplementaryContentContainer>
-            <ContentTitle>Supplementary Content Area</ContentTitle>
-            <Text>{challenge.supplementaryContent}</Text>
-            <Text>
-              <b>Video:</b>{" "}
-              {challenge.videoUrl ? challenge.videoUrl : "No video available"}
-            </Text>
-            {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
-          </SupplementaryContentContainer>
-        </LowerSection>
       </Container>
     );
   }
@@ -646,6 +652,8 @@ class Workspace extends React.Component<IProps, IState> {
           </ContentText>
         );
       }
+      case "media":
+        return null;
       default:
         assertUnreachable(challengeType);
     }
@@ -702,7 +710,19 @@ class Workspace extends React.Component<IProps, IState> {
     });
   };
 
-  handleSaveCodeToLocalStorage = () => {
+  handleChangeEditorCode = () => {
+    if (this.props.isEditMode) {
+      const { challenge } = this.props;
+      this.props.updateChallenge({
+        id: challenge.id,
+        challenge: {
+          [this.state.adminEditorTab]: this.state.code,
+        },
+      });
+
+      // Do not store anything to local storage
+      return;
+    }
     /**
      * Save the current code to local storage. This method is debounced.
      */
@@ -886,20 +906,6 @@ class Workspace extends React.Component<IProps, IState> {
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
   };
-
-  toggleNavigationMap = () => {
-    const { overlayVisible } = this.props;
-    if (overlayVisible) {
-      this.unlockVerticalScrolling();
-    } else {
-      this.lockVerticalScrolling();
-    }
-    this.props.setNavigationMapState(!overlayVisible);
-  };
-
-  /* hi */
-  lockVerticalScrolling = () => (document.body.style.overflowY = "hidden");
-  unlockVerticalScrolling = () => (document.body.style.overflowY = "scroll");
 }
 
 /** ===========================================================================
@@ -914,21 +920,16 @@ const Container = styled.div`
 
 const PageSection = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - ${HEADER_HEIGHT}px);
   background: white;
 `;
 
-const LowerSection = styled.div`
+const LowerSection = styled.div<{ withHeader?: boolean }>`
   width: 100vw;
-  height: 100vh;
-  border-top: 2px solid ${C.HEADER_BORDER};
+  height: ${props =>
+    props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
+  border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
   background: ${C.BACKGROUND_LOWER_SECTION};
-`;
-
-const SupplementaryContentContainer = styled.div`
-  padding: 25px;
-  padding-left: 12px;
-  padding-right: 12px;
 `;
 
 const BORDER = 2;
@@ -957,11 +958,7 @@ const Header = styled.div`
     left: 0;
     right: 0;
     height: ${BORDER}px;
-    background: linear-gradient(
-      90deg,
-      rgba(0, 255, 177, 1) 22%,
-      rgba(0, 255, 211, 1) 74%
-    );
+    background: ${COLORS.GRADIENT_GREEN};
   }
 `;
 
@@ -1073,14 +1070,6 @@ const ContentText = styled.span`
   color: ${C.TEXT_CONTENT};
 `;
 
-const Text = styled.p`
-  margin: 0;
-  margin-top: 8px;
-  font-size: 15px;
-  font-weight: 200px;
-  color: ${C.TEXT_CONTENT};
-`;
-
 const ControlsContainer = styled.div`
   display: flex;
   align-items: center;
@@ -1140,6 +1129,40 @@ const StyledTooltip = styled(Tooltip)`
     opacity: 1;
   }
 `;
+const TabbedInnerNav = styled.div<{ show: boolean }>`
+  display: ${props => (props.show ? "flex" : "none")};
+  align-items: center;
+  border-bottom: 1px solid black;
+`;
+
+const Tab = styled.div<{ active?: boolean }>`
+  display: block;
+  padding: 7px 20px;
+  cursor: pointer;
+  position: relative;
+  background: ${props => (props.active ? "#1e1e1e" : "transparent")};
+  color: ${props => (props.active ? "white" : "gray")};
+  border: 1px solid ${props => (props.active ? "black" : "transparent")};
+  border-top: 2px solid
+    ${props => (props.active ? COLORS.PRIMARY_GREEN : "transparent")};
+  border-bottom: none;
+  transition: all 0.2s ease-out;
+
+  &:hover {
+    color: white;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: ${props => (props.active ? "#1e1e1e" : "transparent")};
+  }
+`;
 
 export const LoginSignupText = styled.h1`
   margin-right: 12px;
@@ -1167,6 +1190,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
@@ -1177,6 +1201,7 @@ const dispatchProps = {
   selectChallenge: Modules.actions.challenges.setChallengeId,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
+  updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
 interface ComponentProps {}
@@ -1187,6 +1212,7 @@ interface WorkspaceLoadingContainerProps extends ComponentProps, ConnectProps {}
 
 interface IProps extends WorkspaceLoadingContainerProps {
   challenge: Challenge;
+  unlockVerticalScrolling: () => any;
 }
 
 const withProps = connect(mapStateToProps, dispatchProps);
@@ -1203,8 +1229,24 @@ class WorkspaceLoadingContainer extends React.Component<
   WorkspaceLoadingContainerProps,
   {}
 > {
+  toggleNavigationMap = () => {
+    const { overlayVisible } = this.props;
+    if (overlayVisible) {
+      this.unlockVerticalScrolling();
+    } else {
+      this.lockVerticalScrolling();
+    }
+    this.props.setNavigationMapState(!overlayVisible);
+  };
+
+  /* hi */
+  lockVerticalScrolling = () => (document.body.style.overflowY = "hidden");
+
+  unlockVerticalScrolling = () => (document.body.style.overflowY = "scroll");
+
   render() {
-    const { challenge } = this.props;
+    const { challenge, overlayVisible, nextPrevChallenges } = this.props;
+    const { next, prev } = nextPrevChallenges;
 
     if (!challenge) {
       return this.renderLoadingOverlay();
@@ -1213,7 +1255,79 @@ class WorkspaceLoadingContainer extends React.Component<
     return (
       <React.Fragment>
         {this.renderLoadingOverlay()}
-        <Workspace {...this.props} challenge={challenge} />
+
+        <Header>
+          <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
+            <NavIconButton
+              style={{ color: "white", marginRight: 40 }}
+              onClick={this.toggleNavigationMap}
+            />
+            <h1
+              style={{
+                fontWeight: 100,
+                color: "white",
+                fontFamily: `'Helvetica Neue', Lato, sans-serif`,
+                margin: 0,
+              }}
+            >
+              Prototype X
+            </h1>
+          </ControlsContainer>
+          {DEV_MODE && (
+            <ControlsContainer>
+              <EditingToolbar />
+            </ControlsContainer>
+          )}
+          <ControlsContainer style={{ marginLeft: "auto" }}>
+            {prev && (
+              <StyledTooltip title="Previous Challenge">
+                <IconButton
+                  style={{ color: "white" }}
+                  aria-label="Previous Challenge"
+                  onClick={() => this.props.selectChallenge(prev.id)}
+                >
+                  <SkipPrevious />
+                </IconButton>
+              </StyledTooltip>
+            )}
+            {next && (
+              <StyledTooltip title="Next Challenge">
+                <IconButton
+                  style={{ color: "white" }}
+                  aria-label="Next Challenge"
+                  onClick={() => this.props.selectChallenge(next.id)}
+                >
+                  <SkipNext />
+                </IconButton>
+              </StyledTooltip>
+            )}
+            {this.props.userAuthenticated && this.props.user ? (
+              <CreateAccountText>
+                Welcome, {this.props.user.givenName}!
+                {/* Welcome, {this.props.user ? this.props.user.givenName : ""}! */}
+              </CreateAccountText>
+            ) : (
+              <CreateAccountText
+                onClick={() => this.props.setSingleSignOnDialogState(true)}
+              >
+                Login/Signup
+              </CreateAccountText>
+            )}
+          </ControlsContainer>
+        </Header>
+        <SingleSignOnHandler />
+        <NavigationOverlay overlayVisible={overlayVisible} />
+        {challenge.type !== "media" && (
+          <Workspace
+            {...this.props}
+            challenge={challenge}
+            unlockVerticalScrolling={this.unlockVerticalScrolling}
+          />
+        )}
+        <LowerSection withHeader={challenge.type === "media"}>
+          <MediaArea />
+        </LowerSection>
+        <WorkspaceKeyboardShortcuts />
       </React.Fragment>
     );
   }
@@ -1235,40 +1349,6 @@ class WorkspaceLoadingContainer extends React.Component<
 export default composeWithProps<ComponentProps>(withProps)(
   WorkspaceLoadingContainer,
 );
-
-const TitleInput = styled.input`
-  outline: none;
-  appearance: none;
-  border: none;
-  font-size: 1.2em;
-  background: transparent;
-  font-weight: bold;
-  color: rgb(200, 200, 200);
-  display: block;
-  width: 100%;
-  line-height: 1.5;
-  transition: all 0.2s ease-out;
-  &:focus {
-    background: black;
-  }
-`;
-
-const ContentInput = styled.textarea`
-  outline: none;
-  appearance: none;
-  border: none;
-  font-size: 1.2em;
-  background: transparent;
-  display: block;
-  color: white;
-  height: 100%;
-  width: 100%;
-  line-height: 1.5;
-  transition: all 0.2s ease-out;
-  &:focus {
-    background: black;
-  }
-`;
 
 const contentMapState = (state: ReduxStoreState) => ({
   content: Modules.selectors.challenges.getCurrentContent(state) || "",
@@ -1303,7 +1383,7 @@ const ContentViewEdit = connect(
   );
 
   return (
-    <div style={{ height: "100%" }}>
+    <StyledInputs isEditMode={isEditMode} style={{ height: "100%" }}>
       <TitleInput
         type="text"
         value={props.title}
@@ -1315,58 +1395,40 @@ const ContentViewEdit = connect(
       ) : (
         <StyledMarkdown source={props.content} />
       )}
-    </div>
+    </StyledInputs>
   );
 });
 
-interface YoutubeEmbedProps {
-  url: string;
-}
-
-/**
- * Copied the iframe props form the share sheet on youtube.
- *
- * NOTE: This iframe can be hidden for ease of development. If not actively
- * developing video-related features, loading a youtube iframe causes all sorts
- * of network traffic which both slows down page loads (a big pain in dev) and
- * clutters up the network panel with a bunch of requests we're not interested
- * in.
- */
-const YoutubeEmbed = (props: YoutubeEmbedProps) => {
-  const width = 728;
-  const height = 410;
-
-  if (process.env.REACT_APP_HIDE_EMBEDS) {
-    return (
-      <div
-        style={{
-          width,
-          height,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#999",
-        }}
-      >
-        <h3 style={{ textTransform: "uppercase" }}>Embed Hidden</h3>
-        <p>
-          Restart the app without <code>REACT_APP_HIDE_EMBEDS</code> to view
-          embeds
-        </p>
-      </div>
-    );
+const StyledInputs = styled.div<{ isEditMode: boolean }>`
+  input,
+  textarea {
+    border: 1px solid transparent;
+    &:hover {
+      border-color: ${props =>
+        props.isEditMode ? "rgb(0, 255, 185)" : "transparent"};
+    }
   }
+`;
 
-  return (
-    <iframe
-      title="Youtube Embed"
-      width={width}
-      height={height}
-      src={props.url}
-      frameBorder="0"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    ></iframe>
-  );
+const keyboardDispatchProps = {
+  enterEditMode: (e: KeyboardEvent) => {
+    if (DEV_MODE) {
+      e.preventDefault();
+      return Modules.actions.challenges.setEditMode(true);
+    } else {
+      console.warn("Not in development mode");
+      return { type: "PLACEHOLDER_ACTION" };
+    }
+  },
 };
+
+const WorkspaceKeyboardShortcuts = connect(
+  null,
+  keyboardDispatchProps,
+)((props: typeof keyboardDispatchProps) => (
+  <KeyboardShortcuts
+    keymap={{
+      "cmd+e": props.enterEditMode,
+    }}
+  />
+));

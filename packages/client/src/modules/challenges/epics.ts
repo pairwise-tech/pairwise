@@ -1,6 +1,7 @@
-import API from "modules/api";
+// import axios from "axios";
+import { ChallengeList, Course } from "@prototype/common";
 import { combineEpics } from "redux-observable";
-import { of } from "rxjs";
+import { merge, of } from "rxjs";
 import {
   catchError,
   delay,
@@ -13,12 +14,7 @@ import {
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import {
-  ChallengeList,
-  Course,
-  CourseList,
-  InverseChallengeMapping,
-} from "./types";
+import { InverseChallengeMapping } from "./types";
 
 /** ===========================================================================
  * Epics
@@ -26,8 +22,6 @@ import {
  */
 
 export const CURRENT_ACTIVE_CHALLENGE_IDS = {
-  courseId: "fpvPtfu7s",
-  moduleId: "fpvPtNWkC",
   challengeId: "9scykDold",
 };
 
@@ -40,7 +34,7 @@ const getAllChallengesInCourse = (course: Course): ChallengeList => {
 };
 
 const createInverseChallengeMapping = (
-  courses: CourseList,
+  courses: Course[],
 ): InverseChallengeMapping => {
   const result = courses.reduce((challengeMap, c) => {
     const courseId = c.id;
@@ -75,40 +69,60 @@ const createInverseChallengeMapping = (
  * Can also initialize the challenge id from the url to load the first
  * challenge.
  */
-const challengeInitializationEpic: EpicSignature = (action$, state$, deps) => {
+const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
-    mergeMap(API.fetchChallenges),
-    mergeMap(result => {
-      const { value } = result;
-      if (value) {
-        const course = value;
+    mergeMap(deps.api.fetchChallenges),
+    map(({ value: course }) => {
+      if (course) {
         /* Ok ... */
         const maybeId = deps.router.location.pathname.replace(
           "/workspace/",
           "",
         );
 
-        const challengeMap = createInverseChallengeMapping([course]);
         const challenges = getAllChallengesInCourse(course);
         const challengeExists = challenges.find(c => c.id === maybeId);
+        const challengeMap = createInverseChallengeMapping([course]);
         const challengeId = challengeExists
           ? challengeExists.id
           : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
+        const { moduleId, courseId } = challengeMap[challengeId];
 
-        return [
-          Actions.storeInverseChallengeMapping(challengeMap),
-          Actions.fetchCurrentActiveCourseSuccess({
-            courses: [course],
-            currentChallengeId: challengeId,
-            currentModuleId: CURRENT_ACTIVE_CHALLENGE_IDS.moduleId,
-            currentCourseId: CURRENT_ACTIVE_CHALLENGE_IDS.courseId,
-          }),
-        ];
+        return Actions.fetchCurrentActiveCourseSuccess({
+          courses: [course],
+          currentChallengeId: challengeId,
+          currentModuleId: moduleId,
+          currentCourseId: courseId,
+        });
       } else {
-        return [Actions.fetchCurrentActiveCourseFailure()];
+        return Actions.fetchCurrentActiveCourseFailure();
       }
     }),
+  );
+};
+
+const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
+  return merge(
+    action$.pipe(
+      filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+      map(({ payload: { courses } }) => {
+        const challengeMap = createInverseChallengeMapping(courses);
+        return challengeMap;
+      }),
+    ),
+    action$.pipe(
+      filter(isActionOf(Actions.createChallenge)),
+      map(() => state$.value.challenges.courses),
+      filter(x => Boolean(x)),
+      map(courses => {
+        return createInverseChallengeMapping(
+          courses as Course[], // TS doesn't know that this is not null due to filter above
+        );
+      }),
+    ),
+  ).pipe(
+    map(challengeMap => Actions.storeInverseChallengeMapping(challengeMap)),
   );
 };
 
@@ -160,7 +174,7 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.saveCourse)),
     map(x => x.payload),
     mergeMap(payload => {
-      return deps.course.save(payload).pipe(
+      return deps.api.codepressApi.save(payload).pipe(
         map(Actions.saveCourseSuccess),
         catchError(err => of(Actions.saveCourseFailure(err))),
       );
@@ -174,6 +188,7 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
  */
 
 export default combineEpics(
+  inverseChallengeMappingEpic,
   saveCourse,
   setWorkspaceLoadedEpic,
   updateChallengeRouteId,

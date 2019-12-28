@@ -1,10 +1,11 @@
+import { Course, CourseList } from "@prototype/common";
 import { ActionType, createAction } from "typesafe-actions";
-
 import {
-  Challenge,
-  Course,
-  CourseList,
+  ChallengeCreationPayload,
+  ChallengeUpdatePayload,
   InverseChallengeMapping,
+  ModuleCreationPayload,
+  ModuleUpdatePayload,
 } from "./types";
 
 /** ===========================================================================
@@ -15,6 +16,8 @@ import {
 enum ActionTypesEnum {
   SET_CHALLENGE_ID = "SET_CHALLENGE_ID",
   WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
+
+  SET_MODULE_ID = "SET_MODULE_ID",
 
   SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
 
@@ -33,6 +36,10 @@ enum ActionTypesEnum {
   CREATE_CHALLENGE = "CREATE_CHALLENGE",
   UPDATE_CHALLENGE = "UPDATE_CHALLENGE",
   REMOVE_CHALLENGE = "REMOVE_CHALLENGE",
+
+  CREATE_MODULE = "CREATE_MODULE",
+  UPDATE_MODULE = "UPDATE_MODULE",
+  REMOVE_MODULE = "REMOVE_MODULE",
 }
 
 /** ===========================================================================
@@ -43,6 +50,8 @@ enum ActionTypesEnum {
 const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<boolean>();
 
 const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<string>();
+
+const setCurrentModule = createAction(ActionTypesEnum.SET_MODULE_ID)<string>();
 
 const setWorkspaceChallengeLoaded = createAction(
   ActionTypesEnum.WORKSPACE_CHALLENGE_LOADED,
@@ -59,7 +68,7 @@ const setNavigationMapState = createAction(
 const fetchCurrentActiveCourseSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
 )<{
-  courses: CourseList;
+  courses: Course[];
   currentModuleId: string;
   currentCourseId: string;
   currentChallengeId: string;
@@ -72,16 +81,6 @@ const fetchCurrentActiveCourseFailure = createAction(
 const storeInverseChallengeMapping = createAction(
   ActionTypesEnum.STORE_INVERSE_CHALLENGE_MAP,
 )<InverseChallengeMapping>();
-
-interface ChallengeCreationPayload {
-  insertAt: number; // Index at which to insert this new challenge
-  challenge: Challenge;
-}
-
-interface ChallengeUpdatePayload {
-  id: string;
-  challenge: Partial<Challenge>;
-}
 
 const saveCourse = createAction(ActionTypesEnum.SAVE_COURSE)<Course>();
 const saveCourseSuccess = createAction(ActionTypesEnum.SAVE_COURSE_SUCCESS)();
@@ -101,10 +100,21 @@ const removeChallenge = createAction(ActionTypesEnum.REMOVE_CHALLENGE)<
   string
 >();
 
+const createCourseModule = createAction(ActionTypesEnum.CREATE_MODULE)<
+  ModuleCreationPayload
+>();
+
+const updateCourseModule = createAction(ActionTypesEnum.UPDATE_MODULE)<
+  ModuleUpdatePayload
+>();
+
 const actions = {
+  setCurrentModule,
   saveCourse,
   saveCourseSuccess,
   saveCourseFailure,
+  createCourseModule,
+  updateCourseModule,
   createChallenge,
   updateChallenge,
   removeChallenge,

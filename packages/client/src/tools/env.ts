@@ -5,33 +5,30 @@ import getenv from "getenv";
  * ============================================================================
  */
 
-const NODE_ENV = getenv.string("NODE_ENV", "");
-const DEV_MODE = getenv.bool("REACT_APP_DEV", false);
+export const UNSPECIFIED_ENV_GUARD = "@@INVALID_DEV_ENV_VALUE";
 
-const FACEBOOK_APP_ID = getenv.string("REACT_APP_FACEBOOK_APP_ID");
-const GITHUB_APP_ID = getenv.string("REACT_APP_GITHUB_APP_ID");
-const GOOGLE_APP_ID = getenv.string("REACT_APP_GOOGLE_APP_ID");
+export const NODE_ENV = getenv.string("NODE_ENV", UNSPECIFIED_ENV_GUARD);
+export const DEV_MODE = getenv.bool("REACT_APP_DEV", false);
 
-const HOST = getenv.string("REACT_APP_HOST", "http://localhost:9000");
+export const FACEBOOK_APP_ID = getenv.string(
+  "REACT_APP_FACEBOOK_APP_ID",
+  UNSPECIFIED_ENV_GUARD,
+);
+export const GITHUB_APP_ID = getenv.string(
+  "REACT_APP_GITHUB_APP_ID",
+  UNSPECIFIED_ENV_GUARD,
+);
+export const GOOGLE_APP_ID = getenv.string(
+  "REACT_APP_GOOGLE_APP_ID",
+  UNSPECIFIED_ENV_GUARD,
+);
 
-const TEST = NODE_ENV === "test";
-const DEVELOPMENT = NODE_ENV === "development";
-const PRODUCTION = NODE_ENV === "production";
+export const HOST = getenv.string("REACT_APP_HOST", "http://localhost:9000");
+export const CODEPRESS_HOST = getenv.string(
+  "REACT_APP_CODEPRESS_HOST",
+  "http://localhost:3001",
+);
 
-const ENV = {
-  HOST,
-  TEST,
-  DEVELOPMENT,
-  PRODUCTION,
-  DEV_MODE,
-  FACEBOOK_APP_ID,
-  GITHUB_APP_ID,
-  GOOGLE_APP_ID,
-};
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export default ENV;
+export const TEST = NODE_ENV === "test";
+export const DEVELOPMENT = NODE_ENV === "development";
+export const PRODUCTION = NODE_ENV === "production";

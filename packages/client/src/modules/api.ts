@@ -1,8 +1,10 @@
-import { Err, Ok, Result } from "@prototype/common";
+import { Course, CourseList, Err, Ok, Result } from "@prototype/common";
 import axios, { AxiosError } from "axios";
-import ENV from "tools/env";
+import { Observable } from "rxjs";
+import { fromFetch } from "rxjs/fetch";
+import { map, switchMap } from "rxjs/operators";
+import * as ENV from "tools/env";
 import { getAccessTokenFromLocalStorage } from "tools/utils";
-import { Course } from "./challenges/types";
 import { User } from "./user/types";
 
 /** ===========================================================================
@@ -18,10 +20,34 @@ export interface HttpResponseError {
 
 const HOST = ENV.HOST; /* NestJS Server URL */
 
-const fetchCourseInDevelopment = () => {
-  const Courses = require("@prototype/common").default;
-  const course = Courses.FullstackTypeScript as Course;
-  return course;
+/** ===========================================================================
+ * Codepress API
+ * ============================================================================
+ */
+interface CodepressAPI {
+  getAll: () => Observable<CourseList>;
+  save: (c: Course) => Observable<any>;
+}
+
+export const makeCodepressApi = (endpoint: string): CodepressAPI => {
+  return {
+    getAll: () => {
+      return fromFetch(`${endpoint}/courses`, { mode: "cors" }).pipe(
+        switchMap((response: any) => response.json()),
+        map((x: any) => x.data),
+      );
+    },
+    save: (c: Course) => {
+      return fromFetch(`${endpoint}/courses`, {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(c),
+      }).pipe(switchMap((response: any) => response.json()));
+    },
+  };
 };
 
 /** ===========================================================================
@@ -37,11 +63,19 @@ const fetchCourseInDevelopment = () => {
  */
 
 class Api {
+  codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
+
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
     try {
       let course: Course;
       if (ENV.DEV_MODE) {
-        course = fetchCourseInDevelopment();
+        // TODO: This is not great code, it's just that we're in the middle of a big refactor. In the future, we should standardize a few things, including:
+        // - How we do async. I.e. Observables, Promises, fetch, axios, lots of redundancy
+        // - Arrays of things (CourseList) vs things themselves (Course)
+        course = await this.codepressApi
+          .getAll()
+          .pipe(map(x => x[0]))
+          .toPromise();
       } else {
         const result = await axios.get<Course>(`${HOST}/challenges`);
         course = result.data;

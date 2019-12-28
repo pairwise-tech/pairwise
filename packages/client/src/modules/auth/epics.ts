@@ -3,7 +3,7 @@ import { combineEpics } from "redux-observable";
 import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
-import ENV from "tools/env";
+import * as ENV from "tools/env";
 import {
   getAccessTokenFromLocalStorage,
   setAccessTokenInLocalStorage,

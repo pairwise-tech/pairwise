@@ -1,6 +1,6 @@
 import * as Babel from "@babel/standalone";
 
-import { Challenge } from "modules/challenges/types";
+import { Challenge } from "@prototype/common";
 import { getTestCodeReact, getTestCodeTypeScript } from "./challenges";
 import DependencyCacheService from "./module-service";
 

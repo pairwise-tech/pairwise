@@ -1,11 +1,36 @@
 import React from "react";
 import { connect } from "react-redux";
+import shortid from "shortid";
 import styled from "styled-components/macro";
 
+import Tooltip from "@material-ui/core/Tooltip";
+import Assignment from "@material-ui/icons/Assignment";
+import Code from "@material-ui/icons/Code";
+import PlayCircleFilled from "@material-ui/icons/PlayCircleFilled";
+import { Challenge, Module } from "@prototype/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
-import { Button } from "./Primitives";
+
+const debug = require("debug")("client:NavigationOverlay");
+
+const generateEmptyModule = (): Module => ({
+  id: shortid.generate(),
+  title: "[EMTPY...]",
+  challenges: [],
+});
+
+const generateEmptyChallenge = (): Challenge => ({
+  id: shortid.generate(),
+  type: "markup",
+  title: "[EMPTY...]",
+  content: "",
+  testCode: "[]",
+  videoUrl: "",
+  starterCode: "",
+  solutionCode: "",
+  supplementaryContent: "",
+});
 
 /** ===========================================================================
  * React Class
@@ -14,29 +39,127 @@ import { Button } from "./Primitives";
 
 class NavigationOverlay extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { courseList } = this.props;
+    const {
+      course,
+      module,
+      challengeId,
+      isEditMode,
+      updateCourseModule,
+      setCurrentModule,
+    } = this.props;
 
-    if (!courseList) {
+    if (!course || !module) {
+      debug("[INFO] No module or course", course, module);
       return null;
     }
 
-    /* Just use the first (only) course! */
-    const course = courseList[0];
-
     return (
       <Overlay visible={this.props.overlayVisible}>
-        <Title>View another challenge:</Title>
-        {course.modules[0].challenges.map(c => {
-          return (
-            <Button
-              key={c.id}
-              style={{ marginTop: 25, width: 250 }}
-              onClick={() => this.props.selectChallenge(c.id)}
-            >
-              {c.title}
-            </Button>
-          );
-        })}
+        <Col
+          offsetX={this.props.overlayVisible ? 0 : -20}
+          style={{ zIndex: 3 }}
+        >
+          <Title>{course.title}</Title>
+          {course.modules.map((m, i) => {
+            return (
+              <div key={m.id} style={{ position: "relative" }}>
+                {isEditMode ? (
+                  <NavUpdateField
+                    onChange={e => {
+                      updateCourseModule({
+                        id: m.id,
+                        courseId: course.id,
+                        module: { title: e.target.value },
+                      });
+                    }}
+                    defaultValue={m.title}
+                  />
+                ) : (
+                  <NavButton
+                    active={m.id === module.id}
+                    onClick={() => setCurrentModule(m.id)}
+                  >
+                    <span>
+                      <ModuleNumber>{i + 1}</ModuleNumber>
+                      {m.title}
+                    </span>
+                  </NavButton>
+                )}
+                <AddNavItemButton
+                  show={isEditMode}
+                  onClick={() =>
+                    this.props.createCourseModule({
+                      courseId: course.id,
+                      insertionIndex: i + 1,
+                      module: generateEmptyModule(),
+                    })
+                  }
+                />
+              </div>
+            );
+          })}
+        </Col>
+        <Col
+          offsetX={this.props.overlayVisible ? 0 : -60}
+          style={{
+            width: 600,
+            zIndex: 2,
+            boxShadow: "inset 20px 0px 20px 0px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          {/* In case of no challenges yet, or to add one at the start, here's a button */}
+          <div style={{ position: "relative" }}>
+            <AddNavItemButton
+              show={isEditMode}
+              onClick={() =>
+                this.props.createChallenge({
+                  courseId: course.id,
+                  moduleId: module.id,
+                  insertionIndex: 0,
+                  challenge: generateEmptyChallenge(),
+                })
+              }
+            />
+          </div>
+          {module.challenges.map((c: Challenge, i: number) => {
+            return (
+              <div key={c.id} style={{ position: "relative" }}>
+                <NavButton
+                  active={c.id === challengeId}
+                  key={c.id}
+                  onClick={() => this.props.selectChallenge(c.id)}
+                >
+                  <span>
+                    {c.type === "media" ? (
+                      <Assignment fontSize="small" />
+                    ) : (
+                      <Code fontSize="small" />
+                    )}
+                    <span style={{ marginLeft: 10 }}>{c.title}</span>
+                  </span>
+                  <span>
+                    {c.videoUrl && (
+                      <Tooltip title="Includes Video">
+                        <PlayCircleFilled />
+                      </Tooltip>
+                    )}
+                  </span>
+                </NavButton>
+                <AddNavItemButton
+                  show={isEditMode}
+                  onClick={() =>
+                    this.props.createChallenge({
+                      courseId: course.id,
+                      moduleId: module.id,
+                      insertionIndex: i + 1,
+                      challenge: generateEmptyChallenge(),
+                    })
+                  }
+                />
+              </div>
+            );
+          })}
+        </Col>
       </Overlay>
     );
   }
@@ -47,22 +170,139 @@ class NavigationOverlay extends React.Component<IProps, {}> {
  * ============================================================================
  */
 
-const Overlay = styled.div`
+interface AddNavItemButtonProps {
+  onClick: () => any;
+  show: boolean;
+}
+
+const AddNavItemButton = styled(props => {
+  return <button {...props}>+</button>;
+})<AddNavItemButtonProps>`
+  position: absolute;
+  z-index: 5;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(${props => (props.show ? 1 : 0)});
+  transition: all 0.15s ease-out;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 100px;
+  &:hover {
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+`;
+
+const ModuleNumber = styled.code`
+  font-size: 12px;
+  display: inline-block;
+  padding: 5px;
+  color: #ea709c;
+  background: #3a3a3a;
+  width: 24px;
+  text-align: center;
+  line-height: 12px;
+  border-radius: 4px;
+  box-shadow: inset 0px 0px 2px 0px #ababab;
+  margin-right: 8px;
+`;
+
+const NavUpdateField = styled.input`
+  padding: 12px;
+  font-size: 18px;
+  border: 1px solid transparent;
+  border-bottom-color: ${COLORS.SEPARATOR_BORDER};
+  width: 100%;
+  display: block;
+  text-align: left;
+  outline: none;
+  color: white;
+  background: transparent;
+  position: relative;
+
+  &:hover,
+  &:focus {
+    color: white;
+    background: #0d0d0d;
+  }
+`;
+
+const NavButton = styled.button<{ active?: boolean }>`
+  cursor: pointer;
+  padding: 12px;
+  font-size: 18px;
+  border: 1px solid transparent;
+  border-bottom-color: ${COLORS.SEPARATOR_BORDER};
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  outline: none;
+  color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
+  background: ${({ active }) =>
+    active ? COLORS.BACKGROUND_MODAL : "transparent"};
+  position: relative;
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transition: all 0.15s ease-out;
+    transform: scale(${({ active }) => (active ? 1 : 0)});
+    width: 3px;
+    background: ${COLORS.GRADIENT_GREEN};
+  }
+
+  &:hover {
+    color: white;
+    background: #0d0d0d;
+    &:after {
+      transform: scale(1);
+    }
+  }
+`;
+
+const Col = styled.div<{ offsetX: number }>`
+  display: block;
+  width: 300px;
+  background: ${COLORS.BACKGROUND_CONTENT};
+  border-right: 1px solid ${COLORS.SEPARATOR_BORDER};
+  position: relative;
+  z-index: 2;
+  transition: all 0.2s ease-out;
+  transform: translateX(${({ offsetX }) => `${offsetX}px`});
+`;
+
+const Overlay = styled.div<{ visible: boolean }>`
   width: 100%;
   height: 100%;
   z-index: 100;
-  padding-top: 25px;
-  padding-left: 50px;
   position: fixed;
   background: rgba(0, 0, 0, 0.85);
-  visibility: ${(props: { visible: boolean }) =>
-    props.visible ? "visible" : "hidden"};
+  visibility: ${props => (props.visible ? "visible" : "hidden")};
+  opacity: ${props => (props.visible ? "1" : "0")};
+  pointer-events: ${props => (props.visible ? "all" : "none")};
+  display: flex;
+  transition: all 0.2s ease-out;
 `;
 
 const Title = styled.p`
   font-size: 18px;
   font-weight: 200;
   color: ${COLORS.TEXT_TITLE};
+  margin: 0;
+  padding: 12px;
+  border-bottom: 1px solid ${COLORS.SEPARATOR_BORDER};
 `;
 
 /** ===========================================================================
@@ -71,11 +311,18 @@ const Title = styled.p`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  courseList: Modules.selectors.challenges.courseList(state),
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
+  course: Modules.selectors.challenges.getCurrentCourse(state),
+  module: Modules.selectors.challenges.getCurrentModule(state),
+  challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
 });
 
 const dispatchProps = {
   selectChallenge: Modules.actions.challenges.setChallengeId,
+  setCurrentModule: Modules.actions.challenges.setCurrentModule,
+  createCourseModule: Modules.actions.challenges.createCourseModule,
+  updateCourseModule: Modules.actions.challenges.updateCourseModule,
+  createChallenge: Modules.actions.challenges.createChallenge,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

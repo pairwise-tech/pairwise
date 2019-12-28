@@ -1,16 +1,13 @@
 import { History } from "history";
 import { combineReducers } from "redux";
 import { combineEpics, Epic } from "redux-observable";
-import { Observable } from "rxjs";
-import { fromFetch } from "rxjs/fetch";
-import { map, switchMap } from "rxjs/operators";
-import { Course, CourseList } from "./challenges/types";
 
 /** ===========================================================================
  * Import Redux Modules
  * ============================================================================
  */
 
+import API from "./api";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
 import Challenges, {
@@ -18,36 +15,6 @@ import Challenges, {
   ChallengesState,
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
-
-/** ===========================================================================
- * Course / Challenge API
- * ============================================================================
- */
-interface CourseAPI {
-  getAll: () => Observable<CourseList>;
-  save: (c: Course) => Observable<any>;
-}
-
-export const makeCourseApi = (endpoint: string): CourseAPI => {
-  return {
-    getAll: () => {
-      return fromFetch(`${endpoint}/courses`, { mode: "cors" }).pipe(
-        switchMap((response: any) => response.json()),
-        map((x: any) => x.data),
-      );
-    },
-    save: (c: Course) => {
-      return fromFetch(`${endpoint}/courses`, {
-        mode: "cors",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(c),
-      }).pipe(switchMap((response: any) => response.json()));
-    },
-  };
-};
 
 /** ===========================================================================
  * Root Actions and Selectors
@@ -105,7 +72,7 @@ const rootReducer = combineReducers({
 
 export interface EpicDependencies {
   router: History<any>;
-  course: CourseAPI;
+  api: typeof API;
 }
 
 export type EpicSignature = Epic<

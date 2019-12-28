@@ -1,9 +1,9 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 
+import { CourseList } from "@prototype/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
-import { CourseList } from "./types";
 
 /** ===========================================================================
  * Selectors
@@ -17,6 +17,16 @@ export const challengesState = (state: ReduxStoreState) => {
 export const challengesSelector = createSelector([challengesState], identity);
 
 export const isEditMode = createSelector([challengesState], prop("isEditMode"));
+
+export const getCurrentModuleId = createSelector(
+  [challengesState],
+  prop("currentModuleId"),
+);
+
+export const getCurrentChallengeId = createSelector(
+  [challengesState],
+  prop("currentChallengeId"),
+);
 
 export const navigationOverlayVisible = createSelector(
   [challengesState],
@@ -43,6 +53,25 @@ const findCourseById = (courseId: string, courses: CourseList) => {
 export const getCurrentCourse = createSelector([challengesState], state => {
   return state.courses?.find(x => x.id === state.currentCourseId);
 });
+
+export const getCurrentModule = createSelector(
+  [getCurrentCourse, getCurrentModuleId],
+  (course, moduleId) => {
+    return course?.modules.find(x => x.id === moduleId);
+  },
+);
+
+export const getCurrentChallenge = createSelector(
+  [getCurrentModule, getCurrentChallengeId],
+  (m, challengeId) => {
+    return m?.challenges.find(x => x.id === challengeId);
+  },
+);
+
+export const getCurrentChallengeTestCode = createSelector(
+  [getCurrentChallenge],
+  c => c?.testCode,
+);
 
 /**
  * Find an return the current selected challenge, if it exists. Return

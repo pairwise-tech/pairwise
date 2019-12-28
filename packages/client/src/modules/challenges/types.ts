@@ -1,3 +1,5 @@
+import { Challenge, Module } from "@prototype/common";
+
 /** ===========================================================================
  * Product Curriculum Hierarchy:
  *
@@ -8,42 +10,6 @@
  * ============================================================================
  */
 
-export type CourseList = readonly Course[];
-
-export interface Course {
-  id: string;
-  title: string;
-  modules: ModuleList;
-}
-
-export interface Module {
-  id: string;
-  title: string;
-  challenges: ChallengeList;
-}
-
-export type ModuleList = readonly Module[];
-
-export interface Challenges {
-  id: string;
-  type: string;
-  title: string;
-}
-
-export type ChallengeList = readonly Challenge[];
-
-export interface Challenge {
-  type: CHALLENGE_TYPE;
-  id: string;
-  title: string;
-  content: string;
-  testCode: string;
-  videoUrl?: string;
-  starterCode: string;
-  solutionCode: string;
-  supplementaryContent: string;
-}
-
 export interface InverseChallengeMapping {
   [k: string]: {
     courseId: string;
@@ -51,4 +17,26 @@ export interface InverseChallengeMapping {
   };
 }
 
-export type CHALLENGE_TYPE = "react" | "typescript" | "markup";
+export interface ChallengeCreationPayload {
+  insertionIndex: number; // Index at which to insert this new challenge
+  courseId: string;
+  moduleId: string;
+  challenge: Challenge;
+}
+
+export interface ModuleCreationPayload {
+  insertionIndex: number; // Index at which to insert this new challenge
+  courseId: string;
+  module: Module;
+}
+
+export interface ModuleUpdatePayload {
+  id: string; // Module id
+  courseId: string;
+  module: Partial<Module>;
+}
+
+export interface ChallengeUpdatePayload {
+  id: string; // Challenge ID
+  challenge: Partial<Challenge>;
+}
