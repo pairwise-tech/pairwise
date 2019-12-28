@@ -1273,9 +1273,11 @@ class WorkspaceLoadingContainer extends React.Component<
               Prototype X
             </h1>
           </ControlsContainer>
-          <ControlsContainer>
-            <EditingToolbar />
-          </ControlsContainer>
+          {DEV_MODE && (
+            <ControlsContainer>
+              <EditingToolbar />
+            </ControlsContainer>
+          )}
           <ControlsContainer style={{ marginLeft: "auto" }}>
             {prev && (
               <StyledTooltip title="Previous Challenge">
