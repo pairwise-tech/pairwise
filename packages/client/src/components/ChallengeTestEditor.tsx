@@ -36,8 +36,6 @@ const ChallengeTestEditor = (props: Props) => {
     setEditorReady(true);
   };
 
-  debugger;
-
   return (
     <div style={{ color: "white" }}>
       <Editor

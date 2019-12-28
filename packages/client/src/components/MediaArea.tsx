@@ -2,7 +2,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React, { ChangeEvent } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ContentInput, StyledMarkdown, TitleInput, Text } from "./shared";
+import { ContentInput, StyledMarkdown, Text, TitleInput } from "./shared";
 
 /**
  * The media area. Where supplementary content and challenge videos live. The media area can also serve as the standalone UI for a challenge that is all information, without any interactive coding practice.
@@ -36,8 +36,8 @@ const MediaArea = connect(
     fn(e.target.value);
   };
 
-  const handleTitle = handleChange(title =>
-    props.updateChallenge({ id: challenge.id, challenge: { title } }),
+  const handleTitle = handleChange(x =>
+    props.updateChallenge({ id: challenge.id, challenge: { title: x } }),
   );
   const handleContent = handleChange(supplementaryContent =>
     props.updateChallenge({

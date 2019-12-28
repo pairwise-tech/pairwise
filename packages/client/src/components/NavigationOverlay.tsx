@@ -4,13 +4,13 @@ import shortid from "shortid";
 import styled from "styled-components/macro";
 
 import Tooltip from "@material-ui/core/Tooltip";
+import Assignment from "@material-ui/icons/Assignment";
+import Code from "@material-ui/icons/Code";
+import PlayCircleFilled from "@material-ui/icons/PlayCircleFilled";
 import { Challenge, Module } from "@prototype/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
-import Assignment from "@material-ui/icons/Assignment";
-import Code from "@material-ui/icons/Code";
-import PlayCircleFilled from "@material-ui/icons/PlayCircleFilled";
 
 const debug = require("debug")("client:NavigationOverlay");
 

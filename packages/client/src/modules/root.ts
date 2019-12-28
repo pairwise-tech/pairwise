@@ -11,6 +11,7 @@ import { map, switchMap } from "rxjs/operators";
  */
 
 import { Course, CourseList } from "@prototype/common";
+import API from "./api";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
 import Challenges, {
@@ -18,7 +19,6 @@ import Challenges, {
   ChallengesState,
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
-import API from "./api";
 
 /** ===========================================================================
  * Root Actions and Selectors

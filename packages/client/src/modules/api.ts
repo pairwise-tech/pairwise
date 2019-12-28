@@ -1,11 +1,11 @@
-import { Err, Ok, Result, Course, CourseList } from "@prototype/common";
+import { Course, CourseList, Err, Ok, Result } from "@prototype/common";
 import axios, { AxiosError } from "axios";
+import { Observable } from "rxjs";
+import { fromFetch } from "rxjs/fetch";
+import { map, switchMap } from "rxjs/operators";
 import * as ENV from "tools/env";
 import { getAccessTokenFromLocalStorage } from "tools/utils";
 import { User } from "./user/types";
-import { Observable } from "rxjs";
-import { fromFetch } from "rxjs/fetch";
-import { switchMap, map } from "rxjs/operators";
 
 /** ===========================================================================
  * Types & Config

@@ -5,8 +5,8 @@ import { createLogger } from "redux-logger";
 import { createEpicMiddleware } from "redux-observable";
 
 import * as ENV from "../tools/env";
-import { EpicDependencies, Modules, rootEpic, rootReducer } from "./root";
 import API from "./api";
+import { EpicDependencies, Modules, rootEpic, rootReducer } from "./root";
 
 /** ===========================================================================
  * Logger
