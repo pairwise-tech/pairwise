@@ -1245,12 +1245,7 @@ class WorkspaceLoadingContainer extends React.Component<
   unlockVerticalScrolling = () => (document.body.style.overflowY = "scroll");
 
   render() {
-    const {
-      challenge,
-      overlayVisible,
-      nextPrevChallenges,
-      isEditMode,
-    } = this.props;
+    const { challenge, overlayVisible, nextPrevChallenges } = this.props;
     const { next, prev } = nextPrevChallenges;
 
     if (!challenge) {

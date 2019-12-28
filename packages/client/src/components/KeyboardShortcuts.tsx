@@ -63,7 +63,7 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
         document.removeEventListener("keydown", fn);
       });
     };
-  }, []);
+  }, []); // eslint-disable-line
   return null;
 };
 

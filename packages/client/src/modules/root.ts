@@ -1,16 +1,12 @@
 import { History } from "history";
 import { combineReducers } from "redux";
 import { combineEpics, Epic } from "redux-observable";
-import { Observable } from "rxjs";
-import { fromFetch } from "rxjs/fetch";
-import { map, switchMap } from "rxjs/operators";
 
 /** ===========================================================================
  * Import Redux Modules
  * ============================================================================
  */
 
-import { Course, CourseList } from "@prototype/common";
 import API from "./api";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";

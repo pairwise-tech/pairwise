@@ -29,11 +29,9 @@ const dispatchProps = {
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
 const ChallengeTestEditor = (props: Props) => {
-  const [editorReady, setEditorReady] = React.useState(false);
   const editor = React.useRef();
   const handleEditorReady: EditorDidMount = (_, monaco) => {
     editor.current = monaco;
-    setEditorReady(true);
   };
 
   return (

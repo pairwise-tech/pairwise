@@ -20,12 +20,6 @@ export interface HttpResponseError {
 
 const HOST = ENV.HOST; /* NestJS Server URL */
 
-const fetchCourseInDevelopment = () => {
-  const Courses = require("@prototype/common").default;
-  const course = Courses.FullstackTypeScript as Course;
-  return course;
-};
-
 /** ===========================================================================
  * Codepress API
  * ============================================================================

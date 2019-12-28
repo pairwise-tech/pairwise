@@ -1,5 +1,4 @@
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import React from "react";
 import Markdown from "react-markdown";
 import styled from "styled-components/macro";
 
