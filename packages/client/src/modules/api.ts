@@ -1,6 +1,6 @@
 import { Err, Ok, Result, Course, CourseList } from "@prototype/common";
 import axios, { AxiosError } from "axios";
-import ENV from "tools/env";
+import * as ENV from "tools/env";
 import { getAccessTokenFromLocalStorage } from "tools/utils";
 import { User } from "./user/types";
 import { Observable } from "rxjs";
@@ -69,7 +69,7 @@ export const makeCodepressApi = (endpoint: string): CodepressAPI => {
  */
 
 class Api {
-  codepressApi = makeCodepressApi("http://localhost:3001");
+  codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
 
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
     try {

@@ -4,7 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { createLogger } from "redux-logger";
 import { createEpicMiddleware } from "redux-observable";
 
-import ENV from "../tools/env";
+import * as ENV from "../tools/env";
 import { EpicDependencies, Modules, rootEpic, rootReducer } from "./root";
 import API from "./api";
 

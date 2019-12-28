@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
-import ENV from "tools/env";
+import * as ENV from "tools/env";
 import { composeWithProps } from "tools/utils";
 
 /** ===========================================================================
