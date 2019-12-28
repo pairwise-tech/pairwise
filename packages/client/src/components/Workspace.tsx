@@ -21,6 +21,7 @@ import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
+import { DEV_MODE } from "tools/env";
 import {
   getTestCodeMarkup,
   TestCase,
@@ -1414,7 +1415,7 @@ const StyledInputs = styled.div<{ isEditMode: boolean }>`
 
 const keyboardDispatchProps = {
   enterEditMode: (e: KeyboardEvent) => {
-    if (process.env.NODE_ENV === "development") {
+    if (DEV_MODE) {
       e.preventDefault();
       return Modules.actions.challenges.setEditMode(true);
     } else {

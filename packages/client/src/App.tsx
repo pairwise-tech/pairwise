@@ -5,6 +5,8 @@ import { Router as ReactRouter } from "react-router-dom";
 
 import ParentContainer from "components/ApplicationContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
+import { COLORS } from "tools/constants";
+import { NODE_ENV } from "tools/env";
 
 /** ===========================================================================
  * App
@@ -14,14 +16,14 @@ import store, { exposeGlobals, history } from "modules/create-store";
 const theme = createMuiTheme({
   palette: {
     type: "dark",
-    primary: { main: "rgb(0, 255, 185)" }, // Green
-    secondary: { main: "#f50057" }, // Pink-ish
+    primary: { main: COLORS.PRIMARY_GREEN }, // Green
+    secondary: { main: COLORS.SECONDARY_PINK }, // Pink-ish
   },
 });
 
 class App extends React.Component {
   componentDidMount() {
-    if (process.env.NODE_ENV === "development") {
+    if (NODE_ENV === "development") {
       exposeGlobals();
     }
   }
