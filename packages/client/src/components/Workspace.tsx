@@ -402,7 +402,18 @@ class Workspace extends React.Component<IProps, IState> {
    */
   handleTestTabClick = (tab: IState["adminTestTab"]) => {
     if (tab !== this.state.adminTestTab) {
-      this.setState({ adminTestTab: tab });
+      // NOTE: The reason for this additonal logic is to "refresh" the test
+      // results when one of us clicks back to the test results tab. That tab is
+      // the only tab from the perspective of endusers so this should only ever
+      // happen when we are editing via codepress.
+      if (tab === "testResults") {
+        this.setState({
+          adminTestTab: tab,
+          tests: JSON.parse(this.props.challenge.testCode), // See NOTE
+        });
+      } else {
+        this.setState({ adminTestTab: tab });
+      }
     }
   };
 
