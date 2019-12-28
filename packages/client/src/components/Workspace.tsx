@@ -16,7 +16,7 @@ import { Challenge } from "@prototype/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, HTMLAttributes, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
@@ -776,6 +776,20 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   iFrameRenderPreview = async () => {
+    const makeElementFactory = (
+      createElement: typeof document.createElement,
+    ) => {
+      return (tag: string, props: any) => {
+        const el = createElement(tag);
+        Object.keys(props).forEach(k => {
+          const v = props[k];
+          // @ts-ignore
+          el[k] = v;
+        });
+        return el;
+      };
+    };
+
     // console.clear();
     this.setState({ logs: DEFAULT_LOGS }, async () => {
       if (this.iFrameRef && this.iFrameRef.contentWindow) {
@@ -792,14 +806,22 @@ class Workspace extends React.Component<IProps, IState> {
              * before appending and running the test script.
              */
             await wait(50);
+
+            // Don't forget to bind createElement... not sure typescript can protect us form this one
+            const el = makeElementFactory(
+              this.iFrameRef.contentWindow.document.createElement.bind(
+                this.iFrameRef.contentWindow.document,
+              ),
+            );
+
             const markupTests = getTestCodeMarkup(this.state.tests);
 
-            const testScript = this.iFrameRef.contentWindow.document.createElement(
-              "script",
-            );
-            testScript.id = "test-script";
-            testScript.type = "text/javascript";
-            testScript.innerHTML = markupTests;
+            const testScript = el("script", {
+              id: "test-script",
+              type: "text/javascript",
+              innerHTML: markupTests,
+            });
+
             this.iFrameRef.contentWindow.document.body.appendChild(testScript);
           } else {
             const code = await this.compileAndTransformCodeString();
