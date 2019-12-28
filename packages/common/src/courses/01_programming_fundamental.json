@@ -7,6 +7,17 @@
       "title": "Programming Fundamentals",
       "challenges": [
         {
+          "id": "5ziJI35f",
+          "type": "media",
+          "title": "What is HTML?",
+          "content": "",
+          "testCode": "[]",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "Placeholder..."
+        },
+        {
           "id": "9scykDold",
           "type": "markup",
           "title": "Add a h1 Tag in HTML",
