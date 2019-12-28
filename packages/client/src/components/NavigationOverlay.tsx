@@ -3,10 +3,14 @@ import { connect } from "react-redux";
 import shortid from "shortid";
 import styled from "styled-components/macro";
 
+import Tooltip from "@material-ui/core/Tooltip";
 import { Challenge, Module } from "@prototype/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
+import Assignment from "@material-ui/icons/Assignment";
+import Code from "@material-ui/icons/Code";
+import PlayCircleFilled from "@material-ui/icons/PlayCircleFilled";
 
 const debug = require("debug")("client:NavigationOverlay");
 
@@ -75,8 +79,10 @@ class NavigationOverlay extends React.Component<IProps, {}> {
                     active={m.id === module.id}
                     onClick={() => setCurrentModule(m.id)}
                   >
-                    <ModuleNumber>{i + 1}</ModuleNumber>
-                    {m.title}
+                    <span>
+                      <ModuleNumber>{i + 1}</ModuleNumber>
+                      {m.title}
+                    </span>
                   </NavButton>
                 )}
                 <AddNavItemButton
@@ -94,12 +100,27 @@ class NavigationOverlay extends React.Component<IProps, {}> {
           })}
         </Col>
         <Col
-          offsetX={this.props.overlayVisible ? 0 : -40}
+          offsetX={this.props.overlayVisible ? 0 : -60}
           style={{
+            width: 600,
             zIndex: 2,
             boxShadow: "inset 20px 0px 20px 0px rgba(0, 0, 0, 0.1)",
           }}
         >
+          {/* In case of no challenges yet, or to add one at the start, here's a button */}
+          <div style={{ position: "relative" }}>
+            <AddNavItemButton
+              show={isEditMode}
+              onClick={() =>
+                this.props.createChallenge({
+                  courseId: course.id,
+                  moduleId: module.id,
+                  insertionIndex: 0,
+                  challenge: generateEmptyChallenge(),
+                })
+              }
+            />
+          </div>
           {module.challenges.map((c: Challenge, i: number) => {
             return (
               <div key={c.id} style={{ position: "relative" }}>
@@ -108,7 +129,21 @@ class NavigationOverlay extends React.Component<IProps, {}> {
                   key={c.id}
                   onClick={() => this.props.selectChallenge(c.id)}
                 >
-                  {c.title}
+                  <span>
+                    {c.type === "media" ? (
+                      <Assignment fontSize="small" />
+                    ) : (
+                      <Code fontSize="small" />
+                    )}
+                    <span style={{ marginLeft: 10 }}>{c.title}</span>
+                  </span>
+                  <span>
+                    {c.videoUrl && (
+                      <Tooltip title="Includes Video">
+                        <PlayCircleFilled />
+                      </Tooltip>
+                    )}
+                  </span>
                 </NavButton>
                 <AddNavItemButton
                   show={isEditMode}
@@ -124,22 +159,6 @@ class NavigationOverlay extends React.Component<IProps, {}> {
               </div>
             );
           })}
-          {/* In case of no challenges yet, add a button to add one */}
-          {module.challenges.length === 0 && (
-            <div style={{ position: "relative" }}>
-              <AddNavItemButton
-                show={isEditMode}
-                onClick={() =>
-                  this.props.createChallenge({
-                    courseId: course.id,
-                    moduleId: module.id,
-                    insertionIndex: 0,
-                    challenge: generateEmptyChallenge(),
-                  })
-                }
-              />
-            </div>
-          )}
         </Col>
       </Overlay>
     );
@@ -218,12 +237,18 @@ const NavButton = styled.button<{ active?: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   text-align: left;
   outline: none;
   color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
   background: ${({ active }) =>
     active ? COLORS.BACKGROUND_MODAL : "transparent"};
   position: relative;
+
+  span {
+    display: flex;
+    align-items: center;
+  }
 
   &:after {
     content: "";
