@@ -44,4 +44,4 @@ export interface Challenge {
   supplementaryContent: string;
 }
 
-export type CHALLENGE_TYPE = "react" | "typescript" | "markup";
+export type CHALLENGE_TYPE = "react" | "typescript" | "markup" | "media";
