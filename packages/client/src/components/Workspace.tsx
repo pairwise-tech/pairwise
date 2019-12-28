@@ -18,7 +18,6 @@ import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
-import Markdown from "react-markdown";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
@@ -55,7 +54,9 @@ import {
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import EditingToolbar from "./EditingToolbar";
 import KeyboardShortcuts from "./KeyboardShortcuts";
+import MediaArea from "./MediaArea";
 import NavigationOverlay from "./NavigationOverlay";
+import { ContentInput, StyledMarkdown, TitleInput } from "./shared";
 import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
 
 /** ===========================================================================
@@ -112,23 +113,6 @@ const NavIconButton = styled(props => (
   background: transparent;
   border: none;
   outline: none;
-`;
-
-const StyledMarkdown = styled(Markdown)`
-  color: white;
-  line-height: 1.5;
-  font-size: 1.2rem;
-
-  code {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1px 3px;
-    display: inline;
-    /* color: #ff4788; */
-    color: rgb(0, 255, 185);
-    border-radius: 3px;
-    line-height: normal;
-    font-size: 85%;
-  }
 `;
 
 /** ===========================================================================
@@ -947,12 +931,6 @@ const LowerSection = styled.div<{ withHeader?: boolean }>`
   background: ${C.BACKGROUND_LOWER_SECTION};
 `;
 
-const SupplementaryContentContainer = styled.div`
-  padding: 25px;
-  padding-left: 12px;
-  padding-right: 12px;
-`;
-
 const BORDER = 2;
 
 const Header = styled.div`
@@ -1084,14 +1062,6 @@ const ContentTitle = styled.h3`
 `;
 
 const ContentText = styled.span`
-  margin: 0;
-  margin-top: 8px;
-  font-size: 15px;
-  font-weight: 200px;
-  color: ${C.TEXT_CONTENT};
-`;
-
-const Text = styled.p`
   margin: 0;
   margin-top: 8px;
   font-size: 15px;
@@ -1357,70 +1327,6 @@ class WorkspaceLoadingContainer extends React.Component<
   };
 }
 
-const mediaMapState = (state: ReduxStoreState) => ({
-  title: Modules.selectors.challenges.getCurrentTitle(state) || "",
-  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
-});
-
-const mediaMapDispatch = {
-  updateChallenge: Modules.actions.challenges.updateChallenge,
-};
-
-type MediaAreaProps = ReturnType<typeof mediaMapState> &
-  typeof mediaMapDispatch;
-
-const MediaArea = connect(
-  mediaMapState,
-  mediaMapDispatch,
-)((props: MediaAreaProps) => {
-  const { challenge, title, isEditMode } = props;
-
-  if (!challenge) {
-    return <h1>Loading...</h1>;
-  }
-
-  const handleChange = (fn: (x: string) => any) => (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    fn(e.target.value);
-  };
-
-  const handleTitle = handleChange(title =>
-    props.updateChallenge({ id: challenge.id, challenge: { title } }),
-  );
-  const handleContent = handleChange(supplementaryContent =>
-    props.updateChallenge({
-      id: challenge.id,
-      challenge: { supplementaryContent },
-    }),
-  );
-
-  return (
-    <SupplementaryContentContainer>
-      <TitleInput
-        type="text"
-        value={title}
-        onChange={handleTitle}
-        disabled={!isEditMode}
-      />
-      {isEditMode ? (
-        <ContentInput
-          value={challenge.supplementaryContent}
-          onChange={handleContent}
-        />
-      ) : (
-        <StyledMarkdown source={challenge.supplementaryContent} />
-      )}
-      <Text>
-        <b>Video:</b>{" "}
-        {challenge.videoUrl ? challenge.videoUrl : "No video available"}
-      </Text>
-      {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
-    </SupplementaryContentContainer>
-  );
-});
-
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -1429,40 +1335,6 @@ const MediaArea = connect(
 export default composeWithProps<ComponentProps>(withProps)(
   WorkspaceLoadingContainer,
 );
-
-const TitleInput = styled.input`
-  outline: none;
-  appearance: none;
-  border: none;
-  font-size: 1.2em;
-  background: transparent;
-  font-weight: bold;
-  color: rgb(200, 200, 200);
-  display: block;
-  width: 100%;
-  line-height: 1.5;
-  transition: all 0.2s ease-out;
-  &:focus {
-    background: black;
-  }
-`;
-
-const ContentInput = styled.textarea`
-  outline: none;
-  appearance: none;
-  border: none;
-  font-size: 1.2em;
-  background: transparent;
-  display: block;
-  color: white;
-  height: 100%;
-  width: 100%;
-  line-height: 1.5;
-  transition: all 0.2s ease-out;
-  &:focus {
-    background: black;
-  }
-`;
 
 const contentMapState = (state: ReduxStoreState) => ({
   content: Modules.selectors.challenges.getCurrentContent(state) || "",
@@ -1546,55 +1418,3 @@ const WorkspaceKeyboardShortcuts = connect(
     }}
   />
 ));
-
-interface YoutubeEmbedProps {
-  url: string;
-}
-
-/**
- * Copied the iframe props form the share sheet on youtube.
- *
- * NOTE: This iframe can be hidden for ease of development. If not actively
- * developing video-related features, loading a youtube iframe causes all sorts
- * of network traffic which both slows down page loads (a big pain in dev) and
- * clutters up the network panel with a bunch of requests we're not interested
- * in.
- */
-const YoutubeEmbed = (props: YoutubeEmbedProps) => {
-  const width = 728;
-  const height = 410;
-
-  if (process.env.REACT_APP_HIDE_EMBEDS) {
-    return (
-      <div
-        style={{
-          width,
-          height,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#999",
-        }}
-      >
-        <h3 style={{ textTransform: "uppercase" }}>Embed Hidden</h3>
-        <p>
-          Restart the app without <code>REACT_APP_HIDE_EMBEDS</code> to view
-          embeds
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <iframe
-      title="Youtube Embed"
-      width={width}
-      height={height}
-      src={props.url}
-      frameBorder="0"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    ></iframe>
-  );
-};

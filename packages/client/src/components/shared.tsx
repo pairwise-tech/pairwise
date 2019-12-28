@@ -1,0 +1,65 @@
+import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+import React from "react";
+import Markdown from "react-markdown";
+import styled from "styled-components/macro";
+
+import { COLORS } from "../tools/constants";
+
+export const TitleInput = styled.input`
+  outline: none;
+  appearance: none;
+  border: none;
+  font-size: 1.2em;
+  background: transparent;
+  font-weight: bold;
+  color: rgb(200, 200, 200);
+  display: block;
+  width: 100%;
+  line-height: 1.5;
+  transition: all 0.2s ease-out;
+  &:focus {
+    background: black;
+  }
+`;
+
+export const ContentInput = styled(TextareaAutosize)`
+  outline: none;
+  appearance: none;
+  border: none;
+  font-size: 1.2em;
+  display: block;
+  color: white;
+  height: 100%;
+  width: 100%;
+  line-height: 1.5;
+  background: transparent;
+  transition: background 0.2s ease-out;
+  &:focus {
+    background: black;
+  }
+`;
+
+export const StyledMarkdown = styled(Markdown)`
+  color: white;
+  line-height: 1.5;
+  font-size: 1.2rem;
+
+  code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1px 3px;
+    display: inline;
+    /* color: #ff4788; */
+    color: rgb(0, 255, 185);
+    border-radius: 3px;
+    line-height: normal;
+    font-size: 85%;
+  }
+`;
+
+export const Text = styled.p`
+  margin: 0;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 200px;
+  color: ${COLORS.TEXT_CONTENT};
+`;
