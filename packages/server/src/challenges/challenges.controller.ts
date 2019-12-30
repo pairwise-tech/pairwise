@@ -1,5 +1,4 @@
 import { Controller, Get } from "@nestjs/common";
-
 import { ChallengesService } from "./challenges.service";
 
 @Controller("challenges")
@@ -8,6 +7,7 @@ export class ChallengesController {
 
   @Get()
   fetchChallenges() {
+    console.log("Regular request!");
     return this.challengeService.fetchCourses();
   }
 }

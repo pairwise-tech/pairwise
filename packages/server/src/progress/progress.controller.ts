@@ -11,7 +11,7 @@ export class ProgressController {
   updateUserChallengeProgress(
     @Body() challengeProgressDto: UserCourseProgressDto,
   ) {
-    return this.progressService.updateChallengeCode(challengeProgressDto);
+    return this.progressService.updateUserProgressHistory(challengeProgressDto);
   }
 
   @Post("/challenge")
