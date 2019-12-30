@@ -10,13 +10,15 @@ import { CourseList } from "src/types/courses";
  */
 
 class ChallengeUtilityClass {
-  courses: CourseList;
-  courseIdSet: Set<string>;
+  private courses: CourseList;
+  private courseIdSet: Set<string>;
+  private courseIdChallengeIdMap: Map<string, Set<string>>;
 
   constructor(courses: CourseList) {
     this.courses = courses;
 
     this.initializeCourseIdSet(courses);
+    this.initializeCourseIdChallengeIdMap(courses);
   }
 
   initializeCourseIdSet = (courses: CourseList) => {
@@ -27,8 +29,36 @@ class ChallengeUtilityClass {
     this.courseIdSet = idSet;
   };
 
+  initializeCourseIdChallengeIdMap = (courses: CourseList) => {
+    const courseIdChallengeIdMap = new Map();
+
+    for (const course of courses) {
+      const courseId = course.id;
+      const courseResult = new Set();
+      for (const module of course.modules) {
+        for (const challenge of module.challenges) {
+          const { id } = challenge;
+          courseResult.add(id);
+        }
+      }
+
+      courseIdChallengeIdMap.set(courseId, courseResult);
+    }
+
+    this.courseIdChallengeIdMap = courseIdChallengeIdMap;
+  };
+
   courseIdIsValid = (courseId: string) => {
     return this.courseIdSet.has(courseId);
+  };
+
+  challengeIdInCourseIsValid = (courseId: string, challengeId: string) => {
+    const courseChallengeIdSet = this.courseIdChallengeIdMap.get(courseId);
+    if (courseChallengeIdSet) {
+      return courseChallengeIdSet.has(challengeId);
+    }
+
+    return false;
   };
 }
 

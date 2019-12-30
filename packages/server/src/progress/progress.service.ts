@@ -23,8 +23,15 @@ export class ProgressService {
     console.log("Service handling update challenge code:");
     const { courseId, challengeId, passed } = challengeProgressDto;
 
+    /**
+     * Validate the input request:
+     */
     if (!challengeUtilityClass.courseIdIsValid(courseId)) {
       throw new BadRequestException("The courseId is invalid");
+    } else if (
+      !challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
+    ) {
+      throw new BadRequestException("The challengeId is invalid");
     }
 
     console.log(
