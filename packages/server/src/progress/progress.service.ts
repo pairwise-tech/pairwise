@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserCourseProgress } from "./userCourseProgress.entity";
@@ -8,6 +8,7 @@ import {
 } from "./userCourseProgress.dto";
 import { UserCodeBlobDto } from "./userCodeBlob.dto";
 import { UserService } from "src/user/user.service";
+import { challengeUtilityClass } from "@prototype/common";
 
 @Injectable()
 export class ProgressService {
@@ -21,6 +22,10 @@ export class ProgressService {
   async updateUserProgressHistory(challengeProgressDto: UserCourseProgressDto) {
     console.log("Service handling update challenge code:");
     const { courseId, challengeId, passed } = challengeProgressDto;
+
+    if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+      throw new BadRequestException("The courseId is invalid");
+    }
 
     console.log(
       `Updating challengeProgress for courseId: ${courseId}, challengeId: ${challengeId}`,
