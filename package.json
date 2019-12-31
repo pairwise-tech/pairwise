@@ -20,7 +20,7 @@
     "db:setup": "cd packages/server && yarn migration:run",
     "test": "lerna run test",
     "build": "lerna run build",
-    "test:e2e": "cd packages/e2e && yarn test:e2e",
+    "test:e2e": "cd packages/e2e && HOST=http://server:9000 yarn test:e2e",
     "e2e": "docker-compose up --build --abort-on-container-exit"
   },
   "workspaces": [
