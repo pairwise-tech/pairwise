@@ -1,2 +1,5 @@
+.gitignore
+**/.git
+**/.DS_Store
 node_modules
 packages/**/node_modules
