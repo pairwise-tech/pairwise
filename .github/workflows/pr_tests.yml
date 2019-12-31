@@ -26,5 +26,8 @@ jobs:
       - name: Run build for all packages
         run: |
           npx lerna run build
+      - name: Run e2e test suite
+        run: |
+          yarn e2e
         env:
           CI: true
