@@ -10,6 +10,16 @@ describe("AppController (e2e)", () => {
       .expect("Hello World!");
   });
 
+  test("/auth/facebook (GET)", () => {
+    return request(`${HOST}/auth/facebook`)
+      .get("/")
+      .expect(200)
+      .expect(response => {
+        console.log(response.body);
+        expect(true).toBeTruthy();
+      });
+  });
+
   test("/challenges (GET)", () => {
     return request(`${HOST}/challenges`)
       .get("/")
