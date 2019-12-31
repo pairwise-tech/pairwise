@@ -12,6 +12,7 @@ import { CourseList } from "src/types/courses";
 class ChallengeUtilityClass {
   private courses: CourseList;
   private courseIdSet: Set<string>;
+  private challengeIdSet: Set<string>;
   private courseIdChallengeIdMap: Map<string, Set<string>>;
 
   constructor(courses: CourseList) {
@@ -31,6 +32,7 @@ class ChallengeUtilityClass {
 
   initializeCourseIdChallengeIdMap = (courses: CourseList) => {
     const courseIdChallengeIdMap = new Map();
+    const challengeIdSet: Set<string> = new Set();
 
     for (const course of courses) {
       const courseId = course.id;
@@ -39,17 +41,23 @@ class ChallengeUtilityClass {
         for (const challenge of module.challenges) {
           const { id } = challenge;
           courseResult.add(id);
+          challengeIdSet.add(id);
         }
       }
 
       courseIdChallengeIdMap.set(courseId, courseResult);
     }
 
+    this.challengeIdSet = challengeIdSet;
     this.courseIdChallengeIdMap = courseIdChallengeIdMap;
   };
 
   courseIdIsValid = (courseId: string) => {
     return this.courseIdSet.has(courseId);
+  };
+
+  challengeIdIsValid = (challengeId: string) => {
+    return this.challengeIdSet.has(challengeId);
   };
 
   challengeIdInCourseIsValid = (courseId: string, challengeId: string) => {

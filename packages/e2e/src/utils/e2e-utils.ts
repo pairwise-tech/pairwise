@@ -8,7 +8,7 @@ import axios from "axios";
 const HOST = process.env.HOST || "http://localhost:9000";
 
 const HARD_CODED_FB_ACCESS_TOKEN =
-  "EAAGVjNBRNAQBAAcSoGInukfeJdjVMDupPbGDnLGZAtASh2IWnZBacB4AXExk8EUSLwHSIVGK7rwFQpX4cA9ozygVRiXDsxcfsECXawZBbmOXeR5GWFB3fK7S76baCtpqy7rEqqZCHcBJ1cfHuWu8kfOOxWDpA0Tx3Qwi6iPiBWBrJthgqbi42dasVGyO1UKQFelQK14G9wZDZD";
+  "EAAGVjNBRNAQBAMCakViKu70m092t1hcuZCGmf6Ud4Y0J5VQV0qzVmSjcNcQAhNZBExYooZAfY8G7YY0zKBHqTWevt07j65dMHLHga9g0rezBXwTZBqlZBAt3iAyxS52KnUIo07gDqAyPejosDoIHLG3BPNNHNsZABYfDtQkRbngzfDUgAclOmcsYNhYQak8NGY5lYyOs6C0QZDZD";
 
 const fetchAccessToken = async () => {
   const result = await axios.get(

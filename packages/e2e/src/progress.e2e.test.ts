@@ -1,6 +1,6 @@
 import axios from "axios";
 import request from "supertest";
-import { fetchAccessToken, HOST } from "./utils/utils";
+import { fetchAccessToken, HOST } from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs

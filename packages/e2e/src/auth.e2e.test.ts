@@ -1,5 +1,5 @@
 import request from "supertest";
-import { HOST, HARD_CODED_FB_ACCESS_TOKEN } from "./utils/utils";
+import { HOST, HARD_CODED_FB_ACCESS_TOKEN } from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /auth APIs

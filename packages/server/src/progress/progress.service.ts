@@ -117,6 +117,12 @@ export class ProgressService {
     challengeCodeDto: UserCodeBlobDto,
     requestUser: RequestUser,
   ) {
+    if (
+      !challengeUtilityClass.challengeIdIsValid(challengeCodeDto.challengeId)
+    ) {
+      throw new BadRequestException("The challengeId is invalid");
+    }
+
     const user = await this.userService.findUserByEmail(requestUser.email);
     await this.userCodeBlobRepository.insert({
       user,
@@ -133,6 +139,7 @@ export class ProgressService {
       user,
       challengeId,
     });
+
     if (codeHistory) {
       return codeHistory;
     } else {
