@@ -32,9 +32,17 @@ COPY . .
 # Setup server environment
 RUN yarn server:setup
 
-# Build the server
-RUN yarn server:build
+# # Build the server
+# RUN yarn server:build
 
-FROM dependencies AS runtime
+FROM dependencies AS build
+
+RUN yarn build
+
+FROM build AS test
+
+RUN yarn test
+
+FROM test AS runtime
 
 COPY . .
