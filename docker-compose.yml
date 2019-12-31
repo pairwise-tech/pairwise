@@ -25,7 +25,7 @@ services:
 
   e2e:
     image: server
-    command: dockerize -wait tcp://db:5432 -wait tcp://server:9000 -timeout 10s yarn server:e2e
+    command: dockerize -wait tcp://db:5432 -wait tcp://server:9000 -timeout 10s yarn test:e2e
     environment:
       TYPEORM_HOST: db
     depends_on:

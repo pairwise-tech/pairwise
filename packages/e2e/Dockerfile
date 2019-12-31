@@ -14,8 +14,11 @@ FROM image AS base
 # Copy app source
 COPY . .
 
+# Install Lerna
+RUN npm i -g lerna
+
 # Run yarn
-RUN npx lerna bootstrap
+RUN lerna bootstrap
 
 FROM base as dependencies
 
