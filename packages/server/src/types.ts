@@ -1,4 +1,8 @@
 import { Request } from "express";
-import { User } from "./user/user.entity";
 
-export type AuthenticatedRequest = Request & { user: User };
+export interface RequestUser {
+  email: string;
+  uuid: string;
+}
+
+export type AuthenticatedRequest = Request & { user: RequestUser };

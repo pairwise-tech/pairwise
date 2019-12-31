@@ -1,14 +1,18 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserCourseProgress } from "./userCourseProgress.entity";
-import {
-  UserCourseProgressDto,
-  IUserCourseProgressDto,
-} from "./userCourseProgress.dto";
+import { UserCourseProgressDto } from "./userCourseProgress.dto";
 import { UserCodeBlobDto } from "./userCodeBlob.dto";
 import { UserService } from "src/user/user.service";
 import { challengeUtilityClass } from "@prototype/common";
+import { UserCodeBlob } from "./userCodeBlob.entity";
+import { User } from "src/user/user.entity";
+import { RequestUser } from "src/types";
 
 @Injectable()
 export class ProgressService {
@@ -17,6 +21,9 @@ export class ProgressService {
 
     @InjectRepository(UserCourseProgress)
     private readonly userProgressRepository: Repository<UserCourseProgress>,
+
+    @InjectRepository(UserCodeBlob)
+    private readonly userCodeBlobRepository: Repository<UserCodeBlob>,
   ) {}
 
   async fetchUserChallengeProgress() {
@@ -106,8 +113,32 @@ export class ProgressService {
     return this.userProgressRepository.find({ courseId });
   }
 
-  async updateUserCodeHistory(updateUserCodeHistory: UserCodeBlobDto) {
-    console.log("Updating user code history:");
-    console.log(updateUserCodeHistory);
+  async updateUserCodeHistory(
+    challengeCodeDto: UserCodeBlobDto,
+    requestUser: RequestUser,
+  ) {
+    const user = await this.userService.findUserByEmail(requestUser.email);
+    await this.userCodeBlobRepository.insert({
+      user,
+      challengeId: challengeCodeDto.challengeId,
+      dataBlob: challengeCodeDto.dataBlob,
+    });
+
+    return "Success";
+  }
+
+  async fetchUserCodeHistory(requestUser: RequestUser, challengeId: string) {
+    const user = await this.userService.findUserByEmail(requestUser.email);
+    const codeHistory = await this.userCodeBlobRepository.findOne({
+      user,
+      challengeId,
+    });
+    if (codeHistory) {
+      return codeHistory;
+    } else {
+      throw new NotFoundException(
+        "No history found for this challenge for this user.",
+      );
+    }
   }
 }

@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
 
 interface IUserCodeBlobDto {
-  code: string;
+  dataBlob: string;
   challengeId: string;
 }
 
@@ -10,7 +10,7 @@ export class UserCodeBlobDto implements IUserCodeBlobDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ type: "string" })
-  code: string;
+  dataBlob: string;
 
   @IsString()
   @IsNotEmpty()
