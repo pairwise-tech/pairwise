@@ -11,7 +11,6 @@ import { UserCodeBlobDto } from "./userCodeBlob.dto";
 import { UserService } from "src/user/user.service";
 import { challengeUtilityClass } from "@prototype/common";
 import { UserCodeBlob } from "./userCodeBlob.entity";
-import { User } from "src/user/user.entity";
 import { RequestUser } from "src/types";
 
 @Injectable()
@@ -124,13 +123,30 @@ export class ProgressService {
     }
 
     const user = await this.userService.findUserByEmail(requestUser.email);
-    await this.userCodeBlobRepository.insert({
+    const existingBlob = await this.userCodeBlobRepository.findOne({
       user,
       challengeId: challengeCodeDto.challengeId,
-      dataBlob: challengeCodeDto.dataBlob,
     });
 
-    return "Success";
+    /**
+     * Upsert (no typeorm method exist, ha, ha):
+     */
+    if (existingBlob) {
+      await this.userCodeBlobRepository.update(
+        {
+          uuid: existingBlob.uuid,
+        },
+        challengeCodeDto,
+      );
+    } else {
+      await this.userCodeBlobRepository.insert({
+        user,
+        challengeId: challengeCodeDto.challengeId,
+        dataBlob: challengeCodeDto.dataBlob,
+      });
+    }
+
+    return "Success"; /* TODO: Create shared status code for this message */
   }
 
   async fetchUserCodeHistory(requestUser: RequestUser, challengeId: string) {
