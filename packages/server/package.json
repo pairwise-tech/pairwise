@@ -34,7 +34,8 @@
     "schema:drop": "yarn typeorm schema:drop",
     "schema:sync": "yarn typeorm schema:sync",
     "schema:log": "yarn typeorm schema:log",
-    "db:reset": "yarn schema:drop && rm -rf src/migrations && mkdir src/migrations"
+    "migrations:reset": "yarn schema:drop && rm -rf src/migrations && mkdir src/migrations",
+    "db:reset": "yarn schema:drop && yarn setup:db"
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",

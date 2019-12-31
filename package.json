@@ -12,6 +12,7 @@
     "client:codepress": "cd packages/client && yarn start:codepress",
     "db": "cd packages/server && yarn db",
     "db:setup": "cd packages/server && yarn setup:db",
+    "db:reset": "cd packages/server && yarn db:reset",
     "db:migration": "cd packages/server && yarn migration:run",
     "server:setup": "cd packages/server && yarn setup:env",
     "server": "cd packages/server && yarn start",

@@ -15,12 +15,9 @@ describe("User APIs", () => {
       },
     });
 
-    expect(result.data).toEqual({
-      uuid: "6e7a1ac2-b3b9-4d3c-b329-747b39855646",
-      email: "sean.smith.2009@gmail.com",
-      displayName: "Sean Smith",
-      givenName: "Sean",
-      familyName: "Smith",
-    });
+    expect(result.data.email).toBe("sean.smith.2009@gmail.com");
+    expect(result.data.displayName).toBe("Sean Smith");
+    expect(result.data.givenName).toBe("Sean");
+    expect(result.data.familyName).toBe("Smith");
   });
 });
