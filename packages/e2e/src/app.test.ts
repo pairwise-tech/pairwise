@@ -145,22 +145,61 @@ describe("Challenge APIs", () => {
       });
   });
 
-  test("/progress (POST) accepts a valid input object", async done => {
+  test("/progress (POST) handles valid insertions correctly", async done => {
+    const updateProgressItem = async (progress: any) => {
+      return axios.post(`${HOST}/progress`, progress, {
+        headers: {
+          Authorization: authorizationHeader,
+        },
+      });
+    };
+
+    await updateProgressItem({
+      passed: false,
+      challengeId: "5ziJI35f",
+      courseId: "fpvPtfu7s",
+    });
+
+    await updateProgressItem({
+      passed: true,
+      challengeId: "5ziJI35f",
+      courseId: "fpvPtfu7s",
+    });
+
+    await updateProgressItem({
+      passed: true,
+      challengeId: "5ziJI35f",
+      courseId: "fpvPtfu7s",
+    });
+
+    await updateProgressItem({
+      passed: true,
+      challengeId: "50fxTLRcV",
+      courseId: "fpvPtfu7s",
+    });
+
+    await updateProgressItem({
+      passed: true,
+      challengeId: "WUA8ezECU",
+      courseId: "fpvPtfu7s",
+    });
+
     request(`${HOST}/progress`)
-      .post("/")
-      .send({
-        passed: true,
-        challengeId: "5ziJI35f",
-        courseId: "fpvPtfu7s",
-      })
+      .get("/")
       .set("Authorization", authorizationHeader)
-      .expect(201)
+      .expect(200)
       .end((error, response) => {
         expect(Array.isArray(response.body)).toBeTruthy();
         const entry = response.body.pop();
         expect(entry.uuid).toBeDefined();
         expect(entry.courseId).toBeDefined();
-        const expected = { "5ziJI35f": { passed: true } };
+
+        const expected = {
+          ["5ziJI35f"]: { passed: true },
+          ["WUA8ezECU"]: { passed: true },
+          ["50fxTLRcV"]: { passed: true },
+        };
+
         expect(JSON.parse(entry.progress)).toEqual(expected);
         done(error);
       });

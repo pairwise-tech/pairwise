@@ -5,6 +5,7 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  Get,
 } from "@nestjs/common";
 import { UserCourseProgressDto } from "./userCourseProgress.dto";
 import { ProgressService } from "./progress.service";
@@ -14,6 +15,12 @@ import { AuthGuard } from "@nestjs/passport";
 @Controller("progress")
 export class ProgressController {
   constructor(private readonly progressService: ProgressService) {}
+
+  @UseGuards(AuthGuard("jwt"))
+  @Get()
+  fetchUserChallengeProgress() {
+    return this.progressService.fetchUserChallengeProgress();
+  }
 
   @UseGuards(AuthGuard("jwt"))
   @Post()

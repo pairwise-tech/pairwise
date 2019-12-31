@@ -19,6 +19,21 @@ export class ProgressService {
     private readonly userProgressRepository: Repository<UserCourseProgress>,
   ) {}
 
+  async fetchUserChallengeProgress() {
+    /* TODO: Replace with request user: */
+    const user = await this.userService.findUserByEmail(
+      "sean.smith.2009@gmail.com",
+    );
+
+    const result = await this.userProgressRepository.find({
+      where: {
+        user: user.uuid,
+      },
+    });
+
+    return result;
+  }
+
   async updateUserProgressHistory(challengeProgressDto: UserCourseProgressDto) {
     console.log("Service handling update challenge code:");
     const { courseId, challengeId, passed } = challengeProgressDto;
