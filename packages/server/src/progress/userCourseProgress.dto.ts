@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsBoolean, IsString } from "class-validator";
 
 export interface ProgressHistory {
   [key: string]: IUserCourseProgressDto;
@@ -11,14 +11,17 @@ export interface IUserCourseProgressDto {
 }
 
 export class UserCourseProgressDto implements IUserCourseProgressDto {
+  @IsBoolean()
   @IsNotEmpty()
   @ApiProperty({ type: "boolean" })
   passed: boolean;
 
-  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   @ApiProperty({ type: "string" })
   challengeId: string;
 
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({ type: "string" })
   courseId: string;

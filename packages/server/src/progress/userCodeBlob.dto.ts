@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 interface IUserCodeBlobDto {
   code: string;
@@ -7,10 +7,12 @@ interface IUserCodeBlobDto {
 }
 
 export class UserCodeBlobDto implements IUserCodeBlobDto {
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({ type: "string" })
   code: string;
 
+  @IsString()
   @IsNotEmpty()
   @ApiProperty({ type: "string" })
   challengeId: string;
