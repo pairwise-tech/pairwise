@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Setup Node
+      - name: Setup NodeJS Environment
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
-      - name: Run build and tests for all packages and run e2e tests
+      - name: Run build and test steps for all packages and run e2e test suite
         run: yarn e2e
         env:
           CI: true
