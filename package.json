@@ -13,9 +13,15 @@
     "db": "cd packages/server && yarn db",
     "server:setup": "cd packages/server && yarn setup:env && yarn setup:db",
     "server": "cd packages/server && yarn start",
+    "server:run": "yarn db:setup && yarn server:prod",
+    "server:build": "cd packages/server && yarn build",
     "server:dev": "cd packages/server && yarn start:dev",
+    "server:e2e": "cd packages/server && yarn test:e2e",
+    "server:prod": "cd packages/server && yarn start:prod",
+    "db:setup": "cd packages/server && yarn migration:run",
     "test": "lerna run test",
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "e2e": "docker-compose up --build --abort-on-container-exit"
   },
   "workspaces": [
     "packages/*"

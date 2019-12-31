@@ -1,0 +1,33 @@
+version: "3.5"
+
+services:
+  db:
+    image: postgres:11.2
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    expose:
+      - 5432
+
+  server:
+    build:
+      context: .
+      dockerfile: ./packages/server/test/Dockerfile
+    image: server
+    command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
+    environment:
+      TYPEORM_HOST: db
+    expose:
+      - 9000
+    depends_on:
+      - db
+
+  e2e:
+    image: server
+    command: dockerize -wait tcp://db:5432 -wait tcp://server:9000 -timeout 10s yarn server:e2e
+    environment:
+      TYPEORM_HOST: db
+    depends_on:
+      - db
+      - server
