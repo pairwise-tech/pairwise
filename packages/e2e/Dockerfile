@@ -26,6 +26,9 @@ RUN lerna bootstrap
 
 FROM base as dependencies
 
+# Copy everything
+COPY . .
+
 # Setup server environment
 RUN yarn server:setup
 
