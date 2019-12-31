@@ -1,5 +1,5 @@
 import request from "supertest";
-import { HOST } from "./utils";
+import { HOST } from "./utils/utils";
 
 /** ===========================================================================
  * e2e tests for generic app APIs

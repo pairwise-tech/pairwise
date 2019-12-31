@@ -32,15 +32,14 @@ COPY . .
 # Setup server environment
 RUN yarn server:setup
 
-# # Build the server
-# RUN yarn server:build
-
 FROM dependencies AS build
 
+# Uses Lerna to run the build command for all packages
 RUN yarn build
 
 FROM build AS test
 
+# Uses Lerna to run the test command for all packages
 RUN yarn test
 
 FROM test AS runtime

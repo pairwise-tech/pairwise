@@ -1,5 +1,5 @@
 import axios from "axios";
-import { fetchAccessToken, HOST } from "./utils";
+import { fetchAccessToken, HOST } from "./utils/utils";
 
 /** ===========================================================================
  * e2e Tests for /user APIs
