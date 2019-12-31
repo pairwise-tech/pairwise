@@ -7,7 +7,6 @@ export class ChallengesController {
 
   @Get()
   fetchChallenges() {
-    console.log("Regular request!");
     return this.challengeService.fetchCourses();
   }
 }

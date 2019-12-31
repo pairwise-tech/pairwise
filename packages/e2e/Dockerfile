@@ -6,23 +6,27 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
   && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
   && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
+# Install Lerna
+RUN npm i -g lerna
+
 # Create app directory
 WORKDIR /usr/app
 
 FROM image AS base
 
-# Copy app source
-COPY . .
+# Copy all dependency inputs to cache the npm install step
+COPY package.json lerna.json yarn.lock /usr/app/
+COPY packages/common/package.json /usr/app/packages/common/package.json
+COPY packages/client/package.json /usr/app/packages/client/package.json
+COPY packages/server/package.json /usr/app/packages/server/package.json
+COPY packages/e2e/package.json /usr/app/packages/e2e/package.json
 
-# Install Lerna
-RUN npm i -g lerna
-
-# Run yarn
+# Install all dependencies with Lerna
 RUN lerna bootstrap
 
 FROM base as dependencies
 
-# Setup
+# Build the server
 RUN yarn server:build
 
 FROM dependencies AS runtime
