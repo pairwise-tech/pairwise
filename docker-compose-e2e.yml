@@ -25,12 +25,13 @@ services:
       - db
 
   external-services:
-    build:
-      context: ./packages/external-services
-      dockerfile: ./Dockerfile
+    image: server
+    # build:
+    #   context: ./packages/external-services
+    #   dockerfile: ./Dockerfile
+    command: yarn e2e:services
     expose:
       - 7000
-    command: yarn start
 
   e2e:
     image: server
