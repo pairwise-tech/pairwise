@@ -22,7 +22,7 @@ import { PaymentsModule } from "./payments/payments.module";
     ProgressModule,
     PaymentsModule,
   ],
-  controllers: [AppController, ChallengesController],
-  providers: [AppService, UserService],
+  // controllers: [AppController, ChallengesController],
+  // providers: [AppService, UserService],
 })
 export class AppModule {}
