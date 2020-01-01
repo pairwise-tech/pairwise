@@ -6,7 +6,7 @@ import { AuthService } from "./auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./strategies/jwt.strategy";
-import ENV from "src/tools/env";
+import ENV from "src/tools/server-env";
 import { GitHubStrategy } from "./strategies/github.strategy";
 
 @Module({

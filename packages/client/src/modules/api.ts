@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
-import * as ENV from "tools/env";
+import * as ENV from "tools/client-env";
 import { getAccessTokenFromLocalStorage } from "tools/utils";
 import { User } from "./user/types";
 

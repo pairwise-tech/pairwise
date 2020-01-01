@@ -21,7 +21,7 @@ import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
-import { DEV_MODE } from "tools/env";
+import { DEV_MODE } from "tools/client-env";
 import {
   getTestCodeMarkup,
   TestCase,

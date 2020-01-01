@@ -4,7 +4,7 @@ import { UserService, GenericUserProfile } from "src/user/user.service";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
 import { AuthService } from "./auth.service";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
-import ENV from "src/tools/env";
+import ENV from "src/tools/server-env";
 
 @Controller("auth")
 export class AuthController {

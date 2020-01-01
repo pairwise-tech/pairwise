@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import FacebookTokenStrategy from "passport-facebook-token";
 import { use } from "passport";
-import ENV from "src/tools/env";
+import ENV from "src/tools/server-env";
 
 /** ===========================================================================
  * Facebook Passport Strategy

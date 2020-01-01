@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Strategy as GitHubPassportStrategy } from "passport-github";
 import { use } from "passport";
-import ENV from "src/tools/env";
+import ENV from "src/tools/server-env";
 
 /** ===========================================================================
  * Facebook Passport Strategy

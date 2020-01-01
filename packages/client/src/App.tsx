@@ -5,8 +5,8 @@ import { Router as ReactRouter } from "react-router-dom";
 
 import ParentContainer from "components/ApplicationContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
+import { NODE_ENV } from "tools/client-env";
 import { COLORS } from "tools/constants";
-import { NODE_ENV } from "tools/env";
 
 /** ===========================================================================
  * App

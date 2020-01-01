@@ -1,7 +1,7 @@
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import { Injectable } from "@nestjs/common";
-import ENV from "src/tools/env";
+import ENV from "src/tools/server-env";
 
 export interface JwtPassportPayload {
   email: string;

@@ -7,8 +7,8 @@ import { GithubLoginButton } from "react-social-login-buttons";
 import styled from "styled-components";
 
 import Modules, { ReduxStoreState } from "modules/root";
+import * as ENV from "tools/client-env";
 import { COLORS } from "tools/constants";
-import * as ENV from "tools/env";
 import { composeWithProps } from "tools/utils";
 
 /** ===========================================================================
