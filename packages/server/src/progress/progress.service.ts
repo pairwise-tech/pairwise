@@ -27,7 +27,6 @@ export class ProgressService {
   ) {}
 
   async fetchUserChallengeProgress(requestUser: RequestUser) {
-    /* TODO: Replace with request user: */
     const user = await this.userService.findUserByEmail(requestUser.email);
 
     const result = await this.userProgressRepository.find({

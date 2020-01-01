@@ -18,3 +18,14 @@ export interface User {
   profile: UserProfile;
   payments: Payment[];
 }
+
+export interface UserProgress {
+  passed: boolean;
+  challengeId: string;
+  courseId: string;
+}
+
+export interface ChallengeHistory {
+  dataBlob: string;
+  challengeId: string;
+}

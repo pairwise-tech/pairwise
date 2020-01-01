@@ -1,11 +1,13 @@
 import { Course, CourseList, Err, Ok, Result } from "@prototype/common";
 import axios, { AxiosError } from "axios";
+import { Http2ServerResponse } from "http2";
+import { T } from "ramda";
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
 import * as ENV from "tools/client-env";
 import { getAccessTokenFromLocalStorage } from "tools/utils";
-import { User } from "./user/types";
+import { ChallengeHistory, User, UserProgress } from "./user/types";
 
 /** ===========================================================================
  * Types & Config
@@ -96,6 +98,74 @@ class Api {
       const result = await axios.get<User>(`${HOST}/user/profile`, {
         headers,
       });
+      return new Ok(result.data);
+    } catch (err) {
+      return this.handleHttpError(err);
+    }
+  };
+
+  fetchUserProgress = async (): Promise<
+    Result<UserProgress[], HttpResponseError>
+  > => {
+    try {
+      const headers = this.getRequestHeaders();
+      const result = await axios.get<UserProgress[]>(`${HOST}/progress`, {
+        headers,
+      });
+      return new Ok(result.data);
+    } catch (err) {
+      return this.handleHttpError(err);
+    }
+  };
+
+  updateUserProgress = async (
+    progress: UserProgress,
+  ): Promise<Result<UserProgress, HttpResponseError>> => {
+    try {
+      const headers = this.getRequestHeaders();
+      const result = await axios.post<UserProgress>(`${HOST}/progress`, {
+        headers,
+        body: progress,
+      });
+      return new Ok(result.data);
+    } catch (err) {
+      return this.handleHttpError(err);
+    }
+  };
+
+  fetchChallengeHistory = async (
+    challengeId: string,
+  ): Promise<Result<ChallengeHistory, HttpResponseError>> => {
+    try {
+      const headers = this.getRequestHeaders();
+      const result = await axios.get<ChallengeHistory>(
+        `${HOST}/progress/challenge/${challengeId}`,
+        {
+          headers,
+        },
+      );
+      return new Ok(result.data);
+    } catch (err) {
+      return this.handleHttpError(err);
+    }
+  };
+
+  updateChallengeHistory = async (
+    challengeId: string,
+    dataBlob: string,
+  ): Promise<Result<ChallengeHistory, HttpResponseError>> => {
+    try {
+      const headers = this.getRequestHeaders();
+      const result = await axios.post<ChallengeHistory>(
+        `${HOST}/progress/challenge`,
+        {
+          headers,
+          body: {
+            dataBlob,
+            challengeId,
+          },
+        },
+      );
       return new Ok(result.data);
     } catch (err) {
       return this.handleHttpError(err);
