@@ -16,7 +16,7 @@ import { Challenge } from "@prototype/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";
-import React, { ChangeEvent, HTMLAttributes, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
