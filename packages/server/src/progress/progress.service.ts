@@ -54,7 +54,7 @@ export class ProgressService {
     } else if (
       !challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
     ) {
-      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+      throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
     }
 
     console.log(
@@ -119,7 +119,7 @@ export class ProgressService {
     if (
       !challengeUtilityClass.challengeIdIsValid(challengeCodeDto.challengeId)
     ) {
-      throw new BadRequestException("The challengeId is invalid");
+      throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
     }
 
     const user = await this.userService.findUserByEmail(requestUser.email);

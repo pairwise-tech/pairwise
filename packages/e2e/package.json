@@ -13,12 +13,9 @@
     "tslint:fix": "tslint --project tsconfig.json -c tslint.json --fix",
     "format": "yarn prettier:fix && yarn tslint:fix",
     "lint": "yarn prettier && yarn tslint",
-    "jest": "jest --config ./jest-config.json",
-    "test:unit": "jest",
-    "test:watch": "yarn jest --watch",
-    "test:cov": "yarn jest --coverage",
     "test": "yarn lint",
-    "test:e2e": "yarn jest"
+    "test:e2e": "yarn jest --config ./jest-config.json",
+    "test:watch": "yarn test:e2e --watch"
   },
   "directories": {
     "dist": "dist"

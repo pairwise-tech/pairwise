@@ -59,7 +59,7 @@ describe("Payments APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(201)
       .expect(response => {
-        expect(response.text).toBe("Success!");
+        expect(response.text).toBe("Success");
       });
 
     /**

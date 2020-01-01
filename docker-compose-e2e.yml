@@ -26,9 +26,6 @@ services:
 
   external-services:
     image: server
-    # build:
-    #   context: ./packages/external-services
-    #   dockerfile: ./Dockerfile
     command: yarn e2e:services
     expose:
       - 7000
