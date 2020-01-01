@@ -1336,8 +1336,7 @@ class WorkspaceLoadingContainer extends React.Component<
             )}
             {this.props.userAuthenticated && this.props.user ? (
               <CreateAccountText>
-                Welcome, {this.props.user.givenName}!
-                {/* Welcome, {this.props.user ? this.props.user.givenName : ""}! */}
+                Welcome, {this.props.user.profile.givenName}!
               </CreateAccountText>
             ) : (
               <CreateAccountText

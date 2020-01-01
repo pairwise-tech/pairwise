@@ -20,7 +20,7 @@ export class PaymentsService {
     const userResult = await this.userService.findUserByEmailAndReturnProfile(
       requestUser.email,
     );
-    const { user, payments } = userResult;
+    const { profile: user, payments } = userResult;
 
     console.log(`Purchasing course ${courseId} for user ${user.email}`);
 

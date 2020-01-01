@@ -1,10 +1,20 @@
 /**
- * TODO: Share this type with the server!
+ * TODO: Share these types with the server!
  */
-export interface User {
+export interface UserProfile {
   id: string;
   email: string;
   displayName: string;
   givenName: string;
   familyName: string;
+}
+
+interface Payment {
+  courseId: string;
+  datePaid: string;
+}
+
+export interface User {
+  profile: UserProfile;
+  payments: Payment[];
 }

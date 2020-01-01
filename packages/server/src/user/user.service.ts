@@ -35,8 +35,8 @@ export class UserService {
     });
 
     const result = {
-      user,
       payments,
+      profile: user,
     };
 
     return result;
