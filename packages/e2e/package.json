@@ -7,6 +7,9 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
+    "mock:build": "tsc --lib esnext --esModuleInterop --skipLibCheck mock-server/*.ts",
+    "mock:watch": "concurrently \"yarn run mock:build -- -w\" \"nodemon --inspect ./mock-server/server.js\"",
+    "mock:start": "node ./mock-server/server.js",
     "prettier": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "tslint": "tslint --project tsconfig.json -c tslint.json",
@@ -34,5 +37,16 @@
     "supertest": "^4.0.2",
     "tslint": "^5.20.1",
     "typescript": "^3.7.4"
+  },
+  "devDependencies": {
+    "@types/faker": "^4.1.8",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^13.1.2",
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.0.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "faker": "^4.1.0",
+    "morgan": "^1.9.1"
   }
 }

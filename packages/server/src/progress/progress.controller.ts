@@ -21,8 +21,8 @@ export class ProgressController {
 
   @UseGuards(AuthGuard("jwt"))
   @Get()
-  fetchUserChallengeProgress() {
-    return this.progressService.fetchUserChallengeProgress();
+  fetchUserChallengeProgress(@Req() req: AuthenticatedRequest) {
+    return this.progressService.fetchUserChallengeProgress(req.user);
   }
 
   @UseGuards(AuthGuard("jwt"))
@@ -30,8 +30,12 @@ export class ProgressController {
   @UsePipes(ValidationPipe)
   updateUserChallengeProgress(
     @Body() challengeProgressDto: UserCourseProgressDto,
+    @Req() req: AuthenticatedRequest,
   ) {
-    return this.progressService.updateUserProgressHistory(challengeProgressDto);
+    return this.progressService.updateUserProgressHistory(
+      req.user,
+      challengeProgressDto,
+    );
   }
 
   @UseGuards(AuthGuard("jwt"))

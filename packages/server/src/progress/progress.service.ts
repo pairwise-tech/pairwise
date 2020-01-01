@@ -25,11 +25,9 @@ export class ProgressService {
     private readonly userCodeBlobRepository: Repository<UserCodeBlob>,
   ) {}
 
-  async fetchUserChallengeProgress() {
+  async fetchUserChallengeProgress(requestUser: RequestUser) {
     /* TODO: Replace with request user: */
-    const user = await this.userService.findUserByEmail(
-      "sean.smith.2009@gmail.com",
-    );
+    const user = await this.userService.findUserByEmail(requestUser.email);
 
     const result = await this.userProgressRepository.find({
       where: {
@@ -40,7 +38,10 @@ export class ProgressService {
     return result;
   }
 
-  async updateUserProgressHistory(challengeProgressDto: UserCourseProgressDto) {
+  async updateUserProgressHistory(
+    requestUser: RequestUser,
+    challengeProgressDto: UserCourseProgressDto,
+  ) {
     console.log("Service handling update challenge code:");
     const { courseId, challengeId, passed } = challengeProgressDto;
 
@@ -70,9 +71,7 @@ export class ProgressService {
     });
 
     /* TODO: Replace with request user: */
-    const user = await this.userService.findUserByEmail(
-      "sean.smith.2009@gmail.com",
-    );
+    const user = await this.userService.findUserByEmail(requestUser.email);
 
     /* TODO: Validate input data. */
 
