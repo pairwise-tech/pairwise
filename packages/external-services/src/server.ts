@@ -5,27 +5,52 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
 const app = express();
 
 app.use(morgan("tiny"));
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => res.send("hi!!!"));
+/** ===========================================================================
+ * API Endpoints
+ * ----------------------------------------------------------------------------
+ * Add REST endpoints here which will override external service API requests
+ * in the e2e test environment.
+ * ============================================================================
+ */
 
+app.get("/", (req, res) =>
+  res.send("The external services server is running!"),
+);
+
+/**
+ * Facebook authentication request.
+ */
 app.get("/facebook/profile", (req, res) => {
   const first = faker.name.firstName();
   const last = faker.name.lastName();
-  const result = {
-    id: faker.random.uuid(),
-    name: `${first} ${last}`,
+  const name = `${first} ${last}`;
+
+  const profile = {
+    name,
     first_name: first,
     last_name: last,
+    id: faker.random.uuid(),
     email: faker.internet.email(),
   };
 
-  res.json(result);
+  res.json(profile);
 });
+
+/** ===========================================================================
+ * Run the Server
+ * ============================================================================
+ */
 
 const PORT = 7000;
 
