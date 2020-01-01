@@ -138,7 +138,7 @@ class Api extends BaseApiClass {
     }
   };
 
-  fetchUserProfile = async (): Promise<Result<IUserDto, HttpResponseError>> => {
+  fetchUserProfile = async () => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
       return axios.get<IUserDto>(`${HOST}/user/profile`, {
@@ -147,9 +147,7 @@ class Api extends BaseApiClass {
     });
   };
 
-  fetchUserProgress = async (): Promise<
-    Result<IUserCourseProgressDto[], HttpResponseError>
-  > => {
+  fetchUserProgress = async () => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
       return axios.get<IUserCourseProgressDto[]>(`${HOST}/progress`, {
@@ -158,9 +156,7 @@ class Api extends BaseApiClass {
     });
   };
 
-  updateUserProgress = async (
-    progress: IUserCourseProgressDto,
-  ): Promise<Result<IUserCourseProgressDto, HttpResponseError>> => {
+  updateUserProgress = async (progress: IUserCourseProgressDto) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
       return axios.post<IUserCourseProgressDto>(`${HOST}/progress`, {
@@ -170,9 +166,7 @@ class Api extends BaseApiClass {
     });
   };
 
-  fetchChallengeHistory = async (
-    challengeId: string,
-  ): Promise<Result<IUserCodeBlobDto, HttpResponseError>> => {
+  fetchChallengeHistory = async (challengeId: string) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
       return axios.get<IUserCodeBlobDto>(
@@ -184,10 +178,7 @@ class Api extends BaseApiClass {
     });
   };
 
-  updateChallengeHistory = async (
-    challengeId: string,
-    dataBlob: string,
-  ): Promise<Result<IUserCodeBlobDto, HttpResponseError>> => {
+  updateChallengeHistory = async (challengeId: string, dataBlob: string) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
       return axios.post<IUserCodeBlobDto>(`${HOST}/progress/challenge`, {
