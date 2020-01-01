@@ -10,8 +10,7 @@ var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
 var morgan_1 = __importDefault(require("morgan"));
 var app = express_1["default"]();
-// @ts-ignore
-app.use(morgan_1["default"]("dev"));
+app.use(morgan_1["default"]("tiny"));
 app.use(cors_1["default"]());
 app.use(body_parser_1["default"].json());
 app.get("/", function (req, res) { return res.send("hi!"); });

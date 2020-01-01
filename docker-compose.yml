@@ -27,6 +27,8 @@ services:
     build:
       context: ./packages/e2e
       dockerfile: ./mock-server/Dockerfile
+    expose:
+      - 7000
     command: yarn mock:start
 
   e2e:

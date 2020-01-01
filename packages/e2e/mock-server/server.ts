@@ -7,8 +7,7 @@ import morgan from "morgan";
 
 const app = express();
 
-// @ts-ignore
-app.use(morgan("dev"));
+app.use(morgan("tiny"));
 app.use(cors());
 app.use(bodyParser.json());
 
