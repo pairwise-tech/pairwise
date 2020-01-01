@@ -25,11 +25,11 @@ services:
 
   external-services:
     build:
-      context: ./packages/e2e
-      dockerfile: ./mock-server/Dockerfile
+      context: ./packages/external-services
+      dockerfile: ./Dockerfile
     expose:
       - 7000
-    command: yarn mock:start
+    command: yarn start
 
   e2e:
     image: server

@@ -11,7 +11,7 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => res.send("hi!"));
+app.get("/", (req, res) => res.send("hi!!!"));
 
 app.get("/facebook/profile", (req, res) => {
   const first = faker.name.firstName();
