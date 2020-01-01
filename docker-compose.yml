@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: ./packages/e2e/Dockerfile
     image: server
-    command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
+    command: dockerize -wait tcp://db:5432 -timeout 10s yarn db:migration && yarn server:prod
     environment:
       TYPEORM_HOST: db
       FB_OAUTH_SERVICE_URL: http://external-services:7000/facebook/profile
