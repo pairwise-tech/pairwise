@@ -14,7 +14,7 @@
     "lint": "yarn prettier && yarn tslint",
     "prettier": "prettier --list-different \"src/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\"",
-    "start": "node ./mock-server/server.js",
+    "start": "node ./dist/server.js",
     "test": "yarn lint",
     "tslint": "tslint --project tsconfig.json -c tslint.json",
     "tslint:fix": "tslint --project tsconfig.json -c tslint.json --fix",
