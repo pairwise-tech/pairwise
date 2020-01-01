@@ -18,6 +18,7 @@ services:
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
+      FB_OAUTH_SERVICE_URL: http://external-services:7000/facebook/profile
     expose:
       - 9000
     depends_on:
