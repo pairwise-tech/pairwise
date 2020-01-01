@@ -20,7 +20,7 @@ export class PaymentsService {
     console.log(`Purchasing course ${courseId} for user ${user.email}`);
 
     if (!challengeUtilityClass.courseIdIsValid(courseId)) {
-      return new BadRequestException("Invalid courseId");
+      throw new BadRequestException("The courseId is invalid");
     }
 
     /**

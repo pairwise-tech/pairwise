@@ -66,13 +66,12 @@ export class ProgressService {
       },
     };
 
-    const existingEntry = await this.userProgressRepository.findOne({
-      courseId,
-    });
-
-    /* TODO: Replace with request user: */
     const user = await this.userService.findUserByEmail(requestUser.email);
 
+    const existingEntry = await this.userProgressRepository.findOne({
+      courseId,
+      user,
+    });
     /* TODO: Validate input data. */
 
     if (existingEntry === undefined) {

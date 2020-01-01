@@ -15,9 +15,10 @@ describe("User APIs", () => {
       },
     });
 
-    expect(result.data.email).toBeDefined();
-    expect(result.data.displayName).toBeDefined();
-    expect(result.data.givenName).toBeDefined();
-    expect(result.data.familyName).toBeDefined();
+    const { user } = result.data;
+    expect(user.email).toBeDefined();
+    expect(user.displayName).toBeDefined();
+    expect(user.givenName).toBeDefined();
+    expect(user.familyName).toBeDefined();
   });
 });
