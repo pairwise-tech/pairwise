@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Payments } from "src/payments/payments.entity";
 
 export interface GenericUserProfile {
   email: string;
@@ -15,11 +16,30 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Payments)
+    private readonly paymentsRepository: Repository<Payments>,
   ) {}
 
   async findUserByEmail(email: string) {
+    return this.userRepository.findOne({ email });
+  }
+
+  async findUserByEmailAndReturnProfile(email: string) {
     const user = await this.userRepository.findOne({ email });
-    return user;
+
+    const payments = await this.paymentsRepository.find({
+      where: {
+        user,
+      },
+    });
+
+    const result = {
+      user,
+      payments,
+    };
+
+    return result;
   }
 
   async findOrCreateUser(profile: GenericUserProfile) {

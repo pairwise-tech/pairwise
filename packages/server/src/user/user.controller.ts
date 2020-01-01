@@ -11,6 +11,6 @@ export class UserController {
   @Get("profile")
   async getProfile(@Request() req: AuthenticatedRequest) {
     const { email } = req.user;
-    return this.userService.findUserByEmail(email);
+    return this.userService.findUserByEmailAndReturnProfile(email);
   }
 }
