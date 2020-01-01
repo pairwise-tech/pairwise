@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { UserCourseProgress } from "src/progress/userCourseProgress.entity";
 import { UserCodeBlob } from "src/progress/userCodeBlob.entity";
+import { Payments } from "src/payments/payments.entity";
 
 @Entity()
 export class User {
@@ -24,6 +25,13 @@ export class User {
 
   @Column()
   familyName: string;
+
+  @OneToMany(
+    type => Payments,
+    payments => payments.user,
+  )
+  @JoinColumn()
+  payments: Payments;
 
   @OneToMany(
     type => UserCourseProgress,
