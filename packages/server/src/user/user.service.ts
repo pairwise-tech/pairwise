@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "./user.entity";
+import { UserEntity } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Payments } from "src/payments/payments.entity";
+import { PaymentsEntity } from "src/payments/payments.entity";
+import { IUserDto } from "@prototype/common";
 
 export interface GenericUserProfile {
   email: string;
@@ -14,11 +15,11 @@ export interface GenericUserProfile {
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
 
-    @InjectRepository(Payments)
-    private readonly paymentsRepository: Repository<Payments>,
+    @InjectRepository(PaymentsEntity)
+    private readonly paymentsRepository: Repository<PaymentsEntity>,
   ) {}
 
   async findUserByEmail(email: string) {
@@ -34,7 +35,7 @@ export class UserService {
       },
     });
 
-    const result = {
+    const result: IUserDto = {
       payments,
       profile: user,
     };

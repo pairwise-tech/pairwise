@@ -5,12 +5,12 @@ import {
   JoinColumn,
   OneToMany,
 } from "typeorm";
-import { UserCourseProgress } from "src/progress/userCourseProgress.entity";
-import { UserCodeBlob } from "src/progress/userCodeBlob.entity";
-import { Payments } from "src/payments/payments.entity";
+import { UserCourseProgressEntity } from "src/progress/userCourseProgress.entity";
+import { UserCodeBlobEntity } from "src/progress/userCodeBlob.entity";
+import { PaymentsEntity } from "src/payments/payments.entity";
 
 @Entity()
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn("uuid")
   uuid: string;
 
@@ -27,23 +27,23 @@ export class User {
   familyName: string;
 
   @OneToMany(
-    type => Payments,
+    type => PaymentsEntity,
     payments => payments.user,
   )
   @JoinColumn()
-  payments: Payments;
+  payments: PaymentsEntity;
 
   @OneToMany(
-    type => UserCourseProgress,
+    type => UserCourseProgressEntity,
     challengeProgressHistory => challengeProgressHistory.user,
   )
   @JoinColumn()
-  challengeProgressHistory: UserCourseProgress;
+  challengeProgressHistory: UserCourseProgressEntity;
 
   @OneToMany(
-    type => UserCodeBlob,
+    type => UserCodeBlobEntity,
     userCodeHistory => userCodeHistory.user,
   )
   @JoinColumn()
-  challengeCodeHistory: UserCodeBlob;
+  challengeCodeHistory: UserCodeBlobEntity;
 }

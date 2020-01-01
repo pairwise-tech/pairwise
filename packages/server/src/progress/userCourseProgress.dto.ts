@@ -1,14 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsBoolean, IsString } from "class-validator";
-
-export interface ProgressHistory {
-  [key: string]: IUserCourseProgressDto;
-}
-
-export interface IUserCourseProgressDto {
-  passed: boolean;
-  challengeId: string;
-}
+import { IUserCourseProgressDto } from "@prototype/common";
 
 export class UserCourseProgressDto implements IUserCourseProgressDto {
   @IsBoolean()

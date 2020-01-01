@@ -5,12 +5,12 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UserCourseProgress } from "./userCourseProgress.entity";
+import { UserCourseProgressEntity } from "./userCourseProgress.entity";
 import { UserCourseProgressDto } from "./userCourseProgress.dto";
 import { UserCodeBlobDto } from "./userCodeBlob.dto";
 import { UserService } from "src/user/user.service";
 import { challengeUtilityClass } from "@prototype/common";
-import { UserCodeBlob } from "./userCodeBlob.entity";
+import { UserCodeBlobEntity } from "./userCodeBlob.entity";
 import { RequestUser } from "src/types";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 
@@ -19,11 +19,13 @@ export class ProgressService {
   constructor(
     private readonly userService: UserService,
 
-    @InjectRepository(UserCourseProgress)
-    private readonly userProgressRepository: Repository<UserCourseProgress>,
+    @InjectRepository(UserCourseProgressEntity)
+    private readonly userProgressRepository: Repository<
+      UserCourseProgressEntity
+    >,
 
-    @InjectRepository(UserCodeBlob)
-    private readonly userCodeBlobRepository: Repository<UserCodeBlob>,
+    @InjectRepository(UserCodeBlobEntity)
+    private readonly userCodeBlobRepository: Repository<UserCodeBlobEntity>,
   ) {}
 
   async fetchUserChallengeProgress(requestUser: RequestUser) {
@@ -98,7 +100,7 @@ export class ProgressService {
        */
       await this.userProgressRepository
         .createQueryBuilder("userCourseProgress")
-        .update(UserCourseProgress)
+        .update(UserCourseProgressEntity)
         .where({ uuid: existingEntry.uuid })
         .set({ progress: JSON.stringify(updatedCourseProgress) })
         .execute();

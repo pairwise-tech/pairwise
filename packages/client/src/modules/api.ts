@@ -1,11 +1,19 @@
-import { Course, CourseList, Err, Ok, Result } from "@prototype/common";
+import {
+  Course,
+  CourseList,
+  Err,
+  IUserCodeBlobDto,
+  IUserCourseProgressDto,
+  IUserDto,
+  Ok,
+  Result,
+} from "@prototype/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
 import * as ENV from "tools/client-env";
 import { getAccessTokenFromLocalStorage } from "tools/utils";
-import { ChallengeHistory, User, UserProgress } from "./user/types";
 
 /** ===========================================================================
  * Types & Config
@@ -130,32 +138,32 @@ class Api extends BaseApiClass {
     }
   };
 
-  fetchUserProfile = async (): Promise<Result<User, HttpResponseError>> => {
+  fetchUserProfile = async (): Promise<Result<IUserDto, HttpResponseError>> => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.get<User>(`${HOST}/user/profile`, {
+      return axios.get<IUserDto>(`${HOST}/user/profile`, {
         headers,
       });
     });
   };
 
   fetchUserProgress = async (): Promise<
-    Result<UserProgress[], HttpResponseError>
+    Result<IUserCourseProgressDto[], HttpResponseError>
   > => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.get<UserProgress[]>(`${HOST}/progress`, {
+      return axios.get<IUserCourseProgressDto[]>(`${HOST}/progress`, {
         headers,
       });
     });
   };
 
   updateUserProgress = async (
-    progress: UserProgress,
-  ): Promise<Result<UserProgress, HttpResponseError>> => {
+    progress: IUserCourseProgressDto,
+  ): Promise<Result<IUserCourseProgressDto, HttpResponseError>> => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.post<UserProgress>(`${HOST}/progress`, {
+      return axios.post<IUserCourseProgressDto>(`${HOST}/progress`, {
         headers,
         body: progress,
       });
@@ -164,10 +172,10 @@ class Api extends BaseApiClass {
 
   fetchChallengeHistory = async (
     challengeId: string,
-  ): Promise<Result<ChallengeHistory, HttpResponseError>> => {
+  ): Promise<Result<IUserCodeBlobDto, HttpResponseError>> => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.get<ChallengeHistory>(
+      return axios.get<IUserCodeBlobDto>(
         `${HOST}/progress/challenge/${challengeId}`,
         {
           headers,
@@ -179,10 +187,10 @@ class Api extends BaseApiClass {
   updateChallengeHistory = async (
     challengeId: string,
     dataBlob: string,
-  ): Promise<Result<ChallengeHistory, HttpResponseError>> => {
+  ): Promise<Result<IUserCodeBlobDto, HttpResponseError>> => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.post<ChallengeHistory>(`${HOST}/progress/challenge`, {
+      return axios.post<IUserCodeBlobDto>(`${HOST}/progress/challenge`, {
         headers,
         body: {
           dataBlob,

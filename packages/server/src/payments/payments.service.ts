@@ -2,7 +2,7 @@ import { Injectable, BadRequestException } from "@nestjs/common";
 import { RequestUser } from "src/types";
 import { UserService } from "src/user/user.service";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Payments } from "./payments.entity";
+import { PaymentsEntity } from "./payments.entity";
 import { Repository } from "typeorm";
 import { challengeUtilityClass } from "@prototype/common";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
@@ -12,8 +12,8 @@ export class PaymentsService {
   constructor(
     private readonly userService: UserService,
 
-    @InjectRepository(Payments)
-    private readonly paymentsRepository: Repository<Payments>,
+    @InjectRepository(PaymentsEntity)
+    private readonly paymentsRepository: Repository<PaymentsEntity>,
   ) {}
 
   async purchaseCourse(requestUser: RequestUser, courseId: string) {

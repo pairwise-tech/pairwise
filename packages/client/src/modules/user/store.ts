@@ -1,7 +1,7 @@
 import { createReducer } from "typesafe-actions";
 
+import { IUserDto } from "@prototype/common";
 import actions, { ActionTypes } from "./actions";
-import { User } from "./types";
 
 /** ===========================================================================
  * App Store
@@ -9,7 +9,7 @@ import { User } from "./types";
  */
 
 export interface State {
-  user: Nullable<User>;
+  user: Nullable<IUserDto>;
 }
 
 const initialState = {

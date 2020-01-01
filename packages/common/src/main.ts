@@ -3,6 +3,7 @@ import challengeUtilityClass from "./tools/challenge-utility-class";
 
 export * from "./types/courses";
 export * from "./types/result";
+export * from "./types/dto";
 
 const Courses = {
   FullstackTypeScript,
