@@ -12,6 +12,7 @@ import { UserService } from "src/user/user.service";
 import { challengeUtilityClass } from "@prototype/common";
 import { UserCodeBlob } from "./userCodeBlob.entity";
 import { RequestUser } from "src/types";
+import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 
 @Injectable()
 export class ProgressService {
@@ -49,11 +50,11 @@ export class ProgressService {
      * Validate the input request:
      */
     if (!challengeUtilityClass.courseIdIsValid(courseId)) {
-      throw new BadRequestException("The courseId is invalid");
+      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     } else if (
       !challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
     ) {
-      throw new BadRequestException("The challengeId is invalid");
+      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     }
 
     console.log(
@@ -145,7 +146,7 @@ export class ProgressService {
       });
     }
 
-    return "Success"; /* TODO: Create shared status code for this message */
+    return SUCCESS_CODES.OK;
   }
 
   async fetchUserCodeHistory(requestUser: RequestUser, challengeId: string) {

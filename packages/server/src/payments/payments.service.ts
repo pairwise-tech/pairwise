@@ -5,6 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "./payments.entity";
 import { Repository } from "typeorm";
 import { challengeUtilityClass } from "@prototype/common";
+import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 
 @Injectable()
 export class PaymentsService {
@@ -24,7 +25,7 @@ export class PaymentsService {
     console.log(`Purchasing course ${courseId} for user ${user.email}`);
 
     if (!challengeUtilityClass.courseIdIsValid(courseId)) {
-      throw new BadRequestException("The courseId is invalid");
+      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     }
 
     const existingCoursePayment = payments.find(p => p.courseId === courseId);
@@ -32,17 +33,12 @@ export class PaymentsService {
       throw new BadRequestException("User has previously paid for this course");
     }
 
-    /**
-     * TODO: Check that the user did not already purchase this course,
-     * just in case.
-     */
-
     await this.paymentsRepository.insert({
       user,
       courseId,
       datePaid: String(Date.now()),
     });
 
-    return "Success!";
+    return SUCCESS_CODES.OK;
   }
 }
