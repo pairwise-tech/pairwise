@@ -16,7 +16,7 @@ export class Payments {
   @Column()
   courseId: string;
 
-  @Column("date")
+  @Column()
   datePaid: string;
 
   @ManyToOne(
