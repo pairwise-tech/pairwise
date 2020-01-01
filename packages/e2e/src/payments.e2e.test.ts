@@ -38,13 +38,58 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/payments (POST) accepts valid requests", () => {
-    return request(`${HOST}/payments/fpvPtfu7s`)
+  test("/payments (POST) accepts valid requests", async done => {
+    /**
+     * [1] Initial payments is empty.
+     */
+    await request(`${HOST}/user/profile`)
+      .get("/")
+      .set("Authorization", authorizationHeader)
+      .expect(200)
+      .expect(response => {
+        const { payments } = response.body;
+        expect(payments).toEqual([]);
+      });
+
+    /**
+     * [2] A course can be paid for.
+     */
+    await request(`${HOST}/payments/fpvPtfu7s`)
       .post("/")
       .set("Authorization", authorizationHeader)
       .expect(201)
       .expect(response => {
         expect(response.text).toBe("Success!");
       });
+
+    /**
+     * [3] Repeated payments for the same course fail.
+     */
+    await request(`${HOST}/payments/fpvPtfu7s`)
+      .post("/")
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .expect(response => {
+        expect(response.body.message).toBe(
+          "User has previously paid for this course",
+        );
+      });
+
+    /**
+     * [4] The user now returns the payments information.
+     */
+    await request(`${HOST}/user/profile`)
+      .get("/")
+      .set("Authorization", authorizationHeader)
+      .expect(200)
+      .expect(response => {
+        const { payments } = response.body;
+        const payment = payments.pop();
+        expect(payment.uuid).toBeDefined();
+        expect(payment.datePaid).toBeDefined();
+        expect(payment.courseId).toBe("fpvPtfu7s");
+      });
+
+    done();
   });
 });

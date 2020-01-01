@@ -72,6 +72,7 @@ export class ProgressService {
       courseId,
       user,
     });
+
     /* TODO: Validate input data. */
 
     if (existingEntry === undefined) {

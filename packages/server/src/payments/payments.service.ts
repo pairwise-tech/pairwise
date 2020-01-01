@@ -16,11 +16,20 @@ export class PaymentsService {
   ) {}
 
   async purchaseCourse(requestUser: RequestUser, courseId: string) {
-    const user = await this.userService.findUserByEmail(requestUser.email);
+    const userResult = await this.userService.findUserByEmailAndReturnProfile(
+      requestUser.email,
+    );
+    const { user, payments } = userResult;
+
     console.log(`Purchasing course ${courseId} for user ${user.email}`);
 
     if (!challengeUtilityClass.courseIdIsValid(courseId)) {
       throw new BadRequestException("The courseId is invalid");
+    }
+
+    const existingCoursePayment = payments.find(p => p.courseId === courseId);
+    if (existingCoursePayment) {
+      throw new BadRequestException("User has previously paid for this course");
     }
 
     /**
