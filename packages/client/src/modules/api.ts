@@ -1,7 +1,5 @@
 import { Course, CourseList, Err, Ok, Result } from "@prototype/common";
-import axios, { AxiosError } from "axios";
-import { Http2ServerResponse } from "http2";
-import { T } from "ramda";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
@@ -53,6 +51,46 @@ export const makeCodepressApi = (endpoint: string): CodepressAPI => {
 };
 
 /** ===========================================================================
+ * Base API Class
+ * ---------------------------------------------------------------------------
+ * Base class with shared utility methods.
+ * ============================================================================
+ */
+
+class BaseApiClass {
+  httpHandler = async <X extends {}>(
+    httpFn: () => Promise<AxiosResponse<X>>,
+  ) => {
+    try {
+      const result = await httpFn();
+      return new Ok(result.data);
+    } catch (err) {
+      return this.handleHttpError(err);
+    }
+  };
+
+  getRequestHeaders = () => {
+    const token = getAccessTokenFromLocalStorage();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    return headers;
+  };
+
+  formatHttpError = (error: AxiosError): HttpResponseError => {
+    return {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+    };
+  };
+
+  handleHttpError = (err: any) => {
+    return new Err(this.formatHttpError(err));
+  };
+}
+
+/** ===========================================================================
  * HTTP API Utility Class
  * ----------------------------------------------------------------------------
  * This class provides methods to fetch data from all REST APIs and provides
@@ -64,7 +102,7 @@ export const makeCodepressApi = (endpoint: string): CodepressAPI => {
  * ============================================================================
  */
 
-class Api {
+class Api extends BaseApiClass {
   codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
 
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
@@ -93,103 +131,65 @@ class Api {
   };
 
   fetchUserProfile = async (): Promise<Result<User, HttpResponseError>> => {
-    try {
+    return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      const result = await axios.get<User>(`${HOST}/user/profile`, {
+      return axios.get<User>(`${HOST}/user/profile`, {
         headers,
       });
-      return new Ok(result.data);
-    } catch (err) {
-      return this.handleHttpError(err);
-    }
+    });
   };
 
   fetchUserProgress = async (): Promise<
     Result<UserProgress[], HttpResponseError>
   > => {
-    try {
+    return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      const result = await axios.get<UserProgress[]>(`${HOST}/progress`, {
+      return axios.get<UserProgress[]>(`${HOST}/progress`, {
         headers,
       });
-      return new Ok(result.data);
-    } catch (err) {
-      return this.handleHttpError(err);
-    }
+    });
   };
 
   updateUserProgress = async (
     progress: UserProgress,
   ): Promise<Result<UserProgress, HttpResponseError>> => {
-    try {
+    return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      const result = await axios.post<UserProgress>(`${HOST}/progress`, {
+      return axios.post<UserProgress>(`${HOST}/progress`, {
         headers,
         body: progress,
       });
-      return new Ok(result.data);
-    } catch (err) {
-      return this.handleHttpError(err);
-    }
+    });
   };
 
   fetchChallengeHistory = async (
     challengeId: string,
   ): Promise<Result<ChallengeHistory, HttpResponseError>> => {
-    try {
+    return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      const result = await axios.get<ChallengeHistory>(
+      return axios.get<ChallengeHistory>(
         `${HOST}/progress/challenge/${challengeId}`,
         {
           headers,
         },
       );
-      return new Ok(result.data);
-    } catch (err) {
-      return this.handleHttpError(err);
-    }
+    });
   };
 
   updateChallengeHistory = async (
     challengeId: string,
     dataBlob: string,
   ): Promise<Result<ChallengeHistory, HttpResponseError>> => {
-    try {
+    return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      const result = await axios.post<ChallengeHistory>(
-        `${HOST}/progress/challenge`,
-        {
-          headers,
-          body: {
-            dataBlob,
-            challengeId,
-          },
+      return axios.post<ChallengeHistory>(`${HOST}/progress/challenge`, {
+        headers,
+        body: {
+          dataBlob,
+          challengeId,
         },
-      );
-      return new Ok(result.data);
-    } catch (err) {
-      return this.handleHttpError(err);
-    }
-  };
-
-  getRequestHeaders = () => {
-    const token = getAccessTokenFromLocalStorage();
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-    return headers;
-  };
-
-  formatHttpError = (error: AxiosError): HttpResponseError => {
-    return {
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      message: error.message,
-    };
-  };
-
-  handleHttpError = (err: any) => {
-    return new Err(this.formatHttpError(err));
+      });
+    });
   };
 }
 
