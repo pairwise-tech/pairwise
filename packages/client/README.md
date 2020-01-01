@@ -6,3 +6,7 @@
 yarn install
 yarn start
 ```
+
+# HTTPS for Local Development
+
+Visit chrome://flags/#allow-insecure-localhost in Chrome and enable the option to prevent warnings about insecure https on localhost.

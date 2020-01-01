@@ -6,7 +6,7 @@ import getenv from "getenv";
  */
 
 const JWT_SECRET = getenv.string("JWT_SECRET");
-const FB_OAUTH_SERVICE_URL = getenv.string("FB_OAUTH_SERVICE_URL", undefined);
+const FB_OAUTH_SERVICE_URL = getenv.string("FB_OAUTH_SERVICE_URL", "");
 const FB_APP_CLIENT_ID = getenv.string("FB_APP_CLIENT_ID");
 const FB_APP_CLIENT_SECRET = getenv.string("FB_APP_CLIENT_SECRET");
 const GITHUB_APP_CLIENT_ID = getenv.string("GITHUB_APP_CLIENT_ID");

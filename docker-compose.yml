@@ -9,35 +9,19 @@ services:
       POSTGRES_PASSWORD: postgres
     expose:
       - 5432
+    ports:
+      - "5432:5432"
 
   server:
     build:
-      context: .
-      dockerfile: ./packages/e2e/Dockerfile
+      context: ./packages/server
     image: server
-    command: dockerize -wait tcp://db:5432 -timeout 10s yarn db:migration && yarn server:prod
+    command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:prod
     environment:
       TYPEORM_HOST: db
-      FB_OAUTH_SERVICE_URL: http://external-services:7000/facebook/profile
     expose:
       - 9000
+    ports:
+      - "9000:9000"
     depends_on:
       - db
-
-  external-services:
-    build:
-      context: ./packages/external-services
-      dockerfile: ./Dockerfile
-    expose:
-      - 7000
-    command: yarn start
-
-  e2e:
-    image: server
-    command: dockerize -wait tcp://db:5432 -wait tcp://external-services:7000 -wait tcp://server:9000 -timeout 10s yarn test:e2e
-    environment:
-      TYPEORM_HOST: db
-    depends_on:
-      - db
-      - server
-      - external-services

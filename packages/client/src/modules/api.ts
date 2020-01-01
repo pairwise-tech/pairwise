@@ -77,7 +77,10 @@ class Api {
           .pipe(map(x => x[0]))
           .toPromise();
       } else {
-        const result = await axios.get<Course>(`${HOST}/challenges`);
+        const headers = this.getRequestHeaders();
+        const result = await axios.get<Course>(`${HOST}/challenges`, {
+          headers,
+        });
         course = result.data;
       }
 
