@@ -7,9 +7,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserCourseProgress } from "./userCourseProgress.entity";
 import { UserCourseProgressDto } from "./userCourseProgress.dto";
-import { UserCodeBlobDto } from "./userCodeBlob.dto";
 import { UserService } from "src/user/user.service";
-import { challengeUtilityClass } from "@prototype/common";
+import {
+  challengeUtilityClass,
+  ChallengeStatus,
+  IUserCodeBlobDto,
+  BlobTypeSet,
+} from "@prototype/common";
 import { UserCodeBlob } from "./userCodeBlob.entity";
 import { RequestUser } from "src/types";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
@@ -43,7 +47,7 @@ export class ProgressService {
     challengeProgressDto: UserCourseProgressDto,
   ) {
     console.log("Service handling update challenge code:");
-    const { courseId, challengeId, passed } = challengeProgressDto;
+    const { courseId, challengeId, complete } = challengeProgressDto;
 
     /**
      * Validate the input request:
@@ -60,10 +64,12 @@ export class ProgressService {
       `Updating challengeProgress for courseId: ${courseId}, challengeId: ${challengeId}`,
     );
 
+    const statusObject: ChallengeStatus = {
+      complete,
+    };
+
     const status = {
-      [challengeId]: {
-        passed,
-      },
+      [challengeId]: statusObject,
     };
 
     const user = await this.userService.findUserByEmail(requestUser.email);
@@ -112,13 +118,20 @@ export class ProgressService {
   }
 
   async updateUserCodeHistory(
-    challengeCodeDto: UserCodeBlobDto,
+    challengeCodeDto: IUserCodeBlobDto,
     requestUser: RequestUser,
   ) {
     if (
       !challengeUtilityClass.challengeIdIsValid(challengeCodeDto.challengeId)
     ) {
       throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
+    } else if (!challengeCodeDto.dataBlob.type) {
+      throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
+    } else {
+      const { type } = challengeCodeDto.dataBlob;
+      if (!BlobTypeSet.has(type)) {
+        throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
+      }
     }
 
     const user = await this.userService.findUserByEmail(requestUser.email);
@@ -126,6 +139,11 @@ export class ProgressService {
       user,
       challengeId: challengeCodeDto.challengeId,
     });
+
+    const blob = {
+      challengeId: challengeCodeDto.challengeId,
+      dataBlob: JSON.stringify(challengeCodeDto.dataBlob),
+    };
 
     /**
      * Upsert (no typeorm method exist, ha, ha):
@@ -135,13 +153,13 @@ export class ProgressService {
         {
           uuid: existingBlob.uuid,
         },
-        challengeCodeDto,
+        blob,
       );
     } else {
       await this.userCodeBlobRepository.insert({
         user,
         challengeId: challengeCodeDto.challengeId,
-        dataBlob: challengeCodeDto.dataBlob,
+        dataBlob: JSON.stringify(challengeCodeDto.dataBlob),
       });
     }
 
@@ -156,7 +174,14 @@ export class ProgressService {
     });
 
     if (codeHistory) {
-      return codeHistory;
+      /**
+       * Deserialize data blog before sending back to the client.
+       */
+      const deserialized = {
+        ...codeHistory,
+        dataBlob: JSON.parse(codeHistory.dataBlob),
+      };
+      return deserialized;
     } else {
       throw new NotFoundException(
         "No history found for this challenge for this user.",

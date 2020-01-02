@@ -1,6 +1,7 @@
 import axios from "axios";
 import request from "supertest";
 import { fetchAccessToken, HOST } from "./utils/e2e-utils";
+import { IUserCourseProgressDto } from "@prototype/common";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs
@@ -20,7 +21,7 @@ describe("User Progress APIs", () => {
     request(`${HOST}/progress`)
       .post("/")
       .send({
-        passed: true,
+        complete: true,
         challengeId: "abc",
         courseId: "def",
       })
@@ -36,7 +37,7 @@ describe("User Progress APIs", () => {
     request(`${HOST}/progress`)
       .post("/")
       .send({
-        passed: true,
+        complete: true,
         challengeId: "abc",
         courseId: "def",
       })
@@ -52,7 +53,7 @@ describe("User Progress APIs", () => {
     request(`${HOST}/progress`)
       .post("/")
       .send({
-        passed: true,
+        complete: true,
         challengeId: "abc",
         courseId: "fpvPtfu7s",
       })
@@ -68,7 +69,7 @@ describe("User Progress APIs", () => {
     request(`${HOST}/progress`)
       .post("/")
       .send({
-        passed: "hi",
+        complete: "hi",
         challengeId: "5ziJI35f",
         courseId: "fpvPtfu7s",
       })
@@ -81,7 +82,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/progress (POST) handles valid insertions correctly", async done => {
-    const updateProgressItem = async (progress: any) => {
+    const updateProgressItem = async (progress: IUserCourseProgressDto) => {
       return axios.post(`${HOST}/progress`, progress, {
         headers: {
           Authorization: authorizationHeader,
@@ -90,31 +91,31 @@ describe("User Progress APIs", () => {
     };
 
     await updateProgressItem({
-      passed: false,
+      complete: false,
       challengeId: "5ziJI35f",
       courseId: "fpvPtfu7s",
     });
 
     await updateProgressItem({
-      passed: true,
+      complete: true,
       challengeId: "5ziJI35f",
       courseId: "fpvPtfu7s",
     });
 
     await updateProgressItem({
-      passed: true,
+      complete: true,
       challengeId: "5ziJI35f",
       courseId: "fpvPtfu7s",
     });
 
     await updateProgressItem({
-      passed: true,
+      complete: true,
       challengeId: "50fxTLRcV",
       courseId: "fpvPtfu7s",
     });
 
     await updateProgressItem({
-      passed: true,
+      complete: true,
       challengeId: "WUA8ezECU",
       courseId: "fpvPtfu7s",
     });
@@ -130,9 +131,9 @@ describe("User Progress APIs", () => {
         expect(entry.courseId).toBeDefined();
 
         const expected = {
-          ["5ziJI35f"]: { passed: true },
-          ["WUA8ezECU"]: { passed: true },
-          ["50fxTLRcV"]: { passed: true },
+          ["5ziJI35f"]: { complete: true },
+          ["WUA8ezECU"]: { complete: true },
+          ["50fxTLRcV"]: { complete: true },
         };
 
         expect(JSON.parse(entry.progress)).toEqual(expected);

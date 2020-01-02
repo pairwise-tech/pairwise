@@ -6,7 +6,7 @@ export class UserCourseProgressDto implements IUserCourseProgressDto {
   @IsBoolean()
   @IsNotEmpty()
   @ApiProperty({ type: "boolean" })
-  passed: boolean;
+  complete: boolean;
 
   @IsString()
   @IsNotEmpty()

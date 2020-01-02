@@ -4,9 +4,10 @@ import {
   Column,
   Index,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
-import { IUserCourseProgressDto } from "@prototype/common";
 
 @Entity()
 export class UserCourseProgress {
@@ -25,4 +26,10 @@ export class UserCourseProgress {
     user => user.challengeProgressHistory,
   )
   user: User;
+
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp" })
+  updatedAt: Date;
 }

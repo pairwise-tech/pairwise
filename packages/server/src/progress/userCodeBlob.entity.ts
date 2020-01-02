@@ -4,6 +4,8 @@ import {
   Column,
   ManyToOne,
   Index,
+  UpdateDateColumn,
+  CreateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
 
@@ -24,4 +26,10 @@ export class UserCodeBlob {
     user => user.challengeCodeHistory,
   )
   user: User;
+
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp" })
+  updatedAt: Date;
 }

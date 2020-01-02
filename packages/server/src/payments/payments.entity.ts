@@ -4,6 +4,8 @@ import {
   Column,
   Index,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
 
@@ -16,12 +18,24 @@ export class Payments {
   @Column()
   courseId: string;
 
+  @Column({ type: "timestamp" })
+  datePaid: Date;
+
   @Column()
-  datePaid: string;
+  amountPaid: number;
+
+  @Column({ type: "json", nullable: true })
+  extraData: string;
 
   @ManyToOne(
     type => User,
     user => user.payments,
   )
   user: User;
+
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp" })
+  updatedAt: Date;
 }

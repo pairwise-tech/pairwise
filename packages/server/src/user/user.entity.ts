@@ -4,6 +4,8 @@ import {
   Column,
   JoinColumn,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { UserCourseProgress } from "src/progress/userCourseProgress.entity";
 import { UserCodeBlob } from "src/progress/userCodeBlob.entity";
@@ -46,4 +48,10 @@ export class User {
   )
   @JoinColumn()
   challengeCodeHistory: UserCodeBlob;
+
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: "timestamp" })
+  updatedAt: Date;
 }

@@ -36,7 +36,8 @@ export class PaymentsService {
     await this.paymentsRepository.insert({
       user,
       courseId,
-      datePaid: String(Date.now()),
+      datePaid: new Date(),
+      amountPaid: 50,
     });
 
     return SUCCESS_CODES.OK;

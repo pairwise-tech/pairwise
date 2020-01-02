@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class CreateInitialTables1577913678003 implements MigrationInterface {
-  name = "CreateInitialTables1577913678003";
+export class CreateInitialTables1577968073918 implements MigrationInterface {
+  name = "CreateInitialTables1577968073918";
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(
-      `CREATE TABLE "user_course_progress" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "progress" jsonb, "userUuid" uuid, CONSTRAINT "PK_8f4d46794143bfe45f3ba7a4abc" PRIMARY KEY ("uuid"))`,
+      `CREATE TABLE "user_course_progress" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "progress" jsonb, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userUuid" uuid, CONSTRAINT "PK_8f4d46794143bfe45f3ba7a4abc" PRIMARY KEY ("uuid"))`,
       undefined,
     );
     await queryRunner.query(
@@ -13,7 +13,7 @@ export class CreateInitialTables1577913678003 implements MigrationInterface {
       undefined,
     );
     await queryRunner.query(
-      `CREATE TABLE "user_code_blob" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "challengeId" character varying NOT NULL, "dataBlob" jsonb NOT NULL, "userUuid" uuid, CONSTRAINT "PK_abde5d0a5fc75d288c791eca3b2" PRIMARY KEY ("uuid"))`,
+      `CREATE TABLE "user_code_blob" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "challengeId" character varying NOT NULL, "dataBlob" jsonb NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userUuid" uuid, CONSTRAINT "PK_abde5d0a5fc75d288c791eca3b2" PRIMARY KEY ("uuid"))`,
       undefined,
     );
     await queryRunner.query(
@@ -21,11 +21,11 @@ export class CreateInitialTables1577913678003 implements MigrationInterface {
       undefined,
     );
     await queryRunner.query(
-      `CREATE TABLE "user" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" character varying NOT NULL, "displayName" character varying NOT NULL, "givenName" character varying NOT NULL, "familyName" character varying NOT NULL, CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_a95e949168be7b7ece1a2382fed" PRIMARY KEY ("uuid"))`,
+      `CREATE TABLE "user" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" character varying NOT NULL, "displayName" character varying NOT NULL, "givenName" character varying NOT NULL, "familyName" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_a95e949168be7b7ece1a2382fed" PRIMARY KEY ("uuid"))`,
       undefined,
     );
     await queryRunner.query(
-      `CREATE TABLE "payments" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "datePaid" character varying NOT NULL, "userUuid" uuid, CONSTRAINT "PK_2c540326a039a91fa7e942caed7" PRIMARY KEY ("uuid"))`,
+      `CREATE TABLE "payments" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "datePaid" TIMESTAMP NOT NULL, "amountPaid" integer NOT NULL, "extraData" json, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userUuid" uuid, CONSTRAINT "PK_2c540326a039a91fa7e942caed7" PRIMARY KEY ("uuid"))`,
       undefined,
     );
     await queryRunner.query(

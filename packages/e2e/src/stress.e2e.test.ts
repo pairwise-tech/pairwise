@@ -69,7 +69,7 @@ describe("Stress Test the Server", () => {
 
           const body = {
             challengeId: "9scykDold",
-            dataBlob: JSON.stringify({ code: randomString }),
+            dataBlob: { code: randomString, type: "challenge" },
           };
 
           const response = await axios.post(

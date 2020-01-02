@@ -23,7 +23,7 @@ describe("User Progress APIs", () => {
       .post("/")
       .send({
         challengeId: "9scykDold",
-        dataBlob: JSON.stringify({ code: "console.log('hello') " }),
+        dataBlob: { code: "console.log('hello');", type: "challenge" },
       })
       .set("Authorization", "Bearer as8fd7a0")
       .expect(401)
@@ -38,7 +38,7 @@ describe("User Progress APIs", () => {
       .post("/")
       .send({
         challengeId: "sa7sa7f7f",
-        dataBlob: JSON.stringify({ code: "console.log('hello') " }),
+        dataBlob: { code: "console.log('hello');", type: "challenge" },
       })
       .set("Authorization", authorizationHeader)
       .expect(400)
@@ -79,7 +79,7 @@ describe("User Progress APIs", () => {
       .post("/")
       .send({
         challengeId: "9scykDold",
-        dataBlob: JSON.stringify({ code: "console.log('Hello!!!')" }),
+        dataBlob: { code: "console.log('Hello!!!')", type: "challenge" },
       })
       .set("Authorization", authorizationHeader)
       .expect(201)
@@ -93,7 +93,10 @@ describe("User Progress APIs", () => {
     let progress = await fetchProgressHistory("9scykDold");
     expect(progress.uuid).toBeDefined();
     expect(progress.challengeId).toBe("9scykDold");
-    expect(progress.dataBlob).toBe(`{"code":"console.log(\'Hello!!!\')"}`);
+    expect(progress.dataBlob).toEqual({
+      code: "console.log('Hello!!!')",
+      type: "challenge",
+    });
 
     /**
      * [4] Update again.
@@ -102,9 +105,10 @@ describe("User Progress APIs", () => {
       .post("/")
       .send({
         challengeId: "9scykDold",
-        dataBlob: JSON.stringify({
-          code: "console.log('Hello from Taiwan!') ",
-        }),
+        dataBlob: {
+          type: "challenge",
+          code: "console.log('Hello from Taiwan!');",
+        },
       })
       .set("Authorization", authorizationHeader)
       .expect(201)
@@ -119,9 +123,10 @@ describe("User Progress APIs", () => {
       .post("/")
       .send({
         challengeId: "6T3GXc4ap",
-        dataBlob: JSON.stringify({
+        dataBlob: {
+          type: "challenge",
           code: "// Some other code string!",
-        }),
+        },
       })
       .set("Authorization", authorizationHeader)
       .expect(201)
@@ -135,9 +140,10 @@ describe("User Progress APIs", () => {
     progress = await fetchProgressHistory("9scykDold");
     expect(progress.uuid).toBeDefined();
     expect(progress.challengeId).toBe("9scykDold");
-    expect(progress.dataBlob).toBe(
-      `{"code":"console.log(\'Hello from Taiwan!\') "}`,
-    );
+    expect(progress.dataBlob).toEqual({
+      type: "challenge",
+      code: "console.log('Hello from Taiwan!');",
+    });
 
     done();
   });

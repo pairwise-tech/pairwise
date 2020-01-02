@@ -9,6 +9,11 @@
  * ============================================================================
  */
 
+/** ===========================================================================
+ * User Profile and Payment Types
+ * ============================================================================
+ */
+
 export interface IUserDto {
   profile: {
     uuid: string;
@@ -22,25 +27,24 @@ export interface IUserDto {
 
 interface Payment {
   courseId: string;
-  datePaid: string;
-}
-
-export interface IUserCourseProgressDto {
-  passed: boolean;
-  challengeId: string;
-}
-
-export interface IUserCodeBlobDto {
-  dataBlob: string;
-  challengeId: string;
+  datePaid: Date;
+  amountPaid: number;
+  extraData?: string /* json */;
 }
 
 /** ===========================================================================
- * Code Blobs
+ * Code Blobs for Challenges
  * ============================================================================
  */
 
 export type BlobType = "video" | "challenge" | "project" | "guided_project";
+
+export const BlobTypeSet: Set<BlobType> = new Set([
+  "video",
+  "challenge",
+  "project",
+  "guided_project",
+]);
 
 interface BlobBase {
   type: BlobType;
@@ -76,6 +80,11 @@ export type CodeHistoryBlob =
   | CodeChallengeBlob
   | GuidedProjectBlob;
 
+export interface IUserCodeBlobDto {
+  dataBlob: CodeHistoryBlob;
+  challengeId: string;
+}
+
 /** ===========================================================================
  * User Challenge History
  * ============================================================================
@@ -89,12 +98,17 @@ export type CodeHistoryBlob =
  * undefined: never attempted
  */
 export interface ChallengeStatus {
-  status: boolean;
+  complete: boolean;
+}
+
+export interface IUserCourseProgressDto extends ChallengeStatus {
+  challengeId: string;
+  courseId: string;
 }
 
 /**
  * Map of {[challengeId]: ChallengeStatus} for a given course.
  */
-export interface UserCourseProgress {
+export interface UserCourseStatus {
   [key: string]: ChallengeStatus;
 }

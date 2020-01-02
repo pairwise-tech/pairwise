@@ -7,6 +7,7 @@ import {
   IUserDto,
   Ok,
   Result,
+  UserCourseStatus,
 } from "@prototype/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -164,7 +165,7 @@ class Api extends BaseApiClass {
   fetchUserProgress = async () => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.get<IUserCourseProgressDto[]>(`${HOST}/progress`, {
+      return axios.get<UserCourseStatus>(`${HOST}/progress`, {
         headers,
       });
     });
