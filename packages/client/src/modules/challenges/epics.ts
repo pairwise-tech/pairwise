@@ -1,4 +1,3 @@
-// import axios from "axios";
 import { ChallengeList, Course } from "@prototype/common";
 import { combineEpics } from "redux-observable";
 import { merge, of } from "rxjs";
@@ -11,7 +10,7 @@ import {
   mergeMap,
   tap,
 } from "rxjs/operators";
-import { isActionOf } from "typesafe-actions";
+import { getType, isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
@@ -71,7 +70,7 @@ const createInverseChallengeMapping = (
  */
 const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.initializeApp)),
+    filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
     mergeMap(deps.api.fetchChallenges),
     map(({ value: course }) => {
       if (course) {
@@ -149,11 +148,29 @@ const updateChallengeRouteId: EpicSignature = (action$, state$, deps) => {
         Actions.fetchCurrentActiveCourseSuccess,
       ]),
     ),
-    tap(({ payload }) => {
+    tap(({ type, payload }) => {
+      const { router } = deps;
       const id =
         typeof payload === "string" ? payload : payload.currentChallengeId;
-      const { router } = deps;
-      router.push({ pathname: `/workspace/${id}` });
+      const redirect = () => router.push({ pathname: `/workspace/${id}` });
+
+      /**
+       * If the action causing this is fetchCurrentActiveCourseSuccess,
+       * meaning the app just loaded, only redirect the user if they are
+       * on the workspace/ route. Otherwise do not.
+       *
+       * In other cases, for setChallengeId, always redirect.
+       */
+      if (type === getType(Actions.fetchCurrentActiveCourseSuccess)) {
+        const onWorkspace = deps.router.location.pathname.includes(
+          "/workspace",
+        );
+        if (onWorkspace) {
+          redirect();
+        }
+      } else {
+        redirect();
+      }
     }),
     ignoreElements(),
   );

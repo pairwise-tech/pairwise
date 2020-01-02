@@ -10,21 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Setup Node
+      - name: Setup NodeJS Environment
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
-      - name: Install dependencies with Lerna
-        run: |
-          npx lerna bootstrap
-      - name: Build @prototype/common
-        run: |
-          yarn common:build
-      - name: Run test suites for all packages
-        run: |
-          npx lerna run test
-      - name: Run build for all packages
-        run: |
-          npx lerna run build
+      - name: Run build and test steps for all packages and run e2e test suite
+        run: yarn e2e
         env:
           CI: true

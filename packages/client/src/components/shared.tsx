@@ -1,8 +1,43 @@
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+import Tooltip from "@material-ui/core/Tooltip";
 import Markdown from "react-markdown";
 import styled from "styled-components/macro";
 
 import { COLORS } from "../tools/constants";
+
+export const PageContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 25px;
+`;
+
+export const StyledTooltip = styled(Tooltip)`
+  opacity: 0.5;
+  transition: opacity 0.2s ease-out;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+export const ButtonCore = styled.button`
+  background: none repeat scroll 0 0 transparent;
+  border: medium none;
+  border-spacing: 0;
+  font-family: "PT Sans Narrow", sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.42rem;
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  text-indent: 0;
+
+  :focus {
+    outline: none;
+  }
+`;
 
 export const TitleInput = styled.input`
   outline: none;

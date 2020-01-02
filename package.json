@@ -8,14 +8,24 @@
     "common:watch": "cd packages/common && yarn watch",
     "client": "cd packages/client && yarn start:run",
     "client:dev": "cd packages/client && yarn start:dev",
+    "client:https": "cd packages/client && yarn start:https",
     "client:build": "cd packages/client && yarn build",
     "client:codepress": "cd packages/client && yarn start:codepress",
-    "db": "cd packages/server && yarn db",
-    "server:setup": "cd packages/server && yarn setup:env && yarn setup:db",
+    "server:setup": "cd packages/server && yarn setup:env",
     "server": "cd packages/server && yarn start",
     "server:dev": "cd packages/server && yarn start:dev",
+    "server:build": "cd packages/server && yarn build",
+    "server:run": "yarn db:migration && yarn server:prod",
+    "server:prod": "cd packages/server && yarn start:prod",
+    "db": "cd packages/server && yarn db",
+    "db:setup": "cd packages/server && yarn setup:db",
+    "db:reset": "cd packages/server && yarn db:reset",
+    "db:migration": "cd packages/server && yarn migration:run",
+    "build": "lerna run build",
     "test": "lerna run test",
-    "build": "lerna run build"
+    "e2e:services": "cd packages/external-services && yarn start",
+    "test:e2e": "cd packages/e2e && HOST=http://server:9000 yarn test:e2e",
+    "e2e": "docker-compose -f docker-compose-e2e.yml up --build --abort-on-container-exit"
   },
   "workspaces": [
     "packages/*"

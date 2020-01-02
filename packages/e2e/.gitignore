@@ -1,0 +1,19 @@
+# Project dependencies
+.cache
+.idea
+node_modules
+yarn-error.log
+
+# Build directory
+/public
+.DS_Store
+
+# Monorepo files
+**/public
+**/.cache
+.DS_Store
+
+yarn-error.log
+
+# Build
+dist

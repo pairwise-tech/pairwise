@@ -6,10 +6,9 @@ import { AppService } from "./app.service";
 import { AppController } from "./app.controller";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./user/user.module";
-import { UserService } from "./user/user.service";
 import { ChallengesModule } from "./challenges/challenges.module";
-import { ChallengesController } from "./challenges/challenges.controller";
 import { ProgressModule } from "./progress/progress.module";
+import { PaymentsModule } from "./payments/payments.module";
 
 @Module({
   imports: [
@@ -19,8 +18,9 @@ import { ProgressModule } from "./progress/progress.module";
     UsersModule,
     ChallengesModule,
     ProgressModule,
+    PaymentsModule,
   ],
-  controllers: [AppController, ChallengesController],
-  providers: [AppService, UserService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

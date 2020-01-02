@@ -1,0 +1,36 @@
+{
+  "name": "e2e",
+  "version": "0.0.1",
+  "description": "e2e test suites for Prototype X",
+  "private": true,
+  "main": "dist/e2e.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prettier": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
+    "prettier:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "tslint": "tslint --project tsconfig.json -c tslint.json",
+    "tslint:fix": "tslint --project tsconfig.json -c tslint.json --fix",
+    "format": "yarn prettier:fix && yarn tslint:fix",
+    "lint": "yarn prettier && yarn tslint",
+    "test": "yarn lint",
+    "test:e2e": "yarn jest --config ./jest-config.json",
+    "test:watch": "yarn test:e2e --watch"
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "typings": "dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "axios": "^0.19.0",
+    "faker": "^4.1.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "supertest": "^4.0.2",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.4"
+  }
+}

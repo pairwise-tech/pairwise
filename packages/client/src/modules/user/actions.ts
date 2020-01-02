@@ -1,6 +1,6 @@
+import { IUserDto } from "@prototype/common";
 import { HttpResponseError } from "modules/api";
 import { ActionType, createAction } from "typesafe-actions";
-import { User } from "./types";
 
 /** ===========================================================================
  * Action Types
@@ -22,7 +22,7 @@ enum ActionTypesEnum {
 
 const fetchUser = createAction(ActionTypesEnum.FETCH_USER)();
 const fetchUserSuccess = createAction(ActionTypesEnum.FETCH_USER_SUCCESS)<
-  User
+  IUserDto
 >();
 const fetchUserFailure = createAction(ActionTypesEnum.FETCH_USER_FAILURE)<
   HttpResponseError

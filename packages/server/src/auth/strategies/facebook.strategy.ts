@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import FacebookTokenStrategy from "passport-facebook-token";
 import { use } from "passport";
-import ENV from "src/tools/env";
+import ENV from "src/tools/server-env";
 
 /** ===========================================================================
  * Facebook Passport Strategy
@@ -47,6 +47,7 @@ export class FacebookStrategy {
           fbGraphVersion: "v3.0",
           clientID: ENV.FB_APP_CLIENT_ID,
           clientSecret: ENV.FB_APP_CLIENT_SECRET,
+          profileURL: ENV.FB_OAUTH_SERVICE_URL,
         },
         async (
           accessToken: string,

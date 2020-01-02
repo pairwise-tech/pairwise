@@ -1,11 +1,19 @@
-import { Course, CourseList, Err, Ok, Result } from "@prototype/common";
-import axios, { AxiosError } from "axios";
+import {
+  Course,
+  CourseList,
+  Err,
+  IUserCodeBlobDto,
+  IUserCourseProgressDto,
+  IUserDto,
+  Ok,
+  Result,
+} from "@prototype/common";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
-import * as ENV from "tools/env";
+import * as ENV from "tools/client-env";
 import { getAccessTokenFromLocalStorage } from "tools/utils";
-import { User } from "./user/types";
 
 /** ===========================================================================
  * Types & Config
@@ -51,48 +59,18 @@ export const makeCodepressApi = (endpoint: string): CodepressAPI => {
 };
 
 /** ===========================================================================
- * HTTP API Utility Class
- * ----------------------------------------------------------------------------
- * This class provides methods to fetch data from all REST APIs and provides
- * standardized responses using the Result<Data, Error> approach.
- *
- * - All code related to actually dispatching HTTP requests is in this file.
- * - No error are thrown from here! Only descriptive Result objects which
- *   are then handled by the calling code.
+ * Base API Class
+ * ---------------------------------------------------------------------------
+ * Base class with shared utility methods.
  * ============================================================================
  */
 
-class Api {
-  codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
-
-  fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
+class BaseApiClass {
+  httpHandler = async <X extends {}>(
+    httpFn: () => Promise<AxiosResponse<X>>,
+  ) => {
     try {
-      let course: Course;
-      if (ENV.DEV_MODE) {
-        // TODO: This is not great code, it's just that we're in the middle of a big refactor. In the future, we should standardize a few things, including:
-        // - How we do async. I.e. Observables, Promises, fetch, axios, lots of redundancy
-        // - Arrays of things (CourseList) vs things themselves (Course)
-        course = await this.codepressApi
-          .getAll()
-          .pipe(map(x => x[0]))
-          .toPromise();
-      } else {
-        const result = await axios.get<Course>(`${HOST}/challenges`);
-        course = result.data;
-      }
-
-      return new Ok(course);
-    } catch (err) {
-      return this.handleHttpError(err);
-    }
-  };
-
-  fetchUserProfile = async (): Promise<Result<User, HttpResponseError>> => {
-    try {
-      const headers = this.getRequestHeaders();
-      const result = await axios.get<User>(`${HOST}/user/profile`, {
-        headers,
-      });
+      const result = await httpFn();
       return new Ok(result.data);
     } catch (err) {
       return this.handleHttpError(err);
@@ -109,14 +87,122 @@ class Api {
 
   formatHttpError = (error: AxiosError): HttpResponseError => {
     return {
+      message: error.message,
       status: error.response?.status,
       statusText: error.response?.statusText,
-      message: error.message,
     };
   };
 
   handleHttpError = (err: any) => {
     return new Err(this.formatHttpError(err));
+  };
+}
+
+/** ===========================================================================
+ * HTTP API Utility Class
+ * ----------------------------------------------------------------------------
+ * This class provides methods to fetch data from all REST APIs and provides
+ * standardized responses using the Result<Data, Error> approach.
+ *
+ * - All code related to actually dispatching HTTP requests is in this file.
+ * - No error are thrown from here! Only descriptive Result objects which
+ *   are then handled by the calling code.
+ * ============================================================================
+ */
+
+class Api extends BaseApiClass {
+  codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
+
+  facebookAuthenticationRequest = async (token: string) => {
+    try {
+      const params = { access_token: token };
+      const response = await axios.get<{ accessToken: string }>(
+        `${ENV.HOST}/auth/facebook`,
+        { params },
+      );
+      const { accessToken } = response.data;
+      return new Ok(accessToken);
+    } catch (err) {
+      return this.handleHttpError(err);
+    }
+  };
+
+  fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
+    try {
+      let course: Course;
+      if (ENV.DEV_MODE) {
+        // TODO: This is not great code, it's just that we're in the middle of a big refactor. In the future, we should standardize a few things, including:
+        // - How we do async. I.e. Observables, Promises, fetch, axios, lots of redundancy
+        // - Arrays of things (CourseList) vs things themselves (Course)
+        course = await this.codepressApi
+          .getAll()
+          .pipe(map(x => x[0]))
+          .toPromise();
+      } else {
+        const headers = this.getRequestHeaders();
+        const result = await axios.get<Course>(`${HOST}/challenges`, {
+          headers,
+        });
+        course = result.data;
+      }
+
+      return new Ok(course);
+    } catch (err) {
+      return this.handleHttpError(err);
+    }
+  };
+
+  fetchUserProfile = async () => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.get<IUserDto>(`${HOST}/user/profile`, {
+        headers,
+      });
+    });
+  };
+
+  fetchUserProgress = async () => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.get<IUserCourseProgressDto[]>(`${HOST}/progress`, {
+        headers,
+      });
+    });
+  };
+
+  updateUserProgress = async (progress: IUserCourseProgressDto) => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.post<IUserCourseProgressDto>(`${HOST}/progress`, {
+        headers,
+        body: progress,
+      });
+    });
+  };
+
+  fetchChallengeHistory = async (challengeId: string) => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.get<IUserCodeBlobDto>(
+        `${HOST}/progress/challenge/${challengeId}`,
+        {
+          headers,
+        },
+      );
+    });
+  };
+
+  updateChallengeHistory = async (challengeId: string, dataBlob: string) => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.post<IUserCodeBlobDto>(`${HOST}/progress/challenge`, {
+        headers,
+        body: {
+          dataBlob,
+          challengeId,
+        },
+      });
+    });
   };
 }
 

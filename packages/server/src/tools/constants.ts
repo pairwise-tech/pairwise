@@ -1,0 +1,23 @@
+/** ===========================================================================
+ * Shared error and success constants
+ * ----------------------------------------------------------------------------
+ * These values are intended to be used for shared/common response messages
+ * which are used in more than one place.
+ * ============================================================================
+ */
+
+enum ERROR_CODES {
+  INVALID_COURSE_ID = "The courseId is invalid",
+  INVALID_CHALLENGE_ID = "The challengeId is invalid",
+}
+
+enum SUCCESS_CODES {
+  OK = "Success",
+}
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
+
+export { SUCCESS_CODES, ERROR_CODES };

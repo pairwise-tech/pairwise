@@ -21,7 +21,12 @@ const COLORS = {
   BACKGROUND_EDITOR: "rgb(35, 35, 35)",
   BACKGROUND_CONSOLE: "rgb(36, 36, 36)",
   BACKGROUND_LOWER_SECTION: "rgb(30, 30, 30)",
+  BACKGROUND_DROPDOWN_MENU: "rgb(38, 38, 38)",
+  BACKGROUND_DROPDOWN_MENU_HOVER: "rgb(24, 24, 24)",
+  BORDER_DROPDOWN_MENU_ITEM: "rgb(45, 45, 45)",
   BACKGROUND_MODAL: "rgb(25, 25, 25)",
+  BACKGROUND_ACCOUNT_BUTTON: "rgb(25, 25, 25)",
+  BACKGROUND_BODY: "#13141d",
   GRADIENT_GREEN:
     "linear-gradient( 90deg, rgba(0, 255, 177, 1) 22%, rgba(0, 255, 211, 1) 74%)",
   BORDER_MODAL: "rgb(100,100,100)",
@@ -34,7 +39,7 @@ const COLORS = {
 
 const W = window.innerWidth;
 const H = window.innerHeight;
-const HEADER_HEIGHT = 50;
+const HEADER_HEIGHT = 60;
 
 export const MONACO_EDITOR_THEME = "vs-dark";
 

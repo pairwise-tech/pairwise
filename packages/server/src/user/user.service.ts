@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Payments } from "src/payments/payments.entity";
+import { IUserDto } from "@prototype/common";
 
 export interface GenericUserProfile {
   email: string;
@@ -15,11 +17,30 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Payments)
+    private readonly paymentsRepository: Repository<Payments>,
   ) {}
 
   async findUserByEmail(email: string) {
+    return this.userRepository.findOne({ email });
+  }
+
+  async findUserByEmailAndReturnProfile(email: string) {
     const user = await this.userRepository.findOne({ email });
-    return user;
+
+    const payments = await this.paymentsRepository.find({
+      where: {
+        user,
+      },
+    });
+
+    const result: IUserDto = {
+      payments,
+      profile: user,
+    };
+
+    return result;
   }
 
   async findOrCreateUser(profile: GenericUserProfile) {
@@ -30,13 +51,12 @@ export class UserService {
      * with.
      */
     const { email } = profile;
-    console.log(`Running findOrCreateUser for email ${email}`);
     const userExists = await this.findUserByEmail(email);
     if (userExists) {
-      console.log("User exists, returning.");
+      console.log(`User exists, returning profile for ${email}`);
       return userExists;
     } else {
-      console.log("Creating new user.");
+      console.log(`Creating new user: ${email}`);
       const userData = {
         email,
         givenName: profile.givenName,

@@ -3,25 +3,21 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
+import { IconButton } from "@material-ui/core";
 import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";
-import Menu from "@material-ui/icons/Menu";
 import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
-import SkipNext from "@material-ui/icons/SkipNext";
-import SkipPrevious from "@material-ui/icons/SkipPrevious";
 import { monaco } from "@monaco-editor/react";
 import { Challenge } from "@prototype/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";
-import React, { ChangeEvent, HTMLAttributes, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
-import { DEV_MODE } from "tools/env";
+import { DEV_MODE } from "tools/client-env";
 import {
   getTestCodeMarkup,
   TestCase,
@@ -53,12 +49,14 @@ import {
   wait,
 } from "../tools/utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
-import EditingToolbar from "./EditingToolbar";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
-import NavigationOverlay from "./NavigationOverlay";
-import { ContentInput, StyledMarkdown, TitleInput } from "./shared";
-import SingleSignOnHandler, { CreateAccountText } from "./SingleSignOnHandler";
+import {
+  ContentInput,
+  StyledMarkdown,
+  StyledTooltip,
+  TitleInput,
+} from "./shared";
 
 /** ===========================================================================
  * Types & Config
@@ -103,18 +101,6 @@ interface IState {
   adminTestTab: "testResults" | "testCode";
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
-
-const NavIconButton = styled(props => (
-  <IconButton aria-label="Open navigaton map" {...props}>
-    <Menu />
-  </IconButton>
-))`
-  color: white;
-  appearance: none;
-  background: transparent;
-  border: none;
-  outline: none;
-`;
 
 /** ===========================================================================
  * React Component
@@ -965,36 +951,6 @@ const LowerSection = styled.div<{ withHeader?: boolean }>`
   background: ${C.BACKGROUND_LOWER_SECTION};
 `;
 
-const BORDER = 2;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-
-  position: relative;
-  padding-top: ${BORDER}px;
-  padding-bottom: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
-  margin-bottom: 0;
-  background: #212121;
-  border-bottom: 1px solid #404040;
-
-  height: ${HEADER_HEIGHT}px;
-  width: calc(100vw - 48);
-
-  &:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: ${BORDER}px;
-    background: ${COLORS.GRADIENT_GREEN};
-  }
-`;
-
 // const Title = styled.p`
 //   color: ${C.PRIMARY_BLUE};
 //   margin: 0;
@@ -1103,42 +1059,11 @@ const ContentText = styled.span`
   color: ${C.TEXT_CONTENT};
 `;
 
-const ControlsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-`;
-
 const SuccessFailureText = styled.p`
   margin: 0;
   margin-left: 4px;
   color: ${(props: { testResult: boolean }) =>
     props.testResult ? C.SUCCESS : C.FAILURE};
-`;
-
-const LoadingOverlay = styled.div`
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 999;
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.95);
-  visibility: ${(props: { visible: boolean }) =>
-    props.visible ? "visible" : "hidden"};
-`;
-
-const OverlayLoadingText = styled.p`
-  margin: 0;
-  font-size: 42px;
-  font-weight: 200;
-  color: ${COLORS.PRIMARY_BLUE};
 `;
 
 // const UpperRight = styled.div`
@@ -1155,13 +1080,6 @@ const LowerRight = styled.div`
   right: 0;
 `;
 
-const StyledTooltip = styled(Tooltip)`
-  opacity: 0.5;
-  transition: opacity 0.2s ease-out;
-  &:hover {
-    opacity: 1;
-  }
-`;
 const TabbedInnerNav = styled.div<{ show: boolean }>`
   display: ${props => (props.show ? "flex" : "none")};
   align-items: center;
@@ -1212,176 +1130,6 @@ export const LoginSignupTextInteractive = styled(LoginSignupText)`
     color: ${COLORS.TEXT_HOVER};
   }
 `;
-
-/** ===========================================================================
- * Props
- * ============================================================================
- */
-
-const mapStateToProps = (state: ReduxStoreState) => ({
-  user: Modules.selectors.user.userSelector(state),
-  userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
-  challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
-  nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
-  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
-  workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
-    state,
-  ),
-});
-
-const dispatchProps = {
-  selectChallenge: Modules.actions.challenges.setChallengeId,
-  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
-  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
-  updateChallenge: Modules.actions.challenges.updateChallenge,
-};
-
-interface ComponentProps {}
-
-type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
-
-interface WorkspaceLoadingContainerProps extends ComponentProps, ConnectProps {}
-
-interface IProps extends WorkspaceLoadingContainerProps {
-  challenge: Challenge;
-  unlockVerticalScrolling: () => any;
-}
-
-const withProps = connect(mapStateToProps, dispatchProps);
-
-/** ===========================================================================
- * WorkspaceLoadingContainer
- * ----------------------------------------------------------------------------
- * - A container component to wait for a challenge to be fully initialized
- * before rendering the Workspace, which requires a challenge to exist.
- * ============================================================================
- */
-
-class WorkspaceLoadingContainer extends React.Component<
-  WorkspaceLoadingContainerProps,
-  {}
-> {
-  toggleNavigationMap = () => {
-    const { overlayVisible } = this.props;
-    if (overlayVisible) {
-      this.unlockVerticalScrolling();
-    } else {
-      this.lockVerticalScrolling();
-    }
-    this.props.setNavigationMapState(!overlayVisible);
-  };
-
-  /* hi */
-  lockVerticalScrolling = () => (document.body.style.overflowY = "hidden");
-
-  unlockVerticalScrolling = () => (document.body.style.overflowY = "scroll");
-
-  render() {
-    const { challenge, overlayVisible, nextPrevChallenges } = this.props;
-    const { next, prev } = nextPrevChallenges;
-
-    if (!challenge) {
-      return this.renderLoadingOverlay();
-    }
-
-    return (
-      <React.Fragment>
-        {this.renderLoadingOverlay()}
-
-        <Header>
-          <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
-            <NavIconButton
-              style={{ color: "white", marginRight: 40 }}
-              onClick={this.toggleNavigationMap}
-            />
-            <h1
-              style={{
-                fontWeight: 100,
-                color: "white",
-                fontFamily: `'Helvetica Neue', Lato, sans-serif`,
-                margin: 0,
-              }}
-            >
-              Prototype X
-            </h1>
-          </ControlsContainer>
-          {DEV_MODE && (
-            <ControlsContainer>
-              <EditingToolbar />
-            </ControlsContainer>
-          )}
-          <ControlsContainer style={{ marginLeft: "auto" }}>
-            {prev && (
-              <StyledTooltip title="Previous Challenge">
-                <IconButton
-                  style={{ color: "white" }}
-                  aria-label="Previous Challenge"
-                  onClick={() => this.props.selectChallenge(prev.id)}
-                >
-                  <SkipPrevious />
-                </IconButton>
-              </StyledTooltip>
-            )}
-            {next && (
-              <StyledTooltip title="Next Challenge">
-                <IconButton
-                  style={{ color: "white" }}
-                  aria-label="Next Challenge"
-                  onClick={() => this.props.selectChallenge(next.id)}
-                >
-                  <SkipNext />
-                </IconButton>
-              </StyledTooltip>
-            )}
-            {this.props.userAuthenticated && this.props.user ? (
-              <CreateAccountText>
-                Welcome, {this.props.user.givenName}!
-                {/* Welcome, {this.props.user ? this.props.user.givenName : ""}! */}
-              </CreateAccountText>
-            ) : (
-              <CreateAccountText
-                onClick={() => this.props.setSingleSignOnDialogState(true)}
-              >
-                Login/Signup
-              </CreateAccountText>
-            )}
-          </ControlsContainer>
-        </Header>
-        <SingleSignOnHandler />
-        <NavigationOverlay overlayVisible={overlayVisible} />
-        {challenge.type !== "media" && (
-          <Workspace
-            {...this.props}
-            challenge={challenge}
-            unlockVerticalScrolling={this.unlockVerticalScrolling}
-          />
-        )}
-        <LowerSection withHeader={challenge.type === "media"}>
-          <MediaArea />
-        </LowerSection>
-        <WorkspaceKeyboardShortcuts />
-      </React.Fragment>
-    );
-  }
-
-  renderLoadingOverlay = () => {
-    return (
-      <LoadingOverlay visible={this.props.workspaceLoading}>
-        <OverlayLoadingText>Initializing Workspace...</OverlayLoadingText>
-      </LoadingOverlay>
-    );
-  };
-}
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export default composeWithProps<ComponentProps>(withProps)(
-  WorkspaceLoadingContainer,
-);
 
 const contentMapState = (state: ReduxStoreState) => ({
   content: Modules.selectors.challenges.getCurrentContent(state) || "",
@@ -1465,3 +1213,80 @@ const WorkspaceKeyboardShortcuts = connect(
     }}
   />
 ));
+
+/** ===========================================================================
+ * Props
+ * ============================================================================
+ */
+
+const mapStateToProps = (state: ReduxStoreState) => ({
+  challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
+});
+
+const dispatchProps = {
+  updateChallenge: Modules.actions.challenges.updateChallenge,
+  toggleScrollLock: Modules.actions.app.toggleScrollLock,
+};
+
+interface ComponentProps {}
+
+type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+
+interface WorkspaceLoadingContainerProps extends ComponentProps, ConnectProps {}
+
+interface IProps extends WorkspaceLoadingContainerProps {
+  challenge: Challenge;
+  unlockVerticalScrolling: () => any;
+}
+
+const withProps = connect(mapStateToProps, dispatchProps);
+
+/** ===========================================================================
+ * WorkspaceLoadingContainer
+ * ----------------------------------------------------------------------------
+ * - A container component to wait for a challenge to be fully initialized
+ * before rendering the Workspace, which requires a challenge to exist.
+ * ============================================================================
+ */
+
+class WorkspaceLoadingContainer extends React.Component<
+  WorkspaceLoadingContainerProps,
+  {}
+> {
+  render() {
+    const { challenge } = this.props;
+
+    /* NOTE: Challenge has loaded by the time this component loads: */
+    const loadedChallenge = challenge as Challenge;
+
+    return (
+      <React.Fragment>
+        {loadedChallenge.type !== "media" && (
+          <Workspace
+            {...this.props}
+            challenge={loadedChallenge}
+            unlockVerticalScrolling={this.unlockVerticalScrolling}
+          />
+        )}
+        <LowerSection withHeader={loadedChallenge.type === "media"}>
+          <MediaArea />
+        </LowerSection>
+        <WorkspaceKeyboardShortcuts />
+      </React.Fragment>
+    );
+  }
+
+  unlockVerticalScrolling = () => {
+    this.props.toggleScrollLock({ locked: false });
+  };
+}
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
+
+export default composeWithProps<ComponentProps>(withProps)(
+  WorkspaceLoadingContainer,
+);

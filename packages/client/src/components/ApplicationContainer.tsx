@@ -1,9 +1,23 @@
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/icons/Menu";
 import queryString from "query-string";
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
+import styled from "styled-components/macro";
 
-import Modules from "modules/root";
+import SkipNext from "@material-ui/icons/SkipNext";
+import SkipPrevious from "@material-ui/icons/SkipPrevious";
+import Modules, { ReduxStoreState } from "modules/root";
+import { Link } from "react-router-dom";
+import { DEV_MODE } from "tools/client-env";
+import { COLORS, HEADER_HEIGHT } from "tools/constants";
+import EditingToolbar from "./EditingToolbar";
+import Home from "./Home";
+import NavigationOverlay from "./NavigationOverlay";
+import Profile from "./Profile";
+import { ButtonCore, StyledTooltip } from "./shared";
+import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
 
 /** ===========================================================================
@@ -16,7 +30,10 @@ interface IState {
 }
 
 /** ===========================================================================
- * App
+ * ApplicationContainer
+ * ----------------------------------------------------------------------------
+ * This is the top level component which renders the overall app structure,
+ * including the routing Switch torender all child routes.
  * ============================================================================
  */
 
@@ -45,30 +62,384 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       return null;
     }
 
+    const { challenge, nextPrevChallenges, overlayVisible } = this.props;
+    const { next, prev } = nextPrevChallenges;
+
+    const displayNavigationArrows = window.location.pathname.includes(
+      "workspace",
+    );
+
+    if (!challenge) {
+      return this.renderLoadingOverlay();
+    }
+
     return (
-      <Switch>
-        <Route key={0} path="/workspace/:id" component={Workspace} />
-        <Route key={1} component={() => <Redirect to="/workspace" />} />
-      </Switch>
+      <React.Fragment>
+        <MobileView />
+        <DesktopContainer>
+          {this.renderLoadingOverlay()}
+          <SingleSignOnHandler />
+          <NavigationOverlay overlayVisible={overlayVisible} />
+          <Header>
+            <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
+              <NavIconButton
+                style={{ color: "white", marginRight: 40 }}
+                onClick={this.toggleNavigationMap}
+              />
+              <Link to="/home">
+                <ProductTitle>Prototype X</ProductTitle>
+              </Link>
+            </ControlsContainer>
+            {DEV_MODE && (
+              <ControlsContainer>
+                <EditingToolbar />
+              </ControlsContainer>
+            )}
+            <ControlsContainer style={{ marginLeft: "auto" }}>
+              {displayNavigationArrows && (
+                <React.Fragment>
+                  {prev && (
+                    <StyledTooltip title="Previous Challenge">
+                      <IconButton
+                        style={{ color: "white" }}
+                        aria-label="Previous Challenge"
+                        onClick={() => this.props.selectChallenge(prev.id)}
+                      >
+                        <SkipPrevious />
+                      </IconButton>
+                    </StyledTooltip>
+                  )}
+                  {next && (
+                    <StyledTooltip title="Next Challenge">
+                      <IconButton
+                        style={{ color: "white" }}
+                        aria-label="Next Challenge"
+                        onClick={() => this.props.selectChallenge(next.id)}
+                      >
+                        <SkipNext />
+                      </IconButton>
+                    </StyledTooltip>
+                  )}
+                </React.Fragment>
+              )}
+              {this.props.userAuthenticated && this.props.user ? (
+                <AccountDropdownButton>
+                  <div className="account-menu-dropdown">
+                    <CreateAccountText className="account-menu">
+                      Welcome, {this.props.user.profile.givenName}!
+                    </CreateAccountText>
+                    <div className="dropdown-links">
+                      <Link
+                        to="/profile"
+                        style={{
+                          borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
+                        }}
+                      >
+                        Profile
+                      </Link>
+                      <Link onClick={this.handleLogout} to="/logout">
+                        Logout
+                      </Link>
+                    </div>
+                  </div>
+                </AccountDropdownButton>
+              ) : (
+                <AccountButton
+                  onClick={() => this.props.setSingleSignOnDialogState(true)}
+                >
+                  <CreateAccountText>Login or Signup</CreateAccountText>
+                </AccountButton>
+              )}
+            </ControlsContainer>
+          </Header>
+          <Switch>
+            <Route key={0} path="/workspace/:id" component={Workspace} />
+            <Route key={1} path="/home" component={Home} />
+            <Route key={2} path="/profile" component={Profile} />
+            <Route
+              key={3}
+              path="/logout"
+              component={() => <Redirect to="/home" />}
+            />
+            <Route key={4} component={() => <Redirect to="/workspace" />} />
+          </Switch>
+        </DesktopContainer>
+      </React.Fragment>
     );
   }
+
+  handleLogout = () => {
+    this.props.logoutUser();
+  };
+
+  renderLoadingOverlay = () => {
+    return (
+      <LoadingOverlay visible={this.props.workspaceLoading}>
+        <MobileView />
+        <DesktopContainer>
+          <OverlayLoadingText>Initializing Workspace...</OverlayLoadingText>
+        </DesktopContainer>
+      </LoadingOverlay>
+    );
+  };
+
+  toggleNavigationMap = () => {
+    const { overlayVisible } = this.props;
+    if (overlayVisible) {
+      this.props.toggleScrollLock({ locked: false });
+    } else {
+      this.props.toggleScrollLock({ locked: true });
+    }
+    this.props.setNavigationMapState(!overlayVisible);
+  };
 }
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const BORDER = 3;
+
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  position: relative;
+  padding-top: ${BORDER}px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-bottom: 0;
+  background: #212121;
+  border-bottom: 1px solid #404040;
+
+  height: ${HEADER_HEIGHT}px;
+  width: calc(100vw - 48);
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: ${BORDER}px;
+    background: ${COLORS.GRADIENT_GREEN};
+  }
+`;
+
+const ProductTitle = styled.h1`
+  margin: 0;
+  color: "white";
+  font-weight: 100;
+  font-family: "Helvetica Neue", Lato, sans-serif;
+`;
+
+const ControlsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+`;
+
+const NavIconButton = styled(props => (
+  <IconButton aria-label="Open navigaton map" {...props}>
+    <Menu />
+  </IconButton>
+))`
+  color: white;
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+`;
+
+const LoadingOverlay = styled.div`
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.95);
+  visibility: ${(props: { visible: boolean }) =>
+    props.visible ? "visible" : "hidden"};
+`;
+
+const OverlayLoadingText = styled.p`
+  margin: 0;
+  font-size: 42px;
+  font-weight: 200;
+  color: ${COLORS.PRIMARY_BLUE};
+`;
+
+const AccountButton = styled(ButtonCore)`
+  height: ${HEADER_HEIGHT};
+  color: ${COLORS.TEXT_TITLE};
+  border-radius: 4px;
+
+  :hover {
+    cursor: pointer;
+    color: ${COLORS.TEXT_HOVER};
+    background: ${COLORS.BACKGROUND_ACCOUNT_BUTTON};
+  }
+`;
+
+const CreateAccountText = styled.h1`
+  margin-right: 12px;
+  margin-left: 12px;
+  font-size: 18px;
+  font-weight: 200;
+  font-family: Helvetica Neue, Lato, sans-serif;
+`;
+
+const AccountDropdownButton = styled.div`
+  .account-menu-dropdown {
+    position: relative;
+    display: inline-block;
+    color: ${COLORS.TEXT_TITLE};
+  }
+
+  .dropdown-links {
+    z-index: 1;
+    display: none;
+    position: absolute;
+    min-width: 180px;
+    box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
+    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
+  }
+
+  .dropdown-links a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: ${COLORS.TEXT_TITLE};
+  }
+
+  .dropdown-links a:hover {
+    color: ${COLORS.PRIMARY_GREEN};
+    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU_HOVER};
+  }
+
+  .account-menu-dropdown:hover .dropdown-links {
+    display: block;
+  }
+
+  :hover {
+    cursor: pointer;
+    color: ${COLORS.TEXT_HOVER};
+  }
+`;
+
+/** ===========================================================================
+ * Mobile/Desktop Styles
+ * ============================================================================
+ */
+
+const MobileView = () => (
+  <MobileContainer>
+    <MobileTitleText>Welcome to Prototype X</MobileTitleText>
+    <MobileText>
+      Unfortunately, smart phones and tablets are just not the best devices for
+      developing software. Our platform is intended to be used on a larger
+      screen device. Please return on a laptop or desktop!
+    </MobileText>
+    <MobileText>
+      While you are here, feel free to{" "}
+      <a target="__blank" href="https://prototype-x-www.netlify.com/">
+        visit our landing page
+      </a>{" "}
+      where you can learn more about the curriculum. Thank you!
+    </MobileText>
+  </MobileContainer>
+);
+
+const MobileContainer = styled.div`
+  z-index: 5000;
+  padding: 25px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  flex: 1;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  visibility: hidden;
+  background: ${COLORS.BACKGROUND_BODY};
+
+  a {
+    color: ${COLORS.PRIMARY_GREEN};
+  }
+
+  @media (max-width: 768px) {
+    visibility: visible;
+  }
+`;
+
+const MobileText = styled.p`
+  font-size: 16px;
+  font-weight: 300;
+  text-align: center;
+  font-family: "Helvetica Neue", Lato, sans-serif;
+  color: ${COLORS.TEXT_CONTENT};
+`;
+
+const MobileTitleText = styled(MobileText)`
+  font-size: 24px;
+  font-weight: 300;
+  font-family: "Helvetica Neue", Lato, sans-serif;
+  color: ${COLORS.TEXT_TITLE};
+`;
+
+const DesktopContainer = styled.div`
+  display: inline;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
 
 /** ===========================================================================
  * Props
  * ============================================================================
  */
 
+const mapStateToProps = (state: ReduxStoreState) => ({
+  user: Modules.selectors.user.userSelector(state),
+  userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
+  challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
+  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
+  workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
+    state,
+  ),
+});
+
 const dispatchProps = {
+  logoutUser: Modules.actions.app.logoutUser,
+  selectChallenge: Modules.actions.challenges.setChallengeId,
+  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
+  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
+  toggleScrollLock: Modules.actions.app.toggleScrollLock,
 };
 
-type ConnectProps = typeof dispatchProps;
+interface ComponentProps {}
 
-type IProps = ConnectProps;
+type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-const withProps = connect(null, dispatchProps);
+interface IProps extends ComponentProps, ConnectProps {}
+
+const withProps = connect(mapStateToProps, dispatchProps);
 
 /** ===========================================================================
  * Export
