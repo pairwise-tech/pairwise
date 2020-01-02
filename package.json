@@ -20,10 +20,11 @@
     "db": "cd packages/server && yarn db",
     "db:setup": "cd packages/server && yarn setup:db",
     "db:reset": "cd packages/server && yarn db:reset",
+    "db:rebuild": "yarn build && yarn db:reset",
     "db:migration": "cd packages/server && yarn migration:run",
     "format": "lerna run format",
     "test": "lerna run test",
-    "build": "lerna run build",
+    "build": "yarn common:build && lerna run build",
     "e2e:services": "cd packages/external-services && yarn start",
     "test:e2e": "cd packages/e2e && HOST=http://server:9000 yarn test:e2e",
     "e2e": "docker-compose -f docker-compose-e2e.yml up --build --abort-on-container-exit"
