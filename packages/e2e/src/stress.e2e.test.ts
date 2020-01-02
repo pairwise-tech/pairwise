@@ -45,8 +45,8 @@ import faker from "faker";
  * ===========================================================================
  */
 
-const NUMBER_OF_USERS = 25;
-const NUMBER_OF_REQUESTS_PER_USER = 10;
+const NUMBER_OF_USERS = 15;
+const NUMBER_OF_REQUESTS_PER_USER = 5;
 const TOTAL_REQUESTS = NUMBER_OF_USERS * NUMBER_OF_REQUESTS_PER_USER;
 
 describe("Stress Test the Server", () => {
