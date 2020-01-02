@@ -51,13 +51,12 @@ export class UserService {
      * with.
      */
     const { email } = profile;
-    console.log(`Running findOrCreateUser for email ${email}`);
     const userExists = await this.findUserByEmail(email);
     if (userExists) {
-      console.log("User exists, returning.");
+      console.log(`User exists, returning profile for ${email}`);
       return userExists;
     } else {
-      console.log("Creating new user.");
+      console.log(`Creating new user: ${email}`);
       const userData = {
         email,
         givenName: profile.givenName,
