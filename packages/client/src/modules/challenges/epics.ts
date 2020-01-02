@@ -70,7 +70,7 @@ const createInverseChallengeMapping = (
  */
 const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.initializeApp)),
+    filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
     mergeMap(deps.api.fetchChallenges),
     map(({ value: course }) => {
       if (course) {

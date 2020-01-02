@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap, tap } from "rxjs/operators";
+import { filter, ignoreElements, map, mergeMap, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
 import API from "modules/api";
@@ -50,12 +50,23 @@ const storeAccessTokenEpic: EpicSignature = action$ => {
   );
 };
 
+const logoutEpic: EpicSignature = action$ => {
+  return action$.pipe(
+    filter(isActionOf(Actions.logoutUser)),
+    tap(() => {
+      setAccessTokenInLocalStorage("");
+    }),
+    ignoreElements(),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
 export default combineEpics(
+  logoutEpic,
   facebookLoginEpic,
   initializeAppAuthenticationEpic,
   storeAccessTokenEpic,

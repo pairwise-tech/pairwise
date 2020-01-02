@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { DEV_MODE } from "tools/client-env";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
+import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import Profile from "./Profile";
 import { StyledTooltip } from "./shared";
@@ -83,16 +84,18 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               style={{ color: "white", marginRight: 40 }}
               onClick={this.toggleNavigationMap}
             />
-            <h1
-              style={{
-                fontWeight: 100,
-                color: "white",
-                fontFamily: `'Helvetica Neue', Lato, sans-serif`,
-                margin: 0,
-              }}
-            >
-              Prototype X
-            </h1>
+            <Link to="/home">
+              <h1
+                style={{
+                  margin: 0,
+                  color: "white",
+                  fontWeight: 100,
+                  fontFamily: `'Helvetica Neue', Lato, sans-serif`,
+                }}
+              >
+                Prototype X
+              </h1>
+            </Link>
           </ControlsContainer>
           {DEV_MODE && (
             <ControlsContainer>
@@ -127,15 +130,26 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               </React.Fragment>
             )}
             {this.props.userAuthenticated && this.props.user ? (
-              <div className="account-menu-dropdown">
-                <CreateAccountText className="account-menu">
-                  Welcome, {this.props.user.profile.givenName}!
-                </CreateAccountText>
-                <div className="dropdown-links">
-                  <Link to="/profile">Profile</Link>
-                  <Link to="/logout">Logout</Link>
+              <AccountDropdownButton>
+                <div className="account-menu-dropdown">
+                  <CreateAccountText className="account-menu">
+                    Welcome, {this.props.user.profile.givenName}!
+                  </CreateAccountText>
+                  <div className="dropdown-links">
+                    <Link
+                      to="/profile"
+                      style={{
+                        borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
+                      }}
+                    >
+                      Profile
+                    </Link>
+                    <Link onClick={this.handleLogout} to="/logout">
+                      Logout
+                    </Link>
+                  </div>
                 </div>
-              </div>
+              </AccountDropdownButton>
             ) : (
               <CreateAccountTextClickable
                 onClick={() => this.props.setSingleSignOnDialogState(true)}
@@ -147,12 +161,22 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         </Header>
         <Switch>
           <Route key={0} path="/workspace/:id" component={Workspace} />
-          <Route key={1} path="/profile" component={Profile} />
-          <Route key={2} component={() => <Redirect to="/workspace" />} />
+          <Route key={1} path="/home" component={Home} />
+          <Route key={2} path="/profile" component={Profile} />
+          <Route
+            key={3}
+            path="/logout"
+            component={() => <Redirect to="/home" />}
+          />
+          <Route key={4} component={() => <Redirect to="/workspace" />} />
         </Switch>
       </React.Fragment>
     );
   }
+
+  handleLogout = () => {
+    this.props.logoutUser();
+  };
 
   renderLoadingOverlay = () => {
     return (
@@ -251,6 +275,43 @@ const OverlayLoadingText = styled.p`
   color: ${COLORS.PRIMARY_BLUE};
 `;
 
+const AccountDropdownButton = styled.div`
+  .account-menu-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-links {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    min-width: 175px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
+  }
+
+  .dropdown-links a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: ${COLORS.TEXT_TITLE};
+  }
+
+  .dropdown-links a:hover {
+    color: ${COLORS.PRIMARY_GREEN};
+    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU_HOVER};
+  }
+
+  .account-menu-dropdown:hover .dropdown-links {
+    display: block;
+  }
+
+  :hover {
+    cursor: pointer;
+    color: ${COLORS.TEXT_HOVER};
+  }
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -268,6 +329,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
+  logoutUser: Modules.actions.app.logoutUser,
   selectChallenge: Modules.actions.challenges.setChallengeId,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,

@@ -21,6 +21,9 @@ const COLORS = {
   BACKGROUND_EDITOR: "rgb(35, 35, 35)",
   BACKGROUND_CONSOLE: "rgb(36, 36, 36)",
   BACKGROUND_LOWER_SECTION: "rgb(30, 30, 30)",
+  BACKGROUND_DROPDOWN_MENU: "rgb(35, 35, 35)",
+  BACKGROUND_DROPDOWN_MENU_HOVER: "rgb(24, 24, 24)",
+  BORDER_DROPDOWN_MENU_ITEM: "rgb(45, 45, 45)",
   BACKGROUND_MODAL: "rgb(25, 25, 25)",
   GRADIENT_GREEN:
     "linear-gradient( 90deg, rgba(0, 255, 177, 1) 22%, rgba(0, 255, 211, 1) 74%)",

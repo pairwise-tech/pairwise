@@ -10,6 +10,7 @@ enum ActionTypesEnum {
   INITIALIZE_APP = "INITIALIZE_APP",
   INITIALIZE_APP_SUCCESS = "INITIALIZE_APP_SUCCESS",
   TOGGLE_PAGE_SCROLL_LOCK = "TOGGLE_PAGE_SCROLL_LOCK",
+  LOGOUT = "LOGOUT",
 }
 
 /** ===========================================================================
@@ -18,6 +19,8 @@ enum ActionTypesEnum {
  */
 
 const empty = createAction(ActionTypesEnum.EMPTY_ACTION)();
+
+const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
 
 const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)();
 const initializeAppSuccess = createAction(
@@ -30,6 +33,7 @@ const toggleScrollLock = createAction(ActionTypesEnum.TOGGLE_PAGE_SCROLL_LOCK)<{
 
 const actions = {
   empty,
+  logoutUser,
   initializeApp,
   initializeAppSuccess,
   toggleScrollLock,
