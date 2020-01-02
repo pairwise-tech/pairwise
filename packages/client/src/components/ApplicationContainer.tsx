@@ -16,11 +16,8 @@ import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import Profile from "./Profile";
-import { StyledTooltip } from "./shared";
-import SingleSignOnHandler, {
-  CreateAccountText,
-  CreateAccountTextClickable,
-} from "./SingleSignOnHandler";
+import { ButtonCore, StyledTooltip } from "./shared";
+import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
 
 /** ===========================================================================
@@ -151,11 +148,11 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 </div>
               </AccountDropdownButton>
             ) : (
-              <CreateAccountTextClickable
+              <AccountButton
                 onClick={() => this.props.setSingleSignOnDialogState(true)}
               >
-                Login/Signup
-              </CreateAccountTextClickable>
+                <CreateAccountText>Login or Signup</CreateAccountText>
+              </AccountButton>
             )}
           </ControlsContainer>
         </Header>
@@ -275,10 +272,31 @@ const OverlayLoadingText = styled.p`
   color: ${COLORS.PRIMARY_BLUE};
 `;
 
+const AccountButton = styled(ButtonCore)`
+  height: ${HEADER_HEIGHT};
+  color: ${COLORS.TEXT_TITLE};
+  border-radius: 4px;
+
+  :hover {
+    cursor: pointer;
+    color: ${COLORS.TEXT_HOVER};
+    background: ${COLORS.BACKGROUND_ACCOUNT_BUTTON};
+  }
+`;
+
+const CreateAccountText = styled.h1`
+  margin-right: 12px;
+  margin-left: 12px;
+  font-size: 18px;
+  font-weight: 200;
+  font-family: Helvetica Neue, Lato, sans-serif;
+`;
+
 const AccountDropdownButton = styled.div`
   .account-menu-dropdown {
     position: relative;
     display: inline-block;
+    color: ${COLORS.TEXT_TITLE};
   }
 
   .dropdown-links {

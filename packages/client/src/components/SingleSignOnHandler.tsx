@@ -24,6 +24,10 @@ interface IState {}
  * - This component renders a modal which provides and handles SSO options
  * for the application. Facebook is currently supported, Google and GitHub
  * SSO can be added to this component in the future.
+ *
+ * - NOTE: The components which provide the social login buttons are complete
+ * shit and the styles are very arbitrarily contrived to force them to look
+ * somewhat acceptable.
  * ============================================================================
  */
 
@@ -38,18 +42,20 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
       >
         <AccountModal>
           {this.props.loadingAuth ? (
-            <CreateAccountText>Processing Login...</CreateAccountText>
+            <TitleText>Processing Login...</TitleText>
           ) : (
             <React.Fragment>
-              <CreateAccountText>Signin to Get Started</CreateAccountText>
+              <TitleText>Login or Create an Account</TitleText>
               <SocialButtonsContainer>
                 <FacebookLogin
+                  icon="fa-facebook"
                   appId={ENV.FACEBOOK_APP_ID}
                   callback={this.handleFacebookResponse}
                   cssClass="social-media-login-button facebook-social-login"
                 />
                 <GithubLoginButton
-                  style={{ width: 235, height: 43, marginTop: 12 }}
+                  style={{ width: 235, height: 43, marginTop: 18 }}
+                  activeStyle={{ background: "rgb(68, 68, 68)" }}
                 >
                   <LoginLink href={`${ENV.HOST}/auth/github`}>
                     Login with GitHub
@@ -64,9 +70,10 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
                   className="social-media-login-button google-social-login"
                 />
               </SocialButtonsContainer>
+              <SubText>Creating an account is free and easy.</SubText>
               <SubText>
-                Once you create an account all of your course progress will be
-                saved in your account.
+                Your account will be used to save your progress as you work on
+                the courses.
               </SubText>
             </React.Fragment>
           )}
@@ -98,18 +105,21 @@ const SocialButtonsContainer = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 12px;
 `;
 
 const LoginLink = styled.a`
   font-weight: 500;
   font-size: 14px;
   color: white;
+  margin-left: 4px;
   text-decoration: none;
 `;
 
 const AccountModal = styled.div`
   width: 525px;
   padding: 32px;
+  padding-top: 22px;
   left: 50%;
   top: 50%;
   outline: none;
@@ -120,30 +130,24 @@ const AccountModal = styled.div`
   flex-direction: column;
   justify-content: center;
   transform: translate(-50%, -50%);
-  border-radius: 3px;
+  border-radius: 4px;
   border: 1px solid ${COLORS.BORDER_MODAL};
   background-color: ${COLORS.BACKGROUND_MODAL};
 `;
 
-export const CreateAccountText = styled.h1`
+const TitleText = styled.h1`
   margin-right: 12px;
   margin-left: 12px;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 200;
   color: ${COLORS.TEXT_TITLE};
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
-export const CreateAccountTextClickable = styled(CreateAccountText)`
-  :hover {
-    cursor: pointer;
-    color: ${COLORS.TEXT_HOVER};
-  }
-`;
-
-const SubText = styled(CreateAccountText)`
+const SubText = styled(TitleText)`
   font-size: 16px;
-  margin-top: 24px;
+  margin-top: 12px;
+  max-width: 350px;
   text-align: center;
 `;
 

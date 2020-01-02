@@ -19,6 +19,26 @@ export const StyledTooltip = styled(Tooltip)`
   }
 `;
 
+export const ButtonCore = styled.button`
+  background: none repeat scroll 0 0 transparent;
+  border: medium none;
+  border-spacing: 0;
+  font-family: "PT Sans Narrow", sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.42rem;
+  list-style: none outside none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  text-decoration: none;
+  text-indent: 0;
+
+  :focus {
+    outline: none;
+  }
+`;
+
 export const TitleInput = styled.input`
   outline: none;
   appearance: none;
