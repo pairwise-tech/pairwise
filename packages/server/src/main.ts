@@ -16,9 +16,9 @@ const PORT = 9000;
 
 const swaggerOptions = new DocumentBuilder()
   .setTitle("Mono Prototype")
-  .setDescription("Mono Prototype API description")
+  .setDescription("Mono Prototype APIs")
   .setVersion("1.0")
-  .addTag("coding")
+  .addTag("Learn to Code! 🥳")
   .build();
 
 /** ===========================================================================
@@ -37,8 +37,9 @@ const main = async () => {
   SwaggerModule.setup("api", app, document);
 
   await app.listen(PORT);
-  console.log(`\n- NestJS application launched on http://localhost:${PORT}/`);
-  console.log(`- View Swagger API at http://localhost:${PORT}/api\n`);
+  console.log(`\n- NestJS app launched on:    http://localhost:${PORT}/`);
+  console.log(`- View Swagger API docs:     http://localhost:${PORT}/api\n`);
+  console.log(`Have fun! 🥳\n`);
 };
 
 main();
