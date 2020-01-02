@@ -9,7 +9,7 @@ import Code from "@material-ui/icons/Code";
 import PlayCircleFilled from "@material-ui/icons/PlayCircleFilled";
 import { Challenge, Module } from "@prototype/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS } from "tools/constants";
+import { COLORS, HEADER_HEIGHT } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 
 const debug = require("debug")("client:NavigationOverlay");
@@ -284,8 +284,10 @@ const Col = styled.div<{ offsetX: number }>`
 `;
 
 const Overlay = styled.div<{ visible: boolean }>`
-  width: 100%;
-  height: 100%;
+  top: ${HEADER_HEIGHT}px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 100;
   position: fixed;
   background: rgba(0, 0, 0, 0.85);

@@ -84,7 +84,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
               <NavIconButton
                 style={{ color: "white", marginRight: 40 }}
-                onClick={this.toggleNavigationMap}
+                onClick={this.props.toggleNavigationMap}
               />
               <Link to="/home">
                 <ProductTitle>Prototype X</ProductTitle>
@@ -181,16 +181,6 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         </DesktopContainer>
       </LoadingOverlay>
     );
-  };
-
-  toggleNavigationMap = () => {
-    const { overlayVisible } = this.props;
-    if (overlayVisible) {
-      this.props.toggleScrollLock({ locked: false });
-    } else {
-      this.props.toggleScrollLock({ locked: true });
-    }
-    this.props.setNavigationMapState(!overlayVisible);
   };
 }
 
@@ -435,11 +425,28 @@ const dispatchProps = {
 
 interface ComponentProps {}
 
-type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+const mergeProps = (
+  state: ReturnType<typeof mapStateToProps>,
+  methods: typeof dispatchProps,
+  props: ComponentProps,
+) => ({
+  ...props,
+  ...methods,
+  ...state,
+  toggleNavigationMap: () => {
+    const { overlayVisible } = state;
+    if (overlayVisible) {
+      methods.toggleScrollLock({ locked: false });
+    } else {
+      methods.toggleScrollLock({ locked: true });
+    }
+    methods.setNavigationMapState(!overlayVisible);
+  },
+});
 
-interface IProps extends ComponentProps, ConnectProps {}
+type IProps = ReturnType<typeof mergeProps>;
 
-const withProps = connect(mapStateToProps, dispatchProps);
+const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
 
 /** ===========================================================================
  * Export
