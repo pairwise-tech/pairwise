@@ -5,10 +5,10 @@ import {
   ManyToOne,
   Index,
 } from "typeorm";
-import { UserEntity } from "../user/user.entity";
+import { User } from "../user/user.entity";
 
 @Entity()
-export class UserCodeBlobEntity {
+export class UserCodeBlob {
   @PrimaryGeneratedColumn("uuid")
   uuid: number;
 
@@ -20,8 +20,8 @@ export class UserCodeBlobEntity {
   dataBlob: string;
 
   @ManyToOne(
-    type => UserEntity,
+    type => User,
     user => user.challengeCodeHistory,
   )
-  user: UserEntity;
+  user: User;
 }

@@ -5,11 +5,11 @@ import {
   Index,
   ManyToOne,
 } from "typeorm";
-import { UserEntity } from "../user/user.entity";
+import { User } from "../user/user.entity";
 import { IUserCourseProgressDto } from "@prototype/common";
 
 @Entity()
-export class UserCourseProgressEntity {
+export class UserCourseProgress {
   @PrimaryGeneratedColumn("uuid")
   uuid: number;
 
@@ -21,8 +21,8 @@ export class UserCourseProgressEntity {
   progress: string;
 
   @ManyToOne(
-    type => UserEntity,
+    type => User,
     user => user.challengeProgressHistory,
   )
-  user: UserEntity;
+  user: User;
 }

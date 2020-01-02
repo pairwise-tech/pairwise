@@ -5,10 +5,10 @@ import {
   Index,
   ManyToOne,
 } from "typeorm";
-import { UserEntity } from "../user/user.entity";
+import { User } from "../user/user.entity";
 
 @Entity()
-export class PaymentsEntity {
+export class Payments {
   @PrimaryGeneratedColumn("uuid")
   uuid: number;
 
@@ -20,8 +20,8 @@ export class PaymentsEntity {
   datePaid: string;
 
   @ManyToOne(
-    type => UserEntity,
+    type => User,
     user => user.payments,
   )
-  user: UserEntity;
+  user: User;
 }
