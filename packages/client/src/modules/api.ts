@@ -113,6 +113,20 @@ class BaseApiClass {
 class Api extends BaseApiClass {
   codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
 
+  facebookAuthenticationRequest = async (token: string) => {
+    try {
+      const params = { access_token: token };
+      const response = await axios.get<{ accessToken: string }>(
+        `${ENV.HOST}/auth/facebook`,
+        { params },
+      );
+      const { accessToken } = response.data;
+      return new Ok(accessToken);
+    } catch (err) {
+      return this.handleHttpError(err);
+    }
+  };
+
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
     try {
       let course: Course;

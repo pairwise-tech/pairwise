@@ -2,7 +2,7 @@
   "name": "@prototype/external-services",
   "version": "0.0.1",
   "private": true,
-  "description": "Prototype X e2e Tests: End to End Test Suite for Prototype X",
+  "description": "A simple Express Server to mock external service APIs for testing and development",
   "files": [
     "dist"
   ],

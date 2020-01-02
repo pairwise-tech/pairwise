@@ -134,6 +134,13 @@ export const CreateAccountText = styled.h1`
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
+export const CreateAccountTextClickable = styled(CreateAccountText)`
+  :hover {
+    cursor: pointer;
+    color: ${COLORS.TEXT_HOVER};
+  }
+`;
+
 const SubText = styled(CreateAccountText)`
   font-size: 16px;
   margin-top: 24px;

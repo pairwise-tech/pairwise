@@ -1,9 +1,8 @@
-import axios from "axios";
 import { combineEpics } from "redux-observable";
 import { filter, map, mergeMap, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
-import * as ENV from "tools/client-env";
+import API from "modules/api";
 import {
   getAccessTokenFromLocalStorage,
   setAccessTokenInLocalStorage,
@@ -19,17 +18,12 @@ import { Actions } from "../root-actions";
 const facebookLoginEpic: EpicSignature = action$ => {
   return action$.pipe(
     filter(isActionOf(Actions.facebookLogin)),
-    mergeMap(async action => {
-      try {
-        const params = { access_token: action.payload.accessToken };
-        const response = await axios.get<{ accessToken: string }>(
-          `${ENV.HOST}/auth/facebook`,
-          { params },
-        );
-        const { accessToken } = response.data;
-        return Actions.storeAccessToken({ accessToken });
-      } catch (err) {
-        console.log(err);
+    map(action => action.payload),
+    mergeMap(API.facebookAuthenticationRequest),
+    map(result => {
+      if (result.value) {
+        return Actions.storeAccessToken({ accessToken: result.value });
+      } else {
         return Actions.facebookLoginFailure();
       }
     }),

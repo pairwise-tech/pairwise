@@ -34,7 +34,7 @@ const COLORS = {
 
 const W = window.innerWidth;
 const H = window.innerHeight;
-const HEADER_HEIGHT = 50;
+const HEADER_HEIGHT = 60;
 
 export const MONACO_EDITOR_THEME = "vs-dark";
 
