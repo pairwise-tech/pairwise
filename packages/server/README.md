@@ -94,12 +94,10 @@ Where `MyMigrationName` is a name to describe the current migration. The second 
 
 ```bash
 # Build the Dockerfile
-$ docker build -t prototype-z-server .
+$ docker build -t prototype-x-server .
 # Run the built image
-$ docker run -it prototype-z-server
+$ docker run -it prototype-x-server
 ```
-
-Run `docker run --network="host" -it prototype-z-server` if you are running locally to connect to Postgres on localhost.
 
 ## Support
 

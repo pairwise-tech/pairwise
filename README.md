@@ -50,9 +50,19 @@ $ yarn e2e
 
 ## To Rebuild The Database
 
-```
+```bash
 # Drops database tables and re-runs the latest migrations
 $ yarn db:rebuild
+```
+
+## To Refresh Builds and Dependencies
+
+```bash
+# Runs the builds for all packages, building @prototype/common first
+$ yarn build
+
+# Lerna bootstrap installs and links package dependencies
+$ lerna bootstrap
 ```
 
 ## Repository Structure
