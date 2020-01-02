@@ -48,6 +48,13 @@ $ yarn e2e:services
 $ yarn e2e
 ```
 
+## To Rebuild The Database
+
+```
+# Drops database tables and re-runs the latest migrations
+$ yarn db:rebuild
+```
+
 ## Repository Structure
 
 This project is managed using Lerna, and contains the following packages:
