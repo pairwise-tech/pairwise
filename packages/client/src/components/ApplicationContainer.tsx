@@ -75,101 +75,95 @@ class ApplicationContainer extends React.Component<IProps, IState> {
 
     return (
       <React.Fragment>
-        {this.renderLoadingOverlay()}
-        <SingleSignOnHandler />
-        <NavigationOverlay overlayVisible={overlayVisible} />
-        <Header>
-          <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
-            <NavIconButton
-              style={{ color: "white", marginRight: 40 }}
-              onClick={this.toggleNavigationMap}
-            />
-            <Link to="/home">
-              <h1
-                style={{
-                  margin: 0,
-                  color: "white",
-                  fontWeight: 100,
-                  fontFamily: `'Helvetica Neue', Lato, sans-serif`,
-                }}
-              >
-                Prototype X
-              </h1>
-            </Link>
-          </ControlsContainer>
-          {DEV_MODE && (
-            <ControlsContainer>
-              <EditingToolbar />
+        <MobileView />
+        <DesktopContainer>
+          {this.renderLoadingOverlay()}
+          <SingleSignOnHandler />
+          <NavigationOverlay overlayVisible={overlayVisible} />
+          <Header>
+            <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
+              <NavIconButton
+                style={{ color: "white", marginRight: 40 }}
+                onClick={this.toggleNavigationMap}
+              />
+              <Link to="/home">
+                <ProductTitle>Prototype X</ProductTitle>
+              </Link>
             </ControlsContainer>
-          )}
-          <ControlsContainer style={{ marginLeft: "auto" }}>
-            {displayNavigationArrows && (
-              <React.Fragment>
-                {prev && (
-                  <StyledTooltip title="Previous Challenge">
-                    <IconButton
-                      style={{ color: "white" }}
-                      aria-label="Previous Challenge"
-                      onClick={() => this.props.selectChallenge(prev.id)}
-                    >
-                      <SkipPrevious />
-                    </IconButton>
-                  </StyledTooltip>
-                )}
-                {next && (
-                  <StyledTooltip title="Next Challenge">
-                    <IconButton
-                      style={{ color: "white" }}
-                      aria-label="Next Challenge"
-                      onClick={() => this.props.selectChallenge(next.id)}
-                    >
-                      <SkipNext />
-                    </IconButton>
-                  </StyledTooltip>
-                )}
-              </React.Fragment>
+            {DEV_MODE && (
+              <ControlsContainer>
+                <EditingToolbar />
+              </ControlsContainer>
             )}
-            {this.props.userAuthenticated && this.props.user ? (
-              <AccountDropdownButton>
-                <div className="account-menu-dropdown">
-                  <CreateAccountText className="account-menu">
-                    Welcome, {this.props.user.profile.givenName}!
-                  </CreateAccountText>
-                  <div className="dropdown-links">
-                    <Link
-                      to="/profile"
-                      style={{
-                        borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
-                      }}
-                    >
-                      Profile
-                    </Link>
-                    <Link onClick={this.handleLogout} to="/logout">
-                      Logout
-                    </Link>
+            <ControlsContainer style={{ marginLeft: "auto" }}>
+              {displayNavigationArrows && (
+                <React.Fragment>
+                  {prev && (
+                    <StyledTooltip title="Previous Challenge">
+                      <IconButton
+                        style={{ color: "white" }}
+                        aria-label="Previous Challenge"
+                        onClick={() => this.props.selectChallenge(prev.id)}
+                      >
+                        <SkipPrevious />
+                      </IconButton>
+                    </StyledTooltip>
+                  )}
+                  {next && (
+                    <StyledTooltip title="Next Challenge">
+                      <IconButton
+                        style={{ color: "white" }}
+                        aria-label="Next Challenge"
+                        onClick={() => this.props.selectChallenge(next.id)}
+                      >
+                        <SkipNext />
+                      </IconButton>
+                    </StyledTooltip>
+                  )}
+                </React.Fragment>
+              )}
+              {this.props.userAuthenticated && this.props.user ? (
+                <AccountDropdownButton>
+                  <div className="account-menu-dropdown">
+                    <CreateAccountText className="account-menu">
+                      Welcome, {this.props.user.profile.givenName}!
+                    </CreateAccountText>
+                    <div className="dropdown-links">
+                      <Link
+                        to="/profile"
+                        style={{
+                          borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
+                        }}
+                      >
+                        Profile
+                      </Link>
+                      <Link onClick={this.handleLogout} to="/logout">
+                        Logout
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </AccountDropdownButton>
-            ) : (
-              <AccountButton
-                onClick={() => this.props.setSingleSignOnDialogState(true)}
-              >
-                <CreateAccountText>Login or Signup</CreateAccountText>
-              </AccountButton>
-            )}
-          </ControlsContainer>
-        </Header>
-        <Switch>
-          <Route key={0} path="/workspace/:id" component={Workspace} />
-          <Route key={1} path="/home" component={Home} />
-          <Route key={2} path="/profile" component={Profile} />
-          <Route
-            key={3}
-            path="/logout"
-            component={() => <Redirect to="/home" />}
-          />
-          <Route key={4} component={() => <Redirect to="/workspace" />} />
-        </Switch>
+                </AccountDropdownButton>
+              ) : (
+                <AccountButton
+                  onClick={() => this.props.setSingleSignOnDialogState(true)}
+                >
+                  <CreateAccountText>Login or Signup</CreateAccountText>
+                </AccountButton>
+              )}
+            </ControlsContainer>
+          </Header>
+          <Switch>
+            <Route key={0} path="/workspace/:id" component={Workspace} />
+            <Route key={1} path="/home" component={Home} />
+            <Route key={2} path="/profile" component={Profile} />
+            <Route
+              key={3}
+              path="/logout"
+              component={() => <Redirect to="/home" />}
+            />
+            <Route key={4} component={() => <Redirect to="/workspace" />} />
+          </Switch>
+        </DesktopContainer>
       </React.Fragment>
     );
   }
@@ -181,7 +175,10 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   renderLoadingOverlay = () => {
     return (
       <LoadingOverlay visible={this.props.workspaceLoading}>
-        <OverlayLoadingText>Initializing Workspace...</OverlayLoadingText>
+        <MobileView />
+        <DesktopContainer>
+          <OverlayLoadingText>Initializing Workspace...</OverlayLoadingText>
+        </DesktopContainer>
       </LoadingOverlay>
     );
   };
@@ -230,6 +227,13 @@ const Header = styled.div`
     height: ${BORDER}px;
     background: ${COLORS.GRADIENT_GREEN};
   }
+`;
+
+const ProductTitle = styled.h1`
+  margin: 0;
+  color: "white";
+  font-weight: 100;
+  font-family: "Helvetica Neue", Lato, sans-serif;
 `;
 
 const ControlsContainer = styled.div`
@@ -330,6 +334,76 @@ const AccountDropdownButton = styled.div`
   :hover {
     cursor: pointer;
     color: ${COLORS.TEXT_HOVER};
+  }
+`;
+
+/** ===========================================================================
+ * Mobile/Desktop Styles
+ * ============================================================================
+ */
+
+const MobileView = () => (
+  <MobileContainer>
+    <MobileTitleText>Welcome to Prototype X</MobileTitleText>
+    <MobileText>
+      Unfortunately, smart phones and tablets are just not the best devices for
+      developing software. Our platform is intended to be used on a larger
+      screen device. Please return on a laptop or desktop!
+    </MobileText>
+    <MobileText>
+      While you are here, feel free to{" "}
+      <a target="__blank" href="https://prototype-x-www.netlify.com/">
+        visit our landing page
+      </a>{" "}
+      where you can learn more about the curriculum. Thank you!
+    </MobileText>
+  </MobileContainer>
+);
+
+const MobileContainer = styled.div`
+  z-index: 5000;
+  padding: 25px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  flex: 1;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  visibility: hidden;
+  background: ${COLORS.BACKGROUND_BODY};
+
+  a {
+    color: ${COLORS.PRIMARY_GREEN};
+  }
+
+  @media (max-width: 768px) {
+    visibility: visible;
+  }
+`;
+
+const MobileText = styled.p`
+  font-size: 16px;
+  font-weight: 300;
+  text-align: center;
+  font-family: "Helvetica Neue", Lato, sans-serif;
+  color: ${COLORS.TEXT_CONTENT};
+`;
+
+const MobileTitleText = styled(MobileText)`
+  font-size: 24px;
+  font-weight: 300;
+  font-family: "Helvetica Neue", Lato, sans-serif;
+  color: ${COLORS.TEXT_TITLE};
+`;
+
+const DesktopContainer = styled.div`
+  display: inline;
+
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
