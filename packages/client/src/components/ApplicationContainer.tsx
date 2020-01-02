@@ -9,6 +9,7 @@ import styled from "styled-components/macro";
 import SkipNext from "@material-ui/icons/SkipNext";
 import SkipPrevious from "@material-ui/icons/SkipPrevious";
 import Modules, { ReduxStoreState } from "modules/root";
+import { Link } from "react-router-dom";
 import { DEV_MODE } from "tools/client-env";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
@@ -126,9 +127,15 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               </React.Fragment>
             )}
             {this.props.userAuthenticated && this.props.user ? (
-              <CreateAccountText>
-                Welcome, {this.props.user.profile.givenName}!
-              </CreateAccountText>
+              <div className="account-menu-dropdown">
+                <CreateAccountText className="account-menu">
+                  Welcome, {this.props.user.profile.givenName}!
+                </CreateAccountText>
+                <div className="dropdown-links">
+                  <Link to="/profile">Profile</Link>
+                  <Link to="/logout">Profile</Link>
+                </div>
+              </div>
             ) : (
               <CreateAccountTextClickable
                 onClick={() => this.props.setSingleSignOnDialogState(true)}
