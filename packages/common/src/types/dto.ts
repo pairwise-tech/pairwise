@@ -34,3 +34,67 @@ export interface IUserCodeBlobDto {
   dataBlob: string;
   challengeId: string;
 }
+
+/** ===========================================================================
+ * Code Blobs
+ * ============================================================================
+ */
+
+export type BlobType = "video" | "challenge" | "project" | "guided_project";
+
+interface BlobBase {
+  type: BlobType;
+  created_at: number;
+  updated_at: number /* Date? */;
+}
+
+export interface CodeChallengeBlob extends BlobBase {
+  type: "challenge";
+  code: string;
+}
+
+export interface VideoChallengeBlob extends BlobBase {
+  type: "video";
+  timeLastWatched: number;
+}
+
+export interface ProjectChallengeBlob extends BlobBase {
+  type: "project";
+  url: string;
+  repo: string;
+  timeLastWatched: number;
+}
+
+export interface GuidedProjectBlob extends BlobBase {
+  type: "guided_project";
+  timeLastWatched: number;
+}
+
+export type CodeHistoryBlob =
+  | VideoChallengeBlob
+  | ProjectChallengeBlob
+  | CodeChallengeBlob
+  | GuidedProjectBlob;
+
+/** ===========================================================================
+ * User Challenge History
+ * ============================================================================
+ */
+
+/**
+ * Represent all 3 states for a challenge:
+ *
+ * true: completed
+ * false: incomplete
+ * undefined: never attempted
+ */
+export interface ChallengeStatus {
+  status: boolean;
+}
+
+/**
+ * Map of {[challengeId]: ChallengeStatus} for a given course.
+ */
+export interface UserCourseProgress {
+  [key: string]: ChallengeStatus;
+}
