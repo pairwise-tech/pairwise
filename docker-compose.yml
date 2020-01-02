@@ -14,6 +14,7 @@ services:
 
   server:
     build: .
+    image: runtime
     command: dockerize -wait tcp://db:5432 -wait tcp://external-services:7000 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
@@ -29,7 +30,7 @@ services:
       - external-services
 
   external-services:
-    image: server
+    image: runtime
     command: yarn e2e:services
     expose:
       - 7000
