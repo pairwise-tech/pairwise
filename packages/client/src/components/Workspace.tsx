@@ -1220,21 +1220,11 @@ const WorkspaceKeyboardShortcuts = connect(
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  user: Modules.selectors.user.userSelector(state),
-  userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
-  nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
-  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
-  workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
-    state,
-  ),
 });
 
 const dispatchProps = {
-  selectChallenge: Modules.actions.challenges.setChallengeId,
-  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
-  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   toggleScrollLock: Modules.actions.app.toggleScrollLock,
 };

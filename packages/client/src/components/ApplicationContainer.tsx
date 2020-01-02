@@ -30,7 +30,10 @@ interface IState {
 }
 
 /** ===========================================================================
- * App
+ * ApplicationContainer
+ * ----------------------------------------------------------------------------
+ * This is the top level component which renders the overall app structure,
+ * including the routing Switch torender all child routes.
  * ============================================================================
  */
 
@@ -300,11 +303,11 @@ const AccountDropdownButton = styled.div`
   }
 
   .dropdown-links {
+    z-index: 1;
     display: none;
     position: absolute;
-    z-index: 1;
-    min-width: 175px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+    min-width: 180px;
+    box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
     background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
   }
 
