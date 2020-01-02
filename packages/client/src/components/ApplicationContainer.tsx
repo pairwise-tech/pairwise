@@ -133,7 +133,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 </CreateAccountText>
                 <div className="dropdown-links">
                   <Link to="/profile">Profile</Link>
-                  <Link to="/logout">Profile</Link>
+                  <Link to="/logout">Logout</Link>
                 </div>
               </div>
             ) : (

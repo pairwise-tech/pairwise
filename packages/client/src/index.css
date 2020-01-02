@@ -143,7 +143,7 @@ pre {
   background-color: #ddd;
 }
 
-.account-menu-dropdown:hover .dropdown-content {
+.account-menu-dropdown:hover .dropdown-links {
   display: block;
 }
 
