@@ -26,8 +26,7 @@ services:
 
   client:
     image: runtime
-    # command: yarn client:dev
-    command: npx serve packages/client/build -p 3000
+    command: yarn client:prod
     environment:
       REACT_APP_HOST: http://server:9000
     expose:

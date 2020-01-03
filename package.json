@@ -10,6 +10,7 @@
     "client:dev": "cd packages/client && yarn start:dev",
     "client:https": "cd packages/client && yarn start:https",
     "client:build": "cd packages/client && yarn build",
+    "client:prod": "cd packages/client && yarn start:prod",
     "client:codepress": "cd packages/client && yarn start:codepress",
     "server:setup": "cd packages/server && yarn setup:env",
     "server": "cd packages/server && yarn start",
