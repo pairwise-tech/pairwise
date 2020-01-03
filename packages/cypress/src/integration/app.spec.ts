@@ -1,6 +1,6 @@
 import { HOST } from "../support/utils";
 
-describe("Workspace Loads", () => {
+describe("Workspace Load", () => {
   it("Workspace loads and contains title Prototype X", () => {
     cy.visit(HOST);
     cy.contains("Prototype X");
@@ -15,7 +15,15 @@ describe("Workspace Loads", () => {
 
     cy.visit(HOST);
 
-    cy.wait(500); /* Wait for the workspace to load */
+    /**
+     * Wait for the workspace to load.
+     *
+     * For some reason this takes WAY longer when running cypress:run.
+     *
+     * TODO: Create some programmatic way to determine if the workspace
+     * has loaded or not.
+     */
+    cy.wait(10000);
     cy.url().should("include", "workspace");
 
     let challengeId = "";
@@ -27,6 +35,7 @@ describe("Workspace Loads", () => {
         expect(url).to.not.equal(challengeId);
         challengeId = id;
       });
+      cy.wait(50);
     };
 
     const checkNext = () => {
@@ -36,6 +45,7 @@ describe("Workspace Loads", () => {
         expect(url).to.not.equal(challengeId);
         challengeId = id;
       });
+      cy.wait(50);
     };
 
     checkNext();

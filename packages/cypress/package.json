@@ -15,7 +15,7 @@
     "lint": "yarn prettier && yarn tslint",
     "test": "yarn lint && yarn tsc",
     "tsc": "tsc --pretty --noEmit",
-    "build": "webpack --output-filename out.js --entry ./src/integration/spec.ts"
+    "build": "yarn tsc"
   },
   "dependencies": {
     "@cypress/webpack-preprocessor": "^4.1.1",
