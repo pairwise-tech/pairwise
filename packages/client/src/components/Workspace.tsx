@@ -1,4 +1,7 @@
-// Import TSX SyntaxHighlightWorker:
+// Import Workers:
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import CodeFormatWorker from "workerize-loader!../tools/prettier-code-formatter";
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
@@ -12,9 +15,6 @@ import { monaco } from "@monaco-editor/react";
 import { Challenge } from "@prototype/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
-import parserHtml from "prettier/parser-html";
-import parserTypescript from "prettier/parser-typescript";
-import { format } from "prettier/standalone";
 import pipe from "ramda/es/pipe";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
@@ -66,6 +66,7 @@ import {
  * Types & Config
  * ============================================================================
  */
+const codeWorker = new CodeFormatWorker();
 
 enum IFRAME_MESSAGE_TYPES {
   LOG = "LOG",
@@ -167,6 +168,8 @@ class Workspace extends React.Component<IProps, IState> {
       false,
     );
 
+    codeWorker.addEventListener("message", this.handleCodeFormatMessage);
+
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
     this.initializeMonaco();
     this.initializeSyntaxHighlightWorker();
@@ -184,6 +187,7 @@ class Workspace extends React.Component<IProps, IState> {
       "message",
       this.handleReceiveMessageFromCodeRunner,
     );
+    codeWorker.removeEventListener("message", this.handleCodeFormatMessage);
   }
 
   refreshEditor = () => {
@@ -219,22 +223,6 @@ class Workspace extends React.Component<IProps, IState> {
    */
   resetCodeWindow = () => {
     this.transformMonacoCode(() => this.props.challenge.starterCode);
-  };
-
-  /**
-   * Run the auto formatter on the code in the code window. This replaces the code currently present.
-   */
-  autoFormatCodeWindow = () => {
-    const { challenge } = this.props;
-    const parser = challenge.type === "markup" ? "html" : "typescript";
-    this.transformMonacoCode(code =>
-      format(code, {
-        parser,
-        arrowParens: "always",
-        trailingComma: "es5",
-        plugins: [parserHtml, parserTypescript],
-      }),
-    );
   };
 
   initializeSyntaxHighlightWorker = () => {
@@ -463,7 +451,7 @@ class Workspace extends React.Component<IProps, IState> {
             <IconButton
               style={{ color: "white" }}
               aria-label="format editor code"
-              onClick={this.autoFormatCodeWindow}
+              onClick={this.requestCodeFormatting}
             >
               <FormatLineSpacing />
             </IconButton>
@@ -952,6 +940,29 @@ class Workspace extends React.Component<IProps, IState> {
 
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
+  };
+
+  /**
+   * Run the auto formatter on the code in the code window. This replaces the code currently present.
+   */
+  private readonly handleCodeFormatMessage = (event: MessageEvent) => {
+    const code = event.data?.code;
+    if (code) {
+      this.transformMonacoCode(() => code);
+    } else {
+      console.warn("[INFO] No code passed via message event", event);
+    }
+  };
+
+  private readonly requestCodeFormatting = () => {
+    try {
+      codeWorker.postMessage({
+        code: this.state.code,
+        type: this.props.challenge.type,
+      });
+    } catch (err) {
+      console.warn("[INFO] Could not post to code worker", err);
+    }
   };
 
   private readonly transformMonacoCode = (fn: (x: string) => string) => {
