@@ -13,6 +13,10 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+Cypress.Screenshot.defaults({
+  screenshotOnRunFailure: false,
+});
+
 // Import commands.js using ES2015 syntax:
 import "./commands";
 
