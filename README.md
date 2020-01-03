@@ -46,6 +46,9 @@ $ yarn e2e:services
 
 # Run the full build and test suite locally using Docker
 $ yarn e2e
+
+# Run the Cypress end to end test suite using Docker
+$ yarn cypress
 ```
 
 ## To Rebuild The Database
