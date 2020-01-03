@@ -11,6 +11,8 @@ To get started, install Docker and then run:
 $ docker-compose up
 
 # Launch the client application
+$ yarn client:dev
+# or
 $ yarn client:https
 ```
 
@@ -26,6 +28,9 @@ $ yarn common:build
 # Build the @prototype/common package in watch mode
 $ yarn common:watch
 
+# Build all packages
+$ yarn build
+
 # Start the database (requires Docker)
 $ yarn db
 
@@ -40,14 +45,21 @@ $ yarn server
 
 # Start the client
 $ yarn client
+```
+
+## Running Tests
+
+```bash
+# Use Lerna to run the test script for each package
+$ yarn test
 
 # Run the external services server locally
 $ yarn e2e:services
 
-# Run the full build and test suite locally using Docker
+# Run the e2e test suite
 $ yarn e2e
 
-# Run the Cypress end to end test suite using Docker
+# Run the Cypress end to end test suite
 $ yarn cypress
 ```
 
@@ -76,6 +88,7 @@ This project is managed using Lerna, and contains the following packages:
 | ----------------- | ------------------------------------------------- |
 | client            | React client application                          |
 | common            | Shared code, utils, and types                     |
+| cypress           | Cypress end-to-end test suite                     |
 | e2e               | End-to-end test suite                             |
 | external-services | Express server to mock 3rd party APIs for testing |
 | server            | NestJS backend application                        |
