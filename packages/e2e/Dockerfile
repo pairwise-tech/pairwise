@@ -42,9 +42,11 @@ RUN yarn build
 
 FROM build AS test
 
-# Uses Lerna to run the test command for all packages
-RUN yarn test
-
-FROM test AS runtime
-
 COPY . .
+
+# Uses Lerna to run the test command for all packages
+# RUN yarn test
+
+# FROM test AS runtime
+
+# COPY . .
