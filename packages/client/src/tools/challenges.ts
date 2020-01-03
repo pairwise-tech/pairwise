@@ -23,6 +23,22 @@ export interface TestCaseMarkup {
 
 export type TestCase = TestCaseTypeScript | TestCaseReact | TestCaseMarkup;
 
+export enum IFRAME_MESSAGE_TYPES {
+  LOG = "LOG",
+  INFO = "INFO",
+  WARN = "WARN",
+  ERROR = "ERROR",
+  TEST_RESULTS = "TEST_RESULTS",
+  TEST_ERROR = "TEST_RESULTS",
+}
+
+export interface IframeMessageEvent extends MessageEvent {
+  data: {
+    message: string;
+    source: IFRAME_MESSAGE_TYPES;
+  };
+}
+
 /** ===========================================================================
  * Challenge Utils
  * ============================================================================
@@ -54,9 +70,7 @@ window.parent.postMessage({
 /**
  * Get the test code string for a markup challenge.
  */
-export const getTestCodeMarkup = (testCases: ReadonlyArray<any>) => `
-let results = [];
-
+export const getTestCodeMarkup = (testCode: string): string => `
 window.$ = (...args) => document.querySelector(...args);
 window.$$ = (...args) => Array.prototype.slice.call(document.querySelectorAll(...args));
 window.getStyle = (el, cssProp) => {
@@ -65,19 +79,56 @@ window.getStyle = (el, cssProp) => {
   return style.getPropertyValue(cssProp) || style[cssProp];
 }
 
-for (const x of ${JSON.stringify(testCases)}) {
-  const { test } = x;
-  try {
-    results.push(eval(test));
-  } catch (err) {
-    results.push(false);
-  }
+function buildTestsFromCode() {
+    const arr = [];
+    const test = (message, fn) => {
+        arr.push({
+            message,
+            test: fn,
+        })
+    }
+
+    ${testCode}
+
+    return arr;
 }
 
-window.parent.postMessage({
-  message: JSON.stringify(results),
-  source: "TEST_RESULTS",
-});
+function runTests() {
+  const tests = buildTestsFromCode()
+
+  const results = tests.reduce((agg, { message, test }) => {
+    try {
+      return agg.concat([{
+        message,
+        testResult: test(),
+        error: null,
+      }])
+    } catch (err) {
+      return agg.concat([{
+        message,
+        testResult: false,
+        error: err.message,
+      }])
+    }
+  }, []);
+
+  return results;
+}
+
+try {
+  const results = runTests();
+  window.parent.postMessage({
+    message: JSON.stringify(results),
+    source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
+  });
+} catch (err) {
+  window.parent.postMessage({
+    message: JSON.stringify({
+      error: err.message,
+    }),
+    source: "${IFRAME_MESSAGE_TYPES.TEST_ERROR}",
+  });
+}
 `;
 
 /**

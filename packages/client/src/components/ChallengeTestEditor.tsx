@@ -5,11 +5,6 @@ import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
 import { MONACO_EDITOR_THEME } from "tools/constants";
 
-// TOOD: Should probably replace this with Prettier down the line
-const formatCode = (x: string | undefined): string => {
-  return x ? JSON.stringify(JSON.parse(x), null, 2) : "";
-};
-
 const mapStateToProps = (state: ReduxStoreState) => ({
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   challengeTestCode: Modules.selectors.challenges.getCurrentChallengeTestCode(
@@ -51,16 +46,16 @@ const ChallengeTestEditor = (props: Props) => {
     }
 
     const testCode = getEditorValue();
-    try {
-      // NOTE: This is just to make sure it is valid before storying it, since
-      // you are bound to get invalid JSON during the process of typing some
-      // out.
-      JSON.parse(testCode);
-    } catch (err) {
-      console.log(testCode);
-      console.log(JSON.stringify(testCode));
-      return;
-    }
+    // try {
+    //   // NOTE: This is just to make sure it is valid before storying it, since
+    //   // you are bound to get invalid JSON during the process of typing some
+    //   // out.
+    //   JSON.parse(testCode);
+    // } catch (err) {
+    //   console.log(testCode);
+    //   console.log(JSON.stringify(testCode));
+    //   return;
+    // }
 
     // Since we're using a keyup handler this helps to make it function like a change handler.
     const shouldUpdate = testCode !== props.challengeTestCode;
@@ -80,7 +75,7 @@ const ChallengeTestEditor = (props: Props) => {
         height="50vh"
         language="javascript"
         editorDidMount={handleEditorReady}
-        value={formatCode(props.challengeTestCode)}
+        value={props.challengeTestCode}
         theme={MONACO_EDITOR_THEME}
         options={{
           formatOnType: true,

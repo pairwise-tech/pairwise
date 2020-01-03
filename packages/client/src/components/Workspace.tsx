@@ -24,6 +24,8 @@ import { debounce } from "throttle-debounce";
 import { DEV_MODE } from "tools/client-env";
 import {
   getTestCodeMarkup,
+  IFRAME_MESSAGE_TYPES,
+  IframeMessageEvent,
   TestCase,
   TestCaseMarkup,
   TestCaseReact,
@@ -68,21 +70,6 @@ import {
  */
 const codeWorker = new CodeFormatWorker();
 
-enum IFRAME_MESSAGE_TYPES {
-  LOG = "LOG",
-  INFO = "INFO",
-  WARN = "WARN",
-  ERROR = "ERROR",
-  TEST_RESULTS = "TEST_RESULTS",
-}
-
-interface IframeMessageEvent extends MessageEvent {
-  data: {
-    message: string;
-    source: IFRAME_MESSAGE_TYPES;
-  };
-}
-
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
 interface Log {
@@ -100,7 +87,7 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 interface IState {
   code: string;
   fullScreenEditor: boolean;
-  tests: ReadonlyArray<TestCase>;
+  tests: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
   adminEditorTab: "starterCode" | "solutionCode";
   adminTestTab: "testResults" | "testCode";
@@ -135,7 +122,8 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    const tests = JSON.parse(this.props.challenge.testCode);
+    // const tests = JSON.parse(this.props.challenge.testCode);
+    const tests: any[] = [];
 
     this.state = {
       tests,
@@ -200,7 +188,8 @@ class Workspace extends React.Component<IProps, IState> {
     // Update in response to changing challenge
     if (this.props.challenge.id !== nextProps.challenge.id) {
       const { challenge } = nextProps;
-      const tests = JSON.parse(challenge.testCode);
+      // const tests = JSON.parse(challenge.testCode);
+      const tests: any[] = []; // Reset tests... TODO: Is this what I want here?
       const newCode = this.getEditorCode(challenge);
       this.setState(
         { code: newCode, tests, adminTestTab: "testResults" },
@@ -402,7 +391,7 @@ class Workspace extends React.Component<IProps, IState> {
       if (tab === "testResults") {
         this.setState({
           adminTestTab: tab,
-          tests: JSON.parse(this.props.challenge.testCode), // See NOTE
+          // tests: JSON.parse(this.props.challenge.testCode), // See NOTE
         });
       } else {
         this.setState({ adminTestTab: tab });
@@ -434,26 +423,33 @@ class Workspace extends React.Component<IProps, IState> {
           </Tab>
         </TabbedInnerNav>
         <LowerRight
-          style={{ right: 10, display: "flex", flexDirection: "column" }}
+          style={{
+            right: 20,
+            bottom: 10,
+            display: "flex",
+            flexDirection: "column",
+          }}
         >
           {this.state.code !== challenge.starterCode && !isEditMode && (
             <StyledTooltip title={"Restore Initial Code"} placement="left">
               <IconButton
+                size="medium"
                 style={{ color: "white" }}
                 aria-label="reset editor"
                 onClick={this.resetCodeWindow}
               >
-                <SettingsBackupRestore />
+                <SettingsBackupRestore fontSize="inherit" />
               </IconButton>
             </StyledTooltip>
           )}
           <StyledTooltip title={"Format Code"} placement="left">
             <IconButton
+              size="medium"
               style={{ color: "white" }}
               aria-label="format editor code"
               onClick={this.requestCodeFormatting}
             >
-              <FormatLineSpacing />
+              <FormatLineSpacing fontSize="inherit" />
             </IconButton>
           </StyledTooltip>
           <StyledTooltip
@@ -461,11 +457,16 @@ class Workspace extends React.Component<IProps, IState> {
             placement="left"
           >
             <IconButton
+              size="medium"
               style={{ color: "white" }}
               aria-label="fullscreen editor"
               onClick={this.toggleEditorType}
             >
-              {fullScreenEditor ? <FullscreenExit /> : <Fullscreen />}
+              {fullScreenEditor ? (
+                <FullscreenExit fontSize="inherit" />
+              ) : (
+                <Fullscreen fontSize="inherit" />
+              )}
             </IconButton>
           </StyledTooltip>
         </LowerRight>
@@ -772,11 +773,15 @@ class Workspace extends React.Component<IProps, IState> {
         }
         case IFRAME_MESSAGE_TYPES.TEST_RESULTS: {
           const results = JSON.parse(message);
-          const testCasesCopy = this.state.tests.slice();
-          for (let i = 0; i < results.length; i++) {
-            testCasesCopy[i].testResult = results[i];
-          }
-          this.setState({ tests: testCasesCopy });
+          this.setState({ tests: results });
+          break;
+        }
+        case IFRAME_MESSAGE_TYPES.TEST_ERROR: {
+          console.warn(
+            "[ERR] Something went wrong with the tests:",
+            source,
+            message,
+          );
           break;
         }
         default: {
@@ -785,6 +790,10 @@ class Workspace extends React.Component<IProps, IState> {
       }
     } catch (err) {
       // no-op
+      // This is currently a noop because it's super noisy in dev. The
+      // assertUnreachable throws all the time because of something. Looks like
+      // react devtools is putting a message through and that's hitting the
+      // deafult case
     }
   };
 
@@ -827,7 +836,9 @@ class Workspace extends React.Component<IProps, IState> {
               ),
             );
 
-            const markupTests = getTestCodeMarkup(this.state.tests);
+            const markupTests = getTestCodeMarkup(
+              this.props.challenge.testCode,
+            );
 
             const testScript = el("script", {
               id: "test-script",
