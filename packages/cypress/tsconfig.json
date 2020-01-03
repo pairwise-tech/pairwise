@@ -4,13 +4,7 @@
     "module": "commonjs",
     "skipLibCheck": true,
     "strict": true,
-    "types": [
-      // load Cypress global type
-      "cypress"
-    ]
+    "types": ["cypress"]
   },
-  "include": [
-    // process only spec files
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }

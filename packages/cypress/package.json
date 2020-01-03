@@ -4,10 +4,9 @@
   "description": "Cypress e2e test suite for the client|server application",
   "private": true,
   "scripts": {
-    "cypress:run": "node_modules/.bin/cypress run",
-    "cypress:open": "node_modules/.bin/cypress open",
-    "build": "node_modules/.bin/webpack --output-filename out.js --entry ./src/integration/spec.ts",
-    "tsc": "node_modules/.bin/tsc --pretty --noEmit",
+    "cypress:run": "cypress run",
+    "cypress:open": "cypress open",
+    "cypress:ci": "cypress run  --env SERVER_HOST=http://client:3000",
     "prettier": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "tslint": "tslint --project tsconfig.json -c tslint.json",
@@ -15,7 +14,8 @@
     "format": "yarn prettier:fix && yarn tslint:fix",
     "lint": "yarn prettier && yarn tslint",
     "test": "yarn lint && yarn tsc",
-    "test:ci": "node_modules/.bin/cypress run"
+    "tsc": "tsc --pretty --noEmit",
+    "build": "webpack --output-filename out.js --entry ./src/integration/spec.ts"
   },
   "dependencies": {
     "@cypress/webpack-preprocessor": "^4.1.1",

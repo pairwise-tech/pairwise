@@ -29,7 +29,7 @@
     "e2e:services": "cd packages/external-services && yarn start",
     "test:e2e": "cd packages/e2e && HOST=http://server:9000 yarn test:e2e",
     "e2e": "docker-compose -f packages/e2e/docker-compose.yml up --build --abort-on-container-exit",
-    "test:cypress": "cd packages/cypress && cypress run",
+    "test:cypress": "cd packages/cypress && yarn cypress:ci",
     "cypress": "docker-compose -f packages/cypress/docker-compose.yml up --build --abort-on-container-exit"
   },
   "workspaces": [
