@@ -10,7 +10,7 @@
     "start:codepress": "concurrently \"yarn run codepress:watch\" \"REACT_APP_HIDE_EMBEDS=true REACT_APP_DEV=true HTTPS=false react-scripts start\"",
     "start:dev": "REACT_APP_HIDE_EMBEDS=false REACT_APP_DEV=false react-scripts start",
     "start:https": "HTTPS=true react-scripts start",
-    "start:prod": "serve build -p 3000",
+    "start:prod": "serve build -s -p 3000",
     "build": "react-scripts build",
     "postbuild": "cp _redirects build/",
     "jest": "react-scripts test",
