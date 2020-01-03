@@ -129,8 +129,16 @@ class Api extends BaseApiClass {
   };
 
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
-    const c = require("@prototype/common").default;
-    return new Ok(c.FullstackTypeScript);
+    if (ENV.DEV_MODE) {
+      const course = await this.codepressApi
+        .getAll()
+        .pipe(map(x => x[0]))
+        .toPromise();
+      return Ok.of(course);
+    } else {
+      const c = require("@prototype/common").default;
+      return new Ok(c.FullstackTypeScript);
+    }
     // try {
     //   let course: Course;
     //   if (ENV.DEV_MODE) {
