@@ -1,9 +1,13 @@
-// Import TSX SyntaxHighlightWorker:
+// Import Workers:
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import CodeFormatWorker from "workerize-loader!../tools/prettier-code-formatter";
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
 import { IconButton } from "@material-ui/core";
+import FormatLineSpacing from "@material-ui/icons/FormatLineSpacing";
 import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";
 import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
@@ -62,6 +66,7 @@ import {
  * Types & Config
  * ============================================================================
  */
+const codeWorker = new CodeFormatWorker();
 
 enum IFRAME_MESSAGE_TYPES {
   LOG = "LOG",
@@ -163,6 +168,8 @@ class Workspace extends React.Component<IProps, IState> {
       false,
     );
 
+    codeWorker.addEventListener("message", this.handleCodeFormatMessage);
+
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
     this.initializeMonaco();
     this.initializeSyntaxHighlightWorker();
@@ -180,6 +187,7 @@ class Workspace extends React.Component<IProps, IState> {
       "message",
       this.handleReceiveMessageFromCodeRunner,
     );
+    codeWorker.removeEventListener("message", this.handleCodeFormatMessage);
   }
 
   refreshEditor = () => {
@@ -211,11 +219,10 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   /**
-   * Resest the code editor content to the starterCode
+   * Resest the code editor content to the starterCode.
    */
   resetCodeWindow = () => {
-    const { challenge } = this.props;
-    this.setState({ code: challenge.starterCode }, this.setMonacoEditorValue);
+    this.transformMonacoCode(() => this.props.challenge.starterCode);
   };
 
   initializeSyntaxHighlightWorker = () => {
@@ -440,6 +447,15 @@ class Workspace extends React.Component<IProps, IState> {
               </IconButton>
             </StyledTooltip>
           )}
+          <StyledTooltip title={"Format Code"} placement="left">
+            <IconButton
+              style={{ color: "white" }}
+              aria-label="format editor code"
+              onClick={this.requestCodeFormatting}
+            >
+              <FormatLineSpacing />
+            </IconButton>
+          </StyledTooltip>
           <StyledTooltip
             title={fullScreenEditor ? "Regular" : "Full Screen"}
             placement="left"
@@ -925,6 +941,33 @@ class Workspace extends React.Component<IProps, IState> {
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
   };
+
+  /**
+   * Run the auto formatter on the code in the code window. This replaces the code currently present.
+   */
+  private readonly handleCodeFormatMessage = (event: MessageEvent) => {
+    const code = event.data?.code;
+    if (code) {
+      this.transformMonacoCode(() => code);
+    } else {
+      console.warn("[INFO] No code passed via message event", event);
+    }
+  };
+
+  private readonly requestCodeFormatting = () => {
+    try {
+      codeWorker.postMessage({
+        code: this.state.code,
+        type: this.props.challenge.type,
+      });
+    } catch (err) {
+      console.warn("[INFO] Could not post to code worker", err);
+    }
+  };
+
+  private readonly transformMonacoCode = (fn: (x: string) => string) => {
+    this.setState({ code: fn(this.state.code) }, this.setMonacoEditorValue);
+  };
 }
 
 /** ===========================================================================
@@ -1191,25 +1234,49 @@ const StyledInputs = styled.div<{ isEditMode: boolean }>`
   }
 `;
 
+const keyboardStateToProps = (state: ReduxStoreState) => ({
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
+  course: Modules.selectors.challenges.getCurrentCourse(state),
+});
+
 const keyboardDispatchProps = {
-  enterEditMode: (e: KeyboardEvent) => {
-    if (DEV_MODE) {
-      e.preventDefault();
-      return Modules.actions.challenges.setEditMode(true);
-    } else {
-      console.warn("Not in development mode");
-      return { type: "PLACEHOLDER_ACTION" };
-    }
-  },
+  saveCourse: Modules.actions.challenges.saveCourse,
+  setEditMode: Modules.actions.challenges.setEditMode,
 };
 
-const WorkspaceKeyboardShortcuts = connect(
-  null,
+const mergeProps = (
+  state: ReturnType<typeof keyboardStateToProps>,
+  methods: typeof keyboardDispatchProps,
+) => ({
+  ...state,
+  ...methods,
+  toggleEditMode: (e: KeyboardEvent) => {
+    e.preventDefault();
+    methods.setEditMode(!state.isEditMode);
+  },
+  save: (e: KeyboardEvent) => {
+    if (!state.isEditMode) {
+      return;
+    }
+
+    e.preventDefault();
+    if (state.course) {
+      methods.saveCourse(state.course);
+    } else {
+      console.warn("[ERROR] No course to save!");
+    }
+  },
+});
+
+const AdminKeyboardShortcuts = connect(
+  keyboardStateToProps,
   keyboardDispatchProps,
-)((props: typeof keyboardDispatchProps) => (
+  mergeProps,
+)((props: ReturnType<typeof mergeProps>) => (
   <KeyboardShortcuts
     keymap={{
-      "cmd+e": props.enterEditMode,
+      "cmd+e": props.toggleEditMode,
+      "cmd+s": props.save,
     }}
   />
 ));
@@ -1272,7 +1339,7 @@ class WorkspaceLoadingContainer extends React.Component<
         <LowerSection withHeader={loadedChallenge.type === "media"}>
           <MediaArea />
         </LowerSection>
-        <WorkspaceKeyboardShortcuts />
+        {DEV_MODE && <AdminKeyboardShortcuts />}
       </React.Fragment>
     );
   }

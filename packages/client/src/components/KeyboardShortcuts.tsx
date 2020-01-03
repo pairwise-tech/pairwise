@@ -1,6 +1,8 @@
 import allPass from "ramda/es/allPass";
 import React from "react";
 
+const debug = require("debug")("client:KeyboardShortcuts");
+
 type MetaKey = "shiftKey" | "ctrlKey" | "metaKey" | "altKey";
 
 interface KeyboardShortcutsProps {
@@ -54,16 +56,18 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
       [],
     );
 
+    debug("Setting up listeners");
     listeners.forEach(fn => {
       document.addEventListener("keydown", fn);
     });
 
     return () => {
+      debug("Removing listeners");
       listeners.forEach(fn => {
         document.removeEventListener("keydown", fn);
       });
     };
-  }, []); // eslint-disable-line
+  }, [keymap]);
   return null;
 };
 

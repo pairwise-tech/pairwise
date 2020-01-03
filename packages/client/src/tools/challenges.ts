@@ -57,6 +57,14 @@ window.parent.postMessage({
 export const getTestCodeMarkup = (testCases: ReadonlyArray<any>) => `
 let results = [];
 
+window.$ = (...args) => document.querySelector(...args);
+window.$$ = (...args) => Array.prototype.slice.call(document.querySelectorAll(...args));
+window.getStyle = (el, cssProp) => {
+  const view = (el.ownerDocument && el.ownerDocument.defaultView) ? el.ownerDocument.defaultView : window;
+  const style = view.getComputedStyle(el);
+  return style.getPropertyValue(cssProp) || style[cssProp];
+}
+
 for (const x of ${JSON.stringify(testCases)}) {
   const { test } = x;
   try {
