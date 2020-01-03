@@ -423,12 +423,10 @@ const dispatchProps = {
   toggleScrollLock: Modules.actions.app.toggleScrollLock,
 };
 
-interface ComponentProps {}
-
 const mergeProps = (
   state: ReturnType<typeof mapStateToProps>,
   methods: typeof dispatchProps,
-  props: ComponentProps,
+  props: {},
 ) => ({
   ...props,
   ...methods,

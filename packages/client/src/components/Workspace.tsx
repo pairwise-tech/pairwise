@@ -1191,25 +1191,49 @@ const StyledInputs = styled.div<{ isEditMode: boolean }>`
   }
 `;
 
+const keyboardStateToProps = (state: ReduxStoreState) => ({
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
+  course: Modules.selectors.challenges.getCurrentCourse(state),
+});
+
 const keyboardDispatchProps = {
-  enterEditMode: (e: KeyboardEvent) => {
-    if (DEV_MODE) {
-      e.preventDefault();
-      return Modules.actions.challenges.setEditMode(true);
-    } else {
-      console.warn("Not in development mode");
-      return { type: "PLACEHOLDER_ACTION" };
-    }
-  },
+  saveCourse: Modules.actions.challenges.saveCourse,
+  setEditMode: Modules.actions.challenges.setEditMode,
 };
 
-const WorkspaceKeyboardShortcuts = connect(
-  null,
+const mergeProps = (
+  state: ReturnType<typeof keyboardStateToProps>,
+  methods: typeof keyboardDispatchProps,
+) => ({
+  ...state,
+  ...methods,
+  toggleEditMode: (e: KeyboardEvent) => {
+    e.preventDefault();
+    methods.setEditMode(!state.isEditMode);
+  },
+  save: (e: KeyboardEvent) => {
+    if (!state.isEditMode) {
+      return;
+    }
+
+    e.preventDefault();
+    if (state.course) {
+      methods.saveCourse(state.course);
+    } else {
+      console.warn("[ERROR] No course to save!");
+    }
+  },
+});
+
+const AdminKeyboardShortcuts = connect(
+  keyboardStateToProps,
   keyboardDispatchProps,
-)((props: typeof keyboardDispatchProps) => (
+  mergeProps,
+)((props: ReturnType<typeof mergeProps>) => (
   <KeyboardShortcuts
     keymap={{
-      "cmd+e": props.enterEditMode,
+      "cmd+e": props.toggleEditMode,
+      "cmd+s": props.save,
     }}
   />
 ));
@@ -1272,7 +1296,7 @@ class WorkspaceLoadingContainer extends React.Component<
         <LowerSection withHeader={loadedChallenge.type === "media"}>
           <MediaArea />
         </LowerSection>
-        <WorkspaceKeyboardShortcuts />
+        {DEV_MODE && <AdminKeyboardShortcuts />}
       </React.Fragment>
     );
   }
