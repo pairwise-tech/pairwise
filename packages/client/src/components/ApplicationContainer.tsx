@@ -101,6 +101,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                   {prev && (
                     <StyledTooltip title="Previous Challenge">
                       <IconButton
+                        id="prevButton"
                         style={{ color: "white" }}
                         aria-label="Previous Challenge"
                         onClick={() => this.props.selectChallenge(prev.id)}
@@ -112,6 +113,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                   {next && (
                     <StyledTooltip title="Next Challenge">
                       <IconButton
+                        id="nextButton"
                         style={{ color: "white" }}
                         aria-label="Next Challenge"
                         onClick={() => this.props.selectChallenge(next.id)}
