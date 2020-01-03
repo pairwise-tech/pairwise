@@ -4,6 +4,7 @@
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
 import { IconButton } from "@material-ui/core";
+import FormatLineSpacing from "@material-ui/icons/FormatLineSpacing";
 import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";
 import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
@@ -11,6 +12,9 @@ import { monaco } from "@monaco-editor/react";
 import { Challenge } from "@prototype/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
+import parserHtml from "prettier/parser-html";
+import parserTypescript from "prettier/parser-typescript";
+import { format } from "prettier/standalone";
 import pipe from "ramda/es/pipe";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
@@ -211,11 +215,26 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   /**
-   * Resest the code editor content to the starterCode
+   * Resest the code editor content to the starterCode.
    */
   resetCodeWindow = () => {
+    this.transformMonacoCode(() => this.props.challenge.starterCode);
+  };
+
+  /**
+   * Run the auto formatter on the code in the code window. This replaces the code currently present.
+   */
+  autoFormatCodeWindow = () => {
     const { challenge } = this.props;
-    this.setState({ code: challenge.starterCode }, this.setMonacoEditorValue);
+    const parser = challenge.type === "markup" ? "html" : "typescript";
+    this.transformMonacoCode(code =>
+      format(code, {
+        parser,
+        arrowParens: "always",
+        trailingComma: "es5",
+        plugins: [parserHtml, parserTypescript],
+      }),
+    );
   };
 
   initializeSyntaxHighlightWorker = () => {
@@ -440,6 +459,15 @@ class Workspace extends React.Component<IProps, IState> {
               </IconButton>
             </StyledTooltip>
           )}
+          <StyledTooltip title={"Format Code"} placement="left">
+            <IconButton
+              style={{ color: "white" }}
+              aria-label="format editor code"
+              onClick={this.autoFormatCodeWindow}
+            >
+              <FormatLineSpacing />
+            </IconButton>
+          </StyledTooltip>
           <StyledTooltip
             title={fullScreenEditor ? "Regular" : "Full Screen"}
             placement="left"
@@ -924,6 +952,10 @@ class Workspace extends React.Component<IProps, IState> {
 
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
+  };
+
+  private readonly transformMonacoCode = (fn: (x: string) => string) => {
+    this.setState({ code: fn(this.state.code) }, this.setMonacoEditorValue);
   };
 }
 
