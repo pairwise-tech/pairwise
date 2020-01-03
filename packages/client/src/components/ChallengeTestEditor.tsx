@@ -2,6 +2,7 @@ import { ControlledEditor, EditorDidMount } from "@monaco-editor/react";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
+import { debounce } from "throttle-debounce";
 import { MONACO_EDITOR_THEME } from "tools/constants";
 
 // TOOD: Should probably replace this with Prettier down the line
@@ -61,14 +62,20 @@ const ChallengeTestEditor = (props: Props) => {
       return;
     }
 
-    props.updateChallenge({
-      id: props.challengeId,
-      challenge: { testCode },
-    });
+    // Since we're using a keyup handler this helps to make it function like a change handler.
+    const shouldUpdate = testCode !== props.challengeTestCode;
+
+    if (shouldUpdate) {
+      props.updateChallenge({
+        id: props.challengeId,
+        challenge: { testCode },
+      });
+    }
   };
+  const updateHandler = React.useRef(debounce(200, handleUpdate));
 
   return (
-    <div style={{ color: "white" }} onInput={handleUpdate}>
+    <div style={{ color: "white" }} onKeyUp={updateHandler.current}>
       <ControlledEditor
         height="50vh"
         language="javascript"
