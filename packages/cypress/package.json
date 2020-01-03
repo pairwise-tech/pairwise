@@ -15,7 +15,6 @@
     "format": "yarn prettier:fix && yarn tslint:fix",
     "lint": "yarn prettier && yarn tslint",
     "test": "yarn lint && yarn tsc",
-    "precypress:run": "yarn lint",
     "test:ci": "node_modules/.bin/cypress run"
   },
   "dependencies": {

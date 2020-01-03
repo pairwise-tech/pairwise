@@ -1,4 +1,5 @@
-FROM node:10-alpine AS image
+# FROM node:10-alpine AS image
+FROM cypress/base:10 AS image
 
 # Dockerize is needed to sync containers startup
 ENV DOCKERIZE_VERSION v0.6.0
@@ -20,6 +21,7 @@ COPY packages/common/package.json /usr/app/packages/common/package.json
 COPY packages/client/package.json /usr/app/packages/client/package.json
 COPY packages/server/package.json /usr/app/packages/server/package.json
 COPY packages/e2e/package.json /usr/app/packages/e2e/package.json
+COPY packages/cypress/package.json /usr/app/packages/cypress/package.json
 COPY packages/external-services/package.json /usr/app/packages/external-services/package.json
 
 # Install all dependencies with Lerna

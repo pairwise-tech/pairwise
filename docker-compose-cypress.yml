@@ -24,16 +24,25 @@ services:
     depends_on:
       - db
 
+  client:
+    image: runtime
+    command: yarn client:prod
+    environment:
+      REACT_APP_HOST: http://server:9000
+    expose:
+      - 3000
+
   external-services:
     image: runtime
     command: yarn e2e:services
     expose:
       - 7000
 
-  e2e:
+  cypress:
     image: runtime
-    command: dockerize -wait tcp://db:5432 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 10s yarn test:e2e
+    command: dockerize -wait tcp://db:5432 -wait tcp://client:3000 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 10s yarn test:cypress
     depends_on:
       - db
       - server
+      - client
       - external-services

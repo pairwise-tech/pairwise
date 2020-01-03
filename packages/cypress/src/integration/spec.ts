@@ -21,7 +21,8 @@ describe("TypeScript", () => {
   });
 
   it("tests our example site", () => {
-    cy.visit("http://localhost:3000/home");
+    // cy.visit("http://localhost:3000/home");
+    cy.visit("http://client:3000/home");
     cy.contains("Prototype X Home");
     // cy.get(".home-list")
     //   .contains("Querying")
