@@ -168,8 +168,6 @@ class Workspace extends React.Component<IProps, IState> {
       false,
     );
 
-    codeWorker.addEventListener("message", this.handleCodeFormatMessage);
-
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
     this.initializeMonaco();
     this.initializeSyntaxHighlightWorker();
@@ -178,6 +176,8 @@ class Workspace extends React.Component<IProps, IState> {
     await wait(500);
     this.iFrameRenderPreview();
     this.debouncedSyntaxHighlightFunction(this.state.code);
+
+    codeWorker.addEventListener("message", this.handleCodeFormatMessage);
   }
 
   componentWillUnmount() {
@@ -944,6 +944,8 @@ class Workspace extends React.Component<IProps, IState> {
 
   /**
    * Run the auto formatter on the code in the code window. This replaces the code currently present.
+   * NOTE: An incoming message is fired when the worker is ready, so we can't
+   * assume there is code coming over the wire.
    */
   private readonly handleCodeFormatMessage = (event: MessageEvent) => {
     const code = event.data?.code;
