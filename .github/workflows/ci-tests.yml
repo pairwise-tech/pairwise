@@ -14,6 +14,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
+      - name: Build dependencies container
+        run: yarn docker:build
       - name: Run e2e test suite
         run: yarn e2e
         env:
