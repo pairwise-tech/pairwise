@@ -1,3 +1,10 @@
+// Import Workers:
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import CodeFormatWorker from "workerize-loader!./prettier-code-formatter";
+
+import { CHALLENGE_TYPE } from "@prototype/common";
+
 /** ===========================================================================
  * Types
  * ============================================================================
@@ -38,6 +45,32 @@ export interface IframeMessageEvent extends MessageEvent {
     source: IFRAME_MESSAGE_TYPES;
   };
 }
+
+export interface CodeFormatMessage {
+  code: string;
+  type: CHALLENGE_TYPE;
+  channel: string;
+}
+
+export interface CodeFormatMessageEvent extends MessageEvent {
+  data: CodeFormatMessage;
+}
+
+const codeWorker = new CodeFormatWorker();
+
+export const requestCodeFormatting = (message: CodeFormatMessage) => {
+  codeWorker.postMessage(message);
+};
+
+export const subscribeCodeWorker = (fn: (e: CodeFormatMessageEvent) => any) => {
+  codeWorker.addEventListener("message", fn);
+};
+
+export const unsubscribeCodeWorker = (
+  fn: (e: CodeFormatMessageEvent) => any,
+) => {
+  codeWorker.removeEventListener("message", fn);
+};
 
 /** ===========================================================================
  * Challenge Utils

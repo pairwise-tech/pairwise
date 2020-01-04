@@ -9,8 +9,8 @@ import { format } from "prettier/standalone";
 
 type ParserPlugins = Partial<Options>;
 
-self.addEventListener("message", event => {
-  const { code, type } = event.data;
+self.addEventListener("message", (event: MessageEvent) => {
+  const { code, type, channel } = event.data;
   const parserPlugins: ParserPlugins =
     type === "markup"
       ? {
@@ -28,5 +28,5 @@ self.addEventListener("message", event => {
   });
 
   // @ts-ignore
-  self.postMessage({ code: formatted });
+  self.postMessage({ code: formatted, type, channel });
 });

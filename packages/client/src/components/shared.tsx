@@ -97,3 +97,12 @@ export const Text = styled.p`
   font-weight: 200px;
   color: ${COLORS.TEXT_CONTENT};
 `;
+
+export const LowerRight = styled.div`
+  position: absolute;
+  z-index: 2;
+  right: 20px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+`;

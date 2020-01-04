@@ -1,12 +1,8 @@
-// Import Workers:
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import CodeFormatWorker from "workerize-loader!../tools/prettier-code-formatter";
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
-import { IconButton } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
 import FormatLineSpacing from "@material-ui/icons/FormatLineSpacing";
 import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";
@@ -26,10 +22,13 @@ import {
   getTestCodeMarkup,
   IFRAME_MESSAGE_TYPES,
   IframeMessageEvent,
+  requestCodeFormatting,
+  subscribeCodeWorker,
   TestCase,
   TestCaseMarkup,
   TestCaseReact,
   TestCaseTypeScript,
+  unsubscribeCodeWorker,
 } from "../tools/challenges";
 import {
   COLORS,
@@ -59,6 +58,7 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
 import {
   ContentInput,
+  LowerRight,
   StyledMarkdown,
   StyledTooltip,
   TitleInput,
@@ -68,7 +68,8 @@ import {
  * Types & Config
  * ============================================================================
  */
-const codeWorker = new CodeFormatWorker();
+
+const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
@@ -165,7 +166,7 @@ class Workspace extends React.Component<IProps, IState> {
     this.iFrameRenderPreview();
     this.debouncedSyntaxHighlightFunction(this.state.code);
 
-    codeWorker.addEventListener("message", this.handleCodeFormatMessage);
+    subscribeCodeWorker(this.handleCodeFormatMessage);
   }
 
   componentWillUnmount() {
@@ -175,7 +176,7 @@ class Workspace extends React.Component<IProps, IState> {
       "message",
       this.handleReceiveMessageFromCodeRunner,
     );
-    codeWorker.removeEventListener("message", this.handleCodeFormatMessage);
+    unsubscribeCodeWorker(this.handleCodeFormatMessage);
   }
 
   refreshEditor = () => {
@@ -422,14 +423,7 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
-        <LowerRight
-          style={{
-            right: 20,
-            bottom: 10,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+        <LowerRight>
           {this.state.code !== challenge.starterCode && !isEditMode && (
             <StyledTooltip title={"Restore Initial Code"} placement="left">
               <IconButton
@@ -447,7 +441,7 @@ class Workspace extends React.Component<IProps, IState> {
               size="medium"
               style={{ color: "white" }}
               aria-label="format editor code"
-              onClick={this.requestCodeFormatting}
+              onClick={this.handleFormatCode}
             >
               <FormatLineSpacing fontSize="inherit" />
             </IconButton>
@@ -960,18 +954,20 @@ class Workspace extends React.Component<IProps, IState> {
    */
   private readonly handleCodeFormatMessage = (event: MessageEvent) => {
     const code = event.data?.code;
-    if (code) {
+    const channel = event.data?.channel;
+    if (code && channel === CODE_FORMAT_CHANNEL) {
       this.transformMonacoCode(() => code);
     } else {
       console.warn("[INFO] No code passed via message event", event);
     }
   };
 
-  private readonly requestCodeFormatting = () => {
+  private readonly handleFormatCode = () => {
     try {
-      codeWorker.postMessage({
+      requestCodeFormatting({
         code: this.state.code,
         type: this.props.challenge.type,
+        channel: CODE_FORMAT_CHANNEL,
       });
     } catch (err) {
       console.warn("[INFO] Could not post to code worker", err);
@@ -1120,20 +1116,6 @@ const SuccessFailureText = styled.p`
   margin-left: 4px;
   color: ${(props: { testResult: boolean }) =>
     props.testResult ? C.SUCCESS : C.FAILURE};
-`;
-
-// const UpperRight = styled.div`
-//   position: absolute;
-//   z-index: 2;
-//   top: 0;
-//   right: 0;
-// `;
-
-const LowerRight = styled.div`
-  position: absolute;
-  z-index: 2;
-  bottom: 0;
-  right: 0;
 `;
 
 const TabbedInnerNav = styled.div<{ show: boolean }>`
