@@ -18,6 +18,7 @@ services:
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
+      CLIENT_APP_URL: http://client:3000
       FB_OAUTH_PROFILE_URL: http://external-services:7000/facebook/profile
       GITHUB_OAUTH_PROFILE_URL: http://external-services:7000/github/profile
       GITHUB_OAUTH_TOKEN_URL: http://external-services:7000/github/token
