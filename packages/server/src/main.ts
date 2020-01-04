@@ -6,7 +6,6 @@ import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common/pipes";
-import ENV from "./tools/server-env";
 
 /** ===========================================================================
  * Types & Config
@@ -41,8 +40,6 @@ const main = async () => {
   console.log(`\n- NestJS app launched on:    http://localhost:${PORT}/`);
   console.log(`- View Swagger API docs:     http://localhost:${PORT}/api\n`);
   console.log(`Have fun!\n`);
-
-  console.log(ENV.CLIENT_APP_URL);
 };
 
 main();
