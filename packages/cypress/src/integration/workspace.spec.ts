@@ -27,7 +27,7 @@ describe("Workspace and Challenge Navigation Works", () => {
         expect(url).to.not.equal(challengeId);
         challengeId = id;
       });
-      cy.wait(50);
+      cy.wait(250);
     };
 
     const checkNext = () => {
@@ -37,7 +37,7 @@ describe("Workspace and Challenge Navigation Works", () => {
         expect(url).to.not.equal(challengeId);
         challengeId = id;
       });
-      cy.wait(50);
+      cy.wait(250);
     };
 
     checkNext();

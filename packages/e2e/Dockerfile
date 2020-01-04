@@ -38,7 +38,7 @@ RUN yarn server:setup
 FROM dependencies AS build
 
 # Set the damn React app variables!
-RUN REACT_APP_HOST=http://server:9000
+ENV REACT_APP_HOST=http://server:9000
 
 # Uses Lerna to run the build command for all packages
 RUN yarn build
