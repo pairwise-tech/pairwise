@@ -105,7 +105,7 @@
           "content": "Complete the function body below. The function will receive a string and should return the same string in reverse order.",
           "starterCode": "const reverseString = (inputString) => {\n  // Edit code here\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
           "solutionCode": "const reverseString = (inputString) => {\n  return inputString.split('').reverse().join('');\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = reverseString;\n",
-          "testCode": "[{\"input\":[\"hello\"],\"expected\":\"olleh\"},{\"input\":[\"fantastic\"],\"expected\":\"citsatnaf\"},{\"input\":[\"superb\"],\"expected\":\"brepus\"},{\"input\":[\"frustrating\"],\"expected\":\"gnitartsurf\"},{\"input\":[\"exciting\"],\"expected\":\"gniticxe\"},{\"input\":[\"happy\"],\"expected\":\"yppah\"},{\"input\":[\"a\"],\"expected\":\"a\"},{\"input\":[\"aaaaaaaaaaaaz\"],\"expected\":\"zaaaaaaaaaaaa\"},{\"input\":[\"jumping\"],\"expected\":\"gnipmuj\"},{\"input\":[\"silly\"],\"expected\":\"yllis\"},{\"input\":[\"zombie\"],\"expected\":\"eibmoz\"}]",
+          "testCode": "[\n  { input: [\"hello\"], expected: \"olleh\" },\n  { input: [\"fantastic\"], expected: \"citsatnaf\" },\n  { input: [\"superb\"], expected: \"brepus\" },\n  { input: [\"frustrating\"], expected: \"gnitartsurf\" },\n  { input: [\"exciting\"], expected: \"gniticxe\" },\n  { input: [\"happy\"], expected: \"yppah\" },\n  { input: [\"a\"], expected: \"a\" },\n  { input: [\"aaaaaaaaaaaaz\"], expected: \"zaaaaaaaaaaaa\" },\n  { input: [\"jumping\"], expected: \"gnipmuj\" },\n  { input: [\"silly\"], expected: \"yllis\" },\n  { input: [\"zombie\"], expected: \"eibmoz\" },\n].forEach(({ input, expected }) => {\n  test(`${input[0]} -> ${expected}`, () => {\n    expect(reverseString(...input)).toBe(expected);\n  })\n})\n",
           "supplementaryContent": "Placeholder supplementary content..."
         },
         {
@@ -113,9 +113,9 @@
           "type": "typescript",
           "title": "Return the Length of an Array",
           "content": "Complete the function body below. The function will receive an array as input and should return the number of items in the array.",
-          "starterCode": "\nconst lengthOfArray = (array) => {\n  // Edit code here\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
-          "solutionCode": "\nconst lengthOfArray = (array) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n\n// Do not edit code below this line\nconst main = lengthOfArray;\n",
-          "testCode": "[{\"input\":[[1,2,3,4]],\"expected\":4},{\"input\":[[]],\"expected\":0},{\"input\":[[1,1,1,1,1,1,1,1,1]],\"expected\":9},{\"input\":[[3,3,3]],\"expected\":3},{\"input\":[[2]],\"expected\":1},{\"input\":[[7,7,7,7,7,7,7,7,7,7,7,7,7,7]],\"expected\":14}]",
+          "starterCode": "\nconst lengthOfArray = (array) => {\n  // Edit code here\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
+          "solutionCode": "\nconst lengthOfArray = (array) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
+          "testCode": "[\n  { input: [[1, 2, 3, 4]], expected: 4 },\n  { input: [[]], expected: 0 },\n  { input: [[1, 1, 1, 1, 1, 1, 1, 1, 1]], expected: 9 },\n  { input: [[3, 3, 3]], expected: 3 },\n  { input: [[2]], expected: 1 },\n  { input: [[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]], expected: 14 },\n].forEach(({ input, expected }) => {\n  test(input[0].join(\", \"), () => {\n    expect(lengthOfArray(...input)).toBe(expected);\n  });\n});\n",
           "supplementaryContent": "Placeholder supplementary content..."
         }
       ]
