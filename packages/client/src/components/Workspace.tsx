@@ -748,6 +748,10 @@ class Workspace extends React.Component<IProps, IState> {
         }
         case IFRAME_MESSAGE_TYPES.TEST_RESULTS: {
           const results = JSON.parse(message);
+          if (!Array.isArray(results)) {
+            console.warn('[bad things]', results);
+            break;
+          }
           this.setState({ tests: results });
           break;
         }

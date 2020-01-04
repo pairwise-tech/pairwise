@@ -179,6 +179,9 @@ export const createInjectDependenciesFunction = (
 
 /**
  * Inject test code into a code string.
+ *
+ * NOTE: Including the code twice, once up top and once wrapped within the test
+ * harness, seems necessary for the console to work. Not yet sure why...
  */
 export const injectTestCode = (challenge: Challenge) => (
   codeString: string,
@@ -194,6 +197,7 @@ export const injectTestCode = (challenge: Challenge) => (
   `;
   } else {
     return `
+    ${codeString}
       {
         ${removeConsole(codeString)}
         ${getTestCodeMarkup(testCode)}

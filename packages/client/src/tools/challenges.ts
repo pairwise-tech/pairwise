@@ -30,7 +30,7 @@ export enum IFRAME_MESSAGE_TYPES {
   WARN = "WARN",
   ERROR = "ERROR",
   TEST_RESULTS = "TEST_RESULTS",
-  TEST_ERROR = "TEST_RESULTS",
+  TEST_ERROR = "TEST_ERROR",
 }
 
 export interface IframeMessageEvent extends MessageEvent {
