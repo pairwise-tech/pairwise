@@ -1,4 +1,3 @@
-# FROM node:10-alpine AS image
 FROM cypress/base:10 AS image
 
 # Dockerize is needed to sync containers startup
