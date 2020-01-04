@@ -1,7 +1,7 @@
 import { HOST } from "../support/utils";
 
-describe("GitHub Account Creation Works", () => {
-  it("Workspace navigation next|prev controls works", () => {
+describe("Authentication Flows", () => {
+  it("GitHub Account Creation, Profile, and Logout Work", () => {
     cy.visit(HOST);
     cy.wait(500);
 
@@ -10,5 +10,16 @@ describe("GitHub Account Creation Works", () => {
 
     cy.wait(500);
     cy.contains("Welcome, ");
+
+    cy.get("#account-menu-dropdown").trigger("mouseover");
+    cy.get("#profile-link").click({ force: true });
+    cy.contains("User Profile:");
+
+    cy.get("#account-menu-dropdown").trigger("mouseover");
+    cy.get("#logout-link").click({ force: true });
+    cy.contains("Prototype X Home");
+
+    cy.contains("Login or Signup");
+    cy.url().should("include", "home");
   });
 });

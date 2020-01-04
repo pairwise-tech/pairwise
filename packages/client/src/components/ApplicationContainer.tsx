@@ -126,12 +126,16 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               )}
               {this.props.userAuthenticated && this.props.user ? (
                 <AccountDropdownButton>
-                  <div className="account-menu-dropdown">
+                  <div
+                    id="account-menu-dropdown"
+                    className="account-menu-dropdown"
+                  >
                     <CreateAccountText className="account-menu">
                       Welcome, {this.props.user.profile.givenName}!
                     </CreateAccountText>
                     <div className="dropdown-links">
                       <Link
+                        id="profile-link"
                         to="/profile"
                         style={{
                           borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
@@ -139,7 +143,11 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                       >
                         Profile
                       </Link>
-                      <Link onClick={this.handleLogout} to="/logout">
+                      <Link
+                        id="logout-link"
+                        onClick={this.handleLogout}
+                        to="/logout"
+                      >
                         Logout
                       </Link>
                     </div>
