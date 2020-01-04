@@ -31,8 +31,6 @@ services:
   client:
     image: runtime
     command: yarn client:prod
-    environment:
-      REACT_APP_HOST: http://server:9000
     expose:
       - 3000
 

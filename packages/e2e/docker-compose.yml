@@ -31,8 +31,6 @@ services:
   external-services:
     image: runtime
     command: yarn e2e:services
-    environment:
-      SERVER_URL: http://server:9000
     expose:
       - 7000
 

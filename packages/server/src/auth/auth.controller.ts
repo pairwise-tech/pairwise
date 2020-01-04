@@ -63,7 +63,6 @@ export class AuthController {
     };
     const user = await this.userService.findOrCreateUser(userProfile);
     const { accessToken } = this.authService.getJwtAccessToken(user);
-    console.log(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
     return res.redirect(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
   }
 }

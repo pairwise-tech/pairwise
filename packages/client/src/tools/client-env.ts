@@ -29,6 +29,8 @@ export const CODEPRESS_HOST = getenv.string(
   "http://localhost:3001",
 );
 
+console.log(`HOST: ${HOST}`);
+
 export const TEST = NODE_ENV === "test";
 export const DEVELOPMENT = NODE_ENV === "development";
 export const PRODUCTION = NODE_ENV === "production";
