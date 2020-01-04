@@ -59,9 +59,9 @@ export const validateCodeBlob = (blob: IUserCodeBlobDto) => {
       const { url, repo, timeLastWatched } = dataBlob;
       if (validateTimeLastWatched(timeLastWatched)) {
         throw new BadRequestException("Invalid timeLastWatched value received");
-      } else if (!validator.isUrl(url)) {
+      } else if (!validator.isURL(url)) {
         throw new BadRequestException("Invalid url value received for project");
-      } else if (!validator.isUrl(repo)) {
+      } else if (!validator.isURL(repo)) {
         throw new BadRequestException(
           "Invalid repo url value received for project",
         );

@@ -24,13 +24,13 @@ describe("Auth APIs", () => {
       });
   });
 
-  test("/auth/gihub (GET) - valid", () => {
+  /**
+   * NOTE: Not really a complete test yet. Need to figure out how to handle
+   * the initial redirection to GitHub first.
+   */
+  test("/auth/github (GET) - valid", () => {
     return request(`${HOST}/auth/github`)
       .get("/")
-      .expect(200)
-      .expect(response => {
-        console.log(response.body);
-        expect(response.body.accessToken).toBeDefined();
-      });
+      .expect(302);
   });
 });
