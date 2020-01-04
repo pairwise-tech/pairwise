@@ -1,8 +1,8 @@
-import { HOST } from "../support/utils";
+import { CLIENT_APP_URL } from "../support/utils";
 
 describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Prototype X", () => {
-    cy.visit(HOST);
+    cy.visit(CLIENT_APP_URL);
     cy.contains("Prototype X");
   });
 
@@ -13,7 +13,7 @@ describe("Workspace and Challenge Navigation Works", () => {
       return id;
     };
 
-    cy.visit(HOST);
+    cy.visit(CLIENT_APP_URL);
 
     cy.wait(2500);
     cy.url().should("include", "workspace");

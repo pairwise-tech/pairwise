@@ -1,8 +1,8 @@
-import { HOST } from "../support/utils";
+import { CLIENT_APP_URL } from "../support/utils";
 
 describe("Authentication Flows", () => {
   it("GitHub Account Creation, Profile, and Logout Work", () => {
-    cy.visit(HOST);
+    cy.visit(CLIENT_APP_URL);
     cy.wait(2500);
 
     cy.get("#login-signup-button").click({ force: true });
