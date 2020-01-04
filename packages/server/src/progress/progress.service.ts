@@ -13,10 +13,12 @@ import {
   ChallengeStatus,
   IUserCodeBlobDto,
   BlobTypeSet,
+  UserCourseStatus,
 } from "@prototype/common";
 import { UserCodeBlob } from "./userCodeBlob.entity";
 import { RequestUser } from "src/types";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
+import { validateCodeBlob } from "src/tools/validation";
 
 @Injectable()
 export class ProgressService {
@@ -48,6 +50,7 @@ export class ProgressService {
   ) {
     console.log("Service handling update challenge code:");
     const { courseId, challengeId, complete } = challengeProgressDto;
+    const user = await this.userService.findUserByEmail(requestUser.email);
 
     /**
      * Validate the input request:
@@ -58,6 +61,8 @@ export class ProgressService {
       !challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
     ) {
       throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
+    } else if (!user) {
+      throw new BadRequestException(ERROR_CODES.MISSING_USER);
     }
 
     console.log(
@@ -72,18 +77,14 @@ export class ProgressService {
       [challengeId]: statusObject,
     };
 
-    const user = await this.userService.findUserByEmail(requestUser.email);
-
     const existingEntry = await this.userProgressRepository.findOne({
       courseId,
       user,
     });
 
-    /* TODO: Validate input data. */
-
     if (existingEntry === undefined) {
       console.log("No entity exists, creating and inserting a new one!");
-      const newProgressEntry = {
+      const newProgressEntry: Partial<UserCourseProgress> = {
         user,
         courseId,
         progress: JSON.stringify(status),
@@ -94,7 +95,7 @@ export class ProgressService {
        */
       await this.userProgressRepository.insert(newProgressEntry);
     } else {
-      const updatedCourseProgress = {
+      const updatedCourseProgress: UserCourseStatus = {
         ...JSON.parse(existingEntry.progress),
         ...status,
       };
@@ -121,20 +122,14 @@ export class ProgressService {
     challengeCodeDto: IUserCodeBlobDto,
     requestUser: RequestUser,
   ) {
-    if (
-      !challengeUtilityClass.challengeIdIsValid(challengeCodeDto.challengeId)
-    ) {
-      throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
-    } else if (!challengeCodeDto.dataBlob.type) {
-      throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
-    } else {
-      const { type } = challengeCodeDto.dataBlob;
-      if (!BlobTypeSet.has(type)) {
-        throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
-      }
-    }
+    /* Validate everything in the code blob */
+    validateCodeBlob(challengeCodeDto);
 
     const user = await this.userService.findUserByEmail(requestUser.email);
+    if (!user) {
+      throw new BadRequestException(ERROR_CODES.MISSING_USER);
+    }
+
     const existingBlob = await this.userCodeBlobRepository.findOne({
       user,
       challengeId: challengeCodeDto.challengeId,

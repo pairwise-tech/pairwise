@@ -12,6 +12,12 @@ services:
     ports:
       - 5432
 
+  external-services:
+    image: runtime
+    command: yarn e2e:services
+    expose:
+      - 7000
+
   server:
     build: .
     image: runtime
@@ -27,9 +33,3 @@ services:
     depends_on:
       - db
       - external-services
-
-  external-services:
-    image: runtime
-    command: yarn e2e:services
-    expose:
-      - 7000

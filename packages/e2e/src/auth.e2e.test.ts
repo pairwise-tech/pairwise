@@ -23,4 +23,14 @@ describe("Auth APIs", () => {
         expect(response.body.accessToken).toBeDefined();
       });
   });
+
+  test("/auth/gihub (GET) - valid", () => {
+    return request(`${HOST}/auth/github`)
+      .get("/")
+      .expect(200)
+      .expect(response => {
+        console.log(response.body);
+        expect(response.body.accessToken).toBeDefined();
+      });
+  });
 });
