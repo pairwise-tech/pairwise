@@ -16,7 +16,7 @@ services:
       dockerfile: packages/e2e/Dockerfile
       args:
         # Set the damn React app variables!
-        - REACT_APP_HOST: http://server:9000
+        REACT_APP_HOST: http://server:9000
     image: runtime
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
     environment:
