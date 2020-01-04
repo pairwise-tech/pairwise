@@ -15,15 +15,7 @@ describe("Workspace and Challenge Navigation Works", () => {
 
     cy.visit(HOST);
 
-    /**
-     * Wait for the workspace to load.
-     *
-     * For some reason this takes WAY longer when running cypress:run.
-     *
-     * TODO: Create some programmatic way to determine if the workspace
-     * has loaded or not.
-     */
-    cy.wait(10000);
+    cy.wait(2500);
     cy.url().should("include", "workspace");
 
     let challengeId = "";
