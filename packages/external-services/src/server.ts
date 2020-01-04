@@ -4,6 +4,9 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import mockAuth from "./mock-auth";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 /** ===========================================================================
  * Types & Config
@@ -75,4 +78,5 @@ server.listen(PORT, () => {
   console.log(
     `\n- Mock external services listening at http://localhost:${PORT}`,
   );
+  console.log(`- Using server host url: ${SERVER}`);
 });

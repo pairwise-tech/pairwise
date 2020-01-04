@@ -26,7 +26,7 @@
     "format": "lerna run format",
     "test": "lerna run test",
     "build": "yarn common:build && lerna run build",
-    "e2e:services": "cd packages/external-services && yarn start",
+    "e2e:services": "cd packages/external-services && SERVER_URL=http://server:9000 yarn start",
     "test:e2e": "cd packages/e2e && HOST=http://server:9000 yarn test:e2e",
     "e2e": "docker-compose -f packages/e2e/docker-compose.yml up --build --abort-on-container-exit",
     "test:cypress": "cd packages/cypress && yarn cypress:ci",
