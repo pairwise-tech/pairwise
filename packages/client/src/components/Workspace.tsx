@@ -22,12 +22,12 @@ import {
   getTestCodeMarkup,
   IFRAME_MESSAGE_TYPES,
   IframeMessageEvent,
+  makeElementFactory,
   requestCodeFormatting,
   subscribeCodeWorker,
   TestCase,
-  TestCaseMarkup,
+  TestCaseMarkupTypescript,
   TestCaseReact,
-  TestCaseTypeScript,
   unsubscribeCodeWorker,
 } from "../tools/challenges";
 import {
@@ -620,28 +620,9 @@ class Workspace extends React.Component<IProps, IState> {
           </ContentText>
         );
       }
-      case "typescript": {
-        const { input } = t as TestCaseTypeScript;
-        return (
-          <ContentText
-            key={i}
-            style={{ display: "flex", flexDirection: "row" }}
-          >
-            <div style={{ width: 450 }}>
-              <b style={{ color: C.TEXT_TITLE }}>Input: </b>
-              {input.map(JSON.stringify).join(", ")}
-            </div>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-              <SuccessFailureText testResult={t.testResult}>
-                {t.testResult ? "Success!" : "Incomplete..."}
-              </SuccessFailureText>
-            </div>
-          </ContentText>
-        );
-      }
+      case "typescript":
       case "markup": {
-        const { message } = t as TestCaseMarkup;
+        const { message } = t as TestCaseMarkupTypescript;
         return (
           <ContentText
             key={i}
@@ -792,65 +773,59 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   iFrameRenderPreview = async () => {
-    const makeElementFactory = (
-      createElement: typeof document.createElement,
-    ) => {
-      return (tag: string, props: any) => {
-        const el = createElement(tag);
-        Object.keys(props).forEach(k => {
-          const v = props[k];
-          // @ts-ignore
-          el[k] = v;
-        });
-        return el;
-      };
-    };
+    // TODO!!!
+    // - put different parts in different script tags. I.e. test harness / bootstrap code, library code, then the actual tests
 
     // console.clear();
-    this.setState({ logs: DEFAULT_LOGS }, async () => {
-      if (this.iFrameRef && this.iFrameRef.contentWindow) {
-        try {
+    this.setState(
+      { logs: DEFAULT_LOGS },
+      async (): Promise<void> => {
+        if (!this.iFrameRef || !this.iFrameRef.contentWindow) {
+          console.warn("[ERROR] iframeDoc not defined");
+          return;
+        }
+
+        // Don't forget to bind createElement... not sure typescript can protect us form this one
+        // const el = makeElementFactory(iframeDoc.createElement.bind(iframeDoc));
+        const el = makeElementFactory(
+          this.iFrameRef.contentWindow.document.createElement.bind(
+            this.iFrameRef.contentWindow.document,
+          ),
+        );
+
+        /**
+         * Process the code string and create an HTML document to render
+         * to the iframe.
+         */
+        if (this.props.challenge.type === "markup") {
+          this.iFrameRef.srcdoc = this.state.code;
+
           /**
-           * Process the code string and create an HTML document to render
-           * to the iframe.
+           * Wait to allow the iframe to render the new HTML document
+           * before appending and running the test script.
            */
-          if (this.props.challenge.type === "markup") {
-            this.iFrameRef.srcdoc = this.state.code;
+          await wait(50);
 
-            /**
-             * Wait to allow the iframe to render the new HTML document
-             * before appending and running the test script.
-             */
-            await wait(50);
+          const markupTests = getTestCodeMarkup(this.props.challenge.testCode);
 
-            // Don't forget to bind createElement... not sure typescript can protect us form this one
-            const el = makeElementFactory(
-              this.iFrameRef.contentWindow.document.createElement.bind(
-                this.iFrameRef.contentWindow.document,
-              ),
-            );
+          const testScript = el("script", {
+            id: "test-script",
+            type: "text/javascript",
+            innerHTML: markupTests,
+          });
 
-            const markupTests = getTestCodeMarkup(
-              this.props.challenge.testCode,
-            );
-
-            const testScript = el("script", {
-              id: "test-script",
-              type: "text/javascript",
-              innerHTML: markupTests,
-            });
-
-            this.iFrameRef.contentWindow.document.body.appendChild(testScript);
-          } else {
+          this.iFrameRef.contentWindow.document.body.appendChild(testScript);
+        } else {
+          try {
             const code = await this.compileAndTransformCodeString();
             const sourceDocument = getMarkupForCodeChallenge(code);
             this.iFrameRef.srcdoc = sourceDocument;
+          } catch (err) {
+            this.handleCompilationError(err);
           }
-        } catch (err) {
-          this.handleCompilationError(err);
         }
-      }
-    });
+      },
+    );
   };
 
   compileAndTransformCodeString = async () => {

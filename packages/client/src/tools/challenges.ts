@@ -16,19 +16,13 @@ export interface TestCaseReact {
   testResult: boolean;
 }
 
-export interface TestCaseTypeScript {
-  input: any;
-  expected: any;
-  testResult: boolean;
-}
-
-export interface TestCaseMarkup {
+export interface TestCaseMarkupTypescript {
   test: string;
   message: string;
   testResult: boolean;
 }
 
-export type TestCase = TestCaseTypeScript | TestCaseReact | TestCaseMarkup;
+export type TestCase = TestCaseReact | TestCaseMarkupTypescript;
 
 export enum IFRAME_MESSAGE_TYPES {
   LOG = "LOG",
@@ -56,6 +50,9 @@ export interface CodeFormatMessageEvent extends MessageEvent {
   data: CodeFormatMessage;
 }
 
+// NOTE: Instatiating the worker right here at the top level feels off. Could
+// potentially cause build issues if we get too tricky with our build, but for
+// now this should be fine
 const codeWorker = new CodeFormatWorker();
 
 export const requestCodeFormatting = (message: CodeFormatMessage) => {
@@ -78,6 +75,46 @@ export const unsubscribeCodeWorker = (
  */
 
 /**
+ * Just a simpler (and more declarative) way to create dom elements. We need
+ * this for modifying the iframe
+ */
+export const makeElementFactory = (
+  createElement: typeof document.createElement,
+) => {
+  return (tag: string, props: { [k: string]: string }) => {
+    const el = createElement(tag);
+    Object.keys(props).forEach(k => {
+      const v = props[k];
+      // @ts-ignore
+      el[k] = v;
+    });
+    return el;
+  };
+};
+
+export const waitForDom = (
+  doc: typeof window.document,
+  timeout: number = 10000,
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(
+        new Error(`[DOM Timeout] Waited ${timeout}ms without DOM loaded event`),
+      );
+    }, timeout);
+
+    const listener = () => {
+      // Remove self before resolving
+      clearTimeout(timer);
+      doc.removeEventListener("DOMContentLoaded", listener);
+      resolve();
+    };
+
+    doc.addEventListener("DOMContentLoaded", listener);
+  });
+};
+
+/**
  * Some sample code to run provided tests against a challenge and post
  * the messages back to the app to render.
  *
@@ -85,7 +122,7 @@ export const unsubscribeCodeWorker = (
  * tested with expected input/output values.
  */
 export const getTestCodeTypeScript = (
-  testCases: ReadonlyArray<TestCaseTypeScript>,
+  testCases: ReadonlyArray<TestCaseMarkupTypescript>,
 ) => `
 let results = [];
 
@@ -111,6 +148,17 @@ window.getStyle = (el, cssProp) => {
   const style = view.getComputedStyle(el);
   return style.getPropertyValue(cssProp) || style[cssProp];
 }
+const assertEqual = (a, b) => {
+  if (a !== b) {
+    const typeA = typeof a;
+    const typeB = typeof b;
+    throw new Error(\`[Assertion Error] Expected \${typeA} argument \${a} to equal \${typeB} argument \${b}\`);
+  }
+  return true;
+}
+window.expect = (actual) => ({
+  toBe: (expected) => assertEqual(actual, expected)
+})
 
 function buildTestsFromCode() {
     const arr = [];
@@ -131,9 +179,14 @@ function runTests() {
 
   const results = tests.reduce((agg, { message, test }) => {
     try {
+      const _result = test();
+      // Tests that pass using expect will return undefined, since they don't return anything.
+      // TODO: At some point we will want to account for async tests, which will require
+      // changes here
+      const testResult = _result === undefined ? true : _result;
       return agg.concat([{
         message,
-        testResult: test(),
+        testResult: testResult,
         error: null,
       }])
     } catch (err) {

@@ -1,7 +1,7 @@
 import * as Babel from "@babel/standalone";
 
 import { Challenge } from "@prototype/common";
-import { getTestCodeReact, getTestCodeTypeScript } from "./challenges";
+import { getTestCodeMarkup, getTestCodeReact } from "./challenges";
 import DependencyCacheService from "./module-service";
 
 /** ===========================================================================
@@ -194,10 +194,9 @@ export const injectTestCode = (challenge: Challenge) => (
   `;
   } else {
     return `
-      ${codeString}
       {
         ${removeConsole(codeString)}
-        ${getTestCodeTypeScript(JSON.parse(testCode))}
+        ${getTestCodeMarkup(testCode)}
       }
     `;
   }
