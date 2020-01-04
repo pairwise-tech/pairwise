@@ -1,12 +1,12 @@
 import { HOST } from "../support/utils";
 
-describe("Workspace Load", () => {
+describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Prototype X", () => {
     cy.visit(HOST);
     cy.contains("Prototype X");
   });
 
-  it("Workspace navigation next|prev controls works", () => {
+  it("Workspace navigation next|prev controls work", () => {
     const getChallengeId = (url: string) => {
       const index = url.indexOf("workspace/");
       const id = url.slice(index + 10);

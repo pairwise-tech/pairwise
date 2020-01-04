@@ -147,6 +147,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 </AccountDropdownButton>
               ) : (
                 <AccountButton
+                  id="login-signup-button"
                   onClick={() => this.props.setSingleSignOnDialogState(true)}
                 >
                   <CreateAccountText>Login or Signup</CreateAccountText>

@@ -2,8 +2,9 @@
   "supportFile": "src/support/index.ts",
   "integrationFolder": "src/integration",
   "pluginsFile": "src/plugins/index.js",
-  "fixturesFolder": false,
   "video": false,
+  "fixturesFolder": false,
+  "chromeWebSecurity": false,
   "env": {
     "SERVER_HOST": "http://localhost:3000"
   }
