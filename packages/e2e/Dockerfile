@@ -1,12 +1,7 @@
-FROM dependencies as setup
-
-# Copy everything
-COPY . .
+FROM dependencies as build
 
 # Setup server environment
 RUN yarn server:setup
-
-FROM setup AS build
 
 # Set the damn React variable!
 ENV REACT_APP_HOST=http://server:9000

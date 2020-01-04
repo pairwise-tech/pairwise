@@ -1,12 +1,7 @@
-FROM dependencies as setup
-
-# Copy everything
-COPY . .
+FROM dependencies as build
 
 # Setup server environment
 RUN yarn server:setup
-
-FROM setup AS build
 
 # Uses Lerna to run the build command for all packages
 RUN yarn build
