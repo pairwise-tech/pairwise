@@ -6,6 +6,6 @@
   "fixturesFolder": false,
   "chromeWebSecurity": false,
   "env": {
-    "SERVER_HOST": "http://localhost:3000"
+    "SERVER_HOST": "https://localhost:3000"
   }
 }

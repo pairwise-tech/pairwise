@@ -1,6 +1,6 @@
 import { HOST } from "../support/utils";
 
-describe.skip("GitHub Account Creation Works", () => {
+describe("GitHub Account Creation Works", () => {
   it("Workspace navigation next|prev controls works", () => {
     cy.visit(HOST);
     cy.wait(500);

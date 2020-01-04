@@ -47,7 +47,7 @@ export class FacebookStrategy {
           fbGraphVersion: "v3.0",
           clientID: ENV.FB_APP_CLIENT_ID,
           clientSecret: ENV.FB_APP_CLIENT_SECRET,
-          profileURL: ENV.FB_OAUTH_SERVICE_URL,
+          profileURL: ENV.FB_OAUTH_PROFILE_URL,
         },
         async (
           accessToken: string,

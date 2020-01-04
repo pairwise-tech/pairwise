@@ -16,6 +16,8 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(bodyParser.json());
 
+const SERVER = process.env.SERVER_URL || "http://127.0.0.1:9000";
+
 /** ===========================================================================
  * API Endpoints
  * ----------------------------------------------------------------------------
@@ -37,7 +39,23 @@ app.get("/facebook/profile", (req, res) => {
 });
 
 /**
- * GitHub authentication request.
+ * GitHub authorization request.
+ */
+app.get("/github/authorize", (req, res) => {
+  res.redirect(`${SERVER}/auth/github/callback?code=4c409cbcfbd1e11cb6f3`);
+});
+
+/**
+ * Request for a GitHun access token.
+ */
+app.post("/github/token", (req, res) => {
+  res.send(
+    "access_token=61d5cfb6d0853016109fa997f85f4ad8fa2d5a44&scope=user%3Aemail&token_type=bearer",
+  );
+});
+
+/**
+ * Authenticated GitHub request for a user profile.
  */
 app.get("/github/profile", (req, res) => {
   const profile = mockAuth.generateNewGitHubProfile();

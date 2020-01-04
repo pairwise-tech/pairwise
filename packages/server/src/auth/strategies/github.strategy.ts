@@ -40,7 +40,9 @@ export class GitHubStrategy {
         {
           clientID: ENV.GITHUB_APP_CLIENT_ID,
           clientSecret: ENV.GITHUB_APP_CLIENT_SECRET,
-          userProfileURL: ENV.GITHUB_OAUTH_SERVICE_URL,
+          userProfileURL: ENV.GITHUB_OAUTH_PROFILE_URL,
+          tokenURL: ENV.GITHUB_OAUTH_TOKEN_URL,
+          authorizationURL: ENV.GITHUB_OAUTH_AUTHORIZATION_URL,
           callbackURL: `${ENV.SERVER_HOST_URL}/auth/github/callback`,
         },
         async (accessToken, refreshToken, profile, done) => {
