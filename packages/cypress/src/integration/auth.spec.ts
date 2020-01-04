@@ -3,12 +3,12 @@ import { HOST } from "../support/utils";
 describe("Authentication Flows", () => {
   it("GitHub Account Creation, Profile, and Logout Work", () => {
     cy.visit(HOST);
-    cy.wait(500);
+    cy.wait(2500);
 
-    cy.get("#login-signup-button").click();
-    cy.get("#github-login").click();
+    cy.get("#login-signup-button").click({ force: true });
+    cy.get("#github-login").click({ force: true });
 
-    cy.wait(500);
+    cy.wait(2500);
     cy.contains("Welcome, ");
 
     cy.get("#account-menu-dropdown").trigger("mouseover");
