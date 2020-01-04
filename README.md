@@ -7,13 +7,14 @@
 To get started, install Docker and then run:
 
 ```bash
+# Build the Docker image which has all dependencies installed
+$ yarn docker:build
+
 # Launch the database and backend services
 $ docker-compose up
 
 # Launch the client application
 $ yarn client:dev
-# or
-$ yarn client:https
 ```
 
 For more detailed control, see the following commands:
@@ -49,9 +50,14 @@ $ yarn client
 
 ## Running Tests
 
+Please note that there is a separate Dockerfile, `DockerfileBase`, which builds an image containing all dependencies for the project. This can be built using `yarn docker:build` and is used by various `docker-compose` commands. You should build this first, and only rebuild it if some project dependencies have changed and need to be re-installed.
+
 ```bash
 # Use Lerna to run the test script for each package
 $ yarn test
+
+# Build the Docker image which has all dependencies installed
+$ yarn docker:build
 
 # Run the external services server locally
 $ yarn e2e:services
@@ -78,6 +84,9 @@ $ yarn build
 
 # Lerna bootstrap installs and links package dependencies
 $ lerna bootstrap
+
+# Build the Docker image which has all dependencies installed
+$ yarn docker:build
 ```
 
 ## Repository Structure
