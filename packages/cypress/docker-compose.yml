@@ -19,6 +19,7 @@ services:
     environment:
       TYPEORM_HOST: db
       FB_OAUTH_SERVICE_URL: http://external-services:7000/facebook/profile
+      GITHUB_OAUTH_SERVICE_URL: http://external-services:7000/github/profile
     expose:
       - 9000
     depends_on:

@@ -1,9 +1,9 @@
 import http from "http";
 import bodyParser from "body-parser";
-import faker from "faker";
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
+import mockAuth from "./mock-auth";
 
 /** ===========================================================================
  * Types & Config
@@ -32,18 +32,15 @@ app.get("/", (req, res) =>
  * Facebook authentication request.
  */
 app.get("/facebook/profile", (req, res) => {
-  const first = faker.name.firstName();
-  const last = faker.name.lastName();
-  const name = `${first} ${last}`;
+  const profile = mockAuth.generateNewFacebookProfile();
+  res.json(profile);
+});
 
-  const profile = {
-    name,
-    first_name: first,
-    last_name: last,
-    id: faker.random.uuid(),
-    email: faker.internet.email(),
-  };
-
+/**
+ * GitHub authentication request.
+ */
+app.get("/github/profile", (req, res) => {
+  const profile = mockAuth.generateNewGitHubProfile();
   res.json(profile);
 });
 
@@ -57,5 +54,7 @@ const PORT = 7000;
 const server = http.createServer(app);
 
 server.listen(PORT, () => {
-  console.log(`Mock server listening at http://localhost:${PORT}`);
+  console.log(
+    `\n- Mock external services listening at http://localhost:${PORT}`,
+  );
 });

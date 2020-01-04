@@ -365,9 +365,12 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   disposeModels = () => {
-    const models = this.monacoEditor.editor.getModels();
-    for (const model of models) {
-      model.dispose();
+    /* ??? */
+    if (this.monacoEditor) {
+      const models = this.monacoEditor.editor.getModels();
+      for (const model of models) {
+        model.dispose();
+      }
     }
   };
 

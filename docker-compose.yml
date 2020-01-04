@@ -18,9 +18,8 @@ services:
     command: dockerize -wait tcp://db:5432 -wait tcp://external-services:7000 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
-      # Control how the Facebook OAuth API resolves:
-      # FB_OAUTH_SERVICE_URL: http://localhost:7000/facebook/profile
       FB_OAUTH_SERVICE_URL: http://external-services:7000/facebook/profile
+      GITHUB_OAUTH_SERVICE_URL: http://external-services:7000/github/profile
     expose:
       - 9000
     ports:
