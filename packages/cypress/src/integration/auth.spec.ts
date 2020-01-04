@@ -8,7 +8,7 @@ describe("Authentication Flows", () => {
     cy.get("#login-signup-button").click();
     cy.get("#github-login").click();
 
-    cy.wait(500);
+    cy.wait(10000);
     cy.contains("Welcome, ");
 
     cy.get("#account-menu-dropdown").trigger("mouseover");
