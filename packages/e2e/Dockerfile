@@ -37,19 +37,14 @@ RUN yarn server:setup
 
 FROM dependencies AS build
 
-# Set the damn React app variables!
-ENV REACT_APP_HOST=http://server:9000
-
 # Uses Lerna to run the build command for all packages
 RUN yarn build
 
 FROM build AS test
 
-COPY . .
-
 # Uses Lerna to run the test command for all packages
-# RUN yarn test
+RUN yarn test
 
-# FROM test AS runtime
+FROM test AS runtime
 
-# COPY . .
+COPY . .
