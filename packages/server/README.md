@@ -28,12 +28,6 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
-
-```bash
-$ yarn install
-```
-
 ## Setup
 
 ```bash
@@ -69,9 +63,6 @@ $ yarn start:prod
 ```bash
 # unit tests
 $ yarn test
-
-# e2e tests
-$ yarn test:e2e
 
 # test coverage
 $ yarn test:cov

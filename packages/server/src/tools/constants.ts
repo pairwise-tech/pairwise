@@ -10,6 +10,7 @@ enum ERROR_CODES {
   INVALID_COURSE_ID = "The courseId is invalid",
   INVALID_CHALLENGE_ID = "The challengeId is invalid",
   INVALID_CODE_BLOB = "The code blob is invalid",
+  MISSING_USER = "No user could be found",
 }
 
 enum SUCCESS_CODES {

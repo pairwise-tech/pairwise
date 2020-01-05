@@ -129,38 +129,28 @@ class Api extends BaseApiClass {
   };
 
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
-    if (ENV.DEV_MODE) {
-      const course = await this.codepressApi
-        .getAll()
-        .pipe(map(x => x[0]))
-        .toPromise();
-      return Ok.of(course);
-    } else {
-      const c = require("@prototype/common").default;
-      return new Ok(c.FullstackTypeScript);
-    }
-    // try {
-    //   let course: Course;
-    //   if (ENV.DEV_MODE) {
-    //     // TODO: This is not great code, it's just that we're in the middle of a big refactor. In the future, we should standardize a few things, including:
-    //     // - How we do async. I.e. Observables, Promises, fetch, axios, lots of redundancy
-    //     // - Arrays of things (CourseList) vs things themselves (Course)
-    //     course = await this.codepressApi
-    //       .getAll()
-    //       .pipe(map(x => x[0]))
-    //       .toPromise();
-    //   } else {
-    //     const headers = this.getRequestHeaders();
-    //     const result = await axios.get<Course>(`${HOST}/challenges`, {
-    //       headers,
-    //     });
-    //     course = result.data;
-    //   }
+    try {
+      let course: Course;
+      if (ENV.DEV_MODE) {
+        // TODO: This is not great code, it's just that we're in the middle of a big refactor. In the future, we should standardize a few things, including:
+        // - How we do async. I.e. Observables, Promises, fetch, axios, lots of redundancy
+        // - Arrays of things (CourseList) vs things themselves (Course)
+        course = await this.codepressApi
+          .getAll()
+          .pipe(map(x => x[0]))
+          .toPromise();
+      } else {
+        const headers = this.getRequestHeaders();
+        const result = await axios.get<Course>(`${HOST}/challenges`, {
+          headers,
+        });
+        course = result.data;
+      }
 
-    //   return new Ok(course);
-    // } catch (err) {
-    //   return this.handleHttpError(err);
-    // }
+      return new Ok(course);
+    } catch (err) {
+      return this.handleHttpError(err);
+    }
   };
 
   fetchUserProfile = async () => {

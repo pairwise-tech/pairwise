@@ -87,7 +87,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 onClick={this.props.toggleNavigationMap}
               />
               <Link to="/home">
-                <ProductTitle>Prototype X</ProductTitle>
+                <ProductTitle id="product-title">Prototype X</ProductTitle>
               </Link>
             </ControlsContainer>
             {DEV_MODE && (
@@ -101,6 +101,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                   {prev && (
                     <StyledTooltip title="Previous Challenge">
                       <IconButton
+                        id="prevButton"
                         style={{ color: "white" }}
                         aria-label="Previous Challenge"
                         onClick={() => this.props.selectChallenge(prev.id)}
@@ -112,6 +113,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                   {next && (
                     <StyledTooltip title="Next Challenge">
                       <IconButton
+                        id="nextButton"
                         style={{ color: "white" }}
                         aria-label="Next Challenge"
                         onClick={() => this.props.selectChallenge(next.id)}
@@ -124,12 +126,16 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               )}
               {this.props.userAuthenticated && this.props.user ? (
                 <AccountDropdownButton>
-                  <div className="account-menu-dropdown">
+                  <div
+                    id="account-menu-dropdown"
+                    className="account-menu-dropdown"
+                  >
                     <CreateAccountText className="account-menu">
                       Welcome, {this.props.user.profile.givenName}!
                     </CreateAccountText>
                     <div className="dropdown-links">
                       <Link
+                        id="profile-link"
                         to="/profile"
                         style={{
                           borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
@@ -137,7 +143,11 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                       >
                         Profile
                       </Link>
-                      <Link onClick={this.handleLogout} to="/logout">
+                      <Link
+                        id="logout-link"
+                        onClick={this.handleLogout}
+                        to="/logout"
+                      >
                         Logout
                       </Link>
                     </div>
@@ -145,6 +155,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 </AccountDropdownButton>
               ) : (
                 <AccountButton
+                  id="login-signup-button"
                   onClick={() => this.props.setSingleSignOnDialogState(true)}
                 >
                   <CreateAccountText>Login or Signup</CreateAccountText>

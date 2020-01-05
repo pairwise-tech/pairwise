@@ -1,8 +1,10 @@
-import { someUtil } from "../tools/utils";
+import { assertUnreachable } from "../tools/utils";
 
 describe("Tools > Utils", () => {
-  test("someUtil", () => {
-    const result = someUtil("hi!");
-    expect(result).toBe("hi!");
+  test("assertUnreachable", () => {
+    expect(() => {
+      // @ts-ignore
+      assertUnreachable({ value: "some value " });
+    }).toThrow();
   });
 });

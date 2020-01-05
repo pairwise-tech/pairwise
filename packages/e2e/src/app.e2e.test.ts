@@ -7,10 +7,10 @@ import { HOST } from "./utils/e2e-utils";
  */
 
 describe("AppController (e2e)", () => {
-  test("/ (GET)", () => {
+  test("/ (GET) index route", () => {
     return request(HOST)
       .get("/")
       .expect(200)
-      .expect("Hello World!");
+      .expect("Hello from the Nest Application!");
   });
 });

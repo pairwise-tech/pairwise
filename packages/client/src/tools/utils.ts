@@ -2,16 +2,6 @@ import { Challenge } from "@prototype/common";
 import { compose } from "redux";
 
 /**
- * Assert a condition cannot occur. Used for writing exhaustive switch
- * blocks (e.g. see unwrapOkValueIfExists).
- */
-export const assertUnreachable = (x: never): never => {
-  throw new Error(
-    `Panic! Received a value which should not exist: ${JSON.stringify(x)}`,
-  );
-};
-
-/**
  * Artificially wait the provided amount of time.
  */
 export const wait = async (time: number = 1000) => {
