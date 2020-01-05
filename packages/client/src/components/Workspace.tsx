@@ -19,7 +19,7 @@ import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
 import { DEV_MODE } from "tools/client-env";
 import {
-  getTestCodeMarkup,
+  getTestHarness,
   IFRAME_MESSAGE_TYPES,
   IframeMessageEvent,
   makeElementFactory,
@@ -749,7 +749,7 @@ class Workspace extends React.Component<IProps, IState> {
         case IFRAME_MESSAGE_TYPES.TEST_RESULTS: {
           const results = JSON.parse(message);
           if (!Array.isArray(results)) {
-            console.warn('[bad things]', results);
+            console.warn("[bad things]", results);
             break;
           }
           this.setState({ tests: results });
@@ -785,7 +785,7 @@ class Workspace extends React.Component<IProps, IState> {
       { logs: DEFAULT_LOGS },
       async (): Promise<void> => {
         if (!this.iFrameRef || !this.iFrameRef.contentWindow) {
-          console.warn("[ERROR] iframeDoc not defined");
+          console.warn("[ERROR] iframe not yet mounted");
           return;
         }
 
@@ -802,6 +802,7 @@ class Workspace extends React.Component<IProps, IState> {
          * to the iframe.
          */
         if (this.props.challenge.type === "markup") {
+          // Since the user is writing HTML, set the source doc directly based on their code
           this.iFrameRef.srcdoc = this.state.code;
 
           /**
@@ -810,7 +811,7 @@ class Workspace extends React.Component<IProps, IState> {
            */
           await wait(50);
 
-          const markupTests = getTestCodeMarkup(this.props.challenge.testCode);
+          const markupTests = getTestHarness(this.props.challenge.testCode);
 
           const testScript = el("script", {
             id: "test-script",
@@ -832,8 +833,9 @@ class Workspace extends React.Component<IProps, IState> {
     );
   };
 
+  // TODO: Why is this async? 
   compileAndTransformCodeString = async () => {
-    const { code, dependencies } = stripAndExtractModuleImports(
+    const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
       this.state.code,
     );
 
@@ -845,8 +847,6 @@ class Workspace extends React.Component<IProps, IState> {
         : dependencies,
     );
 
-    const injectTestCodeFn = injectTestCode(this.props.challenge);
-
     /**
      * What happens here:
      *
@@ -856,11 +856,11 @@ class Workspace extends React.Component<IProps, IState> {
      * - Fetch and inject required modules into code string
      */
     const processedCodeString = pipe(
-      injectTestCodeFn,
+      injectTestCode(this.props.challenge.testCode),
       hijackConsole,
       transpileCodeWithBabel,
       injectModuleDependenciesFn,
-    )(code);
+    )(sourceCode);
 
     return processedCodeString;
   };

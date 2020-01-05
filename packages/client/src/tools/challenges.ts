@@ -140,7 +140,7 @@ window.parent.postMessage({
 /**
  * Get the test code string for a markup challenge.
  */
-export const getTestCodeMarkup = (testCode: string): string => `
+export const getTestHarness = (testCode: string): string => `
 window.$ = (...args) => document.querySelector(...args);
 window.$$ = (...args) => Array.prototype.slice.call(document.querySelectorAll(...args));
 window.getStyle = (el, cssProp) => {

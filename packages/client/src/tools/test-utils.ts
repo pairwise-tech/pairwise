@@ -1,7 +1,7 @@
 import * as Babel from "@babel/standalone";
 
 import { Challenge } from "@prototype/common";
-import { getTestCodeMarkup, getTestCodeReact } from "./challenges";
+import { getTestHarness } from "./challenges";
 import DependencyCacheService from "./module-service";
 
 /** ===========================================================================
@@ -109,7 +109,7 @@ export const hijackConsole = (codeString: string) => {
  * create problems if the console statement was written inline with some
  * real code, which would then no longer execute...
  */
-export const removeConsole = (codeString: string) => {
+export const stripConsoleCalls = (codeString: string) => {
   return codeString
     .replace(/console.log/g, "// ")
     .replace(/console.info/g, "// ")
@@ -183,27 +183,15 @@ export const createInjectDependenciesFunction = (
  * NOTE: Including the code twice, once up top and once wrapped within the test
  * harness, seems necessary for the console to work. Not yet sure why...
  */
-export const injectTestCode = (challenge: Challenge) => (
-  codeString: string,
-) => {
-  const { type, testCode } = challenge;
-  if (type === "react") {
-    return `
-    ${codeString}
+export const injectTestCode = (testCode: string) => (codeString: string) => {
+  return `
+  /* Via injectTestCode */
+  ${codeString}
     {
-      ${removeConsole(codeString)}
-      ${getTestCodeReact(JSON.parse(testCode))}
+      ${stripConsoleCalls(codeString)}
+      ${getTestHarness(testCode)}
     }
   `;
-  } else {
-    return `
-    ${codeString}
-      {
-        ${removeConsole(codeString)}
-        ${getTestCodeMarkup(testCode)}
-      }
-    `;
-  }
 };
 
 /**
