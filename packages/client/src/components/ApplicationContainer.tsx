@@ -87,7 +87,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 onClick={this.props.toggleNavigationMap}
               />
               <Link to="/home">
-                <ProductTitle>Prototype X</ProductTitle>
+                <ProductTitle id="product-title">Prototype X</ProductTitle>
               </Link>
             </ControlsContainer>
             {DEV_MODE && (

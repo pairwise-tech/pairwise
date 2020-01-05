@@ -3,7 +3,7 @@ import { CLIENT_APP_URL } from "../support/utils";
 describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Prototype X", () => {
     cy.visit(CLIENT_APP_URL);
-    cy.contains("Prototype X");
+    cy.get("#product-title").contains("Prototype X");
   });
 
   it("Workspace navigation next|prev controls work", () => {
