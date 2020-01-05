@@ -25,7 +25,7 @@ const generateEmptyChallenge = (): Challenge => ({
   type: "markup",
   title: "[EMPTY...]",
   content: "",
-  testCode: "[]",
+  testCode: "// test('message', () => expect(...))",
   videoUrl: "",
   starterCode: "",
   solutionCode: "",
