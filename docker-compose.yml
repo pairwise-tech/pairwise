@@ -20,7 +20,7 @@ services:
 
   external-services:
     image: runtime
-    command: yarn e2e:services
+    command: yarn services:start
     expose:
       - 7000
     ports:

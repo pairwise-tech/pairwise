@@ -10,6 +10,7 @@
   "typings": "dist/server.d.ts",
   "scripts": {
     "build": "tsc",
+    "watch": "concurrently \"yarn build -- -w\" \"nodemon --inspect ./dist/server.js\"",
     "format": "yarn prettier:fix && yarn tslint:fix",
     "lint": "yarn prettier && yarn tslint",
     "prettier": "prettier --list-different \"src/**/*.ts\"",
@@ -17,8 +18,7 @@
     "start": "node ./dist/server.js",
     "test": "yarn lint",
     "tslint": "tslint --project tsconfig.json -c tslint.json",
-    "tslint:fix": "tslint --project tsconfig.json -c tslint.json --fix",
-    "watch": "concurrently \"yarn build -- -w\" \"nodemon --inspect ./dist/server.js\""
+    "tslint:fix": "tslint --project tsconfig.json -c tslint.json --fix"
   },
   "devDependencies": {
     "@types/faker": "^4.1.8",

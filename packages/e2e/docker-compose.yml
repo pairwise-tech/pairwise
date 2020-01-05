@@ -33,7 +33,7 @@ services:
 
   external-services:
     image: pairwise
-    command: yarn e2e:services
+    command: yarn services:start
     environment:
       SERVER_URL: http://server:9000
     expose:
