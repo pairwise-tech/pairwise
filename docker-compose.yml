@@ -1,5 +1,11 @@
 version: "3.5"
 
+# This docker-compose file deploys the backend application: the database,
+# the server, and the mock external services. This can be used to easily run
+# the entire backend application in order to develop the frontend, or to
+# write Cypress tests. This file uses a Dockerfile defined in the package
+# external-services.
+
 services:
   db:
     image: postgres:11.2
@@ -10,7 +16,15 @@ services:
     expose:
       - 5432
     ports:
-      - "5432:5432"
+      - 5432
+
+  external-services:
+    image: runtime
+    command: yarn services:start
+    expose:
+      - 7000
+    ports:
+      - "7000:7000"
 
   server:
     build: .
@@ -18,9 +32,11 @@ services:
     command: dockerize -wait tcp://db:5432 -wait tcp://external-services:7000 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
-      # NOTE: Control how the Facebook OAuth API resolves:
-      # FB_OAUTH_SERVICE_URL: http://localhost:7000/facebook/profile
-      FB_OAUTH_SERVICE_URL: http://external-services:7000/facebook/profile
+      CLIENT_APP_URL: http://127.0.0.1:3000
+      FB_PROFILE_URL: http://127.0.0.1:7000/facebook/profile
+      GITHUB_PROFILE_URL: http://external-services:7000/github/profile
+      GITHUB_TOKEN_URL: http://external-services:7000/github/token
+      GITHUB_AUTHORIZATION_URL: http://127.0.0.1:7000/github/authorize
     expose:
       - 9000
     ports:
@@ -28,9 +44,3 @@ services:
     depends_on:
       - db
       - external-services
-
-  external-services:
-    image: runtime
-    command: yarn e2e:services
-    expose:
-      - 7000

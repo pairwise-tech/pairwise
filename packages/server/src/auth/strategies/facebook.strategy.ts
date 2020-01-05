@@ -45,9 +45,9 @@ export class FacebookStrategy {
       new FacebookTokenStrategy(
         {
           fbGraphVersion: "v3.0",
+          profileURL: ENV.FB_PROFILE_URL,
           clientID: ENV.FB_APP_CLIENT_ID,
           clientSecret: ENV.FB_APP_CLIENT_SECRET,
-          profileURL: ENV.FB_OAUTH_SERVICE_URL,
         },
         async (
           accessToken: string,

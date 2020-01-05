@@ -1,4 +1,7 @@
 version: "3.5"
+
+# This docker-compose file runs the Postgres database.
+
 services:
   db:
     image: postgres:11.2
