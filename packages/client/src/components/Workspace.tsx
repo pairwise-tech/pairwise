@@ -6,7 +6,7 @@ import CodeFormatWorker from "workerize-loader!../tools/prettier-code-formatter"
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
-import { IconButton } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
 import FormatLineSpacing from "@material-ui/icons/FormatLineSpacing";
 import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";

@@ -1,4 +1,4 @@
-import { Modal } from "@material-ui/core";
+import Modal from "@material-ui/core/Modal";
 import React from "react";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
