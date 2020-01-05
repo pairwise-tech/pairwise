@@ -367,13 +367,15 @@ class Workspace extends React.Component<IProps, IState> {
    * just do a fire-and-forget state update regardless, but with all the
    * imperative logic going on with the editor this keeps it from updating
    * unecessarily.
+   *
+   * NOTE: When switching to the solution code default to start code
    */
   handleEditorTabClick = (tab: IState["adminEditorTab"]) => {
     if (tab !== this.state.adminEditorTab) {
       this.setState(
         {
           adminEditorTab: tab,
-          code: this.props.challenge[tab],
+          code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
         },
         this.refreshEditor,
       );
