@@ -180,6 +180,9 @@ class Workspace extends React.Component<IProps, IState> {
     this.props.unlockVerticalScrolling();
     this.resetMonacoEditor();
     this.setMonacoEditorValue();
+    if (this.iFrameRef) {
+      this.iFrameRenderPreview();
+    }
   };
 
   componentWillReceiveProps(nextProps: IProps) {
@@ -385,9 +388,7 @@ class Workspace extends React.Component<IProps, IState> {
       // the only tab from the perspective of endusers so this should only ever
       // happen when we are editing via codepress.
       if (tab === "testResults") {
-        this.setState({
-          adminTestTab: tab,
-        });
+        this.setState({ adminTestTab: tab }, this.refreshEditor);
       } else {
         this.setState({ adminTestTab: tab });
       }

@@ -90,7 +90,7 @@
           "testCode": "test(\"There should be a div\", () => {\n  expect($(\"div\")).toBeTruthy();\n});\n\ntest(\"The h1 and p tags are within the div\", () => {\n  expect($(\"div h1\")).toBeTruthy();\n  expect($(\"div p\")).toBeTruthy();\n});\n\ntest(\"Body should have orange background\", () => {\n  const body = $(\"body\");\n  const bg = getStyle(body, \"background-color\");\n  expect(\"rgb(255, 165, 0)\").toBe(bg);\n});\n\ntest(\"Div should have a teal background\", () => {\n  const el = $(\"div\");\n  const bg = getStyle(el, \"background-color\");\n  expect(\"rgb(0, 128, 128)\").toBe(bg);\n});\n",
           "videoUrl": "",
           "starterCode": "<h1>Oh what a day</h1>\n<p>\n  A wonderful day to start wrapping some divs!\n</p>\n",
-          "solutionCode": "<style>\n    body {\n        background: orange;\n    }\n    div {\n      background: teal;\n    }\n    </style>\n<div>\n  <h1>Oh what a day</h1>\n  <p>\n    A wonderful day to start wrapping some divs!\n  </p>\n</div>",
+          "solutionCode": "<style>\n  body {\n    background: orange;\n  }\n  div {\n    background: teal;\n  }\n</style>\n<div>\n  <h1>Oh what a day</h1>\n  <p>\n    A wonderful day to start wrapping some divs!\n  </p>\n</div>\n",
           "supplementaryContent": ""
         }
       ]
