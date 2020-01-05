@@ -33,6 +33,8 @@ services:
     command: yarn client:prod
     expose:
       - 3000
+    ports:
+      - 3000
 
   external-services:
     image: runtime
