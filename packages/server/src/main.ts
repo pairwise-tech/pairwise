@@ -46,8 +46,6 @@ const main = async () => {
   console.log(`\n- NestJS app launched on:    http://localhost:${PORT}/`);
   console.log(`- View Swagger API docs:     http://localhost:${PORT}/api\n`);
   console.log(`Learn to code!\n`);
-
-  console.log(ENV);
 };
 
 main();
