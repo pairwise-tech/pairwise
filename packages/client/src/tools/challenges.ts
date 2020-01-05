@@ -157,7 +157,9 @@ const assertEqual = (a, b) => {
   return true;
 }
 window.expect = (actual) => ({
-  toBe: (expected) => assertEqual(actual, expected)
+  toBe: (expected) => assertEqual(actual, expected),
+  toBeTruthy: () => assertEqual(Boolean(actual), true),
+  toBeFalsy: () => assertEqual(!Boolean(actual), false),
 })
 
 function buildTestsFromCode() {

@@ -1,6 +1,5 @@
 import * as Babel from "@babel/standalone";
 
-import { Challenge } from "@prototype/common";
 import { getTestHarness } from "./challenges";
 import DependencyCacheService from "./module-service";
 
