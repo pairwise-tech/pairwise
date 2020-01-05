@@ -813,7 +813,6 @@ class Workspace extends React.Component<IProps, IState> {
             innerHTML: markupTests,
           });
 
-          // debugger;
           this.iFrameRef.contentWindow.document.body.appendChild(testScript);
         } else {
           try {

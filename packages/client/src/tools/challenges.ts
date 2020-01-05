@@ -115,29 +115,6 @@ export const waitForDom = (
 };
 
 /**
- * Some sample code to run provided tests against a challenge and post
- * the messages back to the app to render.
- *
- * Regular TypeScript challenges export simple functions which can just be
- * tested with expected input/output values.
- */
-export const getTestCodeTypeScript = (
-  testCases: ReadonlyArray<TestCaseMarkupTypescript>,
-) => `
-let results = [];
-
-for (const x of ${JSON.stringify(testCases)}) {
-  const { input, expected } = x;
-  results.push(main(...input) === expected);
-}
-
-window.parent.postMessage({
-  message: JSON.stringify(results),
-  source: "TEST_RESULTS",
-});
-`;
-
-/**
  * Get the test code string for a markup challenge.
  */
 export const getTestHarness = (testCode: string): string => `
@@ -148,11 +125,17 @@ window.getStyle = (el, cssProp) => {
   const style = view.getComputedStyle(el);
   return style.getPropertyValue(cssProp) || style[cssProp];
 }
-const assertEqual = (a, b) => {
+window.assert = (condition, message = 'Assertion Failed') => {
+  if (!condition) {
+    throw new Error(message);
+  }
+  return true;
+}
+window.assertEqual = (a, b) => {
   if (a !== b) {
     const typeA = typeof a;
     const typeB = typeof b;
-    throw new Error(\`[Assertion Error] Expected \${typeA} argument \${a} to equal \${typeB} argument \${b}\`);
+    throw new Error(\`[Assert] Expected \${typeA} argument \${a} to equal \${typeB} argument \${b}\`);
   }
   return true;
 }
@@ -160,6 +143,9 @@ window.expect = (actual) => ({
   toBe: (expected) => assertEqual(actual, expected),
   toBeTruthy: () => assertEqual(Boolean(actual), true),
   toBeFalsy: () => assertEqual(!Boolean(actual), false),
+  toContain: (val) => {
+    assert(actual.includes(val), \`\${val} not found in \${arr.join(',')}\`)
+  },
 })
 
 function buildTestsFromCode() {
