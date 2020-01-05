@@ -4,7 +4,7 @@ import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 import { connect } from "react-redux";
 import { GithubLoginButton } from "react-social-login-buttons";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import * as ENV from "tools/client-env";
