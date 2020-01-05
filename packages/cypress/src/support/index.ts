@@ -14,7 +14,7 @@
 // ***********************************************************
 
 Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
+  screenshotOnRunFailure: true,
 });
 
 // Import commands.js using ES2015 syntax:

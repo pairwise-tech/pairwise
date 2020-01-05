@@ -25,6 +25,8 @@ services:
       GITHUB_AUTHORIZATION_URL: http://external-services:7000/github/authorize
     expose:
       - 9000
+    ports:
+      - "9000:9000"
     depends_on:
       - db
 
@@ -34,7 +36,7 @@ services:
     expose:
       - 3000
     ports:
-      - 3000
+      - "3000:3000"
 
   external-services:
     image: runtime
@@ -52,3 +54,5 @@ services:
       - server
       - client
       - external-services
+    volumes:
+      - ./screenshots:/usr/app/packages/cypress/screenshots
