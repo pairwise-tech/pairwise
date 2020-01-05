@@ -1,4 +1,4 @@
-# Cypress e2e Test Suite
+# Pairwise Cypress Test Suite
 
 A full end to end test suite for the entire application using Cypress, which runs against the actual backend. This test suite can be run using Docker from the root directory, and runs in CI for pull requests and deploys.
 

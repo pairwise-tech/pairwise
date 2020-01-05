@@ -1,6 +1,6 @@
 # Welcome to Pairwise!
 
-**Pairwise** includes a Create React App client application, a NestJS server application, and other various services, all organized in a monorepo using Lerna.
+The **Pairwise** codebase includes a React app client application, a NestJS server application, and other various services, all organized in a monorepo using Lerna.
 
 ## Structure
 
