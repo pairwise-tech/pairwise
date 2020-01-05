@@ -88,7 +88,7 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 interface IState {
   code: string;
   fullScreenEditor: boolean;
-  tests: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
+  testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
   adminEditorTab: "starterCode" | "solutionCode";
   adminTestTab: "testResults" | "testCode";
@@ -123,11 +123,8 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    // const tests = JSON.parse(this.props.challenge.testCode);
-    const tests: any[] = [];
-
     this.state = {
-      tests,
+      testResults: [],
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
@@ -189,11 +186,9 @@ class Workspace extends React.Component<IProps, IState> {
     // Update in response to changing challenge
     if (this.props.challenge.id !== nextProps.challenge.id) {
       const { challenge } = nextProps;
-      // const tests = JSON.parse(challenge.testCode);
-      const tests: any[] = []; // Reset tests... TODO: Is this what I want here?
       const newCode = this.getEditorCode(challenge);
       this.setState(
-        { code: newCode, tests, adminTestTab: "testResults" },
+        { code: newCode, adminTestTab: "testResults" },
         this.refreshEditor,
       );
     }
@@ -392,7 +387,6 @@ class Workspace extends React.Component<IProps, IState> {
       if (tab === "testResults") {
         this.setState({
           adminTestTab: tab,
-          // tests: JSON.parse(this.props.challenge.testCode), // See NOTE
         });
       } else {
         this.setState({ adminTestTab: tab });
@@ -401,7 +395,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { fullScreenEditor, tests } = this.state;
+    const { fullScreenEditor, testResults } = this.state;
     const { challenge, isEditMode } = this.props;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
@@ -519,7 +513,7 @@ class Workspace extends React.Component<IProps, IState> {
                           <ContentTitle style={{ marginBottom: 12 }}>
                             {this.getTestSummaryString()}
                           </ContentTitle>
-                          {tests.map(this.renderTestResult)}
+                          {testResults.map(this.renderTestResult)}
                           <Spacer height={50} />
                         </ContentContainer>
                       )}
@@ -592,9 +586,9 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   getTestSummaryString = () => {
-    const { tests } = this.state;
-    const passed = tests.filter(t => t.testResult);
-    return `Tests: ${passed.length}/${tests.length} Passed`;
+    const { testResults } = this.state;
+    const passed = testResults.filter(t => t.testResult);
+    return `Tests: ${passed.length}/${testResults.length} Passed`;
   };
 
   renderTestResult = (t: TestCase, i: number) => {
@@ -752,7 +746,7 @@ class Workspace extends React.Component<IProps, IState> {
             console.warn("[bad things]", results);
             break;
           }
-          this.setState({ tests: results });
+          this.setState({ testResults: results });
           break;
         }
         case IFRAME_MESSAGE_TYPES.TEST_ERROR: {
@@ -819,6 +813,7 @@ class Workspace extends React.Component<IProps, IState> {
             innerHTML: markupTests,
           });
 
+          // debugger;
           this.iFrameRef.contentWindow.document.body.appendChild(testScript);
         } else {
           try {
@@ -833,7 +828,7 @@ class Workspace extends React.Component<IProps, IState> {
     );
   };
 
-  // TODO: Why is this async? 
+  // TODO: Why is this async?
   compileAndTransformCodeString = async () => {
     const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
       this.state.code,
