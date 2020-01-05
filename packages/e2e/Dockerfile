@@ -1,7 +1,5 @@
 FROM dependencies as build
 
-COPY . .
-
 # Setup server environment
 RUN yarn server:setup
 

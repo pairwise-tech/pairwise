@@ -12,18 +12,27 @@ services:
     ports:
       - 5432
 
+  external-services:
+    image: runtime
+    command: yarn e2e:services
+    expose:
+      - 7000
+    ports:
+      - "7000:7000"
+
   server:
-    build: .
+    build:
+      context: .
+      dockerfile: packages/external-services/Dockerfile
     image: runtime
     command: dockerize -wait tcp://db:5432 -wait tcp://external-services:7000 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
-      CLIENT_APP_URL: http://client:3000
-      FB_PROFILE_URL: http://external-services:7000/facebook/profile
-      GITHUB_SERVICE_URL: http://external-services:7000/github/profile
+      CLIENT_APP_URL: http://127.0.0.1:3000
+      FB_PROFILE_URL: http://127.0.0.1:7000/facebook/profile
       GITHUB_PROFILE_URL: http://external-services:7000/github/profile
       GITHUB_TOKEN_URL: http://external-services:7000/github/token
-      GITHUB_AUTHORIZATION_URL: http://external-services:7000/github/authorize
+      GITHUB_AUTHORIZATION_URL: http://127.0.0.1:7000/github/authorize
     expose:
       - 9000
     ports:
@@ -31,11 +40,3 @@ services:
     depends_on:
       - db
       - external-services
-
-  external-services:
-    image: runtime
-    command: yarn e2e:services
-    environment:
-      SERVER_URL: http://server:9000
-    expose:
-      - 7000
