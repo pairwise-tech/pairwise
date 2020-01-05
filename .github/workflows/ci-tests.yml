@@ -14,7 +14,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
-      - name: Run build and test steps for all packages and run e2e test suite
+      - name: Build dependencies container
+        run: yarn docker:build
+      - name: Run e2e test suite
         run: yarn e2e
+        env:
+          CI: true
+      - name: Run Cypress test suite
+        run: yarn cypress
         env:
           CI: true

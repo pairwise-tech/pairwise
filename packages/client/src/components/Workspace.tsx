@@ -6,13 +6,13 @@ import CodeFormatWorker from "workerize-loader!../tools/prettier-code-formatter"
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
-import { IconButton } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
 import FormatLineSpacing from "@material-ui/icons/FormatLineSpacing";
 import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";
 import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
 import { monaco } from "@monaco-editor/react";
-import { Challenge } from "@prototype/common";
+import { assertUnreachable, Challenge } from "@prototype/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";
@@ -46,7 +46,6 @@ import {
   transpileCodeWithBabel,
 } from "../tools/test-utils";
 import {
-  assertUnreachable,
   composeWithProps,
   getStoredCodeForChallenge,
   saveCodeToLocalStorage,
@@ -365,9 +364,12 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   disposeModels = () => {
-    const models = this.monacoEditor.editor.getModels();
-    for (const model of models) {
-      model.dispose();
+    /* ??? */
+    if (this.monacoEditor) {
+      const models = this.monacoEditor.editor.getModels();
+      for (const model of models) {
+        model.dispose();
+      }
     }
   };
 

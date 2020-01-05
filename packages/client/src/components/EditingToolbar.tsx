@@ -1,12 +1,10 @@
-import {
-  Button,
-  FormControlLabel,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  Switch,
-} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Switch from "@material-ui/core/Switch";
 import Assignment from "@material-ui/icons/Assignment";
 import Code from "@material-ui/icons/Code";
 import { CHALLENGE_TYPE } from "@prototype/common";

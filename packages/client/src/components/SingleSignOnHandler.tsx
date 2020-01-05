@@ -1,4 +1,4 @@
-import { Modal } from "@material-ui/core";
+import Modal from "@material-ui/core/Modal";
 import React from "react";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
@@ -57,7 +57,7 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
                   style={{ width: 235, height: 43, marginTop: 18 }}
                   activeStyle={{ background: "rgb(68, 68, 68)" }}
                 >
-                  <LoginLink href={`${ENV.HOST}/auth/github`}>
+                  <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
                     Login with GitHub
                   </LoginLink>
                 </GithubLoginButton>
