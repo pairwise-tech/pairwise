@@ -26,7 +26,7 @@
     "format": "lerna run format",
     "test": "lerna run test",
     "build": "yarn common:build && lerna run build",
-    "docker:build": "docker build -t dependencies .",
+    "docker:build": "docker build -t dependencies -f packages/common/Dockerfile .",
     "e2e:services": "cd packages/external-services && yarn start",
     "services:build": "cd packages/external-services && yarn build",
     "test:e2e": "cd packages/e2e && HOST=http://server:9000 yarn test:e2e",

@@ -1,3 +1,6 @@
+# This Dockerfile builds all project packages and is used for the e2e and
+# Cypress test suites.
+
 FROM dependencies as build
 
 # Setup server environment
@@ -14,6 +17,6 @@ FROM build AS test
 # Uses Lerna to run the test command for all packages
 RUN yarn test
 
-FROM test AS runtime
+FROM test AS pairwise
 
 COPY . .

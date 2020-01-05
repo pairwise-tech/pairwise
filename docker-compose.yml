@@ -1,5 +1,11 @@
 version: "3.5"
 
+# This docker-compose file deploys the backend application: the database,
+# the server, and the mock external services. This can be used to easily run
+# the entire backend application in order to develop the frontend, or to
+# write Cypress tests. This file uses a Dockerfile defined in the package
+# external-services.
+
 services:
   db:
     image: postgres:11.2
@@ -21,9 +27,7 @@ services:
       - "7000:7000"
 
   server:
-    build:
-      context: .
-      dockerfile: packages/external-services/Dockerfile
+    build: .
     image: runtime
     command: dockerize -wait tcp://db:5432 -wait tcp://external-services:7000 -timeout 10s yarn server:run
     environment:

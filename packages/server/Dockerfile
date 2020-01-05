@@ -1,3 +1,5 @@
+# This Dockerfile builds and runs the server application.
+
 FROM node:10-alpine
 
 WORKDIR /usr/src/app

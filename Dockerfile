@@ -1,32 +1,23 @@
-FROM cypress/base:10 AS image
+# This Dockerfile builds all the packages, except for the client application.
+# It is used for running the top level docker-compose which runs the entire
+# backend application, database, and services.
 
-# Dockerize is needed to sync containers startup
-ENV DOCKERIZE_VERSION v0.6.0
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-  && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-  && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+FROM dependencies as build
 
-# Install Lerna
-RUN npm i -g lerna
+COPY . .
 
-# Create app directory
-WORKDIR /usr/app
+# Setup server environment
+RUN yarn server:setup
 
-FROM image AS base
+# Build common
+RUN yarn common:build
 
-# Copy all dependency inputs to cache the npm install step
-COPY package.json lerna.json yarn.lock /usr/app/
-COPY packages/common/package.json /usr/app/packages/common/package.json
-COPY packages/client/package.json /usr/app/packages/client/package.json
-COPY packages/server/package.json /usr/app/packages/server/package.json
-COPY packages/e2e/package.json /usr/app/packages/e2e/package.json
-COPY packages/cypress/package.json /usr/app/packages/cypress/package.json
-COPY packages/external-services/package.json /usr/app/packages/external-services/package.json
+# Build external services
+RUN yarn services:build
 
-# Install all dependencies with Lerna
-RUN lerna bootstrap
+# Build the server
+RUN yarn server:build
 
-FROM base as dependencies
+FROM build AS runtime
 
-# Copy everything
 COPY . .

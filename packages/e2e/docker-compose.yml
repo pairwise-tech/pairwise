@@ -1,5 +1,8 @@
 version: "3.5"
 
+# This docker-compose file runs the backend services and executes the e2e
+# test suite against the backend server APIs.
+
 services:
   db:
     image: postgres:11.2
@@ -14,7 +17,7 @@ services:
     build:
       context: ../../
       dockerfile: packages/e2e/Dockerfile
-    image: runtime
+    image: pairwise
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
@@ -29,7 +32,7 @@ services:
       - db
 
   external-services:
-    image: runtime
+    image: pairwise
     command: yarn e2e:services
     environment:
       SERVER_URL: http://server:9000
@@ -37,7 +40,7 @@ services:
       - 7000
 
   e2e:
-    image: runtime
+    image: pairwise
     command: dockerize -wait tcp://db:5432 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 10s yarn test:e2e
     depends_on:
       - db

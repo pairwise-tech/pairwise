@@ -1,5 +1,8 @@
 version: "3.5"
 
+# This docker-compose file runs the backend services and executes the Cypress
+# test suite against the client application.
+
 services:
   db:
     image: postgres:11.2
@@ -14,7 +17,7 @@ services:
     build:
       context: ../../
       dockerfile: packages/e2e/Dockerfile
-    image: runtime
+    image: pairwise
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
@@ -31,7 +34,7 @@ services:
       - db
 
   client:
-    image: runtime
+    image: pairwise
     command: yarn client:prod
     expose:
       - 3000
@@ -39,7 +42,7 @@ services:
       - "3000:3000"
 
   external-services:
-    image: runtime
+    image: pairwise
     command: yarn e2e:services
     environment:
       SERVER_URL: http://server:9000
@@ -47,8 +50,8 @@ services:
       - 7000
 
   cypress:
-    image: runtime
-    command: dockerize -wait tcp://db:5432 -wait tcp://client:3000 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 60s yarn test:cypress
+    image: pairwise
+    command: dockerize -wait tcp://db:5432 -wait tcp://client:3000 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 20s yarn test:cypress
     depends_on:
       - db
       - server
