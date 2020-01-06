@@ -8,6 +8,7 @@ import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import ENV from "src/tools/server-env";
 import { GitHubStrategy } from "./strategies/github.strategy";
+import { GoogleStrategy } from "./strategies/google.strategy";
 
 @Module({
   imports: [
@@ -16,9 +17,20 @@ import { GitHubStrategy } from "./strategies/github.strategy";
       secret: ENV.JWT_SECRET,
       signOptions: { expiresIn: "60s" },
     }),
+    PassportModule.register({
+      session: true,
+      scope: ["profile", "email"],
+      defaultStrategy: "google",
+    }),
     UsersModule,
   ],
-  providers: [JwtStrategy, GitHubStrategy, AuthService, FacebookStrategy],
+  providers: [
+    JwtStrategy,
+    GitHubStrategy,
+    GoogleStrategy,
+    AuthService,
+    FacebookStrategy,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

@@ -16,6 +16,8 @@ const GITHUB_TOKEN_URL = getenv.string("GITHUB_TOKEN_URL", "");
 const GITHUB_AUTHORIZATION_URL = getenv.string("GITHUB_AUTHORIZATION_URL", "");
 const CLIENT_APP_URL = getenv.string("CLIENT_APP_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
+const GOOGLE_CLIENT_ID = getenv.string("GOOGLE_CLIENT_ID");
+const GOOGLE_CLIENT_SECRET = getenv.string("GOOGLE_CLIENT_SECRET");
 
 const ENV = {
   JWT_SECRET,
@@ -29,6 +31,8 @@ const ENV = {
   GITHUB_PROFILE_URL,
   GITHUB_TOKEN_URL,
   GITHUB_AUTHORIZATION_URL,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
 };
 
 /** ===========================================================================

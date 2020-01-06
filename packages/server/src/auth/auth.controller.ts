@@ -48,8 +48,6 @@ export class AuthController {
     @Req() req: Request & { user: GitHubProfileWithCredentials },
     @Res() res,
   ) {
-    console.log("CALLBACK!");
-
     const data = req.user;
 
     /* Whatever! */
@@ -67,5 +65,21 @@ export class AuthController {
     const { accessToken } = this.authService.getJwtAccessToken(user);
     console.log(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
     return res.redirect(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
+  }
+
+  @UseGuards(AuthGuard("google"))
+  @Get("google")
+  async authenticateGoogle(@Req() req) {
+    /* do nothing */
+  }
+
+  @UseGuards(AuthGuard("google"))
+  @Get("google/callback")
+  async getTokenAfterGoogleSignin(
+    @Req() req: Request & { user: GitHubProfileWithCredentials },
+    @Res() res,
+  ) {
+    console.log("Google signin result:");
+    console.log(req.user);
   }
 }

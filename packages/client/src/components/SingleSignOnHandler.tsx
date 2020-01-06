@@ -61,11 +61,14 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
                     Login with GitHub
                   </LoginLink>
                 </GithubLoginButton>
+                <LoginLink id="github-login" href={`${ENV.HOST}/auth/google`}>
+                  Login with Google
+                </LoginLink>
                 <GoogleLogin
                   buttonText="Login with Google"
                   clientId={ENV.GOOGLE_APP_ID}
-                  onSuccess={() => console.log("handling response")}
-                  onFailure={() => console.log("handling response")}
+                  onSuccess={this.handleGoogleResponse}
+                  onFailure={this.handleGoogleResponse}
                   cookiePolicy="single_host_origin"
                   className="social-media-login-button google-social-login"
                 />
@@ -88,6 +91,16 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
     } catch (err) {
       this.props.facebookLoginFailure();
     }
+  };
+
+  handleGoogleResponse = async (response: any) => {
+    console.log(response);
+
+    // try {
+    //   this.props.facebookLoginCallback(response);
+    // } catch (err) {
+    //   this.props.facebookLoginFailure();
+    // }
   };
 
   setAccountModalState = (state: boolean) => {
