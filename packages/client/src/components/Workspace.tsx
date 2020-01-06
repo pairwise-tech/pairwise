@@ -1,16 +1,7 @@
-// Import Workers:
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import CodeFormatWorker from "workerize-loader!../tools/prettier-code-formatter";
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
-import IconButton from "@material-ui/core/IconButton";
-import FormatLineSpacing from "@material-ui/icons/FormatLineSpacing";
-import Fullscreen from "@material-ui/icons/Fullscreen";
-import FullscreenExit from "@material-ui/icons/FullscreenExit";
-import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
 import { monaco } from "@monaco-editor/react";
 import { assertUnreachable, Challenge } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
@@ -23,11 +14,17 @@ import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
 import { DEV_MODE } from "tools/client-env";
 import {
-  getTestCodeMarkup,
+  getTestHarness,
+  IFRAME_MESSAGE_TYPES,
+  IframeMessageEvent,
+  makeElementFactory,
+  requestCodeFormatting,
+  subscribeCodeWorker,
   TestCase,
-  TestCaseMarkup,
+  TestCaseMarkupTypescript,
   TestCaseReact,
-  TestCaseTypeScript,
+  unsubscribeCodeWorker,
+  waitForObjectProp,
 } from "../tools/challenges";
 import {
   COLORS,
@@ -54,33 +51,35 @@ import {
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
-import {
-  ContentInput,
-  StyledMarkdown,
-  StyledTooltip,
-  TitleInput,
-} from "./shared";
+import { ContentInput, LowerRight, StyledMarkdown, TitleInput } from "./shared";
+import { Tooltip, Button, ButtonGroup } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
-const codeWorker = new CodeFormatWorker();
 
-enum IFRAME_MESSAGE_TYPES {
-  LOG = "LOG",
-  INFO = "INFO",
-  WARN = "WARN",
-  ERROR = "ERROR",
-  TEST_RESULTS = "TEST_RESULTS",
-}
+/**
+ * This is only to allow a logic split if editting (i.e. via admin edit mode).
+ * So it is not relevant unless using codepress
+ */
+const getEditorCode = ({
+  challenge,
+  isEditMode,
+  tab = "starterCode",
+}: {
+  challenge: Challenge;
+  isEditMode: boolean;
+  tab: IState["adminEditorTab"];
+}) => {
+  if (isEditMode) {
+    return challenge[tab];
+  } else {
+    return getStoredCodeForChallenge(challenge);
+  }
+};
 
-interface IframeMessageEvent extends MessageEvent {
-  data: {
-    message: string;
-    source: IFRAME_MESSAGE_TYPES;
-  };
-}
+const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
@@ -99,7 +98,7 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 interface IState {
   code: string;
   fullScreenEditor: boolean;
-  tests: ReadonlyArray<TestCase>;
+  testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
   adminEditorTab: "starterCode" | "solutionCode";
   adminTestTab: "testResults" | "testCode";
@@ -134,30 +133,22 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    const tests = JSON.parse(this.props.challenge.testCode);
+    const defaultAdminTab: IState["adminEditorTab"] = "starterCode";
 
     this.state = {
-      tests,
+      testResults: [],
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
-      adminEditorTab: "starterCode",
+      adminEditorTab: defaultAdminTab,
       adminTestTab: "testResults",
-      code: this.getEditorCode(props.challenge),
+      code: getEditorCode({
+        challenge: props.challenge,
+        isEditMode: this.props.isEditMode,
+        tab: defaultAdminTab,
+      }),
     };
   }
-
-  // This is only to allow a logic split if editting (i.e. via admin edit mode).
-  getEditorCode = (
-    challenge: Challenge = this.props.challenge,
-    isEditMode = this.props.isEditMode,
-  ) => {
-    if (isEditMode) {
-      return challenge[this.state.adminEditorTab];
-    } else {
-      return getStoredCodeForChallenge(challenge);
-    }
-  };
 
   async componentDidMount() {
     document.addEventListener("keydown", this.handleKeyPress);
@@ -167,8 +158,6 @@ class Workspace extends React.Component<IProps, IState> {
       false,
     );
 
-    codeWorker.addEventListener("message", this.handleCodeFormatMessage);
-
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
     this.initializeMonaco();
     this.initializeSyntaxHighlightWorker();
@@ -177,6 +166,8 @@ class Workspace extends React.Component<IProps, IState> {
     await wait(500);
     this.iFrameRenderPreview();
     this.debouncedSyntaxHighlightFunction(this.state.code);
+
+    subscribeCodeWorker(this.handleCodeFormatMessage);
   }
 
   componentWillUnmount() {
@@ -186,23 +177,29 @@ class Workspace extends React.Component<IProps, IState> {
       "message",
       this.handleReceiveMessageFromCodeRunner,
     );
-    codeWorker.removeEventListener("message", this.handleCodeFormatMessage);
+    unsubscribeCodeWorker(this.handleCodeFormatMessage);
   }
 
   refreshEditor = () => {
     this.props.unlockVerticalScrolling();
     this.resetMonacoEditor();
     this.setMonacoEditorValue();
+    if (this.iFrameRef) {
+      this.iFrameRenderPreview();
+    }
   };
 
   componentWillReceiveProps(nextProps: IProps) {
     // Update in response to changing challenge
     if (this.props.challenge.id !== nextProps.challenge.id) {
-      const { challenge } = nextProps;
-      const tests = JSON.parse(challenge.testCode);
-      const newCode = this.getEditorCode(challenge);
+      const { challenge, isEditMode } = nextProps;
+      const newCode = getEditorCode({
+        challenge,
+        isEditMode,
+        tab: this.state.adminEditorTab,
+      });
       this.setState(
-        { code: newCode, tests, adminTestTab: "testResults" },
+        { code: newCode, adminTestTab: "testResults" },
         this.refreshEditor,
       );
     }
@@ -211,7 +208,13 @@ class Workspace extends React.Component<IProps, IState> {
     // happen for us as we use codepress, not for our end users.
     if (this.props.isEditMode !== nextProps.isEditMode) {
       this.setState(
-        { code: this.getEditorCode(nextProps.challenge, nextProps.isEditMode) },
+        {
+          code: getEditorCode({
+            challenge: nextProps.challenge,
+            isEditMode: nextProps.isEditMode,
+            tab: this.state.adminEditorTab,
+          }),
+        },
         this.refreshEditor,
       );
     }
@@ -379,13 +382,15 @@ class Workspace extends React.Component<IProps, IState> {
    * just do a fire-and-forget state update regardless, but with all the
    * imperative logic going on with the editor this keeps it from updating
    * unecessarily.
+   *
+   * NOTE: When switching to the solution code default to start code
    */
   handleEditorTabClick = (tab: IState["adminEditorTab"]) => {
     if (tab !== this.state.adminEditorTab) {
       this.setState(
         {
           adminEditorTab: tab,
-          code: this.props.challenge[tab],
+          code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
         },
         this.refreshEditor,
       );
@@ -402,10 +407,7 @@ class Workspace extends React.Component<IProps, IState> {
       // the only tab from the perspective of endusers so this should only ever
       // happen when we are editing via codepress.
       if (tab === "testResults") {
-        this.setState({
-          adminTestTab: tab,
-          tests: JSON.parse(this.props.challenge.testCode), // See NOTE
-        });
+        this.setState({ adminTestTab: tab }, this.refreshEditor);
       } else {
         this.setState({ adminTestTab: tab });
       }
@@ -413,7 +415,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { fullScreenEditor, tests } = this.state;
+    const { fullScreenEditor, testResults } = this.state;
     const { challenge, isEditMode } = this.props;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
@@ -435,41 +437,35 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
-        <LowerRight
-          style={{ right: 10, display: "flex", flexDirection: "column" }}
-        >
-          {this.state.code !== challenge.starterCode && !isEditMode && (
-            <StyledTooltip title={"Restore Initial Code"} placement="left">
-              <IconButton
-                style={{ color: "white" }}
-                aria-label="reset editor"
-                onClick={this.resetCodeWindow}
-              >
-                <SettingsBackupRestore />
-              </IconButton>
-            </StyledTooltip>
-          )}
-          <StyledTooltip title={"Format Code"} placement="left">
-            <IconButton
-              style={{ color: "white" }}
-              aria-label="format editor code"
-              onClick={this.requestCodeFormatting}
+        <LowerRight>
+          <ButtonGroup vertical>
+            {this.state.code !== challenge.starterCode && !isEditMode && (
+              <Tooltip content={"Restore Initial Code"} position="left">
+                <Button
+                  icon="reset"
+                  aria-label="reset editor"
+                  onClick={this.resetCodeWindow}
+                />
+              </Tooltip>
+            )}
+            <Tooltip content={"Format Code"} position="left">
+              <Button
+                icon="style"
+                aria-label="format editor code"
+                onClick={this.handleFormatCode}
+              />
+            </Tooltip>
+            <Tooltip
+              content={fullScreenEditor ? "Regular" : "Full Screen"}
+              position="left"
             >
-              <FormatLineSpacing />
-            </IconButton>
-          </StyledTooltip>
-          <StyledTooltip
-            title={fullScreenEditor ? "Regular" : "Full Screen"}
-            placement="left"
-          >
-            <IconButton
-              style={{ color: "white" }}
-              aria-label="fullscreen editor"
-              onClick={this.toggleEditorType}
-            >
-              {fullScreenEditor ? <FullscreenExit /> : <Fullscreen />}
-            </IconButton>
-          </StyledTooltip>
+              <Button
+                aria-label="fullscreen editor"
+                onClick={this.toggleEditorType}
+                icon={fullScreenEditor ? "collapse-all" : "expand-all"}
+              />
+            </Tooltip>
+          </ButtonGroup>
         </LowerRight>
         <div id="monaco-editor" style={{ height: "100%" }} />
       </div>
@@ -526,7 +522,7 @@ class Workspace extends React.Component<IProps, IState> {
                           <ContentTitle style={{ marginBottom: 12 }}>
                             {this.getTestSummaryString()}
                           </ContentTitle>
-                          {tests.map(this.renderTestResult)}
+                          {testResults.map(this.renderTestResult)}
                           <Spacer height={50} />
                         </ContentContainer>
                       )}
@@ -599,9 +595,9 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   getTestSummaryString = () => {
-    const { tests } = this.state;
-    const passed = tests.filter(t => t.testResult);
-    return `Tests: ${passed.length}/${tests.length} Passed`;
+    const { testResults } = this.state;
+    const passed = testResults.filter(t => t.testResult);
+    return `Tests: ${passed.length}/${testResults.length} Passed`;
   };
 
   renderTestResult = (t: TestCase, i: number) => {
@@ -627,28 +623,9 @@ class Workspace extends React.Component<IProps, IState> {
           </ContentText>
         );
       }
-      case "typescript": {
-        const { input } = t as TestCaseTypeScript;
-        return (
-          <ContentText
-            key={i}
-            style={{ display: "flex", flexDirection: "row" }}
-          >
-            <div style={{ width: 450 }}>
-              <b style={{ color: C.TEXT_TITLE }}>Input: </b>
-              {input.map(JSON.stringify).join(", ")}
-            </div>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-              <SuccessFailureText testResult={t.testResult}>
-                {t.testResult ? "Success!" : "Incomplete..."}
-              </SuccessFailureText>
-            </div>
-          </ContentText>
-        );
-      }
+      case "typescript":
       case "markup": {
-        const { message } = t as TestCaseMarkup;
+        const { message } = t as TestCaseMarkupTypescript;
         return (
           <ContentText
             key={i}
@@ -774,11 +751,19 @@ class Workspace extends React.Component<IProps, IState> {
         }
         case IFRAME_MESSAGE_TYPES.TEST_RESULTS: {
           const results = JSON.parse(message);
-          const testCasesCopy = this.state.tests.slice();
-          for (let i = 0; i < results.length; i++) {
-            testCasesCopy[i].testResult = results[i];
+          if (!Array.isArray(results)) {
+            console.warn("[bad things]", results);
+            break;
           }
-          this.setState({ tests: testCasesCopy });
+          this.setState({ testResults: results });
+          break;
+        }
+        case IFRAME_MESSAGE_TYPES.TEST_ERROR: {
+          console.warn(
+            "[ERR] Something went wrong with the tests:",
+            source,
+            message,
+          );
           break;
         }
         default: {
@@ -787,71 +772,81 @@ class Workspace extends React.Component<IProps, IState> {
       }
     } catch (err) {
       // no-op
+      // This is currently a noop because it's super noisy in dev. The
+      // assertUnreachable throws all the time because of something. Looks like
+      // react devtools is putting a message through and that's hitting the
+      // deafult case
     }
   };
 
   iFrameRenderPreview = async () => {
-    const makeElementFactory = (
-      createElement: typeof document.createElement,
-    ) => {
-      return (tag: string, props: any) => {
-        const el = createElement(tag);
-        Object.keys(props).forEach(k => {
-          const v = props[k];
-          // @ts-ignore
-          el[k] = v;
-        });
-        return el;
-      };
-    };
+    this.setState(
+      { logs: DEFAULT_LOGS },
+      async (): Promise<void> => {
+        if (!this.iFrameRef || !this.iFrameRef.contentWindow) {
+          console.warn("[iframe] Not yet mounted");
+          return;
+        }
 
-    // console.clear();
-    this.setState({ logs: DEFAULT_LOGS }, async () => {
-      if (this.iFrameRef && this.iFrameRef.contentWindow) {
-        try {
+        // Don't forget to bind createElement... not sure typescript can protect us form this one
+        // const el = makeElementFactory(iframeDoc.createElement.bind(iframeDoc));
+        const el = makeElementFactory(
+          this.iFrameRef.contentWindow.document.createElement.bind(
+            this.iFrameRef.contentWindow.document,
+          ),
+        );
+
+        /**
+         * Process the code string and create an HTML document to render
+         * to the iframe.
+         */
+        if (this.props.challenge.type === "markup") {
+          // Since the user is writing HTML, set the source doc directly based on their code
+          this.iFrameRef.srcdoc = this.state.code;
+
           /**
-           * Process the code string and create an HTML document to render
-           * to the iframe.
+           * Wait to allow the iframe to render the new HTML document
+           * before appending and running the test script. The iframe will have
+           * a document before it has a body, and I didn't find any good way to
+           * listen for it to be ready so we are just polling
            */
-          if (this.props.challenge.type === "markup") {
-            this.iFrameRef.srcdoc = this.state.code;
-
-            /**
-             * Wait to allow the iframe to render the new HTML document
-             * before appending and running the test script.
-             */
+          let remainingPollAttempts = 50;
+          while (this.iFrameRef.contentWindow.document.body === null) {
+            console.warn("[iframe] Body not ready. Waiting...");
             await wait(50);
+            remainingPollAttempts--;
+            if (remainingPollAttempts < 0) {
+              throw new Error(
+                `[iframe timeout] Did not render after _several_ attempts.`,
+              );
+            }
+          }
 
-            // Don't forget to bind createElement... not sure typescript can protect us form this one
-            const el = makeElementFactory(
-              this.iFrameRef.contentWindow.document.createElement.bind(
-                this.iFrameRef.contentWindow.document,
-              ),
-            );
+          const markupTests = getTestHarness(this.props.challenge.testCode);
 
-            const markupTests = getTestCodeMarkup(this.state.tests);
+          const testScript = el("script", {
+            id: "test-script",
+            type: "text/javascript",
+            innerHTML: markupTests,
+          });
 
-            const testScript = el("script", {
-              id: "test-script",
-              type: "text/javascript",
-              innerHTML: markupTests,
-            });
-
-            this.iFrameRef.contentWindow.document.body.appendChild(testScript);
-          } else {
+          this.iFrameRef.contentWindow.document.body.appendChild(testScript);
+        } else {
+          try {
             const code = await this.compileAndTransformCodeString();
             const sourceDocument = getMarkupForCodeChallenge(code);
             this.iFrameRef.srcdoc = sourceDocument;
+          } catch (err) {
+            this.handleCompilationError(err);
           }
-        } catch (err) {
-          this.handleCompilationError(err);
         }
-      }
-    });
+      },
+    );
   };
 
+  // TODO: Why is this async?
   compileAndTransformCodeString = async () => {
-    const { code, dependencies } = stripAndExtractModuleImports(
+    const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
       this.state.code,
     );
 
@@ -863,8 +858,6 @@ class Workspace extends React.Component<IProps, IState> {
         : dependencies,
     );
 
-    const injectTestCodeFn = injectTestCode(this.props.challenge);
-
     /**
      * What happens here:
      *
@@ -874,11 +867,11 @@ class Workspace extends React.Component<IProps, IState> {
      * - Fetch and inject required modules into code string
      */
     const processedCodeString = pipe(
-      injectTestCodeFn,
+      injectTestCode(this.props.challenge.testCode),
       hijackConsole,
       transpileCodeWithBabel,
       injectModuleDependenciesFn,
-    )(code);
+    )(sourceCode);
 
     return processedCodeString;
   };
@@ -946,21 +939,25 @@ class Workspace extends React.Component<IProps, IState> {
 
   /**
    * Run the auto formatter on the code in the code window. This replaces the code currently present.
+   * NOTE: An incoming message is fired when the worker is ready, so we can't
+   * assume there is code coming over the wire.
    */
   private readonly handleCodeFormatMessage = (event: MessageEvent) => {
     const code = event.data?.code;
-    if (code) {
+    const channel = event.data?.channel;
+    if (code && channel === CODE_FORMAT_CHANNEL) {
       this.transformMonacoCode(() => code);
     } else {
       console.warn("[INFO] No code passed via message event", event);
     }
   };
 
-  private readonly requestCodeFormatting = () => {
+  private readonly handleFormatCode = () => {
     try {
-      codeWorker.postMessage({
+      requestCodeFormatting({
         code: this.state.code,
         type: this.props.challenge.type,
+        channel: CODE_FORMAT_CHANNEL,
       });
     } catch (err) {
       console.warn("[INFO] Could not post to code worker", err);
@@ -1111,20 +1108,6 @@ const SuccessFailureText = styled.p`
     props.testResult ? C.SUCCESS : C.FAILURE};
 `;
 
-// const UpperRight = styled.div`
-//   position: absolute;
-//   z-index: 2;
-//   top: 0;
-//   right: 0;
-// `;
-
-const LowerRight = styled.div`
-  position: absolute;
-  z-index: 2;
-  bottom: 0;
-  right: 0;
-`;
-
 const TabbedInnerNav = styled.div<{ show: boolean }>`
   display: ${props => (props.show ? "flex" : "none")};
   align-items: center;
@@ -1204,9 +1187,8 @@ const ContentViewEdit = connect(
   const handleTitle = handleChange(title =>
     props.updateChallenge({ id: currentId, challenge: { title } }),
   );
-  const handleContent = handleChange(content =>
-    props.updateChallenge({ id: currentId, challenge: { content } }),
-  );
+  const handleContent = (content: string) =>
+    props.updateChallenge({ id: currentId, challenge: { content } });
 
   return (
     <StyledInputs isEditMode={isEditMode} style={{ height: "100%" }}>

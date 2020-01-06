@@ -1,0 +1,12 @@
+// This file overrides Blueprint color variable definitions with custom colors
+// to use. To find color variable names to change, you can manually inspect
+// an element to find the color and then lookup that color value in the
+// Blueprint source code to find the associated SASS variable name:
+// https://github.com/palantir/blueprint/blob/develop/packages/core/src/common/_colors.scss
+
+$gray4: rgb(105, 105, 105);
+
+$dark-gray4: rgb(50, 50, 50);
+$dark-gray5: rgb(40, 40, 40);
+
+@import "@blueprintjs/core/src/blueprint.scss";

@@ -19,6 +19,10 @@ export class Ok<T> implements IOk<T> {
   value: T;
   error = undefined;
 
+  static of<U>(value: U): Ok<U> {
+    return new Ok(value);
+  }
+
   constructor(value: T) {
     this.value = value;
   }
@@ -27,6 +31,10 @@ export class Ok<T> implements IOk<T> {
 export class Err<E> implements IErr<E> {
   value: undefined;
   error: E;
+
+  static of<U>(value: U): Err<U> {
+    return new Err(value);
+  }
 
   constructor(error: E) {
     this.error = error;

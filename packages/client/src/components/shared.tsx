@@ -1,22 +1,14 @@
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import Tooltip from "@material-ui/core/Tooltip";
+import React from "react";
 import Markdown from "react-markdown";
 import styled from "styled-components/macro";
 
 import { COLORS } from "../tools/constants";
+import { EditableText, IEditableTextProps } from "@blueprintjs/core";
 
 export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 25px;
-`;
-
-export const StyledTooltip = styled(Tooltip)`
-  opacity: 0.5;
-  transition: opacity 0.2s ease-out;
-  &:hover {
-    opacity: 1;
-  }
 `;
 
 export const ButtonCore = styled.button`
@@ -56,7 +48,9 @@ export const TitleInput = styled.input`
   }
 `;
 
-export const ContentInput = styled(TextareaAutosize)`
+export const ContentInput = styled((props: IEditableTextProps) => (
+  <EditableText multiline minLines={3} {...props} />
+))`
   outline: none;
   appearance: none;
   border: none;
@@ -96,4 +90,13 @@ export const Text = styled.p`
   font-size: 15px;
   font-weight: 200px;
   color: ${COLORS.TEXT_CONTENT};
+`;
+
+export const LowerRight = styled.div`
+  position: absolute;
+  z-index: 2;
+  right: 20px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
 `;

@@ -1,13 +1,9 @@
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/icons/Menu";
 import queryString from "query-string";
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
 
-import SkipNext from "@material-ui/icons/SkipNext";
-import SkipPrevious from "@material-ui/icons/SkipPrevious";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { DEV_MODE } from "tools/client-env";
@@ -16,9 +12,11 @@ import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import Profile from "./Profile";
-import { ButtonCore, StyledTooltip } from "./shared";
+import { ButtonCore } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
+import { Button, ButtonGroup, Classes, Tooltip } from "@blueprintjs/core";
+import cx from "classnames";
 
 /** ===========================================================================
  * Types & Config
@@ -76,13 +74,14 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     return (
       <React.Fragment>
         <MobileView />
-        <DesktopContainer>
+        <DarkTheme>
           {this.renderLoadingOverlay()}
           <SingleSignOnHandler />
           <NavigationOverlay overlayVisible={overlayVisible} />
           <Header>
             <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
               <NavIconButton
+                overlayVisible={overlayVisible}
                 style={{ color: "white", marginRight: 40 }}
                 onClick={this.props.toggleNavigationMap}
               />
@@ -97,32 +96,28 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             )}
             <ControlsContainer style={{ marginLeft: "auto" }}>
               {displayNavigationArrows && (
-                <React.Fragment>
+                <ButtonGroup>
                   {prev && (
-                    <StyledTooltip title="Previous Challenge">
-                      <IconButton
+                    <Tooltip content="Previous Challenge">
+                      <Button
                         id="prevButton"
-                        style={{ color: "white" }}
+                        icon="chevron-left"
                         aria-label="Previous Challenge"
                         onClick={() => this.props.selectChallenge(prev.id)}
-                      >
-                        <SkipPrevious />
-                      </IconButton>
-                    </StyledTooltip>
+                      />
+                    </Tooltip>
                   )}
                   {next && (
-                    <StyledTooltip title="Next Challenge">
-                      <IconButton
+                    <Tooltip content="Next Challenge">
+                      <Button
                         id="nextButton"
-                        style={{ color: "white" }}
+                        icon="chevron-right"
                         aria-label="Next Challenge"
                         onClick={() => this.props.selectChallenge(next.id)}
-                      >
-                        <SkipNext />
-                      </IconButton>
-                    </StyledTooltip>
+                      />
+                    </Tooltip>
                   )}
-                </React.Fragment>
+                </ButtonGroup>
               )}
               {this.props.userAuthenticated && this.props.user ? (
                 <AccountDropdownButton>
@@ -174,7 +169,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             />
             <Route key={4} component={() => <Redirect to="/workspace" />} />
           </Switch>
-        </DesktopContainer>
+        </DarkTheme>
       </React.Fragment>
     );
   }
@@ -187,9 +182,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     return (
       <LoadingOverlay visible={this.props.workspaceLoading}>
         <MobileView />
-        <DesktopContainer>
+        <div>
           <OverlayLoadingText>Initializing Workspace...</OverlayLoadingText>
-        </DesktopContainer>
+        </div>
       </LoadingOverlay>
     );
   };
@@ -244,16 +239,20 @@ const ControlsContainer = styled.div`
   flex-direction: row;
 `;
 
-const NavIconButton = styled(props => (
-  <IconButton aria-label="Open navigaton map" {...props}>
-    <Menu />
-  </IconButton>
+const NavIconButton = styled(({ overlayVisible, ...rest }) => (
+  <Button
+    large
+    aria-label="Open navigation map"
+    icon={overlayVisible ? "menu-closed" : "menu"}
+    {...rest}
+  />
 ))`
   color: white;
   appearance: none;
   background: transparent;
   border: none;
   outline: none;
+  margin-left: 10px;
 `;
 
 const LoadingOverlay = styled.div`
@@ -400,13 +399,13 @@ const MobileTitleText = styled(MobileText)`
   color: ${COLORS.TEXT_TITLE};
 `;
 
-const DesktopContainer = styled.div`
-  display: inline;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
+interface DarkThemeProps {
+  className?: string;
+  children: React.ReactNode;
+}
+const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
+  return <div className={cx(className, Classes.DARK)} {...props} />;
+};
 
 /** ===========================================================================
  * Props

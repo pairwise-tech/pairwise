@@ -1,17 +1,10 @@
-import Button from "@material-ui/core/Button";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Switch from "@material-ui/core/Switch";
-import Assignment from "@material-ui/icons/Assignment";
-import Code from "@material-ui/icons/Code";
 import { CHALLENGE_TYPE } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
+import { Switch, Button, ButtonGroup } from "@blueprintjs/core";
+import { Select } from "@blueprintjs/select";
 
 const mapToolbarState = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
@@ -28,20 +21,25 @@ const toolbarDispatchProps = {
 type EditChallengeControlsConnectProps = ReturnType<typeof mapToolbarState> &
   typeof toolbarDispatchProps;
 
+interface ChallengeTypeOption {
+  value: CHALLENGE_TYPE;
+  label: string;
+}
+
+const CHALLENGE_TYPE_CHOICES: ChallengeTypeOption[] = [
+  { value: "markup", label: "Markup" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "react", label: "React" },
+  { value: "media", label: "Media" },
+];
+
+const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
+
 const EditingToolbar = connect(
   mapToolbarState,
   toolbarDispatchProps,
 )((props: EditChallengeControlsConnectProps) => {
   const { isEditMode, setEditMode, saveCourse, course, challenge } = props;
-  const [anchorEl, setAnchorEl] = React.useState<Nullable<HTMLElement>>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditMode(event.target.checked);
@@ -55,72 +53,63 @@ const EditingToolbar = connect(
     }
   };
 
-  const choices: Array<{ value: CHALLENGE_TYPE; label: string }> = [
-    { value: "markup", label: "Markup" },
-    { value: "typescript", label: "TypeScript" },
-    { value: "react", label: "React" },
-    { value: "media", label: "Media" },
-  ];
-
   // NOTE: I'm defaulting the challenge id to an empty string simply to get past ts errors.
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <FormControlLabel
-        style={{ color: "white" }}
-        control={
-          <Switch
-            checked={isEditMode}
-            onChange={handleChange}
-            color="primary"
-            value="isEditMode"
-          />
-        }
-        label="Edit"
+      <Switch
+        style={{ marginBottom: 0, marginRight: 20 }}
+        checked={isEditMode}
+        onChange={handleChange}
+        large
+        labelElement={"Edit"}
       />
       <SlideOut show={isEditMode}>
         <Button
-          color="primary"
+          large
+          minimal
+          intent="primary"
           style={{ marginRight: 10 }}
           onClick={handleSave}
         >
           Save
         </Button>
-        <Button
-          aria-controls="simple-menu"
-          aria-haspopup="true"
-          onClick={handleClick}
-        >
-          Type: <strong style={{ marginLeft: 6 }}>{challenge?.type}</strong>
-        </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          {choices.map(x => (
-            <MenuItem
-              key={x.value}
-              onClick={() => {
-                props.updateChallenge({
-                  id: challenge?.id || "", // See NOTE
-                  challenge: { type: x.value },
-                });
-                handleClose();
-              }}
+        <ChallengeTypeSelect
+          filterable={false}
+          items={CHALLENGE_TYPE_CHOICES}
+          itemListRenderer={({ renderItem, items }) => (
+            <ButtonGroup
+              style={{ minWidth: 150 }}
+              fill
+              alignText="left"
+              vertical
             >
-              <ListItemIcon>
-                {x.value === "media" ? (
-                  <Assignment fontSize="small" />
-                ) : (
-                  <Code fontSize="small" />
-                )}
-              </ListItemIcon>
-              <ListItemText primary={x.label} />
-            </MenuItem>
-          ))}
-        </Menu>
+              {items.map(renderItem)}
+            </ButtonGroup>
+          )}
+          itemRenderer={(x, { handleClick, modifiers }) => (
+            <Button
+              key={x.value}
+              icon={x.value === "media" ? "video" : "code"}
+              text={x.label}
+              onClick={handleClick}
+              active={modifiers.active}
+            />
+          )}
+          onItemSelect={x => {
+            props.updateChallenge({
+              id: challenge?.id || "", // See NOTE
+              challenge: { type: x.value },
+            });
+          }}
+        >
+          <Button
+            rightIcon="caret-down"
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+          >
+            Type: <strong style={{ marginLeft: 6 }}>{challenge?.type}</strong>
+          </Button>
+        </ChallengeTypeSelect>
       </SlideOut>
     </div>
   );

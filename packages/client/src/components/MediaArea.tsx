@@ -39,12 +39,11 @@ const MediaArea = connect(
   const handleTitle = handleChange(x =>
     props.updateChallenge({ id: challenge.id, challenge: { title: x } }),
   );
-  const handleContent = handleChange(supplementaryContent =>
+  const handleContent = (supplementaryContent: string) =>
     props.updateChallenge({
       id: challenge.id,
       challenge: { supplementaryContent },
-    }),
-  );
+    });
 
   return (
     <SupplementaryContentContainer>

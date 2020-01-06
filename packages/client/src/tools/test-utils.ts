@@ -1,7 +1,6 @@
 import * as Babel from "@babel/standalone";
 
-import { Challenge } from "@pairwise/common";
-import { getTestCodeReact, getTestCodeTypeScript } from "./challenges";
+import { getTestHarness } from "./challenges";
 import DependencyCacheService from "./module-service";
 
 /** ===========================================================================
@@ -109,7 +108,7 @@ export const hijackConsole = (codeString: string) => {
  * create problems if the console statement was written inline with some
  * real code, which would then no longer execute...
  */
-export const removeConsole = (codeString: string) => {
+export const stripConsoleCalls = (codeString: string) => {
   return codeString
     .replace(/console.log/g, "// ")
     .replace(/console.info/g, "// ")
@@ -146,7 +145,7 @@ const fetchRequiredDependencies = async (
  */
 const injectDependencies = (
   codeString: string,
-  dependencies: ReadonlyArray<string>,
+  dependencies: readonly string[],
 ) => {
   let result = "";
 
@@ -162,7 +161,7 @@ const injectDependencies = (
  * Fetch the required module dependencies and inject them into the code string.
  */
 export const createInjectDependenciesFunction = (
-  dependencies: ReadonlyArray<string>,
+  dependencies: readonly string[],
 ) => async (codeString: string) => {
   /**
    * TODO: The following method could throw an error if an imported package
@@ -179,28 +178,19 @@ export const createInjectDependenciesFunction = (
 
 /**
  * Inject test code into a code string.
+ *
+ * NOTE: Including the code twice, once up top and once wrapped within the test
+ * harness, seems necessary for the console to work. Not yet sure why...
  */
-export const injectTestCode = (challenge: Challenge) => (
-  codeString: string,
-) => {
-  const { type, testCode } = challenge;
-  if (type === "react") {
-    return `
-    ${codeString}
+export const injectTestCode = (testCode: string) => (codeString: string) => {
+  return `
+  /* Via injectTestCode */
+  ${codeString}
     {
-      ${removeConsole(codeString)}
-      ${getTestCodeReact(JSON.parse(testCode))}
+      ${stripConsoleCalls(codeString)}
+      ${getTestHarness(testCode)}
     }
   `;
-  } else {
-    return `
-      ${codeString}
-      {
-        ${removeConsole(codeString)}
-        ${getTestCodeTypeScript(JSON.parse(testCode))}
-      }
-    `;
-  }
 };
 
 /**

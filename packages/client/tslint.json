@@ -55,7 +55,7 @@
     "object-literal-key-quotes": [true, "as-needed"],
     "object-literal-sort-keys": false,
     "one-variable-per-declaration": true,
-    "ordered-imports": true,
+    "ordered-imports": false,
     "prefer-template": true,
     "quotemark": [true, "double"],
     "semicolon": [true, "always", "ignore-bound-class-methods"],

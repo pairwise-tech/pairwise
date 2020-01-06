@@ -3,12 +3,17 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
-import { MONACO_EDITOR_THEME } from "tools/constants";
+import {
+  CodeFormatMessageEvent,
+  requestCodeFormatting,
+  subscribeCodeWorker,
+  unsubscribeCodeWorker,
+} from "tools/challenges";
+import { COLORS, MONACO_EDITOR_THEME } from "tools/constants";
+import { LowerRight } from "./shared";
+import { Tooltip, Button } from "@blueprintjs/core";
 
-// TOOD: Should probably replace this with Prettier down the line
-const formatCode = (x: string | undefined): string => {
-  return x ? JSON.stringify(JSON.parse(x), null, 2) : "";
-};
+const debug = require("debug")("client:ChallengeTestEditor");
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
@@ -28,9 +33,12 @@ const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
+const CODE_FORMAT_CHANNEL = "TEST_EDITOR";
+
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
 const ChallengeTestEditor = (props: Props) => {
+  const { challengeId, updateChallenge } = props;
   const valueGetter = React.useRef<() => string>(() => "");
   const [isReady, setIsReady] = React.useState(false);
   const getEditorValue = () => {
@@ -45,42 +53,83 @@ const ChallengeTestEditor = (props: Props) => {
     setIsReady(true);
   };
   const handleUpdate = () => {
-    if (!props.challengeId) {
+    if (!challengeId) {
       console.warn("[ERROR] No challenge ID provided");
       return;
     }
 
     const testCode = getEditorValue();
-    try {
-      // NOTE: This is just to make sure it is valid before storying it, since
-      // you are bound to get invalid JSON during the process of typing some
-      // out.
-      JSON.parse(testCode);
-    } catch (err) {
-      console.log(testCode);
-      console.log(JSON.stringify(testCode));
-      return;
-    }
+    // try {
+    //   // NOTE: This is just to make sure it is valid before storying it, since
+    //   // you are bound to get invalid JSON during the process of typing some
+    //   // out.
+    //   JSON.parse(testCode);
+    // } catch (err) {
+    //   console.log(testCode);
+    //   console.log(JSON.stringify(testCode));
+    //   return;
+    // }
 
     // Since we're using a keyup handler this helps to make it function like a change handler.
     const shouldUpdate = testCode !== props.challengeTestCode;
 
     if (shouldUpdate) {
-      props.updateChallenge({
-        id: props.challengeId,
+      updateChallenge({
+        id: challengeId,
         challenge: { testCode },
       });
     }
   };
   const updateHandler = React.useRef(debounce(200, handleUpdate));
+  const handleFormatCode = () => {
+    if (!challengeId) {
+      console.warn("[ERROR] No challenge ID provided");
+      return;
+    }
+    requestCodeFormatting({
+      code: getEditorValue(),
+      type: "typescript",
+      channel: CODE_FORMAT_CHANNEL,
+    });
+  };
+  React.useEffect(() => {
+    const handleCodeFormat = (e: CodeFormatMessageEvent) => {
+      if (!challengeId) {
+        console.warn("[ERROR] No challenge ID provided");
+        return;
+      }
+
+      const { code, channel } = e.data;
+      if (code && channel === CODE_FORMAT_CHANNEL) {
+        updateChallenge({
+          id: challengeId,
+          challenge: { testCode: code },
+        });
+      } else {
+        debug("[INFO] Test Editor -- No code passed via message event", e);
+      }
+    };
+
+    subscribeCodeWorker(handleCodeFormat);
+
+    return () => unsubscribeCodeWorker(handleCodeFormat);
+  }, [updateChallenge, challengeId]);
 
   return (
-    <div style={{ color: "white" }} onKeyUp={updateHandler.current}>
+    <div
+      style={{
+        height: "calc(100% - 50px)",
+        color: "white",
+        position: "relative",
+        background: COLORS.BACKGROUND_CONSOLE,
+      }}
+      onKeyUp={updateHandler.current}
+    >
       <ControlledEditor
-        height="50vh"
+        height="100%"
         language="javascript"
         editorDidMount={handleEditorReady}
-        value={formatCode(props.challengeTestCode)}
+        value={props.challengeTestCode}
         theme={MONACO_EDITOR_THEME}
         options={{
           formatOnType: true,
@@ -90,6 +139,13 @@ const ChallengeTestEditor = (props: Props) => {
           },
         }}
       />
+      <LowerRight>
+        <Tooltip content={"Format Code"} position="left">
+          <Button aria-label="format editor code" onClick={handleFormatCode}>
+            {"{ }"}
+          </Button>
+        </Tooltip>
+      </LowerRight>
     </div>
   );
 };
