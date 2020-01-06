@@ -12,11 +12,21 @@ import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import Profile from "./Profile";
-import { ButtonCore } from "./shared";
+import { ButtonCore, IconButton } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
-import { Button, ButtonGroup, Classes, Tooltip } from "@blueprintjs/core";
+import {
+  Icon,
+  Button,
+  ButtonGroup,
+  Classes,
+  Tooltip,
+  FocusStyleManager,
+} from "@blueprintjs/core";
 import cx from "classnames";
+
+// Only show focus outlinewhen tabbing around the UI
+FocusStyleManager.onlyShowFocusOnTabs();
 
 /** ===========================================================================
  * Types & Config
@@ -85,9 +95,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 style={{ color: "white", marginRight: 40 }}
                 onClick={this.props.toggleNavigationMap}
               />
-              <Link to="/home">
-                <ProductTitle id="product-title">Pairwise</ProductTitle>
-              </Link>
+              <ProductTitle id="product-title">
+                <Link to="/home">Pairwise</Link>
+              </ProductTitle>
             </ControlsContainer>
             {DEV_MODE && (
               <ControlsContainer>
@@ -99,7 +109,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 <ButtonGroup>
                   {prev && (
                     <Tooltip content="Previous Challenge">
-                      <Button
+                      <IconButton
                         id="prevButton"
                         icon="chevron-left"
                         aria-label="Previous Challenge"
@@ -109,7 +119,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                   )}
                   {next && (
                     <Tooltip content="Next Challenge">
-                      <Button
+                      <IconButton
                         id="nextButton"
                         icon="chevron-right"
                         aria-label="Next Challenge"
@@ -230,6 +240,12 @@ const ProductTitle = styled.h1`
   color: "white";
   font-weight: 100;
   font-family: "Helvetica Neue", Lato, sans-serif;
+
+  a,
+  a:hover {
+    color: white;
+    text-decoration: none;
+  }
 `;
 
 const ControlsContainer = styled.div`
@@ -241,18 +257,23 @@ const ControlsContainer = styled.div`
 
 const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   <Button
+    minimal
     large
     aria-label="Open navigation map"
     icon={overlayVisible ? "menu-closed" : "menu"}
     {...rest}
   />
 ))`
-  color: white;
   appearance: none;
   background: transparent;
   border: none;
   outline: none;
   margin-left: 10px;
+
+  .bp3-icon {
+    color: white !important;
+    transform: scale(1.3);
+  }
 `;
 
 const LoadingOverlay = styled.div`

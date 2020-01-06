@@ -7,7 +7,7 @@ import { assertUnreachable, Challenge } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
@@ -50,8 +50,8 @@ import {
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
-import { ContentInput, LowerRight, StyledMarkdown } from "./shared";
-import { Tooltip, Button, ButtonGroup, EditableText } from "@blueprintjs/core";
+import { ContentInput, LowerRight, StyledMarkdown, IconButton } from "./shared";
+import { Tooltip, ButtonGroup, EditableText } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Types & Config
@@ -440,7 +440,7 @@ class Workspace extends React.Component<IProps, IState> {
           <ButtonGroup vertical>
             {this.state.code !== challenge.starterCode && !isEditMode && (
               <Tooltip content={"Restore Initial Code"} position="left">
-                <Button
+                <IconButton
                   icon="reset"
                   aria-label="reset editor"
                   onClick={this.resetCodeWindow}
@@ -448,7 +448,7 @@ class Workspace extends React.Component<IProps, IState> {
               </Tooltip>
             )}
             <Tooltip content={"Format Code"} position="left">
-              <Button
+              <IconButton
                 icon="style"
                 aria-label="format editor code"
                 onClick={this.handleFormatCode}
@@ -458,7 +458,7 @@ class Workspace extends React.Component<IProps, IState> {
               content={fullScreenEditor ? "Regular" : "Full Screen"}
               position="left"
             >
-              <Button
+              <IconButton
                 aria-label="fullscreen editor"
                 onClick={this.toggleEditorType}
                 icon={fullScreenEditor ? "collapse-all" : "expand-all"}
