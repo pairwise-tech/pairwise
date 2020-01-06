@@ -25,6 +25,9 @@ Some setup steps you will need to run after cloning the repo:
 # Install dependencies
 $ lerna bootstrap
 
+# Create .env files in relevant packages
+$ yarn setup
+
 # Build all packages
 $ yarn build
 
