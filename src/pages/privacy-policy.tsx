@@ -57,7 +57,7 @@ const PrivacyPolicy = () => (
             <li>
               <p>
                 <strong>Company</strong> (referred to as either "the Company",
-                "We", "Us" or "Our" in this Agreement) refers to Prototype X.
+                "We", "Us" or "Our" in this Agreement) refers to Pairwise.
               </p>
             </li>
             <li>
@@ -72,8 +72,8 @@ const PrivacyPolicy = () => (
               access our Service or parts of our Service.
             </li>
             <li>
-              <strong>Website</strong> refers to Prototype X, accessible from
-              https://prototype-x.netlify.com/
+              <strong>Website</strong> refers to Pairwise, accessible from
+              https://app.pairwise.tech
             </li>{' '}
             <li>
               <strong>Service</strong> refers to the Website.
@@ -454,7 +454,7 @@ const PrivacyPolicy = () => (
           <ul>
             <li>
               By visiting this page on our website:
-              https://prototype-x-www.netlify.com/contact
+              https://pairwise.tech/contact
             </li>
           </ul>
         </div>

@@ -94,15 +94,7 @@ const Main = () => {
         </Typography>
         <ActionButton
           onClick={() => {
-            /**
-             * Until the platform is released scroll to the email signup
-             * section.
-             */
-            const element = document.getElementById(EMAIL_SIGNUP_SECTION_ID);
-            element.scrollIntoView({ behavior: 'smooth' });
-
-            /* Later link to the actual platform: */
-            // window.open('https://prototype-x.netlify.com', '_blank');
+            window.open('https://app.pairwise.tech', '_blank');
           }}
         >
           Get Started

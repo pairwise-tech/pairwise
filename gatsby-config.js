@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
 module.exports = {
   siteMetadata: {
-    title: `Prototype X`,
+    title: `Pairwise`,
     description: `Learn Full Stack TypeScript`,
-    author: `Prototype X Core Team`,
+    author: `Pairwise Team`,
   },
   plugins: [
     `gatsby-plugin-typescript`,

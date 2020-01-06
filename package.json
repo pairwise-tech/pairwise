@@ -1,8 +1,8 @@
 {
-  "name": "prototype-x-www",
-  "description": "The website for Prototype X",
-  "version": "0.1.0",
-  "author": "Prototype X Core Team",
+  "name": "pairwise-www",
+  "version": "0.0.1",
+  "description": "The website for Pairwise",
+  "author": "Pairwise Team",
   "dependencies": {
     "@material-ui/core": "^4.7.2",
     "@material-ui/icons": "^4.5.1",
