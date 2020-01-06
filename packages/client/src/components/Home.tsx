@@ -20,7 +20,7 @@ class Home extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
     return (
       <PageContainer>
-        <Text>Prototype X Home</Text>
+        <Text>Pairwise Home</Text>
         <Text>Welcome</Text>
       </PageContainer>
     );
