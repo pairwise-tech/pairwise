@@ -1,5 +1,5 @@
 {
-  "name": "@prototype/client",
+  "name": "@pairwise/client",
   "version": "0.0.1",
   "description": "Prototype X Client Project: Create React App Application",
   "private": true,

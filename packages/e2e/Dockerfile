@@ -1,5 +1,6 @@
-# This Dockerfile builds all project packages and is used for the e2e and
-# Cypress test suites.
+# This Dockerfile is used for the e2e and Cypress test suites. It first
+# builds all the projects and runs the unit tests for each. The build is
+# then used to run the e2e and Cypress tests.
 
 FROM dependencies as build
 
@@ -18,7 +19,3 @@ FROM build AS test
 
 # Uses Lerna to run the test command for all packages
 RUN yarn test
-
-FROM test AS pairwise
-
-COPY . .

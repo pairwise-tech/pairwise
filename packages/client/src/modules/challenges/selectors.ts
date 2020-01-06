@@ -1,7 +1,7 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 
-import { CourseList } from "@prototype/common";
+import { CourseList } from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
 

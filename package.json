@@ -1,9 +1,11 @@
 {
-  "name": "mono-prototype",
+  "name": "pariwise",
   "version": "0.0.1",
-  "description": "Prototype X Lerna Monorepo",
+  "description": "Pairwise Codebase",
   "private": true,
   "scripts": {
+    "up": "docker-compose up",
+    "up:build": "docker-compose up --build",
     "common:build": "cd packages/common && yarn build",
     "common:watch": "cd packages/common && yarn watch",
     "client": "cd packages/client && yarn start:run",

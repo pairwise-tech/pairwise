@@ -1,4 +1,4 @@
-import { ChallengeList, Course } from "@prototype/common";
+import { ChallengeList, Course } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of } from "rxjs";
 import {

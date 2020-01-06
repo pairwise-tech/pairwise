@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import shortid from "shortid";
 import styled from "styled-components/macro";
 
-import { Challenge, Module } from "@prototype/common";
+import { Challenge, Module } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
 import { composeWithProps } from "tools/utils";

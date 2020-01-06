@@ -1,4 +1,4 @@
-import { CHALLENGE_TYPE } from "@prototype/common";
+import { CHALLENGE_TYPE } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";

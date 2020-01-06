@@ -3,7 +3,7 @@ import {
   BlobTypeSet,
   challengeUtilityClass,
   assertUnreachable,
-} from "@prototype/common";
+} from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
 import { ERROR_CODES } from "./constants";

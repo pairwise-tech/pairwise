@@ -1,4 +1,4 @@
-import { Challenge } from "@prototype/common";
+import { Challenge } from "@pairwise/common";
 import { compose } from "redux";
 
 /**

@@ -96,7 +96,7 @@ $ yarn db:rebuild
 These steps will be necessary if for instance some package `node_module` dependencies have changed.
 
 ```bash
-# Runs the builds for all packages, building @prototype/common first
+# Runs the builds for all packages, building @pairwise/common first
 $ yarn build
 
 # Lerna bootstrap installs and links package dependencies
