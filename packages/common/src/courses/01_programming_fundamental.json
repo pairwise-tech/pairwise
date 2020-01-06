@@ -61,6 +61,17 @@
           "supplementaryContent": "Placeholder supplementary content..."
         },
         {
+          "id": "CuwykKRM",
+          "type": "media",
+          "title": "Enter CSS",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "CSS stands for Cascading Style Sheets, but that's unimportant. What matters here is that what CSS is how you change the way things _look_ on the web.\n\nWhere HTML is the \"stuff\", the actual content on a webpage, CSS is how all that stuff looks. Is the background dark with light text (like what you're reading right now)? Is there a menu bar near the top? How does the form on screen try to grab your attention with color and positioning? These are all questions CSS can answer.\n\n# Selectors\n\n# Properties\n\n# The HTML `class` and `id` props\n"
+        },
+        {
           "id": "KlxN3f11",
           "type": "markup",
           "title": "Changing colors",
