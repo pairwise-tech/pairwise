@@ -3,7 +3,7 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import CodeFormatWorker from "workerize-loader!./prettier-code-formatter";
 
-import { CHALLENGE_TYPE } from "@prototype/common";
+import { CHALLENGE_TYPE } from "@pairwise/common";
 
 /** ===========================================================================
  * Types
