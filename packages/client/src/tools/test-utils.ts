@@ -145,7 +145,7 @@ const fetchRequiredDependencies = async (
  */
 const injectDependencies = (
   codeString: string,
-  dependencies: ReadonlyArray<string>,
+  dependencies: readonly string[],
 ) => {
   let result = "";
 
@@ -161,7 +161,7 @@ const injectDependencies = (
  * Fetch the required module dependencies and inject them into the code string.
  */
 export const createInjectDependenciesFunction = (
-  dependencies: ReadonlyArray<string>,
+  dependencies: readonly string[],
 ) => async (codeString: string) => {
   /**
    * TODO: The following method could throw an error if an imported package
