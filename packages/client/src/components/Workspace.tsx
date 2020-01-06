@@ -129,7 +129,8 @@ class Workspace extends React.Component<IProps, IState> {
     isEditMode = this.props.isEditMode,
   ) => {
     if (isEditMode) {
-      if (!this.state) debugger;
+      // Can reproduce this issue by switching to type media and then back
+      // if (!this.state) { debugger; }
       return challenge[this.state.adminEditorTab];
     } else {
       return getStoredCodeForChallenge(challenge);

@@ -40,15 +40,6 @@ const EditingToolbar = connect(
   toolbarDispatchProps,
 )((props: EditChallengeControlsConnectProps) => {
   const { isEditMode, setEditMode, saveCourse, course, challenge } = props;
-  const [anchorEl, setAnchorEl] = React.useState<Nullable<HTMLElement>>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditMode(event.target.checked);
@@ -109,14 +100,12 @@ const EditingToolbar = connect(
               id: challenge?.id || "", // See NOTE
               challenge: { type: x.value },
             });
-            handleClose();
           }}
         >
           <Button
             rightIcon="caret-down"
             aria-controls="simple-menu"
             aria-haspopup="true"
-            onClick={handleClick}
           >
             Type: <strong style={{ marginLeft: 6 }}>{challenge?.type}</strong>
           </Button>
