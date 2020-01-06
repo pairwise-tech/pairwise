@@ -81,6 +81,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
           <Header>
             <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
               <NavIconButton
+                overlayVisible={overlayVisible}
                 style={{ color: "white", marginRight: 40 }}
                 onClick={this.props.toggleNavigationMap}
               />
@@ -100,7 +101,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                     <Tooltip content="Previous Challenge">
                       <Button
                         id="prevButton"
-                        icon="step-backward"
+                        icon="chevron-left"
                         aria-label="Previous Challenge"
                         onClick={() => this.props.selectChallenge(prev.id)}
                       />
@@ -110,7 +111,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                     <Tooltip content="Next Challenge">
                       <Button
                         id="nextButton"
-                        icon="step-forward"
+                        icon="chevron-right"
                         aria-label="Next Challenge"
                         onClick={() => this.props.selectChallenge(next.id)}
                       />
@@ -238,8 +239,13 @@ const ControlsContainer = styled.div`
   flex-direction: row;
 `;
 
-const NavIconButton = styled(props => (
-  <Button large icon="menu" aria-label="Open navigaton map" {...props} />
+const NavIconButton = styled(({ overlayVisible, ...rest }) => (
+  <Button
+    large
+    aria-label="Open navigation map"
+    icon={overlayVisible ? "menu-closed" : "menu"}
+    {...rest}
+  />
 ))`
   color: white;
   appearance: none;

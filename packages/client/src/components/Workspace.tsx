@@ -428,20 +428,19 @@ class Workspace extends React.Component<IProps, IState> {
             )}
             <Tooltip content={"Format Code"} position="left">
               <Button
+                icon="style"
                 aria-label="format editor code"
                 onClick={this.handleFormatCode}
-              >
-                {"{ }"}
-              </Button>
+              />
             </Tooltip>
             <Tooltip
               content={fullScreenEditor ? "Regular" : "Full Screen"}
               position="left"
             >
               <Button
-                icon="fullscreen"
                 aria-label="fullscreen editor"
                 onClick={this.toggleEditorType}
+                icon={fullScreenEditor ? "collapse-all" : "expand-all"}
               />
             </Tooltip>
           </ButtonGroup>
