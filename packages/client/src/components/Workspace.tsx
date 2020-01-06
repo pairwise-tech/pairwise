@@ -24,6 +24,7 @@ import {
   TestCaseMarkupTypescript,
   TestCaseReact,
   unsubscribeCodeWorker,
+  waitForObjectProp,
 } from "../tools/challenges";
 import {
   COLORS,
@@ -758,10 +759,6 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   iFrameRenderPreview = async () => {
-    // TODO!!!
-    // - put different parts in different script tags. I.e. test harness / bootstrap code, library code, then the actual tests
-
-    // console.clear();
     this.setState(
       { logs: DEFAULT_LOGS },
       async (): Promise<void> => {
@@ -790,7 +787,16 @@ class Workspace extends React.Component<IProps, IState> {
            * Wait to allow the iframe to render the new HTML document
            * before appending and running the test script.
            */
-          await wait(50);
+          // await wait(50); TOOD: I think since this is a promise it might
+          // actually be hitting a race condition. To get body undefined you can
+          // navigate very quickly using the upper nav through a few challenges.
+          // It should blow up. I think this promise is still going while the
+          // iframe is being swapped, meaning we need something like switch map
+          // to cancel any rendering that would have taken place.
+          await waitForObjectProp(
+            this.iFrameRef.contentWindow.document,
+            "body",
+          );
 
           const markupTests = getTestHarness(this.props.challenge.testCode);
 

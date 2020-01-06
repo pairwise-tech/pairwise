@@ -114,6 +114,33 @@ export const waitForDom = (
   });
 };
 
+export const waitForObjectProp = (
+  obj: { [k: string]: any },
+  prop: string,
+  timeout: number = 10000,
+): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      clearInterval(interval);
+      reject(
+        new Error(`[DOM Timeout] Waited ${timeout}ms without DOM loaded event`),
+      );
+    }, timeout);
+
+    const poll = () => {
+      if (obj[prop] !== undefined) {
+        clearTimeout(timer);
+        clearInterval(interval);
+        resolve(obj[prop]);
+      } else {
+        console.warn("polling...");
+      }
+    };
+
+    const interval = setInterval(poll, 60);
+  });
+};
+
 /**
  * Get the test code string for a markup challenge.
  */
