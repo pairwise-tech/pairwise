@@ -4,9 +4,28 @@
 // Blueprint source code to find the associated SASS variable name:
 // https://github.com/palantir/blueprint/blob/develop/packages/core/src/common/_colors.scss
 
+$primary1: rgb(21, 150, 111);
+$primary2: rgb(16, 202, 146);
+$primary3: rgb(0, 255, 177);
+$primary4: rgb(46, 255, 192);
+$primary5: rgb(161, 255, 227);
+$gradient-green: linear-gradient(
+  90deg,
+  $primary3 22%,
+  rgba(0, 255, 211, 1) 74%
+);
+
 $gray4: rgb(105, 105, 105);
 
 $dark-gray4: rgb(50, 50, 50);
 $dark-gray5: rgb(40, 40, 40);
+
+// WOW! What an assignment! Blueprint JS does not want to be customized, so we
+// just have to work with the variable names it's already using.
+$blue1: $primary1;
+$blue2: $primary2;
+$blue3: $primary3;
+$blue4: $primary4;
+$blue5: $primary5;
 
 @import "@blueprintjs/core/src/blueprint.scss";

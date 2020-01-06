@@ -5,6 +5,8 @@ import styled from "styled-components/macro";
 import { COLORS } from "../tools/constants";
 import { EditableText, IEditableTextProps } from "@blueprintjs/core";
 
+const PROSE_MAX_WIDTH = 728;
+
 const LazyCodeBlock = React.lazy(() => import("./CodeBlock"));
 
 const InlineCode = ({ value }: { value: string }) => {
@@ -38,7 +40,9 @@ export const ButtonCore = styled.button`
 `;
 
 export const ContentInput = styled((props: IEditableTextProps) => (
-  <EditableText multiline minLines={3} {...props} />
+  <div style={{ maxWidth: PROSE_MAX_WIDTH }}>
+    <EditableText multiline minLines={3} {...props} />
+  </div>
 ))`
   font-size: 1.1em;
   line-height: 1.5;
@@ -63,7 +67,7 @@ const HighlightedMarkdown = (props: ReactMarkdownProps) => {
 };
 
 export const StyledMarkdown = styled(HighlightedMarkdown)`
-  max-width: 700px;
+  max-width: ${PROSE_MAX_WIDTH}px;
   color: white;
   line-height: 1.5;
   font-size: 1.1rem;
