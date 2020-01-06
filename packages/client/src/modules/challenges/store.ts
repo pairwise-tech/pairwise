@@ -1,6 +1,6 @@
 import { createReducer } from "typesafe-actions";
 
-import { Challenge, CourseList } from "@prototype/common";
+import { Challenge, CourseList } from "@pairwise/common";
 import Module from "module";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";

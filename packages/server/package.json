@@ -1,5 +1,5 @@
 {
-  "name": "@prototype/server",
+  "name": "@pairwise/server",
   "version": "0.0.1",
   "description": "Prototype X Server Project: NestJS Application",
   "private": true,

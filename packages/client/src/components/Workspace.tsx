@@ -12,7 +12,7 @@ import Fullscreen from "@material-ui/icons/Fullscreen";
 import FullscreenExit from "@material-ui/icons/FullscreenExit";
 import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
 import { monaco } from "@monaco-editor/react";
-import { assertUnreachable, Challenge } from "@prototype/common";
+import { assertUnreachable, Challenge } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";

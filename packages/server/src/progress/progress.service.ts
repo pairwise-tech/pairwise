@@ -14,7 +14,7 @@ import {
   IUserCodeBlobDto,
   BlobTypeSet,
   UserCourseStatus,
-} from "@prototype/common";
+} from "@pairwise/common";
 import { UserCodeBlob } from "./userCodeBlob.entity";
 import { RequestUser } from "src/types";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";

@@ -7,7 +7,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Assignment from "@material-ui/icons/Assignment";
 import Code from "@material-ui/icons/Code";
 import PlayCircleFilled from "@material-ui/icons/PlayCircleFilled";
-import { Challenge, Module } from "@prototype/common";
+import { Challenge, Module } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
 import { composeWithProps } from "tools/utils";

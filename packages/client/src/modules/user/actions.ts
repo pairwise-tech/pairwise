@@ -1,4 +1,4 @@
-import { IUserDto } from "@prototype/common";
+import { IUserDto } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { ActionType, createAction } from "typesafe-actions";
 

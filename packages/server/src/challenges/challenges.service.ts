@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import Courses from "@prototype/common";
+import Courses from "@pairwise/common";
 import { RequestUser } from "src/types";
 
 @Injectable()
