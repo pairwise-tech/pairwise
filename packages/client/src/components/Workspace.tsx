@@ -59,6 +59,26 @@ import { Tooltip, Button, ButtonGroup } from "@blueprintjs/core";
  * ============================================================================
  */
 
+/**
+ * This is only to allow a logic split if editting (i.e. via admin edit mode).
+ * So it is not relevant unless using codepress
+ */
+const getEditorCode = ({
+  challenge,
+  isEditMode,
+  tab = "starterCode",
+}: {
+  challenge: Challenge;
+  isEditMode: boolean;
+  tab: IState["adminEditorTab"];
+}) => {
+  if (isEditMode) {
+    return challenge[tab];
+  } else {
+    return getStoredCodeForChallenge(challenge);
+  }
+};
+
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
@@ -113,30 +133,22 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
+    const defaultAdminTab: IState["adminEditorTab"] = "starterCode";
+
     this.state = {
       testResults: [],
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
-      adminEditorTab: "starterCode",
+      adminEditorTab: defaultAdminTab,
       adminTestTab: "testResults",
-      code: this.getEditorCode(props.challenge),
+      code: getEditorCode({
+        challenge: props.challenge,
+        isEditMode: this.props.isEditMode,
+        tab: defaultAdminTab,
+      }),
     };
   }
-
-  // This is only to allow a logic split if editting (i.e. via admin edit mode).
-  getEditorCode = (
-    challenge: Challenge = this.props.challenge,
-    isEditMode = this.props.isEditMode,
-  ) => {
-    if (isEditMode) {
-      // Can reproduce this issue by switching to type media and then back
-      // if (!this.state) { debugger; }
-      return challenge[this.state.adminEditorTab];
-    } else {
-      return getStoredCodeForChallenge(challenge);
-    }
-  };
 
   async componentDidMount() {
     document.addEventListener("keydown", this.handleKeyPress);
@@ -180,8 +192,12 @@ class Workspace extends React.Component<IProps, IState> {
   componentWillReceiveProps(nextProps: IProps) {
     // Update in response to changing challenge
     if (this.props.challenge.id !== nextProps.challenge.id) {
-      const { challenge } = nextProps;
-      const newCode = this.getEditorCode(challenge);
+      const { challenge, isEditMode } = nextProps;
+      const newCode = getEditorCode({
+        challenge,
+        isEditMode,
+        tab: this.state.adminEditorTab,
+      });
       this.setState(
         { code: newCode, adminTestTab: "testResults" },
         this.refreshEditor,
@@ -192,7 +208,13 @@ class Workspace extends React.Component<IProps, IState> {
     // happen for us as we use codepress, not for our end users.
     if (this.props.isEditMode !== nextProps.isEditMode) {
       this.setState(
-        { code: this.getEditorCode(nextProps.challenge, nextProps.isEditMode) },
+        {
+          code: getEditorCode({
+            challenge: nextProps.challenge,
+            isEditMode: nextProps.isEditMode,
+            tab: this.state.adminEditorTab,
+          }),
+        },
         this.refreshEditor,
       );
     }
@@ -762,7 +784,7 @@ class Workspace extends React.Component<IProps, IState> {
       { logs: DEFAULT_LOGS },
       async (): Promise<void> => {
         if (!this.iFrameRef || !this.iFrameRef.contentWindow) {
-          console.warn("[ERROR] iframe not yet mounted");
+          console.warn("[iframe] Not yet mounted");
           return;
         }
 
@@ -784,18 +806,14 @@ class Workspace extends React.Component<IProps, IState> {
 
           /**
            * Wait to allow the iframe to render the new HTML document
-           * before appending and running the test script.
+           * before appending and running the test script. The iframe will have
+           * a document before it has a body, and I didn't find any good way to
+           * listen for it to be ready so we are just polling
            */
-          // await wait(50); TOOD: I think since this is a promise it might
-          // actually be hitting a race condition. To get body undefined you can
-          // navigate very quickly using the upper nav through a few challenges.
-          // It should blow up. I think this promise is still going while the
-          // iframe is being swapped, meaning we need something like switch map
-          // to cancel any rendering that would have taken place.
-          await waitForObjectProp(
-            this.iFrameRef.contentWindow.document,
-            "body",
-          );
+          while (this.iFrameRef.contentWindow.document.body === null) {
+            console.warn("[iframe] Body not ready. Waiting...");
+            await wait(50);
+          }
 
           const markupTests = getTestHarness(this.props.challenge.testCode);
 
