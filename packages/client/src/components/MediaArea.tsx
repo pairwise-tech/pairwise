@@ -1,8 +1,9 @@
 import Modules, { ReduxStoreState } from "modules/root";
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ContentInput, StyledMarkdown, Text, TitleInput } from "./shared";
+import { ContentInput, StyledMarkdown, Text } from "./shared";
+import { EditableText } from "@blueprintjs/core";
 
 /**
  * The media area. Where supplementary content and challenge videos live. The media area can also serve as the standalone UI for a challenge that is all information, without any interactive coding practice.
@@ -30,15 +31,9 @@ const MediaArea = connect(
     return <h1>Loading...</h1>;
   }
 
-  const handleChange = (fn: (x: string) => any) => (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    fn(e.target.value);
-  };
+  const handleTitle = (x: string) =>
+    props.updateChallenge({ id: challenge.id, challenge: { title: x } });
 
-  const handleTitle = handleChange(x =>
-    props.updateChallenge({ id: challenge.id, challenge: { title: x } }),
-  );
   const handleContent = (supplementaryContent: string) =>
     props.updateChallenge({
       id: challenge.id,
@@ -47,12 +42,13 @@ const MediaArea = connect(
 
   return (
     <SupplementaryContentContainer>
-      <TitleInput
-        type="text"
-        value={title}
-        onChange={handleTitle}
-        disabled={!isEditMode}
-      />
+      <TitleHeader>
+        <EditableText
+          value={title}
+          onChange={handleTitle}
+          disabled={!isEditMode}
+        />
+      </TitleHeader>
       {isEditMode ? (
         <ContentInput
           value={challenge.supplementaryContent}
@@ -125,3 +121,7 @@ const YoutubeEmbed = (props: { url: string }) => {
     ></iframe>
   );
 };
+
+const TitleHeader = styled.h1`
+  font-size: 3em;
+`;

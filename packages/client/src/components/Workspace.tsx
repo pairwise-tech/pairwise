@@ -50,8 +50,8 @@ import {
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
-import { ContentInput, LowerRight, StyledMarkdown, TitleInput } from "./shared";
-import { Tooltip, Button, ButtonGroup } from "@blueprintjs/core";
+import { ContentInput, LowerRight, StyledMarkdown } from "./shared";
+import { Tooltip, Button, ButtonGroup, EditableText } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Types & Config
@@ -1158,6 +1158,20 @@ export const LoginSignupTextInteractive = styled(LoginSignupText)`
   }
 `;
 
+const ChallengeTitleHeading = styled.h1`
+  font-size: 1.2em;
+  background: transparent;
+  font-weight: bold;
+  color: rgb(200, 200, 200);
+  display: block;
+  width: 100%;
+  line-height: 1.5;
+  transition: all 0.2s ease-out;
+  &:focus {
+    background: black;
+  }
+`;
+
 const contentMapState = (state: ReduxStoreState) => ({
   content: Modules.selectors.challenges.getCurrentContent(state) || "",
   title: Modules.selectors.challenges.getCurrentTitle(state) || "",
@@ -1177,44 +1191,31 @@ const ContentViewEdit = connect(
   contentMapDispatch,
 )((props: ContentViewEditProps) => {
   const { isEditMode, currentId } = props;
-  const handleChange = (fn: (x: string) => any) => (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    fn(e.target.value);
-  };
-
-  const handleTitle = handleChange(title =>
-    props.updateChallenge({ id: currentId, challenge: { title } }),
-  );
+  const handleTitle = (title: string) =>
+    props.updateChallenge({ id: currentId, challenge: { title } });
   const handleContent = (content: string) =>
     props.updateChallenge({ id: currentId, challenge: { content } });
 
   return (
-    <StyledInputs isEditMode={isEditMode} style={{ height: "100%" }}>
-      <TitleInput
-        type="text"
-        value={props.title}
-        onChange={handleTitle}
-        disabled={!isEditMode}
-      />
+    <div style={{ height: "100%" }}>
+      <ChallengeTitleHeading>
+        <StyledEditableText
+          value={props.title}
+          onChange={handleTitle}
+          disabled={!isEditMode}
+        />
+      </ChallengeTitleHeading>
       {isEditMode ? (
         <ContentInput value={props.content} onChange={handleContent} />
       ) : (
         <StyledMarkdown source={props.content} />
       )}
-    </StyledInputs>
+    </div>
   );
 });
 
-const StyledInputs = styled.div<{ isEditMode: boolean }>`
-  input,
-  textarea {
-    border: 1px solid transparent;
-    &:hover {
-      border-color: ${props =>
-        props.isEditMode ? "rgb(0, 255, 185)" : "transparent"};
-    }
-  }
+const StyledEditableText = styled(EditableText)`
+  width: 100%;
 `;
 
 const keyboardStateToProps = (state: ReduxStoreState) => ({
