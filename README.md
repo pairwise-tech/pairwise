@@ -22,6 +22,9 @@ To run the app you will need Docker and Node installed. All of the packages tend
 Some setup steps you will need to run after cloning the repo:
 
 ```bash
+# Install dependencies
+$ lerna bootstrap
+
 # Build all packages
 $ yarn build
 
