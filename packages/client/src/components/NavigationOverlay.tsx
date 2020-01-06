@@ -3,14 +3,11 @@ import { connect } from "react-redux";
 import shortid from "shortid";
 import styled from "styled-components/macro";
 
-import Tooltip from "@material-ui/core/Tooltip";
-import Assignment from "@material-ui/icons/Assignment";
-import Code from "@material-ui/icons/Code";
-import PlayCircleFilled from "@material-ui/icons/PlayCircleFilled";
 import { Challenge, Module } from "@prototype/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
 import { composeWithProps } from "tools/utils";
+import { Tooltip, Icon } from "@blueprintjs/core";
 
 const debug = require("debug")("client:NavigationOverlay");
 
@@ -130,17 +127,20 @@ class NavigationOverlay extends React.Component<IProps, {}> {
                   onClick={() => this.props.selectChallenge(c.id)}
                 >
                   <span>
-                    {c.type === "media" ? (
-                      <Assignment fontSize="small" />
-                    ) : (
-                      <Code fontSize="small" />
-                    )}
+                    <Icon
+                      iconSize={Icon.SIZE_LARGE}
+                      icon={c.type === "media" ? "book" : "code"}
+                    />
                     <span style={{ marginLeft: 10 }}>{c.title}</span>
                   </span>
                   <span>
                     {c.videoUrl && (
-                      <Tooltip title="Includes Video">
-                        <PlayCircleFilled />
+                      <Tooltip
+                        usePortal={false}
+                        position="left"
+                        content="Includes Video"
+                      >
+                        <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
                       </Tooltip>
                     )}
                   </span>
@@ -288,7 +288,7 @@ const Overlay = styled.div<{ visible: boolean }>`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 100;
+  z-index: 15;
   position: fixed;
   background: rgba(0, 0, 0, 0.85);
   visibility: ${props => (props.visible ? "visible" : "hidden")};

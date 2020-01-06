@@ -1,5 +1,3 @@
-import IconButton from "@material-ui/core/IconButton";
-import FormatLineSpacing from "@material-ui/icons/FormatLineSpacing";
 import { ControlledEditor, EditorDidMount } from "@monaco-editor/react";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
@@ -12,7 +10,8 @@ import {
   unsubscribeCodeWorker,
 } from "tools/challenges";
 import { COLORS, MONACO_EDITOR_THEME } from "tools/constants";
-import { LowerRight, StyledTooltip } from "./shared";
+import { LowerRight } from "./shared";
+import { Tooltip, Button } from "@blueprintjs/core";
 
 const debug = require("debug")("client:ChallengeTestEditor");
 
@@ -141,16 +140,11 @@ const ChallengeTestEditor = (props: Props) => {
         }}
       />
       <LowerRight>
-        <StyledTooltip title={"Format Code"} placement="left">
-          <IconButton
-            size="medium"
-            style={{ color: "white" }}
-            aria-label="format editor code"
-            onClick={handleFormatCode}
-          >
-            <FormatLineSpacing fontSize="inherit" />
-          </IconButton>
-        </StyledTooltip>
+        <Tooltip content={"Format Code"} position="left">
+          <Button aria-label="format editor code" onClick={handleFormatCode}>
+            {"{ }"}
+          </Button>
+        </Tooltip>
       </LowerRight>
     </div>
   );

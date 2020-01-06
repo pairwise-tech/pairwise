@@ -2,11 +2,6 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
-import IconButton from "@material-ui/core/IconButton";
-import FormatLineSpacing from "@material-ui/icons/FormatLineSpacing";
-import Fullscreen from "@material-ui/icons/Fullscreen";
-import FullscreenExit from "@material-ui/icons/FullscreenExit";
-import SettingsBackupRestore from "@material-ui/icons/SettingsBackupRestore";
 import { monaco } from "@monaco-editor/react";
 import { assertUnreachable, Challenge } from "@prototype/common";
 import { Console, Decode } from "console-feed";
@@ -55,13 +50,8 @@ import {
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
-import {
-  ContentInput,
-  LowerRight,
-  StyledMarkdown,
-  StyledTooltip,
-  TitleInput,
-} from "./shared";
+import { ContentInput, LowerRight, StyledMarkdown, TitleInput } from "./shared";
+import { Tooltip, Button, ButtonGroup } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Types & Config
@@ -139,6 +129,7 @@ class Workspace extends React.Component<IProps, IState> {
     isEditMode = this.props.isEditMode,
   ) => {
     if (isEditMode) {
+      if (!this.state) debugger;
       return challenge[this.state.adminEditorTab];
     } else {
       return getStoredCodeForChallenge(challenge);
@@ -423,45 +414,35 @@ class Workspace extends React.Component<IProps, IState> {
           </Tab>
         </TabbedInnerNav>
         <LowerRight>
-          {this.state.code !== challenge.starterCode && !isEditMode && (
-            <StyledTooltip title={"Restore Initial Code"} placement="left">
-              <IconButton
-                size="medium"
-                style={{ color: "white" }}
-                aria-label="reset editor"
-                onClick={this.resetCodeWindow}
+          <ButtonGroup vertical>
+            {this.state.code !== challenge.starterCode && !isEditMode && (
+              <Tooltip content={"Restore Initial Code"} position="left">
+                <Button
+                  icon="reset"
+                  aria-label="reset editor"
+                  onClick={this.resetCodeWindow}
+                />
+              </Tooltip>
+            )}
+            <Tooltip content={"Format Code"} position="left">
+              <Button
+                aria-label="format editor code"
+                onClick={this.handleFormatCode}
               >
-                <SettingsBackupRestore fontSize="inherit" />
-              </IconButton>
-            </StyledTooltip>
-          )}
-          <StyledTooltip title={"Format Code"} placement="left">
-            <IconButton
-              size="medium"
-              style={{ color: "white" }}
-              aria-label="format editor code"
-              onClick={this.handleFormatCode}
+                {"{ }"}
+              </Button>
+            </Tooltip>
+            <Tooltip
+              content={fullScreenEditor ? "Regular" : "Full Screen"}
+              position="left"
             >
-              <FormatLineSpacing fontSize="inherit" />
-            </IconButton>
-          </StyledTooltip>
-          <StyledTooltip
-            title={fullScreenEditor ? "Regular" : "Full Screen"}
-            placement="left"
-          >
-            <IconButton
-              size="medium"
-              style={{ color: "white" }}
-              aria-label="fullscreen editor"
-              onClick={this.toggleEditorType}
-            >
-              {fullScreenEditor ? (
-                <FullscreenExit fontSize="inherit" />
-              ) : (
-                <Fullscreen fontSize="inherit" />
-              )}
-            </IconButton>
-          </StyledTooltip>
+              <Button
+                icon="fullscreen"
+                aria-label="fullscreen editor"
+                onClick={this.toggleEditorType}
+              />
+            </Tooltip>
+          </ButtonGroup>
         </LowerRight>
         <div id="monaco-editor" style={{ height: "100%" }} />
       </div>
@@ -1175,9 +1156,8 @@ const ContentViewEdit = connect(
   const handleTitle = handleChange(title =>
     props.updateChallenge({ id: currentId, challenge: { title } }),
   );
-  const handleContent = handleChange(content =>
-    props.updateChallenge({ id: currentId, challenge: { content } }),
-  );
+  const handleContent = (content: string) =>
+    props.updateChallenge({ id: currentId, challenge: { content } });
 
   return (
     <StyledInputs isEditMode={isEditMode} style={{ height: "100%" }}>

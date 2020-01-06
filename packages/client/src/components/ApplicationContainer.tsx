@@ -1,5 +1,3 @@
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/icons/Menu";
 import queryString from "query-string";
 import React from "react";
 import { connect } from "react-redux";
@@ -14,10 +12,11 @@ import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import Profile from "./Profile";
-import { ButtonCore, StyledTooltip } from "./shared";
+import { ButtonCore } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
-import { Button, ButtonGroup, Classes } from "@blueprintjs/core";
+import { Button, ButtonGroup, Classes, Tooltip } from "@blueprintjs/core";
+import cx from "classnames";
 
 /** ===========================================================================
  * Types & Config
@@ -75,7 +74,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     return (
       <React.Fragment>
         <MobileView />
-        <div className={Classes.DARK}>
+        <DarkTheme>
           {this.renderLoadingOverlay()}
           <SingleSignOnHandler />
           <NavigationOverlay overlayVisible={overlayVisible} />
@@ -98,24 +97,24 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               {displayNavigationArrows && (
                 <ButtonGroup>
                   {prev && (
-                    <StyledTooltip title="Previous Challenge">
+                    <Tooltip content="Previous Challenge">
                       <Button
                         id="prevButton"
                         icon="step-backward"
                         aria-label="Previous Challenge"
                         onClick={() => this.props.selectChallenge(prev.id)}
                       />
-                    </StyledTooltip>
+                    </Tooltip>
                   )}
                   {next && (
-                    <StyledTooltip title="Next Challenge">
+                    <Tooltip content="Next Challenge">
                       <Button
                         id="nextButton"
                         icon="step-forward"
                         aria-label="Next Challenge"
                         onClick={() => this.props.selectChallenge(next.id)}
                       />
-                    </StyledTooltip>
+                    </Tooltip>
                   )}
                 </ButtonGroup>
               )}
@@ -169,7 +168,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             />
             <Route key={4} component={() => <Redirect to="/workspace" />} />
           </Switch>
-        </div>
+        </DarkTheme>
       </React.Fragment>
     );
   }
@@ -240,15 +239,14 @@ const ControlsContainer = styled.div`
 `;
 
 const NavIconButton = styled(props => (
-  <IconButton aria-label="Open navigaton map" {...props}>
-    <Menu />
-  </IconButton>
+  <Button large icon="menu" aria-label="Open navigaton map" {...props} />
 ))`
   color: white;
   appearance: none;
   background: transparent;
   border: none;
   outline: none;
+  margin-left: 10px;
 `;
 
 const LoadingOverlay = styled.div`
@@ -394,6 +392,14 @@ const MobileTitleText = styled(MobileText)`
   font-family: "Helvetica Neue", Lato, sans-serif;
   color: ${COLORS.TEXT_TITLE};
 `;
+
+interface DarkThemeProps {
+  className?: string;
+  children: React.ReactNode;
+}
+const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
+  return <div className={cx(className, Classes.DARK)} {...props} />;
+};
 
 /** ===========================================================================
  * Props
