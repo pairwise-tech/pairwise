@@ -87,7 +87,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 onClick={this.props.toggleNavigationMap}
               />
               <Link to="/home">
-                <ProductTitle id="product-title">Prototype X</ProductTitle>
+                <ProductTitle id="product-title">Pairwise</ProductTitle>
               </Link>
             </ControlsContainer>
             {DEV_MODE && (
@@ -345,7 +345,7 @@ const AccountDropdownButton = styled.div`
 
 const MobileView = () => (
   <MobileContainer>
-    <MobileTitleText>Welcome to Prototype X</MobileTitleText>
+    <MobileTitleText>Welcome to Pairwise</MobileTitleText>
     <MobileText>
       Unfortunately, smart phones and tablets are just not the best devices for
       developing software. Our platform is intended to be used on a larger

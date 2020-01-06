@@ -1,6 +1,6 @@
 import { createReducer } from "typesafe-actions";
 
-import { IUserDto } from "@prototype/common";
+import { IUserDto } from "@pairwise/common";
 import { AppActionTypes } from "../app";
 import { Actions as actions } from "../root-actions";
 import { ActionTypes } from "./actions";

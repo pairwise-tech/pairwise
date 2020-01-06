@@ -2,7 +2,6 @@ _Things not done yet for the challenge workspace:_
 
 ### HARD:
 
-- [ ] Build Codepress!
 - [~] Type definition files: see codesandbox source code which dynamically
   fetches and inserts @types/ dependencies for modules.
 - [~] Fetch import modules dynamically: unknown ~
@@ -43,3 +42,4 @@ _Things not done yet for the challenge workspace:_
 - [x] Ability to test React challenges
 - [x] Include console warn and info in console method overrides
 - [x] Don't show test console output in workspace console window
+- [x] Build Codepress!

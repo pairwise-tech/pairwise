@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsBoolean, IsString } from "class-validator";
-import { IUserCourseProgressDto } from "@prototype/common";
+import { IUserCourseProgressDto } from "@pairwise/common";
 
 export class UserCourseProgressDto implements IUserCourseProgressDto {
   @IsBoolean()

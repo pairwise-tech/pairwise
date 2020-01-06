@@ -1,5 +1,5 @@
 {
-  "name": "@prototype/cypress",
+  "name": "@pairwise/cypress",
   "version": "0.0.1",
   "description": "Cypress e2e test suite for the client|server application",
   "private": true,

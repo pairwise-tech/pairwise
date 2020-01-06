@@ -3,7 +3,7 @@ import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "src/payments/payments.entity";
-import { IUserDto } from "@prototype/common";
+import { IUserDto } from "@pairwise/common";
 
 export interface GenericUserProfile {
   email: string;

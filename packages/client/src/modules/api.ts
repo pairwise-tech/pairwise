@@ -8,7 +8,7 @@ import {
   Ok,
   Result,
   UserCourseStatus,
-} from "@prototype/common";
+} from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";

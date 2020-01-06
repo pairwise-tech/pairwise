@@ -1,7 +1,7 @@
 import axios from "axios";
 import request from "supertest";
 import { fetchAccessToken, HOST } from "./utils/e2e-utils";
-import { IUserCourseProgressDto } from "@prototype/common";
+import { IUserCourseProgressDto } from "@pairwise/common";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs

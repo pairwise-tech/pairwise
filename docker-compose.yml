@@ -3,8 +3,7 @@ version: "3.5"
 # This docker-compose file deploys the backend application: the database,
 # the server, and the mock external services. This can be used to easily run
 # the entire backend application in order to develop the frontend, or to
-# write Cypress tests. This file uses a Dockerfile defined in the package
-# external-services.
+# write Cypress tests.
 
 services:
   db:

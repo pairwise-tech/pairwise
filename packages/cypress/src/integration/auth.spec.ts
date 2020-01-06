@@ -17,7 +17,7 @@ describe("Authentication Flows", () => {
 
     cy.get("#account-menu-dropdown").trigger("mouseover");
     cy.get("#logout-link").click({ force: true });
-    cy.contains("Prototype X Home");
+    cy.contains("Pairwise Home");
 
     cy.contains("Login or Signup");
     cy.url().should("include", "home");

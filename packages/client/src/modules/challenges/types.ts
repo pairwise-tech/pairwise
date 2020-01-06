@@ -1,4 +1,4 @@
-import { Challenge, Module } from "@prototype/common";
+import { Challenge, Module } from "@pairwise/common";
 
 /** ===========================================================================
  * Product Curriculum Hierarchy:

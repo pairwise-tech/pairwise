@@ -1,5 +1,5 @@
 {
-  "name": "@prototype/common",
+  "name": "@pairwise/common",
   "version": "0.0.1",
   "description": "Prototype X Common Project: Shared utilities and type definitions",
   "private": true,

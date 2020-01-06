@@ -4,7 +4,7 @@ import { UserService } from "src/user/user.service";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "./payments.entity";
 import { Repository } from "typeorm";
-import { challengeUtilityClass } from "@prototype/common";
+import { challengeUtilityClass } from "@pairwise/common";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 
 @Injectable()

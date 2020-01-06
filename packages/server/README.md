@@ -85,9 +85,9 @@ Where `MyMigrationName` is a name to describe the current migration. The second 
 
 ```bash
 # Build the Dockerfile
-$ docker build -t prototype-x-server .
+$ docker build -t pairwise-server .
 # Run the built image
-$ docker run -it prototype-x-server
+$ docker run -it pairwise-server
 ```
 
 ## Support

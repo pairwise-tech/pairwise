@@ -6,7 +6,7 @@ import morgan from "morgan";
 import * as path from "path";
 import { promisify } from "util";
 
-import { Course } from "@prototype/common";
+import { Course } from "@pairwise/common";
 
 const debug = require("debug")("codepress:app");
 

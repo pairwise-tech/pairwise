@@ -1,5 +1,5 @@
 {
-  "name": "e2e",
+  "name": "@pairwise/e2e",
   "version": "0.0.1",
   "description": "e2e test suites for Prototype X",
   "private": true,
