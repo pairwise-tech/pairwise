@@ -131,7 +131,12 @@ class Api extends BaseApiClass {
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
     try {
       let course: Course;
-      if (ENV.DEV_MODE) {
+
+      if (ENV.PRODUCTION) {
+        /* TODO: Remove after deploying a server */
+        const challenges = require("@pairwise/common").default;
+        course = challenges.FullstackTypeScript;
+      } else if (ENV.DEV_MODE) {
         // TODO: This is not great code, it's just that we're in the middle of a big refactor. In the future, we should standardize a few things, including:
         // - How we do async. I.e. Observables, Promises, fetch, axios, lots of redundancy
         // - Arrays of things (CourseList) vs things themselves (Course)
