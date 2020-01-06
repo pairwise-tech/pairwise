@@ -1,4 +1,3 @@
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import { Router as ReactRouter } from "react-router-dom";
@@ -13,13 +12,13 @@ import { COLORS } from "tools/constants";
  * ============================================================================
  */
 
-const theme = createMuiTheme({
+const muiTheme = {
   palette: {
     type: "dark",
     primary: { main: COLORS.PRIMARY_GREEN }, // Green
     secondary: { main: COLORS.SECONDARY_PINK }, // Pink-ish
   },
-});
+};
 
 class App extends React.Component {
   componentDidMount() {
@@ -32,9 +31,7 @@ class App extends React.Component {
     return (
       <ReduxProvider store={store}>
         <ReactRouter history={history}>
-          <ThemeProvider theme={theme}>
-            <ParentContainer />
-          </ThemeProvider>
+          <ParentContainer />
         </ReactRouter>
       </ReduxProvider>
     );

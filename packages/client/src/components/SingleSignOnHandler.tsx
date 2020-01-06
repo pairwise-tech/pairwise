@@ -1,4 +1,4 @@
-import Modal from "@material-ui/core/Modal";
+import { Dialog } from "@blueprintjs/core";
 import React from "react";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
@@ -34,10 +34,10 @@ interface IState {}
 class SingleSignOnHandler extends React.Component<IProps, IState> {
   render(): JSX.Element {
     return (
-      <Modal
+      <Dialog
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        open={this.props.dialogOpen}
+        isOpen={this.props.dialogOpen}
         onClose={() => this.setAccountModalState(false)}
       >
         <AccountModal>
@@ -78,7 +78,7 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
             </React.Fragment>
           )}
         </AccountModal>
-      </Modal>
+      </Dialog>
     );
   }
 

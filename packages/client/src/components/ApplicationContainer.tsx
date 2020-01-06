@@ -6,8 +6,6 @@ import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
 
-import SkipNext from "@material-ui/icons/SkipNext";
-import SkipPrevious from "@material-ui/icons/SkipPrevious";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { DEV_MODE } from "tools/client-env";
@@ -19,6 +17,7 @@ import Profile from "./Profile";
 import { ButtonCore, StyledTooltip } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
+import { Button, ButtonGroup, Classes } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Types & Config
@@ -76,7 +75,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     return (
       <React.Fragment>
         <MobileView />
-        <DesktopContainer>
+        <div className={Classes.DARK}>
           {this.renderLoadingOverlay()}
           <SingleSignOnHandler />
           <NavigationOverlay overlayVisible={overlayVisible} />
@@ -97,32 +96,28 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             )}
             <ControlsContainer style={{ marginLeft: "auto" }}>
               {displayNavigationArrows && (
-                <React.Fragment>
+                <ButtonGroup>
                   {prev && (
                     <StyledTooltip title="Previous Challenge">
-                      <IconButton
+                      <Button
                         id="prevButton"
-                        style={{ color: "white" }}
+                        icon="step-backward"
                         aria-label="Previous Challenge"
                         onClick={() => this.props.selectChallenge(prev.id)}
-                      >
-                        <SkipPrevious />
-                      </IconButton>
+                      />
                     </StyledTooltip>
                   )}
                   {next && (
                     <StyledTooltip title="Next Challenge">
-                      <IconButton
+                      <Button
                         id="nextButton"
-                        style={{ color: "white" }}
+                        icon="step-forward"
                         aria-label="Next Challenge"
                         onClick={() => this.props.selectChallenge(next.id)}
-                      >
-                        <SkipNext />
-                      </IconButton>
+                      />
                     </StyledTooltip>
                   )}
-                </React.Fragment>
+                </ButtonGroup>
               )}
               {this.props.userAuthenticated && this.props.user ? (
                 <AccountDropdownButton>
@@ -174,7 +169,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             />
             <Route key={4} component={() => <Redirect to="/workspace" />} />
           </Switch>
-        </DesktopContainer>
+        </div>
       </React.Fragment>
     );
   }
@@ -187,9 +182,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     return (
       <LoadingOverlay visible={this.props.workspaceLoading}>
         <MobileView />
-        <DesktopContainer>
+        <div>
           <OverlayLoadingText>Initializing Workspace...</OverlayLoadingText>
-        </DesktopContainer>
+        </div>
       </LoadingOverlay>
     );
   };
@@ -398,14 +393,6 @@ const MobileTitleText = styled(MobileText)`
   font-weight: 300;
   font-family: "Helvetica Neue", Lato, sans-serif;
   color: ${COLORS.TEXT_TITLE};
-`;
-
-const DesktopContainer = styled.div`
-  display: inline;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
 `;
 
 /** ===========================================================================
