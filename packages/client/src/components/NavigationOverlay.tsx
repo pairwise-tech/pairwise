@@ -175,9 +175,9 @@ interface AddNavItemButtonProps {
   show: boolean;
 }
 
-const AddNavItemButton = styled(({ show, ...props }) => {
+const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
   return <button {...props}>+</button>;
-})<AddNavItemButtonProps>`
+})`
   position: absolute;
   z-index: 5;
   top: 100%;
