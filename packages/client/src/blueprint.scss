@@ -1,0 +1,7 @@
+// To find color variable names to change, match the color values with the
+// source code here:
+// https://github.com/palantir/blueprint/blob/develop/packages/core/src/common/_colors.scss
+
+$dark-gray5: rgb(40, 40, 40);
+
+@import "@blueprintjs/core/src/blueprint.scss";
