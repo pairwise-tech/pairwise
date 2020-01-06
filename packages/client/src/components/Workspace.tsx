@@ -810,9 +810,16 @@ class Workspace extends React.Component<IProps, IState> {
            * a document before it has a body, and I didn't find any good way to
            * listen for it to be ready so we are just polling
            */
+          let remainingPollAttempts = 50;
           while (this.iFrameRef.contentWindow.document.body === null) {
             console.warn("[iframe] Body not ready. Waiting...");
             await wait(50);
+            remainingPollAttempts--;
+            if (remainingPollAttempts < 0) {
+              throw new Error(
+                `[iframe timeout] Did not render after _several_ attempts.`,
+              );
+            }
           }
 
           const markupTests = getTestHarness(this.props.challenge.testCode);
