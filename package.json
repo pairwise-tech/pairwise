@@ -4,6 +4,8 @@
   "description": "Prototype X Lerna Monorepo",
   "private": true,
   "scripts": {
+    "up": "docker-compose up",
+    "up:build": "docker-compose up --build",
     "common:build": "cd packages/common && yarn build",
     "common:watch": "cd packages/common && yarn watch",
     "client": "cd packages/client && yarn start:run",

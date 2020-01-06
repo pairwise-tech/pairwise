@@ -17,7 +17,3 @@ RUN yarn services:build
 
 # Build the server
 RUN yarn server:build
-
-FROM build AS runtime
-
-COPY . .
