@@ -61,7 +61,7 @@ To run the backend application (database, server, and external services). This c
 $ yarn docker:build
 
 # Run the application with Docker Compose
-$ docker-compose up
+$ yarn up
 
 # Run the client app
 $ yarn client:dev
@@ -107,4 +107,7 @@ $ lerna bootstrap
 
 # Build the Docker image which has all dependencies installed
 $ yarn docker:build
+
+# Rebuild the docker compose for running the app
+$ yarn up:build
 ```
