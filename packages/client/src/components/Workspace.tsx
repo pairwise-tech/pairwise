@@ -24,7 +24,6 @@ import {
   TestCaseMarkupTypescript,
   TestCaseReact,
   unsubscribeCodeWorker,
-  waitForObjectProp,
 } from "../tools/challenges";
 import {
   COLORS,
