@@ -103,7 +103,7 @@ const NavLink = styled(Link)`
   }
 `;
 
-const Header = ({ siteTitle = 'Prototype X' }: HeaderProps) => (
+const Header = ({ siteTitle = 'Pairwise' }: HeaderProps) => (
   <StyledHeader>
     <Flexbox>
       <Heading>

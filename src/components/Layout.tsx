@@ -133,7 +133,7 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
             </Deemphasize>
           </div>
           <div>
-            <small>© {new Date().getFullYear()} Prototype X</small>
+            <small>© {new Date().getFullYear()} Pairwise</small>
           </div>
         </footer>
       </CodeRainSection>
