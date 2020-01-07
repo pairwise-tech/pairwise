@@ -7,6 +7,9 @@ import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 
+/**
+ * TODO: Move the actual user creation logic to the authService.
+ */
 @Controller("auth")
 export class AuthController {
   constructor(
@@ -17,7 +20,7 @@ export class AuthController {
   @UseGuards(AuthGuard("facebook"))
   @Get("facebook")
   async facebook(@Req() req) {
-    /* do nothing */
+    /* passport handles redirection to the SSO provider */
   }
 
   @UseGuards(AuthGuard("facebook"))
@@ -48,7 +51,7 @@ export class AuthController {
   @UseGuards(AuthGuard("github"))
   @Get("github")
   async github(@Req() req) {
-    /* do nothing */
+    /* passport handles redirection to the SSO provider */
   }
 
   @UseGuards(AuthGuard("github"))
@@ -81,7 +84,7 @@ export class AuthController {
   @UseGuards(AuthGuard("google"))
   @Get("google")
   async google(@Req() req) {
-    /* do nothing */
+    /* passport handles redirection to the SSO provider */
   }
 
   @UseGuards(AuthGuard("google"))
