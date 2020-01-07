@@ -11,8 +11,10 @@ const generateNewProfileFields = () => {
   const last = faker.name.lastName();
   const email = faker.internet.email();
   const name = `${first} ${last}`;
+  const picture =
+    "https://lh3.googleusercontent.com/a-/AAuE7mAL7mZbYoRbW-3QSQsTSgdW8elCACVpGMm3DUOFIQ";
 
-  return { id, first, last, name, email };
+  return { id, first, last, name, email, picture };
 };
 
 /** ===========================================================================
@@ -22,7 +24,14 @@ const generateNewProfileFields = () => {
 
 class MockAuth {
   generateNewFacebookProfile() {
-    const { id, first, last, name, email } = generateNewProfileFields();
+    const {
+      id,
+      first,
+      last,
+      name,
+      email,
+      picture,
+    } = generateNewProfileFields();
 
     const profile = {
       id,
@@ -30,16 +39,30 @@ class MockAuth {
       name,
       first_name: first,
       last_name: last,
+      picture,
     };
     return profile;
   }
 
   generateNewGitHubProfile() {
-    const { id, name, email } = generateNewProfileFields();
+    const { id, name, email, picture } = generateNewProfileFields();
     const profile = {
       id,
       name,
       email,
+      picture,
+    };
+
+    return profile;
+  }
+
+  generateNewGoogleProfile() {
+    const { id, name, email, picture } = generateNewProfileFields();
+    const profile = {
+      id,
+      name,
+      email,
+      picture,
     };
 
     return profile;

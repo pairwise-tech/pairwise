@@ -45,7 +45,10 @@ export class GoogleStrategy {
         {
           clientID: ENV.GOOGLE_CLIENT_ID,
           clientSecret: ENV.GOOGLE_CLIENT_SECRET,
-          callbackURL: ENV.GOOGLE_PASSPORT_CALLBACK,
+          userProfileURL: ENV.GOOGLE_PROFILE_URL,
+          tokenURL: ENV.GOOGLE_TOKEN_URL,
+          authorizationURL: ENV.GOOGLE_TOKEN_URL,
+          callbackURL: `${ENV.SERVER_HOST_URL}/auth/google/callback`,
         },
         async (
           accessToken: string,

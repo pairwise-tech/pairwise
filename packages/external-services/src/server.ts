@@ -65,6 +65,36 @@ app.get("/github/profile", (req, res) => {
   res.json(profile);
 });
 
+/**
+ * NOTE: These methods do not work correctly yet!
+ */
+
+/**
+ * GitHub authorization request.
+ */
+app.get("/google/authorize", (req, res) => {
+  res.redirect(
+    `${SERVER}/auth/google/callback?code=vAExoIBVcI3vY26dV5b0KCWm2L95z9IW3P4pEu7HbLCq2TLMpyQv89B9zBe95Bj6worI74a81JEWN&scope=email+profile+https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email+openid?authuser=0&session_state=1dbd561a75553a324b87c0a0452692ae39ecda66..14cb&prompt=consent`,
+  );
+});
+
+/**
+ * Request for a GitHun access token.
+ */
+app.get("/google/token", (req, res) => {
+  res.send(
+    "access_token=61d5cfb6d0853016109fa997f85f4ad8fa2d5a44&scope=user%3Aemail&token_type=bearer",
+  );
+});
+
+/**
+ * Authenticated GitHub request for a user profile.
+ */
+app.get("/google/profile", (req, res) => {
+  const profile = mockAuth.generateNewGoogleProfile();
+  res.json(profile);
+});
+
 /** ===========================================================================
  * Run the Server
  * ============================================================================
