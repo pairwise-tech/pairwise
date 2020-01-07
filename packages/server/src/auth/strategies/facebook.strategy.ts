@@ -37,9 +37,11 @@ export class FacebookStrategy {
     use(
       new FacebookPassportStrategy(
         {
-          profileURL: ENV.FB_PROFILE_URL,
-          clientID: ENV.FB_CLIENT_ID,
-          clientSecret: ENV.FB_CLIENT_SECRET,
+          clientID: ENV.FACEBOOK_CLIENT_ID,
+          clientSecret: ENV.FACEBOOK_CLIENT_SECRET,
+          tokenURL: ENV.FACEBOOK_TOKEN_URL,
+          profileURL: ENV.FACEBOOK_PROFILE_URL,
+          authorizationURL: ENV.FACEBOOK_AUTHORIZATION_URL,
           callbackURL: `${ENV.SERVER_HOST_URL}/auth/facebook/callback`,
           assReqToCallback: true,
           profileFields: ["id", "emails", "name", "picture"],

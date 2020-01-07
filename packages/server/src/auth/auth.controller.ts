@@ -42,7 +42,7 @@ export class AuthController {
     console.log(`Authenticating user {email: ${email}} using Google Strategy`);
     const user = await this.userService.findOrCreateUser(userProfile);
     const { accessToken } = this.authService.getJwtAccessToken(user);
-    return res.redirect(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
+    return res.redirect(`${ENV.CLIENT_URL}?accessToken=${accessToken}`);
   }
 
   @UseGuards(AuthGuard("github"))
@@ -75,7 +75,7 @@ export class AuthController {
     console.log(`Authenticating user {email: ${email}} using GitHub Strategy`);
     const user = await this.userService.findOrCreateUser(userProfile);
     const { accessToken } = this.authService.getJwtAccessToken(user);
-    return res.redirect(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
+    return res.redirect(`${ENV.CLIENT_URL}?accessToken=${accessToken}`);
   }
 
   @UseGuards(AuthGuard("google"))
@@ -104,6 +104,6 @@ export class AuthController {
     console.log(`Authenticating user {email: ${email}} using Google Strategy`);
     const user = await this.userService.findOrCreateUser(userProfile);
     const { accessToken } = this.authService.getJwtAccessToken(user);
-    return res.redirect(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
+    return res.redirect(`${ENV.CLIENT_URL}?accessToken=${accessToken}`);
   }
 }

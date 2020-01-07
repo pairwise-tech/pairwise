@@ -24,36 +24,33 @@ const generateNewProfileFields = () => {
 
 class MockAuth {
   generateNewFacebookProfile() {
-    const {
-      id,
-      first,
-      last,
-      name,
-      email,
-      picture,
-    } = generateNewProfileFields();
+    const { id, first, last, email, picture } = generateNewProfileFields();
 
-    const profile = {
+    return {
       id,
       email,
-      name,
       first_name: first,
       last_name: last,
-      picture,
+      picture: {
+        data: {
+          height: 50,
+          width: 50,
+          is_silhouette: false,
+          url: picture,
+        },
+      },
     };
-    return profile;
   }
 
   generateNewGitHubProfile() {
     const { id, name, email, picture } = generateNewProfileFields();
-    const profile = {
+
+    return {
       id,
       name,
       email,
       picture,
     };
-
-    return profile;
   }
 
   generateNewGoogleProfile() {
@@ -66,8 +63,8 @@ class MockAuth {
       picture,
     } = generateNewProfileFields();
 
-    const profile = {
-      sub: "117143576716466893406",
+    return {
+      sub: id,
       name,
       email,
       picture,
@@ -76,9 +73,16 @@ class MockAuth {
       locale: "en",
       email_verified: true,
     };
-
-    return profile;
   }
+
+  getFacebookAccessToken = () => {
+    return {
+      access_token:
+        "EAAGdfD41U5wBADJFoBPDg6emDgwnlcyejfCFxaOpNIocNAGNYxmR4LDZCKVXc7cjFbigpCEqjoATgYmeMqbELYIZBf3yFw5OZCHEIz8zmjoubT3aZCMnolxYnPWQKcBBBaiMXpOFDE2bsSmxm4LcDFq4SCmlnPSXmeOxvZAURBQZDZD",
+      token_type: "bearer",
+      expires_in: 5180249,
+    };
+  };
 
   getGoogleAccessToken = () => {
     return {

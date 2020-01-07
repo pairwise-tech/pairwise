@@ -34,7 +34,21 @@ app.get("/", (req, res) =>
 );
 
 /**
- * Facebook authentication request.
+ * Facebook authorization request.
+ */
+app.get("/facebook/authorize", (req, res) => {
+  res.redirect(`${SERVER}/auth/facebook/callback?code=4c409cbcfbd1e11cb6f3`);
+});
+
+/**
+ * Request for a Facebook access token.
+ */
+app.post("/facebook/token", (req, res) => {
+  res.json(mockAuth.getFacebookAccessToken());
+});
+
+/**
+ * Authenticated Facebook request for a user profile.
  */
 app.get("/facebook/profile", (req, res) => {
   const profile = mockAuth.generateNewFacebookProfile();
