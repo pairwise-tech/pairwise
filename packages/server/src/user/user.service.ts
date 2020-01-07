@@ -10,7 +10,7 @@ export interface GenericUserProfile {
   displayName: string;
   givenName: string;
   familyName: string;
-  profileImageUrl: string;
+  profileImageUrl?: string;
 }
 
 @Injectable()
