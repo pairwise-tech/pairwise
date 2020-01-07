@@ -81,10 +81,10 @@ $ yarn test
 # Build the Docker image which has all dependencies installed
 $ yarn docker:build
 
-# Run the e2e test suite
+# Run the e2e test suite (be sure to run docker:build first)
 $ yarn e2e
 
-# Run the Cypress end to end test suite
+# Run the Cypress end to end test suite (be sure to run docker:build first)
 $ yarn cypress
 ```
 

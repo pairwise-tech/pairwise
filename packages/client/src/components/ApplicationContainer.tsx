@@ -373,7 +373,7 @@ const MobileView = () => (
     </MobileText>
     <MobileText>
       While you are here, feel free to{" "}
-      <a target="__blank" href="https://prototype-x-www.netlify.com/">
+      <a target="__blank" href="https://www.pairwise.tech">
         visit our landing page
       </a>{" "}
       where you can learn more about the curriculum. Thank you!
