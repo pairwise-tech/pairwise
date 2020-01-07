@@ -7,6 +7,9 @@ import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 
+/**
+ * TODO: Add profileImageUrl from Facebook and GitHub signin.
+ */
 @Controller("auth")
 export class AuthController {
   constructor(
