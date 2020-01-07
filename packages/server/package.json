@@ -13,7 +13,6 @@
     "start:dev": "nest start --watch",
     "start:https": "HTTPS=true nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "db": "docker-compose up",
     "start:prod": "node dist/main",
     "prettier": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -36,7 +35,8 @@
     "schema:sync": "yarn typeorm schema:sync",
     "schema:log": "yarn typeorm schema:log",
     "migrations:reset": "yarn schema:drop && rm -rf src/migrations && mkdir src/migrations",
-    "db:reset": "yarn schema:drop && yarn setup:db"
+    "db:reset": "yarn schema:drop && yarn setup:db",
+    "db": "docker-compose up"
   },
   "dependencies": {
     "@nestjs/cli": "^6.9.0",
