@@ -7,7 +7,7 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { DEV_MODE } from "tools/client-env";
-import { COLORS, HEADER_HEIGHT } from "tools/constants";
+import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
@@ -81,6 +81,8 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       return this.renderLoadingOverlay();
     }
 
+    const isSandbox = challenge.id === SANDBOX_ID;
+
     return (
       <React.Fragment>
         <MobileView />
@@ -105,6 +107,16 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               </ControlsContainer>
             )}
             <ControlsContainer style={{ marginLeft: "auto" }}>
+              {isSandbox && (
+                /*CHallenge type select should go here... */
+              )}
+              <Button
+                disabled={isSandbox}
+                onClick={this.handleEnterSandbox}
+                style={{ marginRight: 20 }}
+              >
+                Sandbox
+              </Button>
               {displayNavigationArrows && (
                 <ButtonGroup>
                   {prev && (
@@ -184,10 +196,6 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     );
   }
 
-  handleLogout = () => {
-    this.props.logoutUser();
-  };
-
   renderLoadingOverlay = () => {
     return (
       <LoadingOverlay visible={this.props.workspaceLoading}>
@@ -197,6 +205,14 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         </div>
       </LoadingOverlay>
     );
+  };
+
+  private readonly handleLogout = () => {
+    this.props.logoutUser();
+  };
+
+  private readonly handleEnterSandbox = () => {
+    this.props.selectChallenge(SANDBOX_ID);
   };
 }
 
@@ -436,7 +452,7 @@ const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
-  challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(

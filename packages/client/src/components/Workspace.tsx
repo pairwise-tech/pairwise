@@ -31,6 +31,7 @@ import {
   DIMENSIONS as D,
   HEADER_HEIGHT,
   MONACO_EDITOR_THEME,
+  SANDBOX_ID,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
@@ -416,6 +417,8 @@ class Workspace extends React.Component<IProps, IState> {
   render() {
     const { fullScreenEditor, testResults } = this.state;
     const { challenge, isEditMode } = this.props;
+    const isSandbox = challenge.id === SANDBOX_ID;
+    const isFullScreen = fullScreenEditor || isSandbox;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
@@ -438,15 +441,17 @@ class Workspace extends React.Component<IProps, IState> {
         </TabbedInnerNav>
         <LowerRight>
           <ButtonGroup vertical>
-            {this.state.code !== challenge.starterCode && !isEditMode && (
-              <Tooltip content={"Restore Initial Code"} position="left">
-                <IconButton
-                  icon="reset"
-                  aria-label="reset editor"
-                  onClick={this.resetCodeWindow}
-                />
-              </Tooltip>
-            )}
+            {this.state.code !== challenge.starterCode &&
+              !isEditMode &&
+              !isSandbox && (
+                <Tooltip content={"Restore Initial Code"} position="left">
+                  <IconButton
+                    icon="reset"
+                    aria-label="reset editor"
+                    onClick={this.resetCodeWindow}
+                  />
+                </Tooltip>
+              )}
             <Tooltip content={"Format Code"} position="left">
               <IconButton
                 icon="style"
@@ -454,16 +459,18 @@ class Workspace extends React.Component<IProps, IState> {
                 onClick={this.handleFormatCode}
               />
             </Tooltip>
-            <Tooltip
-              content={fullScreenEditor ? "Regular" : "Full Screen"}
-              position="left"
-            >
-              <IconButton
-                aria-label="fullscreen editor"
-                onClick={this.toggleEditorType}
-                icon={fullScreenEditor ? "collapse-all" : "expand-all"}
-              />
-            </Tooltip>
+            {!isSandbox && (
+              <Tooltip
+                content={fullScreenEditor ? "Regular" : "Full Screen"}
+                position="left"
+              >
+                <IconButton
+                  aria-label="fullscreen editor"
+                  onClick={this.toggleEditorType}
+                  icon={fullScreenEditor ? "collapse-all" : "expand-all"}
+                />
+              </Tooltip>
+            )}
           </ButtonGroup>
         </LowerRight>
         <div id="monaco-editor" style={{ height: "100%" }} />
@@ -479,7 +486,7 @@ class Workspace extends React.Component<IProps, IState> {
                 initialWidth={D.EDITOR_PANEL_WIDTH}
                 initialHeight={D.WORKSPACE_HEIGHT}
               >
-                {!fullScreenEditor ? (
+                {!isFullScreen ? (
                   <RowsWrapper separatorProps={rowSeparatorProps}>
                     <Row
                       initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
@@ -1271,7 +1278,8 @@ const AdminKeyboardShortcuts = connect(
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  // challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
 });
 

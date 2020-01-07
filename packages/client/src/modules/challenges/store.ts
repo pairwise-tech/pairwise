@@ -11,6 +11,8 @@ import {
   InverseChallengeMapping,
   ModuleCreationPayload,
 } from "./types";
+import { generateEmptyChallenge, SANDBOX_ID } from "tools/constants";
+import { strictEqual } from "assert";
 
 const debug = require("debug")("challenge:store");
 
@@ -28,6 +30,7 @@ export interface State {
   currentCourseId: Nullable<string>;
   currentChallengeId: Nullable<string>;
   challengeMap: Nullable<InverseChallengeMapping>;
+  sandboxChallenge: Challenge;
 }
 
 const initialState = {
@@ -39,6 +42,10 @@ const initialState = {
   currentChallengeId: null,
   displayNavigationMap: false,
   challengeMap: null,
+  sandboxChallenge: generateEmptyChallenge({
+    id: SANDBOX_ID, // Important. This is how the app knows it's the sandbox challenge
+    title: "Sandbox",
+  }),
 };
 
 interface ChallengeUpdate {
@@ -143,6 +150,17 @@ const challenges = createReducer<State, ActionTypes>(initialState)
 
     if (!mapping || !courses) {
       return state;
+    }
+
+    // If the user is typing away in the sandbox we handle it differently
+    if (id === SANDBOX_ID) {
+      return {
+        ...state,
+        sandboxChallenge: {
+          ...state.sandboxChallenge,
+          challenge,
+        },
+      };
     }
 
     const { moduleId, courseId } = mapping;

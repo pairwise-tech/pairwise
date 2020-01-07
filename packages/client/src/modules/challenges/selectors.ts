@@ -4,6 +4,7 @@ import { createSelector } from "reselect";
 import { CourseList } from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
+import { SANDBOX_ID } from "tools/constants";
 
 /** ===========================================================================
  * Selectors
@@ -62,8 +63,11 @@ export const getCurrentModule = createSelector(
 );
 
 export const getCurrentChallenge = createSelector(
-  [getCurrentModule, getCurrentChallengeId],
-  (m, challengeId) => {
+  [getCurrentModule, getCurrentChallengeId, challengesState],
+  (m, challengeId, state) => {
+    if (challengeId === SANDBOX_ID) {
+      return state.sandboxChallenge;
+    }
     return m?.challenges.find(x => x.id === challengeId);
   },
 );

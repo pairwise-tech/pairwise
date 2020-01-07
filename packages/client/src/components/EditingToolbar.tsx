@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { Switch, Button, ButtonGroup } from "@blueprintjs/core";
 import { Select } from "@blueprintjs/select";
+import { SANDBOX_ID } from "tools/constants";
 
 const mapToolbarState = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
@@ -40,6 +41,12 @@ const EditingToolbar = connect(
   toolbarDispatchProps,
 )((props: EditChallengeControlsConnectProps) => {
   const { isEditMode, setEditMode, saveCourse, course, challenge } = props;
+
+  if (challenge?.id === SANDBOX_ID) {
+    // The sandbox is meant to be just that, and cannot be editted in the same
+    // way the course challenges can be
+    return null;
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditMode(event.target.checked);

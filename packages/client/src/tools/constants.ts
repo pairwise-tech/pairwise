@@ -1,3 +1,6 @@
+import shortid from "shortid";
+import { Challenge, Module } from "@pairwise/common";
+
 /** ===========================================================================
  * Colors
  * ============================================================================
@@ -55,9 +58,39 @@ const DIMENSIONS = {
   CONSOLE_HEIGHT: H * 0.4,
 };
 
+/**
+ * The special ID used for the code sandbox. The sandbox will not be persisted
+ * along with the other challenges and online lives in the users browser
+ *
+ * NOTE: This id will appear on the browser URL, and can be deep linked to, so
+ * it should be at least passably memorable.
+ */
+export const SANDBOX_ID = "sandbox";
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
 export { COLORS, DIMENSIONS, HEADER_HEIGHT };
+
+export const generateEmptyModule = (): Module => ({
+  id: shortid.generate(),
+  title: "[EMTPY...]",
+  challenges: [],
+});
+
+export const generateEmptyChallenge = (
+  overwrite: Partial<Challenge> = {},
+): Challenge => ({
+  id: shortid.generate(),
+  type: "markup",
+  title: "[EMPTY...]",
+  content: "",
+  testCode: "// test('message', () => expect(...))",
+  videoUrl: "",
+  starterCode: "",
+  solutionCode: "",
+  supplementaryContent: "",
+  ...overwrite,
+});

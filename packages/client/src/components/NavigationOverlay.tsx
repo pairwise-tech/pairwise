@@ -1,34 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
-import shortid from "shortid";
 import styled from "styled-components/macro";
 
-import { Challenge, Module } from "@pairwise/common";
+import { Challenge } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS, HEADER_HEIGHT } from "tools/constants";
+import {
+  COLORS,
+  HEADER_HEIGHT,
+  generateEmptyModule,
+  generateEmptyChallenge,
+} from "tools/constants";
 import { composeWithProps } from "tools/utils";
 import { Tooltip, Icon } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 
 const debug = require("debug")("client:NavigationOverlay");
-
-const generateEmptyModule = (): Module => ({
-  id: shortid.generate(),
-  title: "[EMTPY...]",
-  challenges: [],
-});
-
-const generateEmptyChallenge = (): Challenge => ({
-  id: shortid.generate(),
-  type: "markup",
-  title: "[EMPTY...]",
-  content: "",
-  testCode: "// test('message', () => expect(...))",
-  videoUrl: "",
-  starterCode: "",
-  solutionCode: "",
-  supplementaryContent: "",
-});
 
 /** ===========================================================================
  * React Class
