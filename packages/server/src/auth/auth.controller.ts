@@ -22,6 +22,7 @@ export class AuthController {
   async getTokenAfterFacebookSignIn(
     @Req() req: Request & { user: FacebookProfileWithCredentials },
   ) {
+    console.log(req.user);
     const data = req.user;
     const email = data.profile.emails[0].value;
     const userProfile: GenericUserProfile = {
@@ -51,6 +52,7 @@ export class AuthController {
     @Req() req: Request & { user: GitHubProfileWithCredentials },
     @Res() res,
   ) {
+    console.log(req.user);
     const data = req.user;
 
     /* Whatever! */
@@ -66,7 +68,6 @@ export class AuthController {
     console.log(`Authenticating user {email: ${email}} using GitHub Strategy`);
     const user = await this.userService.findOrCreateUser(userProfile);
     const { accessToken } = this.authService.getJwtAccessToken(user);
-    console.log(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
     return res.redirect(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
   }
 
@@ -83,21 +84,20 @@ export class AuthController {
     @Res() res,
   ) {
     const data = req.user;
-    const { givenName, familyName } = data.profile.name;
-    const email = data.profile.emails[0].value;
-    const profileImageUrl = data.profile.photos[0].value;
+    const profile = data.profile._json;
+    const email = profile.email;
+    const profileImageUrl = profile.picture;
     const userProfile: GenericUserProfile = {
       email,
-      givenName,
-      familyName,
-      displayName: data.profile.displayName,
       profileImageUrl,
+      displayName: profile.name,
+      givenName: profile.given_name,
+      familyName: profile.family_name,
     };
 
     console.log(`Authenticating user {email: ${email}} using Google Strategy`);
     const user = await this.userService.findOrCreateUser(userProfile);
     const { accessToken } = this.authService.getJwtAccessToken(user);
-    console.log(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
     return res.redirect(`${ENV.CLIENT_APP_URL}?accessToken=${accessToken}`);
   }
 }

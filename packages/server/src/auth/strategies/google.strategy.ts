@@ -25,6 +25,16 @@ export interface GoogleProfile {
   emails: ListValues;
   photos: ListValues;
   provider: string;
+  _json: {
+    sub: string;
+    name: string;
+    email: string;
+    picture: string;
+    given_name: string;
+    family_name: string;
+    locale: string;
+    email_verified: string;
+  };
 }
 
 export interface GoogleProfileWithCredentials {
