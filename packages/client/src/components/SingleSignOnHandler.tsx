@@ -26,10 +26,6 @@ interface IState {}
  * - This component renders a modal which provides and handles SSO options
  * for the application. Facebook is currently supported, Google and GitHub
  * SSO can be added to this component in the future.
- *
- * - NOTE: The components which provide the social login buttons are complete
- * shit and the styles are very arbitrarily contrived to force them to look
- * somewhat acceptable.
  * ============================================================================
  */
 
@@ -49,9 +45,7 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
             <React.Fragment>
               <TitleText>Login or Create an Account</TitleText>
               <SocialButtonsContainer>
-                <FacebookLoginButton
-                  style={{ width: 235, height: 43, marginTop: 18 }}
-                >
+                <FacebookLoginButton style={ssoButtonStyles}>
                   <LoginLink
                     id="facebook-login"
                     href={`${ENV.HOST}/auth/facebook`}
@@ -59,17 +53,12 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
                     Login with Facebook
                   </LoginLink>
                 </FacebookLoginButton>
-                <GithubLoginButton
-                  style={{ width: 235, height: 43, marginTop: 12 }}
-                  activeStyle={{ background: "rgb(68, 68, 68)" }}
-                >
+                <GithubLoginButton style={ssoButtonStyles}>
                   <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
                     Login with GitHub
                   </LoginLink>
                 </GithubLoginButton>
-                <GoogleLoginButton
-                  style={{ width: 235, height: 43, marginTop: 12 }}
-                >
+                <GoogleLoginButton style={ssoButtonStyles}>
                   <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
                     Login with Google
                   </LoginLink>
@@ -87,14 +76,6 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
     );
   }
 
-  handleFacebookResponse = async (response: any) => {
-    try {
-      this.props.facebookLoginCallback(response);
-    } catch (err) {
-      this.props.facebookLoginFailure();
-    }
-  };
-
   setAccountModalState = (state: boolean) => {
     this.props.setSingleSignOnDialogState(state);
   };
@@ -104,6 +85,8 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
  * Styles
  * ============================================================================
  */
+
+const ssoButtonStyles = { width: 235, height: 43, marginTop: 12 };
 
 const SocialButtonsContainer = styled.div`
   display: flex;
@@ -167,8 +150,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
-  facebookLoginCallback: Modules.actions.auth.facebookLogin,
-  facebookLoginFailure: Modules.actions.auth.facebookLoginFailure,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 
