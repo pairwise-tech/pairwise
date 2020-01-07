@@ -2751,13 +2751,6 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-facebook-login@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@types/react-facebook-login/-/react-facebook-login-4.1.0.tgz#c1cf7d5c6f97f0be1619124601fd5e1cfd70c206"
-  integrity sha512-R+qgwBQ/tCGSXK1txCu679wWanMLLrF9dG1Z1DvjeRbvKILQkDA+yETg9qNvhk7zjYRNNTfu2PO+IaS9bLPTdA==
-  dependencies:
-    "@types/react" "*"
-
 "@types/react-native@*":
   version "0.60.26"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.60.26.tgz#cfbb02c39cd162240d59f4922b5bdeb0c212f90d"
