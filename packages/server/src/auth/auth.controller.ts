@@ -21,11 +21,13 @@ export class AuthController {
   ) {
     const data = req.user;
     const email = data.profile.emails[0].value;
+    const profileImageUrl = data.profile.photos[0].value;
     const userProfile: GenericUserProfile = {
       email: data.profile.emails[0].value,
       displayName: data.profile.displayName,
       givenName: data.profile.name.givenName,
       familyName: data.profile.name.familyName,
+      profileImageUrl,
     };
 
     console.log(
@@ -53,11 +55,13 @@ export class AuthController {
     /* Whatever! */
     const [firstName = "", lastName = ""] = data.profile.displayName.split(" ");
     const email = data.profile.emails[0].value;
+    const profileImageUrl = data.profile.photos[0].value;
     const userProfile: GenericUserProfile = {
       email,
       displayName: data.profile.displayName,
       givenName: firstName,
       familyName: lastName,
+      profileImageUrl,
     };
 
     console.log(`Authenticating user {email: ${email}} using GitHub Strategy`);
@@ -82,11 +86,13 @@ export class AuthController {
     const data = req.user;
     const { givenName, familyName } = data.profile.name;
     const email = data.profile.emails[0].value;
+    const profileImageUrl = data.profile.photos[0].value;
     const userProfile: GenericUserProfile = {
       email,
       givenName,
       familyName,
       displayName: data.profile.displayName,
+      profileImageUrl,
     };
 
     console.log(`Authenticating user {email: ${email}} using Google Strategy`);

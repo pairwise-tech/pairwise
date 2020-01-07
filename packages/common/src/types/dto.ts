@@ -21,6 +21,7 @@ export interface IUserDto {
     displayName: string;
     givenName: string;
     familyName: string;
+    profileImageUrl: string;
   };
   payments: Payment[];
 }

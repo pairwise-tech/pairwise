@@ -10,6 +10,7 @@ export interface GenericUserProfile {
   displayName: string;
   givenName: string;
   familyName: string;
+  profileImageUrl: string;
 }
 
 @Injectable()
@@ -57,13 +58,7 @@ export class UserService {
       return userExists;
     } else {
       console.log(`Creating new user: ${email}`);
-      const userData = {
-        email,
-        givenName: profile.givenName,
-        familyName: profile.familyName,
-        displayName: profile.displayName,
-      };
-      await this.userRepository.insert(userData);
+      await this.userRepository.insert(profile);
       return this.findUserByEmail(email);
     }
   }

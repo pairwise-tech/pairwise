@@ -64,7 +64,7 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
                   </LoginLink>
                 </GithubLoginButton>
                 <GoogleLoginButton
-                  style={{ width: 235, height: 43, marginTop: 18 }}
+                  style={{ width: 235, height: 43, marginTop: 12 }}
                 >
                   <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
                     Login with Google
