@@ -8,6 +8,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 import { Tooltip, Icon } from "@blueprintjs/core";
+import KeyboardShortcuts from "./KeyboardShortcuts";
 
 const debug = require("debug")("client:NavigationOverlay");
 
@@ -35,6 +36,12 @@ const generateEmptyChallenge = (): Challenge => ({
  */
 
 class NavigationOverlay extends React.Component<IProps, {}> {
+  handleClose = () => {
+    if (this.props.overlayVisible) {
+      this.props.setNavigationMapState(false);
+    }
+  };
+
   render(): Nullable<JSX.Element> {
     const {
       course,
@@ -51,10 +58,12 @@ class NavigationOverlay extends React.Component<IProps, {}> {
     }
 
     return (
-      <Overlay visible={this.props.overlayVisible}>
+      <Overlay visible={this.props.overlayVisible} onClick={this.handleClose}>
+        <KeyboardShortcuts keymap={{ escape: this.handleClose }} />
         <Col
           offsetX={this.props.overlayVisible ? 0 : -20}
           style={{ zIndex: 3 }}
+          onClick={e => e.stopPropagation()}
         >
           <Title>{course.title}</Title>
           {course.modules.map((m, i) => {
@@ -103,6 +112,7 @@ class NavigationOverlay extends React.Component<IProps, {}> {
             zIndex: 2,
             boxShadow: "inset 20px 0px 20px 0px rgba(0, 0, 0, 0.1)",
           }}
+          onClick={e => e.stopPropagation()}
         >
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
           <div style={{ position: "relative" }}>
@@ -325,6 +335,7 @@ const dispatchProps = {
   createCourseModule: Modules.actions.challenges.createCourseModule,
   updateCourseModule: Modules.actions.challenges.updateCourseModule,
   createChallenge: Modules.actions.challenges.createChallenge,
+  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
