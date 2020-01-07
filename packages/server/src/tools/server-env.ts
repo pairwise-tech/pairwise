@@ -18,6 +18,7 @@ const CLIENT_APP_URL = getenv.string("CLIENT_APP_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
 const GOOGLE_CLIENT_ID = getenv.string("GOOGLE_CLIENT_ID");
 const GOOGLE_CLIENT_SECRET = getenv.string("GOOGLE_CLIENT_SECRET");
+const GOOGLE_PASSPORT_CALLBACK = getenv.string("GOOGLE_PASSPORT_CALLBACK");
 
 const ENV = {
   JWT_SECRET,
@@ -33,6 +34,7 @@ const ENV = {
   GITHUB_AUTHORIZATION_URL,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
+  GOOGLE_PASSPORT_CALLBACK,
 };
 
 /** ===========================================================================

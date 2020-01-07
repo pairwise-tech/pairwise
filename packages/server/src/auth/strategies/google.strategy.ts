@@ -16,8 +16,15 @@ import ENV from "src/tools/server-env";
 type ListValues = Array<{ value: string }>;
 
 export interface GoogleProfile {
-  // TODO: type
-  x: any;
+  id: string;
+  displayName: string;
+  name: {
+    familyName: string;
+    givenName: string;
+  };
+  emails: ListValues;
+  photos: ListValues;
+  provider: string;
 }
 
 export interface GoogleProfileWithCredentials {
@@ -38,7 +45,7 @@ export class GoogleStrategy {
         {
           clientID: ENV.GOOGLE_CLIENT_ID,
           clientSecret: ENV.GOOGLE_CLIENT_SECRET,
-          callbackURL: "http://127.0.0.1:9000/auth/google/callback",
+          callbackURL: ENV.GOOGLE_PASSPORT_CALLBACK,
         },
         async (
           accessToken: string,
@@ -46,8 +53,6 @@ export class GoogleStrategy {
           profile: GoogleProfile,
           done: (err, user) => void,
         ) => {
-          console.log(profile);
-
           return done(null, {
             profile,
             accessToken,

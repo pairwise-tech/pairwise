@@ -1,9 +1,11 @@
 import { Dialog } from "@blueprintjs/core";
 import React from "react";
 import FacebookLogin from "react-facebook-login";
-import GoogleLogin from "react-google-login";
 import { connect } from "react-redux";
-import { GithubLoginButton } from "react-social-login-buttons";
+import {
+  GoogleLoginButton,
+  GithubLoginButton,
+} from "react-social-login-buttons";
 import styled from "styled-components/macro";
 
 import Modules, { ReduxStoreState } from "modules/root";
@@ -61,17 +63,13 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
                     Login with GitHub
                   </LoginLink>
                 </GithubLoginButton>
-                <LoginLink id="github-login" href={`${ENV.HOST}/auth/google`}>
-                  Login with Google
-                </LoginLink>
-                <GoogleLogin
-                  buttonText="Login with Google"
-                  clientId={ENV.GOOGLE_APP_ID}
-                  onSuccess={this.handleGoogleResponse}
-                  onFailure={this.handleGoogleResponse}
-                  cookiePolicy="single_host_origin"
-                  className="social-media-login-button google-social-login"
-                />
+                <GoogleLoginButton
+                  style={{ width: 235, height: 43, marginTop: 18 }}
+                >
+                  <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
+                    Login with Google
+                  </LoginLink>
+                </GoogleLoginButton>
               </SocialButtonsContainer>
               <SubText>Creating an account is free and easy.</SubText>
               <SubText>
@@ -91,16 +89,6 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
     } catch (err) {
       this.props.facebookLoginFailure();
     }
-  };
-
-  handleGoogleResponse = async (response: any) => {
-    console.log(response);
-
-    // try {
-    //   this.props.facebookLoginCallback(response);
-    // } catch (err) {
-    //   this.props.facebookLoginFailure();
-    // }
   };
 
   setAccountModalState = (state: boolean) => {
