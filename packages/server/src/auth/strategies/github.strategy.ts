@@ -3,23 +3,14 @@ import { Strategy as GitHubPassportStrategy } from "passport-github";
 import { use } from "passport";
 import ENV from "src/tools/server-env";
 
-/** ===========================================================================
- * Facebook Passport Strategy
- * ----------------------------------------------------------------------------
- * Reference:
- * - https://medium.com/@baptiste.arnaud95/how-to-handle-facebook-login-with-nestjs-89c5c30d566c
- * - https://github.com/baptisteArnaud/facebook-login-nestjs-example
- * ============================================================================
- */
-
-type ListValues = Array<{ value: string }>;
-
 export interface GitHubProfile {
-  provider: string;
-  id: string;
-  emails: ListValues;
-  photos: ListValues;
-  displayName: string;
+  provider: "github";
+  _json: {
+    id: string;
+    name: string;
+    email: string;
+    avatar_url: string;
+  };
 }
 
 export interface GitHubProfileWithCredentials {
@@ -38,8 +29,8 @@ export class GitHubStrategy {
     use(
       new GitHubPassportStrategy(
         {
-          clientID: ENV.GITHUB_APP_CLIENT_ID,
-          clientSecret: ENV.GITHUB_APP_CLIENT_SECRET,
+          clientID: ENV.GITHUB_CLIENT_ID,
+          clientSecret: ENV.GITHUB_CLIENT_SECRET,
           userProfileURL: ENV.GITHUB_PROFILE_URL,
           tokenURL: ENV.GITHUB_TOKEN_URL,
           authorizationURL: ENV.GITHUB_AUTHORIZATION_URL,

@@ -34,7 +34,21 @@ app.get("/", (req, res) =>
 );
 
 /**
- * Facebook authentication request.
+ * Facebook authorization request.
+ */
+app.get("/facebook/authorize", (req, res) => {
+  res.redirect(`${SERVER}/auth/facebook/callback?code=4c409cbcfbd1e11cb6f3`);
+});
+
+/**
+ * Request for a Facebook access token.
+ */
+app.post("/facebook/token", (req, res) => {
+  res.json(mockAuth.getFacebookAccessToken());
+});
+
+/**
+ * Authenticated Facebook request for a user profile.
  */
 app.get("/facebook/profile", (req, res) => {
   const profile = mockAuth.generateNewFacebookProfile();
@@ -49,7 +63,7 @@ app.get("/github/authorize", (req, res) => {
 });
 
 /**
- * Request for a GitHun access token.
+ * Request for a GitHub access token.
  */
 app.post("/github/token", (req, res) => {
   res.send(
@@ -62,6 +76,30 @@ app.post("/github/token", (req, res) => {
  */
 app.get("/github/profile", (req, res) => {
   const profile = mockAuth.generateNewGitHubProfile();
+  res.json(profile);
+});
+
+/**
+ * [GET] request for a Google access token.
+ */
+app.get("/google/token", (req, res) => {
+  res.redirect(
+    `${SERVER}/auth/google/callback?code=vAExoIBVcI3vY26dV5b0KCWm2L95z9IW3P4pEu7HbLCq2TLMpyQv89B9zBe95Bj6worI74a81JEWN&scope=email+profile+https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email+openid?authuser=0&session_state=1dbd561a75553a324b87c0a0452692ae39ecda66..14cb&prompt=consent`,
+  );
+});
+
+/**
+ * [POST] request for a Google access token.
+ */
+app.post("/google/token", (req, res) => {
+  res.json(mockAuth.getGoogleAccessToken());
+});
+
+/**
+ * Authenticated GitHub request for a user profile.
+ */
+app.get("/google/profile", (req, res) => {
+  const profile = mockAuth.generateNewGoogleProfile();
   res.json(profile);
 });
 

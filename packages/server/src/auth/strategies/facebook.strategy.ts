@@ -1,30 +1,23 @@
 import { Injectable } from "@nestjs/common";
-import FacebookTokenStrategy from "passport-facebook-token";
+import { Strategy as FacebookPassportStrategy } from "passport-facebook";
 import { use } from "passport";
 import ENV from "src/tools/server-env";
 
-/** ===========================================================================
- * Facebook Passport Strategy
- * ----------------------------------------------------------------------------
- * Reference:
- * - https://medium.com/@baptiste.arnaud95/how-to-handle-facebook-login-with-nestjs-89c5c30d566c
- * - https://github.com/baptisteArnaud/facebook-login-nestjs-example
- * ============================================================================
- */
-
-type ListValues = Array<{ value: string }>;
-
 export interface FacebookProfile {
-  provider: string;
-  id: string;
-  gender: string;
-  emails: ListValues;
-  photos: ListValues;
-  displayName: string;
-  name: {
-    familyName: string;
-    givenName: string;
-    middleName: string;
+  provider: "facebook";
+  _json: {
+    id: string;
+    email: string;
+    last_name: string;
+    first_name: string;
+    picture: {
+      data: {
+        height: number;
+        width: number;
+        url: string;
+        is_silhouette: boolean;
+      };
+    };
   };
 }
 
@@ -42,12 +35,16 @@ export class FacebookStrategy {
 
   init() {
     use(
-      new FacebookTokenStrategy(
+      new FacebookPassportStrategy(
         {
-          fbGraphVersion: "v3.0",
-          profileURL: ENV.FB_PROFILE_URL,
-          clientID: ENV.FB_APP_CLIENT_ID,
-          clientSecret: ENV.FB_APP_CLIENT_SECRET,
+          clientID: ENV.FACEBOOK_CLIENT_ID,
+          clientSecret: ENV.FACEBOOK_CLIENT_SECRET,
+          tokenURL: ENV.FACEBOOK_TOKEN_URL,
+          profileURL: ENV.FACEBOOK_PROFILE_URL,
+          authorizationURL: ENV.FACEBOOK_AUTHORIZATION_URL,
+          callbackURL: `${ENV.SERVER_HOST_URL}/auth/facebook/callback`,
+          assReqToCallback: true,
+          profileFields: ["id", "emails", "name", "picture"],
         },
         async (
           accessToken: string,

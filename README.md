@@ -90,6 +90,12 @@ $ yarn cypress
 
 To troubleshoot or develop tests locally, you can run the necessary application services using instructions from above and then run the tests locally from their respective package, `e2e` or `cypress`.
 
+## Authentication
+
+We use the passport module for defining single-sign-on provider logins with common social account providers like Google, Facebook, and GitHub. Authorization through one of these strategies creates a user account which is uniquely identified by the email address. After authentication, a user is granted a long-lived `jwt` to stay signed into Pairwise. All of the SSO provider logins have mock API implementations in the `external-services` package, which are used when running e2e/Cypress tests.
+
+To test authentication locally, you will need to run the client and server using `https`, which can be done using the `yarn client|server:https` commands. You will also need to adjust relevant environment variables for each of these to `https` where appropriate.
+
 ## To Rebuild The Database
 
 ```bash

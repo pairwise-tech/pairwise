@@ -1,10 +1,12 @@
 /* Import styles */
 import "normalize.css";
-import "./index.css";
 
 /* Import Blueprint styles */
 import "./blueprint.scss";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+
+/* Import app styles */
+import "./index.css";
 
 import React from "react";
 import ReactDOM from "react-dom";

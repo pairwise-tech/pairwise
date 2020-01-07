@@ -21,11 +21,16 @@ services:
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
-      CLIENT_APP_URL: http://client:3000
-      FB_PROFILE_URL: http://external-services:7000/facebook/profile
+      CLIENT_URL: http://client:3000
+      FACEBOOK_PROFILE_URL: http://external-services:7000/facebook/profile
+      FACEBOOK_TOKEN_URL: http://external-services:7000/facebook/token
+      FACEBOOK_AUTHORIZATION_URL: http://external-services:7000/facebook/authorize
       GITHUB_PROFILE_URL: http://external-services:7000/github/profile
       GITHUB_TOKEN_URL: http://external-services:7000/github/token
       GITHUB_AUTHORIZATION_URL: http://external-services:7000/github/authorize
+      GOOGLE_PROFILE_URL: http://external-services:7000/google/profile
+      GOOGLE_TOKEN_URL: http://external-services:7000/google/token
+      GOOGLE_AUTHORIZATION_URL: http://external-services:7000/google/authorize
     expose:
       - 9000
     ports:
