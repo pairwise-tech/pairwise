@@ -1,6 +1,5 @@
 import { Dialog } from "@blueprintjs/core";
 import React from "react";
-import FacebookLogin from "react-facebook-login";
 import { connect } from "react-redux";
 import {
   FacebookLoginButton,
@@ -50,15 +49,8 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
             <React.Fragment>
               <TitleText>Login or Create an Account</TitleText>
               <SocialButtonsContainer>
-                {/* <FacebookLogin
-                  icon="fa-facebook"
-                  appId={ENV.FACEBOOK_APP_ID}
-                  callback={this.handleFacebookResponse}
-                  cssClass="social-media-login-button facebook-social-login"
-                /> */}
                 <FacebookLoginButton
                   style={{ width: 235, height: 43, marginTop: 18 }}
-                  // activeStyle={{ background: "rgb(68, 68, 68)" }}
                 >
                   <LoginLink
                     id="facebook-login"

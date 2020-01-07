@@ -23,7 +23,7 @@ export const GOOGLE_APP_ID = getenv.string(
   UNSPECIFIED_ENV_GUARD,
 );
 
-export const HOST = getenv.string("REACT_APP_HOST", "http://localhost:9000");
+export const HOST = getenv.string("REACT_APP_HOST", "https://localhost:9000");
 export const CODEPRESS_HOST = getenv.string(
   "REACT_APP_CODEPRESS_HOST",
   "http://localhost:3001",

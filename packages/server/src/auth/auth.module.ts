@@ -23,8 +23,7 @@ import { GoogleStrategy } from "./strategies/google.strategy";
       defaultStrategy: "google",
     }),
     PassportModule.register({
-      session: false,
-      scope: ["profile", "email"],
+      session: true,
       defaultStrategy: "facebook",
     }),
     UsersModule,

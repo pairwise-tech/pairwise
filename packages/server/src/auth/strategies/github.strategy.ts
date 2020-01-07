@@ -4,18 +4,12 @@ import { use } from "passport";
 import ENV from "src/tools/server-env";
 
 /** ===========================================================================
- * Facebook Passport Strategy
- * ----------------------------------------------------------------------------
- * Reference:
- * - https://medium.com/@baptiste.arnaud95/how-to-handle-facebook-login-with-nestjs-89c5c30d566c
- * - https://github.com/baptisteArnaud/facebook-login-nestjs-example
+ * GitHub Passport Strategy
  * ============================================================================
  */
 
-type ListValues = Array<{ value: string }>;
-
 export interface GitHubProfile {
-  provider: string;
+  provider: "github";
   _json: {
     id: string;
     name: string;
