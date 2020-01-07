@@ -8,6 +8,7 @@ import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common/pipes";
+import ENV from "./tools/server-env";
 
 /** ===========================================================================
  * Types & Config
@@ -21,6 +22,13 @@ const KEY = path.join(__dirname + "/../ssl/pairwise.key");
 const CERT = path.join(__dirname + "/../ssl/pairwise.cert");
 const keyFile = fs.readFileSync(KEY);
 const certFile = fs.readFileSync(CERT);
+
+const httpsOptions = ENV.HTTPS
+  ? {
+      key: keyFile,
+      cert: certFile,
+    }
+  : undefined;
 
 const swaggerOptions = new DocumentBuilder()
   .setTitle("Mono Prototype")
@@ -37,10 +45,7 @@ const swaggerOptions = new DocumentBuilder()
 const main = async () => {
   const app = await NestFactory.create(AppModule, {
     cors: true,
-    httpsOptions: {
-      key: keyFile,
-      cert: certFile,
-    },
+    httpsOptions,
   });
 
   /* Enable logging */

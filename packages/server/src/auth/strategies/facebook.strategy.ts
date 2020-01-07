@@ -3,11 +3,6 @@ import { Strategy as FacebookPassportStrategy } from "passport-facebook";
 import { use } from "passport";
 import ENV from "src/tools/server-env";
 
-/** ===========================================================================
- * Facebook Passport Strategy
- * ============================================================================
- */
-
 export interface FacebookProfile {
   provider: "facebook";
   _json: {
@@ -43,8 +38,8 @@ export class FacebookStrategy {
       new FacebookPassportStrategy(
         {
           profileURL: ENV.FB_PROFILE_URL,
-          clientID: ENV.FB_APP_CLIENT_ID,
-          clientSecret: ENV.FB_APP_CLIENT_SECRET,
+          clientID: ENV.FB_CLIENT_ID,
+          clientSecret: ENV.FB_CLIENT_SECRET,
           callbackURL: `${ENV.SERVER_HOST_URL}/auth/facebook/callback`,
           assReqToCallback: true,
           profileFields: ["id", "emails", "name", "picture"],

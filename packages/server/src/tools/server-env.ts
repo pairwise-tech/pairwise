@@ -6,16 +6,17 @@ import getenv from "getenv";
  */
 
 /* Services: */
-const CLIENT_APP_URL = getenv.string("CLIENT_APP_URL");
+const CLIENT_URL = getenv.string("CLIENT_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
+const HTTPS = getenv.bool("HTTPS", false);
 
 /* Auth: */
 const JWT_SECRET = getenv.string("JWT_SECRET");
-const FB_APP_CLIENT_ID = getenv.string("FB_APP_CLIENT_ID");
-const FB_APP_CLIENT_SECRET = getenv.string("FB_APP_CLIENT_SECRET");
+const FB_CLIENT_ID = getenv.string("FB_CLIENT_ID");
+const FB_CLIENT_SECRET = getenv.string("FB_CLIENT_SECRET");
 const FB_PROFILE_URL = getenv.string("FB_PROFILE_URL", "");
-const GITHUB_APP_CLIENT_ID = getenv.string("GITHUB_APP_CLIENT_ID");
-const GITHUB_APP_CLIENT_SECRET = getenv.string("GITHUB_APP_CLIENT_SECRET");
+const GITHUB_CLIENT_ID = getenv.string("GITHUB_CLIENT_ID");
+const GITHUB_CLIENT_SECRET = getenv.string("GITHUB_CLIENT_SECRET");
 const GITHUB_PROFILE_URL = getenv.string("GITHUB_PROFILE_URL", "");
 const GITHUB_TOKEN_URL = getenv.string("GITHUB_TOKEN_URL", "");
 const GITHUB_AUTHORIZATION_URL = getenv.string("GITHUB_AUTHORIZATION_URL", "");
@@ -26,14 +27,15 @@ const GOOGLE_TOKEN_URL = getenv.string("GOOGLE_TOKEN_URL", "");
 const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 
 const ENV = {
-  CLIENT_APP_URL,
+  HTTPS,
+  CLIENT_URL,
   SERVER_HOST_URL,
   JWT_SECRET,
   FB_PROFILE_URL,
-  FB_APP_CLIENT_ID,
-  FB_APP_CLIENT_SECRET,
-  GITHUB_APP_CLIENT_ID,
-  GITHUB_APP_CLIENT_SECRET,
+  FB_CLIENT_ID,
+  FB_CLIENT_SECRET,
+  GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET,
   GITHUB_PROFILE_URL,
   GITHUB_TOKEN_URL,
   GITHUB_AUTHORIZATION_URL,

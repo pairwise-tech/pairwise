@@ -3,11 +3,6 @@ import { Strategy as GooglePassportStrategy } from "passport-google-oauth20";
 import { use } from "passport";
 import ENV from "src/tools/server-env";
 
-/** ===========================================================================
- * Google Passport Strategy
- * ============================================================================
- */
-
 export interface GoogleProfile {
   provider: "google";
   _json: {

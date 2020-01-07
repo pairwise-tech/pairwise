@@ -3,11 +3,6 @@ import { Strategy as GitHubPassportStrategy } from "passport-github";
 import { use } from "passport";
 import ENV from "src/tools/server-env";
 
-/** ===========================================================================
- * GitHub Passport Strategy
- * ============================================================================
- */
-
 export interface GitHubProfile {
   provider: "github";
   _json: {
@@ -34,8 +29,8 @@ export class GitHubStrategy {
     use(
       new GitHubPassportStrategy(
         {
-          clientID: ENV.GITHUB_APP_CLIENT_ID,
-          clientSecret: ENV.GITHUB_APP_CLIENT_SECRET,
+          clientID: ENV.GITHUB_CLIENT_ID,
+          clientSecret: ENV.GITHUB_CLIENT_SECRET,
           userProfileURL: ENV.GITHUB_PROFILE_URL,
           tokenURL: ENV.GITHUB_TOKEN_URL,
           authorizationURL: ENV.GITHUB_AUTHORIZATION_URL,
