@@ -3,6 +3,7 @@ import React from "react";
 import FacebookLogin from "react-facebook-login";
 import { connect } from "react-redux";
 import {
+  FacebookLoginButton,
   GoogleLoginButton,
   GithubLoginButton,
 } from "react-social-login-buttons";
@@ -49,14 +50,25 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
             <React.Fragment>
               <TitleText>Login or Create an Account</TitleText>
               <SocialButtonsContainer>
-                <FacebookLogin
+                {/* <FacebookLogin
                   icon="fa-facebook"
                   appId={ENV.FACEBOOK_APP_ID}
                   callback={this.handleFacebookResponse}
                   cssClass="social-media-login-button facebook-social-login"
-                />
-                <GithubLoginButton
+                /> */}
+                <FacebookLoginButton
                   style={{ width: 235, height: 43, marginTop: 18 }}
+                  // activeStyle={{ background: "rgb(68, 68, 68)" }}
+                >
+                  <LoginLink
+                    id="facebook-login"
+                    href={`${ENV.HOST}/auth/facebook`}
+                  >
+                    Login with Facebook
+                  </LoginLink>
+                </FacebookLoginButton>
+                <GithubLoginButton
+                  style={{ width: 235, height: 43, marginTop: 12 }}
                   activeStyle={{ background: "rgb(68, 68, 68)" }}
                 >
                   <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>

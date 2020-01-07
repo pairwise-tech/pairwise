@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { Strategy as GooglePassportStrategy } from "passport-google-oauth20";
-
 import { use } from "passport";
 import ENV from "src/tools/server-env";
 
@@ -16,14 +15,6 @@ import ENV from "src/tools/server-env";
 type ListValues = Array<{ value: string }>;
 
 export interface GoogleProfile {
-  id: string;
-  displayName: string;
-  name: {
-    familyName: string;
-    givenName: string;
-  };
-  emails: ListValues;
-  photos: ListValues;
   provider: string;
   _json: {
     sub: string;

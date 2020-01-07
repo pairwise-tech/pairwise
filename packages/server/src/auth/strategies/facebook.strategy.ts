@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import FacebookTokenStrategy from "passport-facebook-token";
+// import FacebookTokenStrategy from "passport-facebook-token";
+import { Strategy as FacebookPassportStrategy } from "passport-facebook";
 import { use } from "passport";
 import ENV from "src/tools/server-env";
 
@@ -42,12 +43,14 @@ export class FacebookStrategy {
 
   init() {
     use(
-      new FacebookTokenStrategy(
+      new FacebookPassportStrategy(
         {
-          fbGraphVersion: "v3.0",
+          // fbGraphVersion: "v3.0",
           profileURL: ENV.FB_PROFILE_URL,
           clientID: ENV.FB_APP_CLIENT_ID,
           clientSecret: ENV.FB_APP_CLIENT_SECRET,
+          callbackURL: "http://localhost:9000/auth/facebook/callback",
+          // callbackURL: `${ENV.SERVER_HOST_URL}/auth/facebook/callback`,
         },
         async (
           accessToken: string,
@@ -55,6 +58,8 @@ export class FacebookStrategy {
           profile: FacebookProfile,
           done: (err, user) => void,
         ) => {
+          console.log("PROFILE:");
+          console.log(profile);
           return done(null, {
             profile,
             accessToken,

@@ -16,10 +16,12 @@ type ListValues = Array<{ value: string }>;
 
 export interface GitHubProfile {
   provider: string;
-  id: string;
-  emails: ListValues;
-  photos: ListValues;
-  displayName: string;
+  _json: {
+    id: string;
+    name: string;
+    email: string;
+    avatar_url: string;
+  };
 }
 
 export interface GitHubProfileWithCredentials {

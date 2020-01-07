@@ -22,14 +22,19 @@ import { GoogleStrategy } from "./strategies/google.strategy";
       scope: ["profile", "email"],
       defaultStrategy: "google",
     }),
+    PassportModule.register({
+      session: false,
+      scope: ["profile", "email"],
+      defaultStrategy: "facebook",
+    }),
     UsersModule,
   ],
   providers: [
     JwtStrategy,
     GitHubStrategy,
     GoogleStrategy,
-    AuthService,
     FacebookStrategy,
+    AuthService,
   ],
   controllers: [AuthController],
 })
