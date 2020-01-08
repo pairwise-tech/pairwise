@@ -55,6 +55,7 @@ const ChallengeTypeMenu = ({
       )}
     >
       <Button
+        id="selectChallengeType"
         rightIcon="caret-down"
         aria-controls="simple-menu"
         aria-haspopup="true"

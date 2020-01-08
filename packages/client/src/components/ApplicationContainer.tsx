@@ -118,6 +118,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               {isSandbox && (
                 <Suspense fallback={<p>Menu Loading...</p>}>
                   <LazyChallengeTypeMenu
+                    data-id={
+                      "challenge-type-select" /* props don't want id=... so i'm using this */
+                    }
                     items={SANDBOX_TYPE_CHOICES}
                     currentChallengeType={challenge?.type}
                     onItemSelect={x => {
@@ -130,6 +133,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                 </Suspense>
               )}
               <Button
+                id="sandboxButton"
                 disabled={isSandbox}
                 onClick={this.handleEnterSandbox}
                 style={{ margin: "0 20px" }}
