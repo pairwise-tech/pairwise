@@ -15,6 +15,7 @@ import Challenges, {
   ChallengesState,
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
+import { IToaster } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Root Actions and Selectors
@@ -73,6 +74,7 @@ const rootReducer = combineReducers({
 export interface EpicDependencies {
   router: History<any>;
   api: typeof API;
+  toaster: IToaster;
 }
 
 export type EpicSignature = Epic<

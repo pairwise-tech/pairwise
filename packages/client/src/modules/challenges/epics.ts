@@ -193,7 +193,24 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
     mergeMap(payload => {
       return deps.api.codepressApi.save(payload).pipe(
         map(Actions.saveCourseSuccess),
-        catchError(err => of(Actions.saveCourseFailure(err))),
+        tap(() =>
+          deps.toaster.show({
+            message: "Saved 👍",
+            intent: "success",
+            icon: "tick",
+          }),
+        ),
+        catchError(err =>
+          of(Actions.saveCourseFailure(err)).pipe(
+            tap(() => {
+              deps.toaster.show({
+                message: "Could not save!",
+                intent: "danger",
+                icon: "error",
+              });
+            }),
+          ),
+        ),
       );
     }),
   );
