@@ -3,6 +3,10 @@ import {
   BlobTypeSet,
   challengeUtilityClass,
   assertUnreachable,
+  UserUpdateOptions,
+  Result,
+  Ok,
+  Err,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -23,7 +27,7 @@ const validateTimeLastWatched = (time: number) => {
 
 /**
  * Perform validation on the user code blob which gets serialized to JSON
- * before it is saved in the databse.
+ * before it is saved in the database.
  */
 export const validateCodeBlob = (blob: IUserCodeBlobDto) => {
   if (!blob.dataBlob.type) {
@@ -79,5 +83,41 @@ export const validateCodeBlob = (blob: IUserCodeBlobDto) => {
       const { type } = dataBlob;
       return assertUnreachable(type);
     }
+  }
+};
+
+const checkField = (field: any) => {
+  if (typeof field === "string") {
+    return field;
+  }
+  return null;
+};
+
+/**
+ * Validate input to user update operation.
+ */
+export const validateUserUpdateDetails = (
+  details: UserUpdateOptions,
+): Result<UserUpdateOptions, ERROR_CODES.INVALID_UPDATE_DETAILS> => {
+  try {
+    const updateDetails = {
+      givenName: checkField(details.givenName),
+      familyName: checkField(details.familyName),
+      displayName: checkField(details.displayName),
+      profileImageUrl: checkField(details.profileImageUrl),
+    };
+
+    const sanitizedUpdate = {};
+
+    /* Only add fields which pass the check: */
+    Object.entries(updateDetails).forEach(([key, value]) => {
+      if (value !== null) {
+        sanitizedUpdate[key] = value;
+      }
+    });
+
+    return new Ok(sanitizedUpdate);
+  } catch (err) {
+    return new Err(ERROR_CODES.INVALID_UPDATE_DETAILS);
   }
 };

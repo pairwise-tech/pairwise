@@ -8,6 +8,7 @@ import {
   Ok,
   Result,
   UserCourseStatus,
+  UserUpdateOptions,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -114,20 +115,6 @@ class BaseApiClass {
 class Api extends BaseApiClass {
   codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
 
-  facebookAuthenticationRequest = async (token: string) => {
-    try {
-      const params = { access_token: token };
-      const response = await axios.get<{ accessToken: string }>(
-        `${ENV.HOST}/auth/facebook`,
-        { params },
-      );
-      const { accessToken } = response.data;
-      return new Ok(accessToken);
-    } catch (err) {
-      return this.handleHttpError(err);
-    }
-  };
-
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
     try {
       let course: Course;
@@ -162,6 +149,15 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
       return axios.get<IUserDto>(`${HOST}/user/profile`, {
+        headers,
+      });
+    });
+  };
+
+  updateUser = async (userDetails: UserUpdateOptions) => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.post<IUserDto>(`${HOST}/user/profile`, userDetails, {
         headers,
       });
     });

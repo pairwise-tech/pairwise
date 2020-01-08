@@ -11,6 +11,7 @@ enum ERROR_CODES {
   INVALID_CHALLENGE_ID = "The challengeId is invalid",
   INVALID_CODE_BLOB = "The code blob is invalid",
   MISSING_USER = "No user could be found",
+  INVALID_UPDATE_DETAILS = "Invalid update parameters provided",
 }
 
 enum SUCCESS_CODES {

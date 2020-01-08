@@ -1,9 +1,11 @@
 import { Dialog } from "@blueprintjs/core";
 import React from "react";
-import FacebookLogin from "react-facebook-login";
-import GoogleLogin from "react-google-login";
 import { connect } from "react-redux";
-import { GithubLoginButton } from "react-social-login-buttons";
+import {
+  FacebookLoginButton,
+  GoogleLoginButton,
+  GithubLoginButton,
+} from "react-social-login-buttons";
 import styled from "styled-components/macro";
 
 import Modules, { ReduxStoreState } from "modules/root";
@@ -24,10 +26,6 @@ interface IState {}
  * - This component renders a modal which provides and handles SSO options
  * for the application. Facebook is currently supported, Google and GitHub
  * SSO can be added to this component in the future.
- *
- * - NOTE: The components which provide the social login buttons are complete
- * shit and the styles are very arbitrarily contrived to force them to look
- * somewhat acceptable.
  * ============================================================================
  */
 
@@ -47,28 +45,24 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
             <React.Fragment>
               <TitleText>Login or Create an Account</TitleText>
               <SocialButtonsContainer>
-                <FacebookLogin
-                  icon="fa-facebook"
-                  appId={ENV.FACEBOOK_APP_ID}
-                  callback={this.handleFacebookResponse}
-                  cssClass="social-media-login-button facebook-social-login"
-                />
-                <GithubLoginButton
-                  style={{ width: 235, height: 43, marginTop: 18 }}
-                  activeStyle={{ background: "rgb(68, 68, 68)" }}
-                >
+                <FacebookLoginButton style={ssoButtonStyles}>
+                  <LoginLink
+                    id="facebook-login"
+                    href={`${ENV.HOST}/auth/facebook`}
+                  >
+                    Login with Facebook
+                  </LoginLink>
+                </FacebookLoginButton>
+                <GithubLoginButton style={ssoButtonStyles}>
                   <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
                     Login with GitHub
                   </LoginLink>
                 </GithubLoginButton>
-                <GoogleLogin
-                  buttonText="Login with Google"
-                  clientId={ENV.GOOGLE_APP_ID}
-                  onSuccess={() => console.log("handling response")}
-                  onFailure={() => console.log("handling response")}
-                  cookiePolicy="single_host_origin"
-                  className="social-media-login-button google-social-login"
-                />
+                <GoogleLoginButton style={ssoButtonStyles}>
+                  <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
+                    Login with Google
+                  </LoginLink>
+                </GoogleLoginButton>
               </SocialButtonsContainer>
               <SubText>Creating an account is free and easy.</SubText>
               <SubText>
@@ -82,14 +76,6 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
     );
   }
 
-  handleFacebookResponse = async (response: any) => {
-    try {
-      this.props.facebookLoginCallback(response);
-    } catch (err) {
-      this.props.facebookLoginFailure();
-    }
-  };
-
   setAccountModalState = (state: boolean) => {
     this.props.setSingleSignOnDialogState(state);
   };
@@ -99,6 +85,8 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
  * Styles
  * ============================================================================
  */
+
+const ssoButtonStyles = { width: 235, height: 43, marginTop: 12 };
 
 const SocialButtonsContainer = styled.div`
   display: flex;
@@ -162,8 +150,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
-  facebookLoginCallback: Modules.actions.auth.facebookLogin,
-  facebookLoginFailure: Modules.actions.auth.facebookLoginFailure,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 

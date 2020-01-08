@@ -28,6 +28,12 @@ export class User {
   @Column()
   familyName: string;
 
+  @Column({ nullable: true })
+  lastActiveChallengeId: string;
+
+  @Column({ nullable: true })
+  profileImageUrl: string;
+
   @OneToMany(
     type => Payments,
     payments => payments.user,
