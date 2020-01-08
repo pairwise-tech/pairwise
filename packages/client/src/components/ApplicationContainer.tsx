@@ -66,6 +66,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     this.props.initializeApp();
 
     const { accessToken } = queryString.parse(window.location.search);
+
     if (typeof accessToken === "string" && Boolean(accessToken)) {
       this.props.storeAccessToken({ accessToken });
     }
