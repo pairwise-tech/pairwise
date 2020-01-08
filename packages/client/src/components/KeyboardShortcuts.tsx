@@ -21,15 +21,21 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
     };
 
     const makePredicate = (commandString: string) => {
-      const chars = commandString.split("+");
+      const chars = commandString.split("+").map(x => x.toLowerCase());
 
+      // Support mapping the escape key
+      if (chars.length === 1 && chars[0] === "escape") {
+        return (e: KeyboardEvent) => e.key.toLowerCase() === chars[0];
+      }
+
+      // If not the escape key then we require two mappings
       if (chars.length < 2) {
         console.warn("Keycode mappings must have at least 2 keys");
         return;
       }
 
       const charKey = chars[chars.length - 1]; // Last
-      const charPred = (e: KeyboardEvent) => e.key === charKey;
+      const charPred = (e: KeyboardEvent) => e.key.toLowerCase() === charKey;
       const meta = chars
         .slice(0, -1)
         .map(x => metaMap[x])

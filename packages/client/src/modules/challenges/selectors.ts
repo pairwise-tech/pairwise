@@ -4,6 +4,7 @@ import { createSelector } from "reselect";
 import { CourseList } from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
+import { SANDBOX_ID } from "tools/constants";
 
 /** ===========================================================================
  * Selectors
@@ -17,6 +18,11 @@ export const challengesState = (state: ReduxStoreState) => {
 export const challengesSelector = createSelector([challengesState], identity);
 
 export const isEditMode = createSelector([challengesState], prop("isEditMode"));
+
+export const getChallengeMap = createSelector(
+  [challengesState],
+  state => state.challengeMap,
+);
 
 export const getCurrentModuleId = createSelector(
   [challengesState],
@@ -61,10 +67,38 @@ export const getCurrentModule = createSelector(
   },
 );
 
+/**
+ * NOTE: This getter does not depend on the current course id or module id. This
+ * is important. This will find the full challenge data for the challenge with
+ * state.currentCHallengeId. In other words, currentCourseId and
+ * currentModuleId do not necessarily need to be the course and module for the
+ * challenge with currentChallengeId.
+ *
+ * This allows the nav to be used on top of the current challenge workspace
+ * without changing it every time the user clicks a new module.
+ */
 export const getCurrentChallenge = createSelector(
-  [getCurrentModule, getCurrentChallengeId],
-  (m, challengeId) => {
-    return m?.challenges.find(x => x.id === challengeId);
+  [getChallengeMap, getCurrentChallengeId, challengesState],
+  (challengeMap, challengeId, state) => {
+    // Just a type asserton to de-nullify
+    if (!challengeId) {
+      return null;
+    }
+
+    // The special case. When the user is in the sandbox.
+    if (challengeId === SANDBOX_ID) {
+      return state.sandboxChallenge;
+    }
+
+    // The standard case, where the challengeId belongs to one of the challenges
+    // in the course
+    const courseId = challengeMap?.[challengeId]?.courseId;
+    const moduleId = challengeMap?.[challengeId]?.moduleId;
+
+    return state.courses
+      ?.find(x => x.id === courseId)
+      ?.modules?.find(x => x.id === moduleId)
+      ?.challenges.find(x => x.id === challengeId);
   },
 );
 
@@ -73,33 +107,18 @@ export const getCurrentChallengeTestCode = createSelector(
   c => c?.testCode,
 );
 
-/**
- * Find an return the current selected challenge, if it exists. Return
- * null otherwise.
- */
-export const currentChallengeSelector = createSelector(
-  [challengesState],
-  state => {
-    const { currentCourseId, currentChallengeId, currentModuleId } = state;
-    return state.courses
-      ?.find(x => x.id === currentCourseId)
-      ?.modules?.find(x => x.id === currentModuleId)
-      ?.challenges?.find(x => x.id === currentChallengeId);
-  },
-);
-
 export const getCurrentTitle = createSelector(
-  [currentChallengeSelector],
+  [getCurrentChallenge],
   challenge => challenge?.title,
 );
 
 export const getCurrentId = createSelector(
-  [currentChallengeSelector],
+  [getCurrentChallenge],
   challenge => challenge?.id,
 );
 
 export const getCurrentContent = createSelector(
-  [currentChallengeSelector],
+  [getCurrentChallenge],
   challenge => challenge?.content,
 );
 
@@ -158,20 +177,3 @@ export const nextPrevChallenges = createSelector(
     return { next, prev };
   },
 );
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-// export default {
-//   getCurrentContent,
-//   isEditMode,
-//   courseList,
-//   challengesSelector,
-//   nextPrevChallenges,
-//   navigationOverlayVisible,
-//   workspaceLoadingSelector,
-//   currentChallengeSelector,
-//   firstUnfinishedChallenge,
-// };

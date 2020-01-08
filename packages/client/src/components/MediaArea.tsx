@@ -34,11 +34,12 @@ const MediaArea = connect(
   const handleTitle = (x: string) =>
     props.updateChallenge({ id: challenge.id, challenge: { title: x } });
 
-  const handleContent = (supplementaryContent: string) =>
+  const handleContent = (supplementaryContent: string) => {
     props.updateChallenge({
       id: challenge.id,
       challenge: { supplementaryContent },
     });
+  };
 
   return (
     <SupplementaryContentContainer>
@@ -72,6 +73,7 @@ const SupplementaryContentContainer = styled.div`
   padding: 25px;
   padding-left: 12px;
   padding-right: 12px;
+  background: #1e1e1e;
 `;
 
 /**

@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import React from "react";
+import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
@@ -7,7 +7,7 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { DEV_MODE } from "tools/client-env";
-import { COLORS, HEADER_HEIGHT } from "tools/constants";
+import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
@@ -16,7 +16,6 @@ import { ButtonCore, IconButton } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
 import {
-  Icon,
   Button,
   ButtonGroup,
   Classes,
@@ -24,9 +23,18 @@ import {
   FocusStyleManager,
 } from "@blueprintjs/core";
 import cx from "classnames";
+import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 
 // Only show focus outlinewhen tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
+
+const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
+
+const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
+  { value: "markup", label: "HTML/CSS" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "react", label: "React" },
+];
 
 /** ===========================================================================
  * Types & Config
@@ -96,6 +104,8 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       return this.renderLoadingOverlay();
     }
 
+    const isSandbox = challenge.id === SANDBOX_ID;
+
     return (
       <React.Fragment>
         <MobileView />
@@ -120,6 +130,28 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               </ControlsContainer>
             )}
             <ControlsContainer style={{ marginLeft: "auto" }}>
+              {isSandbox && (
+                <Suspense fallback={<p>Menu Loading...</p>}>
+                  <LazyChallengeTypeMenu
+                    items={SANDBOX_TYPE_CHOICES}
+                    currentChallengeType={challenge?.type}
+                    onItemSelect={x => {
+                      this.props.updateChallenge({
+                        id: challenge.id, // See NOTE
+                        challenge: { type: x.value },
+                      });
+                    }}
+                  />
+                </Suspense>
+              )}
+              <Button
+                id="sandboxButton"
+                disabled={isSandbox}
+                onClick={this.handleEnterSandbox}
+                style={{ margin: "0 20px" }}
+              >
+                Sandbox
+              </Button>
               {displayNavigationArrows && (
                 <ButtonGroup>
                   {prev && (
@@ -199,10 +231,6 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     );
   }
 
-  handleLogout = () => {
-    this.props.logoutUser();
-  };
-
   renderLoadingOverlay = () => {
     return (
       <LoadingOverlay visible={this.props.workspaceLoading}>
@@ -212,6 +240,31 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         </div>
       </LoadingOverlay>
     );
+  };
+
+  private readonly handleLogout = () => {
+    this.props.logoutUser();
+  };
+
+  private readonly handleEnterSandbox = () => {
+    const type = this.props.challenge?.type;
+
+    // If defined set the sandbox type to the current challenge type. I.e. if
+    // your doing a typescript challenge make sure the sandbox defaults to
+    // typescript
+    // Aside: Not sure yet if this is good ux, but one would assume that
+    // when using the sandbox you would want to programming something related to
+    // the current module.
+    if (type && type !== "media") {
+      this.props.updateChallenge({
+        id: SANDBOX_ID,
+        challenge: {
+          type,
+        },
+      });
+    }
+
+    this.props.selectChallenge(SANDBOX_ID);
   };
 }
 
@@ -436,8 +489,9 @@ const MobileTitleText = styled(MobileText)`
 `;
 
 interface DarkThemeProps {
-  className?: string;
   children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
   return <div className={cx(className, Classes.DARK)} {...props} />;
@@ -451,7 +505,7 @@ const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
-  challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
@@ -466,7 +520,7 @@ const dispatchProps = {
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
-  toggleScrollLock: Modules.actions.app.toggleScrollLock,
+  updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
 const mergeProps = (
@@ -478,13 +532,7 @@ const mergeProps = (
   ...methods,
   ...state,
   toggleNavigationMap: () => {
-    const { overlayVisible } = state;
-    if (overlayVisible) {
-      methods.toggleScrollLock({ locked: false });
-    } else {
-      methods.toggleScrollLock({ locked: true });
-    }
-    methods.setNavigationMapState(!overlayVisible);
+    methods.setNavigationMapState(!state.overlayVisible);
   },
 });
 

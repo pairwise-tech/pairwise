@@ -14,6 +14,7 @@ import { getType, isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
+import { SANDBOX_ID } from "tools/constants";
 
 /** ===========================================================================
  * Epics
@@ -32,6 +33,12 @@ const getAllChallengesInCourse = (course: Course): ChallengeList => {
   return challenges;
 };
 
+/**
+ * Given a list of courses, create a mapping of all challenge ids to both their
+ * module id and course id. Since our URLs don't (currently) indicate course or
+ * module we need to derive the course and module for a given challenge ID. This
+ * dervices all such relationships in one go so it can be referenced later.
+ */
 const createInverseChallengeMapping = (
   courses: Course[],
 ): InverseChallengeMapping => {
@@ -80,13 +87,19 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
           "",
         );
 
-        const challenges = getAllChallengesInCourse(course);
-        const challengeExists = challenges.find(c => c.id === maybeId);
         const challengeMap = createInverseChallengeMapping([course]);
-        const challengeId = challengeExists
-          ? challengeExists.id
-          : CURRENT_ACTIVE_CHALLENGE_IDS.challengeId;
-        const { moduleId, courseId } = challengeMap[challengeId];
+        const challengeId =
+          maybeId in challengeMap
+            ? maybeId
+            : maybeId === SANDBOX_ID
+            ? maybeId
+            : course.modules[0].challenges[0].id;
+        const courseId = challengeMap[challengeId]?.courseId || course.id;
+        const moduleId =
+          challengeMap[challengeId]?.moduleId || course.modules[0].id;
+
+        // Redirect to the route for the challenge
+        deps.router.push(`/workspace/${challengeId}`);
 
         return Actions.fetchCurrentActiveCourseSuccess({
           courses: [course],
@@ -193,7 +206,24 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
     mergeMap(payload => {
       return deps.api.codepressApi.save(payload).pipe(
         map(Actions.saveCourseSuccess),
-        catchError(err => of(Actions.saveCourseFailure(err))),
+        tap(() =>
+          deps.toaster.show({
+            message: "Saved 👍",
+            intent: "success",
+            icon: "tick",
+          }),
+        ),
+        catchError(err =>
+          of(Actions.saveCourseFailure(err)).pipe(
+            tap(() => {
+              deps.toaster.show({
+                message: "Could not save!",
+                intent: "danger",
+                icon: "error",
+              });
+            }),
+          ),
+        ),
       );
     }),
   );

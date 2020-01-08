@@ -31,6 +31,7 @@ import {
   DIMENSIONS as D,
   HEADER_HEIGHT,
   MONACO_EDITOR_THEME,
+  SANDBOX_ID,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
@@ -44,7 +45,7 @@ import {
 import {
   composeWithProps,
   getStoredCodeForChallenge,
-  saveCodeToLocalStorage,
+  persistToLocalStorage,
   wait,
 } from "../tools/utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
@@ -180,7 +181,6 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   refreshEditor = () => {
-    this.props.unlockVerticalScrolling();
     this.resetMonacoEditor();
     this.setMonacoEditorValue();
     if (this.iFrameRef) {
@@ -201,6 +201,13 @@ class Workspace extends React.Component<IProps, IState> {
         { code: newCode, adminTestTab: "testResults" },
         this.refreshEditor,
       );
+    }
+
+    // Account for changing the challenge type in the sandbox. Otherwise nothing
+    // gets rerendered since the ID of the challenge does not change
+    // TODO: This is ugly because it's unclear why re-rendering immediately fails
+    if (this.props.challenge.type !== nextProps.challenge.type) {
+      wait(50).then(this.refreshEditor);
     }
 
     // Update in response to toggling admin edit mode. This will only ever
@@ -416,6 +423,8 @@ class Workspace extends React.Component<IProps, IState> {
   render() {
     const { fullScreenEditor, testResults } = this.state;
     const { challenge, isEditMode } = this.props;
+    const isSandbox = challenge.id === SANDBOX_ID;
+    const isFullScreen = fullScreenEditor || isSandbox;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
@@ -438,15 +447,17 @@ class Workspace extends React.Component<IProps, IState> {
         </TabbedInnerNav>
         <LowerRight>
           <ButtonGroup vertical>
-            {this.state.code !== challenge.starterCode && !isEditMode && (
-              <Tooltip content={"Restore Initial Code"} position="left">
-                <IconButton
-                  icon="reset"
-                  aria-label="reset editor"
-                  onClick={this.resetCodeWindow}
-                />
-              </Tooltip>
-            )}
+            {this.state.code !== challenge.starterCode &&
+              !isEditMode &&
+              !isSandbox && (
+                <Tooltip content={"Restore Initial Code"} position="left">
+                  <IconButton
+                    icon="reset"
+                    aria-label="reset editor"
+                    onClick={this.resetCodeWindow}
+                  />
+                </Tooltip>
+              )}
             <Tooltip content={"Format Code"} position="left">
               <IconButton
                 icon="style"
@@ -454,16 +465,18 @@ class Workspace extends React.Component<IProps, IState> {
                 onClick={this.handleFormatCode}
               />
             </Tooltip>
-            <Tooltip
-              content={fullScreenEditor ? "Regular" : "Full Screen"}
-              position="left"
-            >
-              <IconButton
-                aria-label="fullscreen editor"
-                onClick={this.toggleEditorType}
-                icon={fullScreenEditor ? "collapse-all" : "expand-all"}
-              />
-            </Tooltip>
+            {!isSandbox && (
+              <Tooltip
+                content={fullScreenEditor ? "Regular" : "Full Screen"}
+                position="left"
+              >
+                <IconButton
+                  aria-label="fullscreen editor"
+                  onClick={this.toggleEditorType}
+                  icon={fullScreenEditor ? "collapse-all" : "expand-all"}
+                />
+              </Tooltip>
+            )}
           </ButtonGroup>
         </LowerRight>
         <div id="monaco-editor" style={{ height: "100%" }} />
@@ -479,7 +492,7 @@ class Workspace extends React.Component<IProps, IState> {
                 initialWidth={D.EDITOR_PANEL_WIDTH}
                 initialHeight={D.WORKSPACE_HEIGHT}
               >
-                {!fullScreenEditor ? (
+                {!isFullScreen ? (
                   <RowsWrapper separatorProps={rowSeparatorProps}>
                     <Row
                       initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
@@ -714,10 +727,14 @@ class Workspace extends React.Component<IProps, IState> {
       // Do not store anything to local storage
       return;
     }
+
     /**
      * Save the current code to local storage. This method is debounced.
      */
-    saveCodeToLocalStorage(this.props.challenge.id, this.state.code);
+    persistToLocalStorage(this.props.challenge.id, {
+      code: this.state.code,
+      sandboxType: this.props.challenge.type,
+    });
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
@@ -992,14 +1009,6 @@ const LowerSection = styled.div<{ withHeader?: boolean }>`
   background: ${C.BACKGROUND_LOWER_SECTION};
 `;
 
-// const Title = styled.p`
-//   color: ${C.PRIMARY_BLUE};
-//   margin: 0;
-//   padding: 0;
-//   font-size: 18px;
-//   font-weight: 300;
-// `;
-
 const WorkspaceContainer = styled.div`
   width: 100vw;
   height: ${D.WORKSPACE_HEIGHT}px;
@@ -1271,13 +1280,12 @@ const AdminKeyboardShortcuts = connect(
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
 });
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
-  toggleScrollLock: Modules.actions.app.toggleScrollLock,
 };
 
 interface ComponentProps {}
@@ -1288,7 +1296,6 @@ interface WorkspaceLoadingContainerProps extends ComponentProps, ConnectProps {}
 
 interface IProps extends WorkspaceLoadingContainerProps {
   challenge: Challenge;
-  unlockVerticalScrolling: () => any;
 }
 
 const withProps = connect(mapStateToProps, dispatchProps);
@@ -1308,29 +1315,24 @@ class WorkspaceLoadingContainer extends React.Component<
   render() {
     const { challenge } = this.props;
 
-    /* NOTE: Challenge has loaded by the time this component loads: */
-    const loadedChallenge = challenge as Challenge;
+    if (!challenge) {
+      return <h1>Loading...</h1>;
+    }
 
     return (
       <React.Fragment>
-        {loadedChallenge.type !== "media" && (
-          <Workspace
-            {...this.props}
-            challenge={loadedChallenge}
-            unlockVerticalScrolling={this.unlockVerticalScrolling}
-          />
+        {challenge.type !== "media" && (
+          <Workspace {...this.props} challenge={challenge} />
         )}
-        <LowerSection withHeader={loadedChallenge.type === "media"}>
-          <MediaArea />
-        </LowerSection>
+        {challenge.id !== SANDBOX_ID && (
+          <LowerSection withHeader={challenge.type === "media"}>
+            <MediaArea />
+          </LowerSection>
+        )}
         {DEV_MODE && <AdminKeyboardShortcuts />}
       </React.Fragment>
     );
   }
-
-  unlockVerticalScrolling = () => {
-    this.props.toggleScrollLock({ locked: false });
-  };
 }
 
 /** ===========================================================================

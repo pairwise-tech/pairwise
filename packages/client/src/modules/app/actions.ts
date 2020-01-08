@@ -27,16 +27,11 @@ const initializeAppSuccess = createAction(
   ActionTypesEnum.INITIALIZE_APP_SUCCESS,
 )();
 
-const toggleScrollLock = createAction(ActionTypesEnum.TOGGLE_PAGE_SCROLL_LOCK)<{
-  locked: boolean;
-}>();
-
 const actions = {
   empty,
   logoutUser,
   initializeApp,
   initializeAppSuccess,
-  toggleScrollLock,
 };
 
 /** ===========================================================================
