@@ -103,17 +103,6 @@
           "starterCode": "<h1>Oh what a day</h1>\n<p>\n  A wonderful day to start wrapping some divs!\n</p>\n",
           "solutionCode": "<style>\n  body {\n    background: orange;\n  }\n  div {\n    background: teal;\n  }\n</style>\n<div>\n  <h1>Oh what a day</h1>\n  <p>\n    A wonderful day to start wrapping some divs!\n  </p>\n</div>\n",
           "supplementaryContent": ""
-        },
-        {
-          "id": "nAO_asgu",
-          "type": "media",
-          "title": "TMP",
-          "content": "",
-          "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "supplementaryContent": "tmp"
         }
       ]
     },
