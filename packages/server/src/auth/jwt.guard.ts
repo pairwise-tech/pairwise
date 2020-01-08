@@ -1,5 +1,4 @@
 import { AuthGuard } from "@nestjs/passport";
-import { AuthService } from "./auth.service";
 
 /**
  * A custom Guard which requires optional authentication. The guard
@@ -10,15 +9,11 @@ import { AuthService } from "./auth.service";
  * https://stackoverflow.com/questions/53426069/getting-user-data-by-using-guards-roles-jwt
  */
 export class CustomJwtAuthGuard extends AuthGuard("jwt") {
-  constructor(private readonly authService: AuthService) {
+  constructor() {
     super();
   }
 
-  handleRequest(err, user, info: Error) {
-    if (user) {
-      return user;
-    }
-
-    return undefined;
+  handleRequest(err, user, info) {
+    return user || undefined;
   }
 }

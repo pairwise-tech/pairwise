@@ -29,14 +29,6 @@ const app = createReducer<State, ActionTypes>(initialState)
     loadingAuth: false,
     singleSignOnDialogOpen: false,
     accessToken: action.payload.accessToken,
-  }))
-  .handleAction(actions.facebookLogin, (state, action) => ({
-    ...state,
-    loadingAuth: true,
-  }))
-  .handleAction(actions.facebookLoginFailure, (state, action) => ({
-    ...state,
-    loadingAuth: false,
   }));
 
 /** ===========================================================================

@@ -1,8 +1,10 @@
 import axios from "axios";
 import request from "supertest";
-import { fetchAccessToken, HOST } from "./utils/e2e-utils";
-
-jest.setTimeout(30000);
+import {
+  fetchAccessToken,
+  HOST,
+  fetchUserGivenAccessToken,
+} from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs
@@ -10,6 +12,7 @@ jest.setTimeout(30000);
  */
 
 describe("User Progress APIs", () => {
+  let user;
   let accessToken;
   let authorizationHeader;
 
@@ -29,6 +32,19 @@ describe("User Progress APIs", () => {
       .expect(401)
       .end((error, response) => {
         expect(response.body.error).toBe("Unauthorized");
+        done(error);
+      });
+  });
+
+  test("/challenge (GET) rejects invalid challenge ids", async done => {
+    request(`${HOST}/progress/challenge/fs78dfa79adsf7saf`)
+      .get("/")
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .end((error, response) => {
+        expect(response.body.message).toBe(
+          "Invalid update parameters provided",
+        );
         done(error);
       });
   });
@@ -65,6 +81,12 @@ describe("User Progress APIs", () => {
     };
 
     /**
+     * [0] Check that the user's lastActiveChallengeId starts as null.
+     */
+    user = await fetchUserGivenAccessToken(accessToken);
+    expect(user.profile.lastActiveChallengeId).toBe(null);
+
+    /**
      * [1] Request returns 404 initially.
      */
     await request(`${HOST}/progress/challenge/9scykDold`)
@@ -99,7 +121,13 @@ describe("User Progress APIs", () => {
     });
 
     /**
-     * [4] Update again.
+     * [4] Check that the user's lastActiveChallengeId is updatd.
+     */
+    user = await fetchUserGivenAccessToken(accessToken);
+    expect(user.profile.lastActiveChallengeId).toBe("9scykDold");
+
+    /**
+     * [5] Update again.
      */
     await request(`${HOST}/progress/challenge`)
       .post("/")
@@ -117,7 +145,7 @@ describe("User Progress APIs", () => {
       });
 
     /**
-     * [5] Update some other challenge history.
+     * [6] Update some other challenge history.
      */
     await request(`${HOST}/progress/challenge`)
       .post("/")
@@ -135,7 +163,7 @@ describe("User Progress APIs", () => {
       });
 
     /**
-     * [6] Check the updated occurred correctly.
+     * [7] Check the updated occurred correctly.
      */
     progress = await fetchProgressHistory("9scykDold");
     expect(progress.uuid).toBeDefined();
@@ -144,6 +172,13 @@ describe("User Progress APIs", () => {
       type: "challenge",
       code: "console.log('Hello from Taiwan!');",
     });
+
+    /**
+     * [8] Check that the user's lastActiveChallengeId updated again.
+     */
+    progress = await fetchProgressHistory("6T3GXc4ap");
+    user = await fetchUserGivenAccessToken(accessToken);
+    expect(user.profile.lastActiveChallengeId).toBe("6T3GXc4ap");
 
     done();
   });

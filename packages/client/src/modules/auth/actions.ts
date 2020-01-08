@@ -10,10 +10,6 @@ enum ActionTypesEnum {
 
   STORE_ACCESS_TOKEN = "STORE_ACCESS_TOKEN",
   STORE_ACCESS_TOKEN_SUCCESS = "STORE_ACCESS_TOKEN_SUCCESS",
-
-  FACEBOOK_LOGIN = "FACEBOOK_LOGIN",
-  FACEBOOK_LOGIN_FAILURE = "FACEBOOK_LOGIN_FAILURE",
-  FACEBOOK_LOGIN_SUCCESS = "FACEBOOK_LOGIN_SUCCESS",
 }
 
 /** ===========================================================================
@@ -27,24 +23,14 @@ const setSingleSignOnDialogState = createAction(
 
 const storeAccessToken = createAction(ActionTypesEnum.STORE_ACCESS_TOKEN)<{
   accessToken: string;
+  accountCreated: boolean;
 }>();
 
 const storeAccessTokenSuccess = createAction(
   ActionTypesEnum.STORE_ACCESS_TOKEN_SUCCESS,
 )<{ accessToken: string }>();
 
-const facebookLogin = createAction(ActionTypesEnum.FACEBOOK_LOGIN)<any>();
-const facebookLoginFailure = createAction(
-  ActionTypesEnum.FACEBOOK_LOGIN_FAILURE,
-)();
-const facebookLoginSuccess = createAction(
-  ActionTypesEnum.FACEBOOK_LOGIN_SUCCESS,
-)<{ access_token: string }>();
-
 const actions = {
-  facebookLogin,
-  facebookLoginFailure,
-  facebookLoginSuccess,
   setSingleSignOnDialogState,
   storeAccessToken,
   storeAccessTokenSuccess,

@@ -11,8 +11,8 @@
     "setup:db": "yarn build && yarn migration:run",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start:https": "HTTPS=true nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "db": "docker-compose up",
     "start:prod": "node dist/main",
     "prettier": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -35,7 +35,8 @@
     "schema:sync": "yarn typeorm schema:sync",
     "schema:log": "yarn typeorm schema:log",
     "migrations:reset": "yarn schema:drop && rm -rf src/migrations && mkdir src/migrations",
-    "db:reset": "yarn schema:drop && yarn setup:db"
+    "db:reset": "yarn schema:drop && yarn setup:db",
+    "db": "docker-compose up"
   },
   "dependencies": {
     "@nestjs/cli": "^6.9.0",
@@ -54,8 +55,9 @@
     "getenv": "^1.0.0",
     "morgan": "^1.9.1",
     "passport": "^0.4.1",
-    "passport-facebook-token": "^3.3.0",
+    "passport-facebook": "^3.0.0",
     "passport-github": "^1.1.0",
+    "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "pg": "^7.15.1",
     "reflect-metadata": "^0.1.13",

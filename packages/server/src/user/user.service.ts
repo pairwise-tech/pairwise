@@ -1,15 +1,18 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "src/payments/payments.entity";
-import { IUserDto } from "@pairwise/common";
+import { IUserDto, UserUpdateOptions } from "@pairwise/common";
+import { RequestUser } from "src/types";
+import { validateUserUpdateDetails } from "src/tools/validation";
 
 export interface GenericUserProfile {
   email: string;
   displayName: string;
   givenName: string;
   familyName: string;
+  profileImageUrl?: string;
 }
 
 @Injectable()
@@ -44,27 +47,41 @@ export class UserService {
   }
 
   async findOrCreateUser(profile: GenericUserProfile) {
-    /**
-     * TODO: For multiple SSO providers, check and consolidate login
-     * attempts by email address. A single email address is associated
-     * with only one user, regardless of which provider a user logins in
-     * with.
-     */
     const { email } = profile;
-    const userExists = await this.findUserByEmail(email);
-    if (userExists) {
-      console.log(`User exists, returning profile for ${email}`);
-      return userExists;
+    let accountCreated: boolean;
+
+    let user = await this.findUserByEmail(email);
+    if (user) {
+      accountCreated = false;
     } else {
-      console.log(`Creating new user: ${email}`);
-      const userData = {
-        email,
-        givenName: profile.givenName,
-        familyName: profile.familyName,
-        displayName: profile.displayName,
-      };
-      await this.userRepository.insert(userData);
-      return this.findUserByEmail(email);
+      accountCreated = true;
+      await this.userRepository.insert(profile);
+      user = await this.findUserByEmail(email);
     }
+
+    const msg = accountCreated ? "New account created" : "Account login";
+    console.log(`${msg} for email: ${email}`);
+
+    return { user, accountCreated };
+  }
+
+  async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
+    const validationResult = validateUserUpdateDetails(userDetails);
+
+    if (validationResult.error) {
+      throw new BadRequestException(validationResult.error);
+    } else {
+      console.log(`Updating user: ${user.email}`);
+      const { uuid, email } = user;
+      await this.userRepository.update({ uuid }, validationResult.value);
+      return await this.findUserByEmailAndReturnProfile(email);
+    }
+  }
+
+  async updateLastActiveChallengeId(user: RequestUser, challengeId: string) {
+    await this.userRepository.update(
+      { uuid: user.uuid },
+      { lastActiveChallengeId: challengeId },
+    );
   }
 }
