@@ -42,7 +42,9 @@ describe("User Progress APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("The challengeId is invalid");
+        expect(response.body.message).toBe(
+          "Invalid update parameters provided",
+        );
         done(error);
       });
   });

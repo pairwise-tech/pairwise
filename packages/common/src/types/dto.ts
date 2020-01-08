@@ -27,6 +27,10 @@ export interface IUserDto {
   payments: Payment[];
 }
 
+/**
+ * Only these fields can be updated on the user object by the
+ * POST user/profile API. This validation is applied on the server.
+ */
 export interface UserUpdateOptions {
   givenName?: string;
   familyName?: string;
