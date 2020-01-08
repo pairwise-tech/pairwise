@@ -1320,9 +1320,11 @@ class WorkspaceLoadingContainer extends React.Component<
         {loadedChallenge.type !== "media" && (
           <Workspace {...this.props} challenge={loadedChallenge} />
         )}
-        <LowerSection withHeader={loadedChallenge.type === "media"}>
-          <MediaArea />
-        </LowerSection>
+        {loadedChallenge.id !== SANDBOX_ID && (
+          <LowerSection withHeader={loadedChallenge.type === "media"}>
+            <MediaArea />
+          </LowerSection>
+        )}
         {DEV_MODE && <AdminKeyboardShortcuts />}
       </React.Fragment>
     );
