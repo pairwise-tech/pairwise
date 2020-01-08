@@ -233,6 +233,23 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   };
 
   private readonly handleEnterSandbox = () => {
+    const type = this.props.challenge?.type;
+
+    // If defined set the sandbox type to the current challenge type. I.e. if
+    // your doing a typescript challenge make sure the sandbox defaults to
+    // typescript
+    // Aside: Not sure yet if this is good ux, but one would assume that
+    // when using the sandbox you would want to programming something related to
+    // the current module.
+    if (type) {
+      this.props.updateChallenge({
+        id: SANDBOX_ID,
+        challenge: {
+          type,
+        },
+      });
+    }
+
     this.props.selectChallenge(SANDBOX_ID);
   };
 }

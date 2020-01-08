@@ -12,6 +12,7 @@ import {
   ModuleCreationPayload,
 } from "./types";
 import { generateEmptyChallenge, SANDBOX_ID } from "tools/constants";
+import { getStoredSandboxType } from "tools/utils";
 
 const debug = require("debug")("challenge:store");
 
@@ -44,6 +45,7 @@ const initialState = {
   sandboxChallenge: generateEmptyChallenge({
     id: SANDBOX_ID, // Important. This is how the app knows it's the sandbox challenge
     title: "Sandbox",
+    type: getStoredSandboxType(),
   }),
 };
 

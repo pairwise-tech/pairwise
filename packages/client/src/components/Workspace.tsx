@@ -45,7 +45,7 @@ import {
 import {
   composeWithProps,
   getStoredCodeForChallenge,
-  saveCodeToLocalStorage,
+  persistToLocalStorage,
   wait,
 } from "../tools/utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
@@ -727,10 +727,14 @@ class Workspace extends React.Component<IProps, IState> {
       // Do not store anything to local storage
       return;
     }
+
     /**
      * Save the current code to local storage. This method is debounced.
      */
-    saveCodeToLocalStorage(this.props.challenge.id, this.state.code);
+    persistToLocalStorage(this.props.challenge.id, {
+      code: this.state.code,
+      sandboxType: this.props.challenge.type,
+    });
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
@@ -1276,7 +1280,6 @@ const AdminKeyboardShortcuts = connect(
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  // challenge: Modules.selectors.challenges.firstUnfinishedChallenge(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
 });
