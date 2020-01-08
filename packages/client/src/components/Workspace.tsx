@@ -204,6 +204,13 @@ class Workspace extends React.Component<IProps, IState> {
       );
     }
 
+    // Account for changing the challenge type in the sandbox. Otherwise nothing
+    // gets rerendered since the ID of the challenge does not change
+    // TODO: This is ugly because it's unclear why re-rendering immediately fails
+    if (this.props.challenge.type !== nextProps.challenge.type) {
+      wait(50).then(this.refreshEditor);
+    }
+
     // Update in response to toggling admin edit mode. This will only ever
     // happen for us as we use codepress, not for our end users.
     if (this.props.isEditMode !== nextProps.isEditMode) {
@@ -998,14 +1005,6 @@ const LowerSection = styled.div<{ withHeader?: boolean }>`
   border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
   background: ${C.BACKGROUND_LOWER_SECTION};
 `;
-
-// const Title = styled.p`
-//   color: ${C.PRIMARY_BLUE};
-//   margin: 0;
-//   padding: 0;
-//   font-size: 18px;
-//   font-weight: 300;
-// `;
 
 const WorkspaceContainer = styled.div`
   width: 100vw;

@@ -12,7 +12,6 @@ import {
   ModuleCreationPayload,
 } from "./types";
 import { generateEmptyChallenge, SANDBOX_ID } from "tools/constants";
-import { strictEqual } from "assert";
 
 const debug = require("debug")("challenge:store");
 
@@ -148,19 +147,19 @@ const challenges = createReducer<State, ActionTypes>(initialState)
     const { id, challenge } = action.payload;
     const mapping = state.challengeMap?.[id];
 
-    if (!mapping || !courses) {
-      return state;
-    }
-
     // If the user is typing away in the sandbox we handle it differently
     if (id === SANDBOX_ID) {
       return {
         ...state,
         sandboxChallenge: {
           ...state.sandboxChallenge,
-          challenge,
+          ...challenge,
         },
       };
+    }
+
+    if (!mapping || !courses) {
+      return state;
     }
 
     const { moduleId, courseId } = mapping;

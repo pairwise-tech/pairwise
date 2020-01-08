@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import React from "react";
+import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
@@ -16,7 +16,6 @@ import { ButtonCore, IconButton } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
 import {
-  Icon,
   Button,
   ButtonGroup,
   Classes,
@@ -24,9 +23,18 @@ import {
   FocusStyleManager,
 } from "@blueprintjs/core";
 import cx from "classnames";
+import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 
 // Only show focus outlinewhen tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
+
+const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
+
+const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
+  { value: "markup", label: "HTML/CSS" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "react", label: "React" },
+];
 
 /** ===========================================================================
  * Types & Config
@@ -108,12 +116,23 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             )}
             <ControlsContainer style={{ marginLeft: "auto" }}>
               {isSandbox && (
-                /*CHallenge type select should go here... */
+                <Suspense fallback={<p>Menu Loading...</p>}>
+                  <LazyChallengeTypeMenu
+                    items={SANDBOX_TYPE_CHOICES}
+                    currentChallengeType={challenge?.type}
+                    onItemSelect={x => {
+                      this.props.updateChallenge({
+                        id: challenge.id, // See NOTE
+                        challenge: { type: x.value },
+                      });
+                    }}
+                  />
+                </Suspense>
               )}
               <Button
                 disabled={isSandbox}
                 onClick={this.handleEnterSandbox}
-                style={{ marginRight: 20 }}
+                style={{ margin: "0 20px" }}
               >
                 Sandbox
               </Button>
@@ -468,6 +487,7 @@ const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   toggleScrollLock: Modules.actions.app.toggleScrollLock,
+  updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
 const mergeProps = (

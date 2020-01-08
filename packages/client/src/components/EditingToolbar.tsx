@@ -1,11 +1,10 @@
-import { CHALLENGE_TYPE } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import React from "react";
+import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { Switch, Button, ButtonGroup } from "@blueprintjs/core";
-import { Select } from "@blueprintjs/select";
+import { Switch, Button } from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
+import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 
 const mapToolbarState = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
@@ -19,13 +18,10 @@ const toolbarDispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
+const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
+
 type EditChallengeControlsConnectProps = ReturnType<typeof mapToolbarState> &
   typeof toolbarDispatchProps;
-
-interface ChallengeTypeOption {
-  value: CHALLENGE_TYPE;
-  label: string;
-}
 
 const CHALLENGE_TYPE_CHOICES: ChallengeTypeOption[] = [
   { value: "markup", label: "Markup" },
@@ -33,8 +29,6 @@ const CHALLENGE_TYPE_CHOICES: ChallengeTypeOption[] = [
   { value: "react", label: "React" },
   { value: "media", label: "Media" },
 ];
-
-const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
 
 const EditingToolbar = connect(
   mapToolbarState,
@@ -80,43 +74,18 @@ const EditingToolbar = connect(
         >
           Save
         </Button>
-        <ChallengeTypeSelect
-          filterable={false}
-          items={CHALLENGE_TYPE_CHOICES}
-          itemListRenderer={({ renderItem, items }) => (
-            <ButtonGroup
-              style={{ minWidth: 150 }}
-              fill
-              alignText="left"
-              vertical
-            >
-              {items.map(renderItem)}
-            </ButtonGroup>
-          )}
-          itemRenderer={(x, { handleClick, modifiers }) => (
-            <Button
-              key={x.value}
-              icon={x.value === "media" ? "video" : "code"}
-              text={x.label}
-              onClick={handleClick}
-              active={modifiers.active}
-            />
-          )}
-          onItemSelect={x => {
-            props.updateChallenge({
-              id: challenge?.id || "", // See NOTE
-              challenge: { type: x.value },
-            });
-          }}
-        >
-          <Button
-            rightIcon="caret-down"
-            aria-controls="simple-menu"
-            aria-haspopup="true"
-          >
-            Type: <strong style={{ marginLeft: 6 }}>{challenge?.type}</strong>
-          </Button>
-        </ChallengeTypeSelect>
+        <Suspense fallback={<p>Menu Loading...</p>}>
+          <LazyChallengeTypeMenu
+            items={CHALLENGE_TYPE_CHOICES}
+            currentChallengeType={challenge?.type}
+            onItemSelect={x => {
+              props.updateChallenge({
+                id: challenge?.id || "", // See NOTE
+                challenge: { type: x.value },
+              });
+            }}
+          />
+        </Suspense>
       </SlideOut>
     </div>
   );
