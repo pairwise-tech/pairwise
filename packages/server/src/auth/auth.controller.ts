@@ -22,8 +22,14 @@ export class AuthController {
     @Req() req: Request & { user: FacebookProfileWithCredentials },
     @Res() res,
   ) {
-    const accessToken = await this.authService.handleFacebookSignin(req.user);
-    return res.redirect(`${ENV.CLIENT_URL}?accessToken=${accessToken}`);
+    const {
+      token,
+      accountCreated,
+    } = await this.authService.handleFacebookSignin(req.user);
+
+    return res.redirect(
+      `${ENV.CLIENT_URL}?accessToken=${token}?accountCreated=${accountCreated}`,
+    );
   }
 
   @UseGuards(AuthGuard("github"))
@@ -38,8 +44,13 @@ export class AuthController {
     @Req() req: Request & { user: GitHubProfileWithCredentials },
     @Res() res,
   ) {
-    const accessToken = await this.authService.handleGitHubSignin(req.user);
-    return res.redirect(`${ENV.CLIENT_URL}?accessToken=${accessToken}`);
+    const { token, accountCreated } = await this.authService.handleGitHubSignin(
+      req.user,
+    );
+
+    return res.redirect(
+      `${ENV.CLIENT_URL}?accessToken=${token}?accountCreated=${accountCreated}`,
+    );
   }
 
   @UseGuards(AuthGuard("google"))
@@ -54,7 +65,12 @@ export class AuthController {
     @Req() req: Request & { user: GoogleProfileWithCredentials },
     @Res() res,
   ) {
-    const accessToken = await this.authService.handleGoogleSignin(req.user);
-    return res.redirect(`${ENV.CLIENT_URL}?accessToken=${accessToken}`);
+    const { token, accountCreated } = await this.authService.handleGoogleSignin(
+      req.user,
+    );
+
+    return res.redirect(
+      `${ENV.CLIENT_URL}?accessToken=${token}?accountCreated=${accountCreated}`,
+    );
   }
 }

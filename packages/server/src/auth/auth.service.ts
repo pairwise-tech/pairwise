@@ -14,8 +14,8 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async handleFacebookSignin(user: FacebookProfileWithCredentials) {
-    const profile = user.profile._json;
+  async handleFacebookSignin(requestProfile: FacebookProfileWithCredentials) {
+    const profile = requestProfile.profile._json;
     const email = profile.email;
     const profileImageUrl = profile.picture.data.url;
     const { first_name, last_name } = profile;
@@ -31,12 +31,15 @@ export class AuthService {
     console.log(
       `Authenticating user {email: ${email}} using Facebook Strategy`,
     );
-    const account = await this.userService.findOrCreateUser(userProfile);
-    return this.getJwtAccessToken(account);
+    const { user, accountCreated } = await this.userService.findOrCreateUser(
+      userProfile,
+    );
+    const token = this.getJwtAccessToken(user);
+    return { token, accountCreated };
   }
 
-  async handleGitHubSignin(user: GitHubProfileWithCredentials) {
-    const profile = user.profile._json;
+  async handleGitHubSignin(requestProfile: GitHubProfileWithCredentials) {
+    const profile = requestProfile.profile._json;
 
     const email = profile.email;
     const profileImageUrl = profile.avatar_url;
@@ -52,12 +55,15 @@ export class AuthService {
     };
 
     console.log(`Authenticating user {email: ${email}} using GitHub Strategy`);
-    const account = await this.userService.findOrCreateUser(userProfile);
-    return this.getJwtAccessToken(account);
+    const { user, accountCreated } = await this.userService.findOrCreateUser(
+      userProfile,
+    );
+    const token = this.getJwtAccessToken(user);
+    return { token, accountCreated };
   }
 
-  async handleGoogleSignin(user: GoogleProfileWithCredentials) {
-    const profile = user.profile._json;
+  async handleGoogleSignin(requestProfile: GoogleProfileWithCredentials) {
+    const profile = requestProfile.profile._json;
     const email = profile.email;
     const profileImageUrl = profile.picture;
     const userProfile: GenericUserProfile = {
@@ -69,8 +75,11 @@ export class AuthService {
     };
 
     console.log(`Authenticating user {email: ${email}} using Google Strategy`);
-    const account = await this.userService.findOrCreateUser(userProfile);
-    return this.getJwtAccessToken(account);
+    const { user, accountCreated } = await this.userService.findOrCreateUser(
+      userProfile,
+    );
+    const token = this.getJwtAccessToken(user);
+    return { token, accountCreated };
   }
 
   getJwtAccessToken(user: User) {

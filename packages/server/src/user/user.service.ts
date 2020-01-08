@@ -45,21 +45,21 @@ export class UserService {
   }
 
   async findOrCreateUser(profile: GenericUserProfile) {
-    /**
-     * TODO: For multiple SSO providers, check and consolidate login
-     * attempts by email address. A single email address is associated
-     * with only one user, regardless of which provider a user logins in
-     * with.
-     */
     const { email } = profile;
-    const userExists = await this.findUserByEmail(email);
-    if (userExists) {
-      console.log(`User exists, returning profile for ${email}`);
-      return userExists;
+    let accountCreated: boolean;
+
+    let user = await this.findUserByEmail(email);
+    if (user) {
+      accountCreated = false;
     } else {
-      console.log(`Creating new user: ${email}`);
+      accountCreated = true;
       await this.userRepository.insert(profile);
-      return this.findUserByEmail(email);
+      user = await this.findUserByEmail(email);
     }
+
+    const msg = accountCreated ? "New account created" : "Account login";
+    console.log(`${msg} for email: ${email}`);
+
+    return { user, accountCreated };
   }
 }
