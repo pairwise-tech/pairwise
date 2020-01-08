@@ -34,7 +34,7 @@ services:
     expose:
       - 9000
     ports:
-      - "9000:9000"
+      - 9000:9000
     depends_on:
       - db
 
@@ -44,7 +44,7 @@ services:
     expose:
       - 3000
     ports:
-      - "3000:3000"
+      - 3000:3000
 
   external-services:
     image: pairwise
