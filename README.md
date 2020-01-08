@@ -92,9 +92,12 @@ To troubleshoot or develop tests locally, you can run the necessary application 
 
 ## Authentication
 
-We use the passport module for defining single-sign-on provider logins with common social account providers like Google, Facebook, and GitHub. Authorization through one of these strategies creates a user account which is uniquely identified by the email address. After authentication, a user is granted a long-lived `jwt` to stay signed into Pairwise. All of the SSO provider logins have mock API implementations in the `external-services` package, which are used when running e2e/Cypress tests.
+We use the passport module for defining single-sign-on provider logins with common social account providers like Google, Facebook, and GitHub. Authorization through one of these strategies creates a user account which is uniquely identified by the email address. After authentication, a user is granted a long-lived `jwt` to stay signed into Pairwise.
 
 To test authentication locally, you will need to run the client and server using `https`, which can be done using the `yarn client|server:https` commands. You will also need to adjust relevant environment variables for each of these to `https` where appropriate.
+
+All of the SSO provider logins have mock API implementations in the `external-services` package, which are used when running e2e/Cypress tests. These can be enabled locally by running the
+external services server and by loading all of the SSO provider environment variables which point to the local external service mock APIs (see `server/sample.env`) when running the application server.
 
 ## To Rebuild The Database
 
