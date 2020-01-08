@@ -36,6 +36,17 @@ describe("User Progress APIs", () => {
       });
   });
 
+  test("/challenge (GET) rejects invalid challenge ids", async done => {
+    request(`${HOST}/progress/challenge/fs78dfa79adsf7saf`)
+      .get("/")
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .end((error, response) => {
+        expect(response.body.message).toBe("The challengeId is invalid");
+        done(error);
+      });
+  });
+
   test("/challenge (POST) rejects invalid challenge ids", async done => {
     request(`${HOST}/progress/challenge`)
       .post("/")

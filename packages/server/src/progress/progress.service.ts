@@ -116,6 +116,11 @@ export class ProgressService {
   }
 
   async fetchUserCodeBlob(user: RequestUser, challengeId: string) {
+    /* Verify the challenge id is valid */
+    if (!challengeUtilityClass.challengeIdIsValid(challengeId)) {
+      throw new BadRequestException(ERROR_CODES.INVALID_UPDATE_DETAILS);
+    }
+
     /**
      * [SIDE EFFECT!]
      *
