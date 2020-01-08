@@ -8,6 +8,7 @@ import {
   Ok,
   Result,
   UserCourseStatus,
+  UserUpdateOptions,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -148,6 +149,15 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
       return axios.get<IUserDto>(`${HOST}/user/profile`, {
+        headers,
+      });
+    });
+  };
+
+  updateUser = async (userDetails: UserUpdateOptions) => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.post<IUserDto>(`${HOST}/user/profile`, userDetails, {
         headers,
       });
     });

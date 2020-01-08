@@ -122,9 +122,7 @@ export class ProgressService {
      * Update the lastActiveChallengeId on this user to be this challenge
      * which they are fetching user code history for.
      */
-    await this.userService.updateUser(user, {
-      lastActiveChallengeId: challengeId,
-    });
+    await this.userService.updateLastActiveChallengeId(user, challengeId);
 
     const codeHistory = await this.userCodeBlobRepository.findOne({
       user,

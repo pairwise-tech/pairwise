@@ -32,7 +32,6 @@ export interface UserUpdateOptions {
   familyName?: string;
   displayName?: string;
   profileImageUrl?: string;
-  lastActiveChallengeId?: string;
 }
 
 interface Payment {

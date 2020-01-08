@@ -105,7 +105,6 @@ export const validateUserUpdateDetails = (
       familyName: checkField(details.familyName),
       displayName: checkField(details.displayName),
       profileImageUrl: checkField(details.profileImageUrl),
-      lastActiveChallengeId: checkField(details.lastActiveChallengeId),
     };
 
     const sanitizedUpdate = {};

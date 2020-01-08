@@ -74,7 +74,14 @@ export class UserService {
       console.log(`Updating user: ${user.email}`);
       const { uuid, email } = user;
       await this.userRepository.update({ uuid }, validationResult.value);
-      return await this.findUserByEmail(email);
+      return await this.findUserByEmailAndReturnProfile(email);
     }
+  }
+
+  async updateLastActiveChallengeId(user: RequestUser, challengeId: string) {
+    await this.userRepository.update(
+      { uuid: user.uuid },
+      { lastActiveChallengeId: challengeId },
+    );
   }
 }
