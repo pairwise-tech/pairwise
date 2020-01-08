@@ -29,6 +29,9 @@ export class User {
   familyName: string;
 
   @Column({ nullable: true })
+  lastActiveChallengeId: string;
+
+  @Column({ nullable: true })
   profileImageUrl: string;
 
   @OneToMany(
