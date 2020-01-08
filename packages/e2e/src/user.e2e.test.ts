@@ -42,7 +42,7 @@ describe("User APIs", () => {
 
     const update = await axios.post(`${HOST}/user/profile`, body, headers);
 
-    const profile = update.data;
+    const { profile } = update.data;
     expect(profile.displayName).toBe(displayName);
     expect(profile.profileImageUrl).toBe(profileImageUrl);
     expect(profile.email).toBe(originalProfile.email);
