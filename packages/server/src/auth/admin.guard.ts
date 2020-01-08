@@ -23,7 +23,7 @@ export class AdminAuthGuard extends AuthGuard("jwt") {
     super();
   }
 
-  handleRequest(err, user, info: Error, context: any) {
+  handleRequest(err, user, info, context) {
     if (user) {
       const { email } = user;
       const headers = context.args[0].headers;
