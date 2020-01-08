@@ -56,6 +56,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
 
   componentDidMount() {
     this.props.initializeApp();
+    this.handleInitializeUserSession();
   }
 
   handleInitializeUserSession = () => {

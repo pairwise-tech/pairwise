@@ -7,24 +7,20 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserCourseProgress } from "./userCourseProgress.entity";
 import { UserCourseProgressDto } from "./userCourseProgress.dto";
-import { UserService } from "src/user/user.service";
 import {
   challengeUtilityClass,
   ChallengeStatus,
   IUserCodeBlobDto,
-  BlobTypeSet,
   UserCourseStatus,
 } from "@pairwise/common";
 import { UserCodeBlob } from "./userCodeBlob.entity";
-import { RequestUser } from "src/types";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { validateCodeBlob } from "src/tools/validation";
+import { RequestUser } from "src/types";
 
 @Injectable()
 export class ProgressService {
   constructor(
-    private readonly userService: UserService,
-
     @InjectRepository(UserCourseProgress)
     private readonly userProgressRepository: Repository<UserCourseProgress>,
 
@@ -32,9 +28,7 @@ export class ProgressService {
     private readonly userCodeBlobRepository: Repository<UserCodeBlob>,
   ) {}
 
-  async fetchUserChallengeProgress(requestUser: RequestUser) {
-    const user = await this.userService.findUserByEmail(requestUser.email);
-
+  async fetchUserChallengeProgress(user: RequestUser) {
     const result = await this.userProgressRepository.find({
       where: {
         user: user.uuid,
@@ -50,7 +44,7 @@ export class ProgressService {
   ) {
     console.log("Service handling update challenge code:");
     const { courseId, challengeId, complete } = challengeProgressDto;
-    const user = await this.userService.findUserByEmail(requestUser.email);
+    const user = requestUser;
 
     /**
      * Validate the input request:
@@ -120,15 +114,10 @@ export class ProgressService {
 
   async updateUserCodeHistory(
     challengeCodeDto: IUserCodeBlobDto,
-    requestUser: RequestUser,
+    user: RequestUser,
   ) {
     /* Validate everything in the code blob */
     validateCodeBlob(challengeCodeDto);
-
-    const user = await this.userService.findUserByEmail(requestUser.email);
-    if (!user) {
-      throw new BadRequestException(ERROR_CODES.MISSING_USER);
-    }
 
     const existingBlob = await this.userCodeBlobRepository.findOne({
       user,
@@ -161,8 +150,7 @@ export class ProgressService {
     return SUCCESS_CODES.OK;
   }
 
-  async fetchUserCodeHistory(requestUser: RequestUser, challengeId: string) {
-    const user = await this.userService.findUserByEmail(requestUser.email);
+  async fetchUserCodeHistory(user: RequestUser, challengeId: string) {
     const codeHistory = await this.userCodeBlobRepository.findOne({
       user,
       challengeId,

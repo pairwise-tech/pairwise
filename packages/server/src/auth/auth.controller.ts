@@ -5,6 +5,7 @@ import { AuthService } from "./auth.service";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
+import querystring from "querystring";
 
 @Controller("auth")
 export class AuthController {
@@ -27,9 +28,8 @@ export class AuthController {
       accountCreated,
     } = await this.authService.handleFacebookSignin(req.user);
 
-    return res.redirect(
-      `${ENV.CLIENT_URL}?accessToken=${token}?accountCreated=${accountCreated}`,
-    );
+    const params = this.getQueryParams(token, accountCreated);
+    return res.redirect(`${ENV.CLIENT_URL}?${params}`);
   }
 
   @UseGuards(AuthGuard("github"))
@@ -48,9 +48,8 @@ export class AuthController {
       req.user,
     );
 
-    return res.redirect(
-      `${ENV.CLIENT_URL}?accessToken=${token}?accountCreated=${accountCreated}`,
-    );
+    const params = this.getQueryParams(token, accountCreated);
+    return res.redirect(`${ENV.CLIENT_URL}?${params}`);
   }
 
   @UseGuards(AuthGuard("google"))
@@ -69,8 +68,16 @@ export class AuthController {
       req.user,
     );
 
-    return res.redirect(
-      `${ENV.CLIENT_URL}?accessToken=${token}?accountCreated=${accountCreated}`,
-    );
+    const params = this.getQueryParams(token, accountCreated);
+    return res.redirect(`${ENV.CLIENT_URL}?${params}`);
+  }
+
+  getQueryParams(accessToken: string, accountCreated: boolean) {
+    const params = querystring.stringify({
+      accessToken,
+      accountCreated,
+    });
+
+    return params;
   }
 }

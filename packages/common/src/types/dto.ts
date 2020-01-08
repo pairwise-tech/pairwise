@@ -22,8 +22,17 @@ export interface IUserDto {
     givenName: string;
     familyName: string;
     profileImageUrl: string;
+    lastActiveChallengeId: string;
   };
   payments: Payment[];
+}
+
+export interface UserUpdateOptions {
+  givenName?: string;
+  familyName?: string;
+  displayName?: string;
+  profileImageUrl?: string;
+  lastActiveChallengeId?: string;
 }
 
 interface Payment {

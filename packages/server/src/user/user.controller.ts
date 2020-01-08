@@ -1,14 +1,16 @@
-import { Request, Controller, UseGuards, Get } from "@nestjs/common";
+import {
+  Request,
+  Controller,
+  UseGuards,
+  Get,
+  Body,
+  Post,
+} from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
+import { UserUpdateOptions } from "@pairwise/common";
 
-/**
- * TODO:
- *
- * - Add apis for updating user information: name, profile image...
- * - Add api for updating last attempted challenge id
- */
 @Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -18,5 +20,14 @@ export class UserController {
   async getProfile(@Request() req: AuthenticatedRequest) {
     const { email } = req.user;
     return this.userService.findUserByEmailAndReturnProfile(email);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Post("profile")
+  async updateProfile(
+    @Body() updateDetails: UserUpdateOptions,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    return this.userService.updateUser(req.user, updateDetails);
   }
 }

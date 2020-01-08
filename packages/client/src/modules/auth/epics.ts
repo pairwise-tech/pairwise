@@ -19,7 +19,9 @@ const initializeAppAuthenticationEpic: EpicSignature = (action$, state$) => {
     filter(isActionOf(Actions.initializeApp)),
     map(getAccessTokenFromLocalStorage),
     filter(token => Boolean(token)),
-    map(accessToken => Actions.storeAccessToken({ accessToken })),
+    map(accessToken =>
+      Actions.storeAccessToken({ accessToken, accountCreated: false }),
+    ),
   );
 };
 

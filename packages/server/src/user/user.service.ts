@@ -3,7 +3,8 @@ import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "src/payments/payments.entity";
-import { IUserDto } from "@pairwise/common";
+import { IUserDto, UserUpdateOptions } from "@pairwise/common";
+import { RequestUser } from "src/types";
 
 export interface GenericUserProfile {
   email: string;
@@ -61,5 +62,12 @@ export class UserService {
     console.log(`${msg} for email: ${email}`);
 
     return { user, accountCreated };
+  }
+
+  async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
+    console.log(`Updating user: ${user.email}`);
+    const { uuid, email } = user;
+    await this.userRepository.update({ uuid }, userDetails);
+    return this.findUserByEmail(email);
   }
 }
