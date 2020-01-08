@@ -1312,16 +1312,17 @@ class WorkspaceLoadingContainer extends React.Component<
   render() {
     const { challenge } = this.props;
 
-    /* NOTE: Challenge has loaded by the time this component loads: */
-    const loadedChallenge = challenge as Challenge;
+    if (!challenge) {
+      return <h1>Loading...</h1>;
+    }
 
     return (
       <React.Fragment>
-        {loadedChallenge.type !== "media" && (
-          <Workspace {...this.props} challenge={loadedChallenge} />
+        {challenge.type !== "media" && (
+          <Workspace {...this.props} challenge={challenge} />
         )}
-        {loadedChallenge.id !== SANDBOX_ID && (
-          <LowerSection withHeader={loadedChallenge.type === "media"}>
+        {challenge.id !== SANDBOX_ID && (
+          <LowerSection withHeader={challenge.type === "media"}>
             <MediaArea />
           </LowerSection>
         )}
