@@ -13,13 +13,13 @@ dotenv.config();
  * ============================================================================
  */
 
+const SERVER = process.env.SERVER_URL || "http://127.0.0.1:9000";
+
 const app = express();
 
 app.use(morgan("dev"));
 app.use(cors());
 app.use(bodyParser.json());
-
-const SERVER = process.env.SERVER_URL || "http://127.0.0.1:9000";
 
 /** ===========================================================================
  * API Endpoints
@@ -66,9 +66,7 @@ app.get("/github/authorize", (req, res) => {
  * Request for a GitHub access token.
  */
 app.post("/github/token", (req, res) => {
-  res.send(
-    "access_token=61d5cfb6d0853016109fa997f85f4ad8fa2d5a44&scope=user%3Aemail&token_type=bearer",
-  );
+  res.send(mockAuth.getGitHubAccessToken());
 });
 
 /**
@@ -96,7 +94,7 @@ app.post("/google/token", (req, res) => {
 });
 
 /**
- * Authenticated GitHub request for a user profile.
+ * Authenticated Google request for a user profile.
  */
 app.get("/google/profile", (req, res) => {
   const profile = mockAuth.generateNewGoogleProfile();

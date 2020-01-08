@@ -84,6 +84,10 @@ class MockAuth {
     };
   };
 
+  getGitHubAccessToken = () => {
+    return "access_token=61d5cfb6d0853016109fa997f85f4ad8fa2d5a44&scope=user%3Aemail&token_type=bearer";
+  };
+
   getGoogleAccessToken = () => {
     return {
       access_token:
