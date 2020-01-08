@@ -6,8 +6,6 @@ import {
   fetchUserGivenAccessToken,
 } from "./utils/e2e-utils";
 
-jest.setTimeout(30000);
-
 /** ===========================================================================
  * e2e Tests for /progress APIs
  * ============================================================================

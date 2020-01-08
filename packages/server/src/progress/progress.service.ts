@@ -31,7 +31,7 @@ export class ProgressService {
     private readonly userCodeBlobRepository: Repository<UserCodeBlob>,
   ) {}
 
-  async fetchUserChallengeProgress(user: RequestUser) {
+  async fetchUserProgress(user: RequestUser) {
     const result = await this.userProgressRepository.find({
       where: {
         user: user.uuid,
@@ -115,7 +115,39 @@ export class ProgressService {
     return this.userProgressRepository.find({ courseId });
   }
 
-  async updateUserCodeHistory(
+  async fetchUserCodeBlob(user: RequestUser, challengeId: string) {
+    /**
+     * [SIDE EFFECT!]
+     *
+     * Update the lastActiveChallengeId on this user to be this challenge
+     * which they are fetching user code history for.
+     */
+    await this.userService.updateUser(user, {
+      lastActiveChallengeId: challengeId,
+    });
+
+    const codeHistory = await this.userCodeBlobRepository.findOne({
+      user,
+      challengeId,
+    });
+
+    if (codeHistory) {
+      /**
+       * Deserialize data blog before sending back to the client.
+       */
+      const deserialized = {
+        ...codeHistory,
+        dataBlob: JSON.parse(codeHistory.dataBlob),
+      };
+      return deserialized;
+    } else {
+      throw new NotFoundException(
+        "No history found for this challenge for this user.",
+      );
+    }
+  }
+
+  async updateUserCodeBlob(
     challengeCodeDto: IUserCodeBlobDto,
     user: RequestUser,
   ) {
@@ -151,37 +183,5 @@ export class ProgressService {
     }
 
     return SUCCESS_CODES.OK;
-  }
-
-  async fetchUserCodeHistory(user: RequestUser, challengeId: string) {
-    /**
-     * [SIDE EFFECT!]
-     *
-     * Update the lastActiveChallengeId on this user to be this challenge
-     * which they are fetching user code history for.
-     */
-    await this.userService.updateUser(user, {
-      lastActiveChallengeId: challengeId,
-    });
-
-    const codeHistory = await this.userCodeBlobRepository.findOne({
-      user,
-      challengeId,
-    });
-
-    if (codeHistory) {
-      /**
-       * Deserialize data blog before sending back to the client.
-       */
-      const deserialized = {
-        ...codeHistory,
-        dataBlob: JSON.parse(codeHistory.dataBlob),
-      };
-      return deserialized;
-    } else {
-      throw new NotFoundException(
-        "No history found for this challenge for this user.",
-      );
-    }
   }
 }

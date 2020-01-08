@@ -27,7 +27,7 @@ const validateTimeLastWatched = (time: number) => {
 
 /**
  * Perform validation on the user code blob which gets serialized to JSON
- * before it is saved in the databse.
+ * before it is saved in the database.
  */
 export const validateCodeBlob = (blob: IUserCodeBlobDto) => {
   if (!blob.dataBlob.type) {
@@ -110,8 +110,9 @@ export const validateUserUpdateDetails = (
 
     const sanitizedUpdate = {};
 
+    /* Only add fields which pass the check: */
     Object.entries(updateDetails).forEach(([key, value]) => {
-      if (value) {
+      if (value !== null) {
         sanitizedUpdate[key] = value;
       }
     });

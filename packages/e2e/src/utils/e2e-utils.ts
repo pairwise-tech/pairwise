@@ -7,10 +7,7 @@ import request from "supertest";
  * ============================================================================
  */
 
-const HOST = process.env.HOST || "http://localhost:9000";
-
-const HARD_CODED_FB_ACCESS_TOKEN =
-  "EAAGVjNBRNAQBAOuGymWeupll003o2XTnbf2uQReFCE4rdYB3HNSkfJt0uOrNMGZAIWEkIobmb1CNZBabpz94TI0kIca656YaKy5JmJwt0tYZAm8BoSGZCRYu6cyOWntl0xCh4v7NxkGmnkf8xpk3gmkWIyRLMggyxJQMjtbfoKZAdEcRwfptLLaPZC1KZB3ZCxULaFxt5R3JLQZDZD";
+export const HOST = process.env.HOST || "http://localhost:9000";
 
 /**
  * Parse the accessToken after successful authentication.
@@ -26,7 +23,7 @@ export const getAccessTokenFromRedirect = (redirect: string) => {
  * Create a new user and return the accessToken to use for authentication in
  * other tests.
  */
-const fetchAccessToken = async () => {
+export const fetchAccessToken = async () => {
   let authorizationRedirect;
   let loginRedirect;
   let accessToken;
@@ -67,10 +64,3 @@ export const fetchUserGivenAccessToken = async (accessToken: string) => {
 
   return result.data;
 };
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export { HOST, HARD_CODED_FB_ACCESS_TOKEN, fetchAccessToken };

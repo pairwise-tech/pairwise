@@ -22,7 +22,7 @@ export class ProgressController {
   @UseGuards(AuthGuard("jwt"))
   @Get()
   fetchUserChallengeProgress(@Req() req: AuthenticatedRequest) {
-    return this.progressService.fetchUserChallengeProgress(req.user);
+    return this.progressService.fetchUserProgress(req.user);
   }
 
   @UseGuards(AuthGuard("jwt"))
@@ -42,7 +42,7 @@ export class ProgressController {
   @Get("/challenge/:id")
   fetchUserChallengeHistory(@Param() params, @Req() req: AuthenticatedRequest) {
     const { id } = params;
-    return this.progressService.fetchUserCodeHistory(req.user, id);
+    return this.progressService.fetchUserCodeBlob(req.user, id);
   }
 
   @UseGuards(AuthGuard("jwt"))
@@ -53,6 +53,6 @@ export class ProgressController {
     @Req() req: AuthenticatedRequest,
   ) {
     const { user } = req;
-    return this.progressService.updateUserCodeHistory(challengeCodeDto, user);
+    return this.progressService.updateUserCodeBlob(challengeCodeDto, user);
   }
 }

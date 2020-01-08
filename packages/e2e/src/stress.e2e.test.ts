@@ -49,7 +49,7 @@ const NUMBER_OF_USERS = 15;
 const NUMBER_OF_REQUESTS_PER_USER = 5;
 const TOTAL_REQUESTS = NUMBER_OF_USERS * NUMBER_OF_REQUESTS_PER_USER;
 
-describe.skip("Stress Test the Server", () => {
+describe("Stress Test the Server", () => {
   test("Create users and hit the /progress/challenge endpoint repeatedly", async done => {
     /* Wait 1 second to allow other tests to complete first */
     await new Promise((_: any) => setTimeout(_, 1000));

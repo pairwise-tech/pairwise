@@ -1,4 +1,3 @@
-import axios from "axios";
 import request from "supertest";
 import { fetchAccessToken, HOST } from "./utils/e2e-utils";
 
