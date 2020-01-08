@@ -181,7 +181,6 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   refreshEditor = () => {
-    this.props.unlockVerticalScrolling();
     this.resetMonacoEditor();
     this.setMonacoEditorValue();
     if (this.iFrameRef) {
@@ -1284,7 +1283,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
-  toggleScrollLock: Modules.actions.app.toggleScrollLock,
 };
 
 interface ComponentProps {}
@@ -1295,7 +1293,6 @@ interface WorkspaceLoadingContainerProps extends ComponentProps, ConnectProps {}
 
 interface IProps extends WorkspaceLoadingContainerProps {
   challenge: Challenge;
-  unlockVerticalScrolling: () => any;
 }
 
 const withProps = connect(mapStateToProps, dispatchProps);
@@ -1321,11 +1318,7 @@ class WorkspaceLoadingContainer extends React.Component<
     return (
       <React.Fragment>
         {loadedChallenge.type !== "media" && (
-          <Workspace
-            {...this.props}
-            challenge={loadedChallenge}
-            unlockVerticalScrolling={this.unlockVerticalScrolling}
-          />
+          <Workspace {...this.props} challenge={loadedChallenge} />
         )}
         <LowerSection withHeader={loadedChallenge.type === "media"}>
           <MediaArea />
@@ -1334,10 +1327,6 @@ class WorkspaceLoadingContainer extends React.Component<
       </React.Fragment>
     );
   }
-
-  unlockVerticalScrolling = () => {
-    this.props.toggleScrollLock({ locked: false });
-  };
 }
 
 /** ===========================================================================

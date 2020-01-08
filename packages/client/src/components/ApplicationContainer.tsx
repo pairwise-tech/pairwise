@@ -118,9 +118,6 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               {isSandbox && (
                 <Suspense fallback={<p>Menu Loading...</p>}>
                   <LazyChallengeTypeMenu
-                    data-id={
-                      "challenge-type-select" /* props don't want id=... so i'm using this */
-                    }
                     items={SANDBOX_TYPE_CHOICES}
                     currentChallengeType={challenge?.type}
                     onItemSelect={x => {
@@ -460,8 +457,9 @@ const MobileTitleText = styled(MobileText)`
 `;
 
 interface DarkThemeProps {
-  className?: string;
   children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
   return <div className={cx(className, Classes.DARK)} {...props} />;
@@ -490,7 +488,6 @@ const dispatchProps = {
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
-  toggleScrollLock: Modules.actions.app.toggleScrollLock,
   updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
@@ -503,13 +500,7 @@ const mergeProps = (
   ...methods,
   ...state,
   toggleNavigationMap: () => {
-    const { overlayVisible } = state;
-    if (overlayVisible) {
-      methods.toggleScrollLock({ locked: false });
-    } else {
-      methods.toggleScrollLock({ locked: true });
-    }
-    methods.setNavigationMapState(!overlayVisible);
+    methods.setNavigationMapState(!state.overlayVisible);
   },
 });
 
