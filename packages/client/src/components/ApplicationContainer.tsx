@@ -255,7 +255,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     // Aside: Not sure yet if this is good ux, but one would assume that
     // when using the sandbox you would want to programming something related to
     // the current module.
-    if (type) {
+    if (type && type !== "media") {
       this.props.updateChallenge({
         id: SANDBOX_ID,
         challenge: {

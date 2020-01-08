@@ -14,6 +14,7 @@ import { getType, isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
+import { SANDBOX_ID } from "tools/constants";
 
 /** ===========================================================================
  * Epics
@@ -87,10 +88,18 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
         );
 
         const challengeMap = createInverseChallengeMapping([course]);
-        const challengeId = maybeId || course.modules[0].challenges[0].id;
+        const challengeId =
+          maybeId in challengeMap
+            ? maybeId
+            : maybeId === SANDBOX_ID
+            ? maybeId
+            : course.modules[0].challenges[0].id;
         const courseId = challengeMap[challengeId]?.courseId || course.id;
         const moduleId =
           challengeMap[challengeId]?.moduleId || course.modules[0].id;
+
+        // Redirect to the route for the challenge
+        deps.router.push(`/workspace/${challengeId}`);
 
         return Actions.fetchCurrentActiveCourseSuccess({
           courses: [course],
