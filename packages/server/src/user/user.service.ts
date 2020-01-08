@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "src/payments/payments.entity";
 import { IUserDto, UserUpdateOptions } from "@pairwise/common";
 import { RequestUser } from "src/types";
+import { validateUserUpdateDetails } from "src/tools/validation";
 
 export interface GenericUserProfile {
   email: string;
@@ -65,9 +66,15 @@ export class UserService {
   }
 
   async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
-    console.log(`Updating user: ${user.email}`);
-    const { uuid, email } = user;
-    await this.userRepository.update({ uuid }, userDetails);
-    return this.findUserByEmail(email);
+    const validationResult = validateUserUpdateDetails(userDetails);
+
+    if (validationResult.error) {
+      throw new BadRequestException(validationResult.error);
+    } else {
+      console.log(`Updating user: ${user.email}`);
+      const { uuid, email } = user;
+      await this.userRepository.update({ uuid }, validationResult.value);
+      return await this.findUserByEmail(email);
+    }
   }
 }

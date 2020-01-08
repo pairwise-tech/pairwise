@@ -1,3 +1,4 @@
+import axios from "axios";
 import querystring from "querystring";
 import request from "supertest";
 
@@ -11,6 +12,9 @@ const HOST = process.env.HOST || "http://localhost:9000";
 const HARD_CODED_FB_ACCESS_TOKEN =
   "EAAGVjNBRNAQBAOuGymWeupll003o2XTnbf2uQReFCE4rdYB3HNSkfJt0uOrNMGZAIWEkIobmb1CNZBabpz94TI0kIca656YaKy5JmJwt0tYZAm8BoSGZCRYu6cyOWntl0xCh4v7NxkGmnkf8xpk3gmkWIyRLMggyxJQMjtbfoKZAdEcRwfptLLaPZC1KZB3ZCxULaFxt5R3JLQZDZD";
 
+/**
+ * Parse the accessToken after successful authentication.
+ */
 export const getAccessTokenFromRedirect = (redirect: string) => {
   const indexOfQuestionMark = redirect.indexOf("?");
   const queryParams = redirect.slice(indexOfQuestionMark + 1);
@@ -18,6 +22,10 @@ export const getAccessTokenFromRedirect = (redirect: string) => {
   return params.accessToken;
 };
 
+/**
+ * Create a new user and return the accessToken to use for authentication in
+ * other tests.
+ */
 const fetchAccessToken = async () => {
   let authorizationRedirect;
   let loginRedirect;
@@ -45,6 +53,19 @@ const fetchAccessToken = async () => {
     });
 
   return accessToken;
+};
+
+/**
+ * Helper to fetch a user given an accessToken.
+ */
+export const fetchUserGivenAccessToken = async (accessToken: string) => {
+  const result = await axios.get(`${HOST}/user/profile`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  return result.data;
 };
 
 /** ===========================================================================

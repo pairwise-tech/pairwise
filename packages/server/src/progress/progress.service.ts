@@ -17,10 +17,13 @@ import { UserCodeBlob } from "./userCodeBlob.entity";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { validateCodeBlob } from "src/tools/validation";
 import { RequestUser } from "src/types";
+import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class ProgressService {
   constructor(
+    private readonly userService: UserService,
+
     @InjectRepository(UserCourseProgress)
     private readonly userProgressRepository: Repository<UserCourseProgress>,
 
@@ -151,6 +154,16 @@ export class ProgressService {
   }
 
   async fetchUserCodeHistory(user: RequestUser, challengeId: string) {
+    /**
+     * [SIDE EFFECT!]
+     *
+     * Update the lastActiveChallengeId on this user to be this challenge
+     * which they are fetching user code history for.
+     */
+    await this.userService.updateUser(user, {
+      lastActiveChallengeId: challengeId,
+    });
+
     const codeHistory = await this.userCodeBlobRepository.findOne({
       user,
       challengeId,
