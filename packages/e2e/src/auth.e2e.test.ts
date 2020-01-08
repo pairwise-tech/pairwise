@@ -1,6 +1,6 @@
 import axios from "axios";
 import request from "supertest";
-import { HOST, HARD_CODED_FB_ACCESS_TOKEN } from "./utils/e2e-utils";
+import { HOST, getAccessTokenFromRedirect } from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /auth APIs
@@ -33,10 +33,7 @@ describe("Auth APIs", () => {
       .expect(302)
       .then(response => {
         finalRedirect = response.header.location;
-
-        const match = "?accessToken=";
-        const index = finalRedirect.indexOf(match);
-        accessToken = finalRedirect.slice(index + match.length);
+        accessToken = getAccessTokenFromRedirect(response.header.location);
       });
 
     const result = await axios.get(`${HOST}/user/profile`, {
@@ -86,10 +83,7 @@ describe("Auth APIs", () => {
       .expect(302)
       .then(response => {
         finalRedirect = response.header.location;
-
-        const match = "?accessToken=";
-        const index = finalRedirect.indexOf(match);
-        accessToken = finalRedirect.slice(index + match.length);
+        accessToken = getAccessTokenFromRedirect(response.header.location);
       });
 
     const result = await axios.get(`${HOST}/user/profile`, {
@@ -139,10 +133,7 @@ describe("Auth APIs", () => {
       .expect(302)
       .then(response => {
         finalRedirect = response.header.location;
-
-        const match = "?accessToken=";
-        const index = finalRedirect.indexOf(match);
-        accessToken = finalRedirect.slice(index + match.length);
+        accessToken = getAccessTokenFromRedirect(response.header.location);
       });
 
     const result = await axios.get(`${HOST}/user/profile`, {

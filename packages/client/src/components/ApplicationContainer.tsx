@@ -56,14 +56,29 @@ class ApplicationContainer extends React.Component<IProps, IState> {
 
   componentDidMount() {
     this.props.initializeApp();
+    this.handleInitializeUserSession();
+  }
 
-    const { accessToken } = queryString.parse(window.location.search);
+  handleInitializeUserSession = () => {
+    const { accessToken, accountCreated } = queryString.parse(
+      window.location.search,
+    );
+
+    /* Kind of sloppy: */
+    console.log(`Login detected! Account created: ${accountCreated}`);
+
+    const created =
+      typeof accountCreated === "string" ? JSON.parse(accountCreated) : false;
+
     if (typeof accessToken === "string" && Boolean(accessToken)) {
-      this.props.storeAccessToken({ accessToken });
+      this.props.storeAccessToken({
+        accessToken,
+        accountCreated: Boolean(created),
+      });
     }
 
     this.setState({ hasHandledRedirect: true });
-  }
+  };
 
   render(): Nullable<JSX.Element> {
     if (!this.state.hasHandledRedirect) {

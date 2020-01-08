@@ -23,6 +23,7 @@ const setSingleSignOnDialogState = createAction(
 
 const storeAccessToken = createAction(ActionTypesEnum.STORE_ACCESS_TOKEN)<{
   accessToken: string;
+  accountCreated: boolean;
 }>();
 
 const storeAccessTokenSuccess = createAction(

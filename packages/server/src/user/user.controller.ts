@@ -1,7 +1,15 @@
-import { Request, Controller, UseGuards, Get } from "@nestjs/common";
+import {
+  Request,
+  Controller,
+  UseGuards,
+  Get,
+  Body,
+  Post,
+} from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
+import { UserUpdateOptions } from "@pairwise/common";
 
 @Controller("user")
 export class UserController {
@@ -12,5 +20,14 @@ export class UserController {
   async getProfile(@Request() req: AuthenticatedRequest) {
     const { email } = req.user;
     return this.userService.findUserByEmailAndReturnProfile(email);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Post("profile")
+  async updateProfile(
+    @Body() updateDetails: UserUpdateOptions,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    return this.userService.updateUser(req.user, updateDetails);
   }
 }

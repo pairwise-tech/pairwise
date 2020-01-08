@@ -1,4 +1,5 @@
 import axios from "axios";
+import querystring from "querystring";
 import request from "supertest";
 
 /** ===========================================================================
@@ -6,15 +7,25 @@ import request from "supertest";
  * ============================================================================
  */
 
-const HOST = process.env.HOST || "http://localhost:9000";
+export const HOST = process.env.HOST || "http://localhost:9000";
 
-const HARD_CODED_FB_ACCESS_TOKEN =
-  "EAAGVjNBRNAQBAOuGymWeupll003o2XTnbf2uQReFCE4rdYB3HNSkfJt0uOrNMGZAIWEkIobmb1CNZBabpz94TI0kIca656YaKy5JmJwt0tYZAm8BoSGZCRYu6cyOWntl0xCh4v7NxkGmnkf8xpk3gmkWIyRLMggyxJQMjtbfoKZAdEcRwfptLLaPZC1KZB3ZCxULaFxt5R3JLQZDZD";
+/**
+ * Parse the accessToken after successful authentication.
+ */
+export const getAccessTokenFromRedirect = (redirect: string) => {
+  const indexOfQuestionMark = redirect.indexOf("?");
+  const queryParams = redirect.slice(indexOfQuestionMark + 1);
+  const params = querystring.parse(queryParams);
+  return params.accessToken;
+};
 
-const fetchAccessToken = async () => {
+/**
+ * Create a new user and return the accessToken to use for authentication in
+ * other tests.
+ */
+export const fetchAccessToken = async () => {
   let authorizationRedirect;
   let loginRedirect;
-  let finalRedirect;
   let accessToken;
 
   await request(`${HOST}/auth/github`)
@@ -35,19 +46,21 @@ const fetchAccessToken = async () => {
     .get("/")
     .expect(302)
     .then(response => {
-      finalRedirect = response.header.location;
-
-      const match = "?accessToken=";
-      const index = finalRedirect.indexOf(match);
-      accessToken = finalRedirect.slice(index + match.length);
+      accessToken = getAccessTokenFromRedirect(response.header.location);
     });
 
   return accessToken;
 };
 
-/** ===========================================================================
- * Export
- * ============================================================================
+/**
+ * Helper to fetch a user given an accessToken.
  */
+export const fetchUserGivenAccessToken = async (accessToken: string) => {
+  const result = await axios.get(`${HOST}/user/profile`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-export { HOST, HARD_CODED_FB_ACCESS_TOKEN, fetchAccessToken };
+  return result.data;
+};

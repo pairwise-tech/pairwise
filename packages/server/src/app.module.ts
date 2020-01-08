@@ -9,6 +9,7 @@ import { UsersModule } from "./user/user.module";
 import { ChallengesModule } from "./challenges/challenges.module";
 import { ProgressModule } from "./progress/progress.module";
 import { PaymentsModule } from "./payments/payments.module";
+import { AdminModule } from "./admin/admin.module";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PaymentsModule } from "./payments/payments.module";
     ChallengesModule,
     ProgressModule,
     PaymentsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
