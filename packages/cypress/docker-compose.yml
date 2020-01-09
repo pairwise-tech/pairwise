@@ -30,7 +30,6 @@ services:
       GITHUB_AUTHORIZATION_URL: http://external-services:7000/github/authorize
       GOOGLE_PROFILE_URL: http://external-services:7000/google/profile
       GOOGLE_TOKEN_URL: http://external-services:7000/google/token
-      GOOGLE_AUTHORIZATION_URL: http://external-services:7000/google/authorize
     expose:
       - 9000
     ports:

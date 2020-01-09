@@ -21,23 +21,23 @@ describe("Workspace and Challenge Navigation Works", () => {
     let challengeId = "";
 
     const checkPrev = () => {
-      cy.get("#prevButton").click();
+      cy.get("#prevButton").click({ force: true });
       cy.url().then(url => {
         const id = getChallengeId(url);
         expect(url).to.not.equal(challengeId);
         challengeId = id;
       });
-      cy.wait(250);
+      cy.wait(2000);
     };
 
     const checkNext = () => {
-      cy.get("#nextButton").click();
+      cy.get("#nextButton").click({ force: true });
       cy.url().then(url => {
         const id = getChallengeId(url);
         expect(url).to.not.equal(challengeId);
         challengeId = id;
       });
-      cy.wait(250);
+      cy.wait(2000);
     };
 
     checkNext();

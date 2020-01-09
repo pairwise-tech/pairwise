@@ -34,12 +34,19 @@ const assertAuthenticatedFlowWorks = () => {
   cy.get("#profile-link").click({ force: true });
   cy.contains("User Profile:");
 
+  cy.reload();
+  cy.wait(500);
+  cy.contains("Welcome, ");
+
   cy.get("#account-menu-dropdown").trigger("mouseover");
   cy.get("#logout-link").click({ force: true });
-  cy.contains("Pairwise Home");
 
   cy.contains("Login or Signup");
-  cy.url().should("include", "home");
+  cy.url().should("include", "workspace");
+
+  cy.reload();
+  cy.contains("Login or Signup");
+  cy.url().should("include", "workspace");
 };
 
 /**
