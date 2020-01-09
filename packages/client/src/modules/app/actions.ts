@@ -1,4 +1,5 @@
 import { ActionType, createAction } from "typesafe-actions";
+import { Location } from "history";
 
 /** ===========================================================================
  * Action Types
@@ -11,6 +12,7 @@ enum ActionTypesEnum {
   INITIALIZE_APP_SUCCESS = "INITIALIZE_APP_SUCCESS",
   TOGGLE_PAGE_SCROLL_LOCK = "TOGGLE_PAGE_SCROLL_LOCK",
   LOGOUT = "LOGOUT",
+  LOCATION_CHANGE = "LOCATION_CHANGE",
 }
 
 /** ===========================================================================
@@ -20,6 +22,10 @@ enum ActionTypesEnum {
 
 const empty = createAction(ActionTypesEnum.EMPTY_ACTION)();
 
+const locationChange = createAction(ActionTypesEnum.LOCATION_CHANGE)<
+  Location
+>();
+
 const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
 
 const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)();
@@ -28,6 +34,7 @@ const initializeAppSuccess = createAction(
 )();
 
 const actions = {
+  locationChange,
   empty,
   logoutUser,
   initializeApp,
