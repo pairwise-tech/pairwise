@@ -3,7 +3,14 @@ import Markdown, { ReactMarkdownProps } from "react-markdown";
 import styled from "styled-components/macro";
 
 import { COLORS } from "../tools/constants";
-import { EditableText, IEditableTextProps, Button } from "@blueprintjs/core";
+import {
+  EditableText,
+  IEditableTextProps,
+  Button,
+  Icon,
+  IconName,
+} from "@blueprintjs/core";
+import { NavLink, NavLinkProps } from "react-router-dom";
 
 const PROSE_MAX_WIDTH = 728;
 
@@ -146,6 +153,28 @@ export const LowerRight = styled.div`
   bottom: 10px;
   display: flex;
   flex-direction: column;
+`;
+
+interface IconNavLinkProps extends NavLinkProps {
+  icon: IconName;
+}
+
+export const IconNavLink = styled(({ icon, ...props }: IconNavLinkProps) => {
+  return (
+    <NavLink {...props}>
+      <Button>
+        <Icon icon={icon} />
+      </Button>
+    </NavLink>
+  );
+})`
+  &:hover .bp3-icon:only-child {
+    color: white !important;
+  }
+
+  .bp3-icon:only-child {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
 `;
 
 export const IconButton = styled(Button)`

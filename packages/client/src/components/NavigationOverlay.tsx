@@ -13,6 +13,7 @@ import {
 import { composeWithProps } from "tools/utils";
 import { Tooltip, Icon } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
+import { NavLink, NavLinkProps } from "react-router-dom";
 
 const debug = require("debug")("client:NavigationOverlay");
 
@@ -126,10 +127,10 @@ const NavigationOverlay = (props: IProps) => {
         {module.challenges.map((c: Challenge, i: number) => {
           return (
             <div key={c.id} style={{ position: "relative" }}>
-              <NavButton
-                active={c.id === challengeId}
+              <Link
+                isActive={() => c.id === challengeId}
                 key={c.id}
-                onClick={() => props.selectChallenge(c.id)}
+                to={`/workspace/${c.id}`}
               >
                 <span>
                   <Icon
@@ -149,7 +150,7 @@ const NavigationOverlay = (props: IProps) => {
                     </Tooltip>
                   )}
                 </span>
-              </NavButton>
+              </Link>
               <AddNavItemButton
                 show={isEditMode}
                 onClick={() =>
@@ -229,6 +230,57 @@ const NavUpdateField = styled.input`
   &:focus {
     color: white;
     background: #0d0d0d;
+  }
+`;
+
+const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
+  cursor: pointer;
+  padding: 12px;
+  font-size: 18px;
+  border: 1px solid transparent;
+  border-bottom-color: ${COLORS.SEPARATOR_BORDER};
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  outline: none;
+  color: ${COLORS.TEXT_TITLE} !important;
+  background: transparent;
+  position: relative;
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transition: all 0.15s ease-out;
+    transform: scale(0);
+    width: 3px;
+    background: ${COLORS.GRADIENT_GREEN};
+  }
+
+  &.active {
+    color: white !important;
+    background: ${COLORS.BACKGROUND_MODAL};
+    &:after {
+      transform: scale(1);
+    }
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+
+  &:hover {
+    color: white;
+    background: #0d0d0d;
+    &:after {
+      transform: scale(1);
+    }
   }
 `;
 
@@ -324,7 +376,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
-  selectChallenge: Modules.actions.challenges.setChallengeId,
   setCurrentModule: Modules.actions.challenges.setCurrentModule,
   createCourseModule: Modules.actions.challenges.createCourseModule,
   updateCourseModule: Modules.actions.challenges.updateCourseModule,
