@@ -144,15 +144,15 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                   />
                 </Suspense>
               )}
-              <Button
-                id="sandboxButton"
-                disabled={isSandbox}
-                style={{ margin: "0 20px" }}
-              >
-                <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
+              <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
+                <Button
+                  id="sandboxButton"
+                  disabled={isSandbox}
+                  style={{ margin: "0 20px" }}
+                >
                   Sandbox
-                </Link>
-              </Button>
+                </Button>
+              </Link>
               {displayNavigationArrows && (
                 <ButtonGroup>
                   {prev && (
