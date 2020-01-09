@@ -6,6 +6,7 @@
   "scripts": {
     "setup": "yarn client:setup && yarn server:setup",
     "up": "docker-compose up",
+    "pairwise": "concurrently \"yarn services:start\" \"yarn server:run\"",
     "up:build": "docker-compose up --build",
     "common:build": "cd packages/common && yarn build",
     "common:watch": "cd packages/common && yarn watch",

@@ -22,31 +22,32 @@ services:
       context: .
       dockerfile: Dockerfile
     image: runtime
-    command: dockerize -wait tcp://db:5432 -wait tcp://external-services:7000 -timeout 10s yarn server:run
+    command: dockerize -wait tcp://db:5432 -timeout 10s yarn pairwise
     environment:
       TYPEORM_HOST: db
       CLIENT_URL: http://127.0.0.1:3000
       FACEBOOK_AUTHORIZATION_URL: http://localhost:7000/facebook/authorize
-      FACEBOOK_TOKEN_URL: http://external-services:7000/facebook/token
-      FACEBOOK_PROFILE_URL: http://external-services:7000/facebook/profile
+      FACEBOOK_TOKEN_URL: http://localhost:7000/facebook/token
+      FACEBOOK_PROFILE_URL: http://localhost:7000/facebook/profile
       GITHUB_AUTHORIZATION_URL: http://localhost:7000/github/authorize
-      GITHUB_TOKEN_URL: http://external-services:7000/github/token
-      GITHUB_PROFILE_URL: http://external-services:7000/github/profile
-      # GOOGLE_AUTHORIZATION_URL: http://external-services:7000/google/token
+      GITHUB_TOKEN_URL: http://localhost:7000/github/token
+      GITHUB_PROFILE_URL: http://localhost:7000/github/profile
       GOOGLE_TOKEN_URL: http://localhost:7000/google/token
-      GOOGLE_PROFILE_URL: http://external-services:7000/google/profile
+      GOOGLE_PROFILE_URL: http://localhost:7000/google/profile
     expose:
       - 9000
     ports:
       - 9000:9000
     depends_on:
       - db
-      - external-services
-
-  external-services:
-    image: runtime
-    command: yarn services:start
-    expose:
-      - 7000
-    ports:
-      - 7000:7000
+# NOTE: It would be great to use this instead of running the server and services concurrently above,
+# but there will be a networking bug with Google Authentication! Oh well! An award to whoever can
+# sort that out...
+# - external-services
+# external-services:
+#   image: runtime
+#   command: yarn services:start
+#   expose:
+#     - 7000
+#   ports:
+#     - 7000:7000
