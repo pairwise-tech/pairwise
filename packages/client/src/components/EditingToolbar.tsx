@@ -5,6 +5,7 @@ import styled from "styled-components/macro";
 import { Switch, Button } from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
+import KeyboardShortcuts from "./KeyboardShortcuts";
 
 const mapToolbarState = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
@@ -34,6 +35,8 @@ const EditingToolbar = connect(
   mapToolbarState,
   toolbarDispatchProps,
 )((props: EditChallengeControlsConnectProps) => {
+  // For hiding the controls while recording a video.
+  const [hidden, setHidden] = React.useState(false);
   const { isEditMode, setEditMode, saveCourse, course, challenge } = props;
 
   if (challenge?.id === SANDBOX_ID) {
@@ -41,6 +44,10 @@ const EditingToolbar = connect(
     // way the course challenges can be
     return null;
   }
+
+  const toggleHidden = () => {
+    setHidden(!hidden);
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditMode(event.target.checked);
@@ -58,13 +65,18 @@ const EditingToolbar = connect(
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
       <Switch
-        style={{ marginBottom: 0, marginRight: 20 }}
+        style={{
+          marginBottom: 0,
+          marginRight: 20,
+          transition: "opacity 0.2s ease-out",
+          opacity: hidden ? 0 : 1,
+        }}
         checked={isEditMode}
         onChange={handleChange}
         large
         labelElement={"Edit"}
       />
-      <SlideOut show={isEditMode}>
+      <SlideOut show={isEditMode && !hidden}>
         <Button
           large
           minimal
@@ -87,6 +99,11 @@ const EditingToolbar = connect(
           />
         </Suspense>
       </SlideOut>
+      <KeyboardShortcuts
+        keymap={{
+          "cmd+shift+e": toggleHidden,
+        }}
+      />
     </div>
   );
 });
