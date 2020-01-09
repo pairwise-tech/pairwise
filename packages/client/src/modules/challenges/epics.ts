@@ -1,20 +1,13 @@
-import { ChallengeList, Course } from "@pairwise/common";
+import { Course } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of } from "rxjs";
-import {
-  catchError,
-  delay,
-  filter,
-  ignoreElements,
-  map,
-  mergeMap,
-  tap,
-} from "rxjs/operators";
-import { getType, isActionOf } from "typesafe-actions";
+import { catchError, delay, filter, map, mergeMap, tap } from "rxjs/operators";
+import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
 import { SANDBOX_ID } from "tools/constants";
+import { Location } from "history";
 
 /** ===========================================================================
  * Epics
@@ -23,14 +16,6 @@ import { SANDBOX_ID } from "tools/constants";
 
 export const CURRENT_ACTIVE_CHALLENGE_IDS = {
   challengeId: "9scykDold",
-};
-
-const getAllChallengesInCourse = (course: Course): ChallengeList => {
-  let challenges: ChallengeList = [];
-  course.modules.forEach(module => {
-    challenges = challenges.concat(module.challenges);
-  });
-  return challenges;
 };
 
 /**
@@ -71,6 +56,10 @@ const createInverseChallengeMapping = (
   return result;
 };
 
+const challengeIdFromLocation = ({ pathname }: Location) => {
+  return pathname.replace("/workspace/", "");
+};
+
 /**
  * Can also initialize the challenge id from the url to load the first
  * challenge.
@@ -82,10 +71,7 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
     map(({ value: course }) => {
       if (course) {
         /* Ok ... */
-        const maybeId = deps.router.location.pathname.replace(
-          "/workspace/",
-          "",
-        );
+        const maybeId = challengeIdFromLocation(deps.router.location);
 
         const challengeMap = createInverseChallengeMapping([course]);
         const challengeId =
@@ -150,52 +136,27 @@ const setWorkspaceLoadedEpic: EpicSignature = action$ => {
   );
 };
 
-/**
- * Push the current challenge id into the url.
- */
-const updateChallengeRouteId: EpicSignature = (action$, state$, deps) => {
+const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
   return action$.pipe(
-    filter(
-      isActionOf([
-        Actions.setChallengeId,
-        Actions.fetchCurrentActiveCourseSuccess,
-      ]),
-    ),
-    tap(({ type, payload }) => {
-      const { router } = deps;
-      const id =
-        typeof payload === "string" ? payload : payload.currentChallengeId;
-      const redirect = () => router.push({ pathname: `/workspace/${id}` });
-
-      /**
-       * If the action causing this is fetchCurrentActiveCourseSuccess,
-       * meaning the app just loaded, only redirect the user if they are
-       * on the workspace/ route. Otherwise do not.
-       *
-       * In other cases, for setChallengeId, always redirect.
-       */
-      if (type === getType(Actions.fetchCurrentActiveCourseSuccess)) {
-        const onWorkspace = deps.router.location.pathname.includes(
-          "/workspace",
-        );
-        if (onWorkspace) {
-          redirect();
-        }
-      } else {
-        redirect();
+    filter(isActionOf(Actions.locationChange)),
+    map(x => challengeIdFromLocation(x.payload)),
+    filter(id => {
+      const { challengeMap, currentChallengeId } = state$.value.challenges;
+      // Don't proceed if we're lacking an id or the challenge map
+      if (!challengeMap || !id) {
+        return false;
       }
-    }),
-    ignoreElements(),
-  );
-};
 
-const setChallengeId: EpicSignature = action$ => {
-  return action$.pipe(
-    filter(isActionOf(Actions.setChallengeId)),
-    tap(() => {
-      /* Do something here ~ */
+      const challengeExists = id in challengeMap;
+      const isSandbox = id === SANDBOX_ID;
+      const shouldUpdate =
+        id !== currentChallengeId && (challengeExists || isSandbox);
+
+      return shouldUpdate;
     }),
-    ignoreElements(),
+    map(id => {
+      return Actions.setChallengeId(id);
+    }),
   );
 };
 
@@ -238,7 +199,6 @@ export default combineEpics(
   inverseChallengeMappingEpic,
   saveCourse,
   setWorkspaceLoadedEpic,
-  updateChallengeRouteId,
   challengeInitializationEpic,
-  setChallengeId,
+  syncChallengeToUrlEpic,
 );

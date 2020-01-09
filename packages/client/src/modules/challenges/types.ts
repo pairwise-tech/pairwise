@@ -30,6 +30,13 @@ export interface ModuleCreationPayload {
   module: Module;
 }
 
+/**
+ * User configurable editor options for monaco
+ */
+export interface MonacoEditorOptions {
+  fontSize: number;
+}
+
 export interface ModuleUpdatePayload {
   id: string; // Module id
   courseId: string;

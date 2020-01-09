@@ -12,7 +12,7 @@ import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import Profile from "./Profile";
-import { ButtonCore, IconButton } from "./shared";
+import { ButtonCore, IconNavLink } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
 import {
@@ -144,33 +144,34 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                   />
                 </Suspense>
               )}
-              <Button
-                id="sandboxButton"
-                disabled={isSandbox}
-                onClick={this.handleEnterSandbox}
-                style={{ margin: "0 20px" }}
-              >
-                Sandbox
-              </Button>
+              <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
+                <Button
+                  id="sandboxButton"
+                  disabled={isSandbox}
+                  style={{ margin: "0 20px" }}
+                >
+                  Sandbox
+                </Button>
+              </Link>
               {displayNavigationArrows && (
                 <ButtonGroup>
                   {prev && (
                     <Tooltip content="Previous Challenge">
-                      <IconButton
+                      <IconNavLink
                         id="prevButton"
                         icon="chevron-left"
                         aria-label="Previous Challenge"
-                        onClick={() => this.props.selectChallenge(prev.id)}
+                        to={`/workspace/${prev.id}`}
                       />
                     </Tooltip>
                   )}
                   {next && (
                     <Tooltip content="Next Challenge">
-                      <IconButton
+                      <IconNavLink
                         id="nextButton"
                         icon="chevron-right"
                         aria-label="Next Challenge"
-                        onClick={() => this.props.selectChallenge(next.id)}
+                        to={`/workspace/${next.id}`}
                       />
                     </Tooltip>
                   )}
@@ -244,27 +245,6 @@ class ApplicationContainer extends React.Component<IProps, IState> {
 
   private readonly handleLogout = () => {
     this.props.logoutUser();
-  };
-
-  private readonly handleEnterSandbox = () => {
-    const type = this.props.challenge?.type;
-
-    // If defined set the sandbox type to the current challenge type. I.e. if
-    // your doing a typescript challenge make sure the sandbox defaults to
-    // typescript
-    // Aside: Not sure yet if this is good ux, but one would assume that
-    // when using the sandbox you would want to programming something related to
-    // the current module.
-    if (type && type !== "media") {
-      this.props.updateChallenge({
-        id: SANDBOX_ID,
-        challenge: {
-          type,
-        },
-      });
-    }
-
-    this.props.selectChallenge(SANDBOX_ID);
   };
 }
 
@@ -515,7 +495,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   logoutUser: Modules.actions.app.logoutUser,
-  selectChallenge: Modules.actions.challenges.setChallengeId,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,

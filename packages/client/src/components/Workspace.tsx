@@ -32,6 +32,8 @@ import {
   HEADER_HEIGHT,
   MONACO_EDITOR_THEME,
   SANDBOX_ID,
+  MONACO_EDITOR_INITIAL_FONT_SIZE,
+  MONACO_EDITOR_FONT_SIZE_STEP,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
@@ -53,6 +55,7 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
 import { ContentInput, LowerRight, StyledMarkdown, IconButton } from "./shared";
 import { Tooltip, ButtonGroup, EditableText } from "@blueprintjs/core";
+import { MonacoEditorOptions } from "modules/challenges/types";
 
 /** ===========================================================================
  * Types & Config
@@ -113,6 +116,9 @@ interface IState {
 class Workspace extends React.Component<IProps, IState> {
   syntaxWorker: any = null;
   monacoEditor: any = null;
+  editorInstance: Nullable<{
+    updateOptions: (x: MonacoEditorOptions) => void;
+  }> = null;
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   debouncedSaveCodeFunction: () => void;
   debouncedRenderPreviewFunction: () => void;
@@ -171,7 +177,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentWillUnmount() {
-    this.disposeModels();
+    this.cleanupEditor();
     window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener(
       "message",
@@ -201,6 +207,10 @@ class Workspace extends React.Component<IProps, IState> {
         { code: newCode, adminTestTab: "testResults" },
         this.refreshEditor,
       );
+    }
+
+    if (this.props.editorOptions !== nextProps.editorOptions) {
+      this.editorInstance?.updateOptions(nextProps.editorOptions);
     }
 
     // Account for changing the challenge type in the sandbox. Otherwise nothing
@@ -326,6 +336,7 @@ class Workspace extends React.Component<IProps, IState> {
       minimap: {
         enabled: false,
       },
+      ...this.props.editorOptions,
     };
 
     const language = this.getMonacoLanguageFromChallengeType();
@@ -346,10 +357,13 @@ class Workspace extends React.Component<IProps, IState> {
 
     model.onDidChangeContent(this.handleEditorContentChange);
 
-    mn.editor.create(document.getElementById("monaco-editor"), {
-      ...options,
-      model,
-    });
+    this.editorInstance = mn.editor.create(
+      document.getElementById("monaco-editor"),
+      {
+        ...options,
+        model,
+      },
+    );
 
     /**
      * This is a separate model which provides JSX type information. See
@@ -369,16 +383,6 @@ class Workspace extends React.Component<IProps, IState> {
       return "typescript";
     } else if (type === "markup") {
       return "html";
-    }
-  };
-
-  disposeModels = () => {
-    /* ??? */
-    if (this.monacoEditor) {
-      const models = this.monacoEditor.editor.getModels();
-      for (const model of models) {
-        model.dispose();
-      }
     }
   };
 
@@ -446,6 +450,22 @@ class Workspace extends React.Component<IProps, IState> {
           </Tab>
         </TabbedInnerNav>
         <LowerRight>
+          <ButtonGroup vertical style={{ marginBottom: 8 }}>
+            <Tooltip content={"Increase Font Size"} position="left">
+              <IconButton
+                icon="plus"
+                aria-label="format editor code"
+                onClick={this.props.increaseFontSize}
+              />
+            </Tooltip>
+            <Tooltip content={"Decrease Font Size"} position="left">
+              <IconButton
+                icon="minus"
+                aria-label="format editor code"
+                onClick={this.props.decraseFontSize}
+              />
+            </Tooltip>
+          </ButtonGroup>
           <ButtonGroup vertical>
             {this.state.code !== challenge.starterCode &&
               !isEditMode &&
@@ -945,12 +965,30 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   resetMonacoEditor = () => {
-    this.disposeModels();
+    this.cleanupEditor();
     this.initializeMonacoEditor();
   };
 
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
+  };
+
+  private readonly disposeModels = () => {
+    /* ??? */
+    if (this.monacoEditor) {
+      const models = this.monacoEditor.editor.getModels();
+      for (const model of models) {
+        model.dispose();
+      }
+    }
+  };
+
+  /**
+   * Cleanup monaco editor resources
+   */
+  private readonly cleanupEditor = () => {
+    this.disposeModels();
+    this.editorInstance = null;
   };
 
   /**
@@ -1237,7 +1275,7 @@ const keyboardDispatchProps = {
   setEditMode: Modules.actions.challenges.setEditMode,
 };
 
-const mergeProps = (
+const keyboardMergeProps = (
   state: ReturnType<typeof keyboardStateToProps>,
   methods: typeof keyboardDispatchProps,
 ) => ({
@@ -1264,8 +1302,8 @@ const mergeProps = (
 const AdminKeyboardShortcuts = connect(
   keyboardStateToProps,
   keyboardDispatchProps,
-  mergeProps,
-)((props: ReturnType<typeof mergeProps>) => (
+  keyboardMergeProps,
+)((props: ReturnType<typeof keyboardMergeProps>) => (
   <KeyboardShortcuts
     keymap={{
       "cmd+e": props.toggleEditMode,
@@ -1282,23 +1320,39 @@ const AdminKeyboardShortcuts = connect(
 const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
+  editorOptions: Modules.selectors.challenges.getEditorOptions(state),
 });
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
+  updateEditorOptions: Modules.actions.challenges.updateEditorOptions,
 };
 
-interface ComponentProps {}
+const mergeProps = (
+  state: ReturnType<typeof mapStateToProps>,
+  methods: typeof dispatchProps,
+  props: {},
+) => ({
+  ...props,
+  ...methods,
+  ...state,
+  increaseFontSize: () =>
+    methods.updateEditorOptions({
+      fontSize: state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
+    }),
+  decraseFontSize: () =>
+    methods.updateEditorOptions({
+      fontSize: state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
+    }),
+});
 
-type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+type ConnectProps = ReturnType<typeof mergeProps>;
 
-interface WorkspaceLoadingContainerProps extends ComponentProps, ConnectProps {}
-
-interface IProps extends WorkspaceLoadingContainerProps {
+interface IProps extends ConnectProps {
   challenge: Challenge;
 }
 
-const withProps = connect(mapStateToProps, dispatchProps);
+const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
 
 /** ===========================================================================
  * WorkspaceLoadingContainer
@@ -1308,10 +1362,7 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-class WorkspaceLoadingContainer extends React.Component<
-  WorkspaceLoadingContainerProps,
-  {}
-> {
+class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   render() {
     const { challenge } = this.props;
 
@@ -1340,6 +1391,4 @@ class WorkspaceLoadingContainer extends React.Component<
  * ============================================================================
  */
 
-export default composeWithProps<ComponentProps>(withProps)(
-  WorkspaceLoadingContainer,
-);
+export default composeWithProps<{}>(withProps)(WorkspaceLoadingContainer);

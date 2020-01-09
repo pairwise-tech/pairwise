@@ -10,8 +10,13 @@ import {
   ChallengeCreationPayload,
   InverseChallengeMapping,
   ModuleCreationPayload,
+  MonacoEditorOptions,
 } from "./types";
-import { generateEmptyChallenge, SANDBOX_ID } from "tools/constants";
+import {
+  generateEmptyChallenge,
+  SANDBOX_ID,
+  MONACO_EDITOR_INITIAL_FONT_SIZE,
+} from "tools/constants";
 import { getStoredSandboxType } from "tools/utils";
 
 const debug = require("debug")("challenge:store");
@@ -31,6 +36,7 @@ export interface State {
   currentChallengeId: Nullable<string>;
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
+  editorOptions: MonacoEditorOptions;
 }
 
 const initialState = {
@@ -42,6 +48,9 @@ const initialState = {
   currentChallengeId: null,
   displayNavigationMap: false,
   challengeMap: null,
+  editorOptions: {
+    fontSize: MONACO_EDITOR_INITIAL_FONT_SIZE,
+  },
   sandboxChallenge: generateEmptyChallenge({
     id: SANDBOX_ID, // Important. This is how the app knows it's the sandbox challenge
     title: "Sandbox",
@@ -183,6 +192,13 @@ const challenges = createReducer<State, ActionTypes>(initialState)
       courses: updateModule(courses, action.payload),
     };
   })
+  .handleAction(actions.updateEditorOptions, (state, action) => ({
+    ...state,
+    editorOptions: {
+      ...state.editorOptions,
+      ...action.payload,
+    },
+  }))
   .handleAction(actions.setEditMode, (state, action) => ({
     ...state,
     isEditMode: action.payload,

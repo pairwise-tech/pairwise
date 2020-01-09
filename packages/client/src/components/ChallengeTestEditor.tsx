@@ -9,36 +9,60 @@ import {
   subscribeCodeWorker,
   unsubscribeCodeWorker,
 } from "tools/challenges";
-import { COLORS, MONACO_EDITOR_THEME } from "tools/constants";
-import { LowerRight } from "./shared";
-import { Tooltip, Button } from "@blueprintjs/core";
+import {
+  COLORS,
+  MONACO_EDITOR_THEME,
+  MONACO_EDITOR_INITIAL_FONT_SIZE,
+  MONACO_EDITOR_FONT_SIZE_STEP,
+} from "tools/constants";
+import { LowerRight, IconButton } from "./shared";
+import { Tooltip, Button, ButtonGroup } from "@blueprintjs/core";
 
 const debug = require("debug")("client:ChallengeTestEditor");
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
+  editorOptions: Modules.selectors.challenges.getEditorOptions(state),
   challengeTestCode: Modules.selectors.challenges.getCurrentChallengeTestCode(
     state,
   ),
 });
 
-// (stateProps, dispatchProps, ownProps) => ({
-//   ...ownProps,
-//   ...dispatchProps,
-//   ...stateProps,
-//
-// });
-
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
+  updateEditorOptions: Modules.actions.challenges.updateEditorOptions,
 };
+
+const mergeProps = (
+  state: ReturnType<typeof mapStateToProps>,
+  methods: typeof dispatchProps,
+  props: {},
+) => ({
+  ...props,
+  ...methods,
+  ...state,
+  increaseFontSize: () =>
+    methods.updateEditorOptions({
+      fontSize: state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
+    }),
+  decraseFontSize: () =>
+    methods.updateEditorOptions({
+      fontSize: state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
+    }),
+});
 
 const CODE_FORMAT_CHANNEL = "TEST_EDITOR";
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+type Props = ReturnType<typeof mergeProps>;
 
 const ChallengeTestEditor = (props: Props) => {
-  const { challengeId, updateChallenge } = props;
+  const {
+    challengeId,
+    updateChallenge,
+    editorOptions,
+    increaseFontSize,
+    decraseFontSize,
+  } = props;
   const valueGetter = React.useRef<() => string>(() => "");
   const [isReady, setIsReady] = React.useState(false);
   const getEditorValue = () => {
@@ -137,9 +161,26 @@ const ChallengeTestEditor = (props: Props) => {
           minimap: {
             enabled: false,
           },
+          ...editorOptions,
         }}
       />
       <LowerRight>
+        <ButtonGroup vertical style={{ marginBottom: 8 }}>
+          <Tooltip content={"Increase Font Size"} position="left">
+            <IconButton
+              icon="plus"
+              aria-label="format editor code"
+              onClick={increaseFontSize}
+            />
+          </Tooltip>
+          <Tooltip content={"Decrease Font Size"} position="left">
+            <IconButton
+              icon="minus"
+              aria-label="format editor code"
+              onClick={decraseFontSize}
+            />
+          </Tooltip>
+        </ButtonGroup>
         <Tooltip content={"Format Code"} position="left">
           <Button aria-label="format editor code" onClick={handleFormatCode}>
             {"{ }"}
@@ -150,4 +191,8 @@ const ChallengeTestEditor = (props: Props) => {
   );
 };
 
-export default connect(mapStateToProps, dispatchProps)(ChallengeTestEditor);
+export default connect(
+  mapStateToProps,
+  dispatchProps,
+  mergeProps,
+)(ChallengeTestEditor);
