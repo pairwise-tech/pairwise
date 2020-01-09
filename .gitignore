@@ -35,3 +35,6 @@ dist
 # Environment
 docker
 .env
+
+# Misc backup files
+*.bak
