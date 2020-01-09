@@ -6,6 +6,7 @@ import {
   InverseChallengeMapping,
   ModuleCreationPayload,
   ModuleUpdatePayload,
+  MonacoEditorOptions,
 } from "./types";
 
 /** ===========================================================================
@@ -40,6 +41,8 @@ enum ActionTypesEnum {
   CREATE_MODULE = "CREATE_MODULE",
   UPDATE_MODULE = "UPDATE_MODULE",
   REMOVE_MODULE = "REMOVE_MODULE",
+
+  UPDATE_EDITOR_OPTIONS = "UPDATE_EDITOR_OPTIONS",
 }
 
 /** ===========================================================================
@@ -108,7 +111,12 @@ const updateCourseModule = createAction(ActionTypesEnum.UPDATE_MODULE)<
   ModuleUpdatePayload
 >();
 
+const updateEditorOptions = createAction(ActionTypesEnum.UPDATE_EDITOR_OPTIONS)<
+  Partial<MonacoEditorOptions>
+>();
+
 const actions = {
+  updateEditorOptions,
   setCurrentModule,
   saveCourse,
   saveCourseSuccess,

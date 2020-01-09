@@ -45,6 +45,9 @@ const H = window.innerHeight;
 const HEADER_HEIGHT = 60;
 
 export const MONACO_EDITOR_THEME = "vs-dark";
+export const MONACO_EDITOR_INITIAL_FONT_SIZE = 12;
+// How much to increase or decrease font size with each interaction
+export const MONACO_EDITOR_FONT_SIZE_STEP = 2;
 
 const DIMENSIONS = {
   WORKSPACE_HEIGHT: H - HEADER_HEIGHT,

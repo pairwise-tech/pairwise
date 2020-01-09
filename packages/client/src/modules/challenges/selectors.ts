@@ -19,6 +19,11 @@ export const challengesSelector = createSelector([challengesState], identity);
 
 export const isEditMode = createSelector([challengesState], prop("isEditMode"));
 
+export const getEditorOptions = createSelector(
+  [challengesState],
+  x => x.editorOptions,
+);
+
 export const getChallengeMap = createSelector(
   [challengesState],
   state => state.challengeMap,
