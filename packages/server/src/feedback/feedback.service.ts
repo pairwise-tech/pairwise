@@ -13,6 +13,22 @@ export class FeedbackService {
     private readonly feedbackRepository: Repository<Feedback>,
   ) {}
 
+  async getFeedbackForChallenge(challengeId: string) {
+    return this.feedbackRepository.find({
+      where: {
+        challengeId,
+      },
+    });
+  }
+
+  async getFeedbackForUser(userId: string) {
+    return this.feedbackRepository.find({
+      where: {
+        user: userId,
+      },
+    });
+  }
+
   async recordUserFeedback(user: RequestUser, feedbackDto: FeedbackDto) {
     const feedback = {
       ...feedbackDto,
