@@ -8,6 +8,7 @@ import {
   CreateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
+import { FEEDBACK_TYPE } from "@pairwise/common";
 
 @Entity()
 export class Feedback {
@@ -20,6 +21,9 @@ export class Feedback {
 
   @Column()
   feedback: string;
+
+  @Column()
+  type: FEEDBACK_TYPE;
 
   @ManyToOne(
     type => User,

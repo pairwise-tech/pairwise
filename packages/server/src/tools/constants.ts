@@ -12,6 +12,7 @@ enum ERROR_CODES {
   INVALID_CODE_BLOB = "The code blob is invalid",
   MISSING_USER = "No user could be found",
   INVALID_UPDATE_DETAILS = "Invalid update parameters provided",
+  INVALID_FEEDBACK_TYPE = "Invalid feedback type used",
 }
 
 enum SUCCESS_CODES {

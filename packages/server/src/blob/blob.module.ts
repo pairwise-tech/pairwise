@@ -11,4 +11,4 @@ import { BlobService } from "./blob.service";
   imports: [TypeOrmModule.forFeature([CodeBlob]), UsersModule],
   exports: [TypeOrmModule],
 })
-export class ProgressModule {}
+export class BlobModule {}

@@ -60,6 +60,13 @@ export type COURSE_ACCESS_LEVEL = "FREE" | "PAID";
 
 export type FEEDBACK_TYPE = "TOO_HARD" | "TOO_EASY" | "NOT_HELPFUL" | "OTHER";
 
+export const feedbackTypeSet: Set<FEEDBACK_TYPE> = new Set([
+  "TOO_HARD",
+  "TOO_EASY",
+  "NOT_HELPFUL",
+  "OTHER",
+]);
+
 export interface FeedbackDto {
   feedback: string;
   challengeId: string;
@@ -71,9 +78,9 @@ export interface FeedbackDto {
  * ============================================================================
  */
 
-export type BlobType = "video" | "challenge" | "project" | "guided_project";
+export type BLOB_TYPE = "video" | "challenge" | "project" | "guided_project";
 
-export const BlobTypeSet: Set<BlobType> = new Set([
+export const BlobTypeSet: Set<BLOB_TYPE> = new Set([
   "video",
   "challenge",
   "project",
@@ -81,7 +88,7 @@ export const BlobTypeSet: Set<BlobType> = new Set([
 ]);
 
 interface BlobBase {
-  type: BlobType;
+  type: BLOB_TYPE;
   created_at: number;
   updated_at: number /* Date? */;
 }

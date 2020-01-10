@@ -11,12 +11,14 @@ import { ProgressModule } from "./progress/progress.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { AdminModule } from "./admin/admin.module";
 import { FeedbackModule } from "./feedback/feedback.module";
+import { BlobModule } from "./blob/blob.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(),
     AuthModule,
+    BlobModule,
     UsersModule,
     ContentModule,
     ProgressModule,

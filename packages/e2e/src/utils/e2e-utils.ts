@@ -53,6 +53,38 @@ export const fetchAccessToken = async () => {
 };
 
 /**
+ * The Google auth mock server uses an Admin email:
+ */
+export const fetchAdminAccessToken = async () => {
+  let authorizationRedirect;
+  let loginRedirect;
+  let accessToken;
+
+  await request(`${HOST}/auth/google`)
+    .get("/")
+    .expect(302)
+    .then(response => {
+      authorizationRedirect = response.header.location;
+    });
+
+  await request(authorizationRedirect)
+    .get("/")
+    .expect(302)
+    .then(response => {
+      loginRedirect = response.header.location;
+    });
+
+  await request(loginRedirect)
+    .get("/")
+    .expect(302)
+    .then(response => {
+      accessToken = getAccessTokenFromRedirect(response.header.location);
+    });
+
+  return accessToken;
+};
+
+/**
  * Helper to fetch a user given an accessToken.
  */
 export const fetchUserGivenAccessToken = async (accessToken: string) => {

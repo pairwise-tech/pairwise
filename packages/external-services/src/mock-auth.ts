@@ -5,6 +5,8 @@ import faker from "faker";
  * ============================================================================
  */
 
+const ADMIN_EMAIL = "sean.smith.2009@gmail.com"; /* Blah... */
+
 const generateNewProfileFields = () => {
   const id = faker.random.uuid();
   const first = faker.name.firstName();
@@ -54,20 +56,13 @@ class MockAuth {
   }
 
   generateNewGoogleProfile() {
-    const {
-      id,
-      first,
-      last,
-      name,
-      email,
-      picture,
-    } = generateNewProfileFields();
+    const { id, first, last, name, picture } = generateNewProfileFields();
 
     return {
       sub: id,
       name,
-      email,
       picture,
+      email: ADMIN_EMAIL,
       given_name: first,
       family_name: last,
       locale: "en",
