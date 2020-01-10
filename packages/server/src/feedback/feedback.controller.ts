@@ -1,8 +1,8 @@
-import { Controller, UseGuards, Get, Req, Body, Post } from "@nestjs/common";
+import { Controller, UseGuards, Req, Body, Post } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
 import { FeedbackService } from "./feedback.service";
-import { FeedbackDto } from "@pairwise/common";
+import { IFeedbackDto } from "@pairwise/common";
 
 @Controller("feedback")
 export class FeedbackController {
@@ -11,7 +11,7 @@ export class FeedbackController {
   @UseGuards(AuthGuard("jwt"))
   @Post()
   fetchUserChallengeProgress(
-    @Body() feedbackDto: FeedbackDto,
+    @Body() feedbackDto: IFeedbackDto,
     @Req() req: AuthenticatedRequest,
   ) {
     return this.feedbackService.recordUserFeedback(req.user, feedbackDto);

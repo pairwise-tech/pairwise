@@ -8,10 +8,10 @@ import {
   CreateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
-import { FEEDBACK_TYPE } from "@pairwise/common";
+import { FEEDBACK_TYPE, IFeedbackDto } from "@pairwise/common";
 
 @Entity()
-export class Feedback {
+export class Feedback implements IFeedbackDto {
   @PrimaryGeneratedColumn("uuid")
   uuid: number;
 

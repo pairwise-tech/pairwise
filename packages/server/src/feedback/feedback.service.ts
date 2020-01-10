@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import {
-  FeedbackDto,
+  IFeedbackDto,
   feedbackTypeSet,
   challengeUtilityClass,
 } from "@pairwise/common";
@@ -33,7 +33,7 @@ export class FeedbackService {
     });
   }
 
-  async recordUserFeedback(user: RequestUser, feedbackDto: FeedbackDto) {
+  async recordUserFeedback(user: RequestUser, feedbackDto: IFeedbackDto) {
     if (!challengeUtilityClass.challengeIdIsValid(feedbackDto.challengeId)) {
       throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
     } else if (!feedbackTypeSet.has(feedbackDto.type)) {

@@ -1,12 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString, ValidateNested } from "class-validator";
-import { IUserCodeBlobDto, CodeHistoryBlob } from "@pairwise/common";
+import { DataBlob, ICodeBlobDto } from "@pairwise/common";
 
-export class BlobDto implements IUserCodeBlobDto {
+export class BlobDto implements ICodeBlobDto {
   @IsNotEmpty()
   @ValidateNested()
   @ApiProperty({ type: () => BlobDto })
-  dataBlob: CodeHistoryBlob;
+  dataBlob: DataBlob;
 
   @IsString()
   @IsNotEmpty()

@@ -6,6 +6,10 @@
  * in the API request/response values and also sometimes in the entity
  * definitions for database types. The source of truth for these type
  * definitions is here and shared between the client and server.
+ *
+ * The convention is for all of the actual DTOs to use I as a prefix in the
+ * name of the interface. This is to avoid name collisions with the entities
+ * which implement these DTOs on the server.
  * ============================================================================
  */
 
@@ -67,7 +71,7 @@ export const feedbackTypeSet: Set<FEEDBACK_TYPE> = new Set([
   "OTHER",
 ]);
 
-export interface FeedbackDto {
+export interface IFeedbackDto {
   feedback: string;
   challengeId: string;
   type: FEEDBACK_TYPE;
@@ -115,14 +119,14 @@ export interface GuidedProjectBlob extends BlobBase {
   timeLastWatched: number;
 }
 
-export type CodeHistoryBlob =
+export type DataBlob =
   | VideoChallengeBlob
   | ProjectChallengeBlob
   | CodeChallengeBlob
   | GuidedProjectBlob;
 
-export interface IUserCodeBlobDto {
-  dataBlob: CodeHistoryBlob;
+export interface ICodeBlobDto {
+  dataBlob: DataBlob;
   challengeId: string;
 }
 
@@ -142,7 +146,7 @@ export interface ChallengeStatus {
   complete: boolean;
 }
 
-export interface IUserCourseProgressDto extends ChallengeStatus {
+export interface IProgressDto extends ChallengeStatus {
   challengeId: string;
   courseId: string;
 }

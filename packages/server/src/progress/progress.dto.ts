@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsBoolean, IsString } from "class-validator";
-import { IUserCourseProgressDto } from "@pairwise/common";
+import { IProgressDto } from "@pairwise/common";
 
-export class ProgressDto implements IUserCourseProgressDto {
+export class ProgressDto implements IProgressDto {
   @IsBoolean()
   @IsNotEmpty()
   @ApiProperty({ type: "boolean" })
