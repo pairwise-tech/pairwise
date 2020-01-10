@@ -17,9 +17,8 @@ export class ContentController {
   fetchCourseContent(@Param() params, @Req() req: AuthenticatedRequest) {
     const { id } = params;
     const { user } = req;
-    const authenticated = user !== undefined;
 
-    if (authenticated) {
+    if (user) {
       return this.challengeService.fetchCoursesAuthenticated(user, id);
     }
 
