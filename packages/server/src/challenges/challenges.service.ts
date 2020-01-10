@@ -1,26 +1,30 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
 
-import Courses from "@pairwise/common";
+import { challengeUtilityClass } from "@pairwise/common";
 import { RequestUser } from "src/types";
+import { ERROR_CODES } from "src/tools/constants";
 
 @Injectable()
 export class ChallengesService {
-  fetchFreeCourseContent() {
-    return Courses.FullstackTypeScript;
+  fetchCourseSkeletons() {
+    return challengeUtilityClass.getCourseNavigationSkeletons();
   }
 
-  fetchCoursesAuthenticated(user: RequestUser) {
-    /**
-     * TODO: A real user exists and if they have paid for the course content
-     * they should see all the course content.
-     */
-    const paid = false;
+  fetchFreeCourseContent(courseId: string) {
+    return challengeUtilityClass.getCourseContent(courseId, "FREE");
+  }
 
-    if (paid) {
-      /* TODO: Implement this */
-      return Courses.FullstackTypeScript;
+  fetchCoursesAuthenticated(user: RequestUser, courseId: string) {
+    const { courses } = user;
+
+    if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+    }
+
+    if (courseId in courses) {
+      return challengeUtilityClass.getCourseContent(courseId, "PAID");
     } else {
-      return this.fetchFreeCourseContent();
+      return this.fetchFreeCourseContent(courseId);
     }
   }
 }

@@ -145,6 +145,15 @@ class Api extends BaseApiClass {
     }
   };
 
+  fetchCourseSkeletons = async () => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.get<IUserDto>(`${HOST}/challenges/skeletons`, {
+        headers,
+      });
+    });
+  };
+
   fetchUserProfile = async () => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();

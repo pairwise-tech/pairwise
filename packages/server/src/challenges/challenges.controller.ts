@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from "@nestjs/common";
+import { Controller, Get, Req, UseGuards, Param } from "@nestjs/common";
 import { ChallengesService } from "./challenges.service";
 import { AuthenticatedRequest } from "src/types";
 import { CustomJwtAuthGuard } from "src/auth/jwt.guard";
@@ -7,16 +7,22 @@ import { CustomJwtAuthGuard } from "src/auth/jwt.guard";
 export class ChallengesController {
   constructor(private readonly challengeService: ChallengesService) {}
 
+  @Get("/skeletons")
+  fetchChallengeSkeletons() {
+    return this.challengeService.fetchCourseSkeletons();
+  }
+
   @UseGuards(CustomJwtAuthGuard)
-  @Get()
-  fetchChallenges(@Req() req: AuthenticatedRequest) {
+  @Get(":id")
+  fetchCourseContent(@Param() params, @Req() req: AuthenticatedRequest) {
+    const { id } = params;
     const { user } = req;
     const authenticated = user !== undefined;
 
     if (authenticated) {
-      return this.challengeService.fetchCoursesAuthenticated(user);
+      return this.challengeService.fetchCoursesAuthenticated(user, id);
     }
 
-    return this.challengeService.fetchFreeCourseContent();
+    return this.challengeService.fetchFreeCourseContent(id);
   }
 }

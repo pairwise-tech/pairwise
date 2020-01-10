@@ -25,6 +25,7 @@ export interface IUserDto {
     lastActiveChallengeId: string;
   };
   payments: Payment[];
+  courses: { [key: string]: boolean };
 }
 
 /**
@@ -42,8 +43,13 @@ interface Payment {
   courseId: string;
   datePaid: Date;
   amountPaid: number;
-  extraData?: string /* json */;
+  extraData?: string /* generic json data */;
+  type: PAYMENT_TYPE;
 }
+
+export type PAYMENT_TYPE = "SUCCESS" | "FAILURE" | "REFUNDED";
+
+export type COURSE_ACCESS_LEVEL = "FREE" | "PAID";
 
 /** ===========================================================================
  * Code Blobs for Challenges

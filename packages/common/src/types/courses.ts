@@ -21,6 +21,7 @@ export interface Course {
 export interface Module {
   id: string;
   title: string;
+  free: boolean;
   challenges: ChallengeList;
 }
 
@@ -63,6 +64,7 @@ export type ModuleSkeletonList = ModuleSkeleton[];
 export interface ModuleSkeleton {
   id: string;
   title: string;
+  free: boolean;
   challenges: ChallengeSkeletonList;
 }
 
@@ -72,4 +74,5 @@ export interface ChallengeSkeleton {
   type: CHALLENGE_TYPE;
   id: string;
   title: string;
+  videoUrl?: string;
 }

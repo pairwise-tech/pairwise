@@ -33,7 +33,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPassportSignPayload) {
-    const user = await this.userService.findUserByEmail(payload.email);
+    const user = await this.userService.findUserByEmailGetFullProfile(
+      payload.email,
+    );
+
     return user;
   }
 }
