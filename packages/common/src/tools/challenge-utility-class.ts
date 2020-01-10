@@ -1,5 +1,5 @@
 import FullstackTypeScript from "../courses/01_programming_fundamental.json";
-import { CourseList } from "src/types/courses";
+import { CourseList, CourseSkeletonList } from "src/types/courses";
 
 /** ===========================================================================
  * Challenge Utility Class
@@ -14,13 +14,23 @@ class ChallengeUtilityClass {
   private courseIdSet: Set<string>;
   private challengeIdSet: Set<string>;
   private courseIdChallengeIdMap: Map<string, Set<string>>;
+  private courseNavigationSkeletons: CourseSkeletonList;
 
   constructor(courses: CourseList) {
     this.courses = courses;
 
     this.initializeCourseIdSet(courses);
     this.initializeCourseIdChallengeIdMap(courses);
+    this.createCourseNavigationSkeletons(courses);
   }
+
+  getCourses = () => {
+    return this.courses;
+  };
+
+  getCourseNavigationSkeletons = () => {
+    return this.courseNavigationSkeletons;
+  };
 
   initializeCourseIdSet = (courses: CourseList) => {
     const idSet: Set<string> = new Set();
@@ -67,6 +77,31 @@ class ChallengeUtilityClass {
     }
 
     return false;
+  };
+
+  createCourseNavigationSkeletons = (courses: CourseList) => {
+    /**
+     * Modify all the courses, stripping out the actual challenge content. This
+     * is necessary to still provide an overview of all the course data to the
+     * client.
+     */
+    this.courseNavigationSkeletons = courses.map(course => {
+      return {
+        ...course,
+        modules: course.modules.map(courseModule => {
+          return {
+            ...courseModule,
+            challenges: courseModule.challenges.map(challenge => {
+              return {
+                id: challenge.id,
+                type: challenge.type,
+                title: challenge.title,
+              };
+            }),
+          };
+        }),
+      };
+    });
   };
 }
 

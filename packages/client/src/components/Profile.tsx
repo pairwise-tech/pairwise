@@ -27,7 +27,9 @@ class Profile extends React.Component<IProps, IState> {
     return (
       <PageContainer>
         <Text>User Profile:</Text>
-        <Text>Name: {profile.displayName}</Text>
+        <Text>Given Name: {profile.givenName}</Text>
+        <Text>Family Name: {profile.familyName}</Text>
+        <Text>Display Name: {profile.displayName}</Text>
         <Text>Email: {profile.email}</Text>
       </PageContainer>
     );

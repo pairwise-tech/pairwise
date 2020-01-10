@@ -10,6 +10,8 @@
 
 export type CourseList = ReadonlyArray<Course>;
 
+export type CHALLENGE_TYPE = "react" | "typescript" | "markup" | "media";
+
 export interface Course {
   id: string;
   title: string;
@@ -44,4 +46,30 @@ export interface Challenge {
   supplementaryContent: string;
 }
 
-export type CHALLENGE_TYPE = "react" | "typescript" | "markup" | "media";
+/**
+ * Course skeleton types:
+ */
+
+export type CourseSkeletonList = CourseSkeleton[];
+
+export interface CourseSkeleton {
+  id: string;
+  title: string;
+  modules: ModuleSkeletonList;
+}
+
+export type ModuleSkeletonList = ModuleSkeleton[];
+
+export interface ModuleSkeleton {
+  id: string;
+  title: string;
+  challenges: ChallengeSkeletonList;
+}
+
+type ChallengeSkeletonList = ChallengeSkeleton[];
+
+export interface ChallengeSkeleton {
+  type: CHALLENGE_TYPE;
+  id: string;
+  title: string;
+}
