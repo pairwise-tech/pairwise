@@ -5,7 +5,7 @@ import { RequestUser } from "src/types";
 import { ERROR_CODES } from "src/tools/constants";
 
 @Injectable()
-export class ChallengesService {
+export class ContentService {
   fetchCourseSkeletons() {
     return challengeUtilityClass.getCourseNavigationSkeletons();
   }

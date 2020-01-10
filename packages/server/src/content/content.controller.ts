@@ -1,11 +1,11 @@
 import { Controller, Get, Req, UseGuards, Param } from "@nestjs/common";
-import { ChallengesService } from "./challenges.service";
+import { ContentService } from "./content.service";
 import { AuthenticatedRequest } from "src/types";
 import { CustomJwtAuthGuard } from "src/auth/jwt.guard";
 
 @Controller("content")
-export class ChallengesController {
-  constructor(private readonly challengeService: ChallengesService) {}
+export class ContentController {
+  constructor(private readonly challengeService: ContentService) {}
 
   @Get("/skeletons")
   fetchChallengeSkeletons() {

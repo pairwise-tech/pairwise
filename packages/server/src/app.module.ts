@@ -6,7 +6,7 @@ import { AppService } from "./app.service";
 import { AppController } from "./app.controller";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./user/user.module";
-import { ChallengesModule } from "./challenges/challenges.module";
+import { ContentModule } from "./content/content.module";
 import { ProgressModule } from "./progress/progress.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { AdminModule } from "./admin/admin.module";
@@ -17,7 +17,7 @@ import { AdminModule } from "./admin/admin.module";
     TypeOrmModule.forRoot(),
     AuthModule,
     UsersModule,
-    ChallengesModule,
+    ContentModule,
     ProgressModule,
     PaymentsModule,
     AdminModule,
