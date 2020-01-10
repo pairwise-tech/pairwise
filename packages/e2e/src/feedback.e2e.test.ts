@@ -10,7 +10,7 @@ import {
  * ============================================================================
  */
 
-describe("User Progress APIs", () => {
+describe("User Feedback APIs", () => {
   let accessToken;
   let authorizationHeader;
 

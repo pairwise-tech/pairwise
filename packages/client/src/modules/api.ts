@@ -9,6 +9,7 @@ import {
   Result,
   UserCourseStatus,
   UserUpdateOptions,
+  FeedbackDto,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -213,6 +214,16 @@ class Api extends BaseApiClass {
           dataBlob,
           challengeId,
         },
+      });
+    });
+  };
+
+  submitUserFeedback = async (feedback: FeedbackDto) => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.post<"Success">(`${HOST}/feedback`, {
+        headers,
+        body: feedback,
       });
     });
   };

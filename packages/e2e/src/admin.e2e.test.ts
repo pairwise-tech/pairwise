@@ -10,7 +10,7 @@ import {
  * ============================================================================
  */
 
-describe.only("Admin (e2e)", () => {
+describe("Admin (e2e)", () => {
   test("/admin (GET) index route returns 401 for unauthenticated users", () => {
     return request(`${HOST}/admin`)
       .get("/")
