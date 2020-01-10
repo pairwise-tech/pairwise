@@ -7,11 +7,9 @@ import {
   ValidationPipe,
   Get,
   Req,
-  Param,
 } from "@nestjs/common";
-import { UserCourseProgressDto } from "./userCourseProgress.dto";
+import { ProgressDto } from "./progress.dto";
 import { ProgressService } from "./progress.service";
-import { UserCodeBlobDto } from "./userCodeBlob.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
 
@@ -29,30 +27,12 @@ export class ProgressController {
   @Post()
   @UsePipes(ValidationPipe)
   updateUserChallengeProgress(
-    @Body() challengeProgressDto: UserCourseProgressDto,
+    @Body() challengeProgressDto: ProgressDto,
     @Req() req: AuthenticatedRequest,
   ) {
     return this.progressService.updateUserProgressHistory(
       req.user,
       challengeProgressDto,
     );
-  }
-
-  @UseGuards(AuthGuard("jwt"))
-  @Get("/challenge/:id")
-  fetchUserChallengeHistory(@Param() params, @Req() req: AuthenticatedRequest) {
-    const { id } = params;
-    return this.progressService.fetchUserCodeBlob(req.user, id);
-  }
-
-  @UseGuards(AuthGuard("jwt"))
-  @Post("/challenge")
-  @UsePipes(ValidationPipe)
-  updateUserChallengeCode(
-    @Body() challengeCodeDto: UserCodeBlobDto,
-    @Req() req: AuthenticatedRequest,
-  ) {
-    const { user } = req;
-    return this.progressService.updateUserCodeBlob(challengeCodeDto, user);
   }
 }

@@ -198,19 +198,16 @@ class Api extends BaseApiClass {
   fetchChallengeHistory = async (challengeId: string) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.get<IUserCodeBlobDto>(
-        `${HOST}/progress/challenge/${challengeId}`,
-        {
-          headers,
-        },
-      );
+      return axios.get<IUserCodeBlobDto>(`${HOST}/blob/${challengeId}`, {
+        headers,
+      });
     });
   };
 
   updateChallengeHistory = async (challengeId: string, dataBlob: string) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.post<IUserCodeBlobDto>(`${HOST}/progress/challenge`, {
+      return axios.post<IUserCodeBlobDto>(`${HOST}/blob`, {
         headers,
         body: {
           dataBlob,

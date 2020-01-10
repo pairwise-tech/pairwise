@@ -10,7 +10,7 @@ import {
 import { User } from "../user/user.entity";
 
 @Entity()
-export class UserCodeBlob {
+export class CodeBlob {
   @PrimaryGeneratedColumn("uuid")
   uuid: number;
 

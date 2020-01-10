@@ -7,11 +7,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { UserCourseProgress } from "src/progress/userCourseProgress.entity";
-import { UserCodeBlob } from "src/progress/userCodeBlob.entity";
+import { Progress } from "src/progress/progress.entity";
 import { Payments } from "src/payments/payments.entity";
-import { FeedbackDto } from "@pairwise/common";
 import { Feedback } from "src/feedback/feedback.entity";
+import { CodeBlob } from "src/blob/blob.entity";
 
 @Entity()
 export class User {
@@ -44,18 +43,18 @@ export class User {
   payments: Payments;
 
   @OneToMany(
-    type => UserCourseProgress,
+    type => Progress,
     challengeProgressHistory => challengeProgressHistory.user,
   )
   @JoinColumn()
-  challengeProgressHistory: UserCourseProgress;
+  challengeProgressHistory: Progress;
 
   @OneToMany(
-    type => UserCodeBlob,
-    userCodeHistory => userCodeHistory.user,
+    type => CodeBlob,
+    codeBlob => codeBlob.user,
   )
   @JoinColumn()
-  challengeCodeHistory: UserCodeBlob;
+  challengeCodeHistory: CodeBlob;
 
   @OneToMany(
     type => Feedback,
