@@ -38,6 +38,7 @@ export class PaymentsService {
       courseId,
       datePaid: new Date(),
       amountPaid: 50,
+      type: "SUCCESS",
     });
 
     return SUCCESS_CODES.OK;

@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class CreateInitialTables1578644231665 implements MigrationInterface {
-  name = "CreateInitialTables1578644231665";
+export class CreateInitialTables1578645717244 implements MigrationInterface {
+  name = "CreateInitialTables1578645717244";
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(
@@ -21,15 +21,23 @@ export class CreateInitialTables1578644231665 implements MigrationInterface {
       undefined,
     );
     await queryRunner.query(
-      `CREATE TABLE "user" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" character varying NOT NULL, "displayName" character varying NOT NULL, "givenName" character varying NOT NULL, "familyName" character varying NOT NULL, "lastActiveChallengeId" character varying, "profileImageUrl" character varying, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_a95e949168be7b7ece1a2382fed" PRIMARY KEY ("uuid"))`,
-      undefined,
-    );
-    await queryRunner.query(
       `CREATE TABLE "payments" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "datePaid" TIMESTAMP NOT NULL, "amountPaid" integer NOT NULL, "type" character varying NOT NULL, "extraData" json, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userUuid" uuid, CONSTRAINT "PK_2c540326a039a91fa7e942caed7" PRIMARY KEY ("uuid"))`,
       undefined,
     );
     await queryRunner.query(
       `CREATE INDEX "IDX_00097d3b3147848e3585aabb43" ON "payments" ("courseId") `,
+      undefined,
+    );
+    await queryRunner.query(
+      `CREATE TABLE "user" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" character varying NOT NULL, "displayName" character varying NOT NULL, "givenName" character varying NOT NULL, "familyName" character varying NOT NULL, "lastActiveChallengeId" character varying, "profileImageUrl" character varying, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "PK_a95e949168be7b7ece1a2382fed" PRIMARY KEY ("uuid"))`,
+      undefined,
+    );
+    await queryRunner.query(
+      `CREATE TABLE "feedback" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "challengeId" character varying NOT NULL, "feedback" character varying NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userUuid" uuid, CONSTRAINT "PK_79fbf282194c68837c19d58fb7a" PRIMARY KEY ("uuid"))`,
+      undefined,
+    );
+    await queryRunner.query(
+      `CREATE INDEX "IDX_53a7d1f55a82cc79b0cb48c0be" ON "feedback" ("challengeId") `,
       undefined,
     );
     await queryRunner.query(
@@ -44,9 +52,17 @@ export class CreateInitialTables1578644231665 implements MigrationInterface {
       `ALTER TABLE "payments" ADD CONSTRAINT "FK_3876d75b52f18e543c7aa2a3c5d" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE NO ACTION ON UPDATE NO ACTION`,
       undefined,
     );
+    await queryRunner.query(
+      `ALTER TABLE "feedback" ADD CONSTRAINT "FK_9e510c65847ccd21e2ac3c49672" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      undefined,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
+    await queryRunner.query(
+      `ALTER TABLE "feedback" DROP CONSTRAINT "FK_9e510c65847ccd21e2ac3c49672"`,
+      undefined,
+    );
     await queryRunner.query(
       `ALTER TABLE "payments" DROP CONSTRAINT "FK_3876d75b52f18e543c7aa2a3c5d"`,
       undefined,
@@ -60,11 +76,16 @@ export class CreateInitialTables1578644231665 implements MigrationInterface {
       undefined,
     );
     await queryRunner.query(
+      `DROP INDEX "IDX_53a7d1f55a82cc79b0cb48c0be"`,
+      undefined,
+    );
+    await queryRunner.query(`DROP TABLE "feedback"`, undefined);
+    await queryRunner.query(`DROP TABLE "user"`, undefined);
+    await queryRunner.query(
       `DROP INDEX "IDX_00097d3b3147848e3585aabb43"`,
       undefined,
     );
     await queryRunner.query(`DROP TABLE "payments"`, undefined);
-    await queryRunner.query(`DROP TABLE "user"`, undefined);
     await queryRunner.query(
       `DROP INDEX "IDX_1c42ae72a4283d6118664971d5"`,
       undefined,

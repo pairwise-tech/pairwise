@@ -10,7 +10,7 @@ import { ContentModule } from "./content/content.module";
 import { ProgressModule } from "./progress/progress.module";
 import { PaymentsModule } from "./payments/payments.module";
 import { AdminModule } from "./admin/admin.module";
-import { FeedbackModule } from './feedback/feedback.module';
+import { FeedbackModule } from "./feedback/feedback.module";
 
 @Module({
   imports: [
