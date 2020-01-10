@@ -18,7 +18,7 @@ export class PaymentsService {
 
   async purchaseCourse(requestUser: RequestUser, courseId: string) {
     const userResult = await this.userService.findUserByEmailGetFullProfile(
-      requestUser.email,
+      requestUser.profile.email,
     );
     const { profile: user, payments } = userResult;
 

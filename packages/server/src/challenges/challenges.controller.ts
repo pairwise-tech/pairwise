@@ -3,7 +3,7 @@ import { ChallengesService } from "./challenges.service";
 import { AuthenticatedRequest } from "src/types";
 import { CustomJwtAuthGuard } from "src/auth/jwt.guard";
 
-@Controller("challenges")
+@Controller("content")
 export class ChallengesController {
   constructor(private readonly challengeService: ChallengesService) {}
 
@@ -13,7 +13,7 @@ export class ChallengesController {
   }
 
   @UseGuards(CustomJwtAuthGuard)
-  @Get(":id")
+  @Get("/course/:id")
   fetchCourseContent(@Param() params, @Req() req: AuthenticatedRequest) {
     const { id } = params;
     const { user } = req;

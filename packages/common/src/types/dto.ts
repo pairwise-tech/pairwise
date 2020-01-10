@@ -14,16 +14,18 @@
  * ============================================================================
  */
 
-export interface IUserDto {
-  profile: {
-    uuid: string;
-    email: string;
-    displayName: string;
-    givenName: string;
-    familyName: string;
-    profileImageUrl: string;
-    lastActiveChallengeId: string;
-  };
+export interface UserProfile {
+  uuid: string;
+  email: string;
+  displayName: string;
+  givenName: string;
+  familyName: string;
+  profileImageUrl: string;
+  lastActiveChallengeId: string;
+}
+
+export interface IUserDto<T = UserProfile> {
+  profile: T;
   payments: Payment[];
   courses: { [key: string]: boolean };
 }

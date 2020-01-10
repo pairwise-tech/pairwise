@@ -34,7 +34,7 @@ export class ProgressService {
   async fetchUserProgress(user: RequestUser) {
     const result = await this.userProgressRepository.find({
       where: {
-        user: user.uuid,
+        user: user.profile.uuid,
       },
     });
 
@@ -76,13 +76,13 @@ export class ProgressService {
 
     const existingEntry = await this.userProgressRepository.findOne({
       courseId,
-      user,
+      user: user.profile,
     });
 
     if (existingEntry === undefined) {
       console.log("No entity exists, creating and inserting a new one!");
       const newProgressEntry: Partial<UserCourseProgress> = {
-        user,
+        user: user.profile,
         courseId,
         progress: JSON.stringify(status),
       };
@@ -130,7 +130,7 @@ export class ProgressService {
     await this.userService.updateLastActiveChallengeId(user, challengeId);
 
     const codeHistory = await this.userCodeBlobRepository.findOne({
-      user,
+      user: user.profile,
       challengeId,
     });
 
@@ -158,7 +158,7 @@ export class ProgressService {
     validateCodeBlob(challengeCodeDto);
 
     const existingBlob = await this.userCodeBlobRepository.findOne({
-      user,
+      user: user.profile,
       challengeId: challengeCodeDto.challengeId,
     });
 
@@ -179,7 +179,7 @@ export class ProgressService {
       );
     } else {
       await this.userCodeBlobRepository.insert({
-        user,
+        user: user.profile,
         challengeId: challengeCodeDto.challengeId,
         dataBlob: JSON.stringify(challengeCodeDto.dataBlob),
       });

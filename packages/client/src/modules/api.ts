@@ -132,10 +132,14 @@ class Api extends BaseApiClass {
           .pipe(map(x => x[0]))
           .toPromise();
       } else {
+        /* NOTE: I hard-coded the courseId in the request for now! */
         const headers = this.getRequestHeaders();
-        const result = await axios.get<Course>(`${HOST}/challenges`, {
-          headers,
-        });
+        const result = await axios.get<Course>(
+          `${HOST}/content/course/fpvPtfu7s`,
+          {
+            headers,
+          },
+        );
         course = result.data;
       }
 
@@ -148,7 +152,7 @@ class Api extends BaseApiClass {
   fetchCourseSkeletons = async () => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.get<IUserDto>(`${HOST}/challenges/skeletons`, {
+      return axios.get<IUserDto>(`${HOST}/content/skeletons`, {
         headers,
       });
     });
