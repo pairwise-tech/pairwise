@@ -10,6 +10,8 @@ import {
 import { UserCourseProgress } from "src/progress/userCourseProgress.entity";
 import { UserCodeBlob } from "src/progress/userCodeBlob.entity";
 import { Payments } from "src/payments/payments.entity";
+import { FeedbackDto } from "@pairwise/common";
+import { Feedback } from "src/feedback/feedback.entity";
 
 @Entity()
 export class User {
@@ -54,6 +56,13 @@ export class User {
   )
   @JoinColumn()
   challengeCodeHistory: UserCodeBlob;
+
+  @OneToMany(
+    type => Feedback,
+    userFeedback => userFeedback.user,
+  )
+  @JoinColumn()
+  userFeedback: Feedback;
 
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;

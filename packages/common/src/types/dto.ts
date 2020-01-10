@@ -54,6 +54,19 @@ export type PAYMENT_TYPE = "SUCCESS" | "FAILURE" | "REFUNDED";
 export type COURSE_ACCESS_LEVEL = "FREE" | "PAID";
 
 /** ===========================================================================
+ * Feedback Types
+ * ============================================================================
+ */
+
+export type FEEDBACK_TYPE = "TOO_HARD" | "TOO_EASY" | "NOT_HELPFUL" | "OTHER";
+
+export interface FeedbackDto {
+  feedback: string;
+  challengeId: string;
+  type: FEEDBACK_TYPE;
+}
+
+/** ===========================================================================
  * Code Blobs for Challenges
  * ============================================================================
  */
