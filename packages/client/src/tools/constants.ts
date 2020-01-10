@@ -81,7 +81,7 @@ export const generateEmptyModule = (): Module => ({
   id: shortid.generate(),
   title: "[EMTPY...]",
   challenges: [],
-  free: false,
+  free: false /* All challenges are locked by default */,
 });
 
 export const generateEmptyChallenge = (
