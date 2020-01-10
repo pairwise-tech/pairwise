@@ -115,10 +115,18 @@ interface IState {
 
 class Workspace extends React.Component<IProps, IState> {
   syntaxWorker: any = null;
-  monacoEditor: any = null;
+
+  // The wrapper class provided @monaco-editor/react. Confusingly,
+  // monacoWrapper.editor is not the editor instance but a collection of static
+  // methods and maybe a class as well. But they are different. Editor instance
+  // is needed for updating editor options, i.e. font size.
+  monacoWrapper: any = null;
+
+  // The actual monaco editor instance. The mona
   editorInstance: Nullable<{
     updateOptions: (x: MonacoEditorOptions) => void;
   }> = null;
+
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   debouncedSaveCodeFunction: () => void;
   debouncedRenderPreviewFunction: () => void;
@@ -259,7 +267,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   updateSyntaxDecorations = async (classifications: ReadonlyArray<any>) => {
-    if (!this.monacoEditor || this.props.challenge.type === "markup") {
+    if (!this.monacoWrapper || this.props.challenge.type === "markup") {
       return;
     }
 
@@ -273,7 +281,7 @@ class Workspace extends React.Component<IProps, IState> {
         : c.kind;
 
       return {
-        range: new this.monacoEditor.Range(
+        range: new this.monacoWrapper.Range(
           c.startLine,
           c.start,
           c.endLine,
@@ -285,7 +293,7 @@ class Workspace extends React.Component<IProps, IState> {
       };
     });
 
-    const models = this.monacoEditor.editor.getModels();
+    const models = this.monacoWrapper.editor.getModels();
     const model = models[0];
 
     model.decorations = model.deltaDecorations(
@@ -313,7 +321,7 @@ class Workspace extends React.Component<IProps, IState> {
           noSemanticValidation: false,
         });
 
-        this.monacoEditor = mn;
+        this.monacoWrapper = mn;
 
         this.initializeMonacoEditor();
       })
@@ -327,7 +335,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   initializeMonacoEditor = () => {
-    const mn = this.monacoEditor;
+    const mn = this.monacoWrapper;
 
     const options = {
       theme: MONACO_EDITOR_THEME,
@@ -684,7 +692,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   setMonacoEditorValue = () => {
-    const models = this.monacoEditor.editor.getModels();
+    const models = this.monacoWrapper.editor.getModels();
     const model = models[0];
     model.setValue(this.state.code);
   };
@@ -702,8 +710,8 @@ class Workspace extends React.Component<IProps, IState> {
       "",
     );
 
-    if (this.monacoEditor) {
-      this.monacoEditor.languages.typescript.typescriptDefaults.addExtraLib(
+    if (this.monacoWrapper) {
+      this.monacoWrapper.languages.typescript.typescriptDefaults.addExtraLib(
         moduleDeclarations,
       );
     }
@@ -716,7 +724,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleEditorContentChange = (_: any) => {
-    const models = this.monacoEditor.editor.getModels();
+    const models = this.monacoWrapper.editor.getModels();
     const model = models[0];
     const code = model.getValue();
 
@@ -824,14 +832,6 @@ class Workspace extends React.Component<IProps, IState> {
           return;
         }
 
-        // Don't forget to bind createElement... not sure typescript can protect us form this one
-        // const el = makeElementFactory(iframeDoc.createElement.bind(iframeDoc));
-        const el = makeElementFactory(
-          this.iFrameRef.contentWindow.document.createElement.bind(
-            this.iFrameRef.contentWindow.document,
-          ),
-        );
-
         /**
          * Process the code string and create an HTML document to render
          * to the iframe.
@@ -858,12 +858,25 @@ class Workspace extends React.Component<IProps, IState> {
             }
           }
 
+          // Don't forget to bind createElement... not sure typescript can protect us form this one
+          // const el = makeElementFactory(iframeDoc.createElement.bind(iframeDoc));
+          // NOTE: Since we're in an async function its important to include
+          // this definition in code that will be run _synchronously_ with its
+          // invocation. Otherwise we might end up creating a factor that is
+          // bound to an iframe that's already unmounted, causing odd bugs and
+          // memory leaks to boot
+          const el = makeElementFactory(
+            this.iFrameRef.contentWindow.document.createElement.bind(
+              this.iFrameRef.contentWindow.document,
+            ),
+          );
+
           const markupTests = getTestHarness(this.props.challenge.testCode);
 
           const testScript = el("script", {
             id: "test-script",
             type: "text/javascript",
-            innerHTML: markupTests,
+            innerHTML: "var fun = true;",
           });
 
           this.iFrameRef.contentWindow.document.body.appendChild(testScript);
@@ -975,8 +988,8 @@ class Workspace extends React.Component<IProps, IState> {
 
   private readonly disposeModels = () => {
     /* ??? */
-    if (this.monacoEditor) {
-      const models = this.monacoEditor.editor.getModels();
+    if (this.monacoWrapper) {
+      const models = this.monacoWrapper.editor.getModels();
       for (const model of models) {
         model.dispose();
       }
