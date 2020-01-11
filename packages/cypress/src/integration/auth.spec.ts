@@ -32,7 +32,7 @@ const assertAuthenticatedFlowWorks = () => {
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
   cy.get("#profile-link").click({ force: true });
-  cy.contains("User Profile:");
+  cy.contains("Account:");
 
   cy.reload();
   cy.wait(500);
@@ -42,11 +42,11 @@ const assertAuthenticatedFlowWorks = () => {
   cy.get("#logout-link").click({ force: true });
 
   cy.contains("Login or Signup");
-  cy.url().should("include", "workspace");
+  cy.url().should("include", "profile");
 
   cy.reload();
   cy.contains("Login or Signup");
-  cy.url().should("include", "workspace");
+  cy.url().should("include", "profile");
 };
 
 /**
