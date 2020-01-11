@@ -62,11 +62,13 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "yarn run start",
+    "start:dev": "yarn run start",
     "format": "prettier --write '{__mocks__,src,test}/**/*.{js,ts,tsx}'",
     "lint": "eslint src/**/*.{js,ts,tsx}",
     "lint:fix": "yarn run lint --fix",
     "start": "gatsby develop",
-    "serve": "gatsby serve",
+    "start:prod": "gatsby serve",
+    "serve": "yarn run start:prod",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
     "codegen": "graphql-codegen --config graphql-codegen.yml"
   },

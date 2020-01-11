@@ -14,6 +14,7 @@ This project is managed using Lerna, and contains the following packages:
 | e2e               | End-to-end test suite                             |
 | external-services | Express server to mock 3rd party APIs for testing |
 | server            | NestJS backend application                        |
+| www               | Marketing website built with Gastby               |
 
 ## Development
 
