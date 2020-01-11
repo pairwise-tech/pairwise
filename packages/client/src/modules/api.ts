@@ -2,14 +2,14 @@ import {
   Course,
   CourseList,
   Err,
-  IUserCodeBlobDto,
-  IUserCourseProgressDto,
   IUserDto,
   Ok,
   Result,
   UserCourseStatus,
   UserUpdateOptions,
-  FeedbackDto,
+  IFeedbackDto,
+  IProgressDto,
+  ICodeBlobDto,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -186,10 +186,10 @@ class Api extends BaseApiClass {
     });
   };
 
-  updateUserProgress = async (progress: IUserCourseProgressDto) => {
+  updateUserProgress = async (progress: IProgressDto) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.post<IUserCourseProgressDto>(`${HOST}/progress`, {
+      return axios.post<IProgressDto>(`${HOST}/progress`, {
         headers,
         body: progress,
       });
@@ -199,7 +199,7 @@ class Api extends BaseApiClass {
   fetchChallengeHistory = async (challengeId: string) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.get<IUserCodeBlobDto>(`${HOST}/blob/${challengeId}`, {
+      return axios.get<ICodeBlobDto>(`${HOST}/blob/${challengeId}`, {
         headers,
       });
     });
@@ -208,7 +208,7 @@ class Api extends BaseApiClass {
   updateChallengeHistory = async (challengeId: string, dataBlob: string) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.post<IUserCodeBlobDto>(`${HOST}/blob`, {
+      return axios.post<ICodeBlobDto>(`${HOST}/blob`, {
         headers,
         body: {
           dataBlob,
@@ -218,7 +218,7 @@ class Api extends BaseApiClass {
     });
   };
 
-  submitUserFeedback = async (feedback: FeedbackDto) => {
+  submitUserFeedback = async (feedback: IFeedbackDto) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
       return axios.post<"Success">(`${HOST}/feedback`, {
