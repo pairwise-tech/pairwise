@@ -1,7 +1,7 @@
 import axios from "axios";
 import request from "supertest";
 import { fetchAccessToken, HOST } from "./utils/e2e-utils";
-import { IUserCourseProgressDto } from "@pairwise/common";
+import { IProgressDto } from "@pairwise/common";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs
@@ -82,7 +82,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/progress (POST) handles valid insertions correctly", async done => {
-    const updateProgressItem = async (progress: IUserCourseProgressDto) => {
+    const updateProgressItem = async (progress: IProgressDto) => {
       return axios.post(`${HOST}/progress`, progress, {
         headers: {
           Authorization: authorizationHeader,
