@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap, tap } from "rxjs/operators";
+import { filter, map, mergeMap, tap, pluck } from "rxjs/operators";
 import { getType, isActionOf } from "typesafe-actions";
 
 import API from "modules/api";
@@ -37,9 +37,34 @@ const fetchUserEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const updateUserEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.updateUser)),
+    pluck("payload"),
+    mergeMap(API.updateUser),
+    map(result => {
+      if (result.value) {
+        deps.toaster.show({
+          icon: "tick",
+          intent: "success",
+          message: "Saved 👍",
+        });
+        return Actions.updateUserSuccess(result.value);
+      } else {
+        deps.toaster.show({
+          icon: "tick",
+          intent: "danger",
+          message: "Failure to update user profile...",
+        });
+        return Actions.updateUserFailure(result.error);
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default combineEpics(fetchUserEpic);
+export default combineEpics(fetchUserEpic, updateUserEpic);

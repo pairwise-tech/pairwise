@@ -1,9 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components/macro";
+import { Classes, Button } from "@blueprintjs/core";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text } from "./shared";
-import { Classes, Button } from "@blueprintjs/core";
+import { COLORS } from "tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -34,6 +36,12 @@ class Profile extends React.Component<IProps, IState> {
     };
   }
 
+  componentWillReceiveProps(nextProps: IProps) {
+    if (nextProps.user !== this.props.user) {
+      this.handleDiscardChanges();
+    }
+  }
+
   render(): Nullable<JSX.Element> {
     const { edit } = this.state;
     const { user } = this.props;
@@ -44,37 +52,52 @@ class Profile extends React.Component<IProps, IState> {
     const { profile } = user;
     return (
       <PageContainer>
-        <Text>User Profile:</Text>
-        <Text>Given Name: {profile.givenName}</Text>
+        <Title>Account</Title>
+        <TextItem>
+          <b>Given Name:</b> {profile.givenName}
+        </TextItem>
         {edit && (
-          <input
+          <InputField
             type="text"
+            placeholder="Enter your given name"
             className={Classes.INPUT}
             value={this.state.givenName}
-            onChange={this.createChangeHandler("givenName")}
+            onChange={event => this.setState({ givenName: event.target.value })}
           />
         )}
-        <Text>Family Name: {profile.familyName}</Text>
+        <TextItem>
+          <b>Family Name:</b> {profile.familyName}
+        </TextItem>
         {edit && (
-          <input
+          <InputField
             type="text"
+            placeholder="Enter your family name"
             className={Classes.INPUT}
             value={this.state.familyName}
-            onChange={this.createChangeHandler("familyName")}
+            onChange={event =>
+              this.setState({ familyName: event.target.value })
+            }
           />
         )}
-        <Text>Display Name: {profile.displayName}</Text>
+        <TextItem>
+          <b>Display Name:</b> {profile.displayName}
+        </TextItem>
         {edit && (
-          <input
+          <InputField
             type="text"
+            placeholder="Enter a display name"
             className={Classes.INPUT}
             value={this.state.displayName}
-            onChange={this.createChangeHandler("displayName")}
+            onChange={event =>
+              this.setState({ displayName: event.target.value })
+            }
           />
         )}
-        <Text>Email: {profile.email}</Text>
+        <TextItem>
+          <b>Email:</b> {profile.email}
+        </TextItem>
         {edit && (
-          <input
+          <InputField
             disabled
             type="text"
             className={Classes.INPUT}
@@ -83,21 +106,28 @@ class Profile extends React.Component<IProps, IState> {
           />
         )}
         {edit && (
-          <Text>
-            (Your email is linked to your SSO signin account and cannot be
+          <TextItem style={{ fontSize: 12 }}>
+            (Your email is linked to your 3rd party signin account and cannot be
             changed)
-          </Text>
+          </TextItem>
         )}
         {edit ? (
-          <Button onClick={() => this.setState({ edit: true })} text="Edit" />
-        ) : (
-          <React.Fragment>
-            <Button onClick={this.handleDiscardChanges} text="Discard" />
+          <Controls>
             <Button
-              onClick={() => this.setState({ edit: false })}
-              text="Save"
+              intent="primary"
+              text="Save Profile"
+              onClick={this.handleSaveChanges}
+              style={{ marginRight: 8, color: COLORS.TEXT_DARK }}
             />
-          </React.Fragment>
+            <Button text="Cancel" onClick={this.handleDiscardChanges} />
+          </Controls>
+        ) : (
+          <Controls>
+            <Button
+              onClick={this.handleEditProfile}
+              text="Edit Profile Information"
+            />
+          </Controls>
         )}
       </PageContainer>
     );
@@ -118,19 +148,43 @@ class Profile extends React.Component<IProps, IState> {
   };
 
   handleSaveChanges = () => {
-    console.log("Saving");
+    const userDetails = {
+      givenName: this.state.givenName,
+      familyName: this.state.familyName,
+      displayName: this.state.displayName,
+    };
+    this.props.updateUser(userDetails);
   };
 
   handleDiscardChanges = () => {
-    this.setState({ edit: true });
-  };
-
-  createChangeHandler = (
-    stateKey: "givenName" | "familyName" | "displayName",
-  ) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState(ps => ({ ...ps, [stateKey]: event.target.value }));
+    this.setState({ edit: false });
   };
 }
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const Title = styled.h1`
+  margin-top: 0;
+  color: ${COLORS.TEXT_TITLE};
+`;
+
+const TextItem = styled(Text)`
+  margin-top: 12px;
+`;
+
+const InputField = styled.input`
+  margin-top: 12px;
+  width: 200px;
+  color: ${COLORS.TEXT_HOVER} !important;
+  background: ${COLORS.BACKGROUND_CONSOLE} !important;
+`;
+
+const Controls = styled.div`
+  margin-top: 24px;
+`;
 
 /** ===========================================================================
  * Props
@@ -143,6 +197,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
+  updateUser: Modules.actions.user.updateUser,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

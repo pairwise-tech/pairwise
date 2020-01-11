@@ -84,8 +84,10 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
         const moduleId =
           challengeMap[challengeId]?.moduleId || course.modules[0].id;
 
-        // Redirect to the route for the challenge
-        deps.router.push(`/workspace/${challengeId}`);
+        // Do not redirect unless the user is already on the workspace/
+        if (deps.router.location.pathname.includes("workspace")) {
+          deps.router.push(`/workspace/${challengeId}`);
+        }
 
         return Actions.fetchCurrentActiveCourseSuccess({
           courses: [course],

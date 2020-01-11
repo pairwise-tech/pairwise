@@ -72,13 +72,13 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       window.location.search,
     );
 
-    /* Kind of sloppy: */
-    console.log(`Login detected! Account created: ${accountCreated}`);
-
     const created =
       typeof accountCreated === "string" ? JSON.parse(accountCreated) : false;
 
     if (typeof accessToken === "string" && Boolean(accessToken)) {
+      /* Kind of sloppy: */
+      console.log(`Login detected! Account created: ${accountCreated}`);
+
       this.props.storeAccessToken({
         accessToken,
         accountCreated: Boolean(created),
