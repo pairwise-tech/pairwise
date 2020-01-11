@@ -62,6 +62,19 @@ const NavigationOverlay = (props: IProps) => {
         onClick={e => e.stopPropagation()}
       >
         <Title>{course.title}</Title>
+        {/* In case of no challenges yet, or to add one at the start, here's a button */}
+        <div style={{ position: "relative" }}>
+          <AddNavItemButton
+            show={isEditMode}
+            onClick={() =>
+              props.createCourseModule({
+                courseId: course.id,
+                insertionIndex: 0,
+                module: generateEmptyModule(),
+              })
+            }
+          />
+        </div>
         {course.modules.map((m, i) => {
           return (
             <div key={m.id} style={{ position: "relative" }}>

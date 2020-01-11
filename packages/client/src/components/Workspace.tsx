@@ -876,7 +876,7 @@ class Workspace extends React.Component<IProps, IState> {
           const testScript = el("script", {
             id: "test-script",
             type: "text/javascript",
-            innerHTML: "var fun = true;",
+            innerHTML: markupTests,
           });
 
           this.iFrameRef.contentWindow.document.body.appendChild(testScript);
