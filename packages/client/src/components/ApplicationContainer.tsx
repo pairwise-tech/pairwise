@@ -171,9 +171,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                       <CreateAccountText className="account-menu">
                         Welcome, {this.props.user.profile.givenName}!{" "}
                       </CreateAccountText>
-                      <ProfileIcon
-                        avatar={this.props.user.profile.profileImageUrl}
-                      />
+                      <ProfileIcon avatar={this.props.user.profile.avatarUrl} />
                     </UserBio>
                     <div className="dropdown-links">
                       <Link

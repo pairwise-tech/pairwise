@@ -17,12 +17,12 @@ export class AuthService {
   async handleFacebookSignin(requestProfile: FacebookProfileWithCredentials) {
     const profile = requestProfile.profile._json;
     const email = profile.email;
-    const profileImageUrl = profile.picture.data.url;
+    const avatarUrl = profile.picture.data.url;
     const { first_name, last_name } = profile;
     const name = `${first_name} ${last_name}`;
     const userProfile: GenericUserProfile = {
       email,
-      profileImageUrl,
+      avatarUrl,
       displayName: name,
       givenName: first_name,
       familyName: last_name,
@@ -42,13 +42,13 @@ export class AuthService {
     const profile = requestProfile.profile._json;
 
     const email = profile.email;
-    const profileImageUrl = profile.avatar_url;
+    const avatarUrl = profile.avatar_url;
 
     /* Whatever! */
     const [firstName = "", lastName = ""] = profile.name.split(" ");
     const userProfile: GenericUserProfile = {
       email,
-      profileImageUrl,
+      avatarUrl,
       givenName: firstName,
       familyName: lastName,
       displayName: profile.name,
@@ -65,10 +65,10 @@ export class AuthService {
   async handleGoogleSignin(requestProfile: GoogleProfileWithCredentials) {
     const profile = requestProfile.profile._json;
     const email = profile.email;
-    const profileImageUrl = profile.picture;
+    const avatarUrl = profile.picture;
     const userProfile: GenericUserProfile = {
       email,
-      profileImageUrl,
+      avatarUrl,
       displayName: profile.name,
       givenName: profile.given_name,
       familyName: profile.family_name,

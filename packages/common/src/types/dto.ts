@@ -24,7 +24,7 @@ export interface UserProfile {
   displayName: string;
   givenName: string;
   familyName: string;
-  profileImageUrl: string;
+  avatarUrl: string;
   lastActiveChallengeId: string;
 }
 
@@ -42,7 +42,7 @@ export interface UserUpdateOptions {
   givenName?: string;
   familyName?: string;
   displayName?: string;
-  profileImageUrl?: string;
+  avatarUrl?: string;
 }
 
 export interface Payment {
