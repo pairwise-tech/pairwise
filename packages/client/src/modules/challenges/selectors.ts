@@ -153,32 +153,35 @@ export const firstUnfinishedChallenge = createSelector(
 );
 
 /**
+ * NOTE: A mapping of id to next/prev could be built up immediately after the
+ * course is fetched. That's probably an overoptimization though so this will due
+ * until it won't.
+ */
+export const allChallengesInCurrentCourse = createSelector(
+  [getCurrentCourse],
+  course => {
+    const list = course?.modules
+      .map(x => x.challenges)
+      .reduce((agg, x) => agg.concat(x)); // Flatten
+    return list;
+  },
+);
+
+/**
  * Retrieve the next and previous challenge for a given challenge.
  */
 export const nextPrevChallenges = createSelector(
-  challengesState,
-  challenges => {
-    let next;
-    let prev;
-    const { currentCourseId, currentChallengeId } = challenges;
+  [allChallengesInCurrentCourse, getCurrentChallengeId],
+  (challenges, challengeId) => {
+    const i = challenges?.findIndex(x => x.id === challengeId);
 
-    if (currentCourseId && currentChallengeId && challenges.courses) {
-      const course = findCourseById(currentCourseId, challenges.courses);
-
-      if (course) {
-        for (const courseModule of course.modules) {
-          const moduleChallenges = courseModule.challenges;
-          for (let i = 0; i < moduleChallenges.length; i++) {
-            if (moduleChallenges[i].id === currentChallengeId) {
-              prev = moduleChallenges[i - 1];
-              next = moduleChallenges[i + 1];
-              return { next, prev };
-            }
-          }
-        }
-      }
+    if (i === undefined || i === -1) {
+      return { prev: null, next: null };
     }
 
-    return { next, prev };
+    return {
+      prev: challenges?.[i - 1],
+      next: challenges?.[i + 1],
+    };
   },
 );
