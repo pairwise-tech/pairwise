@@ -4,13 +4,6 @@ version: "3.5"
 # the server, and the mock external services. This can be used to easily run
 # the entire backend application in order to develop the frontend, or to
 # write Cypress tests.
-#
-# NOTE: It would be great if this docker-compose could deploy the
-# external-services as a separate service like the other docker-compose
-# files, however there is an annoying issue with the Google authentication
-# redirects during user signup that make this problematic, so here the
-# server and external-services are both run concurrently in the services
-# service.
 
 services:
   db:
@@ -24,7 +17,7 @@ services:
     ports:
       - 5432:5432
 
-  services:
+  server:
     build:
       context: .
       dockerfile: Dockerfile

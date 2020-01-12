@@ -89,7 +89,7 @@ $ yarn e2e
 $ yarn cypress
 ```
 
-To troubleshoot or develop tests locally, you can run the necessary application services using instructions from above and then run the tests locally from their respective package, `e2e` or `cypress`.
+To troubleshoot or develop tests locally, you can run the necessary application services using instructions from above and then run the tests locally from their respective package, `e2e` or `cypress`. You can also run `yarn up` and then run the tests locally (see each test package README for further instructions).
 
 A quick note to keep in mind about running `docker-compose` commands. There are multiple `docker-compose.yml` configurations in the project, if you run `docker-compose` commands you need to reference the file you want to run the command for, or be in the directory where that file is.
 
