@@ -46,6 +46,7 @@ class Home extends React.Component<IProps, IState> {
           </ContentText>
           <BoldText>Select a course below to get started now!</BoldText>
         </ContentContainer>
+        <PageTitle>Courses:</PageTitle>
         {this.props.skeletons?.map(this.renderCourseSkeleton)}
       </PageContainer>
     );
@@ -56,11 +57,12 @@ class Home extends React.Component<IProps, IState> {
     return (
       <Card
         interactive
+        key={skeleton.id}
         style={{ width: 450 }}
         className="course-card"
         elevation={Elevation.FOUR}
       >
-        <Link key={skeleton.id} to={`workspace/${firstChallengeId}`}>
+        <Link to={`workspace/${firstChallengeId}`}>
           <CourseTitle>{skeleton.title}</CourseTitle>
           <CourseDescription>{skeleton.description}</CourseDescription>
         </Link>
