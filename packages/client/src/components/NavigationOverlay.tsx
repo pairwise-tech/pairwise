@@ -91,6 +91,7 @@ const NavigationOverlay = (props: IProps) => {
                 />
               ) : (
                 <NavButton
+                  id={`module-navigation-${i}`}
                   active={m.id === module.id}
                   onClick={() => setCurrentModule(m.id)}
                 >
@@ -141,9 +142,10 @@ const NavigationOverlay = (props: IProps) => {
           return (
             <div key={c.id} style={{ position: "relative" }}>
               <Link
-                isActive={() => c.id === challengeId}
                 key={c.id}
                 to={`/workspace/${c.id}`}
+                id={`challenge-navigation-${i}`}
+                isActive={() => c.id === challengeId}
               >
                 <span>
                   <Icon

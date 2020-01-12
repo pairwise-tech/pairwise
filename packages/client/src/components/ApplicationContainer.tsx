@@ -1,3 +1,11 @@
+import {
+  Button,
+  ButtonGroup,
+  Classes,
+  Tooltip,
+  FocusStyleManager,
+} from "@blueprintjs/core";
+import cx from "classnames";
 import queryString from "query-string";
 import React, { Suspense } from "react";
 import { connect } from "react-redux";
@@ -11,21 +19,13 @@ import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
-import Profile from "./Profile";
-import { ButtonCore, IconNavLink } from "./shared";
+import Account from "./Account";
+import { ButtonCore, IconNavLink, ProfileIcon } from "./Shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
-import {
-  Button,
-  ButtonGroup,
-  Classes,
-  Tooltip,
-  FocusStyleManager,
-} from "@blueprintjs/core";
-import cx from "classnames";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 
-// Only show focus outlinewhen tabbing around the UI
+// Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
 
 const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
@@ -72,13 +72,13 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       window.location.search,
     );
 
-    /* Kind of sloppy: */
-    console.log(`Login detected! Account created: ${accountCreated}`);
-
     const created =
       typeof accountCreated === "string" ? JSON.parse(accountCreated) : false;
 
     if (typeof accessToken === "string" && Boolean(accessToken)) {
+      /* Kind of sloppy: */
+      console.log(`Login detected! Account created: ${accountCreated}`);
+
       this.props.storeAccessToken({
         accessToken,
         accountCreated: Boolean(created),
@@ -183,18 +183,23 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                     id="account-menu-dropdown"
                     className="account-menu-dropdown"
                   >
-                    <CreateAccountText className="account-menu">
-                      Welcome, {this.props.user.profile.givenName}!
-                    </CreateAccountText>
+                    <UserBio>
+                      <CreateAccountText className="account-menu">
+                        Welcome, {this.props.user.profile.givenName}!{" "}
+                      </CreateAccountText>
+                      <ProfileIcon
+                        avatar={this.props.user.profile.profileImageUrl}
+                      />
+                    </UserBio>
                     <div className="dropdown-links">
                       <Link
-                        id="profile-link"
-                        to="/profile"
+                        id="account-link"
+                        to="/account"
                         style={{
                           borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
                         }}
                       >
-                        Profile
+                        Account
                       </Link>
                       <Link
                         id="logout-link"
@@ -219,13 +224,13 @@ class ApplicationContainer extends React.Component<IProps, IState> {
           <Switch>
             <Route key={0} path="/workspace/:id" component={Workspace} />
             <Route key={1} path="/home" component={Home} />
-            <Route key={2} path="/profile" component={Profile} />
+            <Route key={2} path="/account" component={Account} />
             <Route
               key={3}
               path="/logout"
               component={() => <Redirect to="/home" />}
             />
-            <Route key={4} component={() => <Redirect to="/workspace" />} />
+            <Route key={4} component={() => <Redirect to="/home" />} />
           </Switch>
         </DarkTheme>
       </React.Fragment>
@@ -237,7 +242,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       <LoadingOverlay visible={this.props.workspaceLoading}>
         <MobileView />
         <div>
-          <OverlayLoadingText>Initializing Workspace...</OverlayLoadingText>
+          <OverlayLoadingText>Launching Pairwise...</OverlayLoadingText>
         </div>
       </LoadingOverlay>
     );
@@ -285,14 +290,17 @@ const Header = styled.div`
 
 const ProductTitle = styled.h1`
   margin: 0;
-  color: "white";
+  color: white;
   font-weight: 100;
   font-family: "Helvetica Neue", Lato, sans-serif;
 
-  a,
-  a:hover {
+  a {
     color: white;
     text-decoration: none;
+  }
+
+  a:hover {
+    color: ${COLORS.PRIMARY_GREEN};
   }
 `;
 
@@ -307,6 +315,7 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   <Button
     minimal
     large
+    id="navigation-menu-button"
     aria-label="Open navigation map"
     icon={overlayVisible ? "menu-closed" : "menu"}
     {...rest}
@@ -336,7 +345,7 @@ const LoadingOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(15, 15, 15, 0.92);
   visibility: ${(props: { visible: boolean }) =>
     props.visible ? "visible" : "hidden"};
 `;
@@ -345,19 +354,28 @@ const OverlayLoadingText = styled.p`
   margin: 0;
   font-size: 42px;
   font-weight: 200;
-  color: ${COLORS.PRIMARY_BLUE};
+  color: ${COLORS.PRIMARY_GREEN};
 `;
 
 const AccountButton = styled(ButtonCore)`
-  height: ${HEADER_HEIGHT};
+  height: ${HEADER_HEIGHT + 2};
   color: ${COLORS.TEXT_TITLE};
   border-radius: 4px;
+  margin-left: 2px;
+  margin-right: 2px;
 
   :hover {
     cursor: pointer;
-    color: ${COLORS.TEXT_HOVER};
+    color: ${COLORS.PRIMARY_GREEN};
     background: ${COLORS.BACKGROUND_ACCOUNT_BUTTON};
   }
+`;
+
+const UserBio = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 8px;
 `;
 
 const CreateAccountText = styled.h1`
@@ -376,10 +394,10 @@ const AccountDropdownButton = styled.div`
   }
 
   .dropdown-links {
-    z-index: 1;
+    z-index: 1000;
     display: none;
     position: absolute;
-    min-width: 180px;
+    min-width: 215px;
     box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
     background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
   }
@@ -413,34 +431,41 @@ const AccountDropdownButton = styled.div`
 
 const MobileView = () => (
   <MobileContainer>
-    <MobileTitleText>Welcome to Pairwise</MobileTitleText>
+    <MobileTitleText>Welcome to Pairwise!</MobileTitleText>
     <MobileText>
-      Unfortunately, smart phones and tablets are just not the best devices for
+      Unfortunately, smart phones and tablets are not the best devices for
       developing software. Our platform is intended to be used on a larger
       screen device. Please return on a laptop or desktop!
     </MobileText>
     <MobileText>
-      While you are here, feel free to{" "}
+      While you are here, feel free to visit our product page where you can
+      learn more about the curriculum:
+    </MobileText>
+    <MobileText style={{ fontSize: 20 }}>
       <a target="__blank" href="https://www.pairwise.tech">
-        visit our landing page
-      </a>{" "}
-      where you can learn more about the curriculum. Thank you!
+        Visit Product Page
+      </a>
     </MobileText>
   </MobileContainer>
 );
 
 const MobileContainer = styled.div`
   z-index: 5000;
-  padding: 25px;
-  display: flex;
-  width: 100%;
-  height: 100%;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-top: -35px; /* ? */
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   position: absolute;
   flex: 1;
+  display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
   visibility: hidden;
   background: ${COLORS.BACKGROUND_BODY};
 
@@ -454,7 +479,8 @@ const MobileContainer = styled.div`
 `;
 
 const MobileText = styled.p`
-  font-size: 16px;
+  margin-top: 12px;
+  font-size: 18px;
   font-weight: 300;
   text-align: center;
   font-family: "Helvetica Neue", Lato, sans-serif;
@@ -462,7 +488,7 @@ const MobileText = styled.p`
 `;
 
 const MobileTitleText = styled(MobileText)`
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 300;
   font-family: "Helvetica Neue", Lato, sans-serif;
   color: ${COLORS.TEXT_TITLE};

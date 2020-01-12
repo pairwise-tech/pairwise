@@ -1,5 +1,6 @@
 import shortid from "shortid";
 import { Challenge, Module } from "@pairwise/common";
+import { Toaster } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Colors
@@ -17,6 +18,8 @@ const COLORS = {
   TEXT_HOVER: "rgb(245, 245, 245)",
   TEXT_TITLE: "rgb(200, 200, 200)",
   TEXT_CONTENT: "rgb(165, 165, 165)",
+  TEXT_CONTENT_BRIGHT: "rgb(225, 225, 225)",
+  TEXT_DARK: "rgb(40,40,40)",
   DRAGGABLE_SLIDER: "#2E2E2E",
   DRAGGABLE_SLIDER_BORDER: "#1b1b1b",
   BACKGROUND_HEADER: "#010203",
@@ -28,6 +31,7 @@ const COLORS = {
   BACKGROUND_DROPDOWN_MENU_HOVER: "rgb(24, 24, 24)",
   BORDER_DROPDOWN_MENU_ITEM: "rgb(45, 45, 45)",
   BACKGROUND_MODAL: "rgb(25, 25, 25)",
+  BACKGROUND_INPUT: "rgb(55,55,55)",
   BACKGROUND_ACCOUNT_BUTTON: "rgb(25, 25, 25)",
   BACKGROUND_BODY: "#13141d",
   GRADIENT_GREEN:
@@ -81,6 +85,7 @@ export const generateEmptyModule = (): Module => ({
   id: shortid.generate(),
   title: "[EMTPY...]",
   challenges: [],
+  free: false /* All challenges are locked by default */,
 });
 
 export const generateEmptyChallenge = (
@@ -97,3 +102,5 @@ export const generateEmptyChallenge = (
   supplementaryContent: "",
   ...overwrite,
 });
+
+export const AppToaster = Toaster.create();

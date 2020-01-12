@@ -2,20 +2,27 @@ import {
   Course,
   CourseList,
   Err,
-  IUserCodeBlobDto,
-  IUserCourseProgressDto,
   IUserDto,
   Ok,
   Result,
   UserCourseStatus,
   UserUpdateOptions,
+  IFeedbackDto,
+  IProgressDto,
+  ICodeBlobDto,
+  CourseSkeletonList,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
 import * as ENV from "tools/client-env";
-import { getAccessTokenFromLocalStorage } from "tools/utils";
+import {
+  getAccessTokenFromLocalStorage,
+  logoutUserInLocalStorage,
+  wait,
+} from "tools/utils";
+import { AppToaster } from "tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -96,7 +103,30 @@ class BaseApiClass {
   };
 
   handleHttpError = (err: any) => {
-    return new Err(this.formatHttpError(err));
+    const formattedError = this.formatHttpError(err);
+
+    if (formattedError.status === 401) {
+      this.handleForcedLogout();
+    }
+
+    return new Err(formattedError);
+  };
+
+  handleForcedLogout = async () => {
+    /**
+     * Remove the local access token and force the window to reload to handle
+     * forced logout:
+     */
+    AppToaster.show({
+      icon: "user",
+      intent: "danger",
+      message: "Your session has expired, please login again.",
+    });
+
+    logoutUserInLocalStorage();
+    await wait(2000); /* Wait so they can read the message... */
+
+    window.location.reload();
   };
 }
 
@@ -132,10 +162,14 @@ class Api extends BaseApiClass {
           .pipe(map(x => x[0]))
           .toPromise();
       } else {
+        /* NOTE: I hard-coded the courseId in the request for now! */
         const headers = this.getRequestHeaders();
-        const result = await axios.get<Course>(`${HOST}/challenges`, {
-          headers,
-        });
+        const result = await axios.get<Course>(
+          `${HOST}/content/course/fpvPtfu7s`,
+          {
+            headers,
+          },
+        );
         course = result.data;
       }
 
@@ -143,6 +177,15 @@ class Api extends BaseApiClass {
     } catch (err) {
       return this.handleHttpError(err);
     }
+  };
+
+  fetchCourseSkeletons = async () => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.get<CourseSkeletonList>(`${HOST}/content/skeletons`, {
+        headers,
+      });
+    });
   };
 
   fetchUserProfile = async () => {
@@ -172,10 +215,10 @@ class Api extends BaseApiClass {
     });
   };
 
-  updateUserProgress = async (progress: IUserCourseProgressDto) => {
+  updateUserProgress = async (progress: IProgressDto) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.post<IUserCourseProgressDto>(`${HOST}/progress`, {
+      return axios.post<IProgressDto>(`${HOST}/progress`, {
         headers,
         body: progress,
       });
@@ -185,24 +228,31 @@ class Api extends BaseApiClass {
   fetchChallengeHistory = async (challengeId: string) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.get<IUserCodeBlobDto>(
-        `${HOST}/progress/challenge/${challengeId}`,
-        {
-          headers,
-        },
-      );
+      return axios.get<ICodeBlobDto>(`${HOST}/blob/${challengeId}`, {
+        headers,
+      });
     });
   };
 
   updateChallengeHistory = async (challengeId: string, dataBlob: string) => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.post<IUserCodeBlobDto>(`${HOST}/progress/challenge`, {
+      return axios.post<ICodeBlobDto>(`${HOST}/blob`, {
         headers,
         body: {
           dataBlob,
           challengeId,
         },
+      });
+    });
+  };
+
+  submitUserFeedback = async (feedback: IFeedbackDto) => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      return axios.post<"Success">(`${HOST}/feedback`, {
+        headers,
+        body: feedback,
       });
     });
   };

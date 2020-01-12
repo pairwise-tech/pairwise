@@ -1,40 +1,32 @@
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { UserCourseProgress } from "./userCourseProgress.entity";
-import { UserCourseProgressDto } from "./userCourseProgress.dto";
+import { Progress } from "./progress.entity";
+import { ProgressDto } from "./progress.dto";
 import {
   challengeUtilityClass,
   ChallengeStatus,
-  IUserCodeBlobDto,
   UserCourseStatus,
 } from "@pairwise/common";
-import { UserCodeBlob } from "./userCodeBlob.entity";
-import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
-import { validateCodeBlob } from "src/tools/validation";
+import { ERROR_CODES } from "src/tools/constants";
 import { RequestUser } from "src/types";
 import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class ProgressService {
   constructor(
-    private readonly userService: UserService,
-
-    @InjectRepository(UserCourseProgress)
-    private readonly userProgressRepository: Repository<UserCourseProgress>,
-
-    @InjectRepository(UserCodeBlob)
-    private readonly userCodeBlobRepository: Repository<UserCodeBlob>,
+    @InjectRepository(Progress)
+    private readonly userProgressRepository: Repository<Progress>,
   ) {}
+
+  async fetchProgressHistoryForCourse(courseId: string) {
+    return this.userProgressRepository.find({ courseId });
+  }
 
   async fetchUserProgress(user: RequestUser) {
     const result = await this.userProgressRepository.find({
       where: {
-        user: user.uuid,
+        user: user.profile.uuid,
       },
     });
 
@@ -43,7 +35,7 @@ export class ProgressService {
 
   async updateUserProgressHistory(
     requestUser: RequestUser,
-    challengeProgressDto: UserCourseProgressDto,
+    challengeProgressDto: ProgressDto,
   ) {
     console.log("Service handling update challenge code:");
     const { courseId, challengeId, complete } = challengeProgressDto;
@@ -76,13 +68,13 @@ export class ProgressService {
 
     const existingEntry = await this.userProgressRepository.findOne({
       courseId,
-      user,
+      user: user.profile,
     });
 
     if (existingEntry === undefined) {
       console.log("No entity exists, creating and inserting a new one!");
-      const newProgressEntry: Partial<UserCourseProgress> = {
-        user,
+      const newProgressEntry: Partial<Progress> = {
+        user: user.profile,
         courseId,
         progress: JSON.stringify(status),
       };
@@ -102,89 +94,12 @@ export class ProgressService {
        */
       await this.userProgressRepository
         .createQueryBuilder("userCourseProgress")
-        .update(UserCourseProgress)
+        .update(Progress)
         .where({ uuid: existingEntry.uuid })
         .set({ progress: JSON.stringify(updatedCourseProgress) })
         .execute();
     }
 
     return this.fetchProgressHistoryForCourse(courseId);
-  }
-
-  async fetchProgressHistoryForCourse(courseId: string) {
-    return this.userProgressRepository.find({ courseId });
-  }
-
-  async fetchUserCodeBlob(user: RequestUser, challengeId: string) {
-    /* Verify the challenge id is valid */
-    if (!challengeUtilityClass.challengeIdIsValid(challengeId)) {
-      throw new BadRequestException(ERROR_CODES.INVALID_UPDATE_DETAILS);
-    }
-
-    /**
-     * [SIDE EFFECT!]
-     *
-     * Update the lastActiveChallengeId on this user to be this challenge
-     * which they are fetching user code history for.
-     */
-    await this.userService.updateLastActiveChallengeId(user, challengeId);
-
-    const codeHistory = await this.userCodeBlobRepository.findOne({
-      user,
-      challengeId,
-    });
-
-    if (codeHistory) {
-      /**
-       * Deserialize data blog before sending back to the client.
-       */
-      const deserialized = {
-        ...codeHistory,
-        dataBlob: JSON.parse(codeHistory.dataBlob),
-      };
-      return deserialized;
-    } else {
-      throw new NotFoundException(
-        "No history found for this challenge for this user.",
-      );
-    }
-  }
-
-  async updateUserCodeBlob(
-    challengeCodeDto: IUserCodeBlobDto,
-    user: RequestUser,
-  ) {
-    /* Validate everything in the code blob */
-    validateCodeBlob(challengeCodeDto);
-
-    const existingBlob = await this.userCodeBlobRepository.findOne({
-      user,
-      challengeId: challengeCodeDto.challengeId,
-    });
-
-    const blob = {
-      challengeId: challengeCodeDto.challengeId,
-      dataBlob: JSON.stringify(challengeCodeDto.dataBlob),
-    };
-
-    /**
-     * Upsert (no typeorm method exist, ha, ha):
-     */
-    if (existingBlob) {
-      await this.userCodeBlobRepository.update(
-        {
-          uuid: existingBlob.uuid,
-        },
-        blob,
-      );
-    } else {
-      await this.userCodeBlobRepository.insert({
-        user,
-        challengeId: challengeCodeDto.challengeId,
-        dataBlob: JSON.stringify(challengeCodeDto.dataBlob),
-      });
-    }
-
-    return SUCCESS_CODES.OK;
   }
 }

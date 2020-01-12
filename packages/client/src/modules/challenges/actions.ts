@@ -1,4 +1,4 @@
-import { Course, CourseList } from "@pairwise/common";
+import { Course, CourseSkeletonList } from "@pairwise/common";
 import { ActionType, createAction } from "typesafe-actions";
 import {
   ChallengeCreationPayload,
@@ -8,6 +8,7 @@ import {
   ModuleUpdatePayload,
   MonacoEditorOptions,
 } from "./types";
+import { HttpResponseError } from "modules/api";
 
 /** ===========================================================================
  * Action Types
@@ -22,7 +23,10 @@ enum ActionTypesEnum {
 
   SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
 
+  FETCH_NAVIGATION_SKELETON = "FETCH_NAVIGATION_SKELETON",
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
+  FETCH_NAVIGATION_SKELETON_FAILURE = "FETCH_NAVIGATION_SKELETON_FAILURE",
+
   FETCH_CURRENT_ACTIVE_COURSE_SUCCESS = "FETCH_CURRENT_ACTIVE_COURSE_SUCCESS",
   FETCH_CURRENT_ACTIVE_COURSE_FAILURE = "FETCH_CURRENT_ACTIVE_COURSE_FAILURE",
 
@@ -60,9 +64,17 @@ const setWorkspaceChallengeLoaded = createAction(
   ActionTypesEnum.WORKSPACE_CHALLENGE_LOADED,
 )();
 
+const fetchNavigationSkeleton = createAction(
+  ActionTypesEnum.FETCH_NAVIGATION_SKELETON,
+)();
+
 const fetchNavigationSkeletonSuccess = createAction(
   ActionTypesEnum.FETCH_NAVIGATION_SKELETON_SUCCESS,
-)<CourseList>();
+)<CourseSkeletonList>();
+
+const fetchNavigationSkeletonFailure = createAction(
+  ActionTypesEnum.FETCH_NAVIGATION_SKELETON_FAILURE,
+)<HttpResponseError>();
 
 const setNavigationMapState = createAction(
   ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
@@ -131,7 +143,9 @@ const actions = {
   setChallengeId,
   setNavigationMapState,
   setWorkspaceChallengeLoaded,
+  fetchNavigationSkeleton,
   fetchNavigationSkeletonSuccess,
+  fetchNavigationSkeletonFailure,
   fetchCurrentActiveCourseSuccess,
   fetchCurrentActiveCourseFailure,
 };

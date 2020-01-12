@@ -71,6 +71,11 @@ export const setAccessTokenInLocalStorage = (accessToken: string) => {
 };
 
 /**
+ * Logout: just remove the access token to "".
+ */
+export const logoutUserInLocalStorage = () => setAccessTokenInLocalStorage("");
+
+/**
  * Get the access token.
  */
 export const getAccessTokenFromLocalStorage = () => {

@@ -8,7 +8,7 @@ To add new tests, or debug failing tests, the test suite can be run locally:
 
 ```bash
 # Run the backend services (from the root level)
-$ docker-compose up
+$ yarn up
 
 # Run the client app, e.g.
 $ yarn client:dev
@@ -18,6 +18,8 @@ $ yarn cypress:open
 ```
 
 With the tests and app running, you can make changes and add new tests. For more details on using Cypress and funny assertions like `expect('test').to.have.length.of.at.most(4)`, you can [see their documentation](https://docs.cypress.io/guides/overview/why-cypress.html).
+
+We are using regular HTML `id` attributes to create unique test ids to identify elements in Cypress tests. The reason we are using `id`s is because `id`s should be unique, we typically will not need to use these for any other purpose (e.g. styling), and they are short and concise so easy to use as attributes in JSX and Cypress tests. That's all.
 
 ## Organization
 

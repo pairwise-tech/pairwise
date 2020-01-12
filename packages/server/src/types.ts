@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { IUserDto } from "@pairwise/common";
 import { User } from "./user/user.entity";
 
 /** ===========================================================================
@@ -6,6 +7,6 @@ import { User } from "./user/user.entity";
  * ============================================================================
  */
 
-export type RequestUser = User;
+export type RequestUser = IUserDto<User>;
 
-export type AuthenticatedRequest = Request & { user: User };
+export type AuthenticatedRequest = Request & { user: RequestUser };

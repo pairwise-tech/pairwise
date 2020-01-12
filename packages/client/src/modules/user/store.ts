@@ -19,12 +19,14 @@ const initialState = {
 };
 
 const app = createReducer<State, ActionTypes | AppActionTypes>(initialState)
-  .handleAction(actions.updateUser, state => state)
   .handleAction(actions.logoutUser, () => initialState)
-  .handleAction(actions.fetchUserSuccess, (state, action) => ({
-    ...state,
-    user: action.payload,
-  }));
+  .handleAction(
+    [actions.fetchUserSuccess, actions.updateUserSuccess],
+    (state, action) => ({
+      ...state,
+      user: action.payload,
+    }),
+  );
 
 /** ===========================================================================
  * Export

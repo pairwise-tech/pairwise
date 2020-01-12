@@ -4,6 +4,13 @@ version: "3.5"
 # the server, and the mock external services. This can be used to easily run
 # the entire backend application in order to develop the frontend, or to
 # write Cypress tests.
+#
+# NOTE: It would be great if this docker-compose could deploy the
+# external-services as a separate service like the other docker-compose
+# files, however there is an annoying issue with the Google authentication
+# redirects during user signup that make this problematic, so here the
+# server and external-services are both run concurrently in the services
+# service.
 
 services:
   db:
@@ -17,7 +24,7 @@ services:
     ports:
       - 5432:5432
 
-  server:
+  services:
     build:
       context: .
       dockerfile: Dockerfile
@@ -37,17 +44,7 @@ services:
     expose:
       - 9000
     ports:
+      - 7000:7000
       - 9000:9000
     depends_on:
       - db
-# NOTE: It would be great to use this instead of running the server and services concurrently above,
-# but there will be a networking bug with Google Authentication! Oh well! An award to whoever can
-# sort that out...
-# - external-services
-# external-services:
-#   image: runtime
-#   command: yarn services:start
-#   expose:
-#     - 7000
-#   ports:
-#     - 7000:7000

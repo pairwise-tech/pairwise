@@ -1,8 +1,10 @@
 {
   "id": "fpvPtfu7s",
   "title": "Fullstack TypeScript",
+  "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
   "modules": [
     {
+      "free": true,
       "id": "mKcs4ySy",
       "title": "Welcome to Pairwise",
       "challenges": [
@@ -20,6 +22,7 @@
       ]
     },
     {
+      "free": true,
       "id": "fpvPtNWkC",
       "title": "Programming Fundamentals",
       "challenges": [
@@ -136,6 +139,7 @@
       ]
     },
     {
+      "free": false,
       "id": "lzTzpPcS",
       "title": "TypeScript",
       "challenges": [
@@ -172,6 +176,7 @@
       ]
     },
     {
+      "free": false,
       "id": "IY2mbmT6",
       "title": "React",
       "challenges": [

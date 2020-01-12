@@ -29,7 +29,7 @@ export class UserService {
     return this.userRepository.findOne({ email });
   }
 
-  async findUserByEmailAndReturnProfile(email: string) {
+  async findUserByEmailGetFullProfile(email: string) {
     const user = await this.userRepository.findOne({ email });
 
     const payments = await this.paymentsRepository.find({
@@ -38,8 +38,16 @@ export class UserService {
       },
     });
 
+    const courses = payments.reduce((courseAccess, { courseId, type }) => {
+      return {
+        ...courseAccess,
+        [courseId]: type === "SUCCESS" ? true : false,
+      };
+    }, {});
+
     const result: IUserDto = {
       payments,
+      courses,
       profile: user,
     };
 
@@ -71,16 +79,17 @@ export class UserService {
     if (validationResult.error) {
       throw new BadRequestException(validationResult.error);
     } else {
-      console.log(`Updating user: ${user.email}`);
-      const { uuid, email } = user;
+      const { uuid, email } = user.profile;
+      console.log(`Updating user: ${email}`);
+
       await this.userRepository.update({ uuid }, validationResult.value);
-      return await this.findUserByEmailAndReturnProfile(email);
+      return await this.findUserByEmailGetFullProfile(email);
     }
   }
 
   async updateLastActiveChallengeId(user: RequestUser, challengeId: string) {
     await this.userRepository.update(
-      { uuid: user.uuid },
+      { uuid: user.profile.uuid },
       { lastActiveChallengeId: challengeId },
     );
   }

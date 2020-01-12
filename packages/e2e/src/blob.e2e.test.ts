@@ -3,7 +3,7 @@ import request from "supertest";
 import {
   fetchAccessToken,
   HOST,
-  fetchUserGivenAccessToken,
+  fetchUserWithAccessToken,
 } from "./utils/e2e-utils";
 
 /** ===========================================================================
@@ -22,7 +22,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/challenge (POST) requires an authenticated user", async done => {
-    request(`${HOST}/progress/challenge`)
+    request(`${HOST}/blob`)
       .post("/")
       .send({
         challengeId: "9scykDold",
@@ -37,7 +37,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/challenge (GET) rejects invalid challenge ids", async done => {
-    request(`${HOST}/progress/challenge/fs78dfa79adsf7saf`)
+    request(`${HOST}/blob/fs78dfa79adsf7saf`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(400)
@@ -50,7 +50,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/challenge (POST) rejects invalid challenge ids", async done => {
-    request(`${HOST}/progress/challenge`)
+    request(`${HOST}/blob`)
       .post("/")
       .send({
         challengeId: "sa7sa7f7f",
@@ -69,27 +69,24 @@ describe("User Progress APIs", () => {
      * Helper to fetch progress history for a challenge id.
      */
     const fetchProgressHistory = async (challengeId: string) => {
-      const result = await axios.get(
-        `${HOST}/progress/challenge/${challengeId}`,
-        {
-          headers: {
-            Authorization: authorizationHeader,
-          },
+      const result = await axios.get(`${HOST}/blob/${challengeId}`, {
+        headers: {
+          Authorization: authorizationHeader,
         },
-      );
+      });
       return result.data;
     };
 
     /**
      * [0] Check that the user's lastActiveChallengeId starts as null.
      */
-    user = await fetchUserGivenAccessToken(accessToken);
+    user = await fetchUserWithAccessToken(accessToken);
     expect(user.profile.lastActiveChallengeId).toBe(null);
 
     /**
      * [1] Request returns 404 initially.
      */
-    await request(`${HOST}/progress/challenge/9scykDold`)
+    await request(`${HOST}/blob/9scykDold`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(404);
@@ -97,7 +94,7 @@ describe("User Progress APIs", () => {
     /**
      * [2] Update the challenge history.
      */
-    await request(`${HOST}/progress/challenge`)
+    await request(`${HOST}/blob`)
       .post("/")
       .send({
         challengeId: "9scykDold",
@@ -123,13 +120,13 @@ describe("User Progress APIs", () => {
     /**
      * [4] Check that the user's lastActiveChallengeId is updatd.
      */
-    user = await fetchUserGivenAccessToken(accessToken);
+    user = await fetchUserWithAccessToken(accessToken);
     expect(user.profile.lastActiveChallengeId).toBe("9scykDold");
 
     /**
      * [5] Update again.
      */
-    await request(`${HOST}/progress/challenge`)
+    await request(`${HOST}/blob`)
       .post("/")
       .send({
         challengeId: "9scykDold",
@@ -147,7 +144,7 @@ describe("User Progress APIs", () => {
     /**
      * [6] Update some other challenge history.
      */
-    await request(`${HOST}/progress/challenge`)
+    await request(`${HOST}/blob`)
       .post("/")
       .send({
         challengeId: "6T3GXc4ap",
@@ -177,7 +174,7 @@ describe("User Progress APIs", () => {
      * [8] Check that the user's lastActiveChallengeId updated again.
      */
     progress = await fetchProgressHistory("6T3GXc4ap");
-    user = await fetchUserGivenAccessToken(accessToken);
+    user = await fetchUserWithAccessToken(accessToken);
     expect(user.profile.lastActiveChallengeId).toBe("6T3GXc4ap");
 
     done();

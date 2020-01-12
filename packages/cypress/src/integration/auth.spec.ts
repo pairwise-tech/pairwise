@@ -21,6 +21,32 @@ describe("Authentication Flows: signin, profile, and logout", () => {
     loginByLinkId("#google-login");
     assertAuthenticatedFlowWorks();
   });
+
+  it("Account page works", () => {
+    loginByLinkId("#facebook-login");
+    cy.get("#account-menu-dropdown").trigger("mouseover");
+    cy.get("#account-link").click({ force: true });
+    cy.contains("Account");
+
+    cy.get("#edit-profile-button").click({ force: true });
+    cy.get("#edit-input-given-name").type("Linus");
+    cy.get("#edit-input-family-name").type("Torvalds");
+    cy.get("#edit-input-display-name").type("Linus Torvalds");
+    cy.get("#save-profile-button").click({ force: true });
+
+    /* Let the updates occur */
+    cy.wait(2000);
+
+    cy.get("#profile-given-name").contains("Linus");
+    cy.get("#profile-family-name").contains("Torvalds");
+    cy.get("#profile-display-name").contains("Linus Torvalds");
+
+    /* Check the updates persist after page reload */
+    cy.reload();
+    cy.get("#profile-given-name").contains("Linus");
+    cy.get("#profile-family-name").contains("Torvalds");
+    cy.get("#profile-display-name").contains("Linus Torvalds");
+  });
 });
 
 /**
@@ -31,8 +57,8 @@ const assertAuthenticatedFlowWorks = () => {
   cy.contains("Welcome, ");
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
-  cy.get("#profile-link").click({ force: true });
-  cy.contains("User Profile:");
+  cy.get("#account-link").click({ force: true });
+  cy.contains("Account");
 
   cy.reload();
   cy.wait(500);
@@ -42,11 +68,11 @@ const assertAuthenticatedFlowWorks = () => {
   cy.get("#logout-link").click({ force: true });
 
   cy.contains("Login or Signup");
-  cy.url().should("include", "workspace");
+  cy.url().should("include", "home");
 
   cy.reload();
   cy.contains("Login or Signup");
-  cy.url().should("include", "workspace");
+  cy.url().should("include", "home");
 };
 
 /**
