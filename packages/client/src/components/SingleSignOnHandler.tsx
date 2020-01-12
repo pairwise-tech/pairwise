@@ -33,44 +33,35 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
   render(): JSX.Element {
     return (
       <Dialog
+        isOpen={this.props.dialogOpen}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        isOpen={this.props.dialogOpen}
         onClose={() => this.setAccountModalState(false)}
       >
         <AccountModal>
-          {this.props.loadingAuth ? (
-            <TitleText>Processing Login...</TitleText>
-          ) : (
-            <React.Fragment>
-              <TitleText>Login or Create an Account</TitleText>
-              <SocialButtonsContainer>
-                <FacebookLoginButton style={ssoButtonStyles}>
-                  <LoginLink
-                    id="facebook-login"
-                    href={`${ENV.HOST}/auth/facebook`}
-                  >
-                    Login with Facebook
-                  </LoginLink>
-                </FacebookLoginButton>
-                <GithubLoginButton style={ssoButtonStyles}>
-                  <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
-                    Login with GitHub
-                  </LoginLink>
-                </GithubLoginButton>
-                <GoogleLoginButton style={ssoButtonStyles}>
-                  <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
-                    Login with Google
-                  </LoginLink>
-                </GoogleLoginButton>
-              </SocialButtonsContainer>
-              <SubText>Creating an account is free and easy.</SubText>
-              <SubText>
-                Your account will be used to save your progress as you work on
-                the courses.
-              </SubText>
-            </React.Fragment>
-          )}
+          <TitleText>Login or Create an Account</TitleText>
+          <SocialButtonsContainer>
+            <FacebookLoginButton style={ssoButtonStyles}>
+              <LoginLink id="facebook-login" href={`${ENV.HOST}/auth/facebook`}>
+                Login with Facebook
+              </LoginLink>
+            </FacebookLoginButton>
+            <GithubLoginButton style={ssoButtonStyles}>
+              <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
+                Login with GitHub
+              </LoginLink>
+            </GithubLoginButton>
+            <GoogleLoginButton style={ssoButtonStyles}>
+              <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
+                Login with Google
+              </LoginLink>
+            </GoogleLoginButton>
+          </SocialButtonsContainer>
+          <SubText>Creating an account is free and easy.</SubText>
+          <SubText>
+            Your account will be used to save your progress as you work on the
+            courses.
+          </SubText>
         </AccountModal>
       </Dialog>
     );
@@ -124,11 +115,10 @@ const AccountModal = styled.div`
 `;
 
 const TitleText = styled.h1`
-  margin-right: 12px;
-  margin-left: 12px;
-  font-size: 22px;
-  font-weight: 200;
+  font-size: 24px;
+  font-weight: bold;
   color: ${COLORS.TEXT_TITLE};
+  text-align: center;
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
@@ -136,7 +126,7 @@ const SubText = styled(TitleText)`
   font-size: 16px;
   margin-top: 12px;
   max-width: 350px;
-  text-align: center;
+  font-weight: 100;
 `;
 
 /** ===========================================================================
@@ -145,7 +135,6 @@ const SubText = styled(TitleText)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  loadingAuth: Modules.selectors.auth.loadingAuth(state),
   dialogOpen: Modules.selectors.auth.singleSignOnDialogState(state),
 });
 

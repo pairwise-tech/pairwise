@@ -28,10 +28,6 @@ export const userAuthenticated = createSelector(
   },
 );
 
-export const loadingAuth = createSelector(authSelector, authStateResult => {
-  return authStateResult.loadingAuth;
-});
-
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -39,7 +35,6 @@ export const loadingAuth = createSelector(authSelector, authStateResult => {
 
 export default {
   authSelector,
-  loadingAuth,
   userAuthenticated,
   singleSignOnDialogState,
 };

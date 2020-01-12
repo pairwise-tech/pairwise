@@ -242,7 +242,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       <LoadingOverlay visible={this.props.workspaceLoading}>
         <MobileView />
         <div>
-          <OverlayLoadingText>Initializing Workspace...</OverlayLoadingText>
+          <OverlayLoadingText>Launching Pairwise...</OverlayLoadingText>
         </div>
       </LoadingOverlay>
     );
@@ -342,7 +342,7 @@ const LoadingOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(15, 15, 15, 0.85);
   visibility: ${(props: { visible: boolean }) =>
     props.visible ? "visible" : "hidden"};
 `;
@@ -351,17 +351,19 @@ const OverlayLoadingText = styled.p`
   margin: 0;
   font-size: 42px;
   font-weight: 200;
-  color: ${COLORS.PRIMARY_BLUE};
+  color: ${COLORS.PRIMARY_GREEN};
 `;
 
 const AccountButton = styled(ButtonCore)`
-  height: ${HEADER_HEIGHT};
+  height: ${HEADER_HEIGHT + 2};
   color: ${COLORS.TEXT_TITLE};
   border-radius: 4px;
+  margin-left: 2px;
+  margin-right: 2px;
 
   :hover {
     cursor: pointer;
-    color: ${COLORS.TEXT_HOVER};
+    color: ${COLORS.PRIMARY_GREEN};
     background: ${COLORS.BACKGROUND_ACCOUNT_BUTTON};
   }
 `;
