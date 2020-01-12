@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Tooltip, Callout, Classes } from "@blueprintjs/core";
-import { IconNavLink } from "./shared";
+import { IconNavLink } from "./Shared";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Challenge } from "@pairwise/common";
 
