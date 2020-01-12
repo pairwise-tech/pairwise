@@ -96,17 +96,14 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       return null;
     }
 
-    const { challenge, overlayVisible } = this.props;
-
-    const displayNavigationArrows = window.location.pathname.includes(
-      "workspace",
-    );
+    const { location, challenge, overlayVisible } = this.props;
 
     if (!challenge) {
       return this.renderLoadingOverlay();
     }
 
     const isSandbox = challenge.id === SANDBOX_ID;
+    const displayNavigationArrows = location.includes("workspace");
 
     return (
       <React.Fragment>
@@ -491,6 +488,7 @@ const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  location: Modules.selectors.app.locationSelector(state),
   user: Modules.selectors.user.userSelector(state),
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),

@@ -14,6 +14,11 @@ export const appState = (state: ReduxStoreState) => {
 
 export const appSelector = createSelector([appState], identity);
 
+export const locationSelector = createSelector(
+  appSelector,
+  app => app.location,
+);
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -21,4 +26,5 @@ export const appSelector = createSelector([appState], identity);
 
 export default {
   appSelector,
+  locationSelector,
 };
