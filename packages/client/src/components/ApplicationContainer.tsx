@@ -11,7 +11,7 @@ import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
-import Profile from "./Profile";
+import Profile from "./Account";
 import { ButtonCore, IconNavLink } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";

@@ -16,7 +16,7 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.visit(CLIENT_APP_URL);
 
     cy.wait(2500);
-    cy.url().should("include", "workspace");
+    cy.url().should("include", "home");
 
     let challengeId = "";
 

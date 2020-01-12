@@ -6,6 +6,7 @@ import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
 import over from "ramda/es/over";
 import actions, { ActionTypes } from "./actions";
+import AppActions, { ActionTypes as AppActionTypes } from "../app/actions";
 import {
   ChallengeCreationPayload,
   InverseChallengeMapping,
@@ -130,7 +131,9 @@ const insertChallenge = (
   return over(lens, insert(insertionIndex, challenge), courses);
 };
 
-const challenges = createReducer<State, ActionTypes>(initialState)
+const challenges = createReducer<State, ActionTypes | AppActionTypes>(
+  initialState,
+)
   .handleAction(actions.createChallenge, (state, action) => {
     const { courses } = state;
 
@@ -208,6 +211,10 @@ const challenges = createReducer<State, ActionTypes>(initialState)
   .handleAction(actions.setWorkspaceChallengeLoaded, (state, action) => ({
     ...state,
     workspaceLoading: false,
+  }))
+  .handleAction(AppActions.locationChange, (state, action) => ({
+    ...state,
+    displayNavigationMap: false,
   }))
   .handleAction(actions.setNavigationMapState, (state, action) => ({
     ...state,

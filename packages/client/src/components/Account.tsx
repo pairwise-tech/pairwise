@@ -4,7 +4,7 @@ import styled from "styled-components/macro";
 import { Classes, Button } from "@blueprintjs/core";
 
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text } from "./shared";
+import { PageContainer, Text, PageTitle } from "./shared";
 import { COLORS } from "tools/constants";
 
 /** ===========================================================================
@@ -52,7 +52,7 @@ class Profile extends React.Component<IProps, IState> {
     const { profile } = user;
     return (
       <PageContainer>
-        <Title>Account</Title>
+        <PageTitle>Account</PageTitle>
         <TextItem>
           <b>Given Name:</b> {profile.givenName}
         </TextItem>
@@ -165,11 +165,6 @@ class Profile extends React.Component<IProps, IState> {
  * Styles
  * ============================================================================
  */
-
-const Title = styled.h1`
-  margin-top: 0;
-  color: ${COLORS.TEXT_TITLE};
-`;
 
 const TextItem = styled(Text)`
   margin-top: 12px;
