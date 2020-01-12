@@ -1,9 +1,9 @@
 import Modules, { ReduxStoreState } from "modules/root";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { ContentInput, StyledMarkdown, Text } from "./shared";
-import { EditableText } from "@blueprintjs/core";
+import { EditableText, Callout, Classes } from "@blueprintjs/core";
 
 /**
  * The media area. Where supplementary content and challenge videos live. The media area can also serve as the standalone UI for a challenge that is all information, without any interactive coding practice.
@@ -41,6 +41,15 @@ const MediaArea = connect(
     });
   };
 
+  const handleVideoUrl = (e: ChangeEvent<HTMLInputElement>) => {
+    props.updateChallenge({
+      id: challenge.id,
+      challenge: {
+        videoUrl: e.target.value,
+      },
+    });
+  };
+
   return (
     <SupplementaryContentContainer>
       <TitleHeader>
@@ -50,6 +59,7 @@ const MediaArea = connect(
           disabled={!isEditMode}
         />
       </TitleHeader>
+      {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
       {isEditMode ? (
         <ContentInput
           value={challenge.supplementaryContent}
@@ -58,11 +68,18 @@ const MediaArea = connect(
       ) : (
         <StyledMarkdown source={challenge.supplementaryContent} />
       )}
-      <Text>
-        <b>Video:</b>{" "}
-        {challenge.videoUrl ? challenge.videoUrl : "No video available"}
-      </Text>
-      {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
+      {isEditMode && (
+        <Callout title="Video URL" style={{ marginBottom: 40 }}>
+          <p>If this challenge has a video enter the embed URL here.</p>
+          <input
+            className={Classes.INPUT}
+            style={{ width: "100%" }}
+            type="url"
+            onChange={handleVideoUrl}
+            value={challenge.videoUrl}
+          />
+        </Callout>
+      )}
     </SupplementaryContentContainer>
   );
 });
