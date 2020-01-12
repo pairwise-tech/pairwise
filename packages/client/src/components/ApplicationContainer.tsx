@@ -312,6 +312,7 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   <Button
     minimal
     large
+    id="navigation-menu-button"
     aria-label="Open navigation map"
     icon={overlayVisible ? "menu-closed" : "menu"}
     {...rest}
