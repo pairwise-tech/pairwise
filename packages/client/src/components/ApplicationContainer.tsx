@@ -290,14 +290,17 @@ const Header = styled.div`
 
 const ProductTitle = styled.h1`
   margin: 0;
-  color: "white";
+  color: white;
   font-weight: 100;
   font-family: "Helvetica Neue", Lato, sans-serif;
 
-  a,
-  a:hover {
+  a {
     color: white;
     text-decoration: none;
+  }
+
+  a:hover {
+    color: ${COLORS.PRIMARY_GREEN};
   }
 `;
 
@@ -342,7 +345,7 @@ const LoadingOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 15, 15, 0.85);
+  background: rgba(15, 15, 15, 0.92);
   visibility: ${(props: { visible: boolean }) =>
     props.visible ? "visible" : "hidden"};
 `;

@@ -54,9 +54,14 @@ class Account extends React.Component<IProps, IState> {
     return (
       <PageContainer>
         <PageTitle>Account</PageTitle>
-        <ProfileIcon width={95} height={95} avatar={profile.profileImageUrl} />
+        <ProfileIcon
+          width={95}
+          height={95}
+          style={{ marginBottom: 12 }}
+          avatar={profile.profileImageUrl}
+        />
         <TextItem id="profile-given-name">
-          <b>Given Name:</b> {profile.givenName}
+          <Bold>Given Name:</Bold> {!edit && profile.givenName}
         </TextItem>
         {edit && (
           <InputField
@@ -69,7 +74,7 @@ class Account extends React.Component<IProps, IState> {
           />
         )}
         <TextItem id="profile-family-name">
-          <b>Family Name:</b> {profile.familyName}
+          <Bold>Family Name:</Bold> {!edit && profile.familyName}
         </TextItem>
         {edit && (
           <InputField
@@ -84,7 +89,7 @@ class Account extends React.Component<IProps, IState> {
           />
         )}
         <TextItem id="profile-display-name">
-          <b>Display Name:</b> {profile.displayName}
+          <Bold>Display Name:</Bold> {!edit && profile.displayName}
         </TextItem>
         {edit && (
           <InputField
@@ -99,7 +104,7 @@ class Account extends React.Component<IProps, IState> {
           />
         )}
         <TextItem>
-          <b>Email:</b> {profile.email}
+          <Bold>Email:</Bold> {!edit && profile.email}
         </TextItem>
         {edit && (
           <InputField
@@ -217,6 +222,12 @@ class Account extends React.Component<IProps, IState> {
 
 const TextItem = styled(Text)`
   margin-top: 12px;
+  color: ${COLORS.TEXT_CONTENT_BRIGHT};
+`;
+
+const Bold = styled.b`
+  font-weight: bold;
+  color: ${COLORS.TEXT_CONTENT};
 `;
 
 const InputField = styled.input`

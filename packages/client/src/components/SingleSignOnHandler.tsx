@@ -41,21 +41,24 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
         <AccountModal>
           <TitleText>Login or Create an Account</TitleText>
           <SocialButtonsContainer>
-            <FacebookLoginButton style={ssoButtonStyles}>
-              <LoginLink id="facebook-login" href={`${ENV.HOST}/auth/facebook`}>
+            <LoginLink id="facebook-login" href={`${ENV.HOST}/auth/facebook`}>
+              <FacebookLoginButton
+                className="sso-button"
+                style={ssoButtonStyles}
+              >
                 Login with Facebook
-              </LoginLink>
-            </FacebookLoginButton>
-            <GithubLoginButton style={ssoButtonStyles}>
-              <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
+              </FacebookLoginButton>
+            </LoginLink>
+            <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
+              <GithubLoginButton className="sso-button" style={ssoButtonStyles}>
                 Login with GitHub
-              </LoginLink>
-            </GithubLoginButton>
-            <GoogleLoginButton style={ssoButtonStyles}>
-              <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
+              </GithubLoginButton>
+            </LoginLink>
+            <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
+              <GoogleLoginButton className="sso-button" style={ssoButtonStyles}>
                 Login with Google
-              </LoginLink>
-            </GoogleLoginButton>
+              </GoogleLoginButton>
+            </LoginLink>
           </SocialButtonsContainer>
           <SubText>Creating an account is free and easy.</SubText>
           <SubText>
@@ -109,16 +112,16 @@ const AccountModal = styled.div`
   flex-direction: column;
   justify-content: center;
   transform: translate(-50%, -50%);
-  border-radius: 4px;
+  border-radius: 6px;
   border: 1px solid ${COLORS.BORDER_MODAL};
   background-color: ${COLORS.BACKGROUND_MODAL};
 `;
 
 const TitleText = styled.h1`
   font-size: 24px;
-  font-weight: bold;
-  color: ${COLORS.TEXT_TITLE};
+  font-weight: 300;
   text-align: center;
+  color: ${COLORS.TEXT_TITLE};
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
@@ -126,7 +129,7 @@ const SubText = styled(TitleText)`
   font-size: 16px;
   margin-top: 12px;
   max-width: 350px;
-  font-weight: 100;
+  font-weight: 300;
 `;
 
 /** ===========================================================================

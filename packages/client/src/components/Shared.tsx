@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import Markdown, { ReactMarkdownProps } from "react-markdown";
-import styled from "styled-components/macro";
+import styled, { CSSProperties } from "styled-components/macro";
 import {
   EditableText,
   IEditableTextProps,
@@ -200,10 +200,12 @@ export const ProfileIcon = ({
   avatar,
   width,
   height,
+  style,
 }: {
   avatar: string;
   width?: number;
   height?: number;
+  style?: CSSProperties;
 }) => {
   const src = avatar
     ? avatar
@@ -215,7 +217,7 @@ export const ProfileIcon = ({
       width={width || 32}
       height={height || 32}
       alt="Profile Avatar"
-      style={{ borderRadius: "50%" }}
+      style={{ borderRadius: "50%", ...style }}
     />
   );
 };
