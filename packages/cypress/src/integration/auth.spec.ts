@@ -31,7 +31,7 @@ const assertAuthenticatedFlowWorks = () => {
   cy.contains("Welcome, ");
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
-  cy.get("#profile-link").click({ force: true });
+  cy.get("#account-link").click({ force: true });
   cy.contains("Account");
 
   cy.reload();

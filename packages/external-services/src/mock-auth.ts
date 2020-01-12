@@ -7,13 +7,20 @@ import faker from "faker";
 
 const ADMIN_EMAIL = "sean.smith.2009@gmail.com"; /* Blah... */
 
+const getRandomProfileImage = () => {
+  const n = Math.floor(Math.random() * 100);
+  return n > 50
+    ? "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4"
+    : "https://avatars0.githubusercontent.com/u/1024025?s=460&v=4";
+};
+
 const generateNewProfileFields = () => {
   const id = faker.random.uuid();
   const first = faker.name.firstName();
   const last = faker.name.lastName();
   const email = faker.internet.email();
   const name = `${first} ${last}`;
-  const picture = "https://avatars0.githubusercontent.com/u/1024025?s=460&v=4";
+  const picture = getRandomProfileImage();
 
   return { id, first, last, name, email, picture };
 };
@@ -50,7 +57,7 @@ class MockAuth {
       id,
       name,
       email,
-      picture,
+      avatar_url: picture,
     };
   }
 

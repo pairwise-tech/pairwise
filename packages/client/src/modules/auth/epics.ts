@@ -24,11 +24,11 @@ const initializeAppAuthenticationEpic: EpicSignature = (action$, _, deps) => {
        * Redirect the user if the are on a protected route... This could
        * be done with React Router but I like using epics.
        *
-       * /profile is probably the only protected route like this, but more
+       * /account is probably the only protected route like this, but more
        * could be added in the future if needed.
        */
       if (!token) {
-        if (deps.router.location.pathname.includes("profile")) {
+        if (deps.router.location.pathname.includes("account")) {
           deps.router.push(`/home`);
         }
       }

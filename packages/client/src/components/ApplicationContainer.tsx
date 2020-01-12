@@ -19,8 +19,8 @@ import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
-import Profile from "./Account";
-import { ButtonCore, IconNavLink } from "./shared";
+import Account from "./Account";
+import { ButtonCore, IconNavLink, ProfileIcon } from "./file";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
@@ -193,13 +193,13 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                     </UserBio>
                     <div className="dropdown-links">
                       <Link
-                        id="profile-link"
-                        to="/profile"
+                        id="account-link"
+                        to="/account"
                         style={{
                           borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
                         }}
                       >
-                        Profile
+                        Account
                       </Link>
                       <Link
                         id="logout-link"
@@ -224,7 +224,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
           <Switch>
             <Route key={0} path="/workspace/:id" component={Workspace} />
             <Route key={1} path="/home" component={Home} />
-            <Route key={2} path="/profile" component={Profile} />
+            <Route key={2} path="/account" component={Account} />
             <Route
               key={3}
               path="/logout"
@@ -371,24 +371,6 @@ const UserBio = styled.div`
   justify-content: center;
   padding-right: 8px;
 `;
-
-/**
- * TODO: Render a default Pairwise user avatar icon if there is no profile
- * avatar.
- */
-const ProfileIcon = ({ avatar }: { avatar: string }) => {
-  console.log(avatar);
-
-  return (
-    <img
-      src={avatar}
-      width={32}
-      height={32}
-      alt="Profile Avatar"
-      style={{ borderRadius: "50%" }}
-    />
-  );
-};
 
 const CreateAccountText = styled.h1`
   margin-right: 12px;

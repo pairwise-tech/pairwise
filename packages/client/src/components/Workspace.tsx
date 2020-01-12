@@ -53,7 +53,7 @@ import {
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
-import { ContentInput, LowerRight, StyledMarkdown, IconButton } from "./shared";
+import { ContentInput, LowerRight, StyledMarkdown, IconButton } from "./file";
 import { Tooltip, ButtonGroup, EditableText } from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
 

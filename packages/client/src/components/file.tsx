@@ -191,3 +191,31 @@ export const IconButton = styled(Button)`
     color: rgba(255, 255, 255, 0.8) !important;
   }
 `;
+
+/**
+ * TODO: Render a default Pairwise user avatar icon if there is no profile
+ * avatar.
+ */
+export const ProfileIcon = ({
+  avatar,
+  width,
+  height,
+}: {
+  avatar: string;
+  width?: number;
+  height?: number;
+}) => {
+  const src = avatar
+    ? avatar
+    : "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
+
+  return (
+    <img
+      src={src}
+      width={width || 32}
+      height={height || 32}
+      alt="Profile Avatar"
+      style={{ borderRadius: "50%" }}
+    />
+  );
+};
