@@ -86,7 +86,7 @@ const ContentText = styled(Text)`
 `;
 
 const CourseTitle = styled.h3`
-  margin-top: 12px;
+  margin-top: 10px;
   color: ${COLORS.PRIMARY_GREEN};
 `;
 

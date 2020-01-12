@@ -1,3 +1,11 @@
+import {
+  Button,
+  ButtonGroup,
+  Classes,
+  Tooltip,
+  FocusStyleManager,
+} from "@blueprintjs/core";
+import cx from "classnames";
 import queryString from "query-string";
 import React, { Suspense } from "react";
 import { connect } from "react-redux";
@@ -15,17 +23,9 @@ import Profile from "./Account";
 import { ButtonCore, IconNavLink } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
-import {
-  Button,
-  ButtonGroup,
-  Classes,
-  Tooltip,
-  FocusStyleManager,
-} from "@blueprintjs/core";
-import cx from "classnames";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 
-// Only show focus outlinewhen tabbing around the UI
+// Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
 
 const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
@@ -183,9 +183,14 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                     id="account-menu-dropdown"
                     className="account-menu-dropdown"
                   >
-                    <CreateAccountText className="account-menu">
-                      Welcome, {this.props.user.profile.givenName}!
-                    </CreateAccountText>
+                    <UserBio>
+                      <CreateAccountText className="account-menu">
+                        Welcome, {this.props.user.profile.givenName}!{" "}
+                      </CreateAccountText>
+                      <ProfileIcon
+                        avatar={this.props.user.profile.profileImageUrl}
+                      />
+                    </UserBio>
                     <div className="dropdown-links">
                       <Link
                         id="profile-link"
@@ -360,6 +365,31 @@ const AccountButton = styled(ButtonCore)`
   }
 `;
 
+const UserBio = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 8px;
+`;
+
+/**
+ * TODO: Render a default Pairwise user avatar icon if there is no profile
+ * avatar.
+ */
+const ProfileIcon = ({ avatar }: { avatar: string }) => {
+  console.log(avatar);
+
+  return (
+    <img
+      src={avatar}
+      width={32}
+      height={32}
+      alt="Profile Avatar"
+      style={{ borderRadius: "50%" }}
+    />
+  );
+};
+
 const CreateAccountText = styled.h1`
   margin-right: 12px;
   margin-left: 12px;
@@ -376,10 +406,10 @@ const AccountDropdownButton = styled.div`
   }
 
   .dropdown-links {
-    z-index: 1;
+    z-index: 1000;
     display: none;
     position: absolute;
-    min-width: 180px;
+    min-width: 215px;
     box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
     background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
   }

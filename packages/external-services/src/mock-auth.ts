@@ -13,8 +13,7 @@ const generateNewProfileFields = () => {
   const last = faker.name.lastName();
   const email = faker.internet.email();
   const name = `${first} ${last}`;
-  const picture =
-    "https://lh3.googleusercontent.com/a-/AAuE7mAL7mZbYoRbW-3QSQsTSgdW8elCACVpGMm3DUOFIQ";
+  const picture = "https://avatars0.githubusercontent.com/u/1024025?s=460&v=4";
 
   return { id, first, last, name, email, picture };
 };
