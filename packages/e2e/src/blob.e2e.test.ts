@@ -3,7 +3,7 @@ import request from "supertest";
 import {
   fetchAccessToken,
   HOST,
-  fetchUserGivenAccessToken,
+  fetchUserWithAccessToken,
 } from "./utils/e2e-utils";
 
 /** ===========================================================================
@@ -80,7 +80,7 @@ describe("User Progress APIs", () => {
     /**
      * [0] Check that the user's lastActiveChallengeId starts as null.
      */
-    user = await fetchUserGivenAccessToken(accessToken);
+    user = await fetchUserWithAccessToken(accessToken);
     expect(user.profile.lastActiveChallengeId).toBe(null);
 
     /**
@@ -120,7 +120,7 @@ describe("User Progress APIs", () => {
     /**
      * [4] Check that the user's lastActiveChallengeId is updatd.
      */
-    user = await fetchUserGivenAccessToken(accessToken);
+    user = await fetchUserWithAccessToken(accessToken);
     expect(user.profile.lastActiveChallengeId).toBe("9scykDold");
 
     /**
@@ -174,7 +174,7 @@ describe("User Progress APIs", () => {
      * [8] Check that the user's lastActiveChallengeId updated again.
      */
     progress = await fetchProgressHistory("6T3GXc4ap");
-    user = await fetchUserGivenAccessToken(accessToken);
+    user = await fetchUserWithAccessToken(accessToken);
     expect(user.profile.lastActiveChallengeId).toBe("6T3GXc4ap");
 
     done();

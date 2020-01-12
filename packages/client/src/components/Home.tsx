@@ -52,7 +52,7 @@ class Home extends React.Component<IProps, IState> {
     );
   }
 
-  renderCourseSkeleton = (skeleton: CourseSkeleton) => {
+  renderCourseSkeleton = (skeleton: CourseSkeleton, i: number) => {
     const firstChallengeId = skeleton.modules[0].challenges[0].id;
     return (
       <Card
@@ -62,7 +62,7 @@ class Home extends React.Component<IProps, IState> {
         className="course-card"
         elevation={Elevation.FOUR}
       >
-        <Link to={`workspace/${firstChallengeId}`}>
+        <Link to={`workspace/${firstChallengeId}`} id={`course-link-${i}`}>
           <CourseTitle>{skeleton.title}</CourseTitle>
           <CourseDescription>{skeleton.description}</CourseDescription>
         </Link>

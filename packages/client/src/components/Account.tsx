@@ -55,24 +55,26 @@ class Account extends React.Component<IProps, IState> {
       <PageContainer>
         <PageTitle>Account</PageTitle>
         <ProfileIcon width={95} height={95} avatar={profile.profileImageUrl} />
-        <TextItem>
+        <TextItem id="profile-given-name">
           <b>Given Name:</b> {profile.givenName}
         </TextItem>
         {edit && (
           <InputField
             type="text"
+            id="edit-input-given-name"
             placeholder="Enter your given name"
             className={Classes.INPUT}
             value={this.state.givenName}
             onChange={event => this.setState({ givenName: event.target.value })}
           />
         )}
-        <TextItem>
+        <TextItem id="profile-family-name">
           <b>Family Name:</b> {profile.familyName}
         </TextItem>
         {edit && (
           <InputField
             type="text"
+            id="edit-input-family-name"
             placeholder="Enter your family name"
             className={Classes.INPUT}
             value={this.state.familyName}
@@ -81,12 +83,13 @@ class Account extends React.Component<IProps, IState> {
             }
           />
         )}
-        <TextItem>
+        <TextItem id="profile-display-name">
           <b>Display Name:</b> {profile.displayName}
         </TextItem>
         {edit && (
           <InputField
             type="text"
+            id="edit-input-display-name"
             placeholder="Enter a display name"
             className={Classes.INPUT}
             value={this.state.displayName}
@@ -118,6 +121,7 @@ class Account extends React.Component<IProps, IState> {
             <Button
               intent="primary"
               text="Save Profile"
+              id="save-profile-button"
               onClick={this.handleSaveChanges}
               style={{ marginRight: 8, color: COLORS.TEXT_DARK }}
             />
@@ -126,6 +130,7 @@ class Account extends React.Component<IProps, IState> {
         ) : (
           <Controls>
             <Button
+              id="edit-profile-button"
               onClick={this.handleEditProfile}
               text="Edit Profile Information"
             />

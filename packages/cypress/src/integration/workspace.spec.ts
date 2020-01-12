@@ -6,6 +6,16 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.get("#product-title").contains("Pairwise");
   });
 
+  it("Home route includes courses list", () => {
+    cy.visit(`${CLIENT_APP_URL}/home`);
+    cy.url().should("include", "home");
+    cy.contains("Welcome to Pairwise!");
+    cy.contains("Courses:");
+    cy.get("#course-link-0").contains("Fullstack TypeScript");
+    cy.get("#course-link-0").click({ force: true });
+    cy.url().should("include", "workspace");
+  });
+
   it("Workspace navigation next|prev controls work", () => {
     const getChallengeId = (url: string) => {
       const index = url.indexOf("workspace/");
