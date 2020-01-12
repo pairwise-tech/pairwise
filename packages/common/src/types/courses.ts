@@ -15,6 +15,7 @@ export type CHALLENGE_TYPE = "react" | "typescript" | "markup" | "media";
 export interface Course {
   id: string;
   title: string;
+  description: string;
   modules: ModuleList;
 }
 

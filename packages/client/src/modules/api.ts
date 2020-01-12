@@ -123,7 +123,7 @@ class BaseApiClass {
     });
 
     logoutUserInLocalStorage();
-    await wait(1500); /* Wait so they can read the message... */
+    await wait(2000); /* Wait so they can read the message... */
 
     window.location.reload();
   };

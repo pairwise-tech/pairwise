@@ -225,7 +225,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               path="/logout"
               component={() => <Redirect to="/home" />}
             />
-            <Route key={4} component={() => <Redirect to="/workspace" />} />
+            <Route key={4} component={() => <Redirect to="/home" />} />
           </Switch>
         </DarkTheme>
       </React.Fragment>

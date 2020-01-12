@@ -22,7 +22,7 @@ export const CURRENT_ACTIVE_CHALLENGE_IDS = {
  * Given a list of courses, create a mapping of all challenge ids to both their
  * module id and course id. Since our URLs don't (currently) indicate course or
  * module we need to derive the course and module for a given challenge ID. This
- * dervices all such relationships in one go so it can be referenced later.
+ * devices all such relationships in one go so it can be referenced later.
  */
 const createInverseChallengeMapping = (
   courses: Course[],
