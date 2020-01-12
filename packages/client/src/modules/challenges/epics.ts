@@ -14,8 +14,21 @@ import { Location } from "history";
  * ============================================================================
  */
 
-export const CURRENT_ACTIVE_CHALLENGE_IDS = {
-  challengeId: "9scykDold",
+/**
+ * Fetch the course content skeletons when the app launches.
+ */
+const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.initializeApp)),
+    mergeMap(deps.api.fetchCourseSkeletons),
+    map(({ value: courses, error }) => {
+      if (courses) {
+        return Actions.fetchNavigationSkeletonSuccess(courses);
+      } else {
+        return Actions.fetchNavigationSkeletonFailure(error);
+      }
+    }),
+  );
 };
 
 /**
@@ -198,6 +211,7 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
  */
 
 export default combineEpics(
+  contentSkeletonInitializationEpic,
   inverseChallengeMappingEpic,
   saveCourse,
   setWorkspaceLoadedEpic,

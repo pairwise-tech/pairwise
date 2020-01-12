@@ -10,6 +10,7 @@ import {
   IFeedbackDto,
   IProgressDto,
   ICodeBlobDto,
+  CourseSkeletonList,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -181,7 +182,7 @@ class Api extends BaseApiClass {
   fetchCourseSkeletons = async () => {
     return this.httpHandler(async () => {
       const headers = this.getRequestHeaders();
-      return axios.get<IUserDto>(`${HOST}/content/skeletons`, {
+      return axios.get<CourseSkeletonList>(`${HOST}/content/skeletons`, {
         headers,
       });
     });

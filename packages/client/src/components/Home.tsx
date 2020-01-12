@@ -18,6 +18,7 @@ interface IState {}
 
 class Home extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
+    console.log(this.props.skeletons);
     return (
       <PageContainer>
         <Text>Pairwise Home</Text>
@@ -34,6 +35,7 @@ class Home extends React.Component<IProps, IState> {
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
+  skeletons: Modules.selectors.challenges.courseSkeletons(state),
 });
 
 const dispatchProps = {};

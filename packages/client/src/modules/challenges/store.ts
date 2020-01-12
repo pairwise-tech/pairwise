@@ -1,6 +1,6 @@
 import { createReducer } from "typesafe-actions";
 
-import { Challenge, CourseList } from "@pairwise/common";
+import { Challenge, CourseList, CourseSkeletonList } from "@pairwise/common";
 import Module from "module";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
@@ -31,6 +31,7 @@ export interface State {
   isEditMode: boolean;
   displayNavigationMap: boolean;
   courses: Nullable<CourseList>;
+  courseSkeletons: Nullable<CourseSkeletonList>;
   currentModuleId: Nullable<string>;
   currentCourseId: Nullable<string>;
   currentChallengeId: Nullable<string>;
@@ -41,6 +42,7 @@ export interface State {
 
 const initialState = {
   courses: null,
+  courseSkeletons: null,
   isEditMode: false,
   workspaceLoading: true,
   currentModuleId: null,
@@ -226,7 +228,7 @@ const challenges = createReducer<State, ActionTypes>(initialState)
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,
-    courses: action.payload,
+    courseSkeletons: action.payload,
   }))
   .handleAction(
     actions.fetchCurrentActiveCourseSuccess,

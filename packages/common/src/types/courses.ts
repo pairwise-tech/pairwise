@@ -57,6 +57,7 @@ export type CourseSkeletonList = CourseSkeleton[];
 export interface CourseSkeleton {
   id: string;
   title: string;
+  description: string;
   modules: ModuleSkeletonList;
 }
 
