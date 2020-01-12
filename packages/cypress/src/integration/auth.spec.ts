@@ -42,11 +42,11 @@ const assertAuthenticatedFlowWorks = () => {
   cy.get("#logout-link").click({ force: true });
 
   cy.contains("Login or Signup");
-  cy.url().should("include", "profile");
+  cy.url().should("include", "home");
 
   cy.reload();
   cy.contains("Login or Signup");
-  cy.url().should("include", "profile");
+  cy.url().should("include", "home");
 };
 
 /**

@@ -13,10 +13,10 @@ describe("Workspace and Challenge Navigation Works", () => {
       return id;
     };
 
-    cy.visit(CLIENT_APP_URL);
+    cy.visit(`${CLIENT_APP_URL}/workspace`);
 
     cy.wait(2500);
-    cy.url().should("include", "home");
+    cy.url().should("include", "workspace");
 
     let challengeId = "";
 
