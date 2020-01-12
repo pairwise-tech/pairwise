@@ -46,7 +46,7 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
       } else {
         if (result.error.status !== 401) {
           deps.toaster.show({
-            icon: "tick",
+            icon: "error",
             intent: "danger",
             message: "Failure to update user profile...",
           });

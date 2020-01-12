@@ -118,9 +118,9 @@ class BaseApiClass {
      * forced logout:
      */
     AppToaster.show({
-      message: "Your session has expired, please login again.",
+      icon: "user",
       intent: "danger",
-      icon: "tick",
+      message: "Your session has expired, please login again.",
     });
 
     logoutUserInLocalStorage();
