@@ -6,7 +6,7 @@ import { Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text, PageTitle } from "./file";
+import { PageContainer, Text, PageTitle } from "./Shared";
 import { COLORS } from "tools/constants";
 
 /** ===========================================================================

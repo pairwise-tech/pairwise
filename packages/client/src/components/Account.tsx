@@ -4,7 +4,7 @@ import styled from "styled-components/macro";
 import { Classes, Button } from "@blueprintjs/core";
 
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text, PageTitle, ProfileIcon } from "./file";
+import { PageContainer, Text, PageTitle, ProfileIcon } from "./Shared";
 import { COLORS } from "tools/constants";
 import { Payment } from "@pairwise/common";
 
@@ -54,11 +54,7 @@ class Account extends React.Component<IProps, IState> {
     return (
       <PageContainer>
         <PageTitle>Account</PageTitle>
-        <ProfileIcon
-          width={45}
-          height={45}
-          avatar={this.props.user.profile.profileImageUrl}
-        />
+        <ProfileIcon width={95} height={95} avatar={profile.profileImageUrl} />
         <TextItem>
           <b>Given Name:</b> {profile.givenName}
         </TextItem>

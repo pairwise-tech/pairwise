@@ -1,8 +1,6 @@
 import React, { Suspense } from "react";
 import Markdown, { ReactMarkdownProps } from "react-markdown";
 import styled from "styled-components/macro";
-
-import { COLORS } from "../tools/constants";
 import {
   EditableText,
   IEditableTextProps,
@@ -11,6 +9,8 @@ import {
   IconName,
 } from "@blueprintjs/core";
 import { NavLink, NavLinkProps } from "react-router-dom";
+
+import { COLORS } from "../tools/constants";
 
 const PROSE_MAX_WIDTH = 728;
 

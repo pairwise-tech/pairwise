@@ -2,7 +2,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ContentInput, StyledMarkdown, Text } from "./file";
+import { ContentInput, StyledMarkdown, Text } from "./Shared";
 import { EditableText } from "@blueprintjs/core";
 
 /**

@@ -20,7 +20,7 @@ import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import Account from "./Account";
-import { ButtonCore, IconNavLink, ProfileIcon } from "./file";
+import { ButtonCore, IconNavLink, ProfileIcon } from "./Shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
