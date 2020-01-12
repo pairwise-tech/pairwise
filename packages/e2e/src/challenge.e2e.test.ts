@@ -15,8 +15,31 @@ describe("Challenge APIs", () => {
     authorizationHeader = `Bearer ${accessToken}`;
   });
 
-  test("/challenges (GET)", () => {
-    return request(`${HOST}/challenges`)
+  test("/content/skeletons (GET)", () => {
+    return request(`${HOST}/content/skeletons`)
+      .get("/")
+      .expect(200)
+      .expect(response => {
+        expect(Array.isArray(response.body)).toBeTruthy();
+        expect(response.body[0].title).toBe("Fullstack TypeScript");
+
+        /* Assert all of the challenge content has be sanitized: */
+        for (const course of response.body) {
+          for (const courseModule of course.modules) {
+            for (const challenge of courseModule.challenges) {
+              expect(challenge.testCode).toBeUndefined();
+              expect(challenge.content).toBeUndefined();
+              expect(challenge.starterCode).toBeUndefined();
+              expect(challenge.solutionCode).toBeUndefined();
+              expect(challenge.supplementaryContent).toBeUndefined();
+            }
+          }
+        }
+      });
+  });
+
+  test("/content/:courseId (GET)", () => {
+    return request(`${HOST}/content/course/fpvPtfu7s`)
       .get("/")
       .expect(200)
       .expect(response => {

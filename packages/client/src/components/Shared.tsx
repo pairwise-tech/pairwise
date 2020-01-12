@@ -1,9 +1,8 @@
 import React, { Suspense, SyntheticEvent } from "react";
 import Markdown, { ReactMarkdownProps } from "react-markdown";
-import styled from "styled-components/macro";
 import cx from "classnames";
 
-import { COLORS } from "../tools/constants";
+import styled, { CSSProperties } from "styled-components/macro";
 import {
   EditableText,
   IEditableTextProps,
@@ -16,6 +15,8 @@ import {
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
+
+import { COLORS } from "../tools/constants";
 
 const PROSE_MAX_WIDTH = 728;
 
@@ -143,6 +144,11 @@ export const StyledMarkdown = styled(HighlightedMarkdown)`
   }
 `;
 
+export const PageTitle = styled.h1`
+  margin-top: 0;
+  color: ${COLORS.TEXT_TITLE};
+`;
+
 export const Text = styled.p`
   margin: 0;
   margin-top: 8px;
@@ -223,3 +229,33 @@ export const IconButton = styled(Button)`
     color: rgba(255, 255, 255, 0.8) !important;
   }
 `;
+
+/**
+ * TODO: Render a default Pairwise user avatar icon if there is no profile
+ * avatar.
+ */
+export const ProfileIcon = ({
+  avatar,
+  width,
+  height,
+  style,
+}: {
+  avatar: string;
+  width?: number;
+  height?: number;
+  style?: CSSProperties;
+}) => {
+  const src = avatar
+    ? avatar
+    : "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
+
+  return (
+    <img
+      src={src}
+      width={width || 32}
+      height={height || 32}
+      alt="Profile Avatar"
+      style={{ borderRadius: "50%", ...style }}
+    />
+  );
+};

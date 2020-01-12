@@ -6,6 +6,10 @@
  * in the API request/response values and also sometimes in the entity
  * definitions for database types. The source of truth for these type
  * definitions is here and shared between the client and server.
+ *
+ * The convention is for all of the actual DTOs to use I as a prefix in the
+ * name of the interface. This is to avoid name collisions with the entities
+ * which implement these DTOs on the server.
  * ============================================================================
  */
 
@@ -14,17 +18,20 @@
  * ============================================================================
  */
 
-export interface IUserDto {
-  profile: {
-    uuid: string;
-    email: string;
-    displayName: string;
-    givenName: string;
-    familyName: string;
-    profileImageUrl: string;
-    lastActiveChallengeId: string;
-  };
+export interface UserProfile {
+  uuid: string;
+  email: string;
+  displayName: string;
+  givenName: string;
+  familyName: string;
+  profileImageUrl: string;
+  lastActiveChallengeId: string;
+}
+
+export interface IUserDto<T = UserProfile> {
+  profile: T;
   payments: Payment[];
+  courses: { [key: string]: boolean };
 }
 
 /**
@@ -38,11 +45,36 @@ export interface UserUpdateOptions {
   profileImageUrl?: string;
 }
 
-interface Payment {
+export interface Payment {
   courseId: string;
   datePaid: Date;
   amountPaid: number;
-  extraData?: string /* json */;
+  extraData?: string /* generic json data */;
+  type: PAYMENT_TYPE;
+}
+
+export type PAYMENT_TYPE = "SUCCESS" | "FAILURE" | "REFUNDED";
+
+export type COURSE_ACCESS_LEVEL = "FREE" | "PAID";
+
+/** ===========================================================================
+ * Feedback Types
+ * ============================================================================
+ */
+
+export type FEEDBACK_TYPE = "TOO_HARD" | "TOO_EASY" | "NOT_HELPFUL" | "OTHER";
+
+export const feedbackTypeSet: Set<FEEDBACK_TYPE> = new Set([
+  "TOO_HARD",
+  "TOO_EASY",
+  "NOT_HELPFUL",
+  "OTHER",
+]);
+
+export interface IFeedbackDto {
+  feedback: string;
+  challengeId: string;
+  type: FEEDBACK_TYPE;
 }
 
 /** ===========================================================================
@@ -50,9 +82,9 @@ interface Payment {
  * ============================================================================
  */
 
-export type BlobType = "video" | "challenge" | "project" | "guided_project";
+export type BLOB_TYPE = "video" | "challenge" | "project" | "guided_project";
 
-export const BlobTypeSet: Set<BlobType> = new Set([
+export const BlobTypeSet: Set<BLOB_TYPE> = new Set([
   "video",
   "challenge",
   "project",
@@ -60,7 +92,7 @@ export const BlobTypeSet: Set<BlobType> = new Set([
 ]);
 
 interface BlobBase {
-  type: BlobType;
+  type: BLOB_TYPE;
   created_at: number;
   updated_at: number /* Date? */;
 }
@@ -87,14 +119,14 @@ export interface GuidedProjectBlob extends BlobBase {
   timeLastWatched: number;
 }
 
-export type CodeHistoryBlob =
+export type DataBlob =
   | VideoChallengeBlob
   | ProjectChallengeBlob
   | CodeChallengeBlob
   | GuidedProjectBlob;
 
-export interface IUserCodeBlobDto {
-  dataBlob: CodeHistoryBlob;
+export interface ICodeBlobDto {
+  dataBlob: DataBlob;
   challengeId: string;
 }
 
@@ -114,7 +146,7 @@ export interface ChallengeStatus {
   complete: boolean;
 }
 
-export interface IUserCourseProgressDto extends ChallengeStatus {
+export interface IProgressDto extends ChallengeStatus {
   challengeId: string;
   courseId: string;
 }

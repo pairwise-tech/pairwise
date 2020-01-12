@@ -14,15 +14,28 @@ import { Location } from "history";
  * ============================================================================
  */
 
-export const CURRENT_ACTIVE_CHALLENGE_IDS = {
-  challengeId: "9scykDold",
+/**
+ * Fetch the course content skeletons when the app launches.
+ */
+const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.initializeApp)),
+    mergeMap(deps.api.fetchCourseSkeletons),
+    map(({ value: courses, error }) => {
+      if (courses) {
+        return Actions.fetchNavigationSkeletonSuccess(courses);
+      } else {
+        return Actions.fetchNavigationSkeletonFailure(error);
+      }
+    }),
+  );
 };
 
 /**
  * Given a list of courses, create a mapping of all challenge ids to both their
  * module id and course id. Since our URLs don't (currently) indicate course or
  * module we need to derive the course and module for a given challenge ID. This
- * dervices all such relationships in one go so it can be referenced later.
+ * devices all such relationships in one go so it can be referenced later.
  */
 const createInverseChallengeMapping = (
   courses: Course[],
@@ -84,8 +97,10 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
         const moduleId =
           challengeMap[challengeId]?.moduleId || course.modules[0].id;
 
-        // Redirect to the route for the challenge
-        deps.router.push(`/workspace/${challengeId}`);
+        // Do not redirect unless the user is already on the workspace/
+        if (deps.router.location.pathname.includes("workspace")) {
+          deps.router.push(`/workspace/${challengeId}`);
+        }
 
         return Actions.fetchCurrentActiveCourseSuccess({
           courses: [course],
@@ -196,6 +211,7 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
  */
 
 export default combineEpics(
+  contentSkeletonInitializationEpic,
   inverseChallengeMappingEpic,
   saveCourse,
   setWorkspaceLoadedEpic,

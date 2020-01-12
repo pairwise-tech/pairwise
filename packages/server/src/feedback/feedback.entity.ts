@@ -8,9 +8,10 @@ import {
   CreateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
+import { FEEDBACK_TYPE, IFeedbackDto } from "@pairwise/common";
 
 @Entity()
-export class UserCodeBlob {
+export class Feedback implements IFeedbackDto {
   @PrimaryGeneratedColumn("uuid")
   uuid: number;
 
@@ -18,12 +19,15 @@ export class UserCodeBlob {
   @Column()
   challengeId: string;
 
-  @Column({ type: "jsonb" })
-  dataBlob: string;
+  @Column()
+  feedback: string;
+
+  @Column()
+  type: FEEDBACK_TYPE;
 
   @ManyToOne(
     type => User,
-    user => user.challengeCodeHistory,
+    user => user.userFeedback,
   )
   user: User;
 

@@ -41,6 +41,13 @@ pre {
   min-width: 820px;
 }
 
+/* SSO button override styles */
+.sso-button {
+  padding-top: 2px !important;
+  font-weight: 300 !important;
+  font-size: 15px !important;
+}
+
 /* Custom editor styles for JSX elements:
  *
  * TODO: Improve styling to create a better theme.

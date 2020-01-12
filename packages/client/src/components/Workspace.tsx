@@ -32,7 +32,6 @@ import {
   HEADER_HEIGHT,
   MONACO_EDITOR_THEME,
   SANDBOX_ID,
-  MONACO_EDITOR_INITIAL_FONT_SIZE,
   MONACO_EDITOR_FONT_SIZE_STEP,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
@@ -53,7 +52,7 @@ import {
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
-import { ContentInput, LowerRight, StyledMarkdown, IconButton } from "./shared";
+import { ContentInput, LowerRight, StyledMarkdown, IconButton } from "./Shared";
 import { Tooltip, ButtonGroup, EditableText } from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
 

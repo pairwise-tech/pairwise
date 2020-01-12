@@ -1,4 +1,4 @@
-import { IUserDto } from "@pairwise/common";
+import { IUserDto, UserUpdateOptions } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { ActionType, createAction } from "typesafe-actions";
 
@@ -13,6 +13,8 @@ enum ActionTypesEnum {
   FETCH_USER_FAILURE = "FETCH_USER_FAILURE",
 
   UPDATE_USER = "UPDATE_USER",
+  UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS",
+  UPDATE_USER_FAILURE = "UPDATE_USER_FAILURE",
 }
 
 /** ===========================================================================
@@ -28,13 +30,23 @@ const fetchUserFailure = createAction(ActionTypesEnum.FETCH_USER_FAILURE)<
   HttpResponseError
 >();
 
-const updateUser = createAction(ActionTypesEnum.UPDATE_USER)();
+const updateUser = createAction(ActionTypesEnum.UPDATE_USER)<
+  UserUpdateOptions
+>();
+const updateUserSuccess = createAction(ActionTypesEnum.UPDATE_USER_SUCCESS)<
+  IUserDto
+>();
+const updateUserFailure = createAction(ActionTypesEnum.UPDATE_USER_FAILURE)<
+  HttpResponseError
+>();
 
 const actions = {
   fetchUser,
-  updateUser,
   fetchUserSuccess,
   fetchUserFailure,
+  updateUser,
+  updateUserSuccess,
+  updateUserFailure,
 };
 
 /** ===========================================================================

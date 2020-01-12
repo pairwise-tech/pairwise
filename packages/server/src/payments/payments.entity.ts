@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
+import { PAYMENT_TYPE } from "@pairwise/common";
 
 @Entity()
 export class Payments {
@@ -23,6 +24,9 @@ export class Payments {
 
   @Column()
   amountPaid: number;
+
+  @Column()
+  type: PAYMENT_TYPE;
 
   @Column({ type: "json", nullable: true })
   extraData: string;

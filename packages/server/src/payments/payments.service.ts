@@ -17,8 +17,8 @@ export class PaymentsService {
   ) {}
 
   async purchaseCourse(requestUser: RequestUser, courseId: string) {
-    const userResult = await this.userService.findUserByEmailAndReturnProfile(
-      requestUser.email,
+    const userResult = await this.userService.findUserByEmailGetFullProfile(
+      requestUser.profile.email,
     );
     const { profile: user, payments } = userResult;
 
@@ -38,6 +38,7 @@ export class PaymentsService {
       courseId,
       datePaid: new Date(),
       amountPaid: 50,
+      type: "SUCCESS",
     });
 
     return SUCCESS_CODES.OK;

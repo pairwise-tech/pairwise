@@ -1,5 +1,5 @@
 import {
-  IUserCodeBlobDto,
+  ICodeBlobDto,
   BlobTypeSet,
   challengeUtilityClass,
   assertUnreachable,
@@ -29,7 +29,7 @@ const validateTimeLastWatched = (time: number) => {
  * Perform validation on the user code blob which gets serialized to JSON
  * before it is saved in the database.
  */
-export const validateCodeBlob = (blob: IUserCodeBlobDto) => {
+export const validateCodeBlob = (blob: ICodeBlobDto) => {
   if (!blob.dataBlob.type) {
     throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
   }

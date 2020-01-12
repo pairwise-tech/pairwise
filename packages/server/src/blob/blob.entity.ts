@@ -2,28 +2,28 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  Index,
   ManyToOne,
-  CreateDateColumn,
+  Index,
   UpdateDateColumn,
+  CreateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
 
 @Entity()
-export class UserCourseProgress {
+export class CodeBlob {
   @PrimaryGeneratedColumn("uuid")
   uuid: number;
 
   @Index()
   @Column()
-  courseId: string;
+  challengeId: string;
 
-  @Column({ type: "jsonb", nullable: true })
-  progress: string;
+  @Column({ type: "jsonb" })
+  dataBlob: string;
 
   @ManyToOne(
     type => User,
-    user => user.challengeProgressHistory,
+    user => user.challengeCodeHistory,
   )
   user: User;
 

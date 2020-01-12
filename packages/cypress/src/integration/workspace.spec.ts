@@ -6,6 +6,16 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.get("#product-title").contains("Pairwise");
   });
 
+  it("Home route includes courses list", () => {
+    cy.visit(`${CLIENT_APP_URL}/home`);
+    cy.url().should("include", "home");
+    cy.contains("Welcome to Pairwise!");
+    cy.contains("Courses:");
+    cy.get("#course-link-0").contains("Fullstack TypeScript");
+    cy.get("#course-link-0").click({ force: true });
+    cy.url().should("include", "workspace");
+  });
+
   it("Workspace navigation next|prev controls work", () => {
     const getChallengeId = (url: string) => {
       const index = url.indexOf("workspace/");
@@ -13,10 +23,15 @@ describe("Workspace and Challenge Navigation Works", () => {
       return id;
     };
 
-    cy.visit(CLIENT_APP_URL);
+    cy.visit(`${CLIENT_APP_URL}/workspace`);
 
     cy.wait(2500);
     cy.url().should("include", "workspace");
+
+    /* Open the navigation menu and navigate to the first programming challenge: */
+    cy.get("#navigation-menu-button").click({ force: true });
+    cy.get("#module-navigation-1").click({ force: true });
+    cy.get("#challenge-navigation-0").click({ force: true });
 
     let challengeId = "";
 

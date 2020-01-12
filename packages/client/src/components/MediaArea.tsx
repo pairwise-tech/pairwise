@@ -2,7 +2,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React, { ChangeEvent } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ContentInput, StyledMarkdown } from "./shared";
+import { ContentInput, StyledMarkdown } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCallout } from "./ChallengeControls";
 

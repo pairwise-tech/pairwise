@@ -8,7 +8,7 @@ To add new tests, or debug failing tests, the test suite can be run locally:
 
 ```bash
 # Run the backend services (from the root level)
-$ docker-compose up
+$ yarn up
 
 # Run the e2e tests in watch mode
 $ yarn test:watch

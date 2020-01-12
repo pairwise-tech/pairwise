@@ -1,11 +1,12 @@
 import { createReducer } from "typesafe-actions";
 
-import { Challenge, CourseList } from "@pairwise/common";
+import { Challenge, CourseList, CourseSkeletonList } from "@pairwise/common";
 import Module from "module";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
 import over from "ramda/es/over";
 import actions, { ActionTypes } from "./actions";
+import AppActions, { ActionTypes as AppActionTypes } from "../app/actions";
 import {
   ChallengeCreationPayload,
   InverseChallengeMapping,
@@ -31,6 +32,7 @@ export interface State {
   isEditMode: boolean;
   displayNavigationMap: boolean;
   courses: Nullable<CourseList>;
+  courseSkeletons: Nullable<CourseSkeletonList>;
   currentModuleId: Nullable<string>;
   currentCourseId: Nullable<string>;
   currentChallengeId: Nullable<string>;
@@ -41,6 +43,7 @@ export interface State {
 
 const initialState = {
   courses: null,
+  courseSkeletons: null,
   isEditMode: false,
   workspaceLoading: true,
   currentModuleId: null,
@@ -128,7 +131,9 @@ const insertChallenge = (
   return over(lens, insert(insertionIndex, challenge), courses);
 };
 
-const challenges = createReducer<State, ActionTypes>(initialState)
+const challenges = createReducer<State, ActionTypes | AppActionTypes>(
+  initialState,
+)
   .handleAction(actions.createChallenge, (state, action) => {
     const { courses } = state;
 
@@ -207,6 +212,10 @@ const challenges = createReducer<State, ActionTypes>(initialState)
     ...state,
     workspaceLoading: false,
   }))
+  .handleAction(AppActions.locationChange, (state, action) => ({
+    ...state,
+    displayNavigationMap: false,
+  }))
   .handleAction(actions.setNavigationMapState, (state, action) => ({
     ...state,
     displayNavigationMap: action.payload,
@@ -226,7 +235,7 @@ const challenges = createReducer<State, ActionTypes>(initialState)
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,
-    courses: action.payload,
+    courseSkeletons: action.payload,
   }))
   .handleAction(
     actions.fetchCurrentActiveCourseSuccess,
