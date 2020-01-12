@@ -37,6 +37,7 @@
     "services:start": "cd packages/external-services && yarn start",
     "services:watch": "cd packages/external-services && yarn watch",
     "services:build": "cd packages/external-services && yarn build",
+    "lint": "lerna run lint",
     "format": "lerna run format",
     "test": "lerna run test",
     "build": "yarn common:build && lerna run build",
