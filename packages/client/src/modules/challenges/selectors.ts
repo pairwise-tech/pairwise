@@ -70,8 +70,15 @@ export const getCurrentCourse = createSelector([challengesState], state => {
   return state.courses?.find(x => x.id === state.currentCourseId);
 });
 
+export const getCurrentCourseSkeleton = createSelector(
+  [challengesState],
+  state => {
+    return state.courseSkeletons?.find(x => x.id === state.currentCourseId);
+  },
+);
+
 export const getCurrentModule = createSelector(
-  [getCurrentCourse, getCurrentModuleId],
+  [getCurrentCourseSkeleton, getCurrentModuleId],
   (course, moduleId) => {
     return course?.modules.find(x => x.id === moduleId);
   },

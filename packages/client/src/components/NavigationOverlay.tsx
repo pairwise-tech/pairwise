@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 
-import { Challenge } from "@pairwise/common";
+import { Challenge, ChallengeSkeleton } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   COLORS,
@@ -138,7 +138,7 @@ const NavigationOverlay = (props: IProps) => {
             }
           />
         </div>
-        {module.challenges.map((c: Challenge, i: number) => {
+        {module.challenges.map((c: ChallengeSkeleton, i: number) => {
           return (
             <div key={c.id} style={{ position: "relative" }}>
               <Link
@@ -385,8 +385,8 @@ const Title = styled.p`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
-  course: Modules.selectors.challenges.getCurrentCourse(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
+  course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
 });
 

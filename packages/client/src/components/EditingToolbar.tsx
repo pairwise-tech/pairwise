@@ -40,7 +40,7 @@ const EditingToolbar = connect(
   const { isEditMode, setEditMode, saveCourse, course, challenge } = props;
 
   if (challenge?.id === SANDBOX_ID) {
-    // The sandbox is meant to be just that, and cannot be editted in the same
+    // The sandbox is meant to be just that, and cannot be edited in the same
     // way the course challenges can be
     return null;
   }
