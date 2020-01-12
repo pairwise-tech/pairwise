@@ -1,5 +1,6 @@
 import shortid from "shortid";
 import { Challenge, Module } from "@pairwise/common";
+import { Toaster } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Colors
@@ -100,3 +101,5 @@ export const generateEmptyChallenge = (
   supplementaryContent: "",
   ...overwrite,
 });
+
+export const AppToaster = Toaster.create();

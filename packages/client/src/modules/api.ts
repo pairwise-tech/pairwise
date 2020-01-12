@@ -16,7 +16,12 @@ import { Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
 import * as ENV from "tools/client-env";
-import { getAccessTokenFromLocalStorage } from "tools/utils";
+import {
+  getAccessTokenFromLocalStorage,
+  logoutUserInLocalStorage,
+  wait,
+} from "tools/utils";
+import { AppToaster } from "tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -97,7 +102,30 @@ class BaseApiClass {
   };
 
   handleHttpError = (err: any) => {
-    return new Err(this.formatHttpError(err));
+    const formattedError = this.formatHttpError(err);
+
+    if (formattedError.status === 401) {
+      this.handleForcedLogout();
+    }
+
+    return new Err(formattedError);
+  };
+
+  handleForcedLogout = async () => {
+    /**
+     * Remove the local access token and force the window to reload to handle
+     * forced logout:
+     */
+    AppToaster.show({
+      message: "Your session has expired, please login again.",
+      intent: "danger",
+      icon: "tick",
+    });
+
+    logoutUserInLocalStorage();
+    await wait(1500); /* Wait so they can read the message... */
+
+    window.location.reload();
   };
 }
 

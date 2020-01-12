@@ -7,7 +7,7 @@ import { createEpicMiddleware } from "redux-observable";
 import * as ENV from "../tools/client-env";
 import API from "./api";
 import { EpicDependencies, Modules, rootEpic, rootReducer } from "./root";
-import { Toaster } from "@blueprintjs/core";
+import { AppToaster } from "tools/constants";
 
 /** ===========================================================================
  * Logger
@@ -44,8 +44,6 @@ const history = createBrowserHistory();
  * Setup middleware and configure store
  * ============================================================================
  */
-
-const AppToaster = Toaster.create();
 
 const dependencies: EpicDependencies = {
   router: history,
