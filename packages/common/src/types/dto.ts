@@ -45,7 +45,7 @@ export interface UserUpdateOptions {
   profileImageUrl?: string;
 }
 
-interface Payment {
+export interface Payment {
   courseId: string;
   datePaid: Date;
   amountPaid: number;

@@ -6,6 +6,7 @@ import { Classes, Button } from "@blueprintjs/core";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle } from "./shared";
 import { COLORS } from "tools/constants";
+import { Payment } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -44,12 +45,12 @@ class Profile extends React.Component<IProps, IState> {
 
   render(): Nullable<JSX.Element> {
     const { edit } = this.state;
-    const { user } = this.props;
-    if (!user) {
+    const { user, skeletons } = this.props;
+    if (!user || !skeletons) {
       return null;
     }
 
-    const { profile } = user;
+    const { profile, payments } = user;
     return (
       <PageContainer>
         <PageTitle>Account</PageTitle>
@@ -129,9 +130,51 @@ class Profile extends React.Component<IProps, IState> {
             />
           </Controls>
         )}
+        {payments.length > 0 && (
+          <React.Fragment>
+            <PageTitle style={{ marginTop: 24 }}>Payments</PageTitle>
+            <Text>
+              These are your purchased courses. After purchasing a course, you
+              will have lifetime access.
+            </Text>
+            {payments.map(this.renderPaymentDetails)}
+          </React.Fragment>
+        )}
       </PageContainer>
     );
   }
+  renderPaymentDetails = (payment: Payment) => {
+    return (
+      <PaymentContainer>
+        <Text>
+          <b>Date Paid:</b>
+          {payment.datePaid}
+        </Text>
+        <Text>
+          <b>Amount Paid:</b>
+          {payment.amountPaid}
+        </Text>
+        <Text>
+          <b>Course:</b>
+          {this.getCourseTitleFromId(payment.courseId)}
+        </Text>
+      </PaymentContainer>
+    );
+  };
+
+  getCourseTitleFromId = (id: string) => {
+    const { skeletons } = this.props;
+    if (!skeletons) {
+      return id;
+    } else {
+      const course = skeletons.find(c => c.id === id);
+      if (course) {
+        return course.title;
+      }
+
+      return id; /* Shouldn't happen but just fallback to the course id... */
+    }
+  };
 
   handleEditProfile = () => {
     const { user } = this.props;
@@ -181,6 +224,13 @@ const Controls = styled.div`
   margin-top: 24px;
 `;
 
+const PaymentContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -188,6 +238,7 @@ const Controls = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
+  skeletons: Modules.selectors.challenges.courseSkeletons(state),
 });
 
 const dispatchProps = {
