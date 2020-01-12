@@ -15,6 +15,8 @@ $gradient-green: linear-gradient(
   rgba(0, 255, 211, 1) 74%
 );
 
+$light-gray3: rgb(55, 55, 55);
+
 $gray4: rgb(105, 105, 105);
 
 $dark-gray4: rgb(50, 50, 50);
@@ -38,4 +40,8 @@ $blue5: $primary5;
 .course-card:hover {
   background: rgb(45, 45, 45);
   box-shadow: 0 15px 25px rgba(20, 20, 20, 0.8);
+}
+
+.bp3-popover-content {
+  color: white !important;
 }
