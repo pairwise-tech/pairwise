@@ -12,18 +12,21 @@ import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import Profile from "./Profile";
-import { ButtonCore, IconNavLink } from "./shared";
+import { ButtonCore } from "./shared";
 import SingleSignOnHandler from "./SingleSignOnHandler";
 import Workspace from "./Workspace";
 import {
   Button,
   ButtonGroup,
   Classes,
-  Tooltip,
   FocusStyleManager,
 } from "@blueprintjs/core";
 import cx from "classnames";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
+import {
+  PrevChallengeIconButton,
+  NextChallengeIconButton,
+} from "./ChallengeControls";
 
 // Only show focus outlinewhen tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -93,8 +96,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       return null;
     }
 
-    const { challenge, nextPrevChallenges, overlayVisible } = this.props;
-    const { next, prev } = nextPrevChallenges;
+    const { challenge, overlayVisible } = this.props;
 
     const displayNavigationArrows = window.location.pathname.includes(
       "workspace",
@@ -155,26 +157,8 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               </Link>
               {displayNavigationArrows && (
                 <ButtonGroup>
-                  {prev && (
-                    <Tooltip content="Previous Challenge">
-                      <IconNavLink
-                        id="prevButton"
-                        icon="chevron-left"
-                        aria-label="Previous Challenge"
-                        to={`/workspace/${prev.id}`}
-                      />
-                    </Tooltip>
-                  )}
-                  {next && (
-                    <Tooltip content="Next Challenge">
-                      <IconNavLink
-                        id="nextButton"
-                        icon="chevron-right"
-                        aria-label="Next Challenge"
-                        to={`/workspace/${next.id}`}
-                      />
-                    </Tooltip>
-                  )}
+                  <PrevChallengeIconButton id={"prevButton"} />
+                  <NextChallengeIconButton id={"nextButton"} />
                 </ButtonGroup>
               )}
               {this.props.userAuthenticated && this.props.user ? (
@@ -486,7 +470,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
-  nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,

@@ -1,6 +1,7 @@
-import React, { Suspense } from "react";
+import React, { Suspense, SyntheticEvent } from "react";
 import Markdown, { ReactMarkdownProps } from "react-markdown";
 import styled from "styled-components/macro";
+import cx from "classnames";
 
 import { COLORS } from "../tools/constants";
 import {
@@ -9,8 +10,12 @@ import {
   Button,
   Icon,
   IconName,
+  IButtonProps,
+  Classes,
 } from "@blueprintjs/core";
 import { NavLink, NavLinkProps } from "react-router-dom";
+import pipe from "ramda/es/pipe";
+import identity from "ramda/es/identity";
 
 const PROSE_MAX_WIDTH = 728;
 
@@ -155,19 +160,51 @@ export const LowerRight = styled.div`
   flex-direction: column;
 `;
 
-interface IconNavLinkProps extends NavLinkProps {
+export interface IconNavLinkProps extends NavLinkProps {
   icon: IconName;
+  disabled: boolean;
+  beforeText?: string;
+  afterText?: string;
 }
 
-export const IconNavLink = styled(({ icon, ...props }: IconNavLinkProps) => {
-  return (
-    <NavLink {...props}>
-      <Button>
+export const preventDefault = (e: SyntheticEvent) => {
+  e.preventDefault();
+  return e;
+};
+
+/**
+ * NOTE: I wasn't sure how to type this usage of pipe. This is quite a bit
+ * convoluted, when all I really want was the styling from a blueprint button on
+ * top of a RR link. However, by restyling a link
+ */
+export const IconNavLink = styled(
+  ({
+    icon,
+    className,
+    disabled = false,
+    beforeText,
+    afterText,
+    ...props
+  }: IconNavLinkProps) => {
+    const onClick = disabled ? preventDefault : identity;
+    // @ts-ignore See NOTE
+    // prettier-ignore
+    const handleClick = props.onClick ? pipe(onClick, props.onClick) : onClick;
+    return (
+      <NavLink
+        className={cx(className, Classes.BUTTON, {
+          [Classes.DISABLED]: disabled,
+        })}
+        {...props}
+        onClick={handleClick}
+      >
+        {beforeText && <span style={{ marginRight: 6 }}>{beforeText}</span>}
         <Icon icon={icon} />
-      </Button>
-    </NavLink>
-  );
-})`
+        {afterText && <span style={{ marginLeft: 6 }}>{afterText}</span>}
+      </NavLink>
+    );
+  },
+)`
   &:hover .bp3-icon:only-child {
     color: white !important;
   }

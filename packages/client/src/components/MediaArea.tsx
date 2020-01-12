@@ -2,11 +2,14 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React, { ChangeEvent } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ContentInput, StyledMarkdown, Text } from "./shared";
+import { ContentInput, StyledMarkdown } from "./shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
+import { NextChallengeCallout } from "./ChallengeControls";
 
 /**
- * The media area. Where supplementary content and challenge videos live. The media area can also serve as the standalone UI for a challenge that is all information, without any interactive coding practice.
+ * The media area. Where supplementary content and challenge videos live. The
+ * media area can also serve as the standalone UI for a challenge that is all
+ * information, without any interactive coding practice.
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
@@ -80,9 +83,19 @@ const MediaArea = connect(
           />
         </Callout>
       )}
+      <div>
+        <Hr style={{ marginTop: 40, marginBottom: 20 }} />
+        <NextChallengeCallout />
+      </div>
     </SupplementaryContentContainer>
   );
 });
+
+const Hr = styled.hr`
+  border: 1px solid transparent;
+  border-top-color: black;
+  border-bottom-color: #353535;
+`;
 
 export default MediaArea;
 
