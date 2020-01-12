@@ -3,7 +3,12 @@ import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "src/payments/payments.entity";
-import { IUserDto, UserUpdateOptions } from "@pairwise/common";
+import {
+  IUserDto,
+  UserUpdateOptions,
+  UserProfile,
+  UserSettings,
+} from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
 
@@ -15,6 +20,11 @@ export interface GenericUserProfile {
   avatarUrl: string;
 }
 
+/* Source of truth for user settings: */
+const defaultUserSettings: UserSettings = {
+  workspaceFontSize: 12,
+};
+
 @Injectable()
 export class UserService {
   constructor(
@@ -25,8 +35,25 @@ export class UserService {
     private readonly paymentsRepository: Repository<Payments>,
   ) {}
 
+  processUserEntity = (user: User) => {
+    if (user) {
+      const deserializedSettings = JSON.parse(user.settings);
+      const settings = {
+        ...defaultUserSettings,
+        ...deserializedSettings,
+      };
+
+      const result: UserProfile = {
+        ...user,
+        settings,
+      };
+      return result;
+    }
+  };
+
   async findUserByEmail(email: string) {
-    return this.userRepository.findOne({ email });
+    const user = await this.userRepository.findOne({ email });
+    return this.processUserEntity(user);
   }
 
   async findUserByEmailGetFullProfile(email: string) {
@@ -48,7 +75,7 @@ export class UserService {
     const result: IUserDto = {
       payments,
       courses,
-      profile: user,
+      profile: this.processUserEntity(user),
     };
 
     return result;
@@ -63,7 +90,11 @@ export class UserService {
       accountCreated = false;
     } else {
       accountCreated = true;
-      await this.userRepository.insert(profile);
+      await this.userRepository.insert({
+        ...profile,
+        lastActiveChallengeId: "",
+        settings: JSON.stringify({}),
+      });
       user = await this.findUserByEmail(email);
     }
 

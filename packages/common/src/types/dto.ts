@@ -25,11 +25,19 @@ export interface UserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
+  settings: UserSettings;
   lastActiveChallengeId: string;
 }
 
-export interface IUserDto<T = UserProfile> {
-  profile: T;
+/**
+ * User workspace settings.
+ */
+export interface UserSettings {
+  workspaceFontSize: number;
+}
+
+export interface IUserDto<Profile = UserProfile> {
+  profile: Profile;
   payments: Payment[];
   courses: { [key: string]: boolean };
 }
@@ -38,11 +46,12 @@ export interface IUserDto<T = UserProfile> {
  * Only these fields can be updated on the user object by the
  * POST user/profile API. This validation is applied on the server.
  */
-export interface UserUpdateOptions {
+export interface UserUpdateOptions<SettingsType = UserSettings> {
   givenName?: string;
   familyName?: string;
   displayName?: string;
   avatarUrl?: string;
+  settings?: SettingsType;
 }
 
 export interface Payment {

@@ -35,6 +35,9 @@ export class User {
   @Column()
   avatarUrl: string;
 
+  @Column({ type: "jsonb" })
+  settings: string;
+
   @OneToMany(
     type => Payments,
     payments => payments.user,

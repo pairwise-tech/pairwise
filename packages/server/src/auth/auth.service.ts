@@ -6,6 +6,7 @@ import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import { GenericUserProfile, UserService } from "src/user/user.service";
+import { UserProfile } from "@pairwise/common";
 
 @Injectable()
 export class AuthService {
@@ -82,7 +83,7 @@ export class AuthService {
     return { token, accountCreated };
   }
 
-  getJwtAccessToken(user: User) {
+  getJwtAccessToken(user: UserProfile) {
     const payload: JwtPassportSignPayload = {
       email: user.email,
       sub: user.uuid,
