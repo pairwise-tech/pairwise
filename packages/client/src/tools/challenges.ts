@@ -145,9 +145,8 @@ export const waitForObjectProp = (
  * Get the test code string for a markup challenge.
  */
 export const getTestHarness = (testCode: string): string => `
-window.$ = (...args) => document.querySelector(...args);
-window.$$ = (...args) => {
-  debugger;
+window.get = (...args) => document.querySelector(...args);
+window.getAll = (...args) => {
   return Array.prototype.slice.call(document.querySelectorAll(...args));
 }
 window.getStyle = (el, cssProp) => {

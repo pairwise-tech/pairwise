@@ -61,6 +61,19 @@ import { MonacoEditorOptions } from "modules/challenges/types";
  * ============================================================================
  */
 
+// Create in isValidHTML function that will do roughly this: https://stackoverflow.com/questions/10026626/check-if-html-snippet-is-valid-with-javascript
+// However, we don't want to auto-correct their HTML, just not to
+// render the tests unless it is valid so that we don't accidentally
+// dump the script tag into another tag where it gets rendered as text
+const tidyHtml = (html: string) => {
+  const el = document.createElement("html");
+  el.innerHTML = html;
+  return el.innerHTML;
+};
+const isValidHtml = (html: string) => {
+  return html === tidyHtml(html);
+};
+
 /**
  * This is only to allow a logic split if editting (i.e. via admin edit mode).
  * So it is not relevant unless using codepress
@@ -836,49 +849,27 @@ class Workspace extends React.Component<IProps, IState> {
          * to the iframe.
          */
         if (this.props.challenge.type === "markup") {
-          // Since the user is writing HTML, set the source doc directly based on their code
-          this.iFrameRef.srcdoc = this.state.code;
+          const testScript = `
+            <script id="test-script">
+              ${getTestHarness(this.props.challenge.testCode)}
+            </script>`;
 
-          /**
-           * Wait to allow the iframe to render the new HTML document
-           * before appending and running the test script. The iframe will have
-           * a document before it has a body, and I didn't find any good way to
-           * listen for it to be ready so we are just polling
-           */
-          let remainingPollAttempts = 50;
-          while (this.iFrameRef.contentWindow.document.body === null) {
-            console.warn("[iframe] Body not ready. Waiting...");
-            await wait(50);
-            remainingPollAttempts--;
-            if (remainingPollAttempts < 0) {
-              throw new Error(
-                `[iframe timeout] Did not render after _several_ attempts.`,
-              );
-            }
+          // NOTE: Tidy html should ensure there is indeed a closing body tag
+          const tidySource = tidyHtml(this.state.code);
+
+          // Just to give us some warning if we ever hit this. Should be impossible...
+          if (!tidySource.includes("</body>")) {
+            console.warn(
+              "[Err] Could not append test code to closing body tag in markup challenge",
+            );
           }
 
-          // Don't forget to bind createElement... not sure typescript can protect us form this one
-          // const el = makeElementFactory(iframeDoc.createElement.bind(iframeDoc));
-          // NOTE: Since we're in an async function its important to include
-          // this definition in code that will be run _synchronously_ with its
-          // invocation. Otherwise we might end up creating a factor that is
-          // bound to an iframe that's already unmounted, causing odd bugs and
-          // memory leaks to boot
-          const el = makeElementFactory(
-            this.iFrameRef.contentWindow.document.createElement.bind(
-              this.iFrameRef.contentWindow.document,
-            ),
+          const sourceDocument = tidySource.replace(
+            "</body>",
+            `${testScript}</body>`,
           );
 
-          const markupTests = getTestHarness(this.props.challenge.testCode);
-
-          const testScript = el("script", {
-            id: "test-script",
-            type: "text/javascript",
-            innerHTML: markupTests,
-          });
-
-          this.iFrameRef.contentWindow.document.body.appendChild(testScript);
+          this.iFrameRef.srcdoc = sourceDocument;
         } else {
           try {
             const code = await this.compileAndTransformCodeString();
