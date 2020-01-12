@@ -32,7 +32,6 @@ import {
   HEADER_HEIGHT,
   MONACO_EDITOR_THEME,
   SANDBOX_ID,
-  MONACO_EDITOR_INITIAL_FONT_SIZE,
   MONACO_EDITOR_FONT_SIZE_STEP,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";

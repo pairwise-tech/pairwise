@@ -1,4 +1,4 @@
-import { Course, CourseList, CourseSkeletonList } from "@pairwise/common";
+import { Course, CourseSkeletonList } from "@pairwise/common";
 import { ActionType, createAction } from "typesafe-actions";
 import {
   ChallengeCreationPayload,

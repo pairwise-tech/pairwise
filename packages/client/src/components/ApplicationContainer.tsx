@@ -428,34 +428,41 @@ const AccountDropdownButton = styled.div`
 
 const MobileView = () => (
   <MobileContainer>
-    <MobileTitleText>Welcome to Pairwise</MobileTitleText>
+    <MobileTitleText>Welcome to Pairwise!</MobileTitleText>
     <MobileText>
-      Unfortunately, smart phones and tablets are just not the best devices for
+      Unfortunately, smart phones and tablets are not the best devices for
       developing software. Our platform is intended to be used on a larger
       screen device. Please return on a laptop or desktop!
     </MobileText>
     <MobileText>
-      While you are here, feel free to{" "}
+      While you are here, feel free to visit our product page where you can
+      learn more about the curriculum:
+    </MobileText>
+    <MobileText style={{ fontSize: 20 }}>
       <a target="__blank" href="https://www.pairwise.tech">
-        visit our landing page
-      </a>{" "}
-      where you can learn more about the curriculum. Thank you!
+        Visit Product Page
+      </a>
     </MobileText>
   </MobileContainer>
 );
 
 const MobileContainer = styled.div`
   z-index: 5000;
-  padding: 25px;
-  display: flex;
-  width: 100%;
-  height: 100%;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-top: -35px; /* ? */
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   position: absolute;
   flex: 1;
+  display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
   visibility: hidden;
   background: ${COLORS.BACKGROUND_BODY};
 
@@ -469,7 +476,8 @@ const MobileContainer = styled.div`
 `;
 
 const MobileText = styled.p`
-  font-size: 16px;
+  margin-top: 12px;
+  font-size: 18px;
   font-weight: 300;
   text-align: center;
   font-family: "Helvetica Neue", Lato, sans-serif;
@@ -477,7 +485,7 @@ const MobileText = styled.p`
 `;
 
 const MobileTitleText = styled(MobileText)`
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 300;
   font-family: "Helvetica Neue", Lato, sans-serif;
   color: ${COLORS.TEXT_TITLE};

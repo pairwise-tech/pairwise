@@ -12,7 +12,6 @@ import {
 import {
   COLORS,
   MONACO_EDITOR_THEME,
-  MONACO_EDITOR_INITIAL_FONT_SIZE,
   MONACO_EDITOR_FONT_SIZE_STEP,
 } from "tools/constants";
 import { LowerRight, IconButton } from "./Shared";
