@@ -88,7 +88,9 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
 };
 
 /**
- * Validate input to user update operation.
+ * Validate input to user update operation. This method will filter any
+ * invalid update parameters and return a validated object with values which
+ * can be updated on the user.
  */
 export const validateUserUpdateDetails = (
   details: UserUpdateOptions,
@@ -103,7 +105,11 @@ export const validateUserUpdateDetails = (
     };
 
     const sanitizedUpdate = sanitizeObject(updateDetails);
-    return new Ok(sanitizedUpdate);
+    if (Object.keys(sanitizedUpdate).length) {
+      return new Ok(sanitizedUpdate);
+    } else {
+      throw new Error("No valid update fields received!");
+    }
   } catch (err) {
     return new Err(ERROR_CODES.INVALID_UPDATE_DETAILS);
   }
@@ -127,7 +133,9 @@ const checkSettingsField = (settings?: UserSettings) => {
     };
 
     const sanitizedUpdate = sanitizeObject(validSettings);
-    return JSON.stringify(sanitizedUpdate);
+    if (Object.keys(sanitizedUpdate).length) {
+      return JSON.stringify(sanitizedUpdate);
+    }
   }
 
   return null;
