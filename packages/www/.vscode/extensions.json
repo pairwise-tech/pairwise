@@ -1,9 +1,0 @@
-{
-  /* See http://go.microsoft.com/fwlink/?LinkId=827846 for more information */
-  "recommendations": [
-    "esbenp.prettier-vscode",
-    "wayou.vscode-todo-highlight",
-    "streetsidesoftware.code-spell-checker",
-    "ms-vscode.vscode-typescript-tslint-plugin"
-  ]
-}
