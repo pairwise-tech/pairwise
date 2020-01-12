@@ -146,7 +146,10 @@ export const waitForObjectProp = (
  */
 export const getTestHarness = (testCode: string): string => `
 window.$ = (...args) => document.querySelector(...args);
-window.$$ = (...args) => Array.prototype.slice.call(document.querySelectorAll(...args));
+window.$$ = (...args) => {
+  debugger;
+  return Array.prototype.slice.call(document.querySelectorAll(...args));
+}
 window.getStyle = (el, cssProp) => {
   const view = (el.ownerDocument && el.ownerDocument.defaultView) ? el.ownerDocument.defaultView : window;
   const style = view.getComputedStyle(el);
