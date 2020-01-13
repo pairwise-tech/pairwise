@@ -20,9 +20,9 @@ import * as ENV from "tools/client-env";
 import {
   getAccessTokenFromLocalStorage,
   logoutUserInLocalStorage,
-  wait,
-} from "tools/utils";
+} from "tools/storage-utils";
 import { AppToaster } from "tools/constants";
+import { wait } from "tools/utils";
 
 /** ===========================================================================
  * Types & Config

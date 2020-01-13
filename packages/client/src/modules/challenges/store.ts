@@ -18,7 +18,7 @@ import {
   SANDBOX_ID,
   MONACO_EDITOR_INITIAL_FONT_SIZE,
 } from "tools/constants";
-import { getStoredSandboxType } from "tools/utils";
+import { getStoredSandboxType } from "tools/storage-utils";
 
 const debug = require("debug")("challenge:store");
 

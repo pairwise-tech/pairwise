@@ -42,11 +42,9 @@ import {
   transpileCodeWithBabel,
 } from "../tools/test-utils";
 import {
-  composeWithProps,
   getStoredCodeForChallenge,
   persistToLocalStorage,
-  wait,
-} from "../tools/utils";
+} from "../tools/storage-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
@@ -61,6 +59,7 @@ import {
   Pre,
 } from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
+import { wait, composeWithProps } from "tools/utils";
 
 /** ===========================================================================
  * Types & Config

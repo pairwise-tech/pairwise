@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 
-import { Challenge, ChallengeSkeleton } from "@pairwise/common";
+import { ChallengeSkeleton } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   COLORS,

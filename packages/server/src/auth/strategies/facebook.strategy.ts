@@ -43,7 +43,6 @@ export class FacebookStrategy {
           profileURL: ENV.FACEBOOK_PROFILE_URL,
           authorizationURL: ENV.FACEBOOK_AUTHORIZATION_URL,
           callbackURL: `${ENV.SERVER_HOST_URL}/auth/facebook/callback`,
-          assReqToCallback: true,
           profileFields: ["id", "emails", "name", "picture"],
         },
         async (

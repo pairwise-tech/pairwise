@@ -6,7 +6,7 @@ import {
   getAccessTokenFromLocalStorage,
   setAccessTokenInLocalStorage,
   logoutUserInLocalStorage,
-} from "tools/utils";
+} from "tools/storage-utils";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 
