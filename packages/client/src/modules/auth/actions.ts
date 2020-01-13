@@ -12,6 +12,9 @@ enum ActionTypesEnum {
 
   STORE_ACCESS_TOKEN = "STORE_ACCESS_TOKEN",
   STORE_ACCESS_TOKEN_SUCCESS = "STORE_ACCESS_TOKEN_SUCCESS",
+
+  INITIATE_BULK_PERSISTENCE = "INITIATE_BULK_PERSISTENCE",
+  BULK_PERSISTENCE_COMPLETE = "BULK_PERSISTENCE_COMPLETE",
 }
 
 /** ===========================================================================
@@ -36,11 +39,21 @@ const storeAccessTokenSuccess = createAction(
   ActionTypesEnum.STORE_ACCESS_TOKEN_SUCCESS,
 )<{ accessToken: string; accountCreated: boolean }>();
 
+const initiateBulkPersistence = createAction(
+  ActionTypesEnum.INITIATE_BULK_PERSISTENCE,
+)();
+
+const bulkPersistenceComplete = createAction(
+  ActionTypesEnum.BULK_PERSISTENCE_COMPLETE,
+)();
+
 const actions = {
   initializeAccessToken,
   setSingleSignOnDialogState,
   storeAccessToken,
   storeAccessTokenSuccess,
+  initiateBulkPersistence,
+  bulkPersistenceComplete,
 };
 
 /** ===========================================================================

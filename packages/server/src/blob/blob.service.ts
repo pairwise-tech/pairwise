@@ -5,12 +5,17 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { challengeUtilityClass, ICodeBlobDto } from "@pairwise/common";
+import {
+  challengeUtilityClass,
+  ICodeBlobDto,
+  CodeBlobBulk,
+} from "@pairwise/common";
 import { CodeBlob } from "./blob.entity";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { validateCodeBlob } from "src/tools/validation";
 import { RequestUser } from "src/types";
 import { UserService } from "src/user/user.service";
+import { ObjectUnsubscribedError } from "rxjs";
 
 @Injectable()
 export class BlobService {
@@ -89,5 +94,14 @@ export class BlobService {
     }
 
     return SUCCESS_CODES.OK;
+  }
+
+  async persistBulkBlobs(blobs: CodeBlobBulk, user: RequestUser) {
+    console.log(
+      `[BULK]: Persisting bulk blobs for user: ${user.profile.email}`,
+    );
+    for (const [_, blob] of Object.entries(blobs)) {
+      await this.updateUserCodeBlob(blob, user);
+    }
   }
 }

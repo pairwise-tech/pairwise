@@ -13,6 +13,7 @@ import { ProgressService } from "./progress.service";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
 import { UserCourseProgress } from "@pairwise/common";
+import { SUCCESS_CODES } from "src/tools/constants";
 
 @Controller("progress")
 export class ProgressController {
@@ -40,10 +41,14 @@ export class ProgressController {
   @UseGuards(AuthGuard("jwt"))
   @Post("/bulk")
   @UsePipes(ValidationPipe)
-  updateUserChallengeProgressBulk(
+  async updateUserChallengeProgressBulk(
     @Body() userCourseProgress: UserCourseProgress,
     @Req() req: AuthenticatedRequest,
   ) {
-    console.log(userCourseProgress);
+    await this.progressService.persistUserCourseProgress(
+      userCourseProgress,
+      req.user,
+    );
+    return SUCCESS_CODES.OK;
   }
 }

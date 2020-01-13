@@ -7,6 +7,7 @@ import {
   mergeMap,
   pluck,
   map,
+  mapTo,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { of } from "rxjs";
@@ -107,16 +108,7 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
  * the { accountCreated: true } field.
  *
  * In this case, we want to start a process to persist any of their local
- * saved progress to their new account on the server. The steps would be:
- *
- * [1] Set a flag to indicate this process is underway.
- * [2] Retrieve local storage data and send each entry in a request to the server.
- * [3] In the request fails, ignore the failure.
- * [4] After success or failure, remove the value from local storage.
- * [5] Continue until all requests are processed.
- * [6] Also check for this flag on app startup in case the user reloads the page.
- * [7] Once there are no more entries in local storage, remove the temporary flag.
- * [8] The process is now complete.
+ * saved progress to their new account on the server.
  */
 const accountCreationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
@@ -124,6 +116,13 @@ const accountCreationEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     pluck("accountCreated"),
     filter(Boolean),
+    mapTo(Actions.initiateBulkPersistence()),
+  );
+};
+
+const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.initiateBulkPersistence)),
     mergeMap(async () => {
       console.log(
         "[TODO]: Handling persisting any local user history to the server!",
@@ -139,7 +138,12 @@ const accountCreationEpic: EpicSignature = (action$, _, deps) => {
         message: "Updates saved! You are good to go!",
       });
     }),
-    ignoreElements(),
+    mergeMap(() => {
+      /**
+       * TODO: Refetch user course progress:
+       */
+      return of(Actions.fetchUser(), Actions.bulkPersistenceComplete());
+    }),
   );
 };
 
@@ -164,5 +168,6 @@ export default combineEpics(
   accessTokenInitializationEpic,
   storeAccessTokenEpic,
   accountCreationEpic,
+  bulkPersistenceEpic,
   logoutEpic,
 );

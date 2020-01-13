@@ -14,6 +14,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
 import { BlobService } from "./blob.service";
 import { CodeBlobBulk } from "@pairwise/common";
+import { SUCCESS_CODES } from "src/tools/constants";
 
 @Controller("blob")
 export class BlobController {
@@ -40,10 +41,11 @@ export class BlobController {
   @UseGuards(AuthGuard("jwt"))
   @Post("/bulk")
   @UsePipes(ValidationPipe)
-  updateUserChallengeCodeBulk(
+  async updateUserChallengeCodeBulk(
     @Body() codeBlobBulk: CodeBlobBulk,
     @Req() req: AuthenticatedRequest,
   ) {
-    console.log(codeBlobBulk);
+    await this.blobService.persistBulkBlobs(codeBlobBulk, req.user);
+    return SUCCESS_CODES.OK;
   }
 }

@@ -7,6 +7,7 @@ import {
   challengeUtilityClass,
   ChallengeStatus,
   UserCourseStatus,
+  UserCourseProgress,
 } from "@pairwise/common";
 import { ERROR_CODES } from "src/tools/constants";
 import { RequestUser } from "src/types";
@@ -101,5 +102,23 @@ export class ProgressService {
     }
 
     return this.fetchProgressHistoryForCourse(courseId);
+  }
+
+  async persistUserCourseProgress(
+    courseProgress: UserCourseProgress,
+    user: RequestUser,
+  ) {
+    for (const entity of courseProgress) {
+      const { courseId, progress } = entity;
+      console.log(
+        `[BULK]: Persisting user course progress for courseId: ${courseId}`,
+      );
+      const newProgressEntry: Partial<Progress> = {
+        user: user.profile,
+        courseId,
+        progress: JSON.stringify(progress),
+      };
+      await this.userProgressRepository.insert(newProgressEntry);
+    }
   }
 }
