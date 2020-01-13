@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Tooltip, Callout, Classes } from "@blueprintjs/core";
+import { Tooltip, Classes, Card, H5 } from "@blueprintjs/core";
 import { IconNavLink } from "./Shared";
 import Modules, { ReduxStoreState } from "modules/root";
 
@@ -65,14 +65,15 @@ const NextChallengeButton = ({
   );
 };
 
-const mapCalloutState = (state: ReduxStoreState) => ({
+const mapCardState = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.nextPrevChallenges(state).next,
 });
 
-export const NextChallengeCallout = connect(mapCalloutState)(
-  ({ challenge }: ReturnType<typeof mapCalloutState>) => {
+export const NextChallengeCard = connect(mapCardState)(
+  ({ challenge }: ReturnType<typeof mapCardState>) => {
     return (
-      <Callout title="Up Next">
+      <Card>
+        <H5 style={{ color: "rgb(110, 217, 173)" }}>Up Next</H5>
         {challenge ? (
           <p>{challenge.title}</p>
         ) : (
@@ -82,7 +83,7 @@ export const NextChallengeCallout = connect(mapCalloutState)(
           challengeId={challenge?.id}
           className={Classes.INTENT_SUCCESS}
         />
-      </Callout>
+      </Card>
     );
   },
 );

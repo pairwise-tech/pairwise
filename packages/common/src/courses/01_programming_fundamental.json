@@ -157,6 +157,17 @@
           "starterCode": "<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n\n<div class=\"content\">\n  <p>\n    Welcome to my blog! If you ever want to get in touch I'd love to hear from\n    you. You can contact me using the <a href=\"#\">Contact Page</a>. Cheers!\n  </p>\n</div>\n",
           "solutionCode": "<style>\n  .menu a {\n    display: block;\n  }\n</style>\n<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n\n<div class=\"content\">\n  <p>\n    Welcome to my blog! If you ever want to get in touch I'd love to hear from\n    you. You can contact me using the <a href=\"#\">Contact Page</a>. Cheers!\n  </p>\n</div>\n",
           "supplementaryContent": ""
+        },
+        {
+          "id": "WqwXPsOO",
+          "type": "markup",
+          "title": "Margins and centering things on the page",
+          "content": "* Push the rest of the content away from `.menu` with a bottom margin of `40px`\n* Put `20px` of space between the `<a>` tags in the `.menu` using margins\n* Center `.centered` on the page using margins",
+          "testCode": "test(\"The menu should have a bottom margin of 40px\", () => {\n  const el = get(\".menu\");\n  expect(getStyle(el, \"margin-bottom\")).toBe(\"40px\");\n});\n\ntest(\"The `<a>` tags in the `.menu` should have a right margin of 20px\", () => {\n  const els = getAll(\".menu a\");\n  expect(els.length).toBeTruthy(); // Ensure there aren't zero\n  expect(els.every((x) => getStyle(x, \"margin-right\") === \"20px\")).toBe(true);\n});\n\n// NOTE: The browser will translate margin: auto into a pixel value,\n// so we can't test directly for 'auto'\ntest(\"The `.centered` div should be centered on the page\", () => {\n  const el = get(\".centered\");\n  const right = getStyle(el, \"margin-right\");\n  const left = getStyle(el, \"margin-left\");\n  expect(right).not.toBe(\"0px\");\n  expect(right).toBe(left);\n});\n",
+          "videoUrl": "",
+          "starterCode": "<style>\n  /* \n   * We've added a gray background so that it's easier to see if the div is \n   * centered or not \n   */\n  .centered {\n    width: 300px;\n    background: #dadada; /* Light gray */\n  }\n\n  /* Your code here */\n</style>\n<div class=\"centered\">\n  <div class=\"menu\">\n    <a href=\"#\">Home</a>\n    <a href=\"#\">About</a>\n    <a href=\"#\">Contact</a>\n  </div>\n  <p>\n    Here's some glorious page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
+          "solutionCode": "<style>\n  .menu {\n    margin-bottom: 40px;\n  }\n  .menu a {\n    margin-right: 20px;\n  }\n  .centered {\n      width: 300px;\n      background: #dadada; /* Light gray */\n      margin: 0 auto;\n  }\n</style>\n<div class=\"centered\">\n  <div class=\"menu\">\n    <a href=\"#\">Home</a>\n    <a href=\"#\">About</a>\n    <a href=\"#\">Contact</a>\n  </div>\n  <p>\n    Here's some glorious page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
+          "supplementaryContent": ""
         }
       ]
     },

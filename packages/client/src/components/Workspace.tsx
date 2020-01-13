@@ -22,6 +22,7 @@ import {
   TestCase,
   unsubscribeCodeWorker,
   tidyHtml,
+  getTestScripts,
 } from "../tools/challenges";
 import {
   COLORS,
@@ -791,10 +792,7 @@ class Workspace extends React.Component<IProps, IState> {
          * to the iframe.
          */
         if (this.props.challenge.type === "markup") {
-          const testScript = `
-            <script id="test-script">
-              ${getTestHarness(this.props.challenge.testCode)}
-            </script>`;
+          const testScript = getTestScripts(this.props.challenge.testCode);
 
           // NOTE: Tidy html should ensure there is indeed a closing body tag
           const tidySource = tidyHtml(this.state.code);

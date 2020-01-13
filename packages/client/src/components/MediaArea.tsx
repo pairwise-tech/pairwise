@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { ContentInput, StyledMarkdown } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
-import { NextChallengeCallout } from "./ChallengeControls";
+import { NextChallengeCard } from "./ChallengeControls";
+import { PROSE_MAX_WIDTH } from "tools/constants";
 
 /**
  * The media area. Where supplementary content and challenge videos live. The
@@ -83,9 +84,9 @@ const MediaArea = connect(
           />
         </Callout>
       )}
-      <div>
+      <div style={{ maxWidth: PROSE_MAX_WIDTH }}>
         <Hr style={{ marginTop: 40, marginBottom: 20 }} />
-        <NextChallengeCallout />
+        <NextChallengeCard />
       </div>
     </SupplementaryContentContainer>
   );

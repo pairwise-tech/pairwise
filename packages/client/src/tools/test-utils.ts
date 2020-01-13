@@ -1,6 +1,6 @@
 import * as Babel from "@babel/standalone";
 
-import { getTestHarness } from "./challenges";
+import { getTestHarness, getTestDependencies } from "./challenges";
 import DependencyCacheService from "./module-service";
 
 /** ===========================================================================
@@ -196,13 +196,18 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
 /**
  * Get the full html content string for the iframe, injected the user code
  * into it. This currently includes script libraries now.
+ *
+ * NOTE: I'd like to unify the markdown and ts tests so that when building the
+ * markup they would both use some common function like this, but we're not
+ * there yet.
  */
 export const getMarkupForCodeChallenge = (scriptString: string) => `
 <html>
   <head></head>
   <body>
     <div id="root" />
-    <script>${scriptString}</script>
+    <script id="test-dependencies">${getTestDependencies()}</script>
+    <script id="test-code">${scriptString}</script>
   </body>
 </html>
 `;
