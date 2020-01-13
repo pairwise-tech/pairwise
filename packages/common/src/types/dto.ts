@@ -144,7 +144,7 @@ export interface ICodeBlobDto {
 }
 
 /** ===========================================================================
- * User Challenge History
+ * User Progress History
  * ============================================================================
  */
 
@@ -170,3 +170,10 @@ export interface IProgressDto extends ChallengeStatus {
 export interface UserCourseStatus {
   [key: string]: ChallengeStatus;
 }
+
+export interface ProgressEntity {
+  courseId: string;
+  progress: UserCourseStatus;
+}
+
+export type UserCourseProgress = ProgressEntity[];
