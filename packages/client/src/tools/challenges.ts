@@ -2,6 +2,9 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import CodeFormatWorker from "workerize-loader!./prettier-code-formatter";
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import EXPECTATION_LIB from "raw-loader!./in-browser-testing-lib";
 
 import { CHALLENGE_TYPE } from "@pairwise/common";
 
@@ -82,37 +85,7 @@ export const tidyHtml = (html: string) => {
  * Get the test code string for a markup challenge.
  */
 export const getTestHarness = (testCode: string): string => `
-window.get = (...args) => document.querySelector(...args);
-window.getAll = (...args) => {
-  return Array.prototype.slice.call(document.querySelectorAll(...args));
-}
-window.getStyle = (el, cssProp) => {
-  const view = (el.ownerDocument && el.ownerDocument.defaultView) ? el.ownerDocument.defaultView : window;
-  const style = view.getComputedStyle(el);
-  return style.getPropertyValue(cssProp) || style[cssProp];
-}
-window.assert = (condition, message = 'Assertion Failed') => {
-  if (!condition) {
-    throw new Error(message);
-  }
-  return true;
-}
-window.assertEqual = (a, b) => {
-  if (a !== b) {
-    const typeA = typeof a;
-    const typeB = typeof b;
-    throw new Error(\`[Assert] Expected \${typeA} argument \${a} to equal \${typeB} argument \${b}\`);
-  }
-  return true;
-}
-window.expect = (actual) => ({
-  toBe: (expected) => assertEqual(actual, expected),
-  toBeTruthy: () => assertEqual(Boolean(actual), true),
-  toBeFalsy: () => assertEqual(!Boolean(actual), false),
-  toContain: (val) => {
-    assert(actual.includes(val), \`\${val} not found in \${arr.join(',')}\`)
-  },
-})
+${EXPECTATION_LIB}
 
 function buildTestsFromCode() {
     const arr = [];
