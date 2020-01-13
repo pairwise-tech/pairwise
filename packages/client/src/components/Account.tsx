@@ -58,7 +58,7 @@ class Account extends React.Component<IProps, IState> {
           width={95}
           height={95}
           style={{ marginBottom: 12 }}
-          avatar={profile.profileImageUrl}
+          avatar={profile.avatarUrl}
         />
         <TextItem id="profile-given-name">
           <Bold>Given Name:</Bold> {!edit && profile.givenName}

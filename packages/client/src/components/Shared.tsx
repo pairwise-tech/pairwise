@@ -143,7 +143,7 @@ export const StyledMarkdown = styled(HighlightedMarkdown)`
 
 export const PageTitle = styled.h1`
   margin-top: 0;
-  color: ${COLORS.TEXT_TITLE};
+  color: ${COLORS.TEXT_WHITE};
 `;
 
 export const Text = styled.p`

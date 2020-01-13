@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { CourseSkeleton } from "@pairwise/common";
-import { Card, Elevation } from "@blueprintjs/core";
+import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 
 import Modules, { ReduxStoreState } from "modules/root";
@@ -56,18 +56,41 @@ class Home extends React.Component<IProps, IState> {
     const firstChallengeId = skeleton.modules[0].challenges[0].id;
     return (
       <Card
-        interactive
         key={skeleton.id}
         style={{ width: 450 }}
         className="course-card"
         elevation={Elevation.FOUR}
       >
-        <Link to={`workspace/${firstChallengeId}`} id={`course-link-${i}`}>
-          <CourseTitle>{skeleton.title}</CourseTitle>
-          <CourseDescription>{skeleton.description}</CourseDescription>
-        </Link>
+        <CourseTitle id={`course-link-${i}`}>{skeleton.title}</CourseTitle>
+        <CourseDescription>{skeleton.description}</CourseDescription>
+        <ButtonsBox>
+          <Link to={`workspace/${firstChallengeId}`}>
+            <Button
+              large
+              intent="success"
+              onClick={() => null}
+              style={{ width: 185 }}
+              id={`course-link-${i}-start`}
+            >
+              Start Now For Free
+            </Button>
+          </Link>
+          <Button
+            large
+            intent="success"
+            id={`course-link-${i}-purchase`}
+            style={{ marginLeft: 16, width: 185 }}
+            onClick={this.handlePurchaseCourse(skeleton.id)}
+          >
+            Purchase Course
+          </Button>
+        </ButtonsBox>
       </Card>
     );
+  };
+
+  handlePurchaseCourse = (courseId: string) => () => {
+    this.props.handlePurchaseCourseIntent({ courseId });
   };
 }
 
@@ -85,9 +108,9 @@ const ContentText = styled(Text)`
   margin-top: 14px;
 `;
 
-const CourseTitle = styled.h3`
+const CourseTitle = styled.h2`
   margin-top: 10px;
-  color: ${COLORS.PRIMARY_GREEN};
+  color: ${COLORS.TEXT_WHITE};
 `;
 
 const CourseDescription = styled.p`
@@ -95,6 +118,10 @@ const CourseDescription = styled.p`
   font-size: 14px;
   font-weight: 100;
   color: ${COLORS.TEXT_CONTENT};
+`;
+
+const ButtonsBox = styled.div`
+  margin-top: 18px;
 `;
 
 const BoldText = styled(CourseDescription)`
@@ -113,7 +140,10 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
 });
 
-const dispatchProps = {};
+const dispatchProps = {
+  handlePurchaseCourseIntent:
+    Modules.actions.purchase.handlePurchaseCourseIntent,
+};
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 

@@ -24,25 +24,38 @@ export interface UserProfile {
   displayName: string;
   givenName: string;
   familyName: string;
-  profileImageUrl: string;
+  avatarUrl: string;
+  settings: UserSettings;
   lastActiveChallengeId: string;
 }
 
-export interface IUserDto<T = UserProfile> {
-  profile: T;
+/**
+ * User workspace settings.
+ */
+export interface UserSettings {
+  workspaceFontSize: number;
+}
+
+export interface IUserDto<Profile = UserProfile> {
+  profile: Profile;
   payments: Payment[];
-  courses: { [key: string]: boolean };
+  courses: UserCourseAccessMap;
+}
+
+export interface UserCourseAccessMap {
+  [key: string]: boolean;
 }
 
 /**
  * Only these fields can be updated on the user object by the
  * POST user/profile API. This validation is applied on the server.
  */
-export interface UserUpdateOptions {
+export interface UserUpdateOptions<SettingsType = UserSettings> {
   givenName?: string;
   familyName?: string;
   displayName?: string;
-  profileImageUrl?: string;
+  avatarUrl?: string;
+  settings?: SettingsType;
 }
 
 export interface Payment {
@@ -130,8 +143,12 @@ export interface ICodeBlobDto {
   challengeId: string;
 }
 
+export interface CodeBlobBulk {
+  [key: string]: ICodeBlobDto;
+}
+
 /** ===========================================================================
- * User Challenge History
+ * User Progress History
  * ============================================================================
  */
 
@@ -157,3 +174,10 @@ export interface IProgressDto extends ChallengeStatus {
 export interface UserCourseStatus {
   [key: string]: ChallengeStatus;
 }
+
+export interface ProgressEntity {
+  courseId: string;
+  progress: UserCourseStatus;
+}
+
+export type UserCourseProgress = ProgressEntity[];

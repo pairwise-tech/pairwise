@@ -5,12 +5,15 @@ import {
   IUserDto,
   Ok,
   Result,
-  UserCourseStatus,
+  UserCourseProgress,
   UserUpdateOptions,
   IFeedbackDto,
   IProgressDto,
   ICodeBlobDto,
   CourseSkeletonList,
+  ProgressEntity,
+  CodeBlobBulk,
+  CourseSkeleton,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -20,9 +23,9 @@ import * as ENV from "tools/client-env";
 import {
   getAccessTokenFromLocalStorage,
   logoutUserInLocalStorage,
-  wait,
-} from "tools/utils";
+} from "tools/storage-utils";
 import { AppToaster } from "tools/constants";
+import { wait } from "tools/utils";
 
 /** ===========================================================================
  * Types & Config
@@ -91,7 +94,9 @@ class BaseApiClass {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    return headers;
+
+    const authenticated = !!token;
+    return { headers, authenticated };
   };
 
   formatHttpError = (error: AxiosError): HttpResponseError => {
@@ -163,7 +168,7 @@ class Api extends BaseApiClass {
           .toPromise();
       } else {
         /* NOTE: I hard-coded the courseId in the request for now! */
-        const headers = this.getRequestHeaders();
+        const { headers } = this.getRequestHeaders();
         const result = await axios.get<Course>(
           `${HOST}/content/course/fpvPtfu7s`,
           {
@@ -180,8 +185,31 @@ class Api extends BaseApiClass {
   };
 
   fetchCourseSkeletons = async () => {
+    if (ENV.PRODUCTION) {
+      /* TODO: Remove after deploying a server */
+      const challenges = require("@pairwise/common").default;
+      const FullstackTypeScript: Course = challenges.FullstackTypeScript;
+      const course = {
+        ...FullstackTypeScript,
+        modules: FullstackTypeScript.modules.map(m => {
+          return {
+            ...m,
+            free: true,
+            userCanAccess: true,
+            challenges: m.challenges.map(c => {
+              return {
+                ...c,
+                userCanAccess: true,
+              };
+            }),
+          };
+        }),
+      };
+      return new Ok([course]);
+    }
+
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
+      const { headers } = this.getRequestHeaders();
       return axios.get<CourseSkeletonList>(`${HOST}/content/skeletons`, {
         headers,
       });
@@ -190,7 +218,7 @@ class Api extends BaseApiClass {
 
   fetchUserProfile = async () => {
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
+      const { headers } = this.getRequestHeaders();
       return axios.get<IUserDto>(`${HOST}/user/profile`, {
         headers,
       });
@@ -199,64 +227,247 @@ class Api extends BaseApiClass {
 
   updateUser = async (userDetails: UserUpdateOptions) => {
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
+      const { headers } = this.getRequestHeaders();
       return axios.post<IUserDto>(`${HOST}/user/profile`, userDetails, {
         headers,
       });
     });
   };
 
-  fetchUserProgress = async () => {
+  submitUserFeedback = async (feedback: IFeedbackDto) => {
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
-      return axios.get<UserCourseStatus>(`${HOST}/progress`, {
+      const { headers } = this.getRequestHeaders();
+      return axios.post<"Success">(`${HOST}/feedback`, feedback, {
         headers,
       });
     });
+  };
+
+  fetchUserProgress = async () => {
+    const { headers, authenticated } = this.getRequestHeaders();
+
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.get<UserCourseProgress>(`${HOST}/progress`, {
+          headers,
+        });
+      });
+    } else {
+      const result = localStorageHTTP.fetchUserProgress();
+      return new Ok(result);
+    }
   };
 
   updateUserProgress = async (progress: IProgressDto) => {
-    return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
-      return axios.post<IProgressDto>(`${HOST}/progress`, {
-        headers,
-        body: progress,
+    const { headers, authenticated } = this.getRequestHeaders();
+
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.post<IProgressDto>(`${HOST}/progress`, progress, {
+          headers,
+        });
       });
-    });
+    } else {
+      const result = localStorageHTTP.updateUserProgress(progress);
+      return new Ok(result);
+    }
   };
 
   fetchChallengeHistory = async (challengeId: string) => {
-    return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
-      return axios.get<ICodeBlobDto>(`${HOST}/blob/${challengeId}`, {
-        headers,
+    const { headers, authenticated } = this.getRequestHeaders();
+
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.get<ICodeBlobDto>(`${HOST}/blob/${challengeId}`, {
+          headers,
+        });
       });
-    });
+    } else {
+      const result = localStorageHTTP.fetchChallengeHistory(challengeId);
+      return new Ok(result);
+    }
   };
 
-  updateChallengeHistory = async (challengeId: string, dataBlob: string) => {
+  updateChallengeHistory = async (
+    challengeId: string,
+    dataBlob: ICodeBlobDto,
+  ) => {
+    const { headers, authenticated } = this.getRequestHeaders();
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.post<ICodeBlobDto>(
+          `${HOST}/blob`,
+          {
+            dataBlob,
+            challengeId,
+          },
+          {
+            headers,
+          },
+        );
+      });
+    } else {
+      const result = localStorageHTTP.updateChallengeHistory(dataBlob);
+      return new Ok(result);
+    }
+  };
+
+  updateCourseProgressBulk = async (userCourseProgress: UserCourseProgress) => {
+    const { headers } = this.getRequestHeaders();
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
-      return axios.post<ICodeBlobDto>(`${HOST}/blob`, {
-        headers,
-        body: {
-          dataBlob,
-          challengeId,
+      return axios.post<ICodeBlobDto>(
+        `${HOST}/progress/bulk`,
+        userCourseProgress,
+        {
+          headers,
         },
+      );
+    });
+  };
+
+  updateChallengeHistoryBulk = async (codeBlobBulk: CodeBlobBulk) => {
+    const { headers } = this.getRequestHeaders();
+    return this.httpHandler(async () => {
+      return axios.post<ICodeBlobDto>(`${HOST}/blob/bulk`, codeBlobBulk, {
+        headers,
       });
     });
   };
 
-  submitUserFeedback = async (feedback: IFeedbackDto) => {
-    return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
-      return axios.post<"Success">(`${HOST}/feedback`, {
-        headers,
-        body: feedback,
-      });
-    });
+  handleDataPersistenceForNewAccount = async () => {
+    await localStorageHTTP.persistDataPersistenceForNewAccount();
   };
 }
+
+/** ===========================================================================
+ * Local Storage API
+ * ----------------------------------------------------------------------------
+ * Class which provides local storage APIs which mock the same behavior of the
+ * backend REST APIs.
+ * ============================================================================
+ */
+
+enum KEYS {
+  USER_PROGRESS_KEY = "USER_PROGRESS_KEY",
+  CHALLENGE_BLOB_KEY = "CHALLENGE_BLOB_KEY",
+}
+
+class LocalStorageHttpClass {
+  fetchUserProgress = (): UserCourseProgress => {
+    return this.getItem<UserCourseProgress>(KEYS.USER_PROGRESS_KEY, []);
+  };
+
+  updateUserProgress = (progress: IProgressDto) => {
+    const { courseId, challengeId } = progress;
+
+    const progressList = this.fetchUserProgress();
+    const existingCourseProgress = progressList.find(
+      p => p.courseId === courseId,
+    );
+
+    let updatedProgress: ProgressEntity;
+
+    if (existingCourseProgress) {
+      updatedProgress = {
+        courseId,
+        progress: {
+          ...existingCourseProgress.progress,
+          [challengeId]: { complete: true },
+        },
+      };
+    } else {
+      updatedProgress = {
+        courseId,
+        progress: {
+          [challengeId]: { complete: true },
+        },
+      };
+    }
+
+    const updatedProgressList = progressList.map(p => {
+      if (p.courseId === progress.courseId) {
+        return updatedProgress;
+      } else {
+        return p;
+      }
+    });
+
+    this.setItem(KEYS.USER_PROGRESS_KEY, updatedProgressList);
+  };
+
+  fetchChallengeHistory = (challengeId: string): ICodeBlobDto => {
+    const blobs = this.getItem<{ [key: string]: ICodeBlobDto }>(
+      KEYS.CHALLENGE_BLOB_KEY,
+      {},
+    );
+
+    if (challengeId in blobs) {
+      return blobs[challengeId];
+    } else {
+      throw new Error("404!");
+    }
+  };
+
+  updateChallengeHistory = (blob: ICodeBlobDto) => {
+    const blobs = this.fetchUserProgress();
+    const updatedBlobs = {
+      ...blobs,
+      [blob.challengeId]: blob,
+    };
+    this.setItem(KEYS.CHALLENGE_BLOB_KEY, updatedBlobs);
+  };
+
+  persistDataPersistenceForNewAccount = async () => {
+    await this.persistUserProgressForNewAccount();
+    await this.persistChallengeHistoryForNewAccount();
+    this.removeItem(KEYS.USER_PROGRESS_KEY);
+    this.removeItem(KEYS.CHALLENGE_BLOB_KEY);
+  };
+
+  private getItem<T extends {}>(key: KEYS, defaultValue: T): T {
+    try {
+      const result = localStorage.getItem(key);
+      if (result) {
+        const parsed = JSON.parse(result);
+        if (parsed) {
+          return parsed;
+        }
+      }
+
+      return defaultValue;
+    } catch (err) {
+      return defaultValue;
+    }
+  }
+
+  private setItem(key: KEYS, value: any) {
+    const serialized = JSON.stringify(value);
+    localStorage.setItem(key, serialized);
+  }
+
+  private removeItem(key: KEYS) {
+    localStorage.removeItem(key);
+  }
+
+  private async persistUserProgressForNewAccount() {
+    const progress = this.fetchUserProgress();
+    if (progress.length > 0) {
+      await API.updateCourseProgressBulk(progress);
+    }
+  }
+
+  private async persistChallengeHistoryForNewAccount() {
+    const history = this.getItem<{ [key: string]: ICodeBlobDto }>(
+      KEYS.CHALLENGE_BLOB_KEY,
+      {},
+    );
+    if (Object.keys(history).length > 0) {
+      await API.updateChallengeHistoryBulk(history);
+    }
+  }
+}
+
+const localStorageHTTP = new LocalStorageHttpClass();
 
 /** ===========================================================================
  * Export

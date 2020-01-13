@@ -9,19 +9,23 @@ import actions, { ActionTypes } from "./actions";
 
 export interface State {
   initialized: boolean;
+  location: string;
 }
 
 const initialState = {
   initialized: false,
+  location: "",
 };
 
-const app = createReducer<State, ActionTypes>(initialState).handleAction(
-  actions.initializeAppSuccess,
-  state => ({
+const app = createReducer<State, ActionTypes>(initialState)
+  .handleAction(actions.initializeAppSuccess, state => ({
     ...state,
     initialized: true,
-  }),
-);
+  }))
+  .handleAction(actions.locationChange, (state, action) => ({
+    ...state,
+    location: action.payload.pathname,
+  }));
 
 /** ===========================================================================
  * Export

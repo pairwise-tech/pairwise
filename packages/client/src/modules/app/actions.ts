@@ -20,7 +20,7 @@ enum ActionTypesEnum {
  * ============================================================================
  */
 
-const empty = createAction(ActionTypesEnum.EMPTY_ACTION)();
+const empty = createAction(ActionTypesEnum.EMPTY_ACTION)<string>();
 
 const locationChange = createAction(ActionTypesEnum.LOCATION_CHANGE)<
   Location
@@ -31,7 +31,7 @@ const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
 const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)();
 const initializeAppSuccess = createAction(
   ActionTypesEnum.INITIALIZE_APP_SUCCESS,
-)();
+)<{ accessToken: string }>();
 
 const actions = {
   locationChange,

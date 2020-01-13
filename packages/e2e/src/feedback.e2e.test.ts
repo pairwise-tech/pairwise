@@ -81,8 +81,15 @@ describe("User Feedback APIs", () => {
         expect(response.text).toBe("Success");
       });
 
-    const adminAccessToken = await fetchAdminAccessToken();
+    await request(`${HOST}/admin/feedback/9scykDold`)
+      .get("/")
+      .set("Authorization", authorizationHeader)
+      .expect(401)
+      .expect(response => {
+        expect(response.body.error).toBe("Unauthorized");
+      });
 
+    const adminAccessToken = await fetchAdminAccessToken();
     await request(`${HOST}/admin/feedback/9scykDold`)
       .get("/")
       .send({

@@ -7,6 +7,7 @@ import {
   Result,
   Ok,
   Err,
+  UserSettings,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -86,38 +87,71 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
   }
 };
 
-const checkField = (field: any) => {
-  if (typeof field === "string") {
-    return field;
+/**
+ * Validate input to user update operation. This method will filter any
+ * invalid update parameters and return a validated object with values which
+ * can be updated on the user.
+ */
+export const validateUserUpdateDetails = (
+  details: UserUpdateOptions,
+): Result<UserUpdateOptions<string>, ERROR_CODES.INVALID_UPDATE_DETAILS> => {
+  try {
+    const updateDetails = {
+      avatarUrl: checkStringField(details.avatarUrl),
+      givenName: checkStringField(details.givenName),
+      familyName: checkStringField(details.familyName),
+      displayName: checkStringField(details.displayName),
+      settings: checkSettingsField(details.settings),
+    };
+
+    const sanitizedUpdate = sanitizeObject(updateDetails);
+    if (Object.keys(sanitizedUpdate).length) {
+      return new Ok(sanitizedUpdate);
+    } else {
+      throw new Error("No valid update fields received!");
+    }
+  } catch (err) {
+    return new Err(ERROR_CODES.INVALID_UPDATE_DETAILS);
   }
+};
+
+const checkStringField = (field: any) => {
+  return typeof field === "string" ? field : null;
+};
+
+const checkNumberField = (field: any) => {
+  return typeof field === "number" ? field : null;
+};
+
+/**
+ * Validate the user settings JSON before update.
+ */
+const checkSettingsField = (settings?: UserSettings) => {
+  if (settings) {
+    const validSettings: UserSettings = {
+      workspaceFontSize: checkNumberField(settings.workspaceFontSize),
+    };
+
+    const sanitizedUpdate = sanitizeObject(validSettings);
+    if (Object.keys(sanitizedUpdate).length) {
+      return JSON.stringify(sanitizedUpdate);
+    }
+  }
+
   return null;
 };
 
 /**
- * Validate input to user update operation.
+ * Remove [key]: null key:value pairs from an object.
  */
-export const validateUserUpdateDetails = (
-  details: UserUpdateOptions,
-): Result<UserUpdateOptions, ERROR_CODES.INVALID_UPDATE_DETAILS> => {
-  try {
-    const updateDetails = {
-      givenName: checkField(details.givenName),
-      familyName: checkField(details.familyName),
-      displayName: checkField(details.displayName),
-      profileImageUrl: checkField(details.profileImageUrl),
-    };
+const sanitizeObject = (obj: any) => {
+  const sanitizedUpdate = {};
 
-    const sanitizedUpdate = {};
-
-    /* Only add fields which pass the check: */
-    Object.entries(updateDetails).forEach(([key, value]) => {
-      if (value !== null) {
-        sanitizedUpdate[key] = value;
-      }
-    });
-
-    return new Ok(sanitizedUpdate);
-  } catch (err) {
-    return new Err(ERROR_CODES.INVALID_UPDATE_DETAILS);
-  }
+  /* Only add fields which pass the check: */
+  Object.entries(obj).forEach(([key, value]) => {
+    if (value !== null) {
+      sanitizedUpdate[key] = value;
+    }
+  });
+  return sanitizedUpdate;
 };

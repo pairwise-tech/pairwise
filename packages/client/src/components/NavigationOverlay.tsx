@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 
-import { Challenge } from "@pairwise/common";
+import { ChallengeSkeleton } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   COLORS,
@@ -45,6 +45,15 @@ const NavigationOverlay = (props: IProps) => {
   const handleClose = () => {
     if (props.overlayVisible) {
       props.setNavigationMapState(false);
+    }
+  };
+
+  const handleClickChallenge = (userCanAccess: boolean, courseId: string) => (
+    event: any,
+  ) => {
+    if (!userCanAccess) {
+      event.preventDefault();
+      props.handlePurchaseCourseIntent({ courseId });
     }
   };
 
@@ -138,7 +147,7 @@ const NavigationOverlay = (props: IProps) => {
             }
           />
         </div>
-        {module.challenges.map((c: Challenge, i: number) => {
+        {module.challenges.map((c: ChallengeSkeleton, i: number) => {
           return (
             <div key={c.id} style={{ position: "relative" }}>
               <Link
@@ -146,11 +155,18 @@ const NavigationOverlay = (props: IProps) => {
                 to={`/workspace/${c.id}`}
                 id={`challenge-navigation-${i}`}
                 isActive={() => c.id === challengeId}
+                onClick={handleClickChallenge(c.userCanAccess, course.id)}
               >
                 <span>
                   <Icon
                     iconSize={Icon.SIZE_LARGE}
-                    icon={c.type === "media" ? "book" : "code"}
+                    icon={
+                      !c.userCanAccess
+                        ? "lock"
+                        : c.type === "media"
+                        ? "book"
+                        : "code"
+                    }
                   />
                   <span style={{ marginLeft: 10 }}>{c.title}</span>
                 </span>
@@ -384,9 +400,10 @@ const Title = styled.p`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  user: Modules.selectors.user.userSelector(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
-  course: Modules.selectors.challenges.getCurrentCourse(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
+  course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
 });
 
@@ -396,6 +413,9 @@ const dispatchProps = {
   updateCourseModule: Modules.actions.challenges.updateCourseModule,
   createChallenge: Modules.actions.challenges.createChallenge,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
+  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
+  handlePurchaseCourseIntent:
+    Modules.actions.purchase.handlePurchaseCourseIntent,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

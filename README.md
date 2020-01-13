@@ -87,6 +87,9 @@ $ yarn e2e
 
 # Run the Cypress end to end test suite (be sure to run docker:build first)
 $ yarn cypress
+
+# With the application running locally, this command will run the e2e and Cypress tests
+$ yarn ci
 ```
 
 To troubleshoot or develop tests locally, you can run the necessary application services using instructions from above and then run the tests locally from their respective package, `e2e` or `cypress`. You can also run `yarn up` and then run the tests locally (see each test package README for further instructions).

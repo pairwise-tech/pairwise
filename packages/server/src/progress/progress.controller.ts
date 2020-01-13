@@ -12,6 +12,8 @@ import { ProgressDto } from "./progress.dto";
 import { ProgressService } from "./progress.service";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
+import { UserCourseProgress } from "@pairwise/common";
+import { SUCCESS_CODES } from "src/tools/constants";
 
 @Controller("progress")
 export class ProgressController {
@@ -34,5 +36,19 @@ export class ProgressController {
       req.user,
       challengeProgressDto,
     );
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Post("/bulk")
+  @UsePipes(ValidationPipe)
+  async updateUserChallengeProgressBulk(
+    @Body() userCourseProgress: UserCourseProgress,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    await this.progressService.persistUserCourseProgress(
+      userCourseProgress,
+      req.user,
+    );
+    return SUCCESS_CODES.OK;
   }
 }

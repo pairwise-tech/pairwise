@@ -1,4 +1,4 @@
-import { CLIENT_APP_URL } from "../support/utils";
+import { CLIENT_APP_URL, TIMEOUT } from "../support/utils";
 
 describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Pairwise", () => {
@@ -12,7 +12,7 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.contains("Welcome to Pairwise!");
     cy.contains("Courses:");
     cy.get("#course-link-0").contains("Fullstack TypeScript");
-    cy.get("#course-link-0").click({ force: true });
+    cy.get("#course-link-0-start").click({ force: true });
     cy.url().should("include", "workspace");
   });
 
@@ -25,7 +25,7 @@ describe("Workspace and Challenge Navigation Works", () => {
 
     cy.visit(`${CLIENT_APP_URL}/workspace`);
 
-    cy.wait(2500);
+    cy.wait(TIMEOUT);
     cy.url().should("include", "workspace");
 
     /* Open the navigation menu and navigate to the first programming challenge: */
@@ -36,23 +36,23 @@ describe("Workspace and Challenge Navigation Works", () => {
     let challengeId = "";
 
     const checkPrev = () => {
-      cy.get("#prevButton").click({ force: true });
+      cy.wait(TIMEOUT);
+      cy.get("#prevButton").click();
       cy.url().then(url => {
         const id = getChallengeId(url);
         expect(url).to.not.equal(challengeId);
         challengeId = id;
       });
-      cy.wait(2000);
     };
 
     const checkNext = () => {
-      cy.get("#nextButton").click({ force: true });
+      cy.wait(TIMEOUT);
+      cy.get("#nextButton").click();
       cy.url().then(url => {
         const id = getChallengeId(url);
         expect(url).to.not.equal(challengeId);
         challengeId = id;
       });
-      cy.wait(2000);
     };
 
     checkNext();

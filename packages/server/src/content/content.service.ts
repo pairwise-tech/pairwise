@@ -6,8 +6,13 @@ import { ERROR_CODES } from "src/tools/constants";
 
 @Injectable()
 export class ContentService {
-  fetchCourseSkeletons() {
-    return challengeUtilityClass.getCourseNavigationSkeletons();
+  fetchCourseSkeletons(user: RequestUser) {
+    if (user) {
+      const { courses } = user;
+      return challengeUtilityClass.getCourseNavigationSkeletons(courses);
+    } else {
+      return challengeUtilityClass.getCourseNavigationSkeletons();
+    }
   }
 
   fetchFreeCourseContent(courseId: string) {

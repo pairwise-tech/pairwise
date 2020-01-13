@@ -9,33 +9,24 @@ import actions, { ActionTypes } from "./actions";
 
 export interface State {
   accessToken: string;
-  singleSignOnDialogOpen: boolean;
-  bulkPersistenceInProgress: boolean;
+  purchaseCourseId: string;
+  purchaseCourseModalOpen: boolean;
 }
 
 const initialState = {
   accessToken: "",
-  singleSignOnDialogOpen: false,
-  bulkPersistenceInProgress: false,
+  purchaseCourseId: "",
+  purchaseCourseModalOpen: false,
 };
 
 const app = createReducer<State, ActionTypes>(initialState)
-  .handleAction(actions.initiateBulkPersistence, (state, action) => ({
+  .handleAction(actions.setPurchaseCourseModalState, (state, action) => ({
     ...state,
-    bulkPersistenceInProgress: true,
+    purchaseCourseModalOpen: action.payload,
   }))
-  .handleAction(actions.bulkPersistenceComplete, (state, action) => ({
+  .handleAction(actions.setPurchaseCourseId, (state, action) => ({
     ...state,
-    bulkPersistenceInProgress: false,
-  }))
-  .handleAction(actions.setSingleSignOnDialogState, (state, action) => ({
-    ...state,
-    singleSignOnDialogOpen: action.payload,
-  }))
-  .handleAction(actions.storeAccessTokenSuccess, (state, action) => ({
-    ...state,
-    singleSignOnDialogOpen: false,
-    accessToken: action.payload.accessToken,
+    purchaseCourseId: action.payload,
   }));
 
 /** ===========================================================================

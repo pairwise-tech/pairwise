@@ -1,6 +1,6 @@
 import FullstackTypeScript from "../courses/01_programming_fundamental.json";
 import { CourseList, CourseSkeletonList } from "src/types/courses";
-import { COURSE_ACCESS_LEVEL } from "src/types/dto.js";
+import { COURSE_ACCESS_LEVEL, UserCourseAccessMap } from "src/types/dto.js";
 
 /** ===========================================================================
  * Challenge Utility Class
@@ -66,13 +66,16 @@ class ChallengeUtilityClass {
         ...course,
         modules: course.modules.map(courseModule => {
           return {
-            ...courseModule,
+            id: courseModule.id,
+            title: courseModule.title,
+            userCanAccess: courseModule.free,
             challenges: courseModule.challenges.map(challenge => {
               return {
                 id: challenge.id,
                 type: challenge.type,
                 title: challenge.title,
                 videoUrl: challenge.videoUrl,
+                userCanAccess: courseModule.free,
               };
             }),
           };
@@ -96,8 +99,30 @@ class ChallengeUtilityClass {
     }
   };
 
-  getCourseNavigationSkeletons = () => {
-    return this.courseNavigationSkeletons;
+  getCourseNavigationSkeletons = (courseAccess: UserCourseAccessMap = {}) => {
+    const skeletonsWithAccessInformation = this.courseNavigationSkeletons.map(
+      course => {
+        return {
+          ...course,
+          modules: course.modules.map(courseModule => {
+            const userCanAccess =
+              courseModule.userCanAccess || courseModule.id in courseAccess;
+            return {
+              ...courseModule,
+              userCanAccess,
+              challenges: courseModule.challenges.map(challenge => {
+                return {
+                  ...challenge,
+                  userCanAccess,
+                };
+              }),
+            };
+          }),
+        };
+      },
+    );
+
+    return skeletonsWithAccessInformation;
   };
 
   courseIdIsValid = (courseId: string) => {

@@ -1,15 +1,9 @@
 import { Dialog } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
-import {
-  FacebookLoginButton,
-  GoogleLoginButton,
-  GithubLoginButton,
-} from "react-social-login-buttons";
 import styled from "styled-components/macro";
 
 import Modules, { ReduxStoreState } from "modules/root";
-import * as ENV from "tools/client-env";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 
@@ -23,55 +17,39 @@ interface IState {}
 /** ===========================================================================
  * React Component
  * ----------------------------------------------------------------------------
- * - This component renders a modal which provides and handles SSO options
- * for the application. Facebook is currently supported, Google and GitHub
- * SSO can be added to this component in the future.
+ * - This component handles purchasing courses.
  * ============================================================================
  */
 
-class SingleSignOnHandler extends React.Component<IProps, IState> {
-  render(): JSX.Element {
+class PurchaseCourseModal extends React.Component<IProps, IState> {
+  render(): Nullable<JSX.Element> {
+    const course = this.props.skeletons?.find(
+      c => c.id === this.props.coursePurchaseId,
+    );
+
+    if (!course) {
+      return null;
+    }
+
     return (
       <Dialog
         isOpen={this.props.dialogOpen}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        onClose={() => this.setAccountModalState(false)}
+        onClose={() => {
+          this.setAccountModalState(false);
+        }}
       >
         <AccountModal>
-          <TitleText>Login or Create an Account</TitleText>
-          <SocialButtonsContainer>
-            <LoginLink id="facebook-login" href={`${ENV.HOST}/auth/facebook`}>
-              <FacebookLoginButton
-                className="sso-button"
-                style={ssoButtonStyles}
-              >
-                Login with Facebook
-              </FacebookLoginButton>
-            </LoginLink>
-            <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
-              <GithubLoginButton className="sso-button" style={ssoButtonStyles}>
-                Login with GitHub
-              </GithubLoginButton>
-            </LoginLink>
-            <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
-              <GoogleLoginButton className="sso-button" style={ssoButtonStyles}>
-                Login with Google
-              </GoogleLoginButton>
-            </LoginLink>
-          </SocialButtonsContainer>
-          <SubText>Creating an account is free and easy.</SubText>
-          <SubText>
-            Your account will be used to save your progress as you work on the
-            courses.
-          </SubText>
+          <TitleText>Purchase Course</TitleText>
+          <SubText>{course.title}</SubText>
         </AccountModal>
       </Dialog>
     );
   }
 
   setAccountModalState = (state: boolean) => {
-    this.props.setSingleSignOnDialogState(state);
+    this.props.setPurchaseCourseModalState(state);
   };
 }
 
@@ -79,24 +57,6 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
  * Styles
  * ============================================================================
  */
-
-const ssoButtonStyles = { width: 235, height: 43, marginTop: 12 };
-
-const SocialButtonsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 12px;
-`;
-
-const LoginLink = styled.a`
-  font-weight: 500;
-  font-size: 14px;
-  color: white;
-  margin-left: 4px;
-  text-decoration: none;
-`;
 
 const AccountModal = styled.div`
   width: 525px;
@@ -138,11 +98,16 @@ const SubText = styled(TitleText)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  dialogOpen: Modules.selectors.auth.singleSignOnDialogState(state),
+  dialogOpen: Modules.selectors.purchase.coursePurchaseModalStateSelector(
+    state,
+  ),
+  coursePurchaseId: Modules.selectors.purchase.coursePurchaseId(state),
+  skeletons: Modules.selectors.challenges.getCourseSkeletons(state),
 });
 
 const dispatchProps = {
-  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
+  setPurchaseCourseModalState:
+    Modules.actions.purchase.setPurchaseCourseModalState,
 };
 
 interface ComponentProps {}
@@ -158,4 +123,4 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default composeWithProps<ComponentProps>(withProps)(SingleSignOnHandler);
+export default composeWithProps<ComponentProps>(withProps)(PurchaseCourseModal);

@@ -62,4 +62,4 @@ services:
       - client
       - external-services
     volumes:
-      - ./screenshots:/usr/app/packages/cypress/screenshots
+      - ./docker-screenshots:/usr/app/packages/cypress/screenshots

@@ -81,7 +81,7 @@ describe("User Progress APIs", () => {
      * [0] Check that the user's lastActiveChallengeId starts as null.
      */
     user = await fetchUserWithAccessToken(accessToken);
-    expect(user.profile.lastActiveChallengeId).toBe(null);
+    expect(user.profile.lastActiveChallengeId).toBe("");
 
     /**
      * [1] Request returns 404 initially.

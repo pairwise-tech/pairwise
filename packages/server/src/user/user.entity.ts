@@ -29,11 +29,14 @@ export class User {
   @Column()
   familyName: string;
 
-  @Column({ nullable: true })
+  @Column()
   lastActiveChallengeId: string;
 
-  @Column({ nullable: true })
-  profileImageUrl: string;
+  @Column()
+  avatarUrl: string;
+
+  @Column({ type: "jsonb" })
+  settings: string;
 
   @OneToMany(
     type => Payments,

@@ -1,4 +1,3 @@
-import queryString from "query-string";
 import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
@@ -20,13 +19,14 @@ import {
 import cx from "classnames";
 import Account from "./Account";
 import { ButtonCore, ProfileIcon } from "./Shared";
-import SingleSignOnHandler from "./SingleSignOnHandler";
+import SingleSignOnModal from "./SingleSignOnModal";
 import Workspace from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
 } from "./ChallengeControls";
+import PurchaseCourseModal from "./PurchaseCourseModal";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -52,7 +52,7 @@ interface IState {
  * ApplicationContainer
  * ----------------------------------------------------------------------------
  * This is the top level component which renders the overall app structure,
- * including the routing Switch torender all child routes.
+ * including the routing Switch to render all child routes.
  * ============================================================================
  */
 
@@ -71,23 +71,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   }
 
   handleInitializeUserSession = () => {
-    const { accessToken, accountCreated } = queryString.parse(
-      window.location.search,
-    );
-
-    const created =
-      typeof accountCreated === "string" ? JSON.parse(accountCreated) : false;
-
-    if (typeof accessToken === "string" && Boolean(accessToken)) {
-      /* Kind of sloppy: */
-      console.log(`Login detected! Account created: ${accountCreated}`);
-
-      this.props.storeAccessToken({
-        accessToken,
-        accountCreated: Boolean(created),
-      });
-    }
-
+    this.props.initializeAccessToken({
+      initialWindowLocationSearch: window.location.search,
+    });
     this.setState({ hasHandledRedirect: true });
   };
 
@@ -96,24 +82,22 @@ class ApplicationContainer extends React.Component<IProps, IState> {
       return null;
     }
 
-    const { challenge, overlayVisible } = this.props;
-
-    const displayNavigationArrows = window.location.pathname.includes(
-      "workspace",
-    );
+    const { location, challenge, overlayVisible } = this.props;
 
     if (!challenge) {
       return this.renderLoadingOverlay();
     }
 
     const isSandbox = challenge.id === SANDBOX_ID;
+    const displayNavigationArrows = location.includes("workspace");
 
     return (
       <React.Fragment>
         <MobileView />
         <DarkTheme>
           {this.renderLoadingOverlay()}
-          <SingleSignOnHandler />
+          <SingleSignOnModal />
+          <PurchaseCourseModal />
           <NavigationOverlay overlayVisible={overlayVisible} />
           <Header>
             <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
@@ -171,9 +155,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                       <CreateAccountText className="account-menu">
                         Welcome, {this.props.user.profile.givenName}!{" "}
                       </CreateAccountText>
-                      <ProfileIcon
-                        avatar={this.props.user.profile.profileImageUrl}
-                      />
+                      <ProfileIcon avatar={this.props.user.profile.avatarUrl} />
                     </UserBio>
                     <div className="dropdown-links">
                       <Link
@@ -329,7 +311,7 @@ const LoadingOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 15, 15, 0.92);
+  background: rgba(15, 15, 15, 0.95);
   visibility: ${(props: { visible: boolean }) =>
     props.visible ? "visible" : "hidden"};
 `;
@@ -493,6 +475,7 @@ const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  location: Modules.selectors.app.locationSelector(state),
   user: Modules.selectors.user.userSelector(state),
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
@@ -509,6 +492,7 @@ const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   updateChallenge: Modules.actions.challenges.updateChallenge,
+  initializeAccessToken: Modules.actions.auth.initializeAccessToken,
 };
 
 const mergeProps = (
