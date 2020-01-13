@@ -17,13 +17,13 @@ import {
   getTestHarness,
   IFRAME_MESSAGE_TYPES,
   IframeMessageEvent,
-  makeElementFactory,
   requestCodeFormatting,
   subscribeCodeWorker,
   TestCase,
   TestCaseMarkupTypescript,
   TestCaseReact,
   unsubscribeCodeWorker,
+  tidyHtml,
 } from "../tools/challenges";
 import {
   COLORS,
@@ -60,19 +60,6 @@ import { MonacoEditorOptions } from "modules/challenges/types";
  * Types & Config
  * ============================================================================
  */
-
-// Create in isValidHTML function that will do roughly this: https://stackoverflow.com/questions/10026626/check-if-html-snippet-is-valid-with-javascript
-// However, we don't want to auto-correct their HTML, just not to
-// render the tests unless it is valid so that we don't accidentally
-// dump the script tag into another tag where it gets rendered as text
-const tidyHtml = (html: string) => {
-  const el = document.createElement("html");
-  el.innerHTML = html;
-  return el.innerHTML;
-};
-const isValidHtml = (html: string) => {
-  return html === tidyHtml(html);
-};
 
 /**
  * This is only to allow a logic split if editting (i.e. via admin edit mode).
@@ -864,6 +851,10 @@ class Workspace extends React.Component<IProps, IState> {
             );
           }
 
+          // TODO: There's no reason for us to inject the test script in sandbox
+          // mode, but hte same applies to all cahllenge types so ideally we
+          // would standardize the testing pipeline to the point where we could
+          // include that logic in one place only.
           const sourceDocument = tidySource.replace(
             "</body>",
             `${testScript}</body>`,

@@ -75,70 +75,14 @@ export const unsubscribeCodeWorker = (
  */
 
 /**
- * Just a simpler (and more declarative) way to create dom elements. We need
- * this for modifying the iframe
+ * Uses the browsers own internal engine to clean up HTML. The reason to do this
+ * is to standardize HTML output from the user before work work with it
+ * internally
  */
-export const makeElementFactory = (
-  createElement: typeof document.createElement,
-) => {
-  return (tag: string, props: { [k: string]: string }) => {
-    const el = createElement(tag);
-    Object.keys(props).forEach(k => {
-      const v = props[k];
-      // @ts-ignore
-      el[k] = v;
-    });
-    return el;
-  };
-};
-
-export const waitForDom = (
-  doc: typeof window.document,
-  timeout: number = 10000,
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      reject(
-        new Error(`[DOM Timeout] Waited ${timeout}ms without DOM loaded event`),
-      );
-    }, timeout);
-
-    const listener = () => {
-      // Remove self before resolving
-      clearTimeout(timer);
-      doc.removeEventListener("DOMContentLoaded", listener);
-      resolve();
-    };
-
-    doc.addEventListener("DOMContentLoaded", listener);
-  });
-};
-
-export const waitForObjectProp = (
-  obj: { [k: string]: any },
-  prop: string,
-  timeout: number = 10000,
-): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      clearInterval(interval);
-      reject(
-        new Error(`[DOM Timeout] Waited ${timeout}ms without DOM loaded event`),
-      );
-    }, timeout);
-
-    const poll = () => {
-      if (obj[prop] !== undefined) {
-        clearTimeout(timer);
-        clearInterval(interval);
-        resolve(obj[prop]);
-      } else {
-        console.warn("polling...");
-      }
-    };
-
-    const interval = setInterval(poll, 60);
-  });
+export const tidyHtml = (html: string) => {
+  const el = document.createElement("html");
+  el.innerHTML = html;
+  return el.innerHTML;
 };
 
 /**

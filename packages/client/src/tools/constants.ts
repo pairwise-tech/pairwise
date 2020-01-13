@@ -66,6 +66,13 @@ const DIMENSIONS = {
 };
 
 /**
+ * A cap on prose width so that we don't end up with super wide text. This was
+ * originally created for the media area where there is currently no other UI
+ * besides the text.
+ */
+export const PROSE_MAX_WIDTH = 728;
+
+/**
  * The special ID used for the code sandbox. The sandbox will not be persisted
  * along with the other challenges and online lives in the users browser
  *
