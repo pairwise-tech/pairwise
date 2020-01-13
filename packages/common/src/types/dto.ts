@@ -39,7 +39,11 @@ export interface UserSettings {
 export interface IUserDto<Profile = UserProfile> {
   profile: Profile;
   payments: Payment[];
-  courses: { [key: string]: boolean };
+  courses: UserCourseAccessMap;
+}
+
+export interface UserCourseAccessMap {
+  [key: string]: boolean;
 }
 
 /**

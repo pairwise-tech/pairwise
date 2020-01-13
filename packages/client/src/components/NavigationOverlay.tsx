@@ -9,6 +9,7 @@ import {
   HEADER_HEIGHT,
   generateEmptyModule,
   generateEmptyChallenge,
+  AppToaster,
 } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 import { Tooltip, Icon } from "@blueprintjs/core";
@@ -45,6 +46,13 @@ const NavigationOverlay = (props: IProps) => {
   const handleClose = () => {
     if (props.overlayVisible) {
       props.setNavigationMapState(false);
+    }
+  };
+
+  const handleClickChallenge = (userCanAccess: boolean) => (event: any) => {
+    if (!userCanAccess) {
+      event.preventDefault();
+      /* Handle opening purchase modal... */
     }
   };
 
@@ -146,11 +154,18 @@ const NavigationOverlay = (props: IProps) => {
                 to={`/workspace/${c.id}`}
                 id={`challenge-navigation-${i}`}
                 isActive={() => c.id === challengeId}
+                onClick={handleClickChallenge(c.userCanAccess)}
               >
                 <span>
                   <Icon
                     iconSize={Icon.SIZE_LARGE}
-                    icon={c.type === "media" ? "book" : "code"}
+                    icon={
+                      !c.userCanAccess
+                        ? "lock"
+                        : c.type === "media"
+                        ? "book"
+                        : "code"
+                    }
                   />
                   <span style={{ marginLeft: 10 }}>{c.title}</span>
                 </span>

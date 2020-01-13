@@ -66,7 +66,7 @@ export type ModuleSkeletonList = ModuleSkeleton[];
 export interface ModuleSkeleton {
   id: string;
   title: string;
-  free: boolean;
+  userCanAccess: boolean;
   challenges: ChallengeSkeletonList;
 }
 
@@ -77,4 +77,5 @@ export interface ChallengeSkeleton {
   id: string;
   title: string;
   videoUrl?: string;
+  userCanAccess: boolean;
 }
