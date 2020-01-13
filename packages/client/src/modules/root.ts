@@ -10,6 +10,7 @@ import { combineEpics, Epic } from "redux-observable";
 import API from "./api";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
+import Purchase, { PurchaseActionTypes, PurchaseState } from "./purchase";
 import Challenges, {
   ChallengesActionTypes,
   ChallengesState,
@@ -26,13 +27,15 @@ export type ReduxActionTypes =
   | AppActionTypes
   | ChallengesActionTypes
   | UserActionTypes
-  | AuthActionTypes;
+  | AuthActionTypes
+  | PurchaseActionTypes;
 
 export const selectors = {
   app: App.selector,
   auth: Auth.selector,
   user: User.selector,
   challenges: Challenges.selector,
+  purchase: Purchase.selector,
 };
 
 export const actions = {
@@ -40,6 +43,7 @@ export const actions = {
   auth: Auth.actions,
   user: User.actions,
   challenges: Challenges.actions,
+  purchase: Purchase.actions,
 };
 
 export const Modules = {
@@ -57,6 +61,7 @@ export interface ReduxStoreState {
   auth: AuthState;
   user: UserState;
   challenges: ChallengesState;
+  purchase: PurchaseState;
 }
 
 const rootReducer = combineReducers({
@@ -64,6 +69,7 @@ const rootReducer = combineReducers({
   auth: Auth.store,
   user: User.store,
   challenges: Challenges.store,
+  purchase: Purchase.store,
 });
 
 /** ===========================================================================
@@ -89,6 +95,7 @@ const rootEpic = combineEpics(
   User.epics,
   Auth.epics,
   Challenges.epics,
+  Purchase.epics,
 );
 
 /** ===========================================================================

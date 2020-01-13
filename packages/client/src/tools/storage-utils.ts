@@ -6,6 +6,8 @@ import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
  */
 
 const CHALLENGE_STORE_KEY = "CHALLENGES";
+const ACCESS_TOKEN_STORAGE_KEY = "ACCESS_TOKEN_STORAGE_KEY";
+const EPHEMERAL_PURCHASE_COURSE_ID_KEY = "EPHEMERAL_PURCHASE_COURSE_ID_KEY";
 
 interface Storage {
   challenges: { [k: string]: string };
@@ -63,7 +65,35 @@ const getPersistedData = (): Storage => {
   return { challenges: {}, sandboxType: "markup" };
 };
 
-export const ACCESS_TOKEN_STORAGE_KEY = "ACCESS_TOKEN_STORAGE_KEY";
+/**
+ * Set the ephemeral purchase course id.
+ */
+export const setEphemeralPurchaseCourseId = (courseId: string) => {
+  localStorage.setItem(EPHEMERAL_PURCHASE_COURSE_ID_KEY, courseId);
+};
+
+/**
+ * Remove the ephemeral course id.
+ */
+export const removeEphemeralPurchaseCourseId = () => {
+  localStorage.removeItem(EPHEMERAL_PURCHASE_COURSE_ID_KEY);
+};
+
+/**
+ * Get the ephemeral purchase course id.
+ */
+export const getEphemeralPurchaseCourseId = () => {
+  try {
+    const id = localStorage.getItem(EPHEMERAL_PURCHASE_COURSE_ID_KEY);
+    if (id) {
+      return id;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  return null;
+};
 
 /**
  * Set the access token.

@@ -23,6 +23,10 @@ interface IState {}
 
 class PurchaseCourseModal extends React.Component<IProps, IState> {
   render(): JSX.Element {
+    const course = this.props.skeletons?.find(
+      c => c.id === this.props.coursePurchaseId,
+    );
+    const courseTitle = course ? course.title : "";
     return (
       <Dialog
         isOpen={this.props.dialogOpen}
@@ -32,6 +36,7 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
       >
         <AccountModal>
           <TitleText>Purchase Course</TitleText>
+          <SubText>{courseTitle}</SubText>
         </AccountModal>
       </Dialog>
     );
@@ -87,11 +92,16 @@ const SubText = styled(TitleText)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  dialogOpen: Modules.selectors.app.coursePurchaseModalStateSelector(state),
+  dialogOpen: Modules.selectors.purchase.coursePurchaseModalStateSelector(
+    state,
+  ),
+  coursePurchaseId: Modules.selectors.purchase.coursePurchaseId(state),
+  skeletons: Modules.selectors.challenges.getCourseSkeletons(state),
 });
 
 const dispatchProps = {
-  setPurchaseCourseModalState: Modules.actions.app.setPurchaseCourseModalState,
+  setPurchaseCourseModalState:
+    Modules.actions.purchase.setPurchaseCourseModalState,
 };
 
 interface ComponentProps {}

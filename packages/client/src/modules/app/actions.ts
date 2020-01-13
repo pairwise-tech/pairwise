@@ -8,7 +8,6 @@ import { Location } from "history";
 
 enum ActionTypesEnum {
   EMPTY_ACTION = "EMPTY_ACTION" /* Empty action */,
-  SET_PURCHASE_COURSE_MODAL_STATE = "SET_PURCHASE_COURSE_MODAL_STATE",
   INITIALIZE_APP = "INITIALIZE_APP",
   INITIALIZE_APP_SUCCESS = "INITIALIZE_APP_SUCCESS",
   TOGGLE_PAGE_SCROLL_LOCK = "TOGGLE_PAGE_SCROLL_LOCK",
@@ -22,10 +21,6 @@ enum ActionTypesEnum {
  */
 
 const empty = createAction(ActionTypesEnum.EMPTY_ACTION)();
-
-const setPurchaseCourseModalState = createAction(
-  ActionTypesEnum.SET_PURCHASE_COURSE_MODAL_STATE,
-)<boolean>();
 
 const locationChange = createAction(ActionTypesEnum.LOCATION_CHANGE)<
   Location
@@ -41,7 +36,6 @@ const initializeAppSuccess = createAction(
 const actions = {
   locationChange,
   empty,
-  setPurchaseCourseModalState,
   logoutUser,
   initializeApp,
   initializeAppSuccess,

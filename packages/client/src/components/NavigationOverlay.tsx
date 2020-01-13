@@ -15,6 +15,7 @@ import { composeWithProps } from "tools/utils";
 import { Tooltip, Icon } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
+import { setEphemeralPurchaseCourseId } from "tools/storage-utils";
 
 const debug = require("debug")("client:NavigationOverlay");
 
@@ -49,17 +50,21 @@ const NavigationOverlay = (props: IProps) => {
     }
   };
 
-  const handleClickChallenge = (userCanAccess: boolean) => (event: any) => {
+  const handleClickChallenge = (userCanAccess: boolean, courseId: string) => (
+    event: any,
+  ) => {
     if (!userCanAccess) {
       event.preventDefault();
       if (props.user) {
         props.setPurchaseCourseModalState(true);
+        props.setPurchaseCourseId(courseId);
       } else {
         AppToaster.show({
           icon: "user",
           intent: "primary",
           message: "Please create an account to purchase the course",
         });
+        setEphemeralPurchaseCourseId(courseId);
         props.setSingleSignOnDialogState(true);
       }
     }
@@ -163,7 +168,7 @@ const NavigationOverlay = (props: IProps) => {
                 to={`/workspace/${c.id}`}
                 id={`challenge-navigation-${i}`}
                 isActive={() => c.id === challengeId}
-                onClick={handleClickChallenge(c.userCanAccess)}
+                onClick={handleClickChallenge(c.userCanAccess, course.id)}
               >
                 <span>
                   <Icon
@@ -422,7 +427,9 @@ const dispatchProps = {
   createChallenge: Modules.actions.challenges.createChallenge,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
-  setPurchaseCourseModalState: Modules.actions.app.setPurchaseCourseModalState,
+  setPurchaseCourseModalState:
+    Modules.actions.purchase.setPurchaseCourseModalState,
+  setPurchaseCourseId: Modules.actions.purchase.setPurchaseCourseID,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

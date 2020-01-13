@@ -77,6 +77,10 @@ export const getCurrentCourseSkeleton = createSelector(
   },
 );
 
+export const getCourseSkeletons = createSelector([challengesState], state => {
+  return state.courseSkeletons;
+});
+
 export const getCurrentModule = createSelector(
   [getCurrentCourseSkeleton, getCurrentModuleId],
   (course, moduleId) => {

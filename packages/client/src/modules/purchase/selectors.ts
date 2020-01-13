@@ -8,15 +8,20 @@ import { ReduxStoreState } from "modules/root";
  * ============================================================================
  */
 
-export const appState = (state: ReduxStoreState) => {
-  return state.app;
+export const purchaseState = (state: ReduxStoreState) => {
+  return state.purchase;
 };
 
-export const appSelector = createSelector([appState], identity);
+export const purchaseSelector = createSelector([purchaseState], identity);
 
-export const locationSelector = createSelector(
-  appSelector,
-  app => app.location,
+export const coursePurchaseModalStateSelector = createSelector(
+  purchaseState,
+  purchase => purchase.purchaseCourseModalOpen,
+);
+
+export const coursePurchaseId = createSelector(
+  purchaseState,
+  purchase => purchase.purchaseCourseId,
 );
 
 /** ===========================================================================
@@ -25,6 +30,7 @@ export const locationSelector = createSelector(
  */
 
 export default {
-  appSelector,
-  locationSelector,
+  purchaseState,
+  coursePurchaseId,
+  coursePurchaseModalStateSelector,
 };
