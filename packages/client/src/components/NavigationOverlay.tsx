@@ -9,13 +9,11 @@ import {
   HEADER_HEIGHT,
   generateEmptyModule,
   generateEmptyChallenge,
-  AppToaster,
 } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 import { Tooltip, Icon } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
-import { setEphemeralPurchaseCourseId } from "tools/storage-utils";
 
 const debug = require("debug")("client:NavigationOverlay");
 

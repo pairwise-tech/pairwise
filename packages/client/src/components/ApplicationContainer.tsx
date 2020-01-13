@@ -52,7 +52,7 @@ interface IState {
  * ApplicationContainer
  * ----------------------------------------------------------------------------
  * This is the top level component which renders the overall app structure,
- * including the routing Switch torender all child routes.
+ * including the routing Switch to render all child routes.
  * ============================================================================
  */
 

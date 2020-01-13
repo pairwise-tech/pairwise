@@ -18,6 +18,15 @@ import { userSelector } from "modules/user/selectors";
  * ============================================================================
  */
 
+/**
+ * After the app is initialized and the course skeletons have been fetched,
+ * handle the edge case logic where a user just signed in after expressing
+ * the intent to purchase a course. In this case, there is an ephemeral
+ * course id stored in local storage which should be used to prompt them
+ * with the purchase course modal.
+ *
+ * In either case, remove this ephemeral token.
+ */
 const purchaseCourseInitializeEpic: EpicSignature = action$ => {
   return combineLatest(
     action$.pipe(filter(isActionOf(Actions.fetchNavigationSkeletonSuccess))),
@@ -46,6 +55,15 @@ const purchaseCourseInitializeEpic: EpicSignature = action$ => {
   );
 };
 
+/**
+ * A user expresses the intent to purchase a course:
+ *
+ * [1] The user is signed in and they should see the purchase modal.
+ * [2] The user is not signed in and must sign in or create and account, in
+ *     this case prompt them to sign in and store an ephemeral course id
+ *     in local storage which can be used to continue the purchase flow
+ *     once they return to the app as an authenticated user.
+ */
 const handlePurchaseCourseIntentEpic: EpicSignature = (
   action$,
   state$,
@@ -65,7 +83,7 @@ const handlePurchaseCourseIntentEpic: EpicSignature = (
         deps.toaster.show({
           icon: "user",
           intent: "primary",
-          message: "Please create an account to purchase the course",
+          message: "Please create an account to purchase this course",
         });
         setEphemeralPurchaseCourseId(courseId);
         return of(
