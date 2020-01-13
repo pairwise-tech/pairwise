@@ -82,11 +82,15 @@ export const tidyHtml = (html: string) => {
 };
 
 /**
+ * This is just exported as a function for consistency and in case we need to
+ * augment it later;
+ */
+export const getTestDependencies = (): string => EXPECTATION_LIB;
+
+/**
  * Get the test code string for a markup challenge.
  */
 export const getTestHarness = (testCode: string): string => `
-${EXPECTATION_LIB}
-
 function buildTestsFromCode() {
     const arr = [];
     const test = (message, fn) => {
@@ -143,3 +147,14 @@ try {
   });
 }
 `;
+
+/**
+ * Put together the script tags necessary for running the tests in an iframe,
+ * including the script that includes the tests themselves.
+ */
+export const getTestScripts = (testCode: string) => {
+  return `
+    <script id="test-dependencies">${getTestDependencies()}</script>
+    <script id="test-code">${getTestHarness(testCode)}</script>
+  `;
+};

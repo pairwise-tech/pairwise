@@ -2,6 +2,8 @@
 
 /**
  * This file is meant to be run within our testing iframe, and is thus simple JS.
+ * For now this file is indeed meant to be JS (not TS) since it's not run
+ * through any compilaton pipeline.
  */
 
 /**
