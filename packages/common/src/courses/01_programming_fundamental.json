@@ -146,6 +146,17 @@
           "starterCode": "<style>\n  span {\n    background: pink;\n  }\n  /* Your code here *?\n</style>\n<p>\n  What if <span>we</span> wanted to <span>highlight</span> different text with\n  different <span>colors</span>?\n</p>\n",
           "solutionCode": "<style>\n  span {\n    background: pink;\n  }\n  .highlight {\n    background: yellow;\n  }\n  .highlight-blue {\n    background: skyblue;\n  }\n</style>\n<p>\n  What if <span>we</span> wanted to <span class=\"highlight\">highlight</span> different\n  text with different <span class=\"highlight-blue\">colors</span>?\n</p>\n",
           "supplementaryContent": "# To style many things\n\nCSS classes give you a ton of flexibility when styling your HTML. You can utilize classes to style one type of tag in many different ways. You can also utilize CSS classes to overwrite default styles since they have greater specificity.\n\nThe CSS lesson includes more information."
+        },
+        {
+          "id": "za5KHMo7",
+          "type": "markup",
+          "title": "Styles within styles",
+          "content": "* Style the `<a>` tags _within_ the `.menu` div so that they appear vertically\n",
+          "testCode": "test(\"The <a> tags _within .menu_ should have display block\", () => {\n  const els = getAll(\".menu a\");\n  expect(els.every((x) => getStyle(x, \"display\") === \"block\")).toBe(true);\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/LcayPfQGrwM",
+          "starterCode": "<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n\n<div class=\"content\">\n  <p>\n    Welcome to my blog! If you ever want to get in touch I'd love to hear from\n    you. You can contact me using the <a href=\"#\">Contact Page</a>. Cheers!\n  </p>\n</div>\n",
+          "solutionCode": "<style>\n  .menu a {\n    display: block;\n  }\n</style>\n<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n\n<div class=\"content\">\n  <p>\n    Welcome to my blog! If you ever want to get in touch I'd love to hear from\n    you. You can contact me using the <a href=\"#\">Contact Page</a>. Cheers!\n  </p>\n</div>\n",
+          "supplementaryContent": ""
         }
       ]
     },
