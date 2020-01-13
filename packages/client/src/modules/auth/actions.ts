@@ -34,7 +34,7 @@ const storeAccessToken = createAction(ActionTypesEnum.STORE_ACCESS_TOKEN)<{
 
 const storeAccessTokenSuccess = createAction(
   ActionTypesEnum.STORE_ACCESS_TOKEN_SUCCESS,
-)<{ accessToken: string }>();
+)<{ accessToken: string; accountCreated: boolean }>();
 
 const actions = {
   initializeAccessToken,

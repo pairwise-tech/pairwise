@@ -91,7 +91,9 @@ class BaseApiClass {
     const headers = {
       Authorization: `Bearer ${token}`,
     };
-    return headers;
+
+    const authenticated = !!token;
+    return { headers, authenticated };
   };
 
   formatHttpError = (error: AxiosError): HttpResponseError => {
@@ -163,7 +165,7 @@ class Api extends BaseApiClass {
           .toPromise();
       } else {
         /* NOTE: I hard-coded the courseId in the request for now! */
-        const headers = this.getRequestHeaders();
+        const { headers } = this.getRequestHeaders();
         const result = await axios.get<Course>(
           `${HOST}/content/course/fpvPtfu7s`,
           {
@@ -181,7 +183,7 @@ class Api extends BaseApiClass {
 
   fetchCourseSkeletons = async () => {
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
+      const { headers } = this.getRequestHeaders();
       return axios.get<CourseSkeletonList>(`${HOST}/content/skeletons`, {
         headers,
       });
@@ -190,7 +192,7 @@ class Api extends BaseApiClass {
 
   fetchUserProfile = async () => {
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
+      const { headers } = this.getRequestHeaders();
       return axios.get<IUserDto>(`${HOST}/user/profile`, {
         headers,
       });
@@ -199,62 +201,88 @@ class Api extends BaseApiClass {
 
   updateUser = async (userDetails: UserUpdateOptions) => {
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
+      const { headers } = this.getRequestHeaders();
       return axios.post<IUserDto>(`${HOST}/user/profile`, userDetails, {
         headers,
       });
     });
   };
 
-  fetchUserProgress = async () => {
-    return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
-      return axios.get<UserCourseStatus>(`${HOST}/progress`, {
-        headers,
-      });
-    });
-  };
-
-  updateUserProgress = async (progress: IProgressDto) => {
-    return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
-      return axios.post<IProgressDto>(`${HOST}/progress`, {
-        headers,
-        body: progress,
-      });
-    });
-  };
-
-  fetchChallengeHistory = async (challengeId: string) => {
-    return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
-      return axios.get<ICodeBlobDto>(`${HOST}/blob/${challengeId}`, {
-        headers,
-      });
-    });
-  };
-
-  updateChallengeHistory = async (challengeId: string, dataBlob: string) => {
-    return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
-      return axios.post<ICodeBlobDto>(`${HOST}/blob`, {
-        headers,
-        body: {
-          dataBlob,
-          challengeId,
-        },
-      });
-    });
-  };
-
   submitUserFeedback = async (feedback: IFeedbackDto) => {
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
+      const { headers } = this.getRequestHeaders();
       return axios.post<"Success">(`${HOST}/feedback`, {
         headers,
         body: feedback,
       });
     });
+  };
+
+  fetchUserProgress = async () => {
+    const { headers, authenticated } = this.getRequestHeaders();
+
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.get<UserCourseStatus>(`${HOST}/progress`, {
+          headers,
+        });
+      });
+    } else {
+      /* TODO: Implement local storage api! */
+      return new Ok({});
+    }
+  };
+
+  updateUserProgress = async (progress: IProgressDto) => {
+    const { headers, authenticated } = this.getRequestHeaders();
+
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.post<IProgressDto>(`${HOST}/progress`, {
+          headers,
+          body: progress,
+        });
+      });
+    } else {
+      /* TODO: Implement local storage api! */
+      return new Ok(progress);
+    }
+  };
+
+  fetchChallengeHistory = async (challengeId: string) => {
+    const { headers, authenticated } = this.getRequestHeaders();
+
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.get<ICodeBlobDto>(`${HOST}/blob/${challengeId}`, {
+          headers,
+        });
+      });
+    } else {
+      /* TODO: Implement local storage api! */
+      return new Ok({});
+    }
+  };
+
+  updateChallengeHistory = async (challengeId: string, dataBlob: string) => {
+    const { headers, authenticated } = this.getRequestHeaders();
+    const blob = {
+      dataBlob,
+      challengeId,
+    };
+
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.post<ICodeBlobDto>(`${HOST}/blob`, {
+          headers,
+          body: blob,
+        });
+      });
+    } else {
+      /* TODO: Implement local storage api! */
+      const result = { data: blob };
+      return new Ok(result);
+    }
   };
 }
 
