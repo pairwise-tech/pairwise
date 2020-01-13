@@ -10,19 +10,12 @@ import { CHALLENGE_TYPE } from "@pairwise/common";
  * ============================================================================
  */
 
-export interface TestCaseReact {
-  message: string;
-  test: string;
-  testResult: boolean;
-}
-
-export interface TestCaseMarkupTypescript {
+export interface TestCase {
   test: string;
   message: string;
   testResult: boolean;
+  error?: string;
 }
-
-export type TestCase = TestCaseReact | TestCaseMarkupTypescript;
 
 export enum IFRAME_MESSAGE_TYPES {
   LOG = "LOG",
@@ -154,7 +147,7 @@ function runTests() {
       return agg.concat([{
         message,
         testResult: false,
-        error: err.message,
+        error: err.message + '\\n\\n' + err.stack,
       }])
     }
   }, []);
@@ -177,25 +170,3 @@ try {
   });
 }
 `;
-
-/**
- * Some sample code to run provided tests against a challenge and post
- * the messages back to the app to render.
- *
- * This is currently using the React test-utils package for testing,
- * ref: https://reactjs.org/docs/test-utils.html.
- */
-export const getTestCodeReact = (testCases: ReadonlyArray<TestCaseReact>) => {
-  const codeString = testCases.map(t => t.test).join(", ");
-
-  return `
-  {
-    const results = [${codeString}];
-
-    window.parent.postMessage({
-      message: JSON.stringify(results),
-      source: "TEST_RESULTS",
-    });
-  }
-  `;
-};

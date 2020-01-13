@@ -20,8 +20,6 @@ import {
   requestCodeFormatting,
   subscribeCodeWorker,
   TestCase,
-  TestCaseMarkupTypescript,
-  TestCaseReact,
   unsubscribeCodeWorker,
   tidyHtml,
 } from "../tools/challenges";
@@ -53,7 +51,15 @@ import ChallengeTestEditor from "./ChallengeTestEditor";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
 import { ContentInput, LowerRight, StyledMarkdown, IconButton } from "./Shared";
-import { Tooltip, ButtonGroup, EditableText } from "@blueprintjs/core";
+import {
+  Tooltip,
+  ButtonGroup,
+  EditableText,
+  Icon,
+  Callout,
+  Collapse,
+  Pre,
+} from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
 
 /** ===========================================================================
@@ -561,7 +567,9 @@ class Workspace extends React.Component<IProps, IState> {
                           <ContentTitle style={{ marginBottom: 12 }}>
                             {this.getTestSummaryString()}
                           </ContentTitle>
-                          {testResults.map(this.renderTestResult)}
+                          {testResults.map((x, i) => (
+                            <TestResultRow key={i} {...x} />
+                          ))}
                           <Spacer height={50} />
                         </ContentContainer>
                       )}
@@ -637,57 +645,6 @@ class Workspace extends React.Component<IProps, IState> {
     const { testResults } = this.state;
     const passed = testResults.filter(t => t.testResult);
     return `Tests: ${passed.length}/${testResults.length} Passed`;
-  };
-
-  renderTestResult = (t: TestCase, i: number) => {
-    const challengeType = this.props.challenge.type;
-    switch (challengeType) {
-      case "react": {
-        const { message } = t as TestCaseReact;
-        return (
-          <ContentText
-            key={i}
-            style={{ display: "flex", flexDirection: "row" }}
-          >
-            <div style={{ width: 450 }}>
-              <b style={{ color: C.TEXT_TITLE }}>Test: </b>
-              {message}
-            </div>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-              <SuccessFailureText testResult={t.testResult}>
-                {t.testResult ? "Success!" : "Incomplete..."}
-              </SuccessFailureText>
-            </div>
-          </ContentText>
-        );
-      }
-      case "typescript":
-      case "markup": {
-        const { message } = t as TestCaseMarkupTypescript;
-        return (
-          <ContentText
-            key={i}
-            style={{ display: "flex", flexDirection: "row" }}
-          >
-            <div style={{ width: 450 }}>
-              <b style={{ color: C.TEXT_TITLE }}>Input: </b>
-              {message}
-            </div>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-              <SuccessFailureText testResult={t.testResult}>
-                {t.testResult ? "Success!" : "Incomplete..."}
-              </SuccessFailureText>
-            </div>
-          </ContentText>
-        );
-      }
-      case "media":
-        return null;
-      default:
-        assertUnreachable(challengeType);
-    }
   };
 
   setMonacoEditorValue = () => {
@@ -1094,6 +1051,48 @@ const DragIgnorantFrameContainer = React.forwardRef(
   },
 );
 
+const TestResultRow = ({ message, testResult, error }: TestCase) => {
+  const [showError, setShowError] = React.useState(false);
+  const toggleShowError = () => {
+    if (!error) {
+      return;
+    }
+    setShowError(!showError);
+  };
+
+  return (
+    <div>
+      <ContentDiv>
+        <MinimalButton
+          style={{ cursor: error ? "pointer" : "normal" }}
+          onClick={toggleShowError}
+        >
+          {error ? (
+            <Icon icon="error" intent="danger" />
+          ) : (
+            <Icon icon="tick-circle" intent="primary" />
+          )}
+        </MinimalButton>
+        <div style={{ width: 450 }}>
+          <b style={{ color: C.TEXT_TITLE }}>Test: </b>
+          {message}
+        </div>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <b style={{ color: C.TEXT_TITLE }}>Status:</b>
+          <SuccessFailureText testResult={testResult}>
+            {testResult ? "Success!" : "Incomplete..."}
+          </SuccessFailureText>
+        </div>
+      </ContentDiv>
+      {error && (
+        <Collapse isOpen={showError}>
+          <Pre>{error}</Pre>
+        </Collapse>
+      )}
+    </div>
+  );
+};
+
 const consoleRowStyles = {
   paddingTop: 2,
   paddingBottom: 4,
@@ -1133,7 +1132,16 @@ const ContentTitle = styled.h3`
   color: ${C.TEXT_TITLE};
 `;
 
-const ContentText = styled.span`
+const MinimalButton = styled.button`
+  appearance: none;
+  outline: none;
+  background: transparent;
+  border: none;
+`;
+
+const ContentDiv = styled.div`
+  display: flex;
+  align-items: center;
   margin: 0;
   margin-top: 8px;
   font-size: 15px;
