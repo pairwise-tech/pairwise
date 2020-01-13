@@ -1,4 +1,4 @@
-import { filter, map, tap } from "rxjs/operators";
+import { filter, map, tap, ignoreElements } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
@@ -26,7 +26,7 @@ const appInitializationEpic: EpicSignature = (action$, _, deps) => {
         deps.router.push("/home");
       }
     }),
-    map(() => Actions.initializeAppSuccess()),
+    ignoreElements(),
   );
 };
 

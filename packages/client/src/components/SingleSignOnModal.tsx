@@ -12,6 +12,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import * as ENV from "tools/client-env";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
+import { removeEphemeralPurchaseCourseId } from "tools/storage-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -34,9 +35,12 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
     return (
       <Dialog
         isOpen={this.props.dialogOpen}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        onClose={() => this.setAccountModalState(false)}
+        aria-labelledby="Pairwise Signin Modal"
+        aria-describedby="Signin to Pairwise with a social media provider"
+        onClose={() => {
+          removeEphemeralPurchaseCourseId();
+          this.setAccountModalState(false);
+        }}
       >
         <AccountModal>
           <TitleText>Login or Create an Account</TitleText>
@@ -142,6 +146,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
+  setPurchaseCourseId: Modules.actions.purchase.setPurchaseCourseId,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 

@@ -6,16 +6,13 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
-import { CourseSkeleton } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
 
-interface IState {
-  course: Nullable<CourseSkeleton>;
-}
+interface IState {}
 
 /** ===========================================================================
  * React Component
@@ -25,36 +22,12 @@ interface IState {
  */
 
 class PurchaseCourseModal extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      course: null,
-    };
-  }
-
-  componentDidMount() {
+  render(): Nullable<JSX.Element> {
     const course = this.props.skeletons?.find(
       c => c.id === this.props.coursePurchaseId,
     );
 
-    if (course) {
-      return this.setState({ course });
-    } else {
-      /**
-       * The course id is previously validated, so this should not happen,
-       * but in case it does:
-       */
-      console.warn(
-        "[WARNING]: PurchaseCourseModal opened with a invalid courseId, this should not happen!",
-      );
-      return this.props.setPurchaseCourseModalState(false);
-    }
-  }
-
-  render(): Nullable<JSX.Element> {
-    const { course } = this.state;
-    if (course === null) {
+    if (!course) {
       return null;
     }
 
@@ -63,7 +36,9 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
         isOpen={this.props.dialogOpen}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        onClose={() => this.setAccountModalState(false)}
+        onClose={() => {
+          this.setAccountModalState(false);
+        }}
       >
         <AccountModal>
           <TitleText>Purchase Course</TitleText>

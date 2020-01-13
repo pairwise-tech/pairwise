@@ -28,6 +28,7 @@ import {
   NextChallengeIconButton,
 } from "./ChallengeControls";
 import PurchaseCourseModal from "./PurchaseCourseModal";
+import { getAccessTokenFromLocalStorage } from "tools/storage-utils";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -72,6 +73,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   }
 
   handleInitializeUserSession = () => {
+    let token = getAccessTokenFromLocalStorage();
+    let accountCreatedField = false;
+
     const { accessToken, accountCreated } = queryString.parse(
       window.location.search,
     );
@@ -79,15 +83,16 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     const created =
       typeof accountCreated === "string" ? JSON.parse(accountCreated) : false;
 
-    if (typeof accessToken === "string" && Boolean(accessToken)) {
-      /* Kind of sloppy: */
-      console.log(`Login detected! Account created: ${accountCreated}`);
-
-      this.props.storeAccessToken({
-        accessToken,
-        accountCreated: Boolean(created),
-      });
+    if (typeof accessToken === "string" && typeof created === "boolean") {
+      console.log(`Login detected! Account created: ${created}`);
+      token = accessToken;
+      accountCreatedField = created;
     }
+
+    this.props.storeAccessToken({
+      accessToken: token,
+      accountCreated: accountCreatedField,
+    });
 
     this.setState({ hasHandledRedirect: true });
   };

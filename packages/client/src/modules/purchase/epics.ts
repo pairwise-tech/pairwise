@@ -19,21 +19,26 @@ import { CourseSkeletonList } from "@pairwise/common";
 const purchaseCourseInitializeEpic: EpicSignature = action$ => {
   return combineLatest(
     action$.pipe(filter(isActionOf(Actions.fetchNavigationSkeletonSuccess))),
-    action$.pipe(filter(isActionOf(Actions.initializeApp))),
+    action$.pipe(filter(isActionOf(Actions.storeAccessTokenSuccess))),
   ).pipe(
-    map(([action]: any) => action.payload),
-    mergeMap((skeletons: CourseSkeletonList) => {
-      /* Validate that the course id exists */
-      const id = getEphemeralPurchaseCourseId();
-      const course = skeletons.find(c => c.id === id);
-      if (id && course) {
-        return of(
-          Actions.setPurchaseCourseId(id),
-          Actions.setPurchaseCourseModalState(true),
-        );
-      } else {
-        return of(Actions.empty());
+    /* Wtf: types!? */
+    mergeMap(([skeletonAction, initAction]: any) => {
+      if (initAction.payload.accessToken) {
+        const skeletons: CourseSkeletonList = skeletonAction.payload;
+
+        /* Validate that the course id exists */
+        const id = getEphemeralPurchaseCourseId();
+
+        const course = skeletons.find(c => c.id === id);
+        if (id && course) {
+          return of(
+            Actions.setPurchaseCourseId(id),
+            Actions.setPurchaseCourseModalState(true),
+          );
+        }
       }
+
+      return of(Actions.empty("No purchase course id actions to take"));
     }),
     tap(removeEphemeralPurchaseCourseId),
   );

@@ -65,6 +65,7 @@ const NavigationOverlay = (props: IProps) => {
           message: "Please create an account to purchase the course",
         });
         setEphemeralPurchaseCourseId(courseId);
+        props.setPurchaseCourseId(courseId);
         props.setSingleSignOnDialogState(true);
       }
     }

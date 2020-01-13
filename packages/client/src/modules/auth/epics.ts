@@ -1,9 +1,9 @@
 import { combineEpics } from "redux-observable";
-import { filter, ignoreElements, map, tap } from "rxjs/operators";
+import { filter, ignoreElements, tap, mergeMap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
+import { of } from "rxjs";
 
 import {
-  getAccessTokenFromLocalStorage,
   setAccessTokenInLocalStorage,
   logoutUserInLocalStorage,
 } from "tools/storage-utils";
@@ -17,9 +17,10 @@ import { Actions } from "../root-actions";
 
 const initializeAppAuthenticationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.initializeApp)),
-    map(getAccessTokenFromLocalStorage),
-    tap(token => {
+    filter(isActionOf(Actions.storeAccessToken)),
+    tap(({ payload }) => {
+      const { accessToken } = payload;
+
       /**
        * Redirect the user if the are on a protected route... This could
        * be done with React Router but I like using epics.
@@ -27,27 +28,24 @@ const initializeAppAuthenticationEpic: EpicSignature = (action$, _, deps) => {
        * /account is probably the only protected route like this, but more
        * could be added in the future if needed.
        */
-      if (!token) {
+      if (!accessToken) {
         if (deps.router.location.pathname.includes("account")) {
           deps.router.push(`/home`);
         }
       }
     }),
-    filter(token => Boolean(token)),
-    map(accessToken =>
-      Actions.storeAccessToken({ accessToken, accountCreated: false }),
-    ),
-  );
-};
-
-const storeAccessTokenEpic: EpicSignature = action$ => {
-  return action$.pipe(
-    filter(isActionOf(Actions.storeAccessToken)),
-    tap(({ payload }) => {
-      const { accessToken } = payload;
-      setAccessTokenInLocalStorage(accessToken);
+    tap(action => {
+      setAccessTokenInLocalStorage(action.payload.accessToken);
     }),
-    map(action => Actions.storeAccessTokenSuccess(action.payload)),
+    mergeMap(({ payload }) => {
+      const { accessToken } = payload;
+      const initAction = Actions.initializeAppSuccess({ accessToken });
+      if (accessToken) {
+        return of(initAction, Actions.storeAccessTokenSuccess(payload));
+      } else {
+        return of(initAction);
+      }
+    }),
   );
 };
 
@@ -64,8 +62,4 @@ const logoutEpic: EpicSignature = action$ => {
  * ============================================================================
  */
 
-export default combineEpics(
-  logoutEpic,
-  initializeAppAuthenticationEpic,
-  storeAccessTokenEpic,
-);
+export default combineEpics(logoutEpic, initializeAppAuthenticationEpic);
