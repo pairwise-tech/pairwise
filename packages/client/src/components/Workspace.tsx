@@ -1073,11 +1073,18 @@ const TestResultRow = ({ message, testResult, error }: TestCase) => {
             <Icon icon="tick-circle" intent="primary" />
           )}
         </MinimalButton>
-        <div style={{ width: 450 }}>
+        <div>
           <b style={{ color: C.TEXT_TITLE }}>Test: </b>
           {message}
         </div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div
+          style={{
+            display: "flex",
+            width: 140,
+            marginLeft: "auto",
+            flexDirection: "row",
+          }}
+        >
           <b style={{ color: C.TEXT_TITLE }}>Status:</b>
           <SuccessFailureText testResult={testResult}>
             {testResult ? "Success!" : "Incomplete..."}
