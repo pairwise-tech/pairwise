@@ -52,7 +52,16 @@ const NavigationOverlay = (props: IProps) => {
   const handleClickChallenge = (userCanAccess: boolean) => (event: any) => {
     if (!userCanAccess) {
       event.preventDefault();
-      /* Handle opening purchase modal... */
+      if (props.user) {
+        props.setPurchaseCourseModalState(true);
+      } else {
+        AppToaster.show({
+          icon: "user",
+          intent: "primary",
+          message: "Please create an account to purchase the course",
+        });
+        props.setSingleSignOnDialogState(true);
+      }
     }
   };
 
@@ -399,6 +408,7 @@ const Title = styled.p`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  user: Modules.selectors.user.userSelector(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
@@ -411,6 +421,8 @@ const dispatchProps = {
   updateCourseModule: Modules.actions.challenges.updateCourseModule,
   createChallenge: Modules.actions.challenges.createChallenge,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
+  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
+  setPurchaseCourseModalState: Modules.actions.app.setPurchaseCourseModalState,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

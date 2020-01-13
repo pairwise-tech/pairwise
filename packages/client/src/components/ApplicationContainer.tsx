@@ -20,13 +20,14 @@ import {
 import cx from "classnames";
 import Account from "./Account";
 import { ButtonCore, ProfileIcon } from "./Shared";
-import SingleSignOnHandler from "./SingleSignOnHandler";
+import SingleSignOnModal from "./SingleSignOnModal";
 import Workspace from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
 } from "./ChallengeControls";
+import PurchaseCourseModal from "./PurchaseCourseModal";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -110,7 +111,8 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         <MobileView />
         <DarkTheme>
           {this.renderLoadingOverlay()}
-          <SingleSignOnHandler />
+          <SingleSignOnModal />
+          <PurchaseCourseModal />
           <NavigationOverlay overlayVisible={overlayVisible} />
           <Header>
             <ControlsContainer style={{ height: "100%", marginRight: 60 }}>

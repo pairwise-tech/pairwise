@@ -19,6 +19,11 @@ export const locationSelector = createSelector(
   app => app.location,
 );
 
+export const coursePurchaseModalStateSelector = createSelector(
+  appSelector,
+  app => app.purchaseCourseModalOpen,
+);
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -27,4 +32,5 @@ export const locationSelector = createSelector(
 export default {
   appSelector,
   locationSelector,
+  coursePurchaseModalStateSelector,
 };
