@@ -8,6 +8,8 @@ import { ActionType, createAction } from "typesafe-actions";
 enum ActionTypesEnum {
   SET_SINGLE_SIGN_ON_DIALOG_STATE = "SET_SINGLE_SIGN_ON_DIALOG_STATE",
 
+  INITIALIZE_ACCESS_TOKEN = "INITIALIZE_ACCESS_TOKEN",
+
   STORE_ACCESS_TOKEN = "STORE_ACCESS_TOKEN",
   STORE_ACCESS_TOKEN_SUCCESS = "STORE_ACCESS_TOKEN_SUCCESS",
 }
@@ -16,6 +18,10 @@ enum ActionTypesEnum {
  * Actions
  * ============================================================================
  */
+
+const initializeAccessToken = createAction(
+  ActionTypesEnum.INITIALIZE_ACCESS_TOKEN,
+)<{ initialWindowLocationSearch: string }>();
 
 const setSingleSignOnDialogState = createAction(
   ActionTypesEnum.SET_SINGLE_SIGN_ON_DIALOG_STATE,
@@ -31,6 +37,7 @@ const storeAccessTokenSuccess = createAction(
 )<{ accessToken: string }>();
 
 const actions = {
+  initializeAccessToken,
   setSingleSignOnDialogState,
   storeAccessToken,
   storeAccessTokenSuccess,

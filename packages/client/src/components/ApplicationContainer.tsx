@@ -1,4 +1,3 @@
-import queryString from "query-string";
 import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
@@ -28,7 +27,6 @@ import {
   NextChallengeIconButton,
 } from "./ChallengeControls";
 import PurchaseCourseModal from "./PurchaseCourseModal";
-import { getAccessTokenFromLocalStorage } from "tools/storage-utils";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -73,27 +71,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   }
 
   handleInitializeUserSession = () => {
-    let token = getAccessTokenFromLocalStorage();
-    let accountCreatedField = false;
-
-    const { accessToken, accountCreated } = queryString.parse(
-      window.location.search,
-    );
-
-    const created =
-      typeof accountCreated === "string" ? JSON.parse(accountCreated) : false;
-
-    if (typeof accessToken === "string" && typeof created === "boolean") {
-      console.log(`Login detected! Account created: ${created}`);
-      token = accessToken;
-      accountCreatedField = created;
-    }
-
-    this.props.storeAccessToken({
-      accessToken: token,
-      accountCreated: accountCreatedField,
+    this.props.initializeAccessToken({
+      initialWindowLocationSearch: window.location.search,
     });
-
     this.setState({ hasHandledRedirect: true });
   };
 
@@ -512,6 +492,7 @@ const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   updateChallenge: Modules.actions.challenges.updateChallenge,
+  initializeAccessToken: Modules.actions.auth.initializeAccessToken,
 };
 
 const mergeProps = (

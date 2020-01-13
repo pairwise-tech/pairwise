@@ -1,11 +1,20 @@
+import queryString from "query-string";
 import { combineEpics } from "redux-observable";
-import { filter, ignoreElements, tap, mergeMap } from "rxjs/operators";
+import {
+  filter,
+  ignoreElements,
+  tap,
+  mergeMap,
+  pluck,
+  map,
+} from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { of } from "rxjs";
 
 import {
   setAccessTokenInLocalStorage,
   logoutUserInLocalStorage,
+  getAccessTokenFromLocalStorage,
 } from "tools/storage-utils";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
@@ -14,6 +23,34 @@ import { Actions } from "../root-actions";
  * Epics
  * ============================================================================
  */
+
+const accessTokenInitializationEpic: EpicSignature = action$ => {
+  return action$.pipe(
+    filter(isActionOf(Actions.initializeAccessToken)),
+    pluck("payload"),
+    map(payload => {
+      let token = getAccessTokenFromLocalStorage();
+      let accountCreatedField = false;
+
+      const search = payload.initialWindowLocationSearch;
+      const { accessToken, accountCreated } = queryString.parse(search);
+
+      const created =
+        typeof accountCreated === "string" ? JSON.parse(accountCreated) : false;
+
+      if (typeof accessToken === "string" && typeof created === "boolean") {
+        console.log(`Login detected! Account created: ${created}`);
+        token = accessToken;
+        accountCreatedField = created;
+      }
+
+      return Actions.storeAccessToken({
+        accessToken: token,
+        accountCreated: accountCreatedField,
+      });
+    }),
+  );
+};
 
 const initializeAppAuthenticationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
@@ -62,4 +99,8 @@ const logoutEpic: EpicSignature = action$ => {
  * ============================================================================
  */
 
-export default combineEpics(logoutEpic, initializeAppAuthenticationEpic);
+export default combineEpics(
+  accessTokenInitializationEpic,
+  initializeAppAuthenticationEpic,
+  logoutEpic,
+);
