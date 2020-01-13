@@ -311,7 +311,7 @@ const LoadingOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 15, 15, 0.92);
+  background: rgba(15, 15, 15, 0.95);
   visibility: ${(props: { visible: boolean }) =>
     props.visible ? "visible" : "hidden"};
 `;

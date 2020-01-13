@@ -55,19 +55,7 @@ const NavigationOverlay = (props: IProps) => {
   ) => {
     if (!userCanAccess) {
       event.preventDefault();
-      if (props.user) {
-        props.setPurchaseCourseModalState(true);
-        props.setPurchaseCourseId(courseId);
-      } else {
-        AppToaster.show({
-          icon: "user",
-          intent: "primary",
-          message: "Please create an account to purchase the course",
-        });
-        setEphemeralPurchaseCourseId(courseId);
-        props.setPurchaseCourseId(courseId);
-        props.setSingleSignOnDialogState(true);
-      }
+      props.handlePurchaseCourseIntent({ courseId });
     }
   };
 
@@ -428,9 +416,8 @@ const dispatchProps = {
   createChallenge: Modules.actions.challenges.createChallenge,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
-  setPurchaseCourseModalState:
-    Modules.actions.purchase.setPurchaseCourseModalState,
-  setPurchaseCourseId: Modules.actions.purchase.setPurchaseCourseId,
+  handlePurchaseCourseIntent:
+    Modules.actions.purchase.handlePurchaseCourseIntent,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
