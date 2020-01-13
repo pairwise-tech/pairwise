@@ -61,15 +61,16 @@ class Home extends React.Component<IProps, IState> {
         className="course-card"
         elevation={Elevation.FOUR}
       >
-        <CourseTitle>{skeleton.title}</CourseTitle>
+        <CourseTitle id={`course-link-${i}`}>{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
         <ButtonsBox>
-          <Link to={`workspace/${firstChallengeId}`} id={`course-link-${i}`}>
+          <Link to={`workspace/${firstChallengeId}`}>
             <Button
               large
               intent="success"
               onClick={() => null}
               style={{ width: 185 }}
+              id={`course-link-${i}-start`}
             >
               Start Now For Free
             </Button>
@@ -77,6 +78,7 @@ class Home extends React.Component<IProps, IState> {
           <Button
             large
             intent="success"
+            id={`course-link-${i}-purchase`}
             style={{ marginLeft: 16, width: 185 }}
             onClick={this.handlePurchaseCourse(skeleton.id)}
           >

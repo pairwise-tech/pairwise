@@ -6,6 +6,7 @@
   "fixturesFolder": false,
   "chromeWebSecurity": false,
   "env": {
+    "TIMEOUT": 2000,
     "CLIENT_APP_URL": "http://localhost:3000"
   }
 }

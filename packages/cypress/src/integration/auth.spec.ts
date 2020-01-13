@@ -1,9 +1,9 @@
-import { CLIENT_APP_URL } from "../support/utils";
+import { CLIENT_APP_URL, TIMEOUT } from "../support/utils";
 
 describe("Authentication Flows: signin, profile, and logout", () => {
   beforeEach(() => {
     cy.visit(CLIENT_APP_URL);
-    cy.wait(2500);
+    cy.wait(TIMEOUT);
     cy.get("#login-signup-button").click({ force: true });
   });
 
@@ -35,7 +35,7 @@ describe("Authentication Flows: signin, profile, and logout", () => {
     cy.get("#save-profile-button").click({ force: true });
 
     /* Let the updates occur */
-    cy.wait(2000);
+    cy.wait(TIMEOUT);
 
     cy.get("#profile-given-name").contains("Linus");
     cy.get("#profile-family-name").contains("Torvalds");
@@ -53,7 +53,7 @@ describe("Authentication Flows: signin, profile, and logout", () => {
  * Helper to test the authentication features work after login occurs.
  */
 const assertAuthenticatedFlowWorks = () => {
-  cy.wait(2500);
+  cy.wait(TIMEOUT);
   cy.contains("Welcome, ");
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
@@ -61,7 +61,7 @@ const assertAuthenticatedFlowWorks = () => {
   cy.contains("Account");
 
   cy.reload();
-  cy.wait(500);
+  cy.wait(TIMEOUT);
   cy.contains("Welcome, ");
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
