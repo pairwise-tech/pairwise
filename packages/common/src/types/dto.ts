@@ -143,6 +143,10 @@ export interface ICodeBlobDto {
   challengeId: string;
 }
 
+export interface CodeBlobBulk {
+  [key: string]: ICodeBlobDto;
+}
+
 /** ===========================================================================
  * User Progress History
  * ============================================================================

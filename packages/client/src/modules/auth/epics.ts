@@ -124,10 +124,20 @@ const accountCreationEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     pluck("accountCreated"),
     filter(Boolean),
-    map(() => {
+    mergeMap(async () => {
       console.log(
         "[TODO]: Handling persisting any local user history to the server!",
       );
+      deps.toaster.show({
+        intent: "warning",
+        message:
+          "Syncing your progress to your new account, please wait a moment and do not close your browser window.",
+      });
+      await deps.api.handleDataPersistenceForNewAccount();
+      deps.toaster.show({
+        intent: "success",
+        message: "Updates saved! You are good to go!",
+      });
     }),
     ignoreElements(),
   );

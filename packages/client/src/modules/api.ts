@@ -12,6 +12,8 @@ import {
   ICodeBlobDto,
   CourseSkeletonList,
   ProgressEntity,
+  CodeBlobBulk,
+  UserCourseStatus,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -285,6 +287,30 @@ class Api extends BaseApiClass {
       return new Ok(result);
     }
   };
+
+  updateCourseProgressBulk = async (userCourseProgress: UserCourseProgress) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.post<ICodeBlobDto>(`${HOST}/progress/bulk`, {
+        headers,
+        body: userCourseProgress,
+      });
+    });
+  };
+
+  updateChallengeHistoryBulk = async (codeBlobBulk: CodeBlobBulk) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.post<ICodeBlobDto>(`${HOST}/blob/bulk`, {
+        headers,
+        body: codeBlobBulk,
+      });
+    });
+  };
+
+  handleDataPersistenceForNewAccount = async () => {
+    await localStorageHTTP.persistDataPersistenceForNewAccount();
+  };
 }
 
 /** ===========================================================================
@@ -301,27 +327,6 @@ enum KEYS {
 }
 
 class LocalStorageHttpClass {
-  getItem = <T extends {}>(key: KEYS, defaultValue: T): T => {
-    try {
-      const result = localStorage.getItem(key);
-      if (result) {
-        const parsed = JSON.parse(result);
-        if (parsed) {
-          return parsed;
-        }
-      }
-
-      return defaultValue;
-    } catch (err) {
-      return defaultValue;
-    }
-  };
-
-  setItem = (key: KEYS, value: any) => {
-    const serialized = JSON.stringify(value);
-    localStorage.setItem(key, serialized);
-  };
-
   fetchUserProgress = (): UserCourseProgress => {
     return this.getItem<UserCourseProgress>(KEYS.USER_PROGRESS_KEY, []);
   };
@@ -386,13 +391,50 @@ class LocalStorageHttpClass {
     this.setItem(KEYS.CHALLENGE_BLOB_KEY, updatedBlobs);
   };
 
-  persistUserProgressForNewAccount = async () => {
-    /* TODO: Implement this */
+  persistDataPersistenceForNewAccount = async () => {
+    await this.persistUserProgressForNewAccount();
+    await this.persistChallengeHistoryForNewAccount();
+    this.removeItem(KEYS.USER_PROGRESS_KEY);
+    this.removeItem(KEYS.CHALLENGE_BLOB_KEY);
   };
 
-  persistChallengeHistoryForNewAccount = async () => {
-    /* TODO: Implement this */
-  };
+  private getItem<T extends {}>(key: KEYS, defaultValue: T): T {
+    try {
+      const result = localStorage.getItem(key);
+      if (result) {
+        const parsed = JSON.parse(result);
+        if (parsed) {
+          return parsed;
+        }
+      }
+
+      return defaultValue;
+    } catch (err) {
+      return defaultValue;
+    }
+  }
+
+  private setItem(key: KEYS, value: any) {
+    const serialized = JSON.stringify(value);
+    localStorage.setItem(key, serialized);
+  }
+
+  private removeItem(key: KEYS) {
+    localStorage.removeItem(key);
+  }
+
+  private async persistUserProgressForNewAccount() {
+    const progress = this.fetchUserProgress();
+    await API.updateCourseProgressBulk(progress);
+  }
+
+  private async persistChallengeHistoryForNewAccount() {
+    const history = this.getItem<{ [key: string]: ICodeBlobDto }>(
+      KEYS.CHALLENGE_BLOB_KEY,
+      {},
+    );
+    await API.updateChallengeHistoryBulk(history);
+  }
 }
 
 const localStorageHTTP = new LocalStorageHttpClass();

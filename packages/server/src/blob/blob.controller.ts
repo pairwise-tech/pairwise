@@ -13,6 +13,7 @@ import { BlobDto } from "./blob.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
 import { BlobService } from "./blob.service";
+import { CodeBlobBulk } from "@pairwise/common";
 
 @Controller("blob")
 export class BlobController {
@@ -34,5 +35,15 @@ export class BlobController {
   ) {
     const { user } = req;
     return this.blobService.updateUserCodeBlob(challengeCodeDto, user);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Post("/bulk")
+  @UsePipes(ValidationPipe)
+  updateUserChallengeCodeBulk(
+    @Body() codeBlobBulk: CodeBlobBulk,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    console.log(codeBlobBulk);
   }
 }
