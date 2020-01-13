@@ -40,7 +40,7 @@
     "lint": "lerna run lint",
     "format": "lerna run format",
     "test": "lerna run test",
-    "build": "yarn common:build && lerna run build",
+    "build": "yarn common:build && lerna run build --parallel",
     "docker:build": "docker build -t dependencies -f Base.Dockerfile .",
     "ci": "cd packages/e2e && yarn test:e2e && cd ../cypress && yarn cypress:run",
     "e2e": "docker-compose -f packages/e2e/docker-compose.yml up --build --abort-on-container-exit",
