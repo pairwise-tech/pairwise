@@ -9,16 +9,13 @@ import {
   Button,
   Icon,
   IconName,
-  IButtonProps,
   Classes,
 } from "@blueprintjs/core";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
 
-import { COLORS } from "../tools/constants";
-
-const PROSE_MAX_WIDTH = 728;
+import { COLORS, PROSE_MAX_WIDTH } from "../tools/constants";
 
 const LazyCodeBlock = React.lazy(() => import("./CodeBlock"));
 
