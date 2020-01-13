@@ -21,7 +21,7 @@ const purchaseCourseInitializeEpic: EpicSignature = action$ => {
     action$.pipe(filter(isActionOf(Actions.fetchNavigationSkeletonSuccess))),
     action$.pipe(filter(isActionOf(Actions.initializeApp))),
   ).pipe(
-    map(([action]: any) => action.payload) /* Wtf types!? */,
+    map(([action]: any) => action.payload),
     mergeMap((skeletons: CourseSkeletonList) => {
       /* Validate that the course id exists */
       const id = getEphemeralPurchaseCourseId();
