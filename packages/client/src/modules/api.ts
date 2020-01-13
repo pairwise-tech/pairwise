@@ -13,7 +13,6 @@ import {
   CourseSkeletonList,
   ProgressEntity,
   CodeBlobBulk,
-  UserCourseStatus,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -214,9 +213,8 @@ class Api extends BaseApiClass {
   submitUserFeedback = async (feedback: IFeedbackDto) => {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
-      return axios.post<"Success">(`${HOST}/feedback`, {
+      return axios.post<"Success">(`${HOST}/feedback`, feedback, {
         headers,
-        body: feedback,
       });
     });
   };
@@ -241,9 +239,8 @@ class Api extends BaseApiClass {
 
     if (authenticated) {
       return this.httpHandler(async () => {
-        return axios.post<IProgressDto>(`${HOST}/progress`, {
+        return axios.post<IProgressDto>(`${HOST}/progress`, progress, {
           headers,
-          body: progress,
         });
       });
     } else {
@@ -274,13 +271,16 @@ class Api extends BaseApiClass {
     const { headers, authenticated } = this.getRequestHeaders();
     if (authenticated) {
       return this.httpHandler(async () => {
-        return axios.post<ICodeBlobDto>(`${HOST}/blob`, {
-          headers,
-          body: {
+        return axios.post<ICodeBlobDto>(
+          `${HOST}/blob`,
+          {
             dataBlob,
             challengeId,
           },
-        });
+          {
+            headers,
+          },
+        );
       });
     } else {
       const result = localStorageHTTP.updateChallengeHistory(dataBlob);
@@ -289,21 +289,23 @@ class Api extends BaseApiClass {
   };
 
   updateCourseProgressBulk = async (userCourseProgress: UserCourseProgress) => {
+    const { headers } = this.getRequestHeaders();
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.post<ICodeBlobDto>(`${HOST}/progress/bulk`, {
-        headers,
-        body: userCourseProgress,
-      });
+      return axios.post<ICodeBlobDto>(
+        `${HOST}/progress/bulk`,
+        userCourseProgress,
+        {
+          headers,
+        },
+      );
     });
   };
 
   updateChallengeHistoryBulk = async (codeBlobBulk: CodeBlobBulk) => {
+    const { headers } = this.getRequestHeaders();
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.post<ICodeBlobDto>(`${HOST}/blob/bulk`, {
+      return axios.post<ICodeBlobDto>(`${HOST}/blob/bulk`, codeBlobBulk, {
         headers,
-        body: codeBlobBulk,
       });
     });
   };
@@ -425,7 +427,9 @@ class LocalStorageHttpClass {
 
   private async persistUserProgressForNewAccount() {
     const progress = this.fetchUserProgress();
-    await API.updateCourseProgressBulk(progress);
+    if (progress.length > 0) {
+      await API.updateCourseProgressBulk(progress);
+    }
   }
 
   private async persistChallengeHistoryForNewAccount() {
@@ -433,7 +437,9 @@ class LocalStorageHttpClass {
       KEYS.CHALLENGE_BLOB_KEY,
       {},
     );
-    await API.updateChallengeHistoryBulk(history);
+    if (Object.keys(history).length > 0) {
+      await API.updateChallengeHistoryBulk(history);
+    }
   }
 }
 

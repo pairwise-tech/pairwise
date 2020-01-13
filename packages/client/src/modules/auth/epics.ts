@@ -19,6 +19,7 @@ import {
 } from "tools/storage-utils";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
+import { wait } from "tools/utils";
 
 /** ===========================================================================
  * Epics
@@ -133,6 +134,7 @@ const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
           "Syncing your progress to your new account, please wait a moment and do not close your browser window.",
       });
       await deps.api.handleDataPersistenceForNewAccount();
+      await wait(2500);
       deps.toaster.show({
         intent: "success",
         message: "Updates saved! You are good to go!",
