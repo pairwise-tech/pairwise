@@ -6,13 +6,16 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
+import { CourseSkeleton } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
 
-interface IState {}
+interface IState {
+  course: Nullable<CourseSkeleton>;
+}
 
 /** ===========================================================================
  * React Component
@@ -22,11 +25,39 @@ interface IState {}
  */
 
 class PurchaseCourseModal extends React.Component<IProps, IState> {
-  render(): JSX.Element {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      course: null,
+    };
+  }
+
+  componentDidMount() {
     const course = this.props.skeletons?.find(
       c => c.id === this.props.coursePurchaseId,
     );
-    const courseTitle = course ? course.title : "";
+
+    if (course) {
+      return this.setState({ course });
+    } else {
+      /**
+       * The course id is previously validated, so this should not happen,
+       * but in case it does:
+       */
+      console.warn(
+        "[WARNING]: PurchaseCourseModal opened with a invalid courseId, this should not happen!",
+      );
+      return this.props.setPurchaseCourseModalState(false);
+    }
+  }
+
+  render(): Nullable<JSX.Element> {
+    const { course } = this.state;
+    if (course === null) {
+      return null;
+    }
+
     return (
       <Dialog
         isOpen={this.props.dialogOpen}
@@ -36,7 +67,7 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
       >
         <AccountModal>
           <TitleText>Purchase Course</TitleText>
-          <SubText>{courseTitle}</SubText>
+          <SubText>{course.title}</SubText>
         </AccountModal>
       </Dialog>
     );

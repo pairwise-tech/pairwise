@@ -429,7 +429,7 @@ const dispatchProps = {
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   setPurchaseCourseModalState:
     Modules.actions.purchase.setPurchaseCourseModalState,
-  setPurchaseCourseId: Modules.actions.purchase.setPurchaseCourseID,
+  setPurchaseCourseId: Modules.actions.purchase.setPurchaseCourseId,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
