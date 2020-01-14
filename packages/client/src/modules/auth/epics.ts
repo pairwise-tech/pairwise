@@ -8,6 +8,7 @@ import {
   pluck,
   map,
   mapTo,
+  mergeMapTo,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { of } from "rxjs";
@@ -119,39 +120,12 @@ const accountCreationEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+/* Nice! */
 const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initiateBulkPersistence)),
-    mergeMap(async () => {
-      /**
-       * This toast UI can be improved by showing some more obvious/blocking
-       * UI on the screen, but for now this gets the message across:
-       */
-
-      /* Arbitrary delay for the application to load... */
-      await wait(500);
-      const key = deps.toaster.show({
-        intent: "warning",
-        message:
-          "Syncing your progress to your new account, please wait a moment and do not close your browser window.",
-      });
-
-      /* Execute the updates! */
-      await deps.api.handleDataPersistenceForNewAccount();
-
-      /* Arbitrary delay for effect... */
-      await wait(3000);
-
-      /* Dismiss the previous toaster: */
-      deps.toaster.dismiss(key);
-      deps.toaster.show({
-        intent: "success",
-        message: "Updates saved! You are good to go!",
-      });
-    }),
-    mergeMap(() => {
-      return of(Actions.fetchUser(), Actions.bulkPersistenceComplete());
-    }),
+    mergeMap(deps.api.handleDataPersistenceForNewAccount),
+    mergeMapTo(of(Actions.fetchUser(), Actions.bulkPersistenceComplete())),
   );
 };
 

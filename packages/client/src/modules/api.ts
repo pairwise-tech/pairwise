@@ -41,6 +41,8 @@ export interface HttpResponseError {
   statusText?: string;
 }
 
+type MaybeFailedResponse = Result<any, HttpResponseError>;
+
 const HOST = ENV.HOST; /* NestJS Server URL */
 
 /**
@@ -525,72 +527,119 @@ class LocalStorageHttpClass {
 
   persistDataPersistenceForNewAccount = async () => {
     /**
+     * This is the method!
+     *
      * Persist user settings, progress, and code blob history from local
      * storage for a new account signup. This results in 3 API calls which
      * should persist all of this data for the newly created user account.
+     *
+     * Handle failure/empty cases, and render toasts messages for the
+     * user when appropriate.
      */
+    const { settings, blobs, progress } = this.getLocalDataToPersist();
 
-    type MaybeFailed = Result<any, HttpResponseError>;
-    const logErrorIfOperationFailed = (result: MaybeFailed) => {
-      if (result.error) {
-        console.warn(
-          "[WARNING]: A new account data persistence request failed!",
-          result.error,
-        );
-      }
-    };
-
-    const persistSettings = async (): Promise<MaybeFailed> => {
-      const result = await this.persistUserSettingsForNewAccount();
-      this.removeItem(KEYS.USER_SETTINGS);
-      return result;
-    };
-
-    const persistProgress = async () => {
-      const result = await this.persistUserProgressForNewAccount();
-      this.removeItem(KEYS.USER_PROGRESS_KEY);
-      return result;
-    };
-
-    const persistBlobs = async () => {
-      const result = await this.persistChallengeHistoryForNewAccount();
-      this.removeItem(KEYS.CHALLENGE_BLOB_KEY);
-      return result;
-    };
-
-    const results = await Promise.all([
-      persistSettings(),
-      persistProgress(),
-      persistBlobs(),
-    ]);
-
-    results.forEach(x => logErrorIfOperationFailed(x));
-  };
-
-  private async persistUserSettingsForNewAccount() {
-    const settings = this.fetchUserSettings();
-    return API.updateUser({ settings });
-  }
-
-  private async persistUserProgressForNewAccount() {
-    const progress = this.fetchUserProgress();
-    if (progress.length > 0) {
-      return API.updateCourseProgressBulk(progress);
+    /* Only show the toast migration messages if we are sure pre-existing progress exists */
+    let shouldToast = false;
+    if (blobs !== null || progress !== null) {
+      shouldToast = true;
     }
 
-    return createNonHttpResponseError("No progress updates to persist");
+    /* Arbitrary delay for the application to load... */
+    await wait(500);
+
+    let toastKey = "";
+    if (shouldToast) {
+      toastKey = AppToaster.show({
+        intent: "warning",
+        message:
+          "Syncing your progress to your new account, please wait a moment and do not close your browser window.",
+      });
+    }
+
+    const results = await Promise.all([
+      this.persistBlobs(blobs),
+      this.persistProgress(progress),
+      this.persistSettings(settings),
+    ]);
+
+    if (shouldToast) {
+      /* Arbitrary delay for effect... */
+      await wait(3000);
+
+      /* Dismiss the previous toaster: */
+      AppToaster.dismiss(toastKey);
+      AppToaster.show({
+        intent: "success",
+        message: "Updates saved! You are good to go!",
+      });
+    }
+
+    /* Log failed operations for debugging */
+    results.forEach(this.logErrorIfOperationFailed);
+  };
+
+  private getLocalDataToPersist() {
+    return {
+      settings: this.fetchUserSettings(),
+      blobs: this.getBlobsForPersistence(),
+      progress: this.getProgressForPersistence(),
+    };
   }
 
-  private async persistChallengeHistoryForNewAccount() {
+  private getProgressForPersistence() {
+    const progress = this.fetchUserProgress();
+    if (progress.length > 0) {
+      return progress;
+    }
+
+    return null;
+  }
+
+  private getBlobsForPersistence() {
     const history = this.getItem<{ [key: string]: ICodeBlobDto }>(
       KEYS.CHALLENGE_BLOB_KEY,
       {},
     );
     if (Object.keys(history).length > 0) {
-      return API.updateChallengeHistoryBulk(history);
+      return history;
     }
 
-    return createNonHttpResponseError("No challenge blobs to persist");
+    return null;
+  }
+
+  private async persistSettings(settings: UserSettings) {
+    const result = await API.updateUser({ settings });
+    this.removeItem(KEYS.USER_SETTINGS);
+    return result;
+  }
+
+  private async persistProgress(progress: Nullable<UserCourseProgress>) {
+    if (progress) {
+      const result = API.updateCourseProgressBulk(progress);
+      this.removeItem(KEYS.USER_PROGRESS_KEY);
+      return result;
+    } else {
+      return createNonHttpResponseError("No progress updates to persist!");
+    }
+  }
+
+  private async persistBlobs(blobs: Nullable<{ [key: string]: ICodeBlobDto }>) {
+    if (blobs) {
+      const result = await API.updateChallengeHistoryBulk(blobs);
+      this.removeItem(KEYS.CHALLENGE_BLOB_KEY);
+      return result;
+    } else {
+      return createNonHttpResponseError("No code blobs to persist!");
+    }
+  }
+
+  private logErrorIfOperationFailed(result: MaybeFailedResponse) {
+    if (result.error) {
+      console.warn(
+        "[WARNING]: A new account data persistence request failed!",
+        result.error,
+      );
+    }
   }
 
   private getItem<T extends {}>(key: KEYS, defaultValue: T): T {
