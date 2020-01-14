@@ -14,7 +14,6 @@ import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
 import { DEV_MODE } from "tools/client-env";
 import {
-  getTestHarness,
   IFRAME_MESSAGE_TYPES,
   IframeMessageEvent,
   requestCodeFormatting,

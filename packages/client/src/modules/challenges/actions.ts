@@ -1,7 +1,6 @@
 import {
   Course,
   CourseSkeletonList,
-  DataBlob,
   ICodeBlobDto,
   IProgressDto,
 } from "@pairwise/common";
@@ -15,7 +14,6 @@ import {
   MonacoEditorOptions,
 } from "./types";
 import { HttpResponseError } from "modules/api";
-import { string } from "getenv";
 
 /** ===========================================================================
  * Action Types

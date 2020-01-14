@@ -13,7 +13,6 @@ import {
   CourseSkeletonList,
   ProgressEntity,
   CodeBlobBulk,
-  CourseSkeleton,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";

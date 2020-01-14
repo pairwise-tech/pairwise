@@ -16,7 +16,6 @@ import {
   mergeMap,
   tap,
   pluck,
-  ignoreElements,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
