@@ -100,7 +100,21 @@ export class BlobService {
       `[BULK]: Persisting bulk blobs for user: ${user.profile.email}`,
     );
     for (const [_, blob] of Object.entries(blobs)) {
-      await this.updateUserCodeBlob(blob, user);
+      try {
+        /**
+         * This method performs input validation, but it could fail if the
+         * input is mal-formed. If it does, don't just silent fail and continue
+         * the total operation.
+         */
+        await this.updateUserCodeBlob(blob, user);
+      } catch (err) {
+        console.log(
+          "[BULK ERROR]: Error occurring processing one of the bulk blobs",
+          err,
+        );
+      }
     }
+
+    return SUCCESS_CODES.OK;
   }
 }

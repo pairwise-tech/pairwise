@@ -457,6 +457,7 @@ class LocalStorageHttpClass {
 
     let updatedProgress: ProgressEntity;
 
+    /* ugh */
     if (existingCourseProgress) {
       updatedProgress = {
         courseId,
@@ -474,13 +475,16 @@ class LocalStorageHttpClass {
       };
     }
 
-    const updatedProgressList = progressList.map(p => {
-      if (p.courseId === progress.courseId) {
-        return updatedProgress;
-      } else {
-        return p;
-      }
-    });
+    /* ugh */
+    const updatedProgressList = progressList.length
+      ? progressList.map(p => {
+          if (p.courseId === progress.courseId) {
+            return updatedProgress;
+          } else {
+            return p;
+          }
+        })
+      : [updatedProgress];
 
     this.setItem(KEYS.USER_PROGRESS_KEY, updatedProgressList);
 

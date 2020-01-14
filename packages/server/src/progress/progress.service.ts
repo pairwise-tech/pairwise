@@ -9,7 +9,7 @@ import {
   UserCourseStatus,
   UserCourseProgress,
 } from "@pairwise/common";
-import { ERROR_CODES } from "src/tools/constants";
+import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { RequestUser } from "src/types";
 
 @Injectable()
@@ -107,17 +107,29 @@ export class ProgressService {
     courseProgress: UserCourseProgress,
     user: RequestUser,
   ) {
+    /**
+     * TODO: Validation!
+     */
     for (const entity of courseProgress) {
-      const { courseId, progress } = entity;
-      console.log(
-        `[BULK]: Persisting user course progress for courseId: ${courseId}`,
-      );
-      const newProgressEntry: Partial<Progress> = {
-        user: user.profile,
-        courseId,
-        progress: JSON.stringify(progress),
-      };
-      await this.progressRepository.insert(newProgressEntry);
+      try {
+        const { courseId, progress } = entity;
+        console.log(
+          `[BULK]: Persisting user course progress for courseId: ${courseId}`,
+        );
+        const newProgressEntry: Partial<Progress> = {
+          user: user.profile,
+          courseId,
+          progress: JSON.stringify(progress),
+        };
+        await this.progressRepository.insert(newProgressEntry);
+      } catch (err) {
+        console.log(
+          "[BULK ERROR]: Error occurring processing one of the user course progress insertions",
+          err,
+        );
+      }
     }
+
+    return SUCCESS_CODES.OK;
   }
 }
