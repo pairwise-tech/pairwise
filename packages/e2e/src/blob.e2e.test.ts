@@ -42,9 +42,7 @@ describe("User Progress APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe(
-          "Invalid update parameters provided",
-        );
+        expect(response.body.message).toBe("Invalid parameters provided");
         done(error);
       });
   });

@@ -79,9 +79,7 @@ describe("User APIs", () => {
       .set("Authorization", `Bearer ${accessToken}`)
       .expect(400)
       .expect(response => {
-        expect(response.body.message).toBe(
-          "Invalid update parameters provided",
-        );
+        expect(response.body.message).toBe("Invalid parameters provided");
       });
 
     await request(`${HOST}/user/profile`)
@@ -94,9 +92,7 @@ describe("User APIs", () => {
       .set("Authorization", `Bearer ${accessToken}`)
       .expect(400)
       .expect(response => {
-        expect(response.body.message).toBe(
-          "Invalid update parameters provided",
-        );
+        expect(response.body.message).toBe("Invalid parameters provided");
       });
 
     result = await axios.get(`${HOST}/user/profile`, headers);

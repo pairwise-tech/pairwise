@@ -19,6 +19,8 @@ const appInitializationEpic: EpicSignature = (action$, _, deps) => {
       /**
        * On app load for mobile sized devices, direct /home and lock
        * the page scrolling.
+       *
+       * The mobile UI sucks.
        */
       if (window.innerWidth < 768) {
         document.body.style.overflowX = "hidden";

@@ -111,4 +111,4 @@ export const generateEmptyChallenge = (
   ...overwrite,
 });
 
-export const AppToaster = Toaster.create();
+export const AppToaster = Toaster.create({ className: "blueprint-toaster" });
