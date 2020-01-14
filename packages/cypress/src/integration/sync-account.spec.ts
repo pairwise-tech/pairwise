@@ -7,13 +7,13 @@ import { CLIENT_APP_URL, TIMEOUT } from "../support/utils";
  * after page reload.
  */
 describe("Account Creation Flow", () => {
-  type TestStatus = "Success!" | "Incomplete...";
+  type TestStatus = "Success!" | "Incomplete..." | string;
   const checkTestStatus = (status: TestStatus, index: number) => {
     cy.get(`#test-result-status-${index}`).contains(status);
   };
 
   const checkTestResultStatus = (
-    expectedStatus: "Success!" | "Incomplete...",
+    expectedStatus: TestStatus,
     numberOfResults: number = 1,
   ) => {
     /* Whatever! */

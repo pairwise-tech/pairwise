@@ -3,7 +3,8 @@
 # used to run the e2e and Cypress tests with the full application using
 # docker-compose.
 
-FROM cypress/base:10 AS image
+# FROM cypress/base:10 AS image
+FROM cypress/browsers:node10.16.0-chrome77 AS image
 
 # Dockerize is needed to sync containers startup
 ENV DOCKERIZE_VERSION v0.6.0
