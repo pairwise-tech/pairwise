@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { User } from "src/user/user.entity";
 import { JwtPassportSignPayload } from "./strategies/jwt.strategy";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";

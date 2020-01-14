@@ -6,7 +6,6 @@ import { Payments } from "src/payments/payments.entity";
 import {
   IUserDto,
   UserUpdateOptions,
-  UserProfile,
   UserSettings,
   UserProgressMap,
   defaultUserSettings,
@@ -34,23 +33,6 @@ export class UserService {
     @InjectRepository(Payments)
     private readonly paymentsRepository: Repository<Payments>,
   ) {}
-
-  processUserEntity = (user: User) => {
-    if (user) {
-      const deserializedSettings = JSON.parse(user.settings);
-      const settings: UserSettings = {
-        ...defaultUserSettings,
-        ...deserializedSettings,
-      };
-
-      const result = {
-        settings,
-        profile: user,
-      };
-
-      return result;
-    }
-  };
 
   async findUserByEmail(email: string) {
     const user = await this.userRepository.findOne({ email });
@@ -143,4 +125,21 @@ export class UserService {
       { lastActiveChallengeId: challengeId },
     );
   }
+
+  private processUserEntity = (user: User) => {
+    if (user) {
+      const deserializedSettings = JSON.parse(user.settings);
+      const settings: UserSettings = {
+        ...defaultUserSettings,
+        ...deserializedSettings,
+      };
+
+      const result = {
+        settings,
+        profile: user,
+      };
+
+      return result;
+    }
+  };
 }
