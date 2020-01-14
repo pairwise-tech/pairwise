@@ -193,12 +193,20 @@ export const IconNavLink = styled(
     // @ts-ignore See NOTE
     // prettier-ignore
     const handleClick = props.onClick ? pipe(onClick, props.onClick) : onClick;
+
+    /**
+     * NOTE: There is some dispatch prop which React shows a warning about if
+     * it is include in the <a> props below...
+     */
+    // @ts-ignore
+    const { dispatch, ...rest } = props;
+
     return (
       <NavLink
         className={cx(className, Classes.BUTTON, {
           [Classes.DISABLED]: disabled,
         })}
-        {...props}
+        {...rest}
         onClick={handleClick}
       >
         {beforeText && <span style={{ marginRight: 6 }}>{beforeText}</span>}

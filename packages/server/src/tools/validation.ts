@@ -8,6 +8,8 @@ import {
   Ok,
   Err,
   UserSettings,
+  IProgressDto,
+  ProgressEntity,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -94,7 +96,7 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
  */
 export const validateUserUpdateDetails = (
   details: UserUpdateOptions,
-): Result<UserUpdateOptions<string>, ERROR_CODES.INVALID_UPDATE_DETAILS> => {
+): Result<UserUpdateOptions<string>, ERROR_CODES.INVALID_PARAMETERS> => {
   try {
     const updateDetails = {
       avatarUrl: checkStringField(details.avatarUrl),
@@ -111,7 +113,7 @@ export const validateUserUpdateDetails = (
       throw new Error("No valid update fields received!");
     }
   } catch (err) {
-    return new Err(ERROR_CODES.INVALID_UPDATE_DETAILS);
+    return new Err(ERROR_CODES.INVALID_PARAMETERS);
   }
 };
 
@@ -154,4 +156,46 @@ const sanitizeObject = (obj: any) => {
     }
   });
   return sanitizedUpdate;
+};
+
+/**
+ * Validate a progress item before update/insertion. Throw an error if the
+ * entire object is mal-formed, otherwise proceed with validating each
+ * entry.
+ *
+ * Return a sanitized object which can be persisted.
+ */
+export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
+  const { progress, courseId } = entity;
+
+  if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+    throw new Error(ERROR_CODES.INVALID_COURSE_ID);
+  }
+
+  const sanitizedEntity: ProgressEntity = Object.entries(progress).reduce(
+    (sanitized, [challengeId, status]) => {
+      /**
+       * Validate the progress item:
+       */
+      if (
+        challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
+      ) {
+        if (typeof status.complete === "boolean") {
+          return {
+            ...sanitized,
+            [challengeId]: status,
+          };
+        }
+
+        return sanitized;
+      }
+    },
+    {} as ProgressEntity,
+  );
+
+  if (Object.keys(sanitizedEntity).length > 0) {
+    return sanitizedEntity;
+  } else {
+    throw new Error(ERROR_CODES.INVALID_PARAMETERS);
+  }
 };

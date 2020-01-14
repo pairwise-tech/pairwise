@@ -11,6 +11,7 @@ import {
 } from "@pairwise/common";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { RequestUser } from "src/types";
+import { validateAndSanitizeProgressItem } from "src/tools/validation";
 
 @Injectable()
 export class ProgressService {
@@ -107,15 +108,21 @@ export class ProgressService {
     courseProgress: UserCourseProgress,
     user: RequestUser,
   ) {
-    /**
-     * TODO: Validation!
-     */
     for (const entity of courseProgress) {
       try {
-        const { courseId, progress } = entity;
+        /**
+         * If the entity is totally mal-formed, this validation method will
+         * throw and this entry will be skipped. Otherwise, it will check
+         * and sanitize all the challenge status entries, excluding any
+         * mal-formed ones.
+         */
+        const sanitizedEntity = validateAndSanitizeProgressItem(entity);
+        const { courseId, progress } = sanitizedEntity;
+
         console.log(
           `[BULK]: Persisting user course progress for courseId: ${courseId}`,
         );
+
         const newProgressEntry: Partial<Progress> = {
           user: user.profile,
           courseId,

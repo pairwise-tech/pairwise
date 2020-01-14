@@ -510,7 +510,11 @@ class LocalStorageHttpClass {
   };
 
   updateChallengeHistory = (blob: ICodeBlobDto) => {
-    const blobs = this.fetchUserProgress();
+    const blobs = this.getItem<{ [key: string]: ICodeBlobDto }>(
+      KEYS.CHALLENGE_BLOB_KEY,
+      {},
+    );
+
     const updatedBlobs = {
       ...blobs,
       [blob.challengeId]: blob,

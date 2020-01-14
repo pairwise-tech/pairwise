@@ -28,7 +28,7 @@ export class BlobService {
   async fetchUserCodeBlob(user: RequestUser, challengeId: string) {
     /* Verify the challenge id is valid */
     if (!challengeUtilityClass.challengeIdIsValid(challengeId)) {
-      throw new BadRequestException(ERROR_CODES.INVALID_UPDATE_DETAILS);
+      throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
     }
 
     /**
@@ -99,6 +99,7 @@ export class BlobService {
     console.log(
       `[BULK]: Persisting bulk blobs for user: ${user.profile.email}`,
     );
+
     for (const [_, blob] of Object.entries(blobs)) {
       try {
         /**

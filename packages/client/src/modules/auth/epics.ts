@@ -93,12 +93,10 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
     }),
     mergeMap(({ payload }) => {
       const { accessToken } = payload;
-      const initAction = Actions.initializeAppSuccess({ accessToken });
-      if (accessToken) {
-        return of(initAction, Actions.storeAccessTokenSuccess(payload));
-      } else {
-        return of(initAction);
-      }
+      return of(
+        Actions.storeAccessTokenSuccess(payload),
+        Actions.initializeAppSuccess({ accessToken }),
+      );
     }),
   );
 };
@@ -125,9 +123,6 @@ const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initiateBulkPersistence)),
     mergeMap(async () => {
-      console.log(
-        "[TODO]: Handling persisting any local user history to the server!",
-      );
       deps.toaster.show({
         intent: "warning",
         message:
@@ -141,9 +136,6 @@ const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
       });
     }),
     mergeMap(() => {
-      /**
-       * TODO: Refetch user course progress:
-       */
       return of(Actions.fetchUser(), Actions.bulkPersistenceComplete());
     }),
   );
