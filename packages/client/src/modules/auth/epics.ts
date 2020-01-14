@@ -20,7 +20,6 @@ import {
 } from "tools/storage-utils";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import { wait } from "tools/utils";
 
 /** ===========================================================================
  * Epics
