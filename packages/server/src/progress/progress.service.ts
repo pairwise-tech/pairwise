@@ -11,23 +11,22 @@ import {
 } from "@pairwise/common";
 import { ERROR_CODES } from "src/tools/constants";
 import { RequestUser } from "src/types";
-import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class ProgressService {
   constructor(
     @InjectRepository(Progress)
-    private readonly userProgressRepository: Repository<Progress>,
+    private readonly progressRepository: Repository<Progress>,
   ) {}
 
   async fetchProgressHistoryForCourse(courseId: string) {
-    return this.userProgressRepository.find({ courseId });
+    return this.progressRepository.find({ courseId });
   }
 
-  async fetchUserProgress(user: RequestUser) {
-    const result = await this.userProgressRepository.find({
+  async fetchUserProgress(uuid: string) {
+    const result = await this.progressRepository.find({
       where: {
-        user: user.profile.uuid,
+        user: uuid,
       },
     });
 
@@ -67,7 +66,7 @@ export class ProgressService {
       [challengeId]: statusObject,
     };
 
-    const existingEntry = await this.userProgressRepository.findOne({
+    const existingEntry = await this.progressRepository.findOne({
       courseId,
       user: user.profile,
     });
@@ -83,7 +82,7 @@ export class ProgressService {
       /**
        * Insert:
        */
-      await this.userProgressRepository.insert(newProgressEntry);
+      await this.progressRepository.insert(newProgressEntry);
     } else {
       const updatedCourseProgress: UserCourseStatus = {
         ...JSON.parse(existingEntry.progress),
@@ -93,7 +92,7 @@ export class ProgressService {
       /**
        * Update:
        */
-      await this.userProgressRepository
+      await this.progressRepository
         .createQueryBuilder("userCourseProgress")
         .update(Progress)
         .where({ uuid: existingEntry.uuid })
@@ -118,7 +117,7 @@ export class ProgressService {
         courseId,
         progress: JSON.stringify(progress),
       };
-      await this.userProgressRepository.insert(newProgressEntry);
+      await this.progressRepository.insert(newProgressEntry);
     }
   }
 }

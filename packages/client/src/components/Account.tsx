@@ -46,11 +46,11 @@ class Account extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
     const { edit } = this.state;
     const { user, skeletons } = this.props;
-    if (!user || !skeletons) {
+    const { payments, profile } = user;
+    if (!payments || !profile || !skeletons) {
       return null;
     }
 
-    const { profile, payments } = user;
     return (
       <PageContainer>
         <PageTitle>Account</PageTitle>
@@ -188,10 +188,8 @@ class Account extends React.Component<IProps, IState> {
   };
 
   handleEditProfile = () => {
-    const { user } = this.props;
-    if (user) {
-      const { profile } = user;
-
+    const { profile } = this.props.user;
+    if (profile) {
       this.setState({
         edit: true,
         givenName: profile.givenName,

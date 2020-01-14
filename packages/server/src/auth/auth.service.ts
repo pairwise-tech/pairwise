@@ -35,7 +35,7 @@ export class AuthService {
     const { user, accountCreated } = await this.userService.findOrCreateUser(
       userProfile,
     );
-    const token = this.getJwtAccessToken(user);
+    const token = this.getJwtAccessToken(user.profile);
     return { token, accountCreated };
   }
 
@@ -59,7 +59,7 @@ export class AuthService {
     const { user, accountCreated } = await this.userService.findOrCreateUser(
       userProfile,
     );
-    const token = this.getJwtAccessToken(user);
+    const token = this.getJwtAccessToken(user.profile);
     return { token, accountCreated };
   }
 
@@ -79,7 +79,7 @@ export class AuthService {
     const { user, accountCreated } = await this.userService.findOrCreateUser(
       userProfile,
     );
-    const token = this.getJwtAccessToken(user);
+    const token = this.getJwtAccessToken(user.profile);
     return { token, accountCreated };
   }
 

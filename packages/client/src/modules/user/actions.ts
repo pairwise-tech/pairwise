@@ -1,6 +1,7 @@
 import { IUserDto, UserUpdateOptions } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { ActionType, createAction } from "typesafe-actions";
+import { UserStoreState } from "./store";
 
 /** ===========================================================================
  * Action Types
@@ -24,7 +25,7 @@ enum ActionTypesEnum {
 
 const fetchUser = createAction(ActionTypesEnum.FETCH_USER)();
 const fetchUserSuccess = createAction(ActionTypesEnum.FETCH_USER_SUCCESS)<
-  IUserDto
+  UserStoreState
 >();
 const fetchUserFailure = createAction(ActionTypesEnum.FETCH_USER_FAILURE)<
   HttpResponseError

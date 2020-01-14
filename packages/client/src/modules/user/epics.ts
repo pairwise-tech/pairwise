@@ -17,12 +17,12 @@ const fetchUserEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(API.fetchUserProfile),
     map(result => {
       if (result.value) {
-        const user = result.value;
-        if (user.profile.lastActiveChallengeId) {
-          deps.router.push(`/workspace/${user.profile.lastActiveChallengeId}`);
+        const { profile } = result.value;
+        if (profile && profile.lastActiveChallengeId) {
+          deps.router.push(`/workspace/${profile.lastActiveChallengeId}`);
         }
 
-        return Actions.fetchUserSuccess(user);
+        return Actions.fetchUserSuccess(result.value);
       } else {
         return Actions.fetchUserFailure(result.error);
       }

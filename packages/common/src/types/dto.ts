@@ -25,25 +25,37 @@ export interface UserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
-  settings: UserSettings;
   lastActiveChallengeId: string;
 }
 
 /**
- * User workspace settings.
+ * The source of truth for client and server for the JSON blob user
+ * settings object!
+ *
+ * Type definition and default settings object:
  */
 export interface UserSettings {
   workspaceFontSize: number;
 }
 
+export const defaultUserSettings: UserSettings = {
+  workspaceFontSize: 12,
+};
+
 export interface IUserDto<Profile = UserProfile> {
   profile: Profile;
   payments: Payment[];
+  settings: UserSettings;
   courses: UserCourseAccessMap;
+  progress: UserProgressMap;
 }
 
 export interface UserCourseAccessMap {
   [key: string]: boolean;
+}
+
+export interface UserProgressMap {
+  [key: string]: UserCourseStatus;
 }
 
 /**

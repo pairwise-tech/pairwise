@@ -13,6 +13,9 @@ import {
   CourseSkeletonList,
   ProgressEntity,
   CodeBlobBulk,
+  UserSettings,
+  UserProgressMap,
+  defaultUserSettings,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -25,6 +28,7 @@ import {
 } from "tools/storage-utils";
 import { AppToaster } from "tools/constants";
 import { wait } from "tools/utils";
+import { UserStoreState } from "./user/store";
 
 /** ===========================================================================
  * Types & Config
@@ -216,12 +220,32 @@ class Api extends BaseApiClass {
   };
 
   fetchUserProfile = async () => {
-    return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<IUserDto>(`${HOST}/user/profile`, {
-        headers,
+    const { headers, authenticated } = this.getRequestHeaders();
+
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.get<UserStoreState>(`${HOST}/user/profile`, {
+          headers,
+        });
       });
-    });
+    } else {
+      const settings: UserSettings = defaultUserSettings;
+      const progress = localStorageHTTP.fetchUserProgressMap();
+
+      const preAccountUser: UserStoreState = {
+        settings,
+        progress,
+        profile: null,
+        courses: null,
+        payments: null,
+      };
+
+      return new Ok(preAccountUser);
+    }
+  };
+
+  updateUserSettings = async (settings: UserSettings) => {
+    return this.updateUser({ settings });
   };
 
   updateUser = async (userDetails: UserUpdateOptions) => {
@@ -351,6 +375,21 @@ enum KEYS {
 class LocalStorageHttpClass {
   fetchUserProgress = (): UserCourseProgress => {
     return this.getItem<UserCourseProgress>(KEYS.USER_PROGRESS_KEY, []);
+  };
+
+  fetchUserProgressMap = (): UserProgressMap => {
+    const progressList = this.getItem<UserCourseProgress>(
+      KEYS.USER_PROGRESS_KEY,
+      [],
+    );
+    const progressMap: UserProgressMap = progressList.reduce((x, progress) => {
+      return {
+        ...x,
+        [progress.courseId]: progress.progress,
+      };
+    }, {});
+
+    return progressMap;
   };
 
   updateUserProgress = (progress: IProgressDto) => {

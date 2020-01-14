@@ -22,7 +22,7 @@ export class ProgressController {
   @UseGuards(AuthGuard("jwt"))
   @Get()
   fetchUserChallengeProgress(@Req() req: AuthenticatedRequest) {
-    return this.progressService.fetchUserProgress(req.user);
+    return this.progressService.fetchUserProgress(req.user.profile.uuid);
   }
 
   @UseGuards(AuthGuard("jwt"))

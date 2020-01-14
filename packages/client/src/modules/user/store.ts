@@ -1,6 +1,12 @@
 import { createReducer } from "typesafe-actions";
 
-import { IUserDto } from "@pairwise/common";
+import {
+  UserSettings,
+  Payment,
+  UserCourseAccessMap,
+  UserProgressMap,
+  UserProfile,
+} from "@pairwise/common";
 import { AppActionTypes } from "../app";
 import { Actions as actions } from "../root-actions";
 import { ActionTypes } from "./actions";
@@ -11,11 +17,21 @@ import { ActionTypes } from "./actions";
  */
 
 export interface State {
-  user: Nullable<IUserDto>;
+  profile: Nullable<UserProfile>;
+  payments: Nullable<Payment[]>;
+  settings: Nullable<UserSettings>;
+  courses: Nullable<UserCourseAccessMap>;
+  progress: Nullable<UserProgressMap>;
 }
 
+export type UserStoreState = State;
+
 const initialState = {
-  user: null,
+  profile: null,
+  payments: null,
+  settings: null,
+  courses: null,
+  progress: null,
 };
 
 const app = createReducer<State, ActionTypes | AppActionTypes>(initialState)
@@ -24,7 +40,7 @@ const app = createReducer<State, ActionTypes | AppActionTypes>(initialState)
     [actions.fetchUserSuccess, actions.updateUserSuccess],
     (state, action) => ({
       ...state,
-      user: action.payload,
+      ...action.payload,
     }),
   );
 

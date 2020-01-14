@@ -16,13 +16,13 @@ describe("User APIs", () => {
       },
     });
 
-    const { profile } = result.data;
+    const { profile, settings } = result.data;
     expect(profile.email).toBeDefined();
     expect(profile.displayName).toBeDefined();
     expect(profile.givenName).toBeDefined();
     expect(profile.familyName).toBeDefined();
-    expect(profile.settings).toBeDefined();
-    expect(profile.settings.workspaceFontSize).toBe(12);
+    expect(settings).toBeDefined();
+    expect(settings.workspaceFontSize).toBe(12);
   });
 
   test("/user/profile (POST)", async () => {
@@ -35,6 +35,7 @@ describe("User APIs", () => {
 
     const result = await axios.get(`${HOST}/user/profile`, headers);
     const originalProfile = result.data.profile;
+    const originalSettings = result.data.settings;
 
     const displayName = "孫瑪思！";
     const avatarUrl = "www.my-new-image.com";
@@ -48,15 +49,15 @@ describe("User APIs", () => {
 
     const update = await axios.post(`${HOST}/user/profile`, body, headers);
 
-    const { profile } = update.data;
+    const { profile, settings } = update.data;
     expect(profile.displayName).toBe(displayName);
     expect(profile.avatarUrl).toBe(avatarUrl);
-    expect(profile.settings).toBeDefined();
+    expect(settings).toBeDefined();
     expect(profile.email).toBe(originalProfile.email);
     expect(profile.givenName).toBe(originalProfile.givenName);
     expect(profile.familyName).toBe(originalProfile.familyName);
-    expect(originalProfile.settings.workspaceFontSize).toBe(12);
-    expect(profile.settings.workspaceFontSize).toBe(18);
+    expect(originalSettings.workspaceFontSize).toBe(12);
+    expect(settings.workspaceFontSize).toBe(18);
   });
 
   test("/user/profile (POST) fails invalid update operations", async done => {
@@ -133,9 +134,10 @@ describe("User APIs", () => {
 
     result = await axios.get(`${HOST}/user/profile`, headers);
     const secondProfile = result.data.profile;
+    const secondSettings = result.data.settings;
 
     expect(secondProfile.displayName).toBe("Djikstra");
-    expect(secondProfile.settings.workspaceFontSize).toBe(28);
+    expect(secondSettings.workspaceFontSize).toBe(28);
     expect(secondProfile.email).toBe(originalProfile.email);
     expect(secondProfile.avatarUrl).toBe(originalProfile.avatarUrl);
     expect(secondProfile.givenName).toBe(originalProfile.givenName);

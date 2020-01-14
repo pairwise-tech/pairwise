@@ -8,9 +8,12 @@ import {
   UserUpdateOptions,
   UserProfile,
   UserSettings,
+  UserProgressMap,
+  defaultUserSettings,
 } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
+import { ProgressService } from "src/progress/progress.service";
 
 export interface GenericUserProfile {
   email: string;
@@ -20,14 +23,11 @@ export interface GenericUserProfile {
   avatarUrl: string;
 }
 
-/* Source of truth for user settings: */
-const defaultUserSettings: UserSettings = {
-  workspaceFontSize: 12,
-};
-
 @Injectable()
 export class UserService {
   constructor(
+    private readonly progressService: ProgressService,
+
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
 
@@ -38,15 +38,16 @@ export class UserService {
   processUserEntity = (user: User) => {
     if (user) {
       const deserializedSettings = JSON.parse(user.settings);
-      const settings = {
+      const settings: UserSettings = {
         ...defaultUserSettings,
         ...deserializedSettings,
       };
 
-      const result: UserProfile = {
-        ...user,
+      const result = {
         settings,
+        profile: user,
       };
+
       return result;
     }
   };
@@ -72,10 +73,28 @@ export class UserService {
       };
     }, {});
 
+    const progressList = await this.progressService.fetchUserProgress(
+      user.uuid,
+    );
+
+    const progressMap: UserProgressMap = progressList.reduce(
+      (map, progress) => {
+        return {
+          ...map,
+          [progress.courseId]: progress.progress,
+        };
+      },
+      {},
+    );
+
+    const { profile, settings } = this.processUserEntity(user);
+
     const result: IUserDto = {
+      profile,
       payments,
       courses,
-      profile: this.processUserEntity(user),
+      settings,
+      progress: progressMap,
     };
 
     return result;

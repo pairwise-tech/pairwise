@@ -145,7 +145,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                   <NextChallengeIconButton id={"nextButton"} />
                 </ButtonGroup>
               )}
-              {this.props.userAuthenticated && this.props.user ? (
+              {this.props.userAuthenticated && this.props.user.profile ? (
                 <AccountDropdownButton>
                   <div
                     id="account-menu-dropdown"
