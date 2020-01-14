@@ -106,8 +106,6 @@ export const BlobTypeSet: Set<BLOB_TYPE> = new Set([
 
 interface BlobBase {
   type: BLOB_TYPE;
-  created_at: number;
-  updated_at: number /* Date? */;
 }
 
 export interface CodeChallengeBlob extends BlobBase {

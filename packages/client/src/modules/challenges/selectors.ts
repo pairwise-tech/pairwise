@@ -54,6 +54,11 @@ export const courseSkeletons = createSelector(
   challenges => challenges.courseSkeletons,
 );
 
+export const getCurrentChallengeBlob = createSelector(
+  [challengesState],
+  state => state.currentChallengeBlob,
+);
+
 export const workspaceLoadingSelector = createSelector(
   [challengesState],
   challenges => {

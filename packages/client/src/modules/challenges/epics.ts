@@ -1,4 +1,11 @@
-import { Course, IProgressDto, Err, Ok, Result } from "@pairwise/common";
+import {
+  Course,
+  IProgressDto,
+  Err,
+  Ok,
+  Result,
+  ICodeBlobDto,
+} from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of } from "rxjs";
 import {
@@ -9,6 +16,7 @@ import {
   mergeMap,
   tap,
   pluck,
+  ignoreElements,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
@@ -16,6 +24,7 @@ import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { Location } from "history";
+import { getCurrentChallengeBlob } from "./selectors";
 
 /** ===========================================================================
  * Epics
@@ -213,6 +222,48 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.setChallengeId)),
+    pluck("payload"),
+    map(challengeId => {
+      const blob = getCurrentChallengeBlob(state$.value);
+      if (blob) {
+        const codeBlob: ICodeBlobDto = {
+          challengeId,
+          dataBlob: blob,
+        };
+        return new Ok(codeBlob);
+      } else {
+        return new Err("No blob found");
+      }
+    }),
+    map(result => {
+      if (result.value) {
+        return Actions.saveChallengeBlob(result.value);
+      } else {
+        return Actions.empty("No blob saved");
+      }
+    }),
+  );
+};
+
+const saveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.saveChallengeBlob)),
+    pluck("payload"),
+    mergeMap(deps.api.updateChallengeHistory),
+    map(result => {
+      console.log(result);
+      if (result.value) {
+        return Actions.saveChallengeBlobSuccess();
+      } else {
+        return Actions.saveChallengeBlobFailure(result.error);
+      }
+    }),
+  );
+};
+
 const handleCompleteChallengeEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.handleCompleteChallenge)),
@@ -237,18 +288,26 @@ const handleCompleteChallengeEpic: EpicSignature = (action$, state$, deps) => {
         }
       },
     ),
-    mergeMap(async result => {
+    map(result => {
       if (result.value) {
-        return deps.api.updateUserProgress(result.value);
+        return Actions.updateUserProgress(result.value);
       } else {
-        return new Err("Did not fetch");
+        return Actions.empty("Did not save user progress");
       }
     }),
+  );
+};
+
+const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.updateUserProgress)),
+    pluck("payload"),
+    mergeMap(deps.api.updateUserProgress),
     map(result => {
       if (result.value) {
         return Actions.updateUserProgressSuccess();
       } else {
-        return Actions.updateUserProgressFailure();
+        return Actions.updateUserProgressFailure(result.error);
       }
     }),
   );
@@ -266,5 +325,8 @@ export default combineEpics(
   setWorkspaceLoadedEpic,
   challengeInitializationEpic,
   syncChallengeToUrlEpic,
+  handleSaveCodeBlobEpic,
+  saveCodeBlobEpic,
   handleCompleteChallengeEpic,
+  updateUserProgressEpic,
 );

@@ -243,7 +243,9 @@ class Api extends BaseApiClass {
     });
   };
 
-  fetchUserProgress = async () => {
+  fetchUserProgress = async (): Promise<
+    Result<UserCourseProgress, HttpResponseError>
+  > => {
     const { headers, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
@@ -258,7 +260,9 @@ class Api extends BaseApiClass {
     }
   };
 
-  updateUserProgress = async (progress: IProgressDto) => {
+  updateUserProgress = async (
+    progress: IProgressDto,
+  ): Promise<Result<IProgressDto, HttpResponseError>> => {
     const { headers, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
@@ -273,7 +277,9 @@ class Api extends BaseApiClass {
     }
   };
 
-  fetchChallengeHistory = async (challengeId: string) => {
+  fetchChallengeHistory = async (
+    challengeId: string,
+  ): Promise<Result<ICodeBlobDto, HttpResponseError>> => {
     const { headers, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
@@ -289,22 +295,14 @@ class Api extends BaseApiClass {
   };
 
   updateChallengeHistory = async (
-    challengeId: string,
     dataBlob: ICodeBlobDto,
-  ) => {
+  ): Promise<Result<ICodeBlobDto, HttpResponseError>> => {
     const { headers, authenticated } = this.getRequestHeaders();
     if (authenticated) {
       return this.httpHandler(async () => {
-        return axios.post<ICodeBlobDto>(
-          `${HOST}/blob`,
-          {
-            dataBlob,
-            challengeId,
-          },
-          {
-            headers,
-          },
-        );
+        return axios.post<ICodeBlobDto>(`${HOST}/blob`, dataBlob, {
+          headers,
+        });
       });
     } else {
       const result = localStorageHTTP.updateChallengeHistory(dataBlob);
@@ -393,6 +391,8 @@ class LocalStorageHttpClass {
     });
 
     this.setItem(KEYS.USER_PROGRESS_KEY, updatedProgressList);
+
+    return progress;
   };
 
   fetchChallengeHistory = (challengeId: string): ICodeBlobDto => {
@@ -415,6 +415,7 @@ class LocalStorageHttpClass {
       [blob.challengeId]: blob,
     };
     this.setItem(KEYS.CHALLENGE_BLOB_KEY, updatedBlobs);
+    return blob;
   };
 
   persistDataPersistenceForNewAccount = async () => {

@@ -1,4 +1,10 @@
-import { Course, CourseSkeletonList } from "@pairwise/common";
+import {
+  Course,
+  CourseSkeletonList,
+  DataBlob,
+  ICodeBlobDto,
+  IProgressDto,
+} from "@pairwise/common";
 import { ActionType, createAction } from "typesafe-actions";
 import {
   ChallengeCreationPayload,
@@ -49,6 +55,15 @@ enum ActionTypesEnum {
   UPDATE_EDITOR_OPTIONS = "UPDATE_EDITOR_OPTIONS",
 
   CHALLENGE_COMPLETED = "CHALLENGE_COMPLETED",
+
+  UPDATE_USER_PROGRESS = "UPDATE_USER_PROGRESS",
+  UPDATE_USER_PROGRESS_SUCCESS = "UPDATE_USER_PROGRESS_SUCCESS",
+  UPDATE_USER_PROGRESS_FAILURE = "UPDATE_USER_PROGRESS_FAILURE",
+
+  UPDATE_CURRENT_CHALLENGE_BLOB = "UPDATE_CURRENT_CHALLENGE_BLOB",
+  SAVE_CHALLENGE_BLOB = "SAVE_CHALLENGE_BLOB",
+  SAVE_CHALLENGE_BLOB_SUCCESS = "SAVE_CHALLENGE_BLOB_SUCCESS",
+  SAVE_CHALLENGE_BLOB_FAILURE = "SAVE_CHALLENGE_BLOB_FAILURE",
 }
 
 /** ===========================================================================
@@ -63,6 +78,34 @@ const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<string>();
 const handleCompleteChallenge = createAction(
   ActionTypesEnum.CHALLENGE_COMPLETED,
 )<string>();
+
+const updateUserProgress = createAction(ActionTypesEnum.UPDATE_USER_PROGRESS)<
+  IProgressDto
+>();
+
+const updateUserProgressSuccess = createAction(
+  ActionTypesEnum.UPDATE_USER_PROGRESS_SUCCESS,
+)();
+
+const updateUserProgressFailure = createAction(
+  ActionTypesEnum.UPDATE_USER_PROGRESS_FAILURE,
+)<HttpResponseError>();
+
+const updateCurrentChallengeBlob = createAction(
+  ActionTypesEnum.UPDATE_CURRENT_CHALLENGE_BLOB,
+)<DataBlob>();
+
+const saveChallengeBlob = createAction(ActionTypesEnum.SAVE_CHALLENGE_BLOB)<
+  ICodeBlobDto
+>();
+
+const saveChallengeBlobSuccess = createAction(
+  ActionTypesEnum.SAVE_CHALLENGE_BLOB_SUCCESS,
+)();
+
+const saveChallengeBlobFailure = createAction(
+  ActionTypesEnum.SAVE_CHALLENGE_BLOB_FAILURE,
+)<HttpResponseError>();
 
 const setCurrentModule = createAction(ActionTypesEnum.SET_MODULE_ID)<string>();
 
@@ -134,9 +177,16 @@ const updateEditorOptions = createAction(ActionTypesEnum.UPDATE_EDITOR_OPTIONS)<
 >();
 
 const actions = {
+  updateUserProgress,
+  updateUserProgressSuccess,
+  updateUserProgressFailure,
   handleCompleteChallenge,
   updateEditorOptions,
   setCurrentModule,
+  updateCurrentChallengeBlob,
+  saveChallengeBlob,
+  saveChallengeBlobSuccess,
+  saveChallengeBlobFailure,
   saveCourse,
   saveCourseSuccess,
   saveCourseFailure,

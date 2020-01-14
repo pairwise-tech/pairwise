@@ -59,7 +59,11 @@ import {
   Pre,
 } from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
-import { wait, composeWithProps } from "tools/utils";
+import {
+  wait,
+  composeWithProps,
+  constructDataBlobFromChallenge,
+} from "tools/utils";
 
 /** ===========================================================================
  * Types & Config
@@ -713,13 +717,17 @@ class Workspace extends React.Component<IProps, IState> {
 
     /**
      * Save the current code to local storage. This method is debounced.
-     *
-     * TODO: XXX
      */
     persistToLocalStorage(this.props.challenge.id, {
       code: this.state.code,
       sandboxType: this.props.challenge.type,
     });
+
+    const blob = constructDataBlobFromChallenge({
+      code: this.state.code,
+      challenge: this.props.challenge,
+    });
+    this.props.updateCurrentChallengeBlob(blob);
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
@@ -1343,6 +1351,8 @@ const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
   updateEditorOptions: Modules.actions.challenges.updateEditorOptions,
   handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
+  updateCurrentChallengeBlob:
+    Modules.actions.challenges.updateCurrentChallengeBlob,
 };
 
 const mergeProps = (

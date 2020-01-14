@@ -1,6 +1,11 @@
 import { createReducer } from "typesafe-actions";
 
-import { Challenge, CourseList, CourseSkeletonList } from "@pairwise/common";
+import {
+  Challenge,
+  CourseList,
+  CourseSkeletonList,
+  DataBlob,
+} from "@pairwise/common";
 import Module from "module";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
@@ -39,6 +44,7 @@ export interface State {
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
   editorOptions: MonacoEditorOptions;
+  currentChallengeBlob: Nullable<DataBlob>;
 }
 
 const initialState = {
@@ -59,6 +65,7 @@ const initialState = {
     title: "Sandbox",
     type: getStoredSandboxType(),
   }),
+  currentChallengeBlob: null,
 };
 
 interface ChallengeUpdate {
@@ -207,6 +214,10 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
   .handleAction(actions.setEditMode, (state, action) => ({
     ...state,
     isEditMode: action.payload,
+  }))
+  .handleAction(actions.updateCurrentChallengeBlob, (state, action) => ({
+    ...state,
+    currentChallengeBlob: action.payload,
   }))
   .handleAction(actions.setWorkspaceChallengeLoaded, (state, action) => ({
     ...state,
