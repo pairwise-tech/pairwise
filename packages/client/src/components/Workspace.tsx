@@ -1403,14 +1403,26 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   render() {
     const { challenge, blob, isLoadingBlob } = this.props;
 
-    if (!challenge || !blob || isLoadingBlob) {
+    if (!challenge || isLoadingBlob) {
       return <h1>Loading...</h1>;
     }
+
+    /**
+     * If the code blob does not exist (the APIs will return 404 if it does not
+     * exist yet), construct a new code blob for this challenge which uses the
+     * starter code for the challenge itself.
+     */
+    const codeBlob = blob
+      ? blob
+      : constructDataBlobFromChallenge({
+          challenge,
+          code: challenge.starterCode,
+        });
 
     return (
       <React.Fragment>
         {challenge.type !== "media" && (
-          <Workspace {...this.props} blob={blob} challenge={challenge} />
+          <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
         )}
         {challenge.id !== SANDBOX_ID && (
           <LowerSection withHeader={challenge.type === "media"}>

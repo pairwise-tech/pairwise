@@ -39,18 +39,18 @@ export class BlobService {
      */
     await this.userService.updateLastActiveChallengeId(user, challengeId);
 
-    const codeHistory = await this.userCodeBlobRepository.findOne({
+    const blob = await this.userCodeBlobRepository.findOne({
       user: user.profile,
       challengeId,
     });
 
-    if (codeHistory) {
+    if (blob) {
       /**
        * Deserialize data blog before sending back to the client.
        */
       const deserialized = {
-        ...codeHistory,
-        dataBlob: JSON.parse(codeHistory.dataBlob),
+        ...blob,
+        dataBlob: JSON.parse(blob.dataBlob),
       };
       return deserialized;
     } else {
