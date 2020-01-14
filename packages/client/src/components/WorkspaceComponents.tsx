@@ -90,7 +90,12 @@ export const DragIgnorantFrameContainer = React.forwardRef(
   },
 );
 
-export const TestResultRow = ({ message, testResult, error }: TestCase) => {
+export const TestResultRow = ({
+  message,
+  testResult,
+  error,
+  index,
+}: TestCase & { index: number }) => {
   const [showError, setShowError] = React.useState(false);
   const toggleShowError = () => {
     if (!error) {
@@ -125,7 +130,10 @@ export const TestResultRow = ({ message, testResult, error }: TestCase) => {
           }}
         >
           <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-          <SuccessFailureText testResult={testResult}>
+          <SuccessFailureText
+            testResult={testResult}
+            id={`test-result-status-${index}`}
+          >
             {testResult ? "Success!" : "Incomplete..."}
           </SuccessFailureText>
         </div>

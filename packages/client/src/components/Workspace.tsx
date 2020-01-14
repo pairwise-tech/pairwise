@@ -581,7 +581,7 @@ class Workspace extends React.Component<IProps, IState> {
                             {this.getTestSummaryString()}
                           </ContentTitle>
                           {testResults.map((x, i) => (
-                            <TestResultRow key={i} {...x} />
+                            <TestResultRow key={i} {...x} index={i} />
                           ))}
                           <Spacer height={50} />
                         </ContentContainer>
