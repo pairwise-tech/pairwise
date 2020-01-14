@@ -30,8 +30,7 @@ export const composeWithProps = <T extends {}>(
 
 /**
  * Given a challenge and other relevant data, construct the
- * data blob to represent the user's progress on that challenge
- * object.
+ * data blob to represent the user's progress on that challenge.
  */
 export const constructDataBlobFromChallenge = (args: {
   code: string;

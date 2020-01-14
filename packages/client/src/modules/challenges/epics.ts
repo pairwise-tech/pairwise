@@ -195,6 +195,18 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
   );
 };
 
+/**
+ * Fetches a code blob for a challenge when the challenge id changes. Code
+ * blobs are fetched individually whenever a challenge loads, and then
+ * cached locally in Redux state. When a challenge is first viewed, the code
+ * blob will be fetched from the API, if the challenge is viewed again, the
+ * blob will be fetched from the local Redux blob cache.
+ *
+ * NOTE: If the API fails to find a blob, it will return a 404 error. This is
+ * used to clearly differentiate when the Workspace should default to showing
+ * the initial starter code for a challenge (and when instead it should show
+ * an empty editor, if, for instance the user cleared all the editor code).
+ */
 const fetchCodeBlobForChallenge: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
@@ -252,6 +264,12 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
   );
 };
 
+/**
+ * Handles saving a code blob, this occurs whenever the challenge id changes
+ * and it saves the code blob for the previous challenge. This epic just
+ * finds the blob to save and then dispatches the action which actually saves
+ * the blob.
+ */
 const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
@@ -279,7 +297,10 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
   );
 };
 
-const saveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
+/**
+ * Save a code blob. Just take the blob and send it to the API to be saved.
+ */
+const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.saveChallengeBlob)),
     pluck("payload"),
@@ -294,6 +315,11 @@ const saveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
   );
 };
 
+/**
+ * Handle completing a challenge (all tests passed). This epic constructs
+ * a user progress update after a challenge is passed and then dispatches an
+ * action to save this progress update.
+ */
 const handleCompleteChallengeEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.handleCompleteChallenge)),
@@ -328,7 +354,11 @@ const handleCompleteChallengeEpic: EpicSignature = (action$, state$, deps) => {
   );
 };
 
-const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
+/**
+ * Handle saving a user progress update. Just send the progress update
+ * to the API to be saved.
+ */
+const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserProgress)),
     pluck("payload"),

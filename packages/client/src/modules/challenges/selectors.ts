@@ -133,6 +133,9 @@ export const getCurrentChallenge = createSelector(
   },
 );
 
+/**
+ * Get the code blob for a challenge.
+ */
 export const getBlobForCurrentChallenge = createSelector(
   [isLoadingBlob, getBlobCache, getCurrentChallenge, isEditMode],
   (isLoading, blobs, challenge, isEdit) => {
