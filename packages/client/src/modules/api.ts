@@ -43,6 +43,20 @@ export interface HttpResponseError {
 
 const HOST = ENV.HOST; /* NestJS Server URL */
 
+/**
+ * A helper to create HttpResponseError type Err objects for localStorage
+ * API methods to preserve consistent type checking with the API methods
+ * which return real HTTP errors.
+ */
+const createNonHttpResponseError = (
+  message: string,
+): Err<HttpResponseError> => {
+  return new Err({
+    status: 418,
+    message,
+  });
+};
+
 /** ===========================================================================
  * Codepress API
  * ============================================================================
@@ -229,8 +243,16 @@ class Api extends BaseApiClass {
         });
       });
     } else {
-      const settings: UserSettings = defaultUserSettings;
+      /**
+       * If the user is not authenticated we construct a partial user result,
+       * because we are still storing user progress and settings locally for
+       * unauthenticated users.
+       *
+       * The global Redux store state for the user includes this unified
+       * definition, which works in both cases.
+       */
       const progress = localStorageHTTP.fetchUserProgressMap();
+      const settings: UserSettings = localStorageHTTP.fetchUserSettings();
 
       const preAccountUser: UserStoreState = {
         settings,
@@ -244,8 +266,20 @@ class Api extends BaseApiClass {
     }
   };
 
+  /**
+   * NOTE: User settings are just part of the user object and are updated
+   * with the POST /user/profile API. This helper is a convenience method
+   * to make it easier to update user settings from the client application,
+   * since these are functionally/conceptually separated from the rest of the
+   * user profile/object.
+   */
   updateUserSettings = async (settings: UserSettings) => {
-    return this.updateUser({ settings });
+    const { authenticated } = this.getRequestHeaders();
+    if (authenticated) {
+      return this.updateUser({ settings });
+    } else {
+      return localStorageHTTP.updateUserSettings(settings);
+    }
   };
 
   updateUser = async (userDetails: UserUpdateOptions) => {
@@ -368,11 +402,32 @@ class Api extends BaseApiClass {
  */
 
 enum KEYS {
+  USER_SETTINGS = "USER_SETTINGS",
   USER_PROGRESS_KEY = "USER_PROGRESS_KEY",
   CHALLENGE_BLOB_KEY = "CHALLENGE_BLOB_KEY",
 }
 
 class LocalStorageHttpClass {
+  fetchUserSettings = (): UserSettings => {
+    const result = this.getItem<UserSettings>(
+      KEYS.USER_SETTINGS,
+      defaultUserSettings,
+    );
+
+    /**
+     * Merge the result over whatever the defaultUserSettings are anyway to
+     * better ensure the validity of the final object.
+     */
+    return {
+      ...defaultUserSettings,
+      ...result,
+    };
+  };
+
+  updateUserSettings = (settings: UserSettings) => {
+    this.setItem(KEYS.USER_SETTINGS, settings);
+  };
+
   fetchUserProgress = (): UserCourseProgress => {
     return this.getItem<UserCourseProgress>(KEYS.USER_PROGRESS_KEY, []);
   };
@@ -461,11 +516,74 @@ class LocalStorageHttpClass {
   };
 
   persistDataPersistenceForNewAccount = async () => {
-    await this.persistUserProgressForNewAccount();
-    await this.persistChallengeHistoryForNewAccount();
-    this.removeItem(KEYS.USER_PROGRESS_KEY);
-    this.removeItem(KEYS.CHALLENGE_BLOB_KEY);
+    /**
+     * Persist user settings, progress, and code blob history from local
+     * storage for a new account signup. This results in 3 API calls which
+     * should persist all of this data for the newly created user account.
+     */
+
+    type MaybeFailed = Result<any, HttpResponseError>;
+    const logErrorIfOperationFailed = (result: MaybeFailed) => {
+      if (result.error) {
+        console.warn(
+          "[WARNING]: A new account data persistence request failed!",
+          result.error,
+        );
+      }
+    };
+
+    const persistSettings = async (): Promise<MaybeFailed> => {
+      const result = await this.persistUserSettingsForNewAccount();
+      this.removeItem(KEYS.USER_SETTINGS);
+      return result;
+    };
+
+    const persistProgress = async () => {
+      const result = await this.persistUserProgressForNewAccount();
+      this.removeItem(KEYS.USER_PROGRESS_KEY);
+      return result;
+    };
+
+    const persistBlobs = async () => {
+      const result = await this.persistChallengeHistoryForNewAccount();
+      this.removeItem(KEYS.CHALLENGE_BLOB_KEY);
+      return result;
+    };
+
+    const results = await Promise.all([
+      persistSettings(),
+      persistProgress(),
+      persistBlobs(),
+    ]);
+
+    results.forEach(x => logErrorIfOperationFailed(x));
   };
+
+  private async persistUserSettingsForNewAccount() {
+    const settings = this.fetchUserSettings();
+    return API.updateUser({ settings });
+  }
+
+  private async persistUserProgressForNewAccount() {
+    const progress = this.fetchUserProgress();
+    if (progress.length > 0) {
+      return API.updateCourseProgressBulk(progress);
+    }
+
+    return createNonHttpResponseError("No progress updates to persist");
+  }
+
+  private async persistChallengeHistoryForNewAccount() {
+    const history = this.getItem<{ [key: string]: ICodeBlobDto }>(
+      KEYS.CHALLENGE_BLOB_KEY,
+      {},
+    );
+    if (Object.keys(history).length > 0) {
+      return API.updateChallengeHistoryBulk(history);
+    }
+
+    return createNonHttpResponseError("No challenge blobs to persist");
+  }
 
   private getItem<T extends {}>(key: KEYS, defaultValue: T): T {
     try {
@@ -490,23 +608,6 @@ class LocalStorageHttpClass {
 
   private removeItem(key: KEYS) {
     localStorage.removeItem(key);
-  }
-
-  private async persistUserProgressForNewAccount() {
-    const progress = this.fetchUserProgress();
-    if (progress.length > 0) {
-      await API.updateCourseProgressBulk(progress);
-    }
-  }
-
-  private async persistChallengeHistoryForNewAccount() {
-    const history = this.getItem<{ [key: string]: ICodeBlobDto }>(
-      KEYS.CHALLENGE_BLOB_KEY,
-      {},
-    );
-    if (Object.keys(history).length > 0) {
-      await API.updateChallengeHistoryBulk(history);
-    }
   }
 }
 
