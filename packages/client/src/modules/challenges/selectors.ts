@@ -1,7 +1,7 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 
-import { CourseList } from "@pairwise/common";
+import { CourseList, CodeChallengeBlob } from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
 import { SANDBOX_ID } from "tools/constants";
@@ -54,9 +54,14 @@ export const courseSkeletons = createSelector(
   challenges => challenges.courseSkeletons,
 );
 
-export const getCurrentChallengeBlob = createSelector(
+export const getBlobCache = createSelector(
   [challengesState],
-  state => state.currentChallengeBlob,
+  state => state.blobCache,
+);
+
+export const isLoadingBlob = createSelector(
+  [challengesState],
+  state => state.loadingCurrentBlob,
 );
 
 export const workspaceLoadingSelector = createSelector(
@@ -96,7 +101,7 @@ export const getCurrentModule = createSelector(
 /**
  * NOTE: This getter does not depend on the current course id or module id. This
  * is important. This will find the full challenge data for the challenge with
- * state.currentCHallengeId. In other words, currentCourseId and
+ * state.currentChallengeId. In other words, currentCourseId and
  * currentModuleId do not necessarily need to be the course and module for the
  * challenge with currentChallengeId.
  *
@@ -125,6 +130,34 @@ export const getCurrentChallenge = createSelector(
       ?.find(x => x.id === courseId)
       ?.modules?.find(x => x.id === moduleId)
       ?.challenges.find(x => x.id === challengeId);
+  },
+);
+
+export const getBlobForCurrentChallenge = createSelector(
+  [isLoadingBlob, getBlobCache, getCurrentChallenge, isEditMode],
+  (isLoading, blobs, challenge, isEdit) => {
+    if (isLoading) {
+      return null;
+    } else {
+      if (!challenge) {
+        return null;
+      } else {
+        if (isEdit) {
+          /**
+           * TODO: Should be adminEditorTab state after moving it from the
+           * Workspace to Redux Store:
+           */
+          const tab = "starterCode";
+          const editorChallengeBlob: CodeChallengeBlob = {
+            type: "challenge",
+            code: challenge[tab],
+          };
+          return editorChallengeBlob;
+        } else {
+          return blobs[challenge.id];
+        }
+      }
+    }
   },
 );
 

@@ -289,8 +289,7 @@ class Api extends BaseApiClass {
         });
       });
     } else {
-      const result = localStorageHTTP.fetchChallengeHistory(challengeId);
-      return new Ok(result);
+      return localStorageHTTP.fetchChallengeHistory(challengeId);
     }
   };
 
@@ -395,16 +394,21 @@ class LocalStorageHttpClass {
     return progress;
   };
 
-  fetchChallengeHistory = (challengeId: string): ICodeBlobDto => {
+  fetchChallengeHistory = (
+    challengeId: string,
+  ): Result<ICodeBlobDto, HttpResponseError> => {
     const blobs = this.getItem<{ [key: string]: ICodeBlobDto }>(
       KEYS.CHALLENGE_BLOB_KEY,
       {},
     );
 
     if (challengeId in blobs) {
-      return blobs[challengeId];
+      return new Ok(blobs[challengeId]);
     } else {
-      throw new Error("404!");
+      return new Err({
+        status: 404,
+        message: "Blob not found!",
+      });
     }
   };
 

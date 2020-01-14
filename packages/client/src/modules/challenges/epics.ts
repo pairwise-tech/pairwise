@@ -24,7 +24,7 @@ import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { Location } from "history";
-import { getCurrentChallengeBlob } from "./selectors";
+import { getBlobCache } from "./selectors";
 
 /** ===========================================================================
  * Epics
@@ -187,7 +187,38 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       return shouldUpdate;
     }),
     map(id => {
-      return Actions.setChallengeId(id);
+      const { currentChallengeId } = state$.value.challenges;
+      return Actions.setChallengeId({
+        newChallengeId: id,
+        previousChallengeId: currentChallengeId as string /* null is filtered above */,
+      });
+    }),
+  );
+};
+
+const fetchCodeBlobForChallenge: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.setChallengeId)),
+    pluck("payload"),
+    pluck("newChallengeId"),
+    mergeMap(async id => {
+      /* Check the local cache first! */
+      const blobCache = state$.value.challenges.blobCache;
+      if (id in blobCache) {
+        return new Ok({
+          challengeId: id,
+          dataBlob: blobCache[id],
+        });
+      } else {
+        return deps.api.fetchChallengeHistory(id);
+      }
+    }),
+    map(result => {
+      if (result.value) {
+        return Actions.fetchBlobForChallengeSuccess(result.value);
+      } else {
+        return Actions.fetchBlobForChallengeFailure(result.error);
+      }
     }),
   );
 };
@@ -226,12 +257,13 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
     pluck("payload"),
+    pluck("previousChallengeId"),
     map(challengeId => {
-      const blob = getCurrentChallengeBlob(state$.value);
-      if (blob) {
+      const blobs = getBlobCache(state$.value);
+      if (challengeId in blobs) {
         const codeBlob: ICodeBlobDto = {
           challengeId,
-          dataBlob: blob,
+          dataBlob: blobs[challengeId],
         };
         return new Ok(codeBlob);
       } else {
@@ -254,7 +286,6 @@ const saveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
     pluck("payload"),
     mergeMap(deps.api.updateChallengeHistory),
     map(result => {
-      console.log(result);
       if (result.value) {
         return Actions.saveChallengeBlobSuccess();
       } else {
@@ -322,6 +353,7 @@ export default combineEpics(
   contentSkeletonInitializationEpic,
   inverseChallengeMappingEpic,
   saveCourse,
+  fetchCodeBlobForChallenge,
   setWorkspaceLoadedEpic,
   challengeInitializationEpic,
   syncChallengeToUrlEpic,

@@ -3,7 +3,7 @@
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
 import { monaco } from "@monaco-editor/react";
-import { assertUnreachable, Challenge } from "@pairwise/common";
+import { assertUnreachable, Challenge, DataBlob } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";
@@ -71,7 +71,7 @@ import {
  */
 
 /**
- * This is only to allow a logic split if editting (i.e. via admin edit mode).
+ * This is only to allow a logic split if editing (i.e. via admin edit mode).
  * So it is not relevant unless using codepress
  */
 const getEditorCode = ({
@@ -155,7 +155,10 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
+    /* TODO: Move the admin editor adn test tab state to Redux? */
     const defaultAdminTab: IState["adminEditorTab"] = "starterCode";
+
+    const initialCode = props.blob.type === "challenge" ? props.blob.code : "";
 
     this.state = {
       testResults: [],
@@ -164,11 +167,12 @@ class Workspace extends React.Component<IProps, IState> {
       monacoInitializationError: false,
       adminEditorTab: defaultAdminTab,
       adminTestTab: "testResults",
-      code: getEditorCode({
-        challenge: props.challenge,
-        isEditMode: this.props.isEditMode,
-        tab: defaultAdminTab,
-      }),
+      code: initialCode,
+      // code: getEditorCode({
+      //   challenge: props.challenge,
+      //   isEditMode: this.props.isEditMode,
+      //   tab: defaultAdminTab,
+      // }),
     };
   }
 
@@ -727,7 +731,10 @@ class Workspace extends React.Component<IProps, IState> {
       code: this.state.code,
       challenge: this.props.challenge,
     });
-    this.props.updateCurrentChallengeBlob(blob);
+    this.props.updateCurrentChallengeBlob({
+      dataBlob: blob,
+      challengeId: this.props.challenge.id,
+    });
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
@@ -1345,6 +1352,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   editorOptions: Modules.selectors.challenges.getEditorOptions(state),
+  blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
+  isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
 });
 
 const dispatchProps = {
@@ -1376,6 +1385,7 @@ const mergeProps = (
 type ConnectProps = ReturnType<typeof mergeProps>;
 
 interface IProps extends ConnectProps {
+  blob: DataBlob;
   challenge: Challenge;
 }
 
@@ -1391,16 +1401,16 @@ const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
 
 class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   render() {
-    const { challenge } = this.props;
+    const { challenge, blob, isLoadingBlob } = this.props;
 
-    if (!challenge) {
+    if (!challenge || !blob || isLoadingBlob) {
       return <h1>Loading...</h1>;
     }
 
     return (
       <React.Fragment>
         {challenge.type !== "media" && (
-          <Workspace {...this.props} challenge={challenge} />
+          <Workspace {...this.props} blob={blob} challenge={challenge} />
         )}
         {challenge.id !== SANDBOX_ID && (
           <LowerSection withHeader={challenge.type === "media"}>

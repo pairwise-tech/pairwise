@@ -15,6 +15,7 @@ import {
   MonacoEditorOptions,
 } from "./types";
 import { HttpResponseError } from "modules/api";
+import { string } from "getenv";
 
 /** ===========================================================================
  * Action Types
@@ -54,6 +55,10 @@ enum ActionTypesEnum {
 
   UPDATE_EDITOR_OPTIONS = "UPDATE_EDITOR_OPTIONS",
 
+  FETCH_BLOB_FOR_CHALLENGE = "FETCH_BLOB_FOR_CHALLENGE",
+  FETCH_BLOB_FOR_CHALLENGE_SUCCESS = "FETCH_BLOB_FOR_CHALLENGE_SUCCESS",
+  FETCH_BLOB_FOR_CHALLENGE_FAILURE = "FETCH_BLOB_FOR_CHALLENGE_FAILURE",
+
   CHALLENGE_COMPLETED = "CHALLENGE_COMPLETED",
 
   UPDATE_USER_PROGRESS = "UPDATE_USER_PROGRESS",
@@ -73,7 +78,22 @@ enum ActionTypesEnum {
 
 const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<boolean>();
 
-const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<string>();
+const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
+  newChallengeId: string;
+  previousChallengeId: string;
+}>();
+
+const fetchBlobForChallenge = createAction(
+  ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE,
+)<IProgressDto>();
+
+const fetchBlobForChallengeSuccess = createAction(
+  ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE_SUCCESS,
+)<ICodeBlobDto>();
+
+const fetchBlobForChallengeFailure = createAction(
+  ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE_FAILURE,
+)<HttpResponseError>();
 
 const handleCompleteChallenge = createAction(
   ActionTypesEnum.CHALLENGE_COMPLETED,
@@ -93,7 +113,7 @@ const updateUserProgressFailure = createAction(
 
 const updateCurrentChallengeBlob = createAction(
   ActionTypesEnum.UPDATE_CURRENT_CHALLENGE_BLOB,
-)<DataBlob>();
+)<ICodeBlobDto>();
 
 const saveChallengeBlob = createAction(ActionTypesEnum.SAVE_CHALLENGE_BLOB)<
   ICodeBlobDto
@@ -177,6 +197,9 @@ const updateEditorOptions = createAction(ActionTypesEnum.UPDATE_EDITOR_OPTIONS)<
 >();
 
 const actions = {
+  fetchBlobForChallenge,
+  fetchBlobForChallengeSuccess,
+  fetchBlobForChallengeFailure,
   updateUserProgress,
   updateUserProgressSuccess,
   updateUserProgressFailure,

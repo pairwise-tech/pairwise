@@ -44,7 +44,8 @@ export interface State {
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
   editorOptions: MonacoEditorOptions;
-  currentChallengeBlob: Nullable<DataBlob>;
+  blobCache: { [key: string]: DataBlob };
+  loadingCurrentBlob: boolean;
 }
 
 const initialState = {
@@ -65,7 +66,8 @@ const initialState = {
     title: "Sandbox",
     type: getStoredSandboxType(),
   }),
-  currentChallengeBlob: null,
+  blobCache: {},
+  loadingCurrentBlob: false,
 };
 
 interface ChallengeUpdate {
@@ -217,7 +219,22 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
   }))
   .handleAction(actions.updateCurrentChallengeBlob, (state, action) => ({
     ...state,
-    currentChallengeBlob: action.payload,
+    blobCache: {
+      ...state.blobCache,
+      [action.payload.challengeId]: action.payload.dataBlob,
+    },
+  }))
+  .handleAction(actions.fetchBlobForChallengeSuccess, (state, action) => ({
+    ...state,
+    loadingCurrentBlob: false,
+    blobCache: {
+      ...state.blobCache,
+      [action.payload.challengeId]: action.payload.dataBlob,
+    },
+  }))
+  .handleAction(actions.fetchBlobForChallengeFailure, (state, action) => ({
+    ...state,
+    loadingCurrentBlob: false,
   }))
   .handleAction(actions.setWorkspaceChallengeLoaded, (state, action) => ({
     ...state,
@@ -241,8 +258,9 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
   }))
   .handleAction(actions.setChallengeId, (state, action) => ({
     ...state,
+    loadingCurrentBlob: true,
     displayNavigationMap: false,
-    currentChallengeId: action.payload,
+    currentChallengeId: action.payload.newChallengeId,
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,

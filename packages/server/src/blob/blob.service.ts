@@ -15,7 +15,6 @@ import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { validateCodeBlob } from "src/tools/validation";
 import { RequestUser } from "src/types";
 import { UserService } from "src/user/user.service";
-import { ObjectUnsubscribedError } from "rxjs";
 
 @Injectable()
 export class BlobService {
