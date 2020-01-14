@@ -652,7 +652,7 @@ class Workspace extends React.Component<IProps, IState> {
     const passedTests = testResults.filter(t => t.testResult);
     const correct = passedTests.length === testResults.length;
     return { correct, passedTests, testResults };
-  }
+  };
 
   getTestSummaryString = () => {
     const { passedTests, testResults } = this.getTestPassedStatus();
@@ -726,14 +726,15 @@ class Workspace extends React.Component<IProps, IState> {
 
     /**
      * Save the current code to local storage. This method is debounced.
-     *     * TODO: Remove this entirely and replace with the code after:
+     *
+     * TODO: Remove this entirely and replace with the code after:
      * TODO: Figure out what to do with the sandbox. Probably we can just
      * arbitrarily save this in one place to local storage for now.
      */
-    persistToLocalStorage(this.props.challenge.id, {
-      code: this.state.code,
-      sandboxType: this.props.challenge.type,
-    });
+    // persistToLocalStorage(this.props.challenge.id, {
+    //   code: this.state.code,
+    //   sandboxType: this.props.challenge.type,
+    // });
 
     /**
      * Construct a code blob for the current challenge and update this code
@@ -784,7 +785,10 @@ class Workspace extends React.Component<IProps, IState> {
             console.warn("[bad things]", results);
             break;
           }
-          this.setState({ testResults: results }, this.handleReceiveTestResults);
+          this.setState(
+            { testResults: results },
+            this.handleReceiveTestResults,
+          );
           break;
         }
         case IFRAME_MESSAGE_TYPES.TEST_ERROR: {
@@ -822,8 +826,7 @@ class Workspace extends React.Component<IProps, IState> {
      * modal.
      */
     this.props.handleCompleteChallenge(this.props.challenge.id);
-  }
-
+  };
 
   iFrameRenderPreview = async () => {
     this.setState(
