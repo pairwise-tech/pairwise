@@ -47,6 +47,8 @@ enum ActionTypesEnum {
   REMOVE_MODULE = "REMOVE_MODULE",
 
   UPDATE_EDITOR_OPTIONS = "UPDATE_EDITOR_OPTIONS",
+
+  CHALLENGE_COMPLETED = "CHALLENGE_COMPLETED",
 }
 
 /** ===========================================================================
@@ -57,6 +59,10 @@ enum ActionTypesEnum {
 const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<boolean>();
 
 const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<string>();
+
+const handleCompleteChallenge = createAction(
+  ActionTypesEnum.CHALLENGE_COMPLETED,
+)<string>();
 
 const setCurrentModule = createAction(ActionTypesEnum.SET_MODULE_ID)<string>();
 
@@ -128,6 +134,7 @@ const updateEditorOptions = createAction(ActionTypesEnum.UPDATE_EDITOR_OPTIONS)<
 >();
 
 const actions = {
+  handleCompleteChallenge,
   updateEditorOptions,
   setCurrentModule,
   saveCourse,

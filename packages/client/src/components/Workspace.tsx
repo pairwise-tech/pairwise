@@ -713,6 +713,8 @@ class Workspace extends React.Component<IProps, IState> {
 
     /**
      * Save the current code to local storage. This method is debounced.
+     *
+     * TODO: XXX
      */
     persistToLocalStorage(this.props.challenge.id, {
       code: this.state.code,
@@ -754,7 +756,7 @@ class Workspace extends React.Component<IProps, IState> {
             console.warn("[bad things]", results);
             break;
           }
-          this.setState({ testResults: results });
+          this.setState({ testResults: results }, this.handlePassChallenge);
           break;
         }
         case IFRAME_MESSAGE_TYPES.TEST_ERROR: {
@@ -774,7 +776,17 @@ class Workspace extends React.Component<IProps, IState> {
       // This is currently a noop because it's super noisy in dev. The
       // assertUnreachable throws all the time because of something. Looks like
       // react devtools is putting a message through and that's hitting the
-      // deafult case
+      // default case.
+    }
+  };
+
+  handlePassChallenge = () => {
+    const { testResults } = this.state;
+    const passed = testResults.filter(t => t.testResult);
+    const correct = passed.length === testResults.length;
+
+    if (correct) {
+      this.props.handleCompleteChallenge(this.props.challenge.id);
     }
   };
 
@@ -827,8 +839,7 @@ class Workspace extends React.Component<IProps, IState> {
     );
   };
 
-  // TODO: Why is this async?
-  compileAndTransformCodeString = async () => {
+  compileAndTransformCodeString = () => {
     const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
       this.state.code,
     );
@@ -1331,6 +1342,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
   updateEditorOptions: Modules.actions.challenges.updateEditorOptions,
+  handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
 };
 
 const mergeProps = (

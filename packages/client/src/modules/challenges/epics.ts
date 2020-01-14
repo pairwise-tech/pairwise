@@ -1,7 +1,15 @@
-import { Course } from "@pairwise/common";
+import { Course, IProgressDto, Err, Ok, Result } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of } from "rxjs";
-import { catchError, delay, filter, map, mergeMap, tap } from "rxjs/operators";
+import {
+  catchError,
+  delay,
+  filter,
+  map,
+  mergeMap,
+  tap,
+  pluck,
+} from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
@@ -205,6 +213,47 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const handleCompleteChallengeEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.handleCompleteChallenge)),
+    map(x => x.payload),
+    map(
+      (challengeId): Result<IProgressDto, string> => {
+        const courseId = state$.value.challenges.currentCourseId;
+
+        if (courseId) {
+          const payload: IProgressDto = {
+            courseId,
+            challengeId,
+            complete: true,
+          };
+
+          return new Ok(payload);
+        } else {
+          const msg =
+            "[WARNING!]: No active course id found in handleCompleteChallengeEpic, this shouldn't happen...";
+          console.warn(msg);
+          return new Err(msg);
+        }
+      },
+    ),
+    mergeMap(async result => {
+      if (result.value) {
+        return deps.api.updateUserProgress(result.value);
+      } else {
+        return new Err("Did not fetch");
+      }
+    }),
+    map(result => {
+      if (result.value) {
+        return Actions.updateUserProgressSuccess();
+      } else {
+        return Actions.updateUserProgressFailure();
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -217,4 +266,5 @@ export default combineEpics(
   setWorkspaceLoadedEpic,
   challengeInitializationEpic,
   syncChallengeToUrlEpic,
+  handleCompleteChallengeEpic,
 );
