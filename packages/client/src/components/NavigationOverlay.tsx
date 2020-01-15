@@ -104,7 +104,7 @@ const NavigationOverlay = (props: IProps) => {
                   onClick={() => setCurrentModule(m.id)}
                 >
                   <span>
-                    <ModuleNumber>{i + 1}</ModuleNumber>
+                    <ModuleNumber>{i}</ModuleNumber>
                     {m.title}
                   </span>
                 </NavButton>
