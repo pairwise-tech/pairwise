@@ -465,8 +465,11 @@ interface DarkThemeProps {
   className?: string;
   style?: React.CSSProperties;
 }
+
 const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
-  return <div className={cx(className, Classes.DARK)} {...props} />;
+  return (
+    <div className={`pairwise ${cx(className, Classes.DARK)}`} {...props} />
+  );
 };
 
 /** ===========================================================================
