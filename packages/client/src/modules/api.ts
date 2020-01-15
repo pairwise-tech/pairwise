@@ -341,6 +341,10 @@ class Api extends BaseApiClass {
   fetchChallengeHistory = async (
     challengeId: string,
   ): Promise<Result<ICodeBlobDto, HttpResponseError>> => {
+    /**
+     * Exception: if the challenge is the sandbox, return the sandbox
+     * challenge directly from local storage.
+     */
     if (challengeId === "sandbox") {
       const blob = getSandboxFromLocalStorage();
       const result: ICodeBlobDto = {
@@ -367,6 +371,10 @@ class Api extends BaseApiClass {
   updateChallengeHistory = async (
     dataBlob: ICodeBlobDto,
   ): Promise<Result<ICodeBlobDto, HttpResponseError>> => {
+    /**
+     * Exception: If the data blob is a sandbox blob, save is directly to
+     * local storage.
+     */
     if (dataBlob.dataBlob.type === "sandbox") {
       saveSandboxToLocalStorage(dataBlob.dataBlob);
       return new Ok(dataBlob);
