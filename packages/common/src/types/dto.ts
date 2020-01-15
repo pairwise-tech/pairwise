@@ -1,3 +1,5 @@
+import { CHALLENGE_TYPE } from "./courses";
+
 /** ===========================================================================
  * DTO interfaces
  * ----------------------------------------------------------------------------
@@ -25,25 +27,37 @@ export interface UserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
-  settings: UserSettings;
   lastActiveChallengeId: string;
 }
 
 /**
- * User workspace settings.
+ * The source of truth for client and server for the JSON blob user
+ * settings object!
+ *
+ * Type definition and default settings object:
  */
 export interface UserSettings {
   workspaceFontSize: number;
 }
 
+export const defaultUserSettings: UserSettings = {
+  workspaceFontSize: 12,
+};
+
 export interface IUserDto<Profile = UserProfile> {
   profile: Profile;
   payments: Payment[];
+  settings: UserSettings;
   courses: UserCourseAccessMap;
+  progress: UserProgressMap;
 }
 
 export interface UserCourseAccessMap {
   [key: string]: boolean;
+}
+
+export interface UserProgressMap {
+  [key: string]: UserCourseStatus;
 }
 
 /**
@@ -95,19 +109,23 @@ export interface IFeedbackDto {
  * ============================================================================
  */
 
-export type BLOB_TYPE = "video" | "challenge" | "project" | "guided_project";
+export type BLOB_TYPE =
+  | "video"
+  | "challenge"
+  | "project"
+  | "guided_project"
+  | "sandbox";
 
 export const BlobTypeSet: Set<BLOB_TYPE> = new Set([
   "video",
   "challenge",
   "project",
   "guided_project",
+  "sandbox",
 ]);
 
 interface BlobBase {
   type: BLOB_TYPE;
-  created_at: number;
-  updated_at: number /* Date? */;
 }
 
 export interface CodeChallengeBlob extends BlobBase {
@@ -132,11 +150,18 @@ export interface GuidedProjectBlob extends BlobBase {
   timeLastWatched: number;
 }
 
+export interface SandboxBlob extends BlobBase {
+  type: "sandbox";
+  code: string;
+  challengeType: CHALLENGE_TYPE;
+}
+
 export type DataBlob =
   | VideoChallengeBlob
   | ProjectChallengeBlob
   | CodeChallengeBlob
-  | GuidedProjectBlob;
+  | GuidedProjectBlob
+  | SandboxBlob;
 
 export interface ICodeBlobDto {
   dataBlob: DataBlob;

@@ -8,6 +8,7 @@ import {
   pluck,
   map,
   mapTo,
+  mergeMapTo,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { of } from "rxjs";
@@ -19,7 +20,6 @@ import {
 } from "tools/storage-utils";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import { wait } from "tools/utils";
 
 /** ===========================================================================
  * Epics
@@ -93,12 +93,10 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
     }),
     mergeMap(({ payload }) => {
       const { accessToken } = payload;
-      const initAction = Actions.initializeAppSuccess({ accessToken });
-      if (accessToken) {
-        return of(initAction, Actions.storeAccessTokenSuccess(payload));
-      } else {
-        return of(initAction);
-      }
+      return of(
+        Actions.storeAccessTokenSuccess(payload),
+        Actions.initializeAppSuccess({ accessToken }),
+      );
     }),
   );
 };
@@ -121,31 +119,12 @@ const accountCreationEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+/* Nice! */
 const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.initiateBulkPersistence)),
-    mergeMap(async () => {
-      console.log(
-        "[TODO]: Handling persisting any local user history to the server!",
-      );
-      deps.toaster.show({
-        intent: "warning",
-        message:
-          "Syncing your progress to your new account, please wait a moment and do not close your browser window.",
-      });
-      await deps.api.handleDataPersistenceForNewAccount();
-      await wait(2500);
-      deps.toaster.show({
-        intent: "success",
-        message: "Updates saved! You are good to go!",
-      });
-    }),
-    mergeMap(() => {
-      /**
-       * TODO: Refetch user course progress:
-       */
-      return of(Actions.fetchUser(), Actions.bulkPersistenceComplete());
-    }),
+    mergeMap(deps.api.handleDataPersistenceForNewAccount),
+    mergeMapTo(of(Actions.fetchUser(), Actions.bulkPersistenceComplete())),
   );
 };
 

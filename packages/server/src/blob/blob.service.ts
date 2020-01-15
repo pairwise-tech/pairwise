@@ -15,7 +15,6 @@ import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { validateCodeBlob } from "src/tools/validation";
 import { RequestUser } from "src/types";
 import { UserService } from "src/user/user.service";
-import { ObjectUnsubscribedError } from "rxjs";
 
 @Injectable()
 export class BlobService {
@@ -29,7 +28,7 @@ export class BlobService {
   async fetchUserCodeBlob(user: RequestUser, challengeId: string) {
     /* Verify the challenge id is valid */
     if (!challengeUtilityClass.challengeIdIsValid(challengeId)) {
-      throw new BadRequestException(ERROR_CODES.INVALID_UPDATE_DETAILS);
+      throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
     }
 
     /**
@@ -40,18 +39,18 @@ export class BlobService {
      */
     await this.userService.updateLastActiveChallengeId(user, challengeId);
 
-    const codeHistory = await this.userCodeBlobRepository.findOne({
+    const blob = await this.userCodeBlobRepository.findOne({
       user: user.profile,
       challengeId,
     });
 
-    if (codeHistory) {
+    if (blob) {
       /**
        * Deserialize data blog before sending back to the client.
        */
       const deserialized = {
-        ...codeHistory,
-        dataBlob: JSON.parse(codeHistory.dataBlob),
+        ...blob,
+        dataBlob: JSON.parse(blob.dataBlob),
       };
       return deserialized;
     } else {
@@ -100,8 +99,23 @@ export class BlobService {
     console.log(
       `[BULK]: Persisting bulk blobs for user: ${user.profile.email}`,
     );
+
     for (const [_, blob] of Object.entries(blobs)) {
-      await this.updateUserCodeBlob(blob, user);
+      try {
+        /**
+         * This method performs input validation, but it could fail if the
+         * input is mal-formed. If it does, don't just silent fail and continue
+         * the total operation.
+         */
+        await this.updateUserCodeBlob(blob, user);
+      } catch (err) {
+        console.log(
+          "[BULK ERROR]: Error occurring processing one of the bulk blobs",
+          err,
+        );
+      }
     }
+
+    return SUCCESS_CODES.OK;
   }
 }

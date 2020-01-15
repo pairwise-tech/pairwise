@@ -9,25 +9,25 @@ import {
   UserCourseStatus,
   UserCourseProgress,
 } from "@pairwise/common";
-import { ERROR_CODES } from "src/tools/constants";
+import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { RequestUser } from "src/types";
-import { UserService } from "src/user/user.service";
+import { validateAndSanitizeProgressItem } from "src/tools/validation";
 
 @Injectable()
 export class ProgressService {
   constructor(
     @InjectRepository(Progress)
-    private readonly userProgressRepository: Repository<Progress>,
+    private readonly progressRepository: Repository<Progress>,
   ) {}
 
   async fetchProgressHistoryForCourse(courseId: string) {
-    return this.userProgressRepository.find({ courseId });
+    return this.progressRepository.find({ courseId });
   }
 
-  async fetchUserProgress(user: RequestUser) {
-    const result = await this.userProgressRepository.find({
+  async fetchUserProgress(uuid: string) {
+    const result = await this.progressRepository.find({
       where: {
-        user: user.profile.uuid,
+        user: uuid,
       },
     });
 
@@ -67,7 +67,7 @@ export class ProgressService {
       [challengeId]: statusObject,
     };
 
-    const existingEntry = await this.userProgressRepository.findOne({
+    const existingEntry = await this.progressRepository.findOne({
       courseId,
       user: user.profile,
     });
@@ -83,7 +83,7 @@ export class ProgressService {
       /**
        * Insert:
        */
-      await this.userProgressRepository.insert(newProgressEntry);
+      await this.progressRepository.insert(newProgressEntry);
     } else {
       const updatedCourseProgress: UserCourseStatus = {
         ...JSON.parse(existingEntry.progress),
@@ -93,7 +93,7 @@ export class ProgressService {
       /**
        * Update:
        */
-      await this.userProgressRepository
+      await this.progressRepository
         .createQueryBuilder("userCourseProgress")
         .update(Progress)
         .where({ uuid: existingEntry.uuid })
@@ -109,16 +109,34 @@ export class ProgressService {
     user: RequestUser,
   ) {
     for (const entity of courseProgress) {
-      const { courseId, progress } = entity;
-      console.log(
-        `[BULK]: Persisting user course progress for courseId: ${courseId}`,
-      );
-      const newProgressEntry: Partial<Progress> = {
-        user: user.profile,
-        courseId,
-        progress: JSON.stringify(progress),
-      };
-      await this.userProgressRepository.insert(newProgressEntry);
+      try {
+        /**
+         * If the entity is totally mal-formed, this validation method will
+         * throw and this entry will be skipped. Otherwise, it will check
+         * and sanitize all the challenge status entries, excluding any
+         * mal-formed ones.
+         */
+        const sanitizedEntity = validateAndSanitizeProgressItem(entity);
+        const { courseId, progress } = sanitizedEntity;
+
+        console.log(
+          `[BULK]: Persisting user course progress for courseId: ${courseId}`,
+        );
+
+        const newProgressEntry: Partial<Progress> = {
+          user: user.profile,
+          courseId,
+          progress: JSON.stringify(progress),
+        };
+        await this.progressRepository.insert(newProgressEntry);
+      } catch (err) {
+        console.log(
+          "[BULK ERROR]: Error occurring processing one of the user course progress insertions",
+          err,
+        );
+      }
     }
+
+    return SUCCESS_CODES.OK;
   }
 }

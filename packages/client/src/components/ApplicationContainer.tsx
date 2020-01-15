@@ -145,7 +145,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                   <NextChallengeIconButton id={"nextButton"} />
                 </ButtonGroup>
               )}
-              {this.props.userAuthenticated && this.props.user ? (
+              {this.props.userAuthenticated && this.props.user.profile ? (
                 <AccountDropdownButton>
                   <div
                     id="account-menu-dropdown"
@@ -306,7 +306,7 @@ const LoadingOverlay = styled.div`
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 999;
+  z-index: 500;
   position: fixed;
   display: flex;
   align-items: center;

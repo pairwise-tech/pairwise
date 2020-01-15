@@ -11,7 +11,7 @@ import {
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { CourseSkeletonList } from "@pairwise/common";
-import { userSelector } from "modules/user/selectors";
+import { userProfile } from "modules/user/selectors";
 
 /** ===========================================================================
  * Epics
@@ -73,7 +73,7 @@ const handlePurchaseCourseIntentEpic: EpicSignature = (
     filter(isActionOf(Actions.handlePurchaseCourseIntent)),
     mergeMap(action => {
       const courseId = action.payload.courseId;
-      const user = userSelector(state$.value);
+      const user = userProfile(state$.value);
       if (user) {
         return of(
           Actions.setPurchaseCourseId(courseId),

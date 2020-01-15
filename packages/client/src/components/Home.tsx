@@ -136,7 +136,7 @@ const BoldText = styled(CourseDescription)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  user: Modules.selectors.user.userSelector(state),
+  user: Modules.selectors.user.userProfile(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
 });
 

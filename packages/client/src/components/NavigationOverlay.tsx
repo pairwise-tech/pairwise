@@ -4,13 +4,12 @@ import styled from "styled-components/macro";
 
 import { ChallengeSkeleton } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
+import { COLORS, HEADER_HEIGHT } from "tools/constants";
 import {
-  COLORS,
-  HEADER_HEIGHT,
+  composeWithProps,
   generateEmptyModule,
   generateEmptyChallenge,
-} from "tools/constants";
-import { composeWithProps } from "tools/utils";
+} from "tools/utils";
 import { Tooltip, Icon } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";

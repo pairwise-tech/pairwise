@@ -1,21 +1,51 @@
 import { createReducer } from "typesafe-actions";
 
-import { IUserDto } from "@pairwise/common";
+import {
+  UserSettings,
+  Payment,
+  UserCourseAccessMap,
+  UserProgressMap,
+  UserProfile,
+} from "@pairwise/common";
 import { AppActionTypes } from "../app";
 import { Actions as actions } from "../root-actions";
 import { ActionTypes } from "./actions";
 
 /** ===========================================================================
- * App Store
+ * User Store
  * ============================================================================
  */
 
+/**
+ * The user object stored in Redux is a modified version of the IUserDto
+ * which returns from the server. The structure is the same, but all the
+ * fields are nullable here, because:
+ *
+ * 1. The user may not have been fetched yet.
+ * 2. The user may not have an account.
+ *
+ * The fields are all separated like this to allow a unified API where some
+ * fields can be updated locally before a user signup occurs. This currently
+ * happens with the progress and settings fields. All of this occurs in the
+ * api.ts module and the rest of the client app can just treat this type
+ * definition as the source of truth and behave accordingly.
+ */
 export interface State {
-  user: Nullable<IUserDto>;
+  profile: Nullable<UserProfile>;
+  payments: Nullable<Payment[]>;
+  settings: Nullable<UserSettings>;
+  courses: Nullable<UserCourseAccessMap>;
+  progress: Nullable<UserProgressMap>;
 }
 
+export type UserStoreState = State;
+
 const initialState = {
-  user: null,
+  profile: null,
+  payments: null,
+  settings: null,
+  courses: null,
+  progress: null,
 };
 
 const app = createReducer<State, ActionTypes | AppActionTypes>(initialState)
@@ -24,7 +54,7 @@ const app = createReducer<State, ActionTypes | AppActionTypes>(initialState)
     [actions.fetchUserSuccess, actions.updateUserSuccess],
     (state, action) => ({
       ...state,
-      user: action.payload,
+      ...action.payload,
     }),
   );
 

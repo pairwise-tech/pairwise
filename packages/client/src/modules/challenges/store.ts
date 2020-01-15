@@ -1,6 +1,11 @@
 import { createReducer } from "typesafe-actions";
 
-import { Challenge, CourseList, CourseSkeletonList } from "@pairwise/common";
+import {
+  Challenge,
+  CourseList,
+  CourseSkeletonList,
+  DataBlob,
+} from "@pairwise/common";
 import Module from "module";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
@@ -13,12 +18,8 @@ import {
   ModuleCreationPayload,
   MonacoEditorOptions,
 } from "./types";
-import {
-  generateEmptyChallenge,
-  SANDBOX_ID,
-  MONACO_EDITOR_INITIAL_FONT_SIZE,
-} from "tools/constants";
-import { getStoredSandboxType } from "tools/storage-utils";
+import { SANDBOX_ID, MONACO_EDITOR_INITIAL_FONT_SIZE } from "tools/constants";
+import { defaultSandboxChallenge } from "tools/utils";
 
 const debug = require("debug")("challenge:store");
 
@@ -26,6 +27,9 @@ const debug = require("debug")("challenge:store");
  * App Store
  * ============================================================================
  */
+
+export type ADMIN_TEST_TAB = "testResults" | "testCode";
+export type ADMIN_EDITOR_TAB = "starterCode" | "solutionCode";
 
 export interface State {
   workspaceLoading: boolean;
@@ -39,9 +43,13 @@ export interface State {
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
   editorOptions: MonacoEditorOptions;
+  blobCache: { [key: string]: DataBlob };
+  loadingCurrentBlob: boolean;
+  adminTestTab: ADMIN_TEST_TAB;
+  adminEditorTab: ADMIN_EDITOR_TAB;
 }
 
-const initialState = {
+const initialState: State = {
   courses: null,
   courseSkeletons: null,
   isEditMode: false,
@@ -54,11 +62,11 @@ const initialState = {
   editorOptions: {
     fontSize: MONACO_EDITOR_INITIAL_FONT_SIZE,
   },
-  sandboxChallenge: generateEmptyChallenge({
-    id: SANDBOX_ID, // Important. This is how the app knows it's the sandbox challenge
-    title: "Sandbox",
-    type: getStoredSandboxType(),
-  }),
+  sandboxChallenge: defaultSandboxChallenge,
+  blobCache: {},
+  loadingCurrentBlob: false,
+  adminTestTab: "testResults",
+  adminEditorTab: "starterCode",
 };
 
 interface ChallengeUpdate {
@@ -208,6 +216,25 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
     ...state,
     isEditMode: action.payload,
   }))
+  .handleAction(actions.updateCurrentChallengeBlob, (state, action) => ({
+    ...state,
+    blobCache: {
+      ...state.blobCache,
+      [action.payload.challengeId]: action.payload.dataBlob,
+    },
+  }))
+  .handleAction(actions.fetchBlobForChallengeSuccess, (state, action) => ({
+    ...state,
+    loadingCurrentBlob: false,
+    blobCache: {
+      ...state.blobCache,
+      [action.payload.challengeId]: action.payload.dataBlob,
+    },
+  }))
+  .handleAction(actions.fetchBlobForChallengeFailure, (state, action) => ({
+    ...state,
+    loadingCurrentBlob: false,
+  }))
   .handleAction(actions.setWorkspaceChallengeLoaded, (state, action) => ({
     ...state,
     workspaceLoading: false,
@@ -230,12 +257,21 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
   }))
   .handleAction(actions.setChallengeId, (state, action) => ({
     ...state,
+    loadingCurrentBlob: true,
     displayNavigationMap: false,
-    currentChallengeId: action.payload,
+    currentChallengeId: action.payload.newChallengeId,
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,
     courseSkeletons: action.payload,
+  }))
+  .handleAction(actions.setAdminTestTab, (state, action) => ({
+    ...state,
+    adminTestTab: action.payload,
+  }))
+  .handleAction(actions.setAdminEditorTab, (state, action) => ({
+    ...state,
+    adminEditorTab: action.payload,
   }))
   .handleAction(
     actions.fetchCurrentActiveCourseSuccess,

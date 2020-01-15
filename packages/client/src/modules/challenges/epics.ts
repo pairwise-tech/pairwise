@@ -1,13 +1,29 @@
-import { Course } from "@pairwise/common";
+import {
+  Course,
+  IProgressDto,
+  Err,
+  Ok,
+  Result,
+  ICodeBlobDto,
+} from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of } from "rxjs";
-import { catchError, delay, filter, map, mergeMap, tap } from "rxjs/operators";
+import {
+  catchError,
+  delay,
+  filter,
+  map,
+  mergeMap,
+  tap,
+  pluck,
+} from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { Location } from "history";
+import { getBlobCache } from "./selectors";
 
 /** ===========================================================================
  * Epics
@@ -170,7 +186,11 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       return shouldUpdate;
     }),
     map(id => {
-      return Actions.setChallengeId(id);
+      const { currentChallengeId } = state$.value.challenges;
+      return Actions.setChallengeId({
+        newChallengeId: id,
+        previousChallengeId: currentChallengeId as string /* null is filtered above */,
+      });
     }),
   );
 };
@@ -205,6 +225,154 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
   );
 };
 
+/**
+ * Fetches a code blob for a challenge when the challenge id changes. Code
+ * blobs are fetched individually whenever a challenge loads, and then
+ * cached locally in Redux state. When a challenge is first viewed, the code
+ * blob will be fetched from the API, if the challenge is viewed again, the
+ * blob will be fetched from the local Redux blob cache.
+ *
+ * NOTE: If the API fails to find a blob, it will return a 404 error. This is
+ * used to clearly differentiate when the Workspace should default to showing
+ * the initial starter code for a challenge (and when instead it should show
+ * an empty editor, if, for instance the user cleared all the editor code).
+ */
+const fetchCodeBlobForChallenge: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.setChallengeId)),
+    pluck("payload"),
+    pluck("newChallengeId"),
+    mergeMap(async id => {
+      /* Check the local cache first! */
+      const blobCache = state$.value.challenges.blobCache;
+      if (id in blobCache) {
+        return new Ok({
+          challengeId: id,
+          dataBlob: blobCache[id],
+        });
+      } else {
+        return deps.api.fetchChallengeHistory(id);
+      }
+    }),
+    map(result => {
+      if (result.value) {
+        return Actions.fetchBlobForChallengeSuccess(result.value);
+      } else {
+        return Actions.fetchBlobForChallengeFailure(result.error);
+      }
+    }),
+  );
+};
+
+/**
+ * Handles saving a code blob, this occurs whenever the challenge id changes
+ * and it saves the code blob for the previous challenge. This epic just
+ * finds the blob to save and then dispatches the action which actually saves
+ * the blob.
+ */
+const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.setChallengeId)),
+    pluck("payload"),
+    pluck("previousChallengeId"),
+    map(challengeId => {
+      const blobs = getBlobCache(state$.value);
+      if (challengeId in blobs) {
+        const codeBlob: ICodeBlobDto = {
+          challengeId,
+          dataBlob: blobs[challengeId],
+        };
+        return new Ok(codeBlob);
+      } else {
+        return new Err("No blob found");
+      }
+    }),
+    map(result => {
+      if (result.value) {
+        return Actions.saveChallengeBlob(result.value);
+      } else {
+        return Actions.empty("No blob saved");
+      }
+    }),
+  );
+};
+
+/**
+ * Save a code blob. Just take the blob and send it to the API to be saved.
+ */
+const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.saveChallengeBlob)),
+    pluck("payload"),
+    mergeMap(deps.api.updateChallengeHistory),
+    map(result => {
+      if (result.value) {
+        return Actions.saveChallengeBlobSuccess();
+      } else {
+        return Actions.saveChallengeBlobFailure(result.error);
+      }
+    }),
+  );
+};
+
+/**
+ * Handle completing a challenge (all tests passed). This epic constructs
+ * a user progress update after a challenge is passed and then dispatches an
+ * action to save this progress update.
+ */
+const handleCompleteChallengeEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.handleCompleteChallenge)),
+    map(x => x.payload),
+    map(
+      (challengeId): Result<IProgressDto, string> => {
+        const courseId = state$.value.challenges.currentCourseId;
+
+        if (courseId) {
+          const payload: IProgressDto = {
+            courseId,
+            challengeId,
+            complete: true,
+          };
+
+          return new Ok(payload);
+        } else {
+          const msg =
+            "[WARNING!]: No active course id found in handleCompleteChallengeEpic, this shouldn't happen...";
+          console.warn(msg);
+          return new Err(msg);
+        }
+      },
+    ),
+    map(result => {
+      if (result.value) {
+        return Actions.updateUserProgress(result.value);
+      } else {
+        return Actions.empty("Did not save user progress");
+      }
+    }),
+  );
+};
+
+/**
+ * Handle saving a user progress update. Just send the progress update
+ * to the API to be saved.
+ */
+const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.updateUserProgress)),
+    pluck("payload"),
+    mergeMap(deps.api.updateUserProgress),
+    map(result => {
+      if (result.value) {
+        return Actions.updateUserProgressSuccess();
+      } else {
+        return Actions.updateUserProgressFailure(result.error);
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -214,7 +382,12 @@ export default combineEpics(
   contentSkeletonInitializationEpic,
   inverseChallengeMappingEpic,
   saveCourse,
+  fetchCodeBlobForChallenge,
   setWorkspaceLoadedEpic,
   challengeInitializationEpic,
   syncChallengeToUrlEpic,
+  handleSaveCodeBlobEpic,
+  saveCodeBlobEpic,
+  handleCompleteChallengeEpic,
+  updateUserProgressEpic,
 );

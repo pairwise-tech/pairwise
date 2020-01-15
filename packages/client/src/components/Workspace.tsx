@@ -3,18 +3,16 @@
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
 import { monaco } from "@monaco-editor/react";
-import { assertUnreachable, Challenge } from "@pairwise/common";
+import { assertUnreachable, Challenge, DataBlob } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import pipe from "ramda/es/pipe";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
-import styled from "styled-components/macro";
 import { debounce } from "throttle-debounce";
 import { DEV_MODE } from "tools/client-env";
 import {
-  getTestHarness,
   IFRAME_MESSAGE_TYPES,
   IframeMessageEvent,
   requestCodeFormatting,
@@ -25,10 +23,8 @@ import {
   getTestScripts,
 } from "../tools/challenges";
 import {
-  COLORS,
   COLORS as C,
   DIMENSIONS as D,
-  HEADER_HEIGHT,
   MONACO_EDITOR_THEME,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
@@ -42,49 +38,40 @@ import {
   stripAndExtractModuleImports,
   transpileCodeWithBabel,
 } from "../tools/test-utils";
-import {
-  getStoredCodeForChallenge,
-  persistToLocalStorage,
-} from "../tools/storage-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
-import KeyboardShortcuts from "./KeyboardShortcuts";
 import MediaArea from "./MediaArea";
-import { ContentInput, LowerRight, StyledMarkdown, IconButton } from "./Shared";
-import {
-  Tooltip,
-  ButtonGroup,
-  EditableText,
-  Icon,
-  Collapse,
-  Pre,
-} from "@blueprintjs/core";
+import { LowerRight, IconButton } from "./Shared";
+import { Tooltip, ButtonGroup } from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
-import { wait, composeWithProps } from "tools/utils";
+import {
+  wait,
+  composeWithProps,
+  constructDataBlobFromChallenge,
+} from "tools/utils";
+import {
+  Tab,
+  TabbedInnerNav,
+  Container,
+  PageSection,
+  WorkspaceContainer,
+  colSeparatorProps,
+  rowSeparatorProps,
+  ContentContainer,
+  ContentViewEdit,
+  ContentTitle,
+  TestResultRow,
+  Spacer,
+  DragIgnorantFrameContainer,
+  consoleRowStyles,
+  LowerSection,
+  AdminKeyboardShortcuts,
+} from "./WorkspaceComponents";
+import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
-
-/**
- * This is only to allow a logic split if editting (i.e. via admin edit mode).
- * So it is not relevant unless using codepress
- */
-const getEditorCode = ({
-  challenge,
-  isEditMode,
-  tab = "starterCode",
-}: {
-  challenge: Challenge;
-  isEditMode: boolean;
-  tab: IState["adminEditorTab"];
-}) => {
-  if (isEditMode) {
-    return challenge[tab];
-  } else {
-    return getStoredCodeForChallenge(challenge);
-  }
-};
 
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
@@ -107,8 +94,6 @@ interface IState {
   fullScreenEditor: boolean;
   testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
-  adminEditorTab: "starterCode" | "solutionCode";
-  adminTestTab: "testResults" | "testCode";
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
@@ -151,20 +136,14 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    const defaultAdminTab: IState["adminEditorTab"] = "starterCode";
+    const initialCode = props.blob.type === "challenge" ? props.blob.code : "";
 
     this.state = {
       testResults: [],
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
-      adminEditorTab: defaultAdminTab,
-      adminTestTab: "testResults",
-      code: getEditorCode({
-        challenge: props.challenge,
-        isEditMode: this.props.isEditMode,
-        tab: defaultAdminTab,
-      }),
+      code: initialCode,
     };
   }
 
@@ -207,49 +186,51 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   componentWillReceiveProps(nextProps: IProps) {
+    // TODO: Can remove?
     // Update in response to changing challenge
-    if (this.props.challenge.id !== nextProps.challenge.id) {
-      const { challenge, isEditMode } = nextProps;
-      const newCode = getEditorCode({
-        challenge,
-        isEditMode,
-        tab: this.state.adminEditorTab,
-      });
-      this.setState(
-        { code: newCode, adminTestTab: "testResults" },
-        this.refreshEditor,
-      );
-    }
+    // if (this.props.challenge.id !== nextProps.challenge.id) {
+    //   const { challenge, isEditMode } = nextProps;
+    //   const newCode = getEditorCode({
+    //     challenge,
+    //     isEditMode,
+    //     tab: this.state.adminEditorTab,
+    //   });
+    //   this.setState(
+    //     { code: newCode, adminTestTab: "testResults" },
+    //     this.refreshEditor,
+    //   );
+    // }
 
     if (this.props.editorOptions !== nextProps.editorOptions) {
       this.editorInstance?.updateOptions(nextProps.editorOptions);
     }
 
     // Account for changing the challenge type in the sandbox. Otherwise nothing
-    // gets rerendered since the ID of the challenge does not change
+    // gets re-rendered since the ID of the challenge does not change
     // TODO: This is ugly because it's unclear why re-rendering immediately fails
     if (this.props.challenge.type !== nextProps.challenge.type) {
       wait(50).then(this.refreshEditor);
     }
 
+    // TODO: Can remove?
     // Update in response to toggling admin edit mode. This will only ever
     // happen for us as we use codepress, not for our end users.
-    if (this.props.isEditMode !== nextProps.isEditMode) {
-      this.setState(
-        {
-          code: getEditorCode({
-            challenge: nextProps.challenge,
-            isEditMode: nextProps.isEditMode,
-            tab: this.state.adminEditorTab,
-          }),
-        },
-        this.refreshEditor,
-      );
-    }
+    // if (this.props.isEditMode !== nextProps.isEditMode) {
+    //   this.setState(
+    //     {
+    //       code: getEditorCode({
+    //         challenge: nextProps.challenge,
+    //         isEditMode: nextProps.isEditMode,
+    //         tab: this.state.adminEditorTab,
+    //       }),
+    //     },
+    //     this.refreshEditor,
+    //   );
+    // }
   }
 
   /**
-   * Resest the code editor content to the starterCode.
+   * Reset the code editor content to the starterCode.
    */
   resetCodeWindow = () => {
     this.transformMonacoCode(() => this.props.challenge.starterCode);
@@ -403,18 +384,20 @@ class Workspace extends React.Component<IProps, IState> {
    * Doing a check to see if we even need to update state. Normally we would
    * just do a fire-and-forget state update regardless, but with all the
    * imperative logic going on with the editor this keeps it from updating
-   * unecessarily.
+   * unnecessarily.
    *
    * NOTE: When switching to the solution code default to start code
    */
-  handleEditorTabClick = (tab: IState["adminEditorTab"]) => {
-    if (tab !== this.state.adminEditorTab) {
+  handleEditorTabClick = (tab: ADMIN_EDITOR_TAB) => {
+    if (tab !== this.props.adminEditorTab) {
       this.setState(
         {
-          adminEditorTab: tab,
           code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
         },
-        this.refreshEditor,
+        () => {
+          this.refreshEditor();
+          this.props.setAdminEditorTab(tab);
+        },
       );
     }
   };
@@ -422,17 +405,20 @@ class Workspace extends React.Component<IProps, IState> {
   /**
    * Switch tabs in the test area of the workspace. So that we can see test results and write tests using different tabs.
    */
-  handleTestTabClick = (tab: IState["adminTestTab"]) => {
-    if (tab !== this.state.adminTestTab) {
-      // NOTE: The reason for this additonal logic is to "refresh" the test
-      // results when one of us clicks back to the test results tab. That tab is
-      // the only tab from the perspective of endusers so this should only ever
-      // happen when we are editing via codepress.
+  handleTestTabClick = (tab: ADMIN_TEST_TAB) => {
+    if (tab !== this.props.adminTestTab) {
+      /**
+       * NOTE: The reason for this additional logic is to "refresh" the test
+       * results when one of us clicks back to the test results tab. That tab is
+       * the only tab from the perspective of end users so this should only ever
+       * happen when we are editing via codepress.
+       */
+
       if (tab === "testResults") {
-        this.setState({ adminTestTab: tab }, this.refreshEditor);
-      } else {
-        this.setState({ adminTestTab: tab });
+        this.refreshEditor();
       }
+
+      this.props.setAdminTestTab(tab);
     }
   };
 
@@ -450,13 +436,13 @@ class Workspace extends React.Component<IProps, IState> {
         <TabbedInnerNav show={isEditMode}>
           <Tab
             onClick={() => this.handleEditorTabClick("starterCode")}
-            active={this.state.adminEditorTab === "starterCode"}
+            active={this.props.adminEditorTab === "starterCode"}
           >
             Starter Code
           </Tab>
           <Tab
             onClick={() => this.handleEditorTabClick("solutionCode")}
-            active={this.state.adminEditorTab === "solutionCode"}
+            active={this.props.adminEditorTab === "solutionCode"}
           >
             Solution
           </Tab>
@@ -547,19 +533,19 @@ class Workspace extends React.Component<IProps, IState> {
                       <TabbedInnerNav show={isEditMode}>
                         <Tab
                           onClick={() => this.handleTestTabClick("testResults")}
-                          active={this.state.adminTestTab === "testResults"}
+                          active={this.props.adminTestTab === "testResults"}
                         >
                           Test Results
                         </Tab>
                         <Tab
                           onClick={() => this.handleTestTabClick("testCode")}
-                          active={this.state.adminTestTab === "testCode"}
+                          active={this.props.adminTestTab === "testCode"}
                         >
                           Test Code
                         </Tab>
                       </TabbedInnerNav>
                       {this.props.isEditMode &&
-                      this.state.adminTestTab === "testCode" ? (
+                      this.props.adminTestTab === "testCode" ? (
                         <ChallengeTestEditor />
                       ) : (
                         <ContentContainer>
@@ -567,7 +553,7 @@ class Workspace extends React.Component<IProps, IState> {
                             {this.getTestSummaryString()}
                           </ContentTitle>
                           {testResults.map((x, i) => (
-                            <TestResultRow key={i} {...x} />
+                            <TestResultRow key={i} {...x} index={i} />
                           ))}
                           <Spacer height={50} />
                         </ContentContainer>
@@ -640,10 +626,16 @@ class Workspace extends React.Component<IProps, IState> {
     );
   }
 
-  getTestSummaryString = () => {
+  getTestPassedStatus = () => {
     const { testResults } = this.state;
-    const passed = testResults.filter(t => t.testResult);
-    return `Tests: ${passed.length}/${testResults.length} Passed`;
+    const passedTests = testResults.filter(t => t.testResult);
+    const correct = passedTests.length === testResults.length;
+    return { correct, passedTests, testResults };
+  };
+
+  getTestSummaryString = () => {
+    const { passedTests, testResults } = this.getTestPassedStatus();
+    return `Tests: ${passedTests.length}/${testResults.length} Passed`;
   };
 
   setMonacoEditorValue = () => {
@@ -703,7 +695,7 @@ class Workspace extends React.Component<IProps, IState> {
       this.props.updateChallenge({
         id: challenge.id,
         challenge: {
-          [this.state.adminEditorTab]: this.state.code,
+          [this.props.adminEditorTab]: this.state.code,
         },
       });
 
@@ -712,11 +704,17 @@ class Workspace extends React.Component<IProps, IState> {
     }
 
     /**
-     * Save the current code to local storage. This method is debounced.
+     * Construct a code blob for the current challenge and update this code
+     * blob in local Redux state.
      */
-    persistToLocalStorage(this.props.challenge.id, {
+    const blob = constructDataBlobFromChallenge({
       code: this.state.code,
-      sandboxType: this.props.challenge.type,
+      challenge: this.props.challenge,
+    });
+
+    this.props.updateCurrentChallengeBlob({
+      dataBlob: blob,
+      challengeId: this.props.challenge.id,
     });
   };
 
@@ -754,7 +752,10 @@ class Workspace extends React.Component<IProps, IState> {
             console.warn("[bad things]", results);
             break;
           }
-          this.setState({ testResults: results });
+          this.setState(
+            { testResults: results },
+            this.handleReceiveTestResults,
+          );
           break;
         }
         case IFRAME_MESSAGE_TYPES.TEST_ERROR: {
@@ -774,8 +775,24 @@ class Workspace extends React.Component<IProps, IState> {
       // This is currently a noop because it's super noisy in dev. The
       // assertUnreachable throws all the time because of something. Looks like
       // react devtools is putting a message through and that's hitting the
-      // deafult case
+      // default case.
     }
+  };
+
+  handleReceiveTestResults = () => {
+    const { correct } = this.getTestPassedStatus();
+    if (correct) {
+      this.handlePassChallenge();
+    }
+  };
+
+  handlePassChallenge = () => {
+    /**
+     * Called when all the tests on a challenge pass. This can be used to
+     * trigger events at this time such as displaying the challenge success
+     * modal.
+     */
+    this.props.handleCompleteChallenge(this.props.challenge.id);
   };
 
   iFrameRenderPreview = async () => {
@@ -805,7 +822,7 @@ class Workspace extends React.Component<IProps, IState> {
           }
 
           // TODO: There's no reason for us to inject the test script in sandbox
-          // mode, but hte same applies to all cahllenge types so ideally we
+          // mode, but the same applies to all challenge types so ideally we
           // would standardize the testing pipeline to the point where we could
           // include that logic in one place only.
           const sourceDocument = tidySource.replace(
@@ -827,8 +844,7 @@ class Workspace extends React.Component<IProps, IState> {
     );
   };
 
-  // TODO: Why is this async?
-  compileAndTransformCodeString = async () => {
+  compileAndTransformCodeString = () => {
     const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
       this.state.code,
     );
@@ -971,353 +987,6 @@ class Workspace extends React.Component<IProps, IState> {
 }
 
 /** ===========================================================================
- * Styled Components
- * ============================================================================
- */
-
-const Container = styled.div`
-  height: 100%;
-  overflow: hidden;
-`;
-
-const PageSection = styled.div`
-  width: 100vw;
-  height: calc(100vh - ${HEADER_HEIGHT}px);
-  background: white;
-`;
-
-const LowerSection = styled.div<{ withHeader?: boolean }>`
-  width: 100vw;
-  height: ${props =>
-    props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
-  border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
-  background: ${C.BACKGROUND_LOWER_SECTION};
-`;
-
-const WorkspaceContainer = styled.div`
-  width: 100vw;
-  height: ${D.WORKSPACE_HEIGHT}px;
-`;
-
-const FrameContainer = styled.iframe`
-  height: 100%;
-  width: 100%;
-  border: none;
-`;
-
-/**
- * Our window resizing library is listening for mouse events on
- * window.document.body, however, when the mouse enters an iframe those events
- * fire on document.body _within the iframe_, which causes resizing issues when
- * the pane in question contains an iframe. This component prevents pointer
- * events within the iframe during a drag if that drag was started outside the
- * iframe.
- *
- * NOTE: This is currently a very specific case, but could be refactored into a
- * HOC if it became necessary for other components.
- */
-const DragIgnorantFrameContainer = React.forwardRef(
-  ({ style = {}, ...props }: any, ref: any) => {
-    const [isDragging, setIsDragging] = useState<boolean>(false);
-
-    useEffect(() => {
-      const onMouseDown = () => {
-        setIsDragging(true);
-      };
-      const onMouseUp = () => {
-        setIsDragging(false);
-      };
-
-      window.document.body.addEventListener("mousedown", onMouseDown);
-      window.document.body.addEventListener("mouseup", onMouseUp);
-
-      return () => {
-        window.document.body.removeEventListener("mousedown", onMouseDown);
-        window.document.body.removeEventListener("mouseup", onMouseUp);
-      };
-    }, []);
-
-    return (
-      <FrameContainer
-        ref={ref}
-        style={{ ...style, pointerEvents: isDragging ? "none" : "all" }}
-        {...props}
-      />
-    );
-  },
-);
-
-const TestResultRow = ({ message, testResult, error }: TestCase) => {
-  const [showError, setShowError] = React.useState(false);
-  const toggleShowError = () => {
-    if (!error) {
-      return;
-    }
-    setShowError(!showError);
-  };
-
-  return (
-    <div>
-      <ContentDiv>
-        <MinimalButton
-          style={{ cursor: error ? "pointer" : "normal" }}
-          onClick={toggleShowError}
-        >
-          {error ? (
-            <Icon icon="error" intent="danger" />
-          ) : (
-            <Icon icon="tick-circle" intent="primary" />
-          )}
-        </MinimalButton>
-        <div>
-          <b style={{ color: C.TEXT_TITLE }}>Test: </b>
-          {message}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            width: 140,
-            marginLeft: "auto",
-            flexDirection: "row",
-          }}
-        >
-          <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-          <SuccessFailureText testResult={testResult}>
-            {testResult ? "Success!" : "Incomplete..."}
-          </SuccessFailureText>
-        </div>
-      </ContentDiv>
-      {error && (
-        <Collapse isOpen={showError}>
-          <Pre>{error}</Pre>
-        </Collapse>
-      )}
-    </div>
-  );
-};
-
-const consoleRowStyles = {
-  paddingTop: 2,
-  paddingBottom: 4,
-  background: C.BACKGROUND_CONSOLE,
-};
-
-const colSeparatorProps = {
-  style: {
-    backgroundColor: C.DRAGGABLE_SLIDER,
-    borderLeft: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-    borderRight: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-  },
-};
-
-const rowSeparatorProps = {
-  style: {
-    backgroundColor: C.DRAGGABLE_SLIDER,
-    borderTop: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-    borderBottom: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-  },
-};
-
-const ContentContainer = styled.div`
-  height: 100%;
-  padding: 8px;
-  padding-bottom: 16px;
-  overflow-y: scroll;
-`;
-
-const Spacer = styled.div`
-  height: ${(props: { height: number }) => props.height}px;
-`;
-
-const ContentTitle = styled.h3`
-  margin: 0;
-  margin-bottom: 12px;
-  color: ${C.TEXT_TITLE};
-`;
-
-const MinimalButton = styled.button`
-  appearance: none;
-  outline: none;
-  background: transparent;
-  border: none;
-`;
-
-const ContentDiv = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0;
-  margin-top: 8px;
-  font-size: 15px;
-  font-weight: 200px;
-  color: ${C.TEXT_CONTENT};
-`;
-
-const SuccessFailureText = styled.p`
-  margin: 0;
-  margin-left: 4px;
-  color: ${(props: { testResult: boolean }) =>
-    props.testResult ? C.SUCCESS : C.FAILURE};
-`;
-
-const TabbedInnerNav = styled.div<{ show: boolean }>`
-  display: ${props => (props.show ? "flex" : "none")};
-  align-items: center;
-  border-bottom: 1px solid black;
-`;
-
-const Tab = styled.div<{ active?: boolean }>`
-  display: block;
-  padding: 7px 20px;
-  cursor: pointer;
-  position: relative;
-  background: ${props => (props.active ? "#1e1e1e" : "transparent")};
-  color: ${props => (props.active ? "white" : "gray")};
-  border: 1px solid ${props => (props.active ? "black" : "transparent")};
-  border-top: 2px solid
-    ${props => (props.active ? COLORS.PRIMARY_GREEN : "transparent")};
-  border-bottom: none;
-  transition: all 0.2s ease-out;
-
-  &:hover {
-    color: white;
-  }
-
-  &:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: ${props => (props.active ? "#1e1e1e" : "transparent")};
-  }
-`;
-
-export const LoginSignupText = styled.h1`
-  margin-right: 12px;
-  margin-left: 12px;
-  font-size: 18px;
-  font-weight: 200;
-  color: ${COLORS.TEXT_TITLE};
-  font-family: Helvetica Neue, Lato, sans-serif;
-`;
-
-export const LoginSignupTextInteractive = styled(LoginSignupText)`
-  :hover {
-    cursor: pointer;
-    color: ${COLORS.TEXT_HOVER};
-  }
-`;
-
-const ChallengeTitleHeading = styled.h1`
-  font-size: 1.2em;
-  background: transparent;
-  font-weight: bold;
-  color: rgb(200, 200, 200);
-  display: block;
-  width: 100%;
-  line-height: 1.5;
-  transition: all 0.2s ease-out;
-  &:focus {
-    background: black;
-  }
-`;
-
-const contentMapState = (state: ReduxStoreState) => ({
-  content: Modules.selectors.challenges.getCurrentContent(state) || "",
-  title: Modules.selectors.challenges.getCurrentTitle(state) || "",
-  currentId: Modules.selectors.challenges.getCurrentId(state) || "",
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
-});
-
-const contentMapDispatch = {
-  updateChallenge: Modules.actions.challenges.updateChallenge,
-};
-
-type ContentViewEditProps = ReturnType<typeof contentMapState> &
-  typeof contentMapDispatch;
-
-const ContentViewEdit = connect(
-  contentMapState,
-  contentMapDispatch,
-)((props: ContentViewEditProps) => {
-  const { isEditMode, currentId } = props;
-  const handleTitle = (title: string) =>
-    props.updateChallenge({ id: currentId, challenge: { title } });
-  const handleContent = (content: string) =>
-    props.updateChallenge({ id: currentId, challenge: { content } });
-
-  return (
-    <div style={{ height: "100%" }}>
-      <ChallengeTitleHeading>
-        <StyledEditableText
-          value={props.title}
-          onChange={handleTitle}
-          disabled={!isEditMode}
-        />
-      </ChallengeTitleHeading>
-      {isEditMode ? (
-        <ContentInput value={props.content} onChange={handleContent} />
-      ) : (
-        <StyledMarkdown source={props.content} />
-      )}
-    </div>
-  );
-});
-
-const StyledEditableText = styled(EditableText)`
-  width: 100%;
-`;
-
-const keyboardStateToProps = (state: ReduxStoreState) => ({
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
-  course: Modules.selectors.challenges.getCurrentCourse(state),
-});
-
-const keyboardDispatchProps = {
-  saveCourse: Modules.actions.challenges.saveCourse,
-  setEditMode: Modules.actions.challenges.setEditMode,
-};
-
-const keyboardMergeProps = (
-  state: ReturnType<typeof keyboardStateToProps>,
-  methods: typeof keyboardDispatchProps,
-) => ({
-  ...state,
-  ...methods,
-  toggleEditMode: (e: KeyboardEvent) => {
-    e.preventDefault();
-    methods.setEditMode(!state.isEditMode);
-  },
-  save: (e: KeyboardEvent) => {
-    if (!state.isEditMode) {
-      return;
-    }
-
-    e.preventDefault();
-    if (state.course) {
-      methods.saveCourse(state.course);
-    } else {
-      console.warn("[ERROR] No course to save!");
-    }
-  },
-});
-
-const AdminKeyboardShortcuts = connect(
-  keyboardStateToProps,
-  keyboardDispatchProps,
-  keyboardMergeProps,
-)((props: ReturnType<typeof keyboardMergeProps>) => (
-  <KeyboardShortcuts
-    keymap={{
-      "cmd+e": props.toggleEditMode,
-      "cmd+s": props.save,
-    }}
-  />
-));
-
-/** ===========================================================================
  * Props
  * ============================================================================
  */
@@ -1326,11 +995,20 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   editorOptions: Modules.selectors.challenges.getEditorOptions(state),
+  blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
+  isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
+  adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
+  adminEditorTab: Modules.selectors.challenges.adminEditorTabSelector(state),
 });
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
   updateEditorOptions: Modules.actions.challenges.updateEditorOptions,
+  handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
+  updateCurrentChallengeBlob:
+    Modules.actions.challenges.updateCurrentChallengeBlob,
+  setAdminTestTab: Modules.actions.challenges.setAdminTestTab,
+  setAdminEditorTab: Modules.actions.challenges.setAdminEditorTab,
 };
 
 const mergeProps = (
@@ -1354,6 +1032,7 @@ const mergeProps = (
 type ConnectProps = ReturnType<typeof mergeProps>;
 
 interface IProps extends ConnectProps {
+  blob: DataBlob;
   challenge: Challenge;
 }
 
@@ -1369,16 +1048,28 @@ const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
 
 class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   render() {
-    const { challenge } = this.props;
+    const { challenge, blob, isLoadingBlob } = this.props;
 
-    if (!challenge) {
+    if (!challenge || isLoadingBlob) {
       return <h1>Loading...</h1>;
     }
+
+    /**
+     * If the code blob does not exist (the APIs will return 404 if it does not
+     * exist yet), construct a new code blob for this challenge which uses the
+     * starter code for the challenge itself.
+     */
+    const codeBlob = blob
+      ? blob
+      : constructDataBlobFromChallenge({
+          challenge,
+          code: challenge.starterCode,
+        });
 
     return (
       <React.Fragment>
         {challenge.type !== "media" && (
-          <Workspace {...this.props} challenge={challenge} />
+          <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
         )}
         {challenge.id !== SANDBOX_ID && (
           <LowerSection withHeader={challenge.type === "media"}>

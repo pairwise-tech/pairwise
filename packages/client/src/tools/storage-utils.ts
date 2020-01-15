@@ -1,68 +1,38 @@
-import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
+import { SandboxBlob } from "@pairwise/common";
+import { defaultSandboxBlob } from "./utils";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
 
-const CHALLENGE_STORE_KEY = "CHALLENGES";
+const SANDBOX = "SANDBOX";
 const ACCESS_TOKEN_STORAGE_KEY = "ACCESS_TOKEN_STORAGE_KEY";
 const EPHEMERAL_PURCHASE_COURSE_ID_KEY = "EPHEMERAL_PURCHASE_COURSE_ID_KEY";
-
-interface Storage {
-  challenges: { [k: string]: string };
-  sandboxType: CHALLENGE_TYPE;
-}
-
-interface StorageUpdate {
-  code: string;
-  sandboxType?: CHALLENGE_TYPE;
-}
 
 /** ===========================================================================
  * Local Storage Utils
  * ============================================================================
  */
 
-/**
- * Save code to localStorage.
- */
-export const persistToLocalStorage = (
-  challengeId: string,
-  { code, sandboxType = "markup" }: StorageUpdate,
-) => {
-  const data = getPersistedData();
-  const updatedChallenges = { ...data.challenges, [challengeId]: code };
-  localStorage.setItem(
-    CHALLENGE_STORE_KEY,
-    JSON.stringify({
-      challenges: updatedChallenges,
-      sandboxType,
-    }),
-  );
+export const saveSandboxToLocalStorage = (blob: SandboxBlob) => {
+  localStorage.setItem(SANDBOX, JSON.stringify({ blob }));
 };
 
-/**
- * Get all the stored challenges.
- */
-const getPersistedData = (): Storage => {
+export const getSandboxFromLocalStorage = (): SandboxBlob => {
   try {
-    const data = localStorage.getItem(CHALLENGE_STORE_KEY);
-    if (data) {
-      const result = JSON.parse(data);
-
-      // The additional checks after result are to guard against old local
-      // storage shape blowing up the app
-      if (result && result.challenges && result.sandboxType) {
+    const blob = localStorage.getItem(SANDBOX);
+    if (blob) {
+      const result = JSON.parse(blob);
+      if (result) {
         return result;
       }
     }
   } catch (err) {
-    console.log("[Err] Could not access local storage", err);
+    // do nothing
   }
 
-  // Default
-  return { challenges: {}, sandboxType: "markup" };
+  return defaultSandboxBlob as SandboxBlob;
 };
 
 /**
@@ -89,7 +59,7 @@ export const getEphemeralPurchaseCourseId = () => {
       return id;
     }
   } catch (err) {
-    console.log(err);
+    // do nothing
   }
 
   return null;
@@ -117,38 +87,8 @@ export const getAccessTokenFromLocalStorage = () => {
       return token;
     }
   } catch (err) {
-    console.log(err);
+    // do nothing
   }
 
   return "";
-};
-
-/**
- * Get the initial code for the editor, possibly from localStorage if
- * anything is saved there.
- */
-export const getStoredCodeForChallenge = (challenge: Challenge) => {
-  const { challenges } = getPersistedData();
-  if (challenge.id in challenges) {
-    return challenges[challenge.id];
-  } else {
-    return challenge.starterCode;
-  }
-};
-
-/**
- * The error handling here is overcaution since there is a try catch in the
- * other function. However, I don't want the sandbox to end up breaking the app
- * for some yet-unforseen reason
- */
-export const getStoredSandboxType = (): CHALLENGE_TYPE => {
-  try {
-    return getPersistedData().sandboxType;
-  } catch (err) {
-    console.warn(
-      "[Err] Should be unreachable. Could not get stored sandbox type",
-      err,
-    );
-    return "markup";
-  }
 };
