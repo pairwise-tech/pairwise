@@ -4,6 +4,7 @@ import {
   assertUnreachable,
   CodeChallengeBlob,
   VideoChallengeBlob,
+  DataBlob,
 } from "@pairwise/common";
 
 /** ===========================================================================
@@ -35,7 +36,7 @@ export const composeWithProps = <T extends {}>(
 export const constructDataBlobFromChallenge = (args: {
   code: string;
   challenge: Challenge;
-}) => {
+}): DataBlob => {
   const { code, challenge } = args;
 
   switch (challenge.type) {

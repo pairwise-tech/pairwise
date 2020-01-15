@@ -32,6 +32,9 @@ const debug = require("debug")("challenge:store");
  * ============================================================================
  */
 
+export type ADMIN_TEST_TAB = "testResults" | "testCode";
+export type ADMIN_EDITOR_TAB = "starterCode" | "solutionCode";
+
 export interface State {
   workspaceLoading: boolean;
   isEditMode: boolean;
@@ -46,9 +49,11 @@ export interface State {
   editorOptions: MonacoEditorOptions;
   blobCache: { [key: string]: DataBlob };
   loadingCurrentBlob: boolean;
+  adminTestTab: ADMIN_TEST_TAB;
+  adminEditorTab: ADMIN_EDITOR_TAB;
 }
 
-const initialState = {
+const initialState: State = {
   courses: null,
   courseSkeletons: null,
   isEditMode: false,
@@ -68,6 +73,8 @@ const initialState = {
   }),
   blobCache: {},
   loadingCurrentBlob: false,
+  adminTestTab: "testResults",
+  adminEditorTab: "starterCode",
 };
 
 interface ChallengeUpdate {

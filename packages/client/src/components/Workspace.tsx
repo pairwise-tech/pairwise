@@ -70,31 +70,12 @@ import {
   LowerSection,
   AdminKeyboardShortcuts,
 } from "./WorkspaceComponents";
+import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
-
-/**
- * This is only to allow a logic split if editing (i.e. via admin edit mode).
- * So it is not relevant unless using codepress
- */
-const getEditorCode = ({
-  challenge,
-  isEditMode,
-  tab = "starterCode",
-}: {
-  challenge: Challenge;
-  isEditMode: boolean;
-  tab: IState["adminEditorTab"];
-}) => {
-  if (isEditMode) {
-    return challenge[tab];
-  } else {
-    return getStoredCodeForChallenge(challenge);
-  }
-};
 
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
@@ -117,8 +98,6 @@ interface IState {
   fullScreenEditor: boolean;
   testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
-  adminEditorTab: "starterCode" | "solutionCode";
-  adminTestTab: "testResults" | "testCode";
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
@@ -161,9 +140,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    /* TODO: Move the admin editor and test tab state to Redux? */
-    const defaultAdminTab: IState["adminEditorTab"] = "starterCode";
-
     const initialCode = props.blob.type === "challenge" ? props.blob.code : "";
 
     this.state = {
@@ -171,14 +147,7 @@ class Workspace extends React.Component<IProps, IState> {
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
-      adminEditorTab: defaultAdminTab,
-      adminTestTab: "testResults",
       code: initialCode,
-      // code: getEditorCode({
-      //   challenge: props.challenge,
-      //   isEditMode: this.props.isEditMode,
-      //   tab: defaultAdminTab,
-      // }),
     };
   }
 
@@ -221,19 +190,20 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   componentWillReceiveProps(nextProps: IProps) {
+    // TODO: Can remove?
     // Update in response to changing challenge
-    if (this.props.challenge.id !== nextProps.challenge.id) {
-      const { challenge, isEditMode } = nextProps;
-      const newCode = getEditorCode({
-        challenge,
-        isEditMode,
-        tab: this.state.adminEditorTab,
-      });
-      this.setState(
-        { code: newCode, adminTestTab: "testResults" },
-        this.refreshEditor,
-      );
-    }
+    // if (this.props.challenge.id !== nextProps.challenge.id) {
+    //   const { challenge, isEditMode } = nextProps;
+    //   const newCode = getEditorCode({
+    //     challenge,
+    //     isEditMode,
+    //     tab: this.state.adminEditorTab,
+    //   });
+    //   this.setState(
+    //     { code: newCode, adminTestTab: "testResults" },
+    //     this.refreshEditor,
+    //   );
+    // }
 
     if (this.props.editorOptions !== nextProps.editorOptions) {
       this.editorInstance?.updateOptions(nextProps.editorOptions);
@@ -246,24 +216,25 @@ class Workspace extends React.Component<IProps, IState> {
       wait(50).then(this.refreshEditor);
     }
 
+    // TODO: Can remove?
     // Update in response to toggling admin edit mode. This will only ever
     // happen for us as we use codepress, not for our end users.
-    if (this.props.isEditMode !== nextProps.isEditMode) {
-      this.setState(
-        {
-          code: getEditorCode({
-            challenge: nextProps.challenge,
-            isEditMode: nextProps.isEditMode,
-            tab: this.state.adminEditorTab,
-          }),
-        },
-        this.refreshEditor,
-      );
-    }
+    // if (this.props.isEditMode !== nextProps.isEditMode) {
+    //   this.setState(
+    //     {
+    //       code: getEditorCode({
+    //         challenge: nextProps.challenge,
+    //         isEditMode: nextProps.isEditMode,
+    //         tab: this.state.adminEditorTab,
+    //       }),
+    //     },
+    //     this.refreshEditor,
+    //   );
+    // }
   }
 
   /**
-   * Resest the code editor content to the starterCode.
+   * Reset the code editor content to the starterCode.
    */
   resetCodeWindow = () => {
     this.transformMonacoCode(() => this.props.challenge.starterCode);
@@ -417,18 +388,20 @@ class Workspace extends React.Component<IProps, IState> {
    * Doing a check to see if we even need to update state. Normally we would
    * just do a fire-and-forget state update regardless, but with all the
    * imperative logic going on with the editor this keeps it from updating
-   * unecessarily.
+   * unnecessarily.
    *
    * NOTE: When switching to the solution code default to start code
    */
-  handleEditorTabClick = (tab: IState["adminEditorTab"]) => {
-    if (tab !== this.state.adminEditorTab) {
+  handleEditorTabClick = (tab: ADMIN_EDITOR_TAB) => {
+    if (tab !== this.props.adminEditorTab) {
       this.setState(
         {
-          adminEditorTab: tab,
           code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
         },
-        this.refreshEditor,
+        () => {
+          this.refreshEditor();
+          this.props.setAdminEditorTab(tab);
+        },
       );
     }
   };
@@ -436,17 +409,20 @@ class Workspace extends React.Component<IProps, IState> {
   /**
    * Switch tabs in the test area of the workspace. So that we can see test results and write tests using different tabs.
    */
-  handleTestTabClick = (tab: IState["adminTestTab"]) => {
-    if (tab !== this.state.adminTestTab) {
-      // NOTE: The reason for this additonal logic is to "refresh" the test
-      // results when one of us clicks back to the test results tab. That tab is
-      // the only tab from the perspective of endusers so this should only ever
-      // happen when we are editing via codepress.
+  handleTestTabClick = (tab: ADMIN_TEST_TAB) => {
+    if (tab !== this.props.adminTestTab) {
+      /**
+       * NOTE: The reason for this additional logic is to "refresh" the test
+       * results when one of us clicks back to the test results tab. That tab is
+       * the only tab from the perspective of end users so this should only ever
+       * happen when we are editing via codepress.
+       */
+
       if (tab === "testResults") {
-        this.setState({ adminTestTab: tab }, this.refreshEditor);
-      } else {
-        this.setState({ adminTestTab: tab });
+        this.refreshEditor();
       }
+
+      this.props.setAdminTestTab(tab);
     }
   };
 
@@ -464,13 +440,13 @@ class Workspace extends React.Component<IProps, IState> {
         <TabbedInnerNav show={isEditMode}>
           <Tab
             onClick={() => this.handleEditorTabClick("starterCode")}
-            active={this.state.adminEditorTab === "starterCode"}
+            active={this.props.adminEditorTab === "starterCode"}
           >
             Starter Code
           </Tab>
           <Tab
             onClick={() => this.handleEditorTabClick("solutionCode")}
-            active={this.state.adminEditorTab === "solutionCode"}
+            active={this.props.adminEditorTab === "solutionCode"}
           >
             Solution
           </Tab>
@@ -561,19 +537,19 @@ class Workspace extends React.Component<IProps, IState> {
                       <TabbedInnerNav show={isEditMode}>
                         <Tab
                           onClick={() => this.handleTestTabClick("testResults")}
-                          active={this.state.adminTestTab === "testResults"}
+                          active={this.props.adminTestTab === "testResults"}
                         >
                           Test Results
                         </Tab>
                         <Tab
                           onClick={() => this.handleTestTabClick("testCode")}
-                          active={this.state.adminTestTab === "testCode"}
+                          active={this.props.adminTestTab === "testCode"}
                         >
                           Test Code
                         </Tab>
                       </TabbedInnerNav>
                       {this.props.isEditMode &&
-                      this.state.adminTestTab === "testCode" ? (
+                      this.props.adminTestTab === "testCode" ? (
                         <ChallengeTestEditor />
                       ) : (
                         <ContentContainer>
@@ -723,7 +699,7 @@ class Workspace extends React.Component<IProps, IState> {
       this.props.updateChallenge({
         id: challenge.id,
         challenge: {
-          [this.state.adminEditorTab]: this.state.code,
+          [this.props.adminEditorTab]: this.state.code,
         },
       });
 
@@ -1037,6 +1013,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   editorOptions: Modules.selectors.challenges.getEditorOptions(state),
   blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
   isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
+  adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
+  adminEditorTab: Modules.selectors.challenges.adminEditorTabSelector(state),
 });
 
 const dispatchProps = {
@@ -1045,6 +1023,8 @@ const dispatchProps = {
   handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
   updateCurrentChallengeBlob:
     Modules.actions.challenges.updateCurrentChallengeBlob,
+  setAdminTestTab: Modules.actions.challenges.setAdminTestTab,
+  setAdminEditorTab: Modules.actions.challenges.setAdminEditorTab,
 };
 
 const mergeProps = (

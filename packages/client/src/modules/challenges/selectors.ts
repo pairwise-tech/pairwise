@@ -24,6 +24,16 @@ export const getEditorOptions = createSelector(
   x => x.editorOptions,
 );
 
+export const adminTestTabSelector = createSelector(
+  [challengesState],
+  x => x.adminTestTab,
+);
+
+export const adminEditorTabSelector = createSelector(
+  [challengesState],
+  x => x.adminEditorTab,
+);
+
 export const getChallengeMap = createSelector(
   [challengesState],
   state => state.challengeMap,

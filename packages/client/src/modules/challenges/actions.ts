@@ -14,6 +14,7 @@ import {
   MonacoEditorOptions,
 } from "./types";
 import { HttpResponseError } from "modules/api";
+import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
 
 /** ===========================================================================
  * Action Types
@@ -67,6 +68,9 @@ enum ActionTypesEnum {
   SAVE_CHALLENGE_BLOB = "SAVE_CHALLENGE_BLOB",
   SAVE_CHALLENGE_BLOB_SUCCESS = "SAVE_CHALLENGE_BLOB_SUCCESS",
   SAVE_CHALLENGE_BLOB_FAILURE = "SAVE_CHALLENGE_BLOB_FAILURE",
+
+  SET_ADMIN_TEST_TAB = "SET_ADMIN_TEST_TAB",
+  SET_ADMIN_EDITOR_TAB = "SET_ADMIN_EDITOR_TAB",
 }
 
 /** ===========================================================================
@@ -75,6 +79,14 @@ enum ActionTypesEnum {
  */
 
 const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<boolean>();
+
+const setAdminTestTab = createAction(ActionTypesEnum.SET_ADMIN_TEST_TAB)<
+  ADMIN_TEST_TAB
+>();
+
+const setAdminEditorTab = createAction(ActionTypesEnum.SET_ADMIN_EDITOR_TAB)<
+  ADMIN_EDITOR_TAB
+>();
 
 const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
   newChallengeId: string;
@@ -195,6 +207,8 @@ const updateEditorOptions = createAction(ActionTypesEnum.UPDATE_EDITOR_OPTIONS)<
 >();
 
 const actions = {
+  setAdminTestTab,
+  setAdminEditorTab,
   fetchBlobForChallenge,
   fetchBlobForChallengeSuccess,
   fetchBlobForChallengeFailure,

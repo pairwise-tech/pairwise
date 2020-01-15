@@ -195,45 +195,6 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
   );
 };
 
-/**
- * Fetches a code blob for a challenge when the challenge id changes. Code
- * blobs are fetched individually whenever a challenge loads, and then
- * cached locally in Redux state. When a challenge is first viewed, the code
- * blob will be fetched from the API, if the challenge is viewed again, the
- * blob will be fetched from the local Redux blob cache.
- *
- * NOTE: If the API fails to find a blob, it will return a 404 error. This is
- * used to clearly differentiate when the Workspace should default to showing
- * the initial starter code for a challenge (and when instead it should show
- * an empty editor, if, for instance the user cleared all the editor code).
- */
-const fetchCodeBlobForChallenge: EpicSignature = (action$, state$, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.setChallengeId)),
-    pluck("payload"),
-    pluck("newChallengeId"),
-    mergeMap(async id => {
-      /* Check the local cache first! */
-      const blobCache = state$.value.challenges.blobCache;
-      if (id in blobCache) {
-        return new Ok({
-          challengeId: id,
-          dataBlob: blobCache[id],
-        });
-      } else {
-        return deps.api.fetchChallengeHistory(id);
-      }
-    }),
-    map(result => {
-      if (result.value) {
-        return Actions.fetchBlobForChallengeSuccess(result.value);
-      } else {
-        return Actions.fetchBlobForChallengeFailure(result.error);
-      }
-    }),
-  );
-};
-
 const saveCourse: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.saveCourse)),
@@ -260,6 +221,53 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
           ),
         ),
       );
+    }),
+  );
+};
+
+/**
+ * Fetches a code blob for a challenge when the challenge id changes. Code
+ * blobs are fetched individually whenever a challenge loads, and then
+ * cached locally in Redux state. When a challenge is first viewed, the code
+ * blob will be fetched from the API, if the challenge is viewed again, the
+ * blob will be fetched from the local Redux blob cache.
+ *
+ * NOTE: If the API fails to find a blob, it will return a 404 error. This is
+ * used to clearly differentiate when the Workspace should default to showing
+ * the initial starter code for a challenge (and when instead it should show
+ * an empty editor, if, for instance the user cleared all the editor code).
+ */
+const fetchCodeBlobForChallenge: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.setChallengeId)),
+    pluck("payload"),
+    pluck("newChallengeId"),
+    mergeMap(async id => {
+      // localStorage.setItem(
+      //   CHALLENGE_STORE_KEY,
+      //   JSON.stringify({
+      //     challenges: updatedChallenges,
+      //     sandboxType,
+      //   }),
+      // );
+
+      /* Check the local cache first! */
+      const blobCache = state$.value.challenges.blobCache;
+      if (id in blobCache) {
+        return new Ok({
+          challengeId: id,
+          dataBlob: blobCache[id],
+        });
+      } else {
+        return deps.api.fetchChallengeHistory(id);
+      }
+    }),
+    map(result => {
+      if (result.value) {
+        return Actions.fetchBlobForChallengeSuccess(result.value);
+      } else {
+        return Actions.fetchBlobForChallengeFailure(result.error);
+      }
     }),
   );
 };
