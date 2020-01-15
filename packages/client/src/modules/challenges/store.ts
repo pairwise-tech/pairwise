@@ -273,6 +273,14 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
     ...state,
     courseSkeletons: action.payload,
   }))
+  .handleAction(actions.setAdminTestTab, (state, action) => ({
+    ...state,
+    adminTestTab: action.payload,
+  }))
+  .handleAction(actions.setAdminEditorTab, (state, action) => ({
+    ...state,
+    adminEditorTab: action.payload,
+  }))
   .handleAction(
     actions.fetchCurrentActiveCourseSuccess,
     (state, { payload }) => ({

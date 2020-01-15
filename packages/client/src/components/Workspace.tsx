@@ -38,10 +38,7 @@ import {
   stripAndExtractModuleImports,
   transpileCodeWithBabel,
 } from "../tools/test-utils";
-import {
-  getStoredCodeForChallenge,
-  persistToLocalStorage,
-} from "../tools/storage-utils";
+import { persistToLocalStorage } from "../tools/storage-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
 import { LowerRight, IconButton } from "./Shared";
@@ -210,7 +207,7 @@ class Workspace extends React.Component<IProps, IState> {
     }
 
     // Account for changing the challenge type in the sandbox. Otherwise nothing
-    // gets rerendered since the ID of the challenge does not change
+    // gets re-rendered since the ID of the challenge does not change
     // TODO: This is ugly because it's unclear why re-rendering immediately fails
     if (this.props.challenge.type !== nextProps.challenge.type) {
       wait(50).then(this.refreshEditor);
