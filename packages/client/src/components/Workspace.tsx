@@ -862,7 +862,7 @@ class Workspace extends React.Component<IProps, IState> {
           }
 
           // TODO: There's no reason for us to inject the test script in sandbox
-          // mode, but hte same applies to all cahllenge types so ideally we
+          // mode, but the same applies to all challenge types so ideally we
           // would standardize the testing pipeline to the point where we could
           // include that logic in one place only.
           const sourceDocument = tidySource.replace(
