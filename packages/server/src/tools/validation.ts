@@ -82,6 +82,9 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
       }
       break;
     }
+    case "sandbox": {
+      throw new BadRequestException("Sandbox blob is not supported yet!");
+    }
     default: {
       const { type } = dataBlob;
       return assertUnreachable(type);

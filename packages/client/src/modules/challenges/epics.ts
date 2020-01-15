@@ -243,14 +243,6 @@ const fetchCodeBlobForChallenge: EpicSignature = (action$, state$, deps) => {
     pluck("payload"),
     pluck("newChallengeId"),
     mergeMap(async id => {
-      // localStorage.setItem(
-      //   CHALLENGE_STORE_KEY,
-      //   JSON.stringify({
-      //     challenges: updatedChallenges,
-      //     sandboxType,
-      //   }),
-      // );
-
       /* Check the local cache first! */
       const blobCache = state$.value.challenges.blobCache;
       if (id in blobCache) {

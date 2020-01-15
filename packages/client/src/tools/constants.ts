@@ -1,5 +1,3 @@
-import shortid from "shortid";
-import { Challenge, Module } from "@pairwise/common";
 import { Toaster } from "@blueprintjs/core";
 
 /** ===========================================================================
@@ -73,6 +71,11 @@ const DIMENSIONS = {
  */
 export const PROSE_MAX_WIDTH = 728;
 
+/** ===========================================================================
+ * Constants
+ * ============================================================================
+ */
+
 /**
  * The special ID used for the code sandbox. The sandbox will not be persisted
  * along with the other challenges and online lives in the users browser
@@ -82,33 +85,11 @@ export const PROSE_MAX_WIDTH = 728;
  */
 export const SANDBOX_ID = "sandbox";
 
+const AppToaster = Toaster.create({ className: "blueprint-toaster" });
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export { COLORS, DIMENSIONS, HEADER_HEIGHT };
-
-export const generateEmptyModule = (): Module => ({
-  id: shortid.generate(),
-  title: "[EMTPY...]",
-  challenges: [],
-  free: false /* All challenges are locked by default */,
-});
-
-export const generateEmptyChallenge = (
-  overwrite: Partial<Challenge> = {},
-): Challenge => ({
-  id: shortid.generate(),
-  type: "markup",
-  title: "[EMPTY...]",
-  content: "",
-  testCode: "// test('message', () => expect(...))",
-  videoUrl: "",
-  starterCode: "",
-  solutionCode: "",
-  supplementaryContent: "",
-  ...overwrite,
-});
-
-export const AppToaster = Toaster.create({ className: "blueprint-toaster" });
+export { COLORS, DIMENSIONS, HEADER_HEIGHT, AppToaster };

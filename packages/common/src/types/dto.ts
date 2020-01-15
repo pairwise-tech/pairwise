@@ -1,3 +1,5 @@
+import { CHALLENGE_TYPE } from "./courses";
+
 /** ===========================================================================
  * DTO interfaces
  * ----------------------------------------------------------------------------
@@ -107,13 +109,19 @@ export interface IFeedbackDto {
  * ============================================================================
  */
 
-export type BLOB_TYPE = "video" | "challenge" | "project" | "guided_project";
+export type BLOB_TYPE =
+  | "video"
+  | "challenge"
+  | "project"
+  | "guided_project"
+  | "sandbox";
 
 export const BlobTypeSet: Set<BLOB_TYPE> = new Set([
   "video",
   "challenge",
   "project",
   "guided_project",
+  "sandbox",
 ]);
 
 interface BlobBase {
@@ -142,11 +150,18 @@ export interface GuidedProjectBlob extends BlobBase {
   timeLastWatched: number;
 }
 
+export interface SandboxBlob extends BlobBase {
+  type: "sandbox";
+  code: string;
+  challengeType: CHALLENGE_TYPE;
+}
+
 export type DataBlob =
   | VideoChallengeBlob
   | ProjectChallengeBlob
   | CodeChallengeBlob
-  | GuidedProjectBlob;
+  | GuidedProjectBlob
+  | SandboxBlob;
 
 export interface ICodeBlobDto {
   dataBlob: DataBlob;

@@ -25,6 +25,8 @@ import * as ENV from "tools/client-env";
 import {
   getAccessTokenFromLocalStorage,
   logoutUserInLocalStorage,
+  saveSandboxToLocalStorage,
+  getSandboxFromLocalStorage,
 } from "tools/storage-utils";
 import { AppToaster } from "tools/constants";
 import { wait } from "tools/utils";
@@ -339,6 +341,16 @@ class Api extends BaseApiClass {
   fetchChallengeHistory = async (
     challengeId: string,
   ): Promise<Result<ICodeBlobDto, HttpResponseError>> => {
+    if (challengeId === "sandbox") {
+      const blob = getSandboxFromLocalStorage();
+      const result: ICodeBlobDto = {
+        dataBlob: blob,
+        challengeId: "sandbox",
+      };
+
+      return new Ok(result);
+    }
+
     const { headers, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
@@ -355,6 +367,11 @@ class Api extends BaseApiClass {
   updateChallengeHistory = async (
     dataBlob: ICodeBlobDto,
   ): Promise<Result<ICodeBlobDto, HttpResponseError>> => {
+    if (dataBlob.dataBlob.type === "sandbox") {
+      saveSandboxToLocalStorage(dataBlob.dataBlob);
+      return new Ok(dataBlob);
+    }
+
     const { headers, authenticated } = this.getRequestHeaders();
     if (authenticated) {
       return this.httpHandler(async () => {

@@ -38,7 +38,6 @@ import {
   stripAndExtractModuleImports,
   transpileCodeWithBabel,
 } from "../tools/test-utils";
-import { persistToLocalStorage } from "../tools/storage-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
 import { LowerRight, IconButton } from "./Shared";
@@ -703,18 +702,6 @@ class Workspace extends React.Component<IProps, IState> {
       // Do not store anything to local storage
       return;
     }
-
-    /**
-     * Save the current code to local storage. This method is debounced.
-     *
-     * TODO: Remove this entirely and replace with the code after:
-     * TODO: Figure out what to do with the sandbox. Probably we can just
-     * arbitrarily save this in one place to local storage for now.
-     */
-    persistToLocalStorage(this.props.challenge.id, {
-      code: this.state.code,
-      sandboxType: this.props.challenge.type,
-    });
 
     /**
      * Construct a code blob for the current challenge and update this code

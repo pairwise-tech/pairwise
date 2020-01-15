@@ -18,12 +18,8 @@ import {
   ModuleCreationPayload,
   MonacoEditorOptions,
 } from "./types";
-import {
-  generateEmptyChallenge,
-  SANDBOX_ID,
-  MONACO_EDITOR_INITIAL_FONT_SIZE,
-} from "tools/constants";
-import { getStoredSandboxType } from "tools/storage-utils";
+import { SANDBOX_ID, MONACO_EDITOR_INITIAL_FONT_SIZE } from "tools/constants";
+import { defaultSandboxChallenge } from "tools/utils";
 
 const debug = require("debug")("challenge:store");
 
@@ -66,11 +62,7 @@ const initialState: State = {
   editorOptions: {
     fontSize: MONACO_EDITOR_INITIAL_FONT_SIZE,
   },
-  sandboxChallenge: generateEmptyChallenge({
-    id: SANDBOX_ID, // Important. This is how the app knows it's the sandbox challenge
-    title: "Sandbox",
-    type: getStoredSandboxType(),
-  }),
+  sandboxChallenge: defaultSandboxChallenge,
   blobCache: {},
   loadingCurrentBlob: false,
   adminTestTab: "testResults",
