@@ -195,6 +195,7 @@ const NavigationOverlay = (props: IProps) => {
             </div>
           );
         })}
+        <DoneScrolling />
       </Col>
     </Overlay>
   );
@@ -204,6 +205,16 @@ const NavigationOverlay = (props: IProps) => {
  * Styles
  * ============================================================================
  */
+
+const DoneScrolling = styled((props: any) => (
+  <div {...props}>
+    <p style={{ opacity: 0.8 }}>You're at the end of the list!</p>
+    <p>{"🎉"}</p>
+  </div>
+))`
+  text-align: center;
+  margin: 40px 0;
+`;
 
 interface AddNavItemButtonProps {
   onClick: () => any;
@@ -367,6 +378,7 @@ const Col = styled.div<{ offsetX: number }>`
   z-index: 2;
   transition: all 0.2s ease-out;
   transform: translateX(${({ offsetX }) => `${offsetX}px`});
+  overflow: auto;
 `;
 
 const Overlay = styled.div<{ visible: boolean }>`
