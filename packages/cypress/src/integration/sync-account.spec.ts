@@ -9,7 +9,8 @@ import { CLIENT_APP_URL, TIMEOUT } from "../support/utils";
 describe("Account Creation Flow", () => {
   type TestStatus = "Success!" | "Incomplete..." | string;
   const checkTestStatus = (status: TestStatus, index: number) => {
-    cy.get(`#test-result-status-${index}`).contains(status);
+    const id = `#test-result-status-${index}`;
+    cy.get(id).contains(status);
   };
 
   const checkTestResultStatus = (
