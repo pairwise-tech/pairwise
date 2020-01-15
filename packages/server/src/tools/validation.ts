@@ -172,7 +172,7 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
     throw new Error(ERROR_CODES.INVALID_COURSE_ID);
   }
 
-  const sanitizedEntity: ProgressEntity = Object.entries(progress).reduce(
+  const sanitizedProgress = Object.entries(progress).reduce(
     (sanitized, [challengeId, status]) => {
       /**
        * Validate the progress item:
@@ -190,11 +190,15 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
         return sanitized;
       }
     },
-    {} as ProgressEntity,
+    {},
   );
 
-  if (Object.keys(sanitizedEntity).length > 0) {
-    return sanitizedEntity;
+  if (Object.keys(sanitizedProgress).length > 0) {
+    const result: ProgressEntity = {
+      courseId,
+      progress: sanitizedProgress,
+    };
+    return result;
   } else {
     throw new Error(ERROR_CODES.INVALID_PARAMETERS);
   }

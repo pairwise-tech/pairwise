@@ -161,7 +161,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    /* TODO: Move the admin editor adn test tab state to Redux? */
+    /* TODO: Move the admin editor and test tab state to Redux? */
     const defaultAdminTab: IState["adminEditorTab"] = "starterCode";
 
     const initialCode = props.blob.type === "challenge" ? props.blob.code : "";

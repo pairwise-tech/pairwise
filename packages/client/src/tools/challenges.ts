@@ -4,7 +4,7 @@
 import CodeFormatWorker from "workerize-loader!./prettier-code-formatter";
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import EXPECTATION_LIB from "raw-loader!./in-browser-testing-lib";
+import EXPECTATION_LIB from "!raw-loader!./in-browser-testing-lib";
 
 import { CHALLENGE_TYPE } from "@pairwise/common";
 
