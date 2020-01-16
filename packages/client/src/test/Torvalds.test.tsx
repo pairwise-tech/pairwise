@@ -5,9 +5,9 @@ import {
   compileCodeString,
   getTestHarness,
   IframeMessageEvent,
+  TestCase,
 } from "tools/test-utils";
 import { wait } from "tools/utils";
-import { TestCase } from "tools/challenges";
 
 /** ===========================================================================
  * Config & Utils

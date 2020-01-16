@@ -2,7 +2,7 @@ import { pipe } from "ramda";
 import * as Babel from "@babel/standalone";
 
 import DependencyCacheService from "./module-service";
-import { Challenge } from "@pairwise/common";
+import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import { TEST } from "./client-env";
 
 /** ===========================================================================
@@ -24,6 +24,23 @@ export interface IframeMessageEvent extends MessageEvent {
     message: string;
     source: IFRAME_MESSAGE_TYPES;
   };
+}
+
+export interface TestCase {
+  test: string;
+  message: string;
+  testResult: boolean;
+  error?: string;
+}
+
+export interface CodeFormatMessage {
+  code: string;
+  type: CHALLENGE_TYPE;
+  channel: string;
+}
+
+export interface CodeFormatMessageEvent extends MessageEvent {
+  data: CodeFormatMessage;
 }
 
 /**
@@ -214,8 +231,13 @@ export const createInjectDependenciesFunction = (
 /**
  * Inject test code into a code string.
  *
- * NOTE: Including the code twice, once up top and once wrapped within the test
- * harness, seems necessary for the console to work. Not yet sure why...
+ * The test string is injected twice. The first injection runs normally
+ * and produces the output the user will see. The second injection is
+ * enclosed in a new scope and combined with the test code, the console
+ * is also modified and removed.
+ *
+ * Together, this creates one code string which is executed to produce the
+ * preview for the user and the test results for the workspace.
  */
 export const injectTestCode = (testCode: string) => (codeString: string) => {
   return `
@@ -252,7 +274,13 @@ export const getMarkupForCodeChallenge = (
 
 /**
  * This is just exported as a function for consistency and in case we need to
- * augment it later;
+ * augment it later.
+ *
+ * NOTE: This function takes the dependency library as an input. This is a
+ * workaround to allow us to inject the dependency library at runtime, because
+ * this method runs in the Jest environment and the app, but for the app
+ * the dependency file is imported with a raw-loader which is incompatible
+ * with Jest.
  */
 export const getTestDependencies = (testLib: string): string => testLib;
 
@@ -343,7 +371,11 @@ export const tidyHtml = (html: string) => {
  * Compile and process the code string for any challenge. Return compiled code
  * which can be run in the tests.
  *
- * NOTE: createInjectDependenciesFunction returns an async function.
+ * NOTE: This function is async because createInjectDependenciesFunction
+ * returns an async function.
+ *
+ * TODO: Refactor and unify the markup challenge with the other regular
+ * code challenges.
  */
 export const compileCodeString = async (
   sourceCodeString: string,
@@ -362,10 +394,12 @@ export const compileCodeString = async (
       );
     }
 
-    // TODO: There's no reason for us to inject the test script in sandbox
-    // mode, but the same applies to all challenge types so ideally we
-    // would standardize the testing pipeline to the point where we could
-    // include that logic in one place only.
+    /**
+     * TODO: There's no reason for us to inject the test script in sandbox
+     * mode, but the same applies to all challenge types so ideally we
+     * would standardize the testing pipeline to the point where we could
+     * include that logic in one place only.
+     */
     const sourceDocument = tidySource.replace(
       "</body>",
       `${testScript}</body>`,
@@ -388,7 +422,7 @@ export const compileCodeString = async (
      *
      * - Inject test code in code string, and remove any console methods
      * - Hijack all console usages in user code string
-     * - Transform code with Babel
+     * - Apply Babel transform steps
      * - Fetch and inject required modules into code string
      */
     const processedCodeString = await pipe(

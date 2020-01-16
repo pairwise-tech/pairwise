@@ -1,3 +1,4 @@
+import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/macro";
@@ -9,9 +10,8 @@ import {
 } from "../tools/constants";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { ContentInput, StyledMarkdown } from "./Shared";
-import { TestCase } from "tools/challenges";
 import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
-import { connect } from "react-redux";
+import { TestCase } from "tools/test-utils";
 
 /** ===========================================================================
  * Workspace Components

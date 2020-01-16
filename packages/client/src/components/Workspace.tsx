@@ -14,9 +14,8 @@ import { DEV_MODE } from "tools/client-env";
 import {
   requestCodeFormatting,
   subscribeCodeWorker,
-  TestCase,
   unsubscribeCodeWorker,
-} from "../tools/challenges";
+} from "../tools/code-worker";
 import {
   COLORS as C,
   DIMENSIONS as D,
@@ -33,6 +32,7 @@ import {
   IFRAME_MESSAGE_TYPES,
   getTestScripts,
   tidyHtml,
+  TestCase,
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";

@@ -4,11 +4,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
 import {
-  CodeFormatMessageEvent,
-  requestCodeFormatting,
   subscribeCodeWorker,
   unsubscribeCodeWorker,
-} from "tools/challenges";
+  requestCodeFormatting,
+} from "tools/code-worker";
 import {
   COLORS,
   MONACO_EDITOR_THEME,
@@ -16,6 +15,7 @@ import {
 } from "tools/constants";
 import { LowerRight, IconButton } from "./Shared";
 import { Tooltip, Button, ButtonGroup } from "@blueprintjs/core";
+import { CodeFormatMessageEvent } from "tools/test-utils";
 
 const debug = require("debug")("client:ChallengeTestEditor");
 
