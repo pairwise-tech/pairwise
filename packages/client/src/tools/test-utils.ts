@@ -1,7 +1,7 @@
 import { pipe } from "ramda";
 import * as Babel from "@babel/standalone";
 
-import DependencyCacheService from "./module-service";
+import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import { TEST } from "./client-env";
 
@@ -160,7 +160,9 @@ export const transpileCodeWithBabel = (codeString: string) => {
    *
    * For some reason I couldn't get babel-standalone to transform class
    * properties which would break React code in the test environment. Instead
-   * I just to the following hideous thing:
+   * I just to the following hideous thing.
+   *
+   * TODO: Fix it and find a way to run everything through babel-standalone.
    */
   if (TEST) {
     return require("babel-core").transform(codeString, {
