@@ -20,9 +20,12 @@ jest.setTimeout(30000);
  * Import the expectation library. Read the file directly with Node because
  * Jest doesn't understand Webpack raw-loader. Take that Jest!
  */
-const EXPECTATION_LIBRARY = fs.readFileSync("src/tools/browser-test-lib.js", {
-  encoding: "utf8",
-});
+const EXPECTATION_LIBRARY = fs.readFileSync(
+  "src/tools/browser-test-lib-source.js",
+  {
+    encoding: "utf8",
+  },
+);
 
 /**
  * Import the courses directly. In the future if there are multiple courses

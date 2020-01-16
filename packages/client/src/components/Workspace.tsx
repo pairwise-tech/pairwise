@@ -23,7 +23,6 @@ import {
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
 } from "../tools/constants";
-import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import { types } from "../tools/jsx-types";
 import {
   getMarkupForCodeChallenge,
@@ -63,6 +62,7 @@ import {
   AdminKeyboardShortcuts,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
+import { EXPECTATION_LIB } from "tools/browser-test-lib";
 
 /** ===========================================================================
  * Types & Config
