@@ -218,9 +218,9 @@ export const createInjectDependenciesFunction = (
  * harness, seems necessary for the console to work. Not yet sure why...
  */
 export const injectTestCode = (testCode: string) => (codeString: string) => {
-  // ${codeString}
   return `
-  /* Via injectTestCode */
+    /* Via injectTestCode */
+    ${codeString}
     {
       ${stripConsoleCalls(codeString)}
       ${getTestHarness(testCode)}
