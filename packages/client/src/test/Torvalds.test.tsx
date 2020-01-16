@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { Course, assertUnreachable } from "@pairwise/common";
+import { Course, assertUnreachable, Challenge } from "@pairwise/common";
 import {
   compileCodeString,
   getTestHarness,
@@ -9,6 +9,14 @@ import {
 import { wait } from "tools/utils";
 import { TestCase } from "tools/challenges";
 
+/** ===========================================================================
+ * Config & Utils
+ * ============================================================================
+ */
+
+jest.setTimeout(30000);
+
+/* Import the expectation library */
 const EXPECTATION_LIBRARY = fs.readFileSync(
   "src/tools/in-browser-testing-lib.js",
   { encoding: "utf8" },
@@ -19,19 +27,32 @@ const courses = require("@pairwise/common").default;
 const { FullstackTypeScript } = courses;
 const course: Course = FullstackTypeScript;
 
-jest.setTimeout(30000);
+/* Debug options, add challenge ids here to debug them directly: */
+const DEBUG = true;
+const TEST_ID_WHITELIST = new Set(["50f7f8sUV"]);
+
+/** ===========================================================================
+ * Test
+ * ============================================================================
+ */
 
 describe("Linus should be able to pass all the challenges first try", () => {
   test("Execute all challenge tests against their solutions", async () => {
-    const anyFailed = false;
+    let anyFailed = false;
 
+    /* Get all the challenges */
     const challenges = course.modules
       .map(m => m.challenges)
       .reduce((flat, c) => flat.concat(c));
 
-    // const x = challenges[3];
-
+    /* For every challenge, execute the tests */
     for (const challenge of challenges) {
+      if (DEBUG) {
+        if (!TEST_ID_WHITELIST.has(challenge.id)) {
+          continue;
+        }
+      }
+
       const { code } = await compileCodeString(
         challenge.solutionCode,
         challenge,
@@ -44,7 +65,8 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
       switch (challenge.type) {
         case "react": {
-          script = code;
+          doc = `<html><body><div id="root"></div></body></html>`;
+          script = `${EXPECTATION_LIBRARY}\n${code}`;
           break;
         }
         case "typescript": {
@@ -77,8 +99,16 @@ describe("Linus should be able to pass all the challenges first try", () => {
           }
         };
 
-        // eslint-disable-next-line
-        window.eval(script);
+        try {
+          // eslint-disable-next-line
+          window.eval(script);
+        } catch (err) {
+          console.error("Error thrown from window.eval!", err);
+
+          /* The test failed, enter a failed test case manually */
+          const failedTestCase = { testResult: false };
+          results = [failedTestCase as TestCase];
+        }
 
         /**
          * Wait for the test script to execute and post a message back to
@@ -86,32 +116,56 @@ describe("Linus should be able to pass all the challenges first try", () => {
          *
          * TODO: Refactor this to race until the message is posted.
          */
-        await wait(50);
+        await wait(250);
+
+        if (DEBUG) {
+          console.log(results);
+        }
 
         /**
          * Evaluate the test results.
          */
-        const passed = results.reduce(
-          (_: boolean, result: any) => result.testResult,
-          true,
-        );
+        let passed = true;
+        for (const result of results) {
+          const { testResult } = result;
+          if (!testResult) {
+            passed = false;
+          }
+        }
+
+        anyFailed = !anyFailed ? true : !passed; /* blegh */
 
         if (passed) {
-          console.log(
-            `[SUCCESS]: Challenge ${challenge.title} solution passed!`,
-          );
+          log.success(challenge);
         } else {
-          console.log(
-            `[FAILED]: Challenge ${challenge.title} solution failed!`,
-          );
+          log.fail(challenge);
         }
       } else {
-        console.log(
-          `[SKIPPING]: Challenge ${challenge.title} is being skipped`,
-        );
+        log.skip(challenge);
       }
     }
 
-    expect(anyFailed).toBeFalsy();
+    expect(anyFailed).toBeFalsy(); /* Some tests failed! */
   });
 });
+
+/** ===========================================================================
+ * Log Util
+ * ============================================================================
+ */
+
+const getChallengeLog = (challenge: Challenge) => {
+  return `: ${challenge.id}\n- Type: ${challenge.type}\n- Title: ${challenge.title}`;
+};
+
+const log = {
+  success: (challenge: Challenge) => {
+    console.log(`[SUCCESS]${getChallengeLog(challenge)}`);
+  },
+  fail: (challenge: Challenge) => {
+    console.log(`[FAILED]${getChallengeLog(challenge)}`);
+  },
+  skip: (challenge: Challenge) => {
+    console.log(`[SKIPPED]${getChallengeLog(challenge)}`);
+  },
+};

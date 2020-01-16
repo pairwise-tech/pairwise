@@ -3,6 +3,7 @@ import * as Babel from "@babel/standalone";
 
 import DependencyCacheService from "./module-service";
 import { Challenge } from "@pairwise/common";
+import { TEST } from "./client-env";
 
 /** ===========================================================================
  * Types & Config
@@ -137,13 +138,32 @@ export const stripConsoleCalls = (codeString: string) => {
  * Transpile the code use Babel standalone module.
  */
 export const transpileCodeWithBabel = (codeString: string) => {
-  return Babel.transform(codeString, {
-    presets: [
-      "es2017",
-      "react",
-      ["typescript", { isTSX: true, allExtensions: true }],
-    ],
-  }).code;
+  /**
+   * SUFFER!
+   *
+   * For some reason I couldn't get babel-standalone to transform class
+   * properties which would break React code in the test environment. Instead
+   * I just to the following hideous thing:
+   */
+  if (TEST) {
+    return require("babel-core").transform(codeString, {
+      presets: [
+        "@babel/preset-react",
+        ["@babel/preset-typescript", { isTSX: true, allExtensions: true }],
+      ],
+      plugins: ["@babel/plugin-proposal-class-properties"],
+    }).code;
+  } else {
+    return Babel.transform(codeString, {
+      presets: [
+        "react",
+        "es2017",
+        "stage-2",
+        ["typescript", { isTSX: true, allExtensions: true }],
+      ],
+      plugins: ["@babel/plugin-proposal-class-properties"],
+    }).code;
+  }
 };
 
 /**
@@ -152,9 +172,7 @@ export const transpileCodeWithBabel = (codeString: string) => {
 const fetchRequiredDependencies = async (
   dependencies: ReadonlyArray<string>,
 ) => {
-  return Promise.all(
-    dependencies.map(d => DependencyCacheService.getDependency(d)),
-  );
+  return Promise.all(dependencies.map(DependencyCacheService.getDependency));
 };
 
 /**
@@ -200,9 +218,9 @@ export const createInjectDependenciesFunction = (
  * harness, seems necessary for the console to work. Not yet sure why...
  */
 export const injectTestCode = (testCode: string) => (codeString: string) => {
+  // ${codeString}
   return `
   /* Via injectTestCode */
-  ${codeString}
     {
       ${stripConsoleCalls(codeString)}
       ${getTestHarness(testCode)}

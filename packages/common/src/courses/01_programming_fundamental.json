@@ -66,7 +66,7 @@
           "content": "In the last challenge you added an h1 tag, which represents a \"heading 1\" tag in HTML. In total, there are six tags like this. As you might guess, the second heading tag looks like this: `<h2>`. In the editor below, add one of each heading tag. Each tag should contain some text, feel free to add any text you feel like inside the tags! When you are finished, take a look at the preview to the right to see the results!",
           "starterCode": "<h1>This is a heading 1 tag</h1>",
           "solutionCode": "<h1>This is a heading 1 tag</h1>\n<h2>This is a heading 1 tag</h2>\n<h3>This is a heading 1 tag</h3>\n<h4>This is a heading 1 tag</h4>\n<h5>This is a heading 1 tag</h5>\n<h6>This is a heading 1 tag</h6>",
-          "testCode": "['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(tag => {\n    test(`There should be an ${tag} with text inside`, () => {\n        expect(typeof get(tag).innerText).toBe(\"string\")\n    })\n})\n",
+          "testCode": "['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(tag => {\n    test(`There should be an ${tag} with text inside`, () => {\n        expect(typeof get(tag).innerHTML).toBe(\"string\")\n    })\n})\n",
           "videoUrl": "",
           "supplementaryContent": "Placeholder supplementary content..."
         },
@@ -77,7 +77,7 @@
           "content": "So far we have learned how to add some HTML tags to a document. HTML is pretty flexible, and you can also nest tags inside one another. Another tag we have not seen yet is the <b> tag, which makes text... bold! In the editor below, create a <p> tag with some text inside. Then, choose some part of the text and enclose it in a <b> tag to make it bold.",
           "starterCode": "",
           "solutionCode": "<p>This is a paragraph tag, <b>this is bold text inside it!</b></p>\n",
-          "testCode": "test(\"There should be an p tag with text inside.\", () => {\n  const element = get(\"p\");\n  return typeof element.innerText === \"string\";\n});\n\ntest(\"There should be an b tag with text inside.\", () => {\n  const element = get(\"b\");\n  return typeof element.innerText === \"string\";\n});\n\ntest(\"The p tag should contain a b tag with text inside.\", () => {\n  expect(typeof get(\"p b\").innerText).toBe(\"string\");\n});\n",
+          "testCode": "test(\"There should be an p tag with text inside.\", () => {\n  const element = get(\"p\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"There should be an b tag with text inside.\", () => {\n  const element = get(\"b\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"The p tag should contain a b tag with text inside.\", () => {\n  expect(typeof get(\"p b\").innerHTML).toBe(\"string\");\n});\n",
           "videoUrl": "",
           "supplementaryContent": "Placeholder supplementary content..."
         },
@@ -88,7 +88,7 @@
           "content": "* Change the color of the `<p>` tag to `red`\n* Change its text to `Exciting red text`\n\nIf you're unsure how to style things, that's fine! Check out the supplemental content for help.",
           "starterCode": "<style>\n  /* Your code here */\n</style>\n<p>Just plain text</p>\n",
           "solutionCode": "<!DOCTYPE html>\n<style>\n  /* Your code here */\n  p {\n    color: red;\n  }\n</style>\n<p>Exciting red text</p>\n",
-          "testCode": "test(\"There should be a p tag with red text\", () => {\n  const element = get(\"p\");\n  return [\"#ff0000\", \"rgb(255,0,0)\", \"red\"].includes(\n    getComputedStyle(element, null)\n      .getPropertyValue(\"color\")\n      .replace(/ /g, \"\")\n  );\n});\n\ntest(\"There should be a <p> tag with the text 'Exciting red text'\", () => {\n  const element = get(\"p\");\n  return element.innerText === \"Exciting red text\";\n});\n",
+          "testCode": "test(\"There should be a p tag with red text\", () => {\n  const element = get(\"p\");\n  return [\"#ff0000\", \"rgb(255,0,0)\", \"red\"].includes(\n    getComputedStyle(element, null)\n      .getPropertyValue(\"color\")\n      .replace(/ /g, \"\")\n  );\n});\n\ntest(\"There should be a <p> tag with the text 'Exciting red text'\", () => {\n  const element = get(\"p\");\n  return element.innerHTML === \"Exciting red text\";\n});\n",
           "videoUrl": "https://www.youtube.com/embed/MsaKKxVTsEk",
           "supplementaryContent": "Placeholder supplementary content..."
         },
@@ -121,7 +121,7 @@
           "content": "Use the `<span>` tag to highligh some text within the paragraph.\n\nSometimes you want to style parts of text _inside_ a paragraph or a heading. You can accomplish this with the span tag.",
           "starterCode": "<style>\n  span {\n    /* hm... need some styling in here */\n  }\n</style>\n<p>\n  What a paragraph this is! Let's highlight something.\n</p>",
           "solutionCode": "<style>\n  span {\n    background: yellow;\n  }\n</style>\n<p>What a paragraph this is! Let's <span>highlight</span> something.</p>",
-          "testCode": "test(\"There should be a <span> tag with a yellow background wrapping some text\", function() {\n  const el = document.querySelector(\"span\");\n  return (\n    el &&\n    el.innerText !== \"\" &&\n    [\"#ffff00\", \"rgb(255,255,0)\", \"yellow\"].includes(\n      getComputedStyle(el, null)\n        .getPropertyValue(\"background-color\")\n        .replace(/ /g, \"\")\n    )\n  );\n});\n",
+          "testCode": "test(\"There should be a <span> tag with a yellow background wrapping some text\", function() {\n  const el = document.querySelector(\"span\");\n  return (\n    el &&\n    el.innerHTML !== \"\" &&\n    [\"#ffff00\", \"rgb(255,255,0)\", \"yellow\"].includes(\n      getComputedStyle(el, null)\n        .getPropertyValue(\"background-color\")\n        .replace(/ /g, \"\")\n    )\n  );\n});\n",
           "videoUrl": "https://www.youtube.com/embed/fapBaduhIiY",
           "supplementaryContent": "Placeholder supplementary content..."
         },
@@ -133,7 +133,7 @@
           "testCode": "test(\"There should be a div\", () => {\n  expect(get(\"div\")).toBeTruthy();\n});\n\ntest(\"The h1 and p tags are within the div\", () => {\n  expect(get(\"div h1\")).toBeTruthy();\n  expect(get(\"div p\")).toBeTruthy();\n});\n\ntest(\"Body should have orange background\", () => {\n  const body = get(\"body\");\n  const bg = getStyle(body, \"background-color\");\n  expect(\"rgb(255, 165, 0)\").toBe(bg);\n});\n\ntest(\"Div should have a teal background\", () => {\n  const el = get(\"div\");\n  const bg = getStyle(el, \"background-color\");\n  expect(\"rgb(0, 128, 128)\").toBe(bg);\n});\n",
           "videoUrl": "",
           "starterCode": "<h1>Oh what a day</h1>\n<p>\n  A wonderful day to start wrapping some divs!\n</p>\n",
-          "solutionCode": "<style>\n  body {\n    background: orange;\n  }\n  div {\n    background: teal;\n  }\n</style>\n<div>\n  <h1>Oh what a day</h1>\n  <p>\n    A wonderful day to start wrapping some divs!\n  </p>\n</div>\n",
+          "solutionCode": "<style>\n  body {\n    background: rgb(255, 165, 0);\n  }\n  div {\n    background: rgb(0, 128, 128);\n  }\n</style>\n<div>\n  <h1>Oh what a day</h1>\n  <p>\n    A wonderful day to start wrapping some divs!\n  </p>\n</div>\n",
           "supplementaryContent": ""
         },
         {
@@ -144,7 +144,7 @@
           "testCode": "test(\"At least one span should have the highlight class\", () => {\n  const spans = getAll(\"span\");\n  const hasClass = spans.some((x) => x.classList.contains(\"highlight\"));\n  expect(hasClass).toBe(true);\n});\ntest(\"At least one span should have the highlight-blue class\", () => {\n  const spans = getAll(\"span\");\n  const hasClass = spans.some((x) => x.classList.contains(\"highlight-blue\"));\n  expect(hasClass).toBe(true);\n});\ntest(\"The `.highlight` class should have a `yellow` background\", () => {\n  const el = get(\".highlight\");\n  const bg = getStyle(el, \"background-color\");\n  expect(bg).toBe(\"rgb(255, 255, 0)\");\n});\ntest(\"The `.highlight-blue` class should have a `skyblue` background\", () => {\n  const el = get(\".highlight-blue\");\n  const bg = getStyle(el, \"background-color\");\n  expect(bg).toBe(\"rgb(135, 206, 235)\");\n});\n",
           "videoUrl": "",
           "starterCode": "<style>\n  span {\n    background: pink;\n  }\n  /* Your code here *?\n</style>\n<p>\n  What if <span>we</span> wanted to <span>highlight</span> different text with\n  different <span>colors</span>?\n</p>\n",
-          "solutionCode": "<style>\n  span {\n    background: pink;\n  }\n  .highlight {\n    background: yellow;\n  }\n  .highlight-blue {\n    background: skyblue;\n  }\n</style>\n<p>\n  What if <span>we</span> wanted to <span class=\"highlight\">highlight</span> different\n  text with different <span class=\"highlight-blue\">colors</span>?\n</p>\n",
+          "solutionCode": "<style>\n  span {\n    background: pink;\n  }\n  .highlight {\n    background: rgb(255, 255, 0);\n  }\n  .highlight-blue {\n    background: rgb(135, 206, 235);\n  }\n</style>\n<p>\n  What if <span>we</span> wanted to <span class=\"highlight\">highlight</span> different\n  text with different <span class=\"highlight-blue\">colors</span>?\n</p>\n",
           "supplementaryContent": "# To style many things\n\nCSS classes give you a ton of flexibility when styling your HTML. You can utilize classes to style one type of tag in many different ways. You can also utilize CSS classes to overwrite default styles since they have greater specificity.\n\nThe CSS lesson includes more information."
         },
         {
