@@ -55,7 +55,7 @@
           "content": "There is some HTML below. You should add an <h1> tag with the text \"Hello!\" inside it.",
           "starterCode": "<p>This is an HTML file. Add your code below this line</p>",
           "solutionCode": "<p>This is an HTML file. Add your code below this line</p>\n<h1>Hello!</h1>",
-          "testCode": "test(\"There should be an h1 tag with the text 'Hello!'\", () => {\n  expect(get(\"h1\").innerText).toBe(\"Hello!\");\n});\n",
+          "testCode": "test(\"There should be an h1 tag with the text 'Hello!'\", () => {\n  expect(get(\"h1\").innerHTML).toBe(\"Hello!\");\n});\n",
           "videoUrl": "https://www.youtube.com/embed/LMrZDCjO_60",
           "supplementaryContent": "Placeholder supplementary content..."
         },

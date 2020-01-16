@@ -6,21 +6,16 @@ import { monaco } from "@monaco-editor/react";
 import { assertUnreachable, Challenge, DataBlob } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
-import pipe from "ramda/es/pipe";
 import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
 import { DEV_MODE } from "tools/client-env";
 import {
-  IFRAME_MESSAGE_TYPES,
-  IframeMessageEvent,
   requestCodeFormatting,
   subscribeCodeWorker,
   TestCase,
   unsubscribeCodeWorker,
-  tidyHtml,
-  getTestScripts,
 } from "../tools/challenges";
 import {
   COLORS as C,
@@ -28,15 +23,16 @@ import {
   MONACO_EDITOR_THEME,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
+  EXPECTATION_LIB,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
-  createInjectDependenciesFunction,
   getMarkupForCodeChallenge,
-  hijackConsole,
-  injectTestCode,
-  stripAndExtractModuleImports,
-  transpileCodeWithBabel,
+  compileCodeString,
+  IframeMessageEvent,
+  IFRAME_MESSAGE_TYPES,
+  getTestScripts,
+  tidyHtml,
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
@@ -809,7 +805,10 @@ class Workspace extends React.Component<IProps, IState> {
          * to the iframe.
          */
         if (this.props.challenge.type === "markup") {
-          const testScript = getTestScripts(this.props.challenge.testCode);
+          const testScript = getTestScripts(
+            this.props.challenge.testCode,
+            EXPECTATION_LIB,
+          );
 
           // NOTE: Tidy html should ensure there is indeed a closing body tag
           const tidySource = tidyHtml(this.state.code);
@@ -834,7 +833,10 @@ class Workspace extends React.Component<IProps, IState> {
         } else {
           try {
             const code = await this.compileAndTransformCodeString();
-            const sourceDocument = getMarkupForCodeChallenge(code);
+            const sourceDocument = getMarkupForCodeChallenge(
+              code,
+              EXPECTATION_LIB,
+            );
             this.iFrameRef.srcdoc = sourceDocument;
           } catch (err) {
             this.handleCompilationError(err);
@@ -844,35 +846,44 @@ class Workspace extends React.Component<IProps, IState> {
     );
   };
 
-  compileAndTransformCodeString = () => {
-    const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
+  compileAndTransformCodeString = async () => {
+    const { code, dependencies } = await compileCodeString(
       this.state.code,
+      this.props.challenge,
     );
 
     this.addModuleTypeDefinitionsToMonaco(dependencies);
 
-    const injectModuleDependenciesFn = createInjectDependenciesFunction(
-      this.props.challenge.type === "react"
-        ? [...dependencies, "react-dom-test-utils"]
-        : dependencies,
-    );
+    return code;
 
-    /**
-     * What happens here:
-     *
-     * - Inject test code in code string, and remove any console methods
-     * - Hijack all console usages in user code string
-     * - Transform code with Babel
-     * - Fetch and inject required modules into code string
-     */
-    const processedCodeString = pipe(
-      injectTestCode(this.props.challenge.testCode),
-      hijackConsole,
-      transpileCodeWithBabel,
-      injectModuleDependenciesFn,
-    )(sourceCode);
+    // const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
+    //   this.state.code,
+    // );
 
-    return processedCodeString;
+    // this.addModuleTypeDefinitionsToMonaco(dependencies);
+
+    // const injectModuleDependenciesFn = createInjectDependenciesFunction(
+    //   this.props.challenge.type === "react"
+    //     ? [...dependencies, "react-dom-test-utils"]
+    //     : dependencies,
+    // );
+
+    // /**
+    //  * What happens here:
+    //  *
+    //  * - Inject test code in code string, and remove any console methods
+    //  * - Hijack all console usages in user code string
+    //  * - Transform code with Babel
+    //  * - Fetch and inject required modules into code string
+    //  */
+    // const processedCodeString = pipe(
+    //   injectTestCode(this.props.challenge.testCode),
+    //   hijackConsole,
+    //   transpileCodeWithBabel,
+    //   injectModuleDependenciesFn,
+    // )(sourceCode);
+
+    // return processedCodeString;
   };
 
   handleCompilationError = (error: Error) => {

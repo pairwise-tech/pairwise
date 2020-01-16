@@ -1,3 +1,7 @@
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import EXPECTATION_LIB from "!raw-loader!./in-browser-testing-lib";
+
 import { Toaster } from "@blueprintjs/core";
 
 /** ===========================================================================
@@ -92,4 +96,4 @@ const AppToaster = Toaster.create({ className: "blueprint-toaster" });
  * ============================================================================
  */
 
-export { COLORS, DIMENSIONS, HEADER_HEIGHT, AppToaster };
+export { EXPECTATION_LIB, COLORS, DIMENSIONS, HEADER_HEIGHT, AppToaster };
