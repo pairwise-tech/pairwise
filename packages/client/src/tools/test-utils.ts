@@ -1,12 +1,47 @@
+import { pipe } from "ramda";
 import * as Babel from "@babel/standalone";
 
-import { getTestHarness, getTestDependencies } from "./challenges";
-import DependencyCacheService from "./module-service";
+import DependencyCacheService from "./dependency-service";
+import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
+import { TEST } from "./client-env";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
+
+export enum IFRAME_MESSAGE_TYPES {
+  LOG = "LOG",
+  INFO = "INFO",
+  WARN = "WARN",
+  ERROR = "ERROR",
+  TEST_RESULTS = "TEST_RESULTS",
+  TEST_ERROR = "TEST_ERROR",
+}
+
+export interface IframeMessageEvent extends MessageEvent {
+  data: {
+    message: string;
+    source: IFRAME_MESSAGE_TYPES;
+  };
+}
+
+export interface TestCase {
+  test: string;
+  message: string;
+  testResult: boolean;
+  error?: string;
+}
+
+export interface CodeFormatMessage {
+  code: string;
+  type: CHALLENGE_TYPE;
+  channel: string;
+}
+
+export interface CodeFormatMessageEvent extends MessageEvent {
+  data: CodeFormatMessage;
+}
 
 /**
  * Functions used to intercept console methods and post the messages to
@@ -120,13 +155,34 @@ export const stripConsoleCalls = (codeString: string) => {
  * Transpile the code use Babel standalone module.
  */
 export const transpileCodeWithBabel = (codeString: string) => {
-  return Babel.transform(codeString, {
-    presets: [
-      "es2017",
-      "react",
-      ["typescript", { isTSX: true, allExtensions: true }],
-    ],
-  }).code;
+  /**
+   * SUFFER!
+   *
+   * For some reason I couldn't get babel-standalone to transform class
+   * properties which would break React code in the test environment. Instead
+   * I just to the following hideous thing.
+   *
+   * TODO: Fix it and find a way to run everything through babel-standalone.
+   */
+  if (TEST) {
+    return require("babel-core").transform(codeString, {
+      presets: [
+        "@babel/preset-react",
+        ["@babel/preset-typescript", { isTSX: true, allExtensions: true }],
+      ],
+      plugins: ["@babel/plugin-proposal-class-properties"],
+    }).code;
+  } else {
+    return Babel.transform(codeString, {
+      presets: [
+        "react",
+        "es2017",
+        "stage-2",
+        ["typescript", { isTSX: true, allExtensions: true }],
+      ],
+      plugins: ["@babel/plugin-proposal-class-properties"],
+    }).code;
+  }
 };
 
 /**
@@ -135,9 +191,7 @@ export const transpileCodeWithBabel = (codeString: string) => {
 const fetchRequiredDependencies = async (
   dependencies: ReadonlyArray<string>,
 ) => {
-  return Promise.all(
-    dependencies.map(d => DependencyCacheService.getDependency(d)),
-  );
+  return Promise.all(dependencies.map(DependencyCacheService.getDependency));
 };
 
 /**
@@ -179,13 +233,18 @@ export const createInjectDependenciesFunction = (
 /**
  * Inject test code into a code string.
  *
- * NOTE: Including the code twice, once up top and once wrapped within the test
- * harness, seems necessary for the console to work. Not yet sure why...
+ * The test string is injected twice. The first injection runs normally
+ * and produces the output the user will see. The second injection is
+ * enclosed in a new scope and combined with the test code, the console
+ * is also modified and removed.
+ *
+ * Together, this creates one code string which is executed to produce the
+ * preview for the user and the test results for the workspace.
  */
 export const injectTestCode = (testCode: string) => (codeString: string) => {
   return `
-  /* Via injectTestCode */
-  ${codeString}
+    /* Via injectTestCode */
+    ${codeString}
     {
       ${stripConsoleCalls(codeString)}
       ${getTestHarness(testCode)}
@@ -201,13 +260,183 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
  * markup they would both use some common function like this, but we're not
  * there yet.
  */
-export const getMarkupForCodeChallenge = (scriptString: string) => `
+export const getMarkupForCodeChallenge = (
+  scriptString: string,
+  deps: string,
+) => `
 <html>
   <head></head>
   <body>
     <div id="root" />
-    <script id="test-dependencies">${getTestDependencies()}</script>
+    <script id="test-dependencies">${getTestDependencies(deps)}</script>
     <script id="test-code">${scriptString}</script>
   </body>
 </html>
 `;
+
+/**
+ * This is just exported as a function for consistency and in case we need to
+ * augment it later.
+ *
+ * NOTE: This function takes the dependency library as an input. This is a
+ * workaround to allow us to inject the dependency library at runtime, because
+ * this method runs in the Jest environment and the app, but for the app
+ * the dependency file is imported with a raw-loader which is incompatible
+ * with Jest.
+ */
+export const getTestDependencies = (testLib: string): string => testLib;
+
+/**
+ * Get the test code string for a markup challenge.
+ */
+export const getTestHarness = (testCode: string): string => `
+function buildTestsFromCode() {
+    const arr = [];
+    const test = (message, fn) => {
+        arr.push({
+            message,
+            test: fn,
+        })
+    }
+
+    ${testCode}
+
+    return arr;
+}
+
+function runTests() {
+  const tests = buildTestsFromCode()
+
+  const results = tests.reduce((agg, { message, test }) => {
+    try {
+      const _result = test();
+      // Tests that pass using expect will return undefined, since they don't return anything.
+      // TODO: At some point we will want to account for async tests, which will require
+      // changes here
+      const testResult = _result === undefined ? true : _result;
+      return agg.concat([{
+        message,
+        testResult: testResult,
+        error: null,
+      }])
+    } catch (err) {
+      return agg.concat([{
+        message,
+        testResult: false,
+        error: err.message + '\\n\\n' + err.stack,
+      }])
+    }
+  }, []);
+
+  return results;
+}
+
+try {
+  const results = runTests();
+  window.parent.postMessage({
+    message: JSON.stringify(results),
+    source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
+  });
+} catch (err) {
+  window.parent.postMessage({
+    message: JSON.stringify({
+      error: err.message,
+    }),
+    source: "${IFRAME_MESSAGE_TYPES.TEST_ERROR}",
+  });
+}
+`;
+
+/**
+ * Put together the script tags necessary for running the tests in an iframe,
+ * including the script that includes the tests themselves.
+ */
+export const getTestScripts = (testCode: string, testLib: string) => {
+  return `
+    <script id="test-dependencies">${getTestDependencies(testLib)}</script>
+    <script id="test-code">${getTestHarness(testCode)}</script>
+  `;
+};
+
+/**
+ * Uses the browsers own internal engine to clean up HTML. The reason to do this
+ * is to standardize HTML output from the user before work work with it
+ * internally
+ */
+export const tidyHtml = (html: string) => {
+  const el = document.createElement("html");
+  el.innerHTML = html;
+  return el.innerHTML;
+};
+
+/**
+ * Compile and process the code string for any challenge. Return compiled code
+ * which can be run in the tests.
+ *
+ * NOTE: This function is async because createInjectDependenciesFunction
+ * returns an async function.
+ *
+ * TODO: Refactor and unify the markup challenge with the other regular
+ * code challenges.
+ */
+export const compileCodeString = async (
+  sourceCodeString: string,
+  challenge: Challenge,
+) => {
+  if (challenge.type === "markup") {
+    const testScript = getTestScripts(challenge.testCode, "");
+
+    // NOTE: Tidy html should ensure there is indeed a closing body tag
+    const tidySource = tidyHtml(sourceCodeString);
+
+    // Just to give us some warning if we ever hit this. Should be impossible...
+    if (!tidySource.includes("</body>")) {
+      console.warn(
+        "[Err] Could not append test code to closing body tag in markup challenge",
+      );
+    }
+
+    /**
+     * TODO: There's no reason for us to inject the test script in sandbox
+     * mode, but the same applies to all challenge types so ideally we
+     * would standardize the testing pipeline to the point where we could
+     * include that logic in one place only.
+     */
+    const sourceDocument = tidySource.replace(
+      "</body>",
+      `${testScript}</body>`,
+    );
+
+    return { code: sourceDocument, dependencies: [""] };
+  } else {
+    const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
+      sourceCodeString,
+    );
+
+    const injectModuleDependenciesFn = createInjectDependenciesFunction(
+      challenge.type === "react"
+        ? [...dependencies, "react-dom-test-utils"]
+        : dependencies,
+    );
+
+    /**
+     * What happens here:
+     *
+     * - Inject test code in code string, and remove any console methods
+     * - Hijack all console usages in user code string
+     * - Apply Babel transform steps
+     * - Fetch and inject required modules into code string
+     */
+    const processedCodeString = await pipe(
+      injectTestCode(challenge.testCode),
+      hijackConsole,
+      transpileCodeWithBabel,
+      injectModuleDependenciesFn,
+    )(sourceCode);
+
+    return {
+      dependencies,
+      code: processedCodeString,
+    };
+  }
+};
