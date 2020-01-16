@@ -11,10 +11,29 @@ This project is managed using Lerna, and contains the following packages:
 | client            | React client application                          |
 | common            | Shared code, utils, and types                     |
 | cypress           | Cypress end-to-end test suite                     |
-| e2e               | End-to-end test suite                             |
-| external-services | Express server to mock 3rd party APIs for testing |
+| e2e               | End-to-end API test suite                         |
+| external-services | Mocked 3rd party APIs for testing and development |
 | server            | NestJS backend application                        |
 | www               | Marketing website built with Gatsby               |
+
+## Quick Links
+
+We use the following libraries across the codebase, here are some quick links to their docs:
+
+- [TypeScript](https://www.typescriptlang.org/index.html): Types!
+- [React](https://reactjs.org/): You know it.
+- [Redux](https://redux.js.org/): Of course!
+- [RxJS](https://rxjs-dev.firebaseapp.com/): Futuristic stuff.
+- [React Router](https://reacttraining.com/react-router/web/guides/quick-start): Meh.
+- [BlueprintJS](https://blueprintjs.com/): Modern, fashionable.
+- [NestJS](https://docs.nestjs.com/): Server frameworks!
+- [TypeORM](https://typeorm.io/#/): More types.
+- [Passport](http://www.passportjs.org/docs/): (Easy) authentication.
+- [Jest](https://jestjs.io/docs/en/getting-started): The Test Runner.
+- [Cypress](https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell): You will love it.
+- [TSLint](https://palantir.github.io/tslint/): Write code according to the rules.
+- [Prettier](https://prettier.io/docs/en/options.html): Make the code pretty.
+- [Gatsby](https://www.gatsbyjs.org/docs/): The best static sites.
 
 ## Development
 
