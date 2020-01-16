@@ -163,7 +163,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
       }
     }
 
-    expect(!anyFailed).toBeTruthy();
+    expect(anyFailed).toBe(false);
   });
 });
 
