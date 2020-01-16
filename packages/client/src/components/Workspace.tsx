@@ -23,8 +23,8 @@ import {
   MONACO_EDITOR_THEME,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
-  EXPECTATION_LIB,
 } from "../tools/constants";
+import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import { types } from "../tools/jsx-types";
 import {
   getMarkupForCodeChallenge,
