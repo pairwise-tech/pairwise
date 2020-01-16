@@ -28,16 +28,29 @@ const { FullstackTypeScript } = courses;
 const course: Course = FullstackTypeScript;
 
 /* Debug options, add challenge ids here to debug them directly: */
-const DEBUG = true;
-const TEST_ID_WHITELIST = new Set(["50f7f8sUV"]);
+const DEBUG = false;
+const TEST_ID_WHITELIST = new Set(["KlxN3f11"]);
+
+/* Enable or disable log info */
+const LOG = true;
 
 /** ===========================================================================
  * Test
+ * ----------------------------------------------------------------------------
+ * - This currently takes all the challenges and executes their tests against
+ * their solution code. It is a little hacky right now.
+ *
+ * - If, in the future some challenges had to run in a server environment,
+ * then those challenges would have APIs to run the tests. At that time,
+ * the functions were prepare the code to be tested could be moved to the
+ * common package, and then the tests could be moved to e2e. Then, any tests
+ * which require running on the server could just be sent directly to the
+ * server API which would be running while the test suite runs.
  * ============================================================================
  */
 
 describe("Linus should be able to pass all the challenges first try", () => {
-  test("Execute all challenge tests against their solutions", async () => {
+  test("Execute all challenge tests against their solution code", async () => {
     let anyFailed = false;
 
     /* Get all the challenges */
@@ -63,6 +76,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
       let script;
 
+      /* Process the different challenge types and get the test code */
       switch (challenge.type) {
         case "react": {
           doc = `<html><body><div id="root"></div></body></html>`;
@@ -91,7 +105,10 @@ describe("Linus should be able to pass all the challenges first try", () => {
       let results: TestCase[] = [];
 
       if (script) {
+        /* Load the document */
         document.body.innerHTML = doc;
+
+        /* Add the message listener */
         window.parent.postMessage = (data: IframeMessageEvent["data"]) => {
           const { source, message } = data;
           if (source === "TEST_RESULTS") {
@@ -100,6 +117,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
         };
 
         try {
+          /* Evaluate the test script */
           // eslint-disable-next-line
           window.eval(script);
         } catch (err) {
@@ -113,14 +131,8 @@ describe("Linus should be able to pass all the challenges first try", () => {
         /**
          * Wait for the test script to execute and post a message back to
          * the message listener.
-         *
-         * TODO: Refactor this to race until the message is posted.
          */
-        await wait(250);
-
-        if (DEBUG) {
-          console.log(results);
-        }
+        await waitForResults({ results });
 
         /**
          * Evaluate the test results.
@@ -133,11 +145,11 @@ describe("Linus should be able to pass all the challenges first try", () => {
           }
         }
 
-        anyFailed = !anyFailed ? true : !passed; /* blegh */
-
         if (passed) {
           log.success(challenge);
         } else {
+          /* A test failed, mark it to fail the entire test suite later */
+          anyFailed = true;
           log.fail(challenge);
         }
       } else {
@@ -145,27 +157,79 @@ describe("Linus should be able to pass all the challenges first try", () => {
       }
     }
 
-    expect(anyFailed).toBeFalsy(); /* Some tests failed! */
+    expect(!anyFailed).toBeTruthy();
   });
 });
 
 /** ===========================================================================
- * Log Util
+ * Utils
  * ============================================================================
  */
 
-const getChallengeLog = (challenge: Challenge) => {
-  return `: ${challenge.id}\n- Type: ${challenge.type}\n- Title: ${challenge.title}`;
+/**
+ * Create a method which takes the results array and polls it every poll
+ * interval until it has values inside, and then resolves.
+ */
+const pollResults = (results: TestCase[], poll: number) => {
+  return new Promise(function(resolve, _) {
+    setTimeout(() => {
+      if (results.length) {
+        if (DEBUG) {
+          console.log(results);
+        }
+        resolve("done");
+      }
+    }, poll);
+  });
 };
 
+/**
+ * Timeout to race against the pollResults function. Throws if the timeout
+ * is exceeded.
+ */
+const timeout = async (limit: number) => {
+  await wait(limit);
+  throw new Error("Waiting for results but timeout exceeded!");
+};
+
+/**
+ * Take the results and poll until it is populated, or else fail after some
+ * generous time limit.
+ */
+const waitForResults = async ({
+  poll = 10,
+  limit = 250,
+  results,
+}: {
+  poll?: number;
+  limit?: number;
+  results: TestCase[];
+}) => {
+  await Promise.race([pollResults(results, poll), timeout(limit)]);
+};
+
+/**
+ * Log helper
+ */
 const log = {
   success: (challenge: Challenge) => {
-    console.log(`[SUCCESS]${getChallengeLog(challenge)}`);
+    const msg = `[SUCCESS]${log.getMessage(challenge)}`;
+    log.print(msg);
   },
   fail: (challenge: Challenge) => {
-    console.log(`[FAILED]${getChallengeLog(challenge)}`);
+    const msg = `[FAILED]${log.getMessage(challenge)}`;
+    log.print(msg);
   },
   skip: (challenge: Challenge) => {
-    console.log(`[SKIPPED]${getChallengeLog(challenge)}`);
+    const msg = `[SKIPPED]${log.getMessage(challenge)}`;
+    log.print(msg);
+  },
+  getMessage: (challenge: Challenge) => {
+    return `: Challenge type: ${challenge.type}, title: ${challenge.title}, id: ${challenge.id}`;
+  },
+  print: (msg: string) => {
+    if (LOG) {
+      console.log(msg);
+    }
   },
 };

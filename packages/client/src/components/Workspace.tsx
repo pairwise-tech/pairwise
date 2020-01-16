@@ -855,35 +855,6 @@ class Workspace extends React.Component<IProps, IState> {
     this.addModuleTypeDefinitionsToMonaco(dependencies);
 
     return code;
-
-    // const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
-    //   this.state.code,
-    // );
-
-    // this.addModuleTypeDefinitionsToMonaco(dependencies);
-
-    // const injectModuleDependenciesFn = createInjectDependenciesFunction(
-    //   this.props.challenge.type === "react"
-    //     ? [...dependencies, "react-dom-test-utils"]
-    //     : dependencies,
-    // );
-
-    // /**
-    //  * What happens here:
-    //  *
-    //  * - Inject test code in code string, and remove any console methods
-    //  * - Hijack all console usages in user code string
-    //  * - Transform code with Babel
-    //  * - Fetch and inject required modules into code string
-    //  */
-    // const processedCodeString = pipe(
-    //   injectTestCode(this.props.challenge.testCode),
-    //   hijackConsole,
-    //   transpileCodeWithBabel,
-    //   injectModuleDependenciesFn,
-    // )(sourceCode);
-
-    // return processedCodeString;
   };
 
   handleCompilationError = (error: Error) => {
