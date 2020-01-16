@@ -16,13 +16,19 @@ import { TestCase } from "tools/challenges";
 
 jest.setTimeout(30000);
 
-/* Import the expectation library */
+/**
+ * Import the expectation library. Read the file directly with Node because
+ * Jest doesn't understand Webpack raw-loader. Take that Jest!
+ */
 const EXPECTATION_LIBRARY = fs.readFileSync(
   "src/tools/in-browser-testing-lib.js",
   { encoding: "utf8" },
 );
 
-/* Import the courses directly: */
+/**
+ * Import the courses directly. In the future if there are multiple courses
+ * this could be slightly refactored to just use all the courses.
+ */
 const courses = require("@pairwise/common").default;
 const { FullstackTypeScript } = courses;
 const course: Course = FullstackTypeScript;
@@ -38,7 +44,7 @@ const LOG = true;
  * Test
  * ----------------------------------------------------------------------------
  * - This currently takes all the challenges and executes their tests against
- * their solution code. It is a little hacky right now.
+ * their solution code. It is a little hacked together right now.
  *
  * - If, in the future some challenges had to run in a server environment,
  * then those challenges would have APIs to run the tests. At that time,
@@ -95,6 +101,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
           break;
         }
         case "media": {
+          /* No tests for these challenges */
           break;
         }
         default: {

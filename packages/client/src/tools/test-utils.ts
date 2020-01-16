@@ -377,8 +377,6 @@ export const compileCodeString = async (
       sourceCodeString,
     );
 
-    // this.addModuleTypeDefinitionsToMonaco(dependencies);
-
     const injectModuleDependenciesFn = createInjectDependenciesFunction(
       challenge.type === "react"
         ? [...dependencies, "react-dom-test-utils"]

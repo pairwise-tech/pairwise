@@ -16,11 +16,11 @@ jobs:
           node-version: 10.x
       - name: Build dependencies container
         run: yarn docker:build
-      - name: Run e2e test suite
+      - name: Run e2e API Tests
         run: yarn e2e
         env:
           CI: true
-      - name: Run Cypress test suite
+      - name: Run Cypress Tests
         run: yarn cypress
         env:
           CI: true
