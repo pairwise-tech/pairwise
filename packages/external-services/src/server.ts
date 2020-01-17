@@ -9,9 +9,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 /** ===========================================================================
- * Types & Config
+ * Setup
  * ============================================================================
  */
+
+const PORT = 7000;
 
 const SERVER = process.env.SERVER_URL || "http://127.0.0.1:9000";
 
@@ -106,13 +108,9 @@ app.get("/google/profile", (req, res) => {
  * ============================================================================
  */
 
-const PORT = 7000;
-
 const server = http.createServer(app);
 
 server.listen(PORT, () => {
-  console.log(
-    `\n- Mock external services listening at http://localhost:${PORT}`,
-  );
+  console.log(`\n- External services listening at http://localhost:${PORT}`);
   console.log(`- Using server host url: ${SERVER}`);
 });
