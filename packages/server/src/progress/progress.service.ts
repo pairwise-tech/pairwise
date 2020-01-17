@@ -1,15 +1,14 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Progress } from "./progress.entity";
 import { ProgressDto } from "./progress.dto";
 import {
-  challengeUtilityClass,
   ChallengeStatus,
   UserCourseStatus,
   UserCourseProgress,
 } from "@pairwise/common";
-import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
+import { SUCCESS_CODES } from "src/tools/constants";
 import { RequestUser } from "src/types";
 import {
   validateAndSanitizeProgressItem,

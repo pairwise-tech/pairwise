@@ -14,6 +14,8 @@ import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
 import { ERROR_CODES } from "./constants";
 import { ProgressDto } from "src/progress/progress.dto";
+import { User } from "src/user/user.entity";
+import { RequestUser } from "src/types";
 
 /** ===========================================================================
  * Validation Utils
@@ -218,5 +220,22 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
     return result;
   } else {
     throw new Error(ERROR_CODES.INVALID_PARAMETERS);
+  }
+};
+
+/**
+ * Validate the user request to purchase a course. The course id must be valid
+ * and the user must not have already purchased this course before.
+ */
+export const validatePaymentRequest = (user: RequestUser, courseId: string) => {
+  if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+  }
+
+  const existingCoursePayment = user.payments.find(
+    p => p.courseId === courseId,
+  );
+  if (existingCoursePayment) {
+    throw new BadRequestException("User has previously paid for this course");
   }
 };
