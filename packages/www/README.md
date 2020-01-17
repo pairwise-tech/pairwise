@@ -1,6 +1,10 @@
-# Project-X Website
+# Pairwise Landing Page
+
+> https://pairwise.tech
 
 ## Features
+
+The Pairwise public facing landing page which provides an overview of the Pairwise product.
 
 ## Usage
 

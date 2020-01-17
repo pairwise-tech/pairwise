@@ -1,6 +1,26 @@
-# Prototype X
+# Pairwise Client Application
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/a0bbe4e4-bc5a-4a87-bf4c-349970069d0f/deploy-status)](https://app.netlify.com/sites/prototype-x/deploys)
+This is the Pairwise client application! This is the core product which provides the curriculum and workspace to users. This package also includes `codepress` which is an internal CMS tool for managing and writing course content. Codepress is built directly into the client application.
+
+# Getting Started
+
+```shell
+# Run the application
+$ yarn start:dev
+
+# Run Codepress
+$ yarn start:codepress
+
+# Run the tests
+$ yarn test
+
+# Build the application
+$ yarn build
+```
+
+# Tests
+
+The unit tests for this package includes a test suite to test all of the challenges solution code against their test code. You can see it in `Torvalds.test.ts`.
 
 # HTTPS for Local Development
 
