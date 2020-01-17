@@ -49,6 +49,7 @@ export class ProgressController {
       userCourseProgress,
       req.user,
     );
+
     return SUCCESS_CODES.OK;
   }
 }

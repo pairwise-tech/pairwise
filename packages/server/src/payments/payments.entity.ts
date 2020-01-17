@@ -10,6 +10,15 @@ import {
 import { User } from "../user/user.entity";
 import { PAYMENT_TYPE } from "@pairwise/common";
 
+/** ===========================================================================
+ * Entity
+ * ----------------------------------------------------------------------------
+ * The Payment entity represents a user payment for a course. The payment
+ * information is how we determine if a user has full access to a course or
+ * not.
+ * ============================================================================
+ */
+
 @Entity()
 export class Payments {
   @PrimaryGeneratedColumn("uuid")

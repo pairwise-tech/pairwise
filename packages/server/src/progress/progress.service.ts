@@ -1,17 +1,19 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Progress } from "./progress.entity";
 import { ProgressDto } from "./progress.dto";
 import {
-  challengeUtilityClass,
   ChallengeStatus,
   UserCourseStatus,
   UserCourseProgress,
 } from "@pairwise/common";
-import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
+import { SUCCESS_CODES } from "src/tools/constants";
 import { RequestUser } from "src/types";
-import { validateAndSanitizeProgressItem } from "src/tools/validation";
+import {
+  validateAndSanitizeProgressItem,
+  validateChallengeProgressDto,
+} from "src/tools/validation";
 
 @Injectable()
 export class ProgressService {
@@ -38,22 +40,10 @@ export class ProgressService {
     requestUser: RequestUser,
     challengeProgressDto: ProgressDto,
   ) {
-    console.log("Service handling update challenge code:");
+    validateChallengeProgressDto(challengeProgressDto);
+
     const { courseId, challengeId, complete } = challengeProgressDto;
     const user = requestUser;
-
-    /**
-     * Validate the input request:
-     */
-    if (!challengeUtilityClass.courseIdIsValid(courseId)) {
-      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
-    } else if (
-      !challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
-    ) {
-      throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
-    } else if (!user) {
-      throw new BadRequestException(ERROR_CODES.MISSING_USER);
-    }
 
     console.log(
       `Updating challengeProgress for courseId: ${courseId}, challengeId: ${challengeId}`,

@@ -9,6 +9,16 @@ import {
 } from "typeorm";
 import { User } from "../user/user.entity";
 
+/** ===========================================================================
+ * Entity
+ * ----------------------------------------------------------------------------
+ * The Progress entity contains the specific progress history for a user on
+ * a course. A user has a single progress history per course. The progress
+ * history contains a list of objects for each challenge the user has attempted
+ * or completed.
+ * ============================================================================
+ */
+
 @Entity()
 export class Progress {
   @PrimaryGeneratedColumn("uuid")

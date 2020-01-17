@@ -27,6 +27,9 @@ const generateNewProfileFields = () => {
 
 /** ===========================================================================
  * Mock Auth Class
+ * ----------------------------------------------------------------------------
+ * This class provides methods which produce mock data which resembles the
+ * data returned by the real SSO external APIs.
  * ============================================================================
  */
 

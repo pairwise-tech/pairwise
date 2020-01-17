@@ -1,7 +1,7 @@
 {
   "name": "@pairwise/client",
   "version": "0.0.1",
-  "description": "Prototype X Client Project: Create React App Application",
+  "description": "Pairwise React Client Application",
   "private": true,
   "scripts": {
     "codepress:build": "tsc --lib esnext --esModuleInterop --skipLibCheck codepress/src/*.ts",

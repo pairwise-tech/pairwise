@@ -37,6 +37,9 @@ import { UserStoreState } from "./user/store";
  * ============================================================================
  */
 
+/**
+ * Create a consistent type for failed requests.
+ */
 export interface HttpResponseError {
   message: string;
   status?: number;
@@ -55,10 +58,7 @@ const HOST = ENV.HOST; /* NestJS Server URL */
 const createNonHttpResponseError = (
   message: string,
 ): Err<HttpResponseError> => {
-  return new Err({
-    status: 418,
-    message,
-  });
+  return new Err({ status: 418, message }); /* ha */
 };
 
 /** ===========================================================================
@@ -94,7 +94,7 @@ export const makeCodepressApi = (endpoint: string): CodepressAPI => {
 /** ===========================================================================
  * Base API Class
  * ---------------------------------------------------------------------------
- * Base class with shared utility methods.
+ * Base API class with shared utility methods.
  * ============================================================================
  */
 
@@ -150,7 +150,7 @@ class BaseApiClass {
     });
 
     logoutUserInLocalStorage();
-    await wait(2000); /* Wait so they can read the message... */
+    await wait(1500); /* Wait so they can read the message... */
 
     window.location.reload();
   };
@@ -163,8 +163,8 @@ class BaseApiClass {
  * standardized responses using the Result<Data, Error> approach.
  *
  * - All code related to actually dispatching HTTP requests is in this file.
- * - No error are thrown from here! Only descriptive Result objects which
- *   are then handled by the calling code.
+ * - No errors are thrown from here! Only descriptive Result objects which
+ *   are then handled by the calling code with perfect type safety. Boom!
  * ============================================================================
  */
 
@@ -180,9 +180,9 @@ class Api extends BaseApiClass {
         const challenges = require("@pairwise/common").default;
         course = challenges.FullstackTypeScript;
       } else if (ENV.DEV_MODE) {
-        // TODO: This is not great code, it's just that we're in the middle of a big refactor. In the future, we should standardize a few things, including:
-        // - How we do async. I.e. Observables, Promises, fetch, axios, lots of redundancy
-        // - Arrays of things (CourseList) vs things themselves (Course)
+        /**
+         * TODO: Make this code more consistent with the other API methods.
+         */
         course = await this.codepressApi
           .getAll()
           .pipe(map(x => x[0]))
@@ -425,6 +425,9 @@ class Api extends BaseApiClass {
  * ----------------------------------------------------------------------------
  * Class which provides local storage APIs which mock the same behavior of the
  * backend REST APIs.
+ *
+ * The class is in the same file here because of the overlap between the
+ * local storage mock HTTP APIs and the real HTTP APIs.
  * ============================================================================
  */
 

@@ -1,10 +1,12 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { RequestUser } from "src/types";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "./payments.entity";
 import { Repository } from "typeorm";
-import { challengeUtilityClass } from "@pairwise/common";
-import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
+import { SUCCESS_CODES } from "src/tools/constants";
+import { User } from "src/user/user.entity";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import { validatePaymentRequest } from "src/tools/validation";
 
 @Injectable()
 export class PaymentsService {
@@ -13,27 +15,37 @@ export class PaymentsService {
     private readonly paymentsRepository: Repository<Payments>,
   ) {}
 
-  async purchaseCourse(requestUser: RequestUser, courseId: string) {
-    const { profile, payments } = requestUser;
+  async handlePurchaseCourseRequest(
+    requestUser: RequestUser,
+    courseId: string,
+  ) {
+    validatePaymentRequest(requestUser, courseId);
+
+    const { profile } = requestUser;
     console.log(`Purchasing course ${courseId} for user ${profile.email}`);
 
-    if (!challengeUtilityClass.courseIdIsValid(courseId)) {
-      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
-    }
-
-    const existingCoursePayment = payments.find(p => p.courseId === courseId);
-    if (existingCoursePayment) {
-      throw new BadRequestException("User has previously paid for this course");
-    }
-
-    await this.paymentsRepository.insert({
-      courseId,
-      user: profile,
-      amountPaid: 50,
-      type: "SUCCESS",
-      datePaid: new Date(),
-    });
+    /**
+     * If everything is good create a new payment for this user and course.
+     */
+    const payment = this.createNewPayment(profile, courseId);
+    await this.paymentsRepository.insert(payment);
 
     return SUCCESS_CODES.OK;
   }
+
+  private createNewPayment = (user: User, courseId: string) => {
+    /**
+     * Construct the new payment data. Once Stripe is integrated, most of this
+     * data will come from Stripe and the actual payment information.
+     */
+    const payment: QueryDeepPartialEntity<Payments> = {
+      courseId,
+      user,
+      amountPaid: 50,
+      type: "SUCCESS",
+      datePaid: new Date(),
+    };
+
+    return payment;
+  };
 }

@@ -8,12 +8,15 @@ import {
   Ok,
   Err,
   UserSettings,
-  IProgressDto,
   ProgressEntity,
+  IFeedbackDto,
+  feedbackTypeSet,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
 import { ERROR_CODES } from "./constants";
+import { ProgressDto } from "src/progress/progress.dto";
+import { RequestUser } from "src/types";
 
 /** ===========================================================================
  * Validation Utils
@@ -93,6 +96,20 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
 };
 
 /**
+ * Validate the input request to update user progress history.
+ */
+export const validateChallengeProgressDto = (progressDto: ProgressDto) => {
+  const { courseId, challengeId } = progressDto;
+  if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+  } else if (
+    !challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
+  ) {
+    throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
+  }
+};
+
+/**
  * Validate input to user update operation. This method will filter any
  * invalid update parameters and return a validated object with values which
  * can be updated on the user.
@@ -166,7 +183,7 @@ const sanitizeObject = (obj: any) => {
  * entire object is mal-formed, otherwise proceed with validating each
  * entry.
  *
- * Return a sanitized object which can be persisted.
+ * Return a sanitized object which can be persisted confidently.
  */
 export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
   const { progress, courseId } = entity;
@@ -204,5 +221,33 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
     return result;
   } else {
     throw new Error(ERROR_CODES.INVALID_PARAMETERS);
+  }
+};
+
+/**
+ * Validate the user request to purchase a course. The course id must be valid
+ * and the user must not have already purchased this course before.
+ */
+export const validatePaymentRequest = (user: RequestUser, courseId: string) => {
+  if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+  }
+
+  const existingCoursePayment = user.payments.find(
+    p => p.courseId === courseId,
+  );
+  if (existingCoursePayment) {
+    throw new BadRequestException("User has previously paid for this course");
+  }
+};
+
+/**
+ * Validating the feedback dto.
+ */
+export const validateFeedbackDto = (feedbackDto: IFeedbackDto) => {
+  if (!challengeUtilityClass.challengeIdIsValid(feedbackDto.challengeId)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
+  } else if (!feedbackTypeSet.has(feedbackDto.type)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_FEEDBACK_TYPE);
   }
 };

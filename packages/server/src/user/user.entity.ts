@@ -12,6 +12,16 @@ import { Payments } from "src/payments/payments.entity";
 import { Feedback } from "src/feedback/feedback.entity";
 import { CodeBlob } from "src/blob/blob.entity";
 
+/** ===========================================================================
+ * Entity
+ * ----------------------------------------------------------------------------
+ * The User entity represents Pairwise users. The user contains some basic
+ * profile information which is assigned during first login, some app specific
+ * settings information, and foreign keys to other tables such as payments,
+ * progress, and code blobs.
+ * ============================================================================
+ */
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")

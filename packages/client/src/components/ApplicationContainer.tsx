@@ -60,6 +60,13 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
+    /**
+     * NOTE: The hasHandledRedirect state is used to capture the first
+     * route that renders the route, before react-router takes over and starts
+     * performing redirects. This is required to capture the access token
+     * after a login event, which is delivered to the app via a redirect url
+     * parameter.
+     */
     this.state = {
       hasHandledRedirect: false,
     };

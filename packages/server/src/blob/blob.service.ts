@@ -46,7 +46,7 @@ export class BlobService {
 
     if (blob) {
       /**
-       * Deserialize data blog before sending back to the client.
+       * Deserialize data blob before sending back to the client.
        */
       const deserialized = {
         ...blob,

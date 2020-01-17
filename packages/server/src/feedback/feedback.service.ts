@@ -1,14 +1,11 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
-import {
-  IFeedbackDto,
-  feedbackTypeSet,
-  challengeUtilityClass,
-} from "@pairwise/common";
+import { Injectable } from "@nestjs/common";
+import { IFeedbackDto } from "@pairwise/common";
 import { Feedback } from "./feedback.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RequestUser } from "src/types";
-import { SUCCESS_CODES, ERROR_CODES } from "src/tools/constants";
+import { SUCCESS_CODES } from "src/tools/constants";
+import { validateFeedbackDto } from "src/tools/validation";
 
 @Injectable()
 export class FeedbackService {
@@ -33,12 +30,9 @@ export class FeedbackService {
     });
   }
 
-  async recordUserFeedback(user: RequestUser, feedbackDto: IFeedbackDto) {
-    if (!challengeUtilityClass.challengeIdIsValid(feedbackDto.challengeId)) {
-      throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
-    } else if (!feedbackTypeSet.has(feedbackDto.type)) {
-      throw new BadRequestException(ERROR_CODES.INVALID_FEEDBACK_TYPE);
-    }
+  async saveUserFeedback(user: RequestUser, feedbackDto: IFeedbackDto) {
+    /* Validate the request */
+    validateFeedbackDto(feedbackDto);
 
     const feedback = {
       ...feedbackDto,

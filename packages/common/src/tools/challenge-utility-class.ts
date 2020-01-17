@@ -6,7 +6,10 @@ import { COURSE_ACCESS_LEVEL, UserCourseAccessMap } from "src/types/dto.js";
  * Challenge Utility Class
  * ----------------------------------------------------------------------------
  * A class with various helper utilities for dealing with the curriculum
- * courses, modules, and challenges.
+ * courses, modules, and challenges. This is primarily used in the server
+ * application.
+ *
+ * TODO: It could be useful to add some tests for this class.
  * ============================================================================
  */
 
@@ -148,6 +151,9 @@ class ChallengeUtilityClass {
  * ============================================================================
  */
 
+/**
+ * Modify in the future if more courses are added.
+ */
 const courseList = [FullstackTypeScript];
 
 const challengeUtilityClass = new ChallengeUtilityClass(

@@ -14,6 +14,6 @@ export class FeedbackController {
     @Body() feedbackDto: IFeedbackDto,
     @Req() req: AuthenticatedRequest,
   ) {
-    return this.feedbackService.recordUserFeedback(req.user, feedbackDto);
+    return this.feedbackService.saveUserFeedback(req.user, feedbackDto);
   }
 }

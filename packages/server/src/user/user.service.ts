@@ -39,36 +39,22 @@ export class UserService {
     return this.processUserEntity(user);
   }
 
+  /**
+   * This is the method which aggregates various pieces of data to add to the
+   * user profile in order to construct a single object which consolidates
+   * all of this information in one place. This is mainly just a convenience
+   * to make it easier to access these relevant pieces of data in various
+   * places.
+   *
+   * One minor downside of this is that this combined user object is fetched
+   * and attached to the request for every authenticated API request which
+   * does require more database requests to fetch everything.
+   */
   async findUserByEmailGetFullProfile(email: string) {
     const user = await this.userRepository.findOne({ email });
 
-    const payments = await this.paymentsRepository.find({
-      where: {
-        user,
-      },
-    });
-
-    const courses = payments.reduce((courseAccess, { courseId, type }) => {
-      return {
-        ...courseAccess,
-        [courseId]: type === "SUCCESS" ? true : false,
-      };
-    }, {});
-
-    const progressList = await this.progressService.fetchUserProgress(
-      user.uuid,
-    );
-
-    const progressMap: UserProgressMap = progressList.reduce(
-      (map, progress) => {
-        return {
-          ...map,
-          [progress.courseId]: progress.progress,
-        };
-      },
-      {},
-    );
-
+    const { payments, courses } = await this.getCourseForUser(user);
+    const { progress } = await this.getProgressMapForUser(user);
     const { profile, settings } = this.processUserEntity(user);
 
     const result: IUserDto = {
@@ -76,7 +62,7 @@ export class UserService {
       payments,
       courses,
       settings,
-      progress: progressMap,
+      progress,
     };
 
     return result;
@@ -126,6 +112,15 @@ export class UserService {
     );
   }
 
+  /**
+   * A helper method which processes the database user entity and is
+   * responsible for deserializing and populating the user settings object.
+   *
+   * This is where the default user settings are merged against whatever
+   * user settings the user already has, which ensures the format of the
+   * user settings object is always consistent regardless of the previous
+   * state it was in.
+   */
   private processUserEntity = (user: User) => {
     if (user) {
       const deserializedSettings = JSON.parse(user.settings);
@@ -142,4 +137,39 @@ export class UserService {
       return result;
     }
   };
+
+  private async getCourseForUser(user: User) {
+    const payments = await this.paymentsRepository.find({
+      where: {
+        user,
+      },
+    });
+
+    const courses = payments.reduce((courseAccess, { courseId, type }) => {
+      return {
+        ...courseAccess,
+        [courseId]: type === "SUCCESS" ? true : false,
+      };
+    }, {});
+
+    return { payments, courses };
+  }
+
+  private async getProgressMapForUser(user: User) {
+    const progressList = await this.progressService.fetchUserProgress(
+      user.uuid,
+    );
+
+    const progressMap: UserProgressMap = progressList.reduce(
+      (map, progress) => {
+        return {
+          ...map,
+          [progress.courseId]: progress.progress,
+        };
+      },
+      {},
+    );
+
+    return { progress: progressMap };
+  }
 }
