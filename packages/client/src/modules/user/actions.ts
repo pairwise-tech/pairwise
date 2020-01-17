@@ -24,9 +24,11 @@ enum ActionTypesEnum {
  */
 
 const fetchUser = createAction(ActionTypesEnum.FETCH_USER)();
+
 const fetchUserSuccess = createAction(ActionTypesEnum.FETCH_USER_SUCCESS)<
   UserStoreState
 >();
+
 const fetchUserFailure = createAction(ActionTypesEnum.FETCH_USER_FAILURE)<
   HttpResponseError
 >();
@@ -34,9 +36,11 @@ const fetchUserFailure = createAction(ActionTypesEnum.FETCH_USER_FAILURE)<
 const updateUser = createAction(ActionTypesEnum.UPDATE_USER)<
   UserUpdateOptions
 >();
+
 const updateUserSuccess = createAction(ActionTypesEnum.UPDATE_USER_SUCCESS)<
   IUserDto
 >();
+
 const updateUserFailure = createAction(ActionTypesEnum.UPDATE_USER_FAILURE)<
   HttpResponseError
 >();

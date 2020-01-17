@@ -17,16 +17,8 @@ const appInitializationEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.initializeApp)),
     tap(() => {
       /**
-       * On app load for mobile sized devices, direct /home and lock
-       * the page scrolling.
-       *
-       * The mobile UI sucks.
+       * Nothing happens now...
        */
-      if (window.innerWidth < 768) {
-        document.body.style.overflowX = "hidden";
-        document.body.style.overflowY = "hidden";
-        deps.router.push("/home");
-      }
     }),
     ignoreElements(),
   );

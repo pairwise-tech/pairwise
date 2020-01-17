@@ -19,7 +19,7 @@ const initialState = {
   bulkPersistenceInProgress: false,
 };
 
-const app = createReducer<State, ActionTypes>(initialState)
+const auth = createReducer<State, ActionTypes>(initialState)
   .handleAction(actions.initiateBulkPersistence, (state, action) => ({
     ...state,
     bulkPersistenceInProgress: true,
@@ -43,4 +43,4 @@ const app = createReducer<State, ActionTypes>(initialState)
  * ============================================================================
  */
 
-export default app;
+export default auth;

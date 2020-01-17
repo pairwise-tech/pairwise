@@ -37,6 +37,9 @@ import { UserStoreState } from "./user/store";
  * ============================================================================
  */
 
+/**
+ * Create a consistent type for failed requests.
+ */
 export interface HttpResponseError {
   message: string;
   status?: number;
@@ -55,10 +58,7 @@ const HOST = ENV.HOST; /* NestJS Server URL */
 const createNonHttpResponseError = (
   message: string,
 ): Err<HttpResponseError> => {
-  return new Err({
-    status: 418,
-    message,
-  });
+  return new Err({ status: 418, message }); /* ha */
 };
 
 /** ===========================================================================
@@ -163,8 +163,8 @@ class BaseApiClass {
  * standardized responses using the Result<Data, Error> approach.
  *
  * - All code related to actually dispatching HTTP requests is in this file.
- * - No error are thrown from here! Only descriptive Result objects which
- *   are then handled by the calling code.
+ * - No errors are thrown from here! Only descriptive Result objects which
+ *   are then handled by the calling code with perfect type safety. Boom!
  * ============================================================================
  */
 

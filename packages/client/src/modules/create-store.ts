@@ -1,37 +1,13 @@
 import { createBrowserHistory } from "history";
 import { applyMiddleware, createStore, Middleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { createLogger } from "redux-logger";
 import { createEpicMiddleware } from "redux-observable";
 
 import * as ENV from "../tools/client-env";
 import api from "./api";
 import { EpicDependencies, Modules, rootEpic, rootReducer } from "./root";
 import { AppToaster } from "tools/constants";
-
-/** ===========================================================================
- * Logger
- * ============================================================================
- */
-
-const TITLE = "#15B06D";
-const ACTION = "#ff6647";
-const NEXT_STATE = "#50adfa";
-
-const logger = createLogger({
-  collapsed: true,
-  duration: true,
-  level: {
-    prevState: false,
-    action: "info",
-    nextState: "info",
-  },
-  colors: {
-    title: () => TITLE,
-    action: () => ACTION,
-    nextState: () => NEXT_STATE,
-  },
-});
+import logger from "./logger";
 
 /** ===========================================================================
  * Router History

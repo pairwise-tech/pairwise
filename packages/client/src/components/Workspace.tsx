@@ -107,7 +107,7 @@ class Workspace extends React.Component<IProps, IState> {
   // is needed for updating editor options, i.e. font size.
   monacoWrapper: any = null;
 
-  // The actual monaco editor instance. The mona
+  // The actual monaco editor instance.
   editorInstance: Nullable<{
     updateOptions: (x: MonacoEditorOptions) => void;
   }> = null;
@@ -135,11 +135,11 @@ class Workspace extends React.Component<IProps, IState> {
     const initialCode = props.blob.type === "challenge" ? props.blob.code : "";
 
     this.state = {
+      code: initialCode,
       testResults: [],
       logs: DEFAULT_LOGS,
       fullScreenEditor: false,
       monacoInitializationError: false,
-      code: initialCode,
     };
   }
 
@@ -182,7 +182,8 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   componentWillReceiveProps(nextProps: IProps) {
-    // TODO: Can remove?
+    // TODO: Can this be removed? I refactored some code and this may no
+    // longer be needed, or I am wrong and more refactoring is required.
     // Update in response to changing challenge
     // if (this.props.challenge.id !== nextProps.challenge.id) {
     //   const { challenge, isEditMode } = nextProps;
@@ -208,7 +209,8 @@ class Workspace extends React.Component<IProps, IState> {
       wait(50).then(this.refreshEditor);
     }
 
-    // TODO: Can remove?
+    // TODO: Can this be removed? I refactored some code and this may no
+    // longer be needed, or I am wrong and more refactoring is required.
     // Update in response to toggling admin edit mode. This will only ever
     // happen for us as we use codepress, not for our end users.
     // if (this.props.isEditMode !== nextProps.isEditMode) {
@@ -456,7 +458,7 @@ class Workspace extends React.Component<IProps, IState> {
               <IconButton
                 icon="minus"
                 aria-label="format editor code"
-                onClick={this.props.decraseFontSize}
+                onClick={this.props.decreaseFontSize}
               />
             </Tooltip>
           </ButtonGroup>
@@ -1005,7 +1007,7 @@ const mergeProps = (
     methods.updateEditorOptions({
       fontSize: state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
     }),
-  decraseFontSize: () =>
+  decreaseFontSize: () =>
     methods.updateEditorOptions({
       fontSize: state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
     }),
@@ -1023,8 +1025,9 @@ const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
 /** ===========================================================================
  * WorkspaceLoadingContainer
  * ----------------------------------------------------------------------------
- * - A container component to wait for a challenge to be fully initialized
- * before rendering the Workspace, which requires a challenge to exist.
+ * - A container component to wait for a challenge and blob to be fully
+ * initialized before rendering the Workspace, which requires a challenge to
+ * exist.
  * ============================================================================
  */
 
@@ -1041,12 +1044,11 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
      * exist yet), construct a new code blob for this challenge which uses the
      * starter code for the challenge itself.
      */
-    const codeBlob = blob
-      ? blob
-      : constructDataBlobFromChallenge({
-          challenge,
-          code: challenge.starterCode,
-        });
+    const constructedBlob = constructDataBlobFromChallenge({
+      challenge,
+      code: challenge.starterCode,
+    });
+    const codeBlob = blob ? blob : constructedBlob;
 
     return (
       <React.Fragment>
