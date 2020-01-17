@@ -44,6 +44,8 @@ To work with Pairwise you will need [Node](https://nodejs.org/en/), [npm](https:
 
 We also recommend using [Visual Studio Code](https://code.visualstudio.com/) and installing the recommended project extensions.
 
+All the important information about how Pairwise works should be covered in the repo `README` documents. These documents serve as a quick reference to learn about how the entire codebase works.
+
 ## Development
 
 To run the app you will need Docker and Node installed. All of the packages tend to have commands of the structure `[package]:[dev|start|watch|build|prod]` so you can generally modify the following scripts depending on how you want to start different packages.
