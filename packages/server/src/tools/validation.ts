@@ -184,7 +184,7 @@ const sanitizeObject = (obj: any) => {
  * entire object is mal-formed, otherwise proceed with validating each
  * entry.
  *
- * Return a sanitized object which can be persisted.
+ * Return a sanitized object which can be persisted confidently.
  */
 export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
   const { progress, courseId } = entity;
