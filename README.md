@@ -172,5 +172,3 @@ $ yarn up:build
 ## Contributions
 
 We follow a normal git workflow. Commit your changes to a branch, make a pull request, and merge the code after the tests pass.
-
-We try to write end-to-end tests for any major features which are added or changed. Our goal is to have nearly 100% test cover at the API and UI level.

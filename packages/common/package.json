@@ -1,7 +1,7 @@
 {
   "name": "@pairwise/common",
   "version": "0.0.1",
-  "description": "Prototype X Common Project: Shared utilities and type definitions",
+  "description": "Pairwise shared utilities and types",
   "private": true,
   "scripts": {
     "build": "tsc",

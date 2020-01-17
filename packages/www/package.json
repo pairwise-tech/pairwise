@@ -1,7 +1,7 @@
 {
   "name": "@pairwise/www",
   "version": "0.0.1",
-  "description": "The website for Pairwise",
+  "description": "The Pairwise Website",
   "author": "Pairwise Team",
   "dependencies": {
     "@material-ui/core": "^4.7.2",
