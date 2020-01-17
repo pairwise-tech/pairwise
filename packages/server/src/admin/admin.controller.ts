@@ -7,9 +7,10 @@ import { AdminService } from "./admin.service";
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  /* Placeholder/test admin endpoint */
   @UseGuards(AdminAuthGuard)
   @Get()
-  async getProfile(@Request() req: AuthenticatedRequest) {
+  async adminIndex(@Request() req: AuthenticatedRequest) {
     return this.adminService.adminEndpoint();
   }
 

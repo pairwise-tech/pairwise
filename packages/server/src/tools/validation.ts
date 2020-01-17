@@ -9,6 +9,8 @@ import {
   Err,
   UserSettings,
   ProgressEntity,
+  IFeedbackDto,
+  feedbackTypeSet,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -237,5 +239,16 @@ export const validatePaymentRequest = (user: RequestUser, courseId: string) => {
   );
   if (existingCoursePayment) {
     throw new BadRequestException("User has previously paid for this course");
+  }
+};
+
+/**
+ * Validating the feedback dto.
+ */
+export const validateFeedbackDto = (feedbackDto: IFeedbackDto) => {
+  if (!challengeUtilityClass.challengeIdIsValid(feedbackDto.challengeId)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
+  } else if (!feedbackTypeSet.has(feedbackDto.type)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_FEEDBACK_TYPE);
   }
 };
