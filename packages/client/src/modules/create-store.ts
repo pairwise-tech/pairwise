@@ -86,7 +86,7 @@ const store = configureStore();
  */
 
 /**
- * Meant for dev mode, to manually dispatch actions via the CLI
+ * Meant for dev mode, to manually dispatch actions via the browser console.
  */
 export const exposeGlobals = () => {
   // @ts-ignore

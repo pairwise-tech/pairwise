@@ -2,16 +2,16 @@ import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import { Router as ReactRouter } from "react-router-dom";
 
-import ParentContainer from "components/ApplicationContainer";
+import ApplicationContainer from "components/ApplicationContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
 import { NODE_ENV } from "tools/client-env";
 
 /** ===========================================================================
- * App
+ * Pairwise App!
  * ============================================================================
  */
 
-class App extends React.Component {
+class Pairwise extends React.Component {
   componentDidMount() {
     if (NODE_ENV === "development") {
       exposeGlobals();
@@ -22,7 +22,7 @@ class App extends React.Component {
     return (
       <ReduxProvider store={store}>
         <ReactRouter history={history}>
-          <ParentContainer />
+          <ApplicationContainer />
         </ReactRouter>
       </ReduxProvider>
     );
@@ -34,4 +34,4 @@ class App extends React.Component {
  * ============================================================================
  */
 
-export default App;
+export default Pairwise;

@@ -44,7 +44,7 @@ To work with Pairwise you will need [Node](https://nodejs.org/en/), [npm](https:
 
 We also recommend using [Visual Studio Code](https://code.visualstudio.com/) and installing the recommended project extensions.
 
-All the important information about how Pairwise works should be covered in the repo `README` documents. These documents serve as a quick reference to learn about how the entire codebase works.
+All the important information about how Pairwise works should be covered in the repo `README` documents. These documents serve as a quick reference to learn about how the entire codebase works, and are linked in the above repo structure section.
 
 ## Development
 
