@@ -23,6 +23,7 @@ const CERT = path.join(__dirname + "/../ssl/pairwise.cert");
 const keyFile = fs.readFileSync(KEY);
 const certFile = fs.readFileSync(CERT);
 
+/* Enable https optionally for locally debugging SSO authentication... */
 const httpsOptions = ENV.HTTPS
   ? {
       key: keyFile,
@@ -42,7 +43,7 @@ const swaggerOptions = new DocumentBuilder()
  * ============================================================================
  */
 
-const main = async () => {
+const pairwise = async () => {
   const app = await NestFactory.create(AppModule, {
     cors: true,
     httpsOptions,
@@ -66,4 +67,4 @@ const main = async () => {
   console.log(`Pairwise launched successfully!\n`);
 };
 
-main();
+pairwise();

@@ -1,5 +1,5 @@
 /** ===========================================================================
- * Shared error and success constants
+ * Shared error and success codes
  * ----------------------------------------------------------------------------
  * These values are intended to be used for shared/common response messages
  * which are used in more than one place.

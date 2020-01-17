@@ -16,7 +16,6 @@ import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
 import { ERROR_CODES } from "./constants";
 import { ProgressDto } from "src/progress/progress.dto";
-import { User } from "src/user/user.entity";
 import { RequestUser } from "src/types";
 
 /** ===========================================================================

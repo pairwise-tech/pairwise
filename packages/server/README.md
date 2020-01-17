@@ -4,6 +4,8 @@
 
 This is the [Nest](https://github.com/nestjs/nest) server application for Pairwise.
 
+To become familiar with the APIs feel free to run the server and access the generated Swagger documentation at `http://localhost:9000/api`.
+
 ## Setup
 
 ```bash
