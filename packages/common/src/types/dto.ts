@@ -16,7 +16,11 @@ import { CHALLENGE_TYPE } from "./courses";
  */
 
 /** ===========================================================================
- * User Profile and Payment Types
+ * User Object
+ * ----------------------------------------------------------------------------
+ * The user dto contains the user profile, settings, payments, courses,
+ * and their progress history. These are all consolidated onto one object
+ * for convenience.
  * ============================================================================
  */
 
@@ -106,6 +110,10 @@ export interface IFeedbackDto {
 
 /** ===========================================================================
  * Code Blobs for Challenges
+ * ----------------------------------------------------------------------------
+ * The code blob is a flexible entity which represents user specific information
+ * per challenge. They differ based on the challenge type: each challenge
+ * type has a specific type of code blob.
  * ============================================================================
  */
 

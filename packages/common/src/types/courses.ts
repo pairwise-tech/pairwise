@@ -48,8 +48,13 @@ export interface Challenge {
   supplementaryContent: string;
 }
 
-/**
- * Course skeleton types:
+/** ===========================================================================
+ * Course Skeleton
+ * ----------------------------------------------------------------------------
+ * This is a modified version of the course content which strips out the actual
+ * challenge content. This is used to display the navigation map of all the
+ * challenges for a course.
+ * ============================================================================
  */
 
 export type CourseSkeletonList = CourseSkeleton[];

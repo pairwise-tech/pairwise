@@ -1,7 +1,15 @@
 /** ===========================================================================
  * Result type!
  *
- * ~ Ok|Err
+ * This is a Result type inspired by Rust.
+ *
+ * Reference: https://doc.rust-lang.org/rust-by-example/error/result.html
+ *
+ * It always also to provide robust type checking around operations which
+ * may have a failure status, and to avoid arbitrarily throwing and catching
+ * errors to communicate failure. This is especially useful because TypeScript
+ * provides no utility to type check thrown errors. Thrown errors are like
+ * an any type on fire in TypeScript. The Result type helps us avoid that.
  * ============================================================================
  */
 
@@ -15,6 +23,9 @@ export interface IErr<E> {
   value?: undefined;
 }
 
+/**
+ * Ok type constructor class.
+ */
 export class Ok<T> implements IOk<T> {
   value: T;
   error = undefined;
@@ -28,6 +39,9 @@ export class Ok<T> implements IOk<T> {
   }
 }
 
+/**
+ * Err type constructor class.
+ */
 export class Err<E> implements IErr<E> {
   value: undefined;
   error: E;
@@ -41,5 +55,4 @@ export class Err<E> implements IErr<E> {
   }
 }
 
-/* Useful, not? I like it (?) */
 export type Result<T, E> = IOk<T> | IErr<E>;
