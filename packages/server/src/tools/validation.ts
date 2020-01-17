@@ -8,12 +8,12 @@ import {
   Ok,
   Err,
   UserSettings,
-  IProgressDto,
   ProgressEntity,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
 import { ERROR_CODES } from "./constants";
+import { ProgressDto } from "src/progress/progress.dto";
 
 /** ===========================================================================
  * Validation Utils
@@ -89,6 +89,20 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
       const { type } = dataBlob;
       return assertUnreachable(type);
     }
+  }
+};
+
+/**
+ * Validate the input request to update user progress history.
+ */
+export const validateChallengeProgressDto = (progressDto: ProgressDto) => {
+  const { courseId, challengeId } = progressDto;
+  if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+  } else if (
+    !challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
+  ) {
+    throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
   }
 };
 
