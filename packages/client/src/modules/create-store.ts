@@ -7,7 +7,7 @@ import * as ENV from "../tools/client-env";
 import api from "./api";
 import { EpicDependencies, Modules, rootEpic, rootReducer } from "./root";
 import { AppToaster } from "tools/constants";
-import logger from "./logger";
+import logger from "tools/logger";
 
 /** ===========================================================================
  * Router History

@@ -1,4 +1,11 @@
-import { CLIENT_APP_URL, TIMEOUT } from "../support/utils";
+import { CLIENT_APP_URL, TIMEOUT } from "../support/cypress-utils";
+
+/** ===========================================================================
+ * Auth Tests
+ * ----------------------------------------------------------------------------
+ * Test the authentication flows in the app.
+ * ============================================================================
+ */
 
 describe("Authentication Flows: signin, profile, and logout", () => {
   beforeEach(() => {

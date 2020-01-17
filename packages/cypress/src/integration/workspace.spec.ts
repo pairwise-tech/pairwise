@@ -1,4 +1,11 @@
-import { CLIENT_APP_URL, TIMEOUT } from "../support/utils";
+import { CLIENT_APP_URL, TIMEOUT } from "../support/cypress-utils";
+
+/** ===========================================================================
+ * Workspace Tests
+ * ----------------------------------------------------------------------------
+ * Test various features of the workspace.
+ * ============================================================================
+ */
 
 describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Pairwise", () => {

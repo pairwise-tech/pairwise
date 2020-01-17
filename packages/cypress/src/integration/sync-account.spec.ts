@@ -1,11 +1,15 @@
-import { CLIENT_APP_URL, TIMEOUT } from "../support/utils";
+import { CLIENT_APP_URL, TIMEOUT } from "../support/cypress-utils";
 
-/**
+/** ===========================================================================
+ * Account Creation Tests
+ * ----------------------------------------------------------------------------
  * This just covers basic functionality, but the test works! It tests that
  * a user can work on challenges, then sign up and create an account, and
  * their updates are persisted successfully to their new account, including
  * after page reload.
+ * ============================================================================
  */
+
 describe("Account Creation Flow", () => {
   type TestStatus = "Success!" | "Incomplete..." | string;
   const checkTestStatus = (status: TestStatus, index: number) => {
