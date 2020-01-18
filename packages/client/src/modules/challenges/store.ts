@@ -149,6 +149,7 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
       return state;
     }
 
+    // TODO: This needs to insert into... nav skeleton? Or nav skeleton AND course list?
     return {
       ...state,
       courses: insertChallenge(courses, action.payload),

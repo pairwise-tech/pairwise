@@ -67,6 +67,7 @@ const createNonHttpResponseError = (
  */
 interface CodepressAPI {
   getAll: () => Observable<CourseList>;
+  getSkeletons: () => Observable<CourseSkeletonList>;
   save: (c: Course) => Observable<any>;
 }
 
@@ -75,6 +76,12 @@ export const makeCodepressApi = (endpoint: string): CodepressAPI => {
     getAll: () => {
       return fromFetch(`${endpoint}/courses`, { mode: "cors" }).pipe(
         switchMap((response: any) => response.json()),
+        map((x: any) => x.data),
+      );
+    },
+    getSkeletons: () => {
+      return fromFetch(`${endpoint}/skeletons`, { mode: "cors" }).pipe(
+        switchMap((response: Response) => response.json()),
         map((x: any) => x.data),
       );
     },
@@ -227,6 +234,14 @@ class Api extends BaseApiClass {
         }),
       };
       return new Ok([course]);
+    } else if (ENV.DEV_MODE) {
+      /**
+       * TODO: Make this code more consistent with the other API methods.
+       */
+      return this.codepressApi
+        .getSkeletons()
+        .pipe(map(Ok.of))
+        .toPromise();
     }
 
     return this.httpHandler(async () => {
