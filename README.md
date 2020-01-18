@@ -169,6 +169,6 @@ $ yarn docker:build
 $ yarn up:build
 ```
 
-## Contributions
+## Contributing
 
 We follow a normal git workflow. Commit your changes to a branch, make a pull request, and merge the code after the tests pass.
