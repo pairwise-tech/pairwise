@@ -23,7 +23,7 @@ import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { Location } from "history";
-import { getBlobCache } from "./selectors";
+import { getBlobCache, nextPrevChallenges } from "./selectors";
 
 /** ===========================================================================
  * Epics
@@ -232,18 +232,57 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
  * blob will be fetched from the API, if the challenge is viewed again, the
  * blob will be fetched from the local Redux blob cache.
  *
+ * This epic will receive the current challenge id, and then determine the
+ * next and previously challenge ids, and dispatch requests to fetch all
+ * of these. This could be adjusted later... but the idea is to try to prefetch
+ * the challenge blobs ahead of the user navigating to the challenge. Since
+ * the fetch epic always checks the cache first, this should not result in
+ * multiple API requests.
+ *
  * NOTE: If the API fails to find a blob, it will return a 404 error. This is
  * used to clearly differentiate when the Workspace should default to showing
  * the initial starter code for a challenge (and when instead it should show
  * an empty editor, if, for instance the user cleared all the editor code).
  */
-const fetchCodeBlobForChallenge: EpicSignature = (action$, state$, deps) => {
+const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
+  action$,
+  state$,
+) => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
     pluck("payload"),
     pluck("newChallengeId"),
+    mergeMap(id => {
+      const { next, prev } = nextPrevChallenges(state$.value);
+
+      const actions = [Actions.fetchBlobForChallenge(id)];
+
+      if (next) {
+        actions.push(Actions.fetchBlobForChallenge(next.id));
+      }
+
+      if (prev) {
+        actions.push(Actions.fetchBlobForChallenge(prev.id));
+      }
+
+      return of(...actions);
+    }),
+  );
+};
+
+/**
+ * Handle actually fetching the code blob. Check the cache first, otherwise
+ * fetch it from the API.
+ */
+const fetchCodeBlobForChallengeEpic: EpicSignature = (
+  action$,
+  state$,
+  deps,
+) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.fetchBlobForChallenge)),
+    pluck("payload"),
     mergeMap(async id => {
-      /* Check the local cache first! */
       const blobCache = state$.value.challenges.blobCache;
       if (id in blobCache) {
         return new Ok({
@@ -382,7 +421,8 @@ export default combineEpics(
   contentSkeletonInitializationEpic,
   inverseChallengeMappingEpic,
   saveCourse,
-  fetchCodeBlobForChallenge,
+  handleFetchCodeBlobForChallengeEpic,
+  fetchCodeBlobForChallengeEpic,
   setWorkspaceLoadedEpic,
   challengeInitializationEpic,
   syncChallengeToUrlEpic,
