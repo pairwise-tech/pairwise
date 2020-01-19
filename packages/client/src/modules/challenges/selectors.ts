@@ -221,7 +221,7 @@ export const firstUnfinishedChallenge = createSelector(
 
 /**
  * NOTE: A mapping of id to next/prev could be built up immediately after the
- * course is fetched. That's probably an overoptimization though so this will due
+ * course is fetched. That's probably an over-optimization though so this will due
  * until it won't.
  */
 export const allChallengesInCurrentCourse = createSelector(
@@ -240,15 +240,17 @@ export const allChallengesInCurrentCourse = createSelector(
 export const nextPrevChallenges = createSelector(
   [allChallengesInCurrentCourse, getCurrentChallengeId],
   (challenges, challengeId) => {
-    const i = challenges?.findIndex(x => x.id === challengeId);
+    const i: number | undefined = challenges?.findIndex(
+      x => x.id === challengeId,
+    );
 
     if (i === undefined || i === -1) {
       return { prev: null, next: null };
+    } else {
+      return {
+        prev: challenges?.[i - 1],
+        next: challenges?.[i + 1],
+      };
     }
-
-    return {
-      prev: challenges?.[i - 1],
-      next: challenges?.[i + 1],
-    };
   },
 );

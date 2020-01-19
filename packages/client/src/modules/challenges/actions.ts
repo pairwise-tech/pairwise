@@ -95,7 +95,7 @@ const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
 
 const fetchBlobForChallenge = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE,
-)<IProgressDto>();
+)<string>();
 
 const fetchBlobForChallengeSuccess = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE_SUCCESS,
