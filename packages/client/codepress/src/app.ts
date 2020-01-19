@@ -7,6 +7,7 @@ import * as path from "path";
 import { promisify } from "util";
 
 import { Course } from "@pairwise/common";
+import { ChallengeUtilityClass } from "@pairwise/common/dist/tools/challenge-utility-class";
 
 const debug = require("debug")("codepress:app");
 
@@ -72,11 +73,7 @@ class CourseAPI {
     // Pretty stringify since we still look at the raw course file sometimes
   };
 
-  getAll = ({ useCache = false } = {}) => {
-    if (this.cache && useCache) {
-      return this.resolveFromCache();
-    }
-
+  getAll = () => {
     return readdir(this.basedir)
       .then(filenames => filenames.map(x => path.resolve(this.basedir, x)))
       .then(filepaths =>
@@ -97,8 +94,8 @@ class CourseAPI {
       });
   };
 
-  get = (id, options = {}) => {
-    return this.getAll(options).then(() => {
+  get = (id: string) => {
+    return this.getAll().then(() => {
       return this.cache[id];
     });
   };
@@ -114,13 +111,40 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get("/courses", (req, res) => {
+app.get("/courses", (_, res) => {
   api.courses.getAll().then(courses =>
     res.send({
       status: "OK",
       data: courses,
     }),
   );
+});
+
+app.get("/skeletons", (_, res) => {
+  api.courses
+    .getAll()
+    .then((xs: Course[]) => {
+      const util = new ChallengeUtilityClass(xs);
+
+      // User can access all modules
+      const mockUserAccess = xs
+        .map(x => x.modules)
+        .reduce((agg, x) => agg.concat(x))
+        .reduce((agg, x) => {
+          return {
+            ...agg,
+            [x.id]: true,
+          };
+        }, {});
+
+      return util.getCourseNavigationSkeletons(mockUserAccess);
+    })
+    .then(skeletons => {
+      res.send({
+        status: "OK",
+        data: skeletons,
+      });
+    });
 });
 
 app.get("/courses/:id", (req, res) => {

@@ -115,15 +115,11 @@ const updateModule = (courses: CourseList, update: ModuleUpdate) => {
 
 const insertModule = (
   courses: CourseList,
-  insertion: ModuleCreationPayload,
+  payload: ModuleCreationPayload,
 ): CourseList => {
-  const courseIndex = courses.findIndex(x => x.id === insertion.courseId);
+  const courseIndex = courses.findIndex(x => x.id === payload.courseId);
   const lens = lensPath([courseIndex, "modules"]);
-  return over(
-    lens,
-    insert(insertion.insertionIndex, insertion.module),
-    courses,
-  );
+  return over(lens, insert(payload.insertionIndex, payload.module), courses);
 };
 
 const insertChallenge = (
@@ -143,31 +139,48 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
   initialState,
 )
   .handleAction(actions.createChallenge, (state, action) => {
-    const { courses } = state;
+    const { courses, courseSkeletons } = state;
 
-    if (!courses) {
+    if (!courses || !courseSkeletons) {
       return state;
     }
 
     return {
       ...state,
       courses: insertChallenge(courses, action.payload),
+      // @ts-ignore
+      courseSkeletons: insertChallenge(courseSkeletons, {
+        ...action.payload,
+        challenge: {
+          ...action.payload.challenge,
+          userCanAccess: true,
+        },
+      }),
     };
   })
   .handleAction(actions.createCourseModule, (state, action) => {
-    const { courses } = state;
+    const { courses, courseSkeletons } = state;
 
-    if (!courses) {
+    if (!courses || !courseSkeletons) {
       return state;
     }
 
     return {
       ...state,
       courses: insertModule(courses, action.payload),
+
+      // @ts-ignore
+      courseSkeletons: insertModule(courseSkeletons, {
+        ...action.payload,
+        module: {
+          ...action.payload.module,
+          userCanAccess: true,
+        },
+      }),
     };
   })
   .handleAction(actions.updateChallenge, (state, action) => {
-    const { courses } = state;
+    const { courses, courseSkeletons } = state;
     const { id, challenge } = action.payload;
     const mapping = state.challengeMap?.[id];
 
@@ -191,18 +204,27 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
     return {
       ...state,
       courses: updateChallenge(courses, { id, moduleId, courseId, challenge }),
+      // @ts-ignore
+      courseSkeletons: updateChallenge(courseSkeletons, {
+        id,
+        moduleId,
+        courseId,
+        challenge,
+      }),
     };
   })
   .handleAction(actions.updateCourseModule, (state, action) => {
-    const { courses } = state;
+    const { courses, courseSkeletons } = state;
 
-    if (!courses) {
+    if (!courses || !courseSkeletons) {
       return state;
     }
 
     return {
       ...state,
       courses: updateModule(courses, action.payload),
+      // @ts-ignore
+      courseSkeletons: updateModule(courseSkeletons, action.payload),
     };
   })
   .handleAction(actions.updateEditorOptions, (state, action) => ({

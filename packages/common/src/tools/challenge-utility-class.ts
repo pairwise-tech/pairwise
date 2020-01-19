@@ -13,7 +13,7 @@ import { COURSE_ACCESS_LEVEL, UserCourseAccessMap } from "src/types/dto.js";
  * ============================================================================
  */
 
-class ChallengeUtilityClass {
+export class ChallengeUtilityClass {
   private courses: CourseList;
   private courseIdSet: Set<string>;
   private challengeIdSet: Set<string>;
