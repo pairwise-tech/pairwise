@@ -24,6 +24,7 @@ We use the following libraries across the codebase, here are some quick links to
 - [React](https://reactjs.org/): You know it.
 - [Redux](https://redux.js.org/): Of course!
 - [RxJS](https://rxjs-dev.firebaseapp.com/): Futuristic stuff.
+- [Redux Observable](https://redux-observable.js.org/): Truly epic.
 - [React Router](https://reacttraining.com/react-router/web/guides/quick-start): Meh.
 - [BlueprintJS](https://blueprintjs.com/): Modern, fashionable.
 - [NestJS](https://docs.nestjs.com/): Server frameworks!
