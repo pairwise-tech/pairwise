@@ -20,7 +20,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import styled from 'styled-components';
 
-import { parse as parseQuery, ParsedUrlQuery } from 'querystring';
+import { parse as parseQuery } from 'querystring';
 
 import { CodeRainSection, GREEN_GRADIENT } from './components';
 import Header from './Header';
@@ -79,7 +79,9 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
   return (
     <ThemeProvider theme={theme}>
       {!hideHeader && <Header />}
-      <div style={{ overflow: 'hidden' }}>{children}</div>
+      <div style={{ overflow: 'hidden', minHeight: 'calc(100vh - 140px)' }}>
+        {children}
+      </div>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={Boolean(notification)}
