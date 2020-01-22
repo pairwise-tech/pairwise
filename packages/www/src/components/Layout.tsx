@@ -123,8 +123,8 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
         <footer>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginBottom: 10 }}>
-              <FooterLink to="/curriculum">Curriculum</FooterLink>
-              <FooterLink to="/faq">FAQ</FooterLink>
+              {/* <FooterLink to="/curriculum">Curriculum</FooterLink>
+              <FooterLink to="/faq">FAQ</FooterLink> */}
               <FooterLink to="/contact">Contact</FooterLink>
             </div>
             <Deemphasize>

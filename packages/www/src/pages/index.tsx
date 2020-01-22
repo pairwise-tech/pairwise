@@ -597,7 +597,7 @@ const GetEarlyAccess = () => {
 
 const IndexPage = () => {
   return (
-    <Layout hideHeader>
+    <Layout>
       <SEO
         title="Learn to code"
         description="Learn to code with hands-on, immersive, project-based instruction."
