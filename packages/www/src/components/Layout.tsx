@@ -123,17 +123,12 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
         <footer>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginBottom: 10 }}>
-              {/* <FooterLink to="/curriculum">Curriculum</FooterLink>
-              <FooterLink to="/faq">FAQ</FooterLink> */}
-              <FooterLink to="/contact">Contact</FooterLink>
+              <small>© {new Date().getFullYear()} Pairwise</small>
             </div>
             <Deemphasize>
               <FooterLink to="/terms">Terms of Service</FooterLink>
               <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
             </Deemphasize>
-          </div>
-          <div>
-            <small>© {new Date().getFullYear()} Pairwise</small>
           </div>
         </footer>
       </CodeRainSection>
