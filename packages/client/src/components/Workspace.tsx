@@ -1042,10 +1042,18 @@ const mergeProps = (
     methods.updateEditorOptions({
       fontSize: state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
     });
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.userSettings.workspaceFontSize + MONACO_EDITOR_FONT_SIZE_STEP,
+    });
   },
   decreaseFontSize: () => {
     methods.updateEditorOptions({
       fontSize: state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
+    });
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.userSettings.workspaceFontSize - MONACO_EDITOR_FONT_SIZE_STEP,
     });
   },
 });

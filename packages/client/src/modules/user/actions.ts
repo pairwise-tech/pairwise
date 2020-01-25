@@ -18,6 +18,8 @@ enum ActionTypesEnum {
   UPDATE_USER_FAILURE = "UPDATE_USER_FAILURE",
 
   UPDATE_USER_SETTINGS = "UPDATE_USER_SETTINGS",
+  UPDATE_USER_SETTINGS_SUCCESS = "UPDATE_USER_SETTINGS_SUCCESS",
+  UPDATE_USER_SETTINGS_FAILURE = "UPDATE_USER_SETTINGS_FAILURE",
 }
 
 /** ===========================================================================
@@ -51,6 +53,14 @@ const updateUserSettings = createAction(ActionTypesEnum.UPDATE_USER_SETTINGS)<
   Partial<UserSettings>
 >();
 
+const updateUserSettingsSuccess = createAction(
+  ActionTypesEnum.UPDATE_USER_SETTINGS_SUCCESS,
+)<UserSettings>();
+
+const updateUserSettingsFailure = createAction(
+  ActionTypesEnum.UPDATE_USER_SETTINGS_FAILURE,
+)<HttpResponseError>();
+
 const actions = {
   fetchUser,
   fetchUserSuccess,
@@ -59,6 +69,8 @@ const actions = {
   updateUserSuccess,
   updateUserFailure,
   updateUserSettings,
+  updateUserSettingsSuccess,
+  updateUserSettingsFailure,
 };
 
 /** ===========================================================================

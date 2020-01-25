@@ -471,6 +471,7 @@ class LocalStorageHttpClass {
 
   updateUserSettings = (settings: UserSettings) => {
     this.setItem(KEYS.USER_SETTINGS, settings);
+    return this.fetchUserSettings();
   };
 
   fetchUserProgress = (): UserCourseProgress => {

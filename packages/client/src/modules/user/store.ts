@@ -64,6 +64,13 @@ const app = createReducer<State, ActionTypes | AppActionTypes>(initialState)
       ...state.settings,
       ...action.payload,
     },
+  }))
+  .handleAction(actions.updateUserSettingsSuccess, (state, action) => ({
+    ...state,
+    settings: {
+      ...state.settings,
+      ...action.payload,
+    },
   }));
 
 /** ===========================================================================
