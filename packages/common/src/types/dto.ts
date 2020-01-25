@@ -42,10 +42,12 @@ export interface UserProfile {
  */
 export interface UserSettings {
   workspaceFontSize: number;
+  highContrastMode: boolean;
 }
 
 export const defaultUserSettings: UserSettings = {
   workspaceFontSize: 12,
+  highContrastMode: false,
 };
 
 export interface IUserDto<Profile = UserProfile> {

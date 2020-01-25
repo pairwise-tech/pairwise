@@ -1,4 +1,4 @@
-import { IUserDto, UserUpdateOptions } from "@pairwise/common";
+import { IUserDto, UserUpdateOptions, UserSettings } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { ActionType, createAction } from "typesafe-actions";
 import { UserStoreState } from "./store";
@@ -16,6 +16,8 @@ enum ActionTypesEnum {
   UPDATE_USER = "UPDATE_USER",
   UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS",
   UPDATE_USER_FAILURE = "UPDATE_USER_FAILURE",
+
+  UPDATE_USER_SETTINGS = "UPDATE_USER_SETTINGS",
 }
 
 /** ===========================================================================
@@ -45,6 +47,10 @@ const updateUserFailure = createAction(ActionTypesEnum.UPDATE_USER_FAILURE)<
   HttpResponseError
 >();
 
+const updateUserSettings = createAction(ActionTypesEnum.UPDATE_USER_SETTINGS)<
+  Partial<UserSettings>
+>();
+
 const actions = {
   fetchUser,
   fetchUserSuccess,
@@ -52,6 +58,7 @@ const actions = {
   updateUser,
   updateUserSuccess,
   updateUserFailure,
+  updateUserSettings,
 };
 
 /** ===========================================================================

@@ -6,6 +6,7 @@ import {
   UserCourseAccessMap,
   UserProgressMap,
   UserProfile,
+  defaultUserSettings,
 } from "@pairwise/common";
 import { AppActionTypes } from "../app";
 import { Actions as actions } from "../root-actions";
@@ -33,7 +34,7 @@ import { ActionTypes } from "./actions";
 export interface State {
   profile: Nullable<UserProfile>;
   payments: Nullable<Payment[]>;
-  settings: Nullable<UserSettings>;
+  settings: UserSettings;
   courses: Nullable<UserCourseAccessMap>;
   progress: Nullable<UserProgressMap>;
 }
@@ -43,7 +44,7 @@ export type UserStoreState = State;
 const initialState = {
   profile: null,
   payments: null,
-  settings: null,
+  settings: defaultUserSettings,
   courses: null,
   progress: null,
 };
@@ -56,7 +57,14 @@ const app = createReducer<State, ActionTypes | AppActionTypes>(initialState)
       ...state,
       ...action.payload,
     }),
-  );
+  )
+  .handleAction(actions.updateUserSettings, (state, action) => ({
+    ...state,
+    settings: {
+      ...state.settings,
+      ...action.payload,
+    },
+  }));
 
 /** ===========================================================================
  * Export

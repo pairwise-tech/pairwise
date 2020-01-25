@@ -10,7 +10,7 @@ import {
 } from "tools/code-worker";
 import {
   COLORS,
-  MONACO_EDITOR_THEME,
+  MONACO_EDITOR_THEME_DEFAULT,
   MONACO_EDITOR_FONT_SIZE_STEP,
 } from "tools/constants";
 import { LowerRight, IconButton } from "./Shared";
@@ -153,7 +153,7 @@ const ChallengeTestEditor = (props: Props) => {
         language="javascript"
         editorDidMount={handleEditorReady}
         value={props.challengeTestCode}
-        theme={MONACO_EDITOR_THEME}
+        theme={MONACO_EDITOR_THEME_DEFAULT}
         options={{
           formatOnType: true,
           formatOnPaste: true,

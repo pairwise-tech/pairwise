@@ -19,9 +19,10 @@ import {
 import {
   COLORS as C,
   DIMENSIONS as D,
-  MONACO_EDITOR_THEME,
+  MONACO_EDITOR_THEME_DEFAULT,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
+  MONACO_EDITOR_THEME_HIGH_CONTRAST,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
@@ -63,6 +64,7 @@ import {
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
+import cx from "classnames";
 
 /** ===========================================================================
  * Types & Config
@@ -227,6 +229,15 @@ class Workspace extends React.Component<IProps, IState> {
     // }
   }
 
+  componentDidUpdate = (prevProps: IProps) => {
+    if (
+      this.props.userSettings.highContrastMode !==
+      prevProps.userSettings.highContrastMode
+    ) {
+      this.setMonacoEditorTheme();
+    }
+  };
+
   /**
    * Reset the code editor content to the starterCode.
    */
@@ -259,9 +270,10 @@ class Workspace extends React.Component<IProps, IState> {
        * NOTE: Custom classNames to allow custom styling for the
        * editor theme:
        */
-      const inlineClassName = c.type
-        ? `${c.kind} ${c.type}-of-${c.parentKind}`
-        : c.kind;
+      const inlineClassName = cx(
+        c.type ? `${c.kind} ${c.type}-of-${c.parentKind}` : c.kind,
+        { highContrast: this.props.userSettings.highContrastMode },
+      );
 
       return {
         range: new this.monacoWrapper.Range(
@@ -321,7 +333,6 @@ class Workspace extends React.Component<IProps, IState> {
     const mn = this.monacoWrapper;
 
     const options = {
-      theme: MONACO_EDITOR_THEME,
       automaticLayout: true,
       fixedOverflowWidgets: true,
       minimap: {
@@ -365,6 +376,8 @@ class Workspace extends React.Component<IProps, IState> {
       "typescript",
       mn.Uri.parse("file:///index.d.ts"),
     );
+
+    this.setMonacoEditorTheme();
   };
 
   getMonacoLanguageFromChallengeType = () => {
@@ -459,6 +472,13 @@ class Workspace extends React.Component<IProps, IState> {
                 icon="minus"
                 aria-label="format editor code"
                 onClick={this.props.decreaseFontSize}
+              />
+            </Tooltip>
+            <Tooltip content={"Toggle High Contrast Mode"} position="left">
+              <IconButton
+                icon="contrast"
+                aria-label="toggle high contrast mode"
+                onClick={this.props.toggleHighContrastMode}
               />
             </Tooltip>
           </ButtonGroup>
@@ -640,6 +660,15 @@ class Workspace extends React.Component<IProps, IState> {
     const models = this.monacoWrapper.editor.getModels();
     const model = models[0];
     model.setValue(this.state.code);
+  };
+
+  setMonacoEditorTheme = () => {
+    const theme = this.props.userSettings.highContrastMode
+      ? MONACO_EDITOR_THEME_HIGH_CONTRAST
+      : MONACO_EDITOR_THEME_DEFAULT;
+
+    this.monacoWrapper.editor.setTheme(theme);
+    this.debouncedSyntaxHighlightFunction(this.state.code);
   };
 
   addModuleTypeDefinitionsToMonaco = (packages: ReadonlyArray<string> = []) => {
@@ -979,6 +1008,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   editorOptions: Modules.selectors.challenges.getEditorOptions(state),
+  userSettings: Modules.selectors.user.userSettings(state),
   blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
   isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
   adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
@@ -988,6 +1018,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
   updateEditorOptions: Modules.actions.challenges.updateEditorOptions,
+  updateUserSettings: Modules.actions.user.updateUserSettings,
   handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
   updateCurrentChallengeBlob:
     Modules.actions.challenges.updateCurrentChallengeBlob,
@@ -1003,14 +1034,20 @@ const mergeProps = (
   ...props,
   ...methods,
   ...state,
-  increaseFontSize: () =>
+  toggleHighContrastMode: () =>
+    methods.updateUserSettings({
+      highContrastMode: !state.userSettings.highContrastMode,
+    }),
+  increaseFontSize: () => {
     methods.updateEditorOptions({
       fontSize: state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
-    }),
-  decreaseFontSize: () =>
+    });
+  },
+  decreaseFontSize: () => {
     methods.updateEditorOptions({
       fontSize: state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
-    }),
+    });
+  },
 });
 
 type ConnectProps = ReturnType<typeof mergeProps>;
