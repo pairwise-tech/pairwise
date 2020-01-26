@@ -665,8 +665,10 @@ class Workspace extends React.Component<IProps, IState> {
       ? MONACO_EDITOR_THEME_HIGH_CONTRAST
       : MONACO_EDITOR_THEME_DEFAULT;
 
-    this.monacoWrapper.editor.setTheme(theme);
-    this.debouncedSyntaxHighlightFunction(this.state.code);
+    if (this.monacoWrapper) {
+      this.monacoWrapper.editor.setTheme(theme);
+      this.debouncedSyntaxHighlightFunction(this.state.code);
+    }
   };
 
   addModuleTypeDefinitionsToMonaco = (packages: ReadonlyArray<string> = []) => {

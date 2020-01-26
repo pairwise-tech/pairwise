@@ -218,8 +218,6 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
     {},
   );
 
-  console.log("SANITIZED PROGESS:", sanitizedProgress);
-
   if (Object.keys(sanitizedProgress).length > 0) {
     const result: ProgressEntity = {
       courseId,

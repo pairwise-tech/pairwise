@@ -64,22 +64,18 @@ const updateUserSettingsFromEditorOptionsEpic: EpicSignature = (
 ) => {
   return actions$.pipe(
     filter(isActionOf(Actions.updateEditorOptions)),
-    map(result => {
-      if (result.payload.fontSize) {
-        return Actions.updateUserSettings({
-          workspaceFontSize: result.payload.fontSize,
-        });
-      } else {
-        return Actions.updateUserSettingsPassThrough();
-      }
+    map(({ payload }) => {
+      return Actions.updateUserSettings({
+        workspaceFontSize: payload.fontSize,
+      });
     }),
   );
 };
 
-const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
+const updateUserSettingsEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserSettings)),
-    pluck("payload"),
+    map(({ payload }) => ({ ...state$.value.user.settings, ...payload })),
     mergeMap(API.updateUserSettings),
     map(result => {
       if (result.value) {
