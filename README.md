@@ -71,6 +71,7 @@ $ yarn db
 
 # Run server setup (environment variables and database migrations)
 $ yarn server:setup
+$ yarn db:setup
 ```
 
 To run all the services separately:
