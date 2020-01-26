@@ -204,6 +204,13 @@ class Workspace extends React.Component<IProps, IState> {
       this.editorInstance?.updateOptions(nextProps.editorOptions);
     }
 
+    if (
+      this.props.userSettings.highContrastMode !==
+      nextProps.userSettings.highContrastMode
+    ) {
+      this.setMonacoEditorTheme(nextProps.userSettings.highContrastMode);
+    }
+
     // Account for changing the challenge type in the sandbox. Otherwise nothing
     // gets re-rendered since the ID of the challenge does not change
     // TODO: This is ugly because it's unclear why re-rendering immediately fails
@@ -228,15 +235,6 @@ class Workspace extends React.Component<IProps, IState> {
     //   );
     // }
   }
-
-  componentDidUpdate = (prevProps: IProps) => {
-    if (
-      this.props.userSettings.highContrastMode !==
-      prevProps.userSettings.highContrastMode
-    ) {
-      this.setMonacoEditorTheme();
-    }
-  };
 
   /**
    * Reset the code editor content to the starterCode.
@@ -377,7 +375,7 @@ class Workspace extends React.Component<IProps, IState> {
       mn.Uri.parse("file:///index.d.ts"),
     );
 
-    this.setMonacoEditorTheme();
+    this.setMonacoEditorTheme(this.props.userSettings.highContrastMode);
   };
 
   getMonacoLanguageFromChallengeType = () => {
@@ -662,8 +660,8 @@ class Workspace extends React.Component<IProps, IState> {
     model.setValue(this.state.code);
   };
 
-  setMonacoEditorTheme = () => {
-    const theme = this.props.userSettings.highContrastMode
+  setMonacoEditorTheme = (isHighContrastMode: boolean) => {
+    const theme = isHighContrastMode
       ? MONACO_EDITOR_THEME_HIGH_CONTRAST
       : MONACO_EDITOR_THEME_DEFAULT;
 
