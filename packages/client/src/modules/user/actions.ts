@@ -20,6 +20,8 @@ enum ActionTypesEnum {
   UPDATE_USER_SETTINGS = "UPDATE_USER_SETTINGS",
   UPDATE_USER_SETTINGS_SUCCESS = "UPDATE_USER_SETTINGS_SUCCESS",
   UPDATE_USER_SETTINGS_FAILURE = "UPDATE_USER_SETTINGS_FAILURE",
+
+  UPDATE_USER_SETTINGS_PASS_THROUGH = "UPDATE_USER_SETTINGS_PASS_THROUGH",
 }
 
 /** ===========================================================================
@@ -61,6 +63,10 @@ const updateUserSettingsFailure = createAction(
   ActionTypesEnum.UPDATE_USER_SETTINGS_FAILURE,
 )<HttpResponseError>();
 
+const updateUserSettingsPassThrough = createAction(
+  ActionTypesEnum.UPDATE_USER_SETTINGS_PASS_THROUGH,
+)();
+
 const actions = {
   fetchUser,
   fetchUserSuccess,
@@ -71,6 +77,7 @@ const actions = {
   updateUserSettings,
   updateUserSettingsSuccess,
   updateUserSettingsFailure,
+  updateUserSettingsPassThrough,
 };
 
 /** ===========================================================================

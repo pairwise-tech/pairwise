@@ -2,10 +2,9 @@ import { combineEpics } from "redux-observable";
 import { filter, map, mergeMap, pluck } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 
-import API, { HttpResponseError } from "modules/api";
+import API from "modules/api";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import { UserSettings, Err, Ok, IUserDto, UserProfile } from "@pairwise/common";
 
 /** ===========================================================================
  * Epics
@@ -58,31 +57,38 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-const updateUserSettingsEpic: EpicSignature = (action$, state$, deps) => {
+const updateUserSettingsFromEditorOptionsEpic: EpicSignature = (
+  actions$,
+  _,
+  deps,
+) => {
+  return actions$.pipe(
+    filter(isActionOf(Actions.updateEditorOptions)),
+    map(result => {
+      if (result.payload.fontSize) {
+        return Actions.updateUserSettings({
+          workspaceFontSize: result.payload.fontSize,
+        });
+      } else {
+        return Actions.updateUserSettingsPassThrough();
+      }
+    }),
+  );
+};
+
+const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserSettings)),
     pluck("payload"),
-    map(payload => ({ ...state$.value.user.settings, ...payload })),
     mergeMap(API.updateUserSettings),
     map(result => {
-      if (isUserSettings(result)) {
-        return Actions.updateUserSettingsSuccess(result);
-      } else if (result.value) {
+      if (result.value) {
         return Actions.updateUserSettingsSuccess(result.value.settings);
       } else {
         return Actions.updateUserSettingsFailure(result.error);
       }
     }),
   );
-};
-
-// type guard for safely accessing response from updateUserSettings
-// API call which may return an already unwrapped user settings
-// object from local storage if the user is not authenticated
-const isUserSettings = (
-  response: UserSettings | (Err<HttpResponseError> | Ok<IUserDto<UserProfile>>),
-): response is UserSettings => {
-  return (response as UserSettings).workspaceFontSize !== undefined;
 };
 
 /** ===========================================================================
@@ -94,4 +100,5 @@ export default combineEpics(
   fetchUserEpic,
   updateUserEpic,
   updateUserSettingsEpic,
+  updateUserSettingsFromEditorOptionsEpic,
 );
