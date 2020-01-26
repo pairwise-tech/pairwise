@@ -1,57 +1,57 @@
 *,
 *:before,
 *:after {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 a {
-	color: white;
-	text-decoration: none;
+  color: white;
+  text-decoration: none;
 }
 
 a:hover {
-	color: white;
-	text-decoration: none;
+  color: white;
+  text-decoration: none;
 }
 
 body {
-	margin: 0;
-	padding: 0;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-		sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
 
-	/* NOTE: This looks quite bad on non-retina displays. It makes the text overly light and hard to read */
-	/* -webkit-font-smoothing: antialiased; */
-	-webkit-font-smoothing: auto;
-	-moz-osx-font-smoothing: grayscale;
+  /* NOTE: This looks quite bad on non-retina displays. It makes the text overly light and hard to read */
+  /* -webkit-font-smoothing: antialiased; */
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: grayscale;
 
-	background: #13141d;
-	overflow-x: hidden;
+  background: #13141d;
+  overflow-x: hidden;
 }
 
 @media (max-width: 768px) {
-	.pairwise {
-		display: none;
-	}
+  .pairwise {
+    display: none;
+  }
 }
 
 code,
 pre {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-		monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 /* We are decidedly not a mobile site */
 #root {
-	min-width: 820px;
+  min-width: 820px;
 }
 
 /* SSO button override styles */
 .sso-button {
-	padding-top: 2px !important;
-	font-weight: 300 !important;
-	font-size: 15px !important;
+  padding-top: 2px !important;
+  font-weight: 300 !important;
+  font-size: 15px !important;
 }
 
 /* Custom editor styles for JSX elements:
@@ -60,7 +60,7 @@ pre {
  */
 
 .JsxText {
-	color: #5c6773;
+  color: #5c6773;
 }
 
 .JsxSelfClosingElement,
@@ -69,21 +69,20 @@ pre {
 .tagName-of-JsxOpeningElement,
 .tagName-of-JsxClosingElement,
 .tagName-of-JsxSelfClosingElement {
-	color: #f49255 !important;
+  color: #f49255 !important;
 }
 
-
 .name-of-JsxAttribute {
-	color: #f4cf56 !important;
+  color: #f4cf56 !important;
 }
 
 .name-of-PropertyAssignment {
-	color: #4a63ed !important;
+  color: #4a63ed !important;
 }
 
 .name-of-MethodDeclaration,
 .name-of-PropertyDeclaration {
-	color: #5ccfe6 !important;
+  color: #5ccfe6 !important;
 }
 
 /* customized for hc-black theme */
@@ -93,12 +92,12 @@ pre {
 .tagName-of-JsxOpeningElement.highContrast,
 .tagName-of-JsxClosingElement.highContrast,
 .tagName-of-JsxSelfClosingElement.highContrast {
-	color: #f38517 !important;
+  color: #f38517 !important;
 }
 
 .name-of-MethodDeclaration.highContrast,
 .name-of-PropertyDeclaration.highContrast {
-	color: #66e6ff !important;
+  color: #66e6ff !important;
 }
 
 /*
@@ -116,5 +115,5 @@ pre {
 .name-of-PropertyAssignment.highContrast.inline-selected-text,
 .name-of-MethodDeclaration.highContrast.inline-selected-text,
 .name-of-PropertyDeclaration.highContrast.inline-selected-text {
-	color: #000000 !important;
+  color: #000000 !important;
 }
