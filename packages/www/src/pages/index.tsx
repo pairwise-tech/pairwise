@@ -577,8 +577,8 @@ const GetEarlyAccess = () => {
     <div id={EMAIL_SIGNUP_SECTION_ID}>
       <SectionTitle>Get Early Access</SectionTitle>
       <Typography style={{ marginBottom: 20 }}>
-        Enter your email below to be selected as an exclusive first user of our
-        platform as we launch the initial lesson modules.
+        Enter your email below to get on the list of early users. You'll be
+        among the first to access the platform as we launch the initial modules.
       </Typography>
       <RemoteForm
         name="email-access"
