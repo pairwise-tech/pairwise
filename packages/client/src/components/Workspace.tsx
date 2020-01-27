@@ -746,7 +746,7 @@ class Workspace extends React.Component<IProps, IState> {
           return handleLogMessage(message, "error");
         }
         case IFRAME_MESSAGE_TYPES.INFINITE_LOOP: {
-          AppToaster.clear();
+          AppToaster.clear(); /* Clear existing toasts */
           AppToaster.show({
             icon: "issue",
             intent: "warning",
