@@ -190,6 +190,17 @@
           "starterCode": "<style>\n  /* Your code here */\n</style>\n<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n<div class=\"content\">\n  <p>\n    Here's some <span>glorious</span> page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
           "solutionCode": "<style>\n  .menu a {\n    margin-right: 20px;\n    padding-right: 20px;\n    border-right: 1px solid;\n  }\n  .content {\n    border: 1px solid black;\n    padding: 10px;\n    margin-top: 20px;\n  }\n  .content p {\n    margin: 0;\n  }\n  .content span {\n    border-bottom: 1px solid black;\n  }\n</style>\n<div class=\"menu\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n<div class=\"content\">\n  <p>\n    Here's some <span>glorious</span> page content! If only it was not so close to the top\n    menu!\n  </p>\n</div>\n",
           "supplementaryContent": ""
+        },
+        {
+          "id": "N-LLBkoL",
+          "type": "markup",
+          "title": "Multiple Selectors -- Styling many things",
+          "content": "* Give both the `<h1>` and `<p>` tags a background of `green`\n* Give both the `<h1>` and `<p>` tags a color of `red`\n\n**NOTE:** This challenge is all about using multiple selectors so that you don't have to repeat yourself when writing CSS. You should only have to write the `background` and `color` properties once to make the tests pass.",
+          "testCode": "test(\"The `h1` should have a green background and a red color\", () => {\n  const el = get(\"h1\");\n  expect(getStyle(el, \"background-color\")).toBe(cssColor(\"green\"));\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"red\"));\n});\n\ntest(\"The `p` should have a green background and a red color\", () => {\n  const el = get(\"p\");\n  expect(getStyle(el, \"background-color\")).toBe(cssColor(\"green\"));\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"red\"));\n});\n",
+          "videoUrl": "",
+          "starterCode": "<h1>Welcome</h1>\n<p>This is a paragraph</p>",
+          "solutionCode": "<style>\n  h1,\n  p {\n    background: rgb(0, 128, 0);\n    color: red;\n  }\n</style>\n<h1>Welcome</h1>\n<p>This is a paragraph</p>\n",
+          "supplementaryContent": ""
         }
       ]
     },
