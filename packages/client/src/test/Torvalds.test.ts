@@ -34,7 +34,7 @@ const course: Course = FullstackTypeScript;
 
 /* Debug options, add challenge ids here to debug them directly: */
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["KlxN3f11"]);
+const TEST_ID_WHITELIST = new Set(["WUA8ezECU"]);
 
 /* Enable or disable log info */
 const LOG = true;
@@ -95,7 +95,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
         case "markup": {
           doc = challenge.solutionCode;
           script = `${EXPECTATION_LIBRARY}\n${getTestHarness(
-            challenge.solutionCode,
+            "",
             challenge.testCode,
           )}`;
           break;

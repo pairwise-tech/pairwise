@@ -81,5 +81,8 @@
       }
     ]
   },
+  "linterOptions": {
+    "exclude": ["src/js/*"]
+  },
   "rulesDirectory": []
 }

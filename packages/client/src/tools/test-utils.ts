@@ -308,49 +308,49 @@ export const getTestDependencies = (testLib: string): string => testLib;
  * Get the test code string for a markup challenge.
  */
 export const getTestHarness = (userCode: string, testCode: string): string => `
-function buildTestsFromCode() {
-  const testArray = [];
-  const test = (message, fn) => {
-    testArray.push({
-          message,
-          test: fn,
-      })
-  }
-
-  ${testCode}
-
-  return testArray;
-}
-
-function runTests() {
-  const tests = buildTestsFromCode()
-
-  const results = tests.reduce((agg, { message, test }) => {
-    try {
-      const _result = test();
-      // Tests that pass using expect will return undefined, since they don't return anything.
-      // TODO: At some point we will want to account for async tests, which will require
-      // changes here
-      const testResult = _result === undefined ? true : _result;
-      return agg.concat([{
-        message,
-        testResult: testResult,
-        error: null,
-      }])
-    } catch (err) {
-      return agg.concat([{
-        message,
-        testResult: false,
-        error: err.message + '\\n\\n' + err.stack,
-      }])
-    }
-  }, []);
-
-  return results;
-}
-
 try {
   ${userCode}
+
+  function buildTestsFromCode() {
+    const testArray = [];
+    const test = (message, fn) => {
+      testArray.push({
+            message,
+            test: fn,
+        })
+    }
+
+    ${testCode}
+
+    return testArray;
+  }
+
+  function runTests() {
+    const tests = buildTestsFromCode()
+
+    const results = tests.reduce((agg, { message, test }) => {
+      try {
+        const _result = test();
+        // Tests that pass using expect will return undefined, since they don't return anything.
+        // TODO: At some point we will want to account for async tests, which will require
+        // changes here
+        const testResult = _result === undefined ? true : _result;
+        return agg.concat([{
+          message,
+          testResult: testResult,
+          error: null,
+        }])
+      } catch (err) {
+        return agg.concat([{
+          message,
+          testResult: false,
+          error: err.message + '\\n\\n' + err.stack,
+        }])
+      }
+    }, []);
+
+    return results;
+  }
 
   try {
     const results = runTests();
