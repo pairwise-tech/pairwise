@@ -22,6 +22,7 @@ import {
   MONACO_EDITOR_THEME,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
+  AppToaster,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
 import {
@@ -743,6 +744,14 @@ class Workspace extends React.Component<IProps, IState> {
         }
         case IFRAME_MESSAGE_TYPES.ERROR: {
           return handleLogMessage(message, "error");
+        }
+        case IFRAME_MESSAGE_TYPES.INFINITE_LOOP: {
+          AppToaster.show({
+            message: "Please check your code for infinite loops!",
+            intent: "warning",
+            icon: "warning-sign",
+          });
+          break;
         }
         case IFRAME_MESSAGE_TYPES.TEST_RESULTS: {
           const results = JSON.parse(message);

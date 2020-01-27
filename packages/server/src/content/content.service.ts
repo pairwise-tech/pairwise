@@ -15,11 +15,12 @@ export class ContentService {
     }
   }
 
-  fetchFreeCourseContent(courseId: string) {
-    return challengeUtilityClass.getCourseContent(courseId, "FREE");
-  }
+  fetchCourses(user: RequestUser, courseId: string) {
+    return challengeUtilityClass.getCourseContent(courseId, "PAID");
+    if (!user) {
+      return this.fetchFreeCourseContent(courseId);
+    }
 
-  fetchCoursesAuthenticated(user: RequestUser, courseId: string) {
     const { courses } = user;
 
     if (!challengeUtilityClass.courseIdIsValid(courseId)) {
@@ -31,5 +32,9 @@ export class ContentService {
     } else {
       return this.fetchFreeCourseContent(courseId);
     }
+  }
+
+  private fetchFreeCourseContent(courseId: string) {
+    return challengeUtilityClass.getCourseContent(courseId, "FREE");
   }
 }
