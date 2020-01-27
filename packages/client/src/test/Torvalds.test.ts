@@ -34,7 +34,7 @@ const course: Course = FullstackTypeScript;
 
 /* Debug options, add challenge ids here to debug them directly: */
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["WUA8ezECU"]);
+const TEST_ID_WHITELIST = new Set(["iFvzasqW"]);
 
 /* Enable or disable log info */
 const LOG = true;
