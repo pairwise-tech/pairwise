@@ -16,9 +16,11 @@ import {
   RemoteForm,
   Section,
   SectionTitle,
+  SecondaryButton,
 } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
+import Button from '@material-ui/core/Button';
 
 const EMAIL_SIGNUP_SECTION_ID = 'email-signup-section';
 
@@ -93,12 +95,24 @@ const Main = () => {
           Want to learn to code? Start learning in seconds—it's free.
         </Typography>
         <ActionButton
+          onClick={(e) => {
+            e.preventDefault();
+            const el = document.getElementById(EMAIL_SIGNUP_SECTION_ID);
+            el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        >
+          Get Early Access
+        </ActionButton>
+        <SecondaryButton
+          variant="contained"
+          size="large"
+          color="default"
           onClick={() => {
             window.open('https://app.pairwise.tech', '_blank');
           }}
         >
-          Get Started
-        </ActionButton>
+          Try it out
+        </SecondaryButton>
       </Left>
       <Right>
         <MainImg
