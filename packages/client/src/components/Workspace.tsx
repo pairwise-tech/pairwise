@@ -746,10 +746,11 @@ class Workspace extends React.Component<IProps, IState> {
           return handleLogMessage(message, "error");
         }
         case IFRAME_MESSAGE_TYPES.INFINITE_LOOP: {
+          AppToaster.clear();
           AppToaster.show({
-            message: "Please check your code for infinite loops!",
+            icon: "issue",
             intent: "warning",
-            icon: "warning-sign",
+            message: "Please check your code for infinite loops!",
           });
           break;
         }

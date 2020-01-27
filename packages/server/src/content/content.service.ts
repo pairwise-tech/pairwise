@@ -16,7 +16,6 @@ export class ContentService {
   }
 
   fetchCourses(user: RequestUser, courseId: string) {
-    return challengeUtilityClass.getCourseContent(courseId, "PAID");
     if (!user) {
       return this.fetchFreeCourseContent(courseId);
     }

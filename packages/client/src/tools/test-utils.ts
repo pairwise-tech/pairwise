@@ -261,7 +261,9 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
       try {
         ${codeString}
       } catch (err) {
-        // TODO: Still log this message to the user?
+        if (err.message === "INFINITE_LOOP") {
+          console.error("Infinite loop detected");
+        }
       }
     }
     {
