@@ -491,7 +491,7 @@ const WhoIsThisFor = () => {
             </Typography>
             <Typography style={{ marginBottom: 20 }}>
               You're already a professional software engineer. You might learn
-              almost nothing or you might learn a lot form this course, but at
+              almost nothing or you might learn a lot from this course, but at
               least some of it will be redundant.
             </Typography>
           </CardContent>
@@ -597,7 +597,7 @@ const GetEarlyAccess = () => {
 
 const IndexPage = () => {
   return (
-    <Layout hideHeader>
+    <Layout>
       <SEO
         title="Learn to code"
         description="Learn to code with hands-on, immersive, project-based instruction."
