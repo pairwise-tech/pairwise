@@ -20,7 +20,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import styled from 'styled-components';
 
-import { parse as parseQuery, ParsedUrlQuery } from 'querystring';
+import { parse as parseQuery } from 'querystring';
 
 import { CodeRainSection, GREEN_GRADIENT } from './components';
 import Header from './Header';
@@ -79,7 +79,9 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
   return (
     <ThemeProvider theme={theme}>
       {!hideHeader && <Header />}
-      <div style={{ overflow: 'hidden' }}>{children}</div>
+      <div style={{ overflow: 'hidden', minHeight: 'calc(100vh - 140px)' }}>
+        {children}
+      </div>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={Boolean(notification)}
@@ -123,17 +125,12 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
         <footer>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ marginBottom: 10 }}>
-              <FooterLink to="/curriculum">Curriculum</FooterLink>
-              <FooterLink to="/faq">FAQ</FooterLink>
-              <FooterLink to="/contact">Contact</FooterLink>
+              <small>© {new Date().getFullYear()} Pairwise</small>
             </div>
             <Deemphasize>
               <FooterLink to="/terms">Terms of Service</FooterLink>
               <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
             </Deemphasize>
-          </div>
-          <div>
-            <small>© {new Date().getFullYear()} Pairwise</small>
           </div>
         </footer>
       </CodeRainSection>
