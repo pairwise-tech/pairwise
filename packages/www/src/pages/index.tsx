@@ -16,9 +16,11 @@ import {
   RemoteForm,
   Section,
   SectionTitle,
+  SecondaryButton,
 } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
+import Button from '@material-ui/core/Button';
 
 const EMAIL_SIGNUP_SECTION_ID = 'email-signup-section';
 
@@ -93,12 +95,24 @@ const Main = () => {
           Want to learn to code? Start learning in seconds—it's free.
         </Typography>
         <ActionButton
+          onClick={(e) => {
+            e.preventDefault();
+            const el = document.getElementById(EMAIL_SIGNUP_SECTION_ID);
+            el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        >
+          Get Early Access
+        </ActionButton>
+        <SecondaryButton
+          variant="contained"
+          size="large"
+          color="default"
           onClick={() => {
             window.open('https://app.pairwise.tech', '_blank');
           }}
         >
-          Get Started
-        </ActionButton>
+          Try it out
+        </SecondaryButton>
       </Left>
       <Right>
         <MainImg
@@ -563,8 +577,8 @@ const GetEarlyAccess = () => {
     <div id={EMAIL_SIGNUP_SECTION_ID}>
       <SectionTitle>Get Early Access</SectionTitle>
       <Typography style={{ marginBottom: 20 }}>
-        Enter your email below to be selected as an exclusive first user of our
-        platform as we launch the initial lesson modules.
+        Enter your email below to get on the list of early users. You'll be
+        among the first to access the platform as we launch the initial modules.
       </Typography>
       <RemoteForm
         name="email-access"
