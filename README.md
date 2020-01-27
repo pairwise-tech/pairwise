@@ -158,11 +158,11 @@ $ yarn db:reset
 These steps will be necessary if for instance the `node_module` dependencies for any package have changed.
 
 ```bash
+# Install any missing dependencies
+$ yarn
+
 # Runs the builds for all packages, building @pairwise/common first
 $ yarn build
-
-# Lerna bootstrap installs and links package dependencies
-$ lerna bootstrap
 
 # Build the base Docker image which has all dependencies installed
 $ yarn docker:build

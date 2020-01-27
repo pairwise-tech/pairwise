@@ -112,6 +112,21 @@ export const ActionButton = styled(Button)<ActionButtonProps>`
   padding-left: 30px !important;
   padding-right: 30px !important;
   box-shadow: '0 3px 5px 2px rgba(255, 105, 135, .3)';
+  margin-bottom: 20px !important;
+  display: block !important;
+
+  @media (min-width: 450px) {
+    display: inline-block !important;
+    margin-bottom: 0 !important;
+    margin-right: 20px !important;
+  }
+`;
+
+export const SecondaryButton = styled(Button)`
+  height: 48px;
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+  box-shadow: '0 3px 5px 2px rgba(255, 105, 135, .3)';
 `;
 
 const CodeRainBackground = styled.div`
