@@ -3,7 +3,7 @@ import * as Babel from "@babel/standalone";
 
 import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
-import protect from "./protect.js";
+import protect from "../js/loop-protect-lib.js";
 import { TEST } from "./client-env";
 
 /** ===========================================================================
