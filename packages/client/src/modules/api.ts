@@ -292,14 +292,15 @@ class Api extends BaseApiClass {
    * since these are functionally/conceptually separated from the rest of the
    * user profile/object.
    */
-  updateUserSettings = async (settings: Partial<UserSettings>) => {
+  updateUserSettings = async (
+    settings: Partial<UserSettings>,
+  ): Promise<Err<HttpResponseError> | Ok<UserStoreState>> => {
     const { authenticated } = this.getRequestHeaders();
     if (authenticated) {
       return this.updateUser({ settings });
     } else {
-      return new Ok({
-        settings: localStorageHTTP.updateUserSettings(settings),
-      });
+      localStorageHTTP.updateUserSettings(settings);
+      return this.fetchUserProfile();
     }
   };
 

@@ -24,6 +24,10 @@ export const userPayments = createSelector(userState, state => state.payments);
 
 export const userProgress = createSelector(userState, state => state.progress);
 
+export const editorOptions = createSelector(userState, ({ settings }) => ({
+  fontSize: settings.workspaceFontSize,
+}));
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -36,4 +40,5 @@ export default {
   userCourses,
   userPayments,
   userProgress,
+  editorOptions,
 };

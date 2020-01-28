@@ -21,7 +21,7 @@ const debug = require("debug")("client:ChallengeTestEditor");
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
-  editorOptions: Modules.selectors.challenges.getEditorOptions(state),
+  editorOptions: Modules.selectors.user.editorOptions(state),
   challengeTestCode: Modules.selectors.challenges.getCurrentChallengeTestCode(
     state,
   ),
@@ -29,7 +29,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
-  updateEditorOptions: Modules.actions.challenges.updateEditorOptions,
+  updateUserSettings: Modules.actions.user.updateUserSettings,
 };
 
 const mergeProps = (
@@ -41,12 +41,14 @@ const mergeProps = (
   ...methods,
   ...state,
   increaseFontSize: () =>
-    methods.updateEditorOptions({
-      fontSize: state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
     }),
-  decraseFontSize: () =>
-    methods.updateEditorOptions({
-      fontSize: state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
+  decreaseFontSize: () =>
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
     }),
 });
 
@@ -60,7 +62,7 @@ const ChallengeTestEditor = (props: Props) => {
     updateChallenge,
     editorOptions,
     increaseFontSize,
-    decraseFontSize,
+    decreaseFontSize,
   } = props;
   const valueGetter = React.useRef<() => string>(() => "");
   const [isReady, setIsReady] = React.useState(false);
@@ -176,7 +178,7 @@ const ChallengeTestEditor = (props: Props) => {
             <IconButton
               icon="minus"
               aria-label="format editor code"
-              onClick={decraseFontSize}
+              onClick={decreaseFontSize}
             />
           </Tooltip>
         </ButtonGroup>

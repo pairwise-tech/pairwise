@@ -198,17 +198,14 @@ class Workspace extends React.Component<IProps, IState> {
     //     { code: newCode, adminTestTab: "testResults" },
     //     this.refreshEditor,
     //   );
-    // }
+    //
 
     if (this.props.editorOptions !== nextProps.editorOptions) {
       this.editorInstance?.updateOptions(nextProps.editorOptions);
     }
 
-    if (
-      this.props.userSettings.highContrastMode !==
-      nextProps.userSettings.highContrastMode
-    ) {
-      this.setMonacoEditorTheme(nextProps.userSettings.highContrastMode);
+    if (this.props.userSettings.theme !== nextProps.userSettings.theme) {
+      this.setMonacoEditorTheme(nextProps.userSettings.theme);
     }
 
     // Account for changing the challenge type in the sandbox. Otherwise nothing
@@ -270,7 +267,10 @@ class Workspace extends React.Component<IProps, IState> {
        */
       const inlineClassName = cx(
         c.type ? `${c.kind} ${c.type}-of-${c.parentKind}` : c.kind,
-        { highContrast: this.props.userSettings.highContrastMode },
+        {
+          highContrast:
+            this.props.userSettings.theme === MONACO_EDITOR_THEME_HIGH_CONTRAST,
+        },
       );
 
       return {
@@ -331,6 +331,7 @@ class Workspace extends React.Component<IProps, IState> {
     const mn = this.monacoWrapper;
 
     const options = {
+      theme: MONACO_EDITOR_THEME_DEFAULT,
       automaticLayout: true,
       fixedOverflowWidgets: true,
       minimap: {
@@ -375,7 +376,7 @@ class Workspace extends React.Component<IProps, IState> {
       mn.Uri.parse("file:///index.d.ts"),
     );
 
-    this.setMonacoEditorTheme(this.props.userSettings.highContrastMode);
+    this.setMonacoEditorTheme(this.props.userSettings.theme);
   };
 
   getMonacoLanguageFromChallengeType = () => {
@@ -660,11 +661,7 @@ class Workspace extends React.Component<IProps, IState> {
     model.setValue(this.state.code);
   };
 
-  setMonacoEditorTheme = (isHighContrastMode: boolean) => {
-    const theme = isHighContrastMode
-      ? MONACO_EDITOR_THEME_HIGH_CONTRAST
-      : MONACO_EDITOR_THEME_DEFAULT;
-
+  setMonacoEditorTheme = (theme: string) => {
     if (this.monacoWrapper) {
       this.monacoWrapper.editor.setTheme(theme);
       this.debouncedSyntaxHighlightFunction(this.state.code);
@@ -1007,8 +1004,8 @@ class Workspace extends React.Component<IProps, IState> {
 const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
-  editorOptions: Modules.selectors.challenges.getEditorOptions(state),
   userSettings: Modules.selectors.user.userSettings(state),
+  editorOptions: Modules.selectors.user.editorOptions(state),
   blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
   isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
   adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
@@ -1017,7 +1014,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
-  updateEditorOptions: Modules.actions.challenges.updateEditorOptions,
   updateUserSettings: Modules.actions.user.updateUserSettings,
   handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
   updateCurrentChallengeBlob:
@@ -1036,16 +1032,21 @@ const mergeProps = (
   ...state,
   toggleHighContrastMode: () =>
     methods.updateUserSettings({
-      highContrastMode: !state.userSettings.highContrastMode,
+      theme:
+        state.userSettings.theme === MONACO_EDITOR_THEME_DEFAULT
+          ? MONACO_EDITOR_THEME_HIGH_CONTRAST
+          : MONACO_EDITOR_THEME_DEFAULT,
     }),
   increaseFontSize: () => {
-    methods.updateEditorOptions({
-      fontSize: state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
     });
   },
   decreaseFontSize: () => {
-    methods.updateEditorOptions({
-      fontSize: state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
     });
   },
 });

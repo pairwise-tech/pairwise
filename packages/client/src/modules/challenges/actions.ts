@@ -11,7 +11,6 @@ import {
   InverseChallengeMapping,
   ModuleCreationPayload,
   ModuleUpdatePayload,
-  MonacoEditorOptions,
 } from "./types";
 import { HttpResponseError } from "modules/api";
 import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
@@ -202,10 +201,6 @@ const updateCourseModule = createAction(ActionTypesEnum.UPDATE_MODULE)<
   ModuleUpdatePayload
 >();
 
-const updateEditorOptions = createAction(ActionTypesEnum.UPDATE_EDITOR_OPTIONS)<
-  Partial<MonacoEditorOptions>
->();
-
 const actions = {
   setAdminTestTab,
   setAdminEditorTab,
@@ -216,7 +211,6 @@ const actions = {
   updateUserProgressSuccess,
   updateUserProgressFailure,
   handleCompleteChallenge,
-  updateEditorOptions,
   setCurrentModule,
   updateCurrentChallengeBlob,
   saveChallengeBlob,
