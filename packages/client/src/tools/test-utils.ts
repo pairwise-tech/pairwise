@@ -3,6 +3,7 @@ import * as Babel from "@babel/standalone";
 
 import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
+import protect from "../js/loop-protect-lib.js";
 import { TEST } from "./client-env";
 
 /** ===========================================================================
@@ -17,6 +18,7 @@ export enum IFRAME_MESSAGE_TYPES {
   ERROR = "ERROR",
   TEST_RESULTS = "TEST_RESULTS",
   TEST_ERROR = "TEST_ERROR",
+  INFINITE_LOOP = "INFINITE_LOOP",
 }
 
 export interface IframeMessageEvent extends MessageEvent {
@@ -79,6 +81,18 @@ const __interceptConsoleError = (...value) => {
   });
 }
 `;
+
+const INFINITE_LOOP_TIMEOUT = 2000;
+
+/**
+ * Register loop-protect Babel plugin.
+ */
+Babel.registerPlugin(
+  "loopProtection",
+  protect(INFINITE_LOOP_TIMEOUT, () => {
+    throw new Error("INFINITE_LOOP");
+  }),
+);
 
 /** ===========================================================================
  * Test Utils
@@ -175,12 +189,11 @@ export const transpileCodeWithBabel = (codeString: string) => {
   } else {
     return Babel.transform(codeString, {
       presets: [
-        "react",
         "es2017",
-        "stage-2",
+        "react",
         ["typescript", { isTSX: true, allExtensions: true }],
       ],
-      plugins: ["@babel/plugin-proposal-class-properties"],
+      plugins: ["loopProtection"],
     }).code;
   }
 };
@@ -244,12 +257,19 @@ export const createInjectDependenciesFunction = (
 export const injectTestCode = (testCode: string) => (codeString: string) => {
   return `
     /* Via injectTestCode */
-    ${codeString}
     {
-      ${stripConsoleCalls(codeString)}
-      ${getTestHarness(testCode)}
+      try {
+        ${codeString}
+      } catch (err) {
+        if (err.message === "INFINITE_LOOP") {
+          console.error("Infinite loop detected");
+        }
+      }
     }
-  `;
+    {
+      ${getTestHarness(stripConsoleCalls(codeString), testCode)}
+    }
+    `;
 };
 
 /**
@@ -289,11 +309,14 @@ export const getTestDependencies = (testLib: string): string => testLib;
 /**
  * Get the test code string for a markup challenge.
  */
-export const getTestHarness = (testCode: string): string => `
-function buildTestsFromCode() {
-    const arr = [];
+export const getTestHarness = (userCode: string, testCode: string): string => `
+try {
+  ${userCode}
+
+  function buildTestsFromCode() {
+    const testArray = [];
     const test = (message, fn) => {
-        arr.push({
+      testArray.push({
             message,
             test: fn,
         })
@@ -301,49 +324,62 @@ function buildTestsFromCode() {
 
     ${testCode}
 
-    return arr;
-}
+    return testArray;
+  }
 
-function runTests() {
-  const tests = buildTestsFromCode()
+  function runTests() {
+    const tests = buildTestsFromCode()
 
-  const results = tests.reduce((agg, { message, test }) => {
-    try {
-      const _result = test();
-      // Tests that pass using expect will return undefined, since they don't return anything.
-      // TODO: At some point we will want to account for async tests, which will require
-      // changes here
-      const testResult = _result === undefined ? true : _result;
-      return agg.concat([{
-        message,
-        testResult: testResult,
-        error: null,
-      }])
-    } catch (err) {
-      return agg.concat([{
-        message,
-        testResult: false,
-        error: err.message + '\\n\\n' + err.stack,
-      }])
-    }
-  }, []);
+    const results = tests.reduce((agg, { message, test }) => {
+      try {
+        const _result = test();
+        // Tests that pass using expect will return undefined, since they don't return anything.
+        // TODO: At some point we will want to account for async tests, which will require
+        // changes here
+        const testResult = _result === undefined ? true : _result;
+        return agg.concat([{
+          message,
+          testResult: testResult,
+          error: null,
+        }])
+      } catch (err) {
+        return agg.concat([{
+          message,
+          testResult: false,
+          error: err.message + '\\n\\n' + err.stack,
+        }])
+      }
+    }, []);
 
-  return results;
-}
+    return results;
+  }
 
-try {
-  const results = runTests();
-  window.parent.postMessage({
-    message: JSON.stringify(results),
-    source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
-  });
+  try {
+    const results = runTests();
+    window.parent.postMessage({
+      message: JSON.stringify(results),
+      source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
+    });
+  } catch (err) {
+    window.parent.postMessage({
+      message: JSON.stringify({
+        error: err.message,
+      }),
+      source: "${IFRAME_MESSAGE_TYPES.TEST_ERROR}",
+    });
+  }
 } catch (err) {
-  window.parent.postMessage({
-    message: JSON.stringify({
-      error: err.message,
-    }),
-    source: "${IFRAME_MESSAGE_TYPES.TEST_ERROR}",
-  });
+  if (err.message === "INFINITE_LOOP") {
+    window.parent.postMessage({
+      message: JSON.stringify({
+        error: err.message,
+      }),
+      source: "${IFRAME_MESSAGE_TYPES.INFINITE_LOOP}",
+    });
+  }
+
+  // compilation error, or something else happened
+  // TODO: Still propagate this message back to the Workspace?
 }
 `;
 
@@ -353,8 +389,10 @@ try {
  */
 export const getTestScripts = (testCode: string, testLib: string) => {
   return `
-    <script id="test-dependencies">${getTestDependencies(testLib)}</script>
-    <script id="test-code">${getTestHarness(testCode)}</script>
+    <script id="test-code">${getTestHarness(
+      getTestDependencies(testLib),
+      testCode,
+    )}</script>
   `;
 };
 

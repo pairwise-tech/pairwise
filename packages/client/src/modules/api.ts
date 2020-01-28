@@ -564,6 +564,7 @@ class LocalStorageHttpClass {
       ...blobs,
       [blob.challengeId]: blob,
     };
+
     this.setItem(KEYS.CHALLENGE_BLOB_KEY, updatedBlobs);
     return blob;
   };

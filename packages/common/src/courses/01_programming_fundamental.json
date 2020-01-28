@@ -199,7 +199,7 @@
           "testCode": "test(\"The `h1` should have a green background and a red color\", () => {\n  const el = get(\"h1\");\n  expect(getStyle(el, \"background-color\")).toBe(cssColor(\"green\"));\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"red\"));\n});\n\ntest(\"The `p` should have a green background and a red color\", () => {\n  const el = get(\"p\");\n  expect(getStyle(el, \"background-color\")).toBe(cssColor(\"green\"));\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"red\"));\n});\n",
           "videoUrl": "",
           "starterCode": "<h1>Welcome</h1>\n<p>This is a paragraph</p>",
-          "solutionCode": "<style>\n  h1,\n  p {\n    background: rgb(0, 128, 0);\n    color: red;\n  }\n</style>\n<h1>Welcome</h1>\n<p>This is a paragraph</p>\n",
+          "solutionCode": "<style>\n  h1,\n  p {\n    color: red;\n    background: green;\n  }\n</style>\n<h1>Welcome</h1>\n<p>This is a paragraph</p>\n",
           "supplementaryContent": ""
         },
         {
@@ -221,7 +221,7 @@
           "testCode": "test('.mobile-nav should use flexbox', () => {\n    expect(getStyle(get('.mobile-nav'), 'display')).toBe('flex')\n})\n\ntest('.mobile-nav should use the justify-content property', () => {\n    expect(getStyle(get('.mobile-nav'), 'justify-content')).toBe('space-between')\n})",
           "videoUrl": "",
           "starterCode": "<style>\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .mobile-nav a {\n    padding: 10px;\n    background: tomato;\n  }\n</style>\n<div class=\"mobile-nav\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
-          "solutionCode": "<style>\n  /* Your code here... */\n\n  /* ------------ You can ignore these styles. This is just to make the link placement more obvious ------------ */\n  .mobile-nav a {\n    padding: 10px;\n    background: tomato;\n  }\n</style>\n<div class=\"mobile-nav\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
+          "solutionCode": "<style>\n  /* Your code here... */\n  .mobile-nav {\n    display: flex;\n    justify-content: space-between;\n  }\n  /* ------------ You can ignore these styles. This is just to make the link placement more obvious ------------ */\n  .mobile-nav a {\n    padding: 10px;\n    background: tomato;\n  }\n</style>\n<div class=\"mobile-nav\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "supplementaryContent": "Ever notice how mobile nav menus on a phone are often spaced perfectly so that the icons fill the space on screen? \n\nThis effect is quite simple to accomplish with CSS and Flexbox. \n\nFlexbox is the general term for CSS that utilizes the `display: flex` property. Display `flex` lets you do a lot of things that used to be very difficult in web browsers. Things like:\n\n* Create equal spacing between elements (this challenge!)\n* Create equal space around elements\n* Vertically or horizontally center elements\n\nThere are other uses for Flexbox but these are some of the most common."
         }
       ]
