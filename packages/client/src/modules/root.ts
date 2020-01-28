@@ -17,6 +17,7 @@ import Challenges, {
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
 import { IToaster } from "@blueprintjs/core";
+import { catchError } from "rxjs/operators";
 
 /** ===========================================================================
  * Root Actions and Selectors
@@ -90,13 +91,31 @@ export type EpicSignature = Epic<
   EpicDependencies
 >;
 
-const rootEpic = combineEpics(
+const combinedEpic = combineEpics(
   App.epics,
   User.epics,
   Auth.epics,
   Challenges.epics,
   Purchase.epics,
 );
+
+const handleRootEpicError = (error: any, source: any) => {
+  // Handle error side effects, e.g. report error
+  return source;
+};
+
+/**
+ * See "Adding global error handler" section of:
+ * https://redux-observable.js.org/docs/basics/SettingUpTheMiddleware.html
+ *
+ * If there is an uncaught error, resubscribe the stream so it does not
+ * collapse.
+ */
+const rootEpic = (action$: any, store$: any, dependencies: any) => {
+  return combinedEpic(action$, store$, dependencies).pipe(
+    catchError(handleRootEpicError),
+  );
+};
 
 /** ===========================================================================
  * Export
