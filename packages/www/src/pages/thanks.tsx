@@ -5,6 +5,7 @@ import {
   ConstrainWidth,
   Section,
   SectionTitle,
+  ActionButton,
 } from '../components/components';
 import Layout from '../components/Layout';
 
@@ -22,6 +23,17 @@ const Thanks = () => {
             curriculum, but we expect to launch the beta within the next few
             months.
           </Typography>
+          <Typography>
+            In the meantime, feel free to try out the platform.
+          </Typography>
+          <ActionButton
+            style={{ marginTop: 20 }}
+            onClick={() => {
+              window.open('https://app.pairwise.tech');
+            }}
+          >
+            Try it out
+          </ActionButton>
         </ConstrainWidth>
       </Section>
     </Layout>

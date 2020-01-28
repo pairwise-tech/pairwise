@@ -37,6 +37,32 @@ const getStyle = (el, cssProp) => {
   return style.getPropertyValue(cssProp) || style[cssProp];
 };
 
+const css = (propName, value) => {
+  let dummy = get("#dummy-test-div");
+
+  // Create the dummy div if not present
+  if (!dummy) {
+    dummy = document.createElement("div");
+    dummy.id = "dummy-test-div";
+    dummy.style.display = "none";
+    document.body.appendChild(dummy);
+  }
+
+  // Grab the initial style so that we can reset later
+  const initial = dummy.style[propName];
+
+  // Set the new style and get the style as computed by the browser
+  dummy.style[propName] = value;
+  const result = getStyle(dummy, propName);
+
+  // Reset to the initial value on the dummy el
+  dummy.style[propName] = initial;
+
+  return result;
+};
+
+const cssColor = value => css("color", value);
+
 const assert = (condition, message = "Assertion Failed") => {
   if (!condition) {
     throw new Error(message);
