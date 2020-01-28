@@ -61,5 +61,6 @@ services:
       - server
       - client
       - external-services
+    ipc: host # See: https://github.com/cypress-io/cypress/issues/350#issuecomment-267704772
     volumes:
       - ./docker-screenshots:/usr/app/packages/cypress/screenshots

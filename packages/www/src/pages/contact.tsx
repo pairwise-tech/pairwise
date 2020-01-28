@@ -33,7 +33,7 @@ const FAQ = () => {
       <SEO title="Contact" description="Get in touch with us" />
       <Section>
         <ConstrainWidth>
-          <SectionTitle>Contact</SectionTitle>
+          <SectionTitle>Contact Us</SectionTitle>
           <Typography variant="h5" style={{ marginBottom: 20 }}>
             Want to get in touch? We'd love to hear from you!
           </Typography>
