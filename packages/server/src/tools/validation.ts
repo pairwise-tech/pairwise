@@ -145,10 +145,6 @@ const checkNumberField = (field: any) => {
   return typeof field === "number" ? field : null;
 };
 
-const checkBoolField = (field: any) => {
-  return typeof field === "boolean" ? field : null;
-};
-
 /**
  * Validate the user settings JSON before update.
  */
@@ -156,7 +152,7 @@ const checkSettingsField = (settings?: Partial<UserSettings>) => {
   if (settings) {
     const validSettings: UserSettings = {
       workspaceFontSize: checkNumberField(settings.workspaceFontSize),
-      highContrastMode: checkBoolField(settings.highContrastMode),
+      theme: checkStringField(settings.theme),
     };
 
     const sanitizedUpdate = sanitizeObject(validSettings);
