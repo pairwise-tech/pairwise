@@ -37,6 +37,8 @@ $green3: $primary3;
 $green4: $primary4;
 $green5: $primary5;
 
+$orange3: #ffdf75;
+
 @import "@blueprintjs/core/src/blueprint.scss";
 
 .course-card {
@@ -55,4 +57,19 @@ $green5: $primary5;
 
 .blueprint-toaster {
   z-index: 5000 !important;
+}
+
+/* Override Blueprint warning intent styles: */
+.bp3-intent-warning {
+  color: rgb(50, 50, 50) !important;
+  background-color: #ffdf75 !important;
+
+  .bp3-icon {
+    color: transparent;
+    background: transparent;
+
+    svg {
+      fill: rgb(50, 50, 50) !important;
+    }
+  }
 }

@@ -20,12 +20,9 @@ jest.setTimeout(30000);
  * Import the expectation library. Read the file directly with Node because
  * Jest doesn't understand Webpack raw-loader. Take that Jest!
  */
-const EXPECTATION_LIBRARY = fs.readFileSync(
-  "src/tools/browser-test-lib-source.js",
-  {
-    encoding: "utf8",
-  },
-);
+const EXPECTATION_LIBRARY = fs.readFileSync("src/js/browser-test-lib.js", {
+  encoding: "utf8",
+});
 
 /**
  * Import the courses directly. In the future if there are multiple courses
@@ -37,7 +34,7 @@ const course: Course = FullstackTypeScript;
 
 /* Debug options, add challenge ids here to debug them directly: */
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["KlxN3f11"]);
+const TEST_ID_WHITELIST = new Set(["iFvzasqW"]);
 
 /* Enable or disable log info */
 const LOG = true;
@@ -98,6 +95,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
         case "markup": {
           doc = challenge.solutionCode;
           script = `${EXPECTATION_LIBRARY}\n${getTestHarness(
+            "",
             challenge.testCode,
           )}`;
           break;

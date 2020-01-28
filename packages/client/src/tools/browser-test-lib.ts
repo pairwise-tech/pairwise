@@ -1,6 +1,6 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import EXPECTATION_LIB from "!raw-loader!./browser-test-lib-source";
+import EXPECTATION_LIB from "!raw-loader!../js/browser-test-lib";
 
 /**
  * Isolate this module to isolate the raw-loader from being pulled into

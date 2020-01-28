@@ -20,10 +20,6 @@ export class ContentController {
     const { id } = params;
     const { user } = req;
 
-    if (user) {
-      return this.challengeService.fetchCoursesAuthenticated(user, id);
-    }
-
-    return this.challengeService.fetchFreeCourseContent(id);
+    return this.challengeService.fetchCourses(user, id);
   }
 }
