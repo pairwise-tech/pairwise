@@ -55,7 +55,7 @@ const updateUserSettings = createAction(ActionTypesEnum.UPDATE_USER_SETTINGS)<
 
 const updateUserSettingsSuccess = createAction(
   ActionTypesEnum.UPDATE_USER_SETTINGS_SUCCESS,
-)<UserSettings>();
+)<UserStoreState>();
 
 const updateUserSettingsFailure = createAction(
   ActionTypesEnum.UPDATE_USER_SETTINGS_FAILURE,

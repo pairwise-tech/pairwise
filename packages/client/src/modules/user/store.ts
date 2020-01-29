@@ -49,33 +49,23 @@ const initialState = {
   progress: null,
 };
 
-const app = createReducer<State, ActionTypes | AppActionTypes>(initialState)
+const user = createReducer<State, ActionTypes | AppActionTypes>(initialState)
   .handleAction(actions.logoutUser, () => initialState)
   .handleAction(
-    [actions.fetchUserSuccess, actions.updateUserSuccess],
+    [
+      actions.fetchUserSuccess,
+      actions.updateUserSuccess,
+      actions.updateUserSettingsSuccess,
+    ],
     (state, action) => ({
       ...state,
       ...action.payload,
     }),
-  )
-  .handleAction(actions.updateUserSettings, (state, action) => ({
-    ...state,
-    settings: {
-      ...state.settings,
-      ...action.payload,
-    },
-  }))
-  .handleAction(actions.updateUserSettingsSuccess, (state, action) => ({
-    ...state,
-    settings: {
-      ...state.settings,
-      ...action.payload,
-    },
-  }));
+  );
 
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default app;
+export default user;

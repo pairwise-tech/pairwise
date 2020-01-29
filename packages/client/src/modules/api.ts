@@ -475,7 +475,6 @@ class LocalStorageHttpClass {
   updateUserSettings = (settings: Partial<UserSettings>) => {
     const currentSettings = this.fetchUserSettings();
     this.setItem(KEYS.USER_SETTINGS, { ...currentSettings, ...settings });
-    return this.fetchUserSettings();
   };
 
   fetchUserProgress = (): UserCourseProgress => {

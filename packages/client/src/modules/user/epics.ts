@@ -64,7 +64,7 @@ const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(API.updateUserSettings),
     map(result => {
       if (result.value) {
-        return Actions.updateUserSettingsSuccess(result.value.settings);
+        return Actions.updateUserSettingsSuccess(result.value);
       } else {
         return Actions.updateUserSettingsFailure(result.error);
       }

@@ -44,6 +44,7 @@ export enum MonacoEditorThemes {
   DEFAULT = "vs-dark",
   HIGH_CONTRAST = "hc-black",
 }
+
 export interface UserSettings {
   workspaceFontSize: number;
   theme: MonacoEditorThemes;
