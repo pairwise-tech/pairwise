@@ -8,20 +8,18 @@ import {
   unsubscribeCodeWorker,
   requestCodeFormatting,
 } from "tools/code-worker";
-import {
-  COLORS,
-  MONACO_EDITOR_THEME_DEFAULT,
-  MONACO_EDITOR_FONT_SIZE_STEP,
-} from "tools/constants";
+import { COLORS, MONACO_EDITOR_FONT_SIZE_STEP } from "tools/constants";
 import { LowerRight, IconButton } from "./Shared";
 import { Tooltip, Button, ButtonGroup } from "@blueprintjs/core";
 import { CodeFormatMessageEvent } from "tools/test-utils";
+import { MonacoEditorThemes } from "@pairwise/common";
 
 const debug = require("debug")("client:ChallengeTestEditor");
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   editorOptions: Modules.selectors.user.editorOptions(state),
+  userSettings: Modules.selectors.user.userSettings(state),
   challengeTestCode: Modules.selectors.challenges.getCurrentChallengeTestCode(
     state,
   ),
@@ -155,7 +153,7 @@ const ChallengeTestEditor = (props: Props) => {
         language="javascript"
         editorDidMount={handleEditorReady}
         value={props.challengeTestCode}
-        theme={MONACO_EDITOR_THEME_DEFAULT}
+        theme={MonacoEditorThemes.DEFAULT}
         options={{
           formatOnType: true,
           formatOnPaste: true,

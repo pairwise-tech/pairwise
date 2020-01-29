@@ -3,7 +3,12 @@
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
 import { monaco } from "@monaco-editor/react";
-import { assertUnreachable, Challenge, DataBlob } from "@pairwise/common";
+import {
+  assertUnreachable,
+  Challenge,
+  DataBlob,
+  MonacoEditorThemes,
+} from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
@@ -19,10 +24,8 @@ import {
 import {
   COLORS as C,
   DIMENSIONS as D,
-  MONACO_EDITOR_THEME_DEFAULT,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
-  MONACO_EDITOR_THEME_HIGH_CONTRAST,
   AppToaster,
 } from "../tools/constants";
 import { types } from "../tools/jsx-types";
@@ -270,7 +273,7 @@ class Workspace extends React.Component<IProps, IState> {
         c.type ? `${c.kind} ${c.type}-of-${c.parentKind}` : c.kind,
         {
           highContrast:
-            this.props.userSettings.theme === MONACO_EDITOR_THEME_HIGH_CONTRAST,
+            this.props.userSettings.theme === MonacoEditorThemes.HIGH_CONTRAST,
         },
       );
 
@@ -332,7 +335,7 @@ class Workspace extends React.Component<IProps, IState> {
     const mn = this.monacoWrapper;
 
     const options = {
-      theme: MONACO_EDITOR_THEME_DEFAULT,
+      theme: MonacoEditorThemes.DEFAULT,
       automaticLayout: true,
       fixedOverflowWidgets: true,
       minimap: {
@@ -1043,9 +1046,9 @@ const mergeProps = (
   toggleHighContrastMode: () =>
     methods.updateUserSettings({
       theme:
-        state.userSettings.theme === MONACO_EDITOR_THEME_DEFAULT
-          ? MONACO_EDITOR_THEME_HIGH_CONTRAST
-          : MONACO_EDITOR_THEME_DEFAULT,
+        state.userSettings.theme === MonacoEditorThemes.DEFAULT
+          ? MonacoEditorThemes.HIGH_CONTRAST
+          : MonacoEditorThemes.DEFAULT,
     }),
   increaseFontSize: () => {
     methods.updateUserSettings({

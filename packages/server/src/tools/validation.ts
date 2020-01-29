@@ -11,6 +11,7 @@ import {
   ProgressEntity,
   IFeedbackDto,
   feedbackTypeSet,
+  MonacoEditorThemes,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -145,6 +146,10 @@ const checkNumberField = (field: any) => {
   return typeof field === "number" ? field : null;
 };
 
+const checkThemeField = (theme: any): MonacoEditorThemes => {
+  return Object.values(MonacoEditorThemes).includes(theme) ? theme : null;
+};
+
 /**
  * Validate the user settings JSON before update.
  */
@@ -152,7 +157,7 @@ const checkSettingsField = (settings?: Partial<UserSettings>) => {
   if (settings) {
     const validSettings: UserSettings = {
       workspaceFontSize: checkNumberField(settings.workspaceFontSize),
-      theme: checkStringField(settings.theme),
+      theme: checkThemeField(settings.theme),
     };
 
     const sanitizedUpdate = sanitizeObject(validSettings);
