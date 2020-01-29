@@ -92,7 +92,7 @@ export class UserService {
   }
 
   async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
-    const validationResult = validateUserUpdateDetails(userDetails);
+    const validationResult = validateUserUpdateDetails(user, userDetails);
 
     if (validationResult.error) {
       throw new BadRequestException(validationResult.error);
@@ -100,10 +100,7 @@ export class UserService {
       const { uuid, email } = user.profile;
       console.log(`Updating user: ${email}`);
 
-      await this.userRepository.update(
-        { uuid },
-        this.mergeUserSettings(user, validationResult.value),
-      );
+      await this.userRepository.update({ uuid }, validationResult.value);
       return await this.findUserByEmailGetFullProfile(email);
     }
   }
@@ -139,26 +136,6 @@ export class UserService {
 
       return result;
     }
-  };
-
-  /**
-   * A helper method responsible for merging a partial user settings object
-   * passed to the updateUser method against the user's existing settings.
-   */
-  private mergeUserSettings = (
-    user: RequestUser,
-    validatedUserUpdate: UserUpdateOptions<string>,
-  ) => {
-    if (validatedUserUpdate.settings) {
-      const deserializedSettings = JSON.parse(validatedUserUpdate.settings);
-      validatedUserUpdate.settings = JSON.stringify({
-        ...user.settings,
-        ...deserializedSettings,
-      });
-      return validatedUserUpdate;
-    }
-
-    return validatedUserUpdate;
   };
 
   private async getCourseForUser(user: User) {

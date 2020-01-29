@@ -116,15 +116,20 @@ export const validateChallengeProgressDto = (progressDto: ProgressDto) => {
  * can be updated on the user.
  */
 export const validateUserUpdateDetails = (
+  user: RequestUser,
   details: UserUpdateOptions,
 ): Result<UserUpdateOptions<string>, ERROR_CODES.INVALID_PARAMETERS> => {
   try {
+    const settingsUpdate = checkSettingsField(details.settings);
+    const mergedSettings = { ...user.settings, ...settingsUpdate };
+    const settingsJSON = JSON.stringify(mergedSettings);
+
     const updateDetails = {
       avatarUrl: checkStringField(details.avatarUrl),
       givenName: checkStringField(details.givenName),
       familyName: checkStringField(details.familyName),
       displayName: checkStringField(details.displayName),
-      settings: checkSettingsField(details.settings),
+      settings: settingsJSON,
     };
 
     const sanitizedUpdate = sanitizeObject(updateDetails);
@@ -160,13 +165,10 @@ const checkSettingsField = (settings?: Partial<UserSettings>) => {
       theme: checkThemeField(settings.theme),
     };
 
-    const sanitizedUpdate = sanitizeObject(validSettings);
-    if (Object.keys(sanitizedUpdate).length) {
-      return JSON.stringify(sanitizedUpdate);
-    }
+    return sanitizeObject(validSettings);
   }
 
-  return null;
+  return {};
 };
 
 /**
