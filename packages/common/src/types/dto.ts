@@ -40,14 +40,14 @@ export interface UserProfile {
  *
  * Type definition and default settings object:
  */
-export enum MonacoEditorThemes {
-  DEFAULT = "vs-dark",
-  HIGH_CONTRAST = "hc-black",
-}
-
 export interface UserSettings {
   workspaceFontSize: number;
   theme: MonacoEditorThemes;
+}
+
+export enum MonacoEditorThemes {
+  DEFAULT = "vs-dark",
+  HIGH_CONTRAST = "hc-black",
 }
 
 export const defaultUserSettings: UserSettings = {
