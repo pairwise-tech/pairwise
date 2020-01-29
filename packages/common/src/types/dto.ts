@@ -42,10 +42,17 @@ export interface UserProfile {
  */
 export interface UserSettings {
   workspaceFontSize: number;
+  theme: MonacoEditorThemes;
+}
+
+export enum MonacoEditorThemes {
+  DEFAULT = "vs-dark",
+  HIGH_CONTRAST = "hc-black",
 }
 
 export const defaultUserSettings: UserSettings = {
   workspaceFontSize: 12,
+  theme: MonacoEditorThemes.DEFAULT,
 };
 
 export interface IUserDto<Profile = UserProfile> {
@@ -68,7 +75,7 @@ export interface UserProgressMap {
  * Only these fields can be updated on the user object by the
  * POST user/profile API. This validation is applied on the server.
  */
-export interface UserUpdateOptions<SettingsType = UserSettings> {
+export interface UserUpdateOptions<SettingsType = Partial<UserSettings>> {
   givenName?: string;
   familyName?: string;
   displayName?: string;

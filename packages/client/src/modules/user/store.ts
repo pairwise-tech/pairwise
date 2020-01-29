@@ -6,10 +6,12 @@ import {
   UserCourseAccessMap,
   UserProgressMap,
   UserProfile,
+  defaultUserSettings,
 } from "@pairwise/common";
 import { AppActionTypes } from "../app";
 import { Actions as actions } from "../root-actions";
 import { ActionTypes } from "./actions";
+import { combineReducers } from "redux";
 
 /** ===========================================================================
  * User Store
@@ -30,37 +32,57 @@ import { ActionTypes } from "./actions";
  * api.ts module and the rest of the client app can just treat this type
  * definition as the source of truth and behave accordingly.
  */
-export interface State {
+export interface UserState {
   profile: Nullable<UserProfile>;
   payments: Nullable<Payment[]>;
-  settings: Nullable<UserSettings>;
+  settings: UserSettings;
   courses: Nullable<UserCourseAccessMap>;
   progress: Nullable<UserProgressMap>;
 }
 
-export type UserStoreState = State;
+export type UserStoreState = UserState;
 
-const initialState = {
+const initialUserState = {
   profile: null,
   payments: null,
-  settings: null,
+  settings: defaultUserSettings,
   courses: null,
   progress: null,
 };
 
-const app = createReducer<State, ActionTypes | AppActionTypes>(initialState)
-  .handleAction(actions.logoutUser, () => initialState)
+export interface State {
+  loading: boolean;
+  user: UserState;
+}
+
+const user = createReducer<UserState, ActionTypes | AppActionTypes>(
+  initialUserState,
+)
+  .handleAction(actions.logoutUser, () => initialUserState)
   .handleAction(
-    [actions.fetchUserSuccess, actions.updateUserSuccess],
+    [
+      actions.fetchUserSuccess,
+      actions.updateUserSuccess,
+      actions.updateUserSettingsSuccess,
+    ],
     (state, action) => ({
       ...state,
       ...action.payload,
     }),
   );
 
+const loading = createReducer<boolean, ActionTypes | AppActionTypes>(
+  true,
+).handleAction(actions.fetchUserSuccess, () => false);
+
+const rootReducer = combineReducers({
+  user,
+  loading,
+});
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default app;
+export default rootReducer;

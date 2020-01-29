@@ -16,9 +16,8 @@ import {
   ChallengeCreationPayload,
   InverseChallengeMapping,
   ModuleCreationPayload,
-  MonacoEditorOptions,
 } from "./types";
-import { SANDBOX_ID, MONACO_EDITOR_INITIAL_FONT_SIZE } from "tools/constants";
+import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
 
 const debug = require("debug")("challenge:store");
@@ -42,7 +41,6 @@ export interface State {
   currentChallengeId: Nullable<string>;
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
-  editorOptions: MonacoEditorOptions;
   blobCache: { [key: string]: DataBlob };
   loadingCurrentBlob: boolean;
   adminTestTab: ADMIN_TEST_TAB;
@@ -59,9 +57,6 @@ const initialState: State = {
   currentChallengeId: null,
   displayNavigationMap: false,
   challengeMap: null,
-  editorOptions: {
-    fontSize: MONACO_EDITOR_INITIAL_FONT_SIZE,
-  },
   sandboxChallenge: defaultSandboxChallenge,
   blobCache: {},
   loadingCurrentBlob: false,
@@ -227,13 +222,6 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
       courseSkeletons: updateModule(courseSkeletons, action.payload),
     };
   })
-  .handleAction(actions.updateEditorOptions, (state, action) => ({
-    ...state,
-    editorOptions: {
-      ...state.editorOptions,
-      ...action.payload,
-    },
-  }))
   .handleAction(actions.setEditMode, (state, action) => ({
     ...state,
     isEditMode: action.payload,

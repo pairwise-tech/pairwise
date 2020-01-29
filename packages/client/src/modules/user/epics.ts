@@ -57,9 +57,28 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.updateUserSettings)),
+    pluck("payload"),
+    mergeMap(API.updateUserSettings),
+    map(result => {
+      if (result.value) {
+        return Actions.updateUserSettingsSuccess(result.value);
+      } else {
+        return Actions.updateUserSettingsFailure(result.error);
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default combineEpics(fetchUserEpic, updateUserEpic);
+export default combineEpics(
+  fetchUserEpic,
+  updateUserEpic,
+  updateUserSettingsEpic,
+);

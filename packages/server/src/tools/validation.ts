@@ -11,6 +11,7 @@ import {
   ProgressEntity,
   IFeedbackDto,
   feedbackTypeSet,
+  MonacoEditorThemes,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -115,67 +116,79 @@ export const validateChallengeProgressDto = (progressDto: ProgressDto) => {
  * can be updated on the user.
  */
 export const validateUserUpdateDetails = (
+  user: RequestUser,
   details: UserUpdateOptions,
 ): Result<UserUpdateOptions<string>, ERROR_CODES.INVALID_PARAMETERS> => {
   try {
+    const settingsUpdate = checkSettingsField(details.settings);
+    const mergedSettings = { ...user.settings, ...settingsUpdate };
+    const settingsJSON = JSON.stringify(mergedSettings);
+
     const updateDetails = {
       avatarUrl: checkStringField(details.avatarUrl),
       givenName: checkStringField(details.givenName),
       familyName: checkStringField(details.familyName),
       displayName: checkStringField(details.displayName),
-      settings: checkSettingsField(details.settings),
+      settings: settingsJSON,
     };
 
     const sanitizedUpdate = sanitizeObject(updateDetails);
-    if (Object.keys(sanitizedUpdate).length) {
-      return new Ok(sanitizedUpdate);
-    } else {
-      throw new Error("No valid update fields received!");
-    }
+    return new Ok(sanitizedUpdate);
   } catch (err) {
     return new Err(ERROR_CODES.INVALID_PARAMETERS);
   }
 };
 
-const checkStringField = (field: any) => {
-  return typeof field === "string" ? field : null;
+const checkStringField = (value: any, canBeEmpty = false) => {
+  if (typeof value === "string") {
+    if (!canBeEmpty && value === "") {
+      throw new Error("Field cannot be empty!");
+    }
+
+    return value;
+  }
+
+  return null;
 };
 
-const checkNumberField = (field: any) => {
-  return typeof field === "number" ? field : null;
+const checkNumberField = (value: any) => {
+  return typeof value === "number" ? value : null;
+};
+
+const checkThemeField = (theme: any): MonacoEditorThemes => {
+  return Object.values(MonacoEditorThemes).includes(theme) ? theme : null;
 };
 
 /**
  * Validate the user settings JSON before update.
  */
-const checkSettingsField = (settings?: UserSettings) => {
+const checkSettingsField = (settings?: Partial<UserSettings>) => {
   if (settings) {
     const validSettings: UserSettings = {
       workspaceFontSize: checkNumberField(settings.workspaceFontSize),
+      theme: checkThemeField(settings.theme),
     };
 
-    const sanitizedUpdate = sanitizeObject(validSettings);
-    if (Object.keys(sanitizedUpdate).length) {
-      return JSON.stringify(sanitizedUpdate);
-    }
+    return sanitizeObject(validSettings);
   }
 
-  return null;
+  return {};
 };
 
 /**
  * Remove [key]: null key:value pairs from an object.
  */
 const sanitizeObject = (obj: any) => {
-  const sanitizedUpdate = {};
+  const sanitizedObject = {};
 
   /* Only add fields which pass the check: */
   Object.entries(obj).forEach(([key, value]) => {
     if (value !== null) {
-      sanitizedUpdate[key] = value;
+      sanitizedObject[key] = value;
     }
   });
-  return sanitizedUpdate;
+
+  return sanitizedObject;
 };
 
 /**

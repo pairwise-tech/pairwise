@@ -3,7 +3,12 @@
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
 import { monaco } from "@monaco-editor/react";
-import { assertUnreachable, Challenge, DataBlob } from "@pairwise/common";
+import {
+  assertUnreachable,
+  Challenge,
+  DataBlob,
+  MonacoEditorThemes,
+} from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
@@ -19,7 +24,6 @@ import {
 import {
   COLORS as C,
   DIMENSIONS as D,
-  MONACO_EDITOR_THEME,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
   AppToaster,
@@ -64,6 +68,7 @@ import {
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
+import cx from "classnames";
 
 /** ===========================================================================
  * Types & Config
@@ -197,10 +202,14 @@ class Workspace extends React.Component<IProps, IState> {
     //     { code: newCode, adminTestTab: "testResults" },
     //     this.refreshEditor,
     //   );
-    // }
+    //
 
     if (this.props.editorOptions !== nextProps.editorOptions) {
       this.editorInstance?.updateOptions(nextProps.editorOptions);
+    }
+
+    if (this.props.userSettings.theme !== nextProps.userSettings.theme) {
+      this.setMonacoEditorTheme(nextProps.userSettings.theme);
     }
 
     // Account for changing the challenge type in the sandbox. Otherwise nothing
@@ -260,9 +269,13 @@ class Workspace extends React.Component<IProps, IState> {
        * NOTE: Custom classNames to allow custom styling for the
        * editor theme:
        */
-      const inlineClassName = c.type
-        ? `${c.kind} ${c.type}-of-${c.parentKind}`
-        : c.kind;
+      const inlineClassName = cx(
+        c.type ? `${c.kind} ${c.type}-of-${c.parentKind}` : c.kind,
+        {
+          highContrast:
+            this.props.userSettings.theme === MonacoEditorThemes.HIGH_CONTRAST,
+        },
+      );
 
       return {
         range: new this.monacoWrapper.Range(
@@ -322,7 +335,7 @@ class Workspace extends React.Component<IProps, IState> {
     const mn = this.monacoWrapper;
 
     const options = {
-      theme: MONACO_EDITOR_THEME,
+      theme: MonacoEditorThemes.DEFAULT,
       automaticLayout: true,
       fixedOverflowWidgets: true,
       minimap: {
@@ -366,6 +379,8 @@ class Workspace extends React.Component<IProps, IState> {
       "typescript",
       mn.Uri.parse("file:///index.d.ts"),
     );
+
+    this.setMonacoEditorTheme(this.props.userSettings.theme);
   };
 
   getMonacoLanguageFromChallengeType = () => {
@@ -460,6 +475,13 @@ class Workspace extends React.Component<IProps, IState> {
                 icon="minus"
                 aria-label="format editor code"
                 onClick={this.props.decreaseFontSize}
+              />
+            </Tooltip>
+            <Tooltip content={"Toggle High Contrast Mode"} position="left">
+              <IconButton
+                icon="contrast"
+                aria-label="toggle high contrast mode"
+                onClick={this.props.toggleHighContrastMode}
               />
             </Tooltip>
           </ButtonGroup>
@@ -641,6 +663,13 @@ class Workspace extends React.Component<IProps, IState> {
     const models = this.monacoWrapper.editor.getModels();
     const model = models[0];
     model.setValue(this.state.code);
+  };
+
+  setMonacoEditorTheme = (theme: string) => {
+    if (this.monacoWrapper) {
+      this.monacoWrapper.editor.setTheme(theme);
+      this.debouncedSyntaxHighlightFunction(this.state.code);
+    }
   };
 
   addModuleTypeDefinitionsToMonaco = (packages: ReadonlyArray<string> = []) => {
@@ -988,7 +1017,9 @@ class Workspace extends React.Component<IProps, IState> {
 const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
-  editorOptions: Modules.selectors.challenges.getEditorOptions(state),
+  isUserLoading: Modules.selectors.user.loading(state),
+  userSettings: Modules.selectors.user.userSettings(state),
+  editorOptions: Modules.selectors.user.editorOptions(state),
   blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
   isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
   adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
@@ -997,7 +1028,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
-  updateEditorOptions: Modules.actions.challenges.updateEditorOptions,
+  updateUserSettings: Modules.actions.user.updateUserSettings,
   handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
   updateCurrentChallengeBlob:
     Modules.actions.challenges.updateCurrentChallengeBlob,
@@ -1013,14 +1044,25 @@ const mergeProps = (
   ...props,
   ...methods,
   ...state,
-  increaseFontSize: () =>
-    methods.updateEditorOptions({
-      fontSize: state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
+  toggleHighContrastMode: () =>
+    methods.updateUserSettings({
+      theme:
+        state.userSettings.theme === MonacoEditorThemes.DEFAULT
+          ? MonacoEditorThemes.HIGH_CONTRAST
+          : MonacoEditorThemes.DEFAULT,
     }),
-  decreaseFontSize: () =>
-    methods.updateEditorOptions({
-      fontSize: state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
-    }),
+  increaseFontSize: () => {
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
+    });
+  },
+  decreaseFontSize: () => {
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
+    });
+  },
 });
 
 type ConnectProps = ReturnType<typeof mergeProps>;
@@ -1043,9 +1085,9 @@ const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
 
 class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   render() {
-    const { challenge, blob, isLoadingBlob } = this.props;
+    const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
 
-    if (!challenge || isLoadingBlob) {
+    if (!challenge || isLoadingBlob || isUserLoading) {
       return <h1>Loading...</h1>;
     }
 

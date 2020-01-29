@@ -15,7 +15,8 @@
     "lint": "yarn prettier && yarn tslint",
     "test": "yarn lint",
     "test:e2e": "yarn jest --config ./jest-config.json",
-    "test:watch": "yarn test:e2e --watch"
+    "test:watch": "yarn test:e2e --watch",
+    "test:debug": "yarn test:e2e --watch -f src/user.e2e.test.ts"
   },
   "directories": {
     "dist": "dist"
