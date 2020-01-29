@@ -1017,6 +1017,7 @@ class Workspace extends React.Component<IProps, IState> {
 const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
+  isUserLoading: Modules.selectors.user.loading(state),
   userSettings: Modules.selectors.user.userSettings(state),
   editorOptions: Modules.selectors.user.editorOptions(state),
   blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
@@ -1084,9 +1085,9 @@ const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
 
 class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   render() {
-    const { challenge, blob, isLoadingBlob } = this.props;
+    const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
 
-    if (!challenge || isLoadingBlob) {
+    if (!challenge || isLoadingBlob || isUserLoading) {
       return <h1>Loading...</h1>;
     }
 
