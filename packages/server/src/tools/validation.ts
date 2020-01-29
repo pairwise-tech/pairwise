@@ -133,22 +133,26 @@ export const validateUserUpdateDetails = (
     };
 
     const sanitizedUpdate = sanitizeObject(updateDetails);
-    if (Object.keys(sanitizedUpdate).length) {
-      return new Ok(sanitizedUpdate);
-    } else {
-      throw new Error("No valid update fields received!");
-    }
+    return new Ok(sanitizedUpdate);
   } catch (err) {
     return new Err(ERROR_CODES.INVALID_PARAMETERS);
   }
 };
 
-const checkStringField = (field: any) => {
-  return typeof field === "string" ? field : null;
+const checkStringField = (value: any, canBeEmpty = false) => {
+  if (typeof value === "string") {
+    if (!canBeEmpty && value === "") {
+      throw new Error("Field cannot be empty!");
+    }
+
+    return value;
+  }
+
+  return null;
 };
 
-const checkNumberField = (field: any) => {
-  return typeof field === "number" ? field : null;
+const checkNumberField = (value: any) => {
+  return typeof value === "number" ? value : null;
 };
 
 const checkThemeField = (theme: any): MonacoEditorThemes => {
@@ -175,15 +179,16 @@ const checkSettingsField = (settings?: Partial<UserSettings>) => {
  * Remove [key]: null key:value pairs from an object.
  */
 const sanitizeObject = (obj: any) => {
-  const sanitizedUpdate = {};
+  const sanitizedObject = {};
 
   /* Only add fields which pass the check: */
   Object.entries(obj).forEach(([key, value]) => {
     if (value !== null) {
-      sanitizedUpdate[key] = value;
+      sanitizedObject[key] = value;
     }
   });
-  return sanitizedUpdate;
+
+  return sanitizedObject;
 };
 
 /**

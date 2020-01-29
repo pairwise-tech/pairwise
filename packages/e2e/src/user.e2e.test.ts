@@ -8,7 +8,7 @@ import { fetchAccessToken, HOST } from "./utils/e2e-utils";
  */
 
 describe("User APIs", () => {
-  test("/user/profile (GET)", async () => {
+  test("/user/profile (GET) a user can fetch their profile", async () => {
     const accessToken = await fetchAccessToken();
     const result = await axios.get(`${HOST}/user/profile`, {
       headers: {
@@ -62,6 +62,30 @@ describe("User APIs", () => {
     expect(settings.theme).toBe("hc-black");
   });
 
+  test("/user/profile (POST) a user cannot update their email", async done => {
+    const accessToken = await fetchAccessToken();
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    const email = "joe@pairwise.tech";
+
+    const result = await axios.get(`${HOST}/user/profile`, headers);
+    const originalProfile = result.data.profile;
+
+    request(`${HOST}/user/profile`)
+      .post("/")
+      .send({ email })
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200)
+      .end((error, response) => {
+        expect(response.body.profile.email).toBe(originalProfile.email);
+        done();
+      });
+  });
+
   test("/user/profile (POST) filters invalid parameters, and updates settings correctly", async done => {
     const accessToken = await fetchAccessToken();
     const headers = {
@@ -86,7 +110,7 @@ describe("User APIs", () => {
      */
     await handleUpdateUser({
       settings: {
-        workspaceFontSize: null,
+        workspaceFontSize: NaN,
         theme: "Djikstra Theme",
       },
     });
@@ -139,6 +163,28 @@ describe("User APIs", () => {
 
     expect(thirdSettings.theme).toBe("hc-black");
     expect(thirdSettings.workspaceFontSize).toBe(28);
+
+    done();
+  });
+
+  test("/user/profile (POST) non-empty fields cannot be set to empty", async done => {
+    const accessToken = await fetchAccessToken();
+
+    const expectInvalidRequest = async (userUpdate: any) => {
+      await request(`${HOST}/user/profile`)
+        .post("/")
+        .send(userUpdate)
+        .set("Authorization", `Bearer ${accessToken}`)
+        .expect(400)
+        .then(error => {
+          expect(error.body.message).toBe("Invalid parameters provided");
+        });
+    };
+
+    await expectInvalidRequest({ displayName: "" });
+    await expectInvalidRequest({ givenName: "" });
+    await expectInvalidRequest({ familyName: "" });
+    await expectInvalidRequest({ avatarUrl: "" });
 
     done();
   });
