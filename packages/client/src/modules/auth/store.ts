@@ -1,6 +1,6 @@
 import { createReducer } from "typesafe-actions";
-
-import actions, { ActionTypes } from "./actions";
+import * as actions from "./actions";
+import { AuthActionTypes } from "./index";
 
 /** ===========================================================================
  * App Store
@@ -19,7 +19,7 @@ const initialState = {
   bulkPersistenceInProgress: false,
 };
 
-const auth = createReducer<State, ActionTypes>(initialState)
+const auth = createReducer<State, AuthActionTypes>(initialState)
   .handleAction(actions.initiateBulkPersistence, (state, action) => ({
     ...state,
     bulkPersistenceInProgress: true,

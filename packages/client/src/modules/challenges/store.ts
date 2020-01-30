@@ -1,5 +1,4 @@
 import { createReducer } from "typesafe-actions";
-
 import {
   Challenge,
   CourseList,
@@ -10,8 +9,8 @@ import Module from "module";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
 import over from "ramda/es/over";
-import actions, { ActionTypes } from "./actions";
-import AppActions, { ActionTypes as AppActionTypes } from "../app/actions";
+import * as actions from "./actions";
+import App, { AppActionTypes } from "../app/index";
 import {
   ChallengeCreationPayload,
   InverseChallengeMapping,
@@ -19,6 +18,7 @@ import {
 } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
+import { ChallengesActionTypes } from "./index";
 
 const debug = require("debug")("challenge:store");
 
@@ -130,7 +130,7 @@ const insertChallenge = (
   return over(lens, insert(insertionIndex, challenge), courses);
 };
 
-const challenges = createReducer<State, ActionTypes | AppActionTypes>(
+const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   initialState,
 )
   .handleAction(actions.createChallenge, (state, action) => {
@@ -249,7 +249,7 @@ const challenges = createReducer<State, ActionTypes | AppActionTypes>(
     ...state,
     workspaceLoading: false,
   }))
-  .handleAction(AppActions.locationChange, (state, action) => ({
+  .handleAction(App.actions.locationChange, (state, action) => ({
     ...state,
     displayNavigationMap: false,
   }))

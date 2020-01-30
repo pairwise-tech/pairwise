@@ -4,7 +4,7 @@ import {
   ICodeBlobDto,
   IProgressDto,
 } from "@pairwise/common";
-import { ActionType, createAction } from "typesafe-actions";
+import { createAction } from "typesafe-actions";
 import {
   ChallengeCreationPayload,
   ChallengeUpdatePayload,
@@ -77,88 +77,92 @@ enum ActionTypesEnum {
  * ============================================================================
  */
 
-const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<boolean>();
+export const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<
+  boolean
+>();
 
-const setAdminTestTab = createAction(ActionTypesEnum.SET_ADMIN_TEST_TAB)<
+export const setAdminTestTab = createAction(ActionTypesEnum.SET_ADMIN_TEST_TAB)<
   ADMIN_TEST_TAB
 >();
 
-const setAdminEditorTab = createAction(ActionTypesEnum.SET_ADMIN_EDITOR_TAB)<
-  ADMIN_EDITOR_TAB
->();
+export const setAdminEditorTab = createAction(
+  ActionTypesEnum.SET_ADMIN_EDITOR_TAB,
+)<ADMIN_EDITOR_TAB>();
 
-const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
+export const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
   newChallengeId: string;
   previousChallengeId: string;
 }>();
 
-const fetchBlobForChallenge = createAction(
+export const fetchBlobForChallenge = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE,
 )<string>();
 
-const fetchBlobForChallengeSuccess = createAction(
+export const fetchBlobForChallengeSuccess = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE_SUCCESS,
 )<ICodeBlobDto>();
 
-const fetchBlobForChallengeFailure = createAction(
+export const fetchBlobForChallengeFailure = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE_FAILURE,
 )<HttpResponseError>();
 
-const handleCompleteChallenge = createAction(
+export const handleCompleteChallenge = createAction(
   ActionTypesEnum.CHALLENGE_COMPLETED,
 )<string>();
 
-const updateUserProgress = createAction(ActionTypesEnum.UPDATE_USER_PROGRESS)<
-  IProgressDto
->();
+export const updateUserProgress = createAction(
+  ActionTypesEnum.UPDATE_USER_PROGRESS,
+)<IProgressDto>();
 
-const updateUserProgressSuccess = createAction(
+export const updateUserProgressSuccess = createAction(
   ActionTypesEnum.UPDATE_USER_PROGRESS_SUCCESS,
 )();
 
-const updateUserProgressFailure = createAction(
+export const updateUserProgressFailure = createAction(
   ActionTypesEnum.UPDATE_USER_PROGRESS_FAILURE,
 )<HttpResponseError>();
 
-const updateCurrentChallengeBlob = createAction(
+export const updateCurrentChallengeBlob = createAction(
   ActionTypesEnum.UPDATE_CURRENT_CHALLENGE_BLOB,
 )<ICodeBlobDto>();
 
-const saveChallengeBlob = createAction(ActionTypesEnum.SAVE_CHALLENGE_BLOB)<
-  ICodeBlobDto
->();
+export const saveChallengeBlob = createAction(
+  ActionTypesEnum.SAVE_CHALLENGE_BLOB,
+)<ICodeBlobDto>();
 
-const saveChallengeBlobSuccess = createAction(
+export const saveChallengeBlobSuccess = createAction(
   ActionTypesEnum.SAVE_CHALLENGE_BLOB_SUCCESS,
 )();
 
-const saveChallengeBlobFailure = createAction(
+export const saveChallengeBlobFailure = createAction(
   ActionTypesEnum.SAVE_CHALLENGE_BLOB_FAILURE,
 )<HttpResponseError>();
 
-const setCurrentModule = createAction(ActionTypesEnum.SET_MODULE_ID)<string>();
+export const setCurrentModule = createAction(ActionTypesEnum.SET_MODULE_ID)<
+  string
+>();
 
-const setWorkspaceChallengeLoaded = createAction(
+export const setWorkspaceChallengeLoaded = createAction(
   ActionTypesEnum.WORKSPACE_CHALLENGE_LOADED,
 )();
 
-const fetchNavigationSkeleton = createAction(
+export const fetchNavigationSkeleton = createAction(
   ActionTypesEnum.FETCH_NAVIGATION_SKELETON,
 )();
 
-const fetchNavigationSkeletonSuccess = createAction(
+export const fetchNavigationSkeletonSuccess = createAction(
   ActionTypesEnum.FETCH_NAVIGATION_SKELETON_SUCCESS,
 )<CourseSkeletonList>();
 
-const fetchNavigationSkeletonFailure = createAction(
+export const fetchNavigationSkeletonFailure = createAction(
   ActionTypesEnum.FETCH_NAVIGATION_SKELETON_FAILURE,
 )<HttpResponseError>();
 
-const setNavigationMapState = createAction(
+export const setNavigationMapState = createAction(
   ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
 )<boolean>();
 
-const fetchCurrentActiveCourseSuccess = createAction(
+export const fetchCurrentActiveCourseSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
 )<{
   courses: Course[];
@@ -167,80 +171,38 @@ const fetchCurrentActiveCourseSuccess = createAction(
   currentChallengeId: string;
 }>();
 
-const fetchCurrentActiveCourseFailure = createAction(
+export const fetchCurrentActiveCourseFailure = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_FAILURE,
 )();
 
-const storeInverseChallengeMapping = createAction(
+export const storeInverseChallengeMapping = createAction(
   ActionTypesEnum.STORE_INVERSE_CHALLENGE_MAP,
 )<InverseChallengeMapping>();
 
-const saveCourse = createAction(ActionTypesEnum.SAVE_COURSE)<Course>();
-const saveCourseSuccess = createAction(ActionTypesEnum.SAVE_COURSE_SUCCESS)();
-const saveCourseFailure = createAction(ActionTypesEnum.SAVE_COURSE_FAILURE)<
-  any
->();
+export const saveCourse = createAction(ActionTypesEnum.SAVE_COURSE)<Course>();
+export const saveCourseSuccess = createAction(
+  ActionTypesEnum.SAVE_COURSE_SUCCESS,
+)();
+export const saveCourseFailure = createAction(
+  ActionTypesEnum.SAVE_COURSE_FAILURE,
+)<any>();
 
-const createChallenge = createAction(ActionTypesEnum.CREATE_CHALLENGE)<
+export const createChallenge = createAction(ActionTypesEnum.CREATE_CHALLENGE)<
   ChallengeCreationPayload
 >();
 
-const updateChallenge = createAction(ActionTypesEnum.UPDATE_CHALLENGE)<
+export const updateChallenge = createAction(ActionTypesEnum.UPDATE_CHALLENGE)<
   ChallengeUpdatePayload
 >();
 
-const removeChallenge = createAction(ActionTypesEnum.REMOVE_CHALLENGE)<
+export const removeChallenge = createAction(ActionTypesEnum.REMOVE_CHALLENGE)<
   string
 >();
 
-const createCourseModule = createAction(ActionTypesEnum.CREATE_MODULE)<
+export const createCourseModule = createAction(ActionTypesEnum.CREATE_MODULE)<
   ModuleCreationPayload
 >();
 
-const updateCourseModule = createAction(ActionTypesEnum.UPDATE_MODULE)<
+export const updateCourseModule = createAction(ActionTypesEnum.UPDATE_MODULE)<
   ModuleUpdatePayload
 >();
-
-const actions = {
-  setAdminTestTab,
-  setAdminEditorTab,
-  fetchBlobForChallenge,
-  fetchBlobForChallengeSuccess,
-  fetchBlobForChallengeFailure,
-  updateUserProgress,
-  updateUserProgressSuccess,
-  updateUserProgressFailure,
-  handleCompleteChallenge,
-  setCurrentModule,
-  updateCurrentChallengeBlob,
-  saveChallengeBlob,
-  saveChallengeBlobSuccess,
-  saveChallengeBlobFailure,
-  saveCourse,
-  saveCourseSuccess,
-  saveCourseFailure,
-  createCourseModule,
-  updateCourseModule,
-  createChallenge,
-  updateChallenge,
-  removeChallenge,
-  storeInverseChallengeMapping,
-  setEditMode,
-  setChallengeId,
-  setNavigationMapState,
-  setWorkspaceChallengeLoaded,
-  fetchNavigationSkeleton,
-  fetchNavigationSkeletonSuccess,
-  fetchNavigationSkeletonFailure,
-  fetchCurrentActiveCourseSuccess,
-  fetchCurrentActiveCourseFailure,
-};
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export type ActionTypes = ActionType<typeof actions>;
-
-export default actions;

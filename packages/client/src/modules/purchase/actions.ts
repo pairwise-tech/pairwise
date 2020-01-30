@@ -1,4 +1,4 @@
-import { ActionType, createAction } from "typesafe-actions";
+import { createAction } from "typesafe-actions";
 
 /** ===========================================================================
  * Action Types
@@ -18,29 +18,14 @@ enum ActionTypesEnum {
  * ============================================================================
  */
 
-const setPurchaseCourseModalState = createAction(
+export const setPurchaseCourseModalState = createAction(
   ActionTypesEnum.SET_PURCHASE_COURSE_MODAL_STATE,
 )<boolean>();
 
-const handlePurchaseCourseIntent = createAction(
+export const handlePurchaseCourseIntent = createAction(
   ActionTypesEnum.HANDLE_PURCHASE_COURSE_INTENT,
 )<{ courseId: string }>();
 
-const setPurchaseCourseId = createAction(
+export const setPurchaseCourseId = createAction(
   ActionTypesEnum.SET_PURCHASE_COURSE_ID,
 )<string>();
-
-const actions = {
-  setPurchaseCourseId,
-  handlePurchaseCourseIntent,
-  setPurchaseCourseModalState,
-};
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export type ActionTypes = ActionType<typeof actions>;
-
-export default actions;
