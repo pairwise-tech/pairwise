@@ -149,25 +149,19 @@ const NavigationOverlay = (props: IProps) => {
             <Popover
               content={
                 <Menu>
-                  <MenuItem icon="map" text="Create Topic Title" />
-                  <MenuDivider />
-                  <MenuItem icon="zoom-to-fit" text="Create Challenge">
-                    <MenuItem icon="remove" text="Media" />
-                    <MenuItem icon="remove" text="Markup" />
-                    <MenuItem icon="add" text="TypeScript" />
-                    <MenuItem
-                      icon="remove"
-                      text="React"
-                      onClick={() =>
-                        props.createChallenge({
-                          courseId: course.id,
-                          moduleId: module.id,
-                          insertionIndex: 0,
-                          challenge: generateEmptyChallenge(),
-                        })
-                      }
-                    />
-                  </MenuItem>
+                  <MenuItem icon="map" text="Section" />
+                  <MenuItem
+                    icon="remove"
+                    text="Challenge"
+                    onClick={() =>
+                      props.createChallenge({
+                        courseId: course.id,
+                        moduleId: module.id,
+                        insertionIndex: 0,
+                        challenge: generateEmptyChallenge(),
+                      })
+                    }
+                  />
                 </Menu>
               }
               position={Position.RIGHT_TOP}
