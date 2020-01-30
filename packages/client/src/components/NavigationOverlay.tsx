@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-
 import { ChallengeSkeleton } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
@@ -10,7 +9,15 @@ import {
   generateEmptyModule,
   generateEmptyChallenge,
 } from "tools/utils";
-import { Tooltip, Icon } from "@blueprintjs/core";
+import {
+  Tooltip,
+  Icon,
+  Popover,
+  Menu,
+  MenuItem,
+  MenuDivider,
+  Position,
+} from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
 
@@ -72,16 +79,18 @@ const NavigationOverlay = (props: IProps) => {
         <Title>{course.title}</Title>
         {/* In case of no challenges yet, or to add one at the start, here's a button */}
         <div style={{ position: "relative" }}>
-          <AddNavItemButton
-            show={isEditMode}
-            onClick={() =>
-              props.createCourseModule({
-                courseId: course.id,
-                insertionIndex: 0,
-                module: generateEmptyModule(),
-              })
-            }
-          />
+          <AddNavItemPositionContainer>
+            <AddNavItemButton
+              show={isEditMode}
+              onClick={() =>
+                props.createCourseModule({
+                  courseId: course.id,
+                  insertionIndex: 0,
+                  module: generateEmptyModule(),
+                })
+              }
+            />
+          </AddNavItemPositionContainer>
         </div>
         {course.modules.map((m, i) => {
           return (
@@ -109,16 +118,18 @@ const NavigationOverlay = (props: IProps) => {
                   </span>
                 </NavButton>
               )}
-              <AddNavItemButton
-                show={isEditMode}
-                onClick={() =>
-                  props.createCourseModule({
-                    courseId: course.id,
-                    insertionIndex: i + 1,
-                    module: generateEmptyModule(),
-                  })
-                }
-              />
+              <AddNavItemPositionContainer>
+                <AddNavItemButton
+                  show={isEditMode}
+                  onClick={() =>
+                    props.createCourseModule({
+                      courseId: course.id,
+                      insertionIndex: i + 1,
+                      module: generateEmptyModule(),
+                    })
+                  }
+                />
+              </AddNavItemPositionContainer>
             </div>
           );
         })}
@@ -134,17 +145,36 @@ const NavigationOverlay = (props: IProps) => {
       >
         {/* In case of no challenges yet, or to add one at the start, here's a button */}
         <div style={{ position: "relative" }}>
-          <AddNavItemButton
-            show={isEditMode}
-            onClick={() =>
-              props.createChallenge({
-                courseId: course.id,
-                moduleId: module.id,
-                insertionIndex: 0,
-                challenge: generateEmptyChallenge(),
-              })
-            }
-          />
+          <AddNavItemPositionContainer>
+            <Popover
+              content={
+                <Menu>
+                  <MenuItem icon="map" text="Create Topic Title" />
+                  <MenuDivider />
+                  <MenuItem icon="zoom-to-fit" text="Create Challenge">
+                    <MenuItem icon="remove" text="Media" />
+                    <MenuItem icon="remove" text="Markup" />
+                    <MenuItem icon="add" text="TypeScript" />
+                    <MenuItem
+                      icon="remove"
+                      text="React"
+                      onClick={() =>
+                        props.createChallenge({
+                          courseId: course.id,
+                          moduleId: module.id,
+                          insertionIndex: 0,
+                          challenge: generateEmptyChallenge(),
+                        })
+                      }
+                    />
+                  </MenuItem>
+                </Menu>
+              }
+              position={Position.RIGHT_TOP}
+            >
+              <AddNavItemButton show={isEditMode} onClick={() => null} />
+            </Popover>
+          </AddNavItemPositionContainer>
         </div>
         {module.challenges.map((c: ChallengeSkeleton, i: number) => {
           return (
@@ -181,17 +211,30 @@ const NavigationOverlay = (props: IProps) => {
                   )}
                 </span>
               </Link>
-              <AddNavItemButton
-                show={isEditMode}
-                onClick={() =>
-                  props.createChallenge({
-                    courseId: course.id,
-                    moduleId: module.id,
-                    insertionIndex: i + 1,
-                    challenge: generateEmptyChallenge(),
-                  })
-                }
-              />
+              <AddNavItemPositionContainer>
+                <Popover
+                  content={
+                    <Menu>
+                      <MenuItem icon="map" text="Section" />
+                      <MenuItem
+                        icon="add"
+                        text="Challenge"
+                        onClick={() =>
+                          props.createChallenge({
+                            courseId: course.id,
+                            moduleId: module.id,
+                            insertionIndex: i + 1,
+                            challenge: generateEmptyChallenge(),
+                          })
+                        }
+                      />
+                    </Menu>
+                  }
+                  position={Position.RIGHT_TOP}
+                >
+                  <AddNavItemButton show={isEditMode} onClick={() => null} />
+                </Popover>
+              </AddNavItemPositionContainer>
             </div>
           );
         })}
@@ -216,6 +259,13 @@ const DoneScrolling = styled((props: any) => (
   margin: 40px 0;
 `;
 
+const AddNavItemPositionContainer = styled.div`
+  z-index: 5;
+  top: 100%;
+  left: 50%;
+  position: absolute;
+`;
+
 interface AddNavItemButtonProps {
   onClick: () => any;
   show: boolean;
@@ -224,10 +274,6 @@ interface AddNavItemButtonProps {
 const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
   return <button {...props}>+</button>;
 })`
-  position: absolute;
-  z-index: 5;
-  top: 100%;
-  left: 50%;
   transform: translate(-50%, -50%) scale(${props => (props.show ? 1 : 0)});
   transition: all 0.15s ease-out;
   font-weight: bold;
