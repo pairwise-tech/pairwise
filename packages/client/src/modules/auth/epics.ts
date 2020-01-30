@@ -12,7 +12,6 @@ import {
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { of } from "rxjs";
-
 import {
   setAccessTokenInLocalStorage,
   logoutUserInLocalStorage,

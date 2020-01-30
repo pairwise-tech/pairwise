@@ -3,7 +3,6 @@ import { Observable } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
-
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 

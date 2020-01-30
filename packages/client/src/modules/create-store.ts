@@ -5,7 +5,13 @@ import { createEpicMiddleware } from "redux-observable";
 
 import * as ENV from "../tools/client-env";
 import api from "./api";
-import { EpicDependencies, Modules, rootEpic, rootReducer } from "./root";
+import {
+  EpicDependencies,
+  Modules,
+  selectors,
+  rootEpic,
+  rootReducer,
+} from "./root";
 import { AppToaster } from "tools/constants";
 import logger from "tools/logger";
 
@@ -23,6 +29,7 @@ const history = createBrowserHistory();
 
 const dependencies: EpicDependencies = {
   api,
+  selectors,
   router: history,
   toaster: AppToaster,
 };

@@ -82,6 +82,7 @@ export interface EpicDependencies {
   router: History<any>;
   api: typeof API;
   toaster: IToaster;
+  selectors: typeof selectors;
 }
 
 export type EpicSignature = Epic<

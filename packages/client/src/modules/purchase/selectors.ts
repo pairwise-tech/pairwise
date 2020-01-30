@@ -23,14 +23,3 @@ export const coursePurchaseId = createSelector(
   purchaseState,
   purchase => purchase.purchaseCourseId,
 );
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export default {
-  purchaseState,
-  coursePurchaseId,
-  coursePurchaseModalStateSelector,
-};

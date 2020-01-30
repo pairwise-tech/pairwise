@@ -18,13 +18,3 @@ export const locationSelector = createSelector(
   appSelector,
   app => app.location,
 );
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export default {
-  appSelector,
-  locationSelector,
-};

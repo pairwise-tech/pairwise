@@ -2,7 +2,6 @@ import { combineEpics } from "redux-observable";
 import { filter, tap, mergeMap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { of, combineLatest } from "rxjs";
-
 import {
   removeEphemeralPurchaseCourseId,
   getEphemeralPurchaseCourseId,
@@ -11,7 +10,6 @@ import {
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { CourseSkeletonList } from "@pairwise/common";
-import { userProfile } from "modules/user/selectors";
 
 /** ===========================================================================
  * Epics
@@ -73,7 +71,7 @@ const handlePurchaseCourseIntentEpic: EpicSignature = (
     filter(isActionOf(Actions.handlePurchaseCourseIntent)),
     mergeMap(action => {
       const courseId = action.payload.courseId;
-      const user = userProfile(state$.value);
+      const user = deps.selectors.user.userProfile(state$.value);
       if (user) {
         return of(
           Actions.setPurchaseCourseId(courseId),
