@@ -1,6 +1,6 @@
 import actions, { ActionTypes } from "./actions";
 import epics from "./epics";
-import selector from "./selectors";
+import * as selector from "./selectors";
 import store, { State } from "./store";
 
 const purchase = {

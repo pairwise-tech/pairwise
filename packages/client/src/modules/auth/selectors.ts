@@ -27,14 +27,3 @@ export const userAuthenticated = createSelector(
     return Boolean(authStateResult.accessToken);
   },
 );
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export default {
-  authSelector,
-  userAuthenticated,
-  singleSignOnDialogState,
-};

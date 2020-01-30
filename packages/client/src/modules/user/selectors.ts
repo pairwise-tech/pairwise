@@ -42,19 +42,3 @@ export const userProgress = createSelector(
   userState,
   state => state.user.progress,
 );
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export default {
-  editorOptions,
-  loading,
-  userSelector,
-  userProfile,
-  userSettings,
-  userCourses,
-  userPayments,
-  userProgress,
-};

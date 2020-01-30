@@ -23,7 +23,6 @@ import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { Location } from "history";
-import { getBlobCache, nextPrevChallenges } from "./selectors";
 
 /** ===========================================================================
  * Epics
@@ -247,13 +246,16 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
 const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
   action$,
   state$,
+  deps,
 ) => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
     pluck("payload"),
     pluck("newChallengeId"),
     mergeMap(id => {
-      const { next, prev } = nextPrevChallenges(state$.value);
+      const { next, prev } = deps.selectors.challenges.nextPrevChallenges(
+        state$.value,
+      );
 
       const actions = [Actions.fetchBlobForChallenge(id)];
 
@@ -315,7 +317,7 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
     pluck("payload"),
     pluck("previousChallengeId"),
     map(challengeId => {
-      const blobs = getBlobCache(state$.value);
+      const blobs = deps.selectors.challenges.getBlobCache(state$.value);
       if (challengeId in blobs) {
         const codeBlob: ICodeBlobDto = {
           challengeId,
