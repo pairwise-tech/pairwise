@@ -1,5 +1,4 @@
 import { createReducer } from "typesafe-actions";
-
 import {
   UserSettings,
   Payment,
@@ -10,7 +9,7 @@ import {
 } from "@pairwise/common";
 import { AppActionTypes } from "../app";
 import { Actions as actions } from "../root-actions";
-import { ActionTypes } from "./actions";
+import { UserActionTypes } from "./index";
 import { combineReducers } from "redux";
 
 /** ===========================================================================
@@ -55,7 +54,7 @@ export interface State {
   user: UserState;
 }
 
-const user = createReducer<UserState, ActionTypes | AppActionTypes>(
+const user = createReducer<UserState, UserActionTypes | AppActionTypes>(
   initialUserState,
 )
   .handleAction(actions.logoutUser, () => initialUserState)
@@ -71,7 +70,7 @@ const user = createReducer<UserState, ActionTypes | AppActionTypes>(
     }),
   );
 
-const loading = createReducer<boolean, ActionTypes | AppActionTypes>(
+const loading = createReducer<boolean, UserActionTypes | AppActionTypes>(
   true,
 ).handleAction(actions.fetchUserSuccess, () => false);
 

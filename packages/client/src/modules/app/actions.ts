@@ -1,4 +1,4 @@
-import { ActionType, createAction } from "typesafe-actions";
+import { createAction } from "typesafe-actions";
 import { Location } from "history";
 
 /** ===========================================================================
@@ -28,33 +28,16 @@ enum ActionTypesEnum {
  * payload which describes where the action is coming from (for debugging
  * or informational purposes).
  */
-const empty = createAction(ActionTypesEnum.EMPTY_ACTION)<string>();
+export const empty = createAction(ActionTypesEnum.EMPTY_ACTION)<string>();
 
-const locationChange = createAction(ActionTypesEnum.LOCATION_CHANGE)<
+export const locationChange = createAction(ActionTypesEnum.LOCATION_CHANGE)<
   Location
 >();
 
-const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
+export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
 
-const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)();
+export const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)();
 
-const initializeAppSuccess = createAction(
+export const initializeAppSuccess = createAction(
   ActionTypesEnum.INITIALIZE_APP_SUCCESS,
 )<{ accessToken: string }>();
-
-const actions = {
-  locationChange,
-  empty,
-  logoutUser,
-  initializeApp,
-  initializeAppSuccess,
-};
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export type ActionTypes = ActionType<typeof actions>;
-
-export default actions;

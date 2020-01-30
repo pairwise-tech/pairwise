@@ -1,6 +1,6 @@
 import { IUserDto, UserUpdateOptions, UserSettings } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
-import { ActionType, createAction } from "typesafe-actions";
+import { createAction } from "typesafe-actions";
 import { UserStoreState } from "./store";
 
 /** ===========================================================================
@@ -27,57 +27,36 @@ enum ActionTypesEnum {
  * ============================================================================
  */
 
-const fetchUser = createAction(ActionTypesEnum.FETCH_USER)();
+export const fetchUser = createAction(ActionTypesEnum.FETCH_USER)();
 
-const fetchUserSuccess = createAction(ActionTypesEnum.FETCH_USER_SUCCESS)<
-  UserStoreState
->();
+export const fetchUserSuccess = createAction(
+  ActionTypesEnum.FETCH_USER_SUCCESS,
+)<UserStoreState>();
 
-const fetchUserFailure = createAction(ActionTypesEnum.FETCH_USER_FAILURE)<
-  HttpResponseError
->();
+export const fetchUserFailure = createAction(
+  ActionTypesEnum.FETCH_USER_FAILURE,
+)<HttpResponseError>();
 
-const updateUser = createAction(ActionTypesEnum.UPDATE_USER)<
+export const updateUser = createAction(ActionTypesEnum.UPDATE_USER)<
   UserUpdateOptions
 >();
 
-const updateUserSuccess = createAction(ActionTypesEnum.UPDATE_USER_SUCCESS)<
-  IUserDto
->();
+export const updateUserSuccess = createAction(
+  ActionTypesEnum.UPDATE_USER_SUCCESS,
+)<IUserDto>();
 
-const updateUserFailure = createAction(ActionTypesEnum.UPDATE_USER_FAILURE)<
-  HttpResponseError
->();
+export const updateUserFailure = createAction(
+  ActionTypesEnum.UPDATE_USER_FAILURE,
+)<HttpResponseError>();
 
-const updateUserSettings = createAction(ActionTypesEnum.UPDATE_USER_SETTINGS)<
-  Partial<UserSettings>
->();
+export const updateUserSettings = createAction(
+  ActionTypesEnum.UPDATE_USER_SETTINGS,
+)<Partial<UserSettings>>();
 
-const updateUserSettingsSuccess = createAction(
+export const updateUserSettingsSuccess = createAction(
   ActionTypesEnum.UPDATE_USER_SETTINGS_SUCCESS,
 )<UserStoreState>();
 
-const updateUserSettingsFailure = createAction(
+export const updateUserSettingsFailure = createAction(
   ActionTypesEnum.UPDATE_USER_SETTINGS_FAILURE,
 )<HttpResponseError>();
-
-const actions = {
-  fetchUser,
-  fetchUserSuccess,
-  fetchUserFailure,
-  updateUser,
-  updateUserSuccess,
-  updateUserFailure,
-  updateUserSettings,
-  updateUserSettingsSuccess,
-  updateUserSettingsFailure,
-};
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export type ActionTypes = ActionType<typeof actions>;
-
-export default actions;

@@ -1,4 +1,4 @@
-import { ActionType, createAction } from "typesafe-actions";
+import { createAction } from "typesafe-actions";
 
 /** ===========================================================================
  * Action Types
@@ -22,45 +22,29 @@ enum ActionTypesEnum {
  * ============================================================================
  */
 
-const initializeAccessToken = createAction(
+export const initializeAccessToken = createAction(
   ActionTypesEnum.INITIALIZE_ACCESS_TOKEN,
 )<{ initialWindowLocationSearch: string }>();
 
-const setSingleSignOnDialogState = createAction(
+export const setSingleSignOnDialogState = createAction(
   ActionTypesEnum.SET_SINGLE_SIGN_ON_DIALOG_STATE,
 )<boolean>();
 
-const storeAccessToken = createAction(ActionTypesEnum.STORE_ACCESS_TOKEN)<{
+export const storeAccessToken = createAction(
+  ActionTypesEnum.STORE_ACCESS_TOKEN,
+)<{
   accessToken: string;
   accountCreated: boolean;
 }>();
 
-const storeAccessTokenSuccess = createAction(
+export const storeAccessTokenSuccess = createAction(
   ActionTypesEnum.STORE_ACCESS_TOKEN_SUCCESS,
 )<{ accessToken: string; accountCreated: boolean }>();
 
-const initiateBulkPersistence = createAction(
+export const initiateBulkPersistence = createAction(
   ActionTypesEnum.INITIATE_BULK_PERSISTENCE,
 )();
 
-const bulkPersistenceComplete = createAction(
+export const bulkPersistenceComplete = createAction(
   ActionTypesEnum.BULK_PERSISTENCE_COMPLETE,
 )();
-
-const actions = {
-  initializeAccessToken,
-  setSingleSignOnDialogState,
-  storeAccessToken,
-  storeAccessTokenSuccess,
-  initiateBulkPersistence,
-  bulkPersistenceComplete,
-};
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export type ActionTypes = ActionType<typeof actions>;
-
-export default actions;

@@ -1,6 +1,6 @@
 import { createReducer } from "typesafe-actions";
-
-import actions, { ActionTypes } from "./actions";
+import * as actions from "./actions";
+import { AppActionTypes } from "./index";
 
 /** ===========================================================================
  * App Store
@@ -17,7 +17,7 @@ const initialState = {
   location: "",
 };
 
-const app = createReducer<State, ActionTypes>(initialState)
+const app = createReducer<State, AppActionTypes>(initialState)
   .handleAction(actions.initializeAppSuccess, state => ({
     ...state,
     initialized: true,
