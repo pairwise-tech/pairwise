@@ -93,7 +93,7 @@ on your hourly commitment each day. Does that sound like a lot? Consider
 that by completing this course you're putting yourself on a footing to
 enter an entirely new career, a career that you might remain in for the
 rest of your working life or simply a stepping stone to building your own
-business. Either way, an investment of a few months new could put the rest
+business. Either way, an investment of a few months now could put the rest
 of your life on an entirely new trajectory.
     `,
   },
