@@ -8,8 +8,11 @@ import {
   VideoChallengeBlob,
   DataBlob,
   SandboxBlob,
+  ChallengeSkeleton,
+  CHALLENGE_TYPE,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
+import { IconName } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Utils
@@ -108,3 +111,23 @@ export const defaultSandboxBlob = constructDataBlobFromChallenge({
   code: "",
   challenge: defaultSandboxChallenge,
 });
+
+/**
+ * Get the appropriate icon from a challenge based on the challenge type.
+ */
+export const getChallengeIcon = (
+  type: CHALLENGE_TYPE,
+  userCanAccess: boolean,
+): IconName => {
+  if (!userCanAccess) {
+    return "lock";
+  }
+
+  if (type === "section") {
+    return "bookmark";
+  } else if (type === "media") {
+    return "book";
+  } else {
+    return "code";
+  }
+};

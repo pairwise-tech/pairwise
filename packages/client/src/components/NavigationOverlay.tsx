@@ -13,6 +13,7 @@ import {
   composeWithProps,
   generateEmptyModule,
   generateEmptyChallenge,
+  getChallengeIcon,
 } from "tools/utils";
 import {
   Tooltip,
@@ -21,7 +22,6 @@ import {
   Menu,
   MenuItem,
   Position,
-  MenuDivider,
   IconName,
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
@@ -139,7 +139,7 @@ class NavigationOverlay extends React.Component<IProps> {
                   <span>
                     <Icon
                       iconSize={Icon.SIZE_LARGE}
-                      icon={getChallengeIcon(c)}
+                      icon={getChallengeIcon(c.type, c.userCanAccess)}
                     />
                     <span style={{ marginLeft: 10 }}>{c.title}</span>
                   </span>
@@ -188,14 +188,18 @@ class NavigationOverlay extends React.Component<IProps> {
     module: ModuleSkeleton,
     index: number,
   ) => {
-    const { isEditMode } = this.props;
+    const { isEditMode, overlayVisible } = this.props;
     return (
       <AddNavItemPositionContainer>
         <Popover
+          canEscapeKeyClose
+          // NOTE: canEscapeKeyClose does not work, use disabled prop to force
+          // the menu to close when the overlay is not visible!
+          disabled={!overlayVisible}
           content={
             <Menu>
               <MenuItem
-                icon="map"
+                icon="bookmark"
                 text="Section"
                 onClick={() =>
                   this.handleAddChallenge(course, module, index, {
@@ -204,7 +208,7 @@ class NavigationOverlay extends React.Component<IProps> {
                 }
               />
               <MenuItem
-                icon="add"
+                icon="insert"
                 text="Challenge"
                 onClick={() => this.handleAddChallenge(course, module, index)}
               />
@@ -252,21 +256,6 @@ class NavigationOverlay extends React.Component<IProps> {
  * Styles
  * ============================================================================
  */
-
-const getChallengeIcon = (challenge: ChallengeSkeleton): IconName => {
-  const { type, userCanAccess } = challenge;
-  if (!userCanAccess) {
-    return "lock";
-  }
-
-  if (type === "section") {
-    return "bookmark";
-  } else if (type === "media") {
-    return "book";
-  } else {
-    return "code";
-  }
-};
 
 const DoneScrolling = styled((props: any) => (
   <div {...props}>
