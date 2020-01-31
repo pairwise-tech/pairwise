@@ -71,11 +71,6 @@ describe("Linus should be able to pass all the challenges first try", () => {
         }
       }
 
-      const { code } = await compileCodeString(
-        challenge.solutionCode,
-        challenge,
-      );
-
       const html = `<html><body></body></html>`;
       let doc = html;
 
@@ -84,11 +79,13 @@ describe("Linus should be able to pass all the challenges first try", () => {
       /* Process the different challenge types and get the test code */
       switch (challenge.type) {
         case "react": {
+          const code = await compileSolutionCode(challenge);
           doc = `<html><body><div id="root"></div></body></html>`;
           script = `${EXPECTATION_LIBRARY}\n${code}`;
           break;
         }
         case "typescript": {
+          const code = await compileSolutionCode(challenge);
           script = `${EXPECTATION_LIBRARY}\n${code}`;
           break;
         }
@@ -173,6 +170,11 @@ describe("Linus should be able to pass all the challenges first try", () => {
  * Utils
  * ============================================================================
  */
+
+const compileSolutionCode = async (challenge: Challenge) => {
+  const { code } = await compileCodeString(challenge.solutionCode, challenge);
+  return code;
+};
 
 /**
  * Create a method which takes the results array and polls it every poll
