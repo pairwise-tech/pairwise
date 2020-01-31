@@ -29,6 +29,7 @@ const CHALLENGE_TYPE_CHOICES: ChallengeTypeOption[] = [
   { value: "typescript", label: "TypeScript" },
   { value: "react", label: "React" },
   { value: "media", label: "Media" },
+  { value: "section", label: "Section" },
 ];
 
 const EditingToolbar = connect(
