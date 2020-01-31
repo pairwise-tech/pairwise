@@ -15,7 +15,6 @@ import {
   Popover,
   Menu,
   MenuItem,
-  MenuDivider,
   Position,
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";

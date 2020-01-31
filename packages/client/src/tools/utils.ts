@@ -53,6 +53,7 @@ export const constructDataBlobFromChallenge = (args: {
   }
 
   switch (challenge.type) {
+    case "section":
     case "react":
     case "typescript":
     case "markup": {
