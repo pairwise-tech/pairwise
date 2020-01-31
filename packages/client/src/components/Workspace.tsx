@@ -1102,9 +1102,13 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
     });
     const codeBlob = blob ? blob : constructedBlob;
 
+    const { type } = challenge;
+    const contentOnlyChallenge = type === "media" || type === "section";
+    const challengeRequiresWorkspace = !contentOnlyChallenge;
+
     return (
       <React.Fragment>
-        {challenge.type !== "media" && (
+        {challengeRequiresWorkspace && (
           <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
         )}
         {challenge.id !== SANDBOX_ID && (

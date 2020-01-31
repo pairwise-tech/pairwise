@@ -22,6 +22,7 @@ import {
   MenuItem,
   Position,
   MenuDivider,
+  IconName,
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
@@ -76,7 +77,7 @@ class NavigationOverlay extends React.Component<IProps> {
           <Title>{course.title}</Title>
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
           <div style={{ position: "relative" }}>
-            {this.renderModuleCodepressButton(course, 0)}
+            {this.renderModuleCodepressButton(course, -1)}
           </div>
           {course.modules.map((m, i) => {
             return (
@@ -120,7 +121,7 @@ class NavigationOverlay extends React.Component<IProps> {
         >
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
           <div style={{ position: "relative" }}>
-            {this.renderChallengeCodepressButton(course, module, 0)}
+            {this.renderChallengeCodepressButton(course, module, -1)}
           </div>
           {module.challenges.map((c: ChallengeSkeleton, i: number) => {
             return (
@@ -138,13 +139,7 @@ class NavigationOverlay extends React.Component<IProps> {
                   <span>
                     <Icon
                       iconSize={Icon.SIZE_LARGE}
-                      icon={
-                        !c.userCanAccess
-                          ? "lock"
-                          : c.type === "media"
-                          ? "book"
-                          : "code"
-                      }
+                      icon={getChallengeIcon(c)}
                     />
                     <span style={{ marginLeft: 10 }}>{c.title}</span>
                   </span>
@@ -208,7 +203,6 @@ class NavigationOverlay extends React.Component<IProps> {
                   })
                 }
               />
-              <MenuDivider />
               <MenuItem
                 icon="add"
                 text="Challenge"
@@ -258,6 +252,21 @@ class NavigationOverlay extends React.Component<IProps> {
  * Styles
  * ============================================================================
  */
+
+const getChallengeIcon = (challenge: ChallengeSkeleton): IconName => {
+  const { type, userCanAccess } = challenge;
+  if (!userCanAccess) {
+    return "lock";
+  }
+
+  if (type === "section") {
+    return "bookmark";
+  } else if (type === "media") {
+    return "book";
+  } else {
+    return "code";
+  }
+};
 
 const DoneScrolling = styled((props: any) => (
   <div {...props}>
