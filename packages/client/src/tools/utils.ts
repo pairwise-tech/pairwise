@@ -8,7 +8,6 @@ import {
   VideoChallengeBlob,
   DataBlob,
   SandboxBlob,
-  ChallengeSkeleton,
   CHALLENGE_TYPE,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
