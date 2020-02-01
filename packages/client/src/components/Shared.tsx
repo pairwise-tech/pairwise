@@ -19,6 +19,18 @@ import { COLORS, PROSE_MAX_WIDTH } from "../tools/constants";
 
 const LazyCodeBlock = React.lazy(() => import("./CodeBlock"));
 
+interface DarkThemeProps {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
+  return (
+    <div className={`pairwise ${cx(className, Classes.DARK)}`} {...props} />
+  );
+};
+
 const InlineCode = ({ value }: { value: string }) => {
   return <code className="code">{value}</code>;
 };

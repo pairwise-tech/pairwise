@@ -7,17 +7,10 @@ import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 
-const mapToolbarState = (state: ReduxStoreState) => ({
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
-  course: Modules.selectors.challenges.getCurrentCourse(state),
-  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
-});
-
-const toolbarDispatchProps = {
-  setEditMode: Modules.actions.challenges.setEditMode,
-  saveCourse: Modules.actions.challenges.saveCourse,
-  updateChallenge: Modules.actions.challenges.updateChallenge,
-};
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
 
 const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
 
@@ -32,13 +25,26 @@ const CHALLENGE_TYPE_CHOICES: ChallengeTypeOption[] = [
   { value: "react", label: "React" },
 ];
 
-const EditingToolbar = connect(
-  mapToolbarState,
-  toolbarDispatchProps,
-)((props: EditChallengeControlsConnectProps) => {
+/** ===========================================================================
+ * React Component
+ * ============================================================================
+ */
+
+const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
   // For hiding the controls while recording a video.
   const [hidden, setHidden] = React.useState(false);
-  const { isEditMode, setEditMode, saveCourse, course, challenge } = props;
+  const {
+    activeIds,
+    isEditMode,
+    setEditMode,
+    saveCourse,
+    course,
+    challenge,
+  } = props;
+
+  const { currentCourseId, currentModuleId, currentChallengeId } = activeIds;
+
+  const canDelete = currentCourseId && currentModuleId && currentChallengeId;
 
   if (challenge?.id === SANDBOX_ID) {
     // The sandbox is meant to be just that, and cannot be edited in the same
@@ -59,6 +65,18 @@ const EditingToolbar = connect(
       saveCourse(course);
     } else {
       console.warn("No course to save!!! WHAT??");
+    }
+  };
+
+  const handleDelete = () => {
+    if (!currentCourseId || !currentModuleId || !currentChallengeId) {
+      console.warn("No course, module, or challenge id to delete !!! ¿¿¿");
+    } else {
+      props.deleteChallenge({
+        courseId: currentCourseId,
+        moduleId: currentModuleId,
+        challengeId: currentChallengeId,
+      });
     }
   };
 
@@ -87,6 +105,17 @@ const EditingToolbar = connect(
         >
           Save
         </Button>
+        {canDelete && (
+          <Button
+            large
+            minimal
+            intent="danger"
+            style={{ marginRight: 16 }}
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>
+        )}
         <Suspense fallback={<p>Menu Loading...</p>}>
           <LazyChallengeTypeMenu
             items={CHALLENGE_TYPE_CHOICES}
@@ -107,7 +136,12 @@ const EditingToolbar = connect(
       />
     </div>
   );
-});
+};
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
 
 const SlideOut = styled.div<{ show: boolean }>`
   display: block;
@@ -117,4 +151,28 @@ const SlideOut = styled.div<{ show: boolean }>`
   transform: ${props => (props.show ? "translateX(0)" : "translateX(-10px)")};
 `;
 
-export default EditingToolbar;
+/** ===========================================================================
+ * Props
+ * ============================================================================
+ */
+
+const mapToolbarState = (state: ReduxStoreState) => ({
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
+  course: Modules.selectors.challenges.getCurrentCourse(state),
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
+  activeIds: Modules.selectors.challenges.getCurrentActiveIds(state),
+});
+
+const toolbarDispatchProps = {
+  setEditMode: Modules.actions.challenges.setEditMode,
+  saveCourse: Modules.actions.challenges.saveCourse,
+  updateChallenge: Modules.actions.challenges.updateChallenge,
+  deleteChallenge: Modules.actions.challenges.deleteChallenge,
+};
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
+
+export default connect(mapToolbarState, toolbarDispatchProps)(EditingToolbar);

@@ -27,6 +27,7 @@ import {
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { DEV_MODE } from "tools/client-env";
+import { DarkTheme } from "./Shared";
 
 const debug = require("debug")("client:NavigationOverlay");
 
@@ -53,13 +54,7 @@ class NavigationOverlay extends React.Component<IProps> {
   };
 
   render(): Nullable<JSX.Element> {
-    const {
-      course,
-      module,
-      challengeId,
-      isEditMode,
-      updateCourseModule,
-    } = this.props;
+    const { course, module, isEditMode, updateCourseModule } = this.props;
 
     if (!course || !module) {
       debug("[INFO] No module or course", course, module);
@@ -327,15 +322,25 @@ class CodepressNavigationContextMenu extends React.PureComponent<
   showContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
-    const label =
-      this.props.type === "MODULE" ? "Delete Module" : "Delete Challenge";
+    const { type } = this.props;
+    const label = type === "MODULE" ? "Delete Module" : "Delete Challenge";
 
-    ContextMenu.show(
-      <Menu>
-        <MenuItem icon="cross" text={label} onClick={this.props.handleDelete} />
-      </Menu>,
-      { left: e.clientX, top: e.clientY },
-      () => this.setState({ isContextMenuOpen: false }),
+    const Context = (
+      <DarkTheme>
+        <Menu>
+          <MenuItem
+            icon="cross"
+            text={label}
+            onClick={this.props.handleDelete}
+          />
+        </Menu>
+      </DarkTheme>
+    );
+
+    const coordinates = { left: e.clientX, top: e.clientY };
+
+    ContextMenu.show(Context, coordinates, () =>
+      this.setState({ isContextMenuOpen: false }),
     );
 
     this.setState({ isContextMenuOpen: true });

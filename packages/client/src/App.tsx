@@ -6,6 +6,7 @@ import ApplicationContainer from "components/ApplicationContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
 import { NODE_ENV } from "tools/client-env";
 import ScrollToTop from "components/ScrollToTop";
+import { DarkTheme } from "components/Shared";
 
 /** ===========================================================================
  * Pairwise App!
@@ -24,7 +25,9 @@ class Pairwise extends React.Component {
       <ReduxProvider store={store}>
         <ReactRouter history={history}>
           <ScrollToTop />
-          <ApplicationContainer />
+          <DarkTheme>
+            <ApplicationContainer />
+          </DarkTheme>
         </ReactRouter>
       </ReduxProvider>
     );

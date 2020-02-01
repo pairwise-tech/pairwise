@@ -94,12 +94,24 @@ const updateChallenge = (courses: CourseList, update: ChallengeUpdate) => {
   return over(lens, (x: Challenge) => ({ ...x, ...update.challenge }), courses);
 };
 
-const getNewActiveIds = (state: State, updatedCourses: CourseList) => {
+const getNewActiveIds = (
+  state: State,
+  updatedCourses: CourseList,
+  idToDelete: string,
+) => {
   const { currentModuleId, currentCourseId, currentChallengeId } = state;
 
   let newCurrentModuleId = currentModuleId;
   let newCurrentCourseId = currentCourseId;
   let newCurrentChallengeId = currentChallengeId;
+
+  if (idToDelete !== currentChallengeId) {
+    return {
+      newCurrentModuleId,
+      newCurrentCourseId,
+      newCurrentChallengeId,
+    };
+  }
 
   for (const course of updatedCourses) {
     for (const module of course.modules) {
@@ -327,7 +339,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       newCurrentCourseId,
       newCurrentModuleId,
       newCurrentChallengeId,
-    } = getNewActiveIds(state, updatedCourses);
+    } = getNewActiveIds(state, updatedCourses, challengeId);
 
     return {
       ...state,

@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
-
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { DEV_MODE } from "tools/client-env";
@@ -10,13 +9,7 @@ import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
-import {
-  Button,
-  ButtonGroup,
-  Classes,
-  FocusStyleManager,
-} from "@blueprintjs/core";
-import cx from "classnames";
+import { Button, ButtonGroup, FocusStyleManager } from "@blueprintjs/core";
 import Account from "./Account";
 import { ButtonCore, ProfileIcon } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
@@ -101,111 +94,109 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     return (
       <React.Fragment>
         <MobileView />
-        <DarkTheme>
-          {this.renderLoadingOverlay()}
-          <SingleSignOnModal />
-          <PurchaseCourseModal />
-          <NavigationOverlay overlayVisible={overlayVisible} />
-          <Header>
-            <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
-              <NavIconButton
-                overlayVisible={overlayVisible}
-                style={{ color: "white", marginRight: 40 }}
-                onClick={this.props.toggleNavigationMap}
-              />
-              <ProductTitle id="product-title">
-                <Link to="/home">Pairwise</Link>
-              </ProductTitle>
-            </ControlsContainer>
-            {DEV_MODE && (
-              <ControlsContainer>
-                <EditingToolbar />
-              </ControlsContainer>
-            )}
-            <ControlsContainer style={{ marginLeft: "auto" }}>
-              {isSandbox && (
-                <Suspense fallback={<p>Menu Loading...</p>}>
-                  <LazyChallengeTypeMenu
-                    items={SANDBOX_TYPE_CHOICES}
-                    currentChallengeType={challenge?.type}
-                    onItemSelect={x => {
-                      this.props.updateChallenge({
-                        id: challenge.id, // See NOTE
-                        challenge: { type: x.value },
-                      });
-                    }}
-                  />
-                </Suspense>
-              )}
-              <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
-                <Button
-                  id="sandboxButton"
-                  disabled={isSandbox}
-                  style={{ margin: "0 20px" }}
-                >
-                  Sandbox
-                </Button>
-              </Link>
-              {displayNavigationArrows && (
-                <ButtonGroup>
-                  <PrevChallengeIconButton id={"prevButton"} />
-                  <NextChallengeIconButton id={"nextButton"} />
-                </ButtonGroup>
-              )}
-              {this.props.userAuthenticated && this.props.user.profile ? (
-                <AccountDropdownButton>
-                  <div
-                    id="account-menu-dropdown"
-                    className="account-menu-dropdown"
-                  >
-                    <UserBio>
-                      <CreateAccountText className="account-menu">
-                        Welcome, {this.props.user.profile.givenName}!{" "}
-                      </CreateAccountText>
-                      <ProfileIcon avatar={this.props.user.profile.avatarUrl} />
-                    </UserBio>
-                    <div className="dropdown-links">
-                      <Link
-                        id="account-link"
-                        to="/account"
-                        style={{
-                          borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
-                        }}
-                      >
-                        Account
-                      </Link>
-                      <Link
-                        id="logout-link"
-                        onClick={this.handleLogout}
-                        to="/logout"
-                      >
-                        Logout
-                      </Link>
-                    </div>
-                  </div>
-                </AccountDropdownButton>
-              ) : (
-                <AccountButton
-                  id="login-signup-button"
-                  onClick={() => this.props.setSingleSignOnDialogState(true)}
-                >
-                  <CreateAccountText>Login or Signup</CreateAccountText>
-                </AccountButton>
-              )}
-            </ControlsContainer>
-          </Header>
-          <Switch>
-            <Route key={0} path="/workspace/:id" component={Workspace} />
-            <Route key={1} path="/home" component={Home} />
-            <Route key={2} path="/account" component={Account} />
-            <Route
-              key={3}
-              path="/logout"
-              component={() => <Redirect to="/home" />}
+        {this.renderLoadingOverlay()}
+        <SingleSignOnModal />
+        <PurchaseCourseModal />
+        <NavigationOverlay overlayVisible={overlayVisible} />
+        <Header>
+          <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
+            <NavIconButton
+              overlayVisible={overlayVisible}
+              style={{ color: "white", marginRight: 40 }}
+              onClick={this.props.toggleNavigationMap}
             />
-            <Route key={4} component={() => <Redirect to="/home" />} />
-          </Switch>
-        </DarkTheme>
+            <ProductTitle id="product-title">
+              <Link to="/home">Pairwise</Link>
+            </ProductTitle>
+          </ControlsContainer>
+          {DEV_MODE && (
+            <ControlsContainer>
+              <EditingToolbar />
+            </ControlsContainer>
+          )}
+          <ControlsContainer style={{ marginLeft: "auto" }}>
+            {isSandbox && (
+              <Suspense fallback={<p>Menu Loading...</p>}>
+                <LazyChallengeTypeMenu
+                  items={SANDBOX_TYPE_CHOICES}
+                  currentChallengeType={challenge?.type}
+                  onItemSelect={x => {
+                    this.props.updateChallenge({
+                      id: challenge.id, // See NOTE
+                      challenge: { type: x.value },
+                    });
+                  }}
+                />
+              </Suspense>
+            )}
+            <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
+              <Button
+                id="sandboxButton"
+                disabled={isSandbox}
+                style={{ margin: "0 20px" }}
+              >
+                Sandbox
+              </Button>
+            </Link>
+            {displayNavigationArrows && (
+              <ButtonGroup>
+                <PrevChallengeIconButton id={"prevButton"} />
+                <NextChallengeIconButton id={"nextButton"} />
+              </ButtonGroup>
+            )}
+            {this.props.userAuthenticated && this.props.user.profile ? (
+              <AccountDropdownButton>
+                <div
+                  id="account-menu-dropdown"
+                  className="account-menu-dropdown"
+                >
+                  <UserBio>
+                    <CreateAccountText className="account-menu">
+                      Welcome, {this.props.user.profile.givenName}!{" "}
+                    </CreateAccountText>
+                    <ProfileIcon avatar={this.props.user.profile.avatarUrl} />
+                  </UserBio>
+                  <div className="dropdown-links">
+                    <Link
+                      id="account-link"
+                      to="/account"
+                      style={{
+                        borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
+                      }}
+                    >
+                      Account
+                    </Link>
+                    <Link
+                      id="logout-link"
+                      onClick={this.handleLogout}
+                      to="/logout"
+                    >
+                      Logout
+                    </Link>
+                  </div>
+                </div>
+              </AccountDropdownButton>
+            ) : (
+              <AccountButton
+                id="login-signup-button"
+                onClick={() => this.props.setSingleSignOnDialogState(true)}
+              >
+                <CreateAccountText>Login or Signup</CreateAccountText>
+              </AccountButton>
+            )}
+          </ControlsContainer>
+        </Header>
+        <Switch>
+          <Route key={0} path="/workspace/:id" component={Workspace} />
+          <Route key={1} path="/home" component={Home} />
+          <Route key={2} path="/account" component={Account} />
+          <Route
+            key={3}
+            path="/logout"
+            component={() => <Redirect to="/home" />}
+          />
+          <Route key={4} component={() => <Redirect to="/home" />} />
+        </Switch>
       </React.Fragment>
     );
   }
@@ -466,18 +457,6 @@ const MobileTitleText = styled(MobileText)`
   font-family: "Helvetica Neue", Lato, sans-serif;
   color: ${COLORS.TEXT_TITLE};
 `;
-
-interface DarkThemeProps {
-  children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
-  return (
-    <div className={`pairwise ${cx(className, Classes.DARK)}`} {...props} />
-  );
-};
 
 /** ===========================================================================
  * Props
