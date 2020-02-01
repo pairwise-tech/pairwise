@@ -22,9 +22,11 @@ import {
   Menu,
   MenuItem,
   Position,
+  ContextMenu,
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
+import { DEV_MODE } from "tools/client-env";
 
 const debug = require("debug")("client:NavigationOverlay");
 
@@ -57,7 +59,6 @@ class NavigationOverlay extends React.Component<IProps> {
       challengeId,
       isEditMode,
       updateCourseModule,
-      setCurrentModule,
     } = this.props;
 
     if (!course || !module) {
@@ -81,28 +82,27 @@ class NavigationOverlay extends React.Component<IProps> {
           {course.modules.map((m, i) => {
             return (
               <div key={m.id} style={{ position: "relative" }}>
-                {isEditMode ? (
-                  <NavUpdateField
-                    onChange={e => {
-                      updateCourseModule({
-                        id: m.id,
-                        courseId: course.id,
-                        module: { title: e.target.value },
-                      });
-                    }}
-                    defaultValue={m.title}
-                  />
+                {DEV_MODE ? (
+                  isEditMode ? (
+                    <ModuleCodepressContextMenu>
+                      <NavUpdateField
+                        onChange={e => {
+                          updateCourseModule({
+                            id: m.id,
+                            courseId: course.id,
+                            module: { title: e.target.value },
+                          });
+                        }}
+                        defaultValue={m.title}
+                      />
+                    </ModuleCodepressContextMenu>
+                  ) : (
+                    <ModuleCodepressContextMenu>
+                      {this.renderModuleNavigationItem(module.id, m, i)}
+                    </ModuleCodepressContextMenu>
+                  )
                 ) : (
-                  <NavButton
-                    id={`module-navigation-${i}`}
-                    active={m.id === module.id}
-                    onClick={() => setCurrentModule(m.id)}
-                  >
-                    <span>
-                      <ModuleNumber>{i}</ModuleNumber>
-                      {m.title}
-                    </span>
-                  </NavButton>
+                  this.renderModuleNavigationItem(module.id, m, i)
                 )}
                 {this.renderModuleCodepressButton(course, i)}
               </div>
@@ -163,6 +163,25 @@ class NavigationOverlay extends React.Component<IProps> {
       </Overlay>
     );
   }
+
+  renderModuleNavigationItem = (
+    activeModuleId: string,
+    module: ModuleSkeleton,
+    index: number,
+  ) => {
+    return (
+      <NavButton
+        id={`module-navigation-${index}`}
+        active={module.id === activeModuleId}
+        onClick={() => this.props.setCurrentModule(module.id)}
+      >
+        <span>
+          <ModuleNumber>{index}</ModuleNumber>
+          {module.title}
+        </span>
+      </NavButton>
+    );
+  };
 
   renderModuleCodepressButton = (course: CourseSkeleton, index: number) => {
     const { isEditMode } = this.props;
@@ -248,6 +267,38 @@ class NavigationOverlay extends React.Component<IProps> {
       event.preventDefault();
       this.props.handlePurchaseCourseIntent({ courseId });
     }
+  };
+}
+
+/** ===========================================================================
+ * Context Menu
+ * ============================================================================
+ */
+
+class ModuleCodepressContextMenu extends React.PureComponent<
+  {},
+  { isContextMenuOpen: boolean }
+> {
+  state = { isContextMenuOpen: false };
+
+  render() {
+    return (
+      <div onContextMenu={this.showContextMenu}>{this.props.children}</div>
+    );
+  }
+
+  showContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    ContextMenu.show(
+      <Menu>
+        <MenuItem onClick={() => null} text="Edit" />
+        <MenuItem onClick={() => null} text="Delete" />
+      </Menu>,
+      { left: e.clientX, top: e.clientY },
+      () => this.setState({ isContextMenuOpen: false }),
+    );
+
+    this.setState({ isContextMenuOpen: true });
   };
 }
 
