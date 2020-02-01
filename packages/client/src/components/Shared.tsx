@@ -183,6 +183,10 @@ const InlineCode = ({ value }: { value: string }) => {
   return <code className="code">{value}</code>;
 };
 
+const BlockQuote = ({ children }: { children: React.ReactNode }) => {
+  return <blockquote className="tip">{children}</blockquote>;
+};
+
 export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -216,6 +220,7 @@ const HighlightedMarkdown = (props: ReactMarkdownProps) => {
         renderers={{
           code: LazyCodeBlock,
           inlineCode: InlineCode,
+          blockquote: BlockQuote,
         }}
         {...props}
       />
@@ -239,6 +244,19 @@ export const StyledMarkdown = styled(HighlightedMarkdown)`
     border-radius: 3px;
     line-height: normal;
     font-size: 85%;
+  }
+
+  .tip {
+    padding-left: 24px;
+    border-left: 5px solid #6cbbff;
+    font-size: 20px;
+    line-height: 24px;
+    padding: 10px 0 10px 24px;
+    background: #323232;
+  }
+
+  .tip p {
+    margin: 0;
   }
 `;
 

@@ -238,24 +238,123 @@
         {
           "id": "0gih2c1M",
           "type": "media",
-          "title": "Types!",
+          "title": "Enter Types",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "supplementaryContent": "Central to every TypeScript program is the data that it concerns, operates on, and manipulates. But what exactly is that data? How can it be described, and what are its properties?\n\nWell, TypeScript, like every programming language, has different _types_ of data. The number of types that can be created by a programming language’s users is infinite, however all languages, including TypeScript, have a set of built-in types, the lowest level of which are called __primitives__. These types can be operated on and manipulated by themselves, or be composed with other types to form more complex types, but this is a topic we’ll cover in more detail later. For now, let’s focus on TypeScript's most common __primitive__ data types.\n\nFirst, though, let’s clear something up. \n\n## What exactly is a type?\nAt its most basic, a type describes a particular piece of data. A piece of data’s type lets us (and more importantly, the computer!) know how this particular piece of data can be used and what kind of operations can be performed on it. For example, something with the type `number`, should be able to be added, subtracted, divided, and multiplied with other pieces of data that also have the type `number`. Makes sense, right!?\n\nIn fact, you just learned your first type: `number`! As you might have guessed, this is one of TypeScript's primitive data types; one of the basic building blocks of the data found within a TypeScript program. So, what are some of the other primitive types?\n\nTypeScript supports several primitive data types, including:\n\n- `number`\n- `string`\n- `boolean`\n- `null`\n- `undefined`\n\nWhile this list is not exhaustive, for the purposes of the next several lessons, these are the types you'll need to know. Let's take a closer look at each one in the next few challenges."
+          "supplementaryContent": "Central to every TypeScript program is the data that it concerns, operates on, and manipulates. But what exactly is that data? How can it be described, and what are its properties?\n\nWell, TypeScript, like every programming language, has different _types_ of data. The number of types that can be created by a programming language’s users is infinite, however all languages, including TypeScript, have a set of built-in types, the lowest level of which are called __primitives__. These types can be operated on and manipulated by themselves, or be composed with other types to form more complex types, but this is a topic we’ll cover in more detail later. For now, let’s focus on TypeScript's most common __primitive__ data types.\n\nFirst, though, let’s clear something up. \n\n## What exactly is a type?\nAt its most basic, a type describes a particular piece of data. A piece of data’s type lets us (and more importantly, the computer!) know how this particular piece of data can be used and what kind of operations can be performed on it. For example, something with the type `number`, should be able to be added, subtracted, divided, and multiplied with other pieces of data that also have the type `number`. Makes sense, right!?\n\nIn fact, you just learned your first type: `number`! As you might have guessed, this is one of TypeScript's primitive data types; one of the basic building blocks of the data found within a TypeScript program.\n\n## TypeScript Primitive Types\nTypeScript supports several primitive data types, including:\n\n- `number`\n- `string`\n- `boolean`\n- `null`\n- `undefined`\n\nWhile this list is not exhaustive, for the purpose of the next several lessons, these are the types you'll need to know. Let's take a closer look at each one in the next few challenges."
         },
         {
           "id": "w3bc0PeO",
           "type": "typescript",
           "title": "Numbers",
-          "content": "In TypeScript, numbers are expressed literally, and are given the type `number` (not to be confused with `Number`, with a capital \"N\"). As you might expect, numbers can be operated on mathematically, and are used for representing numeric values in our programs.\n\nNumbers can be whole, or have one or more decimal places.\n\n- Modify the code below so that `whole` is equal to `1` and `half` is equal to `.5`.",
+          "content": "In TypeScript, numbers are expressed literally, and are given the type `number` (not to be confused with `Number`, with a capital \"N\"). As you might expect, numbers can be operated on mathematically, and are used for representing numeric values in our programs.\n\nIn TypeScript, numbers can be whole, or fractional (i.e. have one or more decimal places).\n\n- Modify the code below so that `whole` is equal to `1` and `half` is equal to `.5`.",
           "testCode": "test('whole should be equal to 1', () => expect(whole).toBe(1));\ntest('half should be equal to .5', () => expect(half).toBe(.5));",
           "videoUrl": "",
           "starterCode": "let whole = 0;\nlet half = 0;",
           "solutionCode": "let whole = 1;\nlet half = .5;",
-          "supplementaryContent": "## `number` _not_ `Number`\nThis is an important distinction. In TypeScript, _`number`_ refers to the data type, while `Number` refers to the  __global__, and more concrete, `Number` object, a concept that goes beyond the scope of this lesson. For now, it's just important that you understand the distinction, and that TypeScript is a case-sensitive programming language. While this may seem like a small difference, remember: in the case of `number` vs. `Number`, case matters!"
+          "supplementaryContent": "## `number` _not_ `Number`\nThis is an important distinction. In TypeScript, _`number`_ refers to the data type, while `Number` refers to the  __global__, and more concrete, `Number` object, a concept that goes beyond the scope of this lesson. For now, it's just important that you understand the distinction, and that TypeScript is a case-sensitive programming language. While this may seem like a small difference, remember: in the case of `number` vs. `Number`, case matters!\n\n## Just one `number`\nIn the challenge above, we discussed that data with the type `number` in TypeScript can represent both whole and fractional values. While it is not important in the context of this course, you might find it interesting to know that commonly, in other program languages, fractional values, or _floating point_ values, are represented by another data type. TypeScript is unique in that all numbers are considered floating point values."
+        },
+        {
+          "id": "UnMCiU0Z",
+          "type": "typescript",
+          "title": "Strings",
+          "content": "In TypeScript, strings are used to represent text, or data that can be represented by text, and are given the type `string` (not to be confused with `String` – noticing a pattern here?). Strings are expressed as a string of characters surrounded by single or double quotes, `\"like this\"`.\n\n- Modify `greeting` below so that it says \"Hello, my name is \" followed by your name",
+          "testCode": "test('greeting should equal the string \"Hello, my name is {your name here}\"', () => assert(/hello, my name is \\w+/i.test(greeting)))",
+          "videoUrl": "",
+          "starterCode": "let greeting = \"\";",
+          "solutionCode": "let greeting = \"Hello, my name is Pete\";",
+          "supplementaryContent": "## `string` not `String`\nOk, last warning! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway: TypeScript is a **case-sensitive** language, and it is **_not_** safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip:** TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc."
+        },
+        {
+          "id": "aKi_ySGP",
+          "type": "markup",
+          "title": "Booleans",
+          "content": "PLACEHOLDER",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "CRg_eu1t",
+          "type": "markup",
+          "title": "Null and Undefined",
+          "content": "PLACEHOLDER",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "B6sT0T6q",
+          "type": "markup",
+          "title": "All about Any",
+          "content": "PLACEHOLDER",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "7CDlUIz9",
+          "type": "media",
+          "title": "Type Inference",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "By now, you know that all data in a TypeScript program has a type. But how does the compiler know what types of data it's dealing with? Well, TypeScript is a pretty smart language, and in many cases, it can effectively use _type inference_ to determine type information about a piece of data. For example, when a variable is initialized with a string of text surrounded by quotes, TypeScript can _infer_ that that variable is of the type `string`.\n\n```\nlet foo = \"this is a string\";\n// TypeScript infers that foo is a string\n```\nTypeScript can easily accomplish this with primitive data types:\n\n```\nlet bar = true; // inferred to be boolean\nlet baz = 100; // inferred to be number\nlet qux = null; // inferred to be any\nlet qaz = undefined; // inferred to be any\n```\nLet's see this in action in the next challenge!"
+        },
+        {
+          "id": "Q2hgPS5P",
+          "type": "typescript",
+          "title": "Inference in Action",
+          "content": "Consider the code snippet from the last challenge. Don't just take our word for it, hover over the variable names and notice what you see.\n\nWithout being explicit, TypeScript's type engine can successfully infer the types of data that we've assigned to our rather arbitrary variables.",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "let bar = 100; // inferred to be number\nlet baz = true; // inferred to be boolean",
+          "solutionCode": "",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "zSYT-6Vr",
+          "type": "media",
+          "title": "Being Explicit with Type Annotations",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "We've seen that TypeScript can infer type information from our code contextually. However, as data types become more complex, or potentially ambiguous, it is sometimes useful to be more _explicit_, and tell the compiler exactly what type of data it's dealing with. In order to do this, TypeScript provides us with **type annotations**. Type annotations are a way to tell the compiler how to treat a piece of data. \n\nThe syntax `:` + `type name` is used to annotate variables and other parts of our programs. They look like this:\n\n```\nlet name: string = \"Finn\"; \n// use a colon followed by a type to explicitly type something\n```\n\nThis is not always necessary, since TypeScript does have very powerful type inference, which goes far beyond inferring primitive data types. However, it sometimes _is necessary_, and is often helpful to other developers reading your code to allow them to quickly and easily understand how something is intended to work and/or be used.\n\n> **Tip**: Hover over variable names and other parts of your code in the Pairwise workspace to see their type annotations.\n\nUsing explicit types can also act as a safeguard for catching type-errors before your code is even compiled (if you're using something called a linter, which the Pairwise workspace uses, as you'll soon see). For example:\n\n```\nlet theMeaningOfLife: string = 42; \n// Error! TypeScript will complain about this\n```\n\nSince we've told TypeScript that `theMeaningOfLife` should be a `string`, it will warn us that we've tried to assign it a number to (denoted by a squiggly red line, just like a spellchecker). This is called **type incompatibility**, and is something we want to avoid.\n\nLet's try this out."
+        },
+        {
+          "id": "AB2T4DCt",
+          "type": "typescript",
+          "title": "Fix Me!",
+          "content": "Hover over `theMeaningOfLife` to see a helpful linter error, and then fix the problem.",
+          "testCode": "test('message', () => assert(typeof theMeaningOfLife === \"string\"))",
+          "videoUrl": "",
+          "starterCode": "let theMeaningOfLife: string = 42;",
+          "solutionCode": "let theMeaningOfLife: string = \"42\";",
+          "supplementaryContent": "## What is a linter?\nA linter is a type of coding aid, which analyzes the code that you write, and in an integrated development environment (or in this case, an IDE-like environment), gives you realtime feedback about potential problems in your code, such as type incompatibilities (like in this case), or stylistic problems. Linters can be a very effective tool and help you write better, less error-prone code."
+        },
+        {
+          "id": "m4K09_cW",
+          "type": "media",
+          "title": "Types in Review",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "TypeScript's type system is a large part of what makes it such a powerful language. While type inference can be very powerful, reach for explicit typing in more complex cases, or if the inferred type  is inconsistent with how you intend something to be used. In any case, being rigorous around types in your programs and using TypeScript's type engine to its fullest potential can help you avoid painful run-time errors in your code.\n\nIf these topics seem confusing right now, don't worry! Type inference and type annotations are both in-depth topics that we'll learn more about in an organic way throughout this course, but it's essential that you're introduced to the concepts and syntax early on. \n\nFor now, the main takeaway is that you learn the difference between type inference and explicit typing with type annotations, and learn to recognize the type annotation syntax.\n\nTo review:\n```\nlet foo = \"foo is inferred to be a string\";\nlet bar: string = \"bar is explicitly typed as a string\";\n```\nWhile these examples are simple, and purposefully contrived for this introduction to types, as we begin learning about more complex data types and structures, we'll revisit these topics, and learn how each one can have a big impact on the code that we write."
         }
       ]
     },
