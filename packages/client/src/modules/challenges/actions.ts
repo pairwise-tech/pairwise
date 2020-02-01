@@ -11,6 +11,7 @@ import {
   InverseChallengeMapping,
   ModuleCreationPayload,
   ModuleUpdatePayload,
+  ModuleDeletePayload,
 } from "./types";
 import { HttpResponseError } from "modules/api";
 import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
@@ -49,7 +50,7 @@ enum ActionTypesEnum {
 
   CREATE_MODULE = "CREATE_MODULE",
   UPDATE_MODULE = "UPDATE_MODULE",
-  REMOVE_MODULE = "REMOVE_MODULE",
+  DELETE_MODULE = "DELETE_MODULE",
 
   UPDATE_EDITOR_OPTIONS = "UPDATE_EDITOR_OPTIONS",
 
@@ -205,4 +206,8 @@ export const createCourseModule = createAction(ActionTypesEnum.CREATE_MODULE)<
 
 export const updateCourseModule = createAction(ActionTypesEnum.UPDATE_MODULE)<
   ModuleUpdatePayload
+>();
+
+export const deleteCourseModule = createAction(ActionTypesEnum.DELETE_MODULE)<
+  ModuleDeletePayload
 >();

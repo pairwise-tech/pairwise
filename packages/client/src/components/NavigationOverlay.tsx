@@ -80,11 +80,18 @@ class NavigationOverlay extends React.Component<IProps> {
             {this.renderModuleCodepressButton(course, -1)}
           </div>
           {course.modules.map((m, i) => {
+
+            const handleDeleteModule = () => {
+              this.props.deleteCourseModule({ id: m.id, courseId: course.id });
+            };
+
             return (
               <div key={m.id} style={{ position: "relative" }}>
                 {DEV_MODE ? (
                   isEditMode ? (
-                    <ModuleCodepressContextMenu>
+                    <ModuleCodepressContextMenu
+                      handleDelete={handleDeleteModule}
+                    >
                       <NavUpdateField
                         onChange={e => {
                           updateCourseModule({
@@ -97,7 +104,9 @@ class NavigationOverlay extends React.Component<IProps> {
                       />
                     </ModuleCodepressContextMenu>
                   ) : (
-                    <ModuleCodepressContextMenu>
+                    <ModuleCodepressContextMenu
+                    handleDelete={handleDeleteModule}
+                    >
                       {this.renderModuleNavigationItem(module.id, m, i)}
                     </ModuleCodepressContextMenu>
                   )
@@ -276,7 +285,9 @@ class NavigationOverlay extends React.Component<IProps> {
  */
 
 class ModuleCodepressContextMenu extends React.PureComponent<
-  {},
+  {
+    handleDelete: () => void;
+  },
   { isContextMenuOpen: boolean }
 > {
   state = { isContextMenuOpen: false };
@@ -292,7 +303,7 @@ class ModuleCodepressContextMenu extends React.PureComponent<
     ContextMenu.show(
       <Menu>
         <MenuItem onClick={() => null} text="Edit" />
-        <MenuItem onClick={() => null} text="Delete" />
+        <MenuItem onClick={this.props.handleDelete} text="Delete" />
       </Menu>,
       { left: e.clientX, top: e.clientY },
       () => this.setState({ isContextMenuOpen: false }),
@@ -526,6 +537,7 @@ const dispatchProps = {
   setCurrentModule: Modules.actions.challenges.setCurrentModule,
   createCourseModule: Modules.actions.challenges.createCourseModule,
   updateCourseModule: Modules.actions.challenges.updateCourseModule,
+  deleteCourseModule: Modules.actions.challenges.deleteCourseModule,
   createChallenge: Modules.actions.challenges.createChallenge,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,

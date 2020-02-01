@@ -4,6 +4,7 @@ import {
   CourseList,
   CourseSkeletonList,
   DataBlob,
+  ModuleList,
 } from "@pairwise/common";
 import Module from "module";
 import insert from "ramda/es/insert";
@@ -171,6 +172,62 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
           ...action.payload.module,
           userCanAccess: true,
         },
+      }),
+    };
+  })
+  .handleAction(actions.deleteCourseModule, (state, { payload }) => {
+    const {
+      courses,
+      courseSkeletons,
+      currentChallengeId,
+      currentModuleId,
+    } = state;
+
+    if (!courses || !courseSkeletons) {
+      return state;
+    }
+
+    const { id, courseId } = payload;
+
+    let updatedModules: ModuleList = [];
+
+    const updatedCourses = courses.map(c => {
+      if (c.id === courseId) {
+        updatedModules = c.modules.filter(m => m.id !== id);
+        return {
+          ...c,
+          modules: updatedModules,
+        };
+      } else {
+        return c;
+      }
+    });
+
+    /**
+     * Reset the current challenge and module ids if the user just deleted
+     * the current module.
+     */
+    let newCurrentModuleId = currentModuleId;
+    let newCurrentChallengeId = currentChallengeId;
+    if (id === currentModuleId && updatedModules.length) {
+      newCurrentModuleId = updatedModules[0].id;
+      newCurrentChallengeId = updatedModules[0].challenges[0].id;
+    }
+
+    return {
+      ...state,
+      currentModuleId: newCurrentModuleId,
+      currentChallengeId: newCurrentChallengeId,
+      courses: updatedCourses,
+      courseSkeletons: courseSkeletons.map(c => {
+        if (c.id === courseId) {
+          return {
+            ...c,
+            modules: c.modules.filter(m => m.id !== id),
+          };
+        } else {
+          return c;
+        }
       }),
     };
   })

@@ -43,6 +43,11 @@ export interface ModuleUpdatePayload {
   module: Partial<Module>;
 }
 
+export interface ModuleDeletePayload {
+  id: string; // Module id
+  courseId: string;
+}
+
 export interface ChallengeUpdatePayload {
   id: string; // Challenge ID
   challenge: Partial<Challenge>;
