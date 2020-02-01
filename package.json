@@ -33,6 +33,7 @@
     "db:setup": "cd packages/server && yarn setup:db",
     "db:reset": "cd packages/server && yarn db:reset",
     "db:migration": "cd packages/server && yarn migration:run",
+    "services": "yarn services:start",
     "services:start": "cd packages/external-services && yarn start",
     "services:watch": "cd packages/external-services && yarn watch",
     "services:build": "cd packages/external-services && yarn build",
