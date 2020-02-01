@@ -748,13 +748,7 @@ class Workspace extends React.Component<IProps, IState> {
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
-      const log = Decode([
-        {
-          data,
-          method,
-        },
-      ]);
-      this.updateWorkspaceConsole(log);
+      this.updateWorkspaceConsole({ data, method });
     };
 
     try {
@@ -909,7 +903,7 @@ class Workspace extends React.Component<IProps, IState> {
   updateWorkspaceConsole = (log: Log) => {
     this.setState(
       ({ logs }) => ({
-        logs: [...logs, log],
+        logs: [...logs, this.transformUndefinedLogMessages(log)],
       }),
       () => {
         const { method, data } = log;
@@ -933,6 +927,22 @@ class Workspace extends React.Component<IProps, IState> {
         }
       },
     );
+  };
+
+  transformUndefinedLogMessages = (log: Log) => {
+    const { method, data } = log;
+    const withUndefined = data.map(value => {
+      if (value === "__transform_undefined__") {
+        return undefined;
+      }
+
+      return value;
+    });
+
+    return {
+      method,
+      data: withUndefined,
+    };
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
