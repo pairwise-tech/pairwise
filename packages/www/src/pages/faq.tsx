@@ -54,7 +54,7 @@ that what we're selling is truly worth what we charge.
 Yes, but not everyone will. Coding is not for everyone, but you won't know
 if it's for you or not until you try. By the end of the first module, which
 is entirely free, you should have a good sense of what programming is
-like and whether nor not you want to continue.
+like and whether or not you want to continue.
     `,
   },
   {
@@ -66,7 +66,7 @@ You will learn modern fullstack software development skills, specifically
 how to build web and mobile applications using TypeScript, React, and
 NodeJS. You will learn how to build, test, and deploy these applications,
 along with a variety of other topics. In addition, you will gain a solid
-foundation fundamental programming skills which will be useful in an
+foundation in fundamental programming skills which will be useful in an
 software development career.
     `,
   },
@@ -76,9 +76,9 @@ software development career.
     `,
     answer: `
 TypeScript is a typed, superset of JavaScript which is the language that
-powers the web. All modern website use JavaScript to deliver engaging web
+powers the web. All modern websites use JavaScript to deliver engaging web
 experiences. TypeScript is rapidly becoming the preferred way to develop
-JavaScript applications by professional developers and therefore the
+JavaScript applications by professional developers and is therefore the
 starting point for our curriculum.
     `,
   },
@@ -93,7 +93,7 @@ on your hourly commitment each day. Does that sound like a lot? Consider
 that by completing this course you're putting yourself on a footing to
 enter an entirely new career, a career that you might remain in for the
 rest of your working life or simply a stepping stone to building your own
-business. Either way, an investment of a few months new could put the rest
+business. Either way, an investment of a few months now could put the rest
 of your life on an entirely new trajectory.
     `,
   },

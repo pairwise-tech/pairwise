@@ -28,12 +28,12 @@ const getAll = selector => {
  * @param {Element} el DOM Element
  * @param {string} cssProp CSS property name. I.e. "background-color"
  */
-const getStyle = (el, cssProp) => {
+const getStyle = (el, cssProp, pseudoSelector = null) => {
   const view =
     el.ownerDocument && el.ownerDocument.defaultView
       ? el.ownerDocument.defaultView
       : window;
-  const style = view.getComputedStyle(el);
+  const style = view.getComputedStyle(el, pseudoSelector);
   return style.getPropertyValue(cssProp) || style[cssProp];
 };
 
