@@ -291,10 +291,13 @@ class Workspace extends React.Component<IProps, IState> {
     const models = this.monacoWrapper.editor.getModels();
     const model = models[0];
 
-    model.decorations = model.deltaDecorations(
-      model.decorations || [],
-      decorations,
-    );
+    // prevent exception when moving through challenges quickly
+    if (model) {
+      model.decorations = model.deltaDecorations(
+        model.decorations || [],
+        decorations,
+      );
+    }
   };
 
   initializeMonaco = () => {
