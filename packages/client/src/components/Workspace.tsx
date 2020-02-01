@@ -748,7 +748,9 @@ class Workspace extends React.Component<IProps, IState> {
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
-      this.updateWorkspaceConsole({ data, method });
+      this.updateWorkspaceConsole(
+        this.transformUndefinedLogMessages({ data, method }),
+      );
     };
 
     try {
@@ -903,7 +905,7 @@ class Workspace extends React.Component<IProps, IState> {
   updateWorkspaceConsole = (log: Log) => {
     this.setState(
       ({ logs }) => ({
-        logs: [...logs, this.transformUndefinedLogMessages(log)],
+        logs: [...logs, log],
       }),
       () => {
         const { method, data } = log;
@@ -929,8 +931,13 @@ class Workspace extends React.Component<IProps, IState> {
     );
   };
 
-  transformUndefinedLogMessages = (log: Log) => {
-    const { method, data } = log;
+  transformUndefinedLogMessages = ({
+    method,
+    data,
+  }: {
+    method: ConsoleLogMethods;
+    data: ReadonlyArray<any>;
+  }) => {
     const withUndefined = data.map(value => {
       if (value === "__transform_undefined__") {
         return undefined;
