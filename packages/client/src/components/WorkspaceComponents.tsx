@@ -14,6 +14,7 @@ import { Loading, ContentEditor } from "./Shared";
 import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 /** ===========================================================================
  * Workspace Components
@@ -354,6 +355,10 @@ const StyledEditableText = styled(EditableText)`
 const keyboardStateToProps = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   course: Modules.selectors.challenges.getCurrentCourse(state),
+  prevChallengeId: Modules.selectors.challenges.nextPrevChallenges(state).prev
+    ?.id,
+  nextChallengeId: Modules.selectors.challenges.nextPrevChallenges(state).next
+    ?.id,
 });
 
 const keyboardDispatchProps = {
@@ -385,15 +390,33 @@ const keyboardMergeProps = (
   },
 });
 
+const AdminKeyboardShortcutsComponent = (
+  props: ReturnType<typeof keyboardMergeProps> & RouteComponentProps,
+) => {
+  const nextChallenge = () => {
+    if (props.nextChallengeId) {
+      props.history.push(`/workspace/${props.nextChallengeId}`);
+    }
+  };
+  const prevChallenge = () => {
+    if (props.prevChallengeId) {
+      props.history.push(`/workspace/${props.prevChallengeId}`);
+    }
+  };
+  return (
+    <KeyboardShortcuts
+      keymap={{
+        "cmd+e": props.toggleEditMode,
+        "cmd+s": props.save,
+        "cmd+shift+.": nextChallenge,
+        "cmd+shift+,": prevChallenge,
+      }}
+    />
+  );
+};
+
 export const AdminKeyboardShortcuts = connect(
   keyboardStateToProps,
   keyboardDispatchProps,
   keyboardMergeProps,
-)((props: ReturnType<typeof keyboardMergeProps>) => (
-  <KeyboardShortcuts
-    keymap={{
-      "cmd+e": props.toggleEditMode,
-      "cmd+s": props.save,
-    }}
-  />
-));
+)(withRouter(AdminKeyboardShortcutsComponent));
