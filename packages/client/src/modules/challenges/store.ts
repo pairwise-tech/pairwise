@@ -94,6 +94,36 @@ const updateChallenge = (courses: CourseList, update: ChallengeUpdate) => {
   return over(lens, (x: Challenge) => ({ ...x, ...update.challenge }), courses);
 };
 
+const getNewActiveIds = (state: State, updatedCourses: CourseList) => {
+  const { currentModuleId, currentCourseId, currentChallengeId } = state;
+
+  let newCurrentModuleId = currentModuleId;
+  let newCurrentCourseId = currentCourseId;
+  let newCurrentChallengeId = currentChallengeId;
+
+  for (const course of updatedCourses) {
+    for (const module of course.modules) {
+      if (module.challenges.length > 0) {
+        newCurrentModuleId = module.id;
+        newCurrentCourseId = course.id;
+        newCurrentChallengeId = module.challenges[0].id;
+
+        return {
+          newCurrentModuleId,
+          newCurrentCourseId,
+          newCurrentChallengeId,
+        };
+      }
+    }
+  }
+
+  return {
+    newCurrentModuleId,
+    newCurrentCourseId,
+    newCurrentChallengeId,
+  };
+};
+
 interface ModuleUpdate {
   id: string;
   courseId: string;
@@ -262,6 +292,67 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
         moduleId,
         courseId,
         challenge,
+      }),
+    };
+  })
+  .handleAction(actions.deleteChallenge, (state, action) => {
+    const { courses, courseSkeletons } = state;
+    const { courseId, moduleId, challengeId } = action.payload;
+
+    if (!courses || !courseSkeletons) {
+      return state;
+    }
+
+    const updatedCourses = courses.map(c => {
+      if (c.id === courseId) {
+        return {
+          ...c,
+          modules: c.modules.map(m => {
+            if (m.id === moduleId) {
+              return {
+                ...m,
+                challenges: m.challenges.filter(ch => ch.id !== challengeId),
+              };
+            } else {
+              return m;
+            }
+          }),
+        };
+      } else {
+        return c;
+      }
+    });
+
+    const {
+      newCurrentCourseId,
+      newCurrentModuleId,
+      newCurrentChallengeId,
+    } = getNewActiveIds(state, updatedCourses);
+
+    return {
+      ...state,
+      currentCourseId: newCurrentCourseId,
+      currentModuleId: newCurrentModuleId,
+      currentChallengeId: newCurrentChallengeId,
+      courses: updatedCourses,
+      courseSkeletons: courseSkeletons.map(c => {
+        if (c.id === courseId) {
+          return {
+            ...c,
+            modules: c.modules.map(m => {
+              if (m.id === moduleId) {
+                return {
+                  ...m,
+                  challenges: m.challenges.filter(ch => ch.id !== challengeId),
+                };
+              } else {
+                return m;
+              }
+            }),
+          };
+        } else {
+          return c;
+        }
       }),
     };
   })

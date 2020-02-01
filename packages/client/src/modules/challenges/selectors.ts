@@ -116,7 +116,7 @@ export const getCurrentModule = createSelector(
 export const getCurrentChallenge = createSelector(
   [getChallengeMap, getCurrentChallengeId, challengesState],
   (challengeMap, challengeId, state) => {
-    // Just a type asserton to de-nullify
+    // Just a type assertion to de-nullify
     if (!challengeId) {
       return null;
     }

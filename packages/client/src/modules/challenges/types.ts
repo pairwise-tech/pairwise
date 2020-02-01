@@ -52,3 +52,9 @@ export interface ChallengeUpdatePayload {
   id: string; // Challenge ID
   challenge: Partial<Challenge>;
 }
+
+export interface ChallengeDeletePayload {
+  courseId: string;
+  moduleId: string;
+  challengeId: string;
+}

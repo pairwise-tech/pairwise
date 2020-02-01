@@ -12,6 +12,7 @@ import {
   ModuleCreationPayload,
   ModuleUpdatePayload,
   ModuleDeletePayload,
+  ChallengeDeletePayload,
 } from "./types";
 import { HttpResponseError } from "modules/api";
 import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
@@ -46,7 +47,7 @@ enum ActionTypesEnum {
 
   CREATE_CHALLENGE = "CREATE_CHALLENGE",
   UPDATE_CHALLENGE = "UPDATE_CHALLENGE",
-  REMOVE_CHALLENGE = "REMOVE_CHALLENGE",
+  DELETE_CHALLENGE = "DELETE_CHALLENGE",
 
   CREATE_MODULE = "CREATE_MODULE",
   UPDATE_MODULE = "UPDATE_MODULE",
@@ -196,8 +197,8 @@ export const updateChallenge = createAction(ActionTypesEnum.UPDATE_CHALLENGE)<
   ChallengeUpdatePayload
 >();
 
-export const removeChallenge = createAction(ActionTypesEnum.REMOVE_CHALLENGE)<
-  string
+export const deleteChallenge = createAction(ActionTypesEnum.DELETE_CHALLENGE)<
+  ChallengeDeletePayload
 >();
 
 export const createCourseModule = createAction(ActionTypesEnum.CREATE_MODULE)<
