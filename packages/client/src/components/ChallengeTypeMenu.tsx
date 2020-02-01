@@ -2,6 +2,7 @@ import React from "react";
 import { CHALLENGE_TYPE } from "@pairwise/common";
 import { Button, ButtonGroup, Tooltip, Icon } from "@blueprintjs/core";
 import { Select, ItemListRenderer, IListItemsProps } from "@blueprintjs/select";
+import { getChallengeIcon } from "tools/utils";
 
 const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
 
@@ -47,10 +48,10 @@ const ChallengeTypeMenu = ({
       itemRenderer={(x, { handleClick, modifiers }) => (
         <Button
           key={x.value}
-          icon={x.value === "media" ? "video" : "code"}
           text={x.label}
           onClick={handleClick}
           active={modifiers.active}
+          icon={getChallengeIcon(x.value, true)}
         />
       )}
     >

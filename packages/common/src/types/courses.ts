@@ -10,7 +10,12 @@
 
 export type CourseList = Course[];
 
-export type CHALLENGE_TYPE = "react" | "typescript" | "markup" | "media";
+export type CHALLENGE_TYPE =
+  | "react"
+  | "typescript"
+  | "markup"
+  | "media"
+  | "section";
 
 export interface Course {
   id: string;

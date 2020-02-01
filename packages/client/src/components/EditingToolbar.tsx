@@ -25,10 +25,11 @@ type EditChallengeControlsConnectProps = ReturnType<typeof mapToolbarState> &
   typeof toolbarDispatchProps;
 
 const CHALLENGE_TYPE_CHOICES: ChallengeTypeOption[] = [
+  { value: "section", label: "Section" },
+  { value: "media", label: "Media" },
   { value: "markup", label: "Markup" },
   { value: "typescript", label: "TypeScript" },
   { value: "react", label: "React" },
-  { value: "media", label: "Media" },
 ];
 
 const EditingToolbar = connect(

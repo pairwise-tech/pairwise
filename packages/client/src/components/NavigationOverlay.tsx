@@ -1,16 +1,28 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-
-import { ChallengeSkeleton } from "@pairwise/common";
+import {
+  ChallengeSkeleton,
+  CourseSkeleton,
+  ModuleSkeleton,
+  Challenge,
+} from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
 import {
   composeWithProps,
   generateEmptyModule,
   generateEmptyChallenge,
+  getChallengeIcon,
 } from "tools/utils";
-import { Tooltip, Icon } from "@blueprintjs/core";
+import {
+  Tooltip,
+  Icon,
+  Popover,
+  Menu,
+  MenuItem,
+  Position,
+} from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
 
@@ -21,185 +33,223 @@ const debug = require("debug")("client:NavigationOverlay");
  * ============================================================================
  */
 
-const NavigationOverlay = (props: IProps) => {
-  const {
-    course,
-    module,
-    challengeId,
-    isEditMode,
-    updateCourseModule,
-    setCurrentModule,
-    overlayVisible,
-  } = props;
+class NavigationOverlay extends React.Component<IProps> {
+  componentDidMount() {
+    this.lockWindowScrolling();
+  }
 
-  // Prevent scrolling when the overlay is open
-  React.useEffect(() => {
-    if (overlayVisible) {
+  componentDidUpdate() {
+    this.lockWindowScrolling();
+  }
+
+  lockWindowScrolling = () => {
+    if (this.props.overlayVisible) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "visible";
     }
-  }, [overlayVisible]);
+  };
 
-  const handleClose = () => {
-    if (props.overlayVisible) {
-      props.setNavigationMapState(false);
+  render(): Nullable<JSX.Element> {
+    const {
+      course,
+      module,
+      challengeId,
+      isEditMode,
+      updateCourseModule,
+      setCurrentModule,
+    } = this.props;
+
+    if (!course || !module) {
+      debug("[INFO] No module or course", course, module);
+      return null;
+    }
+
+    return (
+      <Overlay visible={this.props.overlayVisible} onClick={this.handleClose}>
+        <KeyboardShortcuts keymap={{ escape: this.handleClose }} />
+        <Col
+          offsetX={this.props.overlayVisible ? 0 : -20}
+          style={{ zIndex: 3 }}
+          onClick={e => e.stopPropagation()}
+        >
+          <Title>{course.title}</Title>
+          {/* In case of no challenges yet, or to add one at the start, here's a button */}
+          <div style={{ position: "relative" }}>
+            {this.renderModuleCodepressButton(course, -1)}
+          </div>
+          {course.modules.map((m, i) => {
+            return (
+              <div key={m.id} style={{ position: "relative" }}>
+                {isEditMode ? (
+                  <NavUpdateField
+                    onChange={e => {
+                      updateCourseModule({
+                        id: m.id,
+                        courseId: course.id,
+                        module: { title: e.target.value },
+                      });
+                    }}
+                    defaultValue={m.title}
+                  />
+                ) : (
+                  <NavButton
+                    id={`module-navigation-${i}`}
+                    active={m.id === module.id}
+                    onClick={() => setCurrentModule(m.id)}
+                  >
+                    <span>
+                      <ModuleNumber>{i}</ModuleNumber>
+                      {m.title}
+                    </span>
+                  </NavButton>
+                )}
+                {this.renderModuleCodepressButton(course, i)}
+              </div>
+            );
+          })}
+        </Col>
+        <Col
+          offsetX={this.props.overlayVisible ? 0 : -60}
+          style={{
+            width: 600,
+            zIndex: 2,
+            boxShadow: "inset 20px 0px 20px 0px rgba(0, 0, 0, 0.1)",
+          }}
+          onClick={e => e.stopPropagation()}
+        >
+          {/* In case of no challenges yet, or to add one at the start, here's a button */}
+          <div style={{ position: "relative" }}>
+            {this.renderChallengeCodepressButton(course, module, -1)}
+          </div>
+          {module.challenges.map((c: ChallengeSkeleton, i: number) => {
+            return (
+              <div key={c.id} style={{ position: "relative" }}>
+                <Link
+                  key={c.id}
+                  to={`/workspace/${c.id}`}
+                  id={`challenge-navigation-${i}`}
+                  isActive={() => c.id === challengeId}
+                  onClick={this.handleClickChallenge(
+                    c.userCanAccess,
+                    course.id,
+                  )}
+                >
+                  <span>
+                    <Icon
+                      iconSize={Icon.SIZE_LARGE}
+                      icon={getChallengeIcon(c.type, c.userCanAccess)}
+                    />
+                    <span style={{ marginLeft: 10 }}>{c.title}</span>
+                  </span>
+                  <span>
+                    {c.videoUrl && (
+                      <Tooltip
+                        usePortal={false}
+                        position="left"
+                        content="Includes Video"
+                      >
+                        <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
+                      </Tooltip>
+                    )}
+                  </span>
+                </Link>
+                {this.renderChallengeCodepressButton(course, module, i)}
+              </div>
+            );
+          })}
+          <DoneScrolling />
+        </Col>
+      </Overlay>
+    );
+  }
+
+  renderModuleCodepressButton = (course: CourseSkeleton, index: number) => {
+    const { isEditMode } = this.props;
+    return (
+      <AddNavItemPositionContainer>
+        <AddNavItemButton
+          show={isEditMode}
+          onClick={() =>
+            this.props.createCourseModule({
+              courseId: course.id,
+              insertionIndex: index + 1,
+              module: generateEmptyModule(),
+            })
+          }
+        />
+      </AddNavItemPositionContainer>
+    );
+  };
+
+  renderChallengeCodepressButton = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    index: number,
+  ) => {
+    const { isEditMode, overlayVisible } = this.props;
+    return (
+      <AddNavItemPositionContainer>
+        <Popover
+          canEscapeKeyClose
+          // NOTE: canEscapeKeyClose does not work, use disabled prop to force
+          // the menu to close when the overlay is not visible!
+          disabled={!overlayVisible}
+          content={
+            <Menu>
+              <MenuItem
+                icon="bookmark"
+                text="Section"
+                onClick={() =>
+                  this.handleAddChallenge(course, module, index, {
+                    type: "section",
+                  })
+                }
+              />
+              <MenuItem
+                icon="insert"
+                text="Challenge"
+                onClick={() => this.handleAddChallenge(course, module, index)}
+              />
+            </Menu>
+          }
+          position={Position.RIGHT}
+        >
+          <AddNavItemButton show={isEditMode} onClick={() => null} />
+        </Popover>
+      </AddNavItemPositionContainer>
+    );
+  };
+
+  handleAddChallenge = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    index: number,
+    overrides?: Partial<Challenge>,
+  ) => {
+    this.props.createChallenge({
+      courseId: course.id,
+      moduleId: module.id,
+      insertionIndex: index + 1,
+      challenge: generateEmptyChallenge(overrides),
+    });
+  };
+
+  handleClose = () => {
+    if (this.props.overlayVisible) {
+      this.props.setNavigationMapState(false);
     }
   };
 
-  const handleClickChallenge = (userCanAccess: boolean, courseId: string) => (
+  handleClickChallenge = (userCanAccess: boolean, courseId: string) => (
     event: any,
   ) => {
     if (!userCanAccess) {
       event.preventDefault();
-      props.handlePurchaseCourseIntent({ courseId });
+      this.props.handlePurchaseCourseIntent({ courseId });
     }
   };
-
-  if (!course || !module) {
-    debug("[INFO] No module or course", course, module);
-    return null;
-  }
-
-  return (
-    <Overlay visible={props.overlayVisible} onClick={handleClose}>
-      <KeyboardShortcuts keymap={{ escape: handleClose }} />
-      <Col
-        offsetX={props.overlayVisible ? 0 : -20}
-        style={{ zIndex: 3 }}
-        onClick={e => e.stopPropagation()}
-      >
-        <Title>{course.title}</Title>
-        {/* In case of no challenges yet, or to add one at the start, here's a button */}
-        <div style={{ position: "relative" }}>
-          <AddNavItemButton
-            show={isEditMode}
-            onClick={() =>
-              props.createCourseModule({
-                courseId: course.id,
-                insertionIndex: 0,
-                module: generateEmptyModule(),
-              })
-            }
-          />
-        </div>
-        {course.modules.map((m, i) => {
-          return (
-            <div key={m.id} style={{ position: "relative" }}>
-              {isEditMode ? (
-                <NavUpdateField
-                  onChange={e => {
-                    updateCourseModule({
-                      id: m.id,
-                      courseId: course.id,
-                      module: { title: e.target.value },
-                    });
-                  }}
-                  defaultValue={m.title}
-                />
-              ) : (
-                <NavButton
-                  id={`module-navigation-${i}`}
-                  active={m.id === module.id}
-                  onClick={() => setCurrentModule(m.id)}
-                >
-                  <span>
-                    <ModuleNumber>{i}</ModuleNumber>
-                    {m.title}
-                  </span>
-                </NavButton>
-              )}
-              <AddNavItemButton
-                show={isEditMode}
-                onClick={() =>
-                  props.createCourseModule({
-                    courseId: course.id,
-                    insertionIndex: i + 1,
-                    module: generateEmptyModule(),
-                  })
-                }
-              />
-            </div>
-          );
-        })}
-      </Col>
-      <Col
-        offsetX={props.overlayVisible ? 0 : -60}
-        style={{
-          width: 600,
-          zIndex: 2,
-          boxShadow: "inset 20px 0px 20px 0px rgba(0, 0, 0, 0.1)",
-        }}
-        onClick={e => e.stopPropagation()}
-      >
-        {/* In case of no challenges yet, or to add one at the start, here's a button */}
-        <div style={{ position: "relative" }}>
-          <AddNavItemButton
-            show={isEditMode}
-            onClick={() =>
-              props.createChallenge({
-                courseId: course.id,
-                moduleId: module.id,
-                insertionIndex: 0,
-                challenge: generateEmptyChallenge(),
-              })
-            }
-          />
-        </div>
-        {module.challenges.map((c: ChallengeSkeleton, i: number) => {
-          return (
-            <div key={c.id} style={{ position: "relative" }}>
-              <Link
-                key={c.id}
-                to={`/workspace/${c.id}`}
-                id={`challenge-navigation-${i}`}
-                isActive={() => c.id === challengeId}
-                onClick={handleClickChallenge(c.userCanAccess, course.id)}
-              >
-                <span>
-                  <Icon
-                    iconSize={Icon.SIZE_LARGE}
-                    icon={
-                      !c.userCanAccess
-                        ? "lock"
-                        : c.type === "media"
-                        ? "book"
-                        : "code"
-                    }
-                  />
-                  <span style={{ marginLeft: 10 }}>{c.title}</span>
-                </span>
-                <span>
-                  {c.videoUrl && (
-                    <Tooltip
-                      usePortal={false}
-                      position="left"
-                      content="Includes Video"
-                    >
-                      <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
-                    </Tooltip>
-                  )}
-                </span>
-              </Link>
-              <AddNavItemButton
-                show={isEditMode}
-                onClick={() =>
-                  props.createChallenge({
-                    courseId: course.id,
-                    moduleId: module.id,
-                    insertionIndex: i + 1,
-                    challenge: generateEmptyChallenge(),
-                  })
-                }
-              />
-            </div>
-          );
-        })}
-        <DoneScrolling />
-      </Col>
-    </Overlay>
-  );
-};
+}
 
 /** ===========================================================================
  * Styles
@@ -216,6 +266,13 @@ const DoneScrolling = styled((props: any) => (
   margin: 40px 0;
 `;
 
+const AddNavItemPositionContainer = styled.div`
+  z-index: 5;
+  top: 100%;
+  left: 50%;
+  position: absolute;
+`;
+
 interface AddNavItemButtonProps {
   onClick: () => any;
   show: boolean;
@@ -224,10 +281,6 @@ interface AddNavItemButtonProps {
 const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
   return <button {...props}>+</button>;
 })`
-  position: absolute;
-  z-index: 5;
-  top: 100%;
-  left: 50%;
   transform: translate(-50%, -50%) scale(${props => (props.show ? 1 : 0)});
   transition: all 0.15s ease-out;
   font-weight: bold;
