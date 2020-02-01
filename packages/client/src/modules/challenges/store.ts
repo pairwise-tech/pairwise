@@ -94,7 +94,12 @@ const updateChallenge = (courses: CourseList, update: ChallengeUpdate) => {
   return over(lens, (x: Challenge) => ({ ...x, ...update.challenge }), courses);
 };
 
-const getNewActiveIds = (
+/**
+ * Take the current state and an update from deleting a challenge, and
+ * determine new active course, module, and challenge ids in the event
+ * that the user deleted the current active challenge.
+ */
+const getNewActiveIdsAfterChallengeDeletion = (
   state: State,
   updatedCourses: CourseList,
   idToDelete: string,
@@ -339,7 +344,11 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       newCurrentCourseId,
       newCurrentModuleId,
       newCurrentChallengeId,
-    } = getNewActiveIds(state, updatedCourses, challengeId);
+    } = getNewActiveIdsAfterChallengeDeletion(
+      state,
+      updatedCourses,
+      challengeId,
+    );
 
     return {
       ...state,
