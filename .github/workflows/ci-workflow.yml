@@ -6,21 +6,34 @@ on:
       - master
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
+    env:
+      CI: true
     steps:
       - uses: actions/checkout@v1
+
       - name: Setup NodeJS Environment
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
+
+      # Build the application dependencies
       - name: Build dependencies container
+        run: yarn docker:dependencies
+
+      # Build the application
+      - name: Build applications
         run: yarn docker:build
+
+      # Run all package unit tests
+      - name: Run unit tests
+        run: yarn docker:test
+
+      # Run e2e tests
       - name: Run e2e Tests
         run: yarn e2e
-        env:
-          CI: true
+
+      # Run Cypress tests
       - name: Run Cypress Tests
         run: yarn cypress
-        env:
-          CI: true

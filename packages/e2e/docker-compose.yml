@@ -16,7 +16,7 @@ services:
   server:
     build:
       context: ../../
-      dockerfile: packages/e2e/Dockerfile
+      dockerfile: packages/e2e/Build.Dockerfile
     image: pairwise
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
     environment:
