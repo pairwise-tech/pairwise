@@ -97,7 +97,7 @@ To run the backend application (database, server, and external services). This c
 
 ```bash
 # Build the Docker image which has all dependencies installed
-$ yarn docker:build
+$ yarn docker:dependencies
 
 # Run the application with Docker Compose
 $ yarn up
@@ -112,19 +112,25 @@ We use Codepress to develop course content. Codepress is an internal CMS tool bu
 
 ## Tests
 
-Please note that there is a separate Dockerfile, `DockerfileBase`, which builds an image containing all dependencies for the project. This can be built using `yarn docker:build` and is used by various `docker-compose` commands. You should build this first, and only rebuild it if some project dependencies have changed and need to be re-installed.
+Please note that there is a separate Dockerfile, `DockerfileBase`, which builds an image containing all dependencies for the project. This can be built using `yarn docker:dependencies` and is used by various `docker-compose` commands. You should build this first, and only rebuild it if some project dependencies have changed and need to be re-installed.
 
 ```bash
 # Use Lerna to run the test script for each package
 $ yarn test
 
 # Build the Docker image which has all dependencies installed
+$ yarn docker:dependencies
+
+# Build the applications
 $ yarn docker:build
 
-# Run the e2e test suite (be sure to run docker:build first)
+# Run the unit tests for all packages
+$ yarn docker:test
+
+# Run the e2e test suite (be sure to run docker:dependencies first)
 $ yarn e2e
 
-# Run the Cypress end to end test suite (be sure to run docker:build first)
+# Run the Cypress end to end test suite (be sure to run docker:dependencies first)
 $ yarn cypress
 
 # With the application running locally, this command will run the e2e and Cypress tests
@@ -165,7 +171,7 @@ $ yarn
 $ yarn build
 
 # Build the base Docker image which has all dependencies installed
-$ yarn docker:build
+$ yarn docker:dependencies
 
 # Rebuild the docker compose for running the app
 $ yarn up:build
