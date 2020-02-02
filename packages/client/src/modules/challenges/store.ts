@@ -1,12 +1,14 @@
 import { createReducer } from "typesafe-actions";
 import {
+  Module,
   Challenge,
   CourseList,
   CourseSkeletonList,
   DataBlob,
   ModuleList,
+  Course,
+  CourseSkeleton,
 } from "@pairwise/common";
-import Module from "module";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
 import over from "ramda/es/over";
@@ -16,6 +18,7 @@ import {
   ChallengeCreationPayload,
   InverseChallengeMapping,
   ModuleCreationPayload,
+  ChallengeDeletePayload,
 } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
@@ -24,7 +27,7 @@ import { ChallengesActionTypes } from "./index";
 const debug = require("debug")("challenge:store");
 
 /** ===========================================================================
- * App Store
+ * Challenges Store
  * ============================================================================
  */
 
@@ -65,6 +68,11 @@ const initialState: State = {
   adminEditorTab: "starterCode",
 };
 
+/** ===========================================================================
+ * Store Utils
+ * ============================================================================
+ */
+
 interface ChallengeUpdate {
   id: string; // Challenge ID
   moduleId: string;
@@ -92,6 +100,45 @@ const updateChallenge = (courses: CourseList, update: ChallengeUpdate) => {
   debug("[INFO] keyPath", keyPath);
 
   return over(lens, (x: Challenge) => ({ ...x, ...update.challenge }), courses);
+};
+
+/**
+ * Take a course or course skeleton list and remove a challenge from it
+ * as specified by the ids in ChallengeDeletePayload.
+ *
+ * NOTE: The types are shit! I tried to make the function generic to accept
+ * a course list or course skeleton list but had trouble coercing TypeScript
+ * to accept it.
+ */
+const deleteChallengeFromCourse = <T extends CourseList | CourseSkeletonList>(
+  courses: CourseList | CourseSkeletonList,
+  deletionIds: ChallengeDeletePayload,
+): T => {
+  const { courseId, moduleId, challengeId } = deletionIds;
+
+  const courseList: CourseList = courses as CourseList; /* ugh */
+
+  const updatedCourses = courseList.map(c => {
+    if (c.id === courseId) {
+      return {
+        ...c,
+        modules: c.modules.map(m => {
+          if (m.id === moduleId) {
+            return {
+              ...m,
+              challenges: m.challenges.filter(ch => ch.id !== challengeId),
+            };
+          } else {
+            return m;
+          }
+        }),
+      };
+    } else {
+      return c;
+    }
+  });
+
+  return updatedCourses as T; /* ugh */
 };
 
 /**
@@ -177,6 +224,11 @@ const insertChallenge = (
   const lens = lensPath([courseIndex, "modules", moduleIndex, "challenges"]);
   return over(lens, insert(insertionIndex, challenge), courses);
 };
+
+/** ===========================================================================
+ * Store
+ * ============================================================================
+ */
 
 const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   initialState,
@@ -314,31 +366,19 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   })
   .handleAction(actions.deleteChallenge, (state, action) => {
     const { courses, courseSkeletons } = state;
-    const { courseId, moduleId, challengeId } = action.payload;
+    const { challengeId } = action.payload;
 
     if (!courses || !courseSkeletons) {
       return state;
     }
 
-    const updatedCourses = courses.map(c => {
-      if (c.id === courseId) {
-        return {
-          ...c,
-          modules: c.modules.map(m => {
-            if (m.id === moduleId) {
-              return {
-                ...m,
-                challenges: m.challenges.filter(ch => ch.id !== challengeId),
-              };
-            } else {
-              return m;
-            }
-          }),
-        };
-      } else {
-        return c;
-      }
-    });
+    const updatedCourses = deleteChallengeFromCourse<CourseList>(
+      courses,
+      action.payload,
+    );
+    const updatedCourseSkeletons = deleteChallengeFromCourse<
+      CourseSkeletonList
+    >(courseSkeletons, action.payload);
 
     const {
       newCurrentCourseId,
@@ -356,25 +396,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       currentModuleId: newCurrentModuleId,
       currentChallengeId: newCurrentChallengeId,
       courses: updatedCourses,
-      courseSkeletons: courseSkeletons.map(c => {
-        if (c.id === courseId) {
-          return {
-            ...c,
-            modules: c.modules.map(m => {
-              if (m.id === moduleId) {
-                return {
-                  ...m,
-                  challenges: m.challenges.filter(ch => ch.id !== challengeId),
-                };
-              } else {
-                return m;
-              }
-            }),
-          };
-        } else {
-          return c;
-        }
-      }),
+      courseSkeletons: updatedCourseSkeletons,
     };
   })
   .handleAction(actions.updateCourseModule, (state, action) => {
