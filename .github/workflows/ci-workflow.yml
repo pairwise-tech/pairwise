@@ -27,13 +27,13 @@ jobs:
         run: yarn docker:build
 
       # Run all package unit tests
-      - name: Run unit tests
+      - name: Run static and unit tests
         run: yarn docker:test
 
       # Run e2e tests
-      - name: Run e2e Tests
+      - name: Run e2e tests
         run: yarn e2e
 
       # Run Cypress tests
-      - name: Run Cypress Tests
+      - name: Run Cypress tests
         run: yarn cypress
