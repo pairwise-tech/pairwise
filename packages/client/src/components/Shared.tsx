@@ -228,12 +228,7 @@ const HighlightedMarkdown = (props: ReactMarkdownProps) => {
   );
 };
 
-export const StyledMarkdown = styled(HighlightedMarkdown)`
-  max-width: ${PROSE_MAX_WIDTH}px;
-  color: white;
-  line-height: 1.5;
-  font-size: 1.1rem;
-
+const StyledMarkdownBase = styled(HighlightedMarkdown)`
   .code {
     background: rgba(255, 255, 255, 0.1);
     padding: 1px 3px;
@@ -245,6 +240,13 @@ export const StyledMarkdown = styled(HighlightedMarkdown)`
     line-height: normal;
     font-size: 85%;
   }
+`;
+
+export const StyledMarkdown = styled(StyledMarkdownBase)`
+  max-width: ${PROSE_MAX_WIDTH}px;
+  color: white;
+  line-height: 1.5;
+  font-size: 1.1rem;
 
   .tip {
     padding-left: 24px;
@@ -256,6 +258,14 @@ export const StyledMarkdown = styled(HighlightedMarkdown)`
   }
 
   .tip p {
+    margin: 0;
+  }
+`;
+
+export const StyledMarkdownInline = styled(StyledMarkdownBase)`
+  display: inline-block;
+
+  p {
     margin: 0;
   }
 `;
