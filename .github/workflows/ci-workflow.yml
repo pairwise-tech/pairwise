@@ -18,8 +18,8 @@ jobs:
         with:
           node-version: 10.x
 
-      # Build the application dependencies
-      - name: Build dependencies container
+      # Install the application dependencies
+      - name: Install dependencies
         run: yarn docker:base
 
       # Build the application
