@@ -20,10 +20,10 @@ jobs:
 
       # Build the application dependencies
       - name: Build dependencies container
-        run: yarn docker:dependencies
+        run: yarn docker:base
 
       # Build the application
-      - name: Build applications
+      - name: Build application
         run: yarn docker:build
 
       # Run all package unit tests
