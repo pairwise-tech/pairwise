@@ -22,9 +22,12 @@ import {
   Menu,
   MenuItem,
   Position,
+  ContextMenu,
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
+import { DEV_MODE } from "tools/client-env";
+import { DarkTheme } from "./Shared";
 
 const debug = require("debug")("client:NavigationOverlay");
 
@@ -51,14 +54,7 @@ class NavigationOverlay extends React.Component<IProps> {
   };
 
   render(): Nullable<JSX.Element> {
-    const {
-      course,
-      module,
-      challengeId,
-      isEditMode,
-      updateCourseModule,
-      setCurrentModule,
-    } = this.props;
+    const { course, module, isEditMode, updateCourseModule } = this.props;
 
     if (!course || !module) {
       debug("[INFO] No module or course", course, module);
@@ -79,30 +75,30 @@ class NavigationOverlay extends React.Component<IProps> {
             {this.renderModuleCodepressButton(course, -1)}
           </div>
           {course.modules.map((m, i) => {
+            const handleDeleteModule = () => {
+              this.props.deleteCourseModule({ id: m.id, courseId: course.id });
+            };
+
             return (
               <div key={m.id} style={{ position: "relative" }}>
                 {isEditMode ? (
-                  <NavUpdateField
-                    onChange={e => {
-                      updateCourseModule({
-                        id: m.id,
-                        courseId: course.id,
-                        module: { title: e.target.value },
-                      });
-                    }}
-                    defaultValue={m.title}
-                  />
-                ) : (
-                  <NavButton
-                    id={`module-navigation-${i}`}
-                    active={m.id === module.id}
-                    onClick={() => setCurrentModule(m.id)}
+                  <CodepressNavigationContextMenu
+                    type="MODULE"
+                    handleDelete={handleDeleteModule}
                   >
-                    <span>
-                      <ModuleNumber>{i}</ModuleNumber>
-                      {m.title}
-                    </span>
-                  </NavButton>
+                    <NavUpdateField
+                      onChange={e => {
+                        updateCourseModule({
+                          id: m.id,
+                          courseId: course.id,
+                          module: { title: e.target.value },
+                        });
+                      }}
+                      defaultValue={m.title}
+                    />
+                  </CodepressNavigationContextMenu>
+                ) : (
+                  this.renderModuleNavigationItem(module.id, m, i)
                 )}
                 {this.renderModuleCodepressButton(course, i)}
               </div>
@@ -119,50 +115,91 @@ class NavigationOverlay extends React.Component<IProps> {
           onClick={e => e.stopPropagation()}
         >
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
-          <div style={{ position: "relative" }}>
-            {this.renderChallengeCodepressButton(course, module, -1)}
-          </div>
+          {this.renderChallengeCodepressButton(course, module, -1)}
           {module.challenges.map((c: ChallengeSkeleton, i: number) => {
-            return (
-              <div key={c.id} style={{ position: "relative" }}>
-                <Link
-                  key={c.id}
-                  to={`/workspace/${c.id}`}
-                  id={`challenge-navigation-${i}`}
-                  isActive={() => c.id === challengeId}
-                  onClick={this.handleClickChallenge(
-                    c.userCanAccess,
-                    course.id,
-                  )}
+            if (isEditMode) {
+              return (
+                <CodepressNavigationContextMenu
+                  type="CHALLENGE"
+                  handleDelete={() =>
+                    this.props.deleteChallenge({
+                      challengeId: c.id,
+                      courseId: course.id,
+                      moduleId: module.id,
+                    })
+                  }
                 >
-                  <span>
-                    <Icon
-                      iconSize={Icon.SIZE_LARGE}
-                      icon={getChallengeIcon(c.type, c.userCanAccess)}
-                    />
-                    <span style={{ marginLeft: 10 }}>{c.title}</span>
-                  </span>
-                  <span>
-                    {c.videoUrl && (
-                      <Tooltip
-                        usePortal={false}
-                        position="left"
-                        content="Includes Video"
-                      >
-                        <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
-                      </Tooltip>
-                    )}
-                  </span>
-                </Link>
-                {this.renderChallengeCodepressButton(course, module, i)}
-              </div>
-            );
+                  {this.renderChallengeNavigationItem(module, course, c, i)}
+                </CodepressNavigationContextMenu>
+              );
+            } else {
+              return this.renderChallengeNavigationItem(module, course, c, i);
+            }
           })}
           <DoneScrolling />
         </Col>
       </Overlay>
     );
   }
+
+  renderModuleNavigationItem = (
+    activeModuleId: string,
+    module: ModuleSkeleton,
+    index: number,
+  ) => {
+    return (
+      <NavButton
+        id={`module-navigation-${index}`}
+        active={module.id === activeModuleId}
+        onClick={() => this.props.setCurrentModule(module.id)}
+      >
+        <span>
+          <ModuleNumber>{index}</ModuleNumber>
+          {module.title}
+        </span>
+      </NavButton>
+    );
+  };
+
+  renderChallengeNavigationItem = (
+    module: ModuleSkeleton,
+    course: CourseSkeleton,
+    c: ChallengeSkeleton,
+    index: number,
+  ) => {
+    const { challengeId } = this.props;
+    return (
+      <div key={c.id} style={{ position: "relative" }}>
+        <Link
+          key={c.id}
+          to={`/workspace/${c.id}`}
+          id={`challenge-navigation-${index}`}
+          isActive={() => c.id === challengeId}
+          onClick={this.handleClickChallenge(c.userCanAccess, course.id)}
+        >
+          <span>
+            <Icon
+              iconSize={Icon.SIZE_LARGE}
+              icon={getChallengeIcon(c.type, c.userCanAccess)}
+            />
+            <span style={{ marginLeft: 10 }}>{c.title}</span>
+          </span>
+          <span>
+            {c.videoUrl && (
+              <Tooltip
+                usePortal={false}
+                position="left"
+                content="Includes Video"
+              >
+                <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
+              </Tooltip>
+            )}
+          </span>
+        </Link>
+        {this.renderChallengeCodepressButton(course, module, index)}
+      </div>
+    );
+  };
 
   renderModuleCodepressButton = (course: CourseSkeleton, index: number) => {
     const { isEditMode } = this.props;
@@ -189,35 +226,37 @@ class NavigationOverlay extends React.Component<IProps> {
   ) => {
     const { isEditMode, overlayVisible } = this.props;
     return (
-      <AddNavItemPositionContainer>
-        <Popover
-          canEscapeKeyClose
-          // NOTE: canEscapeKeyClose does not work, use disabled prop to force
-          // the menu to close when the overlay is not visible!
-          disabled={!overlayVisible}
-          content={
-            <Menu>
-              <MenuItem
-                icon="bookmark"
-                text="Section"
-                onClick={() =>
-                  this.handleAddChallenge(course, module, index, {
-                    type: "section",
-                  })
-                }
-              />
-              <MenuItem
-                icon="insert"
-                text="Challenge"
-                onClick={() => this.handleAddChallenge(course, module, index)}
-              />
-            </Menu>
-          }
-          position={Position.RIGHT}
-        >
-          <AddNavItemButton show={isEditMode} onClick={() => null} />
-        </Popover>
-      </AddNavItemPositionContainer>
+      <div style={{ position: "relative" }}>
+        <AddNavItemPositionContainer>
+          <Popover
+            canEscapeKeyClose
+            // NOTE: canEscapeKeyClose does not work, use disabled prop to force
+            // the menu to close when the overlay is not visible!
+            disabled={!overlayVisible}
+            content={
+              <Menu>
+                <MenuItem
+                  icon="bookmark"
+                  text="Section"
+                  onClick={() =>
+                    this.handleAddChallenge(course, module, index, {
+                      type: "section",
+                    })
+                  }
+                />
+                <MenuItem
+                  icon="insert"
+                  text="Challenge"
+                  onClick={() => this.handleAddChallenge(course, module, index)}
+                />
+              </Menu>
+            }
+            position={Position.RIGHT}
+          >
+            <AddNavItemButton show={isEditMode} onClick={() => null} />
+          </Popover>
+        </AddNavItemPositionContainer>
+      </div>
     );
   };
 
@@ -248,6 +287,54 @@ class NavigationOverlay extends React.Component<IProps> {
       event.preventDefault();
       this.props.handlePurchaseCourseIntent({ courseId });
     }
+  };
+}
+
+/** ===========================================================================
+ * Context Menu
+ * ============================================================================
+ */
+
+class CodepressNavigationContextMenu extends React.PureComponent<
+  {
+    type: "MODULE" | "CHALLENGE";
+    handleDelete: () => void;
+  },
+  { isContextMenuOpen: boolean }
+> {
+  state = { isContextMenuOpen: false };
+
+  render() {
+    return (
+      <div onContextMenu={this.showContextMenu}>{this.props.children}</div>
+    );
+  }
+
+  showContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    const { type } = this.props;
+    const label = type === "MODULE" ? "Delete Module" : "Delete Challenge";
+
+    const Context = (
+      <DarkTheme>
+        <Menu>
+          <MenuItem
+            icon="cross"
+            text={label}
+            onClick={this.props.handleDelete}
+          />
+        </Menu>
+      </DarkTheme>
+    );
+
+    const coordinates = { left: e.clientX, top: e.clientY };
+
+    ContextMenu.show(Context, coordinates, () =>
+      this.setState({ isContextMenuOpen: false }),
+    );
+
+    this.setState({ isContextMenuOpen: true });
   };
 }
 
@@ -475,7 +562,9 @@ const dispatchProps = {
   setCurrentModule: Modules.actions.challenges.setCurrentModule,
   createCourseModule: Modules.actions.challenges.createCourseModule,
   updateCourseModule: Modules.actions.challenges.updateCourseModule,
+  deleteCourseModule: Modules.actions.challenges.deleteCourseModule,
   createChallenge: Modules.actions.challenges.createChallenge,
+  deleteChallenge: Modules.actions.challenges.deleteChallenge,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePurchaseCourseIntent:

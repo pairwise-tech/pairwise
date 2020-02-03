@@ -15,7 +15,6 @@ import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
-import { DEV_MODE } from "tools/client-env";
 import {
   requestCodeFormatting,
   subscribeCodeWorker,
@@ -64,7 +63,6 @@ import {
   DragIgnorantFrameContainer,
   consoleRowStyles,
   LowerSection,
-  AdminKeyboardShortcuts,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
@@ -1116,7 +1114,6 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
             <MediaArea />
           </LowerSection>
         )}
-        {DEV_MODE && <AdminKeyboardShortcuts />}
       </React.Fragment>
     );
   }

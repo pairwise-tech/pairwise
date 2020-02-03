@@ -1,11 +1,14 @@
 import { createReducer } from "typesafe-actions";
 import {
+  Module,
   Challenge,
   CourseList,
   CourseSkeletonList,
   DataBlob,
+  ModuleList,
+  Course,
+  CourseSkeleton,
 } from "@pairwise/common";
-import Module from "module";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
 import over from "ramda/es/over";
@@ -15,6 +18,7 @@ import {
   ChallengeCreationPayload,
   InverseChallengeMapping,
   ModuleCreationPayload,
+  ChallengeDeletePayload,
 } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
@@ -23,7 +27,7 @@ import { ChallengesActionTypes } from "./index";
 const debug = require("debug")("challenge:store");
 
 /** ===========================================================================
- * App Store
+ * Challenges Store
  * ============================================================================
  */
 
@@ -64,6 +68,11 @@ const initialState: State = {
   adminEditorTab: "starterCode",
 };
 
+/** ===========================================================================
+ * Store Utils
+ * ============================================================================
+ */
+
 interface ChallengeUpdate {
   id: string; // Challenge ID
   moduleId: string;
@@ -91,6 +100,92 @@ const updateChallenge = (courses: CourseList, update: ChallengeUpdate) => {
   debug("[INFO] keyPath", keyPath);
 
   return over(lens, (x: Challenge) => ({ ...x, ...update.challenge }), courses);
+};
+
+/**
+ * Take a course or course skeleton list and remove a challenge from it
+ * as specified by the ids in ChallengeDeletePayload.
+ *
+ * NOTE: The types are shit! I tried to make the function generic to accept
+ * a course list or course skeleton list but had trouble coercing TypeScript
+ * to accept it.
+ */
+const deleteChallengeFromCourse = <T extends CourseList | CourseSkeletonList>(
+  courses: CourseList | CourseSkeletonList,
+  deletionIds: ChallengeDeletePayload,
+): T => {
+  const { courseId, moduleId, challengeId } = deletionIds;
+
+  const courseList: CourseList = courses as CourseList; /* ugh */
+
+  const updatedCourses = courseList.map(c => {
+    if (c.id === courseId) {
+      return {
+        ...c,
+        modules: c.modules.map(m => {
+          if (m.id === moduleId) {
+            return {
+              ...m,
+              challenges: m.challenges.filter(ch => ch.id !== challengeId),
+            };
+          } else {
+            return m;
+          }
+        }),
+      };
+    } else {
+      return c;
+    }
+  });
+
+  return updatedCourses as T; /* ugh */
+};
+
+/**
+ * Take the current state and an update from deleting a challenge, and
+ * determine new active course, module, and challenge ids in the event
+ * that the user deleted the current active challenge.
+ */
+const getNewActiveIdsAfterChallengeDeletion = (
+  state: State,
+  updatedCourses: CourseList,
+  idToDelete: string,
+) => {
+  const { currentModuleId, currentCourseId, currentChallengeId } = state;
+
+  let newCurrentModuleId = currentModuleId;
+  let newCurrentCourseId = currentCourseId;
+  let newCurrentChallengeId = currentChallengeId;
+
+  if (idToDelete !== currentChallengeId) {
+    return {
+      newCurrentModuleId,
+      newCurrentCourseId,
+      newCurrentChallengeId,
+    };
+  }
+
+  for (const course of updatedCourses) {
+    for (const module of course.modules) {
+      if (module.challenges.length > 0) {
+        newCurrentModuleId = module.id;
+        newCurrentCourseId = course.id;
+        newCurrentChallengeId = module.challenges[0].id;
+
+        return {
+          newCurrentModuleId,
+          newCurrentCourseId,
+          newCurrentChallengeId,
+        };
+      }
+    }
+  }
+
+  return {
+    newCurrentModuleId,
+    newCurrentCourseId,
+    newCurrentChallengeId,
+  };
 };
 
 interface ModuleUpdate {
@@ -129,6 +224,11 @@ const insertChallenge = (
   const lens = lensPath([courseIndex, "modules", moduleIndex, "challenges"]);
   return over(lens, insert(insertionIndex, challenge), courses);
 };
+
+/** ===========================================================================
+ * Store
+ * ============================================================================
+ */
 
 const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   initialState,
@@ -174,6 +274,62 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       }),
     };
   })
+  .handleAction(actions.deleteCourseModule, (state, { payload }) => {
+    const {
+      courses,
+      courseSkeletons,
+      currentChallengeId,
+      currentModuleId,
+    } = state;
+
+    if (!courses || !courseSkeletons) {
+      return state;
+    }
+
+    const { id, courseId } = payload;
+
+    let updatedModules: ModuleList = [];
+
+    const updatedCourses = courses.map(c => {
+      if (c.id === courseId) {
+        updatedModules = c.modules.filter(m => m.id !== id);
+        return {
+          ...c,
+          modules: updatedModules,
+        };
+      } else {
+        return c;
+      }
+    });
+
+    /**
+     * Reset the current challenge and module ids if the user just deleted
+     * the current module.
+     */
+    let newCurrentModuleId = currentModuleId;
+    let newCurrentChallengeId = currentChallengeId;
+    if (id === currentModuleId && updatedModules.length) {
+      newCurrentModuleId = updatedModules[0].id;
+      newCurrentChallengeId = updatedModules[0].challenges[0].id;
+    }
+
+    return {
+      ...state,
+      currentModuleId: newCurrentModuleId,
+      currentChallengeId: newCurrentChallengeId,
+      courses: updatedCourses,
+      courseSkeletons: courseSkeletons.map(c => {
+        if (c.id === courseId) {
+          return {
+            ...c,
+            modules: c.modules.filter(m => m.id !== id),
+          };
+        } else {
+          return c;
+        }
+      }),
+    };
+  })
   .handleAction(actions.updateChallenge, (state, action) => {
     const { courses, courseSkeletons } = state;
     const { id, challenge } = action.payload;
@@ -206,6 +362,41 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
         courseId,
         challenge,
       }),
+    };
+  })
+  .handleAction(actions.deleteChallenge, (state, action) => {
+    const { courses, courseSkeletons } = state;
+    const { challengeId } = action.payload;
+
+    if (!courses || !courseSkeletons) {
+      return state;
+    }
+
+    const updatedCourses = deleteChallengeFromCourse<CourseList>(
+      courses,
+      action.payload,
+    );
+    const updatedCourseSkeletons = deleteChallengeFromCourse<
+      CourseSkeletonList
+    >(courseSkeletons, action.payload);
+
+    const {
+      newCurrentCourseId,
+      newCurrentModuleId,
+      newCurrentChallengeId,
+    } = getNewActiveIdsAfterChallengeDeletion(
+      state,
+      updatedCourses,
+      challengeId,
+    );
+
+    return {
+      ...state,
+      currentCourseId: newCurrentCourseId,
+      currentModuleId: newCurrentModuleId,
+      currentChallengeId: newCurrentChallengeId,
+      courses: updatedCourses,
+      courseSkeletons: updatedCourseSkeletons,
     };
   })
   .handleAction(actions.updateCourseModule, (state, action) => {

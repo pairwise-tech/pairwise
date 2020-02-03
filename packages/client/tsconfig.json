@@ -1,14 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -23,8 +20,5 @@
     "inlineSources": true,
     "sourceRoot": "/"
   },
-  "include": [
-    "src",
-    "global.d.ts"
-  ]
+  "include": ["src", "global.d.ts"]
 }
