@@ -6,8 +6,22 @@ import { ContentInput, StyledMarkdown } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import { PROSE_MAX_WIDTH } from "tools/constants";
-import { createEditor, Node as SlateNode } from "slate";
-import { Slate, Editable, withReact } from "slate-react";
+import {
+  createEditor,
+  Editor,
+  Transforms,
+  Range,
+  Point,
+  Node as SlateNode,
+} from "slate";
+import {
+  Slate,
+  Editable,
+  withReact,
+  ReactEditor,
+  RenderElementProps,
+} from "slate-react";
+import pipe from "ramda/es/pipe";
 
 /**
  * The media area. Where supplementary content and challenge videos live. The
@@ -27,35 +41,186 @@ const dispatchProps = {
 
 type MediaAreaProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
+const CodeElement = (props: RenderElementProps) => {
+  return (
+    <pre style={{ border: "1px solid red" }} {...props.attributes}>
+      <code>{props.children}</code>
+    </pre>
+  );
+};
+
+const Element = (props: RenderElementProps) => {
+  const { attributes, children, element } = props;
+
+  switch (element.type) {
+    case "block-quote":
+      return <blockquote {...attributes}>{children}</blockquote>;
+    case "bulleted-list":
+      return <ul {...attributes}>{children}</ul>;
+    case "heading-one":
+      return <h1 {...attributes}>{children}</h1>;
+    case "heading-two":
+      return <h2 {...attributes}>{children}</h2>;
+    case "heading-three":
+      return <h3 {...attributes}>{children}</h3>;
+    case "heading-four":
+      return <h4 {...attributes}>{children}</h4>;
+    case "heading-five":
+      return <h5 {...attributes}>{children}</h5>;
+    case "heading-six":
+      return <h6 {...attributes}>{children}</h6>;
+    case "list-item":
+      return <li {...attributes}>{children}</li>;
+    case "horizontal-rule":
+      return <hr {...attributes} />;
+    case "code":
+    case "code-js":
+    case "code-javascript":
+    case "code-ts":
+    case "code-typescript":
+    case "code-html":
+    case "code-css": {
+      // TODO: Use this code type to inform syntax highlighting
+      const codeType = element.type.split("-")[1] || "text";
+      console.warn(`[INFO] Got code type of "${codeType}"`);
+      return <CodeElement {...props} />;
+    }
+    default:
+      return <p {...attributes}>{children}</p>;
+  }
+};
+
+const SHORTCUTS: { [k: string]: string } = {
+  "*": "list-item",
+  "-": "list-item",
+  "+": "list-item",
+  ">": "block-quote",
+  "#": "heading-one",
+  "##": "heading-two",
+  "###": "heading-three",
+  "####": "heading-four",
+  "#####": "heading-five",
+  "######": "heading-six",
+  "```": "code",
+  "```js": "code-javascript",
+  "```javascript": "code-javascript",
+  "```ts": "code-typescript",
+  "```typescript": "code-typescript",
+  "```html": "code-html",
+  "```css": "code-css",
+};
+const withRichMarkdown = (editor: ReactEditor) => {
+  const { deleteBackward, insertText } = editor;
+
+  editor.insertText = text => {
+    const { selection } = editor;
+
+    if (text === " " && selection && Range.isCollapsed(selection)) {
+      const { anchor } = selection;
+      const block = Editor.above(editor, {
+        match: n => Editor.isBlock(editor, n),
+      });
+      const path = block ? block[1] : [];
+      const start = Editor.start(editor, path);
+      const range = { anchor, focus: start };
+      const beforeText = Editor.string(editor, range);
+      const type = SHORTCUTS[beforeText];
+
+      if (type) {
+        Transforms.select(editor, range);
+        Transforms.delete(editor);
+        Transforms.setNodes(
+          editor,
+          { type },
+          { match: n => Editor.isBlock(editor, n) },
+        );
+
+        if (type === "list-item") {
+          const list = { type: "bulleted-list", children: [] };
+          Transforms.wrapNodes(editor, list, {
+            match: n => n.type === "list-item",
+          });
+        }
+
+        return;
+      }
+    }
+
+    insertText(text);
+  };
+
+  editor.deleteBackward = (...args) => {
+    const { selection } = editor;
+
+    if (selection && Range.isCollapsed(selection)) {
+      const match = Editor.above(editor, {
+        match: n => Editor.isBlock(editor, n),
+      });
+
+      if (match) {
+        const [block, path] = match;
+        const start = Editor.start(editor, path);
+
+        if (
+          block.type !== "paragraph" &&
+          Point.equals(selection.anchor, start)
+        ) {
+          Transforms.setNodes(editor, { type: "paragraph" });
+
+          if (block.type === "list-item") {
+            Transforms.unwrapNodes(editor, {
+              match: n => n.type === "bulleted-list",
+            });
+          }
+
+          return;
+        }
+      }
+
+      deleteBackward(...args);
+    }
+  };
+
+  return editor;
+};
+
+const enhanceEditor: (e: Editor) => ReactEditor = pipe(
+  withReact,
+  withRichMarkdown,
+);
+
 const MediaArea = connect(
   mapStateToProps,
   dispatchProps,
-)((props: MediaAreaProps) => {
-  const { challenge, title, isEditMode } = props;
-  const editor = React.useMemo(() => withReact(createEditor()), []);
+)(({ challenge, title, isEditMode, updateChallenge }: MediaAreaProps) => {
+  const editor = React.useMemo(() => enhanceEditor(createEditor()), []);
   const [value, setValue] = React.useState<SlateNode[]>([
     {
       type: "paragraph",
       children: [{ text: "" }],
     },
   ]);
+  const renderElement = React.useCallback(
+    (props: RenderElementProps) => <Element {...props} />,
+    [],
+  );
 
   if (!challenge) {
     return <h1>Loading...</h1>;
   }
 
   const handleTitle = (x: string) =>
-    props.updateChallenge({ id: challenge.id, challenge: { title: x } });
+    updateChallenge({ id: challenge.id, challenge: { title: x } });
 
   const handleContent = (supplementaryContent: string) => {
-    props.updateChallenge({
+    updateChallenge({
       id: challenge.id,
       challenge: { supplementaryContent },
     });
   };
 
   const handleVideoUrl = (e: ChangeEvent<HTMLInputElement>) => {
-    props.updateChallenge({
+    updateChallenge({
       id: challenge.id,
       challenge: {
         videoUrl: e.target.value,
@@ -74,7 +239,7 @@ const MediaArea = connect(
       </TitleHeader>
       {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
       <Slate editor={editor} value={value} onChange={setValue}>
-        <Editable />
+        <Editable renderElement={renderElement} />
       </Slate>
       {isEditMode ? (
         <ContentInput
