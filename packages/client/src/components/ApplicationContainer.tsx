@@ -20,6 +20,7 @@ import {
   NextChallengeIconButton,
 } from "./ChallengeControls";
 import PurchaseCourseModal from "./PurchaseCourseModal";
+import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -97,6 +98,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         {this.renderLoadingOverlay()}
         <SingleSignOnModal />
         <PurchaseCourseModal />
+        {DEV_MODE && <AdminKeyboardShortcuts />}
         <NavigationOverlay overlayVisible={overlayVisible} />
         <Header>
           <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
