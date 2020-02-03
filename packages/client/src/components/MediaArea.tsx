@@ -6,6 +6,8 @@ import { ContentInput, StyledMarkdown } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import { PROSE_MAX_WIDTH } from "tools/constants";
+import { createEditor, Node as SlateNode } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
 
 /**
  * The media area. Where supplementary content and challenge videos live. The
@@ -30,6 +32,13 @@ const MediaArea = connect(
   dispatchProps,
 )((props: MediaAreaProps) => {
   const { challenge, title, isEditMode } = props;
+  const editor = React.useMemo(() => withReact(createEditor()), []);
+  const [value, setValue] = React.useState<SlateNode[]>([
+    {
+      type: "paragraph",
+      children: [{ text: "" }],
+    },
+  ]);
 
   if (!challenge) {
     return <h1>Loading...</h1>;
@@ -64,6 +73,9 @@ const MediaArea = connect(
         />
       </TitleHeader>
       {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
+      <Slate editor={editor} value={value} onChange={setValue}>
+        <Editable />
+      </Slate>
       {isEditMode ? (
         <ContentInput
           value={challenge.supplementaryContent}
