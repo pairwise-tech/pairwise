@@ -275,8 +275,8 @@
           "content": "Booleans, are perhaps the simplest of the primitive data types, and in TypeScript,  can be expressed as either `true` or `false`. They are given the type `boolean`. Booleans are the primary way that we handle \"logical\" decision making, and, in fact, many expressions can be _evaluated_ as booleans, but we'll get into this more later.\n\n- Look at the following example, and change `false` to `true`.\n- Notice what happens!\n\nDon't worry, there's a lot going on here that we haven't covered yet. For now, just focus on the challenge at hand.",
           "testCode": "test('`str` should be equal to `\"Hello, TypeScript!\"`', () => expect(str).toBe(\"Hello, TypeScript!\"))\ntest('`isTrue` should be of type `boolean`', () => expect(typeof isTrue).toBe(\"boolean\"))",
           "videoUrl": "",
-          "starterCode": "let str: string;\nlet isTrue: boolean = false; // type annotation is not really neccessary here\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
-          "solutionCode": "let str: string;\nlet isTrue: boolean = true;\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
+          "starterCode": "let str;\nlet isTrue = false;\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
+          "solutionCode": "let str;\nlet isTrue = true;\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
           "supplementaryContent": ""
         },
         {
