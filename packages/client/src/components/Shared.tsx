@@ -249,11 +249,10 @@ export const StyledMarkdown = styled(StyledMarkdownBase)`
   font-size: 1.1rem;
 
   .tip {
-    padding-left: 24px;
     border-left: 5px solid #6cbbff;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
-    padding: 10px 0 10px 24px;
+    padding: 10px 10px 10px 24px;
     background: #323232;
   }
 
