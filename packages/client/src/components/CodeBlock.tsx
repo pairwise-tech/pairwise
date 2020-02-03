@@ -11,14 +11,15 @@ import { vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 interface Props {
   value: string;
   language?: string;
+  ref?: any;
 }
 
-const CodeBlock = ({ value, language }: Props) => {
+const CodeBlock = React.forwardRef(({ value, language }: Props, ref: any) => {
   return (
-    <ReactSyntaxHighlighter style={vs2015} language={language}>
+    <ReactSyntaxHighlighter ref={ref} style={vs2015} language={language}>
       {value}
     </ReactSyntaxHighlighter>
   );
-};
+});
 
 export default CodeBlock;

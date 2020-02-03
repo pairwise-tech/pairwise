@@ -17,7 +17,7 @@ import identity from "ramda/es/identity";
 
 import { COLORS, PROSE_MAX_WIDTH } from "../tools/constants";
 
-const LazyCodeBlock = React.lazy(() => import("./CodeBlock"));
+export const LazyCodeBlock = React.lazy(() => import("./CodeBlock"));
 
 interface DarkThemeProps {
   children: React.ReactNode;

@@ -1,8 +1,8 @@
 import Modules, { ReduxStoreState } from "modules/root";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ContentInput, StyledMarkdown } from "./Shared";
+import { ContentInput, StyledMarkdown, LazyCodeBlock } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import { PROSE_MAX_WIDTH } from "tools/constants";
@@ -41,13 +41,29 @@ const dispatchProps = {
 
 type MediaAreaProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-const CodeElement = (props: RenderElementProps) => {
-  return (
-    <pre style={{ border: "1px solid red" }} {...props.attributes}>
-      <code>{props.children}</code>
-    </pre>
-  );
+const getChildStrings = (children: any): string => {
+  return React.Children.toArray(children)
+    .map(x => x.props.node)
+    .map(SlateNode.string)
+    .join("\n");
 };
+
+const CodeElement = React.forwardRef((props: RenderElementProps, ref: any) => {
+  // TODO: Use this code type to inform syntax highlighting
+  const language = props.element.type.split("-")[1] || "text";
+  console.warn(`[INFO] Got code type of "${language}"`);
+  debugger;
+  return (
+    <Suspense fallback={<pre ref={ref}>Loading...</pre>}>
+      <LazyCodeBlock
+        {...props.attributes}
+        ref={ref}
+        value={getChildStrings(props.children)}
+        language={language}
+      />
+    </Suspense>
+  );
+});
 
 const Element = (props: RenderElementProps) => {
   const { attributes, children, element } = props;
@@ -74,17 +90,11 @@ const Element = (props: RenderElementProps) => {
     case "horizontal-rule":
       return <hr {...attributes} />;
     case "code":
-    case "code-js":
     case "code-javascript":
-    case "code-ts":
     case "code-typescript":
     case "code-html":
-    case "code-css": {
-      // TODO: Use this code type to inform syntax highlighting
-      const codeType = element.type.split("-")[1] || "text";
-      console.warn(`[INFO] Got code type of "${codeType}"`);
+    case "code-css":
       return <CodeElement {...props} />;
-    }
     default:
       return <p {...attributes}>{children}</p>;
   }
