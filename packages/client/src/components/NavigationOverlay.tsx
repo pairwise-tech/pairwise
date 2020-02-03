@@ -81,31 +81,22 @@ class NavigationOverlay extends React.Component<IProps> {
 
             return (
               <div key={m.id} style={{ position: "relative" }}>
-                {DEV_MODE ? (
-                  isEditMode ? (
-                    <CodepressNavigationContextMenu
-                      type="MODULE"
-                      handleDelete={handleDeleteModule}
-                    >
-                      <NavUpdateField
-                        onChange={e => {
-                          updateCourseModule({
-                            id: m.id,
-                            courseId: course.id,
-                            module: { title: e.target.value },
-                          });
-                        }}
-                        defaultValue={m.title}
-                      />
-                    </CodepressNavigationContextMenu>
-                  ) : (
-                    <CodepressNavigationContextMenu
-                      type="MODULE"
-                      handleDelete={handleDeleteModule}
-                    >
-                      {this.renderModuleNavigationItem(module.id, m, i)}
-                    </CodepressNavigationContextMenu>
-                  )
+                {isEditMode ? (
+                  <CodepressNavigationContextMenu
+                    type="MODULE"
+                    handleDelete={handleDeleteModule}
+                  >
+                    <NavUpdateField
+                      onChange={e => {
+                        updateCourseModule({
+                          id: m.id,
+                          courseId: course.id,
+                          module: { title: e.target.value },
+                        });
+                      }}
+                      defaultValue={m.title}
+                    />
+                  </CodepressNavigationContextMenu>
                 ) : (
                   this.renderModuleNavigationItem(module.id, m, i)
                 )}
@@ -126,7 +117,7 @@ class NavigationOverlay extends React.Component<IProps> {
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
           {this.renderChallengeCodepressButton(course, module, -1)}
           {module.challenges.map((c: ChallengeSkeleton, i: number) => {
-            if (DEV_MODE) {
+            if (isEditMode) {
               return (
                 <CodepressNavigationContextMenu
                   type="CHALLENGE"
