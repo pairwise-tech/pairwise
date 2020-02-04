@@ -99,9 +99,6 @@ const MediaArea = connect(
         <ContentEditor
           toc={false /* Turn off so we can use our own */}
           plugins={[tableOfContents]}
-          onClickHashtag={tag => {
-            console.log(tag, "clicked tag");
-          }}
           placeholder="Write something beautiful..."
           defaultValue={challenge.supplementaryContent}
           autoFocus={
@@ -113,19 +110,6 @@ const MediaArea = connect(
           onChange={handleContent}
         />
       </Suspense>
-      {isEditMode ? (
-        <ContentInput
-          value={challenge.supplementaryContent}
-          onChange={supplementaryContent =>
-            updateChallenge({
-              id: challenge.id,
-              challenge: { supplementaryContent },
-            })
-          }
-        />
-      ) : (
-        <StyledMarkdown source={challenge.supplementaryContent} />
-      )}
       {isEditMode && (
         <Callout title="Video URL" style={{ marginBottom: 40 }}>
           <p>If this challenge has a video enter the embed URL here.</p>
