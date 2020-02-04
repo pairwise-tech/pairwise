@@ -83,7 +83,7 @@ const editorTheme = {
   codeInserted: "#202746",
   codeImportant: "#c94922",
 
-  background: editorColors.almostBlack,
+  background: "transparent",
   text: editorColors.almostWhite,
   code: editorColors.almostWhite,
 
@@ -118,6 +118,7 @@ const editorTheme = {
 const EditorExternalStyles = styled.div`
   font-size: 17px;
   max-width: 728px;
+  position: relative;
 
   // Inline code
   p code {

@@ -12,8 +12,8 @@ declare module "rich-markdown-editor" {
    * node but did include render block. When using plugins with
    * rich-markdown-editor@9.11.2 I was only seeing renderNode getting called
    */
-  interface SlatePlugin extends SlateReact.Plugin {
-    renderNode: SlateReact.Plugin["renderBlock"];
+  export interface SlatePlugin extends SlateReact.Plugin {
+    renderNode?: SlateReact.Plugin["renderBlock"];
   }
 
   /**

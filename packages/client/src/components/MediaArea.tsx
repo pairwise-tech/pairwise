@@ -7,6 +7,23 @@ import { ContentInput, StyledMarkdown, Loading, ContentEditor } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import { PROSE_MAX_WIDTH } from "tools/constants";
+import { SlatePlugin } from "rich-markdown-editor";
+import TableOfContents from "./TableOfContents";
+
+const TableOfContentsPlugin = (): SlatePlugin => {
+  const renderEditor: SlatePlugin["renderEditor"] = (props, editor, next) => {
+    const children = next();
+
+    return (
+      <>
+        <TableOfContents editor={editor} />
+        {children}
+      </>
+    );
+  };
+
+  return { renderEditor };
+};
 
 /**
  * The media area. Where supplementary content and challenge videos live. The
@@ -36,6 +53,10 @@ const MediaArea = connect(
 
   const handleTitle = (x: string) =>
     updateChallenge({ id: challenge.id, challenge: { title: x } });
+
+  const tableOfContents = React.useMemo(() => TableOfContentsPlugin(), [
+    challenge.id,
+  ]);
 
   /**
    * @NOTE The function is memoized so that we're not constantly recreating the
@@ -76,13 +97,17 @@ const MediaArea = connect(
       {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
       <Suspense fallback={<Loading />}>
         <ContentEditor
-          toc={true}
+          toc={false /* Turn off so we can use our own */}
+          plugins={[tableOfContents]}
           onClickHashtag={tag => {
             console.log(tag, "clicked tag");
           }}
           placeholder="Write something beautiful..."
           defaultValue={challenge.supplementaryContent}
-          autoFocus={isEditMode}
+          autoFocus={
+            isEditMode &&
+            !challenge.supplementaryContent /* Only focus an empty editor */
+          }
           readOnly={!isEditMode}
           spellCheck={isEditMode}
           onChange={handleContent}
