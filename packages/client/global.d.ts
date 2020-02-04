@@ -43,6 +43,7 @@ declare module "rich-markdown-editor" {
     onSearchLink?: (term: string) => Promise<SearchResult[]>;
     onClickLink?: (href: string) => void;
     onShowToast?: (message: string) => void;
+    onClickHashtag?: (tag: string) => void;
     className?: string;
     style?: Object;
     spellCheck?: boolean;
