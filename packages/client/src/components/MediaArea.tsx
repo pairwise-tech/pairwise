@@ -1,28 +1,12 @@
 import Modules, { ReduxStoreState } from "modules/root";
+import { debounce } from "throttle-debounce";
 import React, { ChangeEvent, Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ContentInput, StyledMarkdown, LazyCodeBlock } from "./Shared";
+import { ContentInput, StyledMarkdown, Loading, ContentEditor } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import { PROSE_MAX_WIDTH } from "tools/constants";
-import {
-  createEditor,
-  Editor,
-  Transforms,
-  Range,
-  Point,
-  Node as SlateNode,
-} from "slate";
-import {
-  Slate,
-  Editable,
-  withReact,
-  ReactEditor,
-  RenderElementProps,
-} from "slate-react";
-import pipe from "ramda/es/pipe";
-import ReactSyntaxHighlighter from "react-syntax-highlighter";
 
 /**
  * The media area. Where supplementary content and challenge videos live. The
@@ -42,189 +26,34 @@ const dispatchProps = {
 
 type MediaAreaProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-const getChildStrings = (children: any): string => {
-  return React.Children.toArray(children)
-    .map(x => x.props.node)
-    .map(SlateNode.string)
-    .join("\n");
-};
-
-const CodeElement = React.forwardRef((props: RenderElementProps, ref: any) => {
-  // TODO: Use this code type to inform syntax highlighting
-  const language = props.element.type.split("-")[1] || "text";
-  const value = getChildStrings(props.children);
-  console.warn(`[INFO] Got code type of "${language}"`);
-  debugger;
-  return (
-    <ReactSyntaxHighlighter ref={ref} language={language}>
-      {value}
-    </ReactSyntaxHighlighter>
-  );
-});
-
-const Element = (props: RenderElementProps) => {
-  const { attributes, children, element } = props;
-
-  switch (element.type) {
-    case "block-quote":
-      return <blockquote {...attributes}>{children}</blockquote>;
-    case "bulleted-list":
-      return <ul {...attributes}>{children}</ul>;
-    case "heading-one":
-      return <h1 {...attributes}>{children}</h1>;
-    case "heading-two":
-      return <h2 {...attributes}>{children}</h2>;
-    case "heading-three":
-      return <h3 {...attributes}>{children}</h3>;
-    case "heading-four":
-      return <h4 {...attributes}>{children}</h4>;
-    case "heading-five":
-      return <h5 {...attributes}>{children}</h5>;
-    case "heading-six":
-      return <h6 {...attributes}>{children}</h6>;
-    case "list-item":
-      return <li {...attributes}>{children}</li>;
-    case "horizontal-rule":
-      return <hr {...attributes} />;
-    case "code":
-    case "code-javascript":
-    case "code-typescript":
-    case "code-html":
-    case "code-css":
-      return <CodeElement {...props} />;
-    default:
-      return <p {...attributes}>{children}</p>;
-  }
-};
-
-const SHORTCUTS: { [k: string]: string } = {
-  "*": "list-item",
-  "-": "list-item",
-  "+": "list-item",
-  ">": "block-quote",
-  "#": "heading-one",
-  "##": "heading-two",
-  "###": "heading-three",
-  "####": "heading-four",
-  "#####": "heading-five",
-  "######": "heading-six",
-  "```": "code",
-  "```js": "code-javascript",
-  "```javascript": "code-javascript",
-  "```ts": "code-typescript",
-  "```typescript": "code-typescript",
-  "```html": "code-html",
-  "```css": "code-css",
-};
-const withRichMarkdown = (editor: ReactEditor) => {
-  const { deleteBackward, insertText } = editor;
-
-  editor.insertText = text => {
-    const { selection } = editor;
-
-    if (text === " " && selection && Range.isCollapsed(selection)) {
-      const { anchor } = selection;
-      const block = Editor.above(editor, {
-        match: n => Editor.isBlock(editor, n),
-      });
-      const path = block ? block[1] : [];
-      const start = Editor.start(editor, path);
-      const range = { anchor, focus: start };
-      const beforeText = Editor.string(editor, range);
-      const type = SHORTCUTS[beforeText];
-
-      if (type) {
-        Transforms.select(editor, range);
-        Transforms.delete(editor);
-        Transforms.setNodes(
-          editor,
-          { type },
-          { match: n => Editor.isBlock(editor, n) },
-        );
-
-        if (type === "list-item") {
-          const list = { type: "bulleted-list", children: [] };
-          Transforms.wrapNodes(editor, list, {
-            match: n => n.type === "list-item",
-          });
-        }
-
-        return;
-      }
-    }
-
-    insertText(text);
-  };
-
-  editor.deleteBackward = (...args) => {
-    const { selection } = editor;
-
-    if (selection && Range.isCollapsed(selection)) {
-      const match = Editor.above(editor, {
-        match: n => Editor.isBlock(editor, n),
-      });
-
-      if (match) {
-        const [block, path] = match;
-        const start = Editor.start(editor, path);
-
-        if (
-          block.type !== "paragraph" &&
-          Point.equals(selection.anchor, start)
-        ) {
-          Transforms.setNodes(editor, { type: "paragraph" });
-
-          if (block.type === "list-item") {
-            Transforms.unwrapNodes(editor, {
-              match: n => n.type === "bulleted-list",
-            });
-          }
-
-          return;
-        }
-      }
-
-      deleteBackward(...args);
-    }
-  };
-
-  return editor;
-};
-
-const enhanceEditor: (e: Editor) => ReactEditor = pipe(
-  withReact,
-  withRichMarkdown,
-);
-
 const MediaArea = connect(
   mapStateToProps,
   dispatchProps,
 )(({ challenge, title, isEditMode, updateChallenge }: MediaAreaProps) => {
-  const editor = React.useMemo(() => enhanceEditor(createEditor()), []);
-  const [value, setValue] = React.useState<SlateNode[]>([
-    {
-      type: "paragraph",
-      children: [{ text: "" }],
-    },
-  ]);
-  const renderElement = React.useCallback(
-    (props: RenderElementProps) => <Element {...props} />,
-    [],
-  );
-
   if (!challenge) {
-    return <h1>Loading...</h1>;
+    return <Loading />;
   }
 
   const handleTitle = (x: string) =>
     updateChallenge({ id: challenge.id, challenge: { title: x } });
 
-  const handleContent = (supplementaryContent: string) => {
-    updateChallenge({
-      id: challenge.id,
-      challenge: { supplementaryContent },
-    });
-  };
+  /**
+   * @NOTE The function is memoized so that we're not constantly recreating the
+   * debounced function.
+   * @NOTE The function is debounced because serializing to markdown has a
+   * non-trivial performance impact, which is why the underlying lib provides a
+   * getter function rather than the string value onChange.
+   */
+  const handleContent = React.useMemo(
+    () =>
+      debounce(800, (serializeEditorContent: () => string) => {
+        updateChallenge({
+          id: challenge.id,
+          challenge: { supplementaryContent: serializeEditorContent() },
+        });
+      }),
+    [challenge.id],
+  );
 
   const handleVideoUrl = (e: ChangeEvent<HTMLInputElement>) => {
     updateChallenge({
@@ -245,13 +74,25 @@ const MediaArea = connect(
         />
       </TitleHeader>
       {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
-      <Slate editor={editor} value={value} onChange={setValue}>
-        <Editable renderElement={renderElement} />
-      </Slate>
+      <Suspense fallback={<Loading />}>
+        <ContentEditor
+          placeholder="Write something beautiful..."
+          defaultValue={challenge.supplementaryContent}
+          autoFocus={isEditMode}
+          readOnly={!isEditMode}
+          spellCheck={isEditMode}
+          onChange={handleContent}
+        />
+      </Suspense>
       {isEditMode ? (
         <ContentInput
           value={challenge.supplementaryContent}
-          onChange={handleContent}
+          onChange={supplementaryContent =>
+            updateChallenge({
+              id: challenge.id,
+              challenge: { supplementaryContent },
+            })
+          }
         />
       ) : (
         <StyledMarkdown source={challenge.supplementaryContent} />
