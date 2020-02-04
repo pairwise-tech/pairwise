@@ -22,6 +22,7 @@ import {
   RenderElementProps,
 } from "slate-react";
 import pipe from "ramda/es/pipe";
+import ReactSyntaxHighlighter from "react-syntax-highlighter";
 
 /**
  * The media area. Where supplementary content and challenge videos live. The
@@ -51,17 +52,13 @@ const getChildStrings = (children: any): string => {
 const CodeElement = React.forwardRef((props: RenderElementProps, ref: any) => {
   // TODO: Use this code type to inform syntax highlighting
   const language = props.element.type.split("-")[1] || "text";
+  const value = getChildStrings(props.children);
   console.warn(`[INFO] Got code type of "${language}"`);
   debugger;
   return (
-    <Suspense fallback={<pre ref={ref}>Loading...</pre>}>
-      <LazyCodeBlock
-        {...props.attributes}
-        ref={ref}
-        value={getChildStrings(props.children)}
-        language={language}
-      />
-    </Suspense>
+    <ReactSyntaxHighlighter ref={ref} language={language}>
+      {value}
+    </ReactSyntaxHighlighter>
   );
 });
 
