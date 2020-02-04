@@ -46,7 +46,6 @@ export default class TableOfContents extends React.Component<
     editor: Editor;
   },
   {
-    activeHeading?: string;
     isFixed: boolean;
     left: number;
   }
@@ -54,7 +53,6 @@ export default class TableOfContents extends React.Component<
   wrapperRef = React.createRef<HTMLDivElement>();
 
   state = {
-    activeHeading: undefined,
     isFixed: false,
     left: PROSE_MAX_WIDTH + 40,
   };
@@ -123,18 +121,15 @@ export default class TableOfContents extends React.Component<
 
             // @ts-ignore
             const slug = headingToSlug(editor.value.document, heading);
-            const active = this.state.activeHeading === slug;
 
             return (
-              <ListItem
-                style={{
-                  marginLeft: Number(heading.type.match(/(\d)/)?.[0]) * 12,
-                }}
-                type={heading.type}
-                active={active}
-                key={slug}
-              >
-                <Anchor href={`#${slug}`} active={active}>
+              <ListItem key={slug} style={{ marginLeft: -1 }}>
+                <Anchor
+                  href={`#${slug}`}
+                  style={{
+                    marginLeft: Number(heading.type.match(/(\d)/)?.[0]) * 8,
+                  }}
+                >
                   {heading.text}
                 </Anchor>
               </ListItem>
@@ -155,6 +150,9 @@ const Wrapper = styled.div`
   border: 1px solid #404040;
   border-radius: 2px;
   background: #292929;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 300px;
 
   h4 {
     padding: 5px;
@@ -172,23 +170,19 @@ const Wrapper = styled.div`
   }
 `;
 
-const Anchor = styled.a<{ active: boolean }>`
+const Anchor = styled.a`
   display: block;
-  font-weight: ${props => (props.active ? 500 : 400)};
+  font-weight: 400;
   transition: all 100ms ease-in-out;
-  margin-right: -5px;
-  padding: 2px 0;
+  padding: 8px 5px;
   text-overflow: ellipsis;
   text-decoration: none;
 `;
 
-const ListItem = styled.li<{ type: string; active: boolean }>`
+const ListItem = styled.div`
   display: block;
-  padding: 8px 5px;
   border-bottom: 1px solid #404040;
   position: relative;
-  margin-left: ${props => (props.type.match(/heading[12]/) ? "8px" : "16px")};
-  padding-right: 16px;
   white-space: nowrap;
   a {
     color: #cacaca;
@@ -201,9 +195,9 @@ const ListItem = styled.li<{ type: string; active: boolean }>`
   }
 `;
 
-const Sections = styled.ol`
-  margin: 0 0 0 -8px;
+const Sections = styled.div`
   padding: 0;
+  margin: 0;
   list-style: none;
   font-size: 13px;
   width: 300px;
