@@ -16,7 +16,7 @@ import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
 
-import { COLORS, PROSE_MAX_WIDTH } from "../tools/constants";
+import { COLORS, PROSE_MAX_WIDTH, AppToaster } from "../tools/constants";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -117,6 +117,12 @@ const editorTheme = {
  */
 const EditorExternalStyles = styled.div`
   font-size: 17px;
+  max-width: 728px;
+
+  // Inline code
+  p code {
+    color: rgb(108, 188, 255);
+  }
 
   .prism-token.token {
     // color: #9bdbfd;
@@ -128,11 +134,15 @@ const EditorExternalStyles = styled.div`
     &.keyword {
       color: rgb(86, 156, 214);
     }
-    &.string {
+    &.string,
+    &.tag.attr-value {
       color: rgb(214, 157, 133);
     }
     &.builtin {
       color: rgb(78, 201, 176);
+    }
+    &.tag.attr-name {
+      color: rgb(156, 220, 254);
     }
     &.punctuation {
       color: ${editorColors.almostWhite};
@@ -150,13 +160,22 @@ const EditorExternalStyles = styled.div`
  * The ContentEditor is our rich markdown editor for use in codepress for
  * editing and in the overall app for viewing markdown content.
  *
- * This export just attaches the theme and passes the rest through.
+ * This export attaches the theme and any other props that are unlikely to
+ * change if the editor is used in different places.
  *
  * @NOTE Render this within <Suspense />. React will throw a helpful error if not
  */
 export const ContentEditor = (props: EditorProps) => (
   <EditorExternalStyles>
-    <RichMarkdownEditor theme={editorTheme} {...props} />
+    <RichMarkdownEditor
+      theme={editorTheme}
+      onShowToast={message => {
+        AppToaster.show({
+          message,
+        });
+      }}
+      {...props}
+    />
   </EditorExternalStyles>
 );
 

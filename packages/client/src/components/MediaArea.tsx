@@ -76,6 +76,10 @@ const MediaArea = connect(
       {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
       <Suspense fallback={<Loading />}>
         <ContentEditor
+          toc={true}
+          onClickHashtag={tag => {
+            console.log(tag, "clicked tag");
+          }}
           placeholder="Write something beautiful..."
           defaultValue={challenge.supplementaryContent}
           autoFocus={isEditMode}
