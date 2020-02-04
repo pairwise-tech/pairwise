@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import {
   ChallengeSkeleton,
   CourseSkeleton,
@@ -26,7 +27,6 @@ import {
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
-import { DEV_MODE } from "tools/client-env";
 import { DarkTheme } from "./Shared";
 
 const debug = require("debug")("client:NavigationOverlay");
