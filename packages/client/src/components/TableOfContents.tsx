@@ -141,6 +141,7 @@ export default class TableOfContents extends React.Component<
                 <Anchor
                   href={`#${slug}`}
                   style={{
+                    // Indent based on heading level
                     marginLeft: Number(heading.type.match(/(\d)/)?.[0]) * 8,
                   }}
                 >
