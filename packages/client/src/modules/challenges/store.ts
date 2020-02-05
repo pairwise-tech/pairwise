@@ -8,6 +8,7 @@ import {
   ModuleList,
   Course,
   CourseSkeleton,
+  ChallengeList,
 } from "@pairwise/common";
 import insert from "ramda/es/insert";
 import lensPath from "ramda/es/lensPath";
@@ -19,10 +20,12 @@ import {
   InverseChallengeMapping,
   ModuleCreationPayload,
   ChallengeDeletePayload,
+  ChallengeReorderPayload,
 } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
 import { ChallengesActionTypes } from "./index";
+import arrayMove from "array-move";
 
 const debug = require("debug")("challenge:store");
 
@@ -225,6 +228,35 @@ const insertChallenge = (
   return over(lens, insert(insertionIndex, challenge), courses);
 };
 
+const reorderChallengeList = (
+  courses: CourseList,
+  challengeReorderPayload: ChallengeReorderPayload,
+) => {
+  const {
+    courseId,
+    moduleId,
+    challengeOldIndex,
+    challengeNewIndex,
+  } = challengeReorderPayload;
+
+  const courseIndex = courses.findIndex(x => x.id === courseId);
+  const moduleIndex = courses[courseIndex].modules.findIndex(
+    m => m.id === moduleId,
+  );
+  const lens = lensPath([courseIndex, "modules", moduleIndex, "challenges"]);
+
+  const updateChallengeListOrder = (challengeList: ChallengeList) => {
+    const reorderedList = arrayMove(
+      challengeList,
+      challengeOldIndex,
+      challengeNewIndex,
+    );
+    return reorderedList;
+  };
+
+  return over(lens, updateChallengeListOrder, courses);
+};
+
 /** ===========================================================================
  * Store
  * ============================================================================
@@ -397,6 +429,20 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       currentChallengeId: newCurrentChallengeId,
       courses: updatedCourses,
       courseSkeletons: updatedCourseSkeletons,
+    };
+  })
+  .handleAction(actions.reorderChallengeList, (state, action) => {
+    const { courses, courseSkeletons } = state;
+
+    if (!courses || !courseSkeletons) {
+      return state;
+    }
+
+    return {
+      ...state,
+      courses: reorderChallengeList(courses, action.payload),
+      // @ts-ignore
+      courseSkeletons: reorderChallengeList(courseSkeletons, action.payload),
     };
   })
   .handleAction(actions.updateCourseModule, (state, action) => {

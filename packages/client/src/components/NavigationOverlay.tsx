@@ -1,7 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import {
+  SortEnd,
+  SortableContainer,
+  SortableElement,
+} from "react-sortable-hoc";
 import {
   ChallengeSkeleton,
   CourseSkeleton,
@@ -186,13 +190,24 @@ class NavigationOverlay extends React.Component<IProps> {
       <SortableChallengeList
         items={challengeList}
         helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
-        onSortEnd={this.handleSortChallengesEnd}
+        onSortEnd={result =>
+          this.handleSortChallengesEnd(course, module, result)
+        }
       />
     );
   };
 
-  handleSortChallengesEnd = (sortResult: any) => {
-    console.log(sortResult);
+  handleSortChallengesEnd = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    result: SortEnd,
+  ) => {
+    this.props.reorderChallengeList({
+      courseId: course.id,
+      moduleId: module.id,
+      challengeOldIndex: result.oldIndex,
+      challengeNewIndex: result.newIndex,
+    });
   };
 
   renderModuleNavigationItem = (
@@ -629,6 +644,7 @@ const dispatchProps = {
   deleteCourseModule: Modules.actions.challenges.deleteCourseModule,
   createChallenge: Modules.actions.challenges.createChallenge,
   deleteChallenge: Modules.actions.challenges.deleteChallenge,
+  reorderChallengeList: Modules.actions.challenges.reorderChallengeList,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePurchaseCourseIntent:
