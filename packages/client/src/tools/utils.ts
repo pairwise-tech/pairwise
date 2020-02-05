@@ -170,22 +170,39 @@ export const partitionChallengesBySection = (
     challenges: [],
   };
 
+  let reachedProjectsYet = false;
+
   const finalSection = challengeList.reduce(
     (
       currentSection: NavigationChallengeSection,
       challenge: ChallengeSkeleton,
     ) => {
       const { type } = challenge;
-      const shouldEndSection =
-        type === "section" ||
+      /**
+       * The section should end when the next section type challenge is
+       * reached.
+       */
+      const shouldEndSection = type === "section";
+
+      /**
+       * If the projects section is reached, all of the challenges have been
+       * reached, and we should no longer aggregate challenges into section
+       * blocks. But, when we first reach the projects we should aggregate
+       * all the current challenges into a section.
+       */
+      const reachedProjectsNow =
         type === "project" ||
         type === "guided-project" ||
         type === "special-topic";
 
-      if (shouldEndSection) {
+      const firstReachedProjects = !reachedProjectsYet && reachedProjectsNow;
+
+      if (shouldEndSection || firstReachedProjects) {
         if (currentSection.challenges.length > 0) {
           sections = sections.concat(currentSection);
         }
+
+        reachedProjectsYet = reachedProjectsNow;
 
         const nextSection: NavigationChallengeSection = {
           section: challenge,
@@ -202,7 +219,7 @@ export const partitionChallengesBySection = (
     defaultSection,
   );
 
-  /* Add the last challenges */
+  /* Add whatever last challenges remain and were not aggregated yet */
   sections = sections.concat(finalSection);
 
   return sections;
