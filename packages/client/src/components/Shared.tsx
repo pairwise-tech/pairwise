@@ -126,7 +126,6 @@ const EditorExternalStyles = styled.div`
   }
 
   .prism-token.token {
-    // color: #9bdbfd;
     color: white;
 
     &.function {
