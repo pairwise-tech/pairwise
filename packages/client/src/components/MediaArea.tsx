@@ -3,7 +3,7 @@ import { debounce } from "throttle-debounce";
 import React, { ChangeEvent, Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ContentInput, StyledMarkdown, Loading, ContentEditor } from "./Shared";
+import { Loading, ContentEditor } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import { PROSE_MAX_WIDTH } from "tools/constants";
@@ -111,7 +111,7 @@ const MediaArea = connect(
         />
       </Suspense>
       {isEditMode && (
-        <Callout title="Video URL" style={{ marginBottom: 40 }}>
+        <Callout title="Video URL" style={{ marginBottom: 40, marginTop: 40 }}>
           <p>If this challenge has a video enter the embed URL here.</p>
           <input
             className={Classes.INPUT}
@@ -130,13 +130,13 @@ const MediaArea = connect(
   );
 });
 
+export default MediaArea;
+
 const Hr = styled.hr`
   border: 1px solid transparent;
   border-top-color: black;
   border-bottom-color: #353535;
 `;
-
-export default MediaArea;
 
 const SupplementaryContentContainer = styled.div`
   padding: 25px;
