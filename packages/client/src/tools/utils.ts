@@ -11,6 +11,7 @@ import {
   CHALLENGE_TYPE,
   ChallengeSkeleton,
   ChallengeSkeletonList,
+  ProjectChallengeBlob,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
 import { IconName } from "@blueprintjs/core";
@@ -67,9 +68,20 @@ export const constructDataBlobFromChallenge = (args: {
       };
       return blob;
     }
+    case "guided-project":
+    case "special-topic":
     case "media": {
       const blob: VideoChallengeBlob = {
         type: "video",
+        timeLastWatched: 0,
+      };
+      return blob;
+    }
+    case "project": {
+      const blob: ProjectChallengeBlob = {
+        type: "project",
+        url: "",
+        repo: "",
         timeLastWatched: 0,
       };
       return blob;
@@ -141,8 +153,13 @@ export interface NavigationChallengeSection {
 /**
  * Behold the following hideous code!
  *
- * Partition the challenges into blocks separate by section. This is
- * the greatest code ever written.
+ * This method partitions a list of challenge into blocks of challenges by
+ * section challenges which exist in the challenge list.
+ *
+ * It takes all challenges in a section, until the next section (or until
+ * a non-challenge type is encountered) and groups them into a block. These
+ * can then be rendered in a way that allow the sections to be separately
+ * collapsed and expanded.
  */
 export const partitionChallengesBySection = (
   challengeList: ChallengeSkeletonList,
@@ -158,7 +175,14 @@ export const partitionChallengesBySection = (
       currentSection: NavigationChallengeSection,
       challenge: ChallengeSkeleton,
     ) => {
-      if (challenge.type === "section") {
+      const { type } = challenge;
+      const shouldEndSection =
+        type === "section" ||
+        type === "project" ||
+        type === "guided-project" ||
+        type === "special-topic";
+
+      if (shouldEndSection) {
         if (currentSection.challenges.length > 0) {
           sections = sections.concat(currentSection);
         }
@@ -178,6 +202,7 @@ export const partitionChallengesBySection = (
     defaultSection,
   );
 
+  /* Add the last challenges */
   sections = sections.concat(finalSection);
 
   return sections;

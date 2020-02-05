@@ -15,7 +15,10 @@ export type CHALLENGE_TYPE =
   | "typescript"
   | "markup"
   | "media"
-  | "section";
+  | "section"
+  | "project"
+  | "guided-project"
+  | "special-topic";
 
 export interface Course {
   id: string;
