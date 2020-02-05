@@ -2,71 +2,9 @@ import * as React from "react";
 import styled from "styled-components";
 import { Editor } from "slate-react";
 
-import { Document, Block, Node as SlateNode } from "slate";
+import { Block } from "slate";
+import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
 import { PROSE_MAX_WIDTH } from "tools/constants";
-
-/**
- * Make slugs from text: "I'm a page title" -> "im-a-page-title"
- * @NOTE The matching set is negated and contains the following
- *    a-zA-Z Alpha characters
- *    \d     Numeric characters
- *    \s     Whitespace
- * @NOTE There is no inherent need to append "h-" but the actual headings are
- * rendered seprately via the rich-markdown-editor, so unless we implement our
- * own renderNode handler (we could) we need to match their behavior for now.
- * Also see headingToSlug below.
- *
- * @param text Some string like "I'm a page title"
- */
-const slugFromHeading = (text: string) => {
-  const nonAlphaNumeric = /[^a-zA-Z\d\s]+/g; // See NOTE
-  const whitespace = /\s+/g;
-  const s = text
-    .toLowerCase()
-    .replace(nonAlphaNumeric, "")
-    .replace(whitespace, "-");
-
-  // See NOTE
-  return `h-${s}`;
-};
-
-// finds the index of this heading in the document compared to other headings
-// with the same slugified text
-const indexOfHeading = (document: Document, heading: SlateNode): number => {
-  const slugified = slugFromHeading(heading.text);
-  const headings = document.nodes.filter((node?: Block) => {
-    if (!node || !node.text) {
-      return false;
-    }
-    return (
-      Boolean(node.type.match(/^heading/)) &&
-      slugified === slugFromHeading(node.text)
-    );
-  });
-
-  // NOTE: Immutable.List _does have_ an indexOf method. So, the type error here
-  // is just wrong and the types are third party.
-  // @ts-ignore
-  return headings.indexOf(heading);
-};
-
-/**
- * Calculates a unique slug for this heading based on it's text and position.
- * Adding the position in is simply to account for headings with the same text,
- * although that is quite unlikely
- *
- * @NOTE I'm actually not a fan of the inconsistency with zero-indexed headers.
- * Just add the "-0" on the end as far as I'm concerned. But the actual headings
- * are rendered seprately via the rich-markdown-editor, so unless we implement
- * our own renderNode handler (we could) we need to match their behavior for now.
- */
-const headingToSlug = (document: Document, node: SlateNode) => {
-  const slugified = slugFromHeading(node.text);
-  const index = indexOfHeading(document, node);
-
-  // See NOTE
-  return index === 0 ? slugified : `${slugified}-${index}`;
-};
 
 export default class TableOfContents extends React.Component<
   {
@@ -85,13 +23,41 @@ export default class TableOfContents extends React.Component<
   };
 
   componentDidMount() {
+    window.document.addEventListener("click", this.smoothScrollToHeading);
     window.addEventListener("scroll", this.updateScrollState);
     setImmediate(this.updateScrollState);
   }
 
   componentWillUnmount() {
+    window.document.removeEventListener("click", this.smoothScrollToHeading);
     window.removeEventListener("scroll", this.updateScrollState);
   }
+
+  /**
+   * @NOTE The way that the underlying lib slugifies titles is flawed in that it
+   * will allow characters such as period which are invalid in a selector.
+   * However, getElementById is happy to oblige so we go with that instead.
+   */
+  smoothScrollToHeading = (e: MouseEvent) => {
+    try {
+      const el = e.target as HTMLElement;
+      const href = el?.getAttribute("href");
+      if (href && href.startsWith("#")) {
+        const id = href.slice(1); // #some-id -> some-id. Also, see NOTE
+        window.document
+          .getElementById(id)
+          ?.scrollIntoView({ behavior: "smooth" });
+
+        // Prevent default late so that if the above fails the default will not
+        // have been prevented
+        e.preventDefault();
+      }
+    } catch (err) {
+      console.warn(
+        "[INFO] Could not smooth scroll to header. Will fall back to default browser behavior.",
+      );
+    }
+  };
 
   updateScrollState = () => {
     const parent = this.wrapperRef.current?.parentElement;
