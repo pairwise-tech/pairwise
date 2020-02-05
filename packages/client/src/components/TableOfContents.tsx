@@ -3,29 +3,40 @@ import styled from "styled-components";
 import { Editor } from "slate-react";
 
 import { Document, Block, Node as SlateNode } from "slate";
-import slugify from "slugify";
 import { PROSE_MAX_WIDTH } from "tools/constants";
 
-// Slugify, and remove periods from headings so that they are
-// compatible with url hashes AND dom selectors
-function customSlugify(text: string) {
-  return `h-${slugify(text, { lower: true }).replace(".", "-")}`;
-}
+/**
+ * Make slugs from text: "I'm a page title" -> "im-a-page-title"
+ * @NOTE The matching set is negated and contains the following
+ *    a-zA-Z Alpha characters
+ *    \d     Numeric characters
+ *    \s     Whitespace
+ * @param text Some string like "I'm a page title"
+ */
+const slugFromHeading = (text: string) => {
+  const nonAlphaNumeric = /[^a-zA-Z\d\s]+/g; // See NOTE
+  const whitespace = /\s+/g;
+  return text
+    .toLowerCase()
+    .replace(nonAlphaNumeric, "") // Strip non alnum
+    .replace(whitespace, "-"); // Whitespace -> '-'
+};
 
 // finds the index of this heading in the document compared to other headings
 // with the same slugified text
 const indexOfType = (document: Document, heading: SlateNode) => {
-  const slugified = customSlugify(heading.text);
+  const slugified = slugFromHeading(heading.text);
   const headings = document.nodes.filter((node?: Block) => {
     if (!node || !node.text) {
       return false;
     }
     return (
       Boolean(node.type.match(/^heading/)) &&
-      slugified === customSlugify(node.text)
+      slugified === slugFromHeading(node.text)
     );
   });
 
+  debugger;
   // @ts-ignore
   return headings.indexOf(heading);
 };
@@ -33,7 +44,7 @@ const indexOfType = (document: Document, heading: SlateNode) => {
 // calculates a unique slug for this heading based on it's text and position
 // in the document that is as stable as possible
 const headingToSlug = (document: Document, node: SlateNode) => {
-  const slugified = customSlugify(node.text);
+  const slugified = slugFromHeading(node.text);
   const index = indexOfType(document, node);
   if (index === 0) {
     return slugified;
