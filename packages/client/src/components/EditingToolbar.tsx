@@ -34,12 +34,13 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
   // For hiding the controls while recording a video.
   const [hidden, setHidden] = React.useState(false);
   const {
+    course,
+    challenge,
     activeIds,
     isEditMode,
     setEditMode,
     saveCourse,
-    course,
-    challenge,
+    overlayVisible,
   } = props;
 
   const { currentCourseId, currentModuleId, currentChallengeId } = activeIds;
@@ -57,7 +58,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
   };
 
   const handleToggleNavigationMap = () => {
-    props.setNavigationMapState(!props.overlayVisible);
+    props.setNavigationMapState(!overlayVisible);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,6 +117,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
             intent="danger"
             style={{ marginRight: 16 }}
             onClick={handleDelete}
+            disabled={overlayVisible}
           >
             Delete
           </Button>
@@ -134,9 +136,10 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
         </Suspense>
       </SlideOut>
       <KeyboardShortcuts
+        /* TODO: Provide some reference in the app of what shortcut keys exist? */
         keymap={{
           "cmd+shift+e": toggleHidden,
-          "cmd+shift+y": handleToggleNavigationMap,
+          "cmd+i": handleToggleNavigationMap,
         }}
       />
     </div>
