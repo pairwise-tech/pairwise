@@ -6,7 +6,6 @@ import {
   CourseSkeletonList,
   DataBlob,
   ModuleList,
-  ChallengeList,
 } from "@pairwise/common";
 import insert from "ramda/es/insert";
 import move from "ramda/es/move";
