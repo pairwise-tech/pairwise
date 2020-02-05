@@ -11,15 +11,23 @@ import { PROSE_MAX_WIDTH } from "tools/constants";
  *    a-zA-Z Alpha characters
  *    \d     Numeric characters
  *    \s     Whitespace
+ * @NOTE There is no inherent need to append "h-" but the actual headings are
+ * rendered seprately via the rich-markdown-editor, so unless we implement our
+ * own renderNode handler (we could) we need to match their behavior for now.
+ * Also see headingToSlug below.
+ *
  * @param text Some string like "I'm a page title"
  */
 const slugFromHeading = (text: string) => {
   const nonAlphaNumeric = /[^a-zA-Z\d\s]+/g; // See NOTE
   const whitespace = /\s+/g;
-  return text
+  const s = text
     .toLowerCase()
-    .replace(nonAlphaNumeric, "") // Strip non alnum
-    .replace(whitespace, "-"); // Whitespace -> '-'
+    .replace(nonAlphaNumeric, "")
+    .replace(whitespace, "-");
+
+  // See NOTE
+  return `h-${s}`;
 };
 
 // finds the index of this heading in the document compared to other headings
@@ -46,11 +54,18 @@ const indexOfHeading = (document: Document, heading: SlateNode): number => {
  * Calculates a unique slug for this heading based on it's text and position.
  * Adding the position in is simply to account for headings with the same text,
  * although that is quite unlikely
+ *
+ * @NOTE I'm actually not a fan of the inconsistency with zero-indexed headers.
+ * Just add the "-0" on the end as far as I'm concerned. But the actual headings
+ * are rendered seprately via the rich-markdown-editor, so unless we implement
+ * our own renderNode handler (we could) we need to match their behavior for now.
  */
 const headingToSlug = (document: Document, node: SlateNode) => {
   const slugified = slugFromHeading(node.text);
   const index = indexOfHeading(document, node);
-  return `${slugified}-${index}`;
+
+  // See NOTE
+  return index === 0 ? slugified : `${slugified}-${index}`;
 };
 
 export default class TableOfContents extends React.Component<
