@@ -76,6 +76,13 @@ export const PROSE_MAX_WIDTH = 728;
  */
 
 /**
+ * Serializing the rich content editor state into markdown could have a perf
+ * impact if we did it to often, so this is the debounce timeout for that
+ * serialization.
+ */
+export const CONTENT_SERIALIZE_DEBOUNCE = 600;
+
+/**
  * The special ID used for the code sandbox. The sandbox will not be persisted
  * along with the other challenges and online lives in the users browser
  *

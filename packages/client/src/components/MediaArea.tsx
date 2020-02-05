@@ -1,11 +1,29 @@
 import Modules, { ReduxStoreState } from "modules/root";
-import React, { ChangeEvent } from "react";
+import { debounce } from "throttle-debounce";
+import React, { ChangeEvent, Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ContentInput, StyledMarkdown } from "./Shared";
+import { Loading, ContentEditor } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
-import { PROSE_MAX_WIDTH } from "tools/constants";
+import { PROSE_MAX_WIDTH, CONTENT_SERIALIZE_DEBOUNCE } from "tools/constants";
+import { SlatePlugin } from "rich-markdown-editor";
+import TableOfContents from "./TableOfContents";
+
+const TableOfContentsPlugin = (): SlatePlugin => {
+  const renderEditor: SlatePlugin["renderEditor"] = (props, editor, next) => {
+    const children = next();
+
+    return (
+      <>
+        <TableOfContents editor={editor} />
+        {children}
+      </>
+    );
+  };
+
+  return { renderEditor };
+};
 
 /**
  * The media area. Where supplementary content and challenge videos live. The
@@ -28,25 +46,41 @@ type MediaAreaProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 const MediaArea = connect(
   mapStateToProps,
   dispatchProps,
-)((props: MediaAreaProps) => {
-  const { challenge, title, isEditMode } = props;
-
+)(({ challenge, title, isEditMode, updateChallenge }: MediaAreaProps) => {
   if (!challenge) {
-    return <h1>Loading...</h1>;
+    return <Loading />;
   }
 
   const handleTitle = (x: string) =>
-    props.updateChallenge({ id: challenge.id, challenge: { title: x } });
+    updateChallenge({ id: challenge.id, challenge: { title: x } });
 
-  const handleContent = (supplementaryContent: string) => {
-    props.updateChallenge({
-      id: challenge.id,
-      challenge: { supplementaryContent },
-    });
-  };
+  const tableOfContents = React.useMemo(() => TableOfContentsPlugin(), [
+    challenge.id,
+  ]);
+
+  /**
+   * @NOTE The function is memoized so that we're not constantly recreating the
+   * debounced function.
+   * @NOTE The function is debounced because serializing to markdown has a
+   * non-trivial performance impact, which is why the underlying lib provides a
+   * getter function rather than the string value onChange.
+   */
+  const handleContent = React.useMemo(
+    () =>
+      debounce(
+        CONTENT_SERIALIZE_DEBOUNCE,
+        (serializeEditorContent: () => string) => {
+          updateChallenge({
+            id: challenge.id,
+            challenge: { supplementaryContent: serializeEditorContent() },
+          });
+        },
+      ),
+    [challenge.id],
+  );
 
   const handleVideoUrl = (e: ChangeEvent<HTMLInputElement>) => {
-    props.updateChallenge({
+    updateChallenge({
       id: challenge.id,
       challenge: {
         videoUrl: e.target.value,
@@ -64,16 +98,26 @@ const MediaArea = connect(
         />
       </TitleHeader>
       {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
-      {isEditMode ? (
-        <ContentInput
-          value={challenge.supplementaryContent}
+      <Suspense fallback={<Loading />}>
+        <ContentEditor
+          toc={false /* Turn off so we can use our own */}
+          plugins={[tableOfContents]}
+          placeholder="Write something beautiful..."
+          defaultValue={challenge.supplementaryContent}
+          autoFocus={
+            isEditMode &&
+            !challenge.supplementaryContent /* Only focus an empty editor */
+          }
+          readOnly={!isEditMode}
+          spellCheck={isEditMode}
           onChange={handleContent}
         />
-      ) : (
-        <StyledMarkdown source={challenge.supplementaryContent} />
-      )}
+      </Suspense>
       {isEditMode && (
-        <Callout title="Video URL" style={{ marginBottom: 40 }}>
+        <Callout
+          title="Video URL"
+          style={{ marginBottom: 40, marginTop: 40, maxWidth: PROSE_MAX_WIDTH }}
+        >
           <p>If this challenge has a video enter the embed URL here.</p>
           <input
             className={Classes.INPUT}
@@ -92,13 +136,13 @@ const MediaArea = connect(
   );
 });
 
+export default MediaArea;
+
 const Hr = styled.hr`
   border: 1px solid transparent;
   border-top-color: black;
   border-bottom-color: #353535;
 `;
-
-export default MediaArea;
 
 const SupplementaryContentContainer = styled.div`
   padding: 25px;
