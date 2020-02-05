@@ -114,7 +114,10 @@ const MediaArea = connect(
         />
       </Suspense>
       {isEditMode && (
-        <Callout title="Video URL" style={{ marginBottom: 40, marginTop: 40 }}>
+        <Callout
+          title="Video URL"
+          style={{ marginBottom: 40, marginTop: 40, maxWidth: PROSE_MAX_WIDTH }}
+        >
           <p>If this challenge has a video enter the embed URL here.</p>
           <input
             className={Classes.INPUT}
