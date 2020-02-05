@@ -28,7 +28,7 @@ services:
     build:
       context: .
       dockerfile: App.Dockerfile
-    image: runtime
+    image: pairwise-dev-runtime
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn pairwise
     environment:
       TYPEORM_HOST: db

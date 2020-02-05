@@ -14,7 +14,7 @@ services:
       - 5432
 
   server:
-    image: build
+    image: pairwise-runtime
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
     environment:
       TYPEORM_HOST: db
@@ -35,7 +35,7 @@ services:
       - db
 
   client:
-    image: build
+    image: pairwise-runtime
     command: yarn client:prod
     expose:
       - 3000
@@ -43,7 +43,7 @@ services:
       - 3000:3000
 
   external-services:
-    image: build
+    image: pairwise-runtime
     command: yarn services:start
     environment:
       SERVER_URL: http://server:9000
@@ -51,7 +51,7 @@ services:
       - 7000
 
   cypress:
-    image: build
+    image: pairwise-runtime
     command: dockerize -wait tcp://db:5432 -wait tcp://client:3000 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 20s yarn test:cypress
     depends_on:
       - db

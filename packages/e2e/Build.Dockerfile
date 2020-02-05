@@ -2,7 +2,7 @@
 # for all the pacakges. This is used to produce a full application build
 # which is then used for the various test stages.
 
-FROM dependencies as build
+FROM pairwise-dependencies as build
 
 COPY . .
 
