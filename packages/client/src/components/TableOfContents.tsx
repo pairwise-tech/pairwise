@@ -24,7 +24,7 @@ const slugFromHeading = (text: string) => {
 
 // finds the index of this heading in the document compared to other headings
 // with the same slugified text
-const indexOfType = (document: Document, heading: SlateNode) => {
+const indexOfType = (document: Document, heading: SlateNode): number => {
   const slugified = slugFromHeading(heading.text);
   const headings = document.nodes.filter((node?: Block) => {
     if (!node || !node.text) {
@@ -36,7 +36,8 @@ const indexOfType = (document: Document, heading: SlateNode) => {
     );
   });
 
-  debugger;
+  // NOTE: Immutable.List _does have_ an indexOf method. So, the type error here
+  // is just wrong and the types are third party.
   // @ts-ignore
   return headings.indexOf(heading);
 };
