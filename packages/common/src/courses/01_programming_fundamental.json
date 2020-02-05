@@ -71,17 +71,6 @@
           "supplementaryContent": "Placeholder supplementary content..."
         },
         {
-          "id": "iMChbD-3",
-          "type": "section",
-          "title": "MY SECTION",
-          "content": "",
-          "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "supplementaryContent": "hahaha"
-        },
-        {
           "id": "9scykuYtf",
           "type": "markup",
           "title": "Nesting Tags",
