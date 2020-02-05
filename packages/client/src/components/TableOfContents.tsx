@@ -97,12 +97,13 @@ export default class TableOfContents extends React.Component<
   getHeadings() {
     const { editor } = this.props;
 
+    // Third party typing issue
     // @ts-ignore
     return editor.value.document.nodes.filter((node?: Block) => {
       if (!node || !node.text) {
         return false;
       }
-      return node.type.match(/^heading/);
+      return Boolean(node.type.match(/^heading/));
     });
   }
 
@@ -131,6 +132,7 @@ export default class TableOfContents extends React.Component<
               return null;
             }
 
+            // Third party typing issue
             // @ts-ignore
             const slug = headingToSlug(editor.value.document, heading);
 
