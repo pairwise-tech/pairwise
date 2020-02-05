@@ -127,6 +127,7 @@ class NavigationOverlay extends React.Component<IProps> {
           isEditMode,
           updateCourseModule,
           handleDeleteModule,
+          currentActiveModule: module,
           renderModuleNavigationItem: this.renderModuleNavigationItem,
           renderModuleCodepressButton: this.renderModuleCodepressButton,
         }}
@@ -413,6 +414,8 @@ class CodepressNavigationContextMenu extends React.PureComponent<
 interface SortableModuleContainerProps {
   isEditMode: boolean;
   course: CourseSkeleton;
+  currentActiveModule: ModuleSkeleton;
+  updateCourseModule: typeof Modules.actions.challenges.updateCourseModule;
   handleDeleteModule: () => void;
   renderModuleNavigationItem: (
     activeModuleId: string,
@@ -423,7 +426,6 @@ interface SortableModuleContainerProps {
     course: CourseSkeleton,
     index: number,
   ) => JSX.Element;
-  updateCourseModule: typeof Modules.actions.challenges.updateCourseModule;
 }
 
 interface SortableModuleItemValue extends SortableModuleContainerProps {
@@ -457,29 +459,41 @@ const SortableModuleList = SortableContainer(
 
 const SortableModuleItem = SortableElement(
   (props: { value: SortableModuleItemValue }) => {
-    const { value } = props;
+    const {
+      index,
+      module,
+      course,
+      isEditMode,
+      handleDeleteModule,
+      currentActiveModule,
+      updateCourseModule,
+      renderModuleNavigationItem,
+      renderModuleCodepressButton,
+    } = props.value;
 
     const DraggableModuleHandle = SortableHandle(() => (
-      <ModuleNumber>{value.index}</ModuleNumber>
+      <ModuleNumber>{index}</ModuleNumber>
     ));
 
     return (
       <UnorderedListItem>
-        <div key={value.module.id} style={{ position: "relative" }}>
-          {value.isEditMode ? (
+        <div key={module.id} style={{ position: "relative" }}>
+          {isEditMode ? (
             <CodepressNavigationContextMenu
               type="MODULE"
-              handleDelete={value.handleDeleteModule}
+              handleDelete={handleDeleteModule}
             >
-              <ModuleNavigationBase active={value.module.id === module.id}>
+              <ModuleNavigationBase
+                active={currentActiveModule.id === module.id}
+              >
                 <span>
                   <DraggableModuleHandle />
                   <NavUpdateField
-                    value={value.module.title}
+                    value={module.title}
                     onChange={e => {
-                      value.updateCourseModule({
-                        id: value.module.id,
-                        courseId: value.course.id,
+                      updateCourseModule({
+                        id: module.id,
+                        courseId: course.id,
                         module: { title: e.target.value },
                       });
                     }}
@@ -488,13 +502,9 @@ const SortableModuleItem = SortableElement(
               </ModuleNavigationBase>
             </CodepressNavigationContextMenu>
           ) : (
-            value.renderModuleNavigationItem(
-              module.id,
-              value.module,
-              value.index,
-            )
+            renderModuleNavigationItem(module.id, module, index)
           )}
-          {value.renderModuleCodepressButton(value.course, value.index)}
+          {renderModuleCodepressButton(course, index)}
         </div>
       </UnorderedListItem>
     );
@@ -505,7 +515,12 @@ interface SortableChallengeContainerProps {
   isEditMode: boolean;
   course: CourseSkeleton;
   module: ModuleSkeleton;
-  renderChallengeNavigationItem: any;
+  renderChallengeNavigationItem: (
+    module: ModuleSkeleton,
+    course: CourseSkeleton,
+    challenge: ChallengeSkeleton,
+    index: number,
+  ) => JSX.Element;
   deleteChallenge: typeof Modules.actions.challenges.deleteChallenge;
 }
 
