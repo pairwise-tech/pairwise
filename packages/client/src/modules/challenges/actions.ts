@@ -78,6 +78,8 @@ enum ActionTypesEnum {
 
   SET_ADMIN_TEST_TAB = "SET_ADMIN_TEST_TAB",
   SET_ADMIN_EDITOR_TAB = "SET_ADMIN_EDITOR_TAB",
+
+  TOGGLE_SECTION_ACCORDION_VIEW = "TOGGLE_SECTION_ACCORDION_VIEW",
 }
 
 /** ===========================================================================
@@ -226,3 +228,7 @@ export const deleteCourseModule = createAction(ActionTypesEnum.DELETE_MODULE)<
 export const reorderModuleList = createAction(
   ActionTypesEnum.REORDER_MODULE_LIST,
 )<ModuleReorderPayload>();
+
+export const toggleSectionAccordionView = createAction(
+  ActionTypesEnum.TOGGLE_SECTION_ACCORDION_VIEW,
+)<{ sectionId: string; open: boolean }>();

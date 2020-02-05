@@ -65,6 +65,11 @@ export const navigationOverlayVisible = createSelector(
   challenges => challenges.displayNavigationMap,
 );
 
+export const getNavigationSectionAccordionViewState = createSelector(
+  [challengesState],
+  prop("navigationSectionAccordionViewState"),
+);
+
 export const courseList = createSelector(
   [challengesState],
   challenges => challenges.courses,

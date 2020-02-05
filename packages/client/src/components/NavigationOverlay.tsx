@@ -26,6 +26,7 @@ import {
 import {
   Tooltip,
   Icon,
+  Collapse,
   Popover,
   Menu,
   MenuItem,
@@ -156,16 +157,83 @@ class NavigationOverlay extends React.Component<IProps> {
 
     /* Reordering is only available in edit mode */
     if (!isEditMode) {
-      return challengeList.map(
-        (challenge: ChallengeSkeleton, index: number) => {
-          return this.renderChallengeNavigationItem(
-            module,
-            course,
-            challenge,
-            index,
+      /* BLEGH !!!!!! 哈哈哈哈哈哈哈哈哈 */
+      const organizeChallengesBySection = () => {
+        interface Section {
+          section: Nullable<ChallengeSkeleton>;
+          challenges: ChallengeSkeleton[];
+        }
+
+        let sections: Section[] = [];
+        const defaultSection: Section = { section: null, challenges: [] };
+
+        const finalSection = challengeList.reduce(
+          (currentSection: Section, challenge: ChallengeSkeleton) => {
+            if (challenge.type === "section") {
+              if (currentSection.challenges.length > 0) {
+                sections = sections.concat(currentSection);
+              }
+
+              const nextSection: Section = {
+                section: challenge,
+                challenges: [],
+              };
+              return nextSection;
+            } else {
+              return {
+                section: currentSection.section,
+                challenges: currentSection.challenges.concat(challenge),
+              };
+            }
+          },
+          defaultSection,
+        );
+
+        sections = sections.concat(finalSection);
+
+        return sections;
+      };
+
+      const sectionBlocks = organizeChallengesBySection();
+      console.log(sectionBlocks);
+
+      return sectionBlocks.map((block, blockIndex) => {
+        if (block.section) {
+          return (
+            <Collapse
+              isOpen={this.getCurrentAccordionViewState(block.section.id)}
+            >
+              {this.renderChallengeSectionNavigationItem(
+                module,
+                course,
+                block.section,
+                blockIndex,
+              )}
+              {block.challenges.map(
+                (challenge: ChallengeSkeleton, index: number) => {
+                  return this.renderChallengeNavigationItem(
+                    module,
+                    course,
+                    challenge,
+                    blockIndex,
+                  );
+                },
+              )}
+            </Collapse>
           );
-        },
-      );
+        } else {
+          return block.challenges.map(
+            (challenge: ChallengeSkeleton, index: number) => {
+              return this.renderChallengeNavigationItem(
+                module,
+                course,
+                challenge,
+                index,
+              );
+            },
+          );
+        }
+      });
     }
 
     return (
@@ -218,6 +286,76 @@ class NavigationOverlay extends React.Component<IProps> {
         </span>
       </ModuleNavigationButton>
     );
+  };
+
+  renderChallengeSectionNavigationItem = (
+    module: ModuleSkeleton,
+    course: CourseSkeleton,
+    c: ChallengeSkeleton,
+    index: number,
+  ) => {
+    const { challengeId, isEditMode } = this.props;
+
+    const ChallengeIcon = () => (
+      <Icon
+        iconSize={Icon.SIZE_LARGE}
+        icon={getChallengeIcon(c.type, c.userCanAccess)}
+      />
+    );
+
+    const ChallengeIconUI = isEditMode
+      ? SortableHandle(() => <ChallengeIcon />)
+      : ChallengeIcon;
+
+    return (
+      <div key={c.id} style={{ position: "relative" }}>
+        <Link
+          key={c.id}
+          to={`/workspace/${c.id}`}
+          id={`challenge-navigation-${index}`}
+          isActive={() => c.id === challengeId}
+          onClick={this.handleClickChallenge(c.userCanAccess, course.id)}
+        >
+          <span>
+            <ChallengeIconUI />
+            <span style={{ marginLeft: 10 }}>{c.title}</span>
+          </span>
+          <span>
+            <Icon
+              icon="expand-all"
+              onClick={() => {
+                /* toggle section by the section challenge id, i.e. c.id */
+                this.props.toggleSectionAccordionView({
+                  sectionId: c.id,
+                  open: !this.getCurrentAccordionViewState(c.id),
+                });
+              }}
+            />
+          </span>
+          <span>
+            {c.videoUrl && (
+              <Tooltip
+                usePortal={false}
+                position="left"
+                content="Includes Video"
+              >
+                <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
+              </Tooltip>
+            )}
+          </span>
+        </Link>
+        {this.renderChallengeCodepressButton(course, module, index)}
+      </div>
+    );
+  };
+
+  getCurrentAccordionViewState = (sectionId: string) => {
+    const { navigationAccordionViewState } = this.props;
+    if (sectionId in navigationAccordionViewState) {
+      return navigationAccordionViewState[sectionId];
+    } else {
+      return false; /* Default to closed */
+    }
   };
 
   renderChallengeNavigationItem = (
@@ -836,6 +974,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
+  navigationAccordionViewState: Modules.selectors.challenges.getNavigationSectionAccordionViewState(
+    state,
+  ),
 });
 
 const dispatchProps = {
@@ -848,6 +989,8 @@ const dispatchProps = {
   reorderChallengeList: Modules.actions.challenges.reorderChallengeList,
   reorderModuleList: Modules.actions.challenges.reorderModuleList,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
+  toggleSectionAccordionView:
+    Modules.actions.challenges.toggleSectionAccordionView,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePurchaseCourseIntent:
     Modules.actions.purchase.handlePurchaseCourseIntent,
