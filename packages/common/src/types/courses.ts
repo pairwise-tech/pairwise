@@ -80,7 +80,7 @@ export interface ModuleSkeleton {
   challenges: ChallengeSkeletonList;
 }
 
-type ChallengeSkeletonList = ChallengeSkeleton[];
+export type ChallengeSkeletonList = ChallengeSkeleton[];
 
 export interface ChallengeSkeleton {
   type: CHALLENGE_TYPE;

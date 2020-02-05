@@ -7,6 +7,7 @@ import {
   CourseSkeleton,
   ModuleSkeleton,
   Challenge,
+  ChallengeSkeletonList,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
@@ -116,31 +117,83 @@ class NavigationOverlay extends React.Component<IProps> {
         >
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
           {this.renderChallengeCodepressButton(course, module, -1)}
-          {module.challenges.map((c: ChallengeSkeleton, i: number) => {
-            if (isEditMode) {
-              return (
-                <CodepressNavigationContextMenu
-                  type="CHALLENGE"
-                  handleDelete={() =>
-                    this.props.deleteChallenge({
-                      challengeId: c.id,
-                      courseId: course.id,
-                      moduleId: module.id,
-                    })
-                  }
-                >
-                  {this.renderChallengeNavigationItem(module, course, c, i)}
-                </CodepressNavigationContextMenu>
-              );
-            } else {
-              return this.renderChallengeNavigationItem(module, course, c, i);
-            }
-          })}
+          {this.renderSortableChallengeList(course, module, module.challenges)}
           <DoneScrolling />
         </Col>
       </Overlay>
     );
   }
+
+  renderSortableChallengeList = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    challengeList: ChallengeSkeletonList,
+  ) => {
+    const { isEditMode } = this.props;
+    const SortableChallengeItem = SortableElement(
+      ({ value, index }: { value: ChallengeSkeleton; index: number }) => {
+        if (isEditMode) {
+          return (
+            <UnorderedListItem>
+              <CodepressNavigationContextMenu
+                type="CHALLENGE"
+                handleDelete={() =>
+                  this.props.deleteChallenge({
+                    courseId: course.id,
+                    moduleId: module.id,
+                    challengeId: value.id,
+                  })
+                }
+              >
+                {this.renderChallengeNavigationItem(
+                  module,
+                  course,
+                  value,
+                  index,
+                )}
+              </CodepressNavigationContextMenu>
+            </UnorderedListItem>
+          );
+        } else {
+          return (
+            <UnorderedListItem>
+              {this.renderChallengeNavigationItem(module, course, value, index)}
+            </UnorderedListItem>
+          );
+        }
+      },
+    );
+
+    const SortableChallengeList = SortableContainer(
+      ({ items: challenges }: { items: ChallengeSkeletonList }) => {
+        return (
+          <UnorderedList>
+            {challenges.map((challenge: ChallengeSkeleton, index: number) => {
+              return (
+                <SortableChallengeItem
+                  key={challenge.id}
+                  index={index}
+                  value={challenge}
+                />
+              );
+            })}
+          </UnorderedList>
+        );
+      },
+    );
+
+    return (
+      <SortableChallengeList
+        items={challengeList}
+        helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
+        onSortEnd={this.handleSortChallengesEnd}
+      />
+    );
+  };
+
+  handleSortChallengesEnd = (sortResult: any) => {
+    console.log(sortResult);
+  };
 
   renderModuleNavigationItem = (
     activeModuleId: string,
@@ -378,6 +431,17 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
   &:hover {
     transform: translate(-50%, -50%) scale(1.3);
   }
+`;
+
+const UnorderedList = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const UnorderedListItem = styled.li`
+  margin: 0;
+  padding: 0;
 `;
 
 const ModuleNumber = styled.code`

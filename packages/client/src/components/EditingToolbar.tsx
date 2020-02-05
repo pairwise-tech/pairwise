@@ -56,6 +56,10 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
     setHidden(!hidden);
   };
 
+  const handleToggleNavigationMap = () => {
+    props.setNavigationMapState(!props.overlayVisible);
+  };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditMode(event.target.checked);
   };
@@ -132,6 +136,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
       <KeyboardShortcuts
         keymap={{
           "cmd+shift+e": toggleHidden,
+          "cmd+shift+y": handleToggleNavigationMap,
         }}
       />
     </div>
@@ -161,6 +166,7 @@ const mapToolbarState = (state: ReduxStoreState) => ({
   course: Modules.selectors.challenges.getCurrentCourse(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   activeIds: Modules.selectors.challenges.getCurrentActiveIds(state),
+  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
 });
 
 const toolbarDispatchProps = {
@@ -168,6 +174,7 @@ const toolbarDispatchProps = {
   saveCourse: Modules.actions.challenges.saveCourse,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   deleteChallenge: Modules.actions.challenges.deleteChallenge,
+  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
 };
 
 /** ===========================================================================
