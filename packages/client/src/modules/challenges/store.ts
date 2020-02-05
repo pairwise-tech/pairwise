@@ -6,11 +6,10 @@ import {
   CourseSkeletonList,
   DataBlob,
   ModuleList,
-  Course,
-  CourseSkeleton,
   ChallengeList,
 } from "@pairwise/common";
 import insert from "ramda/es/insert";
+import move from "ramda/es/move";
 import lensPath from "ramda/es/lensPath";
 import over from "ramda/es/over";
 import * as actions from "./actions";
@@ -25,7 +24,6 @@ import {
 import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
 import { ChallengesActionTypes } from "./index";
-import arrayMove from "array-move";
 
 const debug = require("debug")("challenge:store");
 
@@ -244,17 +242,7 @@ const reorderChallengeList = (
     m => m.id === moduleId,
   );
   const lens = lensPath([courseIndex, "modules", moduleIndex, "challenges"]);
-
-  const updateChallengeListOrder = (challengeList: ChallengeList) => {
-    const reorderedList = arrayMove(
-      challengeList,
-      challengeOldIndex,
-      challengeNewIndex,
-    );
-    return reorderedList;
-  };
-
-  return over(lens, updateChallengeListOrder, courses);
+  return over(lens, move(challengeOldIndex, challengeNewIndex), courses);
 };
 
 /** ===========================================================================

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import {
   SortEnd,
+  SortableHandle,
   SortableContainer,
   SortableElement,
 } from "react-sortable-hoc";
@@ -137,17 +138,15 @@ class NavigationOverlay extends React.Component<IProps> {
 
     /* Reordering is only available in edit mode */
     if (!isEditMode) {
-      return (
-        <>
-          {challengeList.map((challenge: ChallengeSkeleton, index: number) => {
-            return this.renderChallengeNavigationItem(
-              module,
-              course,
-              challenge,
-              index,
-            );
-          })}
-        </>
+      return challengeList.map(
+        (challenge: ChallengeSkeleton, index: number) => {
+          return this.renderChallengeNavigationItem(
+            module,
+            course,
+            challenge,
+            index,
+          );
+        },
       );
     }
 
@@ -212,6 +211,7 @@ class NavigationOverlay extends React.Component<IProps> {
 
     return (
       <SortableChallengeList
+        useDragHandle
         items={challengeList}
         helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
         onSortEnd={sortEndResult =>
@@ -259,7 +259,19 @@ class NavigationOverlay extends React.Component<IProps> {
     c: ChallengeSkeleton,
     index: number,
   ) => {
-    const { challengeId } = this.props;
+    const { challengeId, isEditMode } = this.props;
+
+    const ChallengeIcon = () => (
+      <Icon
+        iconSize={Icon.SIZE_LARGE}
+        icon={getChallengeIcon(c.type, c.userCanAccess)}
+      />
+    );
+
+    const ChallengeIconUI = isEditMode
+      ? SortableHandle(() => <ChallengeIcon />)
+      : ChallengeIcon;
+
     return (
       <div key={c.id} style={{ position: "relative" }}>
         <Link
@@ -270,10 +282,7 @@ class NavigationOverlay extends React.Component<IProps> {
           onClick={this.handleClickChallenge(c.userCanAccess, course.id)}
         >
           <span>
-            <Icon
-              iconSize={Icon.SIZE_LARGE}
-              icon={getChallengeIcon(c.type, c.userCanAccess)}
-            />
+            <ChallengeIconUI />
             <span style={{ marginLeft: 10 }}>{c.title}</span>
           </span>
           <span>
