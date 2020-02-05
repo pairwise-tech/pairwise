@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components/macro";
+import styled, { StyledComponentProps } from "styled-components/macro";
 import {
   SortEnd,
   SortableHandle,
@@ -13,6 +13,7 @@ import {
   ModuleSkeleton,
   Challenge,
   ChallengeSkeletonList,
+  ModuleSkeletonList,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
@@ -60,7 +61,7 @@ class NavigationOverlay extends React.Component<IProps> {
   };
 
   render(): Nullable<JSX.Element> {
-    const { course, module, isEditMode, updateCourseModule } = this.props;
+    const { course, module } = this.props;
 
     if (!course || !module) {
       debug("[INFO] No module or course", course, module);
@@ -80,36 +81,7 @@ class NavigationOverlay extends React.Component<IProps> {
           <div style={{ position: "relative" }}>
             {this.renderModuleCodepressButton(course, -1)}
           </div>
-          {course.modules.map((m, i) => {
-            const handleDeleteModule = () => {
-              this.props.deleteCourseModule({ id: m.id, courseId: course.id });
-            };
-
-            return (
-              <div key={m.id} style={{ position: "relative" }}>
-                {isEditMode ? (
-                  <CodepressNavigationContextMenu
-                    type="MODULE"
-                    handleDelete={handleDeleteModule}
-                  >
-                    <NavUpdateField
-                      onChange={e => {
-                        updateCourseModule({
-                          id: m.id,
-                          courseId: course.id,
-                          module: { title: e.target.value },
-                        });
-                      }}
-                      defaultValue={m.title}
-                    />
-                  </CodepressNavigationContextMenu>
-                ) : (
-                  this.renderModuleNavigationItem(module.id, m, i)
-                )}
-                {this.renderModuleCodepressButton(course, i)}
-              </div>
-            );
-          })}
+          {this.renderSortableModuleList(course, module, course.modules)}
         </Col>
         <Col
           offsetX={this.props.overlayVisible ? 0 : -60}
@@ -128,6 +100,113 @@ class NavigationOverlay extends React.Component<IProps> {
       </Overlay>
     );
   }
+
+  renderSortableModuleList = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    moduleList: ModuleSkeletonList,
+  ) => {
+    const { isEditMode, updateCourseModule } = this.props;
+
+    const handleDeleteModule = () => {
+      this.props.deleteCourseModule({ id: module.id, courseId: course.id });
+    };
+
+    if (!isEditMode) {
+      return moduleList.map((m, i) => {
+        return this.renderModuleNavigationItem(m.id, m, i);
+      });
+    }
+
+    const SortableModuleItem = SortableElement(
+      (props: { value: { module: ModuleSkeleton; index: number } }) => {
+        const { value } = props;
+
+        const DraggableModuleHandle = SortableHandle(() => (
+          <ModuleNumber>{value.index}</ModuleNumber>
+        ));
+
+        return (
+          <UnorderedListItem>
+            <div key={value.module.id} style={{ position: "relative" }}>
+              {isEditMode ? (
+                <CodepressNavigationContextMenu
+                  type="MODULE"
+                  handleDelete={handleDeleteModule}
+                >
+                  <ModuleNavigationBase active={value.module.id === module.id}>
+                    <span>
+                      <DraggableModuleHandle />
+                      <NavUpdateField
+                        onChange={e => {
+                          updateCourseModule({
+                            id: value.module.id,
+                            courseId: course.id,
+                            module: { title: e.target.value },
+                          });
+                        }}
+                        defaultValue={value.module.title}
+                      />
+                    </span>
+                  </ModuleNavigationBase>
+                </CodepressNavigationContextMenu>
+              ) : (
+                this.renderModuleNavigationItem(
+                  module.id,
+                  value.module,
+                  value.index,
+                )
+              )}
+              {this.renderModuleCodepressButton(course, value.index)}
+            </div>
+          </UnorderedListItem>
+        );
+      },
+    );
+
+    const SortableChallengeList = SortableContainer(
+      ({ items: modules }: { items: ModuleSkeletonList }) => {
+        return (
+          <UnorderedList>
+            {modules.map((m: ModuleSkeleton, index: number) => {
+              return (
+                <SortableModuleItem
+                  key={m.id}
+                  index={index}
+                  value={{ module: m, index }}
+                />
+              );
+            })}
+          </UnorderedList>
+        );
+      },
+    );
+
+    return (
+      <SortableChallengeList
+        useDragHandle
+        items={moduleList}
+        helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
+        onSortEnd={sortEndResult =>
+          this.handleSortChallengesEnd(course, module, sortEndResult)
+        }
+      />
+    );
+  };
+
+  handleSortModulesEnd = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    sortEndResult: SortEnd,
+  ) => {
+    console.log("modules sorted!");
+    // this.props.reorderChallengeList({
+    //   courseId: course.id,
+    //   moduleId: module.id,
+    //   challengeOldIndex: sortEndResult.oldIndex,
+    //   challengeNewIndex: sortEndResult.newIndex,
+    // });
+  };
 
   renderSortableChallengeList = (
     course: CourseSkeleton,
@@ -149,13 +228,6 @@ class NavigationOverlay extends React.Component<IProps> {
         },
       );
     }
-
-    /**
-     * NOTE: These components are all rendered directly within this method
-     * here, so it's easier for them to reference other methods and props on
-     * the class without passing a lot of arguments out of the class. This
-     * could be changed in the future.
-     */
 
     const SortableChallengeItem = SortableElement(
       ({ value, index }: { value: ChallengeSkeleton; index: number }) => {
@@ -240,7 +312,8 @@ class NavigationOverlay extends React.Component<IProps> {
     index: number,
   ) => {
     return (
-      <NavButton
+      <ModuleNavigationButton
+        key={module.id}
         id={`module-navigation-${index}`}
         active={module.id === activeModuleId}
         onClick={() => this.props.setCurrentModule(module.id)}
@@ -249,7 +322,7 @@ class NavigationOverlay extends React.Component<IProps> {
           <ModuleNumber>{index}</ModuleNumber>
           {module.title}
         </span>
-      </NavButton>
+      </ModuleNavigationButton>
     );
   };
 
@@ -507,7 +580,7 @@ const ModuleNumber = styled.code`
 `;
 
 const NavUpdateField = styled.input`
-  padding: 12px;
+  padding: 0;
   font-size: 18px;
   border: 1px solid transparent;
   border-bottom-color: ${COLORS.SEPARATOR_BORDER};
@@ -577,9 +650,12 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
   }
 `;
 
-const NavButton = styled.button<{ active?: boolean }>`
+const ModuleNavigationBase = styled.div<{ active?: boolean }>`
   cursor: pointer;
-  padding: 12px;
+  padding-left: 12px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-right: 2px;
   font-size: 18px;
   border: 1px solid transparent;
   border-bottom-color: ${COLORS.SEPARATOR_BORDER};
@@ -588,10 +664,6 @@ const NavButton = styled.button<{ active?: boolean }>`
   align-items: center;
   justify-content: space-between;
   text-align: left;
-  outline: none;
-  color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
-  background: ${({ active }) =>
-    active ? COLORS.BACKGROUND_MODAL : "transparent"};
   position: relative;
 
   span {
@@ -611,6 +683,15 @@ const NavButton = styled.button<{ active?: boolean }>`
     width: 3px;
     background: ${COLORS.GRADIENT_GREEN};
   }
+`;
+
+const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
+  active?: boolean;
+}>`
+  outline: none;
+  color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
+  background: ${({ active }) =>
+    active ? COLORS.BACKGROUND_MODAL : "transparent"};
 
   &:hover {
     color: white;
@@ -620,6 +701,13 @@ const NavButton = styled.button<{ active?: boolean }>`
     }
   }
 `;
+
+const ModuleNavigationButton = ({
+  active,
+  ...rest
+}: { active?: boolean } & any) => (
+  <ModuleNavigationButtonBase active={active} as="button" {...rest} />
+);
 
 const Col = styled.div<{ offsetX: number }>`
   display: block;
