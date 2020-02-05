@@ -22,6 +22,7 @@ import {
   generateEmptyModule,
   generateEmptyChallenge,
   getChallengeIcon,
+  partitionChallengesBySection,
 } from "tools/utils";
 import {
   Tooltip,
@@ -155,94 +156,12 @@ class NavigationOverlay extends React.Component<IProps> {
   ) => {
     const { isEditMode } = this.props;
 
-    /* Reordering is only available in edit mode */
+    /* Render the normal list: */
     if (!isEditMode) {
-      /**
-       * Partition the challenges into blocks separate by section. This is
-       * the greatest code ever written:
-       */
-      const partitionChallengesBySection = () => {
-        interface Section {
-          section: Nullable<ChallengeSkeleton>;
-          challenges: ChallengeSkeleton[];
-        }
-
-        let sections: Section[] = [];
-        const defaultSection: Section = { section: null, challenges: [] };
-
-        const finalSection = challengeList.reduce(
-          (currentSection: Section, challenge: ChallengeSkeleton) => {
-            if (challenge.type === "section") {
-              if (currentSection.challenges.length > 0) {
-                sections = sections.concat(currentSection);
-              }
-
-              const nextSection: Section = {
-                section: challenge,
-                challenges: [],
-              };
-              return nextSection;
-            } else {
-              return {
-                section: currentSection.section,
-                challenges: currentSection.challenges.concat(challenge),
-              };
-            }
-          },
-          defaultSection,
-        );
-
-        sections = sections.concat(finalSection);
-
-        return sections;
-      };
-
-      const sectionBlocks = partitionChallengesBySection();
-
-      /**
-       * Render the section blocks:
-       */
-      return sectionBlocks.map((block, blockIndex) => {
-        if (block.section) {
-          return (
-            <div key={blockIndex}>
-              {this.renderChallengeSectionNavigationItem(
-                module,
-                course,
-                block.section,
-                blockIndex,
-              )}
-              <Collapse
-                isOpen={this.getCurrentAccordionViewState(block.section.id)}
-              >
-                {block.challenges.map(
-                  (challenge: ChallengeSkeleton, index: number) => {
-                    return this.renderChallengeNavigationItem(
-                      module,
-                      course,
-                      challenge,
-                      blockIndex,
-                    );
-                  },
-                )}
-              </Collapse>
-            </div>
-          );
-        } else {
-          return block.challenges.map(
-            (challenge: ChallengeSkeleton, index: number) => {
-              return this.renderChallengeNavigationItem(
-                module,
-                course,
-                challenge,
-                index,
-              );
-            },
-          );
-        }
-      });
+      return this.renderNormalChallengeList(course, module, challengeList);
     }
 
+    /* Render the sortable list: */
     return (
       <SortableChallengeList
         useDragHandle
@@ -260,6 +179,61 @@ class NavigationOverlay extends React.Component<IProps> {
         }
       />
     );
+  };
+
+  renderNormalChallengeList = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    challengeList: ChallengeSkeletonList,
+  ) => {
+    /**
+     * Partition the challenge list by sections.
+     */
+    const sectionBlocks = partitionChallengesBySection(challengeList);
+
+    /**
+     * Render the section blocks:
+     */
+    return sectionBlocks.map((block, blockIndex) => {
+      if (block.section) {
+        return (
+          <div key={blockIndex}>
+            {this.renderChallengeNavigationItem(
+              module,
+              course,
+              block.section,
+              blockIndex,
+              true,
+            )}
+            <Collapse
+              isOpen={this.getCurrentAccordionViewState(block.section.id)}
+            >
+              {block.challenges.map(
+                (challenge: ChallengeSkeleton, index: number) => {
+                  return this.renderChallengeNavigationItem(
+                    module,
+                    course,
+                    challenge,
+                    blockIndex,
+                  );
+                },
+              )}
+            </Collapse>
+          </div>
+        );
+      } else {
+        return block.challenges.map(
+          (challenge: ChallengeSkeleton, index: number) => {
+            return this.renderChallengeNavigationItem(
+              module,
+              course,
+              challenge,
+              index,
+            );
+          },
+        );
+      }
+    });
   };
 
   handleSortChallengesEnd = (
@@ -295,82 +269,12 @@ class NavigationOverlay extends React.Component<IProps> {
     );
   };
 
-  renderChallengeSectionNavigationItem = (
-    module: ModuleSkeleton,
-    course: CourseSkeleton,
-    c: ChallengeSkeleton,
-    index: number,
-  ) => {
-    const { challengeId, isEditMode } = this.props;
-
-    const ChallengeIcon = () => (
-      <Icon
-        iconSize={Icon.SIZE_LARGE}
-        icon={getChallengeIcon(c.type, c.userCanAccess)}
-      />
-    );
-
-    const ChallengeIconUI = isEditMode
-      ? SortableHandle(() => <ChallengeIcon />)
-      : ChallengeIcon;
-
-    const currentState = this.getCurrentAccordionViewState(c.id);
-
-    return (
-      <div key={c.id} style={{ position: "relative" }}>
-        <Link
-          key={c.id}
-          to={`/workspace/${c.id}`}
-          id={`challenge-navigation-${index}`}
-          isActive={() => c.id === challengeId}
-          onClick={this.handleClickChallenge(c.userCanAccess, course.id)}
-        >
-          <span>
-            <ChallengeIconUI />
-            <span style={{ marginLeft: 10 }}>{c.title}</span>
-          </span>
-          <span>
-            <Tooltip
-              position="right"
-              usePortal={false}
-              content={`${currentState ? "Collapse" : "Expand"} Section`}
-            >
-              <Icon
-                iconSize={Icon.SIZE_LARGE}
-                icon="expand-all"
-                onClick={(
-                  e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-                ) => {
-                  e.preventDefault();
-                  /* toggle section by the section challenge id, i.e. c.id */
-                  this.props.toggleSectionAccordionView({
-                    sectionId: c.id,
-                    open: !currentState,
-                  });
-                }}
-              />
-            </Tooltip>
-          </span>
-        </Link>
-        {this.renderChallengeCodepressButton(course, module, index)}
-      </div>
-    );
-  };
-
-  getCurrentAccordionViewState = (sectionId: string) => {
-    const { navigationAccordionViewState } = this.props;
-    if (sectionId in navigationAccordionViewState) {
-      return navigationAccordionViewState[sectionId];
-    } else {
-      return false; /* Default to closed */
-    }
-  };
-
   renderChallengeNavigationItem = (
     module: ModuleSkeleton,
     course: CourseSkeleton,
     c: ChallengeSkeleton,
     index: number,
+    section?: boolean,
   ) => {
     const { challengeId, isEditMode } = this.props;
 
@@ -384,6 +288,8 @@ class NavigationOverlay extends React.Component<IProps> {
     const ChallengeIconUI = isEditMode
       ? SortableHandle(() => <ChallengeIcon />)
       : ChallengeIcon;
+
+    const sectionViewState = this.getCurrentAccordionViewState(c.id);
 
     return (
       <div key={c.id} style={{ position: "relative" }}>
@@ -399,7 +305,27 @@ class NavigationOverlay extends React.Component<IProps> {
             <span style={{ marginLeft: 10 }}>{c.title}</span>
           </span>
           <span>
-            {c.videoUrl && (
+            {section ? (
+              <Tooltip
+                position="right"
+                usePortal={false}
+                content={`${sectionViewState ? "Collapse" : "Expand"} Section`}
+              >
+                <Icon
+                  iconSize={Icon.SIZE_LARGE}
+                  icon={sectionViewState ? "collapse-all" : "expand-all"}
+                  onClick={(
+                    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+                  ) => {
+                    e.preventDefault();
+                    this.props.toggleSectionAccordionView({
+                      sectionId: c.id,
+                      open: !sectionViewState,
+                    });
+                  }}
+                />
+              </Tooltip>
+            ) : c.videoUrl ? (
               <Tooltip
                 usePortal={false}
                 position="left"
@@ -407,7 +333,7 @@ class NavigationOverlay extends React.Component<IProps> {
               >
                 <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
               </Tooltip>
-            )}
+            ) : null}
           </span>
         </Link>
         {this.renderChallengeCodepressButton(course, module, index)}
@@ -500,6 +426,15 @@ class NavigationOverlay extends React.Component<IProps> {
     if (!userCanAccess) {
       event.preventDefault();
       this.props.handlePurchaseCourseIntent({ courseId });
+    }
+  };
+
+  getCurrentAccordionViewState = (sectionId: string) => {
+    const { navigationAccordionViewState } = this.props;
+    if (sectionId in navigationAccordionViewState) {
+      return navigationAccordionViewState[sectionId];
+    } else {
+      return false; /* Default to closed */
     }
   };
 }

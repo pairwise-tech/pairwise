@@ -9,6 +9,8 @@ import {
   DataBlob,
   SandboxBlob,
   CHALLENGE_TYPE,
+  ChallengeSkeleton,
+  ChallengeSkeletonList,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
 import { IconName } from "@blueprintjs/core";
@@ -129,4 +131,54 @@ export const getChallengeIcon = (
   } else {
     return "code";
   }
+};
+
+export interface NavigationChallengeSection {
+  section: Nullable<ChallengeSkeleton>;
+  challenges: ChallengeSkeleton[];
+}
+
+/**
+ * Behold the following hideous code!
+ *
+ * Partition the challenges into blocks separate by section. This is
+ * the greatest code ever written.
+ */
+export const partitionChallengesBySection = (
+  challengeList: ChallengeSkeletonList,
+) => {
+  let sections: NavigationChallengeSection[] = [];
+  const defaultSection: NavigationChallengeSection = {
+    section: null,
+    challenges: [],
+  };
+
+  const finalSection = challengeList.reduce(
+    (
+      currentSection: NavigationChallengeSection,
+      challenge: ChallengeSkeleton,
+    ) => {
+      if (challenge.type === "section") {
+        if (currentSection.challenges.length > 0) {
+          sections = sections.concat(currentSection);
+        }
+
+        const nextSection: NavigationChallengeSection = {
+          section: challenge,
+          challenges: [],
+        };
+        return nextSection;
+      } else {
+        return {
+          section: currentSection.section,
+          challenges: currentSection.challenges.concat(challenge),
+        };
+      }
+    },
+    defaultSection,
+  );
+
+  sections = sections.concat(finalSection);
+
+  return sections;
 };
