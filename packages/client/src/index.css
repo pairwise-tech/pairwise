@@ -117,3 +117,11 @@ pre {
 .name-of-PropertyDeclaration.highContrast.inline-selected-text {
   color: #000000 !important;
 }
+
+/*
+ * Set z-index on sortable list item so it does not appear invisible when
+ * dragged.
+ */
+.sortable-list-helper-class {
+  z-index: 9999;
+}

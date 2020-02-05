@@ -58,3 +58,16 @@ export interface ChallengeDeletePayload {
   moduleId: string;
   challengeId: string;
 }
+
+export interface ChallengeReorderPayload {
+  courseId: string;
+  moduleId: string;
+  challengeOldIndex: number;
+  challengeNewIndex: number;
+}
+
+export interface ModuleReorderPayload {
+  courseId: string;
+  moduleOldIndex: number;
+  moduleNewIndex: number;
+}

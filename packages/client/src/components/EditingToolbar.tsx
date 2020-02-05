@@ -34,12 +34,13 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
   // For hiding the controls while recording a video.
   const [hidden, setHidden] = React.useState(false);
   const {
+    course,
+    challenge,
     activeIds,
     isEditMode,
     setEditMode,
     saveCourse,
-    course,
-    challenge,
+    overlayVisible,
   } = props;
 
   const { currentCourseId, currentModuleId, currentChallengeId } = activeIds;
@@ -54,6 +55,10 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
 
   const toggleHidden = () => {
     setHidden(!hidden);
+  };
+
+  const handleToggleNavigationMap = () => {
+    props.setNavigationMapState(!overlayVisible);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +117,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
             intent="danger"
             style={{ marginRight: 16 }}
             onClick={handleDelete}
+            disabled={overlayVisible}
           >
             Delete
           </Button>
@@ -130,8 +136,10 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
         </Suspense>
       </SlideOut>
       <KeyboardShortcuts
+        /* TODO: Provide some reference in the app of what shortcut keys exist? */
         keymap={{
           "cmd+shift+e": toggleHidden,
+          "cmd+i": handleToggleNavigationMap,
         }}
       />
     </div>
@@ -161,6 +169,7 @@ const mapToolbarState = (state: ReduxStoreState) => ({
   course: Modules.selectors.challenges.getCurrentCourse(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   activeIds: Modules.selectors.challenges.getCurrentActiveIds(state),
+  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
 });
 
 const toolbarDispatchProps = {
@@ -168,6 +177,7 @@ const toolbarDispatchProps = {
   saveCourse: Modules.actions.challenges.saveCourse,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   deleteChallenge: Modules.actions.challenges.deleteChallenge,
+  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
 };
 
 /** ===========================================================================

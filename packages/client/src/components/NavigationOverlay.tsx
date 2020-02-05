@@ -2,10 +2,18 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import {
+  SortEnd,
+  SortableHandle,
+  SortableContainer,
+  SortableElement,
+} from "react-sortable-hoc";
+import {
   ChallengeSkeleton,
   CourseSkeleton,
   ModuleSkeleton,
   Challenge,
+  ChallengeSkeletonList,
+  ModuleSkeletonList,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT } from "tools/constants";
@@ -26,7 +34,6 @@ import {
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
-import { DEV_MODE } from "tools/client-env";
 import { DarkTheme } from "./Shared";
 
 const debug = require("debug")("client:NavigationOverlay");
@@ -54,7 +61,7 @@ class NavigationOverlay extends React.Component<IProps> {
   };
 
   render(): Nullable<JSX.Element> {
-    const { course, module, isEditMode, updateCourseModule } = this.props;
+    const { course, module } = this.props;
 
     if (!course || !module) {
       debug("[INFO] No module or course", course, module);
@@ -74,36 +81,7 @@ class NavigationOverlay extends React.Component<IProps> {
           <div style={{ position: "relative" }}>
             {this.renderModuleCodepressButton(course, -1)}
           </div>
-          {course.modules.map((m, i) => {
-            const handleDeleteModule = () => {
-              this.props.deleteCourseModule({ id: m.id, courseId: course.id });
-            };
-
-            return (
-              <div key={m.id} style={{ position: "relative" }}>
-                {isEditMode ? (
-                  <CodepressNavigationContextMenu
-                    type="MODULE"
-                    handleDelete={handleDeleteModule}
-                  >
-                    <NavUpdateField
-                      onChange={e => {
-                        updateCourseModule({
-                          id: m.id,
-                          courseId: course.id,
-                          module: { title: e.target.value },
-                        });
-                      }}
-                      defaultValue={m.title}
-                    />
-                  </CodepressNavigationContextMenu>
-                ) : (
-                  this.renderModuleNavigationItem(module.id, m, i)
-                )}
-                {this.renderModuleCodepressButton(course, i)}
-              </div>
-            );
-          })}
+          {this.renderSortableModuleList(course, module, course.modules)}
         </Col>
         <Col
           offsetX={this.props.overlayVisible ? 0 : -60}
@@ -116,31 +94,111 @@ class NavigationOverlay extends React.Component<IProps> {
         >
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
           {this.renderChallengeCodepressButton(course, module, -1)}
-          {module.challenges.map((c: ChallengeSkeleton, i: number) => {
-            if (isEditMode) {
-              return (
-                <CodepressNavigationContextMenu
-                  type="CHALLENGE"
-                  handleDelete={() =>
-                    this.props.deleteChallenge({
-                      challengeId: c.id,
-                      courseId: course.id,
-                      moduleId: module.id,
-                    })
-                  }
-                >
-                  {this.renderChallengeNavigationItem(module, course, c, i)}
-                </CodepressNavigationContextMenu>
-              );
-            } else {
-              return this.renderChallengeNavigationItem(module, course, c, i);
-            }
-          })}
+          {this.renderSortableChallengeList(course, module, module.challenges)}
           <DoneScrolling />
         </Col>
       </Overlay>
     );
   }
+
+  renderSortableModuleList = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    moduleList: ModuleSkeletonList,
+  ) => {
+    const { isEditMode, updateCourseModule } = this.props;
+
+    const handleDeleteModule = () => {
+      this.props.deleteCourseModule({ id: module.id, courseId: course.id });
+    };
+
+    if (!isEditMode) {
+      return moduleList.map((m, i) => {
+        return this.renderModuleNavigationItem(module.id, m, i);
+      });
+    }
+
+    return (
+      <SortableModuleList
+        useDragHandle
+        items={moduleList}
+        itemValueProps={{
+          course,
+          isEditMode,
+          updateCourseModule,
+          handleDeleteModule,
+          currentActiveModule: module,
+          renderModuleNavigationItem: this.renderModuleNavigationItem,
+          renderModuleCodepressButton: this.renderModuleCodepressButton,
+        }}
+        helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
+        onSortEnd={sortEndResult =>
+          this.handleSortModulesEnd(course, sortEndResult)
+        }
+      />
+    );
+  };
+
+  handleSortModulesEnd = (course: CourseSkeleton, sortEndResult: SortEnd) => {
+    this.props.reorderModuleList({
+      courseId: course.id,
+      moduleOldIndex: sortEndResult.oldIndex,
+      moduleNewIndex: sortEndResult.newIndex,
+    });
+  };
+
+  renderSortableChallengeList = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    challengeList: ChallengeSkeletonList,
+  ) => {
+    const { isEditMode } = this.props;
+
+    /* Reordering is only available in edit mode */
+    if (!isEditMode) {
+      return challengeList.map(
+        (challenge: ChallengeSkeleton, index: number) => {
+          return this.renderChallengeNavigationItem(
+            module,
+            course,
+            challenge,
+            index,
+          );
+        },
+      );
+    }
+
+    return (
+      <SortableChallengeList
+        useDragHandle
+        items={challengeList}
+        itemValueProps={{
+          isEditMode,
+          course,
+          module,
+          deleteChallenge: this.props.deleteChallenge,
+          renderChallengeNavigationItem: this.renderChallengeNavigationItem,
+        }}
+        helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
+        onSortEnd={sortEndResult =>
+          this.handleSortChallengesEnd(course, module, sortEndResult)
+        }
+      />
+    );
+  };
+
+  handleSortChallengesEnd = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    sortEndResult: SortEnd,
+  ) => {
+    this.props.reorderChallengeList({
+      courseId: course.id,
+      moduleId: module.id,
+      challengeOldIndex: sortEndResult.oldIndex,
+      challengeNewIndex: sortEndResult.newIndex,
+    });
+  };
 
   renderModuleNavigationItem = (
     activeModuleId: string,
@@ -148,7 +206,8 @@ class NavigationOverlay extends React.Component<IProps> {
     index: number,
   ) => {
     return (
-      <NavButton
+      <ModuleNavigationButton
+        key={module.id}
         id={`module-navigation-${index}`}
         active={module.id === activeModuleId}
         onClick={() => this.props.setCurrentModule(module.id)}
@@ -157,7 +216,7 @@ class NavigationOverlay extends React.Component<IProps> {
           <ModuleNumber>{index}</ModuleNumber>
           {module.title}
         </span>
-      </NavButton>
+      </ModuleNavigationButton>
     );
   };
 
@@ -167,7 +226,19 @@ class NavigationOverlay extends React.Component<IProps> {
     c: ChallengeSkeleton,
     index: number,
   ) => {
-    const { challengeId } = this.props;
+    const { challengeId, isEditMode } = this.props;
+
+    const ChallengeIcon = () => (
+      <Icon
+        iconSize={Icon.SIZE_LARGE}
+        icon={getChallengeIcon(c.type, c.userCanAccess)}
+      />
+    );
+
+    const ChallengeIconUI = isEditMode
+      ? SortableHandle(() => <ChallengeIcon />)
+      : ChallengeIcon;
+
     return (
       <div key={c.id} style={{ position: "relative" }}>
         <Link
@@ -178,10 +249,7 @@ class NavigationOverlay extends React.Component<IProps> {
           onClick={this.handleClickChallenge(c.userCanAccess, course.id)}
         >
           <span>
-            <Icon
-              iconSize={Icon.SIZE_LARGE}
-              icon={getChallengeIcon(c.type, c.userCanAccess)}
-            />
+            <ChallengeIconUI />
             <span style={{ marginLeft: 10 }}>{c.title}</span>
           </span>
           <span>
@@ -339,6 +407,192 @@ class CodepressNavigationContextMenu extends React.PureComponent<
 }
 
 /** ===========================================================================
+ * Sortable List Components
+ * ============================================================================
+ */
+
+interface SortableModuleContainerProps {
+  isEditMode: boolean;
+  course: CourseSkeleton;
+  currentActiveModule: ModuleSkeleton;
+  updateCourseModule: typeof Modules.actions.challenges.updateCourseModule;
+  handleDeleteModule: () => void;
+  renderModuleNavigationItem: (
+    activeModuleId: string,
+    module: ModuleSkeleton,
+    index: number,
+  ) => JSX.Element;
+  renderModuleCodepressButton: (
+    course: CourseSkeleton,
+    index: number,
+  ) => JSX.Element;
+}
+
+interface SortableModuleItemValue extends SortableModuleContainerProps {
+  index: number;
+  module: ModuleSkeleton;
+}
+
+const SortableModuleList = SortableContainer(
+  ({
+    items: modules,
+    itemValueProps,
+  }: {
+    items: ModuleSkeletonList;
+    itemValueProps: SortableModuleContainerProps;
+  }) => {
+    return (
+      <UnorderedList>
+        {modules.map((m: ModuleSkeleton, index: number) => {
+          return (
+            <SortableModuleItem
+              key={m.id}
+              index={index}
+              value={{ module: m, index, ...itemValueProps }}
+            />
+          );
+        })}
+      </UnorderedList>
+    );
+  },
+);
+
+const SortableModuleItem = SortableElement(
+  (props: { value: SortableModuleItemValue }) => {
+    const {
+      index,
+      module,
+      course,
+      isEditMode,
+      handleDeleteModule,
+      currentActiveModule,
+      updateCourseModule,
+      renderModuleNavigationItem,
+      renderModuleCodepressButton,
+    } = props.value;
+
+    const DraggableModuleHandle = SortableHandle(() => (
+      <ModuleNumber>{index}</ModuleNumber>
+    ));
+
+    return (
+      <UnorderedListItem>
+        <div key={module.id} style={{ position: "relative" }}>
+          {isEditMode ? (
+            <CodepressNavigationContextMenu
+              type="MODULE"
+              handleDelete={handleDeleteModule}
+            >
+              <ModuleNavigationBase
+                active={currentActiveModule.id === module.id}
+              >
+                <span>
+                  <DraggableModuleHandle />
+                  <NavUpdateField
+                    value={module.title}
+                    onChange={e => {
+                      updateCourseModule({
+                        id: module.id,
+                        courseId: course.id,
+                        module: { title: e.target.value },
+                      });
+                    }}
+                  />
+                </span>
+              </ModuleNavigationBase>
+            </CodepressNavigationContextMenu>
+          ) : (
+            renderModuleNavigationItem(module.id, module, index)
+          )}
+          {renderModuleCodepressButton(course, index)}
+        </div>
+      </UnorderedListItem>
+    );
+  },
+);
+
+interface SortableChallengeContainerProps {
+  isEditMode: boolean;
+  course: CourseSkeleton;
+  module: ModuleSkeleton;
+  renderChallengeNavigationItem: (
+    module: ModuleSkeleton,
+    course: CourseSkeleton,
+    challenge: ChallengeSkeleton,
+    index: number,
+  ) => JSX.Element;
+  deleteChallenge: typeof Modules.actions.challenges.deleteChallenge;
+}
+
+interface SortableChallengeItemValue extends SortableChallengeContainerProps {
+  index: number;
+  challenge: ChallengeSkeleton;
+}
+
+const SortableChallengeItem = SortableElement(
+  (props: { value: SortableChallengeItemValue }) => {
+    const {
+      index,
+      course,
+      module,
+      challenge,
+      isEditMode,
+      deleteChallenge,
+      renderChallengeNavigationItem,
+    } = props.value;
+
+    if (isEditMode) {
+      return (
+        <UnorderedListItem>
+          <CodepressNavigationContextMenu
+            type="CHALLENGE"
+            handleDelete={() =>
+              deleteChallenge({
+                courseId: course.id,
+                moduleId: module.id,
+                challengeId: challenge.id,
+              })
+            }
+          >
+            {renderChallengeNavigationItem(module, course, challenge, index)}
+          </CodepressNavigationContextMenu>
+        </UnorderedListItem>
+      );
+    } else {
+      return (
+        <UnorderedListItem>
+          {renderChallengeNavigationItem(module, course, challenge, index)}
+        </UnorderedListItem>
+      );
+    }
+  },
+);
+
+const SortableChallengeList = SortableContainer(
+  ({
+    items: challenges,
+    itemValueProps,
+  }: {
+    items: ChallengeSkeletonList;
+    itemValueProps: SortableChallengeContainerProps;
+  }) => {
+    return (
+      <UnorderedList>
+        {challenges.map((challenge: ChallengeSkeleton, index: number) => {
+          return (
+            <SortableChallengeItem
+              index={index}
+              key={challenge.id}
+              value={{ challenge, index, ...itemValueProps }}
+            />
+          );
+        })}
+      </UnorderedList>
+    );
+  },
+);
+
+/** ===========================================================================
  * Styles
  * ============================================================================
  */
@@ -380,6 +634,17 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
   }
 `;
 
+const UnorderedList = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const UnorderedListItem = styled.li`
+  margin: 0;
+  padding: 0;
+`;
+
 const ModuleNumber = styled.code`
   font-size: 12px;
   display: inline-block;
@@ -395,7 +660,7 @@ const ModuleNumber = styled.code`
 `;
 
 const NavUpdateField = styled.input`
-  padding: 12px;
+  padding: 0;
   font-size: 18px;
   border: 1px solid transparent;
   border-bottom-color: ${COLORS.SEPARATOR_BORDER};
@@ -465,9 +730,12 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
   }
 `;
 
-const NavButton = styled.button<{ active?: boolean }>`
+const ModuleNavigationBase = styled.div<{ active?: boolean }>`
   cursor: pointer;
-  padding: 12px;
+  padding-left: 12px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-right: 2px;
   font-size: 18px;
   border: 1px solid transparent;
   border-bottom-color: ${COLORS.SEPARATOR_BORDER};
@@ -476,10 +744,6 @@ const NavButton = styled.button<{ active?: boolean }>`
   align-items: center;
   justify-content: space-between;
   text-align: left;
-  outline: none;
-  color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
-  background: ${({ active }) =>
-    active ? COLORS.BACKGROUND_MODAL : "transparent"};
   position: relative;
 
   span {
@@ -499,6 +763,15 @@ const NavButton = styled.button<{ active?: boolean }>`
     width: 3px;
     background: ${COLORS.GRADIENT_GREEN};
   }
+`;
+
+const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
+  active?: boolean;
+}>`
+  outline: none;
+  color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
+  background: ${({ active }) =>
+    active ? COLORS.BACKGROUND_MODAL : "transparent"};
 
   &:hover {
     color: white;
@@ -508,6 +781,13 @@ const NavButton = styled.button<{ active?: boolean }>`
     }
   }
 `;
+
+const ModuleNavigationButton = ({
+  active,
+  ...rest
+}: { active?: boolean } & any) => (
+  <ModuleNavigationButtonBase active={active} as="button" {...rest} />
+);
 
 const Col = styled.div<{ offsetX: number }>`
   display: block;
@@ -565,6 +845,8 @@ const dispatchProps = {
   deleteCourseModule: Modules.actions.challenges.deleteCourseModule,
   createChallenge: Modules.actions.challenges.createChallenge,
   deleteChallenge: Modules.actions.challenges.deleteChallenge,
+  reorderChallengeList: Modules.actions.challenges.reorderChallengeList,
+  reorderModuleList: Modules.actions.challenges.reorderModuleList,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePurchaseCourseIntent:
