@@ -151,6 +151,13 @@ class NavigationOverlay extends React.Component<IProps> {
       );
     }
 
+    /**
+     * NOTE: These components are all rendered directly within this method
+     * here, so it's easier for them to reference other methods and props on
+     * the class without passing a lot of arguments out of the class. This
+     * could be changed in the future.
+     */
+
     const SortableChallengeItem = SortableElement(
       ({ value, index }: { value: ChallengeSkeleton; index: number }) => {
         if (isEditMode) {
