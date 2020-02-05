@@ -6,7 +6,7 @@ import styled from "styled-components/macro";
 import { Loading, ContentEditor } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
-import { PROSE_MAX_WIDTH } from "tools/constants";
+import { PROSE_MAX_WIDTH, CONTENT_SERIALIZE_DEBOUNCE } from "tools/constants";
 import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 
@@ -67,12 +67,15 @@ const MediaArea = connect(
    */
   const handleContent = React.useMemo(
     () =>
-      debounce(800, (serializeEditorContent: () => string) => {
-        updateChallenge({
-          id: challenge.id,
-          challenge: { supplementaryContent: serializeEditorContent() },
-        });
-      }),
+      debounce(
+        CONTENT_SERIALIZE_DEBOUNCE,
+        (serializeEditorContent: () => string) => {
+          updateChallenge({
+            id: challenge.id,
+            challenge: { supplementaryContent: serializeEditorContent() },
+          });
+        },
+      ),
     [challenge.id],
   );
 

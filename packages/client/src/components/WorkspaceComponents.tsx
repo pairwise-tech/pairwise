@@ -1,17 +1,19 @@
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import styled from "styled-components/macro";
 import {
   COLORS as C,
   DIMENSIONS as D,
   HEADER_HEIGHT,
   COLORS,
+  CONTENT_SERIALIZE_DEBOUNCE,
 } from "../tools/constants";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { ContentInput, StyledMarkdown } from "./Shared";
+import { Loading, ContentEditor } from "./Shared";
 import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
+import { debounce } from "throttle-debounce";
 
 /** ===========================================================================
  * Workspace Components
@@ -294,10 +296,30 @@ export const ContentViewEdit = connect(
   contentMapDispatch,
 )((props: ContentViewEditProps) => {
   const { isEditMode, currentId } = props;
+
+  /**
+   * @NOTE The function is memoized so that we're not constantly recreating the
+   * debounced function.
+   * @NOTE The function is debounced because serializing to markdown has a
+   * non-trivial performance impact, which is why the underlying lib provides a
+   * getter function rather than the string value onChange.
+   */
+  const handleContent = React.useMemo(
+    () =>
+      debounce(
+        CONTENT_SERIALIZE_DEBOUNCE,
+        (serializeEditorContent: () => string) => {
+          props.updateChallenge({
+            id: currentId,
+            challenge: { content: serializeEditorContent() },
+          });
+        },
+      ),
+    [currentId],
+  );
+
   const handleTitle = (title: string) =>
     props.updateChallenge({ id: currentId, challenge: { title } });
-  const handleContent = (content: string) =>
-    props.updateChallenge({ id: currentId, challenge: { content } });
 
   return (
     <div style={{ height: "100%" }}>
@@ -308,11 +330,19 @@ export const ContentViewEdit = connect(
           disabled={!isEditMode}
         />
       </ChallengeTitleHeading>
-      {isEditMode ? (
-        <ContentInput value={props.content} onChange={handleContent} />
-      ) : (
-        <StyledMarkdown source={props.content} />
-      )}
+      <Suspense fallback={<Loading />}>
+        <ContentEditor
+          toc={false}
+          placeholder="Write something beautiful..."
+          defaultValue={props.content}
+          autoFocus={
+            isEditMode && !props.content /* Only focus an empty editor */
+          }
+          readOnly={!isEditMode}
+          spellCheck={isEditMode}
+          onChange={handleContent}
+        />
+      </Suspense>
     </div>
   );
 });
