@@ -134,6 +134,23 @@ class NavigationOverlay extends React.Component<IProps> {
     challengeList: ChallengeSkeletonList,
   ) => {
     const { isEditMode } = this.props;
+
+    /* Reordering is only available in edit mode */
+    if (!isEditMode) {
+      return (
+        <>
+          {challengeList.map((challenge: ChallengeSkeleton, index: number) => {
+            return this.renderChallengeNavigationItem(
+              module,
+              course,
+              challenge,
+              index,
+            );
+          })}
+        </>
+      );
+    }
+
     const SortableChallengeItem = SortableElement(
       ({ value, index }: { value: ChallengeSkeleton; index: number }) => {
         if (isEditMode) {
@@ -190,8 +207,8 @@ class NavigationOverlay extends React.Component<IProps> {
       <SortableChallengeList
         items={challengeList}
         helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
-        onSortEnd={result =>
-          this.handleSortChallengesEnd(course, module, result)
+        onSortEnd={sortEndResult =>
+          this.handleSortChallengesEnd(course, module, sortEndResult)
         }
       />
     );
@@ -200,13 +217,13 @@ class NavigationOverlay extends React.Component<IProps> {
   handleSortChallengesEnd = (
     course: CourseSkeleton,
     module: ModuleSkeleton,
-    result: SortEnd,
+    sortEndResult: SortEnd,
   ) => {
     this.props.reorderChallengeList({
       courseId: course.id,
       moduleId: module.id,
-      challengeOldIndex: result.oldIndex,
-      challengeNewIndex: result.newIndex,
+      challengeOldIndex: sortEndResult.oldIndex,
+      challengeNewIndex: sortEndResult.newIndex,
     });
   };
 
