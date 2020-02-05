@@ -24,7 +24,7 @@ const slugFromHeading = (text: string) => {
 
 // finds the index of this heading in the document compared to other headings
 // with the same slugified text
-const indexOfType = (document: Document, heading: SlateNode): number => {
+const indexOfHeading = (document: Document, heading: SlateNode): number => {
   const slugified = slugFromHeading(heading.text);
   const headings = document.nodes.filter((node?: Block) => {
     if (!node || !node.text) {
@@ -42,14 +42,14 @@ const indexOfType = (document: Document, heading: SlateNode): number => {
   return headings.indexOf(heading);
 };
 
-// calculates a unique slug for this heading based on it's text and position
-// in the document that is as stable as possible
+/**
+ * Calculates a unique slug for this heading based on it's text and position.
+ * Adding the position in is simply to account for headings with the same text,
+ * although that is quite unlikely
+ */
 const headingToSlug = (document: Document, node: SlateNode) => {
   const slugified = slugFromHeading(node.text);
-  const index = indexOfType(document, node);
-  if (index === 0) {
-    return slugified;
-  }
+  const index = indexOfHeading(document, node);
   return `${slugified}-${index}`;
 };
 
