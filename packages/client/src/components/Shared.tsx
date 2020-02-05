@@ -210,65 +210,6 @@ export const ButtonCore = styled.button`
   }
 `;
 
-/**
- * A blueprint EditableText that will not respond to escape key events. See
- * NOTE below for details.
- */
-const NoCancelContentInput = (props: IEditableTextProps) => {
-  const [confirmedContent, setConfirmedContent] = React.useState<string>(
-    props.value || "",
-  );
-  const handleChange = (supplementaryContent: string) => {
-    if (!props.onChange) {
-      return;
-    }
-
-    /**
-     * NOTE: Blueprintjs has a just terrible cancel feature on their editable
-     * inputs. If you hit escape it reverts the text to its "last confirmed
-     * value". This would be fine if it could be configured or disabled, but it
-     * cannot. It's far too easy to accidentally hit escape and loose all the
-     * copy you've written. This is meant to be a workaround for that. Upgrading
-     * to a rich-markdown editor (like Slate) will solve this since we can move
-     * away from this blueprint component.
-     */
-    if (confirmedContent === supplementaryContent) {
-      console.warn("[INFO] Ignoring update. Probably was escape key");
-      return;
-    }
-
-    props.onChange(supplementaryContent);
-  };
-
-  const handleConfirm = (x: string) => {
-    setConfirmedContent(x);
-    if (props.onConfirm) {
-      props.onConfirm(x);
-    }
-  };
-
-  return (
-    <div style={{ maxWidth: PROSE_MAX_WIDTH }}>
-      <EditableText
-        multiline
-        minLines={3}
-        {...props}
-        onChange={handleChange}
-        onConfirm={handleConfirm}
-      />
-    </div>
-  );
-};
-
-export const ContentInput = styled(NoCancelContentInput)`
-  font-size: 1.1em;
-  line-height: 1.5;
-  transition: background 0.2s ease-out;
-  &:focus {
-    background: black;
-  }
-`;
-
 const HighlightedMarkdown = (props: ReactMarkdownProps) => {
   return (
     <Suspense fallback={<pre>Loading...</pre>}>
