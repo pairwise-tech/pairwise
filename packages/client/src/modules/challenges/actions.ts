@@ -14,6 +14,7 @@ import {
   ModuleDeletePayload,
   ChallengeDeletePayload,
   ChallengeReorderPayload,
+  ModuleReorderPayload,
 } from "./types";
 import { HttpResponseError } from "modules/api";
 import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
@@ -55,6 +56,8 @@ enum ActionTypesEnum {
   CREATE_MODULE = "CREATE_MODULE",
   UPDATE_MODULE = "UPDATE_MODULE",
   DELETE_MODULE = "DELETE_MODULE",
+
+  REORDER_MODULE_LIST = "REORDER_MODULE_LIST",
 
   UPDATE_EDITOR_OPTIONS = "UPDATE_EDITOR_OPTIONS",
 
@@ -219,3 +222,7 @@ export const updateCourseModule = createAction(ActionTypesEnum.UPDATE_MODULE)<
 export const deleteCourseModule = createAction(ActionTypesEnum.DELETE_MODULE)<
   ModuleDeletePayload
 >();
+
+export const reorderModuleList = createAction(
+  ActionTypesEnum.REORDER_MODULE_LIST,
+)<ModuleReorderPayload>();

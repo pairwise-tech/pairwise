@@ -20,6 +20,7 @@ import {
   ModuleCreationPayload,
   ChallengeDeletePayload,
   ChallengeReorderPayload,
+  ModuleReorderPayload,
 } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
@@ -245,6 +246,17 @@ const reorderChallengeList = (
   return over(lens, move(challengeOldIndex, challengeNewIndex), courses);
 };
 
+const reorderModuleList = (
+  courses: CourseList,
+  moduleReorderPayload: ModuleReorderPayload,
+) => {
+  const { courseId, moduleOldIndex, moduleNewIndex } = moduleReorderPayload;
+
+  const courseIndex = courses.findIndex(x => x.id === courseId);
+  const lens = lensPath([courseIndex, "modules"]);
+  return over(lens, move(moduleOldIndex, moduleNewIndex), courses);
+};
+
 /** ===========================================================================
  * Store
  * ============================================================================
@@ -431,6 +443,20 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       courses: reorderChallengeList(courses, action.payload),
       // @ts-ignore
       courseSkeletons: reorderChallengeList(courseSkeletons, action.payload),
+    };
+  })
+  .handleAction(actions.reorderModuleList, (state, action) => {
+    const { courses, courseSkeletons } = state;
+
+    if (!courses || !courseSkeletons) {
+      return state;
+    }
+
+    return {
+      ...state,
+      courses: reorderModuleList(courses, action.payload),
+      // @ts-ignore
+      courseSkeletons: reorderModuleList(courseSkeletons, action.payload),
     };
   })
   .handleAction(actions.updateCourseModule, (state, action) => {

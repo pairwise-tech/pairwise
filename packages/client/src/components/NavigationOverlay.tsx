@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import styled, { StyledComponentProps } from "styled-components/macro";
+import styled from "styled-components/macro";
 import {
   SortEnd,
   SortableHandle,
@@ -114,7 +114,7 @@ class NavigationOverlay extends React.Component<IProps> {
 
     if (!isEditMode) {
       return moduleList.map((m, i) => {
-        return this.renderModuleNavigationItem(m.id, m, i);
+        return this.renderModuleNavigationItem(module.id, m, i);
       });
     }
 
@@ -188,24 +188,18 @@ class NavigationOverlay extends React.Component<IProps> {
         items={moduleList}
         helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
         onSortEnd={sortEndResult =>
-          this.handleSortChallengesEnd(course, module, sortEndResult)
+          this.handleSortModulesEnd(course, sortEndResult)
         }
       />
     );
   };
 
-  handleSortModulesEnd = (
-    course: CourseSkeleton,
-    module: ModuleSkeleton,
-    sortEndResult: SortEnd,
-  ) => {
-    console.log("modules sorted!");
-    // this.props.reorderChallengeList({
-    //   courseId: course.id,
-    //   moduleId: module.id,
-    //   challengeOldIndex: sortEndResult.oldIndex,
-    //   challengeNewIndex: sortEndResult.newIndex,
-    // });
+  handleSortModulesEnd = (course: CourseSkeleton, sortEndResult: SortEnd) => {
+    this.props.reorderModuleList({
+      courseId: course.id,
+      moduleOldIndex: sortEndResult.oldIndex,
+      moduleNewIndex: sortEndResult.newIndex,
+    });
   };
 
   renderSortableChallengeList = (
@@ -766,6 +760,7 @@ const dispatchProps = {
   createChallenge: Modules.actions.challenges.createChallenge,
   deleteChallenge: Modules.actions.challenges.deleteChallenge,
   reorderChallengeList: Modules.actions.challenges.reorderChallengeList,
+  reorderModuleList: Modules.actions.challenges.reorderModuleList,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePurchaseCourseIntent:

@@ -65,3 +65,9 @@ export interface ChallengeReorderPayload {
   challengeOldIndex: number;
   challengeNewIndex: number;
 }
+
+export interface ModuleReorderPayload {
+  courseId: string;
+  moduleOldIndex: number;
+  moduleNewIndex: number;
+}
