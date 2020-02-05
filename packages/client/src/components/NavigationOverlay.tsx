@@ -118,74 +118,18 @@ class NavigationOverlay extends React.Component<IProps> {
       });
     }
 
-    const SortableModuleItem = SortableElement(
-      (props: { value: { module: ModuleSkeleton; index: number } }) => {
-        const { value } = props;
-
-        const DraggableModuleHandle = SortableHandle(() => (
-          <ModuleNumber>{value.index}</ModuleNumber>
-        ));
-
-        return (
-          <UnorderedListItem>
-            <div key={value.module.id} style={{ position: "relative" }}>
-              {isEditMode ? (
-                <CodepressNavigationContextMenu
-                  type="MODULE"
-                  handleDelete={handleDeleteModule}
-                >
-                  <ModuleNavigationBase active={value.module.id === module.id}>
-                    <span>
-                      <DraggableModuleHandle />
-                      <NavUpdateField
-                        onChange={e => {
-                          updateCourseModule({
-                            id: value.module.id,
-                            courseId: course.id,
-                            module: { title: e.target.value },
-                          });
-                        }}
-                        defaultValue={value.module.title}
-                      />
-                    </span>
-                  </ModuleNavigationBase>
-                </CodepressNavigationContextMenu>
-              ) : (
-                this.renderModuleNavigationItem(
-                  module.id,
-                  value.module,
-                  value.index,
-                )
-              )}
-              {this.renderModuleCodepressButton(course, value.index)}
-            </div>
-          </UnorderedListItem>
-        );
-      },
-    );
-
-    const SortableChallengeList = SortableContainer(
-      ({ items: modules }: { items: ModuleSkeletonList }) => {
-        return (
-          <UnorderedList>
-            {modules.map((m: ModuleSkeleton, index: number) => {
-              return (
-                <SortableModuleItem
-                  key={m.id}
-                  index={index}
-                  value={{ module: m, index }}
-                />
-              );
-            })}
-          </UnorderedList>
-        );
-      },
-    );
-
     return (
-      <SortableChallengeList
+      <SortableModuleList
         useDragHandle
         items={moduleList}
+        itemValueProps={{
+          course,
+          isEditMode,
+          updateCourseModule,
+          handleDeleteModule,
+          renderModuleNavigationItem: this.renderModuleNavigationItem,
+          renderModuleCodepressButton: this.renderModuleCodepressButton,
+        }}
         helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
         onSortEnd={sortEndResult =>
           this.handleSortModulesEnd(course, sortEndResult)
@@ -505,6 +449,102 @@ class CodepressNavigationContextMenu extends React.PureComponent<
     this.setState({ isContextMenuOpen: true });
   };
 }
+
+/** ===========================================================================
+ * Sortable List Components
+ * ============================================================================
+ */
+
+interface SortableContainerProps {
+  isEditMode: boolean;
+  course: CourseSkeleton;
+  handleDeleteModule: () => void;
+  renderModuleNavigationItem: (
+    activeModuleId: string,
+    module: ModuleSkeleton,
+    index: number,
+  ) => JSX.Element;
+  renderModuleCodepressButton: (
+    course: CourseSkeleton,
+    index: number,
+  ) => JSX.Element;
+  updateCourseModule: typeof Modules.actions.challenges.updateCourseModule;
+}
+
+interface SortableModuleItemValue extends SortableContainerProps {
+  index: number;
+  module: ModuleSkeleton;
+}
+
+const SortableModuleList = SortableContainer(
+  ({
+    items: modules,
+    itemValueProps,
+  }: {
+    items: ModuleSkeletonList;
+    itemValueProps: SortableContainerProps;
+  }) => {
+    return (
+      <UnorderedList>
+        {modules.map((m: ModuleSkeleton, index: number) => {
+          return (
+            <SortableModuleItem
+              key={m.id}
+              index={index}
+              value={{ module: m, index, ...itemValueProps }}
+            />
+          );
+        })}
+      </UnorderedList>
+    );
+  },
+);
+
+const SortableModuleItem = SortableElement(
+  (props: { value: SortableModuleItemValue }) => {
+    const { value } = props;
+
+    const DraggableModuleHandle = SortableHandle(() => (
+      <ModuleNumber>{value.index}</ModuleNumber>
+    ));
+
+    return (
+      <UnorderedListItem>
+        <div key={value.module.id} style={{ position: "relative" }}>
+          {value.isEditMode ? (
+            <CodepressNavigationContextMenu
+              type="MODULE"
+              handleDelete={value.handleDeleteModule}
+            >
+              <ModuleNavigationBase active={value.module.id === module.id}>
+                <span>
+                  <DraggableModuleHandle />
+                  <NavUpdateField
+                    value={value.module.title}
+                    onChange={e => {
+                      value.updateCourseModule({
+                        id: value.module.id,
+                        courseId: value.course.id,
+                        module: { title: e.target.value },
+                      });
+                    }}
+                  />
+                </span>
+              </ModuleNavigationBase>
+            </CodepressNavigationContextMenu>
+          ) : (
+            value.renderModuleNavigationItem(
+              module.id,
+              value.module,
+              value.index,
+            )
+          )}
+          {value.renderModuleCodepressButton(value.course, value.index)}
+        </div>
+      </UnorderedListItem>
+    );
+  },
+);
 
 /** ===========================================================================
  * Styles
