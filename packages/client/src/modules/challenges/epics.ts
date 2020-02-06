@@ -312,7 +312,6 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
     }),
     mergeMap(result => {
       if (result.value) {
-        debugger;
         return [
           Actions.fetchBlobForChallengeSuccess(result.value),
           // Actions.updateCurrentChallengeBlob(result.value),

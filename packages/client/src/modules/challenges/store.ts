@@ -489,6 +489,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       [action.payload.challengeId]: action.payload.dataBlob,
     },
   }))
+  .handleAction(actions.fetchBlobForChallenge, (state, action) => ({
+    ...state,
+    loadingCurrentBlob: true,
+  }))
   .handleAction(actions.fetchBlobForChallengeSuccess, (state, action) => ({
     ...state,
     loadingCurrentBlob: false,
