@@ -67,6 +67,7 @@ import {
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import cx from "classnames";
+import traverse from "traverse";
 
 /** ===========================================================================
  * Types & Config
@@ -291,10 +292,13 @@ class Workspace extends React.Component<IProps, IState> {
     const models = this.monacoWrapper.editor.getModels();
     const model = models[0];
 
-    model.decorations = model.deltaDecorations(
-      model.decorations || [],
-      decorations,
-    );
+    // prevent exception when moving through challenges quickly
+    if (model) {
+      model.decorations = model.deltaDecorations(
+        model.decorations || [],
+        decorations,
+      );
+    }
   };
 
   initializeMonaco = () => {
@@ -464,14 +468,14 @@ class Workspace extends React.Component<IProps, IState> {
             <Tooltip content={"Increase Font Size"} position="left">
               <IconButton
                 icon="plus"
-                aria-label="format editor code"
+                aria-label="increase editor font size"
                 onClick={this.props.increaseFontSize}
               />
             </Tooltip>
             <Tooltip content={"Decrease Font Size"} position="left">
               <IconButton
                 icon="minus"
-                aria-label="format editor code"
+                aria-label="decrease editor font size"
                 onClick={this.props.decreaseFontSize}
               />
             </Tooltip>
@@ -748,13 +752,8 @@ class Workspace extends React.Component<IProps, IState> {
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
-      const log = Decode([
-        {
-          data,
-          method,
-        },
-      ]);
-      this.updateWorkspaceConsole(log);
+      this.transformUndefinedLogMessages(data);
+      this.updateWorkspaceConsole({ data, method });
     };
 
     try {
@@ -933,6 +932,25 @@ class Workspace extends React.Component<IProps, IState> {
         }
       },
     );
+  };
+
+  /**
+   * This method handles transforming log messages passed from the
+   * iframe to the parent window. When we pass the iframe's log messages
+   * through `postMessage`, we first serialize them, and in doing so, we
+   * would be replacing all `undefined`s with `null`s, since `undefined`
+   * is not valid json. To overcome this, we use pass a replacer function
+   * to JSON.stringify, which replaces every instance of `undefined` with
+   * "__transform_undefined__". When we deserialize on the other end, we
+   * need to then recursively traverse whatever object the end-user logged
+   * to resolve these transformations with an actual `undefined` value.
+   */
+  transformUndefinedLogMessages = (data: ReadonlyArray<any>) => {
+    traverse(data).forEach(function(x) {
+      if (x === "__transform_undefined__") {
+        this.update(undefined);
+      }
+    });
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
