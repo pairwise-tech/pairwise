@@ -16,8 +16,9 @@ import {
   mergeMap,
   tap,
   pluck,
+  ignoreElements,
 } from "rxjs/operators";
-import { isActionOf } from "typesafe-actions";
+import { isActionOf, action } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
@@ -251,7 +252,8 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
   state$,
   deps,
 ) => {
-  return action$.pipe(
+  // Fetch when navigation changes, i.e. setChallengeId
+  const fetchOnNavEpic = action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
     pluck("payload"),
     pluck("newChallengeId"),
@@ -273,6 +275,15 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
       return of(...actions);
     }),
   );
+
+  // Fetch on challenge initialization which does not fire a setChallengeId action
+  const fetchOnChallengeInitEpic = action$.pipe(
+    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+    map(x => x.payload.currentChallengeId),
+    map(Actions.fetchBlobForChallenge),
+  );
+
+  return merge(fetchOnNavEpic, fetchOnChallengeInitEpic);
 };
 
 /**
