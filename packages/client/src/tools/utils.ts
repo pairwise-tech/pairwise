@@ -151,7 +151,7 @@ export interface NavigationChallengeSection {
 }
 
 /**
- * Behold the following hideous code!
+ * Behold, the great challenge partitioning method!
  *
  * This method partitions a list of challenge into blocks of challenges by
  * section challenges which exist in the challenge list.
@@ -160,67 +160,76 @@ export interface NavigationChallengeSection {
  * a non-challenge type is encountered) and groups them into a block. These
  * can then be rendered in a way that allow the sections to be separately
  * collapsed and expanded.
+ *
+ * The behavior may change in the future, especially around projects and
+ * special topics.
+ *
+ * Sean is responsible for this!
  */
 export const partitionChallengesBySection = (
   challengeList: ChallengeSkeletonList,
 ) => {
-  let sections: NavigationChallengeSection[] = [];
   const defaultSection: NavigationChallengeSection = {
     section: null,
     challenges: [],
   };
 
-  let reachedProjectsYet = false;
+  let currentSection = defaultSection;
+  let firstReachedProjects = false;
+  let firstReachedSpecialTopics = false;
+  let sections: NavigationChallengeSection[] = [];
 
-  const finalSection = challengeList.reduce(
-    (
-      currentSection: NavigationChallengeSection,
-      challenge: ChallengeSkeleton,
-    ) => {
-      const { type } = challenge;
-      /**
-       * The section should end when the next section type challenge is
-       * reached.
-       */
-      const shouldEndSection = type === "section";
+  for (const challenge of challengeList) {
+    const { type } = challenge;
 
-      /**
-       * If the projects section is reached, all of the challenges have been
-       * reached, and we should no longer aggregate challenges into section
-       * blocks. But, when we first reach the projects we should aggregate
-       * all the current challenges into a section.
-       */
-      const reachedProjectsNow =
-        type === "project" ||
-        type === "guided-project" ||
-        type === "special-topic";
+    const SHOULD_END_SECTION = type === "section";
+    const reachedProjectsNow = type === "project" || type === "guided-project";
+    const reachedSpecialTopics = type === "special-topic";
 
-      const firstReachedProjects = !reachedProjectsYet && reachedProjectsNow;
+    const PROJECT_BOUNDARY = reachedProjectsNow && !firstReachedProjects;
+    const SPECIAL_TOPIC_BOUNDARY =
+      reachedSpecialTopics && !firstReachedSpecialTopics;
 
-      if (shouldEndSection || firstReachedProjects) {
-        if (currentSection.challenges.length > 0) {
-          sections = sections.concat(currentSection);
-        }
-
-        reachedProjectsYet = reachedProjectsNow;
-
-        const nextSection: NavigationChallengeSection = {
-          section: challenge,
-          challenges: [],
-        };
-        return nextSection;
-      } else {
-        return {
-          section: currentSection.section,
-          challenges: currentSection.challenges.concat(challenge),
-        };
+    if (SPECIAL_TOPIC_BOUNDARY) {
+      if (currentSection.challenges.length > 0) {
+        sections = sections.concat(currentSection);
       }
-    },
-    defaultSection,
-  );
+      const nextSection: NavigationChallengeSection = {
+        section: null,
+        challenges: [challenge],
+      };
+      firstReachedSpecialTopics = true;
+      currentSection = nextSection;
+    } else if (PROJECT_BOUNDARY) {
+      if (currentSection.challenges.length > 0) {
+        sections = sections.concat(currentSection);
+      }
+      const nextSection: NavigationChallengeSection = {
+        section: null,
+        challenges: [challenge],
+      };
+      firstReachedProjects = true;
+      currentSection = nextSection;
+    } else if (SHOULD_END_SECTION) {
+      if (currentSection.challenges.length > 0) {
+        sections = sections.concat(currentSection);
+      }
+
+      const nextSection: NavigationChallengeSection = {
+        section: challenge,
+        challenges: [],
+      };
+      currentSection = nextSection;
+    } else {
+      currentSection = {
+        section: currentSection.section,
+        challenges: currentSection.challenges.concat(challenge),
+      };
+    }
+  }
 
   /* Add whatever last challenges remain and were not aggregated yet */
-  sections = sections.concat(finalSection);
+  sections = sections.concat(currentSection);
 
   return sections;
 };

@@ -54,7 +54,7 @@ const LOG = true;
  * ============================================================================
  */
 
-describe("Linus should be able to pass all the challenges first try", () => {
+describe.skip("Linus should be able to pass all the challenges first try", () => {
   test("Execute all challenge tests against their solution code", async () => {
     let anyFailed = false;
 
