@@ -53,3 +53,11 @@ declare module "rich-markdown-editor" {
 
   export default Editor;
 }
+
+declare module "rich-markdown-editor/lib/lib/headingToSlug" {
+  import { Document, Block, Node as SlateNode } from "slate";
+  export default function headingToSlug(
+    document: Document,
+    node: SlateNode,
+  ): string;
+}
