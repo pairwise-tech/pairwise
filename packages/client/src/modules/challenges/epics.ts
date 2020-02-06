@@ -17,6 +17,7 @@ import {
   tap,
   pluck,
   ignoreElements,
+  debounceTime,
 } from "rxjs/operators";
 import { isActionOf, action } from "typesafe-actions";
 import { EpicSignature } from "../root";
@@ -326,7 +327,7 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
  * the blob.
  */
 const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
-  return action$.pipe(
+  const saveOnNavEpic = action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
     pluck("payload"),
     pluck("previousChallengeId"),
@@ -350,6 +351,15 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
       }
     }),
   );
+
+  const saveOnUpdateEpic = action$.pipe(
+    filter(isActionOf(Actions.updateCurrentChallengeBlob)),
+    debounceTime(500),
+    map(x => x.payload),
+    map(Actions.saveChallengeBlob),
+  );
+
+  return merge(saveOnNavEpic, saveOnUpdateEpic);
 };
 
 /**
@@ -426,6 +436,20 @@ const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
       }
     }),
   );
+};
+
+const sandboxPersistenceEpic: EpicSignature = (action$, state$, deps) => {
+  const storeSandboxCodeEpic = action$.pipe(
+    filter(isActionOf(Actions.updateChallenge)),
+    filter(x => x.payload.id === SANDBOX_ID),
+    map(x => x.payload.challenge.starterCode),
+    tap(code => {
+      console.log("code coming through", code);
+    }),
+    ignoreElements(),
+  );
+
+  return storeSandboxCodeEpic;
 };
 
 /** ===========================================================================
