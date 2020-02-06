@@ -434,7 +434,7 @@ class NavigationOverlay extends React.Component<IProps> {
     if (sectionId in navigationAccordionViewState) {
       return navigationAccordionViewState[sectionId];
     } else {
-      return false; /* Default to closed */
+      return true; /* Default to open */
     }
   };
 }
