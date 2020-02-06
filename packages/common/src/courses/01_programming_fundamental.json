@@ -35,7 +35,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "supplementaryContent": "Welcome to module 1\\! Where we'll be using HTML, CSS and JavaScript to dive into the basics of programming.\n# What you will learn\n\n* Foundational programming skills like\n   * Variables\n   * Functions\n   * How computers represent information and what _types_ of information you can represent\n   * Data structure\n   * Algorithms\n* How to build your own website\n* How to put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n\nOnward\\."
+          "supplementaryContent": "Welcome to module 1\\! Where we'll be using HTML, CSS and TypeScript to dive into the basics of programming.\n# What you will learn\n\n* Foundational programming skills like\n   * Variables\n   * Functions\n   * How computers represent information and what _types_ of information you can represent\n   * Data structure\n   * Algorithms\n* How to build your own website\n* How to put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n\nOnward\\."
         },
         {
           "id": "5ziJI35f",
@@ -234,6 +234,149 @@
           "starterCode": "<style>\n  /* Your code here */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    padding: 10px;\n    background: tomato;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .nav a:hover {\n    background: blue;\n    color: tomato;\n  }\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    background: tomato;\n    color: blue;\n    padding: 10px;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "supplementaryContent": "You've probably noticed that when you hover over a link in a browser it will change somehow. You can customize this!\n\nThis is called a hover state, and you can style a hover state just like you can style any other CSS. The main difference is the selector.\n\n```css\n/* Style the hover state for all links on the site */\na:hover {\n  text-decoration: underline;\n}\n\n/* Style just the nav links */\n.nav a:hover {\n  color: tomato;\n}\n\n/* Style the entire nav div when it's hovered */\n.nav:hover {\n  background: gray;\n}\n```\n\nTo style how something looks when the mouse hovers over it you use `:hover`. Specifically, you just put `:hover` after the selector you want to style. It's important not to put a space in front of `:hover`."
+        },
+        {
+          "id": "0gih2c1M",
+          "type": "section",
+          "title": "Types and Type Primitives",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "Central to every TypeScript program is the data that it concerns, operates on, and manipulates. But what exactly is that data? How can it be described, and what are its properties?\n\nWell, TypeScript, like every programming language, has different _types_ of data. The number of types that can be created by a programming language’s users is infinite, however all languages, including TypeScript, have a set of built-in types, the lowest level of which are called **primitives**. These types can be operated on and manipulated by themselves, or be composed with other types to form more complex types, but this is a topic we’ll cover in more detail later. For now, let’s focus on TypeScript's most common **primitive data types**.\n\nFirst, though, let’s clear something up. \n\n## What exactly is a type?\nAt its most basic, a type describes a particular piece of data. A piece of data’s type lets us (and more importantly, the TypeScript compiler!) know how this particular piece of data can be used and what kind of operations can be performed on it. For example, something with the type `number`, should be able to be added, subtracted, divided, and multiplied with other pieces of data that also have the type `number`. Makes sense, right!?\n\nIn fact, you just learned your first type: `number`! As you might have guessed, this is one of TypeScript's primitive data types; one of the basic building blocks of the data found within a TypeScript program.\n\n> **Tip:** A compiler is responsible for translating code written in one programming language into another language. In many cases, compilers are responsible for translating human-readable source code into something called machine-code, which is highly optimized and only intended to be interpreted by computers. In the case of TypeScript, the compiler is responsible for translating TypeScript into JavaScript that can be executed anywhere JavaScript can be.\n\n## TypeScript Primitive Types\nTypeScript supports several primitive data types, including:\n\n- `number`\n- `string`\n- `boolean`\n- `null`\n- `undefined`\n\nWhile this list is not exhaustive, for the purpose of the next several lessons, these are the types you'll need to know. Let's take a closer look at each one in the next few challenges."
+        },
+        {
+          "id": "w3bc0PeO",
+          "type": "typescript",
+          "title": "Numbers",
+          "content": "In TypeScript, numbers are expressed literally, and are given the type `number` (not to be confused with `Number`, with a capital \"N\"). As you might expect, numbers can be operated on mathematically, and are used for representing numeric values in our programs.\n\nIn TypeScript, numbers can be whole, or fractional (i.e. have one or more decimal places).\n\n- Modify the code below so that `whole` is equal to `1` and `half` is equal to `.5`.",
+          "testCode": "test('`whole` should be equal to `1`', () => expect(whole).toBe(1));\ntest('`half` should be equal to `.5`', () => expect(half).toBe(.5));",
+          "videoUrl": "",
+          "starterCode": "let whole = 0;\nlet half = 0;",
+          "solutionCode": "let whole = 1;\nlet half = .5;",
+          "supplementaryContent": "## `number` _not_ `Number`\nThis is an important distinction. In TypeScript, _`number`_ refers to the data type, while `Number` refers to the  __global__, and more concrete, `Number` object, a concept that goes beyond the scope of this lesson. For now, it's just important that you understand the distinction, and that TypeScript is a case-sensitive programming language. While this may seem like a small difference, remember: in the case of `number` vs. `Number`, case matters!\n\n## Just one `number`\nIn the challenge above, we discussed that data with the type `number` in TypeScript can represent both whole and fractional values. While it is not important in the context of this course, you might find it interesting to know that commonly, in other program languages, fractional values, or _floating point_ values, are represented by another data type. TypeScript is unique in that all numbers are considered floating point values."
+        },
+        {
+          "id": "UnMCiU0Z",
+          "type": "typescript",
+          "title": "Strings",
+          "content": "In TypeScript, strings are used to represent text, or data that can be represented by text, and are given the type `string` (not to be confused with `String` – noticing a pattern here?). Strings are expressed as a string of characters surrounded by single or double quotes, `\"like this\"`.\n\n- Modify `greeting` below so that it says \"Hello, my name is \" followed by your name",
+          "testCode": "test('`greeting` should equal the string `\"Hello, my name is {your name here}\"`', () => assert(/hello, my name is \\w+/i.test(greeting)))",
+          "videoUrl": "",
+          "starterCode": "let greeting = \"\";",
+          "solutionCode": "let greeting = \"Hello, my name is Pete\";",
+          "supplementaryContent": "## `string` not `String`\nOk, last warning! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway: TypeScript is a **case-sensitive** language, and it is **_not_** safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip:** TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc."
+        },
+        {
+          "id": "aKi_ySGP",
+          "type": "typescript",
+          "title": "Booleans",
+          "content": "Booleans, are perhaps the simplest of the primitive data types, and in TypeScript,  can be expressed as either `true` or `false`. They are given the type `boolean`. Booleans are the primary way that we handle \"logical\" decision making, and, in fact, many expressions can be _evaluated_ as booleans, but we'll get into this more later.\n\n- Look at the following example, and change `false` to `true`.\n- Notice what happens!\n\nDon't worry, there's a lot going on here that we haven't covered yet. For now, just focus on the challenge at hand.",
+          "testCode": "test('`str` should be equal to `\"Hello, TypeScript!\"`', () => expect(str).toBe(\"Hello, TypeScript!\"))\ntest('`isTrue` should be of type `boolean`', () => expect(typeof isTrue).toBe(\"boolean\"))",
+          "videoUrl": "",
+          "starterCode": "let str;\nlet isTrue = false;\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
+          "solutionCode": "let str;\nlet isTrue = true;\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "CRg_eu1t",
+          "type": "media",
+          "title": "Null and Undefined",
+          "content": "",
+          "testCode": "",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "`null` and `undefined` are similar in that they both represent the absence of value. They are both expressed literally, and in TypeScript are given the types `null` and `undefined` (i.e. the values and the types are the same, but are used in different contexts).\n\n`null` differs from `undefined` in that it is typically _intentionally_ used to represent the absence of value, while `undefined` is assigned to variables that have not yet been initialized.\n\n```typescript\nlet n; // n's value is currently undefined\nlet x = null; // x has been assigned a value of null\n```\nThis is not to say that `undefined` cannot be explicitly assigned to a variable, it is just less common, and almost certainly a mistake.\n```typescript\nlet dontDoThis = undefined;\n```\nMuch more commonly, we're checking if something _is_ `undefined`, rather than _making something_ `undefined`."
+        },
+        {
+          "id": "B6sT0T6q",
+          "type": "typescript",
+          "title": "Null and Undefined in Action",
+          "content": "Take a look at the code in the editor below. You'll probably notice some syntax here that you haven't seen before; `: string` and `: number` are called type annotations. They indicate to TypeScript what type of data can be assigned to the variables they annotate, and how that data should be treated. We'll cover this in more detail in the coming challenges. For now, we just want you to start getting familiar with what the syntax looks like.\n\n- Change the `undefined` variable `iShouldBeAString` to a string\n- Change the `null` variable `iShouldBeANumber` to a number\n\nRemember, `null` and `undefined` are valid subtypes of all other types, so we can assign them to variables TypeScript expects to be other types.\n",
+          "testCode": "test('`iShouldBeAString` should be of type `string`', () => expect(typeof iShouldBeAString).toBe(\"string\"))\ntest('`iShouldBeANumber` should be of type `number`', () => expect(typeof iShouldBeANumber).toBe(\"number\"))",
+          "videoUrl": "",
+          "starterCode": "let iShouldBeAString: string = undefined; // undefined is a valid subtype of string\nlet iShouldBeANumber: number = null; // null is a valid subtype of number",
+          "solutionCode": "let iShouldBeAString: string = \"undefined\"; // undefined is a valid subtype of string\nlet iShouldBeANumber: number = 100; // null is a valid subtype of number",
+          "supplementaryContent": "We've covered a decent amount of ground talking about primitive types. We've talked about how they're expressed, and what their types are. For instance, numbers are expressed literally, e.g. `1`, `75`, `2.064`, and their type is `number`. Until now, though, we haven't haven't used the types themselves in our code. But we haven't been introducing you to these for no reason! \n\nIn the above challenge, we've introduced the concept of type annotations. This is a simple example of how we use types in our code. We want to draw your attention to this, as you'll see this concept come up a lot more throughout this course.\n\n> **Tip:** Type annotations, using the syntax `: ` + `type name`, indicate to TypeScript what kind of data can be assigned to the variables they annotate, and how that data should treated."
+        },
+        {
+          "id": "7CDlUIz9",
+          "type": "media",
+          "title": "Type Inference",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "By now, you know that all data in a TypeScript program has a type. But how does the compiler know what types of data it's dealing with? Well, TypeScript is a pretty smart language, and in many cases, it can effectively use _type inference_ to determine type information about a piece of data. For example, when a variable is initialized with a string of text surrounded by quotes, TypeScript can _infer_ that that variable is of the type `string`.\n\n```typescript\nlet foo = \"this is a string\";\n// TypeScript infers that foo is a string\n```\nTypeScript can easily accomplish this with primitive data types:\n\n```typescript\nlet bar = true; // inferred to be boolean\nlet baz = 100; // inferred to be number\nlet qux = null; // inferred to be null\nlet qaz = undefined; // inferred to be undefined\n```\nLet's see this in action in the next challenge!"
+        },
+        {
+          "id": "Q2hgPS5P",
+          "type": "typescript",
+          "title": "Inference in Action",
+          "content": "Consider the code snippet from the last challenge. Don't just take our word for it, hover over the variable names and notice what you see.\n\nWithout being explicit, TypeScript's type engine can successfully infer the types of data that we've assigned to our rather arbitrary variables.",
+          "testCode": "\ntest('`bar` should be of type `boolean`', () => expect(typeof bar).toBe(\"boolean\"))\ntest('`baz` should be of type `number`', () => expect(typeof baz).toBe(\"number\"))\ntest('`qux` should be `null`', () => expect(qux).toBe(null))\ntest('`qaz` should be `undefined`', () => expect(qaz).toBe(undefined))",
+          "videoUrl": "",
+          "starterCode": "let bar = true; // inferred to be boolean\nlet baz = 100; // inferred to be number\nlet qux = null; // inferred to be null\nlet qaz = undefined; // inferred to be undefined",
+          "solutionCode": "let bar = true; // inferred to be boolean\nlet baz = 100; // inferred to be number\nlet qux = null; // inferred to be null\nlet qaz = undefined; // inferred to be undefined",
+          "supplementaryContent": "## TypeScript Configuration\nA topic that we won't be covering here, but is worth mentioning, is TypeScript configuration. Some of the behavior we see in these challenges depends on how the TypeScript compiler is configured in the Pairwise workspace.\n\nWe only mention this so that you're aware that it's possible you'll see slightly different behavior in your own workspace should the configuration options you choose differ. This is something you won't have to deal with while working in the Pairwise workspace, but you should be aware of it all the same.\n\nIf you're setting up you're own project in the future, see TypeScript's \"Project Configuration\" documentation for additional information on this topic."
+        },
+        {
+          "id": "zSYT-6Vr",
+          "type": "media",
+          "title": "Being Explicit with Type Annotations",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "We've seen that TypeScript can infer type information from our code contextually. However, as data types become more complex, or potentially ambiguous, it is sometimes useful to be more _explicit_, and tell the compiler exactly what type of data it's dealing with. In order to do this, TypeScript provides us with **type annotations**. Type annotations are a way to tell the compiler what type of data to expect, and how to treat that data. \n\nThe syntax `:` + `type name` is used to annotate variables and other parts of our programs. They look like this:\n\n```typescript\nlet name: string = \"Finn\"; \n// use a colon followed by a type to explicitly type something\n```\n\nThis is not always necessary, since TypeScript does have very powerful type inference, which goes far beyond inferring primitive data types. However, it sometimes _is necessary_, and is often helpful to other developers reading your code to allow them to quickly and easily understand how something is intended to work and/or be used.\n\n> **Tip**: Hover over variable names and other parts of your code in the Pairwise workspace to see their type annotations.\n\nUsing explicit types can also act as a safeguard for catching type-errors before your code is even compiled (if you're using something called a linter, which the Pairwise workspace uses, as you'll soon see). For example:\n\n```typescript\nlet theMeaningOfLife: string = 42; \n// Error! TypeScript will complain about this\n```\n\nSince we've told TypeScript that `theMeaningOfLife` should be a `string`, it will warn us that we've tried to assign it a number to (denoted by a squiggly red line, just like a spellchecker). This is called **type error**, and is something we want to avoid.\n\nLet's try this out."
+        },
+        {
+          "id": "AB2T4DCt",
+          "type": "typescript",
+          "title": "Fix Me!",
+          "content": "Hover over `theMeaningOfLife` to see a helpful linter error, and then fix the problem.",
+          "testCode": "test('`theMeaningOfLife` should be of type `string`', () => expect(typeof theMeaningOfLife).toBe(\"string\"))",
+          "videoUrl": "",
+          "starterCode": "let theMeaningOfLife: string = 42;",
+          "solutionCode": "let theMeaningOfLife: string = \"42\";",
+          "supplementaryContent": "## What is a linter?\nA linter is a type of coding aid, which analyzes the code that you write, and in an integrated development environment (or in this case, an IDE-like environment), gives you realtime feedback about potential problems in your code, such as type incompatibilities (like in this case), or stylistic problems. Linters can be a very effective tool and help you write better, less error-prone code."
+        },
+        {
+          "id": "m4K09_cW",
+          "type": "media",
+          "title": "Type Inference vs. Explicit Types",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "TypeScript's type system is a large part of what makes it such a powerful language. While type inference can be very powerful, reach for explicit typing in more complex cases, or if the inferred type  is inconsistent with how you intend something to be used. In any case, being rigorous around types in your programs and using TypeScript's type engine to its fullest potential can help you avoid painful run-time errors in your code.\n\nIf these topics seem confusing right now, don't worry! Type inference and type annotations are both in-depth topics that we'll learn more about in an organic way throughout this course, but it's essential that you're introduced to the concepts and syntax early on. \n\nFor now, the main takeaway is that you learn the difference between type inference and explicit typing with type annotations, and learn to recognize the type annotation syntax.\n\nTo review:\n```typescript\nlet foo = \"foo is inferred to be a string\";\nlet bar: string = \"bar is explicitly typed as a string\";\n```\nWhile these examples are simple, and purposefully contrived for this introduction to types, as we begin learning about more complex data types and structures, we'll see less trivial examples and put these concepts into action. "
+        },
+        {
+          "id": "xLJj8XiU",
+          "type": "media",
+          "title": "The Any Type",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In TypeScript, there's a basic type we have not explored yet called the `any` type. This is the only type we've learned about so far which is not a valid type in its subset language, JavaScript. This is because `any` is _just a type_, and JavaScript is not a statically typed language like its superset, TypeScript.\n\nIn other words, `any` cannot be expressed literally. It is not a primitive type, and has no actual value that corresponds to it, the way that integer literals can be assigned to the `number` type, and string literals can be assigned to `string`. Rather, _all values_ can be assigned to `any`. \n\n```typescript\nlet quux: any = \"foo bar baz\";\nlet quuz: any = 70000;\nlet corg: any = true;\nlet flob: any = undefined;\nlet glob: any = null;\n```\n`any` is sort of like a type check escape hatch. It basically lets TypeScript know _not_ to **type check** something at compile-time (before the code is executed, i.e. statically).\n\n> **Tip:** Type checking is the process of validating and enforcing the type constraints in our code. Static type checking (such as in TypeScript), happens at compile-time, and helps to greatly reduce the occurrence of run-time errors in our code.\n\nUsing `any` can be extremely useful when we simply don't know the type of data something will be until run-time (when the code is actually executed). This might be because the data is coming from some external source that we don't have knowledge of beforehand, such as a program's end-user, or an external library. \n\nThat said, it is generally considered best practice to avoid using `any` wherever possible. This is because `any` makes our code less _type safe_: anything labeled as `any` will be type checked only at run-time (i.e. dynamically) and if there's a type mismatch, an error will be thrown, and your users' experience may impacted. \n\n> If `any` is overused, many of the benefits of using a statically typed language will be lost, and the incidence of run-time errors (something we always want to avoid!) is likely to increase. \n\nThe takeaway: use `any` sparingly, only when it is absolutely necessary."
+        },
+        {
+          "id": "KbkT6v8g",
+          "type": "typescript",
+          "title": "Any in Action",
+          "content": "Change the values below to match their variable names. This is a simple challenge just to demonstrate that any type can be assigned to something annotated as `any`.",
+          "testCode": "test('`iAmAString` should be of type `string`', () => expect(typeof iAmAString).toBe(\"string\"))\ntest('`iAmANumber` should be of type `number`', () => expect(typeof iAmANumber).toBe(\"number\"))\ntest('`iAmNull` should be `null`', () => expect(iAmNull).toBe(null))\ntest('`iAmUndefined` should be `undefined`', () => expect(iAmUndefined).toBe(undefined))\n",
+          "videoUrl": "",
+          "starterCode": "let iAmAString: any = undefined;\nlet iAmANumber: any = null;\nlet iAmNull: any = 71919;\nlet iAmUndefined: any = \"not undefined yet!\";",
+          "solutionCode": "let iAmAString: any = \"undefined\";\nlet iAmANumber: any = 71919;\nlet iAmNull: any = null;\nlet iAmUndefined: any = undefined;",
+          "supplementaryContent": ""
         }
       ]
     },

@@ -183,6 +183,10 @@ const InlineCode = ({ value }: { value: string }) => {
   return <code className="code">{value}</code>;
 };
 
+const BlockQuote = ({ children }: { children: React.ReactNode }) => {
+  return <blockquote className="tip">{children}</blockquote>;
+};
+
 export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -216,6 +220,7 @@ const HighlightedMarkdown = (props: ReactMarkdownProps) => {
         renderers={{
           code: LazyCodeBlock,
           inlineCode: InlineCode,
+          blockquote: BlockQuote,
         }}
         {...props}
       />
@@ -223,12 +228,7 @@ const HighlightedMarkdown = (props: ReactMarkdownProps) => {
   );
 };
 
-export const StyledMarkdown = styled(HighlightedMarkdown)`
-  max-width: ${PROSE_MAX_WIDTH}px;
-  color: white;
-  line-height: 1.5;
-  font-size: 1.1rem;
-
+const StyledMarkdownBase = styled(HighlightedMarkdown)`
   .code {
     background: rgba(255, 255, 255, 0.1);
     padding: 1px 3px;
@@ -239,6 +239,33 @@ export const StyledMarkdown = styled(HighlightedMarkdown)`
     border-radius: 3px;
     line-height: normal;
     font-size: 85%;
+  }
+`;
+
+export const StyledMarkdown = styled(StyledMarkdownBase)`
+  max-width: ${PROSE_MAX_WIDTH}px;
+  color: white;
+  line-height: 1.5;
+  font-size: 1.1rem;
+
+  .tip {
+    border-left: 5px solid #6cbbff;
+    font-size: 18px;
+    line-height: 24px;
+    padding: 10px 10px 10px 24px;
+    background: #323232;
+  }
+
+  .tip p {
+    margin: 0;
+  }
+`;
+
+export const StyledMarkdownInline = styled(StyledMarkdownBase)`
+  display: inline-block;
+
+  p {
+    margin: 0;
   }
 `;
 

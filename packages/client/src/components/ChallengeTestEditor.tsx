@@ -168,14 +168,14 @@ const ChallengeTestEditor = (props: Props) => {
           <Tooltip content={"Increase Font Size"} position="left">
             <IconButton
               icon="plus"
-              aria-label="format editor code"
+              aria-label="increase editor font size"
               onClick={increaseFontSize}
             />
           </Tooltip>
           <Tooltip content={"Decrease Font Size"} position="left">
             <IconButton
               icon="minus"
-              aria-label="format editor code"
+              aria-label="decrease editor font size"
               onClick={decreaseFontSize}
             />
           </Tooltip>

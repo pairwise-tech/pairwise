@@ -48,35 +48,40 @@ export interface CodeFormatMessageEvent extends MessageEvent {
 /**
  * Functions used to intercept console methods and post the messages to
  * the parent window.
- *
- * TODO: Fix this: JSON.stringify([undefined]) -> "[null]", ha!
- *
  */
 const CONSOLE_INTERCEPTOR_FUNCTIONS = `
+const __replacer = (key, value) => {
+  if (typeof value === "undefined") {
+    return "__transform_undefined__";
+  }
+
+  return value;
+}
+
 const __interceptConsoleLog = (...value) => {
   window.parent.postMessage({
-    message: JSON.stringify(value),
+    message: JSON.stringify(value, __replacer),
     source: "LOG",
   });
 }
 
 const __interceptConsoleInfo = (...value) => {
   window.parent.postMessage({
-    message: JSON.stringify(value),
+    message: JSON.stringify(value, __replacer),
     source: "INFO",
   });
 }
 
 const __interceptConsoleWarn = (...value) => {
   window.parent.postMessage({
-    message: JSON.stringify(value),
+    message: JSON.stringify(value, __replacer),
     source: "WARN",
   });
 }
 
 const __interceptConsoleError = (...value) => {
   window.parent.postMessage({
-    message: JSON.stringify(value),
+    message: JSON.stringify(value, __replacer),
     source: "ERROR",
   });
 }
