@@ -9,6 +9,9 @@ import {
   DataBlob,
   SandboxBlob,
   CHALLENGE_TYPE,
+  ChallengeSkeleton,
+  ChallengeSkeletonList,
+  ProjectChallengeBlob,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
 import { IconName } from "@blueprintjs/core";
@@ -65,9 +68,20 @@ export const constructDataBlobFromChallenge = (args: {
       };
       return blob;
     }
+    case "guided-project":
+    case "special-topic":
     case "media": {
       const blob: VideoChallengeBlob = {
         type: "video",
+        timeLastWatched: 0,
+      };
+      return blob;
+    }
+    case "project": {
+      const blob: ProjectChallengeBlob = {
+        type: "project",
+        url: "",
+        repo: "",
         timeLastWatched: 0,
       };
       return blob;
@@ -129,4 +143,93 @@ export const getChallengeIcon = (
   } else {
     return "code";
   }
+};
+
+export interface NavigationChallengeSection {
+  section: Nullable<ChallengeSkeleton>;
+  challenges: ChallengeSkeleton[];
+}
+
+/**
+ * Behold, the great challenge partitioning method!
+ *
+ * This method partitions a list of challenge into blocks of challenges by
+ * section challenges which exist in the challenge list.
+ *
+ * It takes all challenges in a section, until the next section (or until
+ * a non-challenge type is encountered) and groups them into a block. These
+ * can then be rendered in a way that allow the sections to be separately
+ * collapsed and expanded.
+ *
+ * The behavior may change in the future, especially around projects and
+ * special topics.
+ *
+ * Sean is responsible for this!
+ */
+export const partitionChallengesBySection = (
+  challengeList: ChallengeSkeletonList,
+) => {
+  const defaultSection: NavigationChallengeSection = {
+    section: null,
+    challenges: [],
+  };
+
+  let currentSection = defaultSection;
+  let firstReachedProjects = false;
+  let firstReachedSpecialTopics = false;
+  let sections: NavigationChallengeSection[] = [];
+
+  for (const challenge of challengeList) {
+    const { type } = challenge;
+
+    const SHOULD_END_SECTION = type === "section";
+    const reachedProjectsNow = type === "project" || type === "guided-project";
+    const reachedSpecialTopics = type === "special-topic";
+
+    const PROJECT_BOUNDARY = reachedProjectsNow && !firstReachedProjects;
+    const SPECIAL_TOPIC_BOUNDARY =
+      reachedSpecialTopics && !firstReachedSpecialTopics;
+
+    if (SPECIAL_TOPIC_BOUNDARY) {
+      if (currentSection.challenges.length > 0) {
+        sections = sections.concat(currentSection);
+      }
+      const nextSection: NavigationChallengeSection = {
+        section: null,
+        challenges: [challenge],
+      };
+      firstReachedSpecialTopics = true;
+      currentSection = nextSection;
+    } else if (PROJECT_BOUNDARY) {
+      if (currentSection.challenges.length > 0) {
+        sections = sections.concat(currentSection);
+      }
+      const nextSection: NavigationChallengeSection = {
+        section: null,
+        challenges: [challenge],
+      };
+      firstReachedProjects = true;
+      currentSection = nextSection;
+    } else if (SHOULD_END_SECTION) {
+      if (currentSection.challenges.length > 0) {
+        sections = sections.concat(currentSection);
+      }
+
+      const nextSection: NavigationChallengeSection = {
+        section: challenge,
+        challenges: [],
+      };
+      currentSection = nextSection;
+    } else {
+      currentSection = {
+        section: currentSection.section,
+        challenges: currentSection.challenges.concat(challenge),
+      };
+    }
+  }
+
+  /* Add whatever last challenges remain and were not aggregated yet */
+  sections = sections.concat(currentSection);
+
+  return sections;
 };

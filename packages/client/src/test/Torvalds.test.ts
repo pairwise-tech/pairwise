@@ -98,7 +98,10 @@ describe("Linus should be able to pass all the challenges first try", () => {
           break;
         }
         case "section":
-        case "media": {
+        case "media":
+        case "project":
+        case "guided-project":
+        case "special-topic": {
           /* No tests for these challenges */
           break;
         }

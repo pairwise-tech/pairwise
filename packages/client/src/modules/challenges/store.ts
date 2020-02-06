@@ -35,6 +35,10 @@ const debug = require("debug")("challenge:store");
 export type ADMIN_TEST_TAB = "testResults" | "testCode";
 export type ADMIN_EDITOR_TAB = "starterCode" | "solutionCode";
 
+interface AccordionViewState {
+  [key: string]: boolean;
+}
+
 export interface State {
   workspaceLoading: boolean;
   isEditMode: boolean;
@@ -50,6 +54,7 @@ export interface State {
   loadingCurrentBlob: boolean;
   adminTestTab: ADMIN_TEST_TAB;
   adminEditorTab: ADMIN_EDITOR_TAB;
+  navigationSectionAccordionViewState: AccordionViewState;
 }
 
 const initialState: State = {
@@ -67,6 +72,7 @@ const initialState: State = {
   loadingCurrentBlob: false,
   adminTestTab: "testResults",
   adminEditorTab: "starterCode",
+  navigationSectionAccordionViewState: {},
 };
 
 /** ===========================================================================
@@ -524,6 +530,13 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,
     courseSkeletons: action.payload,
+  }))
+  .handleAction(actions.toggleSectionAccordionView, (state, action) => ({
+    ...state,
+    navigationSectionAccordionViewState: {
+      ...state.navigationSectionAccordionViewState,
+      [action.payload.sectionId]: action.payload.open,
+    },
   }))
   .handleAction(actions.setAdminTestTab, (state, action) => ({
     ...state,

@@ -22,10 +22,12 @@ import {
   generateEmptyModule,
   generateEmptyChallenge,
   getChallengeIcon,
+  partitionChallengesBySection,
 } from "tools/utils";
 import {
   Tooltip,
   Icon,
+  Collapse,
   Popover,
   Menu,
   MenuItem,
@@ -154,20 +156,12 @@ class NavigationOverlay extends React.Component<IProps> {
   ) => {
     const { isEditMode } = this.props;
 
-    /* Reordering is only available in edit mode */
+    /* Render the normal list: */
     if (!isEditMode) {
-      return challengeList.map(
-        (challenge: ChallengeSkeleton, index: number) => {
-          return this.renderChallengeNavigationItem(
-            module,
-            course,
-            challenge,
-            index,
-          );
-        },
-      );
+      return this.renderNormalChallengeList(course, module, challengeList);
     }
 
+    /* Render the sortable list: */
     return (
       <SortableChallengeList
         useDragHandle
@@ -185,6 +179,61 @@ class NavigationOverlay extends React.Component<IProps> {
         }
       />
     );
+  };
+
+  renderNormalChallengeList = (
+    course: CourseSkeleton,
+    module: ModuleSkeleton,
+    challengeList: ChallengeSkeletonList,
+  ) => {
+    /**
+     * Partition the challenge list by sections.
+     */
+    const sectionBlocks = partitionChallengesBySection(challengeList);
+
+    /**
+     * Render the section blocks:
+     */
+    return sectionBlocks.map((block, blockIndex) => {
+      if (block.section) {
+        return (
+          <div key={blockIndex}>
+            {this.renderChallengeNavigationItem({
+              module,
+              course,
+              section: true,
+              index: blockIndex,
+              challenge: block.section,
+            })}
+            <Collapse
+              isOpen={this.getCurrentAccordionViewState(block.section.id)}
+            >
+              {block.challenges.map(
+                (challenge: ChallengeSkeleton, index: number) => {
+                  return this.renderChallengeNavigationItem({
+                    module,
+                    course,
+                    challenge,
+                    index: blockIndex,
+                  });
+                },
+              )}
+            </Collapse>
+          </div>
+        );
+      } else {
+        return block.challenges.map(
+          (challenge: ChallengeSkeleton, index: number) => {
+            return this.renderChallengeNavigationItem({
+              index,
+              module,
+              course,
+              challenge,
+            });
+          },
+        );
+      }
+    });
   };
 
   handleSortChallengesEnd = (
@@ -220,18 +269,20 @@ class NavigationOverlay extends React.Component<IProps> {
     );
   };
 
-  renderChallengeNavigationItem = (
-    module: ModuleSkeleton,
-    course: CourseSkeleton,
-    c: ChallengeSkeleton,
-    index: number,
-  ) => {
+  renderChallengeNavigationItem = (args: {
+    index: number;
+    section?: boolean;
+    module: ModuleSkeleton;
+    course: CourseSkeleton;
+    challenge: ChallengeSkeleton;
+  }) => {
     const { challengeId, isEditMode } = this.props;
+    const { index, module, course, section, challenge } = args;
 
     const ChallengeIcon = () => (
       <Icon
         iconSize={Icon.SIZE_LARGE}
-        icon={getChallengeIcon(c.type, c.userCanAccess)}
+        icon={getChallengeIcon(challenge.type, challenge.userCanAccess)}
       />
     );
 
@@ -239,21 +290,46 @@ class NavigationOverlay extends React.Component<IProps> {
       ? SortableHandle(() => <ChallengeIcon />)
       : ChallengeIcon;
 
+    const sectionViewState = this.getCurrentAccordionViewState(challenge.id);
+
     return (
-      <div key={c.id} style={{ position: "relative" }}>
+      <div key={challenge.id} style={{ position: "relative" }}>
         <Link
-          key={c.id}
-          to={`/workspace/${c.id}`}
+          key={challenge.id}
+          to={`/workspace/${challenge.id}`}
           id={`challenge-navigation-${index}`}
-          isActive={() => c.id === challengeId}
-          onClick={this.handleClickChallenge(c.userCanAccess, course.id)}
+          isActive={() => challenge.id === challengeId}
+          onClick={this.handleClickChallenge(
+            challenge.userCanAccess,
+            course.id,
+          )}
         >
           <span>
             <ChallengeIconUI />
-            <span style={{ marginLeft: 10 }}>{c.title}</span>
+            <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>
-            {c.videoUrl && (
+            {section ? (
+              <Tooltip
+                position="right"
+                usePortal={false}
+                content={`${sectionViewState ? "Collapse" : "Expand"} Section`}
+              >
+                <Icon
+                  iconSize={Icon.SIZE_LARGE}
+                  icon={sectionViewState ? "collapse-all" : "expand-all"}
+                  onClick={(
+                    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+                  ) => {
+                    e.preventDefault();
+                    this.props.toggleSectionAccordionView({
+                      sectionId: challenge.id,
+                      open: !sectionViewState,
+                    });
+                  }}
+                />
+              </Tooltip>
+            ) : challenge.videoUrl ? (
               <Tooltip
                 usePortal={false}
                 position="left"
@@ -261,7 +337,7 @@ class NavigationOverlay extends React.Component<IProps> {
               >
                 <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
               </Tooltip>
-            )}
+            ) : null}
           </span>
         </Link>
         {this.renderChallengeCodepressButton(course, module, index)}
@@ -354,6 +430,15 @@ class NavigationOverlay extends React.Component<IProps> {
     if (!userCanAccess) {
       event.preventDefault();
       this.props.handlePurchaseCourseIntent({ courseId });
+    }
+  };
+
+  getCurrentAccordionViewState = (sectionId: string) => {
+    const { navigationAccordionViewState } = this.props;
+    if (sectionId in navigationAccordionViewState) {
+      return navigationAccordionViewState[sectionId];
+    } else {
+      return true; /* Default to open */
     }
   };
 }
@@ -515,12 +600,13 @@ interface SortableChallengeContainerProps {
   isEditMode: boolean;
   course: CourseSkeleton;
   module: ModuleSkeleton;
-  renderChallengeNavigationItem: (
-    module: ModuleSkeleton,
-    course: CourseSkeleton,
-    challenge: ChallengeSkeleton,
-    index: number,
-  ) => JSX.Element;
+  renderChallengeNavigationItem: (args: {
+    index: number;
+    section?: boolean;
+    module: ModuleSkeleton;
+    course: CourseSkeleton;
+    challenge: ChallengeSkeleton;
+  }) => JSX.Element;
   deleteChallenge: typeof Modules.actions.challenges.deleteChallenge;
 }
 
@@ -554,14 +640,19 @@ const SortableChallengeItem = SortableElement(
               })
             }
           >
-            {renderChallengeNavigationItem(module, course, challenge, index)}
+            {renderChallengeNavigationItem({
+              module,
+              course,
+              challenge,
+              index,
+            })}
           </CodepressNavigationContextMenu>
         </UnorderedListItem>
       );
     } else {
       return (
         <UnorderedListItem>
-          {renderChallengeNavigationItem(module, course, challenge, index)}
+          {renderChallengeNavigationItem({ module, course, challenge, index })}
         </UnorderedListItem>
       );
     }
@@ -836,6 +927,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
+  navigationAccordionViewState: Modules.selectors.challenges.getNavigationSectionAccordionViewState(
+    state,
+  ),
 });
 
 const dispatchProps = {
@@ -848,6 +942,8 @@ const dispatchProps = {
   reorderChallengeList: Modules.actions.challenges.reorderChallengeList,
   reorderModuleList: Modules.actions.challenges.reorderModuleList,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
+  toggleSectionAccordionView:
+    Modules.actions.challenges.toggleSectionAccordionView,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePurchaseCourseIntent:
     Modules.actions.purchase.handlePurchaseCourseIntent,
