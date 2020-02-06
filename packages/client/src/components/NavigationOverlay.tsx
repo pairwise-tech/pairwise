@@ -198,24 +198,24 @@ class NavigationOverlay extends React.Component<IProps> {
       if (block.section) {
         return (
           <div key={blockIndex}>
-            {this.renderChallengeNavigationItem(
+            {this.renderChallengeNavigationItem({
               module,
               course,
-              block.section,
-              blockIndex,
-              true,
-            )}
+              section: true,
+              index: blockIndex,
+              challenge: block.section,
+            })}
             <Collapse
               isOpen={this.getCurrentAccordionViewState(block.section.id)}
             >
               {block.challenges.map(
                 (challenge: ChallengeSkeleton, index: number) => {
-                  return this.renderChallengeNavigationItem(
+                  return this.renderChallengeNavigationItem({
                     module,
                     course,
                     challenge,
-                    blockIndex,
-                  );
+                    index: blockIndex,
+                  });
                 },
               )}
             </Collapse>
@@ -224,12 +224,12 @@ class NavigationOverlay extends React.Component<IProps> {
       } else {
         return block.challenges.map(
           (challenge: ChallengeSkeleton, index: number) => {
-            return this.renderChallengeNavigationItem(
+            return this.renderChallengeNavigationItem({
+              index,
               module,
               course,
               challenge,
-              index,
-            );
+            });
           },
         );
       }
@@ -269,19 +269,20 @@ class NavigationOverlay extends React.Component<IProps> {
     );
   };
 
-  renderChallengeNavigationItem = (
-    module: ModuleSkeleton,
-    course: CourseSkeleton,
-    c: ChallengeSkeleton,
-    index: number,
-    section?: boolean,
-  ) => {
+  renderChallengeNavigationItem = (args: {
+    index: number;
+    section?: boolean;
+    module: ModuleSkeleton;
+    course: CourseSkeleton;
+    challenge: ChallengeSkeleton;
+  }) => {
     const { challengeId, isEditMode } = this.props;
+    const { index, module, course, section, challenge } = args;
 
     const ChallengeIcon = () => (
       <Icon
         iconSize={Icon.SIZE_LARGE}
-        icon={getChallengeIcon(c.type, c.userCanAccess)}
+        icon={getChallengeIcon(challenge.type, challenge.userCanAccess)}
       />
     );
 
@@ -289,20 +290,23 @@ class NavigationOverlay extends React.Component<IProps> {
       ? SortableHandle(() => <ChallengeIcon />)
       : ChallengeIcon;
 
-    const sectionViewState = this.getCurrentAccordionViewState(c.id);
+    const sectionViewState = this.getCurrentAccordionViewState(challenge.id);
 
     return (
-      <div key={c.id} style={{ position: "relative" }}>
+      <div key={challenge.id} style={{ position: "relative" }}>
         <Link
-          key={c.id}
-          to={`/workspace/${c.id}`}
+          key={challenge.id}
+          to={`/workspace/${challenge.id}`}
           id={`challenge-navigation-${index}`}
-          isActive={() => c.id === challengeId}
-          onClick={this.handleClickChallenge(c.userCanAccess, course.id)}
+          isActive={() => challenge.id === challengeId}
+          onClick={this.handleClickChallenge(
+            challenge.userCanAccess,
+            course.id,
+          )}
         >
           <span>
             <ChallengeIconUI />
-            <span style={{ marginLeft: 10 }}>{c.title}</span>
+            <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>
             {section ? (
@@ -319,13 +323,13 @@ class NavigationOverlay extends React.Component<IProps> {
                   ) => {
                     e.preventDefault();
                     this.props.toggleSectionAccordionView({
-                      sectionId: c.id,
+                      sectionId: challenge.id,
                       open: !sectionViewState,
                     });
                   }}
                 />
               </Tooltip>
-            ) : c.videoUrl ? (
+            ) : challenge.videoUrl ? (
               <Tooltip
                 usePortal={false}
                 position="left"
@@ -596,12 +600,13 @@ interface SortableChallengeContainerProps {
   isEditMode: boolean;
   course: CourseSkeleton;
   module: ModuleSkeleton;
-  renderChallengeNavigationItem: (
-    module: ModuleSkeleton,
-    course: CourseSkeleton,
-    challenge: ChallengeSkeleton,
-    index: number,
-  ) => JSX.Element;
+  renderChallengeNavigationItem: (args: {
+    index: number;
+    section?: boolean;
+    module: ModuleSkeleton;
+    course: CourseSkeleton;
+    challenge: ChallengeSkeleton;
+  }) => JSX.Element;
   deleteChallenge: typeof Modules.actions.challenges.deleteChallenge;
 }
 
@@ -635,14 +640,19 @@ const SortableChallengeItem = SortableElement(
               })
             }
           >
-            {renderChallengeNavigationItem(module, course, challenge, index)}
+            {renderChallengeNavigationItem({
+              module,
+              course,
+              challenge,
+              index,
+            })}
           </CodepressNavigationContextMenu>
         </UnorderedListItem>
       );
     } else {
       return (
         <UnorderedListItem>
-          {renderChallengeNavigationItem(module, course, challenge, index)}
+          {renderChallengeNavigationItem({ module, course, challenge, index })}
         </UnorderedListItem>
       );
     }
