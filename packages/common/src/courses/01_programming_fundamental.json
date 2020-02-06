@@ -35,7 +35,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "supplementaryContent": "Welcome to module 1\\! Where we'll be using HTML, CSS and JavaScript to dive into the basics of programming.\n# What you will learn\n\n* Foundational programming skills like\n   * Variables\n   * Functions\n   * How computers represent information and what _types_ of information you can represent\n   * Data structure\n   * Algorithms\n* How to build your own website\n* How to put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n\nOnward\\."
+          "supplementaryContent": "Welcome to module 1\\! Where we'll be using HTML, CSS and TypeScript to dive into the basics of programming.\n# What you will learn\n\n* Foundational programming skills like\n   * Variables\n   * Functions\n   * How computers represent information and what _types_ of information you can represent\n   * Data structure\n   * Algorithms\n* How to build your own website\n* How to put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n\nOnward\\."
         },
         {
           "id": "5ziJI35f",
@@ -234,6 +234,28 @@
           "starterCode": "<style>\n  /* Your code here */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    padding: 10px;\n    background: tomato;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .nav a:hover {\n    background: blue;\n    color: tomato;\n  }\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    background: tomato;\n    color: blue;\n    padding: 10px;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "supplementaryContent": "You've probably noticed that when you hover over a link in a browser it will change somehow. You can customize this!\n\nThis is called a hover state, and you can style a hover state just like you can style any other CSS. The main difference is the selector.\n\n```css\n/* Style the hover state for all links on the site */\na:hover {\n  text-decoration: underline;\n}\n\n/* Style just the nav links */\n.nav a:hover {\n  color: tomato;\n}\n\n/* Style the entire nav div when it's hovered */\n.nav:hover {\n  background: gray;\n}\n```\n\nTo style how something looks when the mouse hovers over it you use `:hover`. Specifically, you just put `:hover` after the selector you want to style. It's important not to put a space in front of `:hover`."
+        },
+        {
+          "id": "0gih2c1M",
+          "type": "media",
+          "title": "Types!",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "Central to every TypeScript program is the data that it concerns, operates on, and manipulates. But what exactly is that data? How can it be described, and what are its properties?\n\nWell, TypeScript, like every programming language, has different _types_ of data. The number of types that can be created by a programming language’s users is infinite, however all languages, including TypeScript, have a set of built-in types, the lowest level of which are called __primitives__. These types can be operated on and manipulated by themselves, or be composed with other types to form more complex types, but this is a topic we’ll cover in more detail later. For now, let’s focus on TypeScript's most common __primitive__ data types.\n\nFirst, though, let’s clear something up. \n\n## What exactly is a type?\nAt its most basic, a type describes a particular piece of data. A piece of data’s type lets us (and more importantly, the computer!) know how this particular piece of data can be used and what kind of operations can be performed on it. For example, something with the type `number`, should be able to be added, subtracted, divided, and multiplied with other pieces of data that also have the type `number`. Makes sense, right!?\n\nIn fact, you just learned your first type: `number`! As you might have guessed, this is one of TypeScript's primitive data types; one of the basic building blocks of the data found within a TypeScript program. So, what are some of the other primitive types?\n\nTypeScript supports several primitive data types, including:\n\n- `number`\n- `string`\n- `boolean`\n- `null`\n- `undefined`\n\nWhile this list is not exhaustive, for the purposes of the next several lessons, these are the types you'll need to know. Let's take a closer look at each one in the next few challenges."
+        },
+        {
+          "id": "w3bc0PeO",
+          "type": "typescript",
+          "title": "Numbers",
+          "content": "In TypeScript, numbers are expressed literally, and are given the type `number` (not to be confused with `Number`, with a capital \"N\"). As you might expect, numbers can be operated on mathematically, and are used for representing numeric values in our programs.\n\nNumbers can be whole, or have one or more decimal places.\n\n- Modify the code below so that `whole` is equal to `1` and `half` is equal to `.5`.",
+          "testCode": "test('whole should be equal to 1', () => expect(whole).toBe(1));\ntest('half should be equal to .5', () => expect(half).toBe(.5));",
+          "videoUrl": "",
+          "starterCode": "let whole = 0;\nlet half = 0;",
+          "solutionCode": "let whole = 1;\nlet half = .5;",
+          "supplementaryContent": "## `number` _not_ `Number`\nThis is an important distinction. In TypeScript, _`number`_ refers to the data type, while `Number` refers to the  __global__, and more concrete, `Number` object, a concept that goes beyond the scope of this lesson. For now, it's just important that you understand the distinction, and that TypeScript is a case-sensitive programming language. While this may seem like a small difference, remember: in the case of `number` vs. `Number`, case matters!"
         }
       ]
     },
