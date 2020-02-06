@@ -117,8 +117,8 @@
         {
           "id": "wCrQh1f4",
           "type": "markup",
-          "title": "Highliting text",
-          "content": "Use the `<span>` tag to highligh some text within the paragraph.\n\nSometimes you want to style parts of text _inside_ a paragraph or a heading. You can accomplish this with the span tag.",
+          "title": "Highlighting text",
+          "content": "Use the `<span>` tag to highlight some text within the paragraph.\n\nSometimes you want to style parts of text _inside_ a paragraph or a heading. You can accomplish this with the span tag.",
           "starterCode": "<style>\n  span {\n    /* hm... need some styling in here */\n  }\n</style>\n<p>\n  What a paragraph this is! Let's highlight something.\n</p>",
           "solutionCode": "<style>\n  span {\n    background: yellow;\n  }\n</style>\n<p>What a paragraph this is! Let's <span>highlight</span> something.</p>",
           "testCode": "test(\"There should be a <span> tag with a yellow background wrapping some text\", function() {\n  const el = document.querySelector(\"span\");\n  return (\n    el &&\n    el.innerHTML !== \"\" &&\n    [\"#ffff00\", \"rgb(255,255,0)\", \"yellow\"].includes(\n      getComputedStyle(el, null)\n        .getPropertyValue(\"background-color\")\n        .replace(/ /g, \"\")\n    )\n  );\n});\n",
