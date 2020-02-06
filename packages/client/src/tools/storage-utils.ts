@@ -19,11 +19,11 @@ export const saveSandboxToLocalStorage = (blob: SandboxBlob) => {
   localStorage.setItem(SANDBOX, JSON.stringify({ blob }));
 };
 
-export const getSandboxFromLocalStorage = (): SandboxBlob => {
+export const getSandboxFromLocalStorage = (): { blob: SandboxBlob } => {
   try {
-    const blob = localStorage.getItem(SANDBOX);
-    if (blob) {
-      const result = JSON.parse(blob);
+    const json = localStorage.getItem(SANDBOX);
+    if (json) {
+      const result = JSON.parse(json);
       if (result) {
         return result;
       }
@@ -32,7 +32,8 @@ export const getSandboxFromLocalStorage = (): SandboxBlob => {
     // do nothing
   }
 
-  return defaultSandboxBlob as SandboxBlob;
+  const blob = defaultSandboxBlob as SandboxBlob;
+  return { blob };
 };
 
 /**

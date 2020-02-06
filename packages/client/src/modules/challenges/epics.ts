@@ -310,11 +310,15 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
         return deps.api.fetchChallengeHistory(id);
       }
     }),
-    map(result => {
+    mergeMap(result => {
       if (result.value) {
-        return Actions.fetchBlobForChallengeSuccess(result.value);
+        debugger;
+        return [
+          Actions.fetchBlobForChallengeSuccess(result.value),
+          // Actions.updateCurrentChallengeBlob(result.value),
+        ];
       } else {
-        return Actions.fetchBlobForChallengeFailure(result.error);
+        return of(Actions.fetchBlobForChallengeFailure(result.error));
       }
     }),
   );

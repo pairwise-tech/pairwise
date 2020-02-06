@@ -137,7 +137,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    const initialCode = props.blob.type === "challenge" ? props.blob.code : "";
+    const initialCode = "code" in props.blob ? props.blob.code : "";
 
     this.state = {
       code: initialCode,

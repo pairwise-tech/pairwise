@@ -364,9 +364,9 @@ class Api extends BaseApiClass {
      * challenge directly from local storage.
      */
     if (challengeId === "sandbox") {
-      const blob = getSandboxFromLocalStorage();
+      const stored = getSandboxFromLocalStorage();
       const result: ICodeBlobDto = {
-        dataBlob: blob,
+        dataBlob: stored.blob,
         challengeId: "sandbox",
       };
 
