@@ -67,6 +67,7 @@ import {
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import cx from "classnames";
+import traverse from "traverse";
 
 /** ===========================================================================
  * Types & Config
@@ -751,9 +752,8 @@ class Workspace extends React.Component<IProps, IState> {
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
-      this.updateWorkspaceConsole(
-        this.transformUndefinedLogMessages({ data, method }),
-      );
+      this.transformUndefinedLogMessages(data);
+      this.updateWorkspaceConsole({ data, method });
     };
 
     try {
@@ -934,25 +934,23 @@ class Workspace extends React.Component<IProps, IState> {
     );
   };
 
-  transformUndefinedLogMessages = ({
-    method,
-    data,
-  }: {
-    method: ConsoleLogMethods;
-    data: ReadonlyArray<any>;
-  }) => {
-    const withUndefined = data.map(value => {
-      if (value === "__transform_undefined__") {
-        return undefined;
+  /**
+   * This method handles transforming log messages passed from the
+   * iframe to the parent window. When we pass the iframe's log messages
+   * through `postMessage`, we first serialize them, and in doing so, we
+   * would be replacing all `undefined`s with `null`s, since `undefined`
+   * is not valid json. To overcome this, we use pass a replacer function
+   * to JSON.stringify, which replaces every instance of `undefined` with
+   * "__transform_undefined__". When we deserialize on the other end, we
+   * need to then recursively traverse whatever object the end-user logged
+   * to resolve these transformations with an actual `undefined` value.
+   */
+  transformUndefinedLogMessages = (data: ReadonlyArray<any>) => {
+    traverse(data).forEach(function(x) {
+      if (x === "__transform_undefined__") {
+        this.update(undefined);
       }
-
-      return value;
     });
-
-    return {
-      method,
-      data: withUndefined,
-    };
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
