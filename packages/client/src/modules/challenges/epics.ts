@@ -98,8 +98,9 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(deps.api.fetchChallenges),
     map(({ value: course }) => {
       if (course) {
+        const { router } = deps;
         /* Ok ... */
-        const maybeId = challengeIdFromLocation(deps.router.location);
+        const maybeId = challengeIdFromLocation(router.location);
 
         const challengeMap = createInverseChallengeMapping([course]);
         const challengeId =
@@ -113,8 +114,10 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
           challengeMap[challengeId]?.moduleId || course.modules[0].id;
 
         // Do not redirect unless the user is already on the workspace/
-        if (deps.router.location.pathname.includes("workspace")) {
-          deps.router.push(`/workspace/${challengeId}`);
+        if (router.location.pathname.includes("workspace")) {
+          const subPath =
+            challengeId + router.location.search + router.location.hash;
+          router.push(`/workspace/${subPath}`);
         }
 
         return Actions.fetchCurrentActiveCourseSuccess({
