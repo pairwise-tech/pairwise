@@ -5,14 +5,14 @@ import styled from "styled-components/macro";
 import {
   injectStripe,
   CardElement,
-  IbanElement,
   StripeProvider,
   Elements,
 } from "react-stripe-elements";
-
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
+import { STRIPE_API_KEY } from "tools/client-env";
+import { UserState } from "modules/user";
 
 /** ===========================================================================
  * Types & Config
@@ -57,7 +57,7 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
             Purchasing the course will give you full lifetime access to this
             course content and is fully refundable up to 30 days and{" "}
           </SubText>
-          <StripeProvider apiKey="pk_test_UrBUzJWPNse3I03Bsaxh6WFX00r6rJ1YCq">
+          <StripeProvider apiKey={STRIPE_API_KEY}>
             <div className="stripe-checkout">
               <Elements>
                 <StripeCheckoutForm course={course} />
@@ -67,10 +67,9 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
           <Button
             large
             minimal
-            type="submit"
             intent="primary"
             style={{ marginTop: 12 }}
-            // onClick={this.handleIntentToPurchase}
+            onClick={this.confirmPurchase}
           >
             Confirm Order
           </Button>
@@ -79,7 +78,7 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
     );
   }
 
-  handleIntentToPurchase = () => {
+  confirmPurchase = () => {
     console.log("handle purchase ~");
   };
 
@@ -97,7 +96,13 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
-class CheckoutForm extends React.Component<any, any> {
+type X = any;
+
+interface CheckoutFormProps extends X {
+  user: UserState;
+}
+
+class CheckoutForm extends React.Component<CheckoutFormProps, any> {
   handleSubmit = (ev: any) => {
     ev.preventDefault();
 
@@ -106,7 +111,7 @@ class CheckoutForm extends React.Component<any, any> {
       .createPaymentMethod({
         type: "card",
         card: cardElement,
-        billing_details: { name: "Jenny Rosen" },
+        billing_details: { name: "" },
       })
       .then(({ paymentMethod }: any) => {
         console.log("Received Stripe PaymentMethod:", paymentMethod);
@@ -118,17 +123,17 @@ class CheckoutForm extends React.Component<any, any> {
       },
     });
 
-    this.props.stripe.confirmCardSetpu("{PAYMENT_INTENT_CLIENT_SECRET}", {
+    this.props.stripe.confirmCardSetup("{PAYMENT_INTENT_CLIENT_SECRET}", {
       payment_method: {
         card: cardElement,
       },
     });
 
-    this.props.stripe.createToken({ type: "card", name: "Jenny Rosen" });
+    this.props.stripe.createToken({ type: "card", name: "" });
     this.props.stripe.createSource({
       type: "card",
       owner: {
-        name: "Jenny Rosen",
+        name: "",
       },
     });
   };
@@ -234,6 +239,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   dialogOpen: Modules.selectors.purchase.coursePurchaseModalStateSelector(
     state,
   ),
+  user: Modules.selectors.user.userSelector(state),
   coursePurchaseId: Modules.selectors.purchase.coursePurchaseId(state),
   skeletons: Modules.selectors.challenges.getCourseSkeletons(state),
 });
