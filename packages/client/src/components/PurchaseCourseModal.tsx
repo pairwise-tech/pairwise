@@ -2,7 +2,13 @@ import { Button, Dialog } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { StripeProvider, Elements } from "react-stripe-elements";
+import {
+  injectStripe,
+  CardElement,
+  IbanElement,
+  StripeProvider,
+  Elements,
+} from "react-stripe-elements";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
@@ -13,9 +19,7 @@ import { composeWithProps } from "tools/utils";
  * ============================================================================
  */
 
-interface IState {
-  showStripeDialog: boolean;
-}
+interface IState {}
 
 /** ===========================================================================
  * React Component
@@ -28,9 +32,7 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.state = {
-      showStripeDialog: false,
-    };
+    this.state = {};
   }
 
   render(): Nullable<JSX.Element> {
@@ -49,35 +51,36 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
         aria-describedby="simple-modal-description"
         onClose={this.handleOnCloseModal}
       >
-        {this.state.showStripeDialog ? (
+        <AccountModal>
+          <TitleText>{course.title}</TitleText>
+          <SubText>
+            Purchasing the course will give you full lifetime access to this
+            course content and is fully refundable up to 30 days and{" "}
+          </SubText>
           <StripeProvider apiKey="pk_test_UrBUzJWPNse3I03Bsaxh6WFX00r6rJ1YCq">
-            <Elements>
-              <div>hi</div>
-            </Elements>
+            <div className="stripe-checkout">
+              <Elements>
+                <StripeCheckoutForm course={course} />
+              </Elements>
+            </div>
           </StripeProvider>
-        ) : (
-          <AccountModal>
-            <TitleText>{course.title}</TitleText>
-            <SubText>
-              Purchasing the course will give you full lifetime access to this
-              course content and is fully refundable up to 30 days and{" "}
-            </SubText>
-            <Button
-              large
-              minimal
-              intent="primary"
-              onClick={this.handleIntentToPurchase}
-            >
-              Purchase Course!
-            </Button>
-          </AccountModal>
-        )}
+          <Button
+            large
+            minimal
+            type="submit"
+            intent="primary"
+            style={{ marginTop: 12 }}
+            // onClick={this.handleIntentToPurchase}
+          >
+            Confirm Order
+          </Button>
+        </AccountModal>
       </Dialog>
     );
   }
 
   handleIntentToPurchase = () => {
-    this.setState({ showStripeDialog: true });
+    console.log("handle purchase ~");
   };
 
   setAccountModalState = (state: boolean) => {
@@ -86,9 +89,98 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
 
   handleOnCloseModal = () => {
     this.setAccountModalState(false);
-    this.setState({ showStripeDialog: false });
   };
 }
+
+/** ===========================================================================
+ * Stripe Checkout Form
+ * ============================================================================
+ */
+
+class CheckoutForm extends React.Component<any, any> {
+  handleSubmit = (ev: any) => {
+    ev.preventDefault();
+
+    const cardElement = this.props.elements.getElement("card");
+    this.props.stripe
+      .createPaymentMethod({
+        type: "card",
+        card: cardElement,
+        billing_details: { name: "Jenny Rosen" },
+      })
+      .then(({ paymentMethod }: any) => {
+        console.log("Received Stripe PaymentMethod:", paymentMethod);
+      });
+
+    this.props.stripe.confirmCardPayment("{PAYMENT_INTENT_CLIENT_SECRET}", {
+      payment_method: {
+        card: cardElement,
+      },
+    });
+
+    this.props.stripe.confirmCardSetpu("{PAYMENT_INTENT_CLIENT_SECRET}", {
+      payment_method: {
+        card: cardElement,
+      },
+    });
+
+    this.props.stripe.createToken({ type: "card", name: "Jenny Rosen" });
+    this.props.stripe.createSource({
+      type: "card",
+      owner: {
+        name: "Jenny Rosen",
+      },
+    });
+  };
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit} style={{ width: "500px" }}>
+        <Elements>
+          <PaymentBioForm />
+        </Elements>
+        <CardSection />
+      </form>
+    );
+  }
+}
+
+class CardSection extends React.Component {
+  render() {
+    return (
+      <label>
+        Card details
+        <CardElement style={{ base: { fontSize: "18px" } }} />
+      </label>
+    );
+  }
+}
+
+const StripeCheckoutForm = injectStripe(CheckoutForm);
+
+class NameForm extends React.Component<any, any> {
+  render() {
+    return (
+      <>
+        <label>
+          Name
+          <input name="name" type="text" placeholder="Jane Doe" required />
+        </label>
+        <label>
+          Email
+          <input
+            name="email"
+            type="email"
+            placeholder="jane.doe@example.com"
+            required
+          />
+        </label>
+      </>
+    );
+  }
+}
+
+const PaymentBioForm = injectStripe(NameForm);
 
 /** ===========================================================================
  * Styles
@@ -96,7 +188,8 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
  */
 
 const AccountModal = styled.div`
-  width: 525px;
+  width: 650px;
+  height: 650px;
   padding: 32px;
   padding-top: 22px;
   left: 50%;
@@ -111,22 +204,25 @@ const AccountModal = styled.div`
   transform: translate(-50%, -50%);
   border-radius: 6px;
   border: 1px solid ${COLORS.BORDER_MODAL};
-  background-color: ${COLORS.BACKGROUND_MODAL};
+  /* background-color: ${COLORS.BACKGROUND_MODAL}; */
+  background-color: ${COLORS.TEXT_WHITE};
 `;
 
 const TitleText = styled.h1`
   font-size: 24px;
   font-weight: 300;
   text-align: center;
-  color: ${COLORS.TEXT_TITLE};
+  /* color: ${COLORS.TEXT_TITLE}; */
+  color: ${COLORS.TEXT_DARK};
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
 const SubText = styled(TitleText)`
   font-size: 16px;
   margin-top: 12px;
-  max-width: 350px;
+  max-width: 525px;
   font-weight: 300;
+  color: ${COLORS.TEXT_DARK};
 `;
 
 /** ===========================================================================
