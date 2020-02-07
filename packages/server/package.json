@@ -11,7 +11,7 @@
     "setup:db": "yarn build && yarn migration:run",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "start:https": "HTTPS=true nest start --watch",
+    "start:https": "CLIENT_URL=https://127.0.0.1:3000 SERVER_HOST_URL=https://localhost:9000 HTTPS=true nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "prettier": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",

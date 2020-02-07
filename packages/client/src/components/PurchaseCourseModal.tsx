@@ -1,7 +1,8 @@
-import { Dialog } from "@blueprintjs/core";
+import { Button, Dialog } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
+import { StripeProvider, Elements } from "react-stripe-elements";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
@@ -12,7 +13,9 @@ import { composeWithProps } from "tools/utils";
  * ============================================================================
  */
 
-interface IState {}
+interface IState {
+  showStripeDialog: boolean;
+}
 
 /** ===========================================================================
  * React Component
@@ -22,6 +25,14 @@ interface IState {}
  */
 
 class PurchaseCourseModal extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      showStripeDialog: false,
+    };
+  }
+
   render(): Nullable<JSX.Element> {
     const course = this.props.skeletons?.find(
       c => c.id === this.props.coursePurchaseId,
@@ -36,20 +47,46 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
         isOpen={this.props.dialogOpen}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        onClose={() => {
-          this.setAccountModalState(false);
-        }}
+        onClose={this.handleOnCloseModal}
       >
-        <AccountModal>
-          <TitleText>Purchase Course</TitleText>
-          <SubText>{course.title}</SubText>
-        </AccountModal>
+        {this.state.showStripeDialog ? (
+          <StripeProvider apiKey="pk_test_UrBUzJWPNse3I03Bsaxh6WFX00r6rJ1YCq">
+            <Elements>
+              <div>hi</div>
+            </Elements>
+          </StripeProvider>
+        ) : (
+          <AccountModal>
+            <TitleText>{course.title}</TitleText>
+            <SubText>
+              Purchasing the course will give you full lifetime access to this
+              course content and is fully refundable up to 30 days and{" "}
+            </SubText>
+            <Button
+              large
+              minimal
+              intent="primary"
+              onClick={this.handleIntentToPurchase}
+            >
+              Purchase Course!
+            </Button>
+          </AccountModal>
+        )}
       </Dialog>
     );
   }
 
+  handleIntentToPurchase = () => {
+    this.setState({ showStripeDialog: true });
+  };
+
   setAccountModalState = (state: boolean) => {
     this.props.setPurchaseCourseModalState(state);
+  };
+
+  handleOnCloseModal = () => {
+    this.setAccountModalState(false);
+    this.setState({ showStripeDialog: false });
   };
 }
 
