@@ -12,7 +12,6 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 import { STRIPE_API_KEY } from "tools/client-env";
-import { UserState } from "modules/user";
 
 /** ===========================================================================
  * Types & Config
@@ -36,11 +35,11 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const course = this.props.skeletons?.find(
-      c => c.id === this.props.coursePurchaseId,
-    );
+    const { user, skeletons } = this.props;
+    const { profile } = user;
+    const course = skeletons?.find(c => c.id === this.props.coursePurchaseId);
 
-    if (!course) {
+    if (!course || !profile) {
       return null;
     }
 
@@ -60,7 +59,7 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
           <StripeProvider apiKey={STRIPE_API_KEY}>
             <div className="stripe-checkout">
               <Elements>
-                <StripeCheckoutForm course={course} />
+                <StripeCheckoutForm profile={profile} course={course} />
               </Elements>
             </div>
           </StripeProvider>
@@ -96,22 +95,18 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
-type X = any;
-
-interface CheckoutFormProps extends X {
-  user: UserState;
-}
-
-class CheckoutForm extends React.Component<CheckoutFormProps, any> {
+class CheckoutForm extends React.Component<any, any> {
   handleSubmit = (ev: any) => {
     ev.preventDefault();
+
+    const name = this.props.profile.displayName;
 
     const cardElement = this.props.elements.getElement("card");
     this.props.stripe
       .createPaymentMethod({
         type: "card",
         card: cardElement,
-        billing_details: { name: "" },
+        billing_details: { name },
       })
       .then(({ paymentMethod }: any) => {
         console.log("Received Stripe PaymentMethod:", paymentMethod);
@@ -129,11 +124,11 @@ class CheckoutForm extends React.Component<CheckoutFormProps, any> {
       },
     });
 
-    this.props.stripe.createToken({ type: "card", name: "" });
+    this.props.stripe.createToken({ type: "card", name });
     this.props.stripe.createSource({
       type: "card",
       owner: {
-        name: "",
+        name,
       },
     });
   };
