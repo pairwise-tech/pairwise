@@ -1,19 +1,8 @@
-# This Dockerfile builds and runs the server application.
+# Take the production image and run the server.
 
-FROM node:10-alpine
-
-WORKDIR /usr/src/app
+FROM pairwise-runtime AS production
 
 COPY . .
 
-EXPOSE 9000
-
-# Setup server environment variables
-RUN npm run setup:env
-
-# Install dependencies
-RUN npm install --production
-
-# Build the app
-RUN npm run build
-
+# Launch Pairwise!
+CMD ["yarn", "server:prod"]
