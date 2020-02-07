@@ -137,6 +137,13 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
+    // NOTE: Except for codepress edit mode this is the only touchpoint for
+    // updating the code in the editor as of this commit. This means that to
+    // update editor code the whole editor has to be re-initialized, which
+    // in-turn means that the parent component has to ensure it's fully
+    // re-initializing this component rather than just passing updated props. As
+    // of right now this means that the various loading props need to be
+    // accurate.
     const initialCode = "code" in props.blob ? props.blob.code : "";
 
     this.state = {
@@ -189,31 +196,18 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   componentWillReceiveProps(nextProps: IProps) {
-    // TODO: Can this be removed? I refactored some code and this may no
-    // longer be needed, or I am wrong and more refactoring is required.
-    // Update in response to changing challenge
-    // if (this.props.challenge.id !== nextProps.challenge.id) {
-    //   const { challenge, isEditMode } = nextProps;
-    //   const newCode = getEditorCode({
-    //     challenge,
-    //     isEditMode,
-    //     tab: this.state.adminEditorTab,
-    //   });
-    //   this.setState(
-    //     { code: newCode, adminTestTab: "testResults" },
-    //     this.refreshEditor,
-    //   );
-    //
-
+    // Handle changes in editor options
     if (this.props.editorOptions !== nextProps.editorOptions) {
       this.editorInstance?.updateOptions(nextProps.editorOptions);
     }
 
+    // Handle changes in the editor theme
     if (this.props.userSettings.theme !== nextProps.userSettings.theme) {
       this.setMonacoEditorTheme(nextProps.userSettings.theme);
     }
 
-    // If this is a code challenge and isEditMode has changed, then update.
+    // Handle changes to isEditMode. If this is a code challenge and isEditMode
+    // has changed, then update.
     //
     // This update is currently necessary to get the correct code into the
     // editor when switching edit mode. For example: I'm in codepress but just
