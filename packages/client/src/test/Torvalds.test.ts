@@ -174,6 +174,11 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
 /**
  * Ha! Take that! Read it and weep!
+ *
+ * The evaluation of the script will result in setting properties on
+ * the window object, which may overwrite existing properties such as the
+ * Jest expect object. Here we preserve the original window and reset it after
+ * evaluating the script to avoid frightening side effects of this.
  */
 const handleAbsurdScriptEvaluation = (script: string) => {
   const JestExpect = expect;
