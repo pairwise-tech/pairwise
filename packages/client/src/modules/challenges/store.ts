@@ -69,7 +69,7 @@ const initialState: State = {
   challengeMap: null,
   sandboxChallenge: defaultSandboxChallenge,
   blobCache: {},
-  loadingCurrentBlob: false,
+  loadingCurrentBlob: true,
   adminTestTab: "testResults",
   adminEditorTab: "starterCode",
   navigationSectionAccordionViewState: {},
