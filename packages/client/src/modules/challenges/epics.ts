@@ -5,9 +5,10 @@ import {
   Ok,
   Result,
   ICodeBlobDto,
+  SandboxBlob,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
-import { merge, of } from "rxjs";
+import { merge, of, combineLatest } from "rxjs";
 import {
   catchError,
   delay,
@@ -16,10 +17,9 @@ import {
   mergeMap,
   tap,
   pluck,
-  ignoreElements,
   debounceTime,
 } from "rxjs/operators";
-import { isActionOf, action } from "typesafe-actions";
+import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { InverseChallengeMapping } from "./types";
@@ -321,6 +321,44 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
 };
 
 /**
+ * Initialize the sandbox with whatever challenge type was stored locally. This
+ * is so you can select a sandbox challenge type and have that type remain on
+ * page reload.
+ *
+ * The underlying reason this is necessary is that the workspace will look at
+ * challenge.type rather than blob.challengeType when determining what type of
+ * code is running. With normal challenges this is fine, the type never changes
+ * except in edit mode, but the sandbox is a special case.
+ *
+ * @NOTE The workspace will throw an error if we fire an update challenge action
+ * before it is loaded, so combine latest is just used to ensure that the update
+ * is not fired before the workspace is ready
+ */
+const hydrateSandboxType: EpicSignature = action$ => {
+  // See NOTE
+  const workspaceLoaded$ = action$.pipe(
+    filter(isActionOf(Actions.setWorkspaceChallengeLoaded)),
+  );
+  const sandboxCodeFetched$ = action$.pipe(
+    filter(isActionOf(Actions.fetchBlobForChallengeSuccess)),
+    filter(x => x.payload.challengeId === "sandbox"),
+  );
+
+  return combineLatest(workspaceLoaded$, sandboxCodeFetched$).pipe(
+    map(([_, x]) => x.payload),
+    map(x => {
+      const blob = x.dataBlob as SandboxBlob;
+      return Actions.updateChallenge({
+        id: SANDBOX_ID,
+        challenge: {
+          type: blob.challengeType,
+        },
+      });
+    }),
+  );
+};
+
+/**
  * Handles saving a code blob, this occurs whenever the challenge id changes
  * and it saves the code blob for the previous challenge. This epic just
  * finds the blob to save and then dispatches the action which actually saves
@@ -444,6 +482,7 @@ const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
  */
 
 export default combineEpics(
+  hydrateSandboxType,
   contentSkeletonInitializationEpic,
   inverseChallengeMappingEpic,
   saveCourse,
