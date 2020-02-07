@@ -125,9 +125,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
         };
 
         try {
-          /* Evaluate the test script */
-          // eslint-disable-next-line
-          window.eval(script);
+          handleAbsurdScriptEvaluation(script);
         } catch (err) {
           console.error("Error thrown from window.eval!", err);
 
@@ -165,7 +163,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
       }
     }
 
-    expect(anyFailed).toBe(false);
+    expect(anyFailed).toEqual(false);
   });
 });
 
@@ -173,6 +171,21 @@ describe("Linus should be able to pass all the challenges first try", () => {
  * Utils
  * ============================================================================
  */
+
+/**
+ * Ha! Take that! Read it and weep!
+ */
+const handleAbsurdScriptEvaluation = (script: string) => {
+  const JestExpect = expect;
+
+  /* Evaluate the test script */
+  // eslint-disable-next-line
+  window.eval(script);
+
+  // @ts-ignore
+  // eslint-disable-next-line
+  expect = JestExpect;
+};
 
 const compileSolutionCode = async (challenge: Challenge) => {
   const { code } = await compileCodeString(challenge.solutionCode, challenge);

@@ -60,8 +60,6 @@ describe("test utils.ts functions", () => {
     ];
 
     const result = partitionChallengesBySection(challengeList);
-
-    // @ts-ignore Where are the Jest types?!?
     expect(result).toMatchSnapshot();
   });
 });
