@@ -125,9 +125,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
         };
 
         try {
-          /* Evaluate the test script */
-          // eslint-disable-next-line
-          window.eval(script);
+          handleAbsurdScriptEvaluation(script);
         } catch (err) {
           console.error("Error thrown from window.eval!", err);
 
@@ -165,7 +163,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
       }
     }
 
-    expect(anyFailed).toBe(false);
+    expect(anyFailed).toEqual(false);
   });
 });
 
@@ -173,6 +171,26 @@ describe("Linus should be able to pass all the challenges first try", () => {
  * Utils
  * ============================================================================
  */
+
+/**
+ * Ha! Take that! Read it and weep!
+ *
+ * The evaluation of the script will result in setting properties on
+ * the window object, which may overwrite existing properties such as the
+ * Jest expect object. Here we preserve the original window and reset it after
+ * evaluating the script to avoid frightening side effects of this.
+ */
+const handleAbsurdScriptEvaluation = (script: string) => {
+  const JestExpect = expect;
+
+  /* Evaluate the test script */
+  // eslint-disable-next-line
+  window.eval(script);
+
+  // @ts-ignore
+  // eslint-disable-next-line
+  expect = JestExpect;
+};
 
 const compileSolutionCode = async (challenge: Challenge) => {
   const { code } = await compileCodeString(challenge.solutionCode, challenge);
