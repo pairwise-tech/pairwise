@@ -441,20 +441,6 @@ const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-const sandboxPersistenceEpic: EpicSignature = (action$, state$, deps) => {
-  const storeSandboxCodeEpic = action$.pipe(
-    filter(isActionOf(Actions.updateChallenge)),
-    filter(x => x.payload.id === SANDBOX_ID),
-    map(x => x.payload.challenge.starterCode),
-    tap(code => {
-      console.log("code coming through", code);
-    }),
-    ignoreElements(),
-  );
-
-  return storeSandboxCodeEpic;
-};
-
 /** ===========================================================================
  * Export
  * ============================================================================
