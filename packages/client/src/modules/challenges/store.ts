@@ -42,6 +42,7 @@ interface AccordionViewState {
 export interface State {
   workspaceLoading: boolean;
   isEditMode: boolean;
+  feedbackDialogOpen: boolean;
   displayNavigationMap: boolean;
   courses: Nullable<CourseList>;
   courseSkeletons: Nullable<CourseSkeletonList>;
@@ -61,6 +62,7 @@ const initialState: State = {
   courses: null,
   courseSkeletons: null,
   isEditMode: false,
+  feedbackDialogOpen: false,
   workspaceLoading: true,
   currentModuleId: null,
   currentCourseId: null,
@@ -512,6 +514,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.setNavigationMapState, (state, action) => ({
     ...state,
     displayNavigationMap: action.payload,
+  }))
+  .handleAction(actions.setFeedbackDialogState, (state, action) => ({
+    ...state,
+    feedbackDialogOpen: action.payload,
   }))
   .handleAction(actions.storeInverseChallengeMapping, (state, action) => ({
     ...state,

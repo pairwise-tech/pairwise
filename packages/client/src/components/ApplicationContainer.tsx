@@ -11,7 +11,7 @@ import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
 import { Button, ButtonGroup, FocusStyleManager } from "@blueprintjs/core";
 import Account from "./Account";
-import { ButtonCore, ProfileIcon } from "./Shared";
+import { ButtonCore, ProfileIcon, IconButton } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import Workspace from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
@@ -117,6 +117,13 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             </ControlsContainer>
           )}
           <ControlsContainer style={{ marginLeft: "auto" }}>
+            {!isSandbox && (
+              <IconButton
+                icon="help"
+                aria-label="open/close feedback dialog"
+                onClick={this.props.toggleFeedbackDialogOpen}
+              />
+            )}
             {isSandbox && (
               <Suspense fallback={<p>Menu Loading...</p>}>
                 <LazyChallengeTypeMenu
@@ -471,6 +478,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
+  feedbackDialogOpen: Modules.selectors.challenges.getFeedbackDialogOpen(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),
@@ -484,6 +492,7 @@ const dispatchProps = {
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   initializeAccessToken: Modules.actions.auth.initializeAccessToken,
+  setFeedbackDialogState: Modules.actions.challenges.setFeedbackDialogState,
 };
 
 const mergeProps = (
@@ -496,6 +505,9 @@ const mergeProps = (
   ...state,
   toggleNavigationMap: () => {
     methods.setNavigationMapState(!state.overlayVisible);
+  },
+  toggleFeedbackDialogOpen: () => {
+    methods.setFeedbackDialogState(!state.feedbackDialogOpen);
   },
 });
 

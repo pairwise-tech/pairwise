@@ -32,6 +32,8 @@ enum ActionTypesEnum {
 
   SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
 
+  SET_FEEDBACK_DIALOG_STATE = "SET_FEEDBACK_DIALOG_STATE",
+
   FETCH_NAVIGATION_SKELETON = "FETCH_NAVIGATION_SKELETON",
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
   FETCH_NAVIGATION_SKELETON_FAILURE = "FETCH_NAVIGATION_SKELETON_FAILURE",
@@ -170,6 +172,10 @@ export const fetchNavigationSkeletonFailure = createAction(
 
 export const setNavigationMapState = createAction(
   ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
+)<boolean>();
+
+export const setFeedbackDialogState = createAction(
+  ActionTypesEnum.SET_FEEDBACK_DIALOG_STATE,
 )<boolean>();
 
 export const fetchCurrentActiveCourseSuccess = createAction(

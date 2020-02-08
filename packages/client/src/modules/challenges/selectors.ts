@@ -270,3 +270,8 @@ export const nextPrevChallenges = createSelector(
     }
   },
 );
+
+export const getFeedbackDialogOpen = createSelector(
+  challengesState,
+  state => state.feedbackDialogOpen,
+);
