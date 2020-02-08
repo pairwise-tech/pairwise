@@ -721,8 +721,16 @@ class Workspace extends React.Component<IProps, IState> {
      */
     this.setState({ code }, () => {
       this.debouncedSaveCodeFunction();
-      // this.debouncedRenderPreviewFunction();
       this.debouncedSyntaxHighlightFunction(code);
+
+      /**
+       * Only live preview markup challenges, for the UI.
+       *
+       * TODO: Revisit this for React challenges.
+       */
+      if (this.props.challenge.type === "markup") {
+        this.debouncedRenderPreviewFunction();
+      }
     });
   };
 
