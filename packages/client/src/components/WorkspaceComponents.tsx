@@ -10,12 +10,7 @@ import {
   CONTENT_SERIALIZE_DEBOUNCE,
 } from "../tools/constants";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import {
-  Loading,
-  ContentEditor,
-  StyledMarkdown,
-  StyledMarkdownInline,
-} from "./Shared";
+import { Loading, ContentEditor, StyledMarkdownInline } from "./Shared";
 import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
