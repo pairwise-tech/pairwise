@@ -465,6 +465,13 @@ class Workspace extends React.Component<IProps, IState> {
         </TabbedInnerNav>
         <LowerRight>
           <ButtonGroup vertical style={{ marginBottom: 8 }}>
+            <Tooltip content={"Run Code"} position="left">
+              <IconButton
+                icon="build"
+                aria-label="run the current editor code"
+                onClick={this.iFrameRenderPreview}
+              />
+            </Tooltip>
             <Tooltip content={"Increase Font Size"} position="left">
               <IconButton
                 icon="plus"
@@ -714,7 +721,7 @@ class Workspace extends React.Component<IProps, IState> {
      */
     this.setState({ code }, () => {
       this.debouncedSaveCodeFunction();
-      this.debouncedRenderPreviewFunction();
+      // this.debouncedRenderPreviewFunction();
       this.debouncedSyntaxHighlightFunction(code);
     });
   };
@@ -954,7 +961,12 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === "Meta" && event.keyCode === 91) {
+    /**
+     * I like Cmd+Enter but this produces a new line in the editor...so I
+     * just used Opt+Enter for now. Can be debugged later.
+     */
+    const OptionAndEnterKey = event.altKey && event.key === "Enter";
+    if (OptionAndEnterKey) {
       this.iFrameRenderPreview();
     }
   };
