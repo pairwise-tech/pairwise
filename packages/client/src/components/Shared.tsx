@@ -385,3 +385,41 @@ export const ProfileIcon = ({
     />
   );
 };
+
+/** ===========================================================================
+ * Modal Styles
+ * ============================================================================
+ */
+export const AccountModal = styled.div`
+  width: 525px;
+  padding: 32px;
+  padding-top: 22px;
+  left: 50%;
+  top: 50%;
+  outline: none;
+  position: absolute;
+  background: black;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  border-radius: 6px;
+  border: 1px solid ${COLORS.BORDER_MODAL};
+  background-color: ${COLORS.BACKGROUND_MODAL};
+`;
+
+export const ModalTitleText = styled.h1`
+  font-size: 24px;
+  font-weight: 300;
+  text-align: center;
+  color: ${COLORS.TEXT_TITLE};
+  font-family: Helvetica Neue, Lato, sans-serif;
+`;
+
+export const ModalSubText = styled(ModalTitleText)`
+  font-size: 16px;
+  margin-top: 12px;
+  max-width: 350px;
+  font-weight: 300;
+`;
