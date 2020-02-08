@@ -10,7 +10,7 @@ export class FeedbackController {
 
   @UseGuards(AuthGuard("jwt"))
   @Post()
-  fetchUserChallengeProgress(
+  submitUserFeedback(
     @Body() feedbackDto: IFeedbackDto,
     @Req() req: AuthenticatedRequest,
   ) {
