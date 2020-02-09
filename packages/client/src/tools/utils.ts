@@ -39,6 +39,27 @@ export const composeWithProps = <T extends {}>(
 };
 
 /**
+ * Determine if a challenge should only show content (no code editor).
+ */
+export const isContentOnlyChallenge = (challenge: Challenge) => {
+  const { type } = challenge;
+  return (
+    type === "media" ||
+    type === "section" ||
+    type === "project" ||
+    type === "guided-project"
+  );
+};
+
+/**
+ * Determine if a challenge requires the workspace (code editor).
+ */
+export const challengeRequiresWorkspace = (challenge: Challenge) => {
+  const contentOnlyChallenge = isContentOnlyChallenge(challenge);
+  return !contentOnlyChallenge;
+};
+
+/**
  * Given a challenge and other relevant data, construct the
  * data blob to represent the user's progress on that challenge.
  */

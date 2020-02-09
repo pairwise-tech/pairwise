@@ -46,6 +46,8 @@ import {
   wait,
   composeWithProps,
   constructDataBlobFromChallenge,
+  isContentOnlyChallenge,
+  challengeRequiresWorkspace,
 } from "tools/utils";
 import {
   Tab,
@@ -1172,14 +1174,11 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       code: challenge.starterCode,
     });
     const codeBlob = blob ? blob : constructedBlob;
-
-    const { type } = challenge;
-    const contentOnlyChallenge = type === "media" || type === "section";
-    const challengeRequiresWorkspace = !contentOnlyChallenge;
+    const requiresWorkspace = challengeRequiresWorkspace(challenge);
 
     return (
       <React.Fragment>
-        {challengeRequiresWorkspace && (
+        {requiresWorkspace && (
           <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
         )}
         {challenge.id !== SANDBOX_ID && (

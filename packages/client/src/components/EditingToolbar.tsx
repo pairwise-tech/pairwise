@@ -23,6 +23,8 @@ const CHALLENGE_TYPE_CHOICES: ChallengeTypeOption[] = [
   { value: "markup", label: "Markup" },
   { value: "typescript", label: "TypeScript" },
   { value: "react", label: "React" },
+  { value: "project", label: "Project" },
+  { value: "guided-project", label: "Guided Project" },
 ];
 
 /** ===========================================================================
