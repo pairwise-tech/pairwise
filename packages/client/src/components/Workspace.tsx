@@ -39,8 +39,8 @@ import {
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
-import { LowerRight, IconButton } from "./Shared";
-import { Tooltip, ButtonGroup } from "@blueprintjs/core";
+import { LowerRight, IconButton, UpperRight } from "./Shared";
+import { Button, Tooltip, ButtonGroup } from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import {
   wait,
@@ -473,30 +473,33 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
+        <UpperRight>
+          <Tooltip content="Shortcut: opt+enter" position="top">
+            <Button
+              aria-label="run the current editor code"
+              onClick={this.iFrameRenderPreview}
+            >
+              Run Code
+            </Button>
+          </Tooltip>
+        </UpperRight>
         <LowerRight>
           <ButtonGroup vertical style={{ marginBottom: 8 }}>
-            <Tooltip content={"Run Code"} position="left">
-              <IconButton
-                icon="build"
-                aria-label="run the current editor code"
-                onClick={this.iFrameRenderPreview}
-              />
-            </Tooltip>
-            <Tooltip content={"Increase Font Size"} position="left">
+            <Tooltip content="Increase Font Size" position="left">
               <IconButton
                 icon="plus"
                 aria-label="increase editor font size"
                 onClick={this.props.increaseFontSize}
               />
             </Tooltip>
-            <Tooltip content={"Decrease Font Size"} position="left">
+            <Tooltip content="Decrease Font Size" position="left">
               <IconButton
                 icon="minus"
                 aria-label="decrease editor font size"
                 onClick={this.props.decreaseFontSize}
               />
             </Tooltip>
-            <Tooltip content={"Toggle High Contrast Mode"} position="left">
+            <Tooltip content="Toggle High Contrast Mode" position="left">
               <IconButton
                 icon="contrast"
                 aria-label="toggle high contrast mode"
@@ -508,7 +511,7 @@ class Workspace extends React.Component<IProps, IState> {
             {this.state.code !== challenge.starterCode &&
               !isEditMode &&
               !isSandbox && (
-                <Tooltip content={"Restore Initial Code"} position="left">
+                <Tooltip content="Restore Initial Code" position="left">
                   <IconButton
                     icon="reset"
                     aria-label="reset editor"
@@ -516,7 +519,7 @@ class Workspace extends React.Component<IProps, IState> {
                   />
                 </Tooltip>
               )}
-            <Tooltip content={"Format Code"} position="left">
+            <Tooltip content="Format Code" position="left">
               <IconButton
                 icon="style"
                 aria-label="format editor code"
@@ -525,7 +528,11 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
             {!isSandbox && (
               <Tooltip
-                content={fullScreenEditor ? "Regular" : "Full Screen"}
+                content={
+                  fullScreenEditor
+                    ? "Regular Size Editor"
+                    : "Full Screen Editor"
+                }
                 position="left"
               >
                 <IconButton

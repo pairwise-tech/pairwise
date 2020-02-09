@@ -74,6 +74,7 @@ class NavigationOverlay extends React.Component<IProps> {
       <Overlay visible={this.props.overlayVisible} onClick={this.handleClose}>
         <KeyboardShortcuts
           keymap={{
+            // TODO: Add some UI to display what key shortcuts are available:
             escape: this.handleClose,
             "cmd+k": this.navigateToSandBox,
             "cmd+j": this.handleToggleNavigationMap,
