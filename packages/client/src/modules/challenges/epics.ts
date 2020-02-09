@@ -16,6 +16,7 @@ import {
   mergeMap,
   tap,
   pluck,
+  ignoreElements,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
@@ -163,6 +164,41 @@ const setWorkspaceLoadedEpic: EpicSignature = action$ => {
     filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
     delay(1000),
     map(() => Actions.setWorkspaceChallengeLoaded()),
+  );
+};
+
+const syncUrlToChallengeEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.setChallengeId)),
+    filter(() => deps.router.location.pathname.includes("/workspace")),
+    map(action => {
+      const { pathname } = deps.router.location;
+      const { newChallengeId } = action.payload;
+      const urlChallengeId = pathname.replace("/workspace/", "");
+      return {
+        newChallengeId,
+        urlChallengeId,
+      };
+    }),
+    filter(ids => {
+      const { newChallengeId, urlChallengeId } = ids;
+      const { challengeMap } = state$.value.challenges;
+      if (!challengeMap) {
+        return false;
+      }
+
+      const shouldUpdateUrl =
+        newChallengeId !== urlChallengeId &&
+        newChallengeId in challengeMap &&
+        urlChallengeId in challengeMap;
+
+      return shouldUpdateUrl;
+    }),
+    tap(ids => {
+      // The url id is out of sync with the challenge id. Update it:
+      deps.router.push(`/workspace/${ids.newChallengeId}`);
+    }),
+    ignoreElements(),
   );
 };
 
@@ -427,6 +463,7 @@ export default combineEpics(
   fetchCodeBlobForChallengeEpic,
   setWorkspaceLoadedEpic,
   challengeInitializationEpic,
+  syncUrlToChallengeEpic,
   syncChallengeToUrlEpic,
   handleSaveCodeBlobEpic,
   saveCodeBlobEpic,
