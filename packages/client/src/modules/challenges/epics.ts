@@ -167,41 +167,11 @@ const setWorkspaceLoadedEpic: EpicSignature = action$ => {
   );
 };
 
-const syncUrlToChallengeEpic: EpicSignature = (action$, state$, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.setChallengeId)),
-    filter(() => deps.router.location.pathname.includes("/workspace")),
-    map(action => {
-      const { pathname } = deps.router.location;
-      const { newChallengeId } = action.payload;
-      const urlChallengeId = pathname.replace("/workspace/", "");
-      return {
-        newChallengeId,
-        urlChallengeId,
-      };
-    }),
-    filter(ids => {
-      const { newChallengeId, urlChallengeId } = ids;
-      const { challengeMap } = state$.value.challenges;
-      if (!challengeMap) {
-        return false;
-      }
-
-      const shouldUpdateUrl =
-        newChallengeId !== urlChallengeId &&
-        newChallengeId in challengeMap &&
-        urlChallengeId in challengeMap;
-
-      return shouldUpdateUrl;
-    }),
-    tap(ids => {
-      // The url id is out of sync with the challenge id. Update it:
-      deps.router.push(`/workspace/${ids.newChallengeId}`);
-    }),
-    ignoreElements(),
-  );
-};
-
+/**
+ * Sync the challenge id to the url epic. Allow the workspace url to
+ * dictate the current challenge id. This epic responds to location change
+ * events and sets the challenge id if needed.
+ */
 const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
   return action$.pipe(
     filter(isActionOf(Actions.locationChange)),
@@ -227,6 +197,55 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
         previousChallengeId: currentChallengeId as string /* null is filtered above */,
       });
     }),
+  );
+};
+
+/**
+ * Reverse sync the workspace url to a changed challenge id. This allows
+ * the challenge id to be changed directly with the action setChallengeId
+ * from anywhere in the app. Currently, the url should be updated if it
+ * gets out of sync, or if a challenge is deleted.
+ */
+const syncUrlToChallengeEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf([Actions.setChallengeId, Actions.deleteChallenge])),
+    filter(() => deps.router.location.pathname.includes("/workspace")),
+    map(action => {
+      let newChallengeId;
+      if (isActionOf(Actions.setChallengeId, action)) {
+        // setChallengeId action:
+        newChallengeId = action.payload.newChallengeId;
+      } else {
+        // deleteChallenge action:
+        newChallengeId = state$.value.challenges.currentChallengeId;
+      }
+
+      const { pathname } = deps.router.location;
+      const urlChallengeId = pathname.replace("/workspace/", "");
+      return {
+        newChallengeId,
+        urlChallengeId,
+      };
+    }),
+    filter(ids => {
+      const { newChallengeId, urlChallengeId } = ids;
+      const { challengeMap } = state$.value.challenges;
+      if (!challengeMap || !newChallengeId) {
+        return false;
+      }
+
+      const shouldUpdateUrl =
+        newChallengeId !== urlChallengeId &&
+        newChallengeId in challengeMap &&
+        urlChallengeId in challengeMap;
+
+      return shouldUpdateUrl;
+    }),
+    tap(ids => {
+      // The url id is out of sync with the challenge id. Update it:
+      deps.router.push(`/workspace/${ids.newChallengeId}`);
+    }),
+    ignoreElements(),
   );
 };
 

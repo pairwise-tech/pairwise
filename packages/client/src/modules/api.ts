@@ -149,6 +149,13 @@ class BaseApiClass {
     /**
      * Remove the local access token and force the window to reload to handle
      * forced logout:
+     *
+     * TODO: This works easily but it would be nice to surface this error
+     * higher up to then just update the application state correctly and
+     * avoid a forced reload. The forced reload is a little jarring. The
+     * logic to do this already exists, it would just require moving this
+     * error handling higher up into the epics layer. Then again, logout
+     * should RARELY occur, so... blegh.
      */
     AppToaster.show({
       icon: "user",
