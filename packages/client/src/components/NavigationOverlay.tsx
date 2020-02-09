@@ -16,7 +16,7 @@ import {
   ModuleSkeletonList,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS, HEADER_HEIGHT } from "tools/constants";
+import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import {
   composeWithProps,
   generateEmptyModule,
@@ -75,7 +75,10 @@ class NavigationOverlay extends React.Component<IProps> {
         <KeyboardShortcuts
           keymap={{
             escape: this.handleClose,
+            "cmd+k": this.navigateToSandBox,
             "cmd+j": this.handleToggleNavigationMap,
+            "alt+ArrowLeft": this.navigateLeft,
+            "alt+ArrowRight": this.navigateRight,
           }}
         />
         <Col
@@ -449,6 +452,38 @@ class NavigationOverlay extends React.Component<IProps> {
 
   handleToggleNavigationMap = () => {
     this.props.setNavigationMapState(!this.props.overlayVisible);
+  };
+
+  navigateLeft = (e: KeyboardEvent) => {
+    const { challengeId, nextPrevChallengeIds } = this.props;
+    const { prev } = nextPrevChallengeIds;
+    if (prev && challengeId) {
+      this.props.setChallengeId({
+        newChallengeId: prev.id,
+        previousChallengeId: challengeId,
+      });
+    }
+  };
+
+  navigateRight = (e: KeyboardEvent) => {
+    const { challengeId, nextPrevChallengeIds } = this.props;
+    const { next } = nextPrevChallengeIds;
+    if (next && challengeId) {
+      this.props.setChallengeId({
+        newChallengeId: next.id,
+        previousChallengeId: challengeId,
+      });
+    }
+  };
+
+  navigateToSandBox = () => {
+    const { challengeId } = this.props;
+    if (challengeId) {
+      this.props.setChallengeId({
+        newChallengeId: SANDBOX_ID,
+        previousChallengeId: challengeId,
+      });
+    }
   };
 }
 
@@ -936,6 +971,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
+  nextPrevChallengeIds: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   navigationAccordionViewState: Modules.selectors.challenges.getNavigationSectionAccordionViewState(
     state,
@@ -945,6 +981,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const ChallengeActions = Modules.actions.challenges;
 
 const dispatchProps = {
+  setChallengeId: ChallengeActions.setChallengeId,
   setCurrentModule: ChallengeActions.setCurrentModule,
   createCourseModule: ChallengeActions.createCourseModule,
   updateCourseModule: ChallengeActions.updateCourseModule,
