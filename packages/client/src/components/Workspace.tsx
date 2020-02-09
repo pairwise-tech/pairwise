@@ -166,7 +166,17 @@ class Workspace extends React.Component<IProps, IState> {
     this.debouncedSyntaxHighlightFunction(this.state.code);
 
     subscribeCodeWorker(this.handleCodeFormatMessage);
+
+    /* Focus the editor whenever a challenge is loaded */
+    this.tryToFocusEditor();
   }
+
+  tryToFocusEditor = () => {
+    if (this.editorInstance) {
+      // @ts-ignore .focus is a valid method...
+      this.editorInstance.focus();
+    }
+  };
 
   componentWillUnmount() {
     this.cleanupEditor();
