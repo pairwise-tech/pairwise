@@ -477,11 +477,15 @@ class NavigationOverlay extends React.Component<IProps> {
   };
 
   navigateToSandBox = () => {
+    /**
+     * NOTE: This will only work anyway if the user is already viewing
+     * the Workspace.
+     */
     const { challengeId } = this.props;
     if (challengeId) {
       this.props.setChallengeId({
         newChallengeId: SANDBOX_ID,
-        previousChallengeId: challengeId,
+        previousChallengeId: challengeId || "",
       });
     }
   };
