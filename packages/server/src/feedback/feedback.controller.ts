@@ -8,7 +8,6 @@ import { IFeedbackDto } from "@pairwise/common";
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
-  @UseGuards(AuthGuard("jwt"))
   @Post()
   submitUserFeedback(
     @Body() feedbackDto: IFeedbackDto,
