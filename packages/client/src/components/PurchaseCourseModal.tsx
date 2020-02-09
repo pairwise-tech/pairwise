@@ -33,15 +33,19 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
     return (
       <Dialog
         isOpen={this.props.dialogOpen}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        aria-labelledby="purchase-modal-title"
+        aria-describedby="purchase-modal-description"
         onClose={() => {
           this.setAccountModalState(false);
         }}
       >
         <AccountModal>
-          <ModalTitleText>Purchase Course</ModalTitleText>
-          <ModalSubText>{course.title}</ModalSubText>
+          <ModalTitleText id="purchase-modal-title">
+            Purchase Course
+          </ModalTitleText>
+          <ModalSubText id="purchase-modal-description">
+            {course.title}
+          </ModalSubText>
         </AccountModal>
       </Dialog>
     );

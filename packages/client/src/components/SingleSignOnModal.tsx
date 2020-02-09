@@ -35,15 +35,17 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
     return (
       <Dialog
         isOpen={this.props.dialogOpen}
-        aria-labelledby="Pairwise Signin Modal"
-        aria-describedby="Signin to Pairwise with a social media provider"
+        aria-labelledby="sso-modal-title"
+        aria-describedby="facebook-login github-login google-login"
         onClose={() => {
           removeEphemeralPurchaseCourseId();
           this.setAccountModalState(false);
         }}
       >
         <AccountModal>
-          <ModalTitleText>Login or Create an Account</ModalTitleText>
+          <ModalTitleText id="sso-modal-title">
+            Login or Create an Account
+          </ModalTitleText>
           <SocialButtonsContainer>
             <LoginLink id="facebook-login" href={`${ENV.HOST}/auth/facebook`}>
               <FacebookLoginButton
