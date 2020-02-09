@@ -208,7 +208,13 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
  */
 const syncUrlToChallengeEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
-    filter(isActionOf([Actions.setChallengeId, Actions.deleteChallenge])),
+    filter(
+      isActionOf([
+        Actions.setChallengeId,
+        Actions.deleteChallenge,
+        Actions.deleteCourseModule,
+      ]),
+    ),
     filter(() => deps.router.location.pathname.includes("/workspace")),
     map(action => {
       let newChallengeId;
@@ -216,7 +222,7 @@ const syncUrlToChallengeEpic: EpicSignature = (action$, state$, deps) => {
         // setChallengeId action:
         newChallengeId = action.payload.newChallengeId;
       } else {
-        // deleteChallenge action:
+        // deleteChallenge or deleteCourseModule action:
         newChallengeId = state$.value.challenges.currentChallengeId;
       }
 
