@@ -80,6 +80,7 @@ class NavigationOverlay extends React.Component<IProps> {
             "cmd+j": this.handleToggleNavigationMap,
             "alt+ArrowLeft": this.navigateLeft,
             "alt+ArrowRight": this.navigateRight,
+            "cmd+[": this.props.toggleEditorSize /* cmd+[ ~ whatever! */,
           }}
         />
         <Col
@@ -972,6 +973,7 @@ const Title = styled.p`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
+  userSettings: Modules.selectors.user.userSettings(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
@@ -995,6 +997,7 @@ const dispatchProps = {
   deleteChallenge: ChallengeActions.deleteChallenge,
   reorderChallengeList: ChallengeActions.reorderChallengeList,
   reorderModuleList: ChallengeActions.reorderModuleList,
+  updateUserSettings: Modules.actions.user.updateUserSettings,
   setNavigationMapState: ChallengeActions.setNavigationMapState,
   toggleSectionAccordionView: ChallengeActions.toggleSectionAccordionView,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
@@ -1002,7 +1005,22 @@ const dispatchProps = {
     Modules.actions.purchase.handlePurchaseCourseIntent,
 };
 
-type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+const mergeProps = (
+  state: ReturnType<typeof mapStateToProps>,
+  methods: typeof dispatchProps,
+  props: {},
+) => ({
+  ...props,
+  ...methods,
+  ...state,
+  toggleEditorSize: () => {
+    methods.updateUserSettings({
+      fullScreenEditor: !state.userSettings.fullScreenEditor,
+    });
+  },
+});
+
+type ConnectProps = ReturnType<typeof mergeProps>;
 
 type IProps = ConnectProps & ComponentProps;
 
@@ -1010,7 +1028,7 @@ interface ComponentProps {
   overlayVisible: boolean;
 }
 
-const withProps = connect(mapStateToProps, dispatchProps);
+const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
 
 /** ===========================================================================
  * Export

@@ -92,7 +92,6 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 
 interface IState {
   code: string;
-  fullScreenEditor: boolean;
   testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
@@ -143,7 +142,6 @@ class Workspace extends React.Component<IProps, IState> {
       code: initialCode,
       testResults: [],
       logs: DEFAULT_LOGS,
-      fullScreenEditor: false,
       monacoInitializationError: false,
     };
   }
@@ -171,13 +169,6 @@ class Workspace extends React.Component<IProps, IState> {
     this.tryToFocusEditor();
   }
 
-  tryToFocusEditor = () => {
-    if (this.editorInstance) {
-      // @ts-ignore .focus is a valid method...
-      this.editorInstance.focus();
-    }
-  };
-
   componentWillUnmount() {
     this.cleanupEditor();
     window.removeEventListener("keydown", this.handleKeyPress);
@@ -187,14 +178,6 @@ class Workspace extends React.Component<IProps, IState> {
     );
     unsubscribeCodeWorker(this.handleCodeFormatMessage);
   }
-
-  refreshEditor = () => {
-    this.resetMonacoEditor();
-    this.setMonacoEditorValue();
-    if (this.iFrameRef) {
-      this.iFrameRenderPreview();
-    }
-  };
 
   componentWillReceiveProps(nextProps: IProps) {
     // TODO: Can this be removed? I refactored some code and this may no
@@ -217,7 +200,8 @@ class Workspace extends React.Component<IProps, IState> {
       this.editorInstance?.updateOptions(nextProps.editorOptions);
     }
 
-    if (this.props.userSettings.theme !== nextProps.userSettings.theme) {
+    const settingsChanged = this.props.userSettings !== nextProps.userSettings;
+    if (settingsChanged) {
       this.setMonacoEditorTheme(nextProps.userSettings.theme);
     }
 
@@ -245,6 +229,36 @@ class Workspace extends React.Component<IProps, IState> {
     //   );
     // }
   }
+
+  componentDidUpdate(prevProps: IProps) {
+    /**
+     * Reset the editor if the editor screen size is toggle.
+     *
+     * NOTE: This must happen AFTER the component updates.
+     */
+    if (
+      prevProps.userSettings.fullScreenEditor !==
+      this.props.userSettings.fullScreenEditor
+    ) {
+      this.resetMonacoEditor();
+      this.tryToFocusEditor();
+    }
+  }
+
+  refreshEditor = () => {
+    this.resetMonacoEditor();
+    this.setMonacoEditorValue();
+    if (this.iFrameRef) {
+      this.iFrameRenderPreview();
+    }
+  };
+
+  tryToFocusEditor = () => {
+    if (this.editorInstance) {
+      // @ts-ignore .focus is a valid method...
+      this.editorInstance.focus();
+    }
+  };
 
   /**
    * Reset the code editor content to the starterCode.
@@ -449,8 +463,9 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { fullScreenEditor, testResults } = this.state;
-    const { challenge, isEditMode } = this.props;
+    const { testResults } = this.state;
+    const { challenge, isEditMode, userSettings } = this.props;
+    const { fullScreenEditor } = userSettings;
     const isSandbox = challenge.id === SANDBOX_ID;
     const isFullScreen = fullScreenEditor || isSandbox;
     const IS_REACT_CHALLENGE = challenge.type === "react";
@@ -997,10 +1012,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   toggleEditorType = () => {
-    this.setState(
-      x => ({ fullScreenEditor: !x.fullScreenEditor }),
-      this.resetMonacoEditor,
-    );
+    this.props.toggleEditorSize();
   };
 
   resetMonacoEditor = () => {
@@ -1097,13 +1109,19 @@ const mergeProps = (
   ...props,
   ...methods,
   ...state,
-  toggleHighContrastMode: () =>
+  toggleHighContrastMode: () => {
     methods.updateUserSettings({
       theme:
         state.userSettings.theme === MonacoEditorThemes.DEFAULT
           ? MonacoEditorThemes.HIGH_CONTRAST
           : MonacoEditorThemes.DEFAULT,
-    }),
+    });
+  },
+  toggleEditorSize: () => {
+    methods.updateUserSettings({
+      fullScreenEditor: !state.userSettings.fullScreenEditor,
+    });
+  },
   increaseFontSize: () => {
     methods.updateUserSettings({
       workspaceFontSize:
