@@ -442,10 +442,10 @@ export const getRenderItemList = (listMinWidth: number) => {
   }: IItemListRendererProps<T>) {
     return (
       <ButtonGroup
-        style={{ minWidth: listMinWidth }}
         fill
-        alignText="left"
         vertical
+        alignText="left"
+        style={{ minWidth: listMinWidth }}
       >
         {items.map(renderItem)}
       </ButtonGroup>

@@ -4,7 +4,7 @@ import { Select, IListItemsProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE } from "@pairwise/common";
 import { getRenderItemList, labelByType } from "./Shared";
 
-const MENU_WIDTH = 190;
+const MENU_WIDTH = 195;
 
 interface FeedbackTypeOption {
   value: FEEDBACK_TYPE;
@@ -23,9 +23,14 @@ const FeedbackTypeSelect = Select.ofType<FeedbackTypeOption>();
 interface Props {
   onItemSelect: IListItemsProps<FeedbackTypeOption>["onItemSelect"];
   currentFeedbackType: Nullable<string>;
+  intent: "danger" | "none";
 }
 
-const FeedbackTypeMenu = ({ onItemSelect, currentFeedbackType }: Props) => {
+const FeedbackTypeMenu = ({
+  onItemSelect,
+  currentFeedbackType,
+  intent,
+}: Props) => {
   return (
     <FeedbackTypeSelect
       filterable={false}
@@ -34,6 +39,7 @@ const FeedbackTypeMenu = ({ onItemSelect, currentFeedbackType }: Props) => {
       itemListRenderer={getRenderItemList(MENU_WIDTH)}
       itemRenderer={(x, { handleClick, modifiers }) => (
         <Button
+          fill={true}
           key={x.value}
           text={x.label}
           onClick={handleClick}
@@ -42,16 +48,18 @@ const FeedbackTypeMenu = ({ onItemSelect, currentFeedbackType }: Props) => {
       )}
     >
       <Button
-        style={{ width: MENU_WIDTH }}
+        intent={intent}
         alignText="left"
-        fill={true}
+        aria-haspopup="true"
         rightIcon="caret-down"
         aria-controls="simple-menu"
-        aria-haspopup="true"
+        style={{ width: MENU_WIDTH }}
       >
-        {!currentFeedbackType
-          ? "Select Feedback Type"
-          : labelByType(currentFeedbackType, FEEDBACK_TYPE_OPTIONS)}
+        <strong>
+          {!currentFeedbackType
+            ? "Select Feedback Type"
+            : labelByType(currentFeedbackType, FEEDBACK_TYPE_OPTIONS)}
+        </strong>
       </Button>
     </FeedbackTypeSelect>
   );
