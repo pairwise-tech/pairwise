@@ -57,10 +57,6 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
     setHidden(!hidden);
   };
 
-  const handleToggleNavigationMap = () => {
-    props.setNavigationMapState(!overlayVisible);
-  };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEditMode(event.target.checked);
   };
@@ -135,13 +131,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
           />
         </Suspense>
       </SlideOut>
-      <KeyboardShortcuts
-        /* TODO: Provide some reference in the app of what shortcut keys exist? */
-        keymap={{
-          "cmd+shift+e": toggleHidden,
-          "cmd+i": handleToggleNavigationMap,
-        }}
-      />
+      <KeyboardShortcuts keymap={{ "cmd+shift+e": toggleHidden }} />
     </div>
   );
 };
@@ -177,7 +167,6 @@ const toolbarDispatchProps = {
   saveCourse: Modules.actions.challenges.saveCourse,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   deleteChallenge: Modules.actions.challenges.deleteChallenge,
-  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
 };
 
 /** ===========================================================================

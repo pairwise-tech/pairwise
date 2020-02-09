@@ -72,7 +72,12 @@ class NavigationOverlay extends React.Component<IProps> {
 
     return (
       <Overlay visible={this.props.overlayVisible} onClick={this.handleClose}>
-        <KeyboardShortcuts keymap={{ escape: this.handleClose }} />
+        <KeyboardShortcuts
+          keymap={{
+            escape: this.handleClose,
+            "cmd+j": this.handleToggleNavigationMap,
+          }}
+        />
         <Col
           offsetX={this.props.overlayVisible ? 0 : -20}
           style={{ zIndex: 3 }}
@@ -440,6 +445,10 @@ class NavigationOverlay extends React.Component<IProps> {
     } else {
       return true; /* Default to open */
     }
+  };
+
+  handleToggleNavigationMap = () => {
+    this.props.setNavigationMapState(!this.props.overlayVisible);
   };
 }
 
@@ -927,23 +936,25 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
+  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   navigationAccordionViewState: Modules.selectors.challenges.getNavigationSectionAccordionViewState(
     state,
   ),
 });
 
+const ChallengeActions = Modules.actions.challenges;
+
 const dispatchProps = {
-  setCurrentModule: Modules.actions.challenges.setCurrentModule,
-  createCourseModule: Modules.actions.challenges.createCourseModule,
-  updateCourseModule: Modules.actions.challenges.updateCourseModule,
-  deleteCourseModule: Modules.actions.challenges.deleteCourseModule,
-  createChallenge: Modules.actions.challenges.createChallenge,
-  deleteChallenge: Modules.actions.challenges.deleteChallenge,
-  reorderChallengeList: Modules.actions.challenges.reorderChallengeList,
-  reorderModuleList: Modules.actions.challenges.reorderModuleList,
-  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
-  toggleSectionAccordionView:
-    Modules.actions.challenges.toggleSectionAccordionView,
+  setCurrentModule: ChallengeActions.setCurrentModule,
+  createCourseModule: ChallengeActions.createCourseModule,
+  updateCourseModule: ChallengeActions.updateCourseModule,
+  deleteCourseModule: ChallengeActions.deleteCourseModule,
+  createChallenge: ChallengeActions.createChallenge,
+  deleteChallenge: ChallengeActions.deleteChallenge,
+  reorderChallengeList: ChallengeActions.reorderChallengeList,
+  reorderModuleList: ChallengeActions.reorderModuleList,
+  setNavigationMapState: ChallengeActions.setNavigationMapState,
+  toggleSectionAccordionView: ChallengeActions.toggleSectionAccordionView,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePurchaseCourseIntent:
     Modules.actions.purchase.handlePurchaseCourseIntent,
