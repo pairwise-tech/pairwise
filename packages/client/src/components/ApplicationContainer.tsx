@@ -9,10 +9,16 @@ import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
-import { Button, ButtonGroup, FocusStyleManager } from "@blueprintjs/core";
+import {
+  Button,
+  ButtonGroup,
+  FocusStyleManager,
+  Tooltip,
+} from "@blueprintjs/core";
 import Account from "./Account";
 import { ButtonCore, ProfileIcon, IconButton } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
+import FeedbackModal from "./FeedbackModal";
 import Workspace from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
@@ -98,6 +104,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         {this.renderLoadingOverlay()}
         <SingleSignOnModal />
         <PurchaseCourseModal />
+        <FeedbackModal />
         {DEV_MODE && <AdminKeyboardShortcuts />}
         <NavigationOverlay overlayVisible={overlayVisible} />
         <Header>
@@ -118,11 +125,13 @@ class ApplicationContainer extends React.Component<IProps, IState> {
           )}
           <ControlsContainer style={{ marginLeft: "auto" }}>
             {!isSandbox && (
-              <IconButton
-                icon="help"
-                aria-label="open/close feedback dialog"
-                onClick={this.props.toggleFeedbackDialogOpen}
-              />
+              <Tooltip content="Submit Feedback" position="bottom">
+                <IconButton
+                  icon="help"
+                  aria-label="open/close feedback dialog"
+                  onClick={this.props.toggleFeedbackDialogOpen}
+                />
+              </Tooltip>
             )}
             {isSandbox && (
               <Suspense fallback={<p>Menu Loading...</p>}>

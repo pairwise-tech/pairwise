@@ -3,6 +3,7 @@ import {
   CourseSkeletonList,
   ICodeBlobDto,
   IProgressDto,
+  FEEDBACK_TYPE,
 } from "@pairwise/common";
 import { createAction } from "typesafe-actions";
 import {
@@ -33,6 +34,8 @@ enum ActionTypesEnum {
   SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
 
   SET_FEEDBACK_DIALOG_STATE = "SET_FEEDBACK_DIALOG_STATE",
+  SET_FEEDBACK_STATE = "SET_FEEDBACK_STATE",
+  SET_FEEDBACK_TYPE = "SET_FEEDBACK_TYPE",
 
   FETCH_NAVIGATION_SKELETON = "FETCH_NAVIGATION_SKELETON",
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
@@ -177,6 +180,14 @@ export const setNavigationMapState = createAction(
 export const setFeedbackDialogState = createAction(
   ActionTypesEnum.SET_FEEDBACK_DIALOG_STATE,
 )<boolean>();
+
+export const setFeedbackState = createAction(
+  ActionTypesEnum.SET_FEEDBACK_STATE,
+)<string>();
+
+export const setFeedbackType = createAction(ActionTypesEnum.SET_FEEDBACK_TYPE)<
+  FEEDBACK_TYPE
+>();
 
 export const fetchCurrentActiveCourseSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,

@@ -4,12 +4,20 @@ import cx from "classnames";
 import { EditorProps } from "rich-markdown-editor";
 
 import styled, { CSSProperties } from "styled-components/macro";
-import { Button, Icon, IconName, Classes } from "@blueprintjs/core";
+import {
+  Button,
+  Icon,
+  IconName,
+  Classes,
+  ButtonGroup,
+} from "@blueprintjs/core";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
 
 import { COLORS, PROSE_MAX_WIDTH, AppToaster } from "../tools/constants";
+import { IItemListRendererProps } from "@blueprintjs/select";
+import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -386,9 +394,8 @@ export const ProfileIcon = ({
   );
 };
 
-/** ===========================================================================
+/**
  * Modal Styles
- * ============================================================================
  */
 export const AccountModal = styled.div`
   width: 525px;
@@ -423,3 +430,32 @@ export const ModalSubText = styled(ModalTitleText)`
   max-width: 350px;
   font-weight: 300;
 `;
+
+/**
+ * the getRenderItemList and labelByType functions are helpers used by our
+ * BlueprintJs Select components: FeedbackTypeMenu and ChallengeTypeMenu
+ */
+export const getRenderItemList = (listMinWidth: number) => {
+  return function renderItemList<T>({
+    renderItem,
+    items,
+  }: IItemListRendererProps<T>) {
+    return (
+      <ButtonGroup
+        style={{ minWidth: listMinWidth }}
+        fill
+        alignText="left"
+        vertical
+      >
+        {items.map(renderItem)}
+      </ButtonGroup>
+    );
+  };
+};
+
+export function labelByType<
+  T extends { value: FEEDBACK_TYPE | CHALLENGE_TYPE; label: string }
+>(type: string | undefined, items: T[]) {
+  const item = items.find(x => x.value === type);
+  return item?.label || type;
+}

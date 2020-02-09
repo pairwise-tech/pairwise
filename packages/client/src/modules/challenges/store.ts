@@ -6,6 +6,7 @@ import {
   CourseSkeletonList,
   DataBlob,
   ModuleList,
+  FEEDBACK_TYPE,
 } from "@pairwise/common";
 import insert from "ramda/es/insert";
 import move from "ramda/es/move";
@@ -43,6 +44,8 @@ export interface State {
   workspaceLoading: boolean;
   isEditMode: boolean;
   feedbackDialogOpen: boolean;
+  feedbackType: Nullable<FEEDBACK_TYPE>;
+  feedback?: string;
   displayNavigationMap: boolean;
   courses: Nullable<CourseList>;
   courseSkeletons: Nullable<CourseSkeletonList>;
@@ -62,6 +65,8 @@ const initialState: State = {
   courses: null,
   courseSkeletons: null,
   isEditMode: false,
+  feedbackType: null,
+  feedback: undefined,
   feedbackDialogOpen: false,
   workspaceLoading: true,
   currentModuleId: null,
@@ -518,6 +523,14 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.setFeedbackDialogState, (state, action) => ({
     ...state,
     feedbackDialogOpen: action.payload,
+  }))
+  .handleAction(actions.setFeedbackState, (state, action) => ({
+    ...state,
+    feedback: action.payload,
+  }))
+  .handleAction(actions.setFeedbackType, (state, action) => ({
+    ...state,
+    feedbackType: action.payload,
   }))
   .handleAction(actions.storeInverseChallengeMapping, (state, action) => ({
     ...state,
