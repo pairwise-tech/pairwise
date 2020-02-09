@@ -46,7 +46,6 @@ import {
   wait,
   composeWithProps,
   constructDataBlobFromChallenge,
-  isContentOnlyChallenge,
   challengeRequiresWorkspace,
 } from "tools/utils";
 import {
@@ -490,7 +489,7 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
-        <UpperRight>
+        <UpperRight isEditMode={isEditMode}>
           <Tooltip content="Shortcut: opt+enter" position="top">
             <Button
               aria-label="run the current editor code"
@@ -1161,7 +1160,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
     const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
 
     if (!challenge || isLoadingBlob || isUserLoading) {
-      return <h1>Loading...</h1>;
+      return <h1>Loading Challenge...</h1>;
     }
 
     /**
@@ -1174,6 +1173,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       code: challenge.starterCode,
     });
     const codeBlob = blob ? blob : constructedBlob;
+    const isSandbox = challenge.id === SANDBOX_ID;
     const requiresWorkspace = challengeRequiresWorkspace(challenge);
 
     return (
@@ -1181,7 +1181,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
         {requiresWorkspace && (
           <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
         )}
-        {challenge.id !== SANDBOX_ID && (
+        {!isSandbox && (
           <LowerSection withHeader={challenge.type === "media"}>
             <MediaArea />
           </LowerSection>

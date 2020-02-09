@@ -282,11 +282,11 @@ export const Text = styled.p`
   color: ${COLORS.TEXT_CONTENT};
 `;
 
-export const UpperRight = styled.div`
+export const UpperRight = styled.div<{ isEditMode: boolean }>`
   position: absolute;
   z-index: 2;
   right: 20px;
-  top: 10px;
+  top: ${props => (props.isEditMode ? 45 : 10)}px;
   display: flex;
   flex-direction: column;
 `;
