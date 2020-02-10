@@ -137,7 +137,14 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    const initialCode = props.blob.type === "challenge" ? props.blob.code : "";
+    // NOTE: Except for codepress edit mode this is the only touchpoint for
+    // updating the code in the editor as of this commit. This means that to
+    // update editor code the whole editor has to be re-initialized, which
+    // in-turn means that the parent component has to ensure it's fully
+    // re-initializing this component rather than just passing updated props. As
+    // of right now this means that the various loading props need to be
+    // accurate.
+    const initialCode = "code" in props.blob ? props.blob.code : "";
 
     this.state = {
       code: initialCode,
@@ -161,6 +168,8 @@ class Workspace extends React.Component<IProps, IState> {
     this.initializeSyntaxHighlightWorker();
 
     /* Handle some timing issue with Monaco initialization... */
+    // TODO: This might cause issues with an unmounted editor. Needs to be made
+    // cancellable.
     await wait(500);
     this.iFrameRenderPreview();
     this.debouncedSyntaxHighlightFunction(this.state.code);
@@ -187,53 +196,47 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   componentWillReceiveProps(nextProps: IProps) {
-    // TODO: Can this be removed? I refactored some code and this may no
-    // longer be needed, or I am wrong and more refactoring is required.
-    // Update in response to changing challenge
-    // if (this.props.challenge.id !== nextProps.challenge.id) {
-    //   const { challenge, isEditMode } = nextProps;
-    //   const newCode = getEditorCode({
-    //     challenge,
-    //     isEditMode,
-    //     tab: this.state.adminEditorTab,
-    //   });
-    //   this.setState(
-    //     { code: newCode, adminTestTab: "testResults" },
-    //     this.refreshEditor,
-    //   );
-    //
-
+    // Handle changes in editor options
     if (this.props.editorOptions !== nextProps.editorOptions) {
       this.editorInstance?.updateOptions(nextProps.editorOptions);
     }
 
+    // Handle changes in the editor theme
     if (this.props.userSettings.theme !== nextProps.userSettings.theme) {
       this.setMonacoEditorTheme(nextProps.userSettings.theme);
+    }
+
+    // Handle changes to isEditMode. If this is a code challenge and isEditMode
+    // has changed, then update.
+    //
+    // This update is currently necessary to get the correct code into the
+    // editor when switching edit mode. For example: I'm in codepress but just
+    // using the app as a user. I type some code in the editor, which gets
+    // persisted.  I then switch to edit mode. At that point we need to replace
+    // the editor code--which has changed--with the starter code so that I can
+    // edit it.
+    if (
+      "code" in nextProps.blob &&
+      this.props.isEditMode !== nextProps.isEditMode
+    ) {
+      if (nextProps.isEditMode) {
+        // Switching TO edit mode FROM user mode
+        this.handleEditorTabClick(nextProps.adminEditorTab);
+      } else {
+        // Switching FROM edit mode TO user mode
+        const userCode = nextProps.blob.code || "";
+        this.setState({ code: userCode }, this.refreshEditor);
+      }
     }
 
     // Account for changing the challenge type in the sandbox. Otherwise nothing
     // gets re-rendered since the ID of the challenge does not change
     // TODO: This is ugly because it's unclear why re-rendering immediately fails
     if (this.props.challenge.type !== nextProps.challenge.type) {
+      // TODO: I think this is causing an issue where this component has
+      // unmounted when the refresh is called.
       wait(50).then(this.refreshEditor);
     }
-
-    // TODO: Can this be removed? I refactored some code and this may no
-    // longer be needed, or I am wrong and more refactoring is required.
-    // Update in response to toggling admin edit mode. This will only ever
-    // happen for us as we use codepress, not for our end users.
-    // if (this.props.isEditMode !== nextProps.isEditMode) {
-    //   this.setState(
-    //     {
-    //       code: getEditorCode({
-    //         challenge: nextProps.challenge,
-    //         isEditMode: nextProps.isEditMode,
-    //         tab: this.state.adminEditorTab,
-    //       }),
-    //     },
-    //     this.refreshEditor,
-    //   );
-    // }
   }
 
   /**
@@ -396,30 +399,26 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   /**
-   * Switching tabs in the main code area, so that we can edit the starter code and solution code of a challenge.
-   * Doing a check to see if we even need to update state. Normally we would
-   * just do a fire-and-forget state update regardless, but with all the
-   * imperative logic going on with the editor this keeps it from updating
-   * unnecessarily.
+   * Switching tabs in the main code area, so that we can edit the starter code
+   * and solution code of a challenge.
    *
    * NOTE: When switching to the solution code default to start code
    */
   handleEditorTabClick = (tab: ADMIN_EDITOR_TAB) => {
-    if (tab !== this.props.adminEditorTab) {
-      this.setState(
-        {
-          code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
-        },
-        () => {
-          this.refreshEditor();
-          this.props.setAdminEditorTab(tab);
-        },
-      );
-    }
+    this.setState(
+      {
+        code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
+      },
+      () => {
+        this.refreshEditor();
+        this.props.setAdminEditorTab(tab);
+      },
+    );
   };
 
   /**
-   * Switch tabs in the test area of the workspace. So that we can see test results and write tests using different tabs.
+   * Switch tabs in the test area of the workspace. So that we can see test
+   * results and write tests using different tabs.
    */
   handleTestTabClick = (tab: ADMIN_TEST_TAB) => {
     if (tab !== this.props.adminTestTab) {
