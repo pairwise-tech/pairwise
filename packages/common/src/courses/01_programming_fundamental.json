@@ -24,7 +24,7 @@
     {
       "free": true,
       "id": "fpvPtNWkC",
-      "title": "Programming Fundamentals",
+      "title": "HTML & CSS",
       "challenges": [
         {
           "id": "IEC6FcKI",
@@ -386,6 +386,17 @@
       "title": "TypeScript",
       "challenges": [
         {
+          "id": "2qKcNab8",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
+        },
+        {
           "id": "6T3GXc4ap",
           "type": "typescript",
           "title": "Add Two Numbers",
@@ -451,10 +462,56 @@
       ]
     },
     {
-      "free": false,
-      "id": "IY2mbmT6",
-      "title": "React",
+      "id": "4IXSqQMi",
+      "title": "Developer Workflow",
       "challenges": [
+        {
+          "id": "3a4-HU8P",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module, you will learn about a standard developer workflow practices, tools, and techniques. You will learn how to use version control software such as Git, code editing tools like VS Code, and team collaboration tools like GitHub."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "N3xExLt4",
+      "title": "Async Programming & APIs",
+      "challenges": [
+        {
+          "id": "SfvRE0Ai",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn how different programs communicate with each."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "_tllrvtp",
+      "title": "UI Programming",
+      "challenges": [
+        {
+          "id": "-pAkjWcr",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn how to build frontend user interfaces \\(UIs\\). Specifically, will learn a popular library called React."
+        },
         {
           "id": "50f7f8sUV",
           "type": "react",
@@ -465,7 +522,134 @@
           "testCode": "test(\"Renders a <h1> tag with the text 'Hello, React!'\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const label = container.querySelector(\"h1\");\n  return label.textContent === \"Hello, React!\";\n});\n\ntest(\"Renders a controlled <input /> using React state\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const inputEl = container.querySelector(\"input\");\n  const testValue = \"giraffe\";\n  ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });\n  return inputEl.value === testValue;\n});\n",
           "supplementaryContent": "Placeholder supplementary content..."
         }
-      ]
+      ],
+      "free": false
+    },
+    {
+      "id": "xdu5gf3-",
+      "title": "Server Programming",
+      "challenges": [
+        {
+          "id": "kUvFiQmw",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn about backend engineering: how to write servers."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "f0pDYSOV",
+      "title": "Databases",
+      "challenges": [
+        {
+          "id": "LO2nn_8O",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn about databases, the technology responsible for storing all of the data used by modern software applications."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "D1JR2EXa",
+      "title": "Mobile",
+      "challenges": [
+        {
+          "id": "BfciawyS",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn the basics of programming mobile apps. Specifically, you will learn React Native, a cross\\-platform technology which allows developers to build iOS and Android apps using a single codebase."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "ZzVuDVNP",
+      "title": "Testing & Automation",
+      "challenges": [
+        {
+          "id": "s_p7YnS0",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn about how to test software and automate common tasks in order to improve productivity."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "qV7cPqG1",
+      "title": "Debugging & Refactoring",
+      "challenges": [
+        {
+          "id": "cBlWsqgO",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn the vital skills of debugging and refactoring software. Once software is written, it will inevitably have problems and errors. Debugging is the process of tracking down, understanding, and fixing errors in the code. Refactoring, it is the process of revisiting old code and writing it to improve the code quality and hopefully reduce the chances of bugs and errors."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "G8v0iMpm",
+      "title": "Delivery & Deployment",
+      "challenges": [
+        {
+          "id": "Vy435o_N",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module, you will learn about how modern software is deployed and delivered to users. This is one of the last important topics on your journey to becoming a software engineer\\!"
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "GgP1rkAa",
+      "title": "Capstone Project",
+      "challenges": [
+        {
+          "id": "Oe15TzrQ",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "Congratulations\\! You have completed all the course material and you're not ready to get your hands dirty building real world applications\\! You are definitely ready for a job, but you still need a portfolio of rockstar projects to prove it to your future employer. That's what this section is all about: letting you loose to build some amazing projects to impress everyone around you. Let's get started\\!"
+        }
+      ],
+      "free": false
     }
   ]
 }
