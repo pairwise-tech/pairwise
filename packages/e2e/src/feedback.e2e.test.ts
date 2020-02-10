@@ -51,7 +51,7 @@ describe("User Feedback APIs", () => {
       });
   });
 
-  test("/feedback (POST) rejects invalid challenge ids", async done => {
+  test("/feedback (POST) rejects feedback with an invalid feedback type", async done => {
     request(`${HOST}/feedback`)
       .post("/")
       .send({

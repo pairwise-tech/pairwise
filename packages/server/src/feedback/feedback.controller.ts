@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Req, Body, Post } from "@nestjs/common";
+import { Controller, Req, Body, Post, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
 import { FeedbackService } from "./feedback.service";
@@ -8,6 +8,7 @@ import { IFeedbackDto } from "@pairwise/common";
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
+  @UseGuards(AuthGuard("jwt"))
   @Post()
   submitUserFeedback(
     @Body() feedbackDto: IFeedbackDto,
