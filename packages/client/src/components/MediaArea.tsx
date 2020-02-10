@@ -11,7 +11,7 @@ import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 
 const TableOfContentsPlugin = (): SlatePlugin => {
-  const renderEditor: SlatePlugin["renderEditor"] = (props, editor, next) => {
+  const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {
     const children = next();
 
     return (

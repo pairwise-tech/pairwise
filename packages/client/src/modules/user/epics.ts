@@ -17,7 +17,14 @@ const fetchUserEpic: EpicSignature = (action$, _, deps) => {
     map(result => {
       if (result.value) {
         const { profile } = result.value;
-        if (profile && profile.lastActiveChallengeId) {
+
+        // @NOTE Only redirect if they have a last id AND they are on the
+        // generic /workspace URL
+        if (
+          profile &&
+          profile.lastActiveChallengeId &&
+          deps.router.location.pathname.match(/\/^workspace\/?/) // See NOTE
+        ) {
           deps.router.push(`/workspace/${profile.lastActiveChallengeId}`);
         }
 

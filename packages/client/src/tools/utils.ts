@@ -73,7 +73,7 @@ export const constructDataBlobFromChallenge = (args: {
     const blob: SandboxBlob = {
       code,
       type: "sandbox",
-      challengeType: "typescript" /* ? */,
+      challengeType: challenge.type,
     };
     return blob;
   }
