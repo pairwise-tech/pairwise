@@ -51,9 +51,9 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
         onClose={this.handleOnCloseModal}
       >
         <AccountModal>
-          <TitleText>{course.title}</TitleText>
+          <TitleText>Purchase Course</TitleText>
           <SubText>
-            Purchasing the course will give you full lifetime access to this
+            Purchasing {course.title} will give you full lifetime access to the
             course content and is fully refundable up to 30 days and{" "}
           </SubText>
           <StripeProvider apiKey={STRIPE_API_KEY}>
@@ -136,9 +136,9 @@ class CheckoutForm extends React.Component<any, any> {
   render() {
     return (
       <form onSubmit={this.handleSubmit} style={{ width: "500px" }}>
-        <Elements>
+        {/* <Elements>
           <PaymentBioForm />
-        </Elements>
+        </Elements> */}
         <CardSection />
       </form>
     );
@@ -150,7 +150,14 @@ class CardSection extends React.Component {
     return (
       <label>
         Card details
-        <CardElement style={{ base: { fontSize: "18px" } }} />
+        <CardElement
+          iconStyle="solid"
+          style={{
+            empty: { color: COLORS.TEXT_WHITE },
+            base: { color: COLORS.TEXT_WHITE },
+            invalid: { color: COLORS.FAILURE },
+          }}
+        />
       </label>
     );
   }
@@ -188,8 +195,8 @@ const PaymentBioForm = injectStripe(NameForm);
  */
 
 const AccountModal = styled.div`
-  width: 650px;
-  height: 650px;
+  width: 625px;
+  height: 450px;
   padding: 32px;
   padding-top: 22px;
   left: 50%;
@@ -204,16 +211,14 @@ const AccountModal = styled.div`
   transform: translate(-50%, -50%);
   border-radius: 6px;
   border: 1px solid ${COLORS.BORDER_MODAL};
-  /* background-color: ${COLORS.BACKGROUND_MODAL}; */
-  background-color: ${COLORS.TEXT_WHITE};
+  background-color: ${COLORS.BACKGROUND_MODAL};
 `;
 
 const TitleText = styled.h1`
   font-size: 24px;
   font-weight: 300;
   text-align: center;
-  /* color: ${COLORS.TEXT_TITLE}; */
-  color: ${COLORS.TEXT_DARK};
+  color: ${COLORS.TEXT_TITLE};
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
@@ -222,7 +227,7 @@ const SubText = styled(TitleText)`
   margin-top: 12px;
   max-width: 525px;
   font-weight: 300;
-  color: ${COLORS.TEXT_DARK};
+  color: ${COLORS.TEXT_TITLE};
 `;
 
 /** ===========================================================================
