@@ -234,6 +234,24 @@
           "starterCode": "<style>\n  /* Your code here */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    padding: 10px;\n    background: tomato;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .nav a:hover {\n    background: blue;\n    color: tomato;\n  }\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    background: tomato;\n    color: blue;\n    padding: 10px;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "supplementaryContent": "You've probably noticed that when you hover over a link in a browser it will change somehow. You can customize this!\n\nThis is called a hover state, and you can style a hover state just like you can style any other CSS. The main difference is the selector.\n\n```css\n/* Style the hover state for all links on the site */\na:hover {\n  text-decoration: underline;\n}\n\n/* Style just the nav links */\n.nav a:hover {\n  color: tomato;\n}\n\n/* Style the entire nav div when it's hovered */\n.nav:hover {\n  background: gray;\n}\n```\n\nTo style how something looks when the mouse hovers over it you use `:hover`. Specifically, you just put `:hover` after the selector you want to style. It's important not to put a space in front of `:hover`."
+        }
+      ]
+    },
+    {
+      "free": true,
+      "id": "lzTzpPcS",
+      "title": "TypeScript",
+      "challenges": [
+        {
+          "id": "2qKcNab8",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
         },
         {
           "id": "0gih2c1M",
@@ -377,24 +395,6 @@
           "starterCode": "let iAmAString: any = undefined;\nlet iAmANumber: any = null;\nlet iAmNull: any = 71919;\nlet iAmUndefined: any = \"not undefined yet!\";",
           "solutionCode": "let iAmAString: any = \"undefined\";\nlet iAmANumber: any = 71919;\nlet iAmNull: any = null;\nlet iAmUndefined: any = undefined;",
           "supplementaryContent": ""
-        }
-      ]
-    },
-    {
-      "free": false,
-      "id": "lzTzpPcS",
-      "title": "TypeScript",
-      "challenges": [
-        {
-          "id": "2qKcNab8",
-          "type": "section",
-          "title": "Intro",
-          "content": "",
-          "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "supplementaryContent": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
         },
         {
           "id": "6T3GXc4ap",
