@@ -112,6 +112,9 @@ class Workspace extends React.Component<IProps, IState> {
   // is needed for updating editor options, i.e. font size.
   monacoWrapper: any = null;
 
+  // A cancelable handler for refreshing the editor
+  editorRefreshTimerHandler: Nullable<NodeJS.Timeout> = null;
+
   // The actual monaco editor instance.
   editorInstance: Nullable<{
     updateOptions: (x: MonacoEditorOptions) => void;
@@ -187,49 +190,10 @@ class Workspace extends React.Component<IProps, IState> {
       this.handleReceiveMessageFromCodeRunner,
     );
     unsubscribeCodeWorker(this.handleCodeFormatMessage);
-  }
 
-  componentWillReceiveProps(nextProps: IProps) {
-    // Handle changes in editor options
-    if (this.props.editorOptions !== nextProps.editorOptions) {
-      this.editorInstance?.updateOptions(nextProps.editorOptions);
-    }
-
-    // Handle changes in the editor theme
-    if (this.props.userSettings.theme !== nextProps.userSettings.theme) {
-      this.setMonacoEditorTheme(nextProps.userSettings.theme);
-    }
-
-    // Handle changes to isEditMode. If this is a code challenge and isEditMode
-    // has changed, then update.
-    //
-    // This update is currently necessary to get the correct code into the
-    // editor when switching edit mode. For example: I'm in codepress but just
-    // using the app as a user. I type some code in the editor, which gets
-    // persisted.  I then switch to edit mode. At that point we need to replace
-    // the editor code--which has changed--with the starter code so that I can
-    // edit it.
-    if (
-      "code" in nextProps.blob &&
-      this.props.isEditMode !== nextProps.isEditMode
-    ) {
-      if (nextProps.isEditMode) {
-        // Switching TO edit mode FROM user mode
-        this.handleEditorTabClick(nextProps.adminEditorTab);
-      } else {
-        // Switching FROM edit mode TO user mode
-        const userCode = nextProps.blob.code || "";
-        this.setState({ code: userCode }, this.refreshEditor);
-      }
-    }
-
-    // Account for changing the challenge type in the sandbox. Otherwise nothing
-    // gets re-rendered since the ID of the challenge does not change
-    // TODO: This is ugly because it's unclear why re-rendering immediately fails
-    if (this.props.challenge.type !== nextProps.challenge.type) {
-      // TODO: I think this is causing an issue where this component has
-      // unmounted when the refresh is called.
-      wait(50).then(this.refreshEditor);
+    // Cancel any pending refresh
+    if (this.editorRefreshTimerHandler) {
+      clearTimeout(this.editorRefreshTimerHandler);
     }
   }
 
@@ -245,6 +209,46 @@ class Workspace extends React.Component<IProps, IState> {
     ) {
       this.resetMonacoEditor();
       this.tryToFocusEditor();
+    }
+
+    // Handle changes in editor options
+    if (prevProps.editorOptions !== this.props.editorOptions) {
+      this.editorInstance?.updateOptions(prevProps.editorOptions);
+    }
+
+    // Handle changes in the editor theme
+    if (prevProps.userSettings.theme !== this.props.userSettings.theme) {
+      this.setMonacoEditorTheme(prevProps.userSettings.theme);
+    }
+
+    // Handle changes to isEditMode. If this is a code challenge and isEditMode
+    // has changed, then update.
+    //
+    // This update is currently necessary to get the correct code into the
+    // editor when switching edit mode. For example: I'm in codepress but just
+    // using the app as a user. I type some code in the editor, which gets
+    // persisted.  I then switch to edit mode. At that point we need to replace
+    // the editor code--which has changed--with the starter code so that I can
+    // edit it.
+    if (
+      "code" in this.props.blob &&
+      prevProps.isEditMode !== this.props.isEditMode
+    ) {
+      if (this.props.isEditMode) {
+        // Switching TO edit mode FROM user mode
+        this.handleEditorTabClick(prevProps.adminEditorTab);
+      } else {
+        // Switching FROM edit mode TO user mode
+        const userCode = this.props.blob.code || "";
+        this.setState({ code: userCode }, this.refreshEditor);
+      }
+    }
+
+    // Account for changing the challenge type in the sandbox. Otherwise nothing
+    // gets re-rendered since the ID of the challenge does not change
+    // TODO: This is ugly because it's unclear why re-rendering immediately fails
+    if (prevProps.challenge.type !== this.props.challenge.type) {
+      this.pauseAndRefreshEditor();
     }
   }
 
@@ -1070,6 +1074,11 @@ class Workspace extends React.Component<IProps, IState> {
 
   private readonly transformMonacoCode = (fn: (x: string) => string) => {
     this.setState({ code: fn(this.state.code) }, this.setMonacoEditorValue);
+  };
+
+  private readonly pauseAndRefreshEditor = async (timeout: number = 50) => {
+    // @ts-ignore types!
+    this.editorRefreshTimerHandler = setTimeout(this.refreshEditor, timeout);
   };
 }
 
