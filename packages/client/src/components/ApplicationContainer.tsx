@@ -124,7 +124,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             </ControlsContainer>
           )}
           <ControlsContainer style={{ marginLeft: "auto" }}>
-            {!isSandbox && (
+            {!isSandbox && challenge && (
               <Tooltip content="Submit Feedback" position="bottom">
                 <IconButton
                   icon="help"

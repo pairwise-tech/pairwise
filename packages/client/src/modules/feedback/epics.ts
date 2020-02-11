@@ -2,6 +2,7 @@ import { EpicSignature } from "modules/root";
 import { filter, pluck, mergeMap, map } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { Actions } from "modules/root-actions";
+import { combineEpics } from "redux-observable";
 
 const submitUserFeedbackEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
@@ -28,6 +29,4 @@ const submitUserFeedbackEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-export default {
-  submitUserFeedbackEpic,
-};
+export default combineEpics(submitUserFeedbackEpic);
