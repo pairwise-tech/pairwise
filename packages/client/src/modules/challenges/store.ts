@@ -76,7 +76,7 @@ const initialState: State = {
   challengeMap: null,
   sandboxChallenge: defaultSandboxChallenge,
   blobCache: {},
-  loadingCurrentBlob: false,
+  loadingCurrentBlob: true,
   adminTestTab: "testResults",
   adminEditorTab: "starterCode",
   navigationSectionAccordionViewState: {},
@@ -495,6 +495,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state.blobCache,
       [action.payload.challengeId]: action.payload.dataBlob,
     },
+  }))
+  .handleAction(actions.fetchBlobForChallenge, (state, action) => ({
+    ...state,
+    loadingCurrentBlob: true,
   }))
   .handleAction(actions.fetchBlobForChallengeSuccess, (state, action) => ({
     ...state,

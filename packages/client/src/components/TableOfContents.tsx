@@ -34,9 +34,17 @@ export default class TableOfContents extends React.Component<
   }
 
   /**
+   * Smoothly scroll the browser window to a heading, rather than jumping
+   * instantaneously.
+   *
    * @NOTE The way that the underlying lib slugifies titles is flawed in that it
    * will allow characters such as period which are invalid in a selector.
    * However, getElementById is happy to oblige so we go with that instead.
+   * @NOTE Since default is prevented we have to _manually_ update the URL to
+   * include the hash. This is how the browser works by default, so that if the
+   * user refreshes they will refresh into the header they last linked to.
+   * Setting window.location.hash = '...' will still trigger an immediate jump
+   * to the header so it would break the smooth scroll.
    */
   smoothScrollToHeading = (e: MouseEvent) => {
     try {
@@ -48,11 +56,23 @@ export default class TableOfContents extends React.Component<
           .getElementById(id)
           ?.scrollIntoView({ behavior: "smooth" });
 
+        // See NOTE
+        window.history.pushState(
+          null,
+          document.head.title,
+          window.location.pathname + href,
+        );
+
         // Prevent default late so that if the above fails the default will not
         // have been prevented
         e.preventDefault();
       }
     } catch (err) {
+      // - Maybe some browser will consider the passed ID invalid (just like
+      //   chrome does with querySelector('#id..'))
+      // - Maybe the browser simply doesn't support this feature yet
+      // Either way, it's fine if this fails, the fallback is default browser
+      // jump-to-anchor behavior
       console.warn(
         "[INFO] Could not smooth scroll to header. Will fall back to default browser behavior.",
       );

@@ -28,7 +28,7 @@ import {
   saveSandboxToLocalStorage,
   getSandboxFromLocalStorage,
 } from "tools/storage-utils";
-import { AppToaster } from "tools/constants";
+import { AppToaster, SANDBOX_ID } from "tools/constants";
 import { wait } from "tools/utils";
 import { UserStoreState } from "./user/store";
 
@@ -363,11 +363,11 @@ class Api extends BaseApiClass {
      * Exception: if the challenge is the sandbox, return the sandbox
      * challenge directly from local storage.
      */
-    if (challengeId === "sandbox") {
-      const blob = getSandboxFromLocalStorage();
+    if (challengeId === SANDBOX_ID) {
+      const stored = getSandboxFromLocalStorage();
       const result: ICodeBlobDto = {
-        dataBlob: blob,
-        challengeId: "sandbox",
+        dataBlob: stored.blob,
+        challengeId: SANDBOX_ID,
       };
 
       return new Ok(result);
@@ -393,7 +393,7 @@ class Api extends BaseApiClass {
      * Exception: If the data blob is a sandbox blob, save is directly to
      * local storage.
      */
-    if (dataBlob.dataBlob.type === "sandbox") {
+    if (dataBlob.dataBlob.type === SANDBOX_ID) {
       saveSandboxToLocalStorage(dataBlob.dataBlob);
       return new Ok(dataBlob);
     }
