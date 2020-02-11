@@ -403,6 +403,12 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     isEditMode: action.payload,
   }))
+  .handleAction(actions.setActiveChallengeIds, (state, { payload }) => ({
+    ...state,
+    currentModuleId: payload.currentModuleId,
+    currentCourseId: payload.currentCourseId,
+    currentChallengeId: payload.currentChallengeId,
+  }))
   .handleAction(actions.updateCurrentChallengeBlob, (state, action) => ({
     ...state,
     blobCache: {

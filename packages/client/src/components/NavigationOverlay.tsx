@@ -38,8 +38,6 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import { DarkTheme } from "./Shared";
 
-const debug = require("debug")("client:NavigationOverlay");
-
 /** ===========================================================================
  * React Class
  * ============================================================================
@@ -66,7 +64,11 @@ class NavigationOverlay extends React.Component<IProps> {
     const { course, module } = this.props;
 
     if (!course || !module) {
-      debug("[INFO] No module or course", course, module);
+      console.warn(
+        "[WARN] No module or course found in NavigationOverlay! ->",
+        course,
+        module,
+      );
       return null;
     }
 
@@ -120,8 +122,8 @@ class NavigationOverlay extends React.Component<IProps> {
   ) => {
     const { isEditMode, updateCourseModule } = this.props;
 
-    const handleDeleteModule = () => {
-      this.props.deleteCourseModule({ id: module.id, courseId: course.id });
+    const handleDeleteModule = (moduleId: string) => {
+      this.props.deleteCourseModule({ id: moduleId, courseId: course.id });
     };
 
     if (!isEditMode) {
@@ -498,14 +500,17 @@ class NavigationOverlay extends React.Component<IProps> {
  * ============================================================================
  */
 
+interface CodepressNavigationContextMenuProps {
+  type: "MODULE" | "CHALLENGE";
+  handleDelete: () => void;
+}
+
 class CodepressNavigationContextMenu extends React.PureComponent<
-  {
-    type: "MODULE" | "CHALLENGE";
-    handleDelete: () => void;
-  },
-  { isContextMenuOpen: boolean }
+  CodepressNavigationContextMenuProps
 > {
-  state = { isContextMenuOpen: false };
+  componentWillUnmount() {
+    ContextMenu.hide(); /* Remove this code and you will suffer */
+  }
 
   render() {
     return (
@@ -518,6 +523,7 @@ class CodepressNavigationContextMenu extends React.PureComponent<
 
     const { type } = this.props;
     const label = type === "MODULE" ? "Delete Module" : "Delete Challenge";
+    const coordinates = { left: e.clientX, top: e.clientY };
 
     const Context = (
       <DarkTheme>
@@ -531,13 +537,7 @@ class CodepressNavigationContextMenu extends React.PureComponent<
       </DarkTheme>
     );
 
-    const coordinates = { left: e.clientX, top: e.clientY };
-
-    ContextMenu.show(Context, coordinates, () =>
-      this.setState({ isContextMenuOpen: false }),
-    );
-
-    this.setState({ isContextMenuOpen: true });
+    ContextMenu.show(Context, coordinates);
   };
 }
 
@@ -551,7 +551,7 @@ interface SortableModuleContainerProps {
   course: CourseSkeleton;
   currentActiveModule: ModuleSkeleton;
   updateCourseModule: typeof Modules.actions.challenges.updateCourseModule;
-  handleDeleteModule: () => void;
+  handleDeleteModule: (moduleId: string) => void;
   renderModuleNavigationItem: (
     activeModuleId: string,
     module: ModuleSkeleton,
@@ -616,7 +616,7 @@ const SortableModuleItem = SortableElement(
           {isEditMode ? (
             <CodepressNavigationContextMenu
               type="MODULE"
-              handleDelete={handleDeleteModule}
+              handleDelete={() => handleDeleteModule(module.id)}
             >
               <ModuleNavigationBase
                 active={currentActiveModule.id === module.id}

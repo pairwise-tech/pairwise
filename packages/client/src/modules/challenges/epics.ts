@@ -89,6 +89,32 @@ const resetActiveChallengeIds: EpicSignature = (action$, state$, deps) => {
 };
 
 /**
+ * Show a toast when a module or challenge is deleted for a better UX.
+ */
+const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf([Actions.deleteChallenge, Actions.deleteCourseModule])),
+    tap(action => {
+      let message = "";
+      if (isActionOf(Actions.deleteChallenge, action)) {
+        message = "Challenge deleted successfully!";
+      } else if (isActionOf(Actions.deleteCourseModule, action)) {
+        message = "Module deleted successfully!";
+      }
+
+      if (message) {
+        deps.toaster.show({
+          message,
+          intent: "warning",
+          icon: "take-action",
+        });
+      }
+    }),
+    ignoreElements(),
+  );
+};
+
+/**
  * Can also initialize the challenge id from the url to load the first
  * challenge.
  */
@@ -504,6 +530,7 @@ export default combineEpics(
   fetchCodeBlobForChallengeEpic,
   setWorkspaceLoadedEpic,
   resetActiveChallengeIds,
+  codepressDeleteToasterEpic,
   challengeInitializationEpic,
   setAndSyncChallengeIdEpic,
   syncChallengeToUrlEpic,
