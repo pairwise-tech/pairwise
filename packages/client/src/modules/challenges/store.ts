@@ -450,7 +450,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     loadingCurrentBlob: true,
     displayNavigationMap: false,
-    currentChallengeId: action.payload.newChallengeId,
+    currentChallengeId: action.payload.currentChallengeId,
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,

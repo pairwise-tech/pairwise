@@ -461,7 +461,7 @@ class NavigationOverlay extends React.Component<IProps> {
     const { prev } = nextPrevChallengeIds;
     if (prev && challengeId) {
       this.props.setAndSyncChallengeId({
-        newChallengeId: prev.id,
+        currentChallengeId: prev.id,
         previousChallengeId: challengeId,
       });
     }
@@ -472,7 +472,7 @@ class NavigationOverlay extends React.Component<IProps> {
     const { next } = nextPrevChallengeIds;
     if (next && challengeId) {
       this.props.setAndSyncChallengeId({
-        newChallengeId: next.id,
+        currentChallengeId: next.id,
         previousChallengeId: challengeId,
       });
     }
@@ -486,7 +486,7 @@ class NavigationOverlay extends React.Component<IProps> {
     const { challengeId } = this.props;
     if (challengeId) {
       this.props.setAndSyncChallengeId({
-        newChallengeId: SANDBOX_ID,
+        currentChallengeId: SANDBOX_ID,
         previousChallengeId: challengeId || "",
       });
     }

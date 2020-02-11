@@ -105,15 +105,25 @@ export const setAdminEditorTab = createAction(
 export const setAndSyncChallengeId = createAction(
   ActionTypesEnum.SET_ANY_SYNC_CHALLENGE_ID,
 )<{
-  newChallengeId: string;
+  currentChallengeId: string;
   previousChallengeId: string;
 }>();
 
+/**
+ * NOTE: This action is used primarily within Redux state updates to
+ * communicate the challenge id changing.
+ */
 export const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
-  newChallengeId: string;
+  currentChallengeId: string;
   previousChallengeId: string;
 }>();
 
+/**
+ * NOTE: The canonical way to "set" a new challenge id is to navigate to it.
+ * The url is the source of truth for the current challenge. To programmatically
+ * select a new challenge, you can use the following action, which will result
+ * in the routing side effect occurring via an epic. Good luck!
+ */
 export const fetchBlobForChallenge = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE,
 )<string>();
