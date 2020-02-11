@@ -6,6 +6,7 @@ import { Switch, Button } from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import KeyboardShortcuts from "./KeyboardShortcuts";
+import { CHALLENGE_TYPE } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -17,15 +18,39 @@ const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
 type EditChallengeControlsConnectProps = ReturnType<typeof mapToolbarState> &
   typeof toolbarDispatchProps;
 
-const CHALLENGE_TYPE_CHOICES: ChallengeTypeOption[] = [
-  { value: "section", label: "Section" },
-  { value: "media", label: "Media" },
-  { value: "markup", label: "Markup" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "react", label: "React" },
-  { value: "project", label: "Project" },
-  { value: "guided-project", label: "Guided Project" },
-];
+type ChallengeTypeChoiceMap = { [key in CHALLENGE_TYPE]: string };
+
+/**
+ * Map of challenge types to choice labels.
+ */
+const challengeTypeChoiceMap: ChallengeTypeChoiceMap = {
+  section: "Section",
+  media: "Media",
+  markup: "Markup",
+  typescript: "TypeScript",
+  react: "React",
+  project: "Project",
+  "guided-project": "Guided Project",
+  "special-topic": "Special Topic",
+};
+
+const mapChallengeTypeEntries = (
+  entry: [string, string],
+): ChallengeTypeOption => {
+  const [key, label] = entry;
+  return {
+    value: key as CHALLENGE_TYPE /* Screw you TypeScript! */,
+    label,
+  };
+};
+
+/**
+ * Turn the well-typed challenge type choice map into a list of options
+ * without elegance.
+ */
+const CHALLENGE_TYPE_CHOICES = Object.entries(challengeTypeChoiceMap).map(
+  mapChallengeTypeEntries,
+);
 
 /** ===========================================================================
  * React Component

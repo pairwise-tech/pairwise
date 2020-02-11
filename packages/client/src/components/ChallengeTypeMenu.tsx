@@ -4,6 +4,11 @@ import { Button, ButtonGroup, Tooltip, Icon } from "@blueprintjs/core";
 import { Select, ItemListRenderer, IListItemsProps } from "@blueprintjs/select";
 import { getChallengeIcon } from "tools/utils";
 
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
 const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
 
 export interface ChallengeTypeOption {
@@ -17,22 +22,10 @@ interface Props {
   onItemSelect: IListItemsProps<ChallengeTypeOption>["onItemSelect"];
 }
 
-const renderItemList: ItemListRenderer<ChallengeTypeOption> = ({
-  renderItem,
-  items,
-}) => (
-  <ButtonGroup style={{ minWidth: 150 }} fill alignText="left" vertical>
-    {items.map(renderItem)}
-  </ButtonGroup>
-);
-
-const labelByType = (
-  type: string | undefined,
-  items: ChallengeTypeOption[],
-) => {
-  const item = items.find(x => x.value === type);
-  return item?.label || type;
-};
+/** ===========================================================================
+ * Component
+ * ============================================================================
+ */
 
 const ChallengeTypeMenu = ({
   items,
@@ -74,5 +67,32 @@ const ChallengeTypeMenu = ({
     </ChallengeTypeSelect>
   );
 };
+
+/** ===========================================================================
+ * Helpers
+ * ============================================================================
+ */
+
+const renderItemList: ItemListRenderer<ChallengeTypeOption> = ({
+  renderItem,
+  items,
+}) => (
+  <ButtonGroup style={{ minWidth: 150 }} fill alignText="left" vertical>
+    {items.map(renderItem)}
+  </ButtonGroup>
+);
+
+const labelByType = (
+  type: string | undefined,
+  items: ChallengeTypeOption[],
+) => {
+  const item = items.find(x => x.value === type);
+  return item?.label || type;
+};
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default ChallengeTypeMenu;
