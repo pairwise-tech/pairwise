@@ -350,7 +350,7 @@ export const ContentViewEdit = connect(
           });
         },
       ),
-    [currentId],
+    [currentId, props],
   );
 
   const handleTitle = (title: string) =>
