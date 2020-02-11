@@ -34,12 +34,10 @@ export class FeedbackService {
     /* Validate the request */
     validateFeedbackDto(feedbackDto);
 
-    const feedback = user
-      ? {
-          ...feedbackDto,
-          user: user.profile,
-        }
-      : feedbackDto;
+    const feedback = {
+      ...feedbackDto,
+      user: user ? user.profile : null,
+    };
 
     await this.feedbackRepository.insert(feedback);
 
