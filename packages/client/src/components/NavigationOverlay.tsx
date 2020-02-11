@@ -460,7 +460,7 @@ class NavigationOverlay extends React.Component<IProps> {
     const { challengeId, nextPrevChallengeIds } = this.props;
     const { prev } = nextPrevChallengeIds;
     if (prev && challengeId) {
-      this.props.setChallengeId({
+      this.props.setAndSyncChallengeId({
         newChallengeId: prev.id,
         previousChallengeId: challengeId,
       });
@@ -471,7 +471,7 @@ class NavigationOverlay extends React.Component<IProps> {
     const { challengeId, nextPrevChallengeIds } = this.props;
     const { next } = nextPrevChallengeIds;
     if (next && challengeId) {
-      this.props.setChallengeId({
+      this.props.setAndSyncChallengeId({
         newChallengeId: next.id,
         previousChallengeId: challengeId,
       });
@@ -485,7 +485,7 @@ class NavigationOverlay extends React.Component<IProps> {
      */
     const { challengeId } = this.props;
     if (challengeId) {
-      this.props.setChallengeId({
+      this.props.setAndSyncChallengeId({
         newChallengeId: SANDBOX_ID,
         previousChallengeId: challengeId || "",
       });
@@ -988,7 +988,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const ChallengeActions = Modules.actions.challenges;
 
 const dispatchProps = {
-  setChallengeId: ChallengeActions.setChallengeId,
+  setAndSyncChallengeId: ChallengeActions.setAndSyncChallengeId,
   setCurrentModule: ChallengeActions.setCurrentModule,
   createCourseModule: ChallengeActions.createCourseModule,
   updateCourseModule: ChallengeActions.updateCourseModule,

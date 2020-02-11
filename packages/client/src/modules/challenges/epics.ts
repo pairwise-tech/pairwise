@@ -205,60 +205,70 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
   );
 };
 
+const setAndSyncChallengeIdEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.setAndSyncChallengeId)),
+    tap(action => {
+      deps.router.push(`/workspace/${action.payload.newChallengeId}`);
+    }),
+    ignoreElements(),
+  );
+};
+
 /**
  * Reverse sync the workspace url to a changed challenge id. This allows
  * the challenge id to be changed directly with the action setChallengeId
  * from anywhere in the app. Currently, the url should be updated if it
  * gets out of sync, or if a challenge is deleted.
  */
-const syncUrlToChallengeEpic: EpicSignature = (action$, state$, deps) => {
-  return action$.pipe(
-    filter(
-      isActionOf([
-        Actions.setChallengeId,
-        Actions.deleteChallenge,
-        Actions.deleteCourseModule,
-      ]),
-    ),
-    filter(() => deps.router.location.pathname.includes("/workspace")),
-    map(action => {
-      let newChallengeId;
-      if (isActionOf(Actions.setChallengeId, action)) {
-        // setChallengeId action:
-        newChallengeId = action.payload.newChallengeId;
-      } else {
-        // deleteChallenge or deleteCourseModule action:
-        newChallengeId = state$.value.challenges.currentChallengeId;
-      }
+// const syncUrlToChallengeEpic: EpicSignature = (action$, state$, deps) => {
+//   return action$.pipe(
+//     filter(
+//       isActionOf([
+//         Actions.setChallengeId,
+//         Actions.deleteChallenge,
+//         Actions.deleteCourseModule,
+//       ]),
+//     ),
+//     filter(() => deps.router.location.pathname.includes("/workspace")),
+//     map(action => {
+//       let newChallengeId;
+//       if (isActionOf(Actions.setChallengeId, action)) {
+//         // setChallengeId action:
+//         newChallengeId = action.payload.newChallengeId;
+//       } else {
+//         // deleteChallenge or deleteCourseModule action:
+//         newChallengeId = state$.value.challenges.currentChallengeId;
+//       }
 
-      const { pathname } = deps.router.location;
-      const urlChallengeId = pathname.replace("/workspace/", "");
-      return {
-        newChallengeId,
-        urlChallengeId,
-      };
-    }),
-    filter(ids => {
-      const { newChallengeId, urlChallengeId } = ids;
-      const { challengeMap } = state$.value.challenges;
-      if (!challengeMap || !newChallengeId) {
-        return false;
-      }
+//       const { pathname } = deps.router.location;
+//       const urlChallengeId = pathname.replace("/workspace/", "");
+//       return {
+//         newChallengeId,
+//         urlChallengeId,
+//       };
+//     }),
+//     filter(ids => {
+//       const { newChallengeId, urlChallengeId } = ids;
+//       const { challengeMap } = state$.value.challenges;
+//       if (!challengeMap || !newChallengeId) {
+//         return false;
+//       }
 
-      const shouldUpdateUrl =
-        newChallengeId !== urlChallengeId &&
-        newChallengeId in challengeMap &&
-        urlChallengeId in challengeMap;
+//       const shouldUpdateUrl =
+//         newChallengeId !== urlChallengeId &&
+//         newChallengeId in challengeMap &&
+//         urlChallengeId in challengeMap;
 
-      return shouldUpdateUrl;
-    }),
-    tap(ids => {
-      // The url id is out of sync with the challenge id. Update it:
-      deps.router.push(`/workspace/${ids.newChallengeId}`);
-    }),
-    ignoreElements(),
-  );
-};
+//       return shouldUpdateUrl;
+//     }),
+//     tap(ids => {
+//       // The url id is out of sync with the challenge id. Update it:
+//       deps.router.push(`/workspace/${ids.newChallengeId}`);
+//     }),
+//     ignoreElements(),
+//   );
+// };
 
 const saveCourse: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
@@ -551,7 +561,7 @@ export default combineEpics(
   fetchCodeBlobForChallengeEpic,
   setWorkspaceLoadedEpic,
   challengeInitializationEpic,
-  syncUrlToChallengeEpic,
+  setAndSyncChallengeIdEpic,
   syncChallengeToUrlEpic,
   handleSaveCodeBlobEpic,
   saveCodeBlobEpic,

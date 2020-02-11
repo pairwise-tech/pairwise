@@ -26,6 +26,7 @@ import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
 
 enum ActionTypesEnum {
   SET_CHALLENGE_ID = "SET_CHALLENGE_ID",
+  SET_ANY_SYNC_CHALLENGE_ID = "SET_ANY_SYNC_CHALLENGE_ID",
   WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
 
   SET_MODULE_ID = "SET_MODULE_ID",
@@ -98,6 +99,13 @@ export const setAdminTestTab = createAction(ActionTypesEnum.SET_ADMIN_TEST_TAB)<
 export const setAdminEditorTab = createAction(
   ActionTypesEnum.SET_ADMIN_EDITOR_TAB,
 )<ADMIN_EDITOR_TAB>();
+
+export const setAndSyncChallengeId = createAction(
+  ActionTypesEnum.SET_ANY_SYNC_CHALLENGE_ID,
+)<{
+  newChallengeId: string;
+  previousChallengeId: string;
+}>();
 
 export const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
   newChallengeId: string;
