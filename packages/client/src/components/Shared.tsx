@@ -1,5 +1,4 @@
-import React, { Suspense, SyntheticEvent } from "react";
-import Markdown, { ReactMarkdownProps } from "react-markdown";
+import React, { SyntheticEvent } from "react";
 import cx from "classnames";
 import { EditorProps } from "rich-markdown-editor";
 
@@ -15,13 +14,11 @@ import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
 
-import { COLORS, PROSE_MAX_WIDTH, AppToaster } from "../tools/constants";
+import { COLORS, AppToaster } from "../tools/constants";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
-
-export const LazyCodeBlock = React.lazy(() => import("./CodeBlock"));
 
 interface DarkThemeProps {
   children: React.ReactNode;
@@ -41,7 +38,7 @@ export const Loading = () => {
 };
 
 // Adapted from: https://github.com/outline/rich-markdown-editor/blob/master/src/theme.js
-const editorColors = {
+export const editorColors = {
   almostBlack: "#181A1B",
   lightBlack: "#2F3336",
   almostWhite: "#E6E6E6",
@@ -180,14 +177,6 @@ export const ContentEditor = (props: EditorProps) => (
   </EditorExternalStyles>
 );
 
-const InlineCode = ({ value }: { value: string }) => {
-  return <code className="code">{value}</code>;
-};
-
-const BlockQuote = ({ children }: { children: React.ReactNode }) => {
-  return <blockquote className="tip">{children}</blockquote>;
-};
-
 export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -211,62 +200,6 @@ export const ButtonCore = styled.button`
 
   :focus {
     outline: none;
-  }
-`;
-
-const HighlightedMarkdown = (props: ReactMarkdownProps) => {
-  return (
-    <Suspense fallback={<pre>Loading...</pre>}>
-      <Markdown
-        renderers={{
-          code: LazyCodeBlock,
-          inlineCode: InlineCode,
-          blockquote: BlockQuote,
-        }}
-        {...props}
-      />
-    </Suspense>
-  );
-};
-
-const StyledMarkdownBase = styled(HighlightedMarkdown)`
-  .code {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1px 3px;
-    display: inline;
-    /* color: #ff4788; */
-    /* color: rgb(0, 255, 185); */
-    color: rgb(108, 188, 255);
-    border-radius: 3px;
-    line-height: normal;
-    font-size: 85%;
-  }
-`;
-
-export const StyledMarkdown = styled(StyledMarkdownBase)`
-  max-width: ${PROSE_MAX_WIDTH}px;
-  color: white;
-  line-height: 1.5;
-  font-size: 1.1rem;
-
-  .tip {
-    border-left: 5px solid #6cbbff;
-    font-size: 18px;
-    line-height: 24px;
-    padding: 10px 10px 10px 24px;
-    background: #323232;
-  }
-
-  .tip p {
-    margin: 0;
-  }
-`;
-
-export const StyledMarkdownInline = styled(StyledMarkdownBase)`
-  display: inline-block;
-
-  p {
-    margin: 0;
   }
 `;
 
@@ -397,7 +330,7 @@ export const ProfileIcon = ({
 /**
  * Modal Styles
  */
-export const AccountModal = styled.div`
+export const ModalContainer = styled.div`
   width: 525px;
   padding: 32px;
   padding-top: 22px;

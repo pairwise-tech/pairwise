@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
-import { AccountModal, ModalTitleText, ModalSubText } from "./Shared";
+import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -39,14 +39,14 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
           this.setAccountModalState(false);
         }}
       >
-        <AccountModal>
+        <ModalContainer>
           <ModalTitleText id="purchase-modal-title">
             Purchase Course
           </ModalTitleText>
           <ModalSubText id="purchase-modal-description">
             {course.title}
           </ModalSubText>
-        </AccountModal>
+        </ModalContainer>
       </Dialog>
     );
   }

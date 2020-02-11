@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import Modules, { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
-import { AccountModal, ModalTitleText, ModalSubText } from "./Shared";
+import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
 import { Dialog, TextArea, Button } from "@blueprintjs/core";
 import FeedbackTypeMenu from "./FeedbackTypeMenu";
 import styled from "styled-components";
@@ -68,7 +68,7 @@ const FeedbackModal = (props: Props) => {
       aria-labelledby="feedback-modal-title"
       aria-describedby="feedback-modal-description"
     >
-      <AccountModal style={{ maxHeight: "calc(100vh - 100px)" }}>
+      <ModalContainer style={{ maxHeight: "calc(100vh - 100px)" }}>
         <ModalTitleText id="feedback-modal-title">
           Submit Feedback
         </ModalTitleText>
@@ -111,7 +111,7 @@ const FeedbackModal = (props: Props) => {
             Submit
           </Button>
         </div>
-      </AccountModal>
+      </ModalContainer>
     </Dialog>
   );
 };

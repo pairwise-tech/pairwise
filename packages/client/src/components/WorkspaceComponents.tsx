@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import React, { useEffect, useState, Suspense } from "react";
+import Markdown, { ReactMarkdownProps } from "react-markdown";
 import styled from "styled-components/macro";
 import {
   COLORS as C,
@@ -10,7 +11,7 @@ import {
   CONTENT_SERIALIZE_DEBOUNCE,
 } from "../tools/constants";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { Loading, ContentEditor, StyledMarkdownInline } from "./Shared";
+import { Loading, ContentEditor, editorColors } from "./Shared";
 import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
@@ -122,7 +123,7 @@ export const TestResultRow = ({
         </MinimalButton>
         <div>
           <b style={{ color: C.TEXT_TITLE }}>Test: </b>
-          <StyledMarkdownInline source={message} />
+          <TestMessageHighlighter source={message} />
         </div>
         <div
           style={{
@@ -149,6 +150,39 @@ export const TestResultRow = ({
     </div>
   );
 };
+
+const HighlightedMarkdown = (props: ReactMarkdownProps) => {
+  return (
+    <Markdown
+      renderers={{
+        inlineCode: ({ value }: { value: string }) => (
+          <code className="code">{value}</code>
+        ),
+      }}
+      {...props}
+    />
+  );
+};
+
+const TestMessageHighlighter = styled(HighlightedMarkdown)`
+  display: inline-block;
+
+  p {
+    margin: 0;
+  }
+
+  .code {
+    padding: 1px 3px;
+    display: inline;
+    color: rgb(108, 188, 255);
+    border-radius: 4px;
+    line-height: normal;
+    font-size: 85%;
+    padding: 3px 6px;
+    border: 1px solid ${editorColors.lightBlack};
+    background: ${editorColors.almostBlack};
+  }
+`;
 
 export const consoleRowStyles = {
   paddingTop: 2,

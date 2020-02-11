@@ -12,7 +12,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import * as ENV from "tools/client-env";
 import { composeWithProps } from "tools/utils";
 import { removeEphemeralPurchaseCourseId } from "tools/storage-utils";
-import { ModalTitleText, AccountModal, ModalSubText } from "./Shared";
+import { ModalTitleText, ModalContainer, ModalSubText } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -39,10 +39,10 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
         aria-describedby="facebook-login github-login google-login"
         onClose={() => {
           removeEphemeralPurchaseCourseId();
-          this.setAccountModalState(false);
+          this.setSingleSignOnModalState(false);
         }}
       >
-        <AccountModal>
+        <ModalContainer>
           <ModalTitleText id="sso-modal-title">
             Login or Create an Account
           </ModalTitleText>
@@ -71,12 +71,12 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
             Your account will be used to save your progress as you work on the
             courses.
           </ModalSubText>
-        </AccountModal>
+        </ModalContainer>
       </Dialog>
     );
   }
 
-  setAccountModalState = (state: boolean) => {
+  setSingleSignOnModalState = (state: boolean) => {
     this.props.setSingleSignOnDialogState(state);
   };
 }
