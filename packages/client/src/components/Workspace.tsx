@@ -195,9 +195,8 @@ class Workspace extends React.Component<IProps, IState> {
       this.editorInstance?.updateOptions(nextProps.editorOptions);
     }
 
-    const settingsChanged = this.props.userSettings !== nextProps.userSettings;
-    if (settingsChanged) {
-      // Handle changes in the editor theme
+    // Handle changes in the editor theme
+    if (this.props.userSettings.theme !== nextProps.userSettings.theme) {
       this.setMonacoEditorTheme(nextProps.userSettings.theme);
     }
 
