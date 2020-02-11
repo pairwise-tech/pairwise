@@ -414,31 +414,6 @@ const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-const submitUserFeedbackEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.submitUserFeedback)),
-    pluck("payload"),
-    mergeMap(deps.api.submitUserFeedback),
-    map(result => {
-      if (result.value) {
-        deps.toaster.show({
-          message: "Feedback Submitted Successfully!",
-          intent: "success",
-          icon: "tick",
-        });
-        return Actions.submitUserFeedbackSuccess();
-      } else {
-        deps.toaster.show({
-          message: "Could not submit feedback!",
-          intent: "danger",
-          icon: "error",
-        });
-        return Actions.submitUserFeedbackFailure(result.error);
-      }
-    }),
-  );
-};
-
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -457,5 +432,4 @@ export default combineEpics(
   saveCodeBlobEpic,
   handleCompleteChallengeEpic,
   updateUserProgressEpic,
-  submitUserFeedbackEpic,
 );

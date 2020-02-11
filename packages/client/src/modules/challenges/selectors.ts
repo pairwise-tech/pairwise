@@ -270,18 +270,3 @@ export const nextPrevChallenges = createSelector(
     }
   },
 );
-
-export const getFeedbackDialogOpen = createSelector(
-  challengesState,
-  state => state.feedbackDialogOpen,
-);
-
-export const getFeedback = createSelector(
-  challengesState,
-  state => state.feedback,
-);
-
-export const getFeedbackType = createSelector(
-  challengesState,
-  state => state.feedbackType,
-);

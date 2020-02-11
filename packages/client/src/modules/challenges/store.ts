@@ -559,24 +559,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state,
       ...payload,
     }),
-  )
-  .handleAction(actions.setFeedbackDialogState, (state, action) => ({
-    ...state,
-    feedbackDialogOpen: action.payload,
-  }))
-  .handleAction(actions.setFeedbackState, (state, action) => ({
-    ...state,
-    feedback: action.payload,
-  }))
-  .handleAction(actions.submitUserFeedbackSuccess, (state, action) => ({
-    ...state,
-    feedback: undefined,
-    feedbackType: null,
-  }))
-  .handleAction(actions.setFeedbackType, (state, action) => ({
-    ...state,
-    feedbackType: action.payload,
-  }));
+  );
 
 /** ===========================================================================
  * Export

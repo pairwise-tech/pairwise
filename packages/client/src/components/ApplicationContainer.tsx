@@ -487,7 +487,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
-  feedbackDialogOpen: Modules.selectors.challenges.getFeedbackDialogOpen(state),
+  feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),
@@ -501,7 +501,7 @@ const dispatchProps = {
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   initializeAccessToken: Modules.actions.auth.initializeAccessToken,
-  setFeedbackDialogState: Modules.actions.challenges.setFeedbackDialogState,
+  setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
 };
 
 const mergeProps = (

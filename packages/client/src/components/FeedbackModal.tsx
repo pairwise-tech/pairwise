@@ -133,17 +133,17 @@ const FeedbackInput = styled(TextArea)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  feedback: Modules.selectors.challenges.getFeedback(state),
-  feedbackType: Modules.selectors.challenges.getFeedbackType(state),
-  feedbackDialogOpen: Modules.selectors.challenges.getFeedbackDialogOpen(state),
+  feedback: Modules.selectors.feedback.getFeedback(state),
+  feedbackType: Modules.selectors.feedback.getFeedbackType(state),
+  feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   currentChallenge: Modules.selectors.challenges.getCurrentChallenge(state),
 });
 
 const dispatchProps = {
-  setFeedbackType: Modules.actions.challenges.setFeedbackType,
-  setFeedbackState: Modules.actions.challenges.setFeedbackState,
-  setFeedbackDialogState: Modules.actions.challenges.setFeedbackDialogState,
-  submitUserFeedback: Modules.actions.challenges.submitUserFeedback,
+  setFeedbackType: Modules.actions.feedback.setFeedbackType,
+  setFeedbackState: Modules.actions.feedback.setFeedbackState,
+  setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
+  submitUserFeedback: Modules.actions.feedback.submitUserFeedback,
 };
 
 const mergeProps = (
