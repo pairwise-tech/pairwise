@@ -4,14 +4,7 @@ import cx from "classnames";
 import { EditorProps } from "rich-markdown-editor";
 
 import styled, { CSSProperties } from "styled-components/macro";
-import {
-  EditableText,
-  IEditableTextProps,
-  Button,
-  Icon,
-  IconName,
-  Classes,
-} from "@blueprintjs/core";
+import { Button, Icon, IconName, Classes } from "@blueprintjs/core";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";

@@ -148,53 +148,6 @@ const deleteChallengeFromCourse = <T extends CourseList | CourseSkeletonList>(
   return updatedCourses as T; /* ugh */
 };
 
-/**
- * Take the current state and an update from deleting a challenge, and
- * determine new active course, module, and challenge ids in the event
- * that the user deleted the current active challenge.
- */
-const getNewActiveIdsAfterChallengeDeletion = (
-  state: State,
-  updatedCourses: CourseList,
-  idToDelete: string,
-) => {
-  const { currentModuleId, currentCourseId, currentChallengeId } = state;
-
-  let newCurrentModuleId = currentModuleId;
-  let newCurrentCourseId = currentCourseId;
-  let newCurrentChallengeId = currentChallengeId;
-
-  if (idToDelete !== currentChallengeId) {
-    return {
-      newCurrentModuleId,
-      newCurrentCourseId,
-      newCurrentChallengeId,
-    };
-  }
-
-  for (const course of updatedCourses) {
-    for (const module of course.modules) {
-      if (module.challenges.length > 0) {
-        newCurrentModuleId = module.id;
-        newCurrentCourseId = course.id;
-        newCurrentChallengeId = module.challenges[0].id;
-
-        return {
-          newCurrentModuleId,
-          newCurrentCourseId,
-          newCurrentChallengeId,
-        };
-      }
-    }
-  }
-
-  return {
-    newCurrentModuleId,
-    newCurrentCourseId,
-    newCurrentChallengeId,
-  };
-};
-
 interface ModuleUpdate {
   id: string;
   courseId: string;
@@ -312,12 +265,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     };
   })
   .handleAction(actions.deleteCourseModule, (state, { payload }) => {
-    const {
-      courses,
-      courseSkeletons,
-      currentChallengeId,
-      currentModuleId,
-    } = state;
+    const { courses, courseSkeletons } = state;
 
     if (!courses || !courseSkeletons) {
       return state;
@@ -339,21 +287,8 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       }
     });
 
-    /**
-     * Reset the current challenge and module ids if the user just deleted
-     * the current module.
-     */
-    let newCurrentModuleId = currentModuleId;
-    let newCurrentChallengeId = currentChallengeId;
-    if (id === currentModuleId && updatedModules.length) {
-      newCurrentModuleId = updatedModules[0].id;
-      newCurrentChallengeId = updatedModules[0].challenges[0].id;
-    }
-
     return {
       ...state,
-      currentModuleId: newCurrentModuleId,
-      currentChallengeId: newCurrentChallengeId,
       courses: updatedCourses,
       courseSkeletons: courseSkeletons.map(c => {
         if (c.id === courseId) {
@@ -403,7 +338,6 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   })
   .handleAction(actions.deleteChallenge, (state, action) => {
     const { courses, courseSkeletons } = state;
-    const { challengeId } = action.payload;
 
     if (!courses || !courseSkeletons) {
       return state;
@@ -417,21 +351,8 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       CourseSkeletonList
     >(courseSkeletons, action.payload);
 
-    const {
-      newCurrentCourseId,
-      newCurrentModuleId,
-      newCurrentChallengeId,
-    } = getNewActiveIdsAfterChallengeDeletion(
-      state,
-      updatedCourses,
-      challengeId,
-    );
-
     return {
       ...state,
-      currentCourseId: newCurrentCourseId,
-      currentModuleId: newCurrentModuleId,
-      currentChallengeId: newCurrentChallengeId,
       courses: updatedCourses,
       courseSkeletons: updatedCourseSkeletons,
     };

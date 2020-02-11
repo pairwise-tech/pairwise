@@ -1,10 +1,11 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 
-import { CourseList, CodeChallengeBlob } from "@pairwise/common";
+import { CodeChallengeBlob } from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
 import { SANDBOX_ID } from "tools/constants";
+import { findCourseById } from "tools/utils";
 
 /** ===========================================================================
  * Selectors
@@ -96,11 +97,6 @@ export const workspaceLoadingSelector = createSelector(
     return challenges.workspaceLoading;
   },
 );
-
-const findCourseById = (courseId: string, courses: CourseList) => {
-  const course = courses.find(c => c.id === courseId);
-  return course;
-};
 
 export const getCurrentCourse = createSelector([challengesState], state => {
   return state.courses?.find(x => x.id === state.currentCourseId);

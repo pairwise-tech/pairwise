@@ -12,6 +12,7 @@ import {
   ChallengeSkeleton,
   ChallengeSkeletonList,
   ProjectChallengeBlob,
+  CourseList,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
 import { IconName } from "@blueprintjs/core";
@@ -253,4 +254,12 @@ export const partitionChallengesBySection = (
   sections = sections.concat(currentSection);
 
   return sections;
+};
+
+/**
+ * Find a course by id in the course list.
+ */
+export const findCourseById = (courseId: string, courses: CourseList) => {
+  const course = courses.find(c => c.id === courseId);
+  return course;
 };
