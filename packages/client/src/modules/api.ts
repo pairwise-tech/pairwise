@@ -149,6 +149,13 @@ class BaseApiClass {
     /**
      * Remove the local access token and force the window to reload to handle
      * forced logout:
+     *
+     * TODO: This works easily but it would be nice to surface this error
+     * higher up to then just update the application state correctly and
+     * avoid a forced reload. The forced reload is a little jarring. The
+     * logic to do this already exists, it would just require moving this
+     * error handling higher up into the epics layer. Then again, logout
+     * should RARELY occur, so... blegh.
      */
     AppToaster.show({
       icon: "user",
@@ -181,12 +188,11 @@ class Api extends BaseApiClass {
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
     try {
       let course: Course;
-
-      if (ENV.PRODUCTION) {
+      if (ENV.PRODUCTION || ENV.DEV) {
         /* TODO: Remove after deploying a server */
         const challenges = require("@pairwise/common").default;
         course = challenges.FullstackTypeScript;
-      } else if (ENV.DEV_MODE) {
+      } else if (ENV.CODEPRESS) {
         /**
          * TODO: Make this code more consistent with the other API methods.
          */
@@ -213,7 +219,7 @@ class Api extends BaseApiClass {
   };
 
   fetchCourseSkeletons = async () => {
-    if (ENV.PRODUCTION) {
+    if (ENV.PRODUCTION || ENV.DEV) {
       /* TODO: Remove after deploying a server */
       const challenges = require("@pairwise/common").default;
       const FullstackTypeScript: Course = challenges.FullstackTypeScript;
@@ -234,7 +240,7 @@ class Api extends BaseApiClass {
         }),
       };
       return new Ok([course]);
-    } else if (ENV.DEV_MODE) {
+    } else if (ENV.CODEPRESS) {
       /**
        * TODO: Make this code more consistent with the other API methods.
        */

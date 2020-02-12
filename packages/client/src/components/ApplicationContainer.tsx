@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
-import { DEV_MODE } from "tools/client-env";
+import { CODEPRESS } from "tools/client-env";
 import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
@@ -104,8 +104,8 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         {this.renderLoadingOverlay()}
         <SingleSignOnModal />
         <PurchaseCourseModal />
+        {CODEPRESS && <AdminKeyboardShortcuts />}
         <FeedbackModal />
-        {DEV_MODE && <AdminKeyboardShortcuts />}
         <NavigationOverlay overlayVisible={overlayVisible} />
         <Header>
           <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
@@ -118,7 +118,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               <Link to="/home">Pairwise</Link>
             </ProductTitle>
           </ControlsContainer>
-          {DEV_MODE && (
+          {CODEPRESS && (
             <ControlsContainer>
               <EditingToolbar />
             </ControlsContainer>

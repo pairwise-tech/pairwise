@@ -155,6 +155,10 @@ const checkNumberField = (value: any) => {
   return typeof value === "number" ? value : null;
 };
 
+const checkBooleanField = (value: any) => {
+  return typeof value === "boolean" ? value : null;
+};
+
 const checkThemeField = (theme: any): MonacoEditorThemes => {
   return Object.values(MonacoEditorThemes).includes(theme) ? theme : null;
 };
@@ -165,8 +169,9 @@ const checkThemeField = (theme: any): MonacoEditorThemes => {
 const checkSettingsField = (settings?: Partial<UserSettings>) => {
   if (settings) {
     const validSettings: UserSettings = {
-      workspaceFontSize: checkNumberField(settings.workspaceFontSize),
       theme: checkThemeField(settings.theme),
+      fullScreenEditor: checkBooleanField(settings.fullScreenEditor),
+      workspaceFontSize: checkNumberField(settings.workspaceFontSize),
     };
 
     return sanitizeObject(validSettings);

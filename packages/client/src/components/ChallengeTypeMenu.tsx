@@ -5,6 +5,11 @@ import { Select, IListItemsProps } from "@blueprintjs/select";
 import { getChallengeIcon } from "tools/utils";
 import { getRenderItemList, labelByType } from "./Shared";
 
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
 const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
 
 export interface ChallengeTypeOption {
@@ -17,6 +22,11 @@ interface Props {
   currentChallengeType?: string;
   onItemSelect: IListItemsProps<ChallengeTypeOption>["onItemSelect"];
 }
+
+/** ===========================================================================
+ * Component
+ * ============================================================================
+ */
 
 const ChallengeTypeMenu = ({
   items,
@@ -58,5 +68,10 @@ const ChallengeTypeMenu = ({
     </ChallengeTypeSelect>
   );
 };
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default ChallengeTypeMenu;

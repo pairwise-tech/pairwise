@@ -26,7 +26,10 @@ import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
 
 enum ActionTypesEnum {
   SET_CHALLENGE_ID = "SET_CHALLENGE_ID",
+  SET_ANY_SYNC_CHALLENGE_ID = "SET_ANY_SYNC_CHALLENGE_ID",
   WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
+
+  SET_ACTIVE_CHALLENGE_IDS = "SET_ACTIVE_CHALLENGE_IDS",
 
   SET_MODULE_ID = "SET_MODULE_ID",
 
@@ -99,11 +102,28 @@ export const setAdminEditorTab = createAction(
   ActionTypesEnum.SET_ADMIN_EDITOR_TAB,
 )<ADMIN_EDITOR_TAB>();
 
-export const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
-  newChallengeId: string;
+export const setAndSyncChallengeId = createAction(
+  ActionTypesEnum.SET_ANY_SYNC_CHALLENGE_ID,
+)<{
+  currentChallengeId: string;
   previousChallengeId: string;
 }>();
 
+/**
+ * NOTE: This action is used primarily within Redux state updates to
+ * communicate the challenge id changing.
+ */
+export const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
+  currentChallengeId: string;
+  previousChallengeId: string;
+}>();
+
+/**
+ * NOTE: The canonical way to "set" a new challenge id is to navigate to it.
+ * The url is the source of truth for the current challenge. To programmatically
+ * select a new challenge, you can use the following action, which will result
+ * in the routing side effect occurring via an epic. Good luck!
+ */
 export const fetchBlobForChallenge = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE,
 )<string>();
@@ -171,6 +191,14 @@ export const fetchNavigationSkeletonFailure = createAction(
 export const setNavigationMapState = createAction(
   ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
 )<boolean>();
+
+export const setActiveChallengeIds = createAction(
+  ActionTypesEnum.SET_ACTIVE_CHALLENGE_IDS,
+)<{
+  currentModuleId: string;
+  currentCourseId: string;
+  currentChallengeId: string;
+}>();
 
 export const fetchCurrentActiveCourseSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
