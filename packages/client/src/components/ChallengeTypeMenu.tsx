@@ -1,8 +1,9 @@
 import React from "react";
 import { CHALLENGE_TYPE } from "@pairwise/common";
-import { Button, ButtonGroup, Tooltip, Icon } from "@blueprintjs/core";
-import { Select, ItemListRenderer, IListItemsProps } from "@blueprintjs/select";
+import { Button, Tooltip, Icon } from "@blueprintjs/core";
+import { Select, IListItemsProps } from "@blueprintjs/select";
 import { getChallengeIcon } from "tools/utils";
+import { getRenderItemList, labelByType } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -37,7 +38,7 @@ const ChallengeTypeMenu = ({
       filterable={false}
       onItemSelect={onItemSelect}
       items={items}
-      itemListRenderer={renderItemList}
+      itemListRenderer={getRenderItemList(150)}
       itemRenderer={(x, { handleClick, modifiers }) => (
         <Button
           key={x.value}

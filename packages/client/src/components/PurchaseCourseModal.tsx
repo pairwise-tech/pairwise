@@ -1,11 +1,10 @@
 import { Dialog } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components/macro";
 
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
+import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -34,16 +33,20 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
     return (
       <Dialog
         isOpen={this.props.dialogOpen}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        aria-labelledby="purchase-modal-title"
+        aria-describedby="purchase-modal-description"
         onClose={() => {
           this.setAccountModalState(false);
         }}
       >
-        <AccountModal>
-          <TitleText>Purchase Course</TitleText>
-          <SubText>{course.title}</SubText>
-        </AccountModal>
+        <ModalContainer>
+          <ModalTitleText id="purchase-modal-title">
+            Purchase Course
+          </ModalTitleText>
+          <ModalSubText id="purchase-modal-description">
+            {course.title}
+          </ModalSubText>
+        </ModalContainer>
       </Dialog>
     );
   }
@@ -52,45 +55,6 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
     this.props.setPurchaseCourseModalState(state);
   };
 }
-
-/** ===========================================================================
- * Styles
- * ============================================================================
- */
-
-const AccountModal = styled.div`
-  width: 525px;
-  padding: 32px;
-  padding-top: 22px;
-  left: 50%;
-  top: 50%;
-  outline: none;
-  position: absolute;
-  background: black;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  transform: translate(-50%, -50%);
-  border-radius: 6px;
-  border: 1px solid ${COLORS.BORDER_MODAL};
-  background-color: ${COLORS.BACKGROUND_MODAL};
-`;
-
-const TitleText = styled.h1`
-  font-size: 24px;
-  font-weight: 300;
-  text-align: center;
-  color: ${COLORS.TEXT_TITLE};
-  font-family: Helvetica Neue, Lato, sans-serif;
-`;
-
-const SubText = styled(TitleText)`
-  font-size: 16px;
-  margin-top: 12px;
-  max-width: 350px;
-  font-weight: 300;
-`;
 
 /** ===========================================================================
  * Props
