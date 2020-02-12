@@ -36,7 +36,7 @@ export class FeedbackService {
 
     const feedback = {
       ...feedbackDto,
-      user: user.profile,
+      user: user ? user.profile : null,
     };
 
     await this.feedbackRepository.insert(feedback);

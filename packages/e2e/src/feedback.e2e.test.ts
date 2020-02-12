@@ -25,12 +25,11 @@ describe("User Feedback APIs", () => {
       .send({
         feedback: "hi",
         type: "TOO_HARD",
-        challengeId: "9scykDold",
+        challengeId: "0fCd6MkU",
       })
-      .set("Authorization", "Bearer as8fd7a0")
-      .expect(401)
+      .expect(201)
       .end((error, response) => {
-        expect(response.body.error).toBe("Unauthorized");
+        expect(response.text).toBe("Success");
         done(error);
       });
   });
@@ -51,7 +50,7 @@ describe("User Feedback APIs", () => {
       });
   });
 
-  test("/feedback (POST) rejects invalid challenge ids", async done => {
+  test("/feedback (POST) rejects feedback with an invalid feedback type", async done => {
     request(`${HOST}/feedback`)
       .post("/")
       .send({

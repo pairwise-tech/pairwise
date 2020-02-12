@@ -9,10 +9,16 @@ import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
-import { Button, ButtonGroup, FocusStyleManager } from "@blueprintjs/core";
+import {
+  Button,
+  ButtonGroup,
+  FocusStyleManager,
+  Tooltip,
+} from "@blueprintjs/core";
 import Account from "./Account";
-import { ButtonCore, ProfileIcon } from "./Shared";
+import { ButtonCore, ProfileIcon, IconButton } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
+import FeedbackModal from "./FeedbackModal";
 import Workspace from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
@@ -98,6 +104,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         {this.renderLoadingOverlay()}
         <SingleSignOnModal />
         <PurchaseCourseModal />
+        <FeedbackModal />
         {DEV_MODE && <AdminKeyboardShortcuts />}
         <NavigationOverlay overlayVisible={overlayVisible} />
         <Header>
@@ -117,6 +124,15 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             </ControlsContainer>
           )}
           <ControlsContainer style={{ marginLeft: "auto" }}>
+            {!isSandbox && challenge && (
+              <Tooltip content="Submit Feedback" position="bottom">
+                <IconButton
+                  icon="help"
+                  aria-label="open/close feedback dialog"
+                  onClick={this.props.toggleFeedbackDialogOpen}
+                />
+              </Tooltip>
+            )}
             {isSandbox && (
               <Suspense fallback={<p>Menu Loading...</p>}>
                 <LazyChallengeTypeMenu
@@ -471,6 +487,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
+  feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),
@@ -484,6 +501,7 @@ const dispatchProps = {
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   initializeAccessToken: Modules.actions.auth.initializeAccessToken,
+  setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
 };
 
 const mergeProps = (
@@ -496,6 +514,9 @@ const mergeProps = (
   ...state,
   toggleNavigationMap: () => {
     methods.setNavigationMapState(!state.overlayVisible);
+  },
+  toggleFeedbackDialogOpen: () => {
+    methods.setFeedbackDialogState(!state.feedbackDialogOpen);
   },
 });
 

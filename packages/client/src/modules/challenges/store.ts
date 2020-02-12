@@ -6,6 +6,7 @@ import {
   CourseSkeletonList,
   DataBlob,
   ModuleList,
+  FEEDBACK_TYPE,
 } from "@pairwise/common";
 import insert from "ramda/es/insert";
 import move from "ramda/es/move";
@@ -42,6 +43,9 @@ interface AccordionViewState {
 export interface State {
   workspaceLoading: boolean;
   isEditMode: boolean;
+  feedbackDialogOpen: boolean;
+  feedbackType: Nullable<FEEDBACK_TYPE>;
+  feedback?: string;
   displayNavigationMap: boolean;
   courses: Nullable<CourseList>;
   courseSkeletons: Nullable<CourseSkeletonList>;
@@ -61,6 +65,9 @@ const initialState: State = {
   courses: null,
   courseSkeletons: null,
   isEditMode: false,
+  feedbackType: null,
+  feedback: undefined,
+  feedbackDialogOpen: false,
   workspaceLoading: true,
   currentModuleId: null,
   currentCourseId: null,

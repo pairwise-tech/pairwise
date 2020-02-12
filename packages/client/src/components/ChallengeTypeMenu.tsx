@@ -1,8 +1,9 @@
 import React from "react";
 import { CHALLENGE_TYPE } from "@pairwise/common";
-import { Button, ButtonGroup, Tooltip, Icon } from "@blueprintjs/core";
-import { Select, ItemListRenderer, IListItemsProps } from "@blueprintjs/select";
+import { Button, Tooltip, Icon } from "@blueprintjs/core";
+import { Select, IListItemsProps } from "@blueprintjs/select";
 import { getChallengeIcon } from "tools/utils";
+import { getRenderItemList, labelByType } from "./Shared";
 
 const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
 
@@ -17,23 +18,6 @@ interface Props {
   onItemSelect: IListItemsProps<ChallengeTypeOption>["onItemSelect"];
 }
 
-const renderItemList: ItemListRenderer<ChallengeTypeOption> = ({
-  renderItem,
-  items,
-}) => (
-  <ButtonGroup style={{ minWidth: 150 }} fill alignText="left" vertical>
-    {items.map(renderItem)}
-  </ButtonGroup>
-);
-
-const labelByType = (
-  type: string | undefined,
-  items: ChallengeTypeOption[],
-) => {
-  const item = items.find(x => x.value === type);
-  return item?.label || type;
-};
-
 const ChallengeTypeMenu = ({
   items,
   currentChallengeType,
@@ -44,7 +28,7 @@ const ChallengeTypeMenu = ({
       filterable={false}
       onItemSelect={onItemSelect}
       items={items}
-      itemListRenderer={renderItemList}
+      itemListRenderer={getRenderItemList(150)}
       itemRenderer={(x, { handleClick, modifiers }) => (
         <Button
           key={x.value}
