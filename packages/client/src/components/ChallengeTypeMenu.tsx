@@ -70,28 +70,6 @@ const ChallengeTypeMenu = ({
 };
 
 /** ===========================================================================
- * Helpers
- * ============================================================================
- */
-
-const renderItemList: ItemListRenderer<ChallengeTypeOption> = ({
-  renderItem,
-  items,
-}) => (
-  <ButtonGroup style={{ minWidth: 150 }} fill alignText="left" vertical>
-    {items.map(renderItem)}
-  </ButtonGroup>
-);
-
-const labelByType = (
-  type: string | undefined,
-  items: ChallengeTypeOption[],
-) => {
-  const item = items.find(x => x.value === type);
-  return item?.label || type;
-};
-
-/** ===========================================================================
  * Export
  * ============================================================================
  */
