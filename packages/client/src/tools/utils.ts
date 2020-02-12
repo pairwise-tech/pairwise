@@ -271,7 +271,7 @@ export const findCourseById = (courseId: string, courses: CourseList) => {
  * Given a list of courses, create a mapping of all challenge ids to both their
  * module id and course id. Since our URLs don't (currently) indicate course or
  * module we need to derive the course and module for a given challenge ID. This
- * devices all such relationships in one go so it can be referenced later.
+ * derives all such relationships in one go so it can be referenced later.
  */
 export const createInverseChallengeMapping = (
   courses: Course[],
