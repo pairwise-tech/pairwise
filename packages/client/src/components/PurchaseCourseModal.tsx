@@ -1,7 +1,6 @@
 import { Button, Dialog } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components/macro";
 import {
   injectStripe,
   CardElement,
@@ -9,9 +8,10 @@ import {
   Elements,
 } from "react-stripe-elements";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 import { STRIPE_API_KEY } from "tools/client-env";
+import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
+import { COLORS } from "tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -50,12 +50,12 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
         aria-describedby="simple-modal-description"
         onClose={this.handleOnCloseModal}
       >
-        <AccountModal>
-          <TitleText>Purchase Course</TitleText>
-          <SubText>
+        <ModalContainer>
+          <ModalTitleText>Purchase Course</ModalTitleText>
+          <ModalSubText>
             Purchasing {course.title} will give you full lifetime access to the
             course content and is fully refundable up to 30 days and{" "}
-          </SubText>
+          </ModalSubText>
           <StripeProvider apiKey={STRIPE_API_KEY}>
             <div className="stripe-checkout">
               <Elements>
@@ -72,7 +72,7 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
           >
             Confirm Order
           </Button>
-        </AccountModal>
+        </ModalContainer>
       </Dialog>
     );
   }
@@ -188,47 +188,6 @@ class NameForm extends React.Component<any, any> {
 }
 
 const PaymentBioForm = injectStripe(NameForm);
-
-/** ===========================================================================
- * Styles
- * ============================================================================
- */
-
-const AccountModal = styled.div`
-  width: 625px;
-  height: 450px;
-  padding: 32px;
-  padding-top: 22px;
-  left: 50%;
-  top: 50%;
-  outline: none;
-  position: absolute;
-  background: black;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  transform: translate(-50%, -50%);
-  border-radius: 6px;
-  border: 1px solid ${COLORS.BORDER_MODAL};
-  background-color: ${COLORS.BACKGROUND_MODAL};
-`;
-
-const TitleText = styled.h1`
-  font-size: 24px;
-  font-weight: 300;
-  text-align: center;
-  color: ${COLORS.TEXT_TITLE};
-  font-family: Helvetica Neue, Lato, sans-serif;
-`;
-
-const SubText = styled(TitleText)`
-  font-size: 16px;
-  margin-top: 12px;
-  max-width: 525px;
-  font-weight: 300;
-  color: ${COLORS.TEXT_TITLE};
-`;
 
 /** ===========================================================================
  * Props

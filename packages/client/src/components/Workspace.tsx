@@ -39,13 +39,14 @@ import {
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
-import { LowerRight, IconButton } from "./Shared";
-import { Tooltip, ButtonGroup } from "@blueprintjs/core";
+import { LowerRight, IconButton, UpperRight } from "./Shared";
+import { Button, Tooltip, ButtonGroup } from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import {
   wait,
   composeWithProps,
   constructDataBlobFromChallenge,
+  challengeRequiresWorkspace,
 } from "tools/utils";
 import {
   Tab,
@@ -92,7 +93,6 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 
 interface IState {
   code: string;
-  fullScreenEditor: boolean;
   testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
@@ -111,6 +111,9 @@ class Workspace extends React.Component<IProps, IState> {
   // methods and maybe a class as well. But they are different. Editor instance
   // is needed for updating editor options, i.e. font size.
   monacoWrapper: any = null;
+
+  // A cancelable handler for refreshing the editor
+  editorRefreshTimerHandler: Nullable<NodeJS.Timeout> = null;
 
   // The actual monaco editor instance.
   editorInstance: Nullable<{
@@ -137,13 +140,19 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    const initialCode = props.blob.type === "challenge" ? props.blob.code : "";
+    // NOTE: Except for codepress edit mode this is the only touchpoint for
+    // updating the code in the editor as of this commit. This means that to
+    // update editor code the whole editor has to be re-initialized, which
+    // in-turn means that the parent component has to ensure it's fully
+    // re-initializing this component rather than just passing updated props. As
+    // of right now this means that the various loading props need to be
+    // accurate.
+    const initialCode = "code" in props.blob ? props.blob.code : "";
 
     this.state = {
       code: initialCode,
       testResults: [],
       logs: DEFAULT_LOGS,
-      fullScreenEditor: false,
       monacoInitializationError: false,
     };
   }
@@ -161,11 +170,16 @@ class Workspace extends React.Component<IProps, IState> {
     this.initializeSyntaxHighlightWorker();
 
     /* Handle some timing issue with Monaco initialization... */
+    // TODO: This might cause issues with an unmounted editor. Needs to be made
+    // cancellable.
     await wait(500);
     this.iFrameRenderPreview();
     this.debouncedSyntaxHighlightFunction(this.state.code);
 
     subscribeCodeWorker(this.handleCodeFormatMessage);
+
+    /* Focus the editor whenever a challenge is loaded */
+    this.tryToFocusEditor();
   }
 
   componentWillUnmount() {
@@ -176,6 +190,66 @@ class Workspace extends React.Component<IProps, IState> {
       this.handleReceiveMessageFromCodeRunner,
     );
     unsubscribeCodeWorker(this.handleCodeFormatMessage);
+
+    // Cancel any pending refresh
+    if (this.editorRefreshTimerHandler) {
+      clearTimeout(this.editorRefreshTimerHandler);
+    }
+  }
+
+  componentDidUpdate(prevProps: IProps) {
+    /**
+     * Reset the editor if the editor screen size is toggle.
+     *
+     * NOTE: This must happen AFTER the component updates.
+     */
+    if (
+      prevProps.userSettings.fullScreenEditor !==
+      this.props.userSettings.fullScreenEditor
+    ) {
+      this.resetMonacoEditor();
+      this.tryToFocusEditor();
+    }
+
+    // Handle changes in editor options
+    if (prevProps.editorOptions !== this.props.editorOptions) {
+      this.editorInstance?.updateOptions(prevProps.editorOptions);
+    }
+
+    // Handle changes in the editor theme
+    if (prevProps.userSettings.theme !== this.props.userSettings.theme) {
+      this.setMonacoEditorTheme(prevProps.userSettings.theme);
+    }
+
+    // Handle changes to isEditMode. If this is a code challenge and isEditMode
+    // has changed, then update.
+    //
+    // This update is currently necessary to get the correct code into the
+    // editor when switching edit mode. For example: I'm in codepress but just
+    // using the app as a user. I type some code in the editor, which gets
+    // persisted.  I then switch to edit mode. At that point we need to replace
+    // the editor code--which has changed--with the starter code so that I can
+    // edit it.
+    if (
+      "code" in this.props.blob &&
+      prevProps.isEditMode !== this.props.isEditMode
+    ) {
+      if (this.props.isEditMode) {
+        // Switching TO edit mode FROM user mode
+        this.handleEditorTabClick(prevProps.adminEditorTab);
+      } else {
+        // Switching FROM edit mode TO user mode
+        const userCode = this.props.blob.code || "";
+        this.setState({ code: userCode }, this.refreshEditor);
+      }
+    }
+
+    // Account for changing the challenge type in the sandbox. Otherwise nothing
+    // gets re-rendered since the ID of the challenge does not change
+    // TODO: This is ugly because it's unclear why re-rendering immediately fails
+    if (prevProps.challenge.type !== this.props.challenge.type) {
+      this.pauseAndRefreshEditor();
+    }
   }
 
   refreshEditor = () => {
@@ -186,55 +260,12 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  componentWillReceiveProps(nextProps: IProps) {
-    // TODO: Can this be removed? I refactored some code and this may no
-    // longer be needed, or I am wrong and more refactoring is required.
-    // Update in response to changing challenge
-    // if (this.props.challenge.id !== nextProps.challenge.id) {
-    //   const { challenge, isEditMode } = nextProps;
-    //   const newCode = getEditorCode({
-    //     challenge,
-    //     isEditMode,
-    //     tab: this.state.adminEditorTab,
-    //   });
-    //   this.setState(
-    //     { code: newCode, adminTestTab: "testResults" },
-    //     this.refreshEditor,
-    //   );
-    //
-
-    if (this.props.editorOptions !== nextProps.editorOptions) {
-      this.editorInstance?.updateOptions(nextProps.editorOptions);
+  tryToFocusEditor = () => {
+    if (this.editorInstance) {
+      // @ts-ignore .focus is a valid method...
+      this.editorInstance.focus();
     }
-
-    if (this.props.userSettings.theme !== nextProps.userSettings.theme) {
-      this.setMonacoEditorTheme(nextProps.userSettings.theme);
-    }
-
-    // Account for changing the challenge type in the sandbox. Otherwise nothing
-    // gets re-rendered since the ID of the challenge does not change
-    // TODO: This is ugly because it's unclear why re-rendering immediately fails
-    if (this.props.challenge.type !== nextProps.challenge.type) {
-      wait(50).then(this.refreshEditor);
-    }
-
-    // TODO: Can this be removed? I refactored some code and this may no
-    // longer be needed, or I am wrong and more refactoring is required.
-    // Update in response to toggling admin edit mode. This will only ever
-    // happen for us as we use codepress, not for our end users.
-    // if (this.props.isEditMode !== nextProps.isEditMode) {
-    //   this.setState(
-    //     {
-    //       code: getEditorCode({
-    //         challenge: nextProps.challenge,
-    //         isEditMode: nextProps.isEditMode,
-    //         tab: this.state.adminEditorTab,
-    //       }),
-    //     },
-    //     this.refreshEditor,
-    //   );
-    // }
-  }
+  };
 
   /**
    * Reset the code editor content to the starterCode.
@@ -396,30 +427,26 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   /**
-   * Switching tabs in the main code area, so that we can edit the starter code and solution code of a challenge.
-   * Doing a check to see if we even need to update state. Normally we would
-   * just do a fire-and-forget state update regardless, but with all the
-   * imperative logic going on with the editor this keeps it from updating
-   * unnecessarily.
+   * Switching tabs in the main code area, so that we can edit the starter code
+   * and solution code of a challenge.
    *
    * NOTE: When switching to the solution code default to start code
    */
   handleEditorTabClick = (tab: ADMIN_EDITOR_TAB) => {
-    if (tab !== this.props.adminEditorTab) {
-      this.setState(
-        {
-          code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
-        },
-        () => {
-          this.refreshEditor();
-          this.props.setAdminEditorTab(tab);
-        },
-      );
-    }
+    this.setState(
+      {
+        code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
+      },
+      () => {
+        this.refreshEditor();
+        this.props.setAdminEditorTab(tab);
+      },
+    );
   };
 
   /**
-   * Switch tabs in the test area of the workspace. So that we can see test results and write tests using different tabs.
+   * Switch tabs in the test area of the workspace. So that we can see test
+   * results and write tests using different tabs.
    */
   handleTestTabClick = (tab: ADMIN_TEST_TAB) => {
     if (tab !== this.props.adminTestTab) {
@@ -439,8 +466,9 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { fullScreenEditor, testResults } = this.state;
-    const { challenge, isEditMode } = this.props;
+    const { testResults } = this.state;
+    const { challenge, isEditMode, userSettings } = this.props;
+    const { fullScreenEditor } = userSettings;
     const isSandbox = challenge.id === SANDBOX_ID;
     const isFullScreen = fullScreenEditor || isSandbox;
     const IS_REACT_CHALLENGE = challenge.type === "react";
@@ -463,23 +491,33 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
+        <UpperRight isEditMode={isEditMode}>
+          <Tooltip content="Shortcut: opt+enter" position="top">
+            <Button
+              aria-label="run the current editor code"
+              onClick={this.iFrameRenderPreview}
+            >
+              Run Code
+            </Button>
+          </Tooltip>
+        </UpperRight>
         <LowerRight>
           <ButtonGroup vertical style={{ marginBottom: 8 }}>
-            <Tooltip content={"Increase Font Size"} position="left">
+            <Tooltip content="Increase Font Size" position="left">
               <IconButton
                 icon="plus"
                 aria-label="increase editor font size"
                 onClick={this.props.increaseFontSize}
               />
             </Tooltip>
-            <Tooltip content={"Decrease Font Size"} position="left">
+            <Tooltip content="Decrease Font Size" position="left">
               <IconButton
                 icon="minus"
                 aria-label="decrease editor font size"
                 onClick={this.props.decreaseFontSize}
               />
             </Tooltip>
-            <Tooltip content={"Toggle High Contrast Mode"} position="left">
+            <Tooltip content="Toggle High Contrast Mode" position="left">
               <IconButton
                 icon="contrast"
                 aria-label="toggle high contrast mode"
@@ -491,7 +529,7 @@ class Workspace extends React.Component<IProps, IState> {
             {this.state.code !== challenge.starterCode &&
               !isEditMode &&
               !isSandbox && (
-                <Tooltip content={"Restore Initial Code"} position="left">
+                <Tooltip content="Restore Initial Code" position="left">
                   <IconButton
                     icon="reset"
                     aria-label="reset editor"
@@ -499,7 +537,7 @@ class Workspace extends React.Component<IProps, IState> {
                   />
                 </Tooltip>
               )}
-            <Tooltip content={"Format Code"} position="left">
+            <Tooltip content="Format Code" position="left">
               <IconButton
                 icon="style"
                 aria-label="format editor code"
@@ -508,7 +546,11 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
             {!isSandbox && (
               <Tooltip
-                content={fullScreenEditor ? "Regular" : "Full Screen"}
+                content={
+                  fullScreenEditor
+                    ? "Regular Size Editor"
+                    : "Full Screen Editor"
+                }
                 position="left"
               >
                 <IconButton
@@ -714,8 +756,16 @@ class Workspace extends React.Component<IProps, IState> {
      */
     this.setState({ code }, () => {
       this.debouncedSaveCodeFunction();
-      this.debouncedRenderPreviewFunction();
       this.debouncedSyntaxHighlightFunction(code);
+
+      /**
+       * Only live preview markup challenges, for the UI.
+       *
+       * TODO: Revisit this for React challenges.
+       */
+      if (this.props.challenge.type === "markup") {
+        this.debouncedRenderPreviewFunction();
+      }
     });
   };
 
@@ -954,16 +1004,18 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === "Meta" && event.keyCode === 91) {
+    /**
+     * I like Cmd+Enter but this produces a new line in the editor...so I
+     * just used Opt+Enter for now. Can be debugged later.
+     */
+    const OptionAndEnterKey = event.altKey && event.key === "Enter";
+    if (OptionAndEnterKey) {
       this.iFrameRenderPreview();
     }
   };
 
   toggleEditorType = () => {
-    this.setState(
-      x => ({ fullScreenEditor: !x.fullScreenEditor }),
-      this.resetMonacoEditor,
-    );
+    this.props.toggleEditorSize();
   };
 
   resetMonacoEditor = () => {
@@ -1023,6 +1075,11 @@ class Workspace extends React.Component<IProps, IState> {
   private readonly transformMonacoCode = (fn: (x: string) => string) => {
     this.setState({ code: fn(this.state.code) }, this.setMonacoEditorValue);
   };
+
+  private readonly pauseAndRefreshEditor = async (timeout: number = 50) => {
+    // @ts-ignore types!
+    this.editorRefreshTimerHandler = setTimeout(this.refreshEditor, timeout);
+  };
 }
 
 /** ===========================================================================
@@ -1060,13 +1117,19 @@ const mergeProps = (
   ...props,
   ...methods,
   ...state,
-  toggleHighContrastMode: () =>
+  toggleHighContrastMode: () => {
     methods.updateUserSettings({
       theme:
         state.userSettings.theme === MonacoEditorThemes.DEFAULT
           ? MonacoEditorThemes.HIGH_CONTRAST
           : MonacoEditorThemes.DEFAULT,
-    }),
+    });
+  },
+  toggleEditorSize: () => {
+    methods.updateUserSettings({
+      fullScreenEditor: !state.userSettings.fullScreenEditor,
+    });
+  },
   increaseFontSize: () => {
     methods.updateUserSettings({
       workspaceFontSize:
@@ -1104,7 +1167,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
     const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
 
     if (!challenge || isLoadingBlob || isUserLoading) {
-      return <h1>Loading...</h1>;
+      return <h1>Loading Challenge...</h1>;
     }
 
     /**
@@ -1117,17 +1180,15 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       code: challenge.starterCode,
     });
     const codeBlob = blob ? blob : constructedBlob;
-
-    const { type } = challenge;
-    const contentOnlyChallenge = type === "media" || type === "section";
-    const challengeRequiresWorkspace = !contentOnlyChallenge;
+    const isSandbox = challenge.id === SANDBOX_ID;
+    const requiresWorkspace = challengeRequiresWorkspace(challenge);
 
     return (
       <React.Fragment>
-        {challengeRequiresWorkspace && (
+        {requiresWorkspace && (
           <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
         )}
-        {challenge.id !== SANDBOX_ID && (
+        {!isSandbox && (
           <LowerSection withHeader={challenge.type === "media"}>
             <MediaArea />
           </LowerSection>

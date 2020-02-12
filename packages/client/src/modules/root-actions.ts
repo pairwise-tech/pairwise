@@ -3,6 +3,7 @@ import * as Auth from "./auth/actions";
 import * as Challenges from "./challenges/actions";
 import * as User from "./user/actions";
 import * as Purchase from "./purchase/actions";
+import * as Feedback from "./feedback/actions";
 
 /** ===========================================================================
  * All Actions
@@ -15,4 +16,5 @@ export const Actions = {
   ...User,
   ...Challenges,
   ...Purchase,
+  ...Feedback,
 };

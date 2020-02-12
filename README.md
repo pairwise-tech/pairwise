@@ -94,6 +94,9 @@ $ yarn db
 $ yarn server:dev
 
 # Start the client
+$ yarn client
+
+# Start the client in development mode (no server required)
 $ yarn client:dev
 
 # (Optional) Run the common package
@@ -113,7 +116,7 @@ $ yarn docker:dependencies
 $ yarn up
 
 # Run the client app
-$ yarn client:dev
+$ yarn client
 ```
 
 ## Codepress

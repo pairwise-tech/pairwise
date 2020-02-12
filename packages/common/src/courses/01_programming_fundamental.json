@@ -24,7 +24,7 @@
     {
       "free": true,
       "id": "fpvPtNWkC",
-      "title": "Programming Fundamentals",
+      "title": "HTML & CSS",
       "challenges": [
         {
           "id": "IEC6FcKI",
@@ -234,6 +234,24 @@
           "starterCode": "<style>\n  /* Your code here */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    padding: 10px;\n    background: tomato;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .nav a:hover {\n    background: blue;\n    color: tomato;\n  }\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    background: tomato;\n    color: blue;\n    padding: 10px;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "supplementaryContent": "You've probably noticed that when you hover over a link in a browser it will change somehow. You can customize this!\n\nThis is called a hover state, and you can style a hover state just like you can style any other CSS. The main difference is the selector.\n\n```css\n/* Style the hover state for all links on the site */\na:hover {\n  text-decoration: underline;\n}\n\n/* Style just the nav links */\n.nav a:hover {\n  color: tomato;\n}\n\n/* Style the entire nav div when it's hovered */\n.nav:hover {\n  background: gray;\n}\n```\n\nTo style how something looks when the mouse hovers over it you use `:hover`. Specifically, you just put `:hover` after the selector you want to style. It's important not to put a space in front of `:hover`."
+        }
+      ]
+    },
+    {
+      "free": true,
+      "id": "lzTzpPcS",
+      "title": "TypeScript",
+      "challenges": [
+        {
+          "id": "2qKcNab8",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
         },
         {
           "id": "0gih2c1M",
@@ -377,14 +395,7 @@
           "starterCode": "let iAmAString: any = undefined;\nlet iAmANumber: any = null;\nlet iAmNull: any = 71919;\nlet iAmUndefined: any = \"not undefined yet!\";",
           "solutionCode": "let iAmAString: any = \"undefined\";\nlet iAmANumber: any = 71919;\nlet iAmNull: any = null;\nlet iAmUndefined: any = undefined;",
           "supplementaryContent": ""
-        }
-      ]
-    },
-    {
-      "free": false,
-      "id": "lzTzpPcS",
-      "title": "TypeScript",
-      "challenges": [
+        },
         {
           "id": "6T3GXc4ap",
           "type": "typescript",
@@ -414,14 +425,93 @@
           "solutionCode": "\nconst lengthOfArray = (array) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
           "testCode": "[\n  { input: [[1, 2, 3, 4]], expected: 4 },\n  { input: [[]], expected: 0 },\n  { input: [[1, 1, 1, 1, 1, 1, 1, 1, 1]], expected: 9 },\n  { input: [[3, 3, 3]], expected: 3 },\n  { input: [[2]], expected: 1 },\n  { input: [[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]], expected: 14 },\n].forEach(({ input, expected }) => {\n  test(input[0].join(\", \"), () => {\n    expect(lengthOfArray(...input)).toBe(expected);\n  });\n});\n",
           "supplementaryContent": "Placeholder supplementary content..."
+        },
+        {
+          "id": "9wRw1y5V",
+          "type": "section",
+          "title": "Programming Projects",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this section, you will tackle building your first real program."
+        },
+        {
+          "id": "zweKy6cg",
+          "type": "typescript",
+          "title": "Tic Tac Toe",
+          "content": "In this project, we will build Tic\\-Tac\\-Toe as a simple TypeScript program.\n\nIn the editor, you will find several types defined which present the players and game classes for a Tic\\-Tac\\-Toe game. There are also two TypeScript classes `GamePlayer` and `Game` which contain partially implemented methods.\n\nYour job is to complete the implementation of these methods \\(use the type definitions and comments as a reference\\) so that the `Game` class method `playGame` can run an entire round of Tic\\-Tac\\-Toe\\!\n\nThe `playGame` method accepts the two players in the game and executes the game logic \\(this is what you have to implement\\!\\) until a winner is reached, or the game results in a tie. This method should return the game result.\n\nGood luck\\!",
+          "testCode": "// test('message', () => expect(...))\ntest(\"The game should conclude and playGame should return the winner\", () => {\n    const board = [\n        [null, null, null],\n        [null, null, null],\n        [null, null, null],\n    ];\n\n    const human = new GamePlayer(\"human\");\n    const machine = new GamePlayer(\"machine\");\n    const game = new Game(board);\n    const winner = game.playGame(human, machine);\n    expect(winner).toBe(\"human\");\n});",
+          "videoUrl": "",
+          "starterCode": "// Player types\ntype Human = \"human\";\ntype Machine = \"machine\";\ntype Player = Machine | Human;\n\n// Game types\ntype Tile = Player | null;\ntype Board = Tile[][];\ntype GameResult = Player | \"tie\";\n\ninterface TicTacToePlayer {\n    play: (board: Board) => Board;\n}\n\nclass GamePlayer implements TicTacToePlayer {\n    player: Player;\n\n    constructor(player: Player) {\n        this.player = player;\n    }\n\n    play(board: Board): Board {\n        // This method takes a game board and makes a move. Where will you play?\n        // [TODO]: Your code here:\n        return [];\n    }\n}\n\ninterface TicTacToeGame {\n    board: Board;\n    checkBoard: (board: Board) => GameResult | null;\n    playGame: (humanPlayer: TicTacToePlayer, machinePlayer: TicTacToePlayer) => GameResult;\n}\n\nclass Game implements TicTacToeGame {\n    board: Board;\n    constructor(board: Board) {\n        this.board = board;\n    }\n\n    checkBoard(board: Board): GameResult | null {\n        // This method checks the game board and returns a GameResult when the game\n        // is concluded, or null if the game is still in progress.\n        // [TODO]: Your code here:\n        return null;\n    }\n\n    playGame(humanPlayer: TicTacToePlayer, machinePlayer: TicTacToePlayer): GameResult {\n        // This method executes the game logic!\n        // [TODO]: Your code here:\n        return \"tie\";\n    }\n\n    printBoard() {\n        for (const row of this.board) {\n            console.log(row);\n        }\n    }\n}\n",
+          "solutionCode": "/**\n * Define Game Types:\n */\n\ntype Machine = \"machine\";\ntype Human = \"human\";\ntype Player = Machine | Human;\ntype Tile = Player | null;\ntype Board = Tile[][];\ntype GameResult = Player | \"tie\";\n\n/**\n * Create Player and Game classes:\n */\n\n\ninterface TicTacToePlayer {\n    play: (board: Board) => Board;\n}\n\nclass GamePlayer implements TicTacToePlayer {\n    player: Player;\n\n    constructor(player: Player) {\n        this.player = player;\n    }\n\n    play(board: Board): Board {\n        for (let i = 0; i < board.length; i++) {\n            for (let j = 0; j < board.length; j++) {\n                const tile = board[i][j];\n                if (tile === null) {\n                    board[i][j] = this.player;\n                    return board;\n                }\n            }\n        }\n    }\n}\n\ninterface TicTacToeGame {\n    board: Board;\n    checkBoard: (board: Board) => GameResult | null;\n    playGame: (humanPlayer: TicTacToePlayer, machinePlayer: TicTacToePlayer) => GameResult;\n}\n\nclass Game implements TicTacToeGame {\n    board: Board;\n    constructor(board: Board) {\n        this.board = board;\n    }\n\n    checkBoard(board: Board): GameResult | null {\n        const countNulls = (board: Board) => {\n            const nulls = board.reduce((nullCount, row) => row.reduce((c, x) => x === null ? c + 1 : c, 0), 0);\n            if (nulls === 0) {\n                return \"tie!\";\n            }\n        }\n\n        const checkRows = (rowIndex: number = 0) => {\n            const [left, middle, right] = board[rowIndex];\n            if (left === middle && middle === right) {\n                if (left !== null) {\n                    return left;\n                } else if (rowIndex < board.length - 1) {\n                    return checkRows(rowIndex + 1);\n                } else {\n                    return null;\n                }\n            }\n        }\n\n        const checkColumns = (columnIndex: number = 0) => {\n            const top = board[0][columnIndex];\n            const middle = board[1][columnIndex];\n            const bottom = board[2][columnIndex];\n\n            if (top === middle && middle === bottom) {\n                if (top !== null) {\n                    return top;\n                } else if (columnIndex < board[0].length - 1) {\n                    return checkColumns(columnIndex + 1);\n                } else {\n                    return null;\n                }\n            }\n        }\n\n        let winner = null;\n\n        // Check rows\n        winner = checkRows();\n        if (winner) {\n            return winner;\n        }\n\n        // Check columns\n        winner = checkColumns();\n        if (winner) {\n            return winner;\n        }\n\n        // Get coordinates for diagonal tiles\n        const topLeft = board[0][0];\n        const topRight = board[0][2];\n        const middle = board[0][0];\n        const bottomLeft = board[2][0];\n        const bottomRight = board[2][2];\n\n        // Check top left to bottom right diagonal\n        if (topLeft === middle && middle === bottomLeft) {\n            if (topLeft !== null) {\n                return topLeft;\n            }\n        }\n\n        // Check bottom left to top right diagonal\n        if (bottomLeft === middle && middle === topRight) {\n            if (bottomLeft !== null) {\n                return bottomLeft;\n            }\n        }\n\n        return null;\n    }\n\n    turn(player: TicTacToePlayer, nextPlayer: TicTacToePlayer): GameResult {\n        player.play(this.board);\n        const winner = this.checkBoard(this.board);\n        if (winner !== null) {\n            return winner;\n        } else {\n            return this.turn(nextPlayer, player);\n        }\n    }\n\n    playGame(humanPlayer: TicTacToePlayer, machinePlayer: TicTacToePlayer): GameResult {\n        return this.turn(humanPlayer, machinePlayer);\n    }\n\n    printBoard() {\n        for (const row of this.board) {\n            console.log(row);\n        }\n    }\n}\n\n/**\n * Instantiate game pieces:\n */\n\nconst board = [\n    [null, null, null],\n    [null, null, null],\n    [null, null, null],\n];\n\nconst human = new GamePlayer(\"human\");\nconst machine = new GamePlayer(\"machine\");\nconst game = new Game(board);\n\n/**\n * Play the game1\n */\n\nconst winner = game.playGame(human, machine);\ngame.printBoard();\n",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "CktrOyVg",
+          "type": "media",
+          "title": "Tic Tac Toe Guided Project",
+          "content": "ic",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "Here we will walk through an example of how the Tic Tac Toe project could be built."
         }
       ]
     },
     {
-      "free": false,
-      "id": "IY2mbmT6",
-      "title": "React",
+      "id": "4IXSqQMi",
+      "title": "Developer Workflow",
       "challenges": [
+        {
+          "id": "3a4-HU8P",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module, you will learn about a standard developer workflow practices, tools, and techniques. You will learn how to use version control software such as Git, code editing tools like VS Code, and team collaboration tools like GitHub."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "N3xExLt4",
+      "title": "Async Programming & APIs",
+      "challenges": [
+        {
+          "id": "SfvRE0Ai",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn how different programs communicate with each."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "_tllrvtp",
+      "title": "UI Programming",
+      "challenges": [
+        {
+          "id": "-pAkjWcr",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn how to build frontend user interfaces \\(UIs\\). Specifically, will learn a popular library called React."
+        },
         {
           "id": "50f7f8sUV",
           "type": "react",
@@ -432,7 +522,134 @@
           "testCode": "test(\"Renders a <h1> tag with the text 'Hello, React!'\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const label = container.querySelector(\"h1\");\n  return label.textContent === \"Hello, React!\";\n});\n\ntest(\"Renders a controlled <input /> using React state\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const inputEl = container.querySelector(\"input\");\n  const testValue = \"giraffe\";\n  ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });\n  return inputEl.value === testValue;\n});\n",
           "supplementaryContent": "Placeholder supplementary content..."
         }
-      ]
+      ],
+      "free": false
+    },
+    {
+      "id": "xdu5gf3-",
+      "title": "Server Programming",
+      "challenges": [
+        {
+          "id": "kUvFiQmw",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn about backend engineering: how to write servers."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "f0pDYSOV",
+      "title": "Databases",
+      "challenges": [
+        {
+          "id": "LO2nn_8O",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn about databases, the technology responsible for storing all of the data used by modern software applications."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "D1JR2EXa",
+      "title": "Mobile",
+      "challenges": [
+        {
+          "id": "BfciawyS",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn the basics of programming mobile apps. Specifically, you will learn React Native, a cross\\-platform technology which allows developers to build iOS and Android apps using a single codebase."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "ZzVuDVNP",
+      "title": "Testing & Automation",
+      "challenges": [
+        {
+          "id": "s_p7YnS0",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn about how to test software and automate common tasks in order to improve productivity."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "qV7cPqG1",
+      "title": "Debugging & Refactoring",
+      "challenges": [
+        {
+          "id": "cBlWsqgO",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module you will learn the vital skills of debugging and refactoring software. Once software is written, it will inevitably have problems and errors. Debugging is the process of tracking down, understanding, and fixing errors in the code. Refactoring, it is the process of revisiting old code and writing it to improve the code quality and hopefully reduce the chances of bugs and errors."
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "G8v0iMpm",
+      "title": "Delivery & Deployment",
+      "challenges": [
+        {
+          "id": "Vy435o_N",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "In this module, you will learn about how modern software is deployed and delivered to users. This is one of the last important topics on your journey to becoming a software engineer\\!"
+        }
+      ],
+      "free": false
+    },
+    {
+      "id": "GgP1rkAa",
+      "title": "Capstone Project",
+      "challenges": [
+        {
+          "id": "Oe15TzrQ",
+          "type": "section",
+          "title": "Intro",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "Congratulations\\! You have completed all the course material and you're not ready to get your hands dirty building real world applications\\! You are definitely ready for a job, but you still need a portfolio of rockstar projects to prove it to your future employer. That's what this section is all about: letting you loose to build some amazing projects to impress everyone around you. Let's get started\\!"
+        }
+      ],
+      "free": false
     }
   ]
 }

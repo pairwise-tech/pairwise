@@ -6,6 +6,7 @@ import { Switch, Button } from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import KeyboardShortcuts from "./KeyboardShortcuts";
+import { CHALLENGE_TYPE } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -17,13 +18,39 @@ const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
 type EditChallengeControlsConnectProps = ReturnType<typeof mapToolbarState> &
   typeof toolbarDispatchProps;
 
-const CHALLENGE_TYPE_CHOICES: ChallengeTypeOption[] = [
-  { value: "section", label: "Section" },
-  { value: "media", label: "Media" },
-  { value: "markup", label: "Markup" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "react", label: "React" },
-];
+type ChallengeTypeChoiceMap = { [key in CHALLENGE_TYPE]: string };
+
+/**
+ * Map of challenge types to choice labels.
+ */
+const challengeTypeChoiceMap: ChallengeTypeChoiceMap = {
+  section: "Section",
+  media: "Media",
+  markup: "Markup",
+  typescript: "TypeScript",
+  react: "React",
+  project: "Project",
+  "guided-project": "Guided Project",
+  "special-topic": "Special Topic",
+};
+
+const mapChallengeTypeEntries = (
+  entry: [string, string],
+): ChallengeTypeOption => {
+  const [key, label] = entry;
+  return {
+    value: key as CHALLENGE_TYPE /* Screw you TypeScript! */,
+    label,
+  };
+};
+
+/**
+ * Turn the well-typed challenge type choice map into a list of options
+ * without elegance.
+ */
+const CHALLENGE_TYPE_CHOICES = Object.entries(challengeTypeChoiceMap).map(
+  mapChallengeTypeEntries,
+);
 
 /** ===========================================================================
  * React Component
@@ -55,10 +82,6 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
 
   const toggleHidden = () => {
     setHidden(!hidden);
-  };
-
-  const handleToggleNavigationMap = () => {
-    props.setNavigationMapState(!overlayVisible);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,13 +158,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
           />
         </Suspense>
       </SlideOut>
-      <KeyboardShortcuts
-        /* TODO: Provide some reference in the app of what shortcut keys exist? */
-        keymap={{
-          "cmd+shift+e": toggleHidden,
-          "cmd+i": handleToggleNavigationMap,
-        }}
-      />
+      <KeyboardShortcuts keymap={{ "cmd+shift+e": toggleHidden }} />
     </div>
   );
 };
@@ -177,7 +194,6 @@ const toolbarDispatchProps = {
   saveCourse: Modules.actions.challenges.saveCourse,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   deleteChallenge: Modules.actions.challenges.deleteChallenge,
-  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
 };
 
 /** ===========================================================================

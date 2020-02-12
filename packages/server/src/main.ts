@@ -32,8 +32,8 @@ const httpsOptions = ENV.HTTPS
   : undefined;
 
 const swaggerOptions = new DocumentBuilder()
-  .setTitle("Mono Prototype")
-  .setDescription("Mono Prototype APIs")
+  .setTitle("Pairwise")
+  .setDescription("Pairwise APIs")
   .setVersion("1.0")
   .addTag("Learn to Code!")
   .build();

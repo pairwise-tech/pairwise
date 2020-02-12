@@ -1,26 +1,24 @@
-import React, { Suspense, SyntheticEvent } from "react";
-import Markdown, { ReactMarkdownProps } from "react-markdown";
+import React, { SyntheticEvent } from "react";
 import cx from "classnames";
 import { EditorProps } from "rich-markdown-editor";
 
 import styled, { CSSProperties } from "styled-components/macro";
 import {
-  EditableText,
-  IEditableTextProps,
   Button,
   Icon,
   IconName,
   Classes,
+  ButtonGroup,
 } from "@blueprintjs/core";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
 
-import { COLORS, PROSE_MAX_WIDTH, AppToaster } from "../tools/constants";
+import { COLORS, AppToaster } from "../tools/constants";
+import { IItemListRendererProps } from "@blueprintjs/select";
+import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
-
-export const LazyCodeBlock = React.lazy(() => import("./CodeBlock"));
 
 interface DarkThemeProps {
   children: React.ReactNode;
@@ -40,7 +38,7 @@ export const Loading = () => {
 };
 
 // Adapted from: https://github.com/outline/rich-markdown-editor/blob/master/src/theme.js
-const editorColors = {
+export const editorColors = {
   almostBlack: "#181A1B",
   lightBlack: "#2F3336",
   almostWhite: "#E6E6E6",
@@ -179,14 +177,6 @@ export const ContentEditor = (props: EditorProps) => (
   </EditorExternalStyles>
 );
 
-const InlineCode = ({ value }: { value: string }) => {
-  return <code className="code">{value}</code>;
-};
-
-const BlockQuote = ({ children }: { children: React.ReactNode }) => {
-  return <blockquote className="tip">{children}</blockquote>;
-};
-
 export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -213,62 +203,6 @@ export const ButtonCore = styled.button`
   }
 `;
 
-const HighlightedMarkdown = (props: ReactMarkdownProps) => {
-  return (
-    <Suspense fallback={<pre>Loading...</pre>}>
-      <Markdown
-        renderers={{
-          code: LazyCodeBlock,
-          inlineCode: InlineCode,
-          blockquote: BlockQuote,
-        }}
-        {...props}
-      />
-    </Suspense>
-  );
-};
-
-const StyledMarkdownBase = styled(HighlightedMarkdown)`
-  .code {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1px 3px;
-    display: inline;
-    /* color: #ff4788; */
-    /* color: rgb(0, 255, 185); */
-    color: rgb(108, 188, 255);
-    border-radius: 3px;
-    line-height: normal;
-    font-size: 85%;
-  }
-`;
-
-export const StyledMarkdown = styled(StyledMarkdownBase)`
-  max-width: ${PROSE_MAX_WIDTH}px;
-  color: white;
-  line-height: 1.5;
-  font-size: 1.1rem;
-
-  .tip {
-    border-left: 5px solid #6cbbff;
-    font-size: 18px;
-    line-height: 24px;
-    padding: 10px 10px 10px 24px;
-    background: #323232;
-  }
-
-  .tip p {
-    margin: 0;
-  }
-`;
-
-export const StyledMarkdownInline = styled(StyledMarkdownBase)`
-  display: inline-block;
-
-  p {
-    margin: 0;
-  }
-`;
-
 export const PageTitle = styled.h1`
   margin-top: 0;
   color: ${COLORS.TEXT_WHITE};
@@ -280,6 +214,15 @@ export const Text = styled.p`
   font-size: 15px;
   font-weight: 200px;
   color: ${COLORS.TEXT_CONTENT};
+`;
+
+export const UpperRight = styled.div<{ isEditMode: boolean }>`
+  position: absolute;
+  z-index: 2;
+  right: 20px;
+  top: ${props => (props.isEditMode ? 45 : 10)}px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const LowerRight = styled.div`
@@ -392,3 +335,69 @@ export const ProfileIcon = ({
     />
   );
 };
+
+/**
+ * Modal Styles
+ */
+export const ModalContainer = styled.div`
+  width: 525px;
+  padding: 32px;
+  padding-top: 22px;
+  left: 50%;
+  top: 50%;
+  outline: none;
+  position: absolute;
+  background: black;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  border-radius: 6px;
+  border: 1px solid ${COLORS.BORDER_MODAL};
+  background-color: ${COLORS.BACKGROUND_MODAL};
+`;
+
+export const ModalTitleText = styled.h1`
+  font-size: 24px;
+  font-weight: 300;
+  text-align: center;
+  color: ${COLORS.TEXT_TITLE};
+  font-family: Helvetica Neue, Lato, sans-serif;
+`;
+
+export const ModalSubText = styled(ModalTitleText)`
+  font-size: 16px;
+  margin-top: 12px;
+  max-width: 350px;
+  font-weight: 300;
+`;
+
+/**
+ * the getRenderItemList and labelByType functions are helpers used by our
+ * BlueprintJs Select components: FeedbackTypeMenu and ChallengeTypeMenu
+ */
+export const getRenderItemList = (listMinWidth: number) => {
+  return function renderItemList<T>({
+    renderItem,
+    items,
+  }: IItemListRendererProps<T>) {
+    return (
+      <ButtonGroup
+        fill
+        vertical
+        alignText="left"
+        style={{ minWidth: listMinWidth }}
+      >
+        {items.map(renderItem)}
+      </ButtonGroup>
+    );
+  };
+};
+
+export function labelByType<
+  T extends { value: FEEDBACK_TYPE | CHALLENGE_TYPE; label: string }
+>(type: string | undefined, items: T[]) {
+  const item = items.find(x => x.value === type);
+  return item?.label || type;
+}

@@ -12,9 +12,13 @@ import {
   ChallengeSkeleton,
   ChallengeSkeletonList,
   ProjectChallengeBlob,
+  CourseList,
+  Course,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
+import { Location } from "history";
 import { IconName } from "@blueprintjs/core";
+import { InverseChallengeMapping } from "modules/challenges/types";
 
 /** ===========================================================================
  * Utils
@@ -39,6 +43,27 @@ export const composeWithProps = <T extends {}>(
 };
 
 /**
+ * Determine if a challenge should only show content (no code editor).
+ */
+export const isContentOnlyChallenge = (challenge: Challenge) => {
+  const { type } = challenge;
+  return (
+    type === "media" ||
+    type === "section" ||
+    type === "project" ||
+    type === "guided-project"
+  );
+};
+
+/**
+ * Determine if a challenge requires the workspace (code editor).
+ */
+export const challengeRequiresWorkspace = (challenge: Challenge) => {
+  const contentOnlyChallenge = isContentOnlyChallenge(challenge);
+  return !contentOnlyChallenge;
+};
+
+/**
  * Given a challenge and other relevant data, construct the
  * data blob to represent the user's progress on that challenge.
  */
@@ -52,7 +77,7 @@ export const constructDataBlobFromChallenge = (args: {
     const blob: SandboxBlob = {
       code,
       type: "sandbox",
-      challengeType: "typescript" /* ? */,
+      challengeType: challenge.type,
     };
     return blob;
   }
@@ -232,4 +257,85 @@ export const partitionChallengesBySection = (
   sections = sections.concat(currentSection);
 
   return sections;
+};
+
+/**
+ * Find a course by id in the course list.
+ */
+export const findCourseById = (courseId: string, courses: CourseList) => {
+  const course = courses.find(c => c.id === courseId);
+  return course;
+};
+
+/**
+ * Given a list of courses, create a mapping of all challenge ids to both their
+ * module id and course id. Since our URLs don't (currently) indicate course or
+ * module we need to derive the course and module for a given challenge ID. This
+ * derives all such relationships in one go so it can be referenced later.
+ */
+export const createInverseChallengeMapping = (
+  courses: Course[],
+): InverseChallengeMapping => {
+  const result = courses.reduce((challengeMap, c) => {
+    const courseId = c.id;
+    const cx = c.modules.reduce((courseChallengeMap, m) => {
+      const moduleId = m.id;
+      const mx = m.challenges.reduce((moduleChallengeMap, challenge) => {
+        return {
+          ...moduleChallengeMap,
+          [challenge.id]: {
+            moduleId,
+            courseId,
+          },
+        };
+      }, {});
+
+      return {
+        ...courseChallengeMap,
+        ...mx,
+      };
+    }, {});
+
+    return {
+      ...challengeMap,
+      ...cx,
+    };
+  }, {});
+
+  return result;
+};
+
+/**
+ * Get a challenge id from a workspace url path.
+ */
+export const findChallengeIdInLocationIfExists = ({
+  pathname,
+}: Location): string => {
+  return pathname.replace("/workspace/", "");
+};
+
+/**
+ * Given a course and a possible default challenge id, derive the course,
+ * module, and challenge ids to set as active in the Workspace. Falls back
+ * to sensible default options.
+ */
+export const deriveIdsFromCourse = (
+  course: Course,
+  maybeChallengeId: string,
+) => {
+  const challengeMap = createInverseChallengeMapping([course]);
+  const challengeId =
+    maybeChallengeId in challengeMap
+      ? maybeChallengeId
+      : maybeChallengeId === SANDBOX_ID
+      ? maybeChallengeId
+      : course.modules[0].challenges[0].id;
+  const courseId = challengeMap[challengeId]?.courseId || course.id;
+  const moduleId = challengeMap[challengeId]?.moduleId || course.modules[0].id;
+
+  return {
+    courseId,
+    moduleId,
+    challengeId,
+  };
 };

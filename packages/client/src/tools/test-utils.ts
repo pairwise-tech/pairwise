@@ -4,7 +4,7 @@ import * as Babel from "@babel/standalone";
 import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
-import { TEST } from "./client-env";
+import { TEST, PRODUCTION } from "./client-env";
 
 /** ===========================================================================
  * Types & Config
@@ -87,17 +87,27 @@ const __interceptConsoleError = (...value) => {
 }
 `;
 
-const INFINITE_LOOP_TIMEOUT = 2000;
-
 /**
- * Register loop-protect Babel plugin.
+ * Fuck!
+ *
+ * For some reason this breaks in the production build of the app and
+ * produces some arcane Babel error. I don't know why. But the consequence
+ * is challenges which require Babel transpilation stop working.
+ *
+ * TODO: Fix it!
  */
-Babel.registerPlugin(
-  "loopProtection",
-  protect(INFINITE_LOOP_TIMEOUT, () => {
-    throw new Error("INFINITE_LOOP");
-  }),
-);
+if (!PRODUCTION) {
+  const INFINITE_LOOP_TIMEOUT = 2000;
+  /**
+   * Register loop-protect Babel plugin.
+   */
+  Babel.registerPlugin(
+    "loopProtection",
+    protect(INFINITE_LOOP_TIMEOUT, () => {
+      throw new Error("INFINITE_LOOP");
+    }),
+  );
+}
 
 /** ===========================================================================
  * Test Utils

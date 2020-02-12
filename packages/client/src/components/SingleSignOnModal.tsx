@@ -10,9 +10,9 @@ import styled from "styled-components/macro";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import * as ENV from "tools/client-env";
-import { COLORS } from "tools/constants";
 import { composeWithProps } from "tools/utils";
 import { removeEphemeralPurchaseCourseId } from "tools/storage-utils";
+import { ModalTitleText, ModalContainer, ModalSubText } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -35,15 +35,17 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
     return (
       <Dialog
         isOpen={this.props.dialogOpen}
-        aria-labelledby="Pairwise Signin Modal"
-        aria-describedby="Signin to Pairwise with a social media provider"
+        aria-labelledby="sso-modal-title"
+        aria-describedby="facebook-login github-login google-login"
         onClose={() => {
           removeEphemeralPurchaseCourseId();
-          this.setAccountModalState(false);
+          this.setSingleSignOnModalState(false);
         }}
       >
-        <AccountModal>
-          <TitleText>Login or Create an Account</TitleText>
+        <ModalContainer>
+          <ModalTitleText id="sso-modal-title">
+            Login or Create an Account
+          </ModalTitleText>
           <SocialButtonsContainer>
             <LoginLink id="facebook-login" href={`${ENV.HOST}/auth/facebook`}>
               <FacebookLoginButton
@@ -64,17 +66,17 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
               </GoogleLoginButton>
             </LoginLink>
           </SocialButtonsContainer>
-          <SubText>Creating an account is free and easy.</SubText>
-          <SubText>
+          <ModalSubText>Creating an account is free and easy.</ModalSubText>
+          <ModalSubText>
             Your account will be used to save your progress as you work on the
             courses.
-          </SubText>
-        </AccountModal>
+          </ModalSubText>
+        </ModalContainer>
       </Dialog>
     );
   }
 
-  setAccountModalState = (state: boolean) => {
+  setSingleSignOnModalState = (state: boolean) => {
     this.props.setSingleSignOnDialogState(state);
   };
 }
@@ -100,40 +102,6 @@ const LoginLink = styled.a`
   color: white;
   margin-left: 4px;
   text-decoration: none;
-`;
-
-const AccountModal = styled.div`
-  width: 525px;
-  padding: 32px;
-  padding-top: 22px;
-  left: 50%;
-  top: 50%;
-  outline: none;
-  position: absolute;
-  background: black;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  transform: translate(-50%, -50%);
-  border-radius: 6px;
-  border: 1px solid ${COLORS.BORDER_MODAL};
-  background-color: ${COLORS.BACKGROUND_MODAL};
-`;
-
-const TitleText = styled.h1`
-  font-size: 24px;
-  font-weight: 300;
-  text-align: center;
-  color: ${COLORS.TEXT_TITLE};
-  font-family: Helvetica Neue, Lato, sans-serif;
-`;
-
-const SubText = styled(TitleText)`
-  font-size: 16px;
-  margin-top: 12px;
-  max-width: 350px;
-  font-weight: 300;
 `;
 
 /** ===========================================================================

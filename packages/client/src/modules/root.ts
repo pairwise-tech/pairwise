@@ -18,6 +18,7 @@ import Challenges, {
 import User, { UserActionTypes, UserState } from "./user";
 import { IToaster } from "@blueprintjs/core";
 import { catchError } from "rxjs/operators";
+import Feedback, { FeedbackActionTypes, FeedbackState } from "./feedback";
 
 /** ===========================================================================
  * Root Actions and Selectors
@@ -29,7 +30,8 @@ export type ReduxActionTypes =
   | ChallengesActionTypes
   | UserActionTypes
   | AuthActionTypes
-  | PurchaseActionTypes;
+  | PurchaseActionTypes
+  | FeedbackActionTypes;
 
 export const selectors = {
   app: App.selector,
@@ -37,6 +39,7 @@ export const selectors = {
   user: User.selector,
   challenges: Challenges.selector,
   purchase: Purchase.selector,
+  feedback: Feedback.selector,
 };
 
 export const actions = {
@@ -45,6 +48,7 @@ export const actions = {
   user: User.actions,
   challenges: Challenges.actions,
   purchase: Purchase.actions,
+  feedback: Feedback.actions,
 };
 
 export const Modules = {
@@ -63,6 +67,7 @@ export interface ReduxStoreState {
   user: UserState;
   challenges: ChallengesState;
   purchase: PurchaseState;
+  feedback: FeedbackState;
 }
 
 const rootReducer = combineReducers({
@@ -71,6 +76,7 @@ const rootReducer = combineReducers({
   user: User.store,
   challenges: Challenges.store,
   purchase: Purchase.store,
+  feedback: Feedback.store,
 });
 
 /** ===========================================================================
@@ -98,6 +104,7 @@ const combinedEpic = combineEpics(
   Auth.epics,
   Challenges.epics,
   Purchase.epics,
+  Feedback.epics,
 );
 
 const handleRootEpicError = (error: any, source: any) => {
