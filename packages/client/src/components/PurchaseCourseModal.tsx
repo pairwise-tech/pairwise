@@ -53,8 +53,9 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
         <ModalContainer>
           <ModalTitleText>Purchase Course</ModalTitleText>
           <ModalSubText>
-            Purchasing {course.title} will give you full lifetime access to the
-            course content and is fully refundable up to 30 days and{" "}
+            Purchasing the <b>{course.title}</b> course will give you full
+            lifetime access to the course content and is fully refundable up to
+            30 days.
           </ModalSubText>
           <StripeProvider apiKey={STRIPE_API_KEY}>
             <div className="stripe-checkout">
@@ -63,15 +64,6 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
               </Elements>
             </div>
           </StripeProvider>
-          <Button
-            large
-            minimal
-            intent="primary"
-            style={{ marginTop: 12 }}
-            onClick={this.confirmPurchase}
-          >
-            Confirm Order
-          </Button>
         </ModalContainer>
       </Dialog>
     );
@@ -135,12 +127,21 @@ class CheckoutForm extends React.Component<any, any> {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} style={{ width: "500px" }}>
-        {/* <Elements>
-          <PaymentBioForm />
-        </Elements> */}
-        <CardSection />
-      </form>
+      <>
+        <form onSubmit={this.handleSubmit} style={{ width: "500px" }}>
+          <CardSection />
+        </form>
+        <div style={{ textAlign: "center" }}>
+          <Button
+            large
+            intent="primary"
+            style={{ marginTop: 24 }}
+            onClick={this.handleSubmit}
+          >
+            Submit Order
+          </Button>
+        </div>
+      </>
     );
   }
 }
@@ -153,8 +154,16 @@ class CardSection extends React.Component {
         <CardElement
           iconStyle="solid"
           style={{
-            empty: { color: COLORS.TEXT_WHITE },
-            base: { color: COLORS.TEXT_WHITE },
+            empty: {
+              fontWeight: 100,
+              color: COLORS.TEXT_WHITE,
+              fontFamily: "Helvetica Neue, Lato, sans-serif",
+            },
+            base: {
+              fontWeight: 100,
+              color: COLORS.TEXT_WHITE,
+              fontFamily: "Helvetica Neue, Lato, sans-serif",
+            },
             invalid: { color: COLORS.FAILURE },
           }}
         />
@@ -164,30 +173,6 @@ class CardSection extends React.Component {
 }
 
 const StripeCheckoutForm = injectStripe(CheckoutForm);
-
-class NameForm extends React.Component<any, any> {
-  render() {
-    return (
-      <>
-        <label>
-          Name
-          <input name="name" type="text" placeholder="Jane Doe" required />
-        </label>
-        <label>
-          Email
-          <input
-            name="email"
-            type="email"
-            placeholder="jane.doe@example.com"
-            required
-          />
-        </label>
-      </>
-    );
-  }
-}
-
-const PaymentBioForm = injectStripe(NameForm);
 
 /** ===========================================================================
  * Props

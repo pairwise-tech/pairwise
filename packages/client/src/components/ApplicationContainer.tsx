@@ -185,9 +185,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                       Account
                     </Link>
                     <Link
+                      to="/logout"
                       id="logout-link"
                       onClick={this.handleLogout}
-                      to="/logout"
                     >
                       Logout
                     </Link>

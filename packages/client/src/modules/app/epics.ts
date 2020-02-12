@@ -1,4 +1,4 @@
-import { filter, map, tap, ignoreElements } from "rxjs/operators";
+import { delay, filter, map, tap, ignoreElements } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
@@ -33,9 +33,30 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   }).pipe(map(Actions.locationChange));
 };
 
+const logoutUserSuccess: EpicSignature = (action$, _, deps) => {
+  const logoutToast = () => {
+    deps.toaster.show({
+      icon: "log-out",
+      intent: "primary",
+      message: "Logout Success",
+    });
+  };
+
+  return action$.pipe(
+    filter(isActionOf(Actions.logoutUser)),
+    delay(500),
+    tap(logoutToast),
+    ignoreElements(),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default combineEpics(appInitializationEpic, locationChangeEpic);
+export default combineEpics(
+  appInitializationEpic,
+  locationChangeEpic,
+  logoutUserSuccess,
+);
