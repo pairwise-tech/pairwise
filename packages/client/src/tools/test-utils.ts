@@ -348,21 +348,20 @@ try {
     const results = tests.reduce((agg, { message, test }) => {
       try {
         const _result = test();
-        // Tests that pass using expect will return undefined, since they don't return anything.
+
         // TODO: At some point we will want to account for async tests, which will require
-        // changes here
-        const testResult = _result === undefined ? true : _result;
+        // changes here. Handle _result being a promise.
         return agg.concat([{
           message,
-          testResult: testResult,
+          testResult: true, // If we get here it didn't throw, so it passed
           error: null,
-        }])
+        }]);
       } catch (err) {
         return agg.concat([{
           message,
           testResult: false,
           error: err.message + '\\n\\n' + err.stack,
-        }])
+        }]);
       }
     }, []);
 
