@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 
-import { challengeUtilityClass } from "@pairwise/common";
+import { contentUtility } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { ERROR_CODES } from "src/tools/constants";
 
@@ -9,9 +9,9 @@ export class ContentService {
   fetchCourseSkeletons(user: RequestUser) {
     if (user) {
       const { courses } = user;
-      return challengeUtilityClass.getCourseNavigationSkeletons(courses);
+      return contentUtility.getCourseNavigationSkeletons(courses);
     } else {
-      return challengeUtilityClass.getCourseNavigationSkeletons();
+      return contentUtility.getCourseNavigationSkeletons();
     }
   }
 
@@ -22,18 +22,18 @@ export class ContentService {
 
     const { courses } = user;
 
-    if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+    if (!contentUtility.courseIdIsValid(courseId)) {
       throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     }
 
     if (courseId in courses) {
-      return challengeUtilityClass.getCourseContent(courseId, "PAID");
+      return contentUtility.getCourseContent(courseId, "PAID");
     } else {
       return this.fetchFreeCourseContent(courseId);
     }
   }
 
   private fetchFreeCourseContent(courseId: string) {
-    return challengeUtilityClass.getCourseContent(courseId, "FREE");
+    return contentUtility.getCourseContent(courseId, "FREE");
   }
 }

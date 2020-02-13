@@ -13,7 +13,7 @@ import { COURSE_ACCESS_LEVEL, UserCourseAccessMap } from "src/types/dto.js";
  * ============================================================================
  */
 
-export class ChallengeUtilityClass {
+export class ContentUtilityClass {
   private courses: CourseList;
   private courseIdSet: Set<string>;
   private challengeIdSet: Set<string>;
@@ -128,6 +128,19 @@ export class ChallengeUtilityClass {
     return skeletonsWithAccessInformation;
   };
 
+  getCourseMetadata = (courseId: string) => {
+    const course = this.courses.find(c => c.id === courseId);
+    if (course) {
+      return {
+        id: course.id,
+        title: course.title,
+        description: course.description,
+      };
+    } else {
+      return null;
+    }
+  };
+
   courseIdIsValid = (courseId: string) => {
     return this.courseIdSet.has(courseId);
   };
@@ -156,8 +169,6 @@ export class ChallengeUtilityClass {
  */
 const courseList = [FullstackTypeScript];
 
-const challengeUtilityClass = new ChallengeUtilityClass(
-  courseList as CourseList,
-);
+const contentUtility = new ContentUtilityClass(courseList as CourseList);
 
-export default challengeUtilityClass;
+export default contentUtility;

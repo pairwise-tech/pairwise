@@ -7,7 +7,7 @@ import * as path from "path";
 import { promisify } from "util";
 
 import { Course } from "@pairwise/common";
-import { ChallengeUtilityClass } from "@pairwise/common/dist/tools/challenge-utility-class";
+import { contentUtility } from "@pairwise/common/dist/tools/challenge-utility-class";
 
 const debug = require("debug")("codepress:app");
 
@@ -124,7 +124,7 @@ app.get("/skeletons", (_, res) => {
   api.courses
     .getAll()
     .then((xs: Course[]) => {
-      const util = new ChallengeUtilityClass(xs);
+      const util = new contentUtility(xs);
 
       // User can access all modules
       const mockUserAccess = xs

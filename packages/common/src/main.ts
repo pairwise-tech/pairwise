@@ -1,5 +1,5 @@
 import FullstackTypeScript from "./courses/01_programming_fundamental.json";
-import challengeUtilityClass from "./tools/challenge-utility-class";
+import contentUtility from "./tools/content-utility-class";
 
 /**
  * Types
@@ -14,12 +14,15 @@ export * from "./types/dto";
 export * from "./tools/utils";
 
 /**
+ * Content Utility
+ */
+export { contentUtility };
+
+/**
  * Courses
  */
 const Courses = {
   FullstackTypeScript,
 };
-
-export { challengeUtilityClass };
 
 export default Courses;

@@ -9,7 +9,7 @@ import { User } from "src/user/user.entity";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { validatePaymentRequest } from "src/tools/validation";
 import ENV from "src/tools/server-env";
-import { challengeUtilityClass } from "@pairwise/common";
+import { contentUtility } from "@pairwise/common";
 
 const stripe = new Stripe(ENV.STRIPE_API_KEY, {
   typescript: true,
