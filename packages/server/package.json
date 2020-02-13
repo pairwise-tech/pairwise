@@ -63,6 +63,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",
+    "stripe": "^8.17.0",
     "swagger-ui-express": "^4.1.2",
     "typeorm": "^0.2.21",
     "validator": "^12.1.0"
