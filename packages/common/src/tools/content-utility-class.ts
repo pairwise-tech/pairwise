@@ -1,5 +1,9 @@
 import FullstackTypeScript from "../courses/01_programming_fundamental.json";
-import { CourseList, CourseSkeletonList } from "src/types/courses";
+import {
+  CourseList,
+  CourseSkeletonList,
+  CourseMetadata,
+} from "src/types/courses";
 import { COURSE_ACCESS_LEVEL, UserCourseAccessMap } from "src/types/dto.js";
 
 /** ===========================================================================
@@ -128,7 +132,7 @@ export class ContentUtilityClass {
     return skeletonsWithAccessInformation;
   };
 
-  getCourseMetadata = (courseId: string) => {
+  getCourseMetadata = (courseId: string): CourseMetadata => {
     const course = this.courses.find(c => c.id === courseId);
     if (course) {
       return {

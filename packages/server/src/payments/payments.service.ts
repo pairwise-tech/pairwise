@@ -1,15 +1,15 @@
 import Stripe from "stripe";
-import { Injectable } from "@nestjs/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
 import { RequestUser } from "src/types";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "./payments.entity";
 import { Repository } from "typeorm";
-import { SUCCESS_CODES } from "src/tools/constants";
+import { SUCCESS_CODES, ERROR_CODES } from "src/tools/constants";
 import { User } from "src/user/user.entity";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { validatePaymentRequest } from "src/tools/validation";
 import ENV from "src/tools/server-env";
-import { contentUtility } from "@pairwise/common";
+import { contentUtility, CourseMetadata } from "@pairwise/common";
 
 const stripe = new Stripe(ENV.STRIPE_API_KEY, {
   typescript: true,
@@ -18,28 +18,44 @@ const stripe = new Stripe(ENV.STRIPE_API_KEY, {
 
 @Injectable()
 export class PaymentsService {
+  // Just hard-code it here for now
+  COURSE_PRICE = 50;
+
   constructor(
     @InjectRepository(Payments)
     private readonly paymentsRepository: Repository<Payments>,
   ) {}
 
-  async handleCreatePaymentIntent(requestUser: RequestUser, courseId: string) {
+  private async createStripeCheckoutSession(courseMetadata: CourseMetadata) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
         {
-          name: "T-shirt",
-          description: "Comfortable cotton t-shirt",
-          images: ["https://example.com/t-shirt.png"],
-          amount: 500,
-          currency: "usd",
           quantity: 1,
+          amount: 50,
+          currency: "usd",
+          name: courseMetadata.title,
+          description: courseMetadata.description,
+          images: [
+            "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4",
+          ],
         },
       ],
-      success_url:
-        "https://example.com/success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "https://example.com/cancel",
+      cancel_url: ENV.STRIPE_CANCEL_URL,
+      success_url: `${ENV.STRIPE_SUCCESS_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
     });
+
+    return session;
+  }
+
+  async handleCreatePaymentIntent(requestUser: RequestUser, courseId: string) {
+    const courseMetadata = contentUtility.getCourseMetadata(courseId);
+    if (courseMetadata) {
+      const session = this.createStripeCheckoutSession(courseMetadata);
+      console.log(session);
+    } else {
+      return new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+    }
   }
 
   async handlePurchaseCourseRequest(
