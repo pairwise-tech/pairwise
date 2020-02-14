@@ -25,8 +25,8 @@ import {
   DIMENSIONS as D,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
-  toaster,
 } from "../tools/constants";
+import toaster from "tools/toast-utils";
 import { types } from "../tools/jsx-types";
 import {
   getMarkupForCodeChallenge,

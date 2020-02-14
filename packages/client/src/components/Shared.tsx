@@ -12,7 +12,8 @@ import {
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
-import { COLORS, toaster } from "../tools/constants";
+import { COLORS } from "../tools/constants";
+import toaster from "tools/toast-utils";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 

@@ -29,7 +29,8 @@ import {
   saveSandboxToLocalStorage,
   getSandboxFromLocalStorage,
 } from "tools/storage-utils";
-import { toaster, SANDBOX_ID } from "tools/constants";
+import { SANDBOX_ID } from "tools/constants";
+import toaster from "tools/toast-utils";
 import { wait } from "tools/utils";
 import { UserStoreState } from "./user/store";
 

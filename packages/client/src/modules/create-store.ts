@@ -12,7 +12,7 @@ import {
   rootEpic,
   rootReducer,
 } from "./root";
-import { toaster } from "tools/constants";
+import toaster from "tools/toast-utils";
 import logger from "tools/logger";
 
 /** ===========================================================================

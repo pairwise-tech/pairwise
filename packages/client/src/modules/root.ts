@@ -1,13 +1,15 @@
 import { History } from "history";
 import { combineReducers } from "redux";
 import { combineEpics, Epic } from "redux-observable";
+import { catchError } from "rxjs/operators";
+import API from "./api";
+import toaster from "tools/toast-utils";
 
 /** ===========================================================================
  * Import Redux Modules
  * ============================================================================
  */
 
-import API from "./api";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
 import Purchase, { PurchaseActionTypes, PurchaseState } from "./payments";
@@ -16,9 +18,7 @@ import Challenges, {
   ChallengesState,
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
-import { catchError } from "rxjs/operators";
 import Feedback, { FeedbackActionTypes, FeedbackState } from "./feedback";
-import { toaster } from "tools/constants";
 
 /** ===========================================================================
  * Root Actions and Selectors
