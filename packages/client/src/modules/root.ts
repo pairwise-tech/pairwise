@@ -10,7 +10,7 @@ import { combineEpics, Epic } from "redux-observable";
 import API from "./api";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
-import Purchase, { PurchaseActionTypes, PurchaseState } from "./purchase";
+import Purchase, { PurchaseActionTypes, PurchaseState } from "./payments";
 import Challenges, {
   ChallengesActionTypes,
   ChallengesState,

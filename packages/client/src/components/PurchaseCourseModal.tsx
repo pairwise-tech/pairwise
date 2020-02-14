@@ -70,7 +70,7 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
             style={{ marginTop: 24 }}
             onClick={() => this.confirmPurchase(course.id)}
           >
-            Submit Order
+            Start Checkout
           </Button>
         </ModalContainer>
       </Dialog>

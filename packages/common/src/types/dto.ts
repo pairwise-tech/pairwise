@@ -223,3 +223,12 @@ export interface ProgressEntity {
 }
 
 export type UserCourseProgress = ProgressEntity[];
+
+/** ===========================================================================
+ * Payment Types
+ * ============================================================================
+ */
+
+export interface StripeStartCheckoutSuccessResponse {
+  stripeCheckoutSessionId: string;
+}

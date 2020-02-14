@@ -16,6 +16,7 @@ import {
   UserSettings,
   UserProgressMap,
   defaultUserSettings,
+  StripeStartCheckoutSuccessResponse,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -163,10 +164,10 @@ class BaseApiClass {
       message: "Your session has expired, please login again.",
     });
 
-    // logoutUserInLocalStorage();
-    // await wait(1500); /* Wait so they can read the message... */
+    logoutUserInLocalStorage();
+    await wait(1500); /* Wait so they can read the message... */
 
-    // window.location.reload();
+    window.location.reload();
   };
 }
 
@@ -446,7 +447,7 @@ class Api extends BaseApiClass {
   createCheckoutSession = async (courseId: string) => {
     const { headers } = this.getRequestHeaders();
     return this.httpHandler(async () => {
-      return axios.post<{ checkoutSessionId: string }>(
+      return axios.post<StripeStartCheckoutSuccessResponse>(
         `${HOST}/payments/checkout/${courseId}`,
         {},
         {

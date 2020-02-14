@@ -108,9 +108,12 @@ const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
     pluck("courseId"),
     mergeMap(deps.api.createCheckoutSession),
     map(result => {
-      console.log(result);
+      if (result.value) {
+        return Actions.startCheckoutSuccess(result.value);
+      } else {
+        return Actions.startCheckoutFailure(result.error);
+      }
     }),
-    ignoreElements(),
   );
 };
 

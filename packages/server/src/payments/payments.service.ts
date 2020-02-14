@@ -9,7 +9,11 @@ import { User } from "src/user/user.entity";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { validatePaymentRequest } from "src/tools/validation";
 import ENV from "src/tools/server-env";
-import { contentUtility, CourseMetadata } from "@pairwise/common";
+import {
+  contentUtility,
+  CourseMetadata,
+  StripeStartCheckoutSuccessResponse,
+} from "@pairwise/common";
 
 const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
   typescript: true,
@@ -36,8 +40,8 @@ export class PaymentsService {
         );
         console.log(session);
 
-        const result = {
-          checkoutSessionId: session.id,
+        const result: StripeStartCheckoutSuccessResponse = {
+          stripeCheckoutSessionId: session.id,
         };
 
         return result;
