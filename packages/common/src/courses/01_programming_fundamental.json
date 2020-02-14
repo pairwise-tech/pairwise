@@ -39,7 +39,7 @@
         },
         {
           "id": "5ziJI35f",
-          "type": "section",
+          "type": "media",
           "title": "HTML, the language of the web",
           "content": "",
           "testCode": "[]",
@@ -277,7 +277,7 @@
         },
         {
           "id": "0gih2c1M",
-          "type": "section",
+          "type": "media",
           "title": "Types and Type Primitives",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
