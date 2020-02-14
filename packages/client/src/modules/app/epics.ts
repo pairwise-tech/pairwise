@@ -6,6 +6,7 @@ import { Location } from "history";
 import { combineEpics } from "redux-observable";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
+import { parseInitialUrlToInitializationType } from "tools/utils";
 
 /** ===========================================================================
  * Epics
@@ -31,6 +32,7 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
     map(() => {
       const { location } = window;
       const params = queryString.parse(location.search);
+      parseInitialUrlToInitializationType(location.pathname, params);
       return Actions.captureAppInitializationUrl({
         params,
         location,

@@ -19,6 +19,7 @@ import { SANDBOX_ID } from "./constants";
 import { Location } from "history";
 import { IconName } from "@blueprintjs/core";
 import { InverseChallengeMapping } from "modules/challenges/types";
+import { ParsedQuery } from "query-string";
 
 /** ===========================================================================
  * Utils
@@ -338,4 +339,13 @@ export const deriveIdsFromCourse = (
     moduleId,
     challengeId,
   };
+};
+
+// Parse the initial url and params which may have loaded the app.
+export const parseInitialUrlToInitializationType = (
+  location: string,
+  params: ParsedQuery<string>,
+) => {
+  console.log(location);
+  console.log(params);
 };

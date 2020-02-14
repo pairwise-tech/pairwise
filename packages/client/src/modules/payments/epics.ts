@@ -18,6 +18,7 @@ import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { CourseSkeletonList } from "@pairwise/common";
 import { STRIPE_API_KEY } from "tools/client-env";
+import { wait } from "tools/utils";
 
 /** ===========================================================================
  * Epics
@@ -117,34 +118,62 @@ const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
   );
 };
 
+type StripeLibrary = any; /* What's the type definition? */
+
+// Initialize stripe module. The module is imported by an
+// asynchronously loaded .js file in a script tag from the application
+// index.html file. Apparently the library may not always loaded quickly
+// enough (???), therefore the calling function handles retry logic.
+const getStripeJsLibrary = (): Nullable<StripeLibrary> => {
+  // @ts-ignore where is the type definition...
+  const lib = Stripe;
+  if (lib !== undefined) {
+    const stripe: StripeLibrary = lib(STRIPE_API_KEY);
+    return stripe;
+  }
+
+  return null;
+};
+
+// Handle redirect to Stripe portal, the stripe.js library may not have
+// loaded yet which will crash the entire Workspace... Ok, let's just retry
+// a few times in case the library is not loaded yet. Blegh:
+const handleRedirectToStripeCheckoutFlow = async (
+  sessionId: string,
+  retries: number = 3,
+): Promise<any> => {
+  const library = getStripeJsLibrary();
+  if (library === null) {
+    if (retries > 0) {
+      await wait(500); /* Pause and retry... */
+      return handleRedirectToStripeCheckoutFlow(sessionId, retries - 1);
+    } else {
+      throw new Error("Could not find Stripe library!");
+    }
+  }
+
+  const result = await library.redirectToCheckout({
+    sessionId,
+  });
+
+  // If `redirectToCheckout` fails due to a browser or network
+  // error, display the localized error message to your customer
+  // using `error.message`.
+  throw new Error(`Failure to handle redirect! Error: ${result.error.message}`);
+};
+
 // Redirect the user to the Stripe checkout portal after successfully
 // creating a checkout session id.
 const redirectToStripeCheckoutEpic: EpicSignature = (action$, state$, deps) => {
-  // Initialize stripe module. The module is imported by an
-  // asynchronously loaded .js file in a script tag from the application
-  // index.html file.
-  // @ts-ignore where is the type definition...
-  const stripe = Stripe(STRIPE_API_KEY);
-
-  // Handle redirect to Stripe portal
-  const redirectToStripe = async (sessionId: string) => {
-    const result = await stripe.redirectToCheckout({
-      sessionId,
-    });
-
-    // If `redirectToCheckout` fails due to a browser or network
-    // error, display the localized error message to your customer
-    // using `error.message`.
-    return result.error;
-  };
-
   return action$.pipe(
     filter(isActionOf(Actions.startCheckoutSuccess)),
     pluck("payload"),
     pluck("stripeCheckoutSessionId"),
-    mergeMap(redirectToStripe),
-    tap(error => {
-      if (error) {
+    mergeMap(async id => {
+      try {
+        await handleRedirectToStripeCheckoutFlow(id);
+      } catch (err) {
+        console.warn("[WARN]: Error starting Stripe checkout flow: ", err);
         deps.toaster.error("Checkout failed, please try again...");
       }
     }),
