@@ -4,8 +4,8 @@ import {
   tap,
   mergeMap,
   pluck,
-  ignoreElements,
   map,
+  ignoreElements,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { of, combineLatest } from "rxjs";
@@ -17,6 +17,7 @@ import {
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { CourseSkeletonList } from "@pairwise/common";
+import { STRIPE_API_KEY } from "tools/client-env";
 
 /** ===========================================================================
  * Epics
@@ -117,6 +118,41 @@ const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
   );
 };
 
+const stripe = Stripe(STRIPE_API_KEY);
+
+// Redirect the user to the Stripe checkout portal after successfully
+// creating a checkout session id.
+const redirectToStripeCheckoutEpic: EpicSignature = (action$, state$, deps) => {
+  // Handle redirect to Stripe portal
+  const redirectToStripe = async (sessionId: string) => {
+    const result = await stripe.redirectToCheckout({
+      sessionId,
+    });
+
+    // If `redirectToCheckout` fails due to a browser or network
+    // error, display the localized error message to your customer
+    // using `error.message`.
+    return result.error;
+  };
+
+  return action$.pipe(
+    filter(isActionOf(Actions.startCheckoutSuccess)),
+    pluck("payload"),
+    pluck("stripeCheckoutSessionId"),
+    mergeMap(redirectToStripe),
+    tap(error => {
+      if (error) {
+        deps.toaster.show({
+          icon: "error",
+          intent: "danger",
+          message: "Checkout failed, please try again...",
+        });
+      }
+    }),
+    ignoreElements(),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -126,4 +162,5 @@ export default combineEpics(
   startCheckoutEpic,
   purchaseCourseInitializeEpic,
   handlePurchaseCourseIntentEpic,
+  redirectToStripeCheckoutEpic,
 );
