@@ -163,10 +163,10 @@ class BaseApiClass {
       message: "Your session has expired, please login again.",
     });
 
-    logoutUserInLocalStorage();
-    await wait(1500); /* Wait so they can read the message... */
+    // logoutUserInLocalStorage();
+    // await wait(1500); /* Wait so they can read the message... */
 
-    window.location.reload();
+    // window.location.reload();
   };
 }
 
@@ -441,6 +441,19 @@ class Api extends BaseApiClass {
 
   handleDataPersistenceForNewAccount = async () => {
     await localStorageHTTP.persistDataPersistenceForNewAccount();
+  };
+
+  createCheckoutSession = async (courseId: string) => {
+    const { headers } = this.getRequestHeaders();
+    return this.httpHandler(async () => {
+      return axios.post<{ checkoutSessionId: string }>(
+        `${HOST}/payments/checkout/${courseId}`,
+        {},
+        {
+          headers,
+        },
+      );
+    });
   };
 }
 

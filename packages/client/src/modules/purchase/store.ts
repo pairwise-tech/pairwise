@@ -26,7 +26,7 @@ const app = createReducer<State, PurchaseActionTypes>(initialState)
   }))
   .handleAction(actions.setPurchaseCourseId, (state, action) => ({
     ...state,
-    purchaseCourseId: action.payload,
+    purchaseCourseId: action.payload.courseId,
   }));
 
 /** ===========================================================================

@@ -11,7 +11,7 @@ import { validatePaymentRequest } from "src/tools/validation";
 import ENV from "src/tools/server-env";
 import { contentUtility, CourseMetadata } from "@pairwise/common";
 
-const stripe = new Stripe(ENV.STRIPE_API_KEY, {
+const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
   typescript: true,
   apiVersion: "2019-12-03",
 });
@@ -26,33 +26,25 @@ export class PaymentsService {
     private readonly paymentsRepository: Repository<Payments>,
   ) {}
 
-  private async createStripeCheckoutSession(courseMetadata: CourseMetadata) {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          quantity: 1,
-          amount: 50,
-          currency: "usd",
-          name: courseMetadata.title,
-          description: courseMetadata.description,
-          images: [
-            "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4",
-          ],
-        },
-      ],
-      cancel_url: ENV.STRIPE_CANCEL_URL,
-      success_url: `${ENV.STRIPE_SUCCESS_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-    });
-
-    return session;
-  }
-
   async handleCreatePaymentIntent(requestUser: RequestUser, courseId: string) {
     const courseMetadata = contentUtility.getCourseMetadata(courseId);
     if (courseMetadata) {
-      const session = this.createStripeCheckoutSession(courseMetadata);
-      console.log(session);
+      try {
+        const session = await this.createStripeCheckoutSession(
+          requestUser,
+          courseMetadata,
+        );
+        console.log(session);
+
+        const result = {
+          checkoutSessionId: session.id,
+        };
+
+        return result;
+      } catch (err) {
+        console.log("Failed to create Stripe session!");
+        console.log(err);
+      }
     } else {
       return new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     }
@@ -91,4 +83,30 @@ export class PaymentsService {
 
     return payment;
   };
+
+  private async createStripeCheckoutSession(
+    requestUser: RequestUser,
+    courseMetadata: CourseMetadata,
+  ) {
+    const session = await stripe.checkout.sessions.create({
+      customer_email: requestUser.profile.email,
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          quantity: 1,
+          amount: 50,
+          currency: "usd",
+          name: courseMetadata.title,
+          description: courseMetadata.description,
+          images: [
+            "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4",
+          ],
+        },
+      ],
+      cancel_url: `${ENV.CLIENT_URL}/payment-cancelled`,
+      success_url: `${ENV.CLIENT_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+    });
+
+    return session;
+  }
 }

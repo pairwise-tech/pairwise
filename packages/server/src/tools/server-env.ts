@@ -14,9 +14,6 @@ const HTTPS = getenv.bool("HTTPS", false);
 const STRIPE_API_KEY = getenv.string("STRIPE_API_KEY");
 const STRIPE_SECRET_KEY = getenv.string("STRIPE_SECRET_KEY");
 
-const STRIPE_SUCCESS_URL = getenv.string("STRIPE_SUCCESS_URL");
-const STRIPE_CANCEL_URL = getenv.string("STRIPE_CANCEL_URL");
-
 /* Auth: */
 const JWT_SECRET = getenv.string("JWT_SECRET");
 const FACEBOOK_CLIENT_ID = getenv.string("FACEBOOK_CLIENT_ID");
@@ -44,8 +41,6 @@ const ENV = {
   SERVER_HOST_URL,
   STRIPE_API_KEY,
   STRIPE_SECRET_KEY,
-  STRIPE_SUCCESS_URL,
-  STRIPE_CANCEL_URL,
   JWT_SECRET,
   FACEBOOK_CLIENT_ID,
   FACEBOOK_CLIENT_SECRET,

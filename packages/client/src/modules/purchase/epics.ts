@@ -1,5 +1,12 @@
 import { combineEpics } from "redux-observable";
-import { filter, tap, mergeMap } from "rxjs/operators";
+import {
+  filter,
+  tap,
+  mergeMap,
+  pluck,
+  ignoreElements,
+  map,
+} from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { of, combineLatest } from "rxjs";
 import {
@@ -41,7 +48,7 @@ const purchaseCourseInitializeEpic: EpicSignature = action$ => {
         const course = skeletons.find(c => c.id === id);
         if (id && course) {
           return of(
-            Actions.setPurchaseCourseId(id),
+            Actions.setPurchaseCourseId({ courseId: id }),
             Actions.setPurchaseCourseModalState(true),
           );
         }
@@ -69,12 +76,13 @@ const handlePurchaseCourseIntentEpic: EpicSignature = (
 ) => {
   return action$.pipe(
     filter(isActionOf(Actions.handlePurchaseCourseIntent)),
-    mergeMap(action => {
-      const courseId = action.payload.courseId;
+    pluck("payload"),
+    pluck("courseId"),
+    mergeMap(courseId => {
       const user = deps.selectors.user.userProfile(state$.value);
       if (user) {
         return of(
-          Actions.setPurchaseCourseId(courseId),
+          Actions.setPurchaseCourseId({ courseId }),
           Actions.setPurchaseCourseModalState(true),
         );
       } else {
@@ -85,11 +93,24 @@ const handlePurchaseCourseIntentEpic: EpicSignature = (
         });
         setEphemeralPurchaseCourseId(courseId);
         return of(
-          Actions.setPurchaseCourseId(courseId),
+          Actions.setPurchaseCourseId({ courseId }),
           Actions.setSingleSignOnDialogState(true),
         );
       }
     }),
+  );
+};
+
+const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.startCheckout)),
+    pluck("payload"),
+    pluck("courseId"),
+    mergeMap(deps.api.createCheckoutSession),
+    map(result => {
+      console.log(result);
+    }),
+    ignoreElements(),
   );
 };
 
@@ -99,6 +120,7 @@ const handlePurchaseCourseIntentEpic: EpicSignature = (
  */
 
 export default combineEpics(
+  startCheckoutEpic,
   purchaseCourseInitializeEpic,
   handlePurchaseCourseIntentEpic,
 );

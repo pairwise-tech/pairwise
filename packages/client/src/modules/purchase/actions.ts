@@ -11,6 +11,8 @@ enum ActionTypesEnum {
   HANDLE_PURCHASE_COURSE_INTENT = "HANDLE_PURCHASE_COURSE_INTENT",
 
   SET_PURCHASE_COURSE_ID = "SET_PURCHASE_COURSE_ID",
+
+  START_CHECKOUT = "START_CHECKOUT",
 }
 
 /** ===========================================================================
@@ -28,4 +30,8 @@ export const handlePurchaseCourseIntent = createAction(
 
 export const setPurchaseCourseId = createAction(
   ActionTypesEnum.SET_PURCHASE_COURSE_ID,
-)<string>();
+)<{ courseId: string }>();
+
+export const startCheckout = createAction(ActionTypesEnum.START_CHECKOUT)<{
+  courseId: string;
+}>();

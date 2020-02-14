@@ -57,20 +57,28 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
             lifetime access to the course content and is fully refundable up to
             30 days.
           </ModalSubText>
-          <StripeProvider apiKey={STRIPE_API_KEY}>
+          {/* <StripeProvider apiKey={STRIPE_API_KEY}>
             <div className="stripe-checkout">
               <Elements>
                 <StripeCheckoutForm profile={profile} course={course} />
               </Elements>
             </div>
-          </StripeProvider>
+          </StripeProvider> */}
+          <Button
+            large
+            intent="primary"
+            style={{ marginTop: 24 }}
+            onClick={() => this.confirmPurchase(course.id)}
+          >
+            Submit Order
+          </Button>
         </ModalContainer>
       </Dialog>
     );
   }
 
-  confirmPurchase = () => {
-    console.log("handle purchase ~");
+  confirmPurchase = (courseId: string) => {
+    this.props.startCheckout({ courseId });
   };
 
   setAccountModalState = (state: boolean) => {
@@ -132,14 +140,14 @@ class CheckoutForm extends React.Component<any, any> {
           <CardSection />
         </form>
         <div style={{ textAlign: "center" }}>
-          <Button
+          {/* <Button
             large
             intent="primary"
             style={{ marginTop: 24 }}
             onClick={this.handleSubmit}
           >
             Submit Order
-          </Button>
+          </Button> */}
         </div>
       </>
     );
@@ -189,6 +197,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
+  startCheckout: Modules.actions.purchase.startCheckout,
   setPurchaseCourseModalState:
     Modules.actions.purchase.setPurchaseCourseModalState,
 };
