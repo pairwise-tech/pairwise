@@ -24,6 +24,10 @@ services:
     ports:
       - 5432:5432
 
+  stripe:
+    image: stripe/stripe-cli
+    command: --api-key sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ listen --forward-to=services:9000/payments/checkout-success
+
   services:
     build:
       context: .
@@ -48,3 +52,4 @@ services:
       - 9000:9000
     depends_on:
       - db
+      - stripe
