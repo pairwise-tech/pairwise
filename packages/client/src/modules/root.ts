@@ -66,7 +66,7 @@ export interface ReduxStoreState {
   auth: AuthState;
   user: UserState;
   challenges: ChallengesState;
-  purchase: PaymentsState;
+  payments: PaymentsState;
   feedback: FeedbackState;
 }
 
@@ -75,7 +75,7 @@ const rootReducer = combineReducers({
   auth: Auth.store,
   user: User.store,
   challenges: Challenges.store,
-  purchase: Payments.store,
+  payments: Payments.store,
   feedback: Feedback.store,
 });
 
