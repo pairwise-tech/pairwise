@@ -9,21 +9,21 @@ import { PaymentsActionTypes } from "./index";
 
 export interface State {
   accessToken: string;
-  purchaseCourseId: string;
-  purchaseCourseModalOpen: boolean;
+  paymentCourseId: string;
+  paymentCourseModalOpen: boolean;
 }
 
 const initialState = {
   accessToken: "",
-  purchaseCourseId: "",
+  paymentCourseId: "",
   stripeCheckoutSessionId: "",
-  purchaseCourseModalOpen: false,
+  paymentCourseModalOpen: false,
 };
 
 const payments = createReducer<State, PaymentsActionTypes>(initialState)
   .handleAction(actions.setPurchaseCourseModalState, (state, action) => ({
     ...state,
-    purchaseCourseModalOpen: action.payload,
+    paymentCourseModalOpen: action.payload,
   }))
   .handleAction(actions.startCheckoutSuccess, (state, action) => ({
     ...state,
@@ -31,7 +31,7 @@ const payments = createReducer<State, PaymentsActionTypes>(initialState)
   }))
   .handleAction(actions.setPurchaseCourseId, (state, action) => ({
     ...state,
-    purchaseCourseId: action.payload.courseId,
+    paymentCourseId: action.payload.courseId,
   }));
 
 /** ===========================================================================

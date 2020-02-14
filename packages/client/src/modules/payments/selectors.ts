@@ -9,20 +9,20 @@ import { courseSkeletons } from "modules/challenges/selectors";
  * ============================================================================
  */
 
-export const purchaseState = (state: ReduxStoreState) => {
-  return state.purchase;
+export const paymentsState = (state: ReduxStoreState) => {
+  return state.payments;
 };
 
-export const purchaseSelector = createSelector([purchaseState], identity);
+export const purchaseSelector = createSelector([paymentsState], identity);
 
 export const coursePurchaseModalStateSelector = createSelector(
-  purchaseState,
-  purchase => purchase.purchaseCourseModalOpen,
+  paymentsState,
+  purchase => purchase.paymentCourseModalOpen,
 );
 
 export const coursePurchaseId = createSelector(
-  purchaseState,
-  purchase => purchase.purchaseCourseId,
+  paymentsState,
+  purchase => purchase.paymentCourseId,
 );
 
 // Find the course which corresponds to the current course purchase id,
