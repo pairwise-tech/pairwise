@@ -32,10 +32,14 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
     map(() => {
       const { location } = window;
       const params = queryString.parse(location.search);
-      parseInitialUrlToInitializationType(location.pathname, params);
+      const appInitializationType = parseInitialUrlToInitializationType(
+        location.pathname,
+        params,
+      );
       return Actions.captureAppInitializationUrl({
         params,
         location,
+        appInitializationType,
       });
     }),
   );

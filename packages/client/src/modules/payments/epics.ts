@@ -18,7 +18,7 @@ import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { CourseSkeletonList } from "@pairwise/common";
 import { STRIPE_API_KEY } from "tools/client-env";
-import { wait } from "tools/utils";
+import { wait, APP_INITIALIZATION_TYPE } from "tools/utils";
 
 /** ===========================================================================
  * Epics
@@ -181,6 +181,23 @@ const redirectToStripeCheckoutEpic: EpicSignature = (action$, state$, deps) => {
   );
 };
 
+// Show a warning toast message if the user returns to the app after
+// aborting the payment checkout flow.
+const handlePaymentCancelledSideEffect: EpicSignature = (
+  action$,
+  state$,
+  deps,
+) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("appInitializationType"),
+    filter(type => type === APP_INITIALIZATION_TYPE.PAYMENT_CANCELLED),
+    tap(() => deps.toaster.warn("Payment flow cancelled.")),
+    ignoreElements(),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -191,4 +208,5 @@ export default combineEpics(
   purchaseCourseInitializeEpic,
   handlePurchaseCourseIntentEpic,
   redirectToStripeCheckoutEpic,
+  handlePaymentCancelledSideEffect,
 );

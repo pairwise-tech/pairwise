@@ -341,11 +341,56 @@ export const deriveIdsFromCourse = (
   };
 };
 
+// Definition of specific types to identify different states for the
+// initial app load:
+export enum APP_INITIALIZATION_TYPE {
+  DEFAULT = "DEFAULT",
+
+  // Special types:
+  SIGN_IN = "SIGN_IN",
+  ACCOUNT_CREATED = "ACCOUNT_CREATED",
+  PAYMENT_SUCCESS = "PAYMENT_SUCCESS",
+  PAYMENT_CANCELLED = "PAYMENT_CANCELLED",
+}
+
+// Check a list of param keys exists in the parsed query params from a url
+const checkParamsExist = (params: ParsedQuery<string>, keys: string[]) => {
+  for (const key of keys) {
+    if (params[key] !== undefined) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 // Parse the initial url and params which may have loaded the app.
 export const parseInitialUrlToInitializationType = (
-  location: string,
+  path: string,
   params: ParsedQuery<string>,
 ) => {
-  console.log(location);
-  console.log(params);
+  // A user authenticated:
+  if (
+    path === "/authenticated" &&
+    checkParamsExist(params, ["accessToken", "accountCreated"])
+  ) {
+    if (params.accountCreated === "true") {
+      return APP_INITIALIZATION_TYPE.ACCOUNT_CREATED;
+    } else {
+      return APP_INITIALIZATION_TYPE.SIGN_IN;
+    }
+  }
+
+  // A user returned from the checkout flow after cancelling:
+  if (path === "/payment-cancelled") {
+    return APP_INITIALIZATION_TYPE.PAYMENT_CANCELLED;
+  }
+
+  // A user returned from the checkout flow after payment success:
+  if (path === "/payment-success") {
+    return APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS;
+  }
+
+  // Default category:
+  return APP_INITIALIZATION_TYPE.DEFAULT;
 };

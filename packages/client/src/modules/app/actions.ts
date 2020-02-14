@@ -1,6 +1,7 @@
 import { createAction } from "typesafe-actions";
 import { Location as HistoryLocation } from "history";
 import { ParsedQuery } from "query-string";
+import { APP_INITIALIZATION_TYPE } from "tools/utils";
 
 /** ===========================================================================
  * Action Types
@@ -49,4 +50,5 @@ export const captureAppInitializationUrl = createAction(
 )<{
   location: Location;
   params: ParsedQuery<string>;
+  appInitializationType: APP_INITIALIZATION_TYPE;
 }>();
