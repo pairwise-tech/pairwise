@@ -6,7 +6,7 @@ import { fetchAccessToken, HOST } from "./utils/e2e-utils";
  * ============================================================================
  */
 
-describe("Payments APIs", () => {
+describe.skip("Payments APIs", () => {
   let accessToken;
   let authorizationHeader;
 
