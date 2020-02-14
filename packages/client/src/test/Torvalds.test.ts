@@ -56,7 +56,7 @@ const LOG = true;
 
 describe("Linus should be able to pass all the challenges first try", () => {
   test("Execute all challenge tests against their solution code", async () => {
-    let anyFailed = false;
+    let failedTests: string[] = [];
 
     /* Get all the challenges */
     const challenges = course.modules
@@ -64,7 +64,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
       .reduce((flat, c) => flat.concat(c));
 
     /* For every challenge, execute the tests */
-    for (const challenge of challenges) {
+    outerLoop: for (const challenge of challenges) {
       if (DEBUG) {
         if (!TEST_ID_WHITELIST.has(challenge.id)) {
           continue;
@@ -103,7 +103,8 @@ describe("Linus should be able to pass all the challenges first try", () => {
         case "guided-project":
         case "special-topic": {
           /* No tests for these challenges */
-          break;
+          log.skip(challenge);
+          continue outerLoop;
         }
         default: {
           assertUnreachable(challenge.type);
@@ -112,58 +113,57 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
       let results: TestCase[] = [];
 
-      if (script) {
-        /* Load the document */
-        document.body.innerHTML = doc;
+      /* Load the document */
+      document.body.innerHTML = doc;
 
-        /* Add the message listener */
-        window.parent.postMessage = (data: IframeMessageEvent["data"]) => {
-          const { source, message } = data;
-          if (source === "TEST_RESULTS") {
-            results = JSON.parse(message);
-          }
-        };
-
-        try {
-          handleAbsurdScriptEvaluation(script);
-        } catch (err) {
-          console.error("Error thrown from window.eval!", err);
-
-          /* The test failed, enter a failed test case manually */
-          const failedTestCase = { testResult: false };
-          results = [failedTestCase as TestCase];
+      /* Add the message listener */
+      window.parent.postMessage = (data: IframeMessageEvent["data"]) => {
+        const { source, message } = data;
+        if (source === "TEST_RESULTS") {
+          results = JSON.parse(message);
         }
+      };
 
-        /**
-         * Wait for the test script to execute and post a message back to
-         * the message listener.
-         */
-        await waitForResults({ results });
+      try {
+        handleAbsurdScriptEvaluation(script);
+      } catch (err) {
+        console.error("Error thrown from window.eval!", err);
 
-        /**
-         * Evaluate the test results.
-         */
-        let passed = true;
-        for (const result of results) {
-          const { testResult } = result;
-          if (!testResult) {
-            passed = false;
-          }
-        }
-
-        if (passed) {
-          log.success(challenge);
-        } else {
-          /* A test failed, mark it to fail the entire test suite later */
-          anyFailed = true;
-          log.fail(challenge);
-        }
-      } else {
-        log.skip(challenge);
+        /* The test failed, enter a failed test case manually */
+        const failedTestCase = { testResult: false };
+        results = [failedTestCase as TestCase];
       }
+
+      /**
+       * Wait for the test script to execute and post a message back to
+       * the message listener.
+       */
+      await waitForResults({ results });
+
+      /**
+       * Evaluate the test results. There are potentially many result objects
+       * for a given challenge.
+       */
+      const currentFailedTests: string[] = [];
+      for (const result of results) {
+        if (!result.testResult) {
+          currentFailedTests.push(
+            `{${challenge.title}} ${result.message}\n${result.error}`,
+          );
+        }
+      }
+
+      if (currentFailedTests.length) {
+        log.fail(challenge);
+      } else {
+        log.success(challenge);
+      }
+
+      // Add any failed tests for the current challenge to the overall list.
+      failedTests = failedTests.concat(currentFailedTests);
     }
 
-    expect(anyFailed).toEqual(false);
+    expect(failedTests).toEqual([]);
   });
 });
 
