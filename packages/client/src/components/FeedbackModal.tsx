@@ -79,6 +79,9 @@ const FeedbackModal = (props: Props) => {
           {`Tell us what you think! Provide us with feedback on the
            "${props.currentChallenge?.title}" challenge.`}
         </ModalSubText>
+        <DangerLabel show={selectIntent === "danger"}>
+          Please select a feedback type!
+        </DangerLabel>
         <FeedbackTypeMenu
           intent={selectIntent}
           onItemSelect={item => {
@@ -87,11 +90,15 @@ const FeedbackModal = (props: Props) => {
           }}
           currentFeedbackType={props.feedbackType}
         />
+        <DangerLabel show={textAreaIntent === "danger"}>
+          Enter some feedback so we know how to improve
+        </DangerLabel>
         <FeedbackInput
           fill={true}
           large={true}
           value={props.feedback}
           onChange={handleChange}
+          margintop={textAreaIntent === "danger" ? 0 : 10}
           className={`bp3-intent-${textAreaIntent}`}
         />
         <div style={{ marginLeft: "auto", marginTop: 20 }}>
@@ -121,10 +128,25 @@ const FeedbackModal = (props: Props) => {
  * ============================================================================
  */
 
-const FeedbackInput = styled(TextArea)`
-  background: #323232 !important;
-  margin-top: 10px;
+interface FeedbackInputProps {
+  margintop: number;
+}
+
+const FeedbackInput = styled(TextArea)<FeedbackInputProps>`
   resize: vertical !important;
+  margin-top: ${props => props.margintop}px !important;
+  background: #323232 !important;
+`;
+
+interface DangerLabelProps {
+  show: boolean;
+}
+
+const DangerLabel = styled.label<DangerLabelProps>`
+  color: #de4648;
+  margin: 10px 0;
+  font-weight: bold;
+  display: ${props => (props.show ? "block" : "none")};
 `;
 
 /** ===========================================================================
