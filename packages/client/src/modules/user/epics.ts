@@ -43,19 +43,11 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(API.updateUser),
     map(result => {
       if (result.value) {
-        deps.toaster.show({
-          icon: "tick",
-          intent: "success",
-          message: "Saved 👍",
-        });
+        deps.toaster.success("Saved 👍");
         return Actions.updateUserSuccess(result.value);
       } else {
         if (result.error.status !== 401) {
-          deps.toaster.show({
-            icon: "error",
-            intent: "danger",
-            message: "Failure to update user profile...",
-          });
+          deps.toaster.error("Failure to update user profile...");
         }
         return Actions.updateUserFailure(result.error);
       }

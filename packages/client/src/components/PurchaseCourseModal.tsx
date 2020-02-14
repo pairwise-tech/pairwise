@@ -1,17 +1,9 @@
 import { Button, Dialog } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
-import {
-  injectStripe,
-  CardElement,
-  StripeProvider,
-  Elements,
-} from "react-stripe-elements";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
-import { STRIPE_API_KEY } from "tools/client-env";
 import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
-import { COLORS } from "tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -28,12 +20,6 @@ interface IState {}
  */
 
 class PurchaseCourseModal extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {};
-  }
-
   render(): Nullable<JSX.Element> {
     const { user, skeletons } = this.props;
     const { profile } = user;
@@ -57,13 +43,6 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
             lifetime access to the course content and is fully refundable up to
             30 days.
           </ModalSubText>
-          {/* <StripeProvider apiKey={STRIPE_API_KEY}>
-            <div className="stripe-checkout">
-              <Elements>
-                <StripeCheckoutForm profile={profile} course={course} />
-              </Elements>
-            </div>
-          </StripeProvider> */}
           <Button
             large
             intent="primary"
@@ -89,98 +68,6 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
     this.setAccountModalState(false);
   };
 }
-
-/** ===========================================================================
- * Stripe Checkout Form
- * ============================================================================
- */
-
-class CheckoutForm extends React.Component<any, any> {
-  handleSubmit = (ev: any) => {
-    ev.preventDefault();
-
-    const name = this.props.profile.displayName;
-
-    const cardElement = this.props.elements.getElement("card");
-    this.props.stripe
-      .createPaymentMethod({
-        type: "card",
-        card: cardElement,
-        billing_details: { name },
-      })
-      .then(({ paymentMethod }: any) => {
-        console.log("Received Stripe PaymentMethod:", paymentMethod);
-      });
-
-    this.props.stripe.confirmCardPayment("{PAYMENT_INTENT_CLIENT_SECRET}", {
-      payment_method: {
-        card: cardElement,
-      },
-    });
-
-    this.props.stripe.confirmCardSetup("{PAYMENT_INTENT_CLIENT_SECRET}", {
-      payment_method: {
-        card: cardElement,
-      },
-    });
-
-    this.props.stripe.createToken({ type: "card", name });
-    this.props.stripe.createSource({
-      type: "card",
-      owner: {
-        name,
-      },
-    });
-  };
-
-  render() {
-    return (
-      <>
-        <form onSubmit={this.handleSubmit} style={{ width: "500px" }}>
-          <CardSection />
-        </form>
-        <div style={{ textAlign: "center" }}>
-          {/* <Button
-            large
-            intent="primary"
-            style={{ marginTop: 24 }}
-            onClick={this.handleSubmit}
-          >
-            Submit Order
-          </Button> */}
-        </div>
-      </>
-    );
-  }
-}
-
-class CardSection extends React.Component {
-  render() {
-    return (
-      <label>
-        Card details
-        <CardElement
-          iconStyle="solid"
-          style={{
-            empty: {
-              fontWeight: 100,
-              color: COLORS.TEXT_WHITE,
-              fontFamily: "Helvetica Neue, Lato, sans-serif",
-            },
-            base: {
-              fontWeight: 100,
-              color: COLORS.TEXT_WHITE,
-              fontFamily: "Helvetica Neue, Lato, sans-serif",
-            },
-            invalid: { color: COLORS.FAILURE },
-          }}
-        />
-      </label>
-    );
-  }
-}
-
-const StripeCheckoutForm = injectStripe(CheckoutForm);
 
 /** ===========================================================================
  * Props

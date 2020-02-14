@@ -117,11 +117,14 @@ const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
   );
 };
 
-const stripe = Stripe(STRIPE_API_KEY);
-
 // Redirect the user to the Stripe checkout portal after successfully
 // creating a checkout session id.
 const redirectToStripeCheckoutEpic: EpicSignature = (action$, state$, deps) => {
+  // Initialize stripe module. The module is imported by an
+  // asynchronously loaded .js file in a script tag from the application
+  // index.html file.
+  const stripe = Stripe(STRIPE_API_KEY);
+
   // Handle redirect to Stripe portal
   const redirectToStripe = async (sessionId: string) => {
     const result = await stripe.redirectToCheckout({

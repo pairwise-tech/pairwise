@@ -35,11 +35,7 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
 
 const logoutUserSuccess: EpicSignature = (action$, _, deps) => {
   const logoutToast = () => {
-    deps.toaster.show({
-      icon: "log-out",
-      intent: "primary",
-      message: "Logout Success",
-    });
+    deps.toaster.success("Logout Success", "log-out");
   };
 
   return action$.pipe(

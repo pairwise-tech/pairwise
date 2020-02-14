@@ -1,9 +1,6 @@
 /* Import styles */
 import "normalize.css";
 
-/* Import Stripe styles */
-import "./stripe.scss";
-
 /* Import Blueprint styles */
 import "./blueprint.scss";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
