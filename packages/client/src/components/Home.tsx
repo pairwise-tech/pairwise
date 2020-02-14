@@ -4,7 +4,6 @@ import styled from "styled-components/macro";
 import { CourseSkeleton } from "@pairwise/common";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
-
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle } from "./Shared";
 import { COLORS } from "tools/constants";
@@ -146,7 +145,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   handlePurchaseCourseIntent:
-    Modules.actions.purchase.handlePurchaseCourseIntent,
+    Modules.actions.payments.handlePurchaseCourseIntent,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

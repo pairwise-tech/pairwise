@@ -679,7 +679,7 @@ const dispatchProps = {
   toggleSectionAccordionView: ChallengeActions.toggleSectionAccordionView,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePurchaseCourseIntent:
-    Modules.actions.purchase.handlePurchaseCourseIntent,
+    Modules.actions.payments.handlePurchaseCourseIntent,
 };
 
 const mergeProps = (

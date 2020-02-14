@@ -25,6 +25,8 @@ export const coursePurchaseId = createSelector(
   purchase => purchase.purchaseCourseId,
 );
 
+// Find the course which corresponds to the current course purchase id,
+// if it exists.
 export const courseToPurchase = createSelector(
   [coursePurchaseId, courseSkeletons],
   (id, skeletons) => {

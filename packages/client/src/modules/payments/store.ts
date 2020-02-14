@@ -1,6 +1,6 @@
 import { createReducer } from "typesafe-actions";
 import * as actions from "./actions";
-import { PurchaseActionTypes } from "./index";
+import { PaymentsActionTypes } from "./index";
 
 /** ===========================================================================
  * App Store
@@ -20,7 +20,7 @@ const initialState = {
   purchaseCourseModalOpen: false,
 };
 
-const app = createReducer<State, PurchaseActionTypes>(initialState)
+const payments = createReducer<State, PaymentsActionTypes>(initialState)
   .handleAction(actions.setPurchaseCourseModalState, (state, action) => ({
     ...state,
     purchaseCourseModalOpen: action.payload,
@@ -39,4 +39,4 @@ const app = createReducer<State, PurchaseActionTypes>(initialState)
  * ============================================================================
  */
 
-export default app;
+export default payments;

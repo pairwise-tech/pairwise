@@ -74,17 +74,17 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  dialogOpen: Modules.selectors.purchase.coursePurchaseModalStateSelector(
+  dialogOpen: Modules.selectors.payments.coursePurchaseModalStateSelector(
     state,
   ),
   user: Modules.selectors.user.userSelector(state),
-  courseToPurchase: Modules.selectors.purchase.courseToPurchase(state),
+  courseToPurchase: Modules.selectors.payments.courseToPurchase(state),
 });
 
 const dispatchProps = {
-  startCheckout: Modules.actions.purchase.startCheckout,
+  startCheckout: Modules.actions.payments.startCheckout,
   setPurchaseCourseModalState:
-    Modules.actions.purchase.setPurchaseCourseModalState,
+    Modules.actions.payments.setPurchaseCourseModalState,
 };
 
 interface ComponentProps {}

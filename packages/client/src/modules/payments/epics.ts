@@ -123,6 +123,7 @@ const redirectToStripeCheckoutEpic: EpicSignature = (action$, state$, deps) => {
   // Initialize stripe module. The module is imported by an
   // asynchronously loaded .js file in a script tag from the application
   // index.html file.
+  // @ts-ignore where is the type definition...
   const stripe = Stripe(STRIPE_API_KEY);
 
   // Handle redirect to Stripe portal

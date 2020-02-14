@@ -12,7 +12,7 @@ import toaster from "tools/toast-utils";
 
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
-import Purchase, { PurchaseActionTypes, PurchaseState } from "./payments";
+import Payments, { PaymentsActionTypes, PaymentsState } from "./payments";
 import Challenges, {
   ChallengesActionTypes,
   ChallengesState,
@@ -30,7 +30,7 @@ export type ReduxActionTypes =
   | ChallengesActionTypes
   | UserActionTypes
   | AuthActionTypes
-  | PurchaseActionTypes
+  | PaymentsActionTypes
   | FeedbackActionTypes;
 
 export const selectors = {
@@ -38,7 +38,7 @@ export const selectors = {
   auth: Auth.selector,
   user: User.selector,
   challenges: Challenges.selector,
-  purchase: Purchase.selector,
+  payments: Payments.selector,
   feedback: Feedback.selector,
 };
 
@@ -47,7 +47,7 @@ export const actions = {
   auth: Auth.actions,
   user: User.actions,
   challenges: Challenges.actions,
-  purchase: Purchase.actions,
+  payments: Payments.actions,
   feedback: Feedback.actions,
 };
 
@@ -66,7 +66,7 @@ export interface ReduxStoreState {
   auth: AuthState;
   user: UserState;
   challenges: ChallengesState;
-  purchase: PurchaseState;
+  purchase: PaymentsState;
   feedback: FeedbackState;
 }
 
@@ -75,7 +75,7 @@ const rootReducer = combineReducers({
   auth: Auth.store,
   user: User.store,
   challenges: Challenges.store,
-  purchase: Purchase.store,
+  purchase: Payments.store,
   feedback: Feedback.store,
 });
 
@@ -103,7 +103,7 @@ const combinedEpic = combineEpics(
   User.epics,
   Auth.epics,
   Challenges.epics,
-  Purchase.epics,
+  Payments.epics,
   Feedback.epics,
 );
 
