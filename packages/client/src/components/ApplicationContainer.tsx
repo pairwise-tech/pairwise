@@ -74,15 +74,8 @@ class ApplicationContainer extends React.Component<IProps, IState> {
 
   componentDidMount() {
     this.props.initializeApp();
-    this.handleInitializeUserSession();
-  }
-
-  handleInitializeUserSession = () => {
-    this.props.initializeAccessToken({
-      initialWindowLocationSearch: window.location.search,
-    });
     this.setState({ hasHandledRedirect: true });
-  };
+  }
 
   render(): Nullable<JSX.Element> {
     if (!this.state.hasHandledRedirect) {
@@ -500,7 +493,6 @@ const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   updateChallenge: Modules.actions.challenges.updateChallenge,
-  initializeAccessToken: Modules.actions.auth.initializeAccessToken,
   setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
 };
 

@@ -1,4 +1,5 @@
-import { delay, filter, map, tap, ignoreElements } from "rxjs/operators";
+import queryString from "query-string";
+import { delay, filter, map, tap, ignoreElements, pluck } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
@@ -20,6 +21,21 @@ const appInitializationEpic: EpicSignature = (action$, _, deps) => {
        */
     }),
     ignoreElements(),
+  );
+};
+
+const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
+  return action$.pipe(
+    filter(isActionOf(Actions.initializeApp)),
+    pluck("payload"),
+    map(() => {
+      const { location } = window;
+      const params = queryString.parse(location.search);
+      return Actions.captureAppInitializationUrl({
+        params,
+        location,
+      });
+    }),
   );
 };
 
@@ -53,6 +69,7 @@ const logoutUserSuccess: EpicSignature = (action$, _, deps) => {
 
 export default combineEpics(
   appInitializationEpic,
+  appInitializeCaptureUrlEpic,
   locationChangeEpic,
   logoutUserSuccess,
 );

@@ -37,14 +37,13 @@ import { Actions } from "../root-actions";
  */
 const accessTokenInitializationEpic: EpicSignature = action$ => {
   return action$.pipe(
-    filter(isActionOf(Actions.initializeAccessToken)),
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     map(payload => {
       let token = getAccessTokenFromLocalStorage();
       let accountCreatedField = false;
 
-      const search = payload.initialWindowLocationSearch;
-      const { accessToken, accountCreated } = queryString.parse(search);
+      const { accessToken, accountCreated } = payload.params;
 
       const created =
         typeof accountCreated === "string" ? JSON.parse(accountCreated) : false;
