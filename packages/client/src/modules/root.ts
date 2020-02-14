@@ -16,9 +16,9 @@ import Challenges, {
   ChallengesState,
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
-import { IToaster } from "@blueprintjs/core";
 import { catchError } from "rxjs/operators";
 import Feedback, { FeedbackActionTypes, FeedbackState } from "./feedback";
+import { toaster } from "tools/constants";
 
 /** ===========================================================================
  * Root Actions and Selectors
@@ -87,7 +87,7 @@ const rootReducer = combineReducers({
 export interface EpicDependencies {
   router: History<any>;
   api: typeof API;
-  toaster: IToaster;
+  toaster: typeof toaster;
   selectors: typeof selectors;
 }
 

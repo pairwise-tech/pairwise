@@ -29,7 +29,7 @@ import {
   saveSandboxToLocalStorage,
   getSandboxFromLocalStorage,
 } from "tools/storage-utils";
-import { AppToaster, SANDBOX_ID } from "tools/constants";
+import { toaster, SANDBOX_ID } from "tools/constants";
 import { wait } from "tools/utils";
 import { UserStoreState } from "./user/store";
 
@@ -158,12 +158,7 @@ class BaseApiClass {
      * error handling higher up into the epics layer. Then again, logout
      * should RARELY occur, so... blegh.
      */
-    AppToaster.show({
-      icon: "user",
-      intent: "danger",
-      message: "Your session has expired, please login again.",
-    });
-
+    toaster.error("Your session has expired, please login again.", "user");
     logoutUserInLocalStorage();
     await wait(1500); /* Wait so they can read the message... */
 
@@ -617,11 +612,9 @@ class LocalStorageHttpClass {
 
     let toastKey = "";
     if (shouldToast) {
-      toastKey = AppToaster.show({
-        intent: "warning",
-        message:
-          "Syncing your progress to your new account, please wait a moment and do not close your browser window.",
-      });
+      toastKey = toaster.warn(
+        "Syncing your progress to your new account, please wait a moment and do not close your browser window.",
+      );
     }
 
     const results = await Promise.all([
@@ -635,11 +628,8 @@ class LocalStorageHttpClass {
       await wait(3000);
 
       /* Dismiss the previous toaster: */
-      AppToaster.dismiss(toastKey);
-      AppToaster.show({
-        intent: "success",
-        message: "Updates saved! You are good to go!",
-      });
+      toaster.toast.dismiss(toastKey);
+      toaster.success("Updates saved! You are good to go!");
     }
 
     /* Log failed operations for debugging */

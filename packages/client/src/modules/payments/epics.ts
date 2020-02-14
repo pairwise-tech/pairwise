@@ -87,11 +87,10 @@ const handlePurchaseCourseIntentEpic: EpicSignature = (
           Actions.setPurchaseCourseModalState(true),
         );
       } else {
-        deps.toaster.show({
-          icon: "user",
-          intent: "primary",
-          message: "Please create an account to purchase this course",
-        });
+        deps.toaster.warn(
+          "Please create an account to purchase this course",
+          "user",
+        );
         setEphemeralPurchaseCourseId(courseId);
         return of(
           Actions.setPurchaseCourseId({ courseId }),
@@ -142,11 +141,7 @@ const redirectToStripeCheckoutEpic: EpicSignature = (action$, state$, deps) => {
     mergeMap(redirectToStripe),
     tap(error => {
       if (error) {
-        deps.toaster.show({
-          icon: "error",
-          intent: "danger",
-          message: "Checkout failed, please try again...",
-        });
+        deps.toaster.error("Checkout failed, please try again...");
       }
     }),
     ignoreElements(),

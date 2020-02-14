@@ -12,7 +12,7 @@ import {
   rootEpic,
   rootReducer,
 } from "./root";
-import { AppToaster } from "tools/constants";
+import { toaster } from "tools/constants";
 import logger from "tools/logger";
 
 /** ===========================================================================
@@ -29,9 +29,9 @@ const history = createBrowserHistory();
 
 const dependencies: EpicDependencies = {
   api,
+  toaster,
   selectors,
   router: history,
-  toaster: AppToaster,
 };
 
 const epicMiddleware = createEpicMiddleware({

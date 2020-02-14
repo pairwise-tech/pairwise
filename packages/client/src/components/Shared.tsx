@@ -1,7 +1,6 @@
 import React, { SyntheticEvent } from "react";
 import cx from "classnames";
 import { EditorProps } from "rich-markdown-editor";
-
 import styled, { CSSProperties } from "styled-components/macro";
 import {
   Button,
@@ -13,8 +12,7 @@ import {
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
-
-import { COLORS, AppToaster } from "../tools/constants";
+import { COLORS, toaster } from "../tools/constants";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 
@@ -168,7 +166,7 @@ export const ContentEditor = (props: EditorProps) => (
     <RichMarkdownEditor
       theme={editorTheme}
       onShowToast={message => {
-        AppToaster.show({
+        toaster.toast.show({
           message,
         });
       }}
