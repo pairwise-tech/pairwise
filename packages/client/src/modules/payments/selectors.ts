@@ -2,6 +2,7 @@ import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 
 import { ReduxStoreState } from "modules/root";
+import { courseSkeletons } from "modules/challenges/selectors";
 
 /** ===========================================================================
  * Selectors
@@ -22,4 +23,11 @@ export const coursePurchaseModalStateSelector = createSelector(
 export const coursePurchaseId = createSelector(
   purchaseState,
   purchase => purchase.purchaseCourseId,
+);
+
+export const courseToPurchase = createSelector(
+  [coursePurchaseId, courseSkeletons],
+  (id, skeletons) => {
+    return skeletons?.find(c => c.id === id);
+  },
 );

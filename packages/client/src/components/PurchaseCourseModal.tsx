@@ -21,11 +21,10 @@ interface IState {}
 
 class PurchaseCourseModal extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
-    const { user, skeletons } = this.props;
+    const { user, courseToPurchase } = this.props;
     const { profile } = user;
-    const course = skeletons?.find(c => c.id === this.props.coursePurchaseId);
 
-    if (!course || !profile) {
+    if (!courseToPurchase || !profile) {
       return null;
     }
 
@@ -39,15 +38,15 @@ class PurchaseCourseModal extends React.Component<IProps, IState> {
         <ModalContainer>
           <ModalTitleText>Purchase Course</ModalTitleText>
           <ModalSubText>
-            Purchasing the <b>{course.title}</b> course will give you full
-            lifetime access to the course content and is fully refundable up to
-            30 days.
+            Purchasing the <b>{courseToPurchase.title}</b> course will give you
+            full lifetime access to the course content and is fully refundable
+            up to 30 days.
           </ModalSubText>
           <Button
             large
             intent="primary"
             style={{ marginTop: 24 }}
-            onClick={() => this.confirmPurchase(course.id)}
+            onClick={() => this.confirmPurchase(courseToPurchase.id)}
           >
             Start Checkout
           </Button>
@@ -79,8 +78,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
     state,
   ),
   user: Modules.selectors.user.userSelector(state),
-  coursePurchaseId: Modules.selectors.purchase.coursePurchaseId(state),
-  skeletons: Modules.selectors.challenges.getCourseSkeletons(state),
+  courseToPurchase: Modules.selectors.purchase.courseToPurchase(state),
 });
 
 const dispatchProps = {
