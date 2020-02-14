@@ -73,7 +73,10 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    this.props.initializeApp();
+    // We have to pass location in here to correctly capture the original
+    // url to send it to the epics before React Router takes over and starts
+    // to redirect the app.
+    this.props.initializeApp({ location: window.location });
     this.setState({ hasHandledRedirect: true });
   }
 

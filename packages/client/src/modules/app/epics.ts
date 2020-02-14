@@ -29,8 +29,8 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
     pluck("payload"),
-    map(() => {
-      const { location } = window;
+    pluck("location"),
+    map(location => {
       const params = queryString.parse(location.search);
       const appInitializationType = parseInitialUrlToInitializationType(
         location.pathname,

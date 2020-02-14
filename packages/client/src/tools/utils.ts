@@ -356,7 +356,7 @@ export enum APP_INITIALIZATION_TYPE {
 // Check a list of param keys exists in the parsed query params from a url
 const checkParamsExist = (params: ParsedQuery<string>, keys: string[]) => {
   for (const key of keys) {
-    if (params[key] !== undefined) {
+    if (params[key] === undefined) {
       return false;
     }
   }
@@ -369,6 +369,9 @@ export const parseInitialUrlToInitializationType = (
   path: string,
   params: ParsedQuery<string>,
 ) => {
+  console.log(path);
+  console.log(params);
+
   // A user authenticated:
   if (
     path === "/authenticated" &&

@@ -39,7 +39,9 @@ export const locationChange = createAction(ActionTypesEnum.LOCATION_CHANGE)<
 
 export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
 
-export const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)();
+export const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)<{
+  location: Location;
+}>();
 
 export const initializeAppSuccess = createAction(
   ActionTypesEnum.INITIALIZE_APP_SUCCESS,
