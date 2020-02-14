@@ -1,3 +1,4 @@
+import { Request } from "express";
 import Stripe from "stripe";
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { RequestUser } from "src/types";
@@ -13,7 +14,9 @@ import {
   contentUtility,
   CourseMetadata,
   StripeStartCheckoutSuccessResponse,
+  UserProfile,
 } from "@pairwise/common";
+import { UserService } from "src/user/user.service";
 
 const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
   typescript: true,
@@ -26,6 +29,8 @@ export class PaymentsService {
   COURSE_PRICE = 50;
 
   constructor(
+    private readonly userService: UserService,
+
     @InjectRepository(Payments)
     private readonly paymentsRepository: Repository<Payments>,
   ) {}
@@ -38,7 +43,6 @@ export class PaymentsService {
           requestUser,
           courseMetadata,
         );
-        console.log(session);
 
         const result: StripeStartCheckoutSuccessResponse = {
           stripeCheckoutSessionId: session.id,
@@ -54,13 +58,45 @@ export class PaymentsService {
     }
   }
 
-  async handlePurchaseCourseRequest(
-    requestUser: RequestUser,
+  async handleStripeCheckoutSuccessWebhook(
+    request: Request,
+    signature: string,
+  ) {
+    try {
+      // @ts-ignore
+      const { rawBody } = request;
+      const event = stripe.webhooks.constructEvent(
+        rawBody,
+        signature,
+        ENV.STRIPE_WEBHOOK_SIGNING_SECRET,
+      );
+      if (event.type === "checkout.session.completed") {
+        const { object } = event.data as any; /* Stripe type is pointless */
+        const email = object.customer_email;
+        const courseId = object.metadata.courseId;
+        await this.handlePurchaseCourseRequest(email, courseId);
+      } else {
+        // Handle other event types...
+      }
+    } catch (err) {
+      console.log(`[ERROR]: ${err.message}`);
+      return new BadRequestException(`Webhook Error: ${err.message}`);
+    }
+
+    return SUCCESS_CODES.OK;
+  }
+
+  private async handlePurchaseCourseRequest(
+    userEmail: string,
     courseId: string,
   ) {
-    validatePaymentRequest(requestUser, courseId);
+    const user = await this.userService.findUserByEmailGetFullProfile(
+      userEmail,
+    );
 
-    const { profile } = requestUser;
+    validatePaymentRequest(user, courseId);
+
+    const { profile } = user;
     console.log(`Purchasing course ${courseId} for user ${profile.email}`);
 
     /**
@@ -72,7 +108,7 @@ export class PaymentsService {
     return SUCCESS_CODES.OK;
   }
 
-  private createNewPayment = (user: User, courseId: string) => {
+  private createNewPayment = (user: UserProfile, courseId: string) => {
     /**
      * Construct the new payment data. Once Stripe is integrated, most of this
      * data will come from Stripe and the actual payment information.
@@ -94,6 +130,9 @@ export class PaymentsService {
   ) {
     const session = await stripe.checkout.sessions.create({
       customer_email: requestUser.profile.email,
+      metadata: {
+        courseId: courseMetadata.id,
+      },
       payment_method_types: ["card"],
       line_items: [
         {

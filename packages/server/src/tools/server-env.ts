@@ -13,6 +13,9 @@ const HTTPS = getenv.bool("HTTPS", false);
 /* Stripe */
 const STRIPE_API_KEY = getenv.string("STRIPE_API_KEY");
 const STRIPE_SECRET_KEY = getenv.string("STRIPE_SECRET_KEY");
+const STRIPE_WEBHOOK_SIGNING_SECRET = getenv.string(
+  "STRIPE_WEBHOOK_SIGNING_SECRET",
+);
 
 /* Auth: */
 const JWT_SECRET = getenv.string("JWT_SECRET");
@@ -41,6 +44,7 @@ const ENV = {
   SERVER_HOST_URL,
   STRIPE_API_KEY,
   STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_SIGNING_SECRET,
   JWT_SECRET,
   FACEBOOK_CLIENT_ID,
   FACEBOOK_CLIENT_SECRET,

@@ -12,6 +12,8 @@ import {
   IFeedbackDto,
   feedbackTypeSet,
   MonacoEditorThemes,
+  IUserDto,
+  UserProfile,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -244,7 +246,10 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
  * Validate the user request to purchase a course. The course id must be valid
  * and the user must not have already purchased this course before.
  */
-export const validatePaymentRequest = (user: RequestUser, courseId: string) => {
+export const validatePaymentRequest = (
+  user: IUserDto<UserProfile>,
+  courseId: string,
+) => {
   if (!contentUtility.courseIdIsValid(courseId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
   }
@@ -252,6 +257,7 @@ export const validatePaymentRequest = (user: RequestUser, courseId: string) => {
   const existingCoursePayment = user.payments.find(
     p => p.courseId === courseId,
   );
+
   if (existingCoursePayment) {
     throw new BadRequestException("User has previously paid for this course");
   }
