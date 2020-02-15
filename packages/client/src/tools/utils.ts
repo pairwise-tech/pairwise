@@ -397,3 +397,17 @@ export const parseInitialUrlToInitializationType = (
   // Default category:
   return APP_INITIALIZATION_TYPE.DEFAULT;
 };
+
+// Format a date, e.g. 2020-02-15T13:10:18.920Z -> Saturday, February 15, 2020
+export const formatDate = (rawDate: Date) => {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  const date = new Date(rawDate);
+  const formatted = date.toLocaleDateString("en-US", options);
+  return formatted;
+};

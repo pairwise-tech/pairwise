@@ -74,12 +74,15 @@ export class PaymentsService {
         const { object } = event.data as any; /* Stripe type is pointless */
         const email = object.customer_email;
         const courseId = object.metadata.courseId;
+        console.log(
+          `[STRIPE]: Checkout session completed event received for user: ${email} and course: ${courseId}`,
+        );
         await this.handlePurchaseCourseRequest(email, courseId);
       } else {
         // Handle other event types...
       }
     } catch (err) {
-      console.log(`[ERROR]: ${err.message}`);
+      console.log(`[STRIPE ERROR]: ${err.message}`);
       return new BadRequestException(`Webhook Error: ${err.message}`);
     }
 
