@@ -81,6 +81,7 @@ export type ModuleSkeletonList = ModuleSkeleton[];
 export interface ModuleSkeleton {
   id: string;
   title: string;
+  free: boolean;
   userCanAccess: boolean;
   challenges: ChallengeSkeletonList;
 }

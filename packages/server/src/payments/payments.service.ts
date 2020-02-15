@@ -24,10 +24,11 @@ const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
 
 @Injectable()
 export class PaymentsService {
-  // Just hard-code it here for now, the units are apparent in cents
-  COURSE_PRICE = 5000; // $50
+  // Just hard-code these here for now
+  COURSE_PRICE = 5000; // the units are apparently in cents
   COURSE_CURRENCY = "usd";
-  PAIRWISE_ICON_URL = "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4"; ,
+  PAIRWISE_ICON_URL =
+    "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
 
   constructor(
     private readonly userService: UserService,

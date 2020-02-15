@@ -75,6 +75,7 @@ export class ContentUtilityClass {
           return {
             id: courseModule.id,
             title: courseModule.title,
+            free: courseModule.free,
             userCanAccess: courseModule.free,
             challenges: courseModule.challenges.map(challenge => {
               return {
@@ -118,13 +119,15 @@ export class ContentUtilityClass {
         return {
           ...course,
           modules: course.modules.map(courseModule => {
+            const moduleFree = courseModule.free;
+            const userCanAccess = moduleFree || canAccessCourse;
             return {
               ...courseModule,
-              userCanAccess: canAccessCourse,
+              userCanAccess,
               challenges: courseModule.challenges.map(challenge => {
                 return {
                   ...challenge,
-                  userCanAccess: canAccessCourse,
+                  userCanAccess,
                 };
               }),
             };
