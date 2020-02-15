@@ -19,7 +19,7 @@ export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   // Stripe webhook endpoint:
-  @Post("/checkout-success")
+  @Post("/stripe-webhook")
   async coursePaymentSuccessStripeWebhook(
     @Headers("stripe-signature") signature,
     @Req() request: Request,

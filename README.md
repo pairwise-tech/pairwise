@@ -163,6 +163,17 @@ To test authentication locally, you will need to run the client and server using
 All of the SSO provider logins have mock API implementations in the `external-services` package, which are used when running e2e/Cypress tests. These can be enabled locally by running the
 external services server and by loading all of the SSO provider environment variables which point to the local external service mock APIs (see `server/sample.env`) when running the application server.
 
+## Payments
+
+We are using [Stripe](https://stripe.com/) to process user payments. Currently, the application redirects to a hosted Stripe checkout page which then sends a webhook event to our server if the user completes the checkout process succcessfully. The user is then redirected back to Pairwise and sees a payment confirmation. Here are some instructions and resources for working locally if you need to work on the Stripe payments integration feature.
+
+The docker-compose files deploy a `stripe` service which runs the [Stripe CLI](https://stripe.com/docs/stripe-cli) docker image which handles processing Stripe events. This allows the payment integration to simply work in development mode when running Pairwise locally or in a CI environment. Stripe provides several options for easily testing payments in development, [see their documentation here](https://stripe.com/docs/testing). To run the Stripe CLI locally, outside of Docker, you can run the following command:
+
+```bash
+# Run the Stripe CLI and forward requests to localhost:9000/payments/stripe-webhook
+$ yarn stripe:dev
+```
+
 ## To Rebuild The Database
 
 If the database schema changes or you want to simply remove all the data in your local database you can do the following:
