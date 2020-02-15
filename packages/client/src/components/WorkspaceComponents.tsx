@@ -9,6 +9,7 @@ import {
   HEADER_HEIGHT,
   COLORS,
   CONTENT_SERIALIZE_DEBOUNCE,
+  SANDBOX_ID,
 } from "../tools/constants";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Loading, ContentEditor, editorColors } from "./Shared";
@@ -393,6 +394,7 @@ const keyboardStateToProps = (state: ReduxStoreState) => ({
     ?.id,
   nextChallengeId: Modules.selectors.challenges.nextPrevChallenges(state).next
     ?.id,
+  currentChallengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
 });
 
 const keyboardDispatchProps = {
@@ -408,7 +410,9 @@ const keyboardMergeProps = (
   ...methods,
   toggleEditMode: (e: KeyboardEvent) => {
     e.preventDefault();
-    methods.setEditMode(!state.isEditMode);
+    if (state.currentChallengeId !== SANDBOX_ID) {
+      methods.setEditMode(!state.isEditMode);
+    }
   },
   save: (e: KeyboardEvent) => {
     if (!state.isEditMode) {

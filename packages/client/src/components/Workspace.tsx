@@ -491,16 +491,18 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
-        <UpperRight isEditMode={isEditMode}>
-          <Tooltip content="Shortcut: opt+enter" position="top">
-            <Button
-              aria-label="run the current editor code"
-              onClick={this.iFrameRenderPreview}
-            >
-              Run Code
-            </Button>
-          </Tooltip>
-        </UpperRight>
+        {!IS_MARKUP_CHALLENGE && (
+          <UpperRight isEditMode={isEditMode}>
+            <Tooltip content="Shortcut: opt+enter" position="top">
+              <Button
+                aria-label="run the current editor code"
+                onClick={this.iFrameRenderPreview}
+              >
+                Run Code
+              </Button>
+            </Tooltip>
+          </UpperRight>
+        )}
         <LowerRight>
           <ButtonGroup vertical style={{ marginBottom: 8 }}>
             <Tooltip content="Increase Font Size" position="left">

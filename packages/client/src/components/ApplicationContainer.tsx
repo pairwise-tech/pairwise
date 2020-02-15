@@ -124,7 +124,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             </ControlsContainer>
           )}
           <ControlsContainer style={{ marginLeft: "auto" }}>
-            {!isSandbox && challenge && (
+            {this.props.shouldShowFeedbackButton && (
               <Tooltip content="Submit Feedback" position="bottom">
                 <IconButton
                   icon="help"
@@ -489,6 +489,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
+    state,
+  ),
+  shouldShowFeedbackButton: Modules.selectors.app.shouldShowFeedbackButton(
     state,
   ),
 });
