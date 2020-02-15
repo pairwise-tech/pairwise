@@ -217,11 +217,13 @@ class NavigationOverlay extends React.Component<IProps> {
             >
               {block.challenges.map(
                 (challenge: ChallengeSkeleton, index: number) => {
+                  // @NOTE This is meant to be the index of the challenge as indexed in the full flattened list
+                  const serialIndex = blockIndex + index + 1;
                   return this.renderChallengeNavigationItem({
                     module,
                     course,
                     challenge,
-                    index: blockIndex,
+                    index: serialIndex,
                   });
                 },
               )}
