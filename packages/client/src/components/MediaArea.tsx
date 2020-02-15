@@ -54,6 +54,7 @@ const MediaArea = connect(
   const handleTitle = (x: string) =>
     updateChallenge({ id: challenge.id, challenge: { title: x } });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const tableOfContents = React.useMemo(() => TableOfContentsPlugin(), [
     challenge.id,
   ]);
@@ -76,6 +77,7 @@ const MediaArea = connect(
           });
         },
       ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [challenge.id],
   );
 

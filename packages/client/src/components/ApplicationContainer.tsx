@@ -502,7 +502,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
-  logoutUser: Modules.actions.app.logoutUser,
+  logoutUser: Modules.actions.auth.logoutUser,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
