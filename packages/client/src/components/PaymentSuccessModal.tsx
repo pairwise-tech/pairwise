@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button, Dialog } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
@@ -19,12 +20,12 @@ interface IState {}
  * ============================================================================
  */
 
-class PaymentCourseModal extends React.Component<IProps, IState> {
+class PaymentSuccessModal extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
-    const { user, courseToPurchase } = this.props;
+    const { user, paymentSuccessCourse } = this.props;
     const { profile } = user;
 
-    if (!courseToPurchase || !profile) {
+    if (!paymentSuccessCourse || !profile) {
       return null;
     }
 
@@ -36,31 +37,32 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
         onClose={this.handleOnCloseModal}
       >
         <ModalContainer>
-          <ModalTitleText>Purchase Course</ModalTitleText>
+          <ModalTitleText>Thank you, {profile.displayName}!</ModalTitleText>
           <ModalSubText>
-            Purchasing the <b>{courseToPurchase.title}</b> course will give you
-            full lifetime access to the course content and is fully refundable
-            up to 30 days.
+            Fantastic! Thank you for purchasing the{" "}
+            <b>{paymentSuccessCourse.title}</b> taking the first big step to
+            learning to code and becoming a software developer. We know you're
+            excited so let's just get right to it! Click the button to get
+            started!
           </ModalSubText>
-          <Button
-            large
-            intent="primary"
-            style={{ marginTop: 24 }}
-            onClick={() => this.confirmPurchase(courseToPurchase.id)}
-          >
-            Start Checkout
-          </Button>
+          <Link to={`workspace/${paymentSuccessCourse.id}`}>
+            <Button
+              large
+              intent="success"
+              style={{ width: 185 }}
+              onClick={this.handleOnCloseModal}
+              id="payment-success-modal-get-started"
+            >
+              Let's get started!
+            </Button>
+          </Link>
         </ModalContainer>
       </Dialog>
     );
   }
 
-  confirmPurchase = (courseId: string) => {
-    this.props.startCheckout({ courseId });
-  };
-
   setModalState = (state: boolean) => {
-    this.props.setPurchaseCourseModalState(state);
+    this.props.setPaymentSuccessModalState(state);
   };
 
   handleOnCloseModal = () => {
@@ -78,13 +80,12 @@ const mapStateToProps = (state: ReduxStoreState) => ({
     state,
   ),
   user: Modules.selectors.user.userSelector(state),
-  courseToPurchase: Modules.selectors.payments.paymentIntentCourse(state),
+  paymentSuccessCourse: Modules.selectors.payments.paymentSuccessCourse(state),
 });
 
 const dispatchProps = {
-  startCheckout: Modules.actions.payments.startCheckout,
-  setPurchaseCourseModalState:
-    Modules.actions.payments.setPaymentCourseModalState,
+  setPaymentSuccessModalState:
+    Modules.actions.payments.setPaymentSuccessModalState,
 };
 
 interface ComponentProps {}
@@ -100,4 +101,4 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default composeWithProps<ComponentProps>(withProps)(PaymentCourseModal);
+export default composeWithProps<ComponentProps>(withProps)(PaymentSuccessModal);

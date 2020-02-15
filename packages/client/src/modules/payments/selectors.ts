@@ -17,18 +17,32 @@ export const purchaseSelector = createSelector([paymentsState], identity);
 
 export const coursePurchaseModalStateSelector = createSelector(
   paymentsState,
-  purchase => purchase.paymentCourseModalOpen,
+  payments => payments.paymentCourseModalOpen,
 );
 
-export const coursePurchaseId = createSelector(
+export const paymentIntentCourseId = createSelector(
   paymentsState,
-  purchase => purchase.paymentCourseId,
+  payments => payments.paymentIntentCourseId,
+);
+
+export const paymentSuccessCourseId = createSelector(
+  paymentsState,
+  payments => payments.paymentSuccessCourseId,
 );
 
 // Find the course which corresponds to the current course purchase id,
 // if it exists.
-export const courseToPurchase = createSelector(
-  [coursePurchaseId, courseSkeletons],
+export const paymentIntentCourse = createSelector(
+  [paymentIntentCourseId, courseSkeletons],
+  (id, skeletons) => {
+    return skeletons?.find(c => c.id === id);
+  },
+);
+
+// Find the course which corresponds to the current course purchase id,
+// if it exists.
+export const paymentSuccessCourse = createSelector(
+  [paymentSuccessCourseId, courseSkeletons],
   (id, skeletons) => {
     return skeletons?.find(c => c.id === id);
   },

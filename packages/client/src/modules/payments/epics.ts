@@ -50,8 +50,8 @@ const purchaseCourseInitializeEpic: EpicSignature = action$ => {
         const course = skeletons.find(c => c.id === id);
         if (id && course) {
           return of(
-            Actions.setPurchaseCourseId({ courseId: id }),
-            Actions.setPurchaseCourseModalState(true),
+            Actions.setPaymentCourseId({ courseId: id }),
+            Actions.setPaymentCourseModalState(true),
           );
         }
       }
@@ -77,15 +77,15 @@ const handlePurchaseCourseIntentEpic: EpicSignature = (
   deps,
 ) => {
   return action$.pipe(
-    filter(isActionOf(Actions.handlePurchaseCourseIntent)),
+    filter(isActionOf(Actions.handlePaymentCourseIntent)),
     pluck("payload"),
     pluck("courseId"),
     mergeMap(courseId => {
       const user = deps.selectors.user.userProfile(state$.value);
       if (user) {
         return of(
-          Actions.setPurchaseCourseId({ courseId }),
-          Actions.setPurchaseCourseModalState(true),
+          Actions.setPaymentCourseId({ courseId }),
+          Actions.setPaymentCourseModalState(true),
         );
       } else {
         deps.toaster.warn(
@@ -94,7 +94,7 @@ const handlePurchaseCourseIntentEpic: EpicSignature = (
         );
         setEphemeralPurchaseCourseId(courseId);
         return of(
-          Actions.setPurchaseCourseId({ courseId }),
+          Actions.setPaymentCourseId({ courseId }),
           Actions.setSingleSignOnDialogState(true),
         );
       }

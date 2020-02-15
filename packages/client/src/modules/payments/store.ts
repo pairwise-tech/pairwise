@@ -8,16 +8,14 @@ import { PaymentsActionTypes } from "./index";
  */
 
 export interface State {
-  accessToken: string;
-  paymentCourseId: string;
+  paymentIntentCourseId: string;
   paymentCourseModalOpen: boolean;
   paymentSuccessModalOpen: boolean;
   paymentSuccessCourseId: string;
 }
 
 const initialState = {
-  accessToken: "",
-  paymentCourseId: "",
+  paymentIntentCourseId: "",
   stripeCheckoutSessionId: "",
   paymentCourseModalOpen: false,
   paymentSuccessModalOpen: false,

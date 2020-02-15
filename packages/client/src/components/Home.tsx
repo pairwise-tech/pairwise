@@ -93,7 +93,7 @@ class Home extends React.Component<IProps, IState> {
   };
 
   handlePurchaseCourse = (courseId: string) => () => {
-    this.props.handlePurchaseCourseIntent({ courseId });
+    this.props.handlePaymentCourseIntent({ courseId });
   };
 }
 
@@ -144,8 +144,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
-  handlePurchaseCourseIntent:
-    Modules.actions.payments.handlePurchaseCourseIntent,
+  handlePaymentCourseIntent: Modules.actions.payments.handlePaymentCourseIntent,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

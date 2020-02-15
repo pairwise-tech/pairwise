@@ -113,7 +113,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
-  setPurchaseCourseId: Modules.actions.payments.setPurchaseCourseId,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 

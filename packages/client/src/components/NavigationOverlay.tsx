@@ -438,7 +438,7 @@ class NavigationOverlay extends React.Component<IProps> {
   ) => {
     if (!userCanAccess) {
       event.preventDefault();
-      this.props.handlePurchaseCourseIntent({ courseId });
+      this.props.handlePaymentCourseIntent({ courseId });
     }
   };
 
@@ -680,8 +680,7 @@ const dispatchProps = {
   setNavigationMapState: ChallengeActions.setNavigationMapState,
   toggleSectionAccordionView: ChallengeActions.toggleSectionAccordionView,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
-  handlePurchaseCourseIntent:
-    Modules.actions.payments.handlePurchaseCourseIntent,
+  handlePaymentCourseIntent: Modules.actions.payments.handlePaymentCourseIntent,
 };
 
 const mergeProps = (

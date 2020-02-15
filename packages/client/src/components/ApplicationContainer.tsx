@@ -25,8 +25,9 @@ import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
 } from "./ChallengeControls";
-import PaymentCourseModal from "./PurchaseCourseModal";
+import PaymentCourseModal from "./PaymentCourseModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
+import PaymentSuccessModal from "./PaymentSuccessModal";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -47,6 +48,15 @@ const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
 interface IState {
   hasHandledRedirect: boolean;
 }
+
+// All the application modal components:
+const Modals = () => (
+  <>
+    <SingleSignOnModal />
+    <PaymentCourseModal />
+    <PaymentSuccessModal />
+  </>
+);
 
 /** ===========================================================================
  * ApplicationContainer
@@ -97,9 +107,8 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     return (
       <React.Fragment>
         <MobileView />
+        <Modals />
         {this.renderLoadingOverlay()}
-        <SingleSignOnModal />
-        <PaymentCourseModal />
         {CODEPRESS && <AdminKeyboardShortcuts />}
         <FeedbackModal />
         <NavigationOverlay overlayVisible={overlayVisible} />
