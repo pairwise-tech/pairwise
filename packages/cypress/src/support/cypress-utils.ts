@@ -7,6 +7,7 @@ export const CLIENT_APP_URL = Cypress.env("CLIENT_APP_URL");
 
 export const TIMEOUT = Cypress.env("TIMEOUT");
 
+// Convert an id string to an id identifier which includes a #.
 const toId = (id: string) => `#${id}`;
 
 // Click an element by it's id. Pass in an id without the #.

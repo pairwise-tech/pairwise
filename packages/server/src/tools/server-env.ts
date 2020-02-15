@@ -11,7 +11,6 @@ const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
 const HTTPS = getenv.bool("HTTPS", false);
 
 /* Stripe */
-const STRIPE_API_KEY = getenv.string("STRIPE_API_KEY");
 const STRIPE_SECRET_KEY = getenv.string("STRIPE_SECRET_KEY");
 const STRIPE_WEBHOOK_SIGNING_SECRET = getenv.string(
   "STRIPE_WEBHOOK_SIGNING_SECRET",

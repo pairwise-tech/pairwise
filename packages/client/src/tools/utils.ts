@@ -364,14 +364,14 @@ const checkParamsExist = (params: ParsedQuery<string>, keys: string[]) => {
   return true;
 };
 
-// Parse the initial url and params which may have loaded the app.
+// Parse the initial url and params which may have loaded the app and
+// return the APP_INITIALIZATION_TYPE enum which specifically
+// categorizes the app initialization type. This is then used to trigger
+// other events in the app based on the initialization state.
 export const parseInitialUrlToInitializationType = (
   path: string,
   params: ParsedQuery<string>,
-) => {
-  console.log(path);
-  console.log(params);
-
+): APP_INITIALIZATION_TYPE => {
   // A user authenticated:
   if (
     path === "/authenticated" &&

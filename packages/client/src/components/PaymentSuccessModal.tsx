@@ -18,7 +18,8 @@ interface IState {}
 /** ===========================================================================
  * React Component
  * ----------------------------------------------------------------------------
- * - This component handles purchasing courses.
+ * - This component renders after a user has successfully purchased a
+ * course and is redirected back to Pairwise.
  * ============================================================================
  */
 

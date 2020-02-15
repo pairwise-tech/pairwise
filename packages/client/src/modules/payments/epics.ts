@@ -124,7 +124,8 @@ type StripeLibrary = any; /* What's the type definition? */
 // Initialize stripe module. The module is imported by an
 // asynchronously loaded .js file in a script tag from the application
 // index.html file. Apparently the library may not always loaded quickly
-// enough (???), therefore the calling function handles retry logic.
+// enough especially if the internet connection is mediocre (???),
+// so the calling function handles retry logic. Ok, this isn't great!
 const getStripeJsLibrary = (): Nullable<StripeLibrary> => {
   // @ts-ignore where is the type definition...
   const lib = Stripe;
@@ -138,7 +139,7 @@ const getStripeJsLibrary = (): Nullable<StripeLibrary> => {
 
 // Handle redirect to Stripe portal, the stripe.js library may not have
 // loaded yet which will crash the entire Workspace... Ok, let's just retry
-// a few times in case the library is not loaded yet. Blegh:
+// a few times in case the library is not loaded yet. Blegh!
 const handleRedirectToStripeCheckoutFlow = async (
   sessionId: string,
   retries: number = 3,
