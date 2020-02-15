@@ -3,6 +3,7 @@ import {
   filter,
   ignoreElements,
   tap,
+  delay,
   mergeMap,
   pluck,
   map,
@@ -128,14 +129,17 @@ const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-/**
- * Logging out the current user involves removing the current access token
- * from local storage.
- */
-const logoutEpic: EpicSignature = action$ => {
+// Logout the user by removing the local storage access token.
+const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
+  const logoutToast = () => {
+    deps.toaster.warn("Logout Success", "log-out");
+  };
+
   return action$.pipe(
     filter(isActionOf(Actions.logoutUser)),
     tap(logoutUserInLocalStorage),
+    delay(500),
+    tap(logoutToast),
     ignoreElements(),
   );
 };
@@ -150,5 +154,5 @@ export default combineEpics(
   storeAccessTokenEpic,
   accountCreationEpic,
   bulkPersistenceEpic,
-  logoutEpic,
+  logoutUserSuccessEpic,
 );

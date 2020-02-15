@@ -13,6 +13,8 @@ enum ActionTypesEnum {
 
   INITIATE_BULK_PERSISTENCE = "INITIATE_BULK_PERSISTENCE",
   BULK_PERSISTENCE_COMPLETE = "BULK_PERSISTENCE_COMPLETE",
+
+  LOGOUT = "LOGOUT",
 }
 
 /** ===========================================================================
@@ -42,3 +44,5 @@ export const initiateBulkPersistence = createAction(
 export const bulkPersistenceComplete = createAction(
   ActionTypesEnum.BULK_PERSISTENCE_COMPLETE,
 )();
+
+export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();

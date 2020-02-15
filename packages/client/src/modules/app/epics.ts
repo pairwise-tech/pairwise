@@ -1,5 +1,5 @@
 import queryString from "query-string";
-import { delay, filter, map, tap, ignoreElements, pluck } from "rxjs/operators";
+import { filter, map, tap, ignoreElements, pluck } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
@@ -55,19 +55,6 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   }).pipe(map(Actions.locationChange));
 };
 
-const logoutUserSuccess: EpicSignature = (action$, _, deps) => {
-  const logoutToast = () => {
-    deps.toaster.success("Logout Success", "log-out");
-  };
-
-  return action$.pipe(
-    filter(isActionOf(Actions.logoutUser)),
-    delay(500),
-    tap(logoutToast),
-    ignoreElements(),
-  );
-};
-
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -77,5 +64,4 @@ export default combineEpics(
   appInitializationEpic,
   appInitializeCaptureUrlEpic,
   locationChangeEpic,
-  logoutUserSuccess,
 );

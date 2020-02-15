@@ -14,7 +14,6 @@ enum ActionTypesEnum {
   INITIALIZE_APP_SUCCESS = "INITIALIZE_APP_SUCCESS",
   CAPTURE_APP_INITIALIZATION_URL = "CAPTURE_APP_INITIALIZATION_URL",
   TOGGLE_PAGE_SCROLL_LOCK = "TOGGLE_PAGE_SCROLL_LOCK",
-  LOGOUT = "LOGOUT",
   LOCATION_CHANGE = "LOCATION_CHANGE",
 }
 
@@ -36,8 +35,6 @@ export const empty = createAction(ActionTypesEnum.EMPTY_ACTION)<string>();
 export const locationChange = createAction(ActionTypesEnum.LOCATION_CHANGE)<
   HistoryLocation
 >();
-
-export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
 
 export const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)<{
   location: Location;
