@@ -29,7 +29,9 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     cy.wait(TIMEOUT);
 
     // Try to navigate to a locked challenge
-    navigateToLockedChallenge();
+    click("navigation-menu-button");
+    click("module-navigation-7");
+    click("challenge-navigation-0");
     cy.wait(TIMEOUT);
 
     // Prompted to login, login
