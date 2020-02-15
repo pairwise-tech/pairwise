@@ -5,6 +5,7 @@ import express from "express";
 import morgan from "morgan";
 import mockAuth from "./mock-auth";
 import dotenv from "dotenv";
+import { exec } from "child_process";
 
 dotenv.config();
 

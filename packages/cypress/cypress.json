@@ -4,7 +4,6 @@
   "pluginsFile": "src/plugins/index.js",
   "video": false,
   "fixturesFolder": false,
-  "chromeWebSecurity": false,
   "env": {
     "TIMEOUT": 2000,
     "CLIENT_APP_URL": "http://127.0.0.1:3000"

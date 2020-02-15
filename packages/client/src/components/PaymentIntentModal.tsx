@@ -45,6 +45,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
           <Button
             large
             intent="primary"
+            id="start-checkout-button"
             style={{ marginTop: 24 }}
             onClick={() => this.confirmPurchase(courseToPurchase.id)}
           >

@@ -25,7 +25,7 @@ import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
 } from "./ChallengeControls";
-import PaymentCourseModal from "./PaymentCourseModal";
+import PaymentCourseModal from "./PaymentIntentModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 import PaymentSuccessModal from "./PaymentSuccessModal";
 
