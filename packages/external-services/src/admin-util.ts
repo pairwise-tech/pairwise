@@ -5,8 +5,8 @@ import request from "supertest";
 export const purchaseCourseForUserByAdmin = async (userEmail: string) => {
   const accessToken = await getAccessTokenForAdmin();
 
-  const result = await axios.post(
-    `http://localhost:9000/admin/course-pay`,
+  await axios.post(
+    `http://localhost:9000/payments/admin-purchase-course`,
     {
       userEmail,
       courseId: "fpvPtfu7s",
