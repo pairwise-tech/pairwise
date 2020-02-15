@@ -24,35 +24,61 @@ import {
 // and locked content.
 describe("Payment Course Flow: A user can purchase a course and unlock it's content", () => {
   it("Fullstack TypeScript Course Payment", () => {
+    // Open the app
     cy.visit(`${CLIENT_APP_URL}/home`);
     cy.wait(TIMEOUT);
 
-    click("course-link-0-purchase");
+    // Try to navigate to a locked challenge
+    navigateToLockedChallenge();
+
+    // Prompted to login, login
     click("github-login");
     cy.wait(TIMEOUT);
 
+    // Check that the post-login payment modal is visible
     cy.contains("Purchase Course");
     cy.contains("Start Checkout");
     cy.get("body").type("{esc}");
 
+    // Go to the account page
     cy.get("#account-menu-dropdown").trigger("mouseover");
     cy.get("#account-link").click({ force: true });
 
+    // Find the user email and dispatch a request to the admin API to
+    // purchase a course for this user. See the above comments for an
+    // explanation of this egregious fact.
     let dispatchedAdminRequest = false;
     cy.get("#user-email").should(async $div => {
       const email = $div.text();
 
       if (!dispatchedAdminRequest) {
-        console.log("Dispatching admin request!");
         axios.post("http://localhost:7000/admin-purchase-course", { email });
         dispatchedAdminRequest = true;
       }
     });
 
+    // Wait and reload the page.
     cy.wait(TIMEOUT);
     cy.reload();
 
+    // Confirm that the user account now shows the purchased course
     elementContains("account-payment-details-0", "Fullstack TypeScript");
     cy.contains("• Duration: Lifetime Access.");
+
+    // Navigate back to the original locked challenge
+    navigateToLockedChallenge();
+
+    // Perform some simple checks that the previously locked intro
+    // challenges loaded and are now accessible:
+    cy.contains("databases");
+    click("workspace-next-challenge-button");
+    cy.contains("mobile app");
   });
 });
+
+// Helper to navigate to challenge which requires course payment to access.
+const navigateToLockedChallenge = () => {
+  click("navigation-menu-button");
+  click("module-navigation-7");
+  click("challenge-navigation-0");
+};
