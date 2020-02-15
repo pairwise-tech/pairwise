@@ -38,7 +38,7 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
       >
         <ModalContainer>
           <ModalTitleText>Thank you, {profile.displayName}!</ModalTitleText>
-          <ModalSubText>
+          <ModalSubText style={{ maxWidth: 450 }}>
             Fantastic! Thank you for purchasing the{" "}
             <b>{paymentSuccessCourse.title}</b> taking the first big step to
             learning to code and becoming a software developer. We know you're
@@ -49,7 +49,7 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
             <Button
               large
               intent="success"
-              style={{ width: 185 }}
+              style={{ width: 185, marginTop: 24 }}
               onClick={this.handleOnCloseModal}
               id="payment-success-modal-get-started"
             >

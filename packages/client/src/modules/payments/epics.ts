@@ -112,6 +112,7 @@ const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
       if (result.value) {
         return Actions.startCheckoutSuccess(result.value);
       } else {
+        deps.toaster.warn("Failed to start checkout, please try again!");
         return Actions.startCheckoutFailure(result.error);
       }
     }),
