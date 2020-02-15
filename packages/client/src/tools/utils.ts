@@ -390,7 +390,7 @@ export const parseInitialUrlToInitializationType = (
   }
 
   // A user returned from the checkout flow after payment success:
-  if (path === "/payment-success") {
+  if (path === "/payment-success" && checkParamsExist(params, ["courseId"])) {
     return APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS;
   }
 

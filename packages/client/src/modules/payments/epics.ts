@@ -183,7 +183,7 @@ const redirectToStripeCheckoutEpic: EpicSignature = (action$, state$, deps) => {
 
 // Show a warning toast message if the user returns to the app after
 // aborting the payment checkout flow.
-const handlePaymentCancelledSideEffect: EpicSignature = (
+const handlePaymentCancelledSideEffectEpic: EpicSignature = (
   action$,
   state$,
   deps,
@@ -198,6 +198,21 @@ const handlePaymentCancelledSideEffect: EpicSignature = (
   );
 };
 
+// Handle an app initialization which results from a payment success redirect
+// and dispatch an action to signify a successful payment occurred.
+const handlePaymentSuccessEpic: EpicSignature = action$ => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    filter(
+      x => x.appInitializationType === APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS,
+    ),
+    pluck("params"),
+    map(x => x.courseId as string),
+    map(courseId => Actions.setPaymentSuccess({ courseId })),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -208,5 +223,6 @@ export default combineEpics(
   purchaseCourseInitializeEpic,
   handlePurchaseCourseIntentEpic,
   redirectToStripeCheckoutEpic,
-  handlePaymentCancelledSideEffect,
+  handlePaymentCancelledSideEffectEpic,
+  handlePaymentSuccessEpic,
 );

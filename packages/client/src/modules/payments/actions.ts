@@ -8,15 +8,18 @@ import { StripeStartCheckoutSuccessResponse } from "@pairwise/common";
  */
 
 enum ActionTypesEnum {
-  SET_PURCHASE_COURSE_MODAL_STATE = "SET_PURCHASE_COURSE_MODAL_STATE",
+  SET_PAYMENT_COURSE_MODAL_STATE = "SET_PAYMENT_COURSE_MODAL_STATE",
+  SET_PAYMENT_SUCCESS_MODAL_STATE = "SET_PAYMENT_SUCCESS_MODAL_STATE",
 
-  HANDLE_PURCHASE_COURSE_INTENT = "HANDLE_PURCHASE_COURSE_INTENT",
+  HANDLE_PAYMENT_COURSE_INTENT = "HANDLE_PAYMENT_COURSE_INTENT",
 
-  SET_PURCHASE_COURSE_ID = "SET_PURCHASE_COURSE_ID",
+  SET_PAYMENT_COURSE_ID = "SET_PAYMENT_COURSE_ID",
 
   START_CHECKOUT = "START_CHECKOUT",
   START_CHECKOUT_SUCCESS = "START_CHECKOUT_SUCCESS",
   START_CHECKOUT_FAILURE = "START_CHECKOUT_FAILURE",
+
+  PAYMENT_SUCCESS = "PAYMENT_SUCCESS",
 }
 
 /** ===========================================================================
@@ -24,16 +27,16 @@ enum ActionTypesEnum {
  * ============================================================================
  */
 
-export const setPurchaseCourseModalState = createAction(
-  ActionTypesEnum.SET_PURCHASE_COURSE_MODAL_STATE,
+export const setPaymentCourseModalState = createAction(
+  ActionTypesEnum.SET_PAYMENT_COURSE_MODAL_STATE,
 )<boolean>();
 
-export const handlePurchaseCourseIntent = createAction(
-  ActionTypesEnum.HANDLE_PURCHASE_COURSE_INTENT,
+export const handlePaymentCourseIntent = createAction(
+  ActionTypesEnum.HANDLE_PAYMENT_COURSE_INTENT,
 )<{ courseId: string }>();
 
-export const setPurchaseCourseId = createAction(
-  ActionTypesEnum.SET_PURCHASE_COURSE_ID,
+export const setPaymentCourseId = createAction(
+  ActionTypesEnum.SET_PAYMENT_COURSE_ID,
 )<{ courseId: string }>();
 
 export const startCheckout = createAction(ActionTypesEnum.START_CHECKOUT)<{
@@ -47,3 +50,11 @@ export const startCheckoutSuccess = createAction(
 export const startCheckoutFailure = createAction(
   ActionTypesEnum.START_CHECKOUT_FAILURE,
 )<HttpResponseError>();
+
+export const setPaymentSuccess = createAction(ActionTypesEnum.PAYMENT_SUCCESS)<{
+  courseId: string;
+}>();
+
+export const setPaymentSuccessModalState = createAction(
+  ActionTypesEnum.SET_PAYMENT_SUCCESS_MODAL_STATE,
+)<boolean>();

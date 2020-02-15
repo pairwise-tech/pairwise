@@ -19,7 +19,7 @@ interface IState {}
  * ============================================================================
  */
 
-class PurchaseCourseModal extends React.Component<IProps, IState> {
+class PaymentCourseModal extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
     const { user, courseToPurchase } = this.props;
     const { profile } = user;
@@ -100,4 +100,4 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default composeWithProps<ComponentProps>(withProps)(PurchaseCourseModal);
+export default composeWithProps<ComponentProps>(withProps)(PaymentCourseModal);

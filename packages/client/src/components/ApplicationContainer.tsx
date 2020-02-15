@@ -25,7 +25,7 @@ import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
 } from "./ChallengeControls";
-import PurchaseCourseModal from "./PurchaseCourseModal";
+import PaymentCourseModal from "./PurchaseCourseModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 
 // Only show focus outline when tabbing around the UI
@@ -99,7 +99,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         <MobileView />
         {this.renderLoadingOverlay()}
         <SingleSignOnModal />
-        <PurchaseCourseModal />
+        <PaymentCourseModal />
         {CODEPRESS && <AdminKeyboardShortcuts />}
         <FeedbackModal />
         <NavigationOverlay overlayVisible={overlayVisible} />

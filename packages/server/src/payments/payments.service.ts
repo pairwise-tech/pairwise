@@ -147,7 +147,7 @@ export class PaymentsService {
         },
       ],
       cancel_url: `${ENV.CLIENT_URL}/payment-cancelled`,
-      success_url: `${ENV.CLIENT_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${ENV.CLIENT_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}&courseId=${courseMetadata.id}`,
     });
 
     return session;

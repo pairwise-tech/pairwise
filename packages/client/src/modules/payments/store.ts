@@ -11,6 +11,8 @@ export interface State {
   accessToken: string;
   paymentCourseId: string;
   paymentCourseModalOpen: boolean;
+  paymentSuccessModalOpen: boolean;
+  paymentSuccessCourseId: string;
 }
 
 const initialState = {
@@ -18,10 +20,12 @@ const initialState = {
   paymentCourseId: "",
   stripeCheckoutSessionId: "",
   paymentCourseModalOpen: false,
+  paymentSuccessModalOpen: false,
+  paymentSuccessCourseId: "",
 };
 
 const payments = createReducer<State, PaymentsActionTypes>(initialState)
-  .handleAction(actions.setPurchaseCourseModalState, (state, action) => ({
+  .handleAction(actions.setPaymentCourseModalState, (state, action) => ({
     ...state,
     paymentCourseModalOpen: action.payload,
   }))
@@ -29,7 +33,16 @@ const payments = createReducer<State, PaymentsActionTypes>(initialState)
     ...state,
     stripeCheckoutSessionId: action.payload.stripeCheckoutSessionId,
   }))
-  .handleAction(actions.setPurchaseCourseId, (state, action) => ({
+  .handleAction(actions.setPaymentSuccess, (state, action) => ({
+    ...state,
+    paymentSuccessModalOpen: true,
+    paymentSuccessCourseId: action.payload.courseId,
+  }))
+  .handleAction(actions.setPaymentSuccessModalState, (state, action) => ({
+    ...state,
+    paymentSuccessModalOpen: action.payload,
+  }))
+  .handleAction(actions.setPaymentCourseId, (state, action) => ({
     ...state,
     paymentCourseId: action.payload.courseId,
   }));
