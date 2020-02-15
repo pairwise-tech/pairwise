@@ -167,12 +167,16 @@ external services server and by loading all of the SSO provider environment vari
 
 We are using [Stripe](https://stripe.com/) to process user payments. Currently, the application redirects to a hosted Stripe checkout page which then sends a webhook event to our server if the user completes the checkout process succcessfully. The user is then redirected back to Pairwise and sees a payment confirmation. Here are some instructions and resources for working locally if you need to work on the Stripe payments integration feature.
 
-The docker-compose files deploy a `stripe` service which runs the [Stripe CLI](https://stripe.com/docs/stripe-cli) docker image which handles processing Stripe events. This allows the payment integration to simply work in development mode when running Pairwise locally or in a CI environment. Stripe provides several options for easily testing payments in development, [see their documentation here](https://stripe.com/docs/testing). To run the Stripe CLI locally, outside of Docker, you can run the following command:
+The docker-compose files deploy a `stripe` service which runs the [Stripe CLI](https://stripe.com/docs/stripe-cli) docker image which handles processing Stripe events. This allows the payment integration to simply work in development mode when running Pairwise locally or in a CI environment. Stripe provides several options for [easily testing](https://stripe.com/docs/testing) payments in development. For instance, you can enter the card number `4242424242424242` with any future date as an expiration and any 3 digit CVC to submit a test successful payment.
+
+To run the Stripe CLI locally, outside of Docker, you can run the following command:
 
 ```bash
 # Run the Stripe CLI and forward requests to localhost:9000/payments/stripe-webhook
 $ yarn stripe:dev
 ```
+
+Please note that it is necessary to have the Stripe CLI running for the payment checkout to complete successfully and submit the webhook to our server.
 
 ## To Rebuild The Database
 
