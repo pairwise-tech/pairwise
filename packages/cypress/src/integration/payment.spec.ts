@@ -30,6 +30,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Try to navigate to a locked challenge
     navigateToLockedChallenge();
+    cy.wait(TIMEOUT);
 
     // Prompted to login, login
     click("github-login");
@@ -67,6 +68,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Navigate back to the original locked challenge
     navigateToLockedChallenge();
+    cy.wait(TIMEOUT);
 
     // Perform some simple checks that the previously locked intro
     // challenges loaded and are now accessible:
