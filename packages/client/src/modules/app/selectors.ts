@@ -22,6 +22,7 @@ export const locationSelector = createSelector(
 
 export const shouldShowFeedbackButton = createSelector(
   locationSelector,
-  location =>
-    /\/workspace\/\w+/.test(location) && !location.endsWith(SANDBOX_ID),
+  location => {
+    return /\/workspace\/\w+/.test(location) && !location.endsWith(SANDBOX_ID);
+  },
 );

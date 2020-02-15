@@ -134,7 +134,7 @@ interface FeedbackInputProps {
 
 const FeedbackInput = styled(TextArea)<FeedbackInputProps>`
   resize: vertical !important;
-  margin-top: ${props => props.margintop}px !important;
+  margin-top: ${props => props.margintop}px;
   background: #323232 !important;
 `;
 
