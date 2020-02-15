@@ -1,14 +1,27 @@
 import axios from "axios";
-import { click, TIMEOUT, CLIENT_APP_URL } from "../support/cypress-utils";
+import {
+  click,
+  TIMEOUT,
+  CLIENT_APP_URL,
+  elementContains,
+} from "../support/cypress-utils";
 
 /** ===========================================================================
- * Auth Tests
+ * Course Payments
  * ----------------------------------------------------------------------------
- * Test the authentication flows in the app.
+ * Test that course payments work
  * ============================================================================
  */
 
 // Garbage! https://github.com/cypress-io/cypress/issues/944
+// Cypress does not support running tests which visit different domains,
+// therefore we cannot actually walk through the entire payments flow and
+// submit the payment to Stripe. This would be possible using the Stripe CLI
+// in test mode, however, Cypress makes this impossible. Instead of this,
+// The test relies on an admin API to actually generate the course payment
+// for the user (that's damn right!). Aside from that, the test does
+// guarantee that Pairwise handles the correct behavior for course payments
+// and locked content.
 describe("Payment Course Flow: A user can purchase a course and unlock it's content", () => {
   it("Fullstack TypeScript Course Payment", () => {
     cy.visit(`${CLIENT_APP_URL}/home`);
@@ -38,5 +51,8 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     cy.wait(TIMEOUT);
     cy.reload();
+
+    elementContains("account-payment-details-0", "Fullstack TypeScript");
+    cy.contains("• Duration: Lifetime Access.");
   });
 });

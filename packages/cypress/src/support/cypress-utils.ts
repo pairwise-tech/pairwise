@@ -14,6 +14,12 @@ export const click = (id: string) => {
   cy.get(toId(id)).click({ force: true });
 };
 
+// Find an element by id and type some text into it.
 export const type = (id: string, text: string) => {
   cy.get(toId(id)).type(text);
+};
+
+// Asset some element with an id contains some text.
+export const elementContains = (id: string, text: string) => {
+  cy.get(toId(id)).contains(text);
 };
