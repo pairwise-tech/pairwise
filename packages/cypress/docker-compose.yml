@@ -50,6 +50,12 @@ services:
     expose:
       - 7000
 
+  stripe:
+    image: stripe/stripe-cli
+    command: --api-key sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ listen --forward-to=services:9000/payments/stripe-webhook
+
+  # It does not wait for the Stripe service to launch... but it will very definitely
+  # be ready by the type the client and server are ready.
   cypress:
     image: pairwise-runtime
     command: dockerize -wait tcp://db:5432 -wait tcp://client:3000 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 20s yarn test:cypress

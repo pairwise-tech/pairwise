@@ -26,7 +26,7 @@ services:
 
   stripe:
     image: stripe/stripe-cli
-    command: --api-key sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ listen --forward-to=services:9000/payments/checkout-success
+    command: --api-key sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ listen --forward-to=services:9000/payments/stripe-webhook
 
   services:
     build:
