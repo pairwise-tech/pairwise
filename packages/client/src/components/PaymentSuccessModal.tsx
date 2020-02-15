@@ -31,7 +31,7 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
 
     return (
       <Dialog
-        isOpen={this.props.dialogOpen}
+        isOpen={this.props.modalOpen}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         onClose={this.handleOnCloseModal}
@@ -76,10 +76,8 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  dialogOpen: Modules.selectors.payments.coursePurchaseModalStateSelector(
-    state,
-  ),
   user: Modules.selectors.user.userSelector(state),
+  modalOpen: Modules.selectors.payments.paymentSuccessModalState(state),
   paymentSuccessCourse: Modules.selectors.payments.paymentSuccessCourse(state),
 });
 

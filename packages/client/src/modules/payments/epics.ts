@@ -34,7 +34,7 @@ import { wait, APP_INITIALIZATION_TYPE } from "tools/utils";
  *
  * In either case, remove this ephemeral token.
  */
-const purchaseCourseInitializeEpic: EpicSignature = action$ => {
+const coursePaymentInitializeEpic: EpicSignature = action$ => {
   return combineLatest(
     action$.pipe(filter(isActionOf(Actions.fetchNavigationSkeletonSuccess))),
     action$.pipe(filter(isActionOf(Actions.storeAccessTokenSuccess))),
@@ -71,7 +71,7 @@ const purchaseCourseInitializeEpic: EpicSignature = action$ => {
  *     in local storage which can be used to continue the purchase flow
  *     once they return to the app as an authenticated user.
  */
-const handlePurchaseCourseIntentEpic: EpicSignature = (
+const handlePaymentCourseIntentEpic: EpicSignature = (
   action$,
   state$,
   deps,
@@ -220,8 +220,8 @@ const handlePaymentSuccessEpic: EpicSignature = action$ => {
 
 export default combineEpics(
   startCheckoutEpic,
-  purchaseCourseInitializeEpic,
-  handlePurchaseCourseIntentEpic,
+  coursePaymentInitializeEpic,
+  handlePaymentCourseIntentEpic,
   redirectToStripeCheckoutEpic,
   handlePaymentCancelledSideEffectEpic,
   handlePaymentSuccessEpic,
