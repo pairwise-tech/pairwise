@@ -6,7 +6,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "./payments.entity";
 import { Repository } from "typeorm";
 import { SUCCESS_CODES, ERROR_CODES } from "src/tools/constants";
-import { User } from "src/user/user.entity";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { validatePaymentRequest } from "src/tools/validation";
 import ENV from "src/tools/server-env";
@@ -25,8 +24,10 @@ const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
 
 @Injectable()
 export class PaymentsService {
-  // Just hard-code it here for now
-  COURSE_PRICE = 50;
+  // Just hard-code it here for now, the units are apparent in cents
+  COURSE_PRICE = 5000; // $50
+  COURSE_CURRENCY = "usd";
+  PAIRWISE_ICON_URL = "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4"; ,
 
   constructor(
     private readonly userService: UserService,
@@ -35,6 +36,7 @@ export class PaymentsService {
     private readonly paymentsRepository: Repository<Payments>,
   ) {}
 
+  // Creates a payment intent using Stripe
   async handleCreatePaymentIntent(requestUser: RequestUser, courseId: string) {
     const courseMetadata = contentUtility.getCourseMetadata(courseId);
     if (courseMetadata) {
@@ -50,7 +52,7 @@ export class PaymentsService {
 
         return result;
       } catch (err) {
-        console.log("Failed to create Stripe session!");
+        console.log("[STRIPE ERROR]: Failed to create Stripe session!");
         console.log(err);
       }
     } else {
@@ -58,18 +60,23 @@ export class PaymentsService {
     }
   }
 
+  // Processes a successfully checkout event sent to us via a webhook
+  // from Stripe. This occurs after a user completes checkout in the
+  // Stripe UI. Based on the event information, we create a payment for
+  // user and course.
   async handleStripeCheckoutSuccessWebhook(
     request: Request,
     signature: string,
   ) {
     try {
-      // @ts-ignore
+      // @ts-ignore - the raw body is added by custom code in main.ts
       const { rawBody } = request;
       const event = stripe.webhooks.constructEvent(
         rawBody,
         signature,
         ENV.STRIPE_WEBHOOK_SIGNING_SECRET,
       );
+
       if (event.type === "checkout.session.completed") {
         const { object } = event.data as any; /* Stripe type is pointless */
         const email = object.customer_email;
@@ -109,9 +116,7 @@ export class PaymentsService {
     const { profile } = user;
     console.log(`Purchasing course ${courseId} for user ${profile.email}`);
 
-    /**
-     * If everything is good create a new payment for this user and course.
-     */
+    // If everything is good create a new payment for this user and course.
     const payment = this.createNewPayment(profile, courseId);
     await this.paymentsRepository.insert(payment);
 
@@ -119,16 +124,14 @@ export class PaymentsService {
   }
 
   private createNewPayment = (user: UserProfile, courseId: string) => {
-    /**
-     * Construct the new payment data. Once Stripe is integrated, most of this
-     * data will come from Stripe and the actual payment information.
-     */
+    // Construct the new payment data. Once Stripe is integrated, most of this
+    // data will come from Stripe and the actual payment information.
     const payment: QueryDeepPartialEntity<Payments> = {
-      courseId,
       user,
-      amountPaid: 50,
+      courseId,
       type: "SUCCESS",
       datePaid: new Date(),
+      amountPaid: this.COURSE_PRICE,
     };
 
     return payment;
@@ -147,13 +150,11 @@ export class PaymentsService {
       line_items: [
         {
           quantity: 1,
-          amount: 50,
-          currency: "usd",
+          amount: this.COURSE_PRICE,
+          currency: this.COURSE_CURRENCY,
           name: courseMetadata.title,
           description: courseMetadata.description,
-          images: [
-            "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4",
-          ],
+          images: [this.PAIRWISE_ICON_URL],
         },
       ],
       cancel_url: `${ENV.CLIENT_URL}/payment-cancelled`,
