@@ -104,7 +104,8 @@ class Account extends React.Component<IProps, IState> {
           />
         )}
         <TextItem>
-          <Bold>Email:</Bold> {!edit && profile.email}
+          <Bold>Email:</Bold>{" "}
+          <span id="user-email">{!edit && profile.email}</span>
         </TextItem>
         {edit && (
           <InputField

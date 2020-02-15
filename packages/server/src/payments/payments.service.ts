@@ -86,6 +86,13 @@ export class PaymentsService {
     return SUCCESS_CODES.OK;
   }
 
+  async handlePurchaseCourseByAdmin(userEmail: string, courseId: string) {
+    console.log(
+      `[ADMIN]: Admin request to purchase course: ${courseId} for user: ${userEmail}`,
+    );
+    this.handlePurchaseCourseRequest(userEmail, courseId);
+  }
+
   private async handlePurchaseCourseRequest(
     userEmail: string,
     courseId: string,
