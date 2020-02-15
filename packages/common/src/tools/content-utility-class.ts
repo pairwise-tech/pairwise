@@ -106,21 +106,25 @@ export class ContentUtilityClass {
     }
   };
 
-  getCourseNavigationSkeletons = (courseAccess: UserCourseAccessMap = {}) => {
+  getCourseNavigationSkeletons = (
+    courseAccessMap: UserCourseAccessMap = {},
+  ) => {
     const skeletonsWithAccessInformation = this.courseNavigationSkeletons.map(
       course => {
+        // The user can access all the content in the course if the course
+        // id is included in the provided course access map (which represents
+        // the courses the user has purchased).
+        const canAccessCourse = course.id in courseAccessMap;
         return {
           ...course,
           modules: course.modules.map(courseModule => {
-            const userCanAccess =
-              courseModule.userCanAccess || courseModule.id in courseAccess;
             return {
               ...courseModule,
-              userCanAccess,
+              userCanAccess: canAccessCourse,
               challenges: courseModule.challenges.map(challenge => {
                 return {
                   ...challenge,
-                  userCanAccess,
+                  userCanAccess: canAccessCourse,
                 };
               }),
             };
