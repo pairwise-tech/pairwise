@@ -361,7 +361,7 @@ export const ModalTitleText = styled.h1`
   font-size: 24px;
   font-weight: 300;
   text-align: center;
-  color: ${COLORS.TEXT_TITLE};
+  color: ${COLORS.TEXT_WHITE};
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 

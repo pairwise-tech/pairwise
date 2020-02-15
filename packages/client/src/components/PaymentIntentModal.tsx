@@ -1,9 +1,11 @@
 import { Button, Dialog } from "@blueprintjs/core";
+import styled from "styled-components/macro";
 import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
 import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
+import { COLORS } from "tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -38,19 +40,22 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
         <ModalContainer>
           <ModalTitleText>Purchase Course</ModalTitleText>
           <ModalSubText>
-            Purchasing the <b>{courseToPurchase.title}</b> course will give you
-            full lifetime access to the course content and is fully refundable
-            up to 30 days.
+            Purchasing the <CourseTitle>{courseToPurchase.title}</CourseTitle>{" "}
+            course will give you full lifetime access to the course content and
+            is fully refundable up to 30 days.
           </ModalSubText>
           <Button
             large
             intent="primary"
             id="start-checkout-button"
-            style={{ marginTop: 24 }}
+            style={{ marginTop: 20 }}
             onClick={() => this.confirmPurchase(courseToPurchase.id)}
           >
             Start Checkout
           </Button>
+          <SmallPoint>
+            You will be redirected to Stripe to complete the checkout process.
+          </SmallPoint>
         </ModalContainer>
       </Dialog>
     );
@@ -68,6 +73,21 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
     this.setModalState(false);
   };
 }
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const SmallPoint = styled.p`
+  font-size: 12px;
+  margin-top: 26px;
+  color: ${COLORS.TEXT_CONTENT};
+`;
+
+const CourseTitle = styled.b`
+  color: ${COLORS.PRIMARY_GREEN};
+`;
 
 /** ===========================================================================
  * Props

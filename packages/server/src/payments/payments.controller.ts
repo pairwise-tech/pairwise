@@ -44,7 +44,7 @@ export class PaymentsController {
   @UseGuards(AdminAuthGuard)
   @Post("/admin-purchase-course")
   async purchaseCourseForUser(@Body() body) {
-    const { courseId, userEmail } = body;
+    const { userEmail, courseId } = body;
     await this.paymentsService.handlePurchaseCourseByAdmin(userEmail, courseId);
     return SUCCESS_CODES.OK;
   }

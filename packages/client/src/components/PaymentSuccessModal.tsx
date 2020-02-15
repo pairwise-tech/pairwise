@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import styled from "styled-components/macro";
 import { Button, Dialog } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
 import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
+import { COLORS } from "tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -40,10 +42,10 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
           <ModalTitleText>Thank you, {profile.displayName}!</ModalTitleText>
           <ModalSubText style={{ maxWidth: 450 }}>
             Fantastic! Thank you for purchasing the{" "}
-            <b>{paymentSuccessCourse.title}</b> taking the first big step to
-            learning to code and becoming a software developer. We know you're
-            excited so let's just get right to it! Click the button to get
-            started!
+            <CourseTitle>{paymentSuccessCourse.title}</CourseTitle> taking the
+            first big step to learning to code and becoming a software
+            developer. We know you're excited so let's just get right to it!
+            Click the button to get started!
           </ModalSubText>
           <Link to={`workspace/${paymentSuccessCourse.id}`}>
             <Button
@@ -69,6 +71,15 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
     this.setModalState(false);
   };
 }
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const CourseTitle = styled.b`
+  color: ${COLORS.PRIMARY_GREEN};
+`;
 
 /** ===========================================================================
  * Props

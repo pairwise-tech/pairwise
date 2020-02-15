@@ -138,7 +138,7 @@ const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.logoutUser)),
     tap(logoutUserInLocalStorage),
-    delay(500),
+    delay(250),
     tap(logoutToast),
     ignoreElements(),
   );

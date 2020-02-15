@@ -79,7 +79,7 @@ const pairwise = async () => {
 
   console.log(`\n- NestJS app launched on:    http://localhost:${PORT}/`);
   console.log(`- View Swagger API docs:     http://localhost:${PORT}/api\n`);
-  console.log(`Pairwise launched successfully!\n`);
+  console.log(`Pairwise launched!\n`);
 };
 
 pairwise();
