@@ -205,6 +205,8 @@ $ yarn docker:dependencies
 $ yarn up:build
 ```
 
+If you feel like you having issues with Docker or it is running slowly, you can run `docker system prune` to remove any older unused resources and images.
+
 ## Contributing
 
 We follow a normal git workflow. Commit your changes to a branch, make a pull request, and merge the code after the tests pass.
