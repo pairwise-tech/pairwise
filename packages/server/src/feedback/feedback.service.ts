@@ -6,6 +6,7 @@ import { Repository } from "typeorm";
 import { RequestUser } from "src/types";
 import { SUCCESS_CODES } from "src/tools/constants";
 import { validateFeedbackDto } from "src/tools/validation";
+import { SlackService } from "src/tools/slack";
 
 @Injectable()
 export class FeedbackService {
@@ -41,6 +42,13 @@ export class FeedbackService {
 
     await this.feedbackRepository.insert(feedback);
 
+    let message: string;
+    if (feedback.user) {
+      message = `Feedback for challenge \`${feedback.challengeId}\` of type \`${feedback.type}\` submitted by **${feedback.user.displayName}** (${feedback.user.email}):\n> ${feedback.feedback}`;
+    } else {
+      message = `Feedback for challenge \`${feedback.challengeId}\` of type \`${feedback.type}\` was submitted by an unauthenticated user:\n> ${feedback.feedback}`;
+    }
+    await new SlackService().postMessageToChannel("feedback", message);
     return SUCCESS_CODES.OK;
   }
 }
