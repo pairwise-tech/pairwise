@@ -54,6 +54,9 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
       const email = $div.text();
 
       if (!dispatchedAdminRequest) {
+        console.log(
+          `[DEBUG]: Dispatching admin request for user email: ${email}, services: ${EXTERNAL_SERVICES_URL}`,
+        );
         axios.post(`${EXTERNAL_SERVICES_URL}/admin-purchase-course`, { email });
         dispatchedAdminRequest = true;
       }

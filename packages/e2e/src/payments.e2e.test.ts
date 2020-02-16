@@ -31,8 +31,8 @@ describe("Payments APIs", () => {
     user = await fetchUserWithAccessToken(accessToken);
   });
 
-  test("/checkout (POST) should require authentication", async done => {
-    request(`${HOST}/checkout/fpvPtfu7s`)
+  test("/payments/checkout (POST) should require authentication", async done => {
+    request(`${HOST}/payments/checkout/fpvPtfu7s`)
       .post("/")
       .set("Authorization", "Bearer asd97f8809as7fsa")
       .expect(401)
@@ -42,8 +42,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/checkout (POST) rejects invalid course ids", async done => {
-    request(`${HOST}/checkout/zsdfasfsafsa`)
+  test("/payments/checkout (POST) rejects invalid course ids", async done => {
+    request(`${HOST}/payments/checkout/zsdfasfsafsa`)
       .post("/")
       .set("Authorization", "Bearer asd97f8809as7fsa")
       .expect(400)
@@ -53,8 +53,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/checkout (POST) accepts a request with a valid course id", async done => {
-    request(`${HOST}/checkout/zsdfasfsafsa`)
+  test("/payments/checkout (POST) accepts a request with a valid course id", async done => {
+    request(`${HOST}/payments/checkout/zsdfasfsafsa`)
       .post("/")
       .set("Authorization", authorizationHeader)
       .expect(200)
@@ -65,8 +65,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/admin-purchase-course (POST) requires admin authentication", async done => {
-    request(`${HOST}/admin-purchase-course`)
+  test("/payments/admin-purchase-course (POST) requires admin authentication", async done => {
+    request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
       .send({
         courseId: "asdfafaasdfsa",
@@ -80,8 +80,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/admin-purchase-course (POST) requires a valid course id", async done => {
-    request(`${HOST}/admin-purchase-course`)
+  test("/payments/admin-purchase-course (POST) requires a valid course id", async done => {
+    request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
       .send({
         courseId: "asdfafaasdfsa",
@@ -95,8 +95,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/admin-purchase-course (POST) requires the email of an existing user", async done => {
-    request(`${HOST}/admin-purchase-course`)
+  test("/payments/admin-purchase-course (POST) requires the email of an existing user", async done => {
+    request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -110,8 +110,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/admin-purchase-course (POST) accepts requests from an admin for a valid user and course", async done => {
-    await request(`${HOST}/admin-purchase-course`)
+  test("/payments/admin-purchase-course (POST) accepts requests from an admin for a valid user and course", async done => {
+    await request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -129,9 +129,9 @@ describe("Payments APIs", () => {
     expect(course).toBeDefined();
   });
 
-  test("/admin-purchase-course (POST) rejects requests if a user has already purchased the course", async done => {
+  test("/payments/admin-purchase-course (POST) rejects requests if a user has already purchased the course", async done => {
     // Purchase the course
-    await request(`${HOST}/admin-purchase-course`)
+    await request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -143,8 +143,8 @@ describe("Payments APIs", () => {
         expect(response.text).toBe("Success");
       });
 
-    // Try to purhcase it again and expect a failure
-    await request(`${HOST}/admin-purchase-course`)
+    // Try to purchase it again and expect a failure
+    await request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",

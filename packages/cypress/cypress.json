@@ -7,6 +7,6 @@
   "env": {
     "TIMEOUT": 2000,
     "CLIENT_APP_URL": "http://127.0.0.1:3000",
-    "EXTERNAL_SERVICES_URL": "http://localhost:7000"
+    "EXTERNAL_SERVICES_URL": "http://127.0.0.1:7000"
   }
 }
