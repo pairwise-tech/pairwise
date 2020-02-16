@@ -145,10 +145,11 @@ export class UserService {
       },
     });
 
-    const courses = payments.reduce((courseAccess, { courseId, type }) => {
+    const courses = payments.reduce((courseAccess, { courseId, status }) => {
+      const courseIsPaid = status === "CONFIRMED";
       return {
         ...courseAccess,
-        [courseId]: type === "SUCCESS" ? true : false,
+        [courseId]: courseIsPaid,
       };
     }, {});
 

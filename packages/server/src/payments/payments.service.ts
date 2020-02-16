@@ -137,7 +137,7 @@ export class PaymentsService {
     const payment: QueryDeepPartialEntity<Payments> = {
       user,
       courseId,
-      type: "SUCCESS",
+      status: "CONFIRMED",
       datePaid: new Date(),
       amountPaid: this.COURSE_PRICE,
     };
