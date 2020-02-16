@@ -29,13 +29,13 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     cy.wait(TIMEOUT);
 
     // Try to navigate to a locked challenge
-    click("navigation-menu-button");
-    click("module-navigation-7");
-    click("challenge-navigation-0");
-    cy.wait(TIMEOUT);
+    cy.get("#navigation-menu-button").click({ force: true });
+    cy.get("#module-navigation-1").click({ force: true });
+    cy.get("#challenge-navigation-2").click({ force: true });
 
     // Prompted to login, login
-    click("github-login");
+    cy.get("#github-login").click({ force: true });
+
     cy.wait(TIMEOUT);
 
     // Check that the post-login payment modal is visible
