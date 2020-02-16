@@ -378,6 +378,12 @@ class NavigationOverlay extends React.Component<IProps> {
     index: number,
   ) => {
     const { isEditMode, overlayVisible } = this.props;
+
+    // Do not render outside of Codepress
+    if (!isEditMode) {
+      return null;
+    }
+
     return (
       <div style={{ position: "relative" }}>
         <AddNavItemPositionContainer>
