@@ -41,6 +41,8 @@ const FeedbackModal = (props: Props) => {
         feedback: props.feedback,
         type: props.feedbackType,
         challengeId: props.currentChallenge.id,
+        challengeTitle: props.currentChallenge.title,
+        challengeType: props.currentChallenge.type,
       });
       props.toggleFeedbackDialogOpen();
     }

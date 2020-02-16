@@ -114,6 +114,8 @@ export const feedbackTypeSet: Set<FEEDBACK_TYPE> = new Set([
 export interface IFeedbackDto {
   feedback: string;
   challengeId: string;
+  challengeTitle: string;
+  challengeType: string;
   type: FEEDBACK_TYPE;
 }
 

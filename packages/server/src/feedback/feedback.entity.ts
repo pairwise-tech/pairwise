@@ -21,7 +21,7 @@ import { FEEDBACK_TYPE, IFeedbackDto } from "@pairwise/common";
  */
 
 @Entity()
-export class Feedback implements IFeedbackDto {
+export class Feedback implements Partial<IFeedbackDto> {
   @PrimaryGeneratedColumn("uuid")
   uuid: number;
 
