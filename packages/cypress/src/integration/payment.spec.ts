@@ -30,8 +30,8 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Try to navigate to a locked challenge
     cy.get("#navigation-menu-button").click({ force: true });
-    cy.get("#module-navigation-1").click({ force: true });
-    cy.get("#challenge-navigation-2").click({ force: true });
+    cy.get("#module-navigation-5").click({ force: true });
+    cy.get("#challenge-navigation-0").click({ force: true });
 
     // Prompted to login, login
     cy.get("#github-login").click({ force: true });
