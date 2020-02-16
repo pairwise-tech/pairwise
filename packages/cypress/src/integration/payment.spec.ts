@@ -28,13 +28,16 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     cy.visit(`${CLIENT_APP_URL}/home`);
     cy.wait(TIMEOUT);
 
-    // Try to navigate to a locked challenge
-    cy.get("#navigation-menu-button").click({ force: true });
-    cy.get("#module-navigation-5").click({ force: true });
-    cy.get("#challenge-navigation-0").click({ force: true });
+    // // Try to navigate to a locked challenge
+    // cy.get("#navigation-menu-button").click({ force: true });
+    // cy.get("#module-navigation-5").click({ force: true });
+    // cy.get("#challenge-navigation-0").click({ force: true });
 
-    // Prompted to login, login
-    cy.get("#github-login").click({ force: true });
+    // // Prompted to login, login
+    // cy.get("#github-login").click({ force: true });
+
+    cy.get("#login-signup-button").click({ force: true });
+    cy.get("#facebook-login").click({ force: true });
 
     cy.wait(TIMEOUT);
 

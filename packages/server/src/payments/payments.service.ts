@@ -104,6 +104,13 @@ export class PaymentsService {
     this.handlePurchaseCourseRequest(userEmail, courseId);
   }
 
+  async handleRefundCourseByAdmin(userEmail: string, courseId: string) {
+    console.log(
+      `[ADMIN]: Admin request to refund course: ${courseId} for user: ${userEmail}`,
+    );
+    // TODO: Implement
+  }
+
   private async handlePurchaseCourseRequest(
     userEmail: string,
     courseId: string,

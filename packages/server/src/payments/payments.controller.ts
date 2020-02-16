@@ -48,4 +48,13 @@ export class PaymentsController {
     await this.paymentsService.handlePurchaseCourseByAdmin(userEmail, courseId);
     return SUCCESS_CODES.OK;
   }
+
+  // An admin API to handle refunding a course for a user.
+  @UseGuards(AdminAuthGuard)
+  @Post("/refund")
+  async refundCourseForUser(@Body() body) {
+    const { userEmail, courseId } = body;
+    await this.paymentsService.handlePurchaseCourseByAdmin(userEmail, courseId);
+    return SUCCESS_CODES.OK;
+  }
 }
