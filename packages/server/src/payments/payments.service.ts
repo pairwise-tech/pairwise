@@ -108,7 +108,27 @@ export class PaymentsService {
     console.log(
       `[ADMIN]: Admin request to refund course: ${courseId} for user: ${userEmail}`,
     );
-    // TODO: Implement
+
+    const user = await this.userService.findUserByEmailGetFullProfile(
+      userEmail,
+    );
+
+    // Will throw error if invalid
+    validatePaymentRequest(user, courseId);
+
+    const { profile } = user;
+    console.log(`Refunding course ${courseId} for user ${profile.email}`);
+
+    const match = {
+      courseId,
+      user: profile,
+    };
+
+    const payment: QueryDeepPartialEntity<Payments> = {
+      status: "REFUNDED",
+    };
+
+    this.paymentsRepository.update(match, payment);
   }
 
   private async handlePurchaseCourseRequest(
@@ -119,6 +139,7 @@ export class PaymentsService {
       userEmail,
     );
 
+    // Will throw error if invalid
     validatePaymentRequest(user, courseId);
 
     const { profile } = user;
