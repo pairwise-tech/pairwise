@@ -52,12 +52,9 @@ export class PaymentsController {
 
   // An admin API to handle refunding a course for a user.
   @UseGuards(AdminAuthGuard)
-  @Post("/refund")
+  @Post("/admin-refund-course")
   async refundCourseForUser(@Body() body) {
     const { userEmail, courseId } = body;
-    return this.paymentsService.handlePurchaseCourseByAdmin(
-      userEmail,
-      courseId,
-    );
+    return this.paymentsService.handleRefundCourseByAdmin(userEmail, courseId);
   }
 }

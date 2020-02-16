@@ -242,10 +242,8 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
   }
 };
 
-/**
- * Validate the user request to purchase a course. The course id must be valid
- * and the user must not have already purchased this course before.
- */
+// Validate the user request to purchase a course. The course id must be valid
+// and the user must not have already purchased this course before.
 export const validatePaymentRequest = (
   user: IUserDto<UserProfile>,
   courseId: string,
@@ -267,6 +265,33 @@ export const validatePaymentRequest = (
   // The user must no have already paid for the course
   if (existingCoursePayment) {
     throw new BadRequestException("User has already paid for this course");
+  }
+};
+
+// Validate a refund request for a course
+export const validateRefundRequest = (
+  user: IUserDto<UserProfile>,
+  courseId: string,
+) => {
+  // A valid user is required
+  if (!user) {
+    throw new BadRequestException(ERROR_CODES.MISSING_USER);
+  }
+
+  // The course id must be valid
+  if (!contentUtility.courseIdIsValid(courseId)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+  }
+
+  const existingCoursePayment = user.payments.find(
+    p => p.courseId === courseId,
+  );
+
+  // The course must exist and not be refunded already
+  if (!existingCoursePayment) {
+    throw new BadRequestException("The user has not purchased this course");
+  } else if (existingCoursePayment.status === "REFUNDED") {
+    throw new BadRequestException("The course is already refunded");
   }
 };
 

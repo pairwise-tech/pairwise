@@ -7,7 +7,10 @@ import { Payments } from "./payments.entity";
 import { Repository } from "typeorm";
 import { SUCCESS_CODES, ERROR_CODES } from "src/tools/constants";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
-import { validatePaymentRequest } from "src/tools/validation";
+import {
+  validatePaymentRequest,
+  validateRefundRequest,
+} from "src/tools/validation";
 import ENV from "src/tools/server-env";
 import {
   contentUtility,
@@ -114,7 +117,7 @@ export class PaymentsService {
     );
 
     // Will throw error if invalid
-    validatePaymentRequest(user, courseId);
+    validateRefundRequest(user, courseId);
 
     const { profile } = user;
     console.log(`Refunding course ${courseId} for user ${profile.email}`);

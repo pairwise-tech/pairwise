@@ -150,8 +150,6 @@ describe("Payments APIs", () => {
         expect(response.text).toBe("Success");
       });
 
-    user = await fetchUserWithAccessToken(accessToken);
-
     // Try to purchase it again and expect a failure
     await request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
@@ -162,6 +160,133 @@ describe("Payments APIs", () => {
         expect(error.body.message).toBe(
           "User has already paid for this course",
         );
+      });
+
+    done();
+  });
+
+  test("/payments/admin-refund-course (POST) allows courses to be refunded", async done => {
+    // Get a new user:
+    accessToken = await fetchAccessToken();
+    authorizationHeader = `Bearer ${accessToken}`;
+    user = await fetchUserWithAccessToken(accessToken);
+
+    const body = {
+      courseId: "fpvPtfu7s",
+      userEmail: user.profile.email,
+    };
+
+    // Purchase the course
+    await request(`${HOST}/payments/admin-purchase-course`)
+      .post("/")
+      .send(body)
+      .set("Authorization", adminAuthorizationHeader)
+      .expect(201)
+      .expect(response => {
+        expect(response.text).toBe("Success");
+      });
+
+    const userWithCourse = await fetchUserWithAccessToken(accessToken);
+    const { payments } = userWithCourse;
+    const course = payments.find(p => p.courseId === "fpvPtfu7s");
+    expect(course.status).toBe("CONFIRMED");
+
+    // Refund the course
+    await request(`${HOST}/payments/admin-refund-course`)
+      .post("/")
+      .send(body)
+      .set("Authorization", adminAuthorizationHeader)
+      .expect(201)
+      .expect(response => {
+        expect(response.text).toBe("Success");
+      });
+
+    const userWithCourseRefunded = await fetchUserWithAccessToken(accessToken);
+    const refundedCourse = userWithCourseRefunded.payments.find(
+      p => p.courseId === "fpvPtfu7s",
+    );
+    expect(refundedCourse.status).toBe("REFUNDED");
+
+    done();
+  });
+
+  test("/payments/admin-refund-course (POST) invalid refund requests are rejected", async done => {
+    // Get a new user:
+    accessToken = await fetchAccessToken();
+    authorizationHeader = `Bearer ${accessToken}`;
+    user = await fetchUserWithAccessToken(accessToken);
+
+    const body = {
+      courseId: "fpvPtfu7s",
+      userEmail: user.profile.email,
+    };
+
+    // Refund is not possible yet because no purchase exists
+    await request(`${HOST}/payments/admin-refund-course`)
+      .post("/")
+      .send(body)
+      .set("Authorization", adminAuthorizationHeader)
+      .expect(400)
+      .expect((error, response) => {
+        expect(error.body.message).toBe(
+          "The user has not purchased this course",
+        );
+      });
+
+    // Purchase the course
+    await request(`${HOST}/payments/admin-purchase-course`)
+      .post("/")
+      .send(body)
+      .set("Authorization", adminAuthorizationHeader)
+      .expect(201)
+      .expect(response => {
+        expect(response.text).toBe("Success");
+      });
+
+    // Refund requires a valid course id
+    await request(`${HOST}/payments/admin-refund-course`)
+      .post("/")
+      .send({
+        courseId: "sadfasf07sa",
+        userEmail: user.profile.email,
+      })
+      .set("Authorization", adminAuthorizationHeader)
+      .expect(400)
+      .expect((error, response) => {
+        expect(error.body.message).toBe("The courseId is invalid");
+      });
+
+    // Refund requires a valid user
+    await request(`${HOST}/payments/admin-refund-course`)
+      .post("/")
+      .send({
+        courseId: "fpvPtfu7s",
+        userEmail: "sean@pairwise.tech",
+      })
+      .set("Authorization", adminAuthorizationHeader)
+      .expect(400)
+      .expect((error, response) => {
+        expect(error.body.message).toBe("No user could be found");
+      });
+
+    // Refund the course
+    await request(`${HOST}/payments/admin-refund-course`)
+      .post("/")
+      .send(body)
+      .set("Authorization", adminAuthorizationHeader)
+      .expect(201)
+      .expect(response => {
+        expect(response.text).toBe("Success");
+      });
+
+    // Refund requires the course is not already refunded
+    await request(`${HOST}/payments/admin-refund-course`)
+      .post("/")
+      .send(body)
+      .set("Authorization", adminAuthorizationHeader)
+      .expect(400)
+      .expect((error, response) => {
+        expect(error.body.message).toBe("The course is already refunded");
       });
 
     done();
