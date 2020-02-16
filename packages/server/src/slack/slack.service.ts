@@ -1,6 +1,8 @@
-import ENV from "./server-env";
+import ENV from "../tools/server-env";
 import { WebClient, ErrorCode, WebAPICallResult } from "@slack/web-api";
 import { Injectable } from "@nestjs/common";
+import { IFeedbackDto } from "@pairwise/common";
+import { RequestUser } from "src/types";
 
 /**
  * NOTE: The Slack web-api package does not have full TypeScript support when
@@ -42,7 +44,7 @@ export class SlackService {
         })) as ChatPostMessageResult;
 
         console.log(
-          `A message was posed to conversation ${result.channel} with id ${result.ts} which contains the message ${result.message.text}`,
+          `[SLACK INFO] A message with id ${result.ts} was posed to conversation ${result.channel}`,
         );
       } catch (e) {
         this.logSlackError(e, "Failed to post message to Slack");
@@ -51,7 +53,7 @@ export class SlackService {
   }
 
   private async fetchChannelId(channelName: string) {
-    let channelId: string = null;
+    let channelId = "";
 
     try {
       const result = (await this.client.conversations.list()) as ConversationsListResult;
@@ -66,10 +68,23 @@ export class SlackService {
 
   private logSlackError(error: any, message: string) {
     if (error.code === ErrorCode.PlatformError) {
-      console.error(`${message}. Error: ${error.data}`);
+      console.log(`[SLACK ERROR] ${message}. Error: ${error.data}`);
     } else {
-      console.error(`${message}. Error Code: ${error.code}`);
-      console.error(JSON.stringify(error));
+      console.log(`[SLACK ERROR] ${message}. Error Code: ${error.code}`);
+      console.log(`[SLACK ERROR] ${JSON.stringify(error)}`);
+    }
+  }
+
+  /* Ugly! But pretty in Slack :-) */
+  public formatFeedbackMessageUtil(feedback: IFeedbackDto, user: RequestUser) {
+    const challengeInfo = `*${feedback.challengeTitle}* (\`${feedback.challengeId}\`/\`${feedback.challengeType}\`)`;
+    const messageBase = `:memo: Feedback for challenge ${challengeInfo} of type \`${feedback.type}\``;
+    const feedbackWrapper = `\n\n*FEEDBACK BEGIN*\n\n${feedback.feedback}\n\n*FEEDBACK END*\n\n`;
+
+    if (user) {
+      return `${messageBase} submitted by *${user.profile.displayName}* (${user.profile.email}):${feedbackWrapper}`;
+    } else {
+      return `${messageBase} was submitted by an unauthenticated user:${feedbackWrapper}`;
     }
   }
 }
