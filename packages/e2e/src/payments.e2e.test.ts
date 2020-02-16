@@ -7,7 +7,7 @@ import {
 } from "./utils/e2e-utils";
 
 /** ===========================================================================
- * e2e Tests for /user APIs
+ * e2e Tests for /payments APIs
  * ============================================================================
  */
 
@@ -24,11 +24,12 @@ describe("Payments APIs", () => {
     accessToken = await fetchAccessToken();
     authorizationHeader = `Bearer ${accessToken}`;
 
+    // Fetch the user
+    user = await fetchUserWithAccessToken(accessToken);
+
     // Get admin user access token
     adminAccessToken = await fetchAdminAccessToken();
     adminAuthorizationHeader = `Bearer ${adminAccessToken}`;
-
-    user = await fetchUserWithAccessToken(accessToken);
   });
 
   test("/payments/checkout (POST) should require authentication", async done => {
