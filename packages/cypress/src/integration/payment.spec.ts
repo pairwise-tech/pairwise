@@ -48,22 +48,33 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Find the user email and dispatch a request to the admin API to
     // purchase a course for this user. See the above comments for an
-    // explanation of this egregious fact.
+    // explanation of this egregiousness.
     let dispatchedAdminRequest = false;
-    cy.get("#user-email").should(async $div => {
-      const email = $div.text();
 
-      if (!dispatchedAdminRequest) {
-        console.log(
-          `[DEBUG]: Dispatching admin request for user email: ${email}, services: ${EXTERNAL_SERVICES_URL}`,
-        );
-        axios.post(`${EXTERNAL_SERVICES_URL}/admin-purchase-course`, { email });
-        dispatchedAdminRequest = true;
-      }
-    });
+    cy.get("#user-email")
+      .invoke("text")
+      .then(email => {
+        // Only dispatch a single request
+        if (!dispatchedAdminRequest) {
+          dispatchedAdminRequest = true;
+          const EXTERNAL_SERVICES_ADMIN_PAYMENT_URL = `${EXTERNAL_SERVICES_URL}/admin-purchase-course`;
+          const body = { email };
+          cy.request("POST", EXTERNAL_SERVICES_ADMIN_PAYMENT_URL, body).should(
+            response => {
+              if (response.body !== "OK") {
+                throw new Error(
+                  `Invalid response received from external-services request, url used: ${EXTERNAL_SERVICES_ADMIN_PAYMENT_URL}`,
+                );
+              }
+            },
+          );
+        }
+      });
 
-    // Wait and reload the page.
+    // Wait!
     cy.wait(TIMEOUT);
+
+    // Reload the page.
     cy.reload();
 
     // Confirm that the user account now shows the purchased course
