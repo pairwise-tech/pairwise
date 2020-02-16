@@ -30,15 +30,10 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     cy.wait(TIMEOUT);
 
     // // Try to navigate to a locked challenge
-    cy.get("#navigation-menu-button").click({ force: true });
-    cy.get("#module-navigation-5").click({ force: true });
-    cy.get("#challenge-navigation-0").click({ force: true });
+    navigateToLockedChallenge();
 
     // // Prompted to login, login
-    cy.get("#facebook-login").click({ force: true });
-
-    // cy.get("#login-signup-button").click({ force: true });
-    // cy.get("#facebook-login").click({ force: true });
+    click("github-login");
 
     cy.wait(TIMEOUT);
 

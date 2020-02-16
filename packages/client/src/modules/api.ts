@@ -185,7 +185,7 @@ class Api extends BaseApiClass {
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
     try {
       let course: Course;
-      if (ENV.PRODUCTION || ENV.DEV) {
+      if (ENV.DEV) {
         /* TODO: Remove after deploying a server */
         const challenges = require("@pairwise/common").default;
         course = challenges.FullstackTypeScript;
@@ -216,7 +216,7 @@ class Api extends BaseApiClass {
   };
 
   fetchCourseSkeletons = async () => {
-    if (ENV.PRODUCTION || ENV.DEV) {
+    if (ENV.DEV) {
       /* TODO: Remove after deploying a server */
       const challenges = require("@pairwise/common").default;
       const FullstackTypeScript: Course = challenges.FullstackTypeScript;
