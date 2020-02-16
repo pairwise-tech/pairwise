@@ -4,6 +4,7 @@ import {
   TIMEOUT,
   CLIENT_APP_URL,
   elementContains,
+  EXTERNAL_SERVICES_URL,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -29,15 +30,15 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     cy.wait(TIMEOUT);
 
     // // Try to navigate to a locked challenge
-    // cy.get("#navigation-menu-button").click({ force: true });
-    // cy.get("#module-navigation-5").click({ force: true });
-    // cy.get("#challenge-navigation-0").click({ force: true });
+    cy.get("#navigation-menu-button").click({ force: true });
+    cy.get("#module-navigation-5").click({ force: true });
+    cy.get("#challenge-navigation-0").click({ force: true });
 
     // // Prompted to login, login
-    // cy.get("#github-login").click({ force: true });
-
-    cy.get("#login-signup-button").click({ force: true });
     cy.get("#facebook-login").click({ force: true });
+
+    // cy.get("#login-signup-button").click({ force: true });
+    // cy.get("#facebook-login").click({ force: true });
 
     cy.wait(TIMEOUT);
 
@@ -58,7 +59,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
       const email = $div.text();
 
       if (!dispatchedAdminRequest) {
-        axios.post("http://localhost:7000/admin-purchase-course", { email });
+        axios.post(`${EXTERNAL_SERVICES_URL}/admin-purchase-course`, { email });
         dispatchedAdminRequest = true;
       }
     });

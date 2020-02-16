@@ -5,6 +5,8 @@
 
 export const CLIENT_APP_URL = Cypress.env("CLIENT_APP_URL");
 
+export const EXTERNAL_SERVICES_URL = Cypress.env("EXTERNAL_SERVICES_URL");
+
 export const TIMEOUT = Cypress.env("TIMEOUT");
 
 // Convert an id string to an id identifier which includes a #.
