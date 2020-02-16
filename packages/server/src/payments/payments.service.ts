@@ -27,7 +27,7 @@ const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
 
 @Injectable()
 export class PaymentsService {
-  // Just hard-code these here for now
+  // Just hard-code these here for now:
   COURSE_PRICE = 5000; // the units are apparently in cents
   COURSE_CURRENCY = "usd";
   PAIRWISE_ICON_URL =

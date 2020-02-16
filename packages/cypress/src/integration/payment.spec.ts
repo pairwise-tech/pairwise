@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   click,
   TIMEOUT,
@@ -20,11 +19,12 @@ import {
 // submit the payment to Stripe. This would be possible using the Stripe CLI
 // in test mode, however, Cypress makes this impossible. Instead of this,
 // The test relies on an admin API to actually generate the course payment
-// for the user (that's damn right!). Aside from that, the test does
-// guarantee that Pairwise handles the correct behavior for course payments
-// and locked content.
+// for the user (that's damn right!). This occurs by calling an
+// external-services API which then handles the admin operation. Aside from
+// that, the test does guarantee that Pairwise handles the correct behavior
+// for course payments and locked content.
 describe("Payment Course Flow: A user can purchase a course and unlock it's content", () => {
-  it("Fullstack TypeScript Course Payment", () => {
+  it("Purchase the Fullstack TypeScript Course", () => {
     // Open the app
     cy.visit(`${CLIENT_APP_URL}/home`);
     cy.wait(TIMEOUT);

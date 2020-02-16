@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@cypress/webpack-preprocessor": "^4.1.1",
-    "axios": "^0.19.2",
     "cypress": "^3.8.1",
     "prettier": "^1.19.1",
     "ts-loader": "^6.2.1",
