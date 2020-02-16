@@ -50,17 +50,20 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     // purchase a course for this user. See the above comments for an
     // explanation of this egregiousness.
     let dispatchedAdminRequest = false;
-
     cy.get("#user-email")
       .invoke("text")
       .then(email => {
         // Only dispatch a single request
         if (!dispatchedAdminRequest) {
           dispatchedAdminRequest = true;
-          const EXTERNAL_SERVICES_ADMIN_PAYMENT_URL = `${EXTERNAL_SERVICES_URL}/admin-purchase-course`;
           const body = { email };
+          const EXTERNAL_SERVICES_ADMIN_PAYMENT_URL = `${EXTERNAL_SERVICES_URL}/admin-purchase-course`;
+
+          // You better use cy.request for this and not any other HTTP library
           cy.request("POST", EXTERNAL_SERVICES_ADMIN_PAYMENT_URL, body).should(
             response => {
+              // Fail immediately if the response is bad so it's clear why
+              // the test failed
               if (response.body !== "OK") {
                 throw new Error(
                   `Invalid response received from external-services request, url used: ${EXTERNAL_SERVICES_ADMIN_PAYMENT_URL}`,
