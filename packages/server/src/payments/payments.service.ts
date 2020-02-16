@@ -40,7 +40,9 @@ export class PaymentsService {
   // Creates a payment intent using Stripe
   async handleCreatePaymentIntent(requestUser: RequestUser, courseId: string) {
     const courseMetadata = contentUtility.getCourseMetadata(courseId);
-    if (courseMetadata) {
+    if (!courseMetadata) {
+      return new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+    } else {
       try {
         const session = await this.createStripeCheckoutSession(
           requestUser,
@@ -56,8 +58,6 @@ export class PaymentsService {
         console.log("[STRIPE ERROR]: Failed to create Stripe session!");
         console.log(err);
       }
-    } else {
-      return new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     }
   }
 

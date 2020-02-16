@@ -250,6 +250,12 @@ export const validatePaymentRequest = (
   user: IUserDto<UserProfile>,
   courseId: string,
 ) => {
+  // A valid user is required
+  if (!user) {
+    throw new BadRequestException(ERROR_CODES.MISSING_USER);
+  }
+
+  // The course id must be valid
   if (!contentUtility.courseIdIsValid(courseId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
   }
@@ -258,8 +264,9 @@ export const validatePaymentRequest = (
     p => p.courseId === courseId,
   );
 
+  // The user must no have already paid for the course
   if (existingCoursePayment) {
-    throw new BadRequestException("User has previously paid for this course");
+    throw new BadRequestException("User has already paid for this course");
   }
 };
 
