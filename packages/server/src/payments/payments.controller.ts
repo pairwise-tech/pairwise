@@ -17,7 +17,16 @@ import { AdminAuthGuard } from "src/auth/admin.guard";
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  // Stripe webhook endpoint:
+  @UseGuards(AuthGuard("jwt"))
+  @Post("/checkout/:courseId")
+  createCoursePaymentIntent(@Param() params, @Req() req: AuthenticatedRequest) {
+    const { courseId } = params;
+    return this.paymentsService.handleCreatePaymentIntent(req.user, courseId);
+  }
+
+  // Stripe webhook endpoint. Stripe will send all webhook events here,
+  // currently we only rely on this for the checkout session completed
+  // event.
   @Post("/stripe-webhook")
   async coursePaymentSuccessStripeWebhook(
     @Headers("stripe-signature") signature,
@@ -27,13 +36,6 @@ export class PaymentsController {
       request,
       signature,
     );
-  }
-
-  @UseGuards(AuthGuard("jwt"))
-  @Post("/checkout/:courseId")
-  createCoursePaymentIntent(@Param() params, @Req() req: AuthenticatedRequest) {
-    const { courseId } = params;
-    return this.paymentsService.handleCreatePaymentIntent(req.user, courseId);
   }
 
   // An admin API to allow admin users to effectively purchase a course for
