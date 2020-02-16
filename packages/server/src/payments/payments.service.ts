@@ -1,6 +1,10 @@
 import { Request } from "express";
 import Stripe from "stripe";
-import { Injectable, BadRequestException } from "@nestjs/common";
+import {
+  Injectable,
+  BadRequestException,
+  InternalServerErrorException,
+} from "@nestjs/common";
 import { RequestUser } from "src/types";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "./payments.entity";
@@ -20,25 +24,55 @@ import {
 } from "@pairwise/common";
 import { UserService } from "src/user/user.service";
 
-const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
-  typescript: true,
-  apiVersion: "2019-12-03",
-});
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
+enum StripeEventTypes {
+  CHECKOUT_COMPLETED = "checkout.session.completed",
+}
+
+const PRICING_CONSTANTS = {
+  COURSE_PRICE: 5000, // the units are apparently in cents
+  ACCEPTED_CURRENCY: "usd",
+};
+
+const PairwiseIconUrl =
+  "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
+
+/** ===========================================================================
+ * Payments Service
+ * ============================================================================
+ */
 
 @Injectable()
 export class PaymentsService {
-  // Just hard-code these here for now:
-  COURSE_PRICE = 5000; // the units are apparently in cents
-  COURSE_CURRENCY = "usd";
-  PAIRWISE_ICON_URL =
-    "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
+  stripe: Stripe;
+
+  COURSE_PRICE: number;
+  COURSE_CURRENCY: string;
+  PAIRWISE_ICON_URL: string;
 
   constructor(
     private readonly userService: UserService,
 
     @InjectRepository(Payments)
     private readonly paymentsRepository: Repository<Payments>,
-  ) {}
+  ) {
+    // Initialize Stripe module
+    const stripe = new Stripe(ENV.STRIPE_SECRET_KEY, {
+      typescript: true,
+      apiVersion: "2019-12-03",
+    });
+
+    this.stripe = stripe;
+
+    // Set pricing values
+    this.COURSE_PRICE = PRICING_CONSTANTS.COURSE_PRICE;
+    this.COURSE_CURRENCY = PRICING_CONSTANTS.ACCEPTED_CURRENCY;
+    this.PAIRWISE_ICON_URL = PairwiseIconUrl;
+  }
 
   // Creates a payment intent using Stripe
   async handleCreatePaymentIntent(requestUser: RequestUser, courseId: string) {
@@ -58,8 +92,12 @@ export class PaymentsService {
 
         return result;
       } catch (err) {
-        console.log("[STRIPE ERROR]: Failed to create Stripe session!");
-        console.log(err);
+        // I saw this happen once. If it happens more, we could create retry
+        // logic here...
+        console.log("[STRIPE ERROR]: Failed to create Stripe session!", err);
+        throw new InternalServerErrorException(
+          "Failed to initialize checkout session",
+        );
       }
     }
   }
@@ -73,15 +111,16 @@ export class PaymentsService {
     signature: string,
   ) {
     try {
+      // You must use the raw body:
       // @ts-ignore - the raw body is added by custom code in main.ts
       const { rawBody } = request;
-      const event = stripe.webhooks.constructEvent(
+      const event = this.stripe.webhooks.constructEvent(
         rawBody,
         signature,
         ENV.STRIPE_WEBHOOK_SIGNING_SECRET,
       );
 
-      if (event.type === "checkout.session.completed") {
+      if (event.type === StripeEventTypes.CHECKOUT_COMPLETED) {
         const { object } = event.data as any; /* Stripe type is pointless */
         const email = object.customer_email;
         const courseId = object.metadata.courseId;
@@ -93,7 +132,7 @@ export class PaymentsService {
         // Handle other event types...
       }
     } catch (err) {
-      console.log(`[STRIPE ERROR]: ${err.message}`);
+      console.log(`[STRIPE WEBHOOK ERROR]: ${err.message}`);
       throw new BadRequestException(`Webhook Error: ${err.message}`);
     }
 
@@ -131,7 +170,7 @@ export class PaymentsService {
       status: "REFUNDED",
     };
 
-    this.paymentsRepository.update(match, payment);
+    await this.paymentsRepository.update(match, payment);
 
     return SUCCESS_CODES.OK;
   }
@@ -151,13 +190,13 @@ export class PaymentsService {
     console.log(`Purchasing course ${courseId} for user ${profile.email}`);
 
     // If everything is good create a new payment for this user and course.
-    const payment = this.createNewPayment(profile, courseId);
+    const payment = this.createNewPaymentObject(profile, courseId);
     await this.paymentsRepository.insert(payment);
 
     return SUCCESS_CODES.OK;
   }
 
-  private createNewPayment = (user: UserProfile, courseId: string) => {
+  private createNewPaymentObject = (user: UserProfile, courseId: string) => {
     // Construct the new payment data. Once Stripe is integrated, most of this
     // data will come from Stripe and the actual payment information.
     const payment: QueryDeepPartialEntity<Payments> = {
@@ -175,7 +214,8 @@ export class PaymentsService {
     requestUser: RequestUser,
     courseMetadata: CourseMetadata,
   ) {
-    const session = await stripe.checkout.sessions.create({
+    // Create a new checkout session with Stripe
+    const session = await this.stripe.checkout.sessions.create({
       customer_email: requestUser.profile.email,
       metadata: {
         courseId: courseMetadata.id,

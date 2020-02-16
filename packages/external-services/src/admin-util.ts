@@ -5,10 +5,6 @@ import { SERVER } from "./config";
 
 // Use the admin API to handle purchasing a course for a user.
 export const purchaseCourseForUserByAdmin = async (userEmail: string) => {
-  console.log(
-    `[DEBUG]: Handling purchase course for user email: ${userEmail}, server: ${SERVER}`,
-  );
-
   const accessToken = await getAccessTokenForAdmin();
 
   const body = {
