@@ -12,7 +12,6 @@ import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
 import { PaymentsService } from "./payments.service";
 import { AdminAuthGuard } from "src/auth/admin.guard";
-import { SUCCESS_CODES } from "src/tools/constants";
 
 @Controller("payments")
 export class PaymentsController {
@@ -45,8 +44,10 @@ export class PaymentsController {
   @Post("/admin-purchase-course")
   async purchaseCourseForUser(@Body() body) {
     const { userEmail, courseId } = body;
-    await this.paymentsService.handlePurchaseCourseByAdmin(userEmail, courseId);
-    return SUCCESS_CODES.OK;
+    return this.paymentsService.handlePurchaseCourseByAdmin(
+      userEmail,
+      courseId,
+    );
   }
 
   // An admin API to handle refunding a course for a user.
@@ -54,7 +55,9 @@ export class PaymentsController {
   @Post("/refund")
   async refundCourseForUser(@Body() body) {
     const { userEmail, courseId } = body;
-    await this.paymentsService.handlePurchaseCourseByAdmin(userEmail, courseId);
-    return SUCCESS_CODES.OK;
+    return this.paymentsService.handlePurchaseCourseByAdmin(
+      userEmail,
+      courseId,
+    );
   }
 }

@@ -41,7 +41,7 @@ export class PaymentsService {
   async handleCreatePaymentIntent(requestUser: RequestUser, courseId: string) {
     const courseMetadata = contentUtility.getCourseMetadata(courseId);
     if (!courseMetadata) {
-      return new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     } else {
       try {
         const session = await this.createStripeCheckoutSession(
@@ -91,7 +91,7 @@ export class PaymentsService {
       }
     } catch (err) {
       console.log(`[STRIPE ERROR]: ${err.message}`);
-      return new BadRequestException(`Webhook Error: ${err.message}`);
+      throw new BadRequestException(`Webhook Error: ${err.message}`);
     }
 
     return SUCCESS_CODES.OK;
@@ -101,7 +101,7 @@ export class PaymentsService {
     console.log(
       `[ADMIN]: Admin request to purchase course: ${courseId} for user: ${userEmail}`,
     );
-    this.handlePurchaseCourseRequest(userEmail, courseId);
+    return this.handlePurchaseCourseRequest(userEmail, courseId);
   }
 
   async handleRefundCourseByAdmin(userEmail: string, courseId: string) {
@@ -129,6 +129,8 @@ export class PaymentsService {
     };
 
     this.paymentsRepository.update(match, payment);
+
+    return SUCCESS_CODES.OK;
   }
 
   private async handlePurchaseCourseRequest(

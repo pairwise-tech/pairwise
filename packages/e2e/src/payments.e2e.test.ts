@@ -45,7 +45,7 @@ describe("Payments APIs", () => {
   test("/payments/checkout (POST) rejects invalid course ids", async done => {
     request(`${HOST}/payments/checkout/zsdfasfsafsa`)
       .post("/")
-      .set("Authorization", "Bearer asd97f8809as7fsa")
+      .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
         expect(response.body.message).toBe("The courseId is invalid");
@@ -53,11 +53,11 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/payments/checkout (POST) accepts a request with a valid course id", async done => {
-    request(`${HOST}/payments/checkout/zsdfasfsafsa`)
+  test("/payments/checkout (POST) accepts a request with a valid course id", () => {
+    return request(`${HOST}/payments/checkout/fpvPtfu7s`)
       .post("/")
       .set("Authorization", authorizationHeader)
-      .expect(200)
+      .expect(201)
       .expect(response => {
         const { body } = response;
         expect(body.stripeCheckoutSessionId).toBeDefined();
@@ -110,7 +110,7 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/payments/admin-purchase-course (POST) accepts requests from an admin for a valid user and course", async done => {
+  test("/payments/admin-purchase-course (POST) accepts requests from an admin for a valid user and course", async () => {
     await request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
       .send({
@@ -130,30 +130,36 @@ describe("Payments APIs", () => {
   });
 
   test("/payments/admin-purchase-course (POST) rejects requests if a user has already purchased the course", async done => {
+    // Get a new user:
+    accessToken = await fetchAccessToken();
+    authorizationHeader = `Bearer ${accessToken}`;
+    user = await fetchUserWithAccessToken(accessToken);
+
+    const body = {
+      courseId: "fpvPtfu7s",
+      userEmail: user.profile.email,
+    };
+
     // Purchase the course
     await request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
-      .send({
-        courseId: "fpvPtfu7s",
-        userEmail: user.profile.email,
-      })
+      .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(201)
       .expect(response => {
         expect(response.text).toBe("Success");
       });
 
+    user = await fetchUserWithAccessToken(accessToken);
+
     // Try to purchase it again and expect a failure
     await request(`${HOST}/payments/admin-purchase-course`)
       .post("/")
-      .send({
-        courseId: "fpvPtfu7s",
-        userEmail: user.profile.email,
-      })
+      .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .end((error, response) => {
-        expect(response.body.message).toBe(
+      .expect((error, response) => {
+        expect(error.body.message).toBe(
           "User has already paid for this course",
         );
       });

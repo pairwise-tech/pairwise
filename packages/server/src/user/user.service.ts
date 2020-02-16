@@ -13,6 +13,7 @@ import {
 import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
+import { ERROR_CODES } from "src/tools/constants";
 
 export interface GenericUserProfile {
   email: string;
@@ -52,6 +53,10 @@ export class UserService {
    */
   async findUserByEmailGetFullProfile(email: string) {
     const user = await this.userRepository.findOne({ email });
+
+    if (!user) {
+      throw new BadRequestException(ERROR_CODES.MISSING_USER);
+    }
 
     const { payments, courses } = await this.getCourseForUser(user);
     const { progress } = await this.getProgressMapForUser(user);
