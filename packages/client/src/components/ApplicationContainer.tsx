@@ -55,6 +55,7 @@ const Modals = () => (
     <SingleSignOnModal />
     <PaymentCourseModal />
     <PaymentSuccessModal />
+    <FeedbackModal />
   </>
 );
 
@@ -110,7 +111,6 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         <Modals />
         {this.renderLoadingOverlay()}
         {CODEPRESS && <AdminKeyboardShortcuts />}
-        <FeedbackModal />
         <NavigationOverlay overlayVisible={overlayVisible} />
         <Header>
           <ControlsContainer style={{ height: "100%", marginRight: 60 }}>

@@ -43,8 +43,8 @@ class PaymentSuccessModal extends React.Component<IProps, IState> {
           <ModalTitleText>Thank you, {profile.displayName}!</ModalTitleText>
           <ModalSubText style={{ maxWidth: 450 }}>
             Fantastic! Thank you for purchasing the{" "}
-            <CourseTitle>{paymentSuccessCourse.title}</CourseTitle> taking the
-            first big step to learning to code and becoming a software
+            <CourseTitle>{paymentSuccessCourse.title}</CourseTitle> and taking
+            the first big step to learning to code and becoming a software
             developer. We know you're excited so let's just get right to it!
             Click the button to get started!
           </ModalSubText>
