@@ -1,7 +1,7 @@
 import ENV from "../tools/server-env";
 import { WebClient, ErrorCode, WebAPICallResult } from "@slack/web-api";
 import { Injectable, Optional } from "@nestjs/common";
-import { IFeedbackDto } from "@pairwise/common";
+import { IFeedbackDto, challengeUtilityClass } from "@pairwise/common";
 import { RequestUser } from "src/types";
 
 /**
@@ -99,14 +99,35 @@ export class SlackService {
 
   /* Ugly! But pretty in Slack :-) */
   public formatFeedbackMessageUtil(feedback: IFeedbackDto, user: RequestUser) {
-    const challengeInfo = `*${feedback.challengeTitle}* (\`${feedback.challengeId}\`/\`${feedback.challengeType}\`)`;
-    const messageBase = `:memo: Feedback for challenge ${challengeInfo} of type \`${feedback.type}\``;
+    const ctx = challengeUtilityClass.deriveChallengeContextFromId(
+      feedback.challengeId,
+    );
+
+    /* the worst! */
+    const challengeContext =
+      "\n*Challenge Context:*\n" +
+      "•  *Id:* " +
+      `\`${ctx.challenge.id}\`` +
+      "\n•  *Type:* " +
+      `\`${ctx.challenge.type}\`` +
+      "\n•  *Course:* " +
+      ctx.course.title +
+      ` (\`${ctx.course.id}\`)` +
+      "\n•  *Module:* " +
+      ctx.module.title +
+      (ctx.module.free ? " _FREE_ " : " ") +
+      `(\`${ctx.module.id}\`)`;
+
+    const messageBase = `:memo: Feedback for challenge *${ctx.challenge.title}* of type \`${feedback.type}\``;
     const feedbackWrapper = `\n\n*FEEDBACK BEGIN*\n\n${feedback.feedback}\n\n*FEEDBACK END*\n\n`;
 
     if (user) {
-      return `${messageBase} submitted by *${user.profile.displayName}* (${user.profile.email}):${feedbackWrapper}`;
+      return `${messageBase} submitted by *${user.profile.displayName}* (${
+        user.profile.email
+      }).\n${challengeContext + feedbackWrapper}`;
     } else {
-      return `${messageBase} was submitted by an unauthenticated user:${feedbackWrapper}`;
+      return `${messageBase} was submitted by an unauthenticated user.\n${challengeContext +
+        feedbackWrapper}`;
     }
   }
 }
