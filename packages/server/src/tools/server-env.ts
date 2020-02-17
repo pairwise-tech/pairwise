@@ -31,6 +31,7 @@ const GOOGLE_PROFILE_URL = getenv.string("GOOGLE_PROFILE_URL", "");
 const GOOGLE_TOKEN_URL = getenv.string("GOOGLE_TOKEN_URL", "");
 const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN");
+const SLACK_ADMIN_IDS = getenv.string("SLACK_ADMIN_IDS");
 
 const ENV = {
   HTTPS,
@@ -53,6 +54,7 @@ const ENV = {
   GOOGLE_TOKEN_URL,
   GOOGLE_AUTHORIZATION_URL,
   SLACK_API_TOKEN,
+  SLACK_ADMIN_IDS,
 };
 
 /** ===========================================================================

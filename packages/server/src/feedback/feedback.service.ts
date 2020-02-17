@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { IFeedbackDto } from "@pairwise/common";
 import { Feedback } from "./feedback.entity";
 import { InjectRepository } from "@nestjs/typeorm";
