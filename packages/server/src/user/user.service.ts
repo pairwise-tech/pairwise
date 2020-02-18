@@ -88,14 +88,13 @@ export class UserService {
       user = await this.findUserByEmail(email);
     }
 
-    const msgBase = accountCreated ? "New account created" : "Account login";
-    const msg = `${msgBase} for *${user.profile.displayName}* (${email}) :tada:`;
+    const msg = accountCreated ? "New account created" : "Account login";
     console.log(msg);
 
-    if (accountCreated) {
-      this.slackService.postMessageToChannel("users", msg);
-    }
-
+    this.slackService.postUserAccountCreationMessage({
+      profile,
+      accountCreated,
+    });
     return { user, accountCreated };
   }
 

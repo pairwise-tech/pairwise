@@ -45,8 +45,7 @@ export class FeedbackService {
     await this.feedbackRepository.insert(feedback);
 
     /* Post feedback to Slack feedback channel */
-    const message = this.slackService.formatFeedbackMessageUtil(feedback, user);
-    this.slackService.postMessageToChannel("feedback", message);
+    this.slackService.postFeedbackMessage({ feedbackDto, user });
 
     return SUCCESS_CODES.OK;
   }
