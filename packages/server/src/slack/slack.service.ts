@@ -101,7 +101,7 @@ export class SlackService {
     try {
       const { mentionAdmins, channel } = config;
       const text = mentionAdmins
-        ? `${this.adminMentionMarkup}\n\n${message}`
+        ? `${this.adminMentionMarkup}\n${message}`
         : message;
 
       // see NOTE
