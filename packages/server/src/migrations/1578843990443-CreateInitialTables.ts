@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class CreateInitialTables1581828204613 implements MigrationInterface {
-  name = "CreateInitialTables1581828204613";
+export class CreateInitialTables1578843990443 implements MigrationInterface {
+  name = "CreateInitialTables1578843990443";
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(
@@ -13,7 +13,7 @@ export class CreateInitialTables1581828204613 implements MigrationInterface {
       undefined,
     );
     await queryRunner.query(
-      `CREATE TABLE "payments" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "datePaid" TIMESTAMP NOT NULL, "amountPaid" integer NOT NULL, "status" character varying NOT NULL, "extraData" json, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userUuid" uuid, CONSTRAINT "PK_2c540326a039a91fa7e942caed7" PRIMARY KEY ("uuid"))`,
+      `CREATE TABLE "payments" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "datePaid" TIMESTAMP NOT NULL, "amountPaid" integer NOT NULL, "type" character varying NOT NULL, "extraData" json, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userUuid" uuid, CONSTRAINT "PK_2c540326a039a91fa7e942caed7" PRIMARY KEY ("uuid"))`,
       undefined,
     );
     await queryRunner.query(
