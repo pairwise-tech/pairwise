@@ -193,3 +193,7 @@ $ yarn up:build
 ## Contributing
 
 We follow a normal git workflow. Commit your changes to a branch, make a pull request, and merge the code after the tests pass.
+
+## Production
+
+The Pairwise client application and landing page are deployed using [ZEIT Now](https://zeit.co/) and the backend server is deployed using [Google Cloud Run](https://cloud.google.com/run), which provides a full managed cloud platform that auto-scales application containers out of the box. Updates are shipped continuously by commits to the `master` branch.
