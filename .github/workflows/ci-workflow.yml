@@ -5,11 +5,12 @@ on:
     branches:
       - master
 
+env:
+  CI: true
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      CI: true
     steps:
       - uses: actions/checkout@v1
 

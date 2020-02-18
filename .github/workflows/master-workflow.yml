@@ -1,0 +1,78 @@
+name: Deploy Production
+
+# Only deploy on commits to the master branch
+on:
+  push:
+    branches:
+      - master
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  CI: true
+  PROJECT_ID: ${{ secrets.RUN_PROJECT }}
+  RUN_REGION: us-central1
+  SERVICE_NAME: pairwise-production
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Setup NodeJS Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+
+      # Install the application dependencies
+      - name: Install dependencies
+        run: yarn docker:dependencies
+
+      # Build the application
+      - name: Build application
+        run: yarn docker:build
+
+      # Run all package unit tests
+      - name: Run static and unit tests
+        run: yarn docker:test
+
+      # Run e2e tests
+      - name: Run e2e tests
+        run: yarn e2e
+
+      # Run Cypress tests
+      - name: Run Cypress tests
+        run: yarn cypress
+
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: "275.0.0"
+          service_account_email: ${{ secrets.SA_EMAIL }}
+          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+
+      # Configure gcloud CLI
+      - name: gcloud Set up
+        run: |
+          gcloud config set project $PROJECT_ID
+
+      # Build the image locally using Docker
+      - name: Build
+        run: |
+          docker build -t pairwise-production --tag gcr.io/$PROJECT-ID/$SERVICE_NAME:$GITHUB_SHA -f packages/server/Dockerfile .
+
+      # Configure Docker to use gcloud
+      - name: Configure Docker with gcloud
+        run: gcloud auth configure-docker
+
+      # Push the image to gcloud
+      - name: Push the image
+        run: docker push gcr.io/$PROJECT-ID/$SERVICE_NAME:$GITHUB_SHA
+
+        # Deploy image to Cloud Run
+      - name: Deploy
+        run: |
+          gcloud run deploy $SERVICE_NAME \
+            --region $RUN_REGION \
+            --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
+            --platform managed
