@@ -1,3 +1,8 @@
+# This workflow deploys the production server to Google Cloud Run.
+# Reference docs:
+# https://github.com/GoogleCloudPlatform/github-actions/blob/master/example-workflows/cloud-run/.github/workflows/cloud-run.yml
+# https://cloud.google.com/run/docs/building/containers
+
 name: Deploy Production
 
 # Only deploy on commits to the master branch
