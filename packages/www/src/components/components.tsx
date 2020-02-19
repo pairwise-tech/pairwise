@@ -152,6 +152,7 @@ export const CodeRainSection = ({ children, ...props }: any) => {
 };
 
 interface RemoteFormProps {
+  action: string;
   name: string;
   children: React.ReactNode;
   submitText?: string;
@@ -160,6 +161,23 @@ interface RemoteFormProps {
   errorText?: string;
   validate?: () => any;
 }
+
+/**
+ * Given a form turn the data into a JS object
+ */
+const formToJson = (form: FormData) => {
+  const result: { [k: string]: any } = {};
+
+  for (let [k, v] of form.entries()) {
+    if (typeof k === 'string') {
+      result[k] = v;
+    } else {
+      console.warn('[INFO] Could not assign non-string value to dict', k);
+    }
+  }
+
+  return result;
+};
 
 /**
  * Currently this is a netlify form, but we could potentially point it at some
@@ -173,6 +191,7 @@ export const RemoteForm = (props: RemoteFormProps) => {
     validate = () => true,
     errorText = 'Please fill out all the fields.',
     name,
+    action,
     children,
     ...rest
   } = props;
@@ -193,12 +212,14 @@ export const RemoteForm = (props: RemoteFormProps) => {
 
     const el = e.currentTarget;
     const data = new FormData(el);
+    const json = JSON.stringify(formToJson(data));
 
     setLoading(true);
 
-    fetch(el.action, {
+    fetch(action, {
       method: 'POST',
-      body: data, // Should be auto-formatted by browser
+      mode: 'cors',
+      body: json,
     })
       .then(onComplete)
       .finally(() => setLoading(false));
@@ -207,15 +228,7 @@ export const RemoteForm = (props: RemoteFormProps) => {
   };
 
   return (
-    <form
-      {...rest}
-      name={name}
-      action="/thanks/"
-      data-netlify="true"
-      data-netlify-honeypot="bot-field"
-      method="POST"
-      onSubmit={handleSubmit}
-    >
+    <form {...rest} name={name} method="POST" onSubmit={handleSubmit}>
       <input type="hidden" name="form-name" value={name} />
       <p style={{ display: 'none' }}>
         <input name="bot-field" />
