@@ -108,7 +108,7 @@ const Main = () => {
           size="large"
           color="default"
           onClick={() => {
-            window.open('https://app.pairwise.tech', '_blank');
+            window.open('https://app.pairwise.tech/workspace/', '_blank');
           }}
         >
           Try it out
@@ -581,6 +581,7 @@ const GetEarlyAccess = () => {
         among the first to access the platform as we launch the initial modules.
       </Typography>
       <RemoteForm
+        action="https://hooks.zapier.com/hooks/catch/2903409/omou78r/"
         name="email-access"
         submitText="I want!"
         validate={() => email}
@@ -603,6 +604,14 @@ const GetEarlyAccess = () => {
           variant="outlined"
           value={email}
           onChange={handleChange}
+        />
+
+        {/* NOTE: Since the form is auto-serialized this is how to add a date to the payload body */}
+        <input
+          style={{ display: 'none' }}
+          id="date"
+          name="date"
+          defaultValue={new Date().toISOString()}
         />
       </RemoteForm>
     </div>
