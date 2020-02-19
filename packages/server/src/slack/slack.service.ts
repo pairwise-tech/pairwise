@@ -151,7 +151,7 @@ export class SlackService {
     if (user) {
       messageBase += ` submitted by *${user.profile.displayName}* (${user.profile.email}).`;
     } else {
-      messageBase += ` was submitted by an unauthenticated user.`;
+      messageBase += ` was submitted by an anonymous user.`;
     }
 
     return `${messageBase}\n${challengeContext + feedbackWrapper}`;
@@ -159,10 +159,16 @@ export class SlackService {
 
   private errorLogUtil(error: any, message: string) {
     if (error.code === ErrorCode.PlatformError) {
-      console.log(`[SLACK ERROR] ${message}. Error: ${error.data}`);
+      console.log(
+        `[SLACK ERROR] ${message}. Error: ${JSON.stringify(
+          error.data,
+          null,
+          2,
+        )}`,
+      );
     } else {
       console.log(`[SLACK ERROR] ${message}. Error Code: ${error.code}`);
-      console.log(`[SLACK ERROR] ${JSON.stringify(error)}`);
+      console.log(`[SLACK ERROR] ${JSON.stringify(error, null, 2)}`);
     }
   }
 }
