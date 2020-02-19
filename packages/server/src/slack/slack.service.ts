@@ -61,9 +61,11 @@ export class SlackService {
     @Optional() private adminMentionMarkup: string,
   ) {
     this.client = new WebClient(ENV.SLACK_API_TOKEN);
-    this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS.split(",")
-      .map(id => `<@${id}>`)
-      .join(" ");
+    this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS
+      ? ENV.SLACK_ADMIN_IDS.split(",")
+          .map(id => `<@${id}>`)
+          .join(" ")
+      : "";
   }
 
   public async postFeedbackMessage({

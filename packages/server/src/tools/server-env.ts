@@ -32,8 +32,8 @@ const GOOGLE_TOKEN_URL = getenv.string("GOOGLE_TOKEN_URL", "");
 const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 
 /* Slack: */
-const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN");
-const SLACK_ADMIN_IDS = getenv.string("SLACK_ADMIN_IDS");
+const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
+const SLACK_ADMIN_IDS = getenv.string("SLACK_ADMIN_IDS", "");
 
 const ENV = {
   HTTPS,
