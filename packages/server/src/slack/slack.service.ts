@@ -61,11 +61,9 @@ export class SlackService {
     @Optional() private adminMentionMarkup: string,
   ) {
     this.client = new WebClient(ENV.SLACK_API_TOKEN);
-    this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS
-      ? ENV.SLACK_ADMIN_IDS.split(",")
-          .map(id => `<@${id}>`)
-          .join(" ")
-      : "";
+    this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS.map(id => `<@${id}>`).join(
+      " ",
+    );
   }
 
   public async postFeedbackMessage({
@@ -101,9 +99,10 @@ export class SlackService {
     try {
       const { mentionAdmins = false, channel } = config;
 
-      const text = mentionAdmins
-        ? `${this.adminMentionMarkup}\n${message}`
-        : message;
+      const text =
+        mentionAdmins && this.adminMentionMarkup
+          ? `${this.adminMentionMarkup}\n${message}`
+          : message;
 
       // see NOTE
       const result = (await this.client.chat.postMessage({
