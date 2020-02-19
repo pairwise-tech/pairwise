@@ -27,7 +27,6 @@ services:
       GITHUB_AUTHORIZATION_URL: http://external-services:7000/github/authorize
       GOOGLE_PROFILE_URL: http://external-services:7000/google/profile
       GOOGLE_TOKEN_URL: http://external-services:7000/google/token
-      SLACK_API_TOKEN: xxxx # bogus token to ensure we don't get spammed during e2e
     expose:
       - 9000
     ports:
