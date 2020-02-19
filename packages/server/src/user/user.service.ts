@@ -89,7 +89,7 @@ export class UserService {
     }
 
     const msg = accountCreated ? "New account created" : "Account login";
-    console.log(msg);
+    console.log(`${msg} for email: ${email}`);
 
     this.slackService.postUserAccountCreationMessage({
       profile,

@@ -24,8 +24,8 @@ interface SlackAccountCreationMessageData {
 }
 
 interface SlackMessageConfig {
-  channel: SLACK_CHANNELS;
-  mentionAdmins: boolean;
+  channel?: SLACK_CHANNELS;
+  mentionAdmins?: boolean;
 }
 
 /**
@@ -35,22 +35,14 @@ interface SlackMessageConfig {
  * @see: https://slack.dev/node-slack-sdk/typescript
  */
 interface ChatPostMessageResult extends WebAPICallResult {
+  ok: boolean;
+  error?: string;
   channel: string;
   ts: string;
   message: {
     text: string;
   };
 }
-
-const defaultFeedbackMessageConfig: SlackMessageConfig = {
-  channel: "feedback",
-  mentionAdmins: true,
-};
-
-const defaultAccountMessageConfig: SlackMessageConfig = {
-  channel: "users",
-  mentionAdmins: true,
-};
 
 /** ===========================================================================
  * SlackService
@@ -77,20 +69,26 @@ export class SlackService {
   public async postFeedbackMessage({
     feedbackDto,
     user,
-    config = defaultFeedbackMessageConfig,
+    config,
   }: SlackFeedbackMessageData) {
     const message = this.formatFeedbackMessageUtil(feedbackDto, user);
-    await this.postMessageToChannel(message, config);
+    await this.postMessageToChannel(message, {
+      channel: "feedback",
+      ...config,
+    });
   }
 
   public async postUserAccountCreationMessage({
     profile,
     accountCreated,
-    config = defaultAccountMessageConfig,
+    config,
   }: SlackAccountCreationMessageData) {
     if (accountCreated) {
       const message = `New account created for *${profile.displayName}* (${profile.email}) :tada:`;
-      await this.postMessageToChannel(message, config);
+      await this.postMessageToChannel(message, {
+        channel: "users",
+        ...config,
+      });
     }
   }
 
@@ -99,7 +97,8 @@ export class SlackService {
     config: SlackMessageConfig,
   ) {
     try {
-      const { mentionAdmins, channel } = config;
+      const { mentionAdmins = false, channel } = config;
+
       const text = mentionAdmins
         ? `${this.adminMentionMarkup}\n${message}`
         : message;
@@ -110,9 +109,13 @@ export class SlackService {
         channel,
       })) as ChatPostMessageResult;
 
-      console.log(
-        `[SLACK INFO] A message with id ${result.ts} was posed to conversation ${channel}`,
-      );
+      if (result.ok) {
+        console.log(
+          `[SLACK INFO] A message with id ${result.ts} was posed to conversation ${channel}`,
+        );
+      } else {
+        console.log(`[SLACK ERROR] ${result.error}`);
+      }
     } catch (e) {
       this.errorLogUtil(e, "Failed to post message to Slack");
     }
@@ -132,10 +135,16 @@ export class SlackService {
       `\n•  *Course:* ${ctx.course.title}` +
       `\n•  *Module:* ${ctx.module.title}${ctx.module.free ? " _FREE_" : ""}`;
 
+    // build challenge link strings
+    const prodLink = `<https://app.pairwise.tech/workspace//${ctx.challenge.id}|prod>`;
+    const localLink = `<http://127.0.0.1:3000/workspace/${ctx.challenge.id}|local>`;
+    const challengeLinks = `*${ctx.challenge.title}* (${prodLink}/${localLink})`;
+
     // wrap feedback with begin/end strings to clearly show user's feedback in slack UI
     const feedbackWrapper = `\n\n*FEEDBACK BEGIN*\n\n${feedback.feedback}\n\n*FEEDBACK END*\n\n`;
-    const challengeLink = `<http://127.0.0.1:3000/workspace/${ctx.challenge.id}|*${ctx.challenge.title}*>`;
-    let messageBase = `:memo: Feedback for challenge ${challengeLink} of type \`${feedback.type}\``;
+
+    // build base message
+    let messageBase = `:memo: Feedback for challenge ${challengeLinks} of type \`${feedback.type}\``;
 
     if (user) {
       messageBase += ` submitted by *${user.profile.displayName}* (${user.profile.email}).`;
