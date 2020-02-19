@@ -38,6 +38,7 @@ const FAQ = () => {
             Want to get in touch? We'd love to hear from you!
           </Typography>
           <RemoteForm
+            action="https://hooks.zapier.com/hooks/catch/2903409/omojaza/"
             name="contact-us"
             onComplete={handleComplete}
             submitText="Send"
@@ -49,6 +50,7 @@ const FAQ = () => {
               inputProps={{ style: { background: '#1d1d1d', borderRadius: 4 } }}
               fullWidth
               id="email"
+              name="email"
               label="Email"
               variant="outlined"
               helperText="Where can we get in touch with you?"
@@ -69,11 +71,19 @@ const FAQ = () => {
               }}
               fullWidth
               id="message"
+              name="message"
               label="Message"
               variant="outlined"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               disabled={isComplete}
+            />
+            {/* NOTE: Since the form is auto-serialized this is how to add a date to the payload body */}
+            <input
+              style={{ display: 'none' }}
+              id="date"
+              name="date"
+              defaultValue={new Date().toISOString()}
             />
           </RemoteForm>
         </ConstrainWidth>
