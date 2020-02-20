@@ -17,7 +17,7 @@ import { COURSE_ACCESS_LEVEL, UserCourseAccessMap } from "src/types/dto.js";
  * ============================================================================
  */
 
-export class ContentUtilityClass {
+class ContentUtilityClass {
   private courses: CourseList;
   private courseIdSet: Set<string>;
   private challengeIdSet: Set<string>;
@@ -180,6 +180,8 @@ export class ContentUtilityClass {
  */
 const courseList = [FullstackTypeScript];
 
-const contentUtility = new ContentUtilityClass(courseList as CourseList);
+const ContentUtility = new ContentUtilityClass(courseList as CourseList);
 
-export default contentUtility;
+export { ContentUtilityClass };
+
+export default ContentUtility;

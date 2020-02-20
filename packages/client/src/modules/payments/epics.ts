@@ -39,7 +39,7 @@ const coursePaymentInitializeEpic: EpicSignature = action$ => {
     action$.pipe(filter(isActionOf(Actions.fetchNavigationSkeletonSuccess))),
     action$.pipe(filter(isActionOf(Actions.storeAccessTokenSuccess))),
   ).pipe(
-    /* Wtf: types!? */
+    /* Wtf: types!? I cannot correctly type the result of combineLatest... */
     mergeMap(([skeletonAction, initAction]: any) => {
       if (initAction.payload.accessToken) {
         const skeletons: CourseSkeletonList = skeletonAction.payload;
