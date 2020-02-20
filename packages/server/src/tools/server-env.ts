@@ -5,12 +5,12 @@ import getenv from "getenv";
  * ============================================================================
  */
 
-/* Services: */
+// Services
 const CLIENT_URL = getenv.string("CLIENT_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
 const HTTPS = getenv.bool("HTTPS", false);
 
-/* Auth: */
+// Auth
 const JWT_SECRET = getenv.string("JWT_SECRET");
 const FACEBOOK_CLIENT_ID = getenv.string("FACEBOOK_CLIENT_ID");
 const FACEBOOK_CLIENT_SECRET = getenv.string("FACEBOOK_CLIENT_SECRET");
@@ -31,9 +31,12 @@ const GOOGLE_PROFILE_URL = getenv.string("GOOGLE_PROFILE_URL", "");
 const GOOGLE_TOKEN_URL = getenv.string("GOOGLE_TOKEN_URL", "");
 const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 
-/* Slack: */
+// Slack
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
+
+// Sentry
+const SENTRY_DSN = getenv.string("SENTRY_DSN");
 
 const ENV = {
   HTTPS,
@@ -57,6 +60,7 @@ const ENV = {
   GOOGLE_AUTHORIZATION_URL,
   SLACK_API_TOKEN,
   SLACK_ADMIN_IDS,
+  SENTRY_DSN,
 };
 
 /** ===========================================================================
