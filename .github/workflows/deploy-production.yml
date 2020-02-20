@@ -28,6 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      # Setup Node
       - name: Setup NodeJS Environment
         uses: actions/setup-node@v1
         with:
@@ -53,7 +54,7 @@ jobs:
       - name: Run Cypress tests
         run: yarn cypress
 
-      # Deploy client app on Netlify
+      # Deploy client workspace on Netlify (no builds occur on Netlify)
       - run:
         name: Deploy to Netlify
         run: npx netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --message "Pairwise Client Deployed, commit $(git rev-parse --short HEAD)"
@@ -70,7 +71,7 @@ jobs:
         run: |
           gcloud config set project $CLOUD_RUN_PROJECT_ID
 
-      # Build the image locally using Docker
+      # Build the image locally using Docker (instead of using Google Cloud Build)
       - name: Build
         run: |
           docker build -t pairwise-production --tag gcr.io/$PROJECT-ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA -f packages/server/Dockerfile .
@@ -83,7 +84,7 @@ jobs:
       - name: Push the image
         run: docker push gcr.io/$PROJECT-ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
 
-        # Deploy image to Cloud Run
+        # Deploy the image to Cloud Run
       - name: Deploy
         run: |
           gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
