@@ -14,9 +14,13 @@ on:
 # Environment variables available to all jobs and steps in this workflow
 env:
   CI: true
-  PROJECT_ID: ${{ secrets.RUN_PROJECT }}
   RUN_REGION: us-central1
   SERVICE_NAME: pairwise-production
+  CLOUD_RUN_PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_WORKSPACE_AUTH_TOKEN }}
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_WORKSPACE_SITE_ID }}
+  GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+  GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
 
 jobs:
   deploy-production:
@@ -49,17 +53,22 @@ jobs:
       - name: Run Cypress tests
         run: yarn cypress
 
+      # Deploy client app on Netlify
+      - run:
+        name: Deploy to Netlify
+        command: npx netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --message "Pairwise Client Deployed, commit $(git rev-parse --short HEAD)"
+
       # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: "275.0.0"
-          service_account_email: ${{ secrets.SA_EMAIL }}
-          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          service_account_email: $GOOGLE_SERVICE_ACCOUNT_EMAIL
+          service_account_key: $GOOGLE_SERVICE_ACCOUNT_KEY
 
       # Configure gcloud CLI
       - name: gcloud Set up
         run: |
-          gcloud config set project $PROJECT_ID
+          gcloud config set project $CLOUD_RUN_PROJECT_ID
 
       # Build the image locally using Docker
       - name: Build
@@ -79,5 +88,5 @@ jobs:
         run: |
           gcloud run deploy $SERVICE_NAME \
             --region $RUN_REGION \
-            --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
+            --image gcr.io/$CLOUD_RUN_PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
             --platform managed
