@@ -52,6 +52,9 @@
     "cypress": "docker-compose -f packages/cypress/docker-compose.yml up --abort-on-container-exit",
     "test:cypress": "cd packages/cypress && yarn cypress:ci"
   },
+  "resolutions": {
+    "minipass": "2.7.0"
+  },
   "workspaces": [
     "packages/*"
   ]

@@ -15,7 +15,7 @@ import ENV from "./tools/server-env";
  * ============================================================================
  */
 
-const PORT = 9000;
+const PORT = ENV.PORT;
 
 /* Read https certificates: */
 const KEY = path.join(__dirname + "/../ssl/pairwise.key");

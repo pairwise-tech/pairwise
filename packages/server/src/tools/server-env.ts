@@ -5,6 +5,8 @@ import getenv from "getenv";
  * ============================================================================
  */
 
+const PORT = getenv.int("PORT", 9000);
+
 /* Services: */
 const CLIENT_URL = getenv.string("CLIENT_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
@@ -32,6 +34,7 @@ const GOOGLE_TOKEN_URL = getenv.string("GOOGLE_TOKEN_URL", "");
 const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 
 const ENV = {
+  PORT,
   HTTPS,
   CLIENT_URL,
   SERVER_HOST_URL,
