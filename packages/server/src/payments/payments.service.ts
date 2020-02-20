@@ -17,10 +17,10 @@ import {
 } from "src/tools/validation";
 import ENV from "src/tools/server-env";
 import {
-  contentUtility,
-  CourseMetadata,
   StripeStartCheckoutSuccessResponse,
   UserProfile,
+  ContentUtility,
+  CourseMetadata,
 } from "@pairwise/common";
 import { UserService } from "src/user/user.service";
 
@@ -76,7 +76,7 @@ export class PaymentsService {
 
   // Creates a payment intent using Stripe
   async handleCreatePaymentIntent(requestUser: RequestUser, courseId: string) {
-    const courseMetadata = contentUtility.getCourseMetadata(courseId);
+    const courseMetadata = ContentUtility.getCourseMetadata(courseId);
     if (!courseMetadata) {
       throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     } else {

@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { contentUtility, ICodeBlobDto, CodeBlobBulk } from "@pairwise/common";
+import { ContentUtility, ICodeBlobDto, CodeBlobBulk } from "@pairwise/common";
 import { CodeBlob } from "./blob.entity";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { validateCodeBlob } from "src/tools/validation";
@@ -23,7 +23,7 @@ export class BlobService {
 
   async fetchUserCodeBlob(user: RequestUser, challengeId: string) {
     /* Verify the challenge id is valid */
-    if (!contentUtility.challengeIdIsValid(challengeId)) {
+    if (!ContentUtility.challengeIdIsValid(challengeId)) {
       throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
     }
 

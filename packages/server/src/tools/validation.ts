@@ -1,7 +1,7 @@
 import {
   ICodeBlobDto,
   BlobTypeSet,
-  contentUtility,
+  ContentUtility,
   assertUnreachable,
   UserUpdateOptions,
   Result,
@@ -47,7 +47,7 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
     throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
   }
 
-  if (!contentUtility.challengeIdIsValid(blob.challengeId)) {
+  if (!ContentUtility.challengeIdIsValid(blob.challengeId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
   }
 
@@ -103,10 +103,10 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
  */
 export const validateChallengeProgressDto = (progressDto: ProgressDto) => {
   const { courseId, challengeId } = progressDto;
-  if (!contentUtility.courseIdIsValid(courseId)) {
+  if (!ContentUtility.courseIdIsValid(courseId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
   } else if (
-    !contentUtility.challengeIdInCourseIsValid(courseId, challengeId)
+    !ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)
   ) {
     throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
   }
@@ -208,7 +208,7 @@ const sanitizeObject = (obj: any) => {
 export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
   const { progress, courseId } = entity;
 
-  if (!contentUtility.courseIdIsValid(courseId)) {
+  if (!ContentUtility.courseIdIsValid(courseId)) {
     throw new Error(ERROR_CODES.INVALID_COURSE_ID);
   }
 
@@ -217,7 +217,7 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
       /**
        * Validate the progress item:
        */
-      if (contentUtility.challengeIdInCourseIsValid(courseId, challengeId)) {
+      if (ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)) {
         if (typeof status.complete === "boolean") {
           return {
             ...sanitized,
@@ -254,7 +254,7 @@ export const validatePaymentRequest = (
   }
 
   // The course id must be valid
-  if (!contentUtility.courseIdIsValid(courseId)) {
+  if (!ContentUtility.courseIdIsValid(courseId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
   }
 
@@ -279,7 +279,7 @@ export const validateRefundRequest = (
   }
 
   // The course id must be valid
-  if (!contentUtility.courseIdIsValid(courseId)) {
+  if (!ContentUtility.courseIdIsValid(courseId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
   }
 
@@ -299,7 +299,7 @@ export const validateRefundRequest = (
  * Validating the feedback dto.
  */
 export const validateFeedbackDto = (feedbackDto: IFeedbackDto) => {
-  if (!contentUtility.challengeIdIsValid(feedbackDto.challengeId)) {
+  if (!ContentUtility.challengeIdIsValid(feedbackDto.challengeId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
   } else if (!feedbackTypeSet.has(feedbackDto.type)) {
     throw new BadRequestException(ERROR_CODES.INVALID_FEEDBACK_TYPE);
