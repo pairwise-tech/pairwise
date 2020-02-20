@@ -108,7 +108,7 @@ const Main = () => {
           size="large"
           color="default"
           onClick={() => {
-            window.open('https://app.pairwise.tech', '_blank');
+            window.open('https://app.pairwise.tech/workspace/', '_blank');
           }}
         >
           Try it out

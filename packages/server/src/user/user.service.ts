@@ -14,6 +14,7 @@ import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES } from "src/tools/constants";
+import { SlackService } from "src/slack/slack.service";
 
 export interface GenericUserProfile {
   email: string;
@@ -33,6 +34,8 @@ export class UserService {
 
     @InjectRepository(Payments)
     private readonly paymentsRepository: Repository<Payments>,
+
+    private readonly slackService: SlackService,
   ) {}
 
   async findUserByEmail(email: string) {
@@ -93,6 +96,10 @@ export class UserService {
     const msg = accountCreated ? "New account created" : "Account login";
     console.log(`${msg} for email: ${email}`);
 
+    this.slackService.postUserAccountCreationMessage({
+      profile,
+      accountCreated,
+    });
     return { user, accountCreated };
   }
 
