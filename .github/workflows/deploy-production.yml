@@ -56,8 +56,7 @@ jobs:
         run: yarn cypress
 
       # Deploy client workspace on Netlify (no builds occur on Netlify)
-      - run:
-        name: Deploy to Netlify
+      - name: Deploy to Netlify
         run: npx netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --message "Pairwise Client Deployed, commit $(git rev-parse --short HEAD)"
 
       # Setup gcloud CLI
@@ -104,7 +103,7 @@ jobs:
           channel: git
           status: SUCCESS
           color: good
-      
+
       # Send Slack failure notification
       - name: Notify Slack for deployment failure
         if: failure()
