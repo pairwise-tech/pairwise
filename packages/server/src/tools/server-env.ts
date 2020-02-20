@@ -36,7 +36,7 @@ const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
 
 // Sentry
-const SENTRY_DSN = getenv.string("SENTRY_DSN");
+const SENTRY_DSN = getenv.string("SENTRY_DSN", "");
 
 const ENV = {
   HTTPS,
