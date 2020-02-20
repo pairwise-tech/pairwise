@@ -15,7 +15,7 @@ describe("AppController", () => {
   });
 
   describe("root", () => {
-    it(`should return "Hello from the Nest Application!"`, () => {
+    it(`should return "This is Pairwise 😎"`, () => {
       expect(appController.getIndex()).toBe("This is Pairwise 😎");
     });
   });
