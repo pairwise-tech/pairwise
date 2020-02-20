@@ -23,7 +23,6 @@
     "server:dev": "cd packages/server && yarn start:dev",
     "server:https": "cd packages/server && yarn start:https",
     "server:build": "cd packages/server && yarn build",
-    "server:run": "yarn db:migration && yarn server:prod",
     "server:prod": "cd packages/server && yarn start:prod",
     "www": "cd packages/www && yarn start",
     "www:dev": "cd packages/www && yarn start:dev",
@@ -51,6 +50,9 @@
     "test:e2e": "cd packages/e2e && HOST=http://server:9000 yarn test:e2e",
     "cypress": "docker-compose -f packages/cypress/docker-compose.yml up --abort-on-container-exit",
     "test:cypress": "cd packages/cypress && yarn cypress:ci"
+  },
+  "resolutions": {
+    "minipass": "2.7.0"
   },
   "workspaces": [
     "packages/*"

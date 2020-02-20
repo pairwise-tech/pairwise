@@ -16,7 +16,7 @@ import * as Sentry from "@sentry/node";
  * ============================================================================
  */
 
-const PORT = 9000;
+const PORT = ENV.PORT;
 
 /* Read https certificates: */
 const KEY = path.join(__dirname + "/../ssl/pairwise.key");

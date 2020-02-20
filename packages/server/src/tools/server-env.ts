@@ -6,6 +6,9 @@ import getenv from "getenv";
  */
 
 // Services
+const PORT = getenv.int("PORT", 9000);
+
+/* Services: */
 const CLIENT_URL = getenv.string("CLIENT_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
 const HTTPS = getenv.bool("HTTPS", false);
@@ -39,6 +42,7 @@ const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
 const SENTRY_DSN = getenv.string("SENTRY_DSN", "");
 
 const ENV = {
+  PORT,
   HTTPS,
   CLIENT_URL,
   SERVER_HOST_URL,
