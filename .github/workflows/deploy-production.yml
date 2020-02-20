@@ -102,7 +102,7 @@ jobs:
       - name: Notify Slack for deployment success
         if: success()
         env:
-          SLACK_BOT_TOKEN: $SLACK_STATUS_BOT_ACCESS_TOKEN
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
         uses: voxmedia/github-action-slack-notify-build@v1
         with:
           channel: git
@@ -113,7 +113,7 @@ jobs:
       - name: Notify Slack for deployment failure
         if: failure()
         env:
-          SLACK_BOT_TOKEN: $SLACK_STATUS_BOT_ACCESS_TOKEN
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
         uses: voxmedia/github-action-slack-notify-build@v1
         with:
           channel: git
