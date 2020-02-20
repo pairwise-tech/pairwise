@@ -79,8 +79,7 @@ $ yarn build
 # Start the database
 $ yarn db
 
-# Run server setup (environment variables and database migrations)
-$ yarn server:setup
+# Run database migrations
 $ yarn db:setup
 ```
 
