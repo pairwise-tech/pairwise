@@ -42,7 +42,7 @@ services:
 
   e2e:
     image: pairwise-runtime
-    command: dockerize -wait tcp://db:5432 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 20s yarn test:e2e
+    command: dockerize -wait tcp://db:5432 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 10s yarn test:e2e
     depends_on:
       - db
       - server
