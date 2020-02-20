@@ -55,10 +55,6 @@ jobs:
       - name: Run Cypress tests
         run: yarn cypress
 
-      # Deploy client workspace on Netlify (no builds occur on Netlify)
-      - name: Deploy to Netlify
-        run: npx netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --message "Pairwise Client Deployed, commit $(git rev-parse --short HEAD)"
-
       # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
@@ -67,12 +63,12 @@ jobs:
           service_account_key: $GOOGLE_SERVICE_ACCOUNT_KEY
 
       # Configure gcloud CLI
-      - name: gcloud Set up
+      - name: Setup gcloud CLI
         run: |
           gcloud config set project $CLOUD_RUN_PROJECT_ID
 
       # Build the image locally using Docker (instead of using Google Cloud Build)
-      - name: Build
+      - name: Build the production server image
         run: |
           docker build -t pairwise-production --tag gcr.io/$PROJECT-ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA -f packages/server/Dockerfile .
 
@@ -81,16 +77,20 @@ jobs:
         run: gcloud auth configure-docker
 
       # Push the image to gcloud
-      - name: Push the image
+      - name: Push the image to GCR
         run: docker push gcr.io/$PROJECT-ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
 
         # Deploy the image to Cloud Run
-      - name: Deploy
+      - name: Deploy to Cloud Run
         run: |
           gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
             --region $RUN_REGION \
             --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
             --platform managed
+
+      # Deploy client workspace on Netlify (no builds occur on Netlify)
+      # - name: Deploy Workspace to Netlify
+      #   run: npx netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --message "Pairwise Client Deployed, commit $(git rev-parse --short HEAD)"
 
       # Send Slack success notification
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
