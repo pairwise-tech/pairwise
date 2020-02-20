@@ -55,6 +55,9 @@ jobs:
       # - name: Run Cypress tests
       #   run: yarn cypress
 
+      - name: Install python-openssl
+        run: sudo apt-get install -y python-openssl -o=Dpkg::Use-Pty=0
+
       # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
