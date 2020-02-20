@@ -8,6 +8,14 @@
  * ============================================================================
  */
 
+export interface CourseBase {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export type CourseMetadata = CourseBase;
+
 export type CourseList = Course[];
 
 export type CHALLENGE_TYPE =
@@ -20,10 +28,7 @@ export type CHALLENGE_TYPE =
   | "guided-project"
   | "special-topic";
 
-export interface Course {
-  id: string;
-  title: string;
-  description: string;
+export interface Course extends CourseBase {
   modules: ModuleList;
 }
 
@@ -67,10 +72,7 @@ export interface Challenge {
 
 export type CourseSkeletonList = CourseSkeleton[];
 
-export interface CourseSkeleton {
-  id: string;
-  title: string;
-  description: string;
+export interface CourseSkeleton extends CourseBase {
   modules: ModuleSkeletonList;
 }
 
@@ -79,6 +81,7 @@ export type ModuleSkeletonList = ModuleSkeleton[];
 export interface ModuleSkeleton {
   id: string;
   title: string;
+  free: boolean;
   userCanAccess: boolean;
   challenges: ChallengeSkeletonList;
 }

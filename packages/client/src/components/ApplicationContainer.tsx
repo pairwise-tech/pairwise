@@ -25,8 +25,9 @@ import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
 } from "./ChallengeControls";
-import PurchaseCourseModal from "./PurchaseCourseModal";
+import PaymentCourseModal from "./PaymentIntentModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
+import PaymentSuccessModal from "./PaymentSuccessModal";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -47,6 +48,16 @@ const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
 interface IState {
   hasHandledRedirect: boolean;
 }
+
+// All the application modal components:
+const Modals = () => (
+  <>
+    <SingleSignOnModal />
+    <PaymentCourseModal />
+    <PaymentSuccessModal />
+    <FeedbackModal />
+  </>
+);
 
 /** ===========================================================================
  * ApplicationContainer
@@ -73,16 +84,12 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    this.props.initializeApp();
-    this.handleInitializeUserSession();
-  }
-
-  handleInitializeUserSession = () => {
-    this.props.initializeAccessToken({
-      initialWindowLocationSearch: window.location.search,
-    });
+    // We have to pass location in here to correctly capture the original
+    // url to send it to the epics before React Router takes over and starts
+    // to redirect the app.
+    this.props.initializeApp({ location: window.location });
     this.setState({ hasHandledRedirect: true });
-  };
+  }
 
   render(): Nullable<JSX.Element> {
     if (!this.state.hasHandledRedirect) {
@@ -101,11 +108,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     return (
       <React.Fragment>
         <MobileView />
+        <Modals />
         {this.renderLoadingOverlay()}
-        <SingleSignOnModal />
-        <PurchaseCourseModal />
         {CODEPRESS && <AdminKeyboardShortcuts />}
-        <FeedbackModal />
         <NavigationOverlay overlayVisible={overlayVisible} />
         <Header>
           <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
@@ -185,9 +190,9 @@ class ApplicationContainer extends React.Component<IProps, IState> {
                       Account
                     </Link>
                     <Link
+                      to="/logout"
                       id="logout-link"
                       onClick={this.handleLogout}
-                      to="/logout"
                     >
                       Logout
                     </Link>
@@ -497,13 +502,12 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
-  logoutUser: Modules.actions.app.logoutUser,
+  logoutUser: Modules.actions.auth.logoutUser,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   updateChallenge: Modules.actions.challenges.updateChallenge,
-  initializeAccessToken: Modules.actions.auth.initializeAccessToken,
   setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
 };
 

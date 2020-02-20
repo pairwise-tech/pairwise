@@ -59,6 +59,7 @@ const NextChallengeButton = ({
       icon="chevron-right"
       aria-label="Next Challenge"
       beforeText="Next Challenge"
+      id="workspace-next-challenge-button"
       to={`/workspace/${challengeId}`}
       {...props}
     />

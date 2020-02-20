@@ -19,6 +19,7 @@ import { SANDBOX_ID } from "./constants";
 import { Location } from "history";
 import { IconName } from "@blueprintjs/core";
 import { InverseChallengeMapping } from "modules/challenges/types";
+import { ParsedQuery } from "query-string";
 
 /** ===========================================================================
  * Utils
@@ -338,4 +339,75 @@ export const deriveIdsFromCourse = (
     moduleId,
     challengeId,
   };
+};
+
+// Definition of specific types to identify different states for the
+// initial app load:
+export enum APP_INITIALIZATION_TYPE {
+  DEFAULT = "DEFAULT",
+
+  // Special types:
+  SIGN_IN = "SIGN_IN",
+  ACCOUNT_CREATED = "ACCOUNT_CREATED",
+  PAYMENT_SUCCESS = "PAYMENT_SUCCESS",
+  PAYMENT_CANCELLED = "PAYMENT_CANCELLED",
+}
+
+// Check a list of param keys exists in the parsed query params from a url
+const checkParamsExist = (params: ParsedQuery<string>, keys: string[]) => {
+  for (const key of keys) {
+    if (params[key] === undefined) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+// Parse the initial url and params which may have loaded the app and
+// return the APP_INITIALIZATION_TYPE enum which specifically
+// categorizes the app initialization type. This is then used to trigger
+// other events in the app based on the initialization state.
+export const parseInitialUrlToInitializationType = (
+  path: string,
+  params: ParsedQuery<string>,
+): APP_INITIALIZATION_TYPE => {
+  // A user authenticated:
+  if (
+    path === "/authenticated" &&
+    checkParamsExist(params, ["accessToken", "accountCreated"])
+  ) {
+    if (params.accountCreated === "true") {
+      return APP_INITIALIZATION_TYPE.ACCOUNT_CREATED;
+    } else {
+      return APP_INITIALIZATION_TYPE.SIGN_IN;
+    }
+  }
+
+  // A user returned from the checkout flow after cancelling:
+  if (path === "/payment-cancelled") {
+    return APP_INITIALIZATION_TYPE.PAYMENT_CANCELLED;
+  }
+
+  // A user returned from the checkout flow after payment success:
+  if (path === "/payment-success" && checkParamsExist(params, ["courseId"])) {
+    return APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS;
+  }
+
+  // Default category:
+  return APP_INITIALIZATION_TYPE.DEFAULT;
+};
+
+// Format a date, e.g. 2020-02-15T13:10:18.920Z -> Saturday, February 15, 2020
+export const formatDate = (rawDate: Date) => {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  const date = new Date(rawDate);
+  const formatted = date.toLocaleDateString("en-US", options);
+  return formatted;
 };

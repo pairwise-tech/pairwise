@@ -1,23 +1,23 @@
 import { History } from "history";
 import { combineReducers } from "redux";
 import { combineEpics, Epic } from "redux-observable";
+import { catchError } from "rxjs/operators";
+import API from "./api";
+import toaster from "tools/toast-utils";
 
 /** ===========================================================================
  * Import Redux Modules
  * ============================================================================
  */
 
-import API from "./api";
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
-import Purchase, { PurchaseActionTypes, PurchaseState } from "./purchase";
+import Payments, { PaymentsActionTypes, PaymentsState } from "./payments";
 import Challenges, {
   ChallengesActionTypes,
   ChallengesState,
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
-import { IToaster } from "@blueprintjs/core";
-import { catchError } from "rxjs/operators";
 import Feedback, { FeedbackActionTypes, FeedbackState } from "./feedback";
 
 /** ===========================================================================
@@ -30,7 +30,7 @@ export type ReduxActionTypes =
   | ChallengesActionTypes
   | UserActionTypes
   | AuthActionTypes
-  | PurchaseActionTypes
+  | PaymentsActionTypes
   | FeedbackActionTypes;
 
 export const selectors = {
@@ -38,7 +38,7 @@ export const selectors = {
   auth: Auth.selector,
   user: User.selector,
   challenges: Challenges.selector,
-  purchase: Purchase.selector,
+  payments: Payments.selector,
   feedback: Feedback.selector,
 };
 
@@ -47,7 +47,7 @@ export const actions = {
   auth: Auth.actions,
   user: User.actions,
   challenges: Challenges.actions,
-  purchase: Purchase.actions,
+  payments: Payments.actions,
   feedback: Feedback.actions,
 };
 
@@ -66,7 +66,7 @@ export interface ReduxStoreState {
   auth: AuthState;
   user: UserState;
   challenges: ChallengesState;
-  purchase: PurchaseState;
+  payments: PaymentsState;
   feedback: FeedbackState;
 }
 
@@ -75,7 +75,7 @@ const rootReducer = combineReducers({
   auth: Auth.store,
   user: User.store,
   challenges: Challenges.store,
-  purchase: Purchase.store,
+  payments: Payments.store,
   feedback: Feedback.store,
 });
 
@@ -87,7 +87,7 @@ const rootReducer = combineReducers({
 export interface EpicDependencies {
   router: History<any>;
   api: typeof API;
-  toaster: IToaster;
+  toaster: typeof toaster;
   selectors: typeof selectors;
 }
 
@@ -103,7 +103,7 @@ const combinedEpic = combineEpics(
   User.epics,
   Auth.epics,
   Challenges.epics,
-  Purchase.epics,
+  Payments.epics,
   Feedback.epics,
 );
 

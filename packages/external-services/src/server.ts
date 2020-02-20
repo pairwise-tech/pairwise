@@ -4,18 +4,13 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import mockAuth from "./mock-auth";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { purchaseCourseForUserByAdmin } from "./admin-util";
+import { PORT, SERVER } from "./config";
 
 /** ===========================================================================
  * Setup
  * ============================================================================
  */
-
-const PORT = 7000;
-
-const SERVER = process.env.SERVER_URL || "http://127.0.0.1:9000";
 
 const app = express();
 
@@ -101,6 +96,15 @@ app.post("/google/token", (req, res) => {
 app.get("/google/profile", (req, res) => {
   const profile = mockAuth.generateNewGoogleProfile();
   res.json(profile);
+});
+
+/**
+ * Admin API to handle purchasing a course for a user.
+ */
+app.post("/admin-purchase-course", async (req, res) => {
+  const { email } = req.body;
+  const result = await purchaseCourseForUserByAdmin(email);
+  res.send(result);
 });
 
 /** ===========================================================================

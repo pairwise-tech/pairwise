@@ -29,7 +29,7 @@ export class AuthController {
     } = await this.authService.handleFacebookSignin(req.user);
 
     const params = this.getQueryParams(token, accountCreated);
-    return res.redirect(`${ENV.CLIENT_URL}?${params}`);
+    return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
   }
 
   @UseGuards(AuthGuard("github"))
@@ -49,7 +49,7 @@ export class AuthController {
     );
 
     const params = this.getQueryParams(token, accountCreated);
-    return res.redirect(`${ENV.CLIENT_URL}?${params}`);
+    return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
   }
 
   @UseGuards(AuthGuard("google"))
@@ -69,7 +69,7 @@ export class AuthController {
     );
 
     const params = this.getQueryParams(token, accountCreated);
-    return res.redirect(`${ENV.CLIENT_URL}?${params}`);
+    return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
   }
 
   getQueryParams(accessToken: string, accountCreated: boolean) {

@@ -4,14 +4,14 @@ import * as selector from "./selectors";
 import store, { State } from "./store";
 import { ActionType } from "typesafe-actions";
 
-const purchase = {
+const payments = {
   actions,
   epics,
   store,
   selector,
 };
 
-export type PurchaseState = State;
-export type PurchaseActionTypes = ActionType<typeof actions>;
+export type PaymentsState = State;
+export type PaymentsActionTypes = ActionType<typeof actions>;
 
-export default purchase;
+export default payments;
