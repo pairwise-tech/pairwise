@@ -13,7 +13,7 @@
     "start:dev": "nest start --watch",
     "start:https": "HTTPS=true nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "yarn migration:run && yarn start:prod",
     "prettier": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "tslint": "tslint --project tsconfig.json -c tslint.json",
