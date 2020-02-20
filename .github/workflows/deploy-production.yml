@@ -58,9 +58,10 @@ jobs:
       # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          version: "275.0.0"
+          version: "278.0.0"
           service_account_email: $GOOGLE_SERVICE_ACCOUNT_EMAIL
           service_account_key: $GOOGLE_SERVICE_ACCOUNT_KEY
+        run: gcloud info
 
       # Configure gcloud CLI
       - name: Setup gcloud CLI
