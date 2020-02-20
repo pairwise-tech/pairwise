@@ -1,7 +1,7 @@
 import ENV from "../tools/server-env";
 import { WebClient, ErrorCode, WebAPICallResult } from "@slack/web-api";
 import { Injectable, Optional } from "@nestjs/common";
-import { IFeedbackDto, ContentUtility } from "@pairwise/common";
+import { IFeedbackDto, challengeUtilityClass } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { GenericUserProfile } from "src/user/user.service";
 
@@ -124,7 +124,7 @@ export class SlackService {
 
   /* Ugly! But pretty in Slack :-) */
   private formatFeedbackMessageUtil(feedback: IFeedbackDto, user: RequestUser) {
-    const ctx = ContentUtility.deriveChallengeContextFromId(
+    const ctx = challengeUtilityClass.deriveChallengeContextFromId(
       feedback.challengeId,
     );
 
