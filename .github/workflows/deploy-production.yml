@@ -1,0 +1,117 @@
+# This workflow deploys the production server to Google Cloud Run.
+# Reference docs:
+# https://github.com/GoogleCloudPlatform/github-actions/blob/master/example-workflows/cloud-run/.github/workflows/cloud-run.yml
+# https://cloud.google.com/run/docs/building/containers
+
+name: Deploy Production
+
+# Only deploy on commits to the master branch
+on:
+  push:
+    branches:
+      - master
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  CI: true
+  RUN_REGION: us-central1
+  CLOUD_RUN_SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE_NAME }}
+  CLOUD_RUN_PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_WORKSPACE_AUTH_TOKEN }}
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_WORKSPACE_SITE_ID }}
+  GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+  GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+  SLACK_STATUS_BOT_ACCESS_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      # Setup Node
+      - name: Setup NodeJS Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+
+      # Install the application dependencies
+      - name: Install dependencies
+        run: yarn docker:dependencies
+
+      # Build the application
+      - name: Build application
+        run: yarn docker:build
+
+      # Run all package unit tests
+      - name: Run static and unit tests
+        run: yarn docker:test
+
+      # Run e2e tests
+      - name: Run e2e tests
+        run: yarn e2e
+
+      # Run Cypress tests
+      - name: Run Cypress tests
+        run: yarn cypress
+
+      # Deploy client workspace on Netlify (no builds occur on Netlify)
+      - run:
+        name: Deploy to Netlify
+        run: npx netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --message "Pairwise Client Deployed, commit $(git rev-parse --short HEAD)"
+
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: "275.0.0"
+          service_account_email: $GOOGLE_SERVICE_ACCOUNT_EMAIL
+          service_account_key: $GOOGLE_SERVICE_ACCOUNT_KEY
+
+      # Configure gcloud CLI
+      - name: gcloud Set up
+        run: |
+          gcloud config set project $CLOUD_RUN_PROJECT_ID
+
+      # Build the image locally using Docker (instead of using Google Cloud Build)
+      - name: Build
+        run: |
+          docker build -t pairwise-production --tag gcr.io/$PROJECT-ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA -f packages/server/Dockerfile .
+
+      # Configure Docker to use gcloud
+      - name: Configure Docker with gcloud
+        run: gcloud auth configure-docker
+
+      # Push the image to gcloud
+      - name: Push the image
+        run: docker push gcr.io/$PROJECT-ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
+
+        # Deploy the image to Cloud Run
+      - name: Deploy
+        run: |
+          gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
+            --region $RUN_REGION \
+            --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
+            --platform managed
+
+      # Send Slack success notification
+      # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
+      - name: Notify Slack for deployment success
+        if: success()
+        env:
+          SLACK_BOT_TOKEN: $SLACK_STATUS_BOT_ACCESS_TOKEN
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: git
+          status: SUCCESS
+          color: good
+      
+      # Send Slack failure notification
+      - name: Notify Slack for deployment failure
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: $SLACK_STATUS_BOT_ACCESS_TOKEN
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: git
+          status: FAILED
+          color: danger

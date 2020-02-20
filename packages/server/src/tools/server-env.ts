@@ -5,6 +5,8 @@ import getenv from "getenv";
  * ============================================================================
  */
 
+const PORT = getenv.int("PORT", 9000);
+
 /* Services: */
 const CLIENT_URL = getenv.string("CLIENT_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
@@ -36,6 +38,7 @@ const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
 
 const ENV = {
+  PORT,
   HTTPS,
   CLIENT_URL,
   SERVER_HOST_URL,
