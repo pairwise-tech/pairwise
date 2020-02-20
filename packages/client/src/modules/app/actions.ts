@@ -1,5 +1,7 @@
 import { createAction } from "typesafe-actions";
-import { Location } from "history";
+import { Location as HistoryLocation } from "history";
+import { ParsedQuery } from "query-string";
+import { APP_INITIALIZATION_TYPE } from "tools/utils";
 
 /** ===========================================================================
  * Action Types
@@ -10,8 +12,8 @@ enum ActionTypesEnum {
   EMPTY_ACTION = "EMPTY_ACTION",
   INITIALIZE_APP = "INITIALIZE_APP",
   INITIALIZE_APP_SUCCESS = "INITIALIZE_APP_SUCCESS",
+  CAPTURE_APP_INITIALIZATION_URL = "CAPTURE_APP_INITIALIZATION_URL",
   TOGGLE_PAGE_SCROLL_LOCK = "TOGGLE_PAGE_SCROLL_LOCK",
-  LOGOUT = "LOGOUT",
   LOCATION_CHANGE = "LOCATION_CHANGE",
 }
 
@@ -31,13 +33,21 @@ enum ActionTypesEnum {
 export const empty = createAction(ActionTypesEnum.EMPTY_ACTION)<string>();
 
 export const locationChange = createAction(ActionTypesEnum.LOCATION_CHANGE)<
-  Location
+  HistoryLocation
 >();
 
-export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
-
-export const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)();
+export const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)<{
+  location: Location;
+}>();
 
 export const initializeAppSuccess = createAction(
   ActionTypesEnum.INITIALIZE_APP_SUCCESS,
 )<{ accessToken: string }>();
+
+export const captureAppInitializationUrl = createAction(
+  ActionTypesEnum.CAPTURE_APP_INITIALIZATION_URL,
+)<{
+  location: Location;
+  params: ParsedQuery<string>;
+  appInitializationType: APP_INITIALIZATION_TYPE;
+}>();

@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import { json } from "body-parser";
+import cloneBuffer from "clone-buffer";
 import morgan from "morgan";
 import fs from "fs";
 import path from "path";
@@ -55,6 +57,19 @@ const pairwise = async () => {
   /* Enable validation pipes */
   app.useGlobalPipes(new ValidationPipe());
 
+  app.use(
+    json({
+      verify: (req: any, res, buf, encoding) => {
+        // Important to store rawBody for Stripe signature verification
+        // View this: https://yanndanthu.github.io/2019/07/04/Checking-Stripe-Webhook-Signatures-from-NestJS.html
+        if (req.headers["stripe-signature"] && Buffer.isBuffer(buf)) {
+          req.rawBody = cloneBuffer(buf);
+        }
+        return true;
+      },
+    }),
+  );
+
   /* Enable Swagger documentation */
   const document = SwaggerModule.createDocument(app, swaggerOptions);
   SwaggerModule.setup("api", app, document);
@@ -64,7 +79,7 @@ const pairwise = async () => {
 
   console.log(`\n- NestJS app launched on:    http://localhost:${PORT}/`);
   console.log(`- View Swagger API docs:     http://localhost:${PORT}/api\n`);
-  console.log(`Pairwise launched successfully!\n`);
+  console.log(`Pairwise launched!\n`);
 };
 
 pairwise();

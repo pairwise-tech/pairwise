@@ -11,18 +11,10 @@ const submitUserFeedbackEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(deps.api.submitUserFeedback),
     map(result => {
       if (result.value) {
-        deps.toaster.show({
-          message: "Feedback Submitted Successfully!",
-          intent: "success",
-          icon: "tick",
-        });
+        deps.toaster.success("Feedback Submitted Successfully!");
         return Actions.submitUserFeedbackSuccess();
       } else {
-        deps.toaster.show({
-          message: "Could not submit feedback!",
-          intent: "danger",
-          icon: "error",
-        });
+        deps.toaster.error("Could not submit feedback!");
         return Actions.submitUserFeedbackFailure(result.error);
       }
     }),

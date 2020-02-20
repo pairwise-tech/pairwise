@@ -103,11 +103,7 @@ const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
       }
 
       if (message) {
-        deps.toaster.show({
-          message,
-          intent: "warning",
-          icon: "take-action",
-        });
+        deps.toaster.warn(message, "take-action");
       }
     }),
     ignoreElements(),
@@ -246,21 +242,11 @@ const saveCourse: EpicSignature = (action$, _, deps) => {
     mergeMap(payload => {
       return deps.api.codepressApi.save(payload).pipe(
         map(Actions.saveCourseSuccess),
-        tap(() =>
-          deps.toaster.show({
-            message: "Saved 👍",
-            intent: "success",
-            icon: "tick",
-          }),
-        ),
+        tap(() => deps.toaster.success("Saved 👍")),
         catchError(err =>
           of(Actions.saveCourseFailure(err)).pipe(
             tap(() => {
-              deps.toaster.show({
-                message: "Could not save!",
-                intent: "danger",
-                icon: "error",
-              });
+              deps.toaster.error("Could not save!");
             }),
           ),
         ),

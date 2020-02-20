@@ -7,7 +7,6 @@ import {
   GithubLoginButton,
 } from "react-social-login-buttons";
 import styled from "styled-components/macro";
-
 import Modules, { ReduxStoreState } from "modules/root";
 import * as ENV from "tools/client-env";
 import { composeWithProps } from "tools/utils";
@@ -114,7 +113,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
-  setPurchaseCourseId: Modules.actions.purchase.setPurchaseCourseId,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 

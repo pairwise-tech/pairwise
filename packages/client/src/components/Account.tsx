@@ -7,6 +7,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle, ProfileIcon } from "./Shared";
 import { COLORS } from "tools/constants";
 import { Payment } from "@pairwise/common";
+import { formatDate } from "tools/utils";
 
 /** ===========================================================================
  * Types & Config
@@ -104,7 +105,8 @@ class Account extends React.Component<IProps, IState> {
           />
         )}
         <TextItem>
-          <Bold>Email:</Bold> {!edit && profile.email}
+          <Bold>Email:</Bold>{" "}
+          <span id="user-email">{!edit && profile.email}</span>
         </TextItem>
         {edit && (
           <InputField
@@ -142,34 +144,30 @@ class Account extends React.Component<IProps, IState> {
           </Controls>
         )}
         {payments.length > 0 && (
-          <React.Fragment>
+          <>
             <PageTitle style={{ marginTop: 24 }}>Payments</PageTitle>
             <Text>
               These are your purchased courses. After purchasing a course, you
               will have lifetime access.
             </Text>
             {payments.map(this.renderPaymentDetails)}
-          </React.Fragment>
+          </>
         )}
       </PageContainer>
     );
   }
-  renderPaymentDetails = (payment: Payment) => {
+
+  renderPaymentDetails = (payment: Payment, index: number) => {
     return (
-      <PaymentContainer>
-        <Text>
-          <b>Date Paid:</b>
-          {payment.datePaid}
-        </Text>
-        <Text>
-          <b>Amount Paid:</b>
-          {payment.amountPaid}
-        </Text>
-        <Text>
-          <b>Course:</b>
+      <React.Fragment key={payment.courseId}>
+        <PaymentTitle id={`account-payment-details-${index}`}>
           {this.getCourseTitleFromId(payment.courseId)}
-        </Text>
-      </PaymentContainer>
+        </PaymentTitle>
+        <PaymentDetail>• Duration: Lifetime Access.</PaymentDetail>
+        <PaymentDetail>
+          • Date Paid: {formatDate(payment.datePaid)}
+        </PaymentDetail>
+      </React.Fragment>
     );
   };
 
@@ -223,6 +221,18 @@ const TextItem = styled(Text)`
   color: ${COLORS.TEXT_CONTENT_BRIGHT};
 `;
 
+const PaymentTitle = styled(Text)`
+  font-size: 22px;
+  margin-top: 16px;
+  font-weight: bold;
+  color: ${COLORS.TEXT_CONTENT_BRIGHT};
+`;
+
+const PaymentDetail = styled(Text)`
+  font-size: 12px;
+  color: ${COLORS.TEXT_CONTENT};
+`;
+
 const Bold = styled.b`
   font-weight: bold;
   color: ${COLORS.TEXT_CONTENT};
@@ -237,13 +247,6 @@ const InputField = styled.input`
 
 const Controls = styled.div`
   margin-top: 24px;
-`;
-
-const PaymentContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 12px;
 `;
 
 /** ===========================================================================

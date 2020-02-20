@@ -16,6 +16,7 @@
     "prettier": "prettier --list-different \"src/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\"",
     "start": "node ./dist/server.js",
+    "start:https": "SERVER_URL=https://127.0.0.1:9000 node ./dist/server.js",
     "test": "yarn lint",
     "tslint": "tslint --project tsconfig.json -c tslint.json",
     "tslint:fix": "tslint --project tsconfig.json -c tslint.json --fix"
@@ -34,5 +35,9 @@
     "prettier": "^1.19.1",
     "tslint": "^5.20.1",
     "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "querystring": "^0.2.0",
+    "supertest": "^4.0.2"
   }
 }

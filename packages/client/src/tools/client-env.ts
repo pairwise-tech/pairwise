@@ -17,6 +17,8 @@ export const CODEPRESS_HOST = getenv.string(
   "http://localhost:3001",
 );
 
+export const STRIPE_API_KEY = getenv.string("REACT_APP_STRIPE_API_KEY", "");
+
 export const TEST = NODE_ENV === "test";
 export const DEVELOPMENT = NODE_ENV === "development";
 export const PRODUCTION = NODE_ENV === "production";

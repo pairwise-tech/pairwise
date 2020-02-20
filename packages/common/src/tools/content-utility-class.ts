@@ -1,5 +1,9 @@
 import FullstackTypeScript from "../courses/01_programming_fundamental.json";
-import { CourseList, CourseSkeletonList } from "src/types/courses";
+import {
+  CourseList,
+  CourseSkeletonList,
+  CourseMetadata,
+} from "src/types/courses";
 import { COURSE_ACCESS_LEVEL, UserCourseAccessMap } from "src/types/dto.js";
 
 /** ===========================================================================
@@ -13,7 +17,7 @@ import { COURSE_ACCESS_LEVEL, UserCourseAccessMap } from "src/types/dto.js";
  * ============================================================================
  */
 
-export class ChallengeUtilityClass {
+class ContentUtilityClass {
   private courses: CourseList;
   private courseIdSet: Set<string>;
   private challengeIdSet: Set<string>;
@@ -71,6 +75,7 @@ export class ChallengeUtilityClass {
           return {
             id: courseModule.id,
             title: courseModule.title,
+            free: courseModule.free,
             userCanAccess: courseModule.free,
             challenges: courseModule.challenges.map(challenge => {
               return {
@@ -102,14 +107,20 @@ export class ChallengeUtilityClass {
     }
   };
 
-  getCourseNavigationSkeletons = (courseAccess: UserCourseAccessMap = {}) => {
+  getCourseNavigationSkeletons = (
+    courseAccessMap: UserCourseAccessMap = {},
+  ) => {
     const skeletonsWithAccessInformation = this.courseNavigationSkeletons.map(
       course => {
+        // The user can access all the content in the course if the course
+        // id is included in the provided course access map (which represents
+        // the courses the user has purchased).
+        const canAccessCourse = course.id in courseAccessMap;
         return {
           ...course,
           modules: course.modules.map(courseModule => {
-            const userCanAccess =
-              courseModule.userCanAccess || courseModule.id in courseAccess;
+            const moduleFree = courseModule.free;
+            const userCanAccess = moduleFree || canAccessCourse;
             return {
               ...courseModule,
               userCanAccess,
@@ -126,6 +137,19 @@ export class ChallengeUtilityClass {
     );
 
     return skeletonsWithAccessInformation;
+  };
+
+  getCourseMetadata = (courseId: string): CourseMetadata => {
+    const course = this.courses.find(c => c.id === courseId);
+    if (course) {
+      return {
+        id: course.id,
+        title: course.title,
+        description: course.description,
+      };
+    } else {
+      return null;
+    }
   };
 
   deriveChallengeContextFromId = (challengeId: string) => {
@@ -187,8 +211,8 @@ export class ChallengeUtilityClass {
  */
 const courseList = [FullstackTypeScript];
 
-const challengeUtilityClass = new ChallengeUtilityClass(
-  courseList as CourseList,
-);
+const ContentUtility = new ContentUtilityClass(courseList as CourseList);
 
-export default challengeUtilityClass;
+export { ContentUtilityClass };
+
+export default ContentUtility;

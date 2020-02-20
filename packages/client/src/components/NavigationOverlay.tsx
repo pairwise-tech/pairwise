@@ -378,6 +378,12 @@ class NavigationOverlay extends React.Component<IProps> {
     index: number,
   ) => {
     const { isEditMode, overlayVisible } = this.props;
+
+    // Do not render outside of Codepress
+    if (!isEditMode) {
+      return null;
+    }
+
     return (
       <div style={{ position: "relative" }}>
         <AddNavItemPositionContainer>
@@ -438,7 +444,7 @@ class NavigationOverlay extends React.Component<IProps> {
   ) => {
     if (!userCanAccess) {
       event.preventDefault();
-      this.props.handlePurchaseCourseIntent({ courseId });
+      this.props.handlePaymentCourseIntent({ courseId });
     }
   };
 
@@ -680,8 +686,7 @@ const dispatchProps = {
   setNavigationMapState: ChallengeActions.setNavigationMapState,
   toggleSectionAccordionView: ChallengeActions.toggleSectionAccordionView,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
-  handlePurchaseCourseIntent:
-    Modules.actions.purchase.handlePurchaseCourseIntent,
+  handlePaymentCourseIntent: Modules.actions.payments.handlePaymentCourseIntent,
 };
 
 const mergeProps = (
