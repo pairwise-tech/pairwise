@@ -6,8 +6,7 @@ import morgan from "morgan";
 import * as path from "path";
 import { promisify } from "util";
 
-import { Course } from "@pairwise/common";
-import { ContentUtilityClass } from "@pairwise/common/dist/tools/content-utility-class";
+import { Course, ContentUtilityClass } from "@pairwise/common";
 
 const debug = require("debug")("codepress:app");
 

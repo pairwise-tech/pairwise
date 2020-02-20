@@ -1,5 +1,7 @@
 import FullstackTypeScript from "./courses/01_programming_fundamental.json";
-import contentUtility from "./tools/content-utility-class";
+import ContentUtility, {
+  ContentUtilityClass,
+} from "./tools/content-utility-class";
 
 /**
  * Types
@@ -16,7 +18,7 @@ export * from "./tools/utils";
 /**
  * Content Utility
  */
-export { contentUtility };
+export { ContentUtility, ContentUtilityClass };
 
 /**
  * Courses
