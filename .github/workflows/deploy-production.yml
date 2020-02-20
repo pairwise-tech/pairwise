@@ -88,29 +88,32 @@ jobs:
             --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
             --platform managed
 
-      # Deploy client workspace on Netlify (no builds occur on Netlify)
-      # - name: Deploy Workspace to Netlify
-      #   run: npx netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --message "Pairwise Client Deployed, commit $(git rev-parse --short HEAD)"
+      # Install Netlify CLI
+      - name: Install Netlify CLI
+        run: npm install netlify-cli -g
 
+      # Deploy client workspace on Netlify (no builds occur on Netlify)
+      # (docs: https://github.com/netlify/cli/blob/master/docs/commands/deploy.md)
+      - name: Deploy Workspace to Netlify
+        run: netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --dir packages/client/build --message "Pairwise Client Deployed (commit $(git rev-parse --short HEAD))"
       # Send Slack success notification
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
-      - name: Notify Slack for deployment success
-        if: success()
-        env:
-          SLACK_BOT_TOKEN: $SLACK_STATUS_BOT_ACCESS_TOKEN
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          channel: git
-          status: SUCCESS
-          color: good
-
+      # - name: Notify Slack for deployment success
+      #   if: success()
+      #   env:
+      #     SLACK_BOT_TOKEN: $SLACK_STATUS_BOT_ACCESS_TOKEN
+      #   uses: voxmedia/github-action-slack-notify-build@v1
+      #   with:
+      #     channel: git
+      #     status: SUCCESS
+      #     color: good
       # Send Slack failure notification
-      - name: Notify Slack for deployment failure
-        if: failure()
-        env:
-          SLACK_BOT_TOKEN: $SLACK_STATUS_BOT_ACCESS_TOKEN
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          channel: git
-          status: FAILED
-          color: danger
+      # - name: Notify Slack for deployment failure
+      #   if: failure()
+      #   env:
+      #     SLACK_BOT_TOKEN: $SLACK_STATUS_BOT_ACCESS_TOKEN
+      #   uses: voxmedia/github-action-slack-notify-build@v1
+      #   with:
+      #     channel: git
+      #     status: FAILED
+      #     color: danger
