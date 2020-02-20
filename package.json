@@ -23,7 +23,6 @@
     "server:dev": "cd packages/server && yarn start:dev",
     "server:https": "cd packages/server && yarn start:https",
     "server:build": "cd packages/server && yarn build",
-    "server:run": "yarn db:migration && yarn server:prod",
     "server:prod": "cd packages/server && yarn start:prod",
     "www": "cd packages/www && yarn start",
     "www:dev": "cd packages/www && yarn start:dev",
