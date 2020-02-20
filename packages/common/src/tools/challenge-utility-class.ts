@@ -128,6 +128,37 @@ export class ChallengeUtilityClass {
     return skeletonsWithAccessInformation;
   };
 
+  deriveChallengeContextFromId = (challengeId: string) => {
+    if (!this.challengeIdIsValid(challengeId)) {
+      return null;
+    }
+
+    const courseId = Array.from(this.courseIdSet.values()).find(id =>
+      this.challengeIdInCourseIsValid(id, challengeId),
+    );
+
+    const course = this.courses.find(({ id }) => id === courseId);
+
+    for (const module of course.modules) {
+      for (const challenge of module.challenges) {
+        if (challenge.id === challengeId) {
+          return {
+            challenge,
+            module: {
+              title: module.title,
+              id: module.id,
+              free: module.free,
+            },
+            course: {
+              title: course.title,
+              id: course.id,
+            },
+          };
+        }
+      }
+    }
+  };
+
   courseIdIsValid = (courseId: string) => {
     return this.courseIdSet.has(courseId);
   };

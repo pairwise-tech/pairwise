@@ -1,6 +1,6 @@
 ### Pairwise e2e Test Suite
 
-This package includes end to end test suites for Prototype X which are powered by [Jest](https://jestjs.io/) and [supertest](https://github.com/visionmedia/supertest).
+This package includes end to end test suites for Pairwise which are powered by [Jest](https://jestjs.io/) and [supertest](https://github.com/visionmedia/supertest).
 
 These tests run directly against the Nest Server, so they are end to end tests for the server application and backend APIs. These are run using the command `yarn e2e` from the project root level and use Docker to deploy the various services required for the tests to run.
 
