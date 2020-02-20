@@ -15,7 +15,7 @@ services:
 
   server:
     image: pairwise-runtime
-    command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
+    command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:prod
     environment:
       TYPEORM_HOST: db
       CLIENT_URL: http://client:3000
