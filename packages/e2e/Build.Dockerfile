@@ -12,9 +12,5 @@ RUN yarn server:setup
 # Set the damn React variable!
 ENV REACT_APP_HOST=http://server:9000
 
-# Uses Lerna to run the build command for all packages
+# Use Lerna to run the build command for all packages
 RUN yarn build
-
-# Enable for local server build debugging (much faster):
-# RUN yarn common:build
-# RUN yarn server:build
