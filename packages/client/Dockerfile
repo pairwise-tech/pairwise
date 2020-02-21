@@ -6,13 +6,16 @@
 
 FROM pairwise-runtime AS pairwise-production-client
 
+COPY . .
+
 # Read from the build environment args
 ARG REACT_APP_HOST
 
+# Set it as an env var for the build
+ENV REACT_APP_HOST ${REACT_APP_HOST}}
+
 # Set the environment to production
 ENV NODE_ENV=production
-
-COPY . .
 
 # Install Netlify CLI
 RUN npm i -g netlify-cli
