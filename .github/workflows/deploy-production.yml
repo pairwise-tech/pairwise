@@ -1,6 +1,6 @@
 # This workflow deploys the production server to Google Cloud Run and
-# the client workspace to Netlify after any commits to the master branch.
-# The landing page is deployed separately using ZEIT Now.
+# the client workspace to Netlify. It's triggered by any commits to
+# the master branch. The landing page is deployed separately using ZEIT Now.
 
 # Reference docs:
 # https://github.com/GoogleCloudPlatform/github-actions/blob/master/example-workflows/cloud-run/.github/workflows/cloud-run.yml
@@ -20,12 +20,12 @@ env:
   RUN_REGION: us-central1
   CLOUD_RUN_SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE_NAME }}
   CLOUD_RUN_PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
+  GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+  GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+  PRODUCTION_SERVER_URL: ${{ secrets.PRODUCTION_SERVER_URL }}
   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_WORKSPACE_AUTH_TOKEN }}
   NETLIFY_SITE_ID: ${{ secrets.NETLIFY_WORKSPACE_SITE_ID }}
-  GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
-  GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
   SLACK_STATUS_BOT_ACCESS_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
-  PRODUCTION_SERVER_URL: ${{ secrets.PRODUCTION_SERVER_URL }}
 
 jobs:
   deploy-production:
@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      # Setup Node
+      # Setup NodeJS
       - name: Setup NodeJS Environment
         uses: actions/setup-node@v1
         with:
@@ -43,7 +43,7 @@ jobs:
       - name: Install dependencies
         run: yarn docker:dependencies
 
-      # Build the application
+      # Build the production application
       - name: Build production application
         run: docker build --env REACT_APP_HOST=$PRODUCTION_SERVER_URL -t pairwise-runtime -f packages/e2e/Build.Dockerfile .
 
@@ -62,9 +62,8 @@ jobs:
       # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          # version: "278.0.0"
-          service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
           service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
 
       # Configure gcloud CLI
       - name: Setup gcloud CLI
