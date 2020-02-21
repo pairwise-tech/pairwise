@@ -70,17 +70,17 @@ jobs:
         run: |
           gcloud config set project $CLOUD_RUN_PROJECT_ID
 
+      # Configure Docker to use gcloud
+      - name: Configure Docker with gcloud
+        run: gcloud auth configure-docker
+
       # Build the image locally using Docker (instead of using Google Cloud Build)
       - name: Build the production server image
         run: |
           docker build -t pairwise-production --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA -f packages/server/Dockerfile .
 
-      # Configure Docker to use gcloud
-      - name: Configure Docker with gcloud
-        run: gcloud auth configure-docker
-
       # Push the image to gcloud
-      - name: Push the image to GCR
+      - name: Push the production server image to GCR
         run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
 
       # Deploy the image to Cloud Run
@@ -97,12 +97,15 @@ jobs:
 
       # Deploy client workspace on Netlify (no builds occur on Netlify)
       # (docs: https://github.com/netlify/cli/blob/master/docs/commands/deploy.md)
+      # Note that in Netlify the production branch is set to some non-existent
+      # branch, master-x, to prevent automatically publishing. The only path to
+      # publish the production client is this step right here:
       - name: Deploy the client workspace to Netlify
         run: docker run --env NETLIFY_SITE_ID=$NETLIFY_SITE_ID --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN --env GITHUB_SHA=$GITHUB_SHA -t pairwise-production-client
 
       # Send Slack success notification
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
-      - name: Notify Slack for deployment success
+      - name: Notify Slack on workflow success
         if: success()
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
@@ -113,7 +116,7 @@ jobs:
           color: good
 
       # Send Slack failure notification
-      - name: Notify Slack for deployment failure
+      - name: Notify Slack on workflow failure
         if: failure()
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
