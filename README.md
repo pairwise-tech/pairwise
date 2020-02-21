@@ -216,8 +216,8 @@ The Pairwise landing page is deployed using [ZEIT Now](https://zeit.co/), the cl
 
 ```bash
 # Build the production server container
-$ yarn docker:prod-build
+$ yarn docker:prod-server-build
 
 # Run the production server
-$ yarn docker:prod-run
+$ yarn docker:prod-server-start
 ```
