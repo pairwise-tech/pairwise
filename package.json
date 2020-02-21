@@ -39,6 +39,7 @@
     "services:build": "cd packages/external-services && yarn build",
     "lint": "lerna run lint",
     "format": "lerna run format",
+    "tsc": "lerna run tsc",
     "test": "lerna run test",
     "build": "yarn common:build && lerna run build --parallel",
     "docker:dependencies": "docker build -t pairwise-dependencies -f Base.Dockerfile .",

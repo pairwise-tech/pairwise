@@ -186,7 +186,6 @@ class Api extends BaseApiClass {
     try {
       let course: Course;
       if (ENV.DEV) {
-        /* TODO: Remove after deploying a server */
         const challenges = require("@pairwise/common").default;
         course = challenges.FullstackTypeScript;
       } else if (ENV.CODEPRESS) {
