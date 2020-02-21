@@ -94,13 +94,13 @@ jobs:
             --platform managed
 
       # Install Netlify CLI
-      - name: Install Netlify CLI
-        run: npm install netlify-cli -g
+      - name: Build the client production deployment image
+        run: yarn docker:prod-client-build
 
       # Deploy client workspace on Netlify (no builds occur on Netlify)
       # (docs: https://github.com/netlify/cli/blob/master/docs/commands/deploy.md)
-      - name: Deploy Workspace to Netlify
-        run: netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --dir packages/client/build --message "Pairwise Client Deployed (commit $(git rev-parse --short HEAD))"
+      - name: Deploy Client Workspace to Netlify
+        run: docker run -it --env NETLIFY_SITE_ID=$NETLIFY_SITE_ID --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN --env GITHUB_SHA=$GITHUB_SHA -t pairwise-production-client
 
       # Send Slack success notification
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)

@@ -44,6 +44,7 @@
     "docker:dependencies": "docker build -t pairwise-dependencies -f Base.Dockerfile .",
     "docker:build": "docker build -t pairwise-runtime -f packages/e2e/Build.Dockerfile .",
     "docker:test": "docker build -t test -f packages/e2e/Test.Dockerfile .",
+    "docker:prod-client-build": "docker build -t pairwise-production-client -f packages/client/Dockerfile .",
     "docker:prod-build": "docker build -t pairwise-production -f packages/server/Dockerfile .",
     "docker:prod-run": "docker run -t pairwise-production",
     "stripe:dev": "docker run --rm -it --network=\"host\" stripe/stripe-cli --api-key sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ listen --forward-to=docker.for.mac.localhost:9000/payments/stripe-webhook",
