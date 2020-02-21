@@ -35,13 +35,13 @@ jobs:
         with:
           node-version: 10.x
 
-      # # Install the application dependencies
-      # - name: Install dependencies
-      #   run: yarn docker:dependencies
+      # Install the application dependencies
+      - name: Install dependencies
+        run: yarn docker:dependencies
 
-      # # Build the application
-      # - name: Build application
-      #   run: yarn docker:build
+      # Build the application
+      - name: Build application
+        run: yarn docker:build
 
       # # Run all package unit tests
       # - name: Run static and unit tests
