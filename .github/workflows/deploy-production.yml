@@ -76,7 +76,7 @@ jobs:
       # Build the image locally using Docker (instead of using Google Cloud Build)
       - name: Build the production server image
         run: |
-          docker build -t pairwise-production --tag gcr.io/$PROJECT-ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA -f packages/server/Dockerfile .
+          docker build -t pairwise-production --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA -f packages/server/Dockerfile .
 
       # Configure Docker to use gcloud
       - name: Configure Docker with gcloud
@@ -84,7 +84,7 @@ jobs:
 
       # Push the image to gcloud
       - name: Push the image to GCR
-        run: docker push gcr.io/$PROJECT-ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
+        run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
 
         # Deploy the image to Cloud Run
       - name: Deploy to Cloud Run
