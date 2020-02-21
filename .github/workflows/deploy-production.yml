@@ -36,6 +36,10 @@ jobs:
           node-version: 10.x
 
       # Install the application dependencies
+      - name: DEBUG
+        run: pwd && ls && cd packages && ls && cd client && ls
+
+      # Install the application dependencies
       - name: Install dependencies
         run: yarn docker:dependencies
 

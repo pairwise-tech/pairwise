@@ -4,6 +4,7 @@
   "description": "Pairwise Codebase",
   "private": true,
   "scripts": {
+    "a": "echo $BLEG",
     "setup": "yarn client:setup && yarn server:setup",
     "up": "docker-compose up",
     "down": "docker-compose down",
