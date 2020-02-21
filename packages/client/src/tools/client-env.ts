@@ -22,3 +22,7 @@ export const STRIPE_API_KEY = getenv.string("REACT_APP_STRIPE_API_KEY", "");
 export const TEST = NODE_ENV === "test";
 export const DEVELOPMENT = NODE_ENV === "development";
 export const PRODUCTION = NODE_ENV === "production";
+
+console.log("------------------");
+console.log(HOST);
+console.log(NODE_ENV);

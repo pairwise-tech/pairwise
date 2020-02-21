@@ -93,7 +93,8 @@ jobs:
 
       # Install Netlify CLI
       - name: Build the production client application
-        run: yarn docker:prod-client-build
+        run: |
+          docker build --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL -t pairwise-production-client -f packages/client/Dockerfile .
 
       # Deploy client workspace on Netlify (no builds occur on Netlify)
       # (docs: https://github.com/netlify/cli/blob/master/docs/commands/deploy.md)
