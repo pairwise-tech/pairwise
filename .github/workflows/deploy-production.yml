@@ -56,11 +56,14 @@ jobs:
       #   run: yarn cypress
 
       # Setup gcloud CLI
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          version: "278.0.0"
-          service_account_email: $GOOGLE_SERVICE_ACCOUNT_EMAIL
-          service_account_key: $GOOGLE_SERVICE_ACCOUNT_KEY
+      # - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      # with:
+      #   version: "278.0.0"
+      #   service_account_email: $GOOGLE_SERVICE_ACCOUNT_EMAIL
+      #   service_account_key: $GOOGLE_SERVICE_ACCOUNT_KEY
+      - uses: actions/gcloud/auth@master
+        env:
+          GCLOUD_AUTH: $GOOGLE_SERVICE_ACCOUNT_KEY
 
       # Configure gcloud CLI
       - name: Setup gcloud CLI
