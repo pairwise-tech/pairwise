@@ -12,7 +12,7 @@ COPY . .
 ARG REACT_APP_HOST
 
 # Set it as an env var for the build
-ENV REACT_APP_HOST ${REACT_APP_HOST}}
+ENV REACT_APP_HOST ${REACT_APP_HOST}
 
 # Set the environment to production
 ENV NODE_ENV=production
