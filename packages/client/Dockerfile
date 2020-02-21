@@ -6,10 +6,17 @@
 
 FROM pairwise-runtime AS pairwise-production-client
 
+# Read from the build environment args
+ARG REACT_APP_HOST
+
 COPY . .
 
 # Install Netlify CLI
 RUN npm i -g netlify-cli
+
+# TEMP:
+RUN echo $REACT_APP_HOST
+RUN yarn common:build
 
 # Build the client app
 RUN yarn client:build
