@@ -25,7 +25,7 @@ class Home extends React.Component<IProps, IState> {
     return (
       <PageContainer>
         <ContentContainer>
-          <PageTitle>Welcome to Pairwise!</PageTitle>
+          <PageTitle>Welcome to BLEGH!</PageTitle>
           <ContentText>
             Pairwise is a platform where you can learn hirable software
             engineering skills through a series of hands-on challenges and
