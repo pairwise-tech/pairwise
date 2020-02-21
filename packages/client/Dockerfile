@@ -4,7 +4,8 @@
 # rebuilding here will capture the correct production URL which will
 # be set in the environment.
 
-FROM pairwise-runtime AS pairwise-production-client
+# FROM pairwise-runtime AS pairwise-production-client
+FROM pairwise-dependencies as pairwise-production-client
 
 # Read from the build environment args
 ARG REACT_APP_HOST
