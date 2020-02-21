@@ -1,4 +1,6 @@
-# Take the production image and deploy the client.
+# Take the production image and deploy the client. This is required
+# because the client workspace build exists in the pairwise-runtime
+# image so we have to push the deployment from within that context.
 
 FROM pairwise-runtime AS pairwise-production-client
 
