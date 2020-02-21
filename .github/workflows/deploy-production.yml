@@ -74,12 +74,12 @@ jobs:
       - name: Configure Docker with gcloud
         run: gcloud auth configure-docker
 
-      # Build the image locally using Docker (instead of using Google Cloud Build)
-      - name: Build the production server image
+      # Build the server application directly (instead of using Google Cloud Build)
+      - name: Build the production server application
         run: |
           docker build -t pairwise-production --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA -f packages/server/Dockerfile .
 
-      # Push the image to gcloud
+      # Push the production server image to gcloud
       - name: Push the production server image to GCR
         run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
 
@@ -91,7 +91,7 @@ jobs:
             --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
             --platform managed
 
-      # Install Netlify CLI
+      # Build the client application directly (instead of using Netlify)
       - name: Build the production client application
         run: |
           docker build --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL -t pairwise-production-client -f packages/client/Dockerfile .
