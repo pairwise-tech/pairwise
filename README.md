@@ -36,8 +36,11 @@ We use the following libraries across the codebase, here are some quick links to
 - [Prettier](https://prettier.io/docs/en/options.html): Make the code pretty.
 - [Gatsby](https://www.gatsbyjs.org/docs/): The best static sites.
 - [Lerna](https://lerna.js.org/): All the code, all the repos.
-- [GitHub Actions](https://github.com/features/actions): Automate!
 - [VS Code](https://code.visualstudio.com/): Highly recommended, great experience.
+- [GitHub Actions](https://github.com/features/actions): Automate!
+- [ZEIT Now](https://zeit.co/): Host the Pairwise landing page.
+- [Netlify](https://www.netlify.com/): Host the Pairwise client workspace.
+- [Google Cloud Platform](https://cloud.google.com/): Deploy the production backend.
 
 ## Getting Started
 
