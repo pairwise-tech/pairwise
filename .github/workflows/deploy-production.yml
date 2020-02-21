@@ -1,4 +1,7 @@
-# This workflow deploys the production server to Google Cloud Run.
+# This workflow deploys the production server to Google Cloud Run and
+# the client workspace to Netlify after any commits to the master branch.
+# The landing page is deployed separately using ZEIT Now.
+
 # Reference docs:
 # https://github.com/GoogleCloudPlatform/github-actions/blob/master/example-workflows/cloud-run/.github/workflows/cloud-run.yml
 # https://cloud.google.com/run/docs/building/containers
@@ -95,7 +98,7 @@ jobs:
 
       # Deploy client workspace on Netlify (no builds occur on Netlify)
       # (docs: https://github.com/netlify/cli/blob/master/docs/commands/deploy.md)
-      - name: Deploy Client Workspace to Netlify
+      - name: Deploy client workspace to Netlify
         run: docker run -it --env NETLIFY_SITE_ID=$NETLIFY_SITE_ID --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN --env GITHUB_SHA=$GITHUB_SHA -t pairwise-production-client
 
       # Send Slack success notification
