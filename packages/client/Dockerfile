@@ -4,22 +4,20 @@
 # rebuilding here will capture the correct production URL which will
 # be set in the environment.
 
-# FROM pairwise-runtime AS pairwise-production-client
-FROM pairwise-dependencies as pairwise-production-client
+FROM pairwise-runtime AS pairwise-production-client
 
 # Read from the build environment args
 ARG REACT_APP_HOST
+
+# Set the environment to production
+ENV NODE_ENV=production
 
 COPY . .
 
 # Install Netlify CLI
 RUN npm i -g netlify-cli
 
-# TEMP:
-RUN echo $REACT_APP_HOST
-RUN yarn common:build
-
-# Build the client app
+# Build the production client app
 RUN yarn client:build
 
 # Deploy the client application
