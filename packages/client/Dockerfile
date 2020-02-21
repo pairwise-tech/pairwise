@@ -4,15 +4,16 @@
 # rebuilding here will capture the correct production URL which will
 # be set in the environment.
 
+# If you want to know why this also has to use the pairwise-dependencies
+# image instead of pairwise-runtime, well, you really don't want to
+# know that.
+
 FROM pairwise-dependencies AS pairwise-production-client
 
 COPY . .
 
 # Read from the build environment args
 ARG REACT_APP_HOST
-
-# # Set it as an env var for the build
-# ENV REACT_APP_HOST ${REACT_APP_HOST}
 
 # Set the environment to production
 ENV NODE_ENV=production

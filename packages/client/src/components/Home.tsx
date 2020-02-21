@@ -30,7 +30,7 @@ class Home extends React.Component<IProps, IState> {
             Pairwise is a platform where you can learn hirable software
             engineering skills through a series of hands-on challenges and
             projects. It's free to get started with no signup required. You can
-            easily create an account anytime to track your progress. BLEGH!
+            easily create an account anytime to track your progress.
           </ContentText>
           <ContentText>
             To learn more about our product and courses, take a look at our{" "}
