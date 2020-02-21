@@ -59,7 +59,7 @@ jobs:
       - name: Run Cypress tests
         run: yarn cypress
 
-      Setup gcloud CLI
+      # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           # version: "278.0.0"
