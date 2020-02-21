@@ -86,6 +86,7 @@ jobs:
           gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
             --region $RUN_REGION \
             --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
+            --service-account $GOOGLE_SERVICE_ACCOUNT_EMAIL \
             --platform managed
 
       # Install Netlify CLI
