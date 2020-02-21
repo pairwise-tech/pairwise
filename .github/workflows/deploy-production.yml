@@ -47,17 +47,17 @@ jobs:
       - name: Build production application
         run: yarn docker:build-prod
 
-      # Run all package unit tests
-      - name: Run static and unit tests
-        run: yarn docker:test
+      # # Run all package unit tests
+      # - name: Run static and unit tests
+      #   run: yarn docker:test
 
-      # Run e2e tests
-      - name: Run e2e tests
-        run: yarn e2e
+      # # Run e2e tests
+      # - name: Run e2e tests
+      #   run: yarn e2e
 
-      # Run Cypress tests
-      - name: Run Cypress tests
-        run: yarn cypress
+      # # Run Cypress tests
+      # - name: Run Cypress tests
+      #   run: yarn cypress
 
       # Setup gcloud CLI
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
