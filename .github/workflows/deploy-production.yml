@@ -45,7 +45,7 @@ jobs:
 
       # Build the production application
       - name: Build production application
-        run: docker build --env REACT_APP_HOST=$PRODUCTION_SERVER_URL -t pairwise-runtime -f packages/e2e/Build.Dockerfile .
+        run: yarn docker:build-prod
 
       # Run all package unit tests
       - name: Run static and unit tests
