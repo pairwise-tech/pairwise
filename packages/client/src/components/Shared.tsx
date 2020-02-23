@@ -118,6 +118,19 @@ const EditorExternalStyles = styled.div`
   max-width: 728px;
   position: relative;
 
+  blockquote {
+    margin-left: 30px !important;
+    background: ${COLORS.LIGHT_GREY} !important;
+    font-style: normal !important;
+    border-left-width: 9px !important;
+    padding: 5px 20px 5px 10px !important;
+  }
+
+  ul,
+  ol {
+    margin-left: 30px !important;
+  }
+
   // Inline code
   p code {
     color: rgb(108, 188, 255);

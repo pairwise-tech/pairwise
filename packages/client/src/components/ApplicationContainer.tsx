@@ -254,7 +254,7 @@ const Header = styled.div`
   padding-right: 0px;
   margin-bottom: 0;
   background: #212121;
-  border-bottom: 1px solid #404040;
+  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
 
   height: ${HEADER_HEIGHT}px;
   width: calc(100vw - 48);

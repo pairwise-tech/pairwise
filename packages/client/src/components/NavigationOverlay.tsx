@@ -539,7 +539,7 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
   padding: 12px;
   font-size: 18px;
   border: 1px solid transparent;
-  border-bottom-color: ${COLORS.SEPARATOR_BORDER};
+  border-bottom-color: ${COLORS.LIGHT_GREY};
   width: 100%;
   display: flex;
   align-items: center;
@@ -613,7 +613,7 @@ const Col = styled.div<{ offsetX: number }>`
   display: block;
   width: 300px;
   background: ${COLORS.BACKGROUND_CONTENT};
-  border-right: 1px solid ${COLORS.SEPARATOR_BORDER};
+  border-right: 1px solid ${COLORS.LIGHT_GREY};
   position: relative;
   z-index: 2;
   transition: all 0.2s ease-out;
@@ -642,7 +642,7 @@ const Title = styled.p`
   color: ${COLORS.TEXT_TITLE};
   margin: 0;
   padding: 12px;
-  border-bottom: 1px solid ${COLORS.SEPARATOR_BORDER};
+  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
 `;
 
 /** ===========================================================================
