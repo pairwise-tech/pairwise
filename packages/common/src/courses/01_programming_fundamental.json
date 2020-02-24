@@ -496,10 +496,10 @@
           "id": "mIj2Sy2B",
           "type": "typescript",
           "title": "Comparing String Values",
-          "content": "The best way to compare two string values in TypeScript is to use the triple equals operator,\n`===`. The triple equal operator determines if two values are the same and can be applied directly to strings.\n\nGo ahead, take a look at the code in the editor and try it out\\!",
-          "testCode": "test(`The two fruits should be equal so the console prints \"The fruits are equal!\"`, () => {\n    expect(fruit).toBe(otherFruit);\n});",
+          "content": "The best way to compare two string values in TypeScript is to use the triple equals operator,\n`===`. The triple equal operator determines if two values are the same and can be applied directly to strings. Go ahead, take a look at the code in the editor and try it out\\!",
+          "testCode": "test(\"The two fruit variables `fruit` and `otherFruit` should both be strings and they should be equal\", () => {\n    expect(fruit).toBe(otherFruit);\n    expect(typeof fruit).toBe(\"string\");\n    expect(typeof otherFruit).toBe(\"string\");\n});",
           "videoUrl": "",
-          "starterCode": "// Only change code below this line\nconst fruit: string = \"apple\";\nconst otherFruit: string = \"grape\";\n// Only change code above this line\n\nconst areFruitsEqual = fruit === otherFruit;\n\nif (areFruitsEqual) {\n    console.log(\"The fruits are equal!\");\n}",
+          "starterCode": "const fruit: string = \"apple\";\nconst otherFruit: string = \"grape\";\n\nconst areFruitsEqual = fruit === otherFruit;\n\nif (areFruitsEqual) {\n    console.log(\"The fruits are equal!\");\n}",
           "solutionCode": "\nconst fruit: string = \"apple\";\nconst otherFruit: string = \"apple\";\n\nconst areFruitsEqual = fruit === otherFruit;\n\nif (areFruitsEqual) {\n    console.log(\"The fruits are equal!\");\n}",
           "supplementaryContent": ""
         },
@@ -507,11 +507,22 @@
           "id": "9yEpUrhb",
           "type": "typescript",
           "title": "Comparing String Values",
-          "content": "Comparing strings is just like comparing numbers. Strings and numbers are primitive values in TypeScript, and can be compared directly against one another. Take a look at the code in the editor\\!",
-          "testCode": "test(\"The two numbers declared in the editor should be equal\", () => {\n    expect(someNumber).toBe(someCalculatedValue);\n});",
+          "content": "Comparing strings is just like comparing numbers. Strings and numbers are primitive values in TypeScript, and can be compared directly against one another. Take a look at the code in the editor and give it a try\\!",
+          "testCode": "test(\"The two values `someNumber` and `someCalculatedValue` should both be numbers and they should be equal\", () => {\n    expect(someNumber).toBe(someCalculatedValue);\n    expect(typeof someNumber).toBe(\"number\");\n    expect(typeof someCalculatedValue).toBe(\"number\");\n});",
           "videoUrl": "",
-          "starterCode": "// Only change code below this line\nconst someNumber = 102;\nconst someCalculatedValue = (250 + 250) / 5;\n// Only change code above this line\n\nif (someNumber === someCalculatedValue) {\n    console.log(\"The numbers are equal!\");\n}",
-          "solutionCode": "// Only change code below this line\nconst someNumber = 100;\nconst someCalculatedValue = (250 + 250) / 5;\n// Only change code above this line\n\nif (someNumber === someCalculatedValue) {\n    console.log(\"The numbers are equal!\");\n}",
+          "starterCode": "const someNumber = 102;\nconst someCalculatedValue = (250 + 250) / 5;\n\nif (someNumber === someCalculatedValue) {\n    console.log(\"The numbers are equal!\");\n}",
+          "solutionCode": "const someNumber = 100;\nconst someCalculatedValue = (250 + 250) / 5;\n\nif (someNumber === someCalculatedValue) {\n    console.log(\"The numbers are equal!\");\n}",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "6l0NR0XE",
+          "type": "typescript",
+          "title": "Comparing Null and Undefined Equality",
+          "content": "You can compared `null` and `undefined` just like numbers and strings. They are all primitive values, a single `null` is identical to any other `null` value you may come across.",
+          "testCode": "test(\"Both variables `anUndefinedVariable` and `explicitlyUndefined` should be equal to undefined\", () => {\n    expect(anUndefinedVariable).toBe(undefined);\n    expect(explicitlyUndefined).toBe(undefined);\n});",
+          "videoUrl": "",
+          "starterCode": "let anUndefinedVariable;\nconst explicitlyUndefined = \"a real value\";\n\nif (anUndefinedVariable === explicitlyUndefined) {\n    console.log(\"Both values are equal to undefined!\");\n}",
+          "solutionCode": "let anUndefinedVariable;\nconst explicitlyUndefined = undefined;\n\nif (anUndefinedVariable === explicitlyUndefined) {\n    console.log(\"Both values are equal to undefined!\");\n}",
           "supplementaryContent": ""
         }
       ]
