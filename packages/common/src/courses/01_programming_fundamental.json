@@ -544,7 +544,7 @@
           "testCode": "test(\"The two lists `oneList` and `anotherList` should reference the same value.\", () => {\n    expect(oneList).toBe(anotherList);\n});\n\ntest(\"`theListsAreTheSame` should evaluate to `true`.\", () => {\n    expect(theListsAreTheSame).toBe(true);\n});",
           "videoUrl": "",
           "starterCode": "const oneList = [1,2,3,4,5];\nconst anotherList = [1,2,3,4,5];\n\nconst theListsAreTheSame = oneList === anotherList;\n\nif (theListsAreTheSame) {\n    console.log(\"The lists are the same!\");\n}",
-          "solutionCode": "const oneList = [1,2,3,4,5];\nconst anotherList = [1,2,3,4,5];\n\nconst theListsAreTheSame = oneList === anotherList;\n\nif (theListsAreTheSame) {\n    console.log(\"The lists are the same!\"); // Surprise, they are actually different!\n}",
+          "solutionCode": "const oneList = [1,2,3,4,5];\nconst anotherList = oneList;\n\nconst theListsAreTheSame = oneList === anotherList;\n\nif (theListsAreTheSame) {\n    console.log(\"The lists are the same!\");\n}",
           "supplementaryContent": "The triple equals operator when applied to objects or arrays compares the \\_references \\_not the object or array itself. Therefore, in the code above the `theListsAreTheSame` variable can become `true` if the two list variables reference the same list.\n\n**HINT: **You can define a new variable to reference another. In that case, they both share the same reference. For example:\n\n```typescript\nconst referenceOne = { a: true };\nconst referenceTwo = referenceOne;\n// referenceOne and referenceTwo are the same!\n\n```\n"
         }
       ]
