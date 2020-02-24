@@ -490,17 +490,28 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "supplementaryContent": "In programming, it is often helpful to compare two different values and determine if they are equal or not. You may think this is simple, and it usually is.\n\nIn this section you will learn the basics for how to determine equality between different values in TypeScript, and you will learn a few nuances about equality."
+          "supplementaryContent": "In programming, it is often helpful to compare two different values and determine if they are equal or not. You may think this is simple, and it usually is. However, there are some interesting nuances which are helpful to learn as well.\n\nIn this section you will learn the basics for how to determine equality between different values in TypeScript, and you will learn a few edge cases which can easily trip you up as well.\n\nComparing primitive values like strings or numbers is very straightforward, but comparing more complex data structures like arrays or objects is a little more tricky."
         },
         {
           "id": "mIj2Sy2B",
           "type": "typescript",
-          "title": "Comparing Values",
-          "content": "The best way to compare two values in TypeScript is to use the triple equals operator, \\`===\\`. Go ahead, take a look at the code in the editor and try it out\\!",
-          "testCode": "// test('message', () => expect(...))\n\ntest(`The two fruits should be equal so the console prints \"The fruits are equal!\"`, () => {\n    expect(fruit).toBe(otherFruit);\n});",
+          "title": "Comparing String Values",
+          "content": "The best way to compare two string values in TypeScript is to use the triple equals operator,\n`===`. The triple equal operator determines if two values are the same and can be applied directly to strings.\n\nGo ahead, take a look at the code in the editor and try it out\\!",
+          "testCode": "test(`The two fruits should be equal so the console prints \"The fruits are equal!\"`, () => {\n    expect(fruit).toBe(otherFruit);\n});",
           "videoUrl": "",
           "starterCode": "// Only change code below this line\nconst fruit: string = \"apple\";\nconst otherFruit: string = \"grape\";\n// Only change code above this line\n\nconst areFruitsEqual = fruit === otherFruit;\n\nif (areFruitsEqual) {\n    console.log(\"The fruits are equal!\");\n}",
           "solutionCode": "\nconst fruit: string = \"apple\";\nconst otherFruit: string = \"apple\";\n\nconst areFruitsEqual = fruit === otherFruit;\n\nif (areFruitsEqual) {\n    console.log(\"The fruits are equal!\");\n}",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "9yEpUrhb",
+          "type": "typescript",
+          "title": "Comparing String Values",
+          "content": "Comparing strings is just like comparing numbers. Strings and numbers are primitive values in TypeScript, and can be compared directly against one another. Take a look at the code in the editor\\!",
+          "testCode": "test(\"The two numbers declared in the editor should be equal\", () => {\n    expect(someNumber).toBe(someCalculatedValue);\n});",
+          "videoUrl": "",
+          "starterCode": "// Only change code below this line\nconst someNumber = 102;\nconst someCalculatedValue = (250 + 250) / 5;\n// Only change code above this line\n\nif (someNumber === someCalculatedValue) {\n    console.log(\"The numbers are equal!\");\n}",
+          "solutionCode": "// Only change code below this line\nconst someNumber = 100;\nconst someCalculatedValue = (250 + 250) / 5;\n// Only change code above this line\n\nif (someNumber === someCalculatedValue) {\n    console.log(\"The numbers are equal!\");\n}",
           "supplementaryContent": ""
         }
       ]
