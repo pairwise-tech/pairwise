@@ -36,11 +36,6 @@ pre {
     monospace;
 }
 
-/* We are decidedly not a mobile site */
-#root {
-  min-width: 820px;
-}
-
 /* SSO button override styles */
 .sso-button {
   padding-top: 2px !important;
