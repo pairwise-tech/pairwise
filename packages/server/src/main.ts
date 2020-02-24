@@ -11,6 +11,7 @@ import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common/pipes";
 import ENV from "./tools/server-env";
+import * as Sentry from "@sentry/node";
 
 /** ===========================================================================
  * Types & Config
@@ -39,6 +40,10 @@ const swaggerOptions = new DocumentBuilder()
   .setVersion("1.0")
   .addTag("Learn to Code!")
   .build();
+
+Sentry.init({
+  dsn: ENV.SENTRY_DSN,
+});
 
 /** ===========================================================================
  * Setup and Run the Server
