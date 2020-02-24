@@ -26,9 +26,7 @@ interface DarkThemeProps {
 }
 
 export const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
-  return (
-    <div className={`pairwise ${cx(className, Classes.DARK)}`} {...props} />
-  );
+  return <div className={cx(className, Classes.DARK)} {...props} />;
 };
 
 // TODO: This could be made a bit more friendly. Maybe a spinner of some sort

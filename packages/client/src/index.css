@@ -30,12 +30,6 @@ body {
   overflow-x: hidden;
 }
 
-@media (max-width: 768px) {
-  .pairwise {
-    display: none;
-  }
-}
-
 code,
 pre {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
