@@ -12,7 +12,7 @@ import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common/pipes";
 import ENV from "./tools/server-env";
 import * as Sentry from "@sentry/node";
-import * as compression from "compression";
+import compression from "compression";
 
 /** ===========================================================================
  * Types & Config
@@ -57,14 +57,14 @@ const pairwise = async () => {
     httpsOptions,
   });
 
+  /* Enable compression */
+  app.use(compression());
+
   /* Enable logging */
   app.use(morgan("dev"));
 
   /* Enable validation pipes */
   app.useGlobalPipes(new ValidationPipe());
-
-  /* Enable compression */
-  app.use(compression());
 
   app.use(
     json({
