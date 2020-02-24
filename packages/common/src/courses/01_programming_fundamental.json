@@ -506,7 +506,7 @@
         {
           "id": "9yEpUrhb",
           "type": "typescript",
-          "title": "Comparing String Values",
+          "title": "Comparing Number Values",
           "content": "Comparing strings is just like comparing numbers. Strings and numbers are primitive values in TypeScript, and can be compared directly against one another. Take a look at the code in the editor and give it a try\\!",
           "testCode": "test(\"The two values `someNumber` and `someCalculatedValue` should both be numbers and they should be equal\", () => {\n    expect(someNumber).toBe(someCalculatedValue);\n    expect(typeof someNumber).toBe(\"number\");\n    expect(typeof someCalculatedValue).toBe(\"number\");\n});",
           "videoUrl": "",
@@ -523,6 +523,17 @@
           "videoUrl": "",
           "starterCode": "let anUndefinedVariable;\nconst explicitlyUndefined = \"a real value\";\n\nif (anUndefinedVariable === explicitlyUndefined) {\n    console.log(\"Both values are equal to undefined!\");\n}",
           "solutionCode": "let anUndefinedVariable;\nconst explicitlyUndefined = undefined;\n\nif (anUndefinedVariable === explicitlyUndefined) {\n    console.log(\"Both values are equal to undefined!\");\n}",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "T5-BAT-r",
+          "type": "typescript",
+          "title": "Equality with Boolean Values",
+          "content": "The boolean values `true` and `false` can also be applied directly in equality assertions like other primitive values. To see what we mean, take a look at the code in the editor below.",
+          "testCode": "test(\"The `ageLimit` variable should be 18\", () => {\n    expect(ageLimit).toBe(18);\n});\n\ntest(\"The `age` variable should be greater than 18 so that `isOldEnough` is true\", () => {\n    expect(age > 18).toBe(true);\n    expect(isOldEnough).toBe(true);\n});",
+          "videoUrl": "",
+          "starterCode": "const age = 16;\nconst ageLimit = 18;\nconst isOldEnough = age > ageLimit;\n\nif (isOldEnough === true) {\n    console.log(\"You are old enough!\");\n}",
+          "solutionCode": "const age = 25;\nconst ageLimit = 18;\nconst isOldEnough = age > ageLimit;\n\nif (isOldEnough === true) {\n    console.log(\"You are old enough!\");\n}",
           "supplementaryContent": ""
         }
       ]
