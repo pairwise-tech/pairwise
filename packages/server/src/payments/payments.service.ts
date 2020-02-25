@@ -33,8 +33,9 @@ enum StripeEventTypes {
   CHECKOUT_COMPLETED = "checkout.session.completed",
 }
 
+// The pricing units are apparently in cents, 5000 = $50 USD.
 const PRICING_CONSTANTS = {
-  COURSE_PRICE: 5000, // the units are apparently in cents
+  COURSE_PRICE: 5000,
   ACCEPTED_CURRENCY: "usd",
 };
 
