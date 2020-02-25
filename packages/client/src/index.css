@@ -30,21 +30,10 @@ body {
   overflow-x: hidden;
 }
 
-@media (max-width: 768px) {
-  .pairwise {
-    display: none;
-  }
-}
-
 code,
 pre {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-/* We are decidedly not a mobile site */
-#root {
-  min-width: 820px;
 }
 
 /* SSO button override styles */
