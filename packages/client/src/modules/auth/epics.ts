@@ -132,7 +132,7 @@ const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
 // Logout the user by removing the local storage access token.
 const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
   const logoutToast = () => {
-    deps.toaster.warn("Logout Success", "log-out");
+    deps.toaster.success("Logout Success", "log-out");
   };
 
   return action$.pipe(
