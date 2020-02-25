@@ -1,4 +1,4 @@
-import { Dialog } from "@blueprintjs/core";
+import { Dialog, Classes } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -11,7 +11,12 @@ import Modules, { ReduxStoreState } from "modules/root";
 import * as ENV from "tools/client-env";
 import { composeWithProps } from "tools/utils";
 import { removeEphemeralPurchaseCourseId } from "tools/storage-utils";
-import { ModalTitleText, ModalContainer, ModalSubText } from "./Shared";
+import {
+  ModalTitleText,
+  ModalContainer,
+  ModalSubText,
+  HrefLink,
+} from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -33,6 +38,7 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
   render(): JSX.Element {
     return (
       <Dialog
+        className={Classes.DARK}
         isOpen={this.props.dialogOpen}
         aria-labelledby="sso-modal-title"
         aria-describedby="facebook-login github-login google-login"
@@ -65,10 +71,20 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
               </GoogleLoginButton>
             </LoginLink>
           </SocialButtonsContainer>
-          <ModalSubText>Creating an account is free and easy.</ModalSubText>
           <ModalSubText>
-            Your account will be used to save your progress as you work on the
-            courses.
+            Create an account with one-click for free. Your account will be used
+            to save your progress as you work on the courses.
+          </ModalSubText>
+          <ModalSubText>
+            By creating a Pairwise account you are agreeing to our{" "}
+            <HrefLink link="https://pairwise.tech/terms/">
+              Terms of Service
+            </HrefLink>{" "}
+            and{" "}
+            <HrefLink link="https://pairwise.tech/privacy-policy">
+              Privacy Policy
+            </HrefLink>
+            .
           </ModalSubText>
         </ModalContainer>
       </Dialog>

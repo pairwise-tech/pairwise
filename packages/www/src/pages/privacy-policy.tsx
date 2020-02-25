@@ -6,7 +6,7 @@ import SEO from '../components/SEO';
 
 const PrivacyPolicy = () => (
   <Layout>
-    <SEO title="Contact" description="Get in touch with us" />
+    <SEO title="Pairwise | Privacy Policy" description="Get in touch with us" />
     <Section>
       <ConstrainWidth>
         <h2>Privacy Policy</h2>

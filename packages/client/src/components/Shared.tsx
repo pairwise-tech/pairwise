@@ -398,3 +398,25 @@ export function labelByType<
   const item = items.find(x => x.value === type);
   return item?.label || type;
 }
+
+// Render an <a /> href link.
+export const HrefLink = ({
+  link,
+  style,
+  children,
+}: {
+  link: string;
+  children: string;
+  style?: React.CSSProperties;
+}) => {
+  return (
+    <a
+      href={link}
+      target="__blank"
+      rel="noopener noreferrer"
+      style={{ ...style }}
+    >
+      {children}
+    </a>
+  );
+};

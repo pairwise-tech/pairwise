@@ -6,7 +6,10 @@ import SEO from '../components/SEO';
 
 const TermsOfService = () => (
   <Layout>
-    <SEO title="Contact" description="Get in touch with us" />
+    <SEO
+      title="Pairwise | Terms of Service"
+      description="Get in touch with us"
+    />
     <Section>
       <ConstrainWidth>
         <h2>Pairwise, LLC Terms of Service</h2>
