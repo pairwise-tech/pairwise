@@ -61,7 +61,7 @@ const pairwise = async () => {
   app.use(compression());
 
   /* Enable logging */
-  app.use(morgan("dev"));
+  app.use(morgan(ENV.PRODUCTION ? "combined" : "dev"));
 
   /* Enable validation pipes */
   app.useGlobalPipes(new ValidationPipe());
