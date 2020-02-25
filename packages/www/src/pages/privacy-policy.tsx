@@ -1,12 +1,15 @@
 import React from 'react';
 
-import { ConstrainWidth, Section } from '../components/components';
+import { HrefLink, ConstrainWidth, Section } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 
 const PrivacyPolicy = () => (
   <Layout>
-    <SEO title="Pairwise | Privacy Policy" description="Get in touch with us" />
+    <SEO
+      title="Privacy Policy"
+      description="View the Pairwise Privacy Policy"
+    />
     <Section>
       <ConstrainWidth>
         <h2>Privacy Policy</h2>
@@ -14,8 +17,10 @@ const PrivacyPolicy = () => (
           Your privacy is important to us. It is Pairwise, LLC's policy to
           respect your privacy regarding any information we may collect from you
           across our website,{' '}
-          <a href="https://app.pairwise.tech/">https://app.pairwise.tech/</a>,
-          and other sites we own and operate.
+          <HrefLink link="https://app.pairwise.tech/">
+            https://app.pairwise.tech/
+          </HrefLink>
+          , and other sites we own and operate.
         </p>
         <h3>1. Information we collect</h3>
         <h4>Log data</h4>
@@ -273,7 +278,7 @@ const PrivacyPolicy = () => (
           <br />
           sean@pairwise.tech
         </p>
-        <p>This policy is effective as of March 1, 2020.</p>
+        <p>This policy is effective as of January 1, 2020.</p>
       </ConstrainWidth>
     </Section>
   </Layout>

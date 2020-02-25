@@ -259,3 +259,25 @@ export const ErrorMessage = styled(({ children, ...props }) => {
   margin-bottom: 10px;
   padding: 20px;
 `;
+
+// Render an <a /> href link.
+export const HrefLink = ({
+  link,
+  style,
+  children,
+}: {
+  link: string;
+  children: string;
+  style?: React.CSSProperties;
+}) => {
+  return (
+    <a
+      href={link}
+      target="__blank"
+      rel="noopener noreferrer"
+      style={{ color: 'rgb(0, 255, 185)', ...style }}
+    >
+      {children}
+    </a>
+  );
+};

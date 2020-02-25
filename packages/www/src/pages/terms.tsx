@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { ConstrainWidth, Section } from '../components/components';
+import { HrefLink, ConstrainWidth, Section } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 
 const TermsOfService = () => (
   <Layout>
     <SEO
-      title="Pairwise | Terms of Service"
-      description="Get in touch with us"
+      title="Terms of Service"
+      description="View the Pairwise Terms of Service"
     />
     <Section>
       <ConstrainWidth>
@@ -16,12 +16,14 @@ const TermsOfService = () => (
         <h3>1. Terms</h3>
         <p>
           By accessing the website at{' '}
-          <a href="https://app.pairwise.tech/">https://app.pairwise.tech/</a>,
-          you are agreeing to be bound by these terms of service, all applicable
-          laws and regulations, and agree that you are responsible for
-          compliance with any applicable local laws. If you do not agree with
-          any of these terms, you are prohibited from using or accessing this
-          site. The materials contained in this website are protected by
+          <HrefLink link="https://app.pairwise.tech/">
+            https://app.pairwise.tech/
+          </HrefLink>
+          , you are agreeing to be bound by these terms of service, all
+          applicable laws and regulations, and agree that you are responsible
+          for compliance with any applicable local laws. If you do not agree
+          with any of these terms, you are prohibited from using or accessing
+          this site. The materials contained in this website are protected by
           applicable copyright and trademark law.
         </p>
         <h3>2. Use License</h3>
