@@ -30,5 +30,16 @@ module.exports = {
         icon: `src/images/favicon2.png`, // This path is relative to the root of the site.
       },
     },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: 'UA-158972025-2',
+        // Defines where to place the tracking script - `true` in the head and `false` in the body
+        // GA recommends putting this in the head so here we are.
+        head: true,
+        // Aparently required in germany? https://www.gatsbyjs.org/packages/gatsby-plugin-google-analytics/#anonymize
+        anonymize: true,
+      },
+    },
   ],
 };
