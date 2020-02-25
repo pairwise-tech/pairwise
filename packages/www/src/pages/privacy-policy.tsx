@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { HrefLink, ConstrainWidth, Section } from '../components/components';
+import {
+  ExternalLink,
+  ConstrainWidth,
+  Section,
+} from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 
@@ -18,9 +22,9 @@ const PrivacyPolicy = () => (
             Your privacy is important to us. It is Pairwise, LLC's policy to
             respect your privacy regarding any information we may collect from
             you across our website,{' '}
-            <HrefLink link="https://app.pairwise.tech/">
+            <ExternalLink link="https://app.pairwise.tech/">
               https://app.pairwise.tech/
-            </HrefLink>
+            </ExternalLink>
             , and other sites we own and operate.
           </p>
           <h3>1. Information we collect</h3>

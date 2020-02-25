@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { HrefLink, ConstrainWidth, Section } from '../components/components';
+import {
+  ExternalLink,
+  ConstrainWidth,
+  Section,
+} from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 
@@ -17,9 +21,9 @@ const TermsOfService = () => (
           <h3>1. Terms</h3>
           <p>
             By accessing the website at{' '}
-            <HrefLink link="https://app.pairwise.tech/">
+            <ExternalLink link="https://app.pairwise.tech/">
               https://app.pairwise.tech/
-            </HrefLink>
+            </ExternalLink>
             , you are agreeing to be bound by these terms of service, all
             applicable laws and regulations, and agree that you are responsible
             for compliance with any applicable local laws. If you do not agree

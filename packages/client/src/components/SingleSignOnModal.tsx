@@ -15,7 +15,7 @@ import {
   ModalTitleText,
   ModalContainer,
   ModalSubText,
-  HrefLink,
+  ExternalLink,
 } from "./Shared";
 
 /** ===========================================================================
@@ -77,13 +77,13 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
           </ModalSubText>
           <ModalSubText>
             By creating a Pairwise account you are agreeing to our{" "}
-            <HrefLink link="https://pairwise.tech/terms/">
+            <ExternalLink link="https://pairwise.tech/terms/">
               Terms of Service
-            </HrefLink>{" "}
+            </ExternalLink>{" "}
             and{" "}
-            <HrefLink link="https://pairwise.tech/privacy-policy">
+            <ExternalLink link="https://pairwise.tech/privacy-policy">
               Privacy Policy
-            </HrefLink>
+            </ExternalLink>
             .
           </ModalSubText>
         </ModalContainer>

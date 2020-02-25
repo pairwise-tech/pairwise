@@ -399,8 +399,11 @@ export function labelByType<
   return item?.label || type;
 }
 
-// Render an <a /> href link.
-export const HrefLink = ({
+// Quick shorthand component for rendering an href link to an external URL.
+// NOTE: This is basically duplicated in the client workspace package. We
+// could at some point consolidate shared UI components in the common
+// package, but there doesn't feel to be a strong need to do so now.
+export const ExternalLink = ({
   link,
   style,
   children,

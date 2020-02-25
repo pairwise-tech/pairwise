@@ -5,7 +5,7 @@ import { CourseSkeleton } from "@pairwise/common";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text, PageTitle, HrefLink } from "./Shared";
+import { PageContainer, Text, PageTitle, ExternalLink } from "./Shared";
 import { COLORS } from "tools/constants";
 
 /** ===========================================================================
@@ -34,7 +34,10 @@ class Home extends React.Component<IProps, IState> {
           </ContentText>
           <ContentText>
             To learn more about our product and courses, take a look at our{" "}
-            <HrefLink link="https://pairwise.tech">Product Page</HrefLink>.
+            <ExternalLink link="https://pairwise.tech">
+              Product Page
+            </ExternalLink>
+            .
           </ContentText>
           <BoldText>Select a course below to get started now!</BoldText>
         </ContentContainer>
