@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { connect } from "react-redux";
+import { useMedia } from "use-media";
 import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -14,9 +15,11 @@ import {
   ButtonGroup,
   FocusStyleManager,
   Tooltip,
+  Alert,
+  Classes,
 } from "@blueprintjs/core";
 import Account from "./Account";
-import { ButtonCore, ProfileIcon, IconButton } from "./Shared";
+import { ButtonCore, ProfileIcon, IconButton, DarkTheme } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
 import Workspace from "./Workspace";
@@ -227,7 +230,6 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   renderLoadingOverlay = () => {
     return (
       <LoadingOverlay visible={this.props.workspaceLoading}>
-        <MobileView />
         <div>
           <OverlayLoadingText>Launching Pairwise...</OverlayLoadingText>
         </div>
@@ -416,52 +418,51 @@ const AccountDropdownButton = styled.div`
  * ============================================================================
  */
 
-const MobileView = () => (
-  <MobileContainer>
-    <MobileTitleText>Welcome to Pairwise!</MobileTitleText>
-    <MobileText>
-      Unfortunately, smart phones and tablets are not the best devices for
-      developing software. Our platform is intended to be used on a larger
-      screen device. Please return on a laptop or desktop!
-    </MobileText>
-    <MobileText>
-      While you are here, feel free to visit our product page where you can
-      learn more about the curriculum:
-    </MobileText>
-    <MobileText style={{ fontSize: 20 }}>
-      <a target="__blank" href="https://www.pairwise.tech">
-        Visit Product Page
-      </a>
-    </MobileText>
-  </MobileContainer>
-);
+const MobileView = () => {
+  const [isOpen, setIsOpen] = React.useState<boolean>(true);
+  const isMobile = useMedia("(max-width: 768px)", false);
+  return (
+    <Alert
+      confirmButtonText="Okay"
+      onClose={() => setIsOpen(false)}
+      isOpen={isOpen && isMobile}
+      className={Classes.DARK}
+    >
+      <MobileContainer>
+        <MobileTitleText>Welcome to Pairwise!</MobileTitleText>
+        <MobileText>
+          Pairwise might not work on mobile! Feel free to use Pairwise on a
+          phone or tablet but it might not fully work as expected. We recommend
+          you use a computer. For some challenges a phone simply doesn't have
+          the necessary software to complete the challenge.
+        </MobileText>
+        <MobileText>
+          Unfortunately, smart phones and tablets are not the best devices for
+          developing software.
+        </MobileText>
+        <MobileText>
+          If you you're just wondering what Pairwise is about you can check out
+          our hompage:
+        </MobileText>
+        <MobileText style={{ fontSize: 20 }}>
+          <a target="__blank" href="https://www.pairwise.tech">
+            Visit Product Page
+          </a>
+        </MobileText>
+      </MobileContainer>
+    </Alert>
+  );
+};
 
 const MobileContainer = styled.div`
-  z-index: 5000;
-  padding-left: 30px;
-  padding-right: 30px;
-  margin-top: -35px; /* ? */
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position: absolute;
   flex: 1;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  visibility: hidden;
-  background: ${COLORS.BACKGROUND_BODY};
 
   a {
     color: ${COLORS.PRIMARY_GREEN};
-  }
-
-  @media (max-width: 768px) {
-    visibility: visible;
   }
 `;
 
@@ -471,14 +472,12 @@ const MobileText = styled.p`
   font-weight: 300;
   text-align: center;
   font-family: "Helvetica Neue", Lato, sans-serif;
-  color: ${COLORS.TEXT_CONTENT};
 `;
 
 const MobileTitleText = styled(MobileText)`
   font-size: 32px;
   font-weight: 300;
   font-family: "Helvetica Neue", Lato, sans-serif;
-  color: ${COLORS.TEXT_TITLE};
 `;
 
 /** ===========================================================================
