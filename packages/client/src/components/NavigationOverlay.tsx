@@ -444,7 +444,10 @@ class NavigationOverlay extends React.Component<IProps> {
   ) => {
     if (!userCanAccess) {
       event.preventDefault();
-      this.props.handlePaymentCourseIntent({ courseId });
+      this.props.handlePaymentCourseIntent({
+        courseId,
+        showToastWarning: true,
+      });
     }
   };
 
