@@ -48,7 +48,7 @@ jobs:
 
       # Deploy the static site to Cloud Storage
       - name: Configure Docker with gcloud
-        run: gsutil rsync -r packages/www/public gs://www.pairwise.tech
+        run: gsutil -m rsync -r packages/www/public gs://www.pairwise.tech
 
       # Send Slack success notification
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
