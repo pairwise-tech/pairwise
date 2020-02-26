@@ -1,0 +1,74 @@
+name: Deploy Pairwise Website
+
+# Only deploy on commits to the master branch
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "packages/www/**"
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  CLOUD_RUN_PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
+  GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+  GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+  SLACK_STATUS_BOT_ACCESS_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      # Setup NodeJS
+      - name: Setup NodeJS Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+
+      # Install the application dependencies
+      - name: Install dependencies
+        run: yarn docker:dependencies
+
+      # Build the application
+      - name: Build the application
+        run: yarn docker:build-www
+
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+
+      # Configure gcloud CLI
+      - name: Setup gcloud CLI
+        run: |
+          gcloud config set project $CLOUD_RUN_PROJECT_ID
+
+      # Deploy the static site to Cloud Storage
+      - name: Configure Docker with gcloud
+        run: gsutil rsync -r packages/www/public gs://www.pairwise.tech
+
+      # Send Slack success notification
+      # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
+      - name: Notify Slack on workflow success
+        if: success()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: CTBG8AT0B
+          status: SUCCESS
+          color: good
+
+      # Send Slack failure notification
+      - name: Notify Slack on workflow failure
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel_id: CTBG8AT0B
+          status: FAILED
+          color: danger
