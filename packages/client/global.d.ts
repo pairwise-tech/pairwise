@@ -61,3 +61,9 @@ declare module "rich-markdown-editor/lib/lib/headingToSlug" {
     node: SlateNode,
   ): string;
 }
+
+declare module "string-quote-x" {
+  // typing module default export as `any` will allow you to access its members without compiler warning
+  const quote: (str: string) => string;
+  export default quote;
+}

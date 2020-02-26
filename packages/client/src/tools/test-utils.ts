@@ -5,6 +5,7 @@ import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
 import { TEST, PRODUCTION } from "./client-env";
+import quote from "string-quote-x";
 
 /** ===========================================================================
  * Types & Config
@@ -327,6 +328,10 @@ export const getTestDependencies = (testLib: string): string => testLib;
 export const getTestHarness = (userCode: string, testCode: string): string => `
 try {
   ${userCode}
+
+  // use as a fallback when the only way to test user code is by regexp.
+  // purposefully named against conventions to avoid collisions with user vars
+  const __user_code_string__ = ${quote(userCode)};
 
   function buildTestsFromCode() {
     const testArray = [];
