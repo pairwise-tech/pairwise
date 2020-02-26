@@ -372,6 +372,7 @@ class Workspace extends React.Component<IProps, IState> {
       theme: MonacoEditorThemes.DEFAULT,
       automaticLayout: true,
       fixedOverflowWidgets: true,
+      multiCursorModifier: "ctrlCmd",
       minimap: {
         enabled: false,
       },
