@@ -45,6 +45,8 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
   );
 };
 
+// This epic creates a new stream of locations the user visits. The tap is just
+// to make google analytics work with our SPA
 const locationChangeEpic: EpicSignature = (_, __, deps) => {
   return new Observable<Location>(obs => {
     const unsub = deps.router.listen(location => {
@@ -52,7 +54,19 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
     });
 
     return unsub;
-  }).pipe(map(Actions.locationChange));
+  }).pipe(
+    tap(location => {
+      try {
+        // @ts-ignore
+        window.ga("set", "page", location.pathname + location.search);
+        // @ts-ignore
+        window.ga("send", "pageview");
+      } catch (err) {
+        console.warn("[INFO] Google analytics related error", err);
+      }
+    }),
+    map(Actions.locationChange),
+  );
 };
 
 /** ===========================================================================
