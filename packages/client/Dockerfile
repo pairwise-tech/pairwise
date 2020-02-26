@@ -16,7 +16,10 @@ COPY . .
 ARG REACT_APP_HOST
 
 # Set the environment to production
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
+
+# Enable Google Analytics
+ENV REACT_APP_ENABLE_ANALYTICS=true
 
 RUN echo $REACT_APP_HOST
 
