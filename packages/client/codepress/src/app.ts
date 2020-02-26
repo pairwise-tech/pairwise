@@ -108,7 +108,7 @@ const app = express();
 
 app.use(morgan("dev"));
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "10mb" }));
 
 app.get("/courses", (_, res) => {
   api.courses.getAll().then(courses =>

@@ -8,6 +8,21 @@ import getenv from "getenv";
 // Port
 const PORT = getenv.int("PORT", 9000);
 
+// Environment
+const ENVIRONMENT = getenv.string("ENVIRONMENT");
+
+const VALID_ENVIRONMENTS = new Set(["development", "production"]);
+
+// Validate ENVIRONMENT variable. Is there any way to do this with getenv?
+if (!VALID_ENVIRONMENTS.has(ENVIRONMENT)) {
+  throw new Error(
+    `Invalid ENVIRONMENT variable specified, received: "${ENVIRONMENT}". The only environments are "development" and "production" 😎.`,
+  );
+}
+
+const DEVELOPMENT = ENVIRONMENT === "development";
+const PRODUCTION = ENVIRONMENT === "production";
+
 // Services
 const CLIENT_URL = getenv.string("CLIENT_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
@@ -49,6 +64,8 @@ const SENTRY_DSN = getenv.string("SENTRY_DSN", "");
 
 const ENV = {
   PORT,
+  DEVELOPMENT,
+  PRODUCTION,
   HTTPS,
   CLIENT_URL,
   SERVER_HOST_URL,

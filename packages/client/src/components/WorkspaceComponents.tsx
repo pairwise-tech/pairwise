@@ -369,11 +369,9 @@ export const ContentViewEdit = connect(
       <Suspense fallback={<Loading />}>
         <ContentEditor
           toc={false}
+          autoFocus={false}
           placeholder="Write something beautiful..."
           defaultValue={props.content}
-          autoFocus={
-            isEditMode && !props.content /* Only focus an empty editor */
-          }
           readOnly={!isEditMode}
           spellCheck={isEditMode}
           onChange={handleContent}
