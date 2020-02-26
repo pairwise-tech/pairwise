@@ -42,7 +42,6 @@
     "test": "lerna run test",
     "build": "yarn common:build && lerna run build --parallel",
     "docker:dependencies": "docker build -t pairwise-dependencies -f Base.Dockerfile .",
-    "docker:build-www": "docker run --rm -v \"$PWD/packages/www/public:/usr/app/packages/www/public:rw\" pairwise-dependencies /bin/bash -c 'yarn www:build'",
     "docker:build": "docker build -t pairwise-runtime -f packages/e2e/Build.Dockerfile .",
     "docker:test": "docker build -t test -f packages/e2e/Test.Dockerfile .",
     "docker:prod-server-build": "docker build -t pairwise-production-server -f packages/server/Dockerfile .",

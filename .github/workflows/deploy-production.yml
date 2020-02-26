@@ -96,6 +96,18 @@ jobs:
         run: |
           docker build --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL -t pairwise-production-client -f packages/client/Dockerfile .
 
+      # NOTE: We need the static files to be available to the host environment,
+      # thus the use of volumes here. This is because we want to use the
+      # authenticated and authorized gsutil to deploy the site, and if we
+      # dropped gsutil into the docker container we would have to auth another
+      # way
+      - name: Build the pairwise.tech static site
+        run: docker run --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public:rw" pairwise-dependencies /bin/bash -c 'yarn www:build'
+
+      # Deploy the static WWW site to Cloud Storage
+      - name: Deploy pairwise.tech static site
+        run: gsutil -m rsync -r packages/www/public gs://www.pairwise.tech
+
       # Deploy client workspace on Netlify (no builds occur on Netlify)
       # (docs: https://github.com/netlify/cli/blob/master/docs/commands/deploy.md)
       # Note that in Netlify the production branch is set to some non-existent
