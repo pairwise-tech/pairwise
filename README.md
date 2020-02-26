@@ -36,8 +36,11 @@ We use the following libraries across the codebase, here are some quick links to
 - [Prettier](https://prettier.io/docs/en/options.html): Make the code pretty.
 - [Gatsby](https://www.gatsbyjs.org/docs/): The best static sites.
 - [Lerna](https://lerna.js.org/): All the code, all the repos.
-- [GitHub Actions](https://github.com/features/actions): Automate!
 - [VS Code](https://code.visualstudio.com/): Highly recommended, great experience.
+- [GitHub Actions](https://github.com/features/actions): Automate!
+- [ZEIT Now](https://zeit.co/): Host the Pairwise landing page.
+- [Netlify](https://www.netlify.com/): Host the Pairwise client workspace.
+- [Google Cloud Platform](https://cloud.google.com/): Deploy the production backend.
 
 ## Getting Started
 
@@ -157,10 +160,25 @@ A quick note to keep in mind about running `docker-compose` commands. There are 
 
 We use the passport module for defining single-sign-on provider logins with common social account providers like Google, Facebook, and GitHub. Authorization through one of these strategies creates a user account which is uniquely identified by the email address. After authentication, a user is granted a long-lived `jwt` to stay signed into Pairwise.
 
-To test authentication locally, you will need to run the client and server using `https`, which can be done using the `yarn client|server:https` commands. You will also need to adjust relevant environment variables for each of these to `https` where appropriate.
+To test authentication locally, you will need to run the client and server using `https`, which can be done using the `yarn client|server|services:https` commands.
 
 All of the SSO provider logins have mock API implementations in the `external-services` package, which are used when running e2e/Cypress tests. These can be enabled locally by running the
 external services server and by loading all of the SSO provider environment variables which point to the local external service mock APIs (see `server/sample.env`) when running the application server.
+
+## Payments
+
+We are using [Stripe](https://stripe.com/) to process user payments. Currently, the application redirects to a hosted Stripe checkout page which then sends a webhook event to our server if the user completes the checkout process succcessfully. The user is then redirected back to Pairwise and sees a payment confirmation. Here are some instructions and resources for working locally if you need to work on the Stripe payments integration feature.
+
+The docker-compose files deploy a `stripe` service which runs the [Stripe CLI](https://stripe.com/docs/stripe-cli) docker image which handles processing Stripe events. This allows the payment integration to simply work in development mode when running Pairwise locally or in a CI environment. Stripe provides several options for [easily testing](https://stripe.com/docs/testing) payments in development. For instance, you can enter the card number `4242424242424242` with any future date as an expiration and any 3 digit CVC to submit a test successful payment.
+
+To run the Stripe CLI locally, outside of Docker, you can run the following command:
+
+```bash
+# Run the Stripe CLI and forward requests to localhost:9000/payments/stripe-webhook
+$ yarn stripe:dev
+```
+
+Please note that it is necessary to have the Stripe CLI running for the payment checkout to complete successfully and submit the webhook to our server.
 
 ## To Rebuild The Database
 
@@ -189,6 +207,20 @@ $ yarn docker:dependencies
 $ yarn up:build
 ```
 
+If you feel like you having issues with Docker or it is running slowly, you can run `docker system prune` to remove any older unused resources and images.
+
 ## Contributing
 
 We follow a normal git workflow. Commit your changes to a branch, make a pull request, and merge the code after the tests pass.
+
+## Production
+
+The Pairwise landing page is deployed using [ZEIT Now](https://zeit.co/), the client workspace is deployed using [Netlify](https://www.netlify.com/) and the backend server is deployed using [Google Cloud Run](https://cloud.google.com/run), which provides a full managed cloud platform automatic auto-scaling. Updates are shipped continuously by commits to the `master` branch. You can simulate the production backend deployment locally by running the following commands:
+
+```bash
+# Build the production server container
+$ yarn docker:prod-server-build
+
+# Run the production server
+$ yarn docker:prod-server-start
+```

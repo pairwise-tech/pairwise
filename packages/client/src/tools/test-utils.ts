@@ -203,13 +203,15 @@ export const transpileCodeWithBabel = (codeString: string) => {
       plugins: ["@babel/plugin-proposal-class-properties"],
     }).code;
   } else {
+    // Define plugins, see Fuck! note above at Babel.registerPlugin
+    const plugins = PRODUCTION ? [] : ["loopProtection"];
     return Babel.transform(codeString, {
       presets: [
         "es2017",
         "react",
         ["typescript", { isTSX: true, allExtensions: true }],
       ],
-      plugins: ["loopProtection"],
+      plugins,
     }).code;
   }
 };

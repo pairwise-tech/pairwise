@@ -4,9 +4,8 @@ import styled from "styled-components/macro";
 import { CourseSkeleton } from "@pairwise/common";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
-
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text, PageTitle } from "./Shared";
+import { PageContainer, Text, PageTitle, ExternalLink } from "./Shared";
 import { COLORS } from "tools/constants";
 
 /** ===========================================================================
@@ -35,25 +34,24 @@ class Home extends React.Component<IProps, IState> {
           </ContentText>
           <ContentText>
             To learn more about our product and courses, take a look at our{" "}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://pairwise.tech"
-            >
+            <ExternalLink link="https://pairwise.tech">
               Product Page
-            </a>
+            </ExternalLink>
             .
           </ContentText>
           <BoldText>Select a course below to get started now!</BoldText>
         </ContentContainer>
         <PageTitle>Courses:</PageTitle>
-        {this.props.skeletons?.map(this.renderCourseSkeleton)}
+        {this.props.skeletons?.map(this.renderCourseItem)}
       </PageContainer>
     );
   }
 
-  renderCourseSkeleton = (skeleton: CourseSkeleton, i: number) => {
-    const firstChallenge = skeleton.modules[0].challenges[0];
+  renderCourseItem = (skeleton: CourseSkeleton, i: number) => {
+    const { payments } = this.props.user;
+    const paidForCourse = payments?.find(p => p.courseId === skeleton.id);
+
+    const firstChallenge = this.props.firstUnfinishedChallenge;
     if (!firstChallenge) {
       return null;
     }
@@ -67,34 +65,46 @@ class Home extends React.Component<IProps, IState> {
       >
         <CourseTitle id={`course-link-${i}`}>{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
-        <ButtonsBox>
+        {paidForCourse ? (
           <Link to={`workspace/${firstChallenge.id}`}>
             <Button
               large
               intent="success"
-              onClick={() => null}
               style={{ width: 185 }}
-              id={`course-link-${i}-start`}
+              id={`course-link-${i}-continue`}
             >
-              Start Now For Free
+              Start Now
             </Button>
           </Link>
-          <Button
-            large
-            intent="success"
-            id={`course-link-${i}-purchase`}
-            style={{ marginLeft: 16, width: 185 }}
-            onClick={this.handlePurchaseCourse(skeleton.id)}
-          >
-            Purchase Course
-          </Button>
-        </ButtonsBox>
+        ) : (
+          <ButtonsBox>
+            <Link to={`workspace/${firstChallenge.id}`}>
+              <Button
+                large
+                intent="success"
+                style={{ width: 185 }}
+                id={`course-link-${i}-start`}
+              >
+                Start Now For Free
+              </Button>
+            </Link>
+            <Button
+              large
+              intent="success"
+              id={`course-link-${i}-purchase`}
+              style={{ marginLeft: 16, width: 185 }}
+              onClick={this.handlePurchaseCourse(skeleton.id)}
+            >
+              Purchase Course
+            </Button>
+          </ButtonsBox>
+        )}
       </Card>
     );
   };
 
   handlePurchaseCourse = (courseId: string) => () => {
-    this.props.handlePurchaseCourseIntent({ courseId });
+    this.props.handlePaymentCourseIntent({ courseId });
   };
 }
 
@@ -140,13 +150,15 @@ const BoldText = styled(CourseDescription)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  user: Modules.selectors.user.userProfile(state),
+  user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
+  firstUnfinishedChallenge: Modules.selectors.challenges.firstUnfinishedChallenge(
+    state,
+  ),
 });
 
 const dispatchProps = {
-  handlePurchaseCourseIntent:
-    Modules.actions.purchase.handlePurchaseCourseIntent,
+  handlePaymentCourseIntent: Modules.actions.payments.handlePaymentCourseIntent,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

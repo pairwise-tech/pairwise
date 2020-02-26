@@ -89,11 +89,11 @@ export interface Payment {
   courseId: string;
   datePaid: Date;
   amountPaid: number;
+  status: PAYMENT_STATUS;
   extraData?: string /* generic json data */;
-  type: PAYMENT_TYPE;
 }
 
-export type PAYMENT_TYPE = "SUCCESS" | "FAILURE" | "REFUNDED";
+export type PAYMENT_STATUS = "CONFIRMED" | "REFUNDED";
 
 export type COURSE_ACCESS_LEVEL = "FREE" | "PAID";
 
@@ -223,3 +223,12 @@ export interface ProgressEntity {
 }
 
 export type UserCourseProgress = ProgressEntity[];
+
+/** ===========================================================================
+ * Payment Types
+ * ============================================================================
+ */
+
+export interface StripeStartCheckoutSuccessResponse {
+  stripeCheckoutSessionId: string;
+}

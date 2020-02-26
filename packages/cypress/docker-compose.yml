@@ -15,7 +15,7 @@ services:
 
   server:
     image: pairwise-runtime
-    command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:run
+    command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:prod
     environment:
       TYPEORM_HOST: db
       CLIENT_URL: http://client:3000
@@ -52,12 +52,13 @@ services:
 
   cypress:
     image: pairwise-runtime
-    command: dockerize -wait tcp://db:5432 -wait tcp://client:3000 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 20s yarn test:cypress
+    command: dockerize -wait tcp://db:5432 -wait tcp://client:3000 -wait tcp://server:9000 -wait tcp://external-services:7000 -timeout 10s yarn test:cypress
     depends_on:
       - db
       - server
       - client
       - external-services
     ipc: host # See: https://github.com/cypress-io/cypress/issues/350#issuecomment-267704772
+    # I don't think this volume is working properly:
     volumes:
       - ./docker-screenshots:/usr/app/packages/cypress/screenshots

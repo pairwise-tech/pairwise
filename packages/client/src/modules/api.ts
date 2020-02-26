@@ -16,6 +16,7 @@ import {
   UserSettings,
   UserProgressMap,
   defaultUserSettings,
+  StripeStartCheckoutSuccessResponse,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -28,7 +29,8 @@ import {
   saveSandboxToLocalStorage,
   getSandboxFromLocalStorage,
 } from "tools/storage-utils";
-import { AppToaster, SANDBOX_ID } from "tools/constants";
+import { SANDBOX_ID } from "tools/constants";
+import toaster from "tools/toast-utils";
 import { wait } from "tools/utils";
 import { UserStoreState } from "./user/store";
 
@@ -157,12 +159,7 @@ class BaseApiClass {
      * error handling higher up into the epics layer. Then again, logout
      * should RARELY occur, so... blegh.
      */
-    AppToaster.show({
-      icon: "user",
-      intent: "danger",
-      message: "Your session has expired, please login again.",
-    });
-
+    toaster.error("Your session has expired, please login again.", "user");
     logoutUserInLocalStorage();
     await wait(1500); /* Wait so they can read the message... */
 
@@ -188,8 +185,7 @@ class Api extends BaseApiClass {
   fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
     try {
       let course: Course;
-      if (ENV.PRODUCTION || ENV.DEV) {
-        /* TODO: Remove after deploying a server */
+      if (ENV.DEV) {
         const challenges = require("@pairwise/common").default;
         course = challenges.FullstackTypeScript;
       } else if (ENV.CODEPRESS) {
@@ -219,7 +215,7 @@ class Api extends BaseApiClass {
   };
 
   fetchCourseSkeletons = async () => {
-    if (ENV.PRODUCTION || ENV.DEV) {
+    if (ENV.DEV) {
       /* TODO: Remove after deploying a server */
       const challenges = require("@pairwise/common").default;
       const FullstackTypeScript: Course = challenges.FullstackTypeScript;
@@ -442,6 +438,19 @@ class Api extends BaseApiClass {
   handleDataPersistenceForNewAccount = async () => {
     await localStorageHTTP.persistDataPersistenceForNewAccount();
   };
+
+  createCheckoutSession = async (courseId: string) => {
+    const { headers } = this.getRequestHeaders();
+    return this.httpHandler(async () => {
+      return axios.post<StripeStartCheckoutSuccessResponse>(
+        `${HOST}/payments/checkout/${courseId}`,
+        {},
+        {
+          headers,
+        },
+      );
+    });
+  };
 }
 
 /** ===========================================================================
@@ -603,11 +612,9 @@ class LocalStorageHttpClass {
 
     let toastKey = "";
     if (shouldToast) {
-      toastKey = AppToaster.show({
-        intent: "warning",
-        message:
-          "Syncing your progress to your new account, please wait a moment and do not close your browser window.",
-      });
+      toastKey = toaster.warn(
+        "Syncing your progress to your new account, please wait a moment and do not close your browser window.",
+      );
     }
 
     const results = await Promise.all([
@@ -621,11 +628,8 @@ class LocalStorageHttpClass {
       await wait(3000);
 
       /* Dismiss the previous toaster: */
-      AppToaster.dismiss(toastKey);
-      AppToaster.show({
-        intent: "success",
-        message: "Updates saved! You are good to go!",
-      });
+      toaster.toast.dismiss(toastKey);
+      toaster.success("Updates saved! You are good to go!");
     }
 
     /* Log failed operations for debugging */

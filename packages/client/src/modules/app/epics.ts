@@ -1,10 +1,12 @@
-import { filter, map, tap, ignoreElements } from "rxjs/operators";
+import queryString from "query-string";
+import { filter, map, tap, ignoreElements, pluck } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
+import { parseInitialUrlToInitializationType } from "tools/utils";
 
 /** ===========================================================================
  * Epics
@@ -23,6 +25,26 @@ const appInitializationEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
+  return action$.pipe(
+    filter(isActionOf(Actions.initializeApp)),
+    pluck("payload"),
+    pluck("location"),
+    map(location => {
+      const params = queryString.parse(location.search);
+      const appInitializationType = parseInitialUrlToInitializationType(
+        location.pathname,
+        params,
+      );
+      return Actions.captureAppInitializationUrl({
+        params,
+        location,
+        appInitializationType,
+      });
+    }),
+  );
+};
+
 const locationChangeEpic: EpicSignature = (_, __, deps) => {
   return new Observable<Location>(obs => {
     const unsub = deps.router.listen(location => {
@@ -38,4 +60,8 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
  * ============================================================================
  */
 
-export default combineEpics(appInitializationEpic, locationChangeEpic);
+export default combineEpics(
+  appInitializationEpic,
+  appInitializeCaptureUrlEpic,
+  locationChangeEpic,
+);

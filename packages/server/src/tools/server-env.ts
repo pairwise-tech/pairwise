@@ -5,12 +5,36 @@ import getenv from "getenv";
  * ============================================================================
  */
 
-/* Services: */
+// Port
+const PORT = getenv.int("PORT", 9000);
+
+// Environment
+const ENVIRONMENT = getenv.string("ENVIRONMENT");
+
+const VALID_ENVIRONMENTS = new Set(["development", "production"]);
+
+// Validate ENVIRONMENT variable. Is there any way to do this with getenv?
+if (!VALID_ENVIRONMENTS.has(ENVIRONMENT)) {
+  throw new Error(
+    `Invalid ENVIRONMENT variable specified, received: "${ENVIRONMENT}". The only environments are "development" and "production" 😎.`,
+  );
+}
+
+const DEVELOPMENT = ENVIRONMENT === "development";
+const PRODUCTION = ENVIRONMENT === "production";
+
+// Services
 const CLIENT_URL = getenv.string("CLIENT_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
 const HTTPS = getenv.bool("HTTPS", false);
 
-/* Auth: */
+// Stripe
+const STRIPE_SECRET_KEY = getenv.string("STRIPE_SECRET_KEY");
+const STRIPE_WEBHOOK_SIGNING_SECRET = getenv.string(
+  "STRIPE_WEBHOOK_SIGNING_SECRET",
+);
+
+// Auth
 const JWT_SECRET = getenv.string("JWT_SECRET");
 const FACEBOOK_CLIENT_ID = getenv.string("FACEBOOK_CLIENT_ID");
 const FACEBOOK_CLIENT_SECRET = getenv.string("FACEBOOK_CLIENT_SECRET");
@@ -31,14 +55,22 @@ const GOOGLE_PROFILE_URL = getenv.string("GOOGLE_PROFILE_URL", "");
 const GOOGLE_TOKEN_URL = getenv.string("GOOGLE_TOKEN_URL", "");
 const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 
-/* Slack: */
+// Slack
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
 
+// Sentry
+const SENTRY_DSN = getenv.string("SENTRY_DSN", "");
+
 const ENV = {
+  PORT,
+  DEVELOPMENT,
+  PRODUCTION,
   HTTPS,
   CLIENT_URL,
   SERVER_HOST_URL,
+  STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_SIGNING_SECRET,
   JWT_SECRET,
   FACEBOOK_CLIENT_ID,
   FACEBOOK_CLIENT_SECRET,
@@ -57,6 +89,7 @@ const ENV = {
   GOOGLE_AUTHORIZATION_URL,
   SLACK_API_TOKEN,
   SLACK_ADMIN_IDS,
+  SENTRY_DSN,
 };
 
 /** ===========================================================================

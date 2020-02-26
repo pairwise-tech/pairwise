@@ -38,3 +38,5 @@ docker
 
 # Misc backup files
 *.bak
+
+secrets

@@ -7,6 +7,7 @@ import getenv from "getenv";
 
 export const UNSPECIFIED_ENV_GUARD = "@@INVALID_DEV_ENV_VALUE";
 
+// Environment
 export const NODE_ENV = getenv.string("NODE_ENV", UNSPECIFIED_ENV_GUARD);
 export const DEV = getenv.bool("REACT_APP_DEV", false);
 export const CODEPRESS = getenv.bool("REACT_APP_CODEPRESS", false);
@@ -17,6 +18,11 @@ export const CODEPRESS_HOST = getenv.string(
   "http://localhost:3001",
 );
 
+export const STRIPE_API_KEY = getenv.string("REACT_APP_STRIPE_API_KEY", "");
+
 export const TEST = NODE_ENV === "test";
 export const DEVELOPMENT = NODE_ENV === "development";
 export const PRODUCTION = NODE_ENV === "production";
+
+// Sentry
+export const SENTRY_DSN = getenv.string("REACT_APP_SENTRY_DSN", "");

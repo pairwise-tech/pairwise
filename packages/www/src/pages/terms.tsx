@@ -1,136 +1,133 @@
 import React from 'react';
 
-import { ConstrainWidth, Section } from '../components/components';
+import {
+  ExternalLink,
+  ConstrainWidth,
+  Section,
+} from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 
 const TermsOfService = () => (
   <Layout>
-    <SEO title="Contact" description="Get in touch with us" />
+    <SEO
+      title="Terms of Service"
+      description="View the Pairwise Terms of Service"
+    />
     <Section>
       <ConstrainWidth>
-        <div>
-          <h1>Website Terms and Conditions of Use</h1>
-
-          <h2>1. Terms</h2>
-
+        <div style={{ fontWeight: 100 }}>
+          <h2>Pairwise, LLC Terms of Service</h2>
+          <h3>1. Terms</h3>
           <p>
-            By accessing this Website, accessible from
-            https://app.pairwise.tech, you are agreeing to be bound by these
-            Website Terms and Conditions of Use and agree that you are
-            responsible for the agreement with any applicable local laws. If you
-            disagree with any of these terms, you are prohibited from accessing
-            this site. The materials contained in this Website are protected by
-            copyright and trade mark law. These Terms of Service has been
-            created with the help of the{' '}
-            <a href="https://www.termsofservicegenerator.net">
-              Terms of Service Generator
-            </a>{' '}
-            and the{' '}
-            <a href="https://www.termsconditionsexample.com">
-              Terms & Conditions Example
-            </a>
-            .
+            By accessing the website at{' '}
+            <ExternalLink link="https://app.pairwise.tech/">
+              https://app.pairwise.tech/
+            </ExternalLink>
+            , you are agreeing to be bound by these terms of service, all
+            applicable laws and regulations, and agree that you are responsible
+            for compliance with any applicable local laws. If you do not agree
+            with any of these terms, you are prohibited from using or accessing
+            this site. The materials contained in this website are protected by
+            applicable copyright and trademark law.
           </p>
-
-          <h2>2. Use License</h2>
-
-          <p>
-            Permission is granted to temporarily download one copy of the
-            materials on Pairwise's Website for personal, non-commercial
-            transitory viewing only. This is the grant of a license, not a
-            transfer of title, and under this license you may not:
-          </p>
-
-          <ul>
-            <li>modify or copy the materials;</li>
+          <h3>2. Use License</h3>
+          <ol type="a">
             <li>
-              use the materials for any commercial purpose or for any public
-              display;
+              Permission is granted to temporarily download one copy of the
+              materials (information or software) on Pairwise, LLC's website for
+              personal, non-commercial transitory viewing only. This is the
+              grant of a license, not a transfer of title, and under this
+              license you may not:
+              <ol type="i">
+                <li>modify or copy the materials;</li>
+                <li>
+                  use the materials for any commercial purpose, or for any
+                  public display (commercial or non-commercial);
+                </li>
+                <li>
+                  attempt to decompile or reverse engineer any software
+                  contained on Pairwise, LLC's website;
+                </li>
+                <li>
+                  remove any copyright or other proprietary notations from the
+                  materials; or
+                </li>
+                <li>
+                  transfer the materials to another person or "mirror" the
+                  materials on any other server.
+                </li>
+              </ol>
             </li>
             <li>
-              attempt to reverse engineer any software contained on Pairwise's
-              Website;
+              This license shall automatically terminate if you violate any of
+              these restrictions and may be terminated by Pairwise, LLC at any
+              time. Upon terminating your viewing of these materials or upon the
+              termination of this license, you must destroy any downloaded
+              materials in your possession whether in electronic or printed
+              format.
+            </li>
+          </ol>
+          <h3>3. Disclaimer</h3>
+          <ol type="a">
+            <li>
+              The materials on Pairwise, LLC's website are provided on an 'as
+              is' basis. Pairwise, LLC makes no warranties, expressed or
+              implied, and hereby disclaims and negates all other warranties
+              including, without limitation, implied warranties or conditions of
+              merchantability, fitness for a particular purpose, or
+              non-infringement of intellectual property or other violation of
+              rights.
             </li>
             <li>
-              remove any copyright or other proprietary notations from the
-              materials; or
+              Further, Pairwise, LLC does not warrant or make any
+              representations concerning the accuracy, likely results, or
+              reliability of the use of the materials on its website or
+              otherwise relating to such materials or on any sites linked to
+              this site.
             </li>
-            <li>
-              transferring the materials to another person or "mirror" the
-              materials on any other server.
-            </li>
-          </ul>
-
+          </ol>
+          <h3>4. Limitations</h3>
           <p>
-            This will let Pairwise to terminate upon violations of any of these
-            restrictions. Upon termination, your viewing right will also be
-            terminated and you should destroy any downloaded materials in your
-            possession whether it is printed or electronic format.
-          </p>
-
-          <h2>3. Disclaimer</h2>
-
-          <p>
-            All the materials on Pairwise’s Website are provided "as is".
-            Pairwise makes no warranties, may it be expressed or implied,
-            therefore negates all other warranties. Furthermore, Pairwise does
-            not make any representations concerning the accuracy or reliability
-            of the use of the materials on its Website or otherwise relating to
-            such materials or any sites linked to this Website.
-          </p>
-
-          <h2>4. Limitations</h2>
-
-          <p>
-            Pairwise or its suppliers will not be hold accountable for any
-            damages that will arise with the use or inability to use the
-            materials on Pairwise’s Website, even if Pairwise or an authorize
-            representative of this Website has been notified, orally or written,
-            of the possibility of such damage. Some jurisdiction does not allow
-            limitations on implied warranties or limitations of liability for
+            In no event shall Pairwise, LLC or its suppliers be liable for any
+            damages (including, without limitation, damages for loss of data or
+            profit, or due to business interruption) arising out of the use or
+            inability to use the materials on Pairwise, LLC's website, even if
+            Pairwise, LLC or a Pairwise, LLC authorized representative has been
+            notified orally or in writing of the possibility of such damage.
+            Because some jurisdictions do not allow limitations on implied
+            warranties, or limitations of liability for consequential or
             incidental damages, these limitations may not apply to you.
           </p>
-
-          <h2>5. Revisions and Errata</h2>
-
+          <h3>5. Accuracy of materials</h3>
           <p>
-            The materials appearing on Pairwise’s Website may include technical,
-            typographical, or photographic errors. Pairwise will not promise
-            that any of the materials in this Website are accurate, complete, or
-            current. Pairwise may change the materials contained on its Website
-            at any time without notice. Pairwise does not make any commitment to
-            update the materials.
+            The materials appearing on Pairwise, LLC's website could include
+            technical, typographical, or photographic errors. Pairwise, LLC does
+            not warrant that any of the materials on its website are accurate,
+            complete or current. Pairwise, LLC may make changes to the materials
+            contained on its website at any time without notice. However
+            Pairwise, LLC does not make any commitment to update the materials.
           </p>
-
-          <h2>6. Links</h2>
-
+          <h3>6. Links</h3>
           <p>
-            Pairwise has not reviewed all of the sites linked to its Website and
-            is not responsible for the contents of any such linked site. The
-            presence of any link does not imply endorsement by Pairwise of the
-            site. The use of any linked website is at the user’s own risk.
+            Pairwise, LLC has not reviewed all of the sites linked to its
+            website and is not responsible for the contents of any such linked
+            site. The inclusion of any link does not imply endorsement by
+            Pairwise, LLC of the site. Use of any such linked website is at the
+            user's own risk.
           </p>
-
-          <h2>7. Site Terms of Use Modifications</h2>
-
+          <h3>7. Modifications</h3>
           <p>
-            Pairwise may revise these Terms of Use for its Website at any time
-            without prior notice. By using this Website, you are agreeing to be
-            bound by the current version of these Terms and Conditions of Use.
+            Pairwise, LLC may revise these terms of service for its website at
+            any time without notice. By using this website you are agreeing to
+            be bound by the then current version of these terms of service.
           </p>
-
-          <h2>8. Your Privacy</h2>
-
+          <h3>8. Governing Law</h3>
           <p>
-            Please read <a href="/privacy-policy">our Privacy Policy</a>.
-          </p>
-
-          <h2>9. Governing Law</h2>
-
-          <p>
-            Any claim related to Pairwise's Website shall be governed by the
-            laws of us without regards to its conflict of law provisions.
+            These terms and conditions are governed by and construed in
+            accordance with the laws of Newark, Delaware and you irrevocably
+            submit to the exclusive jurisdiction of the courts in that State or
+            location.
           </p>
         </div>
       </ConstrainWidth>

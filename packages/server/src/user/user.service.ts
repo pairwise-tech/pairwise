@@ -13,6 +13,7 @@ import {
 import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
+import { ERROR_CODES } from "src/tools/constants";
 import { SlackService } from "src/slack/slack.service";
 
 export interface GenericUserProfile {
@@ -55,6 +56,10 @@ export class UserService {
    */
   async findUserByEmailGetFullProfile(email: string) {
     const user = await this.userRepository.findOne({ email });
+
+    if (!user) {
+      throw new BadRequestException(ERROR_CODES.MISSING_USER);
+    }
 
     const { payments, courses } = await this.getCourseForUser(user);
     const { progress } = await this.getProgressMapForUser(user);
@@ -152,10 +157,11 @@ export class UserService {
       },
     });
 
-    const courses = payments.reduce((courseAccess, { courseId, type }) => {
+    const courses = payments.reduce((courseAccess, { courseId, status }) => {
+      const courseIsPaid = status === "CONFIRMED";
       return {
         ...courseAccess,
-        [courseId]: type === "SUCCESS" ? true : false,
+        [courseId]: courseIsPaid,
       };
     }, {});
 

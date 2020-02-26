@@ -7,7 +7,7 @@ import {
   UserProfile,
   defaultUserSettings,
 } from "@pairwise/common";
-import { AppActionTypes } from "../app";
+import { AuthActionTypes } from "../auth";
 import { Actions as actions } from "../root-actions";
 import { UserActionTypes } from "./index";
 import { combineReducers } from "redux";
@@ -54,7 +54,7 @@ export interface State {
   user: UserState;
 }
 
-const user = createReducer<UserState, UserActionTypes | AppActionTypes>(
+const user = createReducer<UserState, UserActionTypes | AuthActionTypes>(
   initialUserState,
 )
   .handleAction(actions.logoutUser, () => initialUserState)
@@ -70,7 +70,7 @@ const user = createReducer<UserState, UserActionTypes | AppActionTypes>(
     }),
   );
 
-const loading = createReducer<boolean, UserActionTypes | AppActionTypes>(
+const loading = createReducer<boolean, UserActionTypes | AuthActionTypes>(
   true,
 ).handleAction(actions.fetchUserSuccess, () => false);
 

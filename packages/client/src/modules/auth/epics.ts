@@ -1,9 +1,9 @@
-import queryString from "query-string";
 import { combineEpics } from "redux-observable";
 import {
   filter,
   ignoreElements,
   tap,
+  delay,
   mergeMap,
   pluck,
   map,
@@ -19,6 +19,7 @@ import {
 } from "tools/storage-utils";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
+import { APP_INITIALIZATION_TYPE } from "tools/utils";
 
 /** ===========================================================================
  * Epics
@@ -37,27 +38,28 @@ import { Actions } from "../root-actions";
  */
 const accessTokenInitializationEpic: EpicSignature = action$ => {
   return action$.pipe(
-    filter(isActionOf(Actions.initializeAccessToken)),
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     map(payload => {
+      const { params, appInitializationType } = payload;
+      const { accessToken } = params;
+
+      let accountCreated = false;
       let token = getAccessTokenFromLocalStorage();
-      let accountCreatedField = false;
 
-      const search = payload.initialWindowLocationSearch;
-      const { accessToken, accountCreated } = queryString.parse(search);
-
-      const created =
-        typeof accountCreated === "string" ? JSON.parse(accountCreated) : false;
-
-      if (typeof accessToken === "string" && typeof created === "boolean") {
-        console.log(`Login detected! Account created: ${created}`);
-        token = accessToken;
-        accountCreatedField = created;
+      if (appInitializationType === APP_INITIALIZATION_TYPE.ACCOUNT_CREATED) {
+        accountCreated = true;
+        token = accessToken as string;
+        console.log("User signin occurred, new account created!");
+      } else if (appInitializationType === APP_INITIALIZATION_TYPE.SIGN_IN) {
+        accountCreated = false;
+        console.log("Existing user signin occurred!");
+        token = accessToken as string;
       }
 
       return Actions.storeAccessToken({
+        accountCreated,
         accessToken: token,
-        accountCreated: accountCreatedField,
       });
     }),
   );
@@ -127,14 +129,18 @@ const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-/**
- * Logging out the current user involves removing the current access token
- * from local storage.
- */
-const logoutEpic: EpicSignature = action$ => {
+// Logout the user by removing the local storage access token.
+const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
+  const logoutToast = () => {
+    deps.toaster.success("Logout Success", "log-out");
+  };
+
   return action$.pipe(
     filter(isActionOf(Actions.logoutUser)),
     tap(logoutUserInLocalStorage),
+    // Put a short delay so the user feels like something actually happened.
+    delay(250),
+    tap(logoutToast),
     ignoreElements(),
   );
 };
@@ -149,5 +155,5 @@ export default combineEpics(
   storeAccessTokenEpic,
   accountCreationEpic,
   bulkPersistenceEpic,
-  logoutEpic,
+  logoutUserSuccessEpic,
 );

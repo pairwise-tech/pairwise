@@ -9,8 +9,8 @@ COPY . .
 # Setup server environment
 RUN yarn server:setup
 
-# Set the damn React variable!
+# Set the React app server URL for the test/development environment
 ENV REACT_APP_HOST=http://server:9000
 
-# Uses Lerna to run the build command for all packages
+# Use Lerna to run the build command for all packages
 RUN yarn build

@@ -11,6 +11,6 @@ describe("AppController (e2e)", () => {
     return request(HOST)
       .get("/")
       .expect(200)
-      .expect("Hello from the Nest Application!");
+      .expect("This is Pairwise 😎");
   });
 });

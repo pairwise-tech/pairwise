@@ -1,5 +1,3 @@
-import { Toaster } from "@blueprintjs/core";
-
 /** ===========================================================================
  * Colors
  * ============================================================================
@@ -91,11 +89,9 @@ export const CONTENT_SERIALIZE_DEBOUNCE = 600;
  */
 export const SANDBOX_ID = "sandbox";
 
-const AppToaster = Toaster.create({ className: "blueprint-toaster" });
-
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export { COLORS, DIMENSIONS, HEADER_HEIGHT, AppToaster };
+export { COLORS, DIMENSIONS, HEADER_HEIGHT };

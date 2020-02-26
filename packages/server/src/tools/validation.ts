@@ -1,7 +1,7 @@
 import {
   ICodeBlobDto,
   BlobTypeSet,
-  challengeUtilityClass,
+  ContentUtility,
   assertUnreachable,
   UserUpdateOptions,
   Result,
@@ -12,6 +12,8 @@ import {
   IFeedbackDto,
   feedbackTypeSet,
   MonacoEditorThemes,
+  IUserDto,
+  UserProfile,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -45,7 +47,7 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
     throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
   }
 
-  if (!challengeUtilityClass.challengeIdIsValid(blob.challengeId)) {
+  if (!ContentUtility.challengeIdIsValid(blob.challengeId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
   }
 
@@ -101,10 +103,10 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
  */
 export const validateChallengeProgressDto = (progressDto: ProgressDto) => {
   const { courseId, challengeId } = progressDto;
-  if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+  if (!ContentUtility.courseIdIsValid(courseId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
   } else if (
-    !challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
+    !ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)
   ) {
     throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
   }
@@ -206,7 +208,7 @@ const sanitizeObject = (obj: any) => {
 export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
   const { progress, courseId } = entity;
 
-  if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+  if (!ContentUtility.courseIdIsValid(courseId)) {
     throw new Error(ERROR_CODES.INVALID_COURSE_ID);
   }
 
@@ -215,9 +217,7 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
       /**
        * Validate the progress item:
        */
-      if (
-        challengeUtilityClass.challengeIdInCourseIsValid(courseId, challengeId)
-      ) {
+      if (ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)) {
         if (typeof status.complete === "boolean") {
           return {
             ...sanitized,
@@ -242,20 +242,56 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
   }
 };
 
-/**
- * Validate the user request to purchase a course. The course id must be valid
- * and the user must not have already purchased this course before.
- */
-export const validatePaymentRequest = (user: RequestUser, courseId: string) => {
-  if (!challengeUtilityClass.courseIdIsValid(courseId)) {
+// Validate the user request to purchase a course. The course id must be valid
+// and the user must not have already purchased this course before.
+export const validatePaymentRequest = (
+  user: IUserDto<UserProfile>,
+  courseId: string,
+) => {
+  // A valid user is required
+  if (!user) {
+    throw new BadRequestException(ERROR_CODES.MISSING_USER);
+  }
+
+  // The course id must be valid
+  if (!ContentUtility.courseIdIsValid(courseId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
   }
 
   const existingCoursePayment = user.payments.find(
     p => p.courseId === courseId,
   );
+
+  // The user must no have already paid for the course
   if (existingCoursePayment) {
-    throw new BadRequestException("User has previously paid for this course");
+    throw new BadRequestException("User has already paid for this course");
+  }
+};
+
+// Validate a refund request for a course
+export const validateRefundRequest = (
+  user: IUserDto<UserProfile>,
+  courseId: string,
+) => {
+  // A valid user is required
+  if (!user) {
+    throw new BadRequestException(ERROR_CODES.MISSING_USER);
+  }
+
+  // The course id must be valid
+  if (!ContentUtility.courseIdIsValid(courseId)) {
+    throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+  }
+
+  const existingCoursePayment = user.payments.find(
+    p => p.courseId === courseId,
+  );
+
+  // The course must exist and not be refunded already
+  if (!existingCoursePayment) {
+    throw new BadRequestException("The user has not purchased this course");
+  } else if (existingCoursePayment.status === "REFUNDED") {
+    throw new BadRequestException("The course is already refunded");
   }
 };
 
@@ -263,7 +299,7 @@ export const validatePaymentRequest = (user: RequestUser, courseId: string) => {
  * Validating the feedback dto.
  */
 export const validateFeedbackDto = (feedbackDto: IFeedbackDto) => {
-  if (!challengeUtilityClass.challengeIdIsValid(feedbackDto.challengeId)) {
+  if (!ContentUtility.challengeIdIsValid(feedbackDto.challengeId)) {
     throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
   } else if (!feedbackTypeSet.has(feedbackDto.type)) {
     throw new BadRequestException(ERROR_CODES.INVALID_FEEDBACK_TYPE);
