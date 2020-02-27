@@ -27,6 +27,7 @@ import {
   Menu,
   MenuItem,
   Position,
+  Button,
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
@@ -97,10 +98,29 @@ class NavigationOverlay extends React.Component<IProps> {
           style={{
             width: 600,
             zIndex: 2,
-            boxShadow: "inset 20px 0px 20px 0px rgba(0, 0, 0, 0.1)",
           }}
           onClick={e => e.stopPropagation()}
         >
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              zIndex: 3,
+              boxShadow: "rgba(0, 0, 0, 0.22) 10px 0px 10px 0px inset",
+              width: "80px",
+              pointerEvents: "none",
+            }}
+          />
+          <Title>
+            <p>{module.title}</p>
+            <div>
+              <Button onClick={this.props.toggleAllSectionAccordionView}>
+                Expand
+              </Button>
+            </div>
+          </Title>
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
           {this.renderChallengeCodepressButton(course, module, -1)}
           {this.renderSortableChallengeList(course, module, module.challenges)}
@@ -313,7 +333,7 @@ class NavigationOverlay extends React.Component<IProps> {
             course.id,
           )}
         >
-          <span>
+          <span className="content">
             <ChallengeIconUI />
             <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
@@ -546,7 +566,6 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
 const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
   cursor: pointer;
   padding: 12px;
-  font-size: 18px;
   border: 1px solid transparent;
   border-bottom-color: ${COLORS.LIGHT_GREY};
   width: 100%;
@@ -580,7 +599,8 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
     }
   }
 
-  span {
+  .content {
+    font-size: 18px;
     display: flex;
     align-items: center;
   }
@@ -645,13 +665,25 @@ const Overlay = styled.div<{ visible: boolean }>`
   transition: all 0.2s ease-out;
 `;
 
-const Title = styled.p`
+const Title = styled.div`
   font-size: 18px;
   font-weight: 200;
-  color: ${COLORS.TEXT_TITLE};
+  color: white;
   margin: 0;
-  padding: 12px;
-  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
+  height: 40px;
+  padding: 0 12px;
+  border-bottom: 1px solid ${COLORS.SEPARATOR_BORDER};
+  font-variant: small-caps;
+  font-weight: bold;
+  letter-spacing: 2;
+  background: #404040;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  p {
+    margin: 0;
+  }
 `;
 
 /** ===========================================================================
@@ -688,6 +720,7 @@ const dispatchProps = {
   updateUserSettings: Modules.actions.user.updateUserSettings,
   setNavigationMapState: ChallengeActions.setNavigationMapState,
   toggleSectionAccordionView: ChallengeActions.toggleSectionAccordionView,
+  toggleAllSectionAccordionView: ChallengeActions.toggleAllSectionAccordionView,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePaymentCourseIntent: Modules.actions.payments.handlePaymentCourseIntent,
 };
