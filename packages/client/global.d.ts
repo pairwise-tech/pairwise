@@ -61,3 +61,8 @@ declare module "rich-markdown-editor/lib/lib/headingToSlug" {
     node: SlateNode,
   ): string;
 }
+
+declare module "string-quote-x" {
+  const quote: (str: string) => string;
+  export default quote;
+}

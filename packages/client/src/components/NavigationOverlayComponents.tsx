@@ -233,7 +233,7 @@ const NavUpdateField = styled.input`
   padding: 0;
   font-size: 18px;
   border: 1px solid transparent;
-  border-bottom-color: ${COLORS.SEPARATOR_BORDER};
+  border-bottom-color: ${COLORS.LIGHT_GREY};
   width: 100%;
   display: block;
   text-align: left;
@@ -271,7 +271,7 @@ export const ModuleNavigationBase = styled.div<{ active?: boolean }>`
   padding-right: 2px;
   font-size: 18px;
   border: 1px solid transparent;
-  border-bottom-color: ${COLORS.SEPARATOR_BORDER};
+  border-bottom-color: ${COLORS.LIGHT_GREY};
   width: 100%;
   display: flex;
   align-items: center;

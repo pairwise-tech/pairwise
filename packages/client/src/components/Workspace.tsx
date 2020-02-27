@@ -337,6 +337,7 @@ class Workspace extends React.Component<IProps, IState> {
       .init()
       .then(mn => {
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({
+          strict: true,
           noEmit: true,
           jsx: "react",
           typeRoots: ["node_modules/@types"],
@@ -371,6 +372,7 @@ class Workspace extends React.Component<IProps, IState> {
       theme: MonacoEditorThemes.DEFAULT,
       automaticLayout: true,
       fixedOverflowWidgets: true,
+      multiCursorModifier: "ctrlCmd",
       minimap: {
         enabled: false,
       },

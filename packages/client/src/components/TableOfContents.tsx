@@ -4,7 +4,7 @@ import { Editor } from "slate-react";
 
 import { Block } from "slate";
 import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
-import { PROSE_MAX_WIDTH } from "tools/constants";
+import { PROSE_MAX_WIDTH, COLORS } from "tools/constants";
 
 export default class TableOfContents extends React.Component<
   {
@@ -163,7 +163,7 @@ const Wrapper = styled.div`
   font-size: 1em;
   line-height: 1.4;
   z-index: 5;
-  border: 1px solid #404040;
+  border: 1px solid ${COLORS.LIGHT_GREY};
   border-radius: 2px;
   background: #292929;
   flex-grow: 0;
@@ -177,8 +177,8 @@ const Wrapper = styled.div`
     text-transform: uppercase;
     font-weight: 700;
     font-size: 12px;
-    border-bottom: 1px solid #404040;
-    background: #404040;
+    border-bottom: 1px solid ${COLORS.LIGHT_GREY};
+    background: ${COLORS.LIGHT_GREY};
   }
 
   @media print {
@@ -197,7 +197,7 @@ const Anchor = styled.a`
 
 const ListItem = styled.div`
   display: block;
-  border-bottom: 1px solid #404040;
+  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
   position: relative;
   white-space: nowrap;
   a {

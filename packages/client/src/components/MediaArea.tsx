@@ -3,7 +3,7 @@ import { debounce } from "throttle-debounce";
 import React, { ChangeEvent, Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { Loading, ContentEditor } from "./Shared";
+import { Loading, ContentEditor, SmoothScrollButton } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import { PROSE_MAX_WIDTH, CONTENT_SERIALIZE_DEBOUNCE } from "tools/constants";
@@ -54,9 +54,7 @@ const MediaArea = connect(
   const handleTitle = (x: string) =>
     updateChallenge({ id: challenge.id, challenge: { title: x } });
 
-  const tableOfContents = React.useMemo(() => TableOfContentsPlugin(), [
-    challenge.id,
-  ]);
+  const tableOfContents = React.useMemo(() => TableOfContentsPlugin(), []);
 
   /**
    * @NOTE The function is memoized so that we're not constantly recreating the
@@ -76,7 +74,7 @@ const MediaArea = connect(
           });
         },
       ),
-    [challenge.id],
+    [challenge.id, updateChallenge],
   );
 
   const handleVideoUrl = (e: ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +87,7 @@ const MediaArea = connect(
   };
 
   return (
-    <SupplementaryContentContainer>
+    <SupplementaryContentContainer id="supplementary-content-container">
       <TitleHeader>
         <EditableText
           value={title}
@@ -132,6 +130,17 @@ const MediaArea = connect(
         <Hr style={{ marginTop: 40, marginBottom: 20 }} />
         <NextChallengeCard />
       </div>
+      {(challenge.type === "markup" ||
+        challenge.type === "typescript" ||
+        challenge.type === "react") && (
+        <SmoothScrollButton
+          icon="chevron-up"
+          position="top"
+          positionOffset={10}
+          scrollToId="root"
+          backgroundColor="#242423"
+        />
+      )}
     </SupplementaryContentContainer>
   );
 });
@@ -149,6 +158,7 @@ const SupplementaryContentContainer = styled.div`
   padding-left: 12px;
   padding-right: 12px;
   background: #1e1e1e;
+  position: relative;
 `;
 
 /**

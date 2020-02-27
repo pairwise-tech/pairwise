@@ -79,8 +79,7 @@ const handlePaymentCourseIntentEpic: EpicSignature = (
   return action$.pipe(
     filter(isActionOf(Actions.handlePaymentCourseIntent)),
     pluck("payload"),
-    pluck("courseId"),
-    mergeMap(courseId => {
+    mergeMap(({ courseId, showToastWarning }) => {
       const user = deps.selectors.user.userProfile(state$.value);
       if (user) {
         return of(
@@ -88,10 +87,13 @@ const handlePaymentCourseIntentEpic: EpicSignature = (
           Actions.setPaymentCourseModalState(true),
         );
       } else {
-        deps.toaster.warn(
-          "Please create an account to purchase this course",
-          "user",
-        );
+        if (showToastWarning) {
+          deps.toaster.warn(
+            "You must purchase the course to access this content. Please create an account to get started.",
+            "user",
+          );
+        }
+
         setEphemeralPurchaseCourseId(courseId);
         return of(
           Actions.setPaymentCourseId({ courseId }),

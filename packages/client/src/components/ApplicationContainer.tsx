@@ -19,7 +19,12 @@ import {
   Classes,
 } from "@blueprintjs/core";
 import Account from "./Account";
-import { ButtonCore, ProfileIcon, IconButton, DarkTheme } from "./Shared";
+import {
+  ButtonCore,
+  ProfileIcon,
+  IconButton,
+  SmoothScrollButton,
+} from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
 import Workspace from "./Workspace";
@@ -212,6 +217,13 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             )}
           </ControlsContainer>
         </Header>
+        <SmoothScrollButton
+          icon="chevron-down"
+          position="bottom"
+          positionOffset={-20}
+          scrollToId="supplementary-content-container"
+          backgroundColor="rgba(29, 29, 29, 0.7)"
+        />
         <Switch>
           <Route key={0} path="/workspace/:id" component={Workspace} />
           <Route key={1} path="/home" component={Home} />
@@ -261,7 +273,7 @@ const Header = styled.div`
   padding-right: 0px;
   margin-bottom: 0;
   background: #212121;
-  border-bottom: 1px solid #404040;
+  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
 
   height: ${HEADER_HEIGHT}px;
   width: calc(100vw - 48);

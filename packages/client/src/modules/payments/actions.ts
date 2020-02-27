@@ -33,7 +33,7 @@ export const setPaymentCourseModalState = createAction(
 
 export const handlePaymentCourseIntent = createAction(
   ActionTypesEnum.HANDLE_PAYMENT_COURSE_INTENT,
-)<{ courseId: string }>();
+)<{ courseId: string; showToastWarning?: boolean }>();
 
 export const setPaymentCourseId = createAction(
   ActionTypesEnum.SET_PAYMENT_COURSE_ID,
