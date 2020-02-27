@@ -83,6 +83,8 @@ enum ActionTypesEnum {
   SET_ADMIN_EDITOR_TAB = "SET_ADMIN_EDITOR_TAB",
 
   TOGGLE_SECTION_ACCORDION_VIEW = "TOGGLE_SECTION_ACCORDION_VIEW",
+
+  TOGGLE_ALL_SECTION_ACCORDION_VIEW = "TOGGLE_ALL_SECTION_ACCORDION_VIEW",
 }
 
 /** ===========================================================================
@@ -236,6 +238,10 @@ export const updateChallenge = createAction(ActionTypesEnum.UPDATE_CHALLENGE)<
 export const deleteChallenge = createAction(ActionTypesEnum.DELETE_CHALLENGE)<
   ChallengeDeletePayload
 >();
+
+export const toggleAllSectionAccordionView = createAction(
+  ActionTypesEnum.TOGGLE_ALL_SECTION_ACCORDION_VIEW,
+)();
 
 export const reorderChallengeList = createAction(
   ActionTypesEnum.REORDER_CHALLENGE_LIST,

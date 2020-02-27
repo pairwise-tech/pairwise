@@ -24,6 +24,7 @@ import {
 import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
 import { ChallengesActionTypes } from "./index";
+import map from "ramda/es/map";
 
 const debug = require("debug")("challenge:store");
 
@@ -462,6 +463,21 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     courseSkeletons: action.payload,
   }))
+  .handleAction(actions.toggleAllSectionAccordionView, (state, action) => {
+    const { navigationSectionAccordionViewState } = state;
+    const allOpen = Object.values(
+      state.navigationSectionAccordionViewState,
+    ).every(x => x);
+    const nextState = map<AccordionViewState, AccordionViewState>(
+      x => !allOpen,
+      navigationSectionAccordionViewState,
+    );
+
+    return {
+      ...state,
+      navigationSectionAccordionViewState: nextState,
+    };
+  })
   .handleAction(actions.toggleSectionAccordionView, (state, action) => ({
     ...state,
     navigationSectionAccordionViewState: {
