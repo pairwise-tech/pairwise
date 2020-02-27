@@ -116,8 +116,8 @@ class NavigationOverlay extends React.Component<IProps> {
           <Title>
             <p>{module.title}</p>
             <div>
-              <Button onClick={this.props.toggleAllSectionAccordionView}>
-                Expand
+              <Button onClick={this.toggleExpandCollapseAll}>
+                Show/Hide All
               </Button>
             </div>
           </Title>
@@ -206,6 +206,29 @@ class NavigationOverlay extends React.Component<IProps> {
         }
       />
     );
+  };
+
+  toggleExpandCollapseAll = () => {
+    const challengeList = this.props.module?.challenges;
+
+    if (!challengeList) {
+      return;
+    }
+
+    const sections = partitionChallengesBySection(challengeList).map(
+      x => x.section,
+    );
+    const anyOpen = sections.some(
+      x => x && this.getCurrentAccordionViewState(x.id),
+    );
+    sections
+      .filter((x): x is ChallengeSkeleton => x !== null) // This verbose line getsteh next code to typecheck
+      .forEach(x => {
+        this.props.toggleSectionAccordionView({
+          sectionId: x.id,
+          open: !anyOpen,
+        });
+      });
   };
 
   renderNormalChallengeList = (
@@ -720,7 +743,6 @@ const dispatchProps = {
   updateUserSettings: Modules.actions.user.updateUserSettings,
   setNavigationMapState: ChallengeActions.setNavigationMapState,
   toggleSectionAccordionView: ChallengeActions.toggleSectionAccordionView,
-  toggleAllSectionAccordionView: ChallengeActions.toggleAllSectionAccordionView,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePaymentCourseIntent: Modules.actions.payments.handlePaymentCourseIntent,
 };
