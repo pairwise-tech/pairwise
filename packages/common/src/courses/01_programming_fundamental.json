@@ -474,6 +474,39 @@
           "supplementaryContent": "## Constant does not mean immutable\n\nWhile it is true that variables declared with `const` cannot be reassigned, this _does not_ mean that values assigned to them cannot change, or _mutate_ over time.\n\nFor primitive data types like the ones we've learned about so far, this nuance does not apply. In other words, if you assign the string `\"immutable\"` to a variable declared with `const`, you can always count on that variable being equal to the string `\"immutable\"`. Likewise, if you assign it a number, a boolean, null, or undefined. These types are immutable by nature, and values of these types cannot change over time \\(if a string or number appears to change over time, it is really a new instance of a string or number\\).\n\nFor more complex data types, though, `const` can trip you up if you're not careful. Check out the following examples using arrays:\n\n```\nconst arr = [1, 2, 3];\narr = [1, 2, 3, 4]; // error! arr cannot be reassigned\n\n```\n\nLike you would expect, you cannot assign `arr` a new array \\(or any other value\\). However:\n\n```\nconst arr = [1, 2, 3];\narr.push(4);\n// here, .push(4) adds the number 4 to the end of the list\n// the list now equals [1, 2, 3, 4]\n\n```\n\nAlthough we didn't assign `arr` a new value, its current value is different than the value we originally assigned to it. More precisely, the array that `arr` references has been _mutated_.\n\nWe will explore the concept of immutability more in future lessons, but for now, you should be aware that `const` only ensures that a variable cannot be reassigned, _not_ that the value it references is immutable.\n"
         },
         {
+          "id": "fvvYrahy",
+          "type": "section",
+          "title": "Arithmetic Operators",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "# TODO\n\n"
+        },
+        {
+          "id": "-jkgXsag",
+          "type": "typescript",
+          "title": "The Addition Operator",
+          "content": "In TypeScript, the `+`, or addition operator, behaves much like you think it will. It operates on two numbers, or operands \\(which can be number literals, or variables that represent numbers\\), and adds the two operands together:\n\n```typescript\nconst num: number = 1 + 1; // num = 2\n\n```\n\n* Give `num1` and `num2` values so that their sum equals `100`.\n* On an empty line, declare a variable named `sum` and use the `+` operator to assign it `num1` plus `num2` .\n* The variable `sum` should now equal `100`.\n\n",
+          "testCode": "test(\"A variable named `sum` should be declared and be of the type `number`.\", () =>\n  expect(typeof sum).toBe(\"number\"));\n\ntest(\"`sum` should equal `100`.\", () => expect(sum).toBe(100));\n",
+          "videoUrl": "",
+          "starterCode": "let num1: number;\nlet num2: number;\n\n",
+          "solutionCode": "let num1: number = 30;\nlet num2: number = 70;\n\nconst sum = num1 + num2;",
+          "supplementaryContent": ""
+        },
+        {
+          "id": "H0MjLq1p",
+          "type": "typescript",
+          "title": "The Subtraction Operator",
+          "content": "Opposite to the addition operator, is the `-`, or subtraction operator. The subtraction operator takes two numbers as operands and subtracts them:\n\n```typescript\nconst num: number = 14 - 5; // 9\n\n```\n\n* On an empty line, declare a variable named `difference` and assign it an expression which subtracts a number from `twentyThree` so that `difference` equals `10`.\n* Feel free to subtract a number literal, or declare a new variable to subtract from `twentyThree`.\n\n",
+          "testCode": "test(\"A variable named `difference` should be declared and be of the type `number`.\", () =>\n    expect(typeof difference).toBe(\"number\"));\n\ntest(\"`difference` should equal `10`.\", () => expect(difference).toBe(10));",
+          "videoUrl": "",
+          "starterCode": "const twentyThree: number = 23;",
+          "solutionCode": "const twentyThree = 23;\n\nconst difference = twentyThree - 13;\n",
+          "supplementaryContent": ""
+        },
+        {
           "id": "6T3GXc4ap",
           "type": "typescript",
           "title": "Add Two Numbers",
