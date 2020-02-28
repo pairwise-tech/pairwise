@@ -137,7 +137,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             </ControlsContainer>
           )}
           <ControlsContainer style={{ marginLeft: "auto" }}>
-            {this.props.shouldShowFeedbackButton && (
+            {this.props.showFeedbackButton && (
               <Tooltip content="Submit Feedback" position="bottom">
                 <IconButton
                   icon="help"
@@ -217,13 +217,15 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             )}
           </ControlsContainer>
         </Header>
-        <SmoothScrollButton
-          icon="chevron-down"
-          position="bottom"
-          positionOffset={-20}
-          scrollToId="supplementary-content-container"
-          backgroundColor="rgba(29, 29, 29, 0.7)"
-        />
+        {(CODEPRESS || this.props.showMediaAreaButton) && (
+          <SmoothScrollButton
+            icon="chevron-down"
+            position="bottom"
+            positionOffset={-20}
+            scrollToId="supplementary-content-container"
+            backgroundColor="rgba(29, 29, 29, 0.7)"
+          />
+        )}
         <Switch>
           <Route key={0} path="/workspace/:id" component={Workspace} />
           <Route key={1} path="/home" component={Home} />
@@ -504,10 +506,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
+  showFeedbackButton: Modules.selectors.app.showFeedbackButton(state),
+  showMediaAreaButton: Modules.selectors.challenges.getHasMediaContent(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
-    state,
-  ),
-  shouldShowFeedbackButton: Modules.selectors.app.shouldShowFeedbackButton(
     state,
   ),
 });
