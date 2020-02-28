@@ -422,7 +422,7 @@ class Workspace extends React.Component<IProps, IState> {
   getMonacoLanguageFromChallengeType = () => {
     const { type } = this.props.challenge;
 
-    if (type === "react" || type === "typescript") {
+    if (type === "react" || type === "typescript" || type === "special-topic") {
       return "typescript";
     } else if (type === "markup") {
       return "html";
