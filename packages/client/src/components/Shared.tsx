@@ -194,13 +194,14 @@ const getScrollTarget = (href: string) => {
  * use RR to navigate to route. In editor, set the link's href to: `/<route>`
  */
 const isInternalLink = (href: string) => {
-  const re = /^(?:\/home|\/workspace|\/account)(?:\/(\w*)?)?$/;
-  const match = href.match(re);
+  if (!href.startsWith("http")) {
+    const re = /^\/workspace\/(\w*)$/;
+    const isChallengeRoute = href.match(re);
 
-  if (match) {
-    if (href.startsWith("/workspace/")) {
-      const challengeId = match[1];
-      // throw error if we provide an invalid id in workspace route.
+    if (isChallengeRoute) {
+      const challengeId = isChallengeRoute[1];
+      // throw error if we provide an invalid id in workspace route
+      // this should not get past us during development!
       if (!ContentUtility.challengeIdIsValid(challengeId)) {
         throw new Error("[Err ContentEditor] Invalid Challenge Link.");
       }
