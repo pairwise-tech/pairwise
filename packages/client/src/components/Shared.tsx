@@ -9,13 +9,22 @@ import {
   Classes,
   ButtonGroup,
 } from "@blueprintjs/core";
-import { NavLink, NavLinkProps } from "react-router-dom";
+import {
+  NavLink,
+  NavLinkProps,
+  withRouter,
+  RouteComponentProps,
+} from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
 import { COLORS } from "../tools/constants";
 import toaster from "tools/toast-utils";
 import { IItemListRendererProps } from "@blueprintjs/select";
-import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
+import {
+  FEEDBACK_TYPE,
+  CHALLENGE_TYPE,
+  ContentUtility,
+} from "@pairwise/common";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -116,7 +125,7 @@ const EditorExternalStyles = styled.div`
   position: relative;
 
   blockquote {
-    margin-left: 30px !important;
+    margin-left: 10px !important;
     background: ${COLORS.LIGHT_GREY} !important;
     font-style: normal !important;
     border-left-width: 9px !important;
@@ -165,6 +174,45 @@ const EditorExternalStyles = styled.div`
 `;
 
 /**
+ * RichMarkdownEditor `onClickLink` callback helper function to determine
+ * if href is custom scroll target. If so, override default behavior and
+ * smooth scroll to target. In editor, you must set the link's href to:
+ * `/scrollTarget/<id-to-scroll-to>`
+ */
+const getScrollTarget = (href: string) => {
+  const re = /^\/scrollTarget\/([\w-]+)$/;
+  const match = href.match(re);
+
+  if (match) {
+    return match[1];
+  }
+};
+
+/**
+ * RichMarkdownEditor `onClickLink` callback helper function to determine
+ * if href is Pairwise internal link. If so, override default behavior and
+ * use RR to navigate to route. In editor, set the link's href to: `/<route>`
+ */
+const isInternalLink = (href: string) => {
+  const re = /^(?:\/home|\/workspace|\/account)(?:\/(\w*)?)?$/;
+  const match = href.match(re);
+
+  if (match) {
+    if (href.startsWith("/workspace/")) {
+      const challengeId = match[1];
+      // throw error if we provide an invalid id in workspace route.
+      if (!ContentUtility.challengeIdIsValid(challengeId)) {
+        throw new Error("[Err ContentEditor] Invalid Challenge Link.");
+      }
+    }
+
+    return true;
+  }
+
+  return false;
+};
+
+/**
  * The ContentEditor is our rich markdown editor for use in codepress for
  * editing and in the overall app for viewing markdown content.
  *
@@ -173,18 +221,34 @@ const EditorExternalStyles = styled.div`
  *
  * @NOTE Render this within <Suspense />. React will throw a helpful error if not
  */
-export const ContentEditor = (props: EditorProps) => (
-  <EditorExternalStyles>
-    <RichMarkdownEditor
-      theme={editorTheme}
-      onShowToast={message => {
-        toaster.toast.show({
-          message,
-        });
-      }}
-      {...props}
-    />
-  </EditorExternalStyles>
+export const ContentEditor = withRouter(
+  (props: EditorProps & RouteComponentProps) => (
+    <EditorExternalStyles>
+      <RichMarkdownEditor
+        theme={editorTheme}
+        onShowToast={message => {
+          toaster.toast.show({
+            message,
+          });
+        }}
+        onClickLink={href => {
+          const scrollTarget = getScrollTarget(href);
+
+          if (scrollTarget) {
+            const el = document.getElementById(scrollTarget);
+            el?.scrollIntoView({
+              behavior: "smooth",
+            });
+          } else if (isInternalLink(href)) {
+            props.history.push(href);
+          } else {
+            window.open(href, "_blank");
+          }
+        }}
+        {...props}
+      />
+    </EditorExternalStyles>
+  ),
 );
 
 export const PageContainer = styled.div`
