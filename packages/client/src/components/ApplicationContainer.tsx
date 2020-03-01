@@ -36,6 +36,7 @@ import {
 import PaymentCourseModal from "./PaymentIntentModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 import PaymentSuccessModal from "./PaymentSuccessModal";
+import { challengeRequiresWorkspace } from "tools/utils";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -217,7 +218,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             )}
           </ControlsContainer>
         </Header>
-        {this.props.showMediaAreaButton && (
+        {this.showMediaAreaButton && (
           <SmoothScrollButton
             icon="chevron-down"
             position="bottom"
@@ -239,6 +240,17 @@ class ApplicationContainer extends React.Component<IProps, IState> {
         </Switch>
       </React.Fragment>
     );
+  }
+
+  get showMediaAreaButton() {
+    if (this.props.challenge) {
+      return (
+        challengeRequiresWorkspace(this.props.challenge) &&
+        (CODEPRESS || this.props.hasMediaContent)
+      );
+    }
+
+    return false;
   }
 
   renderLoadingOverlay = () => {
@@ -508,7 +520,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   showFeedbackButton: Modules.selectors.app.showFeedbackButton(state),
   hasMediaContent: Modules.selectors.challenges.getHasMediaContent(state),
-  isCodeChallenge: Modules.selectors.challenges.getIsCodeChallenge(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),
@@ -538,8 +549,6 @@ const mergeProps = (
   toggleFeedbackDialogOpen: () => {
     methods.setFeedbackDialogState(!state.feedbackDialogOpen);
   },
-  showMediaAreaButton:
-    state.isCodeChallenge && (CODEPRESS || state.hasMediaContent),
 });
 
 type IProps = ReturnType<typeof mergeProps>;

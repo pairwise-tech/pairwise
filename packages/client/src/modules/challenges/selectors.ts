@@ -205,18 +205,6 @@ export const getCurrentContent = createSelector(
   challenge => challenge?.content,
 );
 
-export const getIsCodeChallenge = createSelector(
-  [getCurrentChallenge],
-  challenge => {
-    return (
-      challenge?.type === "markup" ||
-      challenge?.type === "typescript" ||
-      challenge?.type === "react" ||
-      challenge?.type === "special-topic"
-    );
-  },
-);
-
 export const getHasMediaContent = createSelector(
   [getCurrentChallenge],
   challenge => {
