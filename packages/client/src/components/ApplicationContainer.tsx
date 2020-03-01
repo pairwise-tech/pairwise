@@ -24,6 +24,8 @@ import {
   ProfileIcon,
   IconButton,
   SmoothScrollButton,
+  FullScreenOverlay,
+  OverlayText,
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
@@ -255,11 +257,11 @@ class ApplicationContainer extends React.Component<IProps, IState> {
 
   renderLoadingOverlay = () => {
     return (
-      <LoadingOverlay visible={this.props.workspaceLoading}>
+      <FullScreenOverlay visible={this.props.workspaceLoading}>
         <div>
-          <OverlayLoadingText>Launching Pairwise...</OverlayLoadingText>
+          <OverlayText>Launching Pairwise...</OverlayText>
         </div>
-      </LoadingOverlay>
+      </FullScreenOverlay>
     );
   };
 
@@ -346,30 +348,6 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
     color: white !important;
     transform: scale(1.3);
   }
-`;
-
-const LoadingOverlay = styled.div`
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 500;
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 15, 15, 0.95);
-  visibility: ${(props: { visible: boolean }) =>
-    props.visible ? "visible" : "hidden"};
-`;
-
-const OverlayLoadingText = styled.p`
-  margin: 0;
-  font-size: 42px;
-  font-weight: 200;
-  color: ${COLORS.PRIMARY_GREEN};
 `;
 
 const AccountButton = styled(ButtonCore)`

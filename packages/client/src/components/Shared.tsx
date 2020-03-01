@@ -87,6 +87,30 @@ export const LowerRight = styled.div`
   flex-direction: column;
 `;
 
+export const FullScreenOverlay = styled.div`
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 500;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 15, 15, 0.95);
+  visibility: ${(props: { visible: boolean }) =>
+    props.visible ? "visible" : "hidden"};
+`;
+
+export const OverlayText = styled.p`
+  margin: 0;
+  font-size: 42px;
+  font-weight: 200;
+  color: ${COLORS.PRIMARY_GREEN};
+`;
+
 export interface IconNavLinkProps extends NavLinkProps {
   icon: IconName;
   disabled: boolean;
