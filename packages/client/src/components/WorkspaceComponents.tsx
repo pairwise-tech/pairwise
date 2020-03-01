@@ -12,10 +12,11 @@ import {
   SANDBOX_ID,
 } from "../tools/constants";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { Loading, ContentEditor, editorColors } from "./Shared";
+import { Loading } from "./Shared";
 import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
+import ContentEditor, { editorColors } from "./ContentEditor";
 
 /** ===========================================================================
  * Workspace Components
