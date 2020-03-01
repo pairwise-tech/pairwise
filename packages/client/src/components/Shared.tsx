@@ -100,8 +100,8 @@ export const FullScreenOverlay = styled.div`
   align-items: center;
   justify-content: center;
   background: rgba(15, 15, 15, 0.95);
-  visibility: ${(props: { visible: boolean }) =>
-    props.visible ? "visible" : "hidden"};
+  visibility: ${({ visible = true }: { visible?: boolean }) =>
+    visible ? "visible" : "hidden"};
 `;
 
 export const OverlayText = styled.p`
@@ -259,9 +259,7 @@ interface HalfCircleProps {
   backgroundColor: string;
 }
 
-export const HalfCircle = styled.div<
-  HalfCircleProps & React.HTMLProps<HTMLButtonElement>
->`
+export const HalfCircle = styled.div<HalfCircleProps>`
   &:hover {
     background: ${props => props.backgroundColor};
   }

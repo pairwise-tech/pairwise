@@ -9,7 +9,7 @@ import { DarkTheme, FullScreenOverlay, OverlayText } from "components/Shared";
 import { captureMessage, Severity } from "@sentry/browser";
 
 /** ===========================================================================
- * Pairwise App!
+ * Types
  * ============================================================================
  */
 
@@ -17,12 +17,19 @@ interface IState {
   hasError: boolean;
 }
 
-class Pairwise extends React.Component<{}, IState> {
+interface IProps {}
+
+/** ===========================================================================
+ * Pairwise App!
+ * ============================================================================
+ */
+
+class Pairwise extends React.Component<IProps, IState> {
   static getDerivedStateFromError() {
     return { hasError: true };
   }
 
-  constructor(props: {}) {
+  constructor(props: IProps) {
     super(props);
 
     this.state = {
@@ -43,7 +50,7 @@ class Pairwise extends React.Component<{}, IState> {
 
   renderErrorOverlay = () => {
     return (
-      <FullScreenOverlay visible={this.state.hasError}>
+      <FullScreenOverlay>
         <div>
           <OverlayText>Uh oh... Something went wrong.</OverlayText>
         </div>
