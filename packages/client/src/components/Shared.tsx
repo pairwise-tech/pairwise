@@ -194,6 +194,9 @@ const getScrollTarget = (href: string) => {
  * use RR to navigate to route. In editor, set the link's href to: `/<route>`
  */
 const isInternalLink = (href: string) => {
+  // rich-markdown-editor adds 'https://' to the beginning of any href
+  // that does not start with a forward slash, so just test that href
+  // is a route and not a fully qualified URL
   if (!href.startsWith("http")) {
     const re = /^\/workspace\/(\w*)$/;
     const isChallengeRoute = href.match(re);
