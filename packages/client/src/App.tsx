@@ -32,7 +32,6 @@ class Pairwise extends React.Component<{}, IState> {
 
   componentDidCatch(error: Error, { componentStack }: ErrorInfo) {
     const errors = { error, componentStack };
-    console.log(JSON.stringify(errors, null, 2));
     captureMessage(JSON.stringify(errors, null, 2), Severity.Fatal);
   }
 
@@ -46,7 +45,7 @@ class Pairwise extends React.Component<{}, IState> {
     return (
       <FullScreenOverlay visible={this.state.hasError}>
         <div>
-          <OverlayText>Uh oh... Something Went Wrong.</OverlayText>
+          <OverlayText>Uh oh... Something went wrong.</OverlayText>
         </div>
       </FullScreenOverlay>
     );
