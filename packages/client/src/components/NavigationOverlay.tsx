@@ -237,6 +237,14 @@ class NavigationOverlay extends React.Component<IProps> {
       .forEach(this.props.toggleSectionAccordionView);
   };
 
+  toggleExpandCollapse = (challenge: ChallengeSkeleton) => {
+    const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
+    this.props.toggleSectionAccordionView({
+      sectionId: challenge.id,
+      open: !isSectionOpen,
+    });
+  };
+
   renderNormalChallengeList = (
     course: CourseSkeleton,
     module: ModuleSkeleton,
@@ -358,6 +366,11 @@ class NavigationOverlay extends React.Component<IProps> {
       ? SortableHandle(ChallengeListItemIcon)
       : ChallengeListItemIcon;
 
+    const toggleSection = (e: React.MouseEvent) => {
+      e.preventDefault();
+      this.toggleExpandCollapse(challenge);
+    };
+
     return (
       <div key={challenge.id} style={{ position: "relative", ...style }}>
         <Link
@@ -371,22 +384,15 @@ class NavigationOverlay extends React.Component<IProps> {
           )}
         >
           <span className="content">
-            <ChallengeIconUI
-              {...iconProps}
-              onClick={e => {
-                e.preventDefault();
-                this.props.toggleSectionAccordionView({
-                  sectionId: challenge.id,
-                  open: !isSectionOpen,
-                });
-              }}
-            />
+            <ChallengeIconUI {...iconProps} onClick={toggleSection} />
 
             <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>
             {section ? (
-              <Badge>{sectionChallengeCount} Challenges</Badge>
+              <Badge onClick={toggleSection}>
+                {sectionChallengeCount} Challenges
+              </Badge>
             ) : challenge.videoUrl ? (
               <Tooltip
                 usePortal={false}
@@ -676,7 +682,7 @@ const RotatingIcon = styled(Icon)<{ isRotated?: boolean }>`
 interface ChallengeListItemIconProps {
   challenge: ChallengeSkeleton;
   isSectionOpen?: boolean;
-  onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => any;
+  onClick: (e: React.MouseEvent) => any;
 }
 
 const ChallengeListItemIcon = ({
