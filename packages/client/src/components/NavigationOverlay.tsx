@@ -68,6 +68,13 @@ class NavigationOverlay extends React.Component<IProps> {
       return null;
     }
 
+    const sectionIds = module.challenges
+      .filter(x => x.type === "section")
+      .map(x => x.id);
+    const hasSections = sectionIds.length > 0;
+    const anySectionsOpen =
+      hasSections && sectionIds.some(this.getCurrentAccordionViewState);
+
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
         <KeyboardShortcuts
@@ -115,11 +122,13 @@ class NavigationOverlay extends React.Component<IProps> {
           />
           <Title>
             <p>{module.title}</p>
-            <div>
-              <Button onClick={this.toggleExpandCollapseAll}>
-                Show/Hide All
-              </Button>
-            </div>
+            {hasSections && (
+              <div>
+                <Button onClick={this.toggleExpandCollapseAll}>
+                  {anySectionsOpen ? "Collapse" : "Expand"} All Sections
+                </Button>
+              </div>
+            )}
           </Title>
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
           {this.renderChallengeCodepressButton(course, module, -1)}
@@ -208,6 +217,7 @@ class NavigationOverlay extends React.Component<IProps> {
     );
   };
 
+  // This can be used to expand or collapse all sections in the current module.
   toggleExpandCollapseAll = () => {
     const challengeList = this.props.module?.challenges;
 
@@ -215,20 +225,15 @@ class NavigationOverlay extends React.Component<IProps> {
       return;
     }
 
-    const sections = partitionChallengesBySection(challengeList).map(
-      x => x.section,
-    );
-    const anyOpen = sections.some(
-      x => x && this.getCurrentAccordionViewState(x.id),
-    );
-    sections
-      .filter((x): x is ChallengeSkeleton => x !== null) // This verbose line gets the next code to typecheck
-      .forEach(x => {
-        this.props.toggleSectionAccordionView({
-          sectionId: x.id,
-          open: !anyOpen,
-        });
-      });
+    const sectionIds = challengeList
+      .filter(({ type }) => type === "section")
+      .map(x => x.id);
+    const anyOpen = sectionIds.some(this.getCurrentAccordionViewState);
+
+    // Go through each section and expand or collapse it.
+    sectionIds
+      .map(id => ({ sectionId: id, open: !anyOpen }))
+      .forEach(this.props.toggleSectionAccordionView);
   };
 
   renderNormalChallengeList = (
