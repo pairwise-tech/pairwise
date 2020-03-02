@@ -9,15 +9,26 @@
       "title": "Welcome to Pairwise",
       "challenges": [
         {
+          "id": "iSF4BNIl",
+          "type": "markup",
+          "title": "Hello, Pairwise!",
+          "content": "There is an h1 tag in the code editor below which contains the text \"Pairwise\". Your job is to change the text to say \"Hello, Pairwise\\!\"",
+          "testCode": "test(`The h1 tag should contain the text: \"Hello, Pairwise!\"`, () => {\n    expect(getText(\"h1\")).toBe(\"Hello, Pairwise!\");\n});",
+          "videoUrl": "",
+          "starterCode": "<h1>Pairwise<h1>",
+          "solutionCode": "<h1>Hello, Pairwise!<h1>\n",
+          "supplementaryContent": ""
+        },
+        {
           "id": "yxZjmD0o",
           "type": "media",
-          "title": "Welcome to Pairwise",
+          "title": "Welcome to Pairwise! 🎉",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "https://www.youtube.com/embed/VRQNU8UNuWM",
           "starterCode": "",
           "solutionCode": "",
-          "supplementaryContent": "We're glad to have ya! We haven't written any content here yet so go ahead and jump to the next challenge."
+          "supplementaryContent": "Now that you've solved the first challenge and seen how easy it is to get started, we want to take a moment to introduce you to how Pairwise works and help you get started working through the \ncourse\\.\n\n## The Course\n\nThe Pairwise curriculum is composed of 13 modules. Together, they give you a complete education in full\\-stack software development. Pairwise can give you all the skills to start a new career in software development. Our curriculum focuses on teaching **TypeScript, React, **and** NodeJS**. If you are curious more about why we chose these technologies, feel free to [read our rationale here](https://www.pairwise.tech/curriculum).\n\nYou can access the course navigation by clicking the menu icon in the top left. This is always available for you to navigate to any challenge.\n\nThe first two modules introduce HTML/CSS and TypeScript, so they cover many of the basics of web development and programming. These two modules are completely free and no signup is required\\! However, you can create an account at any time \\(also free\\!\\) to track your progress \\(don't worry, we will track your progress even if you don't have an account yet\\).\n\nIf you do decide to continue and complete the entire course, there will be a one\\-time payment which will give you lifetime access to the course. You can make this payment with a credit card at anytime after signing up.\n\nThe primary mode of learning is through short, interactive coding challenges like the one you just solved. If you persist through the entire course, you will also build up a portfolio of projects you build and deploy on your own\\! You can use this portfolio as a showcase of your skills to future employers.\n\n## Getting Started\n\nEnough talking\\! To start learning you just need to start on the next challenge. Each challenge should just take 5\\-10 minutes to complete and will be simple and interactive just like the last. We know you're eager to click that **Next Challenge** button, but before you do we encourage you to watch this short video tutorial of how to use the _Pairwise Workspace_. It will give you some helpful tips which will help you get started, and after that we'll get out of your way\\! Good luck and welcome\\!\n\n**TODO: Add the intro video\\!**"
         }
       ]
     },
@@ -159,7 +170,7 @@
           "supplementaryContent": ""
         },
         {
-          "id": "HAYX_rRa",
+          "id": "B1LBriGU",
           "type": "media",
           "title": "The Box Model",
           "content": "",
@@ -214,7 +225,7 @@
           "supplementaryContent": ""
         },
         {
-          "id": "N-LLBkoL",
+          "id": "3g8czfBn",
           "type": "markup",
           "title": "Multiple Selectors -- Styling many things",
           "content": "* Give both the `<h1>` and `<p>` tags a background of `green`\n* Give both the `<h1>` and `<p>` tags a color of `red`\n\n**NOTE:** This challenge is all about using multiple selectors so that you don't have to repeat yourself when writing CSS. You should only have to write the `background` and `color` properties once to make the tests pass.",
@@ -309,7 +320,7 @@
           "supplementaryContent": "## string not String\n\nOk, last warning\\! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway: TypeScript is a **case\\-sensitive** language, and it is _not_ safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip:** TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc.\n"
         },
         {
-          "id": "aKi_ySGP",
+          "id": "qNF6Faom",
           "type": "typescript",
           "title": "Booleans",
           "content": "Booleans, are perhaps the simplest of the primitive data types, and in TypeScript,  can be expressed as either `true` or `false`. They are given the type `boolean`. Booleans are the primary way that we handle \"logical\" decision making, and, in fact, many expressions can be _evaluated_ as booleans, but we'll get into this more later.\n\n* Look at the following example, and change `false` to `true`.\n* Notice what happens\\!\n\n\nDon't worry, there's a lot going on here that we haven't covered yet. For now, just focus on the challenge at hand.",
@@ -320,7 +331,7 @@
           "supplementaryContent": ""
         },
         {
-          "id": "CRg_eu1t",
+          "id": "p2Iu3bYN",
           "type": "media",
           "title": "Null and Undefined",
           "content": "",
@@ -353,7 +364,7 @@
           "supplementaryContent": "## TypeScript Configuration\nA topic that we won't be covering here, but is worth mentioning, is TypeScript configuration. Some of the behavior we see in these challenges depends on how the TypeScript compiler is configured in the Pairwise workspace.\n\nWe only mention this so that you're aware that it's possible you'll see slightly different behavior in your own workspace should the configuration options you choose differ. This is something you won't have to deal with while working in the Pairwise workspace, but you should be aware of it all the same.\n\nIf you're setting up you're own project in the future, see TypeScript's \"Project Configuration\" documentation for additional information on this topic."
         },
         {
-          "id": "zSYT-6Vr",
+          "id": "VppIs2a7",
           "type": "media",
           "title": "Being Explicit with Type Annotations",
           "content": "",
@@ -375,7 +386,7 @@
           "supplementaryContent": "## What is a linter?\nA linter is a type of coding aid, which analyzes the code that you write, and in an integrated development environment (or in this case, an IDE-like environment), gives you realtime feedback about potential problems in your code, such as type incompatibilities (like in this case), or stylistic problems. Linters can be a very effective tool and help you write better, less error-prone code."
         },
         {
-          "id": "m4K09_cW",
+          "id": "VpxIs2a9",
           "type": "media",
           "title": "Type Inference vs. Explicit Types",
           "content": "",
@@ -452,7 +463,7 @@
           "supplementaryContent": ""
         },
         {
-          "id": "4dB_Zsxw",
+          "id": "VppIs2a9",
           "type": "typescript",
           "title": "Reassignment with \"let\"",
           "content": "Variables declared using the `let` keyword can be reassigned. In other words, a variable declared with `let`  can be assigned a new value any time after its been declared, initialized, and assigned an initial value. In TypeScript, however, unless a variable declared with `let` is given the type `any`, subsequent assignments must respect the variable's initial type, whether it was explicitly annotated or not.\n\nFor example:\n\n```typescript\nlet str = \"my string\";\nstr = \"another string\"; // ok\n\nlet num = 42;\nnum = \"the meaning of life\"; // not ok!\n\n```\n\n* In the editor below, assign the new values `\"learn to code!\"`, `false` , and `100` to the appropriate variables.\n\n",
@@ -548,7 +559,7 @@
           "supplementaryContent": ""
         },
         {
-          "id": "T5-BAT-r",
+          "id": "RqsAIW6D",
           "type": "typescript",
           "title": "Equality with Boolean Values",
           "content": "The boolean values `true` and `false` can also be applied directly in equality assertions like other primitive values. To see what we mean, take a look at the code in the editor below.",
@@ -652,7 +663,7 @@
       "free": false
     },
     {
-      "id": "_tllrvtp",
+      "id": "ZdkSjC9P",
       "title": "UI Programming",
       "challenges": [
         {
@@ -680,7 +691,7 @@
       "free": false
     },
     {
-      "id": "xdu5gf3-",
+      "id": "EmSvFhW8",
       "title": "Server Programming",
       "challenges": [
         {
@@ -774,8 +785,8 @@
       "title": "Delivery & Deployment",
       "challenges": [
         {
-          "id": "Vy435o_N",
-          "type": "media",
+          "id": "Vy435oZN",
+          "type": "section",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",

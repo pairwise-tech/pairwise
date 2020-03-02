@@ -2,6 +2,11 @@
 
 const shortid = require("shortid");
 
+// Restrict shortid to only friendly-looking characters for nicer-looking ids
+shortid.characters(
+  "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@",
+);
+
 const main = () => {
   return (
     JSON.stringify(
