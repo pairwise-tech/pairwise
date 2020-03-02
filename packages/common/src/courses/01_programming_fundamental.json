@@ -29,7 +29,7 @@
         {
           "id": "IEC6FcKI",
           "type": "media",
-          "title": "Introduction",
+          "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
@@ -266,7 +266,7 @@
       "challenges": [
         {
           "id": "2qKcNab8",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -277,7 +277,7 @@
         },
         {
           "id": "0gih2c1M",
-          "type": "media",
+          "type": "section",
           "title": "Types and Type Primitives",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -621,7 +621,7 @@
       "challenges": [
         {
           "id": "3a4-HU8P",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -639,7 +639,7 @@
       "challenges": [
         {
           "id": "SfvRE0Ai",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -657,7 +657,7 @@
       "challenges": [
         {
           "id": "-pAkjWcr",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -685,7 +685,7 @@
       "challenges": [
         {
           "id": "kUvFiQmw",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -703,7 +703,7 @@
       "challenges": [
         {
           "id": "LO2nn_8O",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -721,7 +721,7 @@
       "challenges": [
         {
           "id": "BfciawyS",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -739,7 +739,7 @@
       "challenges": [
         {
           "id": "s_p7YnS0",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -757,7 +757,7 @@
       "challenges": [
         {
           "id": "cBlWsqgO",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -775,7 +775,7 @@
       "challenges": [
         {
           "id": "Vy435o_N",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -793,7 +793,7 @@
       "challenges": [
         {
           "id": "Oe15TzrQ",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
