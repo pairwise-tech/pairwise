@@ -18,6 +18,7 @@
     "client:build": "cd packages/client && yarn build",
     "client:prod": "cd packages/client && yarn start:prod",
     "client:codepress": "cd packages/client && yarn start:codepress",
+    "codepress": "yarn && yarn common:build && yarn client:codepress",
     "server:setup": "cd packages/server && yarn setup:env",
     "server:start": "cd packages/server && yarn start",
     "server:dev": "cd packages/server && yarn start:dev",

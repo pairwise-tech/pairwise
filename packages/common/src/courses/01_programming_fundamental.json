@@ -25,7 +25,7 @@
           "title": "Welcome to Pairwise! 🎉",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/VRQNU8UNuWM",
           "starterCode": "",
           "solutionCode": "",
           "supplementaryContent": "Now that you've solved the first challenge and seen how easy it is to get started, we want to take a moment to introduce you to how Pairwise works and help you get started working through the \ncourse\\.\n\n## The Course\n\nThe Pairwise curriculum is composed of 13 modules. Together, they give you a complete education in full\\-stack software development. Pairwise can give you all the skills to start a new career in software development. Our curriculum focuses on teaching **TypeScript, React, **and** NodeJS**. If you are curious more about why we chose these technologies, feel free to [read our rationale here](https://www.pairwise.tech/curriculum).\n\nYou can access the course navigation by clicking the menu icon in the top left. This is always available for you to navigate to any challenge.\n\nThe first two modules introduce HTML/CSS and TypeScript, so they cover many of the basics of web development and programming. These two modules are completely free and no signup is required\\! However, you can create an account at any time \\(also free\\!\\) to track your progress \\(don't worry, we will track your progress even if you don't have an account yet\\).\n\nIf you do decide to continue and complete the entire course, there will be a one\\-time payment which will give you lifetime access to the course. You can make this payment with a credit card at anytime after signing up.\n\nThe primary mode of learning is through short, interactive coding challenges like the one you just solved. If you persist through the entire course, you will also build up a portfolio of projects you build and deploy on your own\\! You can use this portfolio as a showcase of your skills to future employers.\n\n## Getting Started\n\nEnough talking\\! To start learning you just need to start on the next challenge. Each challenge should just take 5\\-10 minutes to complete and will be simple and interactive just like the last. We know you're eager to click that **Next Challenge** button, but before you do we encourage you to watch this short video tutorial of how to use the _Pairwise Workspace_. It will give you some helpful tips which will help you get started, and after that we'll get out of your way\\! Good luck and welcome\\!\n\n**TODO: Add the intro video\\!**"
@@ -40,7 +40,7 @@
         {
           "id": "IEC6FcKI",
           "type": "media",
-          "title": "Introduction",
+          "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
@@ -277,7 +277,7 @@
       "challenges": [
         {
           "id": "2qKcNab8",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -288,7 +288,7 @@
         },
         {
           "id": "0gih2c1M",
-          "type": "media",
+          "type": "section",
           "title": "Types and Type Primitives",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -632,7 +632,7 @@
       "challenges": [
         {
           "id": "3a4-HU8P",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -650,7 +650,7 @@
       "challenges": [
         {
           "id": "SfvRE0Ai",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -668,7 +668,7 @@
       "challenges": [
         {
           "id": "-pAkjWcr",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -696,7 +696,7 @@
       "challenges": [
         {
           "id": "kUvFiQmw",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -714,7 +714,7 @@
       "challenges": [
         {
           "id": "LO2nn_8O",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -732,7 +732,7 @@
       "challenges": [
         {
           "id": "BfciawyS",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -750,7 +750,7 @@
       "challenges": [
         {
           "id": "s_p7YnS0",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -768,7 +768,7 @@
       "challenges": [
         {
           "id": "cBlWsqgO",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
@@ -804,7 +804,7 @@
       "challenges": [
         {
           "id": "Oe15TzrQ",
-          "type": "section",
+          "type": "media",
           "title": "Intro",
           "content": "",
           "testCode": "// test('message', () => expect(...))",

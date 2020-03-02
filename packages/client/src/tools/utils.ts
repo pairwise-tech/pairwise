@@ -168,7 +168,7 @@ export const getChallengeIcon = (
   }
 
   if (type === "section") {
-    return "bookmark";
+    return "caret-down";
   } else if (type === "media") {
     return "book";
   } else {
