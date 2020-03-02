@@ -28,7 +28,6 @@ import {
   MenuItem,
   Position,
   Button,
-  IIconProps,
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
