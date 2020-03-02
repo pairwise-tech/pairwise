@@ -55,6 +55,36 @@ const LOG = true;
  */
 
 describe("Linus should be able to pass all the challenges first try", () => {
+  // NOTE: This only checks the current 1 course. If additional courses are
+  // ever added this will need to accommodate those as well.
+  test("Verify all shortid generated ids are unique, just in case!", () => {
+    // Create a set with the course id
+    const challengeIdSet = new Set([course.id]);
+
+    // Get all the challenges
+    const challenges = course.modules
+      .map(m => m.challenges)
+      .reduce((flat, c) => flat.concat(c));
+
+    // Check all the module ids
+    for (const { id } of course.modules) {
+      if (challengeIdSet.has(id)) {
+        throw new Error(`Found duplicated id! The culprit: ${id}`);
+      }
+
+      challengeIdSet.add(id);
+    }
+
+    // Check all the challenge ids
+    for (const { id } of challenges) {
+      if (challengeIdSet.has(id)) {
+        throw new Error(`Found duplicated id! The culprit: ${id}`);
+      }
+
+      challengeIdSet.add(id);
+    }
+  });
+
   test("Execute all challenge tests against their solution code", async () => {
     let failedTests: string[] = [];
 
