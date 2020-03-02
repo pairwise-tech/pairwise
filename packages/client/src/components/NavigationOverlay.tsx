@@ -28,6 +28,7 @@ import {
   MenuItem,
   Position,
   Button,
+  IIconProps,
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
@@ -257,6 +258,7 @@ class NavigationOverlay extends React.Component<IProps> {
               module,
               course,
               section: true,
+              sectionChallengeCount: block.challenges.length,
               index: blockIndex,
               challenge: block.section,
             })}
@@ -330,26 +332,31 @@ class NavigationOverlay extends React.Component<IProps> {
   renderChallengeNavigationItem = (args: {
     index: number;
     section?: boolean;
+    sectionChallengeCount?: number;
     module: ModuleSkeleton;
     course: CourseSkeleton;
     challenge: ChallengeSkeleton;
     style?: React.CSSProperties;
   }) => {
     const { challengeId, isEditMode } = this.props;
-    const { index, module, course, section, challenge, style = {} } = args;
-
-    const ChallengeIcon = () => (
-      <Icon
-        iconSize={Icon.SIZE_LARGE}
-        icon={getChallengeIcon(challenge.type, challenge.userCanAccess)}
-      />
-    );
+    const {
+      index,
+      module,
+      course,
+      section,
+      challenge,
+      sectionChallengeCount = 0,
+      style = {},
+    } = args;
+    const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
+    const iconProps = {
+      challenge,
+      isSectionOpen,
+    };
 
     const ChallengeIconUI = isEditMode
-      ? SortableHandle(() => <ChallengeIcon />)
-      : ChallengeIcon;
-
-    const sectionViewState = this.getCurrentAccordionViewState(challenge.id);
+      ? SortableHandle(ChallengeListItemIcon)
+      : ChallengeListItemIcon;
 
     return (
       <div key={challenge.id} style={{ position: "relative", ...style }}>
@@ -364,30 +371,22 @@ class NavigationOverlay extends React.Component<IProps> {
           )}
         >
           <span className="content">
-            <ChallengeIconUI />
+            <ChallengeIconUI
+              {...iconProps}
+              onClick={e => {
+                e.preventDefault();
+                this.props.toggleSectionAccordionView({
+                  sectionId: challenge.id,
+                  open: !isSectionOpen,
+                });
+              }}
+            />
+
             <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>
             {section ? (
-              <Tooltip
-                position="right"
-                usePortal={false}
-                content={`${sectionViewState ? "Collapse" : "Expand"} Section`}
-              >
-                <Icon
-                  iconSize={Icon.SIZE_LARGE}
-                  icon={sectionViewState ? "collapse-all" : "expand-all"}
-                  onClick={(
-                    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-                  ) => {
-                    e.preventDefault();
-                    this.props.toggleSectionAccordionView({
-                      sectionId: challenge.id,
-                      open: !sectionViewState,
-                    });
-                  }}
-                />
-              </Tooltip>
+              <Badge>{sectionChallengeCount} Challenges</Badge>
             ) : challenge.videoUrl ? (
               <Tooltip
                 usePortal={false}
@@ -667,6 +666,39 @@ const ModuleNavigationButton = ({
 }: { active?: boolean } & any) => (
   <ModuleNavigationButtonBase active={active} as="button" {...rest} />
 );
+
+const RotatingIcon = styled(Icon)<{ isRotated?: boolean }>`
+  transform: ${props =>
+    `rotate3d(0,0,1,${props.isRotated ? "0deg" : "-90deg"})`};
+  transition: transform 0.2s linear;
+`;
+
+interface ChallengeListItemIconProps {
+  challenge: ChallengeSkeleton;
+  isSectionOpen?: boolean;
+  onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => any;
+}
+
+const ChallengeListItemIcon = ({
+  isSectionOpen,
+  challenge,
+  ...props
+}: ChallengeListItemIconProps) => (
+  <RotatingIcon
+    isRotated={isSectionOpen}
+    iconSize={Icon.SIZE_LARGE}
+    icon={getChallengeIcon(challenge.type, challenge.userCanAccess)}
+    {...props}
+  />
+);
+
+const Badge = styled.div`
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: bold;
+  background: #505052;
+  padding: 4px 12px;
+`;
 
 const Col = styled.div<{ offsetX: number }>`
   display: block;
