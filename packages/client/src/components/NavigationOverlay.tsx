@@ -222,7 +222,7 @@ class NavigationOverlay extends React.Component<IProps> {
       x => x && this.getCurrentAccordionViewState(x.id),
     );
     sections
-      .filter((x): x is ChallengeSkeleton => x !== null) // This verbose line getsteh next code to typecheck
+      .filter((x): x is ChallengeSkeleton => x !== null) // This verbose line gets the next code to typecheck
       .forEach(x => {
         this.props.toggleSectionAccordionView({
           sectionId: x.id,
@@ -263,10 +263,11 @@ class NavigationOverlay extends React.Component<IProps> {
                   // @NOTE This is meant to be the index of the challenge as indexed in the full flattened list
                   const serialIndex = blockIndex + index + 1;
                   return this.renderChallengeNavigationItem({
-                    module,
-                    course,
-                    challenge,
                     index: serialIndex,
+                    course,
+                    module,
+                    challenge,
+                    style: { marginLeft: 20 },
                   });
                 },
               )}
@@ -278,8 +279,8 @@ class NavigationOverlay extends React.Component<IProps> {
           (challenge: ChallengeSkeleton, index: number) => {
             return this.renderChallengeNavigationItem({
               index,
-              module,
               course,
+              module,
               challenge,
             });
           },
@@ -327,9 +328,10 @@ class NavigationOverlay extends React.Component<IProps> {
     module: ModuleSkeleton;
     course: CourseSkeleton;
     challenge: ChallengeSkeleton;
+    style?: React.CSSProperties;
   }) => {
     const { challengeId, isEditMode } = this.props;
-    const { index, module, course, section, challenge } = args;
+    const { index, module, course, section, challenge, style = {} } = args;
 
     const ChallengeIcon = () => (
       <Icon
@@ -345,7 +347,7 @@ class NavigationOverlay extends React.Component<IProps> {
     const sectionViewState = this.getCurrentAccordionViewState(challenge.id);
 
     return (
-      <div key={challenge.id} style={{ position: "relative" }}>
+      <div key={challenge.id} style={{ position: "relative", ...style }}>
         <Link
           key={challenge.id}
           to={`/workspace/${challenge.id}`}
@@ -695,7 +697,7 @@ const Title = styled.div`
   margin: 0;
   height: 40px;
   padding: 0 12px;
-  border-bottom: 1px solid ${COLORS.SEPARATOR_BORDER};
+  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
   font-variant: small-caps;
   font-weight: bold;
   letter-spacing: 2;
