@@ -118,6 +118,11 @@ export const constructDataBlobFromChallenge = (args: {
   }
 };
 
+// Restrict shortid to only alphanumeric characters for nicer-looking ids
+shortid.characters(
+  "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+);
+
 export const generateEmptyModule = (): Module => ({
   id: shortid.generate(),
   title: "[EMTPY...]",

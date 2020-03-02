@@ -3,6 +3,10 @@
 const shortid = require("shortid");
 
 const main = () => {
+  // Restrict shortid to only alphanumeric characters for nicer-looking ids
+  shortid.characters(
+    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  );
   return (
     JSON.stringify(
       {
