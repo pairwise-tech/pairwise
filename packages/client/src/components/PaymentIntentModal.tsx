@@ -42,7 +42,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
           <ModalSubText>
             Purchasing the <CourseTitle>{courseToPurchase.title}</CourseTitle>{" "}
             course will give you full lifetime access to the course content and
-            is fully refundable up to 30 days.
+            is fully refundable up to 60 days.
           </ModalSubText>
           <Button
             large
