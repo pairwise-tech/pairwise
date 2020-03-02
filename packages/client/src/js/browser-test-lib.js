@@ -40,6 +40,12 @@ const getStyle = (el, cssProp, pseudoSelector = null) => {
 /**
  * Get the innerHTML from an element given an HTML selector.
  *
+ * NOTE: This is called getText so it's more clear it is the method to use
+ * for getting and performing assertions on text content of HTML elements.
+ * That is because using .innerText will break in our unit test environment,
+ * so we don't want to use it. Naming this method getText should more strongly
+ * suggest to use this when performing text assertions.
+ *
  * NOTE: This approach is advisable to be used to get text for HTML elements
  * because it will work in both the app and unit testing environment.
  */
