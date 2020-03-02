@@ -118,7 +118,7 @@ export const constructDataBlobFromChallenge = (args: {
   }
 };
 
-// Restrict shortid to only alphanumeric characters for nicer-looking ids
+// Restrict shortid to only friendly-looking characters for nicer-looking ids
 shortid.characters(
   "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@",
 );
