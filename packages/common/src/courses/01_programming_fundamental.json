@@ -306,7 +306,7 @@
           "videoUrl": "",
           "starterCode": "const greeting = \"\";",
           "solutionCode": "const greeting = \"Hello, my name is Pete\";",
-          "supplementaryContent": "## string not String\n\nOk, last warning\\! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway: TypeScript is a **case\\-sensitive** language, and it is _not_ safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip:** TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc.\n"
+          "supplementaryContent": "## string not String\n\nOk, last warning\\! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway: TypeScript is a **case\\-sensitive** language, and it is _not_ safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip**\n> TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc.\n"
         },
         {
           "id": "aKi_ySGP",
@@ -466,7 +466,7 @@
           "id": "g2CWrS2M",
           "type": "typescript",
           "title": "\"let\" vs. \"const\"",
-          "content": "In addition to the `let` keyword, we've also seen variables declared with the keyword `const` throughout this section. `const` is short for \"constant\", and unlike variables declared with `let`, variables declared with `const` cannot be reassigned. Otherwise, they behave very similarly.\n\n* Uncomment the code in the editor below, hover over `pairwise`, and note the error.\n* Fix the problem by assigning `pairwise` the string `\"pairwise\"`.\n* On line 2, try to assign `pairwise` a new value and see what happens.\n\n\n> **Tip**\n> In general, when writing TypeScript, `const` is preferred over `let` unless your variable is going to be declared without an initial value, or will be reassigned later in the program. `const` does have a few nuances, though, which you can read about in the supplementary content section below.\n",
+          "content": "In addition to the `let` keyword, we've also seen variables declared with the keyword `const` throughout this section. `const` is short for \"constant\", and unlike variables declared with `let`, variables declared with `const` cannot be reassigned. Otherwise, they behave very similarly.\n\n* Uncomment the code in the editor below, hover over `pairwise`, and note the error.\n* Fix the problem by assigning `pairwise` the string `\"pairwise\"`.\n* On line 2, try to assign `pairwise` a new value and see what happens.\n\n\n> **Tip**\n> In general, when writing TypeScript, `const` is preferred over `let` unless your variable is going to be declared without an initial value, or will be reassigned later in the program. `const` does have a few nuances, though, which you can read about in the supplementary content section [below](/scrollTarget/supplementary-content-container).\n",
           "testCode": "test('`pairwise` should be equal to the string `\"pairwise\"`', () =>\n  expect(pairwise).toBe(\"pairwise\"));\n",
           "videoUrl": "",
           "starterCode": "// const pairwise: string;",
@@ -476,7 +476,7 @@
         {
           "id": "fvvYrahy",
           "type": "section",
-          "title": "Basic Arithmetic Operators",
+          "title": "Arithmetic Operators",
           "content": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
@@ -529,21 +529,10 @@
           "supplementaryContent": ""
         },
         {
-          "id": "WYcydtZx",
-          "type": "section",
-          "title": "Other Arithmetic Operators",
-          "content": "",
-          "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "supplementaryContent": "In addition to the basic arithmetic operators, TypeScript also provides some less obvious operators for working with numbers:\n\n* The `++`, or increment, operator\n* The `--`, or decrement, operator\n* The `%`, or remainder, operator\n* The `**`, or exponentiation, operator\n* The `+`, or unary plus, operator\n* The `-`, or unary negation, operator\n\n\nLet's explore them each in turn."
-        },
-        {
           "id": "Av840s7X",
           "type": "typescript",
           "title": "The Increment Operator",
-          "content": "The increment operator does exactly what its name promises it will do. It increments its operand\\! Unlike the operators we've seen so far, the `++` operator is a unary operator, meaning it only takes one operand:\n\n```\nlet x = 3;\nx++; // x = 4\n\n```\n\nSince variables declared with `const` cannot be reassigned, and incrementing a variable after its been assigned a value is tantamount to reassignment, only variables declared with `let` can be incremented. \n\nThis is where TypeScript's type system shines\\! In a JavaScript program, the below code would result in a run\\-time `TypeError`, meaning the error would occur when the program is executing, and users of the application would likely notice the problem. Not good\\! However, TypeScript _prevents_ this error at compile\\-time, and its linter warns us as we're coding.\n\n* Uncomment line 2 and hover over `notCool`. Note the warning. This is very useful\\!\n\n",
+          "content": "The increment operator does exactly what its name promises it will do. It increments its operand\\! Unlike the operators we've seen so far, the `++` operator is a unary operator, meaning it only takes one operand:\n\n```\nlet x = 3;\nx++; // x = 4\n\n```\n\nSince variables declared with `const` cannot be reassigned, and incrementing a variable after its been assigned a value is tantamount to reassignment, only variables declared with `let` can be incremented. \n\nThis is where TypeScript's type system shines\\! In a JavaScript program, the below code would result in a run\\-time `TypeError`, meaning the error would occur during the program's execution, and users of the application would likely notice the problem. Not good\\! However, TypeScript _prevents_ this error at compile\\-time, and its linter warns us as we're coding.\n\n* Uncomment line 2 and hover over `notCool`. Note the warning. This is very useful\\!\n\n",
           "testCode": "test('`notCool` should be of type number', () => expect(typeof notCool).toBe(\"number\"));",
           "videoUrl": "",
           "starterCode": "const notCool = 3;\n// notCool++;",
@@ -553,13 +542,35 @@
         {
           "id": "Ib5T7-Ll",
           "type": "typescript",
-          "title": "The Increment Operator In Action",
-          "content": "Ok, we took a little detour to drive home the point of why we write TypeScript instead of JavaScript in the first place. But now let's see the `++` operator in action.\n\nThere are a couple of nuances to note about the increment operator. The increment operator can be used either _prefix_ or _postfix_, meaning either _before_, or _after_, its operand.\n\n```typescript\nlet a = 3;\nlet b = 3;\nlet c = ++a; // prefix usage\nlet d = b++; // postfix usage\n\n```\n\nWhile these expression look similar, their behavior is slightly different. The prefix operator increments its operand and returns its value _after being incremented_, while the postfix operator increments its operand and returns its_ \\_value \\_before being incremented_. Let's take a look again with some results:\n\n```typescript\nlet a = 3;\nlet b = 3;\nlet c = ++a; // c = 4 prefix returned a after being incremented\nlet d = b++; // d = 3 postfix returned b before being incremented\n// a = 4, b = 4 both a and b were incremented\n\n```\n\n* Assign `b` an expression where `a` is incremented with the `++` operator _postfix_\n* Assign `c` an expression where `b`  is incremented with the `++` operator _prefix_\n\n",
+          "title": "The Increment Operator Pt. II",
+          "content": "Ok, we took a little detour to drive home the point of why we write TypeScript instead of JavaScript in the first place. But now let's see the `++` operator in action.\n\nThere are a couple of nuances to note about the increment operator. The increment operator can be used either _prefix_ or _postfix_, meaning either _before_, or _after_, its operand.\n\n```typescript\nlet a = 3;\nlet b = 3;\nlet c = ++a; // prefix usage\nlet d = b++; // postfix usage\n\n```\n\nWhile these expression look similar, their behavior is slightly different. The prefix operator increments its operand and returns its value _after being incremented_, while the postfix operator increments its operand and returns its value _before being incremented_. Let's take a look again with some results:\n\n```typescript\nlet a = 3;\nlet b = 3;\nlet c = ++a; // c = 4 prefix returned a after being incremented\nlet d = b++; // d = 3 postfix returned b before being incremented\n// a = 4, b = 4 both a and b were incremented\n\n```\n\n* Assign `b` an expression where `a` is incremented with the `++` operator _postfix_\n* Assign `c` an expression where `b`  is incremented with the `++` operator _prefix_\n\n\nWhen you're done, see [below](/scrollTarget/supplementary-content-container) for a brief discussion on the `++` operators close cousin, the decrement, or `--` operator\\.\n",
           "testCode": "test('`a` should be of type `number`', () => expect(typeof a).toBe(\"number\"));\ntest('`b` should be of type `number`', () => expect(typeof b).toBe(\"number\"));\ntest('`c` should be of type `number`', () => expect(typeof c).toBe(\"number\"));\ntest('`a` should equal `101`', () => expect(a).toBe(101));\ntest('`b` should equal `101`', () => expect(a).toBe(101));\ntest('`c` should equal `101`', () => expect(a).toBe(101));\n",
           "videoUrl": "",
           "starterCode": "let a = 100;\nlet b: number;\nlet c: number;",
           "solutionCode": "let a = 100;\nlet b: number = a++;\nlet c: number = ++b;",
+          "supplementaryContent": "Similar to the increment operator, is the decrement, or `--` operator\\. It's a unary operator that behaves much the same way as the `++` operator, except that it decrements its numeric operand, rather than increments it. \n\n```\nlet x = 100;\nx--; // x = 99\n\n```\n\nLike the increment operator, `--` can only be used on variables declared with `let`. It also has identical prefix and postfix behaviors \\(if used prefix, it returns the value of its operand after being decremented, and vice versa if used postfix\\).\n\n```\nlet x = 100;\nlet q = 100;\nlet y = --x; // y = 99, x = 99\nlet z = q--; // z = 100, q = 99\n\n```\n\nWe're not going to cover this operator in a separate lesson, because its behavior is so similar to what we've covered here. But it can be a useful operator, so be aware of it\\!"
+        },
+        {
+          "id": "ArSBMKtk",
+          "type": "typescript",
+          "title": "The Remainder Operator",
+          "content": "The remainder, or `%`, operator returns the remainder of its two operands' division:\n\n```\nconst remainder = 20 % 3; // 2\n\n```\n\nThe expression `20 % 3` can be thought of as \"the remainder of 20 divided by 3.\"  \n\nOne important note about the `%` operator is that the return value always takes on the sign of the dividend, or the left\\-hand operand \\(the right\\-hand operand is the divisor\\):\n\n```\nconst dividend = -17;\nconst divisor = 2;\ndividend % divisor; // -1\n\n```\n\n* A very common use\\-case for the `%` operator is to test whether or not a number is even or odd. We can accomplish this by comparing the result of `num % 2` with `0` , e.g. `num % 2 === 0`  \\(the `===` operator determines if two operands are equal, which we'll learn more about in a later section\\). If the remainder is `0` we know the number is even, if its not, we know its odd. Pretty handy\\! \n* Assign a number to `num` so that `isEven` evaluates to `true`.\n\n",
+          "testCode": "test(\"`num` should be of type `number`\", () =>\n  expect(typeof num).toBe(\"number\"));\ntest(\"`isEven` should be of type `boolean`\", () =>\n  expect(typeof isEven).toBe(\"boolean\"));\ntest(\"`isEven` should be `true`\", () => expect(isEven).toBe(true));\n",
+          "videoUrl": "",
+          "starterCode": "const num = 5;\nconst isEven = num % 2 === 0;\n",
+          "solutionCode": "const num = 6;\nconst isEven = num % 2 === 0;\n",
           "supplementaryContent": ""
+        },
+        {
+          "id": "WYcydtZx",
+          "type": "media",
+          "title": "Other Arithmetic Operators",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "There are a few other arithmetic operators to be aware of. Let's take a quick look.\n\n## The Exponentiation Operator\n\nThe exponentiation or, `**`, operator raises the left\\-hand operand to the power of the right hand operand:\n\n```\nconst fourCubed = 4 ** 3; // 64\n\n```\n\n## The Unary Plus Operator\n\nThe unary plus, or `+`, operator, as its name suggests, only takes a single operand, and is used _prefix_, or immediately before its operand. Its only purpose is to convert its operand to a number \\(if it isn't one already\\) and return the result. Note that the operand itself _is not_ affected\\.\n\n```\nconst fiveAsString = \"5\";\nconst fiveAsNumber = +fiveAsString;\n// fiveAsString = \"5\", fiveAsNumber = 5\n\n```\n\nTry this out in the [sandbox](/workspace/sandbox) on more complex string representations of numbers \\(e.g. `\"-23543.0274\"`\\), and on values other than strings and see what you get\\! For instance, what do you expect the result to be when you use the unary plus operator on booleans or on `null`?\n\n```\nconst isTrue = true;\n+isTrue // ??\n\n```\n\nExperimentation and fun aside, It should be noted here, however, that there are other, more preferred ways to convert values to numbers in TypeScript. The unary plus operator is borderline esoteric, but will work just fine for simple use\\-cases. For more complex cases, other methods are preferred:\n\n```\nconst notReallyPi = \"3.14IsPie...err...ImeanPi\";\nconst definitelyNotPi = +notReallyPi; // NaN (not a number)\nconst pi = parseFloat(notReallyPi); // 3.14\n\n```\n\nThis example is obviously contrived, but you get the picture.\n\n## The Unary Negation Operator\n\nThe unary negation, or `-`, operator negates the value of its operand. If its operand is not a number, it also converts it to a number before negating it.\n\n```\nconst threeAsNumber = 3;\nconst threeAsString = \"3\";\n-threeAsString; // -3\n-threeAsNumber; // -3\n\n```\n"
         },
         {
           "id": "6T3GXc4ap",
