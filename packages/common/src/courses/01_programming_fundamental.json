@@ -581,6 +581,17 @@
           "supplementaryContent": ""
         },
         {
+          "id": "TJdUI-So",
+          "type": "section",
+          "title": "Scopes",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "By now you have probably seen a lot of `{` and `}` in the code you've been writing. These curly braces are an important part of understanding how a computer program works. In this section, we will dive into the curly braces in more depth and introduce an important concept: _scopes_.\n\nIn TypeScript, a _scope_ refers to which variables are accessible within a specific piece of code. Curly braces `{...}` are used to denote different scopes, which can be used to limit variable accessibility within different parts of code.\n\nA variable which is accessible in one scope may not be accessible in another. This can useful for establishing boundaries between different parts of your program, organizing your code, encapsulation, and for many other reasons.\n\nWith that said, let's dive into the challenges\\!"
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Programming Projects",
