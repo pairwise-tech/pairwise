@@ -693,10 +693,10 @@ const SpecialLeftShadow = styled.div`
   top: 0;
   left: 0;
   bottom: 0;
-  zindex: 3;
-  boxshadow: rgba(0, 0, 0, 0.22) 10px 0px 10px 0px inset;
+  z-index: 3;
+  box-shadow: rgba(0, 0, 0, 0.22) 10px 0px 10px 0px inset;
   width: 80px;
-  pointerevents: none;
+  pointer-events: none;
 `;
 
 const Badge = styled.div`
