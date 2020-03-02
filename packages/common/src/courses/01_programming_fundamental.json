@@ -13,10 +13,10 @@
           "type": "markup",
           "title": "Hello, Pairwise!",
           "content": "There is an h1 tag in the code editor below which contains the text \"Pairwise\". Your job is to change the text to say \"Hello, Pairwise\\!\"",
-          "testCode": "test(`The h1 tag should contain the text: \"Hello, Pairwise!\"`, () => {\n    expect(get(\"h1\").innerText).toBe(\"Hello, Pairwise!\");\n});",
+          "testCode": "test(`The h1 tag should contain the text: \"Hello, Pairwise!\"`, () => {\n    expect(getText(\"h1\")).toBe(\"Hello, Pairwise!\");\n});",
           "videoUrl": "",
-          "starterCode": "<h1>\n    Hello, Pairwise!\n<h1>",
-          "solutionCode": "<!-- This is a comment, the computer ignores it! -->\n\n<p>This is a paragraph tag. Take a look to the right of the screen to see what it looks like!</p>\n\n<b>This is how to make text bold. Impressive!</b>\n\n<!-- Your instructions for this challenge: -->\n<!-- Lines 11-13 contain an h1 tag with the text \"Pairwise\" -->\n<!-- Your job is to change the text to say \"Hello, Pairwise!\" -->\n\n<h1>\n    Hello, Pairwise!\n<h1>\n\n<!-- When you finish, you should see the test below pass! -->",
+          "starterCode": "<h1>Pairwise<h1>",
+          "solutionCode": "<h1>Hello, Pairwise!<h1>\n",
           "supplementaryContent": ""
         },
         {
