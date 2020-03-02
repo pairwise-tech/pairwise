@@ -19765,7 +19765,7 @@ rgba-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/rgba-regex/-/rgba-regex-1.0.0.tgz#43374e2e2ca0968b0ef1523460b7d730ff22eeb3"
   integrity sha1-QzdOLiyglosO8VI0YLfXMP8i7rM=
 
-rich-markdown-editor@^9.11.2:
+rich-markdown-editor@9.11.2:
   version "9.11.2"
   resolved "https://registry.yarnpkg.com/rich-markdown-editor/-/rich-markdown-editor-9.11.2.tgz#12437f5594b492b2c64d6994554311ba0a45e77f"
   integrity sha512-Pj/rBqHqB6tyqgzcdQ/KWFkEn5Yh6cOrjNoIGmmwXDVpsbYV/J9gcBiUfeA2oCAgjf8M1peSFgDPfwzl6SXP5g==
