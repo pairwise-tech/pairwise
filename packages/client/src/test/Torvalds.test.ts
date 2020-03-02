@@ -68,13 +68,19 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
     // Check all the module ids
     for (const { id } of course.modules) {
-      expect(challengeIdSet.has(id)).toBeFalsy();
+      if (challengeIdSet.has(id)) {
+        throw new Error(`Found duplicated id! The culprit: ${id}`);
+      }
+
       challengeIdSet.add(id);
     }
 
     // Check all the challenge ids
     for (const { id } of challenges) {
-      expect(challengeIdSet.has(id)).toBeFalsy();
+      if (challengeIdSet.has(id)) {
+        throw new Error(`Found duplicated id! The culprit: ${id}`);
+      }
+
       challengeIdSet.add(id);
     }
   });
