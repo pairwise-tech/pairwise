@@ -245,14 +245,11 @@ class ApplicationContainer extends React.Component<IProps, IState> {
   }
 
   get showMediaAreaButton() {
-    if (this.props.challenge) {
-      return (
-        challengeRequiresWorkspace(this.props.challenge) &&
-        (CODEPRESS || this.props.hasMediaContent)
-      );
-    }
-
-    return false;
+    return (
+      this.props.challenge &&
+      challengeRequiresWorkspace(this.props.challenge) &&
+      (CODEPRESS || this.props.hasMediaContent)
+    );
   }
 
   renderLoadingOverlay = () => {
