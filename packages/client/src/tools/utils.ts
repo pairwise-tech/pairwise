@@ -52,7 +52,8 @@ export const isContentOnlyChallenge = (challenge: Challenge) => {
     type === "media" ||
     type === "section" ||
     type === "project" ||
-    type === "guided-project"
+    type === "guided-project" ||
+    type === "special-topic"
   );
 };
 
