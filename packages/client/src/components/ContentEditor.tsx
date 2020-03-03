@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import toaster from "tools/toast-utils";
 import { ContentUtility } from "@pairwise/common";
 import styled from "styled-components";
-import { COLORS } from "tools/constants";
+import { COLORS, SANDBOX_ID } from "tools/constants";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -78,8 +78,11 @@ const isInternalLink = (href: string) => {
     if (isChallengeRoute) {
       const challengeId = isChallengeRoute[1];
       // throw error if we provide an invalid id in workspace route
-      // this should not get past us during development!
-      if (!ContentUtility.challengeIdIsValid(challengeId)) {
+      // so that this does not get past us during development
+      if (
+        !ContentUtility.challengeIdIsValid(challengeId) &&
+        challengeId !== SANDBOX_ID
+      ) {
         throw new Error("[Err ContentEditor] Invalid Challenge Link.");
       }
     }
