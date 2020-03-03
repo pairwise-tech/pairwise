@@ -10,7 +10,7 @@ import { CodeFormatMessage, CodeFormatMessageEvent } from "./test-utils";
  * potentially cause build issues if we get too tricky with our build, but for
  * now this should be fine.
  */
-const codeWorker = new CodeFormatWorker();
+const codeWorker: Worker = new CodeFormatWorker();
 
 export const requestCodeFormatting = (message: CodeFormatMessage) => {
   codeWorker.postMessage(message);
