@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { getSearchResults } from "modules/challenges/selectors";
 import styled from "styled-components/macro";
 import { InputGroup } from "@blueprintjs/core";
+import { SearchResult } from "modules/challenges/types";
 
 const mapState = (state: ReduxStoreState) => ({
   searchResults: getSearchResults(state),
@@ -34,13 +35,27 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
         placeholder="Search..."
       />
       <ResultBox>
-        {searchResults.map(x => {
-          return <p key={x.ref}>{x.ref}</p>;
-        })}
+        {searchResults.map(x => (
+          <StyledSearchResultItem key={x.id} result={x} />
+        ))}
       </ResultBox>
     </Box>
   );
 };
+
+const SearchResultItem = ({ result }: { result: SearchResult }) => {
+  return (
+    <div>
+      <h3>{result.title}</h3>
+    </div>
+  );
+};
+
+const StyledSearchResultItem = styled(SearchResultItem)<{
+  result: SearchResult;
+}>`
+  backround: white;
+`;
 
 const Input = styled(InputGroup)`
   input#search-input {
@@ -69,7 +84,6 @@ const Box = styled.div`
 
 const ResultBox = styled.div`
   position: absolute;
-  background: skyblue;
   top: 100%;
   left: 0;
   right: 0;
