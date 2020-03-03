@@ -15,6 +15,7 @@ import {
   ChallengeDeletePayload,
   ChallengeReorderPayload,
   ModuleReorderPayload,
+  SearchResult,
 } from "./types";
 import { HttpResponseError } from "modules/api";
 import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
@@ -83,12 +84,28 @@ enum ActionTypesEnum {
   SET_ADMIN_EDITOR_TAB = "SET_ADMIN_EDITOR_TAB",
 
   TOGGLE_SECTION_ACCORDION_VIEW = "TOGGLE_SECTION_ACCORDION_VIEW",
+
+  // NOTE: These don't follwo the pattern of do_something{,_success,_failure}
+  // because they are worker related so there is no direct tie between one
+  // search action and it's result at the epic level. This is not yet a
+  // convetion though so i'm open to suggestions
+  REQUEST_SEARCH_RESULTS = "REQUEST_SEARCH_RESULTS",
+  RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS",
 }
 
 /** ===========================================================================
  * Actions
  * ============================================================================
  */
+
+export const requestSearchResults = createAction(
+  ActionTypesEnum.REQUEST_SEARCH_RESULTS,
+)<string>();
+
+// TODO: Once i have a firm search result type add it here
+export const receiveSearchResults = createAction(
+  ActionTypesEnum.RECEIVE_SEARCH_RESULTS,
+)<SearchResult[]>();
 
 export const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<
   boolean

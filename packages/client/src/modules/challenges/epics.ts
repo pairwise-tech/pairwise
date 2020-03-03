@@ -1,3 +1,7 @@
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import SearchWorker from "workerize-loader!tools/lunr-search-worker";
+
 import {
   Course,
   IProgressDto,
@@ -8,7 +12,7 @@ import {
   SandboxBlob,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
-import { merge, of, combineLatest } from "rxjs";
+import { merge, of, combineLatest, Observable } from "rxjs";
 import {
   catchError,
   delay,
@@ -19,17 +23,85 @@ import {
   pluck,
   ignoreElements,
   debounceTime,
+  distinctUntilChanged,
+  take,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import { SANDBOX_ID } from "tools/constants";
+import {
+  SANDBOX_ID,
+  SEARCH,
+  SEARCH_SUCCESS,
+  BUILD_SEARCH_INDEX,
+} from "tools/constants";
 import {
   findCourseById,
   deriveIdsFromCourse,
   findChallengeIdInLocationIfExists,
   createInverseChallengeMapping,
 } from "tools/utils";
+import { SearchResultEvent } from "./types";
+
+const searchEpic: EpicSignature = action$ => {
+  // Initialize the search worker. This could get dropped into deps if we need
+  // it elsewhere but I don't think we do
+  const searchWorker: Worker = new SearchWorker();
+
+  // NOTE: Currently we're only using one course... so the search index will
+  // only search over the first course fetched. As of 2020-03-03 we only have
+  // one course and only fetch one course but might need to revisit in the
+  // future
+  const buildSearchIndex$ = action$.pipe(
+    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+    map(x => x.payload.courses[0]), // See NOTE
+    take(1), // Only do this once.. for now
+    tap(course => {
+      searchWorker.postMessage({
+        type: BUILD_SEARCH_INDEX,
+        payload: course,
+      });
+    }),
+    ignoreElements(),
+  );
+
+  // Stream of incoming search strings
+  const search$ = action$.pipe(
+    filter(isActionOf(Actions.requestSearchResults)),
+    map(x => x.payload),
+    filter(x => x.length > 2), // This is arbitrary. Maybe it should just be > 1?
+    distinctUntilChanged(),
+    debounceTime(200),
+    tap(x => {
+      searchWorker.postMessage({
+        type: SEARCH,
+        payload: x,
+      });
+    }),
+    ignoreElements(),
+  );
+
+  // All search results from the worker.
+  // NOTE: Since this is async the way it's current written there is no
+  // guarantee the most recent search result we get back corresponds to the most
+  // recent string the user has typed
+  const searchResult$ = new Observable<SearchResultEvent>(obs => {
+    const listener = (message: SearchResultEvent) => obs.next(message);
+    searchWorker.addEventListener("message", listener);
+    return () => searchWorker.removeEventListener("message", listener);
+  }).pipe(
+    tap(message => {
+      // Debugging
+      console.info("[INFO searchWorker]", message);
+    }),
+    map(x => x.data),
+    filter(x => x.type === SEARCH_SUCCESS),
+    map(x => x.payload),
+    map(Actions.receiveSearchResults),
+  );
+
+  return merge(buildSearchIndex$, search$, searchResult$);
+};
 
 /** ===========================================================================
  * Epics
@@ -524,4 +596,5 @@ export default combineEpics(
   saveCodeBlobEpic,
   handleCompleteChallengeEpic,
   updateUserProgressEpic,
+  searchEpic,
 );
