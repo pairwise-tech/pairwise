@@ -12,7 +12,7 @@ import {
   SandboxBlob,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
-import { merge, of, combineLatest, Observable } from "rxjs";
+import { merge, of, combineLatest, Observable, partition } from "rxjs";
 import {
   catchError,
   delay,
@@ -67,11 +67,19 @@ const searchEpic: EpicSignature = action$ => {
     ignoreElements(),
   );
 
-  // Stream of incoming search strings
-  const search$ = action$.pipe(
-    filter(isActionOf(Actions.requestSearchResults)),
-    map(x => x.payload),
-    filter(x => x.length > 2), // This is arbitrary. Maybe it should just be > 1?
+  // Stream of incoming search strings that we split on the length of the
+  // search. If the search is less than N chars (see below) consider it too
+  // small and clear the result so that stale search results aren't hanging
+  // around in the UI. Otherwise do the search.
+  const [_search$, _clearSearch$] = partition(
+    action$.pipe(
+      filter(isActionOf(Actions.requestSearchResults)),
+      map(x => x.payload),
+    ),
+    x => x.length > 2, // This is arbitrary. Maybe it should just be > 1?
+  );
+
+  const search$ = _search$.pipe(
     distinctUntilChanged(),
     debounceTime(200),
     tap(x => {
@@ -81,6 +89,11 @@ const searchEpic: EpicSignature = action$ => {
       });
     }),
     ignoreElements(),
+  );
+
+  const clearSearch$ = _clearSearch$.pipe(
+    map(() => []), // Empty array will clear the search
+    map(Actions.receiveSearchResults),
   );
 
   // All search results from the worker.
@@ -102,7 +115,7 @@ const searchEpic: EpicSignature = action$ => {
     map(Actions.receiveSearchResults),
   );
 
-  return merge(buildSearchIndex$, search$, searchResult$);
+  return merge(buildSearchIndex$, search$, clearSearch$, searchResult$);
 };
 
 /** ===========================================================================

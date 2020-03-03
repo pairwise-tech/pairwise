@@ -34,27 +34,60 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
         value={searchText}
         placeholder="Search..."
       />
-      <ResultBox>
-        {searchResults.map(x => (
-          <StyledSearchResultItem key={x.id} result={x} />
-        ))}
-      </ResultBox>
+      {searchResults.length > 0 && (
+        <ResultBox>
+          <ResultTitleBox>
+            Showing {searchResults.length} results for "{searchText}"
+          </ResultTitleBox>
+          {searchResults.map(x => (
+            <StyledSearchResultItem key={x.id} result={x} />
+          ))}
+        </ResultBox>
+      )}
     </Box>
   );
 };
 
-const SearchResultItem = ({ result }: { result: SearchResult }) => {
+const SearchResultItem = ({ result, ...rest }: { result: SearchResult }) => {
   return (
-    <div>
+    <div {...rest}>
       <h3>{result.title}</h3>
+      {result.matches.map((x, i) => {
+        return (
+          <p key={i}>
+            {x.matchContext.beforeMatch}
+            <span style={{ fontWeight: "bold", color: "#ffdf75" }}>
+              {x.matchContext.match}
+            </span>
+            {x.matchContext.afterMatch}
+          </p>
+        );
+      })}
     </div>
   );
 };
 
-const StyledSearchResultItem = styled(SearchResultItem)<{
-  result: SearchResult;
-}>`
-  backround: white;
+const ResultTitleBox = styled.div`
+  background: #6d6d6d;
+  font-weight: bold;
+  padding: 12px 4px;
+}
+`;
+
+const StyledSearchResultItem = styled(SearchResultItem)`
+  cursor: pointer;
+  padding: 4px 10px;
+  border-bottom: 1px solid #636363;
+  &:hover {
+    background: #4c4c4c;
+  }
+  h3 {
+    margin: 0;
+    margin-bottom: 4px;
+  }
+  p {
+    margin-bottom: 0;
+  }
 `;
 
 const Input = styled(InputGroup)`
@@ -85,9 +118,15 @@ const Box = styled.div`
 const ResultBox = styled.div`
   position: absolute;
   top: 100%;
-  left: 0;
+  left: auto;
   right: 0;
   z-index: 1;
+  width: 400px;
+  background: #3a3a3a;
+  overflow: auto;
+  max-height: 80vh;
+  border-radius: 3px;
+  box-shadow: 0 1px 5px black;
 `;
 
 export default connect(mapState, dispatchProps)(SearchBox);
