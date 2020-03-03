@@ -121,7 +121,8 @@ const ResultBox = styled.div`
   left: auto;
   right: 0;
   z-index: 1;
-  width: 400px;
+  min-width: 400px;
+  width: 100%;
   background: #3a3a3a;
   overflow: auto;
   max-height: 80vh;

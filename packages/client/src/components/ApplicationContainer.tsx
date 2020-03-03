@@ -137,11 +137,11 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             </ProductTitle>
           </ControlsContainer>
           {CODEPRESS && (
-            <ControlsContainer>
+            <ControlsContainer style={{ flexShrink: 0 }}>
               <EditingToolbar />
             </ControlsContainer>
           )}
-          <ControlsContainer style={{ marginLeft: "auto" }}>
+          <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
             <SearchBox />
             {this.props.showFeedbackButton && (
               <Tooltip content="Submit Feedback" position="bottom">
@@ -356,6 +356,7 @@ const AccountButton = styled(ButtonCore)`
   border-radius: 4px;
   margin-left: 2px;
   margin-right: 2px;
+  flex-shrink: 0;
 
   :hover {
     cursor: pointer;
