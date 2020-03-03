@@ -1,4 +1,3 @@
-import lunr from "lunr";
 import { Challenge, Module, Course } from "@pairwise/common";
 import { BUILD_SEARCH_INDEX, SEARCH, SEARCH_SUCCESS } from "tools/constants";
 
@@ -95,7 +94,22 @@ export interface SearchMessageEvent extends MessageEvent {
   data: BuildSearchIndexAction | SearchAction;
 }
 
-export interface SearchResult extends lunr.Index.Result {}
+// The context of a matched search result. Text that came before and after along
+// with the match itself
+interface MatchContext {
+  beforeMatch: string;
+  match: string;
+  afterMatch: string;
+}
+
+export interface SearchResult {
+  id: string;
+  title: string;
+  matches: Array<{
+    foundIn: keyof Challenge;
+    matchContext: MatchContext;
+  }>;
+}
 
 export interface SearchResultEvent extends MessageEvent {
   data: {

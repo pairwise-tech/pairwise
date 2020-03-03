@@ -34,8 +34,75 @@ const buildSearchDocuments = (course: Course): SearchDocument[] => {
   return documents;
 };
 
-const buildSearchResults = (xs: lunr.Index.Result) => {
-  return xs; // TODO
+interface IMatchData extends lunr.MatchData {
+  metadata: {
+    [k: string]: {
+      [k in keyof SearchDocument]: {
+        position: Array<[number, number]>;
+      };
+    };
+  };
+}
+
+interface ISearchResult extends lunr.Index.Result {
+  matchData: IMatchData;
+}
+
+const buildSearchResult = (result: ISearchResult) => {
+  const doc = documentLookup[result.ref];
+  const metadata = result.matchData.metadata;
+  const matches = Object.keys(metadata).map(term => {
+    const matchLocations = metadata[term];
+
+    return Object.keys(matchLocations).reduce(
+      // Object.keys(...) is insisting the return value is string and thus
+      // locationName cannot be a keyof SearchDocument. Or if locationName is
+      // string then code further down fails because string cannot index some of
+      // these types, it wants specific literals.
+      // @ts-ignore
+      (agg, locationName: keyof SearchDocument) => {
+        const location = metadata[term][locationName];
+        const content = doc[locationName];
+
+        // Not yet sure why postion is an array of arrays
+        const [[from, charCount]] = location.position;
+        const matchPadding = 50; // Number of characters on either side to try to pad the match context with
+
+        // The excerpt string leading up to the match.
+        // NOTE: term here is the "stemmed" term that lunr has come up with so it
+        // is not guaranteed to be the user entered search string. We could
+        // instead match against the user entered search string, or even do some
+        // sort of highlighting of both... although that would quickly become
+        // complex.
+        const beforeMatch = content.slice(from - matchPadding, from);
+        const match = content.slice(from, from + term.length);
+        const afterMatch = content.slice(
+          from + term.length,
+          Math.min(
+            content.indexOf(".", from) + 1, // Cut up to the next period or... (+1 to include the period)
+            from + matchPadding, // ... N characters if not found or...
+            content.length, // ... the length of the document, if that is less than the others
+          ),
+        );
+
+        return {
+          foundIn: locationName,
+          matchContext: {
+            beforeMatch,
+            match,
+            afterMatch,
+          },
+        };
+      },
+      [],
+    );
+  });
+
+  return {
+    id: doc.id,
+    title: doc.title,
+    matches,
+  };
 };
 
 // Create the indexer function that Lunr will use to build the search index
@@ -74,7 +141,19 @@ self.addEventListener("message", (event: SearchMessageEvent) => {
 
       // NOTE: Search success does not guarantee any results. May well be an
       // empty array
-      const results = idx.search(payload as string).map(buildSearchResults);
+      // NOTE: I was between a rock and a hard place with the typing on this
+      // stuff. The fact of the matter is the metadata prop can is just a
+      // mapping of strings to ... pretty much anything depending on what lunr
+      // plugins you use. We're using the standard setup so you get LUNR-STEMMED
+      // SEARCH TERMS mapping to fields on the data we provided to be searched
+      // over. I.e. the data in the index. So those fields will be fields on
+      // SearchDocument. The alternative I was finding was using quite a few
+      // anys in places. So yes, this filer function does not actually guarantee
+      // anything but it does allow this file to typecheck
+      const results = idx
+        .search(payload as string)
+        .filter((x): x is ISearchResult => true) // See NOTE
+        .map(buildSearchResult);
 
       // @ts-ignore
       self.postMessage({ type: SEARCH_SUCCESS, payload: results });
@@ -110,52 +189,3 @@ self.addEventListener("message", (event: SearchMessageEvent) => {
       break;
   }
 });
-
-// const results = idx.search(process.argv[2]).map(result => {
-//   const doc = documentLookup[result.ref];
-//   const metadata = result.matchData.metadata;
-//   const matches = Object.keys(metadata).map(term => {
-//     const matchLocations = metadata[term];
-//     const locations = Object.keys(matchLocations).map(locationName => {
-//       const location = metadata[term][locationName];
-//       const content = doc[locationName];
-
-//       // Not yet sure why postion is an array of arrays
-//       const [[from, charCount]] = location.position;
-
-//       // The excerpt string leading up to the match.
-//       // NOTE: term here is the "stemmed" term that lunr has come up with so it
-//       // is not guaranteed to be the user entered search string. We could
-//       // instead match against the user entered search string, or even do some
-//       // sort of highlighting of both... although that would quickly become
-//       // complex.
-//       const before = content.slice(from - 30, from);
-//       const highlighted =
-//         "--------" + content.slice(from, from + term.length) + "--------";
-//       const after = content.slice(
-//         from + term.length,
-
-//         Math.min(
-//           doc[locationName].indexOf(".", from) + 1, // Cut up to the next period or... (+1 to include the period)
-//           from + 50, // ... N characters if not found or...
-//           doc[locationName].length, // ... the length of the document, if that is less than the others
-//         ),
-//       );
-
-//       const matchExcerpt = before + highlighted + after;
-
-//       return {
-//         foundIn: locationName,
-//         position: location.position,
-//         matchExcerpt,
-//       };
-//     });
-//     return locations;
-//   });
-
-//   return {
-//     title: doc.title,
-//     matches,
-//     ...result,
-//   };
-// });
