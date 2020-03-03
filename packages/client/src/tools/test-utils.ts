@@ -352,7 +352,7 @@ try {
 
   // use as a fallback when the only way to test user code is by regexp.
   // purposefully named against conventions to avoid collisions with user vars
-  // const __user_code_string__ = ${quote(userCode)};
+  const __user_code_string__ = ${quote(userCode)};
 
   function buildTestsFromCode() {
     const testArray = [];
