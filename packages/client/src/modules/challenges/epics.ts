@@ -43,6 +43,8 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 
+const debug = require("debug")("challenges:epics");
+
 const searchEpic: EpicSignature = action$ => {
   // Initialize the search worker. This could get dropped into deps if we need
   // it elsewhere but I don't think we do
@@ -91,8 +93,8 @@ const searchEpic: EpicSignature = action$ => {
     return () => searchWorker.removeEventListener("message", listener);
   }).pipe(
     tap(message => {
-      // Debugging
-      console.info("[INFO searchWorker]", message);
+      // This is the stream of all messages from the worker before it's filtered
+      debug("[INFO searchWorker]", message);
     }),
     map(x => x.data),
     filter(x => x.type === SEARCH_SUCCESS),
