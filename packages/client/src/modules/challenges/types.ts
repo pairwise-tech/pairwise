@@ -1,4 +1,6 @@
-import { Challenge, Module } from "@pairwise/common";
+import lunr from "lunr";
+import { Challenge, Module, Course } from "@pairwise/common";
+import { BUILD_SEARCH_INDEX, SEARCH, SEARCH_SUCCESS } from "tools/constants";
 
 /** ===========================================================================
  * Product Curriculum Hierarchy:
@@ -70,4 +72,34 @@ export interface ModuleReorderPayload {
   courseId: string;
   moduleOldIndex: number;
   moduleNewIndex: number;
+}
+
+export interface SearchAction {
+  type: typeof SEARCH;
+  payload: string;
+}
+
+export interface BuildSearchIndexAction {
+  type: typeof BUILD_SEARCH_INDEX;
+  payload: Course;
+}
+
+export interface SearchDocument {
+  id: string;
+  title: string;
+  content: string;
+  supplementaryContent: string;
+}
+
+export interface SearchMessageEvent extends MessageEvent {
+  data: BuildSearchIndexAction | SearchAction;
+}
+
+export interface SearchResult extends lunr.Index.Result {}
+
+export interface SearchResultEvent extends MessageEvent {
+  data: {
+    type: typeof SEARCH_SUCCESS;
+    payload: SearchResult[];
+  };
 }

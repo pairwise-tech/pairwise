@@ -73,6 +73,14 @@ export const PROSE_MAX_WIDTH = 728;
  * ============================================================================
  */
 
+// Thse are not within some actions file because they are not action creators.
+// They are message types for the search worker
+export const SEARCH = "SEARCH";
+export const SEARCH_SUCCESS = "SEARCH_SUCCESS";
+export const BUILD_SEARCH_INDEX = "BUILD_SEARCH_INDEX_SUCCESS";
+export const BUILD_SEARCH_INDEX_SUCCESS = "BUILD_SEARCH_INDEX_SUCCESS";
+export const BUILD_SEARCH_INDEX_FAILURE = "BUILD_SEARCH_INDEX_FAILURE";
+
 /**
  * Serializing the rich content editor state into markdown could have a perf
  * impact if we did it to often, so this is the debounce timeout for that
