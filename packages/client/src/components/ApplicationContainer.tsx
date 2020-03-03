@@ -24,6 +24,8 @@ import {
   ProfileIcon,
   IconButton,
   SmoothScrollButton,
+  FullScreenOverlay,
+  OverlayText,
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
@@ -36,6 +38,7 @@ import {
 import PaymentCourseModal from "./PaymentIntentModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 import PaymentSuccessModal from "./PaymentSuccessModal";
+import { challengeRequiresWorkspace } from "tools/utils";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -137,7 +140,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             </ControlsContainer>
           )}
           <ControlsContainer style={{ marginLeft: "auto" }}>
-            {this.props.shouldShowFeedbackButton && (
+            {this.props.showFeedbackButton && (
               <Tooltip content="Submit Feedback" position="bottom">
                 <IconButton
                   icon="help"
@@ -217,13 +220,15 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             )}
           </ControlsContainer>
         </Header>
-        <SmoothScrollButton
-          icon="chevron-down"
-          position="bottom"
-          positionOffset={-20}
-          scrollToId="supplementary-content-container"
-          backgroundColor="rgba(29, 29, 29, 0.7)"
-        />
+        {this.showMediaAreaButton && (
+          <SmoothScrollButton
+            icon="chevron-down"
+            position="bottom"
+            positionOffset={-20}
+            scrollToId="supplementary-content-container"
+            backgroundColor="rgba(29, 29, 29, 0.7)"
+          />
+        )}
         <Switch>
           <Route key={0} path="/workspace/:id" component={Workspace} />
           <Route key={1} path="/home" component={Home} />
@@ -239,13 +244,21 @@ class ApplicationContainer extends React.Component<IProps, IState> {
     );
   }
 
+  get showMediaAreaButton() {
+    return (
+      this.props.challenge &&
+      challengeRequiresWorkspace(this.props.challenge) &&
+      (CODEPRESS || this.props.hasMediaContent)
+    );
+  }
+
   renderLoadingOverlay = () => {
     return (
-      <LoadingOverlay visible={this.props.workspaceLoading}>
+      <FullScreenOverlay visible={this.props.workspaceLoading}>
         <div>
-          <OverlayLoadingText>Launching Pairwise...</OverlayLoadingText>
+          <OverlayText>Launching Pairwise...</OverlayText>
         </div>
-      </LoadingOverlay>
+      </FullScreenOverlay>
     );
   };
 
@@ -332,30 +345,6 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
     color: white !important;
     transform: scale(1.3);
   }
-`;
-
-const LoadingOverlay = styled.div`
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 500;
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 15, 15, 0.95);
-  visibility: ${(props: { visible: boolean }) =>
-    props.visible ? "visible" : "hidden"};
-`;
-
-const OverlayLoadingText = styled.p`
-  margin: 0;
-  font-size: 42px;
-  font-weight: 200;
-  color: ${COLORS.PRIMARY_GREEN};
 `;
 
 const AccountButton = styled(ButtonCore)`
@@ -504,10 +493,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
+  showFeedbackButton: Modules.selectors.app.showFeedbackButton(state),
+  hasMediaContent: Modules.selectors.challenges.getHasMediaContent(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
-    state,
-  ),
-  shouldShowFeedbackButton: Modules.selectors.app.shouldShowFeedbackButton(
     state,
   ),
 });

@@ -205,6 +205,13 @@ export const getCurrentContent = createSelector(
   challenge => challenge?.content,
 );
 
+export const getHasMediaContent = createSelector(
+  [getCurrentChallenge],
+  challenge => {
+    return !!(challenge?.supplementaryContent || challenge?.videoUrl);
+  },
+);
+
 /**
  * Retrieve the actual challenge data from the first unfinished challenge.
  */

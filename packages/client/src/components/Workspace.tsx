@@ -67,6 +67,7 @@ import {
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
+import { CODEPRESS } from "tools/client-env";
 import cx from "classnames";
 import traverse from "traverse";
 
@@ -1112,6 +1113,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
   adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
   adminEditorTab: Modules.selectors.challenges.adminEditorTabSelector(state),
+  showMediaArea: Modules.selectors.challenges.getHasMediaContent(state),
 });
 
 const dispatchProps = {
@@ -1203,7 +1205,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
         {requiresWorkspace && (
           <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
         )}
-        {!isSandbox && (
+        {!isSandbox && (CODEPRESS || this.props.showMediaArea) && (
           <LowerSection withHeader={challenge.type === "media"}>
             <MediaArea />
           </LowerSection>

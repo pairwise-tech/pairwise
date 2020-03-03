@@ -3,12 +3,13 @@ import { debounce } from "throttle-debounce";
 import React, { ChangeEvent, Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { Loading, ContentEditor, SmoothScrollButton } from "./Shared";
+import { Loading, SmoothScrollButton } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import { PROSE_MAX_WIDTH, CONTENT_SERIALIZE_DEBOUNCE } from "tools/constants";
 import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
+import ContentEditor from "./ContentEditor";
 
 const TableOfContentsPlugin = (): SlatePlugin => {
   const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {

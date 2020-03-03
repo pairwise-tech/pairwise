@@ -38,8 +38,8 @@ class Account extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
-    if (nextProps.user !== this.props.user) {
+  componentDidUpdate(prevProps: IProps) {
+    if (prevProps.user !== this.props.user) {
       this.handleDiscardChanges();
     }
   }
