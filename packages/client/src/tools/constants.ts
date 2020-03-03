@@ -3,7 +3,7 @@
  * ============================================================================
  */
 
-const COLORS = {
+export const COLORS = {
   SUCCESS: "#2ee3ff",
   FAILURE: "#fc426d",
   PRIMARY_BLUE: "#2ee3ff",
@@ -36,30 +36,9 @@ const COLORS = {
   BORDER_MODAL: "rgb(100,100,100)",
 };
 
-/** ===========================================================================
- * Dimensions
- * ============================================================================
- */
-
-const W = window.innerWidth;
-const H = window.innerHeight;
-const HEADER_HEIGHT = 60;
-
 export const MONACO_EDITOR_INITIAL_FONT_SIZE = 12;
 // How much to increase or decrease font size with each interaction
 export const MONACO_EDITOR_FONT_SIZE_STEP = 2;
-
-const DIMENSIONS = {
-  WORKSPACE_HEIGHT: H - HEADER_HEIGHT,
-  EDITOR_PANEL_WIDTH: W * 0.65,
-
-  CHALLENGE_CONTENT_HEIGHT: H * 0.2,
-  EDITOR_HEIGHT: H * 0.5 - HEADER_HEIGHT,
-  TEST_CONTENT_HEIGHT: H * 0.3,
-
-  PREVIEW_HEIGHT: H * 0.6 - HEADER_HEIGHT,
-  CONSOLE_HEIGHT: H * 0.4,
-};
 
 /**
  * A cap on prose width so that we don't end up with super wide text. This was
@@ -96,10 +75,3 @@ export const CONTENT_SERIALIZE_DEBOUNCE = 600;
  * it should be at least passably memorable.
  */
 export const SANDBOX_ID = "sandbox";
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export { COLORS, DIMENSIONS, HEADER_HEIGHT };

@@ -11,7 +11,8 @@ import {
   ModuleSkeletonList,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
+import { COLORS, SANDBOX_ID } from "tools/constants";
+import { HEADER_HEIGHT } from "tools/dimensions";
 import {
   composeWithProps,
   generateEmptyModule,
