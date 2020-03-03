@@ -118,9 +118,14 @@ export const constructDataBlobFromChallenge = (args: {
   }
 };
 
+// Restrict shortid to only friendly-looking characters for nicer-looking ids
+shortid.characters(
+  "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@",
+);
+
 export const generateEmptyModule = (): Module => ({
   id: shortid.generate(),
-  title: "[EMTPY...]",
+  title: "[EMPTY...]",
   challenges: [],
   free: false /* All challenges are locked by default */,
 });
@@ -163,7 +168,7 @@ export const getChallengeIcon = (
   }
 
   if (type === "section") {
-    return "bookmark";
+    return "caret-down";
   } else if (type === "media") {
     return "book";
   } else {

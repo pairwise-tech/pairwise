@@ -27,6 +27,7 @@ import {
   Menu,
   MenuItem,
   Position,
+  Button,
 } from "@blueprintjs/core";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
@@ -67,6 +68,13 @@ class NavigationOverlay extends React.Component<IProps> {
       return null;
     }
 
+    const sectionIds = module.challenges
+      .filter(x => x.type === "section")
+      .map(x => x.id);
+    const hasSections = sectionIds.length > 0;
+    const anySectionsOpen =
+      hasSections && sectionIds.some(this.getCurrentAccordionViewState);
+
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
         <KeyboardShortcuts
@@ -97,10 +105,20 @@ class NavigationOverlay extends React.Component<IProps> {
           style={{
             width: 600,
             zIndex: 2,
-            boxShadow: "inset 20px 0px 20px 0px rgba(0, 0, 0, 0.1)",
           }}
           onClick={e => e.stopPropagation()}
         >
+          <SpecialLeftShadow />
+          <Title>
+            <p>{module.title}</p>
+            {hasSections && (
+              <div>
+                <Button onClick={this.toggleExpandCollapseAll}>
+                  {anySectionsOpen ? "Collapse" : "Expand"} All Sections
+                </Button>
+              </div>
+            )}
+          </Title>
           {/* In case of no challenges yet, or to add one at the start, here's a button */}
           {this.renderChallengeCodepressButton(course, module, -1)}
           {this.renderSortableChallengeList(course, module, module.challenges)}
@@ -188,6 +206,33 @@ class NavigationOverlay extends React.Component<IProps> {
     );
   };
 
+  // This can be used to expand or collapse all sections in the current module.
+  toggleExpandCollapseAll = () => {
+    const challengeList = this.props.module?.challenges;
+
+    if (!challengeList) {
+      return;
+    }
+
+    const sectionIds = challengeList
+      .filter(({ type }) => type === "section")
+      .map(x => x.id);
+    const anyOpen = sectionIds.some(this.getCurrentAccordionViewState);
+
+    // Go through each section and expand or collapse it.
+    sectionIds
+      .map(id => ({ sectionId: id, open: !anyOpen }))
+      .forEach(this.props.toggleSectionAccordionView);
+  };
+
+  toggleExpandCollapse = (challenge: ChallengeSkeleton) => {
+    const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
+    this.props.toggleSectionAccordionView({
+      sectionId: challenge.id,
+      open: !isSectionOpen,
+    });
+  };
+
   renderNormalChallengeList = (
     course: CourseSkeleton,
     module: ModuleSkeleton,
@@ -209,6 +254,7 @@ class NavigationOverlay extends React.Component<IProps> {
               module,
               course,
               section: true,
+              sectionChallengeCount: block.challenges.length,
               index: blockIndex,
               challenge: block.section,
             })}
@@ -220,10 +266,11 @@ class NavigationOverlay extends React.Component<IProps> {
                   // @NOTE This is meant to be the index of the challenge as indexed in the full flattened list
                   const serialIndex = blockIndex + index + 1;
                   return this.renderChallengeNavigationItem({
-                    module,
-                    course,
-                    challenge,
                     index: serialIndex,
+                    course,
+                    module,
+                    challenge,
+                    style: { marginLeft: 20 },
                   });
                 },
               )}
@@ -235,8 +282,8 @@ class NavigationOverlay extends React.Component<IProps> {
           (challenge: ChallengeSkeleton, index: number) => {
             return this.renderChallengeNavigationItem({
               index,
-              module,
               course,
+              module,
               challenge,
             });
           },
@@ -281,28 +328,39 @@ class NavigationOverlay extends React.Component<IProps> {
   renderChallengeNavigationItem = (args: {
     index: number;
     section?: boolean;
+    sectionChallengeCount?: number;
     module: ModuleSkeleton;
     course: CourseSkeleton;
     challenge: ChallengeSkeleton;
+    style?: React.CSSProperties;
   }) => {
     const { challengeId, isEditMode } = this.props;
-    const { index, module, course, section, challenge } = args;
-
-    const ChallengeIcon = () => (
-      <Icon
-        iconSize={Icon.SIZE_LARGE}
-        icon={getChallengeIcon(challenge.type, challenge.userCanAccess)}
-      />
-    );
+    const {
+      index,
+      module,
+      course,
+      section,
+      challenge,
+      sectionChallengeCount = 0,
+      style = {},
+    } = args;
+    const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
+    const iconProps = {
+      challenge,
+      isSectionOpen,
+    };
 
     const ChallengeIconUI = isEditMode
-      ? SortableHandle(() => <ChallengeIcon />)
-      : ChallengeIcon;
+      ? SortableHandle(ChallengeListItemIcon)
+      : ChallengeListItemIcon;
 
-    const sectionViewState = this.getCurrentAccordionViewState(challenge.id);
+    const toggleSection = (e: React.MouseEvent) => {
+      e.preventDefault();
+      this.toggleExpandCollapse(challenge);
+    };
 
     return (
-      <div key={challenge.id} style={{ position: "relative" }}>
+      <div key={challenge.id} style={{ position: "relative", ...style }}>
         <Link
           key={challenge.id}
           to={`/workspace/${challenge.id}`}
@@ -313,31 +371,16 @@ class NavigationOverlay extends React.Component<IProps> {
             course.id,
           )}
         >
-          <span>
-            <ChallengeIconUI />
+          <span className="content">
+            <ChallengeIconUI {...iconProps} onClick={toggleSection} />
+
             <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>
             {section ? (
-              <Tooltip
-                position="right"
-                usePortal={false}
-                content={`${sectionViewState ? "Collapse" : "Expand"} Section`}
-              >
-                <Icon
-                  iconSize={Icon.SIZE_LARGE}
-                  icon={sectionViewState ? "collapse-all" : "expand-all"}
-                  onClick={(
-                    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-                  ) => {
-                    e.preventDefault();
-                    this.props.toggleSectionAccordionView({
-                      sectionId: challenge.id,
-                      open: !sectionViewState,
-                    });
-                  }}
-                />
-              </Tooltip>
+              <Badge onClick={toggleSection}>
+                {sectionChallengeCount} Challenges
+              </Badge>
             ) : challenge.videoUrl ? (
               <Tooltip
                 usePortal={false}
@@ -546,7 +589,6 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
 const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
   cursor: pointer;
   padding: 12px;
-  font-size: 18px;
   border: 1px solid transparent;
   border-bottom-color: ${COLORS.LIGHT_GREY};
   width: 100%;
@@ -580,7 +622,8 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
     }
   }
 
-  span {
+  .content {
+    font-size: 18px;
     display: flex;
     align-items: center;
   }
@@ -618,6 +661,52 @@ const ModuleNavigationButton = ({
   <ModuleNavigationButtonBase active={active} as="button" {...rest} />
 );
 
+const RotatingIcon = styled(Icon)<{ isRotated?: boolean }>`
+  transform: ${props =>
+    `rotate3d(0,0,1,${props.isRotated ? "0deg" : "-90deg"})`};
+  transition: transform 0.2s linear;
+`;
+
+interface ChallengeListItemIconProps {
+  challenge: ChallengeSkeleton;
+  isSectionOpen?: boolean;
+  onClick: (e: React.MouseEvent) => any;
+}
+
+const ChallengeListItemIcon = ({
+  isSectionOpen,
+  challenge,
+  ...props
+}: ChallengeListItemIconProps) => (
+  <RotatingIcon
+    isRotated={isSectionOpen}
+    iconSize={Icon.SIZE_LARGE}
+    icon={getChallengeIcon(challenge.type, challenge.userCanAccess)}
+    {...props}
+  />
+);
+
+// The shadow that appears in the overlay nav for separating the module column
+// from the challenge column
+const SpecialLeftShadow = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 3;
+  box-shadow: rgba(0, 0, 0, 0.22) 10px 0px 10px 0px inset;
+  width: 80px;
+  pointer-events: none;
+`;
+
+const Badge = styled.div`
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: bold;
+  background: #505052;
+  padding: 4px 12px;
+`;
+
 const Col = styled.div<{ offsetX: number }>`
   display: block;
   width: 300px;
@@ -645,13 +734,25 @@ const Overlay = styled.div<{ visible: boolean }>`
   transition: all 0.2s ease-out;
 `;
 
-const Title = styled.p`
+const Title = styled.div`
   font-size: 18px;
   font-weight: 200;
-  color: ${COLORS.TEXT_TITLE};
+  color: white;
   margin: 0;
-  padding: 12px;
+  height: 40px;
+  padding: 0 12px;
   border-bottom: 1px solid ${COLORS.LIGHT_GREY};
+  font-variant: small-caps;
+  font-weight: bold;
+  letter-spacing: 2;
+  background: #404040;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  p {
+    margin: 0;
+  }
 `;
 
 /** ===========================================================================
