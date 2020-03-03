@@ -40,6 +40,7 @@ import PaymentCourseModal from "./PaymentIntentModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 import PaymentSuccessModal from "./PaymentSuccessModal";
 import { challengeRequiresWorkspace } from "tools/utils";
+import SearchBox from "./SearchBox";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -141,6 +142,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             </ControlsContainer>
           )}
           <ControlsContainer style={{ marginLeft: "auto" }}>
+            <SearchBox />
             {this.props.showFeedbackButton && (
               <Tooltip content="Submit Feedback" position="bottom">
                 <IconButton
