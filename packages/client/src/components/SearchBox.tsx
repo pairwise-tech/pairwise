@@ -54,18 +54,27 @@ const SearchResultItem = ({ result, ...rest }: { result: SearchResult }) => {
       <h3>{result.title}</h3>
       {result.matches.map((x, i) => {
         return (
-          <p key={i}>
+          <LineWrappedText key={i}>
             {x.matchContext.beforeMatch}
-            <span style={{ fontWeight: "bold", color: "#ffdf75" }}>
-              {x.matchContext.match}
-            </span>
+            <YellowText>{x.matchContext.match}</YellowText>
             {x.matchContext.afterMatch}
-          </p>
+          </LineWrappedText>
         );
       })}
     </div>
   );
 };
+
+const LineWrappedText = styled.p`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const YellowText = styled.span`
+  font-weight: bold;
+  color: #ffdf75;
+`;
 
 const SEARCH_TITLE_HEIGHT = 30;
 
