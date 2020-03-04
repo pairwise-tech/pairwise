@@ -97,19 +97,22 @@ export interface SearchMessageEvent extends MessageEvent {
 // The context of a matched search result. Text that came before and after along
 // with the match itself
 interface MatchContext {
+  stemmedMatchTerm: string; // Lunr derived
   beforeMatch: string;
   match: string;
   afterMatch: string;
+}
+
+export interface SearchResultMatch {
+  foundIn: keyof Challenge;
+  matchContext: MatchContext;
 }
 
 export interface SearchResult {
   id: string;
   title: string;
   score: number;
-  matches: Array<{
-    foundIn: keyof Challenge;
-    matchContext: MatchContext;
-  }>;
+  matches: SearchResultMatch[];
 }
 
 export interface SearchResultEvent extends MessageEvent {

@@ -14,6 +14,7 @@ import {
   SearchDocument,
   SearchMessageEvent,
   SearchResult,
+  SearchResultMatch,
 } from "modules/challenges/types";
 
 // The Lunr search index
@@ -60,7 +61,7 @@ interface ISearchResult extends lunr.Index.Result {
 const buildSearchResult = (result: ISearchResult): SearchResult => {
   const doc = documentLookup[result.ref];
   const metadata = result.matchData.metadata;
-  const matches = Object.keys(metadata).map(term => {
+  const matches: SearchResultMatch[] = Object.keys(metadata).map(term => {
     const matchLocations = metadata[term];
 
     return Object.keys(matchLocations).reduce(
@@ -69,7 +70,7 @@ const buildSearchResult = (result: ISearchResult): SearchResult => {
       // string then code further down fails because string cannot index some of
       // these types, it wants specific literals.
       // @ts-ignore
-      (agg, locationName: keyof SearchDocument) => {
+      (agg, locationName: keyof SearchDocument): SearchResultMatch => {
         const location = metadata[term][locationName];
         const content = doc[locationName];
 
@@ -97,7 +98,7 @@ const buildSearchResult = (result: ISearchResult): SearchResult => {
         return {
           foundIn: locationName,
           matchContext: {
-            matchTerm: term,
+            stemmedMatchTerm: term,
             beforeMatch,
             match,
             afterMatch,
