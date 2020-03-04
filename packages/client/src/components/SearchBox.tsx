@@ -36,12 +36,12 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
       />
       {searchResults.length > 0 && (
         <ResultBox>
-          <ResultTitleBox>
-            Showing {searchResults.length} results for "{searchText}"
-          </ResultTitleBox>
           {searchResults.map(x => (
             <StyledSearchResultItem key={x.id} result={x} />
           ))}
+          <ResultTitleBox>
+            Showing {searchResults.length} results for "{searchText}"
+          </ResultTitleBox>
         </ResultBox>
       )}
     </Box>
@@ -71,6 +71,11 @@ const ResultTitleBox = styled.div`
   background: #6d6d6d;
   font-weight: bold;
   padding: 12px 4px;
+  position: aboslute;
+  top: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 `;
 
@@ -120,7 +125,7 @@ const ResultBox = styled.div`
   top: 100%;
   left: auto;
   right: 0;
-  z-index: 1;
+  z-index: 3;
   min-width: 400px;
   width: 100%;
   background: #3a3a3a;
