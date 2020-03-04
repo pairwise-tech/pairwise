@@ -6,16 +6,6 @@ import styled from "styled-components/macro";
 import { InputGroup } from "@blueprintjs/core";
 import { SearchResult } from "modules/challenges/types";
 
-const mapState = (state: ReduxStoreState) => ({
-  searchResults: getSearchResults(state),
-});
-
-const dispatchProps = {
-  requestSearchResults: Modules.actions.challenges.requestSearchResults,
-};
-
-type Props = ReturnType<typeof mapState> & typeof dispatchProps;
-
 const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
   const [searchText, setSearchText] = React.useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,5 +140,15 @@ const ResultBox = styled.div`
   padding-bottom: ${SEARCH_TITLE_HEIGHT}px;
   border: 1px solid #4c4c4c;
 `;
+
+const mapState = (state: ReduxStoreState) => ({
+  searchResults: getSearchResults(state),
+});
+
+const dispatchProps = {
+  requestSearchResults: Modules.actions.challenges.requestSearchResults,
+};
+
+type Props = ReturnType<typeof mapState> & typeof dispatchProps;
 
 export default connect(mapState, dispatchProps)(SearchBox);
