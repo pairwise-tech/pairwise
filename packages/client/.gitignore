@@ -29,3 +29,4 @@ codepress/src/index.js
 codepress/src/modules
 src/modules/challenges/types.js
 tmp
+.vscode/settings.json
