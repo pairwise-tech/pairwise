@@ -41,6 +41,7 @@ services:
       STRIPE_SECRET_KEY: sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ
       STRIPE_WEBHOOK_SIGNING_SECRET: whsec_Y5pDaU8C0qD723auxbamCRlYIjsSQOzq
       CLIENT_URL: http://client:3000
+      SERVER_HOST_URL: http://server:9000
     expose:
       - 9000
     ports:
