@@ -84,9 +84,9 @@ const buildSearchResult = (result: ISearchResult): SearchResult => {
         // sort of highlighting of both... although that would quickly become
         // complex.
         const beforeMatch = content.slice(from - matchPadding, from);
-        const match = content.slice(from, from + term.length);
+        const match = content.slice(from, from + charCount);
         const afterMatch = content.slice(
-          from + term.length,
+          from + charCount,
           Math.min(
             content.indexOf(".", from) + 1, // Cut up to the next period or... (+1 to include the period)
             from + matchPadding, // ... N characters if not found or...
@@ -97,6 +97,7 @@ const buildSearchResult = (result: ISearchResult): SearchResult => {
         return {
           foundIn: locationName,
           matchContext: {
+            matchTerm: term,
             beforeMatch,
             match,
             afterMatch,
