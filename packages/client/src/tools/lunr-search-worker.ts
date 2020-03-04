@@ -110,6 +110,7 @@ const buildSearchResult = (result: ISearchResult): SearchResult => {
   return {
     id: doc.id,
     title: doc.title,
+    score: result.score,
     matches,
   };
 };

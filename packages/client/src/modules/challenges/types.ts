@@ -105,6 +105,7 @@ interface MatchContext {
 export interface SearchResult {
   id: string;
   title: string;
+  score: number;
   matches: Array<{
     foundIn: keyof Challenge;
     matchContext: MatchContext;
