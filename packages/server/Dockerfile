@@ -5,6 +5,7 @@ FROM pairwise-runtime AS pairwise-production-server
 COPY . .
 
 # Set TypeORM environment variables
+# Other environment secrets are set in the production environment
 ENV TYPEORM_LOGGING=false
 ENV TYPEORM_SYNCHRONIZE=false
 ENV TYPEORM_ENTITIES=dist/**/*.entity.js
