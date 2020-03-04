@@ -15,8 +15,18 @@ import {
   SearchMessageEvent,
   SearchResult,
   SearchResultMatch,
-  MatchContext,
 } from "modules/challenges/types";
+import stripMarkdown from "remove-markdown";
+import pipe from "ramda/es/pipe";
+
+// Rudimentary. The markdown we store automatically from codepress includes some
+// escape sequences that we don't want to or need to search over.
+// Ex: "\(this is what you have to implement\!\)" should not have escale "\" in it
+const stripEscapeChars = (x: string): string => {
+  return x.replace(/\\([!@#$%^&*()])/g, "$1");
+};
+
+const toPlainText = pipe((x: string) => stripMarkdown(x), stripEscapeChars);
 
 // The Lunr search index
 let idx: lunr.Index | null = null;
@@ -31,9 +41,9 @@ const buildSearchDocuments = (course: Course): SearchDocument[] => {
     .flatMap(x => x.challenges)
     .map(x => ({
       id: x.id,
-      title: x.title,
-      content: x.content,
-      supplementaryContent: x.supplementaryContent,
+      title: toPlainText(x.title),
+      content: toPlainText(x.content),
+      supplementaryContent: toPlainText(x.supplementaryContent),
     }));
 
   return documents;
