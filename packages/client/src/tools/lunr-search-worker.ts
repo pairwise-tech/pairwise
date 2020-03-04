@@ -69,16 +69,22 @@ const buildResultMatch = (
 ): SearchResultMatch => {
   // Not yet sure why postion is an array of arrays
   const [[from, charCount]] = location.position;
-  const matchPadding = 50; // Number of characters on either side to try to pad the match context with
+  const matchPadding = 70; // Number of characters on either side to try to pad the match context with
 
-  // The excerpt string leading up to the match.
-  // NOTE: term here is the "stemmed" term that lunr has come up with so it
-  // is not guaranteed to be the user entered search string. We could
-  // instead match against the user entered search string, or even do some
-  // sort of highlighting of both... although that would quickly become
-  // complex.
-  const beforeMatch = content.slice(from - matchPadding, from);
+  // Build up an excerpt that browser can show the user.
+  //
+  // Start the excerpt either at
+  // - 0 (if the matching term was found near the start of the content)
+  // - Right after the first space found starting at the offset (to avoid partial words)
+  const excerptStart =
+    from - matchPadding > 0 ? content.indexOf(" ", from - matchPadding) + 1 : 0;
+  const beforeMatch =
+    (excerptStart > 0 ? "..." : "") + content.slice(excerptStart, from);
+
+  // The matched text itself
   const match = content.slice(from, from + charCount);
+
+  // The exceprt end. Tries to avoid going over the lengh of the content
   const afterMatch = content.slice(
     from + charCount,
     Math.min(
