@@ -82,7 +82,7 @@ class NavigationOverlay extends React.Component<IProps> {
           keymap={{
             // TODO: Add some UI to display what key shortcuts are available:
             escape: this.handleClose,
-            "cmd+k": this.navigateToSandBox,
+            "cmd+shift+k": this.navigateToSandBox,
             "cmd+j": this.handleToggleNavigationMap,
             "cmd+,": this.navigateLeft,
             "cmd+.": this.navigateRight,
