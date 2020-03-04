@@ -277,7 +277,7 @@ const ResultBox = styled.div`
   border: 1px solid #4c4c4c;
 `;
 
-const mapState = (state: ReduxStoreState) => ({
+const mapStateToProps = (state: ReduxStoreState) => ({
   searchResults: getSearchResults(state),
 });
 
@@ -285,6 +285,6 @@ const dispatchProps = {
   requestSearchResults: Modules.actions.challenges.requestSearchResults,
 };
 
-type Props = ReturnType<typeof mapState> & typeof dispatchProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-export default connect(mapState, dispatchProps)(SearchBox);
+export default connect(mapStateToProps, dispatchProps)(SearchBox);
