@@ -17,6 +17,7 @@ services:
     image: pairwise-runtime
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:prod
     environment:
+      ENVIRONMENT: development
       TYPEORM_HOST: db
       TYPEORM_USERNAME: postgres
       TYPEORM_PASSWORD: postgres
@@ -37,6 +38,8 @@ services:
       GITHUB_AUTHORIZATION_URL: http://external-services:7000/github/authorize
       GOOGLE_PROFILE_URL: http://external-services:7000/google/profile
       GOOGLE_TOKEN_URL: http://external-services:7000/google/token
+      STRIPE_SECRET_KEY: sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ
+      STRIPE_WEBHOOK_SIGNING_SECRET: whsec_Y5pDaU8C0qD723auxbamCRlYIjsSQOzq
       CLIENT_URL: http://client:3000
     expose:
       - 9000
