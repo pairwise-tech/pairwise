@@ -67,15 +67,20 @@ const SearchResultItem = ({ result, ...rest }: { result: SearchResult }) => {
   );
 };
 
+const SEARCH_TITLE_HEIGHT = 30;
+
 const ResultTitleBox = styled.div`
   background: #6d6d6d;
   font-weight: bold;
-  padding: 12px 4px;
-  position: aboslute;
+  padding: 0px 8px;
+  height: ${SEARCH_TITLE_HEIGHT}px;
+  position: absolute;
   top: auto;
   left: 0;
   right: 0;
-  bottom: 0;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
 }
 `;
 
@@ -132,7 +137,9 @@ const ResultBox = styled.div`
   overflow: auto;
   max-height: 80vh;
   border-radius: 3px;
-  box-shadow: 0 1px 5px black;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.55);
+  padding-bottom: ${SEARCH_TITLE_HEIGHT}px;
+  border: 1px solid #4c4c4c;
 `;
 
 export default connect(mapState, dispatchProps)(SearchBox);
