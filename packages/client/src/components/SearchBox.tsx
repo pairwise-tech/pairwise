@@ -59,14 +59,16 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
       />
       {!isClosed && searchResults.length > 0 && (
         <ResultBox>
-          {searchResults.map(x => (
-            <StyledSearchResultItem
-              key={x.id}
-              result={x}
-              searchText={searchText}
-              onClick={handleNavigation(x.id)}
-            />
-          ))}
+          <ScrollDiv>
+            {searchResults.map(x => (
+              <StyledSearchResultItem
+                key={x.id}
+                result={x}
+                searchText={searchText}
+                onClick={handleNavigation(x.id)}
+              />
+            ))}
+          </ScrollDiv>
           <ResultTitleBox>
             Showing {searchResults.length} results for "{searchText}"
           </ResultTitleBox>
@@ -110,6 +112,11 @@ const SearchResultItem = ({
   );
 };
 
+const ScrollDiv = styled.div`
+  flex: 1 100%;
+  overflow: auto;
+`;
+
 const Underline = styled.span`
   text-decoration: underline;
 `;
@@ -136,6 +143,7 @@ const ResultTitleBox = styled.div`
   top: auto;
   left: 0;
   right: 0;
+  bottom: 0;
   display: flex;
   align-items: center;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
@@ -184,6 +192,8 @@ const Box = styled.div`
 
 // NOTE: The z-index on this is meant to make it appaer above the nav overlay
 const ResultBox = styled.div`
+  display: flex;
+  flex-direction: column;
   z-index: 15;
   position: absolute;
   top: 100%;
@@ -192,7 +202,6 @@ const ResultBox = styled.div`
   min-width: 400px;
   width: 100%;
   background: #3a3a3a;
-  overflow: auto;
   max-height: 80vh;
   border-radius: 3px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.55);
