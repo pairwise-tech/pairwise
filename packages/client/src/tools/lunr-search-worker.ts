@@ -28,8 +28,7 @@ const documentLookup: { [k: string]: SearchDocument } = {};
 // Given a Course build out a flat list of SearchDocuments based on the challenges
 const buildSearchDocuments = (course: Course): SearchDocument[] => {
   const documents = course.modules
-    .map(x => x.challenges)
-    .reduce((arr, x) => arr.concat(x)) // Flatten
+    .flatMap(x => x.challenges)
     .map(x => ({
       id: x.id,
       title: x.title,
@@ -108,36 +107,34 @@ const buildResultMatch = (
 const buildSearchResult = (result: ISearchResult): SearchResult => {
   const doc = documentLookup[result.ref];
   const metadata = result.matchData.metadata;
-  const matches: SearchResultMatch[] = Object.keys(metadata)
-    .map(term => {
-      const matchLocationsByFields = metadata[term];
-      const reducer = (
-        agg: SearchResultMatch[],
-        documentFieldName: keyof typeof matchLocationsByFields,
-      ) => {
-        const matchLocation = matchLocationsByFields[documentFieldName];
-        const content = doc[documentFieldName];
-        const resultMatch = buildResultMatch(
-          documentFieldName,
-          matchLocation,
-          content,
-        );
-        return [...agg, resultMatch];
-      };
+  const matches: SearchResultMatch[] = Object.keys(metadata).flatMap(term => {
+    const matchLocationsByFields = metadata[term];
+    const reducer = (
+      agg: SearchResultMatch[],
+      documentFieldName: keyof typeof matchLocationsByFields,
+    ) => {
+      const matchLocation = matchLocationsByFields[documentFieldName];
+      const content = doc[documentFieldName];
+      const resultMatch = buildResultMatch(
+        documentFieldName,
+        matchLocation,
+        content,
+      );
+      return [...agg, resultMatch];
+    };
 
-      // NOTE: Object.keys is the problem with the typing here. Even though all
-      // keys of matchLocations are known it's still inferred as string[] and as
-      // far as I can tell there is know way to override this assumption. The
-      // explicit typing on _result will give us some type support though
-      const resultMatches: SearchResultMatch[] = Object.keys(
-        matchLocationsByFields,
-      )
-        // @ts-ignore
-        .reduce(reducer, []);
+    // NOTE: Object.keys is the problem with the typing here. Even though all
+    // keys of matchLocations are known it's still inferred as string[] and as
+    // far as I can tell there is know way to override this assumption. The
+    // explicit typing on _result will give us some type support though
+    const resultMatches: SearchResultMatch[] = Object.keys(
+      matchLocationsByFields,
+    )
+      // @ts-ignore
+      .reduce(reducer, []);
 
-      return resultMatches;
-    })
-    .flat();
+    return resultMatches;
+  });
 
   return {
     id: doc.id,
