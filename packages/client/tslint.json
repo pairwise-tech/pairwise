@@ -70,6 +70,14 @@
         "named": "never"
       }
     ],
+    "variable-name": {
+      "options": [
+        "allow-leading-underscore",
+        "ban-keywords",
+        "check-format",
+        "allow-pascal-case"
+      ]
+    },
     "prefer-const": true,
     "prefer-readonly": true,
     "trailing-comma": [
