@@ -15,6 +15,7 @@ import {
   SearchMessageEvent,
   SearchResult,
   SearchResultMatch,
+  MatchContext,
 } from "modules/challenges/types";
 
 // The Lunr search index
@@ -57,57 +58,80 @@ interface ISearchResult extends lunr.Index.Result {
   matchData: IMatchData;
 }
 
+interface ILocation {
+  position: Array<[number, number]>;
+}
+
+const buildResultMatch = (
+  fieldName: keyof SearchDocument, // Which field the match was found in
+  location: ILocation, // What position in the content it was found at
+  content: string, // The full value of the content in which it was found
+): SearchResultMatch => {
+  // Not yet sure why postion is an array of arrays
+  const [[from, charCount]] = location.position;
+  const matchPadding = 50; // Number of characters on either side to try to pad the match context with
+
+  // The excerpt string leading up to the match.
+  // NOTE: term here is the "stemmed" term that lunr has come up with so it
+  // is not guaranteed to be the user entered search string. We could
+  // instead match against the user entered search string, or even do some
+  // sort of highlighting of both... although that would quickly become
+  // complex.
+  const beforeMatch = content.slice(from - matchPadding, from);
+  const match = content.slice(from, from + charCount);
+  const afterMatch = content.slice(
+    from + charCount,
+    Math.min(
+      content.indexOf(".", from) + 1, // Cut up to the next period or... (+1 to include the period)
+      from + matchPadding, // ... N characters if not found or...
+      content.length, // ... the length of the document, if that is less than the others
+    ),
+  );
+
+  return {
+    foundIn: fieldName,
+    matchContext: {
+      beforeMatch,
+      match,
+      afterMatch,
+    },
+  };
+};
+
 // Given a lurn.Index.Result give back something a bit more useful to the UI
 const buildSearchResult = (result: ISearchResult): SearchResult => {
   const doc = documentLookup[result.ref];
   const metadata = result.matchData.metadata;
-  const matches: SearchResultMatch[] = Object.keys(metadata).map(term => {
-    const matchLocations = metadata[term];
-
-    return Object.keys(matchLocations).reduce(
-      // Object.keys(...) is insisting the return value is string and thus
-      // locationName cannot be a keyof SearchDocument. Or if locationName is
-      // string then code further down fails because string cannot index some of
-      // these types, it wants specific literals.
-      // @ts-ignore
-      (agg, locationName: keyof SearchDocument): SearchResultMatch => {
-        const location = metadata[term][locationName];
-        const content = doc[locationName];
-
-        // Not yet sure why postion is an array of arrays
-        const [[from, charCount]] = location.position;
-        const matchPadding = 50; // Number of characters on either side to try to pad the match context with
-
-        // The excerpt string leading up to the match.
-        // NOTE: term here is the "stemmed" term that lunr has come up with so it
-        // is not guaranteed to be the user entered search string. We could
-        // instead match against the user entered search string, or even do some
-        // sort of highlighting of both... although that would quickly become
-        // complex.
-        const beforeMatch = content.slice(from - matchPadding, from);
-        const match = content.slice(from, from + charCount);
-        const afterMatch = content.slice(
-          from + charCount,
-          Math.min(
-            content.indexOf(".", from) + 1, // Cut up to the next period or... (+1 to include the period)
-            from + matchPadding, // ... N characters if not found or...
-            content.length, // ... the length of the document, if that is less than the others
-          ),
+  const matches: SearchResultMatch[] = Object.keys(metadata)
+    .map(term => {
+      const matchLocationsByFields = metadata[term];
+      const reducer = (
+        agg: SearchResultMatch[],
+        documentFieldName: keyof typeof matchLocationsByFields,
+      ) => {
+        const matchLocation = matchLocationsByFields[documentFieldName];
+        const content = doc[documentFieldName];
+        const resultMatch = buildResultMatch(
+          documentFieldName,
+          matchLocation,
+          content,
         );
+        return [...agg, resultMatch];
+      };
 
-        return {
-          foundIn: locationName,
-          matchContext: {
-            stemmedMatchTerm: term,
-            beforeMatch,
-            match,
-            afterMatch,
-          },
-        };
-      },
-      [],
-    );
-  });
+      // NOTE: Object.keys is the problem with the typing here. Even though all
+      // keys of matchLocations are known it's still inferred as string[] and as
+      // far as I can tell there is know way to override this assumption. The
+      // explicit typing on _result will give us some type support though
+      const resultMatches: SearchResultMatch[] = Object.keys(
+        matchLocationsByFields,
+      )
+        // @ts-ignore
+        .reduce(reducer, []);
+
+      return resultMatches;
+    })
+    .flat();
 
   return {
     id: doc.id,

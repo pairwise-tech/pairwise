@@ -96,8 +96,7 @@ export interface SearchMessageEvent extends MessageEvent {
 
 // The context of a matched search result. Text that came before and after along
 // with the match itself
-interface MatchContext {
-  stemmedMatchTerm: string; // Lunr derived
+export interface MatchContext {
   beforeMatch: string;
   match: string;
   afterMatch: string;
