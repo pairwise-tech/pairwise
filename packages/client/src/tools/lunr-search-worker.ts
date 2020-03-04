@@ -10,7 +10,11 @@ import {
   BUILD_SEARCH_INDEX,
   BUILD_SEARCH_INDEX_SUCCESS,
 } from "./constants";
-import { SearchDocument, SearchMessageEvent } from "modules/challenges/types";
+import {
+  SearchDocument,
+  SearchMessageEvent,
+  SearchResult,
+} from "modules/challenges/types";
 
 // The Lunr search index
 let idx: lunr.Index | null = null;
@@ -19,7 +23,7 @@ let idx: lunr.Index | null = null;
 // excerpts from lunr search results
 const documentLookup: { [k: string]: SearchDocument } = {};
 
-// Given a Course buld out a flat list of SearchDocuments based on the challenges
+// Given a Course build out a flat list of SearchDocuments based on the challenges
 const buildSearchDocuments = (course: Course): SearchDocument[] => {
   const documents = course.modules
     .map(x => x.challenges)
@@ -34,9 +38,13 @@ const buildSearchDocuments = (course: Course): SearchDocument[] => {
   return documents;
 };
 
+// NOTE: This is not exactly just any string but a "stemmed" search terms. So
+// "coding library" might turn into "code" and "library" when saerched. Note
+// that "code" is semantically the same as "coding" but not literally.
 interface IMatchData extends lunr.MatchData {
   metadata: {
     [k: string]: {
+      // See NOTE
       [k in keyof SearchDocument]: {
         position: Array<[number, number]>;
       };
@@ -48,7 +56,8 @@ interface ISearchResult extends lunr.Index.Result {
   matchData: IMatchData;
 }
 
-const buildSearchResult = (result: ISearchResult) => {
+// Given a lurn.Index.Result give back something a bit more useful to the UI
+const buildSearchResult = (result: ISearchResult): SearchResult => {
   const doc = documentLookup[result.ref];
   const metadata = result.matchData.metadata;
   const matches = Object.keys(metadata).map(term => {
