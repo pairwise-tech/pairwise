@@ -18,7 +18,17 @@ services:
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:prod
     environment:
       TYPEORM_HOST: db
-      CLIENT_URL: http://client:3000
+      TYPEORM_USERNAME: postgres
+      TYPEORM_PASSWORD: postgres
+      TYPEORM_DATABASE: postgres
+      TYPEORM_CONNECTION: postgres
+      TYPEORM_LOGGING: false
+      TYPEORM_SYNCHRONIZE: false
+      TYPEORM_ENTITIES: dist/**/*.entity.js
+      TYPEORM_MIGRATIONS: dist/migrations/**/*.js
+      TYPEORM_SUBSCRIBERS: dist/subscriber/**/*.js
+      TYPEORM_MIGRATIONS_DIR: src/migrations
+      JWT_SECRET: asfd709as7fd9s0a7f90as6f09as6dfas0
       FACEBOOK_PROFILE_URL: http://external-services:7000/facebook/profile
       FACEBOOK_TOKEN_URL: http://external-services:7000/facebook/token
       FACEBOOK_AUTHORIZATION_URL: http://external-services:7000/facebook/authorize
@@ -27,6 +37,7 @@ services:
       GITHUB_AUTHORIZATION_URL: http://external-services:7000/github/authorize
       GOOGLE_PROFILE_URL: http://external-services:7000/google/profile
       GOOGLE_TOKEN_URL: http://external-services:7000/google/token
+      CLIENT_URL: http://client:3000
     expose:
       - 9000
     depends_on:
