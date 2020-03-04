@@ -154,7 +154,7 @@ const createIndexer = (documents: SearchDocument[]) => {
     this.ref("id");
 
     // I'm guessin you can search multiple fields, thus this
-    this.field("ttile");
+    this.field("title");
     this.field("content");
     this.field("supplementaryContent");
 
