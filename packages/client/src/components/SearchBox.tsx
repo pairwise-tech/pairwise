@@ -5,29 +5,67 @@ import { getSearchResults } from "modules/challenges/selectors";
 import styled from "styled-components/macro";
 import { InputGroup } from "@blueprintjs/core";
 import { SearchResult } from "modules/challenges/types";
+import reactStringReplace from "react-string-replace";
+import { useHistory } from "react-router-dom";
 
 const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
+  const history = useHistory();
   const [searchText, setSearchText] = React.useState("");
+  const [isClosed, setIsClosed] = React.useState(false);
+  React.useEffect(() => {
+    const handleClickOutside = () => {
+      if (!isClosed) {
+        setIsClosed(true);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isClosed]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setSearchText(value);
     requestSearchResults(value);
   };
+  const handleNavigation = (challengeId: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    setSearchText("");
+    if (!isClosed) {
+      setIsClosed(true);
+    }
+
+    history.push(`/workspace/${challengeId}`);
+  };
 
   return (
-    <Box>
+    <Box
+      onClick={e => {
+        e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation(); // Necessary to prevent the background click which is outside the react event system
+      }}
+    >
       <Input
         fill
         leftIcon="search"
         id="search-input"
+        autoComplete="off"
         onChange={handleChange}
         value={searchText}
         placeholder="Search..."
+        onFocus={e => {
+          setIsClosed(false);
+        }}
       />
-      {searchResults.length > 0 && (
+      {!isClosed && searchResults.length > 0 && (
         <ResultBox>
           {searchResults.map(x => (
-            <StyledSearchResultItem key={x.id} result={x} />
+            <StyledSearchResultItem
+              key={x.id}
+              result={x}
+              searchText={searchText}
+              onClick={handleNavigation(x.id)}
+            />
           ))}
           <ResultTitleBox>
             Showing {searchResults.length} results for "{searchText}"
@@ -38,22 +76,43 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
   );
 };
 
-const SearchResultItem = ({ result, ...rest }: { result: SearchResult }) => {
+const underlineText = (fullString: string, subString: string) => {
+  return reactStringReplace(fullString, subString, (x, i) => (
+    <Underline key={i}>{x}</Underline>
+  ));
+};
+
+interface SearchResultItemProps extends React.HTMLAttributes<HTMLDivElement> {
+  result: SearchResult;
+  searchText: string;
+}
+
+const SearchResultItem = ({
+  result,
+  searchText,
+  ...rest
+}: SearchResultItemProps) => {
   return (
     <div {...rest}>
-      <h3>{result.title}</h3>
-      {result.matches.map((x, i) => {
-        return (
-          <LineWrappedText key={i}>
-            {x.matchContext.beforeMatch}
-            <YellowText>{x.matchContext.match}</YellowText>
-            {x.matchContext.afterMatch}
-          </LineWrappedText>
-        );
-      })}
+      <h3>{underlineText(result.title, searchText)}</h3>
+      {result.matches
+        .filter(x => x.foundIn !== "title") // Skip title matches, since we display the title above
+        .map((x, i) => {
+          return (
+            <LineWrappedText key={i}>
+              {x.matchContext.beforeMatch}
+              <YellowText>{x.matchContext.match}</YellowText>
+              {x.matchContext.afterMatch}
+            </LineWrappedText>
+          );
+        })}
     </div>
   );
 };
+
+const Underline = styled.span`
+  text-decoration: underline;
+`;
 
 const LineWrappedText = styled.p`
   text-overflow: ellipsis;
@@ -80,12 +139,11 @@ const ResultTitleBox = styled.div`
   display: flex;
   align-items: center;
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
-}
 `;
 
 const StyledSearchResultItem = styled(SearchResultItem)`
-  cursor: pointer;
   padding: 4px 10px;
+  cursor: pointer;
   border-bottom: 1px solid #636363;
   &:hover {
     background: #4c4c4c;
@@ -124,12 +182,13 @@ const Box = styled.div`
   margin-right: 20px;
 `;
 
+// NOTE: The z-index on this is meant to make it appaer above the nav overlay
 const ResultBox = styled.div`
+  z-index: 15;
   position: absolute;
   top: 100%;
   left: auto;
   right: 0;
-  z-index: 3;
   min-width: 400px;
   width: 100%;
   background: #3a3a3a;
