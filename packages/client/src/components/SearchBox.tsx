@@ -7,36 +7,81 @@ import { InputGroup } from "@blueprintjs/core";
 import { SearchResult } from "modules/challenges/types";
 import reactStringReplace from "react-string-replace";
 import { useHistory } from "react-router-dom";
+import KeyboardShortcuts from "./KeyboardShortcuts";
 
+// NOTE: isClosed is kept in state rather than simply using the presence of
+// search results becuase sometimes we want the search pane to be closed even if
+// there are search results. For example, the user clicks outside the search
+// pane. In such a case there are still results but we don't want to show the
+// pane.
 const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
   const history = useHistory();
   const [searchText, setSearchText] = React.useState("");
-  const [isClosed, setIsClosed] = React.useState(false);
-  React.useEffect(() => {
-    const handleClickOutside = () => {
-      if (!isClosed) {
-        setIsClosed(true);
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [isClosed]);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setSearchText(value);
-    requestSearchResults(value);
-  };
-  const handleNavigation = (challengeId: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    setSearchText("");
+  const [isClosed, setIsClosed] = React.useState(false); // See NOTE
+  const [selIndex, setSelIndex] = React.useState(0);
+  const handleClose = React.useCallback(() => {
     if (!isClosed) {
       setIsClosed(true);
     }
+  }, [isClosed, setIsClosed]);
+  React.useEffect(() => {
+    document.addEventListener("click", handleClose);
+    return () => {
+      document.removeEventListener("click", handleClose);
+    };
+  }, [isClosed, handleClose]);
+  const handleChange = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setSearchText(value);
+      setSelIndex(0);
+      setIsClosed(false);
+      requestSearchResults(value);
+    },
+    [requestSearchResults],
+  );
+  const handleNavigation = React.useCallback(
+    (e: React.MouseEvent<HTMLDivElement> | KeyboardEvent) => {
+      const searchResultItem = searchResults[selIndex];
+      if (searchResultItem) {
+        e.preventDefault();
+        const challengeId = searchResultItem.id;
+        setSearchText(""); // Clear search
+        handleClose();
+        history.push(`/workspace/${challengeId}`);
+      }
+    },
+    [history, searchResults, selIndex, handleClose],
+  );
+  const handleMouseEnter = React.useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const el = e.target as HTMLDivElement;
+      const index = el.dataset.index;
+      if (index) {
+        setSelIndex(Number(index));
+      }
+    },
+    [],
+  );
+  const selNext = React.useCallback(() => {
+    const total = searchResults.length;
+    let next = selIndex + 1;
+    if (next >= total) {
+      next = 0;
+    }
+    setSelIndex(next);
+  }, [searchResults.length, selIndex]);
+  const selPrev = React.useCallback(() => {
+    const total = searchResults.length;
+    let prev = selIndex - 1;
+    if (prev < 0) {
+      prev = total - 1;
+    }
+    setSelIndex(prev);
+  }, [searchResults.length, selIndex]);
 
-    history.push(`/workspace/${challengeId}`);
-  };
+  // See isClosed above if it makes no sense having both
+  const isOpen = !isClosed && searchResults.length > 0;
 
   return (
     <Box
@@ -57,15 +102,19 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
           setIsClosed(false);
         }}
       />
-      {!isClosed && searchResults.length > 0 && (
+      {isOpen && (
         <ResultBox>
           <ScrollDiv>
-            {searchResults.map(x => (
+            {searchResults.map((x, i) => (
               <StyledSearchResultItem
                 key={x.id}
+                data-index={i}
+                data-challenge-id={x.id}
+                active={selIndex === i}
                 result={x}
                 searchText={searchText}
-                onClick={handleNavigation(x.id)}
+                onClick={handleNavigation}
+                onMouseEnter={handleMouseEnter}
               />
             ))}
           </ScrollDiv>
@@ -73,6 +122,17 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
             Showing {searchResults.length} results for "{searchText}"
           </ResultTitleBox>
         </ResultBox>
+      )}
+      {/* These keyboard shortcuts only apply when the search pane is open */}
+      {isOpen && (
+        <KeyboardShortcuts
+          keymap={{
+            ArrowUp: selPrev,
+            ArrowDown: selNext,
+            Enter: handleNavigation,
+            Escape: handleClose,
+          }}
+        />
       )}
     </Box>
   );
@@ -87,11 +147,13 @@ const underlineText = (fullString: string, subString: string) => {
 interface SearchResultItemProps extends React.HTMLAttributes<HTMLDivElement> {
   result: SearchResult;
   searchText: string;
+  active: boolean;
 }
 
 const SearchResultItem = ({
   result,
   searchText,
+  active,
   ...rest
 }: SearchResultItemProps) => {
   return (
@@ -149,12 +211,18 @@ const ResultTitleBox = styled.div`
   box-shadow: 0 0px 12px rgba(0, 0, 0, 0.3);
 `;
 
+// NOTE: Pointer events are disabled on all children to avoid issues with
+// onMouseEnter. The child components also fire events on enter which ends up
+// causing issues when we expect events only to be fired when the mouse enters
+// this specific component at the top level
 const StyledSearchResultItem = styled(SearchResultItem)`
   padding: 4px 10px;
   cursor: pointer;
   border-bottom: 1px solid #636363;
-  &:hover {
-    background: #4c4c4c;
+  background: ${props => (props.active ? "#4c4c4c" : "transparent")};
+  /* See NOTE */
+  & > * {
+    pointer-events: none;
   }
   h3 {
     margin: 0;
@@ -174,8 +242,8 @@ const Input = styled(InputGroup)`
     display: block;
     &:hover {
       box-shadow: 0 0 0 1px #10ca92, 0 0 0 1px #10ca92,
-        0 0 0 3px rgba(16, 202, 146, 0.3), inset 0 0 0 1px rgba(16, 22, 26, 0.3),
-        inset 0 1px 1px rgba(16, 22, 26, 0.4);
+        0 0 0 3px rgba(16, 202, 146, 0.1), inset 0 0 0 1px rgba(16, 22, 26, 0.1),
+        inset 0 1px 1px rgba(16, 22, 26, 0.1);
     }
     &:focus {
       color: black;
@@ -199,7 +267,7 @@ const ResultBox = styled.div`
   top: 100%;
   left: auto;
   right: 0;
-  min-width: 400px;
+  min-width: 360px;
   width: 100%;
   background: #3a3a3a;
   max-height: 80vh;
