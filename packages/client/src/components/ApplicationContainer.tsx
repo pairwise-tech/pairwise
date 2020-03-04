@@ -27,6 +27,7 @@ import {
   SmoothScrollButton,
   FullScreenOverlay,
   OverlayText,
+  LoadingInline,
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
@@ -153,7 +154,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               </Tooltip>
             )}
             {isSandbox && (
-              <Suspense fallback={<p>Menu Loading...</p>}>
+              <Suspense fallback={<LoadingInline />}>
                 <LazyChallengeTypeMenu
                   items={SANDBOX_TYPE_CHOICES}
                   currentChallengeType={challenge?.type}
