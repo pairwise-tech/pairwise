@@ -78,7 +78,12 @@ const buildResultMatch = (
 ): SearchResultMatch => {
   // Not yet sure why position is an array of arrays
   const [[from, charCount]] = location.position;
-  const matchPadding = 70; // Number of characters on either side to try to pad the match context with
+
+  // The rough number of characters to include on either side of the match. The
+  // before padding is shorter so that the match will appear more towards the
+  // right in the excerpt
+  const matchPaddingBefore = 30;
+  const matchPaddingAfter = 70;
 
   // Build up an excerpt that browser can show the user.
   //
@@ -86,7 +91,9 @@ const buildResultMatch = (
   // - 0 (if the matching term was found near the start of the content)
   // - Right after the first space found starting at the offset (to avoid partial words)
   const excerptStart =
-    from - matchPadding > 0 ? content.indexOf(" ", from - matchPadding) + 1 : 0;
+    from - matchPaddingBefore > 0
+      ? content.indexOf(" ", from - matchPaddingBefore) + 1
+      : 0;
   const beforeMatch =
     (excerptStart > 0 ? "..." : "") + content.slice(excerptStart, from);
 
@@ -98,7 +105,7 @@ const buildResultMatch = (
     from + charCount,
     Math.min(
       content.indexOf(".", from) + 1, // Cut up to the next period or... (+1 to include the period)
-      from + matchPadding, // ... N characters if not found or...
+      from + matchPaddingAfter, // ... N characters if not found or...
       content.length, // ... the length of the document, if that is less than the others
     ),
   );
