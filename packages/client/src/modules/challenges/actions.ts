@@ -85,10 +85,10 @@ enum ActionTypesEnum {
 
   TOGGLE_SECTION_ACCORDION_VIEW = "TOGGLE_SECTION_ACCORDION_VIEW",
 
-  // NOTE: These don't follwo the pattern of do_something{,_success,_failure}
+  // NOTE: These don't follow the pattern of do_something{,_success,_failure}
   // because they are worker related so there is no direct tie between one
   // search action and it's result at the epic level. This is not yet a
-  // convetion though so i'm open to suggestions
+  // convention though so I'm open to suggestions
   REQUEST_SEARCH_RESULTS = "REQUEST_SEARCH_RESULTS",
   RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS",
 }
@@ -137,7 +137,7 @@ export const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
 
 /**
  * NOTE: The canonical way to "set" a new challenge id is to navigate to it.
- * The url is the source of truth for the current challenge. To programmatically
+ * The URL is the source of truth for the current challenge. To programmatically
  * select a new challenge, you can use the following action, which will result
  * in the routing side effect occurring via an epic. Good luck!
  */

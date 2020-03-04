@@ -19,9 +19,9 @@ import {
 import stripMarkdown from "remove-markdown";
 import pipe from "ramda/es/pipe";
 
-// Rudimentary. The markdown we store automatically from codepress includes some
+// Rudimentary. The markdown we store automatically from Codepress includes some
 // escape sequences that we don't want to or need to search over.
-// Ex: "\(this is what you have to implement\!\)" should not have escale "\" in it
+// Ex: "\(this is what you have to implement\!\)" should not have escape "\" in it
 const stripEscapeChars = (x: string): string => {
   return x.replace(/\\([!@#$%^&*()])/g, "$1");
 };
@@ -50,7 +50,7 @@ const buildSearchDocuments = (course: Course): SearchDocument[] => {
 };
 
 // NOTE: This is not exactly just any string but a "stemmed" search terms. So
-// "coding library" might turn into "code" and "library" when saerched. Note
+// "coding library" might turn into "code" and "library" when searched. Note
 // that "code" is semantically the same as "coding" but not literally.
 interface IMatchData extends lunr.MatchData {
   metadata: {
@@ -76,7 +76,7 @@ const buildResultMatch = (
   location: ILocation, // What position in the content it was found at
   content: string, // The full value of the content in which it was found
 ): SearchResultMatch => {
-  // Not yet sure why postion is an array of arrays
+  // Not yet sure why position is an array of arrays
   const [[from, charCount]] = location.position;
   const matchPadding = 70; // Number of characters on either side to try to pad the match context with
 
@@ -93,7 +93,7 @@ const buildResultMatch = (
   // The matched text itself
   const match = content.slice(from, from + charCount);
 
-  // The exceprt end. Tries to avoid going over the lengh of the content
+  // The excerpt end. Tries to avoid going over the length of the content
   const afterMatch = content.slice(
     from + charCount,
     Math.min(
@@ -156,20 +156,20 @@ const buildSearchResult = (result: ISearchResult): SearchResult => {
 
 // Create the indexer function that Lunr will use to build the search index
 const createIndexer = (documents: SearchDocument[]) => {
-  // NOTE: We need to access `this` in Lunr so we cannot use arrow funcs here.
+  // NOTE: We need to access `this` in Lunr so we cannot use arrow funks here.
   // Unfortunate API :/
   return function buildLunarIndex(this: lunr.Builder) {
     // This is the identifier field. It's value for each result will be placed in
     // the `ref` prop of each result object
     this.ref("id");
 
-    // I'm guessin you can search multiple fields, thus this
+    // I'm guessing you can search multiple fields, thus this
     this.field("title");
     this.field("content");
     this.field("supplementaryContent");
 
     // Allow the positions of matching terms in the metadata. This is disabled by
-    // dfeault to reduce index size
+    // default to reduce index size
     this.metadataWhitelist = ["position"];
 
     // Very important. Add all the documents to the index
