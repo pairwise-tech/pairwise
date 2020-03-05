@@ -53,7 +53,7 @@
           "type": "section",
           "title": "HTML, the language of the web",
           "content": "",
-          "testCode": "[]",
+          "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
