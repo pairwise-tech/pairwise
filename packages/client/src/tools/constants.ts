@@ -75,3 +75,6 @@ export const CONTENT_SERIALIZE_DEBOUNCE = 600;
  * it should be at least passably memorable.
  */
 export const SANDBOX_ID = "sandbox";
+
+// Media queries
+export const MOBILE = `@media (max-width: ${PROSE_MAX_WIDTH}px)`;
