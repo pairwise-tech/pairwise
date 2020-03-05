@@ -193,7 +193,7 @@ const ApplicationContainer = (props: IProps) => {
       <NavigationOverlay overlayVisible={overlayVisible} />
       <Header>
         <ControlsContainer
-          style={{ height: "100%", marginRight: isMobile ? 0 : 60 }}
+          style={{ height: "100%", marginRight: isMobile ? 0 : 40 }}
         >
           <NavIconButton
             overlayVisible={overlayVisible}
@@ -240,7 +240,7 @@ const ApplicationContainer = (props: IProps) => {
               <Button
                 id="sandboxButton"
                 disabled={isSandbox}
-                style={{ margin: "0 20px" }}
+                style={{ margin: "0 10px", marginLeft: isSandbox ? 0 : 10 }}
               >
                 Sandbox
               </Button>
