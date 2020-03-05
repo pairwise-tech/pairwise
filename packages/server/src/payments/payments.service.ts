@@ -40,7 +40,7 @@ const PRICING_CONSTANTS = {
 };
 
 const PairwiseIconUrl =
-  "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
+  "https://avatars0.githubusercontent.com/oa/1235715?s=240&u=994064f7125e48bc42da6474130323f03a07ca9b&v=4";
 
 /** ===========================================================================
  * Payments Service
