@@ -96,8 +96,8 @@ jobs:
       - name: Build the production client application
         run: |
           docker build \
-            --build-arg STRIPE_PUBLISHABLE_KEY=$STRIPE_PUBLISHABLE_KEY \
             --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL \
+            --build-arg REACT_APP_STRIPE_API_KEY=$STRIPE_PUBLISHABLE_KEY \
             -t pairwise-production-client \
             -f packages/client/Dockerfile .
       # Deploy client workspace on Netlify (no builds occur on Netlify)
