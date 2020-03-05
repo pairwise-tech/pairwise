@@ -371,7 +371,7 @@ export const ExternalLink = ({
 };
 
 export const DesktopOnly = styled.div`
-  ${MOBILE} {
+  @media ${MOBILE} {
     display: none;
   }
 `;

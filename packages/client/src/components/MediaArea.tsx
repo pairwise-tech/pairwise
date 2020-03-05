@@ -179,7 +179,7 @@ const SupplementaryContentContainer = styled.div`
   background: #1e1e1e;
   position: relative;
 
-  ${MOBILE} {
+  @media ${MOBILE} {
     padding-left: 12px;
     padding-right: 12px;
   }

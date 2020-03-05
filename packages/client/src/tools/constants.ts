@@ -77,4 +77,4 @@ export const CONTENT_SERIALIZE_DEBOUNCE = 600;
 export const SANDBOX_ID = "sandbox";
 
 // Media queries
-export const MOBILE = `@media (max-width: ${PROSE_MAX_WIDTH}px)`;
+export const MOBILE = `(max-width: ${PROSE_MAX_WIDTH}px)`;

@@ -82,193 +82,190 @@ const Modals = () => (
  * ============================================================================
  */
 
-class ApplicationContainer extends React.Component<IProps, IState> {
-  /**
-   * NOTE: The hasHandledRedirect state is used to capture the first
-   * route that renders the route, before react-router takes over and starts
-   * performing redirects. This is required to capture the access token
-   * after a login event, which is delivered to the app via a redirect url
-   * parameter.
-   */
-  state = {
-    hasHandledRedirect: false,
-  };
+/**
+ * NOTE: The hasHandledRedirect state is used to capture the first
+ * route that renders the route, before react-router takes over and starts
+ * performing redirects. This is required to capture the access token
+ * after a login event, which is delivered to the app via a redirect url
+ * parameter.
+ */
+const ApplicationContainer = (props: IProps) => {
+  const {
+    location,
+    challenge,
+    updateChallenge,
+    overlayVisible,
+    workspaceLoading,
+    hasMediaContent,
+    toggleNavigationMap,
+    showFeedbackButton,
+    toggleFeedbackDialogOpen,
+    user,
+    userAuthenticated,
+    logoutUser,
+    setSingleSignOnDialogState,
+    initializeApp,
+  } = props;
 
-  componentDidMount() {
+  const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
+  const isMobile = useMedia(MOBILE, false);
+
+  React.useEffect(() => {
     // We have to pass location in here to correctly capture the original
     // url to send it to the epics before React Router takes over and starts
     // to redirect the app.
-    this.props.initializeApp({ location: window.location });
-    this.setState({ hasHandledRedirect: true });
+    initializeApp({ location: window.location });
+    setHasHandledRedirect(true);
+  }, [initializeApp]);
+
+  if (!hasHandledRedirect) {
+    return null;
   }
 
-  render(): Nullable<JSX.Element> {
-    if (!this.state.hasHandledRedirect) {
-      return null;
-    }
+  if (!challenge) {
+    return <LoadingOverlay visible={workspaceLoading} />;
+  }
 
-    const { location, challenge, overlayVisible } = this.props;
+  const isSandbox = challenge.id === SANDBOX_ID;
+  const displayNavigationArrows = location.includes("workspace");
+  const showMediaAreaButton =
+    challenge &&
+    challengeRequiresWorkspace(challenge) &&
+    (CODEPRESS || hasMediaContent);
 
-    if (!challenge) {
-      return this.renderLoadingOverlay();
-    }
-
-    const isSandbox = challenge.id === SANDBOX_ID;
-    const displayNavigationArrows = location.includes("workspace");
-
-    return (
-      <React.Fragment>
-        <MobileView />
-        <Modals />
-        {this.renderLoadingOverlay()}
-        {CODEPRESS && <AdminKeyboardShortcuts />}
-        <NavigationOverlay overlayVisible={overlayVisible} />
-        <Header>
-          <ControlsContainer style={{ height: "100%", marginRight: 60 }}>
-            <NavIconButton
-              overlayVisible={overlayVisible}
-              style={{ color: "white", marginRight: 40 }}
-              onClick={this.props.toggleNavigationMap}
-            />
-            <ProductTitle id="product-title">
-              <Link to="/home">Pairwise</Link>
-            </ProductTitle>
-          </ControlsContainer>
-          {CODEPRESS && (
-            <ControlsContainer style={{ flexShrink: 0 }}>
-              <EditingToolbar />
-            </ControlsContainer>
-          )}
-          <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-            <SearchBox />
-            {this.props.showFeedbackButton && (
-              <Tooltip content="Submit Feedback" position="bottom">
-                <IconButton
-                  icon="help"
-                  aria-label="open/close feedback dialog"
-                  onClick={this.props.toggleFeedbackDialogOpen}
-                />
-              </Tooltip>
-            )}
-            {isSandbox && (
-              <Suspense fallback={<LoadingInline />}>
-                <LazyChallengeTypeMenu
-                  items={SANDBOX_TYPE_CHOICES}
-                  currentChallengeType={challenge?.type}
-                  onItemSelect={x => {
-                    this.props.updateChallenge({
-                      id: challenge.id, // See NOTE
-                      challenge: { type: x.value },
-                    });
-                  }}
-                />
-              </Suspense>
-            )}
-            <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
-              <Button
-                id="sandboxButton"
-                disabled={isSandbox}
-                style={{ margin: "0 20px" }}
-              >
-                Sandbox
-              </Button>
-            </Link>
-            {displayNavigationArrows && (
-              <DesktopOnly>
-                <ButtonGroup>
-                  <PrevChallengeIconButton id={"prevButton"} />
-                  <NextChallengeIconButton id={"nextButton"} />
-                </ButtonGroup>
-              </DesktopOnly>
-            )}
-            {this.props.userAuthenticated && this.props.user.profile ? (
-              <AccountDropdownButton>
-                <div
-                  id="account-menu-dropdown"
-                  className="account-menu-dropdown"
-                >
-                  <UserBio>
-                    <CreateAccountText className="account-menu">
-                      Welcome, {this.props.user.profile.givenName}!{" "}
-                    </CreateAccountText>
-                    <ProfileIcon avatar={this.props.user.profile.avatarUrl} />
-                  </UserBio>
-                  <div className="dropdown-links">
-                    <Link
-                      id="account-link"
-                      to="/account"
-                      style={{
-                        borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
-                      }}
-                    >
-                      Account
-                    </Link>
-                    <Link
-                      to="/logout"
-                      id="logout-link"
-                      onClick={this.handleLogout}
-                    >
-                      Logout
-                    </Link>
-                  </div>
-                </div>
-              </AccountDropdownButton>
-            ) : (
-              <AccountButton
-                id="login-signup-button"
-                onClick={() => this.props.setSingleSignOnDialogState(true)}
-              >
-                <CreateAccountText>Login or Signup</CreateAccountText>
-              </AccountButton>
-            )}
-          </ControlsContainer>
-        </Header>
-        {this.showMediaAreaButton && (
-          <SmoothScrollButton
-            icon="chevron-down"
-            position="bottom"
-            positionOffset={-20}
-            scrollToId="supplementary-content-container"
-            backgroundColor="rgba(29, 29, 29, 0.7)"
+  return (
+    <React.Fragment>
+      <MobileView />
+      <Modals />
+      <LoadingOverlay visible={workspaceLoading} />
+      {CODEPRESS && <AdminKeyboardShortcuts />}
+      <NavigationOverlay overlayVisible={overlayVisible} />
+      <Header>
+        <ControlsContainer
+          style={{ height: "100%", marginRight: isMobile ? 0 : 60 }}
+        >
+          <NavIconButton
+            overlayVisible={overlayVisible}
+            style={{ color: "white", marginRight: 40 }}
+            onClick={toggleNavigationMap}
           />
+          <ProductTitle id="product-title">
+            <Link to="/home">Pairwise</Link>
+          </ProductTitle>
+        </ControlsContainer>
+        {CODEPRESS && (
+          <ControlsContainer style={{ flexShrink: 0 }}>
+            <EditingToolbar />
+          </ControlsContainer>
         )}
-        <Switch>
-          <Route key={0} path="/workspace/:id" component={Workspace} />
-          <Route key={1} path="/home" component={Home} />
-          <Route key={2} path="/account" component={Account} />
-          <Route
-            key={3}
-            path="/logout"
-            component={() => <Redirect to="/home" />}
-          />
-          <Route key={4} component={() => <Redirect to="/home" />} />
-        </Switch>
-      </React.Fragment>
-    );
-  }
+        <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
+          <SearchBox />
+          {showFeedbackButton && (
+            <Tooltip content="Submit Feedback" position="bottom">
+              <IconButton
+                icon="help"
+                aria-label="open/close feedback dialog"
+                onClick={toggleFeedbackDialogOpen}
+              />
+            </Tooltip>
+          )}
+          {isSandbox && (
+            <Suspense fallback={<LoadingInline />}>
+              <LazyChallengeTypeMenu
+                items={SANDBOX_TYPE_CHOICES}
+                currentChallengeType={challenge?.type}
+                onItemSelect={x => {
+                  updateChallenge({
+                    id: challenge.id, // See NOTE
+                    challenge: { type: x.value },
+                  });
+                }}
+              />
+            </Suspense>
+          )}
+          <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
+            <Button
+              id="sandboxButton"
+              disabled={isSandbox}
+              style={{ margin: "0 20px" }}
+            >
+              Sandbox
+            </Button>
+          </Link>
+          {displayNavigationArrows && (
+            <DesktopOnly>
+              <ButtonGroup>
+                <PrevChallengeIconButton id={"prevButton"} />
+                <NextChallengeIconButton id={"nextButton"} />
+              </ButtonGroup>
+            </DesktopOnly>
+          )}
+          {userAuthenticated && user.profile ? (
+            <AccountDropdownButton>
+              <div id="account-menu-dropdown" className="account-menu-dropdown">
+                <UserBio>
+                  <CreateAccountText className="account-menu">
+                    Welcome, {user.profile.givenName}!{" "}
+                  </CreateAccountText>
+                  <ProfileIcon avatar={user.profile.avatarUrl} />
+                </UserBio>
+                <div className="dropdown-links">
+                  <Link
+                    id="account-link"
+                    to="/account"
+                    style={{
+                      borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
+                    }}
+                  >
+                    Account
+                  </Link>
+                  <Link to="/logout" id="logout-link" onClick={logoutUser}>
+                    Logout
+                  </Link>
+                </div>
+              </div>
+            </AccountDropdownButton>
+          ) : (
+            <AccountButton
+              id="login-signup-button"
+              onClick={() => setSingleSignOnDialogState(true)}
+            >
+              <CreateAccountText>Login or Signup</CreateAccountText>
+            </AccountButton>
+          )}
+        </ControlsContainer>
+      </Header>
+      {showMediaAreaButton && (
+        <SmoothScrollButton
+          icon="chevron-down"
+          position="bottom"
+          positionOffset={-20}
+          scrollToId="supplementary-content-container"
+          backgroundColor="rgba(29, 29, 29, 0.7)"
+        />
+      )}
+      <Switch>
+        <Route key={0} path="/workspace/:id" component={Workspace} />
+        <Route key={1} path="/home" component={Home} />
+        <Route key={2} path="/account" component={Account} />
+        <Route
+          key={3}
+          path="/logout"
+          component={() => <Redirect to="/home" />}
+        />
+        <Route key={4} component={() => <Redirect to="/home" />} />
+      </Switch>
+    </React.Fragment>
+  );
+};
 
-  get showMediaAreaButton() {
-    return (
-      this.props.challenge &&
-      challengeRequiresWorkspace(this.props.challenge) &&
-      (CODEPRESS || this.props.hasMediaContent)
-    );
-  }
-
-  renderLoadingOverlay = () => {
-    return (
-      <FullScreenOverlay visible={this.props.workspaceLoading}>
-        <div>
-          <OverlayText>Launching Pairwise...</OverlayText>
-        </div>
-      </FullScreenOverlay>
-    );
-  };
-
-  private readonly handleLogout = () => {
-    this.props.logoutUser();
-  };
-}
+const LoadingOverlay = (props: { visible: boolean }) => (
+  <FullScreenOverlay visible={props.visible}>
+    <div>
+      <OverlayText>Launching Pairwise...</OverlayText>
+    </div>
+  </FullScreenOverlay>
+);
 
 /** ===========================================================================
  * Styles
@@ -321,7 +318,7 @@ const ProductTitle = styled.h1`
   }
 
   /* Not vital to the product so hide it for thin views */
-  ${MOBILE} {
+  @media ${MOBILE} {
     display: none;
   }
 `;
@@ -431,7 +428,7 @@ const AccountDropdownButton = styled.div`
 
 const MobileView = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(true);
-  const isMobile = useMedia("(max-width: 768px)", false);
+  const isMobile = useMedia(MOBILE, false);
   return (
     <Alert
       confirmButtonText="Okay"
