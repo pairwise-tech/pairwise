@@ -367,7 +367,6 @@ const AccountButton = styled(ButtonCore)`
 `;
 
 const UserBio = styled.div`
-  min-width: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,6 +378,7 @@ const CreateAccountText = styled.h1`
   margin-left: 12px;
   font-size: 18px;
   font-weight: 200;
+  white-space: nowrap;
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 

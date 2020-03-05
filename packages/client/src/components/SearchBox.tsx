@@ -8,6 +8,7 @@ import { SearchResult } from "modules/challenges/types";
 import reactStringReplace from "react-string-replace";
 import { useHistory } from "react-router-dom";
 import KeyboardShortcuts from "./KeyboardShortcuts";
+import { PROSE_MAX_WIDTH } from "tools/constants";
 
 // NOTE: isClosed is kept in state rather than simply using the presence of
 // search results becuase sometimes we want the search pane to be closed even if
@@ -239,6 +240,7 @@ const Input = styled(InputGroup)`
     transition: all 0.15s ease-out;
     background: #3a3a3a;
     width: 100%;
+    max-width: ${PROSE_MAX_WIDTH}px;
     display: block;
     &:hover {
       box-shadow: 0 0 0 1px #10ca92, 0 0 0 1px #10ca92,
