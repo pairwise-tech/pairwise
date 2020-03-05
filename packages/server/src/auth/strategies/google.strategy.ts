@@ -39,6 +39,7 @@ export class GoogleStrategy {
           tokenURL: ENV.GOOGLE_TOKEN_URL,
           authorizationURL: ENV.GOOGLE_TOKEN_URL,
           callbackURL: `${ENV.SERVER_HOST_URL}/auth/google/callback`,
+          scope: ["profile", "email"],
         },
         async (
           accessToken: string,

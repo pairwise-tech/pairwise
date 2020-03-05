@@ -12,19 +12,12 @@ import { GoogleStrategy } from "./strategies/google.strategy";
 
 @Module({
   imports: [
-    PassportModule,
+    PassportModule.register({
+      defaultStrategy: "google",
+    }),
     JwtModule.register({
       secret: ENV.JWT_SECRET,
       signOptions: { expiresIn: "365 days" }, // Expire in one year, boom baby!
-    }),
-    PassportModule.register({
-      session: true,
-      scope: ["profile", "email"],
-      defaultStrategy: "google",
-    }),
-    PassportModule.register({
-      session: true,
-      defaultStrategy: "facebook",
     }),
     UsersModule,
   ],
