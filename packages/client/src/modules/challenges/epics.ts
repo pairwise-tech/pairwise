@@ -43,7 +43,7 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 
-const debug = require("debug")("challenges:epics");
+const debug = require("debug")("client:challenges:epics");
 
 const searchEpic: EpicSignature = action$ => {
   // Initialize the search worker. This could get dropped into deps if we need

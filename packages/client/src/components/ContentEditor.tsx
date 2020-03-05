@@ -1,6 +1,6 @@
 import React from "react";
 import { EditorProps } from "rich-markdown-editor";
-import { useHistory, withRouter, RouteComponentProps } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import toaster from "tools/toast-utils";
 import { ContentUtility } from "@pairwise/common";
 import styled from "styled-components";

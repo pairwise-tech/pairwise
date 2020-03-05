@@ -26,7 +26,7 @@ import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
 import { ChallengesActionTypes } from "./index";
 
-const debug = require("debug")("challenge:store");
+const debug = require("debug")("client:challenge:store");
 
 /** ===========================================================================
  * Challenges Store
