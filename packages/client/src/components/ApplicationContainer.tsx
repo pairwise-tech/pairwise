@@ -367,6 +367,7 @@ const AccountButton = styled(ButtonCore)`
 `;
 
 const UserBio = styled.div`
+  min-width: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
