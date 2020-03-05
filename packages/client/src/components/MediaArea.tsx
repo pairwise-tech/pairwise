@@ -6,7 +6,11 @@ import styled from "styled-components/macro";
 import { Loading, SmoothScrollButton } from "./Shared";
 import { EditableText, Callout, Classes } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
-import { PROSE_MAX_WIDTH, CONTENT_SERIALIZE_DEBOUNCE } from "tools/constants";
+import {
+  PROSE_MAX_WIDTH,
+  CONTENT_SERIALIZE_DEBOUNCE,
+  MOBILE,
+} from "tools/constants";
 import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 import ContentEditor from "./ContentEditor";
@@ -172,10 +176,13 @@ const Hr = styled.hr`
 
 const SupplementaryContentContainer = styled.div`
   padding: 25px;
-  padding-left: 12px;
-  padding-right: 12px;
   background: #1e1e1e;
   position: relative;
+
+  ${MOBILE} {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 `;
 
 /**

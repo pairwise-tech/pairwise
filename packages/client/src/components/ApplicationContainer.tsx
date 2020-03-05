@@ -6,7 +6,7 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { CODEPRESS } from "tools/client-env";
-import { COLORS, SANDBOX_ID } from "tools/constants";
+import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
@@ -28,6 +28,7 @@ import {
   FullScreenOverlay,
   OverlayText,
   LoadingInline,
+  DesktopOnly,
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
@@ -82,20 +83,16 @@ const Modals = () => (
  */
 
 class ApplicationContainer extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    /**
-     * NOTE: The hasHandledRedirect state is used to capture the first
-     * route that renders the route, before react-router takes over and starts
-     * performing redirects. This is required to capture the access token
-     * after a login event, which is delivered to the app via a redirect url
-     * parameter.
-     */
-    this.state = {
-      hasHandledRedirect: false,
-    };
-  }
+  /**
+   * NOTE: The hasHandledRedirect state is used to capture the first
+   * route that renders the route, before react-router takes over and starts
+   * performing redirects. This is required to capture the access token
+   * after a login event, which is delivered to the app via a redirect url
+   * parameter.
+   */
+  state = {
+    hasHandledRedirect: false,
+  };
 
   componentDidMount() {
     // We have to pass location in here to correctly capture the original
@@ -177,10 +174,12 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               </Button>
             </Link>
             {displayNavigationArrows && (
-              <ButtonGroup>
-                <PrevChallengeIconButton id={"prevButton"} />
-                <NextChallengeIconButton id={"nextButton"} />
-              </ButtonGroup>
+              <DesktopOnly>
+                <ButtonGroup>
+                  <PrevChallengeIconButton id={"prevButton"} />
+                  <NextChallengeIconButton id={"nextButton"} />
+                </ButtonGroup>
+              </DesktopOnly>
             )}
             {this.props.userAuthenticated && this.props.user.profile ? (
               <AccountDropdownButton>
@@ -319,6 +318,11 @@ const ProductTitle = styled.h1`
 
   a:hover {
     color: ${COLORS.PRIMARY_GREEN};
+  }
+
+  /* Not vital to the product so hide it for thin views */
+  ${MOBILE} {
+    display: none;
   }
 `;
 

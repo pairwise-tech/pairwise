@@ -11,7 +11,7 @@ import {
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
-import { COLORS } from "../tools/constants";
+import { COLORS, MOBILE } from "../tools/constants";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 
@@ -369,3 +369,9 @@ export const ExternalLink = ({
     </a>
   );
 };
+
+export const DesktopOnly = styled.div`
+  ${MOBILE} {
+    display: none;
+  }
+`;
