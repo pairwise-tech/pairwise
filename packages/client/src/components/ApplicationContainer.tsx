@@ -135,10 +135,9 @@ const ApplicationContainer = (props: IProps) => {
 
   const isSandbox = challenge.id === SANDBOX_ID;
   const displayNavigationArrows = location.includes("workspace");
+  const isWorkspaceRequired = challengeRequiresWorkspace(challenge);
   const showMediaAreaButton =
-    challenge &&
-    challengeRequiresWorkspace(challenge) &&
-    (CODEPRESS || hasMediaContent);
+    challenge && isWorkspaceRequired && (CODEPRESS || hasMediaContent);
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
@@ -187,7 +186,7 @@ const ApplicationContainer = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <MobileView />
+      <MobileView isWorkspace={isWorkspaceRequired} />
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
       {CODEPRESS && <AdminKeyboardShortcuts />}
@@ -495,23 +494,31 @@ const AccountDropdownButton = styled.div`
  * ============================================================================
  */
 
-const MobileView = () => {
+export const MobileView = (props: { isWorkspace: boolean }) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const isMobile = useMedia(MOBILE, false);
   return (
     <Alert
       confirmButtonText="Okay"
       onClose={() => setIsOpen(false)}
-      isOpen={isOpen && isMobile}
+      isOpen={isOpen && isMobile && props.isWorkspace}
       className={Classes.DARK}
     >
       <MobileContainer>
-        <MobileTitleText>Welcome to Pairwise!</MobileTitleText>
+        <MobileTitleText>A quick heads up</MobileTitleText>
+        <MobileText style={{ margin: 0 }}>{"⚠️"}</MobileText>
         <MobileText>
-          Pairwise might not work on mobile! Feel free to use Pairwise on a
-          phone or tablet but it might not fully work as expected. We recommend
-          you use a computer. For some challenges a phone simply doesn't have
-          the necessary software to complete the challenge.
+          <strong>The Workspace might not work on mobile!</strong>
+        </MobileText>
+        <MobileText style={{ margin: 0 }}>{"⚠️"}</MobileText>
+        <MobileText>
+          Feel free to use Pairwise on a phone or tablet but it might not fully
+          work as expected. We recommend you use a computer. For some challenges
+          <span style={{ textDecoration: "underline" }}>
+            a mobile device simply doesn't have the necessary software to
+            complete the challenge
+          </span>
+          .
         </MobileText>
         <MobileText>
           Unfortunately, smart phones and tablets are not the best devices for
@@ -549,6 +556,7 @@ const MobileText = styled.p`
   font-weight: 300;
   text-align: center;
   font-family: "Helvetica Neue", Lato, sans-serif;
+  letter-spacing: 1px;
 `;
 
 const MobileTitleText = styled(MobileText)`

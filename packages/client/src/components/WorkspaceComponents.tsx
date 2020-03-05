@@ -8,14 +8,23 @@ import {
   COLORS,
   CONTENT_SERIALIZE_DEBOUNCE,
   SANDBOX_ID,
+  MOBILE,
 } from "../tools/constants";
 import { DIMENSIONS as D, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Loading } from "./Shared";
-import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
+import {
+  Icon,
+  Collapse,
+  Pre,
+  EditableText,
+  Alert,
+  Classes,
+} from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
+import useMedia from "use-media";
 
 /** ===========================================================================
  * Workspace Components
