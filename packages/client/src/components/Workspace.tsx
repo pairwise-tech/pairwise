@@ -807,7 +807,7 @@ class Workspace extends React.Component<IProps, IState> {
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
-      this.transformUndefinedLogMessages(data);
+      this.transformUnserializableLogs(data);
       this.updateWorkspaceConsole({ data, method });
     };
 
@@ -997,7 +997,7 @@ class Workspace extends React.Component<IProps, IState> {
    * replacing them with their corresponding values, thus preserving the
    * original logs.
    */
-  transformUndefinedLogMessages = (data: ReadonlyArray<any>) => {
+  transformUnserializableLogs = (data: ReadonlyArray<any>) => {
     traverse(data).forEach(function(x) {
       if (x === "__transform_undefined__") {
         this.update(undefined);
