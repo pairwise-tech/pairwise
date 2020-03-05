@@ -6,7 +6,7 @@ import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle, ExternalLink } from "./Shared";
-import { COLORS } from "tools/constants";
+import { COLORS, PROSE_MAX_WIDTH } from "tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -41,7 +41,7 @@ class Home extends React.Component<IProps, IState> {
           </ContentText>
           <BoldText>Select a course below to get started now!</BoldText>
         </ContentContainer>
-        <PageTitle>Courses:</PageTitle>
+        <PageTitle>Courses</PageTitle>
         {this.props.skeletons?.map(this.renderCourseItem)}
       </PageContainer>
     );
@@ -50,8 +50,8 @@ class Home extends React.Component<IProps, IState> {
   renderCourseItem = (skeleton: CourseSkeleton, i: number) => {
     const { payments } = this.props.user;
     const paidForCourse = payments?.find(p => p.courseId === skeleton.id);
-
     const firstChallenge = this.props.firstUnfinishedChallenge;
+
     if (!firstChallenge) {
       return null;
     }
@@ -73,7 +73,7 @@ class Home extends React.Component<IProps, IState> {
               style={{ width: 185 }}
               id={`course-link-${i}-continue`}
             >
-              Start Now
+              Go to course
             </Button>
           </Link>
         ) : (
@@ -114,8 +114,12 @@ class Home extends React.Component<IProps, IState> {
  */
 
 const ContentContainer = styled.div`
-  width: 750px;
+  max-width: ${PROSE_MAX_WIDTH}px;
   margin-bottom: 24px;
+
+  p {
+    font-size: 18px;
+  }
 `;
 
 const ContentText = styled(Text)`
@@ -131,7 +135,9 @@ const CourseDescription = styled.p`
   margin-top: 16px;
   font-size: 14px;
   font-weight: 100;
-  color: ${COLORS.TEXT_CONTENT};
+  letter-spacing: 1px;
+  color: white;
+  font-size: 18px;
 `;
 
 const ButtonsBox = styled.div`
