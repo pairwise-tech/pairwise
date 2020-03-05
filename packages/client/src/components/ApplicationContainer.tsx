@@ -276,7 +276,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
-const BORDER = 3;
+const BORDER = 2;
 
 const Header = styled.div`
   display: flex;

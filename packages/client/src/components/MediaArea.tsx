@@ -10,6 +10,7 @@ import { PROSE_MAX_WIDTH, CONTENT_SERIALIZE_DEBOUNCE } from "tools/constants";
 import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 import ContentEditor from "./ContentEditor";
+import { Challenge } from "@pairwise/common";
 
 const TableOfContentsPlugin = (): SlatePlugin => {
   const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {
@@ -32,26 +33,12 @@ const TableOfContentsPlugin = (): SlatePlugin => {
  * information, without any interactive coding practice.
  */
 
-const mapStateToProps = (state: ReduxStoreState) => ({
-  title: Modules.selectors.challenges.getCurrentTitle(state) || "",
-  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
-});
-
-const dispatchProps = {
-  updateChallenge: Modules.actions.challenges.updateChallenge,
-};
-
-type MediaAreaProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
-
-const MediaArea = connect(
-  mapStateToProps,
-  dispatchProps,
-)(({ challenge, title, isEditMode, updateChallenge }: MediaAreaProps) => {
-  if (!challenge) {
-    return <Loading />;
-  }
-
+const MediaArea = ({
+  challenge,
+  title,
+  isEditMode,
+  updateChallenge,
+}: MediaAreaProps) => {
   const handleTitle = (x: string) =>
     updateChallenge({ id: challenge.id, challenge: { title: x } });
 
@@ -144,9 +131,38 @@ const MediaArea = connect(
       )}
     </SupplementaryContentContainer>
   );
+};
+
+// This weirdness is just for typing... the media area needs a fimrly defined
+// challenge otherwise the react hooks get angry that they are being called
+// conditionally. The thing is, they dependf on the challenge so they need the
+// challenge to be defined
+const MediaAreaContainer = (props: MediaAreaContainerProps) => {
+  if (!props.challenge) {
+    return <Loading />;
+  }
+
+  return <MediaArea {...(props as MediaAreaProps)} />;
+};
+
+const mapStateToProps = (state: ReduxStoreState) => ({
+  title: Modules.selectors.challenges.getCurrentTitle(state) || "",
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
 });
 
-export default MediaArea;
+const dispatchProps = {
+  updateChallenge: Modules.actions.challenges.updateChallenge,
+};
+
+type MediaAreaContainerProps = ReturnType<typeof mapStateToProps> &
+  typeof dispatchProps;
+
+interface MediaAreaProps extends MediaAreaContainerProps {
+  challenge: Challenge; // Non nullable
+}
+
+export default connect(mapStateToProps, dispatchProps)(MediaAreaContainer);
 
 const Hr = styled.hr`
   border: 1px solid transparent;
