@@ -3,7 +3,7 @@ import { EditorProps } from "rich-markdown-editor";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import toaster from "tools/toast-utils";
 import { ContentUtility } from "@pairwise/common";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { COLORS, SANDBOX_ID } from "tools/constants";
 import Modules, { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
