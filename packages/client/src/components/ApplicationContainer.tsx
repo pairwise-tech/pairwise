@@ -23,6 +23,7 @@ import {
   MenuDivider,
   Position,
   Popover,
+  Icon,
 } from "@blueprintjs/core";
 import Account from "./Account";
 import {
@@ -281,9 +282,11 @@ const ApplicationContainer = (props: IProps) => {
                       borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
                     }}
                   >
+                    <Icon icon="user" style={{ marginRight: 10 }} />
                     Account
                   </Link>
                   <Link to="/logout" id="logout-link" onClick={logoutUser}>
+                    <Icon icon="log-out" style={{ marginRight: 10 }} />
                     Logout
                   </Link>
                 </div>
