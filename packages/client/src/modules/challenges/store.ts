@@ -20,6 +20,7 @@ import {
   ChallengeDeletePayload,
   ChallengeReorderPayload,
   ModuleReorderPayload,
+  SearchResult,
 } from "./types";
 import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
@@ -55,6 +56,7 @@ export interface State {
   adminTestTab: ADMIN_TEST_TAB;
   adminEditorTab: ADMIN_EDITOR_TAB;
   navigationSectionAccordionViewState: AccordionViewState;
+  searchResults: SearchResult[];
 }
 
 const initialState: State = {
@@ -73,6 +75,7 @@ const initialState: State = {
   adminTestTab: "testResults",
   adminEditorTab: "starterCode",
   navigationSectionAccordionViewState: {},
+  searchResults: [],
 };
 
 /** ===========================================================================
@@ -457,6 +460,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     loadingCurrentBlob: true,
     displayNavigationMap: false,
     currentChallengeId: action.payload.currentChallengeId,
+  }))
+  .handleAction(actions.receiveSearchResults, (state, action) => ({
+    ...state,
+    searchResults: action.payload,
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,

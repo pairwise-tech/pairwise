@@ -6,7 +6,8 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { CODEPRESS } from "tools/client-env";
-import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
+import { COLORS, SANDBOX_ID } from "tools/constants";
+import { HEADER_HEIGHT } from "tools/dimensions";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import NavigationOverlay from "./NavigationOverlay";
@@ -26,6 +27,7 @@ import {
   SmoothScrollButton,
   FullScreenOverlay,
   OverlayText,
+  LoadingInline,
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
@@ -39,6 +41,7 @@ import PaymentCourseModal from "./PaymentIntentModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 import PaymentSuccessModal from "./PaymentSuccessModal";
 import { challengeRequiresWorkspace } from "tools/utils";
+import SearchBox from "./SearchBox";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -135,11 +138,12 @@ class ApplicationContainer extends React.Component<IProps, IState> {
             </ProductTitle>
           </ControlsContainer>
           {CODEPRESS && (
-            <ControlsContainer>
+            <ControlsContainer style={{ flexShrink: 0 }}>
               <EditingToolbar />
             </ControlsContainer>
           )}
-          <ControlsContainer style={{ marginLeft: "auto" }}>
+          <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
+            <SearchBox />
             {this.props.showFeedbackButton && (
               <Tooltip content="Submit Feedback" position="bottom">
                 <IconButton
@@ -150,7 +154,7 @@ class ApplicationContainer extends React.Component<IProps, IState> {
               </Tooltip>
             )}
             {isSandbox && (
-              <Suspense fallback={<p>Menu Loading...</p>}>
+              <Suspense fallback={<LoadingInline />}>
                 <LazyChallengeTypeMenu
                   items={SANDBOX_TYPE_CHOICES}
                   currentChallengeType={challenge?.type}
@@ -353,6 +357,7 @@ const AccountButton = styled(ButtonCore)`
   border-radius: 4px;
   margin-left: 2px;
   margin-right: 2px;
+  flex-shrink: 0;
 
   :hover {
     cursor: pointer;

@@ -5,12 +5,11 @@ import Markdown, { ReactMarkdownProps } from "react-markdown";
 import styled from "styled-components/macro";
 import {
   COLORS as C,
-  DIMENSIONS as D,
-  HEADER_HEIGHT,
   COLORS,
   CONTENT_SERIALIZE_DEBOUNCE,
   SANDBOX_ID,
 } from "../tools/constants";
+import { DIMENSIONS as D, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Loading } from "./Shared";
 import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
