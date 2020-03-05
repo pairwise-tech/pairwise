@@ -214,6 +214,7 @@ const ApplicationContainer = (props: IProps) => {
           {!isMobile && showFeedbackButton && (
             <Tooltip content="Submit Feedback" position="bottom">
               <IconButton
+                style={{ marginLeft: 20 }}
                 icon="help"
                 aria-label="open/close feedback dialog"
                 onClick={toggleFeedbackDialogOpen}
