@@ -150,6 +150,13 @@ const ApplicationContainer = (props: IProps) => {
         }}
         text="Sandbox"
       />
+      {showFeedbackButton && (
+        <MenuItem
+          icon="help"
+          onClick={toggleFeedbackDialogOpen}
+          text="Submit Feedback"
+        />
+      )}
       <MenuItem
         icon="user"
         text="Account"
@@ -190,7 +197,7 @@ const ApplicationContainer = (props: IProps) => {
         >
           <NavIconButton
             overlayVisible={overlayVisible}
-            style={{ color: "white", marginRight: 40 }}
+            style={{ color: "white", marginRight: isMobile ? 15 : 40 }}
             onClick={toggleNavigationMap}
           />
           <ProductTitle id="product-title">
@@ -204,7 +211,7 @@ const ApplicationContainer = (props: IProps) => {
         )}
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
           <SearchBox />
-          {showFeedbackButton && (
+          {!isMobile && showFeedbackButton && (
             <Tooltip content="Submit Feedback" position="bottom">
               <IconButton
                 icon="help"
@@ -246,11 +253,16 @@ const ApplicationContainer = (props: IProps) => {
               </ButtonGroup>
             </DesktopOnly>
           )}
-          <div style={{ flexShrink: 0 }}>
-            <Popover content={mobileMenuItems} position={Position.BOTTOM_RIGHT}>
-              <Button style={{ marginRight: 20 }} text="•••" />
-            </Popover>
-          </div>
+          {isMobile && (
+            <div style={{ flexShrink: 0 }}>
+              <Popover
+                content={mobileMenuItems}
+                position={Position.BOTTOM_RIGHT}
+              >
+                <Button style={{ marginRight: 20 }} text="•••" />
+              </Popover>
+            </div>
+          )}
           {/* user.profile is a redundant check... but now the types work */}
           {isMobile ? null : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
