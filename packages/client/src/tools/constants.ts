@@ -45,7 +45,7 @@ export const MONACO_EDITOR_FONT_SIZE_STEP = 2;
  * originally created for the media area where there is currently no other UI
  * besides the text.
  */
-export const PROSE_MAX_WIDTH = 728;
+export const PROSE_MAX_WIDTH = 900;
 
 /** ===========================================================================
  * Constants
@@ -77,4 +77,4 @@ export const CONTENT_SERIALIZE_DEBOUNCE = 600;
 export const SANDBOX_ID = "sandbox";
 
 // Media queries
-export const MOBILE = `(max-width: ${PROSE_MAX_WIDTH}px)`;
+export const MOBILE = `(max-width: 768px)`;

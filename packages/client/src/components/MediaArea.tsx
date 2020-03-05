@@ -15,21 +15,53 @@ import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 import ContentEditor from "./ContentEditor";
 import { Challenge } from "@pairwise/common";
+import { authSelector } from "modules/auth/selectors";
 
 const TableOfContentsPlugin = (): SlatePlugin => {
   const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {
     const children = next();
 
     return (
-      <>
-        <TableOfContents editor={editor} />
-        {children}
-      </>
+      <FlexWrap>
+        <Flex>{children}</Flex>
+        <FlexFixed>
+          <TableOfContents editor={editor} />
+        </FlexFixed>
+      </FlexWrap>
     );
   };
 
   return { renderEditor };
 };
+
+// NOTE: Overflow auto is necessary to prevent the child from overflowing... but
+// it doesn't add scroll bars. It just does what we actually want which is add
+// scroll bars to the elements that are too wide, but not the whole thing.
+const Flex = styled.div`
+  overflow: auto;
+`;
+
+const FlexWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  @media ${MOBILE} {
+    flex-direction: column-reverse;
+  }
+`;
+
+const FlexFixed = styled.div`
+  position: relative;
+  width: 300px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin-left: 40px;
+
+  @media ${MOBILE} {
+    margin-left: 0;
+  }
+`;
 
 /**
  * The media area. Where supplementary content and challenge videos live. The
@@ -179,10 +211,41 @@ const SupplementaryContentContainer = styled.div`
   padding: 25px;
   background: #1e1e1e;
   position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 
   @media ${MOBILE} {
     padding-left: 12px;
     padding-right: 12px;
+  }
+`;
+
+const TitleHeader = styled.h1`
+  font-size: 3em;
+`;
+
+// NOTE: 16:9 aspect ratio. All our videos should be recorded at 1080p so this
+// should not be a limitation. See this post for the logic on this aspect ratio CSS:
+// https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php
+const VideoWrapper = styled.div`
+  position: relative;
+  padding-bottom: 56.25%; /* See NOTE  */
+  padding-top: 25px;
+  height: 0;
+  margin-bottom: 40px;
+  border: 1px solid #444444;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.48);
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -210,6 +273,7 @@ const YoutubeEmbed = (props: { url: string }) => {
           alignItems: "center",
           justifyContent: "center",
           background: "#999",
+          marginBottom: 40,
         }}
       >
         <h3 style={{ textTransform: "uppercase" }}>Embed Hidden</h3>
@@ -222,18 +286,16 @@ const YoutubeEmbed = (props: { url: string }) => {
   }
 
   return (
-    <iframe
-      title="Youtube Embed"
-      width={width}
-      height={height}
-      src={props.url}
-      frameBorder="0"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    ></iframe>
+    <VideoWrapper>
+      <iframe
+        title="Youtube Embed"
+        width={width}
+        height={height}
+        src={props.url}
+        frameBorder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </VideoWrapper>
   );
 };
-
-const TitleHeader = styled.h1`
-  font-size: 3em;
-`;

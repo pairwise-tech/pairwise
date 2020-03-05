@@ -19,7 +19,7 @@ export default class TableOfContents extends React.Component<
 
   state = {
     isFixed: false,
-    left: PROSE_MAX_WIDTH + 40,
+    left: PROSE_MAX_WIDTH - 90 + 40,
   };
 
   componentDidMount() {
@@ -88,7 +88,7 @@ export default class TableOfContents extends React.Component<
 
     const box = parent.getBoundingClientRect();
     const isFixed = box.top < 40;
-    const left = box.width + (isFixed ? box.x : 0) + 40;
+    const left = isFixed ? box.x : 0;
 
     if (this.state.isFixed !== isFixed || this.state.left !== left) {
       this.setState({ isFixed, left });
@@ -111,7 +111,7 @@ export default class TableOfContents extends React.Component<
   render() {
     const { editor } = this.props;
     const headings = this.getHeadings();
-    const isMobile = window.matchMedia(MOBILE).matches;
+    const isMobile = window.matchMedia("(max-width: 900px)").matches;
 
     // If there are one or less headings in the document no need for a minimap
     if (headings.size <= 1) {
@@ -163,7 +163,6 @@ export default class TableOfContents extends React.Component<
 }
 
 const Wrapper = styled.div`
-  positoin: absolute;
   font-family: ${props => props.theme.fontFamily};
   font-weight: ${props => props.theme.fontWeight};
   font-size: 1em;

@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import toaster from "tools/toast-utils";
 import { ContentUtility } from "@pairwise/common";
 import styled from "styled-components/macro";
-import { COLORS, SANDBOX_ID } from "tools/constants";
+import { COLORS, SANDBOX_ID, PROSE_MAX_WIDTH } from "tools/constants";
 import Modules, { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
 import { timer } from "rxjs";
@@ -208,7 +208,6 @@ const editorTheme = {
  */
 const EditorExternalStyles = styled.div`
   font-size: 17px;
-  max-width: 728px;
   position: relative;
 
   blockquote {
