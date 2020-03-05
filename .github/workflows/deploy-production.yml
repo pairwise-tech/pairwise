@@ -1,6 +1,16 @@
-# This workflow deploys the production server to Google Cloud Run and
-# the client workspace to Netlify. It's triggered by any commits to
-# the master branch. The landing page is deployed separately using ZEIT Now.
+# This is the source of truth for Pairwise Production.
+#
+# This workflow deploys the server and both client applications to
+# production. It runs whenever a commit hits master. The deployments are
+# as follows:
+#
+# - Server: Deployed to Google Cloud Run
+# - Client Workspace: Deployed with Netlify
+# - WWW Landing Page: Deployed via Google with Cloud Storage
+#
+# This workflow builds everything and runs the same full test suite which
+# runs against pull requests and then deploys each of the applications. It
+# takes a long time to run, but it is glorious.
 
 # Reference docs:
 # https://github.com/GoogleCloudPlatform/github-actions/blob/master/example-workflows/cloud-run/.github/workflows/cloud-run.yml
@@ -78,7 +88,10 @@ jobs:
       # Build the server application directly (instead of using Google Cloud Build)
       - name: Build the production server application
         run: |
-          docker build -t pairwise-production --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA -f packages/server/Dockerfile .
+          docker build \
+            --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
+            -t pairwise-production \
+            -f packages/server/Dockerfile .
 
       # Push the production server image to gcloud
       - name: Push the production server image to GCR
@@ -100,13 +113,19 @@ jobs:
             --build-arg REACT_APP_STRIPE_API_KEY=$STRIPE_PUBLISHABLE_KEY \
             -t pairwise-production-client \
             -f packages/client/Dockerfile .
+
       # Deploy client workspace on Netlify (no builds occur on Netlify)
       # (docs: https://github.com/netlify/cli/blob/master/docs/commands/deploy.md)
       # Note that in Netlify the production branch is set to some non-existent
-      # branch, master-x, to prevent automatically publishing. The only path to
+      # branch, "master-x", to prevent automatically publishing. The only path to
       # publish the production client is this step right here:
       - name: Deploy the client workspace to Netlify
-        run: docker run --env NETLIFY_SITE_ID=$NETLIFY_SITE_ID --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN --env GITHUB_SHA=$GITHUB_SHA -t pairwise-production-client
+        run: |
+          docker run \
+            --env GITHUB_SHA=$GITHUB_SHA \
+            --env NETLIFY_SITE_ID=$NETLIFY_SITE_ID \
+            --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
+            -t pairwise-production-client
 
       # NOTE: We need the static files to be available to the host environment,
       # thus the use of volumes here. This is because we want to use the
@@ -114,13 +133,15 @@ jobs:
       # dropped gsutil into the docker container we would have to auth another
       # way
       - name: Build the pairwise.tech static site
-        run: docker run --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public:rw" pairwise-dependencies /bin/bash -c 'yarn www:build'
+        run: |
+          docker run \
+            --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public:rw" pairwise-dependencies /bin/bash -c 'yarn www:build'
 
       # Deploy the static WWW site to Cloud Storage
       - name: Deploy pairwise.tech static site
         run: gsutil -m rsync -r packages/www/public gs://www.pairwise.tech
 
-      # Send Slack success notification
+      # Send Slack notification if workflow succeeds
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
       - name: Notify Slack on workflow success
         if: success()
@@ -132,7 +153,7 @@ jobs:
           status: SUCCESS
           color: good
 
-      # Send Slack failure notification
+      # Send Slack notification if workflow fails
       - name: Notify Slack on workflow failure
         if: failure()
         env:
