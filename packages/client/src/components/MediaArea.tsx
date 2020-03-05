@@ -141,6 +141,7 @@ const MediaArea = ({
 // challenge otherwise the react hooks get angry that they are being called
 // conditionally. The thing is, they dependf on the challenge so they need the
 // challenge to be defined
+// NOTE: Maybe this logic could maybe be a HOC
 const MediaAreaContainer = (props: MediaAreaContainerProps) => {
   if (!props.challenge) {
     return <Loading />;
@@ -163,7 +164,7 @@ type MediaAreaContainerProps = ReturnType<typeof mapStateToProps> &
   typeof dispatchProps;
 
 interface MediaAreaProps extends MediaAreaContainerProps {
-  challenge: Challenge; // Non nullable
+  challenge: NonNullable<Challenge>;
 }
 
 export default connect(mapStateToProps, dispatchProps)(MediaAreaContainer);

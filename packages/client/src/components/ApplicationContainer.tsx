@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import { useMedia } from "use-media";
-import { Redirect, Route, Switch } from "react-router";
+import { Redirect, Route, Switch, useHistory } from "react-router";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
@@ -18,6 +18,11 @@ import {
   Tooltip,
   Alert,
   Classes,
+  Menu,
+  MenuItem,
+  MenuDivider,
+  Position,
+  Popover,
 } from "@blueprintjs/core";
 import Account from "./Account";
 import {
@@ -109,6 +114,7 @@ const ApplicationContainer = (props: IProps) => {
 
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
   const isMobile = useMedia(MOBILE, false);
+  const history = useHistory();
 
   React.useEffect(() => {
     // We have to pass location in here to correctly capture the original
@@ -132,6 +138,44 @@ const ApplicationContainer = (props: IProps) => {
     challenge &&
     challengeRequiresWorkspace(challenge) &&
     (CODEPRESS || hasMediaContent);
+
+  const isLoggedIn = userAuthenticated && user.profile !== null;
+
+  const mobileMenuItems = (
+    <Menu>
+      <MenuItem
+        icon="graph"
+        onClick={() => {
+          history.push("/workspace/sandbox");
+        }}
+        text="Sandbox"
+      />
+      <MenuItem
+        icon="user"
+        text="Account"
+        onClick={() => {
+          history.push("/account");
+        }}
+      />
+      <MenuDivider />
+      {isLoggedIn ? (
+        <MenuItem
+          icon="log-out"
+          text="Log out..."
+          onClick={() => {
+            logoutUser();
+            history.push("/logout");
+          }}
+        />
+      ) : (
+        <MenuItem
+          icon="log-in"
+          text="Login or Signup"
+          onClick={() => setSingleSignOnDialogState(true)}
+        />
+      )}
+    </Menu>
+  );
 
   return (
     <React.Fragment>
@@ -183,15 +227,17 @@ const ApplicationContainer = (props: IProps) => {
               />
             </Suspense>
           )}
-          <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
-            <Button
-              id="sandboxButton"
-              disabled={isSandbox}
-              style={{ margin: "0 20px" }}
-            >
-              Sandbox
-            </Button>
-          </Link>
+          {!isMobile && (
+            <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
+              <Button
+                id="sandboxButton"
+                disabled={isSandbox}
+                style={{ margin: "0 20px" }}
+              >
+                Sandbox
+              </Button>
+            </Link>
+          )}
           {displayNavigationArrows && (
             <DesktopOnly>
               <ButtonGroup>
@@ -200,7 +246,13 @@ const ApplicationContainer = (props: IProps) => {
               </ButtonGroup>
             </DesktopOnly>
           )}
-          {userAuthenticated && user.profile ? (
+          <div style={{ flexShrink: 0 }}>
+            <Popover content={mobileMenuItems} position={Position.BOTTOM_RIGHT}>
+              <Button style={{ marginRight: 20 }} text="•••" />
+            </Popover>
+          </div>
+          {/* user.profile is a redundant check... but now the types work */}
+          {isMobile ? null : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
@@ -384,6 +436,8 @@ const CreateAccountText = styled.h1`
 `;
 
 const AccountDropdownButton = styled.div`
+  flex-shrink: 0;
+
   .account-menu-dropdown {
     position: relative;
     display: inline-block;
