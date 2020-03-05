@@ -30,6 +30,10 @@ export const Loading = () => {
   return <h1>Loading...</h1>;
 };
 
+export const LoadingInline = () => {
+  return <small style={{ display: "inline-block" }}>Loading...</small>;
+};
+
 export const PageContainer = styled.div`
   width: 100%;
   height: 100%;

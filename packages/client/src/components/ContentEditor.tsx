@@ -1,10 +1,14 @@
 import React from "react";
 import { EditorProps } from "rich-markdown-editor";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { useHistory, withRouter, RouteComponentProps } from "react-router-dom";
 import toaster from "tools/toast-utils";
 import { ContentUtility } from "@pairwise/common";
 import styled from "styled-components";
 import { COLORS, SANDBOX_ID } from "tools/constants";
+import Modules, { ReduxStoreState } from "modules/root";
+import { connect } from "react-redux";
+import { timer } from "rxjs";
+import { map } from "rxjs/operators";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -18,35 +22,63 @@ const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
  * change if the editor is used in different places.
  *
  * @NOTE Render this within <Suspense />. React will throw a helpful error if not
+ * @NOTE Currently this has to be a class component if we want getSearchLinks to
+ * work... because of the way the underlying editor component requires a promise
+ * with results to come back we need a reference to this in order to get the
+ * latest search results. Without this reference we use `props` but it will get
+ * scoped in and stale.
  * ============================================================================
  */
-const ContentEditor = (props: EditorProps & RouteComponentProps) => (
-  <EditorExternalStyles>
-    <RichMarkdownEditor
-      theme={editorTheme}
-      onShowToast={message => {
-        toaster.toast.show({
-          message,
-        });
-      }}
-      onClickLink={href => {
-        const scrollTarget = getScrollTarget(href);
+class ContentEditor extends React.Component<Props> {
+  getSearchLinks = (searchTerm: string) => {
+    // Kick off a search request...
+    this.props.requestSearchResults(searchTerm);
 
-        if (scrollTarget) {
-          const el = document.getElementById(scrollTarget);
-          el?.scrollIntoView({
-            behavior: "smooth",
-          });
-        } else if (isInternalLink(href)) {
-          props.history.push(href);
-        } else {
-          window.open(href, "_blank");
-        }
-      }}
-      {...props}
-    />
-  </EditorExternalStyles>
-);
+    // An arbitrary amount of time later just pass the search results in
+    return timer(600)
+      .pipe(
+        map(() => {
+          return this.props.searchResults.map(x => ({
+            title: x.title,
+            url: `/workspace/${x.id}`,
+          }));
+        }),
+      )
+      .toPromise();
+  };
+
+  render() {
+    const { history } = this.props;
+    return (
+      <EditorExternalStyles>
+        <RichMarkdownEditor
+          theme={editorTheme}
+          onSearchLink={this.getSearchLinks}
+          onShowToast={message => {
+            toaster.toast.show({
+              message,
+            });
+          }}
+          onClickLink={href => {
+            const scrollTarget = getScrollTarget(href);
+
+            if (scrollTarget) {
+              const el = document.getElementById(scrollTarget);
+              el?.scrollIntoView({
+                behavior: "smooth",
+              });
+            } else if (isInternalLink(href)) {
+              history.push(href);
+            } else {
+              window.open(href, "_blank");
+            }
+          }}
+          {...this.props}
+        />
+      </EditorExternalStyles>
+    );
+  }
+}
 
 /**
  * Helper function to determine if onClickLink's href is custom scroll target.
@@ -146,9 +178,9 @@ const editorTheme = {
   text: editorColors.almostWhite,
   code: editorColors.almostWhite,
 
-  toolbarBackground: editorColors.white,
-  toolbarInput: editorColors.black10,
-  toolbarItem: editorColors.lightBlack,
+  toolbarBackground: "#3a3a3a",
+  toolbarInput: editorColors.white10,
+  toolbarItem: editorColors.almostWhite,
 
   blockToolbarBackground: editorColors.white,
   blockToolbarTrigger: editorColors.almostWhite,
@@ -233,4 +265,18 @@ const EditorExternalStyles = styled.div`
  * ============================================================================
  */
 
-export default withRouter(ContentEditor);
+const mapStateToProps = (state: ReduxStoreState) => ({
+  searchResults: Modules.selectors.challenges.getSearchResults(state),
+});
+
+const dispatchProps = {
+  requestSearchResults: Modules.actions.challenges.requestSearchResults,
+};
+
+type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+
+type Props = RouteComponentProps & ConnectProps & EditorProps;
+
+export default withRouter(
+  connect(mapStateToProps, dispatchProps)(ContentEditor),
+);

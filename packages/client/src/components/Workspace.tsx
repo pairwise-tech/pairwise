@@ -22,10 +22,10 @@ import {
 } from "../tools/code-worker";
 import {
   COLORS as C,
-  DIMENSIONS as D,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
 } from "../tools/constants";
+import { DIMENSIONS as D } from "../tools/dimensions";
 import toaster from "tools/toast-utils";
 import { types } from "../tools/jsx-types";
 import {
