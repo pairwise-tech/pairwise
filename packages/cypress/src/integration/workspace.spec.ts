@@ -17,7 +17,7 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.visit(`${CLIENT_APP_URL}/home`);
     cy.url().should("include", "home");
     cy.contains("Welcome to Pairwise!");
-    cy.contains("Courses:");
+    cy.contains("Courses");
     cy.get("#course-link-0").contains("Fullstack TypeScript");
     cy.get("#course-link-0-start").click({ force: true });
     cy.url().should("include", "workspace");
