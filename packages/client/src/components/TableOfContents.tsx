@@ -1,10 +1,10 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { Editor } from "slate-react";
 
 import { Block } from "slate";
 import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
-import { PROSE_MAX_WIDTH, COLORS } from "tools/constants";
+import { PROSE_MAX_WIDTH, COLORS, MOBILE } from "tools/constants";
 
 export default class TableOfContents extends React.Component<
   {
@@ -19,7 +19,7 @@ export default class TableOfContents extends React.Component<
 
   state = {
     isFixed: false,
-    left: PROSE_MAX_WIDTH + 40,
+    left: PROSE_MAX_WIDTH - 90 + 40,
   };
 
   componentDidMount() {
@@ -88,7 +88,7 @@ export default class TableOfContents extends React.Component<
 
     const box = parent.getBoundingClientRect();
     const isFixed = box.top < 40;
-    const left = box.width + (isFixed ? box.x : 0) + 40;
+    const left = isFixed ? box.x : 0;
 
     if (this.state.isFixed !== isFixed || this.state.left !== left) {
       this.setState({ isFixed, left });
@@ -111,6 +111,7 @@ export default class TableOfContents extends React.Component<
   render() {
     const { editor } = this.props;
     const headings = this.getHeadings();
+    const isMobile = window.matchMedia("(max-width: 900px)").matches;
 
     // If there are one or less headings in the document no need for a minimap
     if (headings.size <= 1) {
@@ -121,7 +122,11 @@ export default class TableOfContents extends React.Component<
       <Wrapper
         ref={this.wrapperRef}
         style={{
-          position: this.state.isFixed ? "fixed" : "absolute",
+          position: isMobile
+            ? "static"
+            : this.state.isFixed
+            ? "fixed"
+            : "absolute",
           top: this.state.isFixed ? 40 : 0,
           left: this.state.left,
         }}
@@ -179,6 +184,10 @@ const Wrapper = styled.div`
     font-size: 12px;
     border-bottom: 1px solid ${COLORS.LIGHT_GREY};
     background: ${COLORS.LIGHT_GREY};
+  }
+
+  @media ${MOBILE} {
+    margin-bottom: 20px;
   }
 
   @media print {

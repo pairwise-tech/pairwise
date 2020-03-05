@@ -240,7 +240,6 @@ const Input = styled(InputGroup)`
     transition: all 0.15s ease-out;
     background: #3a3a3a;
     width: 100%;
-    max-width: ${PROSE_MAX_WIDTH}px;
     display: block;
     &:hover {
       box-shadow: 0 0 0 1px #10ca92, 0 0 0 1px #10ca92,
@@ -257,7 +256,8 @@ const Input = styled(InputGroup)`
 const Box = styled.div`
   position: relative;
   flex: 1 100%;
-  margin-right: 20px;
+  margin-right: auto;
+  max-width: 700px;
 `;
 
 // NOTE: The z-index on this is meant to make it appaer above the nav overlay

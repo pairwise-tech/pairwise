@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
 import { Dialog, TextArea, Button } from "@blueprintjs/core";
 import FeedbackTypeMenu from "./FeedbackTypeMenu";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 /** ===========================================================================
  * Types & Config
