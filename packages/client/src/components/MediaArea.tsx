@@ -169,11 +169,11 @@ const MediaArea = ({
   );
 };
 
-// This weirdness is just for typing... the media area needs a fimrly defined
+// This weirdness is just for type checking... the media area needs a firmly defined
 // challenge otherwise the react hooks get angry that they are being called
-// conditionally. The thing is, they dependf on the challenge so they need the
+// conditionally. The thing is, they depends on the challenge so they need the
 // challenge to be defined
-// NOTE: Maybe this logic could maybe be a HOC
+// NOTE: Maybe this logic could be a HOC someday.
 const MediaAreaContainer = (props: MediaAreaContainerProps) => {
   if (!props.challenge) {
     return <Loading />;
