@@ -83,7 +83,7 @@ const buildResultMatch = (
   // before padding is shorter so that the match will appear more towards the
   // right in the excerpt
   const matchPaddingBefore = 30;
-  const matchPaddingAfter = 70;
+  const matchPaddingAfter = 100;
 
   // Build up an excerpt that browser can show the user.
   //
