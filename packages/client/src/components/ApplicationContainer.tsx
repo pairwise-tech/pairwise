@@ -144,7 +144,7 @@ const ApplicationContainer = (props: IProps) => {
   const mobileMenuItems = (
     <Menu>
       <MenuItem
-        icon="graph"
+        icon="code"
         onClick={() => {
           history.push("/workspace/sandbox");
         }}
