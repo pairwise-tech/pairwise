@@ -4,7 +4,7 @@ import { Editor } from "slate-react";
 
 import { Block } from "slate";
 import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
-import { PROSE_MAX_WIDTH, COLORS } from "tools/constants";
+import { PROSE_MAX_WIDTH, COLORS, MOBILE } from "tools/constants";
 
 export default class TableOfContents extends React.Component<
   {
@@ -111,6 +111,7 @@ export default class TableOfContents extends React.Component<
   render() {
     const { editor } = this.props;
     const headings = this.getHeadings();
+    const isMobile = window.matchMedia(MOBILE).matches;
 
     // If there are one or less headings in the document no need for a minimap
     if (headings.size <= 1) {
@@ -121,7 +122,11 @@ export default class TableOfContents extends React.Component<
       <Wrapper
         ref={this.wrapperRef}
         style={{
-          position: this.state.isFixed ? "fixed" : "absolute",
+          position: isMobile
+            ? "static"
+            : this.state.isFixed
+            ? "fixed"
+            : "absolute",
           top: this.state.isFixed ? 40 : 0,
           left: this.state.left,
         }}
@@ -158,6 +163,7 @@ export default class TableOfContents extends React.Component<
 }
 
 const Wrapper = styled.div`
+  positoin: absolute;
   font-family: ${props => props.theme.fontFamily};
   font-weight: ${props => props.theme.fontWeight};
   font-size: 1em;
@@ -179,6 +185,10 @@ const Wrapper = styled.div`
     font-size: 12px;
     border-bottom: 1px solid ${COLORS.LIGHT_GREY};
     background: ${COLORS.LIGHT_GREY};
+  }
+
+  @media ${MOBILE} {
+    margin-bottom: 20px;
   }
 
   @media print {
