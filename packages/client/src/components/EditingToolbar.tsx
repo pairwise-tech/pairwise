@@ -111,13 +111,18 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
 
   // NOTE: I'm defaulting the challenge id to an empty string simply to get past ts errors.
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div
+      style={{
+        display: hidden ? "none" : "flex",
+        alignItems: "center",
+        top: 0,
+        left: 0,
+      }}
+    >
       <Switch
         style={{
           marginBottom: 0,
           marginRight: 10,
-          transition: "opacity 0.2s ease-out",
-          opacity: hidden ? 0 : 1,
         }}
         checked={isEditMode}
         onChange={handleChange}

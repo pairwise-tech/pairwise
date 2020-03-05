@@ -211,10 +211,11 @@ const ApplicationContainer = (props: IProps) => {
         )}
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
           <SearchBox />
+          {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
+          <div style={{ marginLeft: 20 }} />
           {!isMobile && showFeedbackButton && (
             <Tooltip content="Submit Feedback" position="bottom">
               <IconButton
-                style={{ marginLeft: 20 }}
                 icon="help"
                 aria-label="open/close feedback dialog"
                 onClick={toggleFeedbackDialogOpen}
