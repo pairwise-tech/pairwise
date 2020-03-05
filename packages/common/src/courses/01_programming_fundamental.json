@@ -284,7 +284,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "supplementaryContent": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
+          "supplementaryContent": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language: TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
         },
         {
           "id": "0gih2c1M",
@@ -301,34 +301,34 @@
           "id": "w3bc0PeO",
           "type": "typescript",
           "title": "Numbers",
-          "content": "In TypeScript, numbers are expressed literally, and are given the type `number` (not to be confused with `Number`, with a capital \"N\"). As you might expect, numbers can be operated on mathematically, and are used for representing numeric values in our programs.\n\nIn TypeScript, numbers can be whole, or fractional (i.e. have one or more decimal places).\n\n- Modify the code below so that `whole` is equal to `1` and `half` is equal to `.5`.",
+          "content": "Modify the code below so that `whole` is equal to `1` and `half` is equal to `.5`.\n",
           "testCode": "test('`whole` should be equal to `1`', () => expect(whole).toBe(1));\ntest('`half` should be equal to `.5`', () => expect(half).toBe(.5));",
           "videoUrl": "",
           "starterCode": "const whole = 0;\nconst half = 0;",
           "solutionCode": "const whole = 1;\nconst half = .5;",
-          "supplementaryContent": "## `number` _not_ `Number`\nThis is an important distinction. In TypeScript, _`number`_ refers to the data type, while `Number` refers to the  __global__, and more concrete, `Number` object, a concept that goes beyond the scope of this lesson. For now, it's just important that you understand the distinction, and that TypeScript is a case-sensitive programming language. While this may seem like a small difference, remember: in the case of `number` vs. `Number`, case matters!\n\n## Just one `number`\nIn the challenge above, we discussed that data with the type `number` in TypeScript can represent both whole and fractional values. While it is not important in the context of this course, you might find it interesting to know that commonly, in other program languages, fractional values, or _floating point_ values, are represented by another data type. TypeScript is unique in that all numbers are considered floating point values."
+          "supplementaryContent": "In TypeScript, numbers are expressed literally, and are given the type `number` \\(not to be confused with `Number`, with a capital \"N\"\\). As you might expect, numbers can be operated on mathematically, and are used for representing numeric values in our programs.\n\nIn TypeScript, numbers can be whole, or fractional \\(i.e. have one or more decimal places\\).\n\n## number not Number\n\nThis is an important distinction. In TypeScript, _`number`_ refers to the data type, while `Number` refers to the  __global__, and more concrete, `Number` object, a concept that goes beyond the scope of this lesson. For now, it's just important that you understand the distinction, and that TypeScript is a case\\-sensitive programming language. While this may seem like a small difference, remember: in the case of `number` vs\\. `Number`, case matters\\!\n\n## Just one number\n\nIn the challenge above, we discussed that data with the type `number` in TypeScript can represent both whole and fractional values. While it is not important in the context of this course, you might find it interesting to know that commonly, in other program languages, fractional values, or _floating point_ values, are represented by another data type. TypeScript is unique in that all numbers are considered floating point values."
         },
         {
           "id": "UnMCiU0Z",
           "type": "typescript",
           "title": "Strings",
-          "content": "In TypeScript, strings are used to represent text, or data that can be represented by text, and are given the type `string` \\(not to be confused with `String` – noticing a pattern here?\\). Strings are expressed as a string of characters surrounded by single or double quotes, `\"like this\"`.\n\n* Modify `greeting` below so that it says \"Hello, my name is \" followed by your name\n\n",
+          "content": "Modify `greeting` below so that it says \"Hello, my name is \" followed by your name\n",
           "testCode": "test('`greeting` should equal the string `\"Hello, my name is {your name here}\"`', () => assert(/hello, my name is \\w+/i.test(greeting)))",
           "videoUrl": "",
           "starterCode": "const greeting = \"\";",
           "solutionCode": "const greeting = \"Hello, my name is Pete\";",
-          "supplementaryContent": "## string not String\n\nOk, last warning\\! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway: TypeScript is a **case\\-sensitive** language, and it is _not_ safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip:** TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc.\n"
+          "supplementaryContent": "In TypeScript, strings are used to represent text, or data that can be represented by text, and are given the type `string` \\(not to be confused with `String` – noticing a pattern here?\\). Strings are expressed as a string of characters surrounded by single or double quotes, `\"like this\"`.\n\n## string not String\n\nOk, last warning\\! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway: TypeScript is a **case\\-sensitive** language, and it is _not_ safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip**\n> TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc.\n"
         },
         {
           "id": "qNF6Faom",
           "type": "typescript",
           "title": "Booleans",
-          "content": "Booleans, are perhaps the simplest of the primitive data types, and in TypeScript,  can be expressed as either `true` or `false`. They are given the type `boolean`. Booleans are the primary way that we handle \"logical\" decision making, and, in fact, many expressions can be _evaluated_ as booleans, but we'll get into this more later.\n\n* Look at the following example, and change `false` to `true`.\n* Notice what happens\\!\n\n\nDon't worry, there's a lot going on here that we haven't covered yet. For now, just focus on the challenge at hand.",
+          "content": "* Look at the following example, and change `false` to `true`.\n* Notice what happens\\!\n\n\nDon't worry, there's a lot going on here that we haven't covered yet. For now, just focus on the challenge at hand.",
           "testCode": "test('`str` should be equal to `\"Hello, TypeScript!\"`', () =>\n  expect(str).toBe(\"Hello, TypeScript!\"));\ntest(\"`isTrue` should be of type `boolean`\", () =>\n  expect(typeof isTrue).toBe(\"boolean\"));\ntest(\"`isTrue` should be `true`\", () =>\n  expect(isTrue).toBe(true));\n",
           "videoUrl": "",
           "starterCode": "let str = \"\";\nconst isTrue = false;\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
           "solutionCode": "let str = \"\";\nconst isTrue = true;\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
-          "supplementaryContent": ""
+          "supplementaryContent": "Booleans, are perhaps the simplest of the primitive data types, and in TypeScript,  can be expressed as either `true` or `false`. They are given the type `boolean`. Booleans are the primary way that we handle \"logical\" decision making, and, in fact, many expressions can be _evaluated_ as booleans, but we'll get into this more later.\n\n```\nconst isTrue = true;\nconst isFalse = false;\n\nif (isTrue) {\n  // do something cool!\n}\n\n```\n"
         },
         {
           "id": "p2Iu3bYN",
@@ -427,7 +427,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "supplementaryContent": "In our previous lessons, we've seen a lot of code that looks something like this:\n\n```typescript\nconst foo = 100;\n\n```\n\nLet's finally take a closer look at what's going on here.  \n\n## What is a Variable?\n\nIn this example, `foo`  is what's known as a variable. Variables store _references_ to data, or _values_, which we can use in our programs. Here, `foo`  is of the type `number` and has a value of `100`.  `100` is stored in memory, but the variable `foo` holds a reference to that memory, so it can be called up again and again, and used throughout the program. This is an important concept:\n\n> Variables store references to values stored in memory, and do not store the values themselves.\n\nIn TypeScript, to give meaning to a variable, it must be _declared_, _initialized_, and _assigned_ a value. Let's break this down.\n\n## Declaration & Initialization\n\nThroughout the next several lessons, we'll primarily be using they keywords `let`  and `const` to declare our variables. Each of these keywords has a slightly different behavior, which we'll explore in more detail later.\n\nThe syntax for variable declaration requires one of these keywords and an identifier, or name, to act as the variable's unique identifier.  When we declare a variable, it is automatically _initialized_, and memory is allocated for it. Once initialized, a variable will be `undefined` until we assign a value to it. \n\n```typescript\nlet baz; // baz is undefined\n\n```\n\n## Assignment\n\nThat's where the `=` operator comes in. Assignment is pretty intuitive: to the left of the `=` is the variable that we're assigning to, and to the right of it is the value that we're assigning to that variable. That's it\\!\n\nA variable can be declared and initialized first, and assigned a value later in the program. \n\n```typescript\nlet baz; // baz has been declared and intialized, and is undefined\n// do something...\nbaz = \"a string\"; // baz has been assigned a value\n\n```\n\nAlternatively, a variable can be declared, initialized, and given a value in a single statement.\n\n```typescript\nconst bar = \"cool!\"; // bar has been declared, initialized, and assigned a value\n\n```\n\nA quick note here: the process of assigning a variable a value for the first time \\(as in the above example\\) is also sometimes referred to as \"initialization\", since we're \"initializing\" the variable with a value. However, from a theoretical standpoint, true \"initialization\" happens when the variable is declared and the JavaScript engine \\(which ultimately runs all of our TypeScript code, since TypeScript is compiled to JavaScript before execution\\) allocates memory for it.\n\nWe're going to dive deeper into variables and assignment in the next few lessons.\n\nLet's go\\!"
+          "supplementaryContent": "In our previous lessons, we've seen a lot of code that looks something like this:\n\n```typescript\nconst foo = 100;\n\n```\n\nLet's finally take a closer look at what's going on here.  \n\n## What is a Variable?\n\nIn this example, `foo`  is what's known as a variable. Variables store _references_ to data, or _values_, which we can use in our programs. Here, `foo`  is of the type `number` and has a value of `100`.  `100` is stored in memory, but the variable `foo` holds a reference to that memory, so it can be called up again and again, and used throughout the program. This is an important concept:\n\n> Variables store references to values stored in memory, and do not store the values themselves.\n\nIn TypeScript, to give meaning to a variable, it must be _declared_, _initialized_, and _assigned_ a value. Let's break this down.\n\n## Declaration & Initialization\n\nThroughout the next several lessons, we'll primarily be using they keywords `let`  and `const` to declare our variables. Each of these keywords has a slightly different behavior, which we'll explore in more detail later.\n\nThe syntax for variable declaration requires one of these keywords and an identifier, or name, to act as the variable's unique identifier.  When we declare a variable, it is automatically _initialized_, and memory is allocated for it. Once initialized, a variable will be `undefined` until we assign a value to it. \n\n```typescript\nlet baz; // baz is undefined\n\n```\n\n## Assignment\n\nThat's where the `=` operator comes in. Assignment is pretty intuitive: to the left of the `=` is the variable that we're assigning a value to \\(the left operand\\), and to the right of it is the value that we're assigning \\(the right operand\\).  In other words, the assignment operator gives the value of its right operand to its left operand. That's it\\!\n\nA variable can be declared and initialized first, and assigned a value later in the program. \n\n```typescript\nlet baz; // baz has been declared and intialized, and is undefined\n// do something...\nbaz = \"a string\"; // baz has been assigned a value\n\n```\n\nAlternatively, a variable can be declared, initialized, and given a value in a single statement.\n\n```typescript\nconst bar = \"cool!\"; // bar has been declared, initialized, and assigned a value\n\n```\n\nA quick note here: the process of assigning a variable a value for the first time \\(as in the above example\\) is also sometimes referred to as \"initialization\", since we're \"initializing\" the variable with a value. However, from a theoretical standpoint, true \"initialization\" happens when the variable is declared and the JavaScript engine \\(which ultimately runs all of our TypeScript code, since TypeScript is compiled to JavaScript before execution\\) allocates memory for it.\n\nWe're going to dive deeper into variables and assignment in the next few lessons.\n\nLet's go\\!"
         },
         {
           "id": "JALDb575",
@@ -466,23 +466,122 @@
           "id": "VppIs2a9",
           "type": "typescript",
           "title": "Reassignment with \"let\"",
-          "content": "Variables declared using the `let` keyword can be reassigned. In other words, a variable declared with `let`  can be assigned a new value any time after its been declared, initialized, and assigned an initial value. In TypeScript, however, unless a variable declared with `let` is given the type `any`, subsequent assignments must respect the variable's initial type, whether it was explicitly annotated or not.\n\nFor example:\n\n```typescript\nlet str = \"my string\";\nstr = \"another string\"; // ok\n\nlet num = 42;\nnum = \"the meaning of life\"; // not ok!\n\n```\n\n* In the editor below, assign the new values `\"learn to code!\"`, `false` , and `100` to the appropriate variables.\n\n",
+          "content": "In the editor below, assign the new values `\"learn to code!\"`, `false` , and `100` to the appropriate variables. See [below](/scrollTarget/supplementary-content-container) for an example if you get stuck.\n",
           "testCode": "test(\"`foo` should be assigned a new value according to the challenge instructions\", () =>\n  expect(foo).toBe(100));\n\ntest(\"`baz` should be assigned a new value according to the challenge instructions\", () =>\n  expect(baz).toBe(\"learn to code!\"));\n\ntest(\"`iCanBeReassigned` should be assigned a new value according to the challenge instructions\", () =>\n  expect(iCanBeReassigned).toBe(false));\n",
           "videoUrl": "",
           "starterCode": "let foo: any = \"give me a new value!\";\nlet baz: string = \"me too!\";\nlet iCanBeReassigned = true;\n\n// write your code below!\n",
           "solutionCode": "let foo: any = \"give me a new value!\";\nlet baz: string = \"me too!\";\nlet iCanBeReassigned = true;\n\n// write your code below!\nfoo = 100;\nbaz = \"learn to code!\";\niCanBeReassigned = false;",
-          "supplementaryContent": ""
+          "supplementaryContent": "Variables declared using the `let` keyword can be reassigned. In other words, a variable declared with `let`  can be assigned a new value any time after its been declared, initialized, and assigned an initial value:\n\n```\nlet x = \"I'm not constant.\";\nx = \"see!\";\n\n```\n\nIn TypeScript, however, unless a variable declared with `let` is given the type `any`, subsequent assignments must respect the variable's initial type, whether it was explicitly annotated or not.\n\nFor example:\n\n```typescript\nlet str = \"my string\";\nstr = \"another string\"; // ok\n\nlet num = 42;\nnum = \"the meaning of life\"; // not ok!\n\nlet iCanBeAnything: any = true;\niCanBeAnything = \"now I'm a string\"; // ok, but discouraged!\n\n```\n\n`any` tends to make our programs less safe, so try to avoid code like in this last example."
         },
         {
           "id": "g2CWrS2M",
           "type": "typescript",
           "title": "\"let\" vs. \"const\"",
-          "content": "In addition to the `let` keyword, we've also seen variables declared with the keyword `const` throughout this section. `const` is short for \"constant\", and unlike variables declared with `let`, variables declared with `const` cannot be reassigned. Otherwise, they behave very similarly.\n\n* Uncomment the code in the editor below, hover over `pairwise`, and note the error.\n* Fix the problem by assigning `pairwise` the string `\"pairwise\"`.\n* On line 2, try to assign `pairwise` a new value and see what happens.\n\n\nYou can read more about some nuances of the `const` keyword below.",
+          "content": "* Uncomment the code in the editor below, hover over `pairwise`, and note the error.\n* Fix the problem by assigning `pairwise` the string `\"pairwise\"`.\n* On line 2, try to assign `pairwise` a new value and see what happens.\n\n",
           "testCode": "test('`pairwise` should be equal to the string `\"pairwise\"`', () =>\n  expect(pairwise).toBe(\"pairwise\"));\n",
           "videoUrl": "",
           "starterCode": "// const pairwise: string;",
           "solutionCode": "const pairwise: string = \"pairwise\";",
-          "supplementaryContent": "## Constant does not mean immutable\n\nWhile it is true that variables declared with `const` cannot be reassigned, this _does not_ mean that values assigned to them cannot change, or _mutate_ over time.\n\nFor primitive data types like the ones we've learned about so far, this nuance does not apply. In other words, if you assign the string `\"immutable\"` to a variable declared with `const`, you can always count on that variable being equal to the string `\"immutable\"`. Likewise, if you assign it a number, a boolean, null, or undefined. These types are immutable by nature, and values of these types cannot change over time \\(if a string or number appears to change over time, it is really a new instance of a string or number\\).\n\nFor more complex data types, though, `const` can trip you up if you're not careful. Check out the following examples using arrays:\n\n```\nconst arr = [1, 2, 3];\narr = [1, 2, 3, 4]; // error! arr cannot be reassigned\n\n```\n\nLike you would expect, you cannot assign `arr` a new array \\(or any other value\\). However:\n\n```\nconst arr = [1, 2, 3];\narr.push(4);\n// here, .push(4) adds the number 4 to the end of the list\n// the list now equals [1, 2, 3, 4]\n\n```\n\nAlthough we didn't assign `arr` a new value, its current value is different than the value we originally assigned to it. More precisely, the array that `arr` references has been _mutated_.\n\nWe will explore the concept of immutability more in future lessons, but for now, you should be aware that `const` only ensures that a variable cannot be reassigned, _not_ that the value it references is immutable.\n"
+          "supplementaryContent": "In addition to the `let` keyword, we've also seen variables declared with `const` throughout this section. `const` is short for \"constant\", and unlike variables declared with `let`, variables declared with `const` cannot be reassigned. Otherwise, they behave very similarly.\n\n> **Tip**\n> In general, when writing TypeScript, `const` is preferred over `let` unless your variable is going to be declared without an initial value, or will be reassigned later in the program. \n\n## Constant does not mean immutable\n\nWhile it is true that variables declared with `const` cannot be reassigned, this _does not_ mean that values assigned to them cannot change, or _mutate_ over time.\n\nFor primitive data types like the ones we've learned about so far, this nuance does not apply. In other words, if you assign the string `\"immutable\"` to a variable declared with `const`, you can always count on that variable being equal to the string `\"immutable\"`. Likewise, if you assign it a number, a boolean, null, or undefined. These types are immutable by nature, and values of these types cannot change over time \\(if a string or number appears to change over time, it is really a new instance of a string or number\\).\n\nFor more complex data types, though, `const` can trip you up if you're not careful. Check out the following examples using arrays:\n\n```\nconst arr = [1, 2, 3];\narr = [1, 2, 3, 4]; // error! arr cannot be reassigned\n\n```\n\nLike you would expect, you cannot assign `arr` a new array \\(or any other value\\). However:\n\n```\nconst arr = [1, 2, 3];\narr.push(4);\n// here, .push(4) adds the number 4 to the end of the list\n// the list now equals [1, 2, 3, 4]\n\n```\n\nAlthough we didn't assign `arr` a new value, its current value is different than the value we originally assigned to it. More precisely, the array that `arr` references has been _mutated_.\n\nWe will explore the concept of immutability more in future lessons, but for now, you should be aware that `const` only ensures that a variable cannot be reassigned, _not_ that the value it references is immutable."
+        },
+        {
+          "id": "fvvYrahy",
+          "type": "section",
+          "title": "Arithmetic Operators",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "Arithmetic operators in TypeScript are one of the primary ways in which we deal with numerical data. In programming in general, being able to perform simple and complex calculations on numbers is essential in many programs.\n\nThe operators we'll cover in this section give us the basic building blocks to be able to work with numbers in our code. We'll look at how to add, subtract, divide, and multiply numbers, as well as a few other operations that are incredibly useful.\n\nGo ahead to the next challenge and lets get started\\! "
+        },
+        {
+          "id": "-jkgXsag",
+          "type": "typescript",
+          "title": "The Addition Operator",
+          "content": "* Give `num1` and `num2` values so that their sum equals `100`.\n* On an empty line, declare a variable named `sum` and use the `+` operator to assign it `num1` plus `num2` .\n\n",
+          "testCode": "test(\"A variable named `sum` should be declared and be of the type `number`.\", () =>\n  expect(typeof sum).toBe(\"number\"));\n\ntest(\"`sum` should equal `100`.\", () => expect(sum).toBe(100));\n",
+          "videoUrl": "",
+          "starterCode": "let num1: number;\nlet num2: number;\n\n",
+          "solutionCode": "let num1: number = 30;\nlet num2: number = 70;\n\nconst sum = num1 + num2;",
+          "supplementaryContent": "In TypeScript, the `+`, or addition operator, behaves much like you think it will. It operates on two numbers, or operands \\(which can be number literals, or variables that represent numbers\\), and adds the two operands together:\n\n```typescript\nconst num = 1 + 1; // num = 2\n\n```\n"
+        },
+        {
+          "id": "H0MjLq1p",
+          "type": "typescript",
+          "title": "The Subtraction Operator",
+          "content": "* On an empty line, declare a variable named `difference` and assign it an expression which subtracts a number from `twentyThree` so that `difference` equals `10`.\n* Feel free to subtract a number literal, or declare a new variable to subtract from `twentyThree`.\n\n",
+          "testCode": "test(\"A variable named `difference` should be declared and be of the type `number`.\", () =>\n    expect(typeof difference).toBe(\"number\"));\n\ntest(\"`difference` should equal `10`.\", () => expect(difference).toBe(10));",
+          "videoUrl": "",
+          "starterCode": "const twentyThree = 23;",
+          "solutionCode": "const twentyThree = 23;\n\nconst difference = twentyThree - 13;\n",
+          "supplementaryContent": "Opposite to the addition operator, is the `-`, or subtraction operator. The subtraction operator takes two numbers as operands and subtracts them:\n\n```typescript\nconst num = 14 - 5; // 9\n\n```\n\nLike the addition operator \\(and all the arithmetic operators\\), the subtraction operator's operands can be number literals \\(like in the above example\\), or variables that represent numbers:\n\n```\nconst x = 92.42;\nconst y = 14.83;\nconst diff = y - x; // -77.59\n\n```\n"
+        },
+        {
+          "id": "_gO2lskh",
+          "type": "typescript",
+          "title": "The Multipication Operator",
+          "content": "* Declare two variables named `factor1` and `factor2` and assign them numbers whose product equals `63`.\n* Declare a variable named `product` and, using the `*` operator, assign it `factor1` multiplied by `factor2`.\n\n",
+          "testCode": "test(\"A variable named `product` should be declared and be of the type `number`.\", () =>\n    expect(typeof product).toBe(\"number\"));\n\ntest(\"`product` should equal `63`.\", () => expect(product).toBe(63));",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "const factor1 = 9;\nconst factor2 = 7;\n\nconst product = factor1 * factor2;",
+          "supplementaryContent": "For multiplication, we have the `*` operator\\. This binary operator \\(takes two operands\\) is straightforward, just like the addition and subtraction operator: it multiplies its two numeric operands.\n\n```\nconst x = 534;\nconst product = x * 23.24; // 12410.16\n\n```\n"
+        },
+        {
+          "id": "fuZBwqNC",
+          "type": "typescript",
+          "title": "The Division Operator",
+          "content": "In the editor below, declare a variable named `quotient` and use the `/` operator to assign it an expression which equals `243`.\n",
+          "testCode": "test(\"A variable named `quotient` should be declared and be of the type `number`.\", () =>\n    expect(typeof quotient).toBe(\"number\"));\n\ntest(\"`quotient` should equal `243`.\", () => expect(quotient).toBe(243));",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "const quotient = 486 / 2;",
+          "supplementaryContent": "Opposite the multiplication operator, is the division operator, or `/`. Like all of the basic arithmetic operators \\(`+`, `-`, `*`, `/`\\), the division operator is binary, and as you would expect, it divides its two operands:\n\n```typescript\nconst quotient = 98230 / 232; // 423.4051724137931\n\n```\n"
+        },
+        {
+          "id": "Av840s7X",
+          "type": "typescript",
+          "title": "The Increment Operator",
+          "content": "Uncomment line 2 and hover over `notCool`. This is very useful\\! See [below](/scrollTarget/supplementary-content-container) for an explanation.",
+          "testCode": "test('`notCool` should be of type number', () => expect(typeof notCool).toBe(\"number\"));",
+          "videoUrl": "",
+          "starterCode": "const notCool = 3;\n// notCool++;",
+          "solutionCode": "const notCool = 3;",
+          "supplementaryContent": "The increment operator does exactly what its name promises it will do. It increments its operand\\! Unlike the operators we've seen so far, the `++` operator is a unary operator, meaning it only takes one operand:\n\n```\nlet x = 3;\nx++; // x = 4\n\n```\n\nSince variables declared with `const` cannot be reassigned, and incrementing a variable after its been assigned a value is tantamount to reassignment, only variables declared with `let` can be incremented in this way. \n\nThis is where TypeScript's type system shines\\! In a JavaScript program, the code in the example [above](/scrollTarget/root) would result in a run\\-time `TypeError`, meaning the error would occur during the program's execution, and users of the application would likely notice the problem. Not good\\! However, TypeScript _prevents_ this error at compile\\-time, and its linter warns us as we're coding."
+        },
+        {
+          "id": "Ib5T7-Ll",
+          "type": "typescript",
+          "title": "The Increment and Decrement Operators",
+          "content": "Ok, we took a little detour to drive home the point of why we write TypeScript instead of JavaScript in the first place. But now let's see the `++` operator in action.\n\n* Assign `b` an expression where `a` is incremented with the `++` operator _postfix_\n* Assign `c` an expression where `b`  is incremented with the `++` operator _prefix_\n\n",
+          "testCode": "test('`a` should be of type `number`', () => expect(typeof a).toBe(\"number\"));\ntest('`b` should be of type `number`', () => expect(typeof b).toBe(\"number\"));\ntest('`c` should be of type `number`', () => expect(typeof c).toBe(\"number\"));\ntest('`a` should equal `101`', () => expect(a).toBe(101));\ntest('`b` should equal `101`', () => expect(a).toBe(101));\ntest('`c` should equal `101`', () => expect(a).toBe(101));\n",
+          "videoUrl": "",
+          "starterCode": "let a = 100;\nlet b: number;\nlet c: number;",
+          "solutionCode": "let a = 100;\nlet b: number = a++;\nlet c: number = ++b;",
+          "supplementaryContent": "## The Increment Operator\n\nThere are a couple of nuances to note about the increment operator. The increment operator can be used either _prefix_ or _postfix_, meaning either _before_, or _after_, its operand.\n\n```typescript\nlet a = 3;\nlet b = 3;\nlet c = ++a; // prefix usage\nlet d = b++; // postfix usage\n\n```\n\nWhile these expression look similar, their behavior is slightly different. The prefix operator increments its operand and returns its value _after being incremented_, while the postfix operator increments its operand and returns its value _before being incremented_. Let's take a look again with some results:\n\n```typescript\nlet a = 3;\nlet b = 3;\nlet c = ++a; // c = 4 prefix returned a after being incremented\nlet d = b++; // d = 3 postfix returned b before being incremented\n// a = 4, b = 4 both a and b were incremented\n\n```\n\n\n## The Decrement Operator\n\nSimilar to the increment operator, is the decrement, or `--` operator\\. It's a unary operator that behaves much the same way as the `++` operator, except that it decrements its numeric operand, rather than increments it. \n\n```\nlet x = 100;\nx--; // x = 99\n\n```\n\nLike the increment operator, `--` can only be used on variables declared with `let`. It also has identical prefix and postfix behaviors \\(if used prefix, it returns the value of its operand after being decremented, and vice versa if used postfix\\).\n\n```\nlet x = 100;\nlet q = 100;\nlet y = --x; // y = 99, x = 99\nlet z = q--; // z = 100, q = 99\n\n```\n\nWe're not going to cover this operator in a separate lesson, because its behavior is so similar to what we've covered here. But it can be a useful operator, so be aware of it\\!"
+        },
+        {
+          "id": "ArSBMKtk",
+          "type": "typescript",
+          "title": "The Remainder Operator",
+          "content": "A very common use\\-case for the `%` operator is to test whether or not a number is even or odd. We can accomplish this by comparing the result of `num % 2` with `0` , e.g. `num % 2 === 0`  \\(the `===` operator determines if two operands are equal, which we'll learn more about in a later section\\). If the remainder is `0` we know the number is even, if its not, we know its odd. Pretty handy\\! \n\n* Assign a number to `num` so that `isEven` evaluates to `true`.\n\n",
+          "testCode": "test(\"`num` should be of type `number`\", () =>\n  expect(typeof num).toBe(\"number\"));\ntest(\"`isEven` should be of type `boolean`\", () =>\n  expect(typeof isEven).toBe(\"boolean\"));\ntest(\"`isEven` should be `true`\", () => expect(isEven).toBe(true));\n",
+          "videoUrl": "",
+          "starterCode": "const num = 5;\nconst isEven = num % 2 === 0;\n",
+          "solutionCode": "const num = 6;\nconst isEven = num % 2 === 0;\n",
+          "supplementaryContent": "The remainder, or `%`, operator \\(also known as the modulus or modulo operator\\) returns the remainder of its two operands' division:\n\n```\nconst remainder = 20 % 3; // 2\n\n```\n\nThe expression `20 % 3` can be thought of as \"the remainder of 20 divided by 3.\"  \n\nOne important note about the modulus operator is that the return value always takes on the sign of the dividend, or the left\\-hand operand \\(the right\\-hand operand is the divisor\\):\n\n```\nconst dividend = -17;\nconst divisor = 2;\ndividend % divisor; // -1\n\n```\n"
+        },
+        {
+          "id": "WYcydtZx",
+          "type": "media",
+          "title": "Other Arithmetic Operators",
+          "content": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "supplementaryContent": "There are a few other arithmetic operators to be aware of. Let's take a quick look.\n\n## The Exponentiation Operator\n\nThe exponentiation or, `**`, operator raises the left\\-hand operand to the power of the right hand operand:\n\n```\nconst fourCubed = 4 ** 3; // 64\n\n```\n\n## The Unary Plus Operator\n\nThe unary plus, or `+`, operator, as its name suggests, only takes a single operand, and is used _prefix_, or immediately before its operand. Its only purpose is to convert its operand to a number \\(if it isn't one already\\) and return the result. Note that the operand itself _is not_ affected\\.\n\n```\nconst fiveAsString = \"5\";\nconst fiveAsNumber = +fiveAsString;\n// fiveAsString = \"5\", fiveAsNumber = 5\n\n```\n\nTry this out in the [sandbox](/workspace/sandbox) on more complex string representations of numbers \\(e.g. `\"-23543.0274\"`\\), and on values other than strings and see what you get\\! For instance, what do you expect the result to be when you use the unary plus operator on booleans or on `null`?\n\n```\nconst isTrue = true;\n+isTrue // ??\n\n```\n\nExperimentation and fun aside, It should be noted here, however, that there are other, more preferred ways to convert values to numbers in TypeScript. The unary plus operator is borderline esoteric, but will work just fine for simple use\\-cases. For more complex cases, other methods are preferred:\n\n```\nconst notReallyPi = \"3.14IsPie...err...ImeanPi\";\nconst definitelyNotPi = +notReallyPi; // NaN (not a number)\nconst pi = parseFloat(notReallyPi); // 3.14\n\n```\n\nThis example is obviously contrived, but you get the picture.\n\n## The Unary Negation Operator\n\nThe unary negation, or `-`, operator negates the value of its operand. If its operand is not a number, it also converts it to a number before negating it.\n\n```\nconst threeAsNumber = 3;\nconst threeAsString = \"3\";\n-threeAsString; // -3\n-threeAsNumber; // -3\n\n```\n"
         },
         {
           "id": "6T3GXc4ap",
