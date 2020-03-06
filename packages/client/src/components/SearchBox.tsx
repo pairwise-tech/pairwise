@@ -8,7 +8,7 @@ import { SearchResult } from "modules/challenges/types";
 import reactStringReplace from "react-string-replace";
 import { useHistory } from "react-router-dom";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { PROSE_MAX_WIDTH } from "tools/constants";
+import { MOBILE } from "tools/constants";
 
 // NOTE: isClosed is kept in state rather than simply using the presence of
 // search results becuase sometimes we want the search pane to be closed even if
@@ -269,7 +269,7 @@ const ResultBox = styled.div`
   top: 100%;
   left: auto;
   right: 0;
-  min-width: 360px;
+  min-width: 300px;
   width: 100%;
   background: #3a3a3a;
   max-height: 80vh;
@@ -277,6 +277,11 @@ const ResultBox = styled.div`
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.55);
   padding-bottom: ${SEARCH_TITLE_HEIGHT}px;
   border: 1px solid #4c4c4c;
+  @media ${MOBILE} {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const mapStateToProps = (state: ReduxStoreState) => ({

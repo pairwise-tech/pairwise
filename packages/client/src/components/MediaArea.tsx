@@ -15,7 +15,6 @@ import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 import ContentEditor from "./ContentEditor";
 import { Challenge } from "@pairwise/common";
-import { authSelector } from "modules/auth/selectors";
 
 const TableOfContentsPlugin = (): SlatePlugin => {
   const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {
@@ -117,6 +116,7 @@ const MediaArea = ({
           value={title}
           onChange={handleTitle}
           disabled={!isEditMode}
+          multiline
         />
       </TitleHeader>
       {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}

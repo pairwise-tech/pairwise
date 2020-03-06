@@ -111,12 +111,13 @@ export default class TableOfContents extends React.Component<
   render() {
     const { editor } = this.props;
     const headings = this.getHeadings();
-    const isMobile = window.matchMedia("(max-width: 900px)").matches;
 
     // If there are one or less headings in the document no need for a minimap
     if (headings.size <= 1) {
       return null;
     }
+
+    const isMobile = window.matchMedia(MOBILE).matches;
 
     return (
       <Wrapper
