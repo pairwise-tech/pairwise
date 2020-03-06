@@ -117,6 +117,7 @@ const MediaArea = ({
           value={title}
           onChange={handleTitle}
           disabled={!isEditMode}
+          multiline
         />
       </TitleHeader>
       {challenge.videoUrl && <YoutubeEmbed url={challenge.videoUrl} />}
