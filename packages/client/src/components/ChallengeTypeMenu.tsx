@@ -34,7 +34,7 @@ const ChallengeTypeMenu = ({
   onItemSelect,
 }: Props) => {
   return (
-    <div style={{ flexShrink: 0 }}>
+    <div style={{ flexShrink: 0, marginLeft: 10, marginRight: 10 }}>
       <ChallengeTypeSelect
         filterable={false}
         onItemSelect={onItemSelect}

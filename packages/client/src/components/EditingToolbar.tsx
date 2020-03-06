@@ -2,11 +2,12 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { Switch, Button } from "@blueprintjs/core";
+import { Switch, Button, Tooltip, Position } from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { CHALLENGE_TYPE } from "@pairwise/common";
+import { IconButton } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -110,13 +111,18 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
 
   // NOTE: I'm defaulting the challenge id to an empty string simply to get past ts errors.
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div
+      style={{
+        display: hidden ? "none" : "flex",
+        alignItems: "center",
+        top: 0,
+        left: 0,
+      }}
+    >
       <Switch
         style={{
           marginBottom: 0,
-          marginRight: 20,
-          transition: "opacity 0.2s ease-out",
-          opacity: hidden ? 0 : 1,
+          marginRight: 10,
         }}
         checked={isEditMode}
         onChange={handleChange}
@@ -124,26 +130,26 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
         labelElement={"Edit"}
       />
       <SlideOut show={isEditMode && !hidden}>
-        <Button
-          large
-          minimal
-          intent="primary"
-          style={{ marginRight: 10 }}
-          onClick={handleSave}
-        >
-          Save
-        </Button>
-        {canDelete && (
+        <Tooltip content="Save" position={Position.BOTTOM}>
           <Button
+            icon="saved"
             large
             minimal
-            intent="danger"
-            style={{ marginRight: 16 }}
-            onClick={handleDelete}
-            disabled={overlayVisible}
-          >
-            Delete
-          </Button>
+            intent="primary"
+            onClick={handleSave}
+          ></Button>
+        </Tooltip>
+        {canDelete && (
+          <Tooltip content="Delete" position={Position.BOTTOM}>
+            <Button
+              intent="danger"
+              icon="trash"
+              large
+              minimal
+              onClick={handleDelete}
+              disabled={overlayVisible}
+            ></Button>
+          </Tooltip>
         )}
         <Suspense fallback={<p>Menu Loading...</p>}>
           <LazyChallengeTypeMenu
@@ -169,7 +175,8 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
  */
 
 const SlideOut = styled.div<{ show: boolean }>`
-  display: block;
+  display: flex;
+  align-items: center;
   transition: all 0.2s ease-out;
   opacity: ${props => (props.show ? 1 : 0)};
   pointer-events: ${props => (props.show ? "all" : "none")};
