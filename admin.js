@@ -36,8 +36,8 @@ validateActionType(SCRIPT_ACTION);
 
 // Admin API urls
 const ADMIN_INDEX_URL = `${SERVER_URL}/admin`;
-const PURCHASE_COURSE_URL = `${SERVER_URL}/admin-purchase-course`;
-const REFUND_COURSE_URL = `${SERVER_URL}/refund-purchase-course`;
+const PURCHASE_COURSE_URL = `${SERVER_URL}/payments/admin-purchase-course`;
+const REFUND_COURSE_URL = `${SERVER_URL}/payments/admin-refund-course`;
 
 /** ===========================================================================
  * Admin API Utils
