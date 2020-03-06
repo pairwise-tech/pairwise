@@ -17,6 +17,7 @@ import {
 } from "src/tools/validation";
 import ENV from "src/tools/server-env";
 import {
+  Payment,
   StripeStartCheckoutSuccessResponse,
   UserProfile,
   ContentUtility,
@@ -144,7 +145,7 @@ export class PaymentsService {
     console.log(
       `[ADMIN]: Admin request to purchase course: ${courseId} for user: ${userEmail}`,
     );
-    return this.handlePurchaseCourseRequest(userEmail, courseId);
+    return this.handlePurchaseCourseRequest(userEmail, courseId, true);
   }
 
   async handleRefundCourseByAdmin(userEmail: string, courseId: string) {
@@ -179,6 +180,7 @@ export class PaymentsService {
   private async handlePurchaseCourseRequest(
     userEmail: string,
     courseId: string,
+    isGift: boolean = false,
   ) {
     const user = await this.userService.findUserByEmailGetFullProfile(
       userEmail,
@@ -191,24 +193,33 @@ export class PaymentsService {
     console.log(`Purchasing course ${courseId} for user ${profile.email}`);
 
     // If everything is good create a new payment for this user and course.
-    const payment = this.createNewPaymentObject(profile, courseId);
+    const payment = this.createNewPaymentObject(profile, courseId, isGift);
     await this.paymentsRepository.insert(payment);
 
     return SUCCESS_CODES.OK;
   }
 
-  private createNewPaymentObject = (user: UserProfile, courseId: string) => {
+  private createNewPaymentObject = (
+    user: UserProfile,
+    courseId: string,
+    isGift: boolean = false,
+  ) => {
     // Construct the new payment data. Once Stripe is integrated, most of this
     // data will come from Stripe and the actual payment information.
-    const payment: QueryDeepPartialEntity<Payments> = {
-      user,
+    const payment: Payment = {
       courseId,
       status: "CONFIRMED",
       datePaid: new Date(),
       amountPaid: this.COURSE_PRICE,
+      paymentType: isGift ? "ADMIN_GIFT" : "USER_PAID",
     };
 
-    return payment;
+    const paymentPartial: QueryDeepPartialEntity<Payments> = {
+      user,
+      ...payment,
+    };
+
+    return paymentPartial;
   };
 
   private async createStripeCheckoutSession(
