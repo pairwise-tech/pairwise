@@ -502,7 +502,8 @@ export const MobileView = (props: { isWorkspace: boolean }) => {
   const isMobile = useMedia(MOBILE, false);
   return (
     <Alert
-      confirmButtonText="Okay"
+      canOutsideClickCancel
+      confirmButtonText="Close"
       onClose={() => setIsOpen(false)}
       isOpen={isOpen && isMobile && props.isWorkspace}
       className={Classes.DARK}
@@ -511,12 +512,13 @@ export const MobileView = (props: { isWorkspace: boolean }) => {
         <MobileTitleText>A quick heads up</MobileTitleText>
         <MobileText style={{ margin: 0 }}>{"⚠️"}</MobileText>
         <MobileText>
-          <strong>The Workspace might not work on mobile!</strong>
+          <strong>The Workspace doesn't completely work on mobile!</strong>
         </MobileText>
         <MobileText style={{ margin: 0 }}>{"⚠️"}</MobileText>
         <MobileText>
-          Feel free to use Pairwise on a phone or tablet but it might not fully
-          work as expected. We recommend you use a computer. For some challenges
+          Feel free to use Pairwise on a phone or tablet but the workspace won't
+          fully work as expected. We recommend you use a computer. For some
+          challenges
           <span style={{ textDecoration: "underline" }}>
             a mobile device simply doesn't have the necessary software to
             complete the challenge
@@ -528,12 +530,9 @@ export const MobileView = (props: { isWorkspace: boolean }) => {
           developing software.
         </MobileText>
         <MobileText>
-          If you you're just wondering what Pairwise is about you can check out
-          our hompage:
-        </MobileText>
-        <MobileText style={{ fontSize: 20 }}>
+          If you you're just wondering what Pairwise is about you can{" "}
           <a target="__blank" href="https://www.pairwise.tech">
-            Visit Product Page
+            click here to check out our homepage.
           </a>
         </MobileText>
       </MobileContainer>
