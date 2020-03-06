@@ -6,6 +6,13 @@ const axios = require("axios");
  * This needs to be fully removed once a proper admin UI exists. This is
  * a temporary measure to allow us to conduct admin API actions using a
  * hard-coded access token in the production server.
+ *
+ * Be careful with this!!!
+ *
+ * Example usage:
+ *
+ * USER_EMAIL=SCRIPT_ACTION=REFUND user_email@gmail.com COURSE_ID=fpvPtfu7s node admin_script.js
+ *
  * ============================================================================
  */
 
