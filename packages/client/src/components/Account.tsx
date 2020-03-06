@@ -153,6 +153,12 @@ class Account extends React.Component<IProps, IState> {
             {payments.map(this.renderPaymentDetails)}
           </>
         )}
+        <Button
+          onClick={() => {
+            throw new Error("Something blew up in the Pairwise Workspace !!!");
+          }}
+          text="Temporary Bomb Button"
+        />
       </PageContainer>
     );
   }
