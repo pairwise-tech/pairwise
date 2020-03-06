@@ -9,7 +9,7 @@ import { GenericUserProfile } from "src/user/user.service";
  * Types & Config
  * ============================================================================
  */
-type SLACK_CHANNELS = "users" | "feedback" | "production";
+type SLACK_CHANNELS = "feedback" | "production";
 
 interface SlackFeedbackMessageData {
   feedbackDto: IFeedbackDto;
@@ -105,7 +105,7 @@ export class SlackService {
     if (accountCreated) {
       const message = `New account created for *${profile.displayName}* (${profile.email}) :tada:`;
       await this.postMessageToChannel(message, {
-        channel: "users",
+        channel: "production",
         ...config,
       });
     }
