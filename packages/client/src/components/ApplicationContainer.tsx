@@ -157,13 +157,15 @@ const ApplicationContainer = (props: IProps) => {
           text="Submit Feedback"
         />
       )}
-      <MenuItem
-        icon="user"
-        text="Account"
-        onClick={() => {
-          history.push("/account");
-        }}
-      />
+      {isLoggedIn && (
+        <MenuItem
+          icon="user"
+          text="Account"
+          onClick={() => {
+            history.push("/account");
+          }}
+        />
+      )}
       <MenuDivider />
       {isLoggedIn ? (
         <MenuItem
