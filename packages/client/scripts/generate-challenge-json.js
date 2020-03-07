@@ -14,7 +14,7 @@ const main = () => {
         id: shortid.generate(),
         type: "markup",
         title: "[UNTITLED]",
-        content: "Write some **markdown**...",
+        instructions: "Write some **markdown**...",
         starterCode:
           "// Write in an editor and use scripts/stringify-clipboard.sh, then copy into here",
         solutionCode: "",
@@ -25,7 +25,7 @@ const main = () => {
             message: "There should be a p tag with some text",
           },
         ]),
-        supplementaryContent: "Placeholder supplementary content...",
+        content: "Placeholder supplementary content...",
       },
       null,
       2,

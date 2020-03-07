@@ -93,7 +93,7 @@ const MediaArea = ({
         (serializeEditorContent: () => string) => {
           updateChallenge({
             id: challenge.id,
-            challenge: { supplementaryContent: serializeEditorContent() },
+            challenge: { content: serializeEditorContent() },
           });
         },
       ),
@@ -125,10 +125,9 @@ const MediaArea = ({
           toc={false /* Turn off so we can use our own */}
           plugins={[tableOfContents]}
           placeholder="Write something beautiful..."
-          defaultValue={challenge.supplementaryContent}
+          defaultValue={challenge.content}
           autoFocus={
-            isEditMode &&
-            !challenge.supplementaryContent /* Only focus an empty editor */
+            isEditMode && !challenge.content /* Only focus an empty editor */
           }
           readOnly={!isEditMode}
           spellCheck={isEditMode}

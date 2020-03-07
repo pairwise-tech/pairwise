@@ -83,12 +83,10 @@ export interface BuildSearchIndexAction {
   payload: Course;
 }
 
-export interface SearchDocument {
-  id: string;
-  title: string;
-  content: string;
-  supplementaryContent: string;
-}
+export type SearchDocument = Pick<
+  Challenge,
+  "id" | "title" | "instructions" | "content"
+>;
 
 export interface SearchMessageEvent extends MessageEvent {
   data: BuildSearchIndexAction | SearchAction;
