@@ -6,6 +6,18 @@ import { Block } from "slate";
 import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
 import { PROSE_MAX_WIDTH, COLORS, MOBILE } from "tools/constants";
 
+// Get all headings from a slate editor
+const getHeadings = (editor: Editor) => {
+  // Third party typing issue
+  // @ts-ignore
+  return editor.value.document.nodes.filter((node?: Block) => {
+    if (!node || !node.text) {
+      return false;
+    }
+    return Boolean(node.type.match(/^heading/));
+  });
+};
+
 export default class TableOfContents extends React.Component<
   {
     editor: Editor;
@@ -15,6 +27,11 @@ export default class TableOfContents extends React.Component<
     left: number;
   }
 > {
+  // Expose the get headings functionality so that calling code can determine
+  // whether or not to render the TOC. Using the render method of this class was
+  // great until I started wrapping the TOC in other UI.
+  static getHeadings = getHeadings;
+
   wrapperRef = React.createRef<HTMLDivElement>();
 
   state = {
@@ -95,22 +112,9 @@ export default class TableOfContents extends React.Component<
     }
   };
 
-  getHeadings() {
-    const { editor } = this.props;
-
-    // Third party typing issue
-    // @ts-ignore
-    return editor.value.document.nodes.filter((node?: Block) => {
-      if (!node || !node.text) {
-        return false;
-      }
-      return Boolean(node.type.match(/^heading/));
-    });
-  }
-
   render() {
     const { editor } = this.props;
-    const headings = this.getHeadings();
+    const headings = getHeadings(editor);
 
     // If there are one or less headings in the document no need for a minimap
     if (headings.size <= 1) {
