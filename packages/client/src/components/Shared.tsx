@@ -375,3 +375,9 @@ export const DesktopOnly = styled.div`
     display: none;
   }
 `;
+
+export const LineWrappedText = styled.p`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;

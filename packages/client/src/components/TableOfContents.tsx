@@ -5,6 +5,7 @@ import { Editor } from "slate-react";
 import { Block } from "slate";
 import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
 import { PROSE_MAX_WIDTH, COLORS, MOBILE } from "tools/constants";
+import { LineWrappedText } from "./Shared";
 
 // Get all headings from a slate editor
 const getHeadings = (editor: Editor) => {
@@ -136,8 +137,8 @@ export default class TableOfContents extends React.Component<
           left: this.state.left,
         }}
       >
-        <h4>Table of Contents</h4>
-        <Sections>
+        <h4 style={{ marginRight: -1 }}>Table of Contents</h4>
+        <Sections style={{ marginRight: -1 }}>
           {headings.map((heading?: Block) => {
             if (!heading) {
               return null;
@@ -150,6 +151,7 @@ export default class TableOfContents extends React.Component<
             return (
               <ListItem key={slug} style={{ marginLeft: -1 }}>
                 <Anchor
+                  as="a"
                   href={`#${slug}`}
                   style={{
                     // Indent based on heading level
@@ -200,22 +202,23 @@ const Wrapper = styled.div`
   }
 `;
 
-const Anchor = styled.a`
+const Anchor = styled(LineWrappedText)`
   display: block;
   font-weight: 400;
   transition: all 100ms ease-in-out;
   padding: 8px 5px;
-  text-overflow: ellipsis;
   text-decoration: none;
 `;
 
 const ListItem = styled.div`
   display: block;
-  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
   position: relative;
   white-space: nowrap;
   a {
     color: #cacaca;
+  }
+  &:not(:last-child) {
+    border-bottom: 1px solid ${COLORS.LIGHT_GREY};
   }
   &:hover {
     background: #212121;
@@ -230,7 +233,6 @@ const Sections = styled.div`
   margin: 0;
   list-style: none;
   font-size: 13px;
-  width: 300px;
   transition-delay: 1s;
   transition: width 100ms ease-in-out;
 `;

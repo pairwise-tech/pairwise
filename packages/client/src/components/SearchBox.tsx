@@ -9,6 +9,7 @@ import reactStringReplace from "react-string-replace";
 import { useHistory } from "react-router-dom";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { MOBILE } from "tools/constants";
+import { LineWrappedText } from "./Shared";
 
 // NOTE: isClosed is kept in state rather than simply using the presence of
 // search results becuase sometimes we want the search pane to be closed even if
@@ -182,12 +183,6 @@ const ScrollDiv = styled.div`
 
 const Underline = styled.span`
   text-decoration: underline;
-`;
-
-const LineWrappedText = styled.p`
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 `;
 
 const YellowText = styled.span`
