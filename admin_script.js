@@ -24,12 +24,21 @@ const COURSE_ID = process.env.COURSE_ID;
 const USER_EMAIL = process.env.USER_EMAIL;
 const SCRIPT_ACTION = process.env.SCRIPT_ACTION;
 
+console.log(`\n- Running admin script! Received environment config:\n`);
+console.log(`- SCRIPT_ACTION: ${SCRIPT_ACTION}`);
+console.log(`- COURSE_ID: ${COURSE_ID}`);
+console.log(`- USER_EMAIL: ${USER_EMAIL}`);
+console.log(`- SERVER_URL: ${SERVER_URL}`);
+console.log(`- ADMIN_TOKEN: ${ADMIN_TOKEN.slice(0, 15)}...`);
+console.log(`\nRunning script!\n`);
+
 // Valid script actions:
 const TEST = "TEST";
 const PURCHASE = "PURCHASE";
 const REFUND = "REFUND";
 const GET_USERS = "GET_USERS";
-const VALID_ACTIONS = new Set([TEST, PURCHASE, REFUND, GET_USERS]);
+const DELETE_USER = "DELETE_USER";
+const VALID_ACTIONS = new Set([TEST, PURCHASE, REFUND, GET_USERS, DELETE_USER]);
 
 const validateActionType = actionType => {
   if (VALID_ACTIONS.has(actionType)) {
@@ -46,8 +55,34 @@ validateActionType(SCRIPT_ACTION);
 // Admin API urls
 const ADMIN_INDEX_URL = `${SERVER_URL}/admin`;
 const GET_ALL_USERS_URL = `${SERVER_URL}/admin/users`;
+const DELETE_USER_URL = `${SERVER_URL}/admin/users`;
 const PURCHASE_COURSE_URL = `${SERVER_URL}/admin/purchase-course`;
 const REFUND_COURSE_URL = `${SERVER_URL}/admin/refund-course`;
+
+class log {
+  constructor(action) {
+    this.action = action;
+  }
+  start(action) {
+    console.log(`- [Admin Script]: Action ${this.action} started.`);
+  }
+  finish(result) {
+    console.log(
+      `- [Admin Script]: Action ${this.action} completed.${
+        result ? " Result:" : ""
+      }`,
+    );
+    if (result) {
+      console.log(result);
+    }
+  }
+  fail(error) {
+    console.log(`- [Admin Script]: Action ${this.action} failed, error:`);
+    console.log(error);
+  }
+}
+
+const Log = new log(SCRIPT_ACTION);
 
 /** ===========================================================================
  * Admin API Utils
@@ -57,44 +92,64 @@ const REFUND_COURSE_URL = `${SERVER_URL}/admin/refund-course`;
 // Test admin API /admin route
 const testAdminIndexRoute = async () => {
   try {
-    console.log("Sending admin request:");
+    Log.start();
     const result = await axios.get(ADMIN_INDEX_URL, {
       headers: {
         admin_access_token: ADMIN_TOKEN,
       },
     });
-
-    console.log("Admin request successful, response:");
-    console.log(result.data);
+    Log.finish(result.data);
   } catch (err) {
-    console.log("Admin request failed, error:");
-    console.log(err);
+    Log.fail(err);
   }
 };
 
 // Get all users
 const getAllUsers = async () => {
   try {
-    console.log(
-      `Sending admin request to retrieve all users, id: ${COURSE_ID} for user, email: ${USER_EMAIL}`,
-    );
+    Log.start();
     const result = await axios.get(GET_ALL_USERS_URL, {
       headers: {
         admin_access_token: ADMIN_TOKEN,
       },
     });
-
-    console.log(
-      `Admin request successful for retrieving ${result.data.length} users`,
+    Log.finish(
+      `Retrieved ${result.data.length} user records. Writing result to file: ${filename}`,
     );
     const filename = "pairwise-users.json";
-    console.log(`Writing result to file: ${filename}`);
     const users = JSON.stringify(result.data, null, 2);
     fs.writeFileSync(filename, users, "utf-8");
     console.log("Done!");
   } catch (err) {
-    console.log("Admin request failed to retieve all users, error:");
-    console.log(err);
+    Log.fail(err);
+  }
+};
+
+// Fully delete a user account
+const deleteUserByEmail = async userEmail => {
+  try {
+    if (!USER_EMAIL) {
+      throw new Error(
+        "Must provide USER_EMAIL environment variables to delete a user!",
+      );
+    }
+    Log.start();
+
+    const result = await axios.delete(
+      DELETE_USER_URL,
+      {
+        userEmail,
+      },
+      {
+        headers: {
+          admin_access_token: ADMIN_TOKEN,
+        },
+      },
+    );
+
+    Log.finish(result.data);
+  } catch (err) {
+    Log.fail(err);
   }
 };
 
@@ -106,9 +161,8 @@ const purchaseCourseForUserByAdmin = async (userEmail, courseId) => {
         "Must provide USER_EMAIL and COURSE_ID environment variables to purchase a course for a user!",
       );
     }
-    console.log(
-      `Sending admin request to purchase course, id: ${COURSE_ID} for user, email: ${USER_EMAIL}`,
-    );
+    Log.start();
+
     const result = await axios.post(
       PURCHASE_COURSE_URL,
       {
@@ -122,11 +176,9 @@ const purchaseCourseForUserByAdmin = async (userEmail, courseId) => {
       },
     );
 
-    console.log("Admin request successful to purchase course, response:");
-    console.log(result.data);
+    Log.finish(result.data);
   } catch (err) {
-    console.log("Admin request failed to purchase course, error:");
-    console.log(err);
+    Log.fail(err);
   }
 };
 
@@ -138,9 +190,8 @@ const refundCourseForUserByAdmin = async (userEmail, courseId) => {
         "Must provide USER_EMAIL and COURSE_ID environment variables to refund a course for a user!",
       );
     }
-    console.log(
-      `Sending admin request to refund course, id: ${COURSE_ID} for user, email: ${USER_EMAIL}`,
-    );
+    Log.start();
+
     const result = await axios.post(
       REFUND_COURSE_URL,
       {
@@ -154,11 +205,9 @@ const refundCourseForUserByAdmin = async (userEmail, courseId) => {
       },
     );
 
-    console.log("Admin request successful to refund course, response:");
-    console.log(result.data);
+    Log.finish(result.data);
   } catch (err) {
-    console.log("Admin request failed to refund course, error:");
-    console.log(err);
+    Log.fail(err);
   }
 };
 
@@ -173,6 +222,8 @@ const runScript = () => {
       return testAdminIndexRoute();
     case GET_USERS:
       return getAllUsers();
+    case DELETE_USER:
+      return deleteUserByEmail();
     case PURCHASE:
       return purchaseCourseForUserByAdmin(USER_EMAIL, COURSE_ID);
     case REFUND:
