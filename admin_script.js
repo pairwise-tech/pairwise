@@ -13,7 +13,6 @@ const axios = require("axios");
  * Example usage:
  *
  * SCRIPT_ACTION=REFUND USER_EMAIL=user_email@gmail.com COURSE_ID=fpvPtfu7s node admin_script.js
- * SCRIPT_ACTION=GET_USERS node admin_script.js
  *
  * ============================================================================
  */
