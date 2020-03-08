@@ -28,10 +28,10 @@ describe("Challenge APIs", () => {
           for (const courseModule of course.modules) {
             for (const challenge of courseModule.challenges) {
               expect(challenge.testCode).toBeUndefined();
-              expect(challenge.content).toBeUndefined();
+              expect(challenge.instructions).toBeUndefined();
               expect(challenge.starterCode).toBeUndefined();
               expect(challenge.solutionCode).toBeUndefined();
-              expect(challenge.supplementaryContent).toBeUndefined();
+              expect(challenge.content).toBeUndefined();
             }
           }
         }

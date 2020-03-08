@@ -19,13 +19,16 @@ import { Challenge } from "@pairwise/common";
 const TableOfContentsPlugin = (): SlatePlugin => {
   const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {
     const children = next();
+    const showToc = TableOfContents.getHeadings(editor).size > 1;
 
     return (
       <FlexWrap>
         <Flex>{children}</Flex>
-        <FlexFixed>
-          <TableOfContents editor={editor} />
-        </FlexFixed>
+        {showToc && (
+          <FlexFixed>
+            <TableOfContents editor={editor} />
+          </FlexFixed>
+        )}
       </FlexWrap>
     );
   };
@@ -33,11 +36,14 @@ const TableOfContentsPlugin = (): SlatePlugin => {
   return { renderEditor };
 };
 
+// const
+
 // NOTE: Overflow auto is necessary to prevent the child from overflowing... but
 // it doesn't add scroll bars. It just does what we actually want which is add
 // scroll bars to the elements that are too wide, but not the whole thing.
 const Flex = styled.div`
   overflow: auto;
+  width: 100%;
 `;
 
 const FlexWrap = styled.div`
@@ -55,7 +61,7 @@ const FlexFixed = styled.div`
   width: 300px;
   flex-grow: 0;
   flex-shrink: 0;
-  margin-left: 40px;
+  margin-left: 4%;
 
   @media ${MOBILE} {
     margin-left: 0;
@@ -93,7 +99,7 @@ const MediaArea = ({
         (serializeEditorContent: () => string) => {
           updateChallenge({
             id: challenge.id,
-            challenge: { supplementaryContent: serializeEditorContent() },
+            challenge: { content: serializeEditorContent() },
           });
         },
       ),
@@ -125,10 +131,9 @@ const MediaArea = ({
           toc={false /* Turn off so we can use our own */}
           plugins={[tableOfContents]}
           placeholder="Write something beautiful..."
-          defaultValue={challenge.supplementaryContent}
+          defaultValue={challenge.content}
           autoFocus={
-            isEditMode &&
-            !challenge.supplementaryContent /* Only focus an empty editor */
+            isEditMode && !challenge.content /* Only focus an empty editor */
           }
           readOnly={!isEditMode}
           spellCheck={isEditMode}

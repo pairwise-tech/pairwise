@@ -42,8 +42,8 @@ const buildSearchDocuments = (course: Course): SearchDocument[] => {
     .map(x => ({
       id: x.id,
       title: toPlainText(x.title),
+      instructions: toPlainText(x.instructions),
       content: toPlainText(x.content),
-      supplementaryContent: toPlainText(x.supplementaryContent),
     }));
 
   return documents;
@@ -168,12 +168,20 @@ const createIndexer = (documents: SearchDocument[]) => {
   return function buildLunarIndex(this: lunr.Builder) {
     // This is the identifier field. It's value for each result will be placed in
     // the `ref` prop of each result object
-    this.ref("id");
+    const identifier: keyof SearchDocument = "id";
+    const searchFields: Array<keyof SearchDocument> = [
+      "title",
+      "instructions",
+      "content",
+    ];
 
-    // I'm guessing you can search multiple fields, thus this
-    this.field("title");
-    this.field("content");
-    this.field("supplementaryContent");
+    // Set the ID field
+    this.ref(identifier);
+
+    // Set the search fields
+    searchFields.forEach(fieldName => {
+      this.field(fieldName);
+    });
 
     // Allow the positions of matching terms in the metadata. This is disabled by
     // default to reduce index size

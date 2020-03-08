@@ -137,12 +137,12 @@ export const generateEmptyChallenge = (
   id: shortid.generate(),
   type: "markup",
   title: "[EMPTY...]",
-  content: "",
+  instructions: "",
   testCode: "// test('message', () => expect(...))",
   videoUrl: "",
   starterCode: "",
   solutionCode: "",
-  supplementaryContent: "",
+  content: "",
   ...overwrite,
 });
 
