@@ -13,7 +13,7 @@ import {
 import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
-import { ERROR_CODES } from "src/tools/constants";
+import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { SlackServiceClass, slackService } from "src/slack/slack.service";
 
 export interface GenericUserProfile {
@@ -55,11 +55,11 @@ export class UserService {
       throw new BadRequestException(ERROR_CODES.MISSING_USER);
     }
 
-    const result = await this.userRepository.delete({
+    await this.userRepository.delete({
       uuid: user.profile.uuid,
     });
-    console.log(result);
-    return result;
+
+    return SUCCESS_CODES.OK;
   }
 
   public async findUserByEmail(email: string) {

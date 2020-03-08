@@ -3,6 +3,7 @@ import {
   HOST,
   fetchAccessToken,
   fetchAdminAccessToken,
+  createAuthenticatedUser,
 } from "./utils/e2e-utils";
 
 /** ===========================================================================
@@ -26,22 +27,65 @@ describe("Admin (e2e)", () => {
   });
 
   test("/admin (GET) index route returns 200 for admin users", async () => {
-    const accessToken = await fetchAdminAccessToken();
+    const adminAccessToken = await fetchAdminAccessToken();
     return request(`${HOST}/admin`)
       .get("/")
-      .set("Authorization", `Bearer ${accessToken}`)
+      .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
       .expect("Admin Service");
   });
 
   test("/users/admin (GET) get all users", async () => {
-    const accessToken = await fetchAdminAccessToken();
+    const adminAccessToken = await fetchAdminAccessToken();
     return request(`${HOST}/user/admin`)
       .get("/")
-      .set("Authorization", `Bearer ${accessToken}`)
+      .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
       .expect(response => {
         expect(Array.isArray(response.body)).toBe(true);
+        expect(response.body.length >= 1).toBe(true);
+      });
+  });
+
+  // TODO: This test could be improved by verifying the cascade occurs
+  // correctly when the user is deleted, i.e. no data related to this
+  // user exists in other tables.
+  test("/users/admin/delete (DELETE) delete a user", async () => {
+    const adminAccessToken = await fetchAdminAccessToken();
+
+    // 1. Create a regular user and get their email
+    const { user } = await createAuthenticatedUser("facebook");
+    const userEmail = user.profile.email;
+
+    // 2. Get all users and check the user exists
+    await request(`${HOST}/user/admin`)
+      .get("/")
+      .set("Authorization", `Bearer ${adminAccessToken}`)
+      .expect(200)
+      .expect(response => {
+        const userExists = response.body.find(u => u.email === userEmail);
+        expect(userExists).toBeDefined();
+        expect(userExists.email).toBe(userEmail);
+      });
+
+    // 3. Delete the user
+    await request(`${HOST}/user/admin/delete`)
+      .post("/")
+      .send({ userEmail })
+      .set("Authorization", `Bearer ${adminAccessToken}`)
+      .expect(201)
+      .expect(response => {
+        expect(response.text).toBe("Success");
+      });
+
+    // 4. Verify the user no longer exists
+    return request(`${HOST}/user/admin`)
+      .get("/")
+      .set("Authorization", `Bearer ${adminAccessToken}`)
+      .expect(200)
+      .expect(response => {
+        const userExists = response.body.find(u => u.email === userEmail);
+        expect(userExists).toBe(undefined);
       });
   });
 });
