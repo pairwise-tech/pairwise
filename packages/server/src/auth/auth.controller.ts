@@ -7,6 +7,7 @@ import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
 import { ERROR_CODES } from "src/tools/constants";
+import { captureMessage, Severity } from "@sentry/node";
 
 type Strategy = "GitHub" | "Facebook" | "Google";
 
@@ -105,8 +106,9 @@ export class AuthController {
         `${ENV.CLIENT_URL}/authentication-failure?emailError=true&strategy=${strategy}`,
       );
     }
-    console.log(
-      `[Login Err] An unknown error occurred: ${e.name}: ${e.message}`,
+    captureMessage(
+      `[Login Err] An unknown error occurred: ${e}`,
+      Severity.Error,
     );
     return res.redirect(
       `${ENV.CLIENT_URL}/authentication-failure?emailError=false&strategy=${strategy}`,
