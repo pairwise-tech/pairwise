@@ -46,7 +46,6 @@ const MarkdownShortcuts = (): SlatePlugin => {
     // _does not work_ if using a forEach loop with callback
     for (const { mark, shortcut } of inlineShortcuts) {
       const inlineTags = [];
-      const fullText = startBlock.text;
       // By using this text of the last leaf we avoid the issue of having a
       // previous char complete this string. For example, given the string
       // "italic uses `_` to make things _italic_" we want the first underscore
@@ -76,13 +75,11 @@ const MarkdownShortcuts = (): SlatePlugin => {
           potentialText.slice(end, end + 1),
         ].includes(" ");
         const markStart = offsetFromStart + i;
-        const markEnd = offsetFromStart + text.length - shortcut.length;
-        const markInner = fullText.slice(markStart, markEnd);
 
         if (
           potentialText.slice(start, end) === shortcut &&
           (beginningOfBlock || endOfBlock || surroundedByWhitespaces) &&
-          markInner !== "`" // Special case to prevent ``` from turning into an inline code mark (because it should become a code block)
+          potentialText !== "```" // Special case to prevent ``` from turning into an inline code mark (because it should become a code block)
         ) {
           inlineTags.push(markStart); // Start of inline tag
         }
