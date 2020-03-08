@@ -27,7 +27,8 @@ const SCRIPT_ACTION = process.env.SCRIPT_ACTION;
 const TEST = "TEST";
 const PURCHASE = "PURCHASE";
 const REFUND = "REFUND";
-const VALID_ACTIONS = new Set([TEST, PURCHASE, REFUND]);
+const GET_USERS = "GET_USERS";
+const VALID_ACTIONS = new Set([TEST, PURCHASE, REFUND, GET_USERS]);
 
 const validateActionType = actionType => {
   if (VALID_ACTIONS.has(actionType)) {
@@ -43,8 +44,9 @@ validateActionType(SCRIPT_ACTION);
 
 // Admin API urls
 const ADMIN_INDEX_URL = `${SERVER_URL}/admin`;
-const PURCHASE_COURSE_URL = `${SERVER_URL}/payments/admin-purchase-course`;
-const REFUND_COURSE_URL = `${SERVER_URL}/payments/admin-refund-course`;
+const GET_ALL_USERS_URL = `${SERVER_URL}/admin/users`;
+const PURCHASE_COURSE_URL = `${SERVER_URL}/admin/purchase-course`;
+const REFUND_COURSE_URL = `${SERVER_URL}/admin/refund-course`;
 
 /** ===========================================================================
  * Admin API Utils
@@ -65,6 +67,27 @@ const testAdminIndexRoute = async () => {
     console.log(result.data);
   } catch (err) {
     console.log("Admin request failed, error:");
+    console.log(err);
+  }
+};
+
+// Get all users
+const getAllUsers = async () => {
+  try {
+    console.log(
+      `Sending admin request to retrieve all users, id: ${COURSE_ID} for user, email: ${USER_EMAIL}`,
+    );
+    const result = await axios.get(GET_ALL_USERS_URL, {
+      headers: {
+        admin_access_token: ADMIN_TOKEN,
+      },
+    });
+
+    console.log("Admin request successful for retrieving all users, response:");
+    // TODO: Save to a JSON file?
+    console.log(result.data);
+  } catch (err) {
+    console.log("Admin request failed to retieve all users, error:");
     console.log(err);
   }
 };
@@ -142,6 +165,8 @@ const runScript = () => {
   switch (SCRIPT_ACTION) {
     case TEST:
       return testAdminIndexRoute();
+    case GET_USERS:
+      return getAllUsers();
     case PURCHASE:
       return purchaseCourseForUserByAdmin(USER_EMAIL, COURSE_ID);
     case REFUND:
