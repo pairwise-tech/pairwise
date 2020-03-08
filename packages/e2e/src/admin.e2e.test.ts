@@ -33,4 +33,15 @@ describe("Admin (e2e)", () => {
       .expect(200)
       .expect("Admin Service");
   });
+
+  test("/users/admin (GET) get all users", async () => {
+    const accessToken = await fetchAdminAccessToken();
+    return request(`${HOST}/user/admin`)
+      .get("/")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200)
+      .expect(response => {
+        expect(Array.isArray(response.body)).toBe(true);
+      });
+  });
 });

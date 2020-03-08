@@ -29,7 +29,7 @@ console.log(`- SCRIPT_ACTION: ${SCRIPT_ACTION}`);
 console.log(`- COURSE_ID: ${COURSE_ID}`);
 console.log(`- USER_EMAIL: ${USER_EMAIL}`);
 console.log(`- SERVER_URL: ${SERVER_URL}`);
-console.log(`- ADMIN_TOKEN: ${ADMIN_TOKEN.slice(0, 15)}...`);
+console.log(`- ADMIN_TOKEN: ${ADMIN_TOKEN.slice(0, 25)}...`);
 console.log(`\nRunning script!\n`);
 
 // Valid script actions:
