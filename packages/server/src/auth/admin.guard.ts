@@ -17,7 +17,7 @@ const ADMIN_EMAILS = new Set(WHITELISTED_ADMIN_EMAILS);
 /**
  * Hard-coded Admin Access Token. This is dangerous!!! This should be fully
  * removed in the future once a proper admin UI exists. This allows us to
- * manually conduct admin user access uses a simple script.
+ * manually conduct admin user access using a simple script.
  */
 const ADMIN_TOKEN = getenv(
   "DANGEROUSLY_WHITELISTED_PUBLIC_ADMIN_ACCESS_TOKEN",

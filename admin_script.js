@@ -72,7 +72,7 @@ const testAdminIndexRoute = async () => {
 // Purchase a course for a user by an admin
 const purchaseCourseForUserByAdmin = async (userEmail, courseId) => {
   try {
-    if (!USER_EMAIL && !COURSE_ID) {
+    if (!USER_EMAIL || !COURSE_ID) {
       throw new Error(
         "Must provide USER_EMAIL and COURSE_ID environment variables to purchase a course for a user!",
       );
@@ -104,7 +104,7 @@ const purchaseCourseForUserByAdmin = async (userEmail, courseId) => {
 // Refund a course for a user by an admin
 const refundCourseForUserByAdmin = async (userEmail, courseId) => {
   try {
-    if (!USER_EMAIL && !COURSE_ID) {
+    if (!USER_EMAIL || !COURSE_ID) {
       throw new Error(
         "Must provide USER_EMAIL and COURSE_ID environment variables to refund a course for a user!",
       );
