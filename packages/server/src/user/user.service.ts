@@ -38,7 +38,11 @@ export class UserService {
     private readonly slackService: SlackService,
   ) {}
 
-  async findUserByEmail(email: string) {
+  public async adminGetAllUsers() {
+    return this.userRepository.find();
+  }
+
+  public async findUserByEmail(email: string) {
     const user = await this.userRepository.findOne({ email });
     return this.processUserEntity(user);
   }
@@ -54,7 +58,7 @@ export class UserService {
    * and attached to the request for every authenticated API request which
    * does require more database requests to fetch everything.
    */
-  async findUserByEmailGetFullProfile(email: string) {
+  public async findUserByEmailGetFullProfile(email: string) {
     const user = await this.userRepository.findOne({ email });
 
     if (!user) {
@@ -76,7 +80,7 @@ export class UserService {
     return result;
   }
 
-  async findOrCreateUser(profile: GenericUserProfile) {
+  public async findOrCreateUser(profile: GenericUserProfile) {
     const { email } = profile;
     let accountCreated: boolean;
 
@@ -103,7 +107,7 @@ export class UserService {
     return { user, accountCreated };
   }
 
-  async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
+  public async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
     const validationResult = validateUserUpdateDetails(user, userDetails);
 
     if (validationResult.error) {
@@ -117,7 +121,10 @@ export class UserService {
     }
   }
 
-  async updateLastActiveChallengeId(user: RequestUser, challengeId: string) {
+  public async updateLastActiveChallengeId(
+    user: RequestUser,
+    challengeId: string,
+  ) {
     await this.userRepository.update(
       { uuid: user.profile.uuid },
       { lastActiveChallengeId: challengeId },
