@@ -14,6 +14,8 @@ import { Leaf } from "slate";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
+// All adapted from the markdown shorcuts that ship with the lib by default:
+// https://github.com/outline/rich-markdown-editor/blob/master/src/plugins/MarkdownShortcuts.js
 const MarkdownShortcuts = (): SlatePlugin => {
   const inlineShortcuts = [
     { mark: "bold", shortcut: "**" },
@@ -102,6 +104,102 @@ const MarkdownShortcuts = (): SlatePlugin => {
 
     return next();
   };
+  /**
+   * Get the block type for a series of auto-markdown shortcut `chars`.
+   */
+  function getType(chars: string) {
+    switch (chars) {
+      case "*":
+      case "-":
+      case "+":
+      case "1.":
+      case "[ ]":
+      case "[x]":
+        return "list-item";
+      case ">":
+        return "block-quote";
+      case "#":
+        return "heading1";
+      case "##":
+        return "heading2";
+      case "###":
+        return "heading3";
+      case "####":
+        return "heading4";
+      case "#####":
+        return "heading5";
+      case "######":
+        return "heading6";
+      default:
+        return null;
+    }
+  }
+  /**
+   * On space, if it was after an auto-markdown shortcut, convert the current
+   * node into the shortcut's corresponding type.
+   */
+  const onSpace = (
+    ev: React.KeyboardEvent,
+    editor: Editor,
+    next: () => void,
+  ) => {
+    const { value } = editor;
+    const { selection, startBlock } = value;
+    if (selection.isExpanded) {
+      return next();
+    }
+
+    const chars = startBlock.text.slice(0, selection.start.offset).trim();
+    const type = getType(chars);
+
+    // @ts-ignore Slate React types depend on the wrong version of @types/slate...
+    if (type && !editor.isSelectionInTable()) {
+      // only shortcuts to change heading size should work in headings
+      if (startBlock.type.match(/heading/) && !type.match(/heading/)) {
+        return next();
+      }
+      // don't allow doubling up a list item
+      if (type === "list-item" && startBlock.type === "list-item") {
+        return next();
+      }
+
+      // Prevent the space from being inserted
+      ev.preventDefault();
+
+      let checked = false;
+      if (chars === "[x]") {
+        checked = true;
+      }
+      if (chars === "[ ]") {
+        checked = false;
+      }
+
+      // @ts-ignore Slate React types depend on the wrong version of @types/slate...
+      editor.withoutNormalizing(c => {
+        c.moveFocusToStartOfNode(startBlock)
+          .delete()
+          .setBlocks({
+            type,
+            data: { checked },
+          });
+
+        if (type === "list-item") {
+          if (checked !== undefined) {
+            return c.wrapBlock("todo-list");
+          } else if (chars === "1.") {
+            return c.wrapBlock("ordered-list");
+          } else {
+            return c.wrapBlock("bulleted-list");
+          }
+        }
+      });
+    }
+
+    // Purposefully not pasing to next here so that the rich-markdown-editor
+    // default handler does not fire. That handler is where the error-prone
+    // parsing of inline markdown was happening.
+    return;
+  };
 
   const onKeyDown = (
     e: React.KeyboardEvent,
@@ -120,7 +218,9 @@ const MarkdownShortcuts = (): SlatePlugin => {
       return next();
     }
 
-    if (keydownWhitelist.has(e.key)) {
+    if (e.key === " ") {
+      return onSpace(e, editor, next);
+    } else if (keydownWhitelist.has(e.key)) {
       return onSpecialChar(e, editor, next);
     } else {
       return next();
@@ -129,6 +229,8 @@ const MarkdownShortcuts = (): SlatePlugin => {
 
   return { onKeyDown };
 };
+
+const markdownShortcuts = MarkdownShortcuts();
 
 /** ===========================================================================
  * ContentEditor
@@ -148,8 +250,6 @@ const MarkdownShortcuts = (): SlatePlugin => {
  * ============================================================================
  */
 class ContentEditor extends React.Component<Props> {
-  markdownShortcuts = MarkdownShortcuts();
-
   getSearchLinks = (searchTerm: string) => {
     // Kick off a search request...
     this.props.requestSearchResults(searchTerm);
@@ -172,7 +272,7 @@ class ContentEditor extends React.Component<Props> {
     return (
       <EditorExternalStyles>
         <RichMarkdownEditor
-          plugins={[...plugins, this.markdownShortcuts]}
+          plugins={[...plugins, markdownShortcuts]}
           theme={editorTheme}
           onSearchLink={this.getSearchLinks}
           onShowToast={message => {
