@@ -66,8 +66,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/payments/admin-purchase-course (POST) requires admin authentication", async done => {
-    request(`${HOST}/payments/admin-purchase-course`)
+  test("/admin/purchase-course (POST) requires admin authentication", async done => {
+    request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send({
         courseId: "asdfafaasdfsa",
@@ -81,8 +81,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/payments/admin-purchase-course (POST) requires a valid course id", async done => {
-    request(`${HOST}/payments/admin-purchase-course`)
+  test("/admin/purchase-course (POST) requires a valid course id", async done => {
+    request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send({
         courseId: "asdfafaasdfsa",
@@ -96,8 +96,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/payments/admin-purchase-course (POST) requires the email of an existing user", async done => {
-    request(`${HOST}/payments/admin-purchase-course`)
+  test("/admin/purchase-course (POST) requires the email of an existing user", async done => {
+    request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -111,8 +111,8 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/payments/admin-purchase-course (POST) accepts requests from an admin for a valid user and course", async () => {
-    await request(`${HOST}/payments/admin-purchase-course`)
+  test("/admin/purchase-course (POST) accepts requests from an admin for a valid user and course", async () => {
+    await request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -130,7 +130,7 @@ describe("Payments APIs", () => {
     expect(course).toBeDefined();
   });
 
-  test("/payments/admin-purchase-course (POST) rejects requests if a user has already purchased the course", async done => {
+  test("/admin/purchase-course (POST) rejects requests if a user has already purchased the course", async done => {
     // Get a new user:
     accessToken = await fetchAccessToken();
     authorizationHeader = `Bearer ${accessToken}`;
@@ -142,7 +142,7 @@ describe("Payments APIs", () => {
     };
 
     // Purchase the course
-    await request(`${HOST}/payments/admin-purchase-course`)
+    await request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -152,7 +152,7 @@ describe("Payments APIs", () => {
       });
 
     // Try to purchase it again and expect a failure
-    await request(`${HOST}/payments/admin-purchase-course`)
+    await request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -166,7 +166,7 @@ describe("Payments APIs", () => {
     done();
   });
 
-  test("/payments/admin-refund-course (POST) allows courses to be refunded", async done => {
+  test("/admin/refund-course (POST) allows courses to be refunded", async done => {
     // Get a new user:
     accessToken = await fetchAccessToken();
     authorizationHeader = `Bearer ${accessToken}`;
@@ -178,7 +178,7 @@ describe("Payments APIs", () => {
     };
 
     // Purchase the course
-    await request(`${HOST}/payments/admin-purchase-course`)
+    await request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -193,7 +193,7 @@ describe("Payments APIs", () => {
     expect(course.status).toBe("CONFIRMED");
 
     // Refund the course
-    await request(`${HOST}/payments/admin-refund-course`)
+    await request(`${HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -211,7 +211,7 @@ describe("Payments APIs", () => {
     done();
   });
 
-  test("/payments/admin-refund-course (POST) invalid refund requests are rejected", async done => {
+  test("/admin/refund-course (POST) invalid refund requests are rejected", async done => {
     // Get a new user:
     accessToken = await fetchAccessToken();
     authorizationHeader = `Bearer ${accessToken}`;
@@ -223,7 +223,7 @@ describe("Payments APIs", () => {
     };
 
     // Refund is not possible yet because no purchase exists
-    await request(`${HOST}/payments/admin-refund-course`)
+    await request(`${HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -235,7 +235,7 @@ describe("Payments APIs", () => {
       });
 
     // Purchase the course
-    await request(`${HOST}/payments/admin-purchase-course`)
+    await request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -245,7 +245,7 @@ describe("Payments APIs", () => {
       });
 
     // Refund requires a valid course id
-    await request(`${HOST}/payments/admin-refund-course`)
+    await request(`${HOST}/admin/refund-course`)
       .post("/")
       .send({
         courseId: "sadfasf07sa",
@@ -258,7 +258,7 @@ describe("Payments APIs", () => {
       });
 
     // Refund requires a valid user
-    await request(`${HOST}/payments/admin-refund-course`)
+    await request(`${HOST}/admin/refund-course`)
       .post("/")
       .send({
         courseId: "fpvPtfu7s",
@@ -271,7 +271,7 @@ describe("Payments APIs", () => {
       });
 
     // Refund the course
-    await request(`${HOST}/payments/admin-refund-course`)
+    await request(`${HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
@@ -281,7 +281,7 @@ describe("Payments APIs", () => {
       });
 
     // Refund requires the course is not already refunded
-    await request(`${HOST}/payments/admin-refund-course`)
+    await request(`${HOST}/admin/refund-course`)
       .post("/")
       .send(body)
       .set("Authorization", adminAuthorizationHeader)

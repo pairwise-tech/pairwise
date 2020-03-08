@@ -10,6 +10,7 @@ import { ProgressService } from "src/progress/progress.service";
 import { User } from "src/user/user.entity";
 import { Payments } from "src/payments/payments.entity";
 import { Progress } from "src/progress/progress.entity";
+import { PaymentsService } from "src/payments/payments.service";
 
 @Module({
   controllers: [AdminController],
@@ -19,6 +20,7 @@ import { Progress } from "src/progress/progress.entity";
     SlackService,
     UserService,
     ProgressService,
+    PaymentsService,
   ],
   imports: [TypeOrmModule.forFeature([Feedback, User, Payments, Progress])],
 })
