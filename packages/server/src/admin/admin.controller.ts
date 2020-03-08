@@ -101,11 +101,13 @@ export class AdminController {
     return this.paymentsService.handleRefundCourseByAdmin(userEmail, courseId);
   }
 
-  private postAdminStatusMessage(req: AuthenticatedRequest, path: AdminUrls) {
+  private postAdminStatusMessage(
+    req: AuthenticatedRequest,
+    requestPath: AdminUrls,
+  ) {
     const adminUserEmail = req.user.profile.email;
-    const message = `[ADMIN]: Request received for API: "${path}"`;
     this.slackService.postAdminActionAwarenessMessage({
-      message,
+      requestPath,
       adminUserEmail,
     });
   }

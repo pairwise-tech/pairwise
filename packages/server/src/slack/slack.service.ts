@@ -25,7 +25,7 @@ interface SlackAccountCreationMessageData {
 }
 
 interface SlackAdminMessageData {
-  message: string;
+  requestPath: string;
   adminUserEmail: string;
   config?: SlackMessageConfig;
 }
@@ -74,12 +74,12 @@ export class SlackService {
   }
 
   public async postAdminActionAwarenessMessage({
-    message,
+    requestPath,
     adminUserEmail,
     config,
   }: SlackAdminMessageData) {
     // TODO: Improve message formatting later ~
-    const alert = `[ADMIN]: Action taken by admin user: ${adminUserEmail}, message: ${message}`;
+    const alert = `Action taken by admin user: ${adminUserEmail}. User submitted a request for the API: ${requestPath}`;
     await this.postMessageToChannel(alert, {
       channel: "production",
       ...config,
