@@ -85,10 +85,14 @@ const getAllUsers = async () => {
       },
     });
 
-    console.log("Admin request successful for retrieving all users, response:");
-    console.log(result.data);
+    console.log(
+      `Admin request successful for retrieving ${result.data.length} users`,
+    );
+    const filename = "pairwise-users.json";
+    console.log(`Writing result to file: ${filename}`);
     const users = JSON.stringify(result.data, null, 2);
-    fs.writeFileSync("pairwise-users.json", users, "utf-8");
+    fs.writeFileSync(filename, users, "utf-8");
+    console.log("Done!");
   } catch (err) {
     console.log("Admin request failed to retieve all users, error:");
     console.log(err);
