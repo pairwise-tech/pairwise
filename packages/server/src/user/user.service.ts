@@ -48,6 +48,16 @@ export class UserService {
       .getMany();
   }
 
+  public async adminDeleteUserByEmail(email: string) {
+    const user = await this.findUserByEmail(email);
+
+    if (!user) {
+      throw new BadRequestException(ERROR_CODES.MISSING_USER);
+    }
+
+    // TODO: Delete the user!
+  }
+
   public async findUserByEmail(email: string) {
     const user = await this.userRepository.findOne({ email });
     return this.processUserEntity(user);

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Body,
+  Delete,
 } from "@nestjs/common";
 import { AdminAuthGuard } from "src/auth/admin.guard";
 import { AuthenticatedRequest } from "src/types";
@@ -15,9 +16,12 @@ import { UserService } from "src/user/user.service";
 import { PaymentsService } from "src/payments/payments.service";
 import { FeedbackService } from "src/feedback/feedback.service";
 
+// HTTP Methods
+export type HTTP_METHOD = "GET" | "PUT" | "POST" | "DELETE";
+
 // Helper type for consistency and accuracy in report status alerts in
 // messages to Slack
-type AdminUrls =
+export type ADMIN_URLS =
   | "admin"
   | "admin/users"
   | "admin/feedback/:challengeId"
@@ -42,7 +46,7 @@ export class AdminController {
   @UseGuards(AdminAuthGuard)
   @Get()
   async adminIndex(@Request() req: AuthenticatedRequest) {
-    this.postAdminStatusMessage(req, "admin");
+    this.postAdminStatusMessage(req, "GET", "admin");
 
     return this.adminService.adminEndpoint();
   }
@@ -50,9 +54,18 @@ export class AdminController {
   @UseGuards(AdminAuthGuard)
   @Get("/users")
   async getAllUsers(@Request() req: AuthenticatedRequest) {
-    this.postAdminStatusMessage(req, "admin/users");
+    this.postAdminStatusMessage(req, "GET", "admin/users");
 
     return this.userService.adminGetAllUsers();
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Delete("/users")
+  async deleteUser(@Body() body, @Request() req: AuthenticatedRequest) {
+    this.postAdminStatusMessage(req, "DELETE", "admin/users");
+
+    const { userEmail } = body;
+    return this.userService.adminDeleteUserByEmail(userEmail);
   }
 
   @UseGuards(AdminAuthGuard)
@@ -64,7 +77,7 @@ export class AdminController {
     const { challengeId } = params;
 
     // Post status message to Slack
-    this.postAdminStatusMessage(req, "admin/feedback/:challengeId");
+    this.postAdminStatusMessage(req, "POST", "admin/feedback/:challengeId");
 
     return this.feedbackService.getFeedbackForChallenge(challengeId);
   }
@@ -79,7 +92,7 @@ export class AdminController {
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {
-    this.postAdminStatusMessage(req, "admin/purchase-course");
+    this.postAdminStatusMessage(req, "POST", "admin/purchase-course");
 
     const { userEmail, courseId } = body;
     return this.paymentsService.handlePurchaseCourseByAdmin(
@@ -95,7 +108,7 @@ export class AdminController {
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {
-    this.postAdminStatusMessage(req, "admin/refund-course");
+    this.postAdminStatusMessage(req, "POST", "admin/refund-course");
 
     const { userEmail, courseId } = body;
     return this.paymentsService.handleRefundCourseByAdmin(userEmail, courseId);
@@ -103,10 +116,12 @@ export class AdminController {
 
   private postAdminStatusMessage(
     req: AuthenticatedRequest,
-    requestPath: AdminUrls,
+    httpMethod: HTTP_METHOD,
+    requestPath: ADMIN_URLS,
   ) {
     const adminUserEmail = req.user.profile.email;
     this.slackService.postAdminActionAwarenessMessage({
+      httpMethod,
       requestPath,
       adminUserEmail,
     });

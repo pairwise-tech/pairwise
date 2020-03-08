@@ -5,6 +5,7 @@ import { IFeedbackDto, ContentUtility } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { GenericUserProfile } from "src/user/user.service";
 import { captureSentryException } from "src/tools/sentry-utils";
+import { ADMIN_URLS, HTTP_METHOD } from "src/admin/admin.controller";
 
 /** ===========================================================================
  * Types & Config
@@ -25,7 +26,8 @@ interface SlackAccountCreationMessageData {
 }
 
 interface SlackAdminMessageData {
-  requestPath: string;
+  requestPath: ADMIN_URLS;
+  httpMethod: HTTP_METHOD;
   adminUserEmail: string;
   config?: SlackMessageConfig;
 }
@@ -74,12 +76,13 @@ export class SlackService {
   }
 
   public async postAdminActionAwarenessMessage({
+    httpMethod,
     requestPath,
     adminUserEmail,
     config,
   }: SlackAdminMessageData) {
     // TODO: Improve message formatting later ~
-    const alert = `Action taken by admin user: ${adminUserEmail}. User submitted a request for the API: ${requestPath}`;
+    const alert = `Action taken by admin user: ${adminUserEmail}. User submitted a request for the API, [${httpMethod}]: ${requestPath}`;
     await this.postMessageToChannel(alert, {
       channel: "production",
       ...config,
