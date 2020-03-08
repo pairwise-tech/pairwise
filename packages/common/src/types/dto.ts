@@ -90,10 +90,13 @@ export interface Payment {
   datePaid: Date;
   amountPaid: number;
   status: PAYMENT_STATUS;
+  paymentType: PAYMENT_TYPE;
   extraData?: string /* generic json data */;
 }
 
 export type PAYMENT_STATUS = "CONFIRMED" | "REFUNDED";
+
+export type PAYMENT_TYPE = "ADMIN_GIFT" | "USER_PAID";
 
 export type COURSE_ACCESS_LEVEL = "FREE" | "PAID";
 

@@ -9,7 +9,7 @@ import { GenericUserProfile } from "src/user/user.service";
  * Types & Config
  * ============================================================================
  */
-type SLACK_CHANNELS = "users" | "feedback";
+type SLACK_CHANNELS = "feedback" | "production";
 
 interface SlackFeedbackMessageData {
   feedbackDto: IFeedbackDto;
@@ -20,6 +20,12 @@ interface SlackFeedbackMessageData {
 interface SlackAccountCreationMessageData {
   profile: GenericUserProfile;
   accountCreated: boolean;
+  config?: SlackMessageConfig;
+}
+
+interface SlackAdminMessageData {
+  message: string;
+  adminUserEmail: string;
   config?: SlackMessageConfig;
 }
 
@@ -66,6 +72,19 @@ export class SlackService {
     );
   }
 
+  public async postAdminActionAwarenessMessage({
+    message,
+    adminUserEmail,
+    config,
+  }: SlackAdminMessageData) {
+    // TODO: Improve message formatting later ~
+    const alert = `[ADMIN]: Action taken by admin user: ${adminUserEmail}, message: ${message}`;
+    await this.postMessageToChannel(alert, {
+      channel: "production",
+      ...config,
+    });
+  }
+
   public async postFeedbackMessage({
     feedbackDto,
     user,
@@ -86,7 +105,7 @@ export class SlackService {
     if (accountCreated) {
       const message = `New account created for *${profile.displayName}* (${profile.email}) :tada:`;
       await this.postMessageToChannel(message, {
-        channel: "users",
+        channel: "production",
         ...config,
       });
     }

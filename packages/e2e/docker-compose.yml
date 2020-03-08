@@ -53,6 +53,8 @@ services:
       GOOGLE_PROFILE_URL: http://external-services:7000/google/profile
       GOOGLE_TOKEN_URL: http://external-services:7000/google/token
       STRIPE_SECRET_KEY: sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ
+      # Admin whitelisting
+      WHITELISTED_ADMIN_EMAILS: pairwise-dev-admin-user@pairwise.tech
     expose:
       - 9000
     depends_on:

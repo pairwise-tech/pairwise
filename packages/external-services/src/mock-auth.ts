@@ -5,7 +5,8 @@ import faker from "faker";
  * ============================================================================
  */
 
-const ADMIN_EMAIL = "sean.smith.2009@gmail.com"; /* Blah... */
+// Hard-coded admin email for development/testing environments
+const ADMIN_EMAIL = "pairwise-dev-admin-user@pairwise.tech";
 
 const getRandomProfileImage = () => {
   const n = Math.floor(Math.random() * 100);
