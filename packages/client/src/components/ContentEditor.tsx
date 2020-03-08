@@ -167,7 +167,8 @@ const MarkdownShortcuts = (): SlatePlugin => {
       // Prevent the space from being inserted
       e.preventDefault();
 
-      let checked = false;
+      let checked: boolean | undefined;
+
       if (chars === "[x]") {
         checked = true;
       }
