@@ -15,6 +15,7 @@ COPY . .
 # Read from the build environment args
 ARG REACT_APP_HOST
 ARG REACT_APP_STRIPE_API_KEY
+ARG REACT_APP_SENTRY_DSN
 
 # Enable Google Analytics
 ENV REACT_APP_ENABLE_ANALYTICS=true

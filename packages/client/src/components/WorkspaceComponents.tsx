@@ -346,7 +346,7 @@ export const ContentViewEdit = connect(
         (serializeEditorContent: () => string) => {
           props.updateChallenge({
             id: currentId,
-            challenge: { content: serializeEditorContent() },
+            challenge: { instructions: serializeEditorContent() },
           });
         },
       ),

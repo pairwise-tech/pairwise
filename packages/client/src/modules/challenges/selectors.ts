@@ -207,13 +207,13 @@ export const getCurrentId = createSelector(
 
 export const getCurrentContent = createSelector(
   [getCurrentChallenge],
-  challenge => challenge?.content,
+  challenge => challenge?.instructions,
 );
 
 export const getHasMediaContent = createSelector(
   [getCurrentChallenge],
   challenge => {
-    return !!(challenge?.supplementaryContent || challenge?.videoUrl);
+    return !!(challenge?.content || challenge?.videoUrl);
   },
 );
 
