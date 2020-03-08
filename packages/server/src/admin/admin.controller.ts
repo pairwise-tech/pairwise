@@ -14,6 +14,15 @@ import { SlackService } from "src/slack/slack.service";
 import { UserService } from "src/user/user.service";
 import { PaymentsService } from "src/payments/payments.service";
 
+// Helper type for consistency and accuracy in report status alerts in
+// messages to Slack
+type AdminUrls =
+  | "admin"
+  | "admin/users"
+  | "admin/feedback/:challengeId"
+  | "admin/purchase-course"
+  | "admin/refund-course";
+
 @Controller("admin")
 export class AdminController {
   constructor(
@@ -30,10 +39,7 @@ export class AdminController {
   @UseGuards(AdminAuthGuard)
   @Get()
   async adminIndex(@Request() req: AuthenticatedRequest) {
-    this.postAdminStatusMessage(
-      req.user.profile.email,
-      `Admin user request received for /admin`,
-    );
+    this.postAdminStatusMessage(req, "admin");
 
     return this.adminService.adminEndpoint();
   }
@@ -41,10 +47,7 @@ export class AdminController {
   @UseGuards(AdminAuthGuard)
   @Get("/users")
   async getAllUsers(@Request() req: AuthenticatedRequest) {
-    this.postAdminStatusMessage(
-      req.user.profile.email,
-      `Admin user request received for admin/users`,
-    );
+    this.postAdminStatusMessage(req, "admin/users");
 
     return this.userService.adminGetAllUsers();
   }
@@ -58,19 +61,9 @@ export class AdminController {
     const { challengeId } = params;
 
     // Post status message to Slack
-    this.postAdminStatusMessage(
-      req.user.profile.email,
-      `Admin user request received for admin/feedback/${challengeId}`,
-    );
+    this.postAdminStatusMessage(req, "admin/feedback/:challengeId");
 
     return this.adminService.getFeedbackForChallenge(challengeId);
-  }
-
-  private postAdminStatusMessage(adminUserEmail: string, message: string) {
-    this.slackService.postAdminActionAwarenessMessage({
-      message,
-      adminUserEmail,
-    });
   }
 
   // An admin API to allow admin users to effectively purchase a course for
@@ -83,11 +76,7 @@ export class AdminController {
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      adminUserEmail,
-      message: `Admin user request to purchase a course for user!`,
-    });
+    this.postAdminStatusMessage(req, "admin/purchase-course");
 
     const { userEmail, courseId } = body;
     return this.paymentsService.handlePurchaseCourseByAdmin(
@@ -103,13 +92,18 @@ export class AdminController {
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      adminUserEmail,
-      message: `Admin user request to purchase a course for user!`,
-    });
+    this.postAdminStatusMessage(req, "admin/refund-course");
 
     const { userEmail, courseId } = body;
     return this.paymentsService.handleRefundCourseByAdmin(userEmail, courseId);
+  }
+
+  private postAdminStatusMessage(req: AuthenticatedRequest, path: AdminUrls) {
+    const adminUserEmail = req.user.profile.email;
+    const message = `[ADMIN]: Request received for API: "${path}"`;
+    this.slackService.postAdminActionAwarenessMessage({
+      message,
+      adminUserEmail,
+    });
   }
 }
