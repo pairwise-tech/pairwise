@@ -1,4 +1,4 @@
-import Sentry from "@sentry/browser";
+import * as Sentry from "@sentry/browser";
 
 // Report an exception to Sentry
 export const captureSentryException = (error: any) => {
