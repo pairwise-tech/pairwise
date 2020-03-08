@@ -23,27 +23,27 @@ import { FEEDBACK_TYPE, IFeedbackDto } from "@pairwise/common";
 @Entity()
 export class Feedback implements IFeedbackDto {
   @PrimaryGeneratedColumn("uuid")
-  uuid: number;
+  public uuid: number;
 
   @Index()
   @Column()
-  challengeId: string;
+  public challengeId: string;
 
   @Column()
-  feedback: string;
+  public feedback: string;
 
   @Column()
-  type: FEEDBACK_TYPE;
+  public type: FEEDBACK_TYPE;
 
   @ManyToOne(
     type => User,
     user => user.userFeedback,
   )
-  user: User;
+  public user: User;
 
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: Date;
+  public updatedAt: Date;
 }

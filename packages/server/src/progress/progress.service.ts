@@ -22,11 +22,11 @@ export class ProgressService {
     private readonly progressRepository: Repository<Progress>,
   ) {}
 
-  async fetchProgressHistoryForCourse(courseId: string) {
+  public async fetchProgressHistoryForCourse(courseId: string) {
     return this.progressRepository.find({ courseId });
   }
 
-  async fetchUserProgress(uuid: string) {
+  public async fetchUserProgress(uuid: string) {
     const result = await this.progressRepository.find({
       where: {
         user: uuid,
@@ -36,7 +36,7 @@ export class ProgressService {
     return result;
   }
 
-  async updateUserProgressHistory(
+  public async updateUserProgressHistory(
     requestUser: RequestUser,
     challengeProgressDto: ProgressDto,
   ) {
@@ -94,7 +94,7 @@ export class ProgressService {
     return this.fetchProgressHistoryForCourse(courseId);
   }
 
-  async persistUserCourseProgress(
+  public async persistUserCourseProgress(
     courseProgress: UserCourseProgress,
     user: RequestUser,
   ) {

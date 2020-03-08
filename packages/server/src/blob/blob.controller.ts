@@ -22,7 +22,10 @@ export class BlobController {
 
   @UseGuards(AuthGuard("jwt"))
   @Get(":id")
-  fetchUserChallengeHistory(@Param() params, @Req() req: AuthenticatedRequest) {
+  public fetchUserChallengeHistory(
+    @Param() params,
+    @Req() req: AuthenticatedRequest,
+  ) {
     const { id } = params;
     return this.blobService.fetchUserCodeBlob(req.user, id);
   }
@@ -30,7 +33,7 @@ export class BlobController {
   @UseGuards(AuthGuard("jwt"))
   @Post()
   @UsePipes(ValidationPipe)
-  updateUserChallengeCode(
+  public updateUserChallengeCode(
     @Body() challengeCodeDto: BlobDto,
     @Req() req: AuthenticatedRequest,
   ) {
@@ -41,7 +44,7 @@ export class BlobController {
   @UseGuards(AuthGuard("jwt"))
   @Post("/bulk")
   @UsePipes(ValidationPipe)
-  async updateUserChallengeCodeBulk(
+  public async updateUserChallengeCodeBulk(
     @Body() codeBlobBulk: CodeBlobBulk,
     @Req() req: AuthenticatedRequest,
   ) {

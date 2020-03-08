@@ -17,14 +17,14 @@ export class UserController {
 
   @UseGuards(AuthGuard("jwt"))
   @Get("profile")
-  async getProfile(@Request() req: AuthenticatedRequest) {
+  public async getProfile(@Request() req: AuthenticatedRequest) {
     const { email } = req.user.profile;
     return this.userService.findUserByEmailGetFullProfile(email);
   }
 
   @UseGuards(AuthGuard("jwt"))
   @Post("profile")
-  async updateProfile(
+  public async updateProfile(
     @Body() updateDetails: UserUpdateOptions,
     @Request() req: AuthenticatedRequest,
   ) {

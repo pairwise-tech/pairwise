@@ -29,7 +29,7 @@ export class GoogleStrategy {
     this.init();
   }
 
-  init() {
+  private init() {
     use(
       new GooglePassportStrategy(
         {

@@ -22,24 +22,24 @@ import { User } from "../user/user.entity";
 @Entity()
 export class Progress {
   @PrimaryGeneratedColumn("uuid")
-  uuid: number;
+  public uuid: number;
 
   @Index()
   @Column()
-  courseId: string;
+  public courseId: string;
 
   @Column({ type: "jsonb", nullable: true })
-  progress: string;
+  public progress: string;
 
   @ManyToOne(
     type => User,
     user => user.challengeProgressHistory,
   )
-  user: User;
+  public user: User;
 
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: Date;
+  public updatedAt: Date;
 }

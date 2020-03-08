@@ -22,33 +22,33 @@ import { PAYMENT_STATUS } from "@pairwise/common";
 @Entity()
 export class Payments {
   @PrimaryGeneratedColumn("uuid")
-  uuid: number;
+  public uuid: number;
 
   @Index()
   @Column()
-  courseId: string;
+  public courseId: string;
 
   @Column({ type: "timestamp" })
-  datePaid: Date;
+  public datePaid: Date;
 
   @Column()
-  amountPaid: number;
+  public amountPaid: number;
 
   @Column()
-  status: PAYMENT_STATUS;
+  public status: PAYMENT_STATUS;
 
   @Column({ type: "json", nullable: true })
-  extraData: string;
+  public extraData: string;
 
   @ManyToOne(
     type => User,
     user => user.payments,
   )
-  user: User;
+  public user: User;
 
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: Date;
+  public updatedAt: Date;
 }

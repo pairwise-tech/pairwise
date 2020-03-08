@@ -25,60 +25,60 @@ import { CodeBlob } from "src/blob/blob.entity";
 @Entity()
 export class User {
   @PrimaryGeneratedColumn("uuid")
-  uuid: string;
+  public uuid: string;
 
   @Column({ unique: true })
-  email: string;
+  public email: string;
 
   @Column()
-  displayName: string;
+  public displayName: string;
 
   @Column()
-  givenName: string;
+  public givenName: string;
 
   @Column()
-  familyName: string;
+  public familyName: string;
 
   @Column()
-  lastActiveChallengeId: string;
+  public lastActiveChallengeId: string;
 
   @Column()
-  avatarUrl: string;
+  public avatarUrl: string;
 
   @Column({ type: "jsonb" })
-  settings: string;
+  public settings: string;
 
   @OneToMany(
     type => Payments,
     payments => payments.user,
   )
   @JoinColumn()
-  payments: Payments;
+  public payments: Payments;
 
   @OneToMany(
     type => Progress,
     challengeProgressHistory => challengeProgressHistory.user,
   )
   @JoinColumn()
-  challengeProgressHistory: Progress;
+  public challengeProgressHistory: Progress;
 
   @OneToMany(
     type => CodeBlob,
     codeBlob => codeBlob.user,
   )
   @JoinColumn()
-  challengeCodeHistory: CodeBlob;
+  public challengeCodeHistory: CodeBlob;
 
   @OneToMany(
     type => Feedback,
     userFeedback => userFeedback.user,
   )
   @JoinColumn()
-  userFeedback: Feedback;
+  public userFeedback: Feedback;
 
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: Date;
+  public updatedAt: Date;
 }

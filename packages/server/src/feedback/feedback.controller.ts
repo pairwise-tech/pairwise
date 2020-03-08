@@ -10,7 +10,7 @@ export class FeedbackController {
 
   @UseGuards(CustomJwtAuthGuard)
   @Post()
-  submitUserFeedback(
+  public submitUserFeedback(
     @Body() feedbackDto: IFeedbackDto,
     @Req() req: AuthenticatedRequest,
   ) {

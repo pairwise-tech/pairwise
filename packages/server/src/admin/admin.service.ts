@@ -5,11 +5,11 @@ import { FeedbackService } from "src/feedback/feedback.service";
 export class AdminService {
   constructor(private readonly feedbackService: FeedbackService) {}
 
-  adminEndpoint() {
+  public adminEndpoint() {
     return "Admin Service";
   }
 
-  getFeedbackForChallenge(challengeId: string) {
+  public getFeedbackForChallenge(challengeId: string) {
     return this.feedbackService.getFeedbackForChallenge(challengeId);
   }
 }
