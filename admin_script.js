@@ -61,8 +61,8 @@ const RequestHeaders = {
 
 // Admin API urls
 const ADMIN_INDEX_URL = `${SERVER_URL}/admin`;
-const GET_ALL_USERS_URL = `${SERVER_URL}/users/admin`;
-const DELETE_USER_URL = `${SERVER_URL}/users/admin`;
+const GET_ALL_USERS_URL = `${SERVER_URL}/user/admin`;
+const DELETE_USER_URL = `${SERVER_URL}/user/admin/delete`;
 const PURCHASE_COURSE_URL = `${SERVER_URL}/payments/admin/purchase-course`;
 const REFUND_COURSE_URL = `${SERVER_URL}/payments/admin/refund-course`;
 
@@ -135,7 +135,7 @@ const deleteUserByEmail = async userEmail => {
 
     Log.start();
     const body = { userEmail };
-    const result = await axios.delete(DELETE_USER_URL, body, RequestHeaders);
+    const result = await axios.post(DELETE_USER_URL, body, RequestHeaders);
     Log.finish(result.data);
   } catch (err) {
     Log.fail(err);
@@ -190,7 +190,7 @@ const runScript = () => {
     case GET_USERS:
       return getAllUsers();
     case DELETE_USER:
-      return deleteUserByEmail();
+      return deleteUserByEmail(USER_EMAIL);
     case PURCHASE:
       return purchaseCourseForUserByAdmin(USER_EMAIL, COURSE_ID);
     case REFUND:

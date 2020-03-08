@@ -50,7 +50,7 @@ export class UserController {
   }
 
   @UseGuards(AdminAuthGuard)
-  @Delete("/admin")
+  @Post("/admin/delete")
   async deleteUser(@Body() body, @Request() req: AuthenticatedRequest) {
     const adminUserEmail = req.user.profile.email;
     this.slackService.postAdminActionAwarenessMessage({
