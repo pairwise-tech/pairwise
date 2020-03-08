@@ -49,7 +49,7 @@
     "@types/redux-logger": "^3.0.7",
     "@types/remove-markdown": "^0.1.1",
     "@types/shortid": "^0.0.29",
-    "@types/slate": "^0.44.12",
+    "@types/slate": "0.44.11",
     "@types/slate-react": "^0.22.4",
     "@types/styled-components": "^4.4.0",
     "@types/throttle-debounce": "^2.1.0",

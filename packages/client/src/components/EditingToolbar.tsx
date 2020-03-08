@@ -7,7 +7,6 @@ import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { CHALLENGE_TYPE } from "@pairwise/common";
-import { IconButton } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
