@@ -36,6 +36,8 @@ const TableOfContentsPlugin = (): SlatePlugin => {
   return { renderEditor };
 };
 
+// const
+
 // NOTE: Overflow auto is necessary to prevent the child from overflowing... but
 // it doesn't add scroll bars. It just does what we actually want which is add
 // scroll bars to the elements that are too wide, but not the whole thing.
