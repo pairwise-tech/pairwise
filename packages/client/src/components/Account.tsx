@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { Classes, Button } from "@blueprintjs/core";
+import { captureMessage } from "@sentry/browser";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle, ProfileIcon } from "./Shared";
@@ -153,6 +154,15 @@ class Account extends React.Component<IProps, IState> {
             {payments.map(this.renderPaymentDetails)}
           </>
         )}
+        <Button
+          style={{ marginTop: 25 }}
+          intent="danger"
+          onClick={() => {
+            captureMessage("A friendly message from the workspace...");
+            throw new Error("Something blew up in the Pairwise Workspace !!!");
+          }}
+          text="Temporary Bomb Button"
+        />
       </PageContainer>
     );
   }
