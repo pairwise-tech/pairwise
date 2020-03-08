@@ -137,7 +137,7 @@ export class SlackService {
       `\n•  *Module:* ${ctx.module.title}${ctx.module.free ? " _FREE_" : ""}`;
 
     // build challenge link strings
-    const prodLink = `<https://app.pairwise.tech/workspace//${ctx.challenge.id}|prod>`;
+    const prodLink = `<https://app.pairwise.tech/workspace/${ctx.challenge.id}|prod>`;
     const localLink = `<http://127.0.0.1:3000/workspace/${ctx.challenge.id}|local>`;
     const challengeLinks = `*${ctx.challenge.title}* (${prodLink}/${localLink})`;
 
