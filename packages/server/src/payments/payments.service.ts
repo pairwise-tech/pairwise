@@ -24,7 +24,7 @@ import {
   CourseMetadata,
 } from "@pairwise/common";
 import { UserService } from "src/user/user.service";
-import { captureSentryException } from "src/tools/sentry-util";
+import { captureSentryException } from "src/tools/sentry-utils";
 
 /** ===========================================================================
  * Types & Config

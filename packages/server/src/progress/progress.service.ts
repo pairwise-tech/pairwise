@@ -14,7 +14,7 @@ import {
   validateAndSanitizeProgressItem,
   validateChallengeProgressDto,
 } from "src/tools/validation";
-import { captureSentryException } from "src/tools/sentry-util";
+import { captureSentryException } from "src/tools/sentry-utils";
 
 @Injectable()
 export class ProgressService {

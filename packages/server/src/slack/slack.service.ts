@@ -4,7 +4,7 @@ import { Injectable, Optional } from "@nestjs/common";
 import { IFeedbackDto, ContentUtility } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { GenericUserProfile } from "src/user/user.service";
-import { captureSentryException } from "src/tools/sentry-util";
+import { captureSentryException } from "src/tools/sentry-utils";
 
 /** ===========================================================================
  * Types & Config
