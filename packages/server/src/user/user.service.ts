@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { User } from "./user.entity";
-import { Repository } from "typeorm";
+import { Repository, createQueryBuilder } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "src/payments/payments.entity";
 import {
@@ -39,7 +39,13 @@ export class UserService {
   ) {}
 
   public async adminGetAllUsers() {
-    return this.userRepository.find();
+    // Return all users and join with payments.
+    // NOTE: This does not handle pagination. But that's probably not a
+    // problem until we have 10_000s of users. Ha!
+    return this.userRepository
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.payments", "payments")
+      .getMany();
   }
 
   public async findUserByEmail(email: string) {
