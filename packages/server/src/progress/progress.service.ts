@@ -14,6 +14,7 @@ import {
   validateAndSanitizeProgressItem,
   validateChallengeProgressDto,
 } from "src/tools/validation";
+import { captureSentryException } from "src/tools/sentry-util";
 
 @Injectable()
 export class ProgressService {
@@ -120,6 +121,7 @@ export class ProgressService {
         };
         await this.progressRepository.insert(newProgressEntry);
       } catch (err) {
+        captureSentryException(err);
         console.log(
           "[BULK ERROR]: Error occurring processing one of the user course progress insertions",
           err,

@@ -24,6 +24,7 @@ import {
   CourseMetadata,
 } from "@pairwise/common";
 import { UserService } from "src/user/user.service";
+import { captureSentryException } from "src/tools/sentry-util";
 
 /** ===========================================================================
  * Types & Config
@@ -100,6 +101,7 @@ export class PaymentsService {
 
         return result;
       } catch (err) {
+        captureSentryException(err);
         // I saw this happen once. If it happens more, we could create retry
         // logic here...
         console.log("[STRIPE ERROR]: Failed to create Stripe session!", err);
@@ -140,6 +142,7 @@ export class PaymentsService {
         // Handle other event types...
       }
     } catch (err) {
+      captureSentryException(err);
       console.log(`[STRIPE WEBHOOK ERROR]: ${err.message}`);
       throw new BadRequestException(`Webhook Error: ${err.message}`);
     }

@@ -13,6 +13,7 @@ import { AdminService } from "./admin.service";
 import { SlackService } from "src/slack/slack.service";
 import { UserService } from "src/user/user.service";
 import { PaymentsService } from "src/payments/payments.service";
+import { FeedbackService } from "src/feedback/feedback.service";
 
 // Helper type for consistency and accuracy in report status alerts in
 // messages to Slack
@@ -29,6 +30,8 @@ export class AdminController {
     private readonly adminService: AdminService,
 
     private readonly userService: UserService,
+
+    private readonly feedbackService: FeedbackService,
 
     private readonly slackService: SlackService,
 
@@ -63,7 +66,7 @@ export class AdminController {
     // Post status message to Slack
     this.postAdminStatusMessage(req, "admin/feedback/:challengeId");
 
-    return this.adminService.getFeedbackForChallenge(challengeId);
+    return this.feedbackService.getFeedbackForChallenge(challengeId);
   }
 
   // An admin API to allow admin users to effectively purchase a course for

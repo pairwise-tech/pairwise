@@ -4,6 +4,7 @@ import { Injectable, Optional } from "@nestjs/common";
 import { IFeedbackDto, ContentUtility } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { GenericUserProfile } from "src/user/user.service";
+import { captureSentryException } from "src/tools/sentry-util";
 
 /** ===========================================================================
  * Types & Config
@@ -187,6 +188,7 @@ export class SlackService {
     } else {
       console.log(`[SLACK ERROR] ${message}. Error Code: ${error.code}`);
       console.log(`[SLACK ERROR] ${JSON.stringify(error, null, 2)}`);
+      captureSentryException(error);
     }
   }
 }
