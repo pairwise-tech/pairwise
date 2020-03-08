@@ -1,16 +1,134 @@
 import React from "react";
-import { EditorProps } from "rich-markdown-editor";
+import { EditorProps, SlatePlugin } from "rich-markdown-editor";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import toaster from "tools/toast-utils";
 import { ContentUtility } from "@pairwise/common";
 import styled from "styled-components/macro";
-import { COLORS, SANDBOX_ID, PROSE_MAX_WIDTH } from "tools/constants";
+import { COLORS, SANDBOX_ID } from "tools/constants";
 import Modules, { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
 import { timer } from "rxjs";
 import { map } from "rxjs/operators";
+import { Editor } from "slate-react";
+import { Leaf } from "slate";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
+
+const MarkdownShortcuts = (): SlatePlugin => {
+  const inlineShortcuts = [
+    { mark: "bold", shortcut: "**" },
+    { mark: "italic", shortcut: "_" },
+    { mark: "code", shortcut: "`" },
+  ];
+
+  const keydownWhitelist = new Set(inlineShortcuts.map(x => x.shortcut[0]));
+
+  const onSpecialChar = (
+    e: React.KeyboardEvent,
+    editor: Editor,
+    next: () => void,
+  ) => {
+    const { value } = editor;
+    const { selection, startBlock } = value;
+    const firstText = startBlock.getFirstText();
+    if (selection.isExpanded || !firstText) {
+      console.warn("[WARN] Skipping because selection is expanded");
+      return next();
+    }
+
+    // NOTE: There's some oddness with scope going on here. The logic in here
+    // _does not work_ if using a forEach loop with callback
+    for (const { mark, shortcut } of inlineShortcuts) {
+      const inlineTags = [];
+      const fullText = startBlock.text;
+      // By using this text of the last leaf we avoid the issue of having a
+      // previous char complete this string. For example, given the string
+      // "italic uses `_` to make things _italic_" we want the first underscore
+      // to be in a code tag and the word "italic" to be italicized. We do not
+      // want the first underscore of "_italic_" to close out the previous on in
+      // backticks
+      // @ts-ignore Slate React typings are poorly versioned
+      const text = firstText.getLeaves().last().text;
+      const leadingText = firstText
+        // @ts-ignore Slate React typings are poorly versioned
+        .getLeaves()
+        .slice(0, -1)
+        .map((x: Leaf | undefined) => x?.get("text") || "")
+        .reduce((agg: string, x: string = "") => agg + x, "");
+      const offsetFromStart = leadingText !== text ? leadingText.length : 0;
+      const potentialText = text + e.key; // This is a keydown handler, so this is the text that would be on the page _after_ thepress
+
+      // only add tags if they have spaces around them or the tag is beginning
+      // or the end of the block
+      for (let i = 0; i < potentialText.length; i++) {
+        const start = i;
+        const end = i + shortcut.length;
+        const beginningOfBlock = start === 0;
+        const endOfBlock = end === potentialText.length;
+        const surroundedByWhitespaces = [
+          potentialText.slice(start - 1, start),
+          potentialText.slice(end, end + 1),
+        ].includes(" ");
+        const markStart = offsetFromStart + i;
+        const markEnd = offsetFromStart + text.length - shortcut.length;
+        const markInner = fullText.slice(markStart, markEnd);
+
+        if (
+          potentialText.slice(start, end) === shortcut &&
+          (beginningOfBlock || endOfBlock || surroundedByWhitespaces) &&
+          markInner !== "`" // Special case to prevent ``` from turning into an inline code mark (because it should become a code block)
+        ) {
+          inlineTags.push(markStart); // Start of inline tag
+        }
+      }
+
+      const [firstCodeTagIndex, lastCodeTagIndex] = inlineTags;
+      const markLength = lastCodeTagIndex - firstCodeTagIndex;
+      if (inlineTags.length > 1 && markLength > 1) {
+        // Prevent the key that closed this out from getting inserted
+        if (!e.defaultPrevented) {
+          e.preventDefault();
+        }
+
+        return editor
+          .removeTextByKey(firstText.key, lastCodeTagIndex, shortcut.length)
+          .removeTextByKey(firstText.key, firstCodeTagIndex, shortcut.length)
+          .moveAnchorTo(firstCodeTagIndex, lastCodeTagIndex)
+          .addMark(mark)
+          .moveToEnd()
+          .removeMark(mark);
+      }
+    }
+
+    return next();
+  };
+
+  const onKeyDown = (
+    e: React.KeyboardEvent,
+    editor: Editor,
+    next: () => void,
+  ) => {
+    const { value } = editor;
+    const { startBlock } = value;
+
+    if (!startBlock) {
+      return next();
+    }
+
+    // markdown shortcuts should not be parsed in code
+    if (startBlock.type.match(/code/)) {
+      return next();
+    }
+
+    if (keydownWhitelist.has(e.key)) {
+      return onSpecialChar(e, editor, next);
+    } else {
+      return next();
+    }
+  };
+
+  return { onKeyDown };
+};
 
 /** ===========================================================================
  * ContentEditor
@@ -30,6 +148,8 @@ const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
  * ============================================================================
  */
 class ContentEditor extends React.Component<Props> {
+  markdownShortcuts = MarkdownShortcuts();
+
   getSearchLinks = (searchTerm: string) => {
     // Kick off a search request...
     this.props.requestSearchResults(searchTerm);
@@ -48,10 +168,11 @@ class ContentEditor extends React.Component<Props> {
   };
 
   render() {
-    const { history } = this.props;
+    const { history, plugins = [], ...props } = this.props;
     return (
       <EditorExternalStyles>
         <RichMarkdownEditor
+          plugins={[...plugins, this.markdownShortcuts]}
           theme={editorTheme}
           onSearchLink={this.getSearchLinks}
           onShowToast={message => {
@@ -73,7 +194,7 @@ class ContentEditor extends React.Component<Props> {
               window.open(href, "_blank");
             }
           }}
-          {...this.props}
+          {...props}
         />
       </EditorExternalStyles>
     );
