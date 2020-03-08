@@ -1,6 +1,5 @@
 import ENV from "../tools/server-env";
 import { WebClient, ErrorCode, WebAPICallResult } from "@slack/web-api";
-import { Injectable, Optional } from "@nestjs/common";
 import { IFeedbackDto, ContentUtility } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { GenericUserProfile } from "src/user/user.service";
@@ -67,8 +66,7 @@ export class SlackServiceClass {
   private client: WebClient;
   private adminMentionMarkup: string;
 
-  constructor(
-  ) {
+  constructor() {
     this.client = new WebClient(ENV.SLACK_API_TOKEN);
     this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS.map(id => `<@${id}>`).join(
       " ",
