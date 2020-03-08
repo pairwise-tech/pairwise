@@ -21,10 +21,14 @@ const MarkdownShortcuts = (): SlatePlugin => {
     { mark: "bold", shortcut: "**" },
     { mark: "italic", shortcut: "_" },
     { mark: "code", shortcut: "`" },
+    { mark: "inserted", shortcut: "++" },
+    { mark: "deleted", shortcut: "~" },
   ];
 
   const keydownWhitelist = new Set(inlineShortcuts.map(x => x.shortcut[0]));
 
+  // On special char handles inline markdown shortcuts. Support shortcuts are
+  // listed in inlineShortcuts array
   const onSpecialChar = (
     e: React.KeyboardEvent,
     editor: Editor,
@@ -104,9 +108,8 @@ const MarkdownShortcuts = (): SlatePlugin => {
 
     return next();
   };
-  /**
-   * Get the block type for a series of auto-markdown shortcut `chars`.
-   */
+
+  // Get the block type for a series of auto-markdown shortcut `chars`.
   function getType(chars: string) {
     switch (chars) {
       case "*":
@@ -134,12 +137,10 @@ const MarkdownShortcuts = (): SlatePlugin => {
         return null;
     }
   }
-  /**
-   * On space, if it was after an auto-markdown shortcut, convert the current
-   * node into the shortcut's corresponding type.
-   */
+
+  // On space handles block-level markdown shortcuts
   const onSpace = (
-    ev: React.KeyboardEvent,
+    e: React.KeyboardEvent,
     editor: Editor,
     next: () => void,
   ) => {
@@ -164,7 +165,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
       }
 
       // Prevent the space from being inserted
-      ev.preventDefault();
+      e.preventDefault();
 
       let checked = false;
       if (chars === "[x]") {
