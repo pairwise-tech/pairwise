@@ -53,12 +53,12 @@ export interface Challenge {
   type: CHALLENGE_TYPE;
   id: string;
   title: string;
-  content: string;
+  instructions: string;
   testCode: string;
   videoUrl?: string;
   starterCode: string;
   solutionCode: string;
-  supplementaryContent: string;
+  content: string;
 }
 
 /** ===========================================================================

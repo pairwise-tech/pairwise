@@ -218,6 +218,15 @@ const EditorExternalStyles = styled.div`
     padding: 5px 20px 5px 10px !important;
   }
 
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+  }
+
   ul,
   ol {
     margin-left: 30px !important;
