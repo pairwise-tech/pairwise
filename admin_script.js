@@ -52,6 +52,13 @@ const validateActionType = actionType => {
 // Validate the requested action
 validateActionType(SCRIPT_ACTION);
 
+// Admin Request Headers
+const RequestHeaders = {
+  headers: {
+    admin_access_token: ADMIN_TOKEN,
+  },
+};
+
 // Admin API urls
 const ADMIN_INDEX_URL = `${SERVER_URL}/admin`;
 const GET_ALL_USERS_URL = `${SERVER_URL}/users/admin`;
@@ -93,11 +100,7 @@ const Log = new log(SCRIPT_ACTION);
 const testAdminIndexRoute = async () => {
   try {
     Log.start();
-    const result = await axios.get(ADMIN_INDEX_URL, {
-      headers: {
-        admin_access_token: ADMIN_TOKEN,
-      },
-    });
+    const result = await axios.get(ADMIN_INDEX_URL, RequestHeaders);
     Log.finish(result.data);
   } catch (err) {
     Log.fail(err);
@@ -108,11 +111,7 @@ const testAdminIndexRoute = async () => {
 const getAllUsers = async () => {
   try {
     Log.start();
-    const result = await axios.get(GET_ALL_USERS_URL, {
-      headers: {
-        admin_access_token: ADMIN_TOKEN,
-      },
-    });
+    const result = await axios.get(GET_ALL_USERS_URL, RequestHeaders);
     Log.finish(
       `Retrieved ${result.data.length} user records. Writing result to file: ${filename}`,
     );
@@ -133,20 +132,10 @@ const deleteUserByEmail = async userEmail => {
         "Must provide USER_EMAIL environment variables to delete a user!",
       );
     }
+
     Log.start();
-
-    const result = await axios.delete(
-      DELETE_USER_URL,
-      {
-        userEmail,
-      },
-      {
-        headers: {
-          admin_access_token: ADMIN_TOKEN,
-        },
-      },
-    );
-
+    const body = { userEmail };
+    const result = await axios.delete(DELETE_USER_URL, body, RequestHeaders);
     Log.finish(result.data);
   } catch (err) {
     Log.fail(err);
@@ -161,21 +150,10 @@ const purchaseCourseForUserByAdmin = async (userEmail, courseId) => {
         "Must provide USER_EMAIL and COURSE_ID environment variables to purchase a course for a user!",
       );
     }
+
     Log.start();
-
-    const result = await axios.post(
-      PURCHASE_COURSE_URL,
-      {
-        userEmail,
-        courseId,
-      },
-      {
-        headers: {
-          admin_access_token: ADMIN_TOKEN,
-        },
-      },
-    );
-
+    const body = { userEmail, courseId };
+    const result = await axios.post(PURCHASE_COURSE_URL, body, RequestHeaders);
     Log.finish(result.data);
   } catch (err) {
     Log.fail(err);
@@ -190,21 +168,10 @@ const refundCourseForUserByAdmin = async (userEmail, courseId) => {
         "Must provide USER_EMAIL and COURSE_ID environment variables to refund a course for a user!",
       );
     }
+
     Log.start();
-
-    const result = await axios.post(
-      REFUND_COURSE_URL,
-      {
-        userEmail,
-        courseId,
-      },
-      {
-        headers: {
-          admin_access_token: ADMIN_TOKEN,
-        },
-      },
-    );
-
+    const body = { userEmail, courseId };
+    const result = await axios.post(REFUND_COURSE_URL, body, RequestHeaders);
     Log.finish(result.data);
   } catch (err) {
     Log.fail(err);

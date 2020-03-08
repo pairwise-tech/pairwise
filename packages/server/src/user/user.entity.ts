@@ -51,6 +51,7 @@ export class User {
   @OneToMany(
     type => Payments,
     payments => payments.user,
+    { onDelete: "CASCADE" },
   )
   @JoinColumn()
   payments: Payments;
@@ -58,6 +59,7 @@ export class User {
   @OneToMany(
     type => Progress,
     challengeProgressHistory => challengeProgressHistory.user,
+    { onDelete: "CASCADE" },
   )
   @JoinColumn()
   challengeProgressHistory: Progress;
@@ -65,6 +67,7 @@ export class User {
   @OneToMany(
     type => CodeBlob,
     codeBlob => codeBlob.user,
+    { onDelete: "CASCADE" },
   )
   @JoinColumn()
   challengeCodeHistory: CodeBlob;
@@ -72,6 +75,7 @@ export class User {
   @OneToMany(
     type => Feedback,
     userFeedback => userFeedback.user,
+    { onDelete: "CASCADE" },
   )
   @JoinColumn()
   userFeedback: Feedback;

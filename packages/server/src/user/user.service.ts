@@ -55,7 +55,11 @@ export class UserService {
       throw new BadRequestException(ERROR_CODES.MISSING_USER);
     }
 
-    // TODO: Delete the user!
+    const result = await this.userRepository.delete({
+      uuid: user.profile.uuid,
+    });
+    console.log(result);
+    return result;
   }
 
   public async findUserByEmail(email: string) {
