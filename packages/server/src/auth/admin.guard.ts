@@ -13,6 +13,7 @@ const WHITELISTED_ADMIN_EMAILS = getenv.array(
 );
 
 const ADMIN_EMAILS = new Set(WHITELISTED_ADMIN_EMAILS);
+console.log(ADMIN_EMAILS);
 
 /**
  * Hard-coded Admin Access Token. This is dangerous!!! This should be fully

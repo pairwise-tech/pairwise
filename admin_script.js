@@ -1,3 +1,4 @@
+const fs = require("fs");
 const axios = require("axios");
 
 /** ===========================================================================
@@ -12,6 +13,7 @@ const axios = require("axios");
  * Example usage:
  *
  * SCRIPT_ACTION=REFUND user_email@gmail.com COURSE_ID=fpvPtfu7s node admin_script.js
+ * SCRIPT_ACTION=GET_USERS node admin_script.js
  *
  * ============================================================================
  */
@@ -84,8 +86,9 @@ const getAllUsers = async () => {
     });
 
     console.log("Admin request successful for retrieving all users, response:");
-    // TODO: Save to a JSON file?
     console.log(result.data);
+    const users = JSON.stringify(result.data, null, 2);
+    fs.writeFileSync("pairwise-users.json", users, "utf-8");
   } catch (err) {
     console.log("Admin request failed to retieve all users, error:");
     console.log(err);
