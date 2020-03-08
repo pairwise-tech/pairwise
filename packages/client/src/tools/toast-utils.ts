@@ -1,4 +1,4 @@
-import { Toaster, IconName, IToastProps } from "@blueprintjs/core";
+import { Toaster, IconName } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Toaster Util

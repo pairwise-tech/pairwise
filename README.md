@@ -2,6 +2,21 @@
 
 The **Pairwise** codebase includes a React app client application, a NestJS server application, and other various services, all bundled up in a monorepo using Lerna and Yarn workspaces.
 
+## Contents
+
+- [Structure](#structure)
+- [Quick Links](#quick-links)
+- [Getting Started](#getting-started)
+- [Development](#development)
+- [Codepress](#codepress)
+- [Tests](#tests)
+- [Authentication](#authentication)
+- [Payments](#payments)
+- [To Rebuild The Database](#to-rebuild-the-database)
+- [To Refresh Builds and Dependencies](#to-refresh-builds-and-dependencies)
+- [Contributing](#contributing)
+- [Production](#production)
+
 ## Structure
 
 This project is managed using Lerna, and contains the following packages:
@@ -160,7 +175,9 @@ A quick note to keep in mind about running `docker-compose` commands. There are 
 
 We use the passport module for defining single-sign-on provider logins with common social account providers like Google, Facebook, and GitHub. Authorization through one of these strategies creates a user account which is uniquely identified by the email address. After authentication, a user is granted a long-lived `jwt` to stay signed into Pairwise.
 
-To test authentication locally, you will need to run the client and server using `https`, which can be done using the `yarn client|server|services:https` commands. On the server, you will need to ensure the environment variables which specify URL overrides for the SSO providers are removed/disabled: variables of the format `FACEBOOK_..._URL`. These are only used to override the default behavior in the test/development environment and are not necessary to use the actual integration.
+To test authentication locally, you will need to run the client and server using `https`, which can be done using the `yarn client|server|services:https` commands. Also, you may need to visit `chrome://flags/#allow-insecure-localhost` in Chrome and enable the option to prevent warnings about insecure https on localhost.
+
+On the server, you will need to ensure the environment variables which specify URL overrides for the SSO providers are removed/disabled: variables of the format `FACEBOOK_..._URL`. These are only used to override the default behavior in the test/development environment and are not necessary to use the actual integration.
 
 All of the SSO provider logins have mock API implementations in the `external-services` package, which are used when running e2e/Cypress tests. These can be enabled locally by running the
 external services server and by loading all of the SSO provider environment variables which point to the local external service mock APIs (see `server/sample.env`) when running the application server.
