@@ -57,11 +57,11 @@ interface PurchaseCourseRequest {
 
 @Injectable()
 export class PaymentsService {
-  stripe: Stripe;
+  private stripe: Stripe;
 
-  COURSE_PRICE: number;
-  COURSE_CURRENCY: string;
-  PAIRWISE_ICON_URL: string;
+  private COURSE_PRICE: number;
+  private COURSE_CURRENCY: string;
+  private PAIRWISE_ICON_URL: string;
 
   constructor(
     private readonly userService: UserService,

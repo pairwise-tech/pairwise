@@ -63,11 +63,11 @@ interface ChatPostMessageResult extends WebAPICallResult {
  * of our server modules wherever it's needed.
  * ============================================================================
  */
-@Injectable()
-export class SlackService {
+export class SlackServiceClass {
+  private client: WebClient;
+  private adminMentionMarkup: string;
+
   constructor(
-    @Optional() private client: WebClient,
-    @Optional() private adminMentionMarkup: string,
   ) {
     this.client = new WebClient(ENV.SLACK_API_TOKEN);
     this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS.map(id => `<@${id}>`).join(
@@ -195,3 +195,5 @@ export class SlackService {
     }
   }
 }
+
+export const slackService = new SlackServiceClass();

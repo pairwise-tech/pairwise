@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { User } from "./user.entity";
-import { Repository, createQueryBuilder } from "typeorm";
+import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "src/payments/payments.entity";
 import {
@@ -14,7 +14,7 @@ import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES } from "src/tools/constants";
-import { SlackService } from "src/slack/slack.service";
+import { SlackServiceClass, slackService } from "src/slack/slack.service";
 
 export interface GenericUserProfile {
   email: string;
@@ -26,6 +26,8 @@ export interface GenericUserProfile {
 
 @Injectable()
 export class UserService {
+  private readonly slackService: SlackServiceClass = slackService;
+
   constructor(
     private readonly progressService: ProgressService,
 
@@ -34,8 +36,6 @@ export class UserService {
 
     @InjectRepository(Payments)
     private readonly paymentsRepository: Repository<Payments>,
-
-    private readonly slackService: SlackService,
   ) {}
 
   public async adminGetAllUsers() {

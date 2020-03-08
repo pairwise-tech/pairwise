@@ -4,11 +4,10 @@ import { FeedbackService } from "./feedback.service";
 import { Feedback } from "./feedback.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersModule } from "src/user/user.module";
-import { SlackService } from "src/slack/slack.service";
 
 @Module({
   controllers: [FeedbackController],
-  providers: [FeedbackService, SlackService],
+  providers: [FeedbackService],
   imports: [TypeOrmModule.forFeature([Feedback]), UsersModule],
 })
 export class FeedbackModule {}
