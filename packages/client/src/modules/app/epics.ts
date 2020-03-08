@@ -1,12 +1,15 @@
 import queryString from "query-string";
-import { filter, map, tap, ignoreElements, pluck } from "rxjs/operators";
+import { filter, map, tap, ignoreElements, pluck, delay } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import { parseInitialUrlToInitializationType } from "tools/utils";
+import {
+  parseInitialUrlToInitializationType,
+  APP_INITIALIZATION_TYPE,
+} from "tools/utils";
 
 const debug = require("debug")("client:app:epics");
 
@@ -47,6 +50,38 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
   );
 };
 
+const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    filter(
+      x =>
+        x.appInitializationType ===
+        APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE,
+    ),
+    pluck("params"),
+    // wait for the page/workspace to fully load
+    delay(1500),
+    tap(params => {
+      if (params.emailError === "true") {
+        deps.toaster.error(
+          `Login failed! We could not find your email address. Is the email ` +
+            `associated with your ${params.strategy} account private? If so, ` +
+            `you may need to login with a different provider.`,
+          { timeout: 10000 },
+        );
+      } else {
+        deps.toaster.error(
+          `Login failed! An unknown error occurred when trying to log you ` +
+            `in with ${params.strategy}. Please try again.`,
+          { timeout: 10000 },
+        );
+      }
+    }),
+    ignoreElements(),
+  );
+};
+
 // This epic creates a new stream of locations the user visits. The tap is just
 // to make google analytics work with our SPA
 const locationChangeEpic: EpicSignature = (_, __, deps) => {
@@ -79,5 +114,6 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
 export default combineEpics(
   appInitializationEpic,
   appInitializeCaptureUrlEpic,
+  notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
 );

@@ -13,6 +13,7 @@ enum ERROR_CODES {
   MISSING_USER = "No user could be found",
   INVALID_PARAMETERS = "Invalid parameters provided",
   INVALID_FEEDBACK_TYPE = "Invalid feedback type used",
+  SSO_EMAIL_NOT_FOUND = "User email could not be found using strategy",
 }
 
 enum SUCCESS_CODES {

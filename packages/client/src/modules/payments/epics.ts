@@ -90,7 +90,7 @@ const handlePaymentCourseIntentEpic: EpicSignature = (
         if (showToastWarning) {
           deps.toaster.warn(
             "You must purchase the course to access this content. Please create an account to get started.",
-            "user",
+            { icon: "user" },
           );
         }
 

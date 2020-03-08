@@ -6,6 +6,9 @@ import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
+import { ERROR_CODES } from "src/tools/constants";
+
+type Strategy = "GitHub" | "Facebook" | "Google";
 
 @Controller("auth")
 export class AuthController {
@@ -13,71 +16,100 @@ export class AuthController {
 
   @UseGuards(AuthGuard("facebook"))
   @Get("facebook")
-  async facebook(@Req() req) {
+  public async facebook(@Req() req) {
     /* passport handles redirection to the SSO provider */
   }
 
   @UseGuards(AuthGuard("facebook"))
   @Get("facebook/callback")
-  async facebookLogin(
+  public async facebookLogin(
     @Req() req: Request & { user: FacebookProfileWithCredentials },
     @Res() res,
   ) {
-    const {
-      token,
-      accountCreated,
-    } = await this.authService.handleFacebookSignin(req.user);
+    try {
+      const {
+        token,
+        accountCreated,
+      } = await this.authService.handleFacebookSignin(req.user);
 
-    const params = this.getQueryParams(token, accountCreated);
-    return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+      const params = this.getQueryParams(token, accountCreated);
+      return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+    } catch (e) {
+      this.handleLoginError(res, e, "Facebook");
+    }
   }
 
   @UseGuards(AuthGuard("github"))
   @Get("github")
-  async github(@Req() req) {
+  public async github(@Req() req) {
     /* passport handles redirection to the SSO provider */
   }
 
   @UseGuards(AuthGuard("github"))
   @Get("github/callback")
-  async githubLogin(
+  public async githubLogin(
     @Req() req: Request & { user: GitHubProfileWithCredentials },
     @Res() res,
   ) {
-    const { token, accountCreated } = await this.authService.handleGitHubSignin(
-      req.user,
-    );
+    try {
+      const {
+        token,
+        accountCreated,
+      } = await this.authService.handleGitHubSignin(req.user);
 
-    const params = this.getQueryParams(token, accountCreated);
-    return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+      const params = this.getQueryParams(token, accountCreated);
+      return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+    } catch (e) {
+      return this.handleLoginError(res, e, "GitHub");
+    }
   }
 
   @UseGuards(AuthGuard("google"))
   @Get("google")
-  async google(@Req() req) {
+  public async google(@Req() req) {
     /* passport handles redirection to the SSO provider */
   }
 
   @UseGuards(AuthGuard("google"))
   @Get("google/callback")
-  async googleLogin(
+  public async googleLogin(
     @Req() req: Request & { user: GoogleProfileWithCredentials },
     @Res() res,
   ) {
-    const { token, accountCreated } = await this.authService.handleGoogleSignin(
-      req.user,
-    );
+    try {
+      const {
+        token,
+        accountCreated,
+      } = await this.authService.handleGoogleSignin(req.user);
 
-    const params = this.getQueryParams(token, accountCreated);
-    return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+      const params = this.getQueryParams(token, accountCreated);
+      return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+    } catch (e) {
+      this.handleLoginError(res, e, "Google");
+    }
   }
 
-  getQueryParams(accessToken: string, accountCreated: boolean) {
+  private getQueryParams(accessToken: string, accountCreated: boolean) {
     const params = querystring.stringify({
       accessToken,
       accountCreated,
     });
 
     return params;
+  }
+
+  private handleLoginError(@Res() res, e: Error, strategy: Strategy) {
+    if (e.message === ERROR_CODES.SSO_EMAIL_NOT_FOUND) {
+      console.log(`[Login Err] ${e.message}: ${strategy}`);
+      return res.redirect(
+        `${ENV.CLIENT_URL}/authentication-failure?emailError=true&strategy=${strategy}`,
+      );
+    }
+    console.log(
+      `[Login Err] An unknown error occurred: ${e.name}: ${e.message}`,
+    );
+    return res.redirect(
+      `${ENV.CLIENT_URL}/authentication-failure?emailError=false&strategy=${strategy}`,
+    );
   }
 }

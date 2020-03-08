@@ -15,7 +15,7 @@ export class AdminAuthGuard extends AuthGuard("jwt") {
     super();
   }
 
-  handleRequest(err, user, info, context) {
+  public handleRequest(err, user, info, context) {
     if (user) {
       const { email } = user.profile;
       if (WHITELISTED_ADMIN_EMAILS.has(email)) {

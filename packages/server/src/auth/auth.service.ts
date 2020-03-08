@@ -6,6 +6,7 @@ import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import { GenericUserProfile, UserService } from "src/user/user.service";
 import { UserProfile } from "@pairwise/common";
+import { ERROR_CODES } from "src/tools/constants";
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,9 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async handleFacebookSignin(requestProfile: FacebookProfileWithCredentials) {
+  public async handleFacebookSignin(
+    requestProfile: FacebookProfileWithCredentials,
+  ) {
     const profile = requestProfile.profile._json;
     const email = profile.email;
     const avatarUrl = profile.picture.data.url;
@@ -31,6 +34,10 @@ export class AuthService {
     console.log(
       `Authenticating user {email: ${email}} using Facebook Strategy`,
     );
+
+    /** we need user's email, make sure its there! */
+    this.throwIfEmailIsNull(email);
+
     const { user, accountCreated } = await this.userService.findOrCreateUser(
       userProfile,
     );
@@ -38,7 +45,9 @@ export class AuthService {
     return { token, accountCreated };
   }
 
-  async handleGitHubSignin(requestProfile: GitHubProfileWithCredentials) {
+  public async handleGitHubSignin(
+    requestProfile: GitHubProfileWithCredentials,
+  ) {
     const profile = requestProfile.profile._json;
 
     const email = profile.email;
@@ -55,6 +64,10 @@ export class AuthService {
     };
 
     console.log(`Authenticating user {email: ${email}} using GitHub Strategy`);
+
+    /** we need user's email, make sure its there! */
+    this.throwIfEmailIsNull(email);
+
     const { user, accountCreated } = await this.userService.findOrCreateUser(
       userProfile,
     );
@@ -62,7 +75,9 @@ export class AuthService {
     return { token, accountCreated };
   }
 
-  async handleGoogleSignin(requestProfile: GoogleProfileWithCredentials) {
+  public async handleGoogleSignin(
+    requestProfile: GoogleProfileWithCredentials,
+  ) {
     const profile = requestProfile.profile._json;
     const email = profile.email;
     const avatarUrl = profile.picture;
@@ -75,6 +90,10 @@ export class AuthService {
     };
 
     console.log(`Authenticating user {email: ${email}} using Google Strategy`);
+
+    /** we need user's email, make sure its there! */
+    this.throwIfEmailIsNull(email);
+
     const { user, accountCreated } = await this.userService.findOrCreateUser(
       userProfile,
     );
@@ -82,12 +101,23 @@ export class AuthService {
     return { token, accountCreated };
   }
 
-  getJwtAccessToken(user: UserProfile) {
+  private getJwtAccessToken(user: UserProfile) {
     const payload: JwtPassportSignPayload = {
       email: user.email,
       sub: user.uuid,
     };
 
     return this.jwtService.sign(payload);
+  }
+
+  /**
+   * Check to ensure the email we pull out of the SSO account's profile is
+   * not null or empty. If it is, throw an error that we catch in the auth
+   * controller so we can respond appropriately to the client.
+   */
+  private throwIfEmailIsNull(email: string) {
+    if (!email) {
+      throw new Error(ERROR_CODES.SSO_EMAIL_NOT_FOUND);
+    }
   }
 }
