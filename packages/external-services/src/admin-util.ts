@@ -18,7 +18,7 @@ export const purchaseCourseForUserByAdmin = async (userEmail: string) => {
     },
   };
 
-  await axios.post(`${SERVER}/admin/purchase-course`, body, headers);
+  await axios.post(`${SERVER}/payments/admin/purchase-course`, body, headers);
 
   return "OK";
 };
