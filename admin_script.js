@@ -112,10 +112,10 @@ const getAllUsers = async () => {
   try {
     log.start();
     const result = await axios.get(GET_ALL_USERS_URL, RequestHeaders);
+    const filename = "pairwise-users.json";
     log.finish(
       `Retrieved ${result.data.length} user records. Writing result to file: ${filename}`,
     );
-    const filename = "pairwise-users.json";
     const users = JSON.stringify(result.data, null, 2);
     fs.writeFileSync(filename, users, "utf-8");
     console.log("Done!");

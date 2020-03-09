@@ -79,8 +79,7 @@ export class SlackService {
     adminUserEmail,
     config,
   }: SlackAdminMessageData) {
-    // TODO: Improve message formatting later ~
-    const alert = `Action taken by admin user: ${adminUserEmail}. User submitted a request for the API, [${httpMethod}]: ${requestPath}`;
+    const alert = `:exclamation: Action taken by admin user: \`${adminUserEmail}\`. Requested admin API: *[${httpMethod}]: ${requestPath}*`;
     await this.postMessageToChannel(alert, {
       channel: "production",
       ...config,
