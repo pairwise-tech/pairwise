@@ -107,7 +107,20 @@ const Header = ({ siteTitle = 'Pairwise' }: HeaderProps) => (
   <StyledHeader>
     <Flexbox>
       <Heading>
-        <Link to="/" style={{ textDecoration: 'none', whiteSpace: 'nowrap' }}>
+        <Link
+          to="/"
+          style={{
+            textDecoration: 'none',
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <img
+            style={{ width: 'auto', height: 20, marginRight: 20 }}
+            src={require('../images/logo.svg')}
+            alt="Pairwise Logo"
+          />
           {siteTitle}
         </Link>
       </Heading>
