@@ -79,7 +79,7 @@ export class SlackService {
     adminUserEmail,
     config,
   }: SlackAdminMessageData) {
-    const alert = `:exclamation: Action taken by admin user: \`${adminUserEmail}\`. Requested admin API: *[${httpMethod}]: ${requestPath}*`;
+    const alert = `:sunglasses: Action taken by Admin User: \`${adminUserEmail}\`. Requested admin API: *[${httpMethod}]:* \`${requestPath}\`.`;
     await this.postMessageToChannel(alert, {
       channel: "production",
       ...config,
