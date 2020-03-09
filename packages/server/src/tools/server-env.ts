@@ -59,6 +59,12 @@ const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
 
+// Pairwise checkout logo for Stripe checkout page
+const PAIRWISE_CHECKOUT_ICON = getenv.string(
+  "PAIRWISE_CHECKOUT_ICON",
+  "https://user-images.githubusercontent.com/18126719/76193397-d6c50b00-621e-11ea-8533-d6c258fe21af.png",
+);
+
 // Sentry
 const SENTRY_DSN = getenv.string("SENTRY_DSN", "");
 
@@ -90,6 +96,7 @@ const ENV = {
   SLACK_API_TOKEN,
   SLACK_ADMIN_IDS,
   SENTRY_DSN,
+  PAIRWISE_CHECKOUT_ICON,
 };
 
 /** ===========================================================================

@@ -41,9 +41,6 @@ const PRICING_CONSTANTS = {
   ACCEPTED_CURRENCY: "usd",
 };
 
-const PairwiseIconUrl =
-  "https://avatars0.githubusercontent.com/oa/1235715?s=240&u=994064f7125e48bc42da6474130323f03a07ca9b&v=4";
-
 interface PurchaseCourseRequest {
   userEmail: string;
   courseId: string;
@@ -80,7 +77,7 @@ export class PaymentsService {
     // Set pricing values
     this.COURSE_PRICE = PRICING_CONSTANTS.COURSE_PRICE;
     this.COURSE_CURRENCY = PRICING_CONSTANTS.ACCEPTED_CURRENCY;
-    this.PAIRWISE_ICON_URL = PairwiseIconUrl;
+    this.PAIRWISE_ICON_URL = ENV.PAIRWISE_CHECKOUT_ICON;
   }
 
   // Creates a payment intent using Stripe
