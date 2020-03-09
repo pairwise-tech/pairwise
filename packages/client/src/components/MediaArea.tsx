@@ -44,6 +44,7 @@ const TableOfContentsPlugin = (): SlatePlugin => {
 const Flex = styled.div`
   overflow: auto;
   width: 100%;
+  max-width: ${PROSE_MAX_WIDTH}px;
 `;
 
 const FlexWrap = styled.div`
