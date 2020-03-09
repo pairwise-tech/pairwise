@@ -65,6 +65,11 @@ export const navigationOverlayVisible = createSelector(
   challenges => challenges.displayNavigationMap,
 );
 
+export const getSearchResults = createSelector(
+  [challengesState],
+  challenges => challenges.searchResults,
+);
+
 export const getNavigationSectionAccordionViewState = createSelector(
   [challengesState],
   prop("navigationSectionAccordionViewState"),
@@ -202,7 +207,14 @@ export const getCurrentId = createSelector(
 
 export const getCurrentContent = createSelector(
   [getCurrentChallenge],
-  challenge => challenge?.content,
+  challenge => challenge?.instructions,
+);
+
+export const getHasMediaContent = createSelector(
+  [getCurrentChallenge],
+  challenge => {
+    return !!(challenge?.content || challenge?.videoUrl);
+  },
 );
 
 /**

@@ -36,15 +36,6 @@ services:
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn pairwise
     environment:
       TYPEORM_HOST: db
-      CLIENT_URL: http://127.0.0.1:3000
-      FACEBOOK_AUTHORIZATION_URL: http://localhost:7000/facebook/authorize
-      FACEBOOK_TOKEN_URL: http://localhost:7000/facebook/token
-      FACEBOOK_PROFILE_URL: http://localhost:7000/facebook/profile
-      GITHUB_AUTHORIZATION_URL: http://localhost:7000/github/authorize
-      GITHUB_TOKEN_URL: http://localhost:7000/github/token
-      GITHUB_PROFILE_URL: http://localhost:7000/github/profile
-      GOOGLE_TOKEN_URL: http://localhost:7000/google/token
-      GOOGLE_PROFILE_URL: http://localhost:7000/google/profile
     expose:
       - 9000
     ports:

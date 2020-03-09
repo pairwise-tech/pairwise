@@ -22,10 +22,10 @@ import {
 } from "../tools/code-worker";
 import {
   COLORS as C,
-  DIMENSIONS as D,
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
 } from "../tools/constants";
+import { DIMENSIONS as D } from "../tools/dimensions";
 import toaster from "tools/toast-utils";
 import { types } from "../tools/jsx-types";
 import {
@@ -67,6 +67,7 @@ import {
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
+import { CODEPRESS } from "tools/client-env";
 import cx from "classnames";
 import traverse from "traverse";
 
@@ -806,7 +807,7 @@ class Workspace extends React.Component<IProps, IState> {
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
-      this.transformUndefinedLogMessages(data);
+      this.transformUnserializableLogs(data);
       this.updateWorkspaceConsole({ data, method });
     };
 
@@ -988,17 +989,32 @@ class Workspace extends React.Component<IProps, IState> {
    * This method handles transforming log messages passed from the
    * iframe to the parent window. When we pass the iframe's log messages
    * through `postMessage`, we first serialize them, and in doing so, we
-   * would be replacing all `undefined`s with `null`s, since `undefined`
-   * is not valid json. To overcome this, we use pass a replacer function
-   * to JSON.stringify, which replaces every instance of `undefined` with
-   * "__transform_undefined__". When we deserialize on the other end, we
-   * need to then recursively traverse whatever object the end-user logged
-   * to resolve these transformations with an actual `undefined` value.
+   * are inadvertently replacing certain non-serializable values with "null"
+   * (such as `undefined` and `NaN`). To overcome this, we pass a replacer
+   * function to JSON.stringify, which replaces every instance of these
+   * values with "whitelisted" transform strings. Here, we're recursively
+   * traversing the data object searching for these whitelisted strings and
+   * replacing them with their corresponding values, thus preserving the
+   * original logs.
    */
-  transformUndefinedLogMessages = (data: ReadonlyArray<any>) => {
+  transformUnserializableLogs = (data: ReadonlyArray<any>) => {
     traverse(data).forEach(function(x) {
       if (x === "__transform_undefined__") {
         this.update(undefined);
+        return;
+      }
+      if (x === "__transform_NaN__") {
+        this.update(NaN);
+        return;
+      }
+      if (x === "__transform_Infinity__") {
+        this.update(Infinity);
+        return;
+      }
+      if (typeof x === "string" && x.startsWith("__transform_symbol_from:")) {
+        const symbolFrom = x.split(":")[1];
+        this.update(Symbol(symbolFrom));
+        return;
       }
     });
   };
@@ -1097,6 +1113,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
   adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
   adminEditorTab: Modules.selectors.challenges.adminEditorTabSelector(state),
+  showMediaArea: Modules.selectors.challenges.getHasMediaContent(state),
 });
 
 const dispatchProps = {
@@ -1188,7 +1205,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
         {requiresWorkspace && (
           <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
         )}
-        {!isSandbox && (
+        {!isSandbox && (CODEPRESS || this.props.showMediaArea) && (
           <LowerSection withHeader={challenge.type === "media"}>
             <MediaArea />
           </LowerSection>

@@ -39,4 +39,6 @@ docker
 # Misc backup files
 *.bak
 
+# Local files which should not be committed
 secrets
+pairwise-users.json

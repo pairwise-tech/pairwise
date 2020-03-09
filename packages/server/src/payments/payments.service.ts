@@ -17,12 +17,14 @@ import {
 } from "src/tools/validation";
 import ENV from "src/tools/server-env";
 import {
+  Payment,
   StripeStartCheckoutSuccessResponse,
   UserProfile,
   ContentUtility,
   CourseMetadata,
 } from "@pairwise/common";
 import { UserService } from "src/user/user.service";
+import { captureSentryException } from "src/tools/sentry-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -40,7 +42,13 @@ const PRICING_CONSTANTS = {
 };
 
 const PairwiseIconUrl =
-  "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
+  "https://avatars0.githubusercontent.com/oa/1235715?s=240&u=994064f7125e48bc42da6474130323f03a07ca9b&v=4";
+
+interface PurchaseCourseRequest {
+  userEmail: string;
+  courseId: string;
+  isGift?: boolean;
+}
 
 /** ===========================================================================
  * Payments Service
@@ -49,11 +57,11 @@ const PairwiseIconUrl =
 
 @Injectable()
 export class PaymentsService {
-  stripe: Stripe;
+  private stripe: Stripe;
 
-  COURSE_PRICE: number;
-  COURSE_CURRENCY: string;
-  PAIRWISE_ICON_URL: string;
+  private COURSE_PRICE: number;
+  private COURSE_CURRENCY: string;
+  private PAIRWISE_ICON_URL: string;
 
   constructor(
     private readonly userService: UserService,
@@ -93,6 +101,7 @@ export class PaymentsService {
 
         return result;
       } catch (err) {
+        captureSentryException(err);
         // I saw this happen once. If it happens more, we could create retry
         // logic here...
         console.log("[STRIPE ERROR]: Failed to create Stripe session!", err);
@@ -128,11 +137,12 @@ export class PaymentsService {
         console.log(
           `[STRIPE]: Checkout session completed event received for user: ${email} and course: ${courseId}`,
         );
-        await this.handlePurchaseCourseRequest(email, courseId);
+        await this.handlePurchaseCourseRequest({ userEmail: email, courseId });
       } else {
         // Handle other event types...
       }
     } catch (err) {
+      captureSentryException(err);
       console.log(`[STRIPE WEBHOOK ERROR]: ${err.message}`);
       throw new BadRequestException(`Webhook Error: ${err.message}`);
     }
@@ -144,7 +154,11 @@ export class PaymentsService {
     console.log(
       `[ADMIN]: Admin request to purchase course: ${courseId} for user: ${userEmail}`,
     );
-    return this.handlePurchaseCourseRequest(userEmail, courseId);
+    return this.handlePurchaseCourseRequest({
+      userEmail,
+      courseId,
+      isGift: true,
+    });
   }
 
   async handleRefundCourseByAdmin(userEmail: string, courseId: string) {
@@ -176,10 +190,8 @@ export class PaymentsService {
     return SUCCESS_CODES.OK;
   }
 
-  private async handlePurchaseCourseRequest(
-    userEmail: string,
-    courseId: string,
-  ) {
+  private async handlePurchaseCourseRequest(args: PurchaseCourseRequest) {
+    const { userEmail, courseId, isGift = false } = args;
     const user = await this.userService.findUserByEmailGetFullProfile(
       userEmail,
     );
@@ -191,24 +203,33 @@ export class PaymentsService {
     console.log(`Purchasing course ${courseId} for user ${profile.email}`);
 
     // If everything is good create a new payment for this user and course.
-    const payment = this.createNewPaymentObject(profile, courseId);
+    const payment = this.createNewPaymentObject(profile, args);
     await this.paymentsRepository.insert(payment);
 
     return SUCCESS_CODES.OK;
   }
 
-  private createNewPaymentObject = (user: UserProfile, courseId: string) => {
+  private createNewPaymentObject = (
+    user: UserProfile,
+    args: PurchaseCourseRequest,
+  ) => {
+    const { courseId, isGift = false } = args;
     // Construct the new payment data. Once Stripe is integrated, most of this
     // data will come from Stripe and the actual payment information.
-    const payment: QueryDeepPartialEntity<Payments> = {
-      user,
+    const payment: Payment = {
       courseId,
       status: "CONFIRMED",
       datePaid: new Date(),
       amountPaid: this.COURSE_PRICE,
+      paymentType: isGift ? "ADMIN_GIFT" : "USER_PAID",
     };
 
-    return payment;
+    const paymentPartial: QueryDeepPartialEntity<Payments> = {
+      user,
+      ...payment,
+    };
+
+    return paymentPartial;
   };
 
   private async createStripeCheckoutSession(

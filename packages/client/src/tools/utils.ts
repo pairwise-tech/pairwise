@@ -52,7 +52,8 @@ export const isContentOnlyChallenge = (challenge: Challenge) => {
     type === "media" ||
     type === "section" ||
     type === "project" ||
-    type === "guided-project"
+    type === "guided-project" ||
+    type === "special-topic"
   );
 };
 
@@ -136,12 +137,12 @@ export const generateEmptyChallenge = (
   id: shortid.generate(),
   type: "markup",
   title: "[EMPTY...]",
-  content: "",
+  instructions: "",
   testCode: "// test('message', () => expect(...))",
   videoUrl: "",
   starterCode: "",
   solutionCode: "",
-  supplementaryContent: "",
+  content: "",
   ...overwrite,
 });
 

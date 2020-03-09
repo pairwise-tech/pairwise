@@ -11,7 +11,8 @@ import {
   ModuleSkeletonList,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS, HEADER_HEIGHT, SANDBOX_ID } from "tools/constants";
+import { COLORS, SANDBOX_ID } from "tools/constants";
+import { HEADER_HEIGHT } from "tools/dimensions";
 import {
   composeWithProps,
   generateEmptyModule,
@@ -81,11 +82,11 @@ class NavigationOverlay extends React.Component<IProps> {
           keymap={{
             // TODO: Add some UI to display what key shortcuts are available:
             escape: this.handleClose,
-            "cmd+k": this.navigateToSandBox,
+            "cmd+shift+k": this.navigateToSandBox,
             "cmd+j": this.handleToggleNavigationMap,
-            "cmd+[": this.navigateLeft,
-            "cmd+]": this.navigateRight,
-            "cmd+.": this.props.toggleEditorSize,
+            "cmd+,": this.navigateLeft,
+            "cmd+.": this.navigateRight,
+            "cmd+;": this.props.toggleEditorSize,
           }}
         />
         <Col

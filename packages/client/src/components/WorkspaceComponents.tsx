@@ -5,18 +5,17 @@ import Markdown, { ReactMarkdownProps } from "react-markdown";
 import styled from "styled-components/macro";
 import {
   COLORS as C,
-  DIMENSIONS as D,
-  HEADER_HEIGHT,
   COLORS,
   CONTENT_SERIALIZE_DEBOUNCE,
   SANDBOX_ID,
 } from "../tools/constants";
+import { DIMENSIONS as D, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { Loading, ContentEditor, editorColors } from "./Shared";
+import { Loading } from "./Shared";
 import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import ContentEditor, { editorColors } from "./ContentEditor";
 
 /** ===========================================================================
  * Workspace Components
@@ -347,7 +346,7 @@ export const ContentViewEdit = connect(
         (serializeEditorContent: () => string) => {
           props.updateChallenge({
             id: currentId,
-            challenge: { content: serializeEditorContent() },
+            challenge: { instructions: serializeEditorContent() },
           });
         },
       ),
@@ -427,25 +426,13 @@ const keyboardMergeProps = (
 });
 
 const AdminKeyboardShortcutsComponent = (
-  props: ReturnType<typeof keyboardMergeProps> & RouteComponentProps,
+  props: ReturnType<typeof keyboardMergeProps>,
 ) => {
-  const nextChallenge = () => {
-    if (props.nextChallengeId) {
-      props.history.push(`/workspace/${props.nextChallengeId}`);
-    }
-  };
-  const prevChallenge = () => {
-    if (props.prevChallengeId) {
-      props.history.push(`/workspace/${props.prevChallengeId}`);
-    }
-  };
   return (
     <KeyboardShortcuts
       keymap={{
         "cmd+e": props.toggleEditMode,
         "cmd+s": props.save,
-        "cmd+shift+.": nextChallenge,
-        "cmd+shift+,": prevChallenge,
       }}
     />
   );
@@ -455,4 +442,4 @@ export const AdminKeyboardShortcuts = connect(
   keyboardStateToProps,
   keyboardDispatchProps,
   keyboardMergeProps,
-)(withRouter(AdminKeyboardShortcutsComponent));
+)(AdminKeyboardShortcutsComponent);

@@ -11,6 +11,16 @@ interface KeyboardShortcutsProps {
   keymap: { [k: string]: (e: KeyboardEvent) => any };
 }
 
+// NOTE: They should be lowercase
+const singleKeyWhitelist = new Set([
+  "escape",
+  "arrowup",
+  "arrowdown",
+  "arrowleft",
+  "arrowright",
+  "enter",
+]);
+
 const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
   React.useEffect(() => {
     const metaMap: { [k: string]: MetaKey } = {
@@ -23,14 +33,23 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
     const makePredicate = (commandString: string) => {
       const chars = commandString.split("+").map(x => x.toLowerCase());
 
-      // Support mapping the escape key
-      if (chars.length === 1 && chars[0] === "escape") {
-        return (e: KeyboardEvent) => e.key.toLowerCase() === chars[0];
+      // Support mapping the whitelisted single chars. The whole whitelist thing
+      // is meant ot prevent us from willy-nilly mapping single keys since that
+      // can be very unexpected for users. When mapping a single key just keep
+      // in mind that it might be best to map it contextually as opposed to all
+      // the time.
+      if (chars.length === 1 && singleKeyWhitelist.has(chars[0])) {
+        return (e: KeyboardEvent) => {
+          return e.key.toLowerCase() === chars[0];
+        };
       }
 
-      // If not the escape key then we require two mappings
+      // If not in the whitelist require at least two keys
       if (chars.length < 2) {
-        console.warn("Keycode mappings must have at least 2 keys");
+        console.warn(
+          "Keycode mappings must have at least 2 keys unless its one of the following",
+          Array.from(singleKeyWhitelist),
+        );
         return;
       }
 

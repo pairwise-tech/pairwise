@@ -8,6 +8,8 @@ import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { parseInitialUrlToInitializationType } from "tools/utils";
 
+const debug = require("debug")("client:app:epics");
+
 /** ===========================================================================
  * Epics
  * ============================================================================
@@ -62,7 +64,7 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
         // @ts-ignore
         window.ga("send", "pageview");
       } catch (err) {
-        console.warn("[INFO] Google analytics related error", err);
+        debug("[INFO] Google analytics related error:", err.message);
       }
     }),
     map(Actions.locationChange),

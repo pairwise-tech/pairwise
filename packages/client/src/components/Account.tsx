@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { Classes, Button } from "@blueprintjs/core";
+import { captureMessage } from "@sentry/browser";
 
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle, ProfileIcon } from "./Shared";
@@ -38,8 +39,8 @@ class Account extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
-    if (nextProps.user !== this.props.user) {
+  componentDidUpdate(prevProps: IProps) {
+    if (prevProps.user !== this.props.user) {
       this.handleDiscardChanges();
     }
   }

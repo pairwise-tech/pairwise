@@ -1,10 +1,23 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { Editor } from "slate-react";
 
 import { Block } from "slate";
 import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
-import { PROSE_MAX_WIDTH, COLORS } from "tools/constants";
+import { PROSE_MAX_WIDTH, COLORS, MOBILE } from "tools/constants";
+import { LineWrappedText } from "./Shared";
+
+// Get all headings from a slate editor
+const getHeadings = (editor: Editor) => {
+  // Third party typing issue
+  // @ts-ignore
+  return editor.value.document.nodes.filter((node?: Block) => {
+    if (!node || !node.text) {
+      return false;
+    }
+    return Boolean(node.type.match(/^heading/));
+  });
+};
 
 export default class TableOfContents extends React.Component<
   {
@@ -15,11 +28,16 @@ export default class TableOfContents extends React.Component<
     left: number;
   }
 > {
+  // Expose the get headings functionality so that calling code can determine
+  // whether or not to render the TOC. Using the render method of this class was
+  // great until I started wrapping the TOC in other UI.
+  static getHeadings = getHeadings;
+
   wrapperRef = React.createRef<HTMLDivElement>();
 
   state = {
     isFixed: false,
-    left: PROSE_MAX_WIDTH + 40,
+    left: PROSE_MAX_WIDTH - 90 + 40,
   };
 
   componentDidMount() {
@@ -88,46 +106,39 @@ export default class TableOfContents extends React.Component<
 
     const box = parent.getBoundingClientRect();
     const isFixed = box.top < 40;
-    const left = box.width + (isFixed ? box.x : 0) + 40;
+    const left = isFixed ? box.x : 0;
 
     if (this.state.isFixed !== isFixed || this.state.left !== left) {
       this.setState({ isFixed, left });
     }
   };
 
-  getHeadings() {
-    const { editor } = this.props;
-
-    // Third party typing issue
-    // @ts-ignore
-    return editor.value.document.nodes.filter((node?: Block) => {
-      if (!node || !node.text) {
-        return false;
-      }
-      return Boolean(node.type.match(/^heading/));
-    });
-  }
-
   render() {
     const { editor } = this.props;
-    const headings = this.getHeadings();
+    const headings = getHeadings(editor);
 
     // If there are one or less headings in the document no need for a minimap
     if (headings.size <= 1) {
       return null;
     }
 
+    const isMobile = window.matchMedia(MOBILE).matches;
+
     return (
       <Wrapper
         ref={this.wrapperRef}
         style={{
-          position: this.state.isFixed ? "fixed" : "absolute",
+          position: isMobile
+            ? "static"
+            : this.state.isFixed
+            ? "fixed"
+            : "absolute",
           top: this.state.isFixed ? 40 : 0,
           left: this.state.left,
         }}
       >
-        <h4>Table of Contents</h4>
-        <Sections>
+        <h4 style={{ marginRight: -1 }}>Table of Contents</h4>
+        <Sections style={{ marginRight: -1 }}>
           {headings.map((heading?: Block) => {
             if (!heading) {
               return null;
@@ -140,6 +151,7 @@ export default class TableOfContents extends React.Component<
             return (
               <ListItem key={slug} style={{ marginLeft: -1 }}>
                 <Anchor
+                  as="a"
                   href={`#${slug}`}
                   style={{
                     // Indent based on heading level
@@ -181,27 +193,32 @@ const Wrapper = styled.div`
     background: ${COLORS.LIGHT_GREY};
   }
 
+  @media ${MOBILE} {
+    margin-bottom: 20px;
+  }
+
   @media print {
     display: none;
   }
 `;
 
-const Anchor = styled.a`
+const Anchor = styled(LineWrappedText)`
   display: block;
   font-weight: 400;
   transition: all 100ms ease-in-out;
   padding: 8px 5px;
-  text-overflow: ellipsis;
   text-decoration: none;
 `;
 
 const ListItem = styled.div`
   display: block;
-  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
   position: relative;
   white-space: nowrap;
   a {
     color: #cacaca;
+  }
+  &:not(:last-child) {
+    border-bottom: 1px solid ${COLORS.LIGHT_GREY};
   }
   &:hover {
     background: #212121;
@@ -216,7 +233,6 @@ const Sections = styled.div`
   margin: 0;
   list-style: none;
   font-size: 13px;
-  width: 300px;
   transition-delay: 1s;
   transition: width 100ms ease-in-out;
 `;

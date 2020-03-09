@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "../user/user.entity";
-import { PAYMENT_STATUS } from "@pairwise/common";
+import { PAYMENT_STATUS, PAYMENT_TYPE } from "@pairwise/common";
 
 /** ===========================================================================
  * Entity
@@ -37,12 +37,16 @@ export class Payments {
   @Column()
   status: PAYMENT_STATUS;
 
+  @Column()
+  paymentType: PAYMENT_TYPE;
+
   @Column({ type: "json", nullable: true })
   extraData: string;
 
   @ManyToOne(
     type => User,
     user => user.payments,
+    { onDelete: "CASCADE" },
   )
   user: User;
 

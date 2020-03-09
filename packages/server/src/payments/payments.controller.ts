@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request as ExpressRequest } from "express";
 import {
   Headers,
   Controller,
@@ -6,15 +6,20 @@ import {
   Post,
   Param,
   Req,
+  Request,
   Body,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
 import { PaymentsService } from "./payments.service";
 import { AdminAuthGuard } from "src/auth/admin.guard";
+import { HTTP_METHOD, ADMIN_URLS } from "src/admin/admin.controller";
+import { SlackService, slackService } from "src/slack/slack.service";
 
 @Controller("payments")
 export class PaymentsController {
+  private readonly slackService: SlackService = slackService;
+
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @UseGuards(AuthGuard("jwt"))
@@ -30,7 +35,7 @@ export class PaymentsController {
   @Post("/stripe-webhook")
   async coursePaymentSuccessStripeWebhook(
     @Headers("stripe-signature") signature,
-    @Req() request: Request,
+    @Req() request: ExpressRequest,
   ) {
     return this.paymentsService.handleStripeCheckoutSuccessWebhook(
       request,
@@ -43,8 +48,13 @@ export class PaymentsController {
   // course for free to early beta testers or friends. In addition, it is
   // helpful as a workaround to test the payments flow using Cypress.
   @UseGuards(AdminAuthGuard)
-  @Post("/admin-purchase-course")
-  async purchaseCourseForUser(@Body() body) {
+  @Post("/admin/purchase-course")
+  async purchaseCourseForUser(
+    @Body() body,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    this.postAdminStatusMessage(req, "POST", "admin/purchase-course");
+
     const { userEmail, courseId } = body;
     return this.paymentsService.handlePurchaseCourseByAdmin(
       userEmail,
@@ -54,9 +64,27 @@ export class PaymentsController {
 
   // An admin API to handle refunding a course for a user.
   @UseGuards(AdminAuthGuard)
-  @Post("/admin-refund-course")
-  async refundCourseForUser(@Body() body) {
+  @Post("/admin/refund-course")
+  async refundCourseForUser(
+    @Body() body,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    this.postAdminStatusMessage(req, "POST", "admin/refund-course");
+
     const { userEmail, courseId } = body;
     return this.paymentsService.handleRefundCourseByAdmin(userEmail, courseId);
+  }
+
+  private postAdminStatusMessage(
+    req: AuthenticatedRequest,
+    httpMethod: HTTP_METHOD,
+    requestPath: ADMIN_URLS,
+  ) {
+    const adminUserEmail = req.user.profile.email;
+    this.slackService.postAdminActionAwarenessMessage({
+      httpMethod,
+      requestPath,
+      adminUserEmail,
+    });
   }
 }

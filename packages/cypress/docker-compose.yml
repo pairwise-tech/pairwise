@@ -17,16 +17,44 @@ services:
     image: pairwise-runtime
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn server:prod
     environment:
-      TYPEORM_HOST: db
+      # Environment
+      ENVIRONMENT: development
       CLIENT_URL: http://client:3000
+      SERVER_HOST_URL: http://server:9000
+      # Database
+      TYPEORM_HOST: db
+      TYPEORM_USERNAME: postgres
+      TYPEORM_PASSWORD: postgres
+      TYPEORM_DATABASE: postgres
+      TYPEORM_CONNECTION: postgres
+      TYPEORM_LOGGING: "false"
+      TYPEORM_SYNCHRONIZE: "false"
+      TYPEORM_ENTITIES: dist/**/*.entity.js
+      TYPEORM_MIGRATIONS: dist/migrations/**/*.js
+      TYPEORM_SUBSCRIBERS: dist/subscriber/**/*.js
+      TYPEORM_MIGRATIONS_DIR: src/migrations
+      # Jwt
+      JWT_SECRET: asfd709as7fd9s0a7f90as6f09as6dfas0
+      # Stripe
+      STRIPE_WEBHOOK_SIGNING_SECRET: whsec_Y5pDaU8C0qD723auxbamCRlYIjsSQOzq
+      # OAuth
+      FACEBOOK_CLIENT_ID: 445906999653380
+      FACEBOOK_CLIENT_SECRET: 13522b2e1781c29f2e3a5ce4858a28e3
       FACEBOOK_PROFILE_URL: http://external-services:7000/facebook/profile
       FACEBOOK_TOKEN_URL: http://external-services:7000/facebook/token
       FACEBOOK_AUTHORIZATION_URL: http://external-services:7000/facebook/authorize
+      GITHUB_CLIENT_ID: 4033f5bebdd98412b0d8
+      GITHUB_CLIENT_SECRET: 0b96c4b1496c5f2ebcde8929a6d72567f5feed9b
       GITHUB_PROFILE_URL: http://external-services:7000/github/profile
       GITHUB_TOKEN_URL: http://external-services:7000/github/token
       GITHUB_AUTHORIZATION_URL: http://external-services:7000/github/authorize
+      GOOGLE_CLIENT_ID: 736219274374-0op65knke408orc63s6cpnbc08cahhkj.apps.googleusercontent.com
+      GOOGLE_CLIENT_SECRET: 3YZrYVF8zoGn5MJO8rF9worb
       GOOGLE_PROFILE_URL: http://external-services:7000/google/profile
       GOOGLE_TOKEN_URL: http://external-services:7000/google/token
+      STRIPE_SECRET_KEY: sk_test_mbG9wVyUhddtlRfqjtLJfRvZ00ZFBbvNDQ
+      # Admin whitelisting
+      WHITELISTED_ADMIN_EMAILS: pairwise-dev-admin-user@pairwise.tech
     expose:
       - 9000
     ports:

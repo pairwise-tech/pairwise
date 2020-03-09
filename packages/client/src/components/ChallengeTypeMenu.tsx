@@ -34,38 +34,41 @@ const ChallengeTypeMenu = ({
   onItemSelect,
 }: Props) => {
   return (
-    <ChallengeTypeSelect
-      filterable={false}
-      onItemSelect={onItemSelect}
-      items={items}
-      itemListRenderer={getRenderItemList(150)}
-      itemRenderer={(x, { handleClick, modifiers }) => (
-        <Button
-          key={x.value}
-          text={x.label}
-          onClick={handleClick}
-          active={modifiers.active}
-          icon={getChallengeIcon(x.value, true)}
-        />
-      )}
-    >
-      <Button
-        id="selectChallengeType"
-        rightIcon="caret-down"
-        aria-controls="simple-menu"
-        aria-haspopup="true"
+    <div style={{ flexShrink: 0, marginLeft: 10, marginRight: 10 }}>
+      <ChallengeTypeSelect
+        filterable={false}
+        onItemSelect={onItemSelect}
+        items={items}
+        itemListRenderer={getRenderItemList(150)}
+        itemRenderer={(x, { handleClick, modifiers }) => (
+          <Button
+            style={{ flexShrink: 0 }}
+            key={x.value}
+            text={x.label}
+            onClick={handleClick}
+            active={modifiers.active}
+            icon={getChallengeIcon(x.value, true)}
+          />
+        )}
       >
-        <Tooltip
-          content="Choose what type of code you will write"
-          usePortal={false}
+        <Button
+          id="selectChallengeType"
+          rightIcon="caret-down"
+          aria-controls="simple-menu"
+          aria-haspopup="true"
         >
-          <Icon style={{ margin: "0 2px" }} icon="info-sign" />
-        </Tooltip>
-        <strong style={{ marginLeft: 6 }}>
-          {labelByType(currentChallengeType, items)}
-        </strong>
-      </Button>
-    </ChallengeTypeSelect>
+          <Tooltip
+            content="Choose what type of code you will write"
+            usePortal={false}
+          >
+            <Icon style={{ margin: "0 2px" }} icon="info-sign" />
+          </Tooltip>
+          <strong style={{ marginLeft: 6 }}>
+            {labelByType(currentChallengeType, items)}
+          </strong>
+        </Button>
+      </ChallengeTypeSelect>
+    </div>
   );
 };
 

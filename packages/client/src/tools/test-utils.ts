@@ -49,11 +49,30 @@ export interface CodeFormatMessageEvent extends MessageEvent {
 /**
  * Functions used to intercept console methods and post the messages to
  * the parent window.
+ *
+ * This also includes a "replacer" function that is passed into JSON.stringify
+ * which intercepts values that do not serialize and replaces them with
+ * "transform strings". We catch these strings on the other end and replace
+ * them with their corresponding values to preserve the original logs.
  */
 const CONSOLE_INTERCEPTOR_FUNCTIONS = `
 const __replacer = (key, value) => {
   if (typeof value === "undefined") {
     return "__transform_undefined__";
+  }
+  if (typeof value === "number" && isNaN(value)) {
+    return "__transform_NaN__";
+  }
+  if (typeof value === "number" && value === Infinity) {
+    return "__transform_Infinity__";
+  }
+  // for symbols, include the identifier, if any, that was passed into the
+  // symbol "constructor". When we replace the transform string on the other end,
+  // we parse "symbolFrom" out of the string and use it to create a new Symbol
+  if (typeof value === "symbol") {
+    const symbolStr = value.toString();
+    const symbolFrom = symbolStr.slice(symbolStr.indexOf("(") + 1, -1);
+    return "__transform_symbol_from:" + symbolFrom;
   }
 
   return value;

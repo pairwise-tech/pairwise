@@ -1,15 +1,16 @@
 import ENV from "../tools/server-env";
 import { WebClient, ErrorCode, WebAPICallResult } from "@slack/web-api";
-import { Injectable, Optional } from "@nestjs/common";
 import { IFeedbackDto, ContentUtility } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { GenericUserProfile } from "src/user/user.service";
+import { captureSentryException } from "src/tools/sentry-utils";
+import { ADMIN_URLS, HTTP_METHOD } from "src/admin/admin.controller";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
-type SLACK_CHANNELS = "users" | "feedback";
+type SLACK_CHANNELS = "feedback" | "production";
 
 interface SlackFeedbackMessageData {
   feedbackDto: IFeedbackDto;
@@ -20,6 +21,13 @@ interface SlackFeedbackMessageData {
 interface SlackAccountCreationMessageData {
   profile: GenericUserProfile;
   accountCreated: boolean;
+  config?: SlackMessageConfig;
+}
+
+interface SlackAdminMessageData {
+  requestPath: ADMIN_URLS;
+  httpMethod: HTTP_METHOD;
+  adminUserEmail: string;
   config?: SlackMessageConfig;
 }
 
@@ -54,16 +62,28 @@ interface ChatPostMessageResult extends WebAPICallResult {
  * of our server modules wherever it's needed.
  * ============================================================================
  */
-@Injectable()
 export class SlackService {
-  constructor(
-    @Optional() private client: WebClient,
-    @Optional() private adminMentionMarkup: string,
-  ) {
+  private client: WebClient;
+  private adminMentionMarkup: string;
+
+  constructor() {
     this.client = new WebClient(ENV.SLACK_API_TOKEN);
     this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS.map(id => `<@${id}>`).join(
       " ",
     );
+  }
+
+  public async postAdminActionAwarenessMessage({
+    httpMethod,
+    requestPath,
+    adminUserEmail,
+    config,
+  }: SlackAdminMessageData) {
+    const alert = `:exclamation: Action taken by admin user: \`${adminUserEmail}\`. Requested admin API: *[${httpMethod}]: ${requestPath}*`;
+    await this.postMessageToChannel(alert, {
+      channel: "production",
+      ...config,
+    });
   }
 
   public async postFeedbackMessage({
@@ -86,7 +106,7 @@ export class SlackService {
     if (accountCreated) {
       const message = `New account created for *${profile.displayName}* (${profile.email}) :tada:`;
       await this.postMessageToChannel(message, {
-        channel: "users",
+        channel: "production",
         ...config,
       });
     }
@@ -168,6 +188,9 @@ export class SlackService {
     } else {
       console.log(`[SLACK ERROR] ${message}. Error Code: ${error.code}`);
       console.log(`[SLACK ERROR] ${JSON.stringify(error, null, 2)}`);
+      captureSentryException(error);
     }
   }
 }
+
+export const slackService = new SlackService();

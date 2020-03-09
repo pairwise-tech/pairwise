@@ -92,6 +92,11 @@ app.post("/google/token", (req, res) => {
 
 /**
  * Authenticated Google request for a user profile.
+ *
+ * NOTE: The Google SSO login in development/testing creates a user
+ * with a fixed email. The email can be whitelisted as an admin user
+ * email to allow Google SSO to create an admin user for testing in
+ * these environments.
  */
 app.get("/google/profile", (req, res) => {
   const profile = mockAuth.generateNewGoogleProfile();
@@ -101,7 +106,7 @@ app.get("/google/profile", (req, res) => {
 /**
  * Admin API to handle purchasing a course for a user.
  */
-app.post("/admin-purchase-course", async (req, res) => {
+app.post("/admin/purchase-course", async (req, res) => {
   const { email } = req.body;
   const result = await purchaseCourseForUserByAdmin(email);
   res.send(result);
