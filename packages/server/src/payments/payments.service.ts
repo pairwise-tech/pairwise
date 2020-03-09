@@ -25,6 +25,7 @@ import {
 } from "@pairwise/common";
 import { UserService } from "src/user/user.service";
 import { captureSentryException } from "src/tools/sentry-utils";
+import { slackService, SlackService } from "src/slack/slack.service";
 
 /** ===========================================================================
  * Types & Config
@@ -57,7 +58,8 @@ interface PurchaseCourseRequest {
 
 @Injectable()
 export class PaymentsService {
-  private stripe: Stripe;
+  private readonly stripe: Stripe;
+  private readonly slackService: SlackService;
 
   private COURSE_PRICE: number;
   private COURSE_CURRENCY: string;
@@ -76,6 +78,9 @@ export class PaymentsService {
     });
 
     this.stripe = stripe;
+
+    // Initialize Slack service
+    this.slackService = slackService;
 
     // Set pricing values
     this.COURSE_PRICE = PRICING_CONSTANTS.COURSE_PRICE;
@@ -138,6 +143,10 @@ export class PaymentsService {
           `[STRIPE]: Checkout session completed event received for user: ${email} and course: ${courseId}`,
         );
         await this.handlePurchaseCourseRequest({ userEmail: email, courseId });
+        // Post message to Slack
+        this.slackService.postCoursePurchaseMessage();
+
+        return SUCCESS_CODES.OK;
       } else {
         // Handle other event types...
       }
@@ -146,8 +155,6 @@ export class PaymentsService {
       console.log(`[STRIPE WEBHOOK ERROR]: ${err.message}`);
       throw new BadRequestException(`Webhook Error: ${err.message}`);
     }
-
-    return SUCCESS_CODES.OK;
   }
 
   async handlePurchaseCourseByAdmin(userEmail: string, courseId: string) {
@@ -191,7 +198,7 @@ export class PaymentsService {
   }
 
   private async handlePurchaseCourseRequest(args: PurchaseCourseRequest) {
-    const { userEmail, courseId, isGift = false } = args;
+    const { userEmail, courseId } = args;
     const user = await this.userService.findUserByEmailGetFullProfile(
       userEmail,
     );

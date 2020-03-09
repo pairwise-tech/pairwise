@@ -73,6 +73,12 @@ export class SlackService {
     );
   }
 
+  public async postCoursePurchaseMessage() {
+    const fire = ":fire: :fire: :fire:";
+    const message = `${fire} *Someone purchased a course!!!* ${fire}`;
+    await this.postMessageToChannel(message, { channel: "production" });
+  }
+
   public async postAdminActionAwarenessMessage({
     httpMethod,
     requestPath,
