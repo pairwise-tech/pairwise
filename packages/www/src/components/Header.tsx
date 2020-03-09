@@ -117,7 +117,7 @@ const Header = ({ siteTitle = 'Pairwise' }: HeaderProps) => (
           }}
         >
           <img
-            style={{ width: 'auto', height: 26, marginRight: 20 }}
+            style={{ width: 'auto', height: 20, marginRight: 20 }}
             src={require('../images/logo.svg')}
             alt="Pairwise Logo"
           />
