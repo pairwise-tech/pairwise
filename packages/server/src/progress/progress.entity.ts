@@ -34,6 +34,7 @@ export class Progress {
   @ManyToOne(
     type => User,
     user => user.challengeProgressHistory,
+    { onDelete: "CASCADE" },
   )
   public user: User;
 

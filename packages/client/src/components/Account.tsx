@@ -154,15 +154,6 @@ class Account extends React.Component<IProps, IState> {
             {payments.map(this.renderPaymentDetails)}
           </>
         )}
-        <Button
-          style={{ marginTop: 25 }}
-          intent="danger"
-          onClick={() => {
-            captureMessage("A friendly message from the workspace...");
-            throw new Error("Something blew up in the Pairwise Workspace !!!");
-          }}
-          text="Temporary Bomb Button"
-        />
       </PageContainer>
     );
   }

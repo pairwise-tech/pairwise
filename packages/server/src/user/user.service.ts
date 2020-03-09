@@ -13,8 +13,8 @@ import {
 import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
-import { ERROR_CODES } from "src/tools/constants";
-import { SlackService } from "src/slack/slack.service";
+import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
+import { SlackService, slackService } from "src/slack/slack.service";
 
 export interface GenericUserProfile {
   email: string;
@@ -26,6 +26,8 @@ export interface GenericUserProfile {
 
 @Injectable()
 export class UserService {
+  private readonly slackService: SlackService = slackService;
+
   constructor(
     private readonly progressService: ProgressService,
 
@@ -34,9 +36,31 @@ export class UserService {
 
     @InjectRepository(Payments)
     private readonly paymentsRepository: Repository<Payments>,
-
-    private readonly slackService: SlackService,
   ) {}
+
+  public async adminGetAllUsers() {
+    // Return all users and join with payments.
+    // NOTE: This does not handle pagination. But that's probably not a
+    // problem until we have 10_000s of users. Ha!
+    return this.userRepository
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.payments", "payments")
+      .getMany();
+  }
+
+  public async adminDeleteUserByEmail(email: string) {
+    const user = await this.findUserByEmail(email);
+
+    if (!user) {
+      throw new BadRequestException(ERROR_CODES.MISSING_USER);
+    }
+
+    await this.userRepository.delete({
+      uuid: user.profile.uuid,
+    });
+
+    return SUCCESS_CODES.OK;
+  }
 
   public async findUserByEmail(email: string) {
     const user = await this.userRepository.findOne({ email });

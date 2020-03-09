@@ -1,9 +1,10 @@
 import ENV from "../tools/server-env";
 import { WebClient, ErrorCode, WebAPICallResult } from "@slack/web-api";
-import { Injectable, Optional } from "@nestjs/common";
 import { IFeedbackDto, ContentUtility } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { GenericUserProfile } from "src/user/user.service";
+import { captureSentryException } from "src/tools/sentry-utils";
+import { ADMIN_URLS, HTTP_METHOD } from "src/admin/admin.controller";
 
 /** ===========================================================================
  * Types & Config
@@ -24,7 +25,8 @@ interface SlackAccountCreationMessageData {
 }
 
 interface SlackAdminMessageData {
-  message: string;
+  requestPath: ADMIN_URLS;
+  httpMethod: HTTP_METHOD;
   adminUserEmail: string;
   config?: SlackMessageConfig;
 }
@@ -60,12 +62,11 @@ interface ChatPostMessageResult extends WebAPICallResult {
  * of our server modules wherever it's needed.
  * ============================================================================
  */
-@Injectable()
 export class SlackService {
-  constructor(
-    @Optional() private client: WebClient,
-    @Optional() private adminMentionMarkup: string,
-  ) {
+  private client: WebClient;
+  private adminMentionMarkup: string;
+
+  constructor() {
     this.client = new WebClient(ENV.SLACK_API_TOKEN);
     this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS.map(id => `<@${id}>`).join(
       " ",
@@ -73,12 +74,13 @@ export class SlackService {
   }
 
   public async postAdminActionAwarenessMessage({
-    message,
+    httpMethod,
+    requestPath,
     adminUserEmail,
     config,
   }: SlackAdminMessageData) {
     // TODO: Improve message formatting later ~
-    const alert = `[ADMIN]: Action taken by admin user: ${adminUserEmail}, message: ${message}`;
+    const alert = `Action taken by admin user: ${adminUserEmail}. User submitted a request for the API, [${httpMethod}]: ${requestPath}`;
     await this.postMessageToChannel(alert, {
       channel: "production",
       ...config,
@@ -187,6 +189,9 @@ export class SlackService {
     } else {
       console.log(`[SLACK ERROR] ${message}. Error Code: ${error.code}`);
       console.log(`[SLACK ERROR] ${JSON.stringify(error, null, 2)}`);
+      captureSentryException(error);
     }
   }
 }
+
+export const slackService = new SlackService();

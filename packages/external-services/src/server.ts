@@ -106,7 +106,7 @@ app.get("/google/profile", (req, res) => {
 /**
  * Admin API to handle purchasing a course for a user.
  */
-app.post("/admin-purchase-course", async (req, res) => {
+app.post("/admin/purchase-course", async (req, res) => {
   const { email } = req.body;
   const result = await purchaseCourseForUserByAdmin(email);
   res.send(result);

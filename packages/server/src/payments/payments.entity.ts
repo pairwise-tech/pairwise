@@ -46,6 +46,7 @@ export class Payments {
   @ManyToOne(
     type => User,
     user => user.payments,
+    { onDelete: "CASCADE" },
   )
   public user: User;
 

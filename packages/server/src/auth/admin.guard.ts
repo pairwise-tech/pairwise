@@ -59,7 +59,7 @@ export class AdminAuthGuard extends AuthGuard("jwt") {
         const FAKE_ADMIN_PROFILE: UserProfile = {
           lastActiveChallengeId: "",
           uuid: "admin_uuid",
-          email: "sean@pairwise.tech",
+          email: "admin-access-token-user@pairwise.tech",
           givenName: "ADMIN",
           familyName: "ADMIN",
           avatarUrl: "ADMIN",
