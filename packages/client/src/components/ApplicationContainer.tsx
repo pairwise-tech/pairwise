@@ -199,11 +199,13 @@ const ApplicationContainer = (props: IProps) => {
         >
           <NavIconButton
             overlayVisible={overlayVisible}
-            style={{ color: "white", marginRight: isMobile ? 15 : 40 }}
+            style={{ color: "white", marginRight: isMobile ? 15 : 20 }}
             onClick={toggleNavigationMap}
           />
           <ProductTitle id="product-title">
-            <Link to="/home">Pairwise</Link>
+            <Link to="/home" style={{ display: "flex", alignItems: "center" }}>
+              Pairwise
+            </Link>
           </ProductTitle>
         </ControlsContainer>
         {CODEPRESS && (
@@ -400,15 +402,97 @@ const ControlsContainer = styled.div`
   flex-direction: row;
 `;
 
+type OpenCloseLogoProps = { isOpen?: boolean } & React.SVGProps<SVGSVGElement>;
+
+const OpenCloseLogo = ({ isOpen = false, ...props }: OpenCloseLogoProps) => {
+  return (
+    <svg
+      width="24.44"
+      height="20"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <g fill-rule="nonzero" fill="none" transform="scale(0.37)">
+        <rect
+          fill="#27C9DD"
+          x="0"
+          y="0"
+          width={isOpen ? 50 : 12}
+          height="8"
+          rx="3.774"
+        />
+        <rect
+          fill="#FFB85A"
+          x="0"
+          y="46"
+          width={isOpen ? 50 : 15}
+          height="8"
+          rx="3.774"
+        />
+        <rect
+          fill="#F3577A"
+          x="0"
+          y="16"
+          width={isOpen ? 50 : 25}
+          height="8"
+          rx="3.774"
+        />
+        <rect
+          fill="#F6FA88"
+          x="0"
+          y="31"
+          width={isOpen ? 50 : 34}
+          height="8"
+          rx="3.774"
+        />
+        <rect
+          fill="#F3577A"
+          x={!isOpen ? 24 : 56}
+          y="46"
+          width={isOpen ? 10 : 42}
+          height="8"
+          rx="3.774"
+        />
+        <rect
+          fill="#FFB85A"
+          x={!isOpen ? 42 : 56}
+          y="31"
+          width={isOpen ? 10 : 24}
+          height="8"
+          rx="3.774"
+        />
+        <rect
+          fill="#49F480"
+          x={!isOpen ? 21 : 56}
+          y="0"
+          width={isOpen ? 10 : 45}
+          height="8"
+          rx="3.774"
+        />
+        <rect
+          fill="#27C9DD"
+          x={!isOpen ? 33 : 56}
+          y="16"
+          width={isOpen ? 10 : 33}
+          height="8"
+          rx="3.774"
+        />
+      </g>
+    </svg>
+  );
+};
+
 const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   <Button
     minimal
     large
     id="navigation-menu-button"
     aria-label="Open navigation map"
-    icon={overlayVisible ? "menu-closed" : "menu"}
+    // icon={overlayVisible ? "menu-closed" : "menu"}
     {...rest}
-  />
+  >
+    <OpenCloseLogo isOpen={overlayVisible} />
+  </Button>
 ))`
   appearance: none;
   background: transparent;
@@ -419,6 +503,17 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   .bp3-icon {
     color: white !important;
     transform: scale(1.3);
+  }
+  .bp3-button-text {
+    display: flex;
+  }
+
+  // NOTE: The filter only works in firefox as far as I know but it looks cool when it works
+  rect {
+    transition: all 0.2s ease;
+    &:nth-child(-n + 4) {
+      filter: grayscale(${props => (props.overlayVisible ? 1 : 0)});
+    }
   }
 `;
 
