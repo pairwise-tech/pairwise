@@ -56,7 +56,10 @@ export class BlobService {
     }
   }
 
-  public async updateUserCodeBlob(challengeCodeDto: ICodeBlobDto, user: RequestUser) {
+  public async updateUserCodeBlob(
+    challengeCodeDto: ICodeBlobDto,
+    user: RequestUser,
+  ) {
     /* Validate everything in the code blob */
     validateCodeBlob(challengeCodeDto);
 
