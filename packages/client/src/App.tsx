@@ -6,7 +6,7 @@ import store, { exposeGlobals, history } from "modules/create-store";
 import { NODE_ENV } from "tools/client-env";
 import ScrollToTop from "components/ScrollToTop";
 import { DarkTheme, FullScreenOverlay, OverlayText } from "components/Shared";
-import { captureMessage, Severity } from "@sentry/browser";
+import { captureSentryException } from "tools/sentry-utils";
 
 /** ===========================================================================
  * Types
@@ -39,7 +39,7 @@ class Pairwise extends React.Component<IProps, IState> {
 
   componentDidCatch(error: Error, { componentStack }: ErrorInfo) {
     const errors = { error, componentStack };
-    captureMessage(JSON.stringify(errors, null, 2), Severity.Fatal);
+    captureSentryException(errors);
   }
 
   componentDidMount() {

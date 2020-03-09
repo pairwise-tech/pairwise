@@ -57,7 +57,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
         if (!dispatchedAdminRequest) {
           dispatchedAdminRequest = true;
           const body = { email };
-          const EXTERNAL_SERVICES_ADMIN_PAYMENT_URL = `${EXTERNAL_SERVICES_URL}/admin-purchase-course`;
+          const EXTERNAL_SERVICES_ADMIN_PAYMENT_URL = `${EXTERNAL_SERVICES_URL}/admin/purchase-course`;
 
           // You better use cy.request for this and not any other HTTP library
           cy.request("POST", EXTERNAL_SERVICES_ADMIN_PAYMENT_URL, body).should(

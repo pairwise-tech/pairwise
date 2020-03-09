@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class CreateInitialTables1578843990443 implements MigrationInterface {
-  name = "CreateInitialTables1578843990443";
+export class CreateInitialTables1583658993455 implements MigrationInterface {
+  name = "CreateInitialTables1583658993455";
 
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(
@@ -13,7 +13,7 @@ export class CreateInitialTables1578843990443 implements MigrationInterface {
       undefined,
     );
     await queryRunner.query(
-      `CREATE TABLE "payments" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "datePaid" TIMESTAMP NOT NULL, "amountPaid" integer NOT NULL, "type" character varying NOT NULL, "extraData" json, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userUuid" uuid, CONSTRAINT "PK_2c540326a039a91fa7e942caed7" PRIMARY KEY ("uuid"))`,
+      `CREATE TABLE "payments" ("uuid" uuid NOT NULL DEFAULT uuid_generate_v4(), "courseId" character varying NOT NULL, "datePaid" TIMESTAMP NOT NULL, "amountPaid" integer NOT NULL, "status" character varying NOT NULL, "paymentType" character varying NOT NULL, "extraData" json, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "userUuid" uuid, CONSTRAINT "PK_2c540326a039a91fa7e942caed7" PRIMARY KEY ("uuid"))`,
       undefined,
     );
     await queryRunner.query(
@@ -41,19 +41,19 @@ export class CreateInitialTables1578843990443 implements MigrationInterface {
       undefined,
     );
     await queryRunner.query(
-      `ALTER TABLE "progress" ADD CONSTRAINT "FK_a8275b9343d2461a743476943cd" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "progress" ADD CONSTRAINT "FK_a8275b9343d2461a743476943cd" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE CASCADE ON UPDATE NO ACTION`,
       undefined,
     );
     await queryRunner.query(
-      `ALTER TABLE "payments" ADD CONSTRAINT "FK_3876d75b52f18e543c7aa2a3c5d" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "payments" ADD CONSTRAINT "FK_3876d75b52f18e543c7aa2a3c5d" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE CASCADE ON UPDATE NO ACTION`,
       undefined,
     );
     await queryRunner.query(
-      `ALTER TABLE "feedback" ADD CONSTRAINT "FK_9e510c65847ccd21e2ac3c49672" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "feedback" ADD CONSTRAINT "FK_9e510c65847ccd21e2ac3c49672" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE CASCADE ON UPDATE NO ACTION`,
       undefined,
     );
     await queryRunner.query(
-      `ALTER TABLE "code_blob" ADD CONSTRAINT "FK_2c9fe198397d0e2d0a827445c03" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+      `ALTER TABLE "code_blob" ADD CONSTRAINT "FK_2c9fe198397d0e2d0a827445c03" FOREIGN KEY ("userUuid") REFERENCES "user"("uuid") ON DELETE CASCADE ON UPDATE NO ACTION`,
       undefined,
     );
   }

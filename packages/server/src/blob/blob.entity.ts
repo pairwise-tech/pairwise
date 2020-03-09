@@ -34,6 +34,7 @@ export class CodeBlob {
   @ManyToOne(
     type => User,
     user => user.challengeCodeHistory,
+    { onDelete: "CASCADE" },
   )
   user: User;
 

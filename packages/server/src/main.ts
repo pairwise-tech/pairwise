@@ -14,6 +14,9 @@ import ENV from "./tools/server-env";
 import * as Sentry from "@sentry/node";
 import compression from "compression";
 
+/* Initialize Sentry */
+Sentry.init({ dsn: ENV.SENTRY_DSN });
+
 /** ===========================================================================
  * Types & Config
  * ============================================================================
@@ -41,10 +44,6 @@ const swaggerOptions = new DocumentBuilder()
   .setVersion("1.0")
   .addTag("Learn to Code!")
   .build();
-
-Sentry.init({
-  dsn: ENV.SENTRY_DSN,
-});
 
 /** ===========================================================================
  * Setup and Run the Server
