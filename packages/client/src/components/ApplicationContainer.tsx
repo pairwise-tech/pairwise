@@ -518,12 +518,16 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
 `;
 
 const AccountButton = styled(ButtonCore)`
-  height: ${HEADER_HEIGHT + 2};
+  padding: 0px 10px;
+  line-height: 40px;
+  margin: 0;
   color: ${COLORS.TEXT_TITLE};
   border-radius: 4px;
-  margin-left: 2px;
-  margin-right: 2px;
   flex-shrink: 0;
+
+  h1 {
+    margin: 0;
+  }
 
   :hover {
     cursor: pointer;
