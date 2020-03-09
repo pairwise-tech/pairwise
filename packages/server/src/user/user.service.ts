@@ -14,7 +14,7 @@ import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
-import { SlackServiceClass, slackService } from "src/slack/slack.service";
+import { SlackService, slackService } from "src/slack/slack.service";
 
 export interface GenericUserProfile {
   email: string;
@@ -26,7 +26,7 @@ export interface GenericUserProfile {
 
 @Injectable()
 export class UserService {
-  private readonly slackService: SlackServiceClass = slackService;
+  private readonly slackService: SlackService = slackService;
 
   constructor(
     private readonly progressService: ProgressService,

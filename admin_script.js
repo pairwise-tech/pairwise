@@ -66,7 +66,7 @@ const DELETE_USER_URL = `${SERVER_URL}/user/admin/delete`;
 const PURCHASE_COURSE_URL = `${SERVER_URL}/payments/admin/purchase-course`;
 const REFUND_COURSE_URL = `${SERVER_URL}/payments/admin/refund-course`;
 
-class log {
+class Log {
   constructor(action) {
     this.action = action;
   }
@@ -89,7 +89,7 @@ class log {
   }
 }
 
-const Log = new log(SCRIPT_ACTION);
+const log = new Log(SCRIPT_ACTION);
 
 /** ===========================================================================
  * Admin API Utils
@@ -99,20 +99,20 @@ const Log = new log(SCRIPT_ACTION);
 // Test admin API /admin route
 const testAdminIndexRoute = async () => {
   try {
-    Log.start();
+    log.start();
     const result = await axios.get(ADMIN_INDEX_URL, RequestHeaders);
-    Log.finish(result.data);
+    log.finish(result.data);
   } catch (err) {
-    Log.fail(err);
+    log.fail(err);
   }
 };
 
 // Get all users
 const getAllUsers = async () => {
   try {
-    Log.start();
+    log.start();
     const result = await axios.get(GET_ALL_USERS_URL, RequestHeaders);
-    Log.finish(
+    log.finish(
       `Retrieved ${result.data.length} user records. Writing result to file: ${filename}`,
     );
     const filename = "pairwise-users.json";
@@ -120,7 +120,7 @@ const getAllUsers = async () => {
     fs.writeFileSync(filename, users, "utf-8");
     console.log("Done!");
   } catch (err) {
-    Log.fail(err);
+    log.fail(err);
   }
 };
 
@@ -133,12 +133,12 @@ const deleteUserByEmail = async userEmail => {
       );
     }
 
-    Log.start();
+    log.start();
     const body = { userEmail };
     const result = await axios.post(DELETE_USER_URL, body, RequestHeaders);
-    Log.finish(result.data);
+    log.finish(result.data);
   } catch (err) {
-    Log.fail(err);
+    log.fail(err);
   }
 };
 
@@ -151,12 +151,12 @@ const purchaseCourseForUserByAdmin = async (userEmail, courseId) => {
       );
     }
 
-    Log.start();
+    log.start();
     const body = { userEmail, courseId };
     const result = await axios.post(PURCHASE_COURSE_URL, body, RequestHeaders);
-    Log.finish(result.data);
+    log.finish(result.data);
   } catch (err) {
-    Log.fail(err);
+    log.fail(err);
   }
 };
 
@@ -169,12 +169,12 @@ const refundCourseForUserByAdmin = async (userEmail, courseId) => {
       );
     }
 
-    Log.start();
+    log.start();
     const body = { userEmail, courseId };
     const result = await axios.post(REFUND_COURSE_URL, body, RequestHeaders);
-    Log.finish(result.data);
+    log.finish(result.data);
   } catch (err) {
-    Log.fail(err);
+    log.fail(err);
   }
 };
 

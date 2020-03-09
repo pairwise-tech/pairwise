@@ -14,11 +14,11 @@ import { AuthenticatedRequest } from "src/types";
 import { PaymentsService } from "./payments.service";
 import { AdminAuthGuard } from "src/auth/admin.guard";
 import { HTTP_METHOD, ADMIN_URLS } from "src/admin/admin.controller";
-import { SlackServiceClass, slackService } from "src/slack/slack.service";
+import { SlackService, slackService } from "src/slack/slack.service";
 
 @Controller("payments")
 export class PaymentsController {
-  private readonly slackService: SlackServiceClass = slackService;
+  private readonly slackService: SlackService = slackService;
 
   constructor(private readonly paymentsService: PaymentsService) {}
 

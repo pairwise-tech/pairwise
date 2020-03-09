@@ -12,11 +12,11 @@ import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
 import { UserUpdateOptions } from "@pairwise/common";
 import { AdminAuthGuard } from "src/auth/admin.guard";
-import { slackService, SlackServiceClass } from "src/slack/slack.service";
+import { slackService, SlackService } from "src/slack/slack.service";
 
 @Controller("user")
 export class UserController {
-  private readonly slackService: SlackServiceClass = slackService;
+  private readonly slackService: SlackService = slackService;
 
   constructor(private readonly userService: UserService) {}
 

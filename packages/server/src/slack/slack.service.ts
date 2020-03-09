@@ -62,7 +62,7 @@ interface ChatPostMessageResult extends WebAPICallResult {
  * of our server modules wherever it's needed.
  * ============================================================================
  */
-export class SlackServiceClass {
+export class SlackService {
   private client: WebClient;
   private adminMentionMarkup: string;
 
@@ -194,4 +194,4 @@ export class SlackServiceClass {
   }
 }
 
-export const slackService = new SlackServiceClass();
+export const slackService = new SlackService();

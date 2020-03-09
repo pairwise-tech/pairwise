@@ -2,7 +2,7 @@ import { Request, Controller, UseGuards, Get, Param } from "@nestjs/common";
 import { AdminAuthGuard } from "src/auth/admin.guard";
 import { AuthenticatedRequest } from "src/types";
 import { AdminService } from "./admin.service";
-import { slackService, SlackServiceClass } from "src/slack/slack.service";
+import { slackService, SlackService } from "src/slack/slack.service";
 import { FeedbackService } from "src/feedback/feedback.service";
 
 // HTTP Methods
@@ -19,7 +19,7 @@ export type ADMIN_URLS =
 
 @Controller("admin")
 export class AdminController {
-  private readonly slackService: SlackServiceClass = slackService;
+  private readonly slackService: SlackService = slackService;
 
   constructor(
     private readonly adminService: AdminService,

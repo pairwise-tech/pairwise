@@ -6,11 +6,11 @@ import { Repository } from "typeorm";
 import { RequestUser } from "src/types";
 import { SUCCESS_CODES } from "src/tools/constants";
 import { validateFeedbackDto } from "src/tools/validation";
-import { SlackServiceClass, slackService } from "src/slack/slack.service";
+import { SlackService, slackService } from "src/slack/slack.service";
 
 @Injectable()
 export class FeedbackService {
-  private readonly slackService: SlackServiceClass = slackService;
+  private readonly slackService: SlackService = slackService;
 
   constructor(
     @InjectRepository(Feedback)
