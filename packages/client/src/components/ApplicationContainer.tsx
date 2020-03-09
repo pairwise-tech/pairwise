@@ -488,7 +488,6 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
     large
     id="navigation-menu-button"
     aria-label="Open navigation map"
-    // icon={overlayVisible ? "menu-closed" : "menu"}
     {...rest}
   >
     <OpenCloseLogo isOpen={overlayVisible} />
@@ -508,7 +507,8 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
     display: flex;
   }
 
-  // NOTE: The filter only works in firefox as far as I know but it looks cool when it works
+  // NOTE: The filter only works in firefox as far as I know but it looks cool
+  // when it works. It grays out the first four rects
   rect {
     transition: all 0.2s ease;
     &:nth-child(-n + 4) {
