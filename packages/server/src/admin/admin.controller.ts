@@ -30,7 +30,7 @@ export class AdminController {
   /* Placeholder/test admin endpoint */
   @UseGuards(AdminAuthGuard)
   @Get()
-  async adminIndex(@Request() req: AuthenticatedRequest) {
+  public async adminIndex(@Request() req: AuthenticatedRequest) {
     const adminUserEmail = req.user.profile.email;
     this.slackService.postAdminActionAwarenessMessage({
       httpMethod: "GET",
@@ -43,7 +43,7 @@ export class AdminController {
 
   @UseGuards(AdminAuthGuard)
   @Get("/feedback/:challengeId")
-  async getFeedbackForChallenge(
+  public async getFeedbackForChallenge(
     @Param() params,
     @Request() req: AuthenticatedRequest,
   ) {

@@ -81,7 +81,10 @@ export class PaymentsService {
   }
 
   // Creates a payment intent using Stripe
-  async handleCreatePaymentIntent(requestUser: RequestUser, courseId: string) {
+  public async handleCreatePaymentIntent(
+    requestUser: RequestUser,
+    courseId: string,
+  ) {
     const courseMetadata = ContentUtility.getCourseMetadata(courseId);
     if (!courseMetadata) {
       throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
@@ -113,7 +116,7 @@ export class PaymentsService {
   // from Stripe. This occurs after a user completes checkout in the
   // Stripe UI. Based on the event information, we create a payment for
   // user and course.
-  async handleStripeCheckoutSuccessWebhook(
+  public async handleStripeCheckoutSuccessWebhook(
     request: Request,
     signature: string,
   ) {
@@ -147,7 +150,10 @@ export class PaymentsService {
     return SUCCESS_CODES.OK;
   }
 
-  async handlePurchaseCourseByAdmin(userEmail: string, courseId: string) {
+  public async handlePurchaseCourseByAdmin(
+    userEmail: string,
+    courseId: string,
+  ) {
     console.log(
       `[ADMIN]: Admin request to purchase course: ${courseId} for user: ${userEmail}`,
     );
@@ -158,7 +164,7 @@ export class PaymentsService {
     });
   }
 
-  async handleRefundCourseByAdmin(userEmail: string, courseId: string) {
+  public async handleRefundCourseByAdmin(userEmail: string, courseId: string) {
     console.log(
       `[ADMIN]: Admin request to refund course: ${courseId} for user: ${userEmail}`,
     );

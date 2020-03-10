@@ -7,29 +7,37 @@ import { Toaster, IconName } from "@blueprintjs/core";
 
 const BlueprintToaster = Toaster.create({ className: "blueprint-toaster" });
 
+interface IToastOptions {
+  icon?: IconName;
+  timeout?: number;
+}
+
 // Create a util object which includes the Blueprint toaster and shortcut
 // methods to quickly post success, failure, and warning toasts.
 const toaster = {
   toast: BlueprintToaster,
-  success: (message: string, icon?: IconName) => {
+  success: (message: string, options?: IToastOptions) => {
     return BlueprintToaster.show({
       message,
       intent: "success",
-      icon: icon || "tick",
+      icon: options?.icon || "tick",
+      timeout: options?.timeout !== undefined ? options?.timeout : 5000,
     });
   },
-  warn: (message: string, icon?: IconName) => {
+  warn: (message: string, options?: IToastOptions) => {
     return BlueprintToaster.show({
       message,
       intent: "warning",
-      icon: icon || "warning-sign",
+      icon: options?.icon || "warning-sign",
+      timeout: options?.timeout !== undefined ? options?.timeout : 5000,
     });
   },
-  error: (message: string, icon?: IconName) => {
+  error: (message: string, options?: IToastOptions) => {
     return BlueprintToaster.show({
       message,
       intent: "danger",
-      icon: icon || "error",
+      icon: options?.icon || "error",
+      timeout: options?.timeout !== undefined ? options?.timeout : 5000,
     });
   },
 };

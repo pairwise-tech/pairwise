@@ -6,10 +6,10 @@ export class BlobDto implements ICodeBlobDto {
   @IsNotEmpty()
   @ValidateNested()
   @ApiProperty({ type: () => BlobDto })
-  dataBlob: DataBlob;
+  public dataBlob: DataBlob;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ type: "string" })
-  challengeId: string;
+  public challengeId: string;
 }

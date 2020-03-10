@@ -357,6 +357,7 @@ export enum APP_INITIALIZATION_TYPE {
   ACCOUNT_CREATED = "ACCOUNT_CREATED",
   PAYMENT_SUCCESS = "PAYMENT_SUCCESS",
   PAYMENT_CANCELLED = "PAYMENT_CANCELLED",
+  AUTHENTICATION_FAILURE = "AUTHENTICATION_FAILURE",
 }
 
 // Check a list of param keys exists in the parsed query params from a url
@@ -388,6 +389,16 @@ export const parseInitialUrlToInitializationType = (
     } else {
       return APP_INITIALIZATION_TYPE.SIGN_IN;
     }
+  }
+
+  // There was an error during authentication.
+  // Typically, this is because the user's email was not included in the SSO
+  // profile, likely because of a "private email" setting w/ the SSO provider
+  if (
+    path === "/authentication-failure" &&
+    checkParamsExist(params, ["emailError", "strategy"])
+  ) {
+    return APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE;
   }
 
   // A user returned from the checkout flow after cancelling:

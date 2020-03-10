@@ -17,7 +17,7 @@ export class FeedbackService {
     private readonly feedbackRepository: Repository<Feedback>,
   ) {}
 
-  async getFeedbackForChallenge(challengeId: string) {
+  public async getFeedbackForChallenge(challengeId: string) {
     return this.feedbackRepository.find({
       where: {
         challengeId,
@@ -25,7 +25,7 @@ export class FeedbackService {
     });
   }
 
-  async getFeedbackForUser(userId: string) {
+  public async getFeedbackForUser(userId: string) {
     return this.feedbackRepository.find({
       where: {
         user: userId,
@@ -33,7 +33,7 @@ export class FeedbackService {
     });
   }
 
-  async saveUserFeedback(user: RequestUser, feedbackDto: IFeedbackDto) {
+  public async saveUserFeedback(user: RequestUser, feedbackDto: IFeedbackDto) {
     /* Validate the request */
     validateFeedbackDto(feedbackDto);
 
