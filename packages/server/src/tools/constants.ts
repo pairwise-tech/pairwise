@@ -13,7 +13,8 @@ enum ERROR_CODES {
   MISSING_USER = "No user could be found",
   INVALID_PARAMETERS = "Invalid parameters provided",
   INVALID_FEEDBACK_TYPE = "Invalid feedback type used",
-  SSO_EMAIL_NOT_FOUND = "User email could not be found using strategy",
+  SSO_EMAIL_NOT_FOUND = "Redirecting unauthenticated user. Email could not be found using strategy",
+  UNKNOWN_LOGIN_ERROR = "There was an unknown login error",
 }
 
 enum SUCCESS_CODES {

@@ -1,15 +1,12 @@
 import { Controller, Get, Req, UseGuards, Res } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
-import { AuthService } from "./auth.service";
+import { AuthService, LoginFailureCodes, Strategy } from "./auth.service";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
 import { ERROR_CODES } from "src/tools/constants";
-import { captureMessage, Severity } from "@sentry/node";
-
-type Strategy = "GitHub" | "Facebook" | "Google";
 
 @Controller("auth")
 export class AuthController {
@@ -27,16 +24,14 @@ export class AuthController {
     @Req() req: Request & { user: FacebookProfileWithCredentials },
     @Res() res,
   ) {
-    try {
-      const {
-        token,
-        accountCreated,
-      } = await this.authService.handleFacebookSignin(req.user);
+    const result = await this.authService.handleFacebookSignin(req.user);
 
+    if (result.value) {
+      const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
       return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
-    } catch (e) {
-      this.handleLoginError(res, e, "Facebook");
+    } else {
+      return this.handleLoginError(res, result.error, "Facebook");
     }
   }
 
@@ -52,16 +47,14 @@ export class AuthController {
     @Req() req: Request & { user: GitHubProfileWithCredentials },
     @Res() res,
   ) {
-    try {
-      const {
-        token,
-        accountCreated,
-      } = await this.authService.handleGitHubSignin(req.user);
+    const result = await this.authService.handleGitHubSignin(req.user);
 
+    if (result.value) {
+      const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
       return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
-    } catch (e) {
-      return this.handleLoginError(res, e, "GitHub");
+    } else {
+      return this.handleLoginError(res, result.error, "GitHub");
     }
   }
 
@@ -77,16 +70,14 @@ export class AuthController {
     @Req() req: Request & { user: GoogleProfileWithCredentials },
     @Res() res,
   ) {
-    try {
-      const {
-        token,
-        accountCreated,
-      } = await this.authService.handleGoogleSignin(req.user);
+    const result = await this.authService.handleGoogleSignin(req.user);
 
+    if (result.value) {
+      const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
       return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
-    } catch (e) {
-      this.handleLoginError(res, e, "Google");
+    } else {
+      return this.handleLoginError(res, result.error, "Google");
     }
   }
 
@@ -99,17 +90,20 @@ export class AuthController {
     return params;
   }
 
-  private handleLoginError(@Res() res, e: Error, strategy: Strategy) {
-    if (e.message === ERROR_CODES.SSO_EMAIL_NOT_FOUND) {
-      console.log(`[Login Err] ${e.message}: ${strategy}`);
+  /**
+   * Parse these URLs on the client and show appropriate toasts for login failures.
+   */
+  private handleLoginError(
+    @Res() res,
+    err: LoginFailureCodes,
+    strategy: Strategy,
+  ) {
+    if (err === ERROR_CODES.SSO_EMAIL_NOT_FOUND) {
       return res.redirect(
         `${ENV.CLIENT_URL}/authentication-failure?emailError=true&strategy=${strategy}`,
       );
     }
-    captureMessage(
-      `[Login Err] An unknown error occurred: ${e}`,
-      Severity.Error,
-    );
+
     return res.redirect(
       `${ENV.CLIENT_URL}/authentication-failure?emailError=false&strategy=${strategy}`,
     );
