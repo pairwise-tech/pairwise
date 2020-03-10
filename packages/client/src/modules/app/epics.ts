@@ -60,7 +60,8 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
         APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE,
     ),
     pluck("params"),
-    // wait for the page/workspace to fully load
+    // wait for the "Launching Pairwise..." overlay to disappear as the
+    // UI/UX of toast over overlay looks a bit off
     delay(1500),
     tap(params => {
       if (params.emailError === "true") {
