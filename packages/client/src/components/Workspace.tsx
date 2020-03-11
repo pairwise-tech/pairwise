@@ -57,7 +57,7 @@ import {
   colSeparatorProps,
   rowSeparatorProps,
   ContentContainer,
-  ContentViewEdit,
+  InstructionsViewEdit,
   ContentTitle,
   TestResultRow,
   Spacer,
@@ -587,7 +587,7 @@ class Workspace extends React.Component<IProps, IState> {
                       style={{ background: C.BACKGROUND_CONTENT }}
                     >
                       <ContentContainer>
-                        <ContentViewEdit />
+                        <InstructionsViewEdit />
                       </ContentContainer>
                     </Row>
                     <Row

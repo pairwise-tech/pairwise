@@ -205,7 +205,7 @@ export const getCurrentId = createSelector(
   challenge => challenge?.id,
 );
 
-export const getCurrentContent = createSelector(
+export const getCurrentInstructions = createSelector(
   [getCurrentChallenge],
   challenge => challenge?.instructions,
 );
