@@ -478,6 +478,11 @@ const EditorExternalStyles = styled.div`
     margin-left: 30px !important;
   }
 
+  b,
+  strong {
+    font-weight: bold !important;
+  }
+
   // Inline code
   p code {
     color: rgb(108, 188, 255);
