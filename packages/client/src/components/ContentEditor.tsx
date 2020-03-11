@@ -26,6 +26,8 @@ const MarkdownShortcuts = (): SlatePlugin => {
     { mark: "deleted", shortcut: "~" },
   ];
 
+  // Given a list of leaves and a selection find in which indexed leaf the
+  // selection is. It's basically the answer to "Which leaf is the cursor in?"
   const getIndexBySelection = (sel: Selection, leaves: List<Leaf>) => {
     let totalLength = 0;
     let index = -1;
