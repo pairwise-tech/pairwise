@@ -131,6 +131,12 @@ export const generateEmptyModule = (): Module => ({
   free: false /* All challenges are locked by default */,
 });
 
+const starterTestCode = `// Write your tests here:
+test("message", () => {
+  expect(true).toBe(true);
+});
+`;
+
 export const generateEmptyChallenge = (
   overwrite: Partial<Challenge> = {},
 ): Challenge => ({
@@ -138,7 +144,7 @@ export const generateEmptyChallenge = (
   type: "markup",
   title: "[EMPTY...]",
   instructions: "",
-  testCode: "// test('message', () => expect(...))",
+  testCode: starterTestCode,
   videoUrl: "",
   starterCode: "",
   solutionCode: "",

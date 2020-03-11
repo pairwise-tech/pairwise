@@ -691,20 +691,31 @@
           "content": ""
         },
         {
-          "id": "TJdUI-So",
+          "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",
-          "content": "",
+          "instructions": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "supplementaryContent": "By now you have probably seen a lot of `{` and `}` in the code you've been writing. These curly braces are an important part of understanding how a computer program works. In this section, we will dive into the curly braces in more depth and introduce an important concept: _scopes_.\n\nIn TypeScript, a _scope_ refers to which variables are accessible within a specific piece of code. Curly braces `{...}` are used to denote different scopes, which can be used to limit variable accessibility within different parts of code.\n\nA variable which is accessible in one scope may not be accessible in another. This can useful for establishing boundaries between different parts of your program, organizing your code, encapsulation, and for many other reasons.\n\nWith that said, let's dive into the challenges\\!"
+          "content": "By now you have probably seen a lot of `{` and `}` in the code you've been writing. These curly braces are an important part of understanding how a computer program works. In this section, we will dive into the curly braces in more depth and introduce an important concept: _scopes_.\n\nIn TypeScript, a _scope_ refers to which variables are accessible within a specific piece of code. Curly braces `{...}` are used to denote different scopes, which can be used to limit variable accessibility within different parts of code.\n\nA variable which is accessible in one scope may not be accessible in another. This can useful for establishing boundaries between different parts of your program, organizing your code, encapsulation, and for many other reasons.\n\nWith that said, let's dive into the challenges\\!"
+        },
+        {
+          "id": "wkp3YMTk",
+          "type": "typescript",
+          "title": "Global Scope",
+          "instructions": "Values declared with global scope can be accessed _anywhere_ in the program. Create a variable called `myGlobalValue` at the top of the program and assign it to the string: `I am global!`. Take a look at the console output\\!",
+          "testCode": "test(\"`myGlobalValue` exists in the global scope of the program\", () => {\n    expect(myGlobalValue).toBeDefined();\n});\n\ntest(\"`myGlobalValue` is the string `\\\"I am global!\\\"`\", () => {\n    expect(myGlobalValue).toBe(\"I am global!\");\n});",
+          "videoUrl": "",
+          "starterCode": "\n{\n  // Scope 1:\n  console.log(`Scope 1 myGlobalValue: ${myGlobalValue}`);\n  {\n    // Scope 2:\n    console.log(`Scope 2 myGlobalValue: ${myGlobalValue}`);\n    {\n      // Scope 3:\n      console.log(`Scope 3 myGlobalValue: ${myGlobalValue}`);\n    }\n  }\n}\n",
+          "solutionCode": "const myGlobalValue = \"I am global!\";\n\n{\n  // Scope 1:\n  console.log(`Scope 1 myGlobalValue: ${myGlobalValue}`);\n  {\n    // Scope 2:\n    console.log(`Scope 2 myGlobalValue: ${myGlobalValue}`);\n    {\n      // Scope 3:\n      console.log(`Scope 3 myGlobalValue: ${myGlobalValue}`);\n    }\n  }\n}\n",
+          "content": "You may observe the series of brackets in the code above, e.g. `{ ... }`. The brackets create a new _scope_ in TypeScript. A scope basically defines a private environment or namespace for values to exist.\n\nOther than a few exceptional cases, values defined within a scope _cannot be accessed from outside of that scope._\n\nAs you may imagine, values in the _global scope_ are global and can be accessed anywhere in the program\\! "
         },
         {
           "id": "9wRw1y5V",
           "type": "section",
-          "title": "Programming Projects",
+          "title": "Projects",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
