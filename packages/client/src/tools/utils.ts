@@ -132,7 +132,7 @@ export const generateEmptyModule = (): Module => ({
 });
 
 const starterTestCode = `// Write your tests here:
-test("message", () => {
+test("Write your test assertion here!!!", () => {
   expect(true).toBe(true);
 });
 `;

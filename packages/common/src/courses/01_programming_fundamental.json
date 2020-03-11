@@ -713,6 +713,17 @@
           "content": "You may observe the series of brackets in the code above, e.g. `{ ... }`. The brackets create a new _scope_ in TypeScript. A scope basically defines a private environment or namespace for values to exist.\n\nOther than a few exceptional cases, values defined within a scope _cannot be accessed from outside of that scope._\n\nAs you may imagine, values in the _global scope_ are global and can be accessed anywhere in the program\\! "
         },
         {
+          "id": "$o6Oq$iq",
+          "type": "typescript",
+          "title": "The Global Scope Math Object",
+          "instructions": "In TypeScript there are a variety of objects available in the global scope for you to use as a programmer, anywhere in your program. For instead, the `Math` object exists globally and provides methods such as `floor`, `ceil`, `round` and otherwise for performing useful operations with numbers.\n\nUse the `Math` object methods to assign the correct values to the variables `down`, `up`, and `rounded` below\\.",
+          "testCode": "test(\"The results `down`, `up`, and `rounded` should all be numbers.\", () => {\n  expect(typeof down).toBe(\"number\");\n  expect(typeof up).toBe(\"number\");\n  expect(typeof rounded).toBe(\"number\");\n});\n\ntest(\"The `down` variable should apply `Math.floor` to the `testNumber` variable.\", () => {\n  expect(down).toBe(Math.floor(testNumber));\n});\n\ntest(\"The `up` variable should apply `Math.ceil` to the `testNumber` variable.\", () => {\n  expect(up).toBe(Math.ceil(testNumber));\n});\n\ntest(\"The `rounded` variable should apply `Math.round` to the `testNumber` variable.\", () => {\n  expect(rounded).toBe(Math.round(testNumber));\n});\n",
+          "videoUrl": "",
+          "starterCode": "// An example number\nconst testNumber = 10.325;\n\n// Round a decimal value down:\nconst down = undefined;\nconsole.log(`down: ${down}`);\n\n// Round a decimal value up:\nconst up = undefined;\nconsole.log(`up: ${up}`);\n\n// Round a decimal value:\nconst rounded = undefined;\nconsole.log(`rounded: ${rounded}`);",
+          "solutionCode": "// An example number\nconst testNumber = 10.325;\n\n// Round a decimal value down:\nconst down = Math.floor(testNumber);\nconsole.log(`down: ${down}`);\n\n// Round a decimal value up:\nconst up = Math.ceil(testNumber);\nconsole.log(`up: ${up}`);\n\n// Round a decimal value:\nconst rounded = Math.round(testNumber);\nconsole.log(`rounded: ${rounded}`);",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
