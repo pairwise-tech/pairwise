@@ -267,6 +267,50 @@
           "starterCode": "<style>\n  /* Your code here */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    padding: 10px;\n    background: tomato;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .nav a:hover {\n    background: blue;\n    color: tomato;\n  }\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    background: tomato;\n    color: blue;\n    padding: 10px;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "content": "You've probably noticed that when you hover over a link in a browser it will change somehow. You can customize this!\n\nThis is called a hover state, and you can style a hover state just like you can style any other CSS. The main difference is the selector.\n\n```css\n/* Style the hover state for all links on the site */\na:hover {\n  text-decoration: underline;\n}\n\n/* Style just the nav links */\n.nav a:hover {\n  color: tomato;\n}\n\n/* Style the entire nav div when it's hovered */\n.nav:hover {\n  background: gray;\n}\n```\n\nTo style how something looks when the mouse hovers over it you use `:hover`. Specifically, you just put `:hover` after the selector you want to style. It's important not to put a space in front of `:hover`."
+        },
+        {
+          "id": "DDOHTQQC",
+          "type": "section",
+          "title": "Projects",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "TODO"
+        },
+        {
+          "id": "LROl5K9R",
+          "type": "media",
+          "title": "HTML Guided Project",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "TODO"
+        },
+        {
+          "id": "sfxItMSR",
+          "type": "markup",
+          "title": "Styling A Tic Tac Toe Board",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  .board {\n    display: table; /* Only take up as much space as needed */\n    margin: 0 auto; /* Center on the page (requres display:table above) */\n  }\n  .row {\n    display: flex; /* Display horizontally */\n    flex-wrap: wrap;\n  }\n  .square {\n    width: 50px;\n    height: 50px;\n    border: 1px solid black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    font-family: monospace;\n    font-weight: 100;\n    font-size: 40px;\n  }\n  .square:after {\n    display: block;\n  }\n  .has-x:after {\n    content: \"x\";\n    color: forestgreen;\n  }\n  .has-o:after {\n    content: \"o\";\n    color: tomato;\n  }\n</style>\n<div class=\"board\">\n  <div class=\"row\">\n    <div class=\"square has-x\"></div>\n    <div class=\"square\"></div>\n    <div class=\"square\"></div>\n  </div>\n  <div class=\"row\">\n    <div class=\"square\"></div>\n    <div class=\"square has-o\"></div>\n    <div class=\"square\"></div>\n  </div>\n  <div class=\"row\">\n    <div class=\"square\"></div>\n    <div class=\"square\"></div>\n    <div class=\"square\"></div>\n  </div>\n</div>\n",
+          "content": "Here's what we'll cover in this challenge:\n\n* Pseudo selectors and the `content` property\n* [Flexbox](/workspace/iFvzasqW)\n* Using various `display` properties, including the somewhat obscure `display: table` property\n* Using utility classes\n\n\n# TODO\\... VIDEO\n\n\n> **There's almost always more than one solution**\n> This challenge can be accomplished with `flex-wrap` and a fixed `width` or with a more conventional approach of three \"row\" divs and three `div`s inside them to serve as squares on the board.\n> There are actually \n"
+        },
+        {
+          "id": "Fpw0qzGv",
+          "type": "markup",
+          "title": "Creating a Calculator Guided Project",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "TODO\\...\n* Basically copy the UI of the Mac calculator app\n* Can introduce the idea of going from an image, or something you imagine, to a real\\-life UI\n* Can introduce the Digital Color Meter as a way to grab UI colors\n\n"
         }
       ]
     },
