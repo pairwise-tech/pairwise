@@ -222,8 +222,11 @@ export const partitionChallengesBySection = (
     const SPECIAL_TOPIC_BOUNDARY =
       reachedSpecialTopics && !firstReachedSpecialTopics;
 
+    const CURRENT_SECTION_HAS_CONTENT =
+      !!currentSection.section || currentSection.challenges.length > 0;
+
     if (SPECIAL_TOPIC_BOUNDARY) {
-      if (currentSection.challenges.length > 0) {
+      if (CURRENT_SECTION_HAS_CONTENT) {
         sections = sections.concat(currentSection);
       }
       const nextSection: NavigationChallengeSection = {
@@ -233,7 +236,7 @@ export const partitionChallengesBySection = (
       firstReachedSpecialTopics = true;
       currentSection = nextSection;
     } else if (PROJECT_BOUNDARY) {
-      if (currentSection.challenges.length > 0) {
+      if (CURRENT_SECTION_HAS_CONTENT) {
         sections = sections.concat(currentSection);
       }
       const nextSection: NavigationChallengeSection = {
@@ -243,7 +246,7 @@ export const partitionChallengesBySection = (
       firstReachedProjects = true;
       currentSection = nextSection;
     } else if (SHOULD_END_SECTION) {
-      if (currentSection.challenges.length > 0) {
+      if (CURRENT_SECTION_HAS_CONTENT) {
         sections = sections.concat(currentSection);
       }
 
