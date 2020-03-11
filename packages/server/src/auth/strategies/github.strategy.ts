@@ -25,7 +25,7 @@ export class GitHubStrategy {
     this.init();
   }
 
-  init() {
+  private init() {
     use(
       new GitHubPassportStrategy(
         {

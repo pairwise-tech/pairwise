@@ -24,7 +24,10 @@ export class PaymentsController {
 
   @UseGuards(AuthGuard("jwt"))
   @Post("/checkout/:courseId")
-  createCoursePaymentIntent(@Param() params, @Req() req: AuthenticatedRequest) {
+  public createCoursePaymentIntent(
+    @Param() params,
+    @Req() req: AuthenticatedRequest,
+  ) {
     const { courseId } = params;
     return this.paymentsService.handleCreatePaymentIntent(req.user, courseId);
   }
@@ -33,7 +36,7 @@ export class PaymentsController {
   // currently we only rely on this for the checkout session completed
   // event.
   @Post("/stripe-webhook")
-  async coursePaymentSuccessStripeWebhook(
+  public async coursePaymentSuccessStripeWebhook(
     @Headers("stripe-signature") signature,
     @Req() request: ExpressRequest,
   ) {
@@ -49,7 +52,7 @@ export class PaymentsController {
   // helpful as a workaround to test the payments flow using Cypress.
   @UseGuards(AdminAuthGuard)
   @Post("/admin/purchase-course")
-  async purchaseCourseForUser(
+  public async purchaseCourseForUser(
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {
@@ -65,7 +68,7 @@ export class PaymentsController {
   // An admin API to handle refunding a course for a user.
   @UseGuards(AdminAuthGuard)
   @Post("/admin/refund-course")
-  async refundCourseForUser(
+  public async refundCourseForUser(
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {

@@ -190,7 +190,7 @@ const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
       }
 
       if (message) {
-        deps.toaster.warn(message, "take-action");
+        deps.toaster.warn(message, { icon: "take-action" });
       }
     }),
     ignoreElements(),

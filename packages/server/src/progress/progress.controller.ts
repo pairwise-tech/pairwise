@@ -21,14 +21,14 @@ export class ProgressController {
 
   @UseGuards(AuthGuard("jwt"))
   @Get()
-  fetchUserChallengeProgress(@Req() req: AuthenticatedRequest) {
+  public fetchUserChallengeProgress(@Req() req: AuthenticatedRequest) {
     return this.progressService.fetchUserProgress(req.user.profile.uuid);
   }
 
   @UseGuards(AuthGuard("jwt"))
   @Post()
   @UsePipes(ValidationPipe)
-  updateUserChallengeProgress(
+  public updateUserChallengeProgress(
     @Body() challengeProgressDto: ProgressDto,
     @Req() req: AuthenticatedRequest,
   ) {
@@ -41,7 +41,7 @@ export class ProgressController {
   @UseGuards(AuthGuard("jwt"))
   @Post("/bulk")
   @UsePipes(ValidationPipe)
-  async updateUserChallengeProgressBulk(
+  public async updateUserChallengeProgressBulk(
     @Body() userCourseProgress: UserCourseProgress,
     @Req() req: AuthenticatedRequest,
   ) {

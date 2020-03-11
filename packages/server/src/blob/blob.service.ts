@@ -21,7 +21,7 @@ export class BlobService {
     private readonly userCodeBlobRepository: Repository<CodeBlob>,
   ) {}
 
-  async fetchUserCodeBlob(user: RequestUser, challengeId: string) {
+  public async fetchUserCodeBlob(user: RequestUser, challengeId: string) {
     /* Verify the challenge id is valid */
     if (!ContentUtility.challengeIdIsValid(challengeId)) {
       throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
@@ -56,7 +56,10 @@ export class BlobService {
     }
   }
 
-  async updateUserCodeBlob(challengeCodeDto: ICodeBlobDto, user: RequestUser) {
+  public async updateUserCodeBlob(
+    challengeCodeDto: ICodeBlobDto,
+    user: RequestUser,
+  ) {
     /* Validate everything in the code blob */
     validateCodeBlob(challengeCodeDto);
 
@@ -91,7 +94,7 @@ export class BlobService {
     return SUCCESS_CODES.OK;
   }
 
-  async persistBulkBlobs(blobs: CodeBlobBulk, user: RequestUser) {
+  public async persistBulkBlobs(blobs: CodeBlobBulk, user: RequestUser) {
     console.log(
       `[BULK]: Persisting bulk blobs for user: ${user.profile.email}`,
     );

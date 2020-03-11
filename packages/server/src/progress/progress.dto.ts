@@ -6,15 +6,15 @@ export class ProgressDto implements IProgressDto {
   @IsBoolean()
   @IsNotEmpty()
   @ApiProperty({ type: "boolean" })
-  complete: boolean;
+  public complete: boolean;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ type: "string" })
-  challengeId: string;
+  public challengeId: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ type: "string" })
-  courseId: string;
+  public courseId: string;
 }

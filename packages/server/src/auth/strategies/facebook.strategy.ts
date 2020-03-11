@@ -33,7 +33,7 @@ export class FacebookStrategy {
     this.init();
   }
 
-  init() {
+  private init() {
     use(
       new FacebookPassportStrategy(
         {

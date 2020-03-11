@@ -33,7 +33,7 @@ export class AdminAuthGuard extends AuthGuard("jwt") {
     super();
   }
 
-  handleRequest(err, user, info, context) {
+  public handleRequest(err, user, info, context) {
     try {
       // Allow whitelisted users to pass:
       if (user) {

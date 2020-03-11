@@ -22,25 +22,25 @@ import { User } from "../user/user.entity";
 @Entity()
 export class CodeBlob {
   @PrimaryGeneratedColumn("uuid")
-  uuid: number;
+  public uuid: number;
 
   @Index()
   @Column()
-  challengeId: string;
+  public challengeId: string;
 
   @Column({ type: "jsonb" })
-  dataBlob: string;
+  public dataBlob: string;
 
   @ManyToOne(
     type => User,
     user => user.challengeCodeHistory,
     { onDelete: "CASCADE" },
   )
-  user: User;
+  public user: User;
 
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: Date;
+  public createdAt: Date;
 
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: Date;
+  public updatedAt: Date;
 }
