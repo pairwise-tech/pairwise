@@ -15,7 +15,7 @@ import { List } from "immutable";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
-// All adapted from the markdown shorcuts that ship with the lib by default:
+// All adapted from the markdown shortcuts that ship with the lib by default:
 // https://github.com/outline/rich-markdown-editor/blob/master/src/plugins/MarkdownShortcuts.js
 const MarkdownShortcuts = (): SlatePlugin => {
   const inlineShortcuts = [
@@ -82,7 +82,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
       const offsetFromStart = leadingText !== text ? leadingText.length : 0;
       const localOffset = selection.start.offset - leadingText.length;
       const potentialText =
-        text.slice(0, localOffset) + e.key + text.slice(localOffset); // This is a keydown handler, so this is the text that would be on the page _after_ thepress
+        text.slice(0, localOffset) + e.key + text.slice(localOffset); // This is a keydown handler, so this is the text that would be on the page _after_ the press
 
       // only add tags if they have spaces around them or the tag is beginning
       // or the end of the block
@@ -114,7 +114,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
           e.preventDefault();
         }
 
-        // NOTE: Order isimportant. If you you type a `, move to the end of a
+        // NOTE: Order is important. If you you type a `, move to the end of a
         // word, type `, everything works. However if you put a ` at the end of
         // a word, move to the front, put another `, then this will not work.
         // For that to work we would have to do something like reverse the
@@ -222,7 +222,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
       });
     }
 
-    // Purposefully not pasing to next here so that the rich-markdown-editor
+    // Purposefully not passing to next here so that the rich-markdown-editor
     // default handler does not fire. That handler is where the error-prone
     // parsing of inline markdown was happening.
     return;
@@ -262,7 +262,7 @@ const markdownShortcuts = MarkdownShortcuts();
 /** ===========================================================================
  * ContentEditor
  * ----------------------------------------------------------------------------
- * The ContentEditor is our rich markdown editor for use in codepress for
+ * The ContentEditor is our rich markdown editor for use in Codepress for
  * editing and in the overall app for viewing markdown content.
  *
  * This export attaches the theme and any other props that are unlikely to
