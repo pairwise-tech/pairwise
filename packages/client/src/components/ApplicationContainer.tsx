@@ -137,7 +137,10 @@ const ApplicationContainer = (props: IProps) => {
   const displayNavigationArrows = location.includes("workspace");
   const isWorkspaceRequired = challengeRequiresWorkspace(challenge);
   const showMediaAreaButton =
-    challenge && isWorkspaceRequired && (CODEPRESS || hasMediaContent);
+    !location.includes("home") &&
+    challenge &&
+    isWorkspaceRequired &&
+    (CODEPRESS || hasMediaContent);
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
