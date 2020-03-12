@@ -10,11 +10,12 @@ import { connect } from "react-redux";
 import { timer } from "rxjs";
 import { map } from "rxjs/operators";
 import { Editor } from "slate-react";
-import { Leaf } from "slate";
+import { Leaf, Selection } from "slate";
+import { List } from "immutable";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
-// All adapted from the markdown shorcuts that ship with the lib by default:
+// All adapted from the markdown shortcuts that ship with the lib by default:
 // https://github.com/outline/rich-markdown-editor/blob/master/src/plugins/MarkdownShortcuts.js
 const MarkdownShortcuts = (): SlatePlugin => {
   const inlineShortcuts = [
@@ -24,6 +25,24 @@ const MarkdownShortcuts = (): SlatePlugin => {
     { mark: "inserted", shortcut: "++" },
     { mark: "deleted", shortcut: "~" },
   ];
+
+  // Given a list of leaves and a selection find in which indexed leaf the
+  // selection is. It's basically the answer to "Which leaf is the cursor in?"
+  const getIndexBySelection = (sel: Selection, leaves: List<Leaf>) => {
+    let totalLength = 0;
+    let index = -1;
+
+    // @ts-ignore What is wrong with these typings??? Lists are iterable
+    for (const { text } of leaves) {
+      totalLength += text.length;
+      index += 1;
+      if (sel.start.offset < totalLength) {
+        return index;
+      }
+    }
+
+    return -1;
+  };
 
   const keydownWhitelist = new Set(inlineShortcuts.map(x => x.shortcut[0]));
 
@@ -52,16 +71,18 @@ const MarkdownShortcuts = (): SlatePlugin => {
       // to be in a code tag and the word "italic" to be italicized. We do not
       // want the first underscore of "_italic_" to close out the previous on in
       // backticks
-      // @ts-ignore Slate React typings are poorly versioned
-      const text = firstText.getLeaves().last().text;
-      const leadingText = firstText
-        // @ts-ignore Slate React typings are poorly versioned
-        .getLeaves()
-        .slice(0, -1)
-        .map((x: Leaf | undefined) => x?.get("text") || "")
-        .reduce((agg: string, x: string = "") => agg + x, "");
+      const leaves = firstText.getLeaves();
+      const selectionIndex = getIndexBySelection(selection, leaves);
+      const selectionLeaf = leaves.get(selectionIndex);
+      const text = selectionLeaf.text;
+      const leadingText = leaves
+        .slice(0, selectionIndex)
+        .map((x: Leaf | undefined) => x?.text || "")
+        .reduce((agg = "", x = "") => agg + x, "");
       const offsetFromStart = leadingText !== text ? leadingText.length : 0;
-      const potentialText = text + e.key; // This is a keydown handler, so this is the text that would be on the page _after_ thepress
+      const localOffset = selection.start.offset - leadingText.length;
+      const potentialText =
+        text.slice(0, localOffset) + e.key + text.slice(localOffset); // This is a keydown handler, so this is the text that would be on the page _after_ the press
 
       // only add tags if they have spaces around them or the tag is beginning
       // or the end of the block
@@ -93,6 +114,13 @@ const MarkdownShortcuts = (): SlatePlugin => {
           e.preventDefault();
         }
 
+        // NOTE: Order is important. If you you type a `, move to the end of a
+        // word, type `, everything works. However if you put a ` at the end of
+        // a word, move to the front, put another `, then this will not work.
+        // For that to work we would have to do something like reverse the
+        // arguments in moveAnchorTo and we probably wouldn't want to move to
+        // the end afterwards. Even so, I was getting some sort of off-by-1
+        // error when I tried to debug it.
         return editor
           .removeTextByKey(firstText.key, lastCodeTagIndex, shortcut.length)
           .removeTextByKey(firstText.key, firstCodeTagIndex, shortcut.length)
@@ -173,7 +201,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
         checked = false;
       }
 
-      // @ts-ignore Slate React types depend on the wrong version of @types/slate...
+      // @ts-ignore Slate types are not great
       editor.withoutNormalizing(c => {
         c.moveFocusToStartOfNode(startBlock)
           .delete()
@@ -194,7 +222,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
       });
     }
 
-    // Purposefully not pasing to next here so that the rich-markdown-editor
+    // Purposefully not passing to next here so that the rich-markdown-editor
     // default handler does not fire. That handler is where the error-prone
     // parsing of inline markdown was happening.
     return;
@@ -234,7 +262,7 @@ const markdownShortcuts = MarkdownShortcuts();
 /** ===========================================================================
  * ContentEditor
  * ----------------------------------------------------------------------------
- * The ContentEditor is our rich markdown editor for use in codepress for
+ * The ContentEditor is our rich markdown editor for use in Codepress for
  * editing and in the overall app for viewing markdown content.
  *
  * This export attaches the theme and any other props that are unlikely to
@@ -450,6 +478,11 @@ const EditorExternalStyles = styled.div`
   ul,
   ol {
     margin-left: 30px !important;
+  }
+
+  b,
+  strong {
+    font-weight: bold !important;
   }
 
   // Inline code

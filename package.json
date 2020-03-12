@@ -59,7 +59,8 @@
     "test:cypress": "cd packages/cypress && yarn cypress:ci"
   },
   "resolutions": {
-    "minipass": "2.7.0"
+    "minipass": "2.7.0",
+    "**/@types/slate": "0.44.11"
   },
   "workspaces": [
     "packages/*"

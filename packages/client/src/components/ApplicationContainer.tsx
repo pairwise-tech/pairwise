@@ -412,7 +412,7 @@ const OpenCloseLogo = ({ isOpen = false, ...props }: OpenCloseLogoProps) => {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <g fill-rule="nonzero" fill="none" transform="scale(0.37)">
+      <g fillRule="nonzero" fill="none" transform="scale(0.37)">
         <rect
           fill="#27C9DD"
           x="0"
