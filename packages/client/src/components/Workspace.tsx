@@ -895,6 +895,7 @@ class Workspace extends React.Component<IProps, IState> {
          */
         if (this.props.challenge.type === "markup") {
           const testScript = getTestScripts(
+            this.state.code,
             this.props.challenge.testCode,
             EXPECTATION_LIB,
           );
