@@ -123,6 +123,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
           doc = challenge.solutionCode;
           script = `${EXPECTATION_LIBRARY}\n${getTestHarness(
             "",
+            doc,
             challenge.testCode,
           )}`;
           break;
