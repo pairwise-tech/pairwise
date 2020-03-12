@@ -169,7 +169,20 @@ describe("Linus should be able to pass all the challenges first try", () => {
        * Wait for the test script to execute and post a message back to
        * the message listener.
        */
-      await waitForResults({ results });
+      try {
+        await waitForResults({ results });
+      } catch (err) {
+        // waitForResults can throw, it may if the polling timeout is
+        // exceeded. Catch the error here and handle it as a failed test.
+        results = [
+          {
+            testResult: false,
+            test: "Running waitForResults to retrieve test results",
+            message:
+              "waitForResults threw and error, probably because of a timeout",
+          },
+        ];
+      }
 
       /**
        * Evaluate the test results. There are potentially many result objects
@@ -279,7 +292,7 @@ const log = {
     log.print(msg);
   },
   fail: (challenge: Challenge) => {
-    const msg = `[FAILED]${log.getMessage(challenge)}`;
+    const msg = `>>> [FAILED]${log.getMessage(challenge)}`;
     log.print(msg);
   },
   skip: (challenge: Challenge) => {
