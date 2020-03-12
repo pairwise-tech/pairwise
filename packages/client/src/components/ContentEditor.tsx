@@ -16,7 +16,14 @@ import { CODEPRESS_HOST, CODEPRESS } from "tools/client-env";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
-const uploadFile = (file: File, resourceId: string): Promise<string> => {
+const uploadFile = (
+  file: File,
+  resourceId: Nullable<string>,
+): Promise<string> => {
+  if (!resourceId) {
+    return Promise.reject(new Error("No challenge ID provided for upload"));
+  }
+
   const formData = new FormData();
 
   formData.append("asset", file, file.name);
@@ -314,9 +321,6 @@ class ContentEditor extends React.Component<Props> {
   };
 
   handleFileUpload = (file: File): Promise<string> => {
-    if (!this.props.challengeId) {
-      return Promise.reject(new Error("No challenge ID provided for upload"));
-    }
     return uploadFile(file, this.props.challengeId);
   };
 
