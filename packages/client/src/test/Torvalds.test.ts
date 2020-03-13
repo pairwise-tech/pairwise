@@ -89,9 +89,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
     let failedTests: string[] = [];
 
     /* Get all the challenges */
-    const challenges = course.modules
-      .map(m => m.challenges)
-      .reduce((flat, c) => flat.concat(c));
+    const challenges = course.modules.map(m => m.challenges).flat();
 
     /* For every challenge, execute the tests */
     outerLoop: for (const challenge of challenges) {
