@@ -258,7 +258,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Handle changes in editor options
     if (prevProps.editorOptions !== this.props.editorOptions) {
-      this.editorInstance?.updateOptions(prevProps.editorOptions);
+      this.editorInstance?.updateOptions(this.props.editorOptions);
     }
 
     // Handle changes in the editor theme
@@ -269,7 +269,7 @@ class Workspace extends React.Component<IProps, IState> {
         this.props.userSettings.theme,
         ")",
       );
-      this.setMonacoEditorTheme(prevProps.userSettings.theme);
+      this.setMonacoEditorTheme(this.props.userSettings.theme);
     }
 
     // Handle changes to isEditMode. If this is a code challenge and isEditMode
@@ -287,7 +287,7 @@ class Workspace extends React.Component<IProps, IState> {
     ) {
       if (this.props.isEditMode) {
         // Switching TO edit mode FROM user mode
-        this.handleEditorTabClick(prevProps.adminEditorTab);
+        this.handleEditorTabClick(this.props.adminEditorTab);
       } else {
         // Switching FROM edit mode TO user mode
         const userCode = this.props.blob.code || "";
@@ -297,7 +297,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Account for changing the challenge type in the sandbox. Otherwise nothing
     // gets re-rendered since the ID of the challenge does not change
-    // TODO: This is ugly because it's unclear why re-rendering immediately fails
     if (prevProps.challenge.type !== this.props.challenge.type) {
       this.pauseAndRefreshEditor();
     }
