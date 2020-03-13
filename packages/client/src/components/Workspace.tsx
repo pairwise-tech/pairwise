@@ -619,7 +619,9 @@ class Workspace extends React.Component<IProps, IState> {
             }
             position={Position.LEFT_BOTTOM}
           >
-            <IconButton aria-label="fullscreen editor" icon="more" />
+            <Tooltip content="More options..." position="left">
+              <IconButton aria-label="more options" icon="more" />
+            </Tooltip>
           </Popover>
         </LowerRight>
         <div id="monaco-editor" style={{ height: "100%" }} />
