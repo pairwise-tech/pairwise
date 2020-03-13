@@ -90,6 +90,7 @@
     "serve": "^11.3.0",
     "shortid": "^2.2.15",
     "string-quote-x": "^3.1.2",
+    "strip-comments": "^2.0.1",
     "styled-components": "^4.4.1",
     "throttle-debounce": "^2.1.0",
     "traverse": "^0.6.6",
