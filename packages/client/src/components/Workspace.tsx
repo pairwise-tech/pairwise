@@ -81,6 +81,8 @@ import { CODEPRESS } from "tools/client-env";
 import cx from "classnames";
 import traverse from "traverse";
 
+const debug = require("debug")("client:Workspace");
+
 /** ===========================================================================
  * Types & Config
  * ============================================================================
@@ -261,6 +263,12 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Handle changes in the editor theme
     if (prevProps.userSettings.theme !== this.props.userSettings.theme) {
+      debug(
+        "[componentDidUpdate setting theme] (prev, next) (",
+        prevProps.userSettings.theme,
+        this.props.userSettings.theme,
+        ")",
+      );
       this.setMonacoEditorTheme(prevProps.userSettings.theme);
     }
 
@@ -764,8 +772,11 @@ class Workspace extends React.Component<IProps, IState> {
 
   setMonacoEditorTheme = (theme: string) => {
     if (this.monacoWrapper) {
+      debug("[setMonacoEditorTheme]", theme);
       this.monacoWrapper.editor.setTheme(theme);
       this.debouncedSyntaxHighlightFunction(this.state.code);
+    } else {
+      debug("[setMonacoEditorTheme]", "No editor pressent");
     }
   };
 
@@ -1217,12 +1228,11 @@ const mergeProps = (
   ...methods,
   ...state,
   toggleHighContrastMode: () => {
-    methods.updateUserSettings({
-      theme:
-        state.userSettings.theme === MonacoEditorThemes.DEFAULT
-          ? MonacoEditorThemes.HIGH_CONTRAST
-          : MonacoEditorThemes.DEFAULT,
-    });
+    const nextTheme =
+      state.userSettings.theme === MonacoEditorThemes.DEFAULT
+        ? MonacoEditorThemes.HIGH_CONTRAST
+        : MonacoEditorThemes.DEFAULT;
+    methods.updateUserSettings({ theme: nextTheme });
   },
   toggleEditorSize: () => {
     methods.updateUserSettings({
