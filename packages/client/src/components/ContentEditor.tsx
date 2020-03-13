@@ -489,12 +489,27 @@ const EditorExternalStyles = styled.div`
   font-size: 17px;
   position: relative;
 
+  // Highlighting inline text
+  mark {
+    background: #ffdf7538;
+    border-bottom: 2px solid #ffdf75;
+    color: white;
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+
   blockquote {
-    margin-left: 10px !important;
+    margin-left: 0;
     background: ${COLORS.LIGHT_GREY} !important;
     font-style: normal !important;
     border-left-width: 9px !important;
     padding: 5px 20px 5px 10px !important;
+  }
+  blockquote h1,
+  blockquote h2,
+  blockquote h3,
+  blockquote h4 {
+    margin-top: 4px;
   }
 
   h1,
