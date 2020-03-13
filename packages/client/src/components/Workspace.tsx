@@ -8,6 +8,7 @@ import {
   Challenge,
   DataBlob,
   MonacoEditorThemes,
+  CHALLENGE_TYPE,
 } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -98,6 +99,38 @@ interface IState {
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
+
+// Get an appropriate name and file extensionbased on a challenge type
+const getFileMetaByChallengeType = (x: CHALLENGE_TYPE) => {
+  const name = "index";
+
+  switch (x) {
+    case "markup":
+      return {
+        ext: "html",
+        name,
+      };
+    case "react":
+      return {
+        ext: "tsx",
+        name,
+      };
+    case "typescript":
+      return {
+        ext: "ts",
+        name,
+      };
+    case "media":
+    case "section":
+    case "project":
+    case "guided-project":
+    case "special-topic":
+      return null;
+    default:
+      assertUnreachable(x);
+      break;
+  }
+};
 
 /** ===========================================================================
  * React Component
@@ -547,6 +580,13 @@ class Workspace extends React.Component<IProps, IState> {
                 icon="style"
                 aria-label="format editor code"
                 onClick={this.handleFormatCode}
+              />
+            </Tooltip>
+            <Tooltip content="Export File" position="left">
+              <IconButton
+                icon="download"
+                aria-label="export as text"
+                onClick={this.handleExport}
               />
             </Tooltip>
             {!isSandbox && (
@@ -1075,6 +1115,43 @@ class Workspace extends React.Component<IProps, IState> {
     } else {
       console.warn("[INFO] No code passed via message event", event);
     }
+  };
+
+  // Export / Download the text from the editor as a file. File extension is determined by challenge type.
+  private readonly handleExport = () => {
+    const { code } = this.state;
+    const meta = getFileMetaByChallengeType(this.props.challenge.type);
+
+    if (!meta) {
+      console.warn(
+        `[WARN] Cannot get file meta data for inappropriate challenge type: ${this.props.challenge.type}`,
+      );
+      return;
+    }
+
+    const DOWNLOAD_LINK_ID = "pairwise-blob-download-link";
+    const data = new Blob([code], { type: "text/plain" });
+    const url = URL.createObjectURL(data); // NOTE: We never revoke any object URLs. Potential future improvement, but likely not a bottleneck
+    let link: Nullable<HTMLAnchorElement> = document.querySelector(
+      `a#${DOWNLOAD_LINK_ID}`,
+    );
+
+    // We create the download link initially and then just reuse it on
+    // subsequent uses. Not sure if actually appending to the dom is necessary,
+    // just worried some brwosers migth not allow a click on an element that
+    // couldn't realistically be clicked since it's not in the DOM
+    if (!link) {
+      link = document.createElement("a");
+      link.id = DOWNLOAD_LINK_ID;
+      link.style.display = "none";
+      link.textContent = "Click to download";
+      document.body.appendChild(link); // See NOTE
+    }
+
+    // This is how to set the name of the file which will be saved to the users computer
+    link.download = `${meta.name}.${meta.ext}`;
+    link.href = url;
+    link.click();
   };
 
   private readonly handleFormatCode = () => {
