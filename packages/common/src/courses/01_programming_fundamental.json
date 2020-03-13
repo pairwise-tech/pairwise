@@ -57,7 +57,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Welcome to module 1\\! Where we'll be using HTML, CSS and TypeScript to dive into the basics of programming.\n# What you will learn\n\n* Foundational programming skills like\n   * Variables\n   * Functions\n   * How computers represent information and what _types_ of information you can represent\n   * Data structure\n   * Algorithms\n* How to build your own website\n* How to put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n\nOnward\\."
+          "content": "Welcome to Module 1\\! We'll be using HTML and CSS to lay a foundation for programming and get some practice writing real code.\n# What you will do in this module\n\n* Write a bunch of real code\n* Build your own web page\n* Put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n# Why are we learning this?\n\nWe _love_ the question \"why\" and we'll answer that in the [introductory lesson on HTML](/workspace/5ziJI35f#h-why-are-we-learning-html).\n\nOnward\\!"
         },
         {
           "id": "5ziJI35f",
@@ -303,7 +303,7 @@
         },
         {
           "id": "sfxItMSR",
-          "type": "markup",
+          "type": "media",
           "title": "Styling A Tic Tac Toe Board",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
