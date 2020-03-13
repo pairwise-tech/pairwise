@@ -581,7 +581,7 @@ class Workspace extends React.Component<IProps, IState> {
                   <MenuItem
                     icon={fullScreenEditor ? "collapse-all" : "expand-all"}
                     aria-label="toggle editor size"
-                    onClick={this.toggleEditorType}
+                    onClick={this.props.toggleEditorSize}
                     text={
                       fullScreenEditor
                         ? "Regular Size Editor"
@@ -1077,10 +1077,6 @@ class Workspace extends React.Component<IProps, IState> {
     if (OptionAndEnterKey) {
       this.iFrameRenderPreview();
     }
-  };
-
-  toggleEditorType = () => {
-    this.props.toggleEditorSize();
   };
 
   resetMonacoEditor = () => {
