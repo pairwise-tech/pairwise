@@ -41,7 +41,16 @@ import {
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
 import { LowerRight, IconButton, UpperRight } from "./Shared";
-import { Button, Tooltip, ButtonGroup } from "@blueprintjs/core";
+import {
+  Button,
+  Tooltip,
+  ButtonGroup,
+  Menu,
+  MenuItem,
+  Position,
+  Popover,
+  MenuDivider,
+} from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import {
   wait,
@@ -540,7 +549,7 @@ class Workspace extends React.Component<IProps, IState> {
           </UpperRight>
         )}
         <LowerRight>
-          <ButtonGroup vertical style={{ marginBottom: 8 }}>
+          <ButtonGroup vertical>
             <Tooltip content="Increase Font Size" position="left">
               <IconButton
                 icon="plus"
@@ -555,57 +564,56 @@ class Workspace extends React.Component<IProps, IState> {
                 onClick={this.props.decreaseFontSize}
               />
             </Tooltip>
-            <Tooltip content="Toggle High Contrast Mode" position="left">
-              <IconButton
-                icon="contrast"
-                aria-label="toggle high contrast mode"
-                onClick={this.props.toggleHighContrastMode}
-              />
-            </Tooltip>
           </ButtonGroup>
-          <ButtonGroup vertical>
-            {this.state.code !== challenge.starterCode &&
-              !isEditMode &&
-              !isSandbox && (
-                <Tooltip content="Restore Initial Code" position="left">
-                  <IconButton
-                    icon="reset"
-                    aria-label="reset editor"
-                    onClick={this.resetCodeWindow}
+          <div style={{ marginBottom: 8 }} />
+          <Tooltip content="Format Code" position="left">
+            <IconButton
+              icon="clean"
+              aria-label="format editor code"
+              onClick={this.handleFormatCode}
+            />
+          </Tooltip>
+          <div style={{ marginBottom: 8 }} />
+          <Popover
+            content={
+              <Menu>
+                {!isSandbox && (
+                  <MenuItem
+                    icon={fullScreenEditor ? "collapse-all" : "expand-all"}
+                    aria-label="toggle editor size"
+                    onClick={this.toggleEditorType}
+                    text={
+                      fullScreenEditor
+                        ? "Regular Size Editor"
+                        : "Full Screen Editor"
+                    }
                   />
-                </Tooltip>
-              )}
-            <Tooltip content="Format Code" position="left">
-              <IconButton
-                icon="style"
-                aria-label="format editor code"
-                onClick={this.handleFormatCode}
-              />
-            </Tooltip>
-            <Tooltip content="Export File" position="left">
-              <IconButton
-                icon="download"
-                aria-label="export as text"
-                onClick={this.handleExport}
-              />
-            </Tooltip>
-            {!isSandbox && (
-              <Tooltip
-                content={
-                  fullScreenEditor
-                    ? "Regular Size Editor"
-                    : "Full Screen Editor"
-                }
-                position="left"
-              >
-                <IconButton
-                  aria-label="fullscreen editor"
-                  onClick={this.toggleEditorType}
-                  icon={fullScreenEditor ? "collapse-all" : "expand-all"}
+                )}
+                <MenuItem
+                  icon="contrast"
+                  aria-label="toggle high contrast mode"
+                  onClick={this.props.toggleHighContrastMode}
+                  text="Toggle High Contrast Mode"
                 />
-              </Tooltip>
-            )}
-          </ButtonGroup>
+                <MenuItem
+                  icon="download"
+                  aria-label="export as text"
+                  onClick={this.handleExport}
+                  text="Export File"
+                />
+                <MenuDivider />
+                <MenuItem
+                  icon="reset"
+                  aria-label="reset editor"
+                  onClick={this.resetCodeWindow}
+                  text="Restore Initial Code"
+                />
+              </Menu>
+            }
+            position={Position.LEFT_BOTTOM}
+          >
+            <IconButton aria-label="fullscreen editor" icon="more" />
+          </Popover>
         </LowerRight>
         <div id="monaco-editor" style={{ height: "100%" }} />
       </div>
