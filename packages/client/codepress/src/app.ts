@@ -133,10 +133,11 @@ app.post("/assets/:resourceId", (req, res, next) => {
   const filename = `${file.md5}_${file.name}`;
   const filepath = path.join(absDir, filename);
 
-  console.log(`[UPLOAD] saving file for ${req.params.resourceId} at `);
+  console.log(`[UPLOAD] saving file for ${resourceId} at ${filepath}`);
   file.mv(filepath, err => {
     if (err) {
       next(err);
+      return;
     }
 
     res.send({
