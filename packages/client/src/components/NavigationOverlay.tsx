@@ -96,17 +96,17 @@ class NavigationOverlay extends React.Component<IProps> {
         />
         <Col
           offsetX={overlayVisible ? 0 : -20}
-          style={{ zIndex: 3, boxShadow: "rgba(0,0,0,0.22) 10px 0px 10px 0px" }}
+          style={{ zIndex: 3 }}
           onClick={e => e.stopPropagation()}
         >
-          <Title>{course.title}</Title>
-          <ScrollableContent>
+          <ColTItle>{course.title}</ColTItle>
+          <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             <div style={{ position: "relative" }}>
               {this.renderModuleCodepressButton(course, -1)}
             </div>
             {this.renderSortableModuleList(course, module, course.modules)}
-          </ScrollableContent>
+          </ColScroll>
         </Col>
         <Col
           offsetX={overlayVisible ? 0 : -60}
@@ -116,7 +116,8 @@ class NavigationOverlay extends React.Component<IProps> {
           }}
           onClick={e => e.stopPropagation()}
         >
-          <Title>
+          <SpecialLeftShadow />
+          <ColTItle>
             <p>{module.title}</p>
             {hasSections && (
               <div>
@@ -125,8 +126,8 @@ class NavigationOverlay extends React.Component<IProps> {
                 </Button>
               </div>
             )}
-          </Title>
-          <ScrollableContent>
+          </ColTItle>
+          <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             {this.renderChallengeCodepressButton(course, module, -1)}
             {this.renderSortableChallengeList(
@@ -135,7 +136,7 @@ class NavigationOverlay extends React.Component<IProps> {
               module.challenges,
             )}
             <DoneScrolling />
-          </ScrollableContent>
+          </ColScroll>
         </Col>
       </Overlay>
     );
@@ -734,6 +735,19 @@ const ChallengeListItemIcon = ({
   />
 );
 
+// The shadow that appears in the overlay nav for separating the module column
+// from the challenge column
+const SpecialLeftShadow = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 3;
+  box-shadow: rgba(0, 0, 0, 0.22) 10px 0px 10px 0px inset;
+  width: 80px;
+  pointer-events: none;
+`;
+
 const Badge = styled.div`
   border-radius: 100px;
   font-size: 11px;
@@ -743,7 +757,8 @@ const Badge = styled.div`
 `;
 
 const Col = styled.div<{ offsetX: number }>`
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 300px;
   background: ${COLORS.BACKGROUND_CONTENT};
   border-right: 1px solid ${COLORS.LIGHT_GREY};
@@ -753,8 +768,7 @@ const Col = styled.div<{ offsetX: number }>`
   transform: translateX(${({ offsetX }) => `${offsetX}px`});
 `;
 
-const ScrollableContent = styled.div`
-  height: calc(100% - 40px);
+const ColScroll = styled.div`
   overflow: auto;
 `;
 
@@ -773,7 +787,7 @@ const Overlay = styled.div<{ visible: boolean }>`
   transition: all 0.2s ease-out;
 `;
 
-const Title = styled.div`
+const ColTItle = styled.div`
   font-size: 18px;
   font-weight: 200;
   color: white;
@@ -788,6 +802,8 @@ const Title = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-grow: 0;
+  flex-shrink: 0;
 
   p {
     margin: 0;
