@@ -72,22 +72,19 @@ const FeedbackModal = (props: Props) => {
         style={{ maxHeight: "calc(100vh - 100px)" }}
         className={Classes.DARK} // Needed since portal modal is outside inherited styles
       >
-        <ModalTitleText id="feedback-modal-title">
-          Submit Feedback
-        </ModalTitleText>
+        <ModalTitleText id="feedback-modal-title">Feedback</ModalTitleText>
         <ModalSubText
           style={{ maxWidth: 500, textAlign: "left" }}
           id="feedback-modal-description"
         >
-          {`Tell us what you think! Provide us with feedback on the
-           "${props.currentChallenge?.title}" challenge.`}
+          {`Tell us what you think! How is the current challenge?`}
         </ModalSubText>
         <DangerLabel show={selectIntent === "danger"}>
           Please select a feedback type!
         </DangerLabel>
         <FeedbackTypeMenu
           intent={selectIntent}
-          onItemSelect={item => {
+          onItemSelect={(item, e) => {
             setSelectIntent("none");
             props.setFeedbackType(item.value);
           }}
