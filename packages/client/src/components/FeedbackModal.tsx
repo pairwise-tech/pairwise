@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from "react";
 import Modules, { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
 import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
-import { Dialog, TextArea, Button } from "@blueprintjs/core";
+import { Dialog, TextArea, Button, Classes } from "@blueprintjs/core";
 import FeedbackTypeMenu from "./FeedbackTypeMenu";
 import styled from "styled-components/macro";
 
@@ -62,13 +62,16 @@ const FeedbackModal = (props: Props) => {
 
   return (
     <Dialog
-      usePortal={false}
+      usePortal
       isOpen={props.feedbackDialogOpen}
       onClose={props.toggleFeedbackDialogOpen}
       aria-labelledby="feedback-modal-title"
       aria-describedby="feedback-modal-description"
     >
-      <ModalContainer style={{ maxHeight: "calc(100vh - 100px)" }}>
+      <ModalContainer
+        style={{ maxHeight: "calc(100vh - 100px)" }}
+        className={Classes.DARK} // Needed since portal modal is outside inherited styles
+      >
         <ModalTitleText id="feedback-modal-title">
           Submit Feedback
         </ModalTitleText>
