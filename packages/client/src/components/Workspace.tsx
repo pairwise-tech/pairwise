@@ -158,7 +158,7 @@ class Workspace extends React.Component<IProps, IState> {
   monacoWrapper: any = null;
 
   // A cancelable handler for refreshing the editor
-  editorRefreshTimerHandler: Nullable<NodeJS.Timeout> = null;
+  editorRefreshTimerHandler: Nullable<number> = null;
 
   // The actual monaco editor instance.
   editorInstance: Nullable<{
@@ -169,6 +169,8 @@ class Workspace extends React.Component<IProps, IState> {
   debouncedSaveCodeFunction: () => void;
   debouncedRenderPreviewFunction: () => void;
   debouncedSyntaxHighlightFunction: (code: string) => void;
+
+  initializationPromise: Nullable<Promise<void>> = null;
 
   constructor(props: IProps) {
     super(props);
@@ -211,7 +213,7 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
-    this.initializeMonaco();
+    await this.initializeMonaco();
     this.initializeSyntaxHighlightWorker();
 
     /* Handle some timing issue with Monaco initialization... */
@@ -302,11 +304,16 @@ class Workspace extends React.Component<IProps, IState> {
     }
   }
 
-  refreshEditor = () => {
-    this.resetMonacoEditor();
+  refreshEditor = async () => {
+    await this.resetMonacoEditor();
     this.setMonacoEditorValue();
     if (this.iFrameRef) {
       this.iFrameRenderPreview();
+    }
+
+    // Clear the timeout so this can fire again
+    if (this.editorRefreshTimerHandler) {
+      clearTimeout(this.editorRefreshTimerHandler);
     }
   };
 
@@ -382,8 +389,15 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  initializeMonaco = () => {
-    monaco
+  initializeMonaco = async (): Promise<void> => {
+    if (this.initializationPromise) {
+      debug("[initializeMonaco] Monaco already initialized, skipping.");
+      return this.initializationPromise;
+    }
+
+    debug("[initializeMonaco] Monaco initializing...");
+
+    const initializationPromise = monaco
       .init()
       .then(mn => {
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({
@@ -404,7 +418,8 @@ class Workspace extends React.Component<IProps, IState> {
 
         this.monacoWrapper = mn;
 
-        this.initializeMonacoEditor();
+        debug("[initializeMonaco] Monaco initialized. Initializing editor...");
+        return this.initializeMonacoEditor();
       })
       .catch(error => {
         console.error(
@@ -413,9 +428,19 @@ class Workspace extends React.Component<IProps, IState> {
         );
         this.setState({ monacoInitializationError: true });
       });
+
+    this.initializationPromise = initializationPromise;
+
+    return initializationPromise;
   };
 
-  initializeMonacoEditor = () => {
+  initializeMonacoEditor = async (): Promise<void> => {
+    if (!this.monacoWrapper) {
+      debug(
+        "[ERROR initializeMonacoEditor] Called before monaco was initialized!",
+      );
+    }
+
     const mn = this.monacoWrapper;
 
     const options = {
@@ -455,6 +480,7 @@ class Workspace extends React.Component<IProps, IState> {
       },
     );
 
+    debug("adding ts types");
     /**
      * This is a separate model which provides JSX type information. See
      * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
@@ -466,6 +492,8 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     this.setMonacoEditorTheme(this.props.userSettings.theme);
+
+    debug("[initializeMonaco] Monaco editor initialized.");
   };
 
   getMonacoLanguageFromChallengeType = () => {
@@ -484,13 +512,13 @@ class Workspace extends React.Component<IProps, IState> {
    *
    * NOTE: When switching to the solution code default to start code
    */
-  handleEditorTabClick = (tab: ADMIN_EDITOR_TAB) => {
+  handleEditorTabClick = async (tab: ADMIN_EDITOR_TAB) => {
     this.setState(
       {
         code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
       },
-      () => {
-        this.refreshEditor();
+      async () => {
+        await this.refreshEditor();
         this.props.setAdminEditorTab(tab);
       },
     );
@@ -500,7 +528,7 @@ class Workspace extends React.Component<IProps, IState> {
    * Switch tabs in the test area of the workspace. So that we can see test
    * results and write tests using different tabs.
    */
-  handleTestTabClick = (tab: ADMIN_TEST_TAB) => {
+  handleTestTabClick = async (tab: ADMIN_TEST_TAB) => {
     if (tab !== this.props.adminTestTab) {
       /**
        * NOTE: The reason for this additional logic is to "refresh" the test
@@ -510,7 +538,7 @@ class Workspace extends React.Component<IProps, IState> {
        */
 
       if (tab === "testResults") {
-        this.refreshEditor();
+        await this.refreshEditor();
       }
 
       this.props.setAdminTestTab(tab);
@@ -1091,9 +1119,10 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  resetMonacoEditor = () => {
+  resetMonacoEditor = async () => {
     this.cleanupEditor();
-    this.initializeMonacoEditor();
+    await this.initializeMonaco();
+    await this.initializeMonacoEditor();
   };
 
   setIframeRef = (ref: HTMLIFrameElement) => {
@@ -1187,7 +1216,18 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   private readonly pauseAndRefreshEditor = async (timeout: number = 50) => {
-    // @ts-ignore types!
+    // I'm not sure if it's best to cancel the existing timeout and start a new
+    // one or to do what I did here and simply ignore this call. The reason I
+    // chose this path was that since refreshEditor kicks off some promises
+    // cancelling that timeout does not guarantee that the actual actions will
+    // be cancelled.
+    if (this.editorRefreshTimerHandler) {
+      debug(
+        "[WARN pauseAndRefreshEditor] Refresh already in progress. Ignoring.",
+      );
+      return;
+    }
+
     this.editorRefreshTimerHandler = setTimeout(this.refreshEditor, timeout);
   };
 }
