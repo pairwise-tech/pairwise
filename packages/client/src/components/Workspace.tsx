@@ -556,7 +556,10 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
 
     const MONACO_CONTAINER = (
-      <div style={{ height: "100%", position: "relative" }}>
+      <div
+        id="pairwise-code-editor"
+        style={{ height: "100%", position: "relative" }}
+      >
         <TabbedInnerNav show={isEditMode}>
           <Tab
             onClick={() => this.handleEditorTabClick("starterCode")}

@@ -26,3 +26,24 @@ export const type = (id: string, text: string) => {
 export const elementContains = (id: string, text: string) => {
   cy.get(toId(id)).contains(text);
 };
+
+// https://www.cypress.io/blog/2020/02/12/working-with-iframes-in-cypress/
+export const getIframeBody = () => {
+  const WORKSPACE_IFRAME_ID = "#iframe";
+
+  return (
+    cy
+      .get(WORKSPACE_IFRAME_ID)
+      // Cypress yields jQuery element, which has the real DOM element under
+      // property "0".  From the real DOM iframe element we can get the
+      // "document" element, it is stored in "contentDocument" property Cypress
+      // "its" command can access deep properties using dot notation
+      // https://on.cypress.io/its
+      // @ts-ignore TS Doesn't understand this one, but it's valid
+      .its("0.contentDocument")
+      .should("exist")
+      .its("body") // Get the document. Automatically retries until body is loaded
+      .should("not.be.undefined") // wraps "body" DOM element to allow chaining more Cypress commands, like .find(...)
+      .then(cy.wrap)
+  );
+};
