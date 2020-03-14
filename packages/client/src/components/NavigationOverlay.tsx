@@ -94,12 +94,14 @@ class NavigationOverlay extends React.Component<IProps> {
           style={{ zIndex: 3 }}
           onClick={e => e.stopPropagation()}
         >
-          <Title>{course.title}</Title>
-          {/* In case of no challenges yet, or to add one at the start, here's a button */}
-          <div style={{ position: "relative" }}>
-            {this.renderModuleCodepressButton(course, -1)}
-          </div>
-          {this.renderSortableModuleList(course, module, course.modules)}
+          <ColTItle>{course.title}</ColTItle>
+          <ColScroll>
+            {/* In case of no challenges yet, or to add one at the start, here's a button */}
+            <div style={{ position: "relative" }}>
+              {this.renderModuleCodepressButton(course, -1)}
+            </div>
+            {this.renderSortableModuleList(course, module, course.modules)}
+          </ColScroll>
         </Col>
         <Col
           offsetX={overlayVisible ? 0 : -60}
@@ -110,7 +112,7 @@ class NavigationOverlay extends React.Component<IProps> {
           onClick={e => e.stopPropagation()}
         >
           <SpecialLeftShadow />
-          <Title>
+          <ColTItle>
             <p>{module.title}</p>
             {hasSections && (
               <div>
@@ -119,11 +121,17 @@ class NavigationOverlay extends React.Component<IProps> {
                 </Button>
               </div>
             )}
-          </Title>
-          {/* In case of no challenges yet, or to add one at the start, here's a button */}
-          {this.renderChallengeCodepressButton(course, module, -1)}
-          {this.renderSortableChallengeList(course, module, module.challenges)}
-          <DoneScrolling />
+          </ColTItle>
+          <ColScroll>
+            {/* In case of no challenges yet, or to add one at the start, here's a button */}
+            {this.renderChallengeCodepressButton(course, module, -1)}
+            {this.renderSortableChallengeList(
+              course,
+              module,
+              module.challenges,
+            )}
+            <DoneScrolling />
+          </ColScroll>
         </Col>
       </Overlay>
     );
@@ -710,7 +718,8 @@ const Badge = styled.div`
 `;
 
 const Col = styled.div<{ offsetX: number }>`
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 300px;
   background: ${COLORS.BACKGROUND_CONTENT};
   border-right: 1px solid ${COLORS.LIGHT_GREY};
@@ -718,6 +727,9 @@ const Col = styled.div<{ offsetX: number }>`
   z-index: 2;
   transition: all 0.2s ease-out;
   transform: translateX(${({ offsetX }) => `${offsetX}px`});
+`;
+
+const ColScroll = styled.div`
   overflow: auto;
 `;
 
@@ -736,7 +748,7 @@ const Overlay = styled.div<{ visible: boolean }>`
   transition: all 0.2s ease-out;
 `;
 
-const Title = styled.div`
+const ColTItle = styled.div`
   font-size: 18px;
   font-weight: 200;
   color: white;
@@ -751,6 +763,8 @@ const Title = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-grow: 0;
+  flex-shrink: 0;
 
   p {
     margin: 0;
