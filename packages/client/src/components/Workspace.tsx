@@ -310,11 +310,6 @@ class Workspace extends React.Component<IProps, IState> {
     if (this.iFrameRef) {
       this.iFrameRenderPreview();
     }
-
-    // Clear the timeout so this can fire again
-    if (this.editorRefreshTimerHandler) {
-      clearTimeout(this.editorRefreshTimerHandler);
-    }
   };
 
   tryToFocusEditor = () => {
@@ -1219,16 +1214,12 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   private readonly pauseAndRefreshEditor = async (timeout: number = 50) => {
-    // I'm not sure if it's best to cancel the existing timeout and start a new
-    // one or to do what I did here and simply ignore this call. The reason I
-    // chose this path was that since refreshEditor kicks off some promises
-    // cancelling that timeout does not guarantee that the actual actions will
-    // be cancelled.
+    // Be sure to cancel any in-flight timeout before setting up a new one
     if (this.editorRefreshTimerHandler) {
       debug(
         "[WARN pauseAndRefreshEditor] Refresh already in progress. Ignoring.",
       );
-      return;
+      clearTimeout(this.editorRefreshTimerHandler);
     }
 
     this.editorRefreshTimerHandler = setTimeout(this.refreshEditor, timeout);
