@@ -280,6 +280,61 @@
           "content": "Here's a GIF of the end result of this challenge. This should give you a clear idea about what a hover state does.\n\n![](/assets/iZ6nlkiQ/9d080a45671f5e4e63d62090ab24a779_hov.gif)\n# General Concepts\n\nYou've probably noticed that when you hover over a link in a browser it will change somehow. You can customize this\\!\n\nThis is called a hover state, and you can style a hover state just like you can style any other CSS. The main difference is the selector.\n\n```css\n/* Style the hover state for all links on the site */\na:hover {\n  text-decoration: underline;\n}\n\n/* Style just the nav links */\n.nav a:hover {\n  color: tomato;\n}\n\n/* Style the entire nav div when it's hovered */\n.nav:hover {\n  background: gray;\n}\n\n```\n\nTo style how something looks when the mouse hovers over it you use `:hover`. Specifically, you just put `:hover` after the selector you want to style. It's important not to put a space in front of `:hover`."
         },
         {
+          "id": "fAGpsa4L",
+          "type": "media",
+          "title": "CSS is not always intuitive",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "CSS is a bit of a mixed bag. Not to detract from it—it's amazing what you can accomplish with HTML and CSS alone, let alone HTML, CSS and JavaScript. However there are certain aspects of CSS that are not intuitive. \n\nYou may be thinking \"None of this is intuitive\\! 😤\" and that's fair, but it gets better \\(worse?\\). In the next few challenges we'll dive into some of the more confusing _and_ useful CSS properties. You already saw some of this when we [talked about `box-sizing`](/workspace/nel5ggJ1), but there's yet more to cover. \n\nFun topics to come include:\n\n* Positioning \\(including the interesting `content` property\\)\n* More `display` property\n* Transforms\n\n# Why?\n\nSome of this stuff is bound to be fairly confusing at first and we take our content selection very seriously. So is it really that important? \n\n++Yes\\.++\n\nThe techniques we'll cover are extremely potent for creating _layouts_, which is the most confounding aspect of CSS. Almost everyone who has complained about any aspect of CSS ran into issues with their layout and spent entirely too long figuring out how to fix it. I would know, I've been that person—Everyone on the Pairwise team has in fact. \n\n> **Layouts vs Styling**\n> Layouts can be time consuming and frustrating to create when you don't know what you're doing. Styling, on the other hand, is quite straightforward. Things like `border` , `padding`, `font-size`, etc. To generalize:\n> \n> \n> \n>    * Styling refers to CSS that doesn't really care about _position_ on the page.\n>    * Layout is entirely concerned with position on the page. This includes vertical, horizontal, _and_ z\\-axis positioning—Layering things on top of  or behind one another.\n\nSo to bring it back to the question: Why are we learning these things? So that you can build any UI you want.\n\nWith a bit of practice ++you will be able to code up the CSS for Instagram, Twitter, Amazon, Etsy or your cat's blog++ \\(this last one sounds easy but you'd probably spend more time on it than any of the others. Try building anything for yourself as opposed to an employer or client and you will see why\\).\n\nSo let's move forward and learn some CSS\\!"
+        },
+        {
+          "id": "zt2RAhbC",
+          "type": "markup",
+          "title": "[TODO] CSS Positioning",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "$TscTvcd",
+          "type": "markup",
+          "title": "[TODO] The Content Property ",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "BLEmRiRd",
+          "type": "markup",
+          "title": "[TODO] Revisiting the Display Property",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "Ao8hbaiP",
+          "type": "markup",
+          "title": "[TODO] CSS Transforms",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "DDOHTQQC",
           "type": "section",
           "title": "Projects",
