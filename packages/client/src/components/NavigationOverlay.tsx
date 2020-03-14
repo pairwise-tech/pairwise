@@ -794,7 +794,6 @@ const ColTItle = styled.div`
   margin: 0;
   height: 40px;
   padding: 0 12px;
-  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
   font-variant: small-caps;
   font-weight: bold;
   letter-spacing: 2;
