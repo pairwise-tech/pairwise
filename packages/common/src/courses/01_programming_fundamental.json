@@ -768,6 +768,17 @@
           "content": ""
         },
         {
+          "id": "wzTlMB2D",
+          "type": "section",
+          "title": "Loops",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Ever had to do anything tedious? Folding clothes? Inviting a bunch of people to the same event? When you have to do the same thing, over and over again, it can feel really tedious. Well, if you've ever thought to yourself \"There must be a better way\\! 😫\" then you're already thinking like a programmer.\n\nUnfortunately, at the time of this writing there's not yet an affordable robot that can fold your clothes \\(if you know of one, please tell me\\!\\). However, there _is_ a way to quickly send event invites to people. It's called adding a bunch of recipients to the same email. Imagine if you had to actually send each email 1\\-by\\-1.\n\nThe point is, if it's digital ++you can find a way to make a computer do repetitive tasks for you++. That's what we're going to talk about in this section: Telling a computer to do the same thing over and over and over again... until it's done \\(or maybe even forever\\).\n\n> \n> ### Story Time \\(feel free to skip this completely\\)\n> \n> Back in college, before I knew how to program _at all_, I had a job working at our IT department. It was a pretty sweet gig: The hours were easy, the pay was decent \\(for an on\\-campus job\\), and my coworkers were great. It was even a job I could claim gave me technical skills on a resume \\(hah\\!\\). There was just one problem...\n> \n> **The job was extremely tedious.**\n> \n> One of my core responsibilities on the job was renaming and reorganizing video files that were uploaded by professors through some obscure campus portal software. These videos would find their way into a shared network drive where I could then access them using my super admin powers. \n> \n> This was very easy. I would open the upload folder for a professor and rename each file to include the current date, the professors user id, and the original name of the file. However, as I mentioned earlier, _this was \\__**super** tedious\\. \\_So, like any future programmer I thought to myself \"There must be a better way\\! 😫\" and then proceeded to do nothing about it for a whole week.\n> \n> After a week though, I had had enough and I set out on a Google\\-searching mission that eventually lead me to loops\\! Well, loops and a bunch of cobbled together code that semi\\-sort\\-of automated some of my tedious task using shell scripts \\(a topic we'll cover another time\\). The point is my job became much more enjoyable because I learned about looping. \n# Looping\n\nLooping is conceptually simple—it's telling a computer to do the same thing repeatedly until some condition is met. Let's jump in with an example:\n\n```\nhey\n\n```\n# Why looping is important\n\n"
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Programming Projects",
