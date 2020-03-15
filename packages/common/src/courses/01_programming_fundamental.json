@@ -293,12 +293,12 @@
         {
           "id": "zt2RAhbC",
           "type": "markup",
-          "title": "[TODO] CSS Positioning",
-          "instructions": "",
-          "testCode": "// test('message', () => expect(...))",
+          "title": "CSS Positioning: Relative ",
+          "instructions": "* Use the `position` property to style the `.rel` `div` so that has relative positioning.\n* Use the `top` property to move the div down the screen by `100px`.\n\n",
+          "testCode": "test('`.rel` `div` should have relative positioning', () => {\n    const el = get('.rel')\n    const position = getStyle(el, 'position');\n    expect(position).toBe('relative');\n})",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "<style>\n  * {\n    box-sizing: border-box;\n    transition: all 0.2s ease; \n  }\n  .container {\n    width: 300px;\n    height: 500px;\n    background: aquamarine;\n    padding: 10px;\n  }\n  .rel {\n    position: static; /* static is the default position */\n    background: gold;\n    padding: 10px;\n  }\n</style>\n\n<div class=\"container\">\n  <div class=\"rel\">\n    Relative Div\n  </div>\n  <p>\n    This lesson domonstrates <code>relative</code> positioning in CSS. Using\n    position relative you are actually positioning something\n    <em>relative to itself</em>.\n  </p>\n  <p>\n    So for example, if I give the Relative Div a <code>top: 20px</code>\n    property then it's going to overlap with the text.\n  </p>\n</div>\n",
+          "solutionCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  .container {\n    width: 300px;\n    height: 500px;\n    background: aquamarine;\n    padding: 10px;\n  }\n  .rel {\n    position: relative; /* static is the default position */\n    top: 100px;\n    background: gold;\n    padding: 10px;\n  }\n</style>\n\n<div class=\"container\">\n  <div class=\"rel\">\n    Relative Div\n  </div>\n  <p>\n    This lesson domonstrates <code>relative</code> positioning in CSS. Using\n    position relative you are actually positioning something\n    <em>relative to itself</em>.\n  </p>\n  <p>\n    So for example, if I give the Relative Div a <code>top: 20px</code>\n    property then it's going to overlap with the text.\n  </p>\n</div>\n",
           "content": ""
         },
         {
