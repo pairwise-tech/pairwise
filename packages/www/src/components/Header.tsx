@@ -127,6 +127,7 @@ const Header = ({ siteTitle = 'Pairwise' }: HeaderProps) => (
       <Nav>
         <NavLink to="/curriculum">Curriculum</NavLink>
         <NavLink to="/faq">FAQ</NavLink>
+        <NavLink to="/about">About</NavLink>
         <NavLink to="/contact">Contact</NavLink>
       </Nav>
     </Flexbox>
