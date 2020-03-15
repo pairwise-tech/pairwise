@@ -49,6 +49,7 @@ import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 import PaymentSuccessModal from "./PaymentSuccessModal";
 import { challengeRequiresWorkspace } from "tools/utils";
 import SearchBox from "./SearchBox";
+import { AuthenticationForm } from "components/SingleSignOnModal";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -317,11 +318,26 @@ const ApplicationContainer = (props: IProps) => {
         />
       )}
       <Switch>
-        <Route key={0} path="/workspace/:id" component={Workspace} />
-        <Route key={1} path="/home" component={Home} />
-        <Route key={2} path="/account" component={Account} />
+        <Route key={"workspace"} path="/workspace/:id" component={Workspace} />
+        <Route key={"home"} path="/home" component={Home} />
+        <Route key={"account"} path="/account" component={Account} />
         <Route
-          key={3}
+          key={"authenticate"}
+          path="/authenticate"
+          component={AuthenticationForm}
+        />
+        <Route
+          key={"login"}
+          path="/login"
+          component={() => <Redirect to="/authenticate" />}
+        />
+        <Route
+          key={"sign-up"}
+          path="/sign-up"
+          component={() => <Redirect to="/authenticate" />}
+        />
+        <Route
+          key={"logout"}
           path="/logout"
           component={() => <Redirect to="/home" />}
         />
