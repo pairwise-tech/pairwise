@@ -1,4 +1,8 @@
-import { CLIENT_APP_URL, TIMEOUT } from "../support/cypress-utils";
+import {
+  CLIENT_APP_URL,
+  TIMEOUT,
+  getIframeBody,
+} from "../support/cypress-utils";
 
 /** ===========================================================================
  * Workspace Tests
@@ -88,5 +92,23 @@ describe("Sandbox", () => {
     cy.contains("HTML/CSS");
     cy.contains("TypeScript");
     cy.contains("React");
+  });
+
+  it("Sandbox should load when coming from non-workspace challenge", () => {
+    cy.visit(`${CLIENT_APP_URL}/workspace/yxZjmD0o`); // The "Welcome to pairwise" challenge (no workspace)
+    cy.get("#pairwise-code-editor").should("not.exist");
+    cy.get("#sandboxButton").click();
+
+    cy.get("#selectChallengeType").click();
+    cy.get("#challenge-type-markup").click();
+    cy.get("#pairwise-code-editor").type(
+      "<h1 class='just-typed-this'>Testing</h1>",
+    );
+
+    cy.wait(TIMEOUT);
+
+    getIframeBody()
+      .find(".just-typed-this")
+      .should("include.text", `Testing`);
   });
 });
