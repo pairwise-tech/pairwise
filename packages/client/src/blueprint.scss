@@ -59,7 +59,12 @@ $orange3: #ffdf75;
   z-index: 5000 !important;
 }
 
-/* Override Blueprint warning intent styles: */
+// Overwrite blueprint Callout icon color for intent="none". It had a blue-ish hue before
+.bp3-callout.bp3-callout-icon > .bp3-icon:first-child {
+  color: dimgray;
+}
+
+// Override Blueprint warning intent styles
 .bp3-intent-warning {
   color: rgb(50, 50, 50) !important;
   background-color: #ffdf75 !important;
