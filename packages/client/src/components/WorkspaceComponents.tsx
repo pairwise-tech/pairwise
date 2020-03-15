@@ -312,24 +312,25 @@ export const ChallengeTitleHeading = styled.h1`
   }
 `;
 
-const contentMapState = (state: ReduxStoreState) => ({
-  content: Modules.selectors.challenges.getCurrentContent(state) || "",
+const instructionsMapState = (state: ReduxStoreState) => ({
+  instructions:
+    Modules.selectors.challenges.getCurrentInstructions(state) || "",
   title: Modules.selectors.challenges.getCurrentTitle(state) || "",
   currentId: Modules.selectors.challenges.getCurrentId(state) || "",
   isEditMode: Modules.selectors.challenges.isEditMode(state),
 });
 
-const contentMapDispatch = {
+const instructionsMapDispatch = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
-type ContentViewEditProps = ReturnType<typeof contentMapState> &
-  typeof contentMapDispatch;
+type InstructionsViewEditProps = ReturnType<typeof instructionsMapState> &
+  typeof instructionsMapDispatch;
 
-export const ContentViewEdit = connect(
-  contentMapState,
-  contentMapDispatch,
-)((props: ContentViewEditProps) => {
+export const InstructionsViewEdit = connect(
+  instructionsMapState,
+  instructionsMapDispatch,
+)((props: InstructionsViewEditProps) => {
   const { isEditMode, currentId } = props;
 
   /**
@@ -370,7 +371,7 @@ export const ContentViewEdit = connect(
           toc={false}
           autoFocus={false}
           placeholder="Write something beautiful..."
-          defaultValue={props.content}
+          defaultValue={props.instructions}
           readOnly={!isEditMode}
           spellCheck={isEditMode}
           onChange={handleContent}

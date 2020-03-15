@@ -304,7 +304,7 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
       }
     }
     {
-      ${getTestHarness(stripConsoleCalls(codeString), testCode)}
+      ${getTestHarness(stripConsoleCalls(codeString), codeString, testCode)}
     }
     `;
 };
@@ -346,9 +346,13 @@ export const getTestDependencies = (testLib: string): string => testLib;
 /**
  * Get the test code string for a markup challenge.
  */
-export const getTestHarness = (userCode: string, testCode: string): string => `
+export const getTestHarness = (
+  preamble: string,
+  userCode: string,
+  testCode: string,
+): string => `
 try {
-  ${userCode}
+  ${preamble}
 
   // use as a fallback when the only way to test user code is by regexp.
   // purposefully named against conventions to avoid collisions with user vars
@@ -427,10 +431,15 @@ try {
  * Put together the script tags necessary for running the tests in an iframe,
  * including the script that includes the tests themselves.
  */
-export const getTestScripts = (testCode: string, testLib: string) => {
+export const getTestScripts = (
+  userCode: string,
+  testCode: string,
+  testLib: string,
+) => {
   return `
     <script id="test-code">${getTestHarness(
       getTestDependencies(testLib),
+      userCode,
       testCode,
     )}</script>
   `;
@@ -462,7 +471,7 @@ export const compileCodeString = async (
   challenge: Challenge,
 ) => {
   if (challenge.type === "markup") {
-    const testScript = getTestScripts(challenge.testCode, "");
+    const testScript = getTestScripts(sourceCodeString, challenge.testCode, "");
 
     // NOTE: Tidy html should ensure there is indeed a closing body tag
     const tidySource = tidyHtml(sourceCodeString);

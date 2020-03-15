@@ -58,6 +58,28 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <% if (process.env.REACT_APP_CODEPRESS === "true") { %>
+    <!-- 
+      Live Reload was causing issues for us in codepress. Namely it was
+      occasionally reloading before we saved and it would reload on image
+      upload, which would prevent saving. 
+    -->
+    <script>
+      {
+        var WS = window.WebSocket;
+        function DevWebSocket(s) {
+          if (s === "ws:localhost:3000/sockjs-node") {
+            console.info("[CODEPRESS NOTICE] Live Reload Has Been Disabled");
+            return {};
+          } else {
+            // Pass through other usage of sockets
+            return new WS(s);
+          }
+        }
+        window.WebSocket = DevWebSocket;
+      }
+    </script>
+    <% } %>
     <script async src="https://js.stripe.com/v3/"></script>
   </body>
 </html>
