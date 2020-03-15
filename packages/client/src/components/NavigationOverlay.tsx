@@ -100,11 +100,13 @@ class NavigationOverlay extends React.Component<IProps> {
           onClick={e => e.stopPropagation()}
         >
           <Title>{course.title}</Title>
-          {/* In case of no challenges yet, or to add one at the start, here's a button */}
-          <div style={{ position: "relative" }}>
-            {this.renderModuleCodepressButton(course, -1)}
-          </div>
-          {this.renderSortableModuleList(course, module, course.modules)}
+          <ScrollableContent>
+            {/* In case of no challenges yet, or to add one at the start, here's a button */}
+            <div style={{ position: "relative" }}>
+              {this.renderModuleCodepressButton(course, -1)}
+            </div>
+            {this.renderSortableModuleList(course, module, course.modules)}
+          </ScrollableContent>
         </Col>
         <Col
           offsetX={overlayVisible ? 0 : -60}
@@ -124,10 +126,16 @@ class NavigationOverlay extends React.Component<IProps> {
               </div>
             )}
           </Title>
-          {/* In case of no challenges yet, or to add one at the start, here's a button */}
-          {this.renderChallengeCodepressButton(course, module, -1)}
-          {this.renderSortableChallengeList(course, module, module.challenges)}
-          <DoneScrolling />
+          <ScrollableContent>
+            {/* In case of no challenges yet, or to add one at the start, here's a button */}
+            {this.renderChallengeCodepressButton(course, module, -1)}
+            {this.renderSortableChallengeList(
+              course,
+              module,
+              module.challenges,
+            )}
+            <DoneScrolling />
+          </ScrollableContent>
         </Col>
       </Overlay>
     );
@@ -709,6 +717,10 @@ const Col = styled.div<{ offsetX: number }>`
   z-index: 2;
   transition: all 0.2s ease-out;
   transform: translateX(${({ offsetX }) => `${offsetX}px`});
+`;
+
+const ScrollableContent = styled.div`
+  height: calc(100% - 40px);
   overflow: auto;
 `;
 
@@ -742,9 +754,6 @@ const Title = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 3;
 
   p {
     margin: 0;
