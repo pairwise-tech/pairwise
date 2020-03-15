@@ -8,6 +8,7 @@ import {
   Challenge,
   DataBlob,
   MonacoEditorThemes,
+  CHALLENGE_TYPE,
 } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -40,13 +41,23 @@ import {
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
 import { LowerRight, IconButton, UpperRight } from "./Shared";
-import { Button, Tooltip, ButtonGroup } from "@blueprintjs/core";
+import {
+  Button,
+  Tooltip,
+  ButtonGroup,
+  Menu,
+  MenuItem,
+  Position,
+  Popover,
+  MenuDivider,
+} from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import {
   wait,
   composeWithProps,
   constructDataBlobFromChallenge,
   challengeRequiresWorkspace,
+  getFileMetaByChallengeType,
 } from "tools/utils";
 import {
   Tab,
@@ -70,6 +81,8 @@ import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import { CODEPRESS } from "tools/client-env";
 import cx from "classnames";
 import traverse from "traverse";
+
+const debug = require("debug")("client:Workspace");
 
 /** ===========================================================================
  * Types & Config
@@ -114,7 +127,7 @@ class Workspace extends React.Component<IProps, IState> {
   monacoWrapper: any = null;
 
   // A cancelable handler for refreshing the editor
-  editorRefreshTimerHandler: Nullable<NodeJS.Timeout> = null;
+  editorRefreshTimerHandler: Nullable<number> = null;
 
   // The actual monaco editor instance.
   editorInstance: Nullable<{
@@ -125,6 +138,8 @@ class Workspace extends React.Component<IProps, IState> {
   debouncedSaveCodeFunction: () => void;
   debouncedRenderPreviewFunction: () => void;
   debouncedSyntaxHighlightFunction: (code: string) => void;
+
+  initializationPromise: Nullable<Promise<void>> = null;
 
   constructor(props: IProps) {
     super(props);
@@ -167,7 +182,7 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
-    this.initializeMonaco();
+    await this.initializeMonaco();
     this.initializeSyntaxHighlightWorker();
 
     /* Handle some timing issue with Monaco initialization... */
@@ -214,12 +229,18 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Handle changes in editor options
     if (prevProps.editorOptions !== this.props.editorOptions) {
-      this.editorInstance?.updateOptions(prevProps.editorOptions);
+      this.editorInstance?.updateOptions(this.props.editorOptions);
     }
 
     // Handle changes in the editor theme
     if (prevProps.userSettings.theme !== this.props.userSettings.theme) {
-      this.setMonacoEditorTheme(prevProps.userSettings.theme);
+      debug(
+        "[componentDidUpdate setting theme] (prev, next) (",
+        prevProps.userSettings.theme,
+        this.props.userSettings.theme,
+        ")",
+      );
+      this.setMonacoEditorTheme(this.props.userSettings.theme);
     }
 
     // Handle changes to isEditMode. If this is a code challenge and isEditMode
@@ -237,7 +258,7 @@ class Workspace extends React.Component<IProps, IState> {
     ) {
       if (this.props.isEditMode) {
         // Switching TO edit mode FROM user mode
-        this.handleEditorTabClick(prevProps.adminEditorTab);
+        this.handleEditorTabClick(this.props.adminEditorTab);
       } else {
         // Switching FROM edit mode TO user mode
         const userCode = this.props.blob.code || "";
@@ -247,14 +268,13 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Account for changing the challenge type in the sandbox. Otherwise nothing
     // gets re-rendered since the ID of the challenge does not change
-    // TODO: This is ugly because it's unclear why re-rendering immediately fails
     if (prevProps.challenge.type !== this.props.challenge.type) {
       this.pauseAndRefreshEditor();
     }
   }
 
-  refreshEditor = () => {
-    this.resetMonacoEditor();
+  refreshEditor = async () => {
+    await this.resetMonacoEditor();
     this.setMonacoEditorValue();
     if (this.iFrameRef) {
       this.iFrameRenderPreview();
@@ -333,8 +353,15 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  initializeMonaco = () => {
-    monaco
+  initializeMonaco = async (): Promise<void> => {
+    if (this.initializationPromise) {
+      debug("[initializeMonaco] Monaco already initialized, skipping.");
+      return this.initializationPromise;
+    }
+
+    debug("[initializeMonaco] Monaco initializing...");
+
+    const initializationPromise = monaco
       .init()
       .then(mn => {
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({
@@ -355,7 +382,8 @@ class Workspace extends React.Component<IProps, IState> {
 
         this.monacoWrapper = mn;
 
-        this.initializeMonacoEditor();
+        debug("[initializeMonaco] Monaco initialized. Initializing editor...");
+        return this.initializeMonacoEditor();
       })
       .catch(error => {
         console.error(
@@ -364,9 +392,19 @@ class Workspace extends React.Component<IProps, IState> {
         );
         this.setState({ monacoInitializationError: true });
       });
+
+    this.initializationPromise = initializationPromise;
+
+    return initializationPromise;
   };
 
-  initializeMonacoEditor = () => {
+  initializeMonacoEditor = async (): Promise<void> => {
+    if (!this.monacoWrapper) {
+      debug(
+        "[ERROR initializeMonacoEditor] Called before monaco was initialized!",
+      );
+    }
+
     const mn = this.monacoWrapper;
 
     const options = {
@@ -417,6 +455,8 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     this.setMonacoEditorTheme(this.props.userSettings.theme);
+
+    debug("[initializeMonaco] Monaco editor initialized.");
   };
 
   getMonacoLanguageFromChallengeType = () => {
@@ -435,13 +475,13 @@ class Workspace extends React.Component<IProps, IState> {
    *
    * NOTE: When switching to the solution code default to start code
    */
-  handleEditorTabClick = (tab: ADMIN_EDITOR_TAB) => {
+  handleEditorTabClick = async (tab: ADMIN_EDITOR_TAB) => {
     this.setState(
       {
         code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
       },
-      () => {
-        this.refreshEditor();
+      async () => {
+        await this.refreshEditor();
         this.props.setAdminEditorTab(tab);
       },
     );
@@ -451,7 +491,7 @@ class Workspace extends React.Component<IProps, IState> {
    * Switch tabs in the test area of the workspace. So that we can see test
    * results and write tests using different tabs.
    */
-  handleTestTabClick = (tab: ADMIN_TEST_TAB) => {
+  handleTestTabClick = async (tab: ADMIN_TEST_TAB) => {
     if (tab !== this.props.adminTestTab) {
       /**
        * NOTE: The reason for this additional logic is to "refresh" the test
@@ -461,7 +501,7 @@ class Workspace extends React.Component<IProps, IState> {
        */
 
       if (tab === "testResults") {
-        this.refreshEditor();
+        await this.refreshEditor();
       }
 
       this.props.setAdminTestTab(tab);
@@ -479,7 +519,10 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
 
     const MONACO_CONTAINER = (
-      <div style={{ height: "100%", position: "relative" }}>
+      <div
+        id="pairwise-code-editor"
+        style={{ height: "100%", position: "relative" }}
+      >
         <TabbedInnerNav show={isEditMode}>
           <Tab
             onClick={() => this.handleEditorTabClick("starterCode")}
@@ -507,7 +550,7 @@ class Workspace extends React.Component<IProps, IState> {
           </UpperRight>
         )}
         <LowerRight>
-          <ButtonGroup vertical style={{ marginBottom: 8 }}>
+          <ButtonGroup vertical>
             <Tooltip content="Increase Font Size" position="left">
               <IconButton
                 icon="plus"
@@ -522,50 +565,58 @@ class Workspace extends React.Component<IProps, IState> {
                 onClick={this.props.decreaseFontSize}
               />
             </Tooltip>
-            <Tooltip content="Toggle High Contrast Mode" position="left">
-              <IconButton
-                icon="contrast"
-                aria-label="toggle high contrast mode"
-                onClick={this.props.toggleHighContrastMode}
-              />
-            </Tooltip>
           </ButtonGroup>
-          <ButtonGroup vertical>
-            {this.state.code !== challenge.starterCode &&
-              !isEditMode &&
-              !isSandbox && (
-                <Tooltip content="Restore Initial Code" position="left">
-                  <IconButton
-                    icon="reset"
-                    aria-label="reset editor"
-                    onClick={this.resetCodeWindow}
+          <div style={{ marginBottom: 8 }} />
+          <Tooltip content="Format Code" position="left">
+            <IconButton
+              icon="clean"
+              aria-label="format editor code"
+              onClick={this.handleFormatCode}
+            />
+          </Tooltip>
+          <div style={{ marginBottom: 8 }} />
+          <Popover
+            content={
+              <Menu>
+                {!isSandbox && (
+                  <MenuItem
+                    icon={fullScreenEditor ? "collapse-all" : "expand-all"}
+                    aria-label="toggle editor size"
+                    onClick={this.props.toggleEditorSize}
+                    text={
+                      fullScreenEditor
+                        ? "Regular Size Editor"
+                        : "Full Screen Editor"
+                    }
                   />
-                </Tooltip>
-              )}
-            <Tooltip content="Format Code" position="left">
-              <IconButton
-                icon="style"
-                aria-label="format editor code"
-                onClick={this.handleFormatCode}
-              />
-            </Tooltip>
-            {!isSandbox && (
-              <Tooltip
-                content={
-                  fullScreenEditor
-                    ? "Regular Size Editor"
-                    : "Full Screen Editor"
-                }
-                position="left"
-              >
-                <IconButton
-                  aria-label="fullscreen editor"
-                  onClick={this.toggleEditorType}
-                  icon={fullScreenEditor ? "collapse-all" : "expand-all"}
+                )}
+                <MenuItem
+                  icon="contrast"
+                  aria-label="toggle high contrast mode"
+                  onClick={this.props.toggleHighContrastMode}
+                  text="Toggle High Contrast Mode"
                 />
-              </Tooltip>
-            )}
-          </ButtonGroup>
+                <MenuItem
+                  icon="download"
+                  aria-label="export as text"
+                  onClick={this.handleExport}
+                  text="Export File"
+                />
+                <MenuDivider />
+                <MenuItem
+                  icon="reset"
+                  aria-label="reset editor"
+                  onClick={this.resetCodeWindow}
+                  text="Restore Initial Code"
+                />
+              </Menu>
+            }
+            position={Position.LEFT_BOTTOM}
+          >
+            <Tooltip content="More options..." position="left">
+              <IconButton aria-label="more options" icon="more" />
+            </Tooltip>
+          </Popover>
         </LowerRight>
         <div id="monaco-editor" style={{ height: "100%" }} />
       </div>
@@ -716,8 +767,11 @@ class Workspace extends React.Component<IProps, IState> {
 
   setMonacoEditorTheme = (theme: string) => {
     if (this.monacoWrapper) {
+      debug("[setMonacoEditorTheme]", theme);
       this.monacoWrapper.editor.setTheme(theme);
       this.debouncedSyntaxHighlightFunction(this.state.code);
+    } else {
+      debug("[setMonacoEditorTheme]", "No editor pressent");
     }
   };
 
@@ -1031,13 +1085,10 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  toggleEditorType = () => {
-    this.props.toggleEditorSize();
-  };
-
-  resetMonacoEditor = () => {
+  resetMonacoEditor = async () => {
     this.cleanupEditor();
-    this.initializeMonacoEditor();
+    await this.initializeMonaco();
+    await this.initializeMonacoEditor();
   };
 
   setIframeRef = (ref: HTMLIFrameElement) => {
@@ -1077,6 +1128,58 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
+  // Export / Download the text from the editor as a file. File extension is determined by challenge type.
+  private readonly handleExport = () => {
+    const { code } = this.state;
+    const meta = getFileMetaByChallengeType(this.props.challenge.type);
+
+    if (!meta) {
+      console.warn(
+        `[WARN] Cannot get file meta data for inappropriate challenge type: ${this.props.challenge.type}`,
+      );
+      return;
+    }
+
+    const filename = `${meta.name}.${meta.ext}`;
+    const DOWNLOAD_LINK_ID = "pairwise-blob-download-link";
+    const data = new Blob([code], { type: "text/plain" });
+    const url = URL.createObjectURL(data); // NOTE: We never revoke any object URLs. Potential future improvement, but likely not a bottleneck
+
+    try {
+      let link: Nullable<HTMLAnchorElement> = document.querySelector(
+        `a#${DOWNLOAD_LINK_ID}`,
+      );
+
+      // We create the download link initially and then just reuse it on
+      // subsequent uses. Not sure if actually appending to the dom is necessary,
+      // just worried some brwosers migth not allow a click on an element that
+      // couldn't realistically be clicked since it's not in the DOM
+      if (!link) {
+        link = document.createElement("a");
+        link.id = DOWNLOAD_LINK_ID;
+        link.style.display = "none";
+        link.textContent = "Click to download";
+        document.body.appendChild(link); // See NOTE
+      }
+
+      // This is how to set the name of the file which will be saved to the users computer
+      link.download = filename;
+      link.href = url;
+      link.click();
+    } catch (err) {
+      toaster.error(
+        `There was an error downloading the file. Sorry! The team will be
+        notified. As a workaround you can copy the text in the editor and
+        manually paste it into an empty file and save it with the filename
+        "${filename}".
+
+        If you're unsure where to save the file try pasting into TextEdit (Mac)
+        or Notepad (Windows). Linux users you probably already know what you're
+        doing.`,
+      );
+    }
+  };
+
   private readonly handleFormatCode = () => {
     try {
       requestCodeFormatting({
@@ -1094,7 +1197,14 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   private readonly pauseAndRefreshEditor = async (timeout: number = 50) => {
-    // @ts-ignore types!
+    // Be sure to cancel any in-flight timeout before setting up a new one
+    if (this.editorRefreshTimerHandler) {
+      debug(
+        "[WARN pauseAndRefreshEditor] Refresh already in progress. Ignoring.",
+      );
+      clearTimeout(this.editorRefreshTimerHandler);
+    }
+
     this.editorRefreshTimerHandler = setTimeout(this.refreshEditor, timeout);
   };
 }
@@ -1136,12 +1246,11 @@ const mergeProps = (
   ...methods,
   ...state,
   toggleHighContrastMode: () => {
-    methods.updateUserSettings({
-      theme:
-        state.userSettings.theme === MonacoEditorThemes.DEFAULT
-          ? MonacoEditorThemes.HIGH_CONTRAST
-          : MonacoEditorThemes.DEFAULT,
-    });
+    const nextTheme =
+      state.userSettings.theme === MonacoEditorThemes.DEFAULT
+        ? MonacoEditorThemes.HIGH_CONTRAST
+        : MonacoEditorThemes.DEFAULT;
+    methods.updateUserSettings({ theme: nextTheme });
   },
   toggleEditorSize: () => {
     methods.updateUserSettings({

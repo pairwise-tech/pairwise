@@ -428,3 +428,57 @@ export const formatDate = (rawDate: Date) => {
   const formatted = date.toLocaleDateString("en-US", options);
   return formatted;
 };
+
+export const logWhatChanged = (
+  a: { [k: string]: any },
+  b: { [k: string]: any },
+) => {
+  Object.keys(b)
+    .filter(key => {
+      return a[key] !== b[key];
+    })
+    .map(key => {
+      const ax = a[key];
+      const bx = b[key];
+      console.log(
+        "changed property:",
+        key,
+        "from",
+        typeof ax === "function" ? "[FUNC A]" : ax,
+        "to",
+        typeof bx === "function" ? "[FUNC B]" : bx,
+      );
+    });
+};
+
+// Get an appropriate name and file extensionbased on a challenge type
+export const getFileMetaByChallengeType = (x: CHALLENGE_TYPE) => {
+  const name = "index";
+
+  switch (x) {
+    case "markup":
+      return {
+        ext: "html",
+        name,
+      };
+    case "react":
+      return {
+        ext: "tsx",
+        name,
+      };
+    case "typescript":
+      return {
+        ext: "ts",
+        name,
+      };
+    case "media":
+    case "section":
+    case "project":
+    case "guided-project":
+    case "special-topic":
+      return null;
+    default:
+      assertUnreachable(x);
+      break;
+  }
+};
