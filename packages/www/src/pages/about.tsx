@@ -52,7 +52,7 @@ const About = () => {
           <Markdown source={THE_MISSION} />
         </LearningSection>
         <LearningSection>
-          <CoolCodeBullet text="❓" />
+          <CoolCodeBullet text="?" />
           <Typography variant="h5">Why is your about page so short?</Typography>
           <Markdown
             source={`
@@ -88,7 +88,7 @@ const HeadlineImage = styled.div`
 
 const PostImageSection = styled(Section)`
   box-shadow: 0 -10px 20px 2px rgba(0, 0, 0, 0.45);
-  border-top: 1px dashed white;
+  border-top: 1px dashed rgba(140, 140, 140, 0.45);
 `;
 
 export default About;
