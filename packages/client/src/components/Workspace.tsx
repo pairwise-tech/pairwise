@@ -1140,29 +1140,44 @@ class Workspace extends React.Component<IProps, IState> {
       return;
     }
 
+    const filename = `${meta.name}.${meta.ext}`;
     const DOWNLOAD_LINK_ID = "pairwise-blob-download-link";
     const data = new Blob([code], { type: "text/plain" });
     const url = URL.createObjectURL(data); // NOTE: We never revoke any object URLs. Potential future improvement, but likely not a bottleneck
-    let link: Nullable<HTMLAnchorElement> = document.querySelector(
-      `a#${DOWNLOAD_LINK_ID}`,
-    );
 
-    // We create the download link initially and then just reuse it on
-    // subsequent uses. Not sure if actually appending to the dom is necessary,
-    // just worried some brwosers migth not allow a click on an element that
-    // couldn't realistically be clicked since it's not in the DOM
-    if (!link) {
-      link = document.createElement("a");
-      link.id = DOWNLOAD_LINK_ID;
-      link.style.display = "none";
-      link.textContent = "Click to download";
-      document.body.appendChild(link); // See NOTE
+    try {
+      let link: Nullable<HTMLAnchorElement> = document.querySelector(
+        `a#${DOWNLOAD_LINK_ID}`,
+      );
+
+      // We create the download link initially and then just reuse it on
+      // subsequent uses. Not sure if actually appending to the dom is necessary,
+      // just worried some brwosers migth not allow a click on an element that
+      // couldn't realistically be clicked since it's not in the DOM
+      if (!link) {
+        link = document.createElement("a");
+        link.id = DOWNLOAD_LINK_ID;
+        link.style.display = "none";
+        link.textContent = "Click to download";
+        document.body.appendChild(link); // See NOTE
+      }
+
+      // This is how to set the name of the file which will be saved to the users computer
+      link.download = filename;
+      link.href = url;
+      link.click();
+    } catch (err) {
+      toaster.error(
+        `There was an error downloading the file. Sorry! The team will be
+        notified. As a workaround you can copy the text in the editor and
+        manually paste it into an empty file and save it with the filename
+        "${filename}".
+
+        If you're unsure where to save the file try pasting into TextEdit (Mac)
+        or Notepad (Windows). Linux users you probably already know what you're
+        doing.`,
+      );
     }
-
-    // This is how to set the name of the file which will be saved to the users computer
-    link.download = `${meta.name}.${meta.ext}`;
-    link.href = url;
-    link.click();
   };
 
   private readonly handleFormatCode = () => {
