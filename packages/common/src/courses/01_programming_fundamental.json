@@ -823,6 +823,17 @@
           "content": ""
         },
         {
+          "id": "UmvrXaKk",
+          "type": "typescript",
+          "title": "Learn about UNIX Epoch Time, now!",
+          "instructions": "[Unix time](https://en.wikipedia.org/wiki/Unix_time) is a common date/time standard used in computing and operating systems. It describes a moment in time as the number of seconds which have passed since he Unix epoch which is the start of January 1, 1970 in UTC time. The current unix time can be retrieved from the `Date` object using a method called `now`. Take a look at the editor and try to convert dates to and from unix time\\!",
+          "testCode": "const runChecks = (checkFn) => {\n  let count = 0;\n  while (count < 25) {\n    checkFn();\n    count++;\n  }\n}\n\ntest(\"The `getNowInUnixTime` function should return the current date in unix time.\", () => {\n  const check = () => {\n    const now = Date.now();\n    const result = getNowInUnixTime();\n    const diff = result - now;\n    expect(diff <= 50).toBeTruthy();\n    expect(diff >= 0).toBeTruthy();\n  }\n\n  runChecks(check);\n});\n\ntest(\"The `convertUnixTimeToDate` function should convert a unix timestamp number to a `Date` object.\", () => {\n  const check = () => {\n    const now = Date.now();\n    const result = convertUnixTimeToDate(now);\n    const expected = new Date(now).toUTCString();\n    expect(result.toUTCString()).toBe(expected);\n  }\n  \n  runChecks(check);\n});",
+          "videoUrl": "",
+          "starterCode": "const getNowInUnixTime = () => {\n    // Return the current unix timestamp\n}\n\nconst convertUnixTimeToDate = (unix: number): Date => {\n    // Convert and return a Date representing the input unix timestamp\n}\n\nconst unix = getNowInUnixTime();\nconsole.log(`unix: ${unix}`);\n\nconst date = convertUnixTimeToDate(unix);\nconsole.log(`date: ${date}`);\n\n",
+          "solutionCode": "const getNowInUnixTime = () => {\n    return Date.now();\n}\n\nconst convertUnixTimeToDate = (unix: number): Date => {\n    return new Date(unix);\n}\n\nconst unix = getNowInUnixTime();\nconsole.log(`unix: ${unix}`);\n\nconst date = convertUnixTimeToDate(unix);\nconsole.log(`date: ${date}`);\n\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
