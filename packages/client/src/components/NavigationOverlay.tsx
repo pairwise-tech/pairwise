@@ -96,7 +96,7 @@ class NavigationOverlay extends React.Component<IProps> {
         />
         <Col
           offsetX={overlayVisible ? 0 : -20}
-          style={{ zIndex: 3 }}
+          style={{ zIndex: 3, boxShadow: "rgba(0,0,0,0.22) 10px 0px 10px 0px" }}
           onClick={e => e.stopPropagation()}
         >
           <Title>{course.title}</Title>
@@ -114,7 +114,6 @@ class NavigationOverlay extends React.Component<IProps> {
           }}
           onClick={e => e.stopPropagation()}
         >
-          <SpecialLeftShadow />
           <Title>
             <p>{module.title}</p>
             {hasSections && (
@@ -692,19 +691,6 @@ const ChallengeListItemIcon = ({
     {...props}
   />
 );
-
-// The shadow that appears in the overlay nav for separating the module column
-// from the challenge column
-const SpecialLeftShadow = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 3;
-  box-shadow: rgba(0, 0, 0, 0.22) 10px 0px 10px 0px inset;
-  width: 80px;
-  pointer-events: none;
-`;
 
 const Badge = styled.div`
   border-radius: 100px;
