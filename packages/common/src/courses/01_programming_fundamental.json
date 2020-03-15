@@ -812,6 +812,17 @@
           "content": ""
         },
         {
+          "id": "NtvLmjdo",
+          "type": "typescript",
+          "title": "The Global Date Object",
+          "instructions": "Another global object you will probably encounter frequently is the `Date` object\\. It is used to construct and work with dates and times. A new date can be created using the `Date` object and instantiating it with the `new` keyword\\.",
+          "testCode": "\nconst checkTheDate = () => {\n  const now = new Date();\n  let result = whatIsTheDate();\n  const milli = now.getMilliseconds();\n  expect(result.getMilliseconds() - milli < 50).toBeTruthy();\n}\n\ntest(\"The `whatIsTheDate` function should return the current date as a new instance of the `Date` object.\", () => {\n  // Check the date a few times\n  let count = 0;\n  while (count < 25) {\n    checkTheDate();\n    count++;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const whatIsTheDate = (): Date => {\n    // Create and return a new instance of Date\n}\n\nconst rightNow = whatIsTheDate();\n\n// Log the results\nconsole.log(rightNow);\nconsole.log(rightNow.toLocaleString());\n",
+          "solutionCode": "const whatIsTheDate = (): Date => {\n    const date = new Date();\n    return date;\n}\n\nconst rightNow = whatIsTheDate();\nconsole.log(rightNow);\nconsole.log(rightNow.toLocaleString());\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
