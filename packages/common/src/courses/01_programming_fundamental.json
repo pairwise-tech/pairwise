@@ -834,6 +834,17 @@
           "content": ""
         },
         {
+          "id": "ld1zsdXb",
+          "type": "typescript",
+          "title": "Local Scope",
+          "instructions": "Now that you have learned about global scope and some of the objects which are globally available for you to use, we will now take a look at _local scope_. Local scope refers to the ability to define a more restricted scope, or namespace, for values to exist in. Take a look at the editor to continue \\(it should look familiar from the earlier global scopes challenge\\!\\).",
+          "testCode": "// A shitty test:\ntest(\"The `someVariable` variable should be redefined with a different value in each of the 4 scopes (global scope and 3 local scopes).\", () => {\n  let result;\n  let indices = []\n  const regex = /someVariable =/g;\n\n  // Match all the declarations of someVariable\n  while ((result = regex.exec(__user_code_string__))) {\n    indices.push(result.index);\n  }\n\n  let comparisons = new Set();\n  for (const index of indices) {\n    const substring = __user_code_string__.slice(index, index + 20);\n    comparisons.add(substring);\n  }\n\n  // Assert that the string declarations are not the same...\n  expect(indices.length).toBe(4);\n  expect(comparisons.size).toBe(indices.length);\n});\n",
+          "videoUrl": "",
+          "starterCode": "const someVariable = \"\";\n\n{\n  // Scope 1:\n  // const someVariable;\n  console.log(`Scope 1 someVariable: ${someVariable}`);\n  {\n    // Scope 2:\n    // const someVariable;\n    console.log(`Scope 2 someVariable: ${someVariable}`);\n    {\n      // Scope 3:\n      // const someVariable;\n      console.log(`Scope 3 someVariable: ${someVariable}`);\n    }\n  }\n}\n",
+          "solutionCode": "// Global scope:\nconst someVariable = \"Global!\";\nconsole.log(`Global scope someVariable: ${someVariable}`);\n\n{\n  // Scope 1:\n  const someVariable = null;\n  console.log(`Scope 1 someVariable: ${someVariable}`);\n  {\n    // Scope 2:\n    const someVariable = \"A local value!\";\n    console.log(`Scope 2 someVariable: ${someVariable}`);\n    {\n      // Scope 3:\n      const someVariable = true;\n      console.log(`Scope 3 someVariable: ${someVariable}`);\n    }\n  }\n}\n",
+          "content": "As you can see from this challenge, `{...}` can be used to create a new scope. The new local scope created by a pair of brackets can be used to redefine variables which exist in the outer scope, or it can be used to define values which _cannot_ be accessed by the outer scope. This is a very handy way to help you organize your code\\!\n\nHowever, as we will see next brackets are not the only way to create a new local scope."
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
