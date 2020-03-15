@@ -19,7 +19,7 @@ export interface ChallengeTypeOption {
 
 interface Props {
   items: ChallengeTypeOption[];
-  currentChallengeType?: string;
+  currentChallengeType?: CHALLENGE_TYPE;
   onItemSelect: IListItemsProps<ChallengeTypeOption>["onItemSelect"];
 }
 
@@ -33,11 +33,13 @@ const ChallengeTypeMenu = ({
   currentChallengeType,
   onItemSelect,
 }: Props) => {
+  const activeItem = items.find(x => x.value === currentChallengeType);
   return (
     <div style={{ flexShrink: 0, marginLeft: 10, marginRight: 10 }}>
       <ChallengeTypeSelect
         filterable={false}
         onItemSelect={onItemSelect}
+        activeItem={activeItem}
         items={items}
         itemListRenderer={getRenderItemList(150)}
         itemRenderer={(x, { handleClick, modifiers }) => (

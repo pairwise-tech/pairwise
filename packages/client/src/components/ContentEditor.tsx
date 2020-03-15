@@ -12,8 +12,34 @@ import { map } from "rxjs/operators";
 import { Editor } from "slate-react";
 import { Leaf, Selection } from "slate";
 import { List } from "immutable";
+import { CODEPRESS_HOST, CODEPRESS } from "tools/client-env";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
+
+const uploadFile = (
+  file: File,
+  resourceId: Nullable<string>,
+): Promise<string> => {
+  if (!resourceId) {
+    return Promise.reject(new Error("No challenge ID provided for upload"));
+  }
+
+  const formData = new FormData();
+
+  formData.append("asset", file, file.name);
+
+  return fetch(`${CODEPRESS_HOST}/assets/${resourceId}`, {
+    method: "POST",
+    body: formData,
+    redirect: "follow",
+  })
+    .then(x => x.json())
+    .then(x => x.data.filepath)
+    .catch(err => {
+      console.warn("[ERR]", err);
+      toaster.error(`Could not upload\n${err.message}`);
+    });
+};
 
 // All adapted from the markdown shortcuts that ship with the lib by default:
 // https://github.com/outline/rich-markdown-editor/blob/master/src/plugins/MarkdownShortcuts.js
@@ -294,6 +320,10 @@ class ContentEditor extends React.Component<Props> {
       .toPromise();
   };
 
+  handleFileUpload = (file: File): Promise<string> => {
+    return uploadFile(file, this.props.challengeId);
+  };
+
   render() {
     const { history, plugins = [], ...props } = this.props;
     return (
@@ -302,6 +332,7 @@ class ContentEditor extends React.Component<Props> {
           plugins={[...plugins, markdownShortcuts]}
           theme={editorTheme}
           onSearchLink={this.getSearchLinks}
+          uploadImage={this.handleFileUpload}
           onShowToast={message => {
             toaster.toast.show({
               message,
@@ -458,12 +489,27 @@ const EditorExternalStyles = styled.div`
   font-size: 17px;
   position: relative;
 
+  // Highlighting inline text
+  mark {
+    background: #ffdf7538;
+    border-bottom: 2px solid #ffdf75;
+    color: white;
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+
   blockquote {
-    margin-left: 10px !important;
+    margin-left: 0;
     background: ${COLORS.LIGHT_GREY} !important;
     font-style: normal !important;
     border-left-width: 9px !important;
     padding: 5px 20px 5px 10px !important;
+  }
+  blockquote h1,
+  blockquote h2,
+  blockquote h3,
+  blockquote h4 {
+    margin-top: 4px;
   }
 
   h1,
@@ -528,6 +574,7 @@ const EditorExternalStyles = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   searchResults: Modules.selectors.challenges.getSearchResults(state),
+  challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
 });
 
 const dispatchProps = {

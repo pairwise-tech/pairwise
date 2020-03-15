@@ -28,7 +28,18 @@
           "videoUrl": "https://www.youtube.com/embed/VRQNU8UNuWM",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Now that you've solved the first challenge and seen how easy it is to get started, we want to take a moment to introduce you to how Pairwise works and help you get started working through the \ncourse\\.\n\n## The Course\n\nThe Pairwise curriculum is composed of 13 modules. Together, they give you a complete education in full\\-stack software development. Pairwise can give you all the skills to start a new career in software development. Our curriculum focuses on teaching **TypeScript, React, **and** NodeJS**. If you are curious more about why we chose these technologies, feel free to [read our rationale here](https://www.pairwise.tech/curriculum).\n\nYou can access the course navigation by clicking the menu icon in the top left. This is always available for you to navigate to any challenge.\n\nThe first two modules introduce HTML/CSS and TypeScript, so they cover many of the basics of web development and programming. These two modules are completely free and no signup is required\\! However, you can create an account at any time \\(also free\\!\\) to track your progress \\(don't worry, we will track your progress even if you don't have an account yet\\).\n\nIf you do decide to continue and complete the entire course, there will be a one\\-time payment which will give you lifetime access to the course. You can make this payment with a credit card at anytime after signing up.\n\nThe primary mode of learning is through short, interactive coding challenges like the one you just solved. If you persist through the entire course, you will also build up a portfolio of projects you build and deploy on your own\\! You can use this portfolio as a showcase of your skills to future employers.\n\n## Getting Started\n\nEnough talking\\! To start learning you just need to start on the next challenge. Each challenge should just take 5\\-10 minutes to complete and will be simple and interactive just like the last. We know you're eager to click that **Next Challenge** button, but before you do we encourage you to watch this short video tutorial of how to use the _Pairwise Workspace_. It will give you some helpful tips which will help you get started, and after that we'll get out of your way\\! Good luck and welcome\\!\n\n**TODO: Add the intro video\\!**"
+          "content": "Now that you've solved the first challenge and seen how easy it is to get started, we want to take a moment to introduce you to how Pairwise works and help you get started working through the \ncourse\\.\n\n## The Course\n\nThe Pairwise curriculum is composed of 13 modules. Together, they give you a complete education in full\\-stack software development. Pairwise can give you all the skills to start a new career in software development. Our curriculum focuses on teaching **TypeScript, React, **and** NodeJS**. If you are curious more about why we chose these technologies, feel free to [read our rationale here](https://www.pairwise.tech/curriculum).\n\nYou can access the course navigation by clicking the menu icon in the top left. This is always available for you to navigate to any challenge.\n\nThe first two modules introduce HTML/CSS and TypeScript, so they cover many of the basics of web development and programming. These two modules are completely free and no signup is required\\! However, you can create an account at any time \\(also free\\!\\) to track your progress \\(don't worry, we will track your progress even if you don't have an account yet\\).\n\nIf you do decide to continue and complete the entire course, there will be a one\\-time payment which will give you lifetime access to the course. You can make this payment with a credit card at anytime after signing up.\n\nThe primary mode of learning is through short, interactive coding challenges like the one you just solved. If you persist through the entire course, you will also build up a portfolio of projects you build and deploy on your own\\! You can use this portfolio as a showcase of your skills to future employers.\n\n## Getting Started\n\nEnough talking\\! To start learning you just need to start on the next challenge. Each challenge should just take 5\\-10 minutes to complete and will be simple and interactive just like the last. We know you're eager to click that **Next Challenge** button, but before you do we encourage you to watch this short video tutorial of how to use the _Pairwise Workspace_. It will give you some helpful tips which will help you get started, and after that we'll get out of your way\\! Good luck and welcome\\!\n\n++**TODO:**++** Add the intro video\\!**"
+        },
+        {
+          "id": "JzokCvMM",
+          "type": "media",
+          "title": "How to learn (anything)",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Did you know that learning is itself a skill we can all learn and get better at? Let's talk a bit about the meta game of learning: How to learn _efficiently_. \n# Taking Breaks\n\n++TODO++ Primacy and recency? When stuck, take a break, better yet a nap\n# Sleep\n\n++TODO++ Naps are good, full\\-nights sleep is better, avoid alcohol while learning\n# Repetitions aka practice\n\nYou're going to need a lot. Despite learning as efficiently as you possibly can you will still need to do something more than once to get good at it. In fact you need to do it thousands of times.\n\nTo help convince you, consider...\n\n* **Sports**: How many times has Tiger Woods swung a golf club? How many times has Steph Curry shot a 3\\-pointer?\n* **Work**: How many do future\\-doctors _practice_ before they actually earn the title of doctor? Doctors may be extreme but also consider lawyers, plumbers, physicists, Spanish grammar teachers...\n* **School**: Teachers at all levels recognize the importance of repetitions. Homework is just a mechanism to incentivize repetitions.\n\n\n> To get good at something you need to do it many, many times ++even if you're learning as efficiently as possible++\n\nThis is where the challenges come in. We've created many challenges in part because we want you to attack the same problems again and again from different angles. Even if a challenge seems easy remember that you're completing more repetitions and getting better.\n# Real learning won't feel easy...\n\n... but that doesn't mean it's \"hard.\" When you're really learning you will be stretching your brain just a bit beyond what it already knows. This isn't going to feel easy, but it might feel exciting or fun. It might feel hard too, but even if it does, remember that it it gets easier with time. The better adapted your brain is to the task at hand the easier it will be. \n\nYour brain is literally building new neural connections when you learn—by the end of the course you will have a physically different brain than when you started. This won't happen overnight."
         }
       ]
     },
@@ -46,7 +57,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Welcome to module 1\\! Where we'll be using HTML, CSS and TypeScript to dive into the basics of programming.\n# What you will learn\n\n* Foundational programming skills like\n   * Variables\n   * Functions\n   * How computers represent information and what _types_ of information you can represent\n   * Data structure\n   * Algorithms\n* How to build your own website\n* How to put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n\nOnward\\."
+          "content": "Welcome to Module 1\\! We'll be using HTML and CSS to lay a foundation for programming and get some practice writing real code.\n# What you will do in this module\n\n* Write a bunch of real code\n* Build your own web page\n* Put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n# Why are we learning this?\n\nWe _love_ the question \"why\" and we'll answer that in the [introductory lesson on HTML](/workspace/5ziJI35f#h-why-are-we-learning-html).\n\nOnward\\!"
         },
         {
           "id": "5ziJI35f",
@@ -63,12 +74,12 @@
           "id": "9scykDold",
           "type": "markup",
           "title": "Add a h1 Tag in HTML",
-          "instructions": "There is some HTML below. You should add an <h1> tag with the text \"Hello!\" inside it.",
+          "instructions": "* Right below the existing `p` tag add an `h1` tag with the text \"Hello\\!\" inside it.\n\n",
           "starterCode": "<p>This is an HTML file. Add your code below this line</p>",
           "solutionCode": "<p>This is an HTML file. Add your code below this line</p>\n<h1>Hello!</h1>",
           "testCode": "test(\"There should be an h1 tag with the text 'Hello!'\", () => {\n  expect(get(\"h1\").innerHTML).toBe(\"Hello!\");\n});\n",
           "videoUrl": "https://www.youtube.com/embed/LMrZDCjO_60",
-          "content": "Placeholder supplementary content..."
+          "content": "We're starting off with some simple text text tags. The web is full of text so these are some of the most common tags you will find. For now the webpages we create may not look like much, just some different text here an there, but soon we will learn about how to make things look much more interesting."
         },
         {
           "id": "9scykdziW",
@@ -105,7 +116,7 @@
         },
         {
           "id": "CuwykKRM",
-          "type": "media",
+          "type": "section",
           "title": "Enter CSS",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
@@ -255,18 +266,84 @@
           "videoUrl": "",
           "starterCode": "<style>\n  /* Your code here... */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .mobile-nav a {\n    padding: 10px;\n    background: tomato;\n  }\n</style>\n<div class=\"mobile-nav\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .mobile-nav {\n    display: flex;\n    justify-content: space-between;\n  }\n  .mobile-nav a {\n    padding: 10px;\n    background: tomato;\n  }\n</style>\n<div class=\"mobile-nav\">\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
-          "content": "Ever notice how mobile nav menus on a phone are often spaced perfectly so that the icons fill the space on screen? \n\nThis effect is quite simple to accomplish with CSS and Flexbox. \n\nFlexbox is the general term for CSS that utilizes the `display: flex` property. Display `flex` lets you do a lot of things that used to be very difficult in web browsers. Things like:\n\n* Create equal spacing between elements (this challenge!)\n* Create equal space around elements\n* Vertically or horizontally center elements\n\nThere are other uses for Flexbox but these are some of the most common."
+          "content": "Ever notice how mobile nav menus on a phone are often spaced perfectly so that the icons fill the space on screen? \n\nThis effect is quite simple to accomplish with CSS and Flexbox. \n\nFlexbox is the general term for CSS that utilizes the `display: flex` property\\. Display `flex` lets you do a lot of things that used to be very difficult in web browsers. Things like:\n\n* Create equal spacing between elements \\(this challenge\\!\\)\n* Create equal space around elements\n* Vertically or horizontally center elements\n\n\nThere are other uses for Flexbox but these are some of the most common."
         },
         {
           "id": "iZ6nlkiQ",
-          "type": "media",
+          "type": "markup",
           "title": "The hover state",
-          "instructions": "# [INCOMPLETE CHALLENGE]\nFor now this is a media challenge since there seems to be no good way to test hover states programatically\n\n* Invert the appearance of the links when hovered. In other words when you hover a link make it's background `tomato` and it's color `blue`.\n\n**NOTE**: You will need the `:hover` selector.",
-          "testCode": "test(\"Nav links should have inverted hover styles\", () => {\n  const els = getAll(\".nav a\");\n  const hasInvertedStyles = (el) => {\n    return (\n      getStyle(el, \"color\", \":hover\") === cssColor(\"tomato\") &&\n      getStyle(el, \"background-color\", \":hover\") === cssColor(\"blue\")\n    );\n  };\n  expect(getStyle(els[0], 'color')).toBe(cssColor('tomato'))\n  expect(els.every(hasInvertedStyles)).toBe(true);\n});\n",
+          "instructions": "Invert the appearance of the links when hovered. In other words when you hover a link make its background `tomato` and it's color `blue`.\n**NOTE**: You will need the `:hover` selector\\.",
+          "testCode": "test(\"The color and background of the `a` tags should be inverted on hover\", () => {\n  const code = __user_code_string__;\n  const regex = /a:hover\\s+{([\\s\\S]+?)}/i; // All text inside brackets after a:hover. a:hover { <HERE> }\n  const hoverStyles = code.match(regex)[1];\n  expect(hoverStyles).toBeTruthy();\n  expect(hoverStyles.match(/background(-color)?:\\s+blue/)).toBeTruthy();\n  expect(hoverStyles.match(/color:\\s+tomato/)).toBeTruthy();\n});\n",
           "videoUrl": "",
           "starterCode": "<style>\n  /* Your code here */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    padding: 10px;\n    background: tomato;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
           "solutionCode": "<style>\n  .nav a:hover {\n    background: blue;\n    color: tomato;\n  }\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    background: tomato;\n    color: blue;\n    padding: 10px;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
-          "content": "You've probably noticed that when you hover over a link in a browser it will change somehow. You can customize this!\n\nThis is called a hover state, and you can style a hover state just like you can style any other CSS. The main difference is the selector.\n\n```css\n/* Style the hover state for all links on the site */\na:hover {\n  text-decoration: underline;\n}\n\n/* Style just the nav links */\n.nav a:hover {\n  color: tomato;\n}\n\n/* Style the entire nav div when it's hovered */\n.nav:hover {\n  background: gray;\n}\n```\n\nTo style how something looks when the mouse hovers over it you use `:hover`. Specifically, you just put `:hover` after the selector you want to style. It's important not to put a space in front of `:hover`."
+          "content": "Here's a GIF of the end result of this challenge. This should give you a clear idea about what a hover state does.\n\n![](/assets/iZ6nlkiQ/9d080a45671f5e4e63d62090ab24a779_hov.gif)\n# General Concepts\n\nYou've probably noticed that when you hover over a link in a browser it will change somehow. You can customize this\\!\n\nThis is called a hover state, and you can style a hover state just like you can style any other CSS. The main difference is the selector.\n\n```css\n/* Style the hover state for all links on the site */\na:hover {\n  text-decoration: underline;\n}\n\n/* Style just the nav links */\n.nav a:hover {\n  color: tomato;\n}\n\n/* Style the entire nav div when it's hovered */\n.nav:hover {\n  background: gray;\n}\n\n```\n\nTo style how something looks when the mouse hovers over it you use `:hover`. Specifically, you just put `:hover` after the selector you want to style. It's important not to put a space in front of `:hover`."
+        },
+        {
+          "id": "DDOHTQQC",
+          "type": "section",
+          "title": "Projects",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "TODO"
+        },
+        {
+          "id": "LROl5K9R",
+          "type": "media",
+          "title": "HTML Guided Project — Creating a webpage",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Today we're going to creating a full webpage which you can put online and stake out your own corner of the web \\(if you haven't already\\). \n# The Task\n\nCreate a single webpage and style it so it doesn't look terrible to you. The styling part is subjective—no wrong answers here. The goal is just to make something you would be happy to put online, perhaps at `YOUR-NAME.com` or some similar domain.\n# What's the point?\n\nThere are more than one aspects to this challenge, but above all remember that challenges are here to help you get _practice_. ++The more repetitions complete with a given task the better you will be.++ If you write 1000 webpages and put them online you will be pretty good at creating websites, considerably better than someone who's only created one or two.\n\nWith that being said, there is an additional point to this exercise:\n\n* **Create something real**. A website is something real and tangible which you can show to the world.\n\n"
+        },
+        {
+          "id": "sfxItMSR",
+          "type": "media",
+          "title": "Styling A Tic Tac Toe Board",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  .board {\n    display: table; /* Only take up as much space as needed */\n    margin: 0 auto; /* Center on the page (requres display:table above) */\n  }\n  .row {\n    display: flex; /* Display horizontally */\n    flex-wrap: wrap;\n  }\n  .square {\n    width: 50px;\n    height: 50px;\n    border: 1px solid black;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    font-family: monospace;\n    font-weight: 100;\n    font-size: 40px;\n  }\n  .square:after {\n    display: block;\n  }\n  .has-x:after {\n    content: \"x\";\n    color: forestgreen;\n  }\n  .has-o:after {\n    content: \"o\";\n    color: tomato;\n  }\n</style>\n<div class=\"board\">\n  <div class=\"row\">\n    <div class=\"square has-x\"></div>\n    <div class=\"square\"></div>\n    <div class=\"square\"></div>\n  </div>\n  <div class=\"row\">\n    <div class=\"square\"></div>\n    <div class=\"square has-o\"></div>\n    <div class=\"square\"></div>\n  </div>\n  <div class=\"row\">\n    <div class=\"square\"></div>\n    <div class=\"square\"></div>\n    <div class=\"square\"></div>\n  </div>\n</div>\n",
+          "content": "Here's what we'll cover in this challenge:\n\n* Pseudo selectors and the `content` property\n* [Flexbox](/workspace/iFvzasqW)\n* Using various `display` properties, including the somewhat obscure `display: table` property\n* Using utility classes\n\n# The Task\n\nCreate a Tic Tac Toe board using HTML and CSS. It should look something like this:\n\n![A 3x3 tic tac toe board.](/assets/sfxItMSR/d476572f879076a3e659d2ac3081ef95_tic-tac-toe.png)\nIt doesn't matter which squares are blank, which have X and which have O. Just make sure that you style at least one square with an X and one with an O.\n# Why?\n\nThis challenge starts to touch on generalized UI programming rather than just text documents with the occasional image. Don't get me wrong—_most of the web_ is just text documents with the occasional image, but it's important to generalize the concepts your learning to more abstract ideas like a Tic Tac Toe board.\n\nFurthermore, we can use the tic tac toe board again later in the course to make it into a fully functional game that you can play with others or against the computer.\n\nAnd of course as always just by programming, getting more repetitions, you're building the neural pathways that will make all this stuff come as second nature to you over time.\n\n---\n\n\n> **There's almost always more than one solution**\n> \n> This challenge can be accomplished with `flex-wrap` and a fixed `width` or with a more conventional approach of three \"row\" divs and three `div`s inside them to serve as squares on the board.\n> \n> In fact there are many ways you could complete this challenge that I wouldn't even think of. That's part of the beauty of programming—there's always more than one way to get something done. It can also be a curse at times because other programmers will often do things in different ways than you would, but that's beside the point.\n"
+        },
+        {
+          "id": "Fpw0qzGv",
+          "type": "media",
+          "title": "Creating a Calculator Guided Project",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n  body {\n    background: #222; /* Totally unecessary, just nice for coding at night */\n    font-family: system-ui;\n  }\n  .calculator {\n    color: white;\n    width: 210px;\n    margin: 0 auto;\n    margin-top: 40px;\n    border-radius: 5px;\n    background: #323232;\n    border: 1px solid rgba(0,0,0,0.2);\n    overflow: hidden;\n    position: relative;\n    box-shadow: 0 2px 15px rgba(0,0,0,0.5);\n  }\n  .calculator:after {\n    content: '';\n    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);\n    z-index: 2;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    display: block;\n    border-radius: 5px;\n    pointer-events: none;\n  }\n  .display {\n    display: flex;\n    height: 70px;\n    padding: 10px;\n    align-items: flex-end;\n    justify-content: flex-end;\n  }\n  .display span {\n    font-size: 42px;\n    font-weight: 200;\n    display: block;\n    line-height: 35px;\n  }\n  .row {\n    width: 100%;\n    display: flex;\n  }\n  .key {\n    background: #646464;\n    flex: 1 25%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 40px;\n    border-bottom: 1px solid #323232;\n    border-left: 1px solid #323232;\n  }\n  .key:hover {\n    filter: brightness(1.2);\n  }\n  .row:last-child .key {\n    border-bottom: none;\n  }\n  .key:first-child {\n    border-left: none;\n  }\n  .key.span-2 {\n    flex: 2 50%;\n  }\n  .meta-key {\n    background: #464646;\n  }\n  .operator-key {\n    background: orange;\n  }\n</style>\n\n<div class=\"calculator\">\n  <div class=\"display\">\n    <span>47</span>\n  </div>\n\n  <div class=\"row\">\n    <div class=\"key meta-key\">C</div>\n    <div class=\"key meta-key\">±</div>\n    <div class=\"key meta-key\">%</div>\n    <div class=\"key operator-key\">÷</div>\n  </div>\n  <div class=\"row\">\n    <div class=\"key\">7</div>\n    <div class=\"key\">8</div>\n    <div class=\"key\">9</div>\n    <div class=\"key operator-key\">×</div>\n  </div>\n  <div class=\"row\">\n    <div class=\"key\">4</div>\n    <div class=\"key\">5</div>\n    <div class=\"key\">6</div>\n    <div class=\"key operator-key\">-</div>\n  </div>\n  <div class=\"row\">\n    <div class=\"key\">1</div>\n    <div class=\"key\">2</div>\n    <div class=\"key\">3</div>\n    <div class=\"key operator-key\">+</div>\n  </div>\n  <div class=\"row\">\n    <div class=\"key span-2\">0</div>\n    <div class=\"key\">.</div>\n    <div class=\"key operator-key\">=</div>\n  </div>\n</div>\n",
+          "content": "++TODO\\... The video++\n* Basically copy the UI of the Mac calculator app\n* Can introduce the idea of going from an image, or something you imagine, to a real\\-life UI\n* Can introduce the Digital Color Meter as a way to grab UI colors\n* Could also touch on unicode since they need to add some special symbols\n\n# Instructions\n\nCreate a calculator based on the following image.\n\n![A trusty calculator application.](/assets/Fpw0qzGv/6b4ea75bda893632217dda54b9c13e4f_calculator.png)\n\nWe won't be making it work, not yet anyway. We haven't learned enough TypeScript for that yet, so this challenge is all about HTML and CSS.\n\nYou can complete this challenge in the [Sandbox](/workspace/sandbox?type=markup). Once you're satisfied with the result export it to an HTML file. \n# Why?\n\nThere are two particularly important aspects to this project:\n\n* Get familiar with building applications, not just webpages\n* Turn a graphic design into a real interface you can use\n\n\n\n## Applications not web pages\n\nMany people think of HTML and CSS as tools to build web _pages_. That's certainly true, but that's not all you can do with HTML and CSS. You can also build web _applications_.\n\n> **Web applications vs web pages**\n> Possibly a silly distinction, but you will hear these terms in the wild so let's touch on this briefly. \n> \n>    * A web page is just something you read. A news site, a product page, etc.\n>    * A web application is something you interact with. It's software. Web apps also include web pages. For example, Pairwise is a web _application_ \\(you can interact with it\\) but there are many parts of app that you just read, like this page here.\n\n## From design to product\n\nTaking a graphic design and turning it into a finished product is a very important skill because:\n\n* If you work for a company or a client they might give you designs that need to turn into apps.\n* If you want to build your own product you will have to design it and then create it, even if \"designing\" it just means visualizing it in your mind before coding.\n\n# Tips and hints\n\n* You can code in whatever order works best for you, but if you're not sure then start by writing some basic HTML then give it some basic styling. Maybe create the outline of the calculator and get the size and background color right. Then move on to the inner details and repeat.\n* If you're feeling stuck try starting over from the beginning.\n   * This may seem counterintuitive but sometimes you need a blank slate to get new ideas flowing, and there's not actually that much code to write in this challenge so actually typing things out won't take too long. _Thinking about what to write_ is where you will spend most of your time.\n* If you really get stuck or you feel this challenge needs some work let us know\\! There is a feedback button in the header.\n* If you're not sure how to type a `±` symbol or a `÷` symbol just copy and paste from here.\n   * These are Unicode symbols, so it's possible to type them on your computer. It's often a pain though so when in doubt just try Googling around for the relevant symbol. \n\n"
+        },
+        {
+          "id": "4rq4ezCu",
+          "type": "section",
+          "title": "Special Topics",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Welcome to the first special topics section\\! \n# What can I find here?\n\nSpecial topics encompass everything that we think is useful but still optional for the current module. These topics might be revisited in more depth later or moved into the core challenge section.\n\nAs with all the of the course we'd love your feedback on these special topics. Was anything particularly useful? Do you think anything here needs more explanation? There's a feedback button in the upper right marked with a question mark.\n\nNow let's jump in 😎."
+        },
+        {
+          "id": "8YMC6xUd",
+          "type": "media",
+          "title": "Getting your site online",
+          "instructions": "",
+          "testCode": "// test('message', () => expect(...))",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Also known as deploying your first static site.\n\n++TODO++\n\n> \n> ### Jargon Time\n> \n> **Deploy**: Taking whatever code you wrote and uploading it to a server where it can be accessed. For example, no one else can see the code you wrote during this module but if you _deploy_ your code then anyone can access it with the URL. This is very important for websites.\n> **Static**: As opposed to \"dynamic.\" In this context static means that your code is just a bunch of files that can be used directly without any additional software.\n"
         }
       ]
     },
@@ -313,7 +390,7 @@
           "type": "typescript",
           "title": "Strings",
           "instructions": "Modify `greeting` below so that it says \"Hello, my name is \" followed by your name\n",
-          "testCode": "test('`greeting` should equal the string `\"Hello, my name is {your name here}\"`', () => assert(/hello, my name is \\w+/i.test(greeting)))",
+          "testCode": "test('`greeting` should equal the string `\"Hello, my name is {your name here}\"`', () =>\n  assert(/hello, my name is \\w+/i.test(greeting)));\n",
           "videoUrl": "",
           "starterCode": "const greeting = \"\";",
           "solutionCode": "const greeting = \"Hello, my name is Pete\";",

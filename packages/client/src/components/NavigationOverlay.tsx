@@ -380,7 +380,8 @@ class NavigationOverlay extends React.Component<IProps> {
           <span>
             {section ? (
               <Badge onClick={toggleSection}>
-                {sectionChallengeCount} Challenges
+                {sectionChallengeCount} Challenge
+                {sectionChallengeCount > 1 ? "s" : ""}
               </Badge>
             ) : challenge.videoUrl ? (
               <Tooltip

@@ -8,6 +8,7 @@ import {
   TestCase,
 } from "tools/test-utils";
 import { wait } from "tools/utils";
+import stripComments from "strip-comments";
 
 /** ===========================================================================
  * Config & Utils
@@ -89,9 +90,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
     let failedTests: string[] = [];
 
     /* Get all the challenges */
-    const challenges = course.modules
-      .map(m => m.challenges)
-      .reduce((flat, c) => flat.concat(c));
+    const challenges = course.modules.flatMap(m => m.challenges);
 
     /* For every challenge, execute the tests */
     outerLoop: for (const challenge of challenges) {
@@ -123,6 +122,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
           doc = challenge.solutionCode;
           script = `${EXPECTATION_LIBRARY}\n${getTestHarness(
             "",
+            doc,
             challenge.testCode,
           )}`;
           break;
@@ -143,32 +143,58 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
       let results: TestCase[] = [];
 
-      /* Load the document */
-      document.body.innerHTML = doc;
+      // The test code string might not be empty but still have no test code so we run this check.
+      const hasTestCode = stripComments(challenge.testCode).trim();
 
-      /* Add the message listener */
-      window.parent.postMessage = (data: IframeMessageEvent["data"]) => {
-        const { source, message } = data;
-        if (source === "TEST_RESULTS") {
-          results = JSON.parse(message);
+      if (!hasTestCode) {
+        results = results.concat([
+          {
+            testResult: false,
+            test: "Zero test cases",
+            message: `No test cases found for challenge [${challenge.id}] ${challenge.title}. Maybe this should be a media challenge?`,
+          },
+        ]);
+      } else {
+        /* Load the document */
+        document.body.innerHTML = doc;
+
+        /* Add the message listener */
+        window.parent.postMessage = (data: IframeMessageEvent["data"]) => {
+          const { source, message } = data;
+          if (source === "TEST_RESULTS") {
+            results = JSON.parse(message);
+          }
+        };
+
+        try {
+          handleAbsurdScriptEvaluation(script);
+        } catch (err) {
+          console.error("Error thrown from window.eval!", err);
+
+          /* The test failed, enter a failed test case manually */
+          const failedTestCase = { testResult: false };
+          results = [failedTestCase as TestCase];
         }
-      };
 
-      try {
-        handleAbsurdScriptEvaluation(script);
-      } catch (err) {
-        console.error("Error thrown from window.eval!", err);
-
-        /* The test failed, enter a failed test case manually */
-        const failedTestCase = { testResult: false };
-        results = [failedTestCase as TestCase];
+        /**
+         * Wait for the test script to execute and post a message back to
+         * the message listener.
+         */
+        try {
+          await waitForResults({ results });
+        } catch (err) {
+          // waitForResults can throw, it may if the polling timeout is
+          // exceeded. Catch the error here and handle it as a failed test.
+          results = [
+            {
+              testResult: false,
+              test: "Running waitForResults to retrieve test results",
+              message:
+                "waitForResults threw and error, probably because of a timeout",
+            },
+          ];
+        }
       }
-
-      /**
-       * Wait for the test script to execute and post a message back to
-       * the message listener.
-       */
-      await waitForResults({ results });
 
       /**
        * Evaluate the test results. There are potentially many result objects
@@ -278,7 +304,7 @@ const log = {
     log.print(msg);
   },
   fail: (challenge: Challenge) => {
-    const msg = `[FAILED]${log.getMessage(challenge)}`;
+    const msg = `>>> [FAILED]${log.getMessage(challenge)}`;
     log.print(msg);
   },
   skip: (challenge: Challenge) => {
