@@ -15,7 +15,7 @@ const StyledHeader = styled.header`
   position: relative;
   padding-top: ${BORDER}px;
   padding-bottom: 0px;
-  margin-bottom: 1.45rem;
+  margin-bottom: 0;
   background: #212121;
   border-bottom: 1px solid #404040;
 
