@@ -99,7 +99,7 @@ class NavigationOverlay extends React.Component<IProps> {
           style={{ zIndex: 3 }}
           onClick={e => e.stopPropagation()}
         >
-          <ColTItle>{course.title}</ColTItle>
+          <ColTitle>{course.title}</ColTitle>
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             <div style={{ position: "relative" }}>
@@ -117,7 +117,7 @@ class NavigationOverlay extends React.Component<IProps> {
           onClick={e => e.stopPropagation()}
         >
           <SpecialLeftShadow />
-          <ColTItle>
+          <ColTitle>
             <p>{module.title}</p>
             {hasSections && (
               <div>
@@ -126,7 +126,7 @@ class NavigationOverlay extends React.Component<IProps> {
                 </Button>
               </div>
             )}
-          </ColTItle>
+          </ColTitle>
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             {this.renderChallengeCodepressButton(course, module, -1)}
@@ -787,7 +787,7 @@ const Overlay = styled.div<{ visible: boolean }>`
   transition: all 0.2s ease-out;
 `;
 
-const ColTItle = styled.div`
+const ColTitle = styled.div`
   font-size: 18px;
   font-weight: 200;
   color: white;
