@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { DESKTOP, GREEN_GRADIENT } from './components';
+import Button from '@material-ui/core/Button';
 
 interface HeaderProps {
   siteTitle?: string;
@@ -12,12 +13,14 @@ interface HeaderProps {
 const BORDER = 2;
 
 const StyledHeader = styled.header`
+  display: flex;
   position: relative;
   padding-top: ${BORDER}px;
   padding-bottom: 0px;
   margin-bottom: 0;
   background: #212121;
   border-bottom: 1px solid #404040;
+  height: 50px;
 
   &:after {
     content: '';
@@ -31,13 +34,14 @@ const StyledHeader = styled.header`
 `;
 
 const Flexbox = styled(Container)`
-  display: block;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 
   ${DESKTOP} {
-    display: flex;
-    justify-content: space-between;
+    .menuToggle {
+      display: none;
+    }
   }
 `;
 
@@ -47,7 +51,6 @@ const Heading = styled.h1`
   font-family: 'Helvetica Neue', sans-serif;
   text-align: center;
   margin: 0;
-  margin-top: 5px;
 
   a {
     color: white;
@@ -59,12 +62,41 @@ const Heading = styled.h1`
   }
 `;
 
-const Nav = styled.nav`
+const Nav = styled.nav<{ isOpen: boolean }>`
   display: flex;
   justify-content: center;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  flex-direction: column;
+  background: #1e1e1e;
+  padding-bottom: 20px;
+  opacity: ${(props) => (props.isOpen ? '1' : '0')};
+  pointer-events: ${(props) => (props.isOpen ? 'all' : 'none')};
+  transform: translateY(${(props) => (props.isOpen ? '0' : '-15px')})
+    scale(${(props) => (props.isOpen ? '1' : '0.95')});
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  .externalLink {
+    margin: 0 20px;
+    margin-top: 10px;
+  }
 
   ${DESKTOP} {
+    opacity: 1;
+    pointer-events: all;
+    align-items: center;
+    position: static;
     justify-content: flex-start;
+    flex-direction: row;
+    padding-bottom: 0;
+    transform: unset;
+
+    .externalLink {
+      margin: 0;
+    }
   }
 `;
 
@@ -103,35 +135,56 @@ const NavLink = styled(Link)`
   }
 `;
 
-const Header = ({ siteTitle = 'Pairwise' }: HeaderProps) => (
-  <StyledHeader>
-    <Flexbox>
-      <Heading>
-        <Link
-          to="/"
-          style={{
-            textDecoration: 'none',
-            whiteSpace: 'nowrap',
-            display: 'flex',
-            alignItems: 'center',
+const Header = ({ siteTitle = 'Pairwise' }: HeaderProps) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  return (
+    <StyledHeader>
+      <Flexbox onClick={() => setIsOpen(false)}>
+        <Heading>
+          <Link
+            to="/"
+            style={{
+              textDecoration: 'none',
+              whiteSpace: 'nowrap',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <img
+              style={{ width: 'auto', height: 20, marginRight: 20 }}
+              src={require('../images/logo.svg')}
+              alt="Pairwise Logo"
+            />
+            {siteTitle}
+          </Link>
+        </Heading>
+        <Button
+          variant="outlined"
+          className="menuToggle"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(!isOpen);
           }}
         >
-          <img
-            style={{ width: 'auto', height: 20, marginRight: 20 }}
-            src={require('../images/logo.svg')}
-            alt="Pairwise Logo"
-          />
-          {siteTitle}
-        </Link>
-      </Heading>
-      <Nav>
-        <NavLink to="/curriculum">Curriculum</NavLink>
-        <NavLink to="/faq">FAQ</NavLink>
-        <NavLink to="/about">About</NavLink>
-        <NavLink to="/contact">Contact</NavLink>
-      </Nav>
-    </Flexbox>
-  </StyledHeader>
-);
+          Menu
+        </Button>
+        <Nav isOpen={isOpen}>
+          <NavLink to="/curriculum">Curriculum</NavLink>
+          <NavLink to="/faq">FAQ</NavLink>
+          <NavLink to="/about">About</NavLink>
+          <NavLink to="/contact">Contact</NavLink>
+          <Button
+            className="externalLink"
+            size="small"
+            variant="outlined"
+            href="https://app.pairwise.tech/login"
+          >
+            Log In
+          </Button>
+        </Nav>
+      </Flexbox>
+    </StyledHeader>
+  );
+};
 
 export default Header;
