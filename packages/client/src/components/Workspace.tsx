@@ -57,6 +57,7 @@ import {
   composeWithProps,
   constructDataBlobFromChallenge,
   challengeRequiresWorkspace,
+  getFileMetaByChallengeType,
 } from "tools/utils";
 import {
   Tab,
@@ -110,38 +111,6 @@ interface IState {
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
-
-// Get an appropriate name and file extensionbased on a challenge type
-const getFileMetaByChallengeType = (x: CHALLENGE_TYPE) => {
-  const name = "index";
-
-  switch (x) {
-    case "markup":
-      return {
-        ext: "html",
-        name,
-      };
-    case "react":
-      return {
-        ext: "tsx",
-        name,
-      };
-    case "typescript":
-      return {
-        ext: "ts",
-        name,
-      };
-    case "media":
-    case "section":
-    case "project":
-    case "guided-project":
-    case "special-topic":
-      return null;
-    default:
-      assertUnreachable(x);
-      break;
-  }
-};
 
 /** ===========================================================================
  * React Component

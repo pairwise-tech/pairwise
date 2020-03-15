@@ -450,3 +450,35 @@ export const logWhatChanged = (
       );
     });
 };
+
+// Get an appropriate name and file extensionbased on a challenge type
+export const getFileMetaByChallengeType = (x: CHALLENGE_TYPE) => {
+  const name = "index";
+
+  switch (x) {
+    case "markup":
+      return {
+        ext: "html",
+        name,
+      };
+    case "react":
+      return {
+        ext: "tsx",
+        name,
+      };
+    case "typescript":
+      return {
+        ext: "ts",
+        name,
+      };
+    case "media":
+    case "section":
+    case "project":
+    case "guided-project":
+    case "special-topic":
+      return null;
+    default:
+      assertUnreachable(x);
+      break;
+  }
+};
