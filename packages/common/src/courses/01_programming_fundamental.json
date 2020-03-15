@@ -845,6 +845,17 @@
           "content": "As you can see from this challenge, `{...}` can be used to create a new scope. The new local scope created by a pair of brackets can be used to redefine variables which exist in the outer scope, or it can be used to define values which _cannot_ be accessed by the outer scope. This is a very handy way to help you organize your code\\!\n\nHowever, as we will see next brackets are not the only way to create a new local scope."
         },
         {
+          "id": "hyOjHRwi",
+          "type": "typescript",
+          "title": "Creating Local Scope with a Function",
+          "instructions": "Function declarations also create a local scope owned by that function within the function body. This makes the function body a unique namespace where you can define values or change values which \\(usually\\) will not impact the outer scope. Dive into the code to see what we mean\\!",
+          "testCode": "test(\"Change the value of the `outerValue` variable in the `aPrivateFunctionSpace` space to be `\\\"Hello, from the inner side!\\\"`.\", () => {\n  const result = aPrivateFunctionSpace();\n  expect(result).toBe(\"Hello, from the inner side!\");\n  expect(outerValue).toBe(\"Hello, from the outer side!\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "const outerValue = \"Hello, from the outer side!\";\n\n// The function creates it's only private scope\nconst aPrivateFunctionSpace = () => {\n    // Change the code here!\n    const outerValue = \"\";\n    return outerValue;\n}\n\nconst innerValue = aPrivateFunctionSpace();\n\n// Log the results\nconsole.log(`innerValue: ${innerValue}`);\nconsole.log(`outerValue: ${outerValue}`);",
+          "solutionCode": "const outerValue = \"Hello, from the outer side!\";\n\n// The function creates it's only private scope\nconst aPrivateFunctionSpace = () => {\n    // Change the code here!\n    const outerValue = \"Hello, from the inner side!\";\n    return outerValue;\n}\n\nconst innerValue = aPrivateFunctionSpace();\n\n// Log the results\nconsole.log(`innerValue: ${innerValue}`);\nconsole.log(`outerValue: ${outerValue}`);",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
