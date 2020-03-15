@@ -444,7 +444,6 @@ class Workspace extends React.Component<IProps, IState> {
       },
     );
 
-    debug("adding ts types");
     /**
      * This is a separate model which provides JSX type information. See
      * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
