@@ -20,6 +20,50 @@
           "content": ""
         },
         {
+          "id": "Ba5aAVqP",
+          "type": "markup",
+          "title": "HTML Basics",
+          "instructions": "Every webpage you see on the internet is composed of HTML. The last challenge was s simple example. Here is a more complex one\\!",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "<html>\n    <header>\n        <title>My First Webpage</title>\n        <style>\n            body {\n                background: #adffe1;\n            }\n        </style>\n    </header>\n    <body>\n        <h1>My First Webpage</h1>\n        <p>I've always wanted to build a website! Now, I finally can!</p>\n    </body>\n</html>",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "Oqha$qtc",
+          "type": "markup",
+          "title": "The Beautiful World of CSS",
+          "instructions": "HTML provides the structure, CSS provides the _style_.",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "Ve$3UsQ5",
+          "type": "typescript",
+          "title": "Get Started Programming",
+          "instructions": "HTML and CSS are the building blocks for creating webpages, but to give a webpage real functionality you need a programming language. That's where JavaScript comes in.",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// This is a function\nfunction sayMyName() {\n    // The next line contains a variable called 'name'.\n    const name = \"\";\n    console.log(name);\n}\n\nsayMyName();",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "DCpPddyK",
+          "type": "typescript",
+          "title": "Enter TypeScript",
+          "instructions": "You may have heard of JavaScript before, but the word TypeScript may not ring a bell yet\\! There's a lot of code in the editor below. Don't worry if it doesn't make sense to you yet\\! Take a look and see if you can understand what's going on. To solve the challenge, simple uncomment the code on line 28 \\(remove the two slashes at the beginning of the line\\).",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Variables with type signatures!\nconst aString: string = \"I am a string!\";\nconst aNumber: number = 52198;\nconst aBoolean: boolean = true;\nconst aNull: null = null;\nconst anUndefined: undefined = undefined;\n\ntype InterestingThing = string | number | boolean | null | undefined;\ntype InterestingThingBox = InterestingThing[];\n\n// A box of interesting things!\nconst interestingBoxOfThings: InterestingThingBox = [\n    aString,\n    aNumber,\n    aBoolean,\n    aNull,\n    anUndefined,\n];\n\n// A function to see what's in the interesting box!\nconst whatsInTheInterestingBox = (box: InterestingThingBox) => {\n    console.log(\"Contents of the interesting box:\");\n    for (const thing of box) {\n        console.log(thing);\n    }\n}\n\n// Pass the box to the function to see what's inside!\n// whatsInTheInterestingBox(interestingBoxOfThings);",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "yxZjmD0o",
           "type": "media",
           "title": "Welcome to Pairwise! 🎉",
@@ -28,7 +72,7 @@
           "videoUrl": "https://www.youtube.com/embed/VRQNU8UNuWM",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Now that you've solved the first challenge and seen how easy it is to get started, we want to take a moment to introduce you to how Pairwise works and help you get started working through the \ncourse\\.\n\n## The Course\n\nThe Pairwise curriculum is composed of 13 modules. Together, they give you a complete education in full\\-stack software development. Pairwise can give you all the skills to start a new career in software development. Our curriculum focuses on teaching **TypeScript, React, **and** NodeJS**. If you are curious more about why we chose these technologies, feel free to [read our rationale here](https://www.pairwise.tech/curriculum).\n\nYou can access the course navigation by clicking the menu icon in the top left. This is always available for you to navigate to any challenge.\n\nThe first two modules introduce HTML/CSS and TypeScript, so they cover many of the basics of web development and programming. These two modules are completely free and no signup is required\\! However, you can create an account at any time \\(also free\\!\\) to track your progress \\(don't worry, we will track your progress even if you don't have an account yet\\).\n\nIf you do decide to continue and complete the entire course, there will be a one\\-time payment which will give you lifetime access to the course. You can make this payment with a credit card at anytime after signing up.\n\nThe primary mode of learning is through short, interactive coding challenges like the one you just solved. If you persist through the entire course, you will also build up a portfolio of projects you build and deploy on your own\\! You can use this portfolio as a showcase of your skills to future employers.\n\n## Getting Started\n\nEnough talking\\! To start learning you just need to start on the next challenge. Each challenge should just take 5\\-10 minutes to complete and will be simple and interactive just like the last. We know you're eager to click that **Next Challenge** button, but before you do we encourage you to watch this short video tutorial of how to use the _Pairwise Workspace_. It will give you some helpful tips which will help you get started, and after that we'll get out of your way\\! Good luck and welcome\\!\n\n++**TODO:**++** Add the intro video\\!**"
+          "content": "Now that you've solved your first few challenges and seen how easy it is to get started, we want to take a moment to introduce you to how Pairwise works and help you get started working through the \ncourse\\.\n\n## The Course\n\nThe Pairwise curriculum is composed of 13 modules. Together, they give you a complete education in full\\-stack software development. Pairwise can give you all the skills to start a new career in software development. Our curriculum focuses on teaching **TypeScript, React, **and** NodeJS**. If you are curious more about why we chose these technologies, feel free to [read our rationale here](https://www.pairwise.tech/curriculum).\n\nYou can access the course navigation by clicking the menu icon in the top left. This is always available for you to navigate to any challenge.\n\nThe first two modules introduce HTML/CSS and TypeScript, so they cover many of the basics of web development and programming. These two modules are completely free and no signup is required\\! However, you can create an account at any time \\(also free\\!\\) to track your progress \\(don't worry, we will track your progress even if you don't have an account yet\\).\n\nIf you do decide to continue and complete the entire course, there will be a one\\-time payment which will give you lifetime access to the course. You can make this payment with a credit card at anytime after signing up.\n\nThe primary mode of learning is through short, interactive coding challenges like the one you just solved. If you persist through the entire course, you will also build up a portfolio of projects you build and deploy on your own\\! You can use this portfolio as a showcase of your skills to future employers.\n\n## Getting Started\n\nEnough talking\\! To start learning you just need to start on the next challenge. Each challenge should just take 5\\-10 minutes to complete and will be simple and interactive just like the last. We know you're eager to click that **Next Challenge** button, but before you do we encourage you to watch this short video tutorial of how to use the _Pairwise Workspace_. It will give you some helpful tips which will help you get started, and after that we'll get out of your way\\! Good luck and welcome\\!\n\n**TODO: Add the intro video\\!**"
         },
         {
           "id": "JzokCvMM",
