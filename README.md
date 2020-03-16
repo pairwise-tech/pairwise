@@ -1,5 +1,7 @@
 # Welcome to Pairwise!
 
+<img width="75" height="75" src="https://user-images.githubusercontent.com/18126719/76191795-1f7ac500-621b-11ea-8e4c-e615e05eae9a.png" />
+
 The **Pairwise** codebase includes a React app client application, a NestJS server application, and other various services, all bundled up in a monorepo using Lerna and Yarn workspaces.
 
 ## Contents
