@@ -364,6 +364,28 @@
           "content": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language: TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
         },
         {
+          "id": "8p4BZqPl",
+          "type": "section",
+          "title": "Logging and Debugging",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "One of the first things to learn when learning programming is how to print out values from your program\\! This allows you to get information and feedback from your program to determine if it is working properly and also to fix bugs and problems which may develop in your program over time.\n\nFor example, maybe one day your server will show you some error message like:\n\n```typescript\nUncaught ReferenceError: users is not defined\n    at UserService (UserService.tsx:194)\n    at renderWithHooks (react-dom.development.js:16260)\n    at updateFunctionComponent (react-dom.development.js:18347)\n    at beginWork$1 (react-dom.development.js:20176)\n    at HTMLUnknownElement.callCallback (react-dom.development.js:336)\n    at Object.invokeGuardedCallbackDev (react-dom.development.js:385)\n    at invokeGuardedCallback (react-dom.development.js:440)\n    at beginWork$$1 (react-dom.development.js:25780)\n    at performUnitOfWork (react-dom.development.js:24695)\n    at workLoopSync (react-dom.development.js:24671)\n    at performSyncWorkOnRoot (react-dom.development.js:24270)\n    at react-dom.development.js:12199\n\n```\n\n😰😰😰\n\nThis scary message is telling you some value your program thought existed did not exist. The first thing might want to do is print out the value of `users` or the data `users` is coming from to help you see what it is and how it can become `undefined`.\n\nIn this section we will learn how to do this\\!"
+        },
+        {
+          "id": "5mpYgBmX",
+          "type": "typescript",
+          "title": "Logging Values",
+          "instructions": "TypeScript has a built\\-in utility to print values called `console`. The `console` object provides several methods to help you log values, the most commonly used of which is `console.log`. Go ahead and log some values and take a look at the panel to the right to see the results\\!",
+          "testCode": "test(\"The three variables `logMe`, `alsoLogMe`, and `logMeAsWell` should be logged to the console using the `console` `log` method.\", () => {\n  expect(__user_code_string__.includes(\"console.log(logMe)\")).toBeTruthy();\n  expect(__user_code_string__.includes(\"console.log(alsoLogMe)\")).toBeTruthy();\n  expect(__user_code_string__.includes(\"console.log(logMeAsWell)\")).toBeTruthy();\n});\n",
+          "videoUrl": "",
+          "starterCode": "const logMe = \"Hi, it's me!\";\n\nconst alsoLogMe = [1,2,3,4,5];\n\nconst logMeAsWell = {\n    users: [\n        \"Sam\",\n        \"Jerry\",\n        \"Lisa\",\n    ]\n};\n",
+          "solutionCode": "const logMe = \"Hi, it's me!\";\n\nconst alsoLogMe = [1,2,3,4,5];\n\nconst logMeAsWell = {\n    users: [\n        \"Sam\",\n        \"Jerry\",\n        \"Lisa\",\n    ]\n};\n\nconsole.log(logMe);\nconsole.log(alsoLogMe);\nconsole.log(logMeAsWell);",
+          "content": ""
+        },
+        {
           "id": "0gih2c1M",
           "type": "section",
           "title": "Types and Type Primitives",
