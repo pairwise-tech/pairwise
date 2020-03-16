@@ -386,6 +386,17 @@
           "content": ""
         },
         {
+          "id": "RL6JBhYL",
+          "type": "typescript",
+          "title": "Console Warn and Error",
+          "instructions": "The `console` provides other methods as well which you can use to call attention to the values you are printing. There's some code in the editor below. Don't worry if you don't understand all of it. Take a look at lines 7 and 11. Line 7 uses the `console.warn` method to print a warning statement. In line 11, we want to use the `console.error` method to print the error which occurs\\! Go ahead and give it a try\\!",
+          "testCode": "test(\"The `console` `error` method is used to print the error `message` thrown by the `doSomethingDangerous` function.\", () => {\n  expect(__user_code_string__.includes(\"console.error(message)\")).toBeTruthy();\n});\n",
+          "videoUrl": "",
+          "starterCode": "const doSomethingDangerous = () => {\n    throw new Error(\"Danger, danger!!!\");\n}\n\nconst doSomethingSafely = () => {\n    // Print a warning here before we do something dangerous\n    console.warn(\"We are about to do something dangerous!\");\n    try {\n        doSomethingDangerous();\n    } catch (error) {\n        const message = error.message;\n        // Log the error here!\n    }\n}\n\ndoSomethingSafely();\n",
+          "solutionCode": "const doSomethingDangerous = () => {\n    throw new Error(\"Danger, danger!!!\");\n}\n\nconst doSomethingSafely = () => {\n    // Print a warning here before we do something dangerous\n    console.warn(\"We are about to do something dangerous!\");\n    try {\n        doSomethingDangerous();\n    } catch (error) {\n        const message = error.message;\n        // Log the error here!\n        console.error(message);\n    }\n}\n\ndoSomethingSafely();",
+          "content": ""
+        },
+        {
           "id": "0gih2c1M",
           "type": "section",
           "title": "Types and Type Primitives",
