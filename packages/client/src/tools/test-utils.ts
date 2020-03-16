@@ -78,14 +78,14 @@ const __replacer = (key, value) => {
   return value;
 }
 
-let __secret_console_log_box = [];
-let __secret_console_warn_box = [];
-let __secret_console_error_box = [];
-let __secret_console_info_box = [];
+let __secret_log_box = [];
+let __secret_warn_box = [];
+let __secret_error_box = [];
+let __secret_info_box = [];
 
 const __interceptConsoleLog = (...value) => {
   const message = JSON.stringify(value, __replacer);
-  __secret_console_log_box.push(message);
+  __secret_log_box.push(message);
   window.parent.postMessage({
     message,
     source: "LOG",
@@ -94,7 +94,7 @@ const __interceptConsoleLog = (...value) => {
 
 const __interceptConsoleInfo = (...value) => {
   const message = JSON.stringify(value, __replacer);
-  __secret_console_info_box.push(message);
+  __secret_info_box.push(message);
   window.parent.postMessage({
     message,
     source: "INFO",
@@ -103,7 +103,7 @@ const __interceptConsoleInfo = (...value) => {
 
 const __interceptConsoleWarn = (...value) => {
   const message = JSON.stringify(value, __replacer);
-  __secret_console_warn_box.push(message);
+  __secret_warn_box.push(message);
   window.parent.postMessage({
     message,
     source: "WARN",
@@ -112,7 +112,7 @@ const __interceptConsoleWarn = (...value) => {
 
 const __interceptConsoleError = (...value) => {
   const message = JSON.stringify(value, __replacer);
-  __secret_console_error_box.push(message);
+  __secret_error_box.push(message);
   window.parent.postMessage({
     message,
     source: "ERROR",
