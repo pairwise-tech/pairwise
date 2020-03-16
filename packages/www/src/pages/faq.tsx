@@ -95,6 +95,8 @@ advantages:
 * It can help learn. When TypeScript gives you an error it will often helpfully point to what's wrong rather than waiting until you run it to break.
 * It's widely used in industry and therefore gives you a head start in the job market.
 
+Furthermore, by learning TypeScript you've also learned JavaScript. So you'll be well-equipped to use either one.
+
 ### Why not Python?
 
 Python is also an excellent choice for a first programming language, However
