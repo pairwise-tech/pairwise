@@ -397,6 +397,17 @@
           "content": ""
         },
         {
+          "id": "pqwU3tyw",
+          "type": "typescript",
+          "title": "Console Info",
+          "instructions": "There is another useful `console` method, `info`. Take a look at the editor and give it a try\\!",
+          "testCode": "test(\"The `info` method should use the `console` `info` method to log out the `message` argument.\", () => {\n  expect(__user_code_string__.includes(\"console.info(message)\")).toBeTruthy();\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Log a message\nconst log = (message: string) => {\n    console.log(message);\n}\n\n// Show a warning\nconst warn = (message: string) => {\n    console.warn(message);\n}\n\n// Show an error\nconst error = (message: string) => {\n    console.error(message);\n}\n\n// Show an info message\nconst info = (message: string) => {\n    // Write your code here!\n}\n\nlog(\".log display general data\");\nwarn(\".warn shows a warning\");\nerror(\".error displays error information!\");\ninfo(\".info what does .info do???\");",
+          "solutionCode": "// Log a message\nconst log = (message: string) => {\n    console.log(message);\n}\n\n// Show a warning\nconst warn = (message: string) => {\n    console.warn(message);\n}\n\n// Show an error\nconst error = (message: string) => {\n    console.error(message);\n}\n\n// Show an info message\nconst info = (message: string) => {\n    // Write your code here!\n    console.info(message);\n}\n\nlog(\".log display general data\");\nwarn(\".warn shows a warning\");\nerror(\".error displays error information!\");\ninfo(\".info what does .info do???\");",
+          "content": ""
+        },
+        {
           "id": "0gih2c1M",
           "type": "section",
           "title": "Types and Type Primitives",
