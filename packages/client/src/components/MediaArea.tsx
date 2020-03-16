@@ -280,10 +280,11 @@ const YoutubeEmbed = (props: { url: string }) => {
 
   if (isEmbedHidden) {
     return (
-      <div
+      <VideoWrapper
         style={{
-          width,
+          width: "100%",
           height,
+          paddingBottom: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -298,7 +299,7 @@ const YoutubeEmbed = (props: { url: string }) => {
           this.
         </p>
         <Button onClick={() => setIsEmbedHidden(false)}>Show Anyway</Button>
-      </div>
+      </VideoWrapper>
     );
   }
 
