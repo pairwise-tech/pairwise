@@ -44,6 +44,7 @@ const ChallengeTypeMenu = ({
         itemListRenderer={getRenderItemList(150)}
         itemRenderer={(x, { handleClick, modifiers }) => (
           <Button
+            id={`challenge-type-${x.value}`}
             style={{ flexShrink: 0 }}
             key={x.value}
             text={x.label}

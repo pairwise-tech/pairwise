@@ -137,7 +137,10 @@ const ApplicationContainer = (props: IProps) => {
   const displayNavigationArrows = location.includes("workspace");
   const isWorkspaceRequired = challengeRequiresWorkspace(challenge);
   const showMediaAreaButton =
-    challenge && isWorkspaceRequired && (CODEPRESS || hasMediaContent);
+    displayNavigationArrows &&
+    challenge &&
+    isWorkspaceRequired &&
+    (CODEPRESS || hasMediaContent);
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
@@ -265,7 +268,7 @@ const ApplicationContainer = (props: IProps) => {
                 content={mobileMenuItems}
                 position={Position.BOTTOM_RIGHT}
               >
-                <Button style={{ marginRight: 20 }} text="•••" />
+                <IconButton style={{ marginRight: 20 }} icon="more" />
               </Popover>
             </div>
           )}
