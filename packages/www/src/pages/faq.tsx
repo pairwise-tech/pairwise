@@ -24,15 +24,20 @@ const QUESTIONS: FaqItem[] = [
     Is this free?
     `,
     answer: `
-The first module is free. This module will teach you how to
-program and give you a foundation on which you can build. If you'd
-like to take the first section and then go off and learn the rest on your
-own feel free! The creators of this course did much the same and it's
-certainly possible. The remaining modules will teach you all you need to
-know to go from a basic programming level to being able to get a job as
-a software engineer. You will learn how to build applications, how to
-architect systems, how to break in to the software industry, and many
-more things.
+It's free to learn how to program. The paid course is for learning to build apps
+and/or get a job as a software engineer.
+
+The free modules will teach you how to program and give you a foundation on
+which you can build. 
+
+> If you'd like to take the first section and then go off and learn the
+rest on your own feel free! 
+
+The creators of this course did much the same and it's certainly possible. The
+remaining modules will teach you all you need to know to go from a basic
+programming level to being able to get a job as a software engineer. You will
+learn how to build applications, how to architect systems, how to break in to
+the software industry, and many more things.
     `,
   },
   {
@@ -40,10 +45,8 @@ more things.
     How much will the full course cost?
     `,
     answer: `
-We haven't decided yet. We're currently focused on building out
-a great course that will achieve our goals for our students. We believe in
-providing value first and deciding what to charge later, once we're sure
-that what we're selling is truly worth what we charge.
+The course is currently in-progress and doesn't have a set price, however, you
+can pre-purchase the course for $50 and lock in full-access.
     `,
   },
   {
@@ -52,8 +55,8 @@ that what we're selling is truly worth what we charge.
     `,
     answer: `
 Yes, but not everyone will. Coding is not for everyone, but you won't know
-if it's for you or not until you try. By the end of the first module, which
-is entirely free, you should have a good sense of what programming is
+if it's for you or not until you try. By the end of the first few modules, which
+are entirely free, you should have a good sense of what programming is
 like and whether or not you want to continue.
     `,
   },
@@ -62,12 +65,12 @@ like and whether or not you want to continue.
     What will I learn?
     `,
     answer: `
-You will learn modern fullstack software development skills, specifically
-how to build web and mobile applications using TypeScript, React, and
-NodeJS. You will learn how to build, test, and deploy these applications,
-along with a variety of other topics. In addition, you will gain a solid
-foundation in fundamental programming skills which will be useful in an
-software development career.
+You will learn how to build full software. By the end of the course you will be
+able to build applications like Twitter, Facebook, Airbnb, etc. In other words you will have all the skills you need to:
+
+* Get a job
+* Work for yourself
+* Build a startup
     `,
   },
   {
@@ -75,11 +78,34 @@ software development career.
     Why TypeScript?
     `,
     answer: `
-TypeScript is a typed, superset of JavaScript which is the language that
-powers the web. All modern websites use JavaScript to deliver engaging web
-experiences. TypeScript is rapidly becoming the preferred way to develop
-JavaScript applications by professional developers and is therefore the
-starting point for our curriculum.
+TypeScript is a superset of JavaScript which is the language that
+powers the web. JavaScript is the most ubiquitous programming language in the
+world, which means by learning it you will be able to read and understand a
+tremendous amount of applications and code in the wild. Learning JavaScript is
+akin to learning English in that way: Once you know it you have access to a vast
+font of knowledge that was previously inaccessible.
+
+### Why not JavaScript?
+
+Given what we said above, JavaScript––rather than Typescript––might seem like
+the obvious choice. In many ways it is, but TypeScript offers some specific
+advantages:
+
+* You learn types right away. In JavaScript you still have types, but it's not explicit.
+* It can help learn. When TypeScript gives you an error it will often helpfully point to what's wrong rather than waiting until you run it to break.
+* It's widely used in industry and therefore gives you a head start in the job market.
+
+Furthermore, by learning TypeScript you've also learned JavaScript. So you'll be well-equipped to use either one.
+
+### Why not Python?
+
+Python is also an excellent choice for a first programming language, However
+there are several reasons we believe it's less advantageous for your first
+language.
+
+* It doesn't run in a web browser. Even if you don't want to ultimately build web apps it's a great place to start learning because you get visual feedback.
+* The differences between Python 2 and Python 3 can be confusing and cause unexpected bugs, especially when you're first starting.
+* It's easy to pick up after learning JavaScript. Many JavaScript features were inspired directly by Python and much of what you learn in this course is universal to programming in general, not just JavaScript.
     `,
   },
   {
@@ -128,11 +154,21 @@ accessible to anyone in the world who is interested.
     Should I start this course or join a bootcamp?
     `,
     answer: `
-We cannot make this decision for you, however, if you have any hesitation
-about joining a bootcamp this course should be able to give you a strong
-signal to help you make that choice. Generally speaking, the content and
-skills we provide here are very similar to the skills you will receive
-from most immersive bootcamp experiences.
+You don't have to choose. We recommend you start with the first few modules of
+this course to gain a foundation in programming. It's free and most bootcamps
+will want to see that you've done some programming before admitting you.
+
+Those first modules will give you a taste of programming and build up your
+foundational knowledge, after which point you will know if you want to continue
+down this path without spending $15,000 on a bootcamp.
+
+Furthermore, if you decide to continue you can purchase the full Pairwise course
+which will cover roughly the same curriculum as an immersive bootcamp ([see the
+curriculum page](/curriculum/)).
+
+What bootcamps really provide that Pairwise does not is in-person training. If
+attending in-person classes is how you learn most effectively then a bootcamp
+may be exactly right for you.
     `,
   },
   {
@@ -141,13 +177,23 @@ from most immersive bootcamp experiences.
     `,
     answer: `
 A bootcamp is typically a multi-week fulltime, immersive program with
-tuition usually greater than $10,000 USD. There are many of these programs
-and many of them are great ways to learn to code. However, not everyone
-has the time and/or money to make a bootcamp a viable option. The
-curriculum here is an affordable alternative to a bootcamp education
-which anyone can use at their own pace. It can help you decide if a bootcamp
-is right for you, or it can allow you to completely skip the need to attend
-a bootcamp.
+tuition usually greater than $10,000 USD. Many of these are great ways to learn code, but there are significant tradeoffs:
+
+* High cost
+* Extremely high time commitment
+* Location dependent (you have to be there in person)
+
+Not everyone has the money, the time, and lives in the right city to make a
+bootcamp a viable option. Pairwise is an alternative to a bootcamp education
+which anyone can use at their own pace from anywhere with an internet
+connection.
+
+Also, the programming fundamentals modules are completely free so we recommend
+you go through those modules first. In our (completely unbiased) opinion
+Pairwise is a great choice!
+
+It can help you decide if a bootcamp is right for you, or it can allow you to
+completely skip the need to attend a bootcamp.
     `,
   },
   {

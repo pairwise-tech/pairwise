@@ -131,6 +131,12 @@ export const generateEmptyModule = (): Module => ({
   free: false /* All challenges are locked by default */,
 });
 
+const starterTestCode = `// Write your tests here:
+test("Write your test assertion here", () => {
+  expect(true).toBe(true);
+});
+`;
+
 export const generateEmptyChallenge = (
   overwrite: Partial<Challenge> = {},
 ): Challenge => ({
@@ -138,7 +144,7 @@ export const generateEmptyChallenge = (
   type: "markup",
   title: "[EMPTY...]",
   instructions: "",
-  testCode: "// test('message', () => expect(...))",
+  testCode: starterTestCode,
   videoUrl: "",
   starterCode: "",
   solutionCode: "",
@@ -222,8 +228,11 @@ export const partitionChallengesBySection = (
     const SPECIAL_TOPIC_BOUNDARY =
       reachedSpecialTopics && !firstReachedSpecialTopics;
 
+    const CURRENT_SECTION_HAS_CONTENT =
+      !!currentSection.section || currentSection.challenges.length > 0;
+
     if (SPECIAL_TOPIC_BOUNDARY) {
-      if (currentSection.challenges.length > 0) {
+      if (CURRENT_SECTION_HAS_CONTENT) {
         sections = sections.concat(currentSection);
       }
       const nextSection: NavigationChallengeSection = {
@@ -233,7 +242,7 @@ export const partitionChallengesBySection = (
       firstReachedSpecialTopics = true;
       currentSection = nextSection;
     } else if (PROJECT_BOUNDARY) {
-      if (currentSection.challenges.length > 0) {
+      if (CURRENT_SECTION_HAS_CONTENT) {
         sections = sections.concat(currentSection);
       }
       const nextSection: NavigationChallengeSection = {
@@ -243,7 +252,7 @@ export const partitionChallengesBySection = (
       firstReachedProjects = true;
       currentSection = nextSection;
     } else if (SHOULD_END_SECTION) {
-      if (currentSection.challenges.length > 0) {
+      if (CURRENT_SECTION_HAS_CONTENT) {
         sections = sections.concat(currentSection);
       }
 
@@ -427,4 +436,58 @@ export const formatDate = (rawDate: Date) => {
   const date = new Date(rawDate);
   const formatted = date.toLocaleDateString("en-US", options);
   return formatted;
+};
+
+export const logWhatChanged = (
+  a: { [k: string]: any },
+  b: { [k: string]: any },
+) => {
+  Object.keys(b)
+    .filter(key => {
+      return a[key] !== b[key];
+    })
+    .map(key => {
+      const ax = a[key];
+      const bx = b[key];
+      console.log(
+        "changed property:",
+        key,
+        "from",
+        typeof ax === "function" ? "[FUNC A]" : ax,
+        "to",
+        typeof bx === "function" ? "[FUNC B]" : bx,
+      );
+    });
+};
+
+// Get an appropriate name and file extensionbased on a challenge type
+export const getFileMetaByChallengeType = (x: CHALLENGE_TYPE) => {
+  const name = "index";
+
+  switch (x) {
+    case "markup":
+      return {
+        ext: "html",
+        name,
+      };
+    case "react":
+      return {
+        ext: "tsx",
+        name,
+      };
+    case "typescript":
+      return {
+        ext: "ts",
+        name,
+      };
+    case "media":
+    case "section":
+    case "project":
+    case "guided-project":
+    case "special-topic":
+      return null;
+    default:
+      assertUnreachable(x);
+      break;
+  }
 };

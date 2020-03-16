@@ -145,6 +145,9 @@ class Expectation {
   toBeFalsy() {
     assertEqual(!Boolean(this.value), false);
   }
+  toBeDefined() {
+    assertEqual(typeof this.value !== undefined, true);
+  }
   toContain(val) {
     assert(this.value.includes(val), `${val} not found in ${arr.join(",")}`);
   }
