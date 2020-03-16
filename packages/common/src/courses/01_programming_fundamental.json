@@ -419,6 +419,17 @@
           "content": "If you've solved the challenge above correctly you are now familiar with one of the classic programming errors \\(and [one of the most difficult problems in computer science](https://twitter.com/codinghorror/status/506010907021828096?lang=en) 😉\\): _off by one errors._\n\nOff by one errors are errors where a program is _off by one..._ For example, accessing a value just outside the start or end of a list.\n\nThis is a classic error and a common pitfall of writing for loops to perform manual iteration\\!\n\n```typescript\nfor (let i = 0; i < limit; i++) {\n    const item = list[i];\n    // Do something with the item.\n    const contents = item.getContents();\n    // ...\n    // But what if there is nothing at inside list[i] !?!?!?\n}\n\n```\n\nWatch out for this type of error whenever you are writing for loops by hand\\!"
         },
         {
+          "id": "jaZYVeNS",
+          "type": "media",
+          "title": "Debugging Skills",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Debugging is much more than just logging values in a program.\n\nAs you learn more you will find that it encompasses everything from how you write the program in the first place to the detective\\-like skillset required to investigate and debug cryptic errors in production systems.\n\nSometimes the \"error\" is a user saying \"I tried to log in and it didn't work\".\n\nOr the error is an stack\\-trace in the logs for a production server which says some value was `undefined` which you did not thing could ever be `undefined`.\n\nHow do you get to the bottom of the problem\\!?\nHow do you find the causes\\!?\nHow do you recreate the conditions which caused the error\\!?\nHow do you do this quickly and efficiently when you have live users who cannot use your product because of the bug\\!?\nHow do you fix the bug in a sound way instead just adding some quick workaround\\!?\n\nAll of this comprises the art of debugging\\! Learning how to use the `console` in TypeScript is just the starting point. We encourage you to make use of the `console` logging utilities as you work through the Pairwise curriculum and work on your own projects to start getting familiar with printing out values to inspect and debug your programs.\n\nSuccessful debugging is a difficult skill which takes time to become experienced with. Over time we will introduce additional tools and approaches for you to use."
+        },
+        {
           "id": "0gih2c1M",
           "type": "section",
           "title": "Types and Type Primitives",
