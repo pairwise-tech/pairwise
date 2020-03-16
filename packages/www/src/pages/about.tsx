@@ -56,7 +56,7 @@ const About = () => {
           <Typography variant="h5">Why is your about page so short?</Typography>
           <Markdown
             source={`
-We known we should really say more here, and we will! There's just
+We know we should really say more here, and we will! There's just
 more important things we need to prioritize while we build out the
 course. If you have any questions at all don't hesitate to get in
 touch. The contact form will immediately drop a message into one of
