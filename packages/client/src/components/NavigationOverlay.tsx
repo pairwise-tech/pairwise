@@ -409,21 +409,31 @@ class NavigationOverlay extends React.Component<IProps> {
                 {sectionChallengeCompleteCount} of {sectionChallengeCount}{" "}
                 Complete
               </Badge>
-            ) : challenge.videoUrl ? (
-              <Tooltip
-                usePortal={false}
-                position="left"
-                content="Includes Video"
-              >
-                <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
-              </Tooltip>
-            ) : null}
-            {!isSection && isChallengeComplete && (
-              <Icon
-                color={COLORS.SECONDARY_PINK}
-                iconSize={Icon.SIZE_LARGE}
-                icon="endorsed"
-              />
+            ) : (
+              <NavIcons>
+                {challenge.videoUrl && (
+                  <Tooltip
+                    usePortal={false}
+                    position="left"
+                    content="Includes Video"
+                  >
+                    <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
+                  </Tooltip>
+                )}
+                {!isSection && isChallengeComplete && (
+                  <Tooltip
+                    usePortal={false}
+                    position="left"
+                    content="Challenge Completed"
+                  >
+                    <Icon
+                      className="iconCompleted"
+                      iconSize={Icon.SIZE_LARGE}
+                      icon="endorsed"
+                    />
+                  </Tooltip>
+                )}
+              </NavIcons>
             )}
           </span>
         </Link>
@@ -676,10 +686,14 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
   }
 
   &:hover {
-    color: white;
+    color: white !important;
     background: #0d0d0d;
     &:after {
       transform: scale(1);
+    }
+
+    .iconCompleted {
+      color: ${COLORS.NEON_GREEN} !important;
     }
   }
 `;
@@ -804,6 +818,14 @@ const ColTitle = styled.div`
 
   p {
     margin: 0;
+  }
+`;
+
+const NavIcons = styled.span`
+  display: inline-block;
+
+  & > span:not(:first-child) {
+    margin-left: 10px;
   }
 `;
 
