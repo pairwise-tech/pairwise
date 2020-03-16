@@ -405,10 +405,15 @@ class NavigationOverlay extends React.Component<IProps> {
           </span>
           <span>
             {isSection ? (
-              <Badge onClick={toggleSection}>
-                {sectionChallengeCompleteCount} of {sectionChallengeCount}{" "}
-                Complete
-              </Badge>
+              <HoverableBadge onClick={toggleSection}>
+                <BadgeDefaultContent>
+                  {sectionChallengeCompleteCount} of {sectionChallengeCount}{" "}
+                  Complete
+                </BadgeDefaultContent>
+                <BadgeHoverContent>
+                  {isSectionOpen ? "Collapse" : "Expand"}
+                </BadgeHoverContent>
+              </HoverableBadge>
             ) : (
               <NavIcons>
                 {challenge.videoUrl && (
@@ -760,12 +765,41 @@ const SpecialLeftShadow = styled.div`
   pointer-events: none;
 `;
 
-const Badge = styled.div`
+const BadgeDefaultContent = styled.span`
+  display: inline-block;
+  position: relative;
+  transform: translateY(0);
+  transition: all 0.4s ease;
+`;
+
+const BadgeHoverContent = styled.span`
+  display: block;
+  position: absolute;
+  transition: all 0.2s ease;
+  transform: translateY(200%);
+  top: 50%;
+  left: 0;
+  right: 0;
+  text-align: center;
+`;
+
+const HoverableBadge = styled.div`
   border-radius: 100px;
   font-size: 11px;
   font-weight: bold;
   background: #505052;
   padding: 4px 12px;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    ${BadgeDefaultContent} {
+      transform: translateY(-200%);
+    }
+    ${BadgeHoverContent} {
+      transform: translateY(-50%);
+    }
+  }
 `;
 
 const Col = styled.div<{ offsetX: number }>`
