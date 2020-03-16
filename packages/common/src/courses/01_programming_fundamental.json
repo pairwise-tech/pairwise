@@ -364,6 +364,72 @@
           "content": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language: TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
         },
         {
+          "id": "8p4BZqPl",
+          "type": "section",
+          "title": "Logging and Debugging",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "One of the first things to learn when learning programming is how to print out values from your program\\! This allows you to get information and feedback from your program to determine if it is working properly and also to fix bugs and problems which may develop in your program over time.\n\nFor example, maybe one day your server will show you some error message like:\n\n```typescript\nUncaught ReferenceError: users is not defined\n    at UserService (UserService.tsx:194)\n    at renderWithHooks (react-dom.development.js:16260)\n    at updateFunctionComponent (react-dom.development.js:18347)\n    at beginWork$1 (react-dom.development.js:20176)\n    at HTMLUnknownElement.callCallback (react-dom.development.js:336)\n    at Object.invokeGuardedCallbackDev (react-dom.development.js:385)\n    at invokeGuardedCallback (react-dom.development.js:440)\n    at beginWork$$1 (react-dom.development.js:25780)\n    at performUnitOfWork (react-dom.development.js:24695)\n    at workLoopSync (react-dom.development.js:24671)\n    at performSyncWorkOnRoot (react-dom.development.js:24270)\n    at react-dom.development.js:12199\n\n```\n\n😰😰😰\n\nThis scary message is telling you some value your program thought existed did not exist. The first thing might want to do is print out the value of `users` or the data `users` is coming from to help you see what it is and how it can become `undefined`.\n\nIn this section we will learn how to do this\\!"
+        },
+        {
+          "id": "5mpYgBmX",
+          "type": "typescript",
+          "title": "Logging Values",
+          "instructions": "TypeScript has a built\\-in utility to print values called `console`. The `console` object provides several methods to help you log values, the most commonly used of which is `console.log`. Go ahead and log some values and take a look at the panel to the right to see the results\\!",
+          "testCode": "test(\"The three variables `logMe`, `alsoLogMe`, and `logMeAsWell` should be logged to the console using the `console` `log` method.\", () => {\n  expect(__user_code_string__.includes(\"console.log(logMe)\")).toBeTruthy();\n  expect(__user_code_string__.includes(\"console.log(alsoLogMe)\")).toBeTruthy();\n  expect(__user_code_string__.includes(\"console.log(logMeAsWell)\")).toBeTruthy();\n});\n",
+          "videoUrl": "",
+          "starterCode": "const logMe = \"Hi, it's me!\";\n\nconst alsoLogMe = [1,2,3,4,5];\n\nconst logMeAsWell = {\n    users: [\n        \"Sam\",\n        \"Jerry\",\n        \"Lisa\",\n    ]\n};\n",
+          "solutionCode": "const logMe = \"Hi, it's me!\";\n\nconst alsoLogMe = [1,2,3,4,5];\n\nconst logMeAsWell = {\n    users: [\n        \"Sam\",\n        \"Jerry\",\n        \"Lisa\",\n    ]\n};\n\nconsole.log(logMe);\nconsole.log(alsoLogMe);\nconsole.log(logMeAsWell);",
+          "content": ""
+        },
+        {
+          "id": "RL6JBhYL",
+          "type": "typescript",
+          "title": "Console Warn and Error",
+          "instructions": "The `console` provides other methods as well which you can use to call attention to the values you are printing. There's some code in the editor below. Don't worry if you don't understand all of it. Take a look at lines 7 and 11. Line 7 uses the `console.warn` method to print a warning statement. In line 11, we want to use the `console.error` method to print the error which occurs\\! Go ahead and give it a try\\!",
+          "testCode": "test(\"The `console` `error` method is used to print the error `message` thrown by the `doSomethingDangerous` function.\", () => {\n  expect(__user_code_string__.includes(\"console.error(message)\")).toBeTruthy();\n});\n",
+          "videoUrl": "",
+          "starterCode": "const doSomethingDangerous = () => {\n    throw new Error(\"Danger, danger!!!\");\n}\n\nconst doSomethingSafely = () => {\n    // Print a warning here before we do something dangerous\n    console.warn(\"We are about to do something dangerous!\");\n    try {\n        doSomethingDangerous();\n    } catch (error) {\n        const message = error.message;\n        // Log the error here!\n    }\n}\n\ndoSomethingSafely();\n",
+          "solutionCode": "const doSomethingDangerous = () => {\n    throw new Error(\"Danger, danger!!!\");\n}\n\nconst doSomethingSafely = () => {\n    // Print a warning here before we do something dangerous\n    console.warn(\"We are about to do something dangerous!\");\n    try {\n        doSomethingDangerous();\n    } catch (error) {\n        const message = error.message;\n        // Log the error here!\n        console.error(message);\n    }\n}\n\ndoSomethingSafely();",
+          "content": ""
+        },
+        {
+          "id": "pqwU3tyw",
+          "type": "typescript",
+          "title": "Console Info",
+          "instructions": "There is another useful `console` method, `info`. Take a look at the editor and give it a try\\!",
+          "testCode": "test(\"The `info` method should use the `console` `info` method to log out the `message` argument.\", () => {\n  expect(__user_code_string__.includes(\"console.info(message)\")).toBeTruthy();\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Log a message\nconst log = (message: string) => {\n    console.log(message);\n}\n\n// Show a warning\nconst warn = (message: string) => {\n    console.warn(message);\n}\n\n// Show an error\nconst error = (message: string) => {\n    console.error(message);\n}\n\n// Show an info message\nconst info = (message: string) => {\n    // Write your code here!\n}\n\nlog(\".log display general data\");\nwarn(\".warn shows a warning\");\nerror(\".error displays error information!\");\ninfo(\".info what does .info do???\");",
+          "solutionCode": "// Log a message\nconst log = (message: string) => {\n    console.log(message);\n}\n\n// Show a warning\nconst warn = (message: string) => {\n    console.warn(message);\n}\n\n// Show an error\nconst error = (message: string) => {\n    console.error(message);\n}\n\n// Show an info message\nconst info = (message: string) => {\n    // Write your code here!\n    console.info(message);\n}\n\nlog(\".log display general data\");\nwarn(\".warn shows a warning\");\nerror(\".error displays error information!\");\ninfo(\".info what does .info do???\");",
+          "content": ""
+        },
+        {
+          "id": "Y$6fSREp",
+          "type": "typescript",
+          "title": "Debugging",
+          "instructions": "Debugging is the process of find the cause of an error or problem in a program and then re\\-writing or changing the code to avoid the error. This is a critical aspect of a programmer's job and one best learned through trial by fire. Good luck\\!",
+          "testCode": "test(\"There should be 10 students in the `studentList`.\", () => {\n  expect(studentList.length).toBe(10);\n});\n\ntest(\"The `logStudentName` function should be called with all 10 of the students in the `studentList` and introduce them by name, e.g. `\\\"This is: Lewis\\\"`.\", () => {\n  let totalIntroductions = 0;\n  for (const log of __secret_log_box) {\n    if (log.includes(\"This is:\")) {\n      totalIntroductions++;\n    }\n  }\n  expect(totalIntroductions).toBe(10);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// The type of a person\ninterface Student {\n    name: string;\n}\n\n// A list of people\nconst studentList: Student[] = [\n    { name: \"Sam\" },\n    { name: \"Lee\" },\n    { name: \"Jerry\" },\n    { name: \"Ben\" },\n    { name: \"Ryan\" },\n    { name: \"Joe\" },\n    { name: \"Steve\" },\n    { name: \"Lewis\" },\n    { name: \"Bryan\" },\n    { name: \"Mary\" },\n];\n\n// A method to introduce a person by their name\nconst logStudentName = (person: Student) => {\n    const name = person.name;\n    console.log(`This is: ${name}`);\n}\n\n// Introduce everyone!\nconst introduceEveryone = () => {\n    for (let i = 1; i < 11; i++) {\n        const person = studentList[i];\n        logStudentName(person);\n    }\n}\n\n// Try to introduce everyone\ntry {\n    introduceEveryone();\n} catch (err) {\n    console.warn(\"introduceEveryone threw an error!\");\n    console.error(err.message);\n}\n",
+          "solutionCode": "// The type of a person\ninterface Student {\n    name: string;\n}\n\n// A list of people\nconst studentList: Student[] = [\n    { name: \"Sam\" },\n    { name: \"Lee\" },\n    { name: \"Jerry\" },\n    { name: \"Ben\" },\n    { name: \"Ryan\" },\n    { name: \"Joe\" },\n    { name: \"Steve\" },\n    { name: \"Lewis\" },\n    { name: \"Bryan\" },\n    { name: \"Mary\" },\n];\n\n// A method to introduce a person by their name\nconst logStudentName = (person: Student) => {\n    const name = person.name;\n    console.log(`This is: ${name}`);\n}\n\n// Introduce everyone!\nconst introduceEveryone = () => {\n    for (let i = 0; i < 10; i++) {\n        const person = studentList[i];\n        logStudentName(person);\n    }\n}\n\n// Try to introduce everyone\ntry {\n    introduceEveryone();\n} catch (err) {\n    console.warn(\"introduceEveryone threw an error!\");\n    console.error(err.message);\n}\n",
+          "content": "If you've solved the challenge above correctly you are now familiar with one of the classic programming errors \\(and [one of the most difficult problems in computer science](https://twitter.com/codinghorror/status/506010907021828096?lang=en) 😉\\): _off by one errors._\n\nOff by one errors are errors where a program is _off by one..._ For example, accessing a value just outside the start or end of a list.\n\nThis is a classic error and a common pitfall of writing for loops to perform manual iteration\\!\n\n```typescript\nfor (let i = 0; i < limit; i++) {\n    const item = list[i];\n    // Do something with the item.\n    const contents = item.getContents();\n    // ...\n    // But what if there is nothing at inside list[i] !?!?!?\n}\n\n```\n\nWatch out for this type of error whenever you are writing for loops by hand\\!"
+        },
+        {
+          "id": "jaZYVeNS",
+          "type": "media",
+          "title": "Debugging Skills",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Debugging is much more than just logging values in a program.\n\nAs you learn more you will find that it encompasses everything from how you write the program in the first place to the detective\\-like skillset required to investigate and debug cryptic errors in production systems.\n\nSometimes the \"error\" is a user saying \"I tried to log in and it didn't work\".\n\nOr the error is an stack\\-trace in the logs for a production server which says some value was `undefined` which you did not thing could ever be `undefined`.\n\nHow do you get to the bottom of the problem\\!?\nHow do you find the causes\\!?\nHow do you recreate the conditions which caused the error\\!?\nHow do you do this quickly and efficiently when you have live users who cannot use your product because of the bug\\!?\nHow do you fix the bug in a sound way instead just adding some quick workaround\\!?\n\nAll of this comprises the art of debugging\\! Learning how to use the `console` in TypeScript is just the starting point. We encourage you to make use of the `console` logging utilities as you work through the Pairwise curriculum and work on your own projects to start getting familiar with printing out values to inspect and debug your programs.\n\nSuccessful debugging is a difficult skill which takes time to become experienced with. Over time we will introduce additional tools and approaches for you to use."
+        },
+        {
           "id": "0gih2c1M",
           "type": "section",
           "title": "Types and Type Primitives",
