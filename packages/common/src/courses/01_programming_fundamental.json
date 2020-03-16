@@ -395,7 +395,7 @@
           "title": "Getting your site online",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/nwSrWD0U8OY",
           "starterCode": "",
           "solutionCode": "",
           "content": "Also known as deploying your first static site.\n\n++TODO++\n\n> \n> ### Jargon Time\n> \n> **Deploy**: Taking whatever code you wrote and uploading it to a server where it can be accessed. For example, no one else can see the code you wrote during this module but if you _deploy_ your code then anyone can access it with the URL. This is very important for websites.\n> **Static**: As opposed to \"dynamic.\" In this context static means that your code is just a bunch of files that can be used directly without any additional software.\n"
