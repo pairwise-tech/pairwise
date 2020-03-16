@@ -266,8 +266,9 @@ class NavigationOverlay extends React.Component<IProps> {
             {this.renderChallengeNavigationItem({
               module,
               course,
-              section: true,
+              isSection: true,
               sectionChallengeCount: block.challenges.length,
+              sectionChallenges: block.challenges,
               index: blockIndex,
               challenge: block.section,
             })}
@@ -340,8 +341,9 @@ class NavigationOverlay extends React.Component<IProps> {
 
   renderChallengeNavigationItem = (args: {
     index: number;
-    section?: boolean;
+    isSection?: boolean;
     sectionChallengeCount?: number;
+    sectionChallenges?: ChallengeSkeleton[];
     module: ModuleSkeleton;
     course: CourseSkeleton;
     challenge: ChallengeSkeleton;
@@ -352,9 +354,10 @@ class NavigationOverlay extends React.Component<IProps> {
       index,
       module,
       course,
-      section,
+      isSection,
       challenge,
       sectionChallengeCount = 0,
+      sectionChallenges = [],
       style = {},
     } = args;
     const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
@@ -371,6 +374,16 @@ class NavigationOverlay extends React.Component<IProps> {
       e.preventDefault();
       this.toggleExpandCollapse(challenge);
     };
+
+    const isChallengeComplete = this.checkChallengeUserProgress(
+      course.id,
+      challenge.id,
+    );
+    const sectionChallengeCompleteCount = sectionChallenges.reduce(
+      (acc, { id }) =>
+        this.checkChallengeUserProgress(course.id, id) ? acc + 1 : acc,
+      0,
+    );
 
     return (
       <div key={challenge.id} style={{ position: "relative", ...style }}>
@@ -390,10 +403,12 @@ class NavigationOverlay extends React.Component<IProps> {
             <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>
-            {section ? (
+            {isSection ? (
               <Badge onClick={toggleSection}>
-                {sectionChallengeCount} Challenge
-                {sectionChallengeCount > 1 ? "s" : ""}
+                {sectionChallengeCompleteCount} of {sectionChallengeCount}{" "}
+                Challenge
+                {sectionChallengeCount > 1 ? "s " : " "}
+                Complete
               </Badge>
             ) : challenge.videoUrl ? (
               <Tooltip
@@ -404,11 +419,30 @@ class NavigationOverlay extends React.Component<IProps> {
                 <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
               </Tooltip>
             ) : null}
+            {!isSection && isChallengeComplete && (
+              <Icon
+                color={COLORS.SECONDARY_PINK}
+                iconSize={Icon.SIZE_LARGE}
+                icon="endorsed"
+              />
+            )}
           </span>
         </Link>
         {this.renderChallengeCodepressButton(course, module, index)}
       </div>
     );
+  };
+
+  checkChallengeUserProgress = (courseId: string, challengeId: string) => {
+    if (
+      this.props.userProgress &&
+      this.props.userProgress[courseId] &&
+      challengeId in this.props.userProgress[courseId] &&
+      this.props.userProgress[courseId][challengeId].complete
+    ) {
+      return true;
+    }
+    return false;
   };
 
   renderModuleCodepressButton = (course: CourseSkeleton, index: number) => {
@@ -768,6 +802,7 @@ const Title = styled.div`
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userSettings: Modules.selectors.user.userSettings(state),
+  userProgress: Modules.selectors.user.userProgress(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
