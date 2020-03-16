@@ -146,7 +146,14 @@ const MediaArea = ({
           title="Video URL"
           style={{ marginBottom: 40, marginTop: 40, maxWidth: PROSE_MAX_WIDTH }}
         >
-          <p>If this challenge has a video enter the embed URL here.</p>
+          <p>
+            If this challenge has a video enter the <strong>embed</strong> URL
+            here.
+          </p>
+          <p>
+            NOTE: <code>?rel=0</code> will be appended to disable related
+            videos.
+          </p>
           <input
             className={Classes.INPUT}
             style={{ width: "100%" }}
@@ -295,13 +302,17 @@ const YoutubeEmbed = (props: { url: string }) => {
     );
   }
 
+  // Use ?rel=0 to disable related videos in youtube embeds
+  const parsedURL = new URL(props.url);
+  parsedURL.searchParams.set("rel", "0");
+
   return (
     <VideoWrapper>
       <iframe
         title="Youtube Embed"
         width={width}
         height={height}
-        src={props.url}
+        src={parsedURL.href}
         frameBorder="0"
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
