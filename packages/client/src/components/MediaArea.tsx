@@ -4,7 +4,7 @@ import React, { ChangeEvent, Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { Loading, SmoothScrollButton } from "./Shared";
-import { EditableText, Callout, Classes } from "@blueprintjs/core";
+import { EditableText, Callout, Classes, Button } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import {
   PROSE_MAX_WIDTH,
@@ -267,8 +267,11 @@ const VideoWrapper = styled.div`
 const YoutubeEmbed = (props: { url: string }) => {
   const width = 728;
   const height = 410;
+  const [isEmbedHidden, setIsEmbedHidden] = React.useState<boolean>(
+    Boolean(process.env.REACT_APP_HIDE_EMBEDS),
+  );
 
-  if (process.env.REACT_APP_HIDE_EMBEDS) {
+  if (isEmbedHidden) {
     return (
       <div
         style={{
@@ -284,9 +287,10 @@ const YoutubeEmbed = (props: { url: string }) => {
       >
         <h3 style={{ textTransform: "uppercase" }}>Embed Hidden</h3>
         <p>
-          Restart the app without <code>REACT_APP_HIDE_EMBEDS</code> to view
-          embeds
+          Restart the app without <code>REACT_APP_HIDE_EMBEDS</code> to avoid
+          this.
         </p>
+        <Button onClick={() => setIsEmbedHidden(false)}>Show Anyway</Button>
       </div>
     );
   }
