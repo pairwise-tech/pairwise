@@ -407,8 +407,6 @@ class NavigationOverlay extends React.Component<IProps> {
             {isSection ? (
               <Badge onClick={toggleSection}>
                 {sectionChallengeCompleteCount} of {sectionChallengeCount}{" "}
-                Challenge
-                {sectionChallengeCount > 1 ? "s " : " "}
                 Complete
               </Badge>
             ) : challenge.videoUrl ? (
