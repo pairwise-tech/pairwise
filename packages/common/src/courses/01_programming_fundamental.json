@@ -408,6 +408,17 @@
           "content": ""
         },
         {
+          "id": "Y$6fSREp",
+          "type": "typescript",
+          "title": "Debugging",
+          "instructions": "Debugging is the process of find the cause of an error or problem in a program and then re\\-writing or changing the code to avoid the error. This is a critical aspect of a programmer's job and one best learned through trial by fire. Good luck\\!",
+          "testCode": "test(\"There should be 10 students in the `studentList`.\", () => {\n  expect(studentList.length).toBe(10);\n});\n\ntest(\"The `logStudentName` function should be called with all 10 of the students in the `studentList` and introduce them by name, e.g. `\\\"This is: Lewis\\\"`.\", () => {\n  let totalIntroductions = 0;\n  for (const log of __secret_log_box) {\n    if (log.includes(\"This is:\")) {\n      totalIntroductions++;\n    }\n  }\n  expect(totalIntroductions).toBe(10);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// The type of a person\ninterface Student {\n    name: string;\n}\n\n// A list of people\nconst studentList: Student[] = [\n    { name: \"Sam\" },\n    { name: \"Lee\" },\n    { name: \"Jerry\" },\n    { name: \"Ben\" },\n    { name: \"Ryan\" },\n    { name: \"Joe\" },\n    { name: \"Steve\" },\n    { name: \"Lewis\" },\n    { name: \"Bryan\" },\n    { name: \"Mary\" },\n];\n\n// A method to introduce a person by their name\nconst logStudentName = (person: Student) => {\n    const name = person.name;\n    console.log(`This is: ${name}`);\n}\n\n// Introduce everyone!\nconst introduceEveryone = () => {\n    for (let i = 1; i < 11; i++) {\n        const person = studentList[i];\n        logStudentName(person);\n    }\n}\n\n// Try to introduce everyone\ntry {\n    introduceEveryone();\n} catch (err) {\n    console.warn(\"introduceEveryone threw an error!\");\n    console.error(err.message);\n}\n",
+          "solutionCode": "// The type of a person\ninterface Student {\n    name: string;\n}\n\n// A list of people\nconst studentList: Student[] = [\n    { name: \"Sam\" },\n    { name: \"Lee\" },\n    { name: \"Jerry\" },\n    { name: \"Ben\" },\n    { name: \"Ryan\" },\n    { name: \"Joe\" },\n    { name: \"Steve\" },\n    { name: \"Lewis\" },\n    { name: \"Bryan\" },\n    { name: \"Mary\" },\n];\n\n// A method to introduce a person by their name\nconst logStudentName = (person: Student) => {\n    const name = person.name;\n    console.log(`This is: ${name}`);\n}\n\n// Introduce everyone!\nconst introduceEveryone = () => {\n    for (let i = 0; i < 10; i++) {\n        const person = studentList[i];\n        logStudentName(person);\n    }\n}\n\n// Try to introduce everyone\ntry {\n    introduceEveryone();\n} catch (err) {\n    console.warn(\"introduceEveryone threw an error!\");\n    console.error(err.message);\n}\n",
+          "content": ""
+        },
+        {
           "id": "0gih2c1M",
           "type": "section",
           "title": "Types and Type Primitives",

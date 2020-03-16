@@ -78,30 +78,43 @@ const __replacer = (key, value) => {
   return value;
 }
 
+let __secret_console_log_box = [];
+let __secret_console_warn_box = [];
+let __secret_console_error_box = [];
+let __secret_console_info_box = [];
+
 const __interceptConsoleLog = (...value) => {
+  const message = JSON.stringify(value, __replacer);
+  __secret_console_log_box.push(message);
   window.parent.postMessage({
-    message: JSON.stringify(value, __replacer),
+    message,
     source: "LOG",
   });
 }
 
 const __interceptConsoleInfo = (...value) => {
+  const message = JSON.stringify(value, __replacer);
+  __secret_console_info_box.push(message);
   window.parent.postMessage({
-    message: JSON.stringify(value, __replacer),
+    message,
     source: "INFO",
   });
 }
 
 const __interceptConsoleWarn = (...value) => {
+  const message = JSON.stringify(value, __replacer);
+  __secret_console_warn_box.push(message);
   window.parent.postMessage({
-    message: JSON.stringify(value, __replacer),
+    message,
     source: "WARN",
   });
 }
 
 const __interceptConsoleError = (...value) => {
+  const message = JSON.stringify(value, __replacer);
+  __secret_console_error_box.push(message);
   window.parent.postMessage({
-    message: JSON.stringify(value, __replacer),
+    message,
     source: "ERROR",
   });
 }
@@ -300,6 +313,8 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
       } catch (err) {
         if (err.message === "INFINITE_LOOP") {
           console.error("Infinite loop detected");
+        } else {
+          console.error(err.message + err.stack);
         }
       }
     }
@@ -420,10 +435,18 @@ try {
       }),
       source: "${IFRAME_MESSAGE_TYPES.INFINITE_LOOP}",
     });
+  } else {
+    window.parent.postMessage({
+      message: JSON.stringify([
+        {
+          testResult: false,
+          error: err.message + err.stack,
+          message: "The code should compile and not throw any errors.",
+        }
+      ]),
+      source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
+    });
   }
-
-  // compilation error, or something else happened
-  // TODO: Still propagate this message back to the Workspace?
 }
 `;
 
