@@ -9,6 +9,7 @@ import {
   Challenge,
   ChallengeSkeletonList,
   ModuleSkeletonList,
+  CHALLENGE_PROGRESS,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, SANDBOX_ID } from "tools/constants";
@@ -19,6 +20,7 @@ import {
   generateEmptyChallenge,
   getChallengeIcon,
   partitionChallengesBySection,
+  getChallengeProgress,
 } from "tools/utils";
 import {
   Tooltip,
@@ -361,28 +363,33 @@ class NavigationOverlay extends React.Component<IProps> {
       sectionChallenges = [],
       style = {},
     } = args;
+
+    const challengeProgress = getChallengeProgress(
+      this.props.userProgress,
+      course.id,
+      challenge.id,
+    );
     const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
     const iconProps = {
       challenge,
       isSectionOpen,
+      challengeProgress,
     };
 
     const ChallengeIconUI = isEditMode
       ? SortableHandle(ChallengeListItemIcon)
       : ChallengeListItemIcon;
-
     const toggleSection = (e: React.MouseEvent) => {
       e.preventDefault();
       this.toggleExpandCollapse(challenge);
     };
 
-    const isChallengeComplete = this.checkChallengeUserProgress(
-      course.id,
-      challenge.id,
-    );
     const sectionChallengeCompleteCount = sectionChallenges.reduce(
       (acc, { id }) =>
-        this.checkChallengeUserProgress(course.id, id) ? acc + 1 : acc,
+        getChallengeProgress(this.props.userProgress, course.id, id) ===
+        "COMPLETE"
+          ? acc + 1
+          : acc,
       0,
     );
 
@@ -425,19 +432,6 @@ class NavigationOverlay extends React.Component<IProps> {
                     <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
                   </Tooltip>
                 )}
-                {!isSection && isChallengeComplete && (
-                  <Tooltip
-                    usePortal={false}
-                    position="left"
-                    content="Challenge Completed"
-                  >
-                    <Icon
-                      className="iconCompleted"
-                      iconSize={Icon.SIZE_LARGE}
-                      icon="endorsed"
-                    />
-                  </Tooltip>
-                )}
               </NavIcons>
             )}
           </span>
@@ -445,18 +439,6 @@ class NavigationOverlay extends React.Component<IProps> {
         {this.renderChallengeCodepressButton(course, module, index)}
       </div>
     );
-  };
-
-  checkChallengeUserProgress = (courseId: string, challengeId: string) => {
-    if (
-      this.props.userProgress &&
-      this.props.userProgress[courseId] &&
-      challengeId in this.props.userProgress[courseId] &&
-      this.props.userProgress[courseId][challengeId].complete
-    ) {
-      return true;
-    }
-    return false;
   };
 
   renderModuleCodepressButton = (course: CourseSkeleton, index: number) => {
@@ -696,10 +678,14 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
     &:after {
       transform: scale(1);
     }
+  }
 
-    .iconCompleted {
-      color: ${COLORS.NEON_GREEN} !important;
-    }
+  .iconComplete {
+    color: ${COLORS.NEON_GREEN} !important;
+  }
+
+  .iconIncomplete {
+    color: ${COLORS.SECONDARY_PINK} !important;
   }
 `;
 
@@ -736,21 +722,46 @@ const RotatingIcon = styled(Icon)<{ isRotated?: boolean }>`
 interface ChallengeListItemIconProps {
   challenge: ChallengeSkeleton;
   isSectionOpen?: boolean;
+  challengeProgress: CHALLENGE_PROGRESS;
   onClick: (e: React.MouseEvent) => any;
 }
 
 const ChallengeListItemIcon = ({
   isSectionOpen,
   challenge,
+  challengeProgress,
   ...props
-}: ChallengeListItemIconProps) => (
-  <RotatingIcon
-    isRotated={isSectionOpen}
-    iconSize={Icon.SIZE_LARGE}
-    icon={getChallengeIcon(challenge.type, challenge.userCanAccess)}
-    {...props}
-  />
-);
+}: ChallengeListItemIconProps) => {
+  let tooltipContent = "";
+  let iconExtraClass = "";
+
+  if (challengeProgress === "COMPLETE") {
+    tooltipContent = "Challenge Completed";
+    iconExtraClass = "iconComplete";
+  } else if (challengeProgress === "INCOMPLETE") {
+    tooltipContent = "Challenge Attempted";
+    iconExtraClass = "iconIncomplete";
+  }
+
+  return (
+    <Tooltip
+      disabled={challengeProgress === "NOT_ATTEMPTED"}
+      content={tooltipContent}
+    >
+      <RotatingIcon
+        isRotated={isSectionOpen}
+        iconSize={Icon.SIZE_LARGE}
+        icon={getChallengeIcon(
+          challenge.type,
+          challenge.userCanAccess,
+          challengeProgress,
+        )}
+        className={challenge.type !== "section" ? iconExtraClass : ""}
+        {...props}
+      />
+    </Tooltip>
+  );
+};
 
 // The shadow that appears in the overlay nav for separating the module column
 // from the challenge column
