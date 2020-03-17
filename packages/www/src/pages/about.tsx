@@ -18,8 +18,15 @@ We're both self-taught programmers who had different, but similar paths to becom
 `;
 
 const THE_MISSION = `
-* **Short term:** Prove our thesis that there really is a better way to teach and learn by building an online course in one of the worlds most popular technology stacks. We'll prove out our teaching ability and fund our ongoing work by charging for the more advanced sections of the course.
+* **Short term:** Prove our thesis that there really is a better way to teach and learn by building an online course in one of the world's most popular technology stacks. We'll prove out our teaching ability and fund our ongoing work by charging for the more advanced sections of the course.
 * **Long term:** Transform technical education. We believe that at present the education systems of the world have barely scratched the surface of what's become possible through technology.
+`;
+
+const CONTACT = `
+We know we should really say more here, and we will! There's just
+more important things we need to prioritize while we build out the
+course. If you have any questions at all don't hesitate to get in
+touch.
 `;
 
 const About = () => {
@@ -35,11 +42,11 @@ const About = () => {
       <PostImageSection>
         <SectionTitle>Hey there, we're Pairwise</SectionTitle>
         <p>
-          We're two friends and former coworkers who beleive deeply in improving
+          We're two friends and former coworkers who believe deeply in improving
           education.
         </p>
         <p style={{ marginBottom: 40 }}>
-          That's us on the cake. One of our friends surprised us! What a gift.
+          That's us on the cake. One of our friends surprised us, what a gift!
         </p>
         <LearningSection>
           <CoolCodeBullet text="👋" />
@@ -54,15 +61,7 @@ const About = () => {
         <LearningSection>
           <CoolCodeBullet text="?" />
           <Typography variant="h5">Why is your about page so short?</Typography>
-          <Markdown
-            source={`
-We know we should really say more here, and we will! There's just
-more important things we need to prioritize while we build out the
-course. If you have any questions at all don't hesitate to get in
-touch. The contact form will immediately drop a message into one of
-our group channels. 
-          `}
-          />
+          <Markdown source={CONTACT} />
           <Link to="/contact">Get in touch</Link>
         </LearningSection>
       </PostImageSection>
