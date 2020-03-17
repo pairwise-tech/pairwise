@@ -73,13 +73,19 @@ export class SlackService {
     );
   }
 
+  public async postCoursePurchaseMessage() {
+    const fire = ":fire: :fire: :fire:";
+    const message = `${fire} *Someone purchased a course!!!* ${fire}`;
+    await this.postMessageToChannel(message, { channel: "production" });
+  }
+
   public async postAdminActionAwarenessMessage({
     httpMethod,
     requestPath,
     adminUserEmail,
     config,
   }: SlackAdminMessageData) {
-    const alert = `:exclamation: Action taken by admin user: \`${adminUserEmail}\`. Requested admin API: *[${httpMethod}]: ${requestPath}*`;
+    const alert = `:sunglasses: Action taken by Admin User: \`${adminUserEmail}\`. Requested admin API: *[${httpMethod}]:* \`${requestPath}\`.`;
     await this.postMessageToChannel(alert, {
       channel: "production",
       ...config,

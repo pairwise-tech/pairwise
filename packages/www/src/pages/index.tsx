@@ -84,6 +84,16 @@ const MainDiv = styled.div`
   }
 `;
 
+const StartNowButton = ({ label = 'Start Coding Now' }: { label?: string }) => (
+  <ActionButton
+    onClick={() => {
+      window.open('https://app.pairwise.tech/workspace/', '_blank');
+    }}
+  >
+    {label}
+  </ActionButton>
+);
+
 const Main = () => {
   return (
     <MainDiv>
@@ -94,25 +104,7 @@ const Main = () => {
         <Typography style={{ marginBottom: 40 }} variant="h5">
           Want to learn to code? Start learning in seconds—it's free.
         </Typography>
-        <ActionButton
-          onClick={(e) => {
-            e.preventDefault();
-            const el = document.getElementById(EMAIL_SIGNUP_SECTION_ID);
-            el.scrollIntoView({ behavior: 'smooth' });
-          }}
-        >
-          Get Early Access
-        </ActionButton>
-        <SecondaryButton
-          variant="contained"
-          size="large"
-          color="default"
-          onClick={() => {
-            window.open('https://app.pairwise.tech/workspace/', '_blank');
-          }}
-        >
-          Try it out
-        </SecondaryButton>
+        <StartNowButton />
       </Left>
       <Right>
         <MainImg
@@ -575,45 +567,11 @@ const GetEarlyAccess = () => {
 
   return (
     <div id={EMAIL_SIGNUP_SECTION_ID}>
-      <SectionTitle>Get Early Access</SectionTitle>
+      <SectionTitle>Start learning right now</SectionTitle>
       <Typography style={{ marginBottom: 20 }}>
-        Enter your email below to get on the list of early users. You'll be
-        among the first to access the platform as we launch the initial modules.
+        You're one click away from writing your first code.
       </Typography>
-      <RemoteForm
-        action="https://hooks.zapier.com/hooks/catch/2903409/omou78r/"
-        name="email-access"
-        submitText="I want!"
-        validate={() => email}
-        errorText="Please enter an email"
-        onComplete={() =>
-          navigate(
-            `/thanks?notify=${encodeURIComponent(
-              `${email} has been added to the list!`,
-            )}`,
-          )
-        }
-      >
-        <TextField
-          style={{ marginBottom: 20 }}
-          inputProps={{ style: { background: '#1d1d1d', borderRadius: 4 } }}
-          fullWidth
-          id="email"
-          name="email"
-          label="Email"
-          variant="outlined"
-          value={email}
-          onChange={handleChange}
-        />
-
-        {/* NOTE: Since the form is auto-serialized this is how to add a date to the payload body */}
-        <input
-          style={{ display: 'none' }}
-          id="date"
-          name="date"
-          defaultValue={new Date().toISOString()}
-        />
-      </RemoteForm>
+      <StartNowButton label="Start Coding" />
     </div>
   );
 };

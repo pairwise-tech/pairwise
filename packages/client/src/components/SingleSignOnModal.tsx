@@ -44,57 +44,56 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
         aria-describedby="facebook-login github-login google-login"
         onClose={() => {
           removeEphemeralPurchaseCourseId();
-          this.setSingleSignOnModalState(false);
+          this.props.setSingleSignOnDialogState(false);
         }}
       >
-        <ModalContainer>
-          <ModalTitleText id="sso-modal-title">
-            Login or Create an Account
-          </ModalTitleText>
-          <SocialButtonsContainer>
-            <LoginLink id="facebook-login" href={`${ENV.HOST}/auth/facebook`}>
-              <FacebookLoginButton
-                className="sso-button"
-                style={ssoButtonStyles}
-              >
-                Login with Facebook
-              </FacebookLoginButton>
-            </LoginLink>
-            <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
-              <GithubLoginButton className="sso-button" style={ssoButtonStyles}>
-                Login with GitHub
-              </GithubLoginButton>
-            </LoginLink>
-            <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
-              <GoogleLoginButton className="sso-button" style={ssoButtonStyles}>
-                Login with Google
-              </GoogleLoginButton>
-            </LoginLink>
-          </SocialButtonsContainer>
-          <ModalSubText>
-            Create an account with one-click for free. Your account will be used
-            to save your progress as you work on the courses.
-          </ModalSubText>
-          <ModalSubText>
-            By creating a Pairwise account you are agreeing to our{" "}
-            <ExternalLink link="https://pairwise.tech/terms/">
-              Terms of Service
-            </ExternalLink>{" "}
-            and{" "}
-            <ExternalLink link="https://pairwise.tech/privacy-policy">
-              Privacy Policy
-            </ExternalLink>
-            .
-          </ModalSubText>
-        </ModalContainer>
+        <AuthenticationForm />
       </Dialog>
     );
   }
-
-  setSingleSignOnModalState = (state: boolean) => {
-    this.props.setSingleSignOnDialogState(state);
-  };
 }
+
+export const AuthenticationForm = () => {
+  return (
+    <ModalContainer>
+      <ModalTitleText id="sso-modal-title">
+        Login or Create an Account
+      </ModalTitleText>
+      <SocialButtonsContainer>
+        <LoginLink id="facebook-login" href={`${ENV.HOST}/auth/facebook`}>
+          <FacebookLoginButton className="sso-button" style={ssoButtonStyles}>
+            Login with Facebook
+          </FacebookLoginButton>
+        </LoginLink>
+        <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
+          <GithubLoginButton className="sso-button" style={ssoButtonStyles}>
+            Login with GitHub
+          </GithubLoginButton>
+        </LoginLink>
+        <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
+          <GoogleLoginButton className="sso-button" style={ssoButtonStyles}>
+            Login with Google
+          </GoogleLoginButton>
+        </LoginLink>
+      </SocialButtonsContainer>
+      <ModalSubText>
+        Create an account with one-click for free. Your account will be used to
+        save your progress as you work on the courses.
+      </ModalSubText>
+      <ModalSubText>
+        By creating a Pairwise account you are agreeing to our{" "}
+        <ExternalLink link="https://pairwise.tech/terms/">
+          Terms of Service
+        </ExternalLink>{" "}
+        and{" "}
+        <ExternalLink link="https://pairwise.tech/privacy-policy">
+          Privacy Policy
+        </ExternalLink>
+        .
+      </ModalSubText>
+    </ModalContainer>
+  );
+};
 
 /** ===========================================================================
  * Styles

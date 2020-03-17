@@ -7,6 +7,7 @@ import {
   IconName,
   Classes,
   ButtonGroup,
+  Spinner,
 } from "@blueprintjs/core";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
@@ -26,9 +27,9 @@ export const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
 };
 
 // TODO: This could be made a bit more friendly. Maybe a spinner of some sort
-export const Loading = () => {
-  return <h1>Loading...</h1>;
-};
+export const Loading = styled(Spinner)`
+  margin-top: 10px;
+`;
 
 export const LoadingInline = () => {
   return <small style={{ display: "inline-block" }}>Loading...</small>;

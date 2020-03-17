@@ -208,6 +208,15 @@ Array [
     },
   },
   Object {
+    "challenges": Array [],
+    "section": Object {
+      "id": "ny51KoEI",
+      "title": "Data Structures",
+      "type": "section",
+      "userCanAccess": true,
+    },
+  },
+  Object {
     "challenges": Array [
       Object {
         "id": "ny51KoEI",
