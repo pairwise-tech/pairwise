@@ -685,7 +685,7 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
   }
 
   .iconIncomplete {
-    color: ${COLORS.SECONDARY_PINK} !important;
+    color: ${COLORS.SECONDARY_YELLOW} !important;
   }
 `;
 

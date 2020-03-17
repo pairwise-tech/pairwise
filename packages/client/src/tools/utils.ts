@@ -168,10 +168,11 @@ export const getChallengeIcon = (
   challengeProgress?: CHALLENGE_PROGRESS,
 ): IconName => {
   if (challengeProgress && type !== "section") {
-    if (challengeProgress === "COMPLETE") {
+    if (
+      challengeProgress === "COMPLETE" ||
+      challengeProgress === "INCOMPLETE"
+    ) {
       return "tick";
-    } else if (challengeProgress === "INCOMPLETE") {
-      return "circle";
     }
   }
 
