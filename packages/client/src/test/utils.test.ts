@@ -55,7 +55,10 @@ describe("test utils.ts functions", () => {
       ...challenges,
       section,
       project,
+      project,
+      project,
       guidedProject,
+      section,
       ...specialTopics,
     ];
 
