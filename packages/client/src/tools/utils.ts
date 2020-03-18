@@ -202,8 +202,8 @@ export const getChallengeProgress = (
 ): CHALLENGE_PROGRESS => {
   if (
     userProgressMap &&
-    courseId in userProgressMap &&
-    challengeId in userProgressMap[courseId]
+    userProgressMap[courseId] &&
+    userProgressMap[courseId][challengeId]
   ) {
     if (userProgressMap[courseId][challengeId].complete) {
       return "COMPLETE";
