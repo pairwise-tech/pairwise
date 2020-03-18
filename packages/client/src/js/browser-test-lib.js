@@ -130,6 +130,47 @@ const methodNegationProxyHandler = {
   },
 };
 
+const isObject = value =>
+  value !== null && !Array.isArray(value) && typeof value === "object";
+
+const deepEqual = (a, b) => {
+  if (Array.isArray(a)) {
+    return (
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((x, i) => deepEqual(x, b[i]))
+    );
+  } else if (isObject(a)) {
+    const keys = Object.keys(a);
+    return (
+      isObject(b) &&
+      Object.keys(b).length == keys.length &&
+      keys.every(k => deepEqual(a[k], b[k]))
+    );
+  } else {
+    return Object.is(a, b);
+  }
+};
+
+const jsonDiff = (a, b) => {
+  let aStrings = JSON.stringify(a, null, 2).split("\n");
+  let bStrings = JSON.stringify(b, null, 2).split("\n");
+  const maxLineLength = 16;
+  if (aStrings.length > maxLineLength) {
+    aStrings =
+      aStrings.slice(0, maxLineLength / 2).join("\n") +
+      `\n... [${aStrings.length - maxLineLength} lines omitted] ...\n` +
+      aStrings.slice(-(maxLineLength / 2)).join("\n");
+  }
+  if (bStrings.length > maxLineLength) {
+    bStrings =
+      bStrings.slice(0, maxLineLength / 2).join("\n") +
+      `\n... [${bStrings.length - maxLineLength} lines omitted] ...\n` +
+      bStrings.slice(-(maxLineLength / 2)).join("\n");
+  }
+  return `Expected: ${aStrings} but got ${bStrings}`;
+};
+
 class Expectation {
   constructor(value) {
     this.value = value;
@@ -138,6 +179,13 @@ class Expectation {
 
   toBe(expected) {
     assertEqual(this.value, expected);
+  }
+  toEqual(expected) {
+    assert(
+      deepEqual(this.value, expected),
+      "[Assert] Expected deep equality but got:\n" +
+        jsonDiff(this.value, expected),
+    );
   }
   toBeGreaterThan(number) {
     assert(
