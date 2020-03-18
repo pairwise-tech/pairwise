@@ -21,6 +21,7 @@ import {
   getChallengeIcon,
   partitionChallengesBySection,
   getChallengeProgress,
+  getSectionProgress,
 } from "tools/utils";
 import {
   Tooltip,
@@ -258,7 +259,6 @@ class NavigationOverlay extends React.Component<IProps> {
      * Partition the challenge list by sections.
      */
     const sectionBlocks = partitionChallengesBySection(challengeList);
-
     /**
      * Render the section blocks:
      */
@@ -369,6 +369,11 @@ class NavigationOverlay extends React.Component<IProps> {
       course.id,
       challenge.id,
     );
+    const sectionChallengesComplete = getSectionProgress(
+      sectionChallenges,
+      this.props.userProgress,
+      course.id,
+    );
     const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
     const iconProps = {
       challenge,
@@ -383,15 +388,6 @@ class NavigationOverlay extends React.Component<IProps> {
       e.preventDefault();
       this.toggleExpandCollapse(challenge);
     };
-
-    const sectionChallengeCompleteCount = sectionChallenges.reduce(
-      (acc, { id }) =>
-        getChallengeProgress(this.props.userProgress, course.id, id) ===
-        "COMPLETE"
-          ? acc + 1
-          : acc,
-      0,
-    );
 
     return (
       <div key={challenge.id} style={{ position: "relative", ...style }}>
@@ -414,7 +410,7 @@ class NavigationOverlay extends React.Component<IProps> {
             {isSection ? (
               <HoverableBadge onClick={toggleSection}>
                 <BadgeDefaultContent>
-                  {sectionChallengeCompleteCount} of {sectionChallengeCount}{" "}
+                  {sectionChallengesComplete} of {sectionChallengeCount}{" "}
                   Complete
                 </BadgeDefaultContent>
                 <BadgeHoverContent>

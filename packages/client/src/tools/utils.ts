@@ -173,13 +173,12 @@ export const getChallengeIcon = (
   userCanAccess: boolean,
   challengeProgress?: CHALLENGE_PROGRESS,
 ): IconName => {
-  if (challengeProgress && type !== "section") {
-    if (
-      challengeProgress === "COMPLETE" ||
-      challengeProgress === "INCOMPLETE"
-    ) {
-      return "tick";
-    }
+  if (
+    challengeProgress &&
+    type !== "section" &&
+    challengeProgress === "COMPLETE"
+  ) {
+    return "tick";
   }
 
   if (!userCanAccess) {
@@ -211,6 +210,20 @@ export const getChallengeProgress = (
     return "INCOMPLETE";
   }
   return "NOT_ATTEMPTED";
+};
+
+export const getSectionProgress = (
+  sectionChallenges: ChallengeSkeleton[],
+  userProgressMap: Nullable<UserProgressMap>,
+  courseId: string,
+) => {
+  return sectionChallenges.reduce(
+    (acc, { id }) =>
+      getChallengeProgress(userProgressMap, courseId, id) === "COMPLETE"
+        ? acc + 1
+        : acc,
+    0,
+  );
 };
 
 export interface NavigationChallengeSection {
