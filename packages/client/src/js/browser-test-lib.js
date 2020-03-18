@@ -8,6 +8,8 @@
  * .js life!!!
  */
 
+const MAX_LINE_LENGTH = 16;
+
 /**
  * A shortcut for document.querySelector
  * @param {string} selector CSS Selector
@@ -130,6 +132,24 @@ const methodNegationProxyHandler = {
   },
 };
 
+const truncateMiddle = x => {
+  if (typeof x !== "string") {
+    return x;
+  }
+
+  const lines = x.split("\n");
+
+  if (lines.length > MAX_LINE_LENGTH) {
+    return (
+      lines.slice(0, MAX_LINE_LENGTH / 2).join("\n") +
+      `\n... [${lines.length - MAX_LINE_LENGTH} lines omitted] ...\n` +
+      lines.slice(-(MAX_LINE_LENGTH / 2)).join("\n")
+    );
+  } else {
+    return x;
+  }
+};
+
 const isObject = value =>
   value !== null && !Array.isArray(value) && typeof value === "object";
 
@@ -153,22 +173,11 @@ const deepEqual = (a, b) => {
 };
 
 const jsonDiff = (a, b) => {
-  let aStrings = JSON.stringify(a, null, 2).split("\n");
-  let bStrings = JSON.stringify(b, null, 2).split("\n");
-  const maxLineLength = 16;
-  if (aStrings.length > maxLineLength) {
-    aStrings =
-      aStrings.slice(0, maxLineLength / 2).join("\n") +
-      `\n... [${aStrings.length - maxLineLength} lines omitted] ...\n` +
-      aStrings.slice(-(maxLineLength / 2)).join("\n");
-  }
-  if (bStrings.length > maxLineLength) {
-    bStrings =
-      bStrings.slice(0, maxLineLength / 2).join("\n") +
-      `\n... [${bStrings.length - maxLineLength} lines omitted] ...\n` +
-      bStrings.slice(-(maxLineLength / 2)).join("\n");
-  }
-  return `Expected: ${aStrings} but got ${bStrings}`;
+  let aStrings = JSON.stringify(a, null, 2);
+  let bStrings = JSON.stringify(b, null, 2);
+  return `Expected: ${truncateMiddle(aStrings)}\nReceived: ${truncateMiddle(
+    bStrings,
+  )}`;
 };
 
 class Expectation {
@@ -209,6 +218,30 @@ class Expectation {
     assert(
       this.value <= number,
       `[Assert] Expected ${this.value} <= ${number} (LTE)`,
+    );
+  }
+  toMatch(strOrReg) {
+    let matched = false;
+    if (typeof this.value !== "string") {
+      assert(
+        false,
+        "[Assert] toMatch cannot match a non-string value:" + this.value,
+      );
+      return;
+    } else if (typeof strOrReg === "string") {
+      matched = this.value.includes(strOrReg);
+    } else if (strOrReg.constructor === RegExp) {
+      matched = strOrReg.test(this.value);
+    } else {
+      assert(
+        false,
+        "[Assert] toMatch passed invalid value. Use a string or a RegExp",
+      );
+    }
+
+    assert(
+      matched,
+      `[Assert] Expected "${truncateMiddle(this.value)}" to match ${strOrReg}`,
     );
   }
   toBeTruthy() {
