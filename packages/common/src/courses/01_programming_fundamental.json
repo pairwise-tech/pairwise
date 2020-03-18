@@ -966,6 +966,17 @@
           "content": ""
         },
         {
+          "id": "mcGgTSjJa",
+          "type": "typescript",
+          "title": "Building an Array With a Loop",
+          "instructions": "Use a `while` loop or a `for` loop to build an array of the numbers 1, 2, 3, 4, 5, ... etc up to _and including_ 1000\\.",
+          "testCode": "// Write your tests here:\ntest(\"The variable `result` should be an array\", () => {\n  expect(Array.isArray(result)).toBe(true);\n});\n\ntest(\"The `result` array should have all integers from 1 to 1000 in it\", () => {\n  const expected = Array(100).fill(null).map((_, i) => i + 1);\n  expect(result).toEqual(expected);\n})",
+          "videoUrl": "",
+          "starterCode": "const result: number[] = [];\n\n// Write some code to add items to the array\n\nconsole.log(result);\n",
+          "solutionCode": "const result = [];\n\nlet i = 1;\n\nwhile (i < 101) {\n  result.push(i);\n  i++;\n}\n\nconsole.log(result);\n",
+          "content": ""
+        },
+        {
           "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",
