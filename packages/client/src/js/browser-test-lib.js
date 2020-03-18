@@ -139,6 +139,30 @@ class Expectation {
   toBe(expected) {
     assertEqual(this.value, expected);
   }
+  toBeGreaterThan(number) {
+    assert(
+      this.value > number,
+      `[Assert] Expected ${this.value} > ${number} (GT)`,
+    );
+  }
+  toBeGreaterThanOrEqual(number) {
+    assert(
+      this.value >= number,
+      `[Assert] Expected ${this.value} >= ${number} (GTE)`,
+    );
+  }
+  toBeLessThan(number) {
+    assert(
+      this.value < number,
+      `[Assert] Expected ${this.value} < ${number} (LT)`,
+    );
+  }
+  toBeLessThanOrEqual(number) {
+    assert(
+      this.value <= number,
+      `[Assert] Expected ${this.value} <= ${number} (LTE)`,
+    );
+  }
   toBeTruthy() {
     assertEqual(Boolean(this.value), true);
   }
