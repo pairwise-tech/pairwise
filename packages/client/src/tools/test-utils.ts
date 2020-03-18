@@ -5,7 +5,7 @@ import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
 import { TEST, PRODUCTION } from "./client-env";
 import quote from "string-quote-x";
-import pipe from "ramda/es/pipe";
+import pipe from "ramda/src/pipe";
 
 // This not-so-robust code replacement exists becuase if we ourselves (using
 // Codepress) added a script tag to a markup challenge we would accidentally
