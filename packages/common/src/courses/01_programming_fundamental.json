@@ -34,11 +34,11 @@
           "id": "Oqha$qtc",
           "type": "markup",
           "title": "The Beautiful World of CSS",
-          "instructions": "HTML provides the structure, CSS provides the _style_.",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "instructions": "HTML provides the structure, CSS provides the _style_. Take a look at the editor and the preview on the right. That white title isn't too hot though... See if you can turn the `h1` title from `white` to `gold` color\\!",
+          "testCode": "test(\"The `h1` title should have a `gold` CSS `color` property.\", () => {\n  const title = get(\"h1\");\n  const style = getStyle(title, \"color\");\n  expect(style).toBe(cssColor(\"gold\"));\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "<html>\n    <header>\n        <style>\n            body {\n                background: #1a4a2e;\n                padding-left: 12px;\n                padding-right: 12px;\n            }\n            h1 {\n                /* Here! Look Here! */\n                color: white;\n            }\n            p {\n                color: tomato;\n            }\n        </style>\n    </header>\n    <body>\n        <div>\n            <h1>Welcome to Pairwise!</h1>\n            <p>\n                CSS let's you change the color and shape of HTML!\n            </p>\n        </div>\n    </body>\n</html>",
+          "solutionCode": "<html>\n    <header>\n        <style>\n            body {\n                background: #1a4a2e;\n                padding-left: 12px;\n                padding-right: 12px;\n            }\n            h1 {\n                /* Here! Look Here! */\n                color: gold;\n            }\n            p {\n                color: tomato;\n            }\n        </style>\n    </header>\n    <body>\n        <div>\n            <h1>Welcome to Pairwise!</h1>\n            <p>\n                CSS let's you change the color and shape of HTML!\n            </p>\n        </div>\n    </body>\n</html>",
           "content": ""
         },
         {
