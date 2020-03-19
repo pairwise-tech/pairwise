@@ -150,6 +150,7 @@ app.post("/assets/:resourceId", (req, res, next) => {
 });
 
 app.get("/courses", (_, res) => {
+  // NOTE: This returns the entire course and doesn't filter free content.
   api.courses.getAll().then(courses =>
     res.send({
       status: "OK",
@@ -164,17 +165,17 @@ app.get("/skeletons", (_, res) => {
     .then((xs: Course[]) => {
       const util = new ContentUtilityClass(xs);
 
-      // User can access all modules
-      const mockUserAccess = xs
+      // Codepress user "purchased" all existing courses
+      const allAccessPass = xs
         .map(x => x.id)
-        .reduce((agg, id) => {
+        .reduce((courseIdMap, id) => {
           return {
-            ...agg,
+            ...courseIdMap,
             [id]: true,
           };
         }, {});
 
-      return util.getCourseNavigationSkeletons(mockUserAccess);
+      return util.getCourseNavigationSkeletons(allAccessPass);
     })
     .then(skeletons => {
       res.send({

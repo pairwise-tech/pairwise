@@ -1012,6 +1012,7 @@
       ]
     },
     {
+      "free": false,
       "id": "4IXSqQMi",
       "title": "Developer Workflow",
       "challenges": [
@@ -1049,10 +1050,10 @@
           "solutionCode": "",
           "content": "Here is the special topics section for Developer Workflow where we will cover some additional content you may find interesting. Remember, the special topics contain optional material, but are recommended\\!"
         }
-      ],
-      "free": false
+      ]
     },
     {
+      "free": false,
       "id": "N3xExLt4",
       "title": "Async Programming & APIs",
       "challenges": [
@@ -1067,10 +1068,10 @@
           "solutionCode": "",
           "content": "In this module you will learn how different programs communicate with each."
         }
-      ],
-      "free": false
+      ]
     },
     {
+      "free": false,
       "id": "ZdkSjC9P",
       "title": "UI Programming",
       "challenges": [
@@ -1095,10 +1096,10 @@
           "testCode": "test(\"Renders a <h1> tag with the text 'Hello, React!'\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const label = container.querySelector(\"h1\");\n  return label.textContent === \"Hello, React!\";\n});\n\ntest(\"Renders a controlled <input /> using React state\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const inputEl = container.querySelector(\"input\");\n  const testValue = \"giraffe\";\n  ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });\n  return inputEl.value === testValue;\n});\n",
           "content": "Placeholder supplementary content..."
         }
-      ],
-      "free": false
+      ]
     },
     {
+      "free": false,
       "id": "EmSvFhW8",
       "title": "Server Programming",
       "challenges": [
@@ -1113,10 +1114,10 @@
           "solutionCode": "",
           "content": "In this module you will learn about backend engineering: how to write servers."
         }
-      ],
-      "free": false
+      ]
     },
     {
+      "free": false,
       "id": "f0pDYSOV",
       "title": "Databases",
       "challenges": [
@@ -1131,10 +1132,10 @@
           "solutionCode": "",
           "content": "In this module you will learn about databases, the technology responsible for storing all of the data used by modern software applications."
         }
-      ],
-      "free": false
+      ]
     },
     {
+      "free": false,
       "id": "D1JR2EXa",
       "title": "Mobile",
       "challenges": [
@@ -1149,10 +1150,10 @@
           "solutionCode": "",
           "content": "In this module you will learn the basics of programming mobile apps. Specifically, you will learn React Native, a cross\\-platform technology which allows developers to build iOS and Android apps using a single codebase."
         }
-      ],
-      "free": false
+      ]
     },
     {
+      "free": false,
       "id": "ZzVuDVNP",
       "title": "Testing & Automation",
       "challenges": [
@@ -1167,10 +1168,10 @@
           "solutionCode": "",
           "content": "In this module you will learn about how to test software and automate common tasks in order to improve productivity."
         }
-      ],
-      "free": false
+      ]
     },
     {
+      "free": false,
       "id": "qV7cPqG1",
       "title": "Debugging & Refactoring",
       "challenges": [
@@ -1185,10 +1186,10 @@
           "solutionCode": "",
           "content": "In this module you will learn the vital skills of debugging and refactoring software. Once software is written, it will inevitably have problems and errors. Debugging is the process of tracking down, understanding, and fixing errors in the code. Refactoring, it is the process of revisiting old code and writing it to improve the code quality and hopefully reduce the chances of bugs and errors."
         }
-      ],
-      "free": false
+      ]
     },
     {
+      "free": false,
       "id": "G8v0iMpm",
       "title": "Delivery & Deployment",
       "challenges": [
@@ -1203,10 +1204,10 @@
           "solutionCode": "",
           "content": "In this module, you will learn about how modern software is deployed and delivered to users. This is one of the last important topics on your journey to becoming a software engineer\\!"
         }
-      ],
-      "free": false
+      ]
     },
     {
+      "free": false,
       "id": "GgP1rkAa",
       "title": "Capstone Project",
       "challenges": [
@@ -1221,8 +1222,7 @@
           "solutionCode": "",
           "content": "Congratulations\\! You have completed all the course material and you're not ready to get your hands dirty building real world applications\\! You are definitely ready for a job, but you still need a portfolio of rockstar projects to prove it to your future employer. That's what this section is all about: letting you loose to build some amazing projects to impress everyone around you. Let's get started\\!"
         }
-      ],
-      "free": false
+      ]
     }
   ]
 }
