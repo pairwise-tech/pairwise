@@ -23,11 +23,11 @@
           "id": "Ba5aAVqP",
           "type": "markup",
           "title": "HTML Basics",
-          "instructions": "Every webpage you see on the internet is composed of HTML. The last challenge was an easy one to start with. Here is a slightly harder one\\! See if you can solve it.",
+          "instructions": "Every webpage you see on the internet is composed of HTML, which stands for \"hypertext markup language\". It's a fancy term, but it's just a way to describe the content you want to see on a webpage. There is an HTML document in the editor below. You can see the preview of the document on the right side of the workspace.",
           "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "<html>\n    <header>\n        <title>My First Webpage</title>\n        <style>\n            body {\n                background: #adffe1;\n            }\n        </style>\n    </header>\n    <body>\n        <h1>My First Webpage</h1>\n        <p>I've always wanted to build a website! Now, I finally can!</p>\n    </body>\n</html>",
-          "solutionCode": "",
+          "solutionCode": "<html>\n    <header>\n        <title>My First Webpage</title>\n        <style>\n            body {\n                background: #adffe1;\n                padding-left: 12px;\n            }\n        </style>\n    </header>\n    <body>\n        <h1>My First Webpage</h1>\n        <p>I've always wanted to build a website! Now, I finally can!</p>\n    </body>\n</html>",
           "content": ""
         },
         {
@@ -1200,7 +1200,29 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In this module you will learn about databases, the technology responsible for storing all of the data used by modern software applications."
+          "content": "In this module you will learn about databases, the technology responsible for storing all of the data used by modern software applications. Databases are crucial to building modern software applications. They are responsible for storing and backing up the data which makes your applications valuable. Whether it's user profiles, chat messages, transaction records, inventory, or anything else, these are all stored and persisted in a database.\n\nAt a basic level, a database is just a hard disk on a computer where information is stored. As we will see, there are several different types of databases, which are all used for different purposes. Like many things in software engineering, there are tradeoffs to choosing one database type over another.\n\nThe two most common types of databases are relational and non\\-relational. SQL is the canonical relational database, which you may have heard of before.  A SQL database defines a strict schema for what data and relationships between data look like. If you are using a SQL database you can rely on the database schema to enforce integrity for your data.\n\nOn the other hand, a non\\-relational database doesn't have a strict schema like a SQL database does. Non\\-relational databases are great when you have unstructured data, data in inconsistent formats, data with an unknown format, or other types of flexible requirements. Common non\\-relational databases are MongoDB and Redis, along with several others.\n\nIn this module, we will learn the basics for these different types of databases and get some practice working directly writing, reading, and updating data. This will give you the core skillset required to build a CRUD app \\(Create Read Update Delete\\).\n\nLet's get started\\!"
+        },
+        {
+          "id": "K9UYTfwcy",
+          "type": "section",
+          "title": "Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "It's time to start using some real databases\\! In these projects you will build simple applications which interact with a real, live database\\!"
+        },
+        {
+          "id": "qe2LFM0mp",
+          "type": "section",
+          "title": "Special Topics",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In these special topics we will cover a lot of supplementary topics related to databases. As you might guess database engineering is a broad and vast topic, with a lot of room for specialization. Here, we will cover some other popular database technologies and discuss other "
         }
       ]
     },
