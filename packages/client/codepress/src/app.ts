@@ -166,12 +166,11 @@ app.get("/skeletons", (_, res) => {
 
       // User can access all modules
       const mockUserAccess = xs
-        .map(x => x.modules)
-        .reduce((agg, x) => agg.concat(x))
-        .reduce((agg, x) => {
+        .map(x => x.id)
+        .reduce((agg, id) => {
           return {
             ...agg,
-            [x.id]: true,
+            [id]: true,
           };
         }, {});
 

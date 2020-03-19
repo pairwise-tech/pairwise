@@ -79,10 +79,7 @@ class ContentUtilityClass {
             userCanAccess: courseModule.free,
             challenges: courseModule.challenges.map(challenge => {
               return {
-                id: challenge.id,
-                type: challenge.type,
-                title: challenge.title,
-                videoUrl: challenge.videoUrl,
+                ...challenge,
                 userCanAccess: courseModule.free,
               };
             }),
@@ -125,9 +122,15 @@ class ContentUtilityClass {
               ...courseModule,
               userCanAccess,
               challenges: courseModule.challenges.map(challenge => {
+                // Some individual challenges are free, e.g. intro challenges
+                // for a module.
+                const canAccessChallenge = challenge.free
+                  ? true
+                  : courseModule.free;
+
                 return {
                   ...challenge,
-                  userCanAccess,
+                  userCanAccess: canAccessChallenge,
                 };
               }),
             };

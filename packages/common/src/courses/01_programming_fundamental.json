@@ -1016,6 +1016,7 @@
       "title": "Developer Workflow",
       "challenges": [
         {
+          "free": true,
           "id": "3a4-HU8P",
           "type": "media",
           "title": "Intro",
@@ -1025,6 +1026,28 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In this module, you will learn about a standard developer workflow practices, tools, and techniques. You will learn how to use version control software such as Git, code editing tools like VS Code, and team collaboration tools like GitHub."
+        },
+        {
+          "id": "$EcZq5Ecg",
+          "type": "section",
+          "title": "Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this section, you will learn how to build applications on your own computer\\! You will learn how to download the software you need, manage a codebase using version control, Git, and GitHub, and deploy your software projects for the world to see\\!"
+        },
+        {
+          "id": "l$ZcH5bp5",
+          "type": "section",
+          "title": "Special Topics",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here is the special topics section for Developer Workflow where we will cover some additional content you may find interesting. Remember, the special topics contain optional material, but are recommended\\!"
         }
       ],
       "free": false
