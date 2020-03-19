@@ -132,6 +132,26 @@ const methodNegationProxyHandler = {
   },
 };
 
+// Determine if an object has the nested key path
+const hasIn = ([k, ...nextPath], obj) => {
+  if (k === undefined) {
+    return true;
+  } else if (obj.hasOwnProperty(k)) {
+    return hasIn(nextPath, obj[k]);
+  } else {
+    return false;
+  }
+};
+
+// Get the value at a nested path in an object
+const getIn = ([k, ...nextPath], obj, notSetValue = undefined) => {
+  if (k === undefined) {
+    return obj;
+  }
+
+  return getIn(nextPath, obj[k]);
+};
+
 const truncateMiddle = x => {
   if (typeof x !== "string") {
     return x;
@@ -243,6 +263,25 @@ class Expectation {
       matched,
       `[Assert] Expected "${truncateMiddle(this.value)}" to match ${strOrReg}`,
     );
+  }
+  toHaveProperty(keyPath, value) {
+    if (typeof keyPath === "string") {
+      keyPath = keyPath.split(".");
+    }
+    const hasProperty = hasIn(keyPath, this.value);
+    if (value) {
+      assert(
+        hasProperty && deepEqual(getIn(keyPath, this.value), value),
+        `[Assert] Expected to have property ${keyPath.join(".")}`,
+      );
+    } else {
+      assert(
+        hasProperty,
+        `[Assert] Expected at path ${keyPath.join(".")}:\n${truncateMiddle(
+          JSON.stringify(value, null, 2),
+        )}\nReceived: ${truncateMiddle(JSON.stringify(this.value, null, 2))}`,
+      );
+    }
   }
   toBeTruthy() {
     assertEqual(Boolean(this.value), true);
