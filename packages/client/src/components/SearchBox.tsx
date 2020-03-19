@@ -8,7 +8,7 @@ import { SearchResult } from "modules/challenges/types";
 import reactStringReplace from "react-string-replace";
 import { useHistory } from "react-router-dom";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { MOBILE } from "tools/constants";
+import { MOBILE, COLORS } from "tools/constants";
 import { LineWrappedText } from "./Shared";
 
 // NOTE: isClosed is kept in state rather than simply using the presence of
@@ -187,7 +187,7 @@ const Underline = styled.span`
 
 const YellowText = styled.span`
   font-weight: bold;
-  color: #ffdf75;
+  color: ${COLORS.SECONDARY_YELLOW};
 `;
 
 const SEARCH_TITLE_HEIGHT = 30;

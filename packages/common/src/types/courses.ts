@@ -28,6 +28,8 @@ export type CHALLENGE_TYPE =
   | "guided-project"
   | "special-topic";
 
+export type CHALLENGE_PROGRESS = "NOT_ATTEMPTED" | "INCOMPLETE" | "COMPLETE";
+
 export interface Course extends CourseBase {
   modules: ModuleList;
 }

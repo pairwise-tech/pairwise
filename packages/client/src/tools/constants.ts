@@ -9,6 +9,7 @@ export const COLORS = {
   PRIMARY_BLUE: "#2ee3ff",
   PRIMARY_GREEN: "rgb(0, 255, 185)",
   SECONDARY_PINK: "#f50057",
+  SECONDARY_YELLOW: "#ffdf75",
   HEADER_BORDER: "#176191",
   LIGHT_GREY: "#404040",
   TEXT_WHITE: "rgb(250,250,250)",
@@ -31,6 +32,7 @@ export const COLORS = {
   BACKGROUND_INPUT: "rgb(55,55,55)",
   BACKGROUND_ACCOUNT_BUTTON: "rgb(25, 25, 25)",
   BACKGROUND_BODY: "#13141d",
+  NEON_GREEN: "#44f1bd",
   GRADIENT_GREEN:
     "linear-gradient( 90deg, rgba(0, 255, 177, 1) 22%, rgba(0, 255, 211, 1) 74%)",
   BORDER_MODAL: "rgb(100,100,100)",

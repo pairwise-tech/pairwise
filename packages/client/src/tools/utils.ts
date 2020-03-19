@@ -9,11 +9,13 @@ import {
   DataBlob,
   SandboxBlob,
   CHALLENGE_TYPE,
+  CHALLENGE_PROGRESS,
   ChallengeSkeleton,
   ChallengeSkeletonList,
   ProjectChallengeBlob,
   CourseList,
   Course,
+  UserProgressMap,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
 import { Location } from "history";
@@ -169,7 +171,16 @@ export const defaultSandboxBlob = constructDataBlobFromChallenge({
 export const getChallengeIcon = (
   type: CHALLENGE_TYPE,
   userCanAccess: boolean,
+  challengeProgress?: CHALLENGE_PROGRESS,
 ): IconName => {
+  if (
+    challengeProgress &&
+    type !== "section" &&
+    challengeProgress === "COMPLETE"
+  ) {
+    return "tick";
+  }
+
   if (!userCanAccess) {
     return "lock";
   }
@@ -181,6 +192,38 @@ export const getChallengeIcon = (
   } else {
     return "code";
   }
+};
+
+export const getChallengeProgress = (
+  userProgressMap: Nullable<UserProgressMap>,
+  courseId: string,
+  challengeId: string,
+): CHALLENGE_PROGRESS => {
+  if (
+    userProgressMap &&
+    userProgressMap[courseId] &&
+    userProgressMap[courseId][challengeId]
+  ) {
+    if (userProgressMap[courseId][challengeId].complete) {
+      return "COMPLETE";
+    }
+    return "INCOMPLETE";
+  }
+  return "NOT_ATTEMPTED";
+};
+
+export const getSectionProgress = (
+  sectionChallenges: ChallengeSkeleton[],
+  userProgressMap: Nullable<UserProgressMap>,
+  courseId: string,
+) => {
+  return sectionChallenges.reduce(
+    (acc, { id }) =>
+      getChallengeProgress(userProgressMap, courseId, id) === "COMPLETE"
+        ? acc + 1
+        : acc,
+    0,
+  );
 };
 
 export interface NavigationChallengeSection {
