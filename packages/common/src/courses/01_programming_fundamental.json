@@ -1159,7 +1159,29 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In this module you will learn about backend engineering: how to write servers."
+          "content": "To build a fullstack application you need two pieces: a frontend and backend. You've already learned how to build a frontend user interface with React \\- now we will dive into building servers on the backend.\n\nA server fulfills the role of handling requests from applications and storing application data. For instance, the server for Pairwise receives numerous requests as you work through the course. The client frontend sends updates on your progress which the server processes and records. When you signup and login the server handles these requests and creates a user entry for you in a database which the server can access. It stores your progress in association with this user. And, it does this for all the users who access Pairwise. The server is \\(should be\\) always available to handle requests from client applications.\n\nServers may seem daunting\\! But don't worry, they are just computer programs and you learned everything you need to write computer programs in the first course modules. Servers are just composed of functions, classes, and data structures.\n\nIn general, a typical server exposes an API for clients to send it requests. It then has a layer of business logic which handles processing client requests, storing and updating data. Then, finally, it has another layer which is responsible for interacting with a database and persisting or retrieving data.\n\nAs you might imagine, there are many tools and libraries for writing server applications which provide some of the common scaffolding and features modern servers require.\n\nIn this module, we will learn about some of these tools and get some practice building and thinking about some of the common components servers use. By the end you will be writing and deploying your own servers. Get excited, let's go\\!"
+        },
+        {
+          "id": "WkU2mKHxZ",
+          "type": "section",
+          "title": "Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For these projects we will actually write and deploy a server application. Get ready, this is going to be fun\\!"
+        },
+        {
+          "id": "hY2nZf$si",
+          "type": "section",
+          "title": "Special Topics",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The world of building severs is vast and fascinating. There are many topics to learn about, from design patterns to scaling to security and so on and so forth. We will try to give you a taste of some of these different topics here, to broaden your  knowledge and give you an idea of how diverse and deep the world of backend development is."
         }
       ]
     },
