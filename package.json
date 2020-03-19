@@ -12,7 +12,7 @@
     "common:build": "cd packages/common && yarn build",
     "common:watch": "cd packages/common && yarn watch",
     "client:setup": "cd packages/client && yarn setup:env",
-    "client": "yarn run client:start",
+    "client": "yarn && yarn common:build && yarn client:start",
     "client:start": "cd packages/client && yarn start",
     "client:dev": "cd packages/client && yarn start:dev",
     "client:https": "cd packages/client && yarn start:https",

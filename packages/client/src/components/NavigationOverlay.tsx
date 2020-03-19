@@ -9,6 +9,7 @@ import {
   Challenge,
   ChallengeSkeletonList,
   ModuleSkeletonList,
+  CHALLENGE_PROGRESS,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, SANDBOX_ID } from "tools/constants";
@@ -19,6 +20,8 @@ import {
   generateEmptyChallenge,
   getChallengeIcon,
   partitionChallengesBySection,
+  getChallengeProgress,
+  getSectionProgress,
 } from "tools/utils";
 import {
   Tooltip,
@@ -99,12 +102,14 @@ class NavigationOverlay extends React.Component<IProps> {
           style={{ zIndex: 3 }}
           onClick={e => e.stopPropagation()}
         >
-          <Title>{course.title}</Title>
-          {/* In case of no challenges yet, or to add one at the start, here's a button */}
-          <div style={{ position: "relative" }}>
-            {this.renderModuleCodepressButton(course, -1)}
-          </div>
-          {this.renderSortableModuleList(course, module, course.modules)}
+          <ColTitle>{course.title}</ColTitle>
+          <ColScroll>
+            {/* In case of no challenges yet, or to add one at the start, here's a button */}
+            <div style={{ position: "relative" }}>
+              {this.renderModuleCodepressButton(course, -1)}
+            </div>
+            {this.renderSortableModuleList(course, module, course.modules)}
+          </ColScroll>
         </Col>
         <Col
           offsetX={overlayVisible ? 0 : -60}
@@ -115,7 +120,7 @@ class NavigationOverlay extends React.Component<IProps> {
           onClick={e => e.stopPropagation()}
         >
           <SpecialLeftShadow />
-          <Title>
+          <ColTitle>
             <p>{module.title}</p>
             {hasSections && (
               <div>
@@ -124,11 +129,17 @@ class NavigationOverlay extends React.Component<IProps> {
                 </Button>
               </div>
             )}
-          </Title>
-          {/* In case of no challenges yet, or to add one at the start, here's a button */}
-          {this.renderChallengeCodepressButton(course, module, -1)}
-          {this.renderSortableChallengeList(course, module, module.challenges)}
-          <DoneScrolling />
+          </ColTitle>
+          <ColScroll>
+            {/* In case of no challenges yet, or to add one at the start, here's a button */}
+            {this.renderChallengeCodepressButton(course, module, -1)}
+            {this.renderSortableChallengeList(
+              course,
+              module,
+              module.challenges,
+            )}
+            <DoneScrolling />
+          </ColScroll>
         </Col>
       </Overlay>
     );
@@ -248,7 +259,6 @@ class NavigationOverlay extends React.Component<IProps> {
      * Partition the challenge list by sections.
      */
     const sectionBlocks = partitionChallengesBySection(challengeList);
-
     /**
      * Render the section blocks:
      */
@@ -259,8 +269,9 @@ class NavigationOverlay extends React.Component<IProps> {
             {this.renderChallengeNavigationItem({
               module,
               course,
-              section: true,
+              isSection: true,
               sectionChallengeCount: block.challenges.length,
+              sectionChallenges: block.challenges,
               index: blockIndex,
               challenge: block.section,
             })}
@@ -333,8 +344,9 @@ class NavigationOverlay extends React.Component<IProps> {
 
   renderChallengeNavigationItem = (args: {
     index: number;
-    section?: boolean;
+    isSection?: boolean;
     sectionChallengeCount?: number;
+    sectionChallenges?: ChallengeSkeleton[];
     module: ModuleSkeleton;
     course: CourseSkeleton;
     challenge: ChallengeSkeleton;
@@ -345,21 +357,33 @@ class NavigationOverlay extends React.Component<IProps> {
       index,
       module,
       course,
-      section,
+      isSection,
       challenge,
       sectionChallengeCount = 0,
+      sectionChallenges = [],
       style = {},
     } = args;
+
+    const challengeProgress = getChallengeProgress(
+      this.props.userProgress,
+      course.id,
+      challenge.id,
+    );
+    const sectionChallengesComplete = getSectionProgress(
+      sectionChallenges,
+      this.props.userProgress,
+      course.id,
+    );
     const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
     const iconProps = {
       challenge,
       isSectionOpen,
+      challengeProgress,
     };
 
     const ChallengeIconUI = isEditMode
       ? SortableHandle(ChallengeListItemIcon)
       : ChallengeListItemIcon;
-
     const toggleSection = (e: React.MouseEvent) => {
       e.preventDefault();
       this.toggleExpandCollapse(challenge);
@@ -383,20 +407,29 @@ class NavigationOverlay extends React.Component<IProps> {
             <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>
-            {section ? (
-              <Badge onClick={toggleSection}>
-                {sectionChallengeCount} Challenge
-                {sectionChallengeCount > 1 ? "s" : ""}
-              </Badge>
-            ) : challenge.videoUrl ? (
-              <Tooltip
-                usePortal={false}
-                position="left"
-                content="Includes Video"
-              >
-                <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
-              </Tooltip>
-            ) : null}
+            {isSection ? (
+              <HoverableBadge onClick={toggleSection}>
+                <BadgeDefaultContent>
+                  {sectionChallengesComplete} of {sectionChallengeCount}{" "}
+                  Complete
+                </BadgeDefaultContent>
+                <BadgeHoverContent>
+                  {isSectionOpen ? "Collapse" : "Expand"}
+                </BadgeHoverContent>
+              </HoverableBadge>
+            ) : (
+              <NavIcons>
+                {challenge.videoUrl && (
+                  <Tooltip
+                    usePortal={false}
+                    position="left"
+                    content="Includes Video"
+                  >
+                    <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
+                  </Tooltip>
+                )}
+              </NavIcons>
+            )}
           </span>
         </Link>
         {this.renderChallengeCodepressButton(course, module, index)}
@@ -636,11 +669,19 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
   }
 
   &:hover {
-    color: white;
+    color: white !important;
     background: #0d0d0d;
     &:after {
       transform: scale(1);
     }
+  }
+
+  .iconComplete {
+    color: ${COLORS.NEON_GREEN} !important;
+  }
+
+  .iconIncomplete {
+    color: ${COLORS.SECONDARY_YELLOW} !important;
   }
 `;
 
@@ -677,21 +718,46 @@ const RotatingIcon = styled(Icon)<{ isRotated?: boolean }>`
 interface ChallengeListItemIconProps {
   challenge: ChallengeSkeleton;
   isSectionOpen?: boolean;
+  challengeProgress: CHALLENGE_PROGRESS;
   onClick: (e: React.MouseEvent) => any;
 }
 
 const ChallengeListItemIcon = ({
   isSectionOpen,
   challenge,
+  challengeProgress,
   ...props
-}: ChallengeListItemIconProps) => (
-  <RotatingIcon
-    isRotated={isSectionOpen}
-    iconSize={Icon.SIZE_LARGE}
-    icon={getChallengeIcon(challenge.type, challenge.userCanAccess)}
-    {...props}
-  />
-);
+}: ChallengeListItemIconProps) => {
+  let tooltipContent = "";
+  let iconExtraClass = "";
+
+  if (challengeProgress === "COMPLETE") {
+    tooltipContent = "Challenge Completed";
+    iconExtraClass = "iconComplete";
+  } else if (challengeProgress === "INCOMPLETE") {
+    tooltipContent = "Challenge Attempted";
+    iconExtraClass = "iconIncomplete";
+  }
+
+  return (
+    <Tooltip
+      disabled={challengeProgress === "NOT_ATTEMPTED"}
+      content={tooltipContent}
+    >
+      <RotatingIcon
+        isRotated={isSectionOpen}
+        iconSize={Icon.SIZE_LARGE}
+        icon={getChallengeIcon(
+          challenge.type,
+          challenge.userCanAccess,
+          challengeProgress,
+        )}
+        className={challenge.type !== "section" ? iconExtraClass : ""}
+        {...props}
+      />
+    </Tooltip>
+  );
+};
 
 // The shadow that appears in the overlay nav for separating the module column
 // from the challenge column
@@ -706,16 +772,46 @@ const SpecialLeftShadow = styled.div`
   pointer-events: none;
 `;
 
-const Badge = styled.div`
+const BadgeDefaultContent = styled.span`
+  display: inline-block;
+  position: relative;
+  transform: translateY(0);
+  transition: all 0.4s ease;
+`;
+
+const BadgeHoverContent = styled.span`
+  display: block;
+  position: absolute;
+  transition: all 0.2s ease;
+  transform: translateY(200%);
+  top: 50%;
+  left: 0;
+  right: 0;
+  text-align: center;
+`;
+
+const HoverableBadge = styled.div`
   border-radius: 100px;
   font-size: 11px;
   font-weight: bold;
   background: #505052;
   padding: 4px 12px;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    ${BadgeDefaultContent} {
+      transform: translateY(-200%);
+    }
+    ${BadgeHoverContent} {
+      transform: translateY(-50%);
+    }
+  }
 `;
 
 const Col = styled.div<{ offsetX: number }>`
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 300px;
   background: ${COLORS.BACKGROUND_CONTENT};
   border-right: 1px solid ${COLORS.LIGHT_GREY};
@@ -723,6 +819,9 @@ const Col = styled.div<{ offsetX: number }>`
   z-index: 2;
   transition: all 0.2s ease-out;
   transform: translateX(${({ offsetX }) => `${offsetX}px`});
+`;
+
+const ColScroll = styled.div`
   overflow: auto;
 `;
 
@@ -741,14 +840,13 @@ const Overlay = styled.div<{ visible: boolean }>`
   transition: all 0.2s ease-out;
 `;
 
-const Title = styled.div`
+const ColTitle = styled.div`
   font-size: 18px;
   font-weight: 200;
   color: white;
   margin: 0;
   height: 40px;
   padding: 0 12px;
-  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
   font-variant: small-caps;
   font-weight: bold;
   letter-spacing: 2;
@@ -756,9 +854,19 @@ const Title = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-grow: 0;
+  flex-shrink: 0;
 
   p {
     margin: 0;
+  }
+`;
+
+const NavIcons = styled.span`
+  display: inline-block;
+
+  & > span:not(:first-child) {
+    margin-left: 10px;
   }
 `;
 
@@ -770,6 +878,7 @@ const Title = styled.div`
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userSettings: Modules.selectors.user.userSettings(state),
+  userProgress: Modules.selectors.user.userProgress(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),

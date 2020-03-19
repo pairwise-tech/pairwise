@@ -40,7 +40,7 @@ import {
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
-import { LowerRight, IconButton, UpperRight } from "./Shared";
+import { LowerRight, IconButton, UpperRight, Loading } from "./Shared";
 import {
   Button,
   Tooltip,
@@ -1294,7 +1294,11 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
     const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
 
     if (!challenge || isLoadingBlob || isUserLoading) {
-      return <h1>Loading Challenge...</h1>;
+      return (
+        <div style={{ marginTop: 40 }}>
+          <Loading />
+        </div>
+      );
     }
 
     /**
