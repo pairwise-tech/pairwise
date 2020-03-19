@@ -408,6 +408,28 @@
           "content": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language: TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
         },
         {
+          "id": "s9RpoVOt2",
+          "type": "section",
+          "title": "Comments",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Writing comments is an important part of writing computer software. Comments are code which is ignored by the computer. They serve as messages left for yourself or some other future programmer."
+        },
+        {
+          "id": "bf1g0r$bL",
+          "type": "markup",
+          "title": "Comment the Code!",
+          "instructions": "Here we will get some practice writing your first comments.",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "8p4BZqPl",
           "type": "section",
           "title": "Logging and Debugging",
@@ -1222,7 +1244,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In these special topics we will cover a lot of supplementary topics related to databases. As you might guess database engineering is a broad and vast topic, with a lot of room for specialization. Here, we will cover some other popular database technologies and discuss other "
+          "content": "In these special topics we will cover a lot of supplementary topics related to databases. As you might guess database engineering is a broad and vast topic, with a lot of room for specialization. Here, we will cover some other popular database technologies and discuss other topics such as performance and scalability."
         }
       ]
     },
