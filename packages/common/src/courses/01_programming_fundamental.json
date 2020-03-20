@@ -1010,6 +1010,17 @@
           "content": "So far we have seen some simple examples of what scope is in a computer program and how it is defined by functions and block statements of code.\n\nOne of the main ways scope is useful is by giving you the ability to create separations between pieces of code. This helps to improve the organization and readability of your program, and it may prevent bugs and problems as well.\n\nHowever, scope is not the only tool a programmer has to accomplish a goal like this.\n\nLater on, you will learn how to write programs and build apps using a real code environment \\(not this fun editor playground in a browser\\!\\). When you reach that stage, you will have a lot of other tools at your disposal.\n\nFor example, you can define parts of your program in different files, put related files in different folders, and then _import_ values from one file into another. You can also control what you _import_ and _export_. This is a very powerful capability for organizing software programs. These same skills will also allow you to download open source code other people have written and import this code in your own projects as well\\! This is incredibly useful and opens the doors to building a number of interesting applications\\!\n\nYou will learn the details of this later, but for now just keep it in mind as a short preview and extension of the ideas of scopes which will come in handy later\\!\n\nTake a look at this code snippet for a short teaser:\n\n```typescript\n// This imports the library \"request\", which is open source and written\n// and maintained by other developers.\nimport request from \"request\";\n\n// The request library lets you make HTTP requests to URLs!\nrequest(\"http://www.google.com\", (error, response, body) => {\n  if (error) {\n    throw error;\n  } else {\n    console.log(\"Success!, Response received: \", body);\n    // Do somethine else here...\n  }\n});\n\n```\n"
         },
         {
+          "id": "Hvnu4UcaE",
+          "type": "section",
+          "title": "Algorithms",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Now you have learned all the basics of a programming language\\! Now that you have a solid foundation it's time to put your skills to the test solving some algorithms. These will be simple, and increasingly more challenging, problems that require you to write a function to perform some specific operation or algorithm. To solve them, you will need to have a firm grasp of all the basic programming concepts: conditional statements, loops, data structures, functions, and so on.\n\nSolving a number of questions like this is the best way to build up your programming skills and become confident in your abilities."
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
