@@ -181,9 +181,11 @@ const ChallengeTestEditor = (props: Props) => {
           </Tooltip>
         </ButtonGroup>
         <Tooltip content={"Format Code"} position="left">
-          <Button aria-label="format editor code" onClick={handleFormatCode}>
-            {"{ }"}
-          </Button>
+          <IconButton
+            icon="clean"
+            aria-label="format editor code"
+            onClick={handleFormatCode}
+          />
         </Tooltip>
       </LowerRight>
     </div>

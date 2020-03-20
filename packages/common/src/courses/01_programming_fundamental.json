@@ -13,7 +13,7 @@
           "type": "markup",
           "title": "Hello, Pairwise!",
           "instructions": "There is an h1 tag in the code editor below which contains the text \"Pairwise\". Your job is to change the text to say \"Hello, Pairwise\\!\"",
-          "testCode": "test(`The h1 tag should contain the text: \"Hello, Pairwise!\"`, () => {\n    expect(getText(\"h1\")).toBe(\"Hello, Pairwise!\");\n});",
+          "testCode": "test(`The h1 tag should contain the text: \"Hello, Pairwise!\"`, () => {\n  expect(getText(\"h1\")).toBe(\"Hello, Pairwise!\");\n});\n",
           "videoUrl": "",
           "starterCode": "<h1>Pairwise<h1>",
           "solutionCode": "<h1>Hello, Pairwise!<h1>\n",
