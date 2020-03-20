@@ -123,24 +123,26 @@ class ContentUtilityClass {
         // id is included in the provided course access map (which represents
         // the courses the user has purchased).
         const canAccessCourse = course.id in courseAccessMap;
+
         return {
           ...course,
           modules: course.modules.map(courseModule => {
+            // Some modules are free.
             const moduleFree = courseModule.free;
-            const userCanAccess = moduleFree || canAccessCourse;
+            const userCanAccessModule = canAccessCourse || moduleFree;
+
             return {
               ...courseModule,
-              userCanAccess,
+              userCanAccess: userCanAccessModule,
               challenges: courseModule.challenges.map(challenge => {
-                // Some individual challenges are free, e.g. intro challenges
-                // for a module.
-                const canAccessChallenge = challenge.free
-                  ? true
-                  : courseModule.free;
+                // Some challenges are free.
+                const challengeFree = challenge.free;
+                const userCanAccessChallenge =
+                  userCanAccessModule || challengeFree;
 
                 return {
                   ...challenge,
-                  userCanAccess: canAccessChallenge,
+                  userCanAccess: userCanAccessChallenge,
                 };
               }),
             };
