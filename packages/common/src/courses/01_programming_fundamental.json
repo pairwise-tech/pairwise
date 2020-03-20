@@ -433,11 +433,11 @@
           "id": "aMuPir571",
           "type": "typescript",
           "title": "Comment a Function",
-          "instructions": "There is an `anObscureFunctionNoOneCanUnderstand` in the editor below.",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "instructions": "There is a function called `generateUniqueStringId` in the editor below. The function generates a random string id composed of letters. Then, there is some code to generate several ids and print out their values to the console on the right of the screen. The function `generateUniqueStringId` doesn't have any comment to describe what it does though... This could be confusing to someone reading this code in the future\\! Complete the challenge by giving the function a multi\\-line comment \\(remember: `/* ... */` \\) and write a message about what the function does \\(generate a unique string id of letters\\). You can do it\\!",
+          "testCode": "test(\"A multi-line comment should exist using the `/* ... */` comment syntax to describe the `generateUniqueStringId` function.\", () => {\n  const code = __user_code_string__;\n  const includesCommentSyntax = code.includes(\"/*\") && code.includes(\"*/\");\n  expect(includesCommentSyntax).toBe(true);\n});\n",
           "videoUrl": "",
-          "starterCode": "function anObscureFunctionNoOneCanUnderstand() {\n    let result = 1;\n    for (let i = 0; i < 500; i++) {\n        result *= Math.random() + i;\n    }\n    return result.toExponential(5);\n}",
-          "solutionCode": "",
+          "starterCode": "function generateUniqueStringId() {\n  return (\n    Math.random()\n      .toString(36)\n      .substring(2, 15) +\n    Math.random()\n      .toString(36)\n      .substring(2, 15)\n  );\n}\n\n// Create an array and fill it with random ids\nconst ids = new Array(10).fill(\"\").map(generateUniqueStringId);\n\n// Log the random ids\nconsole.log(\"Here are the ids:\");\nfor (const id of ids) {\n  console.log(id);\n}\n",
+          "solutionCode": "/**\n * Generate a unique string id of 21 letters.\n */\nfunction generateUniqueStringId() {\n  return (\n    Math.random()\n      .toString(36)\n      .substring(2, 15) +\n    Math.random()\n      .toString(36)\n      .substring(2, 15)\n  );\n}\n\n// Create an array and fill it with random ids\nconst ids = new Array(10).fill(\"\").map(generateUniqueStringId);\n\n// Log the random ids\nconsole.log(\"Here are the ids:\");\nfor (const id of ids) {\n  console.log(id);\n}\n",
           "content": ""
         },
         {
