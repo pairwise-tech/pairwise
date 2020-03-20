@@ -1485,7 +1485,40 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In this module, you will learn about how modern software is deployed and delivered to users. This is one of the last important topics on your journey to becoming a software engineer\\!"
+          "content": "In this module, you will learn about how modern software is deployed and delivered to users. This is one of the last important topics on your journey to becoming a software engineer\\!\n\nIt's not enough to just write your apps, you have to still deploy them so users can access them\\! This can be a lot more complicated than you may think at first.\n\nYour client application must be hosted somewhere so it can be served quickly to your users when they visit a page and make a request for your app.\n\nYour server must be deployed in the cloud somewhere, possibly with multiple instances running. You need to have monitoring, alerting, and logging so you know if your server encounters any issues, failures, or errors. Maybe you also need rate limiting, caching, and other configuration and setup.\n\nYou database must be deployed, backed up, and possibly supplied with read replicas for performance. It should be secure and only accessible by your production server or possibly administrator users.\n\nAnd that's just a very simple setup\\!\n\nFinally, as your team makes changes to your applications updates should be delivered and deployed to your production system continuously. You never want to hit a big red \"Deploy the App\" button. Ideally, deployments ship continuously as you merge code, tests run automatically and stop deployments when they fail, and your technical team can focus their efforts on building business logic and features rather than fighting fires or troubleshooting manual deployment nightmare scenarios.\n\nAs you can start to see... this world of \"devops\" \\(developer operations\\) is a lot more complex than it may seem at first. That's why it is such an important skillset to be familiar with as a developer. Having an effective devops and infrastructure setup can make the difference between a team being agile, shipping quickly, and out\\-running their competition and a team which is constantly fighting fires and afraid to deploy any new code because of regressions and brittle build pipelines.\n\nLet's get started\\!"
+        },
+        {
+          "id": "3odGQPJTI",
+          "type": "section",
+          "title": "Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In these projects we will put to practice some of the principles you have just learned. In fact, you already have experience with deploying software because you have been deploying your projects for your portfolio from the very beginning.\n\nHere, we will apply some of the devops best practices we have learned to some of your deployed projects."
+        },
+        {
+          "id": "qVh4wMjVh",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this guided project, we will walk through more complex examples of devops setups in production applications. This should illustrate some devops principles in practice and give you more familiarity with why devops is important for software developers to understand."
+        },
+        {
+          "id": "GzyZTY8jb",
+          "type": "section",
+          "title": "Special Topics",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In these special topics we will start to delve into the vast world of devops, infrastructure, and software deployment. Modern, secure, applications at scale require very complex infrastructure setups so they can be highly available, reliable, and fault\\-tolerant for users. In these lessons, we will try to illustrate what devops looks like for more complex systems and introduce some more advanced technologies, such as Docker, Kubernetes, Chef, Terraform, and others.\n\nDon't worry if these seem over your head\\! It's enough at this stage to just have a rough understanding of what these technologies are and why they are useful for production systems."
         }
       ]
     },
