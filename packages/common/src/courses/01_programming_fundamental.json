@@ -1472,6 +1472,39 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Congratulations\\! You have completed all the course material and you're not ready to get your hands dirty building real world applications\\! You are definitely ready for a job, but you still need a portfolio of rockstar projects to prove it to your future employer. That's what this section is all about: letting you loose to build some amazing projects to impress everyone around you. Let's get started\\!"
+        },
+        {
+          "id": "NTkZ2fFGp",
+          "type": "section",
+          "title": "Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The projects in this final section are fullstack applications which will really test your abilities as a programmer\\! These projects are the culmination of all of the hard work and practice you have put in to work to this point.\n\nThese projects will be challenging, but if you can complete them they will give you a portfolio which will really standout and they will prove that you have acquired all the skills necessary to work as a software developer."
+        },
+        {
+          "id": "379M1tAlW",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here, at the very end we present a guided walkthrough of a fullstack application which can illustrate how all the principles and skills you have learned in this course fit together to create a working product."
+        },
+        {
+          "id": "DVy0PqE5j",
+          "type": "section",
+          "title": "Special Topics",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "✨ Congratulations on making it this far\\!\\!\\! ✨\n\nIn this final special topics series we will present summary content, wisdom, reflections, meta\\-content, and other parting advice for you on your journey as a software developer.\n\nHere we will discuss how to get a job as a developer, how to navigate the application and interview process, how to negotiate and understand job offers, and the overall job market. We will also address some trends and predictions in the software industry, and touch on a few other skills and technologies that you might find interesting to extend your learning journey with.\n\nWith these lessons in hand, you will be 100% equipped to go out into the world and get your first job\\! Your first team will be impressed by the depth and breadth of your knowledge.\n\nSincere congratulations from all of us at Pairwise for reaching this point\\! 💫⭐️🌟"
         }
       ]
     }
