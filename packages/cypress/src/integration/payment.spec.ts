@@ -100,5 +100,5 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 const navigateToLockedChallenge = () => {
   click("navigation-menu-button");
   click("module-navigation-7");
-  click("challenge-navigation-0");
+  click("challenge-navigation-1");
 };
