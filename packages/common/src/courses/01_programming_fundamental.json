@@ -1073,6 +1073,17 @@
           "content": "In this section, you will learn how to build applications on your own computer\\! You will learn how to download the software you need, manage a codebase using version control, Git, and GitHub, and deploy your software projects for the world to see\\!"
         },
         {
+          "id": "s2smKN6w6",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this section we will present some guided explanations for building and deploying your own applications."
+        },
+        {
           "id": "l$ZcH5bp5",
           "type": "section",
           "title": "Special Topics",
