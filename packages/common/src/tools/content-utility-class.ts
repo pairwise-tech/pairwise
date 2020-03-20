@@ -78,9 +78,19 @@ class ContentUtilityClass {
             free: courseModule.free,
             userCanAccess: courseModule.free,
             challenges: courseModule.challenges.map(challenge => {
+              // NOTE: The reason for reassigning values specifically like
+              // this is to exclude the other challenge information (e.g.
+              // code, solution, tests, etc.) from the challenge data in
+              // the course skeleton. This is because all users can view
+              // the skeleton, but not all course content, so the skeleton
+              // must be stripped off the additional content.
               return {
-                ...challenge,
+                id: challenge.id,
+                type: challenge.type,
+                title: challenge.title,
+                videoUrl: challenge.videoUrl,
                 userCanAccess: courseModule.free,
+                free: challenge.free,
               };
             }),
           };
