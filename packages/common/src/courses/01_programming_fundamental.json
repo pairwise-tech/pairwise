@@ -416,16 +416,27 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Writing comments is an important part of writing computer software. Comments are code which is ignored by the computer. They serve as messages left for yourself or some other future programmer."
+          "content": "Writing comments is an important part of writing computer software. Comments are code which is ignored by the computer. They serve as messages left for yourself or some other future programmer.\n\nTake a look at the following code snippet and see if you can recognize which parts are comments:\n\n```\n/**\n * Handle fetching a user profile.\n */\nfunction fetchUserProfile() {\n    // TODO: Fetch the user from the server instead\n    // of using a hard-coded user.\n    return { name: \"Sam\", age: 26 };\n}\n\n/**\n * Handle log in. Try to fetch the user but return\n * an error if the user could not be found.\n */\nfunction logIn() {\n    const user = fetchUserProfile();\n    // The user may not exist, handle this case\n    if (user) {\n        return user;\n    } else {\n        return new Error(\"Could not log in!\");\n    }\n}\n\n```\n\nNow let's get some practice writing comments\\!"
         },
         {
           "id": "bf1g0r$bL",
-          "type": "markup",
+          "type": "typescript",
           "title": "Comment the Code!",
-          "instructions": "Here we will get some practice writing your first comments.",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "instructions": "Here we will get some practice writing your first comments. There are two syntax choices for adding comments in TypeScript: `//` and `/* ... */`. The double slash `//` can be used to create single line comments and the `/* ... */` can be used to create single\\-line or multi\\-line comments.\n\nThe code editor is empty\\! Get some practice writing your own comments by adding at least one comment using either comment syntax.",
+          "testCode": "test(\"A comment should exist using the `//` or `/* ... */` comment syntax.\", () => {\n  const code = __user_code_string__;\n  const includesCommentSyntax = code.includes(\"//\") || (code.includes(\"/*\") && code.includes(\"*/\"));\n  expect(includesCommentSyntax).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "",
+          "solutionCode": "// This is a single line comment!\n\n/* This is also a single line comment! */\n\n/**\n * This is a multie-line comment!\n */",
+          "content": ""
+        },
+        {
+          "id": "aMuPir571",
+          "type": "typescript",
+          "title": "Comment a Function",
+          "instructions": "There is an `anObscureFunctionNoOneCanUnderstand` in the editor below.",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "function anObscureFunctionNoOneCanUnderstand() {\n    let result = 1;\n    for (let i = 0; i < 500; i++) {\n        result *= Math.random() + i;\n    }\n    return result.toExponential(5);\n}",
           "solutionCode": "",
           "content": ""
         },
