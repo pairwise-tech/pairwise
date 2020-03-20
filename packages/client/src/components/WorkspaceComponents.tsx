@@ -358,7 +358,7 @@ export const InstructionsViewEdit = connect(
     props.updateChallenge({ id: currentId, challenge: { title } });
 
   return (
-    <div style={{ height: "100%" }}>
+    <div>
       <ChallengeTitleHeading>
         <StyledEditableText
           value={props.title}

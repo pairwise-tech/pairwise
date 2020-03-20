@@ -52,7 +52,7 @@ const getStyle = (el, cssProp, pseudoSelector = null) => {
 const getText = selector => {
   const element = get(selector);
   const html = element.innerHTML;
-  return html;
+  return html.trim();
 };
 
 const css = (propName, value) => {
