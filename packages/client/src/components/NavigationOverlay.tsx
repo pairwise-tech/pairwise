@@ -406,7 +406,6 @@ class NavigationOverlay extends React.Component<IProps> {
         >
           <span className="content">
             <ChallengeIconUI {...iconProps} onClick={toggleSection} />
-
             <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>
