@@ -1125,6 +1125,17 @@
           "content": "Now we will build some simple projects which make use of your new asynchronous programming abilities\\!"
         },
         {
+          "id": "zq3sEi606",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here we will walk through some guided explanations of building and working with APIs. This should give you a sense of how these skills can be applied in the real\\-world applications."
+        },
+        {
           "id": "WdG@C4ceE",
           "type": "section",
           "title": "Special Topics",
@@ -1176,6 +1187,17 @@
           "content": "In the React projects section you will build some real\\-world projects using React. Get ready, this will be your first major projects to showcase in your portfolio\\!"
         },
         {
+          "id": "O1AV1pQs@",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Now that you've had some experience building UIs with React, we will walk through some example projects which use React to build complex frontend web applications. This should give you a sense of what production React applications look like and how more complex applications can be designed."
+        },
+        {
           "id": "iJAcbGybh",
           "type": "section",
           "title": "Special Topics",
@@ -1215,6 +1237,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "For these projects we will actually write and deploy a server application. Get ready, this is going to be fun\\!"
+        },
+        {
+          "id": "OWwTKTH@c",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this section we will walk through some projects which illustrate the backend engineering principles you have learned in some sample production applications."
         },
         {
           "id": "hY2nZf$si",
@@ -1258,6 +1291,17 @@
           "content": "It's time to start using some real databases\\! In these projects you will build simple applications which interact with a real, live database\\!"
         },
         {
+          "id": "gRGsfvdMM",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here we will see some examples of projects which use databases. This should give you some idea of the more complex applications of databases which can exist in real applications."
+        },
+        {
           "id": "qe2LFM0mp",
           "type": "section",
           "title": "Special Topics",
@@ -1299,6 +1343,17 @@
           "content": "Now we will get some experience building and deploying your own mobile apps\\! You can install these on your own mobile phone and use them wherever you go. "
         },
         {
+          "id": "fo@lZIRdV",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here we will walk through an example app build with React Native so you can see clearly what the full workflow looks like for building, developing, and deploying a mobile app built with React Native."
+        },
+        {
           "id": "YL1saaMKQ",
           "type": "section",
           "title": "Special Topics",
@@ -1338,6 +1393,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "The projects for this module will give you some experience writing your own tests, debugging tests, and building some simple automation tools. Get ready, you will enjoy this\\!"
+        },
+        {
+          "id": "Qb@0mALhz",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here we will show you how the Pairwise application is tested\\! We have built an extensive suite of tests which continuously run throughout our development workflow to ensure the important features of the platform continue working correctly. This allows us to confidently push updates and new features quickly and on a routine basis\\!"
         },
         {
           "id": "mqUy13W10",
