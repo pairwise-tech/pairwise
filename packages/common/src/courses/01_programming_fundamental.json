@@ -1433,7 +1433,40 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In this module you will learn the vital skills of debugging and refactoring software. Once software is written, it will inevitably have problems and errors. Debugging is the process of tracking down, understanding, and fixing errors in the code. Refactoring, it is the process of revisiting old code and writing it to improve the code quality and hopefully reduce the chances of bugs and errors."
+          "content": "You probably have some sense of how to debug and refactor code if you've made it this far in the course. Refactoring, if the term isn't familiar to you, is just the process of revisiting some previously written code and re\\-writing it to improve the organization, readability, or maintainability of the code \\- or, just to fix bugs or errors.\n\nAs you move forward as a developer, you will start to observe that code becomes legacy code immediately once it is written, and legacy is often prone to bugs and errors and in need of refactoring. As it terms out, the skills of debugging and refactoring are indispensable for software developers. They are as important as writing code correctly from scratch.\n\nIn this module, we will equip you with tools and techniques which will make you more effective at debugging code, and we will walk through some strategies for refactoring code as well. In addition, we will provide a number of challenges were there is some mistake in the code that you must find, debug and fix. There will be other challenges to give you specific practice refactoring existing code to change the design or organization.\n\nLet's dive in\\!"
+        },
+        {
+          "id": "C3aOJmAu3",
+          "type": "section",
+          "title": "Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "There are two projects for this section. The first will have you download the source code for a project and debug some failing tests. The second involves revisiting one of your previously completed projects and refactoring the code based on what you have learned so far in this module."
+        },
+        {
+          "id": "5iJetMlK0",
+          "type": "section",
+          "title": "Guided Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here we will walk through a real\\-world example of debugging errors in production and refactoring an application to avoid the errors in the future."
+        },
+        {
+          "id": "j@5yd8P9$",
+          "type": "section",
+          "title": "Special Topics",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In these special topics, we will demonstrate some other techniques for debugging code and present some fascinating debugging war stories. We're sure you will enjoy\\!"
         }
       ]
     },
