@@ -8,6 +8,8 @@
  * .js life!!!
  */
 
+const MAX_LINE_LENGTH = 16;
+
 /**
  * A shortcut for document.querySelector
  * @param {string} selector CSS Selector
@@ -130,6 +132,77 @@ const methodNegationProxyHandler = {
   },
 };
 
+// Determine if an object has the nested key path
+const hasIn = ([k, ...nextPath], obj) => {
+  if (k === undefined) {
+    return true;
+  } else if (obj.hasOwnProperty(k)) {
+    return hasIn(nextPath, obj[k]);
+  } else {
+    return false;
+  }
+};
+
+// Get the value at a nested path in an object
+const getIn = ([k, ...nextPath], obj, notSetValue = undefined) => {
+  if (k === undefined) {
+    return obj;
+  }
+
+  return getIn(nextPath, obj[k]);
+};
+
+// Just a shortcut for prettier json output
+const stringify = x => JSON.stringify(x, null, 2);
+
+const truncateMiddle = x => {
+  if (typeof x !== "string") {
+    return x;
+  }
+
+  const lines = x.split("\n");
+
+  if (lines.length > MAX_LINE_LENGTH) {
+    return (
+      lines.slice(0, MAX_LINE_LENGTH / 2).join("\n") +
+      `\n... [${lines.length - MAX_LINE_LENGTH} lines omitted] ...\n` +
+      lines.slice(-(MAX_LINE_LENGTH / 2)).join("\n")
+    );
+  } else {
+    return x;
+  }
+};
+
+const isObject = value =>
+  value !== null && !Array.isArray(value) && typeof value === "object";
+
+const deepEqual = (a, b) => {
+  if (Array.isArray(a)) {
+    return (
+      Array.isArray(b) &&
+      a.length === b.length &&
+      a.every((x, i) => deepEqual(x, b[i]))
+    );
+  } else if (isObject(a)) {
+    const keys = Object.keys(a);
+    return (
+      isObject(b) &&
+      Object.keys(b).length == keys.length &&
+      keys.every(k => deepEqual(a[k], b[k]))
+    );
+  } else {
+    return Object.is(a, b);
+  }
+};
+
+const jsonDiff = (a, b) => {
+  let aStrings = stringify(a);
+  let bStrings = stringify(b);
+  return `Expected: ${truncateMiddle(aStrings)}\nReceived: ${truncateMiddle(
+    bStrings,
+  )}`;
+};
+
 class Expectation {
   constructor(value) {
     this.value = value;
@@ -139,17 +212,99 @@ class Expectation {
   toBe(expected) {
     assertEqual(this.value, expected);
   }
+  toEqual(expected) {
+    assert(
+      deepEqual(this.value, expected),
+      "[Assert] Expected deep equality but got:\n" +
+        jsonDiff(this.value, expected),
+    );
+  }
+  toBeGreaterThan(number) {
+    assert(
+      this.value > number,
+      `[Assert] Expected ${this.value} > ${number} (GT)`,
+    );
+  }
+  toBeGreaterThanOrEqual(number) {
+    assert(
+      this.value >= number,
+      `[Assert] Expected ${this.value} >= ${number} (GTE)`,
+    );
+  }
+  toBeLessThan(number) {
+    assert(
+      this.value < number,
+      `[Assert] Expected ${this.value} < ${number} (LT)`,
+    );
+  }
+  toBeLessThanOrEqual(number) {
+    assert(
+      this.value <= number,
+      `[Assert] Expected ${this.value} <= ${number} (LTE)`,
+    );
+  }
+  toMatch(strOrReg) {
+    let matched = false;
+    if (typeof this.value !== "string") {
+      assert(
+        false,
+        "[Assert] toMatch cannot match a non-string value:" + this.value,
+      );
+      return;
+    } else if (typeof strOrReg === "string") {
+      matched = this.value.includes(strOrReg);
+    } else if (strOrReg.constructor === RegExp) {
+      matched = strOrReg.test(this.value);
+    } else {
+      assert(
+        false,
+        "[Assert] toMatch passed invalid value. Use a string or a RegExp",
+      );
+    }
+
+    assert(
+      matched,
+      `[Assert] Expected "${truncateMiddle(this.value)}" to match ${strOrReg}`,
+    );
+  }
+  toHaveProperty(keyPath, value) {
+    if (typeof keyPath === "string") {
+      keyPath = keyPath.split(".");
+    }
+    const hasProperty = hasIn(keyPath, this.value);
+    if (value) {
+      assert(
+        hasProperty && deepEqual(getIn(keyPath, this.value), value),
+        `[Assert] Expected to have property ${keyPath.join(".")}`,
+      );
+    } else {
+      assert(
+        hasProperty,
+        `[Assert] Expected at path ${keyPath.join(".")}:\n${truncateMiddle(
+          stringify(value),
+        )}\nReceived: ${truncateMiddle(stringify(this.value))}`,
+      );
+    }
+  }
   toBeTruthy() {
     assertEqual(Boolean(this.value), true);
   }
   toBeFalsy() {
-    assertEqual(!Boolean(this.value), false);
+    assertEqual(Boolean(this.value), false);
   }
   toBeDefined() {
-    assertEqual(typeof this.value !== undefined, true);
+    assertEqual(typeof this.value !== "undefined", true);
   }
   toContain(val) {
-    assert(this.value.includes(val), `${val} not found in ${arr.join(",")}`);
+    const isValid = Array.isArray(this.value) || typeof this.value === "string";
+    assert(
+      isValid,
+      `[Assert] toContain used on invalid value ${stringify(this.value)}`,
+    );
+    assert(
+      this.value.includes(val),
+      `${val} not found in ${stringify(this.value)}`,
+    );
   }
 }
 
