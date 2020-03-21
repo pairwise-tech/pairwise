@@ -121,6 +121,5 @@ describe("Expectation matchers", () => {
     expect(arr).toContain("c");
     expect(arr).not.toContain("d");
     expect("hey you there").toContain("you");
-    // expect(12).not.toContain(12); // Doesn't work on non arrays or strings
   });
 });
