@@ -210,7 +210,7 @@ export const ContentContainer = styled.div`
   height: 100%;
   padding: 8px;
   padding-bottom: 16px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 export const Spacer = styled.div`
