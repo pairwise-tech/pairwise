@@ -1,4 +1,3 @@
-import { pipe } from "ramda";
 import * as Babel from "@babel/standalone";
 
 import DependencyCacheService from "./dependency-service";
@@ -6,6 +5,22 @@ import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
 import { TEST, PRODUCTION } from "./client-env";
 import quote from "string-quote-x";
+import pipe from "ramda/src/pipe";
+
+// This not-so-robust code replacement exists becuase if we ourselves (using
+// Codepress) added a script tag to a markup challenge we would accidentally
+// exit the entire script tag and everything would break. So the gist is, we
+// cannot allow the literal string "</script" into the user code string.
+//
+// NOTE: This is entirely due to the existence of __user_code_string__. If we
+// did not try to stringify user code this would not happen. However, at present
+// some of the challenge tests depend on this so it would be hard to go back. If
+// it appears to be a more significant issue we can see what other means we have
+// of stringifying user code.
+const prepareUserCodeString = pipe(
+  (x: string) => x.replace(/<\/script/gi, "<\\/script"), // See NOTE
+  quote,
+);
 
 /** ===========================================================================
  * Types & Config
@@ -371,7 +386,7 @@ try {
 
   // use as a fallback when the only way to test user code is by regexp.
   // purposefully named against conventions to avoid collisions with user vars
-  const __user_code_string__ = ${quote(userCode)};
+  const __user_code_string__ = ${prepareUserCodeString(userCode)};
 
   function buildTestsFromCode() {
     const testArray = [];
