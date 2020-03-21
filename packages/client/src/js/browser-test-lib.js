@@ -152,6 +152,9 @@ const getIn = ([k, ...nextPath], obj, notSetValue = undefined) => {
   return getIn(nextPath, obj[k]);
 };
 
+// Just a shortcut for prettier json output
+const stringify = x => JSON.stringify(x, null, 2);
+
 const truncateMiddle = x => {
   if (typeof x !== "string") {
     return x;
@@ -193,8 +196,8 @@ const deepEqual = (a, b) => {
 };
 
 const jsonDiff = (a, b) => {
-  let aStrings = JSON.stringify(a, null, 2);
-  let bStrings = JSON.stringify(b, null, 2);
+  let aStrings = stringify(a);
+  let bStrings = stringify(b);
   return `Expected: ${truncateMiddle(aStrings)}\nReceived: ${truncateMiddle(
     bStrings,
   )}`;
@@ -278,8 +281,8 @@ class Expectation {
       assert(
         hasProperty,
         `[Assert] Expected at path ${keyPath.join(".")}:\n${truncateMiddle(
-          JSON.stringify(value, null, 2),
-        )}\nReceived: ${truncateMiddle(JSON.stringify(this.value, null, 2))}`,
+          stringify(value),
+        )}\nReceived: ${truncateMiddle(stringify(this.value))}`,
       );
     }
   }
@@ -287,13 +290,21 @@ class Expectation {
     assertEqual(Boolean(this.value), true);
   }
   toBeFalsy() {
-    assertEqual(!Boolean(this.value), false);
+    assertEqual(Boolean(this.value), false);
   }
   toBeDefined() {
-    assertEqual(typeof this.value !== undefined, true);
+    assertEqual(typeof this.value !== "undefined", true);
   }
   toContain(val) {
-    assert(this.value.includes(val), `${val} not found in ${arr.join(",")}`);
+    const isValid = Array.isArray(this.value) || typeof this.value === "string";
+    assert(
+      isValid,
+      `[Assert] toContain used on invalid value ${stringify(this.value)}`,
+    );
+    assert(
+      this.value.includes(val),
+      `${val} not found in ${stringify(this.value)}`,
+    );
   }
 }
 
