@@ -8,7 +8,6 @@ import {
   Challenge,
   DataBlob,
   MonacoEditorThemes,
-  CHALLENGE_TYPE,
 } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";

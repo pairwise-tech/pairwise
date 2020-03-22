@@ -12,7 +12,7 @@ import { map } from "rxjs/operators";
 import { Editor } from "slate-react";
 import { Leaf, Selection } from "slate";
 import { List } from "immutable";
-import { CODEPRESS_HOST, CODEPRESS } from "tools/client-env";
+import { CODEPRESS_HOST } from "tools/client-env";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 

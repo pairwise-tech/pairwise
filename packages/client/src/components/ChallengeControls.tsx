@@ -1,14 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Tooltip,
-  Classes,
-  Card,
-  H5,
-  Button,
-  H4,
-  Callout,
-} from "@blueprintjs/core";
+import { Tooltip, Classes, Card, H5, Button, Callout } from "@blueprintjs/core";
 import { IconNavLink } from "./Shared";
 import Modules, { ReduxStoreState } from "modules/root";
 import styled from "styled-components/macro";
