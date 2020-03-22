@@ -606,6 +606,17 @@
           "content": "Debugging is much more than just logging values in a program.\n\nAs you learn more you will find that it encompasses everything from how you write the program in the first place to the detective\\-like skillset required to investigate and debug cryptic errors in production systems.\n\nSometimes the \"error\" is a user saying \"I tried to log in and it didn't work\".\n\nOr the error is an stack\\-trace in the logs for a production server which says some value was `undefined` which you did not thing could ever be `undefined`.\n\nHow do you get to the bottom of the problem\\!?\nHow do you find the causes\\!?\nHow do you recreate the conditions which caused the error\\!?\nHow do you do this quickly and efficiently when you have live users who cannot use your product because of the bug\\!?\nHow do you fix the bug in a sound way instead just adding some quick workaround\\!?\n\nAll of this comprises the art of debugging\\! Learning how to use the `console` in TypeScript is just the starting point. We encourage you to make use of the `console` logging utilities as you work through the Pairwise curriculum and work on your own projects to start getting familiar with printing out values to inspect and debug your programs.\n\nSuccessful debugging is a difficult skill which takes time to become experienced with. Over time we will introduce additional tools and approaches for you to use."
         },
         {
+          "id": "7llHMoYzK",
+          "type": "section",
+          "title": "Errors and Error Handling",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Sometimes programs fail. Your software must tell the computer exactly what to do in ever state your program may reach. If the computer doesn't know what to do, the program will crash and throw an error. For instance, consider this code:\n\n```typescript\nconst name = user.name;\n\n```\n\nWhat if `user` is `null` or `undefined`? Well, you cannot read the `name` property then\\! If you try to write the above code, you will get an error like this:\n\n```\nUncaught ReferenceError: user is not defined\n    at <anonymous>:1:1\n\n```\n\nThe `ReferenceError` is telling you that `user` is not defined. There are many ways a program can fail like this. When the program fails, it will throw an error and usually the program will crash and stop running. The error message will contain some information about how and why the program failed, which you can use to try to debug and fix the issue.\n\n---\n\nIt is critical to understand errors and how to handle them as a programmer. You will spend a lot of time debugging errors, and excellent programmers write code which handles potential errors states gracefully. In this module, we will learn all about errors and tools you can use to handle errors."
+        },
+        {
           "id": "0gih2c1M",
           "type": "section",
           "title": "Types and Type Primitives",
