@@ -476,7 +476,7 @@ export const logWhatChanged = (
     .filter(key => {
       return a[key] !== b[key];
     })
-    .map(key => {
+    .forEach(key => {
       const ax = a[key];
       const bx = b[key];
       console.log(

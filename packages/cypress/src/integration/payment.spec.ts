@@ -90,9 +90,14 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Perform some simple checks that the previously locked intro
     // challenges loaded and are now accessible:
-    cy.contains("databases");
+    // NOTE: This relies on fixed text and the existing challenge list,
+    // it will need to be updated if/when these challenges change (which
+    // they will).
+    cy.contains("It's time to start using some real databases!");
     click("workspace-next-challenge-button");
-    cy.contains("mobile app");
+    cy.contains(
+      "Here we will see some examples of projects which use databases.",
+    );
   });
 });
 
@@ -100,5 +105,5 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 const navigateToLockedChallenge = () => {
   click("navigation-menu-button");
   click("module-navigation-7");
-  click("challenge-navigation-0");
+  click("challenge-navigation-1");
 };
