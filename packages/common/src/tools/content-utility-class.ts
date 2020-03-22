@@ -103,13 +103,25 @@ class ContentUtilityClass {
     const course = this.courses.find(c => c.id === courseId);
 
     if (accessLevel === "FREE") {
-      const freeContent = {
+      // Transform the course to only include free modules and free
+      // challenges.
+      const courseWithFreeContent = {
         ...course,
-        modules: course.modules.filter(m => m.free),
+        modules: course.modules.map(m => {
+          if (m.free) {
+            return m;
+          } else {
+            return {
+              ...m,
+              challenges: m.challenges.filter(c => c.free),
+            };
+          }
+        }),
       };
 
-      return freeContent;
+      return courseWithFreeContent;
     } else {
+      // Return the entire course because the user has paid.
       return course;
     }
   };
