@@ -1,0 +1,16 @@
+overwrite: true
+schema: 'http://localhost:8000/___graphql'
+documents:
+  - 'src/**/*.tsx'
+pluckConfig:
+  modules:
+    - name: gatsby
+      identifier: graphql
+generates:
+  src/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+  ./graphql.json:
+    plugins:
+      - 'introspection'
