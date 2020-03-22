@@ -31,11 +31,10 @@ const QUESTIONS: FaqItem[] = [
     How was the curriculum chosen?
     `,
     answer: `
-We have combined our professional experiences as software engineers over
-the last several years with many observations of technology trends in the
-software industry to chose specific languages and skills which are in
-high and increasing demand and also very accessible from a learning
-perspective.
+We have combined our professional experiences as software engineers with many
+observations of technology trends in the software industry to choose specific
+languages and skills which are in high and increasing demand and also very
+accessible from a learning perspective.
 
 Our observations of industry trends largely come from several sources:
 
@@ -43,8 +42,8 @@ Our observations of industry trends largely come from several sources:
 - [HackerNews Hiring Trends data](https://www.hntrends.com/)
 - [StackOverflow 2019 Developer Survey](https://insights.stackoverflow.com/survey/2019)
 
-Feel free to look at these in detail and draw your own conclusions. We think
-are choices represent the best combination of in-demand skills which are easily
+Feel free to look at these in detail and draw your own conclusions. We think our
+choices represent the best combination of in-demand skills which are easily
 learnable for someone with no prior coding experience.
 
 Based on these observations, our curriculum teaches fullstack **TypeScript,
@@ -81,15 +80,14 @@ way to write JavaScript applications.
     React
     `,
     answer: `
-[React](https://reactjs.org/) is view library. What this means is React is a
-tool which allows developers to quickly and efficiently build complex user
-interfaces and frontend applications. React was open sourced by Facebook several
-years ago and has exploded in adoption, now becoming the dominant
-framework for building user interfaces.
+[React](https://reactjs.org/) is a tool which allows developers to quickly and
+  efficiently build complex interfaces and frontend applications. React was open
+sourced by Facebook several years ago and has exploded in adoption, now becoming
+the dominant framework for building user interfaces.
 
-React is an excellent starting point for learning frontend development and
-will give you many job opportunities. The site you are looking at right now,
-for instance, is built with React.
+React is an excellent starting point for learning frontend development and will
+  give you many job opportunities. The site you are looking at right now, for
+    instance, is built with React.
     `,
     image: {
       source: 'react_js',

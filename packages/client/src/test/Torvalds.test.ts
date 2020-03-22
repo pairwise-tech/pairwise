@@ -37,6 +37,13 @@ const course: Course = FullstackTypeScript;
 const DEBUG = false;
 const TEST_ID_WHITELIST = new Set(["iFvzasqW"]);
 
+// Allow manually skipping challenges. It's dangerous because this means these
+// are challenges with tests that will _NOT_ be tested in the UI. Why in the
+// world would you do this!?! Limitations of the JSDOM environment.
+const DANGEROUSLY_SKIP_CHALLENGE = new Set([
+  "Ao8hbaiP", // Test env seems to be having trouble calculating the midpoint of a bounding box.
+]);
+
 /* Enable or disable log info */
 const LOG = true;
 
@@ -98,6 +105,11 @@ describe("Linus should be able to pass all the challenges first try", () => {
         if (!TEST_ID_WHITELIST.has(challenge.id)) {
           continue;
         }
+      }
+
+      if (DANGEROUSLY_SKIP_CHALLENGE.has(challenge.id)) {
+        log.skipDangerously(challenge);
+        continue;
       }
 
       const html = `<html><body></body></html>`;
@@ -309,6 +321,12 @@ const log = {
   },
   skip: (challenge: Challenge) => {
     const msg = `[SKIPPED]${log.getMessage(challenge)}`;
+    log.print(msg);
+  },
+  skipDangerously: (challenge: Challenge) => {
+    const msg = `[SKIPPED DANGEROUSLY] Test won't run in CI but will in browser for ${log.getMessage(
+      challenge,
+    )}`;
     log.print(msg);
   },
   getMessage: (challenge: Challenge) => {

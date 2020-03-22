@@ -61,6 +61,7 @@ export interface Challenge {
   starterCode: string;
   solutionCode: string;
   content: string;
+  free?: boolean;
 }
 
 /** ===========================================================================
@@ -96,4 +97,5 @@ export interface ChallengeSkeleton {
   title: string;
   videoUrl?: string;
   userCanAccess: boolean;
+  free?: boolean;
 }

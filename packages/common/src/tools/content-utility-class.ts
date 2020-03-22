@@ -78,12 +78,19 @@ class ContentUtilityClass {
             free: courseModule.free,
             userCanAccess: courseModule.free,
             challenges: courseModule.challenges.map(challenge => {
+              // NOTE: The reason for reassigning values specifically like
+              // this is to exclude the other challenge information (e.g.
+              // code, solution, tests, etc.) from the challenge data in
+              // the course skeleton. This is because all users can view
+              // the skeleton, but not all course content, so the skeleton
+              // must be stripped off the additional content.
               return {
                 id: challenge.id,
                 type: challenge.type,
                 title: challenge.title,
                 videoUrl: challenge.videoUrl,
                 userCanAccess: courseModule.free,
+                free: challenge.free,
               };
             }),
           };
@@ -96,13 +103,25 @@ class ContentUtilityClass {
     const course = this.courses.find(c => c.id === courseId);
 
     if (accessLevel === "FREE") {
-      const freeContent = {
+      // Transform the course to only include free modules and free
+      // challenges.
+      const courseWithFreeContent = {
         ...course,
-        modules: course.modules.filter(m => m.free),
+        modules: course.modules.map(m => {
+          if (m.free) {
+            return m;
+          } else {
+            return {
+              ...m,
+              challenges: m.challenges.filter(c => c.free),
+            };
+          }
+        }),
       };
 
-      return freeContent;
+      return courseWithFreeContent;
     } else {
+      // Return the entire course because the user has paid.
       return course;
     }
   };
@@ -116,18 +135,26 @@ class ContentUtilityClass {
         // id is included in the provided course access map (which represents
         // the courses the user has purchased).
         const canAccessCourse = course.id in courseAccessMap;
+
         return {
           ...course,
           modules: course.modules.map(courseModule => {
+            // Some modules are free.
             const moduleFree = courseModule.free;
-            const userCanAccess = moduleFree || canAccessCourse;
+            const userCanAccessModule = canAccessCourse || moduleFree;
+
             return {
               ...courseModule,
-              userCanAccess,
+              userCanAccess: userCanAccessModule,
               challenges: courseModule.challenges.map(challenge => {
+                // Some challenges are free.
+                const challengeFree = challenge.free;
+                const userCanAccessChallenge =
+                  userCanAccessModule || challengeFree;
+
                 return {
                   ...challenge,
-                  userCanAccess,
+                  userCanAccess: userCanAccessChallenge,
                 };
               }),
             };

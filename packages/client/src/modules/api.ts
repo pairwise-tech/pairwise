@@ -218,7 +218,6 @@ class Api extends BaseApiClass {
 
   fetchCourseSkeletons = async () => {
     if (ENV.DEV) {
-      /* TODO: Remove after deploying a server */
       const challenges = require("@pairwise/common").default;
       const FullstackTypeScript: Course = challenges.FullstackTypeScript;
       const course = {

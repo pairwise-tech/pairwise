@@ -174,6 +174,7 @@ const Header = ({ siteTitle = 'Pairwise' }: HeaderProps) => {
           <NavLink to="/about">About</NavLink>
           <NavLink to="/contact">Contact</NavLink>
           <Button
+            style={{ marginLeft: 10 }}
             className="externalLink"
             size="small"
             variant="outlined"

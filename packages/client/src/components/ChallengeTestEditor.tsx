@@ -10,7 +10,7 @@ import {
 } from "tools/code-worker";
 import { COLORS, MONACO_EDITOR_FONT_SIZE_STEP } from "tools/constants";
 import { LowerRight, IconButton } from "./Shared";
-import { Tooltip, Button, ButtonGroup } from "@blueprintjs/core";
+import { Tooltip, ButtonGroup } from "@blueprintjs/core";
 import { CodeFormatMessageEvent } from "tools/test-utils";
 import { MonacoEditorThemes } from "@pairwise/common";
 
@@ -181,9 +181,11 @@ const ChallengeTestEditor = (props: Props) => {
           </Tooltip>
         </ButtonGroup>
         <Tooltip content={"Format Code"} position="left">
-          <Button aria-label="format editor code" onClick={handleFormatCode}>
-            {"{ }"}
-          </Button>
+          <IconButton
+            icon="clean"
+            aria-label="format editor code"
+            onClick={handleFormatCode}
+          />
         </Tooltip>
       </LowerRight>
     </div>

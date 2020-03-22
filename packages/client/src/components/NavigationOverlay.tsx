@@ -385,8 +385,11 @@ class NavigationOverlay extends React.Component<IProps> {
       ? SortableHandle(ChallengeListItemIcon)
       : ChallengeListItemIcon;
     const toggleSection = (e: React.MouseEvent) => {
-      e.preventDefault();
-      this.toggleExpandCollapse(challenge);
+      // Section should not expand/collapse if there are no challenges
+      if (sectionChallenges.length > 0) {
+        e.preventDefault();
+        this.toggleExpandCollapse(challenge);
+      }
     };
 
     return (
@@ -403,7 +406,6 @@ class NavigationOverlay extends React.Component<IProps> {
         >
           <span className="content">
             <ChallengeIconUI {...iconProps} onClick={toggleSection} />
-
             <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>

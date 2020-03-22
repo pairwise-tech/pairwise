@@ -256,7 +256,6 @@ export const partitionChallengesBySection = (
   };
 
   let currentSection = defaultSection;
-  let firstReachedProjects = false;
   let firstReachedSpecialTopics = false;
   let sections: NavigationChallengeSection[] = [];
 
@@ -264,10 +263,8 @@ export const partitionChallengesBySection = (
     const { type } = challenge;
 
     const SHOULD_END_SECTION = type === "section";
-    const reachedProjectsNow = type === "project" || type === "guided-project";
     const reachedSpecialTopics = type === "special-topic";
 
-    const PROJECT_BOUNDARY = reachedProjectsNow && !firstReachedProjects;
     const SPECIAL_TOPIC_BOUNDARY =
       reachedSpecialTopics && !firstReachedSpecialTopics;
 
@@ -283,16 +280,6 @@ export const partitionChallengesBySection = (
         challenges: [challenge],
       };
       firstReachedSpecialTopics = true;
-      currentSection = nextSection;
-    } else if (PROJECT_BOUNDARY) {
-      if (CURRENT_SECTION_HAS_CONTENT) {
-        sections = sections.concat(currentSection);
-      }
-      const nextSection: NavigationChallengeSection = {
-        section: null,
-        challenges: [challenge],
-      };
-      firstReachedProjects = true;
       currentSection = nextSection;
     } else if (SHOULD_END_SECTION) {
       if (CURRENT_SECTION_HAS_CONTENT) {
@@ -489,7 +476,7 @@ export const logWhatChanged = (
     .filter(key => {
       return a[key] !== b[key];
     })
-    .map(key => {
+    .forEach(key => {
       const ax = a[key];
       const bx = b[key];
       console.log(

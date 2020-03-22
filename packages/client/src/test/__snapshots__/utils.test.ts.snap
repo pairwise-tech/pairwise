@@ -208,16 +208,19 @@ Array [
     },
   },
   Object {
-    "challenges": Array [],
-    "section": Object {
-      "id": "ny51KoEI",
-      "title": "Data Structures",
-      "type": "section",
-      "userCanAccess": true,
-    },
-  },
-  Object {
     "challenges": Array [
+      Object {
+        "id": "ny51KoEI",
+        "title": "Build a game",
+        "type": "project",
+        "userCanAccess": true,
+      },
+      Object {
+        "id": "ny51KoEI",
+        "title": "Build a game",
+        "type": "project",
+        "userCanAccess": true,
+      },
       Object {
         "id": "ny51KoEI",
         "title": "Build a game",
@@ -231,7 +234,21 @@ Array [
         "userCanAccess": true,
       },
     ],
-    "section": null,
+    "section": Object {
+      "id": "ny51KoEI",
+      "title": "Data Structures",
+      "type": "section",
+      "userCanAccess": true,
+    },
+  },
+  Object {
+    "challenges": Array [],
+    "section": Object {
+      "id": "ny51KoEI",
+      "title": "Data Structures",
+      "type": "section",
+      "userCanAccess": true,
+    },
   },
   Object {
     "challenges": Array [
