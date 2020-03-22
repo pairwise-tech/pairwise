@@ -210,7 +210,7 @@ export const ContentContainer = styled.div`
   height: 100%;
   padding: 8px;
   padding-bottom: 16px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 export const Spacer = styled.div`
@@ -358,7 +358,7 @@ export const InstructionsViewEdit = connect(
     props.updateChallenge({ id: currentId, challenge: { title } });
 
   return (
-    <div style={{ height: "100%" }}>
+    <div>
       <ChallengeTitleHeading>
         <StyledEditableText
           value={props.title}
