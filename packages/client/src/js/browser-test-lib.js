@@ -203,6 +203,22 @@ const jsonDiff = (a, b) => {
   )}`;
 };
 
+// Helper to parse the boxes of console messages and convert them
+// to objects and extract the messages to help with writing test
+// assertions.
+const parseLogBox = box => {
+  const parsedBoxLogs = box.map(JSON.parse);
+  const messageBox = parsedBoxLogs.map(x => x[0]);
+  return messageBox;
+};
+
+// Given a box of logged console messages (see above function) and
+// a message, return if the box contains that message exactly.
+const inBox = (box, message) => {
+  const result = box.find(m => m === message);
+  return !!result;
+};
+
 class Expectation {
   constructor(value) {
     this.value = value;
