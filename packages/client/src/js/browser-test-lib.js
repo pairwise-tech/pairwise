@@ -219,6 +219,27 @@ const inBox = (box, message) => {
   return !!result;
 };
 
+// Helper to quickly fail a test.
+const fail = () => expect(false).toBe(true);
+
+// Helper to quickly pass a test.
+const pass = () => expect(true).toBe(true);
+
+// Expect a function passed in as an argument to throw
+// when called.
+const expectFunctionToThrow = fn => {
+  let valid = true;
+
+  try {
+    fn();
+    valid = false;
+  } catch (err) {
+    valid = true;
+  }
+
+  expect(valid).toBe(true);
+};
+
 class Expectation {
   constructor(value) {
     this.value = value;

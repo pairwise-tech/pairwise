@@ -617,6 +617,28 @@
           "content": "Sometimes programs fail. Your software must tell the computer exactly what to do in ever state your program may reach. If the computer doesn't know what to do, the program will crash and throw an error. For instance, consider this code:\n\n```typescript\nconst name = user.name;\n\n```\n\nWhat if `user` is `null` or `undefined`? Well, you cannot read the `name` property then\\! If you try to write the above code, you will get an error like this:\n\n```\nUncaught ReferenceError: user is not defined\n    at <anonymous>:1:1\n\n```\n\nThe `ReferenceError` is telling you that `user` is not defined. There are many ways a program can fail like this. When the program fails, it will throw an error and usually the program will crash and stop running. The error message will contain some information about how and why the program failed, which you can use to try to debug and fix the issue.\n\n---\n\nIt is critical to understand errors and how to handle them as a programmer. You will spend a lot of time debugging errors, and excellent programmers write code which handles potential errors states gracefully. In this module, we will learn all about errors and tools you can use to handle errors."
         },
         {
+          "id": "58fZQwoQA",
+          "type": "typescript",
+          "title": "The Throw Keyword",
+          "instructions": "Unsafe operations may \"throw\" errors. In TypeScript there is also a `throw` keyword which allows you to explicitly throw an error from a block of code. This escalates the error to the calling code, which the must handle the error or the program will crash.\n\nTo throw a new error, you can use the TypeScript `Error` object constructor, e.g. to throw an error you can write `throw new Error(\"An error occurred!\")`.",
+          "testCode": "test(\"The `thisFunctionShowThrow` function should throw an error.\", () => {\n  expectFunctionToThrow(thisFunctionShowThrow);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// This function should throw an error\nconst thisFunctionShowThrow = () => {\n    // Write your code here!\n}\n",
+          "solutionCode": "// This function should throw an error\nconst thisFunctionShowThrow = () => {\n    // Write your code here!\n    throw new Error(\"An error occurred!\");\n}\n",
+          "content": ""
+        },
+        {
+          "id": "CoUCabHwR",
+          "type": "typescript",
+          "title": "The Catch Keyword",
+          "instructions": "Thrown errors can be \"caught\" using the `catch` keyword\\. An example of this is as follows:\n\n```typescript\ntry {\n    throw new Error(\"An error!\");\n} catch (err) {\n    // Caught the error!\n    console.log(\"The error is caught! Error message: \", err.message);\n}\n\n```\n\nThere is a function which throws an error in the editor below. The function throws an error when it is _called_. Wrap the calling function in `try/catch` to handle the error.",
+          "testCode": "test(\"The `aFunctionWhichThrows` should throw an error when called.\", () => {\n  expectFunctionToThrow(aFunctionWhichThrows);\n});\n\ntest(\"The call of `aFunctionWhichThrows` should be wrapped in `try/catch` to catch the thrown error.\", () => {\n  pass();\n});\n",
+          "videoUrl": "",
+          "starterCode": "// This function throws an error\nconst aFunctionWhichThrows = () => {\n  throw new Error(\"Dangerous!\");\n};\n\n// This needs to be wrapped in try/catch so\n// catch the thrown error:\naFunctionWhichThrows();\n",
+          "solutionCode": "// This function throws an error\nconst aFunctionWhichThrows = () => {\n  throw new Error(\"Dangerous!\");\n};\n\n// This needs to be wrapped in try/catch so\n// catch the thrown error:\ntry {\n  aFunctionWhichThrows();\n} catch (err) {\n  console.log(\"Error caught!\");\n}\n",
+          "content": ""
+        },
+        {
           "id": "TiacxGwtm",
           "type": "typescript",
           "title": "Catching Errors",
@@ -636,17 +658,6 @@
           "videoUrl": "",
           "starterCode": "// Fixed amounts for lottery wins and losses\nconst LOTTERY_SIZE = 1000;\nconst ROUND_SIZE = 100;\n\n// Simulate a lottery which only wins 5% of the time\nconst handleLotteryAttempt = () => {\n  const n = Math.round(Math.random() * 100);\n  if (n < 5) {\n    return true;\n  } else {\n    throw new Error(\"Did not win the lottery!\");\n  }\n};\n\n// Simulate playing in a casino\nconst simulateCasino = () => {\n  let userWallet = 500;\n  for (let i = 0; i < 100; i++) {\n    // Refactor the following code to use try/catch\n    // The logic should remain the same!\n    // Change code below this line\n    const result = handleLotteryAttempt();\n    if (result) {\n      userWallet += LOTTERY_SIZE;\n    } else {\n      userWallet -= ROUND_SIZE;\n    }\n    // Change code above this line\n  }\n\n  // Return the result\n  return userWallet;\n};\n\n// Run the simulation\nconst finalUserBalance = simulateCasino();\n\n// Print out the lottery results\nconsole.log(\"Lottery finished!\");\n\n// Show the user a message depending on the results\nif (finalUserBalance > 500) {\n  console.log(\"Congratulations! You should play more often!\");\n} else {\n  console.log(\n    `You lost a lot of money! Your ending balance is: ${finalUserBalance}`\n  );\n}\n",
           "solutionCode": "// Fixed amounts for lottery wins and losses\nconst LOTTERY_SIZE = 1000;\nconst ROUND_SIZE = 100;\n\n// Simulate a lottery which only wins 5% of the time\nconst handleLotteryAttempt = () => {\n  const n = Math.round(Math.random() * 100);\n  if (n < 5) {\n    return true;\n  } else {\n    throw new Error(\"Did not win the lottery!\");\n  }\n};\n\n// Simulate playing in a casino\nconst simulateCasino = () => {\n  let userWallet = 500;\n  for (let i = 0; i < 100; i++) {\n    // Refactor the following code to use try/catch\n    // The logic should remain the same!\n    // Change code below this line\n    try {\n      const result = handleLotteryAttempt();\n      userWallet += LOTTERY_SIZE;\n    } catch (err) {\n      userWallet -= ROUND_SIZE;\n    }\n    // Change code above this line\n  }\n\n  // Return the result\n  return userWallet;\n};\n\n// Run the simulation\nconst finalUserBalance = simulateCasino();\n\n// Print out the lottery results\nconsole.log(\"Lottery finished!\");\n\n// Show the user a message depending on the results\nif (finalUserBalance > 500) {\n  console.log(\"Congratulations! You should play more often!\");\n} else {\n  console.log(\n    `You lost a lot of money! Your ending balance is: ${finalUserBalance}`\n  );\n}\n",
-          "content": ""
-        },
-        {
-          "id": "58fZQwoQA",
-          "type": "typescript",
-          "title": "The Throw Keyword",
-          "instructions": "Unsafe operations may \"throw\" errors. In TypeScript there is also a `throw` keyword which allows you to explicitly throw an error from a block of code. This escalates the error to the calling code, which the must handle the error or the program will crash.",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
           "content": ""
         },
         {
