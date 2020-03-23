@@ -538,7 +538,12 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { testResults } = this.state;
-    const { challenge, isEditMode, userSettings } = this.props;
+    const {
+      challenge,
+      isEditMode,
+      userSettings,
+      revealSolutionCode,
+    } = this.props;
     const { fullScreenEditor } = userSettings;
     const isSandbox = challenge.id === SANDBOX_ID;
     const isFullScreen = fullScreenEditor || isSandbox;
@@ -638,18 +643,18 @@ class Workspace extends React.Component<IProps, IState> {
                   text="Restore Initial Code"
                 />
                 <MenuItem
-                  icon="glass"
+                  icon={revealSolutionCode ? "application" : "applications"}
                   aria-label={
-                    this.props.revealSolutionCode
+                    revealSolutionCode
                       ? "hide solution code"
                       : "reveal solution code"
                   }
                   text={
-                    this.props.revealSolutionCode
+                    revealSolutionCode
                       ? "Hide Solution Code"
                       : "Reveal Solution Code"
                   }
-                  onClick={this.revealSolutionCode}
+                  onClick={this.props.handleToggleSolutionCode}
                 />
               </Menu>
             }
@@ -788,12 +793,6 @@ class Workspace extends React.Component<IProps, IState> {
       </Container>
     );
   }
-
-  revealSolutionCode = () => {
-    this.props.toggleRevealSolutionCode({
-      shouldReveal: !this.props.revealSolutionCode,
-    });
-  };
 
   getTestPassedStatus = () => {
     const { testResults } = this.state;
@@ -1317,6 +1316,11 @@ const mergeProps = (
     methods.updateUserSettings({
       workspaceFontSize:
         state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
+    });
+  },
+  handleToggleSolutionCode: () => {
+    methods.toggleRevealSolutionCode({
+      shouldReveal: !state.revealSolutionCode,
     });
   },
 });
