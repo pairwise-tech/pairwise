@@ -1,11 +1,12 @@
 import React from 'react';
 
 import Layout from '../components/Layout';
-import { Button, Classes } from '@blueprintjs/core';
+import { Button, Classes, Icon } from '@blueprintjs/core';
 import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 import Confetti from 'react-confetti';
 import { IRect } from 'react-confetti/dist/types/Rect';
+import { ICON } from '@blueprintjs/core/lib/esm/common/classes';
 
 interface GreatSuccessProps {
   isOpen: boolean;
@@ -76,7 +77,7 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
           unmountOnExit
           onEntered={nextStage}
         >
-          <Content>
+          <Content id="gs-card">
             <ParentDimensionMeasure id="confetti-measurement-div" />
             {props.onClose && (
               <CloseButton
@@ -85,7 +86,17 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
                 minimal
               ></CloseButton>
             )}
-            <div className="inner">{props.children}</div>
+            <div className="inner">
+              {React.Children.map(props.children, (child) => {
+                // @ts-ignore
+                if (child.type === CardTitle) {
+                  // @ts-ignore
+                  return React.cloneElement(child, { parentStage: stage });
+                } else {
+                  return child;
+                }
+              })}
+            </div>
             <CSSTransition
               in={stage > 1}
               timeout={1000}
@@ -142,6 +153,7 @@ const ContentOutline = styled.div`
 `;
 
 const Content = styled.div`
+  transform-style: preserve-3d;
   position: relative;
   z-index: 7;
   transition: all 500ms ease-out;
@@ -209,6 +221,70 @@ const GreatSuccessContainer = styled.div`
   }
 `;
 
+const CardTitle: React.FC<{ parentStage?: number }> = (props) => {
+  const [stage, setStage] = React.useState(0);
+  const nextStage = () => setStage(stage + 1);
+  if (typeof props.parentStage !== 'number') {
+    throw new Error(
+      'CardTitle should only be used within a GreatSuccess component',
+    );
+  }
+  return (
+    <CardTitleContainer>
+      <CSSTransition
+        in={props.parentStage > 1}
+        timeout={300}
+        classNames="gs"
+        onEntered={nextStage}
+        onExit={() => setStage(0)}
+      >
+        <Icon
+          style={{
+            margin: '0 60px',
+            marginLeft: 40,
+            color: '#09F9A4',
+            transform: 'scale(4)',
+          }}
+          intent="primary"
+          iconSize={Icon.SIZE_LARGE}
+          icon="tick"
+        ></Icon>
+      </CSSTransition>
+      <CSSTransition
+        in={stage > 0}
+        timeout={500}
+        classNames="gs"
+        onEntered={nextStage}
+      >
+        <h1>{props.children}</h1>
+      </CSSTransition>
+    </CardTitleContainer>
+  );
+};
+
+const CardTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 32px;
+  margin-bottom: 40px;
+  // opacity: 0;
+  // transition: all 300ms ease-out;
+
+  h1,
+  .bp3-icon {
+    margin: 0;
+    transition: all 300ms ease-out;
+    opacity: 0;
+    transform: translateX(-50px);
+
+    &.gs-enter-active,
+    &.gs-enter-done {
+      transform: translateX(0px);
+      opacity: 1;
+    }
+  }
+`;
+
 const IndexPage: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const handleClose = () => {
@@ -232,7 +308,7 @@ const IndexPage: React.FC = () => {
           onClose={handleClose}
           onClickOutside={handleClose}
         >
-          <h1>Done! You did it.</h1>
+          <CardTitle>Done! You did it.</CardTitle>
           <p>That was a great success</p>
         </GreatSuccess>
         <Button onClick={() => setIsOpen(true)}>Open It!</Button>
