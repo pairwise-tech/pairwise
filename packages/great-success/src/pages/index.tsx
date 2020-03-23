@@ -60,16 +60,18 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
     >
       <GreatSuccessContainer>
         <Backdrop onClick={props.onClickOutside} />
-        <Confetti
-          width={width}
-          height={height}
-          style={{ zIndex: 6 }}
-          colors={PAIRWISE_COLORS}
-          initialVelocityX={4}
-          initialVelocityY={15}
-          run={stage > 2}
-          confettiSource={contentRect.current}
-        />
+        {stage > 2 && (
+          <Confetti
+            key="gs-confetti"
+            width={width}
+            height={height}
+            style={{ zIndex: 6 }}
+            colors={PAIRWISE_COLORS}
+            initialVelocityX={4}
+            initialVelocityY={15}
+            confettiSource={contentRect.current}
+          />
+        )}
         <CSSTransition
           in={stage > 0}
           timeout={500}
