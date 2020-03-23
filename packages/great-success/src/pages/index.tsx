@@ -4,6 +4,8 @@ import Layout from '../components/Layout';
 import { Button, Classes } from '@blueprintjs/core';
 import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
+import Confetti from 'react-confetti';
+import { IRect } from 'react-confetti/dist/types/Rect';
 
 interface GreatSuccessProps {
   isOpen: boolean;
@@ -11,10 +13,40 @@ interface GreatSuccessProps {
   onClickOutside?: () => any;
 }
 
+const getDimensions = () => ({
+  width: window.innerWidth,
+  height: window.innerHeight,
+});
+
+// The colors from our logo
+const PAIRWISE_COLORS = ['#27C9DD', '#F3577A', '#F6FA88', '#49F480', '#FFB85A'];
+const GRAYSCALE = ['#4444', '#666', '#999', '#eee', '#fff'];
+
 const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
+  const { width, height } = getDimensions();
+  // Deafult the confetti source to a rect at the center of the screen
+  const contentRect = React.useRef<IRect>({
+    x: width / 2,
+    y: width / 2,
+    w: 50,
+    h: 50,
+  });
   const [stage, setStage] = React.useState(0);
   const nextStage = () => setStage(stage + 1);
-  // const prevStage = () => setStage(stage - 1);
+  React.useEffect(() => {
+    // NOTE: We need to use an effect here to grab the DOM el because
+    // CSSTransition doesn't like us adding a ref to children.
+    const el = document.getElementById('confetti-measurement-div');
+    if (el) {
+      const box = el.getBoundingClientRect();
+      contentRect.current = {
+        x: box.x,
+        y: box.y,
+        w: box.width,
+        h: box.height,
+      };
+    }
+  }, [stage]);
 
   return (
     <CSSTransition
@@ -24,10 +56,19 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
       unmountOnExit
       onEntered={nextStage}
       onExit={() => setStage(0)}
-      // onExited={() => setShowButton(true)}
     >
       <GreatSuccessContainer>
         <Backdrop onClick={props.onClickOutside} />
+        <Confetti
+          width={width}
+          height={height}
+          style={{ zIndex: 6 }}
+          colors={PAIRWISE_COLORS}
+          initialVelocityX={4}
+          initialVelocityY={20}
+          run={stage > 2}
+          confettiSource={contentRect.current}
+        />
         <CSSTransition
           in={stage > 0}
           timeout={500}
@@ -36,6 +77,7 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
           onEntered={nextStage}
         >
           <Content>
+            <ParentDimensionMeasure id="confetti-measurement-div" />
             <Button onClick={props.onClose} icon="cross" minimal></Button>
             <div className="inner">{props.children}</div>
             <CSSTransition
@@ -53,6 +95,18 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
     </CSSTransition>
   );
 };
+
+// Take up the full width and height of the parent el while remaining invisible.
+// This is just for measurement purposes.
+const ParentDimensionMeasure = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointerevents: 'none';
+  background: transparent;
+`;
 
 const ContentOutline = styled.div`
   position: absolute;
