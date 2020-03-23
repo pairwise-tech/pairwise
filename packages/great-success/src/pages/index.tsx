@@ -78,7 +78,13 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
         >
           <Content>
             <ParentDimensionMeasure id="confetti-measurement-div" />
-            <Button onClick={props.onClose} icon="cross" minimal></Button>
+            {props.onClose && (
+              <CloseButton
+                onClick={props.onClose}
+                icon="cross"
+                minimal
+              ></CloseButton>
+            )}
             <div className="inner">{props.children}</div>
             <CSSTransition
               in={stage > 1}
@@ -96,6 +102,12 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
   );
 };
 
+const CloseButton = styled(Button)`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+`;
+
 // Take up the full width and height of the parent el while remaining invisible.
 // This is just for measurement purposes.
 const ParentDimensionMeasure = styled.div`
@@ -104,7 +116,7 @@ const ParentDimensionMeasure = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  pointerevents: 'none';
+  pointer-events: none;
   background: transparent;
 `;
 
@@ -127,19 +139,12 @@ const ContentOutline = styled.div`
   &.gs-enter-done {
     box-shadow: 0 0 0 8px rgba(5, 250, 174, 1);
   }
-  // &.gs-enter-done {
-  //   box-shadow: 0 0 30px 8px rgba(5, 250, 174, 0.6);
-  //   background-color: rgba(5, 250, 174, 0.6);
-  //   transform: scale(2);
-  //   opacity: 0;
-  // }
 `;
 
 const Content = styled.div`
   position: relative;
   z-index: 7;
   transition: all 500ms ease-out;
-
   padding: 40px;
   background: #222;
   border-radius: 5px;
@@ -153,12 +158,15 @@ const Content = styled.div`
   }
 
   &.gs-enter {
-    transform: translate(0, 100%) scale(1.5);
+    transform: translate(0, 100%) scale(1.5) rotate3d(1, 0, 0, -55deg);
     opacity: 0;
   }
   &.gs-enter-active {
     transform: translate(0) scale(1);
     opacity: 1;
+  }
+  &.gs-exit-active {
+    transform: translate(15%, -100%) scale(1) rotate3d(0, 0, 1, 25deg);
   }
 `;
 
@@ -173,6 +181,7 @@ const Backdrop = styled.div`
 `;
 
 const GreatSuccessContainer = styled.div`
+  perspective: 800px;
   position: fixed;
   top: 0;
   left: 0;
