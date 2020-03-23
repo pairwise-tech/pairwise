@@ -213,6 +213,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
+    console.log(this.props.revealSolutionCode);
     /**
      * Reset the editor if the editor screen size is toggle.
      *
@@ -1222,13 +1223,15 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
   isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
   adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
-  adminEditorTab: Modules.selectors.challenges.adminEditorTabSelector(state),
   showMediaArea: Modules.selectors.challenges.getHasMediaContent(state),
+  revealSolutionCode: Modules.selectors.challenges.revealSolutionCode(state),
+  adminEditorTab: Modules.selectors.challenges.adminEditorTabSelector(state),
 });
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
   updateUserSettings: Modules.actions.user.updateUserSettings,
+  toggleRevealSolutionCode: Modules.actions.challenges.toggleRevealSolutionCode,
   handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
   updateCurrentChallengeBlob:
     Modules.actions.challenges.updateCurrentChallengeBlob,

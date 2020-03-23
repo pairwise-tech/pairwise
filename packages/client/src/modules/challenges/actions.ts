@@ -85,6 +85,8 @@ enum ActionTypesEnum {
 
   TOGGLE_SECTION_ACCORDION_VIEW = "TOGGLE_SECTION_ACCORDION_VIEW",
 
+  TOGGLE_REVEAL_SOLUTION = "TOGGLE_REVEAL_SOLUTION",
+
   // NOTE: These don't follow the pattern of do_something{,_success,_failure}
   // because they are worker related so there is no direct tie between one
   // search action and it's result at the epic level. This is not yet a
@@ -277,3 +279,7 @@ export const reorderModuleList = createAction(
 export const toggleSectionAccordionView = createAction(
   ActionTypesEnum.TOGGLE_SECTION_ACCORDION_VIEW,
 )<{ sectionId: string; open: boolean }>();
+
+export const toggleRevealSolutionCode = createAction(
+  ActionTypesEnum.TOGGLE_SECTION_ACCORDION_VIEW,
+)<{ shouldReveal: boolean }>();
