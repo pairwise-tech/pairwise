@@ -640,9 +640,9 @@
         },
         {
           "id": "58fZQwoQA",
-          "type": "markup",
-          "title": "[EMPTY...]",
-          "instructions": "",
+          "type": "typescript",
+          "title": "The Throw Keyword",
+          "instructions": "Unsafe operations may \"throw\" errors. In TypeScript there is also a `throw` keyword which allows you to explicitly throw an error from a block of code. This escalates the error to the calling code, which the must handle the error or the program will crash.",
           "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "",
