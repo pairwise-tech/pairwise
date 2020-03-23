@@ -106,6 +106,7 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 
 interface IState {
   code: string;
+  userCode: string; // Place to store user code in case solution is revealed
   testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
@@ -166,6 +167,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.state = {
       code: initialCode,
+      userCode: initialCode,
       testResults: [],
       logs: DEFAULT_LOGS,
       monacoInitializationError: false,
@@ -213,7 +215,33 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
-    console.log(this.props.revealSolutionCode);
+    /**
+     * Handle toggling the solution code on and off.
+     */
+
+    // Solution is toggled ON:
+    if (!prevProps.revealSolutionCode && this.props.revealSolutionCode) {
+      this.setState(
+        ps => ({
+          userCode: ps.code,
+          code: this.props.challenge.solutionCode,
+        }),
+        this.pauseAndRefreshEditor,
+      );
+
+      return;
+    } else if (prevProps.revealSolutionCode && !this.props.revealSolutionCode) {
+      // Solution is toggled OFF:
+      this.setState(
+        ps => ({
+          code: ps.userCode,
+        }),
+        this.pauseAndRefreshEditor,
+      );
+
+      return;
+    }
+
     /**
      * Reset the editor if the editor screen size is toggle.
      *
@@ -609,6 +637,20 @@ class Workspace extends React.Component<IProps, IState> {
                   onClick={this.resetCodeWindow}
                   text="Restore Initial Code"
                 />
+                <MenuItem
+                  icon="glass"
+                  aria-label={
+                    this.props.revealSolutionCode
+                      ? "hide solution code"
+                      : "reveal solution code"
+                  }
+                  text={
+                    this.props.revealSolutionCode
+                      ? "Hide Solution Code"
+                      : "Reveal Solution Code"
+                  }
+                  onClick={this.revealSolutionCode}
+                />
               </Menu>
             }
             position={Position.LEFT_BOTTOM}
@@ -746,6 +788,12 @@ class Workspace extends React.Component<IProps, IState> {
       </Container>
     );
   }
+
+  revealSolutionCode = () => {
+    this.props.toggleRevealSolutionCode({
+      shouldReveal: !this.props.revealSolutionCode,
+    });
+  };
 
   getTestPassedStatus = () => {
     const { testResults } = this.state;
