@@ -628,6 +628,28 @@
           "content": ""
         },
         {
+          "id": "C8I5vca4a",
+          "type": "typescript",
+          "title": "Try/Catch",
+          "instructions": "The syntax you saw in the last challenge is known as `try/catch`. It's a very common structure found in many programming languages. It allows you to \"try\" some operation which may fail and \"catch\" the error if it does occur. This allows you to safely write code to deal with operations which may fail, such as network requests, user interactions, asynchronous logic, functions which call external APIs or libraries, and so on.\n\nIn the editor below is some simple code to simulate playing a lottery in a casino. The function `handleLotteryAttempt` throws an error about 95% of the time to indicate a failed lottery attempt. The `simulateCasino` calls this method 100 times to simulate a user playing in the casino.\n\nCurrently the program crashes because the error is not handled. Your job is to update the code to handle the thrown error condition\\! Can the player beat the casino\\!?",
+          "testCode": "test(\"`handleLotteryAttempt` should throw an error around 95% of the time.\", () => {\n  try {\n    for (let i = 0; i < 100; i++) {\n      handleLotteryAttempt();\n    }\n    expect(true).toBe(false); // Should not happen\n  } catch (err) {\n    expect(true).toBe(true);\n  }\n});\n\ntest(\"`simulateCasino` should run the simulation and return the final user wallet balance.\", () => {\n  const result = simulateCasino();\n  expect(result).toBeDefined();\n  expect(typeof result).toBe(\"number\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Fixed amounts for lottery wins and losses\nconst LOTTERY_SIZE = 1000;\nconst ROUND_SIZE = 100;\n\n// Simulate a lottery which only wins 5% of the time\nconst handleLotteryAttempt = () => {\n  const n = Math.round(Math.random() * 100);\n  if (n < 5) {\n    return true;\n  } else {\n    throw new Error(\"Did not win the lottery!\");\n  }\n};\n\n// Simulate playing in a casino\nconst simulateCasino = () => {\n  let userWallet = 500;\n  for (let i = 0; i < 100; i++) {\n    // Refactor the following code to use try/catch\n    // The logic should remain the same!\n    // Change code below this line\n    const result = handleLotteryAttempt();\n    if (result) {\n      userWallet += LOTTERY_SIZE;\n    } else {\n      userWallet -= ROUND_SIZE;\n    }\n    // Change code above this line\n  }\n\n  // Return the result\n  return userWallet;\n};\n\n// Run the simulation\nconst finalUserBalance = simulateCasino();\n\n// Print out the lottery results\nconsole.log(\"Lottery finished!\");\n\n// Show the user a message depending on the results\nif (finalUserBalance > 500) {\n  console.log(\"Congratulations! You should play more often!\");\n} else {\n  const winner = `You lost a lot of money! Your ending balance is: ${finalUserBalance}`;\n  console.log(winner);\n}\n",
+          "solutionCode": "// Fixed amounts for lottery wins and losses\nconst LOTTERY_SIZE = 1000;\nconst ROUND_SIZE = 100;\n\n// Simulate a lottery which only wins 5% of the time\nconst handleLotteryAttempt = () => {\n  const n = Math.round(Math.random() * 100);\n  if (n < 5) {\n    return true;\n  } else {\n    throw new Error(\"Did not win the lottery!\");\n  }\n};\n\n// Simulate playing in a casino\nconst simulateCasino = () => {\n  let userWallet = 500;\n  for (let i = 0; i < 100; i++) {\n    // Refactor the following code to use try/catch\n    // The logic should remain the same!\n    // Change code below this line\n    try {\n      const result = handleLotteryAttempt();\n      userWallet += LOTTERY_SIZE;\n    } catch (err) {\n      userWallet -= ROUND_SIZE;\n    }\n    // Change code above this line\n  }\n\n  // Return the result\n  return userWallet;\n};\n\n// Run the simulation\nconst finalUserBalance = simulateCasino();\n\n// Print out the lottery results\nconsole.log(\"Lottery finished!\");\n\n// Show the user a message depending on the results\nif (finalUserBalance > 500) {\n  console.log(\"Congratulations! You should play more often!\");\n} else {\n  const winner = `You lost a lot of money! Your ending balance is: ${finalUserBalance}`;\n  console.log(winner);\n}\n",
+          "content": ""
+        },
+        {
+          "id": "58fZQwoQA",
+          "type": "markup",
+          "title": "[EMPTY...]",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "0gih2c1M",
           "type": "section",
           "title": "Types and Type Primitives",

@@ -54,7 +54,11 @@ class NavigationOverlay extends React.Component<IProps> {
 
   // Don't re-render when the nav is not open
   shouldComponentUpdate(nextProps: IProps) {
-    return this.props.overlayVisible || nextProps.overlayVisible;
+    if (this.props.user !== nextProps.user) {
+      return true;
+    } else {
+      return this.props.overlayVisible || nextProps.overlayVisible;
+    }
   }
 
   componentDidUpdate() {

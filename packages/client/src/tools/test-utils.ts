@@ -329,7 +329,7 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
         if (err.message === "INFINITE_LOOP") {
           console.error("Infinite loop detected");
         } else {
-          console.error(err.message + err.stack);
+          console.error(err.message + "\\n" + err.stack);
         }
       }
     }
@@ -455,7 +455,7 @@ try {
       message: JSON.stringify([
         {
           testResult: false,
-          error: err.message + err.stack,
+          error: err.message + "\\n" + err.stack,
           message: "The code should compile and not throw any errors.",
         }
       ]),
