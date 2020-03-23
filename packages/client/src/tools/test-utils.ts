@@ -62,6 +62,14 @@ export interface CodeFormatMessageEvent extends MessageEvent {
 }
 
 /**
+ * Do nothing replacement for console for test environment to turn
+ * console statements into dead-end code paths.
+ */
+const CONSOLE_NO_OP = `
+  const consoleNoOp = (...args) => null;
+`;
+
+/**
  * Functions used to intercept console methods and post the messages to
  * the parent window.
  *
@@ -221,11 +229,13 @@ export const hijackConsole = (codeString: string) => {
  * real code, which would then no longer execute...
  */
 export const stripConsoleCalls = (codeString: string) => {
-  return codeString
-    .replace(/console.log/g, "// ")
-    .replace(/console.info/g, "// ")
-    .replace(/console.warn/g, "// ")
-    .replace(/console.error/g, "// ");
+  const noOpConsole = codeString
+    .replace(/console.log/g, "consoleNoOp")
+    .replace(/console.info/g, "consoleNoOp")
+    .replace(/console.warn/g, "consoleNoOp")
+    .replace(/console.error/g, "consoleNoOp");
+
+  return `${CONSOLE_NO_OP}${noOpConsole}`;
 };
 
 /**
