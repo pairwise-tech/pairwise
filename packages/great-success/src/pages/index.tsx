@@ -66,7 +66,7 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
           style={{ zIndex: 6 }}
           colors={PAIRWISE_COLORS}
           initialVelocityX={4}
-          initialVelocityY={20}
+          initialVelocityY={15}
           run={stage > 2}
           confettiSource={contentRect.current}
         />
