@@ -505,6 +505,8 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
 
   const saveOnUpdateEpic = action$.pipe(
     filter(isActionOf(Actions.updateCurrentChallengeBlob)),
+    // Do not save if the solution code is revealed
+    filter(() => !state$.value.challenges.revealWorkspaceSolution),
     debounceTime(500),
     map(x => x.payload),
     map(Actions.saveChallengeBlob),
@@ -539,6 +541,8 @@ const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
 const handleCompleteChallengeEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.handleCompleteChallenge)),
+    // Do not save if solution code is revealed
+    filter(() => !state$.value.challenges.revealWorkspaceSolution),
     map(x => x.payload),
     map(
       (challengeId): Result<IProgressDto, string> => {
