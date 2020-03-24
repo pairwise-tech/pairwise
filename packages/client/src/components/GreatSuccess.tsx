@@ -1,14 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import Layout from '../components/Layout';
-import { Button, Classes, Icon } from '@blueprintjs/core';
-import styled from 'styled-components';
-import { CSSTransition } from 'react-transition-group';
-import Confetti from 'react-confetti';
-import { IRect } from 'react-confetti/dist/types/Rect';
-import { ICON } from '@blueprintjs/core/lib/esm/common/classes';
+import { Button, Icon } from "@blueprintjs/core";
+import styled from "styled-components";
+import { CSSTransition } from "react-transition-group";
+import Confetti from "react-confetti";
+import { IRect } from "react-confetti/dist/types/Rect";
+import { Challenge } from "@pairwise/common";
 
-interface GreatSuccessProps {
+interface ConfettiModalProps {
   isOpen: boolean;
   onClose?: () => any;
   onClickOutside?: () => any;
@@ -20,10 +19,54 @@ const getDimensions = () => ({
 });
 
 // The colors from our logo
-const PAIRWISE_COLORS = ['#27C9DD', '#F3577A', '#F6FA88', '#49F480', '#FFB85A'];
-const GRAYSCALE = ['#4444', '#666', '#999', '#eee', '#fff'];
+const PAIRWISE_COLORS = ["#27C9DD", "#F3577A", "#F6FA88", "#49F480", "#FFB85A"];
 
-const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
+// The title text of the modal. Will animate along with the modal.
+const CardTitle: React.FC<{ parentStage?: number }> = props => {
+  const [stage, setStage] = React.useState(0);
+  const nextStage = () => setStage(stage + 1);
+
+  if (typeof props.parentStage !== "number") {
+    console.warn(
+      "[Err] CardTitle should only be used within a GreatSuccess component",
+    );
+    return null;
+  }
+
+  return (
+    <CardTitleContainer>
+      <CSSTransition
+        in={props.parentStage > 1}
+        timeout={300}
+        classNames="gs"
+        onEntered={nextStage}
+        onExit={() => setStage(0)}
+      >
+        <Icon
+          style={{
+            margin: "0 60px",
+            marginLeft: 40,
+            color: "#09F9A4",
+            transform: "scale(4)",
+          }}
+          intent="primary"
+          iconSize={Icon.SIZE_LARGE}
+          icon="tick"
+        ></Icon>
+      </CSSTransition>
+      <CSSTransition
+        in={stage > 0}
+        timeout={500}
+        classNames="gs"
+        onEntered={nextStage}
+      >
+        <h1>{props.children}</h1>
+      </CSSTransition>
+    </CardTitleContainer>
+  );
+};
+
+const ConfettiModal: React.FC<ConfettiModalProps> = props => {
   const { width, height } = getDimensions();
   // Deafult the confetti source to a rect at the center of the screen
   const contentRect = React.useRef<IRect>({
@@ -37,7 +80,7 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
   React.useEffect(() => {
     // NOTE: We need to use an effect here to grab the DOM el because
     // CSSTransition doesn't like us adding a ref to children.
-    const el = document.getElementById('confetti-measurement-div');
+    const el = document.getElementById("confetti-measurement-div");
     if (el) {
       const box = el.getBoundingClientRect();
       contentRect.current = {
@@ -89,7 +132,7 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
               ></CloseButton>
             )}
             <div className="inner">
-              {React.Children.map(props.children, (child) => {
+              {React.Children.map(props.children, child => {
                 // @ts-ignore What's going on here? Why are the official types not passing?
                 if (child.type === CardTitle) {
                   // @ts-ignore
@@ -112,6 +155,19 @@ const GreatSuccess: React.FC<GreatSuccessProps> = (props) => {
         </CSSTransition>
       </GreatSuccessContainer>
     </CSSTransition>
+  );
+};
+
+interface GreatSuccessProps extends ConfettiModalProps {
+  challenge: Challenge;
+}
+
+const GreatSuccess: React.FC<GreatSuccessProps> = props => {
+  return (
+    <ConfettiModal {...props}>
+      <CardTitle>Done! You did it.</CardTitle>
+      <p>That was a great success</p>
+    </ConfettiModal>
   );
 };
 
@@ -223,47 +279,6 @@ const GreatSuccessContainer = styled.div`
   }
 `;
 
-const CardTitle: React.FC<{ parentStage?: number }> = (props) => {
-  const [stage, setStage] = React.useState(0);
-  const nextStage = () => setStage(stage + 1);
-  if (typeof props.parentStage !== 'number') {
-    throw new Error(
-      'CardTitle should only be used within a GreatSuccess component',
-    );
-  }
-  return (
-    <CardTitleContainer>
-      <CSSTransition
-        in={props.parentStage > 1}
-        timeout={300}
-        classNames="gs"
-        onEntered={nextStage}
-        onExit={() => setStage(0)}
-      >
-        <Icon
-          style={{
-            margin: '0 60px',
-            marginLeft: 40,
-            color: '#09F9A4',
-            transform: 'scale(4)',
-          }}
-          intent="primary"
-          iconSize={Icon.SIZE_LARGE}
-          icon="tick"
-        ></Icon>
-      </CSSTransition>
-      <CSSTransition
-        in={stage > 0}
-        timeout={500}
-        classNames="gs"
-        onEntered={nextStage}
-      >
-        <h1>{props.children}</h1>
-      </CSSTransition>
-    </CardTitleContainer>
-  );
-};
-
 const CardTitleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -287,36 +302,4 @@ const CardTitleContainer = styled.div`
   }
 `;
 
-const IndexPage: React.FC = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
-  return (
-    <Layout>
-      <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-        className={Classes.DARK}
-      >
-        <GreatSuccess
-          isOpen={isOpen}
-          onClose={handleClose}
-          onClickOutside={handleClose}
-        >
-          <CardTitle>Done! You did it.</CardTitle>
-          <p>That was a great success</p>
-        </GreatSuccess>
-        <Button onClick={() => setIsOpen(true)}>Open It!</Button>
-      </div>
-    </Layout>
-  );
-};
-
-export default IndexPage;
+export default GreatSuccess;

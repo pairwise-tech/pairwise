@@ -80,6 +80,7 @@ import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import { CODEPRESS } from "tools/client-env";
 import cx from "classnames";
 import traverse from "traverse";
+import GreatSuccess from "./GreatSuccess";
 
 const debug = require("debug")("client:Workspace");
 
@@ -109,6 +110,7 @@ interface IState {
   testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
+  isSuccessModalClosed: boolean;
 }
 
 /** ===========================================================================
@@ -169,6 +171,11 @@ class Workspace extends React.Component<IProps, IState> {
       testResults: [],
       logs: DEFAULT_LOGS,
       monacoInitializationError: false,
+
+      // TODO: This probably won't be the final solution. For now this is what
+      // allows the user to close the success modal since it's otherwise based
+      // on passing test status.
+      isSuccessModalClosed: false,
     };
   }
 
@@ -508,7 +515,8 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { testResults } = this.state;
+    const { correct: allTestsPassing } = this.getTestPassedStatus();
+    const { testResults, isSuccessModalClosed } = this.state;
     const { challenge, isEditMode, userSettings } = this.props;
     const { fullScreenEditor } = userSettings;
     const isSandbox = challenge.id === SANDBOX_ID;
@@ -517,11 +525,21 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
 
+    const handleCloseSuccessModal = () => {
+      this.setState({ isSuccessModalClosed: true });
+    };
+
     const MONACO_CONTAINER = (
       <div
         id="pairwise-code-editor"
         style={{ height: "100%", position: "relative" }}
       >
+        <GreatSuccess
+          isOpen={allTestsPassing && !isSuccessModalClosed}
+          onClose={handleCloseSuccessModal}
+          onClickOutside={handleCloseSuccessModal}
+          challenge={challenge}
+        />
         <TabbedInnerNav show={isEditMode}>
           <Tab
             onClick={() => this.handleEditorTabClick("starterCode")}
@@ -749,7 +767,8 @@ class Workspace extends React.Component<IProps, IState> {
   getTestPassedStatus = () => {
     const { testResults } = this.state;
     const passedTests = testResults.filter(t => t.testResult);
-    const correct = passedTests.length === testResults.length;
+    const correct =
+      passedTests.length > 0 && passedTests.length === testResults.length;
     return { correct, passedTests, testResults };
   };
 
