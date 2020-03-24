@@ -919,18 +919,16 @@ class Workspace extends React.Component<IProps, IState> {
 
   handleReceiveTestResults = () => {
     const { correct } = this.getTestPassedStatus();
-    if (correct) {
-      this.handlePassChallenge();
-    }
-  };
-
-  handlePassChallenge = () => {
     /**
-     * Called when all the tests on a challenge pass. This can be used to
-     * trigger events at this time such as displaying the challenge success
-     * modal.
+     * This is called with the results of the test and can be used to trigger
+     * various events at this time such as displaying the challenge success
+     * modal (if passed), and updating the user progress map to show challenge
+     * completed / attempted feedback in the challenge navigation map.
      */
-    this.props.handleCompleteChallenge(this.props.challenge.id);
+    this.props.handleAttemptChallenge({
+      challengeId: this.props.challenge.id,
+      complete: correct,
+    });
   };
 
   iFrameRenderPreview = async () => {
@@ -1229,7 +1227,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
   updateUserSettings: Modules.actions.user.updateUserSettings,
-  handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
+  handleAttemptChallenge: Modules.actions.challenges.handleAttemptChallenge,
   updateCurrentChallengeBlob:
     Modules.actions.challenges.updateCurrentChallengeBlob,
   setAdminTestTab: Modules.actions.challenges.setAdminTestTab,

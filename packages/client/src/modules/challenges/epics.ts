@@ -45,6 +45,11 @@ import { SearchResultEvent } from "./types";
 
 const debug = require("debug")("client:challenges:epics");
 
+/** ===========================================================================
+ * Epics
+ * ============================================================================
+ */
+
 const searchEpic: EpicSignature = action$ => {
   // Initialize the search worker. This could get dropped into deps if we need
   // it elsewhere but I don't think we do
@@ -117,11 +122,6 @@ const searchEpic: EpicSignature = action$ => {
 
   return merge(buildSearchIndex$, search$, clearSearch$, searchResult$);
 };
-
-/** ===========================================================================
- * Epics
- * ============================================================================
- */
 
 /**
  * Fetch the course content skeletons when the app launches.
@@ -536,25 +536,25 @@ const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
  * a user progress update after a challenge is passed and then dispatches an
  * action to save this progress update.
  */
-const handleCompleteChallengeEpic: EpicSignature = (action$, state$, deps) => {
+const handleAttemptChallengeEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.handleCompleteChallenge)),
-    map(x => x.payload),
+    filter(isActionOf(Actions.handleAttemptChallenge)),
+    pluck("payload"),
     map(
-      (challengeId): Result<IProgressDto, string> => {
+      ({ challengeId, complete }): Result<IProgressDto, string> => {
         const courseId = state$.value.challenges.currentCourseId;
 
         if (courseId) {
           const payload: IProgressDto = {
             courseId,
             challengeId,
-            complete: true,
+            complete,
           };
 
           return new Ok(payload);
         } else {
           const msg =
-            "[WARNING!]: No active course id found in handleCompleteChallengeEpic, this shouldn't happen...";
+            "[WARNING!]: No active course id found in handleAttemptChallengeEpic, this shouldn't happen...";
           console.warn(msg);
           return new Err(msg);
         }
@@ -581,7 +581,7 @@ const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(deps.api.updateUserProgress),
     map(result => {
       if (result.value) {
-        return Actions.updateUserProgressSuccess();
+        return Actions.updateUserProgressSuccess(result.value);
       } else {
         return Actions.updateUserProgressFailure(result.error);
       }
@@ -609,7 +609,7 @@ export default combineEpics(
   syncChallengeToUrlEpic,
   handleSaveCodeBlobEpic,
   saveCodeBlobEpic,
-  handleCompleteChallengeEpic,
+  handleAttemptChallengeEpic,
   updateUserProgressEpic,
   searchEpic,
 );

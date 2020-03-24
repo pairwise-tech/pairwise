@@ -69,7 +69,7 @@ enum ActionTypesEnum {
   FETCH_BLOB_FOR_CHALLENGE_SUCCESS = "FETCH_BLOB_FOR_CHALLENGE_SUCCESS",
   FETCH_BLOB_FOR_CHALLENGE_FAILURE = "FETCH_BLOB_FOR_CHALLENGE_FAILURE",
 
-  CHALLENGE_COMPLETED = "CHALLENGE_COMPLETED",
+  CHALLENGE_ATTEMPTED = "CHALLENGE_ATTEMPTED",
 
   UPDATE_USER_PROGRESS = "UPDATE_USER_PROGRESS",
   UPDATE_USER_PROGRESS_SUCCESS = "UPDATE_USER_PROGRESS_SUCCESS",
@@ -153,9 +153,9 @@ export const fetchBlobForChallengeFailure = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE_FAILURE,
 )<HttpResponseError>();
 
-export const handleCompleteChallenge = createAction(
-  ActionTypesEnum.CHALLENGE_COMPLETED,
-)<string>();
+export const handleAttemptChallenge = createAction(
+  ActionTypesEnum.CHALLENGE_ATTEMPTED,
+)<{ challengeId: string; complete: boolean }>();
 
 export const updateUserProgress = createAction(
   ActionTypesEnum.UPDATE_USER_PROGRESS,
@@ -163,7 +163,7 @@ export const updateUserProgress = createAction(
 
 export const updateUserProgressSuccess = createAction(
   ActionTypesEnum.UPDATE_USER_PROGRESS_SUCCESS,
-)();
+)<IProgressDto>();
 
 export const updateUserProgressFailure = createAction(
   ActionTypesEnum.UPDATE_USER_PROGRESS_FAILURE,
