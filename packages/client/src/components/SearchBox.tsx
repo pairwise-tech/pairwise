@@ -21,6 +21,12 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
   const [searchText, setSearchText] = React.useState("");
   const [isClosed, setIsClosed] = React.useState(false); // See NOTE
   const [selIndex, setSelIndex] = React.useState(0);
+  let searchInput: Nullable<HTMLInputElement> = null;
+
+  const focusInput = (e: KeyboardEvent) => {
+    e.preventDefault();
+    searchInput?.focus();
+  };
   const handleClose = React.useCallback(() => {
     if (!isClosed) {
       setIsClosed(true);
@@ -103,6 +109,9 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
         onFocus={e => {
           setIsClosed(false);
         }}
+        inputRef={(ref: HTMLInputElement | null) => {
+          searchInput = ref;
+        }}
       />
       {isOpen && (
         <ResultBox>
@@ -125,14 +134,21 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
           </ResultTitleBox>
         </ResultBox>
       )}
-      {/* These keyboard shortcuts only apply when the search pane is open */}
-      {isOpen && (
+      {/* These keyboard shortcuts only apply when the search pane is open, except
+      for the focusInput shortcut, which only works when not already focused */}
+      {isOpen ? (
         <KeyboardShortcuts
           keymap={{
             ArrowUp: selPrev,
             ArrowDown: selNext,
             Enter: handleNavigation,
             Escape: handleClose,
+          }}
+        />
+      ) : (
+        <KeyboardShortcuts
+          keymap={{
+            "cmd+shift+s": focusInput,
           }}
         />
       )}
