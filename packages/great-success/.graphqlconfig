@@ -1,8 +1,0 @@
-{
-  "schemaPath": "graphql.json",
-  "extensions": {
-    "endpoints": {
-      "dev": "http://localhost:8000/___graphql"
-    }
-  }
-}
