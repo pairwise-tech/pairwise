@@ -10,6 +10,7 @@ import {
   Result,
   ICodeBlobDto,
   SandboxBlob,
+  ContentUtility,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -40,6 +41,7 @@ import {
   deriveIdsFromCourse,
   findChallengeIdInLocationIfExists,
   createInverseChallengeMapping,
+  isContentOnlyChallenge,
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 
@@ -532,6 +534,54 @@ const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
 };
 
 /**
+ * NOTE: content only challenges do not have tests, though we still want them to
+ * appear as completed in the challenge map. Any time we navigate away from a
+ * content only challenge, consider it completed. This could be further improved
+ * by ensuring we're navigating forward, and not backward from the challenge.
+ */
+const markContentOnlyChallengeAsCompleteEpic: EpicSignature = (
+  action$,
+  state$,
+) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.setChallengeId)),
+    pluck("payload"),
+    map(({ previousChallengeId: challengeId }) => {
+      const courseId = state$.value.challenges.currentCourseId;
+      const { challenge } = ContentUtility.deriveChallengeContextFromId(
+        challengeId,
+      );
+
+      if (isContentOnlyChallenge(challenge)) {
+        if (courseId) {
+          const payload: IProgressDto = {
+            courseId,
+            challengeId,
+            complete: true,
+          };
+
+          return new Ok(payload);
+        } else {
+          const msg =
+            "[WARNING!]: No active course id found in markContentOnlyChallengeAsCompleteEpic, this shouldn't happen...";
+          console.warn(msg);
+          return new Err(msg);
+        }
+      } else {
+        return new Err("Not a content-only challenge");
+      }
+    }),
+    map(result => {
+      if (result.value) {
+        return Actions.updateUserProgress(result.value);
+      } else {
+        return Actions.empty("Did not save user progress");
+      }
+    }),
+  );
+};
+
+/**
  * Handle completing a challenge (all tests passed). This epic constructs
  * a user progress update after a challenge is passed and then dispatches an
  * action to save this progress update.
@@ -612,4 +662,5 @@ export default combineEpics(
   handleAttemptChallengeEpic,
   updateUserProgressEpic,
   searchEpic,
+  markContentOnlyChallengeAsCompleteEpic,
 );
