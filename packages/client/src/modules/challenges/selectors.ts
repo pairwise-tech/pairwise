@@ -217,6 +217,11 @@ export const getHasMediaContent = createSelector(
   },
 );
 
+export const revealSolutionCode = createSelector(
+  [challengesState],
+  x => x.revealWorkspaceSolution,
+);
+
 /**
  * Retrieve the actual challenge data from the first unfinished challenge.
  */
