@@ -106,7 +106,6 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 
 interface IState {
   code: string;
-  userCode: string; // Place to store user code in case solution is revealed
   testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
@@ -118,6 +117,9 @@ interface IState {
  */
 
 class Workspace extends React.Component<IProps, IState> {
+  // Place to store user code when solution code is revealed
+  userCode: string = "";
+
   syntaxWorker: any = null;
 
   // The wrapper class provided @monaco-editor/react. Confusingly,
@@ -165,9 +167,10 @@ class Workspace extends React.Component<IProps, IState> {
     // accurate.
     const initialCode = "code" in props.blob ? props.blob.code : "";
 
+    this.userCode = initialCode;
+
     this.state = {
       code: initialCode,
-      userCode: initialCode,
       testResults: [],
       logs: DEFAULT_LOGS,
       monacoInitializationError: false,
@@ -221,25 +224,24 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Solution is toggled ON:
     if (!prevProps.revealSolutionCode && this.props.revealSolutionCode) {
+      // Store the user code and set the solution code as the workspace
+      // editor code string.
+      this.userCode = this.state.code;
       this.setState(
-        ps => ({
-          userCode: ps.code,
+        {
           code: this.props.challenge.solutionCode,
-        }),
+        },
         this.pauseAndRefreshEditor,
       );
-
-      return;
     } else if (prevProps.revealSolutionCode && !this.props.revealSolutionCode) {
-      // Solution is toggled OFF:
+      // Solution is toggled OFF: Restore the user code in the workspace
+      // editor.
       this.setState(
-        ps => ({
-          code: ps.userCode,
-        }),
+        {
+          code: this.userCode,
+        },
         this.pauseAndRefreshEditor,
       );
-
-      return;
     }
 
     /**
