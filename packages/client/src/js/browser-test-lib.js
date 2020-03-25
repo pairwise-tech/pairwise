@@ -328,20 +328,21 @@ class Expectation {
       `${val} not found in ${stringify(this.value)}`,
     );
   }
-  toThrow(failureMessage) {
+  toThrow(optionalFailureMessage) {
     let didThrow = false;
     let errorMessage;
 
     try {
+      // The function to test should be supplied in the initialization of
+      // expect, e.g. expect(() => throw new Error("boom")).toThrow();
       this.value();
     } catch (err) {
       didThrow = true;
       errorMessage = err.message;
     }
 
-    const message =
-      failureMessage ||
-      `[Assert] Expected code/function to not throw, but received this error message: ${errorMessage}`;
+    const defaultMessage = `[Assert] Expected code/function to not throw, but received this error message: ${errorMessage}`;
+    const message = optionalFailureMessage || defaultMessage;
 
     assert(didThrow, message);
   }
