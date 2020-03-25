@@ -225,21 +225,6 @@ const fail = () => expect(false).toBe(true);
 // Helper to quickly pass a test.
 const pass = () => expect(true).toBe(true);
 
-// Expect a function passed in as an argument to throw
-// when called.
-const expectFunctionToThrow = fn => {
-  let valid = true;
-
-  try {
-    fn();
-    valid = false;
-  } catch (err) {
-    valid = true;
-  }
-
-  expect(valid).toBe(true);
-};
-
 class Expectation {
   constructor(value) {
     this.value = value;
@@ -342,6 +327,23 @@ class Expectation {
       this.value.includes(val),
       `${val} not found in ${stringify(this.value)}`,
     );
+  }
+  toThrow(failureMessage) {
+    let didThrow = false;
+    let errorMessage;
+
+    try {
+      this.value();
+    } catch (err) {
+      didThrow = true;
+      errorMessage = err.message;
+    }
+
+    const message =
+      failureMessage ||
+      `[Assert] Expected code/function to not throw, but received this error message: ${errorMessage}`;
+
+    assert(didThrow, message);
   }
 }
 
