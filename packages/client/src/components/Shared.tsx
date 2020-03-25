@@ -81,6 +81,7 @@ export const UpperRight = styled.div<{ isEditMode: boolean }>`
   top: ${props => (props.isEditMode ? 45 : 10)}px;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 `;
 
 export const LowerRight = styled.div`

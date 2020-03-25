@@ -12,7 +12,7 @@ import {
 import { DIMENSIONS as D, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Loading } from "./Shared";
-import { Icon, Collapse, Pre, EditableText } from "@blueprintjs/core";
+import { Icon, Collapse, Pre, EditableText, Tooltip } from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
@@ -310,6 +310,36 @@ export const ChallengeTitleHeading = styled.h1`
   &:focus {
     background: black;
   }
+`;
+
+export const RevealSolutionLabel = ({
+  hideSolution,
+}: {
+  hideSolution: () => void;
+}) => (
+  <Tooltip content="Click to hide solution" position="left">
+    <SolutionWrapper aria-label="hide the solution code" onClick={hideSolution}>
+      <SolutionText>Viewing Solution Code</SolutionText>
+    </SolutionWrapper>
+  </Tooltip>
+);
+
+const SolutionWrapper = styled.button`
+  border: none;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  background: ${C.REVEAL_SOLUTION_LABEL_BACKGROUND};
+
+  &:hover {
+    cursor: pointer;
+    background: ${C.REVEAL_SOLUTION_LABEL_BACKGROUND_HOVER};
+  }
+`;
+
+const SolutionText = styled.p`
+  margin: 0;
+  color: ${C.PRIMARY_GREEN};
 `;
 
 const instructionsMapState = (state: ReduxStoreState) => ({

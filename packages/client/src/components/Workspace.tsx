@@ -74,6 +74,7 @@ import {
   DragIgnorantFrameContainer,
   consoleRowStyles,
   LowerSection,
+  RevealSolutionLabel,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
@@ -572,18 +573,23 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
-        {!IS_MARKUP_CHALLENGE && (
-          <UpperRight isEditMode={isEditMode}>
-            <Tooltip content="Shortcut: opt+enter" position="top">
+        <UpperRight isEditMode={isEditMode}>
+          {revealSolutionCode && (
+            <RevealSolutionLabel
+              hideSolution={this.props.handleToggleSolutionCode}
+            />
+          )}
+          {!IS_MARKUP_CHALLENGE && (
+            <Tooltip content="Shortcut: opt+enter" position="left">
               <Button
-                aria-label="run the current editor code"
                 onClick={this.iFrameRenderPreview}
+                aria-label="run the current editor code"
               >
                 Run Code
               </Button>
             </Tooltip>
-          </UpperRight>
-        )}
+          )}
+        </UpperRight>
         <LowerRight>
           <ButtonGroup vertical>
             <Tooltip content="Increase Font Size" position="left">
