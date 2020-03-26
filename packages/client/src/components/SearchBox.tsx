@@ -148,7 +148,7 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
       ) : (
         <KeyboardShortcuts
           keymap={{
-            "cmd+shift+s": focusInput,
+            "cmd+p": focusInput,
           }}
         />
       )}
