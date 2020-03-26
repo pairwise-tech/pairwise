@@ -10,7 +10,6 @@ import {
   Result,
   ICodeBlobDto,
   SandboxBlob,
-  ContentUtility,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -542,17 +541,18 @@ const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
 const markContentOnlyChallengeAsCompleteEpic: EpicSignature = (
   action$,
   state$,
+  deps,
 ) => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
     pluck("payload"),
     map(({ previousChallengeId: challengeId }) => {
       const courseId = state$.value.challenges.currentCourseId;
-      const { challenge } = ContentUtility.deriveChallengeContextFromId(
-        challengeId,
+      const challenge = deps.selectors.challenges.getCurrentChallenge(
+        state$.value,
       );
 
-      if (isContentOnlyChallenge(challenge)) {
+      if (challenge && isContentOnlyChallenge(challenge)) {
         if (courseId) {
           const payload: IProgressDto = {
             courseId,
