@@ -330,6 +330,7 @@ class Workspace extends React.Component<IProps, IState> {
     this.syntaxWorker = new SyntaxHighlightWorker();
 
     this.syntaxWorker.addEventListener("message", (event: any) => {
+      debug("syntax highlight incoming", event);
       const { classifications, identifier } = event.data;
       if (classifications && identifier) {
         if (identifier === "TSX_SYNTAX_HIGHLIGHTER") {
@@ -493,10 +494,20 @@ class Workspace extends React.Component<IProps, IState> {
   getMonacoLanguageFromChallengeType = () => {
     const { type } = this.props.challenge;
 
-    if (type === "react" || type === "typescript") {
-      return "typescript";
-    } else if (type === "markup") {
-      return "html";
+    switch (type) {
+      case "react":
+        debug(`[getMonacoLanguageFromChallengeType] using "typescriptreact"`);
+        return "typescriptreact";
+      case "typescript":
+        debug(`[getMonacoLanguageFromChallengeType] using "typescript"`);
+        return "typescript";
+      case "markup":
+        debug(`[getMonacoLanguageFromChallengeType] using "html"`);
+        return "html";
+      default:
+        console.warn(`[WARNING] Invalid challenge type for monaco: ${type}`);
+        debug(`[getMonacoLanguageFromChallengeType] using "plaintext"`);
+        return "plaintext";
     }
   };
 
@@ -852,6 +863,7 @@ class Workspace extends React.Component<IProps, IState> {
 
   requestSyntaxHighlighting = (code: string) => {
     if (this.syntaxWorker) {
+      debug("request syntax highlighting");
       this.syntaxWorker.postMessage({ code });
     }
   };
