@@ -399,7 +399,7 @@ class Workspace extends React.Component<IProps, IState> {
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({
           strict: true,
           noEmit: true,
-          jsx: "react",
+          jsx: mn.languages.typescript.JsxEmit.React,
           typeRoots: ["node_modules/@types"],
           allowNonTsExtensions: true,
           target: mn.languages.typescript.ScriptTarget.ES2016,
@@ -439,6 +439,8 @@ class Workspace extends React.Component<IProps, IState> {
 
     const mn = this.monacoWrapper;
 
+    const language = this.getMonacoLanguageFromChallengeType();
+
     const options = {
       theme: MonacoEditorThemes.DEFAULT,
       automaticLayout: true,
@@ -449,8 +451,6 @@ class Workspace extends React.Component<IProps, IState> {
       },
       ...this.props.editorOptions,
     };
-
-    const language = this.getMonacoLanguageFromChallengeType();
 
     let model;
 
@@ -496,8 +496,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     switch (type) {
       case "react":
-        debug(`[getMonacoLanguageFromChallengeType] using "typescriptreact"`);
-        return "typescriptreact";
       case "typescript":
         debug(`[getMonacoLanguageFromChallengeType] using "typescript"`);
         return "typescript";

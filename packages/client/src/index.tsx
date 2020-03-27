@@ -8,6 +8,9 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 // Import app styles
 import "./index.css";
 
+// Our custom JSX theme
+import "./jsx-theme-styles.scss";
+
 // Import Libraries
 import React from "react";
 import ReactDOM from "react-dom";
