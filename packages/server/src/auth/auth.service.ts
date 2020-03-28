@@ -33,6 +33,16 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
+  public async handleEmailLoginRequest(email: string) {
+    /**
+     * This will need to send an email to the provided email address with
+     * a link to signin to the app. That link will go to the Workspace with
+     * an access token which will create/login a user by the email address
+     * they provided.
+     */
+    console.log(`Received request to login by email: ${email}`);
+  }
+
   public async handleFacebookSignin(
     requestProfile: FacebookProfileWithCredentials,
   ) {

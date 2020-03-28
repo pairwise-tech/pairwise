@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards, Res } from "@nestjs/common";
+import { Controller, Get, Req, UseGuards, Res, Post } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
 import { AuthService, LoginFailureCodes, Strategy } from "./auth.service";
@@ -11,6 +11,12 @@ import { ERROR_CODES } from "src/tools/constants";
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Post("email")
+  public async handleEmailLoginRequest(@Req() req) {
+    // Handle request to login in directly by email
+    this.authService.handleEmailLoginRequest(req.body.email);
+  }
 
   @UseGuards(AuthGuard("facebook"))
   @Get("facebook")
