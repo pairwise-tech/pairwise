@@ -224,6 +224,19 @@ they need to land a new job.
   },
   {
     question: `
+    Is the content up to date? How will you make sure the content stays up to date?`,
+    answer: `
+We chose the Pairwise curriculum very carefully based on our analysis of current
+software trends. We will continue to watch the market closely and we will update our
+curriculum whenever we think there is a reason to do so. This includes changing the
+technologies we teach, or simply updating challenges to stay consistent with the
+current latest versions of the languages, libraries, and technologies we teach. We
+take this very seriously and consider keeping our courses up to date one of our
+main responsibilities to ensure a great product for our users.
+    `,
+  },
+  {
+    question: `
     I am interested in studying computer science in college, or I already am
     doing this. Should I join this course as well?`,
     answer: `

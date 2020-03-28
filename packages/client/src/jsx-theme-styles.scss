@@ -1,0 +1,70 @@
+// Custom editor styles for JSX elements
+// These styles are taken directly from the default VS-dark theme
+
+#monaco-editor {
+  .JsxText {
+    color: #d3d3d3;
+    &.StringLiteral {
+      color: #ce9178;
+    }
+  }
+
+  .JsxSelfClosingElement,
+  .JsxOpeningElement,
+  .JsxClosingElement {
+    color: #808080;
+  }
+
+  .tagName-of-JsxOpeningElement,
+  .tagName-of-JsxClosingElement,
+  .tagName-of-JsxSelfClosingElement {
+    color: #569cd6;
+  }
+
+  .name-of-JsxAttribute,
+  .name-of-PropertyAssignment {
+    color: #9cdcfe;
+  }
+
+  .name-of-MethodDeclaration,
+  .name-of-PropertyDeclaration {
+    color: #5ccfe6;
+  }
+
+  .JsxText.highContrast {
+    color: #fff;
+  }
+
+  /* customized for hc-black theme */
+  .JsxSelfClosingElement.highContrast,
+  .JsxOpeningElement.highContrast,
+  .JsxClosingElement.highContrast,
+  .tagName-of-JsxOpeningElement.highContrast,
+  .tagName-of-JsxClosingElement.highContrast,
+  .tagName-of-JsxSelfClosingElement.highContrast {
+    color: #f38517;
+  }
+
+  .name-of-MethodDeclaration.highContrast,
+  .name-of-PropertyDeclaration.highContrast {
+    color: #66e6ff;
+  }
+
+  /*
+ * Style all customized elements black when
+ * selected by end user in high-contrast mode
+ */
+  .JsxText.highContrast.inline-selected-text,
+  .JsxSelfClosingElement.highContrast.inline-selected-text,
+  .JsxOpeningElement.highContrast.inline-selected-text,
+  .JsxClosingElement.highContrast.inline-selected-text,
+  .tagName-of-JsxOpeningElement.highContrast.inline-selected-text,
+  .tagName-of-JsxClosingElement.highContrast.inline-selected-text,
+  .tagName-of-JsxSelfClosingElement.highContrast.inline-selected-text,
+  .name-of-JsxAttribute.highContrast.inline-selected-text,
+  .name-of-PropertyAssignment.highContrast.inline-selected-text,
+  .name-of-MethodDeclaration.highContrast.inline-selected-text,
+  .name-of-PropertyDeclaration.highContrast.inline-selected-text {
+    color: #000000;
+  }
+}

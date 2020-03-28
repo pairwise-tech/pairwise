@@ -74,6 +74,7 @@ import {
   DragIgnorantFrameContainer,
   consoleRowStyles,
   LowerSection,
+  RevealSolutionLabel,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
@@ -119,6 +120,9 @@ interface IState {
  */
 
 class Workspace extends React.Component<IProps, IState> {
+  // Place to store user code when solution code is revealed
+  userCode: string = "";
+
   syntaxWorker: any = null;
 
   // The wrapper class provided @monaco-editor/react. Confusingly,
@@ -165,6 +169,8 @@ class Workspace extends React.Component<IProps, IState> {
     // of right now this means that the various loading props need to be
     // accurate.
     const initialCode = "code" in props.blob ? props.blob.code : "";
+
+    this.userCode = initialCode;
 
     this.state = {
       code: initialCode,
@@ -220,6 +226,32 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
+    /**
+     * Handle toggling the solution code on and off.
+     */
+
+    // Solution is toggled ON:
+    if (!prevProps.revealSolutionCode && this.props.revealSolutionCode) {
+      // Store the user code and set the solution code as the workspace
+      // editor code string.
+      this.userCode = this.state.code;
+      this.setState(
+        {
+          code: this.props.challenge.solutionCode,
+        },
+        this.pauseAndRefreshEditor,
+      );
+    } else if (prevProps.revealSolutionCode && !this.props.revealSolutionCode) {
+      // Solution is toggled OFF: Restore the user code in the workspace
+      // editor.
+      this.setState(
+        {
+          code: this.userCode,
+        },
+        this.pauseAndRefreshEditor,
+      );
+    }
+
     /**
      * Reset the editor if the editor screen size is toggle.
      *
@@ -305,6 +337,7 @@ class Workspace extends React.Component<IProps, IState> {
     this.syntaxWorker = new SyntaxHighlightWorker();
 
     this.syntaxWorker.addEventListener("message", (event: any) => {
+      debug("syntax highlight incoming", event);
       const { classifications, identifier } = event.data;
       if (classifications && identifier) {
         if (identifier === "TSX_SYNTAX_HIGHLIGHTER") {
@@ -373,7 +406,7 @@ class Workspace extends React.Component<IProps, IState> {
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({
           strict: true,
           noEmit: true,
-          jsx: "react",
+          jsx: mn.languages.typescript.JsxEmit.React,
           typeRoots: ["node_modules/@types"],
           allowNonTsExtensions: true,
           target: mn.languages.typescript.ScriptTarget.ES2016,
@@ -413,6 +446,8 @@ class Workspace extends React.Component<IProps, IState> {
 
     const mn = this.monacoWrapper;
 
+    const language = this.getMonacoLanguageFromChallengeType();
+
     const options = {
       theme: MonacoEditorThemes.DEFAULT,
       automaticLayout: true,
@@ -423,8 +458,6 @@ class Workspace extends React.Component<IProps, IState> {
       },
       ...this.props.editorOptions,
     };
-
-    const language = this.getMonacoLanguageFromChallengeType();
 
     let model;
 
@@ -468,10 +501,18 @@ class Workspace extends React.Component<IProps, IState> {
   getMonacoLanguageFromChallengeType = () => {
     const { type } = this.props.challenge;
 
-    if (type === "react" || type === "typescript") {
-      return "typescript";
-    } else if (type === "markup") {
-      return "html";
+    switch (type) {
+      case "react":
+      case "typescript":
+        debug(`[getMonacoLanguageFromChallengeType] using "typescript"`);
+        return "typescript";
+      case "markup":
+        debug(`[getMonacoLanguageFromChallengeType] using "html"`);
+        return "html";
+      default:
+        console.warn(`[WARNING] Invalid challenge type for monaco: ${type}`);
+        debug(`[getMonacoLanguageFromChallengeType] using "plaintext"`);
+        return "plaintext";
     }
   };
 
@@ -517,7 +558,12 @@ class Workspace extends React.Component<IProps, IState> {
   render() {
     const { correct: allTestsPassing } = this.getTestPassedStatus();
     const { testResults, isSuccessModalClosed } = this.state;
-    const { challenge, isEditMode, userSettings } = this.props;
+    const {
+      challenge,
+      isEditMode,
+      userSettings,
+      revealSolutionCode,
+    } = this.props;
     const { fullScreenEditor } = userSettings;
     const isSandbox = challenge.id === SANDBOX_ID;
     const isFullScreen = fullScreenEditor || isSandbox;
@@ -554,18 +600,23 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
-        {!IS_MARKUP_CHALLENGE && (
-          <UpperRight isEditMode={isEditMode}>
-            <Tooltip content="Shortcut: opt+enter" position="top">
+        <UpperRight isEditMode={isEditMode}>
+          {revealSolutionCode && (
+            <RevealSolutionLabel
+              hideSolution={this.props.handleToggleSolutionCode}
+            />
+          )}
+          {!IS_MARKUP_CHALLENGE && (
+            <Tooltip content="Shortcut: opt+enter" position="left">
               <Button
-                aria-label="run the current editor code"
                 onClick={this.iFrameRenderPreview}
+                aria-label="run the current editor code"
               >
                 Run Code
               </Button>
             </Tooltip>
-          </UpperRight>
-        )}
+          )}
+        </UpperRight>
         <LowerRight>
           <ButtonGroup vertical>
             <Tooltip content="Increase Font Size" position="left">
@@ -625,6 +676,20 @@ class Workspace extends React.Component<IProps, IState> {
                   aria-label="reset editor"
                   onClick={this.resetCodeWindow}
                   text="Restore Initial Code"
+                />
+                <MenuItem
+                  icon={revealSolutionCode ? "application" : "applications"}
+                  aria-label={
+                    revealSolutionCode
+                      ? "hide solution code"
+                      : "reveal solution code"
+                  }
+                  text={
+                    revealSolutionCode
+                      ? "Hide Solution Code"
+                      : "Reveal Solution Code"
+                  }
+                  onClick={this.props.handleToggleSolutionCode}
                 />
               </Menu>
             }
@@ -815,6 +880,7 @@ class Workspace extends React.Component<IProps, IState> {
 
   requestSyntaxHighlighting = (code: string) => {
     if (this.syntaxWorker) {
+      debug("request syntax highlighting");
       this.syntaxWorker.postMessage({ code });
     }
   };
@@ -1241,13 +1307,15 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
   isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
   adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
-  adminEditorTab: Modules.selectors.challenges.adminEditorTabSelector(state),
   showMediaArea: Modules.selectors.challenges.getHasMediaContent(state),
+  revealSolutionCode: Modules.selectors.challenges.revealSolutionCode(state),
+  adminEditorTab: Modules.selectors.challenges.adminEditorTabSelector(state),
 });
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
   updateUserSettings: Modules.actions.user.updateUserSettings,
+  toggleRevealSolutionCode: Modules.actions.challenges.toggleRevealSolutionCode,
   handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
   updateCurrentChallengeBlob:
     Modules.actions.challenges.updateCurrentChallengeBlob,
@@ -1285,6 +1353,11 @@ const mergeProps = (
     methods.updateUserSettings({
       workspaceFontSize:
         state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
+    });
+  },
+  handleToggleSolutionCode: () => {
+    methods.toggleRevealSolutionCode({
+      shouldReveal: !state.revealSolutionCode,
     });
   },
 });
