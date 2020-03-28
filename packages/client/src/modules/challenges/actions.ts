@@ -281,5 +281,5 @@ export const toggleSectionAccordionView = createAction(
 )<{ sectionId: string; open: boolean }>();
 
 export const toggleRevealSolutionCode = createAction(
-  ActionTypesEnum.TOGGLE_SECTION_ACCORDION_VIEW,
+  ActionTypesEnum.TOGGLE_REVEAL_SOLUTION,
 )<{ shouldReveal: boolean }>();
