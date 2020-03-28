@@ -582,11 +582,12 @@ const markContentOnlyChallengeAsCompleteEpic: EpicSignature = (
 };
 
 /**
- * Handle completing a challenge (all tests passed). This epic constructs
- * a user progress update after a challenge is passed and then dispatches an
- * action to save this progress update.
+ * Handle attempting a challenge. This epic constructs a user progress update
+ * after a challenge is attempted and then dispatches an action to save this
+ * progress update. If challenge is complete (all tests passed), we mark the
+ * challenge as completed, if there are failing tests, mark it as attempted.
  */
-const handleAttemptChallengeEpic: EpicSignature = (action$, state$, deps) => {
+const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
   return action$.pipe(
     filter(isActionOf(Actions.handleAttemptChallenge)),
     pluck("payload"),

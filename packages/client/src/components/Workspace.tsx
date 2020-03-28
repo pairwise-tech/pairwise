@@ -924,11 +924,21 @@ class Workspace extends React.Component<IProps, IState> {
      * various events at this time such as displaying the challenge success
      * modal (if passed), and updating the user progress map to show challenge
      * completed / attempted feedback in the challenge navigation map.
+     *
+     * Only fire if user has changed code in the editor, thus establishing
+     * their intent to attempted the challenge. This will correctly ignore
+     * Workspace initiated test runs on challenge load.
      */
-    this.props.handleAttemptChallenge({
-      challengeId: this.props.challenge.id,
-      complete: correct,
-    });
+    if (this.state.code !== this.props.challenge.starterCode) {
+      this.props.handleAttemptChallenge({
+        challengeId: this.props.challenge.id,
+        complete: correct,
+      });
+    } else {
+      debug(
+        "[INFO] Starter code not changed. Not firing handleAttemptChallenge.",
+      );
+    }
   };
 
   iFrameRenderPreview = async () => {
