@@ -75,6 +75,7 @@ import {
   consoleRowStyles,
   LowerSection,
   RevealSolutionLabel,
+  RunButton,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
@@ -94,6 +95,31 @@ const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
+// Given an iframe and the relevant code render it all as a script to the iframe's srcdoc
+const getMarkupSrcdoc = (
+  iframe: HTMLIFrameElement,
+  code: string,
+  testCode: string,
+): string => {
+  const testScript = getTestScripts(code, testCode, EXPECTATION_LIB);
+
+  // NOTE: Tidy html should ensure there is indeed a closing body tag
+  const tidySource = tidyHtml(code);
+
+  // Just to give us some warning if we ever hit this. Should be impossible...
+  if (!tidySource.includes("</body>")) {
+    console.warn(
+      "[Err] Could not append test code to closing body tag in markup challenge",
+    );
+  }
+
+  // TODO: There's no reason for us to inject the test script in sandbox
+  // mode, but the same applies to all challenge types so ideally we
+  // would standardize the testing pipeline to the point where we could
+  // include that logic in one place only.
+  return tidySource.replace("</body>", `${testScript}</body>`);
+};
+
 interface Log {
   data: ReadonlyArray<string>;
   method: ConsoleLogMethods;
@@ -108,10 +134,11 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 
 interface IState {
   code: string;
+  testResultsLoading: boolean;
   testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
-  isSuccessModalClosed: boolean;
+  hideSuccessModal: boolean;
 }
 
 /** ===========================================================================
@@ -149,10 +176,7 @@ class Workspace extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.debouncedRenderPreviewFunction = debounce(
-      200,
-      this.iFrameRenderPreview,
-    );
+    this.debouncedRenderPreviewFunction = debounce(200, this.runChallengeTests);
 
     this.debouncedSyntaxHighlightFunction = debounce(
       250,
@@ -178,10 +202,11 @@ class Workspace extends React.Component<IProps, IState> {
       logs: DEFAULT_LOGS,
       monacoInitializationError: false,
 
-      // TODO: This probably won't be the final solution. For now this is what
-      // allows the user to close the success modal since it's otherwise based
-      // on passing test status.
-      isSuccessModalClosed: false,
+      // This is what allows the user to close the success modal since it's
+      // otherwise based on passing test status.
+      hideSuccessModal: true,
+
+      testResultsLoading: false,
     };
   }
 
@@ -201,7 +226,7 @@ class Workspace extends React.Component<IProps, IState> {
     // TODO: This might cause issues with an unmounted editor. Needs to be made
     // cancellable.
     await wait(500);
-    this.iFrameRenderPreview();
+    this.runChallengeTests();
     this.debouncedSyntaxHighlightFunction(this.state.code);
 
     subscribeCodeWorker(this.handleCodeFormatMessage);
@@ -315,7 +340,7 @@ class Workspace extends React.Component<IProps, IState> {
     await this.resetMonacoEditor();
     this.setMonacoEditorValue();
     if (this.iFrameRef) {
-      this.iFrameRenderPreview();
+      this.runChallengeTests();
     }
   };
 
@@ -560,7 +585,7 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { correct: allTestsPassing } = this.getTestPassedStatus();
-    const { testResults, isSuccessModalClosed } = this.state;
+    const { testResults, hideSuccessModal } = this.state;
     const {
       challenge,
       isEditMode,
@@ -575,7 +600,7 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
 
     const handleCloseSuccessModal = () => {
-      this.setState({ isSuccessModalClosed: true });
+      this.setState({ hideSuccessModal: true });
     };
 
     const MONACO_CONTAINER = (
@@ -584,7 +609,7 @@ class Workspace extends React.Component<IProps, IState> {
         style={{ height: "100%", position: "relative" }}
       >
         <GreatSuccess
-          isOpen={allTestsPassing && !isSuccessModalClosed}
+          isOpen={allTestsPassing && !hideSuccessModal}
           onClose={handleCloseSuccessModal}
           onClickOutside={handleCloseSuccessModal}
           challenge={challenge}
@@ -609,16 +634,19 @@ class Workspace extends React.Component<IProps, IState> {
               hideSolution={this.props.handleToggleSolutionCode}
             />
           )}
-          {!IS_MARKUP_CHALLENGE && (
-            <Tooltip content="Shortcut: opt+enter" position="left">
-              <Button
-                onClick={this.iFrameRenderPreview}
-                aria-label="run the current editor code"
-              >
-                Run Code
-              </Button>
-            </Tooltip>
-          )}
+          <Tooltip content="Shortcut: opt+enter" position="left">
+            <RunButton
+              loading={this.state.testResultsLoading}
+              icon="play"
+              onClick={() => {
+                this.setState({ hideSuccessModal: false });
+                this.runChallengeTests();
+              }}
+              aria-label="run the current editor code"
+            >
+              Run
+            </RunButton>
+          </Tooltip>
         </UpperRight>
         <LowerRight>
           <ButtonGroup vertical>
@@ -833,10 +861,12 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   getTestPassedStatus = () => {
-    const { testResults } = this.state;
+    const { testResults, testResultsLoading } = this.state;
     const passedTests = testResults.filter(t => t.testResult);
     const correct =
-      passedTests.length > 0 && passedTests.length === testResults.length;
+      !testResultsLoading &&
+      passedTests.length > 0 &&
+      passedTests.length === testResults.length;
     return { correct, passedTests, testResults };
   };
 
@@ -979,7 +1009,7 @@ class Workspace extends React.Component<IProps, IState> {
             break;
           }
           this.setState(
-            { testResults: results },
+            { testResults: results, testResultsLoading: false },
             this.handleReceiveTestResults,
           );
           break;
@@ -990,6 +1020,7 @@ class Workspace extends React.Component<IProps, IState> {
             source,
             message,
           );
+          this.setState({ testResultsLoading: false });
           break;
         }
         default: {
@@ -1021,59 +1052,47 @@ class Workspace extends React.Component<IProps, IState> {
     this.props.handleCompleteChallenge(this.props.challenge.id);
   };
 
-  iFrameRenderPreview = async () => {
+  iframeRenderPreview = async (): Promise<void> => {
+    if (!this.iFrameRef || !this.iFrameRef.contentWindow) {
+      console.warn("[iframe] Not yet mounted");
+      return;
+    }
+
+    // Process the code string and create an HTML document to render
+    // to the iframe.
+    try {
+      // Should give some searchable text should we encounter this.
+      let sourceDocument = "<!-- SHOULD_BE_OVERWRITTEN -->";
+
+      if (this.props.challenge.type === "markup") {
+        sourceDocument = getMarkupSrcdoc(
+          this.iFrameRef,
+          this.state.code,
+          this.props.challenge.testCode,
+        );
+      } else {
+        const code = await this.compileAndTransformCodeString();
+        sourceDocument = getMarkupForCodeChallenge(code, EXPECTATION_LIB);
+      }
+
+      this.iFrameRef.srcdoc = sourceDocument;
+    } catch (err) {
+      this.handleCompilationError(err);
+    }
+  };
+
+  // NOTE We manage the false loading state where test results are received. The
+  // iframeRenderPreview method only puts the tests into the DOM where they will
+  // automatically run, but if we were to use that promise to set
+  // testResultsLoading to false we would run into cases where the tests hadn't
+  // finished running yet.
+  runChallengeTests = async () => {
     this.setState(
-      { logs: DEFAULT_LOGS },
-      async (): Promise<void> => {
-        if (!this.iFrameRef || !this.iFrameRef.contentWindow) {
-          console.warn("[iframe] Not yet mounted");
-          return;
-        }
-
-        /**
-         * Process the code string and create an HTML document to render
-         * to the iframe.
-         */
-        if (this.props.challenge.type === "markup") {
-          const testScript = getTestScripts(
-            this.state.code,
-            this.props.challenge.testCode,
-            EXPECTATION_LIB,
-          );
-
-          // NOTE: Tidy html should ensure there is indeed a closing body tag
-          const tidySource = tidyHtml(this.state.code);
-
-          // Just to give us some warning if we ever hit this. Should be impossible...
-          if (!tidySource.includes("</body>")) {
-            console.warn(
-              "[Err] Could not append test code to closing body tag in markup challenge",
-            );
-          }
-
-          // TODO: There's no reason for us to inject the test script in sandbox
-          // mode, but the same applies to all challenge types so ideally we
-          // would standardize the testing pipeline to the point where we could
-          // include that logic in one place only.
-          const sourceDocument = tidySource.replace(
-            "</body>",
-            `${testScript}</body>`,
-          );
-
-          this.iFrameRef.srcdoc = sourceDocument;
-        } else {
-          try {
-            const code = await this.compileAndTransformCodeString();
-            const sourceDocument = getMarkupForCodeChallenge(
-              code,
-              EXPECTATION_LIB,
-            );
-            this.iFrameRef.srcdoc = sourceDocument;
-          } catch (err) {
-            this.handleCompilationError(err);
-          }
-        }
+      {
+        logs: DEFAULT_LOGS,
+        testResultsLoading: true, // See NOTE
       },
+      this.iframeRenderPreview,
     );
   };
 
@@ -1168,7 +1187,7 @@ class Workspace extends React.Component<IProps, IState> {
      */
     const OptionAndEnterKey = event.altKey && event.key === "Enter";
     if (OptionAndEnterKey) {
-      this.iFrameRenderPreview();
+      this.runChallengeTests();
     }
   };
 
