@@ -263,6 +263,7 @@ const GreatSuccessContainer = styled.div`
   align-items: center;
   justify-content: center;
   transition: all 500ms ease-out;
+  opacity: 0;
 
   // Initial
   &.gs-enter {
@@ -276,6 +277,7 @@ const GreatSuccessContainer = styled.div`
 
   // Done
   &.gs-enter-done {
+    opacity: 1;
   }
 `;
 
