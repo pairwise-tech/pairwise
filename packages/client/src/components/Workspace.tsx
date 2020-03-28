@@ -451,6 +451,9 @@ class Workspace extends React.Component<IProps, IState> {
     const options = {
       theme: MonacoEditorThemes.DEFAULT,
       automaticLayout: true,
+      tabSize: 2,
+      autoIndent: true,
+      formatOnPaste: true,
       fixedOverflowWidgets: true,
       multiCursorModifier: "ctrlCmd",
       minimap: {
