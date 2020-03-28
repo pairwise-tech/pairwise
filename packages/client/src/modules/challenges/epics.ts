@@ -10,6 +10,7 @@ import {
   Result,
   ICodeBlobDto,
   SandboxBlob,
+  Challenge,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -27,7 +28,7 @@ import {
   take,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
-import { EpicSignature } from "../root";
+import { EpicSignature, ReduxStoreState } from "../root";
 import { Actions } from "../root-actions";
 import {
   SANDBOX_ID,
@@ -535,42 +536,34 @@ const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
 /**
  * NOTE: content only challenges do not have tests, though we still want them to
  * appear as completed in the challenge map. Any time we navigate away from a
- * content only challenge, consider it completed. This could be further improved
- * by ensuring we're navigating forward, and not backward from the challenge.
+ * content only challenge, consider it completed.
  */
-const markContentOnlyChallengeAsCompleteEpic: EpicSignature = (
+const completeContentOnlyChallengeEpic: EpicSignature = (
   action$,
   state$,
   deps,
 ) => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeId)),
-    pluck("payload"),
-    map(({ previousChallengeId: challengeId }) => {
-      const courseId = state$.value.challenges.currentCourseId;
-      const challenge = deps.selectors.challenges.getCurrentChallenge(
-        state$.value,
-      );
-
-      if (challenge && isContentOnlyChallenge(challenge)) {
-        if (courseId) {
-          const payload: IProgressDto = {
-            courseId,
-            challengeId,
-            complete: true,
-          };
-
-          return new Ok(payload);
-        } else {
-          const msg =
-            "[WARNING!]: No active course id found in markContentOnlyChallengeAsCompleteEpic, this shouldn't happen...";
-          console.warn(msg);
-          return new Err(msg);
-        }
-      } else {
-        return new Err("Not a content-only challenge");
-      }
+    map(({ payload: { previousChallengeId } }) => previousChallengeId),
+    map(prevId => {
+      // artificially construct the previous state in order to get the last
+      // challenge using the getCurrentChallenge selector.
+      const prevState = {
+        ...state$.value,
+        challenges: {
+          ...state$.value.challenges,
+          currentChallengeId: prevId,
+        },
+      };
+      // it should be impossible for previousChallengeId to be null
+      // or empty so it should be safe to cast this as a Challenge
+      return deps.selectors.challenges.getCurrentChallenge(
+        prevState,
+      ) as Challenge;
     }),
+    filter(isContentOnlyChallenge),
+    map(({ id }) => constructProgressDto(state$.value, id, true)),
     map(result => {
       if (result.value) {
         return Actions.updateUserProgress(result.value);
@@ -591,25 +584,8 @@ const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
   return action$.pipe(
     filter(isActionOf(Actions.handleAttemptChallenge)),
     pluck("payload"),
-    map(
-      ({ challengeId, complete }): Result<IProgressDto, string> => {
-        const courseId = state$.value.challenges.currentCourseId;
-
-        if (courseId) {
-          const payload: IProgressDto = {
-            courseId,
-            challengeId,
-            complete,
-          };
-
-          return new Ok(payload);
-        } else {
-          const msg =
-            "[WARNING!]: No active course id found in handleAttemptChallengeEpic, this shouldn't happen...";
-          console.warn(msg);
-          return new Err(msg);
-        }
-      },
+    map(({ challengeId, complete }) =>
+      constructProgressDto(state$.value, challengeId, complete),
     ),
     map(result => {
       if (result.value) {
@@ -641,6 +617,33 @@ const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
 };
 
 /** ===========================================================================
+ * Utils
+ * ============================================================================
+ */
+
+const constructProgressDto = (
+  state: ReduxStoreState,
+  challengeId: string,
+  complete: boolean,
+) => {
+  const courseId = state.challenges.currentCourseId;
+  if (courseId) {
+    const payload: IProgressDto = {
+      courseId,
+      complete,
+      challengeId,
+    };
+
+    return new Ok(payload);
+  } else {
+    const msg =
+      "[WARNING!]: No active course id found in challenge completion epic, this shouldn't happen...";
+    console.warn(msg);
+    return new Err(msg);
+  }
+};
+
+/** ===========================================================================
  * Export
  * ============================================================================
  */
@@ -663,5 +666,5 @@ export default combineEpics(
   handleAttemptChallengeEpic,
   updateUserProgressEpic,
   searchEpic,
-  markContentOnlyChallengeAsCompleteEpic,
+  completeContentOnlyChallengeEpic,
 );
