@@ -1,5 +1,5 @@
 {
-  "id": "f6s7jf8s54",
+  "id": "f76shgb2W",
   "title": "Pairwise Library",
   "description": "Free articles and videos on programming topics and getting hired as a software engineer.",
   "modules": [
@@ -7,7 +7,19 @@
       "free": true,
       "id": "fjuia91kz",
       "title": "Learning to Code",
-      "challenges": []
+      "challenges": [
+        {
+          "id": "f76s5a8x",
+          "type": "markup",
+          "title": "Hello, Pairwise!",
+          "instructions": "There is an h1 tag in the code editor below which contains the text \"Pairwise\". Your job is to change the text to say \"Hello, Pairwise\\!\"",
+          "testCode": "test('The `h1` tag should contain the text: \"Hello, Pairwise!\"', () => {\n    expect(getText(\"h1\")).toBe(\"Hello, Pairwise!\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "<h1>Pairwise</h1>\n",
+          "solutionCode": "<h1>Hello, Pairwise!</h1>\n",
+          "content": ""
+        }
+      ]
     }
   ]
 }

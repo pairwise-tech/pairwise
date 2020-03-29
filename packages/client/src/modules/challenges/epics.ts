@@ -294,12 +294,42 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
 
       return shouldUpdate;
     }),
-    map(id => {
-      const { currentChallengeId } = state$.value.challenges;
-      return Actions.setChallengeId({
-        currentChallengeId: id,
-        previousChallengeId: currentChallengeId as string /* null is filtered above */,
-      });
+    mergeMap(id => {
+      const {
+        challengeMap,
+        currentCourseId,
+        currentModuleId,
+        currentChallengeId,
+      } = state$.value.challenges;
+
+      if (challengeMap) {
+        const challenge = challengeMap[id];
+        const setChallengeIdAction = Actions.setChallengeId({
+          currentChallengeId: id,
+          previousChallengeId: currentChallengeId as string /* null is filtered above */,
+        });
+
+        // I'm not totally sure where this logic should go. The active
+        // course needs to be changed if the user selected a challenge not
+        // in the current active course. Currently putting this logic here.
+        if (
+          currentCourseId !== challenge.courseId ||
+          currentModuleId !== challenge.moduleId
+        ) {
+          return of(
+            setChallengeIdAction,
+            Actions.setActiveChallengeIds({
+              currentChallengeId: id,
+              currentModuleId: challenge.moduleId,
+              currentCourseId: challenge.courseId,
+            }),
+          );
+        } else {
+          return of(setChallengeIdAction);
+        }
+      } else {
+        return of(Actions.empty("No challengeMap found"));
+      }
     }),
   );
 };

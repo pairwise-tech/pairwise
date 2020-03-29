@@ -22,6 +22,7 @@ interface IState {}
 
 class Home extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
+    console.log(this.props.skeletons);
     return (
       <PageContainer>
         <ContentContainer>
@@ -56,6 +57,12 @@ class Home extends React.Component<IProps, IState> {
       return null;
     }
 
+    const first = skeleton.modules[0].challenges[0];
+
+    if (!first) {
+      return null;
+    }
+
     return (
       <Card
         key={skeleton.id}
@@ -66,7 +73,7 @@ class Home extends React.Component<IProps, IState> {
         <CourseTitle id={`course-link-${i}`}>{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
         {paidForCourse ? (
-          <Link to={`workspace/${firstChallenge.id}`}>
+          <Link to={`workspace/${first.id}`}>
             <Button
               large
               intent="success"
@@ -78,7 +85,7 @@ class Home extends React.Component<IProps, IState> {
           </Link>
         ) : (
           <ButtonsBox>
-            <Link to={`workspace/${firstChallenge.id}`}>
+            <Link to={`workspace/${first.id}`}>
               <Button
                 large
                 intent="success"
