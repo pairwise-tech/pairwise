@@ -22,7 +22,6 @@ interface IState {}
 
 class Home extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
-    console.log(this.props.skeletons);
     return (
       <PageContainer>
         <ContentContainer>
