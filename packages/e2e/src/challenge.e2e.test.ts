@@ -39,12 +39,15 @@ describe("Challenge APIs", () => {
   });
 
   test("/content/:courseId (GET)", () => {
-    return request(`${HOST}/content/course/fpvPtfu7s`)
+    return request(`${HOST}/content/courses`)
       .get("/")
       .expect(200)
       .expect(response => {
-        expect(response.body.title).toBe("Fullstack TypeScript");
-        expect(Array.isArray(response.body.modules)).toBeTruthy();
+        expect(Array.isArray(response.body)).toBe(true);
+        // Check course
+        const course = response.body[0];
+        expect(course.title).toBe("Fullstack TypeScript");
+        expect(Array.isArray(course.modules)).toBeTruthy();
       });
   });
 });
