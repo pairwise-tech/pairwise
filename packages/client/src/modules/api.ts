@@ -213,14 +213,10 @@ class Api extends BaseApiClass {
       } else if (ENV.CODEPRESS) {
         courses = await this.codepressApi.getAll().toPromise();
       } else {
-        /* NOTE: I hard-coded the courseId in the request for now! */
         const { headers } = this.getRequestHeaders();
-        const result = await axios.get<CourseList>(
-          `${HOST}/content/course/fpvPtfu7s`,
-          {
-            headers,
-          },
-        );
+        const result = await axios.get<CourseList>(`${HOST}/content/courses`, {
+          headers,
+        });
         courses = result.data;
       }
 

@@ -100,6 +100,15 @@ class ContentUtilityClass {
     });
   };
 
+  getCourses = (userCourseAccessMap: UserCourseAccessMap) => {
+    return this.courses.map(course => {
+      const accessLevel: COURSE_ACCESS_LEVEL =
+        course.id in userCourseAccessMap ? "PAID" : "FREE";
+
+      return this.getCourseContent(course.id, accessLevel);
+    });
+  };
+
   getCourseContent = (courseId: string, accessLevel: COURSE_ACCESS_LEVEL) => {
     const course = this.courses.find(c => c.id === courseId);
 
@@ -109,7 +118,7 @@ class ContentUtilityClass {
       const courseWithFreeContent = {
         ...course,
         modules: course.modules.map(m => {
-          if (m.free) {
+          if (course.free || m.free) {
             return m;
           } else {
             return {
