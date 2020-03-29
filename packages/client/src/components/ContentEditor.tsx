@@ -2,7 +2,6 @@ import React from "react";
 import { EditorProps, SlatePlugin } from "rich-markdown-editor";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import toaster from "tools/toast-utils";
-import { ContentUtility } from "@pairwise/common";
 import styled from "styled-components/macro";
 import { COLORS, SANDBOX_ID } from "tools/constants";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -13,6 +12,7 @@ import { Editor } from "slate-react";
 import { Leaf, Selection } from "slate";
 import { List } from "immutable";
 import { CODEPRESS_HOST } from "tools/client-env";
+import { InverseChallengeMapping } from "modules/challenges/types";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -325,7 +325,7 @@ class ContentEditor extends React.Component<Props> {
   };
 
   render() {
-    const { history, plugins = [], ...props } = this.props;
+    const { history, plugins = [], challengeMap, ...props } = this.props;
     return (
       <EditorExternalStyles>
         <RichMarkdownEditor
@@ -346,7 +346,7 @@ class ContentEditor extends React.Component<Props> {
               el?.scrollIntoView({
                 behavior: "smooth",
               });
-            } else if (isInternalLink(href)) {
+            } else if (isInternalLink(href, challengeMap)) {
               history.push(href);
             } else {
               window.open(href, "_blank");
@@ -378,7 +378,10 @@ const getScrollTarget = (href: string) => {
  * link. If so, override default behavior and use RR to navigate to route.
  * In editor, set the link's href to: `/<route>`, e.g. `/workspace/IEC6FcKI`
  */
-const isInternalLink = (href: string) => {
+const isInternalLink = (
+  href: string,
+  challengeMap: Nullable<InverseChallengeMapping>,
+) => {
   // rich-markdown-editor adds 'https://' to the beginning of any href
   // that does not start with a forward slash, so just test that href
   // is a route and not a fully qualified URL
@@ -386,14 +389,11 @@ const isInternalLink = (href: string) => {
     const re = /^\/workspace\/(\w*)$/;
     const isChallengeRoute = href.match(re);
 
-    if (isChallengeRoute) {
+    // throw error if we provide an invalid id in workspace route
+    // so that this does not get past us during development
+    if (isChallengeRoute && challengeMap) {
       const challengeId = isChallengeRoute[1];
-      // throw error if we provide an invalid id in workspace route
-      // so that this does not get past us during development
-      if (
-        !ContentUtility.challengeIdIsValid(challengeId) &&
-        challengeId !== SANDBOX_ID
-      ) {
+      if (!(challengeId in challengeMap) && challengeId !== SANDBOX_ID) {
         throw new Error("[Err ContentEditor] Invalid Challenge Link.");
       }
     }
@@ -575,6 +575,7 @@ const EditorExternalStyles = styled.div`
 const mapStateToProps = (state: ReduxStoreState) => ({
   searchResults: Modules.selectors.challenges.getSearchResults(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
+  challengeMap: state.challenges.challengeMap,
 });
 
 const dispatchProps = {
