@@ -51,15 +51,11 @@ class Home extends React.Component<IProps, IState> {
   renderCourseItem = (skeleton: CourseSkeleton, i: number) => {
     const { payments } = this.props.user;
     const paidForCourse = payments?.find(p => p.courseId === skeleton.id);
-    const firstChallenge = this.props.firstUnfinishedChallenge;
+    const firstCourseChallenge = skeleton.modules[0].challenges[0];
+    const isCourseFree = skeleton.free;
+    const canAccessCourse = paidForCourse || isCourseFree;
 
-    if (!firstChallenge) {
-      return null;
-    }
-
-    const first = skeleton.modules[0].challenges[0];
-
-    if (!first) {
+    if (!firstCourseChallenge) {
       return null;
     }
 
@@ -72,8 +68,8 @@ class Home extends React.Component<IProps, IState> {
       >
         <CourseTitle id={`course-link-${i}`}>{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
-        {paidForCourse ? (
-          <Link to={`workspace/${first.id}`}>
+        {canAccessCourse ? (
+          <Link to={`workspace/${firstCourseChallenge.id}`}>
             <Button
               large
               intent="success"
@@ -85,7 +81,7 @@ class Home extends React.Component<IProps, IState> {
           </Link>
         ) : (
           <ButtonsBox>
-            <Link to={`workspace/${first.id}`}>
+            <Link to={`workspace/${firstCourseChallenge.id}`}>
               <Button
                 large
                 intent="success"

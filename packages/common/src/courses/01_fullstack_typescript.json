@@ -2,6 +2,7 @@
   "id": "fpvPtfu7s",
   "title": "Fullstack TypeScript",
   "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+  "free": false,
   "modules": [
     {
       "free": true,

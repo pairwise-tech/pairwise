@@ -1,5 +1,5 @@
-import FullstackTypeScript from "../courses/fullstack_typescript.json";
-import PairwiseContent from "../courses/pairwise_content.json";
+import PairwiseContent from "../courses/00_pairwise_content.json";
+import FullstackTypeScript from "../courses/01_fullstack_typescript.json";
 import {
   CourseList,
   CourseSkeletonList,
@@ -174,6 +174,7 @@ class ContentUtilityClass {
         id: course.id,
         title: course.title,
         description: course.description,
+        free: course.free,
       };
     } else {
       return null;

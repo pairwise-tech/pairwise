@@ -2,6 +2,7 @@
   "id": "f76shgb2W",
   "title": "Pairwise Library",
   "description": "Free articles and videos on programming topics and getting hired as a software engineer.",
+  "free": true,
   "modules": [
     {
       "free": true,
