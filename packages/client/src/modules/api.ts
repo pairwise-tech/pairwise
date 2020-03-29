@@ -17,6 +17,7 @@ import {
   UserProgressMap,
   defaultUserSettings,
   StripeStartCheckoutSuccessResponse,
+  CourseSkeleton,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -61,6 +62,25 @@ const createNonHttpResponseError = (
   message: string,
 ): Err<HttpResponseError> => {
   return new Err({ status: 418, message }); /* ha */
+};
+
+const mapCourseSkeletonInDev = (courseSkeleton: CourseSkeleton) => {
+  return {
+    ...courseSkeleton,
+    modules: courseSkeleton.modules.map(m => {
+      return {
+        ...m,
+        free: true,
+        userCanAccess: true,
+        challenges: m.challenges.map(c => {
+          return {
+            ...c,
+            userCanAccess: true,
+          };
+        }),
+      };
+    }),
+  };
 };
 
 /** ===========================================================================
@@ -218,29 +238,11 @@ class Api extends BaseApiClass {
 
   fetchCourseSkeletons = async () => {
     if (ENV.DEV) {
-      const challenges = require("@pairwise/common").default;
-      const FullstackTypeScript: Course = challenges.FullstackTypeScript;
-      const course = {
-        ...FullstackTypeScript,
-        modules: FullstackTypeScript.modules.map(m => {
-          return {
-            ...m,
-            free: true,
-            userCanAccess: true,
-            challenges: m.challenges.map(c => {
-              return {
-                ...c,
-                userCanAccess: true,
-              };
-            }),
-          };
-        }),
-      };
-      return new Ok([course]);
+      const courseMap = require("@pairwise/common").default;
+      const courses: CourseSkeletonList = Object.values(courseMap);
+      const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
+      return new Ok(courseSkeletonList);
     } else if (ENV.CODEPRESS) {
-      /**
-       * TODO: Make this code more consistent with the other API methods.
-       */
       return this.codepressApi
         .getSkeletons()
         .pipe(map(Ok.of))

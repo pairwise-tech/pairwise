@@ -59,7 +59,7 @@ class Home extends React.Component<IProps, IState> {
     return (
       <Card
         key={skeleton.id}
-        style={{ width: 450 }}
+        style={{ width: 450, marginTop: 24 }}
         className="course-card"
         elevation={Elevation.FOUR}
       >

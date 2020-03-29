@@ -370,7 +370,14 @@ const Header = styled.div`
   align-items: center;
   justify-content: flex-start;
 
-  position: relative;
+  /* position: relative; */
+
+  /* Fix the header position */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
   padding-top: ${BORDER}px;
   padding-bottom: 0px;
   padding-left: 0px;

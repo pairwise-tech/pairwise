@@ -1,12 +1,12 @@
 {
   "id": "f6s7jf8s54",
-  "title": "Pairwise Content",
-  "description": "Pairwise blog.",
+  "title": "Pairwise Library",
+  "description": "Free articles and videos on programming topics and getting hired as a software engineer.",
   "modules": [
     {
       "free": true,
       "id": "fjuia91kz",
-      "title": "Pairwise Content",
+      "title": "Learning to Code",
       "challenges": []
     }
   ]
