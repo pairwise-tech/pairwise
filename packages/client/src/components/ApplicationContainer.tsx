@@ -134,8 +134,9 @@ const ApplicationContainer = (props: IProps) => {
     return <LoadingOverlay visible={workspaceLoading} />;
   }
 
-  const isSandbox = challenge.id === SANDBOX_ID;
-  const displayNavigationArrows = location.includes("workspace");
+  const onWorkspaceRoute = location.includes("workspace");
+  const isSandbox = challenge.id === SANDBOX_ID && onWorkspaceRoute;
+  const displayNavigationArrows = onWorkspaceRoute;
   const isWorkspaceRequired = challengeRequiresWorkspace(challenge);
   const showMediaAreaButton =
     displayNavigationArrows &&

@@ -303,11 +303,17 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       } = state$.value.challenges;
 
       if (challengeMap) {
-        const challenge = challengeMap[id];
         const setChallengeIdAction = Actions.setChallengeId({
           currentChallengeId: id,
           previousChallengeId: currentChallengeId as string /* null is filtered above */,
         });
+
+        // Sandbox is handled directly
+        if (id === SANDBOX_ID) {
+          return of(setChallengeIdAction);
+        }
+
+        const challenge = challengeMap[id];
 
         // I'm not totally sure where this logic should go. The active
         // course needs to be changed if the user selected a challenge not
