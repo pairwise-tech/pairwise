@@ -8,14 +8,14 @@ import { SearchResult } from "modules/challenges/types";
 import reactStringReplace from "react-string-replace";
 import { useHistory } from "react-router-dom";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { MOBILE, COLORS } from "tools/constants";
+import { MOBILE, COLORS, SEARCH_QUERY_THRESHOLD } from "tools/constants";
 import { LineWrappedText } from "./Shared";
 
-// NOTE: isClosed is kept in state rather than simply using the presence of
-// search results becuase sometimes we want the search pane to be closed even if
-// there are search results. For example, the user clicks outside the search
-// pane. In such a case there are still results but we don't want to show the
-// pane.
+// NOTE: isClosed is kept in state because sometimes we want the search pane to
+// be closed even if there are search results. For example, the user clicks
+// outside the search pane. In such a case there are still results but we don't
+// want to show the pane. When the search pane is focused we always show the
+// result box, so we can reportwhen there are no search results to the user.
 const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
   const history = useHistory();
   const [searchText, setSearchText] = React.useState("");
@@ -88,8 +88,9 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
     setSelIndex(prev);
   }, [searchResults.length, selIndex]);
 
-  // See isClosed above if it makes no sense having both
-  const isOpen = !isClosed && searchResults.length > 0;
+  // Show result box when search input is focused and there more chars in
+  // the search query than specified by the threshold.
+  const isOpen = !isClosed && searchText.length > SEARCH_QUERY_THRESHOLD;
 
   return (
     <Box
