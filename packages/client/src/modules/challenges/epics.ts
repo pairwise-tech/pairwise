@@ -629,7 +629,7 @@ const constructProgressDto = (
   state: ReduxStoreState,
   challengeId: string,
   complete: boolean,
-) => {
+): Result<IProgressDto, string> => {
   const courseId = state.challenges.currentCourseId;
   if (courseId) {
     const payload: IProgressDto = {

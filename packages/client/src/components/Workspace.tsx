@@ -992,7 +992,7 @@ class Workspace extends React.Component<IProps, IState> {
      * completed / attempted feedback in the challenge navigation map.
      *
      * Only fire if user has changed code in the editor, thus establishing
-     * their intent to attempted the challenge. This will correctly ignore
+     * their intent to attempt the challenge. This will correctly ignore
      * Workspace initiated test runs on challenge load.
      */
     if (this.state.code !== this.props.challenge.starterCode) {
