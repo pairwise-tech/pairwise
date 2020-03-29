@@ -41,7 +41,6 @@ import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
 import { LowerRight, IconButton, UpperRight, Loading } from "./Shared";
 import {
-  Button,
   Tooltip,
   ButtonGroup,
   Menu,

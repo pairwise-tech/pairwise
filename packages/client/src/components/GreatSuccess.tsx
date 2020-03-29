@@ -1,16 +1,21 @@
 import React from "react";
 
-import { Button, Icon } from "@blueprintjs/core";
+import { Button, Icon, Classes } from "@blueprintjs/core";
 import styled from "styled-components";
 import { CSSTransition } from "react-transition-group";
 import Confetti from "react-confetti";
 import { IRect } from "react-confetti/dist/types/Rect";
 import { Challenge } from "@pairwise/common";
+import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
+import Modules, { ReduxStoreState } from "modules/root";
+import { NextChallengeButton } from "./ChallengeControls";
+import { connect } from "react-redux";
 
 interface ConfettiModalProps {
   isOpen: boolean;
   onClose?: () => any;
   onClickOutside?: () => any;
+  hideConfetti?: boolean;
 }
 
 const getDimensions = () => ({
@@ -47,7 +52,7 @@ const CardTitle: React.FC<{ parentStage?: number }> = props => {
             margin: "0 60px",
             marginLeft: 40,
             color: "#09F9A4",
-            transform: "scale(4)",
+            transform: "scale(3)",
           }}
           intent="primary"
           iconSize={Icon.SIZE_LARGE}
@@ -103,7 +108,7 @@ const ConfettiModal: React.FC<ConfettiModalProps> = props => {
     >
       <GreatSuccessContainer>
         <Backdrop onClick={props.onClickOutside} />
-        {stage > 2 && (
+        {stage > 2 && !props.hideConfetti && (
           <Confetti
             key="gs-confetti"
             width={width}
@@ -133,9 +138,9 @@ const ConfettiModal: React.FC<ConfettiModalProps> = props => {
             )}
             <div className="inner">
               {React.Children.map(props.children, child => {
-                // @ts-ignore What's going on here? Why are the official types not passing?
+                // @ts-ignore What's going on here? Why are the official types not passing for child.type?
                 if (child.type === CardTitle) {
-                  // @ts-ignore
+                  // @ts-ignore Same as above. This is totally valid, not sure why TS is complaining
                   return React.cloneElement(child, { parentStage: stage });
                 } else {
                   return child;
@@ -160,16 +165,66 @@ const ConfettiModal: React.FC<ConfettiModalProps> = props => {
 
 interface GreatSuccessProps extends ConfettiModalProps {
   challenge: Challenge;
+  onClose: () => any;
 }
 
-const GreatSuccess: React.FC<GreatSuccessProps> = props => {
+type Props = ReturnType<typeof mapStateToProps> & GreatSuccessProps;
+
+const GreatSuccess: React.FC<Props> = ({
+  challenge,
+  nextChallenge,
+  ...props
+}) => {
+  const { onClose } = props;
+
+  const handleScrollToContent = React.useCallback(() => {
+    onClose();
+    scrollToContentArea();
+  }, [onClose]);
+  const handlePlayVideo = React.useCallback(() => {
+    onClose();
+    scrollToVideoAndPlay();
+  }, [onClose]);
+
+  const handleNext = () => console.log("next...");
+
   return (
     <ConfettiModal {...props}>
-      <CardTitle>Done! You did it.</CardTitle>
-      <p>That was a great success</p>
+      <CardTitle>{challenge.title}</CardTitle>
+      <p>
+        Congratulations, you've completed <strong>{challenge.title}</strong>.
+        Where to next?
+      </p>
+      <ButtonActions>
+        {/* <Button onClick={props.onClose}>Close</Button> */}
+        <div style={{ marginLeft: "auto" }}>
+          {challenge.content && (
+            <Button onClick={handleScrollToContent}>View Content</Button>
+          )}
+          {challenge.videoUrl && (
+            <Button onClick={handlePlayVideo}>Watch Video</Button>
+          )}
+          {nextChallenge && (
+            <NextChallengeButton
+              className={Classes.INTENT_SUCCESS}
+              challengeId={nextChallenge.id}
+            />
+          )}
+        </div>
+      </ButtonActions>
     </ConfettiModal>
   );
 };
+
+const ButtonActions = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  ${Classes.BUTTON} {
+    margin-left: 10px;
+  }
+`;
 
 const CloseButton = styled(Button)`
   position: absolute;
@@ -284,7 +339,7 @@ const GreatSuccessContainer = styled.div`
 const CardTitleContainer = styled.div`
   display: flex;
   align-items: center;
-  font-size: 32px;
+  font-size: 22px;
   margin-bottom: 40px;
   // opacity: 0;
   // transition: all 300ms ease-out;
@@ -304,4 +359,8 @@ const CardTitleContainer = styled.div`
   }
 `;
 
-export default GreatSuccess;
+const mapStateToProps = (state: ReduxStoreState) => ({
+  nextChallenge: Modules.selectors.challenges.nextPrevChallenges(state).next,
+});
+
+export default connect(mapStateToProps)(GreatSuccess);
