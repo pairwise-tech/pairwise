@@ -7,7 +7,6 @@ import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import { GenericUserProfile, UserService } from "src/user/user.service";
 import { UserProfile, Ok, Err, Result } from "@pairwise/common";
 import { ERROR_CODES } from "src/tools/constants";
-import e = require("express");
 import {
   captureSentryException,
   captureSentryMessage,
