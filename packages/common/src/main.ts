@@ -1,4 +1,6 @@
-import FullstackTypeScript from "./courses/01_programming_fundamental.json";
+import FullstackTypeScript from "./courses/fullstack_typescript.json";
+import PairwiseContent from "./courses/pairwise_content.json";
+
 import ContentUtility, {
   ContentUtilityClass,
 } from "./tools/content-utility-class";
@@ -25,6 +27,7 @@ export { ContentUtility, ContentUtilityClass };
  */
 const Courses = {
   FullstackTypeScript,
+  PairwiseContent,
 };
 
 export default Courses;

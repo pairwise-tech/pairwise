@@ -1,4 +1,5 @@
-import FullstackTypeScript from "../courses/01_programming_fundamental.json";
+import FullstackTypeScript from "../courses/fullstack_typescript.json";
+import PairwiseContent from "../courses/pairwise_content.json";
 import {
   CourseList,
   CourseSkeletonList,
@@ -233,10 +234,7 @@ class ContentUtilityClass {
  * ============================================================================
  */
 
-/**
- * Modify in the future if more courses are added.
- */
-const courseList = [FullstackTypeScript];
+const courseList = [FullstackTypeScript, PairwiseContent];
 
 const ContentUtility = new ContentUtilityClass(courseList as CourseList);
 
