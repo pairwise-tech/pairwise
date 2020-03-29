@@ -204,14 +204,14 @@ const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
 const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
-    mergeMap(deps.api.fetchChallenges),
-    map(({ value: course }) => {
-      if (course) {
+    mergeMap(deps.api.fetchCourses),
+    map(({ value: courses }) => {
+      if (courses) {
         const { location } = deps.router;
 
         const maybeChallengeId = findChallengeIdInLocationIfExists(location);
         const { challengeId, courseId, moduleId } = deriveIdsFromCourse(
-          course,
+          courses[0],
           maybeChallengeId,
         );
 
@@ -222,7 +222,7 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
         }
 
         return Actions.fetchCurrentActiveCourseSuccess({
-          courses: [course],
+          courses,
           currentChallengeId: challengeId,
           currentModuleId: moduleId,
           currentCourseId: courseId,

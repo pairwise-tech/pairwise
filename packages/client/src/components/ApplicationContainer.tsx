@@ -377,6 +377,7 @@ const Header = styled.div`
   top: 0;
   left: 0;
   right: 0;
+  z-index: 1000; /* hi */
 
   padding-top: ${BORDER}px;
   padding-bottom: 0px;

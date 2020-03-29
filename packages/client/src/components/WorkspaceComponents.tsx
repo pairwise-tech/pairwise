@@ -25,6 +25,7 @@ import ContentEditor, { editorColors } from "./ContentEditor";
 export const Container = styled.div`
   height: 100%;
   overflow: hidden;
+  padding-top: 60px;
 `;
 
 export const PageSection = styled.div`

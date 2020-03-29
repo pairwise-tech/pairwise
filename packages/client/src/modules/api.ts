@@ -204,33 +204,27 @@ class BaseApiClass {
 class Api extends BaseApiClass {
   codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
 
-  fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
+  fetchCourses = async (): Promise<Result<CourseList, HttpResponseError>> => {
     try {
-      let course: Course;
+      let courses: CourseList;
       if (ENV.DEV) {
-        const challenges = require("@pairwise/common").default;
-        course = challenges.FullstackTypeScript;
+        const courseList = require("@pairwise/common").default;
+        courses = Object.values(courseList);
       } else if (ENV.CODEPRESS) {
-        /**
-         * TODO: Make this code more consistent with the other API methods.
-         */
-        course = await this.codepressApi
-          .getAll()
-          .pipe(map(x => x[0]))
-          .toPromise();
+        courses = await this.codepressApi.getAll().toPromise();
       } else {
         /* NOTE: I hard-coded the courseId in the request for now! */
         const { headers } = this.getRequestHeaders();
-        const result = await axios.get<Course>(
+        const result = await axios.get<CourseList>(
           `${HOST}/content/course/fpvPtfu7s`,
           {
             headers,
           },
         );
-        course = result.data;
+        courses = result.data;
       }
 
-      return new Ok(course);
+      return new Ok(courses);
     } catch (err) {
       return this.handleHttpError(err);
     }
