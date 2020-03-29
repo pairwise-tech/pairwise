@@ -11,14 +11,14 @@
       "challenges": [
         {
           "id": "f76s5a8x",
-          "type": "markup",
-          "title": "Hello, Pairwise!",
+          "type": "media",
+          "title": "Intro",
           "instructions": "There is an h1 tag in the code editor below which contains the text \"Pairwise\". Your job is to change the text to say \"Hello, Pairwise\\!\"",
           "testCode": "test('The `h1` tag should contain the text: \"Hello, Pairwise!\"', () => {\n    expect(getText(\"h1\")).toBe(\"Hello, Pairwise!\");\n});\n",
           "videoUrl": "",
           "starterCode": "<h1>Pairwise</h1>\n",
           "solutionCode": "<h1>Hello, Pairwise!</h1>\n",
-          "content": ""
+          "content": "Welcome to the Learning to Code section of the Pairwise Library.\n\nHere you will find a collection of free writing and videos where we discuss a variety of topics around learning to code and becoming a software engineer."
         }
       ]
     }

@@ -38,6 +38,7 @@ export const LowerSection = styled.div<{ withHeader?: boolean }>`
   width: 100vw;
   height: ${props =>
     props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
+  padding-top: 30px;
   border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
   background: ${C.BACKGROUND_LOWER_SECTION};
 `;

@@ -42,7 +42,7 @@ class Home extends React.Component<IProps, IState> {
           </ContentText>
           <BoldText>Select a course below to get started now!</BoldText>
         </ContentContainer>
-        <PageTitle>Courses</PageTitle>
+        <PageTitle>Content</PageTitle>
         {this.props.skeletons?.map(this.renderCourseItem)}
       </PageContainer>
     );
@@ -64,7 +64,7 @@ class Home extends React.Component<IProps, IState> {
         key={skeleton.id}
         className="course-card"
         elevation={Elevation.FOUR}
-        style={{ width: 450, marginTop: 24 }}
+        style={{ width: 515, marginTop: 24 }}
       >
         <CourseTitle id={`course-link-${i}`}>{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
@@ -73,8 +73,8 @@ class Home extends React.Component<IProps, IState> {
             <Button
               large
               intent="success"
-              style={{ width: 185 }}
               id={`course-link-${i}-continue`}
+              style={{ width: 185, marginTop: 8 }}
             >
               Go to course
             </Button>
