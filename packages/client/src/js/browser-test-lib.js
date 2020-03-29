@@ -203,6 +203,28 @@ const jsonDiff = (a, b) => {
   )}`;
 };
 
+// Helper to parse the boxes of console messages and convert them
+// to objects and extract the messages to help with writing test
+// assertions.
+const parseLogBox = box => {
+  const parsedBoxLogs = box.map(JSON.parse);
+  const messageBox = parsedBoxLogs.map(x => x[0]);
+  return messageBox;
+};
+
+// Given a box of logged console messages (see above function) and
+// a message, return if the box contains that message exactly.
+const inBox = (box, message) => {
+  const result = box.find(m => m === message);
+  return !!result;
+};
+
+// Helper to quickly fail a test.
+const fail = () => expect(false).toBe(true);
+
+// Helper to quickly pass a test.
+const pass = () => expect(true).toBe(true);
+
 class Expectation {
   constructor(value) {
     this.value = value;
@@ -305,6 +327,24 @@ class Expectation {
       this.value.includes(val),
       `${val} not found in ${stringify(this.value)}`,
     );
+  }
+  toThrow(optionalFailureMessage) {
+    let didThrow = false;
+    let errorMessage;
+
+    try {
+      // The function to test should be supplied in the initialization of
+      // expect, e.g. expect(() => throw new Error("boom")).toThrow();
+      this.value();
+    } catch (err) {
+      didThrow = true;
+      errorMessage = err.message;
+    }
+
+    const defaultMessage = `[Assert] Expected code/function to not throw, but received this error message: ${errorMessage}`;
+    const message = optionalFailureMessage || defaultMessage;
+
+    assert(didThrow, message);
   }
 }
 

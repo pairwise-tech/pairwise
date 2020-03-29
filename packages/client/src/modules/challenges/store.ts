@@ -57,6 +57,7 @@ export interface State {
   adminEditorTab: ADMIN_EDITOR_TAB;
   navigationSectionAccordionViewState: AccordionViewState;
   searchResults: SearchResult[];
+  revealWorkspaceSolution: boolean;
 }
 
 const initialState: State = {
@@ -76,6 +77,7 @@ const initialState: State = {
   adminEditorTab: "starterCode",
   navigationSectionAccordionViewState: {},
   searchResults: [],
+  revealWorkspaceSolution: false,
 };
 
 /** ===========================================================================
@@ -459,6 +461,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     loadingCurrentBlob: true,
     displayNavigationMap: false,
+    revealWorkspaceSolution: false,
     currentChallengeId: action.payload.currentChallengeId,
   }))
   .handleAction(actions.receiveSearchResults, (state, action) => ({
@@ -475,6 +478,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state.navigationSectionAccordionViewState,
       [action.payload.sectionId]: action.payload.open,
     },
+  }))
+  .handleAction(actions.toggleRevealSolutionCode, (state, action) => ({
+    ...state,
+    revealWorkspaceSolution: action.payload.shouldReveal,
   }))
   .handleAction(actions.setAdminTestTab, (state, action) => ({
     ...state,
