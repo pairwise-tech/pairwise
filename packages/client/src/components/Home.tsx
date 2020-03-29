@@ -76,7 +76,7 @@ class Home extends React.Component<IProps, IState> {
               id={`course-link-${i}-continue`}
               style={{ width: 185, marginTop: 8 }}
             >
-              Go to course
+              Start Now
             </Button>
           </Link>
         ) : (
