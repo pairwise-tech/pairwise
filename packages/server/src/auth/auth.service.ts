@@ -47,11 +47,13 @@ export class AuthService {
       let user;
       let token;
 
-      const existingUser = await this.userService.findByGithubProfileId(
+      const existingUser = await this.userService.findByFacebookProfileId(
         facebookAccountId,
       );
       if (existingUser) {
         user = existingUser;
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: false });
       } else {
         const email = profile.email;
         if (email) {
@@ -109,6 +111,8 @@ export class AuthService {
 
       if (existingUser) {
         user = existingUser;
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: false });
       } else {
         const email = profile.email;
         if (email) {
