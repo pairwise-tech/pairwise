@@ -430,12 +430,10 @@ export const parseInitialUrlToInitializationType = (
     }
   }
 
-  // There was an error during authentication.
-  // Typically, this is because the user's email was not included in the SSO
-  // profile, likely because of a "private email" setting w/ the SSO provider
+  // There was some error during authentication.
   if (
     path === "/authentication-failure" &&
-    checkParamsExist(params, ["emailError", "strategy"])
+    checkParamsExist(params, ["strategy"])
   ) {
     return APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE;
   }

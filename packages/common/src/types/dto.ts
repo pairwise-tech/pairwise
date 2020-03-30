@@ -26,7 +26,7 @@ import { CHALLENGE_TYPE } from "./courses";
 
 export interface UserProfile {
   uuid: string;
-  email: string;
+  email: string | null;
   displayName: string;
   givenName: string;
   familyName: string;

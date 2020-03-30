@@ -22,6 +22,9 @@ export interface GenericUserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
+  facebookAccountId: string | null;
+  githubAccountId: string | null;
+  googleAccountId: string | null;
 }
 
 @Injectable()
@@ -67,6 +70,21 @@ export class UserService {
     return this.processUserEntity(user);
   }
 
+  public async findByFacebookProfileId(facebookAccountId: string) {
+    const user = await this.userRepository.findOne({ facebookAccountId });
+    return this.processUserEntity(user);
+  }
+
+  public async findByGithubProfileId(githubAccountId: string) {
+    const user = await this.userRepository.findOne({ githubAccountId });
+    return this.processUserEntity(user);
+  }
+
+  public async findByGoogleProfileId(googleAccountId: string) {
+    const user = await this.userRepository.findOne({ googleAccountId });
+    return this.processUserEntity(user);
+  }
+
   /**
    * This is the method which aggregates various pieces of data to add to the
    * user profile in order to construct a single object which consolidates
@@ -100,31 +118,22 @@ export class UserService {
     return result;
   }
 
-  public async findOrCreateUser(profile: GenericUserProfile) {
+  public async createNewUser(profile: GenericUserProfile) {
     const { email } = profile;
-    let accountCreated: boolean;
 
-    let user = await this.findUserByEmail(email);
-    if (user) {
-      accountCreated = false;
-    } else {
-      accountCreated = true;
-      await this.userRepository.insert({
-        ...profile,
-        lastActiveChallengeId: "",
-        settings: JSON.stringify({}),
-      });
-      user = await this.findUserByEmail(email);
-    }
-
-    const msg = accountCreated ? "New account created" : "Account login";
-    console.log(`${msg} for email: ${email}`);
+    await this.userRepository.insert({
+      ...profile,
+      lastActiveChallengeId: "",
+      settings: JSON.stringify({}),
+    });
+    const user = await this.findUserByEmail(email);
 
     this.slackService.postUserAccountCreationMessage({
       profile,
-      accountCreated,
+      accountCreated: true,
     });
-    return { user, accountCreated };
+
+    return user;
   }
 
   public async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {

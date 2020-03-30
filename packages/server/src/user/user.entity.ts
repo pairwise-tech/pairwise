@@ -45,6 +45,15 @@ export class User {
   @Column()
   public avatarUrl: string;
 
+  @Column({ nullable: true })
+  public facebookAccountId: string;
+
+  @Column({ nullable: true })
+  public githubAccountId: string;
+
+  @Column({ nullable: true })
+  public googleAccountId: string;
+
   @Column({ type: "jsonb" })
   public settings: string;
 

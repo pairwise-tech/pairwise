@@ -1,7 +1,7 @@
 import { Controller, Get, Req, UseGuards, Res, Post } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
-import { AuthService, LoginFailureCodes, Strategy } from "./auth.service";
+import { AuthService, Strategy } from "./auth.service";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
@@ -101,17 +101,11 @@ export class AuthController {
    */
   private handleLoginError(
     @Res() res,
-    err: LoginFailureCodes,
+    err: ERROR_CODES.UNKNOWN_LOGIN_ERROR,
     strategy: Strategy,
   ) {
-    if (err === ERROR_CODES.SSO_EMAIL_NOT_FOUND) {
-      return res.redirect(
-        `${ENV.CLIENT_URL}/authentication-failure?emailError=true&strategy=${strategy}`,
-      );
-    }
-
     return res.redirect(
-      `${ENV.CLIENT_URL}/authentication-failure?emailError=false&strategy=${strategy}`,
+      `${ENV.CLIENT_URL}/authentication-failure?strategy=${strategy}`,
     );
   }
 }

@@ -109,18 +109,11 @@ class Account extends React.Component<IProps, IState> {
         </TextItem>
         {edit && (
           <InputField
-            disabled
             type="text"
             className={Classes.INPUT}
             value={profile.email}
             onChange={() => null}
           />
-        )}
-        {edit && (
-          <TextItem style={{ fontSize: 12 }}>
-            (Your email is linked to your 3rd party signin account and cannot be
-            changed)
-          </TextItem>
         )}
         {edit ? (
           <Controls>
