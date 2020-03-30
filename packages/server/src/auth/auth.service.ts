@@ -50,6 +50,7 @@ export class AuthService {
       const existingUser = await this.userService.findByFacebookProfileId(
         facebookAccountId,
       );
+
       if (existingUser) {
         user = existingUser;
         token = this.getJwtAccessToken(user.profile);
