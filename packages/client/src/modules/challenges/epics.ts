@@ -158,7 +158,7 @@ const resetActiveChallengeIds: EpicSignature = (action$, state$, deps) => {
           );
 
           const { courseId, moduleId, challengeId } = deriveIdsFromCourse(
-            course,
+            courses,
             maybeChallengeId,
           );
 
@@ -211,7 +211,7 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
 
         const maybeChallengeId = findChallengeIdInLocationIfExists(location);
         const { challengeId, courseId, moduleId } = deriveIdsFromCourse(
-          courses[0],
+          courses,
           maybeChallengeId,
         );
 

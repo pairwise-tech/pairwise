@@ -17,7 +17,6 @@ import {
   UserProgressMap,
   defaultUserSettings,
   StripeStartCheckoutSuccessResponse,
-  CourseSkeleton,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -32,7 +31,7 @@ import {
 } from "tools/storage-utils";
 import { SANDBOX_ID } from "tools/constants";
 import toaster from "tools/toast-utils";
-import { wait } from "tools/utils";
+import { wait, mapCourseSkeletonInDev } from "tools/utils";
 import { UserStoreState } from "./user/store";
 
 /** ===========================================================================
@@ -62,25 +61,6 @@ const createNonHttpResponseError = (
   message: string,
 ): Err<HttpResponseError> => {
   return new Err({ status: 418, message }); /* ha */
-};
-
-const mapCourseSkeletonInDev = (courseSkeleton: CourseSkeleton) => {
-  return {
-    ...courseSkeleton,
-    modules: courseSkeleton.modules.map(m => {
-      return {
-        ...m,
-        free: true,
-        userCanAccess: true,
-        challenges: m.challenges.map(c => {
-          return {
-            ...c,
-            userCanAccess: true,
-          };
-        }),
-      };
-    }),
-  };
 };
 
 /** ===========================================================================
