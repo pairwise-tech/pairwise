@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 import ENV from "../tools/server-env";
+import { ERROR_CODES } from "src/tools/constants";
+import { captureSentryException } from "src/tools/sentry-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -10,7 +12,7 @@ interface EmailRequest {
   text: string;
   subject: string;
   recipient: string;
-  messageHTML: string;
+  html: string;
 }
 
 /** ===========================================================================
@@ -44,28 +46,28 @@ export class EmailService {
       recipient: email,
       subject: "Welcome to Pairwise",
       text: `Hi, welcome to Pairwise! Open this link to get started now: ${link}`,
-      messageHTML: `Hi, welcome to Pairwise! Click <a href=${link}>this magic link</a> to get started now!`,
+      html: `Hi, welcome to Pairwise! Click <a href=${link}>this magic link</a> to get started now!`,
     };
 
-    console.log(request);
     await this.email(request);
   }
 
   private async email(emailRequest: EmailRequest) {
-    const { subject, text, messageHTML, recipient } = emailRequest;
+    const { subject, text, html, recipient } = emailRequest;
 
     try {
       await this.transporter.verify();
       await this.transporter.sendMail({
-        subject,
+        html,
         text,
-        messageHTML,
+        subject,
         to: recipient,
         from: this.emailAddress,
       });
-      console.log("Message sent!");
     } catch (err) {
-      console.error(err);
+      captureSentryException(err);
+      console.log("Error sending email: ", err);
+      throw new Error(ERROR_CODES.FAILED_TO_SEND_EMAIL);
     }
   }
 }

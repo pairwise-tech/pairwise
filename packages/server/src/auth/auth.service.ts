@@ -34,9 +34,7 @@ export class AuthService {
   public async handleEmailLoginRequest(email: string) {
     const magicEmailToken = this.jwtService.sign({ email });
     const magicEmailLink = `${ENV.SERVER_HOST_URL}/auth/magic-link/${magicEmailToken}`;
-
-    console.log(magicEmailLink);
-    await this.emailService.sendMagicEmailLink(email, magicEmailToken);
+    await this.emailService.sendMagicEmailLink(email, magicEmailLink);
   }
 
   public async handleEmailLoginVerification(magicEmailToken: string) {
