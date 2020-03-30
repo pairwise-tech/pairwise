@@ -1037,18 +1037,26 @@ class Workspace extends React.Component<IProps, IState> {
 
   handleReceiveTestResults = () => {
     const { correct } = this.getTestPassedStatus();
-    if (correct) {
-      this.handlePassChallenge();
-    }
-  };
-
-  handlePassChallenge = () => {
     /**
-     * Called when all the tests on a challenge pass. This can be used to
-     * trigger events at this time such as displaying the challenge success
-     * modal.
+     * This is called with the results of the test and can be used to trigger
+     * various events at this time such as displaying the challenge success
+     * modal (if passed), and updating the user progress map to show challenge
+     * completed / attempted feedback in the challenge navigation map.
+     *
+     * Only fire if user has changed code in the editor, thus establishing
+     * their intent to attempt the challenge. This will correctly ignore
+     * Workspace initiated test runs on challenge load.
      */
-    this.props.handleCompleteChallenge(this.props.challenge.id);
+    if (this.state.code !== this.props.challenge.starterCode) {
+      this.props.handleAttemptChallenge({
+        challengeId: this.props.challenge.id,
+        complete: correct,
+      });
+    } else {
+      debug(
+        "[INFO] Starter code not changed. Not firing handleAttemptChallenge.",
+      );
+    }
   };
 
   iframeRenderPreview = async (): Promise<void> => {
@@ -1336,8 +1344,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
   updateUserSettings: Modules.actions.user.updateUserSettings,
+  handleAttemptChallenge: Modules.actions.challenges.handleAttemptChallenge,
   toggleRevealSolutionCode: Modules.actions.challenges.toggleRevealSolutionCode,
-  handleCompleteChallenge: Modules.actions.challenges.handleCompleteChallenge,
   updateCurrentChallengeBlob:
     Modules.actions.challenges.updateCurrentChallengeBlob,
   setAdminTestTab: Modules.actions.challenges.setAdminTestTab,
