@@ -635,6 +635,7 @@ class Workspace extends React.Component<IProps, IState> {
           )}
           <Tooltip content="Shortcut: opt+enter" position="left">
             <RunButton
+              id="pw-run-code"
               loading={this.state.testResultsLoading}
               icon="play"
               onClick={() => {

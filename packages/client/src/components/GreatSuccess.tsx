@@ -131,10 +131,11 @@ const ConfettiModal: React.FC<ConfettiModalProps> = props => {
             <ParentDimensionMeasure id="confetti-measurement-div" />
             {props.onClose && (
               <CloseButton
+                id="gs-card-close"
                 onClick={props.onClose}
                 icon="cross"
                 minimal
-              ></CloseButton>
+              />
             )}
             <div className="inner">
               {React.Children.map(props.children, child => {
@@ -185,8 +186,6 @@ const GreatSuccess: React.FC<Props> = ({
     onClose();
     scrollToVideoAndPlay();
   }, [onClose]);
-
-  const handleNext = () => console.log("next...");
 
   return (
     <ConfettiModal {...props}>
