@@ -330,6 +330,15 @@ class Api extends BaseApiClass {
     });
   };
 
+  loginByEmail = async (email: string) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      const body = { email };
+      const options = { headers };
+      return axios.post<string>(`${HOST}/auth/email`, body, options);
+    });
+  };
+
   submitUserFeedback = async (feedback: IFeedbackDto) => {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();

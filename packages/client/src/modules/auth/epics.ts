@@ -1,3 +1,4 @@
+import * as EmailValidator from "email-validator";
 import { combineEpics } from "redux-observable";
 import {
   filter,
@@ -129,6 +130,34 @@ const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const loginByEmailEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.loginByEmail)),
+    pluck("payload"),
+    pluck("email"),
+    filter(email => {
+      // Validate email address
+      const valid = EmailValidator.validate(email);
+      if (!valid) {
+        deps.toaster.warn("Please enter a valid email.");
+      }
+
+      return valid;
+    }),
+    mergeMap(deps.api.loginByEmail),
+    tap(result => {
+      if (result.value) {
+        deps.toaster.success(
+          "Email sent! Please check your inbox and follow the instructions.",
+        );
+      } else {
+        deps.toaster.warn("Could not send email...");
+      }
+    }),
+    ignoreElements(),
+  );
+};
+
 // Logout the user by removing the local storage access token.
 const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
   const logoutToast = () => {
@@ -155,5 +184,6 @@ export default combineEpics(
   storeAccessTokenEpic,
   accountCreationEpic,
   bulkPersistenceEpic,
+  loginByEmailEpic,
   logoutUserSuccessEpic,
 );

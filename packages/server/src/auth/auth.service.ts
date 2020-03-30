@@ -35,6 +35,11 @@ export class AuthService {
      * they provided.
      */
     console.log(`Received request to login by email: ${email}`);
+    const sign = this.jwtService.sign({ email });
+    console.log(sign);
+
+    const result = this.jwtService.decode(sign);
+    console.log(result);
   }
 
   public async handleFacebookSignin(

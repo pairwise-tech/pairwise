@@ -1,4 +1,3 @@
-import * as EmailValidator from "email-validator";
 import { Icon, Dialog, Classes, Button } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
@@ -20,7 +19,6 @@ import {
 } from "./Shared";
 import { COLORS } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
-import Toaster from "tools/toast-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -57,14 +55,16 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
   }
 }
 
-interface AuthenticationFormProps {}
+interface AuthenticationFormProps {
+  dispatchLoginByEmailRequest: typeof Modules.actions.auth.loginByEmail;
+}
 
 interface AuthenticationFormState {
   email: string;
   emailLoginFormVisible: boolean;
 }
 
-export class AuthenticationForm extends React.Component<
+class AuthenticationFormComponent extends React.Component<
   AuthenticationFormProps,
   AuthenticationFormState
 > {
@@ -195,18 +195,18 @@ export class AuthenticationForm extends React.Component<
 
   handleLoginByEmail = () => {
     const { email } = this.state;
-    if (EmailValidator.validate(email)) {
-      // TODO: Request the email.
-      console.log("Good!");
-    } else {
-      Toaster.warn("Please enter a valid email.");
-    }
+    this.props.dispatchLoginByEmailRequest({ email });
   };
 
   toggleEmailLoginForm = (emailLoginFormVisible: boolean) => {
     this.setState({ emailLoginFormVisible });
   };
 }
+
+// Connect AuthenticationForm
+export const AuthenticationForm = connect(null, {
+  dispatchLoginByEmailRequest: Modules.actions.auth.loginByEmail,
+})(AuthenticationFormComponent);
 
 /** ===========================================================================
  * Styles

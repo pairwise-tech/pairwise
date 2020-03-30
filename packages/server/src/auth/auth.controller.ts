@@ -6,7 +6,7 @@ import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
-import { ERROR_CODES } from "src/tools/constants";
+import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 
 @Controller("auth")
 export class AuthController {
@@ -14,9 +14,18 @@ export class AuthController {
 
   @Post("email")
   public async handleEmailLoginRequest(@Req() req) {
-    // Handle request to login in directly by email
-    this.authService.handleEmailLoginRequest(req.body.email);
+    await this.authService.handleEmailLoginRequest(req.body.email);
+    return SUCCESS_CODES.OK;
   }
+
+  // @UseGuards(AuthGuard("facebook"))
+  // @Get("email/callback")
+  // public async emailLogin(
+  //   @Req() req: Request & { user: FacebookProfileWithCredentials },
+  //   @Res() res,
+  // ) {
+
+  // }
 
   @UseGuards(AuthGuard("facebook"))
   @Get("facebook")
