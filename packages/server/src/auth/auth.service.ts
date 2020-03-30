@@ -207,8 +207,7 @@ export class AuthService {
 
   private getJwtAccessToken(user: UserProfile) {
     const payload: JwtPassportSignPayload = {
-      email: user.email,
-      sub: user.uuid,
+      uuid: user.uuid,
     };
 
     return this.jwtService.sign(payload);

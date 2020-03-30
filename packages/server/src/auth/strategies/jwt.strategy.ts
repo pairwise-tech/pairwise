@@ -10,8 +10,7 @@ export interface JwtPassportPayload {
 }
 
 export interface JwtPassportSignPayload {
-  email: string;
-  sub: string;
+  uuid: string;
 }
 
 /** ===========================================================================
@@ -33,7 +32,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(payload: JwtPassportSignPayload) {
-    const uuid = payload.sub;
+    const { uuid } = payload;
     return this.userService.findUserByUuidGetFullProfile(uuid);
   }
 }

@@ -47,7 +47,9 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
         return Actions.updateUserSuccess(result.value);
       } else {
         if (result.error.status !== 401) {
-          deps.toaster.error("Failure to update user profile...");
+          deps.toaster.warn(
+            result.error.message || "Failure to update user profile...",
+          );
         }
         return Actions.updateUserFailure(result.error);
       }
