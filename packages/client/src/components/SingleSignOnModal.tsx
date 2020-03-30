@@ -1,3 +1,4 @@
+import * as EmailValidator from "email-validator";
 import { Icon, Dialog, Classes, Button } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
@@ -19,6 +20,7 @@ import {
 } from "./Shared";
 import { COLORS } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
+import Toaster from "tools/toast-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -92,10 +94,10 @@ export class AuthenticationForm extends React.Component<
             </ModalSubText>
             <InputField
               type="text"
+              style={{ width: 415 }}
               className={Classes.INPUT}
               value={this.state.email}
               placeholder="Enter your email"
-              style={{ width: 415 }}
               onChange={event => this.setState({ email: event.target.value })}
             />
             <EmailButtonsContainer>
@@ -192,7 +194,13 @@ export class AuthenticationForm extends React.Component<
   }
 
   handleLoginByEmail = () => {
-    console.log("Login by email!");
+    const { email } = this.state;
+    if (EmailValidator.validate(email)) {
+      // TODO: Request the email.
+      console.log("Good!");
+    } else {
+      Toaster.warn("Please enter a valid email.");
+    }
   };
 
   toggleEmailLoginForm = (emailLoginFormVisible: boolean) => {
