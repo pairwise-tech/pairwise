@@ -14,6 +14,7 @@ import { formatDate } from "tools/utils";
  */
 
 interface IState {
+  email: string;
   givenName: string;
   familyName: string;
   displayName: string;
@@ -30,6 +31,7 @@ class Account extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
+      email: "",
       givenName: "",
       familyName: "",
       displayName: "",
@@ -111,8 +113,8 @@ class Account extends React.Component<IProps, IState> {
           <InputField
             type="text"
             className={Classes.INPUT}
-            value={profile.email}
-            onChange={() => null}
+            onChange={event => this.setState({ email: event.target.value })}
+            value={this.state.email}
           />
         )}
         {edit ? (
