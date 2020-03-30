@@ -146,16 +146,17 @@ const loginByEmailEpic: EpicSignature = (action$, _, deps) => {
       return valid;
     }),
     mergeMap(deps.api.loginByEmail),
-    tap(result => {
+    map(result => {
       if (result.value) {
         deps.toaster.success(
           "Email sent! Please check your inbox and follow the instructions.",
         );
+        return Actions.loginByEmailSuccess();
       } else {
         deps.toaster.warn("Could not send email...");
+        return Actions.loginByEmailFailure();
       }
     }),
-    ignoreElements(),
   );
 };
 

@@ -56,6 +56,7 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
 }
 
 interface AuthenticationFormProps {
+  loginEmailRequestLoading: boolean;
   dispatchLoginByEmailRequest: typeof Modules.actions.auth.loginByEmail;
 }
 
@@ -79,6 +80,7 @@ class AuthenticationFormComponent extends React.Component<
 
   render(): JSX.Element {
     const { emailLoginFormVisible } = this.state;
+    const { loginEmailRequestLoading } = this.props;
     return (
       <ModalContainer>
         <ModalTitleText id="sso-modal-title">
@@ -93,11 +95,13 @@ class AuthenticationFormComponent extends React.Component<
               create an account.
             </ModalSubText>
             <InputField
+              autoFocus
               type="text"
               style={{ width: 415 }}
               className={Classes.INPUT}
-              value={this.state.email}
               placeholder="Enter your email"
+              value={this.state.email}
+              disabled={loginEmailRequestLoading}
               onChange={event => this.setState({ email: event.target.value })}
             />
             <EmailButtonsContainer>
@@ -115,9 +119,12 @@ class AuthenticationFormComponent extends React.Component<
               <Button
                 intent="success"
                 id="email-login-button"
-                text="Send me the link!"
                 style={{ marginLeft: 8 }}
+                disabled={loginEmailRequestLoading}
                 onClick={this.handleLoginByEmail}
+                text={
+                  loginEmailRequestLoading ? "Loading..." : "Send me the link!"
+                }
               />
             </EmailButtonsContainer>
           </SocialButtonsContainer>
@@ -204,9 +211,16 @@ class AuthenticationFormComponent extends React.Component<
 }
 
 // Connect AuthenticationForm
-export const AuthenticationForm = connect(null, {
-  dispatchLoginByEmailRequest: Modules.actions.auth.loginByEmail,
-})(AuthenticationFormComponent);
+export const AuthenticationForm = connect(
+  (state: ReduxStoreState) => ({
+    loginEmailRequestLoading: Modules.selectors.auth.loginEmailRequestLoading(
+      state,
+    ),
+  }),
+  {
+    dispatchLoginByEmailRequest: Modules.actions.auth.loginByEmail,
+  },
+)(AuthenticationFormComponent);
 
 /** ===========================================================================
  * Styles

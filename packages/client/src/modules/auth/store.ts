@@ -8,6 +8,7 @@ import { AuthActionTypes } from "./index";
  */
 
 export interface State {
+  emailLoginRequestLoading: boolean;
   accessToken: string;
   singleSignOnDialogOpen: boolean;
   bulkPersistenceInProgress: boolean;
@@ -17,6 +18,7 @@ const initialState = {
   accessToken: "",
   singleSignOnDialogOpen: false,
   bulkPersistenceInProgress: false,
+  emailLoginRequestLoading: false,
 };
 
 const auth = createReducer<State, AuthActionTypes>(initialState)
@@ -36,7 +38,18 @@ const auth = createReducer<State, AuthActionTypes>(initialState)
     ...state,
     singleSignOnDialogOpen: false,
     accessToken: action.payload.accessToken,
-  }));
+  }))
+  .handleAction(actions.loginByEmail, state => ({
+    ...state,
+    emailLoginRequestLoading: true,
+  }))
+  .handleAction(
+    [actions.loginByEmailSuccess, actions.loginByEmailFailure],
+    state => ({
+      ...state,
+      emailLoginRequestLoading: false,
+    }),
+  );
 
 /** ===========================================================================
  * Export
