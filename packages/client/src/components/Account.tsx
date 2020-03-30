@@ -184,6 +184,7 @@ class Account extends React.Component<IProps, IState> {
     if (profile) {
       this.setState({
         edit: true,
+        email: profile.email || "",
         givenName: profile.givenName,
         familyName: profile.familyName,
         displayName: profile.displayName,
@@ -193,6 +194,7 @@ class Account extends React.Component<IProps, IState> {
 
   handleSaveChanges = () => {
     const userDetails = {
+      email: this.state.email,
       givenName: this.state.givenName,
       familyName: this.state.familyName,
       displayName: this.state.displayName,

@@ -137,6 +137,20 @@ export class UserService {
       throw new BadRequestException(ERROR_CODES.MISSING_USER);
     }
 
+    return this.fillUserProfile(user);
+  }
+
+  public async findUserByUuidGetFullProfile(uuid: string) {
+    const user = await this.userRepository.findOne({ uuid });
+
+    if (!user) {
+      throw new BadRequestException(ERROR_CODES.MISSING_USER);
+    }
+
+    return this.fillUserProfile(user);
+  }
+
+  private async fillUserProfile(user: User) {
     const { payments, courses } = await this.getCourseForUser(user);
     const { progress } = await this.getProgressMapForUser(user);
     const { profile, settings } = this.processUserEntity(user);
