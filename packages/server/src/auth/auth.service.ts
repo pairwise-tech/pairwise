@@ -45,7 +45,7 @@ export class AuthService {
       const profile = requestProfile.profile._json;
 
       let user;
-      let accountCreated = false;
+      let token;
 
       const existingUser = await this.userService.findByGithubProfileId(
         facebookAccountId,
@@ -54,6 +54,21 @@ export class AuthService {
         user = existingUser;
       } else {
         const email = profile.email;
+        if (email) {
+          const userWithEmailExists = await this.userService.findUserByEmail(
+            email,
+          );
+
+          if (userWithEmailExists) {
+            user = await this.userService.updateFacebookAccountId(
+              userWithEmailExists.profile,
+              facebookAccountId,
+            );
+            token = this.getJwtAccessToken(user.profile);
+            return new Ok({ token, accountCreated: false });
+          }
+        }
+
         const avatarUrl = profile.picture.data.url;
         const { first_name, last_name } = profile;
         const name = `${first_name} ${last_name}`;
@@ -68,16 +83,10 @@ export class AuthService {
           googleAccountId: null,
         };
 
-        console.log(
-          `Authenticating user {email: ${email}} using Facebook Strategy`,
-        );
-
         user = await this.userService.createNewUser(userProfile);
-        accountCreated = true;
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: true });
       }
-
-      const token = this.getJwtAccessToken(user.profile);
-      return new Ok({ token, accountCreated });
     } catch (err) {
       captureSentryException(err);
       return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
@@ -92,7 +101,7 @@ export class AuthService {
       const profile = requestProfile.profile._json;
 
       let user;
-      let accountCreated = false;
+      let token;
 
       const existingUser = await this.userService.findByGithubProfileId(
         githubAccountId,
@@ -102,10 +111,23 @@ export class AuthService {
         user = existingUser;
       } else {
         const email = profile.email;
-        const avatarUrl = profile.avatar_url;
+        if (email) {
+          const userWithEmailExists = await this.userService.findUserByEmail(
+            email,
+          );
 
-        /* Whatever! */
+          if (userWithEmailExists) {
+            user = await this.userService.updateGithubAccountId(
+              userWithEmailExists.profile,
+              githubAccountId,
+            );
+            token = this.getJwtAccessToken(user.profile);
+            return new Ok({ token, accountCreated: false });
+          }
+        }
+
         const [firstName = "", lastName = ""] = profile.name.split(" ");
+        const avatarUrl = profile.avatar_url;
         const userProfile: GenericUserProfile = {
           email,
           avatarUrl,
@@ -117,16 +139,10 @@ export class AuthService {
           googleAccountId: null,
         };
 
-        console.log(
-          `Authenticating user {email: ${email}} using GitHub Strategy`,
-        );
-
         user = await this.userService.createNewUser(userProfile);
-        accountCreated = true;
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: true });
       }
-
-      const token = this.getJwtAccessToken(user.profile);
-      return new Ok({ token, accountCreated });
     } catch (err) {
       captureSentryException(err);
       return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
@@ -141,15 +157,32 @@ export class AuthService {
       const profile = requestProfile.profile._json;
 
       let user;
-      let accountCreated = false;
+      let token;
 
       const existingUser = await this.userService.findByGoogleProfileId(
         googleAccountId,
       );
+
       if (existingUser) {
-        user = existingUser;
+        token = this.getJwtAccessToken(existingUser.profile);
+        return new Ok({ token, accountCreated: false });
       } else {
         const email = profile.email;
+        if (email) {
+          const userWithEmailExists = await this.userService.findUserByEmail(
+            email,
+          );
+
+          if (userWithEmailExists) {
+            user = await this.userService.updateGoogleAccountId(
+              userWithEmailExists.profile,
+              googleAccountId,
+            );
+            token = this.getJwtAccessToken(user.profile);
+            return new Ok({ token, accountCreated: false });
+          }
+        }
+
         const avatarUrl = profile.picture;
         const userProfile: GenericUserProfile = {
           email,
@@ -162,15 +195,10 @@ export class AuthService {
           facebookAccountId: null,
         };
 
-        console.log(
-          `Authenticating user {email: ${email}} using Google Strategy`,
-        );
-
         user = await this.userService.createNewUser(userProfile);
-        accountCreated = true;
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: true });
       }
-      const token = this.getJwtAccessToken(user.profile);
-      return new Ok({ token, accountCreated });
     } catch (err) {
       captureSentryException(err);
       return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);

@@ -9,6 +9,7 @@ import {
   UserSettings,
   UserProgressMap,
   defaultUserSettings,
+  UserProfile,
 } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
@@ -25,6 +26,12 @@ export interface GenericUserProfile {
   facebookAccountId: string | null;
   githubAccountId: string | null;
   googleAccountId: string | null;
+}
+
+export interface SSOAccountsIds {
+  facebookAccountId?: string;
+  githubAccountId?: string;
+  googleAccountId?: string;
 }
 
 @Injectable()
@@ -83,6 +90,33 @@ export class UserService {
   public async findByGoogleProfileId(googleAccountId: string) {
     const user = await this.userRepository.findOne({ googleAccountId });
     return this.processUserEntity(user);
+  }
+
+  public async updateFacebookAccountId(
+    userProfile: UserProfile,
+    facebookAccountId: string,
+  ) {
+    const { uuid, email } = userProfile;
+    await this.userRepository.update({ uuid }, { facebookAccountId });
+    return await this.findUserByEmailGetFullProfile(email);
+  }
+
+  public async updateGithubAccountId(
+    userProfile: UserProfile,
+    githubAccountId: string,
+  ) {
+    const { uuid, email } = userProfile;
+    await this.userRepository.update({ uuid }, { githubAccountId });
+    return await this.findUserByEmailGetFullProfile(email);
+  }
+
+  public async updateGoogleAccountId(
+    userProfile: UserProfile,
+    googleAccountId: string,
+  ) {
+    const { uuid, email } = userProfile;
+    await this.userRepository.update({ uuid }, { googleAccountId });
+    return await this.findUserByEmailGetFullProfile(email);
   }
 
   /**
