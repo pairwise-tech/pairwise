@@ -59,7 +59,7 @@ const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
 
-// Email
+// Google Email Service Account Credentials
 const GOOGLE_EMAIL_ACCOUNT_CLIENT_ID = getenv.string(
   "GOOGLE_EMAIL_ACCOUNT_CLIENT_ID",
   "",

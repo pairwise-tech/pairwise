@@ -39,12 +39,17 @@ export class AuthService {
 
   public async handleEmailLoginVerification(magicEmailToken: string) {
     try {
+      // Decode the token payload. If an email is present then proceed
+      // with authentication.
       const result: any = this.jwtService.decode(magicEmailToken);
 
       if (result && "email" in result) {
         const { email } = result;
 
         const existingUser = await this.userService.findUserByEmail(email);
+
+        // If a user exists, just log them in. Otherwise create a new user
+        // with this email address.
         if (existingUser) {
           const token = this.getJwtAccessToken(existingUser.profile);
           return new Ok({ token, accountCreated: true });
