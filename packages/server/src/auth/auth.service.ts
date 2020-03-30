@@ -8,8 +8,9 @@ import { GenericUserProfile, UserService } from "src/user/user.service";
 import { UserProfile, Ok, Err, Result } from "@pairwise/common";
 import { ERROR_CODES } from "src/tools/constants";
 import { captureSentryException } from "src/tools/sentry-utils";
+import ENV from "src/tools/server-env";
 
-export type Strategy = "GitHub" | "Facebook" | "Google";
+export type Strategy = "Email" | "GitHub" | "Facebook" | "Google";
 
 interface LoginSuccess {
   token: string;
@@ -28,18 +29,46 @@ export class AuthService {
   ) {}
 
   public async handleEmailLoginRequest(email: string) {
-    /**
-     * This will need to send an email to the provided email address with
-     * a link to signin to the app. That link will go to the Workspace with
-     * an access token which will create/login a user by the email address
-     * they provided.
-     */
-    console.log(`Received request to login by email: ${email}`);
-    const sign = this.jwtService.sign({ email });
-    console.log(sign);
+    const magicEmailToken = this.jwtService.sign({ email });
+    const magicEmailLink = `${ENV.SERVER_HOST_URL}/auth/magic-link/${magicEmailToken}`;
 
-    const result = this.jwtService.decode(sign);
-    console.log(result);
+    // TODO: Send the link
+    console.log(magicEmailLink);
+  }
+
+  public async handleEmailLoginVerification(magicEmailToken: string) {
+    try {
+      const result: any = this.jwtService.decode(magicEmailToken);
+
+      if (result && "email" in result) {
+        const { email } = result;
+
+        const existingUser = await this.userService.findUserByEmail(email);
+        if (existingUser) {
+          const token = this.getJwtAccessToken(existingUser.profile);
+          return new Ok({ token, accountCreated: true });
+        } else {
+          const userProfile: GenericUserProfile = {
+            email,
+            avatarUrl: "",
+            displayName: "",
+            givenName: "",
+            familyName: "",
+            facebookAccountId: null,
+            githubAccountId: null,
+            googleAccountId: null,
+          };
+
+          const user = await this.userService.createNewUser(userProfile);
+          const token = this.getJwtAccessToken(user.profile);
+          return new Ok({ token, accountCreated: true });
+        }
+      } else {
+        throw new Error("Request payload was invalid");
+      }
+    } catch (err) {
+      return new Err(ERROR_CODES.EMAIL_LOGIN_ERROR);
+    }
   }
 
   public async handleFacebookSignin(

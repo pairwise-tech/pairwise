@@ -1,4 +1,12 @@
-import { Controller, Get, Req, UseGuards, Res, Post } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Req,
+  UseGuards,
+  Res,
+  Post,
+  Param,
+} from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
 import { AuthService, Strategy } from "./auth.service";
@@ -18,14 +26,19 @@ export class AuthController {
     return SUCCESS_CODES.OK;
   }
 
-  // @UseGuards(AuthGuard("facebook"))
-  // @Get("email/callback")
-  // public async emailLogin(
-  //   @Req() req: Request & { user: FacebookProfileWithCredentials },
-  //   @Res() res,
-  // ) {
-
-  // }
+  @Get("magic-link/:token")
+  public async emailLogin(@Param("token") magicEmailToken, @Res() res) {
+    const result = await this.authService.handleEmailLoginVerification(
+      magicEmailToken,
+    );
+    if (result.value) {
+      const { token, accountCreated } = result.value;
+      const params = this.getQueryParams(token, accountCreated);
+      return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+    } else {
+      return this.handleLoginError(res, result.error, "Email");
+    }
+  }
 
   @UseGuards(AuthGuard("facebook"))
   @Get("facebook")

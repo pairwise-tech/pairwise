@@ -14,6 +14,7 @@ enum ERROR_CODES {
   INVALID_PARAMETERS = "Invalid parameters provided",
   INVALID_FEEDBACK_TYPE = "Invalid feedback type used",
   UNKNOWN_LOGIN_ERROR = "There was an unknown login error",
+  EMAIL_LOGIN_ERROR = "An error occurred in the email login flow",
 }
 
 enum SUCCESS_CODES {

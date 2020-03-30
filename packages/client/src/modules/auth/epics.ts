@@ -130,6 +130,7 @@ const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+// Dispatch a request for a magic email login link
 const loginByEmailEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.loginByEmail)),
