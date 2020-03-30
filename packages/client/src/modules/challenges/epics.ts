@@ -10,6 +10,7 @@ import {
   Result,
   ICodeBlobDto,
   SandboxBlob,
+  Challenge,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -27,7 +28,7 @@ import {
   take,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
-import { EpicSignature } from "../root";
+import { EpicSignature, ReduxStoreState } from "../root";
 import { Actions } from "../root-actions";
 import {
   SANDBOX_ID,
@@ -40,10 +41,16 @@ import {
   deriveIdsFromCourse,
   findChallengeIdInLocationIfExists,
   createInverseChallengeMapping,
+  isContentOnlyChallenge,
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 
 const debug = require("debug")("client:challenges:epics");
+
+/** ===========================================================================
+ * Epics
+ * ============================================================================
+ */
 
 const searchEpic: EpicSignature = action$ => {
   // Initialize the search worker. This could get dropped into deps if we need
@@ -117,11 +124,6 @@ const searchEpic: EpicSignature = action$ => {
 
   return merge(buildSearchIndex$, search$, clearSearch$, searchResult$);
 };
-
-/** ===========================================================================
- * Epics
- * ============================================================================
- */
 
 /**
  * Fetch the course content skeletons when the app launches.
@@ -570,35 +572,60 @@ const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
 };
 
 /**
- * Handle completing a challenge (all tests passed). This epic constructs
- * a user progress update after a challenge is passed and then dispatches an
- * action to save this progress update.
+ * NOTE: content only challenges do not have tests, though we still want them to
+ * appear as completed in the challenge map. Any time we navigate away from a
+ * content only challenge, consider it completed.
  */
-const handleCompleteChallengeEpic: EpicSignature = (action$, state$, deps) => {
+const completeContentOnlyChallengeEpic: EpicSignature = (
+  action$,
+  state$,
+  deps,
+) => {
   return action$.pipe(
-    filter(isActionOf(Actions.handleCompleteChallenge)),
+    filter(isActionOf(Actions.setChallengeId)),
+    map(({ payload: { previousChallengeId } }) => previousChallengeId),
+    map(prevId => {
+      // artificially construct the previous state in order to get the last
+      // challenge using the getCurrentChallenge selector.
+      const prevState = {
+        ...state$.value,
+        challenges: {
+          ...state$.value.challenges,
+          currentChallengeId: prevId,
+        },
+      };
+      // it should be impossible for previousChallengeId to be null
+      // or empty so it should be safe to cast this as a Challenge
+      return deps.selectors.challenges.getCurrentChallenge(
+        prevState,
+      ) as Challenge;
+    }),
+    filter(isContentOnlyChallenge),
+    map(({ id }) => constructProgressDto(state$.value, id, true)),
+    map(result => {
+      if (result.value) {
+        return Actions.updateUserProgress(result.value);
+      } else {
+        return Actions.empty("Did not save user progress");
+      }
+    }),
+  );
+};
+
+/**
+ * Handle attempting a challenge. This epic constructs a user progress update
+ * after a challenge is attempted and then dispatches an action to save this
+ * progress update. If challenge is complete (all tests passed), we mark the
+ * challenge as completed, if there are failing tests, mark it as attempted.
+ */
+const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.handleAttemptChallenge)),
     // Do not save if solution code is revealed
     filter(() => !state$.value.challenges.revealWorkspaceSolution),
-    map(x => x.payload),
-    map(
-      (challengeId): Result<IProgressDto, string> => {
-        const courseId = state$.value.challenges.currentCourseId;
-
-        if (courseId) {
-          const payload: IProgressDto = {
-            courseId,
-            challengeId,
-            complete: true,
-          };
-
-          return new Ok(payload);
-        } else {
-          const msg =
-            "[WARNING!]: No active course id found in handleCompleteChallengeEpic, this shouldn't happen...";
-          console.warn(msg);
-          return new Err(msg);
-        }
-      },
+    pluck("payload"),
+    map(({ challengeId, complete }) =>
+      constructProgressDto(state$.value, challengeId, complete),
     ),
     map(result => {
       if (result.value) {
@@ -621,12 +648,39 @@ const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(deps.api.updateUserProgress),
     map(result => {
       if (result.value) {
-        return Actions.updateUserProgressSuccess();
+        return Actions.updateUserProgressSuccess(result.value);
       } else {
         return Actions.updateUserProgressFailure(result.error);
       }
     }),
   );
+};
+
+/** ===========================================================================
+ * Utils
+ * ============================================================================
+ */
+
+const constructProgressDto = (
+  state: ReduxStoreState,
+  challengeId: string,
+  complete: boolean,
+): Result<IProgressDto, string> => {
+  const courseId = state.challenges.currentCourseId;
+  if (courseId) {
+    const payload: IProgressDto = {
+      courseId,
+      complete,
+      challengeId,
+    };
+
+    return new Ok(payload);
+  } else {
+    const msg =
+      "[WARNING!]: No active course id found in challenge completion epic, this shouldn't happen...";
+    console.warn(msg);
+    return new Err(msg);
+  }
 };
 
 /** ===========================================================================
@@ -649,7 +703,8 @@ export default combineEpics(
   syncChallengeToUrlEpic,
   handleSaveCodeBlobEpic,
   saveCodeBlobEpic,
-  handleCompleteChallengeEpic,
+  handleAttemptChallengeEpic,
   updateUserProgressEpic,
   searchEpic,
+  completeContentOnlyChallengeEpic,
 );
