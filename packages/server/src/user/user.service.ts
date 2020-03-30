@@ -177,7 +177,17 @@ export class UserService {
       throw new BadRequestException(validationResult.error);
     } else {
       const { uuid, email } = user.profile;
-      console.log(`Updating user: ${email}`);
+
+      const updateEmail = validationResult.value.email;
+      // If the user is updating their email
+      if (updateEmail) {
+        // Find other users with the same email
+        const userWithEmail = await this.findUserByEmail(updateEmail);
+        // If other users exists, and have a different uuid, reject it!
+        if (userWithEmail && userWithEmail.profile.uuid !== user.profile.uuid) {
+          throw new BadRequestException("This email already exists.");
+        }
+      }
 
       await this.userRepository.update({ uuid }, validationResult.value);
       return await this.findUserByEmailGetFullProfile(email);
