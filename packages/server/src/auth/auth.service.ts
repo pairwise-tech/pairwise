@@ -9,6 +9,7 @@ import { UserProfile, Ok, Err, Result } from "@pairwise/common";
 import { ERROR_CODES } from "src/tools/constants";
 import { captureSentryException } from "src/tools/sentry-utils";
 import ENV from "src/tools/server-env";
+import { emailService, EmailService } from "src/email/email.service";
 
 export type Strategy = "Email" | "GitHub" | "Facebook" | "Google";
 
@@ -23,6 +24,8 @@ type LoginServiceReturnType = Promise<
 
 @Injectable()
 export class AuthService {
+  private readonly emailService: EmailService = emailService;
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
@@ -32,8 +35,8 @@ export class AuthService {
     const magicEmailToken = this.jwtService.sign({ email });
     const magicEmailLink = `${ENV.SERVER_HOST_URL}/auth/magic-link/${magicEmailToken}`;
 
-    // TODO: Send the link
     console.log(magicEmailLink);
+    await this.emailService.sendMagicEmailLink(email, magicEmailToken);
   }
 
   public async handleEmailLoginVerification(magicEmailToken: string) {
