@@ -196,7 +196,6 @@ const GreatSuccess: React.FC<Props> = ({
         Where to next?
       </p>
       <ButtonActions>
-        {/* <Button onClick={props.onClose}>Close</Button> */}
         <div style={{ marginLeft: "auto" }}>
           {challenge.content && (
             <Button onClick={handleScrollToContent}>View Content</Button>
@@ -341,8 +340,6 @@ const CardTitleContainer = styled.div`
   align-items: center;
   font-size: 22px;
   margin-bottom: 40px;
-  // opacity: 0;
-  // transition: all 300ms ease-out;
 
   h1,
   .bp3-icon {
