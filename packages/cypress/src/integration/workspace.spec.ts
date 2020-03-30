@@ -2,6 +2,7 @@ import {
   CLIENT_APP_URL,
   TIMEOUT,
   getIframeBody,
+  click,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -97,10 +98,9 @@ describe("Sandbox", () => {
   it("Sandbox should load when coming from non-workspace challenge", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/yxZjmD0o`); // The "Welcome to pairwise" challenge (no workspace)
     cy.get("#pairwise-code-editor").should("not.exist");
-    cy.get("#sandboxButton").click();
-
-    cy.get("#selectChallengeType").click();
-    cy.get("#challenge-type-markup").click();
+    click("#sandboxButton");
+    click("#selectChallengeType");
+    click("#challenge-type-markup");
     cy.get("#pairwise-code-editor").type(
       "<h1 class='just-typed-this'>Testing</h1>",
     );
@@ -117,18 +117,18 @@ describe("Success Modal", () => {
   it("Should show the modal when and only when the run button is clicked", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
     cy.contains("Incomplete");
-    cy.get("#pw-run-code").click();
+    click("#pw-run-code");
     cy.get("#gs-card").should("not.exist");
 
     cy.get("#pairwise-code-editor").type("<h1>Hello!</h1>");
     cy.get("#gs-card").should("not.exist");
 
-    cy.get("#pw-run-code").click();
+    click("#pw-run-code");
     cy.get("#gs-card").should("exist");
   });
 
   it("Should close when the close button is clicked", () => {
-    cy.get("#gs-card-close").click();
+    click("#gs-card-close");
     cy.get("#gs-card").should("not.exist");
   });
 });
