@@ -324,11 +324,13 @@ const ApplicationContainer = (props: IProps) => {
         <Route key={"workspace"} path="/workspace/:id" component={Workspace} />
         <Route key={"home"} path="/home" component={Home} />
         <Route key={"account"} path="/account" component={Account} />
-        <Route
-          key={"authenticate"}
-          path="/authenticate"
-          component={AuthenticationForm}
-        />
+        {!isLoggedIn && (
+          <Route
+            key={"authenticate"}
+            path="/authenticate"
+            component={AuthenticationForm}
+          />
+        )}
         <Route
           key={"login"}
           path="/login"
