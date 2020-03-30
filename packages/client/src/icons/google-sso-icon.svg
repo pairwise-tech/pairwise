@@ -1,4 +1,3 @@
-const x = (
 <svg
   width="46"
   height="46"
@@ -77,4 +76,3 @@ const x = (
     <path d="M14 14h18v18H14V14z" />
   </g>
 </svg>
-);
