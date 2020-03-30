@@ -112,3 +112,23 @@ describe("Sandbox", () => {
       .should("include.text", `Testing`);
   });
 });
+
+describe("Success Modal", () => {
+  it("Should show the modal when and only when the run button is clicked", () => {
+    cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
+    cy.contains("Incomplete");
+    cy.get("#pw-run-code").click();
+    cy.get("#gs-card").should("not.exist");
+
+    cy.get("#pairwise-code-editor").type("<h1>Hello!</h1>");
+    cy.get("#gs-card").should("not.exist");
+
+    cy.get("#pw-run-code").click();
+    cy.get("#gs-card").should("exist");
+  });
+
+  it("Should close when the close button is clicked", () => {
+    cy.get("#gs-card-close").click();
+    cy.get("#gs-card").should("not.exist");
+  });
+});
