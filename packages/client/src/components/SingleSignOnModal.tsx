@@ -2,8 +2,8 @@ import { Icon, Dialog, Classes, Button } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
 import {
+  createButton,
   FacebookLoginButton,
-  GoogleLoginButton,
   GithubLoginButton,
 } from "react-social-login-buttons";
 import styled from "styled-components/macro";
@@ -18,6 +18,7 @@ import {
   ExternalLink,
 } from "./Shared";
 import { COLORS } from "tools/constants";
+import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
 
 /** ===========================================================================
  * Types & Config
@@ -120,37 +121,54 @@ export class AuthenticationForm extends React.Component<
           </SocialButtonsContainer>
         ) : (
           <SocialButtonsContainer>
+            <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
+              <GoogleLoginButton
+                className="sso-button"
+                style={{
+                  ...ssoButtonStyles,
+                  padding: 0,
+                  paddingBottom: 2,
+                }}
+              >
+                <LoginButtonText style={{ marginLeft: 2 }}>
+                  Sign in with Google
+                </LoginButtonText>
+              </GoogleLoginButton>
+            </LoginLink>
             <LoginLink id="facebook-login" href={`${ENV.HOST}/auth/facebook`}>
               <FacebookLoginButton
                 className="sso-button"
                 style={ssoButtonStyles}
               >
-                Login with Facebook
+                <LoginButtonText>Sign in with Facebook</LoginButtonText>
               </FacebookLoginButton>
-            </LoginLink>
-            <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
-              <GoogleLoginButton className="sso-button" style={ssoButtonStyles}>
-                Login with Google
-              </GoogleLoginButton>
             </LoginLink>
             <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
               <GithubLoginButton className="sso-button" style={ssoButtonStyles}>
-                Login with GitHub
+                <LoginButtonText>Sign in with GitHub</LoginButtonText>
               </GithubLoginButton>
             </LoginLink>
             <Button
               icon={
                 <Icon
-                  iconSize={18}
-                  color={COLORS.TEXT_CONTENT_BRIGHT}
+                  iconSize={24}
                   icon="envelope"
+                  color={COLORS.TEXT_CONTENT_BRIGHT}
                 />
               }
               id="toggle-email-login-form"
               alignText="left"
+              intent="success"
               onClick={() => this.toggleEmailLoginForm(true)}
-              style={{ ...ssoButtonStyles, paddingLeft: 14 }}
-              text={<EmailLoginText>Login with Email</EmailLoginText>}
+              style={{
+                ...ssoButtonStyles,
+                paddingLeft: 14,
+              }}
+              text={
+                <LoginButtonText style={{ marginLeft: 10 }}>
+                  Sign in with Email
+                </LoginButtonText>
+              }
             />
           </SocialButtonsContainer>
         )}
@@ -187,7 +205,21 @@ export class AuthenticationForm extends React.Component<
  * ============================================================================
  */
 
-const ssoButtonStyles = { width: 235, height: 43, marginTop: 12 };
+const GoogleButtonConfig = {
+  iconSize: "42px",
+  icon: googleSvgIcon,
+  style: { background: "rgb(57, 122, 242)" },
+  activeStyle: { background: "rgba(57, 122, 242, 0.5)" },
+};
+
+const GoogleLoginButton = createButton(GoogleButtonConfig);
+
+const ssoButtonStyles = {
+  width: 235,
+  height: 46,
+  marginTop: 12,
+  fontFamily: "Roboto-Medium",
+};
 
 const SocialButtonsContainer = styled.div`
   display: flex;
@@ -205,10 +237,11 @@ const LoginLink = styled.a`
   text-decoration: none;
 `;
 
-const EmailLoginText = styled.p`
+const LoginButtonText = styled.p`
   margin: 0;
   margin-left: 8px;
   color: ${COLORS.TEXT_CONTENT_BRIGHT};
+  font-family: "Roboto Medium", arial;
 `;
 
 const EmailButtonsContainer = styled.div`
