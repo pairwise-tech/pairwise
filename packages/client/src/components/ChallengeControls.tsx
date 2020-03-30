@@ -50,7 +50,7 @@ export const NextChallengeIconButton = connect((state: ReduxStoreState) => ({
   );
 });
 
-const NextChallengeButton = ({
+export const NextChallengeButton = ({
   challengeId,
   ...props
 }: ChallengeButtonProps) => {

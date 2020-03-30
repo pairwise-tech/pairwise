@@ -11,6 +11,7 @@ import { AuthActionTypes } from "../auth";
 import { Actions as actions } from "../root-actions";
 import { UserActionTypes } from "./index";
 import { combineReducers } from "redux";
+import { ChallengesActionTypes } from "modules/challenges";
 
 /** ===========================================================================
  * User Store
@@ -54,9 +55,10 @@ export interface State {
   user: UserState;
 }
 
-const user = createReducer<UserState, UserActionTypes | AuthActionTypes>(
-  initialUserState,
-)
+const user = createReducer<
+  UserState,
+  UserActionTypes | AuthActionTypes | ChallengesActionTypes
+>(initialUserState)
   .handleAction(actions.logoutUser, () => initialUserState)
   .handleAction(
     [
@@ -68,7 +70,36 @@ const user = createReducer<UserState, UserActionTypes | AuthActionTypes>(
       ...state,
       ...action.payload,
     }),
-  );
+  )
+  // when user progress is updated successfully, immediately update
+  // user state to reflect user's progress in challenge map right away
+  .handleAction(actions.updateUserProgressSuccess, (state, action) => {
+    if (state.progress) {
+      return {
+        ...state,
+        progress: {
+          ...state.progress,
+          [action.payload.courseId]: {
+            ...state.progress[action.payload.courseId],
+            [action.payload.challengeId]: {
+              complete: action.payload.complete,
+            },
+          },
+        },
+      };
+    }
+
+    return {
+      ...state,
+      progress: {
+        [action.payload.courseId]: {
+          [action.payload.challengeId]: {
+            complete: action.payload.complete,
+          },
+        },
+      },
+    };
+  });
 
 const loading = createReducer<boolean, UserActionTypes | AuthActionTypes>(
   true,
