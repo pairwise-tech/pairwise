@@ -1,7 +1,6 @@
 import React from "react";
 import Modules, { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
-import { getSearchResults } from "modules/challenges/selectors";
 import styled from "styled-components/macro";
 import { InputGroup } from "@blueprintjs/core";
 import { SearchResult } from "modules/challenges/types";
@@ -15,8 +14,12 @@ import { LineWrappedText } from "./Shared";
 // be closed even if there are search results. For example, the user clicks
 // outside the search pane. In such a case there are still results but we don't
 // want to show the pane. When the search pane is focused we always show the
-// result box, so we can reportwhen there are no search results to the user.
-const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
+// result box, so we can report when there are no search results to the user.
+const SearchBox = ({
+  searchResults,
+  isSearching,
+  requestSearchResults,
+}: Props) => {
   const history = useHistory();
   const [searchText, setSearchText] = React.useState("");
   const [isClosed, setIsClosed] = React.useState(false); // See NOTE
@@ -88,9 +91,13 @@ const SearchBox = ({ searchResults, requestSearchResults }: Props) => {
     setSelIndex(prev);
   }, [searchResults.length, selIndex]);
 
-  // Show result box when search input is focused and there more chars in
-  // the search query than specified by the threshold.
-  const isOpen = !isClosed && searchText.length > SEARCH_QUERY_THRESHOLD;
+  // Show result box when search input is focused, there more chars in
+  // the search query than specified by the threshold, and the search has
+  // finished executing / caught up to the debounce. Also, show when the search
+  // is executing if there are still results in order to avoid screen flashes.
+  const showResultBox = !isClosed && searchText.length > SEARCH_QUERY_THRESHOLD;
+  const hasResults = !isSearching || searchResults.length > 0;
+  const isOpen = hasResults && showResultBox;
 
   return (
     <Box
@@ -297,7 +304,8 @@ const ResultBox = styled.div`
 `;
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  searchResults: getSearchResults(state),
+  searchResults: Modules.selectors.challenges.getSearchResults(state),
+  isSearching: Modules.selectors.challenges.getIsSearching(state),
 });
 
 const dispatchProps = {

@@ -57,6 +57,7 @@ export interface State {
   adminEditorTab: ADMIN_EDITOR_TAB;
   navigationSectionAccordionViewState: AccordionViewState;
   searchResults: SearchResult[];
+  isSearching: boolean;
   revealWorkspaceSolution: boolean;
 }
 
@@ -77,6 +78,7 @@ const initialState: State = {
   adminEditorTab: "starterCode",
   navigationSectionAccordionViewState: {},
   searchResults: [],
+  isSearching: false,
   revealWorkspaceSolution: false,
 };
 
@@ -464,9 +466,14 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     revealWorkspaceSolution: false,
     currentChallengeId: action.payload.currentChallengeId,
   }))
+  .handleAction(actions.requestSearchResults, (state, action) => ({
+    ...state,
+    isSearching: true,
+  }))
   .handleAction(actions.receiveSearchResults, (state, action) => ({
     ...state,
     searchResults: action.payload,
+    isSearching: false,
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,
