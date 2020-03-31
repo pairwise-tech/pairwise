@@ -160,9 +160,6 @@ const BoldText = styled(CourseDescription)`
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
-  firstUnfinishedChallenge: Modules.selectors.challenges.firstUnfinishedChallenge(
-    state,
-  ),
 });
 
 const dispatchProps = {
