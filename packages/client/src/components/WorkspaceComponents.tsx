@@ -12,7 +12,14 @@ import {
 import { DIMENSIONS as D, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Loading } from "./Shared";
-import { Icon, Collapse, Pre, EditableText, Tooltip } from "@blueprintjs/core";
+import {
+  Icon,
+  Collapse,
+  Pre,
+  EditableText,
+  Tooltip,
+  Button,
+} from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
@@ -52,6 +59,12 @@ export const FrameContainer = styled.iframe`
   height: 100%;
   width: 100%;
   border: none;
+`;
+
+export const RunButton = styled(Button)`
+  .bp3-icon {
+    color: ${COLORS.NEON_GREEN} !important;
+  }
 `;
 
 /**
