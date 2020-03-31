@@ -168,7 +168,7 @@ const MediaArea = ({
         <Hr style={{ marginTop: 40, marginBottom: 20 }} />
         <NextChallengeCard />
       </div>
-      {isContentOnlyChallenge(challenge) && (
+      {!isContentOnlyChallenge(challenge) && (
         <SmoothScrollButton
           icon="chevron-up"
           position="top"
