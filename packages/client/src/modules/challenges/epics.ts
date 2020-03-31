@@ -84,7 +84,7 @@ const searchEpic: EpicSignature = action$ => {
       filter(isActionOf(Actions.requestSearchResults)),
       map(x => x.payload),
     ),
-    x => x.length > SEARCH_QUERY_THRESHOLD, // This is arbitrary. Maybe it should just be > 1?
+    x => x.length > SEARCH_QUERY_THRESHOLD,
   );
 
   const search$ = _search$.pipe(
