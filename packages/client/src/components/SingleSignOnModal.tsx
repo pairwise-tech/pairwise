@@ -167,7 +167,6 @@ class AuthenticationFormComponent extends React.Component<
               }
               id="toggle-email-login-form"
               alignText="left"
-              intent="success"
               onClick={() => this.toggleEmailLoginForm(true)}
               style={{
                 ...ssoButtonStyles,

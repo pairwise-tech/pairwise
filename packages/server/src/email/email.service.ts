@@ -23,8 +23,6 @@ interface EmailRequest {
  */
 export class EmailService {
   private transporter: any;
-
-  // TODO: Use a different email?
   private emailAddress: string = "sean@pairwise.tech";
 
   constructor() {

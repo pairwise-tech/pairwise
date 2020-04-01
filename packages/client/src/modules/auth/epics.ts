@@ -10,6 +10,7 @@ import {
   map,
   mapTo,
   mergeMapTo,
+  switchMap,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { of } from "rxjs";
@@ -145,7 +146,7 @@ const loginByEmailEpic: EpicSignature = (action$, _, deps) => {
 
       return valid;
     }),
-    mergeMap(deps.api.loginByEmail),
+    switchMap(deps.api.loginByEmail),
     map(result => {
       if (result.value) {
         deps.toaster.success(
