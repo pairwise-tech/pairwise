@@ -246,9 +246,15 @@ export class PaymentsService {
     requestUser: RequestUser,
     courseMetadata: CourseMetadata,
   ) {
+    const userEmail = requestUser.profile.email;
+
+    if (!userEmail) {
+      // Should not happen, but check just in case.
+      throw new BadRequestException(ERROR_CODES.MISSING_EMAIL);
+    }
     // Create a new checkout session with Stripe
     const session = await this.stripe.checkout.sessions.create({
-      customer_email: requestUser.profile.email,
+      customer_email: userEmail,
       metadata: {
         courseId: courseMetadata.id,
       },
