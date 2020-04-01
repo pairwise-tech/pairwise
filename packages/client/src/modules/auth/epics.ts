@@ -137,17 +137,16 @@ const loginByEmailEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.loginByEmail)),
     pluck("payload"),
     pluck("email"),
-    filter(email => {
+    switchMap(async email => {
       // Validate email address
       const valid = EmailValidator.validate(email);
       if (!valid) {
         deps.toaster.warn("Please enter a valid email.");
+        return Actions.loginByEmailFailure();
       }
 
-      return valid;
-    }),
-    switchMap(deps.api.loginByEmail),
-    map(result => {
+      // Send the request
+      const result = await deps.api.loginByEmail(email);
       if (result.value) {
         deps.toaster.success(
           "Email sent! Please check your inbox and follow the instructions.",
