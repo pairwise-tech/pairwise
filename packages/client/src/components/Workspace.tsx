@@ -608,7 +608,7 @@ class Workspace extends React.Component<IProps, IState> {
         style={{ height: "100%", position: "relative" }}
       >
         <GreatSuccess
-          isOpen={allTestsPassing && !hideSuccessModal}
+          isOpen={allTestsPassing && !hideSuccessModal && !isEditMode}
           onClose={handleCloseSuccessModal}
           onClickOutside={handleCloseSuccessModal}
           challenge={challenge}
