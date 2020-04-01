@@ -38,7 +38,7 @@ import { APP_INITIALIZATION_TYPE } from "tools/utils";
  * the next epic which handles the next steps in the access token
  * initialization flow.
  */
-const accessTokenInitializationEpic: EpicSignature = action$ => {
+const accessTokenInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
@@ -53,6 +53,7 @@ const accessTokenInitializationEpic: EpicSignature = action$ => {
         accountCreated = true;
         token = accessToken as string;
         console.log("User signin occurred, new account created!");
+        deps.toaster.success("Welcome to Pairwise! 🎉");
       } else if (appInitializationType === APP_INITIALIZATION_TYPE.SIGN_IN) {
         accountCreated = false;
         console.log("Existing user signin occurred!");
