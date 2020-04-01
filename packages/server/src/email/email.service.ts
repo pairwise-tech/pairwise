@@ -50,7 +50,7 @@ export class EmailService {
   public async sendMagicEmailLink(email: string, link: string) {
     const request: EmailRequest = {
       recipient: email,
-      subject: "Welcome to Pairwise",
+      subject: "Welcome to Pairwise! 🎉",
       text: `Hi, welcome to Pairwise! Open this link to get started now: ${link}`,
       html: `Hi, welcome to Pairwise! Click <a href=${link}>this magic link</a> to get started now!`,
     };
