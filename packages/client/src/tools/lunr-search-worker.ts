@@ -2,7 +2,7 @@
 // See this, ha! ~ https://github.com/facebook/create-react-app/issues/8014
 
 import lunr from "lunr";
-import { Course } from "@pairwise/common";
+import { Course, CourseList } from "@pairwise/common";
 import {
   SEARCH,
   SEARCH_SUCCESS,
@@ -36,17 +36,19 @@ let idx: lunr.Index | null = null;
 const documentLookup: { [k: string]: SearchDocument } = {};
 
 // Given a Course build out a flat list of SearchDocuments based on the challenges
-const buildSearchDocuments = (course: Course): SearchDocument[] => {
-  const documents = course.modules
-    .flatMap(x => x.challenges)
-    .map(x => ({
-      id: x.id,
-      title: toPlainText(x.title),
-      instructions: toPlainText(x.instructions),
-      content: toPlainText(x.content),
-    }));
+const buildSearchDocuments = (courses: CourseList): SearchDocument[] => {
+  const getDocuments = (course: Course) =>
+    course.modules
+      .flatMap(x => x.challenges)
+      .map(x => ({
+        id: x.id,
+        courseName: course.title,
+        title: toPlainText(x.title),
+        instructions: toPlainText(x.instructions),
+        content: toPlainText(x.content),
+      }));
 
-  return documents;
+  return courses.flatMap(getDocuments);
 };
 
 // NOTE: This is not exactly just any string but a "stemmed" search terms. So
@@ -225,7 +227,7 @@ self.addEventListener("message", (event: SearchMessageEvent) => {
     }
     case BUILD_SEARCH_INDEX: {
       try {
-        const documents = buildSearchDocuments(payload as Course);
+        const documents = buildSearchDocuments(payload as CourseList);
         const indexer = createIndexer(documents);
 
         // Add all the documents to the lookup for use in constructing excerpts

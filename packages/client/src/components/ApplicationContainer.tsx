@@ -134,8 +134,9 @@ const ApplicationContainer = (props: IProps) => {
     return <LoadingOverlay visible={workspaceLoading} />;
   }
 
-  const isSandbox = challenge.id === SANDBOX_ID;
-  const displayNavigationArrows = location.includes("workspace");
+  const onWorkspaceRoute = location.includes("workspace");
+  const isSandbox = challenge.id === SANDBOX_ID && onWorkspaceRoute;
+  const displayNavigationArrows = onWorkspaceRoute;
   const isWorkspaceRequired = challengeRequiresWorkspace(challenge);
   const showMediaAreaButton =
     displayNavigationArrows &&
@@ -371,8 +372,11 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* hi */
   padding-top: ${BORDER}px;
   padding-bottom: 0px;
   padding-left: 0px;

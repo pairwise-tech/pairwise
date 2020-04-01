@@ -15,6 +15,7 @@ import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 import ContentEditor from "./ContentEditor";
 import { Challenge } from "@pairwise/common";
+import { isContentOnlyChallenge } from "tools/utils";
 
 const VIDEO_DOM_ID = "pw-video-embed";
 
@@ -171,13 +172,11 @@ const MediaArea = ({
         <Hr style={{ marginTop: 40, marginBottom: 20 }} />
         <NextChallengeCard />
       </div>
-      {(challenge.type === "markup" ||
-        challenge.type === "typescript" ||
-        challenge.type === "react") && (
+      {!isContentOnlyChallenge(challenge) && (
         <SmoothScrollButton
           icon="chevron-up"
           position="top"
-          positionOffset={10}
+          positionOffset={40}
           scrollToId="root"
           backgroundColor="#242423"
         />

@@ -32,6 +32,7 @@ import ContentEditor, { editorColors } from "./ContentEditor";
 export const Container = styled.div`
   height: 100%;
   overflow: hidden;
+  padding-top: 60px;
 `;
 
 export const PageSection = styled.div`
@@ -44,6 +45,7 @@ export const LowerSection = styled.div<{ withHeader?: boolean }>`
   width: 100vw;
   height: ${props =>
     props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
+  padding-top: 30px;
   border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
   background: ${C.BACKGROUND_LOWER_SECTION};
 `;

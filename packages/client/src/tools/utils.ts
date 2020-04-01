@@ -16,6 +16,7 @@ import {
   CourseList,
   Course,
   UserProgressMap,
+  CourseSkeleton,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
 import { Location } from "history";
@@ -366,23 +367,48 @@ export const findChallengeIdInLocationIfExists = ({
  * to sensible default options.
  */
 export const deriveIdsFromCourse = (
-  course: Course,
+  courses: CourseList,
   maybeChallengeId: string,
 ) => {
-  const challengeMap = createInverseChallengeMapping([course]);
+  const defaultCourse = courses[0];
+  const challengeMap = createInverseChallengeMapping(courses);
   const challengeId =
     maybeChallengeId in challengeMap
       ? maybeChallengeId
       : maybeChallengeId === SANDBOX_ID
       ? maybeChallengeId
-      : course.modules[0].challenges[0].id;
-  const courseId = challengeMap[challengeId]?.courseId || course.id;
-  const moduleId = challengeMap[challengeId]?.moduleId || course.modules[0].id;
+      : defaultCourse.modules[0].challenges[0].id;
+  const courseId = challengeMap[challengeId]?.courseId || defaultCourse.id;
+  const moduleId =
+    challengeMap[challengeId]?.moduleId || defaultCourse.modules[0].id;
 
   return {
     courseId,
     moduleId,
     challengeId,
+  };
+};
+
+/**
+ * Map the course skeletons when fetched in DEV mode. This just transforms
+ * the skeletons so all the content is available in development.
+ */
+export const mapCourseSkeletonInDev = (courseSkeleton: CourseSkeleton) => {
+  return {
+    ...courseSkeleton,
+    modules: courseSkeleton.modules.map(m => {
+      return {
+        ...m,
+        free: true,
+        userCanAccess: true,
+        challenges: m.challenges.map(c => {
+          return {
+            ...c,
+            userCanAccess: true,
+          };
+        }),
+      };
+    }),
   };
 };
 

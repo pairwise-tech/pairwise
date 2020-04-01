@@ -15,7 +15,15 @@ export class ContentService {
     }
   }
 
-  public fetchCourses(user: RequestUser, courseId: string) {
+  public fetchCourses(user: RequestUser) {
+    if (!user) {
+      return ContentUtility.getCourses({});
+    } else {
+      return ContentUtility.getCourses(user.courses);
+    }
+  }
+
+  public fetchCourseById(user: RequestUser, courseId: string) {
     if (!user) {
       return this.fetchFreeCourseContent(courseId);
     }
