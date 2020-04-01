@@ -105,7 +105,6 @@ class AuthenticationFormComponent extends React.Component<
               <InputField
                 autoFocus
                 type="text"
-                style={{ width: 415 }}
                 className={Classes.INPUT}
                 placeholder="Enter your email"
                 value={this.state.email}
@@ -289,7 +288,7 @@ const EmailButtonsContainer = styled.div`
 
 const InputField = styled.input`
   margin-top: 12px;
-  width: 200px;
+  width: 415px;
   color: ${COLORS.TEXT_HOVER} !important;
   background: ${COLORS.BACKGROUND_CONSOLE} !important;
 `;

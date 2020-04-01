@@ -1,4 +1,4 @@
-import { Button, Dialog } from "@blueprintjs/core";
+import { Button, Dialog, Classes } from "@blueprintjs/core";
 import styled from "styled-components/macro";
 import React from "react";
 import { connect } from "react-redux";
@@ -12,7 +12,9 @@ import { COLORS } from "tools/constants";
  * ============================================================================
  */
 
-interface IState {}
+interface IState {
+  email: string;
+}
 
 /** ===========================================================================
  * React Component
@@ -22,6 +24,14 @@ interface IState {}
  */
 
 class PaymentCourseModal extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      email: "",
+    };
+  }
+
   render(): Nullable<JSX.Element> {
     const { user, courseToPurchase } = this.props;
     const { profile } = user;
@@ -30,6 +40,10 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
       return null;
     }
 
+    // If the user does not have an email set yet require it
+    // before allowing them to proceed with checkout.
+    const hasEmail = !!profile.email;
+
     return (
       <Dialog
         isOpen={this.props.modalOpen}
@@ -37,26 +51,58 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
         aria-describedby="simple-modal-description"
         onClose={this.handleOnCloseModal}
       >
-        <ModalContainer>
-          <ModalTitleText>Purchase Course</ModalTitleText>
-          <ModalSubText>
-            Purchasing the <CourseTitle>{courseToPurchase.title}</CourseTitle>{" "}
-            course will give you full lifetime access to the course content and
-            is fully refundable up to 60 days.
-          </ModalSubText>
-          <Button
-            large
-            intent="primary"
-            id="start-checkout-button"
-            style={{ marginTop: 20 }}
-            onClick={() => this.confirmPurchase(courseToPurchase.id)}
-          >
-            Start Checkout
-          </Button>
-          <SmallPoint>
-            You will be redirected to Stripe to complete the checkout process.
-          </SmallPoint>
-        </ModalContainer>
+        {hasEmail ? (
+          <ModalContainer>
+            <ModalTitleText>Purchase Course</ModalTitleText>
+            <ModalSubText>
+              Purchasing the <CourseTitle>{courseToPurchase.title}</CourseTitle>{" "}
+              course will give you full lifetime access to the course content
+              and is fully refundable up to 60 days.
+            </ModalSubText>
+            <Button
+              large
+              intent="primary"
+              id="start-checkout-button"
+              style={{ marginTop: 20 }}
+              onClick={() => this.confirmPurchase(courseToPurchase.id)}
+            >
+              Start Checkout
+            </Button>
+            <SmallPoint>
+              You will be redirected to Stripe to complete the checkout process.
+            </SmallPoint>
+          </ModalContainer>
+        ) : (
+          <ModalContainer>
+            <ModalTitleText>Enter Email</ModalTitleText>
+            <ModalSubText>
+              Please provide your email to continue the checkout for{" "}
+              <CourseTitle>{courseToPurchase.title}</CourseTitle>.
+            </ModalSubText>
+            <EmailForm
+              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                e.preventDefault();
+                this.updateUserEmail();
+              }}
+            >
+              <InputField
+                autoFocus
+                type="text"
+                className={Classes.INPUT}
+                placeholder="Enter your email"
+                value={this.state.email}
+                onChange={event => this.setState({ email: event.target.value })}
+              />
+              <Button
+                text="Save Email"
+                intent="success"
+                id="email-login-button"
+                onClick={this.updateUserEmail}
+                style={{ marginLeft: 8, width: 95 }}
+              />
+            </EmailForm>
+          </ModalContainer>
+        )}
       </Dialog>
     );
   }
@@ -71,6 +117,10 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
 
   handleOnCloseModal = () => {
     this.setModalState(false);
+  };
+
+  updateUserEmail = () => {
+    this.props.updateUser({ email: this.state.email });
   };
 }
 
@@ -89,6 +139,20 @@ const CourseTitle = styled.b`
   color: ${COLORS.PRIMARY_GREEN};
 `;
 
+const EmailForm = styled.form`
+  margin-top: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const InputField = styled.input`
+  width: 325px;
+  color: ${COLORS.TEXT_HOVER} !important;
+  background: ${COLORS.BACKGROUND_CONSOLE} !important;
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -101,6 +165,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
+  updateUser: Modules.actions.user.updateUser,
   startCheckout: Modules.actions.payments.startCheckout,
   setPurchaseCourseModalState:
     Modules.actions.payments.setPaymentCourseModalState,
