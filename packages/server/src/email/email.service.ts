@@ -26,7 +26,8 @@ export class EmailService {
   private emailAddress: string = "sean@pairwise.tech";
 
   constructor() {
-    const privateKey = ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY.replace(
+    // Read it and weep: https://github.com/googleapis/google-api-nodejs-client/issues/1110#issuecomment-546147468
+    const GOOGLE_EMAIL_PRIVATE_KEY = ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY.replace(
       new RegExp("\\\\n", "g"),
       "\n",
     );
@@ -38,7 +39,7 @@ export class EmailService {
       auth: {
         type: "OAuth2",
         user: this.emailAddress,
-        privateKey,
+        privateKey: GOOGLE_EMAIL_PRIVATE_KEY,
         serviceClient: ENV.GOOGLE_EMAIL_ACCOUNT_CLIENT_ID,
       },
     });
@@ -47,17 +48,6 @@ export class EmailService {
   }
 
   public async sendMagicEmailLink(email: string, link: string) {
-    console.log("GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY:");
-    console.log(ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY);
-
-    console.log("GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY MODIFIED:");
-    const privateKey = ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY.replace(
-      new RegExp("\\\\n", "g"),
-      "\n",
-    );
-
-    console.log(privateKey);
-
     const request: EmailRequest = {
       recipient: email,
       subject: "Welcome to Pairwise",
