@@ -65,14 +65,14 @@ class Home extends React.Component<IProps, IState> {
         elevation={Elevation.FOUR}
         style={{ width: 515, marginTop: 24 }}
       >
-        <CourseTitle id={`course-link-${i}`}>{skeleton.title}</CourseTitle>
+        <CourseTitle className={`courseLink`}>{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
         {canAccessCourse ? (
           <Link to={`workspace/${firstCourseChallenge.id}`}>
             <Button
               large
               intent="success"
-              id={`course-link-${i}-continue`}
+              className={`courseLinkContinue`}
               style={{ width: 185, marginTop: 8 }}
             >
               Start Now

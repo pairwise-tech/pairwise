@@ -356,7 +356,7 @@ const ApplicationContainer = (props: IProps) => {
 const LoadingOverlay = (props: { visible: boolean }) => (
   <FullScreenOverlay visible={props.visible}>
     <div>
-      <OverlayText>Launching Pairwise...</OverlayText>
+      <OverlayText id="pw-loading-overlay">Launching Pairwise...</OverlayText>
     </div>
   </FullScreenOverlay>
 );
