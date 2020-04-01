@@ -11,9 +11,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
   && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
   && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-# Fuck! https://github.com/lovell/sharp/issues/1882
-RUN apt-get update && apt-get install -y libvips-dev --no-install-recommends
-
 # Install Lerna
 RUN npm i -g lerna
 

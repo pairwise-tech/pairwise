@@ -5,6 +5,7 @@ import ENV from "src/tools/server-env";
 
 export interface GitHubProfile {
   provider: "github";
+  id: string;
   _json: {
     id: string;
     name: string;

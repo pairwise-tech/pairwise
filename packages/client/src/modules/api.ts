@@ -130,11 +130,25 @@ class BaseApiClass {
   };
 
   formatHttpError = (error: AxiosError): HttpResponseError => {
-    return {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-    };
+    if (error.response) {
+      const { data } = error.response;
+      const message = data.message || error.message;
+      const status = data.status || error.response.status;
+      const statusText = data.error || error.response.statusText;
+
+      return {
+        message,
+        status,
+        statusText,
+      };
+    } else {
+      // Should not happen - types issue with AxiosResponse...
+      return {
+        status: 400,
+        statusText: "Request Failed",
+        message: "Request Failed",
+      };
+    }
   };
 
   handleHttpError = (err: any) => {
@@ -285,6 +299,15 @@ class Api extends BaseApiClass {
       return axios.post<IUserDto>(`${HOST}/user/profile`, userDetails, {
         headers,
       });
+    });
+  };
+
+  loginByEmail = async (email: string) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      const body = { email };
+      const options = { headers };
+      return axios.post<string>(`${HOST}/auth/email`, body, options);
     });
   };
 

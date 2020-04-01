@@ -9,6 +9,7 @@ import {
   UserSettings,
   UserProgressMap,
   defaultUserSettings,
+  UserProfile,
 } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { validateUserUpdateDetails } from "src/tools/validation";
@@ -22,6 +23,15 @@ export interface GenericUserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
+  facebookAccountId: string | null;
+  githubAccountId: string | null;
+  googleAccountId: string | null;
+}
+
+export interface SSOAccountsIds {
+  facebookAccountId?: string;
+  githubAccountId?: string;
+  googleAccountId?: string;
 }
 
 @Injectable()
@@ -67,6 +77,48 @@ export class UserService {
     return this.processUserEntity(user);
   }
 
+  public async findByFacebookProfileId(facebookAccountId: string) {
+    const user = await this.userRepository.findOne({ facebookAccountId });
+    return this.processUserEntity(user);
+  }
+
+  public async findByGithubProfileId(githubAccountId: string) {
+    const user = await this.userRepository.findOne({ githubAccountId });
+    return this.processUserEntity(user);
+  }
+
+  public async findByGoogleProfileId(googleAccountId: string) {
+    const user = await this.userRepository.findOne({ googleAccountId });
+    return this.processUserEntity(user);
+  }
+
+  public async updateFacebookAccountId(
+    userProfile: UserProfile,
+    facebookAccountId: string,
+  ) {
+    const { uuid, email } = userProfile;
+    await this.userRepository.update({ uuid }, { facebookAccountId });
+    return await this.findUserByEmailGetFullProfile(email);
+  }
+
+  public async updateGithubAccountId(
+    userProfile: UserProfile,
+    githubAccountId: string,
+  ) {
+    const { uuid, email } = userProfile;
+    await this.userRepository.update({ uuid }, { githubAccountId });
+    return await this.findUserByEmailGetFullProfile(email);
+  }
+
+  public async updateGoogleAccountId(
+    userProfile: UserProfile,
+    googleAccountId: string,
+  ) {
+    const { uuid, email } = userProfile;
+    await this.userRepository.update({ uuid }, { googleAccountId });
+    return await this.findUserByEmailGetFullProfile(email);
+  }
+
   /**
    * This is the method which aggregates various pieces of data to add to the
    * user profile in order to construct a single object which consolidates
@@ -85,6 +137,20 @@ export class UserService {
       throw new BadRequestException(ERROR_CODES.MISSING_USER);
     }
 
+    return this.fillUserProfile(user);
+  }
+
+  public async findUserByUuidGetFullProfile(uuid: string) {
+    const user = await this.userRepository.findOne({ uuid });
+
+    if (!user) {
+      throw new BadRequestException(ERROR_CODES.MISSING_USER);
+    }
+
+    return this.fillUserProfile(user);
+  }
+
+  private async fillUserProfile(user: User) {
     const { payments, courses } = await this.getCourseForUser(user);
     const { progress } = await this.getProgressMapForUser(user);
     const { profile, settings } = this.processUserEntity(user);
@@ -100,31 +166,22 @@ export class UserService {
     return result;
   }
 
-  public async findOrCreateUser(profile: GenericUserProfile) {
+  public async createNewUser(profile: GenericUserProfile) {
     const { email } = profile;
-    let accountCreated: boolean;
 
-    let user = await this.findUserByEmail(email);
-    if (user) {
-      accountCreated = false;
-    } else {
-      accountCreated = true;
-      await this.userRepository.insert({
-        ...profile,
-        lastActiveChallengeId: "",
-        settings: JSON.stringify({}),
-      });
-      user = await this.findUserByEmail(email);
-    }
-
-    const msg = accountCreated ? "New account created" : "Account login";
-    console.log(`${msg} for email: ${email}`);
+    await this.userRepository.insert({
+      ...profile,
+      lastActiveChallengeId: "",
+      settings: JSON.stringify({}),
+    });
+    const user = await this.findUserByEmail(email);
 
     this.slackService.postUserAccountCreationMessage({
       profile,
-      accountCreated,
+      accountCreated: true,
     });
-    return { user, accountCreated };
+
+    return user;
   }
 
   public async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
@@ -134,10 +191,20 @@ export class UserService {
       throw new BadRequestException(validationResult.error);
     } else {
       const { uuid, email } = user.profile;
-      console.log(`Updating user: ${email}`);
+
+      const updateEmail = validationResult.value.email;
+      // If the user is updating their email
+      if (updateEmail) {
+        // Find other users with the same email
+        const userWithEmail = await this.findUserByEmail(updateEmail);
+        // If other users exists, and have a different uuid, reject it!
+        if (userWithEmail && userWithEmail.profile.uuid !== user.profile.uuid) {
+          throw new BadRequestException("This email is already taken.");
+        }
+      }
 
       await this.userRepository.update({ uuid }, validationResult.value);
-      return await this.findUserByEmailGetFullProfile(email);
+      return await this.findUserByEmailGetFullProfile(updateEmail || email);
     }
   }
 

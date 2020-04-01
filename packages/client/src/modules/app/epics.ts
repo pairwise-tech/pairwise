@@ -64,20 +64,11 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
     // UI/UX of toast over overlay looks a bit off
     delay(1500),
     tap(params => {
-      if (params.emailError === "true") {
-        deps.toaster.error(
-          `Login failed! We could not find your email address. Is the email ` +
-            `associated with your ${params.strategy} account private? If so, ` +
-            `you may need to login with a different provider.`,
-          { timeout: 10000 },
-        );
-      } else {
-        deps.toaster.error(
-          `Login failed! An unknown error occurred when trying to log you ` +
-            `in with ${params.strategy}. Please try again.`,
-          { timeout: 10000 },
-        );
-      }
+      deps.toaster.error(
+        `Login failed! An unknown error occurred when trying to log you ` +
+          `in with ${params.strategy}. Please try again.`,
+        { timeout: 10000 },
+      );
     }),
     ignoreElements(),
   );

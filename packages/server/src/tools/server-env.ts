@@ -59,6 +59,16 @@ const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
 
+// Google Email Service Account Credentials
+const GOOGLE_EMAIL_ACCOUNT_CLIENT_ID = getenv.string(
+  "GOOGLE_EMAIL_ACCOUNT_CLIENT_ID",
+  "",
+);
+const GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY = getenv.string(
+  "GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY",
+  "",
+);
+
 // Pairwise checkout logo for Stripe checkout page
 const PAIRWISE_CHECKOUT_ICON = getenv.string(
   "PAIRWISE_CHECKOUT_ICON",
@@ -95,6 +105,8 @@ const ENV = {
   GOOGLE_AUTHORIZATION_URL,
   SLACK_API_TOKEN,
   SLACK_ADMIN_IDS,
+  GOOGLE_EMAIL_ACCOUNT_CLIENT_ID,
+  GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY,
   SENTRY_DSN,
   PAIRWISE_CHECKOUT_ICON,
 };

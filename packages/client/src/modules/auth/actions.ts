@@ -15,6 +15,10 @@ enum ActionTypesEnum {
   BULK_PERSISTENCE_COMPLETE = "BULK_PERSISTENCE_COMPLETE",
 
   LOGOUT = "LOGOUT",
+
+  LOGIN_BY_EMAIL = "LOGIN_BY_EMAIL",
+  LOGIN_BY_EMAIL_SUCCESS = "LOGIN_BY_EMAIL_SUCCESS",
+  LOGIN_BY_EMAIL_FAILURE = "LOGIN_BY_EMAIL_FAILURE",
 }
 
 /** ===========================================================================
@@ -46,3 +50,15 @@ export const bulkPersistenceComplete = createAction(
 )();
 
 export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
+
+export const loginByEmail = createAction(ActionTypesEnum.LOGIN_BY_EMAIL)<{
+  email: string;
+}>();
+
+export const loginByEmailSuccess = createAction(
+  ActionTypesEnum.LOGIN_BY_EMAIL_SUCCESS,
+)();
+
+export const loginByEmailFailure = createAction(
+  ActionTypesEnum.LOGIN_BY_EMAIL_FAILURE,
+)();

@@ -27,7 +27,7 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   public uuid: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   public email: string;
 
   @Column()
@@ -44,6 +44,15 @@ export class User {
 
   @Column()
   public avatarUrl: string;
+
+  @Column({ nullable: true })
+  public facebookAccountId: string;
+
+  @Column({ nullable: true })
+  public githubAccountId: string;
+
+  @Column({ nullable: true })
+  public googleAccountId: string;
 
   @Column({ type: "jsonb" })
   public settings: string;
