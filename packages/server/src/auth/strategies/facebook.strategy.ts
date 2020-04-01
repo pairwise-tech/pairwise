@@ -5,6 +5,7 @@ import ENV from "src/tools/server-env";
 
 export interface FacebookProfile {
   provider: "facebook";
+  id: string;
   _json: {
     id: string;
     email: string;

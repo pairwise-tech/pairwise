@@ -7,62 +7,129 @@ import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import { GenericUserProfile, UserService } from "src/user/user.service";
 import { UserProfile, Ok, Err, Result } from "@pairwise/common";
 import { ERROR_CODES } from "src/tools/constants";
-import e = require("express");
-import {
-  captureSentryException,
-  captureSentryMessage,
-} from "src/tools/sentry-utils";
+import { captureSentryException } from "src/tools/sentry-utils";
+import ENV from "src/tools/server-env";
+import { emailService, EmailService } from "src/email/email.service";
 
-export type Strategy = "GitHub" | "Facebook" | "Google";
-
-export type LoginFailureCodes =
-  | ERROR_CODES.SSO_EMAIL_NOT_FOUND
-  | ERROR_CODES.UNKNOWN_LOGIN_ERROR;
+export type Strategy = "Email" | "GitHub" | "Facebook" | "Google";
 
 interface LoginSuccess {
   token: string;
   accountCreated: boolean;
 }
 
-type LoginServiceReturnType = Promise<Result<LoginSuccess, LoginFailureCodes>>;
+type LoginServiceReturnType = Promise<
+  Result<LoginSuccess, ERROR_CODES.UNKNOWN_LOGIN_ERROR>
+>;
 
 @Injectable()
 export class AuthService {
+  private readonly emailService: EmailService = emailService;
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
   ) {}
 
+  public async handleEmailLoginRequest(email: string) {
+    const magicEmailToken = this.jwtService.sign({ email });
+    const magicEmailLink = `${ENV.SERVER_HOST_URL}/auth/magic-link/${magicEmailToken}`;
+    await this.emailService.sendMagicEmailLink(email, magicEmailLink);
+  }
+
+  public async handleEmailLoginVerification(magicEmailToken: string) {
+    try {
+      // Decode the token payload. If an email is present then proceed
+      // with authentication.
+      const result: any = this.jwtService.decode(magicEmailToken);
+
+      if (result && "email" in result) {
+        const { email } = result;
+
+        const existingUser = await this.userService.findUserByEmail(email);
+
+        // If a user exists, just log them in. Otherwise create a new user
+        // with this email address.
+        if (existingUser) {
+          const token = this.getJwtAccessToken(existingUser.profile);
+          return new Ok({ token, accountCreated: true });
+        } else {
+          const userProfile: GenericUserProfile = {
+            email,
+            avatarUrl: "",
+            displayName: "",
+            givenName: "",
+            familyName: "",
+            facebookAccountId: null,
+            githubAccountId: null,
+            googleAccountId: null,
+          };
+
+          const user = await this.userService.createNewUser(userProfile);
+          const token = this.getJwtAccessToken(user.profile);
+          return new Ok({ token, accountCreated: true });
+        }
+      } else {
+        throw new Error("Request payload was invalid");
+      }
+    } catch (err) {
+      return new Err(ERROR_CODES.EMAIL_LOGIN_ERROR);
+    }
+  }
+
   public async handleFacebookSignin(
     requestProfile: FacebookProfileWithCredentials,
   ) {
     try {
+      const facebookAccountId = requestProfile.profile.id;
       const profile = requestProfile.profile._json;
-      const email = profile.email;
-      const avatarUrl = profile.picture.data.url;
-      const { first_name, last_name } = profile;
-      const name = `${first_name} ${last_name}`;
-      const userProfile: GenericUserProfile = {
-        email,
-        avatarUrl,
-        displayName: name,
-        givenName: first_name,
-        familyName: last_name,
-      };
 
-      console.log(
-        `Authenticating user {email: ${email}} using Facebook Strategy`,
+      let user;
+      let token;
+
+      const existingUser = await this.userService.findByFacebookProfileId(
+        facebookAccountId,
       );
 
-      if (!email) {
-        return this.handleEmailNotFound("Facebook");
+      if (existingUser) {
+        user = existingUser;
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: false });
+      } else {
+        const email = profile.email;
+        if (email) {
+          const userWithEmailExists = await this.userService.findUserByEmail(
+            email,
+          );
+
+          if (userWithEmailExists) {
+            user = await this.userService.updateFacebookAccountId(
+              userWithEmailExists.profile,
+              facebookAccountId,
+            );
+            token = this.getJwtAccessToken(user.profile);
+            return new Ok({ token, accountCreated: false });
+          }
+        }
+
+        const avatarUrl = profile.picture.data.url;
+        const { first_name, last_name } = profile;
+        const name = `${first_name} ${last_name}`;
+        const userProfile: GenericUserProfile = {
+          email,
+          avatarUrl,
+          displayName: name,
+          givenName: first_name,
+          familyName: last_name,
+          facebookAccountId,
+          githubAccountId: null,
+          googleAccountId: null,
+        };
+
+        user = await this.userService.createNewUser(userProfile);
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: true });
       }
-
-      const { user, accountCreated } = await this.userService.findOrCreateUser(
-        userProfile,
-      );
-      const token = this.getJwtAccessToken(user.profile);
-      return new Ok({ token, accountCreated });
     } catch (err) {
       captureSentryException(err);
       return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
@@ -73,34 +140,54 @@ export class AuthService {
     requestProfile: GitHubProfileWithCredentials,
   ): LoginServiceReturnType {
     try {
+      const githubAccountId = requestProfile.profile.id;
       const profile = requestProfile.profile._json;
 
-      const email = profile.email;
-      const avatarUrl = profile.avatar_url;
+      let user;
+      let token;
 
-      /* Whatever! */
-      const [firstName = "", lastName = ""] = profile.name.split(" ");
-      const userProfile: GenericUserProfile = {
-        email,
-        avatarUrl,
-        givenName: firstName,
-        familyName: lastName,
-        displayName: profile.name,
-      };
-
-      console.log(
-        `Authenticating user {email: ${email}} using GitHub Strategy`,
+      const existingUser = await this.userService.findByGithubProfileId(
+        githubAccountId,
       );
 
-      if (!email) {
-        return this.handleEmailNotFound("GitHub");
+      if (existingUser) {
+        user = existingUser;
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: false });
+      } else {
+        const email = profile.email;
+        if (email) {
+          const userWithEmailExists = await this.userService.findUserByEmail(
+            email,
+          );
+
+          if (userWithEmailExists) {
+            user = await this.userService.updateGithubAccountId(
+              userWithEmailExists.profile,
+              githubAccountId,
+            );
+            token = this.getJwtAccessToken(user.profile);
+            return new Ok({ token, accountCreated: false });
+          }
+        }
+
+        const [firstName = "", lastName = ""] = profile.name.split(" ");
+        const avatarUrl = profile.avatar_url;
+        const userProfile: GenericUserProfile = {
+          email,
+          avatarUrl,
+          givenName: firstName,
+          familyName: lastName,
+          displayName: profile.name,
+          githubAccountId,
+          facebookAccountId: null,
+          googleAccountId: null,
+        };
+
+        user = await this.userService.createNewUser(userProfile);
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: true });
       }
-
-      const { user, accountCreated } = await this.userService.findOrCreateUser(
-        userProfile,
-      );
-      const token = this.getJwtAccessToken(user.profile);
-      return new Ok({ token, accountCreated });
     } catch (err) {
       captureSentryException(err);
       return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
@@ -111,30 +198,52 @@ export class AuthService {
     requestProfile: GoogleProfileWithCredentials,
   ): LoginServiceReturnType {
     try {
+      const googleAccountId = requestProfile.profile.id;
       const profile = requestProfile.profile._json;
-      const email = profile.email;
-      const avatarUrl = profile.picture;
-      const userProfile: GenericUserProfile = {
-        email,
-        avatarUrl,
-        displayName: profile.name,
-        givenName: profile.given_name,
-        familyName: profile.family_name,
-      };
 
-      console.log(
-        `Authenticating user {email: ${email}} using Google Strategy`,
+      let user;
+      let token;
+
+      const existingUser = await this.userService.findByGoogleProfileId(
+        googleAccountId,
       );
 
-      if (!email) {
-        return this.handleEmailNotFound("Google");
+      if (existingUser) {
+        token = this.getJwtAccessToken(existingUser.profile);
+        return new Ok({ token, accountCreated: false });
+      } else {
+        const email = profile.email;
+        if (email) {
+          const userWithEmailExists = await this.userService.findUserByEmail(
+            email,
+          );
+
+          if (userWithEmailExists) {
+            user = await this.userService.updateGoogleAccountId(
+              userWithEmailExists.profile,
+              googleAccountId,
+            );
+            token = this.getJwtAccessToken(user.profile);
+            return new Ok({ token, accountCreated: false });
+          }
+        }
+
+        const avatarUrl = profile.picture;
+        const userProfile: GenericUserProfile = {
+          email,
+          avatarUrl,
+          displayName: profile.name,
+          givenName: profile.given_name,
+          familyName: profile.family_name,
+          googleAccountId,
+          githubAccountId: null,
+          facebookAccountId: null,
+        };
+
+        user = await this.userService.createNewUser(userProfile);
+        token = this.getJwtAccessToken(user.profile);
+        return new Ok({ token, accountCreated: true });
       }
-
-      const { user, accountCreated } = await this.userService.findOrCreateUser(
-        userProfile,
-      );
-      const token = this.getJwtAccessToken(user.profile);
-      return new Ok({ token, accountCreated });
     } catch (err) {
       captureSentryException(err);
       return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
@@ -143,19 +252,9 @@ export class AuthService {
 
   private getJwtAccessToken(user: UserProfile) {
     const payload: JwtPassportSignPayload = {
-      email: user.email,
-      sub: user.uuid,
+      uuid: user.uuid,
     };
 
     return this.jwtService.sign(payload);
-  }
-
-  private handleEmailNotFound(
-    strategy: Strategy,
-  ): Err<ERROR_CODES.SSO_EMAIL_NOT_FOUND> {
-    // we need email to proceed, fail if not found. Report this to Sentry
-    // so we get a general idea of the incidence rate at which this occurs
-    captureSentryMessage(`${ERROR_CODES.SSO_EMAIL_NOT_FOUND}: ${strategy}`);
-    return new Err(ERROR_CODES.SSO_EMAIL_NOT_FOUND);
   }
 }

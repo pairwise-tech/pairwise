@@ -27,3 +27,10 @@ export const userAuthenticated = createSelector(
     return Boolean(authStateResult.accessToken);
   },
 );
+
+export const loginEmailRequestLoading = createSelector(
+  authSelector,
+  authStateResult => {
+    return authStateResult.emailLoginRequestLoading;
+  },
+);

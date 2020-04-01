@@ -5,6 +5,7 @@ import ENV from "src/tools/server-env";
 
 export interface GoogleProfile {
   provider: "google";
+  id: string;
   _json: {
     sub: string;
     name: string;

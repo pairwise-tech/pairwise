@@ -18,11 +18,8 @@ export class ContentController {
   }
 
   @UseGuards(CustomJwtAuthGuard)
-  @Get("/course/:id")
+  @Get("/courses")
   public fetchCourseContent(@Param() params, @Req() req: AuthenticatedRequest) {
-    const { id } = params;
-    const { user } = req;
-
-    return this.challengeService.fetchCourses(user, id);
+    return this.challengeService.fetchCourses(req.user);
   }
 }

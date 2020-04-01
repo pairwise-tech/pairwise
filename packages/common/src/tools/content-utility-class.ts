@@ -1,4 +1,5 @@
-import FullstackTypeScript from "../courses/01_programming_fundamental.json";
+import PairwiseContent from "../courses/00_pairwise_content.json";
+import FullstackTypeScript from "../courses/01_fullstack_typescript.json";
 import {
   CourseList,
   CourseSkeletonList,
@@ -99,6 +100,15 @@ class ContentUtilityClass {
     });
   };
 
+  getCourses = (userCourseAccessMap: UserCourseAccessMap) => {
+    return this.courses.map(course => {
+      const accessLevel: COURSE_ACCESS_LEVEL =
+        course.id in userCourseAccessMap ? "PAID" : "FREE";
+
+      return this.getCourseContent(course.id, accessLevel);
+    });
+  };
+
   getCourseContent = (courseId: string, accessLevel: COURSE_ACCESS_LEVEL) => {
     const course = this.courses.find(c => c.id === courseId);
 
@@ -108,7 +118,7 @@ class ContentUtilityClass {
       const courseWithFreeContent = {
         ...course,
         modules: course.modules.map(m => {
-          if (m.free) {
+          if (course.free || m.free) {
             return m;
           } else {
             return {
@@ -173,6 +183,7 @@ class ContentUtilityClass {
         id: course.id,
         title: course.title,
         description: course.description,
+        free: course.free,
       };
     } else {
       return null;
@@ -233,10 +244,7 @@ class ContentUtilityClass {
  * ============================================================================
  */
 
-/**
- * Modify in the future if more courses are added.
- */
-const courseList = [FullstackTypeScript];
+const courseList = [FullstackTypeScript, PairwiseContent];
 
 const ContentUtility = new ContentUtilityClass(courseList as CourseList);
 

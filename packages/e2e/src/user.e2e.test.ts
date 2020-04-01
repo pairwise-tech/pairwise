@@ -62,7 +62,7 @@ describe("User APIs", () => {
     expect(settings.theme).toBe("hc-black");
   });
 
-  test("/user/profile (POST) a user cannot update their email", async done => {
+  test("/user/profile (POST) a user can update their email", async done => {
     const accessToken = await fetchAccessToken();
     const headers = {
       headers: {
@@ -70,8 +70,7 @@ describe("User APIs", () => {
       },
     };
 
-    const email = "joe@pairwise.tech";
-
+    const email = "sam@pairwise.tech";
     const result = await axios.get(`${HOST}/user/profile`, headers);
     const originalProfile = result.data.profile;
 
@@ -81,7 +80,9 @@ describe("User APIs", () => {
       .set("Authorization", `Bearer ${accessToken}`)
       .expect(200)
       .end((error, response) => {
-        expect(response.body.profile.email).toBe(originalProfile.email);
+        const newEmail = response.body.profile.email;
+        expect(newEmail).toBe(email);
+        expect(newEmail !== originalProfile.email).toBe(true);
         done();
       });
   });

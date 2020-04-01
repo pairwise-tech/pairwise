@@ -21,7 +21,10 @@ describe("Challenge APIs", () => {
       .expect(200)
       .expect(response => {
         expect(Array.isArray(response.body)).toBeTruthy();
-        expect(response.body[0].title).toBe("Fullstack TypeScript");
+
+        // Check course title
+        const firstCourse = response.body[0];
+        expect(firstCourse.title).toBe("Fullstack TypeScript Course");
 
         /* Assert all of the challenge content has be sanitized: */
         for (const course of response.body) {
@@ -39,12 +42,15 @@ describe("Challenge APIs", () => {
   });
 
   test("/content/:courseId (GET)", () => {
-    return request(`${HOST}/content/course/fpvPtfu7s`)
+    return request(`${HOST}/content/courses`)
       .get("/")
       .expect(200)
       .expect(response => {
-        expect(response.body.title).toBe("Fullstack TypeScript");
-        expect(Array.isArray(response.body.modules)).toBeTruthy();
+        expect(Array.isArray(response.body)).toBe(true);
+        // Check course
+        const course = response.body[0];
+        expect(course.title).toBe("Fullstack TypeScript Course");
+        expect(Array.isArray(course.modules)).toBeTruthy();
       });
   });
 });

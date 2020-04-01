@@ -1,16 +1,44 @@
-import { Controller, Get, Req, UseGuards, Res } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Req,
+  UseGuards,
+  Res,
+  Post,
+  Param,
+} from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
-import { AuthService, LoginFailureCodes, Strategy } from "./auth.service";
+import { AuthService, Strategy } from "./auth.service";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
-import { ERROR_CODES } from "src/tools/constants";
+import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Post("email")
+  public async handleEmailLoginRequest(@Req() req) {
+    await this.authService.handleEmailLoginRequest(req.body.email);
+    return SUCCESS_CODES.OK;
+  }
+
+  @Get("magic-link/:token")
+  public async emailLogin(@Param("token") magicEmailToken, @Res() res) {
+    const result = await this.authService.handleEmailLoginVerification(
+      magicEmailToken,
+    );
+    if (result.value) {
+      const { token, accountCreated } = result.value;
+      const params = this.getQueryParams(token, accountCreated);
+      return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+    } else {
+      return this.handleLoginError(res, result.error, "Email");
+    }
+  }
 
   @UseGuards(AuthGuard("facebook"))
   @Get("facebook")
@@ -95,17 +123,11 @@ export class AuthController {
    */
   private handleLoginError(
     @Res() res,
-    err: LoginFailureCodes,
+    err: ERROR_CODES.UNKNOWN_LOGIN_ERROR,
     strategy: Strategy,
   ) {
-    if (err === ERROR_CODES.SSO_EMAIL_NOT_FOUND) {
-      return res.redirect(
-        `${ENV.CLIENT_URL}/authentication-failure?emailError=true&strategy=${strategy}`,
-      );
-    }
-
     return res.redirect(
-      `${ENV.CLIENT_URL}/authentication-failure?emailError=false&strategy=${strategy}`,
+      `${ENV.CLIENT_URL}/authentication-failure?strategy=${strategy}`,
     );
   }
 }
