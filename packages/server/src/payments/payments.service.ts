@@ -38,7 +38,6 @@ enum StripeEventTypes {
 
 // The pricing units are apparently in cents, 5000 = $50 USD.
 const PRICING_CONSTANTS = {
-  COURSE_PRICE: 5000,
   ACCEPTED_CURRENCY: "usd",
 };
 
@@ -58,7 +57,6 @@ export class PaymentsService {
   private readonly stripe: Stripe;
   private readonly slackService: SlackService;
 
-  private COURSE_PRICE: number;
   private COURSE_CURRENCY: string;
   private PAIRWISE_ICON_URL: string;
 
@@ -79,10 +77,8 @@ export class PaymentsService {
     // Initialize Slack service
     this.slackService = slackService;
 
-    // Set pricing values
-    this.COURSE_PRICE = PRICING_CONSTANTS.COURSE_PRICE;
-    this.COURSE_CURRENCY = PRICING_CONSTANTS.ACCEPTED_CURRENCY;
     this.PAIRWISE_ICON_URL = ENV.PAIRWISE_CHECKOUT_ICON;
+    this.COURSE_CURRENCY = PRICING_CONSTANTS.ACCEPTED_CURRENCY;
   }
 
   // Creates a payment intent using Stripe
@@ -224,13 +220,17 @@ export class PaymentsService {
     args: PurchaseCourseRequest,
   ) => {
     const { courseId, isGift = false } = args;
+
+    // Get the metadata for this course
+    const courseMetadata = ContentUtility.getCourseMetadata(courseId);
+
     // Construct the new payment data. Once Stripe is integrated, most of this
     // data will come from Stripe and the actual payment information.
     const payment: Payment = {
       courseId,
       status: "CONFIRMED",
       datePaid: new Date(),
-      amountPaid: this.COURSE_PRICE,
+      amountPaid: courseMetadata.price,
       paymentType: isGift ? "ADMIN_GIFT" : "USER_PAID",
     };
 
@@ -262,10 +262,10 @@ export class PaymentsService {
       line_items: [
         {
           quantity: 1,
-          amount: this.COURSE_PRICE,
-          currency: this.COURSE_CURRENCY,
           name: courseMetadata.title,
+          amount: courseMetadata.price,
           description: courseMetadata.description,
+          currency: this.COURSE_CURRENCY,
           images: [this.PAIRWISE_ICON_URL],
         },
       ],
