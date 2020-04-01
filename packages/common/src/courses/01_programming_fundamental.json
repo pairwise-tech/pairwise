@@ -507,8 +507,19 @@
           "content": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language: TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
         },
         {
-          "id": "s9RpoVOt2",
+          "id": "j@wcwCKw4",
           "type": "section",
+          "title": "The TypeScript Language",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++"
+        },
+        {
+          "id": "s9RpoVOt2",
+          "type": "media",
           "title": "Comments",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
@@ -1076,6 +1087,17 @@
           "content": ""
         },
         {
+          "id": "DgGiepNrm",
+          "type": "section",
+          "title": "Conditionals & Control Statements",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "wzTlMB2D",
           "type": "section",
           "title": "Loops",
@@ -1140,6 +1162,17 @@
           "starterCode": "const people = [\n  { name: \"Nichole Nienow\", job: \"transmitting the panel\" },\n  { name: \"Shanon Harris\", job: \"calculating the monitor\" },\n  { name: \"Lamar Heathcote\", job: \"navigating the transmitter\" },\n  { name: \"Alfred Jenkins\", job: \"compressing the microchip\" },\n  { name: \"Grayce Conroy\", job: \"indexing the matrix\" },\n  { name: \"Garry Eichmann\", job: \"backing up the bandwidth\" },\n  { name: \"Colby Bradtke\", job: \"connecting the array\" },\n  { name: \"Kobe Carroll\", job: \"overriding the hard drive\" },\n  { name: \"Brian Miller\", job: \"connecting the transmitter\" },\n  { name: \"Alycia Schoen\", job: \"hacking the microchip\" },\n  { name: \"Wellington McCullough\", job: \"connecting the port\" },\n  { name: \"Jaylin Walsh\", job: \"indexing the microchip\" },\n];\n\nconst result = []\n\n// Your code here...",
           "solutionCode": "const people = [\n  { name: \"Nichole Nienow\", job: \"transmitting the panel\" },\n  { name: \"Shanon Harris\", job: \"calculating the monitor\" },\n  { name: \"Lamar Heathcote\", job: \"navigating the transmitter\" },\n  { name: \"Alfred Jenkins\", job: \"compressing the microchip\" },\n  { name: \"Grayce Conroy\", job: \"indexing the matrix\" },\n  { name: \"Garry Eichmann\", job: \"backing up the bandwidth\" },\n  { name: \"Colby Bradtke\", job: \"connecting the array\" },\n  { name: \"Kobe Carroll\", job: \"overriding the hard drive\" },\n  { name: \"Brian Miller\", job: \"connecting the transmitter\" },\n  { name: \"Alycia Schoen\", job: \"hacking the microchip\" },\n  { name: \"Wellington McCullough\", job: \"connecting the port\" },\n  { name: \"Jaylin Walsh\", job: \"indexing the microchip\" },\n];\n\nlet result = [];\n\nfor (let i = 0; i < people.length; i++) {\n  const person = people[i];\n  if (!person.name.startsWith(\"G\")) {\n    continue;\n  }\n  result.push(person);\n}\n",
           "content": "Continuing could also be thought of as skipping an iteration. Each time the code in your loop runs is one iteration. You can use `continue` to say \"Skip the rest of this iteration and start again at the top\".\n# Why is this useful?\n\nThe `continue` keyword is useful for avoiding doing some work. For example, if you want to `push` all the three\\-letter words on to a new array you could write a loop that pushes _all_ words and then add a `continue` keyword if the length is not what you want:\n\n```typescript\nconst words = [\n  \"hey\",\n  \"some\",\n  \"of\",\n  \"these\",\n  \"words\",\n  \"have\",\n  \"the\",\n  \"wrong\",\n  \"length\",\n  \"right\",\n  \"?\"\n];\n\nconst result = [];\n\nfor (let i = 0; i < words.length; i++) {\n  if (words[i].length !== 5) {\n    continue; // This is important! Skip the rest of the code in this loop\n  }\n  result.push(words[i]);\n}\n\nconsole.log(result); // => ['these', 'words', 'wrong', 'right']\n\n```\n"
+        },
+        {
+          "id": "ZBvBJuip4",
+          "type": "section",
+          "title": "Functions",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
         },
         {
           "id": "TJdUIaSo",
@@ -1241,6 +1274,17 @@
           "content": "So far we have seen some simple examples of what scope is in a computer program and how it is defined by functions and block statements of code.\n\nOne of the main ways scope is useful is by giving you the ability to create separations between pieces of code. This helps to improve the organization and readability of your program, and it may prevent bugs and problems as well.\n\nHowever, scope is not the only tool a programmer has to accomplish a goal like this.\n\nLater on, you will learn how to write programs and build apps using a real code environment \\(not this fun editor playground in a browser\\!\\). When you reach that stage, you will have a lot of other tools at your disposal.\n\nFor example, you can define parts of your program in different files, put related files in different folders, and then _import_ values from one file into another. You can also control what you _import_ and _export_. This is a very powerful capability for organizing software programs. These same skills will also allow you to download open source code other people have written and import this code in your own projects as well\\! This is incredibly useful and opens the doors to building a number of interesting applications\\!\n\nYou will learn the details of this later, but for now just keep it in mind as a short preview and extension of the ideas of scopes which will come in handy later\\!\n\nTake a look at this code snippet for a short teaser:\n\n```typescript\n// This imports the library \"request\", which is open source and written\n// and maintained by other developers.\nimport request from \"request\";\n\n// The request library lets you make HTTP requests to URLs!\nrequest(\"http://www.google.com\", (error, response, body) => {\n  if (error) {\n    throw error;\n  } else {\n    console.log(\"Success!, Response received: \", body);\n    // Do somethine else here...\n  }\n});\n\n```\n"
         },
         {
+          "id": "QwTb996sF",
+          "type": "section",
+          "title": "Closures",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "prlFliKCW",
           "type": "section",
           "title": "Collections: Arrays and Objects",
@@ -1296,6 +1340,61 @@
           "content": "The purpose of this lesson is to get you started thinking about how you can use data to model real\\-world situations like a tic tac toe game.\n\nUsing arrays and objects you can model anything you want. You can even use these data structures to create new data structures of your own that are useful in different ways. "
         },
         {
+          "id": "b0uiUUzxT",
+          "type": "section",
+          "title": "Built-in Functions",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++ The TS \\(JS\\) standard lib"
+        },
+        {
+          "id": "7WoHO3ohe",
+          "type": "section",
+          "title": "Mutation & Immutability",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++"
+        },
+        {
+          "id": "n9QYwQgTM",
+          "type": "section",
+          "title": "Side Effects & Purity",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++"
+        },
+        {
+          "id": "uyjd$DG@$",
+          "type": "section",
+          "title": "Classes",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++"
+        },
+        {
+          "id": "if2EAwsyp",
+          "type": "section",
+          "title": "Programming Styles",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++ Imperative, Declarative, OOP, Functional, etc"
+        },
+        {
           "id": "Hvnu4UcaE",
           "type": "section",
           "title": "Algorithms",
@@ -1349,6 +1448,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Here we will walk through an example of how the Tic Tac Toe project could be built."
+        },
+        {
+          "id": "qPDY@y0fm",
+          "type": "section",
+          "title": "Special Topics",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "* Type Coercion \n* Common Conventions\n* Race conditions\n* Language runtime: memory heap, execution flow, etc.\n* JS origins and history\n* Comparison to other languages\n* Single vs multi\\-threaded languages / programming\n* Compile\\-to\\-JS languages \n* How computers work\n* Stack overflow, documentation, using the internet\n* Esoteric JS topics \\(i.e. JS the bad parts. `this`, Symbols, prototypical inheritance, bitwise operators... ok just kidding\\)\n\n\n\n++TODO++\n"
         }
       ]
     },
