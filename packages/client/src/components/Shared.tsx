@@ -224,6 +224,7 @@ export const ProfileIcon = ({
  */
 export const ModalContainer = styled.div`
   width: 525px;
+  height: 510px;
   padding: 32px;
   padding-top: 22px;
   left: 50%;

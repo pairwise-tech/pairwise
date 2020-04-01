@@ -127,6 +127,7 @@ export const validateUserUpdateDetails = (
     const settingsJSON = JSON.stringify(mergedSettings);
 
     const updateDetails = {
+      email: checkStringField(details.email),
       avatarUrl: checkStringField(details.avatarUrl),
       givenName: checkStringField(details.givenName),
       familyName: checkStringField(details.familyName),

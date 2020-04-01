@@ -58,18 +58,14 @@ const searchEpic: EpicSignature = action$ => {
   // it elsewhere but I don't think we do
   const searchWorker: Worker = new SearchWorker();
 
-  // NOTE: Currently we're only using one course... so the search index will
-  // only search over the first course fetched. As of 2020-03-03 we only have
-  // one course and only fetch one course but might need to revisit in the
-  // future
   const buildSearchIndex$ = action$.pipe(
     filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
-    map(x => x.payload.courses[0]), // See NOTE
+    map(x => x.payload.courses),
     take(1), // Only do this once.. for now
-    tap(course => {
+    tap(courses => {
       searchWorker.postMessage({
         type: BUILD_SEARCH_INDEX,
-        payload: course,
+        payload: courses,
       });
     }),
     ignoreElements(),
@@ -161,7 +157,7 @@ const resetActiveChallengeIds: EpicSignature = (action$, state$, deps) => {
           );
 
           const { courseId, moduleId, challengeId } = deriveIdsFromCourse(
-            course,
+            courses,
             maybeChallengeId,
           );
 
@@ -207,14 +203,14 @@ const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
 const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
-    mergeMap(deps.api.fetchChallenges),
-    map(({ value: course }) => {
-      if (course) {
+    mergeMap(deps.api.fetchCourses),
+    map(({ value: courses }) => {
+      if (courses) {
         const { location } = deps.router;
 
         const maybeChallengeId = findChallengeIdInLocationIfExists(location);
         const { challengeId, courseId, moduleId } = deriveIdsFromCourse(
-          course,
+          courses,
           maybeChallengeId,
         );
 
@@ -225,7 +221,7 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
         }
 
         return Actions.fetchCurrentActiveCourseSuccess({
-          courses: [course],
+          courses,
           currentChallengeId: challengeId,
           currentModuleId: moduleId,
           currentCourseId: courseId,
@@ -297,12 +293,49 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
 
       return shouldUpdate;
     }),
-    map(id => {
-      const { currentChallengeId } = state$.value.challenges;
-      return Actions.setChallengeId({
+    mergeMap(id => {
+      const {
+        challengeMap,
+        currentCourseId,
+        currentModuleId,
+        currentChallengeId,
+      } = state$.value.challenges;
+
+      // Should not happen, filtered above
+      if (!challengeMap) {
+        return of(Actions.empty("No challengeMap found"));
+      }
+
+      const setChallengeIdAction = Actions.setChallengeId({
         currentChallengeId: id,
         previousChallengeId: currentChallengeId as string /* null is filtered above */,
       });
+
+      // Sandbox is handled directly
+      if (id === SANDBOX_ID) {
+        return of(setChallengeIdAction);
+      }
+
+      const challenge = challengeMap[id];
+      const shouldUpdateCurrentCourse =
+        currentCourseId !== challenge.courseId ||
+        currentModuleId !== challenge.moduleId;
+
+      // I'm not totally sure where this logic should go. The active
+      // course needs to be changed if the user selected a challenge not
+      // in the current active course. Currently putting this logic here.
+      if (shouldUpdateCurrentCourse) {
+        return of(
+          setChallengeIdAction,
+          Actions.setActiveChallengeIds({
+            currentChallengeId: id,
+            currentModuleId: challenge.moduleId,
+            currentCourseId: challenge.courseId,
+          }),
+        );
+      } else {
+        return of(setChallengeIdAction);
+      }
     }),
   );
 };

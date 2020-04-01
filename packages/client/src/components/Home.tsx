@@ -41,7 +41,7 @@ class Home extends React.Component<IProps, IState> {
           </ContentText>
           <BoldText>Select a course below to get started now!</BoldText>
         </ContentContainer>
-        <PageTitle>Courses</PageTitle>
+        <PageTitle>Content</PageTitle>
         {this.props.skeletons?.map(this.renderCourseItem)}
       </PageContainer>
     );
@@ -50,35 +50,37 @@ class Home extends React.Component<IProps, IState> {
   renderCourseItem = (skeleton: CourseSkeleton, i: number) => {
     const { payments } = this.props.user;
     const paidForCourse = payments?.find(p => p.courseId === skeleton.id);
-    const firstChallenge = this.props.firstUnfinishedChallenge;
+    const firstCourseChallenge = skeleton.modules[0].challenges[0];
+    const isCourseFree = skeleton.free;
+    const canAccessCourse = paidForCourse || isCourseFree;
 
-    if (!firstChallenge) {
+    if (!firstCourseChallenge) {
       return null;
     }
 
     return (
       <Card
         key={skeleton.id}
-        style={{ width: 450 }}
         className="course-card"
         elevation={Elevation.FOUR}
+        style={{ width: 515, marginTop: 24 }}
       >
         <CourseTitle id={`course-link-${i}`}>{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
-        {paidForCourse ? (
-          <Link to={`workspace/${firstChallenge.id}`}>
+        {canAccessCourse ? (
+          <Link to={`workspace/${firstCourseChallenge.id}`}>
             <Button
               large
               intent="success"
-              style={{ width: 185 }}
               id={`course-link-${i}-continue`}
+              style={{ width: 185, marginTop: 8 }}
             >
-              Go to course
+              Start Now
             </Button>
           </Link>
         ) : (
           <ButtonsBox>
-            <Link to={`workspace/${firstChallenge.id}`}>
+            <Link to={`workspace/${firstCourseChallenge.id}`}>
               <Button
                 large
                 intent="success"
@@ -158,9 +160,6 @@ const BoldText = styled(CourseDescription)`
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
-  firstUnfinishedChallenge: Modules.selectors.challenges.firstUnfinishedChallenge(
-    state,
-  ),
 });
 
 const dispatchProps = {

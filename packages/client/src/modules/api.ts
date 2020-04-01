@@ -31,7 +31,7 @@ import {
 } from "tools/storage-utils";
 import { SANDBOX_ID } from "tools/constants";
 import toaster from "tools/toast-utils";
-import { wait } from "tools/utils";
+import { wait, mapCourseSkeletonInDev } from "tools/utils";
 import { UserStoreState } from "./user/store";
 
 /** ===========================================================================
@@ -130,11 +130,25 @@ class BaseApiClass {
   };
 
   formatHttpError = (error: AxiosError): HttpResponseError => {
-    return {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-    };
+    if (error.response) {
+      const { data } = error.response;
+      const message = data.message || error.message;
+      const status = data.status || error.response.status;
+      const statusText = data.error || error.response.statusText;
+
+      return {
+        message,
+        status,
+        statusText,
+      };
+    } else {
+      // Should not happen - types issue with AxiosResponse...
+      return {
+        status: 400,
+        statusText: "Request Failed",
+        message: "Request Failed",
+      };
+    }
   };
 
   handleHttpError = (err: any) => {
@@ -184,33 +198,23 @@ class BaseApiClass {
 class Api extends BaseApiClass {
   codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
 
-  fetchChallenges = async (): Promise<Result<Course, HttpResponseError>> => {
+  fetchCourses = async (): Promise<Result<CourseList, HttpResponseError>> => {
     try {
-      let course: Course;
+      let courses: CourseList;
       if (ENV.DEV) {
-        const challenges = require("@pairwise/common").default;
-        course = challenges.FullstackTypeScript;
+        const courseList = require("@pairwise/common").default;
+        courses = Object.values(courseList);
       } else if (ENV.CODEPRESS) {
-        /**
-         * TODO: Make this code more consistent with the other API methods.
-         */
-        course = await this.codepressApi
-          .getAll()
-          .pipe(map(x => x[0]))
-          .toPromise();
+        courses = await this.codepressApi.getAll().toPromise();
       } else {
-        /* NOTE: I hard-coded the courseId in the request for now! */
         const { headers } = this.getRequestHeaders();
-        const result = await axios.get<Course>(
-          `${HOST}/content/course/fpvPtfu7s`,
-          {
-            headers,
-          },
-        );
-        course = result.data;
+        const result = await axios.get<CourseList>(`${HOST}/content/courses`, {
+          headers,
+        });
+        courses = result.data;
       }
 
-      return new Ok(course);
+      return new Ok(courses);
     } catch (err) {
       return this.handleHttpError(err);
     }
@@ -218,29 +222,11 @@ class Api extends BaseApiClass {
 
   fetchCourseSkeletons = async () => {
     if (ENV.DEV) {
-      const challenges = require("@pairwise/common").default;
-      const FullstackTypeScript: Course = challenges.FullstackTypeScript;
-      const course = {
-        ...FullstackTypeScript,
-        modules: FullstackTypeScript.modules.map(m => {
-          return {
-            ...m,
-            free: true,
-            userCanAccess: true,
-            challenges: m.challenges.map(c => {
-              return {
-                ...c,
-                userCanAccess: true,
-              };
-            }),
-          };
-        }),
-      };
-      return new Ok([course]);
+      const courseMap = require("@pairwise/common").default;
+      const courses: CourseSkeletonList = Object.values(courseMap);
+      const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
+      return new Ok(courseSkeletonList);
     } else if (ENV.CODEPRESS) {
-      /**
-       * TODO: Make this code more consistent with the other API methods.
-       */
       return this.codepressApi
         .getSkeletons()
         .pipe(map(Ok.of))
@@ -313,6 +299,15 @@ class Api extends BaseApiClass {
       return axios.post<IUserDto>(`${HOST}/user/profile`, userDetails, {
         headers,
       });
+    });
+  };
+
+  loginByEmail = async (email: string) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      const body = { email };
+      const options = { headers };
+      return axios.post<string>(`${HOST}/auth/email`, body, options);
     });
   };
 

@@ -15,6 +15,11 @@ import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 import ContentEditor from "./ContentEditor";
 import { Challenge } from "@pairwise/common";
+import { isContentOnlyChallenge } from "tools/utils";
+
+const VIDEO_DOM_ID = "pw-video-embed";
+
+const CONTENT_AREA_ID = "supplementary-content-container";
 
 const TableOfContentsPlugin = (): SlatePlugin => {
   const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {
@@ -117,7 +122,7 @@ const MediaArea = ({
   };
 
   return (
-    <SupplementaryContentContainer id="supplementary-content-container">
+    <SupplementaryContentContainer id={CONTENT_AREA_ID}>
       <TitleHeader>
         <EditableText
           value={title}
@@ -167,13 +172,11 @@ const MediaArea = ({
         <Hr style={{ marginTop: 40, marginBottom: 20 }} />
         <NextChallengeCard />
       </div>
-      {(challenge.type === "markup" ||
-        challenge.type === "typescript" ||
-        challenge.type === "react") && (
+      {!isContentOnlyChallenge(challenge) && (
         <SmoothScrollButton
           icon="chevron-up"
           position="top"
-          positionOffset={10}
+          positionOffset={40}
           scrollToId="root"
           backgroundColor="#242423"
         />
@@ -262,6 +265,16 @@ const VideoWrapper = styled.div`
   }
 `;
 
+// Get the origin param for embeds. Should be our site, but we also want embeds
+// to run locally for developing and testing.
+const getEmbedOrigin = () => {
+  try {
+    return window.location.origin;
+  } catch (err) {
+    return "https://app.pairwise.tech";
+  }
+};
+
 /**
  * Copied the iframe props form the share sheet on youtube.
  *
@@ -303,13 +316,20 @@ const YoutubeEmbed = (props: { url: string }) => {
     );
   }
 
-  // Use ?rel=0 to disable related videos in youtube embeds
   const parsedURL = new URL(props.url);
+
+  // Use ?rel=0 to disable related videos in youtube embeds. Supposedly shouldn't work, but it seems to: https://developers.google.com/youtube/player_parameters#rel
   parsedURL.searchParams.set("rel", "0");
+  parsedURL.searchParams.set("modestbranding", "1");
+
+  // Allow programmatic control
+  parsedURL.searchParams.set("enablejsapi", "1");
+  parsedURL.searchParams.set("origin", getEmbedOrigin());
 
   return (
     <VideoWrapper>
       <iframe
+        id={VIDEO_DOM_ID}
         title="Youtube Embed"
         width={width}
         height={height}
@@ -320,4 +340,42 @@ const YoutubeEmbed = (props: { url: string }) => {
       />
     </VideoWrapper>
   );
+};
+
+export const scrollToContentArea = () => {
+  const el = document.getElementById(CONTENT_AREA_ID);
+
+  if (!el) {
+    throw new Error("No content area element found");
+  }
+
+  el.scrollIntoView({ behavior: "smooth" });
+};
+
+export const scrollToVideoAndPlay = () => {
+  // @ts-ignore Seems that get element by ID cannot be passed the type of dom node it expects
+  const el: Nullable<HTMLIFrameElement> = document.getElementById(VIDEO_DOM_ID);
+
+  if (!el) {
+    throw new Error("No video element found");
+  }
+
+  // Should this be an error? It's a transient issue assuming it really is the iframe not yet loaded.
+  if (!el.contentWindow) {
+    console.warn(
+      "No content window found. This usually means the iframe has not finished loading yet.",
+    );
+    return;
+  }
+
+  const PLAY_COMMAND = JSON.stringify({ event: "command", func: "playVideo" });
+
+  el.scrollIntoView({ behavior: "smooth" });
+
+  // Reverse engineered the postMessage call to play the vid without external
+  // SDK. This is... unecessary. We could just use youtube's YT.js, however I
+  // really didn't want to include an external lib just to make this play. Yes,
+  // I'm being silly but my silliness lead me to the post message call they use
+  // internally to play. Anyway, here we are.
+  el.contentWindow.postMessage(PLAY_COMMAND, "https://www.youtube.com");
 };

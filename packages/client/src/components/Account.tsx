@@ -14,6 +14,7 @@ import { formatDate } from "tools/utils";
  */
 
 interface IState {
+  email: string;
   givenName: string;
   familyName: string;
   displayName: string;
@@ -30,6 +31,7 @@ class Account extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
+      email: "",
       givenName: "",
       familyName: "",
       displayName: "",
@@ -109,18 +111,11 @@ class Account extends React.Component<IProps, IState> {
         </TextItem>
         {edit && (
           <InputField
-            disabled
             type="text"
             className={Classes.INPUT}
-            value={profile.email}
-            onChange={() => null}
+            onChange={event => this.setState({ email: event.target.value })}
+            value={this.state.email}
           />
-        )}
-        {edit && (
-          <TextItem style={{ fontSize: 12 }}>
-            (Your email is linked to your 3rd party signin account and cannot be
-            changed)
-          </TextItem>
         )}
         {edit ? (
           <Controls>
@@ -189,6 +184,7 @@ class Account extends React.Component<IProps, IState> {
     if (profile) {
       this.setState({
         edit: true,
+        email: profile.email || "",
         givenName: profile.givenName,
         familyName: profile.familyName,
         displayName: profile.displayName,
@@ -198,6 +194,7 @@ class Account extends React.Component<IProps, IState> {
 
   handleSaveChanges = () => {
     const userDetails = {
+      email: this.state.email,
       givenName: this.state.givenName,
       familyName: this.state.familyName,
       displayName: this.state.displayName,

@@ -12,7 +12,14 @@ import {
 import { DIMENSIONS as D, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Loading } from "./Shared";
-import { Icon, Collapse, Pre, EditableText, Tooltip } from "@blueprintjs/core";
+import {
+  Icon,
+  Collapse,
+  Pre,
+  EditableText,
+  Tooltip,
+  Button,
+} from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
@@ -25,6 +32,7 @@ import ContentEditor, { editorColors } from "./ContentEditor";
 export const Container = styled.div`
   height: 100%;
   overflow: hidden;
+  padding-top: 60px;
 `;
 
 export const PageSection = styled.div`
@@ -37,6 +45,7 @@ export const LowerSection = styled.div<{ withHeader?: boolean }>`
   width: 100vw;
   height: ${props =>
     props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
+  padding-top: 30px;
   border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
   background: ${C.BACKGROUND_LOWER_SECTION};
 `;
@@ -50,6 +59,12 @@ export const FrameContainer = styled.iframe`
   height: 100%;
   width: 100%;
   border: none;
+`;
+
+export const RunButton = styled(Button)`
+  .bp3-icon {
+    color: ${COLORS.NEON_GREEN} !important;
+  }
 `;
 
 /**
