@@ -189,10 +189,6 @@ export const IconButton = styled(Button)`
   }
 `;
 
-/**
- * TODO: Render a default Pairwise user avatar icon if there is no profile
- * avatar.
- */
 export const ProfileIcon = ({
   avatar,
   width,
@@ -204,9 +200,10 @@ export const ProfileIcon = ({
   height?: number;
   style?: CSSProperties;
 }) => {
-  const src = avatar
-    ? avatar
-    : "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
+  const PAIRWISE_LOGO =
+    "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
+
+  const src = avatar ? avatar : PAIRWISE_LOGO;
 
   return (
     <img

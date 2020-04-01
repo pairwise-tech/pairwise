@@ -240,11 +240,14 @@ export const AuthenticationForm = connect(
  * ============================================================================
  */
 
+const GOOGLE_BLUE = "rgb(57, 122, 242)";
+const GOOGLE_BLUE_ACTIVE = "rgba(57, 122, 242, 0.5)"; // Not exact brand color...
+
 const GoogleButtonConfig = {
   iconSize: "42px",
   icon: googleSvgIcon,
-  style: { background: "rgb(57, 122, 242)" },
-  activeStyle: { background: "rgba(57, 122, 242, 0.5)" },
+  style: { background: GOOGLE_BLUE },
+  activeStyle: { background: GOOGLE_BLUE_ACTIVE },
 };
 
 const GoogleLoginButton = createButton(GoogleButtonConfig);
