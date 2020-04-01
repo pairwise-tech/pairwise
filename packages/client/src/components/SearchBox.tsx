@@ -96,8 +96,8 @@ const SearchBox = ({
   // finished executing / caught up to the debounce. Also, show when the search
   // is executing if there are still results in order to avoid screen flashes.
   const showResultBox = !isClosed && searchText.length > SEARCH_QUERY_THRESHOLD;
-  const hasResults = !isSearching || searchResults.length > 0;
-  const isOpen = hasResults && showResultBox;
+  const isReady = !isSearching || searchResults.length > 0;
+  const isOpen = isReady && showResultBox;
 
   return (
     <Box
