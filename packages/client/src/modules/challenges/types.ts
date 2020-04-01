@@ -1,4 +1,4 @@
-import { Challenge, Module, Course } from "@pairwise/common";
+import { Challenge, Module, Course, CourseList } from "@pairwise/common";
 import { BUILD_SEARCH_INDEX, SEARCH, SEARCH_SUCCESS } from "tools/constants";
 
 /** ===========================================================================
@@ -80,13 +80,13 @@ export interface SearchAction {
 
 export interface BuildSearchIndexAction {
   type: typeof BUILD_SEARCH_INDEX;
-  payload: Course;
+  payload: CourseList;
 }
 
 export type SearchDocument = Pick<
   Challenge,
   "id" | "title" | "instructions" | "content"
->;
+> & { courseName: string };
 
 export interface SearchMessageEvent extends MessageEvent {
   data: BuildSearchIndexAction | SearchAction;
@@ -101,7 +101,7 @@ export interface MatchContext {
 }
 
 export interface SearchResultMatch {
-  foundIn: keyof Challenge;
+  foundIn: keyof SearchDocument;
   matchContext: MatchContext;
 }
 

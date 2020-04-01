@@ -12,6 +12,7 @@ export interface CourseBase {
   id: string;
   title: string;
   description: string;
+  free: boolean;
 }
 
 export type CourseMetadata = CourseBase;
