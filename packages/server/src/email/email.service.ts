@@ -26,6 +26,11 @@ export class EmailService {
   private emailAddress: string = "sean@pairwise.tech";
 
   constructor() {
+    const privateKey = ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY.replace(
+      new RegExp("\\\\n", "g"),
+      "\n",
+    );
+
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -33,7 +38,7 @@ export class EmailService {
       auth: {
         type: "OAuth2",
         user: this.emailAddress,
-        privateKey: ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY,
+        privateKey,
         serviceClient: ENV.GOOGLE_EMAIL_ACCOUNT_CLIENT_ID,
       },
     });
@@ -42,6 +47,17 @@ export class EmailService {
   }
 
   public async sendMagicEmailLink(email: string, link: string) {
+    console.log("GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY:");
+    console.log(ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY);
+
+    console.log("GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY MODIFIED:");
+    const privateKey = ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY.replace(
+      new RegExp("\\\\n", "g"),
+      "\n",
+    );
+
+    console.log(privateKey);
+
     const request: EmailRequest = {
       recipient: email,
       subject: "Welcome to Pairwise",
