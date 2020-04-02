@@ -92,6 +92,8 @@ const debug = require("debug")("client:Workspace");
 
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
+const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
+
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
 // Given an iframe and the relevant code render it all as a script to the iframe's srcdoc
@@ -503,7 +505,7 @@ class Workspace extends React.Component<IProps, IState> {
     model.onDidChangeContent(this.handleEditorContentChange);
 
     this.editorInstance = mn.editor.create(
-      document.getElementById("monaco-editor"),
+      document.getElementById(PAIRWISE_CODE_EDITOR_ID),
       {
         ...options,
         model,
@@ -603,10 +605,7 @@ class Workspace extends React.Component<IProps, IState> {
     };
 
     const MONACO_CONTAINER = (
-      <div
-        id="pairwise-code-editor"
-        style={{ height: "100%", position: "relative" }}
-      >
+      <div style={{ height: "100%", position: "relative" }}>
         <GreatSuccess
           isOpen={allTestsPassing && !hideSuccessModal}
           onClose={handleCloseSuccessModal}
@@ -731,7 +730,7 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
           </Popover>
         </LowerRight>
-        <div id="monaco-editor" style={{ height: "100%" }} />
+        <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} />
       </div>
     );
 
