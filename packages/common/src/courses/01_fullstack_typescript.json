@@ -1320,6 +1320,28 @@
           "content": ""
         },
         {
+          "id": "B@oHTd2Ha",
+          "type": "typescript",
+          "title": "Using Objects",
+          "instructions": "* Set the cat's name \\(`cat.name`\\) to be Jarvis.\n* Set the cat's job to be `\"Coding\"` using the `JOB_PROPERTY` variable rather than using the `job` property directly.\n   * In other words, don't use `cat.job`, instead use bracket syntax to set the job property by using the `JOB_PROPERTY` variable\\.\n   * This covers setting a property defined in a variable, which is much more flexible than setting a hard\\-coded property.\n\n",
+          "testCode": "test(\"`cat` should be defined\", () => {\n  expect(cat).toBeDefined();\n});\ntest(\"`cat.name` should be `\\\"Jarvis\\\"`\", () => {\n  expect(cat.name).toBe(\"Jarvis\");\n});\ntest(\"`cat.job` should be set to the value of `\\\"Coding\\\"`\", () => {\n  expect(cat[JOB_PROPERTY]).toBe(\"Coding\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Typescript wants to know what things are beforehand, so this defintion\n// tells it we just want an object with all string values.\ntype StringsObject = { [k: string]: string };\n\nconst cat: StringsObject = {};\n\nconst JOB_PROPERTY = \"job\";\n\n//\n// Your code here\n// Modify the cat objecct \n",
+          "solutionCode": "// Typescript wants to know what things are beforehand, so this defintion\n// tells it we just want an object with all string values.\ntype StringsObject = { [k: string]: string };\n\nconst cat: StringsObject = {};\n\nconst JOB_PROPERTY = \"job\";\n\ncat.name = \"Jarvis\";\ncat[JOB_PROPERTY] = \"Coding\";\n",
+          "content": ""
+        },
+        {
+          "id": "ZSRjgCS3m",
+          "type": "markup",
+          "title": "[EMPTY...]",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "NEKvEvei4",
           "type": "typescript",
           "title": "Objects and arrays together",
