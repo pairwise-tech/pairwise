@@ -34,7 +34,7 @@ export class AuthService {
   public async handleEmailLoginRequest(email: string) {
     const magicEmailToken = this.jwtService.sign({ email });
     const magicEmailLink = `${ENV.SERVER_HOST_URL}/auth/magic-link/${magicEmailToken}`;
-    await this.emailService.sendMagicEmailLink(email, magicEmailLink);
+    this.emailService.sendMagicEmailLink(email, magicEmailLink);
   }
 
   public async handleEmailLoginVerification(magicEmailToken: string) {
@@ -52,7 +52,7 @@ export class AuthService {
         // with this email address.
         if (existingUser) {
           const token = this.getJwtAccessToken(existingUser.profile);
-          return new Ok({ token, accountCreated: true });
+          return new Ok({ token, accountCreated: false });
         } else {
           const userProfile: GenericUserProfile = {
             email,
@@ -92,7 +92,6 @@ export class AuthService {
       );
 
       if (existingUser) {
-        user = existingUser;
         token = this.getJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: false });
       } else {
@@ -151,7 +150,6 @@ export class AuthService {
       );
 
       if (existingUser) {
-        user = existingUser;
         token = this.getJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: false });
       } else {

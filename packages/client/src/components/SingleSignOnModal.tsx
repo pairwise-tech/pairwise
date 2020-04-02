@@ -56,6 +56,7 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
 }
 
 interface AuthenticationFormProps {
+  emailRequestSent: boolean;
   loginEmailRequestLoading: boolean;
   dispatchLoginByEmailRequest: typeof Modules.actions.auth.loginByEmail;
 }
@@ -80,7 +81,7 @@ class AuthenticationFormComponent extends React.Component<
 
   render(): JSX.Element {
     const { emailLoginFormVisible } = this.state;
-    const { loginEmailRequestLoading } = this.props;
+    const { emailRequestSent, loginEmailRequestLoading } = this.props;
     return (
       <ModalContainer>
         <ModalTitleText id="sso-modal-title">
@@ -91,42 +92,54 @@ class AuthenticationFormComponent extends React.Component<
         {emailLoginFormVisible ? (
           <SocialButtonsContainer>
             <ModalSubText>
-              Enter your email and we will send you a magic link to login or
-              create an account.
+              {emailRequestSent
+                ? "Magic link sent! Please check your inbox and follow the instructions."
+                : "Enter your email and we will send you a magic link to login or create an account."}
             </ModalSubText>
-            <InputField
-              autoFocus
-              type="text"
-              style={{ width: 415 }}
-              className={Classes.INPUT}
-              placeholder="Enter your email"
-              value={this.state.email}
-              disabled={loginEmailRequestLoading}
-              onChange={event => this.setState({ email: event.target.value })}
-            />
-            <EmailButtonsContainer>
-              <Button
-                icon={
-                  <Icon
-                    icon="chevron-left"
-                    color={COLORS.TEXT_CONTENT_BRIGHT}
-                  />
-                }
-                color={COLORS.TEXT_CONTENT_BRIGHT}
-                id="toggle-email-login-form"
-                onClick={() => this.toggleEmailLoginForm(false)}
-              />
-              <Button
-                intent="success"
-                id="email-login-button"
-                style={{ marginLeft: 8 }}
+            <form
+              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                e.preventDefault();
+                this.handleLoginByEmail();
+              }}
+            >
+              <InputField
+                autoFocus
+                type="text"
+                className={Classes.INPUT}
+                placeholder="Enter your email"
+                value={this.state.email}
                 disabled={loginEmailRequestLoading}
-                onClick={this.handleLoginByEmail}
-                text={
-                  loginEmailRequestLoading ? "Loading..." : "Send me the link!"
-                }
+                onChange={event => this.setState({ email: event.target.value })}
               />
-            </EmailButtonsContainer>
+              <EmailButtonsContainer>
+                <Button
+                  icon={
+                    <Icon
+                      icon="chevron-left"
+                      color={COLORS.TEXT_CONTENT_BRIGHT}
+                    />
+                  }
+                  color={COLORS.TEXT_CONTENT_BRIGHT}
+                  id="toggle-email-login-form"
+                  onClick={() => this.toggleEmailLoginForm(false)}
+                />
+                <Button
+                  intent="success"
+                  id="email-login-button"
+                  style={{ marginLeft: 8 }}
+                  disabled={loginEmailRequestLoading}
+                  onClick={this.handleLoginByEmail}
+                  text={
+                    // ternary life!
+                    emailRequestSent
+                      ? "Resend Email"
+                      : loginEmailRequestLoading
+                      ? "Loading..."
+                      : "Send me the link!"
+                  }
+                />
+              </EmailButtonsContainer>
+            </form>
           </SocialButtonsContainer>
         ) : (
           <SocialButtonsContainer>
@@ -212,6 +225,7 @@ class AuthenticationFormComponent extends React.Component<
 // Connect AuthenticationForm
 export const AuthenticationForm = connect(
   (state: ReduxStoreState) => ({
+    emailRequestSent: Modules.selectors.auth.emailRequestSent(state),
     loginEmailRequestLoading: Modules.selectors.auth.loginEmailRequestLoading(
       state,
     ),
@@ -226,11 +240,14 @@ export const AuthenticationForm = connect(
  * ============================================================================
  */
 
+const GOOGLE_BLUE = "rgb(57, 122, 242)";
+const GOOGLE_BLUE_ACTIVE = "rgba(57, 122, 242, 0.5)"; // Not exact brand color...
+
 const GoogleButtonConfig = {
   iconSize: "42px",
   icon: googleSvgIcon,
-  style: { background: "rgb(57, 122, 242)" },
-  activeStyle: { background: "rgba(57, 122, 242, 0.5)" },
+  style: { background: GOOGLE_BLUE },
+  activeStyle: { background: GOOGLE_BLUE_ACTIVE },
 };
 
 const GoogleLoginButton = createButton(GoogleButtonConfig);
@@ -274,7 +291,7 @@ const EmailButtonsContainer = styled.div`
 
 const InputField = styled.input`
   margin-top: 12px;
-  width: 200px;
+  width: 415px;
   color: ${COLORS.TEXT_HOVER} !important;
   background: ${COLORS.BACKGROUND_CONSOLE} !important;
 `;

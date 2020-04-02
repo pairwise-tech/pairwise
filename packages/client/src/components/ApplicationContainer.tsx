@@ -280,7 +280,9 @@ const ApplicationContainer = (props: IProps) => {
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
                   <CreateAccountText className="account-menu">
-                    Welcome, {user.profile.givenName}!{" "}
+                    {!user.profile.givenName
+                      ? "Welcome!"
+                      : `Welcome, ${user.profile.givenName}!`}
                   </CreateAccountText>
                   <ProfileIcon avatar={user.profile.avatarUrl} />
                 </UserBio>

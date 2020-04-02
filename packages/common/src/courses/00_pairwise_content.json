@@ -3,6 +3,7 @@
   "title": "Pairwise Library",
   "description": "Free articles and videos on programming topics and getting hired as a software engineer.",
   "free": true,
+  "price": 0,
   "modules": [
     {
       "id": "rwD9TvhQ7",
