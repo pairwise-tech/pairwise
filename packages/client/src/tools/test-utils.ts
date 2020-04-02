@@ -70,6 +70,34 @@ const CONSOLE_NO_OP = `
 `;
 
 /**
+ * Global test utils values which are available in the test
+ * environment. These are mapped to a Codepress tooltip to
+ * display them.
+ */
+export const TEST_UTILS_GLOBALS = {
+  __secret_log_box: "Box of console.log messages",
+  __secret_warn_box: "Box of console.warn messages",
+  __secret_error_box: "Box of console.error messages",
+  __secret_info_box: "Box of console.info messages",
+  __user_code_string__: "Original string of user solution code",
+  parseLogBox: "(box) => parseLogBox - parse a box of log messages",
+  inBox: "(box, message) => boolean - given a box, find the message",
+  pass: "A function to just pass a test",
+  fail: "A function to just fail a test",
+};
+
+type TEST_UTILS_GLOBALS_KEYS = {
+  [key in keyof typeof TEST_UTILS_GLOBALS]: any;
+};
+
+// Just recreate the TEST_UTILS_GLOBALS object, mapping the keys
+// as the values.
+// @ts-ignore - whatever TypeScript!
+const TEST_UTILS_GLOBALS_KEYS: TEST_UTILS_GLOBALS_KEYS = Object.keys(
+  TEST_UTILS_GLOBALS,
+).reduce((keys, key) => ({ ...keys, [key]: key }), {});
+
+/**
  * Functions used to intercept console methods and post the messages to
  * the parent window.
  *
@@ -101,10 +129,10 @@ const __replacer = (key, value) => {
   return value;
 }
 
-let __secret_log_box = [];
-let __secret_warn_box = [];
-let __secret_error_box = [];
-let __secret_info_box = [];
+let ${TEST_UTILS_GLOBALS_KEYS.__secret_log_box} = [];
+let ${TEST_UTILS_GLOBALS_KEYS.__secret_warn_box} = [];
+let ${TEST_UTILS_GLOBALS_KEYS.__secret_error_box} = [];
+let ${TEST_UTILS_GLOBALS_KEYS.__secret_info_box} = [];
 
 const __interceptConsoleLog = (...value) => {
   const message = JSON.stringify(value, __replacer);
@@ -396,7 +424,9 @@ try {
 
   // use as a fallback when the only way to test user code is by regexp.
   // purposefully named against conventions to avoid collisions with user vars
-  const __user_code_string__ = ${prepareUserCodeString(userCode)};
+  const ${
+    TEST_UTILS_GLOBALS_KEYS.__user_code_string__
+  } = ${prepareUserCodeString(userCode)};
 
   function buildTestsFromCode() {
     const testArray = [];

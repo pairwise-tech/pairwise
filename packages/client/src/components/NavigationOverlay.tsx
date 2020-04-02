@@ -123,6 +123,7 @@ class NavigationOverlay extends React.Component<IProps> {
               onItemSelect={({ id }) => this.props.setCurrentCourse(id)}
               itemRenderer={({ title, id }, { handleClick }) => (
                 <ClickableColTitle
+                  key={id}
                   disabled={id === course.id}
                   onClick={handleClick}
                 >
