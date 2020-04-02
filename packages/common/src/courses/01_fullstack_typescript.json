@@ -1507,6 +1507,17 @@
           "content": ""
         },
         {
+          "id": "cMfM6vCPX",
+          "type": "typescript",
+          "title": "Bus Stop",
+          "instructions": "There is a `Bus` class in the editor below. It should model a real world bus. The `Bus` has a `capacity` \\(total number of passengers it can support\\). The `capacity` is set when the bus is instantiated \\(different busses might have different capacities.\n\nThe `Bus` class has two methods: `embark` and `disembark` which represent the actions of passengers getting on and off the bus. Your job is to complete these methods, adhering to the following logic:\n\n* The `Bus` `passengers` value reflects the current number of passengers on the bus.\n* The `Bus` `passengers` can not exceed the `capacity` of the bus, or fall below zero.\n* Calling the `embark` method increments the `Bus` `passengers`, only if there is room for a new passenger. The method returns `true` if embarkment was successful, and `false` otherwise\\.\n* Calling the `disembark` method decrements the `Bus` `passengers`, but not below zero. The method returns `true` if disembarking was successful, and `false` otherwise\\.\n\n",
+          "testCode": "test(\"The bus cannot `embark` more passengers than the `capacity`.\", () => {\n  const bus = new Bus(25);\n  let count = 0;\n  while (count < 25) {\n    const result = bus.embark();\n    expect(result).toBe(true);\n    count++;\n  }\n  expect(bus.passengers).toBe(25);\n  const result = bus.embark();\n  expect(result).toBe(false);\n});\n\ntest(\"The bus will `disembark` passengers but not below `0`.\", () => {\n  const bus = new Bus(25);\n  let count = 0;\n  while (count < 25) {\n    const result = bus.embark();\n    expect(result).toBe(true);\n    count++;\n  }\n  bus.embark();\n  bus.embark();\n  bus.embark();\n  expect(bus.passengers).toBe(25);\n\n  while (count > 0) {\n    const result = bus.disembark();\n    expect(result).toBe(true);\n    count--;\n  }\n\n  expect(bus.passengers).toBe(0);\n  const result = bus.disembark();\n  expect(result).toBe(false);\n  expect(bus.passengers).toBe(0);\n  bus.disembark();\n  bus.disembark();\n  bus.disembark();\n  expect(bus.passengers).toBe(0);\n});\n",
+          "videoUrl": "",
+          "starterCode": "class Bus {\n  capacity: number;\n  passengers: number;\n\n  constructor(capacity: number) {\n    this.capacity = capacity;\n    this.passengers = 0;\n  }\n\n  embark(): boolean {\n    // Your code here\n  }\n\n  disembark(): boolean {\n    // Your code here\n  }\n}\n",
+          "solutionCode": "class Bus {\n  capacity: number;\n  passengers: number;\n\n  constructor(capacity: number) {\n    this.capacity = capacity;\n    this.passengers = 0;\n  }\n\n  embark(): boolean {\n    // Your code here\n    if (this.passengers === this.capacity) {\n      return false;\n    } else {\n      this.passengers++;\n      return true;\n    }\n  }\n\n  disembark(): boolean {\n    // Your code here\n    if (this.passengers === 0) {\n      return false;\n    } else {\n      this.passengers--;\n      return true;\n    }\n  }\n}\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
