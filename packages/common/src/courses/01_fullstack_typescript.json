@@ -3,6 +3,7 @@
   "title": "Fullstack TypeScript Course",
   "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
   "free": false,
+  "price": 5000,
   "modules": [
     {
       "free": true,

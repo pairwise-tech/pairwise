@@ -1,6 +1,5 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
-
 import { ReduxStoreState } from "modules/root";
 
 /** ===========================================================================
@@ -18,6 +17,13 @@ export const singleSignOnDialogState = createSelector(
   authSelector,
   authStateResult => {
     return authStateResult.singleSignOnDialogOpen;
+  },
+);
+
+export const emailRequestSent = createSelector(
+  authSelector,
+  authStateResult => {
+    return authStateResult.emailRequestSent;
   },
 );
 

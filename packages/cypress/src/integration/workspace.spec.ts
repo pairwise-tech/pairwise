@@ -23,8 +23,16 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.url().should("include", "home");
     cy.contains("Welcome to Pairwise!");
     cy.contains("Content");
-    cy.get("#course-link-0").contains("Fullstack TypeScript Course");
-    cy.get("#course-link-0-start").click({ force: true });
+
+    // Hacky? This ensures the loading overlay is visible and then not. I.e. it finishes loading
+    cy.get("#pw-loading-overlay").should("be.visible");
+    cy.get("#pw-loading-overlay").should("not.be.visible");
+
+    // These are currently the two courses we have
+    cy.contains("Fullstack TypeScript Course");
+    cy.contains("Pairwise Library");
+
+    cy.get(".courseLinkContinue").click({ force: true });
     cy.url().should("include", "workspace");
   });
 

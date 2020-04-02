@@ -280,7 +280,9 @@ const ApplicationContainer = (props: IProps) => {
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
                   <CreateAccountText className="account-menu">
-                    Welcome, {user.profile.givenName}!{" "}
+                    {!user.profile.givenName
+                      ? "Welcome!"
+                      : `Welcome, ${user.profile.givenName}!`}
                   </CreateAccountText>
                   <ProfileIcon avatar={user.profile.avatarUrl} />
                 </UserBio>
@@ -356,7 +358,7 @@ const ApplicationContainer = (props: IProps) => {
 const LoadingOverlay = (props: { visible: boolean }) => (
   <FullScreenOverlay visible={props.visible}>
     <div>
-      <OverlayText>Launching Pairwise...</OverlayText>
+      <OverlayText id="pw-loading-overlay">Launching Pairwise...</OverlayText>
     </div>
   </FullScreenOverlay>
 );
