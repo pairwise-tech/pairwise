@@ -36,6 +36,7 @@ import {
 } from "@blueprintjs/core";
 import KeyboardShortcuts, {
   VALID_SHORTCUT_KEYS_MAP,
+  KeyMapProps,
 } from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import {
@@ -101,7 +102,7 @@ class NavigationOverlay extends React.Component<IProps> {
 
     // Define the available shortcut keys, only valid key combinations
     // are allowed.
-    const shortcutKeyMap: VALID_SHORTCUT_KEYS_MAP = {
+    const shortcutKeyMap: Partial<VALID_SHORTCUT_KEYS_MAP> = {
       escape: this.handleClose,
       "cmd+shift+k": this.navigateToSandBox,
       "cmd+j": this.handleToggleNavigationMap,
@@ -112,7 +113,7 @@ class NavigationOverlay extends React.Component<IProps> {
 
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
-        <KeyboardShortcuts keymap={shortcutKeyMap} />
+        <KeyboardShortcuts keymap={shortcutKeyMap as KeyMapProps} />
         <Col
           style={{ zIndex: 3 }}
           offsetX={overlayVisible ? 0 : -20}

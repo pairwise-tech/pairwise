@@ -14,6 +14,9 @@ const debug = require("debug")("client:KeyboardShortcuts");
  * ============================================================================
  */
 
+// Callback method for handling a keypress
+type ShortcutKeyHandler = (e: KeyboardEvent) => any;
+
 /**
  * This is the source of truth for shortcut key key combinations and their
  * intended action in the application.
@@ -24,6 +27,7 @@ const SHORTCUT_KEYS = {
   "cmd+,": "Navigate to Previous Challenge",
   "cmd+.": "Navigate to Next Challenge",
   "cmd+;": "Toggle Full Screen Editor",
+  "cmd+p": "Focus Search Bar",
 };
 
 /**
@@ -33,6 +37,7 @@ const SHORTCUT_KEYS = {
  */
 interface NonMappedKeys {
   escape: ShortcutKeyHandler;
+  "cmd+shift+e": ShortcutKeyHandler; // Codepress editing toolbar
 }
 
 /**
@@ -44,12 +49,18 @@ export type VALID_SHORTCUT_KEYS_MAP = {
 } &
   NonMappedKeys;
 
-// Callback method for handling a keypress
-type ShortcutKeyHandler = (e: KeyboardEvent) => any;
+/**
+ * NOTE: It's hard to type this, valid props also include the single
+ * key whitelist below, in addition to the fixed key combinations
+ * defined above...
+ */
+export interface KeyMapProps {
+  [key: string]: ShortcutKeyHandler;
+}
 
 // Keyboard shortcut props
 interface KeyboardShortcutsProps {
-  keymap: VALID_SHORTCUT_KEYS_MAP;
+  keymap: KeyMapProps;
 }
 
 // NOTE: They should be lowercase
@@ -143,7 +154,7 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
         const fn = keymap[commandString as keyof VALID_SHORTCUT_KEYS_MAP];
         const predicate = makePredicate(commandString);
 
-        if (!predicate) {
+        if (!predicate || !fn) {
           console.warn(
             `[INFO] Could not create key mapping for "${commandString}"`,
           );
