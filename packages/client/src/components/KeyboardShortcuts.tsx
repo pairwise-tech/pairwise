@@ -47,9 +47,9 @@ export type VALID_SHORTCUT_KEYS_MAP = {
 // Callback method for handling a keypress
 type ShortcutKeyHandler = (e: KeyboardEvent) => any;
 
-// Keyboardshortcut props
+// Keyboard shortcut props
 interface KeyboardShortcutsProps {
-  keymap: { [key: string]: ShortcutKeyHandler };
+  keymap: VALID_SHORTCUT_KEYS_MAP;
 }
 
 // NOTE: They should be lowercase
@@ -139,7 +139,8 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
 
     const listeners = Object.keys(keymap).reduce(
       (agg: ShortcutKeyHandler[], commandString: string) => {
-        const fn = keymap[commandString];
+        // Typing complexity issue...
+        const fn = keymap[commandString as keyof VALID_SHORTCUT_KEYS_MAP];
         const predicate = makePredicate(commandString);
 
         if (!predicate) {
