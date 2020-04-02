@@ -1163,7 +1163,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "Functions are the basic building block of all software. A function is just a piece of code which is written to perform a specific task. Consider the following function:\n\n```typescript\nfunction addTwoNumbers(a: number, b: number) {\n    return a + b;\n}\n\n```\n\nThis function, `addTwoNumbers`, contains the instructions for adding two numbers together, and \"returns\" the result. The function can be used like this:\n\n```typescript\nconst FIVE = addTwoNumbers(2, 3);\nconst TEN = addTwoNumbers(2, 8);\nconst ONE_HUNDRED = addTwoNumbers(50, 50);\n\n```\n\nYou can use functions to write specific, reusable instructions in one place, and then use them throughout your entire program. This allows you to encapsulate code which serves a specific purpose in a single location. This is important for code reuse \\(DRY: \"don't repeat yourself\"\\), code organization, code readability, and code testability.\n\nAs you build more complex programs, you will write more complex functions which call other functions, or functions which are composed of a series of smaller functions. Functions are the fundamental building block for building software applications. Eventually, you can conceptualize an entire application or program just as a function, or collection of functions.\n\nAll software is just data and operations or transformations of that data. Functions are what all you to perform these transformations.\n\nIn this section, we will get a lot of experience writing functions in TypeScript. Let's dive in\\!"
         },
         {
           "id": "TJdUIaSo",
