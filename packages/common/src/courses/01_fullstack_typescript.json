@@ -75,17 +75,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Now that you've solved your first few challenges and seen how easy it is to get started, we want to take a moment to introduce you to how Pairwise works and help you get started working through the \ncourse\\.\n\n## The Course\n\nThe Pairwise curriculum is composed of 13 modules. Together, they give you a complete education in full\\-stack software development. Pairwise can give you all the skills to start a new career in software development. Our curriculum focuses on teaching **TypeScript, React, **and** NodeJS**. If you are curious more about why we chose these technologies, feel free to [read our rationale here](https://www.pairwise.tech/curriculum).\n\nYou can access the course navigation by clicking the menu icon in the top left. This is always available for you to navigate to any challenge.\n\nThe first two modules introduce HTML/CSS and TypeScript, so they cover many of the basics of web development and programming. These two modules are completely free and no signup is required\\! However, you can create an account at any time \\(also free\\!\\) to track your progress \\(don't worry, we will track your progress even if you don't have an account yet\\).\n\nIf you do decide to continue and complete the entire course, there will be a one\\-time payment which will give you lifetime access to the course. You can make this payment with a credit card at anytime after signing up.\n\nThe primary mode of learning is through short, interactive coding challenges like the one you just solved. If you persist through the entire course, you will also build up a portfolio of projects you build and deploy on your own\\! You can use this portfolio as a showcase of your skills to future employers.\n\n## Getting Started\n\nEnough talking\\! To start learning you just need to start on the next challenge. Each challenge should just take 5\\-10 minutes to complete and will be simple and interactive just like the last. We know you're eager to click that **Next Challenge** button, but before you do we encourage you to watch this short video tutorial of how to use the _Pairwise Workspace_. It will give you some helpful tips which will help you get started, and after that we'll get out of your way\\! Good luck and welcome\\!"
-        },
-        {
-          "id": "JzokCvMM",
-          "type": "media",
-          "title": "How to learn (anything)",
-          "instructions": "",
-          "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Did you know that learning is itself a skill we can all learn and get better at? Let's talk a bit about the meta game of learning: How to learn _efficiently_. \n# Get a high\\-level view of what you're learning\n\nWhat I mean is, before diving in to the details something new \\(like this course\\) get an overview. I'll illustrate with an example: \n\n## To get an overview of this course you could...\n\n* Review the high level rational for the course [on the curriculum page](https://www.pairwise.tech/curriculum/). **\\(2 minutes\\)**\n* Open the navigation menu and skim through the titles. Try to internalize the high level roadmap. **\\(4 minutes\\)**\n   * Don't just read the module title and move on. Pause for at least 10 seconds and think \"Have I heard of this before? Does any of my existing knowledge tie in to this concept?\" \\(The answer may well be \"no\" but just try it out. For example, you've probably heard of databases. You may not know how they work but having heard of something can help you remember information about it later.\n   * You won't know how everything works just yet, but you can think to yourself \"So I'll start with basic programming concepts, then a programming language and eventually servers and databases.\"\n   * Having a clear idea in your head of where you're going will give you a better sense of your own progress and help you fit the different pieces together as you learn them.\n* When you start a module, skim through the navigation to get a sense of what challenges there will be and how many there are. **\\(5\\-10 minutes\\)**\n   * Also, open up the projects section and read through a project. Start at the end like this may be counterintuitive but it will give you a concrete example of _what_ you will learn. The projects are interim goals on your path to becoming a programmer. If a project sounds interesting keep it in mind as you go through challenges and you'll see how some challenges will apply to the project.\n\n\nThe same applies to traditional studies as well. If you just picked up a textbook try reading through the table of contents first, then skip to some problem sets _at the end_ of a few lessons to get a feel for what there is to learn.\n\nPart of what makes learning programming difficult is that ++there's no clear roadmap for how to become a programmer++. We know this because we've gone through the learning process ourselves and all of us had to create our own roadmap. That's why we've created the curriculum the way we did. Pairwise is a full roadmap for becoming a programmer. \n# Prioritize your learning\n\nThere's **A LOT** you could be learning in programming. If you want to see rapid progress you need to learn what's most relevant, first. If there's any time left you can learn more obscure topics later.\n\nFor example, here are some things you might be tempted to learn:\n\n* Multiple programming languages\n   * This is not a good use of time initially. Most programmers can program in more than one language, but we all had our _first_ language\\. Just learn one language at first and things will go much smoother. For this course we've chose TypeScript and we've laid out our reasoning here: [Pairwise Curriculum](https://www.pairwise.tech/curriculum/).\n* Obscure language features\n   * Every language has them, and for good reason—sometimes you need obscure features to get the job done. JavaScript \\(the language TypeScript is built on top of\\) is no exception, but these are features you can learn as you need them. For example, an introductory book on JavaScript will teach you about Bitwise Operators. When you come across this chapter **RUN**. This is not relevant yet and if it becomes relevant later you can learn about it then.\n* All language features\n   * Some people obsess about learning a language _completely _\\(I know because I used to be one such person...\\). This is not helpful. \n   * If you were just starting to learn English you would not benefit much from learning words like \"elucidate\", \"sanguine\", and \"wharf\" \\(if you disagree about this last one, you probably live near a wharf\\). You can be fully fluent in English without knowing every word. Likewise you can be fully fluent in a programming language without knowing every aspect of it. \n      * Confession: This author never learned JavaScript Generators 🙀They were just never needed for my work or personal projects. \n\n# Sleep\n\nThis is might be obvious but it bears repeating. ++When you're learning you need lots of sleep++. Your brain uses sleep in part to assimilate information you learn and synthesize new information. \n\nYou will be amazed how concepts you were barely grasping one day become easily understood and utilized the next day. It doesn't always happen as quickly as one day but it does happen. It's similar to learning a new human language. At first, nothing makes sense. The sounds are foreign, the script is tedious, the culture is incomprehensible. However, day by day sounds, words, actions all become more clear until eventually you're dreaming and conversing in a foreign language.\n\nSo get as much sleep as you can. You will learn more in less time.\n# Repetitions \\(aka practice\\)\n\nYou're going to need a lot. Despite learning as efficiently as you possibly can you will still need to do something more than once to get good at it. In fact you need to do it thousands of times.\n\nTo help convince you, consider...\n\n* **Sports**: How many times has Tiger Woods swung a golf club? How many times has Steph Curry shot a 3\\-pointer?\n* **Work**: How many do future\\-doctors _practice_ before they actually earn the title of doctor? Doctors may be extreme but also consider lawyers, plumbers, physicists, Spanish grammar teachers...\n* **School**: Teachers at all levels recognize the importance of repetitions. Homework is just a mechanism to incentivize repetitions.\n\n\n> To get good at something you need to do it many, many times ++even if you're learning as efficiently as possible++\n\nThis is where the challenges come in. We've created many challenges in part because we want you to attack the same problems again and again from different angles. Even if a challenge seems easy remember that you're completing more repetitions and getting better.\n# Real learning won't feel easy...\n\n... but that doesn't mean it's \"hard.\" When you're really learning you will be stretching your brain just a bit beyond what it already knows. This isn't going to feel easy, but it might feel exciting or fun. It might feel hard too, but even if it does, remember that it it gets easier with time. The better adapted your brain is to the task at hand the easier it will be. \n\nYour brain is literally building new neural connections when you learn—by the end of the course you will have a physically different brain than when you started. This won't happen overnight.\n# In summary\n\n* Start with an overview of whatever you're trying to learn\n* Prioritize your learning so you only spend time on the highest\\-impact concepts\n* Get _lots_ of sleep\n* Practice, practice, and then practice some more\n* Don't get discouraged. Learning isn't easy but it's extremely rewarding\n\n\nAnd if you feel that we left something out, you disagree about a specific point or you just want to leave us a note **please do**. We'd love to hear from you. \n\\(The feedback button is the question mark in the upper\\-right of the page\\)"
         }
       ]
     },
@@ -509,8 +498,19 @@
           "content": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language: TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!"
         },
         {
-          "id": "s9RpoVOt2",
+          "id": "j@wcwCKw4",
           "type": "section",
+          "title": "The TypeScript Language",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++"
+        },
+        {
+          "id": "s9RpoVOt2",
+          "type": "media",
           "title": "Comments",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
@@ -806,50 +806,6 @@
           "content": ""
         },
         {
-          "id": "prlFliKCW",
-          "type": "section",
-          "title": "Collections: Arrays and Objects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "A bunch of values together in a bucket.\n\nCollections is a general term. When we talk about collections we're going to be talking about two data structures in TypeScript:\n\n* Array\n   * A list of things. Like a shopping list. \n   * You access things within the array using an index. Example: `myArray[2]`\n* Objects\n   * A group of things, usually related. Like a row in a spreadsheet.\n   * You access things using a property name, which is a string. Example: `myObject[\"name\"]`\n   * You can **also** access things using a dot, followed by the property name. Example: `myObject.name`\n      * This is more common, but only works if your property name doesn't have special symbols like hyphens.\n\n# The importance of collections\n\nCollections are yet another way of representing data. You've seen `string`, `number`, `boolean` but alone those types are insufficient to represent the data of the world. In order to represent real\\-world data we're going to need collections.\n\n## Why arrays are important\n\nList are _everywhere_. You may not have thought about it before, but there are list all over the place. It's wild\\!\n\n* This page is made up of a list of html tags like `p`, `h1`, etc. The text within those tags is also a list, a list of characters like `a`, `b`, `c`, `.`, etc.\n* Schools have lists of students and grades.\n* Companies have lists of employees, expenses, and customers.\n* If you wrote out everything you did today it would make a list.\n* A recipe contains a lists of ingredients and steps to complete a dish.\n* The contacts in your phone is a list.\n\n\nThe list goes on \\(pun very much intended\\). The point is if we want to represent any of these things digitally we need the concept of a list in our programs. In TypeScript this takes the form of the `Array`.\n\n## Why objects are important\n\nThe idea of an object is a \"thing\" that has properties. For example, you—being a person—probably have a name, a job, and a _list_ of favorite HTML colors:\n\n```typescript\nconst me = {\n  name: \"Ian\",\n  job: \"Building Pairwise\",\n  favoriteHTMLColors: [\"Salmon\", \"Tomato\", \"Lime\"],\n};\n\n```\n\nYou see what I did there? An object con contain a list and likewise a list can also contain an object. TypeScript is very flexible like this.\n\n```typescript\nconst people = [\n  {\n    name: \"Ian\",\n    job: \"Building Pairwise\",\n    favoriteHTMLColors: [\"Salmon\", \"Tomato\", \"Lime\"]\n  },\n  {\n    name: \"Sean\",\n    job: \"Building Pairwise\",\n    favoriteHTMLColors: [\"SeaShell\", \"Coral\", \"MediumSeaGreen\"]\n  }\n];\n\n```\n\\(Sean doesn't yet know he favors the \"beach theme\" of HTML colors 🤫\\)\n\nAnother way to visualize the data above in the `people` array is as a table. Consider this more familiar form: \n| **Name** | **Job** | **Favorite HTML Colors** |\n|:--- |:--- |:--- |\n| Ian | Building Pairwise | Salmon, Tomato, Lime |\n| Sean | Building Pairwise | SeaShell, Coral, MediumSeaGreen |\n\nLook at that\\! By adding arrays and objects to our arsenal we can suddenly represent tabular data, which means we can represent anything you can put into a spreadsheet \\(quite literally, just look at Google Sheets\\).\n\nWe can even build on top of objects and arrays to create new data structures. \n# Syntax\n\nOK, now that we  know _why_ let's talk about _how_. The syntax for arrays and objects is fairly simple, but it may not be intuitive.\n\n## Creating Arrays and Objects\n\n```typescript\nconst htmlColors = [\"Salmon\", \"Tomato\", \"Lime\"];\nconst cat = {\n  name: \"Maomi\",\n  job: \"Napping\",\n  favoriteHTMLColors: [\"LightSalmon\", \"Salmon\", \"DarkSalmon\"] // Yes, these are real colors\n};\n\n```\n\nWe've created a new array with three wonderful HTML color names inside it and we've created a new `cat` object with some cat\\-appropriate properties.\n\n> **Syntax Specifics**\n> To create an array place any valid values separated by `,`within `[` and `]`\n> To create an object\n> \n> \n>    * Open `{` and `}` brackets\n>    * With the brackets use a string, followed by `:` , followed by any valid value to create a key\\-value pair\n\n## Using Arrays and Objects\n\n```typescript\nconsole.log(htmlColors[1]); // => \"Tomato\"\nconsole.log(cat.job); // \"Napping\"\nconsole.log(cat.favoriteHTMLColors[0]); // \"LightSalmon\"\n\n```\n\nHere we log three things out to the console.\n\n1. Log the string at index `1` of the `htmlColors` array\\.\n1. Log the value associated with the key `job` on the `cat` object\\.\n1. Log the string at index `0` of the array at key `favoriteHTMLColors` on the `cat` object\\.\n\n\nThe third line is an example of using nested selectors. \n\n> **Syntax Specifics**\n> To access an element within an array use a number placed between `[` and `]` after the array\n> To access a value associated with a key on an object place the key after a the object and a `.`\n> Alternatively, objects can use the same syntax as arrays except rather than a number use a string: `console.log(cat[\"name\"]);`\n"
-        },
-        {
-          "id": "UMroK7wKl",
-          "type": "typescript",
-          "title": "Create arrays",
-          "instructions": "Create three arrays `stringArray`, `numArray`, and `boolArray`, each of which contains only strings, numbers, and booleans respectively.",
-          "testCode": "test(\"`stringArray`, `numArray`, `boolArray` should not be null\", () => {\n  [stringArray, numArray, boolArray].forEach(x => {\n    expect(x).not.toBe(null);\n  });\n});\n\ntest(\"`stringArray`, `numArray`, `boolArray`  should be an arrays\", () => {\n  [stringArray, numArray, boolArray].forEach(x => {\n    expect(Array.isArray(x)).toBe(true);\n  });\n});\n\ntest(\"`stringArray` should be an array of strings\", () => {\n  expect(stringArray.length).toBeGreaterThan(0);\n  expect(stringArray.every(x => typeof x === \"string\")).toBe(true);\n});\ntest(\"`numArray` should be an array of numbers\", () => {\n  expect(numArray.length).toBeGreaterThan(0);\n  expect(numArray.every(x => typeof x === \"number\")).toBe(true);\n});\ntest(\"`boolArray` should be an array of booleans\", () => {\n  expect(boolArray.length).toBeGreaterThan(0);\n  expect(boolArray.every(x => typeof x === \"boolean\")).toBe(true);\n});",
-          "videoUrl": "",
-          "starterCode": "const stringArray: string[] = null;\nconst numArray: number[] = null;\nconst boolArray: boolean[] = null;\n",
-          "solutionCode": "const stringArray: string[] = [\"hey\"];\nconst numArray: number[] = [1,2,3];\nconst boolArray: boolean[] = [true];\n",
-          "content": ""
-        },
-        {
-          "id": "KOlr7dhnP",
-          "type": "typescript",
-          "title": "Create Objects",
-          "instructions": "Create a single object named `cat` based on the following table:\n| **name** | **job** | **favoriteSubreddit** |\n|:--- |:--- |:--- |\n| Maomi | Napping | https://www.reddit.com/r/cats |\n",
-          "testCode": "// Write your tests here:\ntest(\"`cat` should not be null\", () => {\n  expect(cat).not.toBe(null);\n});\n\nconst x = {\n  name: \"Maomi\",\n  job: \"Napping\",\n  favoriteSubreddit: \"https://www.reddit.com/r/cats/\",\n};\n\nObject.keys(x).forEach((k) => {\n  test(`\\`cat\\` should have a \\`${k}\\` of \\`${x[k]}\\``, () => {\n    expect(cat[k]).toBe(x[k]);\n  });\n});\n",
-          "videoUrl": "",
-          "starterCode": "const cat = null;",
-          "solutionCode": "const cat = {\n  name: \"Maomi\",\n  job: \"Napping\",\n  favoriteSubreddit: \"https://www.reddit.com/r/cats/\",\n};\n",
-          "content": ""
-        },
-        {
-          "id": "NEKvEvei4",
-          "type": "typescript",
-          "title": "Objects and arrays together",
-          "instructions": "Create an array of objects to represent the following table. Name the array `catParty`.\n**NOTE**: The cat named Jello does not have a favorite subreddit. Use `null` to represent this.\n| **name** | **job** | **favoriteSubreddit** |\n|:--- |:--- |:--- |\n| Maomi | Napping | https://www.reddit.com/r/cats |\n| Jarbles | Sleeping | https://www.reddit.com/r/cute |\n| Jello | Playing |  |\n",
-          "testCode": "// Write your tests here:\ntest(\"`catParty` should be an array\", () => {\n  expect(Array.isArray(catParty)).toBe(true);\n});\n\ntest(\"Every object in `catParty` should have `name`, `job`, `favoriteSubreddit` keys.\", () => {\n  catParty.forEach((x) => {\n    expect(x).toHaveProperty(\"name\");\n    expect(x).toHaveProperty(\"job\");\n    expect(x).toHaveProperty(\"favoriteSubreddit\");\n  });\n});\n\ntest(\"There should be three cats in the party\", () => {\n  expect(catParty.length).toBe(3);\n})\n\n// This test would do it, but the others give more context to the user\ntest(\"Jello should have a favoriteSubreddit of `null`\", () => {\n  expect(catParty).toHaveProperty([2, 'favoriteSubreddit'], null);\n})\n\n// This test would do it, but the others give more context to the user\ntest(\"The three objects should match the three rows in the table\", () => {\n  const _expected = [\n    {\n      name: \"Maomi\",\n      job: \"Napping\",\n      favoriteSubreddit: \"https://www.reddit.com/r/cats\",\n    },\n    {\n      name: \"Jarbles\",\n      job: \"Sleeping\",\n      favoriteSubreddit: \"https://www.reddit.com/r/cute\",\n    },\n    {\n      name: \"Jello\",\n      job: \"Playing\",\n      favoriteSubreddit: null,\n    },\n  ]\n\n  expect(catParty).toEqual(_expected);\n})",
-          "videoUrl": "",
-          "starterCode": "const catParty = null;",
-          "solutionCode": "const catParty = [\n  {\n    name: \"Maomi\",\n    job: \"Napping\",\n    favoriteSubreddit: \"https://www.reddit.com/r/cats\",\n  },\n  {\n    name: \"Jarbles\",\n    job: \"Sleeping\",\n    favoriteSubreddit: \"https://www.reddit.com/r/cute\",\n  },\n  {\n    name: \"Jello\",\n    job: \"Playing\",\n    favoriteSubreddit: null,\n  },\n];\n",
-          "content": ""
-        },
-        {
           "id": "UNWwhyHW",
           "type": "section",
           "title": "Variables & Assignment",
@@ -1122,6 +1078,17 @@
           "content": ""
         },
         {
+          "id": "DgGiepNrm",
+          "type": "section",
+          "title": "Conditionals & Control Statements",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "wzTlMB2D",
           "type": "section",
           "title": "Loops",
@@ -1186,6 +1153,17 @@
           "starterCode": "const people = [\n  { name: \"Nichole Nienow\", job: \"transmitting the panel\" },\n  { name: \"Shanon Harris\", job: \"calculating the monitor\" },\n  { name: \"Lamar Heathcote\", job: \"navigating the transmitter\" },\n  { name: \"Alfred Jenkins\", job: \"compressing the microchip\" },\n  { name: \"Grayce Conroy\", job: \"indexing the matrix\" },\n  { name: \"Garry Eichmann\", job: \"backing up the bandwidth\" },\n  { name: \"Colby Bradtke\", job: \"connecting the array\" },\n  { name: \"Kobe Carroll\", job: \"overriding the hard drive\" },\n  { name: \"Brian Miller\", job: \"connecting the transmitter\" },\n  { name: \"Alycia Schoen\", job: \"hacking the microchip\" },\n  { name: \"Wellington McCullough\", job: \"connecting the port\" },\n  { name: \"Jaylin Walsh\", job: \"indexing the microchip\" },\n];\n\nconst result = []\n\n// Your code here...",
           "solutionCode": "const people = [\n  { name: \"Nichole Nienow\", job: \"transmitting the panel\" },\n  { name: \"Shanon Harris\", job: \"calculating the monitor\" },\n  { name: \"Lamar Heathcote\", job: \"navigating the transmitter\" },\n  { name: \"Alfred Jenkins\", job: \"compressing the microchip\" },\n  { name: \"Grayce Conroy\", job: \"indexing the matrix\" },\n  { name: \"Garry Eichmann\", job: \"backing up the bandwidth\" },\n  { name: \"Colby Bradtke\", job: \"connecting the array\" },\n  { name: \"Kobe Carroll\", job: \"overriding the hard drive\" },\n  { name: \"Brian Miller\", job: \"connecting the transmitter\" },\n  { name: \"Alycia Schoen\", job: \"hacking the microchip\" },\n  { name: \"Wellington McCullough\", job: \"connecting the port\" },\n  { name: \"Jaylin Walsh\", job: \"indexing the microchip\" },\n];\n\nlet result = [];\n\nfor (let i = 0; i < people.length; i++) {\n  const person = people[i];\n  if (!person.name.startsWith(\"G\")) {\n    continue;\n  }\n  result.push(person);\n}\n",
           "content": "Continuing could also be thought of as skipping an iteration. Each time the code in your loop runs is one iteration. You can use `continue` to say \"Skip the rest of this iteration and start again at the top\".\n# Why is this useful?\n\nThe `continue` keyword is useful for avoiding doing some work. For example, if you want to `push` all the three\\-letter words on to a new array you could write a loop that pushes _all_ words and then add a `continue` keyword if the length is not what you want:\n\n```typescript\nconst words = [\n  \"hey\",\n  \"some\",\n  \"of\",\n  \"these\",\n  \"words\",\n  \"have\",\n  \"the\",\n  \"wrong\",\n  \"length\",\n  \"right\",\n  \"?\"\n];\n\nconst result = [];\n\nfor (let i = 0; i < words.length; i++) {\n  if (words[i].length !== 5) {\n    continue; // This is important! Skip the rest of the code in this loop\n  }\n  result.push(words[i]);\n}\n\nconsole.log(result); // => ['these', 'words', 'wrong', 'right']\n\n```\n"
+        },
+        {
+          "id": "ZBvBJuip4",
+          "type": "section",
+          "title": "Functions",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
         },
         {
           "id": "TJdUIaSo",
@@ -1285,6 +1263,127 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "So far we have seen some simple examples of what scope is in a computer program and how it is defined by functions and block statements of code.\n\nOne of the main ways scope is useful is by giving you the ability to create separations between pieces of code. This helps to improve the organization and readability of your program, and it may prevent bugs and problems as well.\n\nHowever, scope is not the only tool a programmer has to accomplish a goal like this.\n\nLater on, you will learn how to write programs and build apps using a real code environment \\(not this fun editor playground in a browser\\!\\). When you reach that stage, you will have a lot of other tools at your disposal.\n\nFor example, you can define parts of your program in different files, put related files in different folders, and then _import_ values from one file into another. You can also control what you _import_ and _export_. This is a very powerful capability for organizing software programs. These same skills will also allow you to download open source code other people have written and import this code in your own projects as well\\! This is incredibly useful and opens the doors to building a number of interesting applications\\!\n\nYou will learn the details of this later, but for now just keep it in mind as a short preview and extension of the ideas of scopes which will come in handy later\\!\n\nTake a look at this code snippet for a short teaser:\n\n```typescript\n// This imports the library \"request\", which is open source and written\n// and maintained by other developers.\nimport request from \"request\";\n\n// The request library lets you make HTTP requests to URLs!\nrequest(\"http://www.google.com\", (error, response, body) => {\n  if (error) {\n    throw error;\n  } else {\n    console.log(\"Success!, Response received: \", body);\n    // Do somethine else here...\n  }\n});\n\n```\n"
+        },
+        {
+          "id": "QwTb996sF",
+          "type": "section",
+          "title": "Closures",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "prlFliKCW",
+          "type": "section",
+          "title": "Arrays and Objects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "A bunch of values together in a bucket.\n\nCollections is a general term. When we talk about collections we're going to be talking about two data structures in TypeScript:\n\n* Arrays\n   * A list of things. Like a shopping list. \n   * You access things within the array using an index. Example: `myArray[2]`\n* Objects\n   * A group of things, usually related. Like a row in a spreadsheet.\n   * You access things using a property name, which is a string. Example: `myObject[\"name\"]`\n   * You can **also** access things using a dot, followed by the property name. Example: `myObject.name`\n      * This is more common, but only works if your property name doesn't have special symbols like hyphens.\n\n# The importance of collections\n\nCollections are yet another way of representing data. You've seen `string`, `number`, `boolean` but alone those types are insufficient to represent the data of the world. In order to represent real\\-world data we're going to need collections.\n\n## Why arrays are important\n\nList are _everywhere_. You may not have thought about it before, but there are list all over the place. It's wild\\!\n\n* This page is made up of a list of html tags like `p`, `h1`, etc. The text within those tags is also a list, a list of characters like `a`, `b`, `c`, `.`, etc.\n* Schools have lists of students and grades.\n* Companies have lists of employees, expenses, and customers.\n* If you wrote out everything you did today it would make a list.\n* A recipe contains a lists of ingredients and steps to complete a dish.\n* The contacts in your phone is a list.\n\n\nThe list goes on \\(pun very much intended\\). The point is if we want to represent any of these things digitally we need the concept of a list in our programs. In TypeScript this takes the form of the `Array`.\n\n## Why objects are important\n\nThe idea of an object is a \"thing\" that has properties. For example, you—being a person—probably have a name, a job, and a _list_ of favorite HTML colors:\n\n```typescript\nconst me = {\n  name: \"Ian\",\n  job: \"Building Pairwise\",\n  favoriteHTMLColors: [\"Salmon\", \"Tomato\", \"Lime\"],\n};\n\n```\n\nYou see what I did there? An object con contain a list and likewise a list can also contain an object. TypeScript is very flexible like this.\n\n```typescript\nconst people = [\n  {\n    name: \"Ian\",\n    job: \"Building Pairwise\",\n    favoriteHTMLColors: [\"Salmon\", \"Tomato\", \"Lime\"]\n  },\n  {\n    name: \"Sean\",\n    job: \"Building Pairwise\",\n    favoriteHTMLColors: [\"SeaShell\", \"Coral\", \"MediumSeaGreen\"]\n  }\n];\n\n```\n\\(Sean doesn't yet know he favors the \"beach theme\" of HTML colors 🤫\\)\n\nAnother way to visualize the data above in the `people` array is as a table. Consider this more familiar form: \n| **Name** | **Job** | **Favorite HTML Colors** |\n|:--- |:--- |:--- |\n| Ian | Building Pairwise | Salmon, Tomato, Lime |\n| Sean | Building Pairwise | SeaShell, Coral, MediumSeaGreen |\n\nLook at that\\! By adding arrays and objects to our arsenal we can suddenly represent tabular data, which means we can represent anything you can put into a spreadsheet \\(quite literally, just look at Google Sheets\\).\n\nWe can even build on top of objects and arrays to create new data structures. \n# Syntax\n\nOK, now that we  know _why_ let's talk about _how_. The syntax for arrays and objects is fairly simple, but it may not be intuitive.\n\n## Creating Arrays and Objects\n\n```typescript\nconst htmlColors = [\"Salmon\", \"Tomato\", \"Lime\"];\nconst cat = {\n  name: \"Maomi\",\n  job: \"Napping\",\n  favoriteHTMLColors: [\"LightSalmon\", \"Salmon\", \"DarkSalmon\"] // Yes, these are real colors\n};\n\n```\n\nWe've created a new array with three wonderful HTML color names inside it and we've created a new `cat` object with some cat\\-appropriate properties.\n\n> **Syntax Specifics**\n> To create an array place any valid values separated by `,`within `[` and `]`\n> To create an object\n> \n> \n>    * Open `{` and `}` brackets\n>    * With the brackets use a string, followed by `:` , followed by any valid value to create a key\\-value pair\n\n## Using Arrays and Objects\n\n```typescript\nconsole.log(htmlColors[1]); // => \"Tomato\"\nconsole.log(cat.job); // \"Napping\"\nconsole.log(cat.favoriteHTMLColors[0]); // \"LightSalmon\"\n\n```\n\nHere we log three things out to the console.\n\n1. Log the string at index `1` of the `htmlColors` array\\.\n1. Log the value associated with the key `job` on the `cat` object\\.\n1. Log the string at index `0` of the array at key `favoriteHTMLColors` on the `cat` object\\.\n\n\nThe third line is an example of using nested selectors. \n\n> **Syntax Specifics**\n> To access an element within an array use a number placed between `[` and `]` after the array\n> To access a value associated with a key on an object place the key after a the object and a `.`\n> Alternatively, objects can use the same syntax as arrays except rather than a number use a string: `console.log(cat[\"name\"]);`\n"
+        },
+        {
+          "id": "UMroK7wKl",
+          "type": "typescript",
+          "title": "Create arrays",
+          "instructions": "Create three arrays `stringArray`, `numArray`, and `boolArray`, each of which contains only strings, numbers, and booleans respectively.",
+          "testCode": "test(\"`stringArray`, `numArray`, `boolArray` should not be null\", () => {\n  [stringArray, numArray, boolArray].forEach(x => {\n    expect(x).not.toBe(null);\n  });\n});\n\ntest(\"`stringArray`, `numArray`, `boolArray`  should be an arrays\", () => {\n  [stringArray, numArray, boolArray].forEach(x => {\n    expect(Array.isArray(x)).toBe(true);\n  });\n});\n\ntest(\"`stringArray` should be an array of strings\", () => {\n  expect(stringArray.length).toBeGreaterThan(0);\n  expect(stringArray.every(x => typeof x === \"string\")).toBe(true);\n});\ntest(\"`numArray` should be an array of numbers\", () => {\n  expect(numArray.length).toBeGreaterThan(0);\n  expect(numArray.every(x => typeof x === \"number\")).toBe(true);\n});\ntest(\"`boolArray` should be an array of booleans\", () => {\n  expect(boolArray.length).toBeGreaterThan(0);\n  expect(boolArray.every(x => typeof x === \"boolean\")).toBe(true);\n});",
+          "videoUrl": "",
+          "starterCode": "const stringArray: string[] = null;\nconst numArray: number[] = null;\nconst boolArray: boolean[] = null;\n",
+          "solutionCode": "const stringArray: string[] = [\"hey\"];\nconst numArray: number[] = [1,2,3];\nconst boolArray: boolean[] = [true];\n",
+          "content": ""
+        },
+        {
+          "id": "KOlr7dhnP",
+          "type": "typescript",
+          "title": "Create Objects",
+          "instructions": "Create a single object named `cat` based on the following table:\n| **name** | **job** | **favoriteSubreddit** |\n|:--- |:--- |:--- |\n| Maomi | Napping | https://www.reddit.com/r/cats |\n",
+          "testCode": "// Write your tests here:\ntest(\"`cat` should not be null\", () => {\n  expect(cat).not.toBe(null);\n});\n\nconst x = {\n  name: \"Maomi\",\n  job: \"Napping\",\n  favoriteSubreddit: \"https://www.reddit.com/r/cats/\",\n};\n\nObject.keys(x).forEach((k) => {\n  test(`\\`cat\\` should have a \\`${k}\\` of \\`${x[k]}\\``, () => {\n    expect(cat[k]).toBe(x[k]);\n  });\n});\n",
+          "videoUrl": "",
+          "starterCode": "const cat = null;",
+          "solutionCode": "const cat = {\n  name: \"Maomi\",\n  job: \"Napping\",\n  favoriteSubreddit: \"https://www.reddit.com/r/cats/\",\n};\n",
+          "content": ""
+        },
+        {
+          "id": "NEKvEvei4",
+          "type": "typescript",
+          "title": "Objects and arrays together",
+          "instructions": "Create an array of objects to represent the following table. Name the array `catParty`.\n**NOTE**: The cat named Jello does not have a favorite subreddit. Use `null` to represent this.\n| **name** | **job** | **favoriteSubreddit** |\n|:--- |:--- |:--- |\n| Maomi | Napping | https://www.reddit.com/r/cats |\n| Jarbles | Sleeping | https://www.reddit.com/r/cute |\n| Jello | Playing |  |\n",
+          "testCode": "// Write your tests here:\ntest(\"`catParty` should be an array\", () => {\n  expect(Array.isArray(catParty)).toBe(true);\n});\n\ntest(\"Every object in `catParty` should have `name`, `job`, `favoriteSubreddit` keys.\", () => {\n  catParty.forEach((x) => {\n    expect(x).toHaveProperty(\"name\");\n    expect(x).toHaveProperty(\"job\");\n    expect(x).toHaveProperty(\"favoriteSubreddit\");\n  });\n});\n\ntest(\"There should be three cats in the party\", () => {\n  expect(catParty.length).toBe(3);\n})\n\n// This test would do it, but the others give more context to the user\ntest(\"Jello should have a favoriteSubreddit of `null`\", () => {\n  expect(catParty).toHaveProperty([2, 'favoriteSubreddit'], null);\n})\n\n// This test would do it, but the others give more context to the user\ntest(\"The three objects should match the three rows in the table\", () => {\n  const _expected = [\n    {\n      name: \"Maomi\",\n      job: \"Napping\",\n      favoriteSubreddit: \"https://www.reddit.com/r/cats\",\n    },\n    {\n      name: \"Jarbles\",\n      job: \"Sleeping\",\n      favoriteSubreddit: \"https://www.reddit.com/r/cute\",\n    },\n    {\n      name: \"Jello\",\n      job: \"Playing\",\n      favoriteSubreddit: null,\n    },\n  ]\n\n  expect(catParty).toEqual(_expected);\n})",
+          "videoUrl": "",
+          "starterCode": "const catParty = null;",
+          "solutionCode": "const catParty = [\n  {\n    name: \"Maomi\",\n    job: \"Napping\",\n    favoriteSubreddit: \"https://www.reddit.com/r/cats\",\n  },\n  {\n    name: \"Jarbles\",\n    job: \"Sleeping\",\n    favoriteSubreddit: \"https://www.reddit.com/r/cute\",\n  },\n  {\n    name: \"Jello\",\n    job: \"Playing\",\n    favoriteSubreddit: null,\n  },\n];\n",
+          "content": ""
+        },
+        {
+          "id": "sZBviRApf",
+          "type": "typescript",
+          "title": "Thinking in terms of data",
+          "instructions": "Use a nested arrays to model a tic\\-tac\\-toe board.",
+          "testCode": "// Write your tests here:\ntest(\"`xWins` should have a winning X row\", () => {\n  expect(typeof xWins).not.toBe(\"undefined\");\n  expect(hasWinner(1, xWins)).toBe(true);\n});\n\ntest(\"`oWins` should have a winning O row\", () => {\n  expect(typeof xWins).not.toBe(\"undefined\");\n  expect(hasWinner(2, oWins)).toBe(true);\n});\n\nfunction hasWinner(winner, board) {\n  for (let i = 0; i < board.length; i++) {\n    // Rows\n    let rowSum = 0;\n    let colSum = 0;\n    for (let j = 0; j < board.length; j++) {\n      rowSum += board[i][j];\n      colSum += board[j][i];\n    }\n\n    if (rowSum === winner * 3) {\n      return true;\n    }\n    if (colSum === winner * 3) {\n      return true;\n    }\n  }\n  const d1 = [board[0][0], board[1][1], board[2][2]].reduce((a, b) => a + b);\n  const d2 = [board[0][2], board[1][1], board[2][0]].reduce((a, b) => a + b);\n  if (d1 === winner * 3 || d2 === winner * 3) {\n    return true;\n  }\n  return false;\n}\n",
+          "videoUrl": "",
+          "starterCode": "const _ = 0; // We'll ues the underscore to mean \"empty\"\nconst X = 1;\nconst O = 2;\n\n// number[][] is the same as Array<Array<number>>\n// It's an array of arrays of numbers.\ntype BoardState = number[][];\n\n// Here's an example of creating a board based on nested arrays of numbers\nconst emptyBoard: BoardState = [\n  [_, _, _],\n  [_, _, _],\n  [_, _, _],\n];\n\nconst xWins: BoardState = [];\n\nconst oWins: BoardState = [];\n\nconsole.log(\"emptyBoard\");\nconsole.log(printBoard(emptyBoard));\nconsole.log(); // This just adds a new line in the console\nconsole.log(\"xWins\");\nconsole.log(printBoard(xWins));\nconsole.log();\nconsole.log(\"oWins\");\nconsole.log(printBoard(oWins));\n\n// -----------------------------------------------------\n// We've provided this function to help print out the board but you can ignore if it you want.\nfunction printBoard(rows: BoardState) {\n  const labelMap: any = { [_]: \"-\", [X]: \"X\", [O]: \"O\" };\n  return rows\n    .map((row) => {\n      return row.map((x: any) => labelMap[x]).join(\" \");\n    })\n    .join(\"\\n\");\n}\n",
+          "solutionCode": "const _ = 0; // We'll ues the underscore to mean \"empty\"\nconst X = 1;\nconst O = 2;\n\n// number[][] is the same as Array<Array<number>>\n// It's an array of arrays of numbers.\ntype BoardState = number[][];\n\nconst emptyBoard: BoardState = [\n  [_, _, _],\n  [_, _, _],\n  [_, _, _],\n];\n\nconst xWins: BoardState = [\n  [X, _, _],\n  [_, X, _],\n  [_, _, X],\n];\n\nconst oWins: BoardState = [\n  [_, _, _],\n  [O, O, O],\n  [_, _, _],\n];\n\nconsole.log(\"xWins\");\nconsole.log(printBoard(xWins) + \"\\n\\n\");\n\nconsole.log(\"oWins\");\nconsole.log(printBoard(oWins));\n\nfunction printBoard(rows: BoardState) {\n  const labelMap: any = { [_]: \"-\", [X]: \"X\", [O]: \"O\" };\n  return rows\n    .map((row) => {\n      return row.map((x: any) => labelMap[x]).join(\" \");\n    })\n    .join(\"\\n\");\n}",
+          "content": "The purpose of this lesson is to get you started thinking about how you can use data to model real\\-world situations like a tic tac toe game.\n\nUsing arrays and objects you can model anything you want. You can even use these data structures to create new data structures of your own that are useful in different ways. "
+        },
+        {
+          "id": "b0uiUUzxT",
+          "type": "section",
+          "title": "Built-in Functions",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++ The TS \\(JS\\) standard lib"
+        },
+        {
+          "id": "7WoHO3ohe",
+          "type": "section",
+          "title": "Mutation & Immutability",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++"
+        },
+        {
+          "id": "n9QYwQgTM",
+          "type": "section",
+          "title": "Side Effects & Purity",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++"
+        },
+        {
+          "id": "uyjd$DG@$",
+          "type": "section",
+          "title": "Classes",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++"
+        },
+        {
+          "id": "if2EAwsyp",
+          "type": "section",
+          "title": "Programming Styles",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "++TODO++ Imperative, Declarative, OOP, Functional, etc"
         },
         {
           "id": "Hvnu4UcaE",
@@ -1395,6 +1494,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Here we will walk through an example of how the Tic Tac Toe project could be built."
+        },
+        {
+          "id": "qPDY@y0fm",
+          "type": "section",
+          "title": "Special Topics",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "* Type Coercion \n* Common Conventions\n* Race conditions\n* Language runtime: memory heap, execution flow, etc.\n* JS origins and history\n* Comparison to other languages\n* Single vs multi\\-threaded languages / programming\n* Compile\\-to\\-JS languages \n* How computers work\n* Stack overflow, documentation, using the internet\n* Esoteric JS topics \\(i.e. JS the bad parts. `this`, Symbols, prototypical inheritance, bitwise operators... ok just kidding\\)\n\n\n\n++TODO++\n"
         }
       ]
     },
