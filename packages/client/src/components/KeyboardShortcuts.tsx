@@ -2,13 +2,54 @@ import allPass from "ramda/es/allPass";
 import React from "react";
 import tap from "ramda/es/tap";
 import difference from "ramda/es/difference";
+import { Position, Popover, Tooltip } from "@blueprintjs/core";
+import { IconButton } from "./Shared";
+import styled from "styled-components";
+import { COLORS } from "tools/constants";
 
 const debug = require("debug")("client:KeyboardShortcuts");
 
-type MetaKey = "shiftKey" | "ctrlKey" | "metaKey" | "altKey";
+/** ===========================================================================
+ * Keyboard Shortcuts
+ * ============================================================================
+ */
 
+/**
+ * This is the source of truth for shortcut key key combinations and their
+ * intended action in the application.
+ */
+const SHORTCUT_KEYS = {
+  "cmd+shift+k": "Navigate to Sandbox",
+  "cmd+j": "Toggle Navigation Map",
+  "cmd+,": "Navigate to Previous Challenge",
+  "cmd+.": "Navigate to Next Challenge",
+  "cmd+;": "Toggle Full Screen Editor",
+};
+
+/**
+ * Additional keys which we don't want to show as visible shortcuts,
+ * for some reason, e.g. they are intuitive or their specific behavior
+ * changes depending on the context.
+ */
+interface NonMappedKeys {
+  escape: ShortcutKeyHandler;
+}
+
+/**
+ * Type representing the valid shortcut key combinations which
+ * exist.
+ */
+export type VALID_SHORTCUT_KEYS_MAP = {
+  [key in keyof typeof SHORTCUT_KEYS]: ShortcutKeyHandler;
+} &
+  NonMappedKeys;
+
+// Callback method for handling a keypress
+type ShortcutKeyHandler = (e: KeyboardEvent) => any;
+
+// Keyboardshortcut props
 interface KeyboardShortcutsProps {
-  keymap: { [k: string]: (e: KeyboardEvent) => any };
+  keymap: { [key: string]: ShortcutKeyHandler };
 }
 
 // NOTE: They should be lowercase
@@ -20,6 +61,13 @@ const singleKeyWhitelist = new Set([
   "arrowright",
   "enter",
 ]);
+
+type MetaKey = "shiftKey" | "ctrlKey" | "metaKey" | "altKey";
+
+/** ===========================================================================
+ * Component
+ * ============================================================================
+ */
 
 const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
   React.useEffect(() => {
@@ -90,7 +138,7 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
     };
 
     const listeners = Object.keys(keymap).reduce(
-      (agg: Array<(e: KeyboardEvent) => any>, commandString) => {
+      (agg: ShortcutKeyHandler[], commandString: string) => {
         const fn = keymap[commandString];
         const predicate = makePredicate(commandString);
 
@@ -121,5 +169,72 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
   }, [keymap]);
   return null;
 };
+
+/** ===========================================================================
+ * Keyboard Shortcut Popover
+ * ============================================================================
+ */
+
+export const ShortcutKeysPopover = () => {
+  return (
+    <Popover
+      position={Position.BOTTOM}
+      className="shortcut-key-popover"
+      popoverClassName="shortcut-key-popover"
+      content={
+        <ShortcutPopover>
+          <ShortcutKeysTitle>Shortcut Keys</ShortcutKeysTitle>
+          {Object.entries(SHORTCUT_KEYS).map(([shortcut, description]) => {
+            return (
+              <ShortcutKey key={shortcut}>
+                <ShortcutText>
+                  <Code>{shortcut}</Code>
+                </ShortcutText>
+                <DescriptionText>{description}</DescriptionText>
+              </ShortcutKey>
+            );
+          })}
+        </ShortcutPopover>
+      }
+    >
+      <Tooltip content="View Shortcut Keys" position="bottom">
+        <IconButton icon="path-search" aria-label="view shortcut keys" />
+      </Tooltip>
+    </Popover>
+  );
+};
+
+const ShortcutPopover = styled.div`
+  padding: 18px;
+  padding-left: 24px;
+  padding-right: 24px;
+`;
+
+const ShortcutKey = styled.div`
+  margin-top: 8px;
+`;
+
+const ShortcutText = styled.p`
+  margin: 0;
+`;
+
+const Code = styled.code``;
+
+const DescriptionText = styled.span`
+  font-size: 10px;
+  color: ${COLORS.TEXT_CONTENT};
+`;
+
+const ShortcutKeysTitle = styled.h3`
+  margin: 0;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid ${COLORS.TEXT_CONTENT};
+`;
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default KeyboardShortcuts;

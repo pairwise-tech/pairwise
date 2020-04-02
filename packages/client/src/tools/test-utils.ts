@@ -86,8 +86,9 @@ export const TEST_UTILS_GLOBALS = {
   fail: "A function to just fail a test",
 };
 
+// Type representing all the globally available key names
 type TEST_UTILS_GLOBALS_KEYS = {
-  [key in keyof typeof TEST_UTILS_GLOBALS]: any;
+  [key in keyof typeof TEST_UTILS_GLOBALS]: string;
 };
 
 // Just recreate the TEST_UTILS_GLOBALS object, mapping the keys

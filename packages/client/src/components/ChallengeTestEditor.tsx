@@ -183,7 +183,6 @@ const ChallengeTestEditor = (props: Props) => {
             <IconButton
               icon="helper-management"
               aria-label="test utils helpers"
-              onClick={handleFormatCode}
             />
           </Tooltip>
         </Popover>
@@ -228,7 +227,9 @@ const DescriptionText = styled.span`
 
 const TestUtilsTitle = styled.h3`
   margin: 0;
-  border-bottom: 1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM};
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid ${COLORS.TEXT_CONTENT};
 `;
 
 /** ===========================================================================
