@@ -1,6 +1,6 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
-import { CodeChallengeBlob } from "@pairwise/common";
+import { CodeChallengeBlob, ContentUtility } from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
 import { SANDBOX_ID } from "tools/constants";
@@ -123,6 +123,21 @@ export const getCurrentModule = createSelector(
     return course?.modules.find(x => x.id === moduleId);
   },
 );
+
+// Get an array of course metadata for the current course list
+export const courseListMetadata = createSelector([challengesState], state => {
+  if (state.courses) {
+    return state.courses.map(course => ({
+      id: course.id,
+      title: course.title,
+      description: course.description,
+      free: course.free,
+      price: course.price,
+    }));
+  } else {
+    return [];
+  }
+});
 
 /**
  * NOTE: This getter does not depend on the current course id or module id. This
