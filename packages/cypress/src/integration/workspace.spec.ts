@@ -3,6 +3,7 @@ import {
   TIMEOUT,
   getIframeBody,
   click,
+  type,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -105,9 +106,7 @@ describe("Sandbox", () => {
     click("sandboxButton");
     click("selectChallengeType");
     click("challenge-type-markup");
-    cy.get("#pairwise-code-editor").type(
-      "<h1 class='just-typed-this'>Testing</h1>",
-    );
+    type("pairwise-code-editor", "<h1 class='just-typed-this'>Testing</h1>");
 
     cy.wait(TIMEOUT);
 
@@ -124,7 +123,7 @@ describe("Success Modal", () => {
     click("pw-run-code");
     cy.get("#gs-card").should("not.exist");
 
-    cy.get("#pairwise-code-editor").type("<h1>Hello!</h1>");
+    type("pairwise-code-editor", "<h1>Hello!</h1>");
     cy.get("#gs-card").should("not.exist");
 
     click("pw-run-code");

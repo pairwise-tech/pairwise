@@ -67,6 +67,9 @@ export const BUILD_SEARCH_INDEX = "BUILD_SEARCH_INDEX_SUCCESS";
 export const BUILD_SEARCH_INDEX_SUCCESS = "BUILD_SEARCH_INDEX_SUCCESS";
 export const BUILD_SEARCH_INDEX_FAILURE = "BUILD_SEARCH_INDEX_FAILURE";
 
+// the threshold for how many chars in a query before we start searching
+export const SEARCH_QUERY_THRESHOLD = 2;
+
 /**
  * Serializing the rich content editor state into markdown could have a perf
  * impact if we did it to often, so this is the debounce timeout for that

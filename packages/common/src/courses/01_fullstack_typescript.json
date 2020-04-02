@@ -180,7 +180,7 @@
           "solutionCode": "<style>\n  span {\n    background: yellow;\n  }\n</style>\n<p>What a paragraph this is! Let's <span>highlight</span> something.</p>",
           "testCode": "test(\"There should be a `<span>` tag with a yellow background wrapping some text\", function() {\n  const el = get(\"span\");\n  expect(el).toBeTruthy();\n  expect(el.innerHTML).not.toBe(\"\");\n  expect(getStyle(el, \"background-color\")).toBe(cssColor(\"yellow\"));\n});\n",
           "videoUrl": "https://www.youtube.com/embed/fapBaduhIiY",
-          "content": "Placeholder supplementary content..."
+          "content": ""
         },
         {
           "id": "5oqm6GmH",
@@ -971,36 +971,6 @@
           "content": "There are a few other arithmetic operators to be aware of. Let's take a quick look.\n\n## The Exponentiation Operator\n\nThe exponentiation or, `**`, operator raises the left\\-hand operand to the power of the right hand operand:\n\n```\nconst fourCubed = 4 ** 3; // 64\n\n```\n\n## The Unary Plus Operator\n\nThe unary plus, or `+`, operator, as its name suggests, only takes a single operand, and is used _prefix_, or immediately before its operand. Its only purpose is to convert its operand to a number \\(if it isn't one already\\) and return the result. Note that the operand itself _is not_ affected\\.\n\n```\nconst fiveAsString = \"5\";\nconst fiveAsNumber = +fiveAsString;\n// fiveAsString = \"5\", fiveAsNumber = 5\n\n```\n\nTry this out in the [sandbox](/workspace/sandbox) on more complex string representations of numbers \\(e.g. `\"-23543.0274\"`\\), and on values other than strings and see what you get\\! For instance, what do you expect the result to be when you use the unary plus operator on booleans or on `null`?\n\n```\nconst isTrue = true;\n+isTrue // ??\n\n```\n\nExperimentation and fun aside, It should be noted here, however, that there are other, more preferred ways to convert values to numbers in TypeScript. The unary plus operator is borderline esoteric, but will work just fine for simple use\\-cases. For more complex cases, other methods are preferred:\n\n```\nconst notReallyPi = \"3.14IsPie...err...ImeanPi\";\nconst definitelyNotPi = +notReallyPi; // NaN (not a number)\nconst pi = parseFloat(notReallyPi); // 3.14\n\n```\n\nThis example is obviously contrived, but you get the picture.\n\n## The Unary Negation Operator\n\nThe unary negation, or `-`, operator negates the value of its operand. If its operand is not a number, it also converts it to a number before negating it.\n\n```\nconst threeAsNumber = 3;\nconst threeAsString = \"3\";\n-threeAsString; // -3\n-threeAsNumber; // -3\n\n```\n"
         },
         {
-          "id": "6T3GXc4ap",
-          "type": "typescript",
-          "title": "Add Two Numbers",
-          "instructions": "Complete the function body below. The function should receive two numbers as input arguments and return the result of adding these numbers together.",
-          "starterCode": "const addTwoNumbers = (a: number, b: number) => {\n  // Your code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
-          "solutionCode": "const addTwoNumbers = (a: number, b: number) => {\n  return a + b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
-          "testCode": "const cases = [\n  { input: [1, 2], expected: 3 },\n  { input: [10, 50], expected: 60 },\n  { input: [-10, -50], expected: -60 },\n  { input: [100, 500], expected: 600 },\n  { input: [1123, 532142], expected: 533265 },\n  { input: [-10, 50], expected: 40 },\n  { input: [1, 500], expected: 501 },\n  { input: [842, 124], expected: 966 },\n  { input: [1000, 500], expected: 1500 },\n  { input: [-100, 100], expected: 0 },\n  { input: [2, 50234432], expected: 50234434 },\n];\n\ncases.forEach(x => {\n    const { input: [a, b], expected } = x;\n    test(`${x.input[0]} + ${x.input[1]}`, () => {\n        expect(addTwoNumbers(a,b)).toBe(expected)\n    })\n})",
-          "content": "Placeholder supplementary content..."
-        },
-        {
-          "id": "WUA8ezECU",
-          "type": "typescript",
-          "title": "Reverse a String",
-          "instructions": "Complete the function body below. The function will receive a string and should return the same string in reverse order.",
-          "starterCode": "const reverseString = (inputString: string) => {\n  // Edit code here\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n",
-          "solutionCode": "const reverseString = (inputString: string) => {\n  return inputString.split('').reverse().join('');\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n",
-          "testCode": "[\n  { input: [\"hello\"], expected: \"olleh\" },\n  { input: [\"fantastic\"], expected: \"citsatnaf\" },\n  { input: [\"superb\"], expected: \"brepus\" },\n  { input: [\"frustrating\"], expected: \"gnitartsurf\" },\n  { input: [\"exciting\"], expected: \"gniticxe\" },\n  { input: [\"happy\"], expected: \"yppah\" },\n  { input: [\"a\"], expected: \"a\" },\n  { input: [\"aaaaaaaaaaaaz\"], expected: \"zaaaaaaaaaaaa\" },\n  { input: [\"jumping\"], expected: \"gnipmuj\" },\n  { input: [\"silly\"], expected: \"yllis\" },\n  { input: [\"zombie\"], expected: \"eibmoz\" },\n].forEach(({ input, expected }) => {\n  test(`${input[0]} -> ${expected}`, () => {\n    expect(reverseString(...input)).toBe(expected);\n  })\n})\n",
-          "content": "Placeholder supplementary content..."
-        },
-        {
-          "id": "50fxTLRcV",
-          "type": "typescript",
-          "title": "Return the Length of an Array",
-          "instructions": "Complete the function body below. The function will receive an array as input and should return the number of items in the array.",
-          "starterCode": "const lengthOfArray = (array: any[]) => {\n  // Edit code here\n};\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
-          "solutionCode": "\nconst lengthOfArray = (array: any[]) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
-          "testCode": "[\n  { input: [[1, 2, 3, 4]], expected: 4 },\n  { input: [[]], expected: 0 },\n  { input: [[1, 1, 1, 1, 1, 1, 1, 1, 1]], expected: 9 },\n  { input: [[3, 3, 3]], expected: 3 },\n  { input: [[2]], expected: 1 },\n  { input: [[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]], expected: 14 },\n].forEach(({ input, expected }) => {\n  test(input[0].join(\", \"), () => {\n    expect(lengthOfArray(...input)).toBe(expected);\n  });\n});\n",
-          "content": "Placeholder supplementary content..."
-        },
-        {
           "id": "u5nA6qc6",
           "type": "section",
           "title": "Equality",
@@ -1452,6 +1422,36 @@
           "content": "Now you have learned all the basics of a programming language\\! Now that you have a solid foundation it's time to put your skills to the test solving some algorithms. These will be simple, and increasingly more challenging, problems that require you to write a function to perform some specific operation or algorithm. To solve them, you will need to have a firm grasp of all the basic programming concepts: conditional statements, loops, data structures, functions, and so on.\n\nSolving a number of questions like this is the best way to build up your programming skills and become confident in your abilities."
         },
         {
+          "id": "6T3GXc4ap",
+          "type": "typescript",
+          "title": "Add Two Numbers",
+          "instructions": "Complete the function body below. The function should receive two numbers as input arguments and return the result of adding these numbers together.",
+          "starterCode": "const addTwoNumbers = (a: number, b: number) => {\n  // Your code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
+          "solutionCode": "const addTwoNumbers = (a: number, b: number) => {\n  return a + b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
+          "testCode": "const cases = [\n  { input: [1, 2], expected: 3 },\n  { input: [10, 50], expected: 60 },\n  { input: [-10, -50], expected: -60 },\n  { input: [100, 500], expected: 600 },\n  { input: [1123, 532142], expected: 533265 },\n  { input: [-10, 50], expected: 40 },\n  { input: [1, 500], expected: 501 },\n  { input: [842, 124], expected: 966 },\n  { input: [1000, 500], expected: 1500 },\n  { input: [-100, 100], expected: 0 },\n  { input: [2, 50234432], expected: 50234434 },\n];\n\ncases.forEach(x => {\n    const { input: [a, b], expected } = x;\n    test(`${x.input[0]} + ${x.input[1]}`, () => {\n        expect(addTwoNumbers(a,b)).toBe(expected)\n    })\n})",
+          "content": ""
+        },
+        {
+          "id": "WUA8ezECU",
+          "type": "typescript",
+          "title": "Reverse a String",
+          "instructions": "Complete the function body below. The function will receive a string and should return the same string in reverse order.",
+          "starterCode": "const reverseString = (inputString: string) => {\n  // Edit code here\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n",
+          "solutionCode": "const reverseString = (inputString: string) => {\n  return inputString.split('').reverse().join('');\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n",
+          "testCode": "[\n  { input: [\"hello\"], expected: \"olleh\" },\n  { input: [\"fantastic\"], expected: \"citsatnaf\" },\n  { input: [\"superb\"], expected: \"brepus\" },\n  { input: [\"frustrating\"], expected: \"gnitartsurf\" },\n  { input: [\"exciting\"], expected: \"gniticxe\" },\n  { input: [\"happy\"], expected: \"yppah\" },\n  { input: [\"a\"], expected: \"a\" },\n  { input: [\"aaaaaaaaaaaaz\"], expected: \"zaaaaaaaaaaaa\" },\n  { input: [\"jumping\"], expected: \"gnipmuj\" },\n  { input: [\"silly\"], expected: \"yllis\" },\n  { input: [\"zombie\"], expected: \"eibmoz\" },\n].forEach(({ input, expected }) => {\n  test(`${input[0]} -> ${expected}`, () => {\n    expect(reverseString(...input)).toBe(expected);\n  })\n})\n",
+          "content": ""
+        },
+        {
+          "id": "50fxTLRcV",
+          "type": "typescript",
+          "title": "Return the Length of an Array",
+          "instructions": "Complete the function body below. The function will receive an array as input and should return the number of items in the array.",
+          "starterCode": "const lengthOfArray = (array: any[]) => {\n  // Edit code here\n};\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
+          "solutionCode": "\nconst lengthOfArray = (array: any[]) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
+          "testCode": "[\n  { input: [[1, 2, 3, 4]], expected: 4 },\n  { input: [[]], expected: 0 },\n  { input: [[1, 1, 1, 1, 1, 1, 1, 1, 1]], expected: 9 },\n  { input: [[3, 3, 3]], expected: 3 },\n  { input: [[2]], expected: 1 },\n  { input: [[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]], expected: 14 },\n].forEach(({ input, expected }) => {\n  test(input[0].join(\", \"), () => {\n    expect(lengthOfArray(...input)).toBe(expected);\n  });\n});\n",
+          "content": ""
+        },
+        {
           "id": "E9wWilBf8",
           "type": "typescript",
           "title": "Gateway",
@@ -1700,10 +1700,11 @@
           "type": "react",
           "title": "Create a Controlled Input",
           "instructions": "There is a React Component below. Complete it so in includes a controlled input which allows user's to type.",
+          "testCode": "test(\"Renders a <h1> tag with the text 'Hello, React!'\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const label = container.querySelector(\"h1\");\n  return label.textContent === \"Hello, React!\";\n});\n\ntest(\"Renders a controlled <input /> using React state\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const inputEl = container.querySelector(\"input\");\n  const testValue = \"giraffe\";\n  ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });\n  return inputEl.value === testValue;\n});\n",
+          "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface IState {\n  value: string;\n}\n\nclass App extends React.Component<{}, IState> {\n  constructor(props: {}) {\n    super(props);\n\n    this.state = {\n      value: \"\",\n    };\n  }\n\n  render(): JSX.Element {\n    const welcome: string = \"Hello, React!\";\n    console.log(\"Hello from the iframe!!!\");\n    return (\n      <div>\n        <h1>{welcome}</h1>\n        <input />\n      </div>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface IState {\n  value: string;\n}\n\nclass App extends React.Component<{}, IState> {\n  constructor(props: {}) {\n    super(props);\n\n    this.state = {\n      value: \"\",\n    };\n  }\n\n  render(): JSX.Element {\n    const welcome: string = \"Hello, React!\";\n    console.log(\"Hello from the iframe!!!\");\n    return (\n      <div>\n        <h1>{welcome}</h1>\n        <input value={this.state.value} onChange={this.handleChange} />\n      </div>\n    );\n  }\n\n  handleChange = (e: any) => {\n    this.setState({ value: e.target.value });\n  };\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));",
-          "testCode": "test(\"Renders a <h1> tag with the text 'Hello, React!'\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const label = container.querySelector(\"h1\");\n  return label.textContent === \"Hello, React!\";\n});\n\ntest(\"Renders a controlled <input /> using React state\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const inputEl = container.querySelector(\"input\");\n  const testValue = \"giraffe\";\n  ReactTestUtils.Simulate.change(inputEl, { target: { value: testValue } });\n  return inputEl.value === testValue;\n});\n",
-          "content": "Placeholder supplementary content..."
+          "content": ""
         },
         {
           "id": "wmBDaJz5Q",

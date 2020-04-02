@@ -70,6 +70,11 @@ export const getSearchResults = createSelector(
   challenges => challenges.searchResults,
 );
 
+export const getIsSearching = createSelector(
+  [challengesState],
+  challenges => challenges.isSearching,
+);
+
 export const getNavigationSectionAccordionViewState = createSelector(
   [challengesState],
   prop("navigationSectionAccordionViewState"),
