@@ -144,7 +144,7 @@ export const generateEmptyChallenge = (
   overwrite: Partial<Challenge> = {},
 ): Challenge => ({
   id: shortid.generate(),
-  type: "markup",
+  type: "typescript",
   title: "[EMPTY...]",
   instructions: "",
   testCode: starterTestCode,

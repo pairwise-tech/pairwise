@@ -1166,6 +1166,28 @@
           "content": "Functions are the basic building block of all software. A function is just a piece of code which is written to perform a specific task. Consider the following function:\n\n```typescript\nfunction addTwoNumbers(a: number, b: number) {\n    return a + b;\n}\n\n```\n\nThis function, `addTwoNumbers`, contains the instructions for adding two numbers together, and \"returns\" the result. The function can be used like this:\n\n```typescript\nconst FIVE = addTwoNumbers(2, 3);\nconst TEN = addTwoNumbers(2, 8);\nconst ONE_HUNDRED = addTwoNumbers(50, 50);\n\n```\n\nYou can use functions to write specific, reusable instructions in one place, and then use them throughout your entire program. This allows you to encapsulate code which serves a specific purpose in a single location. This is important for code reuse \\(DRY: \"don't repeat yourself\"\\), code organization, code readability, and code testability.\n\nAs you build more complex programs, you will write more complex functions which call other functions, or functions which are composed of a series of smaller functions. Functions are the fundamental building block for building software applications. Eventually, you can conceptualize an entire application or program just as a function, or collection of functions.\n\nAll software is just data and operations or transformations of that data. Functions are what all you to perform these transformations.\n\nIn this section, we will get a lot of experience writing functions in TypeScript. Let's dive in\\!"
         },
         {
+          "id": "Sbb4NJbCP",
+          "type": "typescript",
+          "title": "Your First Function",
+          "instructions": "Let's start with something very simple. You will see the `addTwoNumbers` function we introduced in the section intro below. It just adds two numbers and returns the result. There is another function, `subtractTwoNumbers`, as well, but it is incomplete. Your job is to complete it\\!",
+          "testCode": "const tests = [\n  [3234, 435],\n  [32134, 46645],\n  [31234, 2342231],\n  [321341, 4234],\n  [3234, 2342],\n  [92342, 437],\n  [2343, 432324],\n  [233, 235],\n  [36579, 444],\n  [3, 12],\n];\n\ntest(\"The `addTwoNumbers` function should add the arguments together and return the result.\", () => {\n  for (const testCase of tests) {\n    expect(addTwoNumbers(...testCase)).toBe(testCase[0] + testCase[1]);\n  }\n});\n\ntest(\"The `subtractTwoNumbers` function should accept two arguments and return the result of subtracting the second from the first.\", () => {\n  for (const testCase of tests) {\n    expect(subtractTwoNumbers(...testCase)).toBe(testCase[0] - testCase[1]);\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction addTwoNumbers(a: number, b: number) {\n  return a + b;\n}\n\n/**\n * A function which takes two numbers and subtracts\n * the second from the first.\n */\nfunction subtractTwoNumbers(a: number, b: number) {\n  // Your code here\n}\n",
+          "solutionCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction addTwoNumbers(a: number, b: number) {\n  return a + b;\n}\n\n/**\n * A function which takes two numbers and subtracts\n * the second from the first.\n */\nfunction subtractTwoNumbers(a: number, b: number) {\n  // Your code here\n  return a - b;\n}\n",
+          "content": ""
+        },
+        {
+          "id": "67nNTFXZT",
+          "type": "typescript",
+          "title": "Multiply and Divide",
+          "instructions": "Great\\! Let's keep going with the math theme. There are two more incomplete functions in the editor below, `multiply` and `divide`. You know what to do\\!",
+          "testCode": "const tests = [\n  [3234, 435],\n  [32134, 46645],\n  [31234, 2342231],\n  [321341, 4234],\n  [3234, 2342],\n  [92342, 437],\n  [2343, 432324],\n  [233, 235],\n  [36579, 444],\n  [3, 12],\n];\n\ntest(\"The `multiply` function should add the arguments together and return the result of multiplying them together.\", () => {\n  for (const testCase of tests) {\n    expect(multiply(...testCase)).toBe(testCase[0] * testCase[1]);\n  }\n});\n\ntest(\"The `divide` function should accept two arguments and return the result of dividing the first by the second.\", () => {\n  for (const testCase of tests) {\n    expect(divide(...testCase)).toBe(testCase[0] / testCase[1]);\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "/**\n * A function which takes two numbers and multiplies\n * them together.\n */\nfunction multiply(a: number, b: number) {\n  // Your code here\n}\n\n/**\n * A function which takes two numbers and divides\n * the first by the second.\n */\nfunction divide(a: number, b: number) {\n  // Your code here\n}\n",
+          "solutionCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction multiply(a: number, b: number) {\n  // Your code here\n  return a * b;\n}\n\n/**\n * A function which takes two numbers and divides\n * the first by the second.\n */\nfunction divide(a: number, b: number) {\n  // Your code here\n  return a / b;\n}\n",
+          "content": ""
+        },
+        {
           "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",
