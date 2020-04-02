@@ -1309,6 +1309,17 @@
           "content": ""
         },
         {
+          "id": "EHIj@pzdY",
+          "type": "typescript",
+          "title": "Zero-based Indexes",
+          "instructions": "* Set `numElements` to the number of elements in the `things` array\\. In other words, the length of the array.\n   * NOTE: Use the `length` property of the array rather. The array is very short so you can clearly see there are only 4 elements, but in practice it won't always be clear how many elements an array has. The `length` property gives us this information on demand.\n* Set `first` equal to the first element of the `things` array\n* Set `last` equal to the last element of the `things` array\n\n\nRather than copying directly use array indexing to grab the value using it's index.\n",
+          "testCode": "// Write your tests here:\ntest(\"`numElements` is equal to the length of the array\", () => {\n  expect(numElements).toBe(things.length);\n});\ntest(\"`first` is equal to the first element of the array\", () => {\n  expect(first).toBe(things[0]);\n});\ntest(\"`last` is equal to the last element of the array\", () => {\n  expect(last).toBe(things[things.length - 1]);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "const things = [\"pears\", \"peaches\", \"apples\", \"juicer\"];\n\nconst numElements = undefined;\nconst first = undefined;\nconst last = undefined;\n\n",
+          "solutionCode": "const things = [\"pears\", \"peaches\", \"apples\", \"juicer\"];\n\nconst numElements = things.length;\nconst first = things[0];\nconst last = things[things.length - 1];\n\n",
+          "content": "# Zero\\-based?\n\nWhat this means is that the very first element of an array will always be at index zero. I.e. `someArray[0]`. This may be counterintuitive. For example if there are 8 elements in your array \\(i.e. the `length` is eight\\) and you want the last element you might be tempted to write `someArray[8]`. However, this will give you `undefined` for your troubles because the last element is actually at index `7`.\n# When in doubt, log it out\n\nOver time you will get used to this fact and you will not need to think much to work with arrays by index. However, it can get pretty confusing trying to think about what's at which index using simply your brain—after all, that's what computers are for. If you're ever in doubt just drop a `console.log` into your code somewhere and see what value you're actually getting.\n# Useful beyond TypeScript\n\nZero\\-based indexes is a fairly foundational concept in programming so it's worth trying to remember this early on. Mainstream programming languages such as Python, Ruby, PHP, Java, Swift, C\\# and of course JavaScript all use zero\\-based indexes. In fact, if you work as a software engineer or you write software for any reason at all the chances are overwhelmingly that you'll be using a language with zero\\-based indexes.\n\nAs with much of what you're learning in this course this knowledge is foundational.\n"
+        },
+        {
           "id": "KOlr7dhnP",
           "type": "typescript",
           "title": "Create Objects",
@@ -1328,17 +1339,6 @@
           "videoUrl": "",
           "starterCode": "// Typescript wants to know what things are beforehand, so this defintion\n// tells it we just want an object with all string values.\ntype StringsObject = { [k: string]: string };\n\nconst cat: StringsObject = {};\n\nconst JOB_PROPERTY = \"job\";\n\n//\n// Your code here\n// Modify the cat objecct \n",
           "solutionCode": "// Typescript wants to know what things are beforehand, so this defintion\n// tells it we just want an object with all string values.\ntype StringsObject = { [k: string]: string };\n\nconst cat: StringsObject = {};\n\nconst JOB_PROPERTY = \"job\";\n\ncat.name = \"Jarvis\";\ncat[JOB_PROPERTY] = \"Coding\";\n",
-          "content": ""
-        },
-        {
-          "id": "ZSRjgCS3m",
-          "type": "markup",
-          "title": "[EMPTY...]",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
           "content": ""
         },
         {
