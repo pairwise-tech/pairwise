@@ -225,7 +225,11 @@ const ApplicationContainer = (props: IProps) => {
           <div style={{ marginLeft: 20 }} />
           <ShortcutKeysPopover />
           {!isMobile && showFeedbackButton && (
-            <Tooltip content="Submit Feedback" position="bottom">
+            <Tooltip
+              usePortal={false}
+              position="bottom"
+              content="Submit Feedback"
+            >
               <IconButton
                 icon="help"
                 style={{ marginLeft: 6 }}
@@ -381,7 +385,7 @@ const Header = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 1000;
   padding-top: ${BORDER}px;
   padding-bottom: 0px;
   padding-left: 0px;

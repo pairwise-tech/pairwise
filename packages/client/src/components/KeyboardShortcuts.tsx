@@ -178,9 +178,8 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
 export const ShortcutKeysPopover = () => {
   return (
     <Popover
+      usePortal={false}
       position={Position.BOTTOM}
-      className="shortcut-key-popover"
-      popoverClassName="shortcut-key-popover"
       content={
         <ShortcutPopover>
           <ShortcutKeysTitle>Shortcut Keys</ShortcutKeysTitle>
@@ -197,7 +196,7 @@ export const ShortcutKeysPopover = () => {
         </ShortcutPopover>
       }
     >
-      <Tooltip content="View Shortcut Keys" position="bottom">
+      <Tooltip usePortal={false} content="View Shortcut Keys" position="bottom">
         <IconButton icon="path-search" aria-label="view shortcut keys" />
       </Tooltip>
     </Popover>
