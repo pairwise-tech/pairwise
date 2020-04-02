@@ -182,8 +182,9 @@ class ContentUtilityClass {
       return {
         id: course.id,
         title: course.title,
-        description: course.description,
         free: course.free,
+        price: course.price,
+        description: course.description,
       };
     } else {
       return null;

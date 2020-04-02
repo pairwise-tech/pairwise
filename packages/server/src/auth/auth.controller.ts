@@ -22,7 +22,10 @@ export class AuthController {
 
   @Post("email")
   public async handleEmailLoginRequest(@Req() req) {
-    await this.authService.handleEmailLoginRequest(req.body.email);
+    // Just call the method, we don't want to wait for it. It takes a
+    // while to actually send the email, so just respond immediately to
+    // the user.
+    this.authService.handleEmailLoginRequest(req.body.email);
     return SUCCESS_CODES.OK;
   }
 

@@ -13,6 +13,7 @@ export interface CourseBase {
   title: string;
   description: string;
   free: boolean;
+  price: number; // Course price, in cents (e.g. 5000 = $50)
 }
 
 export type CourseMetadata = CourseBase;
