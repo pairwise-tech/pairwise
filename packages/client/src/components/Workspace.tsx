@@ -75,7 +75,6 @@ import {
   LowerSection,
   RevealSolutionLabel,
   RunButton,
-  SolutionText,
   TestStatusTextTab,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
