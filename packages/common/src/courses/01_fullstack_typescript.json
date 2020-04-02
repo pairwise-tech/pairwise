@@ -1188,6 +1188,17 @@
           "content": ""
         },
         {
+          "id": "D1NAejvT@",
+          "type": "typescript",
+          "title": "How Functions Work",
+          "instructions": "Now you should have some basic understanding of how functions work. Let's introduce some keywords to help you understand more. A function is defined using the `function` keyword \\(or another syntax which we will see next\\). Functions accepts _arguments_ and _return_ a result. To \"use\" the function, you _invoke_ it\\. This runs the function and returns the result, which you can assign to a variable. Invoking one of the math functions from the previous challenge looks like this:\n\n```typescript\nconst FIFTY = multiply(5, 10);\n\n```\n\nThe `()` _invoke_ the function. When you invoke a function, you have to \"pass in\" any arguments the function is expecting. Here, we passed in `5` and `10` as arguments. The `FIFTY` value is then assigned the result of invoking the `multiply` function, which is `50`\\!\n\nIn the editor below is a function `greeting` which takes a `name` argument and returns a greeting for that person. There is a list of `names` and a loop which iterates over the list of names and it should greet everyone by name. Currently, the `greeting` in the loop is `undefined`. Change this to the result of invoking the `greeting` function with the `name` variable\\.",
+          "testCode": "test(\"The `greeting` function should return a string to greet the provide `name` argument.\", () => {\n  expect(createGreeting(\"Sam\")).toBe(\"Hello, Sam!\");\n});\n\ntest(\"Greetings for all of the `names` should be logged to the console.\", () => {\n  const logs = new Set(parseLogBox(__secret_log_box));\n  for (const name of names) {\n    const result = `Hello, ${name}!`;\n    expect(logs.has(result)).toBe(true);\n  }\n});",
+          "videoUrl": "",
+          "starterCode": "/**\n * A function to return a string to greet a user\n * by name.\n */\nfunction createGreeting(name: string) {\n  return `Hello, ${name}!`;\n}\n\n// A list of names\nconst names = [\n  \"Sam\",\n  \"Isaac\",\n  \"Jerry\",\n  \"Ryan\",\n  \"Sarah\",\n  \"Mia\",\n];\n\n// Greet everyone:\nfor (const name of names) {\n  // Change the code here!\n  const greeting = undefined;\n  console.log(greeting);\n}",
+          "solutionCode": "/**\n * A function to return a string to greet a user\n * by name.\n */\nfunction createGreeting(name: string) {\n  return `Hello, ${name}!`;\n}\n\n// A list of names\nconst names = [\n  \"Sam\",\n  \"Isaac\",\n  \"Jerry\",\n  \"Ryan\",\n  \"Sarah\",\n  \"Mia\",\n];\n\n// Greet everyone:\nfor (const name of names) {\n  // Change the code here!\n  const greeting = createGreeting(name);\n  console.log(greeting);\n}",
+          "content": ""
+        },
+        {
           "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",
