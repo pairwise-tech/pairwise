@@ -75,6 +75,8 @@ import {
   LowerSection,
   RevealSolutionLabel,
   RunButton,
+  SolutionText,
+  TestStatusTextTab,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
@@ -777,6 +779,9 @@ class Workspace extends React.Component<IProps, IState> {
                         >
                           Test Code
                         </Tab>
+                        {isEditMode && (
+                          <TestStatusTextTab passing={allTestsPassing} />
+                        )}
                       </TabbedInnerNav>
                       {this.props.isEditMode &&
                       this.props.adminTestTab === "testCode" ? (

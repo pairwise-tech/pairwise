@@ -263,6 +263,7 @@ export const SuccessFailureText = styled.p`
 `;
 
 export const TabbedInnerNav = styled.div<{ show: boolean }>`
+  position: relative;
   display: ${props => (props.show ? "flex" : "none")};
   align-items: center;
   border-bottom: 1px solid black;
@@ -296,6 +297,25 @@ export const Tab = styled.div<{ active?: boolean }>`
     background: ${props => (props.active ? "#1e1e1e" : "transparent")};
   }
 `;
+
+const TestStatusText = styled.p<{ passing: boolean }>`
+  margin: 0;
+  color: ${props => (props.passing ? COLORS.SUCCESS : COLORS.FAILURE)};
+`;
+
+const StatusTab = styled.div`
+  top: 7px;
+  right: 12px;
+  position: absolute;
+`;
+
+export const TestStatusTextTab = ({ passing }: { passing: boolean }) => (
+  <StatusTab>
+    <TestStatusText passing={passing}>
+      {passing ? "Tests Passing" : "Tests Failing"}
+    </TestStatusText>
+  </StatusTab>
+);
 
 export const LoginSignupText = styled.h1`
   margin-right: 12px;
