@@ -460,7 +460,7 @@
         {
           "id": "C$3mo2yQ",
           "type": "media",
-          "title": "The Document Objet Model",
+          "title": "The Document Object Model",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
