@@ -1,4 +1,4 @@
-import { CLIENT_APP_URL, TIMEOUT } from "../support/cypress-utils";
+import { CLIENT_APP_URL, TIMEOUT, click, type } from "../support/cypress-utils";
 
 /** ===========================================================================
  * Auth Tests
@@ -11,35 +11,35 @@ describe("Authentication Flows: signin, profile, and logout", () => {
   beforeEach(() => {
     cy.visit(CLIENT_APP_URL);
     cy.wait(TIMEOUT);
-    cy.get("#login-signup-button").click({ force: true });
+    click("login-signup-button");
   });
 
   it("Facebook Authentication", () => {
-    loginByLinkId("#facebook-login");
+    click("facebook-login");
     assertAuthenticatedFlowWorks();
   });
 
   it("GitHub Authentication", () => {
-    loginByLinkId("#github-login");
+    click("github-login");
     assertAuthenticatedFlowWorks();
   });
 
   it("Google Authentication", () => {
-    loginByLinkId("#google-login");
+    click("google-login");
     assertAuthenticatedFlowWorks();
   });
 
   it("Account page works", () => {
-    loginByLinkId("#facebook-login");
+    click("facebook-login");
     cy.get("#account-menu-dropdown").trigger("mouseover");
-    cy.get("#account-link").click({ force: true });
+    click("account-link");
     cy.contains("Account");
 
-    cy.get("#edit-profile-button").click({ force: true });
-    cy.get("#edit-input-given-name").type("Linus");
-    cy.get("#edit-input-family-name").type("Torvalds");
-    cy.get("#edit-input-display-name").type("Linus Torvalds");
-    cy.get("#save-profile-button").click({ force: true });
+    click("edit-profile-button");
+    type("edit-input-given-name", "Linus");
+    type("edit-input-family-name", "Torvalds");
+    type("edit-input-display-name", "Linus Torvalds");
+    click("save-profile-button");
 
     /* Let the updates occur */
     cy.wait(TIMEOUT);
@@ -64,7 +64,7 @@ const assertAuthenticatedFlowWorks = () => {
   cy.contains("Welcome, ");
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
-  cy.get("#account-link").click({ force: true });
+  click("account-link");
   cy.contains("Account");
 
   cy.reload();
@@ -72,7 +72,7 @@ const assertAuthenticatedFlowWorks = () => {
   cy.contains("Welcome, ");
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
-  cy.get("#logout-link").click({ force: true });
+  click("logout-link");
 
   cy.contains("Login or Signup");
   cy.url().should("include", "home");
@@ -80,11 +80,4 @@ const assertAuthenticatedFlowWorks = () => {
   cy.reload();
   cy.contains("Login or Signup");
   cy.url().should("include", "home");
-};
-
-/**
- * Helper to click the appropriate SSO login link.
- */
-const loginByLinkId = (id: string) => {
-  cy.get(id).click({ force: true });
 };

@@ -46,9 +46,9 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.url().should("include", "workspace");
 
     /* Open the navigation menu and navigate to the first programming challenge: */
-    cy.get("#navigation-menu-button").click({ force: true });
-    cy.get("#module-navigation-1").click({ force: true });
-    cy.get("#challenge-navigation-0").click({ force: true });
+    click("navigation-menu-button");
+    click("module-navigation-1");
+    click("challenge-navigation-0");
 
     let challengeId = "";
 

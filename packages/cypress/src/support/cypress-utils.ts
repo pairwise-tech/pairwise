@@ -9,7 +9,21 @@ export const EXTERNAL_SERVICES_URL = Cypress.env("EXTERNAL_SERVICES_URL");
 
 export const TIMEOUT = Cypress.env("TIMEOUT");
 
-// Convert an id string to an id identifier which includes a #.
+/**
+ * Convert an id string to an id identifier which includes a #.
+ *
+ * NOTE: We have decided to exclusively use HTML `id` attributes
+ * to identify Cypress test elements. We realize this is not
+ * exactly a standard practice, but we chose to for 2 reasons:
+ *
+ * 1) id is a very short and easy attribute to add in JSX.
+ * 2) id should not change, and we should very rarely need it
+ * for other reasons, e.g. targeting or manipulating DOM elements
+ * directly. This means it should be stable for use in tests.
+ *
+ * Because of this, we can assume the majority of selectors in
+ * Cypress tests are using HTML ids.
+ */
 const toId = (id: string) => `#${id}`;
 
 // Click an element by it's id. Pass in an id without the #.
@@ -24,8 +38,10 @@ export const type = (id: string, text: string) => {
 
 const MONACO_TEXT_ELEMENT_IDENTIFIER = ".view-lines";
 
-// Enter text in the code editor, targeting it with a
-// specific class.
+/**
+ * Enter text in the code editor, targeting it with a specific
+ * class.
+ */
 export const typeTextInCodeEditor = (text: string) => {
   cy.get(MONACO_TEXT_ELEMENT_IDENTIFIER).type(text);
 };

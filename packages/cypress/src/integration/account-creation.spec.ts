@@ -2,6 +2,8 @@ import {
   CLIENT_APP_URL,
   TIMEOUT,
   typeTextInCodeEditor,
+  elementContains,
+  click,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -43,9 +45,9 @@ describe("Account Creation Flow", () => {
     cy.url().should("include", "workspace");
 
     /* Open the navigation menu and navigate to the first programming challenge: */
-    cy.get("#navigation-menu-button").click({ force: true });
-    cy.get("#module-navigation-1").click({ force: true });
-    cy.get("#challenge-navigation-2").click({ force: true });
+    click("navigation-menu-button");
+    click("module-navigation-1");
+    click("challenge-navigation-2");
 
     checkTestResultStatus("Incomplete...");
     typeTextInCodeEditor("<h1>Hello!</h1>");
@@ -68,19 +70,19 @@ describe("Account Creation Flow", () => {
     checkTestResultStatus("Success!", 3);
     goToNext();
 
-    cy.get("#login-signup-button").click({ force: true });
-    cy.get("#facebook-login").click({ force: true });
+    click("login-signup-button");
+    click("facebook-login");
 
     cy.wait(5000); /* Wait! */
 
     const checkCourseState = () => {
       cy.contains("Welcome, ");
-      cy.get("#navigation-menu-button").click({ force: true });
-      cy.get("#module-navigation-1").click({ force: true });
-      cy.get("#challenge-navigation-1").click({ force: true });
+      click("navigation-menu-button");
+      click("module-navigation-1");
+      click("challenge-navigation-1");
 
       goToNext();
-      cy.get("#test-result-status-0").contains("Success!");
+      elementContains("test-result-status-0", "Success!");
       goToNext();
       checkTestResultStatus("Success!", 6);
       goToNext();
