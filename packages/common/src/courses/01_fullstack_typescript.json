@@ -1551,6 +1551,17 @@
           "content": ""
         },
         {
+          "id": "TL9i1z2rT",
+          "type": "typescript",
+          "title": "Circumference",
+          "instructions": "Let's write a function to calculate the circumference of a circle. Recall from math class that the circumference is `C = 2πr` where `r` is the radius of the circle.\n\n**Hint: **TypeScript provides the constant π with `Math.PI`.\n\n```\nCircumference: 2 * π * radius\n\n```\n",
+          "testCode": "test(\"The `getCircumference` function should calculate and return the circumference of the provided `Circle`.\", () => {\n  expect(getCircumference({ radius: 10 })).toBe(2 * Math.PI * 10);\n  expect(getCircumference({ radius: 12 })).toBe(2 * Math.PI * 12);\n  expect(getCircumference({ radius: 192 })).toBe(2 * Math.PI * 192);\n  expect(getCircumference({ radius: 105 })).toBe(2 * Math.PI * 105);\n  expect(getCircumference({ radius: 637 })).toBe(2 * Math.PI * 637);\n  expect(getCircumference({ radius: 2893 })).toBe(2 * Math.PI * 2893);\n});\n",
+          "videoUrl": "",
+          "starterCode": "interface Circle {\n  radius: number;\n}\n\n// Return the circumference of a circle\nconst getCircumference = (circle: Circle): number => {\n  // Your code here\n}",
+          "solutionCode": "interface Circle {\n  radius: number;\n}\n\n// Return the circumference of a circle\nconst getCircumference = (circle: Circle): number => {\n  return 2 * Math.PI * circle.radius;\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
