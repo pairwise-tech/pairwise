@@ -1213,6 +1213,17 @@
           "content": ""
         },
         {
+          "id": "RReii2Dod",
+          "type": "typescript",
+          "title": "Create a Calculator with Functions",
+          "instructions": "Functions can be combined in diverse ways to create more complex functionality. In the editor below are four simple math functions, `add`, `subtract`, `multiply`, and `divide`. Then, there is a calculator function, which should return a new `Calculator` object which includes all of these math functions. Give a ",
+          "testCode": "test(\"The `createCalculator` should return a `Calculator` object with the provided math functions.\", () => {\n  const newTestCalculator = createCalculator();\n  expect(newTestCalculator.add(5, 10)).toBe(15);\n  expect(newTestCalculator.subtract(5, 10)).toBe(-5);\n  expect(newTestCalculator.multiply(5, 10)).toBe(50);\n  expect(newTestCalculator.divide(5, 10)).toBe(0.5);\n\n  expect(newTestCalculator.add(5, 100)).toBe(105);\n  expect(newTestCalculator.subtract(50, 10)).toBe(40);\n  expect(newTestCalculator.multiply(50, 10)).toBe(500);\n  expect(newTestCalculator.divide(5, 1)).toBe(5);\n\n  expect(newTestCalculator.add(500, 10)).toBe(510);\n  expect(newTestCalculator.subtract(500, 10)).toBe(490);\n  expect(newTestCalculator.multiply(10, 100)).toBe(1000);\n  expect(newTestCalculator.divide(400, 2)).toBe(200);\n});\n",
+          "videoUrl": "",
+          "starterCode": "type MathFunction = (a: number, b: number) => number;\n\nconst add = (a: number, b: number) => a + b;\nconst subtract = (a: number, b: number) => a - b;\nconst multiply = (a: number, b: number) => a * b;\nconst divide = (a: number, b: number) => a / b;\n\ninterface Calculator {\n  add: MathFunction;\n  subtract: MathFunction;\n  multiply: MathFunction;\n  divide: MathFunction;\n}\n\n/**\n * A function which uses the math functions defined\n * above to return a Calculator object.\n */\nconst createCalculator = (): Calculator => {\n  // Your code here!\n}\n\n// Create a calculator:\nconst calculator = createCalculator();\n\n// Try it out!\nconsole.log(calculator.add(5, 10));\nconsole.log(calculator.subtract(5, 10));\nconsole.log(calculator.multiply(5, 10));\nconsole.log(calculator.divide(5, 10));\n\n",
+          "solutionCode": "type MathFunction = (a: number, b: number) => number;\n\nconst add = (a: number, b: number) => a + b;\nconst subtract = (a: number, b: number) => a - b;\nconst multiply = (a: number, b: number) => a * b;\nconst divide = (a: number, b: number) => a / b;\n\ninterface Calculator {\n  add: MathFunction;\n  subtract: MathFunction;\n  multiply: MathFunction;\n  divide: MathFunction;\n}\n\n/**\n * A function which uses the math functions defined\n * above to return a Calculator object.\n */\nconst createCalculator = (): Calculator => {\n  /**\n   * We can use the object shorthand proerty to\n   * easily return a new Calculator object since\n   * the field names match the math function names.\n   */\n  return {\n    add,\n    subtract,\n    multiply,\n    divide,\n  };\n}\n\n// Create a calculator:\nconst calculator = createCalculator();\n\n// Try it out!\nconsole.log(calculator.add(5, 10));\nconsole.log(calculator.subtract(5, 10));\nconsole.log(calculator.multiply(5, 10));\nconsole.log(calculator.divide(5, 10));\n\n",
+          "content": ""
+        },
+        {
           "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",

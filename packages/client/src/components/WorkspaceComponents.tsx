@@ -300,7 +300,7 @@ export const Tab = styled.div<{ active?: boolean }>`
 
 const TestStatusText = styled.p<{ passing: boolean }>`
   margin: 0;
-  color: ${props => (props.passing ? COLORS.SUCCESS : COLORS.FAILURE)};
+  color: ${props => (props.passing ? COLORS.NEON_GREEN : COLORS.FAILURE)};
 `;
 
 const StatusTab = styled.div`
