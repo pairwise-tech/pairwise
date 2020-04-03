@@ -1202,6 +1202,17 @@
           "content": ""
         },
         {
+          "id": "acyr@oJWa",
+          "type": "typescript",
+          "title": "Return a Function From a Function",
+          "instructions": "You can return functions from functions in order to create more versatile, reusable, and composable pieces of code. This is a harder to concept to wrap your mind around at first. Let's try to dive in with a simple example\\!\n\nThe `createCurrencyDisplayFunction` return the `displayCurrency` function\\. This `displayCurrency` function should return a string representing the provided `currency` and `amount`, e.g. a string like this: `Amount: 100 USD`.",
+          "testCode": "test(\"Given `AUD`, `createCurrencyDisplayFunction` should a function which given an `amount` `1000` returns a string: `Amount: 1000 AUD`.\", () => {\n  let fn = createCurrencyDisplayFunction(\"AUD\");\n  let result = fn(1000);\n  let expected = \"Amount: 1000 AUD\";\n  expect(result).toBe(expected);\n});\n\ntest(\"`createCurrencyDisplayFunction` should return a function which returns a string showing the provided `amount` and `currency`.\", () => {\n  let fn = createCurrencyDisplayFunction(\"USD\");\n  let result = fn(500);\n  let expected = \"Amount: 500 USD\";\n  expect(result).toBe(expected);\n\n  fn = createCurrencyDisplayFunction(\"JPY\");\n  result = fn(5.1);\n  expected = \"Amount: 5.1 JPY\";\n  expect(result).toBe(expected);\n\n  result = fn(5000.12);\n  expected = \"Amount: 5000.12 JPY\";\n  expect(result).toBe(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "type Currency = \"USD\" | \"EUR\" | \"JPY\" | \"AUD\" | \"NZD\";\n\n// Return a function to help displayig a value in different\n// currencies.\nconst createCurrencyDisplayFunction = (currency: Currency) => {\n  // Create a new function to render an amount with\n  // the provied currency.\n  const displayCurrency = (amount: number) => {\n    // Your code here!\n  };\n\n  // Return the new function!\n  return displayCurrency;\n};\n\n// Try it out:\nconst displayFunction = createCurrencyDisplayFunction(\"USD\");\nconst result = displayFunction(500);\nconsole.log(result);\n",
+          "solutionCode": "type Currency = \"USD\" | \"EUR\" | \"JPY\" | \"AUD\" | \"NZD\";\n\n// Return a function to help displayig a value in different\n// currencies.\nconst createCurrencyDisplayFunction = (currency: Currency) => {\n  // Create a new function to render an amount with\n  // the provied currency.\n  const displayCurrency = (amount: number) => {\n    return `Amount: ${amount} ${currency}`;\n  };\n\n  // Return the new function!\n  return displayCurrency;\n};\n\n// Try it out:\nconst displayFunction = createCurrencyDisplayFunction(\"USD\");\nconst result = displayFunction(500);\nconsole.log(result);",
+          "content": ""
+        },
+        {
           "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",
