@@ -1468,13 +1468,13 @@
         {
           "id": "Hvnu4UcaE",
           "type": "section",
-          "title": "Algorithms",
+          "title": "Algorithms Practice",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Now you have learned all the basics of a programming language\\! Now that you have a solid foundation it's time to put your skills to the test solving some algorithms. These will be simple, and increasingly more challenging, problems that require you to write a function to perform some specific operation or algorithm. To solve them, you will need to have a firm grasp of all the basic programming concepts: conditional statements, loops, data structures, functions, and so on.\n\nSolving a number of questions like this is the best way to build up your programming skills and become confident in your abilities."
+          "content": "Now you have learned all the basics of a programming language\\! Now that you have a solid foundation it's time to put your skills to the test solving some algorithms. These will be simple, and increasingly more challenging, problems that require you to write a function to perform some specific operation or algorithm. To solve them, you will need to have a firm grasp of all the basic programming concepts: conditional statements, loops, data structures, functions, and so on.\n\nSolving a number of questions like this is the best way to build up your programming skills and become confident in your abilities.\n\nA quick note about algorithms: eventually, in your journey as a programmer you may find yourself in an interview where you have to solve algorithm questions, perhaps on a whiteboard or in a coding environment. These can be a hard and challenging part of getting a job as a programmer.\n\nThis section is not meant to be practice for this style of algorithm questions. It is just meant to provide a lot of simple practice putting to use the concepts and skills you have learned in the previous challenges. These algorithms should give you ample practice writing functions, working with arrays, objects, and classes, and experimenting with the language features TypeScript has to offer. By the end, you should be very comfortable writing TypeScript\\!"
         },
         {
           "id": "6T3GXc4ap",
