@@ -1,4 +1,8 @@
-import { CLIENT_APP_URL, TIMEOUT } from "../support/cypress-utils";
+import {
+  CLIENT_APP_URL,
+  TIMEOUT,
+  typeTextInCodeEditor,
+} from "../support/cypress-utils";
 
 /** ===========================================================================
  * Account Creation Tests
@@ -44,7 +48,7 @@ describe("Account Creation Flow", () => {
     cy.get("#challenge-navigation-2").click({ force: true });
 
     checkTestResultStatus("Incomplete...");
-    cy.get(".view-lines").type("<h1>Hello!</h1>");
+    typeTextInCodeEditor("<h1>Hello!</h1>");
     checkTestResultStatus("Success!");
 
     goToNext();
@@ -55,14 +59,12 @@ describe("Account Creation Flow", () => {
     checkTestStatus("Incomplete...", 3);
     checkTestStatus("Incomplete...", 4);
     checkTestStatus("Incomplete...", 5);
-    cy.get(".view-lines").type(
-      "<h2>2</h2><h3>3</h3><h4>4</h4><h5>5</h5><h6>6</h6>",
-    );
+    typeTextInCodeEditor("<h2>2</h2><h3>3</h3><h4>4</h4><h5>5</h5><h6>6</h6>");
     checkTestResultStatus("Success!", 6);
 
     goToNext();
     checkTestResultStatus("Incomplete...", 3);
-    cy.get(".view-lines").type("<p>This text is: <b>bold!</b></p>");
+    typeTextInCodeEditor("<p>This text is: <b>bold!</b></p>");
     checkTestResultStatus("Success!", 3);
     goToNext();
 

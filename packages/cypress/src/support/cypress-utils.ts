@@ -22,6 +22,14 @@ export const type = (id: string, text: string) => {
   cy.get(toId(id)).type(text);
 };
 
+const MONACO_TEXT_ELEMENT_IDENTIFIER = ".view-lines";
+
+// Enter text in the code editor, targeting it with a
+// specific class.
+export const typeTextInCodeEditor = (text: string) => {
+  cy.get(MONACO_TEXT_ELEMENT_IDENTIFIER).type(text);
+};
+
 // Asset some element with an id contains some text.
 export const elementContains = (id: string, text: string) => {
   cy.get(toId(id)).contains(text);
