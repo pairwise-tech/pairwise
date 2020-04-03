@@ -1529,6 +1529,17 @@
           "content": ""
         },
         {
+          "id": "RZ@VTuljX",
+          "type": "typescript",
+          "title": "Sort The Boxes",
+          "instructions": "A `Box` can be small, medium, or large. Write a function to accept a list of boxes and sort them into an object based on their size.",
+          "testCode": "const solutionFn = (boxes) => {\n  let result = {\n    small: [],\n    medium: [],\n    large: [],\n  };\n  for (const box of boxes) {\n    if (box.size === \"small\") {\n      result = {\n        ...result,\n        small: result.small.concat(box),\n      };\n    } else if (box.size === \"medium\") {\n      result = {\n        ...result,\n        medium: result.medium.concat(box),\n      };\n    } else if (box.size === \"large\") {\n      result = {\n        ...result,\n        large: result.large.concat(box),\n      };\n    }\n  }\n  return result;\n};\n\ntest(\"The `sortTheBoxes` function should sort the provided list of boxes correctly and return a `SortedBoxes` object.\", () => {\n  const small = {\n    size: \"small\",\n    contents: 5,\n  };\n  const medium = {\n    size: \"medium\",\n    contents: 10,\n  };\n  const large = {\n    size: \"large\",\n    contents: 50,\n  };\n\n  let boxes = [small, medium, medium, small, large, medium, small, large];\n  let result = sortTheBoxes(boxes);\n  let expected = solutionFn(boxes);\n  expect(result).toEqual(expected);\n\n  boxes = [large, large, large, large, large, small, small];\n  result = sortTheBoxes(boxes);\n  expected = solutionFn(boxes);\n  expect(result).toEqual(expected);\n\n  boxes = [\n    large,\n    medium,\n    small,\n    small,\n    medium,\n    medium,\n    medium,\n    large,\n    large,\n    medium,\n    medium,\n    medium,\n    large,\n    small,\n  ];\n  result = sortTheBoxes(boxes);\n  expected = solutionFn(boxes);\n  expect(result).toEqual(expected);\n\n  boxes = [];\n  result = sortTheBoxes(boxes);\n  expected = solutionFn(boxes);\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "type BoxSize = \"small\" | \"medium\" | \"large\";\n\ninterface Box {\n  size: BoxSize;\n  contents: any;\n}\n\ninterface SortedBoxes {\n  small: Box[];\n  medium: Box[];\n  large: Box[];\n}\n\nconst sortTheBoxes = (boxes: Box[]): SortedBoxes => {\n  // Your code here\n};",
+          "solutionCode": "type BoxSize = \"small\" | \"medium\" | \"large\";\n\ninterface Box {\n  size: BoxSize;\n  contents: any;\n}\n\ninterface SortedBoxes {\n  small: Box[];\n  medium: Box[];\n  large: Box[];\n}\n\nconst sortTheBoxes = (boxes: Box[]): SortedBoxes => {\n  let result: SortedBoxes = {\n    small: [],\n    medium: [],\n    large: [],\n  };\n\n  // Iterate over the boxes and place them according to their\n  // size:\n  for (const box of boxes) {\n    if (box.size === \"small\") {\n      result = {\n        ...result,\n        small: result.small.concat(box),\n      };\n    } else if (box.size === \"medium\") {\n      result = {\n        ...result,\n        medium: result.medium.concat(box),\n      };\n    } else if (box.size === \"large\") {\n      result = {\n        ...result,\n        large: result.large.concat(box),\n      };\n    }\n  }\n\n  return result;\n};",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
