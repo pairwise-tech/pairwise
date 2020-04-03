@@ -134,8 +134,7 @@ export const generateEmptyModule = (): Module => ({
   free: false /* All challenges are locked by default */,
 });
 
-const starterTestCode = `// Write your tests here:
-test("Write your test assertion here", () => {
+const starterTestCode = `test("Write your test assertion here", () => {
   expect(true).toBe(true);
 });
 `;
