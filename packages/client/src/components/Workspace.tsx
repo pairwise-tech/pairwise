@@ -595,8 +595,9 @@ class Workspace extends React.Component<IProps, IState> {
       revealSolutionCode,
     } = this.props;
     const { fullScreenEditor } = userSettings;
-    const isSandbox = challenge.id === SANDBOX_ID;
-    const isFullScreen = fullScreenEditor || isSandbox;
+
+    const IS_SANDBOX = challenge.id === SANDBOX_ID;
+    const IS_FULLSCREEN = fullScreenEditor || IS_SANDBOX;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
@@ -677,7 +678,7 @@ class Workspace extends React.Component<IProps, IState> {
           <Popover
             content={
               <Menu>
-                {!isSandbox && (
+                {!IS_SANDBOX && (
                   <MenuItem
                     icon={fullScreenEditor ? "collapse-all" : "expand-all"}
                     aria-label="toggle editor size"
@@ -708,20 +709,22 @@ class Workspace extends React.Component<IProps, IState> {
                   onClick={this.resetCodeWindow}
                   text="Restore Initial Code"
                 />
-                <MenuItem
-                  icon={revealSolutionCode ? "application" : "applications"}
-                  aria-label={
-                    revealSolutionCode
-                      ? "hide solution code"
-                      : "reveal solution code"
-                  }
-                  text={
-                    revealSolutionCode
-                      ? "Hide Solution Code"
-                      : "Reveal Solution Code"
-                  }
-                  onClick={this.props.handleToggleSolutionCode}
-                />
+                {!IS_SANDBOX && (
+                  <MenuItem
+                    icon={revealSolutionCode ? "application" : "applications"}
+                    aria-label={
+                      revealSolutionCode
+                        ? "hide solution code"
+                        : "reveal solution code"
+                    }
+                    text={
+                      revealSolutionCode
+                        ? "Hide Solution Code"
+                        : "Reveal Solution Code"
+                    }
+                    onClick={this.props.handleToggleSolutionCode}
+                  />
+                )}
               </Menu>
             }
             position={Position.LEFT_BOTTOM}
@@ -744,7 +747,7 @@ class Workspace extends React.Component<IProps, IState> {
                 initialWidth={D.EDITOR_PANEL_WIDTH}
                 initialHeight={D.WORKSPACE_HEIGHT}
               >
-                {!isFullScreen ? (
+                {!IS_FULLSCREEN ? (
                   <RowsWrapper separatorProps={rowSeparatorProps}>
                     <Row
                       initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
