@@ -1562,6 +1562,17 @@
           "content": ""
         },
         {
+          "id": "Bqb7cmX3q",
+          "type": "typescript",
+          "title": "Pythagorean",
+          "instructions": "Recall the [Pythagorean theorem](https://en.wikipedia.org/wiki/Pythagorean_theorem) from math class \\(we know you want to 😉\\): `a^2 + b^2 = c^2`. Given a `Triangle` with sides `a` and `b`, return the length of side `c` using the Pythagorean formula.",
+          "testCode": "const solutionFn = (triangle) => {\n  return Math.sqrt(Math.pow(triangle.a, 2) + Math.pow(triangle.b, 2));\n};\n\ntest(\"Given a `Triangle`, `pythagoreanFormula` should return the length of the longest side.\", () => {\n  let triangle = { a: 3, b: 4 };\n  let result = pythagoreanFormula(triangle);\n  let expected = solutionFn(triangle);\n  expect(result).toBe(expected);\n\n  triangle = { a: 30, b: 42 };\n  result = pythagoreanFormula(triangle);\n  expected = solutionFn(triangle);\n  expect(result).toBe(expected);\n\n  triangle = { a: 30, b: 42 };\n  result = pythagoreanFormula(triangle);\n  expected = solutionFn(triangle);\n  expect(result).toBe(expected);\n\n  triangle = { a: 5, b: 12 };\n  result = pythagoreanFormula(triangle);\n  expected = solutionFn(triangle);\n  expect(result).toBe(expected);\n\n  triangle = { a: 39, b: 80 };\n  result = pythagoreanFormula(triangle);\n  expected = solutionFn(triangle);\n  expect(result).toBe(expected);\n\n  triangle = { a: 65, b: 72 };\n  result = pythagoreanFormula(triangle);\n  expected = solutionFn(triangle);\n  expect(result).toBe(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "interface Triangle {\n  a: number;\n  b: number;\n}\n\n// Return the length of the longest side of a triangle\nconst pythagoreanFormula = (triangle: Triangle): number => {\n  // Your code here\n};\n",
+          "solutionCode": "interface Triangle {\n  a: number;\n  b: number;\n}\n\n// Return the length of the longest side of a triangle\nconst pythagoreanFormula = (triangle: Triangle): number => {\n  const c = Math.sqrt(Math.pow(triangle.a, 2) + Math.pow(triangle.b, 2));\n  return c;\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
