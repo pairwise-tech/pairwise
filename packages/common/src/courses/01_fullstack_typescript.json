@@ -1573,6 +1573,17 @@
           "content": ""
         },
         {
+          "id": "3evnp9yvA",
+          "type": "typescript",
+          "title": "Count the Words",
+          "instructions": "People take word processors for granted\\! They are actually much more complicated than you might imagine. Let's implement one basic functionality: word count. Given a string of text, return the number of words in the string. Don't worry about spelling, a word is just a substring with spaces on either side.\n\nThe string `Today I am learning to code.` has 6 words in it, for example. Good luck\\!",
+          "testCode": "test(\"The `wordCount` function should return the number of words in a string.\", () => {\n  expect(wordCount(\"I am a cat.\")).toBe(4);\n  expect(wordCount(\"\")).toBe(0);\n  expect(wordCount(\"I love learning to code!\")).toBe(5);\n  expect(wordCount(\"Amazing\")).toBe(1);\n  const bigString = \"is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\";\n  expect(wordCount(bigString)).toBe(89);\n});\n\ntest(\"The `wordCount` function should return `0` for empty string `\\\"\\\"` arguments.\", () => {\n  expect(wordCount(\"\")).toBe(0);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// A function to perform word count on a string\nconst wordCount = (text: string): number => {\n  // Your code here\n}",
+          "solutionCode": "// A function to perform word count on a string\nconst wordCount = (text: string): number => {\n  // We can just split the text based on the presence of \" \" spaces\n  // and return the length of the array.\n  return text.split(\" \").filter(Boolean).length;\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
