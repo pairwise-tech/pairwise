@@ -44,7 +44,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // Go to the account page
     cy.get("#account-menu-dropdown").trigger("mouseover");
-    cy.get("#account-link").click({ force: true });
+    click("account-link");
 
     // Find the user email and dispatch a request to the admin API to
     // purchase a course for this user. See the above comments for an

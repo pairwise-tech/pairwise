@@ -1,3 +1,4 @@
+import styled from "styled-components/macro";
 import { ControlledEditor, EditorDidMount } from "@monaco-editor/react";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
@@ -10,49 +11,25 @@ import {
 } from "tools/code-worker";
 import { COLORS, MONACO_EDITOR_FONT_SIZE_STEP } from "tools/constants";
 import { LowerRight, IconButton } from "./Shared";
-import { Tooltip, ButtonGroup } from "@blueprintjs/core";
-import { CodeFormatMessageEvent } from "tools/test-utils";
+import { Tooltip, ButtonGroup, Popover } from "@blueprintjs/core";
+import { CodeFormatMessageEvent, TEST_UTILS_GLOBALS } from "tools/test-utils";
 import { MonacoEditorThemes } from "@pairwise/common";
+import toaster from "tools/toast-utils";
+import { copyToClipboard } from "tools/utils";
 
 const debug = require("debug")("client:ChallengeTestEditor");
 
-const mapStateToProps = (state: ReduxStoreState) => ({
-  challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
-  editorOptions: Modules.selectors.user.editorOptions(state),
-  userSettings: Modules.selectors.user.userSettings(state),
-  challengeTestCode: Modules.selectors.challenges.getCurrentChallengeTestCode(
-    state,
-  ),
-});
-
-const dispatchProps = {
-  updateChallenge: Modules.actions.challenges.updateChallenge,
-  updateUserSettings: Modules.actions.user.updateUserSettings,
-};
-
-const mergeProps = (
-  state: ReturnType<typeof mapStateToProps>,
-  methods: typeof dispatchProps,
-  props: {},
-) => ({
-  ...props,
-  ...methods,
-  ...state,
-  increaseFontSize: () =>
-    methods.updateUserSettings({
-      workspaceFontSize:
-        state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
-    }),
-  decreaseFontSize: () =>
-    methods.updateUserSettings({
-      workspaceFontSize:
-        state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
-    }),
-});
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
 
 const CODE_FORMAT_CHANNEL = "TEST_EDITOR";
 
-type Props = ReturnType<typeof mergeProps>;
+/** ===========================================================================
+ * React Component
+ * ============================================================================
+ */
 
 const ChallengeTestEditor = (props: Props) => {
   const {
@@ -82,16 +59,6 @@ const ChallengeTestEditor = (props: Props) => {
     }
 
     const testCode = getEditorValue();
-    // try {
-    //   // NOTE: This is just to make sure it is valid before storying it, since
-    //   // you are bound to get invalid JSON during the process of typing some
-    //   // out.
-    //   JSON.parse(testCode);
-    // } catch (err) {
-    //   console.log(testCode);
-    //   console.log(JSON.stringify(testCode));
-    //   return;
-    // }
 
     // Since we're using a keyup handler this helps to make it function like a change handler.
     const shouldUpdate = testCode !== props.challengeTestCode;
@@ -187,10 +154,129 @@ const ChallengeTestEditor = (props: Props) => {
             onClick={handleFormatCode}
           />
         </Tooltip>
+        <Popover
+          content={
+            <TestUtilsPopover>
+              <TestUtilsTitle>Global Test Utils</TestUtilsTitle>
+              {Object.entries(TEST_UTILS_GLOBALS).map(
+                ([globalValue, description]) => {
+                  return (
+                    <UtilBox
+                      key={globalValue}
+                      onClick={() => {
+                        copyToClipboard(globalValue);
+                        toaster.success(`"${globalValue}" copied!`);
+                      }}
+                    >
+                      <CopyText>
+                        <Code>{globalValue}</Code>
+                      </CopyText>
+                      <DescriptionText>{description}</DescriptionText>
+                    </UtilBox>
+                  );
+                },
+              )}
+            </TestUtilsPopover>
+          }
+        >
+          <Tooltip content="View Test Utils" position="left">
+            <IconButton
+              icon="helper-management"
+              aria-label="test utils helpers"
+            />
+          </Tooltip>
+        </Popover>
       </LowerRight>
     </div>
   );
 };
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const TestUtilsPopover = styled.div`
+  padding: 18px;
+  padding-left: 24px;
+  padding-right: 24px;
+`;
+
+const UtilBox = styled.div`
+  margin-top: 8px;
+
+  :hover {
+    cursor: pointer;
+
+    code {
+      color: ${COLORS.NEON_GREEN};
+    }
+  }
+`;
+
+const CopyText = styled.p`
+  margin: 0;
+`;
+
+const Code = styled.code``;
+
+const DescriptionText = styled.span`
+  font-size: 10px;
+  color: ${COLORS.TEXT_CONTENT};
+`;
+
+const TestUtilsTitle = styled.h3`
+  margin: 0;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid ${COLORS.TEXT_CONTENT};
+`;
+
+/** ===========================================================================
+ * Props
+ * ============================================================================
+ */
+
+const mapStateToProps = (state: ReduxStoreState) => ({
+  challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
+  editorOptions: Modules.selectors.user.editorOptions(state),
+  userSettings: Modules.selectors.user.userSettings(state),
+  challengeTestCode: Modules.selectors.challenges.getCurrentChallengeTestCode(
+    state,
+  ),
+});
+
+const dispatchProps = {
+  updateChallenge: Modules.actions.challenges.updateChallenge,
+  updateUserSettings: Modules.actions.user.updateUserSettings,
+};
+
+const mergeProps = (
+  state: ReturnType<typeof mapStateToProps>,
+  methods: typeof dispatchProps,
+  props: {},
+) => ({
+  ...props,
+  ...methods,
+  ...state,
+  increaseFontSize: () =>
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.editorOptions.fontSize + MONACO_EDITOR_FONT_SIZE_STEP,
+    }),
+  decreaseFontSize: () =>
+    methods.updateUserSettings({
+      workspaceFontSize:
+        state.editorOptions.fontSize - MONACO_EDITOR_FONT_SIZE_STEP,
+    }),
+});
+
+type Props = ReturnType<typeof mergeProps>;
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default connect(
   mapStateToProps,

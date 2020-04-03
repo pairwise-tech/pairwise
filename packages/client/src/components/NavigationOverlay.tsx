@@ -10,6 +10,7 @@ import {
   ChallengeSkeletonList,
   ModuleSkeletonList,
   CHALLENGE_PROGRESS,
+  CourseMetadata,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, SANDBOX_ID } from "tools/constants";
@@ -33,7 +34,10 @@ import {
   Position,
   Button,
 } from "@blueprintjs/core";
-import KeyboardShortcuts from "./KeyboardShortcuts";
+import KeyboardShortcuts, {
+  VALID_SHORTCUT_KEYS_MAP,
+  KeyMapProps,
+} from "./KeyboardShortcuts";
 import { NavLink, NavLinkProps } from "react-router-dom";
 import {
   SortableModuleList,
@@ -41,6 +45,14 @@ import {
   ModuleNumber,
   ModuleNavigationBase,
 } from "./NavigationOverlayComponents";
+import { Select } from "@blueprintjs/select";
+
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
+const CourseSelect = Select.ofType<CourseMetadata>();
 
 /** ===========================================================================
  * React Class
@@ -74,7 +86,7 @@ class NavigationOverlay extends React.Component<IProps> {
   };
 
   render(): Nullable<JSX.Element> {
-    const { course, module, overlayVisible } = this.props;
+    const { course, module, overlayVisible, courseListMetadata } = this.props;
 
     if (!course || !module) {
       console.warn("[WARN] No module or course found! ->", course, module);
@@ -88,25 +100,44 @@ class NavigationOverlay extends React.Component<IProps> {
     const anySectionsOpen =
       hasSections && sectionIds.some(this.getCurrentAccordionViewState);
 
+    // Define the available shortcut keys, only valid key combinations
+    // are allowed.
+    const shortcutKeyMap: Partial<VALID_SHORTCUT_KEYS_MAP> = {
+      escape: this.handleClose,
+      "cmd+shift+k": this.navigateToSandBox,
+      "cmd+j": this.handleToggleNavigationMap,
+      "cmd+,": this.navigateLeft,
+      "cmd+.": this.navigateRight,
+      "cmd+;": this.props.toggleEditorSize,
+    };
+
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
-        <KeyboardShortcuts
-          keymap={{
-            // TODO: Add some UI to display what key shortcuts are available:
-            escape: this.handleClose,
-            "cmd+shift+k": this.navigateToSandBox,
-            "cmd+j": this.handleToggleNavigationMap,
-            "cmd+,": this.navigateLeft,
-            "cmd+.": this.navigateRight,
-            "cmd+;": this.props.toggleEditorSize,
-          }}
-        />
+        <KeyboardShortcuts keymap={shortcutKeyMap as KeyMapProps} />
         <Col
-          offsetX={overlayVisible ? 0 : -20}
           style={{ zIndex: 3 }}
+          offsetX={overlayVisible ? 0 : -20}
           onClick={e => e.stopPropagation()}
         >
-          <ColTitle>{course.title}</ColTitle>
+          <ColTitle>
+            <CourseSelect
+              filterable={false}
+              items={courseListMetadata}
+              itemDisabled={c => c.id === course.id}
+              onItemSelect={({ id }) => this.props.setCurrentCourse(id)}
+              itemRenderer={({ title, id }, { handleClick }) => (
+                <ClickableColTitle
+                  key={id}
+                  disabled={id === course.id}
+                  onClick={handleClick}
+                >
+                  {title}
+                </ClickableColTitle>
+              )}
+            >
+              <Button text={course.title} rightIcon="chevron-down" />
+            </CourseSelect>
+          </ColTitle>
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             <div style={{ position: "relative" }}>
@@ -676,7 +707,7 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
 
   &:hover {
     color: white !important;
-    background: #0d0d0d;
+    background: ${COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
     &:after {
       transform: scale(1);
     }
@@ -701,7 +732,7 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
 
   &:hover {
     color: white;
-    background: #0d0d0d;
+    background: ${COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
     &:after {
       transform: scale(1);
     }
@@ -856,7 +887,7 @@ const ColTitle = styled.div`
   font-variant: small-caps;
   font-weight: bold;
   letter-spacing: 2;
-  background: #404040;
+  background: ${COLORS.BACKGROUND_NAVIGATION_ITEM};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -865,6 +896,21 @@ const ColTitle = styled.div`
 
   p {
     margin: 0;
+  }
+`;
+
+const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
+  border-left: ${props =>
+    props.disabled
+      ? `3px solid ${COLORS.NEON_GREEN}`
+      : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
+
+  :hover {
+    cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
+    background: ${props =>
+      props.disabled
+        ? COLORS.BACKGROUND_NAVIGATION_ITEM
+        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
   }
 `;
 
@@ -889,6 +935,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
+  courseListMetadata: Modules.selectors.challenges.courseListMetadata(state),
   nextPrevChallengeIds: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   navigationAccordionViewState: Modules.selectors.challenges.getNavigationSectionAccordionViewState(
@@ -901,6 +948,7 @@ const ChallengeActions = Modules.actions.challenges;
 const dispatchProps = {
   setAndSyncChallengeId: ChallengeActions.setAndSyncChallengeId,
   setCurrentModule: ChallengeActions.setCurrentModule,
+  setCurrentCourse: ChallengeActions.setCurrentCourse,
   createCourseModule: ChallengeActions.createCourseModule,
   updateCourseModule: ChallengeActions.updateCourseModule,
   deleteCourseModule: ChallengeActions.deleteCourseModule,

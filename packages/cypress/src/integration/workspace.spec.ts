@@ -3,7 +3,7 @@ import {
   TIMEOUT,
   getIframeBody,
   click,
-  type,
+  typeTextInCodeEditor,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -24,10 +24,6 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.url().should("include", "home");
     cy.contains("Welcome to Pairwise!");
     cy.contains("Content");
-
-    // Hacky? This ensures the loading overlay is visible and then not. I.e. it finishes loading
-    cy.get("#pw-loading-overlay").should("be.visible");
-    cy.get("#pw-loading-overlay").should("not.be.visible");
 
     // These are currently the two courses we have
     cy.contains("Fullstack TypeScript Course");
@@ -50,9 +46,9 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.url().should("include", "workspace");
 
     /* Open the navigation menu and navigate to the first programming challenge: */
-    cy.get("#navigation-menu-button").click({ force: true });
-    cy.get("#module-navigation-1").click({ force: true });
-    cy.get("#challenge-navigation-0").click({ force: true });
+    click("navigation-menu-button");
+    click("module-navigation-1");
+    click("challenge-navigation-0");
 
     let challengeId = "";
 
@@ -110,7 +106,7 @@ describe("Sandbox", () => {
     click("sandboxButton");
     click("selectChallengeType");
     click("challenge-type-markup");
-    cy.get(".view-lines").type("<h1 class='just-typed-this'>Testing</h1>");
+    typeTextInCodeEditor("<h1 class='just-typed-this'>Testing</h1>");
 
     cy.wait(TIMEOUT);
 
@@ -127,7 +123,7 @@ describe("Success Modal", () => {
     click("pw-run-code");
     cy.get("#gs-card").should("not.exist");
 
-    cy.get(".view-lines").type("<h1>Hello!</h1>");
+    typeTextInCodeEditor("<h1>Hello!</h1>");
     cy.get("#gs-card").should("not.exist");
 
     click("pw-run-code");

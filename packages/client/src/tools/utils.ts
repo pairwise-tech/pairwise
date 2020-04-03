@@ -134,8 +134,7 @@ export const generateEmptyModule = (): Module => ({
   free: false /* All challenges are locked by default */,
 });
 
-const starterTestCode = `// Write your tests here:
-test("Write your test assertion here", () => {
+const starterTestCode = `test("Write your test assertion here", () => {
   expect(true).toBe(true);
 });
 `;
@@ -144,7 +143,7 @@ export const generateEmptyChallenge = (
   overwrite: Partial<Challenge> = {},
 ): Challenge => ({
   id: shortid.generate(),
-  type: "markup",
+  type: "typescript",
   title: "[EMPTY...]",
   instructions: "",
   testCode: starterTestCode,
@@ -544,4 +543,14 @@ export const getFileMetaByChallengeType = (x: CHALLENGE_TYPE) => {
       assertUnreachable(x);
       break;
   }
+};
+
+// Copy some text to the clipboard
+export const copyToClipboard = (text: string) => {
+  const el = document.createElement("textarea");
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);
 };
