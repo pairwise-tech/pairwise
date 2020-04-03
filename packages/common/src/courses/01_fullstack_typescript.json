@@ -1235,6 +1235,17 @@
           "content": ""
         },
         {
+          "id": "WHA@DjaX4",
+          "type": "typescript",
+          "title": "Total Weight",
+          "instructions": "Let's have one final practice with functions. This time, you will write a function from scratch\\! Write a function call `totalWeight` which accepts a list of items, `Item[]`, and return a single `number` representing the total weight of the items in the list. The `Item` interface is already defined for you below. Good luck\\!",
+          "testCode": "test(\"`totalWeight` should exist and be a function.\", () => {\n  expect(typeof totalWeight === \"function\").toBe(true);\n});\n\ntest(\"`totalWeight` should accept a list of items and return their total weight.\", () => {\n  const items = [\n    {\n      type: \"thing\",\n      weight: 15023,\n    },\n    {\n      type: \"thing\",\n      weight: 100,\n    },\n    {\n      type: \"thing\",\n      weight: 203,\n    },\n    {\n      type: \"thing\",\n      weight: 202,\n    },\n    {\n      type: \"thing\",\n      weight: 200,\n    },\n    {\n      type: \"thing\",\n      weight: 1001,\n    },\n  ];\n\n  expect(totalWeight(items.slice(0))).toBe(16729);\n  expect(totalWeight(items.slice(0, 1))).toBe(15023);\n  expect(totalWeight(items.slice(0, 2))).toBe(15123);\n  expect(totalWeight(items.slice(0, 3))).toBe(15326);\n  expect(totalWeight(items.slice(0, 4))).toBe(15528);\n});\n",
+          "videoUrl": "",
+          "starterCode": "interface Item {\n  type: string;\n  weight: number;\n}\n\n// Your code here!\n",
+          "solutionCode": "interface Item {\n  type: string;\n  weight: number;\n}\n\nconst totalWeight = (items: Item[]): number => {\n  // Iterate through the list and add up the total\n  let total = 0;\n  for (const item of items) {\n    total += item.weight;\n  }\n  return total;\n};\n",
+          "content": ""
+        },
+        {
           "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",
