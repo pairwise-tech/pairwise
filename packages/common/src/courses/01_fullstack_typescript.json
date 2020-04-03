@@ -1540,6 +1540,17 @@
           "content": ""
         },
         {
+          "id": "DpEPuZSCH",
+          "type": "typescript",
+          "title": "Square or Rectangle",
+          "instructions": "A `FourSides` object has four sides and a `width` and `height`. Complete the `isSquareOrRectangle` function to determine if such an object is a `square` or `rectangle`.",
+          "testCode": "test(\"`isSquareOrRectangle` should return `square` when passed a square object.\", () => {\n  expect(isSquareOrRectangle({ width: 50, height: 50 })).toBe(\"square\");\n  expect(isSquareOrRectangle({ width: 50245, height: 50245 })).toBe(\"square\");\n  expect(isSquareOrRectangle({ width: 2, height: 2 })).toBe(\"square\");\n  expect(isSquareOrRectangle({ width: 5, height: 5 })).toBe(\"square\");\n  expect(isSquareOrRectangle({ width: 150, height: 150 })).toBe(\"square\");\n});\n\ntest(\"`isSquareOrRectangle` should return `rectangle` when passed a rectangle object.\", () => {\n  expect(isSquareOrRectangle({ width: 504, height: 50 })).toBe(\"rectangle\");\n  expect(isSquareOrRectangle({ width: 502345, height: 50245 })).toBe(\"rectangle\");\n  expect(isSquareOrRectangle({ width: 21, height: 2 })).toBe(\"rectangle\");\n  expect(isSquareOrRectangle({ width: 4, height: 5 })).toBe(\"rectangle\");\n  expect(isSquareOrRectangle({ width: 151, height: 150 })).toBe(\"rectangle\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "interface FourSides {\n  width: number;\n  height: number;\n}\n\ntype Result = \"square\" | \"rectangle\";\n\nconst isSquareOrRectangle = (fourSidedObject: FourSides): Result => {\n  // Your code here.\n}",
+          "solutionCode": "interface FourSides {\n  width: number;\n  height: number;\n}\n\ntype Result = \"square\" | \"rectangle\";\n\nconst isSquareOrRectangle = (fourSidedObject: FourSides): Result => {\n  if (fourSidedObject.width === fourSidedObject.height) {\n    return \"square\";\n  } else {\n    return \"rectangle\";\n  }\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
