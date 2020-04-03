@@ -27,10 +27,11 @@ class Home extends React.Component<IProps, IState> {
         <ContentContainer>
           <PageTitle>Welcome to Pairwise!</PageTitle>
           <ContentText>
-            Pairwise is a platform where you can learn hirable software
-            engineering skills through a series of hands-on challenges and
-            projects. It's free to get started with no signup required. You can
-            easily create an account anytime to track your progress.
+            Pairwise is a platform where you can learn to code and build a
+            portfolio of projects to get hired as a software developer. It's
+            free to get started with no signup required, and the HTML and
+            programming course is free for anyone to complete. You can easily
+            create an account anytime to track your progress.
           </ContentText>
           <ContentText>
             To learn more about our product and courses, take a look at our{" "}
@@ -116,7 +117,7 @@ class Home extends React.Component<IProps, IState> {
  */
 
 const ContentContainer = styled.div`
-  max-width: ${PROSE_MAX_WIDTH}px;
+  max-width: ${PROSE_MAX_WIDTH - 250}px;
   margin-bottom: 24px;
 
   p {
