@@ -509,6 +509,17 @@
           "content": "++TODO++"
         },
         {
+          "id": "6wAHBhSUj",
+          "type": "media",
+          "title": "Language Syntax",
+          "instructions": "",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Programming languages, like human languages, provide a syntax \\(think _grammar_\\) to define how to represent programs \\(or thoughts/ideas\\) using that language."
+        },
+        {
           "id": "s9RpoVOt2",
           "type": "media",
           "title": "Comments",

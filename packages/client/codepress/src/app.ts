@@ -7,13 +7,20 @@ import * as path from "path";
 import { promisify } from "util";
 import fileUpload from "express-fileupload";
 
-import { Course, ContentUtilityClass, ContentUtility } from "@pairwise/common";
+import {
+  Course,
+  ContentUtilityClass,
+  ContentUtility,
+  CourseList,
+} from "@pairwise/common";
 
 const debug = require("debug")("codepress:app");
 
+const readdir = promisify(fs.readdir);
+const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
-const makeCache = data => {
+const makeCache = (data: CourseList) => {
   return data.reduce((agg, x) => {
     return {
       ...agg,
@@ -71,8 +78,34 @@ class CourseAPI {
     // Pretty stringify since we still look at the raw course file sometimes
   };
 
-  getAll = () => {
-    // Fetch and return all the courses
+  /**
+   * NOTE: This originally read all the courses directly from the file system,
+   * and, to all writing the courses once they are edited with Codepress, it
+   * relied on the filepaths the courses were read from. This is great, but
+   * created problems because they way the courses were "read" differed from
+   * how they are read in the normal application. The result was the courses
+   * coming back in a different order in Codepress versus the normal app. As
+   * a workaround, we return the courses using the ContentUtility class, for
+   * consistency, but still read the course filesystem to allow Codepress
+   * write operations to work.
+   */
+  getAll = async () => {
+    // Map all the course filepaths to use for WRITE operations, see NOTE
+    await readdir(this.basedir)
+      .then(filenames => filenames.map(x => path.resolve(this.basedir, x)))
+      .then(filepaths =>
+        Promise.all(
+          filepaths.map(x => {
+            return readFile(x, { encoding: "utf8" })
+              .then(JSON.parse)
+              .then(course => {
+                this.filepaths[course.id] = x;
+              });
+          }),
+        ),
+      );
+
+    // Fetch and return all the courses, using the ContentUtility, see NOTE
     const courses = ContentUtility.getAllCoursesForCodepress();
     this.cache = makeCache(courses);
     return this.resolveFromCache();
