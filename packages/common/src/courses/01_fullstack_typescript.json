@@ -1372,7 +1372,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "++TODO++ The TS \\(JS\\) standard lib"
+          "content": "Now that you've had a chance to look at the concept of functions we have some good news. There are many that are provided for you without writing any code\\! \n\n> \n> ### Jargon Time: The Standard Library\n> \n> Every programming language has functions or helpers that are provided for you out of the box. This is known as a **standard library** or standard \"lib\" for short.\n\nIn this section we'll cover things like `map`, `filter`, and `reduce`, which are fundamental concepts in programming. "
         },
         {
           "id": "7WoHO3ohe",
