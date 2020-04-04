@@ -21,6 +21,7 @@ interface Props {
   items: ChallengeTypeOption[];
   currentChallengeType?: CHALLENGE_TYPE;
   onItemSelect: IListItemsProps<ChallengeTypeOption>["onItemSelect"];
+  tooltip?: boolean;
 }
 
 /** ===========================================================================
@@ -32,6 +33,7 @@ const ChallengeTypeMenu = ({
   items,
   currentChallengeType,
   onItemSelect,
+  tooltip = true,
 }: Props) => {
   const activeItem = items.find(x => x.value === currentChallengeType);
   return (
@@ -60,12 +62,14 @@ const ChallengeTypeMenu = ({
           aria-controls="simple-menu"
           aria-haspopup="true"
         >
-          <Tooltip
-            content="Choose what type of code you will write"
-            usePortal={false}
-          >
-            <Icon style={{ margin: "0 2px" }} icon="info-sign" />
-          </Tooltip>
+          {tooltip && (
+            <Tooltip
+              content="Choose what type of code you will write"
+              usePortal={false}
+            >
+              <Icon style={{ margin: "0 2px" }} icon="info-sign" />
+            </Tooltip>
+          )}
           <strong style={{ marginLeft: 6 }}>
             {labelByType(currentChallengeType, items)}
           </strong>

@@ -9,7 +9,6 @@ import {
   Position,
   ButtonGroup,
   Popover,
-  PopoverInteractionKind,
 } from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
@@ -165,6 +164,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
         )}
         <Suspense fallback={<p>Menu Loading...</p>}>
           <LazyChallengeTypeMenu
+            tooltip={false}
             items={CHALLENGE_TYPE_CHOICES}
             currentChallengeType={challenge?.type}
             onItemSelect={x => {
