@@ -135,8 +135,8 @@ export const generateEmptyModule = (): Module => ({
 });
 
 const starterTestCode = `// Write your tests here:
-test("Write your test assertion here", () => {
-  expect(true).toBe(true);
+test("\`variable\` should be defined", () => {
+  expect(variable).toBeDefined();
 });
 `;
 
@@ -144,7 +144,7 @@ export const generateEmptyChallenge = (
   overwrite: Partial<Challenge> = {},
 ): Challenge => ({
   id: shortid.generate(),
-  type: "markup",
+  type: "typescript",
   title: "[EMPTY...]",
   instructions: "",
   testCode: starterTestCode,
