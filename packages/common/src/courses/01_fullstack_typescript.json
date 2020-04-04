@@ -1375,6 +1375,50 @@
           "content": "Now that you've had a chance to look at the concept of functions we have some good news. There are many that are provided for you without writing any code\\! \n\n> \n> ### Jargon Time: The Standard Library\n> \n> Every programming language has functions or helpers that are provided for you out of the box. This is known as a **standard library** or standard \"lib\" for short.\n\nIn this section we'll cover things like `map`, `filter`, and `reduce`, which are fundamental concepts in programming. "
         },
         {
+          "id": "B3mNHCb$m",
+          "type": "typescript",
+          "title": "Transform array items using map",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "5HnuVW8li",
+          "type": "typescript",
+          "title": "Get the items you want using a filter",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "gR7810hCR",
+          "type": "typescript",
+          "title": "Transform arrays using reduce",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "y6F01Gwa7",
+          "type": "media",
+          "title": "Functions and Methods",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "There's another word for functions that you will come across during your travels as a software engineer. That word is \"method\" and it means _almost_ the same thing.\n\n# What is a method?\n\nIt's just a function but it's defined on an object. The first part of that is important—it's just a function. So for all intents and purposes you can just remember functions and not worry about the distinction, but you will see the word \"method\" written online a lot and you will hear other programmers say it. \n# Some quick examples\n\nHere are some string _methods_ at work:\n\n```typescript\n\"some string\".split(\" \"); // [\"some\", \"string\"]\n\"no yelling!\".toUpperCase(); // \"NO YELLING!\"\n\n```\n\nRemember, `split` and `toUpperCase` are just functions, but they would also be called methods because they are defined on the string object.\n\nHere are some more examples of methods:\n\n```typescript\n[\"a\", \"b\", \"c\"].map(x => x + x); // [\"aa\", \"bb\", \"cc\"]\n[1,2,3,4,5].filter(x => x % 2 === 0); // [2,4]\nObject.keys({ name: \"Maomi\", job: \"Sleeping\" }); // [\"name\", \"job\"]\n\n```\n\nIn this example the methods are `map`, `filter`, and `keys`.\n\n> **Rule of thumb**: You can tell it's a method if it's called with a `.` in front of it.\n"
+        },
+        {
           "id": "7WoHO3ohe",
           "type": "section",
           "title": "Mutation & Immutability",
