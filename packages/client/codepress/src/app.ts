@@ -7,12 +7,10 @@ import * as path from "path";
 import { promisify } from "util";
 import fileUpload from "express-fileupload";
 
-import { Course, ContentUtilityClass } from "@pairwise/common";
+import { Course, ContentUtilityClass, ContentUtility } from "@pairwise/common";
 
 const debug = require("debug")("codepress:app");
 
-const readdir = promisify(fs.readdir);
-const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
 const makeCache = data => {
@@ -74,24 +72,10 @@ class CourseAPI {
   };
 
   getAll = () => {
-    return readdir(this.basedir)
-      .then(filenames => filenames.map(x => path.resolve(this.basedir, x)))
-      .then(filepaths =>
-        Promise.all(
-          filepaths.map(x => {
-            return readFile(x, { encoding: "utf8" })
-              .then(JSON.parse)
-              .then(course => {
-                this.filepaths[course.id] = x;
-                return course;
-              });
-          }),
-        ),
-      )
-      .then(x => {
-        this.cache = makeCache(x);
-        return this.resolveFromCache();
-      });
+    // Fetch and return all the courses
+    const courses = ContentUtility.getAllCoursesForCodepress();
+    this.cache = makeCache(courses);
+    return this.resolveFromCache();
   };
 
   get = (id: string) => {

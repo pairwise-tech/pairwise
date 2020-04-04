@@ -100,6 +100,13 @@ class ContentUtilityClass {
     });
   };
 
+  getAllCoursesForCodepress = () => {
+    // Return all the course data for Codepress
+    return this.courses.map(course => {
+      return this.getCourseContent(course.id, "PAID");
+    });
+  };
+
   getCourses = (userCourseAccessMap: UserCourseAccessMap) => {
     return this.courses.map(course => {
       const accessLevel: COURSE_ACCESS_LEVEL =
