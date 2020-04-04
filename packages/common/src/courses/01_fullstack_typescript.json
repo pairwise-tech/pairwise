@@ -520,6 +520,17 @@
           "content": "Programming languages, like human languages, provide a syntax \\(think _grammar_\\) to define how to represent programs \\(or thoughts/ideas\\) using that language."
         },
         {
+          "id": "vf8UoQalQ",
+          "type": "media",
+          "title": "Brackets, Identifiers, Keywords, Semicolons - and more!",
+          "instructions": "",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here we will see several of the special language syntax features which it is helpful to learn about from the beginning. Like many things in programming, these are best illustrated with an example. Read through the code snippet below to see these language features in action:"
+        },
+        {
           "id": "s9RpoVOt2",
           "type": "media",
           "title": "Comments",
