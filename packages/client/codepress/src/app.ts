@@ -92,9 +92,17 @@ class CourseAPI {
         /**
          * NOTE: The course order comes from the file order in the
          * file system. Reorder them manually to match the order
-         * provided in other environments.
+         * provided in other environments for consistency.
+         *
+         * This is not ideal... but it turns out there are a lot
+         * of issues which arise if we try to read the course list
+         * directly using the ContentUtilityClass API... Because we
+         * rarely add new courses, just manually reordering the
+         * courses here turned out to be a much simpler solution.
          */
         const [PairwiseContent, FullstackTypeScript] = courses;
+
+        // Manually match the order provided by ContentUtilityClass:
         const courseList = [FullstackTypeScript, PairwiseContent];
         this.cache = makeCache(courseList);
         return this.resolveFromCache();
