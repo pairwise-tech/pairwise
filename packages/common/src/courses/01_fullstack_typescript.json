@@ -1727,6 +1727,17 @@
           "content": ""
         },
         {
+          "id": "F1dLKVeY1",
+          "type": "typescript",
+          "title": "Search the Matrix",
+          "instructions": "Given a 2D matrix and an element, return `true` if the matrix contains the element and `false` otherwise\\.",
+          "testCode": "test(\"Given a matrix and element, `findElementInMatrix` should return `true` if the matrix contains the element and `false` otherwise.\", () => {\n  let matrix = [\n    [1, 1, 1],\n    [2, 2, 2],\n    [3, 3, 3],\n    [4, 4, 5],\n  ];\n  expect(findElementInMatrix(matrix, 5)).toBe(true);\n  expect(findElementInMatrix(matrix, 1)).toBe(true);\n  expect(findElementInMatrix(matrix, 2)).toBe(true);\n  expect(findElementInMatrix(matrix, 3)).toBe(true);\n  expect(findElementInMatrix(matrix, 4)).toBe(true);\n  expect(findElementInMatrix(matrix, 15)).toBe(false);\n  expect(findElementInMatrix(matrix, 25)).toBe(false);\n  expect(findElementInMatrix(matrix, 51)).toBe(false);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Find an element in a 2D matrix of values\nconst findElementInMatrix = (matrix: any[][], element: any): boolean => {\n  // Your code here!\n}",
+          "solutionCode": "// Find an element in a 2D matrix of values\nconst findElementInMatrix = (matrix: any[][], element: any): boolean => {\n  for (const row of matrix) {\n    for (const item of row) {\n      // Return true as soon as the element is found\n      if (item === element) {\n        return true;\n      }\n    }\n  }\n\n  // If the element was never found, return false\n  return false;\n}",
+          "content": ""
+        },
+        {
           "id": "EztzbqIDQ",
           "type": "typescript",
           "title": "Batch Lists",
