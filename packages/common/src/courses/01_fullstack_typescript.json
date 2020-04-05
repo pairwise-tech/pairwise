@@ -1323,6 +1323,17 @@
           "content": ""
         },
         {
+          "id": "9alVlE$kL",
+          "type": "typescript",
+          "title": "Functions with Generic Type Arguments",
+          "instructions": "A powerful feature of TypeScript is [Generics](https://www.typescriptlang.org/docs/handbook/generics.html). Generics allow you to create code which does not specify an exact type, but instead allows you to pass in type information at the point of consumption. One of the most useful ways generics can be used in TypeScript is with generics type arguments to functions. Generics are a very powerful way to create reusable code components and abstractions.\n\nThe function in the code editor `theReturnTypeIsGeneric` is a very simple illustration of how generics can be used in a function definition. The function invocation is where you supply the type information for the `T` type\\.\n\nTake a look at the examples, and then add two more following the same pattern: `booleanReturnType` and `nullReturnType`.",
+          "testCode": "test(\"`booleanReturnType` should exist and be a `boolean` value.\", () => {\n  expect(typeof booleanReturnType === \"boolean\").toBe(true);\n});\n\ntest(\"`nullReturnType` should exist and be a `null` value.\", () => {\n  expect(nullReturnType === null).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "/**\n * A function with a generic type argument. You supply the type T\n * when you call the function (see the examples below).\n */\nconst theReturnTypeIsGeneric = <T extends {}>(args: T): T => {\n  // Just return the provided arguments\n  return args;\n};\n\n// A number return type:\nconst numberReturnType = theReturnTypeIsGeneric<number>(500);\n\n// A string return type:\nconst stringReturnType = theReturnTypeIsGeneric<string>(\"a string!\");\n\n// A list return type:\nconst listReturnType = theReturnTypeIsGeneric<number[]>([1, 2, 3]);\n",
+          "solutionCode": "/**\n * A function with a generic type argument. You supply the type T\n * when you call the function (see the examples below).\n */\nconst theReturnTypeIsGeneric = <T extends any>(args: T): T => {\n  // Just return the provided arguments\n  return args;\n};\n\n// A number return type:\nconst numberReturnType = theReturnTypeIsGeneric<number>(500);\n\n// A string return type:\nconst stringReturnType = theReturnTypeIsGeneric<string>(\"a string!\");\n\n// A list return type:\nconst listReturnType = theReturnTypeIsGeneric<number[]>([1, 2, 3]);\n\n// A boolean return type:\nconst booleanReturnType = theReturnTypeIsGeneric<boolean>(true);\n\n// A null return type:\nconst nullReturnType = theReturnTypeIsGeneric<null>(null);\n",
+          "content": ""
+        },
+        {
           "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",
