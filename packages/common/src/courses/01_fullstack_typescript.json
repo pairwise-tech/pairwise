@@ -556,7 +556,7 @@
           "id": "YUeIPBR0M",
           "type": "typescript",
           "title": "Format the Code!",
-          "instructions": "In the editor below is some badly formatted code. Click the double star icon in the ",
+          "instructions": "In the editor below is some badly formatted code. Click the double star icon in the editor controls menu to format it properly\\!",
           "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "",
@@ -595,6 +595,17 @@
           "starterCode": "function generateUniqueStringId() {\n  return (\n    Math.random()\n      .toString(36)\n      .substring(2, 15) +\n    Math.random()\n      .toString(36)\n      .substring(2, 15)\n  );\n}\n\n// Create an array and fill it with random ids\nconst ids = new Array(10).fill(\"\").map(generateUniqueStringId);\n\n// Log the random ids\nconsole.log(\"Here are the ids:\");\nfor (const id of ids) {\n  console.log(id);\n}\n",
           "solutionCode": "/**\n * Generate a unique string id of 21 letters.\n */\nfunction generateUniqueStringId() {\n  return (\n    Math.random()\n      .toString(36)\n      .substring(2, 15) +\n    Math.random()\n      .toString(36)\n      .substring(2, 15)\n  );\n}\n\n// Create an array and fill it with random ids\nconst ids = new Array(10).fill(\"\").map(generateUniqueStringId);\n\n// Log the random ids\nconsole.log(\"Here are the ids:\");\nfor (const id of ids) {\n  console.log(id);\n}\n",
           "content": ""
+        },
+        {
+          "id": "AvOR6cM4o",
+          "type": "media",
+          "title": "What Makes TypeScript Special",
+          "instructions": "",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "TypeScript is a typed superset of JavaScript."
         },
         {
           "id": "UZG$5V862",
