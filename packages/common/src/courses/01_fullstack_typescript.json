@@ -611,11 +611,11 @@
           "id": "OM9Y1SvnG",
           "type": "typescript",
           "title": "TypeScript in Action",
-          "instructions": "The function from the last challenge is in the code editor below.",
-          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "instructions": "The function from the last challenge is in the code editor below. The code is still trying to pass in the number `100` into the `sayHello` function\\. Change this to some string value name, like `\"Sam\"`. Note that strings, in TypeScript, are defined using `\"` quotes\\. Single or double quotes are valid for strings.\n\n**Hint: **The code editor can understand the TypeScript language. Observe the red squiggle beneath the `100` and hover your mouse over this to see a helpful error message from the TypeScript compiler.",
+          "testCode": "test(\"The `sayHello` invocation on line 5 should use a string value, rather than a number.\", () => {\n  expect(__user_code_string__.includes(\"sayHello(\\\"\")).toBe(true);\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "function sayHello(name: string): string {\n    return \"Hello, \" + name;\n}\n\nsayHello(100);",
+          "solutionCode": "function sayHello(name: string): string {\n    return \"Hello, \" + name;\n}\n\nsayHello(\"Sam\");",
           "content": ""
         },
         {
