@@ -1727,6 +1727,17 @@
           "content": ""
         },
         {
+          "id": "EztzbqIDQ",
+          "type": "typescript",
+          "title": "Batch Lists",
+          "instructions": "You have a long list of elements which you want to batch into smaller lists, with a variable batch size. For example:\n\n```\n// Input list\nconst input = [1,2,3,4,5,6,7,8,9,10];\n// Batched output, with a batchSize of 3:\nconst output = [ [1,2,3], [4,5,6], [7,8,9], [10] ];\n\n```\n\nImplement the `batchLists` function in the code editor.",
+          "testCode": "const batchListSolution = (list, batchSize = 5) => {\n  let batches = [];\n  let batch = [];\n  for (let i = 0; i < list.length; i += batchSize) {\n    batch = list.slice(i, i + batchSize);\n    batches.push(batch);\n  }\n  return batches;\n};\n\ntest(\"The `batchLists` function should accept a list of elements and return a batched list using the provided `batchSize`.\", () => {\n  let list = stringList.slice(0, 12);\n  let result = batchLists(list);\n  let expected = batchListSolution(list);\n  expect(result).toEqual(expected);\n\n  list = stringList.slice(0, 24);\n  result = batchLists(list, 12);\n  expected = batchListSolution(list, 12);\n  expect(result).toEqual(expected);\n  expect(result[0].length).toBe(12);\n  expect(result[1].length).toBe(12);\n\n  list = stringList.slice(0, 76);\n  result = batchLists(list);\n  expected = batchListSolution(list);\n  expect(result).toEqual(expected);\n\n  list = [];\n  result = batchLists(list);\n  expected = batchListSolution(list);\n  expect(result).toEqual(expected);\n\n  list = stringList.slice(0, 30);\n  result = batchLists(list, 7);\n  expected = batchListSolution(list, 7);\n  expect(result).toEqual(expected);\n  expect(result[0].length).toBe(7);\n  expect(result[1].length).toBe(7);\n  expect(result[2].length).toBe(7);\n});\n",
+          "videoUrl": "",
+          "starterCode": "/**\n * A function which accepts a list of elements and returns a list\n * of lists of the elements in batches\n */\nconst batchLists = <T extends {}>(list: T[], batchSize = 5): T[][] => {\n  // Your code here\n}",
+          "solutionCode": "/**\n * A function which accepts a list of elements and returns a list\n * of lists of the elements in batches\n */\nconst batchLists = <T extends {}>(list: T[], batchSize = 5): T[][] => {\n  let batches = [];\n  let batch = [];\n  for (let i = 0; i < list.length; i += batchSize) {\n    batch = list.slice(i, i + batchSize);\n    batches.push(batch);\n  }\n  return batches;\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
