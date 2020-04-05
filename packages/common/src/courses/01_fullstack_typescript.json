@@ -1749,6 +1749,17 @@
           "content": ""
         },
         {
+          "id": "Es@mxtD8l",
+          "type": "typescript",
+          "title": "Object Filter",
+          "instructions": "You receive an object where some of the values may be `null` or `undefined`. We want to remove all of these from the object. For instance, given the object `{ name: \"Ben\", age: null }` we want to remove `age` and return `{ name: \"Ben\" }`.",
+          "testCode": "const objectFilterSolution = (obj) => {\n  return Object.entries(obj).reduce((filtered, [key, value]) => {\n    if (value) {\n      return {\n        ...filtered,\n        [key]: value,\n      };\n    } else {\n      return filtered;\n    }\n  }, {});\n};\n\ntest(\"`objectFilter` should remove `null` or `undefined` values from an object.\", () => {\n  let obj = {};\n  let result = objectFilter(obj);\n  let expected = objectFilterSolution(obj);\n  expect(result).toEqual(expected);\n\n  obj = {\n    name: \"Ben\",\n    age: null,\n  };\n  result = objectFilter(obj);\n  expected = objectFilterSolution(obj);\n  expect(result).toEqual(expected);\n\n  obj = {\n    name: \"Ben\",\n    age: null,\n    value: undefined,\n    list: [1, 2, 3],\n    obj: { x: \"x\", z: \"z\" },\n    other: null,\n  };\n  result = objectFilter(obj);\n  expected = objectFilterSolution(obj);\n  console.log(expected);\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Filter null or undefined values from an object\nconst objectFilter = (obj: { [key: string]: any }): { [key: string]: any } => {\n  // Your code here\n};\n",
+          "solutionCode": "// Filter null or undefined values from an object\nconst objectFilter = (obj: { [key: string]: any }): { [key: string]: any } => {\n  // Reduce the object entries to a new object, only including {key:value} pairs\n  // where the value is not null or undefined.\n  return Object.entries(obj).reduce(\n    (filtered: { [key: string]: any }, [key, value]: [string, any]) => {\n      if (value === null || value === undefined) {\n        return filtered;\n      } else {\n        return {\n          ...filtered,\n          [key]: value,\n        };\n      }\n    },\n    {}\n  );\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
