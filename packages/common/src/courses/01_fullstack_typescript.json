@@ -1466,11 +1466,11 @@
           "id": "ZurFUR4Hb",
           "type": "typescript",
           "title": "Remove All Vowels",
-          "instructions": "Write a function `removeVowels` that removes all vowels from any string you pass into it.",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "instructions": "Write a function `removeVowels` that removes all vowels from any string you pass into it.\n\n**HINT**: Operating on every character in a string is easier if you convert it into an array of characters.",
+          "testCode": "// Write your tests here:\ntest(\"`removeVowels` should remove all vowels from a string\", () => {\n  expect(removeVowels('Here we are in the vowels challenge')).toBe(\"Hr w r n th vwls chllng\");\n  expect(removeVowels('weeeeeeeeeeeeeeeeeeeeee are the champions')).toBe(\"w r th chmpns\");\n});\n",
           "videoUrl": "",
-          "starterCode": "const VOWELS = [\"a\", \"e\", \"i\", \"o\", \"u\"];\n\nconst removeVowels = () => {\n  // Your code here\n};\n",
-          "solutionCode": "",
+          "starterCode": "const VOWELS = [\"a\", \"e\", \"i\", \"o\", \"u\"];\n\nconst removeVowels = (s: string) => {\n  // Your code here\n};\n\nconsole.log(removeVowels('Here we are in the vowels challenge'));",
+          "solutionCode": "const VOWELS: Array<string> = [\"a\", \"e\", \"i\", \"o\", \"u\"];\n\nconst removeVowels = (s: string) => {\n  return s\n    .split(\"\")\n    .filter((x) => !VOWELS.includes(x))\n    .join(\"\");\n};\n\nconsole.log(removeVowels('Here we are in the vowels challenge'));",
           "content": ""
         },
         {
