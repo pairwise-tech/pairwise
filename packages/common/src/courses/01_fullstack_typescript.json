@@ -1760,6 +1760,17 @@
           "content": ""
         },
         {
+          "id": "qvVZSJxdh",
+          "type": "typescript",
+          "title": "Count the Elements",
+          "instructions": "You receive an array of integers, e.g. `[1, 2, 2, 1, 7, 8, 2, 9]`. Return an object which specifies the number of times each element appears in the array, e.g. `{ 1: 2, 2: 3, 7: 1, 8: 1, 9: 1 }`. The keys in the object should represent the number from the list, and the value should represent how many times it appears in the array.",
+          "testCode": "const countElementsInListSolution = (list) => {\n  let counts = {};\n  for (const item of list) {\n    counts[item] = item in counts ? counts[item] + 1 : 1;\n  }\n  return counts;\n};\n\ntest(\"`countElementsInList` should return an object with key value pairs which indicate the number of times (value) each item (key) appears in the list.\", () => {\n  let list = [1, 2, 2, 1, 7, 8, 2, 9];\n  let result = countElementsInList(list);\n  let expected = countElementsInListSolution(list);\n  expect(result).toEqual(expected);\n\n  list = [1, 12, 12, 12, 12, 12, 5, 5, 6, 8, 8, 8, 8, 8, 8, 30, 90, 99];\n  result = countElementsInList(list);\n  expected = countElementsInListSolution(list);\n  expect(result).toEqual(expected);\n\n  list = [\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    9,\n    11,\n    11,\n    11,\n    11,\n    5,\n    5,\n    7,\n    7,\n    7,\n    100,\n    12333333,\n  ];\n  result = countElementsInList(list);\n  expected = countElementsInListSolution(list);\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "const countElementsInList = (list: any[]): { [key: number]: number } => {\n  // Your code here\n}",
+          "solutionCode": "const countElementsInList = (list: number[]): { [key: number]: number } => {\n  let counts: { [key: number]: number } = {};\n\n  for (const item of list) {\n    if (item in counts) {\n      // Second or more appearance, just increment:\n      counts[item] = counts[item] + 1;\n    } else {\n      // First appearance, set to 1:\n      counts[item] = 1;\n    }\n  }\n\n  return counts;\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
