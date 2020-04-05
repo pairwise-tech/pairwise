@@ -542,6 +542,28 @@
           "content": ""
         },
         {
+          "id": "2EnIHyp9S",
+          "type": "media",
+          "title": "Whitespace and Semicolons",
+          "instructions": "",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Languages tend to have specific rules concerning whitespace and the placement of semicolons. Whitespace is just the empty space between blocks of code, values, or keywords. Semicolons, `;`, are identifiers which indicate the end of a line.\n\n### An Example\n\nConsider the following code:\n\n```typescript\n\n\nconst name     = \"Sam\"   ;\n\n  function sayHello (person) {\n    // This is my function\n\n        if (person ) {\n          console.log(\"Hello \", person);\n        }   else    { return;\n\n        }\n  }\n\n\n\n  // Say hello!\nsayHello(   name) ;\n\n```\n\nThis code doesn't look that great... but it is actually valid and works fine\\!\n\nCompare that to the following:\n\n```\nconst name = \"Sam\";\n\nfunction sayHello(person) {\n  // This is my function\n\n  if (person) {\n    console.log(\"Hello \", person);\n  } else {\n    return;\n  }\n}\n\n// Say hello!\nsayHello(name);\n\n\n```\n\nThis is a much better formatted version of the above code snippet. The first code snippet has a lot of additional unnecessary whitespace and other weird indentations.\n\n### Code Style and Formatting\n\nMany modern programming languages include specific code style conventions and formatting tools which are used to format code in a specific way. This is very powerful, because if allows code style conventions to be consistent across teams and it doesn't require the programmer to ever spend any time formatting code manually.\n\nThe Pairwise workspace \\(and the developer workflow we will teach you later in the course\\) provide and use such formatting tools. We will see them in action in the next challenge\\!\n\n### Semicolons\n\nA short note about semicolons... Semicolons are used to mark the \"end\" of many statements in TypeScript, however they are not always strictly necessary. Without getting into the weird rules regarding semicolons, we would recommend trying to end statements using `;` and otherwise relying on the automatic formatting rules if you are in doubt.\n"
+        },
+        {
+          "id": "YUeIPBR0M",
+          "type": "typescript",
+          "title": "Format the Code!",
+          "instructions": "In the editor below is some badly formatted code. Click the double star icon in the ",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "s9RpoVOt2",
           "type": "media",
           "title": "Comments",
@@ -573,6 +595,28 @@
           "starterCode": "function generateUniqueStringId() {\n  return (\n    Math.random()\n      .toString(36)\n      .substring(2, 15) +\n    Math.random()\n      .toString(36)\n      .substring(2, 15)\n  );\n}\n\n// Create an array and fill it with random ids\nconst ids = new Array(10).fill(\"\").map(generateUniqueStringId);\n\n// Log the random ids\nconsole.log(\"Here are the ids:\");\nfor (const id of ids) {\n  console.log(id);\n}\n",
           "solutionCode": "/**\n * Generate a unique string id of 21 letters.\n */\nfunction generateUniqueStringId() {\n  return (\n    Math.random()\n      .toString(36)\n      .substring(2, 15) +\n    Math.random()\n      .toString(36)\n      .substring(2, 15)\n  );\n}\n\n// Create an array and fill it with random ids\nconst ids = new Array(10).fill(\"\").map(generateUniqueStringId);\n\n// Log the random ids\nconsole.log(\"Here are the ids:\");\nfor (const id of ids) {\n  console.log(id);\n}\n",
           "content": ""
+        },
+        {
+          "id": "UZG$5V862",
+          "type": "media",
+          "title": "Language Compilation",
+          "instructions": "",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Before we continue, here is a brief overview to help you understand how programs are actually executed by computers.\n\n### Source vs. Production Code\n\nIn general, you can think about programs in two forms: \"source\" code which is what software engineers read and write, and \"production\" code which is what computers read and execute. Typically, source code is formatted nicely and includes things like comments to describe the code organization or context. Production code often goes through many transformation steps before it is run by a computer. \n\nTypeScript, for instance, is compiled to JavaScript. Other languages may be compiled to machine code \\(binary\\). In additional, there may be other transformation steps, such as minification, stripping of dead code or comments, obfuscation/uglification and so on.\n\n### Production JS Bundle\n\nFor instance, take a look at this snippet from the production JavaScript bundle which is rendering the Pairwise platform you are looking at right now:\n\n```\n(this.deriveChallengeContextFromId = function(e) {\n  if (!n.challengeIdIsValid(e)) return null;\n  var t = Array.from(n.courseIdSet.values()).find(function(t) {\n      return n.challengeIdInCourseIsValid(t, e);\n    }),\n    r = n.courses.find(function(e) {\n      return e.id === t;\n    }),\n    o = !0,\n    i = !1,\n    a = void 0;\n  try {\n    for (\n      var s, l = r.modules[Symbol.iterator]();\n      !(o = (s = l.next()).done);\n      o = !0\n    ) {\n      var c = s.value,\n        d = !0,\n        p = !1,\n        u = void 0;\n      try {\n        for (\n          var h, g = c.challenges[Symbol.iterator]();\n          !(d = (h = g.next()).done);\n          d = !0\n        ) {\n          var m = h.value;\n          if (m.id === e)\n            return {\n              challenge: m,\n              module: { title: c.title, id: c.id, free: c.free },\n              course: { title: r.title, id: r.id }\n            };\n        }\n      } catch (y) {\n        (p = !0), (u = y);\n      } finally {\n        try {\n          d || null == g.return || g.return();\n        } finally {\n          if (p) throw u;\n        }\n      }\n    }\n  } catch (y) {\n    (i = !0), (a = y);\n  } finally {\n    try {\n      o || null == l.return || l.return();\n    } finally {\n      if (i) throw a;\n    }\n  }\n}),\n\n```\n\nThis is not very readable\\! There are a lot of obscure, single\\-letter variable names and other bad practices. In addition, in the original form this is just one long string of text \\(it's nicely formatted above so you can read it more easily\\).\n\n### Original Source Code\n\nIn contrast, here is the original piece of code:\n\n```typescript\n// Provide the course context for a challenge, given its id\nderiveChallengeContextFromId = (challengeId: string) => {\n  // Short circuit if the challenge id is invalid\n  if (!this.challengeIdIsValid(challengeId)) {\n    return null;\n  }\n\n  // Find the associated course id\n  const courseId = Array.from(this.courseIdSet.values()).find(id =>\n    this.challengeIdInCourseIsValid(id, challengeId),\n  );\n\n  // Find the associated course\n  const course = this.courses.find(({ id }) => id === courseId);\n\n  // Construct the challenge context from the course\n  for (const module of course.modules) {\n    for (const challenge of module.challenges) {\n      if (challenge.id === challengeId) {\n        return {\n          challenge,\n          module: {\n            title: module.title,\n            id: module.id,\n            free: module.free,\n          },\n          course: {\n            title: course.title,\n            id: course.id,\n          },\n        };\n      }\n    }\n  }\n};\n\n```\n\nThis is a lot more readable and clear\\!\n\nThe important thing to note is that a lot of transformation steps exist between the code that you write and the code that the computer executes."
+        },
+        {
+          "id": "DFlhdsLoO",
+          "type": "media",
+          "title": "Code Authorship",
+          "instructions": "",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "When you are writing code, it's important to remember that your code will always be read and maintained by other developers in the future. Even you may return to the same piece of code and need to remember what you were thinking when you first wrote it \\(trust us, one day this will happen and you will say to yourself: \"What was I thinking when I wrote this? Did I _even_ write this?\"\\)\\!\n\nSoftware products have constantly changing requirements and assumptions, and you will find often yourself revisiting code you thought \"could never change\". The important thing is to write code in the first place in a way which makes it easy to change in the future, when you find that requirements or assumptions have changed.\n\nWhen you are writing code here are just a few important rules to keep in mind:\n\n* **Readability:** how easy is it to read and follow the logic in a piece of code.\n* **Comments:** provide additional context or intention which is not clear from the code itself.\n* **Organization:** avoid complex structures, clever one\\-liners, and very nested if statements.\n* **Consistency:** use consistent style and formatting conventions.\n\n\nYou want to strive for code which is easy to read and understand by someone who is less familiar with the codebase, and easier to refactor and change in the future. This typically means code organized into many relatively small, single\\-purpose classes/functions which are easy to read and well documented/commented.\n\nStrong code design will be a theme throughout the course, so don't worry if this is not that clear yet. The main takeaway is that good software is not just about whether the code \"works\" or not. Well\\-written code not only works but is easy to understand and refactor in the future.\n"
         },
         {
           "id": "8p4BZqPl",
