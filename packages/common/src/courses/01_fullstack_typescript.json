@@ -1716,6 +1716,17 @@
           "content": ""
         },
         {
+          "id": "IVu9guoLS",
+          "type": "typescript",
+          "title": "Enter the Matrix",
+          "instructions": "One way to represent a matrix is with an array of arrays: `number[][]`.  For instance, you could represent a Tic Tac Toe board using this structure:\n\n```\nconst TicTacToe = [\n    [1, 0, 0],\n    [0, 1, 0],\n    [0, 0, 1],\n];\n\n```\n\nIn the code editor is a function which should accept a matrix of zeroes and ones. Complete the function `countMatrixZeroes` which should accept a 2 dimensional array and return the number of `0`s the matrix contains.",
+          "testCode": "test(\"`countMatrixZeroes` should return the number of zeroes in a matrix of `1`s and `0`s.\", () => {\n  let matrix = [\n    [1, 0, 0],\n    [0, 1, 0],\n    [0, 0, 1],\n  ];\n  let result = countMatrixZeroes(matrix);\n  expect(result).toBe(6);\n\n  matrix = [\n    [0, 0, 0],\n    [0, 0, 0],\n    [0, 0, 0],\n  ];\n  result = countMatrixZeroes(matrix);\n  expect(result).toBe(9);\n\n  matrix = [\n    [0, 1, 1],\n    [0, 1, 1],\n    [0, 1, 1],\n  ];\n  result = countMatrixZeroes(matrix);\n  expect(result).toBe(3);\n\n  matrix = [\n    [1, 1, 1],\n    [1, 1, 1],\n    [1, 1, 1],\n  ];\n  result = countMatrixZeroes(matrix);\n  expect(result).toBe(0);\n});\n",
+          "videoUrl": "",
+          "starterCode": "type Matrix = number[][];\n\n/**\n * A function to count the number of zeroes within a\n * 2 dimenstional array.\n */\nconst countMatrixZeroes = (matrix: Matrix): number => {\n  // Your code here!\n}",
+          "solutionCode": "type Matrix = number[][];\n\n/**\n * A function to count the number of zeroes within a\n * 2 dimenstional array.\n */\nconst countMatrixZeroes = (matrix: Matrix): number => {\n  let zeroes = 0;\n  // Iterate through each row\n  for (const row of matrix) {\n    // Iterate through each item of the each row\n    for (const element of row) {\n      // Increment the zeroes counter, if the item is 0\n      if (element === 0) {\n        zeroes++;\n      }\n    }\n  }\n  return zeroes;\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
