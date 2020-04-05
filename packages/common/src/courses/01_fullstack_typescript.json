@@ -1441,15 +1441,26 @@
           "content": ""
         },
         {
+          "id": "A5veAUqXP",
+          "type": "typescript",
+          "title": "Capitalize Words",
+          "instructions": "* Write a function `capitalize` that will capitalize a string. In other words, it will make the first character uppercase.\n* Write a function `capitalizeAll` that will capitalize every word in a string.\n   * **HINT:** You can reuse your `capitalize` function to make this function very simple. Just focus on how to run capitalize on every word within a string.\n\n",
+          "testCode": "// Write your tests here:\ntest(\"`capitalize` and `capitalizeAll` should be functions\", () => {\n  expect(typeof capitalize).toBe('function');\n  expect(typeof capitalizeAll).toBe('function');\n});\n\ntest('`capitalize` should capitalize a single word', () => {\n  expect(capitalize('hey')).toBe(\"Hey\");\n  expect(capitalize('Hey')).toBe(\"Hey\");\n  expect(capitalize('less is more')).toBe(\"Less is more\");\n})\n\ntest('`capitalizeAll` should capitalize every word in a string', () => {\n  expect(capitalizeAll('hey')).toBe(\"Hey\");\n  expect(capitalizeAll('Hey')).toBe(\"Hey\");\n  expect(capitalizeAll('less is more')).toBe(\"Less Is More\");\n})",
+          "videoUrl": "",
+          "starterCode": "const capitalize = (word: string): string => {\n  return word[0].toUpperCase() + word.slice(1);\n};\n\n// The trick here is to\n// - turn the string into an arary\n// - run capitalize on every element of the array (this is exactly what .map is for)\n// - turn the array int a string\nconst capitalizeAll = (str: string): string => {\n  return str\n    .split(\" \")\n    .map(capitalize)\n    .join(\" \");\n};\n",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "5HnuVW8li",
           "type": "typescript",
           "title": "Get the items you want using a filter",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "instructions": "Use the `filter` function to do the following:\n\n* Extract all numbers from `mixedArray` and assign them to `numbers`\n* Extract all strings from `mixedArray` and assign them to `strings`\n* Filter out only names that start with \"A\" from the `names` list and assign the result to `namesStartingWithA`.\n\n\n**HINT:** For the first two you will find the `typeof` keyword helpful.\n",
+          "testCode": "// Write your tests here:\ntest(\"`numbers` should be the subset of `mixedArray` elements that are numbers`\", () => {\n  expect(numbers).toEqual(mixedArray.filter(x => typeof x === \"number\"));\n});\ntest(\"`strings` should be the subset of `mixedArray` elements that are strings`\", () => {\n  expect(strings).toEqual(mixedArray.filter(x => typeof x === \"string\"));\n});\n\ntest(\"`namesStartingWithA` should be the subset of `names` elements start with the letter A`\", () => {\n  expect(namesStartingWithA).toEqual(names.filter(x => x.startsWith(\"A\")));\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": ""
+          "starterCode": "const mixedArray = [\"one\", 2, \"three\", 4, \"five\", 6];\nconst names = [\n  \"Gabrielle\",\n  \"Kiarra\",\n  \"Santa\",\n  \"Peter\",\n  \"Wava\",\n  \"Austin\",\n  \"Austen\",\n  \"Alaina\",\n  \"Ian\",\n  \"Bria\",\n];\n\nconst numbers = undefined;\nconst strings = undefined;\nconst namesStartingWithA = undefined;",
+          "solutionCode": "const mixedArray = [\"one\", 2, \"three\", 4, \"five\", 6];\nconst names = [\n  \"Gabrielle\",\n  \"Kiarra\",\n  \"Santa\",\n  \"Peter\",\n  \"Wava\",\n  \"Austin\",\n  \"Austen\",\n  \"Alaina\",\n  \"Ian\",\n  \"Bria\",\n];\n\nconst numbers = mixedArray.filter((x) => typeof x === \"number\");\nconst strings = mixedArray.filter((x) => typeof x === \"string\");\nconst namesStartingWithA = names.filter((x) => x[0] == \"A\");\n",
+          "content": "# Filtering\n\nThe idea of filtering is to go from one set of things to a smaller set, i.e. a subset. You see this all the time in the world of software, especially messaging apps. Consider:\n\n* Your phone apps can filter your calls to show you things like your outgoing calls, or missed calls. These are both subsets of all the calls on your phone.\n* Email apps let you do tons of filtering such as: only emails from a particular sender, only sent emails, only unread emails, only emails flagged as important, etc.\n* Stock trading apps let you do tons of filtering too, often based on time: Daily price for the past two weeks, two months, 5 years, etc. Even simply entering in a ticker symbol is using filtering. The stock price for AMZN is a subset of all stock prices for all companies.\n\n# When is this useful?\n\nWhenever you want a subset of an array. "
         },
         {
           "id": "ZurFUR4Hb",
