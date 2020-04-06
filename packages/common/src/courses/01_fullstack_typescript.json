@@ -1169,6 +1169,17 @@
           "content": ""
         },
         {
+          "id": "l9L9F4wfS",
+          "type": "typescript",
+          "title": "Box or Bag?",
+          "instructions": "Now our fruit stand is very popular. Some customers even buy a lot of fruit\\! We need better options for letting them carry their fruit away. To our fruit stand management software we add a function `getTakeawayContainer` which returns a takeaway container based on how many fruits the customer purchased. We only have two options for this container right now: `bag` or `box`. Implement this function using a [ternary expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator).",
+          "testCode": "test(\"`getTakeawayContainer` should return a `bag` when provided less than 10 fruits purchased.\", () => {\n  expect(getTakeawayContainer(1)).toBe(\"bag\");\n  expect(getTakeawayContainer(2)).toBe(\"bag\");\n  expect(getTakeawayContainer(5)).toBe(\"bag\");\n  expect(getTakeawayContainer(6)).toBe(\"bag\");\n  expect(getTakeawayContainer(9)).toBe(\"bag\");\n  expect(getTakeawayContainer(10)).toBe(\"bag\");\n});\n\ntest(\"`getTakeawayContainer` should return a `box` when provided more than 10 fruits purchased.\", () => {\n  expect(getTakeawayContainer(11)).toBe(\"box\");\n  expect(getTakeawayContainer(20)).toBe(\"box\");\n  expect(getTakeawayContainer(50)).toBe(\"box\");\n  expect(getTakeawayContainer(61)).toBe(\"box\");\n  expect(getTakeawayContainer(92)).toBe(\"box\");\n});\n\ntest(\"The `getTakeawayContainer` should use a ternary expression, `condition ? ... : ...` to return the `Container`\", () => {\n  const code = __user_code_string__;\n  expect(code.includes(\" ? \")).toBe(true);\n  expect(code.includes(\" : \")).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "\ntype Container = \"bag\" | \"box\";\n\n/**\n * A function to return the takeaway container based on\n * how many fruits the cusomter purchased.\n * \n * If the customer purchased more than 10 fruits, give them\n * a box. Otherwise, a bag is fine!\n */\nfunction getTakeawayContainer(numberOfFruitPurchased: number): Container {\n  // Your code here\n};",
+          "solutionCode": "\ntype Container = \"bag\" | \"box\";\n\n/**\n * A function to return the takeaway container based on\n * how many fruits the cusomter purchased.\n * \n * If the customer purchased more than 10 fruits, give them\n * a box. Otherwise, a bag is fine!\n */\nfunction getTakeawayContainer(numberOfFruitPurchased: number): Container {\n  return numberOfFruitPurchased > 10 ? \"box\" : \"bag\";\n};",
+          "content": ""
+        },
+        {
           "id": "wzTlMB2D",
           "type": "section",
           "title": "Loops",
