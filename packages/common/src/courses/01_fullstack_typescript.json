@@ -172,6 +172,17 @@
           "content": ""
         },
         {
+          "id": "C76VHWFEt",
+          "type": "markup",
+          "title": "Links",
+          "instructions": "One fundamental property of the internet is that webpages link to other webpages. How can we \"link\" to another webpage in an HTML document? HTML provides an `a` hyperlink tag for just this purpose. The `a` tag behaves a little differently than the tags we have seen so far. If you want to link to a webpage, you need to specify the target link. How do we do that in HTML?\n\n```markup\n<a href=\"https://app.pairwise.tech/\">Visit Pairwise!</a>\n\n```\n\nJust like that\\! The `href` _attribute_ is used to specify the url the `a` tag should link to. Another helpful attribute is the `target` attribute, which can be used to specify where the browser should open the link. If you provide `target=\"_blank\"` this will indicate to the browser to open the link in a new tab \\(rather than the current tab\\).\n\nThere is a blank canvas below\\! Add an `a` link to any url you would like to visit\\! Click the link in the preview window to try it out \\(add the `target` attribute if you don't want to be navigated away from the Pairwise workspace\\).",
+          "testCode": "test(\"An `a` tag should exist.\", () => {\n  const a = get(\"a\");\n  expect(a !== null).toBe(true);\n});\n\ntest(\"The `a` tag should contain some text.\", () => {\n  const a = get(\"a\");\n  expect(typeof a.innerHTML === \"string\").toBe(true);\n  expect(a.innerHTML.length > 0).toBe(true);\n});\n\ntest(\"The `a` tag should link to a url.\", () => {\n  const a = get(\"a\");\n  expect(typeof a.href === \"string\").toBe(true);\n  expect(a.href.length > 0).toBe(true);\n  // Ok ~\n  expect(a.href.includes(\"http\") || a.href.includes(\"https\")).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "<a href=\"https://app.pairwise.tech/\" target=\"_blank\">Visit Pairwise!</a>",
+          "content": ""
+        },
+        {
           "id": "CuwykKRM",
           "type": "section",
           "title": "Enter CSS",
