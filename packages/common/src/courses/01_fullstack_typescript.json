@@ -161,6 +161,17 @@
           "content": ""
         },
         {
+          "id": "SB9wO2H4z",
+          "type": "markup",
+          "title": "Divs, Divs, Divs!",
+          "instructions": "To give you a sense of how divs are like \"containers\" take a look at the preview on the right. We are adding some styles to the 3 divs in the HTML document so they all have a width and height and background color, so you can see them. Again, don't worry about the styles yet, we will focus on these soon. For now just look at the three boxes\\! These are all divs. You can add text or other HTML content inside of them.\n\nFor this challenge, continue adding divs to the document until there are 20 total divs\\! ",
+          "testCode": "test(\"The HTML document should contain 20 divs.\", () => {\n  expect(getAll(\"div\").length).toBe(20);\n});\n",
+          "videoUrl": "",
+          "starterCode": "<style>\n  body {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  div {\n    margin: 2px;\n    width: 150px;\n    height: 150px;\n    background: teal;\n  }\n</style>\n\n<!-- Add divs here -->\n<div></div>\n<div></div>\n<div></div>\n\n",
+          "solutionCode": "<style>\n  body {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  div {\n    margin: 2px;\n    width: 150px;\n    height: 150px;\n    background: teal;\n  }\n</style>\n\n<!-- Add divs here -->\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n\n",
+          "content": ""
+        },
+        {
           "id": "CuwykKRM",
           "type": "section",
           "title": "Enter CSS",
