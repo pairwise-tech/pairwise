@@ -139,15 +139,26 @@
           "content": ""
         },
         {
-          "id": "ny51KoEI",
+          "id": "MNNx8m4XV",
           "type": "markup",
-          "title": "Style some text",
-          "instructions": "* Change the color of the `<p>` tag to `red`\n* Change its text to `Exciting red text`\n\n\nIf you're unsure how to style things, that's fine\\! Check out the supplemental content for help.",
-          "starterCode": "<style>\n  /* Your code here */\n</style>\n<p>Just plain text</p>\n",
-          "solutionCode": "<!DOCTYPE html>\n<style>\n  p {\n    color: red;\n  }\n</style>\n<p>Exciting red text</p>\n",
-          "testCode": "test(\"There should be a `p` tag with red text\", () => {\n  const el = get(\"p\");\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"red\"));\n});\n\ntest(\"There should be a `<p>` tag with the text 'Exciting red text'\", () => {\n  const el = get(\"p\");\n  expect(el.innerHTML).toBe(\"Exciting red text\");\n});\n",
-          "videoUrl": "https://www.youtube.com/embed/MsaKKxVTsEk",
-          "content": "This is a quick intro to CSS before we really dive in. If you're thinking to yourself \"You haven't explained this yet\" then you're right. It's intentional\\!\n\nWe'll go more in depth about what's going on shortly."
+          "title": "The Span Tag",
+          "instructions": "We've seen heading, paragraph, and bold tags now. Another very common HTML tag is the `span`. The span is a generic tag which can be used to wrap some content. It is used to select inline content purely for stylistic purposes \\(we will learn more about styles and CSS later\\).\n\nFor now, let's try out something simple with the `span` tag\\. In the code editor is some text and a `style` tag\\. Don't worry about the details of the style tag just yet: this is just a preview of what it can do\\! Change the `b` tag in the paragraph to a `span`. Watch the results in the preview on the right\\! The text remains bold because we are targeting and styling the `span` to be bold. Cool\\!",
+          "testCode": "test(\"There should be a `p` tag with text inside.\", () => {\n  const element = get(\"p\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"There should be a `span` tag with text inside.\", () => {\n  const element = get(\"span\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"The `p` tag should contain a `span` tag with text inside.\", () => {\n  expect(typeof get(\"p span\").innerHTML).toBe(\"string\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "<style>\n  span {\n    font-weight: bold;\n  }\n</style>\n\n<!-- Only change code here: -->\n<p>\n  This is a paragraph, with some <b>bold text</b>.\n</p>",
+          "solutionCode": "<style>\n  span {\n    font-weight: bold;\n  }\n</style>\n\n<!-- Only change code here: -->\n<p>\n  This is a paragraph, with some <span>bold text</span>.\n</p>",
+          "content": ""
+        },
+        {
+          "id": "rOuaLSaYV",
+          "type": "typescript",
+          "title": "Divs!",
+          "instructions": "",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
         },
         {
           "id": "CuwykKRM",
@@ -159,6 +170,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "CSS stands for Cascading Style Sheets, but that's unimportant. What matters here is that what CSS is how you change the way things _look_ on the web.\n\nWhere HTML is the \"stuff\", the actual content on a webpage, CSS is how all that stuff looks. Is the background dark with light text \\(like what you're reading right now\\)? Is there a menu bar near the top? How does the form on screen try to grab your attention with color and positioning? These are all questions CSS can answer.\n\nTo be specific, CSS tells the browser two things:\n\n* What we want to style\n* What we want it to look like\n\n# Selectors\n\nSelectors tell the browser what you want to style.\n\nFor example, you might say to yourself \"I want all the paragraphs on my site to be red\\!\" A very elegant design decision. In order to communicate this to the browser we can use CSS:\n\n```css\np {\n  color: red;\n}\n\n```\n\nRemember the `<p>` tag from earlier lessons? Using the tagname, `p`, we were able to \"select\" every paragraph on the page and make them all red. In this example `p` is the selector. Now let's talk about what's inside those brackets.\n# Properties\n\nCSS properties tell the browser how you want something to look. Let's say you're tired of drab white\\-background websites and want to mix it up with a `teal` background\\.\n\n```css\nbody {\n  background: teal;\n}\n\n```\n\n`body` will select the entire visible area of the web page, but we will touch on that more later. Focus on `background: teal;`. Here we have another CSS property `background` with a value of `teal`.\n\n> CSS properties take the form: property name \\+ `:` \\+ property value \\+ `;`.\n\n`background` and `color` are just two examples. There are quite a few CSS properties you can use, and the combination of them is responsible for styling every site you use on the internet.\n\nIf you're curious you can skim through [the full list of CSS properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference), but we don't recommend it. It's a very dry read and by itself won't tell you what you really want to know which is what each property does. Furthermore, some CSS properties are so obscure that you can go your entire career without learning them on the job because they are just not useful in most context.\n# Blocks\n\nA \"block\" of CSS is simply the combination of selectors and properties. All the examples above are CSS blocks.\n\n> CSS blocks take the form: Selectors \\+ `{` \\+ properties \\+ `}`\n\nThese terms are not important for their own sake, but so that you aren't lost when you're working outside of this course. \n# The <style\\> tag connects HTML and CSS\n\nYou can't just write CSS anywhere in an HTML document and expect it to work. You have to write it **within a \\*\\***`style`**\\*\\* tag**. Like this:\n\n```html\n<style>\n  p { color: red; }\n</style>\n<p>Red text!</p>\n\n```\n\nIf you write that without the `style` tag the browser will literally put `p { color: red; }` on the page for everyone to see. By putting that CSS code within a `style` tag you are telling the browser to treat it as CSS rather than HTML.\n# Specificity and the HTML class and id props\n\nImagine you have two paragraphs, and you want one to be `red` and the other to be `blue`. How would you select just one? Here's the HTML:\n\n```html\n<p>I want a blue background</p>\n<p>I want a red background</p>\n\n```\n\nYou might try the following CSS:\n\n```\np { background: red; }\np { background: blue; }\n\n```\n\nHowever, both paragraphs will be `blue`\\! Why? Two things are happening here:\n\n1. `p` selects every `<p>` tag, not just the first or the second.\n1. When you have two identical selectors \\(`p` and `p` above\\) and two identical property names \\(`background` and `background` above\\) whichever one comes last wins.\n\nPoint 1 can be addressed with IDs and classes, which we will discuss shortly.\n\nPoint 2, how conflicting styles get applied by the browser, is called \"specificity\". As in, the second CSS block is considered more _specific_ than the first, and therefore it wins and gets applied.\n\n## IDs\n\nAn ID is a unique identifier in the browser and it can be used as a selector. \n\n* There should only be 1 of any ID on a web page.\n* IDs are very specific, meaning if you select an ID in your CSS that CSS will most likely win over other styles\n* HTML uses the `id` property, CSS uses the `#` selector\\.\n\n\n```html\n<style>\n  #my-paragraph { color: red; }\n  p { color: blue; }\n</style>\n<p id=\"my-paragraph\">Red text!</p>\n\n```\n\nEven though the `p` styles come last, the `#my-paragraph` styles get applied because they are more specific.\n\n> In general don't use IDs, use classes.\n\n## Classes\n\n* A class can be applied to as many things as you want.\n* Classes are more specific than tag names\n* HTML uses the `class` property, CSS uses the `.` selector\\.\n\n\n```markup\n<style>\n  .red-text { color: red; }\n  p { color: blue; }\n</style>\n<p class=\"red-text\">Red text!</p>\n\n```\n\nThe text is again red because classes are more specific than tag names.\n\n> Classes are extremely useful and flexible. Use them a lot.\n# More to come...\n\nThat's a lot of information, and mostly meaningless without practice. There's more to CSS which we will dive into later, but for now let's practice everything we just talked about."
+        },
+        {
+          "id": "ny51KoEI",
+          "type": "markup",
+          "title": "Style some text",
+          "instructions": "* Change the color of the `<p>` tag to `red`\n* Change its text to `Exciting red text`\n\n\nIf you're unsure how to style things, that's fine\\! Check out the supplemental content for help.",
+          "starterCode": "<style>\n  /* Your code here */\n</style>\n<p>Just plain text</p>\n",
+          "solutionCode": "<!DOCTYPE html>\n<style>\n  p {\n    color: red;\n  }\n</style>\n<p>Exciting red text</p>\n",
+          "testCode": "test(\"There should be a `p` tag with red text\", () => {\n  const el = get(\"p\");\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"red\"));\n});\n\ntest(\"There should be a `<p>` tag with the text 'Exciting red text'\", () => {\n  const el = get(\"p\");\n  expect(el.innerHTML).toBe(\"Exciting red text\");\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/MsaKKxVTsEk",
+          "content": "This is a quick intro to CSS before we really dive in. If you're thinking to yourself \"You haven't explained this yet\" then you're right. It's intentional\\!\n\nWe'll go more in depth about what's going on shortly."
         },
         {
           "id": "KlxN3f11",
