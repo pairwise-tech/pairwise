@@ -156,8 +156,8 @@
           "instructions": "A fundamental HTML tag is the `div`. \"div\" is short for division, and you can think of divs like a block or container which you can use to organize, structure, and style HTML content. A div does not do anything on it's own, but it can be used to organize other HTML content and then specifically target it for styling and layout.\n\nIn the HTML document below is some content. There are two divs present, one in the top and one at the end of the document. Take a look at how they are organized, and how other content is included _inside_ the div. There is additional content in the middle of the document, three paragraph tags, but it is just sitting there. Add another div element to group these three paragraph tags.",
           "testCode": "test(\"There should be 3 divs in the document.\", () => {\n  const divs = getAll(\"div\");\n  expect(divs.length).toBe(3);\n});\n\ntest(\"The middle div should contain 3 paragraph tags.\", () => {\n  const divs = getAll(\"div\");\n  for (const child of divs[1].children) {\n    expect(child.tagName).toBe(\"P\");\n  }\n});\n",
           "videoUrl": "",
-          "starterCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<p>We are glad you can join us</p>\n<p>It's great you are here!</p>\n<p>Welcome!</p>\n\n<div>\n  <h3>Footer section...</h3>\n</div>",
-          "solutionCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<div>\n  <p>We are glad you can join us</p>\n  <p>It's great you are here!</p>\n  <p>Welcome!</p>\n</div>\n\n<div>\n  <h3>Footer section...</h3>\n</div>",
+          "starterCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<p>We are glad you can join us</p>\n<p>It's great you are here!</p>\n<p>Welcome!</p>\n\n<div>\n  <h3>Footer section...</h3>\n</div>\n",
+          "solutionCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<div>\n  <p>We are glad you can join us</p>\n  <p>It's great you are here!</p>\n  <p>Welcome!</p>\n</div>\n\n<div>\n  <h3>Footer section...</h3>\n</div>\n",
           "content": ""
         },
         {
@@ -167,7 +167,7 @@
           "instructions": "To give you a sense of how divs are like \"containers\" take a look at the preview on the right. We are adding some styles to the 3 divs in the HTML document so they all have a width and height and background color, so you can see them. Again, don't worry about the styles yet, we will focus on these soon. For now just look at the three boxes\\! These are all divs. You can add text or other HTML content inside of them.\n\nFor this challenge, continue adding divs to the document until there are 20 total divs\\! ",
           "testCode": "test(\"The HTML document should contain 20 divs.\", () => {\n  expect(getAll(\"div\").length).toBe(20);\n});\n",
           "videoUrl": "",
-          "starterCode": "<style>\n  body {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  div {\n    margin: 2px;\n    width: 150px;\n    height: 150px;\n    background: teal;\n  }\n</style>\n\n<!-- Add divs here -->\n<div></div>\n<div></div>\n<div></div>\n\n",
+          "starterCode": "<style>\n  body {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  div {\n    margin: 2px;\n    width: 150px;\n    height: 150px;\n    background: teal;\n  }\n</style>\n\n<!-- Add divs here -->\n<div></div>\n<div></div>\n<div></div>\n",
           "solutionCode": "<style>\n  body {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  div {\n    margin: 2px;\n    width: 150px;\n    height: 150px;\n    background: teal;\n  }\n</style>\n\n<!-- Add divs here -->\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n\n",
           "content": ""
         },
@@ -179,7 +179,18 @@
           "testCode": "test(\"An `a` tag should exist.\", () => {\n  const a = get(\"a\");\n  expect(a !== null).toBe(true);\n});\n\ntest(\"The `a` tag should contain some text.\", () => {\n  const a = get(\"a\");\n  expect(typeof a.innerHTML === \"string\").toBe(true);\n  expect(a.innerHTML.length > 0).toBe(true);\n});\n\ntest(\"The `a` tag should link to a url.\", () => {\n  const a = get(\"a\");\n  expect(typeof a.href === \"string\").toBe(true);\n  expect(a.href.length > 0).toBe(true);\n  // Ok ~\n  expect(a.href.includes(\"http\") || a.href.includes(\"https\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "",
-          "solutionCode": "<a href=\"https://app.pairwise.tech/\" target=\"_blank\">Visit Pairwise!</a>",
+          "solutionCode": "<a href=\"https://app.pairwise.tech/\" target=\"_blank\">Visit Pairwise!</a>\n",
+          "content": ""
+        },
+        {
+          "id": "TaV@i63z8",
+          "type": "markup",
+          "title": "Entering Text with Input Tags",
+          "instructions": "Webpages would not be very useful without the ability to enter information and support user interactions. In fact, submitting text to a webpage is one of the most common interactions. How do we enter text in an HTML document? We can use the `input` tag\\. It's very easy, actually. Try to add an `input` tag in the HTML document below. The input tag behaves very similarly to the tags we have already seen.\n\nOnce you figure it out, try typing in the input element in the preview\\! Great\\!",
+          "testCode": "test(\"The HTML document should contain an `input` tag.\", () => {\n  expect(get(\"input\") !== null).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "<div>\n  <h1>We want to enter some text</h1>\n  <p>Any text!</p>\n  <div>\n    <b>Let the user decide!</b>\n  </div>\n  <div>\n    <italic>Let's add an \"input\" tag here:</italic>\n  </div>\n</div>\n",
+          "solutionCode": "<div>\n  <h1>We want to enter some text</h1>\n  <p>Any text!</p>\n  <div>\n    <b>Let the user decide!</b>\n  </div>\n  <div>\n    <italic>Let's add an \"input\" tag here:</italic>\n  </div>\n  <input />\n</div>\n",
           "content": ""
         },
         {
