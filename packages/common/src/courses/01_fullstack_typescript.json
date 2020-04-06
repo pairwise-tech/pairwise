@@ -1507,6 +1507,17 @@
           "content": ""
         },
         {
+          "id": "y22djF1ur",
+          "type": "typescript",
+          "title": "Some and Every",
+          "instructions": "Use the `some` and `every` array functions to complete the following:\n\n* Use `every` to confirm that all people in the `people` array have names starting with `\"J\"`.\n* Use `every` to confirm that **NOT** all people in the `people` array have `\"Sales\"` roles\\.\n* Use `some` to confirm that _some_ people in the `people` array have `\"Sales\"` roles, but not all.\n\n",
+          "testCode": "// Write your tests here:\ntest(\"`allNamesStartWithJ` should be true\", () => {\n  expect(allNamesStartWithJ).toBe(true);\n});\ntest(\"`allPeopleHaveSalesRoles` should be false\", () => {\n  expect(allPeopleHaveSalesRoles).toBe(false);\n});\ntest(\"`somePeopleHaveSalesRoles` should be true\", () => {\n  expect(somePeopleHaveSalesRoles).toBe(true);\n});\ntest(\"The `some` function should be used\", () => {\n  expect(__user_code_string__).toMatch(/people\\s*\\.some/);\n});\ntest(\"The `every` function should be used\", () => {\n  expect(__user_code_string__).toMatch(/people\\s*\\.every/);\n});\n",
+          "videoUrl": "",
+          "starterCode": "const people = [\n  { name: \"Jim\", role: \"Sales\" },\n  { name: \"Jenna\", role: \"Management\" },\n  { name: \"Jack\", role: \"Sales\" },\n  { name: \"Julie\", role: \"Assistant\" },\n];\n\nconst allNamesStartWithJ = undefined;\nconst allPeopleHaveSalesRoles = undefined;\nconst somePeopleHaveSalesRoles = undefined;",
+          "solutionCode": "const people = [\n  { name: \"Jim\", role: \"Sales\" },\n  { name: \"Jenna\", role: \"Management\" },\n  { name: \"Jack\", role: \"Sales\" },\n  { name: \"Julie\", role: \"Assistant\" },\n];\n\nconst allNamesStartWithJ = people.every(x => x.name.startsWith(\"J\"));\nconst allPeopleHaveSalesRoles = people.every(x => x.role === \"Sales\");\nconst somePeopleHaveSalesRoles = people.some(x => x.role === \"Sales\");",
+          "content": ""
+        },
+        {
           "id": "y6F01Gwa7",
           "type": "media",
           "title": "Functions and Methods",
