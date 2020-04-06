@@ -108,7 +108,7 @@
         {
           "id": "9scykDold",
           "type": "markup",
-          "title": "Add a h1 Tag in HTML",
+          "title": "The h1 Tag",
           "instructions": "* Right below the existing `p` tag add an `h1` tag with the text \"Hello\\!\" inside it.\n\n",
           "starterCode": "<p>This is an HTML file. Add your code below this line</p>",
           "solutionCode": "<p>This is an HTML file. Add your code below this line</p>\n<h1>Hello!</h1>",
