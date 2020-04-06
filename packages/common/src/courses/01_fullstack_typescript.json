@@ -1826,6 +1826,17 @@
           "content": ""
         },
         {
+          "id": "xvKEAc0sX",
+          "type": "typescript",
+          "title": "Box of Strings",
+          "instructions": "You are given a box of strings, and a list of valid strings. Return only the strings in the box which are included in the list of valid strings.\n\n**Note: **There are many ways to do this. Get creative and try out different solutions\\!",
+          "testCode": "const solutionFn = (boxOfStrings, validStrings) => {\n  const valid = new Set(validStrings);\n  return boxOfStrings.filter((s) => valid.has(s));\n};\n\ntest(\"`getValidStrings` should return only the strings in the provided `boxOfStrings` which exist in the `validStrings` list.\", () => {\n  let list = [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\", \"g\"];\n  let result = getValidStrings(list, list.slice(0, 2));\n  let expected = solutionFn(list, list.slice(0, 2));\n  expect(result).toEqual(expected);\n\n  list = stringList;\n  result = getValidStrings(list, stringList.slice(0, 12));\n  expected = solutionFn(list, stringList.slice(0, 12));\n  expect(result).toEqual(expected);\n\n  list = stringList;\n  result = getValidStrings(list, stringList.slice(0, 50));\n  expected = solutionFn(list, stringList.slice(0, 50));\n  expect(result).toEqual(expected);\n\n  list = stringList;\n  result = getValidStrings(list, []);\n  expected = solutionFn(list, []);\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// A function to filter a list of strings given a list of valid strings.\nconst getValidStrings = (boxOfStrings: string[], validStrings: string[]): string[] => {\n  // Your code here\n}",
+          "solutionCode": "// A function to filter a list of strings given a list of valid strings.\nconst getValidStrings = (boxOfStrings: string[], validStrings: string[]): string[] => {\n  // Create a set of only the valid strings\n  const valid = new Set(validStrings);\n  // Filter the box of strings, including only strings in the valid set\n  return boxOfStrings.filter(s => valid.has(s));\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
