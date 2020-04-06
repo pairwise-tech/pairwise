@@ -7,7 +7,7 @@ import * as path from "path";
 import { promisify } from "util";
 import fileUpload from "express-fileupload";
 
-import { Course, ContentUtilityClass } from "@pairwise/common";
+import { Course, ContentUtilityClass, CourseList } from "@pairwise/common";
 
 const debug = require("debug")("codepress:app");
 
@@ -75,7 +75,10 @@ class CourseAPI {
 
   getAll = () => {
     return readdir(this.basedir)
-      .then(filenames => filenames.map(x => path.resolve(this.basedir, x)))
+      .then(filenames => {
+        // Sort the filenames for a definitive order:
+        return filenames.sort().map(x => path.resolve(this.basedir, x));
+      })
       .then(filepaths =>
         Promise.all(
           filepaths.map(x => {
@@ -88,8 +91,27 @@ class CourseAPI {
           }),
         ),
       )
-      .then(x => {
-        this.cache = makeCache(x);
+      .then((courses: CourseList) => {
+        /**
+         * NOTE: A better solution would be to unify reading the courses
+         * in the ContentUtilityClass API. If Codepress used that,
+         * ContentUtilityClass will need to be able to "re-read" the
+         * courses to get the updated version after saving them. This
+         * will require using the fs module in ContentUtilityClass,
+         * because the client workspace imports from common/ which caused
+         * webpack to be unable to resolve the fs module, even though
+         * the workspace doesn't use the ContentUtilityClass directly.
+         *
+         * Because we rarely add new courses, just manually reordering
+         * the courses here turned out to be a much simpler solution. The
+         * course filenames are sorted before they are read so they
+         * will be in a predicable order here.
+         */
+        const [PairwiseContent, FullstackTypeScript] = courses;
+
+        // Manually match the order provided by ContentUtilityClass:
+        const courseList = [FullstackTypeScript, PairwiseContent];
+        this.cache = makeCache(courseList);
         return this.resolveFromCache();
       });
   };

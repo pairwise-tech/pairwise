@@ -84,6 +84,7 @@ export const TEST_UTILS_GLOBALS = {
   inBox: "(box, message) => boolean - given a box, find the message",
   pass: "A function to just pass a test",
   fail: "A function to just fail a test",
+  stringList: "An array of 100 random strings",
 };
 
 // Type representing all the globally available key names
@@ -423,6 +424,9 @@ export const getTestHarness = (
 try {
   ${preamble}
 
+  // Fixed helper constants to be used in the test environment.
+  ${TEST_HELPER_CONSTANTS}
+
   // use as a fallback when the only way to test user code is by regexp.
   // purposefully named against conventions to avoid collisions with user vars
   const ${
@@ -606,3 +610,112 @@ export const compileCodeString = async (
     };
   }
 };
+
+/**
+ * An array of 100 random string values which is populated in the
+ * test environment to use as a source of fixed data for writing
+ * challenge tests.
+ */
+const TEST_HELPER_CONSTANTS = `
+const stringList = [
+  "QVRYdrkdVw",
+  "0pWPuoHqRw",
+  "le5J7biZ6t",
+  "AUfg0JRWwl",
+  "WQe8SRvXeY",
+  "6RWbBD2Y94",
+  "QXdo2erD1p",
+  "c203WhArZ3",
+  "e5keBaaAGQ",
+  "UEtDLsH8bg",
+  "GAsU1wEC4a",
+  "MKlgZBNSw9",
+  "5dUzk7nyeK",
+  "L0AlHTLiWV",
+  "xwZemS1nY2",
+  "lq0tSDkJwe",
+  "xpLIPZsInJ",
+  "j514vU8LH6",
+  "orLHidHocj",
+  "P9AcPdVPoF",
+  "mNkAf7Qjq1",
+  "kyfoYXVSF1",
+  "SOkccTFJ5F",
+  "7cgQqgZOgE",
+  "MY7U0BJDw0",
+  "q6rct7tNwr",
+  "drE2n9YAiC",
+  "KOHQ7kt50Q",
+  "pZD726HvCX",
+  "w1CxnpEDEt",
+  "Tj6FjHXL4N",
+  "vQFfx6qpw5",
+  "bXnKCZz4Nr",
+  "FfUWj42rgv",
+  "rGae85UvFH",
+  "tyXGV7aKgL",
+  "zCxkZ7cYCF",
+  "gxXQcqc3sD",
+  "z5LsQl10HC",
+  "shBCEdn1ql",
+  "Jl1LFpR3vE",
+  "1awcpUFLD9",
+  "htW55BxWYP",
+  "RoM6BFqtIE",
+  "k7ymKDJhzC",
+  "VrvPT4R95I",
+  "fpZmdWma3b",
+  "dR5RqldNin",
+  "vwWmWWTnOP",
+  "f3p1vThSFP",
+  "9N4Xn0tw7X",
+  "z3BEZdTBnO",
+  "0fRulMGsG0",
+  "56dNhTAlpW",
+  "0n1NB0l419",
+  "jFgrd053l9",
+  "w61n93wIlv",
+  "u2S7f1OcVN",
+  "XYqrPrJGdS",
+  "Fkxjdb9Dlt",
+  "OsT1N4XoyW",
+  "E6jR7NhmL4",
+  "1dgY7OIoXa",
+  "PLQ3KnDcHN",
+  "YuQSm9ALxE",
+  "Syzup76N9c",
+  "QnkA6NPj7H",
+  "TipsiCgGFj",
+  "sbyvRL5YXy",
+  "QAUmWxzCzr",
+  "0SJIupX54D",
+  "jFdZYIK0t1",
+  "rTSC0QtFRv",
+  "pcAthU0Jth",
+  "u6IZETUtNU",
+  "UzWqlFnkjH",
+  "RKv42wyewb",
+  "oaKrrKwWme",
+  "6T6mab8Pfm",
+  "oqFlSsv5Gx",
+  "H6RturqShP",
+  "LY00Zq9aoV",
+  "uZKDkDJOHC",
+  "M64RjYLFHW",
+  "hLtOzPf6zm",
+  "Ff1NrGC3oP",
+  "BD4gkrsAuE",
+  "1N13l8Nfdz",
+  "JpThfDtb7B",
+  "GHOWoEwsri",
+  "1zkHNjYTzW",
+  "ANJsMHGfrj",
+  "GXzyQvoDuZ",
+  "oQ60uBbp1n",
+  "GT5btNBeYi",
+  "Jr2kLMQPa8",
+  "dKedTpfo94",
+  "JqVTEc9VvT",
+  "nYglUHWXI9",
+  "GV2c3JIdVA",
+];`;
