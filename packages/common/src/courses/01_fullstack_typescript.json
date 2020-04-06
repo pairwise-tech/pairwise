@@ -1848,6 +1848,17 @@
           "content": ""
         },
         {
+          "id": "8XxA3@@xk",
+          "type": "typescript",
+          "title": "Shortest String",
+          "instructions": "You receive a long string of words. Find and return the shortest word in the string, if there are multiple shortest words, just return the first word which is the shortest. For instance, `In this sentence, there is an answer: find the shortest word!`, the result would be `In`. Note that `is` and `an` are not returned.",
+          "testCode": "const solutionFn = (words) => {\n  const wordsList = words.split(\" \");\n  let shortest = wordsList[0];\n\n  for (const word of wordsList) {\n    if (word.length < shortest.length) {\n      shortest = word;\n    }\n  }\n\n  for (const word of wordsList) {\n    if (word.length === shortest.length) {\n      return word;\n    }\n  }\n\n  return shortest;\n};\n\n\ntest(\"`findTheShortestWord` should return the first shortest word in a provided string.\", () => {\n  let input = loremIpsum;\n  let result = findTheShortestWord(input);\n  let expected = solutionFn(input);\n  expect(result).toEqual(expected);\n\n  input = \"This should return the long string the!\";\n  result = findTheShortestWord(input);\n  expected = solutionFn(input);\n  expect(result).toEqual(expected);\n\n  input = \"\";\n  result = findTheShortestWord(input);\n  expected = solutionFn(input);\n  expect(result).toEqual(expected);\n\n  input = \"house\";\n  result = findTheShortestWord(input);\n  expected = solutionFn(input);\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Find the first shortest word in a string of words\nconst findTheShortestWord = (words: string): string => {\n  // Your code here\n}",
+          "solutionCode": "// Find the first shortest word in a string of words\nconst findTheShortestWord = (words: string): string => {\n  const wordsList = words.split(\" \");\n  let shortest = wordsList[0];\n\n  // Find the shortest word\n  for (const word of wordsList) {\n    if (word.length < shortest.length) {\n      shortest = word;\n    }\n  }\n\n  // Find the first word in the list with the length\n  // of the shortest\n  for (const word of wordsList) {\n    if (word.length === shortest.length) {\n      return word;\n    }\n  }\n\n  // Default condition\n  return shortest;\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
