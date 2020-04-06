@@ -93,15 +93,17 @@ class CourseAPI {
       )
       .then((courses: CourseList) => {
         /**
-         * NOTE: The course order comes from the file order in the
-         * file system. Reorder them manually to match the order
-         * provided in other environments for consistency.
+         * NOTE: A better solution would be to unify reading the courses
+         * in the ContentUtilityClass API. If Codepress used that,
+         * ContentUtilityClass will need to be able to "re-read" the
+         * courses to get the updated version after saving them. This
+         * will require using the fs module in ContentUtilityClass,
+         * because the client workspace imports from common/ which caused
+         * webpack to be unable to resolve the fs module, even though
+         * the workspace doesn't use the ContentUtilityClass directly.
          *
-         * This is not ideal... but it turns out there are a lot
-         * of issues which arise if we try to read the course list
-         * directly using the ContentUtilityClass API... Because we
-         * rarely add new courses, just manually reordering the
-         * courses here turned out to be a much simpler solution. The
+         * Because we rarely add new courses, just manually reordering
+         * the courses here turned out to be a much simpler solution. The
          * course filenames are sorted before they are read so they
          * will be in a predicable order here.
          */
