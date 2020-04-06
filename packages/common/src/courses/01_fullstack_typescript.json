@@ -1837,6 +1837,17 @@
           "content": ""
         },
         {
+          "id": "8EE78uuRi",
+          "type": "typescript",
+          "title": "Exclusion",
+          "instructions": "You are given a list of elements. Return the list, excluding all elements which appear more than `n` times\\. For instance, `[1,1,1,2,3]` with `n = 2` should return `[2,3]`. The elements in the original list which remain should be retained in the same order and frequency.",
+          "testCode": "const solutionFn = (list, n) => {\n  let counts = {};\n  for (const element of list) {\n    const key = String(element);\n    if (element in counts) {\n      counts[key] = counts[key] + 1;\n    } else {\n      counts[key] = 1;\n    }\n  }\n\n  let result = [];\n  for (const element of list) {\n    const key = String(element);\n    if (counts[key] > n) {\n      continue;\n    } else {\n      result.push(element);\n    }\n  }\n\n  return result;\n};\n\ntest(\"`exclusion` should exclude elements which appear more than `n` times from the provided `list`.\", () => {\n  let list = [1, 1, 1, 2, 3];\n  let result = exclusion(list, 2);\n  let expected = solutionFn(list, 2);\n  expect(result).toEqual(expected);\n\n  list = [1, 1, 1, 2, 2, 3, 5, 5, 5, 5];\n  result = exclusion(list, 2);\n  expected = solutionFn(list, 2);\n  expect(result).toEqual(expected);\n\n  list = [1, 1, 1, 2, 2, 3, 5, 5, 5, 5];\n  result = exclusion(list, 7);\n  expected = solutionFn(list, 7);\n  expect(result).toEqual(expected);\n\n  list = [1, 1, 1, 2, 2, 3, 5, 5, 5, 5];\n  result = exclusion(list, 1);\n  expected = solutionFn(list, 1);\n  expect(result).toEqual(expected);\n\n  list = [1, 1, 1, 2, 2, 3, 5, 5, 5, 5];\n  result = exclusion(list, 0);\n  expected = solutionFn(list, 0);\n  expect(result).toEqual(expected);\n\n  list = [5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7];\n  result = exclusion(list, 20);\n  expected = solutionFn(list, 20);\n  expect(result).toEqual(expected);\n\n  result = exclusion(list, 21);\n  expected = solutionFn(list, 21);\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Exclude elements from a list which appear more than n times\nconst exclusion = <T extends {}>(list: T[], n: number): T[] => {\n  // Your code here\n};\n\nconst input = [1, 1, 1, 2, 3];\nconst output = exclusion<number>(input, 2);\nconsole.log(output);\n",
+          "solutionCode": "// Exclude elements from a list which appear more than n times\nconst exclusion = <T extends string | number>(list: T[], n: number): T[] => {\n  // Construct an object to track how many times all the\n  // elements appear in the list\n  let counts: { [key: string]: number } = {};\n  for (const element of list) {\n    const key = String(element);\n    if (element in counts) {\n      counts[key] = counts[key] + 1;\n    } else {\n      counts[key] = 1;\n    }\n  }\n\n  // Iterate through the list and build up a results\n  // list which only contains the items from the original\n  // list which appear more than n times\n  let result = [];\n  for (const element of list) {\n    const key = String(element);\n    if (counts[key] > n) {\n      continue;\n    } else {\n      result.push(element);\n    }\n  }\n\n  // Return the final result\n  return result;\n};\n\nconst input = [1, 1, 1, 2, 3];\nconst output = exclusion<number>(input, 2);\nconsole.log(output);\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
