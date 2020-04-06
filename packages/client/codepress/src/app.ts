@@ -75,7 +75,10 @@ class CourseAPI {
 
   getAll = () => {
     return readdir(this.basedir)
-      .then(filenames => filenames.map(x => path.resolve(this.basedir, x)))
+      .then(filenames => {
+        // Sort the filenames for a definitive order:
+        return filenames.sort().map(x => path.resolve(this.basedir, x));
+      })
       .then(filepaths =>
         Promise.all(
           filepaths.map(x => {
@@ -98,7 +101,9 @@ class CourseAPI {
          * of issues which arise if we try to read the course list
          * directly using the ContentUtilityClass API... Because we
          * rarely add new courses, just manually reordering the
-         * courses here turned out to be a much simpler solution.
+         * courses here turned out to be a much simpler solution. The
+         * course filenames are sorted before they are read so they
+         * will be in a predicable order here.
          */
         const [PairwiseContent, FullstackTypeScript] = courses;
 
