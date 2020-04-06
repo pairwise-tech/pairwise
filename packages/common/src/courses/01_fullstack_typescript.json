@@ -2024,6 +2024,17 @@
           "content": ""
         },
         {
+          "id": "wH7qiJ2P4",
+          "type": "typescript",
+          "title": "Find in Array",
+          "instructions": "You are given an array of integers and a target integer. Return all of the indexes which contain the target integer in the array, or `null` if the target is not present. For instance, `[1,7,9,8,9]` with a target of `9` should return `[2,4]`. A target of `11` would return `null`.",
+          "testCode": "test(\"`findInArray` should return `null` for target values which are not present.\", () => {\n  expect(findInArray([1, 1, 2, 3, 4, 5, 6], 8)).toBe(null);\n  expect(findInArray([1, 1, 2, 3, 4, 5, 6], 7)).toBe(null);\n  expect(findInArray([1, 1, 2, 3, 4, 5, 6], -1)).toBe(null);\n  expect(findInArray([1, 1, 2, 3, 4, 5, 6], NaN)).toBe(null);\n  expect(findInArray([], 8)).toBe(null);\n});\n\ntest(\"`findInArray` should return an array containing all of the indexes the target value can be found in the array.\", () => {\n  expect(findInArray([10000], 10000)).toEqual([0]);\n  expect(findInArray([1, 1, 2, 3, 4, 5, 6], 1)).toEqual([0, 1]);\n  expect(findInArray([1, 1, 2, 3, 4, 5, 6], 2)).toEqual([2]);\n  expect(findInArray([-1, 1, 1, 2, 3, 4, 5, 6, -1], -1)).toEqual([0, 8]);\n  expect(findInArray([1, 1, 2, 3, 4, 5, 6, 7, 7, 7], 7)).toEqual([7, 8, 9]);\n});\n",
+          "videoUrl": "",
+          "starterCode": "/**\n * Given an array and a target, return all of the indexes\n * which contain the target value in the array.\n */\nconst findInArray = (list: number[], target: number): number[] | null => {\n  // Your code here\n}",
+          "solutionCode": "/**\n * Given an array and a target, return all of the indexes\n * which contain the target value in the array.\n */\nconst findInArray = (list: number[], target: number): number[] | null => {\n  let indexes = [];\n  // Find each index and push the index into a results array\n  for (let i = 0; i < list.length; i++) {\n    if (list[i] === target) {\n      indexes.push(i);\n    }\n  }\n  // Return null if indexes is empty (no target found)\n  return indexes.length > 0 ? indexes : null;\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
