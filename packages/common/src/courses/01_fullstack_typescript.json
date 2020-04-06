@@ -227,6 +227,17 @@
           "content": ""
         },
         {
+          "id": "kp3HVbx$L",
+          "type": "markup",
+          "title": "The Select Tag",
+          "instructions": "Another common input element tag which you have most likely used before is the `select`tag\\. The `select` tag creates a dropdown to provide you with several options you can choose between. The options are created using the... `option` tag\\! Take a look at the HTML below, and the preview on the right.\n\nIt's a select element to chose a fruit\\! Your job is to add 3 more fruit options\\!",
+          "testCode": "test(\"A `select` tag should exist.\", () => {\n  expect(get(\"select\") !== null).toBe(true);\n});\n\ntest(\"The `select` tag should contain 7 `option` tags.\", () => {\n  const options = getAll(\"select option\");\n  expect(options.length).toBe(7);\n});\n\ntest(\"There should be 7 unique fruit options.\", () => {\n  const options = getAll(\"select option\");\n  const fruits = new Set();\n  for (const opt of options) {\n    fruits.add(opt.innerHTML);\n  }\n  expect(fruits.size).toBe(7);\n});\n",
+          "videoUrl": "",
+          "starterCode": "<label for=\"fruits\">Choose a fruit:</label>\n\n<select id=\"fruits\">\n  <option value=\"apples\">Apples</option>\n  <option value=\"oranges\">Oranges</option>\n  <option value=\"bananas\">Bananas</option>\n  <option value=\"plums\">Plums</option>\n</select>\n",
+          "solutionCode": "<label for=\"fruits\">Choose a fruit:</label>\n\n<select id=\"fruits\">\n  <option value=\"apples\">Apples</option>\n  <option value=\"oranges\">Oranges</option>\n  <option value=\"bananas\">Bananas</option>\n  <option value=\"plums\">Plums</option>\n  <option value=\"blueberries\">Blueberries</option>\n  <option value=\"strawberries\">Strawberries</option>\n  <option value=\"grapes\">Grapes</option>\n</select>\n",
+          "content": ""
+        },
+        {
           "id": "CuwykKRM",
           "type": "section",
           "title": "Enter CSS",
