@@ -151,13 +151,13 @@
         },
         {
           "id": "rOuaLSaYV",
-          "type": "typescript",
+          "type": "markup",
           "title": "Divs!",
-          "instructions": "",
-          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "instructions": "A fundamental HTML tag is the `div`. \"div\" is short for division, and you can think of divs like a block or container which you can use to organize, structure, and style HTML content. A div does not do anything on it's own, but it can be used to organize other HTML content and then specifically target it for styling and layout.\n\nIn the HTML document below is some content. There are two divs present, one in the top and one at the end of the document. Take a look at how they are organized, and how other content is included _inside_ the div. There is additional content in the middle of the document, three paragraph tags, but it is just sitting there. Add another div element to group these three paragraph tags.",
+          "testCode": "test(\"There should be 3 divs in the document.\", () => {\n  const divs = getAll(\"div\");\n  expect(divs.length).toBe(3);\n});\n\ntest(\"The middle div should contain 3 paragraph tags.\", () => {\n  const divs = getAll(\"div\");\n  for (const child of divs[1].children) {\n    expect(child.tagName).toBe(\"P\");\n  }\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<p>We are glad you can join us</p>\n<p>It's great you are here!</p>\n<p>Welcome!</p>\n\n<div>\n  <h3>Footer section...</h3>\n</div>",
+          "solutionCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<div>\n  <p>We are glad you can join us</p>\n  <p>It's great you are here!</p>\n  <p>Welcome!</p>\n</div>\n\n<div>\n  <h3>Footer section...</h3>\n</div>",
           "content": ""
         },
         {
