@@ -50,6 +50,7 @@ import PaymentSuccessModal from "./PaymentSuccessModal";
 import { challengeRequiresWorkspace } from "tools/utils";
 import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
+import { ShortcutKeysPopover } from "./KeyboardShortcuts";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -222,10 +223,16 @@ const ApplicationContainer = (props: IProps) => {
           <SearchBox />
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 20 }} />
+          <ShortcutKeysPopover />
           {!isMobile && showFeedbackButton && (
-            <Tooltip content="Submit Feedback" position="bottom">
+            <Tooltip
+              usePortal={false}
+              position="bottom"
+              content="Submit Feedback"
+            >
               <IconButton
                 icon="help"
+                style={{ marginLeft: 6 }}
                 aria-label="open/close feedback dialog"
                 onClick={toggleFeedbackDialogOpen}
               />
@@ -259,8 +266,8 @@ const ApplicationContainer = (props: IProps) => {
           {displayNavigationArrows && (
             <DesktopOnly>
               <ButtonGroup>
-                <PrevChallengeIconButton id={"prevButton"} />
-                <NextChallengeIconButton id={"nextButton"} />
+                <PrevChallengeIconButton id="prevButton" />
+                <NextChallengeIconButton id="nextButton" />
               </ButtonGroup>
             </DesktopOnly>
           )}
@@ -378,7 +385,7 @@ const Header = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000; /* hi */
+  z-index: 1000;
   padding-top: ${BORDER}px;
   padding-bottom: 0px;
   padding-left: 0px;

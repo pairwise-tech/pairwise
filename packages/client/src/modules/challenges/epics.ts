@@ -35,6 +35,7 @@ import {
   SEARCH,
   SEARCH_SUCCESS,
   BUILD_SEARCH_INDEX,
+  SEARCH_QUERY_THRESHOLD,
 } from "tools/constants";
 import {
   findCourseById,
@@ -79,7 +80,7 @@ const searchEpic: EpicSignature = action$ => {
       filter(isActionOf(Actions.requestSearchResults)),
       map(x => x.payload),
     ),
-    x => x.length > 2, // This is arbitrary. Maybe it should just be > 1?
+    x => x.length > SEARCH_QUERY_THRESHOLD,
   );
 
   const search$ = _search$.pipe(

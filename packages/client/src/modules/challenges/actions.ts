@@ -33,6 +33,7 @@ enum ActionTypesEnum {
   SET_ACTIVE_CHALLENGE_IDS = "SET_ACTIVE_CHALLENGE_IDS",
 
   SET_MODULE_ID = "SET_MODULE_ID",
+  SET_COURSE_ID = "SET_COURSE_ID",
 
   SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
 
@@ -188,6 +189,10 @@ export const saveChallengeBlobFailure = createAction(
 )<HttpResponseError>();
 
 export const setCurrentModule = createAction(ActionTypesEnum.SET_MODULE_ID)<
+  string
+>();
+
+export const setCurrentCourse = createAction(ActionTypesEnum.SET_COURSE_ID)<
   string
 >();
 

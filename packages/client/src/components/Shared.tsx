@@ -283,6 +283,7 @@ export const HalfCircle = styled.div<HalfCircleProps>`
     props.position === "top" ? "bottom" : "top"}-left-radius: 90px;
   border-${props =>
     props.position === "top" ? "bottom" : "top"}-right-radius: 90px;
+
   ${props => props.position}: ${props => props.positionOffset}px;
 `;
 

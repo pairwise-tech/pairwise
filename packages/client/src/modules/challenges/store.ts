@@ -57,6 +57,7 @@ export interface State {
   adminEditorTab: ADMIN_EDITOR_TAB;
   navigationSectionAccordionViewState: AccordionViewState;
   searchResults: SearchResult[];
+  isSearching: boolean;
   revealWorkspaceSolution: boolean;
 }
 
@@ -77,6 +78,7 @@ const initialState: State = {
   adminEditorTab: "starterCode",
   navigationSectionAccordionViewState: {},
   searchResults: [],
+  isSearching: false,
   revealWorkspaceSolution: false,
 };
 
@@ -457,6 +459,13 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     currentModuleId: action.payload,
   }))
+  .handleAction(actions.setCurrentCourse, (state, action) => ({
+    ...state,
+    currentCourseId: action.payload,
+    // Update the current module id to the first module in the course
+    currentModuleId: state.courses?.find(c => c.id === action.payload)
+      ?.modules[0].id as string,
+  }))
   .handleAction(actions.setChallengeId, (state, action) => ({
     ...state,
     loadingCurrentBlob: true,
@@ -464,9 +473,14 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     revealWorkspaceSolution: false,
     currentChallengeId: action.payload.currentChallengeId,
   }))
+  .handleAction(actions.requestSearchResults, (state, action) => ({
+    ...state,
+    isSearching: true,
+  }))
   .handleAction(actions.receiveSearchResults, (state, action) => ({
     ...state,
     searchResults: action.payload,
+    isSearching: false,
   }))
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,

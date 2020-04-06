@@ -70,6 +70,11 @@ export const getSearchResults = createSelector(
   challenges => challenges.searchResults,
 );
 
+export const getIsSearching = createSelector(
+  [challengesState],
+  challenges => challenges.isSearching,
+);
+
 export const getNavigationSectionAccordionViewState = createSelector(
   [challengesState],
   prop("navigationSectionAccordionViewState"),
@@ -123,6 +128,21 @@ export const getCurrentModule = createSelector(
     return course?.modules.find(x => x.id === moduleId);
   },
 );
+
+// Get an array of course metadata for the current course list
+export const courseListMetadata = createSelector([challengesState], state => {
+  if (state.courses) {
+    return state.courses.map(course => ({
+      id: course.id,
+      title: course.title,
+      description: course.description,
+      free: course.free,
+      price: course.price,
+    }));
+  } else {
+    return [];
+  }
+});
 
 /**
  * NOTE: This getter does not depend on the current course id or module id. This

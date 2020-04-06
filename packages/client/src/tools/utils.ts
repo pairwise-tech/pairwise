@@ -545,3 +545,13 @@ export const getFileMetaByChallengeType = (x: CHALLENGE_TYPE) => {
       break;
   }
 };
+
+// Copy some text to the clipboard
+export const copyToClipboard = (text: string) => {
+  const el = document.createElement("textarea");
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);
+};
