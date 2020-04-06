@@ -216,6 +216,17 @@
           "content": ""
         },
         {
+          "id": "e@rWfBJRk",
+          "type": "markup",
+          "title": "Textareas",
+          "instructions": "Sometimes, you have more to say than can fit in a simple `input` tag\\. For these cases of prolific creativity, there is the `textarea`\\! The `textarea` tag provides a more flexible input space for writing more lengthy text. It behaves just like the `input` tag, but renders differently. On the blank canvas below, try rendering a `textarea` tag\\.",
+          "testCode": "test(\"The HTML document should contain a `textarea` tag.\", () => {\n  expect(get(\"textarea\") !== null).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "<div><label for=\"prose\">Write to your heart's content:</label></div>\n<textarea id=\"prose\" />\n",
+          "content": ""
+        },
+        {
           "id": "CuwykKRM",
           "type": "section",
           "title": "Enter CSS",
