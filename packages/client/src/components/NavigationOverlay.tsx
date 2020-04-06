@@ -86,7 +86,13 @@ class NavigationOverlay extends React.Component<IProps> {
   };
 
   render(): Nullable<JSX.Element> {
-    const { course, module, overlayVisible, courseListMetadata } = this.props;
+    const {
+      course,
+      module,
+      isEditMode,
+      overlayVisible,
+      courseListMetadata,
+    } = this.props;
 
     if (!course || !module) {
       console.warn("[WARN] No module or course found! ->", course, module);
@@ -157,7 +163,7 @@ class NavigationOverlay extends React.Component<IProps> {
           <SpecialLeftShadow />
           <ColTitle>
             <p>{module.title}</p>
-            {hasSections && (
+            {hasSections && !isEditMode && (
               <div>
                 <Button onClick={this.toggleExpandCollapseAll}>
                   {anySectionsOpen ? "Collapse" : "Expand"} All Sections
