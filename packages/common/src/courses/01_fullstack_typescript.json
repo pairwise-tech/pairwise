@@ -2035,6 +2035,17 @@
           "content": ""
         },
         {
+          "id": "igCXB755P",
+          "type": "typescript",
+          "title": "Zip the Lists",
+          "instructions": "A zip operation takes two lists and processes them in parallel. The `zip` function in the editor takes two lists of values and a callback function to call for each value in the arrays. Implement the function so it processes the arrays and applies the callback to each item in the arrays. Add the result from the `callbackFn` into a result array, and return this from the function. You can assume the lists will be the same length.\n\nHere is an example to help you understand what the function should do:\n\n```typescript\n// Input lists:\nconst listA = [1,2,3];\nconst listB = [4,5,6];\n\n// The callback function just adds the numbers, but\n// it could do anything.\nconst callbackFn = (a: number, b: number) => a + b;\n\n// Call the function:\nconst result = zip(listA, listB, callbackFn);\n\nconsole.log(result); // -> should be: [5,7,9]\n\n```\n",
+          "testCode": "test(\"The `zip` function should process the two provided lists in parallel and return the aggregated results in a new list.\", () => {\n  let a = [1, 2, 3];\n  let b = [4, 5, 6];\n  let fn = (a, b) => a + b;\n  let result = zip(a, b, fn);\n  let expected = [5, 7, 9];\n  expect(result).toEqual(expected);\n\n  a = [1, 2, 3];\n  b = [4, 5, 6];\n  fn = (a, b) => a * b;\n  result = zip(a, b, fn);\n  expected = [4, 10, 18];\n  expect(result).toEqual(expected);\n\n  a = [];\n  b = [];\n  fn = (a, b) => a * b;\n  result = zip(a, b, fn);\n  expected = [];\n  expect(result).toEqual(expected);\n\n  a = [10, 20, 30];\n  b = [5, 10, 3];\n  fn = (a, b) => a / b;\n  result = zip(a, b, fn);\n  expected = [2, 2, 10];\n  expect(result).toEqual(expected);\n\n  a = [1, 2, 3];\n  b = [5, 10, 3];\n  fn = (a, b) => Math.pow(a, b);\n  result = zip(a, b, fn);\n  expected = [1, 1024, 27];\n  expect(result).toEqual(expected);\n\n  a = [\"hi\", \"ho\", \"he\"];\n  b = [\"a\", \"b\", \"c\"];\n  fn = (a, b) => a + b + \" lol !!!\";\n  result = zip(a, b, fn);\n  expected = [\"hia lol !!!\", \"hob lol !!!\", \"hec lol !!!\"];\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "type CallbackFn = (itemA: any, itemB: any) => any;\n\n/**\n * Processes two lists item by item and apply a callback\n * function to each item. Aggregate and return the results\n * in a new list.\n */\nconst zip = (listA: any[], listB: any[], callbackFn: CallbackFn): void => {\n  // Your code here\n};\n",
+          "solutionCode": "type CallbackFn = (itemA: any, itemB: any) => any;\n\n/**\n * Processes two lists item by item and apply a callback\n * function to each item. Aggregate and return the results\n * in a new list.\n */\nconst zip = (listA: any[], listB: any[], callbackFn: CallbackFn): any[] => {\n  const results = [];\n\n  // Processes the lists using of regular for loop to use\n  // the index to access the same index item in each list\n  // at the same time.\n  for (let i = 0; i < listA.length; i++) {\n    const result = callbackFn(listA[i], listB[i]);\n    results.push(result);\n  }\n\n  return results;\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
