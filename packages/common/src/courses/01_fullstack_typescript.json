@@ -1870,6 +1870,17 @@
           "content": ""
         },
         {
+          "id": "pezwk4Wq5",
+          "type": "typescript",
+          "title": "Alphanumeric",
+          "instructions": "One limitation from the last 2 challenges is the assumption that the strings did not contain any non\\-alphanumeric characters. But what if they did? Complete the function below to remove all non alphanumeric characters from a string. There is a `RegExp` in the code editor to help you, look at the `console.log` examples to see how you can use it.",
+          "testCode": "test(\"`alphanumericOnly` should remove non-alphanumeric characters, if they exist.\", () => {\n  expect(alphanumericOnly(\"\")).toBe(\"\");\n  expect(alphanumericOnly(\"Hello!!!!!!!!\")).toBe(\"Hello\");\n  expect(alphanumericOnly(\"Hello\")).toBe(\"Hello\");\n  expect(alphanumericOnly(\"This, is, a, test, can, it, pass, ???\")).toBe(\"This is a test can it pass \");\n  expect(alphanumericOnly(\"!!! This, is, a, test, can, it, pass, ???hi\")).toBe(\" This is a test can it pass hi\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Match a-z, A-Z, 0-9, and \" \" characters\nconst alphanumeric = new RegExp(/[^a-zA-Z0-9 ]/);\n\n// Example:\nconsole.log(alphanumeric.test(\"What is your name\")); // -> true\nconsole.log(alphanumeric.test(\"What is your name?\")); // -> false\n\n// Remove all non-alphanumeric characters from a string\nconst alphanumericOnly = (text: string): string => {\n  // Your code here\n}",
+          "solutionCode": "// Match a-z, A-Z, 0-9, and \" \" characters\nconst alphanumeric = new RegExp(/[^a-zA-Z0-9 ]/);\n\n// Example:\nconsole.log(alphanumeric.test(\"What is your name\")); // -> false\nconsole.log(alphanumeric.test(\"What is your name?\")); // -> true\n\n// Remove all non-alphanumeric characters from a string\nconst alphanumericOnly = (text: string): string => {\n  let result = \"\";\n\n  // Manually iterate through the string and test each character\n  for (let i = 0; i < text.length; i++) {\n    const character = text.charAt(i);\n    if (!alphanumeric.test(character)) {\n      result += character;\n    }\n  }\n\n  return result;\n};\n\n// Replace using a one line RegExp\nconst alphanumericOnlyRegexGlobal = (text: string): string => {\n  // Only line global replace using the same RegExp pattern\n  return text.replace(/[^a-zA-Z0-9 ]/g, \"\");\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
