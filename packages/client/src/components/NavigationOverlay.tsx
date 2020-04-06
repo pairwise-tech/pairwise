@@ -782,10 +782,22 @@ const ChallengeListItemIcon = ({
     iconExtraClass = "iconIncomplete";
   }
 
+  const isSection = challenge.type === "section";
+
+  // Render a different label for sections to indicate
+  // the expand|collapse functionality of clicking the icon
+  if (isSection) {
+    if (isSectionOpen) {
+      tooltipContent = "Collapse Section";
+    } else {
+      tooltipContent = "Expand Section";
+    }
+  }
+
   return (
     <Tooltip
-      disabled={challengeProgress === "NOT_ATTEMPTED"}
       content={tooltipContent}
+      disabled={!isSection && challengeProgress === "NOT_ATTEMPTED"}
     >
       <RotatingIcon
         isRotated={isSectionOpen}
