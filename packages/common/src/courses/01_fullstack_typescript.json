@@ -205,6 +205,17 @@
           "content": ""
         },
         {
+          "id": "6hRkTDrSu",
+          "type": "markup",
+          "title": "Forms",
+          "instructions": "In HTML, traditionally, information is submitted using a `form`. A form is a special tag which is intended to enclose several other tags which allow the user to enter text and other information. The \"form\" captures all of this and then provides a \"submit\" function which can be used to submit the form data to a server.\n\nFor now, we won't worry about how form submission works. We will cover this later in the course. At the stage, let's just become familiar with what a `form` is\\.\n\nTake a look at the HTML document below and the preview on the right. There are some more inputs and labels again, but now the results are very different. Here, we have radio buttons and checkboxes, new types of input element. As you can see, these can be specified using the `type` attribute\\. The radio button allows only one selection out of several, and the checkbox can be checked on or off.\n\nAll of these elements constitute the contents of a form. To complete the challenge, wrap them all in a `form` tag\\.",
+          "testCode": "test(\"A `form` should exist in the HTML document.\", () => {\n  expect(get(\"form\") !== null).toBe(true);\n});\n\ntest(\"The `form` tag should contain the 6 input tags.\", () => {\n  const inputs = getAll(\"form input\");\n  expect(inputs.length).toBe(6);\n});\n\ntest(\"The `form` tag should contain the 6 label tags.\", () => {\n  const lables = getAll(\"form label\");\n  expect(lables.length).toBe(6);\n});\n",
+          "videoUrl": "",
+          "starterCode": "\n<p><b>Personal Information:</b></p>\n<label for=\"name\">Name</label>\n<input type=\"text\" name=\"name\" value=\"name\" /><br />\n<label for=\"email\">Email</label>\n<input type=\"text\" name=\"email\" value=\"email\" /><br />\n\n<p><b>Gender:</b></p>\n<label for=\"male\">Male</label>\n<input type=\"radio\" name=\"gender\" value=\"male\" /><br />\n<label for=\"female\">Female</label>\n<input type=\"radio\" name=\"gender\" value=\"female\" /><br />\n<label for=\"other\">Other</label>\n<input type=\"radio\" name=\"gender\" value=\"other\" /><br /><br />\n<label for=\"updates\">I want to receieve email updates:</label>\n<input type=\"checkbox\" name=\"updates\" value=\"updates\" /><br /><br />",
+          "solutionCode": "<form>\n  <p><b>Personal Information:</b></p>\n  <label for=\"name\">Name</label>\n  <input type=\"text\" name=\"name\" value=\"name\" /><br />\n  <label for=\"email\">Email</label>\n  <input type=\"text\" name=\"email\" value=\"email\" /><br />\n\n  <p><b>Gender:</b></p>\n  <label for=\"male\">Male</label>\n  <input type=\"radio\" name=\"gender\" value=\"male\" /><br />\n  <label for=\"female\">Female</label>\n  <input type=\"radio\" name=\"gender\" value=\"female\" /><br />\n  <label for=\"other\">Other</label>\n  <input type=\"radio\" name=\"gender\" value=\"other\" /><br /><br />\n  <label for=\"updates\">I want to receieve email updates:</label>\n  <input type=\"checkbox\" name=\"updates\" value=\"updates\" /><br /><br />\n</form>\n",
+          "content": ""
+        },
+        {
           "id": "CuwykKRM",
           "type": "section",
           "title": "Enter CSS",
@@ -544,6 +555,17 @@
           "starterCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n</style>\n<div>Hey there I'm a div that should have inline styles</div>\n",
           "solutionCode": "<style>\n  * {\n    box-sizing: border-box;\n  }\n</style>\n<div style=\"padding:10px;background: azure; border: 1px solid blue;\">Hey there I'm a div with inline styles</div>\n",
           "content": "There is another way to apply CSS other than a `<style>` tag: **Inline Styles**.\n# The Syntax\n\nInline styles look just like CSS if you remove the selectors and brackets and put everything on the same line. Check it out:\n\n```markup\n<style>\n  * {\n    box-sizing: border-box;\n  }\n  .label {\n    position: absolute;\n    background: teal;\n    padding: 10px;\n  }\n</style>\n<div class=\"label\">\n  Heyo!\n</div>\n<div style=\"position: absolute; background: teal; padding: 10px;\">\n  Heyo!\n</div>\n\n\n```\n\nThe two `div`s will have the _exact same style_ applied, just in two different ways. \n# What's the difference\n\n* Inline styles are more specific. If you have inline styles that contradict your regular CSS styles the inline styles take precedence and will be applied.\n* You cannot reuse inline styles. You can certainly copy and paste your inline styles anywhere you want, but you can't reuse styles the way you can with CSS classes. \n   * If you decide you want to change some inline styles for your whole site you will have to make the change everywhere, rather than just in one place. \n* Inline styles are usually harder to read. If you just have one or two CSS properties it's no problem, but it quickly starts becoming difficult to read inline styles as they expand.\n\n# When is this useful?\n\nGiven the downsides mentioned above, why use this at all?\n\n* You really just want some styles on one element. This happens, and inline styles are great for it.\n\n\nThat's pretty much it. However, if you're using a UI framework \\(React, for example\\) rather than plain HTML inline styles can actually be very powerful, because the framework will give you other ways to write them. We'll revisit this in UI programming.\n"
+        },
+        {
+          "id": "e3mgVBucq",
+          "type": "media",
+          "title": "Web Accessibility",
+          "instructions": "",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "**TODO**"
         }
       ]
     },
