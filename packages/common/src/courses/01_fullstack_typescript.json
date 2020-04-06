@@ -1493,6 +1493,17 @@
           "videoUrl": "",
           "starterCode": "const sum = (numbers: number[]): number => {\n  // Your code here\n};\n",
           "solutionCode": "const sum = (numbers: number[]): number => {\n  return numbers.reduce((a, b) => a + b, 0);\n};\n",
+          "content": "# Reducing\n\nThe concept of reducing is extremely powerful and flexible, but may bit hard to wrap your head around initially. The idea is, given an array, \"reduce\" the array to some other form by \n"
+        },
+        {
+          "id": "0xs07JCP4",
+          "type": "typescript",
+          "title": "Counting words",
+          "instructions": "Write two functions, `countWordsSimple` and `countWords`. Both functions should count the number of words in a string. \n* `countWordsSimple` should not add any additional logic to determine what a word is. It should just count all strings in the array separated by spaces.\n   * After implementing this you will notice the limitations. `The` and `the` get counted separately, as do `quick` and `quick.`\n* `countWords` should add additional logic to handle the issues described above. Namely: \n   * `countWords` should make all words lowercase before counting, so `The` and `the` get correctly counted as the same word.\n   * `countWords` should remove periods \\(`.`\\) so that `quick` and `quick.` get accurately counted as the same word.\n\n",
+          "testCode": "const simpleExpected = {\n  The: 1,\n  quick: 1,\n  brown: 1,\n  fox: 2,\n  jumped: 1,\n  over: 1,\n  the: 2,\n  lazy: 1,\n  \"dog.\": 1,\n  Remember: 1,\n  was: 1,\n  \"quick.\": 1,\n};\n\nconst advancedExpected = {\n  the: 3,\n  quick: 2,\n  brown: 1,\n  fox: 2,\n  jumped: 1,\n  over: 1,\n  lazy: 1,\n  dog: 1,\n  remember: 1,\n  was: 1,\n};\n\ntest(\"`countWordsSimple` should count space-separated strings\", () => {\n  expect(simpleExpected).toEqual(countWordsSimple(sentence));\n});\n\ntest(\"`countWords` should count words in lowercase with periods removed\", () => {\n  expect(advancedExpected).toEqual(countWords(sentence));\n});\n",
+          "videoUrl": "",
+          "starterCode": "const sentence =\n  \"The quick brown fox jumped over the lazy dog. Remember, the fox was quick.\";\n\ntype WordCounts = { [k: string]: number };\n\nconst countWordsSimple = (str: string): WordCounts => {\n  // Your code here\n};\n\nconst countWords = (str: string): WordCounts => {\n  // Your code here\n};\n\n\nconsole.log('Simple Count:', countWordsSimple(sentence));\nconsole.log('Advanced Count:', countWords(sentence));\n",
+          "solutionCode": "const sentence =\n  \"The quick brown fox jumped over the lazy dog. Remember the fox was quick.\";\n\ntype WordCounts = { [k: string]: number };\n\nconst countWordsSimple = (str: string): WordCounts => {\n  return str.split(\" \").reduce((agg, word) => {\n    if (agg[word] === undefined) {\n      agg[word] = 0;\n    }\n    agg[word] += 1;\n    return agg;\n  }, {});\n};\n\nconst countWords = (str: string): WordCounts => {\n  return str\n    .split(\" \")\n    .map((x) => x.toLowerCase())\n    .map((x) => x.replace(\".\", \"\"))\n    .reduce((agg, word) => {\n      if (agg[word] === undefined) {\n        agg[word] = 0;\n      }\n      agg[word] += 1;\n      return agg;\n    }, {});\n};\n\nconsole.log(\"Simple Count:\", countWordsSimple(sentence));\nconsole.log(\"Advanced Count:\", countWords(sentence));\n",
           "content": ""
         },
         {
