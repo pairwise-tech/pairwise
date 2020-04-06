@@ -1487,12 +1487,12 @@
         {
           "id": "gR7810hCR",
           "type": "typescript",
-          "title": "Transform arrays using reduce",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "title": "Calculate the sum using reduce",
+          "instructions": "Write a `sum` function that takes an array of numbers and returns their sum. Use `reduce`. Here's the spec:\n* Passing an array of numbers will return their sum. Example: `sum([2,4,1])` will return `7`.\n* Passing an empty array will return `0`.\n\n",
+          "testCode": "// Write your tests here:\n\ntest(\"`sum` should return the sum of an array of numbers\", () => {\n  expect(sum([1, 2, 3])).toBe(6);\n  expect(sum([244, 61454, 0, 1, 9, 3, 35])).toBe(61746);\n});\ntest(\"`sum` should return `0` when passed an empty array\", () => {\n  expect(sum([])).toBe(0);\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "const sum = (numbers: number[]): number => {\n  // Your code here\n};\n",
+          "solutionCode": "const sum = (numbers: number[]): number => {\n  return numbers.reduce((a, b) => a + b, 0);\n};\n",
           "content": ""
         },
         {
