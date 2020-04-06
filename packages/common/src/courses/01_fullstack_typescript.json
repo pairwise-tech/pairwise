@@ -249,6 +249,17 @@
           "content": ""
         },
         {
+          "id": "Uf6xcgQtW",
+          "type": "media",
+          "title": "Checkpoint",
+          "instructions": "",
+          "testCode": "test(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "### HTML Conclusion\n\nWe have just touched the surface of HTML. We have covered headings and paragraphs for rendering text, inputs, forms, and buttons for capturing user input and creating interactions, and spans and divs for adding structure and layout to your HTML pages.\n\nThe tags you have learned constitute the most commonly used HTML tags and a knowledge of them will get you very far. If you are interested, take a look at the [MDN HTML reference page](https://developer.mozilla.org/en-US/docs/Web/HTML/Element) for a more exhaustive list of all of the HTML tags which exist. There's no need to memorize all of these, but a brief overview should help paint a picture of all of the different elements HTML has to offer.\n\n### Styles with CSS\n\nThe next section will introduce CSS, which will build upon your current HTML skills to start adding life and color to your HTML document. CSS allows you to color and shape HTML elements to create custom appearances and layouts for your webpages.\n\nWith HTML and CSS, you can create beautiful webpages but to really transform them into functional web applications you need a programming language.\n\n### JavaScript\n\nJavaScript is the programming language of the web. All web browsers can run JavaScript programs, and any functionality you use on websites is typically built using JavaScript. Once you complete the CSS section, the next course module will be a deep dive into programming with a special dialect of JavaScript, _TypeScript\\._\n\nTypeScript is a typed superset of JavaScript which compiles to JavaScript. Don't worry about the details here yet: we will cover them in depth once we get to the TypeScript section. This programming section will lay the foundation for everything which comes later.\n\n### Moving Forward\n\nAfter the TypeScript module, we will have covered the foundations of HTML/CSS and programming. You will understand the basics of how webpages are made and you will have a thorough grasp of a modern programming language.\n\nFrom there, the course will get into the modern skills, tools, and workflows software engineers use to build complex applications, servers, and mobile apps. There's a lot to learn, but as you will see all of this is built on the basic foundation you are learning now\\!\n\nLet's continue\\!\n"
+        },
+        {
           "id": "CuwykKRM",
           "type": "section",
           "title": "Enter CSS",
