@@ -2343,6 +2343,17 @@
           "content": ""
         },
         {
+          "id": "fOCQv3Dx$",
+          "type": "typescript",
+          "title": "The Average Row",
+          "instructions": "You have a 2 dimensional array of `1`s and `0`s, e.g.\n\n```typescript\n[\n    [1, 1, 0],\n    [0, 0, 0],\n    [1, 1, 1],\n]\n\n```\n\nWrite a function `averageRow` to return the mean of each row in the array, in a new array. The above example would return: `[0.67, 0, 1]`. You can round decimals to the nearest hundredths place \\(see the `.toFixed` [method documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed)\\). If the row is empty, return `null` for that row. Note that the rows can differ in length.",
+          "testCode": "test(\"`averageRow` should be defined.\", () => {\n  expect(averageRow).toBeDefined();\n});\n\ntest(\"`averageRow` should return `null` for any row which doesn't contain any values.\", () => {\n  let input = [[1, 1, 1], []];\n  let expected = [1, null];\n  let result = averageRow(input);\n  expect(result).toEqual(expected);\n});\n\ntest(\"`averageRow` should return an array containing the average of each row from the input array.\", () => {\n  let input = [[1, 1, 1]];\n  let expected = [1];\n  let result = averageRow(input);\n  expect(result).toEqual(expected);\n\n  input = [\n    [1, 1, 0],\n    [0, 0, 0],\n    [1, 1, 1],\n  ];\n  expected = [0.67, 0, 1];\n  result = averageRow(input);\n  expect(result).toEqual(expected);\n\n  input = [[1, 1, 10, 10, 10], [0, 0, 0, 50], [1, 1, 1, 72, 98, 200], [1009]];\n  expected = [6.4, 12.5, 62.17, 1009];\n  result = averageRow(input);\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Find the average of each row in a matrix\nconst averageRow = (matrix: number[][]): Array<number | null> => {\n  let averages = [];\n  // Iterate through every row in the matrix\n  for (const row of matrix) {\n    // Handle empty rows\n    if (row.length === 0) {\n      averages.push(null);\n      continue;\n    }\n\n    // For non-empty rows, find the sum of all the values\n    let sum = 0;\n    for (const n of row) {\n      sum += n;\n    }\n    // Find the average, given the sum\n    const average = sum / row.length;\n    // Push the rounded averge into the results array\n    averages.push(Number(average.toFixed(2)));\n  }\n\n  return averages;\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
