@@ -29,3 +29,7 @@ codepress/src/index.js
 codepress/src/modules
 src/modules/challenges/types.js
 tmp
+
+# These files are necessary but they are compiled from others
+src/js/browser-test-lib.d.ts
+src/js/browser-test-lib.js
