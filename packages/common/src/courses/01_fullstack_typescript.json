@@ -2420,6 +2420,17 @@
           "content": ""
         },
         {
+          "id": "n7yk$aLKz",
+          "type": "typescript",
+          "title": "Greatest Pair",
+          "instructions": "You receive a list of pairs of integers, e.g. `[ [1,2], [7,9], [12,8], ... [8,3] ]`. Write a function, `largestPair`, which returns the pair in the list which sums to the largest value. In that example, `[12,8]` would be returned. You can assume that there will only be a single pair which sums to the largest value.",
+          "testCode": "test(\"`largestPair` should be defined.\", () => {\n  expect(largestPair).toBeDefined();\n});\n\ntest(\"`largestPair` should return the pair in a given array which has the largest sum of any pair in that array.\", () => {\n  let input = [\n    [1, 2],\n    [11, 9],\n    [1, 5],\n    [7, 2],\n    [17, 0],\n    [1, 200],\n    [0, 0],\n  ];\n  let result = largestPair(input);\n  let expected = [1, 200];\n  expect(result).toEqual(expected);\n\n  input = [\n    [1, 2],\n    [11, 9],\n    [1, 5],\n    [7, 2],\n    [17, 0],\n    [1, 200],\n    [0, 1100],\n  ];\n  result = largestPair(input);\n  expected = [0, 1100];\n  expect(result).toEqual(expected);\n\n  input = [[-1, 2]];\n  result = largestPair(input);\n  expected = [-1, 2];\n  expect(result).toEqual(expected);\n\n  input = [\n    [-12, 19],\n    [100, 2],\n  ];\n  result = largestPair(input);\n  expected = [100, 2];\n  expect(result).toEqual(expected);\n\n  input = [\n    [-12, 19],\n    [100, 2],\n    [100, 200],\n  ];\n  result = largestPair(input);\n  expected = [100, 200];\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "type Pair = [number, number];\n\n// Find and return the largest pair in the given array\nconst largestPair = (pairs: Pair[]): Pair => {\n  // Track the largest sum and the pair which creates that sum\n  let largestSum = 0;\n  let largestPair = pairs[0];\n\n  // Iterate throught the list and find the largest pair\n  for (const [a, b] of pairs) {\n    const sum = a + b;\n    if (sum > largestSum) {\n      largestSum = sum;\n      largestPair = [a, b];\n    }\n  }\n\n  return largestPair;\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
