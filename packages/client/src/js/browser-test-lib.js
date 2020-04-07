@@ -225,7 +225,7 @@ const fail = () => expect(false).toBe(true);
 // Helper to quickly pass a test.
 const pass = () => expect(true).toBe(true);
 
-// Generate a random id
+// Generate a random string id
 const __id = () => {
   return (
     Math.random()
@@ -234,9 +234,9 @@ const __id = () => {
   );
 };
 
-// Generate a random number in a range
+// Generate a random number in a min...max range
 const __randomInRange = (min, max) => {
-  return Math.ceil(Math.random() * (max - min) + min);
+  return Math.round(Math.random() * (max - min) + min);
 };
 
 class Expectation {
