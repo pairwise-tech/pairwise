@@ -247,6 +247,7 @@ export const ContentDiv = styled.div`
   margin-top: 8px;
   font-size: 15px;
   font-weight: 200px;
+  padding-right: 8px;
   color: ${C.TEXT_CONTENT};
 `;
 
