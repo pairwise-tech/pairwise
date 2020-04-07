@@ -2475,6 +2475,61 @@
           "content": ""
         },
         {
+          "id": "6lgJamB8yr",
+          "type": "typescript",
+          "title": "Create a Set Data Structure",
+          "instructions": "A Set is a data structure which records the presence of values.",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "bOKf5cIqT",
+          "type": "typescript",
+          "title": "Going Up",
+          "instructions": "Let's create an `Elevator` class\\.",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "0ch2x12xH",
+          "type": "typescript",
+          "title": "Get the Average in a Stream of Elements",
+          "instructions": "We have a class which accepts values in a stream. Implement functionality to track the `mean` value in this stream.",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "YXEoFvb4x",
+          "type": "typescript",
+          "title": "Implement a Cache",
+          "instructions": "A fundamental and powerful tool in programming is a cache. A cache is just a quick store for a value which is otherwise costly to look up or calculate. Caches are a common answer to performance problems. In this challenge, we will implement a simple caching behavior.",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "OFfKcMn5X",
+          "type": "typescript",
+          "title": "Tracker",
+          "instructions": "Implement a function which records values only if the value meets some condition, which can be provided.",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
