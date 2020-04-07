@@ -364,7 +364,7 @@ class Workspace extends React.Component<IProps, IState> {
     this.syntaxWorker = new SyntaxHighlightWorker();
 
     this.syntaxWorker.addEventListener("message", (event: any) => {
-      debug("syntax highlight incoming", event);
+      debug("[syntax highlight incoming]", event);
       const { classifications, identifier } = event.data;
       if (classifications && identifier) {
         if (identifier === "TSX_SYNTAX_HIGHLIGHTER") {
@@ -992,23 +992,29 @@ class Workspace extends React.Component<IProps, IState> {
       const { source, message } = event.data;
       switch (source) {
         case IFRAME_MESSAGE_TYPES.LOG: {
+          debug("[IFRAME_MESSAGE_TYPES.LOG]", message);
           return handleLogMessage(message, "log");
         }
         case IFRAME_MESSAGE_TYPES.INFO: {
+          debug("[IFRAME_MESSAGE_TYPES.INFO]", message);
           return handleLogMessage(message, "info");
         }
         case IFRAME_MESSAGE_TYPES.WARN: {
+          debug("[IFRAME_MESSAGE_TYPES.WARN]", message);
           return handleLogMessage(message, "warn");
         }
         case IFRAME_MESSAGE_TYPES.ERROR: {
+          debug("[IFRAME_MESSAGE_TYPES.ERROR]", message);
           return handleLogMessage(message, "error");
         }
         case IFRAME_MESSAGE_TYPES.INFINITE_LOOP: {
+          debug("[IFRAME_MESSAGE_TYPES.INFINITE_LOOP]", message);
           toaster.toast.clear(); /* Clear existing toasts */
           toaster.warn("Please check your code for infinite loops!");
           break;
         }
         case IFRAME_MESSAGE_TYPES.TEST_RESULTS: {
+          debug("[IFRAME_MESSAGE_TYPES.TEST_RESULTS]", message);
           const results = JSON.parse(message);
           if (!Array.isArray(results)) {
             console.warn("[bad things]", results);
@@ -1021,6 +1027,7 @@ class Workspace extends React.Component<IProps, IState> {
           break;
         }
         case IFRAME_MESSAGE_TYPES.TEST_ERROR: {
+          debug("[IFRAME_MESSAGE_TYPES.TEST_ERROR]", message);
           console.warn(
             "[ERR] Something went wrong with the tests:",
             source,
@@ -1122,6 +1129,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleCompilationError = (error: Error) => {
+    debug("[handleCompilationError]", error);
     const log = Decode([
       {
         method: "error",
@@ -1129,6 +1137,7 @@ class Workspace extends React.Component<IProps, IState> {
       },
     ]);
     this.updateWorkspaceConsole(log);
+    this.setState({ testResultsLoading: false });
   };
 
   updateWorkspaceConsole = (log: Log) => {
