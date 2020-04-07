@@ -2321,6 +2321,17 @@
           "content": "The group by operation is fairly common across multiple programming languages and writing a `groupBy` function is an actual programming interview question at some companies so it's useful to know.\n\nThe main idea of a group by function is that you're grouping elements of an array by some criteria. That criteria is specified in a function. This makes the `groupBy` function extremely flexible, because you can group by any criteria you want. \n\nFor example, consider the [Counting Word Occurrences](/workspace/0xs07JCP4) challenge\\. In that challenge we wanted to find out how frequently words occurred in a string. Using the `groupBy` function we can get a very similar answer in just a few lines of code:\n\n```\nconst sentence = \"The quick brown fox jumped over the lazy dog. Remember, the fox was quick.\";\nconst words = sentence.split(\" \");\n\n// Our grouping function will lowercase the string and remove a period if present.\nconst groupingFunction = (x: string) => x.toLowerCase().replace(\".\", \"\");\n\ngroupBy(words, groupingFunction);\n// => \n// { \n//   the: ['The', 'the', 'the'], \n//   quick: ['quick', 'quick.'], \n//   ...etc \n// }\n\n```\n\nAs you can see this approach gives us a list of all occurrences of a word based on our `groupingFunction`, rather than the number of occurrences. To get the number from here we could easily use `.length` on each of the grouped arrays."
         },
         {
+          "id": "49hgAfavS",
+          "type": "typescript",
+          "title": "Most Frequent Number",
+          "instructions": "You are given an array of integers. Write a function mostFrequentNumber to return the integer which appears most frequently in the array. If the input array is empty, return `null`.",
+          "testCode": "test(\"`mostFrequentNumber` should be defined\", () => {\n  expect(mostFrequentNumber).toBeDefined();\n});\n\ntest(\"`mostFrequentNumber` should return `null` for empty arrays.\", () => {\n  expect(mostFrequentNumber([])).toBe(null);\n});\n\n\ntest(\"`mostFrequentNumber` should accept an array of integers as an argument and return the most frequent integer in the array.\", () => {\n  expect(mostFrequentNumber([1, 2, 5, 5, 5, 7, 8, 8])).toBe(5);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Return the most frequent number in an array\nconst mostFrequentNumber = (input: number[]): number | null => {\n  if (input.length === 0) {\n    return null;\n  }\n\n  let counts: { [key: number]: number } = {};\n  for (const num of input) {\n    counts[num] = (counts[num] || 0) + 1;\n  }\n\n  let mostFrequentInteger = input[0];\n  let highestCount = 0;\n\n  for (const [n, count] of Object.entries(counts)) {\n    console.log(n, count);\n    if (count > highestCount) {\n      highestCount = count;\n      mostFrequentInteger = n;\n    }\n  }\n\n  return Number(mostFrequentInteger);\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",

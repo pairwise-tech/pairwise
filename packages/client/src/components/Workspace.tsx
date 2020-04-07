@@ -436,7 +436,7 @@ class Workspace extends React.Component<IProps, IState> {
           jsx: mn.languages.typescript.JsxEmit.React,
           typeRoots: ["node_modules/@types"],
           allowNonTsExtensions: true,
-          target: mn.languages.typescript.ScriptTarget.ES2016,
+          target: mn.languages.typescript.ScriptTarget.ES2017,
           module: mn.languages.typescript.ModuleKind.CommonJS,
           moduleResolution: mn.languages.typescript.ModuleResolutionKind.NodeJs,
         });
