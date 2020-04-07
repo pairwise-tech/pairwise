@@ -2464,6 +2464,17 @@
           "content": ""
         },
         {
+          "id": "gFARdL2FUm",
+          "type": "typescript",
+          "title": "Remember Me",
+          "instructions": "Implement a function which accepts two arguments, a `value` and `n`. This function should return a new function which returns the `value` every `n`th time is it called, and `null` otherwise\\. For instance:\n\n```typescript\nconst forgetful = getForgetfulFunction(\"It's hard to remember...\", 3);\n\nforgetful(); // -> null\nforgetful(); // -> null\nforgetful(); // -> \"It's hard to remember...\"\nforgetful(); // -> null\nforgetful(); // -> null\nforgetful(); // -> \"It's hard to remember...\"\n\n// The forgetful function returns the first argument every 3rd time it\n// is invoked.\n\n```\n",
+          "testCode": "test(\"`getForgetfulFunction` should be defined.\", () => {\n  expect(getForgetfulFunction).toBeDefined();\n});\n\ntest(\"`getForgetfulFunction` should return a function.\", () => {\n  expect(typeof getForgetfulFunction()).toBe(\"function\");\n});\n\ntest(\"The function returned by `getForgetfulFunction` should return the `value` argument every `n` time it is called.\", () => {\n  let value = \"x\";\n  let f = getForgetfulFunction(value, 2);\n  expect(f()).toBe(null);\n  expect(f()).toBe(value);\n  expect(f()).toBe(null);\n  expect(f()).toBe(value);\n  expect(f()).toBe(null);\n  expect(f()).toBe(value);\n\n  value = \"x888\";\n  f = getForgetfulFunction(value, 5);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(value);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(value);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(value);\n\n  value = \"cheese\";\n  f = getForgetfulFunction(value, 15);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(null);\n  expect(f()).toBe(value);\n  expect(f()).toBe(null);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Return a new function which remembers the value every\n// n times it is called.\nconst getForgetfulFunction = (value: any, n: number) => {\n  // Use a closure over the current value here to track\n  // the number of times the function has been called.\n  let current = 0;\n\n  // Return a new function\n  return () => {\n    current++;\n    if (current === n) {\n      current = 0;\n      return value;\n    } else {\n      return null;\n    }\n  };\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
