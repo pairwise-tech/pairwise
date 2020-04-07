@@ -3,8 +3,12 @@ import * as MonacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 
 const debug = require("debug")("client:Workspace:monaco");
 
+// Name is optional, but recommended. The case where we don't use the name is
+// where the external lib is dynamic. Currently this is the case with stripping
+// out module imports and adding a definition for each of them. Just to make the
+// code type check. It's not like we get actual definitions for the modules.
 interface ExternalLibrary {
-  name: string;
+  name?: string;
   source: string;
 }
 
@@ -19,18 +23,19 @@ const libs: ExternalLibrary[] = [
   },
 ];
 
+// Uses lib source content to identify if a lib has been added yet.
 const addedLibs = new Set<string>();
 
 // Libs only need to be added once.
 const addExtraLibs = (mn: typeof MonacoEditor) => {
   libs
-    .filter(lib => !addedLibs.has(lib.name))
+    .filter(lib => !addedLibs.has(lib.source))
     .forEach(lib => {
       debug("[REGISTERING EXTERNAL LIB]", lib);
-      addedLibs.add(lib.name);
+      addedLibs.add(lib.source);
       mn.languages.typescript.typescriptDefaults.addExtraLib(
         lib.source,
-        `ts:filename/${lib.name}`,
+        lib.name ? `ts:filename/${lib.name}` : undefined,
       );
     });
 

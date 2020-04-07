@@ -83,6 +83,7 @@ import { CODEPRESS } from "tools/client-env";
 import cx from "classnames";
 import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
+import { register } from "serviceWorker";
 
 const debug = require("debug")("client:Workspace");
 
@@ -911,9 +912,9 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     if (this.monacoWrapper) {
-      this.monacoWrapper.languages.typescript.typescriptDefaults.addExtraLib(
-        moduleDeclarations,
-      );
+      registerExternalLib({
+        source: moduleDeclarations,
+      });
     }
   };
 
