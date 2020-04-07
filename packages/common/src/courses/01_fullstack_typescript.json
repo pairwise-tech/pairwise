@@ -1950,6 +1950,17 @@
           "content": ""
         },
         {
+          "id": "zxk4TAdC5",
+          "type": "typescript",
+          "title": "Mutate the Object in the Array",
+          "instructions": "Jim has just been given a new role in `\"Management\"`. Modify his role to be `\"Management\"` using the `peopleCopy` array\\.\n\n**NOTE:** Use simple `0` index to access the object for Jim in the `peopleCopy` array\\. The point of this challenge is to demonstrate that mutable object references remain even if the parent object or array is copied.",
+          "testCode": "// Write your tests here:\ntest(\"`people` should NOT be mutated directly\", () => {\n  expect(__user_code_string__).not.toMatch(/people\\s*\\[\\d\\]\\.\\w+/);\n});\n\ntest(\"`peopleCopy` should be mutated directly\", () => {\n  expect(__user_code_string__).toMatch(/peopleCopy\\s*\\[\\d\\]\\.\\w+/);\n});\n\ntest('`people[0]` (aka Jim) should have the role `\"Management\"`', () => {\n  expect(people[0].role).toBe(\"Management\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "const people = [\n  { name: \"Jim\", role: \"Sales\" },\n  { name: \"Jenna\", role: \"Management\" },\n  { name: \"Jack\", role: \"Sales\" },\n  { name: \"Julie\", role: \"Assistant\" },\n];\n\n// Calling slice with no arguments copies an array\nconst peopleCopy = people.slice();\n\n// Mutate the peopleCopy array to show that people is NOT mutated\npeopleCopy.push({ name: \"Jarbles\", role: \"Cat Wrangler\" });\nconsole.log(`people has ${people.length} elements, peopleCopy has ${peopleCopy.length} elements`);\n\n// Confirm that they are not the same array\nconsole.log(`people === peopleCopy`, people === peopleCopy)\n\nconsole.log('Before:', people[0]);\n\n// Your code here...\n\nconsole.log('After:', people[0]);",
+          "solutionCode": "const people = [\n  { name: \"Jim\", role: \"Sales\" },\n  { name: \"Jenna\", role: \"Management\" },\n  { name: \"Jack\", role: \"Sales\" },\n  { name: \"Julie\", role: \"Assistant\" },\n];\n\n// Calling slice with no arguments copies an array\nconst peopleCopy = people.slice();\n\n// Mutate the peopleCopy array to show that people is NOT mutated\npeopleCopy.push({ name: \"Jarbles\", role: \"Cat Wrangler\" });\nconsole.log(`people has ${people.length} elements, peopleCopy has ${peopleCopy.length} elements`);\n\n// Confirm that they are not the same array\nconsole.log(`people === peopleCopy`, people === peopleCopy)\n\n\nconsole.log(people[0]);\n\npeopleCopy[0].role = \"Management\";\n\nconsole.log(people[0]);",
+          "content": ""
+        },
+        {
           "id": "n9QYwQgTM",
           "type": "section",
           "title": "Side Effects & Purity",
