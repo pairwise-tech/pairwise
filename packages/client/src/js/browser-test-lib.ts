@@ -311,21 +311,21 @@ class Expectation {
     );
   }
 
-  toHaveProperty(keyPath: Path | string, value: any) {
+  toHaveProperty(keyPath: Path | string, optionalTestValue?: any) {
     if (typeof keyPath === "string") {
       keyPath = keyPath.split(".");
     }
     const hasProperty = hasIn(keyPath, this.value);
-    if (value) {
+    if (optionalTestValue) {
       assert(
-        hasProperty && deepEqual(getIn(keyPath, this.value), value),
+        hasProperty && deepEqual(getIn(keyPath, this.value), optionalTestValue),
         `[Assert] Expected to have property ${keyPath.join(".")}`,
       );
     } else {
       assert(
         hasProperty,
         `[Assert] Expected at path ${keyPath.join(".")}:\n${truncateMiddle(
-          stringify(value),
+          stringify(optionalTestValue),
         )}\nReceived: ${truncateMiddle(stringify(this.value))}`,
       );
     }
