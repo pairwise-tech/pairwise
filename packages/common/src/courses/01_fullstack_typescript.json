@@ -2354,6 +2354,17 @@
           "content": ""
         },
         {
+          "id": "ZOkGBcvQ7E",
+          "type": "typescript",
+          "title": "Immutable Reversal",
+          "instructions": "You receive an array of values _but you cannot change it._ Write a function `reverseArrayImmutable` to return a new array which is the reverse of the given array, without modifying the given array. This means that you cannot mutate or change the original way. You must create a new array which represents the reverse of the given array\\! There are a few ways to do this \\- get creative and try out some different solutions\\!",
+          "testCode": "test(\"`reverseArrayImmutable` should be defined.\", () => {\n  expect(reverseArrayImmutable).toBeDefined();\n});\n\ntest(\"`reverseArrayImmutable` should not modify the given array.\", () => {\n  let array = [1, 2, 3];\n  let input = array.slice();\n  let result = reverseArrayImmutable(array);\n  expect(array === array).toBe(true);\n  expect(array).toEqual(input);\n  expect(result).toEqual([3, 2, 1]);\n\n  array = [1, 2, 3, [], \"hi\", \"blegh\", 999];\n  input = array.slice();\n  result = reverseArrayImmutable(array);\n  expect(array === array).toBe(true);\n  expect(array).toEqual(input);\n  expect(result).toEqual(input.slice().reverse());\n});\n\ntest(\"`reverseArrayImmutable` should return a new array which is the reverse of the given array.\", () => {\n  let array = [1, 2, 3];\n  let result = reverseArrayImmutable(array);\n  let input = array.slice();\n  expect(result).toEqual(input.slice().reverse());\n\n  array = [1, 2, 3, [], \"hi\", \"blegh\", 999];\n  input = array.slice();\n  result = reverseArrayImmutable(array);\n  expect(result).toEqual(input.slice().reverse());\n\n  array = [null, undefined, {key: \"hi\" }, true, false, 101010];\n  input = array.slice();\n  result = reverseArrayImmutable(array);\n  expect(result).toEqual(input.slice().reverse());\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Reverse an array without changing the input array\nconst reverseArrayImmutable = (list: any[]): any[] => {\n  // Just copy the array and reverse it!\n  return list.slice().reverse();\n\n  // You can also use a regular for loop and iterate\n  // from the end of the array to the beginning, building\n  // up the new array item by item. This would be a great\n  // solution because it would only require a single iteration\n  // through the list.\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
