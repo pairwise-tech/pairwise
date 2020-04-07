@@ -127,7 +127,7 @@ const ChallengeTestEditor = (props: Props) => {
     >
       <ControlledEditor
         height="100%"
-        language="typescript"
+        language="javascript"
         editorDidMount={handleEditorReady}
         value={props.challengeTestCode}
         theme={MonacoEditorThemes.DEFAULT}
