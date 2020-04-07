@@ -1,26 +1,21 @@
-/* eslint-disable */
-
 /**
- * This file is meant to be run within our testing iframe, and is thus simple JS.
- * For now this file is indeed meant to be JS (not TS) since it's not run
- * through any compilation pipeline.
- *
- * .js life!!!
+ * This file is meant to be run within our testing iframe.
  */
 
+// @ts-ignore
 const MAX_LINE_LENGTH = 16;
 
 /**
  * A shortcut for document.querySelector
  * @param {string} selector CSS Selector
  */
-const get = selector => document.querySelector(selector);
+const get = (selector: string) => document.querySelector<HTMLElement>(selector);
 
 /**
  * A shortcut for getting an array of all elements that match the selector
  * @param {string} selector CSS Selector
  */
-const getAll = selector => {
+const getAll = (selector: string) => {
   return Array.prototype.slice.call(document.querySelectorAll(selector));
 };
 
@@ -30,12 +25,18 @@ const getAll = selector => {
  * @param {Element} el DOM Element
  * @param {string} cssProp CSS property name. I.e. "background-color"
  */
-const getStyle = (el, cssProp, pseudoSelector = null) => {
+const getStyle = (
+  el: HTMLElement,
+  cssProp: string,
+  pseudoSelector: string | null = null,
+): string => {
   const view =
     el.ownerDocument && el.ownerDocument.defaultView
       ? el.ownerDocument.defaultView
       : window;
   const style = view.getComputedStyle(el, pseudoSelector);
+
+  // @ts-ignore
   return style.getPropertyValue(cssProp) || style[cssProp];
 };
 
@@ -51,14 +52,21 @@ const getStyle = (el, cssProp, pseudoSelector = null) => {
  * NOTE: This approach is advisable to be used to get text for HTML elements
  * because it will work in both the app and unit testing environment.
  */
-const getText = selector => {
-  const element = get(selector);
-  const html = element.innerHTML;
-  return html.trim();
+const getText = (selector: string) => {
+  try {
+    const element = get(selector);
+    // @ts-ignore
+    const html = element.innerHTML;
+    return html.trim();
+  } catch (err) {
+    throw err; // Just rethrow
+  }
 };
 
-const css = (propName, value) => {
-  let dummy = get("#dummy-test-div");
+type Maybe<T> = T | null;
+
+const css = (propName: string, value: string | number) => {
+  let dummy: Maybe<HTMLElement> = get("#dummy-test-div");
 
   // Create the dummy div if not present
   if (!dummy) {
@@ -69,28 +77,31 @@ const css = (propName, value) => {
   }
 
   // Grab the initial style so that we can reset later
+  // @ts-ignore
   const initial = dummy.style[propName];
 
   // Set the new style and get the style as computed by the browser
+  // @ts-ignore
   dummy.style[propName] = value;
   const result = getStyle(dummy, propName);
 
   // Reset to the initial value on the dummy el
+  // @ts-ignore
   dummy.style[propName] = initial;
 
   return result;
 };
 
-const cssColor = value => css("color", value);
+const cssColor = (value: string) => css("color", value);
 
-const assert = (condition, message = "Assertion Failed") => {
+const assert = (condition: boolean, message = "Assertion Failed") => {
   if (!condition) {
     throw new Error(message);
   }
   return true;
 };
 
-const assertEqual = (a, b) => {
+const assertEqual = (a: any, b: any) => {
   if (a !== b) {
     const typeA = typeof a;
     const typeB = typeof b;
@@ -107,16 +118,19 @@ const assertEqual = (a, b) => {
  * since this is to be used with the expect library
  */
 const methodNegationProxyHandler = {
-  get: (obj, prop) => {
+  get: (obj: Expectation, prop: string) => {
     // We don't care about normal props. Just want to negate function call results
+    // @ts-ignore
     if (typeof obj[prop] !== "function") {
+      // @ts-ignore
       return obj[prop];
     }
 
     // Return a new function that will throw if and only if the original
     // function does not
-    return (...args) => {
+    return (...args: any[]) => {
       try {
+        // @ts-ignore
         obj[prop](...args);
       } catch (err) {
         // We expected this throw, so everything is in order
@@ -132,11 +146,14 @@ const methodNegationProxyHandler = {
   },
 };
 
+type Path = Array<string | number>;
+
 // Determine if an object has the nested key path
-const hasIn = ([k, ...nextPath], obj) => {
+const hasIn = ([k, ...nextPath]: Path, obj: any): boolean => {
   if (k === undefined) {
     return true;
   } else if (obj.hasOwnProperty(k)) {
+    // @ts-ignore
     return hasIn(nextPath, obj[k]);
   } else {
     return false;
@@ -144,18 +161,23 @@ const hasIn = ([k, ...nextPath], obj) => {
 };
 
 // Get the value at a nested path in an object
-const getIn = ([k, ...nextPath], obj, notSetValue = undefined) => {
+const getIn = (
+  [k, ...nextPath]: Path,
+  obj: any,
+  notSetValue: any = undefined,
+): any => {
   if (k === undefined) {
     return obj;
   }
 
+  // @ts-ignore
   return getIn(nextPath, obj[k]);
 };
 
 // Just a shortcut for prettier json output
-const stringify = x => JSON.stringify(x, null, 2);
+const stringify = (x: any) => JSON.stringify(x, null, 2);
 
-const truncateMiddle = x => {
+const truncateMiddle = (x: string) => {
   if (typeof x !== "string") {
     return x;
   }
@@ -173,10 +195,10 @@ const truncateMiddle = x => {
   }
 };
 
-const isObject = value =>
+const isObject = (value: any) =>
   value !== null && !Array.isArray(value) && typeof value === "object";
 
-const deepEqual = (a, b) => {
+const deepEqual = (a: any, b: any): boolean => {
   if (Array.isArray(a)) {
     return (
       Array.isArray(b) &&
@@ -195,7 +217,7 @@ const deepEqual = (a, b) => {
   }
 };
 
-const jsonDiff = (a, b) => {
+const jsonDiff = (a: any, b: any): string => {
   let aStrings = stringify(a);
   let bStrings = stringify(b);
   return `Expected: ${truncateMiddle(aStrings)}\nReceived: ${truncateMiddle(
@@ -206,66 +228,65 @@ const jsonDiff = (a, b) => {
 // Helper to parse the boxes of console messages and convert them
 // to objects and extract the messages to help with writing test
 // assertions.
-const parseLogBox = box => {
-  const parsedBoxLogs = box.map(JSON.parse);
+const parseLogBox = (box: string[]): string[] => {
+  const parsedBoxLogs = box.map(x => JSON.parse(x));
   const messageBox = parsedBoxLogs.map(x => x[0]);
   return messageBox;
 };
 
 // Given a box of logged console messages (see above function) and
 // a message, return if the box contains that message exactly.
-const inBox = (box, message) => {
+const inBox = (box: string[], message: string): boolean => {
   const result = box.find(m => m === message);
   return !!result;
 };
 
 // Helper to quickly fail a test.
+// @ts-ignore
 const fail = () => expect(false).toBe(true);
 
 // Helper to quickly pass a test.
 const pass = () => expect(true).toBe(true);
 
 class Expectation {
-  constructor(value) {
+  value: any;
+
+  not: Expectation;
+
+  constructor(value: any) {
     this.value = value;
     this.not = new Proxy(this, methodNegationProxyHandler);
   }
 
-  toBe(expected) {
+  toBe(expected: any) {
     assertEqual(this.value, expected);
   }
-  toEqual(expected) {
+
+  toEqual(expected: any) {
     assert(
       deepEqual(this.value, expected),
       "[Assert] Expected deep equality but got:\n" +
         jsonDiff(this.value, expected),
     );
   }
-  toBeGreaterThan(number) {
-    assert(
-      this.value > number,
-      `[Assert] Expected ${this.value} > ${number} (GT)`,
-    );
+
+  toBeGreaterThan(n: number) {
+    assert(this.value > n, `[Assert] Expected ${this.value} > ${n} (GT)`);
   }
-  toBeGreaterThanOrEqual(number) {
-    assert(
-      this.value >= number,
-      `[Assert] Expected ${this.value} >= ${number} (GTE)`,
-    );
+
+  toBeGreaterThanOrEqual(n: number) {
+    assert(this.value >= n, `[Assert] Expected ${this.value} >= ${n} (GTE)`);
   }
-  toBeLessThan(number) {
-    assert(
-      this.value < number,
-      `[Assert] Expected ${this.value} < ${number} (LT)`,
-    );
+
+  toBeLessThan(n: number) {
+    assert(this.value < n, `[Assert] Expected ${this.value} < ${n} (LT)`);
   }
-  toBeLessThanOrEqual(number) {
-    assert(
-      this.value <= number,
-      `[Assert] Expected ${this.value} <= ${number} (LTE)`,
-    );
+
+  toBeLessThanOrEqual(n: number) {
+    assert(this.value <= n, `[Assert] Expected ${this.value} <= ${n} (LTE)`);
   }
-  toMatch(strOrReg) {
+
+  toMatch(strOrReg: string | RegExp) {
     let matched = false;
     if (typeof this.value !== "string") {
       assert(
@@ -289,7 +310,8 @@ class Expectation {
       `[Assert] Expected "${truncateMiddle(this.value)}" to match ${strOrReg}`,
     );
   }
-  toHaveProperty(keyPath, value) {
+
+  toHaveProperty(keyPath: Path | string, value: any) {
     if (typeof keyPath === "string") {
       keyPath = keyPath.split(".");
     }
@@ -308,16 +330,20 @@ class Expectation {
       );
     }
   }
+
   toBeTruthy() {
     assertEqual(Boolean(this.value), true);
   }
+
   toBeFalsy() {
     assertEqual(Boolean(this.value), false);
   }
+
   toBeDefined() {
     assertEqual(typeof this.value !== "undefined", true);
   }
-  toContain(val) {
+
+  toContain(val: any) {
     const isValid = Array.isArray(this.value) || typeof this.value === "string";
     assert(
       isValid,
@@ -328,7 +354,8 @@ class Expectation {
       `${val} not found in ${stringify(this.value)}`,
     );
   }
-  toThrow(optionalFailureMessage) {
+
+  toThrow(optionalFailureMessage?: string) {
     let didThrow = false;
     let errorMessage;
 
@@ -348,13 +375,21 @@ class Expectation {
   }
 }
 
+// @ts-ignore
 const expect = x => new Expectation(x);
 
 /* Expose Globals */
+// @ts-ignore
 window.get = get;
+// @ts-ignore
 window.getAll = getAll;
+// @ts-ignore
 window.getStyle = getStyle;
+// @ts-ignore
 window.getText = getText;
+// @ts-ignore
 window.assert = assert;
+// @ts-ignore
 window.assertEqual = assertEqual;
+// @ts-ignore
 window.expect = expect;
