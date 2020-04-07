@@ -2,11 +2,22 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React, { Suspense } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { Switch, Button, Tooltip, Position } from "@blueprintjs/core";
+import {
+  Switch,
+  Button,
+  Tooltip,
+  Position,
+  ButtonGroup,
+  Popover,
+} from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { CHALLENGE_TYPE } from "@pairwise/common";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+import pipe from "ramda/es/pipe";
+import { generateEmptyChallenge } from "tools/utils";
+import { IconButton } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -129,6 +140,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
         labelElement={"Edit"}
       />
       <SlideOut show={isEditMode && !hidden}>
+        <ChallengeInsertionMenu />
         <Tooltip content="Save" position={Position.BOTTOM}>
           <Button
             icon="saved"
@@ -152,6 +164,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
         )}
         <Suspense fallback={<p>Menu Loading...</p>}>
           <LazyChallengeTypeMenu
+            tooltip={false}
             items={CHALLENGE_TYPE_CHOICES}
             currentChallengeType={challenge?.type}
             onItemSelect={x => {
@@ -167,6 +180,93 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
     </div>
   );
 };
+
+const mapInsertionMenuState = (state: ReduxStoreState) => ({
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
+  module: Modules.selectors.challenges.getCurrentModule(state),
+  courseId: Modules.selectors.challenges.getCurrentCourseSkeleton(state)?.id,
+  challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
+});
+
+const insertionMenuDispatchProps = {
+  createChallenge: Modules.actions.challenges.createChallenge,
+};
+
+const mergeInsertionMenuProps = (
+  state: ReturnType<typeof mapInsertionMenuState>,
+  methods: typeof insertionMenuDispatchProps,
+  props: RouteComponentProps,
+) => {
+  if (!state.module || !state.isEditMode || !state.courseId) {
+    return {
+      isEditMode: state.isEditMode,
+      insertPrevChallenge: () => console.warn("Called outside of edit mode."),
+      insertNextChallenge: () => console.warn("Called outside of edit mode."),
+    };
+  }
+
+  const courseId = state.courseId;
+  const moduleId = state.module.id;
+  const newChallenge = generateEmptyChallenge();
+  const index = state.module.challenges.findIndex(
+    x => x.id === state.challengeId,
+  );
+
+  return {
+    isEditMode: state.isEditMode,
+    insertPrevChallenge: () => {
+      methods.createChallenge({
+        courseId,
+        moduleId,
+        insertionIndex: index, // NOTE: Inserting _at the current index_ will put the new challenge before this current one
+        challenge: newChallenge,
+      });
+      props.history.push(`/workspace/${newChallenge.id}`);
+    },
+    insertNextChallenge: () => {
+      methods.createChallenge({
+        courseId,
+        moduleId,
+        insertionIndex: index + 1,
+        challenge: newChallenge,
+      });
+      props.history.push(`/workspace/${newChallenge.id}`);
+    },
+  };
+};
+
+type ChallengeInsertionProps = ReturnType<typeof mergeInsertionMenuProps> &
+  RouteComponentProps;
+
+const connectChallengeInsertion = pipe(
+  connect(
+    mapInsertionMenuState,
+    insertionMenuDispatchProps,
+    mergeInsertionMenuProps,
+  ),
+  withRouter,
+);
+
+const ChallengeInsertionMenu = connectChallengeInsertion(
+  (props: ChallengeInsertionProps) => {
+    return (
+      <Popover
+        canEscapeKeyClose
+        position={Position.BOTTOM}
+        content={
+          <div>
+            <ButtonGroup>
+              <Button onClick={props.insertPrevChallenge}>Insert Before</Button>
+              <Button onClick={props.insertNextChallenge}>Insert After</Button>
+            </ButtonGroup>
+          </div>
+        }
+      >
+        <IconButton large minimal icon="add-to-artifact" />
+      </Popover>
+    );
+  },
+);
 
 /** ===========================================================================
  * Styles
