@@ -2376,6 +2376,17 @@
           "content": ""
         },
         {
+          "id": "Sj1Ubp7Qs",
+          "type": "typescript",
+          "title": "Toggle Class",
+          "instructions": "In the editor is the definition of a `Toggle` class\\. Create a class called `ToggleClass` which implements this interface and provides the functionality of a \"toggle\" switch. Imagine how you might use this in a real application to model several different toggle switches in a control panel or interface.",
+          "testCode": "test(\"`ToggleClass` should be defined.\", () => {\n  expect(ToggleClass).toBeDefined();\n});\n\ntest(\"`ToggleClass` should have a method `toggleOn`.\", () => {\n  \n  expect(new ToggleClass().toggleOn).toBeDefined();\n});\n\ntest(\"`ToggleClass` should have a method `toggleOff`.\", () => {\n  expect(new ToggleClass().toggleOff).toBeDefined();\n});\n\ntest(\"`ToggleClass` should have a method `getToggleState`.\", () => {\n  expect(new ToggleClass().getToggleState).toBeDefined();\n});\n\ntest(\"`ToggleClass` should have a method `setToggleState`.\", () => {\n  expect(new ToggleClass().setToggleState).toBeDefined();\n});\n\ntest(\"The `ToggleClass` `getToggleState` should return `on` or `off`.\", () => {\n  const toggle = new ToggleClass();\n  const state = toggle.getToggleState();\n  expect(state === \"on\" || state === \"off\").toBe(true);\n});\n\ntest(\"The `ToggleClass` can toggle state between `on` and `off` using the class methods.\", () => {\n  const toggle = new ToggleClass();\n  toggle.setToggleState(\"off\");\n  expect(toggle.getToggleState()).toBe(\"off\");\n  toggle.toggleOn();\n  expect(toggle.getToggleState()).toBe(\"on\");\n  toggle.toggleOff();\n  toggle.toggleOff();\n  expect(toggle.getToggleState()).toBe(\"off\");\n  toggle.toggleOn();\n  expect(toggle.getToggleState()).toBe(\"on\");\n  toggle.setToggleState(\"on\");\n  expect(toggle.getToggleState()).toBe(\"on\");\n  toggle.setToggleState(\"off\");\n  expect(toggle.getToggleState()).toBe(\"off\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "type ToggleState = \"on\" | \"off\";\n\ninterface Toggle {\n  state: ToggleState;\n  toggleOn: () => void;\n  toggleOff: () => void;\n  getState: () => ToggleState;\n  setToggleState: (state: ToggleState) => void;\n}\n\n// Your code here",
+          "solutionCode": "type ToggleState = \"on\" | \"off\";\n\ninterface Toggle {\n  state: ToggleState;\n  toggleOn: () => void;\n  toggleOff: () => void;\n  getToggleState: () => ToggleState;\n  setToggleState: (state: ToggleState) => void;\n}\n\nclass ToggleClass implements Toggle {\n  state: ToggleState = \"off\";\n\n  toggleOn = () => {\n    this.state = \"on\";\n  }\n\n  toggleOff = () => {\n    this.state = \"off\";\n  }\n\n  getToggleState = () => {\n    return this.state;\n  }\n\n  setToggleState = (state: ToggleState) => {\n    this.state = state;\n  }\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",

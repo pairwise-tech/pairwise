@@ -155,6 +155,7 @@ const ChallengeTestEditor = (props: Props) => {
           />
         </Tooltip>
         <Popover
+          canEscapeKeyClose
           content={
             <TestUtilsPopover>
               <TestUtilsTitle>Global Test Utils</TestUtilsTitle>
@@ -180,10 +181,7 @@ const ChallengeTestEditor = (props: Props) => {
           }
         >
           <Tooltip content="View Test Utils" position="left">
-            <IconButton
-              icon="helper-management"
-              aria-label="test utils helpers"
-            />
+            <IconButton icon="more" aria-label="test utils helpers" />
           </Tooltip>
         </Popover>
       </LowerRight>
