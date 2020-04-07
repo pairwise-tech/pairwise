@@ -2442,6 +2442,17 @@
           "content": ""
         },
         {
+          "id": "gQBQUIV8B",
+          "type": "typescript",
+          "title": "Create a Multiplier",
+          "instructions": "The type signature for a `Multipler` function is in the editor below. This function should receive a value `x` to multiply other values by and then return a new function which accepts a `value` argument and then returns the result of multiplying this value by the previous value, `x`. Implement this function\\!",
+          "testCode": "test(\"`multiplier` should be defined.\", () => {\n  expect(multiplier).toBeDefined();\n});\n\ntest(\"`multiplier` should be a function.\", () => {\n  expect(typeof multiplier).toBe(\"function\");\n});\n\ntest(\"`multiplier` should return a function.\", () => {\n  expect(typeof multiplier()).toBe(\"function\");\n});\n\ntest(\"The function returned by `multiplier` should return accept number arguments, and return the result of multiplying these numbers by the original value passed to the `multiplier` function.\", () => {\n  let mult = multiplier(2);\n  let result = mult(5);\n  expect(result).toBe(10);\n\n  mult = multiplier(20);\n  result = mult(1);\n  expect(result).toBe(20);\n\n  mult = multiplier(5);\n  result = mult(100);\n  expect(result).toBe(500);\n  result = mult(1);\n  expect(result).toBe(5);\n  result = mult(10);\n  expect(result).toBe(50);\n  result = mult(27);\n  expect(result).toBe(135);\n\n  mult = multiplier(9);\n  result = mult(10);\n  expect(result).toBe(90);\n  result = mult(1);\n  expect(result).toBe(9);\n  result = mult(11);\n  expect(result).toBe(99);\n  result = mult(100);\n  expect(result).toBe(900);\n});\n",
+          "videoUrl": "",
+          "starterCode": "type Multiplier = (x: number) => (value: number) => number;\n\n// Your code here",
+          "solutionCode": "type Multiplier = (x: number) => (value: number) => number;\n\n/**\n * We can easily solve this with one-line arrow functions.\n * Note that the function type definition is defined separately\n * and then used to type the function at the beginning. The\n * arguments then do not require explicit type definitions,\n * but TypeScript still understands what the types are.\n */\nconst multiplier: Multiplier = (x) => (value) => value * x;\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
