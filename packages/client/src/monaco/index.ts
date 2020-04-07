@@ -37,6 +37,10 @@ const addExtraLibs = (mn: typeof MonacoEditor) => {
         lib.source,
         lib.name ? `ts:filename/${lib.name}` : undefined,
       );
+      mn.languages.typescript.javascriptDefaults.addExtraLib(
+        lib.source,
+        lib.name ? `ts:filename/${lib.name}` : undefined,
+      );
     });
 
   return mn;
