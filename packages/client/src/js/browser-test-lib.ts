@@ -1,11 +1,19 @@
+/* eslint-disable */
+
 /**
  * This file is meant to be run within our testing iframe.
  */
 
 const MAX_LINE_LENGTH = 16;
 
+// These are all defined elsewhere but they are present in the testing editor.
 // @ts-ignore
 declare function test(message: string, testFunction: () => void): void;
+declare const __user_code_string__: string;
+declare const __secret_log_box: string;
+declare const __secret_warn_box: string[];
+declare const __secret_error_box: string[];
+declare const __secret_info_box: string[];
 
 /**
  * A shortcut for document.querySelector
