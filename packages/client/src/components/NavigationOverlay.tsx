@@ -86,7 +86,13 @@ class NavigationOverlay extends React.Component<IProps> {
   };
 
   render(): Nullable<JSX.Element> {
-    const { course, module, overlayVisible, courseListMetadata } = this.props;
+    const {
+      course,
+      module,
+      isEditMode,
+      overlayVisible,
+      courseListMetadata,
+    } = this.props;
 
     if (!course || !module) {
       console.warn("[WARN] No module or course found! ->", course, module);
@@ -157,7 +163,7 @@ class NavigationOverlay extends React.Component<IProps> {
           <SpecialLeftShadow />
           <ColTitle>
             <p>{module.title}</p>
-            {hasSections && (
+            {hasSections && !isEditMode && (
               <div>
                 <Button onClick={this.toggleExpandCollapseAll}>
                   {anySectionsOpen ? "Collapse" : "Expand"} All Sections
@@ -776,10 +782,22 @@ const ChallengeListItemIcon = ({
     iconExtraClass = "iconIncomplete";
   }
 
+  const isSection = challenge.type === "section";
+
+  // Render a different label for sections to indicate
+  // the expand|collapse functionality of clicking the icon
+  if (isSection) {
+    if (isSectionOpen) {
+      tooltipContent = "Collapse Section";
+    } else {
+      tooltipContent = "Expand Section";
+    }
+  }
+
   return (
     <Tooltip
-      disabled={challengeProgress === "NOT_ATTEMPTED"}
       content={tooltipContent}
+      disabled={!isSection && challengeProgress === "NOT_ATTEMPTED"}
     >
       <RotatingIcon
         isRotated={isSectionOpen}
