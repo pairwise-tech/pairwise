@@ -1,5 +1,6 @@
 import styled from "styled-components/macro";
-import { ControlledEditor, EditorDidMount } from "@monaco-editor/react";
+import { EditorDidMount } from "@monaco-editor/react";
+import { ControlledEditor, registerExternalLib } from "../monaco";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
@@ -18,6 +19,9 @@ import toaster from "tools/toast-utils";
 import { copyToClipboard } from "tools/utils";
 
 const debug = require("debug")("client:ChallengeTestEditor");
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+const testLibDefinitions = require("!raw-loader!../js/browser-test-lib.d.ts");
 
 /** ===========================================================================
  * Types & Config
@@ -104,6 +108,12 @@ const ChallengeTestEditor = (props: Props) => {
 
     return () => unsubscribeCodeWorker(handleCodeFormat);
   }, [updateChallenge, challengeId]);
+  React.useEffect(() => {
+    registerExternalLib({
+      name: "pairwise-test-lib.d.ts",
+      source: testLibDefinitions,
+    });
+  }, []);
 
   return (
     <div
@@ -117,7 +127,7 @@ const ChallengeTestEditor = (props: Props) => {
     >
       <ControlledEditor
         height="100%"
-        language="javascript"
+        language="typescript"
         editorDidMount={handleEditorReady}
         value={props.challengeTestCode}
         theme={MonacoEditorThemes.DEFAULT}

@@ -83,7 +83,6 @@ import { CODEPRESS } from "tools/client-env";
 import cx from "classnames";
 import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
-import { register } from "serviceWorker";
 
 const debug = require("debug")("client:Workspace");
 
