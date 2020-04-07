@@ -2332,6 +2332,17 @@
           "content": ""
         },
         {
+          "id": "HB0P9thnMf",
+          "type": "typescript",
+          "title": "Unique Numbers",
+          "instructions": "You are given an array of integers. Write a function `uniqueNumbers` to return the subset of integers which only appear one time in the input array.\n\nFor instance, given the input `[1, 5, 5, 5, 7, 9, 9]` the result would be `[1, 7]`. If no numbers appear only once, return an empty array.",
+          "testCode": "test(\"`uniqueNumbers` should be defined.\", () => {\n  expect(uniqueNumbers).toBeDefined();\n});\n\ntest(\"`uniqueNumbers` should return `[]` if there are no unique numbers in the input array.\", () => {\n  expect(uniqueNumbers([])).toEqual([]);\n  expect(uniqueNumbers([2, 2, 3, 3, 3, 5, 5])).toEqual([]);\n  expect(uniqueNumbers([7, 7, 7, 7, 7])).toEqual([]);\n  expect(uniqueNumbers([7, 7])).toEqual([]);\n  expect(uniqueNumbers([7, 7, 9, 9, 100, 100, 100])).toEqual([]);\n});\n\ntest(\"`uniqueNumbers` should return an array of the numbers which only appear once in the input array.\", () => {\n  expect(uniqueNumbers([6])).toEqual([6]);\n  expect(uniqueNumbers([2, 2, 3, 3, 3, 8, 5, 5])).toEqual([8]);\n  expect(uniqueNumbers([7, 7, 7, 7, 7, 2, -1])).toEqual([2, -1]);\n  expect(uniqueNumbers([7, 7, 1000000])).toEqual([1000000]);\n  expect(uniqueNumbers([7, 7, 9, 9, 100, 100, 100, 18])).toEqual([18]);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Return the umbers which only appear once in the input array\nconst uniqueNumbers = (input: number[]): number[] => {\n  // Create two sets to track number seen once and more than once\n  const seenOnce = new Set<number>();\n  const seenTwice = new Set<number>();\n\n  // Iterate through the list\n  for (const n of input) {\n    if (seenTwice.has(n)) {\n      // If the number has been seen twice, just continue\n      continue;\n    } else if (seenOnce.has(n)) {\n      // If the number has been seen once and is seen again\n      // add it to seenTwice and remove it from seenOnce\n      seenTwice.add(n);\n      seenOnce.delete(n);\n    } else {\n      // If this is the first time seeing a number, add it\n      // to seenOnce\n      seenOnce.add(n);\n    }\n  }\n\n  // Return an array of values in the seenOnce set\n  return Array.from(seenOnce);\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
