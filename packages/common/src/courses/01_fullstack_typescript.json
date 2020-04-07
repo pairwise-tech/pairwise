@@ -1578,7 +1578,7 @@
         {
           "id": "B3mNHCb$m",
           "type": "typescript",
-          "title": "Transform array items using map",
+          "title": "Transform Array Items Using Map",
           "instructions": "* Using `.map` square all numbers in the `numbers` array \\(multiply them all by themself\\) and assign it to `squares`.\n   * The resulting array will be `[1,4,9,16,25]` but you should use `.map` to get it rather than writing it out directly.\n* Using `.toUpperCase` transform the `lowercase` string to all caps and assign it to `uppercase`.\n   * We're mainly talking about `.map` in this lesson, but being able to transform a string to uppercase is also useful and will help us with future challenges.\n\n",
           "testCode": "// Write your tests here:\ntest(\"`squares` should be an array of the squares of elements of `numbers`\", () => {\n  expect(squares).toEqual([1, 2, 3, 4, 5].map(x => x * x));\n});\ntest(\"`uppercase` should be the all-caps version of `lowercase`\", () => {\n  expect(uppercase).toBe(lowercase.toUpperCase());\n});\n",
           "videoUrl": "",
@@ -1589,7 +1589,7 @@
         {
           "id": "8nr@H9Eyrm",
           "type": "typescript",
-          "title": "Taking only part of a list with slice",
+          "title": "Taking Only Part of a List With Slice",
           "instructions": "Use `slice` to do the following:\n* `last1` should be _an array of_ the last element of `numbers`.\n* `first2` should be an array of the first two elements of `numbers`.\n* `last3` should be an array of the last three elements of `numbers`.\n* `middle3` should be an array of the middle elements of numbers. I.e. `[2,3,4]`, but be sure to use `slice` to get it.\n\n",
           "testCode": "// Write your tests here:\ntest(\"`last1` should be an array of the last element of `numbers`\", () => {\n  expect(last1).toEqual(numbers.slice(-1));\n});\ntest(\"`first2` should be an array of the last element of `numbers`\", () => {\n  expect(first2).toEqual(numbers.slice(0, 2));\n});\ntest(\"`last3` should be an array of the last element of `numbers`\", () => {\n  expect(last3).toEqual(numbers.slice(-3));\n});\ntest(\"`middle3` should be an array of the last element of `numbers`\", () => {\n  expect(middle3).toEqual(numbers.slice(1, -1));\n});\ntest('`slice` should be used', () => {\n  expect(__user_code_string__).toMatch(/.+\\.slice/)\n})\n",
           "videoUrl": "",
@@ -1600,7 +1600,7 @@
         {
           "id": "RBidz6MWr",
           "type": "typescript",
-          "title": "Testing for inclusion",
+          "title": "Testing For Inclusion",
           "instructions": "Find if the following phrases exist in the `LONG_EXCERPT` string\\.\n* `\"exclusion\"`\n* `\"data dependency\"`\n* `\"higher order\"`\n* `\"idempotent\"`\n* `\"trivial\"`\n\n\n**HINT:** This challenge is all about using the built\\-in `includes` function\\. ",
           "testCode": "// Write your tests here:\n\nObject.keys(includedPhrases).forEach((k) => {\n  const included = LONG_EXCERPT.includes(k);\n  test(\n    `\\`includedPhrases[\"${k}\"]\\` should ${included ? \"\" : \"not \"}be included`,\n    () => {\n      expect(includedPhrases[k]).toBe(included);\n    },\n  );\n});\n\ntest(\"The `includes` function should be used\", () => {\n  expect(__user_code_string__).toMatch(/LONG_EXCERPT\\s*\\.includes/);\n})",
           "videoUrl": "",
@@ -1611,7 +1611,7 @@
         {
           "id": "Y3M5EjYjR",
           "type": "typescript",
-          "title": "Splitting and Joining",
+          "title": "Splitting and joining",
           "instructions": "This lesson is all about `split` and `join`. You can `split` a string into an array and you can `join` an array into a string. Scroll down to the content for more info. Here's the challenge:\n\n* Split the `str` variable on spaces and assign the result to `words`.\n* Split the `str` variable on individual characters and assign the result to `chars`. See HINT below.\n* Join `words` into a string using a space and assign the result to `joinedWords`.\n* Join `chars` into a string using an empty string and assign the result to `joinedChars`.\n\n\n**HINT**: To split on characters, think about it as splitting on \"nothing\" or splitting on an _empty string_.\n",
           "testCode": "// Write your tests here:\ntest(\"`words` should be `str` split on spaces\", () => {\n  expect(words).toEqual(str.split(\" \"));\n});\ntest(\"`chars` should be `str` split on an empty string\", () => {\n  expect(chars).toEqual(str.split(\"\"));\n});\ntest(\"`joinedWords` should be `words` joined on spaces\", () => {\n  expect(joinedWords).toEqual(words.join(\" \"));\n});\ntest(\"`joinedChars` should be `chars` joined on an empty string\", () => {\n  expect(joinedChars).toEqual(chars.join(\"\"));\n});\ntest(\"`joinedWords` and `joinedChars` should both equal `str`\", () => {\n  expect(joinedWords).toEqual(str);\n  expect(joinedChars).toEqual(str);\n});\n",
           "videoUrl": "",
@@ -1644,7 +1644,7 @@
         {
           "id": "5HnuVW8li",
           "type": "typescript",
-          "title": "Get the items you want using a filter",
+          "title": "Get the Items You Want Using a Filter",
           "instructions": "Use the `filter` function to do the following:\n\n* Extract all numbers from `mixedArray` and assign them to `numbers`\n* Extract all strings from `mixedArray` and assign them to `strings`\n* Filter out only names that start with \"A\" from the `names` list and assign the result to `namesStartingWithA`.\n\n\n**HINT:** For the first two you will find the `typeof` keyword helpful.\n",
           "testCode": "// Write your tests here:\ntest(\"`numbers` should be the subset of `mixedArray` elements that are numbers`\", () => {\n  expect(numbers).toEqual(mixedArray.filter(x => typeof x === \"number\"));\n});\ntest(\"`strings` should be the subset of `mixedArray` elements that are strings`\", () => {\n  expect(strings).toEqual(mixedArray.filter(x => typeof x === \"string\"));\n});\n\ntest(\"`namesStartingWithA` should be the subset of `names` elements start with the letter A`\", () => {\n  expect(namesStartingWithA).toEqual(names.filter(x => x.startsWith(\"A\")));\n});\n",
           "videoUrl": "",
@@ -1677,7 +1677,7 @@
         {
           "id": "gR7810hCR",
           "type": "typescript",
-          "title": "Calculate the sum using reduce",
+          "title": "Calculate the Sum Using Reduce",
           "instructions": "Write a `sum` function that takes an array of numbers and returns their sum. Use `reduce`. Here's the spec:\n* Passing an array of numbers will return their sum. Example: `sum([2,4,1])` will return `7`.\n* Passing an empty array will return `0`.\n\n",
           "testCode": "// Write your tests here:\n\ntest(\"`sum` should return the sum of an array of numbers\", () => {\n  expect(sum([1, 2, 3])).toBe(6);\n  expect(sum([244, 61454, 0, 1, 9, 3, 35])).toBe(61746);\n});\ntest(\"`sum` should return `0` when passed an empty array\", () => {\n  expect(sum([])).toBe(0);\n});\n",
           "videoUrl": "",
@@ -1688,7 +1688,7 @@
         {
           "id": "0xs07JCP4",
           "type": "typescript",
-          "title": "Counting Word Occurances",
+          "title": "Counting Word Occurrences",
           "instructions": "Write two functions, `countWordsSimple` and `countWords`. Both functions should count the number of words in a string. Represent the word counts in an object with the words as they key and their counts as the value. For example, `countWords(\"hello hello everyone\")` would give us the object `{ hello: 2, everyone: 1 }`. This object represents that the string `\"hello\"` occurred `2` times in the input string and the string `\"everyone\"` occurred `1` time\\.\n* `countWordsSimple` should not add any additional logic to determine what a word is. It should just count all strings in the array separated by spaces.\n   * After implementing this you will notice the limitations. `The` and `the` get counted separately, as do `quick` and `quick.`\n* `countWords` should add additional logic to handle the issues described above. Namely: \n   * `countWords` should make all words lowercase before counting, so `The` and `the` get correctly counted as the same word.\n   * `countWords` should remove periods \\(`.`\\) so that `quick` and `quick.` get accurately counted as the same word.\n\n",
           "testCode": "const simpleExpected = {\n  The: 1,\n  quick: 1,\n  brown: 1,\n  fox: 2,\n  jumped: 1,\n  over: 1,\n  the: 2,\n  lazy: 1,\n  \"dog.\": 1,\n  Remember: 1,\n  was: 1,\n  \"quick.\": 1,\n};\n\nconst advancedExpected = {\n  the: 3,\n  quick: 2,\n  brown: 1,\n  fox: 2,\n  jumped: 1,\n  over: 1,\n  lazy: 1,\n  dog: 1,\n  remember: 1,\n  was: 1,\n};\n\ntest(\"`countWordsSimple` should count space-separated strings\", () => {\n  expect(simpleExpected).toEqual(countWordsSimple(sentence));\n});\n\ntest(\"`countWords` should count words in lowercase with periods removed\", () => {\n  expect(advancedExpected).toEqual(countWords(sentence));\n});\n",
           "videoUrl": "",
