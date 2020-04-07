@@ -86,6 +86,8 @@ export const TEST_UTILS_GLOBALS = {
   fail: "A function to just fail a test",
   stringList: "An array of 100 random strings",
   loremIpsum: "A paragraph of Lorem Ipsum text",
+  __id: "() => generate a random string id",
+  __randomInRange: "(max: number) => random number",
 };
 
 // Type representing all the globally available key names
