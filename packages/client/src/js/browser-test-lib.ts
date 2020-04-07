@@ -2,8 +2,10 @@
  * This file is meant to be run within our testing iframe.
  */
 
-// @ts-ignore
 const MAX_LINE_LENGTH = 16;
+
+// @ts-ignore
+declare function test(message: string, testFunction: () => void): void;
 
 /**
  * A shortcut for document.querySelector
