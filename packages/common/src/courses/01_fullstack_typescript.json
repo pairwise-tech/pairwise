@@ -1941,11 +1941,11 @@
         {
           "id": "ruPUvG25T",
           "type": "typescript",
-          "title": "[EMPTY...]",
+          "title": "Mutate the Array",
           "instructions": "`arr` and `letters` reference the same array, which can be mutated. \n* Use the `push` array method to mutate the `letters` array by pushing the characters `\" \"`, `\"y\"`, `\"o\"`, and `\"u\"` onto the array.\n   * The resulting array will be `[\"h\", \"e\", \"l\", \"l\", \"o\", \" \", \"y\", \"o\", \"u\"]`\n* Log `arr` to the console to confirm that it too was mutated.\n\n",
-          "testCode": "// Write your tests here:\ntest(\"`arr` should not be mutated directly\", () => {\n  expect(arr).toEqual([\"h\", \"e\", \"l\", \"l\", \"o\"]);\n});\n",
+          "testCode": "// Write your tests here:\ntest(\"`arr` should NOT be mutated directly\", () => {\n  expect(__user_code_string__).not.toMatch(/arr\\s*\\.push\\([\\s\\S]+\\)/);\n  expect(__user_code_string__).not.toMatch(/arr\\s*\\.splice\\([\\s\\S]+\\)/);\n  expect(__user_code_string__).not.toMatch(/arr\\s*\\.sort\\(/);\n});\n\ntest(\"`letters` should be mutated directly\", () => {\n  expect(__user_code_string__).toMatch(/letters\\s*\\.push\\([\\s\\S]+\\)/);\n});\n\ntest('`\" \"`, `\"y\"`, `\"o\"`, and `\"u\"` should be appended to `letters`', () => {\n  expect(letters).toEqual([\"h\", \"e\", \"l\", \"l\", \"o\", \" \", \"y\", \"o\", \"u\"]);\n});\n\n// Testing for logged arrays seems difficult. This stringify business seems fragile\n// but we can revisit if it proves not to work in other browsers.\ntest(\"`arr` should be logged to the console\", () => {\n  const logs = parseLogBox(__secret_log_box);\n  expect(JSON.stringify(logs)).toContain(\n    JSON.stringify([\"h\", \"e\", \"l\", \"l\", \"o\", \" \", \"y\", \"o\", \"u\"])\n  );\n});\n",
           "videoUrl": "",
-          "starterCode": "",
+          "starterCode": "const arr = [\"h\", \"e\", \"l\", \"l\", \"o\"];\nconst letters = arr;",
           "solutionCode": "const arr = [\"h\", \"e\", \"l\", \"l\", \"o\"];\nconst letters = arr;\n\nletters.push(\" \");\nletters.push(\"y\");\nletters.push(\"o\");\nletters.push(\"u\");\n\nconsole.log(arr);",
           "content": ""
         },
