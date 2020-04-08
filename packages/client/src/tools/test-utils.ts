@@ -7,6 +7,10 @@ import { TEST, PRODUCTION } from "./client-env";
 import quote from "string-quote-x";
 import pipe from "ramda/src/pipe";
 
+// TODO: This could be made more secure
+// NOTE: We will be dropping this string into another string so we want it stringified
+const TARGET_WINDOW_ORIGIN = JSON.stringify("*");
+
 // This not-so-robust code replacement exists becuase if we ourselves (using
 // Codepress) added a script tag to a markup challenge we would accidentally
 // exit the entire script tag and everything would break. So the gist is, we
@@ -140,37 +144,25 @@ let ${TEST_UTILS_GLOBALS_KEYS.__secret_info_box} = [];
 const __interceptConsoleLog = (...value) => {
   const message = JSON.stringify(value, __replacer);
   __secret_log_box.push(message);
-  window.parent.postMessage({
-    message,
-    source: "LOG",
-  });
+  window.parent.postMessage({ message, source: "LOG" }, ${TARGET_WINDOW_ORIGIN});
 }
 
 const __interceptConsoleInfo = (...value) => {
   const message = JSON.stringify(value, __replacer);
   __secret_info_box.push(message);
-  window.parent.postMessage({
-    message,
-    source: "INFO",
-  });
+  window.parent.postMessage({ message, source: "INFO" }, ${TARGET_WINDOW_ORIGIN});
 }
 
 const __interceptConsoleWarn = (...value) => {
   const message = JSON.stringify(value, __replacer);
   __secret_warn_box.push(message);
-  window.parent.postMessage({
-    message,
-    source: "WARN",
-  });
+  window.parent.postMessage({ message, source: "WARN" }, ${TARGET_WINDOW_ORIGIN});
 }
 
 const __interceptConsoleError = (...value) => {
   const message = JSON.stringify(value, __replacer);
   __secret_error_box.push(message);
-  window.parent.postMessage({
-    message,
-    source: "ERROR",
-  });
+  window.parent.postMessage({ message, source: "ERROR" }, ${TARGET_WINDOW_ORIGIN});
 }
 `;
 
@@ -478,15 +470,15 @@ try {
     const results = runTests();
     window.parent.postMessage({
       message: JSON.stringify(results),
-      source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
-    });
+      source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}"
+    }, ${TARGET_WINDOW_ORIGIN});
   } catch (err) {
     window.parent.postMessage({
       message: JSON.stringify({
         error: err.message,
       }),
-      source: "${IFRAME_MESSAGE_TYPES.TEST_ERROR}",
-    });
+      source: "${IFRAME_MESSAGE_TYPES.TEST_ERROR}"
+    }, ${TARGET_WINDOW_ORIGIN});
   }
 } catch (err) {
   if (err.message === "INFINITE_LOOP") {
@@ -495,7 +487,7 @@ try {
         error: err.message,
       }),
       source: "${IFRAME_MESSAGE_TYPES.INFINITE_LOOP}",
-    });
+    }, ${TARGET_WINDOW_ORIGIN});
   } else {
     window.parent.postMessage({
       message: JSON.stringify([
@@ -506,7 +498,7 @@ try {
         }
       ]),
       source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
-    });
+    }, ${TARGET_WINDOW_ORIGIN});
   }
 }
 `;

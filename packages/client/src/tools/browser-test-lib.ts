@@ -3,7 +3,7 @@
 
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import EXPECTATION_LIB from "raw-loader!../js/browser-test-lib.ts";
+import EXPECTATION_LIB from "!raw-loader!../js/browser-test-lib.js";
 
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
