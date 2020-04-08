@@ -2488,12 +2488,12 @@
         {
           "id": "bOKf5cIqT",
           "type": "typescript",
-          "title": "Going Up",
-          "instructions": "Let's create an `Elevator` class\\.",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "title": "Sort the Rows",
+          "instructions": "You receive a 2 dimensional grid of numbers, each row contains a list of numbers of varying lengths. Write a function `sortTheRows` to return a new grid which has the rows sorted by smallest sum to largest sum. Here is an example:\n\n```typescript\n// Input:\n[\n    [11, 6, 20],\n    [1, 3, 9, 0, 1],\n    [2, 90],\n]\n\n// Output:\n[\n    [1, 3, 9, 0, 1],\n    [11, 6, 20],\n    [2, 90],\n]\n\n\n```\n",
+          "testCode": "test(\"`sortTheRows` should be defined.\", () => {\n  expect(sortTheRows).toBeDefined();\n});\n\ntest(\"`sortTheRows` should be a function.\", () => {\n  expect(typeof sortTheRows === \"function\").toBe(true);\n});\n\ntest(\"`sortTheRows` should accept a matrix of rows and return a new matrix with the rows sorted from least sum to greatest sum.\", () => {\n  const solutionFn = (grid) => {\n    const sumRow = (row) => row.reduce((total, x) => total + x);\n    return grid.slice().sort((a, b) => {\n      const sumA = sumRow(a);\n      const sumB = sumRow(b);\n      return sumA > sumB ? 1 : -1;\n    });\n  };\n\n  let input = [\n    [11, 6, 20],\n    [1, 3, 9, 0, 1],\n    [2, 90],\n  ];\n\n  const output = [\n    [1, 3, 9, 0, 1],\n    [11, 6, 20],\n    [2, 90],\n  ];\n  expect(sortTheRows(input)).toEqual(output);\n\n  input = [[1]];\n  expect(sortTheRows(input)).toEqual(solutionFn(input));\n\n  input = [[1], [9, 9, 9, 9, 9, 9], [-1, -10], [-100, 90]];\n  expect(sortTheRows(input)).toEqual(solutionFn(input));\n\n  input = [[7, 6, 5, 4, 3, 1, 2], [1], [8, 9]];\n  expect(sortTheRows(input)).toEqual(solutionFn(input));\n\n  input = [[7, 6, 5, 4, 3, 1, 2], [1], [8, 9], [-100000]];\n  expect(sortTheRows(input)).toEqual(solutionFn(input));\n\n  input = [\n    [7, 6, 5, 4, 3, 1, 2],\n    [1],\n    [8, 9],\n    [32, 234, 234, 234, 234, 234, 234, 324, 324, 2342, 234, 23424, 234],\n    [-5, 2],\n    [-50000000000],\n  ];\n  expect(sortTheRows(input)).toEqual(solutionFn(input));\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Sort a matrix by the sum of each row\nconst sortTheRows = (grid: number[][]): number[][] => {\n  // Reduce a row to a sum:\n  const sumRow = (row: number[]) => row.reduce((total, x) => total + x);\n\n  // Sort the grid based on the row sums\n  const sortedMatrix = grid.slice().sort((a, b) => {\n    const sumA = sumRow(a);\n    const sumB = sumRow(b);\n    return sumA > sumB ? 1 : -1;\n  });\n\n  // Return the sorted grid\n  return sortedMatrix;\n};\n",
           "content": ""
         },
         {
