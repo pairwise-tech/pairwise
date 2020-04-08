@@ -2596,6 +2596,17 @@
           "content": "In this section we will present guided project explanations for the programming project challenges. These are meant to serve as an illustration of what a solution to these projects can look like. Ideally, you should try to view these after solving the project yourself. However, if you have struggled with the project and cannot complete it after multiple attempts you are welcome to view the guided project to find a way to solve it."
         },
         {
+          "id": "@pxmsKa7M",
+          "type": "media",
+          "title": "Build a Calculator Guided Project",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Here we will walk through a solution for the Build a Calculator project."
+        },
+        {
           "id": "CktrOyVg",
           "type": "media",
           "title": "Tic Tac Toe Guided Project",
@@ -2605,6 +2616,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Here we will walk through an example of how the Tic Tac Toe project could be built."
+        },
+        {
+          "id": "DVVxNTYmQ",
+          "type": "media",
+          "title": "Game Board Navigator Guided Project",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
         },
         {
           "id": "qPDY@y0fm",
