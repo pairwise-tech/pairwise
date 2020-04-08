@@ -1974,7 +1974,7 @@
         {
           "id": "Hvnu4UcaE",
           "type": "section",
-          "title": "Algorithms Practice",
+          "title": "Algorithms Basics",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
           "videoUrl": "",
@@ -2528,6 +2528,17 @@
           "starterCode": "// The tracker function should return all of the tracked values\n// everytime it is called.\ntype Tracker = (value: any) => any[];\n\n// The conditional function should test a value and return true\n// if the value should be tracked.\ntype ConditionalFunction = (x: any) => boolean;\n\n// To create a tracker provided a functional which determines\n// whether values should be remember or not.\ntype CreateTracker = (conditionToRemember: ConditionalFunction) => Tracker;\n\n// Your code here",
           "solutionCode": "// The tracker function should return all of the tracked values\n// everytime it is called.\ntype Tracker = (value: any) => any[];\n\n// The conditional function should test a value and return true\n// if the value should be tracked.\ntype ConditionalFunction = (x: any) => boolean;\n\n// To create a tracker provided a functional which determines\n// whether values should be remember or not.\ntype CreateTracker = (conditionToRemember: ConditionalFunction) => Tracker;\n\n// Return a tracking function which remembers values based on some condition.\nconst tracker = (conditionToRemember: ConditionalFunction) => {\n  const values: any[] = [];\n  return (x: any) => {\n    if (conditionToRemember(x)) {\n      values.push(x);\n    }\n\n    return values;\n  };\n};\n",
           "content": ""
+        },
+        {
+          "id": "ZVCwuWOjf",
+          "type": "section",
+          "title": "Algorithms Challenges",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The previous section of algorithms should be fairly easy to complete and is designed to get you very comfortable writing and solving all types of basic tasks using TypeScript. By now, you should be pretty comfortable writing simple TypeScript programs.\n\nNow, let's ramp things up to another level and start solving some more challenging questions\\!"
         },
         {
           "id": "9wRw1y5V",
