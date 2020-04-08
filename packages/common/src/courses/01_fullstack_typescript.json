@@ -1983,6 +1983,17 @@
           "content": ""
         },
         {
+          "id": "OtNV$ge0a",
+          "type": "typescript",
+          "title": "Getters and Setters",
+          "instructions": "Create a class `NameBadge` which tracks an internal property `name`. The `name` property should be `private` and can be set via a public `setName` method, and read via a public `getName` method\\. For a bonus, try writing an interface for your class to implement\\!",
+          "testCode": "test(\"`NameBadge` should be defined.\", () => {\n  expect(NameBadge).toBeDefined();\n});\n\ntest(\"`NameBadge` can be instantiated.\", () => {\n  expect(new NameBadge()).toBeDefined();\n});\n\ntest(\"`NameBadge` should have a `setName` method.\", () => {\n  expect(typeof new NameBadge().setName).toBe(\"function\");\n});\n\ntest(\"`NameBadge` should have a `getName` method.\", () => {\n  expect(typeof new NameBadge().getName).toBe(\"function\");\n});\n\ntest(\"`NameBadge` should have a private `name` property.\", () => {\n  expect(__user_code_string__.includes(\"private name\")).toBe(true);\n});\n\ntest(\"The `setName` and `getName` public methods can be used to read and write the `name` property of `NameBadge`.\", () => {\n  const x = new NameBadge();\n  let name = \"Sean\";\n  x.setName(name);\n  expect(x.name).toBe(name);\n  expect(x.getName()).toBe(name);\n\n  name = \"Sam\";\n  x.setName(name);\n  expect(x.name).toBe(name);\n  expect(x.getName()).toBe(name);\n\n  name = \"Sara\";\n  x.setName(name);\n  expect(x.name).toBe(name);\n  expect(x.getName()).toBe(name);\n\n  name = \"Ben\";\n  x.setName(name);\n  expect(x.name).toBe(name);\n  expect(x.getName()).toBe(name);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Interface definition\ninterface INameBadge {\n  getName: () => string;\n  setName: (name: string) => void;\n}\n\n// Class definition\nclass NameBadge implements INameBadge {\n  private name: string = \"\";\n\n  setName(name: string) {\n    this.name = name;\n  }\n\n  getName() {\n    return this.name;\n  }\n}",
+          "content": ""
+        },
+        {
           "id": "if2EAwsyp",
           "type": "section",
           "title": "Programming Styles",
