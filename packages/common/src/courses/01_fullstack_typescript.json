@@ -2478,11 +2478,11 @@
           "id": "6lgJamB8yr",
           "type": "typescript",
           "title": "Create a Set Data Structure",
-          "instructions": "A Set is a data structure which records the presence of values.",
+          "instructions": "A Set is a data structure which efficiently records whether an item exists or not. A set holds keys, not values. A set is a good way to store values which you need to later lookup and know simply if they have been seen before or not. You may be familiar with the built\\-in `Set` data structure which TypeScript has to offer, but in this challenge we will try to implement the behavior of a set using a class. It is often a helpful learning exercise to implement data structures or functions by hand, even if in a real programming environment you will use a built\\-in tool or library for the same purpose.\n\nCreate a class `CustomSet` which correctly implements the `SetClass` interface in the editor. Try to implement the set behavior without using an actual `Set` \\- there are other ways to do this\\!",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "interface SetClass<T extends string | number> {\n  add(item: T): void;\n  has(item: T): boolean;\n  remove(item: T): void;\n  getSize(): number;\n}\n\n// Your code here",
+          "solutionCode": "interface SetClass<T extends string | number> {\n  add(item: T): void;\n  has(item: T): boolean;\n  remove(item: T): void;\n  getSize(): number;\n}\n\n/**\n * We can use an array internally to track a series of values. This\n * is okay, but it does require us to iterate through the entire array\n * to determine if a value exists, or to remove a value.\n * \n * Another option would be to use an object, and just store a simple\n * placeholder value each key. Objects keys can be read and removed\n * in a single operation and would not require any iteration.\n */\nclass CustomSet<T extends string | number> implements SetClass<T> {\n  keys: T[] = [];\n\n  add(item: T) {\n    this.keys.push(item);\n  }\n\n  has(item: T) {\n    return !!this.keys.find((x) => x === item);\n  }\n\n  remove(item: T) {\n    this.keys.filter((x) => x === item);\n  }\n\n  getSize() {\n    return this.keys.length;\n  }\n}\n",
           "content": ""
         },
         {
