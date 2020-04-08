@@ -1,5 +1,6 @@
 import styled from "styled-components/macro";
-import { ControlledEditor, EditorDidMount } from "@monaco-editor/react";
+import { EditorDidMount } from "@monaco-editor/react";
+import { ControlledEditor, registerExternalLib } from "../monaco";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
@@ -16,6 +17,7 @@ import { CodeFormatMessageEvent, TEST_UTILS_GLOBALS } from "tools/test-utils";
 import { MonacoEditorThemes } from "@pairwise/common";
 import toaster from "tools/toast-utils";
 import { copyToClipboard } from "tools/utils";
+import { EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
 
 const debug = require("debug")("client:ChallengeTestEditor");
 
@@ -104,6 +106,12 @@ const ChallengeTestEditor = (props: Props) => {
 
     return () => unsubscribeCodeWorker(handleCodeFormat);
   }, [updateChallenge, challengeId]);
+  React.useEffect(() => {
+    registerExternalLib({
+      name: "pairwise-test-lib.d.ts",
+      source: EXPECTATION_LIB_TYPES,
+    });
+  }, []);
 
   return (
     <div

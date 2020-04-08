@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
-import { monaco } from "@monaco-editor/react";
+import { monaco, registerExternalLib } from "../monaco";
 import {
   assertUnreachable,
   Challenge,
@@ -911,9 +911,9 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     if (this.monacoWrapper) {
-      this.monacoWrapper.languages.typescript.typescriptDefaults.addExtraLib(
-        moduleDeclarations,
-      );
+      registerExternalLib({
+        source: moduleDeclarations,
+      });
     }
   };
 
