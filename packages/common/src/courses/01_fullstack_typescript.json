@@ -2005,6 +2005,17 @@
           "content": ""
         },
         {
+          "id": "c3TMHf9F2",
+          "type": "typescript",
+          "title": "Queue Class",
+          "instructions": "Data structures are often implemented using object oriented programming techniques. We have seen some common data structures in this programming module, like arrays and objects, but there are many more than just these which you will encounter over time, one of which we will create in this challenge\\!\n\nIn this challenge, create a `Queue` class which implements the basic functionality of a queue. Items can be \"enqueued\" and \"dequeued\". The first item into the queue should be the first one out\\! It's just like standing in a line for a movie.",
+          "testCode": "test(\"`Queue` should be defined.\", () => {\n  expect(Queue).toBeDefined();\n});\n\ntest(\"`Queue` should have a method called `enqueue`.\", () => {\n  expect(typeof new Queue().enqueue).toBe(\"function\");\n});\n\ntest(\"`Queue` should have a method called `dequeue`.\", () => {\n  expect(typeof new Queue().dequeue).toBe(\"function\");\n});\n\ntest(\"The `Queue` returns items using the `dequeue` method in the order they were added with the `enqueue` method.\", () => {\n  const q = new Queue();\n  q.enqueue(1);\n  q.enqueue(2);\n  q.enqueue(3);\n  expect(q.dequeue()).toBe(1);\n  expect(q.dequeue()).toBe(2);\n  expect(q.dequeue()).toBe(3);\n\n  q.enqueue(\"A\");\n  q.enqueue(\"B\");\n  q.enqueue(\"C\");\n  q.enqueue(\"X\");\n  q.enqueue(\"Y\");\n  q.enqueue(\"Z\");\n  expect(q.dequeue()).toBe(\"A\");\n  expect(q.dequeue()).toBe(\"B\");\n  expect(q.dequeue()).toBe(\"C\");\n  expect(q.dequeue()).toBe(\"X\");\n  expect(q.dequeue()).toBe(\"Y\");\n  expect(q.dequeue()).toBe(\"Z\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// A First In First Out \"FIFO\" queue class\nclass Queue {\n  private items: any[] = [];\n\n  public enqueue(item: any) {\n    this.items.push(item);\n  }\n\n  public dequeue() {\n    const items = this.items;\n    const item = items[0];\n    /**\n     * Note that this is not a very efficient solution\n     * since it has to copy the remainder of the items\n     * list every time an item is dequeued... What other\n     * ways could you design this?\n     */\n    this.items = items.slice(1);\n    return item;\n  }\n}\n",
+          "content": ""
+        },
+        {
           "id": "if2EAwsyp",
           "type": "section",
           "title": "Programming Styles",
