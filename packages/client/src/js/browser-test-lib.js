@@ -141,6 +141,14 @@ var inBox = function (box, message) {
 };
 var fail = function () { return expect(false).toBe(true); };
 var pass = function () { return expect(true).toBe(true); };
+var __id = function () {
+    return (Math.random()
+        .toString(36)
+        .substring(2) + Date.now().toString(36));
+};
+var __randomInRange = function (min, max) {
+    return Math.round(Math.random() * (max - min) + min);
+};
 var Expectation = (function () {
     function Expectation(value) {
         this.value = value;

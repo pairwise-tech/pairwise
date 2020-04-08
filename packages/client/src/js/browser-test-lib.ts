@@ -258,6 +258,20 @@ const fail = () => expect(false).toBe(true);
 // Helper to quickly pass a test.
 const pass = () => expect(true).toBe(true);
 
+// Generate a random string id
+const __id = () => {
+  return (
+    Math.random()
+      .toString(36)
+      .substring(2) + Date.now().toString(36)
+  );
+};
+
+// Generate a random number in a min...max range
+const __randomInRange = (min, max) => {
+  return Math.round(Math.random() * (max - min) + min);
+};
+
 class Expectation {
   value: any;
 

@@ -136,10 +136,7 @@ export const TestResultRow = ({
             <Icon icon="tick-circle" intent="primary" />
           )}
         </MinimalButton>
-        <div>
-          <b style={{ color: C.TEXT_TITLE }}>Test: </b>
-          <TestMessageHighlighter source={message} />
-        </div>
+        <TestMessageHighlighter source={message} />
         <div
           style={{
             display: "flex",
@@ -180,8 +177,6 @@ const HighlightedMarkdown = (props: ReactMarkdownProps) => {
 };
 
 const TestMessageHighlighter = styled(HighlightedMarkdown)`
-  display: inline-block;
-
   p {
     margin: 0;
   }
@@ -252,6 +247,7 @@ export const ContentDiv = styled.div`
   margin-top: 8px;
   font-size: 15px;
   font-weight: 200px;
+  padding-right: 8px;
   color: ${C.TEXT_CONTENT};
 `;
 

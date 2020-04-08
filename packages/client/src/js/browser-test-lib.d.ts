@@ -29,6 +29,8 @@ declare const parseLogBox: (box: string[]) => string[];
 declare const inBox: (box: string[], message: string) => boolean;
 declare const fail: () => void;
 declare const pass: () => void;
+declare const __id: () => string;
+declare const __randomInRange: (min: any, max: any) => number;
 declare class Expectation {
     value: any;
     not: Expectation;
