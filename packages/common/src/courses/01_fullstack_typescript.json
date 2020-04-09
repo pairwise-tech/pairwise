@@ -2053,9 +2053,20 @@
           "type": "typescript",
           "title": "A Generic Adding Function",
           "instructions": "Write a function called `createdAdder` that takes a number `n` and returns _a new function_ that will add `n` to any number passed. For example:\n\n```typescript\nconst add5 = createAdder(5);\nconsole.log(add5(2)); // 7\nconsole.log(add5(10)); // 15\nconsole.log(add5(71)); // 76\n\nconst increment = createAdder(1);\nconsole.log(increment(2)); // 3\nconsole.log(increment(10)); // 11\nconsole.log(increment(71)); // 72\n\n```\n",
+          "testCode": "// Write your tests here:\nconst testValues = [1, 3, 5, 7, 2, 28, 68, 256];\n\ntest(\"`createAdder` should return a function\", () => {\n  expect(typeof createAdder(0)).toBe('function');\n});\n\ntestValues.forEach((n) => {\n  test(`\\`add5(${n})\\` should be \\`${n + 5}\\``, () => {\n    expect(add5(n)).toBe(n + 5);\n  });\n});\ntestValues.forEach((n) => {\n  test(`\\`increment(${n})\\` should be \\`${n + 1}\\``, () => {\n    expect(increment(n)).toBe(n + 1);\n  });\n});\n",
+          "videoUrl": "",
+          "starterCode": "type Adder = (x: number) => number;\n\nconst createAdder = (n: number): Adder => {\n  // Your code here\n};\n\nconst add5 = createAdder(5);\nconst increment = createAdder(1);\n\n// You can uncomment these log statements if you want to see some output\n\n// console.log(add5(2)); // 7\n// console.log(add5(10)); // 15\n// console.log(add5(71)); // 76\n\n// console.log(increment(2)); // 3\n// console.log(increment(10)); // 11\n// console.log(increment(71)); // 72\n",
+          "solutionCode": "type Adder = (x: number) => number;\n\nconst createAdder = (n: number): Adder => {\n  return (x: number) => n + x;\n};\n\nconst add5 = createAdder(5);\nconsole.log(add5(2)); // 7\nconsole.log(add5(10)); // 15\nconsole.log(add5(71)); // 76\n\nconst increment = createAdder(1);\nconsole.log(increment(2)); // 3\nconsole.log(increment(10)); // 11\nconsole.log(increment(71)); // 72",
+          "content": ""
+        },
+        {
+          "id": "3aH7QTZ3v",
+          "type": "typescript",
+          "title": "More higher-order functions",
+          "instructions": "Write the following two functions:\n\n* `prepend`: Creates new \"prepender\" functions that will prepend a string onto another string\n* `append`: Very similar to prepend but it _appends_ to the end of a string. \n\n\nExamples:\n\n```\nconst formatDollars = prepend(\"$\");\nconst formatPrecent = append(\"%\");\nformatDollars(\"12\"); // => \"$12\"\nformatPercent(\"12\"); // => \"12%\"\n\n```\n",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
-          "starterCode": "type Adder = (x: number) => number;\n\nconst createAdder = (n: number): Adder => {\n  // Your code here\n};\n\nconst add5 = createAdder(5);\nconsole.log(add5(2)); // 7\nconsole.log(add5(10)); // 15\nconsole.log(add5(71)); // 76\n\nconst increment = createAdder(1);\nconsole.log(increment(2)); // 3\nconsole.log(increment(10)); // 11\nconsole.log(increment(71)); // 72",
+          "starterCode": "",
           "solutionCode": "",
           "content": ""
         },
