@@ -609,10 +609,10 @@ class Workspace extends React.Component<IProps, IState> {
     const MONACO_CONTAINER = (
       <div style={{ height: "100%", position: "relative" }}>
         <GreatSuccess
-          isOpen={allTestsPassing && !hideSuccessModal && !isEditMode}
+          challenge={challenge}
           onClose={handleCloseSuccessModal}
           onClickOutside={handleCloseSuccessModal}
-          challenge={challenge}
+          isOpen={allTestsPassing && !hideSuccessModal && !isEditMode}
         />
         <TabbedInnerNav show={isEditMode}>
           <Tab
@@ -636,13 +636,10 @@ class Workspace extends React.Component<IProps, IState> {
           )}
           <Tooltip content="Shortcut: opt+enter" position="left">
             <RunButton
+              icon="play"
               id="pw-run-code"
               loading={this.state.testResultsLoading}
-              icon="play"
-              onClick={() => {
-                this.setState({ hideSuccessModal: false });
-                this.runChallengeTests();
-              }}
+              onClick={this.handleUserTriggeredTestRun}
               aria-label="run the current editor code"
             >
               Run
@@ -1095,6 +1092,19 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
+  handleUserTriggeredTestRun = () => {
+    /**
+     * The tests run automatically in other scenarios, but this method
+     * handles the "user triggered" test executions and other events
+     * which should accompany the user triggered test runs, such as
+     * showing the success modal.
+     *     * Currently, the user can only run the tests using opt+enter
+     * key combination or by clicking the Run button.
+     */
+    this.setState({ hideSuccessModal: false });
+    this.runChallengeTests();
+  };
+
   // NOTE We manage the false loading state where test results are received. The
   // iframeRenderPreview method only puts the tests into the DOM where they will
   // automatically run, but if we were to use that promise to set
@@ -1197,11 +1207,13 @@ class Workspace extends React.Component<IProps, IState> {
   handleKeyPress = (event: KeyboardEvent) => {
     /**
      * I like Cmd+Enter but this produces a new line in the editor...so I
-     * just used Opt+Enter for now. Can be debugged later.
+     * just used Opt+Enter for now. We can try to fix this later, anyway
+     * it will need to be revisited if we want to fully support
+     * Windows shortcut keys.
      */
     const OptionAndEnterKey = event.altKey && event.key === "Enter";
     if (OptionAndEnterKey) {
-      this.runChallengeTests();
+      this.handleUserTriggeredTestRun();
     }
   };
 
