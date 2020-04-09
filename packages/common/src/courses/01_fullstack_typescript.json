@@ -2016,6 +2016,83 @@
           "content": ""
         },
         {
+          "id": "jxRxi1j5A",
+          "type": "section",
+          "title": "Functional Programming",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Functions are pretty flexible. So flexible in fact that you can build _whole applications_ with functions alone. If you boil JavaScript down, it's actually almost entirely objects and functions \\(see the Appendix for more on this if you're curious\\).\n\nThe aim of this section is to explain how code like this works:\n\n```typescript\n[\"a\", \"b\", \"c\"]\n  .map(capitalize)\n  .map(surround(`'`))\n  .map(append(\" is a letter\")); // [\"'A' is a letter\", \"'B' is a letter\", \"'C' is a letter\"]\n\n```\n# Functions as data\n\nAlso known as first\\-class functions, if you like jargon.\n\nFunctions are like any other data type in that they can be passed around and used wherever syntactically valid. The jargon here is \"first\\-class\" meaning that functions are just like any other value in terms of where they can be used.\n\nIn other words, ++functions can be used just like data++.\n\n> **Why do first\\-class functions matter**?\n> First class functions allow you a huge degree of flexibility in your programs. Having first\\-class functions is one of the major defining characteristics of JavaScript and thus of TypeScript too. **Not all** programming languages allow you to use functions in this way.\n\nLook at the first code below. You will see that we are passing a function in to the `map` array method. Since functions are like any other value we can grab it right out of there and assign it to another variable. The following two code snippets are equivalent.\n\n```typescript\n[\"a\", \"b\", \"c\"].map((letter: string) => letter.toUpperCase()); // => [\"A\", \"B\", \"C\"]\n\n```\n\n```typescript\nconst capitalize = (letter: string) => letter.toUpperCase();\n\n[\"a\", \"b\", \"c\"].map(capitalize); // => [\"A\", \"B\", \"C\"]\n\n```\n\nJust like any other value we can also put functions into arrays:\n\n```typescript\nconst capitalize = (letter: string) => letter.toUpperCase();\nconst surroundQuote = (s: string) => `'${s}'`;\nconst appendLetter = (s: string) => `${s} is a letter`;\n\n// Create an array of transformations (functions)\nconst transformations = [capitalize, surroundQuote, appendLetter];\n\nconst result = [\"a\", \"b\", \"c\"].map((letter: string) => {\n  transformations.forEach((transform: Function) => {\n    letter = transform(letter);\n  });\n  return letter;\n});\n\nconsole.log(result);\n// [\"'A' is a letter\", \"'B' is a letter\", \"'C' is a letter\"];\n\n```\n\nFinally, just like any other value we can put functions onto objects. Here's an example creating some helper functions that prepend the type of log operation to the message:\n\n```typescript\nconst Log = {\n  info: (message: string) => console.info(\"[INFO]\" + message),\n  warn: (message: string) => console.info(\"[WARN]\" + message),\n};\nLog.info(\"Log helper created\"); // \"[INFO] Log helper created\"\nLog.warn(\"This helper is not so useful...\"); // \"[WARN] This helper is not so useful...\"\n\n```\n# Simple, but not easy¹\n\nThe idea that functions can be used anywhere just like other values is simple, but it's not easy. Here's what we mean:\n\n* It's **simple** because you don't have to worry about where functions can be used. If you can use any kind of value you can use a function. This means less cognitive overhead worrying about what type can be used where.\n* It's **not easy** because it's unintuitive. We're used to thinking of \n   * **NOTE:** It's unintuitive for _most people_. It is true that some people understand these concepts very quickly. If you are one of those people that's great\\! However, most programmers including this author struggled with the idea of first\\-class functions before it finally clicked.\n\n# Higher\\-order Functions\n\nAs a consequence of functions being first\\-class, they can be passed in to other functions and passed back out too. When a function deals with other functions it's called a higher order function.\n\n> **Jargon Tip**: Now that you know of high\\-order functions you can forget the term until someone brings it up in a programming interview or a pedantry contest. The _idea_ of higher order functions is extremely useful—the jargon less so.\n\n## Functions can take other functions as arguments\n\nYou've already seen this but it may not have been apparent what was going on. Array methods often take functions:\n\n* `map`\n* `filter`\n* `reduce`\n\n\nThese are all examples of functions that take other functions as arguments. As an example:\n\n```typescript\nconst double = (n: number) => n * 2;\n[2,3,4].map(double); // => [4, 6, 8]\n\n```\n\n## Functions can return functions\n\nThis is where things get a bit more interesting and potentially more confusing. Let's just jump right in with an example. Above we had a `double` function that will multiply any number by `2`. What if we wanted some number other than `2`? We can write other functions for other numbers, but we can also write a function that will create other functions.\n\n```typescript\nconst multiplyBy = (n: number) => {\n  // Define our inner function. n is currently available within scope\n  // so we can make use of it in our inner function \n  const multiplyByN = (x: number) => {\n    return n * x;\n  };\n  \n  // Return the new function\n  return multiplyByN;\n};\n\n```\n\nNow we can use this `multiplyBy` function to define new functions for us. Rewriting the doubling example above:\n\n```\nconst double = multiplyBy(2);\n[2,3,4].map(double); // => [4, 6, 8]\n\n```\n\nIf we're not going to reuse the `double` function we can make this even less verbose:\n\n```\n[2,3,4].map(multiplyBy(2)); // => [4, 6, 8]\n\n```\n\n**NOTE:** Another way you will often see these functions written is in this more concise way. Here's our rewritten `multiplyBy` function\\.\n\n```\nconst multiplyBy = (n: number) => (x: number) => n * x;\n\n```\n\nRevisiting our string transformation functions from above, we can rewrite them to make them more reusable. Here was the original code. `capitalize` is not going to change, but the other two can be rewritten to allow surrounding with any string and appending any string.\n\n```\n// Original code\nconst capitalize = (letter: string) => letter.toUpperCase();\nconst surroundQuote = (s: string) => `'${s}'`;\nconst appendLetter = (s: string) => `${s} is a letter`;\nconst transformations = [capitalize, surroundQuote, appendLetter];\n\n// New code. capitalize remains the same\nconst surround = (s: string) => (x: string) => s + x + s;\nconst append = (s: string) => (x: string) => x + s;\nconst transformations = [capitalize, surround(`'`), append(\" is a letter\")];\n\n```\n# Why?\n\nThis may all seem a bit crazy and even _less readable_ than before, but there's a reason many programmers use this style.\n\n## Declarative Code\n\nDeclarative code is more concerned with the \"what\" than the \"how\" which can often make it very easy to read, at least once you're familiar with this programming style. It's very easy to get caught up in the nitty gritty details while programming. Declarative programming is all about creating abstractions that make it easier to not worry about the \"how\" so you can focus on \"what\" you want instead.\n\nLet's revisit the example from above. In English we might say:\n\n1. Capitalize each letter\n1. Surround each letter with a single quote\n1. Append \" is a letter\" to the end of the string \n\n\nNow let's look at some code again:\n\n```typescript\n[\"a\", \"b\", \"c\"]\n  .map((x) => x.toUpperCase())\n  .map((x) => `'${x}'`)\n  .map((x) => x + \" is a letter\"); // [\"'A' is a letter\", \"'B' is a letter\", \"'C' is a letter\"]\n\n```\n\nThere's certainly nothing wrong with this code. It's concise and direct. However, a more declarative approach might make it more clear what each step is doing:\n\n```typescript\n[\"a\", \"b\", \"c\"]\n  .map(capitalize)\n  .map(surround(`'`))\n  .map(append(\" is a letter\")); // [\"'A' is a letter\", \"'B' is a letter\", \"'C' is a letter\"]\n\n```\n\nUltimately some of this comes down to personal choice. How you choose to write your own code is highly subjective and you should pursue whatever you enjoy at the time while still being open to new styles.\n\nRegardless of how you enjoy programming you will eventually read code in many different styles so it will help to be familiar with many.\n\n---\n\n# Appendix\n\n\n## Simple vs. Easy\n\nI've borrowed this particular distinction from the seminal talk [Simple Made Easy](https://www.infoq.com/presentations/Simple-Made-Easy/) by Rich Hickey, the creator of the [Clojure](https://clojure.org/) programming language. Clojure, unsurprisingly, is a functional programming language that incorporates this idea of striving for code that is simple rather than easy.\n\nThe idea is that there's a strong distinction between what is simple and what is quick or within reach.\n\n* Simple: Lacking exceptions. Not interconnected or dependent on other conditions.\n   * Being able to use functions as data is simple because you can use other values as data. You don't have to worry about whether or not something is a function to add it to an array for example.\n* Easy: Within reach, nearby. Relating to things we already know.\n   * Using functions as data is not easy because we lack mental context for it. Using functions as a set of steps to complete **is easy** because we have context for this. \n\n\n### Sometimes you can have both\n\nSimple and easy are not mutually exclusive, but they are often in opposition in the world of programming.\n\n## Classes before the class keyword\n\nLet's create a simple `Person` class\\.\n\n```\nclass Person {\n  constructor(props) {\n    this.name = props.name;\n    this.role = props.role;\n  }\n  \n  getDescription = () => {\n    return `${this.name} works in ${this.role}`;\n  }\n}\n\nconst jim = new Person({ name: 'Jim', role: 'Sales' });\n\nconsole.log(jim.getDescription()); // Jim works in Sales\n\n```\n\nHowever, did you know that classes are actually functions. In the past classes were only classes because of the `new` keyword which could be applied to functions. Here's how you could create a `Person` class without using the `class` keyword\\.\n\n```\nfunction Person(props) {\n  this.name = props.name;\n  this.role = props.role;\n  \n  this.getDescription = () => {\n    return `${this.name} works in ${this.role}`;\n  };\n}\n\nconst jim = new Person({ name: 'Jim', role: 'Sales' });\n\nconsole.log(jim.getDescription()); // Jim works in Sales\n\n```\n\nThese two examples will give you the same result.\n\n> **NOTE:** Although you can create classes this way you absolutely should use the `class` keyword when creating classes. It makes for much clearer code, which is part of why the `class` keyword was created and added to the language.\n"
+        },
+        {
+          "id": "Jo7lG3TTa",
+          "type": "typescript",
+          "title": "Functions as Values",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "U7AhhCIyGT",
+          "type": "typescript",
+          "title": "Higher-Order Functions",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "JYcktwpDa1",
+          "type": "typescript",
+          "title": "A Generic Adding Function",
+          "instructions": "Write a function called `createdAdder` that takes a number `n` and returns _a new function_ that will add `n` to any number passed. For example:\n\n```typescript\nconst add5 = createAdder(5);\nconsole.log(add5(2)); // 7\nconsole.log(add5(10)); // 15\nconsole.log(add5(71)); // 76\n\nconst increment = createAdder(1);\nconsole.log(increment(2)); // 3\nconsole.log(increment(10)); // 11\nconsole.log(increment(71)); // 72\n\n```\n",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "type Adder = (x: number) => number;\n\nconst createAdder = (n: number): Adder => {\n  // Your code here\n};\n\nconst add5 = createAdder(5);\nconsole.log(add5(2)); // 7\nconsole.log(add5(10)); // 15\nconsole.log(add5(71)); // 76\n\nconst increment = createAdder(1);\nconsole.log(increment(2)); // 3\nconsole.log(increment(10)); // 11\nconsole.log(increment(71)); // 72",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "f5Z5fSfdl8",
+          "type": "typescript",
+          "title": "Composition",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "q3Yf2G1FV",
+          "type": "typescript",
+          "title": "Partial Application",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "feDRWPcTsc",
+          "type": "typescript",
+          "title": "Passing Functions Around Point-free Style",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "uyjd$DG@$",
           "type": "section",
           "title": "Classes",
