@@ -1059,6 +1059,11 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleReceiveTestResults = () => {
+    // Don't do anything if they are viewing the solution code.
+    if (this.props.revealSolutionCode) {
+      return;
+    }
+
     const { correct } = this.getTestPassedStatus();
     /**
      * This is called with the results of the test and can be used to trigger
