@@ -112,8 +112,8 @@ class NavigationOverlay extends React.Component<IProps> {
       escape: this.handleClose,
       "cmd+shift+k": this.navigateToSandBox,
       "cmd+j": this.handleToggleNavigationMap,
-      "cmd+,": this.navigateLeft,
-      "cmd+.": this.navigateRight,
+      "opt+,": this.navigateLeft,
+      "opt+.": this.navigateRight,
       "cmd+;": this.props.toggleEditorSize,
     };
 

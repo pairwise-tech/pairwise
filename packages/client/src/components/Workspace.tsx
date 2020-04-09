@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
-import { monaco, registerExternalLib } from "../monaco";
+import { monaco, registerExternalLib, MonacoModel } from "../monaco";
 import {
   assertUnreachable,
   Challenge,
@@ -134,6 +134,10 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
   },
 ];
 
+type MODEL_ID = string;
+type MODEL_TYPE = "workspace-editor" | "jsx-types";
+type ModelIdMap = Map<MODEL_TYPE, MODEL_ID>;
+
 interface IState {
   code: string;
   testResultsLoading: boolean;
@@ -141,6 +145,7 @@ interface IState {
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
   hideSuccessModal: boolean;
+  workspaceEditorModelIdMap: ModelIdMap;
 }
 
 /** ===========================================================================
@@ -187,7 +192,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
-    // NOTE: Except for codepress edit mode this is the only touchpoint for
+    // NOTE: Except for codepress edit mode this is the only touch point for
     // updating the code in the editor as of this commit. This means that to
     // update editor code the whole editor has to be re-initialized, which
     // in-turn means that the parent component has to ensure it's fully
@@ -209,6 +214,9 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal: true,
 
       testResultsLoading: false,
+
+      // A map of the Monaco models the Workspace has created.
+      workspaceEditorModelIdMap: new Map(),
     };
   }
 
@@ -407,15 +415,14 @@ class Workspace extends React.Component<IProps, IState> {
       };
     });
 
-    const models = this.monacoWrapper.editor.getModels();
-    const model = models[0];
+    const model = this.findModelByType("workspace-editor");
 
     // prevent exception when moving through challenges quickly
     if (model) {
-      model.decorations = model.deltaDecorations(
-        model.decorations || [],
-        decorations,
-      );
+      // @ts-ignore I think decorations exist.
+      const existing = model.decorations;
+      // @ts-ignore I think decorations exist.
+      model.decorations = model.deltaDecorations(existing || [], decorations);
     }
   };
 
@@ -489,27 +496,27 @@ class Workspace extends React.Component<IProps, IState> {
       ...this.props.editorOptions,
     };
 
-    let model;
+    let workspaceEditorModel;
 
     /* Markup challenges: */
     if (this.props.challenge.type === "markup") {
-      model = mn.editor.createModel(this.state.code, language);
+      workspaceEditorModel = mn.editor.createModel(this.state.code, language);
     } else {
       /* TypeScript and React challenges: */
-      model = mn.editor.createModel(
+      workspaceEditorModel = mn.editor.createModel(
         this.state.code,
         language,
         new mn.Uri.parse("file:///main.tsx"),
       );
     }
 
-    model.onDidChangeContent(this.handleEditorContentChange);
+    workspaceEditorModel.onDidChangeContent(this.handleEditorContentChange);
 
     this.editorInstance = mn.editor.create(
       document.getElementById(PAIRWISE_CODE_EDITOR_ID),
       {
         ...options,
-        model,
+        model: workspaceEditorModel,
       },
     );
 
@@ -517,13 +524,20 @@ class Workspace extends React.Component<IProps, IState> {
      * This is a separate model which provides JSX type information. See
      * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
      */
-    mn.editor.createModel(
+    const jsxTypesModel = mn.editor.createModel(
       types,
       "typescript",
       mn.Uri.parse("file:///index.d.ts"),
     );
 
     this.setMonacoEditorTheme(this.props.userSettings.theme);
+
+    // Record the model ids for the two created models to track them.
+    const workspaceEditorModelIdMap: ModelIdMap = new Map();
+    workspaceEditorModelIdMap.set("workspace-editor", workspaceEditorModel.id);
+    workspaceEditorModelIdMap.set("jsx-types", jsxTypesModel.id);
+
+    this.setState({ workspaceEditorModelIdMap });
 
     debug("[initializeMonaco] Monaco editor initialized.");
   };
@@ -550,7 +564,7 @@ class Workspace extends React.Component<IProps, IState> {
    * Switching tabs in the main code area, so that we can edit the starter code
    * and solution code of a challenge.
    *
-   * NOTE: When switching to the solution code default to start code
+   * NOTE: When switching to the solution code default to the starter code.
    */
   handleEditorTabClick = async (tab: ADMIN_EDITOR_TAB) => {
     this.setState(
@@ -601,6 +615,11 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
+    const IS_GREAT_SUCCESS_OPEN =
+      allTestsPassing &&
+      !hideSuccessModal &&
+      !isEditMode &&
+      !revealSolutionCode;
 
     const handleCloseSuccessModal = () => {
       this.setState({ hideSuccessModal: true });
@@ -609,10 +628,10 @@ class Workspace extends React.Component<IProps, IState> {
     const MONACO_CONTAINER = (
       <div style={{ height: "100%", position: "relative" }}>
         <GreatSuccess
-          isOpen={allTestsPassing && !hideSuccessModal && !isEditMode}
+          challenge={challenge}
+          isOpen={IS_GREAT_SUCCESS_OPEN}
           onClose={handleCloseSuccessModal}
           onClickOutside={handleCloseSuccessModal}
-          challenge={challenge}
         />
         <TabbedInnerNav show={isEditMode}>
           <Tab
@@ -636,13 +655,10 @@ class Workspace extends React.Component<IProps, IState> {
           )}
           <Tooltip content="Shortcut: opt+enter" position="left">
             <RunButton
+              icon="play"
               id="pw-run-code"
               loading={this.state.testResultsLoading}
-              icon="play"
-              onClick={() => {
-                this.setState({ hideSuccessModal: false });
-                this.runChallengeTests();
-              }}
+              onClick={this.handleUserTriggeredTestRun}
               aria-label="run the current editor code"
             >
               Run
@@ -882,9 +898,10 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   setMonacoEditorValue = () => {
-    const models = this.monacoWrapper.editor.getModels();
-    const model = models[0];
-    model.setValue(this.state.code);
+    const model = this.findModelByType("workspace-editor");
+    if (model) {
+      model.setValue(this.state.code);
+    }
   };
 
   setMonacoEditorTheme = (theme: string) => {
@@ -925,8 +942,12 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleEditorContentChange = (_: any) => {
-    const models = this.monacoWrapper.editor.getModels();
-    const model = models[0];
+    const model = this.findModelByType("workspace-editor");
+    if (!model) {
+      console.warn("No model found when editor content changed!");
+      return;
+    }
+
     const code = model.getValue();
 
     /**
@@ -1095,6 +1116,20 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
+  /**
+   * The tests run automatically in other scenarios, but this method
+   * handles the "user triggered" test executions and other events
+   * which should accompany the user triggered test runs, such as
+   * showing the success modal.
+   *
+   * Currently, the user can only run the tests using opt+enter
+   * key combination or by clicking the Run button.
+   */
+  handleUserTriggeredTestRun = () => {
+    this.setState({ hideSuccessModal: false });
+    this.runChallengeTests();
+  };
+
   // NOTE We manage the false loading state where test results are received. The
   // iframeRenderPreview method only puts the tests into the DOM where they will
   // automatically run, but if we were to use that promise to set
@@ -1197,11 +1232,13 @@ class Workspace extends React.Component<IProps, IState> {
   handleKeyPress = (event: KeyboardEvent) => {
     /**
      * I like Cmd+Enter but this produces a new line in the editor...so I
-     * just used Opt+Enter for now. Can be debugged later.
+     * just used Opt+Enter for now. We can try to fix this later, anyway
+     * it will need to be revisited if we want to fully support
+     * Windows shortcut keys.
      */
     const OptionAndEnterKey = event.altKey && event.key === "Enter";
     if (OptionAndEnterKey) {
-      this.runChallengeTests();
+      this.handleUserTriggeredTestRun();
     }
   };
 
@@ -1216,13 +1253,25 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   private readonly disposeModels = () => {
-    /* ??? */
+    const { workspaceEditorModelIdMap } = this.state;
+    const workspaceModelIds = new Set(workspaceEditorModelIdMap.values());
+    const remainingModelIds = new Map(workspaceEditorModelIdMap);
+
     if (this.monacoWrapper) {
       const models = this.monacoWrapper.editor.getModels();
       for (const model of models) {
-        model.dispose();
+        if (workspaceModelIds.has(model.id)) {
+          model.dispose();
+          remainingModelIds.delete(model.id);
+        }
       }
     }
+
+    /**
+     * I'm not sure if it matters that we update the tracked model
+     * ids and remove the removed ones... but anyway it happens.
+     */
+    this.setState({ workspaceEditorModelIdMap: remainingModelIds });
   };
 
   /**
@@ -1231,6 +1280,23 @@ class Workspace extends React.Component<IProps, IState> {
   private readonly cleanupEditor = () => {
     this.disposeModels();
     this.editorInstance = null;
+  };
+
+  private readonly findModelByType = (
+    type: MODEL_TYPE,
+  ): Nullable<MonacoModel> => {
+    const { workspaceEditorModelIdMap } = this.state;
+    const modelId = workspaceEditorModelIdMap.get(type);
+
+    if (this.monacoWrapper) {
+      const models = this.monacoWrapper.editor.getModels();
+      const model = models.find((m: MonacoModel) => m.id === modelId);
+      if (model) {
+        return model;
+      }
+    }
+
+    return null;
   };
 
   /**
