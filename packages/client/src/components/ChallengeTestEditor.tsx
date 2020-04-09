@@ -43,6 +43,7 @@ const ChallengeTestEditor = (props: Props) => {
   } = props;
   const valueGetter = React.useRef<() => string>(() => "");
   const [isReady, setIsReady] = React.useState(false);
+
   const getEditorValue = () => {
     if (!isReady) {
       console.warn("getEditorValue called before editor was ready");
@@ -50,10 +51,12 @@ const ChallengeTestEditor = (props: Props) => {
 
     return valueGetter.current();
   };
-  const handleEditorReady: EditorDidMount = getValue => {
+
+  const handleEditorReady: EditorDidMount = (getValue, editor) => {
     valueGetter.current = getValue;
     setIsReady(true);
   };
+
   const handleUpdate = () => {
     if (!challengeId) {
       console.warn("[ERROR] No challenge ID provided");
@@ -72,7 +75,9 @@ const ChallengeTestEditor = (props: Props) => {
       });
     }
   };
+
   const updateHandler = React.useRef(debounce(200, handleUpdate));
+
   const handleFormatCode = () => {
     if (!challengeId) {
       console.warn("[ERROR] No challenge ID provided");
@@ -84,6 +89,7 @@ const ChallengeTestEditor = (props: Props) => {
       channel: CODE_FORMAT_CHANNEL,
     });
   };
+
   React.useEffect(() => {
     const handleCodeFormat = (e: CodeFormatMessageEvent) => {
       if (!challengeId) {
@@ -106,6 +112,7 @@ const ChallengeTestEditor = (props: Props) => {
 
     return () => unsubscribeCodeWorker(handleCodeFormat);
   }, [updateChallenge, challengeId]);
+
   React.useEffect(() => {
     registerExternalLib({
       name: "pairwise-test-lib.d.ts",

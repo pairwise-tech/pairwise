@@ -468,6 +468,8 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   }))
   .handleAction(actions.setChallengeId, (state, action) => ({
     ...state,
+    adminTestTab: "testResults",
+    adminEditorTab: "starterCode",
     loadingCurrentBlob: true,
     displayNavigationMap: false,
     revealWorkspaceSolution: false,
