@@ -1092,15 +1092,16 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
+  /**
+   * The tests run automatically in other scenarios, but this method
+   * handles the "user triggered" test executions and other events
+   * which should accompany the user triggered test runs, such as
+   * showing the success modal.
+   *
+   * Currently, the user can only run the tests using opt+enter
+   * key combination or by clicking the Run button.
+   */
   handleUserTriggeredTestRun = () => {
-    /**
-     * The tests run automatically in other scenarios, but this method
-     * handles the "user triggered" test executions and other events
-     * which should accompany the user triggered test runs, such as
-     * showing the success modal.
-     *     * Currently, the user can only run the tests using opt+enter
-     * key combination or by clicking the Run button.
-     */
     this.setState({ hideSuccessModal: false });
     this.runChallengeTests();
   };
