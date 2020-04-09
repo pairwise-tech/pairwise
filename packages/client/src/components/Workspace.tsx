@@ -615,6 +615,11 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
+    const IS_GREAT_SUCCESS_OPEN =
+      allTestsPassing &&
+      !hideSuccessModal &&
+      !isEditMode &&
+      !revealSolutionCode;
 
     const handleCloseSuccessModal = () => {
       this.setState({ hideSuccessModal: true });
@@ -624,9 +629,9 @@ class Workspace extends React.Component<IProps, IState> {
       <div style={{ height: "100%", position: "relative" }}>
         <GreatSuccess
           challenge={challenge}
+          isOpen={IS_GREAT_SUCCESS_OPEN}
           onClose={handleCloseSuccessModal}
           onClickOutside={handleCloseSuccessModal}
-          isOpen={allTestsPassing && !hideSuccessModal && !isEditMode}
         />
         <TabbedInnerNav show={isEditMode}>
           <Tab
@@ -1059,11 +1064,6 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleReceiveTestResults = () => {
-    // Don't do anything if they are viewing the solution code.
-    if (this.props.revealSolutionCode) {
-      return;
-    }
-
     const { correct } = this.getTestPassedStatus();
     /**
      * This is called with the results of the test and can be used to trigger
@@ -1267,6 +1267,10 @@ class Workspace extends React.Component<IProps, IState> {
       }
     }
 
+    /**
+     * I'm not sure if it matters that we update the tracked model
+     * ids and remove the removed ones... but anyway it happens.
+     */
     this.setState({ workspaceEditorModelIdMap: remainingModelIds });
   };
 
