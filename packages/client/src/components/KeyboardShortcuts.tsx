@@ -24,8 +24,8 @@ type ShortcutKeyHandler = (e: KeyboardEvent) => any;
 const SHORTCUT_KEYS = {
   "cmd+shift+k": "Navigate to Sandbox",
   "cmd+j": "Toggle Navigation Map",
-  "opt+,": "Navigate to Previous Challenge",
-  "opt+.": "Navigate to Next Challenge",
+  "alt+,": "Navigate to Previous Challenge",
+  "alt+.": "Navigate to Next Challenge",
   "cmd+;": "Toggle Full Screen Editor",
   "cmd+p": "Focus Search Bar",
 };

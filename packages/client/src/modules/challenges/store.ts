@@ -43,6 +43,7 @@ interface AccordionViewState {
 export interface State {
   workspaceLoading: boolean;
   isEditMode: boolean;
+  editModeAlternativeView: boolean;
   displayNavigationMap: boolean;
   courses: Nullable<CourseList>;
   courseSkeletons: Nullable<CourseSkeletonList>;
@@ -65,6 +66,7 @@ const initialState: State = {
   courses: null,
   courseSkeletons: null,
   isEditMode: false,
+  editModeAlternativeView: false,
   workspaceLoading: true,
   currentModuleId: null,
   currentCourseId: null,
@@ -506,6 +508,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.setAdminEditorTab, (state, action) => ({
     ...state,
     adminEditorTab: action.payload,
+  }))
+  .handleAction(actions.toggleEditModeAlternativeView, (state, action) => ({
+    ...state,
+    editModeAlternativeView: !state.editModeAlternativeView,
   }))
   .handleAction(
     actions.fetchCurrentActiveCourseSuccess,
