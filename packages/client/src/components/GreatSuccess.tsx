@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Button, Icon, Classes } from "@blueprintjs/core";
 import styled from "styled-components";
 import { CSSTransition } from "react-transition-group";
@@ -10,6 +9,7 @@ import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
 import Modules, { ReduxStoreState } from "modules/root";
 import { NextChallengeButton } from "./ChallengeControls";
 import { connect } from "react-redux";
+import KeyboardShortcuts from "./KeyboardShortcuts";
 
 interface ConfettiModalProps {
   isOpen: boolean;
@@ -169,14 +169,16 @@ interface GreatSuccessProps extends ConfettiModalProps {
   onClose: () => any;
 }
 
-type Props = ReturnType<typeof mapStateToProps> & GreatSuccessProps;
+type Props = ReturnType<typeof mapStateToProps> &
+  typeof dispatchProps &
+  GreatSuccessProps;
 
 const GreatSuccess: React.FC<Props> = ({
   challenge,
   nextChallenge,
   ...props
 }) => {
-  const { onClose } = props;
+  const { onClose, setChallengeId } = props;
 
   const handleScrollToContent = React.useCallback(() => {
     onClose();
@@ -187,8 +189,24 @@ const GreatSuccess: React.FC<Props> = ({
     scrollToVideoAndPlay();
   }, [onClose]);
 
+  // Proceed to next challenge
+  const proceed = () => {
+    if (nextChallenge) {
+      setChallengeId({
+        currentChallengeId: nextChallenge.id,
+        previousChallengeId: challenge.id,
+      });
+    }
+  };
+
   return (
     <ConfettiModal {...props}>
+      <KeyboardShortcuts
+        keymap={{
+          escape: onClose,
+          enter: proceed,
+        }}
+      />
       <CardTitle>{challenge.title}</CardTitle>
       <p>
         Congratulations, you've completed <strong>{challenge.title}</strong>.
@@ -359,4 +377,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   nextChallenge: Modules.selectors.challenges.nextPrevChallenges(state).next,
 });
 
-export default connect(mapStateToProps)(GreatSuccess);
+const dispatchProps = {
+  setChallengeId: Modules.actions.challenges.setChallengeId,
+};
+
+export default connect(mapStateToProps, dispatchProps)(GreatSuccess);

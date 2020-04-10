@@ -3,6 +3,9 @@ import * as MonacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 
 const debug = require("debug")("client:Workspace:monaco");
 
+// Quicker reference type for the Monaco model
+export type MonacoModel = MonacoEditor.editor.ITextModel;
+
 // Name is optional, but recommended. The case where we don't use the name is
 // where the external lib is dynamic. Currently this is the case with stripping
 // out module imports and adding a definition for each of them. Just to make the
