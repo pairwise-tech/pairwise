@@ -149,7 +149,9 @@ const getChallengMetadata = (id, courseFiles = readCourseFilesFromDisk()) => {
 };
 module.exports.getChallengMetadata = getChallengMetadata;
 
-const readCourseFilesFromDisk = (courseRoot = "./src/courses") => {
+const readCourseFilesFromDisk = (
+  courseRoot = path.resolve(__dirname, "../courses"),
+) => {
   const courseFiles = fs
     .readdirSync(path.resolve(courseRoot))
     .map(filename => path.resolve(courseRoot, filename))
