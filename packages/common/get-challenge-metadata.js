@@ -13,15 +13,20 @@ const camelCase = str => {
 // because slice is not includive of the end index
 // NOTE: Adding 1 back onto start makes git blame -L <start>. Looking at the
 // docs it looks like git line indexes are actually 1-based not 0-based.
-const getFileLocation = ({ raw, challenge }) => {
+const getFileLocation = ({ raw, challenge, filepath }) => {
   const lines = raw.split("\n");
   const start =
     lines.findIndex(line => line.includes(`"id": "${challenge.id}"`)) - 1; // See NOTE
   const end = start + Object.keys(challenge).length + 2; // See NOTE
+
+  // Currently unused. We could use this to cunt out the exact lines of text for
+  // this challenge
+  // const getSnippet = () => lines.slice(start, end).join("\n");
+
   return {
-    getSnippet: () => lines.slice(start, end).join("\n"),
     gitStart: start + 1, // See NOTE
     gitEnd: end,
+    filepath,
   };
 };
 
@@ -56,30 +61,39 @@ const parseGitPorcelain = str => {
 // without a comment to explain in words the actual ordering.
 const sortOldestFirst = x => x.sort((a, b) => a.authorTime - b.authorTime);
 
-const getGitMetadata = ({ gitStart, gitEnd }) => {
+const getGitMetadata = ({ gitStart, gitEnd, filepath }) => {
   const gitPorcelain = execSync(
-    `git blame --line-porcelain -L ${gitStart},${gitEnd} /Users/ian/dev/pairwise/packages/common/src/courses/01_fullstack_typescript.json`,
+    `git blame --line-porcelain -L ${gitStart},${gitEnd} ${filepath}`,
     { encoding: "utf-8" },
   );
-  const blameLines = sortOldestFirst(
-    parseGitPorcelain(gitPorcelain),
-  ).map(x => ({ ...x, authorDate: new Date(x.authorTime * 1000) }));
+
+  // NOTE: I'm creating a stirng date in addition to the authorTime timestamp
+  // because it's human readable and doesn't require remembering to * 1000 in
+  // order to instantiate a date
+  const blameLines = sortOldestFirst(parseGitPorcelain(gitPorcelain)).map(
+    x => ({
+      commit: x.commit.slice(0, 8),
+      summary: x.summary,
+      author: x.author,
+      authorDate: new Date(x.authorTime * 1000).toISOString(), // See NOTE
+    }),
+  );
 
   const authors = Array.from(new Set(blameLines.map(x => x.author))).sort();
   const edits = new Set(blameLines.map(x => x.commit)).size;
 
   return {
+    lineRange: [gitStart, gitEnd],
     authors,
     edits,
-    firstCommit: blameLines[0],
-    lastCommit: blameLines[blameLines.length - 1],
+    latestUpdate: blameLines[blameLines.length - 1],
   };
 };
 
-const getChallengMetadata = (id, coursesFiles = readCourseFilesFromDisk()) => {
+const getChallengMetadata = (id, courseFiles = readCourseFilesFromDisk()) => {
   const foundIn = {};
 
-  coursesFiles.forEach(
+  courseFiles.forEach(
     ({
       filename,
       filepath,
@@ -103,7 +117,6 @@ const getChallengMetadata = (id, coursesFiles = readCourseFilesFromDisk()) => {
 
         if (challenge) {
           foundIn.filename = filename;
-          foundIn.filepath = filepath;
           (foundIn.keypath = [
             "modules",
             moduleIndex,
@@ -118,12 +131,15 @@ const getChallengMetadata = (id, coursesFiles = readCourseFilesFromDisk()) => {
             title: challenge.title,
           };
 
-          foundIn.fileLocation = getFileLocation({
+          const fileLocation = getFileLocation({
             raw,
             challenge,
           });
 
-          foundIn.gitMetadata = getGitMetadata(foundIn.fileLocation);
+          foundIn.gitMetadata = getGitMetadata({
+            ...fileLocation,
+            filepath,
+          });
         }
       });
     },
@@ -131,9 +147,10 @@ const getChallengMetadata = (id, coursesFiles = readCourseFilesFromDisk()) => {
 
   return Object.keys(foundIn).length ? foundIn : null;
 };
+module.exports.getChallengMetadata = getChallengMetadata;
 
 const readCourseFilesFromDisk = (courseRoot = "./src/courses") => {
-  const coursesFiles = fs
+  const courseFiles = fs
     .readdirSync(path.resolve(courseRoot))
     .map(filename => path.resolve(courseRoot, filename))
     .map(filepath => {
@@ -146,7 +163,7 @@ const readCourseFilesFromDisk = (courseRoot = "./src/courses") => {
       };
     });
 
-  return coursesFiles;
+  return courseFiles;
 };
 module.exports.readCourseFilesFromDisk = readCourseFilesFromDisk;
 
