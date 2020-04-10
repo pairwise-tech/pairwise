@@ -2218,7 +2218,7 @@
           "instructions": "Complete the function body below. The function will receive an array as input and should return the number of items in the array.",
           "starterCode": "const lengthOfArray = (array: any[]) => {\n  // Edit code here\n};\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
           "solutionCode": "\nconst lengthOfArray = (array: any[]) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
-          "testCode": "[\n  { input: [[1, 2, 3, 4]], expected: 4 },\n  { input: [[]], expected: 0 },\n  { input: [[1, 1, 1, 1, 1, 1, 1, 1, 1]], expected: 9 },\n  { input: [[3, 3, 3]], expected: 3 },\n  { input: [[2]], expected: 1 },\n  { input: [[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]], expected: 14 },\n].forEach(({ input, expected }) => {\n  test(input[0].join(\", \"), () => {\n    expect(lengthOfArray(...input)).toBe(expected);\n  });\n});\n",
+          "testCode": "[\n  { input: [[1, 2, 3, 4]], expected: 4 },\n  { input: [[]], expected: 0 },\n  { input: [[1, 1, 1, 1, 1, 1, 1, 1, 1]], expected: 9 },\n  { input: [[3, 3, 3]], expected: 3 },\n  { input: [[2]], expected: 1 },\n  { input: [[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]], expected: 14 },\n].forEach(({ input, expected }) => {\n  test(`\\\\[${input[0].join(\", \")}\\\\] has length ${expected}`, () => {\n    expect(lengthOfArray(...input)).toBe(expected);\n  });\n});\n",
           "content": ""
         },
         {
@@ -2846,7 +2846,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "* Type Coercion \n* Common Conventions\n* Race conditions\n* Language runtime: memory heap, execution flow, etc.\n* JS origins and history\n* Comparison to other languages\n* Single vs multi\\-threaded languages / programming\n* Compile\\-to\\-JS languages \n* How computers work\n* Stack overflow, documentation, using the internet\n* Esoteric JS topics \\(i.e. JS the bad parts. `this`, Symbols, prototypical inheritance, bitwise operators... ok just kidding\\)\n\n\n\n++TODO++\n"
+          "content": "Here is a collection of special topic lessons for the programming fundamentals section. These topics cover additional material which is relevant and useful to know, but either not as important to include in the core challenges or not as well suited to the testable challenge environment.\n\nIn these special topics we will cover topics such as:\n\n* JavaScript vs. TypeScript, the history/evolution of JavaScript, TypeScript, and web programming.\n* Single\\-threaded vs. multi\\-threaded programming concepts.\n* Language runtime and execution concepts \\(heap, memory, call\\-stack, etc.\\).\n* Esoteric JavaScript concepts \\(such as prototypical inheritance, `this`, etc.\\).\n* Time and space complexity.\n* How to debug problems when you don't know the answer\\!\n\n"
         }
       ]
     },

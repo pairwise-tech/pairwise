@@ -776,12 +776,6 @@ class Workspace extends React.Component<IProps, IState> {
                   text="Toggle High Contrast Mode"
                 />
                 <MenuItem
-                  icon="contrast"
-                  aria-label="toggle high contrast mode"
-                  onClick={this.props.toggleHighContrastMode}
-                  text="Toggle High Contrast Mode"
-                />
-                <MenuItem
                   icon="download"
                   aria-label="export as text"
                   onClick={this.handleExport}
