@@ -2082,6 +2082,17 @@
           "content": ""
         },
         {
+          "id": "$SghMZjwc",
+          "type": "typescript",
+          "title": "Clone an Array",
+          "instructions": "Array's provide a handy built\\-in `.slice` method which copies the array into a new array. Implement slice manually in a `cloneArray` pure function which should accept an array as input and return a copied version of that array without using `.slice`.",
+          "testCode": "test(\"`cloneArray` should be a function.\", () => {\n  expect(typeof cloneArray === \"function\").toBe(true);\n});\n\ntest(\"`cloneArray` should return a copied version of the input array.\", () => {\n  let input = [1, 2, 3];\n  let result = cloneArray(input);\n  expect(input !== result).toBe(true);\n  expect(input).toEqual(result);\n\n  input = [1, 2, 3, 5, 6, 7, 8, 3, 345, 345, 432, 123, 432, 241];\n  result = cloneArray(input);\n  expect(input !== result).toBe(true);\n  expect(input).toEqual(result);\n\n  input = stringList;\n  result = cloneArray(input);\n  expect(input !== result).toBe(true);\n  expect(input).toEqual(result);\n});\n\ntest(\"`cloneArray` should not use `.slice` method.\", () => {\n  expect(__user_code_string__.includes(\".slice\")).toBe(false);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Manually clone an array without using the slice method\nconst cloneArray = (array: any[]): any[] => {\n  let clone = [];\n  for (let i = 0; i < array.length; i++) {\n    clone[i] = array[i];\n  }\n  return clone;\n}",
+          "content": ""
+        },
+        {
           "id": "jxRxi1j5A",
           "type": "section",
           "title": "Functional Programming",
