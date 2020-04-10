@@ -2805,6 +2805,17 @@
           "content": "The previous section of algorithms should be fairly easy to complete and is designed to get you very comfortable writing and solving all types of basic tasks using TypeScript. By now, you should be pretty comfortable writing simple TypeScript programs.\n\nNow, let's ramp things up to another level and start solving some more challenging questions\\!"
         },
         {
+          "id": "HYVyW@eI2",
+          "type": "typescript",
+          "title": "The Quadratic Formula",
+          "instructions": "We all remember the quadratic formula from math class. Wouldn't it be easy if we had a program to solve it for us, rather than having to solve it by hand? Let's implement the quadratic formula with code.",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
