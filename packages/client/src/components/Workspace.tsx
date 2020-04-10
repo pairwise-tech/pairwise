@@ -733,10 +733,12 @@ class Workspace extends React.Component<IProps, IState> {
               <Menu>
                 {!IS_SANDBOX && isEditMode && (
                   <MenuItem
-                    icon="applications"
+                    icon={
+                      IS_ALTERNATIVE_EDIT_VIEW ? "application" : "applications"
+                    }
+                    text="Toggle Alternative Edit Mode"
                     aria-label="toggle alternative edit mode"
                     onClick={this.props.toggleAlternativeEditView}
-                    text="Toggle Alternative Edit Mode"
                   />
                 )}
                 {!IS_SANDBOX && (
