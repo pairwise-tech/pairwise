@@ -117,13 +117,13 @@ const getChallengMetadata = (id, courseFiles = readCourseFilesFromDisk()) => {
 
         if (challenge) {
           foundIn.filename = filename;
-          (foundIn.keypath = [
+          foundIn.keypath = [
             "modules",
             moduleIndex,
             "challenges",
             challengeIndex,
-          ]),
-            (foundIn.course = course);
+          ];
+          foundIn.course = course;
           foundIn.module = mod;
           foundIn.challenge = {
             id: challenge.id,
