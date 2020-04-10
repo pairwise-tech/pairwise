@@ -76,7 +76,7 @@ const getGitMetadata = ({ gitStart, gitEnd }) => {
   };
 };
 
-const getChallengLocationById = (coursesFiles, id) => {
+const getChallengMetadata = (id, coursesFiles) => {
   const foundIn = {};
 
   coursesFiles.forEach(
@@ -124,10 +124,7 @@ const getChallengLocationById = (coursesFiles, id) => {
   return Object.keys(foundIn).length ? foundIn : null;
 };
 
-const main = () => {
-  const id = process.argv[2];
-  const courseRoot = "./packages/common/src/courses";
-
+const readCourseFilesFromDisk = (courseRoot = "./src/courses") => {
   const coursesFiles = fs
     .readdirSync(path.resolve(courseRoot))
     .map(filename => path.resolve(courseRoot, filename))
@@ -141,7 +138,14 @@ const main = () => {
       };
     });
 
-  const foundIn = getChallengLocationById(coursesFiles, id);
+  return coursesFiles;
+};
+
+const main = () => {
+  const id = process.argv[2];
+  const coursesFiles = readCourseFilesFromDisk();
+
+  const foundIn = getChallengMetadata(id, coursesFiles);
 
   if (foundIn) {
     console.log(
