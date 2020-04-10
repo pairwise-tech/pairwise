@@ -295,11 +295,10 @@ class Workspace extends React.Component<IProps, IState> {
       this.props.editModeAlternativeViewEnabled;
 
     /**
-     * Reset the editor if the editor views are changed.
+     * Refresh the editor if the editor views are changed.
      */
     if (fullScreenChange || editViewChange) {
-      this.resetMonacoEditor();
-      this.tryToFocusEditor();
+      this.refreshEditor();
     }
 
     // Handle changes in editor options
@@ -662,6 +661,23 @@ class Workspace extends React.Component<IProps, IState> {
       </>
     );
 
+    const TestFullHeightEditor = (
+      <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+        <>{IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}</>
+        <div>
+          {!IS_ALTERNATIVE_EDIT_VIEW && (
+            <Console variant="dark" logs={this.state.logs} />
+          )}
+          <DragIgnorantFrameContainer
+            id="iframe"
+            title="code-preview"
+            ref={this.setIframeRef}
+            style={{ visibility: "hidden", height: 0, width: 0 }}
+          />
+        </div>
+      </Col>
+    );
+
     const MONACO_CONTAINER = (
       <div style={{ height: "100%", position: "relative" }}>
         <GreatSuccess
@@ -847,7 +863,9 @@ class Workspace extends React.Component<IProps, IState> {
                   </RowsWrapper>
                 )}
               </Col>
-              {IS_REACT_CHALLENGE ? (
+              {IS_ALTERNATIVE_EDIT_VIEW ? (
+                TestFullHeightEditor
+              ) : IS_REACT_CHALLENGE ? (
                 <Col initialHeight={D.WORKSPACE_HEIGHT}>
                   <RowsWrapper separatorProps={rowSeparatorProps}>
                     <Row initialHeight={D.PREVIEW_HEIGHT}>
@@ -874,11 +892,8 @@ class Workspace extends React.Component<IProps, IState> {
                   style={consoleRowStyles}
                   initialHeight={D.WORKSPACE_HEIGHT}
                 >
-                  <>{IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}</>
                   <div>
-                    {!IS_ALTERNATIVE_EDIT_VIEW && (
-                      <Console variant="dark" logs={this.state.logs} />
-                    )}
+                    <Console variant="dark" logs={this.state.logs} />
                     <DragIgnorantFrameContainer
                       id="iframe"
                       title="code-preview"

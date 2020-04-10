@@ -411,6 +411,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.setEditMode, (state, action) => ({
     ...state,
     isEditMode: action.payload,
+    editModeAlternativeView: false,
   }))
   .handleAction(actions.setActiveChallengeIds, (state, { payload }) => ({
     ...state,
