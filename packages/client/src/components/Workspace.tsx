@@ -1536,7 +1536,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
 
     if (!challenge || isLoadingBlob || isUserLoading) {
       return (
-        <div style={{ marginTop: 40 }}>
+        <div style={{ marginTop: 150 }}>
           <Loading />
         </div>
       );
