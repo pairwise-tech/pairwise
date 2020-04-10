@@ -2827,6 +2827,17 @@
           "content": ""
         },
         {
+          "id": "n1X3SCvk3",
+          "type": "typescript",
+          "title": "Reverse In Place",
+          "instructions": "You may be familiar with the `.reverse` built\\-in array method, which reverses an array's contents in place. This means the array is mutated in place: any reference to the original array will now point to the mutated version. You can of course use `.slice` to create a new copy of an array, and then reverse the contents, if you wanted to immutably reverse the contents of any array \\(slice is always a great tool to keep in mind\\).\n\nFor this challenge exercise, let's try to implement a reverse method which reverses the contents of an array in place. Your function, `reverseInPlace`, should accept an array and reverse it in place and return the same array. Any other references to the original array should be reversed. Since it is a challenge, do not use the built\\-in `.reverse` method\\!",
+          "testCode": "test(\"`reverseInPlace` should be a function.\", () => {\n  expect(reverseInPlace).toBeDefined();\n  expect(typeof reverseInPlace === \"function\").toBe(true);\n});\n\ntest(\"`reverseInPlace` should reverse an array input in place.\", () => {\n  let input = [1, 2, 3];\n  let expected = input.slice().reverse();\n  let result = reverseInPlace(input);\n  expect(input === result).toBe(true);\n  expect(result).toEqual(expected);\n\n  input = [1, 2, 3, 9, 10, 18, 19, 20];\n  expected = input.slice().reverse();\n  result = reverseInPlace(input);\n  expect(input === result).toBe(true);\n  expect(result).toEqual(expected);\n\n  input = [122];\n  expected = input.slice().reverse();\n  result = reverseInPlace(input);\n  expect(input === result).toBe(true);\n  expect(result).toEqual(expected);\n\n  input = [122, 5000];\n  expected = input.slice().reverse();\n  result = reverseInPlace(input);\n  expect(input === result).toBe(true);\n  expect(result).toEqual(expected);\n\n  input = stringList;\n  expected = input.slice().reverse();\n  result = reverseInPlace(input);\n  expect(input === result).toBe(true);\n  expect(result).toEqual(expected);\n});\n\ntest(\"`reverseInPlace` does not use the built-in `.reverse` method.\", () => {\n  expect(__user_code_string__.includes(\".reverse\")).toBe(false);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Reverse an array in place without using the\n// built-in reverse method\nconst reverseInPlace = (list: any[]): any[] => {\n\n  // Use a for loop to iterate to the middle of the list\n  for (let i = 0; i < list.length / 2; i++) {\n    // Get the last index\n    const last = list.length - i - 1;\n    \n    // Get the left and right values\n    const left = list[i];\n    const right = list[last];\n\n    // Swap the left and right values in place\n    list[i] = right;\n    list[last] = left;\n  }\n\n  // Return the original array\n  return list;\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
