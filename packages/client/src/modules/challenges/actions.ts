@@ -88,6 +88,8 @@ enum ActionTypesEnum {
 
   TOGGLE_REVEAL_SOLUTION = "TOGGLE_REVEAL_SOLUTION",
 
+  TOGGLE_EDIT_MODE_ALTERNATIVE_VIEW = "TOGGLE_EDIT_MODE_ALTERNATIVE_VIEW",
+
   // NOTE: These don't follow the pattern of do_something{,_success,_failure}
   // because they are worker related so there is no direct tie between one
   // search action and it's result at the epic level. This is not yet a
@@ -288,3 +290,7 @@ export const toggleSectionAccordionView = createAction(
 export const toggleRevealSolutionCode = createAction(
   ActionTypesEnum.TOGGLE_REVEAL_SOLUTION,
 )<{ shouldReveal: boolean }>();
+
+export const toggleEditModeAlternativeView = createAction(
+  ActionTypesEnum.TOGGLE_EDIT_MODE_ALTERNATIVE_VIEW,
+)();

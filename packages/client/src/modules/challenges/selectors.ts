@@ -19,6 +19,11 @@ export const challengesSelector = createSelector([challengesState], identity);
 
 export const isEditMode = createSelector([challengesState], prop("isEditMode"));
 
+export const editModeAlternativeViewEnabled = createSelector(
+  [challengesState],
+  x => x.editModeAlternativeView,
+);
+
 export const adminTestTabSelector = createSelector(
   [challengesState],
   x => x.adminTestTab,

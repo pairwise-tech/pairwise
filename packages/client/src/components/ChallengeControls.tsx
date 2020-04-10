@@ -109,7 +109,7 @@ export const NextChallengeCard = connect(
           </Horizontal>
           <Button
             intent="none"
-            icon="help"
+            icon="comment"
             aria-label="open/close feedback dialog"
             onClick={toggleFeedbackDialogOpen}
           >

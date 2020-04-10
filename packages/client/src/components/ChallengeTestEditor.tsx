@@ -147,14 +147,14 @@ const ChallengeTestEditor = (props: Props) => {
       />
       <LowerRight>
         <ButtonGroup vertical style={{ marginBottom: 8 }}>
-          <Tooltip content={"Increase Font Size"} position="left">
+          <Tooltip content="Increase Font Size" position="left">
             <IconButton
               icon="plus"
               aria-label="increase editor font size"
               onClick={increaseFontSize}
             />
           </Tooltip>
-          <Tooltip content={"Decrease Font Size"} position="left">
+          <Tooltip content="Decrease Font Size" position="left">
             <IconButton
               icon="minus"
               aria-label="decrease editor font size"
@@ -162,7 +162,7 @@ const ChallengeTestEditor = (props: Props) => {
             />
           </Tooltip>
         </ButtonGroup>
-        <Tooltip content={"Format Code"} position="left">
+        <Tooltip content="Format Code" position="left">
           <IconButton
             icon="clean"
             aria-label="format editor code"

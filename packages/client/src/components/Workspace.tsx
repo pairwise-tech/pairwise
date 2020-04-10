@@ -287,17 +287,18 @@ class Workspace extends React.Component<IProps, IState> {
       );
     }
 
-    /**
-     * Reset the editor if the editor screen size is toggle.
-     *
-     * NOTE: This must happen AFTER the component updates.
-     */
-    if (
+    const fullScreenChange =
       prevProps.userSettings.fullScreenEditor !==
-      this.props.userSettings.fullScreenEditor
-    ) {
-      this.resetMonacoEditor();
-      this.tryToFocusEditor();
+      this.props.userSettings.fullScreenEditor;
+    const editViewChange =
+      prevProps.editModeAlternativeViewEnabled !==
+      this.props.editModeAlternativeViewEnabled;
+
+    /**
+     * Refresh the editor if the editor views are changed.
+     */
+    if (fullScreenChange || editViewChange) {
+      this.refreshEditor();
     }
 
     // Handle changes in editor options
@@ -601,15 +602,17 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { correct: allTestsPassing } = this.getTestPassedStatus();
-    const { testResults, hideSuccessModal } = this.state;
+    const { testResults, testResultsLoading, hideSuccessModal } = this.state;
     const {
       challenge,
       isEditMode,
       userSettings,
       revealSolutionCode,
+      editModeAlternativeViewEnabled,
     } = this.props;
     const { fullScreenEditor } = userSettings;
 
+    const IS_ALTERNATIVE_EDIT_VIEW = editModeAlternativeViewEnabled;
     const IS_SANDBOX = challenge.id === SANDBOX_ID;
     const IS_FULLSCREEN = fullScreenEditor || IS_SANDBOX;
     const IS_REACT_CHALLENGE = challenge.type === "react";
@@ -624,6 +627,56 @@ class Workspace extends React.Component<IProps, IState> {
     const handleCloseSuccessModal = () => {
       this.setState({ hideSuccessModal: true });
     };
+
+    const WorkspaceTestContainer = (
+      <>
+        <TabbedInnerNav show={isEditMode}>
+          <Tab
+            onClick={() => this.handleTestTabClick("testResults")}
+            active={this.props.adminTestTab === "testResults"}
+          >
+            Test Results
+          </Tab>
+          <Tab
+            onClick={() => this.handleTestTabClick("testCode")}
+            active={this.props.adminTestTab === "testCode"}
+          >
+            Test Code
+          </Tab>
+          {isEditMode && <TestStatusTextTab passing={allTestsPassing} />}
+        </TabbedInnerNav>
+        {this.props.isEditMode && this.props.adminTestTab === "testCode" ? (
+          <ChallengeTestEditor />
+        ) : (
+          <ContentContainer>
+            <ContentTitle style={{ marginBottom: 12 }}>
+              {this.getTestSummaryString()}
+            </ContentTitle>
+            {testResults.map((x, i) => (
+              <TestResultRow key={i} {...x} index={i} />
+            ))}
+            <Spacer height={50} />
+          </ContentContainer>
+        )}
+      </>
+    );
+
+    const TestFullHeightEditor = (
+      <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+        <>{IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}</>
+        <div>
+          {!IS_ALTERNATIVE_EDIT_VIEW && (
+            <Console variant="dark" logs={this.state.logs} />
+          )}
+          <DragIgnorantFrameContainer
+            id="iframe"
+            title="code-preview"
+            ref={this.setIframeRef}
+            style={{ visibility: "hidden", height: 0, width: 0 }}
+          />
+        </div>
+      </Col>
+    );
 
     const MONACO_CONTAINER = (
       <div style={{ height: "100%", position: "relative" }}>
@@ -657,7 +710,7 @@ class Workspace extends React.Component<IProps, IState> {
             <RunButton
               icon="play"
               id="pw-run-code"
-              loading={this.state.testResultsLoading}
+              loading={testResultsLoading}
               onClick={this.handleUserTriggeredTestRun}
               aria-label="run the current editor code"
             >
@@ -694,6 +747,16 @@ class Workspace extends React.Component<IProps, IState> {
           <Popover
             content={
               <Menu>
+                {!IS_SANDBOX && isEditMode && (
+                  <MenuItem
+                    icon={
+                      IS_ALTERNATIVE_EDIT_VIEW ? "application" : "applications"
+                    }
+                    text="Toggle Alternative Edit Mode"
+                    aria-label="toggle alternative edit mode"
+                    onClick={this.props.toggleAlternativeEditView}
+                  />
+                )}
                 {!IS_SANDBOX && (
                   <MenuItem
                     icon={fullScreenEditor ? "collapse-all" : "expand-all"}
@@ -763,7 +826,13 @@ class Workspace extends React.Component<IProps, IState> {
                 initialWidth={D.EDITOR_PANEL_WIDTH}
                 initialHeight={D.WORKSPACE_HEIGHT}
               >
-                {!IS_FULLSCREEN ? (
+                {IS_FULLSCREEN || IS_ALTERNATIVE_EDIT_VIEW ? (
+                  <div
+                    style={{ height: "100%", background: C.BACKGROUND_CONSOLE }}
+                  >
+                    {MONACO_CONTAINER}
+                  </div>
+                ) : (
                   <RowsWrapper separatorProps={rowSeparatorProps}>
                     <Row
                       initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
@@ -774,8 +843,8 @@ class Workspace extends React.Component<IProps, IState> {
                       </ContentContainer>
                     </Row>
                     <Row
-                      initialHeight={D.EDITOR_HEIGHT}
                       style={{ background: C.BACKGROUND_EDITOR }}
+                      initialHeight={D.EDITOR_HEIGHT}
                     >
                       {MONACO_CONTAINER}
                     </Row>
@@ -783,48 +852,14 @@ class Workspace extends React.Component<IProps, IState> {
                       initialHeight={D.TEST_CONTENT_HEIGHT}
                       style={{ background: C.BACKGROUND_CONTENT }}
                     >
-                      <TabbedInnerNav show={isEditMode}>
-                        <Tab
-                          onClick={() => this.handleTestTabClick("testResults")}
-                          active={this.props.adminTestTab === "testResults"}
-                        >
-                          Test Results
-                        </Tab>
-                        <Tab
-                          onClick={() => this.handleTestTabClick("testCode")}
-                          active={this.props.adminTestTab === "testCode"}
-                        >
-                          Test Code
-                        </Tab>
-                        {isEditMode && (
-                          <TestStatusTextTab passing={allTestsPassing} />
-                        )}
-                      </TabbedInnerNav>
-                      {this.props.isEditMode &&
-                      this.props.adminTestTab === "testCode" ? (
-                        <ChallengeTestEditor />
-                      ) : (
-                        <ContentContainer>
-                          <ContentTitle style={{ marginBottom: 12 }}>
-                            {this.getTestSummaryString()}
-                          </ContentTitle>
-                          {testResults.map((x, i) => (
-                            <TestResultRow key={i} {...x} index={i} />
-                          ))}
-                          <Spacer height={50} />
-                        </ContentContainer>
-                      )}
+                      {WorkspaceTestContainer}
                     </Row>
                   </RowsWrapper>
-                ) : (
-                  <div
-                    style={{ height: "100%", background: C.BACKGROUND_CONSOLE }}
-                  >
-                    {MONACO_CONTAINER}
-                  </div>
                 )}
               </Col>
-              {IS_REACT_CHALLENGE ? (
+              {IS_ALTERNATIVE_EDIT_VIEW ? (
+                TestFullHeightEditor
+              ) : IS_REACT_CHALLENGE ? (
                 <Col initialHeight={D.WORKSPACE_HEIGHT}>
                   <RowsWrapper separatorProps={rowSeparatorProps}>
                     <Row initialHeight={D.PREVIEW_HEIGHT}>
@@ -1409,29 +1444,36 @@ class Workspace extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
+const ChallengeSelectors = Modules.selectors.challenges;
+const ChallengeActions = Modules.actions.challenges;
+
 const mapStateToProps = (state: ReduxStoreState) => ({
-  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
+  isEditMode: ChallengeSelectors.isEditMode(state),
   isUserLoading: Modules.selectors.user.loading(state),
+  isLoadingBlob: ChallengeSelectors.isLoadingBlob(state),
+  challenge: ChallengeSelectors.getCurrentChallenge(state),
   userSettings: Modules.selectors.user.userSettings(state),
   editorOptions: Modules.selectors.user.editorOptions(state),
-  blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
-  isLoadingBlob: Modules.selectors.challenges.isLoadingBlob(state),
-  adminTestTab: Modules.selectors.challenges.adminTestTabSelector(state),
-  showMediaArea: Modules.selectors.challenges.getHasMediaContent(state),
-  revealSolutionCode: Modules.selectors.challenges.revealSolutionCode(state),
-  adminEditorTab: Modules.selectors.challenges.adminEditorTabSelector(state),
+  blob: ChallengeSelectors.getBlobForCurrentChallenge(state),
+  showMediaArea: ChallengeSelectors.getHasMediaContent(state),
+  adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
+  revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
+  adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
+  editModeAlternativeViewEnabled: ChallengeSelectors.editModeAlternativeViewEnabled(
+    state,
+  ),
 });
 
 const dispatchProps = {
-  updateChallenge: Modules.actions.challenges.updateChallenge,
+  setAdminTestTab: ChallengeActions.setAdminTestTab,
+  setAdminEditorTab: ChallengeActions.setAdminEditorTab,
+  updateChallenge: ChallengeActions.updateChallenge,
   updateUserSettings: Modules.actions.user.updateUserSettings,
-  handleAttemptChallenge: Modules.actions.challenges.handleAttemptChallenge,
-  toggleRevealSolutionCode: Modules.actions.challenges.toggleRevealSolutionCode,
-  updateCurrentChallengeBlob:
-    Modules.actions.challenges.updateCurrentChallengeBlob,
-  setAdminTestTab: Modules.actions.challenges.setAdminTestTab,
-  setAdminEditorTab: Modules.actions.challenges.setAdminEditorTab,
+  handleAttemptChallenge: ChallengeActions.handleAttemptChallenge,
+  toggleRevealSolutionCode: ChallengeActions.toggleRevealSolutionCode,
+  updateCurrentChallengeBlob: ChallengeActions.updateCurrentChallengeBlob,
+  toggleAlternativeEditView:
+    Modules.actions.challenges.toggleEditModeAlternativeView,
 };
 
 const mergeProps = (
@@ -1497,7 +1539,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
 
     if (!challenge || isLoadingBlob || isUserLoading) {
       return (
-        <div style={{ marginTop: 40 }}>
+        <div style={{ marginTop: 150 }}>
           <Loading />
         </div>
       );
