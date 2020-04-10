@@ -2104,28 +2104,6 @@
           "content": ""
         },
         {
-          "id": "q3Yf2G1FV",
-          "type": "typescript",
-          "title": "Partial Application",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": ""
-        },
-        {
-          "id": "feDRWPcTsc",
-          "type": "typescript",
-          "title": "Passing Functions Around Point-free Style",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": ""
-        },
-        {
           "id": "uyjd$DG@$",
           "type": "section",
           "title": "Classes",
