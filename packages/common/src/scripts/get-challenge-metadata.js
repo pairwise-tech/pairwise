@@ -154,6 +154,7 @@ const readCourseFilesFromDisk = (
 ) => {
   const courseFiles = fs
     .readdirSync(path.resolve(courseRoot))
+    .filter(filename => filename.match(/^\d\d/)) // Only numbered course files
     .map(filename => path.resolve(courseRoot, filename))
     .map(filepath => {
       const raw = fs.readFileSync(filepath, { encoding: "utf-8" });

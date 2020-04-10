@@ -25,7 +25,7 @@ const main = () => {
   try {
     existingFile = JSON.parse(fs.readFileSync(outfile, { encoding: "utf-8" }));
   } catch (err) {
-    console.error("No existig file found or parse failure.");
+    log("No existig file found or parse failure.");
   }
 
   // TODO: We can use this to git diff the course dir against this commit. If
@@ -35,7 +35,6 @@ const main = () => {
 
   if (existingFile) {
     const { buildCommit } = existingFile["@@PAIRWISE"];
-    // const cmd = `git diff --name-only 6177d21 -- ${courseDir}`;
     const cmd = `git diff --name-only ${buildCommit} -- ${courseDir}`;
     const filesChanged = execSync(cmd, { encoding: "utf-8" }).trim();
 
@@ -80,7 +79,7 @@ const main = () => {
     if (metadata) {
       result[id] = metadata;
     } else {
-      console.error(`[WARN] ${id} Challenge Not Found`);
+      log(`[WARN] ${id} Challenge Not Found`);
     }
   });
 
