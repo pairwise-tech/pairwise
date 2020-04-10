@@ -27,44 +27,60 @@ const FeedbackModal = (props: Props) => {
     "none",
   );
 
+  const {
+    feedback,
+    feedbackType,
+    currentChallenge,
+    setFeedbackState,
+    feedbackDialogOpen,
+    submitUserFeedback,
+    toggleFeedbackDialogOpen,
+  } = props;
+
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaIntent !== "none") {
       setTextAreaIntent("none");
     }
-    props.setFeedbackState(e.target.value);
+    setFeedbackState(e.target.value);
   };
 
   const handleSubmit = () => {
     validate();
-    if (props.feedback && props.feedbackType && props.currentChallenge) {
-      props.submitUserFeedback({
-        feedback: props.feedback,
-        type: props.feedbackType,
-        challengeId: props.currentChallenge.id,
+    if (feedback && feedbackType && currentChallenge) {
+      submitUserFeedback({
+        feedback,
+        type: feedbackType,
+        challengeId: currentChallenge.id,
       });
-      props.toggleFeedbackDialogOpen();
+      toggleFeedbackDialogOpen();
     }
   };
 
   const validate = () => {
-    if (!props.feedback) {
+    if (!feedback) {
       setTextAreaIntent("danger");
     } else {
       setTextAreaIntent("none");
     }
 
-    if (!props.feedbackType) {
+    if (!feedbackType) {
       setSelectIntent("danger");
     } else {
       setSelectIntent("none");
     }
   };
 
+  // Construct the modal title, make it more explicit the feedback is
+  // specifically for a challenge.
+  const modalTitle = currentChallenge
+    ? `Feedback for ${currentChallenge.title} Challenge`
+    : "Feedback";
+
   return (
     <Dialog
       usePortal
-      isOpen={props.feedbackDialogOpen}
-      onClose={props.toggleFeedbackDialogOpen}
+      isOpen={feedbackDialogOpen}
+      onClose={toggleFeedbackDialogOpen}
       aria-labelledby="feedback-modal-title"
       aria-describedby="feedback-modal-description"
     >
@@ -72,7 +88,7 @@ const FeedbackModal = (props: Props) => {
         style={{ maxHeight: "calc(100vh - 100px)" }}
         className={Classes.DARK} // Needed since portal modal is outside inherited styles
       >
-        <ModalTitleText id="feedback-modal-title">Feedback</ModalTitleText>
+        <ModalTitleText id="feedback-modal-title">{modalTitle}</ModalTitleText>
         <ModalSubText
           style={{ maxWidth: 500, textAlign: "left" }}
           id="feedback-modal-description"
@@ -88,7 +104,7 @@ const FeedbackModal = (props: Props) => {
             setSelectIntent("none");
             props.setFeedbackType(item.value);
           }}
-          currentFeedbackType={props.feedbackType}
+          currentFeedbackType={feedbackType}
         />
         <DangerLabel show={textAreaIntent === "danger"}>
           Enter some feedback so we know how to improve
@@ -105,7 +121,7 @@ const FeedbackModal = (props: Props) => {
           <Button
             large={true}
             style={{ marginRight: 10 }}
-            onClick={props.toggleFeedbackDialogOpen}
+            onClick={toggleFeedbackDialogOpen}
           >
             Close
           </Button>

@@ -540,7 +540,7 @@ export const getFileExtensionByChallengeType = (challenge: Challenge) => {
     case "special-topic":
       return null;
     default:
-      return assertUnreachable(x);
+      return assertUnreachable(type);
   }
 };
 
