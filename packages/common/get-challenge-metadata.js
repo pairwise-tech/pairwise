@@ -76,7 +76,7 @@ const getGitMetadata = ({ gitStart, gitEnd }) => {
   };
 };
 
-const getChallengMetadata = (id, coursesFiles) => {
+const getChallengMetadata = (id, coursesFiles = readCourseFilesFromDisk()) => {
   const foundIn = {};
 
   coursesFiles.forEach(
@@ -87,7 +87,15 @@ const getChallengMetadata = (id, coursesFiles) => {
       json: { modules, ...course },
       courseIndex,
     }) => {
+      if (course.id === id) {
+        console.error(`${id} -> [COURSE] ${course.title}`);
+      }
+
       modules.forEach(({ challenges, ...mod }, moduleIndex) => {
+        if (mod.id === id) {
+          console.error(`${id} -> [MODULE] ${mod.title}`);
+        }
+
         const challengeIndex = challenges.findIndex(
           challenge => challenge.id === id,
         );
@@ -140,12 +148,11 @@ const readCourseFilesFromDisk = (courseRoot = "./src/courses") => {
 
   return coursesFiles;
 };
+module.exports.readCourseFilesFromDisk = readCourseFilesFromDisk;
 
 const main = () => {
   const id = process.argv[2];
-  const coursesFiles = readCourseFilesFromDisk();
-
-  const foundIn = getChallengMetadata(id, coursesFiles);
+  const foundIn = getChallengMetadata(id);
 
   if (foundIn) {
     console.log(
@@ -159,8 +166,10 @@ const main = () => {
     );
     console.log(foundIn);
   } else {
-    console.log("Not found");
+    console.log(`[COURSE] ${id} Not found`);
   }
 };
 
-main();
+if (require.main === module) {
+  main();
+}
