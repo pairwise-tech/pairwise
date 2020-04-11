@@ -16,9 +16,9 @@ const URL_TERM_BLACKLIST = new Set(["the", "of", "and", "a", "an"]);
 export const sluggify = (s: string) => {
   return s
     .toLowerCase()
-    .replace(/[^A-Za-z0-9\s]/g, "") // Replace non alphanumeric chars except space. See NOTE
-    .trim()
     .split(" ")
+    .map(x => x.replace(/[^A-Za-z0-9]/g, "").trim()) //  Replace non alphanumeric chars except space. See NOTE
+    .filter(Boolean)
     .filter(x => !URL_TERM_BLACKLIST.has(x)) // Remove common filler words like "the", "of", "an"
     .join("-");
 };
