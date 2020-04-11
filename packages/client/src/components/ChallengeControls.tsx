@@ -4,46 +4,53 @@ import { Tooltip, Classes, Card, H5, Button, Callout } from "@blueprintjs/core";
 import { IconNavLink } from "./Shared";
 import Modules, { ReduxStoreState } from "modules/root";
 import styled from "styled-components/macro";
+import { getChallengeSlug } from "@pairwise/common";
 
 interface ChallengeButtonProps {
-  challengeId?: string;
+  slug: string | null;
   id?: string;
   className?: string;
   style?: React.CSSProperties;
 }
 
-export const PrevChallengeIconButton = connect((state: ReduxStoreState) => ({
-  challengeId: Modules.selectors.challenges.nextPrevChallenges(state).prev?.id,
-}))(({ challengeId, ...props }: ChallengeButtonProps) => {
-  const tooltipMessage = challengeId
+export const PrevChallengeIconButton = connect((state: ReduxStoreState) => {
+  const { prev } = Modules.selectors.challenges.nextPrevChallenges(state);
+  return {
+    slug: prev ? getChallengeSlug(prev) : null,
+  };
+})(({ slug, ...props }: ChallengeButtonProps) => {
+  const tooltipMessage = slug
     ? "Previous Challenge"
     : "Already at the first challenge";
   return (
     <Tooltip content={tooltipMessage}>
       <IconNavLink
-        disabled={!challengeId}
+        disabled={!slug}
         icon="chevron-left"
         aria-label="Previous Challenge"
-        to={`/workspace/${challengeId}`}
+        to={`/workspace/${slug}`}
         {...props}
       />
     </Tooltip>
   );
 });
 
-export const NextChallengeIconButton = connect((state: ReduxStoreState) => ({
-  challengeId: Modules.selectors.challenges.nextPrevChallenges(state).next?.id,
-}))(({ challengeId, ...props }: ChallengeButtonProps) => {
-  const tooltipMessage = challengeId
+export const NextChallengeIconButton = connect((state: ReduxStoreState) => {
+  const { next } = Modules.selectors.challenges.nextPrevChallenges(state);
+  return {
+    slug: next ? getChallengeSlug(next) : null,
+  };
+})(({ slug, ...props }: ChallengeButtonProps) => {
+  const tooltipMessage = slug
     ? "Next Challenge"
     : "Already at the last challenge";
   return (
     <Tooltip content={tooltipMessage}>
       <IconNavLink
-        disabled={!challengeId}
+        disabled={!slug}
         icon="chevron-right"
         aria-label="Next Challenge"
-        to={`/workspace/${challengeId}`}
+        to={`/workspace/${slug}`}
         {...props}
       />
     </Tooltip>
@@ -51,17 +58,17 @@ export const NextChallengeIconButton = connect((state: ReduxStoreState) => ({
 });
 
 export const NextChallengeButton = ({
-  challengeId,
+  slug,
   ...props
 }: ChallengeButtonProps) => {
   return (
     <IconNavLink
-      disabled={!challengeId}
+      disabled={!slug}
       icon="chevron-right"
       aria-label="Next Challenge"
       beforeText="Next Challenge"
       id="workspace-next-challenge-button"
-      to={`/workspace/${challengeId}`}
+      to={`/workspace/${slug}`}
       {...props}
     />
   );
@@ -116,20 +123,24 @@ export const NextChallengeCard = connect(
             Feedback
           </Button>
         </Upper>
-        <Horizontal style={{ marginBottom: 10 }}>
-          <H5 style={{ color: "rgb(110, 217, 173)", marginRight: 10 }}>
-            Up Next
-          </H5>
-          <H5>
-            {nextChallenge
-              ? nextChallenge.title
-              : "You're on the last challenge!"}
-          </H5>
-        </Horizontal>
-        <NextChallengeButton
-          challengeId={nextChallenge?.id}
-          className={Classes.INTENT_SUCCESS}
-        />
+        {nextChallenge && (
+          <>
+            <Horizontal style={{ marginBottom: 10 }}>
+              <H5 style={{ color: "rgb(110, 217, 173)", marginRight: 10 }}>
+                Up Next
+              </H5>
+              <H5>
+                {nextChallenge
+                  ? nextChallenge.title
+                  : "You're on the last challenge!"}
+              </H5>
+            </Horizontal>
+            <NextChallengeButton
+              slug={getChallengeSlug(nextChallenge)}
+              className={Classes.INTENT_SUCCESS}
+            />
+          </>
+        )}
       </Card>
     );
   },
