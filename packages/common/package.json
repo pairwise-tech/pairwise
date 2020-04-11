@@ -4,7 +4,9 @@
   "description": "Pairwise shared utilities and types",
   "private": true,
   "scripts": {
+    "prebuild": "yarn run build:metadata",
     "build": "tsc",
+    "build:metadata": "node ./src/scripts/build-metadata-index.js",
     "watch": "tsc -w",
     "prettier": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
