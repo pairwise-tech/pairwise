@@ -34,12 +34,19 @@ const main = async () => {
     encoding: "utf-8",
   }).trim();
 
+  // NOTE: Remove metadata.json since it would break this change-checking as
+  // long as its under version control. Git will detect a change to that file,
+  // but that file is the one being built here
   if (existingFile) {
     const { buildCommit } = existingFile["@@PAIRWISE"];
     const cmd = `git diff --name-only ${buildCommit} -- ${courseDir}`;
-    const filesChanged = execSync(cmd, { encoding: "utf-8" }).trim();
+    const filesChanged = execSync(cmd, { encoding: "utf-8" })
+      .trim()
+      .split("\n")
+      .filter(Boolean) // Remove empty strings
+      .filter(s => !s.includes("metadata.json")); // See NOTE
 
-    if (!filesChanged) {
+    if (!filesChanged.length) {
       log(
         `No course files changed since last build commit ${buildCommit}. Course metadata will not be rebuilt.`,
       );
@@ -47,12 +54,7 @@ const main = async () => {
     }
 
     log("The following course files have changed:");
-    log(
-      filesChanged
-        .split("\n")
-        .map(x => `- ${x}`)
-        .join("\n"),
-    );
+    log(filesChanged.map(x => `- ${x}`).join("\n"));
     log("Index will be rebuilt.");
   }
 
