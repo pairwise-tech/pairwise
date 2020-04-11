@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { promisify } from "util";
 import * as ChildProcess from "child_process";
-import { Course } from "src/types/courses";
+import { Course, ChallengeMetadata } from "src/types/courses";
 
 const exec = promisify(ChildProcess.exec);
 
@@ -19,39 +19,6 @@ interface GitPorcelainFormat {
   summary: string;
   previous: string;
   filename: string;
-}
-
-interface ChallengeMetadata {
-  filename: string;
-  keypath: Array<string | number>;
-  course: {
-    id: string;
-    title: string;
-    description: string;
-    free: boolean;
-    price: number;
-  };
-  module: {
-    id: string;
-    title: string;
-    free: boolean;
-  };
-  challenge: {
-    id: string;
-    type: string;
-    title: string;
-  };
-  gitMetadata: {
-    lineRange: number[];
-    authors: string[];
-    edits: number;
-    latestUpdate: {
-      commit: string;
-      summary: string;
-      author: string;
-      authorDate: string;
-    };
-  };
 }
 
 const camelCase = str => {
@@ -115,8 +82,8 @@ const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
 
 // This is a total one-off helper but I always find sorting to be confusing
 // without a comment to explain in words the actual ordering.
-const sortOldestFirst = (x: GitPorcelainFormat[]) =>
-  x.sort((a, b) => a.authorTime - b.authorTime);
+const sortLatestFirst = (x: GitPorcelainFormat[]) =>
+  x.sort((a, b) => b.authorTime - a.authorTime);
 
 const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
   const {
@@ -129,7 +96,7 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
   // NOTE: I'm creating a stirng date in addition to the authorTime timestamp
   // because it's human readable and doesn't require remembering to * 1000 in
   // order to instantiate a date
-  const blameLines = sortOldestFirst(parseGitPorcelain(gitPorcelain)).map(
+  const blameLines = sortLatestFirst(parseGitPorcelain(gitPorcelain)).map(
     x => ({
       commit: x.commit.slice(0, 8),
       summary: x.summary,
@@ -138,16 +105,14 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
     }),
   );
 
-  const authors = Array.from(
-    new Set<string>(blameLines.map(x => x.author)),
-  ).sort();
+  const authors = Array.from(new Set<string>(blameLines.map(x => x.author)));
   const edits = new Set(blameLines.map(x => x.commit)).size;
 
   return {
     lineRange: [gitStart, gitEnd],
     authors,
     edits,
-    latestUpdate: blameLines[blameLines.length - 1],
+    latestUpdate: blameLines[0],
   };
 };
 

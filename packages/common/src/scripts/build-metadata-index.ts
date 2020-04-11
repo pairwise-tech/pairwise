@@ -21,6 +21,7 @@ const hasTodo = (challenge: Challenge) => {
 const main = async () => {
   const outfile = path.resolve(__dirname, "../courses/metadata.json");
   const courseDir = path.resolve(__dirname, "../courses");
+  const forceUpdate = process.argv.includes("--force");
 
   let existingFile;
   try {
@@ -34,10 +35,13 @@ const main = async () => {
     encoding: "utf-8",
   }).trim();
 
-  // NOTE: Remove metadata.json since it would break this change-checking as
-  // long as its under version control. Git will detect a change to that file,
-  // but that file is the one being built here
-  if (existingFile) {
+  if (forceUpdate) {
+    log("Forced Update");
+  } else if (existingFile) {
+    // NOTE: Remove metadata.json since it would break this change-checking as
+    // long as its under version control. Git will detect a change to that file,
+    // but that file is the one being built here
+
     const { buildCommit } = existingFile["@@PAIRWISE"];
     const cmd = `git diff --name-only ${buildCommit} -- ${courseDir}`;
     const filesChanged = execSync(cmd, { encoding: "utf-8" })
