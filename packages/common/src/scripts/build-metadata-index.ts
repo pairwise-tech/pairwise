@@ -79,6 +79,7 @@ const main = async () => {
       videoChallenges: allChallenges.filter(x => x.videoUrl).length,
       todoChallenges: allChallenges.filter(hasTodo).map(x => x.id),
     },
+    // tslint:disable-next-line: object-literal-key-quotes
     challenges: {},
   };
 
