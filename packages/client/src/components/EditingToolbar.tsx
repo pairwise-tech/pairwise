@@ -9,15 +9,28 @@ import {
   Position,
   ButtonGroup,
   Popover,
+  AnchorButton,
+  Spinner,
+  Card,
 } from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { CHALLENGE_TYPE } from "@pairwise/common";
+import {
+  CHALLENGE_TYPE,
+  Challenge,
+  ChallengeMetadataIndex,
+} from "@pairwise/common";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import { generateEmptyChallenge } from "tools/utils";
 import { IconButton } from "./Shared";
+
+const CONTRIBUTOR_IMAGES = {
+  "Ian Sinnott": require("./img/ian.jpg"),
+  "Sean Smith": require("./img/sean.png"),
+  "Peter Weinberg": require("./img/pete.jpg"),
+};
 
 /** ===========================================================================
  * Types & Config
@@ -141,6 +154,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
       />
       <SlideOut show={isEditMode && !hidden}>
         <ChallengeInsertionMenu />
+        {challenge && <GitContributionInfo challenge={challenge} />}
         <Tooltip content="Save" position={Position.BOTTOM}>
           <Button
             icon="saved"
@@ -267,6 +281,86 @@ const ChallengeInsertionMenu = connectChallengeInsertion(
     );
   },
 );
+
+const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
+  const [metadata, setMetadata] = React.useState<ChallengeMetadataIndex | null>(
+    null,
+  );
+  const [error, setError] = React.useState(false);
+
+  const handleClick = React.useCallback(() => {
+    import("@pairwise/common/src/courses/metadata.json")
+      .then(({ default: x }) => {
+        // @ts-ignore
+        setMetadata(x as ChallengeMetadataIndex);
+      })
+      .catch(err => {
+        setError(true);
+      });
+  }, []);
+
+  let content;
+  if (error) {
+    content = (
+      <>
+        <h1>Error</h1>
+        <p>
+          Could not load metadata for current challenge. This probably just
+          means the metadata index hasn't been rebuilt after recent course
+          udpates.
+        </p>
+      </>
+    );
+  } else if (!metadata || !(challenge.id in metadata)) {
+    content = <Spinner />;
+  } else {
+    const meta = metadata[challenge.id];
+    const { authors, latestUpdate } = meta.gitMetadata;
+    const { commit, author, authorDate } = latestUpdate;
+    const dateString = authorDate.split("T")[0];
+    content = (
+      <>
+        <h3 style={{ display: "flex", alignItems: "center", marginTop: 0 }}>
+          <span style={{ marginRight: 20 }}>Authors</span>
+          {authors.map(name => (
+            <img
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: 30,
+                marginLeft: 10,
+              }}
+              key={name}
+              // @ts-ignore Just shut up TS.If the name is not found that's fine
+              src={CONTRIBUTOR_IMAGES[name]}
+              alt={name}
+            />
+          ))}
+        </h3>
+        <div>
+          Last updated by <strong>{author}</strong> on <em>{dateString}</em>.
+        </div>
+        <AnchorButton
+          style={{ width: "100%" }}
+          target="_blank"
+          href={`https://github.com/pairwise-tech/pairwise/commit/${commit}`}
+        >
+          View Latest Commit
+        </AnchorButton>
+      </>
+    );
+  }
+
+  return (
+    <Popover
+      canEscapeKeyClose
+      position={Position.BOTTOM}
+      content={<Card>{content}</Card>}
+    >
+      <IconButton onClick={handleClick} large minimal icon="git-branch" />
+    </Popover>
+  );
+};
 
 /** ===========================================================================
  * Styles
