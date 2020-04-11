@@ -79,6 +79,7 @@ const main = async () => {
       videoChallenges: allChallenges.filter(x => x.videoUrl).length,
       todoChallenges: allChallenges.filter(hasTodo).map(x => x.id),
     },
+    challenges: {},
   };
 
   const allMetadata = await Promise.all(
@@ -88,7 +89,7 @@ const main = async () => {
   );
 
   allMetadata.forEach(metadata => {
-    result[metadata.challenge.id] = metadata;
+    result.challenges[metadata.challenge.id] = metadata;
   });
 
   log(`Writing to ${outfile}`);

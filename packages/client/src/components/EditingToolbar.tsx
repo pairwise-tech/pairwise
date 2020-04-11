@@ -12,6 +12,8 @@ import {
   AnchorButton,
   Spinner,
   Card,
+  Collapse,
+  Callout,
 } from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
@@ -283,16 +285,19 @@ const ChallengeInsertionMenu = connectChallengeInsertion(
 );
 
 const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
-  const [metadata, setMetadata] = React.useState<ChallengeMetadataIndex | null>(
-    null,
-  );
+  const [
+    allMetadata,
+    setAllMetadata,
+  ] = React.useState<ChallengeMetadataIndex | null>(null);
   const [error, setError] = React.useState(false);
+  const [isGitInfoOpen, setIsGitInfoOpen] = React.useState(false);
+  const handleToggleGitInfo = () => setIsGitInfoOpen(!isGitInfoOpen);
 
   const handleClick = React.useCallback(() => {
     import("@pairwise/common/src/courses/metadata.json")
       .then(({ default: x }) => {
         // @ts-ignore
-        setMetadata(x as ChallengeMetadataIndex);
+        setAllMetadata(x as ChallengeMetadataIndex);
       })
       .catch(err => {
         setError(true);
@@ -311,18 +316,18 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
         </p>
       </>
     );
-  } else if (!metadata || !(challenge.id in metadata)) {
+  } else if (!allMetadata || !(challenge.id in allMetadata.challenges)) {
     content = <Spinner />;
   } else {
-    const meta = metadata[challenge.id];
-    const { authors, latestUpdate } = meta.gitMetadata;
-    const { commit, author, authorDate } = latestUpdate;
-    const dateString = authorDate.split("T")[0];
+    const { buildCommit } = allMetadata["@@PAIRWISE"];
+    const meta = allMetadata.challenges[challenge.id];
+    const { contributors, latestUpdate, earliestUpdate } = meta.gitMetadata;
+    const dateString = latestUpdate.authorDate.split("T")[0];
     content = (
       <>
         <h3 style={{ display: "flex", alignItems: "center", marginTop: 0 }}>
-          <span style={{ marginRight: 20 }}>Authors</span>
-          {authors.map(name => (
+          <span style={{ marginRight: 20 }}>Contributors</span>
+          {contributors.map(name => (
             <img
               style={{
                 width: 30,
@@ -337,16 +342,51 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
             />
           ))}
         </h3>
-        <div>
-          Last updated by <strong>{author}</strong> on <em>{dateString}</em>.
+        <div style={{ marginBottom: 10 }}>
+          Last updated by <strong>{latestUpdate.author}</strong> on{" "}
+          <em>{dateString}</em>.
         </div>
-        <AnchorButton
+        <div style={{ marginBottom: 10 }}>
+          <ButtonGroup>
+            <AnchorButton
+              target="_blank"
+              href={`https://github.com/pairwise-tech/pairwise/commit/${earliestUpdate.commit}`}
+            >
+              Earliest Known Commit
+            </AnchorButton>
+            <AnchorButton
+              target="_blank"
+              href={`https://github.com/pairwise-tech/pairwise/commit/${latestUpdate.commit}`}
+            >
+              Latest Known Commit
+            </AnchorButton>
+          </ButtonGroup>
+        </div>
+        <Button
           style={{ width: "100%" }}
-          target="_blank"
-          href={`https://github.com/pairwise-tech/pairwise/commit/${commit}`}
+          icon={isGitInfoOpen ? "caret-down" : "caret-right"}
+          minimal
+          onClick={handleToggleGitInfo}
         >
-          View Latest Commit
-        </AnchorButton>
+          About this information
+        </Button>
+        <Collapse isOpen={isGitInfoOpen}>
+          <Callout>
+            <p>
+              Known commits are not guaranteed to be accurate. Correcting a typo
+              for example will make you the author of the entirety of a course
+              line.
+            </p>
+            <p>
+              However, git is fairly advanced. Commits where lines can be
+              detected to be copy-pasted are not included so moving lines around
+              in the course file should not overwrite existing authorship in
+              this view. This does mean though that the latest linked here
+              commit may well not be the literal latest commit you can find for
+              the given block of JSON that makes up this challenge.
+            </p>
+          </Callout>
+        </Collapse>
       </>
     );
   }
@@ -355,7 +395,7 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
     <Popover
       canEscapeKeyClose
       position={Position.BOTTOM}
-      content={<Card>{content}</Card>}
+      content={<Card style={{ maxWidth: 350 }}>{content}</Card>}
     >
       <IconButton onClick={handleClick} large minimal icon="git-branch" />
     </Popover>

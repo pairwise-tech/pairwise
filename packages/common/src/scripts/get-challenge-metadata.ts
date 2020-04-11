@@ -89,7 +89,7 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
   const {
     stdout: gitPorcelain,
   } = await exec(
-    `git blame --line-porcelain -L ${gitStart},${gitEnd} ${filepath}`,
+    `git blame --line-porcelain -M -L ${gitStart},${gitEnd} ${filepath}`,
     { encoding: "utf-8" },
   );
 
@@ -105,14 +105,17 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
     }),
   );
 
-  const authors = Array.from(new Set<string>(blameLines.map(x => x.author)));
+  const contributors = Array.from(
+    new Set<string>(blameLines.map(x => x.author)),
+  );
   const edits = new Set(blameLines.map(x => x.commit)).size;
 
   return {
     lineRange: [gitStart, gitEnd],
-    authors,
+    contributors,
     edits,
     latestUpdate: blameLines[0],
+    earliestUpdate: blameLines[blameLines.length - 1],
   };
 };
 
