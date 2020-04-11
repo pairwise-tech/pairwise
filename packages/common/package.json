@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "yarn run build:metadata",
     "build": "tsc",
-    "build:metadata": "ts-node ./src/scripts/build-metadata-index.js",
+    "build:metadata": "ts-node ./src/scripts/build-metadata-index.ts",
     "watch": "tsc -w",
     "prettier": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
