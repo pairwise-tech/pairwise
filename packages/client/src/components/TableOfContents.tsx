@@ -7,6 +7,8 @@ import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
 import { PROSE_MAX_WIDTH, COLORS, MOBILE } from "tools/constants";
 import { LineWrappedText } from "./Shared";
 
+const TOP_SPACING = 80;
+
 // Get all headings from a slate editor
 const getHeadings = (editor: Editor) => {
   // Third party typing issue
@@ -105,7 +107,7 @@ export default class TableOfContents extends React.Component<
     }
 
     const box = parent.getBoundingClientRect();
-    const isFixed = box.top < 40;
+    const isFixed = box.top < TOP_SPACING;
     const left = isFixed ? box.x : 0;
 
     if (this.state.isFixed !== isFixed || this.state.left !== left) {
@@ -133,7 +135,7 @@ export default class TableOfContents extends React.Component<
             : this.state.isFixed
             ? "fixed"
             : "absolute",
-          top: this.state.isFixed ? 40 : 0,
+          top: this.state.isFixed ? TOP_SPACING : 0,
           left: this.state.left,
         }}
       >

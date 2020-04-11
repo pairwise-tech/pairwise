@@ -1581,12 +1581,15 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   }
 }
 
+// Strip characters that would probably not look great in SEO results
 const stripChars = (s: string) => {
-  return s.replace(/\n/g, ". ").replace(/[^A-Za-z0-9 ,."'!?]/g, "");
+  return s
+    .replace(/\n/g, ". ") // Join newlines with a period and a space
+    .replace(/[^A-Za-z0-9 ,."'!?]/g, ""); // Whitelist alpha numeric characters plus a few standard others
 };
 
 const getSeoExcerpt = pipe(
-  (x: Challenge) => x.instructions || x.content || x.title,
+  (x: Challenge) => x.instructions || x.content,
   stripChars,
   (x: string) => truncate(x, 150),
 );
