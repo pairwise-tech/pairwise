@@ -1,6 +1,7 @@
 const fs = require("fs");
+const { promisify } = require("util");
 const path = require("path");
-const { execSync } = require("child_process");
+const exec = promisify(require("child_process").exec);
 
 const camelCase = str => {
   const capitalize = s => s.slice(0, 1).toUpperCase() + s.slice(1);
@@ -61,8 +62,10 @@ const parseGitPorcelain = str => {
 // without a comment to explain in words the actual ordering.
 const sortOldestFirst = x => x.sort((a, b) => a.authorTime - b.authorTime);
 
-const getGitMetadata = ({ gitStart, gitEnd, filepath }) => {
-  const gitPorcelain = execSync(
+const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
+  const {
+    stdout: gitPorcelain,
+  } = await exec(
     `git blame --line-porcelain -L ${gitStart},${gitEnd} ${filepath}`,
     { encoding: "utf-8" },
   );
@@ -90,60 +93,60 @@ const getGitMetadata = ({ gitStart, gitEnd, filepath }) => {
   };
 };
 
-const getChallengMetadata = (id, courseFiles = readCourseFilesFromDisk()) => {
+const getChallengMetadata = async (
+  id,
+  courseFiles = readCourseFilesFromDisk(),
+) => {
   const foundIn = {};
 
-  courseFiles.forEach(
-    ({
-      filename,
-      filepath,
-      raw,
-      json: { modules, ...course },
-      courseIndex,
-    }) => {
-      if (course.id === id) {
-        console.error(`${id} -> [COURSE] ${course.title}`);
+  for (const {
+    filename,
+    filepath,
+    raw,
+    json: { modules, ...course },
+  } of courseFiles) {
+    if (course.id === id) {
+      console.error(`${id} -> [COURSE] ${course.title}`);
+    }
+
+    for (const [moduleIndex, { challenges, ...mod }] of modules.entries()) {
+      if (mod.id === id) {
+        console.error(`${id} -> [MODULE] ${mod.title}`);
       }
 
-      modules.forEach(({ challenges, ...mod }, moduleIndex) => {
-        if (mod.id === id) {
-          console.error(`${id} -> [MODULE] ${mod.title}`);
-        }
+      const challengeIndex = challenges.findIndex(
+        challenge => challenge.id === id,
+      );
+      const challenge = challenges[challengeIndex];
 
-        const challengeIndex = challenges.findIndex(
-          challenge => challenge.id === id,
-        );
-        const challenge = challenges[challengeIndex];
+      if (challenge) {
+        foundIn.filename = filename;
+        foundIn.keypath = [
+          "modules",
+          moduleIndex,
+          "challenges",
+          challengeIndex,
+        ];
+        foundIn.course = course;
+        foundIn.module = mod;
+        foundIn.challenge = {
+          id: challenge.id,
+          type: challenge.type,
+          title: challenge.title,
+        };
 
-        if (challenge) {
-          foundIn.filename = filename;
-          foundIn.keypath = [
-            "modules",
-            moduleIndex,
-            "challenges",
-            challengeIndex,
-          ];
-          foundIn.course = course;
-          foundIn.module = mod;
-          foundIn.challenge = {
-            id: challenge.id,
-            type: challenge.type,
-            title: challenge.title,
-          };
+        const fileLocation = getFileLocation({
+          raw,
+          challenge,
+        });
 
-          const fileLocation = getFileLocation({
-            raw,
-            challenge,
-          });
-
-          foundIn.gitMetadata = getGitMetadata({
-            ...fileLocation,
-            filepath,
-          });
-        }
-      });
-    },
-  );
+        foundIn.gitMetadata = await getGitMetadata({
+          ...fileLocation,
+          filepath,
+        });
+      }
+    }
+  }
 
   return Object.keys(foundIn).length ? foundIn : null;
 };
@@ -170,9 +173,9 @@ const readCourseFilesFromDisk = (
 };
 module.exports.readCourseFilesFromDisk = readCourseFilesFromDisk;
 
-const main = () => {
+const main = async () => {
   const id = process.argv[2];
-  const foundIn = getChallengMetadata(id);
+  const foundIn = await getChallengMetadata(id);
 
   if (foundIn) {
     console.log(

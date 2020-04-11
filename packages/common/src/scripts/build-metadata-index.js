@@ -17,7 +17,7 @@ const hasTodo = challenge => {
     .some(x => x.toLowerCase().includes("todo"));
 };
 
-const main = () => {
+const main = async () => {
   const outfile = path.resolve(__dirname, "../courses/metadata.json");
   const courseDir = path.resolve(__dirname, "../courses");
 
@@ -74,13 +74,14 @@ const main = () => {
     },
   };
 
-  allChallenges.forEach(({ id }) => {
-    const metadata = getChallengMetadata(id, courseFiles);
-    if (metadata) {
-      result[id] = metadata;
-    } else {
-      log(`[WARN] ${id} Challenge Not Found`);
-    }
+  const allMetadata = await Promise.all(
+    allChallenges.map(({ id }) => {
+      return getChallengMetadata(id, courseFiles);
+    }),
+  );
+
+  allMetadata.forEach(metadata => {
+    result[metadata.challenge.id] = metadata;
   });
 
   log(`Writing to ${outfile}`);
