@@ -5,16 +5,23 @@ type MetaProps = JSX.IntrinsicElements["meta"];
 
 interface SEOProps {
   title: string;
-  description: string;
+  description?: string;
   lang?: string;
 }
+
+const DEFAULT_DESCRIPTION =
+  "Learn to code with hands-on challenges and projects";
 
 /**
  * SEO component copied largely from our WWW package. That version is using
  * gatsby queries to get some of the data though so it's not compatible with our
  * workspace.
  */
-const SEO = ({ title, description, lang = "en" }: SEOProps) => {
+const SEO = ({
+  title,
+  description = DEFAULT_DESCRIPTION,
+  lang = "en",
+}: SEOProps) => {
   const metaTags: MetaProps[] = [
     {
       name: "description",
