@@ -1,17 +1,18 @@
-const fs = require("fs");
-const path = require("path");
-const { execSync } = require("child_process");
+import * as fs from "fs";
+import * as path from "path";
+import { execSync } from "child_process";
 
-const {
+import {
   getChallengMetadata,
   readCourseFilesFromDisk,
-} = require("./get-challenge-metadata");
+} from "./get-challenge-metadata";
+import { Challenge } from "src/types/courses";
 
 const log = (...args) => {
   console.log("[COURSE METADATA]", ...args);
 };
 
-const hasTodo = challenge => {
+const hasTodo = (challenge: Challenge) => {
   return Object.values(challenge)
     .filter(x => typeof x === "string")
     .some(x => x.toLowerCase().includes("todo"));

@@ -1,7 +1,58 @@
-const fs = require("fs");
-const { promisify } = require("util");
-const path = require("path");
-const exec = promisify(require("child_process").exec);
+import * as fs from "fs";
+import * as path from "path";
+import { promisify } from "util";
+import * as ChildProcess from "child_process";
+import { Course } from "src/types/courses";
+
+const exec = promisify(ChildProcess.exec);
+
+interface GitPorcelainFormat {
+  commit: string;
+  author: string;
+  authorMail: string;
+  authorTime: number;
+  authorTz: string;
+  committer: string;
+  committerMail: string;
+  committerTime: number;
+  committerTz: string;
+  summary: string;
+  previous: string;
+  filename: string;
+}
+
+interface ChallengeMetadata {
+  filename: string;
+  keypath: Array<string | number>;
+  course: {
+    id: string;
+    title: string;
+    description: string;
+    free: boolean;
+    price: number;
+  };
+  module: {
+    id: string;
+    title: string;
+    free: boolean;
+  };
+  challenge: {
+    id: string;
+    type: string;
+    title: string;
+  };
+  gitMetadata: {
+    lineRange: number[];
+    authors: string[];
+    edits: number;
+    latestUpdate: {
+      commit: string;
+      summary: string;
+      author: string;
+      authorDate: string;
+    };
+  };
+}
 
 const camelCase = str => {
   const capitalize = s => s.slice(0, 1).toUpperCase() + s.slice(1);
@@ -14,7 +65,7 @@ const camelCase = str => {
 // because slice is not includive of the end index
 // NOTE: Adding 1 back onto start makes git blame -L <start>. Looking at the
 // docs it looks like git line indexes are actually 1-based not 0-based.
-const getFileLocation = ({ raw, challenge, filepath }) => {
+const getFileLocation = ({ raw, challenge }) => {
   const lines = raw.split("\n");
   const start =
     lines.findIndex(line => line.includes(`"id": "${challenge.id}"`)) - 1; // See NOTE
@@ -27,7 +78,6 @@ const getFileLocation = ({ raw, challenge, filepath }) => {
   return {
     gitStart: start + 1, // See NOTE
     gitEnd: end,
-    filepath,
   };
 };
 
@@ -37,7 +87,12 @@ const isNumeric = str => {
 
 // Git has a "Porcelain" format for machine consumption. It seems to be entirely
 // its own thing. Not terribly difficult to parse though.
-const parseGitPorcelain = str => {
+const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
+  // This seems simply too dynamic for TS, which is fair. It cannot gaurantee
+  // what I'm telling it, but we're working on the assumption that the passed in
+  // string really is a git porcelain string and TS can't help us with the
+  // specific format of a string
+  // @ts-ignore
   return str
     .trim()
     .split(/^\t.+$/m)
@@ -60,7 +115,8 @@ const parseGitPorcelain = str => {
 
 // This is a total one-off helper but I always find sorting to be confusing
 // without a comment to explain in words the actual ordering.
-const sortOldestFirst = x => x.sort((a, b) => a.authorTime - b.authorTime);
+const sortOldestFirst = (x: GitPorcelainFormat[]) =>
+  x.sort((a, b) => a.authorTime - b.authorTime);
 
 const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
   const {
@@ -82,7 +138,9 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
     }),
   );
 
-  const authors = Array.from(new Set(blameLines.map(x => x.author))).sort();
+  const authors = Array.from(
+    new Set<string>(blameLines.map(x => x.author)),
+  ).sort();
   const edits = new Set(blameLines.map(x => x.commit)).size;
 
   return {
@@ -93,11 +151,13 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
   };
 };
 
-const getChallengMetadata = async (
-  id,
-  courseFiles = readCourseFilesFromDisk(),
-) => {
-  const foundIn = {};
+export const getChallengMetadata = async (
+  id: string,
+  courseFiles: ReturnType<
+    typeof readCourseFilesFromDisk
+  > = readCourseFilesFromDisk(),
+): Promise<ChallengeMetadata | null> => {
+  const foundIn: Partial<ChallengeMetadata> = {};
 
   for (const {
     filename,
@@ -114,9 +174,7 @@ const getChallengMetadata = async (
         console.error(`${id} -> [MODULE] ${mod.title}`);
       }
 
-      const challengeIndex = challenges.findIndex(
-        challenge => challenge.id === id,
-      );
+      const challengeIndex = challenges.findIndex(x => x.id === id);
       const challenge = challenges[challengeIndex];
 
       if (challenge) {
@@ -148,12 +206,11 @@ const getChallengMetadata = async (
     }
   }
 
-  return Object.keys(foundIn).length ? foundIn : null;
+  return Object.keys(foundIn).length ? (foundIn as ChallengeMetadata) : null;
 };
-module.exports.getChallengMetadata = getChallengMetadata;
 
-const readCourseFilesFromDisk = (
-  courseRoot = path.resolve(__dirname, "../courses"),
+export const readCourseFilesFromDisk = (
+  courseRoot: string = path.resolve(__dirname, "../courses"),
 ) => {
   const courseFiles = fs
     .readdirSync(path.resolve(courseRoot))
@@ -165,13 +222,12 @@ const readCourseFilesFromDisk = (
         filename: path.basename(filepath),
         filepath,
         raw,
-        json: JSON.parse(raw),
+        json: JSON.parse(raw) as Course,
       };
     });
 
   return courseFiles;
 };
-module.exports.readCourseFilesFromDisk = readCourseFilesFromDisk;
 
 const main = async () => {
   const id = process.argv[2];
