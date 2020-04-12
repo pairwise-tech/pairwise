@@ -97,7 +97,7 @@
         {
           "id": "5ziJI35f",
           "type": "section",
-          "title": "HTML, The Language of the Web",
+          "title": "HTML, the Language of the Web",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
@@ -1017,7 +1017,7 @@
         {
           "id": "qYQ8GOYvW",
           "type": "typescript",
-          "title": "What type is this?",
+          "title": "What Type is This?",
           "instructions": "Use `typeof` to find the types of the variables defined in the code below.",
           "testCode": "// Write your tests here:\ntest(\"`sType` should be string\", () => {\n  expect(sType).toBe(\"string\");\n});\ntest(\"`nType` should be number\", () => {\n  expect(nType).toBe(\"number\");\n});\ntest(\"`bType` should be boolean\", () => {\n  expect(bType).toBe(\"boolean\");\n});\ntest(\"The `typeof` keyword should be used\", () => {\n  expect(__user_code_string__).toMatch(/typeof .+/)\n})",
           "videoUrl": "",
@@ -1391,7 +1391,7 @@
         {
           "id": "Jy0Azabm",
           "type": "typescript",
-          "title": "Get the index using a while loop",
+          "title": "Get the Index Using a While Loop",
           "instructions": "Use a `while` loop to find the index of `\"broom\"` in the `randomThings` array\\.",
           "testCode": "test(\"`result` should be defined\", () =>\n    expect(result).not.toBe(undefined));\ntest(\"`result` should be the index of \\\"broom\\\" in the `randomThings` array\", () =>\n    expect(result).toBe(randomThings.indexOf('broom')));\ntest('Solution should use a `while` loop', () => {\n    const reg = /while\\s+\\(.+\\)\\s+{/\n    expect(reg.test(__user_code_string__)).toBe(true);\n})",
           "videoUrl": "",
@@ -1402,7 +1402,7 @@
         {
           "id": "xAggDM8Y",
           "type": "typescript",
-          "title": "Get the index using a for loop get the loop a loop",
+          "title": "Get the Index Using a for Loop",
           "instructions": "Use a `for` loop to find the index of `\"mango\"` in the `randomThings` array\\.",
           "testCode": "test(\"`result` should be defined\", () => expect(result).not.toBe(undefined));\ntest('`result` should be the index of \"mango\" in the `randomThings` array', () =>\n  expect(result).toBe(randomThings.indexOf(\"mango\")));\ntest(\"Solution should use a `for` loop\", () => {\n  const reg = /for\\s+\\(.+\\)\\s+{/;\n  expect(reg.test(__user_code_string__)).toBe(true);\n});\n",
           "videoUrl": "",
@@ -1424,7 +1424,7 @@
         {
           "id": "5gbtOWeTG",
           "type": "typescript",
-          "title": "Breaking out of a loop",
+          "title": "Breaking Out of a Loop",
           "instructions": "Use a `while` loop or a `for` loop to find the index in the `people` array of the person with the job `\"overriding the hard drive\"`. Once you find it `break` out of the loop to avoid doing more work.",
           "testCode": "// Write your tests here:\ntest(\"`people` should be an array\", () => {\n  expect(Array.isArray(people)).toBe(true);\n});\n\ntest(\"`index` should be a number\", () => expect(typeof index).toBe(\"number\"));\n\ntest('`index` should be be the index of the person with the job `\"overriding the hard drive\"`', () => {\n  expect(index).toBe(\n    people.findIndex((x) => x.job === \"overriding the hard drive\")\n  );\n});\n\ntest(\"Should use the `break` statement\", () => {\n  expect(__user_code_string__).toMatch(/break/g);\n});\n",
           "videoUrl": "",
@@ -1435,7 +1435,7 @@
         {
           "id": "3d0e8KsAI",
           "type": "typescript",
-          "title": "Continuing a loop",
+          "title": "Continuing a Loop",
           "instructions": "Use a `while` loop or a `for` loop to fill the `result` array with ever person who's name starts with `\"G\"`.",
           "testCode": "// Write your tests here:\ntest(\"`people` should be an array\", () => {\n  expect(Array.isArray(people)).toBe(true);\n});\n\ntest(\"`result` should be an array\", () =>\n  expect(Array.isArray(result)).toBe(true));\n\ntest('`result` should contain all people whos name starts with \"G\"', () => {\n  const _result = people.filter((x) => x.name.startsWith(\"G\"));\n  expect(result).toEqual(_result);\n});\n\ntest(\"Should use the `continue` statement\", () => {\n  expect(__user_code_string__).toMatch(/continue/g);\n});\n",
           "videoUrl": "",
@@ -1776,7 +1776,7 @@
         {
           "id": "UMroK7wKl",
           "type": "typescript",
-          "title": "Create arrays",
+          "title": "Create Arrays",
           "instructions": "Create three arrays `stringArray`, `numArray`, and `boolArray`, each of which contains only strings, numbers, and booleans respectively.",
           "testCode": "test(\"`stringArray`, `numArray`, `boolArray` should not be null\", () => {\n  [stringArray, numArray, boolArray].forEach(x => {\n    expect(x).not.toBe(null);\n  });\n});\n\ntest(\"`stringArray`, `numArray`, `boolArray`  should be an arrays\", () => {\n  [stringArray, numArray, boolArray].forEach(x => {\n    expect(Array.isArray(x)).toBe(true);\n  });\n});\n\ntest(\"`stringArray` should be an array of strings\", () => {\n  expect(stringArray.length).toBeGreaterThan(0);\n  expect(stringArray.every(x => typeof x === \"string\")).toBe(true);\n});\ntest(\"`numArray` should be an array of numbers\", () => {\n  expect(numArray.length).toBeGreaterThan(0);\n  expect(numArray.every(x => typeof x === \"number\")).toBe(true);\n});\ntest(\"`boolArray` should be an array of booleans\", () => {\n  expect(boolArray.length).toBeGreaterThan(0);\n  expect(boolArray.every(x => typeof x === \"boolean\")).toBe(true);\n});",
           "videoUrl": "",
@@ -1798,13 +1798,13 @@
         {
           "id": "EHIj@pzdY",
           "type": "typescript",
-          "title": "Zero-based Indexes",
-          "instructions": "* Set `numElements` to the number of elements in the `things` array\\. In other words, the length of the array.\n   * NOTE: Use the `length` property of the array rather. The array is very short so you can clearly see there are only 4 elements, but in practice it won't always be clear how many elements an array has. The `length` property gives us this information on demand.\n* Set `first` equal to the first element of the `things` array\n* Set `last` equal to the last element of the `things` array\n\n\nRather than copying directly use array indexing to grab the value using it's index.\n",
+          "title": "Zero-Based Indexes",
+          "instructions": "* Set `numElements` to the number of elements in the `things` array\\. In other words, the length of the array.\n   * NOTE: Use the `length` property of the array rather. The array is very short so you can clearly see there are only 4 elements, but in practice it won't always be clear how many elements an array has. The `length` property gives us this information on demand.\n* Set `first` equal to the first element of the `things` array\n* Set `last` equal to the last element of the `things` array\n\n\nRather than copying directly use array indexing to grab the value using it's index.",
           "testCode": "// Write your tests here:\ntest(\"`numElements` is equal to the length of the array\", () => {\n  expect(numElements).toBe(things.length);\n});\ntest(\"`first` is equal to the first element of the array\", () => {\n  expect(first).toBe(things[0]);\n});\ntest(\"`last` is equal to the last element of the array\", () => {\n  expect(last).toBe(things[things.length - 1]);\n});\n\n",
           "videoUrl": "",
           "starterCode": "const things = [\"pears\", \"peaches\", \"apples\", \"juicer\"];\n\nconst numElements = undefined;\nconst first = undefined;\nconst last = undefined;\n\n",
           "solutionCode": "const things = [\"pears\", \"peaches\", \"apples\", \"juicer\"];\n\nconst numElements = things.length;\nconst first = things[0];\nconst last = things[things.length - 1];\n\n",
-          "content": "# Zero\\-based?\n\nWhat this means is that the very first element of an array will always be at index zero. I.e. `someArray[0]`. This may be counterintuitive. For example if there are 8 elements in your array \\(i.e. the `length` is eight\\) and you want the last element you might be tempted to write `someArray[8]`. However, this will give you `undefined` for your troubles because the last element is actually at index `7`.\n# When in doubt, log it out\n\nOver time you will get used to this fact and you will not need to think much to work with arrays by index. However, it can get pretty confusing trying to think about what's at which index using simply your brain—after all, that's what computers are for. If you're ever in doubt just drop a `console.log` into your code somewhere and see what value you're actually getting.\n# Useful beyond TypeScript\n\nZero\\-based indexes is a fairly foundational concept in programming so it's worth trying to remember this early on. Mainstream programming languages such as Python, Ruby, PHP, Java, Swift, C\\# and of course JavaScript all use zero\\-based indexes. In fact, if you work as a software engineer or you write software for any reason at all the chances are overwhelmingly that you'll be using a language with zero\\-based indexes.\n\nAs with much of what you're learning in this course this knowledge is foundational.\n"
+          "content": "# Zero\\-based?\n\nWhat this means is that the very first element of an array will always be at index zero. I.e. `someArray[0]`. This may be counterintuitive. For example if there are 8 elements in your array \\(i.e. the `length` is eight\\) and you want the last element you might be tempted to write `someArray[8]`. However, this will give you `undefined` for your troubles because the last element is actually at index `7`.\n# When in doubt, log it out\n\nOver time you will get used to this fact and you will not need to think much to work with arrays by index. However, it can get pretty confusing trying to think about what's at which index using simply your brain—after all, that's what computers are for. If you're ever in doubt just drop a `console.log` into your code somewhere and see what value you're actually getting.\n# Useful beyond TypeScript\n\nZero\\-based indexes is a fairly foundational concept in programming so it's worth trying to remember this early on. Mainstream programming languages such as Python, Ruby, PHP, Java, Swift, C\\# and of course JavaScript all use zero\\-based indexes. In fact, if you work as a software engineer or you write software for any reason at all the chances are overwhelmingly that you'll be using a language with zero\\-based indexes.\n\nAs with much of what you're learning in this course this knowledge is foundational."
         },
         {
           "id": "KOlr7dhnP",
@@ -1831,7 +1831,7 @@
         {
           "id": "NEKvEvei4",
           "type": "typescript",
-          "title": "Objects and arrays together",
+          "title": "Objects and Arrays Together",
           "instructions": "Create an array of objects to represent the following table. Name the array `catParty`.\n**NOTE**: The cat named Jello does not have a favorite subreddit. Use `null` to represent this.\n| **name** | **job** | **favoriteSubreddit** |\n|:--- |:--- |:--- |\n| Maomi | Napping | https://www.reddit.com/r/cats |\n| Jarbles | Sleeping | https://www.reddit.com/r/cute |\n| Jello | Playing |  |\n",
           "testCode": "// Write your tests here:\ntest(\"`catParty` should be an array\", () => {\n  expect(Array.isArray(catParty)).toBe(true);\n});\n\ntest(\"Every object in `catParty` should have `name`, `job`, `favoriteSubreddit` keys.\", () => {\n  catParty.forEach((x) => {\n    expect(x).toHaveProperty(\"name\");\n    expect(x).toHaveProperty(\"job\");\n    expect(x).toHaveProperty(\"favoriteSubreddit\");\n  });\n});\n\ntest(\"There should be three cats in the party\", () => {\n  expect(catParty.length).toBe(3);\n})\n\n// This test would do it, but the others give more context to the user\ntest(\"Jello should have a favoriteSubreddit of `null`\", () => {\n  expect(catParty).toHaveProperty([2, 'favoriteSubreddit'], null);\n})\n\n// This test would do it, but the others give more context to the user\ntest(\"The three objects should match the three rows in the table\", () => {\n  const _expected = [\n    {\n      name: \"Maomi\",\n      job: \"Napping\",\n      favoriteSubreddit: \"https://www.reddit.com/r/cats\",\n    },\n    {\n      name: \"Jarbles\",\n      job: \"Sleeping\",\n      favoriteSubreddit: \"https://www.reddit.com/r/cute\",\n    },\n    {\n      name: \"Jello\",\n      job: \"Playing\",\n      favoriteSubreddit: null,\n    },\n  ]\n\n  expect(catParty).toEqual(_expected);\n})",
           "videoUrl": "",
@@ -1842,7 +1842,7 @@
         {
           "id": "sZBviRApf",
           "type": "typescript",
-          "title": "Thinking in terms of data",
+          "title": "Thinking in Terms of Data",
           "instructions": "Use a nested arrays to model a tic\\-tac\\-toe board.",
           "testCode": "// Write your tests here:\ntest(\"`xWins` should have a winning X row\", () => {\n  expect(typeof xWins).not.toBe(\"undefined\");\n  expect(hasWinner(1, xWins)).toBe(true);\n});\n\ntest(\"`oWins` should have a winning O row\", () => {\n  expect(typeof xWins).not.toBe(\"undefined\");\n  expect(hasWinner(2, oWins)).toBe(true);\n});\n\nfunction hasWinner(winner, board) {\n  for (let i = 0; i < board.length; i++) {\n    // Rows\n    let rowSum = 0;\n    let colSum = 0;\n    for (let j = 0; j < board.length; j++) {\n      rowSum += board[i][j];\n      colSum += board[j][i];\n    }\n\n    if (rowSum === winner * 3) {\n      return true;\n    }\n    if (colSum === winner * 3) {\n      return true;\n    }\n  }\n  const d1 = [board[0][0], board[1][1], board[2][2]].reduce((a, b) => a + b);\n  const d2 = [board[0][2], board[1][1], board[2][0]].reduce((a, b) => a + b);\n  if (d1 === winner * 3 || d2 === winner * 3) {\n    return true;\n  }\n  return false;\n}\n",
           "videoUrl": "",
@@ -1919,7 +1919,7 @@
         {
           "id": "Y3M5EjYjR",
           "type": "typescript",
-          "title": "Splitting and joining",
+          "title": "Splitting and Joining",
           "instructions": "This lesson is all about `split` and `join`. You can `split` a string into an array and you can `join` an array into a string. Scroll down to the content for more info. Here's the challenge:\n\n* Split the `str` variable on spaces and assign the result to `words`.\n* Split the `str` variable on individual characters and assign the result to `chars`. See HINT below.\n* Join `words` into a string using a space and assign the result to `joinedWords`.\n* Join `chars` into a string using an empty string and assign the result to `joinedChars`.\n\n\n**HINT**: To split on characters, think about it as splitting on \"nothing\" or splitting on an _empty string_.\n",
           "testCode": "// Write your tests here:\ntest(\"`words` should be `str` split on spaces\", () => {\n  expect(words).toEqual(str.split(\" \"));\n});\ntest(\"`chars` should be `str` split on an empty string\", () => {\n  expect(chars).toEqual(str.split(\"\"));\n});\ntest(\"`joinedWords` should be `words` joined on spaces\", () => {\n  expect(joinedWords).toEqual(words.join(\" \"));\n});\ntest(\"`joinedChars` should be `chars` joined on an empty string\", () => {\n  expect(joinedChars).toEqual(chars.join(\"\"));\n});\ntest(\"`joinedWords` and `joinedChars` should both equal `str`\", () => {\n  expect(joinedWords).toEqual(str);\n  expect(joinedChars).toEqual(str);\n});\n",
           "videoUrl": "",
