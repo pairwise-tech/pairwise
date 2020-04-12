@@ -2,6 +2,7 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
+import truncate from "truncate";
 import { monaco, registerExternalLib, MonacoModel } from "../monaco";
 import {
   assertUnreachable,
@@ -55,7 +56,7 @@ import {
   composeWithProps,
   constructDataBlobFromChallenge,
   challengeRequiresWorkspace,
-  getFileMetaByChallengeType,
+  getFileExtensionByChallengeType,
 } from "tools/utils";
 import {
   Tab,
@@ -83,6 +84,8 @@ import { CODEPRESS } from "tools/client-env";
 import cx from "classnames";
 import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
+import pipe from "ramda/es/pipe";
+import SEO from "./SEO";
 
 const debug = require("debug")("client:Workspace");
 
@@ -1361,7 +1364,7 @@ class Workspace extends React.Component<IProps, IState> {
   // Export / Download the text from the editor as a file. File extension is determined by challenge type.
   private readonly handleExport = () => {
     const { code } = this.state;
-    const meta = getFileMetaByChallengeType(this.props.challenge.type);
+    const meta = getFileExtensionByChallengeType(this.props.challenge);
 
     if (!meta) {
       console.warn(
@@ -1557,9 +1560,14 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
     const codeBlob = blob ? blob : constructedBlob;
     const isSandbox = challenge.id === SANDBOX_ID;
     const requiresWorkspace = challengeRequiresWorkspace(challenge);
+    const seoMeta = {
+      title: challenge.title,
+      description: getSeoExcerpt(challenge),
+    };
 
     return (
       <React.Fragment>
+        <SEO {...seoMeta} />
         {requiresWorkspace && (
           <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
         )}
@@ -1572,6 +1580,19 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
     );
   }
 }
+
+// Strip characters that would probably not look great in SEO results
+const stripChars = (s: string) => {
+  return s
+    .replace(/\n/g, ". ") // Join newlines with a period and a space
+    .replace(/[^A-Za-z0-9 ,."'!?]/g, ""); // Whitelist alpha numeric characters plus a few standard others
+};
+
+const getSeoExcerpt = pipe(
+  (x: Challenge) => x.instructions || x.content, // Prioritize instructions over content. The most common case is one or the other not both
+  stripChars,
+  (x: string) => truncate(x, 150),
+);
 
 /** ===========================================================================
  * Export
