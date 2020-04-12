@@ -14,6 +14,8 @@ import {
   Card,
   Collapse,
   Callout,
+  PopoverInteractionKind,
+  PopoverPosition,
 } from "@blueprintjs/core";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
@@ -22,6 +24,7 @@ import {
   CHALLENGE_TYPE,
   Challenge,
   ChallengeMetadataIndex,
+  ChallengeMetadata,
 } from "@pairwise/common";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
@@ -322,7 +325,7 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
     const { buildCommit } = allMetadata["@@PAIRWISE"];
     const meta = allMetadata.challenges[challenge.id];
     const { contributors, latestUpdate, earliestUpdate } = meta.gitMetadata;
-    const dateString = latestUpdate.authorDate.split("T")[0];
+    const dateString = dateFromIso(latestUpdate.authorDate);
     content = (
       <>
         <h3 style={{ display: "flex", alignItems: "center", marginTop: 0 }}>
@@ -348,18 +351,11 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
         </div>
         <div style={{ marginBottom: 10 }}>
           <ButtonGroup>
-            <AnchorButton
-              target="_blank"
-              href={`https://github.com/pairwise-tech/pairwise/commit/${earliestUpdate.commit}`}
-            >
-              Earliest Known Commit
-            </AnchorButton>
-            <AnchorButton
-              target="_blank"
-              href={`https://github.com/pairwise-tech/pairwise/commit/${latestUpdate.commit}`}
-            >
-              Latest Known Commit
-            </AnchorButton>
+            <CommitDetailButton
+              label="Earliest Known Commit"
+              {...earliestUpdate}
+            />
+            <CommitDetailButton label="Latest Known Commit" {...latestUpdate} />
           </ButtonGroup>
         </div>
         <Button
@@ -398,6 +394,63 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
       content={<Card style={{ maxWidth: 350 }}>{content}</Card>}
     >
       <IconButton onClick={handleClick} large minimal icon="git-branch" />
+    </Popover>
+  );
+};
+
+const dateFromIso = (s: string) => {
+  return s.split("T")[0];
+};
+
+const MinimalCard = styled(Card)`
+  background-color: #222 !important;
+  padding: 5px 10px;
+  color: white;
+
+  h3 {
+    margin: 0;
+    margin-bottom: 5px;
+  }
+  p {
+    margin: 0;
+  }
+`;
+
+type GitUpdate = ChallengeMetadata["gitMetadata"]["earliestUpdate"] & {
+  label: string;
+};
+
+const CommitDetailButton = ({ label, ...update }: GitUpdate) => {
+  return (
+    <Popover
+      minimal
+      interactionKind={PopoverInteractionKind.HOVER}
+      position={PopoverPosition.BOTTOM}
+      hoverOpenDelay={30}
+      hoverCloseDelay={30}
+    >
+      <AnchorButton
+        target="_blank"
+        href={`https://github.com/pairwise-tech/pairwise/commit/${update.commit}`}
+      >
+        {label}
+      </AnchorButton>
+      <MinimalCard>
+        <h3>
+          <em>{dateFromIso(update.authorDate)}</em>
+          <span style={{ opacity: 0.5 }}>{" • "}</span>
+          <a
+            target="_blank"
+            href={`https://github.com/pairwise-tech/pairwise/commit/${update.commit}`}
+          >
+            {update.commit}
+          </a>
+          <span style={{ opacity: 0.5 }}>{" • "}</span>
+          {update.author}
+        </h3>
+        <p></p>
+        <p>{update.summary}</p>
+      </MinimalCard>
     </Popover>
   );
 };
