@@ -41,6 +41,7 @@ export interface ChallengeMetadata {
   gitMetadata: {
     lineRange: number[];
     contributors: string[];
+    contributionsBy: { [k: string]: string[] };
     edits: number;
     earliestUpdate: {
       commit: string;

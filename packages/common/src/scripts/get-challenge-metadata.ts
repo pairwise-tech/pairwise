@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { promisify } from "util";
+import { promisify, inspect } from "util";
 import * as ChildProcess from "child_process";
 import { Course, ChallengeMetadata } from "src/types/courses";
 
@@ -168,11 +168,19 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
   const contributors = Array.from(
     new Set<string>(blameLines.map(x => x.author)),
   );
+  const contributionsBy = blameLines.reduce((agg, x) => {
+    const arr = [...(agg[x.author] || []), x.commit];
+    return {
+      ...agg,
+      [x.author]: arr,
+    };
+  }, {});
   const edits = new Set(blameLines.map(x => x.commit)).size;
 
   return {
     lineRange: [gitStart, gitEnd],
     contributors,
+    contributionsBy,
     edits,
     latestUpdate: blameLines[0],
     earliestUpdate: blameLines[blameLines.length - 1],
@@ -271,7 +279,7 @@ const main = async () => {
         foundIn.challenge.title,
       ].join(" > "),
     );
-    console.log(foundIn);
+    console.log(inspect(foundIn, { colors: true, depth: 30 }));
   } else {
     console.log(`[COURSE] ${id} Not found`);
   }

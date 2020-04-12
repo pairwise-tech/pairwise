@@ -1,6 +1,6 @@
 {
   "@@PAIRWISE": {
-    "buildCommit": "674b733",
+    "buildCommit": "6b6fd6b",
     "totalChallenges": 302,
     "codeChallenges": 202,
     "videoChallenges": 15,
@@ -47,6 +47,16 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "4945acc6",
+            "4945acc6",
+            "4945acc6",
+            "4945acc6",
+            "4945acc6",
+            "4945acc6"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "4945acc6",
@@ -95,6 +105,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0a8cab41",
+            "0a8cab41",
+            "0a8cab41",
+            "0a8cab41",
+            "0ce609cc",
+            "0ce609cc",
+            "0ce609cc",
+            "e5563588",
+            "e5563588"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "0a8cab41",
@@ -144,6 +167,19 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0a8cab41",
+            "0a8cab41",
+            "e5563588",
+            "0e8b620d"
+          ],
+          "Ian Sinnott": [
+            "69eaa34c",
+            "69eaa34c",
+            "69eaa34c"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "0a8cab41",
@@ -193,6 +229,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "834025a1"
+          ],
+          "Ian Sinnott": [
+            "08df8ed1",
+            "08df8ed1",
+            "08df8ed1",
+            "08df8ed1",
+            "08df8ed1"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "834025a1",
@@ -243,6 +291,23 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "4e9b0850",
+            "7b45cb64",
+            "7b45cb64"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "1f34a9c8",
+            "1f34a9c8",
+            "1f34a9c8",
+            "1f34a9c8"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "4e9b0850",
@@ -291,6 +356,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "867701f4",
+            "867701f4",
+            "867701f4",
+            "867701f4",
+            "867701f4",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "867701f4",
@@ -339,6 +417,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "65fbd828",
+            "65fbd828",
+            "ea14fa62",
+            "ea14fa62",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "65fbd828",
@@ -387,6 +478,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "5a53bd76",
+            "8c8313a8",
+            "65fbd828",
+            "89f5df48",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "5a53bd76",
@@ -435,6 +539,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "65fbd828",
+            "65fbd828",
+            "ee9e7fcc",
+            "ee9e7fcc",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e",
+            "db852e4e"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "65fbd828",
@@ -484,6 +601,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0e8b620d",
+            "1f34a9c8",
+            "b836d287",
+            "b836d287"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "7d69ddc8"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "0e8b620d",
@@ -532,6 +661,15 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "75909f00",
+            "f811aad7",
+            "f36b3f68",
+            "ae278535",
+            "ae278535"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "75909f00",
@@ -580,6 +718,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7",
+            "9fabf07c",
+            "ae278535",
+            "60b5a903",
+            "79fb69b8",
+            "79fb69b8",
+            "79fb69b8",
+            "79fb69b8"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -630,6 +781,23 @@
           "Peter Weinberg",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "e40505ec",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b"
+          ],
+          "Peter Weinberg": [
+            "7b45cb64"
+          ],
+          "Ian Sinnott": [
+            "59b95291",
+            "59b95291"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "e40505ec",
@@ -680,6 +848,23 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "7b45cb64",
+            "7b45cb64",
+            "7b45cb64"
+          ],
+          "Ian Sinnott": [
+            "ef43a6f1"
+          ],
+          "Sean Smith": [
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "7b45cb64",
@@ -730,6 +915,23 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "7b45cb64",
+            "7b45cb64"
+          ],
+          "Ian Sinnott": [
+            "ef43a6f1",
+            "e1f518de"
+          ],
+          "Sean Smith": [
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "7b45cb64",
@@ -778,6 +980,18 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b9802904",
+            "b9802904",
+            "bdca9543",
+            "bdca9543",
+            "bdca9543",
+            "bdca9543",
+            "bdca9543",
+            "bdca9543"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "b9802904",
@@ -826,6 +1040,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b1bc744a",
+            "b1bc744a",
+            "0e4de3cd",
+            "0e4de3cd",
+            "0e4de3cd",
+            "bdca9543",
+            "bdca9543",
+            "bdca9543",
+            "bdca9543"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "b1bc744a",
@@ -874,6 +1101,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b1bc744a",
+            "7c9cd038",
+            "7c9cd038",
+            "7c9cd038",
+            "7c9cd038",
+            "7c9cd038",
+            "7c9cd038",
+            "7c9cd038",
+            "7c9cd038"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "b1bc744a",
@@ -922,6 +1162,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b1bc744a",
+            "b1bc744a",
+            "686797f3",
+            "686797f3",
+            "686797f3",
+            "686797f3",
+            "686797f3",
+            "686797f3",
+            "686797f3"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "b1bc744a",
@@ -970,6 +1223,18 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b1bc744a",
+            "b1bc744a",
+            "b1bc744a",
+            "b1bc744a",
+            "b1bc744a",
+            "b1bc744a",
+            "b1bc744a",
+            "b1bc744a"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "b1bc744a",
@@ -1018,6 +1283,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "6c3ec16b",
+            "8f793063",
+            "8f793063",
+            "b9802904",
+            "b9802904",
+            "b9802904",
+            "b9802904",
+            "b9802904",
+            "b9802904"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "6c3ec16b",
@@ -1066,6 +1344,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "8f793063",
+            "8f793063",
+            "7cb81b8d",
+            "7cb81b8d",
+            "7cb81b8d",
+            "7cb81b8d",
+            "7cb81b8d",
+            "7cb81b8d",
+            "7cb81b8d"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "8f793063",
@@ -1114,6 +1405,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "8f793063",
+            "6fc57ce2",
+            "6fc57ce2",
+            "6fc57ce2",
+            "6fc57ce2",
+            "6fc57ce2",
+            "6fc57ce2",
+            "6fc57ce2",
+            "6fc57ce2"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "8f793063",
@@ -1162,6 +1466,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "08288342",
+            "08288342",
+            "08288342",
+            "08288342",
+            "08288342",
+            "08288342",
+            "08288342",
+            "08288342",
+            "08288342"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "08288342",
@@ -1210,6 +1527,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0b977240",
+            "0b977240",
+            "6c3ec16b",
+            "6c3ec16b",
+            "6c3ec16b",
+            "6c3ec16b",
+            "6c3ec16b",
+            "6c3ec16b",
+            "6c3ec16b"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "0b977240",
@@ -1258,6 +1588,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "1e74ea45",
+            "1e74ea45",
+            "1e74ea45",
+            "1e74ea45"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "1e74ea45",
@@ -1306,6 +1644,16 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "59b95291",
+            "f811aad7",
+            "f811aad7",
+            "60b5a903",
+            "60b5a903",
+            "60b5a903"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "59b95291",
@@ -1356,6 +1704,23 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "7b45cb64"
+          ],
+          "Ian Sinnott": [
+            "ef43a6f1",
+            "f811aad7",
+            "431dddd3",
+            "28c36ba4"
+          ],
+          "Sean Smith": [
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b"
+          ]
+        },
         "edits": 6,
         "latestUpdate": {
           "commit": "7b45cb64",
@@ -1405,6 +1770,21 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7",
+            "baf6daa9",
+            "28c36ba4",
+            "f622668e",
+            "f622668e",
+            "f622668e",
+            "f622668e"
+          ],
+          "Sean Smith": [
+            "f41f57d3"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -1455,6 +1835,23 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "3f9edebc",
+            "7b45cb64"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "10effe88"
+          ],
+          "Sean Smith": [
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "3f9edebc",
@@ -1504,6 +1901,21 @@
           "Peter Weinberg",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "4e9b0850",
+            "4e9b0850"
+          ],
+          "Ian Sinnott": [
+            "0daaab05",
+            "ef43a6f1",
+            "f811aad7",
+            "a056a0f8",
+            "a056a0f8",
+            "a056a0f8",
+            "a056a0f8"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "4e9b0850",
@@ -1553,6 +1965,21 @@
           "Peter Weinberg",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "4e9b0850"
+          ],
+          "Ian Sinnott": [
+            "ef43a6f1",
+            "ef43a6f1",
+            "f811aad7",
+            "be76408b",
+            "be76408b",
+            "be76408b",
+            "be76408b",
+            "be76408b"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "4e9b0850",
@@ -1602,6 +2029,21 @@
           "Peter Weinberg",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "7b45cb64"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7",
+            "ea20ee8f",
+            "ea20ee8f",
+            "ea20ee8f",
+            "ea20ee8f",
+            "ea20ee8f",
+            "ea20ee8f"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "7b45cb64",
@@ -1651,6 +2093,15 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "ef43a6f1",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "2e1cd02e"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "ef43a6f1",
@@ -1699,6 +2150,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7",
+            "baf6daa9",
+            "0dd06f87",
+            "0dd06f87",
+            "0dd06f87",
+            "0dd06f87",
+            "0dd06f87",
+            "0dd06f87"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -1747,6 +2211,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7",
+            "02acbd04",
+            "02acbd04",
+            "02acbd04",
+            "02acbd04",
+            "02acbd04",
+            "02acbd04",
+            "02acbd04"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -1795,6 +2272,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7",
+            "fe0c2dd5",
+            "fe0c2dd5",
+            "fe0c2dd5",
+            "fe0c2dd5",
+            "fe0c2dd5",
+            "fe0c2dd5",
+            "fe0c2dd5"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -1843,6 +2333,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "ef43a6f1",
+            "ef43a6f1",
+            "ef43a6f1",
+            "f811aad7",
+            "d281ba1c",
+            "d281ba1c",
+            "d281ba1c",
+            "d281ba1c",
+            "d281ba1c"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "ef43a6f1",
@@ -1892,6 +2395,17 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "ef43a6f1",
+            "ef43a6f1",
+            "ef43a6f1",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "2e1cd02e"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "ef43a6f1",
@@ -1940,6 +2454,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "ef43a6f1",
+            "f811aad7",
+            "f811aad7",
+            "0289eed8",
+            "0289eed8",
+            "0289eed8",
+            "0289eed8",
+            "0289eed8",
+            "0289eed8"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "ef43a6f1",
@@ -1988,6 +2515,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "ef43a6f1",
+            "ef43a6f1",
+            "b3a5bd66",
+            "f811aad7",
+            "233b4a90",
+            "233b4a90",
+            "4520081a",
+            "4520081a",
+            "4520081a"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "ef43a6f1",
@@ -2036,6 +2576,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "b3a5bd66",
+            "41a2050d",
+            "41a2050d",
+            "69eaa34c",
+            "dffd31c8",
+            "dffd31c8",
+            "dffd31c8",
+            "dffd31c8",
+            "dffd31c8"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "b3a5bd66",
@@ -2084,6 +2637,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "393feb68",
+            "393feb68",
+            "393feb68",
+            "393feb68"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "393feb68",
@@ -2132,6 +2693,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "0daaab05",
+            "0daaab05",
+            "62f88b40",
+            "6c1e3d35",
+            "6c1e3d35",
+            "6c1e3d35",
+            "393feb68",
+            "393feb68",
+            "393feb68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "0daaab05",
@@ -2180,6 +2754,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "62f88b40",
+            "62f88b40",
+            "62f88b40",
+            "62f88b40",
+            "62f88b40",
+            "62f88b40",
+            "393feb68",
+            "393feb68",
+            "393feb68"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "62f88b40",
@@ -2228,6 +2815,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "0daaab05",
+            "0daaab05",
+            "0daaab05",
+            "6aac2e74",
+            "28d70d47",
+            "28d70d47",
+            "28d70d47",
+            "28d70d47",
+            "28d70d47"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "0daaab05",
@@ -2276,6 +2876,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "be93fb7e",
+            "62f88b40",
+            "62f88b40",
+            "393feb68"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "be93fb7e",
@@ -2324,6 +2932,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "be93fb7e",
+            "be93fb7e",
+            "807a346e",
+            "ef43a6f1",
+            "ef43a6f1",
+            "ef43a6f1",
+            "ef43a6f1",
+            "393feb68",
+            "393feb68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "be93fb7e",
@@ -2372,6 +2993,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "8b91d91e",
+            "207b2e22",
+            "207b2e22",
+            "207b2e22"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "8b91d91e",
@@ -2420,6 +3049,17 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "be93fb7e",
+            "be93fb7e",
+            "be93fb7e",
+            "be93fb7e",
+            "be93fb7e",
+            "207b2e22",
+            "207b2e22"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "be93fb7e",
@@ -2468,6 +3108,17 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "0d49f001",
+            "0d49f001",
+            "0d49f001",
+            "6aac2e74",
+            "6aac2e74",
+            "6aac2e74",
+            "6aac2e74"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "0d49f001",
@@ -2516,6 +3167,17 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "be93fb7e",
+            "5b4e8c1c",
+            "b3a5bd66",
+            "207b2e22",
+            "207b2e22",
+            "207b2e22",
+            "207b2e22"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "be93fb7e",
@@ -2564,6 +3226,17 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "8b91d91e",
+            "8b91d91e",
+            "be93fb7e",
+            "46688c86",
+            "207b2e22",
+            "207b2e22",
+            "207b2e22"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "8b91d91e",
@@ -2612,6 +3285,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "69eaa34c",
+            "69eaa34c",
+            "69eaa34c",
+            "69eaa34c"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "69eaa34c",
@@ -2660,6 +3341,15 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "a61abd8c",
+            "2d24af69",
+            "69eaa34c",
+            "69eaa34c",
+            "69eaa34c"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "a61abd8c",
@@ -2709,6 +3399,15 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9a01acf0"
+          ],
+          "Ian Sinnott": [
+            "62f88b40",
+            "62f88b40"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "9a01acf0",
@@ -2757,6 +3456,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "6aac2e74",
+            "28d70d47",
+            "28d70d47",
+            "28d70d47",
+            "28d70d47",
+            "28d70d47",
+            "28d70d47",
+            "28d70d47",
+            "28d70d47"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "6aac2e74",
@@ -2805,6 +3517,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "7cb81b8d",
+            "7cb81b8d",
+            "7cb81b8d",
+            "7cb81b8d"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "7cb81b8d",
@@ -2854,6 +3574,17 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0360d0c2",
+            "0360d0c2",
+            "2e9dca0b",
+            "2e9dca0b"
+          ],
+          "Ian Sinnott": [
+            "f811aad7"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "0360d0c2",
@@ -2902,6 +3633,13 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0360d0c2",
+            "da472597",
+            "da472597"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "0360d0c2",
@@ -2950,6 +3688,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "82839149",
+            "82839149",
+            "82839149",
+            "82839149",
+            "a01b67e7",
+            "a01b67e7",
+            "a01b67e7",
+            "a01b67e7",
+            "a01b67e7"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "82839149",
@@ -2998,6 +3749,13 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0360d0c2",
+            "0360d0c2",
+            "0360d0c2"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "0360d0c2",
@@ -3046,6 +3804,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c001fe2d",
+            "c001fe2d",
+            "51bf0e46",
+            "51bf0e46"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "c001fe2d",
@@ -3094,6 +3860,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2432ef16",
+            "2432ef16",
+            "2432ef16",
+            "2432ef16",
+            "2432ef16",
+            "2432ef16",
+            "2432ef16",
+            "2432ef16",
+            "2432ef16"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "2432ef16",
@@ -3142,6 +3921,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "00dd8863",
+            "00dd8863",
+            "00dd8863",
+            "00dd8863"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "00dd8863",
@@ -3190,6 +3977,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "a41735c4",
+            "a41735c4",
+            "a41735c4",
+            "a41735c4",
+            "00dd8863",
+            "00dd8863",
+            "00dd8863",
+            "00dd8863",
+            "00dd8863"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "a41735c4",
@@ -3238,6 +4038,12 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "a1c46565",
+            "a1c46565"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "a1c46565",
@@ -3286,6 +4092,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "01ba9859",
+            "01ba9859",
+            "01ba9859",
+            "01ba9859",
+            "01ba9859",
+            "c6f77009",
+            "c6f77009",
+            "c6f77009",
+            "c6f77009"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "01ba9859",
@@ -3334,6 +4153,18 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "47ee0178",
+            "47ee0178",
+            "47ee0178",
+            "47ee0178",
+            "01ba9859",
+            "01ba9859",
+            "01ba9859",
+            "01ba9859"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "47ee0178",
@@ -3382,6 +4213,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0360d0c2",
+            "0360d0c2",
+            "00dd8863",
+            "00dd8863"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "0360d0c2",
@@ -3431,6 +4270,16 @@
           "Peter Weinberg",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "7de0d6c2"
+          ],
+          "Sean Smith": [
+            "b7cc60e3",
+            "b7cc60e3",
+            "b7cc60e3"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "7de0d6c2",
@@ -3479,6 +4328,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b7cc60e3",
+            "b7cc60e3",
+            "b7cc60e3",
+            "b7cc60e3",
+            "b7cc60e3",
+            "b7cc60e3",
+            "b7cc60e3",
+            "b7cc60e3",
+            "b7cc60e3"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "b7cc60e3",
@@ -3527,6 +4389,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9b3d620e",
+            "9b3d620e",
+            "9b3d620e",
+            "9b3d620e",
+            "9b3d620e",
+            "9b3d620e",
+            "9b3d620e",
+            "9b3d620e",
+            "9b3d620e"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "9b3d620e",
@@ -3575,6 +4450,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "adda800c",
+            "adda800c",
+            "adda800c",
+            "adda800c",
+            "adda800c",
+            "adda800c",
+            "adda800c",
+            "adda800c",
+            "adda800c"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "adda800c",
@@ -3624,6 +4512,21 @@
           "Peter Weinberg",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "7de0d6c2"
+          ],
+          "Sean Smith": [
+            "f6d94964",
+            "6df2b132",
+            "6df2b132",
+            "6df2b132",
+            "6df2b132",
+            "6df2b132",
+            "6df2b132",
+            "6df2b132"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "7de0d6c2",
@@ -3673,6 +4576,16 @@
           "Peter Weinberg",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "9639aa31"
+          ],
+          "Sean Smith": [
+            "832a2997",
+            "832a2997",
+            "832a2997"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "9639aa31",
@@ -3721,6 +4634,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "6760bc32",
+            "6760bc32",
+            "6760bc32",
+            "6760bc32"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "6760bc32",
@@ -3769,6 +4690,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "51d9565f",
+            "51d9565f",
+            "72b421e2",
+            "72b421e2",
+            "72b421e2",
+            "72b421e2",
+            "ba6fc701",
+            "ba6fc701",
+            "2fbc7066"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "51d9565f",
@@ -3817,6 +4751,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "51d9565f",
+            "51d9565f",
+            "72b421e2",
+            "72b421e2",
+            "72b421e2",
+            "72b421e2",
+            "72b421e2",
+            "72b421e2",
+            "72b421e2"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "51d9565f",
@@ -3865,6 +4812,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "ac54dfbc",
+            "ac54dfbc",
+            "ac54dfbc",
+            "ac54dfbc",
+            "ac54dfbc",
+            "ac54dfbc",
+            "ac54dfbc",
+            "ac54dfbc",
+            "ac54dfbc"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "ac54dfbc",
@@ -3913,6 +4873,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "51d9565f",
+            "57df8fe7",
+            "57df8fe7",
+            "2fbc7066",
+            "2fbc7066",
+            "2fbc7066",
+            "2fbc7066",
+            "2fbc7066",
+            "2fbc7066"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "51d9565f",
@@ -3961,6 +4934,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "288870e8",
+            "288870e8",
+            "288870e8",
+            "288870e8"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "288870e8",
@@ -4010,6 +4991,16 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7",
+            "f36b3f68"
+          ],
+          "Peter Weinberg": [
+            "a5f8f121"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4059,6 +5050,20 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "51149151",
+            "51149151",
+            "a5f8f121",
+            "a5f8f121",
+            "a5f8f121",
+            "a5f8f121"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4108,6 +5113,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "41a2050d",
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "51149151",
+            "51149151",
+            "f6b3c3ad",
+            "f6b3c3ad",
+            "f6b3c3ad",
+            "f6b3c3ad"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "41a2050d",
@@ -4157,6 +5177,15 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "2e1cd02e"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4206,6 +5235,15 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "2e1cd02e"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4255,6 +5293,17 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "f6b3c3ad",
+            "f6b3c3ad",
+            "f6b3c3ad"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4304,6 +5353,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "51149151",
+            "51149151",
+            "69104f94",
+            "f6b3c3ad",
+            "f6b3c3ad",
+            "f6b3c3ad",
+            "f6b3c3ad"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4352,6 +5416,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "b5c82fd7",
+            "b5c82fd7",
+            "b5c82fd7",
+            "b5c82fd7",
+            "b5c82fd7",
+            "b5c82fd7",
+            "b5c82fd7",
+            "b5c82fd7",
+            "b5c82fd7"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "b5c82fd7",
@@ -4401,6 +5478,15 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "4a49eca5"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4450,6 +5536,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "51149151",
+            "51149151",
+            "69104f94",
+            "f6b3c3ad",
+            "f6b3c3ad",
+            "f6b3c3ad",
+            "f6b3c3ad"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4499,6 +5600,15 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "4a49eca5"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4548,6 +5658,17 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "69104f94",
+            "69104f94",
+            "69104f94"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4597,6 +5718,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "51149151",
+            "51149151",
+            "69104f94",
+            "69104f94",
+            "69104f94",
+            "69104f94",
+            "69104f94"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4646,6 +5782,17 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "51149151",
+            "51149151",
+            "51149151"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4695,6 +5842,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4744,6 +5906,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "a9fd27f1",
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4793,6 +5970,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151",
+            "51149151"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4842,6 +6034,15 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "2e1cd02e"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4891,6 +6092,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "a9fd27f1",
+            "a9fd27f1",
+            "a9fd27f1",
+            "a9fd27f1",
+            "a9fd27f1",
+            "a9fd27f1",
+            "a9fd27f1"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4940,6 +6156,17 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "95c949cf",
+            "6862a242",
+            "6862a242"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -4989,6 +6216,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "6862a242",
+            "6862a242",
+            "6862a242",
+            "6862a242",
+            "6862a242",
+            "6862a242",
+            "6862a242"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5038,6 +6280,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "897c4b4e",
+            "6862a242",
+            "6862a242",
+            "6862a242",
+            "6862a242",
+            "6862a242",
+            "6862a242"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5087,6 +6344,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "4bff03a9",
+            "4bff03a9",
+            "4bff03a9",
+            "4bff03a9",
+            "4bff03a9",
+            "4bff03a9",
+            "4bff03a9"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5136,6 +6408,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5185,6 +6472,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "486d8011",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5234,6 +6536,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "486d8011",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e",
+            "897c4b4e"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5283,6 +6600,21 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "95c949cf",
+            "95c949cf",
+            "95c949cf",
+            "95c949cf",
+            "95c949cf",
+            "95c949cf",
+            "95c949cf"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5332,6 +6664,17 @@
           "Ian Sinnott",
           "Peter Weinberg"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Peter Weinberg": [
+            "95c949cf",
+            "95c949cf",
+            "95c949cf"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5381,6 +6724,17 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "8bcb27e2",
+            "8bcb27e2",
+            "8bcb27e2"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5430,6 +6784,21 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "3883c0aa",
+            "3883c0aa",
+            "2e1c6010",
+            "8bcb27e2",
+            "8bcb27e2",
+            "8bcb27e2",
+            "8bcb27e2"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5479,6 +6848,21 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "ff30dbae",
+            "3883c0aa",
+            "3883c0aa",
+            "3883c0aa",
+            "2e1c6010",
+            "2e1c6010",
+            "2e1c6010"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5528,6 +6912,21 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "3883c0aa",
+            "3883c0aa",
+            "3883c0aa",
+            "3883c0aa",
+            "3883c0aa",
+            "3883c0aa",
+            "3883c0aa"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5577,6 +6976,15 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "2e1cd02e"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5626,6 +7034,21 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "162e93dc",
+            "d32b7c08",
+            "82f52b66",
+            "82f52b66",
+            "82f52b66",
+            "82f52b66",
+            "82f52b66"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5675,6 +7098,21 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "70177ced",
+            "70177ced",
+            "70177ced",
+            "70177ced",
+            "70177ced",
+            "70177ced",
+            "70177ced"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -5724,6 +7162,16 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9ad6994a",
+            "9ad6994a"
+          ],
+          "Ian Sinnott": [
+            "a1c46565",
+            "a1c46565"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "9ad6994a",
@@ -5772,6 +7220,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "12589cb0",
+            "12589cb0",
+            "12589cb0",
+            "12589cb0",
+            "12589cb0",
+            "12589cb0",
+            "12589cb0",
+            "12589cb0",
+            "12589cb0"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "12589cb0",
@@ -5820,6 +7281,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "df789ca6",
+            "df789ca6",
+            "df789ca6",
+            "df789ca6",
+            "93f5d173",
+            "93f5d173",
+            "93f5d173",
+            "93f5d173",
+            "93f5d173"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "df789ca6",
@@ -5868,6 +7342,18 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "df789ca6",
+            "df789ca6",
+            "df789ca6",
+            "df789ca6",
+            "df789ca6",
+            "df789ca6",
+            "df789ca6",
+            "df789ca6"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "df789ca6",
@@ -5916,6 +7402,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2df2f962",
+            "2df2f962",
+            "2df2f962",
+            "2df2f962",
+            "2df2f962",
+            "2df2f962",
+            "2df2f962",
+            "2df2f962",
+            "2df2f962"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "2df2f962",
@@ -5964,6 +7463,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "6ea75d74",
+            "6ea75d74",
+            "6ea75d74",
+            "6ea75d74"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "6ea75d74",
@@ -6012,6 +7519,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "51c2de00",
@@ -6060,6 +7580,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00",
+            "51c2de00"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "51c2de00",
@@ -6108,6 +7641,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "3139fe11",
+            "be316dd8",
+            "be316dd8",
+            "be316dd8",
+            "be316dd8",
+            "be316dd8",
+            "be316dd8",
+            "be316dd8",
+            "be316dd8"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "3139fe11",
@@ -6156,6 +7702,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "a6324c9c",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "a6324c9c",
@@ -6204,6 +7763,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "a6324c9c",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11",
+            "3139fe11"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "a6324c9c",
@@ -6253,6 +7825,16 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "7d42fcb9"
+          ],
+          "Ian Sinnott": [
+            "a1c46565",
+            "a1c46565",
+            "a1c46565"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "7d42fcb9",
@@ -6301,6 +7883,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "5642a5fc",
@@ -6349,6 +7944,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc",
+            "5642a5fc"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "5642a5fc",
@@ -6397,6 +8005,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "4fbc851a",
+            "4fbc851a",
+            "4fbc851a",
+            "4fbc851a",
+            "4fbc851a",
+            "4fbc851a",
+            "4fbc851a",
+            "4fbc851a",
+            "4fbc851a"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "4fbc851a",
@@ -6445,6 +8066,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "f752859c",
+            "90c5e535",
+            "90c5e535",
+            "90c5e535",
+            "90c5e535",
+            "90c5e535",
+            "90c5e535",
+            "90c5e535",
+            "90c5e535"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f752859c",
@@ -6493,6 +8127,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "e2244188",
+            "ab90bd0a",
+            "ab90bd0a",
+            "ab90bd0a",
+            "ab90bd0a",
+            "ab90bd0a",
+            "ab90bd0a",
+            "ab90bd0a",
+            "ab90bd0a"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "e2244188",
@@ -6541,6 +8188,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "e2244188",
+            "e2244188",
+            "e2244188",
+            "e2244188",
+            "e2244188",
+            "e2244188",
+            "e2244188",
+            "e2244188",
+            "e2244188"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "e2244188",
@@ -6589,6 +8249,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c9eed191",
+            "c9eed191",
+            "c9eed191",
+            "c9eed191",
+            "c9eed191",
+            "c9eed191",
+            "c9eed191",
+            "c9eed191",
+            "c9eed191"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "c9eed191",
@@ -6637,6 +8310,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "26c4e413",
+            "05f1231f",
+            "05f1231f",
+            "05f1231f",
+            "05f1231f",
+            "05f1231f",
+            "05f1231f",
+            "05f1231f",
+            "05f1231f"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "26c4e413",
@@ -6685,6 +8371,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "26c4e413",
+            "26c4e413",
+            "26c4e413",
+            "26c4e413",
+            "26c4e413",
+            "26c4e413",
+            "26c4e413",
+            "26c4e413",
+            "26c4e413"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "26c4e413",
@@ -6733,6 +8432,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "18d59dd5",
+            "18d59dd5",
+            "18d59dd5",
+            "18d59dd5",
+            "18d59dd5",
+            "18d59dd5",
+            "18d59dd5",
+            "18d59dd5",
+            "18d59dd5"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "18d59dd5",
@@ -6781,6 +8493,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "02e69b7a",
+            "02e69b7a",
+            "02e69b7a",
+            "02e69b7a",
+            "02e69b7a",
+            "02e69b7a",
+            "02e69b7a",
+            "02e69b7a",
+            "02e69b7a"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "02e69b7a",
@@ -6829,6 +8554,13 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "31c01785",
+            "31c01785",
+            "31c01785"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "31c01785",
@@ -6877,6 +8609,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "31c01785",
+            "31c01785",
+            "31c01785",
+            "31c01785",
+            "31c01785",
+            "31c01785",
+            "31c01785",
+            "31c01785",
+            "31c01785"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "31c01785",
@@ -6925,6 +8670,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "4cd3d789",
+            "724510cf",
+            "724510cf",
+            "724510cf",
+            "724510cf",
+            "724510cf",
+            "724510cf",
+            "724510cf",
+            "724510cf"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "4cd3d789",
@@ -6973,6 +8731,18 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "4cd3d789",
+            "4cd3d789",
+            "4cd3d789",
+            "4cd3d789",
+            "4cd3d789",
+            "4cd3d789",
+            "4cd3d789",
+            "4cd3d789"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "4cd3d789",
@@ -7021,6 +8791,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "da152aeb",
+            "da152aeb",
+            "da152aeb",
+            "da152aeb",
+            "da152aeb",
+            "da152aeb",
+            "da152aeb",
+            "da152aeb",
+            "da152aeb"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "da152aeb",
@@ -7069,6 +8852,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "1f25a261",
+            "1f25a261",
+            "1f25a261",
+            "1f25a261",
+            "1f25a261",
+            "1f25a261",
+            "1f25a261",
+            "1f25a261",
+            "1f25a261"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "1f25a261",
@@ -7117,6 +8913,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2893f693",
+            "2893f693",
+            "2893f693",
+            "2893f693",
+            "2893f693",
+            "2893f693",
+            "2893f693",
+            "2893f693",
+            "2893f693"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "2893f693",
@@ -7165,6 +8974,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2c6cd5d0",
+            "ca1ddadb",
+            "ca1ddadb",
+            "ca1ddadb",
+            "ca1ddadb",
+            "ca1ddadb",
+            "ca1ddadb",
+            "ca1ddadb",
+            "ca1ddadb"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "2c6cd5d0",
@@ -7213,6 +9035,16 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "db9bc965",
+            "db9bc965",
+            "db9bc965",
+            "db9bc965",
+            "db9bc965",
+            "db9bc965"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "db9bc965",
@@ -7261,6 +9093,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "a1c46565",
+            "a1c46565",
+            "a1c46565",
+            "a1c46565"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "a1c46565",
@@ -7309,6 +9149,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "821d2d3b",
+            "239a0a5b",
+            "1ecdcb19",
+            "1ecdcb19"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "821d2d3b",
@@ -7357,6 +9205,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "1ecdcb19",
@@ -7405,6 +9266,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "5402977b",
+            "5402977b",
+            "5402977b",
+            "5402977b",
+            "5402977b",
+            "5402977b",
+            "5402977b",
+            "5402977b",
+            "5402977b"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "5402977b",
@@ -7453,6 +9327,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "9a025237",
+            "9a025237",
+            "9a025237",
+            "9a025237",
+            "9a025237",
+            "9a025237",
+            "9a025237",
+            "9a025237",
+            "9a025237"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "9a025237",
@@ -7501,6 +9388,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19",
+            "1ecdcb19"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "1ecdcb19",
@@ -7549,6 +9449,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "add28f3b",
+            "add28f3b",
+            "add28f3b",
+            "add28f3b",
+            "add28f3b",
+            "add28f3b",
+            "add28f3b",
+            "add28f3b",
+            "add28f3b"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "add28f3b",
@@ -7597,6 +9510,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "6ebb01a3",
+            "81a874b5",
+            "81a874b5",
+            "81a874b5",
+            "81a874b5",
+            "81a874b5",
+            "81a874b5",
+            "81a874b5",
+            "81a874b5"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "6ebb01a3",
@@ -7645,6 +9571,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "239a0a5b",
+            "239a0a5b",
+            "239a0a5b",
+            "239a0a5b",
+            "239a0a5b",
+            "239a0a5b",
+            "239a0a5b",
+            "239a0a5b",
+            "239a0a5b"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "239a0a5b",
@@ -7693,6 +9632,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "56c035c7",
+            "a1c46565",
+            "a1c46565",
+            "a1c46565"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "56c035c7",
@@ -7741,6 +9688,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "70764caa",
+            "70764caa",
+            "70764caa",
+            "70764caa",
+            "70764caa",
+            "70764caa",
+            "70764caa",
+            "70764caa",
+            "70764caa"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "70764caa",
@@ -7789,6 +9749,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "52366140",
+            "52366140",
+            "52366140",
+            "52366140",
+            "52366140",
+            "52366140",
+            "52366140",
+            "52366140",
+            "52366140"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "52366140",
@@ -7837,6 +9810,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "c390edbe",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25",
+            "87b34922",
+            "87b34922"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "c390edbe",
@@ -7885,6 +9871,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "c390edbe",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25",
+            "a3a68e25"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "c390edbe",
@@ -7933,6 +9932,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "c390edbe",
+            "20aa2622",
+            "603f8333",
+            "603f8333",
+            "603f8333",
+            "603f8333",
+            "603f8333",
+            "603f8333",
+            "603f8333"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "c390edbe",
@@ -7981,6 +9993,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "c390edbe",
+            "65ef9e08",
+            "65ef9e08",
+            "65ef9e08",
+            "65ef9e08",
+            "65ef9e08",
+            "603f8333",
+            "a3a68e25",
+            "a3a68e25"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "c390edbe",
@@ -8029,6 +10054,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "4aec2da9",
+            "20aa2622",
+            "20aa2622",
+            "20aa2622",
+            "20aa2622",
+            "20aa2622",
+            "20aa2622",
+            "20aa2622",
+            "20aa2622"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "4aec2da9",
@@ -8077,6 +10115,16 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "7f4ae835",
+            "7f4ae835"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "1c42584d",
@@ -8125,6 +10173,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "c390edbe",
+            "7f4ae835",
+            "7f4ae835",
+            "7f4ae835",
+            "7f4ae835",
+            "7f4ae835",
+            "7f4ae835",
+            "87b34922",
+            "87b34922"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "c390edbe",
@@ -8173,6 +10234,18 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "5c31d3a1",
+            "5c31d3a1",
+            "5c31d3a1",
+            "5c31d3a1",
+            "65ef9e08",
+            "65ef9e08",
+            "65ef9e08",
+            "65ef9e08"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "5c31d3a1",
@@ -8221,6 +10294,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "603f8333",
+            "daacc1a8",
+            "daacc1a8",
+            "daacc1a8",
+            "daacc1a8",
+            "daacc1a8",
+            "daacc1a8",
+            "daacc1a8",
+            "daacc1a8"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "603f8333",
@@ -8269,6 +10355,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "c390edbe",
+            "449315e7",
+            "b6666e56",
+            "b6666e56",
+            "b6666e56",
+            "b6666e56",
+            "87b34922",
+            "87b34922",
+            "87b34922"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "c390edbe",
@@ -8317,6 +10416,18 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "c390edbe",
+            "2789c53c",
+            "449315e7",
+            "449315e7",
+            "449315e7",
+            "449315e7",
+            "449315e7",
+            "449315e7"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "c390edbe",
@@ -8365,6 +10476,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "ce0778dc",
+            "fb3a11c5",
+            "fb3a11c5",
+            "fb3a11c5",
+            "fb3a11c5",
+            "fb3a11c5",
+            "fb3a11c5",
+            "fb3a11c5",
+            "fb3a11c5"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "ce0778dc",
@@ -8413,6 +10537,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "da02f1ff",
@@ -8461,6 +10598,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff",
+            "da02f1ff"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "da02f1ff",
@@ -8509,6 +10659,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "e888dfa4",
+            "6be80581",
+            "6be80581",
+            "6be80581",
+            "6be80581",
+            "6be80581",
+            "6be80581",
+            "6be80581",
+            "6be80581"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "e888dfa4",
@@ -8557,6 +10720,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "52e44b48",
+            "13e1b78f",
+            "e888dfa4",
+            "e888dfa4",
+            "e888dfa4",
+            "e888dfa4",
+            "e888dfa4",
+            "e888dfa4",
+            "e888dfa4"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "52e44b48",
@@ -8605,6 +10781,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "fa321cff",
+            "fa321cff",
+            "fa321cff",
+            "fa321cff",
+            "e888dfa4",
+            "e888dfa4",
+            "e888dfa4",
+            "e888dfa4",
+            "e888dfa4"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "fa321cff",
@@ -8653,6 +10842,16 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "52e44b48",
+            "87b34922",
+            "87b34922",
+            "87b34922",
+            "87b34922",
+            "87b34922"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "52e44b48",
@@ -8701,6 +10900,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "76e66680",
+            "a1c46565",
+            "a1c46565",
+            "a1c46565"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "76e66680",
@@ -8749,6 +10956,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "445e2752",
+            "445e2752",
+            "445e2752",
+            "52e44b48",
+            "52e44b48",
+            "52e44b48",
+            "52e44b48",
+            "52e44b48",
+            "52e44b48"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "445e2752",
@@ -8797,6 +11017,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "2cc249f7",
+            "2cc249f7",
+            "2cc249f7",
+            "2cc249f7",
+            "2cc249f7",
+            "2cc249f7",
+            "2cc249f7",
+            "2cc249f7",
+            "2cc249f7"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "2cc249f7",
@@ -8845,6 +11078,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "e6df1161",
+            "e6df1161",
+            "e6df1161",
+            "e6df1161",
+            "e6df1161",
+            "e6df1161",
+            "e6df1161",
+            "e6df1161",
+            "e6df1161"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "e6df1161",
@@ -8893,6 +11139,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "954a105a",
+            "a1c46565",
+            "a1c46565",
+            "a1c46565"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "954a105a",
@@ -8941,6 +11195,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "d3ccdec7",
+            "d3ccdec7",
+            "d3ccdec7",
+            "d3ccdec7",
+            "d3ccdec7",
+            "d3ccdec7",
+            "d3ccdec7",
+            "d3ccdec7",
+            "d3ccdec7"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "d3ccdec7",
@@ -8989,6 +11256,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "6c354775",
+            "b03be9ac",
+            "b03be9ac",
+            "b03be9ac"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "6c354775",
@@ -9037,6 +11312,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "b03be9ac",
+            "b03be9ac",
+            "b03be9ac",
+            "b03be9ac",
+            "b03be9ac"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "1c42584d",
@@ -9085,6 +11373,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "6c354775",
+            "6c354775",
+            "6c354775",
+            "6c354775",
+            "6c354775",
+            "6c354775",
+            "b03be9ac",
+            "b03be9ac",
+            "b03be9ac"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "6c354775",
@@ -9133,6 +11434,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "1c42584d",
+            "1c42584d"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "1c42584d",
@@ -9181,6 +11495,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "b37e0e97",
+            "b37e0e97",
+            "b37e0e97",
+            "b37e0e97",
+            "b37e0e97",
+            "b03be9ac",
+            "b03be9ac",
+            "b03be9ac",
+            "b03be9ac"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "b37e0e97",
@@ -9229,6 +11556,17 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "6d946342",
+            "f34da761",
+            "f34da761",
+            "f34da761",
+            "b37e0e97",
+            "b37e0e97",
+            "b37e0e97"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "6d946342",
@@ -9277,6 +11615,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "6d946342",
+            "6d946342",
+            "6d946342",
+            "6d946342",
+            "6d946342",
+            "6d946342",
+            "b03be9ac",
+            "b03be9ac",
+            "b03be9ac"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "6d946342",
@@ -9325,6 +11676,19 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "2e9bd26c",
+            "2e9bd26c",
+            "2e9bd26c",
+            "2e9bd26c",
+            "2e9bd26c",
+            "2e9bd26c",
+            "2e9bd26c",
+            "2e9bd26c",
+            "2e9bd26c"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "2e9bd26c",
@@ -9374,6 +11738,16 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "e8f224a6"
+          ],
+          "Ian Sinnott": [
+            "a1c46565",
+            "a1c46565",
+            "a1c46565"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "e8f224a6",
@@ -9422,6 +11796,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "52322d20",
+            "52322d20",
+            "52322d20",
+            "52322d20",
+            "52322d20",
+            "52322d20",
+            "52322d20"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "52322d20",
@@ -9470,6 +11855,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c3fd988a",
+            "c3fd988a",
+            "c3fd988a",
+            "c3fd988a",
+            "c3fd988a",
+            "c3fd988a",
+            "c3fd988a",
+            "c3fd988a",
+            "c3fd988a"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "c3fd988a",
@@ -9518,6 +11916,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "88d27e51",
+            "88d27e51",
+            "88d27e51",
+            "88d27e51",
+            "88d27e51",
+            "88d27e51",
+            "88d27e51"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "88d27e51",
@@ -9566,6 +11975,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "29ed84ff",
+            "29ed84ff",
+            "29ed84ff",
+            "29ed84ff",
+            "29ed84ff",
+            "29ed84ff",
+            "29ed84ff"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "29ed84ff",
@@ -9614,6 +12034,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "83c0c9b1",
+            "83c0c9b1",
+            "83c0c9b1",
+            "83c0c9b1",
+            "83c0c9b1",
+            "83c0c9b1",
+            "83c0c9b1"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "83c0c9b1",
@@ -9662,6 +12093,14 @@
         "contributors": [
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "a1c46565",
+            "a1c46565",
+            "a1c46565",
+            "a1c46565"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "a1c46565",
@@ -9710,6 +12149,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c2e16a07",
+            "c3d20143",
+            "fabf4762",
+            "fabf4762"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "c2e16a07",
@@ -9760,6 +12207,22 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "3f9edebc"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "e1f518de",
+            "e1f518de",
+            "fc3880f8"
+          ],
+          "Sean Smith": [
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "3f9edebc",
@@ -9810,6 +12273,22 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "3f9edebc",
+            "a9fd27f1",
+            "a9fd27f1"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "5e3f630f"
+          ],
+          "Sean Smith": [
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "3f9edebc",
@@ -9860,6 +12339,22 @@
           "Peter Weinberg",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "8d7deb3a",
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b"
+          ],
+          "Peter Weinberg": [
+            "3f9edebc",
+            "a9fd27f1",
+            "a9fd27f1"
+          ],
+          "Ian Sinnott": [
+            "f811aad7"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "8d7deb3a",
@@ -9908,6 +12403,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "ede1a1a2",
+            "a4d6739c",
+            "8da433a2",
+            "8da433a2",
+            "8da433a2",
+            "8da433a2",
+            "8da433a2",
+            "8da433a2",
+            "8da433a2"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "ede1a1a2",
@@ -9956,6 +12464,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "ede1a1a2",
+            "ede1a1a2",
+            "ede1a1a2",
+            "ede1a1a2",
+            "ede1a1a2",
+            "ede1a1a2",
+            "ede1a1a2",
+            "ede1a1a2",
+            "ede1a1a2"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "ede1a1a2",
@@ -10004,6 +12525,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "f668b29b",
+            "b354bd46",
+            "b354bd46",
+            "b354bd46",
+            "b354bd46",
+            "b354bd46",
+            "b354bd46",
+            "b354bd46",
+            "b354bd46"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f668b29b",
@@ -10052,6 +12586,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "69796008",
+            "69796008",
+            "f668b29b",
+            "f668b29b",
+            "f668b29b",
+            "f668b29b",
+            "f668b29b"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "69796008",
@@ -10100,6 +12645,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "54ae31ef",
+            "54ae31ef",
+            "54ae31ef",
+            "54ae31ef",
+            "54ae31ef",
+            "54ae31ef",
+            "54ae31ef",
+            "54ae31ef",
+            "54ae31ef"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "54ae31ef",
@@ -10148,6 +12706,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "7a603d7e",
+            "7a603d7e",
+            "7a603d7e",
+            "7a603d7e",
+            "7a603d7e",
+            "7a603d7e",
+            "7a603d7e",
+            "7a603d7e",
+            "7a603d7e"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "7a603d7e",
@@ -10196,6 +12767,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "15adeff4",
+            "15adeff4",
+            "15adeff4",
+            "15adeff4",
+            "15adeff4",
+            "15adeff4",
+            "15adeff4",
+            "15adeff4",
+            "15adeff4"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "15adeff4",
@@ -10244,6 +12828,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "1a2f7b8a",
+            "1a2f7b8a",
+            "1a2f7b8a",
+            "1a2f7b8a",
+            "1a2f7b8a",
+            "1a2f7b8a",
+            "1a2f7b8a",
+            "1a2f7b8a",
+            "1a2f7b8a"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "1a2f7b8a",
@@ -10292,6 +12889,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "81e9424b",
+            "81e9424b",
+            "81e9424b",
+            "81e9424b",
+            "81e9424b",
+            "81e9424b",
+            "81e9424b",
+            "81e9424b",
+            "81e9424b"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "81e9424b",
@@ -10340,6 +12950,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "270a8d0b",
+            "270a8d0b",
+            "270a8d0b",
+            "270a8d0b",
+            "270a8d0b",
+            "270a8d0b",
+            "270a8d0b",
+            "270a8d0b",
+            "270a8d0b"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "270a8d0b",
@@ -10388,6 +13011,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "134a1eee",
+            "134a1eee",
+            "134a1eee",
+            "134a1eee",
+            "134a1eee",
+            "134a1eee",
+            "134a1eee",
+            "134a1eee",
+            "134a1eee"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "134a1eee",
@@ -10436,6 +13072,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "5fde7a4c",
+            "5fde7a4c",
+            "5fde7a4c",
+            "5fde7a4c",
+            "5fde7a4c",
+            "5fde7a4c",
+            "5fde7a4c",
+            "5fde7a4c",
+            "5fde7a4c"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "5fde7a4c",
@@ -10484,6 +13133,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "fec3c631",
+            "fec3c631",
+            "fec3c631",
+            "fec3c631",
+            "fec3c631",
+            "fec3c631",
+            "fec3c631",
+            "fec3c631",
+            "fec3c631"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "fec3c631",
@@ -10532,6 +13194,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "d9835522",
+            "d9835522",
+            "d9835522",
+            "d9835522",
+            "d9835522",
+            "d9835522",
+            "d9835522",
+            "d9835522",
+            "d9835522"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "d9835522",
@@ -10580,6 +13255,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2be46c76",
+            "2be46c76",
+            "2be46c76",
+            "2be46c76",
+            "2be46c76",
+            "2be46c76",
+            "2be46c76",
+            "2be46c76",
+            "2be46c76"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "2be46c76",
@@ -10628,6 +13316,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "38141776",
+            "38141776",
+            "38141776",
+            "38141776",
+            "38141776",
+            "38141776",
+            "38141776",
+            "38141776",
+            "38141776"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "38141776",
@@ -10676,6 +13377,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "1c29dc11",
+            "1c29dc11",
+            "1c29dc11",
+            "1c29dc11",
+            "1c29dc11",
+            "1c29dc11",
+            "1c29dc11",
+            "1c29dc11",
+            "1c29dc11"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "1c29dc11",
@@ -10724,6 +13438,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "454feb4d",
+            "454feb4d",
+            "454feb4d",
+            "454feb4d",
+            "454feb4d",
+            "454feb4d",
+            "454feb4d",
+            "454feb4d",
+            "454feb4d"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "454feb4d",
@@ -10772,6 +13499,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "5d60550e",
+            "5d60550e",
+            "5d60550e",
+            "5d60550e",
+            "5d60550e",
+            "5d60550e",
+            "5d60550e",
+            "5d60550e",
+            "5d60550e"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "5d60550e",
@@ -10820,6 +13560,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "d000f078",
+            "d000f078",
+            "f69af2e2",
+            "f69af2e2",
+            "f69af2e2",
+            "f69af2e2",
+            "f69af2e2",
+            "f69af2e2",
+            "f69af2e2"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "d000f078",
@@ -10868,6 +13621,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "d000f078",
+            "d000f078",
+            "d000f078",
+            "d000f078",
+            "d000f078",
+            "d000f078",
+            "d000f078",
+            "d000f078",
+            "d000f078"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "d000f078",
@@ -10916,6 +13682,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c4a21c7b",
+            "c4a21c7b",
+            "c4a21c7b",
+            "c4a21c7b",
+            "c4a21c7b",
+            "c4a21c7b",
+            "c4a21c7b",
+            "c4a21c7b",
+            "c4a21c7b"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "c4a21c7b",
@@ -10964,6 +13743,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "4369b910",
+            "4369b910",
+            "4369b910",
+            "4369b910",
+            "4369b910",
+            "4369b910",
+            "4369b910",
+            "4369b910",
+            "4369b910"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "4369b910",
@@ -11012,6 +13804,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "3a944e7d",
+            "3a944e7d",
+            "3a944e7d",
+            "3a944e7d",
+            "3a944e7d",
+            "3a944e7d",
+            "3a944e7d",
+            "3a944e7d",
+            "3a944e7d"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "3a944e7d",
@@ -11060,6 +13865,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "fcb8592c",
+            "fcb8592c",
+            "fd878efc",
+            "fd878efc",
+            "fd878efc",
+            "fd878efc",
+            "fd878efc",
+            "fd878efc",
+            "fd878efc"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "fcb8592c",
@@ -11108,6 +13926,16 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "fcb8592c",
+            "fcb8592c",
+            "fcb8592c",
+            "fcb8592c",
+            "fcb8592c",
+            "fcb8592c"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "fcb8592c",
@@ -11156,6 +13984,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "4e90c107",
+            "4e90c107",
+            "4e90c107",
+            "4e90c107",
+            "4e90c107",
+            "4e90c107",
+            "4e90c107",
+            "4e90c107",
+            "4e90c107"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "4e90c107",
@@ -11205,6 +14046,21 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "a556dc73",
+            "24b73a22"
+          ],
+          "Ian Sinnott": [
+            "f6f43022",
+            "13e1b78f",
+            "13e1b78f",
+            "13e1b78f",
+            "13e1b78f",
+            "13e1b78f",
+            "13e1b78f"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "a556dc73",
@@ -11253,6 +14109,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "511d0e3c",
+            "aef074b2",
+            "aef074b2",
+            "8a63de68",
+            "8a63de68",
+            "8a63de68",
+            "8a63de68",
+            "8a63de68",
+            "8a63de68"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "511d0e3c",
@@ -11301,6 +14170,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "912d875f",
+            "912d875f",
+            "912d875f",
+            "912d875f",
+            "912d875f",
+            "912d875f",
+            "912d875f"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "912d875f",
@@ -11349,6 +14229,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "4a4f86fd",
+            "4a4f86fd",
+            "4a4f86fd",
+            "4a4f86fd",
+            "4a4f86fd",
+            "4a4f86fd",
+            "4a4f86fd"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "4a4f86fd",
@@ -11397,6 +14288,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "6aee0713",
+            "6aee0713",
+            "6aee0713",
+            "6aee0713",
+            "6aee0713",
+            "6aee0713",
+            "6aee0713"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "6aee0713",
@@ -11445,6 +14347,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "e56b2db6",
+            "d9594601",
+            "d9594601",
+            "d9594601",
+            "d9594601",
+            "d9594601",
+            "d9594601",
+            "d9594601",
+            "d9594601"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "e56b2db6",
@@ -11493,6 +14408,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "5fb7c657",
+            "5fb7c657",
+            "5fb7c657",
+            "5fb7c657",
+            "5fb7c657",
+            "5fb7c657",
+            "5fb7c657",
+            "5fb7c657",
+            "5fb7c657"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "5fb7c657",
@@ -11541,6 +14469,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "a9f72d97",
+            "a9f72d97",
+            "a9f72d97",
+            "a9f72d97",
+            "a9f72d97",
+            "a9f72d97",
+            "a9f72d97",
+            "a9f72d97",
+            "a9f72d97"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "a9f72d97",
@@ -11589,6 +14530,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "255e1519",
+            "255e1519",
+            "255e1519",
+            "255e1519",
+            "255e1519",
+            "255e1519",
+            "255e1519"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "255e1519",
@@ -11637,6 +14589,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "d8ece26e",
+            "d8ece26e",
+            "d8ece26e",
+            "d8ece26e",
+            "d8ece26e",
+            "d8ece26e",
+            "d8ece26e",
+            "d8ece26e",
+            "d8ece26e"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "d8ece26e",
@@ -11685,6 +14650,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "cb6039f4",
+            "cb6039f4",
+            "cb6039f4",
+            "cb6039f4",
+            "cb6039f4",
+            "cb6039f4",
+            "cb6039f4"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "cb6039f4",
@@ -11733,6 +14709,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0975d9ce",
+            "0975d9ce",
+            "0975d9ce",
+            "0975d9ce",
+            "0975d9ce",
+            "0975d9ce",
+            "0975d9ce",
+            "0975d9ce",
+            "0975d9ce"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "0975d9ce",
@@ -11781,6 +14770,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "a063b12e",
+            "a063b12e",
+            "a063b12e",
+            "a063b12e",
+            "a063b12e",
+            "a063b12e",
+            "a063b12e",
+            "a063b12e",
+            "a063b12e"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "a063b12e",
@@ -11829,6 +14831,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "dcdb47d0",
+            "dcdb47d0",
+            "dcdb47d0",
+            "dcdb47d0",
+            "dcdb47d0",
+            "dcdb47d0",
+            "dcdb47d0",
+            "dcdb47d0",
+            "dcdb47d0"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "dcdb47d0",
@@ -11877,6 +14892,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "66734aad",
+            "66734aad",
+            "66734aad",
+            "66734aad",
+            "66734aad",
+            "66734aad",
+            "66734aad"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "66734aad",
@@ -11925,6 +14951,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2c20753f",
+            "2c20753f",
+            "4d41ae92",
+            "4d41ae92",
+            "50387de1",
+            "50387de1",
+            "50387de1",
+            "50387de1",
+            "50387de1"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "2c20753f",
@@ -11973,6 +15012,18 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2d3be93b",
+            "2d3be93b",
+            "2d3be93b",
+            "2d3be93b",
+            "50387de1",
+            "50387de1",
+            "50387de1",
+            "50387de1"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "2d3be93b",
@@ -12021,6 +15072,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "57cf9301",
+            "57cf9301",
+            "57cf9301",
+            "57cf9301",
+            "57cf9301",
+            "50387de1",
+            "50387de1",
+            "50387de1",
+            "50387de1"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "57cf9301",
@@ -12069,6 +15133,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "76ed6728",
+            "76ed6728",
+            "76ed6728",
+            "76ed6728",
+            "76ed6728",
+            "50387de1",
+            "50387de1",
+            "50387de1",
+            "50387de1"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "76ed6728",
@@ -12117,6 +15194,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c5338401",
+            "c5338401",
+            "c5338401",
+            "c5338401",
+            "50387de1",
+            "50387de1",
+            "50387de1",
+            "50387de1",
+            "50387de1"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "c5338401",
@@ -12165,6 +15255,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c2e16a07",
+            "c2e16a07",
+            "c2e16a07",
+            "c2e16a07"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "c2e16a07",
@@ -12214,6 +15312,17 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "dc2d8f71",
+            "31c01785",
+            "5b209c09",
+            "5b209c09"
+          ],
+          "Ian Sinnott": [
+            "f811aad7"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "dc2d8f71",
@@ -12262,6 +15371,19 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "4b803e09",
+            "853fc4f8",
+            "853fc4f8",
+            "853fc4f8",
+            "446b3b2e",
+            "446b3b2e",
+            "446b3b2e",
+            "446b3b2e",
+            "446b3b2e"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "4b803e09",
@@ -12311,6 +15433,21 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "93e83d7d",
+            "93e83d7d",
+            "93e83d7d",
+            "5b209c09",
+            "5b209c09",
+            "5b209c09",
+            "5b209c09"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -12359,6 +15496,17 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2744b747",
+            "7c6e5107",
+            "7c6e5107",
+            "6cb8ea15",
+            "47b9d249",
+            "47b9d249",
+            "47b9d249"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "2744b747",
@@ -12407,6 +15555,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "dc2d8f71",
+            "dc2d8f71"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "dc2d8f71",
@@ -12455,6 +15609,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0491b280",
+            "0491b280",
+            "0491b280",
+            "0491b280"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "0491b280",
@@ -12504,6 +15666,17 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7"
+          ],
+          "Sean Smith": [
+            "5b209c09",
+            "5b209c09",
+            "5b209c09"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "f811aad7",
@@ -12552,6 +15725,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "e8f224a6",
+            "0491b280",
+            "0491b280",
+            "0491b280"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "e8f224a6",
@@ -12601,6 +15782,14 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "8d7deb3a"
+          ],
+          "Ian Sinnott": [
+            "a1c46565"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "8d7deb3a",
@@ -12650,6 +15839,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "17071825",
+            "f251d0a2",
+            "f251d0a2"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7",
+            "f36b3f68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "17071825",
@@ -12698,6 +15899,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "17071825",
+            "17071825"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "17071825",
@@ -12746,6 +15953,14 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "12d33556",
+            "12d33556",
+            "12d33556",
+            "12d33556"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "12d33556",
@@ -12794,6 +16009,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "17071825",
+            "17071825"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "17071825",
@@ -12843,6 +16064,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9becdec9",
+            "9becdec9",
+            "f251d0a2",
+            "f251d0a2"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f36b3f68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "9becdec9",
@@ -12891,6 +16124,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9becdec9",
+            "9becdec9"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "9becdec9",
@@ -12939,6 +16178,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "07447b7f",
+            "07447b7f"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "07447b7f",
@@ -12987,6 +16232,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9becdec9",
+            "9becdec9"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "9becdec9",
@@ -13035,6 +16286,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "75e53c2b",
+            "9becdec9"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "75e53c2b",
@@ -13085,6 +16342,23 @@
           "Ian Sinnott",
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Peter Weinberg": [
+            "3f9edebc",
+            "3f9edebc",
+            "a9fd27f1",
+            "a9fd27f1"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "e1f518de"
+          ],
+          "Sean Smith": [
+            "24b1b37b",
+            "24b1b37b",
+            "24b1b37b"
+          ]
+        },
         "edits": 5,
         "latestUpdate": {
           "commit": "3f9edebc",
@@ -13133,6 +16407,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "75e53c2b",
+            "75e53c2b"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "75e53c2b",
@@ -13181,6 +16461,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "07447b7f",
+            "07447b7f"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "07447b7f",
@@ -13229,6 +16515,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "75e53c2b",
+            "75e53c2b"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "75e53c2b",
@@ -13278,6 +16570,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "e328f854",
+            "e328f854",
+            "f251d0a2",
+            "f251d0a2"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f36b3f68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "e328f854",
@@ -13326,6 +16630,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "e328f854",
+            "e328f854"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "e328f854",
@@ -13374,6 +16684,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "07447b7f",
+            "07447b7f"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "07447b7f",
@@ -13422,6 +16738,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "e328f854",
+            "e328f854"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "e328f854",
@@ -13471,6 +16793,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "900945bb",
+            "900945bb",
+            "f251d0a2",
+            "f251d0a2"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f36b3f68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "900945bb",
@@ -13519,6 +16853,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "900945bb",
+            "900945bb"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "900945bb",
@@ -13567,6 +16907,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "07447b7f",
+            "07447b7f"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "07447b7f",
@@ -13615,6 +16961,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c6f77009",
+            "900945bb"
+          ]
+        },
         "edits": 2,
         "latestUpdate": {
           "commit": "c6f77009",
@@ -13664,6 +17016,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0e8b620d",
+            "0e8b620d",
+            "f251d0a2",
+            "f251d0a2"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f36b3f68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "0e8b620d",
@@ -13712,6 +17076,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0e8b620d",
+            "0e8b620d"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "0e8b620d",
@@ -13760,6 +17130,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "07447b7f",
+            "07447b7f"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "07447b7f",
@@ -13808,6 +17184,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0e8b620d",
+            "0e8b620d"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "0e8b620d",
@@ -13857,6 +17239,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2573812f",
+            "2573812f",
+            "f251d0a2",
+            "f251d0a2"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f36b3f68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "2573812f",
@@ -13905,6 +17299,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2573812f",
+            "2573812f"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "2573812f",
@@ -13953,6 +17353,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "07447b7f",
+            "07447b7f"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "07447b7f",
@@ -14001,6 +17407,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "2573812f",
+            "2573812f"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "2573812f",
@@ -14050,6 +17462,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "19f425be",
+            "19f425be",
+            "f251d0a2",
+            "f251d0a2"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f36b3f68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "19f425be",
@@ -14098,6 +17522,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "19f425be",
+            "19f425be"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "19f425be",
@@ -14146,6 +17576,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "19f425be",
+            "19f425be"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "19f425be",
@@ -14194,6 +17630,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "19f425be",
+            "19f425be"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "19f425be",
@@ -14243,6 +17685,16 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9afbd482",
+            "9afbd482",
+            "1d662875"
+          ],
+          "Ian Sinnott": [
+            "f811aad7"
+          ]
+        },
         "edits": 3,
         "latestUpdate": {
           "commit": "9afbd482",
@@ -14291,6 +17743,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9afbd482",
+            "9afbd482"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "9afbd482",
@@ -14339,6 +17797,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9afbd482",
+            "9afbd482"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "9afbd482",
@@ -14387,6 +17851,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9afbd482",
+            "9afbd482"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "9afbd482",
@@ -14436,6 +17906,18 @@
           "Sean Smith",
           "Ian Sinnott"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c59247bd",
+            "f251d0a2",
+            "f251d0a2"
+          ],
+          "Ian Sinnott": [
+            "f811aad7",
+            "f811aad7",
+            "f36b3f68"
+          ]
+        },
         "edits": 4,
         "latestUpdate": {
           "commit": "c59247bd",
@@ -14484,6 +17966,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c59247bd",
+            "c59247bd"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "c59247bd",
@@ -14532,6 +18020,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c59247bd",
+            "c59247bd"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "c59247bd",
@@ -14580,6 +18074,12 @@
         "contributors": [
           "Sean Smith"
         ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "c59247bd",
+            "c59247bd"
+          ]
+        },
         "edits": 1,
         "latestUpdate": {
           "commit": "c59247bd",
