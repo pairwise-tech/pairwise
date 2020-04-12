@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle, ExternalLink } from "./Shared";
 import { COLORS, PROSE_MAX_WIDTH } from "tools/constants";
+import SEO from "./SEO";
 
 /** ===========================================================================
  * Types & Config
@@ -24,6 +25,10 @@ class Home extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
     return (
       <PageContainer>
+        <SEO
+          title={"Welcome to Pairwise"}
+          description={"Learn to code with hands-on challenges and projects"}
+        />
         <ContentContainer>
           <PageTitle>Welcome to Pairwise!</PageTitle>
           <ContentText>
