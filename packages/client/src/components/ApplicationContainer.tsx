@@ -223,7 +223,7 @@ const ApplicationContainer = (props: IProps) => {
           <SearchBox />
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 20 }} />
-          <ShortcutKeysPopover />
+          {!isMobile && <ShortcutKeysPopover />}
           {!isMobile && showFeedbackButton && (
             <Tooltip
               usePortal={false}

@@ -7,6 +7,9 @@
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "target": "es2017",
+    "lib": [
+      "es2019"
+    ],
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -14,6 +17,11 @@
     "esModuleInterop": true,
     "incremental": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
