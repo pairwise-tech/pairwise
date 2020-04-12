@@ -1598,6 +1598,17 @@
           "content": ""
         },
         {
+          "id": "fMxrcyVzB",
+          "type": "typescript",
+          "title": "Find the Factorial",
+          "instructions": "The second most classic recursion problem is using recursion to find the factorial of a number. The factorial of 5 is 120. Recall a factorial is represented using the `!` symbol, and expands like this:\n\n> 5\\! \\-\\> 5 \\* 4 \\* 3 \\* 2 \\* 1\n\nWrite a function `findFactorial` which accepts a number and returns the number's factorial using recursion. Think of the base case and the recursive case as you are trying to solve the problem.\n\n> Hint: The factorial of 0 is 1 and the factorial of 1 is also 1.\n",
+          "testCode": "test(\"`findFactorial` should be a function\", () => {\n  expect(typeof findFactorial === \"function\").toBe(true);\n});\n\ntest(\"`findFactorial(0)` should be `1`.\", () => {\n  expect(findFactorial(0)).toBe(1);\n});\n\ntest(\"`findFactorial(1)` should be `1`.\", () => {\n  expect(findFactorial(1)).toBe(1);\n});\n\ntest(\"`findFactorial(2)` should be `2`.\", () => {\n  expect(findFactorial(2)).toBe(2);\n});\n\ntest(\"`findFactorial(3)` should be `6`.\", () => {\n  expect(findFactorial(3)).toBe(6);\n});\n\ntest(\"`findFactorial(4)` should be `24`.\", () => {\n  expect(findFactorial(4)).toBe(24);\n});\n\ntest(\"`findFactorial(5)` should be `120`.\", () => {\n  expect(findFactorial(5)).toBe(120);\n});\n\ntest(\"`findFactorial(15)` should be `1307674368000`.\", () => {\n  expect(findFactorial(15)).toBe(1307674368000);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "const findFactorial = (n: number): number => {\n  // Handle base case of 0:\n  if (n === 0) {\n    return 1;\n  }\n\n  // Handle base case of 1:\n  if (n === 1) {\n    return n;\n  }\n\n  // Handle recursive case of n:\n  return n * findFactorial(n - 1);\n}\n",
+          "content": ""
+        },
+        {
           "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",
