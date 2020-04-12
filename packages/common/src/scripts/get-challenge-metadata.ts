@@ -172,10 +172,11 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
 
   // Aggregate commits by each author
   const contributionsBy = blameLines.reduce((agg, x) => {
-    const arr = [...(agg[x.author] || []), x.commit];
+    // Use set to dedupe commits
+    const set = new Set([...(agg[x.author] || []), x.commit]);
     return {
       ...agg,
-      [x.author]: arr,
+      [x.author]: Array.from(set),
     };
   }, {});
   const edits = new Set(blameLines.map(x => x.commit)).size;

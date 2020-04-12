@@ -1,6 +1,6 @@
 {
   "@@PAIRWISE": {
-    "buildCommit": "03e9197",
+    "buildCommit": "d8076fe",
     "totalChallenges": 302,
     "codeChallenges": 202,
     "videoChallenges": 15,
@@ -49,11 +49,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "4945acc6",
-            "4945acc6",
-            "4945acc6",
-            "4945acc6",
-            "4945acc6",
             "4945acc6"
           ]
         },
@@ -108,13 +103,7 @@
         "contributionsBy": {
           "Sean Smith": [
             "0a8cab41",
-            "0a8cab41",
-            "0a8cab41",
-            "0a8cab41",
             "0ce609cc",
-            "0ce609cc",
-            "0ce609cc",
-            "e5563588",
             "e5563588"
           ]
         },
@@ -170,13 +159,10 @@
         "contributionsBy": {
           "Sean Smith": [
             "0a8cab41",
-            "0a8cab41",
             "e5563588",
             "0e8b620d"
           ],
           "Ian Sinnott": [
-            "69eaa34c",
-            "69eaa34c",
             "69eaa34c"
           ]
         },
@@ -234,10 +220,6 @@
             "834025a1"
           ],
           "Ian Sinnott": [
-            "08df8ed1",
-            "08df8ed1",
-            "08df8ed1",
-            "08df8ed1",
             "08df8ed1"
           ]
         },
@@ -294,17 +276,12 @@
         "contributionsBy": {
           "Peter Weinberg": [
             "4e9b0850",
-            "7b45cb64",
             "7b45cb64"
           ],
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
-            "1f34a9c8",
-            "1f34a9c8",
-            "1f34a9c8",
             "1f34a9c8"
           ]
         },
@@ -359,13 +336,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "867701f4",
-            "867701f4",
-            "867701f4",
-            "867701f4",
-            "867701f4",
-            "db852e4e",
-            "db852e4e",
-            "db852e4e",
             "db852e4e"
           ]
         },
@@ -420,13 +390,7 @@
         "contributionsBy": {
           "Sean Smith": [
             "65fbd828",
-            "65fbd828",
             "ea14fa62",
-            "ea14fa62",
-            "db852e4e",
-            "db852e4e",
-            "db852e4e",
-            "db852e4e",
             "db852e4e"
           ]
         },
@@ -484,10 +448,6 @@
             "8c8313a8",
             "65fbd828",
             "89f5df48",
-            "db852e4e",
-            "db852e4e",
-            "db852e4e",
-            "db852e4e",
             "db852e4e"
           ]
         },
@@ -542,13 +502,7 @@
         "contributionsBy": {
           "Sean Smith": [
             "65fbd828",
-            "65fbd828",
             "ee9e7fcc",
-            "ee9e7fcc",
-            "db852e4e",
-            "db852e4e",
-            "db852e4e",
-            "db852e4e",
             "db852e4e"
           ]
         },
@@ -605,7 +559,6 @@
           "Sean Smith": [
             "0e8b620d",
             "1f34a9c8",
-            "b836d287",
             "b836d287"
           ],
           "Ian Sinnott": [
@@ -666,7 +619,6 @@
             "75909f00",
             "f811aad7",
             "f36b3f68",
-            "ae278535",
             "ae278535"
           ]
         },
@@ -721,13 +673,9 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "f811aad7",
-            "f811aad7",
             "9fabf07c",
             "ae278535",
             "60b5a903",
-            "79fb69b8",
-            "79fb69b8",
-            "79fb69b8",
             "79fb69b8"
           ]
         },
@@ -784,17 +732,12 @@
         "contributionsBy": {
           "Sean Smith": [
             "e40505ec",
-            "24b1b37b",
-            "24b1b37b",
-            "24b1b37b",
-            "24b1b37b",
             "24b1b37b"
           ],
           "Peter Weinberg": [
             "7b45cb64"
           ],
           "Ian Sinnott": [
-            "59b95291",
             "59b95291"
           ]
         },
@@ -850,18 +793,12 @@
         ],
         "contributionsBy": {
           "Peter Weinberg": [
-            "7b45cb64",
-            "7b45cb64",
             "7b45cb64"
           ],
           "Ian Sinnott": [
             "ef43a6f1"
           ],
           "Sean Smith": [
-            "24b1b37b",
-            "24b1b37b",
-            "24b1b37b",
-            "24b1b37b",
             "24b1b37b"
           ]
         },
@@ -917,7 +854,6 @@
         ],
         "contributionsBy": {
           "Peter Weinberg": [
-            "7b45cb64",
             "7b45cb64"
           ],
           "Ian Sinnott": [
@@ -925,10 +861,6 @@
             "e1f518de"
           ],
           "Sean Smith": [
-            "24b1b37b",
-            "24b1b37b",
-            "24b1b37b",
-            "24b1b37b",
             "24b1b37b"
           ]
         },
@@ -983,12 +915,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "b9802904",
-            "b9802904",
-            "bdca9543",
-            "bdca9543",
-            "bdca9543",
-            "bdca9543",
-            "bdca9543",
             "bdca9543"
           ]
         },
@@ -1043,13 +969,7 @@
         "contributionsBy": {
           "Sean Smith": [
             "b1bc744a",
-            "b1bc744a",
             "0e4de3cd",
-            "0e4de3cd",
-            "0e4de3cd",
-            "bdca9543",
-            "bdca9543",
-            "bdca9543",
             "bdca9543"
           ]
         },
@@ -1104,13 +1024,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "b1bc744a",
-            "7c9cd038",
-            "7c9cd038",
-            "7c9cd038",
-            "7c9cd038",
-            "7c9cd038",
-            "7c9cd038",
-            "7c9cd038",
             "7c9cd038"
           ]
         },
@@ -1165,13 +1078,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "b1bc744a",
-            "b1bc744a",
-            "686797f3",
-            "686797f3",
-            "686797f3",
-            "686797f3",
-            "686797f3",
-            "686797f3",
             "686797f3"
           ]
         },
@@ -1225,13 +1131,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b1bc744a",
-            "b1bc744a",
-            "b1bc744a",
-            "b1bc744a",
-            "b1bc744a",
-            "b1bc744a",
-            "b1bc744a",
             "b1bc744a"
           ]
         },
@@ -1287,12 +1186,6 @@
           "Sean Smith": [
             "6c3ec16b",
             "8f793063",
-            "8f793063",
-            "b9802904",
-            "b9802904",
-            "b9802904",
-            "b9802904",
-            "b9802904",
             "b9802904"
           ]
         },
@@ -1347,13 +1240,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "8f793063",
-            "8f793063",
-            "7cb81b8d",
-            "7cb81b8d",
-            "7cb81b8d",
-            "7cb81b8d",
-            "7cb81b8d",
-            "7cb81b8d",
             "7cb81b8d"
           ]
         },
@@ -1408,13 +1294,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "8f793063",
-            "6fc57ce2",
-            "6fc57ce2",
-            "6fc57ce2",
-            "6fc57ce2",
-            "6fc57ce2",
-            "6fc57ce2",
-            "6fc57ce2",
             "6fc57ce2"
           ]
         },
@@ -1468,14 +1347,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "08288342",
-            "08288342",
-            "08288342",
-            "08288342",
-            "08288342",
-            "08288342",
-            "08288342",
-            "08288342",
             "08288342"
           ]
         },
@@ -1530,13 +1401,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "0b977240",
-            "0b977240",
-            "6c3ec16b",
-            "6c3ec16b",
-            "6c3ec16b",
-            "6c3ec16b",
-            "6c3ec16b",
-            "6c3ec16b",
             "6c3ec16b"
           ]
         },
@@ -1590,9 +1454,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "1e74ea45",
-            "1e74ea45",
-            "1e74ea45",
             "1e74ea45"
           ]
         },
@@ -1648,9 +1509,6 @@
           "Ian Sinnott": [
             "59b95291",
             "f811aad7",
-            "f811aad7",
-            "60b5a903",
-            "60b5a903",
             "60b5a903"
           ]
         },
@@ -1715,9 +1573,6 @@
             "28c36ba4"
           ],
           "Sean Smith": [
-            "24b1b37b",
-            "24b1b37b",
-            "24b1b37b",
             "24b1b37b"
           ]
         },
@@ -1773,12 +1628,8 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "f811aad7",
-            "f811aad7",
             "baf6daa9",
             "28c36ba4",
-            "f622668e",
-            "f622668e",
-            "f622668e",
             "f622668e"
           ],
           "Sean Smith": [
@@ -1845,10 +1696,6 @@
             "10effe88"
           ],
           "Sean Smith": [
-            "24b1b37b",
-            "24b1b37b",
-            "24b1b37b",
-            "24b1b37b",
             "24b1b37b"
           ]
         },
@@ -1903,16 +1750,12 @@
         ],
         "contributionsBy": {
           "Peter Weinberg": [
-            "4e9b0850",
             "4e9b0850"
           ],
           "Ian Sinnott": [
             "0daaab05",
             "ef43a6f1",
             "f811aad7",
-            "a056a0f8",
-            "a056a0f8",
-            "a056a0f8",
             "a056a0f8"
           ]
         },
@@ -1971,12 +1814,7 @@
           ],
           "Ian Sinnott": [
             "ef43a6f1",
-            "ef43a6f1",
             "f811aad7",
-            "be76408b",
-            "be76408b",
-            "be76408b",
-            "be76408b",
             "be76408b"
           ]
         },
@@ -2035,12 +1873,6 @@
           ],
           "Ian Sinnott": [
             "f811aad7",
-            "f811aad7",
-            "ea20ee8f",
-            "ea20ee8f",
-            "ea20ee8f",
-            "ea20ee8f",
-            "ea20ee8f",
             "ea20ee8f"
           ]
         },
@@ -2153,13 +1985,7 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "f811aad7",
-            "f811aad7",
             "baf6daa9",
-            "0dd06f87",
-            "0dd06f87",
-            "0dd06f87",
-            "0dd06f87",
-            "0dd06f87",
             "0dd06f87"
           ]
         },
@@ -2214,13 +2040,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "f811aad7",
-            "f811aad7",
-            "02acbd04",
-            "02acbd04",
-            "02acbd04",
-            "02acbd04",
-            "02acbd04",
-            "02acbd04",
             "02acbd04"
           ]
         },
@@ -2275,13 +2094,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "f811aad7",
-            "f811aad7",
-            "fe0c2dd5",
-            "fe0c2dd5",
-            "fe0c2dd5",
-            "fe0c2dd5",
-            "fe0c2dd5",
-            "fe0c2dd5",
             "fe0c2dd5"
           ]
         },
@@ -2336,13 +2148,7 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "ef43a6f1",
-            "ef43a6f1",
-            "ef43a6f1",
             "f811aad7",
-            "d281ba1c",
-            "d281ba1c",
-            "d281ba1c",
-            "d281ba1c",
             "d281ba1c"
           ]
         },
@@ -2397,8 +2203,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "ef43a6f1",
-            "ef43a6f1",
             "ef43a6f1",
             "f811aad7"
           ],
@@ -2458,12 +2262,6 @@
           "Ian Sinnott": [
             "ef43a6f1",
             "f811aad7",
-            "f811aad7",
-            "0289eed8",
-            "0289eed8",
-            "0289eed8",
-            "0289eed8",
-            "0289eed8",
             "0289eed8"
           ]
         },
@@ -2518,13 +2316,9 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "ef43a6f1",
-            "ef43a6f1",
             "b3a5bd66",
             "f811aad7",
             "233b4a90",
-            "233b4a90",
-            "4520081a",
-            "4520081a",
             "4520081a"
           ]
         },
@@ -2580,12 +2374,7 @@
           "Ian Sinnott": [
             "b3a5bd66",
             "41a2050d",
-            "41a2050d",
             "69eaa34c",
-            "dffd31c8",
-            "dffd31c8",
-            "dffd31c8",
-            "dffd31c8",
             "dffd31c8"
           ]
         },
@@ -2639,9 +2428,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "393feb68",
-            "393feb68",
-            "393feb68",
             "393feb68"
           ]
         },
@@ -2696,13 +2482,8 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "0daaab05",
-            "0daaab05",
             "62f88b40",
             "6c1e3d35",
-            "6c1e3d35",
-            "6c1e3d35",
-            "393feb68",
-            "393feb68",
             "393feb68"
           ]
         },
@@ -2757,13 +2538,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "62f88b40",
-            "62f88b40",
-            "62f88b40",
-            "62f88b40",
-            "62f88b40",
-            "62f88b40",
-            "393feb68",
-            "393feb68",
             "393feb68"
           ]
         },
@@ -2818,13 +2592,7 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "0daaab05",
-            "0daaab05",
-            "0daaab05",
             "6aac2e74",
-            "28d70d47",
-            "28d70d47",
-            "28d70d47",
-            "28d70d47",
             "28d70d47"
           ]
         },
@@ -2880,7 +2648,6 @@
           "Ian Sinnott": [
             "be93fb7e",
             "62f88b40",
-            "62f88b40",
             "393feb68"
           ]
         },
@@ -2935,13 +2702,8 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "be93fb7e",
-            "be93fb7e",
             "807a346e",
             "ef43a6f1",
-            "ef43a6f1",
-            "ef43a6f1",
-            "ef43a6f1",
-            "393feb68",
             "393feb68"
           ]
         },
@@ -2996,8 +2758,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "8b91d91e",
-            "207b2e22",
-            "207b2e22",
             "207b2e22"
           ]
         },
@@ -3052,11 +2812,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "be93fb7e",
-            "be93fb7e",
-            "be93fb7e",
-            "be93fb7e",
-            "be93fb7e",
-            "207b2e22",
             "207b2e22"
           ]
         },
@@ -3111,11 +2866,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "0d49f001",
-            "0d49f001",
-            "0d49f001",
-            "6aac2e74",
-            "6aac2e74",
-            "6aac2e74",
             "6aac2e74"
           ]
         },
@@ -3172,9 +2922,6 @@
             "be93fb7e",
             "5b4e8c1c",
             "b3a5bd66",
-            "207b2e22",
-            "207b2e22",
-            "207b2e22",
             "207b2e22"
           ]
         },
@@ -3229,11 +2976,8 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "8b91d91e",
-            "8b91d91e",
             "be93fb7e",
             "46688c86",
-            "207b2e22",
-            "207b2e22",
             "207b2e22"
           ]
         },
@@ -3287,9 +3031,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "69eaa34c",
-            "69eaa34c",
-            "69eaa34c",
             "69eaa34c"
           ]
         },
@@ -3345,8 +3086,6 @@
           "Ian Sinnott": [
             "a61abd8c",
             "2d24af69",
-            "69eaa34c",
-            "69eaa34c",
             "69eaa34c"
           ]
         },
@@ -3404,7 +3143,6 @@
             "9a01acf0"
           ],
           "Ian Sinnott": [
-            "62f88b40",
             "62f88b40"
           ]
         },
@@ -3459,13 +3197,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "6aac2e74",
-            "28d70d47",
-            "28d70d47",
-            "28d70d47",
-            "28d70d47",
-            "28d70d47",
-            "28d70d47",
-            "28d70d47",
             "28d70d47"
           ]
         },
@@ -3519,9 +3250,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "7cb81b8d",
-            "7cb81b8d",
-            "7cb81b8d",
             "7cb81b8d"
           ]
         },
@@ -3577,8 +3305,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "0360d0c2",
-            "0360d0c2",
-            "2e9dca0b",
             "2e9dca0b"
           ],
           "Ian Sinnott": [
@@ -3636,7 +3362,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "0360d0c2",
-            "da472597",
             "da472597"
           ]
         },
@@ -3691,13 +3416,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "82839149",
-            "82839149",
-            "82839149",
-            "82839149",
-            "a01b67e7",
-            "a01b67e7",
-            "a01b67e7",
-            "a01b67e7",
             "a01b67e7"
           ]
         },
@@ -3751,8 +3469,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "0360d0c2",
-            "0360d0c2",
             "0360d0c2"
           ]
         },
@@ -3807,8 +3523,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "c001fe2d",
-            "c001fe2d",
-            "51bf0e46",
             "51bf0e46"
           ]
         },
@@ -3862,14 +3576,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "2432ef16",
-            "2432ef16",
-            "2432ef16",
-            "2432ef16",
-            "2432ef16",
-            "2432ef16",
-            "2432ef16",
-            "2432ef16",
             "2432ef16"
           ]
         },
@@ -3923,9 +3629,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "00dd8863",
-            "00dd8863",
-            "00dd8863",
             "00dd8863"
           ]
         },
@@ -3980,13 +3683,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "a41735c4",
-            "a41735c4",
-            "a41735c4",
-            "a41735c4",
-            "00dd8863",
-            "00dd8863",
-            "00dd8863",
-            "00dd8863",
             "00dd8863"
           ]
         },
@@ -4040,7 +3736,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "a1c46565",
             "a1c46565"
           ]
         },
@@ -4095,13 +3790,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "01ba9859",
-            "01ba9859",
-            "01ba9859",
-            "01ba9859",
-            "01ba9859",
-            "c6f77009",
-            "c6f77009",
-            "c6f77009",
             "c6f77009"
           ]
         },
@@ -4156,12 +3844,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "47ee0178",
-            "47ee0178",
-            "47ee0178",
-            "47ee0178",
-            "01ba9859",
-            "01ba9859",
-            "01ba9859",
             "01ba9859"
           ]
         },
@@ -4216,8 +3898,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "0360d0c2",
-            "0360d0c2",
-            "00dd8863",
             "00dd8863"
           ]
         },
@@ -4275,8 +3955,6 @@
             "7de0d6c2"
           ],
           "Sean Smith": [
-            "b7cc60e3",
-            "b7cc60e3",
             "b7cc60e3"
           ]
         },
@@ -4330,14 +4008,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b7cc60e3",
-            "b7cc60e3",
-            "b7cc60e3",
-            "b7cc60e3",
-            "b7cc60e3",
-            "b7cc60e3",
-            "b7cc60e3",
-            "b7cc60e3",
             "b7cc60e3"
           ]
         },
@@ -4391,14 +4061,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "9b3d620e",
-            "9b3d620e",
-            "9b3d620e",
-            "9b3d620e",
-            "9b3d620e",
-            "9b3d620e",
-            "9b3d620e",
-            "9b3d620e",
             "9b3d620e"
           ]
         },
@@ -4452,14 +4114,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "adda800c",
-            "adda800c",
-            "adda800c",
-            "adda800c",
-            "adda800c",
-            "adda800c",
-            "adda800c",
-            "adda800c",
             "adda800c"
           ]
         },
@@ -4518,12 +4172,6 @@
           ],
           "Sean Smith": [
             "f6d94964",
-            "6df2b132",
-            "6df2b132",
-            "6df2b132",
-            "6df2b132",
-            "6df2b132",
-            "6df2b132",
             "6df2b132"
           ]
         },
@@ -4581,8 +4229,6 @@
             "9639aa31"
           ],
           "Sean Smith": [
-            "832a2997",
-            "832a2997",
             "832a2997"
           ]
         },
@@ -4636,9 +4282,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "6760bc32",
-            "6760bc32",
-            "6760bc32",
             "6760bc32"
           ]
         },
@@ -4693,12 +4336,7 @@
         "contributionsBy": {
           "Sean Smith": [
             "51d9565f",
-            "51d9565f",
             "72b421e2",
-            "72b421e2",
-            "72b421e2",
-            "72b421e2",
-            "ba6fc701",
             "ba6fc701",
             "2fbc7066"
           ]
@@ -4754,13 +4392,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "51d9565f",
-            "51d9565f",
-            "72b421e2",
-            "72b421e2",
-            "72b421e2",
-            "72b421e2",
-            "72b421e2",
-            "72b421e2",
             "72b421e2"
           ]
         },
@@ -4814,14 +4445,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "ac54dfbc",
-            "ac54dfbc",
-            "ac54dfbc",
-            "ac54dfbc",
-            "ac54dfbc",
-            "ac54dfbc",
-            "ac54dfbc",
-            "ac54dfbc",
             "ac54dfbc"
           ]
         },
@@ -4877,12 +4500,6 @@
           "Sean Smith": [
             "51d9565f",
             "57df8fe7",
-            "57df8fe7",
-            "2fbc7066",
-            "2fbc7066",
-            "2fbc7066",
-            "2fbc7066",
-            "2fbc7066",
             "2fbc7066"
           ]
         },
@@ -4936,9 +4553,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "288870e8",
-            "288870e8",
-            "288870e8",
             "288870e8"
           ]
         },
@@ -4993,7 +4607,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7",
             "f36b3f68"
           ],
@@ -5052,15 +4665,10 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "51149151",
-            "51149151",
-            "a5f8f121",
-            "a5f8f121",
-            "a5f8f121",
             "a5f8f121"
           ]
         },
@@ -5116,15 +4724,10 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "41a2050d",
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "51149151",
-            "51149151",
-            "f6b3c3ad",
-            "f6b3c3ad",
-            "f6b3c3ad",
             "f6b3c3ad"
           ]
         },
@@ -5179,7 +4782,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
@@ -5237,7 +4839,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
@@ -5295,12 +4896,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "f6b3c3ad",
-            "f6b3c3ad",
             "f6b3c3ad"
           ]
         },
@@ -5355,16 +4953,11 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "51149151",
-            "51149151",
             "69104f94",
-            "f6b3c3ad",
-            "f6b3c3ad",
-            "f6b3c3ad",
             "f6b3c3ad"
           ]
         },
@@ -5418,14 +5011,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "b5c82fd7",
-            "b5c82fd7",
-            "b5c82fd7",
-            "b5c82fd7",
-            "b5c82fd7",
-            "b5c82fd7",
-            "b5c82fd7",
-            "b5c82fd7",
             "b5c82fd7"
           ]
         },
@@ -5480,7 +5065,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
@@ -5538,16 +5122,11 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "51149151",
-            "51149151",
             "69104f94",
-            "f6b3c3ad",
-            "f6b3c3ad",
-            "f6b3c3ad",
             "f6b3c3ad"
           ]
         },
@@ -5602,7 +5181,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
@@ -5660,12 +5238,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "69104f94",
-            "69104f94",
             "69104f94"
           ]
         },
@@ -5720,16 +5295,10 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "51149151",
-            "51149151",
-            "69104f94",
-            "69104f94",
-            "69104f94",
-            "69104f94",
             "69104f94"
           ]
         },
@@ -5784,12 +5353,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "51149151",
-            "51149151",
             "51149151"
           ]
         },
@@ -5844,16 +5410,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "51149151",
-            "51149151",
-            "51149151",
-            "51149151",
-            "51149151",
-            "51149151",
             "51149151"
           ]
         },
@@ -5908,16 +5467,10 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "a9fd27f1",
-            "51149151",
-            "51149151",
-            "51149151",
-            "51149151",
-            "51149151",
             "51149151"
           ]
         },
@@ -5972,16 +5525,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "51149151",
-            "51149151",
-            "51149151",
-            "51149151",
-            "51149151",
-            "51149151",
             "51149151"
           ]
         },
@@ -6036,7 +5582,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
@@ -6094,16 +5639,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "a9fd27f1",
-            "a9fd27f1",
-            "a9fd27f1",
-            "a9fd27f1",
-            "a9fd27f1",
-            "a9fd27f1",
             "a9fd27f1"
           ]
         },
@@ -6158,12 +5696,10 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "95c949cf",
-            "6862a242",
             "6862a242"
           ]
         },
@@ -6218,16 +5754,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "6862a242",
-            "6862a242",
-            "6862a242",
-            "6862a242",
-            "6862a242",
-            "6862a242",
             "6862a242"
           ]
         },
@@ -6282,16 +5811,10 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "897c4b4e",
-            "6862a242",
-            "6862a242",
-            "6862a242",
-            "6862a242",
-            "6862a242",
             "6862a242"
           ]
         },
@@ -6346,16 +5869,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "4bff03a9",
-            "4bff03a9",
-            "4bff03a9",
-            "4bff03a9",
-            "4bff03a9",
-            "4bff03a9",
             "4bff03a9"
           ]
         },
@@ -6410,16 +5926,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
             "897c4b4e"
           ]
         },
@@ -6474,16 +5983,10 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "486d8011",
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
             "897c4b4e"
           ]
         },
@@ -6538,16 +6041,10 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
             "486d8011",
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
-            "897c4b4e",
             "897c4b4e"
           ]
         },
@@ -6602,16 +6099,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "95c949cf",
-            "95c949cf",
-            "95c949cf",
-            "95c949cf",
-            "95c949cf",
-            "95c949cf",
             "95c949cf"
           ]
         },
@@ -6666,12 +6156,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Peter Weinberg": [
-            "95c949cf",
-            "95c949cf",
             "95c949cf"
           ]
         },
@@ -6726,12 +6213,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
-            "8bcb27e2",
-            "8bcb27e2",
             "8bcb27e2"
           ]
         },
@@ -6786,16 +6270,11 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
             "3883c0aa",
-            "3883c0aa",
             "2e1c6010",
-            "8bcb27e2",
-            "8bcb27e2",
-            "8bcb27e2",
             "8bcb27e2"
           ]
         },
@@ -6850,16 +6329,11 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
             "ff30dbae",
             "3883c0aa",
-            "3883c0aa",
-            "3883c0aa",
-            "2e1c6010",
-            "2e1c6010",
             "2e1c6010"
           ]
         },
@@ -6914,16 +6388,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
-            "3883c0aa",
-            "3883c0aa",
-            "3883c0aa",
-            "3883c0aa",
-            "3883c0aa",
-            "3883c0aa",
             "3883c0aa"
           ]
         },
@@ -6978,7 +6445,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
@@ -7036,16 +6502,11 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
             "162e93dc",
             "d32b7c08",
-            "82f52b66",
-            "82f52b66",
-            "82f52b66",
-            "82f52b66",
             "82f52b66"
           ]
         },
@@ -7100,16 +6561,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
-            "70177ced",
-            "70177ced",
-            "70177ced",
-            "70177ced",
-            "70177ced",
-            "70177ced",
             "70177ced"
           ]
         },
@@ -7164,11 +6618,9 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "9ad6994a",
             "9ad6994a"
           ],
           "Ian Sinnott": [
-            "a1c46565",
             "a1c46565"
           ]
         },
@@ -7222,14 +6674,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "12589cb0",
-            "12589cb0",
-            "12589cb0",
-            "12589cb0",
-            "12589cb0",
-            "12589cb0",
-            "12589cb0",
-            "12589cb0",
             "12589cb0"
           ]
         },
@@ -7284,13 +6728,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "df789ca6",
-            "df789ca6",
-            "df789ca6",
-            "df789ca6",
-            "93f5d173",
-            "93f5d173",
-            "93f5d173",
-            "93f5d173",
             "93f5d173"
           ]
         },
@@ -7344,13 +6781,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "df789ca6",
-            "df789ca6",
-            "df789ca6",
-            "df789ca6",
-            "df789ca6",
-            "df789ca6",
-            "df789ca6",
             "df789ca6"
           ]
         },
@@ -7404,14 +6834,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "2df2f962",
-            "2df2f962",
-            "2df2f962",
-            "2df2f962",
-            "2df2f962",
-            "2df2f962",
-            "2df2f962",
-            "2df2f962",
             "2df2f962"
           ]
         },
@@ -7465,9 +6887,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "6ea75d74",
-            "6ea75d74",
-            "6ea75d74",
             "6ea75d74"
           ]
         },
@@ -7521,14 +6940,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
             "51c2de00"
           ]
         },
@@ -7582,14 +6993,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
-            "51c2de00",
             "51c2de00"
           ]
         },
@@ -7644,13 +7047,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "3139fe11",
-            "be316dd8",
-            "be316dd8",
-            "be316dd8",
-            "be316dd8",
-            "be316dd8",
-            "be316dd8",
-            "be316dd8",
             "be316dd8"
           ]
         },
@@ -7705,13 +7101,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "a6324c9c",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
             "3139fe11"
           ]
         },
@@ -7766,13 +7155,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "a6324c9c",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
-            "3139fe11",
             "3139fe11"
           ]
         },
@@ -7830,8 +7212,6 @@
             "7d42fcb9"
           ],
           "Ian Sinnott": [
-            "a1c46565",
-            "a1c46565",
             "a1c46565"
           ]
         },
@@ -7885,14 +7265,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
             "5642a5fc"
           ]
         },
@@ -7946,14 +7318,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
-            "5642a5fc",
             "5642a5fc"
           ]
         },
@@ -8007,14 +7371,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "4fbc851a",
-            "4fbc851a",
-            "4fbc851a",
-            "4fbc851a",
-            "4fbc851a",
-            "4fbc851a",
-            "4fbc851a",
-            "4fbc851a",
             "4fbc851a"
           ]
         },
@@ -8069,13 +7425,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "f752859c",
-            "90c5e535",
-            "90c5e535",
-            "90c5e535",
-            "90c5e535",
-            "90c5e535",
-            "90c5e535",
-            "90c5e535",
             "90c5e535"
           ]
         },
@@ -8130,13 +7479,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "e2244188",
-            "ab90bd0a",
-            "ab90bd0a",
-            "ab90bd0a",
-            "ab90bd0a",
-            "ab90bd0a",
-            "ab90bd0a",
-            "ab90bd0a",
             "ab90bd0a"
           ]
         },
@@ -8190,14 +7532,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "e2244188",
-            "e2244188",
-            "e2244188",
-            "e2244188",
-            "e2244188",
-            "e2244188",
-            "e2244188",
-            "e2244188",
             "e2244188"
           ]
         },
@@ -8251,14 +7585,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "c9eed191",
-            "c9eed191",
-            "c9eed191",
-            "c9eed191",
-            "c9eed191",
-            "c9eed191",
-            "c9eed191",
-            "c9eed191",
             "c9eed191"
           ]
         },
@@ -8313,13 +7639,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "26c4e413",
-            "05f1231f",
-            "05f1231f",
-            "05f1231f",
-            "05f1231f",
-            "05f1231f",
-            "05f1231f",
-            "05f1231f",
             "05f1231f"
           ]
         },
@@ -8373,14 +7692,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "26c4e413",
-            "26c4e413",
-            "26c4e413",
-            "26c4e413",
-            "26c4e413",
-            "26c4e413",
-            "26c4e413",
-            "26c4e413",
             "26c4e413"
           ]
         },
@@ -8434,14 +7745,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "18d59dd5",
-            "18d59dd5",
-            "18d59dd5",
-            "18d59dd5",
-            "18d59dd5",
-            "18d59dd5",
-            "18d59dd5",
-            "18d59dd5",
             "18d59dd5"
           ]
         },
@@ -8495,14 +7798,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "02e69b7a",
-            "02e69b7a",
-            "02e69b7a",
-            "02e69b7a",
-            "02e69b7a",
-            "02e69b7a",
-            "02e69b7a",
-            "02e69b7a",
             "02e69b7a"
           ]
         },
@@ -8556,8 +7851,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "31c01785",
-            "31c01785",
             "31c01785"
           ]
         },
@@ -8611,14 +7904,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "31c01785",
-            "31c01785",
-            "31c01785",
-            "31c01785",
-            "31c01785",
-            "31c01785",
-            "31c01785",
-            "31c01785",
             "31c01785"
           ]
         },
@@ -8673,13 +7958,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "4cd3d789",
-            "724510cf",
-            "724510cf",
-            "724510cf",
-            "724510cf",
-            "724510cf",
-            "724510cf",
-            "724510cf",
             "724510cf"
           ]
         },
@@ -8733,13 +8011,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "4cd3d789",
-            "4cd3d789",
-            "4cd3d789",
-            "4cd3d789",
-            "4cd3d789",
-            "4cd3d789",
-            "4cd3d789",
             "4cd3d789"
           ]
         },
@@ -8793,14 +8064,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "da152aeb",
-            "da152aeb",
-            "da152aeb",
-            "da152aeb",
-            "da152aeb",
-            "da152aeb",
-            "da152aeb",
-            "da152aeb",
             "da152aeb"
           ]
         },
@@ -8854,14 +8117,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "1f25a261",
-            "1f25a261",
-            "1f25a261",
-            "1f25a261",
-            "1f25a261",
-            "1f25a261",
-            "1f25a261",
-            "1f25a261",
             "1f25a261"
           ]
         },
@@ -8915,14 +8170,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "2893f693",
-            "2893f693",
-            "2893f693",
-            "2893f693",
-            "2893f693",
-            "2893f693",
-            "2893f693",
-            "2893f693",
             "2893f693"
           ]
         },
@@ -8977,13 +8224,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "2c6cd5d0",
-            "ca1ddadb",
-            "ca1ddadb",
-            "ca1ddadb",
-            "ca1ddadb",
-            "ca1ddadb",
-            "ca1ddadb",
-            "ca1ddadb",
             "ca1ddadb"
           ]
         },
@@ -9037,11 +8277,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "db9bc965",
-            "db9bc965",
-            "db9bc965",
-            "db9bc965",
-            "db9bc965",
             "db9bc965"
           ]
         },
@@ -9095,9 +8330,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "a1c46565",
-            "a1c46565",
-            "a1c46565",
             "a1c46565"
           ]
         },
@@ -9153,7 +8385,6 @@
           "Ian Sinnott": [
             "821d2d3b",
             "239a0a5b",
-            "1ecdcb19",
             "1ecdcb19"
           ]
         },
@@ -9207,14 +8438,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
             "1ecdcb19"
           ]
         },
@@ -9268,14 +8491,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "5402977b",
-            "5402977b",
-            "5402977b",
-            "5402977b",
-            "5402977b",
-            "5402977b",
-            "5402977b",
-            "5402977b",
             "5402977b"
           ]
         },
@@ -9329,14 +8544,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "9a025237",
-            "9a025237",
-            "9a025237",
-            "9a025237",
-            "9a025237",
-            "9a025237",
-            "9a025237",
-            "9a025237",
             "9a025237"
           ]
         },
@@ -9390,14 +8597,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
-            "1ecdcb19",
             "1ecdcb19"
           ]
         },
@@ -9451,14 +8650,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "add28f3b",
-            "add28f3b",
-            "add28f3b",
-            "add28f3b",
-            "add28f3b",
-            "add28f3b",
-            "add28f3b",
-            "add28f3b",
             "add28f3b"
           ]
         },
@@ -9513,13 +8704,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "6ebb01a3",
-            "81a874b5",
-            "81a874b5",
-            "81a874b5",
-            "81a874b5",
-            "81a874b5",
-            "81a874b5",
-            "81a874b5",
             "81a874b5"
           ]
         },
@@ -9573,14 +8757,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "239a0a5b",
-            "239a0a5b",
-            "239a0a5b",
-            "239a0a5b",
-            "239a0a5b",
-            "239a0a5b",
-            "239a0a5b",
-            "239a0a5b",
             "239a0a5b"
           ]
         },
@@ -9635,8 +8811,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "56c035c7",
-            "a1c46565",
-            "a1c46565",
             "a1c46565"
           ]
         },
@@ -9690,14 +8864,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "70764caa",
-            "70764caa",
-            "70764caa",
-            "70764caa",
-            "70764caa",
-            "70764caa",
-            "70764caa",
-            "70764caa",
             "70764caa"
           ]
         },
@@ -9751,14 +8917,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "52366140",
-            "52366140",
-            "52366140",
-            "52366140",
-            "52366140",
-            "52366140",
-            "52366140",
-            "52366140",
             "52366140"
           ]
         },
@@ -9814,12 +8972,6 @@
           "Ian Sinnott": [
             "c390edbe",
             "a3a68e25",
-            "a3a68e25",
-            "a3a68e25",
-            "a3a68e25",
-            "a3a68e25",
-            "a3a68e25",
-            "87b34922",
             "87b34922"
           ]
         },
@@ -9874,13 +9026,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "c390edbe",
-            "a3a68e25",
-            "a3a68e25",
-            "a3a68e25",
-            "a3a68e25",
-            "a3a68e25",
-            "a3a68e25",
-            "a3a68e25",
             "a3a68e25"
           ]
         },
@@ -9936,12 +9081,6 @@
           "Ian Sinnott": [
             "c390edbe",
             "20aa2622",
-            "603f8333",
-            "603f8333",
-            "603f8333",
-            "603f8333",
-            "603f8333",
-            "603f8333",
             "603f8333"
           ]
         },
@@ -9997,12 +9136,7 @@
           "Ian Sinnott": [
             "c390edbe",
             "65ef9e08",
-            "65ef9e08",
-            "65ef9e08",
-            "65ef9e08",
-            "65ef9e08",
             "603f8333",
-            "a3a68e25",
             "a3a68e25"
           ]
         },
@@ -10057,13 +9191,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "4aec2da9",
-            "20aa2622",
-            "20aa2622",
-            "20aa2622",
-            "20aa2622",
-            "20aa2622",
-            "20aa2622",
-            "20aa2622",
             "20aa2622"
           ]
         },
@@ -10118,10 +9245,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "1c42584d",
-            "1c42584d",
-            "1c42584d",
-            "1c42584d",
-            "7f4ae835",
             "7f4ae835"
           ]
         },
@@ -10177,12 +9300,6 @@
           "Ian Sinnott": [
             "c390edbe",
             "7f4ae835",
-            "7f4ae835",
-            "7f4ae835",
-            "7f4ae835",
-            "7f4ae835",
-            "7f4ae835",
-            "87b34922",
             "87b34922"
           ]
         },
@@ -10237,12 +9354,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "5c31d3a1",
-            "5c31d3a1",
-            "5c31d3a1",
-            "5c31d3a1",
-            "65ef9e08",
-            "65ef9e08",
-            "65ef9e08",
             "65ef9e08"
           ]
         },
@@ -10297,13 +9408,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "603f8333",
-            "daacc1a8",
-            "daacc1a8",
-            "daacc1a8",
-            "daacc1a8",
-            "daacc1a8",
-            "daacc1a8",
-            "daacc1a8",
             "daacc1a8"
           ]
         },
@@ -10360,11 +9464,6 @@
             "c390edbe",
             "449315e7",
             "b6666e56",
-            "b6666e56",
-            "b6666e56",
-            "b6666e56",
-            "87b34922",
-            "87b34922",
             "87b34922"
           ]
         },
@@ -10420,11 +9519,6 @@
           "Ian Sinnott": [
             "c390edbe",
             "2789c53c",
-            "449315e7",
-            "449315e7",
-            "449315e7",
-            "449315e7",
-            "449315e7",
             "449315e7"
           ]
         },
@@ -10479,13 +9573,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "ce0778dc",
-            "fb3a11c5",
-            "fb3a11c5",
-            "fb3a11c5",
-            "fb3a11c5",
-            "fb3a11c5",
-            "fb3a11c5",
-            "fb3a11c5",
             "fb3a11c5"
           ]
         },
@@ -10539,14 +9626,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
             "da02f1ff"
           ]
         },
@@ -10600,14 +9679,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
-            "da02f1ff",
             "da02f1ff"
           ]
         },
@@ -10662,13 +9733,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "e888dfa4",
-            "6be80581",
-            "6be80581",
-            "6be80581",
-            "6be80581",
-            "6be80581",
-            "6be80581",
-            "6be80581",
             "6be80581"
           ]
         },
@@ -10724,12 +9788,6 @@
           "Ian Sinnott": [
             "52e44b48",
             "13e1b78f",
-            "e888dfa4",
-            "e888dfa4",
-            "e888dfa4",
-            "e888dfa4",
-            "e888dfa4",
-            "e888dfa4",
             "e888dfa4"
           ]
         },
@@ -10784,13 +9842,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "fa321cff",
-            "fa321cff",
-            "fa321cff",
-            "fa321cff",
-            "e888dfa4",
-            "e888dfa4",
-            "e888dfa4",
-            "e888dfa4",
             "e888dfa4"
           ]
         },
@@ -10845,10 +9896,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "52e44b48",
-            "87b34922",
-            "87b34922",
-            "87b34922",
-            "87b34922",
             "87b34922"
           ]
         },
@@ -10903,8 +9950,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "76e66680",
-            "a1c46565",
-            "a1c46565",
             "a1c46565"
           ]
         },
@@ -10959,13 +10004,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "445e2752",
-            "445e2752",
-            "445e2752",
-            "52e44b48",
-            "52e44b48",
-            "52e44b48",
-            "52e44b48",
-            "52e44b48",
             "52e44b48"
           ]
         },
@@ -11019,14 +10057,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "2cc249f7",
-            "2cc249f7",
-            "2cc249f7",
-            "2cc249f7",
-            "2cc249f7",
-            "2cc249f7",
-            "2cc249f7",
-            "2cc249f7",
             "2cc249f7"
           ]
         },
@@ -11080,14 +10110,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "e6df1161",
-            "e6df1161",
-            "e6df1161",
-            "e6df1161",
-            "e6df1161",
-            "e6df1161",
-            "e6df1161",
-            "e6df1161",
             "e6df1161"
           ]
         },
@@ -11142,8 +10164,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "954a105a",
-            "a1c46565",
-            "a1c46565",
             "a1c46565"
           ]
         },
@@ -11197,14 +10217,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "d3ccdec7",
-            "d3ccdec7",
-            "d3ccdec7",
-            "d3ccdec7",
-            "d3ccdec7",
-            "d3ccdec7",
-            "d3ccdec7",
-            "d3ccdec7",
             "d3ccdec7"
           ]
         },
@@ -11259,8 +10271,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "6c354775",
-            "b03be9ac",
-            "b03be9ac",
             "b03be9ac"
           ]
         },
@@ -11315,13 +10325,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "1c42584d",
-            "1c42584d",
-            "1c42584d",
-            "1c42584d",
-            "b03be9ac",
-            "b03be9ac",
-            "b03be9ac",
-            "b03be9ac",
             "b03be9ac"
           ]
         },
@@ -11376,13 +10379,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "6c354775",
-            "6c354775",
-            "6c354775",
-            "6c354775",
-            "6c354775",
-            "6c354775",
-            "b03be9ac",
-            "b03be9ac",
             "b03be9ac"
           ]
         },
@@ -11436,14 +10432,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "1c42584d",
-            "1c42584d",
-            "1c42584d",
-            "1c42584d",
-            "1c42584d",
-            "1c42584d",
-            "1c42584d",
-            "1c42584d",
             "1c42584d"
           ]
         },
@@ -11498,13 +10486,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "b37e0e97",
-            "b37e0e97",
-            "b37e0e97",
-            "b37e0e97",
-            "b37e0e97",
-            "b03be9ac",
-            "b03be9ac",
-            "b03be9ac",
             "b03be9ac"
           ]
         },
@@ -11560,10 +10541,6 @@
           "Ian Sinnott": [
             "6d946342",
             "f34da761",
-            "f34da761",
-            "f34da761",
-            "b37e0e97",
-            "b37e0e97",
             "b37e0e97"
           ]
         },
@@ -11618,13 +10595,6 @@
         "contributionsBy": {
           "Ian Sinnott": [
             "6d946342",
-            "6d946342",
-            "6d946342",
-            "6d946342",
-            "6d946342",
-            "6d946342",
-            "b03be9ac",
-            "b03be9ac",
             "b03be9ac"
           ]
         },
@@ -11678,14 +10648,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "2e9bd26c",
-            "2e9bd26c",
-            "2e9bd26c",
-            "2e9bd26c",
-            "2e9bd26c",
-            "2e9bd26c",
-            "2e9bd26c",
-            "2e9bd26c",
             "2e9bd26c"
           ]
         },
@@ -11743,8 +10705,6 @@
             "e8f224a6"
           ],
           "Ian Sinnott": [
-            "a1c46565",
-            "a1c46565",
             "a1c46565"
           ]
         },
@@ -11798,12 +10758,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "52322d20",
-            "52322d20",
-            "52322d20",
-            "52322d20",
-            "52322d20",
-            "52322d20",
             "52322d20"
           ]
         },
@@ -11857,14 +10811,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "c3fd988a",
-            "c3fd988a",
-            "c3fd988a",
-            "c3fd988a",
-            "c3fd988a",
-            "c3fd988a",
-            "c3fd988a",
-            "c3fd988a",
             "c3fd988a"
           ]
         },
@@ -11918,12 +10864,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "88d27e51",
-            "88d27e51",
-            "88d27e51",
-            "88d27e51",
-            "88d27e51",
-            "88d27e51",
             "88d27e51"
           ]
         },
@@ -11977,12 +10917,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "29ed84ff",
-            "29ed84ff",
-            "29ed84ff",
-            "29ed84ff",
-            "29ed84ff",
-            "29ed84ff",
             "29ed84ff"
           ]
         },
@@ -12036,12 +10970,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "83c0c9b1",
-            "83c0c9b1",
-            "83c0c9b1",
-            "83c0c9b1",
-            "83c0c9b1",
-            "83c0c9b1",
             "83c0c9b1"
           ]
         },
@@ -12095,9 +11023,6 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "a1c46565",
-            "a1c46565",
-            "a1c46565",
             "a1c46565"
           ]
         },
@@ -12153,7 +11078,6 @@
           "Sean Smith": [
             "c2e16a07",
             "c3d20143",
-            "fabf4762",
             "fabf4762"
           ]
         },
@@ -12214,12 +11138,9 @@
           "Ian Sinnott": [
             "f811aad7",
             "e1f518de",
-            "e1f518de",
             "fc3880f8"
           ],
           "Sean Smith": [
-            "24b1b37b",
-            "24b1b37b",
             "24b1b37b"
           ]
         },
@@ -12276,7 +11197,6 @@
         "contributionsBy": {
           "Peter Weinberg": [
             "3f9edebc",
-            "a9fd27f1",
             "a9fd27f1"
           ],
           "Ian Sinnott": [
@@ -12284,8 +11204,6 @@
             "5e3f630f"
           ],
           "Sean Smith": [
-            "24b1b37b",
-            "24b1b37b",
             "24b1b37b"
           ]
         },
@@ -12342,13 +11260,10 @@
         "contributionsBy": {
           "Sean Smith": [
             "8d7deb3a",
-            "24b1b37b",
-            "24b1b37b",
             "24b1b37b"
           ],
           "Peter Weinberg": [
             "3f9edebc",
-            "a9fd27f1",
             "a9fd27f1"
           ],
           "Ian Sinnott": [
@@ -12407,12 +11322,6 @@
           "Sean Smith": [
             "ede1a1a2",
             "a4d6739c",
-            "8da433a2",
-            "8da433a2",
-            "8da433a2",
-            "8da433a2",
-            "8da433a2",
-            "8da433a2",
             "8da433a2"
           ]
         },
@@ -12466,14 +11375,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "ede1a1a2",
-            "ede1a1a2",
-            "ede1a1a2",
-            "ede1a1a2",
-            "ede1a1a2",
-            "ede1a1a2",
-            "ede1a1a2",
-            "ede1a1a2",
             "ede1a1a2"
           ]
         },
@@ -12528,13 +11429,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "f668b29b",
-            "b354bd46",
-            "b354bd46",
-            "b354bd46",
-            "b354bd46",
-            "b354bd46",
-            "b354bd46",
-            "b354bd46",
             "b354bd46"
           ]
         },
@@ -12589,11 +11483,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "69796008",
-            "69796008",
-            "f668b29b",
-            "f668b29b",
-            "f668b29b",
-            "f668b29b",
             "f668b29b"
           ]
         },
@@ -12647,14 +11536,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "54ae31ef",
-            "54ae31ef",
-            "54ae31ef",
-            "54ae31ef",
-            "54ae31ef",
-            "54ae31ef",
-            "54ae31ef",
-            "54ae31ef",
             "54ae31ef"
           ]
         },
@@ -12708,14 +11589,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "7a603d7e",
-            "7a603d7e",
-            "7a603d7e",
-            "7a603d7e",
-            "7a603d7e",
-            "7a603d7e",
-            "7a603d7e",
-            "7a603d7e",
             "7a603d7e"
           ]
         },
@@ -12769,14 +11642,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "15adeff4",
-            "15adeff4",
-            "15adeff4",
-            "15adeff4",
-            "15adeff4",
-            "15adeff4",
-            "15adeff4",
-            "15adeff4",
             "15adeff4"
           ]
         },
@@ -12830,14 +11695,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "1a2f7b8a",
-            "1a2f7b8a",
-            "1a2f7b8a",
-            "1a2f7b8a",
-            "1a2f7b8a",
-            "1a2f7b8a",
-            "1a2f7b8a",
-            "1a2f7b8a",
             "1a2f7b8a"
           ]
         },
@@ -12891,14 +11748,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "81e9424b",
-            "81e9424b",
-            "81e9424b",
-            "81e9424b",
-            "81e9424b",
-            "81e9424b",
-            "81e9424b",
-            "81e9424b",
             "81e9424b"
           ]
         },
@@ -12952,14 +11801,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "270a8d0b",
-            "270a8d0b",
-            "270a8d0b",
-            "270a8d0b",
-            "270a8d0b",
-            "270a8d0b",
-            "270a8d0b",
-            "270a8d0b",
             "270a8d0b"
           ]
         },
@@ -13013,14 +11854,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "134a1eee",
-            "134a1eee",
-            "134a1eee",
-            "134a1eee",
-            "134a1eee",
-            "134a1eee",
-            "134a1eee",
-            "134a1eee",
             "134a1eee"
           ]
         },
@@ -13074,14 +11907,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "5fde7a4c",
-            "5fde7a4c",
-            "5fde7a4c",
-            "5fde7a4c",
-            "5fde7a4c",
-            "5fde7a4c",
-            "5fde7a4c",
-            "5fde7a4c",
             "5fde7a4c"
           ]
         },
@@ -13135,14 +11960,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "fec3c631",
-            "fec3c631",
-            "fec3c631",
-            "fec3c631",
-            "fec3c631",
-            "fec3c631",
-            "fec3c631",
-            "fec3c631",
             "fec3c631"
           ]
         },
@@ -13196,14 +12013,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "d9835522",
-            "d9835522",
-            "d9835522",
-            "d9835522",
-            "d9835522",
-            "d9835522",
-            "d9835522",
-            "d9835522",
             "d9835522"
           ]
         },
@@ -13257,14 +12066,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "2be46c76",
-            "2be46c76",
-            "2be46c76",
-            "2be46c76",
-            "2be46c76",
-            "2be46c76",
-            "2be46c76",
-            "2be46c76",
             "2be46c76"
           ]
         },
@@ -13318,14 +12119,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "38141776",
-            "38141776",
-            "38141776",
-            "38141776",
-            "38141776",
-            "38141776",
-            "38141776",
-            "38141776",
             "38141776"
           ]
         },
@@ -13379,14 +12172,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "1c29dc11",
-            "1c29dc11",
-            "1c29dc11",
-            "1c29dc11",
-            "1c29dc11",
-            "1c29dc11",
-            "1c29dc11",
-            "1c29dc11",
             "1c29dc11"
           ]
         },
@@ -13440,14 +12225,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "454feb4d",
-            "454feb4d",
-            "454feb4d",
-            "454feb4d",
-            "454feb4d",
-            "454feb4d",
-            "454feb4d",
-            "454feb4d",
             "454feb4d"
           ]
         },
@@ -13501,14 +12278,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "5d60550e",
-            "5d60550e",
-            "5d60550e",
-            "5d60550e",
-            "5d60550e",
-            "5d60550e",
-            "5d60550e",
-            "5d60550e",
             "5d60550e"
           ]
         },
@@ -13563,13 +12332,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "d000f078",
-            "d000f078",
-            "f69af2e2",
-            "f69af2e2",
-            "f69af2e2",
-            "f69af2e2",
-            "f69af2e2",
-            "f69af2e2",
             "f69af2e2"
           ]
         },
@@ -13623,14 +12385,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "d000f078",
-            "d000f078",
-            "d000f078",
-            "d000f078",
-            "d000f078",
-            "d000f078",
-            "d000f078",
-            "d000f078",
             "d000f078"
           ]
         },
@@ -13684,14 +12438,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "c4a21c7b",
-            "c4a21c7b",
-            "c4a21c7b",
-            "c4a21c7b",
-            "c4a21c7b",
-            "c4a21c7b",
-            "c4a21c7b",
-            "c4a21c7b",
             "c4a21c7b"
           ]
         },
@@ -13745,14 +12491,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "4369b910",
-            "4369b910",
-            "4369b910",
-            "4369b910",
-            "4369b910",
-            "4369b910",
-            "4369b910",
-            "4369b910",
             "4369b910"
           ]
         },
@@ -13806,14 +12544,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3a944e7d",
-            "3a944e7d",
-            "3a944e7d",
-            "3a944e7d",
-            "3a944e7d",
-            "3a944e7d",
-            "3a944e7d",
-            "3a944e7d",
             "3a944e7d"
           ]
         },
@@ -13868,13 +12598,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "fcb8592c",
-            "fcb8592c",
-            "fd878efc",
-            "fd878efc",
-            "fd878efc",
-            "fd878efc",
-            "fd878efc",
-            "fd878efc",
             "fd878efc"
           ]
         },
@@ -13928,11 +12651,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "fcb8592c",
-            "fcb8592c",
-            "fcb8592c",
-            "fcb8592c",
-            "fcb8592c",
             "fcb8592c"
           ]
         },
@@ -13986,14 +12704,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "4e90c107",
-            "4e90c107",
-            "4e90c107",
-            "4e90c107",
-            "4e90c107",
-            "4e90c107",
-            "4e90c107",
-            "4e90c107",
             "4e90c107"
           ]
         },
@@ -14053,11 +12763,6 @@
           ],
           "Ian Sinnott": [
             "f6f43022",
-            "13e1b78f",
-            "13e1b78f",
-            "13e1b78f",
-            "13e1b78f",
-            "13e1b78f",
             "13e1b78f"
           ]
         },
@@ -14113,12 +12818,6 @@
           "Sean Smith": [
             "511d0e3c",
             "aef074b2",
-            "aef074b2",
-            "8a63de68",
-            "8a63de68",
-            "8a63de68",
-            "8a63de68",
-            "8a63de68",
             "8a63de68"
           ]
         },
@@ -14172,12 +12871,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "912d875f",
-            "912d875f",
-            "912d875f",
-            "912d875f",
-            "912d875f",
-            "912d875f",
             "912d875f"
           ]
         },
@@ -14231,12 +12924,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "4a4f86fd",
-            "4a4f86fd",
-            "4a4f86fd",
-            "4a4f86fd",
-            "4a4f86fd",
-            "4a4f86fd",
             "4a4f86fd"
           ]
         },
@@ -14290,12 +12977,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "6aee0713",
-            "6aee0713",
-            "6aee0713",
-            "6aee0713",
-            "6aee0713",
-            "6aee0713",
             "6aee0713"
           ]
         },
@@ -14350,13 +13031,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "e56b2db6",
-            "d9594601",
-            "d9594601",
-            "d9594601",
-            "d9594601",
-            "d9594601",
-            "d9594601",
-            "d9594601",
             "d9594601"
           ]
         },
@@ -14410,14 +13084,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "5fb7c657",
-            "5fb7c657",
-            "5fb7c657",
-            "5fb7c657",
-            "5fb7c657",
-            "5fb7c657",
-            "5fb7c657",
-            "5fb7c657",
             "5fb7c657"
           ]
         },
@@ -14471,14 +13137,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "a9f72d97",
-            "a9f72d97",
-            "a9f72d97",
-            "a9f72d97",
-            "a9f72d97",
-            "a9f72d97",
-            "a9f72d97",
-            "a9f72d97",
             "a9f72d97"
           ]
         },
@@ -14532,12 +13190,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "255e1519",
-            "255e1519",
-            "255e1519",
-            "255e1519",
-            "255e1519",
-            "255e1519",
             "255e1519"
           ]
         },
@@ -14591,14 +13243,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "d8ece26e",
-            "d8ece26e",
-            "d8ece26e",
-            "d8ece26e",
-            "d8ece26e",
-            "d8ece26e",
-            "d8ece26e",
-            "d8ece26e",
             "d8ece26e"
           ]
         },
@@ -14652,12 +13296,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "cb6039f4",
-            "cb6039f4",
-            "cb6039f4",
-            "cb6039f4",
-            "cb6039f4",
-            "cb6039f4",
             "cb6039f4"
           ]
         },
@@ -14711,14 +13349,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "0975d9ce",
-            "0975d9ce",
-            "0975d9ce",
-            "0975d9ce",
-            "0975d9ce",
-            "0975d9ce",
-            "0975d9ce",
-            "0975d9ce",
             "0975d9ce"
           ]
         },
@@ -14772,14 +13402,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "a063b12e",
-            "a063b12e",
-            "a063b12e",
-            "a063b12e",
-            "a063b12e",
-            "a063b12e",
-            "a063b12e",
-            "a063b12e",
             "a063b12e"
           ]
         },
@@ -14833,14 +13455,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "dcdb47d0",
-            "dcdb47d0",
-            "dcdb47d0",
-            "dcdb47d0",
-            "dcdb47d0",
-            "dcdb47d0",
-            "dcdb47d0",
-            "dcdb47d0",
             "dcdb47d0"
           ]
         },
@@ -14894,12 +13508,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "66734aad",
-            "66734aad",
-            "66734aad",
-            "66734aad",
-            "66734aad",
-            "66734aad",
             "66734aad"
           ]
         },
@@ -14954,13 +13562,7 @@
         "contributionsBy": {
           "Sean Smith": [
             "2c20753f",
-            "2c20753f",
             "4d41ae92",
-            "4d41ae92",
-            "50387de1",
-            "50387de1",
-            "50387de1",
-            "50387de1",
             "50387de1"
           ]
         },
@@ -15015,12 +13617,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "2d3be93b",
-            "2d3be93b",
-            "2d3be93b",
-            "2d3be93b",
-            "50387de1",
-            "50387de1",
-            "50387de1",
             "50387de1"
           ]
         },
@@ -15075,13 +13671,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "57cf9301",
-            "57cf9301",
-            "57cf9301",
-            "57cf9301",
-            "57cf9301",
-            "50387de1",
-            "50387de1",
-            "50387de1",
             "50387de1"
           ]
         },
@@ -15136,13 +13725,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "76ed6728",
-            "76ed6728",
-            "76ed6728",
-            "76ed6728",
-            "76ed6728",
-            "50387de1",
-            "50387de1",
-            "50387de1",
             "50387de1"
           ]
         },
@@ -15197,13 +13779,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "c5338401",
-            "c5338401",
-            "c5338401",
-            "c5338401",
-            "50387de1",
-            "50387de1",
-            "50387de1",
-            "50387de1",
             "50387de1"
           ]
         },
@@ -15257,9 +13832,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "c2e16a07",
-            "c2e16a07",
-            "c2e16a07",
             "c2e16a07"
           ]
         },
@@ -15316,7 +13888,6 @@
           "Sean Smith": [
             "dc2d8f71",
             "31c01785",
-            "5b209c09",
             "5b209c09"
           ],
           "Ian Sinnott": [
@@ -15375,12 +13946,6 @@
           "Sean Smith": [
             "4b803e09",
             "853fc4f8",
-            "853fc4f8",
-            "853fc4f8",
-            "446b3b2e",
-            "446b3b2e",
-            "446b3b2e",
-            "446b3b2e",
             "446b3b2e"
           ]
         },
@@ -15435,16 +14000,10 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
             "93e83d7d",
-            "93e83d7d",
-            "93e83d7d",
-            "5b209c09",
-            "5b209c09",
-            "5b209c09",
             "5b209c09"
           ]
         },
@@ -15500,10 +14059,7 @@
           "Sean Smith": [
             "2744b747",
             "7c6e5107",
-            "7c6e5107",
             "6cb8ea15",
-            "47b9d249",
-            "47b9d249",
             "47b9d249"
           ]
         },
@@ -15557,7 +14113,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "dc2d8f71",
             "dc2d8f71"
           ]
         },
@@ -15611,9 +14166,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "0491b280",
-            "0491b280",
-            "0491b280",
             "0491b280"
           ]
         },
@@ -15668,12 +14220,9 @@
         ],
         "contributionsBy": {
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7"
           ],
           "Sean Smith": [
-            "5b209c09",
-            "5b209c09",
             "5b209c09"
           ]
         },
@@ -15728,8 +14277,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "e8f224a6",
-            "0491b280",
-            "0491b280",
             "0491b280"
           ]
         },
@@ -15842,11 +14389,9 @@
         "contributionsBy": {
           "Sean Smith": [
             "17071825",
-            "f251d0a2",
             "f251d0a2"
           ],
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7",
             "f36b3f68"
           ]
@@ -15901,7 +14446,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "17071825",
             "17071825"
           ]
         },
@@ -15955,9 +14499,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "12d33556",
-            "12d33556",
-            "12d33556",
             "12d33556"
           ]
         },
@@ -16011,7 +14552,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "17071825",
             "17071825"
           ]
         },
@@ -16067,8 +14607,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "9becdec9",
-            "9becdec9",
-            "f251d0a2",
             "f251d0a2"
           ],
           "Ian Sinnott": [
@@ -16126,7 +14664,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "9becdec9",
             "9becdec9"
           ]
         },
@@ -16180,7 +14717,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "07447b7f",
             "07447b7f"
           ]
         },
@@ -16234,7 +14770,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "9becdec9",
             "9becdec9"
           ]
         },
@@ -16345,8 +14880,6 @@
         "contributionsBy": {
           "Peter Weinberg": [
             "3f9edebc",
-            "3f9edebc",
-            "a9fd27f1",
             "a9fd27f1"
           ],
           "Ian Sinnott": [
@@ -16354,8 +14887,6 @@
             "e1f518de"
           ],
           "Sean Smith": [
-            "24b1b37b",
-            "24b1b37b",
             "24b1b37b"
           ]
         },
@@ -16409,7 +14940,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "75e53c2b",
             "75e53c2b"
           ]
         },
@@ -16463,7 +14993,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "07447b7f",
             "07447b7f"
           ]
         },
@@ -16517,7 +15046,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "75e53c2b",
             "75e53c2b"
           ]
         },
@@ -16573,8 +15101,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "e328f854",
-            "e328f854",
-            "f251d0a2",
             "f251d0a2"
           ],
           "Ian Sinnott": [
@@ -16632,7 +15158,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "e328f854",
             "e328f854"
           ]
         },
@@ -16686,7 +15211,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "07447b7f",
             "07447b7f"
           ]
         },
@@ -16740,7 +15264,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "e328f854",
             "e328f854"
           ]
         },
@@ -16796,8 +15319,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "900945bb",
-            "900945bb",
-            "f251d0a2",
             "f251d0a2"
           ],
           "Ian Sinnott": [
@@ -16855,7 +15376,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "900945bb",
             "900945bb"
           ]
         },
@@ -16909,7 +15429,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "07447b7f",
             "07447b7f"
           ]
         },
@@ -17019,8 +15538,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "0e8b620d",
-            "0e8b620d",
-            "f251d0a2",
             "f251d0a2"
           ],
           "Ian Sinnott": [
@@ -17078,7 +15595,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "0e8b620d",
             "0e8b620d"
           ]
         },
@@ -17132,7 +15648,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "07447b7f",
             "07447b7f"
           ]
         },
@@ -17186,7 +15701,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "0e8b620d",
             "0e8b620d"
           ]
         },
@@ -17242,8 +15756,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "2573812f",
-            "2573812f",
-            "f251d0a2",
             "f251d0a2"
           ],
           "Ian Sinnott": [
@@ -17301,7 +15813,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "2573812f",
             "2573812f"
           ]
         },
@@ -17355,7 +15866,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "07447b7f",
             "07447b7f"
           ]
         },
@@ -17409,7 +15919,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "2573812f",
             "2573812f"
           ]
         },
@@ -17465,8 +15974,6 @@
         "contributionsBy": {
           "Sean Smith": [
             "19f425be",
-            "19f425be",
-            "f251d0a2",
             "f251d0a2"
           ],
           "Ian Sinnott": [
@@ -17524,7 +16031,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "19f425be",
             "19f425be"
           ]
         },
@@ -17578,7 +16084,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "19f425be",
             "19f425be"
           ]
         },
@@ -17632,7 +16137,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "19f425be",
             "19f425be"
           ]
         },
@@ -17687,7 +16191,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "9afbd482",
             "9afbd482",
             "1d662875"
           ],
@@ -17745,7 +16248,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "9afbd482",
             "9afbd482"
           ]
         },
@@ -17799,7 +16301,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "9afbd482",
             "9afbd482"
           ]
         },
@@ -17853,7 +16354,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "9afbd482",
             "9afbd482"
           ]
         },
@@ -17909,11 +16409,9 @@
         "contributionsBy": {
           "Sean Smith": [
             "c59247bd",
-            "f251d0a2",
             "f251d0a2"
           ],
           "Ian Sinnott": [
-            "f811aad7",
             "f811aad7",
             "f36b3f68"
           ]
@@ -17968,7 +16466,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "c59247bd",
             "c59247bd"
           ]
         },
@@ -18022,7 +16519,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "c59247bd",
             "c59247bd"
           ]
         },
@@ -18076,7 +16572,6 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "c59247bd",
             "c59247bd"
           ]
         },
