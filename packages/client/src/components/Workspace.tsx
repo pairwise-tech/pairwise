@@ -56,7 +56,7 @@ import {
   composeWithProps,
   constructDataBlobFromChallenge,
   challengeRequiresWorkspace,
-  getFileMetaByChallengeType,
+  getFileExtensionByChallengeType,
 } from "tools/utils";
 import {
   Tab,
@@ -1364,7 +1364,7 @@ class Workspace extends React.Component<IProps, IState> {
   // Export / Download the text from the editor as a file. File extension is determined by challenge type.
   private readonly handleExport = () => {
     const { code } = this.state;
-    const meta = getFileMetaByChallengeType(this.props.challenge.type);
+    const meta = getFileExtensionByChallengeType(this.props.challenge);
 
     if (!meta) {
       console.warn(
