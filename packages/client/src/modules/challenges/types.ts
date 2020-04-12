@@ -15,6 +15,10 @@ export interface InverseChallengeMapping {
   [k: string]: {
     courseId: string;
     moduleId: string;
+    challenge: {
+      id: string;
+      title: string;
+    };
   };
 }
 
