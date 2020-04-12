@@ -1589,7 +1589,7 @@ const stripChars = (s: string) => {
 };
 
 const getSeoExcerpt = pipe(
-  (x: Challenge) => x.instructions || x.content,
+  (x: Challenge) => x.instructions || x.content, // Prioritize instructions over content. The most common case is one or the other not both
   stripChars,
   (x: string) => truncate(x, 150),
 );
