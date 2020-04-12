@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { CSSTransition } from "react-transition-group";
 import Confetti from "react-confetti";
 import { IRect } from "react-confetti/dist/types/Rect";
-import { Challenge } from "@pairwise/common";
+import { Challenge, getChallengeSlug } from "@pairwise/common";
 import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
 import Modules, { ReduxStoreState } from "modules/root";
 import { NextChallengeButton } from "./ChallengeControls";
@@ -223,7 +223,7 @@ const GreatSuccess: React.FC<Props> = ({
           {nextChallenge && (
             <NextChallengeButton
               className={Classes.INTENT_SUCCESS}
-              challengeId={nextChallenge.id}
+              slug={getChallengeSlug(nextChallenge)}
             />
           )}
         </div>

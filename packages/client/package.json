@@ -102,6 +102,7 @@
     "styled-components": "^4.4.1",
     "throttle-debounce": "^2.1.0",
     "traverse": "^0.6.6",
+    "truncate": "^2.1.0",
     "ts-morph": "^5.0.0",
     "tslint": "^5.20.1",
     "typesafe-actions": "^5.1.0",
