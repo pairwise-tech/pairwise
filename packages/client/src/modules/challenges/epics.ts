@@ -198,7 +198,8 @@ const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
 
 /**
  * Can also initialize the challenge id from the url to load the first
- * challenge.
+ * challenge. Usually challenge ID get set via location change, but in this case
+ * the location hasn't change.d
  */
 const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
@@ -209,14 +210,14 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
         const { location } = deps.router;
 
         const maybeChallengeId = findChallengeIdInLocationIfExists(location);
-        const { challengeId, courseId, moduleId } = deriveIdsFromCourse(
+        const { challengeId, courseId, moduleId, slug } = deriveIdsFromCourse(
           courses,
           maybeChallengeId,
         );
 
         // Do not redirect unless the user is already on the workspace/
         if (location.pathname.includes("workspace")) {
-          const subPath = challengeId + location.search + location.hash;
+          const subPath = slug + location.search + location.hash;
           deps.router.push(`/workspace/${subPath}`);
         }
 

@@ -11,6 +11,7 @@ import {
   ModuleSkeletonList,
   CHALLENGE_PROGRESS,
   CourseMetadata,
+  getChallengeSlug,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, SANDBOX_ID } from "tools/constants";
@@ -437,7 +438,7 @@ class NavigationOverlay extends React.Component<IProps> {
       <div key={challenge.id} style={{ position: "relative", ...style }}>
         <Link
           key={challenge.id}
-          to={`/workspace/${challenge.id}`}
+          to={`/workspace/${getChallengeSlug(challenge)}`}
           id={`challenge-navigation-${index}`}
           isActive={() => challenge.id === challengeId}
           onClick={this.handleClickChallenge(
