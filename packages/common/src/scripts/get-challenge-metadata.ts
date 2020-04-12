@@ -4,10 +4,12 @@ import { promisify } from "util";
 import * as ChildProcess from "child_process";
 import { Course, ChallengeMetadata } from "src/types/courses";
 
+// tslint:disable-next-line: no-var-requires
+const debug = require("debug")("common:get-challenge-metadata");
+
 const exec = promisify(ChildProcess.exec);
 
 interface GitPorcelainFormat {
-  commit: string;
   author: string;
   authorMail: string;
   authorTime: number;
@@ -19,6 +21,10 @@ interface GitPorcelainFormat {
   summary: string;
   previous: string;
   filename: string;
+
+  // These values are both present in Porcelain output but the associated keys are a custom creation.
+  commit: string;
+  content: string;
 }
 
 const camelCase = str => {
@@ -34,13 +40,21 @@ const camelCase = str => {
 // docs it looks like git line indexes are actually 1-based not 0-based.
 const getFileLocation = ({ raw, challenge }) => {
   const lines = raw.split("\n");
-  const start =
-    lines.findIndex(line => line.includes(`"id": "${challenge.id}"`)) - 1; // See NOTE
-  const end = start + Object.keys(challenge).length + 2; // See NOTE
+  const start = lines.findIndex(line =>
+    line.includes(`"id": "${challenge.id}"`),
+  ); // See NOTE
+  const end = start + Object.keys(challenge).length; // See NOTE
 
   // Currently unused. We could use this to cunt out the exact lines of text for
   // this challenge
-  // const getSnippet = () => lines.slice(start, end).join("\n");
+  debug(
+    "[getFileLocation] Lines Snippet",
+    "\n" +
+      lines
+        .slice(start, end)
+        .map(s => s.slice(0, 80))
+        .join("\n"),
+  );
 
   return {
     gitStart: start + 1, // See NOTE
@@ -54,6 +68,16 @@ const isNumeric = str => {
 
 // Git has a "Porcelain" format for machine consumption. It seems to be entirely
 // its own thing. Not terribly difficult to parse though.
+// NOTE: Regarding the split regex. Porcelain format puts the content of every
+// blame line right after a \t character. This means splitting on tab
+// effectively splits the porcelain output into output by line of the original
+// source file. Porcelain outputs many lines for metadata for each line of
+// source, so this lets us group by source line essentially. The matching group
+// is very important for the reduce that comes later though. A matching group in
+// a split command puts the matched elements in every odd-numbered element. Odd,
+// I know, maybe there's a precident in some other langauge. Regardless, this is
+// how it works and it's what lets the reducer grab the content and tack it on
+// to the last object.
 const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
   // This seems simply too dynamic for TS, which is fair. It cannot gaurantee
   // what I'm telling it, but we're working on the assumption that the passed in
@@ -62,22 +86,32 @@ const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
   // @ts-ignore
   return str
     .trim()
-    .split(/^\t.+$/m)
+    .split(/^(\t.+$)/m) // Very important regex. See NOTE
     .filter(Boolean)
-    .map(chunk => {
+    .reduce((agg, chunk, i) => {
+      if (i % 2 !== 0) {
+        // NOTE: Trimming will remove whitespace present in the original file
+        // content. Not sure if this is advisable.
+        const content = chunk.trim();
+        agg[agg.length - 1].content = content;
+        return agg;
+      }
+
       const [commitLine, ...meta] = chunk.trim().split("\n");
-      return meta.reduce(
-        (agg, line) => {
+      const blame = meta.reduce(
+        // tslint:disable-next-line: variable-name
+        (_agg, line) => {
           const [k, ...rest] = line.split(" ");
           const value = rest.join(" ");
           return {
-            ...agg,
+            ..._agg,
             [camelCase(k)]: isNumeric(value) ? Number(value) : value, // Convert values to number if all numbers
           };
         },
         { commit: commitLine.split(" ")[0] },
       );
-    });
+      return [...agg, blame];
+    }, []);
 };
 
 // This is a total one-off helper but I always find sorting to be confusing
@@ -86,24 +120,50 @@ const sortLatestFirst = (x: GitPorcelainFormat[]) =>
   x.sort((a, b) => b.authorTime - a.authorTime);
 
 const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
-  const {
-    stdout: gitPorcelain,
-  } = await exec(
-    `git blame --line-porcelain -M -L ${gitStart},${gitEnd} ${filepath}`,
-    { encoding: "utf-8" },
+  const blameCommand = `git blame --line-porcelain -M -C -C -L ${gitStart},${gitEnd} ${filepath}`;
+  debug("[getGitMetadata] Blame Command: $", blameCommand);
+  const { stdout: gitPorcelain } = await exec(blameCommand, {
+    encoding: "utf-8",
+  });
+
+  const porcelainLines = parseGitPorcelain(gitPorcelain);
+
+  // This is expected to be the line with "id": "...", which we know will be
+  // generated when this challenge was first saved and thus can be treated as
+  // the first commit for this challenge.
+  const initialCommitLine = porcelainLines[0];
+
+  debug("[getGitMetadata] porcelainLines", porcelainLines);
+
+  debug(
+    "[getGitMetadata] initialCommitLine: filtering out lines prior to",
+    initialCommitLine,
   );
+
+  // Try to make sure the initial commit line really is the ID line, which was
+  // assume is initial becuase IDs do not get modified
+  if (!initialCommitLine.content.includes(`"id"`)) {
+    const message = "Initial commit line did not include id prop";
+    debug(`[getGitMetadata] ${message}`, initialCommitLine);
+    throw new Error(`${message} Rerun with DEBUG=common* to see more info`);
+  }
 
   // NOTE: I'm creating a stirng date in addition to the authorTime timestamp
   // because it's human readable and doesn't require remembering to * 1000 in
   // order to instantiate a date
-  const blameLines = sortLatestFirst(parseGitPorcelain(gitPorcelain)).map(
-    x => ({
-      commit: x.commit.slice(0, 8),
-      summary: x.summary,
-      author: x.author,
-      authorDate: new Date(x.authorTime * 1000).toISOString(), // See NOTE
-    }),
-  );
+  // NOTE: Only keep blame lines more recent than the initial commit line. Using
+  // -M and -C option with git blame tries to track lines that were copy-pasted,
+  // however, this can cause false old commits to be associated with lines since
+  // some lines in a json object appear copy-pasted due to simply being default
+  // values. Such as an empty video URL.
+  const blameLines = sortLatestFirst(
+    porcelainLines.filter(x => x.authorTime >= initialCommitLine.authorTime), // See NOTE
+  ).map(x => ({
+    commit: x.commit.slice(0, 8),
+    summary: x.summary,
+    author: x.author,
+    authorDate: new Date(x.authorTime * 1000).toISOString(), // See NOTE
+  }));
 
   const contributors = Array.from(
     new Set<string>(blameLines.map(x => x.author)),
