@@ -524,26 +524,25 @@ export const logWhatChanged = (
     });
 };
 
-// Get an appropriate name and file extensionbased on a challenge type
-export const getFileMetaByChallengeType = (x: CHALLENGE_TYPE) => {
-  const name = "index";
+// Get an appropriate name and file extension for a challenge
+export const getFileExtensionByChallengeType = (challenge: Challenge) => {
+  const { type, title } = challenge;
 
-  switch (x) {
+  // Should format the name decently enough I think
+  const name = title.replace(/ /g, "-").toLowerCase();
+
+  // File extensions
+  const HTML = "html";
+  const REACT = "tsx";
+  const TYPESCRIPT = "ts";
+
+  switch (type) {
     case "markup":
-      return {
-        ext: "html",
-        name,
-      };
+      return { name, ext: HTML };
     case "react":
-      return {
-        ext: "tsx",
-        name,
-      };
+      return { name, ext: REACT };
     case "typescript":
-      return {
-        ext: "ts",
-        name,
-      };
+      return { name, ext: TYPESCRIPT };
     case "media":
     case "section":
     case "project":
@@ -551,8 +550,7 @@ export const getFileMetaByChallengeType = (x: CHALLENGE_TYPE) => {
     case "special-topic":
       return null;
     default:
-      assertUnreachable(x);
-      break;
+      return assertUnreachable(type);
   }
 };
 
