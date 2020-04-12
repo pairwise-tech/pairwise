@@ -322,26 +322,23 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
   } else if (!allMetadata || !(challenge.id in allMetadata.challenges)) {
     content = <Spinner />;
   } else {
-    const { buildCommit } = allMetadata["@@PAIRWISE"];
     const meta = allMetadata.challenges[challenge.id];
-    const { contributors, latestUpdate, earliestUpdate } = meta.gitMetadata;
+    const {
+      contributors,
+      contributionsBy,
+      latestUpdate,
+      earliestUpdate,
+    } = meta.gitMetadata;
     const dateString = dateFromIso(latestUpdate.authorDate);
     content = (
       <>
         <h3 style={{ display: "flex", alignItems: "center", marginTop: 0 }}>
           <span style={{ marginRight: 20 }}>Contributors</span>
           {contributors.map(name => (
-            <img
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: 30,
-                marginLeft: 10,
-              }}
+            <ContributorAvatar
               key={name}
-              // @ts-ignore Just shut up TS.If the name is not found that's fine
-              src={CONTRIBUTOR_IMAGES[name]}
-              alt={name}
+              name={name}
+              contributions={contributionsBy[name]}
             />
           ))}
         </h3>
@@ -426,8 +423,9 @@ const CommitDetailButton = ({ label, ...update }: GitUpdate) => {
       minimal
       interactionKind={PopoverInteractionKind.HOVER}
       position={PopoverPosition.BOTTOM}
-      hoverOpenDelay={30}
-      hoverCloseDelay={30}
+      hoverOpenDelay={200}
+      hoverCloseDelay={0}
+      usePortal={false}
     >
       <AnchorButton
         target="_blank"
@@ -440,6 +438,7 @@ const CommitDetailButton = ({ label, ...update }: GitUpdate) => {
           <em>{dateFromIso(update.authorDate)}</em>
           <span style={{ opacity: 0.5 }}>{" • "}</span>
           <a
+            style={{ fontFamily: "monospace", color: "#1AB6FF" }}
             target="_blank"
             href={`https://github.com/pairwise-tech/pairwise/commit/${update.commit}`}
           >
@@ -450,6 +449,68 @@ const CommitDetailButton = ({ label, ...update }: GitUpdate) => {
         </h3>
         <p></p>
         <p>{update.summary}</p>
+      </MinimalCard>
+    </Popover>
+  );
+};
+
+interface ContributorAvatarProps {
+  name: string;
+  contributions: string[];
+}
+
+// NOTE: The need for state here is because of super finnicky Blueprint
+// popovers. The commits popover was opening up whenever the parent popover
+// opened. This is not at all what we want. So I created a boolean that only
+// becomes true whent he img element is hovered. What makes this quite wierd
+// though is that being true doesn't mean its open, it just means it can use its
+// own open/clsoe logic. This is because handling over state manually is tricky.
+// It's easy for the mouse leave / mouse out event not to fire (i'm guessing its
+// debounced somewhere behind the scense) thus leaving your hover popout open
+// without a means to close it except to rehover and slowly move the mouse out.
+const ContributorAvatar = ({ name, contributions }: ContributorAvatarProps) => {
+  const [canOpen, setCanOpen] = React.useState(false);
+  return (
+    <Popover
+      minimal
+      interactionKind={PopoverInteractionKind.HOVER}
+      position={PopoverPosition.BOTTOM}
+      hoverOpenDelay={30}
+      hoverCloseDelay={0}
+      usePortal={false}
+      defaultIsOpen={false}
+      enforceFocus={false}
+      isOpen={canOpen ? undefined : false} // See NOTE
+      onClose={() => setCanOpen(false)}
+    >
+      <img
+        onMouseOver={() => setCanOpen(true)}
+        style={{
+          width: 30,
+          height: 30,
+          borderRadius: 30,
+          marginLeft: 10,
+        }}
+        key={name}
+        // @ts-ignore Just shut up TS. If the name is not found that's fine
+        src={CONTRIBUTOR_IMAGES[name]}
+        alt={name}
+      />
+      <MinimalCard>
+        {contributions.map(commit => (
+          <a
+            style={{
+              display: "block",
+              fontFamily: "monospace",
+              color: "#1AB6FF",
+            }}
+            key={commit}
+            target="_blank"
+            href={`https://github.com/pairwise-tech/pairwise/commit/${commit}`}
+          >
+            {commit}
+          </a>
+        ))}
       </MinimalCard>
     </Popover>
   );
