@@ -1609,6 +1609,17 @@
           "content": ""
         },
         {
+          "id": "3gu90L@JL",
+          "type": "typescript",
+          "title": "Find the Leaves",
+          "instructions": "As mentioned previously a tree structure is one composed of nodes which have a recursive definition: a node has children which are more nodes. A `TreeNode` is defined for you in the editor below. This `TreeNode` belongs to a binary tree, in which every node only has two children. Write a function, `findTheLeaves`, which takes a root node to a binary tree and returns the values of all the leaf nodes in an array.\n\n> Hint: You can solve this using recursion. The base case is when you reach a leaf node. A leaf node is defined as a node with `null` for both children. Your function, `findTheLeaves`, can call another function which you write and provide some shared state array of `result` values which the recursive function can access. This is necessary because the tree recursion will \"branch out\" and reach many base cases. Each base case needs to record the result value. Give it a try and check the solution code if you are stuck\\!\n",
+          "testCode": "test(\"`findTheLeaves` should be a function.\", () => {\n  expect(typeof findTheLeaves === \"function\").toBe(true);\n});\n\ntest(\"`findTheLeaves` should return the root node value in an array if the root node has no children.\", () => {\n  const node = (value) => ({\n    value,\n    left: null,\n    right: null,\n  });\n  expect(findTheLeaves(node(100))).toEqual([100]);\n});\n\ntest(\"`findTheLeaves` should return `[2,3]` for a tree of three values: `1,2,3` where `1` is the root node.\", () => {\n  const node = (value) => ({\n    value,\n    left: null,\n    right: null,\n  });\n  const root = node(1);\n  root.left = node(2);\n  root.right = node(3);\n  expect(findTheLeaves(root).sort()).toEqual([2, 3].sort());\n});\n\ntest(\"`findTheLeaves` should return an array of the leaf node values for more complicated tree structures.\", () => {\n  const node = (value) => ({\n    value,\n    left: null,\n    right: null,\n  });\n  const root = node(1);\n  const two = (root.left = node(2));\n  const three = (root.right = node(3));\n  const four = (two.left = node(4));\n  four.left = node(200);\n  four.right = node(400);\n  three.left = node(500);\n  three.right = node(900);\n  expect(findTheLeaves(root).sort()).toEqual([200, 400, 500, 900].sort());\n});\n",
+          "videoUrl": "",
+          "starterCode": "interface TreeNode<T> {\n  value: T;\n  left: TreeNode<T>;\n  right: TreeNode<T>;\n}\n\n// Your code here",
+          "solutionCode": "interface TreeNode<T> {\n  value: T;\n  left: TreeNode<T>;\n  right: TreeNode<T>;\n}\n\nconst findTheLeaves = (root: TreeNode<any>): any[] => {\n  // State variable to track the results\n  const result: any[] = [];\n\n  // Find the leaves of a given node\n  const findLeaf = (node: TreeNode<any>) => {\n    // Handle the base case\n    if (node.left === null && node.right === null) {\n      result.push(node.value);\n    }\n\n    // Find the leaves for the left node, if it exists\n    if (node.left) {\n      findLeaf(node.left);\n    }\n\n    // Find the leaves for the right node, if it exists\n    if (node.right) {\n      findLeaf(node.right);\n    }\n  };\n\n  // Run the recursive function\n  findLeaf(root);\n\n  return result;\n};\n",
+          "content": ""
+        },
+        {
           "id": "TJdUIaSo",
           "type": "section",
           "title": "Scopes",
