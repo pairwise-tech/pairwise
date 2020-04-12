@@ -356,7 +356,7 @@ const ApplicationContainer = (props: IProps) => {
           path="/logout"
           component={() => <Redirect to="/home" />}
         />
-        <Route key={4} component={() => <Redirect to="/home" />} />
+        {/* <Route key={4} component={() => <Redirect to="/home" />} /> */}
       </Switch>
     </React.Fragment>
   );

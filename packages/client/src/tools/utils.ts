@@ -17,6 +17,7 @@ import {
   Course,
   UserProgressMap,
   CourseSkeleton,
+  getChallengeSlug,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
 import { Location } from "history";
@@ -333,6 +334,10 @@ export const createInverseChallengeMapping = (
           [challenge.id]: {
             moduleId,
             courseId,
+            challenge: {
+              id: challenge.id,
+              title: challenge.title,
+            },
           },
         };
       }, {});
@@ -358,7 +363,7 @@ export const createInverseChallengeMapping = (
 export const findChallengeIdInLocationIfExists = ({
   pathname,
 }: Location): string => {
-  return pathname.replace("/workspace/", "");
+  return pathname.replace("/workspace/", "").split("/")[0];
 };
 
 /**
@@ -381,11 +386,16 @@ export const deriveIdsFromCourse = (
   const courseId = challengeMap[challengeId]?.courseId || defaultCourse.id;
   const moduleId =
     challengeMap[challengeId]?.moduleId || defaultCourse.modules[0].id;
+  const slug =
+    challengeId in challengeMap
+      ? getChallengeSlug(challengeMap[challengeId].challenge)
+      : "";
 
   return {
     courseId,
     moduleId,
     challengeId,
+    slug,
   };
 };
 
