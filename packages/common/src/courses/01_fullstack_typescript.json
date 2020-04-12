@@ -97,7 +97,7 @@
         {
           "id": "5ziJI35f",
           "type": "section",
-          "title": "HTML, the language of the web",
+          "title": "HTML, The Language of the Web",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
@@ -273,7 +273,7 @@
         {
           "id": "ny51KoEI",
           "type": "markup",
-          "title": "Style some text",
+          "title": "Style Some Text",
           "instructions": "* Change the color of the `<p>` tag to `red`\n* Change its text to `Exciting red text`\n\n\nIf you're unsure how to style things, that's fine\\! Check out the supplemental content for help.",
           "starterCode": "<style>\n  /* Your code here */\n</style>\n<p>Just plain text</p>\n",
           "solutionCode": "<!DOCTYPE html>\n<style>\n  p {\n    color: red;\n  }\n</style>\n<p>Exciting red text</p>\n",
@@ -284,7 +284,7 @@
         {
           "id": "KlxN3f11",
           "type": "markup",
-          "title": "Changing colors",
+          "title": "Changing Colors",
           "instructions": "* Change the background color so that it is `black`.\n* Change the text color of the `<p>` tags and the `<h1>` tag so that it is `white`.\n\nYour challenge is to invert the colors of the page. Instead of having black text on a white background let's have some white text on a black background. You will find the `background-color` and `color` CSS properties useful.",
           "testCode": "// test(\"The page background should be black.\", () => {\n//   const el = get(\"body\");\n//   expect(getStyle(el, \"background-color\")).toBe(cssColor(\"black\"));\n// });\n\ntest(\"The `<h1>` tag should be white.\", () => {\n  const el = get(\"h1\");\n  expect(el).toBeTruthy();\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"white\"));\n});\n\ntest(\"The `<p>` tag should be white.\", () => {\n  const els = getAll(\"p\");\n  els.forEach((el) => expect(getStyle(el, \"color\")).toBe(cssColor(\"white\")));\n});\n",
           "videoUrl": "https://www.youtube.com/embed/7Xl0Acybsq8",
@@ -295,7 +295,7 @@
         {
           "id": "wCrQh1f4",
           "type": "markup",
-          "title": "Highlighting text",
+          "title": "Highlighting Text",
           "instructions": "Use the `<span>` tag to highlight some text within the paragraph.\n\nSometimes you want to style parts of text _inside_ a paragraph or a heading. You can accomplish this with the span tag.",
           "starterCode": "<style>\n  span {\n    /* hm... need some styling in here */\n  }\n</style>\n<p>\n  What a paragraph this is! Let's highlight something.\n</p>",
           "solutionCode": "<style>\n  span {\n    background: yellow;\n  }\n</style>\n<p>What a paragraph this is! Let's <span>highlight</span> something.</p>",
@@ -306,7 +306,7 @@
         {
           "id": "5oqm6GmH",
           "type": "markup",
-          "title": "The div tag — Putting Things in Boxes",
+          "title": "The div Tag — Putting Things in Boxes",
           "instructions": "* Give the page an `orange` background\n* Wrap the existing `h1` and `p` tags in a `div`\n* Style the div to have a `teal` background",
           "testCode": "test(\"There should be a `div`\", () => {\n  expect(get(\"div\")).toBeTruthy();\n});\n\ntest(\"The `h1` and `p` tags are within the div\", () => {\n  expect(get(\"div h1\")).toBeTruthy();\n  expect(get(\"div p\")).toBeTruthy();\n});\n\ntest(\"Body should have orange background\", () => {\n  const body = get(\"body\");\n  const bg = getStyle(body, \"background-color\");\n  expect(bg).toBe(cssColor('orange'));\n});\n\ntest(\"Div should have a teal background\", () => {\n  const el = get(\"div\");\n  const bg = getStyle(el, \"background-color\");\n  expect(bg).toBe(cssColor('teal'));\n});\n",
           "videoUrl": "",
@@ -328,7 +328,7 @@
         {
           "id": "za5KHMo7",
           "type": "markup",
-          "title": "Styles within styles",
+          "title": "Styles Within Styles",
           "instructions": "* Style the `<a>` tags _within_ the `.menu` div so that they appear vertically\n",
           "testCode": "test(\"The `<a>` tags _within_ `.menu` should have display block\", () => {\n  const els = getAll(\".menu a\");\n  expect(els.every((x) => getStyle(x, \"display\") === \"block\")).toBe(true);\n});\n",
           "videoUrl": "https://www.youtube.com/embed/LcayPfQGrwM",
@@ -361,7 +361,7 @@
         {
           "id": "WqwXPsOO",
           "type": "markup",
-          "title": "Margins and centering things on the page",
+          "title": "Margins and Centering Things on the Page",
           "instructions": "* Push the rest of the content away from `.menu` with a bottom margin of `40px`\n* Put `20px` of space between the `<a>` tags in the `.menu` using margins\n* Center `.centered` on the page using margins",
           "testCode": "test(\"The menu should have a bottom margin of 40px\", () => {\n  const el = get(\".menu\");\n  expect(getStyle(el, \"margin-bottom\")).toBe(\"40px\");\n});\n\ntest(\"The `<a>` tags in the `.menu` should have a right margin of 20px\", () => {\n  const els = getAll(\".menu a\");\n  expect(els.length).toBeTruthy(); // Ensure there aren't zero\n  expect(els.every((x) => getStyle(x, \"margin-right\") === \"20px\")).toBe(true);\n});\n\n// NOTE: The browser will translate margin: auto into a pixel value,\n// so we can't test directly for 'auto'\ntest(\"The `.centered` div should be centered on the page\", () => {\n  const el = get(\".centered\");\n  const right = getStyle(el, \"margin-right\");\n  const left = getStyle(el, \"margin-left\");\n  expect(right).not.toBe(\"0px\");\n  expect(right).toBe(left);\n});\n",
           "videoUrl": "",
@@ -394,7 +394,7 @@
         {
           "id": "3g8czfBn",
           "type": "markup",
-          "title": "Multiple Selectors — Styling many things",
+          "title": "Multiple Selectors — Styling Many Things",
           "instructions": "* Give both the `h1` and `p` tags a `background` of `green`\n* Give both the `h1` and `p` tags a `color` of `red`\n\n\n**NOTE:** This challenge is all about using multiple selectors so that you don't have to repeat yourself when writing CSS. You should only have to write the `background` and `color` properties once to make the tests pass.",
           "testCode": "test(\"The `h1` should have a green background and a red color\", () => {\n  const el = get(\"h1\");\n  expect(getStyle(el, \"background-color\")).toBe(cssColor(\"green\"));\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"red\"));\n});\n\ntest(\"The `p` should have a green background and a red color\", () => {\n  const el = get(\"p\");\n  expect(getStyle(el, \"background-color\")).toBe(cssColor(\"green\"));\n  expect(getStyle(el, \"color\")).toBe(cssColor(\"red\"));\n});\n",
           "videoUrl": "https://www.youtube.com/embed/f9IxFfP80vQ",
@@ -405,7 +405,7 @@
         {
           "id": "s8be1H0U",
           "type": "markup",
-          "title": "Columns and Rows — The display property",
+          "title": "Columns and Rows — The Display Property",
           "instructions": "* Make the `.horizontal-nav` links have a bottom margin of `20px`.\n* Make the `.vertical-nav` links stack one on top of another using the `display` property. I.e. make it into a vertical nav.\n\nBy default `<a>` tags have `display: inline`, however you can change this.\n* If you need a **row**, try `display: inline-block`.\n* If you need a **column**, try `display: block`.\n",
           "testCode": "test(\".horizontal-nav should have a bottom margin of 20px\", () => {\n  const els = getAll(\".horizontal-nav a\");\n  const result = els.every(\n    (x) =>\n      getStyle(x, \"margin-bottom\") === \"20px\" &&\n      getStyle(x, \"display\") !== \"inline\"\n  );\n  expect(result).toBe(true);\n});\n\ntest(\".vertical-nav links should be vertical\", () => {\n  const els = getAll(\".vertical-nav a\");\n  const result = els.every((x) => getStyle(x, \"display\") === \"block\");\n  expect(result).toBe(true);\n});\n",
           "videoUrl": "",
@@ -416,7 +416,7 @@
         {
           "id": "iFvzasqW",
           "type": "markup",
-          "title": "Flexbox — Creating an evenly-spaced nav menu",
+          "title": "Flexbox — Creating an Evenly-Spaced nav Menu",
           "instructions": "* Use the `display` property and `justify-content` property to evenly space the links in `.mobile-nav`",
           "testCode": "test('.mobile-nav should use flexbox', () => {\n    expect(getStyle(get('.mobile-nav'), 'display')).toBe('flex')\n})\n\ntest('.mobile-nav should use the justify-content property', () => {\n    expect(getStyle(get('.mobile-nav'), 'justify-content')).toBe('space-between')\n})",
           "videoUrl": "https://www.youtube.com/embed/hyuv9yoSREs",
@@ -427,7 +427,7 @@
         {
           "id": "iZ6nlkiQ",
           "type": "markup",
-          "title": "The hover state",
+          "title": "The Hover State",
           "instructions": "Invert the appearance of the links when hovered. In other words when you hover a link make its background `tomato` and it's color `blue`.\n**NOTE**: You will need the `:hover` selector\\.",
           "testCode": "test(\"The color and background of the `a` tags should be inverted on hover\", () => {\n  const code = __user_code_string__;\n  const regex = /a:hover\\s+{([\\s\\S]+?)}/i; // All text inside brackets after a:hover. a:hover { <HERE> }\n  const hoverStyles = code.match(regex)[1];\n  expect(hoverStyles).toBeTruthy();\n  expect(hoverStyles.match(/background(-color)?:\\s+blue/)).toBeTruthy();\n  expect(hoverStyles.match(/color:\\s+tomato/)).toBeTruthy();\n});\n",
           "videoUrl": "",
@@ -438,13 +438,13 @@
         {
           "id": "fAGpsa4L",
           "type": "media",
-          "title": "CSS is not always intuitive",
+          "title": "CSS is not Always Intuitive",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "CSS is a bit of a mixed bag. Not to detract from it—it's amazing what you can accomplish with HTML and CSS alone, let alone HTML, CSS and JavaScript. However there are certain aspects of CSS that are not intuitive. \n\nYou may be thinking \"None of this is intuitive\\! 😤\" and that's fair, but it gets better \\(worse?\\). In the next few challenges we'll dive into some of the more confusing _and_ useful CSS properties. You already saw some of this when we [talked about `box-sizing`](/workspace/nel5ggJ1), but there's yet more to cover. \n\nFun topics to come include:\n\n* Positioning \\(including the interesting `content` property\\)\n* More `display` property\n* Transforms\n\n# Why?\n\nSome of this stuff is bound to be fairly confusing at first and we take our content selection very seriously. So is it really that important? \n\n++Yes\\.++\n\nThe techniques we'll cover are extremely potent for creating _layouts_, which is the most confounding aspect of CSS. Almost everyone who has complained about any aspect of CSS ran into issues with their layout and spent entirely too long figuring out how to fix it. I would know, I've been that person—Everyone on the Pairwise team has in fact. \n\n> **Layouts vs Styling**\n> Layouts can be time consuming and frustrating to create when you don't know what you're doing. Styling, on the other hand, is quite straightforward. Things like `border` , `padding`, `font-size`, etc. To generalize:\n> \n> \n> \n>    * Styling refers to CSS that doesn't really care about _position_ on the page.\n>    * Layout is entirely concerned with position on the page. This includes vertical, horizontal, _and_ z\\-axis positioning—Layering things on top of  or behind one another.\n\nSo to bring it back to the question: Why are we learning these things? So that you can build any UI you want.\n\nWith a bit of practice ++you will be able to code up the CSS for Instagram, Twitter, Amazon, Etsy or your cat's blog++ \\(this last one sounds easy but you'd probably spend more time on it than any of the others. Try building anything for yourself as opposed to an employer or client and you will see why\\).\n\nSo let's move forward and learn some CSS\\!"
+          "content": "CSS is a bit of a mixed bag. Not to detract from it—it's amazing what you can accomplish with HTML and CSS alone, let alone HTML, CSS and JavaScript. However there are certain aspects of CSS that are not intuitive. \n\nYou may be thinking \"None of this is intuitive\\! 😤\" and that's fair, but it gets better \\(worse?\\). In the next few challenges we'll dive into some of the more confusing _and_ useful CSS properties. You already saw some of this when we [talked about `box-sizing`](/workspace/nel5ggJ1), but there's yet more to cover. \n\nFun topics to come include:\n\n* Positioning \\(including the interesting `content` property\\)\n* More `display` property\n* Transforms\n\n# Why?\n\nSome of this stuff is bound to be fairly confusing at first and we take our content selection very seriously. So is it really that important? \n\n++Yes\\.++\n\nThe techniques we'll cover are extremely potent for creating _layouts_, which is the most confounding aspect of CSS. Almost everyone who has complained about any aspect of CSS ran into issues with their layout and spent entirely too long figuring out how to fix it. I would know, I've been that person—Everyone on the Pairwise team has in fact. \n\n> **Layouts vs Styling**\n> Layouts can be time consuming and frustrating to create when you don't know what you're doing. Styling, on the other hand, is quite straightforward. Things like `border` , `padding`, `font-size`, etc. To generalize:\n> \n> \n> \n> \n>    * Styling refers to CSS that doesn't really care about _position_ on the page.\n>    * Layout is entirely concerned with position on the page. This includes vertical, horizontal, _and_ z\\-axis positioning—Layering things on top of  or behind one another.\n\nSo to bring it back to the question: Why are we learning these things? So that you can build any UI you want.\n\nWith a bit of practice ++you will be able to code up the CSS for Instagram, Twitter, Amazon, Etsy or your cat's blog++ \\(this last one sounds easy but you'd probably spend more time on it than any of the others. Try building anything for yourself as opposed to an employer or client and you will see why\\).\n\nSo let's move forward and learn some CSS\\!"
         },
         {
           "id": "zt2RAhbC",
@@ -471,7 +471,7 @@
         {
           "id": "kUhWPOkj",
           "type": "markup",
-          "title": "Top, left, bottom, right",
+          "title": "Top, Left, Bottom, Right",
           "instructions": "Use `absolute` positioning together with `top`, `left`, `bottom`, and/or `right` to position the labels as described.\n* `.top-right-inside` should be in the upper\\-right corner of the screen\n* `.top-right-outside` should be dangling off the upper\\-right of .outer\n* `.bottom-left-inside` should be in the lower\\-left of .outer\n* `.stretch-center` should stretched to the width of .outer and moved down 50%\n\n",
           "testCode": "const labels = getAll(\".label\");\nconst body = get(\"body\");\nconst bbox = body.getBoundingClientRect();\nconst outerBox = get(\".outer\").getBoundingClientRect();\n\ntest(\"Labels should have absolute positioning\", () => {\n  expect(labels.length).not.toBe(0);\n  labels.forEach((x) => {\n    expect(getStyle(x, \"position\")).toBe(\"absolute\");\n  });\n});\n\ntest(\"`.top-right-inside` should be in the upper-right corner of the screen\", () => {\n  const el = get(\".top-right-inside\");\n  const box = el.getBoundingClientRect();\n  expect(box.top).toBe(0);\n  expect(box.right).toBe(bbox.width);\n});\ntest(\"`.top-right-outside` should be dangling off the upper-right of `.outer`\", () => {\n  const el = get(\".top-right-outside\");\n  const box = el.getBoundingClientRect();\n  expect(box.top).toBe(outerBox.top);\n  expect(box.left).toBe(outerBox.right);\n});\n\ntest(\"`.bottom-left-inside` should be in the lower-left of `.outer`\", () => {\n  const el = get(\".bottom-left-inside\");\n  const box = el.getBoundingClientRect();\n  expect(box.bottom).toBe(outerBox.bottom);\n  expect(box.left).toBe(outerBox.left);\n});\n\ntest(\"`.stretch-center` should stretched to the width of `.outer` and moved down 50%\", () => {\n  const el = get(\".stretch-center\");\n  const box = el.getBoundingClientRect();\n  expect(box.right).toBe(outerBox.right);\n  expect(box.left).toBe(outerBox.left);\n  expect(box.top).toBe(outerBox.height / 2 + outerBox.top);\n});\n",
           "videoUrl": "",
@@ -625,7 +625,7 @@
         {
           "id": "8YMC6xUd",
           "type": "media",
-          "title": "Getting your site online",
+          "title": "Getting Your Site Online",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
           "videoUrl": "https://www.youtube.com/embed/nwSrWD0U8OY",
