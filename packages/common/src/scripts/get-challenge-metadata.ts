@@ -165,9 +165,12 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
     authorDate: new Date(x.authorTime * 1000).toISOString(), // See NOTE
   }));
 
-  const contributors = Array.from(
-    new Set<string>(blameLines.map(x => x.author)),
-  );
+  // Use a Set to get distinct (unique) entries. Duplicate authors are
+  // unavoidable without this, since every blame line has an author and there
+  // are only three of us as of this commit.
+  const contributors = [...new Set<string>(blameLines.map(x => x.author))];
+
+  // Aggregate commits by each author
   const contributionsBy = blameLines.reduce((agg, x) => {
     const arr = [...(agg[x.author] || []), x.commit];
     return {

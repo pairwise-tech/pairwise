@@ -33,11 +33,6 @@ const main = async () => {
     log("No existig file found or parse failure.");
   }
 
-  // TODO: We can use this to git diff the course dir against this commit. If
-  const currentCommit = execSync(`git log -n 1 --pretty=format:"%h"`, {
-    encoding: "utf-8",
-  }).trim();
-
   if (forceUpdate) {
     log("Forced Update");
   } else if (existingFile) {
@@ -67,6 +62,12 @@ const main = async () => {
 
   log("Building index...");
 
+  // Record the current commit so that on future builds we can diff against it
+  // and see if a rebuild is necessary
+  const currentCommit = execSync(`git log -n 1 --pretty=format:"%h"`, {
+    encoding: "utf-8",
+  }).trim();
+
   const courseFiles = readCourseFilesFromDisk(courseDir);
 
   const allChallenges = courseFiles
@@ -86,6 +87,8 @@ const main = async () => {
     challenges: {},
   };
 
+  // This is where all the script time is spent and why your CPU will run up to
+  // 1000%. All the git commands are run with max concurrency.
   const allMetadata = await Promise.all(
     allChallenges.map(({ id }) => {
       return getChallengMetadata(id, courseFiles);
