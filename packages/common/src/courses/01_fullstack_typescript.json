@@ -1708,6 +1708,17 @@
           "content": ""
         },
         {
+          "id": "GKr5sCqW5",
+          "type": "typescript",
+          "title": "Multiply By",
+          "instructions": "Create a function `multiplyBy` which accepts a single number. This function returns a new function which accepts a number which multiplies that number by the original number passed to the `multiplyBy` function\\. The type `MultiplyByFunction` is present for you as a guide. For example:\n\n```typescript\n// Get a multiplier function:\nconst multiplyByFive = multiplyBy(5);\n\n// Use the multiplier function:\nconst ten = multiplyByFive(2);\nconst fifty = multiplyByFive(10);\n\n```\n",
+          "testCode": "test(\"`multiplyBy` should be a function.\", () => {\n  expect(typeof multiplyBy === \"function\").toBe(true);\n});\n\ntest(\"`multiplyBy` should return a function.\", () => {\n  expect(typeof multiplyBy(100) === \"function\").toBe(true);\n});\n\ntest(\"`multiplyBy` should accept a value and return a new function which accepts a value and returns the result of multiplying the two values together.\", () => {\n  const values = [1, 6, 8, 9, 10, 11, 12, 23, 234, 532, 645, 234, 5463];\n  for (const x of values) {\n    const fn = multiplyBy(x);\n    expect(fn(x)).toBe(x * x);\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "type MultiplyByFunction = (multiplier: number) => (value: number) => number;\n\n// Your code here",
+          "solutionCode": "type MultiplyByFunction = (multiplier: number) => (value: number) => number;\n\n// Provide a function to multiply by a value\nconst multiplyBy: MultiplyByFunction = (multiplier: number) => {\n  // Return a new function to perform the multiplication\n  return (value: number) => multiplier * value;\n};\n",
+          "content": ""
+        },
+        {
           "id": "prlFliKCW",
           "type": "section",
           "title": "Arrays and Objects",
