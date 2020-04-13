@@ -1,5 +1,10 @@
 .gitignore
-**/.git
 **/.DS_Store
 node_modules
 packages/**/node_modules
+
+# We need the git dir present for the build:metadata command in common/. This
+# does add to the context that gets sent to docker deamon but that shouldn't be
+# an issue. 
+**/.git
+!.git/

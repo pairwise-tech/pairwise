@@ -4,6 +4,7 @@
   "description": "Pairwise shared utilities and types",
   "private": true,
   "scripts": {
+    "prebuild": "yarn run build:metadata",
     "build": "tsc",
     "build:metadata": "ts-node ./src/scripts/build-metadata-index.ts",
     "watch": "tsc -w",
