@@ -2997,7 +2997,7 @@
           "title": "Build a Calculator Guided Project",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "https://youtu.be/E0Pt6qwfeDg",
+          "videoUrl": "https://youtu.be/16OV_FXKbVI",
           "starterCode": "",
           "solutionCode": "",
           "content": "Here we will walk through a solution for the Build a Calculator project."
