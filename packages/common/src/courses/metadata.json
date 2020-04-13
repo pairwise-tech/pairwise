@@ -1,6 +1,6 @@
 {
   "@@PAIRWISE": {
-    "buildCommit": "4a05862",
+    "buildCommit": "4a4d699",
     "totalChallenges": 321,
     "codeChallenges": 213,
     "videoChallenges": 15,
@@ -726,7 +726,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "f811aad7",
@@ -737,10 +737,10 @@
         },
         "edits": 5,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "79fb69b8",
@@ -1620,7 +1620,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11",
+            "4a4d6995",
             "24b1b37b"
           ],
           "Peter Weinberg": [
@@ -1635,10 +1635,10 @@
         },
         "edits": 7,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "24b1b37b",
@@ -1684,7 +1684,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11",
+            "4a4d6995",
             "f41f57d3"
           ],
           "Ian Sinnott": [
@@ -1696,10 +1696,10 @@
         },
         "edits": 6,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "f622668e",
@@ -1746,7 +1746,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11",
+            "4a4d6995",
             "24b1b37b"
           ],
           "Peter Weinberg": [
@@ -1759,10 +1759,10 @@
         },
         "edits": 5,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "24b1b37b",
@@ -1809,7 +1809,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11"
+            "4a4d6995"
           ],
           "Peter Weinberg": [
             "4e9b0850"
@@ -1822,10 +1822,10 @@
         },
         "edits": 5,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "a056a0f8",
@@ -1931,7 +1931,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11"
+            "4a4d6995"
           ],
           "Peter Weinberg": [
             "7b45cb64"
@@ -1943,10 +1943,10 @@
         },
         "edits": 4,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "ea20ee8f",
@@ -2105,7 +2105,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "f811aad7",
@@ -2114,10 +2114,10 @@
         },
         "edits": 3,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "02acbd04",
@@ -2272,7 +2272,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11",
+            "4a4d6995",
             "2e1cd02e"
           ],
           "Ian Sinnott": [
@@ -2282,10 +2282,10 @@
         },
         "edits": 4,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "2e1cd02e",
@@ -2331,7 +2331,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "f811aad7",
@@ -2340,10 +2340,10 @@
         },
         "edits": 3,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "0289eed8",
@@ -2389,7 +2389,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "ef43a6f1",
@@ -2401,10 +2401,10 @@
         },
         "edits": 6,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "4520081a",
@@ -2450,7 +2450,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "b3a5bd66",
@@ -2461,10 +2461,10 @@
         },
         "edits": 5,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "dffd31c8",
@@ -2510,7 +2510,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "393feb68"
@@ -2518,10 +2518,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "393feb68",
@@ -2677,7 +2677,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "0daaab05",
@@ -2687,10 +2687,10 @@
         },
         "edits": 4,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "28d70d47",
@@ -2846,22 +2846,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b7c16f18",
-            "5171cbf6"
+            "4a4d6995"
           ]
         },
-        "edits": 2,
+        "edits": 1,
         "latestUpdate": {
-          "commit": "b7c16f18",
-          "summary": "Edit HTML section content",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:32:19.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "5171cbf6",
-          "summary": "Reorganize HTML projects into projects and guided projects",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T13:18:08.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -2900,22 +2899,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b7c16f18",
-            "5171cbf6"
+            "4a4d6995"
           ]
         },
-        "edits": 2,
+        "edits": 1,
         "latestUpdate": {
-          "commit": "b7c16f18",
-          "summary": "Edit HTML section content",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:32:19.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "5171cbf6",
-          "summary": "Reorganize HTML projects into projects and guided projects",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T13:18:08.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -2954,21 +2952,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "5171cbf6"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "5171cbf6",
-          "summary": "Reorganize HTML projects into projects and guided projects",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T13:18:08.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "5171cbf6",
-          "summary": "Reorganize HTML projects into projects and guided projects",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T13:18:08.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -3007,21 +3005,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "5171cbf6"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "5171cbf6",
-          "summary": "Reorganize HTML projects into projects and guided projects",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T13:18:08.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "5171cbf6",
-          "summary": "Reorganize HTML projects into projects and guided projects",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T13:18:08.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -3060,22 +3058,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b7c16f18",
-            "5171cbf6"
+            "4a4d6995"
           ]
         },
-        "edits": 2,
+        "edits": 1,
         "latestUpdate": {
-          "commit": "b7c16f18",
-          "summary": "Edit HTML section content",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:32:19.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "5171cbf6",
-          "summary": "Reorganize HTML projects into projects and guided projects",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T13:18:08.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -3115,7 +3112,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b7c16f18",
+            "4a4d6995",
             "12d33556"
           ],
           "Ian Sinnott": [
@@ -3124,10 +3121,10 @@
         },
         "edits": 3,
         "latestUpdate": {
-          "commit": "b7c16f18",
-          "summary": "Edit HTML section content",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:32:19.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "207b2e22",
@@ -3173,20 +3170,19 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b7c16f18",
-            "5171cbf6"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "be93fb7e",
             "207b2e22"
           ]
         },
-        "edits": 4,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "b7c16f18",
-          "summary": "Edit HTML section content",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:32:19.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "207b2e22",
@@ -3232,20 +3228,19 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b7c16f18",
-            "5171cbf6"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "0d49f001",
             "6aac2e74"
           ]
         },
-        "edits": 4,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "b7c16f18",
-          "summary": "Edit HTML section content",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:32:19.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "6aac2e74",
@@ -3291,8 +3286,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b7c16f18",
-            "5171cbf6"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "be93fb7e",
@@ -3300,12 +3294,12 @@
             "207b2e22"
           ]
         },
-        "edits": 5,
+        "edits": 4,
         "latestUpdate": {
-          "commit": "b7c16f18",
-          "summary": "Edit HTML section content",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:32:19.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "207b2e22",
@@ -3351,8 +3345,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b7c16f18",
-            "5171cbf6"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "8b91d91e",
@@ -3361,12 +3354,12 @@
             "207b2e22"
           ]
         },
-        "edits": 6,
+        "edits": 5,
         "latestUpdate": {
-          "commit": "b7c16f18",
-          "summary": "Edit HTML section content",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:32:19.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "207b2e22",
@@ -3465,7 +3458,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "79d03e11"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "a61abd8c",
@@ -3475,10 +3468,10 @@
         },
         "edits": 4,
         "latestUpdate": {
-          "commit": "79d03e11",
-          "summary": "Uppercase HTML challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:04:32.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "69eaa34c",
@@ -3741,20 +3734,23 @@
           696
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
-            "0360d0c2",
             "da472597"
           ]
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "0360d0c2",
-          "summary": "Edit intro TypeScript challenges",
-          "author": "Sean Smith",
-          "authorDate": "2020-04-05T12:52:44.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "da472597",
@@ -3849,19 +3845,23 @@
           718
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "0360d0c2"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "0360d0c2",
-          "summary": "Edit intro TypeScript challenges",
-          "author": "Sean Smith",
-          "authorDate": "2020-04-05T12:52:44.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "0360d0c2",
@@ -3902,20 +3902,24 @@
           729
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "c001fe2d",
             "51bf0e46"
           ]
         },
-        "edits": 2,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "c001fe2d",
-          "summary": "Add Keywords challenge",
-          "author": "Sean Smith",
-          "authorDate": "2020-04-05T03:53:21.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "51bf0e46",
@@ -3956,19 +3960,23 @@
           740
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "2432ef16"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "2432ef16",
-          "summary": "Create Practice with Keywords challenge",
-          "author": "Sean Smith",
-          "authorDate": "2020-04-05T04:00:11.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "2432ef16",
@@ -4009,19 +4017,23 @@
           751
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "00dd8863"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "00dd8863",
-          "summary": "Add Whitespace and Semicolons challenge",
-          "author": "Sean Smith",
-          "authorDate": "2020-04-05T04:33:27.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "00dd8863",
@@ -4277,20 +4289,24 @@
           806
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "0360d0c2",
             "00dd8863"
           ]
         },
-        "edits": 2,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "0360d0c2",
-          "summary": "Edit intro TypeScript challenges",
-          "author": "Sean Smith",
-          "authorDate": "2020-04-05T12:52:44.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "00dd8863",
@@ -4715,9 +4731,13 @@
           894
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "51d9565f",
             "72b421e2",
@@ -4725,12 +4745,12 @@
             "2fbc7066"
           ]
         },
-        "edits": 4,
+        "edits": 5,
         "latestUpdate": {
-          "commit": "51d9565f",
-          "summary": "Add toThrow helper, updating challenge tests to use helper",
-          "author": "Sean Smith",
-          "authorDate": "2020-03-25T02:39:49.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "2fbc7066",
@@ -4771,20 +4791,24 @@
           905
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "51d9565f",
             "72b421e2"
           ]
         },
-        "edits": 2,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "51d9565f",
-          "summary": "Add toThrow helper, updating challenge tests to use helper",
-          "author": "Sean Smith",
-          "authorDate": "2020-03-25T02:39:49.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "72b421e2",
@@ -4825,19 +4849,23 @@
           916
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "ac54dfbc"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "ac54dfbc",
-          "summary": "Add first error handling challenge, add helpers to js test library",
-          "author": "Sean Smith",
-          "authorDate": "2020-03-23T07:01:24.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "ac54dfbc",
@@ -4878,21 +4906,24 @@
           927
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "51d9565f",
-            "57df8fe7",
             "2fbc7066"
           ]
         },
         "edits": 3,
         "latestUpdate": {
-          "commit": "51d9565f",
-          "summary": "Add toThrow helper, updating challenge tests to use helper",
-          "author": "Sean Smith",
-          "authorDate": "2020-03-25T02:39:49.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "2fbc7066",
@@ -4925,7 +4956,7 @@
       "challenge": {
         "id": "wesvb7Sd1",
         "type": "media",
-        "title": "Errors Handling and Clean Code"
+        "title": "Error Handling and Clean Code"
       },
       "gitMetadata": {
         "lineRange": [
@@ -4933,19 +4964,23 @@
           938
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "288870e8"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "288870e8",
-          "summary": "Add final errors media challenge",
-          "author": "Sean Smith",
-          "authorDate": "2020-03-23T10:00:28.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "288870e8",
@@ -5396,7 +5431,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "b5c82fd7"
@@ -5404,10 +5439,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "b5c82fd7",
@@ -6244,7 +6279,7 @@
       "challenge": {
         "id": "_gO2lskh",
         "type": "typescript",
-        "title": "The Multipication Operator"
+        "title": "The Multiplication Operator"
       },
       "gitMetadata": {
         "lineRange": [
@@ -6252,23 +6287,24 @@
           1191
         ],
         "contributors": [
-          "Ian Sinnott",
-          "Peter Weinberg"
+          "Peter Weinberg",
+          "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d",
+            "4bff03a9"
+          ],
           "Ian Sinnott": [
             "f811aad7"
-          ],
-          "Peter Weinberg": [
-            "4bff03a9"
           ]
         },
-        "edits": 2,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "f811aad7",
-          "summary": "Migrate the shape of the challenge json file (#77)",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-08T05:55:09.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "4bff03a9",
@@ -7329,7 +7365,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "51c2de00"
@@ -7337,10 +7373,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "51c2de00",
@@ -7386,7 +7422,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "51c2de00"
@@ -7394,10 +7430,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "51c2de00",
@@ -7497,7 +7533,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "a6324c9c",
@@ -7506,10 +7542,10 @@
         },
         "edits": 3,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "3139fe11",
@@ -7555,7 +7591,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "a6324c9c",
@@ -7564,10 +7600,10 @@
         },
         "edits": 3,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "3139fe11",
@@ -7608,12 +7644,12 @@
           1455
         ],
         "contributors": [
-          "Sean Smith",
+          "Peter Weinberg",
           "Ian Sinnott"
         ],
         "contributionsBy": {
-          "Sean Smith": [
-            "7d42fcb9"
+          "Peter Weinberg": [
+            "8ebbc30d"
           ],
           "Ian Sinnott": [
             "a1c46565"
@@ -7621,10 +7657,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "7d42fcb9",
-          "summary": "Add functions intro section content",
-          "author": "Sean Smith",
-          "authorDate": "2020-04-02T04:47:16.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "a1c46565",
@@ -7771,19 +7807,23 @@
           1488
         ],
         "contributors": [
+          "Peter Weinberg",
           "Sean Smith"
         ],
         "contributionsBy": {
+          "Peter Weinberg": [
+            "8ebbc30d"
+          ],
           "Sean Smith": [
             "4fbc851a"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "4fbc851a",
-          "summary": "Add How Functions Work challenge",
-          "author": "Sean Smith",
-          "authorDate": "2020-04-02T05:17:24.000Z"
+          "commit": "8ebbc30d",
+          "summary": "QA challenges, update copy, started code, and some solutions",
+          "author": "Peter Weinberg",
+          "authorDate": "2020-04-11T23:01:15.000Z"
         },
         "earliestUpdate": {
           "commit": "4fbc851a",
@@ -8255,21 +8295,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "07f799f0"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "07f799f0",
-          "summary": "Add Recursion intro section",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T11:09:04.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "07f799f0",
-          "summary": "Add Recursion intro section",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T11:09:04.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -8308,21 +8348,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "da3004ae"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "da3004ae",
-          "summary": "Add Fibonacci challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T13:32:04.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "da3004ae",
-          "summary": "Add Fibonacci challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T13:32:04.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -8361,21 +8401,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "f1577b34"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "f1577b34",
-          "summary": "Add Find the Factorial challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T13:39:13.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "f1577b34",
-          "summary": "Add Find the Factorial challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T13:39:13.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -8414,21 +8454,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "58e14e39"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "58e14e39",
-          "summary": "Add Find the Leaves",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T13:58:08.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "58e14e39",
-          "summary": "Add Find the Leaves",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T13:58:08.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -8947,7 +8987,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "7068acb1"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "a1c46565"
@@ -8955,10 +8995,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "7068acb1",
-          "summary": "Complete Closures intro challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T12:30:23.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "a1c46565",
@@ -9003,21 +9043,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "fc9e8848"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "fc9e8848",
-          "summary": "Add Create a Closure challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T12:42:09.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "fc9e8848",
-          "summary": "Add Create a Closure challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T12:42:09.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -9056,21 +9096,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "9e14ee82"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "9e14ee82",
-          "summary": "Create Multiply By challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T12:49:46.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "9e14ee82",
-          "summary": "Create Multiply By challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T12:49:46.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -9109,21 +9149,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "81fc1dca"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "81fc1dca",
-          "summary": "Add Create a Counter Machine challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T13:03:34.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "81fc1dca",
-          "summary": "Add Create a Counter Machine challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T13:03:34.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -9218,7 +9258,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "1ecdcb19"
@@ -9226,10 +9266,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "1ecdcb19",
@@ -9328,7 +9368,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "9a025237"
@@ -9336,10 +9376,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "9a025237",
@@ -9491,7 +9531,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "6ebb01a3",
@@ -9500,10 +9540,10 @@
         },
         "edits": 3,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "81a874b5",
@@ -9549,7 +9589,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "239a0a5b"
@@ -9557,10 +9597,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "239a0a5b",
@@ -9930,7 +9970,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "3b6f8272"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "65ef9e08",
@@ -9940,10 +9980,10 @@
         },
         "edits": 4,
         "latestUpdate": {
-          "commit": "3b6f8272",
-          "summary": "Uppercase TypeScript challenge titles",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-12T14:08:41.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "a3a68e25",
@@ -11016,7 +11056,7 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "0e8f8cb0"
+            "4a4d6995"
           ],
           "Ian Sinnott": [
             "d3ccdec7"
@@ -11024,10 +11064,10 @@
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "0e8f8cb0",
-          "summary": "Add A Pure Pop Function",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:38:34.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "d3ccdec7",
@@ -11072,21 +11112,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "0e8f8cb0"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "0e8f8cb0",
-          "summary": "Add A Pure Pop Function",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:38:34.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "0e8f8cb0",
-          "summary": "Add A Pure Pop Function",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:38:34.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -11125,21 +11165,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "789bb54f"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "789bb54f",
-          "summary": "Add Clone an Array challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:43:44.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "789bb54f",
-          "summary": "Add Clone an Array challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:43:44.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -14793,23 +14833,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "5cf040c9",
-            "0c99a8a1",
-            "24b4d328"
+            "4a4d6995"
           ]
         },
-        "edits": 3,
+        "edits": 1,
         "latestUpdate": {
-          "commit": "5cf040c9",
-          "summary": "Add Every nth Value challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:02:51.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "24b4d328",
-          "summary": "Start The Quadratic Formula challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T13:22:47.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -14848,21 +14886,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "5cf040c9"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "5cf040c9",
-          "summary": "Add Every nth Value challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:02:51.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "5cf040c9",
-          "summary": "Add Every nth Value challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:02:51.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -14901,21 +14939,21 @@
         ],
         "contributionsBy": {
           "Sean Smith": [
-            "b4f564bc"
+            "4a4d6995"
           ]
         },
         "edits": 1,
         "latestUpdate": {
-          "commit": "b4f564bc",
-          "summary": "Add Reverse In Place challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:22:38.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
-          "commit": "b4f564bc",
-          "summary": "Add Reverse In Place challenge",
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
           "author": "Sean Smith",
-          "authorDate": "2020-04-10T16:22:38.000Z"
+          "authorDate": "2020-04-13T01:28:44.000Z"
         }
       }
     },
@@ -15452,19 +15490,23 @@
           3047
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "4a4d6995"
+          ],
           "Ian Sinnott": [
             "647a0e41"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "647a0e41",
-          "summary": "Add Reading Code supplementary content challenge",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-04-12T14:07:15.000Z"
+          "commit": "4a4d6995",
+          "summary": "Revert \"Edit typos\"",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-13T01:28:44.000Z"
         },
         "earliestUpdate": {
           "commit": "647a0e41",
