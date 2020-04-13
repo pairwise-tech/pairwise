@@ -3,6 +3,7 @@ import * as path from "path";
 import { promisify, inspect } from "util";
 import * as ChildProcess from "child_process";
 import { Course, ChallengeMetadata } from "src/types/courses";
+import bytes from "bytes";
 
 // tslint:disable-next-line: no-var-requires
 const debug = require("debug")("common:get-challenge-metadata");
@@ -78,7 +79,7 @@ const isNumeric = str => {
 // I know, maybe there's a precident in some other langauge. Regardless, this is
 // how it works and it's what lets the reducer grab the content and tack it on
 // to the last object.
-const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
+export const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
   // This seems simply too dynamic for TS, which is fair. It cannot gaurantee
   // what I'm telling it, but we're working on the assumption that the passed in
   // string really is a git porcelain string and TS can't help us with the
@@ -119,14 +120,50 @@ const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
 const sortLatestFirst = (x: GitPorcelainFormat[]) =>
   x.sort((a, b) => b.authorTime - a.authorTime);
 
-const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
-  const blameCommand = `git blame --line-porcelain -M -C -C -L ${gitStart},${gitEnd} ${filepath}`;
-  debug("[getGitMetadata] Blame Command: $", blameCommand);
+// Git porcelain output can get rather large when doing it a while file at a time.
+const MAX_BUFFER_SIZE = bytes("10mb");
+
+interface GitMetadataArgs {
+  gitStart: number;
+  gitEnd: number;
+  porcelainLines: GitPorcelainFormat[];
+}
+
+// Cache the string results of calling git porcelain.
+// NOTE: This takes up a lot of memory (relatively speaking). The porcelain
+// output for a file is roughly 10x the size of the file.
+const porcelainCache: { [k: string]: GitPorcelainFormat[] } = {};
+
+export const getPorcelainForFile = async (filepath: string) => {
+  if (filepath in porcelainCache) {
+    debug(`[getPorcelainForFile] Cache Hit -- ${filepath}`);
+    return porcelainCache[filepath];
+  }
+
+  const blameCommand = `git blame --line-porcelain -M -C -C ${filepath}`;
+
+  debug("[getPorcelainForFile] Blame Command: $", blameCommand);
+
   const { stdout: gitPorcelain } = await exec(blameCommand, {
     encoding: "utf-8",
+    maxBuffer: MAX_BUFFER_SIZE,
   });
 
-  const porcelainLines = parseGitPorcelain(gitPorcelain);
+  porcelainCache[filepath] = parseGitPorcelain(gitPorcelain);
+
+  return porcelainCache[filepath];
+};
+
+const getGitMetadata = async ({
+  gitStart,
+  gitEnd,
+  porcelainLines,
+}: GitMetadataArgs) => {
+  // Porcelain Lines are assumed to be all lines for the file, so slice out the
+  // relevant section. gitStart and gitEnd are all 1-based indexes rather than
+  // zero-based, so by decrementing the start we get what we want. gitEnd
+  // doesn't need to change since slice is not inclusive on the end arguemnt.
+  porcelainLines = porcelainLines.slice(gitStart - 1, gitEnd);
 
   // This is expected to be the line with "id": "...", which we know will be
   // generated when this challenge was first saved and thus can be treated as
@@ -191,13 +228,40 @@ const getGitMetadata = async ({ gitStart, gitEnd, filepath }) => {
   };
 };
 
+type CourseFiles = ReturnType<typeof readCourseFilesFromDisk>;
+
+export const buildFilePorcelain = async (courseFiles: CourseFiles) => {
+  // tslint:disable-next-line: variable-name
+  const _tmp = await Promise.all(
+    courseFiles
+      .map(x => x.filepath)
+      .map(async filepath => ({
+        filepath,
+        porcelain: await getPorcelainForFile(filepath),
+      })),
+  );
+
+  const result = _tmp.reduce((agg, x) => {
+    return {
+      ...agg,
+      [x.filepath]: x.porcelain,
+    };
+  }, {});
+
+  return result;
+};
+
 export const getChallengMetadata = async (
   id: string,
-  courseFiles: ReturnType<
-    typeof readCourseFilesFromDisk
-  > = readCourseFilesFromDisk(),
+  courseFiles: CourseFiles = readCourseFilesFromDisk(),
+  filePorcelain?: { [k: string]: GitPorcelainFormat[] },
 ): Promise<ChallengeMetadata | null> => {
   const foundIn: Partial<ChallengeMetadata> = {};
+
+  if (!filePorcelain) {
+    debug("Must build file porcelain");
+    filePorcelain = await buildFilePorcelain(courseFiles);
+  }
 
   for (const {
     filename,
@@ -208,6 +272,9 @@ export const getChallengMetadata = async (
     if (course.id === id) {
       console.error(`${id} -> [COURSE] ${course.title}`);
     }
+
+    // Get all git porcelain lines for a given file
+    const porcelainLines = filePorcelain[filepath];
 
     for (const [moduleIndex, { challenges, ...mod }] of modules.entries()) {
       if (mod.id === id) {
@@ -240,7 +307,7 @@ export const getChallengMetadata = async (
 
         foundIn.gitMetadata = await getGitMetadata({
           ...fileLocation,
-          filepath,
+          porcelainLines,
         });
       }
     }
