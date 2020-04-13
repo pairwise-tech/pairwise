@@ -1,8 +1,8 @@
 {
   "@@PAIRWISE": {
-    "buildCommit": "d8076fe",
-    "totalChallenges": 302,
-    "codeChallenges": 202,
+    "buildCommit": "4a05862",
+    "totalChallenges": 321,
+    "codeChallenges": 213,
     "videoChallenges": 15,
     "todoChallenges": [
       "e3mgVBucq",
@@ -67,6 +67,59 @@
         }
       }
     },
+    "t$oXPf22$": {
+      "filename": "00_pairwise_content.json",
+      "keypath": [
+        "modules",
+        0,
+        "challenges",
+        1
+      ],
+      "course": {
+        "id": "f76shgb2W",
+        "title": "Pairwise Library",
+        "description": "Free articles and videos on programming topics and getting hired as a software engineer.",
+        "free": true,
+        "price": 0
+      },
+      "module": {
+        "id": "rwD9TvhQ7",
+        "title": "All About Pairwise",
+        "free": false
+      },
+      "challenge": {
+        "id": "t$oXPf22$",
+        "type": "media",
+        "title": "The Pairwise Model of Learning"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          24,
+          32
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "febf57d8"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "febf57d8",
+          "summary": "Add The Pairwise Model of Learning library post",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-11T02:48:16.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "febf57d8",
+          "summary": "Add The Pairwise Model of Learning library post",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-11T02:48:16.000Z"
+        }
+      }
+    },
     "f76s5a8x": {
       "filename": "00_pairwise_content.json",
       "keypath": [
@@ -94,8 +147,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          32,
-          40
+          43,
+          51
         ],
         "contributors": [
           "Sean Smith"
@@ -149,8 +202,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          43,
-          51
+          54,
+          62
         ],
         "contributors": [
           "Sean Smith",
@@ -208,8 +261,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          54,
-          62
+          65,
+          73
         ],
         "contributors": [
           "Sean Smith",
@@ -660,7 +713,7 @@
       "challenge": {
         "id": "5ziJI35f",
         "type": "section",
-        "title": "HTML, the language of the web"
+        "title": "HTML, the Language of the Web"
       },
       "gitMetadata": {
         "lineRange": [
@@ -668,23 +721,26 @@
           106
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "f811aad7",
             "9fabf07c",
-            "ae278535",
             "60b5a903",
             "79fb69b8"
           ]
         },
         "edits": 5,
         "latestUpdate": {
-          "commit": "f811aad7",
-          "summary": "Migrate the shape of the challenge json file (#77)",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-08T05:55:09.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "79fb69b8",
@@ -1550,7 +1606,7 @@
       "challenge": {
         "id": "ny51KoEI",
         "type": "markup",
-        "title": "Style some text"
+        "title": "Style Some Text"
       },
       "gitMetadata": {
         "lineRange": [
@@ -1558,11 +1614,15 @@
           282
         ],
         "contributors": [
+          "Sean Smith",
           "Peter Weinberg",
-          "Ian Sinnott",
-          "Sean Smith"
+          "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11",
+            "24b1b37b"
+          ],
           "Peter Weinberg": [
             "7b45cb64"
           ],
@@ -1571,17 +1631,14 @@
             "f811aad7",
             "431dddd3",
             "28c36ba4"
-          ],
-          "Sean Smith": [
-            "24b1b37b"
           ]
         },
-        "edits": 6,
+        "edits": 7,
         "latestUpdate": {
-          "commit": "7b45cb64",
-          "summary": "fix first challenge, add markdown to early tests",
-          "author": "Peter Weinberg",
-          "authorDate": "2020-03-20T23:31:14.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "24b1b37b",
@@ -1614,7 +1671,7 @@
       "challenge": {
         "id": "KlxN3f11",
         "type": "markup",
-        "title": "Changing colors"
+        "title": "Changing Colors"
       },
       "gitMetadata": {
         "lineRange": [
@@ -1622,26 +1679,27 @@
           293
         ],
         "contributors": [
-          "Ian Sinnott",
-          "Sean Smith"
+          "Sean Smith",
+          "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11",
+            "f41f57d3"
+          ],
           "Ian Sinnott": [
             "f811aad7",
             "baf6daa9",
             "28c36ba4",
             "f622668e"
-          ],
-          "Sean Smith": [
-            "f41f57d3"
           ]
         },
-        "edits": 5,
+        "edits": 6,
         "latestUpdate": {
-          "commit": "f811aad7",
-          "summary": "Migrate the shape of the challenge json file (#77)",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-08T05:55:09.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "f622668e",
@@ -1674,7 +1732,7 @@
       "challenge": {
         "id": "wCrQh1f4",
         "type": "markup",
-        "title": "Highlighting text"
+        "title": "Highlighting Text"
       },
       "gitMetadata": {
         "lineRange": [
@@ -1682,29 +1740,29 @@
           304
         ],
         "contributors": [
+          "Sean Smith",
           "Peter Weinberg",
-          "Ian Sinnott",
-          "Sean Smith"
+          "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11",
+            "24b1b37b"
+          ],
           "Peter Weinberg": [
             "3f9edebc",
             "7b45cb64"
           ],
           "Ian Sinnott": [
-            "f811aad7",
-            "10effe88"
-          ],
-          "Sean Smith": [
-            "24b1b37b"
+            "f811aad7"
           ]
         },
         "edits": 5,
         "latestUpdate": {
-          "commit": "3f9edebc",
-          "summary": "Merge branch 'master' into fix/search-box",
-          "author": "Peter Weinberg",
-          "authorDate": "2020-04-01T23:03:39.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "24b1b37b",
@@ -1737,7 +1795,7 @@
       "challenge": {
         "id": "5oqm6GmH",
         "type": "markup",
-        "title": "The div tag — Putting Things in Boxes"
+        "title": "The div Tag — Putting Things in Boxes"
       },
       "gitMetadata": {
         "lineRange": [
@@ -1745,15 +1803,18 @@
           315
         ],
         "contributors": [
+          "Sean Smith",
           "Peter Weinberg",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11"
+          ],
           "Peter Weinberg": [
             "4e9b0850"
           ],
           "Ian Sinnott": [
-            "0daaab05",
             "ef43a6f1",
             "f811aad7",
             "a056a0f8"
@@ -1761,10 +1822,10 @@
         },
         "edits": 5,
         "latestUpdate": {
-          "commit": "4e9b0850",
-          "summary": "Merge branch 'master' into fix/style-and-course-tweaks",
-          "author": "Peter Weinberg",
-          "authorDate": "2020-03-22T21:51:32.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "a056a0f8",
@@ -1856,7 +1917,7 @@
       "challenge": {
         "id": "za5KHMo7",
         "type": "markup",
-        "title": "Styles within styles"
+        "title": "Styles Within Styles"
       },
       "gitMetadata": {
         "lineRange": [
@@ -1864,10 +1925,14 @@
           337
         ],
         "contributors": [
+          "Sean Smith",
           "Peter Weinberg",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11"
+          ],
           "Peter Weinberg": [
             "7b45cb64"
           ],
@@ -1876,12 +1941,12 @@
             "ea20ee8f"
           ]
         },
-        "edits": 3,
+        "edits": 4,
         "latestUpdate": {
-          "commit": "7b45cb64",
-          "summary": "fix first challenge, add markdown to early tests",
-          "author": "Peter Weinberg",
-          "authorDate": "2020-03-20T23:31:14.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "ea20ee8f",
@@ -2027,7 +2092,7 @@
       "challenge": {
         "id": "WqwXPsOO",
         "type": "markup",
-        "title": "Margins and centering things on the page"
+        "title": "Margins and Centering Things on the Page"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2035,20 +2100,24 @@
           370
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11"
+          ],
           "Ian Sinnott": [
             "f811aad7",
             "02acbd04"
           ]
         },
-        "edits": 2,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "f811aad7",
-          "summary": "Migrate the shape of the challenge json file (#77)",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-08T05:55:09.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "02acbd04",
@@ -2190,7 +2259,7 @@
       "challenge": {
         "id": "3g8czfBn",
         "type": "markup",
-        "title": "Multiple Selectors — Styling many things"
+        "title": "Multiple Selectors — Styling Many Things"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2198,24 +2267,25 @@
           403
         ],
         "contributors": [
-          "Ian Sinnott",
-          "Sean Smith"
+          "Sean Smith",
+          "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11",
+            "2e1cd02e"
+          ],
           "Ian Sinnott": [
             "ef43a6f1",
             "f811aad7"
-          ],
-          "Sean Smith": [
-            "2e1cd02e"
           ]
         },
-        "edits": 3,
+        "edits": 4,
         "latestUpdate": {
-          "commit": "ef43a6f1",
-          "summary": "Add more videos, add initial CSS transforms challenge",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-17T17:15:49.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "2e1cd02e",
@@ -2248,7 +2318,7 @@
       "challenge": {
         "id": "s8be1H0U",
         "type": "markup",
-        "title": "Columns and Rows — The display property"
+        "title": "Columns and Rows — The Display Property"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2256,21 +2326,24 @@
           414
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11"
+          ],
           "Ian Sinnott": [
-            "ef43a6f1",
             "f811aad7",
             "0289eed8"
           ]
         },
         "edits": 3,
         "latestUpdate": {
-          "commit": "ef43a6f1",
-          "summary": "Add more videos, add initial CSS transforms challenge",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-17T17:15:49.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "0289eed8",
@@ -2303,7 +2376,7 @@
       "challenge": {
         "id": "iFvzasqW",
         "type": "markup",
-        "title": "Flexbox — Creating an evenly-spaced nav menu"
+        "title": "Flexbox — Creating an Evenly-Spaced nav Menu"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2311,9 +2384,13 @@
           425
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11"
+          ],
           "Ian Sinnott": [
             "ef43a6f1",
             "b3a5bd66",
@@ -2322,12 +2399,12 @@
             "4520081a"
           ]
         },
-        "edits": 5,
+        "edits": 6,
         "latestUpdate": {
-          "commit": "ef43a6f1",
-          "summary": "Add more videos, add initial CSS transforms challenge",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-17T17:15:49.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "4520081a",
@@ -2360,7 +2437,7 @@
       "challenge": {
         "id": "iZ6nlkiQ",
         "type": "markup",
-        "title": "The hover state"
+        "title": "The Hover State"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2368,9 +2445,13 @@
           436
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11"
+          ],
           "Ian Sinnott": [
             "b3a5bd66",
             "41a2050d",
@@ -2378,12 +2459,12 @@
             "dffd31c8"
           ]
         },
-        "edits": 4,
+        "edits": 5,
         "latestUpdate": {
-          "commit": "b3a5bd66",
-          "summary": "Update tic tac toe challenge",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-13T02:19:45.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "dffd31c8",
@@ -2416,7 +2497,7 @@
       "challenge": {
         "id": "fAGpsa4L",
         "type": "media",
-        "title": "CSS is not always intuitive"
+        "title": "CSS is not Always Intuitive"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2424,19 +2505,23 @@
           447
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11"
+          ],
           "Ian Sinnott": [
             "393feb68"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "393feb68",
-          "summary": "Add CSS media challenge and some placeholder challenges",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-14T15:52:31.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "393feb68",
@@ -2579,7 +2664,7 @@
       "challenge": {
         "id": "kUhWPOkj",
         "type": "markup",
-        "title": "Top, left, bottom, right"
+        "title": "Top, Left, Bottom, Right"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2587,21 +2672,25 @@
           480
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11"
+          ],
           "Ian Sinnott": [
             "0daaab05",
             "6aac2e74",
             "28d70d47"
           ]
         },
-        "edits": 3,
+        "edits": 4,
         "latestUpdate": {
-          "commit": "0daaab05",
-          "summary": "Fix some failing tests",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-18T07:11:02.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "28d70d47",
@@ -2722,7 +2811,7 @@
         }
       }
     },
-    "DDOHTQQC": {
+    "kphKEurPG": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
@@ -2743,7 +2832,7 @@
         "title": "HTML & CSS"
       },
       "challenge": {
-        "id": "DDOHTQQC",
+        "id": "kphKEurPG",
         "type": "section",
         "title": "Projects"
       },
@@ -2753,30 +2842,30 @@
           513
         ],
         "contributors": [
-          "Ian Sinnott"
+          "Sean Smith"
         ],
         "contributionsBy": {
-          "Ian Sinnott": [
-            "8b91d91e",
-            "207b2e22"
+          "Sean Smith": [
+            "b7c16f18",
+            "5171cbf6"
           ]
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "8b91d91e",
-          "summary": "Add HTML project section and video for calculator project",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-18T06:04:00.000Z"
+          "commit": "b7c16f18",
+          "summary": "Edit HTML section content",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:32:19.000Z"
         },
         "earliestUpdate": {
-          "commit": "207b2e22",
-          "summary": "Add tic tac toe styling project",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-11T09:00:05.000Z"
+          "commit": "5171cbf6",
+          "summary": "Reorganize HTML projects into projects and guided projects",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T13:18:08.000Z"
         }
       }
     },
-    "LROl5K9R": {
+    "GiZqL4Jpk": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
@@ -2797,9 +2886,9 @@
         "title": "HTML & CSS"
       },
       "challenge": {
-        "id": "LROl5K9R",
-        "type": "guided-project",
-        "title": "Creating a Webpage"
+        "id": "GiZqL4Jpk",
+        "type": "media",
+        "title": "Create a Webpage"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2807,30 +2896,30 @@
           524
         ],
         "contributors": [
-          "Ian Sinnott"
+          "Sean Smith"
         ],
         "contributionsBy": {
-          "Ian Sinnott": [
-            "be93fb7e",
-            "207b2e22"
+          "Sean Smith": [
+            "b7c16f18",
+            "5171cbf6"
           ]
         },
         "edits": 2,
         "latestUpdate": {
-          "commit": "be93fb7e",
-          "summary": "Add transforms video, add starter code for website project",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-18T04:17:56.000Z"
+          "commit": "b7c16f18",
+          "summary": "Edit HTML section content",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:32:19.000Z"
         },
         "earliestUpdate": {
-          "commit": "207b2e22",
-          "summary": "Add tic tac toe styling project",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-11T09:00:05.000Z"
+          "commit": "5171cbf6",
+          "summary": "Reorganize HTML projects into projects and guided projects",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T13:18:08.000Z"
         }
       }
     },
-    "iwszDGGy": {
+    "CtxaGAJoJ": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
@@ -2851,8 +2940,8 @@
         "title": "HTML & CSS"
       },
       "challenge": {
-        "id": "iwszDGGy",
-        "type": "guided-project",
+        "id": "CtxaGAJoJ",
+        "type": "media",
         "title": "Create a Mobile UI"
       },
       "gitMetadata": {
@@ -2861,30 +2950,29 @@
           535
         ],
         "contributors": [
-          "Ian Sinnott"
+          "Sean Smith"
         ],
         "contributionsBy": {
-          "Ian Sinnott": [
-            "0d49f001",
-            "6aac2e74"
+          "Sean Smith": [
+            "5171cbf6"
           ]
         },
-        "edits": 2,
+        "edits": 1,
         "latestUpdate": {
-          "commit": "0d49f001",
-          "summary": "Add mobile ui guided project",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-17T14:11:34.000Z"
+          "commit": "5171cbf6",
+          "summary": "Reorganize HTML projects into projects and guided projects",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T13:18:08.000Z"
         },
         "earliestUpdate": {
-          "commit": "6aac2e74",
-          "summary": "Add more HTML challenges",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-17T10:59:28.000Z"
+          "commit": "5171cbf6",
+          "summary": "Reorganize HTML projects into projects and guided projects",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T13:18:08.000Z"
         }
       }
     },
-    "sfxItMSR": {
+    "nVAILxovd": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
@@ -2905,9 +2993,9 @@
         "title": "HTML & CSS"
       },
       "challenge": {
-        "id": "sfxItMSR",
-        "type": "guided-project",
-        "title": "Styling A Tic Tac Toe Board"
+        "id": "nVAILxovd",
+        "type": "media",
+        "title": "Create a Tic Tac Toe Board"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2915,32 +3003,29 @@
           546
         ],
         "contributors": [
-          "Ian Sinnott"
+          "Sean Smith"
         ],
         "contributionsBy": {
-          "Ian Sinnott": [
-            "be93fb7e",
-            "5b4e8c1c",
-            "b3a5bd66",
-            "207b2e22"
+          "Sean Smith": [
+            "5171cbf6"
           ]
         },
-        "edits": 4,
+        "edits": 1,
         "latestUpdate": {
-          "commit": "be93fb7e",
-          "summary": "Add transforms video, add starter code for website project",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-18T04:17:56.000Z"
+          "commit": "5171cbf6",
+          "summary": "Reorganize HTML projects into projects and guided projects",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T13:18:08.000Z"
         },
         "earliestUpdate": {
-          "commit": "207b2e22",
-          "summary": "Add tic tac toe styling project",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-11T09:00:05.000Z"
+          "commit": "5171cbf6",
+          "summary": "Reorganize HTML projects into projects and guided projects",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T13:18:08.000Z"
         }
       }
     },
-    "Fpw0qzGv": {
+    "kbllMGDEL3": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
@@ -2961,9 +3046,9 @@
         "title": "HTML & CSS"
       },
       "challenge": {
-        "id": "Fpw0qzGv",
-        "type": "guided-project",
-        "title": "Creating a Calculator Guided Project"
+        "id": "kbllMGDEL3",
+        "type": "media",
+        "title": "Create a Calculator"
       },
       "gitMetadata": {
         "lineRange": [
@@ -2971,32 +3056,30 @@
           557
         ],
         "contributors": [
-          "Ian Sinnott"
+          "Sean Smith"
         ],
         "contributionsBy": {
-          "Ian Sinnott": [
-            "8b91d91e",
-            "be93fb7e",
-            "46688c86",
-            "207b2e22"
+          "Sean Smith": [
+            "b7c16f18",
+            "5171cbf6"
           ]
         },
-        "edits": 4,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "8b91d91e",
-          "summary": "Add HTML project section and video for calculator project",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-18T06:04:00.000Z"
+          "commit": "b7c16f18",
+          "summary": "Edit HTML section content",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:32:19.000Z"
         },
         "earliestUpdate": {
-          "commit": "207b2e22",
-          "summary": "Add tic tac toe styling project",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-11T09:00:05.000Z"
+          "commit": "5171cbf6",
+          "summary": "Reorganize HTML projects into projects and guided projects",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T13:18:08.000Z"
         }
       }
     },
-    "4rq4ezCu": {
+    "DDOHTQQC": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
@@ -3017,14 +3100,311 @@
         "title": "HTML & CSS"
       },
       "challenge": {
+        "id": "DDOHTQQC",
+        "type": "section",
+        "title": "Guided Projects"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          560,
+          568
+        ],
+        "contributors": [
+          "Sean Smith",
+          "Ian Sinnott"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b7c16f18",
+            "12d33556"
+          ],
+          "Ian Sinnott": [
+            "207b2e22"
+          ]
+        },
+        "edits": 3,
+        "latestUpdate": {
+          "commit": "b7c16f18",
+          "summary": "Edit HTML section content",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:32:19.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "207b2e22",
+          "summary": "Add tic tac toe styling project",
+          "author": "Ian Sinnott",
+          "authorDate": "2020-03-11T09:00:05.000Z"
+        }
+      }
+    },
+    "LROl5K9R": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        1,
+        "challenges",
+        44
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "fpvPtNWkC",
+        "title": "HTML & CSS"
+      },
+      "challenge": {
+        "id": "LROl5K9R",
+        "type": "guided-project",
+        "title": "Create a Webpage Guided Project"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          571,
+          579
+        ],
+        "contributors": [
+          "Sean Smith",
+          "Ian Sinnott"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b7c16f18",
+            "5171cbf6"
+          ],
+          "Ian Sinnott": [
+            "be93fb7e",
+            "207b2e22"
+          ]
+        },
+        "edits": 4,
+        "latestUpdate": {
+          "commit": "b7c16f18",
+          "summary": "Edit HTML section content",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:32:19.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "207b2e22",
+          "summary": "Add tic tac toe styling project",
+          "author": "Ian Sinnott",
+          "authorDate": "2020-03-11T09:00:05.000Z"
+        }
+      }
+    },
+    "iwszDGGy": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        1,
+        "challenges",
+        45
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "fpvPtNWkC",
+        "title": "HTML & CSS"
+      },
+      "challenge": {
+        "id": "iwszDGGy",
+        "type": "guided-project",
+        "title": "Create a Mobile UI Guided Project"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          582,
+          590
+        ],
+        "contributors": [
+          "Sean Smith",
+          "Ian Sinnott"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b7c16f18",
+            "5171cbf6"
+          ],
+          "Ian Sinnott": [
+            "0d49f001",
+            "6aac2e74"
+          ]
+        },
+        "edits": 4,
+        "latestUpdate": {
+          "commit": "b7c16f18",
+          "summary": "Edit HTML section content",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:32:19.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "6aac2e74",
+          "summary": "Add more HTML challenges",
+          "author": "Ian Sinnott",
+          "authorDate": "2020-03-17T10:59:28.000Z"
+        }
+      }
+    },
+    "sfxItMSR": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        1,
+        "challenges",
+        46
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "fpvPtNWkC",
+        "title": "HTML & CSS"
+      },
+      "challenge": {
+        "id": "sfxItMSR",
+        "type": "guided-project",
+        "title": "Create a Tic Tac Toe Board Guided Project"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          593,
+          601
+        ],
+        "contributors": [
+          "Sean Smith",
+          "Ian Sinnott"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b7c16f18",
+            "5171cbf6"
+          ],
+          "Ian Sinnott": [
+            "be93fb7e",
+            "5b4e8c1c",
+            "207b2e22"
+          ]
+        },
+        "edits": 5,
+        "latestUpdate": {
+          "commit": "b7c16f18",
+          "summary": "Edit HTML section content",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:32:19.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "207b2e22",
+          "summary": "Add tic tac toe styling project",
+          "author": "Ian Sinnott",
+          "authorDate": "2020-03-11T09:00:05.000Z"
+        }
+      }
+    },
+    "Fpw0qzGv": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        1,
+        "challenges",
+        47
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "fpvPtNWkC",
+        "title": "HTML & CSS"
+      },
+      "challenge": {
+        "id": "Fpw0qzGv",
+        "type": "guided-project",
+        "title": "Create a Calculator Guided Project"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          604,
+          612
+        ],
+        "contributors": [
+          "Sean Smith",
+          "Ian Sinnott"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b7c16f18",
+            "5171cbf6"
+          ],
+          "Ian Sinnott": [
+            "8b91d91e",
+            "be93fb7e",
+            "46688c86",
+            "207b2e22"
+          ]
+        },
+        "edits": 6,
+        "latestUpdate": {
+          "commit": "b7c16f18",
+          "summary": "Edit HTML section content",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:32:19.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "207b2e22",
+          "summary": "Add tic tac toe styling project",
+          "author": "Ian Sinnott",
+          "authorDate": "2020-03-11T09:00:05.000Z"
+        }
+      }
+    },
+    "4rq4ezCu": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        1,
+        "challenges",
+        48
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "fpvPtNWkC",
+        "title": "HTML & CSS"
+      },
+      "challenge": {
         "id": "4rq4ezCu",
         "type": "section",
         "title": "Special Topics"
       },
       "gitMetadata": {
         "lineRange": [
-          560,
-          568
+          615,
+          623
         ],
         "contributors": [
           "Ian Sinnott"
@@ -3055,7 +3435,7 @@
         "modules",
         1,
         "challenges",
-        44
+        49
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -3072,29 +3452,33 @@
       "challenge": {
         "id": "8YMC6xUd",
         "type": "media",
-        "title": "Getting your site online"
+        "title": "Getting Your Site Online"
       },
       "gitMetadata": {
         "lineRange": [
-          571,
-          579
+          626,
+          634
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "79d03e11"
+          ],
           "Ian Sinnott": [
             "a61abd8c",
             "2d24af69",
             "69eaa34c"
           ]
         },
-        "edits": 3,
+        "edits": 4,
         "latestUpdate": {
-          "commit": "a61abd8c",
-          "summary": "Add someone elses computer image",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-16T14:46:50.000Z"
+          "commit": "79d03e11",
+          "summary": "Uppercase HTML challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:04:32.000Z"
         },
         "earliestUpdate": {
           "commit": "69eaa34c",
@@ -3110,7 +3494,7 @@
         "modules",
         1,
         "challenges",
-        45
+        50
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -3131,8 +3515,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          582,
-          590
+          637,
+          645
         ],
         "contributors": [
           "Sean Smith",
@@ -3167,7 +3551,7 @@
         "modules",
         1,
         "challenges",
-        46
+        51
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -3188,8 +3572,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          593,
-          601
+          648,
+          656
         ],
         "contributors": [
           "Ian Sinnott"
@@ -3221,7 +3605,7 @@
         "modules",
         1,
         "challenges",
-        47
+        52
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -3242,8 +3626,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          604,
-          612
+          659,
+          667
         ],
         "contributors": [
           "Sean Smith"
@@ -3295,8 +3679,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          622,
-          630
+          677,
+          685
         ],
         "contributors": [
           "Sean Smith",
@@ -3353,8 +3737,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          633,
-          641
+          688,
+          696
         ],
         "contributors": [
           "Sean Smith"
@@ -3407,8 +3791,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          644,
-          652
+          699,
+          707
         ],
         "contributors": [
           "Sean Smith"
@@ -3461,8 +3845,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          655,
-          663
+          710,
+          718
         ],
         "contributors": [
           "Sean Smith"
@@ -3514,8 +3898,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          666,
-          674
+          721,
+          729
         ],
         "contributors": [
           "Sean Smith"
@@ -3568,8 +3952,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          677,
-          685
+          732,
+          740
         ],
         "contributors": [
           "Sean Smith"
@@ -3621,8 +4005,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          688,
-          696
+          743,
+          751
         ],
         "contributors": [
           "Sean Smith"
@@ -3674,8 +4058,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          699,
-          707
+          754,
+          762
         ],
         "contributors": [
           "Sean Smith"
@@ -3728,8 +4112,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          710,
-          718
+          765,
+          773
         ],
         "contributors": [
           "Ian Sinnott"
@@ -3781,8 +4165,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          721,
-          729
+          776,
+          784
         ],
         "contributors": [
           "Sean Smith"
@@ -3835,8 +4219,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          732,
-          740
+          787,
+          795
         ],
         "contributors": [
           "Sean Smith"
@@ -3889,8 +4273,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          743,
-          751
+          798,
+          806
         ],
         "contributors": [
           "Sean Smith"
@@ -3943,8 +4327,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          754,
-          762
+          809,
+          817
         ],
         "contributors": [
           "Peter Weinberg",
@@ -4000,8 +4384,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          765,
-          773
+          820,
+          828
         ],
         "contributors": [
           "Sean Smith"
@@ -4053,8 +4437,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          776,
-          784
+          831,
+          839
         ],
         "contributors": [
           "Sean Smith"
@@ -4106,8 +4490,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          787,
-          795
+          842,
+          850
         ],
         "contributors": [
           "Sean Smith"
@@ -4159,8 +4543,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          798,
-          806
+          853,
+          861
         ],
         "contributors": [
           "Peter Weinberg",
@@ -4217,8 +4601,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          809,
-          817
+          864,
+          872
         ],
         "contributors": [
           "Peter Weinberg",
@@ -4274,8 +4658,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          820,
-          828
+          875,
+          883
         ],
         "contributors": [
           "Sean Smith"
@@ -4327,8 +4711,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          831,
-          839
+          886,
+          894
         ],
         "contributors": [
           "Sean Smith"
@@ -4383,8 +4767,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          842,
-          850
+          897,
+          905
         ],
         "contributors": [
           "Sean Smith"
@@ -4437,8 +4821,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          853,
-          861
+          908,
+          916
         ],
         "contributors": [
           "Sean Smith"
@@ -4490,8 +4874,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          864,
-          872
+          919,
+          927
         ],
         "contributors": [
           "Sean Smith"
@@ -4545,8 +4929,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          875,
-          883
+          930,
+          938
         ],
         "contributors": [
           "Sean Smith"
@@ -4598,8 +4982,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          886,
-          894
+          941,
+          949
         ],
         "contributors": [
           "Ian Sinnott",
@@ -4656,8 +5040,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          897,
-          905
+          952,
+          960
         ],
         "contributors": [
           "Ian Sinnott",
@@ -4714,8 +5098,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          908,
-          916
+          963,
+          971
         ],
         "contributors": [
           "Ian Sinnott",
@@ -4773,8 +5157,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          919,
-          927
+          974,
+          982
         ],
         "contributors": [
           "Ian Sinnott",
@@ -4830,8 +5214,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          930,
-          938
+          985,
+          993
         ],
         "contributors": [
           "Ian Sinnott",
@@ -4887,8 +5271,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          941,
-          949
+          996,
+          1004
         ],
         "contributors": [
           "Ian Sinnott",
@@ -4944,8 +5328,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          952,
-          960
+          1007,
+          1015
         ],
         "contributors": [
           "Ian Sinnott",
@@ -4999,27 +5383,31 @@
       "challenge": {
         "id": "qYQ8GOYvW",
         "type": "typescript",
-        "title": "What type is this?"
+        "title": "What Type is This?"
       },
       "gitMetadata": {
         "lineRange": [
-          963,
-          971
+          1018,
+          1026
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "b5c82fd7"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "b5c82fd7",
-          "summary": "Add typeof challenge",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-04-05T05:13:26.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "b5c82fd7",
@@ -5056,8 +5444,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          974,
-          982
+          1029,
+          1037
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5113,8 +5501,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          985,
-          993
+          1040,
+          1048
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5172,8 +5560,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          996,
-          1004
+          1051,
+          1059
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5229,8 +5617,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1007,
-          1015
+          1062,
+          1070
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5286,8 +5674,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1018,
-          1026
+          1073,
+          1081
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5344,8 +5732,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1029,
-          1037
+          1084,
+          1092
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5401,8 +5789,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1040,
-          1048
+          1095,
+          1103
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5458,8 +5846,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1051,
-          1059
+          1106,
+          1114
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5516,8 +5904,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1062,
-          1070
+          1117,
+          1125
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5573,8 +5961,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1073,
-          1081
+          1128,
+          1136
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5630,8 +6018,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1084,
-          1092
+          1139,
+          1147
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5687,8 +6075,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1095,
-          1103
+          1150,
+          1158
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5745,8 +6133,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1106,
-          1114
+          1161,
+          1169
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5802,8 +6190,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1117,
-          1125
+          1172,
+          1180
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5860,8 +6248,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1128,
-          1136
+          1183,
+          1191
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5917,8 +6305,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1139,
-          1147
+          1194,
+          1202
         ],
         "contributors": [
           "Ian Sinnott",
@@ -5974,8 +6362,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1150,
-          1158
+          1205,
+          1213
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6032,8 +6420,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1161,
-          1169
+          1216,
+          1224
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6090,8 +6478,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1172,
-          1180
+          1227,
+          1235
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6147,8 +6535,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1183,
-          1191
+          1238,
+          1246
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6204,8 +6592,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1194,
-          1202
+          1249,
+          1257
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6261,8 +6649,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1205,
-          1213
+          1260,
+          1268
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6320,8 +6708,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1216,
-          1224
+          1271,
+          1279
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6379,8 +6767,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1227,
-          1235
+          1282,
+          1290
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6436,8 +6824,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1238,
-          1246
+          1293,
+          1301
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6493,8 +6881,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1249,
-          1257
+          1304,
+          1312
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6552,8 +6940,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1260,
-          1268
+          1315,
+          1323
         ],
         "contributors": [
           "Ian Sinnott",
@@ -6609,8 +6997,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1271,
-          1279
+          1326,
+          1334
         ],
         "contributors": [
           "Sean Smith",
@@ -6666,8 +7054,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1282,
-          1290
+          1337,
+          1345
         ],
         "contributors": [
           "Sean Smith"
@@ -6719,8 +7107,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1293,
-          1301
+          1348,
+          1356
         ],
         "contributors": [
           "Sean Smith"
@@ -6773,8 +7161,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1304,
-          1312
+          1359,
+          1367
         ],
         "contributors": [
           "Sean Smith"
@@ -6826,8 +7214,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1315,
-          1323
+          1370,
+          1378
         ],
         "contributors": [
           "Sean Smith"
@@ -6879,8 +7267,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1326,
-          1334
+          1381,
+          1389
         ],
         "contributors": [
           "Ian Sinnott"
@@ -6928,27 +7316,31 @@
       "challenge": {
         "id": "Jy0Azabm",
         "type": "typescript",
-        "title": "Get the index using a while loop"
+        "title": "Get the Index Using a While Loop"
       },
       "gitMetadata": {
         "lineRange": [
-          1337,
-          1345
+          1392,
+          1400
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "51c2de00"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "51c2de00",
-          "summary": "Add two looping challenges",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-14T15:01:18.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "51c2de00",
@@ -6981,27 +7373,31 @@
       "challenge": {
         "id": "xAggDM8Y",
         "type": "typescript",
-        "title": "Get the index using a for loop get the loop a loop"
+        "title": "Get the Index Using a for Loop"
       },
       "gitMetadata": {
         "lineRange": [
-          1348,
-          1356
+          1403,
+          1411
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "51c2de00"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "51c2de00",
-          "summary": "Add two looping challenges",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-14T15:01:18.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "51c2de00",
@@ -7038,8 +7434,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1359,
-          1367
+          1414,
+          1422
         ],
         "contributors": [
           "Ian Sinnott"
@@ -7088,28 +7484,32 @@
       "challenge": {
         "id": "5gbtOWeTG",
         "type": "typescript",
-        "title": "Breaking out of a loop"
+        "title": "Breaking Out of a Loop"
       },
       "gitMetadata": {
         "lineRange": [
-          1370,
-          1378
+          1425,
+          1433
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "a6324c9c",
             "3139fe11"
           ]
         },
-        "edits": 2,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "a6324c9c",
-          "summary": "Add some content to break and continue challenges",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-19T02:57:49.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "3139fe11",
@@ -7142,28 +7542,32 @@
       "challenge": {
         "id": "3d0e8KsAI",
         "type": "typescript",
-        "title": "Continuing a loop"
+        "title": "Continuing a Loop"
       },
       "gitMetadata": {
         "lineRange": [
-          1381,
-          1389
+          1436,
+          1444
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "a6324c9c",
             "3139fe11"
           ]
         },
-        "edits": 2,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "a6324c9c",
-          "summary": "Add some content to break and continue challenges",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-19T02:57:49.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "3139fe11",
@@ -7200,8 +7604,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1392,
-          1400
+          1447,
+          1455
         ],
         "contributors": [
           "Sean Smith",
@@ -7257,8 +7661,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1403,
-          1411
+          1458,
+          1466
         ],
         "contributors": [
           "Sean Smith"
@@ -7310,8 +7714,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1414,
-          1422
+          1469,
+          1477
         ],
         "contributors": [
           "Sean Smith"
@@ -7363,8 +7767,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1425,
-          1433
+          1480,
+          1488
         ],
         "contributors": [
           "Sean Smith"
@@ -7416,8 +7820,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1436,
-          1444
+          1491,
+          1499
         ],
         "contributors": [
           "Sean Smith"
@@ -7470,8 +7874,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1447,
-          1455
+          1502,
+          1510
         ],
         "contributors": [
           "Sean Smith"
@@ -7524,8 +7928,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1458,
-          1466
+          1513,
+          1521
         ],
         "contributors": [
           "Sean Smith"
@@ -7577,8 +7981,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1469,
-          1477
+          1524,
+          1532
         ],
         "contributors": [
           "Sean Smith"
@@ -7630,8 +8034,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1480,
-          1488
+          1535,
+          1543
         ],
         "contributors": [
           "Sean Smith"
@@ -7684,8 +8088,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1491,
-          1499
+          1546,
+          1554
         ],
         "contributors": [
           "Sean Smith"
@@ -7737,8 +8141,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1502,
-          1510
+          1557,
+          1565
         ],
         "contributors": [
           "Sean Smith"
@@ -7790,8 +8194,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1513,
-          1521
+          1568,
+          1576
         ],
         "contributors": [
           "Sean Smith"
@@ -7816,7 +8220,7 @@
         }
       }
     },
-    "TJdUIaSo": {
+    "BHnwYHNkg": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
@@ -7837,14 +8241,226 @@
         "title": "TypeScript"
       },
       "challenge": {
+        "id": "BHnwYHNkg",
+        "type": "section",
+        "title": "Recursion"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          1579,
+          1587
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "07f799f0"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "07f799f0",
+          "summary": "Add Recursion intro section",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T11:09:04.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "07f799f0",
+          "summary": "Add Recursion intro section",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T11:09:04.000Z"
+        }
+      }
+    },
+    "@wxCAUbHc": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        83
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "@wxCAUbHc",
+        "type": "typescript",
+        "title": "Fibonacci"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          1590,
+          1598
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "da3004ae"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "da3004ae",
+          "summary": "Add Fibonacci challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T13:32:04.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "da3004ae",
+          "summary": "Add Fibonacci challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T13:32:04.000Z"
+        }
+      }
+    },
+    "fMxrcyVzB": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        84
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "fMxrcyVzB",
+        "type": "typescript",
+        "title": "Find the Factorial"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          1601,
+          1609
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "f1577b34"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "f1577b34",
+          "summary": "Add Find the Factorial challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T13:39:13.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "f1577b34",
+          "summary": "Add Find the Factorial challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T13:39:13.000Z"
+        }
+      }
+    },
+    "3gu90L@JL": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        85
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "3gu90L@JL",
+        "type": "typescript",
+        "title": "Find the Leaves"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          1612,
+          1620
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "58e14e39"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "58e14e39",
+          "summary": "Add Find the Leaves",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T13:58:08.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "58e14e39",
+          "summary": "Add Find the Leaves",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T13:58:08.000Z"
+        }
+      }
+    },
+    "TJdUIaSo": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        86
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
         "id": "TJdUIaSo",
         "type": "section",
         "title": "Scopes"
       },
       "gitMetadata": {
         "lineRange": [
-          1524,
-          1532
+          1623,
+          1631
         ],
         "contributors": [
           "Sean Smith"
@@ -7875,7 +8491,7 @@
         "modules",
         2,
         "challenges",
-        83
+        87
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -7896,8 +8512,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1535,
-          1543
+          1634,
+          1642
         ],
         "contributors": [
           "Sean Smith"
@@ -7928,7 +8544,7 @@
         "modules",
         2,
         "challenges",
-        84
+        88
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -7949,8 +8565,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1546,
-          1554
+          1645,
+          1653
         ],
         "contributors": [
           "Sean Smith"
@@ -7982,7 +8598,7 @@
         "modules",
         2,
         "challenges",
-        85
+        89
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8003,8 +8619,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1557,
-          1565
+          1656,
+          1664
         ],
         "contributors": [
           "Sean Smith"
@@ -8035,7 +8651,7 @@
         "modules",
         2,
         "challenges",
-        86
+        90
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8056,8 +8672,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1568,
-          1576
+          1667,
+          1675
         ],
         "contributors": [
           "Sean Smith"
@@ -8088,7 +8704,7 @@
         "modules",
         2,
         "challenges",
-        87
+        91
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8109,8 +8725,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1579,
-          1587
+          1678,
+          1686
         ],
         "contributors": [
           "Sean Smith"
@@ -8141,7 +8757,7 @@
         "modules",
         2,
         "challenges",
-        88
+        92
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8162,8 +8778,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1590,
-          1598
+          1689,
+          1697
         ],
         "contributors": [
           "Sean Smith"
@@ -8194,7 +8810,7 @@
         "modules",
         2,
         "challenges",
-        89
+        93
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8215,8 +8831,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1601,
-          1609
+          1700,
+          1708
         ],
         "contributors": [
           "Sean Smith"
@@ -8248,7 +8864,7 @@
         "modules",
         2,
         "challenges",
-        90
+        94
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8269,8 +8885,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1612,
-          1620
+          1711,
+          1719
         ],
         "contributors": [
           "Sean Smith"
@@ -8301,7 +8917,7 @@
         "modules",
         2,
         "challenges",
-        91
+        95
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8322,23 +8938,27 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1623,
-          1631
+          1722,
+          1730
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "7068acb1"
+          ],
           "Ian Sinnott": [
             "a1c46565"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "a1c46565",
-          "summary": "Reorder typescript sections and add placeholder sections",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-04-01T08:15:39.000Z"
+          "commit": "7068acb1",
+          "summary": "Complete Closures intro challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T12:30:23.000Z"
         },
         "earliestUpdate": {
           "commit": "a1c46565",
@@ -8348,13 +8968,172 @@
         }
       }
     },
+    "Cbx3@SXTb": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        96
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "Cbx3@SXTb",
+        "type": "typescript",
+        "title": "Create a Closure"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          1733,
+          1741
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "fc9e8848"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "fc9e8848",
+          "summary": "Add Create a Closure challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T12:42:09.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "fc9e8848",
+          "summary": "Add Create a Closure challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T12:42:09.000Z"
+        }
+      }
+    },
+    "GKr5sCqW5": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        97
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "GKr5sCqW5",
+        "type": "typescript",
+        "title": "Multiply By"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          1744,
+          1752
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "9e14ee82"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "9e14ee82",
+          "summary": "Create Multiply By challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T12:49:46.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "9e14ee82",
+          "summary": "Create Multiply By challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T12:49:46.000Z"
+        }
+      }
+    },
+    "G9UqP4kBe": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        98
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "G9UqP4kBe",
+        "type": "typescript",
+        "title": "Create a Counter Machine"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          1755,
+          1763
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "81fc1dca"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "81fc1dca",
+          "summary": "Add Create a Counter Machine challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T13:03:34.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "81fc1dca",
+          "summary": "Add Create a Counter Machine challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T13:03:34.000Z"
+        }
+      }
+    },
     "prlFliKCW": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
         2,
         "challenges",
-        92
+        99
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8375,8 +9154,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1634,
-          1642
+          1766,
+          1774
         ],
         "contributors": [
           "Ian Sinnott"
@@ -8409,7 +9188,7 @@
         "modules",
         2,
         "challenges",
-        93
+        100
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8426,27 +9205,31 @@
       "challenge": {
         "id": "UMroK7wKl",
         "type": "typescript",
-        "title": "Create arrays"
+        "title": "Create Arrays"
       },
       "gitMetadata": {
         "lineRange": [
-          1645,
-          1653
+          1777,
+          1785
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "1ecdcb19"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "1ecdcb19",
-          "summary": "Add some collections challenges",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-19T05:30:15.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "1ecdcb19",
@@ -8462,7 +9245,7 @@
         "modules",
         2,
         "challenges",
-        94
+        101
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8483,8 +9266,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1656,
-          1664
+          1788,
+          1796
         ],
         "contributors": [
           "Ian Sinnott"
@@ -8515,7 +9298,7 @@
         "modules",
         2,
         "challenges",
-        95
+        102
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8532,27 +9315,31 @@
       "challenge": {
         "id": "EHIj@pzdY",
         "type": "typescript",
-        "title": "Zero-based Indexes"
+        "title": "Zero-Based Indexes"
       },
       "gitMetadata": {
         "lineRange": [
-          1667,
-          1675
+          1799,
+          1807
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "9a025237"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "9a025237",
-          "summary": "Add zero-based index challenge",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-04-02T12:04:56.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "9a025237",
@@ -8568,7 +9355,7 @@
         "modules",
         2,
         "challenges",
-        96
+        103
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8589,8 +9376,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1678,
-          1686
+          1810,
+          1818
         ],
         "contributors": [
           "Ian Sinnott"
@@ -8621,7 +9408,7 @@
         "modules",
         2,
         "challenges",
-        97
+        104
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8642,8 +9429,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1689,
-          1697
+          1821,
+          1829
         ],
         "contributors": [
           "Ian Sinnott"
@@ -8674,7 +9461,7 @@
         "modules",
         2,
         "challenges",
-        98
+        105
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8691,28 +9478,32 @@
       "challenge": {
         "id": "NEKvEvei4",
         "type": "typescript",
-        "title": "Objects and arrays together"
+        "title": "Objects and Arrays Together"
       },
       "gitMetadata": {
         "lineRange": [
-          1700,
-          1708
+          1832,
+          1840
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "6ebb01a3",
             "81a874b5"
           ]
         },
-        "edits": 2,
+        "edits": 3,
         "latestUpdate": {
-          "commit": "6ebb01a3",
-          "summary": "Add one more test to cat party to add clarity",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-03-21T00:22:44.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "81a874b5",
@@ -8728,7 +9519,7 @@
         "modules",
         2,
         "challenges",
-        99
+        106
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8745,27 +9536,31 @@
       "challenge": {
         "id": "sZBviRApf",
         "type": "typescript",
-        "title": "Thinking in terms of data"
+        "title": "Thinking in Terms of Data"
       },
       "gitMetadata": {
         "lineRange": [
-          1711,
-          1719
+          1843,
+          1851
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
             "239a0a5b"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "239a0a5b",
-          "summary": "Add tic tac toe state nested array challenge",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-04-01T03:09:57.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "239a0a5b",
@@ -8781,7 +9576,7 @@
         "modules",
         2,
         "challenges",
-        100
+        107
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8802,8 +9597,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1722,
-          1730
+          1854,
+          1862
         ],
         "contributors": [
           "Ian Sinnott"
@@ -8835,7 +9630,7 @@
         "modules",
         2,
         "challenges",
-        101
+        108
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8856,8 +9651,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1733,
-          1741
+          1865,
+          1873
         ],
         "contributors": [
           "Ian Sinnott"
@@ -8888,7 +9683,7 @@
         "modules",
         2,
         "challenges",
-        102
+        109
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8909,8 +9704,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1744,
-          1752
+          1876,
+          1884
         ],
         "contributors": [
           "Ian Sinnott"
@@ -8941,7 +9736,7 @@
         "modules",
         2,
         "challenges",
-        103
+        110
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -8962,8 +9757,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1755,
-          1763
+          1887,
+          1895
         ],
         "contributors": [
           "Ian Sinnott"
@@ -8996,7 +9791,7 @@
         "modules",
         2,
         "challenges",
-        104
+        111
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9017,8 +9812,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1766,
-          1774
+          1898,
+          1906
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9050,7 +9845,7 @@
         "modules",
         2,
         "challenges",
-        105
+        112
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9071,8 +9866,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1777,
-          1785
+          1909,
+          1917
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9105,7 +9900,7 @@
         "modules",
         2,
         "challenges",
-        106
+        113
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9122,19 +9917,22 @@
       "challenge": {
         "id": "Y3M5EjYjR",
         "type": "typescript",
-        "title": "Splitting and joining"
+        "title": "Splitting and Joining"
       },
       "gitMetadata": {
         "lineRange": [
-          1788,
-          1796
+          1920,
+          1928
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "3b6f8272"
+          ],
           "Ian Sinnott": [
-            "c390edbe",
             "65ef9e08",
             "603f8333",
             "a3a68e25"
@@ -9142,10 +9940,10 @@
         },
         "edits": 4,
         "latestUpdate": {
-          "commit": "c390edbe",
-          "summary": "Fix typo, update title casing",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-04-07T01:15:46.000Z"
+          "commit": "3b6f8272",
+          "summary": "Uppercase TypeScript challenge titles",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-12T14:08:41.000Z"
         },
         "earliestUpdate": {
           "commit": "a3a68e25",
@@ -9161,7 +9959,7 @@
         "modules",
         2,
         "challenges",
-        107
+        114
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9182,8 +9980,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1799,
-          1807
+          1931,
+          1939
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9215,7 +10013,7 @@
         "modules",
         2,
         "challenges",
-        108
+        115
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9236,8 +10034,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1810,
-          1818
+          1942,
+          1950
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9269,7 +10067,7 @@
         "modules",
         2,
         "challenges",
-        109
+        116
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9290,8 +10088,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1821,
-          1829
+          1953,
+          1961
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9324,7 +10122,7 @@
         "modules",
         2,
         "challenges",
-        110
+        117
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9345,8 +10143,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1832,
-          1840
+          1964,
+          1972
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9378,7 +10176,7 @@
         "modules",
         2,
         "challenges",
-        111
+        118
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9399,8 +10197,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1843,
-          1851
+          1975,
+          1983
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9432,7 +10230,7 @@
         "modules",
         2,
         "challenges",
-        112
+        119
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9453,8 +10251,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1854,
-          1862
+          1986,
+          1994
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9488,7 +10286,7 @@
         "modules",
         2,
         "challenges",
-        113
+        120
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9509,8 +10307,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1865,
-          1873
+          1997,
+          2005
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9543,7 +10341,7 @@
         "modules",
         2,
         "challenges",
-        114
+        121
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9564,8 +10362,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1876,
-          1884
+          2008,
+          2016
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9597,7 +10395,7 @@
         "modules",
         2,
         "challenges",
-        115
+        122
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9618,8 +10416,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1887,
-          1895
+          2019,
+          2027
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9650,7 +10448,7 @@
         "modules",
         2,
         "challenges",
-        116
+        123
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9671,8 +10469,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1898,
-          1906
+          2030,
+          2038
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9703,7 +10501,7 @@
         "modules",
         2,
         "challenges",
-        117
+        124
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9724,8 +10522,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1909,
-          1917
+          2041,
+          2049
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9757,7 +10555,7 @@
         "modules",
         2,
         "challenges",
-        118
+        125
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9778,8 +10576,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1920,
-          1928
+          2052,
+          2060
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9812,7 +10610,7 @@
         "modules",
         2,
         "challenges",
-        119
+        126
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9833,8 +10631,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1931,
-          1939
+          2063,
+          2071
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9866,7 +10664,7 @@
         "modules",
         2,
         "challenges",
-        120
+        127
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9887,8 +10685,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1942,
-          1950
+          2074,
+          2082
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9920,7 +10718,7 @@
         "modules",
         2,
         "challenges",
-        121
+        128
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9941,8 +10739,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1953,
-          1961
+          2085,
+          2093
         ],
         "contributors": [
           "Ian Sinnott"
@@ -9974,7 +10772,7 @@
         "modules",
         2,
         "challenges",
-        122
+        129
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -9995,8 +10793,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1964,
-          1972
+          2096,
+          2104
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10028,7 +10826,7 @@
         "modules",
         2,
         "challenges",
-        123
+        130
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10049,8 +10847,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1975,
-          1983
+          2107,
+          2115
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10081,7 +10879,7 @@
         "modules",
         2,
         "challenges",
-        124
+        131
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10102,8 +10900,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1986,
-          1994
+          2118,
+          2126
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10134,7 +10932,7 @@
         "modules",
         2,
         "challenges",
-        125
+        132
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10155,8 +10953,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          1997,
-          2005
+          2129,
+          2137
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10188,7 +10986,7 @@
         "modules",
         2,
         "challenges",
-        126
+        133
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10209,23 +11007,27 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2008,
-          2016
+          2140,
+          2148
         ],
         "contributors": [
+          "Sean Smith",
           "Ian Sinnott"
         ],
         "contributionsBy": {
+          "Sean Smith": [
+            "0e8f8cb0"
+          ],
           "Ian Sinnott": [
             "d3ccdec7"
           ]
         },
-        "edits": 1,
+        "edits": 2,
         "latestUpdate": {
-          "commit": "d3ccdec7",
-          "summary": "Add pure push function challenge",
-          "author": "Ian Sinnott",
-          "authorDate": "2020-04-08T06:31:34.000Z"
+          "commit": "0e8f8cb0",
+          "summary": "Add A Pure Pop Function",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:38:34.000Z"
         },
         "earliestUpdate": {
           "commit": "d3ccdec7",
@@ -10235,13 +11037,119 @@
         }
       }
     },
+    "IIIdYXsE$": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        134
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "IIIdYXsE$",
+        "type": "typescript",
+        "title": "A Pure Pop Function"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          2151,
+          2159
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "0e8f8cb0"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "0e8f8cb0",
+          "summary": "Add A Pure Pop Function",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:38:34.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "0e8f8cb0",
+          "summary": "Add A Pure Pop Function",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:38:34.000Z"
+        }
+      }
+    },
+    "$SghMZjwc": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        135
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "$SghMZjwc",
+        "type": "typescript",
+        "title": "Clone an Array"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          2162,
+          2170
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "789bb54f"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "789bb54f",
+          "summary": "Add Clone an Array challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:43:44.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "789bb54f",
+          "summary": "Add Clone an Array challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:43:44.000Z"
+        }
+      }
+    },
     "jxRxi1j5A": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
         2,
         "challenges",
-        127
+        136
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10262,8 +11170,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2019,
-          2027
+          2173,
+          2181
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10295,7 +11203,7 @@
         "modules",
         2,
         "challenges",
-        128
+        137
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10316,8 +11224,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2030,
-          2038
+          2184,
+          2192
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10349,7 +11257,7 @@
         "modules",
         2,
         "challenges",
-        129
+        138
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10370,8 +11278,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2041,
-          2049
+          2195,
+          2203
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10403,7 +11311,7 @@
         "modules",
         2,
         "challenges",
-        130
+        139
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10424,8 +11332,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2052,
-          2060
+          2206,
+          2214
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10456,7 +11364,7 @@
         "modules",
         2,
         "challenges",
-        131
+        140
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10477,8 +11385,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2063,
-          2071
+          2217,
+          2225
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10510,7 +11418,7 @@
         "modules",
         2,
         "challenges",
-        132
+        141
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10531,8 +11439,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2074,
-          2082
+          2228,
+          2236
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10565,7 +11473,7 @@
         "modules",
         2,
         "challenges",
-        133
+        142
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10586,8 +11494,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2085,
-          2093
+          2239,
+          2247
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10619,7 +11527,7 @@
         "modules",
         2,
         "challenges",
-        134
+        143
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10640,8 +11548,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2096,
-          2104
+          2250,
+          2258
         ],
         "contributors": [
           "Ian Sinnott"
@@ -10672,7 +11580,7 @@
         "modules",
         2,
         "challenges",
-        135
+        144
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10693,8 +11601,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2107,
-          2115
+          2261,
+          2269
         ],
         "contributors": [
           "Sean Smith",
@@ -10729,7 +11637,7 @@
         "modules",
         2,
         "challenges",
-        136
+        145
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10750,8 +11658,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2118,
-          2126
+          2272,
+          2280
         ],
         "contributors": [
           "Sean Smith"
@@ -10782,7 +11690,7 @@
         "modules",
         2,
         "challenges",
-        137
+        146
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10803,8 +11711,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2129,
-          2137
+          2283,
+          2291
         ],
         "contributors": [
           "Sean Smith"
@@ -10835,7 +11743,7 @@
         "modules",
         2,
         "challenges",
-        138
+        147
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10856,8 +11764,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2140,
-          2148
+          2294,
+          2302
         ],
         "contributors": [
           "Sean Smith"
@@ -10888,7 +11796,7 @@
         "modules",
         2,
         "challenges",
-        139
+        148
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10909,8 +11817,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2151,
-          2159
+          2305,
+          2313
         ],
         "contributors": [
           "Sean Smith"
@@ -10941,7 +11849,7 @@
         "modules",
         2,
         "challenges",
-        140
+        149
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -10962,8 +11870,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2162,
-          2170
+          2316,
+          2324
         ],
         "contributors": [
           "Sean Smith"
@@ -10994,7 +11902,7 @@
         "modules",
         2,
         "challenges",
-        141
+        150
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11015,8 +11923,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2173,
-          2181
+          2327,
+          2335
         ],
         "contributors": [
           "Ian Sinnott"
@@ -11047,7 +11955,7 @@
         "modules",
         2,
         "challenges",
-        142
+        151
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11068,8 +11976,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2184,
-          2192
+          2338,
+          2346
         ],
         "contributors": [
           "Sean Smith"
@@ -11102,7 +12010,7 @@
         "modules",
         2,
         "challenges",
-        143
+        152
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11123,8 +12031,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2195,
-          2202
+          2349,
+          2356
         ],
         "contributors": [
           "Peter Weinberg",
@@ -11165,7 +12073,7 @@
         "modules",
         2,
         "challenges",
-        144
+        153
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11186,8 +12094,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2205,
-          2212
+          2359,
+          2366
         ],
         "contributors": [
           "Peter Weinberg",
@@ -11228,7 +12136,7 @@
         "modules",
         2,
         "challenges",
-        145
+        154
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11249,8 +12157,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2215,
-          2222
+          2369,
+          2376
         ],
         "contributors": [
           "Sean Smith",
@@ -11291,7 +12199,7 @@
         "modules",
         2,
         "challenges",
-        146
+        155
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11312,8 +12220,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2225,
-          2233
+          2379,
+          2387
         ],
         "contributors": [
           "Sean Smith"
@@ -11346,7 +12254,7 @@
         "modules",
         2,
         "challenges",
-        147
+        156
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11367,8 +12275,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2236,
-          2244
+          2390,
+          2398
         ],
         "contributors": [
           "Sean Smith"
@@ -11399,7 +12307,7 @@
         "modules",
         2,
         "challenges",
-        148
+        157
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11420,8 +12328,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2247,
-          2255
+          2401,
+          2409
         ],
         "contributors": [
           "Sean Smith"
@@ -11453,7 +12361,7 @@
         "modules",
         2,
         "challenges",
-        149
+        158
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11474,8 +12382,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2258,
-          2266
+          2412,
+          2420
         ],
         "contributors": [
           "Sean Smith"
@@ -11507,7 +12415,7 @@
         "modules",
         2,
         "challenges",
-        150
+        159
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11528,8 +12436,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2269,
-          2277
+          2423,
+          2431
         ],
         "contributors": [
           "Sean Smith"
@@ -11560,7 +12468,7 @@
         "modules",
         2,
         "challenges",
-        151
+        160
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11581,8 +12489,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2280,
-          2288
+          2434,
+          2442
         ],
         "contributors": [
           "Sean Smith"
@@ -11613,7 +12521,7 @@
         "modules",
         2,
         "challenges",
-        152
+        161
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11634,8 +12542,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2291,
-          2299
+          2445,
+          2453
         ],
         "contributors": [
           "Sean Smith"
@@ -11666,7 +12574,7 @@
         "modules",
         2,
         "challenges",
-        153
+        162
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11687,8 +12595,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2302,
-          2310
+          2456,
+          2464
         ],
         "contributors": [
           "Sean Smith"
@@ -11719,7 +12627,7 @@
         "modules",
         2,
         "challenges",
-        154
+        163
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11740,8 +12648,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2313,
-          2321
+          2467,
+          2475
         ],
         "contributors": [
           "Sean Smith"
@@ -11772,7 +12680,7 @@
         "modules",
         2,
         "challenges",
-        155
+        164
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11793,8 +12701,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2324,
-          2332
+          2478,
+          2486
         ],
         "contributors": [
           "Sean Smith"
@@ -11825,7 +12733,7 @@
         "modules",
         2,
         "challenges",
-        156
+        165
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11846,8 +12754,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2335,
-          2343
+          2489,
+          2497
         ],
         "contributors": [
           "Sean Smith"
@@ -11878,7 +12786,7 @@
         "modules",
         2,
         "challenges",
-        157
+        166
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11899,8 +12807,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2346,
-          2354
+          2500,
+          2508
         ],
         "contributors": [
           "Sean Smith"
@@ -11931,7 +12839,7 @@
         "modules",
         2,
         "challenges",
-        158
+        167
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -11952,8 +12860,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2357,
-          2365
+          2511,
+          2519
         ],
         "contributors": [
           "Sean Smith"
@@ -11984,7 +12892,7 @@
         "modules",
         2,
         "challenges",
-        159
+        168
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12005,8 +12913,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2368,
-          2376
+          2522,
+          2530
         ],
         "contributors": [
           "Sean Smith"
@@ -12037,7 +12945,7 @@
         "modules",
         2,
         "challenges",
-        160
+        169
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12058,8 +12966,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2379,
-          2387
+          2533,
+          2541
         ],
         "contributors": [
           "Sean Smith"
@@ -12090,7 +12998,7 @@
         "modules",
         2,
         "challenges",
-        161
+        170
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12111,8 +13019,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2390,
-          2398
+          2544,
+          2552
         ],
         "contributors": [
           "Sean Smith"
@@ -12143,7 +13051,7 @@
         "modules",
         2,
         "challenges",
-        162
+        171
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12164,8 +13072,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2401,
-          2409
+          2555,
+          2563
         ],
         "contributors": [
           "Sean Smith"
@@ -12196,7 +13104,7 @@
         "modules",
         2,
         "challenges",
-        163
+        172
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12217,8 +13125,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2412,
-          2420
+          2566,
+          2574
         ],
         "contributors": [
           "Sean Smith"
@@ -12249,7 +13157,7 @@
         "modules",
         2,
         "challenges",
-        164
+        173
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12270,8 +13178,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2423,
-          2431
+          2577,
+          2585
         ],
         "contributors": [
           "Sean Smith"
@@ -12302,7 +13210,7 @@
         "modules",
         2,
         "challenges",
-        165
+        174
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12323,8 +13231,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2434,
-          2442
+          2588,
+          2596
         ],
         "contributors": [
           "Sean Smith"
@@ -12356,7 +13264,7 @@
         "modules",
         2,
         "challenges",
-        166
+        175
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12377,8 +13285,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2445,
-          2453
+          2599,
+          2607
         ],
         "contributors": [
           "Sean Smith"
@@ -12409,7 +13317,7 @@
         "modules",
         2,
         "challenges",
-        167
+        176
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12430,8 +13338,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2456,
-          2464
+          2610,
+          2618
         ],
         "contributors": [
           "Sean Smith"
@@ -12462,7 +13370,7 @@
         "modules",
         2,
         "challenges",
-        168
+        177
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12483,8 +13391,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2467,
-          2475
+          2621,
+          2629
         ],
         "contributors": [
           "Sean Smith"
@@ -12515,7 +13423,7 @@
         "modules",
         2,
         "challenges",
-        169
+        178
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12536,8 +13444,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2478,
-          2486
+          2632,
+          2640
         ],
         "contributors": [
           "Sean Smith"
@@ -12568,7 +13476,7 @@
         "modules",
         2,
         "challenges",
-        170
+        179
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12589,8 +13497,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2489,
-          2497
+          2643,
+          2651
         ],
         "contributors": [
           "Sean Smith"
@@ -12622,7 +13530,7 @@
         "modules",
         2,
         "challenges",
-        171
+        180
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12643,8 +13551,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2500,
-          2508
+          2654,
+          2662
         ],
         "contributors": [
           "Sean Smith"
@@ -12675,7 +13583,7 @@
         "modules",
         2,
         "challenges",
-        172
+        181
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12696,8 +13604,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2511,
-          2519
+          2665,
+          2673
         ],
         "contributors": [
           "Sean Smith"
@@ -12728,7 +13636,7 @@
         "modules",
         2,
         "challenges",
-        173
+        182
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12749,8 +13657,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2522,
-          2530
+          2676,
+          2684
         ],
         "contributors": [
           "Sean Smith",
@@ -12787,7 +13695,7 @@
         "modules",
         2,
         "challenges",
-        174
+        183
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12808,8 +13716,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2533,
-          2541
+          2687,
+          2695
         ],
         "contributors": [
           "Sean Smith"
@@ -12842,7 +13750,7 @@
         "modules",
         2,
         "challenges",
-        175
+        184
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12863,8 +13771,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2544,
-          2552
+          2698,
+          2706
         ],
         "contributors": [
           "Sean Smith"
@@ -12895,7 +13803,7 @@
         "modules",
         2,
         "challenges",
-        176
+        185
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12916,8 +13824,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2555,
-          2563
+          2709,
+          2717
         ],
         "contributors": [
           "Sean Smith"
@@ -12948,7 +13856,7 @@
         "modules",
         2,
         "challenges",
-        177
+        186
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -12969,8 +13877,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2566,
-          2574
+          2720,
+          2728
         ],
         "contributors": [
           "Sean Smith"
@@ -13001,7 +13909,7 @@
         "modules",
         2,
         "challenges",
-        178
+        187
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13022,8 +13930,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2577,
-          2585
+          2731,
+          2739
         ],
         "contributors": [
           "Sean Smith"
@@ -13055,7 +13963,7 @@
         "modules",
         2,
         "challenges",
-        179
+        188
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13076,8 +13984,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2588,
-          2596
+          2742,
+          2750
         ],
         "contributors": [
           "Sean Smith"
@@ -13108,7 +14016,7 @@
         "modules",
         2,
         "challenges",
-        180
+        189
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13129,8 +14037,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2599,
-          2607
+          2753,
+          2761
         ],
         "contributors": [
           "Sean Smith"
@@ -13161,7 +14069,7 @@
         "modules",
         2,
         "challenges",
-        181
+        190
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13182,8 +14090,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2610,
-          2618
+          2764,
+          2772
         ],
         "contributors": [
           "Sean Smith"
@@ -13214,7 +14122,7 @@
         "modules",
         2,
         "challenges",
-        182
+        191
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13235,8 +14143,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2621,
-          2629
+          2775,
+          2783
         ],
         "contributors": [
           "Sean Smith"
@@ -13267,7 +14175,7 @@
         "modules",
         2,
         "challenges",
-        183
+        192
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13288,8 +14196,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2632,
-          2640
+          2786,
+          2794
         ],
         "contributors": [
           "Sean Smith"
@@ -13320,7 +14228,7 @@
         "modules",
         2,
         "challenges",
-        184
+        193
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13341,8 +14249,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2643,
-          2651
+          2797,
+          2805
         ],
         "contributors": [
           "Sean Smith"
@@ -13373,7 +14281,7 @@
         "modules",
         2,
         "challenges",
-        185
+        194
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13394,8 +14302,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2654,
-          2662
+          2808,
+          2816
         ],
         "contributors": [
           "Sean Smith"
@@ -13426,7 +14334,7 @@
         "modules",
         2,
         "challenges",
-        186
+        195
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13447,8 +14355,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2665,
-          2673
+          2819,
+          2827
         ],
         "contributors": [
           "Sean Smith"
@@ -13479,7 +14387,7 @@
         "modules",
         2,
         "challenges",
-        187
+        196
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13500,8 +14408,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2676,
-          2684
+          2830,
+          2838
         ],
         "contributors": [
           "Sean Smith"
@@ -13532,7 +14440,7 @@
         "modules",
         2,
         "challenges",
-        188
+        197
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13553,8 +14461,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2687,
-          2695
+          2841,
+          2849
         ],
         "contributors": [
           "Sean Smith"
@@ -13587,7 +14495,7 @@
         "modules",
         2,
         "challenges",
-        189
+        198
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13608,8 +14516,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2698,
-          2706
+          2852,
+          2860
         ],
         "contributors": [
           "Sean Smith"
@@ -13641,7 +14549,7 @@
         "modules",
         2,
         "challenges",
-        190
+        199
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13662,8 +14570,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2709,
-          2717
+          2863,
+          2871
         ],
         "contributors": [
           "Sean Smith"
@@ -13695,7 +14603,7 @@
         "modules",
         2,
         "challenges",
-        191
+        200
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13716,8 +14624,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2720,
-          2728
+          2874,
+          2882
         ],
         "contributors": [
           "Sean Smith"
@@ -13749,7 +14657,7 @@
         "modules",
         2,
         "challenges",
-        192
+        201
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13770,8 +14678,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2731,
-          2739
+          2885,
+          2893
         ],
         "contributors": [
           "Sean Smith"
@@ -13803,7 +14711,7 @@
         "modules",
         2,
         "challenges",
-        193
+        202
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13824,8 +14732,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2742,
-          2750
+          2896,
+          2904
         ],
         "contributors": [
           "Sean Smith"
@@ -13850,13 +14758,174 @@
         }
       }
     },
+    "HYVyW@eI2": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        203
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "HYVyW@eI2",
+        "type": "typescript",
+        "title": "The Quadratic Formula"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          2907,
+          2915
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "5cf040c9",
+            "0c99a8a1",
+            "24b4d328"
+          ]
+        },
+        "edits": 3,
+        "latestUpdate": {
+          "commit": "5cf040c9",
+          "summary": "Add Every nth Value challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:02:51.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "24b4d328",
+          "summary": "Start The Quadratic Formula challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T13:22:47.000Z"
+        }
+      }
+    },
+    "5fGAVCV6H": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        204
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "5fGAVCV6H",
+        "type": "typescript",
+        "title": "Every nth Value"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          2918,
+          2926
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "5cf040c9"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "5cf040c9",
+          "summary": "Add Every nth Value challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:02:51.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "5cf040c9",
+          "summary": "Add Every nth Value challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:02:51.000Z"
+        }
+      }
+    },
+    "n1X3SCvk3": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        205
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "n1X3SCvk3",
+        "type": "typescript",
+        "title": "Reverse In Place"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          2929,
+          2937
+        ],
+        "contributors": [
+          "Sean Smith"
+        ],
+        "contributionsBy": {
+          "Sean Smith": [
+            "b4f564bc"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "b4f564bc",
+          "summary": "Add Reverse In Place challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:22:38.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "b4f564bc",
+          "summary": "Add Reverse In Place challenge",
+          "author": "Sean Smith",
+          "authorDate": "2020-04-10T16:22:38.000Z"
+        }
+      }
+    },
     "9wRw1y5V": {
       "filename": "01_fullstack_typescript.json",
       "keypath": [
         "modules",
         2,
         "challenges",
-        194
+        206
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13877,8 +14946,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2753,
-          2761
+          2940,
+          2948
         ],
         "contributors": [
           "Sean Smith",
@@ -13915,7 +14984,7 @@
         "modules",
         2,
         "challenges",
-        195
+        207
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13936,8 +15005,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2764,
-          2772
+          2951,
+          2959
         ],
         "contributors": [
           "Sean Smith"
@@ -13970,7 +15039,7 @@
         "modules",
         2,
         "challenges",
-        196
+        208
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -13991,8 +15060,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2775,
-          2783
+          2962,
+          2970
         ],
         "contributors": [
           "Ian Sinnott",
@@ -14028,7 +15097,7 @@
         "modules",
         2,
         "challenges",
-        197
+        209
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -14049,8 +15118,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2786,
-          2794
+          2973,
+          2981
         ],
         "contributors": [
           "Sean Smith"
@@ -14084,7 +15153,7 @@
         "modules",
         2,
         "challenges",
-        198
+        210
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -14105,8 +15174,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2797,
-          2805
+          2984,
+          2992
         ],
         "contributors": [
           "Sean Smith"
@@ -14137,7 +15206,7 @@
         "modules",
         2,
         "challenges",
-        199
+        211
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -14158,8 +15227,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2808,
-          2816
+          2995,
+          3003
         ],
         "contributors": [
           "Sean Smith"
@@ -14190,7 +15259,7 @@
         "modules",
         2,
         "challenges",
-        200
+        212
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -14211,8 +15280,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2819,
-          2827
+          3006,
+          3014
         ],
         "contributors": [
           "Ian Sinnott",
@@ -14247,7 +15316,7 @@
         "modules",
         2,
         "challenges",
-        201
+        213
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -14268,8 +15337,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2830,
-          2838
+          3017,
+          3025
         ],
         "contributors": [
           "Sean Smith"
@@ -14301,7 +15370,7 @@
         "modules",
         2,
         "challenges",
-        202
+        214
       ],
       "course": {
         "id": "fpvPtfu7s",
@@ -14322,8 +15391,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2841,
-          2849
+          3028,
+          3036
         ],
         "contributors": [
           "Sean Smith",
@@ -14349,6 +15418,59 @@
           "summary": "Reorder typescript sections and add placeholder sections",
           "author": "Ian Sinnott",
           "authorDate": "2020-04-01T08:15:39.000Z"
+        }
+      }
+    },
+    "gyGd9$$SJ": {
+      "filename": "01_fullstack_typescript.json",
+      "keypath": [
+        "modules",
+        2,
+        "challenges",
+        215
+      ],
+      "course": {
+        "id": "fpvPtfu7s",
+        "title": "Fullstack TypeScript Course",
+        "description": "Learn how to build web and mobile apps using TypeScript, React, and NodeJS.",
+        "free": false,
+        "price": 5000
+      },
+      "module": {
+        "free": true,
+        "id": "lzTzpPcS",
+        "title": "TypeScript"
+      },
+      "challenge": {
+        "id": "gyGd9$$SJ",
+        "type": "media",
+        "title": "Reading Code"
+      },
+      "gitMetadata": {
+        "lineRange": [
+          3039,
+          3047
+        ],
+        "contributors": [
+          "Ian Sinnott"
+        ],
+        "contributionsBy": {
+          "Ian Sinnott": [
+            "647a0e41"
+          ]
+        },
+        "edits": 1,
+        "latestUpdate": {
+          "commit": "647a0e41",
+          "summary": "Add Reading Code supplementary content challenge",
+          "author": "Ian Sinnott",
+          "authorDate": "2020-04-12T14:07:15.000Z"
+        },
+        "earliestUpdate": {
+          "commit": "647a0e41",
+          "summary": "Add Reading Code supplementary content challenge",
+          "author": "Ian Sinnott",
+          "authorDate": "2020-04-12T14:07:15.000Z"
         }
       }
     },
@@ -14379,8 +15501,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2860,
-          2869
+          3058,
+          3067
         ],
         "contributors": [
           "Sean Smith",
@@ -14438,8 +15560,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2871,
-          2879
+          3069,
+          3077
         ],
         "contributors": [
           "Sean Smith"
@@ -14491,8 +15613,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2882,
-          2890
+          3080,
+          3088
         ],
         "contributors": [
           "Sean Smith"
@@ -14544,8 +15666,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2893,
-          2901
+          3091,
+          3099
         ],
         "contributors": [
           "Sean Smith"
@@ -14597,8 +15719,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2912,
-          2921
+          3110,
+          3119
         ],
         "contributors": [
           "Sean Smith",
@@ -14656,8 +15778,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2923,
-          2931
+          3121,
+          3129
         ],
         "contributors": [
           "Sean Smith"
@@ -14709,8 +15831,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2934,
-          2942
+          3132,
+          3140
         ],
         "contributors": [
           "Sean Smith"
@@ -14762,8 +15884,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2945,
-          2953
+          3143,
+          3151
         ],
         "contributors": [
           "Sean Smith"
@@ -14815,8 +15937,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2964,
-          2973
+          3162,
+          3171
         ],
         "contributors": [
           "Sean Smith"
@@ -14869,8 +15991,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2975,
-          2983
+          3173,
+          3181
         ],
         "contributors": [
           "Peter Weinberg",
@@ -14932,8 +16054,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2986,
-          2994
+          3184,
+          3192
         ],
         "contributors": [
           "Sean Smith"
@@ -14985,8 +16107,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          2997,
-          3005
+          3195,
+          3203
         ],
         "contributors": [
           "Sean Smith"
@@ -15038,8 +16160,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3008,
-          3016
+          3206,
+          3214
         ],
         "contributors": [
           "Sean Smith"
@@ -15091,8 +16213,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3027,
-          3036
+          3225,
+          3234
         ],
         "contributors": [
           "Sean Smith",
@@ -15150,8 +16272,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3038,
-          3046
+          3236,
+          3244
         ],
         "contributors": [
           "Sean Smith"
@@ -15203,8 +16325,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3049,
-          3057
+          3247,
+          3255
         ],
         "contributors": [
           "Sean Smith"
@@ -15256,8 +16378,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3060,
-          3068
+          3258,
+          3266
         ],
         "contributors": [
           "Sean Smith"
@@ -15309,8 +16431,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3079,
-          3088
+          3277,
+          3286
         ],
         "contributors": [
           "Sean Smith",
@@ -15368,8 +16490,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3090,
-          3098
+          3288,
+          3296
         ],
         "contributors": [
           "Sean Smith"
@@ -15421,8 +16543,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3101,
-          3109
+          3299,
+          3307
         ],
         "contributors": [
           "Sean Smith"
@@ -15474,8 +16596,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3112,
-          3120
+          3310,
+          3318
         ],
         "contributors": [
           "Sean Smith"
@@ -15528,8 +16650,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3131,
-          3140
+          3329,
+          3338
         ],
         "contributors": [
           "Sean Smith",
@@ -15587,8 +16709,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3142,
-          3150
+          3340,
+          3348
         ],
         "contributors": [
           "Sean Smith"
@@ -15640,8 +16762,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3153,
-          3161
+          3351,
+          3359
         ],
         "contributors": [
           "Sean Smith"
@@ -15693,8 +16815,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3164,
-          3172
+          3362,
+          3370
         ],
         "contributors": [
           "Sean Smith"
@@ -15746,8 +16868,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3183,
-          3192
+          3381,
+          3390
         ],
         "contributors": [
           "Sean Smith",
@@ -15805,8 +16927,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3194,
-          3202
+          3392,
+          3400
         ],
         "contributors": [
           "Sean Smith"
@@ -15858,8 +16980,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3205,
-          3213
+          3403,
+          3411
         ],
         "contributors": [
           "Sean Smith"
@@ -15911,8 +17033,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3216,
-          3224
+          3414,
+          3422
         ],
         "contributors": [
           "Sean Smith"
@@ -15964,8 +17086,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3235,
-          3244
+          3433,
+          3442
         ],
         "contributors": [
           "Sean Smith",
@@ -16023,8 +17145,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3246,
-          3254
+          3444,
+          3452
         ],
         "contributors": [
           "Sean Smith"
@@ -16076,8 +17198,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3257,
-          3265
+          3455,
+          3463
         ],
         "contributors": [
           "Sean Smith"
@@ -16129,8 +17251,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3268,
-          3276
+          3466,
+          3474
         ],
         "contributors": [
           "Sean Smith"
@@ -16182,8 +17304,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3287,
-          3296
+          3485,
+          3494
         ],
         "contributors": [
           "Sean Smith",
@@ -16240,8 +17362,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3298,
-          3306
+          3496,
+          3504
         ],
         "contributors": [
           "Sean Smith"
@@ -16293,8 +17415,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3309,
-          3317
+          3507,
+          3515
         ],
         "contributors": [
           "Sean Smith"
@@ -16346,8 +17468,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3320,
-          3328
+          3518,
+          3526
         ],
         "contributors": [
           "Sean Smith"
@@ -16399,8 +17521,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3339,
-          3348
+          3537,
+          3546
         ],
         "contributors": [
           "Sean Smith",
@@ -16458,8 +17580,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3350,
-          3358
+          3548,
+          3556
         ],
         "contributors": [
           "Sean Smith"
@@ -16511,8 +17633,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3361,
-          3369
+          3559,
+          3567
         ],
         "contributors": [
           "Sean Smith"
@@ -16564,8 +17686,8 @@
       },
       "gitMetadata": {
         "lineRange": [
-          3372,
-          3380
+          3570,
+          3578
         ],
         "contributors": [
           "Sean Smith"
