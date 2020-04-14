@@ -1,6 +1,6 @@
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import ENV from "src/tools/server-env";
 import { UserService } from "src/user/user.service";
 
@@ -33,6 +33,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   public async validate(payload: JwtPassportSignPayload) {
     const { uuid } = payload;
+
+    /**
+     * Verify the jwt payload has a uuid. By the way, if the jwt payload
+     * structure every needs to change in the future be aware that this
+     * will impact any existing access tokens out in the wild.
+     */
+    if (!uuid || typeof uuid !== "string") {
+      throw new UnauthorizedException();
+    }
+
     return this.userService.findUserByUuidGetFullProfile(uuid);
   }
 }
