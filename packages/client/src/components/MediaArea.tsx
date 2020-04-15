@@ -18,6 +18,7 @@ import ContentEditor from "./ContentEditor";
 import { Challenge } from "@pairwise/common";
 import { isContentOnlyChallenge } from "tools/utils";
 import toaster from "tools/toast-utils";
+import { HIDE_EMBEDS } from "tools/client-env";
 
 const VIDEO_DOM_ID = "pw-video-embed";
 
@@ -280,6 +281,18 @@ const VideoWrapper = styled.div`
   }
 `;
 
+const DefaultVideoWrapper = styled(VideoWrapper)`
+  height: 410px;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background: ${COLORS.BACKGROUND_CONTENT};
+`;
+
 // Get the origin param for embeds. Should be our site, but we also want embeds
 // to run locally for developing and testing.
 const getEmbedOrigin = () => {
@@ -302,32 +315,21 @@ const getEmbedOrigin = () => {
 const YoutubeEmbed = (props: { url: string }) => {
   const width = 728;
   const height = 410;
+
   const [isEmbedHidden, setIsEmbedHidden] = React.useState<boolean>(
-    Boolean(process.env.REACT_APP_HIDE_EMBEDS),
+    HIDE_EMBEDS,
   );
 
   if (isEmbedHidden) {
     return (
-      <VideoWrapper
-        style={{
-          width: "100%",
-          height,
-          paddingBottom: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 40,
-          background: COLORS.BACKGROUND_CONTENT,
-        }}
-      >
+      <DefaultVideoWrapper>
         <h3 style={{ textTransform: "uppercase" }}>Embed Hidden</h3>
         <p>
-          Restart the app without <code>REACT_APP_HIDE_EMBEDS</code> to avoid
-          this.
+          Restart the app with <code>REACT_APP_HIDE_EMBEDS=false</code> to show
+          all embeds by default.
         </p>
         <Button onClick={() => setIsEmbedHidden(false)}>Show Anyway</Button>
-      </VideoWrapper>
+      </DefaultVideoWrapper>
     );
   }
 
