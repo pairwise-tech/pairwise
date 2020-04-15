@@ -440,6 +440,7 @@ const CommitDetailButton = ({ label, ...update }: GitUpdate) => {
           <a
             style={{ fontFamily: "monospace", color: "#1AB6FF" }}
             target="_blank"
+            rel="noopener noreferrer"
             href={`https://github.com/pairwise-tech/pairwise/commit/${update.commit}`}
           >
             {update.commit}
@@ -506,6 +507,7 @@ const ContributorAvatar = ({ name, contributions }: ContributorAvatarProps) => {
             }}
             key={commit}
             target="_blank"
+            rel="noopener noreferrer"
             href={`https://github.com/pairwise-tech/pairwise/commit/${commit}`}
           >
             {commit}
