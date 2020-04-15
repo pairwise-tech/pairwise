@@ -267,16 +267,17 @@ export class UserService {
       user.uuid,
     );
 
-    const progressMap: UserProgressMap = progressList.reduce(
-      (map, progress) => {
+    const progress: UserProgressMap = progressList.reduce(
+      (map, courseProgress) => {
+        const history = JSON.parse(courseProgress.progress);
         return {
           ...map,
-          [progress.courseId]: progress.progress,
+          [courseProgress.courseId]: history,
         };
       },
       {},
     );
 
-    return { progress: progressMap };
+    return { progress };
   }
 }
