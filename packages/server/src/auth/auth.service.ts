@@ -92,6 +92,7 @@ export class AuthService {
       );
 
       if (existingUser) {
+        user = existingUser;
         token = this.getJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: false });
       } else {
@@ -150,6 +151,7 @@ export class AuthService {
       );
 
       if (existingUser) {
+        user = existingUser;
         token = this.getJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: false });
       } else {
@@ -207,6 +209,7 @@ export class AuthService {
       );
 
       if (existingUser) {
+        user = existingUser;
         token = this.getJwtAccessToken(existingUser.profile);
         return new Ok({ token, accountCreated: false });
       } else {
