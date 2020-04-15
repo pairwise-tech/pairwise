@@ -5,6 +5,7 @@ import { execSync } from "child_process";
 import {
   getChallengMetadata,
   readCourseFilesFromDisk,
+  buildFilePorcelain,
 } from "./get-challenge-metadata";
 import { Challenge } from "src/types/courses";
 
@@ -70,6 +71,8 @@ const main = async () => {
 
   const courseFiles = readCourseFilesFromDisk(courseDir);
 
+  const filePorcelain = await buildFilePorcelain(courseFiles);
+
   const allChallenges = courseFiles
     .map(x => x.json)
     .flatMap(x => x.modules)
@@ -91,7 +94,7 @@ const main = async () => {
   // 1000%. All the git commands are run with max concurrency.
   const allMetadata = await Promise.all(
     allChallenges.map(({ id }) => {
-      return getChallengMetadata(id, courseFiles);
+      return getChallengMetadata(id, courseFiles, filePorcelain);
     }),
   );
 

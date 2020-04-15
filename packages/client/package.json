@@ -10,11 +10,13 @@
     "prestart": "yarn run test:build",
     "start": "react-scripts start",
     "start:dev": "REACT_APP_HIDE_EMBEDS=false REACT_APP_DEV=true yarn run start",
+    "prestart:codepress": "yarn run build:common",
+    "build:common": "cd ../common && yarn run build",
     "start:codepress": "concurrently \"yarn run codepress:watch\" \"REACT_APP_HIDE_EMBEDS=true REACT_APP_CODEPRESS=true HTTPS=false yarn run start\"",
     "start:https": "REACT_APP_HOST=https://localhost:9000 HTTPS=true yarn run start",
     "start:prod": "serve build -s -p 3000",
+    "prebuild": "yarn run build:common && yarn run test:build",
     "build": "react-scripts build",
-    "prebuild": "yarn run test:build",
     "postbuild": "cp _redirects build/",
     "jest": "react-scripts test",
     "eject": "react-scripts eject",
@@ -125,11 +127,6 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "yarn format"
-    }
   },
   "browserslist": {
     "production": [

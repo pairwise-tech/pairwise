@@ -7,6 +7,7 @@ import {
   ChallengeStatus,
   UserCourseStatus,
   UserCourseProgress,
+  IProgressDto,
 } from "@pairwise/common";
 import { SUCCESS_CODES } from "src/tools/constants";
 import { RequestUser } from "src/types";
@@ -24,7 +25,7 @@ export class ProgressService {
   ) {}
 
   public async fetchProgressHistoryForCourse(courseId: string) {
-    return this.progressRepository.find({ courseId });
+    return this.progressRepository.findOne({ courseId });
   }
 
   public async fetchUserProgress(uuid: string) {
@@ -40,7 +41,7 @@ export class ProgressService {
   public async updateUserProgressHistory(
     requestUser: RequestUser,
     challengeProgressDto: ProgressDto,
-  ) {
+  ): Promise<IProgressDto> {
     validateChallengeProgressDto(challengeProgressDto);
 
     const { courseId, challengeId, complete } = challengeProgressDto;
@@ -92,7 +93,9 @@ export class ProgressService {
         .execute();
     }
 
-    return this.fetchProgressHistoryForCourse(courseId);
+    // Return the progress dto
+    const result: IProgressDto = { courseId, challengeId, complete };
+    return result;
   }
 
   public async persistUserCourseProgress(
