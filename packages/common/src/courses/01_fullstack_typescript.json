@@ -2258,6 +2258,17 @@
           "content": ""
         },
         {
+          "id": "z0AGNe4Lk",
+          "type": "media",
+          "title": "Functional Programming: The Pipe Function Explained",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/P9ua8GEbwPw",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this video I'll demonstrate how the `pipe` function works and why it's written the way it is. Since `pipe` is a higher order function this lesson also discusses building functions that return other functions."
+        },
+        {
           "id": "uyjd$DG@$",
           "type": "section",
           "title": "Classes",
