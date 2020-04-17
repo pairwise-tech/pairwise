@@ -1,4 +1,4 @@
-import PairwiseContent from "../courses/00_pairwise_content.json";
+import PairwiseLibrary from "../courses/00_pairwise_library.json";
 import FullstackTypeScript from "../courses/01_fullstack_typescript.json";
 import {
   CourseList,
@@ -245,7 +245,7 @@ class ContentUtilityClass {
  * ============================================================================
  */
 
-const courseList = [FullstackTypeScript, PairwiseContent];
+const courseList = [FullstackTypeScript, PairwiseLibrary];
 
 const ContentUtility = new ContentUtilityClass(courseList as CourseList);
 

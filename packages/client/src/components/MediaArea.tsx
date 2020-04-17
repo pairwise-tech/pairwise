@@ -10,12 +10,15 @@ import {
   PROSE_MAX_WIDTH,
   CONTENT_SERIALIZE_DEBOUNCE,
   MOBILE,
+  COLORS,
 } from "tools/constants";
 import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 import ContentEditor from "./ContentEditor";
 import { Challenge } from "@pairwise/common";
 import { isContentOnlyChallenge } from "tools/utils";
+import toaster from "tools/toast-utils";
+import { HIDE_EMBEDS } from "tools/client-env";
 
 const VIDEO_DOM_ID = "pw-video-embed";
 
@@ -113,11 +116,16 @@ const MediaArea = ({
   );
 
   const handleVideoUrl = (e: ChangeEvent<HTMLInputElement>) => {
+    const videoUrl = e.target.value;
+
+    // Safety check to be sure the embed link is included!
+    if (!videoUrl.includes("embed")) {
+      toaster.warn("Be sure to use the embed url for the video link.");
+    }
+
     updateChallenge({
       id: challenge.id,
-      challenge: {
-        videoUrl: e.target.value,
-      },
+      challenge: { videoUrl },
     });
   };
 
@@ -149,23 +157,24 @@ const MediaArea = ({
       {isEditMode && (
         <Callout
           title="Video URL"
-          style={{ marginBottom: 40, marginTop: 40, maxWidth: PROSE_MAX_WIDTH }}
+          style={{ marginBottom: 46, marginTop: 46, maxWidth: PROSE_MAX_WIDTH }}
         >
           <p>
-            If this challenge has a video enter the <strong>embed</strong> URL
-            here.
-          </p>
-          <p>
-            NOTE: <code>?rel=0</code> will be appended to disable related
-            videos.
+            If this challenge has a video enter the{" "}
+            <Highlight>video embed URL</Highlight> here. From the video click
+            "Share", "Embed" and grab the <code>src</code> link url.
           </p>
           <input
+            type="url"
             className={Classes.INPUT}
             style={{ width: "100%" }}
-            type="url"
             onChange={handleVideoUrl}
             value={challenge.videoUrl}
           />
+          <p style={{ fontSize: 12, marginTop: 12 }}>
+            <b>NOTE:</b> <code>?rel=0</code> will be appended to disable related
+            videos.
+          </p>
         </Callout>
       )}
       <div style={{ maxWidth: PROSE_MAX_WIDTH }}>
@@ -241,6 +250,13 @@ const TitleHeader = styled.h1`
   font-size: 3em;
 `;
 
+const Highlight = styled.mark`
+  font-weight: bold;
+  color: white;
+  background: #ffdf7538;
+  border-bottom: 2px solid #ffdf75;
+`;
+
 // NOTE: 16:9 aspect ratio. All our videos should be recorded at 1080p so this
 // should not be a limitation. See this post for the logic on this aspect ratio CSS:
 // https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php
@@ -265,6 +281,18 @@ const VideoWrapper = styled.div`
   }
 `;
 
+const DefaultVideoWrapper = styled(VideoWrapper)`
+  height: 410px;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background: ${COLORS.BACKGROUND_CONTENT};
+`;
+
 // Get the origin param for embeds. Should be our site, but we also want embeds
 // to run locally for developing and testing.
 const getEmbedOrigin = () => {
@@ -287,32 +315,21 @@ const getEmbedOrigin = () => {
 const YoutubeEmbed = (props: { url: string }) => {
   const width = 728;
   const height = 410;
+
   const [isEmbedHidden, setIsEmbedHidden] = React.useState<boolean>(
-    Boolean(process.env.REACT_APP_HIDE_EMBEDS),
+    HIDE_EMBEDS,
   );
 
   if (isEmbedHidden) {
     return (
-      <VideoWrapper
-        style={{
-          width: "100%",
-          height,
-          paddingBottom: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#999",
-          marginBottom: 40,
-        }}
-      >
+      <DefaultVideoWrapper>
         <h3 style={{ textTransform: "uppercase" }}>Embed Hidden</h3>
         <p>
-          Restart the app without <code>REACT_APP_HIDE_EMBEDS</code> to avoid
-          this.
+          Restart the app with <code>REACT_APP_HIDE_EMBEDS=false</code> to show
+          all embeds by default.
         </p>
         <Button onClick={() => setIsEmbedHidden(false)}>Show Anyway</Button>
-      </VideoWrapper>
+      </DefaultVideoWrapper>
     );
   }
 
