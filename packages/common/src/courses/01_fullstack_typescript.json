@@ -1735,7 +1735,7 @@
           "title": "Create a Closure",
           "instructions": "Write a function `createClosure` which returns a new function. The new function should return whatever value you pass to the `createClosure` function\\. To accomplish this, just define a new function inside the function body of `createClosure`, and then return this function\\! That new function will have a _closure_ on the argument you pass to `createClosure`.\n\n> This challenge also demonstrates the very useful ability in TypeScript to _return functions from functions._\n",
           "testCode": "test(\"`createClosure` should be a function.\", () => {\n  expect(typeof createClosure === \"function\").toBe(true);\n});\n\ntest(\"`createClosure` should return a function which returns whatever value was passed to `createClosure`.\", () => {\n  const values = [\n    100,\n    1000,\n    1,\n    \"hi\",\n    \"apples\",\n    [true, false, true],\n    { hello: null },\n    false,\n    \"blegh\",\n    1436.23482,\n  ];\n\n  for (const x of values) {\n    expect(createClosure(x)()).toEqual(x);\n  }\n});\n",
-          "videoUrl": "https://www.youtube.com/embed/Qi81_PdhIZc",
+          "videoUrl": "https://www.youtube.com/embed/JYZ7SC57S8M",
           "starterCode": "// Your code here",
           "solutionCode": "const createClosure = (value: any) => {\n  // Return a new function which returns the value argument\n  return () => value;\n};\n",
           "content": ""
