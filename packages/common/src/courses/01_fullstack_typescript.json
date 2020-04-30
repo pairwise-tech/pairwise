@@ -3019,7 +3019,7 @@
           "title": "Tic Tac Toe Guided Project",
           "instructions": "ic",
           "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/TLJeww1EQ2w",
           "starterCode": "",
           "solutionCode": "",
           "content": "Here we will walk through an example of how the Tic Tac Toe project could be built."
