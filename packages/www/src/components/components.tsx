@@ -113,10 +113,11 @@ export const ActionButton = styled(Button)<ActionButtonProps>`
   padding-right: 30px !important;
   box-shadow: '0 3px 5px 2px rgba(255, 105, 135, .3)';
   margin-bottom: 20px !important;
-  display: block !important;
+  display: flex !important;
+  align-items: center;
 
   @media (min-width: 450px) {
-    display: inline-block !important;
+    display: inline-flex !important;
     margin-bottom: 0 !important;
     margin-right: 20px !important;
   }
