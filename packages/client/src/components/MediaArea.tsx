@@ -119,7 +119,7 @@ const MediaArea = ({
     const videoUrl = e.target.value;
 
     // Safety check to be sure the embed link is included!
-    if (!videoUrl.includes("embed")) {
+    if (videoUrl !== "" && !videoUrl.includes("embed")) {
       toaster.warn("Be sure to use the embed url for the video link.");
     }
 
@@ -333,30 +333,35 @@ const YoutubeEmbed = (props: { url: string }) => {
     );
   }
 
-  const parsedURL = new URL(props.url);
+  try {
+    // Will throw if the url is invalid (shouldn't happen, but it will crash the app)
+    const parsedURL = new URL(props.url);
 
-  // Use ?rel=0 to disable related videos in youtube embeds. Supposedly shouldn't work, but it seems to: https://developers.google.com/youtube/player_parameters#rel
-  parsedURL.searchParams.set("rel", "0");
-  parsedURL.searchParams.set("modestbranding", "1");
+    // Use ?rel=0 to disable related videos in youtube embeds. Supposedly shouldn't work, but it seems to: https://developers.google.com/youtube/player_parameters#rel
+    parsedURL.searchParams.set("rel", "0");
+    parsedURL.searchParams.set("modestbranding", "1");
 
-  // Allow programmatic control
-  parsedURL.searchParams.set("enablejsapi", "1");
-  parsedURL.searchParams.set("origin", getEmbedOrigin());
+    // Allow programmatic control
+    parsedURL.searchParams.set("enablejsapi", "1");
+    parsedURL.searchParams.set("origin", getEmbedOrigin());
 
-  return (
-    <VideoWrapper>
-      <iframe
-        id={VIDEO_DOM_ID}
-        title="Youtube Embed"
-        width={width}
-        height={height}
-        src={parsedURL.href}
-        frameBorder="0"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-    </VideoWrapper>
-  );
+    return (
+      <VideoWrapper>
+        <iframe
+          id={VIDEO_DOM_ID}
+          title="Youtube Embed"
+          width={width}
+          height={height}
+          src={parsedURL.href}
+          frameBorder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </VideoWrapper>
+    );
+  } catch (err) {
+    return null;
+  }
 };
 
 export const scrollToContentArea = () => {
