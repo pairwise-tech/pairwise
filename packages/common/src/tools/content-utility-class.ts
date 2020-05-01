@@ -143,28 +143,31 @@ class ContentUtilityClass {
       course => {
         // The user can access all the content in the course if the course
         // id is included in the provided course access map (which represents
-        // the courses the user has purchased).
-        const canAccessCourse = course.id in courseAccessMap;
+        // the courses the user has purchased) or if the entire course is
+        // marked as free (e.g. the Pairwise Library course).
+        const isCourseFree = course.free;
+        const canAccessCourse = course.id in courseAccessMap || isCourseFree;
 
         return {
           ...course,
           modules: course.modules.map(courseModule => {
-            // Some modules are free.
-            const moduleFree = courseModule.free;
-            const userCanAccessModule = canAccessCourse || moduleFree;
+            // The user can access the module if they can access the course
+            // or if the module is marked as free.
+            const isModuleFree = courseModule.free;
+            const canAccessModule = canAccessCourse || isModuleFree;
 
             return {
               ...courseModule,
-              userCanAccess: userCanAccessModule,
+              userCanAccess: canAccessModule,
               challenges: courseModule.challenges.map(challenge => {
-                // Some challenges are free.
-                const challengeFree = challenge.free;
-                const userCanAccessChallenge =
-                  userCanAccessModule || challengeFree;
+                // The user can access the challenge if they can access the
+                // course or if the challenge is marked as free.
+                const cisChallengeFree = challenge.free;
+                const canAccessChallenge = canAccessModule || cisChallengeFree;
 
                 return {
                   ...challenge,
-                  userCanAccess: userCanAccessChallenge,
+                  userCanAccess: canAccessChallenge,
                 };
               }),
             };
