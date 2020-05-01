@@ -3030,7 +3030,7 @@
           "title": "Game Board Navigator Guided Project",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/D6N5Ks2moYE",
           "starterCode": "",
           "solutionCode": "",
           "content": "Here we will walk through a solution for the Game Board Navigator project."
