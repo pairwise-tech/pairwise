@@ -84,10 +84,28 @@ const MainDiv = styled.div`
   }
 `;
 
+const outboundClick = (
+  url: string,
+  eventName: string = 'OUTBOUND_LINK_CLICK',
+) => {
+  try {
+    // @ts-ignore
+    window.amplitude.getInstance().logEvent(eventName, { href: url }, () => {
+      console.info('Redirecting...');
+    });
+  } catch (err) {
+    console.error('Analytics package not loaded. Redirecting...');
+  } finally {
+    window.open(url, '_blank');
+  }
+};
+
 const StartNowButton = ({ label = 'Start Coding Now' }: { label?: string }) => (
   <ActionButton
-    onClick={() => {
-      window.open('https://app.pairwise.tech/workspace/', '_blank');
+    href={'https://app.pairwise.tech/workspace/'}
+    onClick={(e) => {
+      e.preventDefault();
+      outboundClick('https://app.pairwise.tech/workspace/');
     }}
   >
     {label}
