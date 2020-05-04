@@ -2364,7 +2364,8 @@
           "starterCode": "const addTwoNumbers = (a: number, b: number) => {\n  // Your code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
           "solutionCode": "const addTwoNumbers = (a: number, b: number) => {\n  return a + b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
           "testCode": "const cases = [\n  { input: [1, 2], expected: 3 },\n  { input: [10, 50], expected: 60 },\n  { input: [-10, -50], expected: -60 },\n  { input: [100, 500], expected: 600 },\n  { input: [1123, 532142], expected: 533265 },\n  { input: [-10, 50], expected: 40 },\n  { input: [1, 500], expected: 501 },\n  { input: [842, 124], expected: 966 },\n  { input: [1000, 500], expected: 1500 },\n  { input: [-100, 100], expected: 0 },\n  { input: [2, 50234432], expected: 50234434 },\n];\n\ncases.forEach(x => {\n    const { input: [a, b], expected } = x;\n    test(`${x.input[0]} + ${x.input[1]}`, () => {\n        expect(addTwoNumbers(a,b)).toBe(expected)\n    })\n})",
-          "content": ""
+          "content": "",
+          "videoUrl": "https://www.youtube.com/embed/mK9gImt5huc"
         },
         {
           "id": "WUA8ezECU",
@@ -2374,7 +2375,8 @@
           "starterCode": "const reverseString = (inputString: string) => {\n  // Edit code here\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n",
           "solutionCode": "const reverseString = (inputString: string) => {\n  return inputString.split('').reverse().join('');\n}\n\nconst result = reverseString(\"hello\");\nconsole.log(result);\n",
           "testCode": "[\n  { input: [\"hello\"], expected: \"olleh\" },\n  { input: [\"fantastic\"], expected: \"citsatnaf\" },\n  { input: [\"superb\"], expected: \"brepus\" },\n  { input: [\"frustrating\"], expected: \"gnitartsurf\" },\n  { input: [\"exciting\"], expected: \"gniticxe\" },\n  { input: [\"happy\"], expected: \"yppah\" },\n  { input: [\"a\"], expected: \"a\" },\n  { input: [\"aaaaaaaaaaaaz\"], expected: \"zaaaaaaaaaaaa\" },\n  { input: [\"jumping\"], expected: \"gnipmuj\" },\n  { input: [\"silly\"], expected: \"yllis\" },\n  { input: [\"zombie\"], expected: \"eibmoz\" },\n].forEach(({ input, expected }) => {\n  test(`${input[0]} -> ${expected}`, () => {\n    expect(reverseString(...input)).toBe(expected);\n  })\n})\n",
-          "content": ""
+          "content": "",
+          "videoUrl": "https://www.youtube.com/embed/_Df1h0mFJuQ"
         },
         {
           "id": "50fxTLRcV",
@@ -2384,15 +2386,16 @@
           "starterCode": "const lengthOfArray = (array: any[]) => {\n  // Edit code here\n};\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
           "solutionCode": "\nconst lengthOfArray = (array: any[]) => {\n  return array.length;\n}\n\nconst result = lengthOfArray([\"a\", \"b\", \"c\"]);\nconsole.log(result);\n",
           "testCode": "[\n  { input: [[1, 2, 3, 4]], expected: 4 },\n  { input: [[]], expected: 0 },\n  { input: [[1, 1, 1, 1, 1, 1, 1, 1, 1]], expected: 9 },\n  { input: [[3, 3, 3]], expected: 3 },\n  { input: [[2]], expected: 1 },\n  { input: [[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]], expected: 14 },\n].forEach(({ input, expected }) => {\n  test(`\\\\[${input[0].join(\", \")}\\\\] has length ${expected}`, () => {\n    expect(lengthOfArray(...input)).toBe(expected);\n  });\n});\n",
-          "content": ""
+          "content": "",
+          "videoUrl": "https://www.youtube.com/embed/ttgWiLcA49g"
         },
         {
           "id": "E9wWilBf8",
           "type": "typescript",
           "title": "Gateway",
-          "instructions": "There is a function called `gateway` in the editor below. It should only allow `Person`s to pass. The function should throw an error if it receives an other `item` as an argument. Your job is to implement this function\\!\n\nIf it receives a `Person` just return the `Person` from the function. Otherwise, throw an error. Good luck\\!",
+          "instructions": "There is a function called `gateway` in the editor below. It should only allow `Person`s to pass. The function should throw an error if it receives any other `item` as an argument. Your job is to implement this function\\!\n\nIf it receives a `Person` just return the `Person` from the function. Otherwise, throw an error. Good luck\\!",
           "testCode": "test(\"The `gateway` function should reject string arguments and throw an error.\", () => {\n  expect(() => gateway(\"A string argument\")).toThrow(\n    \"Expected the gateway function to throw an error\"\n  );\n});\n\ntest(\"The `gateway` function should reject `null` arguments and throw an error.\", () => {\n  expect(() => gateway(null)).toThrow(\n    \"Expected the gateway function to throw an error\"\n  );\n});\n\ntest(\"The `gateway` function should reject `undefined` arguments and throw an error.\", () => {\n  expect(() => gateway(undefined)).toThrow(\n    \"Expected the gateway function to throw an error\"\n  );\n});\n\ntest(\"The `gateway` function should reject any non `Person` arguments and throw an error.\", () => {\n  expect(() => gateway([])).toThrow(\n    \"Expected the gateway function to throw an error\"\n  );\n  expect(() => gateway({})).toThrow(\n    \"Expected the gateway function to throw an error\"\n  );\n});\n\ntest(\"The `gateway` function should accept `Person` arguments, and return the same argument.\", () => {\n  const person = {\n    name: \"Sam\",\n    age: 25,\n    profession: \"engineer\",\n  };\n\n  const result = gateway(person);\n  expect(result).toEqual(person);\n});\n\ntest(\"The `gateway` function should reject objects which look like a `Person` but have additional non Person properties.\", () => {\n  const notPerson = {\n    name: \"Sam\",\n    age: 25,\n    profession: \"engineer\",\n    otherKey: \"hi!\",\n  };\n\n  expect(() => gateway(notPerson)).toThrow(\n    \"A Person-like object with additional keys should be rejected with an error.\"\n  );\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/I7xbta_BScM",
           "starterCode": "interface Person {\n  name: string;\n  age: number;\n  profession: string;\n}\n\ntype Item = string | number | undefined | null | Person;\n\nconst gateway = (item: Item) => {\n  // Your code here\n};\n",
           "solutionCode": "interface Person {\n  name: string;\n  age: number;\n  profession: string;\n}\n\ntype Item = string | number | undefined | null | Person;\n\nconst gateway = (item: Item) => {\n  // Your code here\n  const maybePerson: any = item;\n\n  // First reject null and undefined values\n  if (!maybePerson) {\n    throw new Error(`Invalid type received: ${typeof maybePerson}`);\n  }\n\n  // Check that the argument has all of the required Person keys\n  if (\n    typeof maybePerson.age === \"number\" &&\n    typeof maybePerson.name === \"string\" &&\n    typeof maybePerson.profession === \"string\"\n  ) {\n    if (Object.keys(maybePerson).length === 3) {\n      return maybePerson;\n    } else {\n      // Reject any Person with additional properties\n      throw new Error(\n        \"Expected a person with only name, age, and profession properties!\"\n      );\n    }\n  } else {\n    // Reject other, non Person types of arguments\n    throw new Error(\n      \"Only Person arguments are accepted. A Person must have a name, age, and profession property!\"\n    );\n  }\n};\n",
           "content": ""
@@ -2403,7 +2406,7 @@
           "title": "Guard House",
           "instructions": "Here we have a function which tests your understand of _scope_ and _closures_. The `createGuard`function returns a new function, `guard`, which guards the entrance\\! The `createGuard` function accepts a `passcode` which the `guard` function should use to control the entrance. Requests to the `guard` must pass a `passphrase` and some `entrant` value\\. The `entrant` should only be allowed if the `passphrase` they provide matches the `passcode` given to the `guard`. If not, throw an error and reject them\\! If the `passcode` is valid, return the provided `entrant`.",
           "testCode": "test(\"The `createGuard` function should return new `guard` functions.\", () => {\n  expect(typeof createGuard(\"passcode\") === \"function\").toBe(true);\n});\n\ntest(\"The `guard` function should reject `entrants` which provide an invalid `passphrase`.\", () => {\n  const guard = createGuard(\"passcode\");\n  expect(() => guard(\"HI\", \"passphrase\")).toThrow(\n    \"Invalid passphrases should be rejected with errors.\"\n  );\n});\n\ntest(\"The `guard` function should accept `entrants` which provide a valid `passphrase`, and return the provided `entrant`.\", () => {\n  const guard = createGuard(\"passcode\");\n  expect(guard(\"HI\", \"passcode\")).toBe(\"HI\");\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/_5jHX8HykVo",
           "starterCode": "// Create a new guard function\nconst createGuard = (passcode: string) => {\n  const guard = (entrant: any, passphrase: string) => {\n    // Your code here!\n    // Only allow entrants which provide a passphrase which matches the passcode.\n  };\n\n  return guard;\n};\n",
           "solutionCode": "// Create a new guard function\nconst createGuard = (passcode: string) => {\n  const guard = (entrant: any, passphrase: string) => {\n    // Your code here!\n    // Only allow entrants which provide a passphrase which matches the passcode.\n    if (passphrase !== passcode) {\n      throw new Error(\"Invalid passphrase!\");\n    } else {\n      return entrant;\n    }\n  };\n\n  return guard;\n};\n",
           "content": ""
