@@ -84,10 +84,28 @@ const MainDiv = styled.div`
   }
 `;
 
+const outboundClick = (
+  url: string,
+  eventName: string = 'OUTBOUND_LINK_CLICK',
+) => {
+  try {
+    // @ts-ignore
+    window.amplitude.getInstance().logEvent(eventName, { href: url }, () => {
+      console.info('Redirecting...');
+    });
+  } catch (err) {
+    console.error('Analytics package not loaded. Redirecting...');
+  } finally {
+    window.open(url, '_blank');
+  }
+};
+
 const StartNowButton = ({ label = 'Start Coding Now' }: { label?: string }) => (
   <ActionButton
-    onClick={() => {
-      window.open('https://app.pairwise.tech/workspace/', '_blank');
+    href={'https://app.pairwise.tech/workspace/'}
+    onClick={(e) => {
+      e.preventDefault();
+      outboundClick('https://app.pairwise.tech/workspace/');
     }}
   >
     {label}
@@ -390,7 +408,7 @@ instance forecasts software developers as enjoying 26% job growth through 2018
 with a [median salary of over $100,000](https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm#tab-6(https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm#tab-6)).
 
 Furthermore, programming can put you in an excellent position to manage other
-programmers, if switching to a career in management is our your of tea, or work
+programmers, if switching to a career in management is your cup of tea, or work
 in other areas of tech, such as product development, design, data science,
 etc. In short, learning to code is a fundamental skill required for a
 wide variety of 21st careers.`,

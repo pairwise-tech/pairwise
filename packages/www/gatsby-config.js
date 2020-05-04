@@ -41,5 +41,17 @@ module.exports = {
         anonymize: true,
       },
     },
+    {
+      resolve: `gatsby-plugin-amplitude-analytics`,
+      options: {
+        apiKey: '8d2f9bcdb96618839e23d8ed5eae8979',
+        // Amplitude JS SDK configuration options (optional)
+        amplitudeConfig: {
+          saveEvents: true,
+          includeUtm: true,
+          includeReferrer: true,
+        },
+      },
+    },
   ],
 };
