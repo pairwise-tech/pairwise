@@ -71,7 +71,7 @@
           "title": "Welcome to Pairwise! 🎉",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "https://www.youtube.com/embed/VRQNU8UNuWM",
+          "videoUrl": "https://www.youtube.com/embed/Fy-RZm2jSJI",
           "starterCode": "",
           "solutionCode": "",
           "content": "Now that you've solved your first few challenges and seen how easy it is to get started, we want to take a moment to introduce you to how Pairwise works and help you get started working through the \ncourse\\.\n\n## The Course\n\nThe Pairwise curriculum is composed of 13 modules. Together, they give you a complete education in full\\-stack software development. Pairwise can give you all the skills to start a new career in software development. Our curriculum focuses on teaching **TypeScript, React, **and** NodeJS**. If you are curious more about why we chose these technologies, feel free to [read our rationale here](https://www.pairwise.tech/curriculum).\n\nYou can access the course navigation by clicking the menu icon in the top left. This is always available for you to navigate to any challenge.\n\nThe first two modules introduce HTML/CSS and TypeScript, so they cover many of the basics of web development and programming. These two modules are completely free and no signup is required\\! However, you can create an account at any time \\(also free\\!\\) to track your progress \\(don't worry, we will track your progress even if you don't have an account yet\\).\n\nIf you do decide to continue and complete the entire course, there will be a one\\-time payment which will give you lifetime access to the course. You can make this payment with a credit card at anytime after signing up.\n\nThe primary mode of learning is through short, interactive coding challenges like the one you just solved. If you persist through the entire course, you will also build up a portfolio of projects you build and deploy on your own\\! You can use this portfolio as a showcase of your skills to future employers.\n\n## Getting Started\n\nEnough talking\\! To start learning you just need to start on the next challenge. Each challenge should just take 5\\-10 minutes to complete and will be simple and interactive just like the last. We know you're eager to click that **Next Challenge** button, but before you do we encourage you to watch this short video tutorial of how to use the _Pairwise Workspace_. It will give you some helpful tips which will help you get started, and after that we'll get out of your way\\! Good luck and welcome\\!"
@@ -109,11 +109,11 @@
           "id": "9scykDold",
           "type": "markup",
           "title": "The h1 Tag",
-          "instructions": "* Right below the existing `p` tag add an `h1` tag with the text \"Hello\\!\" inside it.\n\n",
+          "instructions": "Right below the existing `p` tag add an `h1` tag with the text \"Hello\\!\" inside it.\n",
           "starterCode": "<p>This is an HTML file. Add your code below this line</p>",
           "solutionCode": "<p>This is an HTML file. Add your code below this line</p>\n<h1>Hello!</h1>",
           "testCode": "test(\"There should be an `h1` tag with the text 'Hello!'\", () => {\n  expect(get(\"h1\").innerHTML).toBe(\"Hello!\");\n});\n",
-          "videoUrl": "https://www.youtube.com/embed/LMrZDCjO_60",
+          "videoUrl": "https://www.youtube.com/embed/o7G8vNxD4M0",
           "content": "We're starting off with some simple text text tags. The web is full of text so these are some of the most common tags you will find. For now the webpages we create may not look like much, just some different text here an there, but soon we will learn about how to make things look much more interesting."
         },
         {
@@ -124,7 +124,7 @@
           "starterCode": "<h1>This is a heading 1 tag</h1>\n",
           "solutionCode": "<h1>This is a heading 1 tag</h1>\n<h2>This is a heading 1 tag</h2>\n<h3>This is a heading 1 tag</h3>\n<h4>This is a heading 1 tag</h4>\n<h5>This is a heading 1 tag</h5>\n<h6>This is a heading 1 tag</h6>",
           "testCode": "['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(tag => {\n    test(`There should be an \\`${tag}\\` with text inside`, () => {\n        expect(typeof get(tag).innerHTML).toBe(\"string\")\n    })\n})\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/DNkEvucHKlM",
           "content": ""
         },
         {
@@ -300,7 +300,7 @@
           "starterCode": "<style>\n  span {\n    /* hm... need some styling in here */\n  }\n</style>\n<p>\n  What a paragraph this is! Let's highlight something.\n</p>",
           "solutionCode": "<style>\n  span {\n    background: yellow;\n  }\n</style>\n<p>What a paragraph this is! Let's <span>highlight</span> something.</p>",
           "testCode": "test(\"There should be a `<span>` tag with a yellow background wrapping some text\", function() {\n  const el = get(\"span\");\n  expect(el).toBeTruthy();\n  expect(el.innerHTML).not.toBe(\"\");\n  expect(getStyle(el, \"background-color\")).toBe(cssColor(\"yellow\"));\n});\n",
-          "videoUrl": "https://www.youtube.com/embed/fapBaduhIiY",
+          "videoUrl": "https://www.youtube.com/embed/Q7TK9OFPKTQ",
           "content": ""
         },
         {
