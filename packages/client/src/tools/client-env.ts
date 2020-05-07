@@ -14,9 +14,10 @@ export const CODEPRESS = getenv.bool("REACT_APP_CODEPRESS", false);
 export const HIDE_EMBEDS = getenv.bool("REACT_APP_HIDE_EMBEDS", false);
 export const HOST = getenv.string("REACT_APP_HOST", "http://localhost:9000");
 
+export const CODEPRESS_PORT = getenv.string("REACT_APP_CODEPRESS_PORT", "3001");
 export const CODEPRESS_HOST = getenv.string(
   "REACT_APP_CODEPRESS_HOST",
-  "http://localhost:3001",
+  `http://localhost:${CODEPRESS_PORT}`,
 );
 
 export const STRIPE_API_KEY = getenv.string("REACT_APP_STRIPE_API_KEY", "");
