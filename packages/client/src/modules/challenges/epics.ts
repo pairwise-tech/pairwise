@@ -43,6 +43,7 @@ import {
   findChallengeIdInLocationIfExists,
   createInverseChallengeMapping,
   isContentOnlyChallenge,
+  getChallengeProgress,
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 
@@ -640,9 +641,20 @@ const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
  * Handle saving a user progress update. Just send the progress update
  * to the API to be saved.
  */
-const updateUserProgressEpic: EpicSignature = (action$, _, deps) => {
+const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserProgress)),
+    filter(({ payload }) => {
+      // Only update the progress if the challenge is NOT already complete.
+      const { progress } = state$.value.user.user;
+      const { challengeId, courseId } = payload;
+      const challengeProgress = getChallengeProgress(
+        progress,
+        courseId,
+        challengeId,
+      );
+      return challengeProgress !== "COMPLETE";
+    }),
     pluck("payload"),
     mergeMap(deps.api.updateUserProgress),
     map(result => {

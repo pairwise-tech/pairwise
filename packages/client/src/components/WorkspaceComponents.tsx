@@ -38,7 +38,6 @@ export const Container = styled.div`
 export const PageSection = styled.div`
   width: 100vw;
   height: calc(100vh - ${HEADER_HEIGHT}px);
-  background: white;
 `;
 
 export const LowerSection = styled.div<{ withHeader?: boolean }>`
@@ -59,6 +58,7 @@ export const FrameContainer = styled.iframe`
   height: 100%;
   width: 100%;
   border: none;
+  background: white;
 `;
 
 export const RunButton = styled(Button)`

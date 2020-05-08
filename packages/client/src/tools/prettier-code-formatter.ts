@@ -25,6 +25,7 @@ self.addEventListener("message", (event: MessageEvent) => {
     ...parserPlugins,
     arrowParens: "always",
     trailingComma: "es5",
+    tabWidth: 2,
   });
 
   // @ts-ignore
