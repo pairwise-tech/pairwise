@@ -171,14 +171,15 @@ export class UserService {
     profile: GenericUserProfile,
     signinStrategy: SigninStrategy,
   ) {
-    const { email } = profile;
-
-    await this.userRepository.insert({
+    const result = await this.userRepository.insert({
       ...profile,
       lastActiveChallengeId: "",
       settings: JSON.stringify({}),
     });
-    const user = await this.findUserByEmail(email);
+
+    // Look up the newly created user with the uuid from the insertion result
+    const { uuid } = result.identifiers[0];
+    const user = await this.findUserByUuidGetFullProfile(uuid);
 
     this.slackService.postUserAccountCreationMessage({
       profile,
