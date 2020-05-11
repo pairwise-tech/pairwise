@@ -35,6 +35,7 @@ describe("Authentication Flows: signin, profile, and logout", () => {
     click("account-link");
     cy.contains("Account");
 
+    /* Don't ask */
     cy.wait(TIMEOUT);
 
     click("edit-profile-button");
