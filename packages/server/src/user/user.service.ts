@@ -16,6 +16,7 @@ import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { SlackService, slackService } from "src/slack/slack.service";
+import { SigninStrategy } from "src/auth/auth.service";
 
 export interface GenericUserProfile {
   email: string;
@@ -166,7 +167,10 @@ export class UserService {
     return result;
   }
 
-  public async createNewUser(profile: GenericUserProfile) {
+  public async createNewUser(
+    profile: GenericUserProfile,
+    signinStrategy: SigninStrategy,
+  ) {
     const { email } = profile;
 
     await this.userRepository.insert({
@@ -179,6 +183,7 @@ export class UserService {
     this.slackService.postUserAccountCreationMessage({
       profile,
       accountCreated: true,
+      signinStrategy,
     });
 
     return user;

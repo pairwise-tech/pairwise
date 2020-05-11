@@ -9,7 +9,7 @@ import {
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
-import { AuthService, Strategy } from "./auth.service";
+import { AuthService, SigninStrategy } from "./auth.service";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
@@ -127,7 +127,7 @@ export class AuthController {
   private handleLoginError(
     @Res() res,
     err: ERROR_CODES.UNKNOWN_LOGIN_ERROR,
-    strategy: Strategy,
+    strategy: SigninStrategy,
   ) {
     return res.redirect(
       `${ENV.CLIENT_URL}/authentication-failure?strategy=${strategy}`,
