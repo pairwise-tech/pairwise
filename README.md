@@ -4,6 +4,8 @@
 
 The **Pairwise** codebase includes a React app client application, a NestJS server application, and other various services, all bundled up in a monorepo using Lerna and Yarn workspaces.
 
+OK
+
 ## Contents
 
 - [Structure](#structure)
