@@ -35,6 +35,8 @@ describe("Authentication Flows: signin, profile, and logout", () => {
     click("account-link");
     cy.contains("Account");
 
+    cy.wait(TIMEOUT);
+
     click("edit-profile-button");
     type("edit-input-given-name", "Linus");
     type("edit-input-family-name", "Torvalds");
