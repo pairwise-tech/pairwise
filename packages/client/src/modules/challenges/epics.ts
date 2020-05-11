@@ -404,11 +404,29 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
   state$,
   deps,
 ) => {
-  // Fetch when navigation changes, i.e. setChallengeId
+  /**
+   * Run when location changes (i.e. in response to the selected challenge
+   * changing. Because the URL is the source of truth for the challenge id
+   * this epic should run in response to the location changing (and not
+   * other actions).
+   */
   const fetchOnNavEpic = action$.pipe(
-    filter(isActionOf(Actions.setChallengeId)),
+    filter(isActionOf(Actions.locationChange)),
     pluck("payload"),
-    pluck("currentChallengeId"),
+    map(findChallengeIdInLocationIfExists),
+    filter(id => {
+      const { challengeMap } = state$.value.challenges;
+      // Don't proceed if we're lacking an id or the challenge map
+      if (!challengeMap || !id) {
+        return false;
+      }
+
+      const challengeExists = id in challengeMap;
+      const isSandbox = id === SANDBOX_ID;
+
+      // Only fetch blobs if challenge exists and this is not the sandbox
+      return challengeExists || isSandbox;
+    }),
     mergeMap(id => {
       const { next, prev } = deps.selectors.challenges.nextPrevChallenges(
         state$.value,
