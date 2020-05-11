@@ -171,7 +171,16 @@ export class AuthService {
           }
         }
 
-        const [firstName = "", lastName = ""] = profile.name.split(" ");
+        let firstName = "";
+        let lastName = "";
+
+        // profile.name can be null
+        if (!!profile.name) {
+          const name = profile.name.split(" ");
+          firstName = name[0] || "";
+          lastName = name[1] || "";
+        }
+
         const avatarUrl = profile.avatar_url;
         const userProfile: GenericUserProfile = {
           email,
