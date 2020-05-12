@@ -16,7 +16,7 @@
           "title": "Hello, Pairwise!",
           "instructions": "There is an h1 tag in the code editor below which contains the text \"Pairwise\". Your job is to change the text to say \"Hello, Pairwise\\!\"\n\n> **++NOTE:++**++If you are stuck, scroll down and view the video explanation\\!++\n",
           "testCode": "test('The `h1` tag should contain the text: \"Hello, Pairwise!\"', () => {\n    expect(getText(\"h1\")).toBe(\"Hello, Pairwise!\");\n});\n",
-          "videoUrl": "https://www.youtube.com/embed/aB1baW7R1dc",
+          "videoUrl": "https://www.youtube.com/embed/GEzFkA7XccQ",
           "starterCode": "<h1>Pairwise</h1>\n",
           "solutionCode": "<h1>Hello, Pairwise!</h1>\n",
           "content": ""
@@ -27,7 +27,7 @@
           "title": "Style HTML with CSS",
           "instructions": "HTML provides the structure, CSS provides the _style_. Take a look at the editor and the preview on the right. That white title isn't too hot though... See if you can turn the `h1` title from `white` to `gold` color\\!",
           "testCode": "test(\"The `h1` title should have a `gold` CSS `color` property.\", () => {\n  const title = get(\"h1\");\n  const style = getStyle(title, \"color\");\n  expect(style).toBe(cssColor(\"gold\"));\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/RwNvQZuVdSs",
           "starterCode": "<html>\n  <header>\n    <style>\n      body {\n        background: #204678;\n        padding-left: 12px;\n        padding-right: 12px;\n      }\n      h1 {\n        /* Here! Look Here! */\n        color: white;\n      }\n      p {\n        color: tomato;\n      }\n    </style>\n  </header>\n  <body>\n    <div>\n      <h1>Welcome to Pairwise!</h1>\n      <p>\n        CSS let's you change the color and shape of HTML!\n      </p>\n    </div>\n  </body>\n</html>\n",
           "solutionCode": "<html>\n  <header>\n    <style>\n      body {\n        background: #1a4a2e;\n        padding-left: 12px;\n        padding-right: 12px;\n      }\n      h1 {\n        /* Here! Look Here! */\n        color: gold;\n      }\n      p {\n        color: tomato;\n      }\n    </style>\n  </header>\n  <body>\n    <div>\n      <h1>Welcome to Pairwise!</h1>\n      <p>\n        CSS let's you change the color and shape of HTML!\n      </p>\n    </div>\n  </body>\n</html>\n",
           "content": ""
@@ -38,7 +38,7 @@
           "title": "Start Programming",
           "instructions": "Let's start with something very simple. Take a look at the code editor below. There you will find two functions, the `addTwoNumbers` function \\(which is complete\\) and the `subtractTwoNumbers` function \\(which is incomplete\\).\n\nTake a look at the code and the comments \\(green colored text\\). Try to complete the `subtractTwoNumbers` function\\! When you are finished, press the \"Run\" button to run your code against the tests\\!",
           "testCode": "const tests = [\n  [3234, 435],\n  [32134, 46645],\n  [31234, 2342231],\n  [321341, 4234],\n  [3234, 2342],\n  [92342, 437],\n  [2343, 432324],\n  [233, 235],\n  [36579, 444],\n  [3, 12],\n];\n\ntest(\"The `addTwoNumbers` function should add the arguments together and return the result.\", () => {\n  for (const testCase of tests) {\n    expect(addTwoNumbers(...testCase)).toBe(testCase[0] + testCase[1]);\n  }\n});\n\ntest(\"The `subtractTwoNumbers` function should accept two arguments and return the result of subtracting the second from the first.\", () => {\n  for (const testCase of tests) {\n    expect(subtractTwoNumbers(...testCase)).toBe(testCase[0] - testCase[1]);\n  }\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/uLwyU-vfY0c",
           "starterCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction addTwoNumbers(a: number, b: number) {\n  return a + b;\n}\n\n/**\n * A function which takes two numbers and subtracts\n * the second from the first.\n */\nfunction subtractTwoNumbers(a: number, b: number) {\n  // Hello!!! Write your solution on the next line here:\n  \n}\n",
           "solutionCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction addTwoNumbers(a: number, b: number) {\n  return a + b;\n}\n\n/**\n * A function which takes two numbers and subtracts\n * the second from the first.\n */\nfunction subtractTwoNumbers(a: number, b: number) {\n  // Your code here\n  return a - b;\n}\n",
           "content": ""
@@ -67,7 +67,7 @@
           "title": "Intro",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/Lfh4fPzrCyk",
           "starterCode": "",
           "solutionCode": "",
           "content": "Welcome to Module 1\\! We'll be using HTML and CSS to lay a foundation for programming and get some practice writing real code.\n# What you will do in this module\n\n* Write a bunch of real code\n* Build your own web page\n* Put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n# Why are we learning this?\n\nWe _love_ the question \"why\" and we'll answer that in the [introductory lesson on HTML](/workspace/5ziJI35f#h-why-are-we-learning-html).\n\nOnward\\!"
@@ -668,7 +668,7 @@
           "title": "Intro",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/dy3es6j7lsQ",
           "starterCode": "",
           "solutionCode": "",
           "content": "In this module, you will learn all of the basic fundamentals of computer programming using a popular language: TypeScript. You may not have heard of TypeScript before, but you have probably heard of JavaScript. TypeScript is simply JavaScript with a type system \\- don't worry if you won't know what that means yet\\!\n\nHere we will walk through the basic mechanics of how TypeScript works. This is like learning some of the basic grammar rules for a human language. With this foundation, you will be well equipped for starting your journey to become a programmer\\!"
