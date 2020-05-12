@@ -11,7 +11,7 @@ import { captureSentryException } from "src/tools/sentry-utils";
 import ENV from "src/tools/server-env";
 import { emailService, EmailService } from "src/email/email.service";
 
-export type Strategy = "Email" | "GitHub" | "Facebook" | "Google";
+export type SigninStrategy = "Email" | "GitHub" | "Facebook" | "Google";
 
 interface LoginSuccess {
   token: string;
@@ -65,7 +65,10 @@ export class AuthService {
             googleAccountId: null,
           };
 
-          const user = await this.userService.createNewUser(userProfile);
+          const user = await this.userService.createNewUser(
+            userProfile,
+            "Email",
+          );
           const token = this.getJwtAccessToken(user.profile);
           return new Ok({ token, accountCreated: true });
         }
@@ -126,7 +129,7 @@ export class AuthService {
           googleAccountId: null,
         };
 
-        user = await this.userService.createNewUser(userProfile);
+        user = await this.userService.createNewUser(userProfile, "Facebook");
         token = this.getJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: true });
       }
@@ -171,7 +174,16 @@ export class AuthService {
           }
         }
 
-        const [firstName = "", lastName = ""] = profile.name.split(" ");
+        let firstName = "";
+        let lastName = "";
+
+        // profile.name can be null
+        if (profile.name) {
+          const name = profile.name.split(" ");
+          firstName = name[0] || "";
+          lastName = name[1] || "";
+        }
+
         const avatarUrl = profile.avatar_url;
         const userProfile: GenericUserProfile = {
           email,
@@ -184,7 +196,7 @@ export class AuthService {
           googleAccountId: null,
         };
 
-        user = await this.userService.createNewUser(userProfile);
+        user = await this.userService.createNewUser(userProfile, "GitHub");
         token = this.getJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: true });
       }
@@ -241,7 +253,7 @@ export class AuthService {
           facebookAccountId: null,
         };
 
-        user = await this.userService.createNewUser(userProfile);
+        user = await this.userService.createNewUser(userProfile, "Google");
         token = this.getJwtAccessToken(user.profile);
         return new Ok({ token, accountCreated: true });
       }

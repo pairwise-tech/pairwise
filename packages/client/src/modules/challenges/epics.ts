@@ -406,7 +406,7 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
 ) => {
   // Fetch when navigation changes, i.e. setChallengeId
   const fetchOnNavEpic = action$.pipe(
-    filter(isActionOf(Actions.setChallengeId)),
+    filter(isActionOf([Actions.setChallengeId, Actions.setActiveChallengeIds])),
     pluck("payload"),
     pluck("currentChallengeId"),
     mergeMap(id => {

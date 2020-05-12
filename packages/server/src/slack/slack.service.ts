@@ -5,6 +5,7 @@ import { RequestUser } from "src/types";
 import { GenericUserProfile } from "src/user/user.service";
 import { captureSentryException } from "src/tools/sentry-utils";
 import { ADMIN_URLS, HTTP_METHOD } from "src/admin/admin.controller";
+import { SigninStrategy } from "src/auth/auth.service";
 
 /** ===========================================================================
  * Types & Config
@@ -21,6 +22,7 @@ interface SlackFeedbackMessageData {
 interface SlackAccountCreationMessageData {
   profile: GenericUserProfile;
   accountCreated: boolean;
+  signinStrategy: SigninStrategy;
   config?: SlackMessageConfig;
 }
 
@@ -107,10 +109,11 @@ export class SlackService {
   public async postUserAccountCreationMessage({
     profile,
     accountCreated,
+    signinStrategy,
     config,
   }: SlackAccountCreationMessageData) {
     if (accountCreated) {
-      const message = `New account created for *${profile.displayName}* (${profile.email}) :tada:`;
+      const message = `New account created for *${profile.displayName}* using ${signinStrategy} strategy :tada:`;
       await this.postMessageToChannel(message, {
         channel: "production",
         ...config,

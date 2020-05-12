@@ -16,6 +16,7 @@ import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { SlackService, slackService } from "src/slack/slack.service";
+import { SigninStrategy } from "src/auth/auth.service";
 
 export interface GenericUserProfile {
   email: string;
@@ -166,19 +167,24 @@ export class UserService {
     return result;
   }
 
-  public async createNewUser(profile: GenericUserProfile) {
-    const { email } = profile;
-
-    await this.userRepository.insert({
+  public async createNewUser(
+    profile: GenericUserProfile,
+    signinStrategy: SigninStrategy,
+  ) {
+    const result = await this.userRepository.insert({
       ...profile,
       lastActiveChallengeId: "",
       settings: JSON.stringify({}),
     });
-    const user = await this.findUserByEmail(email);
+
+    // Look up the newly created user with the uuid from the insertion result
+    const { uuid } = result.identifiers[0];
+    const user = await this.findUserByUuidGetFullProfile(uuid);
 
     this.slackService.postUserAccountCreationMessage({
       profile,
       accountCreated: true,
+      signinStrategy,
     });
 
     return user;
