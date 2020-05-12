@@ -178,7 +178,7 @@ export class AuthService {
         let lastName = "";
 
         // profile.name can be null
-        if (!!profile.name) {
+        if (profile.name) {
           const name = profile.name.split(" ");
           firstName = name[0] || "";
           lastName = name[1] || "";
