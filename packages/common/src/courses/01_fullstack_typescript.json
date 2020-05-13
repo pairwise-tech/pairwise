@@ -113,7 +113,7 @@
           "starterCode": "",
           "solutionCode": "<p>This is a paragraph tag, <b>this is bold text inside it!</b></p>\n",
           "testCode": "test(\"There should be a `p` tag with text inside.\", () => {\n  const element = get(\"p\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"There should be a `b` tag with text inside.\", () => {\n  const element = get(\"b\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"The `p` tag should contain a `b` tag with text inside.\", () => {\n  expect(typeof get(\"p b\").innerHTML).toBe(\"string\");\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/hfdVfk4wZMo",
           "content": ""
         },
         {
@@ -122,7 +122,7 @@
           "title": "The Span Tag",
           "instructions": "We've seen heading, paragraph, and bold tags now. Another very common HTML tag is the `span`. The span is a generic tag which can be used to wrap some content. It is used to select inline content purely for stylistic purposes \\(we will learn more about styles and CSS later\\).\n\nFor now, let's try out something simple with the `span` tag\\. In the code editor is some text and a `style` tag\\. Don't worry about the details of the style tag just yet: this is just a preview of what it can do\\! Change the `b` tag in the paragraph to a `span`. Watch the results in the preview on the right\\! The text remains bold because we are targeting and styling the `span` to be bold. Cool\\!",
           "testCode": "test(\"There should be a `p` tag with text inside.\", () => {\n  const element = get(\"p\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"There should be a `span` tag with text inside.\", () => {\n  const element = get(\"span\");\n  return typeof element.innerHTML === \"string\";\n});\n\ntest(\"The `p` tag should contain a `span` tag with text inside.\", () => {\n  expect(typeof get(\"p span\").innerHTML).toBe(\"string\");\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/UCp3Y3cYtG0",
           "starterCode": "<style>\n  span {\n    font-weight: bold;\n  }\n</style>\n\n<!-- Only change code here: -->\n<p>This is a paragraph, with some <b>bold text</b>.</p>\n",
           "solutionCode": "<style>\n  span {\n    font-weight: bold;\n  }\n</style>\n\n<!-- Only change code here: -->\n<p>This is a paragraph, with some <span>bold text</span>.</p>\n",
           "content": ""
@@ -133,7 +133,7 @@
           "title": "Divs!",
           "instructions": "A fundamental HTML tag is the `div`. \"div\" is short for division, and you can think of divs like a block or container which you can use to organize, structure, and style HTML content. A div does not do anything on it's own, but it can be used to organize other HTML content and then specifically target it for styling and layout.\n\nIn the HTML document below is some content. There are two divs present, one in the top and one at the end of the document. Take a look at how they are organized, and how other content is included _inside_ the div. There is additional content in the middle of the document, three paragraph tags, but it is just sitting there. Add another div element to group these three paragraph tags.",
           "testCode": "test(\"There should be 3 divs in the document.\", () => {\n  const divs = getAll(\"div\");\n  expect(divs.length).toBe(3);\n});\n\ntest(\"The middle div should contain 3 paragraph tags.\", () => {\n  const divs = getAll(\"div\");\n  for (const child of divs[1].children) {\n    expect(child.tagName).toBe(\"P\");\n  }\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/4ZVeHykqBqo",
           "starterCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<p>We are glad you can join us</p>\n<p>It's great you are here!</p>\n<p>Welcome!</p>\n\n<div>\n  <h3>Footer section...</h3>\n</div>\n",
           "solutionCode": "<div>\n  <h1>Welcome to my website</h1>\n</div>\n\n<div>\n  <p>We are glad you can join us</p>\n  <p>It's great you are here!</p>\n  <p>Welcome!</p>\n</div>\n\n<div>\n  <h3>Footer section...</h3>\n</div>\n",
           "content": ""
@@ -144,7 +144,7 @@
           "title": "Divs, Divs, Divs!",
           "instructions": "To give you a sense of how divs are like \"containers\" take a look at the preview on the right. We are adding some styles to the 3 divs in the HTML document so they all have a width and height and background color, so you can see them. Again, don't worry about the styles yet, we will focus on these soon. For now just look at the three boxes\\! These are all divs. You can add text or other HTML content inside of them.\n\nFor this challenge, continue adding divs to the document until there are 20 total divs\\! ",
           "testCode": "test(\"The HTML document should contain 20 divs.\", () => {\n  expect(getAll(\"div\").length).toBe(20);\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/jatY1j9xaJg",
           "starterCode": "<style>\n  body {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  div {\n    margin: 2px;\n    width: 150px;\n    height: 150px;\n    background: teal;\n  }\n</style>\n\n<!-- Add divs here -->\n<div></div>\n<div></div>\n<div></div>\n",
           "solutionCode": "<style>\n  body {\n    display: flex;\n    flex-wrap: wrap;\n  }\n  div {\n    margin: 2px;\n    width: 150px;\n    height: 150px;\n    background: teal;\n  }\n</style>\n\n<!-- Add divs here -->\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n<div></div>\n\n",
           "content": ""
@@ -155,7 +155,7 @@
           "title": "Links",
           "instructions": "One fundamental property of the internet is that webpages link to other webpages. How can we \"link\" to another webpage in an HTML document? HTML provides an `a` hyperlink tag for just this purpose. The `a` tag behaves a little differently than the tags we have seen so far. If you want to link to a webpage, you need to specify the target link. How do we do that in HTML?\n\n```markup\n<a href=\"https://app.pairwise.tech/\">Visit Pairwise!</a>\n\n```\n\nJust like that\\! The `href` _attribute_ is used to specify the url the `a` tag should link to. Another helpful attribute is the `target` attribute, which can be used to specify where the browser should open the link. If you provide `target=\"_blank\"` this will indicate to the browser to open the link in a new tab \\(rather than the current tab\\).\n\nThere is a blank canvas below\\! Add an `a` link to any url you would like to visit\\! Click the link in the preview window to try it out \\(add the `target` attribute if you don't want to be navigated away from the Pairwise workspace\\).",
           "testCode": "test(\"An `a` tag should exist.\", () => {\n  const a = get(\"a\");\n  expect(a !== null).toBe(true);\n});\n\ntest(\"The `a` tag should contain some text.\", () => {\n  const a = get(\"a\");\n  expect(typeof a.innerHTML === \"string\").toBe(true);\n  expect(a.innerHTML.length > 0).toBe(true);\n});\n\ntest(\"The `a` tag should link to a url.\", () => {\n  const a = get(\"a\");\n  expect(typeof a.href === \"string\").toBe(true);\n  expect(a.href.length > 0).toBe(true);\n  // Ok ~\n  expect(a.href.includes(\"http\") || a.href.includes(\"https\")).toBe(true);\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/k2LyR-Z60SU",
           "starterCode": "",
           "solutionCode": "<a href=\"https://app.pairwise.tech/\" target=\"_blank\">Visit Pairwise!</a>\n",
           "content": ""
