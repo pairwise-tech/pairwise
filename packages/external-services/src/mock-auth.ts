@@ -36,11 +36,11 @@ const generateNewProfileFields = () => {
 
 class MockAuth {
   generateNewFacebookProfile() {
-    const { id, first, last, email, picture } = generateNewProfileFields();
+    const { id, first, last, picture } = generateNewProfileFields();
 
     return {
       id,
-      email,
+      email: undefined,
       first_name: first,
       last_name: last,
       picture: {
