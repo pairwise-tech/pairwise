@@ -23,8 +23,8 @@ export class UserController {
   @UseGuards(AuthGuard("jwt"))
   @Get("profile")
   public async getProfile(@Request() req: AuthenticatedRequest) {
-    const { email } = req.user.profile;
-    return this.userService.findUserByEmailGetFullProfile(email);
+    const { uuid } = req.user.profile;
+    return this.userService.findUserByUuidGetFullProfile(uuid);
   }
 
   @UseGuards(AuthGuard("jwt"))
