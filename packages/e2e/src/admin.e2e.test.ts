@@ -55,7 +55,7 @@ describe("Admin (e2e)", () => {
 
     // 1. Create a regular user and get their email
     const { user } = await createAuthenticatedUser("facebook");
-    const userEmail = user.profile.email;
+    const userUuid = user.profile.uuid;
 
     // 2. Get all users and check the user exists
     await request(`${HOST}/user/admin`)
@@ -63,15 +63,15 @@ describe("Admin (e2e)", () => {
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
       .expect(response => {
-        const userExists = response.body.find(u => u.email === userEmail);
+        const userExists = response.body.find(u => u.uuid === userUuid);
         expect(userExists).toBeDefined();
-        expect(userExists.email).toBe(userEmail);
+        expect(userExists.uuid).toBe(userUuid);
       });
 
     // 3. Delete the user
     await request(`${HOST}/user/admin/delete`)
       .post("/")
-      .send({ userEmail })
+      .send({ userUuid })
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(201)
       .expect(response => {
@@ -84,7 +84,7 @@ describe("Admin (e2e)", () => {
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
       .expect(response => {
-        const userExists = response.body.find(u => u.email === userEmail);
+        const userExists = response.body.find(u => u.uuid === userUuid);
         expect(userExists).toBe(undefined);
       });
   });

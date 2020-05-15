@@ -59,8 +59,8 @@ export class UserService {
       .getMany();
   }
 
-  public async adminDeleteUserByEmail(email: string) {
-    const user = await this.findUserByEmail(email);
+  public async adminDeleteUserByUuid(uuid: string) {
+    const user = await this.findUserByUuidGetFullProfile(uuid);
 
     if (!user) {
       throw new BadRequestException(ERROR_CODES.MISSING_USER);
