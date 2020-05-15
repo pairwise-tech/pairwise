@@ -3,7 +3,7 @@ import { filter, map, tap, ignoreElements, pluck, delay } from "rxjs/operators";
 import { Observable, merge } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
-import { combineEpics, ofType } from "redux-observable";
+import { combineEpics } from "redux-observable";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import {
