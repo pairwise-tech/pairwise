@@ -35,6 +35,7 @@ const generateNewProfileFields = () => {
  */
 
 class MockAuth {
+  // Returns undefined email. See note in server file.
   generateNewFacebookProfile() {
     const { id, first, last, picture } = generateNewProfileFields();
 
@@ -65,6 +66,7 @@ class MockAuth {
     };
   }
 
+  // Creates an Admin user. See note in server file.
   generateNewGoogleProfile() {
     const { id, first, last, name, picture } = generateNewProfileFields();
 
