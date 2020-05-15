@@ -24,7 +24,7 @@ export const getAccessTokenFromRedirect = (redirect: string) => {
  * other tests.
  */
 export const fetchAccessToken = async () => {
-  const { accessToken } = await createAuthenticatedUser("facebook");
+  const { accessToken } = await createAuthenticatedUser("github");
   return accessToken;
 };
 
