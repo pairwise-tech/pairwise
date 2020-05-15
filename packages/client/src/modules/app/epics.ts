@@ -1,9 +1,9 @@
 import queryString from "query-string";
 import { filter, map, tap, ignoreElements, pluck, delay } from "rxjs/operators";
-import { Observable } from "rxjs";
+import { Observable, merge } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
-import { combineEpics } from "redux-observable";
+import { combineEpics, ofType } from "redux-observable";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import {
@@ -98,6 +98,54 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   );
 };
 
+declare global {
+  interface Window {
+    amplitude?: {
+      getInstance: () => {
+        setUserId: (x: string) => void;
+        logEvent: (x: string, opts?: any) => void;
+      };
+    };
+  }
+}
+
+/**
+ * An epic to send some custom events to amplitude.
+ */
+const analyticsEpic: EpicSignature = action$ => {
+  const identityAnalytic$ = action$.pipe(
+    filter(isActionOf(Actions.fetchUserSuccess)),
+    tap(x => {
+      const { amplitude } = window;
+      const { profile } = x.payload;
+      const amp = amplitude?.getInstance();
+      if (amp && profile) {
+        amp.setUserId(profile.uuid);
+        amp.logEvent("RETURNING_USER", {
+          email: profile.email || "<EMAIL_UNKNOWN>",
+        });
+      }
+    }),
+    ignoreElements(),
+  );
+
+  const completionAnalytic$ = action$.pipe(
+    filter(isActionOf(Actions.updateUserProgress)),
+    filter(x => x.payload.complete),
+    tap(x => {
+      const { amplitude } = window;
+      const amp = amplitude?.getInstance();
+      const { complete, ...props } = x.payload;
+      if (amp) {
+        amp.logEvent("CHALLENGE_COMPLETE", props);
+      }
+    }),
+    ignoreElements(),
+  );
+
+  return merge(identityAnalytic$, completionAnalytic$);
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -108,4 +156,5 @@ export default combineEpics(
   appInitializeCaptureUrlEpic,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
+  analyticsEpic,
 );
