@@ -1,25 +1,27 @@
-# Welcome to Pairwise!
+# 🎉 Welcome to Pairwise!
 
 <img width="75" height="75" src="https://user-images.githubusercontent.com/18126719/76191795-1f7ac500-621b-11ea-8e4c-e615e05eae9a.png" />
 
 The **Pairwise** codebase includes a React app client application, a NestJS server application, and other various services, all bundled up in a monorepo using Lerna and Yarn workspaces.
 
-## Contents
+## 📦 Contents
 
-- [Structure](#structure)
-- [Quick Links](#quick-links)
-- [Getting Started](#getting-started)
-- [Development](#development)
-- [Codepress](#codepress)
-- [Tests](#tests)
-- [Authentication](#authentication)
-- [Payments](#payments)
-- [To Rebuild The Database](#to-rebuild-the-database)
-- [To Refresh Builds and Dependencies](#to-refresh-builds-and-dependencies)
-- [Contributing](#contributing)
-- [Production](#production)
+- [🎉 Welcome to Pairwise!](#%f0%9f%8e%89-welcome-to-pairwise)
+  - [📦 Contents](#%f0%9f%93%a6-contents)
+  - [📋 Structure](#%f0%9f%93%8b-structure)
+  - [🦄 Quick Links](#%f0%9f%a6%84-quick-links)
+  - [👷 Getting Started](#%f0%9f%91%b7-getting-started)
+  - [🛠️ Development](#%f0%9f%9b%a0%ef%b8%8f-development)
+  - [🏭 Codepress](#%f0%9f%8f%ad-codepress)
+  - [🚧 Tests](#%f0%9f%9a%a7-tests)
+  - [💂‍♂️ Authentication](#%f0%9f%92%82%e2%80%8d%e2%99%82%ef%b8%8f-authentication)
+  - [🏦 Payments](#%f0%9f%8f%a6-payments)
+  - [⚙️ To Rebuild The Database](#%e2%9a%99%ef%b8%8f-to-rebuild-the-database)
+  - [🤖 To Refresh Builds and Dependencies](#%f0%9f%a4%96-to-refresh-builds-and-dependencies)
+  - [📝 Contributing](#%f0%9f%93%9d-contributing)
+  - [✈️ Production](#%e2%9c%88%ef%b8%8f-production)
 
-## Structure
+## 📋 Structure
 
 This project is managed using Lerna, and contains the following packages:
 
@@ -33,7 +35,7 @@ This project is managed using Lerna, and contains the following packages:
 | [server](https://github.com/pairwise-tech/pairwise/tree/master/packages/server)                       | NestJS backend application                        |
 | [www](https://github.com/pairwise-tech/pairwise/tree/master/packages/www)                             | Marketing website built with Gatsby               |
 
-## Quick Links
+## 🦄 Quick Links
 
 We use the following libraries across the codebase, here are some quick links to their docs:
 
@@ -59,7 +61,7 @@ We use the following libraries across the codebase, here are some quick links to
 - [Netlify](https://www.netlify.com/): Host the Pairwise client workspace.
 - [Google Cloud Platform](https://cloud.google.com/): Deploy the production backend.
 
-## Getting Started
+## 👷 Getting Started
 
 To work with Pairwise you will need [Node](https://nodejs.org/en/), [npm](https://www.npmjs.com/), [yarn](https://yarnpkg.com/lang/en/docs/), and [Docker](https://www.docker.com/) installed. We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage different versions of Node.
 
@@ -77,7 +79,7 @@ We also recommend using [Visual Studio Code](https://code.visualstudio.com/) and
 
 All the important information about how Pairwise works should be covered in the repo `README` documents. These documents serve as a quick reference to learn about how the entire codebase works, and are linked in the above repo structure section.
 
-## Development
+## 🛠️ Development
 
 To run the app you will need Docker and Node installed. All of the packages tend to have commands of the structure `[package]:[dev|start|watch|build|prod]` so you can generally modify the following scripts depending on how you want to start different packages.
 
@@ -138,11 +140,11 @@ $ yarn up
 $ yarn client
 ```
 
-## Codepress
+## 🏭 Codepress
 
 We use Codepress to develop course content. Codepress is an internal CMS tool built into the Pairwise Workspace. You can run it with the command `yarn client:codepress`. Then, just open the app in your browser to get started. Codepress changes will write directly to the JSON course content file.
 
-## Tests
+## 🚧 Tests
 
 Please note that there is a separate Dockerfile, `DockerfileBase`, which builds an image containing all dependencies for the project. This can be built using `yarn docker:dependencies` and is used by various `docker-compose` commands. You should build this first, and only rebuild it if some project dependencies have changed and need to be re-installed.
 
@@ -173,7 +175,7 @@ To troubleshoot or develop tests locally, you can run the necessary application 
 
 A quick note to keep in mind about running `docker-compose` commands. There are multiple `docker-compose.yml` configurations in the project, if you run `docker-compose` commands you need to reference the file you want to run the command for, or be in the directory where that file is.
 
-## Authentication
+## 💂‍♂️ Authentication
 
 We use the passport module for defining single-sign-on provider logins with common social account providers like Google, Facebook, and GitHub. Authorization through one of these strategies creates a user account which is uniquely identified by the email address. After authentication, a user is granted a long-lived `jwt` to stay signed into Pairwise.
 
@@ -184,7 +186,7 @@ On the server, you will need to ensure the environment variables which specify U
 All of the SSO provider logins have mock API implementations in the `external-services` package, which are used when running e2e/Cypress tests. These can be enabled locally by running the
 external services server and by loading all of the SSO provider environment variables which point to the local external service mock APIs (see `server/sample.env`) when running the application server.
 
-## Payments
+## 🏦 Payments
 
 We are using [Stripe](https://stripe.com/) to process user payments. Currently, the application redirects to a hosted Stripe checkout page which then sends a webhook event to our server if the user completes the checkout process succcessfully. The user is then redirected back to Pairwise and sees a payment confirmation. Here are some instructions and resources for working locally if you need to work on the Stripe payments integration feature.
 
@@ -199,7 +201,7 @@ $ yarn stripe:dev
 
 Please note that it is necessary to have the Stripe CLI running for the payment checkout to complete successfully and submit the webhook to our server.
 
-## To Rebuild The Database
+## ⚙️ To Rebuild The Database
 
 If the database schema changes or you want to simply remove all the data in your local database you can do the following:
 
@@ -208,7 +210,7 @@ If the database schema changes or you want to simply remove all the data in your
 $ yarn db:reset
 ```
 
-## To Refresh Builds and Dependencies
+## 🤖 To Refresh Builds and Dependencies
 
 These steps will be necessary if for instance the `node_module` dependencies for any package have changed.
 
@@ -228,11 +230,11 @@ $ yarn up:build
 
 If you feel like you having issues with Docker or it is running slowly, you can run `docker system prune` to remove any older unused resources and images.
 
-## Contributing
+## 📝 Contributing
 
 We follow a normal git workflow. Commit your changes to a branch, make a pull request, and merge the code after the tests pass.
 
-## Production
+## ✈️ Production
 
 The Pairwise landing page is deployed using [ZEIT Now](https://zeit.co/), the client workspace is deployed using [Netlify](https://www.netlify.com/) and the backend server is deployed using [Google Cloud Run](https://cloud.google.com/run), which provides a full managed cloud platform automatic auto-scaling. Updates are shipped continuously by commits to the `master` branch. You can simulate the production backend deployment locally by running the following commands:
 

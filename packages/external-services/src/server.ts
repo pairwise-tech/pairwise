@@ -46,6 +46,9 @@ app.post("/facebook/token", (req, res) => {
 
 /**
  * Authenticated Facebook request for a user profile.
+ *
+ * NOTE: Since actual SSO providers can return profiles without emails,
+ * we set the FB email to be undefined to test this behavior.
  */
 app.get("/facebook/profile", (req, res) => {
   const profile = mockAuth.generateNewFacebookProfile();

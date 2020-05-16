@@ -16,6 +16,7 @@ import { validateUserUpdateDetails } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { SlackService, slackService } from "src/slack/slack.service";
+import { SigninStrategy } from "src/auth/auth.service";
 
 export interface GenericUserProfile {
   email: string;
@@ -58,8 +59,8 @@ export class UserService {
       .getMany();
   }
 
-  public async adminDeleteUserByEmail(email: string) {
-    const user = await this.findUserByEmail(email);
+  public async adminDeleteUserByUuid(uuid: string) {
+    const user = await this.findUserByUuidGetFullProfile(uuid);
 
     if (!user) {
       throw new BadRequestException(ERROR_CODES.MISSING_USER);
@@ -96,27 +97,27 @@ export class UserService {
     userProfile: UserProfile,
     facebookAccountId: string,
   ) {
-    const { uuid, email } = userProfile;
+    const { uuid } = userProfile;
     await this.userRepository.update({ uuid }, { facebookAccountId });
-    return await this.findUserByEmailGetFullProfile(email);
+    return await this.findUserByUuidGetFullProfile(uuid);
   }
 
   public async updateGithubAccountId(
     userProfile: UserProfile,
     githubAccountId: string,
   ) {
-    const { uuid, email } = userProfile;
+    const { uuid } = userProfile;
     await this.userRepository.update({ uuid }, { githubAccountId });
-    return await this.findUserByEmailGetFullProfile(email);
+    return await this.findUserByUuidGetFullProfile(uuid);
   }
 
   public async updateGoogleAccountId(
     userProfile: UserProfile,
     googleAccountId: string,
   ) {
-    const { uuid, email } = userProfile;
+    const { uuid } = userProfile;
     await this.userRepository.update({ uuid }, { googleAccountId });
-    return await this.findUserByEmailGetFullProfile(email);
+    return await this.findUserByUuidGetFullProfile(uuid);
   }
 
   /**
@@ -130,8 +131,8 @@ export class UserService {
    * and attached to the request for every authenticated API request which
    * does require more database requests to fetch everything.
    */
-  public async findUserByEmailGetFullProfile(email: string) {
-    const user = await this.userRepository.findOne({ email });
+  public async findUserByUuidGetFullProfile(uuid: string) {
+    const user = await this.userRepository.findOne({ uuid });
 
     if (!user) {
       throw new BadRequestException(ERROR_CODES.MISSING_USER);
@@ -140,8 +141,13 @@ export class UserService {
     return this.fillUserProfile(user);
   }
 
-  public async findUserByUuidGetFullProfile(uuid: string) {
-    const user = await this.userRepository.findOne({ uuid });
+  /**
+   * NOTE: Be careful using this method! Not all users will have an
+   * email address! This is currently used only by the Admin Service
+   * to perform Admin actions.
+   */
+  public async findUserByEmailGetFullProfile(email: string) {
+    const user = await this.userRepository.findOne({ email });
 
     if (!user) {
       throw new BadRequestException(ERROR_CODES.MISSING_USER);
@@ -166,19 +172,24 @@ export class UserService {
     return result;
   }
 
-  public async createNewUser(profile: GenericUserProfile) {
-    const { email } = profile;
-
-    await this.userRepository.insert({
+  public async createNewUser(
+    profile: GenericUserProfile,
+    signinStrategy: SigninStrategy,
+  ) {
+    const result = await this.userRepository.insert({
       ...profile,
       lastActiveChallengeId: "",
       settings: JSON.stringify({}),
     });
-    const user = await this.findUserByEmail(email);
+
+    // Look up the newly created user with the uuid from the insertion result
+    const { uuid } = result.identifiers[0];
+    const user = await this.findUserByUuidGetFullProfile(uuid);
 
     this.slackService.postUserAccountCreationMessage({
       profile,
       accountCreated: true,
+      signinStrategy,
     });
 
     return user;
@@ -190,7 +201,7 @@ export class UserService {
     if (validationResult.error) {
       throw new BadRequestException(validationResult.error);
     } else {
-      const { uuid, email } = user.profile;
+      const { uuid } = user.profile;
 
       const updateEmail = validationResult.value.email;
       // If the user is updating their email
@@ -204,7 +215,7 @@ export class UserService {
       }
 
       await this.userRepository.update({ uuid }, validationResult.value);
-      return await this.findUserByEmailGetFullProfile(updateEmail || email);
+      return await this.findUserByUuidGetFullProfile(uuid);
     }
   }
 
