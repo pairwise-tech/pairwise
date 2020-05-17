@@ -337,6 +337,17 @@
           "content": ""
         },
         {
+          "id": "0CUYA6z5m",
+          "type": "media",
+          "title": "Debugging CSS",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/uS0V31yDK3o",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Let's talk about tools. \n\nEvery professional has their tools: gardeners have trowels, instagram celebrities have cameras and programers have computers. We have more than just computers though—we have developer tools.\n# The Dev Tools\n\nDid you know you already have the tool we'll use installed on .your computer? We'll be using what's already built in to the browser in order to debug our layouts. I'm going to be using Google Chrome, but you can use other browsers if you prefer.\n\n**You don't have to use Chrome**\n\nGoogle Chrome has the most widely used developer tools, so I'm going to show you how to use that specific set of tools. However, other browser have dev tools as well.\n\n* Chrome \\(what we'll use\\)\n* Firefox\n* Safari \\(you can even debug apps on an iPhone\\)\n* Edge\n\n\nThese four cover the largest browser in the world, but if you use another browser it probably has dev tools too. \n\nUsing the dev tools is fairly visual so the video will be the focus of this lesson. "
+        },
+        {
           "id": "B1LBriGU",
           "type": "media",
           "title": "The Box Model",
