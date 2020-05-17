@@ -208,6 +208,33 @@ var Expectation = (function () {
     Expectation.prototype.toBeFalsy = function () {
         assertEqual(Boolean(this.value), false);
     };
+    Expectation.prototype.toBeCloseTo = function (expected, precision) {
+        if (precision === void 0) { precision = 2; }
+        var received = this.value;
+        if (typeof expected !== "number") {
+            assert(false, "[Assert] toBeCloseTo passed invalid value. Needs a number but got: " + expected);
+            return;
+        }
+        if (typeof expected !== "number") {
+            assert(false, "[Assert] toBeCloseTo called but expectation contained invalid value. " + received);
+            return;
+        }
+        var pass = false;
+        var expectedDiff = 0;
+        var receivedDiff = 0;
+        if (received === Infinity && expected === Infinity) {
+            pass = true;
+        }
+        else if (received === -Infinity && expected === -Infinity) {
+            pass = true;
+        }
+        else {
+            expectedDiff = Math.pow(10, -precision) / 2;
+            receivedDiff = Math.abs(expected - received);
+            pass = receivedDiff < expectedDiff;
+        }
+        assert(pass, "[Assert] toBeCloseTo expected " + expected + " to differ from " + received + " by less than " + expectedDiff + ". Actual diff was " + receivedDiff);
+    };
     Expectation.prototype.toBeDefined = function () {
         assertEqual(typeof this.value !== "undefined", true);
     };

@@ -122,4 +122,13 @@ describe("Expectation matchers", () => {
     expect(arr).not.toContain("d");
     expect("hey you there").toContain("you");
   });
+
+  test("toBeCloseTo", () => {
+    // Should work with floats
+    expect(0.2 + 0.1).toBeCloseTo(0.3, 5);
+    expect(0.2 + 0.1).not.toBe(3);
+
+    // Should of course work fine with ints
+    expect(1 + 2).toBeCloseTo(3);
+  });
 });

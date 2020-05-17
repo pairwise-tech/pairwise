@@ -363,6 +363,47 @@ class Expectation {
     assertEqual(Boolean(this.value), false);
   }
 
+  // Note: See Jest source code. I'm not sure why they divide by 2.
+  // https://github.com/facebook/jest/blob/2a92e7f49fa35b219e5099d56b0179bccc1bf53e/packages/expect/src/matchers.ts#L170
+  toBeCloseTo(expected: number, precision: number = 2) {
+    const received = this.value;
+
+    if (typeof expected !== "number") {
+      assert(
+        false,
+        `[Assert] toBeCloseTo passed invalid value. Needs a number but got: ${expected}`,
+      );
+      return;
+    }
+
+    if (typeof expected !== "number") {
+      assert(
+        false,
+        `[Assert] toBeCloseTo called but expectation contained invalid value. ${received}`,
+      );
+      return;
+    }
+
+    let pass = false;
+    let expectedDiff = 0;
+    let receivedDiff = 0;
+
+    if (received === Infinity && expected === Infinity) {
+      pass = true; // Infinity - Infinity is NaN
+    } else if (received === -Infinity && expected === -Infinity) {
+      pass = true; // -Infinity - -Infinity is NaN
+    } else {
+      expectedDiff = Math.pow(10, -precision) / 2; // See NOTE
+      receivedDiff = Math.abs(expected - received);
+      pass = receivedDiff < expectedDiff;
+    }
+
+    assert(
+      pass,
+      `[Assert] toBeCloseTo expected ${expected} to differ from ${received} by less than ${expectedDiff}. Actual diff was ${receivedDiff}`,
+    );
+  }
+
   toBeDefined() {
     assertEqual(typeof this.value !== "undefined", true);
   }
