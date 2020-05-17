@@ -141,12 +141,10 @@ const MediaArea = ({
     // Safety check to be sure the embed link is included!
     if (!videoId && input) {
       toaster.warn(`
-Be sure to use the embed url for the video link. All URLS will be converted to
-this format:
-https://www.youtube.com/embed/\${ID}
+All URLS will be converted to this format: https://www.youtube.com/embed/\${ID}
 
 Valid entry formats:
-https://www.youtube.com/embed/\${ID}
+https://www.youtube.com/embed/\${ID} (embed URL)
 https://www.youtube.com/watch?v=\${ID} (long URL)
 https://youtu.be/\${ID} (short URL)
 ID (video ID)
