@@ -45,6 +45,7 @@ declare class Expectation {
     toHaveProperty(keyPath: Path | string, optionalTestValue?: any): void;
     toBeTruthy(): void;
     toBeFalsy(): void;
+    toBeCloseTo(expected: number, precision?: number): void;
     toBeDefined(): void;
     toContain(val: any): void;
     toThrow(optionalFailureMessage?: string): void;

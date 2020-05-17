@@ -115,17 +115,51 @@ const MediaArea = ({
     [challenge.id, updateChallenge],
   );
 
+  const extractVideoId = (s: string) => {
+    const rs: Array<(x: string) => string | undefined | null> = [
+      x => x.match(/https:\/\/www.youtube.com\/embed\/(.+)\/?/)?.[1],
+      x => x.match(/https:\/\/youtu.be\/(.+)\/?/)?.[1],
+      x => new URL(x).searchParams.get("v"),
+    ];
+
+    const results = rs.map(fn => {
+      try {
+        return fn(s);
+      } catch (err) {
+        return null;
+      }
+    });
+
+    return results.find(Boolean);
+  };
+
   const handleVideoUrl = (e: ChangeEvent<HTMLInputElement>) => {
-    const videoUrl = e.target.value;
+    const input = e.target.value;
+    const videoId = extractVideoId(input);
+    const videoUrl = `https://www.youtube.com/embed/${videoId}`;
 
     // Safety check to be sure the embed link is included!
-    if (videoUrl !== "" && !videoUrl.includes("embed")) {
-      toaster.warn("Be sure to use the embed url for the video link.");
+    if (!videoId && input) {
+      toaster.warn(`
+Be sure to use the embed url for the video link. All URLS will be converted to
+this format:
+https://www.youtube.com/embed/\${ID}
+
+Valid entry formats:
+https://www.youtube.com/embed/\${ID}
+https://www.youtube.com/watch?v=\${ID} (long URL)
+https://youtu.be/\${ID} (short URL)
+ID (video ID)
+      `);
+    }
+
+    if (input && videoUrl !== input) {
+      toaster.success(`Video ID (${videoId}) formatted into embed URL.`);
     }
 
     updateChallenge({
       id: challenge.id,
-      challenge: { videoUrl },
+      challenge: { videoUrl: input ? videoUrl : "" },
     });
   };
 
