@@ -428,7 +428,7 @@
           "id": "iZ6nlkiQ",
           "type": "markup",
           "title": "The Hover State",
-          "instructions": "Invert the appearance of the links when hovered. In other words when you hover a link make its background `blue` and it's color `tomato`.\n**NOTE**: You will need the `:hover` selector\\.",
+          "instructions": "Invert the appearance of the links when hovered. In other words when you hover a link make its background `blue` and its color `tomato`.\n**NOTE**: You will need the `:hover` selector\\.",
           "testCode": "test(\"The color and background of the `a` tags should be inverted on hover\", () => {\n  const code = __user_code_string__;\n  const regex = /a:hover\\s+{([\\s\\S]+?)}/i; // All text inside brackets after a:hover. a:hover { <HERE> }\n  const hoverStyles = code.match(regex)[1];\n  expect(hoverStyles).toBeTruthy();\n  expect(hoverStyles.match(/background(-color)?:\\s+blue/)).toBeTruthy();\n  expect(hoverStyles.match(/color:\\s+tomato/)).toBeTruthy();\n});\n",
           "videoUrl": "",
           "starterCode": "<style>\n  /* Your code here */\n\n  /* You can ignore these styles. This is just to make the link placement more obvious */\n  .nav a {\n    padding: 10px;\n    background: tomato;\n    text-decoration: none; /* This removes teh link underline */\n  }\n</style>\n<div class=\"nav\">\n  <p>Hover the mouse to see the effect</p>\n  <a href=\"#\">Home</a>\n  <a href=\"#\">About</a>\n  <a href=\"#\">Contact</a>\n</div>\n",
