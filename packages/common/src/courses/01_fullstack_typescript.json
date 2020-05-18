@@ -98,7 +98,7 @@
           "id": "9scykdziW",
           "type": "markup",
           "title": "HTML Heading Tags",
-          "instructions": "In the last challenge you added an `h1` tag, which represents a \"heading 1\" tag in HTML. In total, there are six tags like this. As you might guess, the second heading tag looks like this: `<h2>`. In the editor below, add one of each heading tag. Each tag should contain some text, feel free to add any text you feel like inside the tags\\! When you are finished, take a look at the preview to the right to see the results\\!",
+          "instructions": "In the last challenge you added an `h1` tag, which represents a \"heading 1\" tag in HTML. In total, there are six tags like this. As you might guess, the second heading tag looks like this: `<h2>`. \n\nIn the editor below, add one of each heading tag. Each tag should contain some text, feel free to add any text you feel like inside the tags\\! When you are finished, take a look at the preview to the right to see the results\\! \n\nCheck out the [video](#{\"component\":\"VideoPlayButton\"}) below for more help. ",
           "starterCode": "<h1>This is a heading 1 tag</h1>\n",
           "solutionCode": "<h1>This is a heading 1 tag</h1>\n<h2>This is a heading 1 tag</h2>\n<h3>This is a heading 1 tag</h3>\n<h4>This is a heading 1 tag</h4>\n<h5>This is a heading 1 tag</h5>\n<h6>This is a heading 1 tag</h6>",
           "testCode": "['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(tag => {\n    test(`There should be an \\`${tag}\\` with text inside`, () => {\n        expect(typeof get(tag).innerHTML).toBe(\"string\")\n    })\n})\n",
