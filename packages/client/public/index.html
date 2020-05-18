@@ -41,6 +41,7 @@
       ga('send', 'pageview');
       </script>
     <!-- End Google Analytics -->
+
     <!-- Amplitude -->
     <!-- prettier-ignore -->
     <script type="text/javascript">
@@ -71,6 +72,19 @@
       amplitude.getInstance().init("8d2f9bcdb96618839e23d8ed5eae8979");
     </script>
     <!-- End Amplitude -->
+
+    <!-- Hotjar -->
+    <!-- prettier-ignore -->
+    <script>
+      (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:1815843,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
     <% } else { %>
     <!-- [INFO] Analytics scripts omitted for environment: %NODE_ENV% -->
     <% } %>
