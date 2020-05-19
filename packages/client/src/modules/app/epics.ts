@@ -1,6 +1,15 @@
 import queryString from "query-string";
-import { filter, map, tap, ignoreElements, pluck, delay } from "rxjs/operators";
-import { Observable, merge } from "rxjs";
+import {
+  filter,
+  map,
+  tap,
+  ignoreElements,
+  pluck,
+  delay,
+  withLatestFrom,
+  catchError,
+} from "rxjs/operators";
+import { Observable, merge, defer, of } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
@@ -10,6 +19,10 @@ import {
   parseInitialUrlToInitializationType,
   APP_INITIALIZATION_TYPE,
 } from "tools/utils";
+import {
+  captureSentryMessage,
+  captureSentryException,
+} from "tools/sentry-utils";
 
 const debug = require("debug")("client:app:epics");
 
@@ -98,14 +111,18 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   );
 };
 
+interface AmplitudeInstance {
+  setUserId: (x: string) => void;
+  logEvent: (x: string, opts?: any) => void;
+}
+
+interface Amplitude {
+  getInstance: () => AmplitudeInstance;
+}
+
 declare global {
   interface Window {
-    amplitude?: {
-      getInstance: () => {
-        setUserId: (x: string) => void;
-        logEvent: (x: string, opts?: any) => void;
-      };
-    };
+    amplitude?: Amplitude;
   }
 }
 
@@ -113,6 +130,13 @@ declare global {
  * An epic to send some custom events to amplitude.
  */
 const analyticsEpic: EpicSignature = action$ => {
+  const amp$ = defer<Observable<Window["amplitude"]>>(() =>
+    of(window.amplitude),
+  ).pipe(
+    filter((x): x is Amplitude => Boolean(x)),
+    map(x => x.getInstance()),
+  );
+
   const identityAnalytic$ = action$.pipe(
     filter(isActionOf(Actions.fetchUserSuccess)),
     tap(x => {
@@ -143,7 +167,25 @@ const analyticsEpic: EpicSignature = action$ => {
     ignoreElements(),
   );
 
-  return merge(identityAnalytic$, completionAnalytic$);
+  const feedbackAnalytic$ = action$.pipe(
+    filter(isActionOf(Actions.submitUserFeedback)),
+    withLatestFrom(amp$),
+    tap(([x, amp]) => {
+      amp.logEvent("FEEDBACK_SUBMITTED", {
+        challengeId: x.payload.challengeId,
+        type: x.payload.type,
+      });
+    }),
+    ignoreElements(),
+  );
+
+  return merge(identityAnalytic$, completionAnalytic$, feedbackAnalytic$).pipe(
+    catchError((err, stream) => {
+      console.warn(`[Low Priority] Analytics error: ${err.message}`);
+      captureSentryException(err);
+      return stream; // Do not collapse the stream
+    }),
+  );
 };
 
 /** ===========================================================================
