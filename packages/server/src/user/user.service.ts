@@ -55,7 +55,7 @@ export class UserService {
     // problem until we have 10_000s of users. Ha!
     return this.userRepository
       .createQueryBuilder("user")
-      .leftJoinAndSelect("user.payments", "payments")
+      .leftJoinAndSelect("user.challengeProgressHistory", "progress")
       .getMany();
   }
 
