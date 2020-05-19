@@ -20,10 +20,7 @@ import {
   parseInitialUrlToInitializationType,
   APP_INITIALIZATION_TYPE,
 } from "tools/utils";
-import {
-  captureSentryMessage,
-  captureSentryException,
-} from "tools/sentry-utils";
+import { captureSentryException } from "tools/sentry-utils";
 
 const debug = require("debug")("client:app:epics");
 

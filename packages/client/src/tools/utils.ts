@@ -389,7 +389,7 @@ export const deriveIdsFromCourse = (
   const slug =
     challengeId in challengeMap
       ? getChallengeSlug(challengeMap[challengeId].challenge)
-      : "";
+      : challengeId; // If it doesn't exist that's ok. Client side 404
 
   return {
     courseId,

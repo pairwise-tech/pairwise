@@ -11,6 +11,7 @@ import {
   ICodeBlobDto,
   SandboxBlob,
   Challenge,
+  getChallengeSlug,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -353,8 +354,23 @@ const setAndSyncChallengeIdEpic: EpicSignature = (action$, state$, deps) => {
         Actions.setActiveChallengeIds,
       ]),
     ),
-    tap(action => {
-      deps.router.push(`/workspace/${action.payload.currentChallengeId}`);
+    map(action => {
+      const { challengeMap } = state$.value.challenges;
+      const challengeId = action.payload.currentChallengeId;
+      const slug =
+        challengeMap && challengeId in challengeMap
+          ? getChallengeSlug(challengeMap[challengeId].challenge)
+          : challengeId; // If it doesn't exist that's ok. Client side 404
+      const { search = "", hash = "" } = deps.router.location;
+      return slug + search + hash;
+    }),
+    map(subPath => `/workspace/${subPath}`),
+    filter(nextPath => {
+      return nextPath !== deps.router.location.pathname;
+    }),
+    tap(nextPath => {
+      debug("[INFO setAndSyncChallengeEpic] Redirectin to new path:", nextPath);
+      deps.router.push(nextPath);
     }),
     ignoreElements(),
   );
