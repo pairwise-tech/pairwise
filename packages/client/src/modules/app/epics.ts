@@ -8,6 +8,7 @@ import {
   delay,
   withLatestFrom,
   catchError,
+  distinct,
 } from "rxjs/operators";
 import { Observable, merge, defer, of } from "rxjs";
 import { isActionOf } from "typesafe-actions";
@@ -156,6 +157,7 @@ const analyticsEpic: EpicSignature = action$ => {
   const completionAnalytic$ = action$.pipe(
     filter(isActionOf(Actions.updateUserProgress)),
     filter(x => x.payload.complete),
+    distinct(x => x.payload.challengeId), // Do not double-log completion of the same challenge
     tap(x => {
       const { amplitude } = window;
       const amp = amplitude?.getInstance();
