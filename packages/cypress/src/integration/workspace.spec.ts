@@ -4,6 +4,7 @@ import {
   getIframeBody,
   click,
   typeTextInCodeEditor,
+  elementContains,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -116,7 +117,7 @@ describe("Sandbox", () => {
   });
 });
 
-describe("Success Modal", () => {
+describe.only("Success Modal", () => {
   it("Should show the modal when and only when the run button is clicked", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
     cy.contains("Incomplete");
@@ -128,6 +129,10 @@ describe("Success Modal", () => {
 
     click("pw-run-code");
     cy.get("#gs-card").should("exist");
+  });
+
+  it("Should have a feedback button", () => {
+    cy.contains("Feedback");
   });
 
   it("Should close when the close button is clicked", () => {
