@@ -2,9 +2,17 @@ import React, { ChangeEvent, useState } from "react";
 import Modules, { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
 import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
-import { Dialog, TextArea, Button, Classes } from "@blueprintjs/core";
+import {
+  Dialog,
+  TextArea,
+  Button,
+  Classes,
+  Callout,
+  H4,
+} from "@blueprintjs/core";
 import FeedbackTypeMenu from "./FeedbackTypeMenu";
 import styled from "styled-components/macro";
+import { Link } from "react-router-dom";
 
 /** ===========================================================================
  * Types & Config
@@ -28,6 +36,7 @@ const FeedbackModal = (props: Props) => {
   );
 
   const {
+    user,
     feedback,
     feedbackType,
     currentChallenge,
@@ -36,6 +45,9 @@ const FeedbackModal = (props: Props) => {
     submitUserFeedback,
     toggleFeedbackDialogOpen,
   } = props;
+
+  const { profile } = user;
+  const email = profile?.email;
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (textAreaIntent !== "none") {
@@ -110,6 +122,7 @@ const FeedbackModal = (props: Props) => {
           Enter some feedback so we know how to improve
         </DangerLabel>
         <FeedbackInput
+          style={{ flexShrink: 0 }}
           fill={true}
           large={true}
           value={props.feedback}
@@ -117,6 +130,38 @@ const FeedbackModal = (props: Props) => {
           margintop={textAreaIntent === "danger" ? 0 : 10}
           className={`bp3-intent-${textAreaIntent}`}
         />
+        {email ? null : (
+          <Callout style={{ marginTop: 10 }}>
+            <H4>Want us to respond?</H4>
+            <p>
+              We listen. That's one of our principles. We'd love to hear from
+              you and we respond to all feedback.
+            </p>
+            {profile ? (
+              <>
+                <p>
+                  Your account doesn't have an email address. If you'd like a
+                  response add an email. This is entirely optional.
+                </p>
+                <Link to="/account">Update my account</Link>
+              </>
+            ) : (
+              <>
+                <p>
+                  Want a response? Log in or create an account first and we'll
+                  respond directly to your feedback, usually very quickly.
+                </p>
+                <Button
+                  large
+                  style={{ width: "100%" }}
+                  onClick={() => props.setSingleSignOnDialogState(true)}
+                >
+                  Log In or Sign Up
+                </Button>
+              </>
+            )}
+          </Callout>
+        )}
         <div style={{ marginLeft: "auto", marginTop: 20 }}>
           <Button
             large={true}
@@ -175,6 +220,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   feedbackType: Modules.selectors.feedback.getFeedbackType(state),
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   currentChallenge: Modules.selectors.challenges.getCurrentChallenge(state),
+  user: Modules.selectors.user.userSelector(state),
 });
 
 const dispatchProps = {
@@ -182,6 +228,7 @@ const dispatchProps = {
   setFeedbackState: Modules.actions.feedback.setFeedbackState,
   setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
   submitUserFeedback: Modules.actions.feedback.submitUserFeedback,
+  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 
 const mergeProps = (
