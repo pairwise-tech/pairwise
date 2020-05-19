@@ -81,7 +81,12 @@ const StyledButton = styled(Button)`
 // An inline button that the user can click to quickly jump to our video.
 const VideoPlayButton: React.FC<PWEditorComponentProps> = props => {
   return (
-    <StyledButton theme rightIcon="video" small onClick={scrollToVideoAndPlay}>
+    <StyledButton
+      id="VideoPlayButton"
+      rightIcon="video"
+      small
+      onClick={scrollToVideoAndPlay}
+    >
       {props.children}
     </StyledButton>
   );
