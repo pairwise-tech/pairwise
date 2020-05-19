@@ -101,6 +101,12 @@ describe("Sandbox", () => {
     cy.contains("React");
   });
 
+  it("Sandbox should load when coming directly to URL", () => {
+    cy.visit(`${CLIENT_APP_URL}/workspace/sandbox`); // The "Welcome to pairwise" challenge (no workspace)
+    cy.url().should("include", "/sandbox");
+    cy.get("#sandboxButton").should("have.attr", "disabled");
+  });
+
   it("Sandbox should load when coming from non-workspace challenge", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/yxZjmD0o`); // The "Welcome to pairwise" challenge (no workspace)
     cy.get("#pairwise-code-editor").should("not.exist");
@@ -117,7 +123,7 @@ describe("Sandbox", () => {
   });
 });
 
-describe.only("Success Modal", () => {
+describe("Success Modal", () => {
   it("Should show the modal when and only when the run button is clicked", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
     cy.contains("Incomplete");
