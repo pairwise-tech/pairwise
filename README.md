@@ -4,23 +4,6 @@
 
 The **Pairwise** codebase includes a React app client application, a NestJS server application, and other various services, all bundled up in a monorepo using Lerna and Yarn workspaces.
 
-## 📦 Contents
-
-- [🎉 Welcome to Pairwise!](#%f0%9f%8e%89-welcome-to-pairwise)
-  - [📦 Contents](#%f0%9f%93%a6-contents)
-  - [📋 Structure](#%f0%9f%93%8b-structure)
-  - [🦄 Quick Links](#%f0%9f%a6%84-quick-links)
-  - [👷 Getting Started](#%f0%9f%91%b7-getting-started)
-  - [🛠️ Development](#%f0%9f%9b%a0%ef%b8%8f-development)
-  - [🏭 Codepress](#%f0%9f%8f%ad-codepress)
-  - [🚧 Tests](#%f0%9f%9a%a7-tests)
-  - [💂‍♂️ Authentication](#%f0%9f%92%82%e2%80%8d%e2%99%82%ef%b8%8f-authentication)
-  - [🏦 Payments](#%f0%9f%8f%a6-payments)
-  - [⚙️ To Rebuild The Database](#%e2%9a%99%ef%b8%8f-to-rebuild-the-database)
-  - [🤖 To Refresh Builds and Dependencies](#%f0%9f%a4%96-to-refresh-builds-and-dependencies)
-  - [📝 Contributing](#%f0%9f%93%9d-contributing)
-  - [✈️ Production](#%e2%9c%88%ef%b8%8f-production)
-
 ## 📋 Structure
 
 This project is managed using Lerna, and contains the following packages:
