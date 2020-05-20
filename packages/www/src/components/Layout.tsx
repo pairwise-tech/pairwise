@@ -128,6 +128,7 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
               <small>© {new Date().getFullYear()} Pairwise</small>
             </div>
             <Deemphasize>
+              <FooterLink to="/media-kit">Media Kit</FooterLink>
               <FooterLink to="/terms">Terms of Service</FooterLink>
               <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
             </Deemphasize>
