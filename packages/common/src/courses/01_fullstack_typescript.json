@@ -954,7 +954,7 @@
           "title": "Types and Type Primitives",
           "instructions": "",
           "testCode": "// test('message', () => expect(...))",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/tcnl9t1ukD8",
           "starterCode": "",
           "solutionCode": "",
           "content": "Central to every TypeScript program is the data that it concerns, operates on, and manipulates. But what exactly is that data? How can it be described, and what are its properties?\n\nWell, TypeScript, like every programming language, has different _types_ of data. The number of types that can be created by a programming language’s users is infinite, however all languages, including TypeScript, have a set of built\\-in types, the lowest level of which are called **primitives**. These types can be operated on and manipulated by themselves, or be composed with other types to form more complex types, but this is a topic we’ll cover in more detail later. For now, let’s focus on TypeScript's most common **primitive data types**.\n\nFirst, though, let’s clear something up. \n\n## What exactly is a type?\n\nAt its most basic, a type describes a particular piece of data. A piece of data’s type lets us \\(and more importantly, the TypeScript compiler\\!\\) know how this particular piece of data can be used and what kind of operations can be performed on it. For example, something with the type `number`, should be able to be added, subtracted, divided, and multiplied with other pieces of data that also have the type `number`. Makes sense, right\\!?\n\nIn fact, you just learned your first type: `number`\\! As you might have guessed, this is one of TypeScript's primitive data types; one of the basic building blocks of the data found within a TypeScript program.\n\n> **Tip**\n> A compiler is responsible for translating code written in one programming language into another language. In many cases, compilers are responsible for translating human\\-readable source code into something called machine\\-code, which is highly optimized and only intended to be interpreted by computers. In the case of TypeScript, the compiler is responsible for translating TypeScript into JavaScript that can be executed anywhere JavaScript can be.\n\n## TypeScript Primitive Types\n\nTypeScript supports several primitive data types, including:\n\n* `number`\n* `string`\n* `boolean`\n* `null`\n* `undefined`\n\n\nWhile this list is not exhaustive, for the purpose of the next several lessons, these are the types you'll need to know. Let's take a closer look at each one in the next few challenges."
@@ -965,7 +965,7 @@
           "title": "Numbers",
           "instructions": "Modify the code below so that `whole` is equal to `1` and `half` is equal to `.5`.\n",
           "testCode": "test('`whole` should be equal to `1`', () => expect(whole).toBe(1));\ntest('`half` should be equal to `.5`', () => expect(half).toBe(.5));",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/AVoUdgDVTVk",
           "starterCode": "const whole = 0;\nconst half = 0;",
           "solutionCode": "const whole = 1;\nconst half = .5;",
           "content": "In TypeScript, numbers are expressed literally, and are given the type `number` \\(not to be confused with `Number`, with a capital \"N\"\\). As you might expect, numbers can be operated on mathematically, and are used for representing numeric values in our programs.\n\nIn TypeScript, numbers can be whole, or fractional \\(i.e. have one or more decimal places\\).\n\n## number not Number\n\nThis is an important distinction. In TypeScript, _`number`_ refers to the data type, while `Number` refers to the  __global__, and more concrete, `Number` object, a concept that goes beyond the scope of this lesson. For now, it's just important that you understand the distinction, and that TypeScript is a case\\-sensitive programming language. While this may seem like a small difference, remember: in the case of `number` vs\\. `Number`, case matters\\!\n\n## Just one number\n\nIn the challenge above, we discussed that data with the type `number` in TypeScript can represent both whole and fractional values. While it is not important in the context of this course, you might find it interesting to know that commonly, in other program languages, fractional values, or _floating point_ values, are represented by another data type. TypeScript is unique in that all numbers are considered floating point values."
@@ -976,7 +976,7 @@
           "title": "Strings",
           "instructions": "Modify `greeting` below so that it says \"Hello, my name is \" followed by your name\n",
           "testCode": "test('`greeting` should equal the string `\"Hello, my name is {your name here}\"`', () =>\n  assert(/hello, my name is \\w+/i.test(greeting)));\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/w4kz27N3p60",
           "starterCode": "const greeting = \"\";",
           "solutionCode": "const greeting = \"Hello, my name is Pete\";",
           "content": "In TypeScript, strings are used to represent text, or data that can be represented by text, and are given the type `string` \\(not to be confused with `String` – noticing a pattern here?\\). Strings are expressed as a string of characters surrounded by single or double quotes, `\"like this\"`.\n\n## string not String\n\nOk, last warning\\! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway: TypeScript is a **case\\-sensitive** language, and it is _not_ safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip**\n> TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc.\n"
@@ -987,7 +987,7 @@
           "title": "Booleans",
           "instructions": "* Look at the following example, and change `false` to `true`.\n* Notice what happens\\!\n\n\nDon't worry, there's a lot going on here that we haven't covered yet. For now, just focus on the challenge at hand.",
           "testCode": "test('`str` should be equal to `\"Hello, TypeScript!\"`', () =>\n  expect(str).toBe(\"Hello, TypeScript!\"));\ntest(\"`isTrue` should be of type `boolean`\", () =>\n  expect(typeof isTrue).toBe(\"boolean\"));\ntest(\"`isTrue` should be `true`\", () =>\n  expect(isTrue).toBe(true));\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/URyS2Te2JaY",
           "starterCode": "let str = \"\";\nconst isTrue = false;\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
           "solutionCode": "let str = \"\";\nconst isTrue = true;\n\nif (isTrue) {\n    str = \"Hello, TypeScript!\";\n}\n\nconsole.log(str);",
           "content": "Booleans, are perhaps the simplest of the primitive data types, and in TypeScript,  can be expressed as either `true` or `false`. They are given the type `boolean`. Booleans are the primary way that we handle \"logical\" decision making, and, in fact, many expressions can be _evaluated_ as booleans, but we'll get into this more later.\n\n```\nconst isTrue = true;\nconst isFalse = false;\n\nif (isTrue) {\n  // do something cool!\n}\n\n```\n"
@@ -1031,7 +1031,7 @@
           "title": "What Type is This?",
           "instructions": "Use `typeof` to find the types of the variables defined in the code below.",
           "testCode": "// Write your tests here:\ntest(\"`sType` should be string\", () => {\n  expect(sType).toBe(\"string\");\n});\ntest(\"`nType` should be number\", () => {\n  expect(nType).toBe(\"number\");\n});\ntest(\"`bType` should be boolean\", () => {\n  expect(bType).toBe(\"boolean\");\n});\ntest(\"The `typeof` keyword should be used\", () => {\n  expect(__user_code_string__).toMatch(/typeof .+/)\n})",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/ADi01CUzCEY",
           "starterCode": "const s = \"hey there\";\nconst n = 256;\nconst b = true;\n\nconst sType = undefined;\nconst nType = undefined;\nconst bType = undefined;",
           "solutionCode": "const s = \"hey there\";\nconst n = 256;\nconst b = true;\n\nconst sType = typeof s;\nconst nType = typeof n;\nconst bType = typeof b;",
           "content": "# The typeof keyword\n\nYou can use `typeof` to find out what type something is. It will return the type as a string such as `\"string\"`, `\"number\"`, `\"boolean\"`, etc. Let's just jump into some examples:\n\n```typescript\ntypeof 'hey'; // => \"string\"\ntypeof 256; // => \"number\"\ntypeof true; // => \"boolean\"\n\nconst catName = \"Jarbles\";\n\nif (typeof catName !== \"string\") {\n  console.log(\"Cat's should have string names!\");\n}\n\n```\n# Why is this useful?\n\nWhen you program with variables you wont' always know what type the variable is. `typeof` allows you to check. In practice this is often used in functions to make sure the variables passed in are the correct time. \n\nWe will make use of `typeof` throughout the course, so it will be become more clear in time what it can be used for. \n# A tool with a catch\n\nUsing `typeof` keyword is both very powerful and fraught with issues. The long and short of it is that it doesn't act how you expect unless you are only using it with strings, numbers and booleans.\n\nI'll show you some examples, but first, consider the following rule of thumb:\n\n> If you only trust `typeof` to work on strings, numbers and booleans it will work great for you.\n\nIf you keep that in mind you don't need to actually know the oddities below, but if you're curious read on. I'm going to say it again for emphasis: ++You don't need to memorize any of this.++ Just consider it a reference.  \n\nConsider the following. What do you expect the types to be?\n\n```typescript\ntypeof []; // => ???\ntypeof {}; // => ???\ntypeof null; // => ???\n\n```\n\nIf you're uncertain let me ask you this: Would you expect the types of `[]`, `{}`, and `null` to all the the same? Probably not, but they are:\n\n```typescript\ntypeof []; // => \"object\"\ntypeof {}; // => \"object\"\ntypeof null; // => \"object\"\n\n```\n\nThe `typeof {}` makes sense since it is indeed an object, however, `typoef null` is completely unintuitive and even worse it's not helpful. "
@@ -1053,10 +1053,10 @@
           "title": "Fix Me!",
           "instructions": "Hover over `theMeaningOfLife` to see a helpful linter error, and then fix the problem.",
           "testCode": "test('`theMeaningOfLife` should be of type `string`', () => expect(typeof theMeaningOfLife).toBe(\"string\"))",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/J1UHcKpw7xA",
           "starterCode": "const theMeaningOfLife: string = 42;",
           "solutionCode": "const theMeaningOfLife: string = \"42\";",
-          "content": "## What is a linter?\nA linter is a type of coding aid, which analyzes the code that you write, and in an integrated development environment (or in this case, an IDE-like environment), gives you realtime feedback about potential problems in your code, such as type incompatibilities (like in this case), or stylistic problems. Linters can be a very effective tool and help you write better, less error-prone code."
+          "content": ""
         },
         {
           "id": "VpxIs2a9",
@@ -1086,7 +1086,7 @@
           "title": "Any in Action",
           "instructions": "Change the values below to match their variable names. This is a simple challenge just to demonstrate that any type can be assigned to something annotated as `any`.",
           "testCode": "test('`iAmAString` should be of type `string`', () => expect(typeof iAmAString).toBe(\"string\"))\ntest('`iAmANumber` should be of type `number`', () => expect(typeof iAmANumber).toBe(\"number\"))\ntest('`iAmNull` should be `null`', () => expect(iAmNull).toBe(null))\ntest('`iAmUndefined` should be `undefined`', () => expect(iAmUndefined).toBe(undefined))\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/BWdiuK_6vog",
           "starterCode": "const iAmAString: any = undefined;\nconst iAmANumber: any = null;\nconst iAmNull: any = 71919;\nconst iAmUndefined: any = \"not undefined yet!\";",
           "solutionCode": "const iAmAString: any = \"undefined\";\nconst iAmANumber: any = 123;\nconst iAmNull: any = null;\nconst iAmUndefined: any = undefined;",
           "content": ""
