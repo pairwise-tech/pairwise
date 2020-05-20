@@ -9,10 +9,15 @@ import { connect } from "react-redux";
 import { timer } from "rxjs";
 import { map } from "rxjs/operators";
 import { Editor } from "slate-react";
-import { Leaf, Selection } from "slate";
+import { Leaf, Selection, Block, Mark } from "slate";
 import { List } from "immutable";
 import { CODEPRESS_HOST } from "tools/client-env";
 import { InverseChallengeMapping } from "modules/challenges/types";
+import pipe from "ramda/es/pipe";
+import tryCatch from "ramda/es/tryCatch";
+import { Dictionary } from "ramda";
+import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
+import { Button, Classes } from "@blueprintjs/core";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -41,8 +46,64 @@ const uploadFile = (
     });
 };
 
+// Encode a JSON object as a URL hash
+const encodeHash = pipe(
+  (x: any) => JSON.stringify(x),
+  encodeURIComponent,
+  x => `#${x}`,
+);
+
+// Decode a URL hash containing a JSON object
+const decodeHash = tryCatch(
+  pipe(
+    (x: string) => x.slice(1), // Strip leading hash
+    decodeURIComponent,
+    JSON.parse,
+  ),
+  err => {
+    console.warn("[decodeHash] Could not decode hash.", err.message);
+    return null;
+  },
+);
+
+interface PWEditorComponentProps {
+  node: Block | Mark;
+  data: { [k: string]: any };
+  children: React.ReactNode;
+}
+
+const StyledButton = styled(Button)`
+  &:hover .bp3-icon {
+    color: #da3a13 !important;
+  }
+`;
+
+// An inline button that the user can click to quickly jump to our video.
+const VideoPlayButton: React.FC<PWEditorComponentProps> = props => {
+  return (
+    <StyledButton theme rightIcon="video" small onClick={scrollToVideoAndPlay}>
+      {props.children}
+    </StyledButton>
+  );
+};
+
+// A button that will scroll down to the content area of teh page
+const ContentScrollButton: React.FC<PWEditorComponentProps> = props => {
+  return (
+    <a
+      href="#content-area"
+      onClick={e => {
+        e.preventDefault();
+        scrollToContentArea();
+      }}
+    >
+      {props.children}
+    </a>
+  );
+};
+
 // All adapted from the markdown shortcuts that ship with the lib by default:
-// https://github.com/outline/rich-markdown-editor/blob/master/src/plugins/MarkdownShortcuts.js
+// https://github.com/outline/rich-markdown-editor/blob/v9.11.2/src/plugins/MarkdownShortcuts.js
 const MarkdownShortcuts = (): SlatePlugin => {
   const inlineShortcuts = [
     { mark: "bold", shortcut: "**" },
@@ -50,7 +111,26 @@ const MarkdownShortcuts = (): SlatePlugin => {
     { mark: "code", shortcut: "`" },
     { mark: "inserted", shortcut: "++" },
     { mark: "deleted", shortcut: "~" },
+
+    // This is our hack to support rendering custom components inot our
+    // markdown. Surround a keyword with "@". See supported keywords below in
+    // componentShortcuts
+    { mark: "link", shortcut: "@" },
   ];
+
+  // A mapping of text strings to component names.
+  const componentShortcuts: Dictionary<string> = {
+    "@video@": "VideoPlayButton",
+    "@content@": "ContentScrollButton",
+  };
+
+  // A mapping of component names to actual components. Why two levels of
+  // mapping? Serialization. We need to serialize the names of components into
+  // markdown.
+  const InlineComponentMap: Dictionary<React.FC<PWEditorComponentProps>> = {
+    VideoPlayButton,
+    ContentScrollButton,
+  };
 
   // Given a list of leaves and a selection find in which indexed leaf the
   // selection is. It's basically the answer to "Which leaf is the cursor in?"
@@ -140,6 +220,28 @@ const MarkdownShortcuts = (): SlatePlugin => {
           e.preventDefault();
         }
 
+        let data = null;
+
+        if (shortcut === "@") {
+          const componentShortcut = potentialText.slice(
+            firstCodeTagIndex - offsetFromStart,
+            lastCodeTagIndex - offsetFromStart + 1,
+          );
+          if (componentShortcut in componentShortcuts) {
+            data = {
+              href: encodeHash({
+                component: componentShortcuts[componentShortcut],
+              }),
+            };
+          } else {
+            console.warn(
+              `Unrecognized "@" component: ${potentialText}. This will be ignored.`,
+            );
+          }
+        }
+
+        const markProperties = data ? { type: mark, data } : { type: mark };
+
         // NOTE: Order is important. If you you type a `, move to the end of a
         // word, type `, everything works. However if you put a ` at the end of
         // a word, move to the front, put another `, then this will not work.
@@ -151,9 +253,9 @@ const MarkdownShortcuts = (): SlatePlugin => {
           .removeTextByKey(firstText.key, lastCodeTagIndex, shortcut.length)
           .removeTextByKey(firstText.key, firstCodeTagIndex, shortcut.length)
           .moveAnchorTo(firstCodeTagIndex, lastCodeTagIndex)
-          .addMark(mark)
+          .addMark(markProperties)
           .moveToEnd()
-          .removeMark(mark);
+          .removeMark(markProperties);
       }
     }
 
@@ -280,7 +382,50 @@ const MarkdownShortcuts = (): SlatePlugin => {
     }
   };
 
-  return { onKeyDown };
+  // We need to handle both nodes and marks, oddly. The rich markdown editor is
+  // using renderMark when you first type the shortcut in the editor, so we use
+  // that to render. After the document is saved and loaded back in from stored
+  // markdown renderNode will be called instead.
+  const _renderNodeOrMark = (
+    node: Block | Mark,
+    children: React.ReactNode,
+    next: () => any,
+  ) => {
+    switch (node.type) {
+      case "link": {
+        const href = node.getIn(["data", "href"], "");
+
+        // Just a standard link. Since we're overloading the link type this is the most likely codepath.
+        if (!href || !href.startsWith("#")) {
+          return next();
+        }
+
+        const data = decodeHash(href) || {};
+        const InlineComponent = InlineComponentMap[data.component];
+
+        // This would happen if one of us types a child value that does not correspond to a comp
+        if (!InlineComponent) {
+          console.warn(
+            "You tried to render an inline component but none was found for type: ",
+            node.type,
+          );
+          return next();
+        }
+
+        return <InlineComponent node={node} children={children} data={data} />;
+      }
+      default:
+        return next();
+    }
+  };
+
+  return {
+    onKeyDown,
+    renderNode: (props, _, next) =>
+      _renderNodeOrMark(props.node, props.children, next),
+    renderMark: (props, _, next) =>
+      _renderNodeOrMark(props.mark, props.children, next),
+  };
 };
 
 const markdownShortcuts = MarkdownShortcuts();
