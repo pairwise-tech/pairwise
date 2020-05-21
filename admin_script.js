@@ -149,9 +149,17 @@ const summarizeUserProgress = users => {
     };
   });
 
-  return withProgressSummaries.sort((a, b) => {
+  const withProgressSummaries = withProgressSummaries.sort((a, b) => {
     return b.completedChallenges.total - a.completedChallenges.total;
   });
+
+  // Create summary with total user count
+  const summary = {
+    totalUsers: withProgressSummaries.length,
+    users: withProgressSummaries,
+  };
+
+  return summary;
 };
 
 /** ===========================================================================
