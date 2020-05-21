@@ -11,6 +11,7 @@ const ADMIN_EMAIL = "pairwise-dev-admin-user@pairwise.tech";
 // Randomly return true of false
 const yesOrNo = () => Math.floor(Math.random() * 100) > 50;
 
+// Choose a random default profile avatar image.
 const getRandomProfileImage = () => {
   return yesOrNo()
     ? "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4"
@@ -25,10 +26,14 @@ const generateNewProfileFields = () => {
   const name = `${first} ${last}`;
   const picture = getRandomProfileImage();
 
-  // Randomly provide/do not provide the profile name
-  const useNullName = yesOrNo();
-  if (useNullName) {
-    return { id, first: null, last: null, name: null, email, picture };
+  /**
+   * Randomly provide/do not provide null profile values. This is to test
+   * the legitimate possibility that these values may be null/undefined in
+   * actual response data.
+   */
+  const randomlyUseNullValues = yesOrNo();
+  if (randomlyUseNullValues) {
+    return { id, first: null, last: null, name: null, email: null, picture };
   } else {
     return { id, first, last, name, email, picture };
   }
@@ -45,15 +50,13 @@ const generateNewProfileFields = () => {
 class MockAuth {
   // Returns undefined email. See note in server file.
   generateNewFacebookProfile() {
-    const { id, first, last, picture } = generateNewProfileFields();
+    const { id, email, first, last, picture } = generateNewProfileFields();
 
     return {
       id,
-      email: undefined,
-      // first_name: first,
-      // last_name: last,
-      first_name: null,
-      last_name: null,
+      email,
+      first_name: first,
+      last_name: last,
       picture: {
         data: {
           height: 50,
