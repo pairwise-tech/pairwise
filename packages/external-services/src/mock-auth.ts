@@ -33,7 +33,7 @@ const generateNewProfileFields = () => {
    */
   const randomlyUseNullValues = yesOrNo();
   if (randomlyUseNullValues) {
-    return { id, first: null, last: null, name: null, email: null, picture };
+    return { id, first: null, last: null, name: null, email, picture };
   } else {
     return { id, first, last, name, email, picture };
   }
@@ -50,11 +50,11 @@ const generateNewProfileFields = () => {
 class MockAuth {
   // Returns undefined email. See note in server file.
   generateNewFacebookProfile() {
-    const { id, email, first, last, picture } = generateNewProfileFields();
+    const { id, first, last, picture } = generateNewProfileFields();
 
     return {
       id,
-      email,
+      email: undefined,
       first_name: first,
       last_name: last,
       picture: {
