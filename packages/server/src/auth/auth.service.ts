@@ -116,7 +116,7 @@ export class AuthService {
         }
 
         const avatarUrl = profile.picture.data.url;
-        const { first_name, last_name } = profile;
+        const { first_name = "", last_name = "" } = profile;
         const name = `${first_name} ${last_name}`;
         const userProfile: GenericUserProfile = {
           email,
@@ -176,21 +176,23 @@ export class AuthService {
 
         let firstName = "";
         let lastName = "";
+        let displayName = "";
 
         // profile.name can be null
         if (profile.name) {
           const name = profile.name.split(" ");
           firstName = name[0] || "";
           lastName = name[1] || "";
+          displayName = profile.name;
         }
 
         const avatarUrl = profile.avatar_url;
         const userProfile: GenericUserProfile = {
           email,
           avatarUrl,
+          displayName,
           givenName: firstName,
           familyName: lastName,
-          displayName: profile.name,
           githubAccountId,
           facebookAccountId: null,
           googleAccountId: null,
@@ -245,9 +247,9 @@ export class AuthService {
         const userProfile: GenericUserProfile = {
           email,
           avatarUrl,
-          displayName: profile.name,
-          givenName: profile.given_name,
-          familyName: profile.family_name,
+          displayName: profile.name || "",
+          givenName: profile.given_name || "",
+          familyName: profile.family_name || "",
           googleAccountId,
           githubAccountId: null,
           facebookAccountId: null,
