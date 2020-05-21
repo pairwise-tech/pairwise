@@ -76,7 +76,8 @@ describe("Account Creation Flow", () => {
     cy.wait(5000); /* Wait! */
 
     const checkCourseState = () => {
-      cy.contains("Welcome, ");
+      const WELCOME_REGEX = /Welcome, |Welcome!/g;
+      cy.contains(WELCOME_REGEX);
       click("navigation-menu-button");
       click("module-navigation-1");
       click("challenge-navigation-1");
