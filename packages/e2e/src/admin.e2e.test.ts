@@ -53,7 +53,7 @@ describe("Admin (e2e)", () => {
   test("/users/admin/delete (DELETE) delete a user", async () => {
     const adminAccessToken = await fetchAdminAccessToken();
 
-    // 1. Create a regular user and get their email
+    // 1. Create a regular user
     const { user } = await createAuthenticatedUser("facebook");
     const userUuid = user.profile.uuid;
 

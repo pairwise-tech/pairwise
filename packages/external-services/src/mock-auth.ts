@@ -50,8 +50,10 @@ class MockAuth {
     return {
       id,
       email: undefined,
-      first_name: first,
-      last_name: last,
+      // first_name: first,
+      // last_name: last,
+      first_name: null,
+      last_name: null,
       picture: {
         data: {
           height: 50,

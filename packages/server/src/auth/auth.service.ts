@@ -116,14 +116,18 @@ export class AuthService {
         }
 
         const avatarUrl = profile.picture.data.url;
-        const { first_name = "", last_name = "" } = profile;
-        const name = `${first_name} ${last_name}`;
+        const { first_name, last_name } = profile;
+        const givenName = first_name || "";
+        const familyName = last_name || "";
+        const displayName =
+          givenName || familyName ? `${first_name} ${last_name}` : "";
+
         const userProfile: GenericUserProfile = {
           email,
           avatarUrl,
-          displayName: name,
-          givenName: first_name,
-          familyName: last_name,
+          givenName,
+          familyName,
+          displayName,
           facebookAccountId,
           githubAccountId: null,
           googleAccountId: null,
