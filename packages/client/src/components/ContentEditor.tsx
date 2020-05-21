@@ -17,7 +17,7 @@ import pipe from "ramda/es/pipe";
 import tryCatch from "ramda/es/tryCatch";
 import { Dictionary } from "ramda";
 import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
-import { Button, Classes } from "@blueprintjs/core";
+import { Button } from "@blueprintjs/core";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
