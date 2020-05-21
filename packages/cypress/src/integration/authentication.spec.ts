@@ -63,8 +63,10 @@ describe("Authentication Flows: signin, profile, and logout", () => {
  * Helper to test the authentication features work after login occurs.
  */
 const assertAuthenticatedFlowWorks = () => {
+  const WELCOME_REGEX = /Welcome, |Welcome!/g;
+
   cy.wait(TIMEOUT);
-  cy.contains("Welcome, ");
+  cy.contains(WELCOME_REGEX);
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
   click("account-link");
@@ -72,7 +74,7 @@ const assertAuthenticatedFlowWorks = () => {
 
   cy.reload();
   cy.wait(TIMEOUT);
-  cy.contains("Welcome, ");
+  cy.contains(WELCOME_REGEX);
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
   click("logout-link");
