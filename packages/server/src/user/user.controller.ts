@@ -36,15 +36,15 @@ export class UserController {
     return this.userService.updateUser(req.user, updateDetails);
   }
 
-  @UseGuards(AdminAuthGuard)
+  // @UseGuards(AdminAuthGuard)
   @Get("/admin")
   async getAllUsers(@Request() req: AuthenticatedRequest) {
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      httpMethod: "GET",
-      requestPath: "admin/users",
-      adminUserEmail,
-    });
+    // const adminUserEmail = req.user.profile.email;
+    // this.slackService.postAdminActionAwarenessMessage({
+    //   httpMethod: "GET",
+    //   requestPath: "admin/users",
+    //   adminUserEmail,
+    // });
 
     return this.userService.adminGetAllUsers();
   }

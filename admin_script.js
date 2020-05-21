@@ -91,6 +91,69 @@ class Log {
 
 const log = new Log(SCRIPT_ACTION);
 
+/**
+ * Parse the course progress.
+ */
+const formatChallengeProgress = progressHistory => {
+  return progressHistory.map(p => ({ ...p, progress: JSON.parse(p.progress) }));
+};
+
+/**
+ * Count the total completed challenges for a user.
+ */
+const countCompletedChallenges = progress => {
+  return progress.reduce(
+    (summary, courseProgress) => {
+      const count = Object.keys(courseProgress.progress).length;
+      return {
+        ...summary,
+        total: summary.total + count,
+        [courseProgress.courseId]: count,
+      };
+    },
+    { total: 0 },
+  );
+};
+
+/**
+ * Remove some extra user fields to make the JSON output easier to read.
+ */
+const removeExcessUserFields = user => {
+  return {
+    uuid: user.uuid,
+    email: user.email,
+    displayName: user.displayName,
+    givenName: user.givenName,
+    familyName: user.familyName,
+    lastActiveChallengeId: user.lastActiveChallengeId,
+    settings: user.settings,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  };
+};
+
+/**
+ * Parse course progress, summarize the progress for each user, and sort
+ * the results.
+ */
+const summarizeUserProgress = users => {
+  const withProgressSummaries = users.map(user => {
+    const formattedProgress = formatChallengeProgress(
+      user.challengeProgressHistory,
+    );
+    const completedChallenges = countCompletedChallenges(formattedProgress);
+    return {
+      ...removeExcessUserFields(user),
+      completedChallenges,
+      challengeProgressHistory: formattedProgress,
+    };
+  });
+
+  return withProgressSummaries.sort((a, b) => {
+    return b.completedChallenges.total - a.completedChallenges.total;
+  });
+};
+
 /** ===========================================================================
  * Admin API Utils
  * ============================================================================
@@ -116,7 +179,8 @@ const getAllUsers = async () => {
     log.finish(
       `Retrieved ${result.data.length} user records. Writing result to file: ${filename}`,
     );
-    const users = JSON.stringify(result.data, null, 2);
+    const data = summarizeUserProgress(result.data);
+    const users = JSON.stringify(data, null, 2);
     fs.writeFileSync(filename, users, "utf-8");
     console.log("Done!");
   } catch (err) {
