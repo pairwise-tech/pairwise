@@ -1,6 +1,6 @@
 import queryString from "query-string";
 import { filter, map, tap, ignoreElements, pluck, delay } from "rxjs/operators";
-import { Observable, merge } from "rxjs";
+import { combineLatest, Observable, merge } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
@@ -68,6 +68,44 @@ const stripInitialParameters: EpicSignature = (action$, _, deps) => {
       const { router } = deps;
       debug(`Removing query parameters: ${router.location.search}`);
       router.replace(router.location.pathname);
+    }),
+    ignoreElements(),
+  );
+};
+
+/**
+ * When the app loads, prompt registered users to enter their email if their
+ * email doesn't exist yet.
+ */
+const promptToAddEmailEpic: EpicSignature = (action$, _, deps) => {
+  const appInitializedSuccess$ = action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("appInitializationType"),
+    filter(type => type === APP_INITIALIZATION_TYPE.DEFAULT),
+  );
+
+  // Get users who are registered but have no email
+  const userFetchedSuccessNoEmail$ = action$.pipe(
+    filter(isActionOf(Actions.fetchUserSuccess)),
+    pluck("payload"),
+    filter(user => {
+      const USER_SIGNED_UP = !!user.profile;
+      const NO_EMAIL = !user.profile?.email;
+      return USER_SIGNED_UP && NO_EMAIL;
+    }),
+  );
+
+  return combineLatest(appInitializedSuccess$, userFetchedSuccessNoEmail$).pipe(
+    tap(() => {
+      const redirect = () => deps.router.push("/account");
+      deps.toaster.warn("Please add your email to receive course updates.", {
+        timeout: 3000000,
+        action: {
+          onClick: redirect,
+          text: "Setup Email",
+        },
+      });
     }),
     ignoreElements(),
   );
@@ -178,6 +216,7 @@ export default combineEpics(
   appInitializationEpic,
   appInitializeCaptureUrlEpic,
   stripInitialParameters,
+  promptToAddEmailEpic,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
   analyticsEpic,
