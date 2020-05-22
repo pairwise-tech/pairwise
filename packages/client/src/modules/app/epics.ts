@@ -100,7 +100,6 @@ const promptToAddEmailEpic: EpicSignature = (action$, _, deps) => {
     tap(() => {
       const redirect = () => deps.router.push("/account");
       deps.toaster.warn("Please add your email to receive course updates.", {
-        timeout: 3000000,
         action: {
           onClick: redirect,
           text: "Setup Email",
