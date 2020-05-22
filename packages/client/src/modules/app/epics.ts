@@ -50,6 +50,29 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
   );
 };
 
+/**
+ * After the initialization is complete, strip the query parameters from the
+ * original url.
+ */
+const stripInitialParameters: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("params"),
+    // Only proceed if there are captured query parameters to remove
+    filter(params => Object.keys(params).length > 0),
+    tap(() => {
+      console.warn(
+        `[WARN]: Query parameters being removed on app initialization!`,
+      );
+      const { router } = deps;
+      debug(`Removing query parameters: ${router.location.search}`);
+      router.replace(router.location.pathname);
+    }),
+    ignoreElements(),
+  );
+};
+
 const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.captureAppInitializationUrl)),
@@ -154,6 +177,7 @@ const analyticsEpic: EpicSignature = action$ => {
 export default combineEpics(
   appInitializationEpic,
   appInitializeCaptureUrlEpic,
+  stripInitialParameters,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
   analyticsEpic,
