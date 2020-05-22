@@ -39,7 +39,7 @@ describe("Account Creation Flow", () => {
     cy.wait(TIMEOUT);
   };
 
-  it("Creating an account persists pre-login updates correctly", () => {
+  it.skip("Creating an account persists pre-login updates correctly", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace`);
     cy.wait(TIMEOUT);
     cy.url().should("include", "workspace");
@@ -95,4 +95,43 @@ describe("Account Creation Flow", () => {
     cy.wait(TIMEOUT);
     checkCourseState();
   });
+
+  it("Creating an account redirects to the original workspace URL on success", () => {
+    // Use Facebook signin
+    checkUrlDuringUserRegistrationProcess("facebook", randomInRange());
+    // Use Google signin
+    checkUrlDuringUserRegistrationProcess("google", randomInRange());
+    // Use GitHub signin
+    checkUrlDuringUserRegistrationProcess("github", randomInRange());
+  });
 });
+
+const randomInRange = () => Math.round(Math.random() * 15);
+
+/**
+ * Helper to check the app URL remains unchanged after user signin.
+ */
+const checkUrlDuringUserRegistrationProcess = (
+  sso: "facebook" | "google" | "github",
+  challengeIndex: number,
+) => {
+  cy.visit(`${CLIENT_APP_URL}/workspace`);
+  cy.wait(TIMEOUT);
+  cy.url().should("include", "workspace");
+
+  // Open the navigation menu and navigate to the first programming challenge:
+  click("navigation-menu-button");
+  click("module-navigation-2");
+  click(`challenge-navigation-${challengeIndex}`);
+
+  // Login
+  click("login-signup-button");
+  click(`${sso}-login`);
+
+  const url = cy.url();
+  cy.wait(1500);
+  cy.url().should("be", url);
+
+  cy.get("#account-menu-dropdown").trigger("mouseover");
+  click("logout-link");
+};
