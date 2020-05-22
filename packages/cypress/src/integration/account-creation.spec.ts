@@ -39,7 +39,7 @@ describe("Account Creation Flow", () => {
     cy.wait(TIMEOUT);
   };
 
-  it.skip("Creating an account persists pre-login updates correctly", () => {
+  it("Creating an account persists pre-login updates correctly", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace`);
     cy.wait(TIMEOUT);
     cy.url().should("include", "workspace");
@@ -96,7 +96,7 @@ describe("Account Creation Flow", () => {
     checkCourseState();
   });
 
-  it("Creating an account redirects to the original workspace URL on success", () => {
+  it("Creating an account redirects to the original workspace URL after registration success", () => {
     // Use Facebook signin
     checkUrlDuringUserRegistrationProcess("facebook", randomInRange());
     // Use Google signin
@@ -104,8 +104,36 @@ describe("Account Creation Flow", () => {
     // Use GitHub signin
     checkUrlDuringUserRegistrationProcess("github", randomInRange());
   });
+
+  it("User registration with no email shows a prompt to add email, but only after reload and only one time", () => {
+    cy.visit(`${CLIENT_APP_URL}/workspace`);
+    cy.wait(TIMEOUT);
+    cy.url().should("include", "workspace");
+
+    // Login with Facebook (defaults to { email: null })
+    click("login-signup-button");
+    click(`facebook-login`);
+
+    // Check that the toast does not exist yet
+    cy.get("Setup Email").should("not.exist");
+    cy.reload();
+
+    // Click the toast and visit the account page
+    cy.contains("Setup Email").click({ force: true });
+    cy.contains(
+      "* Please enter your email to receive course and product updates.",
+    );
+    cy.reload();
+
+    // Verify that the warning toast is gone, but email is still null
+    cy.get("Setup Email").should("not.exist");
+    cy.contains(
+      "* Please enter your email to receive course and product updates.",
+    );
+  });
 });
 
+// Helper to produce a random challenge index
 const randomInRange = () => Math.round(Math.random() * 15);
 
 /**
