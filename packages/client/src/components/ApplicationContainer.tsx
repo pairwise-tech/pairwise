@@ -51,6 +51,7 @@ import { challengeRequiresWorkspace } from "tools/utils";
 import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
+import MobileView from "./MobileView";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -194,7 +195,7 @@ const ApplicationContainer = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <MobileView isWorkspace={isWorkspaceRequired} />
+      <MobileWarningView isWorkspace={isWorkspaceRequired} />
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
       {CODEPRESS && <AdminKeyboardShortcuts />}
@@ -334,6 +335,7 @@ const ApplicationContainer = (props: IProps) => {
         <Route key={"workspace"} path="/workspace/:id" component={Workspace} />
         <Route key={"home"} path="/home" component={Home} />
         <Route key={"account"} path="/account" component={Account} />
+        <Route key={"mobile"} path="/mobile" component={MobileView} />
         {!isLoggedIn && (
           <Route
             key={"authenticate"}
@@ -634,7 +636,7 @@ const AccountDropdownButton = styled.div`
  * ============================================================================
  */
 
-export const MobileView = (props: { isWorkspace: boolean }) => {
+export const MobileWarningView = (props: { isWorkspace: boolean }) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(true);
   const isMobile = useMedia(MOBILE, false);
   return (

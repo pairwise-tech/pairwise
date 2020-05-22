@@ -382,13 +382,21 @@ export const deriveIdsFromCourse = (
       ? maybeChallengeId
       : maybeChallengeId === SANDBOX_ID
       ? maybeChallengeId
-      : defaultCourse.modules[0].challenges[0].id;
-  const courseId = challengeMap[challengeId]?.courseId || defaultCourse.id;
+      : null;
+
+  // We allow challenge ID to be null, but we default the first challengeId as
+  // the ID used to lookup course and module. This means that the course and
+  // module of the first challenge bwill be used if no challenge id is
+  // pressent. We use this for the menu, since it needs to show a currently
+  // selected challenge and module.
+  const lookupId = challengeId || defaultCourse.modules[0].challenges[0].id;
+
+  const courseId = challengeMap[lookupId]?.courseId || defaultCourse.id;
   const moduleId =
-    challengeMap[challengeId]?.moduleId || defaultCourse.modules[0].id;
+    challengeMap[lookupId]?.moduleId || defaultCourse.modules[0].id;
   const slug =
-    challengeId in challengeMap
-      ? getChallengeSlug(challengeMap[challengeId].challenge)
+    lookupId in challengeMap
+      ? getChallengeSlug(challengeMap[lookupId].challenge)
       : challengeId; // If it doesn't exist that's ok. Client side 404
 
   return {
