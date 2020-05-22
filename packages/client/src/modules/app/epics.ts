@@ -10,6 +10,10 @@ import {
   parseInitialUrlToInitializationType,
   APP_INITIALIZATION_TYPE,
 } from "tools/utils";
+import {
+  getViewedEmailPromptStatus,
+  markEmailPromptAsViewed,
+} from "tools/storage-utils";
 
 const debug = require("debug")("client:app:epics");
 
@@ -97,6 +101,11 @@ const promptToAddEmailEpic: EpicSignature = (action$, _, deps) => {
   );
 
   return combineLatest(appInitializedSuccess$, userFetchedSuccessNoEmail$).pipe(
+    filter(() => {
+      // Filter if they have already seen the prompt before.
+      const viewedEmailPromptBefore = getViewedEmailPromptStatus();
+      return !viewedEmailPromptBefore;
+    }),
     tap(() => {
       const redirect = () => deps.router.push("/account");
       deps.toaster.warn("Please add your email to receive course updates.", {
@@ -105,6 +114,10 @@ const promptToAddEmailEpic: EpicSignature = (action$, _, deps) => {
           text: "Setup Email",
         },
       });
+    }),
+    tap(() => {
+      // After showing this, mark it as viewed so the user never sees it again.
+      markEmailPromptAsViewed();
     }),
     ignoreElements(),
   );

@@ -7,6 +7,7 @@ import { defaultSandboxBlob } from "./utils";
  */
 
 const SANDBOX = "SANDBOX";
+const VIEWED_EMAIL_PROMPT = "VIEWED_EMAIL_PROMPT";
 const ACCESS_TOKEN_STORAGE_KEY = "ACCESS_TOKEN_STORAGE_KEY";
 const EPHEMERAL_PURCHASE_COURSE_ID_KEY = "EPHEMERAL_PURCHASE_COURSE_ID_KEY";
 
@@ -14,6 +15,36 @@ const EPHEMERAL_PURCHASE_COURSE_ID_KEY = "EPHEMERAL_PURCHASE_COURSE_ID_KEY";
  * Local Storage Utils
  * ============================================================================
  */
+
+/**
+ * Set the viewed email prompt flag.
+ */
+export const markEmailPromptAsViewed = () => {
+  localStorage.setItem(VIEWED_EMAIL_PROMPT, JSON.stringify(true));
+};
+
+/**
+ * Remove the viewed email prompt flag.
+ */
+export const removeViewedEmailPrompt = () => {
+  localStorage.removeItem(VIEWED_EMAIL_PROMPT);
+};
+
+/**
+ * Get the viewed email prompt flag.
+ */
+export const getViewedEmailPromptStatus = () => {
+  try {
+    const viewed = localStorage.getItem(VIEWED_EMAIL_PROMPT);
+    if (viewed === "true") {
+      return true;
+    }
+  } catch (err) {
+    // do nothing
+  }
+
+  return false;
+};
 
 export const saveSandboxToLocalStorage = (blob: SandboxBlob) => {
   localStorage.setItem(SANDBOX, JSON.stringify({ blob }));
