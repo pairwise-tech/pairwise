@@ -98,11 +98,11 @@ describe("Account Creation Flow", () => {
 
   it("Creating an account redirects to the original workspace URL after registration success", () => {
     // Use Facebook signin
-    checkUrlDuringUserRegistrationProcess("facebook", randomInRange());
+    checkUrlDuringUserRegistrationProcess("facebook", randomChallengeIndex());
     // Use Google signin
-    checkUrlDuringUserRegistrationProcess("google", randomInRange());
+    checkUrlDuringUserRegistrationProcess("google", randomChallengeIndex());
     // Use GitHub signin
-    checkUrlDuringUserRegistrationProcess("github", randomInRange());
+    checkUrlDuringUserRegistrationProcess("github", randomChallengeIndex());
   });
 
   it("User registration with no email shows a prompt to add email, but only after reload and only one time", () => {
@@ -134,7 +134,7 @@ describe("Account Creation Flow", () => {
 });
 
 // Helper to produce a random challenge index
-const randomInRange = () => Math.round(Math.random() * 15);
+const randomChallengeIndex = () => Math.round(Math.random() * 15);
 
 /**
  * Helper to check the app URL remains unchanged after user signin.
@@ -152,11 +152,13 @@ const checkUrlDuringUserRegistrationProcess = (
   click("module-navigation-2");
   click(`challenge-navigation-${challengeIndex}`);
 
+  // Get url and check it is the same after reload
+  const url = cy.url();
+
   // Login
   click("login-signup-button");
   click(`${sso}-login`);
 
-  const url = cy.url();
   cy.wait(1500);
   cy.url().should("be", url);
 
