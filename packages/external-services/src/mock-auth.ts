@@ -74,7 +74,7 @@ class MockAuth {
     return {
       id,
       name,
-      email,
+      email: "sean.smith.2009@gmail.com",
       avatar_url: picture,
     };
   }

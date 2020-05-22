@@ -2,6 +2,10 @@ import nodemailer from "nodemailer";
 import ENV from "../tools/server-env";
 import { ERROR_CODES } from "src/tools/constants";
 import { captureSentryException } from "src/tools/sentry-utils";
+import {
+  getWelcomeEmailContents,
+  getMagicEmailLinkContents,
+} from "./templates/index";
 
 /** ===========================================================================
  * Types & Config
@@ -50,9 +54,16 @@ export class EmailService {
   public async sendMagicEmailLink(email: string, link: string) {
     const request: EmailRequest = {
       recipient: email,
-      subject: "Welcome to Pairwise! 🎉",
-      text: `Hi, welcome to Pairwise! Open this link to get started now: ${link}`,
-      html: `Hi, welcome to Pairwise! Click <a href=${link}>this magic link</a> to get started now!`,
+      ...getMagicEmailLinkContents(link),
+    };
+
+    await this.email(request);
+  }
+
+  public async sendWelcomeEmail(email: string) {
+    const request: EmailRequest = {
+      recipient: email,
+      ...getWelcomeEmailContents(),
     };
 
     await this.email(request);

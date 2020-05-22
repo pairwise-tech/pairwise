@@ -17,6 +17,7 @@ import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { SlackService, slackService } from "src/slack/slack.service";
 import { SigninStrategy } from "src/auth/auth.service";
+import { EmailService, emailService } from "src/email/email.service";
 
 export interface GenericUserProfile {
   email: string;
@@ -38,6 +39,7 @@ export interface SSOAccountsIds {
 @Injectable()
 export class UserService {
   private readonly slackService: SlackService = slackService;
+  private readonly emailService: EmailService = emailService;
 
   constructor(
     private readonly progressService: ProgressService,
@@ -191,6 +193,11 @@ export class UserService {
       accountCreated: true,
       signinStrategy,
     });
+
+    // Send Welcome email, if the user has an email address
+    if (profile.email) {
+      this.emailService.sendWelcomeEmail(profile.email);
+    }
 
     return user;
   }
