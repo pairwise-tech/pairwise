@@ -133,11 +133,11 @@ export class AuthController {
    * the request referrer appears to be invalid.
    */
   private getRedirectUrl = (req: Request) => {
-    // @ts-ignore - the type exists...
-    const referrerUrl = req.headers.referer;
+    // @ts-ignore
+    const referrerUrl: string | undefined = req.headers.referer;
     const clientUrl = ENV.CLIENT_URL;
 
-    if (referrerUrl.includes(clientUrl)) {
+    if (typeof referrerUrl === "string" && referrerUrl.includes(clientUrl)) {
       return referrerUrl;
     } else {
       captureSentryMessage(
