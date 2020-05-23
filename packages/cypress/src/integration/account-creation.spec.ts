@@ -1,6 +1,7 @@
 import {
   CLIENT_APP_URL,
   TIMEOUT,
+  goToNextChallenge,
   typeTextInCodeEditor,
   elementContains,
   click,
@@ -17,28 +18,6 @@ import {
  */
 
 describe("Account Creation Flow", () => {
-  type TestStatus = "Success!" | "Incomplete..." | string;
-  const checkTestStatus = (status: TestStatus, index: number) => {
-    const id = `#test-result-status-${index}`;
-    cy.get(id).contains(status);
-  };
-
-  const checkTestResultStatus = (
-    expectedStatus: TestStatus,
-    numberOfResults: number = 1,
-  ) => {
-    /* Whatever! */
-    for (let i = 0; i < numberOfResults; i++) {
-      checkTestStatus(expectedStatus, i);
-    }
-  };
-
-  const goToNext = () => {
-    cy.wait(TIMEOUT);
-    cy.get("#nextButton").click({ force: true });
-    cy.wait(TIMEOUT);
-  };
-
   it("Creating an account persists pre-login updates correctly", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace`);
     cy.wait(TIMEOUT);
@@ -53,7 +32,7 @@ describe("Account Creation Flow", () => {
     typeTextInCodeEditor("<h1>Hello!</h1>");
     checkTestResultStatus("Success!");
 
-    goToNext();
+    goToNextChallenge();
 
     checkTestStatus("Success!", 0);
     checkTestStatus("Incomplete...", 1);
@@ -64,11 +43,11 @@ describe("Account Creation Flow", () => {
     typeTextInCodeEditor("<h2>2</h2><h3>3</h3><h4>4</h4><h5>5</h5><h6>6</h6>");
     checkTestResultStatus("Success!", 6);
 
-    goToNext();
+    goToNextChallenge();
     checkTestResultStatus("Incomplete...", 3);
     typeTextInCodeEditor("<p>This text is: <b>bold!</b></p>");
     checkTestResultStatus("Success!", 3);
-    goToNext();
+    goToNextChallenge();
 
     click("login-signup-button");
     click("facebook-login");
@@ -82,11 +61,11 @@ describe("Account Creation Flow", () => {
       click("module-navigation-1");
       click("challenge-navigation-1");
 
-      goToNext();
+      goToNextChallenge();
       elementContains("test-result-status-0", "Success!");
-      goToNext();
+      goToNextChallenge();
       checkTestResultStatus("Success!", 6);
-      goToNext();
+      goToNextChallenge();
       checkTestResultStatus("Success!", 3);
     };
 
@@ -133,7 +112,36 @@ describe("Account Creation Flow", () => {
   });
 });
 
-// Helper to produce a random challenge index
+/** ===========================================================================
+ * Test Helpers
+ * ============================================================================
+ */
+
+type TestStatus = "Success!" | "Incomplete..." | string;
+
+/**
+ * Helper to check test status.
+ */
+const checkTestStatus = (status: TestStatus, index: number) => {
+  const id = `#test-result-status-${index}`;
+  cy.get(id).contains(status);
+};
+
+/**
+ * Check the status of the test results.
+ */
+const checkTestResultStatus = (
+  expectedStatus: TestStatus,
+  numberOfResults: number = 1,
+) => {
+  for (let i = 0; i < numberOfResults; i++) {
+    checkTestStatus(expectedStatus, i);
+  }
+};
+
+/**
+ * Helper to produce a random challenge index.
+ */
 const randomChallengeIndex = () => Math.round(Math.random() * 15);
 
 /**

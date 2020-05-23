@@ -71,3 +71,12 @@ export const getIframeBody = () => {
       .then(cy.wrap)
   );
 };
+
+/**
+ * Helper to go to the next challenge.
+ */
+export const goToNextChallenge = () => {
+  cy.wait(TIMEOUT);
+  cy.get("#nextButton").click({ force: true });
+  cy.wait(TIMEOUT);
+};
