@@ -455,10 +455,7 @@ export const parseInitialUrlToInitializationType = (
   params: ParsedQuery<string>,
 ): APP_INITIALIZATION_TYPE => {
   // A user authenticated:
-  if (
-    path === "/authenticated" &&
-    checkParamsExist(params, ["accessToken", "accountCreated"])
-  ) {
+  if (checkParamsExist(params, ["accessToken", "accountCreated"])) {
     if (params.accountCreated === "true") {
       return APP_INITIALIZATION_TYPE.ACCOUNT_CREATED;
     } else {

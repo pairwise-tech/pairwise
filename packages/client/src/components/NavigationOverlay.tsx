@@ -301,38 +301,43 @@ class NavigationOverlay extends React.Component<IProps> {
      * Partition the challenge list by sections.
      */
     const sectionBlocks = partitionChallengesBySection(challengeList);
+
     /**
-     * Render the section blocks:
+     * Create and track and index for all the challenges in the section blocked
+     * list.
      */
-    return sectionBlocks.map((block, blockIndex) => {
+    let serialIndex = -1;
+
+    /**
+     * Render the section blocks.
+     */
+    return sectionBlocks.map(block => {
+      serialIndex++;
       if (block.section) {
         return (
-          <div key={blockIndex}>
+          <div key={serialIndex}>
             {this.renderChallengeNavigationItem({
               module,
               course,
               isSection: true,
               sectionChallengeCount: block.challenges.length,
               sectionChallenges: block.challenges,
-              index: blockIndex,
+              index: serialIndex,
               challenge: block.section,
             })}
             <Collapse
               isOpen={this.getCurrentAccordionViewState(block.section.id)}
             >
-              {block.challenges.map(
-                (challenge: ChallengeSkeleton, index: number) => {
-                  // @NOTE This is meant to be the index of the challenge as indexed in the full flattened list
-                  const serialIndex = blockIndex + index + 1;
-                  return this.renderChallengeNavigationItem({
-                    index: serialIndex,
-                    course,
-                    module,
-                    challenge,
-                    style: { marginLeft: 20 },
-                  });
-                },
-              )}
+              {block.challenges.map((challenge: ChallengeSkeleton) => {
+                serialIndex++;
+                return this.renderChallengeNavigationItem({
+                  index: serialIndex,
+                  course,
+                  module,
+                  challenge,
+                  style: { marginLeft: 20 },
+                });
+              })}
             </Collapse>
           </div>
         );

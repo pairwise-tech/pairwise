@@ -149,14 +149,14 @@ const summarizeUserProgress = users => {
     };
   });
 
-  const withProgressSummaries = withProgressSummaries.sort((a, b) => {
+  const sortedByCompletedChallenges = withProgressSummaries.sort((a, b) => {
     return b.completedChallenges.total - a.completedChallenges.total;
   });
 
   // Create summary with total user count
   const summary = {
-    totalUsers: withProgressSummaries.length,
-    users: withProgressSummaries,
+    totalUsers: sortedByCompletedChallenges.length,
+    users: sortedByCompletedChallenges,
   };
 
   return summary;

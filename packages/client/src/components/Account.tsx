@@ -117,6 +117,11 @@ class Account extends React.Component<IProps, IState> {
             value={this.state.email}
           />
         )}
+        {!profile.email && (
+          <TextItem style={{ color: COLORS.SECONDARY_YELLOW, fontSize: 12 }}>
+            * Please enter your email to receive course and product updates.
+          </TextItem>
+        )}
         {edit ? (
           <Controls>
             <Button
