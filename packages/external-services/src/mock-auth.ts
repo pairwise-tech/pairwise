@@ -8,9 +8,12 @@ import faker from "faker";
 // Hard-coded admin email for development/testing environments
 const ADMIN_EMAIL = "pairwise-dev-admin-user@pairwise.tech";
 
+// Randomly return true of false
+const yesOrNo = () => Math.floor(Math.random() * 100) > 50;
+
+// Choose a random default profile avatar image.
 const getRandomProfileImage = () => {
-  const n = Math.floor(Math.random() * 100);
-  return n > 50
+  return yesOrNo()
     ? "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4"
     : "https://avatars0.githubusercontent.com/u/1024025?s=460&v=4";
 };
@@ -23,7 +26,17 @@ const generateNewProfileFields = () => {
   const name = `${first} ${last}`;
   const picture = getRandomProfileImage();
 
-  return { id, first, last, name, email, picture };
+  /**
+   * Randomly provide/do not provide null profile values. This is to test
+   * the legitimate possibility that these values may be null/undefined in
+   * actual response data.
+   */
+  const randomlyUseNullValues = yesOrNo();
+  if (randomlyUseNullValues) {
+    return { id, first: null, last: null, name: null, email, picture };
+  } else {
+    return { id, first, last, name, email, picture };
+  }
 };
 
 /** ===========================================================================

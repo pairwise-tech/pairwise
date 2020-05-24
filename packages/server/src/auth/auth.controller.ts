@@ -15,6 +15,7 @@ import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
+import { captureSentryMessage } from "src/tools/sentry-utils";
 
 @Controller("auth")
 export class AuthController {
@@ -39,7 +40,7 @@ export class AuthController {
       const params = this.getQueryParams(token, accountCreated);
       return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
     } else {
-      return this.handleLoginError(res, result.error, "Email");
+      return this.handleLoginError(res, "Email");
     }
   }
 
@@ -60,9 +61,10 @@ export class AuthController {
     if (result.value) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
-      return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+      const baseUrl = this.getRedirectUrl(req);
+      return res.redirect(`${baseUrl}?${params}`);
     } else {
-      return this.handleLoginError(res, result.error, "Facebook");
+      return this.handleLoginError(res, "Facebook");
     }
   }
 
@@ -83,9 +85,10 @@ export class AuthController {
     if (result.value) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
-      return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+      const baseUrl = this.getRedirectUrl(req);
+      return res.redirect(`${baseUrl}?${params}`);
     } else {
-      return this.handleLoginError(res, result.error, "GitHub");
+      return this.handleLoginError(res, "GitHub");
     }
   }
 
@@ -106,12 +109,16 @@ export class AuthController {
     if (result.value) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
-      return res.redirect(`${ENV.CLIENT_URL}/authenticated?${params}`);
+      const baseUrl = this.getRedirectUrl(req);
+      return res.redirect(`${baseUrl}?${params}`);
     } else {
-      return this.handleLoginError(res, result.error, "Google");
+      return this.handleLoginError(res, "Google");
     }
   }
 
+  /**
+   * Stringify the parameters into query parameters.
+   */
   private getQueryParams(accessToken: string, accountCreated: boolean) {
     const params = querystring.stringify({
       accessToken,
@@ -122,13 +129,28 @@ export class AuthController {
   }
 
   /**
+   * Get the referrer URL from the request, or default to the client URL if
+   * the request referrer appears to be invalid.
+   */
+  private getRedirectUrl = (req: Request) => {
+    // @ts-ignore
+    const referrerUrl: string | undefined = req.headers.referer;
+    const clientUrl = ENV.CLIENT_URL;
+
+    if (typeof referrerUrl === "string" && referrerUrl.includes(clientUrl)) {
+      return referrerUrl;
+    } else {
+      captureSentryMessage(
+        `Received invalid referrer in user logic redirect! Received: ${referrerUrl}`,
+      );
+      return clientUrl;
+    }
+  };
+
+  /**
    * Parse these URLs on the client and show appropriate toasts for login failures.
    */
-  private handleLoginError(
-    @Res() res,
-    err: ERROR_CODES.UNKNOWN_LOGIN_ERROR,
-    strategy: SigninStrategy,
-  ) {
+  private handleLoginError(@Res() res, strategy: SigninStrategy) {
     return res.redirect(
       `${ENV.CLIENT_URL}/authentication-failure?strategy=${strategy}`,
     );

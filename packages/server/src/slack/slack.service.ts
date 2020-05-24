@@ -113,7 +113,9 @@ export class SlackService {
     config,
   }: SlackAccountCreationMessageData) {
     if (accountCreated) {
-      const message = `New account created for *${profile.displayName}* using ${signinStrategy} strategy :tada:`;
+      const name = profile.displayName;
+      const nameSnippet = name ? ` for *${profile.displayName}* ` : " ";
+      const message = `New account created${nameSnippet}using ${signinStrategy} strategy :tada:`;
       await this.postMessageToChannel(message, {
         channel: "production",
         ...config,

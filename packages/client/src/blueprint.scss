@@ -59,6 +59,12 @@ $orange3: #ffdf75;
   z-index: 5000 !important;
 }
 
+.bp3-toast-container {
+  .bp3-button-text {
+    color: rgb(50, 50, 50) !important;
+  }
+}
+
 // Overwrite blueprint Callout icon color for intent="none". It had a blue-ish hue before
 .bp3-callout.bp3-callout-icon > .bp3-icon:first-child {
   color: dimgray;

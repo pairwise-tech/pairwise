@@ -10,7 +10,7 @@ import {
   catchError,
   distinct,
 } from "rxjs/operators";
-import { Observable, merge, defer, of } from "rxjs";
+import { Observable, merge, defer, of, combineLatest } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
@@ -21,6 +21,10 @@ import {
   APP_INITIALIZATION_TYPE,
 } from "tools/utils";
 import { captureSentryException } from "tools/sentry-utils";
+import {
+  getViewedEmailPromptStatus,
+  markEmailPromptAsViewed,
+} from "tools/storage-utils";
 
 const debug = require("debug")("client:app:epics");
 
@@ -58,6 +62,75 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
         appInitializationType,
       });
     }),
+  );
+};
+
+/**
+ * After the initialization is complete, strip the query parameters from the
+ * original url.
+ */
+const stripInitialParameters: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("params"),
+    // Only proceed if there are captured query parameters to remove
+    filter(params => Object.keys(params).length > 0),
+    tap(() => {
+      console.warn(
+        `[WARN]: Query parameters being removed on app initialization!`,
+      );
+      const { router } = deps;
+      debug(`Removing query parameters: ${router.location.search}`);
+      router.replace(router.location.pathname);
+    }),
+    ignoreElements(),
+  );
+};
+
+/**
+ * When the app loads, prompt registered users to enter their email if their
+ * email doesn't exist yet.
+ */
+const promptToAddEmailEpic: EpicSignature = (action$, _, deps) => {
+  const appInitializedSuccess$ = action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("appInitializationType"),
+    filter(type => type === APP_INITIALIZATION_TYPE.DEFAULT),
+  );
+
+  // Get users who are registered but have no email
+  const userFetchedSuccessNoEmail$ = action$.pipe(
+    filter(isActionOf(Actions.fetchUserSuccess)),
+    pluck("payload"),
+    filter(user => {
+      const USER_SIGNED_UP = !!user.profile;
+      const NO_EMAIL = !user.profile?.email;
+      return USER_SIGNED_UP && NO_EMAIL;
+    }),
+  );
+
+  return combineLatest(appInitializedSuccess$, userFetchedSuccessNoEmail$).pipe(
+    filter(() => {
+      // Filter if they have already seen the prompt before.
+      const viewedEmailPromptBefore = getViewedEmailPromptStatus();
+      return !viewedEmailPromptBefore;
+    }),
+    tap(() => {
+      const redirect = () => deps.router.push("/account");
+      deps.toaster.warn("Please add your email to receive course updates.", {
+        action: {
+          onClick: redirect,
+          text: "Setup Email",
+        },
+      });
+    }),
+    tap(() => {
+      // After showing this, mark it as viewed so the user never sees it again.
+      markEmailPromptAsViewed();
+    }),
+    ignoreElements(),
   );
 };
 
@@ -195,6 +268,8 @@ const analyticsEpic: EpicSignature = action$ => {
 export default combineEpics(
   appInitializationEpic,
   appInitializeCaptureUrlEpic,
+  stripInitialParameters,
+  promptToAddEmailEpic,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
   analyticsEpic,
