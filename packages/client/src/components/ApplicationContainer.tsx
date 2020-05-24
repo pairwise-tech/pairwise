@@ -195,7 +195,7 @@ const ApplicationContainer = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <MobileWarningView isWorkspace={isWorkspaceRequired} />
+      {/* <MobileWarningView isWorkspace={isWorkspaceRequired} /> */}
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
       {CODEPRESS && <AdminKeyboardShortcuts />}
