@@ -40,7 +40,7 @@ import {
 } from "tools/constants";
 import {
   findCourseById,
-  deriveIdsFromCourse,
+  deriveIdsFromCourseWithDefaults,
   findChallengeIdInLocationIfExists,
   createInverseChallengeMapping,
   isContentOnlyChallenge,
@@ -158,10 +158,11 @@ const resetActiveChallengeIds: EpicSignature = (action$, state$, deps) => {
             deps.router.location,
           );
 
-          const { courseId, moduleId, challengeId } = deriveIdsFromCourse(
-            courses,
-            maybeChallengeId,
-          );
+          const {
+            courseId,
+            moduleId,
+            challengeId,
+          } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
 
           return Actions.setActiveChallengeIds({
             currentCourseId: courseId,
@@ -212,10 +213,12 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
         const { location } = deps.router;
 
         const maybeChallengeId = findChallengeIdInLocationIfExists(location);
-        const { challengeId, courseId, moduleId, slug } = deriveIdsFromCourse(
-          courses,
-          maybeChallengeId,
-        );
+        const {
+          challengeId,
+          courseId,
+          moduleId,
+          slug,
+        } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
 
         // Do not redirect unless the user is already on the workspace/
         if (location.pathname.includes("workspace")) {
