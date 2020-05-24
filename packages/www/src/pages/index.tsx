@@ -80,10 +80,7 @@ const MainDiv = styled.div`
   }
 `;
 
-const outboundClick = (
-  url: string,
-  eventName: string = 'OUTBOUND_LINK_CLICK',
-) => {
+const outboundClick = (url: string, eventName = 'OUTBOUND_LINK_CLICK') => {
   try {
     // @ts-ignore
     window.amplitude.getInstance().logEvent(eventName, { href: url }, () => {

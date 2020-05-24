@@ -8,7 +8,6 @@ import {
 } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
-import { CoolCodeBullet } from '.';
 import Typography from '@material-ui/core/Typography';
 
 const THE_IDEA = `
