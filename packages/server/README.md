@@ -51,19 +51,33 @@ $ yarn test:cov
 If you make any change to any database `Entity`, you can generate a new migrations file by running:
 
 ```bash
-# Generate a new migration file
-$ yarn migration:generate MyMigrationName
-# Run any pending migrations
-$ yarn migration:run
+# Install the Nest CLI if you don't have it
+$ npm i -g @nestjs/cli
+
+# Update Nest libraries
+$ nest update --force
 ```
 
 Where `MyMigrationName` is a name to describe the current migration. The second command will execute the migration against the database.
+
+## Update Nest
+
+To update the various NestJS library dependencies, you can use the Nest CLI:
+
+```bash
+# Generate a new migration file
+$ yarn migration:generate MyMigrationName
+
+# Run any pending migrations
+$ yarn migration:run
+```
 
 ## Deployment
 
 ```bash
 # Build the Dockerfile
 $ docker build -t pairwise-server .
+
 # Run the built image
 $ docker run -it pairwise-server
 ```

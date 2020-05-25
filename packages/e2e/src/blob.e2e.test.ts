@@ -31,7 +31,7 @@ describe("User Progress APIs", () => {
       .set("Authorization", "Bearer as8fd7a0")
       .expect(401)
       .end((error, response) => {
-        expect(response.body.error).toBe("Unauthorized");
+        expect(response.body.message).toBe("Unauthorized");
         done(error);
       });
   });
