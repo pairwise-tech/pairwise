@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap, pluck } from "rxjs/operators";
+import { filter, map, mergeMap, pluck, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import API from "modules/api";
 import { EpicSignature } from "../root";
@@ -60,6 +60,9 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
 const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserEmail)),
+    tap(() => {
+      deps.toaster.warn("Sending email verification link...");
+    }),
     pluck("payload"),
     mergeMap(API.updateUserEmail),
     map(result => {

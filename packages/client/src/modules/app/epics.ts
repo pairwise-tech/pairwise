@@ -78,6 +78,22 @@ const stripInitialParameters: EpicSignature = (action$, _, deps) => {
 };
 
 /**
+ * Show a success toast when a user opens the email verification link.
+ */
+const emailUpdateSuccessToastEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("appInitializationType"),
+    filter(type => type === APP_INITIALIZATION_TYPE.EMAIL_UPDATED),
+    tap(() => {
+      deps.toaster.success("Email updated successfully!");
+    }),
+    ignoreElements(),
+  );
+};
+
+/**
  * When the app loads, prompt registered users to enter their email if their
  * email doesn't exist yet.
  */
@@ -228,6 +244,7 @@ export default combineEpics(
   appInitializationEpic,
   appInitializeCaptureUrlEpic,
   stripInitialParameters,
+  emailUpdateSuccessToastEpic,
   promptToAddEmailEpic,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,

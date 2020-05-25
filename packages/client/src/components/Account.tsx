@@ -122,7 +122,7 @@ class Account extends React.Component<IProps, IState> {
           />
         )}
         {verificationEmailProcessing === EMAIL_VERIFICATION_STATUS.LOADING ? (
-          <TextItem>* Sending verification email...</TextItem>
+          <TextItem>* Loading...</TextItem>
         ) : verificationEmailProcessing === EMAIL_VERIFICATION_STATUS.SENT ? (
           <TextItem style={{ color: COLORS.PRIMARY_GREEN }}>
             * Please check your email for a verification link.
@@ -236,7 +236,9 @@ class Account extends React.Component<IProps, IState> {
   };
 
   handleSaveChanges = () => {
-    if (this.state.editedProfile) {
+    const { editedProfile, editedEmail } = this.state;
+
+    if (editedProfile) {
       const userDetails = {
         givenName: this.state.givenName,
         familyName: this.state.familyName,
@@ -245,7 +247,7 @@ class Account extends React.Component<IProps, IState> {
       this.props.updateUser(userDetails);
     }
 
-    if (this.state.editedEmail) {
+    if (editedEmail) {
       this.props.updateUserEmail(this.state.email);
     }
 
