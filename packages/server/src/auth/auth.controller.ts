@@ -6,6 +6,7 @@ import {
   Res,
   Post,
   Param,
+  Body,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
@@ -16,6 +17,7 @@ import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
 import { SUCCESS_CODES } from "src/tools/constants";
 import { captureSentryMessage } from "src/tools/sentry-utils";
+import { AuthenticatedRequest } from "src/types";
 
 @Controller("auth")
 export class AuthController {
@@ -27,6 +29,16 @@ export class AuthController {
     // while to actually send the email, so just respond immediately to
     // the user.
     this.authService.handleEmailLoginRequest(req.body.email);
+    return SUCCESS_CODES.OK;
+  }
+
+  @Post("update-email")
+  public async updateUserEmailRequest(
+    @Body() body: { email: string },
+    @Req() req: AuthenticatedRequest,
+  ) {
+    const { email } = body;
+    await this.authService.sendEmailVerificationMessage(req.user, email);
     return SUCCESS_CODES.OK;
   }
 

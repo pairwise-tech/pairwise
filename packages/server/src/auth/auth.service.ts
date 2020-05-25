@@ -10,6 +10,8 @@ import { ERROR_CODES } from "src/tools/constants";
 import { captureSentryException } from "src/tools/sentry-utils";
 import ENV from "src/tools/server-env";
 import { emailService, EmailService } from "src/email/email.service";
+import { checkEmail } from "src/tools/validation";
+import { RequestUser } from "src/types";
 
 export type SigninStrategy = "Email" | "GitHub" | "Facebook" | "Google";
 
@@ -37,10 +39,20 @@ export class AuthService {
     this.emailService.sendMagicEmailLink(email, magicEmailLink);
   }
 
-  public async generateUpdateEmailLink(uuid: string, email: string) {
+  public async generateUpdateEmailLink(email: string, uuid: string) {
     const payload = this.jwtService.sign({ uuid, email });
     const updateEmailLink = `${ENV.SERVER_HOST_URL}/user/update-email/${payload}`;
     return updateEmailLink;
+  }
+
+  public async sendEmailVerificationMessage(user: RequestUser, email: string) {
+    if (checkEmail(email)) {
+      const { uuid } = user.profile;
+      const verificationLink = this.generateUpdateEmailLink(email, uuid);
+      return verificationLink;
+    } else {
+      throw new BadRequestException("Invalid Email");
+    }
   }
 
   public async handleUserUpdateEmailRequest(payload: any) {

@@ -57,6 +57,29 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.updateUser)),
+    pluck("payload"),
+    pluck("email"),
+    filter((x: any) => typeof x === "string"),
+    mergeMap(API.updateUserEmail),
+    map(result => {
+      if (result.value) {
+        deps.toaster.success(
+          "Please check your email for a verification link.",
+        );
+        return Actions.empty("Email verification link request success");
+      } else {
+        if (result.error.status !== 401) {
+          deps.toaster.warn("Failed to update email address...");
+        }
+        return Actions.empty("Email verification link request failure");
+      }
+    }),
+  );
+};
+
 const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserSettings)),
@@ -80,5 +103,6 @@ const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
 export default combineEpics(
   fetchUserEpic,
   updateUserEpic,
+  updateUserEmailEpic,
   updateUserSettingsEpic,
 );
