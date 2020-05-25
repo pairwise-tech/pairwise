@@ -11,6 +11,7 @@ import {
   Loading,
 } from "./Shared";
 import { COLORS } from "tools/constants";
+import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 
 /** ===========================================================================
  * Types & Config
@@ -38,7 +39,12 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const { user, courseToPurchase, checkoutLoading } = this.props;
+    const {
+      user,
+      courseToPurchase,
+      checkoutLoading,
+      emailVerificationStatus,
+    } = this.props;
     const { profile } = user;
 
     if (!courseToPurchase || !profile) {
@@ -88,6 +94,15 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
             <SmallPoint>
               You will be redirected to Stripe to complete the checkout process.
             </SmallPoint>
+          </ModalContainer>
+        ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
+          <ModalContainer>
+            <Loading />
+          </ModalContainer>
+        ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.SENT ? (
+          <ModalContainer>
+            <ModalTitleText>Email Sent</ModalTitleText>
+            <ModalSubText>Please check your email.</ModalSubText>
           </ModalContainer>
         ) : (
           <ModalContainer>
@@ -180,7 +195,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   checkoutLoading: Modules.selectors.payments.checkoutLoading(state),
   modalOpen: Modules.selectors.payments.paymentIntentModalState(state),
   courseToPurchase: Modules.selectors.payments.paymentIntentCourse(state),
-  verificationEmailProcessing: Modules.selectors.user.verificationEmailProcessing(
+  emailVerificationStatus: Modules.selectors.user.emailVerificationStatus(
     state,
   ),
 });

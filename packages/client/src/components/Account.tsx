@@ -52,7 +52,11 @@ class Account extends React.Component<IProps, IState> {
 
   render(): Nullable<JSX.Element> {
     const { editMode: edit } = this.state;
-    const { user, skeletons, verificationEmailProcessing } = this.props;
+    const {
+      user,
+      skeletons,
+      emailVerificationStatus: verificationEmailProcessing,
+    } = this.props;
     const { payments, profile } = user;
     if (!payments || !profile || !skeletons) {
       return null;
@@ -305,7 +309,7 @@ const Controls = styled.div`
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
-  verificationEmailProcessing: Modules.selectors.user.verificationEmailProcessing(
+  emailVerificationStatus: Modules.selectors.user.emailVerificationStatus(
     state,
   ),
 });

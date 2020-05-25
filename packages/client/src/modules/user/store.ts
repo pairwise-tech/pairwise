@@ -60,7 +60,7 @@ const initialUserState = {
 export interface State {
   user: UserState;
   loading: boolean;
-  verificationEmailProcessing: EMAIL_VERIFICATION_STATUS;
+  emailVerificationStatus: EMAIL_VERIFICATION_STATUS;
 }
 
 const user = createReducer<
@@ -113,7 +113,7 @@ const loading = createReducer<boolean, UserActionTypes | AuthActionTypes>(
   true,
 ).handleAction(actions.fetchUserSuccess, () => false);
 
-const verificationEmailProcessing = createReducer<
+const emailVerificationStatus = createReducer<
   EMAIL_VERIFICATION_STATUS,
   UserActionTypes
 >(EMAIL_VERIFICATION_STATUS.DEFAULT)
@@ -133,7 +133,7 @@ const verificationEmailProcessing = createReducer<
 const rootReducer = combineReducers({
   user,
   loading,
-  verificationEmailProcessing,
+  emailVerificationStatus,
 });
 
 /** ===========================================================================

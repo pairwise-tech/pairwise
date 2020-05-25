@@ -1,9 +1,10 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap, pluck, tap } from "rxjs/operators";
+import { filter, map, mergeMap, pluck } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import API from "modules/api";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
+import { validate } from "email-validator";
 
 /** ===========================================================================
  * Epics
@@ -60,14 +61,20 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
 const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserEmail)),
-    tap(() => {
-      deps.toaster.warn("Sending email verification link...");
-    }),
     pluck("payload"),
-    mergeMap(API.updateUserEmail),
-    map(result => {
+    mergeMap(async email => {
+      const valid = validate(email);
+      if (!valid) {
+        deps.toaster.error("Please enter a valid email...");
+        return Actions.updateUserEmailFailure();
+      }
+
+      deps.toaster.warn("Sending email verification link...");
+      const result = await API.updateUserEmail(email);
       if (result.value) {
-        deps.toaster.warn("Please check your email for a verification link.");
+        deps.toaster.success(
+          "Please check your email for verification instructions.",
+        );
         return Actions.updateUserEmailSuccess();
       } else {
         if (result.error.status !== 401) {
