@@ -11,7 +11,7 @@ COPY . .
 RUN npm i -g @zeit/ncc
 
 # Compile the server into a single js file
-RUN cd packages/server && ncc build dist/main.js -out target --source-map --minify
+RUN cd packages/server && ncc build dist/main.js --out target --source-map --minify
 
 FROM node:12-alpine AS pairwise-server-runtime
 
