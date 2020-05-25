@@ -58,6 +58,11 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+/**
+ * Handle updating a user email. The user must verify the email address
+ * for the change to occur. The email update is handled by a different API
+ * from the API which handles user profile updates (see above epic).
+ */
 const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserEmail)),

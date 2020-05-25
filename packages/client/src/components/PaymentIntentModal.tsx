@@ -97,12 +97,15 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
           </ModalContainer>
         ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
           <ModalContainer>
+            <ModalTitleText>Sending verification email...</ModalTitleText>
             <Loading />
           </ModalContainer>
         ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.SENT ? (
           <ModalContainer>
             <ModalTitleText>Email Sent</ModalTitleText>
-            <ModalSubText>Please check your email.</ModalSubText>
+            <ModalSubText>
+              Please check your email for further instructions.
+            </ModalSubText>
           </ModalContainer>
         ) : (
           <ModalContainer>
