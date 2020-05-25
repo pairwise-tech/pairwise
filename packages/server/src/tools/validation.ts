@@ -122,6 +122,10 @@ export const validateUserUpdateDetails = (
   details: UserUpdateOptions,
 ): Result<UserUpdateOptions<string>, ERROR_CODES.INVALID_PARAMETERS> => {
   try {
+    if ("email" in details) {
+      throw new Error("Not allowed to update email directly!");
+    }
+
     const settingsUpdate = checkSettingsField(details.settings);
     const mergedSettings = { ...user.settings, ...settingsUpdate };
     const settingsJSON = JSON.stringify(mergedSettings);
