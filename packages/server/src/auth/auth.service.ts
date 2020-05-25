@@ -48,8 +48,11 @@ export class AuthService {
   public async sendEmailVerificationMessage(user: RequestUser, email: string) {
     if (checkEmail(email)) {
       const { uuid } = user.profile;
-      const verificationLink = this.generateUpdateEmailLink(email, uuid);
-      return verificationLink;
+      const verificationLink = await this.generateUpdateEmailLink(email, uuid);
+      await this.emailService.sendEmailVerificationLink(
+        email,
+        verificationLink,
+      );
     } else {
       throw new BadRequestException("Invalid Email");
     }

@@ -5,6 +5,7 @@ import { captureSentryException } from "src/tools/sentry-utils";
 import {
   getWelcomeEmailContents,
   getMagicEmailLinkContents,
+  getVerificationLinkContents,
 } from "./templates/index";
 
 /** ===========================================================================
@@ -55,6 +56,15 @@ export class EmailService {
     const request: EmailRequest = {
       recipient: email,
       ...getMagicEmailLinkContents(link),
+    };
+
+    await this.email(request);
+  }
+
+  public async sendEmailVerificationLink(email: string, link: string) {
+    const request: EmailRequest = {
+      recipient: email,
+      ...getVerificationLinkContents(link),
     };
 
     await this.email(request);
