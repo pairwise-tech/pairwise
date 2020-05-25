@@ -48,8 +48,6 @@ export class EmailService {
       },
     });
 
-    console.log(transporter);
-
     this.transporter = transporter;
   }
 
