@@ -56,7 +56,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
         aria-describedby="simple-modal-description"
         onClose={this.handleOnCloseModal}
       >
-        {!checkoutLoading ? (
+        {checkoutLoading ? (
           <ModalContainer>
             <ModalTitleText>Starting Checkout...</ModalTitleText>
             <Loading intent="primary" />

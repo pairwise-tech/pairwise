@@ -35,13 +35,15 @@ const payments = createReducer<State, PaymentsActionTypes>(initialState)
   }))
   .handleAction(actions.startCheckoutSuccess, (state, action) => ({
     ...state,
-    checkoutLoading: false,
     stripeCheckoutSessionId: action.payload.stripeCheckoutSessionId,
   }))
-  .handleAction(actions.startCheckoutFailure, (state, action) => ({
-    ...state,
-    checkoutLoading: false,
-  }))
+  .handleAction(
+    [actions.redirectToStripeSuccess, actions.redirectToStripeFailure],
+    state => ({
+      ...state,
+      checkoutLoading: false,
+    }),
+  )
   .handleAction(actions.setPaymentSuccess, (state, action) => ({
     ...state,
     paymentSuccessModalOpen: true,
