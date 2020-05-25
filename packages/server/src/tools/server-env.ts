@@ -80,7 +80,7 @@ const PAIRWISE_CHECKOUT_ICON = getenv.string(
 const SENTRY_DSN = getenv.string("SENTRY_DSN", "");
 
 // Typeorm Configuration
-const TYPEORM_PORT = getenv.int("TYPEORM_PORT");
+const TYPEORM_PORT = getenv.int("TYPEORM_PORT", 5432);
 const TYPEORM_HOST = getenv.string("TYPEORM_HOST");
 const TYPEORM_USERNAME = getenv.string("TYPEORM_USERNAME");
 const TYPEORM_PASSWORD = getenv.string("TYPEORM_PASSWORD");
