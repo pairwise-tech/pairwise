@@ -189,16 +189,9 @@ export class SlackService {
 
   private errorLogUtil(error: any, message: string) {
     if (error.code === ErrorCode.PlatformError) {
-      console.log(
-        `[SLACK ERROR] ${message}. Error: ${JSON.stringify(
-          error.data,
-          null,
-          2,
-        )}`,
-      );
+      console.log(`[SLACK ERROR] ${message}. Error: ${error.message}`);
     } else {
-      console.log(`[SLACK ERROR] ${message}. Error Code: ${error.code}`);
-      console.log(`[SLACK ERROR] ${JSON.stringify(error, null, 2)}`);
+      console.log(`[SLACK ERROR] ${message}. Error: ${error.message}`);
       captureSentryException(error);
     }
   }

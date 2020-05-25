@@ -70,7 +70,10 @@ describe("User APIs", () => {
       },
     };
 
-    const email = "sam@pairwise.tech";
+    const randomString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".slice(
+      Math.floor(Math.random() * 50),
+    );
+    const email = `${randomString}@pairwise.tech`;
     const result = await axios.get(`${HOST}/user/profile`, headers);
     const originalProfile = result.data.profile;
 
