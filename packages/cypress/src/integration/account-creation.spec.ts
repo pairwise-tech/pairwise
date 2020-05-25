@@ -83,6 +83,9 @@ describe("Account Creation Flow", () => {
     click("login-signup-button");
     click(`facebook-login`);
 
+    // Let the login process complete
+    cy.wait(500);
+
     // Check that the toast does not exist yet
     cy.get("Setup Email").should("not.exist");
     cy.reload();
