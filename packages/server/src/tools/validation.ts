@@ -126,9 +126,8 @@ export const validateUserUpdateDetails = (
     const mergedSettings = { ...user.settings, ...settingsUpdate };
     const settingsJSON = JSON.stringify(mergedSettings);
 
+    // Does NOT include email:
     const updateDetails = {
-      // NOTE: We currently do not validate emails in any way...
-      email: checkStringField(details.email, true),
       avatarUrl: checkStringField(details.avatarUrl),
       givenName: checkStringField(details.givenName),
       familyName: checkStringField(details.familyName),
@@ -140,6 +139,14 @@ export const validateUserUpdateDetails = (
     return new Ok(sanitizedUpdate);
   } catch (err) {
     return new Err(ERROR_CODES.INVALID_PARAMETERS);
+  }
+};
+
+export const checkEmail = (value: string) => {
+  if (validator.isEmail(value)) {
+    return value;
+  } else {
+    return null;
   }
 };
 
