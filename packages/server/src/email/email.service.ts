@@ -48,6 +48,8 @@ export class EmailService {
       },
     });
 
+    console.log(transporter);
+
     this.transporter = transporter;
   }
 
@@ -83,7 +85,7 @@ export class EmailService {
       });
     } catch (err) {
       captureSentryException(err);
-      console.log("Error sending email: ", err);
+      console.log("Error sending email: ", err.message);
       if (shouldEscalateError) {
         throw new Error(ERROR_CODES.FAILED_TO_SEND_EMAIL);
       }
