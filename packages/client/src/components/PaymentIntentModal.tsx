@@ -137,7 +137,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
   };
 
   updateUserEmail = () => {
-    this.props.updateUser({ email: this.state.email });
+    this.props.updateUserEmail(this.state.email);
   };
 }
 
@@ -180,10 +180,13 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   checkoutLoading: Modules.selectors.payments.checkoutLoading(state),
   modalOpen: Modules.selectors.payments.paymentIntentModalState(state),
   courseToPurchase: Modules.selectors.payments.paymentIntentCourse(state),
+  verificationEmailProcessing: Modules.selectors.user.verificationEmailProcessing(
+    state,
+  ),
 });
 
 const dispatchProps = {
-  updateUser: Modules.actions.user.updateUser,
+  updateUserEmail: Modules.actions.user.updateUserEmail,
   startCheckout: Modules.actions.payments.startCheckout,
   setPurchaseCourseModalState:
     Modules.actions.payments.setPaymentCourseModalState,

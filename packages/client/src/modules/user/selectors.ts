@@ -16,6 +16,11 @@ export const editorOptions = createSelector(userState, state => ({
 
 export const loading = createSelector(userState, state => state.loading);
 
+export const verificationEmailProcessing = createSelector(
+  userState,
+  state => state.verificationEmailProcessing,
+);
+
 export const userSelector = createSelector(userState, state => state.user);
 
 export const userProfile = createSelector(
