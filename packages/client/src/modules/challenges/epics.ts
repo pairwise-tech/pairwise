@@ -667,6 +667,58 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
   );
 };
 
+/**
+ * If the current challenge is consecutively after the challenge the
+ * user is navigating away from, and the current challenge is a section,
+ * show a toast to let the user know they have begun a new course section
+ */
+const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.setChallengeId)),
+    pluck("payload"),
+    pluck("previousChallengeId"),
+    map(previousChallengeId => {
+      const {
+        currentCourseId,
+        currentModuleId,
+        courseSkeletons,
+      } = state$.value.challenges;
+
+      const challenges = courseSkeletons
+        ?.find(({ id }) => id === currentCourseId)
+        ?.modules.find(({ id }) => id === currentModuleId)?.challenges;
+
+      if (challenges) {
+        return {
+          challenges,
+          prevChallengeIndex: challenges.findIndex(
+            c => c.id === previousChallengeId,
+          ),
+        };
+      }
+
+      return { prevChallengeIndex: -1, challenges };
+    }),
+    filter(
+      ({ prevChallengeIndex, challenges }) =>
+        prevChallengeIndex !== -1 && challenges !== undefined,
+    ),
+    tap(({ prevChallengeIndex, challenges }) => {
+      const { currentChallengeId } = state$.value.challenges;
+      const nextChallenge = challenges && challenges[prevChallengeIndex + 1];
+      const isNextConsecutiveChallenge =
+        nextChallenge && nextChallenge.id === currentChallengeId;
+
+      if (isNextConsecutiveChallenge && nextChallenge?.type === "section") {
+        deps.toaster.success(`Starting section ${nextChallenge.title}!`, {
+          icon: "bookmark",
+        });
+      }
+    }),
+    ignoreElements(),
+  );
+};
+
 /** ===========================================================================
  * Utils
  * ============================================================================
@@ -718,4 +770,5 @@ export default combineEpics(
   updateUserProgressEpic,
   searchEpic,
   completeContentOnlyChallengeEpic,
+  showSectionToastEpic,
 );
