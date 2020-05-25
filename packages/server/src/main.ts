@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import { json } from "body-parser";
 import cloneBuffer from "clone-buffer";
 import morgan from "morgan";

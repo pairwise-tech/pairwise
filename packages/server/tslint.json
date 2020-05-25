@@ -9,6 +9,7 @@
     "member-access": [false],
     "ordered-imports": [false],
     "max-line-length": [true, 150],
+    "no-var-requires": false,
     "member-ordering": [false],
     "interface-name": [false],
     "arrow-parens": false,

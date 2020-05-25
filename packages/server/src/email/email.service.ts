@@ -66,10 +66,10 @@ export class EmailService {
       ...getWelcomeEmailContents(),
     };
 
-    await this.email(request);
+    await this.email(request, false);
   }
 
-  private async email(emailRequest: EmailRequest) {
+  private async email(emailRequest: EmailRequest, shouldEscalateError = true) {
     const { subject, text, html, recipient } = emailRequest;
 
     try {
@@ -83,8 +83,10 @@ export class EmailService {
       });
     } catch (err) {
       captureSentryException(err);
-      console.log("Error sending email: ", err);
-      throw new Error(ERROR_CODES.FAILED_TO_SEND_EMAIL);
+      console.log("Error sending email: ", err.message);
+      if (shouldEscalateError) {
+        throw new Error(ERROR_CODES.FAILED_TO_SEND_EMAIL);
+      }
     }
   }
 }

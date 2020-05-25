@@ -1,3 +1,4 @@
+require("dotenv").config();
 import getenv from "getenv";
 
 /** ===========================================================================
@@ -78,6 +79,13 @@ const PAIRWISE_CHECKOUT_ICON = getenv.string(
 // Sentry
 const SENTRY_DSN = getenv.string("SENTRY_DSN", "");
 
+// Typeorm Configuration
+const TYPEORM_PORT = getenv.int("TYPEORM_PORT", 5432);
+const TYPEORM_HOST = getenv.string("TYPEORM_HOST");
+const TYPEORM_USERNAME = getenv.string("TYPEORM_USERNAME");
+const TYPEORM_PASSWORD = getenv.string("TYPEORM_PASSWORD");
+const TYPEORM_DATABASE = getenv.string("TYPEORM_DATABASE");
+
 const ENV = {
   PORT,
   DEVELOPMENT,
@@ -109,6 +117,11 @@ const ENV = {
   GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY,
   SENTRY_DSN,
   PAIRWISE_CHECKOUT_ICON,
+  TYPEORM_PORT,
+  TYPEORM_HOST,
+  TYPEORM_USERNAME,
+  TYPEORM_PASSWORD,
+  TYPEORM_DATABASE,
 };
 
 /** ===========================================================================
