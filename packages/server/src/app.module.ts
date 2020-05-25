@@ -12,24 +12,18 @@ import { PaymentsModule } from "./payments/payments.module";
 import { AdminModule } from "./admin/admin.module";
 import { FeedbackModule } from "./feedback/feedback.module";
 import { BlobModule } from "./blob/blob.module";
-
-// TODO: Refactor this
-const host = process.env.TYPEORM_HOST;
-const port = +process.env.TYPEORM_PORT;
-const username = process.env.TYPEORM_USERNAME;
-const password = process.env.TYPEORM_PASSWORD;
-const database = process.env.TYPEORM_DATABASE;
+import ENV from "./tools/server-env";
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      host,
-      username,
-      password,
-      database,
-      port,
       type: "postgres",
+      host: ENV.TYPEORM_HOST,
+      port: ENV.TYPEORM_PORT,
+      username: ENV.TYPEORM_USERNAME,
+      password: ENV.TYPEORM_PASSWORD,
+      database: ENV.TYPEORM_DATABASE,
       autoLoadEntities: true,
     }),
     AuthModule,
