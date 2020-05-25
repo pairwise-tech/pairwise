@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 
 import { AppService } from "./app.service";
@@ -14,18 +14,25 @@ import { FeedbackModule } from "./feedback/feedback.module";
 import { BlobModule } from "./blob/blob.module";
 import ENV from "./tools/server-env";
 
+/**
+ * NOTE: The TypeORM options are ALL supplied here. You cannot mix and match
+ * options, i.e. specify some options here and provide others via environment
+ * variables. Everything must go into this config object.
+ */
+const typeormOptions: TypeOrmModuleOptions = {
+  type: "postgres",
+  host: ENV.TYPEORM_HOST,
+  port: ENV.TYPEORM_PORT,
+  username: ENV.TYPEORM_USERNAME,
+  password: ENV.TYPEORM_PASSWORD,
+  database: ENV.TYPEORM_DATABASE,
+  autoLoadEntities: true,
+};
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: "postgres",
-      host: ENV.TYPEORM_HOST,
-      port: ENV.TYPEORM_PORT,
-      username: ENV.TYPEORM_USERNAME,
-      password: ENV.TYPEORM_PASSWORD,
-      database: ENV.TYPEORM_DATABASE,
-      autoLoadEntities: true,
-    }),
+    TypeOrmModule.forRoot(typeormOptions),
     AuthModule,
     BlobModule,
     UsersModule,
