@@ -10,7 +10,7 @@ import { ERROR_CODES } from "src/tools/constants";
 import { captureSentryException } from "src/tools/sentry-utils";
 import ENV from "src/tools/server-env";
 import { emailService, EmailService } from "src/email/email.service";
-import { checkEmail } from "src/tools/validation";
+import { validateEmailUpdateRequest } from "src/tools/validation";
 import { RequestUser } from "src/types";
 
 export type SigninStrategy = "Email" | "GitHub" | "Facebook" | "Google";
@@ -46,7 +46,7 @@ export class AuthService {
   }
 
   public async sendEmailVerificationMessage(user: RequestUser, email: string) {
-    if (checkEmail(email)) {
+    if (validateEmailUpdateRequest(email)) {
       const { uuid } = user.profile;
       const verificationLink = await this.generateUpdateEmailLink(email, uuid);
       await this.emailService.sendEmailVerificationLink(

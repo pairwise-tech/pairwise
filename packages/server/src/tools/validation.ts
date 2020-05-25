@@ -142,7 +142,10 @@ export const validateUserUpdateDetails = (
   }
 };
 
-export const checkEmail = (value: string) => {
+/**
+ * Validate an email address.
+ */
+export const validateEmailUpdateRequest = (value: string) => {
   if (validator.isEmail(value)) {
     return value;
   } else {

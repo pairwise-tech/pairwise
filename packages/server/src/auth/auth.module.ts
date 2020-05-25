@@ -1,4 +1,4 @@
-import { Module, forwardRef } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { FacebookStrategy } from "./strategies/facebook.strategy";
 import { UsersModule } from "src/user/user.module";
@@ -19,7 +19,7 @@ import { GoogleStrategy } from "./strategies/google.strategy";
       secret: ENV.JWT_SECRET,
       signOptions: { expiresIn: "365 days" }, // Expire in one year, boom baby!
     }),
-    forwardRef(() => UsersModule),
+    UsersModule,
   ],
   providers: [
     JwtStrategy,

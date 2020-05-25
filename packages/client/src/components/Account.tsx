@@ -52,11 +52,7 @@ class Account extends React.Component<IProps, IState> {
 
   render(): Nullable<JSX.Element> {
     const { editMode: edit } = this.state;
-    const {
-      user,
-      skeletons,
-      emailVerificationStatus: verificationEmailProcessing,
-    } = this.props;
+    const { user, skeletons, emailVerificationStatus } = this.props;
     const { payments, profile } = user;
     if (!payments || !profile || !skeletons) {
       return null;
@@ -125,9 +121,9 @@ class Account extends React.Component<IProps, IState> {
             }
           />
         )}
-        {verificationEmailProcessing === EMAIL_VERIFICATION_STATUS.LOADING ? (
+        {emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
           <TextItem>* Loading...</TextItem>
-        ) : verificationEmailProcessing === EMAIL_VERIFICATION_STATUS.SENT ? (
+        ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.SENT ? (
           <TextItem style={{ color: COLORS.PRIMARY_GREEN }}>
             * Please check your email for a verification link.
           </TextItem>

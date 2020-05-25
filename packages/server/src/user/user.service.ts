@@ -12,7 +12,10 @@ import {
   UserProfile,
 } from "@pairwise/common";
 import { RequestUser } from "src/types";
-import { validateUserUpdateDetails, checkEmail } from "src/tools/validation";
+import {
+  validateUserUpdateDetails,
+  validateEmailUpdateRequest,
+} from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { SlackService, slackService } from "src/slack/slack.service";
@@ -209,6 +212,9 @@ export class UserService {
     if (userWithEmail && userWithEmail.profile.uuid !== uuid) {
       throw new BadRequestException("This email is already taken.");
     } else {
+      // Find the user to verify the uuid is valid
+      await this.findUserByUuidGetFullProfile(uuid);
+
       // All good - update the email on this user
       await this.userRepository.update({ uuid }, { email });
     }
