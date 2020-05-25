@@ -4,7 +4,12 @@ import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
-import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
+import {
+  ModalContainer,
+  ModalTitleText,
+  ModalSubText,
+  Loading,
+} from "./Shared";
 import { COLORS } from "tools/constants";
 
 /** ===========================================================================
@@ -33,7 +38,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const { user, courseToPurchase } = this.props;
+    const { user, courseToPurchase, checkoutLoading } = this.props;
     const { profile } = user;
 
     if (!courseToPurchase || !profile) {
@@ -51,7 +56,12 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
         aria-describedby="simple-modal-description"
         onClose={this.handleOnCloseModal}
       >
-        {hasEmail ? (
+        {!checkoutLoading ? (
+          <ModalContainer>
+            <ModalTitleText>Starting Checkout...</ModalTitleText>
+            <Loading intent="primary" />
+          </ModalContainer>
+        ) : hasEmail ? (
           <ModalContainer>
             <ModalTitleText>Purchase Course</ModalTitleText>
             <ModalSubText>
@@ -167,6 +177,7 @@ const InputField = styled.input`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
+  checkoutLoading: Modules.selectors.payments.checkoutLoading(state),
   modalOpen: Modules.selectors.payments.paymentIntentModalState(state),
   courseToPurchase: Modules.selectors.payments.paymentIntentCourse(state),
 });

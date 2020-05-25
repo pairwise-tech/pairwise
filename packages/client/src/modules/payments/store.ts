@@ -12,6 +12,7 @@ export interface State {
   paymentIntentModalOpen: boolean;
   paymentSuccessModalOpen: boolean;
   paymentSuccessCourseId: string;
+  checkoutLoading: boolean;
 }
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   paymentIntentModalOpen: false,
   paymentSuccessModalOpen: false,
   paymentSuccessCourseId: "",
+  checkoutLoading: false,
 };
 
 const payments = createReducer<State, PaymentsActionTypes>(initialState)
@@ -27,9 +29,18 @@ const payments = createReducer<State, PaymentsActionTypes>(initialState)
     ...state,
     paymentIntentModalOpen: action.payload,
   }))
+  .handleAction(actions.startCheckout, (state, action) => ({
+    ...state,
+    checkoutLoading: true,
+  }))
   .handleAction(actions.startCheckoutSuccess, (state, action) => ({
     ...state,
+    checkoutLoading: false,
     stripeCheckoutSessionId: action.payload.stripeCheckoutSessionId,
+  }))
+  .handleAction(actions.startCheckoutFailure, (state, action) => ({
+    ...state,
+    checkoutLoading: false,
   }))
   .handleAction(actions.setPaymentSuccess, (state, action) => ({
     ...state,
