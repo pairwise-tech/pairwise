@@ -32,6 +32,7 @@ export class AuthController {
     return SUCCESS_CODES.OK;
   }
 
+  @UseGuards(AuthGuard("jwt"))
   @Post("update-email")
   public async updateUserEmailRequest(
     @Body() body: { email: string },

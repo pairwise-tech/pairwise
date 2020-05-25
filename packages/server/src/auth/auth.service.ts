@@ -41,7 +41,7 @@ export class AuthService {
 
   public async generateUpdateEmailLink(email: string, uuid: string) {
     const payload = this.jwtService.sign({ uuid, email });
-    const updateEmailLink = `${ENV.SERVER_HOST_URL}/user/update-email/${payload}`;
+    const updateEmailLink = `${ENV.SERVER_HOST_URL}/auth/update-email/${payload}`;
     return updateEmailLink;
   }
 

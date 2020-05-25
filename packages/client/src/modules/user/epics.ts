@@ -43,7 +43,7 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(API.updateUser),
     map(result => {
       if (result.value) {
-        deps.toaster.success("Saved 👍");
+        deps.toaster.success("Profile Updated 👍");
         return Actions.updateUserSuccess(result.value);
       } else {
         if (result.error.status !== 401) {
@@ -66,13 +66,11 @@ const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(API.updateUserEmail),
     map(result => {
       if (result.value) {
-        deps.toaster.success(
-          "Please check your email for a verification link.",
-        );
+        deps.toaster.warn("Please check your email for a verification link.");
         return Actions.empty("Email verification link request success");
       } else {
         if (result.error.status !== 401) {
-          deps.toaster.warn("Failed to update email address...");
+          deps.toaster.error("Failed to update email address...");
         }
         return Actions.empty("Email verification link request failure");
       }
