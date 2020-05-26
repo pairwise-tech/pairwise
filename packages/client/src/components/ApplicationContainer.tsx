@@ -16,8 +16,6 @@ import {
   ButtonGroup,
   FocusStyleManager,
   Tooltip,
-  Alert,
-  Classes,
   Menu,
   MenuItem,
   MenuDivider,
@@ -195,7 +193,6 @@ const ApplicationContainer = (props: IProps) => {
 
   return (
     <React.Fragment>
-      {/* <MobileWarningView isWorkspace={isWorkspaceRequired} /> */}
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
       {CODEPRESS && <AdminKeyboardShortcuts />}
@@ -635,49 +632,6 @@ const AccountDropdownButton = styled.div`
  * Mobile/Desktop Styles
  * ============================================================================
  */
-
-export const MobileWarningView = (props: { isWorkspace: boolean }) => {
-  const [isOpen, setIsOpen] = React.useState<boolean>(true);
-  const isMobile = useMedia(MOBILE, false);
-  return (
-    <Alert
-      canOutsideClickCancel
-      confirmButtonText="Close"
-      onClose={() => setIsOpen(false)}
-      isOpen={isOpen && isMobile && props.isWorkspace}
-      className={Classes.DARK}
-    >
-      <MobileContainer>
-        <MobileTitleText>A quick heads up</MobileTitleText>
-        <MobileText style={{ margin: 0 }}>{"⚠️"}</MobileText>
-        <MobileText>
-          <strong>The Workspace doesn't completely work on mobile!</strong>
-        </MobileText>
-        <MobileText style={{ margin: 0 }}>{"⚠️"}</MobileText>
-        <MobileText>
-          Feel free to use Pairwise on a phone or tablet but the workspace won't
-          fully work as expected. We recommend you use a computer. For some
-          challenges
-          <span style={{ textDecoration: "underline" }}>
-            a mobile device simply doesn't have the necessary software to
-            complete the challenge
-          </span>
-          .
-        </MobileText>
-        <MobileText>
-          Unfortunately, smart phones and tablets are not the best devices for
-          developing software.
-        </MobileText>
-        <MobileText>
-          If you you're just wondering what Pairwise is about you can{" "}
-          <a target="__blank" href="https://www.pairwise.tech">
-            click here to check out our homepage.
-          </a>
-        </MobileText>
-      </MobileContainer>
-    </Alert>
-  );
-};
 
 const MobileContainer = styled.div`
   flex: 1;
