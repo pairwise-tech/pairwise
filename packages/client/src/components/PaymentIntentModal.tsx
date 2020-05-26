@@ -4,8 +4,14 @@ import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
-import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
+import {
+  ModalContainer,
+  ModalTitleText,
+  ModalSubText,
+  Loading,
+} from "./Shared";
 import { COLORS } from "tools/constants";
+import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 
 /** ===========================================================================
  * Types & Config
@@ -33,7 +39,12 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const { user, courseToPurchase } = this.props;
+    const {
+      user,
+      courseToPurchase,
+      checkoutLoading,
+      emailVerificationStatus,
+    } = this.props;
     const { profile } = user;
 
     if (!courseToPurchase || !profile) {
@@ -51,7 +62,12 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
         aria-describedby="simple-modal-description"
         onClose={this.handleOnCloseModal}
       >
-        {hasEmail ? (
+        {checkoutLoading ? (
+          <ModalContainer>
+            <ModalTitleText>Starting Checkout...</ModalTitleText>
+            <Loading intent="primary" />
+          </ModalContainer>
+        ) : hasEmail ? (
           <ModalContainer>
             <ModalTitleText>Purchase Course</ModalTitleText>
             <ModalSubText>
@@ -78,6 +94,18 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
             <SmallPoint>
               You will be redirected to Stripe to complete the checkout process.
             </SmallPoint>
+          </ModalContainer>
+        ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
+          <ModalContainer>
+            <ModalTitleText>Sending verification email...</ModalTitleText>
+            <Loading />
+          </ModalContainer>
+        ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.SENT ? (
+          <ModalContainer>
+            <ModalTitleText>Email Sent</ModalTitleText>
+            <ModalSubText>
+              Please check your email for further instructions.
+            </ModalSubText>
           </ModalContainer>
         ) : (
           <ModalContainer>
@@ -127,7 +155,7 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
   };
 
   updateUserEmail = () => {
-    this.props.updateUser({ email: this.state.email });
+    this.props.updateUserEmail(this.state.email);
   };
 }
 
@@ -167,12 +195,16 @@ const InputField = styled.input`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
+  checkoutLoading: Modules.selectors.payments.checkoutLoading(state),
   modalOpen: Modules.selectors.payments.paymentIntentModalState(state),
   courseToPurchase: Modules.selectors.payments.paymentIntentCourse(state),
+  emailVerificationStatus: Modules.selectors.user.emailVerificationStatus(
+    state,
+  ),
 });
 
 const dispatchProps = {
-  updateUser: Modules.actions.user.updateUser,
+  updateUserEmail: Modules.actions.user.updateUserEmail,
   startCheckout: Modules.actions.payments.startCheckout,
   setPurchaseCourseModalState:
     Modules.actions.payments.setPaymentCourseModalState,

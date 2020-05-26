@@ -122,13 +122,16 @@ export const validateUserUpdateDetails = (
   details: UserUpdateOptions,
 ): Result<UserUpdateOptions<string>, ERROR_CODES.INVALID_PARAMETERS> => {
   try {
+    if ("email" in details) {
+      throw new Error("Not allowed to update email directly!");
+    }
+
     const settingsUpdate = checkSettingsField(details.settings);
     const mergedSettings = { ...user.settings, ...settingsUpdate };
     const settingsJSON = JSON.stringify(mergedSettings);
 
+    // Does NOT include email:
     const updateDetails = {
-      // NOTE: We currently do not validate emails in any way...
-      email: checkStringField(details.email, true),
       avatarUrl: checkStringField(details.avatarUrl),
       givenName: checkStringField(details.givenName),
       familyName: checkStringField(details.familyName),
@@ -140,6 +143,17 @@ export const validateUserUpdateDetails = (
     return new Ok(sanitizedUpdate);
   } catch (err) {
     return new Err(ERROR_CODES.INVALID_PARAMETERS);
+  }
+};
+
+/**
+ * Validate an email address.
+ */
+export const validateEmailUpdateRequest = (value: string) => {
+  if (validator.isEmail(value)) {
+    return value;
+  } else {
+    return null;
   }
 };
 

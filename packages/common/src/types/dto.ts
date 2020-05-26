@@ -78,7 +78,6 @@ export interface UserProgressMap {
  * POST user/profile API. This validation is applied on the server.
  */
 export interface UserUpdateOptions<SettingsType = Partial<UserSettings>> {
-  email?: string;
   givenName?: string;
   familyName?: string;
   displayName?: string;

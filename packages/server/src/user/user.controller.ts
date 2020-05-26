@@ -5,7 +5,6 @@ import {
   Get,
   Body,
   Post,
-  Delete,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";

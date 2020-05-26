@@ -4,6 +4,7 @@ import { isActionOf } from "typesafe-actions";
 import API from "modules/api";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
+import { validate } from "email-validator";
 
 /** ===========================================================================
  * Epics
@@ -43,7 +44,7 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(API.updateUser),
     map(result => {
       if (result.value) {
-        deps.toaster.success("Saved 👍");
+        deps.toaster.success("Profile Updated 👍");
         return Actions.updateUserSuccess(result.value);
       } else {
         if (result.error.status !== 401) {
@@ -52,6 +53,39 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
           );
         }
         return Actions.updateUserFailure(result.error);
+      }
+    }),
+  );
+};
+
+/**
+ * Handle updating a user email. The user must verify the email address
+ * for the change to occur. The email update is handled by a different API
+ * from the API which handles user profile updates (see above epic).
+ */
+const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.updateUserEmail)),
+    pluck("payload"),
+    mergeMap(async email => {
+      const valid = validate(email);
+      if (!valid) {
+        deps.toaster.error("Please enter a valid email...");
+        return Actions.updateUserEmailFailure();
+      }
+
+      deps.toaster.warn("Sending email verification link...");
+      const result = await API.updateUserEmail(email);
+      if (result.value) {
+        deps.toaster.success(
+          "Please check your email for verification instructions.",
+        );
+        return Actions.updateUserEmailSuccess();
+      } else {
+        if (result.error.status !== 401) {
+          deps.toaster.error("Failed to update email address...");
+        }
+        return Actions.updateUserEmailFailure();
       }
     }),
   );
@@ -80,5 +114,6 @@ const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
 export default combineEpics(
   fetchUserEpic,
   updateUserEpic,
+  updateUserEmailEpic,
   updateUserSettingsEpic,
 );

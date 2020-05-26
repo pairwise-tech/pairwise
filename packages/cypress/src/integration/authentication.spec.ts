@@ -30,7 +30,7 @@ describe("Authentication Flows: signin, profile, and logout", () => {
   });
 
   it("Account page works", () => {
-    click("facebook-login");
+    click("github-login");
     cy.get("#account-menu-dropdown").trigger("mouseover");
     click("account-link");
     cy.contains("Account");

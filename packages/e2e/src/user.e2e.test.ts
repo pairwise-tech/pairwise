@@ -62,7 +62,25 @@ describe("User APIs", () => {
     expect(settings.theme).toBe("hc-black");
   });
 
-  test("/user/profile (POST) a user can update their email", async done => {
+  test("/user/profile (POST) rejects email parameters", async () => {
+    const accessToken = await fetchAccessToken();
+
+    const randomString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".slice(
+      Math.floor(Math.random() * 50),
+    );
+    const email = `${randomString}@pairwise.tech`;
+
+    return request(`${HOST}/user/profile`)
+      .post("/")
+      .send({ email })
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(400)
+      .then(error => {
+        expect(error.body.message).toBe("Invalid parameters provided");
+      });
+  });
+
+  test("/auth/update-email (POST) accepts a new email but does not update the user profile email yet", async done => {
     const accessToken = await fetchAccessToken();
     const headers = {
       headers: {
@@ -74,20 +92,19 @@ describe("User APIs", () => {
       Math.floor(Math.random() * 50),
     );
     const email = `${randomString}@pairwise.tech`;
-    const result = await axios.get(`${HOST}/user/profile`, headers);
-    const originalProfile = result.data.profile;
 
-    request(`${HOST}/user/profile`)
+    request(`${HOST}/auth/update-email`)
       .post("/")
       .send({ email })
       .set("Authorization", `Bearer ${accessToken}`)
-      .expect(200)
-      .end((error, response) => {
-        const newEmail = response.body.profile.email;
-        expect(newEmail).toBe(email);
-        expect(newEmail !== originalProfile.email).toBe(true);
-        done();
-      });
+      .expect(200);
+
+    const result = await axios.get(`${HOST}/user/profile`, headers);
+    const profile = result.data.profile;
+
+    // Assert email is not updated yet
+    expect(profile.email !== email).toBe(true);
+    done();
   });
 
   test("/user/profile (POST) filters invalid parameters, and updates settings correctly", async done => {

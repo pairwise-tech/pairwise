@@ -6,6 +6,7 @@ import {
   Res,
   Post,
   Param,
+  Body,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
@@ -14,8 +15,9 @@ import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import ENV from "src/tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
-import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
+import { SUCCESS_CODES } from "src/tools/constants";
 import { captureSentryMessage } from "src/tools/sentry-utils";
+import { AuthenticatedRequest } from "src/types";
 
 @Controller("auth")
 export class AuthController {
@@ -28,6 +30,23 @@ export class AuthController {
     // the user.
     this.authService.handleEmailLoginRequest(req.body.email);
     return SUCCESS_CODES.OK;
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Post("update-email")
+  public async updateUserEmailRequest(
+    @Body() body: { email: string },
+    @Req() req: AuthenticatedRequest,
+  ) {
+    const { email } = body;
+    await this.authService.sendEmailVerificationMessage(req.user, email);
+    return SUCCESS_CODES.OK;
+  }
+
+  @Get("update-email/:payload")
+  public async updateUserEmail(@Param("payload") payload, @Res() res) {
+    await this.authService.handleUserUpdateEmailRequest(payload);
+    return res.redirect(`${ENV.CLIENT_URL}/account?emailUpdated=true`);
   }
 
   @Get("magic-link/:token")
