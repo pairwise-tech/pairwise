@@ -19,7 +19,6 @@ import {
   PROSE_MAX_WIDTH,
   CONTENT_SERIALIZE_DEBOUNCE,
   MOBILE,
-  COLORS,
 } from "tools/constants";
 import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
