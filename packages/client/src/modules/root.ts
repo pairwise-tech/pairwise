@@ -19,6 +19,7 @@ import Challenges, {
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
 import Feedback, { FeedbackActionTypes, FeedbackState } from "./feedback";
+import * as Storage from "../tools/storage-utils";
 
 /** ===========================================================================
  * Root Actions and Selectors
@@ -89,6 +90,7 @@ export interface EpicDependencies {
   api: typeof API;
   toaster: typeof toaster;
   selectors: typeof selectors;
+  storage: typeof Storage;
 }
 
 export type EpicSignature = Epic<
