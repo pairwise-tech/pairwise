@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { JwtPassportSignPayload } from "./strategies/jwt.strategy";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
@@ -10,6 +10,8 @@ import { ERROR_CODES } from "src/tools/constants";
 import { captureSentryException } from "src/tools/sentry-utils";
 import ENV from "src/tools/server-env";
 import { emailService, EmailService } from "src/email/email.service";
+import { validateEmailUpdateRequest } from "src/tools/validation";
+import { RequestUser } from "src/types";
 
 export type SigninStrategy = "Email" | "GitHub" | "Facebook" | "Google";
 
@@ -35,6 +37,46 @@ export class AuthService {
     const magicEmailToken = this.jwtService.sign({ email });
     const magicEmailLink = `${ENV.SERVER_HOST_URL}/auth/magic-link/${magicEmailToken}`;
     this.emailService.sendMagicEmailLink(email, magicEmailLink);
+  }
+
+  public async generateUpdateEmailLink(email: string, uuid: string) {
+    const payload = this.jwtService.sign({ uuid, email });
+    const updateEmailLink = `${ENV.SERVER_HOST_URL}/auth/update-email/${payload}`;
+    return updateEmailLink;
+  }
+
+  public async sendEmailVerificationMessage(user: RequestUser, email: string) {
+    if (validateEmailUpdateRequest(email)) {
+      const { uuid } = user.profile;
+      const verificationLink = await this.generateUpdateEmailLink(email, uuid);
+      await this.emailService.sendEmailVerificationLink(
+        email,
+        verificationLink,
+      );
+    } else {
+      throw new BadRequestException("Invalid Email");
+    }
+  }
+
+  public async handleUserUpdateEmailRequest(payload: any) {
+    const result = this.decodeUserUpdateEmailPayload(payload);
+    if (result.value) {
+      const { email, uuid } = result.value;
+      this.userService.updateUserEmail(email, uuid);
+    } else {
+      throw new BadRequestException("Invalid Request");
+    }
+  }
+
+  private decodeUserUpdateEmailPayload(
+    payload: any,
+  ): Result<{ email: string; uuid: string }, string> {
+    const result: any = this.jwtService.decode(payload);
+    if ("uuid" in result && "email" in result) {
+      return new Ok(result);
+    } else {
+      return new Err("Invalid Payload");
+    }
   }
 
   public async handleEmailLoginVerification(magicEmailToken: string) {

@@ -439,6 +439,7 @@ export enum APP_INITIALIZATION_TYPE {
 
   // Special types:
   SIGN_IN = "SIGN_IN",
+  EMAIL_UPDATED = "EMAIL_UPDATED",
   ACCOUNT_CREATED = "ACCOUNT_CREATED",
   PAYMENT_SUCCESS = "PAYMENT_SUCCESS",
   PAYMENT_CANCELLED = "PAYMENT_CANCELLED",
@@ -470,6 +471,13 @@ export const parseInitialUrlToInitializationType = (
       return APP_INITIALIZATION_TYPE.ACCOUNT_CREATED;
     } else {
       return APP_INITIALIZATION_TYPE.SIGN_IN;
+    }
+  }
+
+  // A user updated their email successfully:
+  if (path === "/account" && checkParamsExist(params, ["emailUpdated"])) {
+    if (params.emailUpdated === "true") {
+      return APP_INITIALIZATION_TYPE.EMAIL_UPDATED;
     }
   }
 

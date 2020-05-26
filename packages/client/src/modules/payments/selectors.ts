@@ -34,6 +34,11 @@ export const paymentSuccessCourseId = createSelector(
   payments => payments.paymentSuccessCourseId,
 );
 
+export const checkoutLoading = createSelector(
+  paymentsState,
+  payments => payments.checkoutLoading,
+);
+
 // Find the course which corresponds to the current course purchase id,
 // if it exists.
 export const paymentIntentCourse = createSelector(

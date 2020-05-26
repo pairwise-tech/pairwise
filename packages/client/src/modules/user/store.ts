@@ -42,6 +42,13 @@ export interface UserState {
 
 export type UserStoreState = UserState;
 
+export enum EMAIL_VERIFICATION_STATUS {
+  DEFAULT = "DEFAULT",
+  LOADING = "LOADING",
+  SENT = "SENT",
+  ERROR = "ERROR",
+}
+
 const initialUserState = {
   profile: null,
   payments: null,
@@ -51,8 +58,9 @@ const initialUserState = {
 };
 
 export interface State {
-  loading: boolean;
   user: UserState;
+  loading: boolean;
+  emailVerificationStatus: EMAIL_VERIFICATION_STATUS;
 }
 
 const user = createReducer<
@@ -105,9 +113,27 @@ const loading = createReducer<boolean, UserActionTypes | AuthActionTypes>(
   true,
 ).handleAction(actions.fetchUserSuccess, () => false);
 
+const emailVerificationStatus = createReducer<
+  EMAIL_VERIFICATION_STATUS,
+  UserActionTypes
+>(EMAIL_VERIFICATION_STATUS.DEFAULT)
+  .handleAction(
+    actions.updateUserEmail,
+    () => EMAIL_VERIFICATION_STATUS.LOADING,
+  )
+  .handleAction(
+    actions.updateUserEmailSuccess,
+    () => EMAIL_VERIFICATION_STATUS.SENT,
+  )
+  .handleAction(
+    actions.updateUserEmailFailure,
+    () => EMAIL_VERIFICATION_STATUS.ERROR,
+  );
+
 const rootReducer = combineReducers({
   user,
   loading,
+  emailVerificationStatus,
 });
 
 /** ===========================================================================

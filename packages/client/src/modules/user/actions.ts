@@ -17,6 +17,10 @@ enum ActionTypesEnum {
   UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS",
   UPDATE_USER_FAILURE = "UPDATE_USER_FAILURE",
 
+  UPDATE_USER_EMAIL = "UPDATE_USER_EMAIL",
+  UPDATE_USER_EMAIL_SUCCESS = "UPDATE_USER_EMAIL_SUCCESS",
+  UPDATE_USER_EMAIL_FAILURE = "UPDATE_USER_EMAIL_FAILURE",
+
   UPDATE_USER_SETTINGS = "UPDATE_USER_SETTINGS",
   UPDATE_USER_SETTINGS_SUCCESS = "UPDATE_USER_SETTINGS_SUCCESS",
   UPDATE_USER_SETTINGS_FAILURE = "UPDATE_USER_SETTINGS_FAILURE",
@@ -48,6 +52,18 @@ export const updateUserSuccess = createAction(
 export const updateUserFailure = createAction(
   ActionTypesEnum.UPDATE_USER_FAILURE,
 )<HttpResponseError>();
+
+export const updateUserEmail = createAction(ActionTypesEnum.UPDATE_USER_EMAIL)<
+  string
+>();
+
+export const updateUserEmailSuccess = createAction(
+  ActionTypesEnum.UPDATE_USER_EMAIL_SUCCESS,
+)();
+
+export const updateUserEmailFailure = createAction(
+  ActionTypesEnum.UPDATE_USER_EMAIL_FAILURE,
+)();
 
 export const updateUserSettings = createAction(
   ActionTypesEnum.UPDATE_USER_SETTINGS,

@@ -36,6 +36,7 @@ services:
     command: dockerize -wait tcp://db:5432 -timeout 10s yarn pairwise
     environment:
       TYPEORM_HOST: db
+      WHITELISTED_ADMIN_EMAILS: pairwise-dev-admin-user@pairwise.tech
     expose:
       - 9000
     ports:

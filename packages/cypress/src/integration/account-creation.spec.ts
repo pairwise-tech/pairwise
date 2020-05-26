@@ -49,30 +49,20 @@ describe("Account Creation Flow", () => {
     checkTestResultStatus("Success!", 3);
     goToNextChallenge();
 
+    checkNavigationOverlay();
+
     click("login-signup-button");
     click("facebook-login");
 
-    cy.wait(5000); /* Wait! */
-
-    const checkCourseState = () => {
-      const WELCOME_REGEX = /Welcome, |Welcome!/g;
-      cy.contains(WELCOME_REGEX);
-      click("navigation-menu-button");
-      click("module-navigation-1");
-      click("challenge-navigation-1");
-
-      goToNextChallenge();
-      elementContains("test-result-status-0", "Success!");
-      goToNextChallenge();
-      checkTestResultStatus("Success!", 6);
-      goToNextChallenge();
-      checkTestResultStatus("Success!", 3);
-    };
+    // Wait!
+    cy.wait(5000);
 
     checkCourseState();
+    checkNavigationOverlay();
     cy.reload();
     cy.wait(TIMEOUT);
     checkCourseState();
+    checkNavigationOverlay();
   });
 
   it("Creating an account redirects to the original workspace URL after registration success", () => {
@@ -92,6 +82,9 @@ describe("Account Creation Flow", () => {
     // Login with Facebook (defaults to { email: null })
     click("login-signup-button");
     click(`facebook-login`);
+
+    // Let the login process complete
+    cy.wait(500);
 
     // Check that the toast does not exist yet
     cy.get("Setup Email").should("not.exist");
@@ -137,6 +130,34 @@ const checkTestResultStatus = (
   for (let i = 0; i < numberOfResults; i++) {
     checkTestStatus(expectedStatus, i);
   }
+};
+
+/**
+ * Check that the challenges appear complete in the navigation overlay.
+ */
+const checkNavigationOverlay = () => {
+  click("navigation-menu-button");
+  cy.get("#challenge-2-icon-COMPLETE").should("exist");
+  cy.get("#challenge-3-icon-COMPLETE").should("exist");
+  cy.get("#challenge-4-icon-COMPLETE").should("exist");
+};
+
+/**
+ * Check the expected challenges are complete.
+ */
+const checkCourseState = () => {
+  const WELCOME_REGEX = /Welcome, |Welcome!/g;
+  cy.contains(WELCOME_REGEX);
+  click("navigation-menu-button");
+  click("module-navigation-1");
+  click("challenge-navigation-1");
+
+  goToNextChallenge();
+  elementContains("test-result-status-0", "Success!");
+  goToNextChallenge();
+  checkTestResultStatus("Success!", 6);
+  goToNextChallenge();
+  checkTestResultStatus("Success!", 3);
 };
 
 /**

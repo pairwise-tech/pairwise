@@ -28,6 +28,19 @@ export const getMagicEmailLinkContents = (link: string) => {
 };
 
 /** ===========================================================================
+ * Email Verification Link
+ * ============================================================================
+ */
+
+export const getVerificationLinkContents = (link: string) => {
+  return {
+    subject: "Pairwise Email Verification",
+    text: `Hi, please open this link to verify your email: ${link}`,
+    html: `Hi, please <a href=${link}>open this link</a> to verify your email address.`,
+  };
+};
+
+/** ===========================================================================
  * Welcome Email
  * ============================================================================
  */
