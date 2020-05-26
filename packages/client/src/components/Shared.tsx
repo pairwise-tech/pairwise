@@ -238,6 +238,10 @@ export const ModalContainer = styled.div`
   border-radius: 6px;
   border: 1px solid ${COLORS.BORDER_MODAL};
   background-color: ${COLORS.BACKGROUND_MODAL};
+
+  @media ${MOBILE} {
+    width: 100%;
+  }
 `;
 
 export const ModalTitleText = styled.h1`

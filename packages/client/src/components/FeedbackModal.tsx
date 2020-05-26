@@ -122,6 +122,7 @@ const FeedbackModal = (props: Props) => {
           Enter some feedback so we know how to improve
         </DangerLabel>
         <FeedbackInput
+          autoFocus
           style={{ flexShrink: 0 }}
           fill={true}
           large={true}
