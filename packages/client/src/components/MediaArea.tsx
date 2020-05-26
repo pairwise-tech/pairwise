@@ -286,7 +286,7 @@ const getEmbedOrigin = () => {
  * clutters up the network panel with a bunch of requests we're not interested
  * in.
  */
-const YoutubeEmbed = (props: { url: string }) => {
+export const YoutubeEmbed = (props: { url: string }) => {
   const width = 728;
   const height = 410;
 
