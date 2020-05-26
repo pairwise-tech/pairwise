@@ -8,8 +8,6 @@ export const assertUnreachable = (x: never): never => {
   );
 };
 
-const URL_TERM_BLACKLIST = new Set(["the", "of", "and", "a", "an"]);
-
 // NOTE: We leave spaces in initially so that we can split on them
 // NOTE: The alphanumeric logic DOES NOT necessarily work outside of English
 // (this would demolish Chinese URLs). Just a consideration.
@@ -19,7 +17,6 @@ export const sluggify = (s: string) => {
     .split(" ")
     .map(x => x.replace(/[^A-Za-z0-9]/g, "").trim()) //  Replace non alphanumeric chars except space. See NOTE
     .filter(Boolean)
-    .filter(x => !URL_TERM_BLACKLIST.has(x)) // Remove common filler words like "the", "of", "an"
     .join("-");
 };
 

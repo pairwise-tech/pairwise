@@ -14,6 +14,7 @@ import {
 } from "./root";
 import toaster from "tools/toast-utils";
 import logger from "tools/logger";
+import * as Storage from "tools/storage-utils";
 
 /** ===========================================================================
  * Router History
@@ -32,6 +33,7 @@ const dependencies: EpicDependencies = {
   toaster,
   selectors,
   router: history,
+  storage: Storage,
 };
 
 const epicMiddleware = createEpicMiddleware({

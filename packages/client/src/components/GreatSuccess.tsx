@@ -208,17 +208,29 @@ const GreatSuccess: React.FC<Props> = ({
         }}
       />
       <CardTitle>{challenge.title}</CardTitle>
-      <p>
+      <p style={{ marginBottom: 20, fontSize: 20 }}>
         Congratulations, you've completed <strong>{challenge.title}</strong>.
         Where to next?
       </p>
       <ButtonActions>
+        <Button
+          onClick={() => props.setFeedbackDialogState(true)}
+          icon="comment"
+        >
+          Have feedback?
+        </Button>
         <div style={{ marginLeft: "auto" }}>
           {challenge.content && (
             <Button onClick={handleScrollToContent}>View Content</Button>
           )}
           {challenge.videoUrl && (
-            <Button onClick={handlePlayVideo}>Watch Video</Button>
+            <Button
+              rightIcon="video"
+              style={{ marginRight: 10 }}
+              onClick={handlePlayVideo}
+            >
+              Watch Video
+            </Button>
           )}
           {nextChallenge && (
             <NextChallengeButton
@@ -379,6 +391,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   setChallengeId: Modules.actions.challenges.setChallengeId,
+  setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
 };
 
 export default connect(mapStateToProps, dispatchProps)(GreatSuccess);

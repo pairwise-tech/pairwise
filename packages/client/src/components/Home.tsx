@@ -6,7 +6,7 @@ import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle, ExternalLink } from "./Shared";
-import { COLORS, PROSE_MAX_WIDTH } from "tools/constants";
+import { COLORS, PROSE_MAX_WIDTH, MOBILE } from "tools/constants";
 import SEO from "./SEO";
 
 /** ===========================================================================
@@ -69,44 +69,35 @@ class Home extends React.Component<IProps, IState> {
         key={skeleton.id}
         className="course-card"
         elevation={Elevation.FOUR}
-        style={{ width: 515, marginTop: 24 }}
+        style={{ maxWidth: 515, marginTop: 24 }}
       >
         <CourseTitle className={`courseLink`}>{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
-        {canAccessCourse ? (
-          <Link to={`workspace/${firstCourseChallenge.id}`}>
-            <Button
-              large
-              intent="success"
-              className={`courseLinkContinue`}
-              style={{ width: 185, marginTop: 8 }}
-            >
-              Start Now
-            </Button>
-          </Link>
-        ) : (
-          <ButtonsBox>
+        <ButtonsBox>
+          {canAccessCourse ? (
             <Link to={`workspace/${firstCourseChallenge.id}`}>
+              <Button large intent="success" className={`courseLinkContinue`}>
+                Start Now
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link to={`workspace/${firstCourseChallenge.id}`}>
+                <Button large intent="success" id={`course-link-${i}-start`}>
+                  Start Now For Free
+                </Button>
+              </Link>
               <Button
                 large
                 intent="success"
-                style={{ width: 185 }}
-                id={`course-link-${i}-start`}
+                id={`course-link-${i}-purchase`}
+                onClick={this.handlePurchaseCourse(skeleton.id)}
               >
-                Start Now For Free
+                Purchase Course
               </Button>
-            </Link>
-            <Button
-              large
-              intent="success"
-              id={`course-link-${i}-purchase`}
-              style={{ marginLeft: 16, width: 185 }}
-              onClick={this.handlePurchaseCourse(skeleton.id)}
-            >
-              Purchase Course
-            </Button>
-          </ButtonsBox>
-        )}
+            </>
+          )}
+        </ButtonsBox>
       </Card>
     );
   };
@@ -150,6 +141,30 @@ const CourseDescription = styled.p`
 
 const ButtonsBox = styled.div`
   margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
+
+  @media ${MOBILE} {
+    display: block;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  & > button,
+  & > a {
+    display: block;
+    text-align: center;
+    flex: 1 100%;
+    &:not(:last-child) {
+      margin-right: 20px;
+      @media ${MOBILE} {
+        margin-right: 0px;
+        margin-bottom: 20px;
+      }
+    }
+  }
 `;
 
 const BoldText = styled(CourseDescription)`

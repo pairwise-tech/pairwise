@@ -11,6 +11,7 @@ import {
   ICodeBlobDto,
   SandboxBlob,
   Challenge,
+  getChallengeSlug,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -39,7 +40,7 @@ import {
 } from "tools/constants";
 import {
   findCourseById,
-  deriveIdsFromCourse,
+  deriveIdsFromCourseWithDefaults,
   findChallengeIdInLocationIfExists,
   createInverseChallengeMapping,
   isContentOnlyChallenge,
@@ -157,10 +158,11 @@ const resetActiveChallengeIds: EpicSignature = (action$, state$, deps) => {
             deps.router.location,
           );
 
-          const { courseId, moduleId, challengeId } = deriveIdsFromCourse(
-            courses,
-            maybeChallengeId,
-          );
+          const {
+            courseId,
+            moduleId,
+            challengeId,
+          } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
 
           return Actions.setActiveChallengeIds({
             currentCourseId: courseId,
@@ -211,10 +213,12 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
         const { location } = deps.router;
 
         const maybeChallengeId = findChallengeIdInLocationIfExists(location);
-        const { challengeId, courseId, moduleId, slug } = deriveIdsFromCourse(
-          courses,
-          maybeChallengeId,
-        );
+        const {
+          challengeId,
+          courseId,
+          moduleId,
+          slug,
+        } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
 
         // Do not redirect unless the user is already on the workspace/
         if (location.pathname.includes("workspace")) {
@@ -353,8 +357,23 @@ const setAndSyncChallengeIdEpic: EpicSignature = (action$, state$, deps) => {
         Actions.setActiveChallengeIds,
       ]),
     ),
-    tap(action => {
-      deps.router.push(`/workspace/${action.payload.currentChallengeId}`);
+    map(action => {
+      const { challengeMap } = state$.value.challenges;
+      const challengeId = action.payload.currentChallengeId;
+      const slug =
+        challengeMap && challengeId in challengeMap
+          ? getChallengeSlug(challengeMap[challengeId].challenge)
+          : challengeId; // If it doesn't exist that's ok. Client side 404
+      const { search = "", hash = "" } = deps.router.location;
+      return slug + search + hash;
+    }),
+    map(subPath => `/workspace/${subPath}`),
+    filter(nextPath => {
+      return nextPath !== deps.router.location.pathname;
+    }),
+    tap(nextPath => {
+      debug("[INFO setAndSyncChallengeEpic] Redirectin to new path:", nextPath);
+      deps.router.push(nextPath);
     }),
     ignoreElements(),
   );

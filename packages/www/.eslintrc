@@ -12,7 +12,11 @@
     "prettier/react",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["@typescript-eslint", "prettier", "react"],
+  "plugins": [
+    "@typescript-eslint",
+    "prettier",
+    "react"
+  ],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
@@ -25,6 +29,7 @@
     "@typescript-eslint/no-useless-constructor": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
     "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/ban-ts-ignore": 0,
     "no-useless-constructor": 0,
     "react/prop-types": 0,
     "react/no-unescaped-entities": 0
