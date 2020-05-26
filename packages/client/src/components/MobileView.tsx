@@ -1,11 +1,12 @@
 import React from "react";
 import { SupplementaryContentContainer, TitleHeader } from "./Shared";
-import { Button } from "@blueprintjs/core";
+import { Button, Callout } from "@blueprintjs/core";
 import { YoutubeEmbed } from "./MediaArea";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Modules from "modules/root";
+import isMobile from "is-mobile";
 
 const LargeButton = styled(Button)`
   width: 100%;
@@ -18,6 +19,15 @@ const MobileView = (props: Props) => {
       id={"mobile-landing-page"}
     >
       <TitleHeader>Welcome to Pairwise on Mobile</TitleHeader>
+      {!isMobile() && (
+        <Callout style={{ marginBottom: 20 }}>
+          <h3 style={{ margin: 0 }}>Not on mobile?</h3>
+          <p>
+            It looks like you're not on mobile, so you can most likely disregard
+            this page.
+          </p>
+        </Callout>
+      )}
       <YoutubeEmbed url={"https://www.youtube.com/embed/oIL0qeS6Txg"} />
       <LargeButton
         style={{ marginBottom: 20 }}
