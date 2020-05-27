@@ -86,6 +86,7 @@ import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
 import pipe from "ramda/es/pipe";
 import SEO from "./SEO";
+import { isDirty } from "modules/challenges/selectors";
 
 const debug = require("debug")("client:Workspace");
 
@@ -1452,6 +1453,7 @@ const ChallengeActions = Modules.actions.challenges;
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   isEditMode: ChallengeSelectors.isEditMode(state),
+  isDirty: ChallengeSelectors.isDirty(state),
   isUserLoading: Modules.selectors.user.loading(state),
   isLoadingBlob: ChallengeSelectors.isLoadingBlob(state),
   challenge: ChallengeSelectors.getCurrentChallenge(state),
@@ -1537,6 +1539,13 @@ const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
  */
 
 class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
+  componentDidMount() {
+    window.addEventListener("beforeunload", this.warnUnsavedEdits);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("beforeunload", this.warnUnsavedEdits);
+  }
+
   render() {
     const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
 
@@ -1579,6 +1588,17 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       </React.Fragment>
     );
   }
+
+  //I took this mostly from the docs:
+  // http://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload#Example
+  private readonly warnUnsavedEdits = (e: BeforeUnloadEvent) => {
+    if (this.props.isDirty) {
+      e.preventDefault();
+      e.returnValue = "";
+    } else {
+      delete e.returnValue;
+    }
+  };
 }
 
 // Strip characters that would probably not look great in SEO results
