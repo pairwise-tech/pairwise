@@ -80,7 +80,9 @@ describe("User Progress APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("The challengeId is invalid");
+        expect(response.body.message).toEqual([
+          "timeCompleted must be a ISOString",
+        ]);
         done(error);
       });
   });
@@ -111,11 +113,12 @@ describe("User Progress APIs", () => {
       });
     };
 
+    const challengeOneTime = new Date();
     await updateProgressItem({
       complete: false,
       challengeId: "5ziJI35f",
       courseId: "fpvPtfu7s",
-      timeCompleted: new Date(),
+      timeCompleted: challengeOneTime,
     });
 
     await updateProgressItem({
@@ -132,18 +135,20 @@ describe("User Progress APIs", () => {
       timeCompleted: new Date(),
     });
 
+    const challengeTwoTime = new Date();
     await updateProgressItem({
       complete: true,
       challengeId: "50fxTLRcV",
       courseId: "fpvPtfu7s",
-      timeCompleted: new Date(),
+      timeCompleted: challengeTwoTime,
     });
 
+    const challengeThreeTime = new Date();
     await updateProgressItem({
       complete: true,
       challengeId: "WUA8ezECU",
       courseId: "fpvPtfu7s",
-      timeCompleted: new Date(),
+      timeCompleted: challengeThreeTime,
     });
 
     request(`${HOST}/progress`)
@@ -157,9 +162,18 @@ describe("User Progress APIs", () => {
         expect(entry.courseId).toBeDefined();
 
         const expected = {
-          ["5ziJI35f"]: { complete: true },
-          ["WUA8ezECU"]: { complete: true },
-          ["50fxTLRcV"]: { complete: true },
+          ["5ziJI35f"]: {
+            complete: true,
+            timeCompleted: challengeOneTime.toISOString(),
+          },
+          ["50fxTLRcV"]: {
+            complete: true,
+            timeCompleted: challengeTwoTime.toISOString(),
+          },
+          ["WUA8ezECU"]: {
+            complete: true,
+            timeCompleted: challengeThreeTime.toISOString(),
+          },
         };
 
         expect(JSON.parse(entry.progress)).toEqual(expected);
