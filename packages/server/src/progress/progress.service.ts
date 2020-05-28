@@ -56,21 +56,21 @@ export class ProgressService {
       `Updating challengeProgress for courseId: ${courseId}, challengeId: ${challengeId}`,
     );
 
-    const statusObject: ChallengeStatus = {
-      complete,
-      timeCompleted,
-    };
-
-    const status = {
-      [challengeId]: statusObject,
-    };
-
     const existingEntry = await this.progressRepository.findOne({
       courseId,
       user: user.profile,
     });
 
     if (existingEntry === undefined) {
+      const statusObject: ChallengeStatus = {
+        complete,
+        timeCompleted,
+      };
+
+      const status: UserCourseStatus = {
+        [challengeId]: statusObject,
+      };
+
       console.log("No entity exists, creating and inserting a new one!");
       const newProgressEntry: Partial<Progress> = {
         user: user.profile,
@@ -83,8 +83,29 @@ export class ProgressService {
        */
       await this.progressRepository.insert(newProgressEntry);
     } else {
+      const existingProgress: UserCourseStatus = JSON.parse(
+        existingEntry.progress,
+      );
+      const existingStatus = existingProgress[challengeId];
+
+      // Preserve the original time completed, if a second request is
+      // received for a challenge progress update
+      let timestamp = timeCompleted;
+      if (existingStatus) {
+        timestamp = existingStatus.timeCompleted;
+      }
+
+      const statusObject: ChallengeStatus = {
+        complete,
+        timeCompleted: timestamp,
+      };
+
+      const status = {
+        [challengeId]: statusObject,
+      };
+
       const updatedCourseProgress: UserCourseStatus = {
-        ...JSON.parse(existingEntry.progress),
+        ...existingProgress,
         ...status,
       };
 
