@@ -24,6 +24,7 @@ describe("User Progress APIs", () => {
         complete: true,
         challengeId: "abc",
         courseId: "def",
+        timeCompleted: new Date(),
       })
       .set("Authorization", "Bearer asd97f8809as7fsa")
       .expect(401)
@@ -40,6 +41,7 @@ describe("User Progress APIs", () => {
         complete: true,
         challengeId: "abc",
         courseId: "def",
+        timeCompleted: new Date(),
       })
       .set("Authorization", authorizationHeader)
       .expect(400)
@@ -56,6 +58,24 @@ describe("User Progress APIs", () => {
         complete: true,
         challengeId: "abc",
         courseId: "fpvPtfu7s",
+        timeCompleted: new Date(),
+      })
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .end((error, response) => {
+        expect(response.body.message).toBe("The challengeId is invalid");
+        done(error);
+      });
+  });
+
+  test("/progress (POST) requires a valid timeCompleted field", async done => {
+    request(`${HOST}/progress`)
+      .post("/")
+      .send({
+        complete: true,
+        challengeId: "5ziJI35f",
+        courseId: "fpvPtfu7s",
+        timeCompleted: "blegh",
       })
       .set("Authorization", authorizationHeader)
       .expect(400)
@@ -72,6 +92,7 @@ describe("User Progress APIs", () => {
         complete: "hi",
         challengeId: "5ziJI35f",
         courseId: "fpvPtfu7s",
+        timeCompleted: new Date(),
       })
       .set("Authorization", authorizationHeader)
       .expect(400)
@@ -94,30 +115,35 @@ describe("User Progress APIs", () => {
       complete: false,
       challengeId: "5ziJI35f",
       courseId: "fpvPtfu7s",
+      timeCompleted: new Date(),
     });
 
     await updateProgressItem({
       complete: true,
       challengeId: "5ziJI35f",
       courseId: "fpvPtfu7s",
+      timeCompleted: new Date(),
     });
 
     await updateProgressItem({
       complete: true,
       challengeId: "5ziJI35f",
       courseId: "fpvPtfu7s",
+      timeCompleted: new Date(),
     });
 
     await updateProgressItem({
       complete: true,
       challengeId: "50fxTLRcV",
       courseId: "fpvPtfu7s",
+      timeCompleted: new Date(),
     });
 
     await updateProgressItem({
       complete: true,
       challengeId: "WUA8ezECU",
       courseId: "fpvPtfu7s",
+      timeCompleted: new Date(),
     });
 
     request(`${HOST}/progress`)
