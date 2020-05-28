@@ -203,9 +203,12 @@ export interface CodeBlobBulk {
  * true: completed
  * false: incomplete
  * undefined: never attempted
+ *
+ * Also includes the time a challenge was completed.
  */
 export interface ChallengeStatus {
   complete: boolean;
+  timeCompleted: Date;
 }
 
 export interface IProgressDto extends ChallengeStatus {

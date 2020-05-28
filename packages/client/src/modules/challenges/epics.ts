@@ -702,6 +702,7 @@ const constructProgressDto = (
       courseId,
       complete,
       challengeId,
+      timeCompleted: new Date(),
     };
 
     return new Ok(payload);

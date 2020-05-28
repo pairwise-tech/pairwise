@@ -44,7 +44,12 @@ export class ProgressService {
   ): Promise<IProgressDto> {
     validateChallengeProgressDto(challengeProgressDto);
 
-    const { courseId, challengeId, complete } = challengeProgressDto;
+    const {
+      courseId,
+      challengeId,
+      complete,
+      timeCompleted,
+    } = challengeProgressDto;
     const user = requestUser;
 
     console.log(
@@ -53,6 +58,7 @@ export class ProgressService {
 
     const statusObject: ChallengeStatus = {
       complete,
+      timeCompleted,
     };
 
     const status = {
@@ -94,7 +100,12 @@ export class ProgressService {
     }
 
     // Return the progress dto
-    const result: IProgressDto = { courseId, challengeId, complete };
+    const result: IProgressDto = {
+      courseId,
+      challengeId,
+      complete,
+      timeCompleted,
+    };
     return result;
   }
 

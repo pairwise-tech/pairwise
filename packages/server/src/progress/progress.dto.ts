@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsBoolean, IsString } from "class-validator";
+import { IsNotEmpty, IsBoolean, IsString, IsDateString } from "class-validator";
 import { IProgressDto } from "@pairwise/common";
 
 export class ProgressDto implements IProgressDto {
@@ -7,6 +7,11 @@ export class ProgressDto implements IProgressDto {
   @IsNotEmpty()
   @ApiProperty({ type: "boolean" })
   public complete: boolean;
+
+  @IsDateString()
+  @IsNotEmpty()
+  @ApiProperty({ type: "date" })
+  public timeCompleted: Date;
 
   @IsString()
   @IsNotEmpty()
