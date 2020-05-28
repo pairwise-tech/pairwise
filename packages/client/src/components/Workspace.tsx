@@ -86,7 +86,6 @@ import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
 import pipe from "ramda/es/pipe";
 import SEO from "./SEO";
-import { isDirty } from "modules/challenges/selectors";
 
 const debug = require("debug")("client:Workspace");
 
