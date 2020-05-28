@@ -25,6 +25,7 @@ import {
 import { SANDBOX_ID } from "tools/constants";
 import { defaultSandboxChallenge } from "tools/utils";
 import { ChallengesActionTypes } from "./index";
+import { view } from "ramda";
 
 const debug = require("debug")("client:challenge:store");
 
@@ -60,6 +61,7 @@ export interface State {
   searchResults: SearchResult[];
   isSearching: boolean;
   revealWorkspaceSolution: boolean;
+  isDirty: boolean;
 }
 
 const initialState: State = {
@@ -82,6 +84,7 @@ const initialState: State = {
   searchResults: [],
   isSearching: false,
   revealWorkspaceSolution: false,
+  isDirty: false,
 };
 
 /** ===========================================================================
@@ -96,14 +99,14 @@ interface ChallengeUpdate {
   challenge: Partial<Challenge>;
 }
 
-const updateChallenge = (courses: CourseList, update: ChallengeUpdate) => {
-  const courseIndex = courses.findIndex(c => c.id === update.courseId);
+const getChallengeLens = (courses: CourseList, payload: ChallengeUpdate) => {
+  const courseIndex = courses.findIndex(c => c.id === payload.courseId);
   const moduleIndex = courses[courseIndex].modules.findIndex(
-    m => m.id === update.moduleId,
+    m => m.id === payload.moduleId,
   );
   const challengeIndex = courses[courseIndex].modules[
     moduleIndex
-  ].challenges.findIndex(ch => ch.id === update.id);
+  ].challenges.findIndex(ch => ch.id === payload.id);
   const keyPath: any[] = [
     courseIndex,
     "modules",
@@ -111,10 +114,22 @@ const updateChallenge = (courses: CourseList, update: ChallengeUpdate) => {
     "challenges",
     challengeIndex,
   ];
-  const lens = lensPath(keyPath);
 
   debug("[INFO] keyPath", keyPath);
 
+  return lensPath(keyPath);
+};
+
+const getChallenge = (
+  courses: CourseList,
+  update: ChallengeUpdate,
+): Nullable<Challenge> => {
+  const lens = getChallengeLens(courses, update);
+  return view(lens, courses);
+};
+
+const updateChallenge = (courses: CourseList, update: ChallengeUpdate) => {
+  const lens = getChallengeLens(courses, update);
   return over(lens, (x: Challenge) => ({ ...x, ...update.challenge }), courses);
 };
 
@@ -332,19 +347,36 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     }
 
     const { moduleId, courseId } = mapping;
+    const update = { id, moduleId, courseId, challenge };
+    const existingChallenge = getChallenge(courses, update);
+
+    // Check if the state of our workspace is dirty. Update challenge calls are
+    // fired all the time, including when you just click into a challenge in
+    // edit mode. Therefor we want to do a diff to determine dirtiness but also
+    // default to the current state if its true. Otherwise those updates getting
+    // fired without any additional data will make state clean again even when
+    // there are unsaved changes. As is we only enter a dirty state when
+    // something changes and only leave the dirty state on successful save
+    const isDirty =
+      state.isDirty ||
+      (existingChallenge &&
+        // @ts-ignore TS really needs to fix Object.keys typings. Returns string, but we want keyof X
+        Object.keys(challenge).some((k: keyof Challenge) => {
+          return challenge[k] !== existingChallenge[k];
+        }));
 
     return {
       ...state,
-      courses: updateChallenge(courses, { id, moduleId, courseId, challenge }),
+      isDirty,
+      courses: updateChallenge(courses, update),
       // @ts-ignore
-      courseSkeletons: updateChallenge(courseSkeletons, {
-        id,
-        moduleId,
-        courseId,
-        challenge,
-      }),
+      courseSkeletons: updateChallenge(courseSkeletons, update),
     };
   })
+  .handleAction(actions.saveCourseSuccess, state => ({
+    ...state,
+    isDirty: false,
+  }))
   .handleAction(actions.deleteChallenge, (state, action) => {
     const { courses, courseSkeletons } = state;
 

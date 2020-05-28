@@ -18,6 +18,7 @@ export const challengesState = (state: ReduxStoreState) => {
 export const challengesSelector = createSelector([challengesState], identity);
 
 export const isEditMode = createSelector([challengesState], prop("isEditMode"));
+export const isDirty = createSelector([challengesState], prop("isDirty"));
 
 export const editModeAlternativeViewEnabled = createSelector(
   [challengesState],
