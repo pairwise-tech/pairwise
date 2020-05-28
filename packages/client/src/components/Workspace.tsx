@@ -1589,7 +1589,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
     );
   }
 
-  //I took this mostly from the docs:
+  // I took this mostly from the docs:
   // http://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload#Example
   private readonly warnUnsavedEdits = (e: BeforeUnloadEvent) => {
     if (this.props.isDirty) {
