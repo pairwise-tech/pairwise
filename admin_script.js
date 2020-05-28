@@ -138,24 +138,77 @@ const removeExcessUserFields = user => {
  */
 const summarizeUserProgress = users => {
   const withProgressSummaries = users.map(user => {
+    // Format the progress histroy
     const formattedProgress = formatChallengeProgress(
       user.challengeProgressHistory,
     );
+
+    // Get all completed challenges count
     const completedChallenges = countCompletedChallenges(formattedProgress);
+
+    // Get completed challenges
+    const completedChallengeList = formattedProgress.reduce(
+      (result, courseProgress) =>
+        result.concat(Object.values(courseProgress.progress)),
+      [],
+    );
+
+    // Get only the completed challenge ids
+    const completedChallengeIds = formattedProgress.reduce(
+      (result, courseProgress) =>
+        result.concat(Object.keys(courseProgress.progress)),
+      [],
+    );
+
     return {
       ...removeExcessUserFields(user),
       completedChallenges,
-      challengeProgressHistory: formattedProgress,
+      completedChallengeList,
+      completedChallengeIds,
     };
   });
 
+  // Sort by completed challenge count
   const sortedByCompletedChallenges = withProgressSummaries.sort((a, b) => {
     return b.completedChallenges.total - a.completedChallenges.total;
   });
 
+  // Record some metrics numbers
+  let totalChallengesCompleted = 0;
+  let challengesCompletedInLastWeek = 0;
+  let newUsersInLastWeek = 0;
+
+  for (const user of withProgressSummaries) {
+    const { completedChallengeList } = user;
+    const now = Date.now();
+    const oneWeek = 1000 * 60 * 60 * 24 * 7;
+    const lastWeek = now - oneWeek;
+
+    const userCreated = new Date(user.createdAt).getTime();
+    if (userCreated > lastWeek) {
+      newUsersInLastWeek++;
+    }
+
+    for (const challenge of completedChallengeList) {
+      totalChallengesCompleted++;
+
+      if (!!challenge.timeCompleted) {
+        const challengeCompleted = new Date(challenge.timeCompleted).getTime();
+        if (challengeCompleted > lastWeek) {
+          challengesCompletedInLastWeek++;
+        }
+      }
+    }
+
+    delete user.completedChallengeList;
+  }
+
   // Create summary with total user count
   const summary = {
     totalUsers: sortedByCompletedChallenges.length,
+    newUsersInLastWeek,
+    totalChallengesCompleted,
+    challengesCompletedInLastWeek,
     users: sortedByCompletedChallenges,
   };
 
