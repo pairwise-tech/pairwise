@@ -17,7 +17,7 @@ interface IToastOptions {
 // methods to quickly post success, failure, and warning toasts.
 const toaster = {
   toast: BlueprintToaster,
-  success: (message: string, options?: IToastOptions) => {
+  success: (message: React.ReactNode, options?: IToastOptions) => {
     return BlueprintToaster.show({
       message,
       intent: "success",
@@ -26,7 +26,7 @@ const toaster = {
       timeout: options?.timeout !== undefined ? options?.timeout : 5000,
     });
   },
-  warn: (message: string, options?: IToastOptions) => {
+  warn: (message: React.ReactNode, options?: IToastOptions) => {
     return BlueprintToaster.show({
       message,
       intent: "warning",
@@ -35,7 +35,7 @@ const toaster = {
       timeout: options?.timeout !== undefined ? options?.timeout : 5000,
     });
   },
-  error: (message: string, options?: IToastOptions) => {
+  error: (message: React.ReactNode, options?: IToastOptions) => {
     return BlueprintToaster.show({
       message,
       intent: "danger",
