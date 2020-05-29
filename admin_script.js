@@ -132,13 +132,27 @@ const removeExcessUserFields = user => {
   };
 };
 
+const WHITELISTED_EMAILS = new Set([
+  "sean.smith.2009@gmail.com",
+  "pweinberg633@gmail.com",
+]);
+
+/**
+ * Remove ourselves from the user list.
+ */
+const filterUsOut = user => {
+  return (
+    user.email.includes("@pairwise.tech") || WHITELISTED_EMAILS.has(user.email)
+  );
+};
+
 /**
  * Parse course progress, summarize the progress for each user, and sort
  * the results.
  */
 const summarizeUserProgress = users => {
-  const withProgressSummaries = users.map(user => {
-    // Format the progress histroy
+  const withProgressSummaries = users.filter(filterUsOut).map(user => {
+    // Format the progress history
     const formattedProgress = formatChallengeProgress(
       user.challengeProgressHistory,
     );
