@@ -46,6 +46,7 @@ import {
   getChallengeProgress,
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
+import React from "react";
 
 const debug = require("debug")("client:challenges:epics");
 
@@ -710,8 +711,24 @@ const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
         nextChallenge && nextChallenge.id === currentChallengeId;
 
       if (isNextConsecutiveChallenge && nextChallenge?.type === "section") {
-        deps.toaster.success(`Starting section ${nextChallenge.title}!`, {
-          icon: "bookmark",
+        deps.toaster.toast.show({
+          intent: "success",
+          message: (
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <img
+                style={{
+                  display: "inline-block",
+                  height: 10,
+                  transform: "translateY(-5px) scale(2.5)",
+                  paddingLeft: 13,
+                  paddingRight: 15,
+                }}
+                src={require("../../icons/partyparrot.gif")}
+                alt="Party Parrot"
+              />
+              {`Starting section ${nextChallenge.title}!`}
+            </span>
+          ),
         });
       }
     }),
