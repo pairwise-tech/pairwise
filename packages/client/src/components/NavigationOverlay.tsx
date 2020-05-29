@@ -314,6 +314,9 @@ class NavigationOverlay extends React.Component<IProps> {
     return sectionBlocks.map(block => {
       serialIndex++;
       if (block.section) {
+        const sectionExpanded = this.getCurrentAccordionViewState(
+          block.section.id,
+        );
         return (
           <div key={serialIndex}>
             {this.renderChallengeNavigationItem({
@@ -324,10 +327,9 @@ class NavigationOverlay extends React.Component<IProps> {
               sectionChallenges: block.challenges,
               index: serialIndex,
               challenge: block.section,
+              sectionExpanded,
             })}
-            <Collapse
-              isOpen={this.getCurrentAccordionViewState(block.section.id)}
-            >
+            <Collapse isOpen={sectionExpanded}>
               {block.challenges.map((challenge: ChallengeSkeleton) => {
                 serialIndex++;
                 return this.renderChallengeNavigationItem({
@@ -392,6 +394,7 @@ class NavigationOverlay extends React.Component<IProps> {
   renderChallengeNavigationItem = (args: {
     index: number;
     isSection?: boolean;
+    sectionExpanded?: boolean;
     sectionChallengeCount?: number;
     sectionChallenges?: ChallengeSkeleton[];
     module: ModuleSkeleton;
@@ -406,6 +409,7 @@ class NavigationOverlay extends React.Component<IProps> {
       course,
       isSection,
       challenge,
+      sectionExpanded,
       sectionChallengeCount = 0,
       sectionChallenges = [],
       style = {},
@@ -421,6 +425,7 @@ class NavigationOverlay extends React.Component<IProps> {
       this.props.userProgress,
       course.id,
     );
+
     const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
     const iconProps = {
       index,
@@ -440,13 +445,18 @@ class NavigationOverlay extends React.Component<IProps> {
       }
     };
 
+    // Section is active if it is collapsed and includes the current challenge
+    const itemActive = sectionExpanded
+      ? challenge.id === challengeId
+      : !!sectionChallenges.find(c => c.id === challengeId);
+
     return (
       <div key={challenge.id} style={{ position: "relative", ...style }}>
         <Link
           key={challenge.id}
           to={`/workspace/${getChallengeSlug(challenge)}`}
           id={`challenge-navigation-${index}`}
-          isActive={() => challenge.id === challengeId}
+          isActive={() => itemActive}
           onClick={this.handleClickChallenge(
             challenge.userCanAccess,
             course.id,
