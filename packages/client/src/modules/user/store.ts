@@ -6,6 +6,7 @@ import {
   UserProgressMap,
   UserProfile,
   defaultUserSettings,
+  ChallengeStatus,
 } from "@pairwise/common";
 import { AuthActionTypes } from "../auth";
 import { Actions as actions } from "../root-actions";
@@ -82,6 +83,11 @@ const user = createReducer<
   // when user progress is updated successfully, immediately update
   // user state to reflect user's progress in challenge map right away
   .handleAction(actions.updateUserProgressSuccess, (state, action) => {
+    const status: ChallengeStatus = {
+      complete: action.payload.complete,
+      timeCompleted: action.payload.timeCompleted,
+    };
+
     if (state.progress) {
       return {
         ...state,
@@ -89,9 +95,7 @@ const user = createReducer<
           ...state.progress,
           [action.payload.courseId]: {
             ...state.progress[action.payload.courseId],
-            [action.payload.challengeId]: {
-              complete: action.payload.complete,
-            },
+            [action.payload.challengeId]: status,
           },
         },
       };
@@ -101,9 +105,7 @@ const user = createReducer<
       ...state,
       progress: {
         [action.payload.courseId]: {
-          [action.payload.challengeId]: {
-            complete: action.payload.complete,
-          },
+          [action.payload.challengeId]: status,
         },
       },
     };

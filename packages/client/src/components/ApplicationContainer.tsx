@@ -629,38 +629,6 @@ const AccountDropdownButton = styled.div`
 `;
 
 /** ===========================================================================
- * Mobile/Desktop Styles
- * ============================================================================
- */
-
-const MobileContainer = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-
-  a {
-    color: ${COLORS.PRIMARY_GREEN};
-  }
-`;
-
-const MobileText = styled.p`
-  margin-top: 12px;
-  font-size: 18px;
-  font-weight: 300;
-  text-align: center;
-  font-family: "Helvetica Neue", Lato, sans-serif;
-  letter-spacing: 1px;
-`;
-
-const MobileTitleText = styled(MobileText)`
-  font-size: 32px;
-  font-weight: 300;
-  font-family: "Helvetica Neue", Lato, sans-serif;
-`;
-
-/** ===========================================================================
  * Props
  * ============================================================================
  */

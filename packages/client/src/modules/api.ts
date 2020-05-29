@@ -524,6 +524,7 @@ class LocalStorageHttpClass {
     );
 
     let updatedProgress: ProgressEntity;
+    const timeCompleted = new Date();
 
     /* ugh */
     if (existingCourseProgress) {
@@ -531,14 +532,14 @@ class LocalStorageHttpClass {
         courseId,
         progress: {
           ...existingCourseProgress.progress,
-          [challengeId]: { complete: true },
+          [challengeId]: { complete: true, timeCompleted },
         },
       };
     } else {
       updatedProgress = {
         courseId,
         progress: {
-          [challengeId]: { complete: true },
+          [challengeId]: { complete: true, timeCompleted },
         },
       };
     }
