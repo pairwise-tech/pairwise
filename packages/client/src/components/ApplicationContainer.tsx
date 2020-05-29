@@ -557,25 +557,6 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   }
 `;
 
-const AccountButton = styled(ButtonCore)`
-  padding: 0px 10px;
-  line-height: 40px;
-  margin: 0;
-  color: ${COLORS.TEXT_TITLE};
-  border-radius: 4px;
-  flex-shrink: 0;
-
-  h1 {
-    margin: 0;
-  }
-
-  :hover {
-    cursor: pointer;
-    color: ${COLORS.PRIMARY_GREEN};
-    background: ${COLORS.BACKGROUND_ACCOUNT_BUTTON};
-  }
-`;
-
 const UserBio = styled.div`
   display: flex;
   align-items: center;
