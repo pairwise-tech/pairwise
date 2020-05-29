@@ -423,6 +423,7 @@ class NavigationOverlay extends React.Component<IProps> {
     );
     const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
     const iconProps = {
+      index,
       challenge,
       isSectionOpen,
       challengeProgress,
@@ -758,13 +759,14 @@ const ModuleNavigationButton = ({
   <ModuleNavigationButtonBase active={active} as="button" {...rest} />
 );
 
-const RotatingIcon = styled(Icon)<{ isRotated?: boolean }>`
+const RotatingIcon = styled(Icon)<{ isRotated?: boolean; id: string }>`
   transform: ${props =>
     `rotate3d(0,0,1,${props.isRotated ? "0deg" : "-90deg"})`};
   transition: transform 0.2s linear;
 `;
 
 interface ChallengeListItemIconProps {
+  index: number;
   challenge: ChallengeSkeleton;
   isSectionOpen?: boolean;
   challengeProgress: CHALLENGE_PROGRESS;
@@ -772,6 +774,7 @@ interface ChallengeListItemIconProps {
 }
 
 const ChallengeListItemIcon = ({
+  index,
   isSectionOpen,
   challenge,
   challengeProgress,
@@ -813,6 +816,7 @@ const ChallengeListItemIcon = ({
           challenge.userCanAccess,
           challengeProgress,
         )}
+        id={`challenge-${index}-icon-${challengeProgress}`}
         className={challenge.type !== "section" ? iconExtraClass : ""}
         {...props}
       />

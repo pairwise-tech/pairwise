@@ -94,6 +94,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
     challenge,
     activeIds,
     isEditMode,
+    isDirty,
     setEditMode,
     saveCourse,
     overlayVisible,
@@ -165,7 +166,8 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
             icon="saved"
             large
             minimal
-            intent="primary"
+            intent={isDirty ? "primary" : "none"}
+            disabled={!isDirty}
             onClick={handleSave}
           ></Button>
         </Tooltip>
@@ -539,6 +541,7 @@ const SlideOut = styled.div<{ show: boolean }>`
 
 const mapToolbarState = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
+  isDirty: Modules.selectors.challenges.isDirty(state),
   course: Modules.selectors.challenges.getCurrentCourse(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   activeIds: Modules.selectors.challenges.getCurrentActiveIds(state),

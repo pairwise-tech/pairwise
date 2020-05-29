@@ -5,6 +5,7 @@ import { captureSentryException } from "src/tools/sentry-utils";
 import {
   getWelcomeEmailContents,
   getMagicEmailLinkContents,
+  getVerificationLinkContents,
 } from "./templates/index";
 
 /** ===========================================================================
@@ -60,16 +61,25 @@ export class EmailService {
     await this.email(request);
   }
 
+  public async sendEmailVerificationLink(email: string, link: string) {
+    const request: EmailRequest = {
+      recipient: email,
+      ...getVerificationLinkContents(link),
+    };
+
+    await this.email(request);
+  }
+
   public async sendWelcomeEmail(email: string) {
     const request: EmailRequest = {
       recipient: email,
       ...getWelcomeEmailContents(),
     };
 
-    await this.email(request);
+    await this.email(request, false);
   }
 
-  private async email(emailRequest: EmailRequest) {
+  private async email(emailRequest: EmailRequest, shouldEscalateError = true) {
     const { subject, text, html, recipient } = emailRequest;
 
     try {
@@ -83,8 +93,10 @@ export class EmailService {
       });
     } catch (err) {
       captureSentryException(err);
-      console.log("Error sending email: ", err);
-      throw new Error(ERROR_CODES.FAILED_TO_SEND_EMAIL);
+      console.log("Error sending email: ", err.message);
+      if (shouldEscalateError) {
+        throw new Error(ERROR_CODES.FAILED_TO_SEND_EMAIL);
+      }
     }
   }
 }

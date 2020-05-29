@@ -71,6 +71,7 @@
     "getenv": "^1.0.0",
     "history": "4.10.1",
     "husky": "^3.1.0",
+    "is-mobile": "^2.2.1",
     "lunr": "^2.3.8",
     "monaco-editor": "^0.20.0",
     "node-sass": "^4.13.0",

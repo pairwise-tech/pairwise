@@ -370,8 +370,17 @@ export const findChallengeIdInLocationIfExists = ({
  * Given a course and a possible default challenge id, derive the course,
  * module, and challenge ids to set as active in the Workspace. Falls back
  * to sensible default options.
+ *
+ * NOTE: This function _____WILL_____ derive an ID, no mater what you pass it.
+ * That's fine in a vaccum but the end result is that it's not (currently)
+ * possible for the challenge ID to be null. This means the app will always
+ * think the first challenge is active if you're not on a route particular to
+ * a challenge. This is not great, because saying the active challenge is
+ * the first challenge when you're not on that challenge is just not true. For
+ * now just be aware of it, the entire app doesn't render if I keep this
+ * function from providing a default id.
  */
-export const deriveIdsFromCourse = (
+export const deriveIdsFromCourseWithDefaults = (
   courses: CourseList,
   maybeChallengeId: string,
 ) => {
@@ -383,13 +392,14 @@ export const deriveIdsFromCourse = (
       : maybeChallengeId === SANDBOX_ID
       ? maybeChallengeId
       : defaultCourse.modules[0].challenges[0].id;
+
   const courseId = challengeMap[challengeId]?.courseId || defaultCourse.id;
   const moduleId =
     challengeMap[challengeId]?.moduleId || defaultCourse.modules[0].id;
   const slug =
     challengeId in challengeMap
       ? getChallengeSlug(challengeMap[challengeId].challenge)
-      : "";
+      : challengeId; // If it doesn't exist that's ok. Client side 404
 
   return {
     courseId,
@@ -429,6 +439,7 @@ export enum APP_INITIALIZATION_TYPE {
 
   // Special types:
   SIGN_IN = "SIGN_IN",
+  EMAIL_UPDATED = "EMAIL_UPDATED",
   ACCOUNT_CREATED = "ACCOUNT_CREATED",
   PAYMENT_SUCCESS = "PAYMENT_SUCCESS",
   PAYMENT_CANCELLED = "PAYMENT_CANCELLED",
@@ -460,6 +471,13 @@ export const parseInitialUrlToInitializationType = (
       return APP_INITIALIZATION_TYPE.ACCOUNT_CREATED;
     } else {
       return APP_INITIALIZATION_TYPE.SIGN_IN;
+    }
+  }
+
+  // A user updated their email successfully:
+  if (path === "/account" && checkParamsExist(params, ["emailUpdated"])) {
+    if (params.emailUpdated === "true") {
+      return APP_INITIALIZATION_TYPE.EMAIL_UPDATED;
     }
   }
 

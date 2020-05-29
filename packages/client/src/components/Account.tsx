@@ -7,6 +7,7 @@ import { PageContainer, Text, PageTitle, ProfileIcon } from "./Shared";
 import { COLORS } from "tools/constants";
 import { Payment } from "@pairwise/common";
 import { formatDate } from "tools/utils";
+import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 
 /** ===========================================================================
  * Types & Config
@@ -18,7 +19,9 @@ interface IState {
   givenName: string;
   familyName: string;
   displayName: string;
-  edit: boolean;
+  editMode: boolean;
+  editedEmail: boolean;
+  editedProfile: boolean;
 }
 
 /** ===========================================================================
@@ -35,7 +38,9 @@ class Account extends React.Component<IProps, IState> {
       givenName: "",
       familyName: "",
       displayName: "",
-      edit: false,
+      editMode: false,
+      editedEmail: false,
+      editedProfile: false,
     };
   }
 
@@ -46,8 +51,8 @@ class Account extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const { edit } = this.state;
-    const { user, skeletons } = this.props;
+    const { editMode: edit } = this.state;
+    const { user, skeletons, emailVerificationStatus } = this.props;
     const { payments, profile } = user;
     if (!payments || !profile || !skeletons) {
       return null;
@@ -72,7 +77,12 @@ class Account extends React.Component<IProps, IState> {
             placeholder="Enter your given name"
             className={Classes.INPUT}
             value={this.state.givenName}
-            onChange={event => this.setState({ givenName: event.target.value })}
+            onChange={event =>
+              this.setState({
+                editedProfile: true,
+                givenName: event.target.value,
+              })
+            }
           />
         )}
         <TextItem id="profile-family-name">
@@ -86,7 +96,10 @@ class Account extends React.Component<IProps, IState> {
             className={Classes.INPUT}
             value={this.state.familyName}
             onChange={event =>
-              this.setState({ familyName: event.target.value })
+              this.setState({
+                editedProfile: true,
+                familyName: event.target.value,
+              })
             }
           />
         )}
@@ -101,26 +114,51 @@ class Account extends React.Component<IProps, IState> {
             className={Classes.INPUT}
             value={this.state.displayName}
             onChange={event =>
-              this.setState({ displayName: event.target.value })
+              this.setState({
+                editedProfile: true,
+                displayName: event.target.value,
+              })
             }
           />
         )}
-        <TextItem>
-          <Bold>Email:</Bold>{" "}
-          <span id="user-email">{!edit && profile.email}</span>
-        </TextItem>
-        {edit && (
-          <InputField
-            type="text"
-            className={Classes.INPUT}
-            onChange={event => this.setState({ email: event.target.value })}
-            value={this.state.email}
-          />
-        )}
-        {!profile.email && (
-          <TextItem style={{ color: COLORS.SECONDARY_YELLOW, fontSize: 12 }}>
-            * Please enter your email to receive course and product updates.
+        {emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
+          <TextItem>* Loading...</TextItem>
+        ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.SENT ? (
+          <TextItem style={{ color: COLORS.PRIMARY_GREEN }}>
+            * Please check your email for a verification link.
           </TextItem>
+        ) : (
+          <>
+            <TextItem>
+              <Bold>Email:</Bold>{" "}
+              <span id="user-email">{!edit && profile.email}</span>
+            </TextItem>
+            {edit && (
+              <InputField
+                type="text"
+                className={Classes.INPUT}
+                onChange={event =>
+                  this.setState({
+                    editedEmail: true,
+                    email: event.target.value,
+                  })
+                }
+                value={this.state.email}
+              />
+            )}
+            {!profile.email ? (
+              <TextItem
+                style={{ color: COLORS.SECONDARY_YELLOW, fontSize: 12 }}
+              >
+                * Please enter your email to receive course and product updates.
+              </TextItem>
+            ) : (
+              <TextItem style={{ color: COLORS.TEXT_CONTENT, fontSize: 12 }}>
+                * Note: To change your email you will need to verify the new
+                email address.
+              </TextItem>
+            )}
+          </>
         )}
         {edit ? (
           <Controls>
@@ -188,7 +226,7 @@ class Account extends React.Component<IProps, IState> {
     const { profile } = this.props.user;
     if (profile) {
       this.setState({
-        edit: true,
+        editMode: true,
         email: profile.email || "",
         givenName: profile.givenName,
         familyName: profile.familyName,
@@ -198,17 +236,26 @@ class Account extends React.Component<IProps, IState> {
   };
 
   handleSaveChanges = () => {
-    const userDetails = {
-      email: this.state.email,
-      givenName: this.state.givenName,
-      familyName: this.state.familyName,
-      displayName: this.state.displayName,
-    };
-    this.props.updateUser(userDetails);
+    const { editedProfile, editedEmail } = this.state;
+
+    if (editedProfile) {
+      const userDetails = {
+        givenName: this.state.givenName,
+        familyName: this.state.familyName,
+        displayName: this.state.displayName,
+      };
+      this.props.updateUser(userDetails);
+    }
+
+    if (editedEmail) {
+      this.props.updateUserEmail(this.state.email);
+    }
+
+    this.setState({ editMode: false });
   };
 
   handleDiscardChanges = () => {
-    this.setState({ edit: false });
+    this.setState({ editMode: false });
   };
 }
 
@@ -258,11 +305,15 @@ const Controls = styled.div`
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
+  emailVerificationStatus: Modules.selectors.user.emailVerificationStatus(
+    state,
+  ),
 });
 
 const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
   updateUser: Modules.actions.user.updateUser,
+  updateUserEmail: Modules.actions.user.updateUserEmail,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

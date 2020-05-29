@@ -176,12 +176,13 @@ const redirectToStripeCheckoutEpic: EpicSignature = (action$, state$, deps) => {
     mergeMap(async id => {
       try {
         await handleRedirectToStripeCheckoutFlow(id);
+        return Actions.redirectToStripeSuccess();
       } catch (err) {
         console.warn("[WARN]: Error starting Stripe checkout flow: ", err);
         deps.toaster.error("Checkout failed, please try again...");
+        return Actions.redirectToStripeFailure();
       }
     }),
-    ignoreElements(),
   );
 };
 

@@ -1,10 +1,9 @@
-import { Link, navigate } from 'gatsby';
+import { Link } from 'gatsby';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Markdown from 'react-markdown';
 import Paper from '@material-ui/core/Paper';
 import React, { useState } from 'react';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
@@ -13,14 +12,11 @@ import {
   CodeRainSection,
   ConstrainWidth,
   DESKTOP,
-  RemoteForm,
   Section,
   SectionTitle,
-  SecondaryButton,
 } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
-import Button from '@material-ui/core/Button';
 
 const EMAIL_SIGNUP_SECTION_ID = 'email-signup-section';
 
@@ -84,10 +80,7 @@ const MainDiv = styled.div`
   }
 `;
 
-const outboundClick = (
-  url: string,
-  eventName: string = 'OUTBOUND_LINK_CLICK',
-) => {
+const outboundClick = (url: string, eventName = 'OUTBOUND_LINK_CLICK') => {
   try {
     // @ts-ignore
     window.amplitude.getInstance().logEvent(eventName, { href: url }, () => {

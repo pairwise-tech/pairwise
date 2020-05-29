@@ -4,6 +4,7 @@ import {
   getIframeBody,
   click,
   typeTextInCodeEditor,
+  elementContains,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -100,6 +101,12 @@ describe("Sandbox", () => {
     cy.contains("React");
   });
 
+  it("Sandbox should load when coming directly to URL", () => {
+    cy.visit(`${CLIENT_APP_URL}/workspace/sandbox`); // The "Welcome to pairwise" challenge (no workspace)
+    cy.url().should("include", "/sandbox");
+    cy.get("#sandboxButton").should("have.attr", "disabled");
+  });
+
   it("Sandbox should load when coming from non-workspace challenge", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/yxZjmD0o`); // The "Welcome to pairwise" challenge (no workspace)
     cy.get("#pairwise-code-editor").should("not.exist");
@@ -128,6 +135,10 @@ describe("Success Modal", () => {
 
     click("pw-run-code");
     cy.get("#gs-card").should("exist");
+  });
+
+  it("Should have a feedback button", () => {
+    cy.contains("Feedback");
   });
 
   it("Should close when the close button is clicked", () => {

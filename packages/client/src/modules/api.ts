@@ -302,6 +302,14 @@ class Api extends BaseApiClass {
     });
   };
 
+  updateUserEmail = async (email: string) => {
+    return this.httpHandler(async () => {
+      const headers = this.getRequestHeaders();
+      const body = { email };
+      return axios.post<"Success">(`${HOST}/auth/update-email`, body, headers);
+    });
+  };
+
   loginByEmail = async (email: string) => {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
@@ -516,6 +524,7 @@ class LocalStorageHttpClass {
     );
 
     let updatedProgress: ProgressEntity;
+    const timeCompleted = new Date();
 
     /* ugh */
     if (existingCourseProgress) {
@@ -523,14 +532,14 @@ class LocalStorageHttpClass {
         courseId,
         progress: {
           ...existingCourseProgress.progress,
-          [challengeId]: { complete: true },
+          [challengeId]: { complete: true, timeCompleted },
         },
       };
     } else {
       updatedProgress = {
         courseId,
         progress: {
-          [challengeId]: { complete: true },
+          [challengeId]: { complete: true, timeCompleted },
         },
       };
     }

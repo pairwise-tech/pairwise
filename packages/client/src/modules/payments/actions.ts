@@ -20,6 +20,9 @@ enum ActionTypesEnum {
   START_CHECKOUT_FAILURE = "START_CHECKOUT_FAILURE",
 
   PAYMENT_SUCCESS = "PAYMENT_SUCCESS",
+
+  STRIPE_REDIRECT_SUCCESS = "STRIPE_REDIRECT_SUCCESS",
+  STRIPE_REDIRECT_FAILURE = "STRIPE_REDIRECT_FAILURE",
 }
 
 /** ===========================================================================
@@ -58,3 +61,11 @@ export const setPaymentSuccess = createAction(ActionTypesEnum.PAYMENT_SUCCESS)<{
 export const setPaymentSuccessModalState = createAction(
   ActionTypesEnum.SET_PAYMENT_SUCCESS_MODAL_STATE,
 )<boolean>();
+
+export const redirectToStripeSuccess = createAction(
+  ActionTypesEnum.STRIPE_REDIRECT_SUCCESS,
+)();
+
+export const redirectToStripeFailure = createAction(
+  ActionTypesEnum.STRIPE_REDIRECT_FAILURE,
+)();

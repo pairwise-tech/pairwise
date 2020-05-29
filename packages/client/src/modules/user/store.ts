@@ -6,6 +6,7 @@ import {
   UserProgressMap,
   UserProfile,
   defaultUserSettings,
+  ChallengeStatus,
 } from "@pairwise/common";
 import { AuthActionTypes } from "../auth";
 import { Actions as actions } from "../root-actions";
@@ -42,6 +43,13 @@ export interface UserState {
 
 export type UserStoreState = UserState;
 
+export enum EMAIL_VERIFICATION_STATUS {
+  DEFAULT = "DEFAULT",
+  LOADING = "LOADING",
+  SENT = "SENT",
+  ERROR = "ERROR",
+}
+
 const initialUserState = {
   profile: null,
   payments: null,
@@ -51,8 +59,9 @@ const initialUserState = {
 };
 
 export interface State {
-  loading: boolean;
   user: UserState;
+  loading: boolean;
+  emailVerificationStatus: EMAIL_VERIFICATION_STATUS;
 }
 
 const user = createReducer<
@@ -74,6 +83,11 @@ const user = createReducer<
   // when user progress is updated successfully, immediately update
   // user state to reflect user's progress in challenge map right away
   .handleAction(actions.updateUserProgressSuccess, (state, action) => {
+    const status: ChallengeStatus = {
+      complete: action.payload.complete,
+      timeCompleted: action.payload.timeCompleted,
+    };
+
     if (state.progress) {
       return {
         ...state,
@@ -81,9 +95,7 @@ const user = createReducer<
           ...state.progress,
           [action.payload.courseId]: {
             ...state.progress[action.payload.courseId],
-            [action.payload.challengeId]: {
-              complete: action.payload.complete,
-            },
+            [action.payload.challengeId]: status,
           },
         },
       };
@@ -93,9 +105,7 @@ const user = createReducer<
       ...state,
       progress: {
         [action.payload.courseId]: {
-          [action.payload.challengeId]: {
-            complete: action.payload.complete,
-          },
+          [action.payload.challengeId]: status,
         },
       },
     };
@@ -105,9 +115,27 @@ const loading = createReducer<boolean, UserActionTypes | AuthActionTypes>(
   true,
 ).handleAction(actions.fetchUserSuccess, () => false);
 
+const emailVerificationStatus = createReducer<
+  EMAIL_VERIFICATION_STATUS,
+  UserActionTypes
+>(EMAIL_VERIFICATION_STATUS.DEFAULT)
+  .handleAction(
+    actions.updateUserEmail,
+    () => EMAIL_VERIFICATION_STATUS.LOADING,
+  )
+  .handleAction(
+    actions.updateUserEmailSuccess,
+    () => EMAIL_VERIFICATION_STATUS.SENT,
+  )
+  .handleAction(
+    actions.updateUserEmailFailure,
+    () => EMAIL_VERIFICATION_STATUS.ERROR,
+  );
+
 const rootReducer = combineReducers({
   user,
   loading,
+  emailVerificationStatus,
 });
 
 /** ===========================================================================

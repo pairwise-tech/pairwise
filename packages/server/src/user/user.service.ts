@@ -12,7 +12,10 @@ import {
   UserProfile,
 } from "@pairwise/common";
 import { RequestUser } from "src/types";
-import { validateUserUpdateDetails } from "src/tools/validation";
+import {
+  validateUserUpdateDetails,
+  validateEmailUpdateRequest,
+} from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { SlackService, slackService } from "src/slack/slack.service";
@@ -202,6 +205,21 @@ export class UserService {
     return user;
   }
 
+  public async updateUserEmail(email: string, uuid: string) {
+    const userWithEmail = await this.findUserByEmail(email);
+
+    // Check if  the email is taken
+    if (userWithEmail && userWithEmail.profile.uuid !== uuid) {
+      throw new BadRequestException("This email is already taken.");
+    } else {
+      // Find the user to verify the uuid is valid
+      await this.findUserByUuidGetFullProfile(uuid);
+
+      // All good - update the email on this user
+      await this.userRepository.update({ uuid }, { email });
+    }
+  }
+
   public async updateUser(user: RequestUser, userDetails: UserUpdateOptions) {
     const validationResult = validateUserUpdateDetails(user, userDetails);
 
@@ -209,18 +227,6 @@ export class UserService {
       throw new BadRequestException(validationResult.error);
     } else {
       const { uuid } = user.profile;
-
-      const updateEmail = validationResult.value.email;
-      // If the user is updating their email
-      if (updateEmail) {
-        // Find other users with the same email
-        const userWithEmail = await this.findUserByEmail(updateEmail);
-        // If other users exists, and have a different uuid, reject it!
-        if (userWithEmail && userWithEmail.profile.uuid !== user.profile.uuid) {
-          throw new BadRequestException("This email is already taken.");
-        }
-      }
-
       await this.userRepository.update({ uuid }, validationResult.value);
       return await this.findUserByUuidGetFullProfile(uuid);
     }

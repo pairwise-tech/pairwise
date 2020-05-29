@@ -16,8 +16,6 @@ import {
   ButtonGroup,
   FocusStyleManager,
   Tooltip,
-  Alert,
-  Classes,
   Menu,
   MenuItem,
   MenuDivider,
@@ -51,6 +49,7 @@ import { challengeRequiresWorkspace } from "tools/utils";
 import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
+import MobileView from "./MobileView";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -194,7 +193,6 @@ const ApplicationContainer = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <MobileView isWorkspace={isWorkspaceRequired} />
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
       {CODEPRESS && <AdminKeyboardShortcuts />}
@@ -334,6 +332,7 @@ const ApplicationContainer = (props: IProps) => {
         <Route key={"workspace"} path="/workspace/:id" component={Workspace} />
         <Route key={"home"} path="/home" component={Home} />
         <Route key={"account"} path="/account" component={Account} />
+        <Route key={"mobile"} path="/mobile" component={MobileView} />
         {!isLoggedIn && (
           <Route
             key={"authenticate"}
@@ -363,7 +362,10 @@ const ApplicationContainer = (props: IProps) => {
 };
 
 const LoadingOverlay = (props: { visible: boolean }) => (
-  <FullScreenOverlay visible={props.visible}>
+  <FullScreenOverlay
+    data-selector="full-screen-overlay"
+    visible={props.visible}
+  >
     <div>
       <OverlayText id="pw-loading-overlay">Launching Pairwise...</OverlayText>
     </div>
@@ -624,81 +626,6 @@ const AccountDropdownButton = styled.div`
     cursor: pointer;
     color: ${COLORS.TEXT_HOVER};
   }
-`;
-
-/** ===========================================================================
- * Mobile/Desktop Styles
- * ============================================================================
- */
-
-export const MobileView = (props: { isWorkspace: boolean }) => {
-  const [isOpen, setIsOpen] = React.useState<boolean>(true);
-  const isMobile = useMedia(MOBILE, false);
-  return (
-    <Alert
-      canOutsideClickCancel
-      confirmButtonText="Close"
-      onClose={() => setIsOpen(false)}
-      isOpen={isOpen && isMobile && props.isWorkspace}
-      className={Classes.DARK}
-    >
-      <MobileContainer>
-        <MobileTitleText>A quick heads up</MobileTitleText>
-        <MobileText style={{ margin: 0 }}>{"⚠️"}</MobileText>
-        <MobileText>
-          <strong>The Workspace doesn't completely work on mobile!</strong>
-        </MobileText>
-        <MobileText style={{ margin: 0 }}>{"⚠️"}</MobileText>
-        <MobileText>
-          Feel free to use Pairwise on a phone or tablet but the workspace won't
-          fully work as expected. We recommend you use a computer. For some
-          challenges
-          <span style={{ textDecoration: "underline" }}>
-            a mobile device simply doesn't have the necessary software to
-            complete the challenge
-          </span>
-          .
-        </MobileText>
-        <MobileText>
-          Unfortunately, smart phones and tablets are not the best devices for
-          developing software.
-        </MobileText>
-        <MobileText>
-          If you you're just wondering what Pairwise is about you can{" "}
-          <a target="__blank" href="https://www.pairwise.tech">
-            click here to check out our homepage.
-          </a>
-        </MobileText>
-      </MobileContainer>
-    </Alert>
-  );
-};
-
-const MobileContainer = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-
-  a {
-    color: ${COLORS.PRIMARY_GREEN};
-  }
-`;
-
-const MobileText = styled.p`
-  margin-top: 12px;
-  font-size: 18px;
-  font-weight: 300;
-  text-align: center;
-  font-family: "Helvetica Neue", Lato, sans-serif;
-  letter-spacing: 1px;
-`;
-
-const MobileTitleText = styled(MobileText)`
-  font-size: 32px;
-  font-weight: 300;
-  font-family: "Helvetica Neue", Lato, sans-serif;
 `;
 
 /** ===========================================================================
