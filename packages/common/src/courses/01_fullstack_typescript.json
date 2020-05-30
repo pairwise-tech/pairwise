@@ -309,7 +309,7 @@
           "title": "The div Tag — Putting Things in Boxes",
           "instructions": "* Give the whole page an `orange` background\n* Wrap the existing `h1` and `p` tags in a `div`\n* Style the div to have a `teal` background\n\n**Hint:** To style the whole page you will need the `body` tag\\. See the [video](#{\"component\":\"VideoPlayButton\"}) for more details.",
           "testCode": "test(\"There should be a `div`\", () => {\n  expect(get(\"div\")).toBeTruthy();\n});\n\ntest(\"The `h1` and `p` tags are within the div\", () => {\n  expect(get(\"div h1\")).toBeTruthy();\n  expect(get(\"div p\")).toBeTruthy();\n});\n\ntest(\"`body` should have orange background\", () => {\n  const body = get(\"body\");\n  const bg = getStyle(body, \"background-color\");\n  expect(bg).toBe(cssColor('orange'));\n});\n\ntest(\"`div` should have a teal background\", () => {\n  const el = get(\"div\");\n  const bg = getStyle(el, \"background-color\");\n  expect(bg).toBe(cssColor('teal'));\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/1pvUY83Wnuk",
           "starterCode": "<h1>Oh what a day</h1>\n<p>\n  A wonderful day to start wrapping some divs!\n</p>\n",
           "solutionCode": "<style>\n  body {\n    background: orange;\n  }\n  div {\n    background: teal;\n  }\n</style>\n<div>\n  <h1>Oh what a day</h1>\n  <p>\n    A wonderful day to start wrapping some divs!\n  </p>\n</div>\n",
           "content": ""
