@@ -80,3 +80,25 @@ export const goToNextChallenge = () => {
   cy.get("#nextButton").click({ force: true });
   cy.wait(TIMEOUT);
 };
+
+type TestStatus = "Success!" | "Incomplete..." | string;
+
+/**
+ * Helper to check test status.
+ */
+export const checkTestStatus = (status: TestStatus, index: number) => {
+  const id = `#test-result-status-${index}`;
+  cy.get(id).contains(status);
+};
+
+/**
+ * Check the status of the test results.
+ */
+export const checkTestResultStatus = (
+  expectedStatus: TestStatus,
+  numberOfResults: number = 1,
+) => {
+  for (let i = 0; i < numberOfResults; i++) {
+    checkTestStatus(expectedStatus, i);
+  }
+};

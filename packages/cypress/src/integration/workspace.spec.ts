@@ -4,7 +4,7 @@ import {
   getIframeBody,
   click,
   typeTextInCodeEditor,
-  elementContains,
+  checkTestResultStatus,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -120,6 +120,66 @@ describe("Sandbox", () => {
     getIframeBody()
       .find(".just-typed-this")
       .should("include.text", `Testing`);
+  });
+});
+
+const REACT_INPUT_SOLUTION = `
+import React from "react";
+import ReactDOM from "react-dom";
+
+interface IState {
+  value: string;
+}
+
+class App extends React.Component<{}, IState> {
+  constructor(props: {}) {
+    super(props);
+
+    this.state = {
+      value: "",
+    };
+  }
+
+  render(): JSX.Element {
+    const welcome: string = "Hello, React!";
+    console.log("Hello from the iframe!!!");
+    return (
+      <div>
+        <h1>{welcome}</h1>
+        <input value={this.state.value} onChange={this.handleChange} />
+      </div>
+    );
+  }
+
+  handleChange = (e: any) => {
+    this.setState({ value: e.target.value });
+  };
+}
+
+// Do not edit code below this line
+const Main = App;
+ReactDOM.render(<Main />, document.querySelector("#root"));
+`;
+
+describe("React Challenges", () => {
+  it("The workspace supports React challenges and they can be solved", () => {
+    cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
+    cy.wait(TIMEOUT);
+    cy.url().should("include", "workspace");
+
+    // Tests should fail
+    checkTestResultStatus("Incomplete...");
+
+    // Enter solution
+    typeTextInCodeEditor(REACT_INPUT_SOLUTION);
+
+    // Tests should pass
+    checkTestResultStatus("Success!");
+
+    // Verify the Success Modal appears when running the code
+    cy.get("#gs-card").should("not.exist");
+    click("pw-run-code");
+    cy.get("#gs-card").should("exist");
   });
 });
 

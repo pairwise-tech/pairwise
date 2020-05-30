@@ -5,6 +5,8 @@ import {
   typeTextInCodeEditor,
   elementContains,
   click,
+  checkTestResultStatus,
+  checkTestStatus,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -109,28 +111,6 @@ describe("Account Creation Flow", () => {
  * Test Helpers
  * ============================================================================
  */
-
-type TestStatus = "Success!" | "Incomplete..." | string;
-
-/**
- * Helper to check test status.
- */
-const checkTestStatus = (status: TestStatus, index: number) => {
-  const id = `#test-result-status-${index}`;
-  cy.get(id).contains(status);
-};
-
-/**
- * Check the status of the test results.
- */
-const checkTestResultStatus = (
-  expectedStatus: TestStatus,
-  numberOfResults: number = 1,
-) => {
-  for (let i = 0; i < numberOfResults; i++) {
-    checkTestStatus(expectedStatus, i);
-  }
-};
 
 /**
  * Check that the challenges appear complete in the navigation overlay.
