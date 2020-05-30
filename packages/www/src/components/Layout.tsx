@@ -18,7 +18,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import Slide from '@material-ui/core/Slide';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { parse as parseQuery } from 'querystring';
 
@@ -68,6 +68,8 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
   `);
   const [notification, setNotification] = useState<string>('');
   const handleClose = () => setNotification('');
+  const [loadIframe, setLoadIframe] = useState(false);
+  const [showFlyIn, setShowFlyIn] = useState(false);
 
   useEffect(() => {
     const query = parseQuery(window.location.search.slice(1));
@@ -76,67 +78,131 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
     }
   }, []);
 
+  useEffect(() => {
+    const el = document.querySelector('#matrix-container');
+    let timeout: null | number = null;
+
+    const listener = () => {
+      if (!el) {
+        return;
+      }
+      const box = el.getBoundingClientRect();
+      const scrollBottom = box.height + el.scrollTop;
+      console.log('scrollBottom');
+
+      if (scrollBottom + 100 > el.scrollHeight) {
+        console.log('BOOM');
+        el.removeEventListener('scroll', listener);
+        setLoadIframe(true);
+        timeout = setTimeout(() => {
+          setShowFlyIn(true);
+        }, 5000);
+      }
+    };
+
+    el.addEventListener('scroll', listener);
+
+    return () => {
+      el.removeEventListener('scroll', listener);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, []);
+
   return (
-    <ThemeProvider theme={theme}>
-      {!hideHeader && <Header />}
-      <div style={{ overflow: 'hidden', minHeight: 'calc(100vh - 140px)' }}>
-        {children}
-      </div>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={Boolean(notification)}
-        TransitionComponent={(props: any) => (
-          <Slide {...props} direction="down" />
-        )}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
-      >
-        <StyledSnackbarContent
-          aria-describedby="client-snackbar"
-          message={
-            <span
-              id="client-snackbar"
-              style={{ display: 'flex', alignItems: 'center' }}
-            >
-              <Info style={{ marginRight: 20 }} />
-              {notification}
-            </span>
-          }
-          action={[
-            <IconButton
-              key="close"
-              aria-label="close"
-              color="inherit"
-              onClick={handleClose}
-            >
-              <Close />
-            </IconButton>,
-          ]}
+    <>
+      {loadIframe && (
+        <FullFrame
+          style={{
+            animation: showFlyIn ? 'pw-fly-in 4s ease-out 1 0s' : '',
+          }}
+          src="http://localhost:3000/workspace/iSF4BNIl/hello-pairwise?iframePreview=1"
         />
-      </Snackbar>
-      <CodeRainSection
-        style={{
-          paddingTop: 20,
-          paddingBottom: 20,
-          boxShadow: 'inset rgba(0, 0, 0, 0.31) 0 10px 5px -10px',
-        }}
+      )}
+      <MatrixContainer
+        id="matrix-container"
+        className={showFlyIn ? 'enterTheMatrix' : ''}
+        key="flipdown"
       >
-        <footer>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ marginBottom: 10 }}>
-              <small>© {new Date().getFullYear()} Pairwise</small>
-            </div>
-            <Deemphasize>
-              <FooterLink to="/media-kit">Media Kit</FooterLink>
-              <FooterLink to="/terms">Terms of Service</FooterLink>
-              <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
-            </Deemphasize>
+        <ThemeProvider theme={theme}>
+          {!hideHeader && <Header />}
+          <div style={{ overflow: 'hidden', minHeight: 'calc(100vh - 140px)' }}>
+            {children}
           </div>
-        </footer>
-      </CodeRainSection>
-    </ThemeProvider>
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            open={Boolean(notification)}
+            TransitionComponent={(props: any) => (
+              <Slide {...props} direction="down" />
+            )}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+          >
+            <StyledSnackbarContent
+              aria-describedby="client-snackbar"
+              message={
+                <span
+                  id="client-snackbar"
+                  style={{ display: 'flex', alignItems: 'center' }}
+                >
+                  <Info style={{ marginRight: 20 }} />
+                  {notification}
+                </span>
+              }
+              action={[
+                <IconButton
+                  key="close"
+                  aria-label="close"
+                  color="inherit"
+                  onClick={handleClose}
+                >
+                  <Close />
+                </IconButton>,
+              ]}
+            />
+          </Snackbar>
+          <CodeRainSection
+            style={{
+              paddingTop: 20,
+              paddingBottom: 20,
+              boxShadow: 'inset rgba(0, 0, 0, 0.31) 0 10px 5px -10px',
+            }}
+          >
+            <footer>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ marginBottom: 10 }}>
+                  <small>© {new Date().getFullYear()} Pairwise</small>
+                </div>
+                <Deemphasize>
+                  <FooterLink to="/media-kit">Media Kit</FooterLink>
+                  <FooterLink to="/terms">Terms of Service</FooterLink>
+                  <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
+                </Deemphasize>
+              </div>
+            </footer>
+          </CodeRainSection>
+        </ThemeProvider>
+      </MatrixContainer>
+    </>
   );
 };
+
+const FullFrame = styled.iframe`
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  outline: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+const MatrixContainer = styled.div`
+  overflow: auto;
+  height: 100vh;
+  position: relative;
+  z-index: 2;
+`;
 
 export default Layout;

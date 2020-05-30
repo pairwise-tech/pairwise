@@ -1,12 +1,13 @@
 html,
 body {
   font-family: sans-serif;
-  background: #2d2d2d;
+  background: #111;
   color: white;
 }
 
 body {
   min-width: 360px;
+  perspective: 5000px;
 }
 
 #___gatsby {
@@ -18,4 +19,27 @@ ul,
 ol,
 li {
   line-height: 1.5;
+}
+
+.enterTheMatrix {
+  transform: scaleY(1) translateY(0%) rotate3d(1, 0, 0, 110deg);
+  transition: transform 2s ease-in;
+  transform-origin: bottom;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+@keyframes pw-fly-in {
+  from {
+    opacity: 0;
+    transform: translateY(-100vh) translateZ(-10000px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-50vh) translateZ(-10000px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0vh) translateZ(0px);
+  }
 }
