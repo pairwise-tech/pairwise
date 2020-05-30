@@ -1,7 +1,7 @@
-// Custom editor styles for JSX elements
-// These styles are taken directly from the default VS-dark theme
-
-#monaco-editor {
+// Custom editor styles for TSX elements
+// These styles are taken directly from the default VS-dark theme, and applied
+// to the Monaco editor using its element id.
+#pairwise-code-editor {
   .JsxText {
     color: #d3d3d3;
     &.StringLiteral {

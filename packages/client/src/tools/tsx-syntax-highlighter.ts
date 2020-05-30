@@ -120,6 +120,8 @@ self.addEventListener("message", event => {
     const lines = code.split("\n").map((line: any) => line.length);
     addChildNodes(sourceFile, lines, classifications);
 
+    // The identifier is used in the Workspace to identifier and apply
+    // the syntax highlighting data
     const identifier = "TSX_SYNTAX_HIGHLIGHTER";
 
     // @ts-ignore

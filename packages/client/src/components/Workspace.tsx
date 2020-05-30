@@ -96,6 +96,7 @@ const debug = require("debug")("client:Workspace");
 
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
+// NOTE: Element id is used to apply TSX styles
 const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
@@ -379,6 +380,7 @@ class Workspace extends React.Component<IProps, IState> {
       debug("[syntax highlight incoming]", event);
       const { classifications, identifier } = event.data;
       if (classifications && identifier) {
+        // Recognize message identifier sent from the worker
         if (identifier === "TSX_SYNTAX_HIGHLIGHTER") {
           requestAnimationFrame(() => {
             this.updateSyntaxDecorations(classifications);

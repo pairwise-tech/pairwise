@@ -8,8 +8,8 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 // Import app styles
 import "./index.css";
 
-// Our custom JSX theme
-import "./jsx-theme-styles.scss";
+// TSX styles to apply to React/TSX challenges
+import "./custom-tsx-styles.scss";
 
 // Import Libraries
 import React from "react";
