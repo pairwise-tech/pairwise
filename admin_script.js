@@ -132,13 +132,35 @@ const removeExcessUserFields = user => {
   };
 };
 
+// Whitelist our emails
+const WHITELISTED_EMAILS = new Set([
+  "sean.smith.2009@gmail.com",
+  "pweinberg633@gmail.com",
+]);
+
+/**
+ * Remove ourselves from the user list.
+ */
+const filterUsOut = user => {
+  const { email } = user;
+  if (!email) {
+    return true;
+  }
+
+  if (email.includes("@pairwise.tech") || WHITELISTED_EMAILS.has(email)) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 /**
  * Parse course progress, summarize the progress for each user, and sort
  * the results.
  */
 const summarizeUserProgress = users => {
-  const withProgressSummaries = users.map(user => {
-    // Format the progress histroy
+  const withProgressSummaries = users.filter(filterUsOut).map(user => {
+    // Format the progress history
     const formattedProgress = formatChallengeProgress(
       user.challengeProgressHistory,
     );
@@ -173,16 +195,32 @@ const summarizeUserProgress = users => {
     return b.completedChallenges.total - a.completedChallenges.total;
   });
 
-  // Record some metrics numbers
+  // Record some stats
   let totalChallengesCompleted = 0;
   let challengesCompletedInLastWeek = 0;
   let newUsersInLastWeek = 0;
+  let usersWithoutEmail = 0;
+  let leaderChallengeCount = 0;
+  let numberOfUsersWithZeroChallengesComplete = 0;
 
   for (const user of withProgressSummaries) {
     const { completedChallengeList } = user;
     const now = Date.now();
     const oneWeek = 1000 * 60 * 60 * 24 * 7;
     const lastWeek = now - oneWeek;
+
+    leaderChallengeCount = Math.max(
+      leaderChallengeCount,
+      completedChallengeList.length,
+    );
+
+    if (!user.email) {
+      usersWithoutEmail++;
+    }
+
+    if (completedChallengeList.length === 0) {
+      numberOfUsersWithZeroChallengesComplete++;
+    }
 
     const userCreated = new Date(user.createdAt).getTime();
     if (userCreated > lastWeek) {
@@ -203,12 +241,25 @@ const summarizeUserProgress = users => {
     delete user.completedChallengeList;
   }
 
+  const totalUsers = sortedByCompletedChallenges.length;
+  const averageChallengesCompletedPerUser = Math.round(
+    totalChallengesCompleted / totalUsers,
+  );
+
   // Create summary with total user count
   const summary = {
-    totalUsers: sortedByCompletedChallenges.length,
-    newUsersInLastWeek,
-    totalChallengesCompleted,
-    challengesCompletedInLastWeek,
+    stats: {
+      totalUsers,
+      newUsersInLastWeek,
+      usersWithoutEmail,
+      totalChallengesCompleted,
+      challengesCompletedInLastWeek,
+    },
+    leaderboard: {
+      leaderChallengeCount,
+      averageChallengesCompletedPerUser,
+      numberOfUsersWithZeroChallengesComplete,
+    },
     users: sortedByCompletedChallenges,
   };
 
@@ -237,10 +288,10 @@ const getAllUsers = async () => {
     log.start();
     const result = await axios.get(GET_ALL_USERS_URL, RequestHeaders);
     const filename = "pairwise-users.json";
-    log.finish(
-      `Retrieved ${result.data.length} user records. Writing result to file: ${filename}`,
-    );
     const data = summarizeUserProgress(result.data);
+    log.finish(
+      `Retrieved ${data.users.length} user records. Writing result to file: ${filename}`,
+    );
     const users = JSON.stringify(data, null, 2);
     fs.writeFileSync(filename, users, "utf-8");
     console.log("Done!");

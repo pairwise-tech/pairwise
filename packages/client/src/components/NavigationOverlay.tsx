@@ -91,6 +91,7 @@ class NavigationOverlay extends React.Component<IProps> {
       course,
       module,
       isEditMode,
+      challengeId,
       overlayVisible,
       courseListMetadata,
     } = this.props;
@@ -106,6 +107,11 @@ class NavigationOverlay extends React.Component<IProps> {
     const hasSections = sectionIds.length > 0;
     const anySectionsOpen =
       hasSections && sectionIds.some(this.getCurrentAccordionViewState);
+
+    // Check if the current module contains the current challenge
+    const moduleContainsActiveChallenge = module.challenges.find(
+      c => c.id === challengeId,
+    );
 
     // Define the available shortcut keys, only valid key combinations
     // are allowed.
@@ -166,6 +172,13 @@ class NavigationOverlay extends React.Component<IProps> {
             <p>{module.title}</p>
             {hasSections && !isEditMode && (
               <div>
+                {challengeId && moduleContainsActiveChallenge && (
+                  <Button
+                    icon="send-to-map"
+                    style={{ marginRight: 6 }}
+                    onClick={() => this.scrollToChallenge()}
+                  />
+                )}
                 <Button onClick={this.toggleExpandCollapseAll}>
                   {anySectionsOpen ? "Collapse" : "Expand"} All Sections
                 </Button>
@@ -265,6 +278,16 @@ class NavigationOverlay extends React.Component<IProps> {
     );
   };
 
+  scrollToChallenge = () => {
+    // Find the currently active element
+    const elements = document.getElementsByClassName("active-item");
+    const element = elements[0];
+    // There should only be one active element...
+    if (element && elements.length === 1) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   // This can be used to expand or collapse all sections in the current module.
   toggleExpandCollapseAll = () => {
     const challengeList = this.props.module?.challenges;
@@ -314,6 +337,9 @@ class NavigationOverlay extends React.Component<IProps> {
     return sectionBlocks.map(block => {
       serialIndex++;
       if (block.section) {
+        const sectionExpanded = this.getCurrentAccordionViewState(
+          block.section.id,
+        );
         return (
           <div key={serialIndex}>
             {this.renderChallengeNavigationItem({
@@ -324,10 +350,9 @@ class NavigationOverlay extends React.Component<IProps> {
               sectionChallenges: block.challenges,
               index: serialIndex,
               challenge: block.section,
+              sectionExpanded,
             })}
-            <Collapse
-              isOpen={this.getCurrentAccordionViewState(block.section.id)}
-            >
+            <Collapse isOpen={sectionExpanded}>
               {block.challenges.map((challenge: ChallengeSkeleton) => {
                 serialIndex++;
                 return this.renderChallengeNavigationItem({
@@ -392,6 +417,7 @@ class NavigationOverlay extends React.Component<IProps> {
   renderChallengeNavigationItem = (args: {
     index: number;
     isSection?: boolean;
+    sectionExpanded?: boolean;
     sectionChallengeCount?: number;
     sectionChallenges?: ChallengeSkeleton[];
     module: ModuleSkeleton;
@@ -406,6 +432,7 @@ class NavigationOverlay extends React.Component<IProps> {
       course,
       isSection,
       challenge,
+      sectionExpanded,
       sectionChallengeCount = 0,
       sectionChallenges = [],
       style = {},
@@ -421,6 +448,7 @@ class NavigationOverlay extends React.Component<IProps> {
       this.props.userProgress,
       course.id,
     );
+
     const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
     const iconProps = {
       index,
@@ -440,13 +468,23 @@ class NavigationOverlay extends React.Component<IProps> {
       }
     };
 
+    // Section is active if it is collapsed and includes the current challenge
+    const sectionActive = sectionExpanded
+      ? false
+      : !!sectionChallenges.find(c => c.id === challengeId);
+    const itemActive = sectionActive || challenge.id === challengeId;
+
     return (
-      <div key={challenge.id} style={{ position: "relative", ...style }}>
+      <div
+        key={challenge.id}
+        id={`challenge-${challenge.id}`}
+        className={itemActive ? "active-item" : ""}
+        style={{ position: "relative", ...style }}
+      >
         <Link
-          key={challenge.id}
           to={`/workspace/${getChallengeSlug(challenge)}`}
           id={`challenge-navigation-${index}`}
-          isActive={() => challenge.id === challengeId}
+          isActive={() => itemActive}
           onClick={this.handleClickChallenge(
             challenge.userCanAccess,
             course.id,
