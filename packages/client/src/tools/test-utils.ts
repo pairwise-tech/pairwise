@@ -5,7 +5,6 @@ import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
 import { TEST, PRODUCTION } from "./client-env";
 import quote from "string-quote-x";
-import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import pipe from "ramda/src/pipe";
 
 // TODO: This could be made more secure
@@ -540,12 +539,16 @@ export const tidyHtml = (html: string) => {
  * Process code string and test code for markup challenges to include the
  * test code in an included script tag and ensure all of it is wrapped in
  * a body tag. This can then be injected as the iframe source document.
+ *
+ * NOTE: Expectation library needs to be passed here from the workspace,
+ * it cannot be imported in this file or it will break in the test environment.
  */
 export const getMarkupSrcDocument = (
   code: string,
   testCode: string,
+  expectationLibrary: string, // see NOTE
 ): string => {
-  const testScript = getTestScripts(code, testCode, EXPECTATION_LIB);
+  const testScript = getTestScripts(code, testCode, expectationLibrary);
 
   // NOTE: Tidy html should ensure there is indeed a closing body tag
   const tidySource = tidyHtml(code);

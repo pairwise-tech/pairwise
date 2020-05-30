@@ -1122,6 +1122,7 @@ class Workspace extends React.Component<IProps, IState> {
         sourceDocument = getMarkupSrcDocument(
           this.state.code,
           this.props.challenge.testCode,
+          EXPECTATION_LIB,
         );
       } else {
         const code = await this.compileAndTransformCodeString();
