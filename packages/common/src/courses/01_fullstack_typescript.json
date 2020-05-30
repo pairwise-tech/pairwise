@@ -14,9 +14,9 @@
           "id": "iSF4BNIl",
           "type": "markup",
           "title": "Hello, Pairwise!",
-          "instructions": "There is an h1 tag in the code editor below which contains the text \"Pairwise\". Your job is to change the text to say `Hello Pairwise!`. If you run into any problems, check out the [video](#{\"component\":\"VideoPlayButton\"}) explanation below\\!",
+          "instructions": "There is an h1 tag in the code editor below which contains the text `Pairwise`. Your job is to change the text to say `Hello Pairwise!`. Once you finish, click the \"Run\" button in the editor, and, if you run into any problems, check out the [video](#{\"component\":\"VideoPlayButton\"}) explanation below\\!",
           "testCode": "test('The `h1` tag should contain the text: `Hello Pairwise!`', () => {\n    expect(getText(\"h1\")).toBe(\"Hello Pairwise!\");\n});\n",
-          "videoUrl": "https://www.youtube.com/embed/GEzFkA7XccQ",
+          "videoUrl": "https://www.youtube.com/embed/qXxUGntJ11I",
           "starterCode": "<h1>Pairwise</h1>\n",
           "solutionCode": "<h1>Hello Pairwise!</h1>\n",
           "content": "## A Quick Note About the Videos\n\nMany \\(but not all\\) challenges will have these videos lessons to walk through solving the challenge. The videos are intended as supplementary material to go in addition to the challenge. We recommend trying to solve the challenge on your own first and if you get totally stuck or lost, then using the video to see a full explanation.\n\nThe videos are intended to help you avoid ever getting lost and not knowing how to proceed. We want Pairwise students to be fully supported throughout the entire curriculum.\n\nIn addition, we cover a lot of other topics and interesting points in the videos, so we recommend watching these even if you solve the challenge successfully on your own. The videos are usually short and should only take a few minutes to watch."
