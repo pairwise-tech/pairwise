@@ -97,7 +97,7 @@ const FeedbackModal = (props: Props) => {
       aria-describedby="feedback-modal-description"
     >
       <ModalContainer
-        style={{ maxHeight: "calc(100vh - 100px)" }}
+        style={{ maxHeight: "calc(100vh - 150px)" }}
         className={Classes.DARK} // Needed since portal modal is outside inherited styles
       >
         <ModalTitleText id="feedback-modal-title">{modalTitle}</ModalTitleText>
@@ -123,13 +123,13 @@ const FeedbackModal = (props: Props) => {
         </DangerLabel>
         <FeedbackInput
           autoFocus
-          style={{ flexShrink: 0 }}
           fill={true}
           large={true}
           value={props.feedback}
           onChange={handleChange}
-          margintop={textAreaIntent === "danger" ? 0 : 10}
+          style={{ flexShrink: 0, maxHeight: 180 }}
           className={`bp3-intent-${textAreaIntent}`}
+          margintop={textAreaIntent === "danger" ? 0 : 10}
         />
         {email ? null : (
           <Callout style={{ marginTop: 10 }}>
