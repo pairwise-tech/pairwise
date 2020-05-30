@@ -685,17 +685,15 @@ class Workspace extends React.Component<IProps, IState> {
               hideSolution={this.props.handleToggleSolutionCode}
             />
           )}
-          <Tooltip content="Shortcut: opt+enter" position="left">
-            <RunButton
-              icon="play"
-              id="pw-run-code"
-              loading={testResultsLoading}
-              onClick={this.handleUserTriggeredTestRun}
-              aria-label="run the current editor code"
-            >
-              Run
-            </RunButton>
-          </Tooltip>
+          <RunButton
+            icon="play"
+            id="pw-run-code"
+            loading={testResultsLoading}
+            onClick={this.handleUserTriggeredTestRun}
+            aria-label="run the current editor code"
+          >
+            Run
+          </RunButton>
         </UpperRight>
         <LowerRight>
           <ButtonGroup vertical>
