@@ -5,6 +5,7 @@ import {
   click,
   typeTextInCodeEditor,
   checkTestResultStatus,
+  purchaseCourseForUser,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -123,7 +124,7 @@ describe("Sandbox", () => {
   });
 });
 
-const REACT_INPUT_SOLUTION = `
+const REACT_CHALLENGE_SOLUTION = `
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -163,15 +164,77 @@ ReactDOM.render(<Main />, document.querySelector("#root"));
 
 describe("React Challenges", () => {
   it("The workspace supports React challenges and they can be solved", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
+    cy.visit(CLIENT_APP_URL);
     cy.wait(TIMEOUT);
     cy.url().should("include", "workspace");
+
+    // React challenges are locked so purchase the course first
+    purchaseCourseForUser();
+
+    // Visit a React challenge
+    cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
+    cy.wait(TIMEOUT);
 
     // Tests should fail
     checkTestResultStatus("Incomplete...");
 
     // Enter solution
-    typeTextInCodeEditor(REACT_INPUT_SOLUTION);
+    typeTextInCodeEditor(REACT_CHALLENGE_SOLUTION);
+
+    // Tests should pass
+    checkTestResultStatus("Success!");
+
+    // Verify the Success Modal appears when running the code
+    cy.get("#gs-card").should("not.exist");
+    click("pw-run-code");
+    cy.get("#gs-card").should("exist");
+  });
+});
+
+const ASYNC_CHALLENGE_SOLUTION = `
+const makePromise = (shouldResolve: boolean = true) => {
+  return new Promise((resolve, reject) => {
+    if (shouldResolve) {
+      resolve("I promised!");
+    } else {
+      reject("Promise rejected!");
+    }
+  });
+}
+
+const fulfillThePromise = async (promiseShouldResolve: boolean = true) => {
+  try {
+    console.log("Fulfilling the promise...");
+    const resolutionValue = await makePromise(promiseShouldResolve);
+    console.log("The resolution value is: ", resolutionValue);
+    return resolutionValue;
+  } catch (rejectionValue) {
+    console.log("The rejection value is: ", rejectionValue);
+    return rejectionValue;
+  }
+};
+
+fulfillThePromise();
+`;
+
+describe("Async Challenges", () => {
+  it("The workspace supports async challenges and they can be solved", () => {
+    cy.visit(CLIENT_APP_URL);
+    cy.wait(TIMEOUT);
+    cy.url().should("include", "workspace");
+
+    // Async challenges are locked so purchase the course first
+    purchaseCourseForUser();
+
+    // Visit an async challenge
+    cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/write-an-async-function`);
+    cy.wait(TIMEOUT);
+
+    // Tests should fail
+    checkTestResultStatus("Incomplete...");
+
+    // Enter solution
+    typeTextInCodeEditor(ASYNC_CHALLENGE_SOLUTION);
 
     // Tests should pass
     checkTestResultStatus("Success!");
