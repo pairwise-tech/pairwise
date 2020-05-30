@@ -266,8 +266,9 @@ const Input = styled(InputGroup)`
         inset 0 1px 1px rgba(16, 22, 26, 0.1);
     }
     &:focus {
-      color: black;
-      background: white;
+      border: none;
+      outline: none;
+      color: white;
     }
   }
 `;
