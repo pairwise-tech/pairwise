@@ -3,7 +3,6 @@ import {
   TIMEOUT,
   CLIENT_APP_URL,
   elementContains,
-  EXTERNAL_SERVICES_URL,
   purchaseCourseForUser,
 } from "../support/cypress-utils";
 

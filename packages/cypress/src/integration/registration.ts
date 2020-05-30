@@ -42,7 +42,9 @@ describe("Account Creation Flow", () => {
     checkTestStatus("Incomplete...", 3);
     checkTestStatus("Incomplete...", 4);
     checkTestStatus("Incomplete...", 5);
-    typeTextInCodeEditor("<h2>2</h2><h3>3</h3><h4>4</h4><h5>5</h5><h6>6</h6>");
+    typeTextInCodeEditor(
+      "<h1>1</h1><h2>2</h2><h3>3</h3><h4>4</h4><h5>5</h5><h6>6</h6>",
+    );
     checkTestResultStatus("Success!", 6);
 
     goToNextChallenge();

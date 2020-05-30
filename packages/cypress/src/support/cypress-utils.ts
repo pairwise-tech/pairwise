@@ -36,14 +36,28 @@ export const type = (id: string, text: string) => {
   cy.get(toId(id)).type(text);
 };
 
-const MONACO_TEXT_ELEMENT_IDENTIFIER = ".view-lines";
-
 /**
  * Enter text in the code editor, targeting it with a specific
  * class.
+ *
+ * It's really hard to type into the Monaco editor correctly!
+ *
+ * https://stackoverflow.com/questions/56617522/testing-monaco-editor-with-cypress
+ *
+ * We first select all of the editor content and then clear it in a platform
+ * agnostic way. Then, we update the input value to be the provided text
+ * content. Typing the content directly, e.g. with .type, will cause Monaco
+ * to start to add auto-completions which disrupt the intended text result. To
+ * avoid this we just update the entire value one time.
  */
 export const typeTextInCodeEditor = (text: string) => {
-  cy.get(MONACO_TEXT_ELEMENT_IDENTIFIER).type(text);
+  const clearEditorCommand =
+    Cypress.platform === "darwin" ? "{cmd}a{backspace}" : "{ctrl}a{backspace}";
+
+  cy.get(".monaco-editor textarea:first")
+    .type(clearEditorCommand)
+    .invoke("val", text)
+    .trigger("input");
 };
 
 // Asset some element with an id contains some text.
