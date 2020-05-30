@@ -50,14 +50,20 @@ export const type = (id: string, text: string) => {
  * to start to add auto-completions which disrupt the intended text result. To
  * avoid this we just update the entire value one time.
  */
-export const typeTextInCodeEditor = (text: string) => {
-  const clearEditorCommand =
-    Cypress.platform === "darwin" ? "{cmd}a{backspace}" : "{ctrl}a{backspace}";
+export const typeTextInCodeEditor = (text: string, shouldClear = true) => {
+  if (shouldClear) {
+    const clearEditorCommand =
+      Cypress.platform === "darwin"
+        ? "{cmd}a{backspace}"
+        : "{ctrl}a{backspace}";
 
-  cy.get(".monaco-editor textarea:first")
-    .type(clearEditorCommand)
-    .invoke("val", text)
-    .trigger("input");
+    cy.get(".monaco-editor textarea:first")
+      .type(clearEditorCommand)
+      .invoke("val", text)
+      .trigger("input");
+  } else {
+    cy.get(".monaco-editor textarea:first").type("text");
+  }
 };
 
 // Asset some element with an id contains some text.

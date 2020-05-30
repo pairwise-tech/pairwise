@@ -186,7 +186,7 @@ describe("Workspace Challenges", () => {
     cy.get("#gs-card").should("exist");
   });
 
-  it("The workspace supports async challenges and they can be solved", () => {
+  it("The workspace supports Async/Await challenges and they can be solved", () => {
     // Visit an async challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/write-an-async-function`);
     cy.wait(TIMEOUT);
@@ -218,7 +218,7 @@ describe("Success Modal", () => {
     click("pw-run-code");
     cy.get("#gs-card").should("not.exist");
 
-    typeTextInCodeEditor("<h1>Hello!</h1>");
+    typeTextInCodeEditor("<h1>Hello!</h1>", true);
     cy.get("#gs-card").should("not.exist");
 
     click("pw-run-code");
