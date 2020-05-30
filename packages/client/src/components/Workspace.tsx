@@ -34,9 +34,8 @@ import {
   compileCodeString,
   IframeMessageEvent,
   IFRAME_MESSAGE_TYPES,
-  getTestScripts,
-  tidyHtml,
   TestCase,
+  getMarkupSrcDocument,
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
@@ -73,10 +72,10 @@ import {
   Spacer,
   DragIgnorantFrameContainer,
   consoleRowStyles,
-  LowerSection,
   RevealSolutionLabel,
   RunButton,
   TestStatusTextTab,
+  LowerSection,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
@@ -100,31 +99,6 @@ const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
-
-// Given an iframe and the relevant code render it all as a script to the iframe's srcdoc
-const getMarkupSrcdoc = (
-  iframe: HTMLIFrameElement,
-  code: string,
-  testCode: string,
-): string => {
-  const testScript = getTestScripts(code, testCode, EXPECTATION_LIB);
-
-  // NOTE: Tidy html should ensure there is indeed a closing body tag
-  const tidySource = tidyHtml(code);
-
-  // Just to give us some warning if we ever hit this. Should be impossible...
-  if (!tidySource.includes("</body>")) {
-    console.warn(
-      "[Err] Could not append test code to closing body tag in markup challenge",
-    );
-  }
-
-  // TODO: There's no reason for us to inject the test script in sandbox
-  // mode, but the same applies to all challenge types so ideally we
-  // would standardize the testing pipeline to the point where we could
-  // include that logic in one place only.
-  return tidySource.replace("</body>", `${testScript}</body>`);
-};
 
 interface Log {
   data: ReadonlyArray<string>;
@@ -1147,8 +1121,7 @@ class Workspace extends React.Component<IProps, IState> {
       let sourceDocument = "<!-- SHOULD_BE_OVERWRITTEN -->";
 
       if (this.props.challenge.type === "markup") {
-        sourceDocument = getMarkupSrcdoc(
-          this.iFrameRef,
+        sourceDocument = getMarkupSrcDocument(
           this.state.code,
           this.props.challenge.testCode,
         );

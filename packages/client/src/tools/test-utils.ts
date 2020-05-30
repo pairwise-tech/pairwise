@@ -5,6 +5,7 @@ import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
 import { TEST, PRODUCTION } from "./client-env";
 import quote from "string-quote-x";
+import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import pipe from "ramda/src/pipe";
 
 // TODO: This could be made more secure
@@ -532,6 +533,34 @@ export const tidyHtml = (html: string) => {
   const el = document.createElement("html");
   el.innerHTML = html;
   return el.innerHTML;
+};
+
+/**
+ * Process code string and test code for markup challenges to include the
+ * test code in an included script tag and ensure all of it is wrapped in
+ * a body tag. This can then be injected as the iframe source document.
+ */
+export const getMarkupSrcDocument = (
+  code: string,
+  testCode: string,
+): string => {
+  const testScript = getTestScripts(code, testCode, EXPECTATION_LIB);
+
+  // NOTE: Tidy html should ensure there is indeed a closing body tag
+  const tidySource = tidyHtml(code);
+
+  // Just to give us some warning if we ever hit this. Should be impossible...
+  if (!tidySource.includes("</body>")) {
+    console.warn(
+      "[Err] Could not append test code to closing body tag in markup challenge",
+    );
+  }
+
+  // TODO: There's no reason for us to inject the test script in sandbox
+  // mode, but the same applies to all challenge types so ideally we
+  // would standardize the testing pipeline to the point where we could
+  // include that logic in one place only.
+  return tidySource.replace("</body>", `${testScript}</body>`);
 };
 
 /**
