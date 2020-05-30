@@ -151,10 +151,6 @@ describe("Workspace Challenges", () => {
 
     // Enter solution
     typeTextInCodeEditor(TYPESCRIPT_CHALLENGE_SOLUTION);
-    click("pw-run-code");
-
-    // Tests should pass
-    checkTestResultStatus("Success!");
 
     // Verify the Success Modal appears when running the code
     cy.get("#gs-card").should("not.exist");
@@ -175,10 +171,6 @@ describe("Workspace Challenges", () => {
 
     // Enter solution
     typeTextInCodeEditor(REACT_CHALLENGE_SOLUTION);
-    click("pw-run-code");
-
-    // Tests should pass
-    checkTestResultStatus("Success!");
 
     // Verify the Success Modal appears when running the code
     cy.get("#gs-card").should("not.exist");
@@ -199,10 +191,6 @@ describe("Workspace Challenges", () => {
 
     // Enter solution
     typeTextInCodeEditor(ASYNC_CHALLENGE_SOLUTION);
-    click("pw-run-code");
-
-    // Tests should pass
-    checkTestResultStatus("Success!");
 
     // Verify the Success Modal appears when running the code
     cy.get("#gs-card").should("not.exist");
