@@ -443,38 +443,39 @@ try {
     return testArray;
   }
 
-  function runTests() {
-    const tests = buildTestsFromCode()
-
-    const results = tests.reduce((agg, { message, test }) => {
+  async function runTests() {
+    const tests = buildTestsFromCode();
+    const testResults = await Promise.all(tests.map(async ({ message, test }) => {
       try {
-        const _result = test();
+        const _result = await test();
 
         // TODO: At some point we will want to account for async tests, which will require
         // changes here. Handle _result being a promise.
-        return agg.concat([{
+        return {
           message,
           testResult: true, // If we get here it didn't throw, so it passed
           error: null,
-        }]);
+        };
       } catch (err) {
-        return agg.concat([{
+        return {
           message,
           testResult: false,
           error: err.message + '\\n\\n' + err.stack,
-        }]);
+        };
       }
-    }, []);
+    }));
 
-    return results;
+    return testResults.flat();
   }
 
   try {
-    const results = runTests();
-    window.parent.postMessage({
-      message: JSON.stringify(results),
-      source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}"
-    }, ${TARGET_WINDOW_ORIGIN});
+    (async function() {
+      const results = await runTests();
+      window.parent.postMessage({
+        message: JSON.stringify(results),
+        source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}"
+      }, ${TARGET_WINDOW_ORIGIN});
+    })();
   } catch (err) {
     window.parent.postMessage({
       message: JSON.stringify({
