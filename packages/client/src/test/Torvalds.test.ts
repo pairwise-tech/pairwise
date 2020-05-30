@@ -189,11 +189,15 @@ describe("Linus should be able to pass all the challenges first try", () => {
         }
 
         /**
-         * Wait for the test script to execute and post a message back to
-         * the message listener.
+         * Wait briefly for the test script to execute and post a message back
+         * to the message listener.
+         *
+         * NOTE: It could be an issue if the tests do not complete in 100
+         * milliseconds. If that's the case, we could try to implement some
+         * polling logic to wait until the tests are populated.
          */
         try {
-          await waitForResults({ results });
+          wait(100);
         } catch (err) {
           // waitForResults can throw, it may if the polling timeout is
           // exceeded. Catch the error here and handle it as a failed test.
@@ -263,48 +267,6 @@ const handleAbsurdScriptEvaluation = (script: string) => {
 const compileSolutionCode = async (challenge: Challenge) => {
   const { code } = await compileCodeString(challenge.solutionCode, challenge);
   return code;
-};
-
-/**
- * Create a method which takes the results array and polls it every poll
- * interval until it has values inside, and then resolves.
- */
-const pollResults = (results: TestCase[], poll: number) => {
-  return new Promise(function(resolve, _) {
-    setTimeout(() => {
-      if (results.length) {
-        if (DEBUG) {
-          console.log(results);
-        }
-        resolve("done");
-      }
-    }, poll);
-  });
-};
-
-/**
- * Timeout to race against the pollResults function. Throws if the timeout
- * is exceeded.
- */
-const timeout = async (limit: number) => {
-  await wait(limit);
-  throw new Error("Waiting for results but timeout exceeded!");
-};
-
-/**
- * Take the results and poll until it is populated, or else fail after some
- * generous time limit.
- */
-const waitForResults = async ({
-  poll = 10,
-  limit = 250,
-  results,
-}: {
-  poll?: number;
-  limit?: number;
-  results: TestCase[];
-}) => {
-  await Promise.race([pollResults(results, poll), timeout(limit)]);
 };
 
 /**
