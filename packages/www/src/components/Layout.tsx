@@ -117,7 +117,7 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
           style={{
             animation: showFlyIn ? 'pw-fly-in 4s ease-out 1 0s' : '',
           }}
-          src="http://localhost:3000/workspace/iSF4BNIl/hello-pairwise?iframePreview=1"
+          src="https://app.pairwise.tech/workspace/iSF4BNIl/hello-pairwise?iframePreview=1"
         />
       )}
       <MatrixContainer
