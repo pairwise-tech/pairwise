@@ -209,7 +209,7 @@ export const ShortcutKeysPopover = () => {
       }
     >
       <Tooltip usePortal={false} content="View Shortcut Keys" position="bottom">
-        <IconButton icon="info-sign" aria-label="view shortcut keys" />
+        <IconButton icon="application" aria-label="view shortcut keys" />
       </Tooltip>
     </Popover>
   );

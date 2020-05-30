@@ -25,7 +25,6 @@ import {
 } from "@blueprintjs/core";
 import Account from "./Account";
 import {
-  ButtonCore,
   ProfileIcon,
   IconButton,
   SmoothScrollButton,
@@ -229,8 +228,8 @@ const ApplicationContainer = (props: IProps) => {
               content="Submit Feedback"
             >
               <IconButton
-                icon="comment"
-                style={{ marginLeft: 6 }}
+                icon="chat"
+                style={{ marginLeft: 6, padding: 0 }}
                 aria-label="open/close feedback dialog"
                 onClick={toggleFeedbackDialogOpen}
               />
@@ -250,24 +249,24 @@ const ApplicationContainer = (props: IProps) => {
               />
             </Suspense>
           )}
+          {displayNavigationArrows && (
+            <DesktopOnly>
+              <ButtonGroup style={{ marginLeft: 6 }}>
+                <PrevChallengeIconButton id="prevButton" />
+                <NextChallengeIconButton id="nextButton" />
+              </ButtonGroup>
+            </DesktopOnly>
+          )}
           {!isMobile && (
             <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
               <Button
                 id="sandboxButton"
                 disabled={isSandbox}
-                style={{ margin: "0 10px", marginLeft: isSandbox ? 0 : 10 }}
+                style={{ marginLeft: 10 }}
               >
                 Sandbox
               </Button>
             </Link>
-          )}
-          {displayNavigationArrows && (
-            <DesktopOnly>
-              <ButtonGroup>
-                <PrevChallengeIconButton id="prevButton" />
-                <NextChallengeIconButton id="nextButton" />
-              </ButtonGroup>
-            </DesktopOnly>
           )}
           {isMobile && (
             <div style={{ flexShrink: 0 }}>
@@ -310,12 +309,16 @@ const ApplicationContainer = (props: IProps) => {
               </div>
             </AccountDropdownButton>
           ) : (
-            <AccountButton
+            <Button
               id="login-signup-button"
+              style={{
+                margin: "0 10px",
+                border: "1px solid rgba(255, 255, 255, 0.23)",
+              }}
               onClick={() => setSingleSignOnDialogState(true)}
             >
-              <CreateAccountText>Login or Signup</CreateAccountText>
-            </AccountButton>
+              Login or Signup
+            </Button>
           )}
         </ControlsContainer>
       </Header>
@@ -550,25 +553,6 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
     &:nth-child(-n + 4) {
       filter: grayscale(${props => (props.overlayVisible ? 1 : 0)});
     }
-  }
-`;
-
-const AccountButton = styled(ButtonCore)`
-  padding: 0px 10px;
-  line-height: 40px;
-  margin: 0;
-  color: ${COLORS.TEXT_TITLE};
-  border-radius: 4px;
-  flex-shrink: 0;
-
-  h1 {
-    margin: 0;
-  }
-
-  :hover {
-    cursor: pointer;
-    color: ${COLORS.PRIMARY_GREEN};
-    background: ${COLORS.BACKGROUND_ACCOUNT_BUTTON};
   }
 `;
 
