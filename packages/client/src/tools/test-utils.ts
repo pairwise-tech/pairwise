@@ -1,5 +1,4 @@
 import * as Babel from "@babel/standalone";
-
 import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
@@ -447,9 +446,6 @@ try {
     const testResults = await Promise.all(tests.map(async ({ message, test }) => {
       try {
         const _result = await test();
-
-        // TODO: At some point we will want to account for async tests, which will require
-        // changes here. Handle _result being a promise.
         return {
           message,
           testResult: true, // If we get here it didn't throw, so it passed
