@@ -754,9 +754,9 @@ class Workspace extends React.Component<IProps, IState> {
                 />
                 <MenuItem
                   icon="download"
-                  aria-label="export as text"
                   onClick={this.handleExport}
-                  text="Export File"
+                  text="Export Code to File"
+                  aria-label="export code to file"
                 />
                 <MenuDivider />
                 <MenuItem
