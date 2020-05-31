@@ -82,6 +82,22 @@ export class EmailService {
   private async email(emailRequest: EmailRequest, shouldEscalateError = true) {
     const { subject, text, html, recipient } = emailRequest;
 
+    /**
+     * NOTE: In the test/dev environments we create users with faked email
+     * addresses. I inadvertently did this and then sent an email verification
+     * message to an email which turned out to be a real person. They replied
+     * and asked me to remove them from the email list. Oops! So, I am providing
+     * this configuration now to make it explicit it we want to enable sending
+     * emails. This is set to true in production, of course.
+     */
+    if (!ENV.ENABLE_EMAILS) {
+      console.warn(
+        "Emails are disabled - set the ENABLE_EMAILS environment variable to 'true' to enable them.",
+      );
+
+      return;
+    }
+
     try {
       await this.transporter.verify();
       await this.transporter.sendMail({
