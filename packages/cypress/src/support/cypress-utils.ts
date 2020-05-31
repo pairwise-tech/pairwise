@@ -54,8 +54,9 @@ export const typeTextInCodeEditor = (text: string) => {
   const clearEditorCommand =
     Cypress.platform === "darwin" ? "{cmd}a{backspace}" : "{ctrl}a{backspace}";
 
+  cy.get(".monaco-editor textarea:first").type(clearEditorCommand);
+  cy.wait(250);
   cy.get(".monaco-editor textarea:first")
-    .type(clearEditorCommand)
     .invoke("val", text)
     .trigger("input");
 };
