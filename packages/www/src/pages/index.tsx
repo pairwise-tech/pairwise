@@ -389,9 +389,16 @@ export const LearningSection = styled(ConstrainWidth)`
   }
 `;
 
+interface SectionData {
+  title: string;
+  description: string;
+  imgSrc?: string;
+}
+
 const WhyLearnThisCourse = () => {
-  const sections: Section[] = [
+  const sections: SectionData[] = [
     {
+      imgSrc: require('../images/job_interview_.svg'),
       title: 'Launch Your Career',
       description: `
 Learning how to program and build software applications is a crucial 21st
@@ -407,6 +414,7 @@ etc. In short, learning to code is a fundamental skill required for a
 wide variety of 21st careers.`,
     },
     {
+      imgSrc: require('../images/start_up.svg'),
       title: 'Build a Startup',
       description: `
 Many of the large companies which have changed our world in the last 25 years
@@ -421,17 +429,16 @@ have a much better chance if you already have a prototype you can shop around.
       `,
     },
     {
+      imgSrc: require('../images/digital_nomad.svg'),
       title: 'Achieve Freedom & Flexibility',
       description: `
-Work from anywhere, or an office. Whether you prefer working from a desk, a
-beach or your own bed you can work from anywhere as long as you have a computer
-and internet. Work 40 hours a week, 80, or 10. The jobs available for software professionals
-are so varied that you can find a work schedule to fit any lifestyle.
+Work from a desk or a beach. You can work from anywhere as long as you have a
+computer and internet. Work 40 hours a week, 80, or 10. The jobs available are
+so varied that you can find a work schedule to fit any lifestyle.
 
-Moreover, software pervades all sectors of the modern economy. Whether you are
-passionate about gaming, travel, education, non-profits, healthcare, renewable
-energy, or space travel, you can find a software career which will let you
-solve the problems you care about the most.
+Software is everywhere. Whether you are passionate about gaming,
+travel, education, non-profits, healthcare, renewable energy, or space travel,
+you can find a software career. Solve the problems you care about the most.
       `,
     },
   ];
@@ -442,23 +449,38 @@ solve the problems you care about the most.
         Programming is not for everyone, but here are a few reasons why you
         might want to give it a try.
       </Typography>
-      <div>
-        <div className="sections">
-          {sections.map((x: Section) => {
-            return (
-              <DarkPaper key={x.title}>
-                <Typography style={{ marginBottom: 20 }} variant="h4">
-                  {x.title}
-                </Typography>
-                {x.description && <Markdown source={x.description.trim()} />}
-              </DarkPaper>
-            );
-          })}
-        </div>
-      </div>
+      <ThreeCol>
+        {sections.map((x) => {
+          return (
+            <DarkPaper key={x.title}>
+              <Typography
+                style={{ marginBottom: 20, textAlign: 'center' }}
+                variant="h3"
+              >
+                {x.title}
+              </Typography>
+              <img
+                style={{
+                  width: '100%',
+                  maxWidth: 400,
+                  height: 'auto',
+                  display: 'block',
+                  margin: '0 auto',
+                }}
+                src={x.imgSrc}
+              />
+              {x.description && <Markdown source={x.description.trim()} />}
+            </DarkPaper>
+          );
+        })}
+      </ThreeCol>
     </div>
   );
 };
+
+const ThreeCol = styled.div`
+  display: block;
+`;
 
 const DarkPaper = styled(Paper)`
   padding: 10px;
@@ -477,6 +499,87 @@ const DarkPaper = styled(Paper)`
     padding: 20px;
   }
 `;
+
+const VIDEO_DOM_ID = 'pw-video';
+
+// NOTE: 16:9 aspect ratio. All our videos should be recorded at 1080p so this
+// should not be a limitation. See this post for the logic on this aspect ratio CSS:
+// https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php
+// Duplicated in client codebase as well
+export const VideoWrapper = styled.div`
+  position: relative;
+  padding-bottom: 56.25%; /* See NOTE  */
+  padding-top: 25px;
+  height: 0;
+  margin-bottom: 40px;
+  border: 1px solid #444444;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.48);
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+// Get the origin param for embeds. Should be our site, but we also want embeds
+// to run locally for developing and testing.
+const getEmbedOrigin = () => {
+  try {
+    return window.location.origin;
+  } catch (err) {
+    return 'https://www.pairwise.tech';
+  }
+};
+
+export const YoutubeEmbed = (props: { url: string }) => {
+  const width = 728;
+  const height = 410;
+
+  try {
+    // Will throw if the url is invalid (shouldn't happen, but it will crash the app)
+    const parsedURL = new URL(props.url);
+
+    // Use ?rel=0 to disable related videos in youtube embeds. Supposedly shouldn't work, but it seems to: https://developers.google.com/youtube/player_parameters#rel
+    parsedURL.searchParams.set('rel', '0');
+    parsedURL.searchParams.set('modestbranding', '1');
+
+    // Allow programmatic control
+    parsedURL.searchParams.set('enablejsapi', '1');
+    parsedURL.searchParams.set('origin', getEmbedOrigin());
+
+    return (
+      <VideoWrapper>
+        <iframe
+          id={VIDEO_DOM_ID}
+          title="Youtube Embed"
+          width={width}
+          height={height}
+          src={parsedURL.href}
+          frameBorder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </VideoWrapper>
+    );
+  } catch (err) {
+    return null;
+  }
+};
+
+const IntroVideo = () => {
+  return (
+    <div>
+      <SectionTitle>What is this?</SectionTitle>
+      <YoutubeEmbed url="https://www.youtube.com/embed/d2DShyE37T4" />
+    </div>
+  );
+};
 
 const WhoIsThisFor = () => {
   return (
@@ -598,15 +701,18 @@ const IndexPage = () => {
         <Main />
       </AboveFoldSection>
       <Section alternate>
-        <WhatWillYouLearn />
+        <IntroVideo />
       </Section>
       <Section>
         <WhyLearnThisCourse />
       </Section>
       <Section alternate>
-        <WhoIsThisFor />
+        <WhatWillYouLearn />
       </Section>
       <Section>
+        <WhoIsThisFor />
+      </Section>
+      <Section alternate>
         <GetEarlyAccess />
       </Section>
     </Layout>
