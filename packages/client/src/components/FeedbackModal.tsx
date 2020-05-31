@@ -127,7 +127,7 @@ const FeedbackModal = (props: Props) => {
           large={true}
           value={props.feedback}
           onChange={handleChange}
-          style={{ flexShrink: 0, maxHeight: 180 }}
+          style={{ flexShrink: 0, maxHeight: "23vh" }}
           className={`bp3-intent-${textAreaIntent}`}
           margintop={textAreaIntent === "danger" ? 0 : 10}
         />
