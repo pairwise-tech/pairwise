@@ -120,6 +120,10 @@ const emailVerificationStatus = createReducer<
   UserActionTypes
 >(EMAIL_VERIFICATION_STATUS.DEFAULT)
   .handleAction(
+    actions.setEmailVerificationStatus,
+    (state, action) => action.payload,
+  )
+  .handleAction(
     actions.updateUserEmail,
     () => EMAIL_VERIFICATION_STATUS.LOADING,
   )

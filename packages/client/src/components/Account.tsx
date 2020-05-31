@@ -122,10 +122,14 @@ class Account extends React.Component<IProps, IState> {
           />
         )}
         {emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
-          <TextItem>* Loading...</TextItem>
+          <TextItem>* Processing request...</TextItem>
         ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.SENT ? (
-          <TextItem style={{ color: COLORS.PRIMARY_GREEN }}>
-            * Please check your email for a verification link.
+          <TextItem>
+            * Verification link sent to:{" "}
+            <span style={{ color: COLORS.PRIMARY_GREEN }}>
+              {this.state.email}
+            </span>
+            . Please check your email and follow the instructions.
           </TextItem>
         ) : (
           <>
@@ -225,6 +229,9 @@ class Account extends React.Component<IProps, IState> {
   handleEditProfile = () => {
     const { profile } = this.props.user;
     if (profile) {
+      // Reset email verification status to allow users to edit their
+      // email again, if they wish
+      this.props.setEmailVerificationStatus(EMAIL_VERIFICATION_STATUS.DEFAULT);
       this.setState({
         editMode: true,
         email: profile.email || "",
@@ -318,6 +325,7 @@ const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
   updateUser: Modules.actions.user.updateUser,
   updateUserEmail: Modules.actions.user.updateUserEmail,
+  setEmailVerificationStatus: Modules.actions.user.setEmailVerificationStatus,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
