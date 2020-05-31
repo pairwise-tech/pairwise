@@ -206,7 +206,7 @@ describe("Success Modal", () => {
     click("pw-run-code");
     cy.get("#gs-card").should("not.exist");
 
-    typeTextInCodeEditor("<h1>Hello!</h1>", true);
+    typeTextInCodeEditor("<h1>Hello!</h1>");
     cy.get("#gs-card").should("not.exist");
 
     click("pw-run-code");
