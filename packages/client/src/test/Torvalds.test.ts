@@ -35,7 +35,10 @@ const course: Course = FullstackTypeScript;
 
 /* Debug options, add challenge ids here to debug them directly: */
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["iFvzasqW"]);
+const TEST_ID_WHITELIST = new Set([
+  "iFvzasqW",
+  "pUf7$Qi2y", // Could not test that p tags are white... works in browser
+]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the
