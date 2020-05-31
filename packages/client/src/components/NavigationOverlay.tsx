@@ -47,6 +47,7 @@ import {
   ModuleNavigationBase,
 } from "./NavigationOverlayComponents";
 import { Select } from "@blueprintjs/select";
+import { IconButton } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -173,11 +174,16 @@ class NavigationOverlay extends React.Component<IProps> {
             {hasSections && !isEditMode && (
               <div>
                 {challengeId && moduleContainsActiveChallenge && (
-                  <Button
-                    icon="send-to-map"
-                    style={{ marginRight: 6 }}
-                    onClick={() => this.scrollToChallenge()}
-                  />
+                  <Tooltip
+                    position="bottom"
+                    content="Scroll to Active Challenge"
+                  >
+                    <IconButton
+                      icon="send-to-map"
+                      style={{ marginRight: 6 }}
+                      onClick={() => this.scrollToChallenge()}
+                    />
+                  </Tooltip>
                 )}
                 <Button onClick={this.toggleExpandCollapseAll}>
                   {anySectionsOpen ? "Collapse" : "Expand"} All Sections
