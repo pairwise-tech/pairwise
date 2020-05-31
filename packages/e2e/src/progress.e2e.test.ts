@@ -46,7 +46,7 @@ describe("User Progress APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("The courseId is invalid");
+        expect(response.body.message).toBe("The courseId is invalid.");
         done(error);
       });
   });
@@ -63,7 +63,7 @@ describe("User Progress APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("The challengeId is invalid");
+        expect(response.body.message).toBe("The challengeId is invalid.");
         done(error);
       });
   });

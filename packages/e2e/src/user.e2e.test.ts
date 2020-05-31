@@ -76,7 +76,7 @@ describe("User APIs", () => {
       .set("Authorization", `Bearer ${accessToken}`)
       .expect(400)
       .then(error => {
-        expect(error.body.message).toBe("Invalid parameters provided");
+        expect(error.body.message).toBe("Invalid parameters provided.");
       });
   });
 
@@ -198,7 +198,7 @@ describe("User APIs", () => {
         .set("Authorization", `Bearer ${accessToken}`)
         .expect(400)
         .then(error => {
-          expect(error.body.message).toBe("Invalid parameters provided");
+          expect(error.body.message).toBe("Invalid parameters provided.");
         });
     };
 
