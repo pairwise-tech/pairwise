@@ -247,11 +247,15 @@ class Account extends React.Component<IProps, IState> {
       this.props.updateUser(userDetails);
     }
 
-    if (editedEmail) {
+    if (editedEmail && this.state.email !== this.props.user.profile?.email) {
       this.props.updateUserEmail(this.state.email);
     }
 
-    this.setState({ editMode: false });
+    this.setState({
+      editMode: false,
+      editedEmail: false,
+      editedProfile: false,
+    });
   };
 
   handleDiscardChanges = () => {
