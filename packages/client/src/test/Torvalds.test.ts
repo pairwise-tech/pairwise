@@ -35,16 +35,18 @@ const course: Course = FullstackTypeScript;
 
 /* Debug options, add challenge ids here to debug them directly: */
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set([
-  "iFvzasqW",
-  "pUf7$Qi2y", // Could not test that p tags are white... works in browser
-]);
+const TEST_ID_WHITELIST = new Set(["iFvzasqW"]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the
 // world would you do this!?! Limitations of the JSDOM environment.
+// NOTE: I'm leaving this commented-out ID in here for now in case it happens
+// again in the future. The test env is bad at inheritted styles. That
+// particular test was failing becuase I had applied color:white; to the body
+// tag and not p tags directly.
 const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "Ao8hbaiP", // Test env seems to be having trouble calculating the midpoint of a bounding box.
+  // "pUf7$Qi2y", // Could not test that p tags are white... WHY? See NOTE
 ]);
 
 /* Enable or disable log info */
