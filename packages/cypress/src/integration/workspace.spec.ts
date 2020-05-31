@@ -16,7 +16,7 @@ import {
  * ============================================================================
  */
 
-describe.skip("Workspace and Challenge Navigation Works", () => {
+describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Pairwise", () => {
     cy.visit(CLIENT_APP_URL);
     cy.get("#product-title").contains("Pairwise");
@@ -89,7 +89,7 @@ describe.skip("Workspace and Challenge Navigation Works", () => {
   });
 });
 
-describe.skip("Sandbox", () => {
+describe("Sandbox", () => {
   it("Sandbox should exist", () => {
     cy.visit(CLIENT_APP_URL);
     cy.get("#sandboxButton").click();

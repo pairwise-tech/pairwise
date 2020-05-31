@@ -95,7 +95,7 @@ const debug = require("debug")("client:Workspace");
 
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
-// NOTE: Element id is used to apply TSX styles
+// NOTE: Element id is referenced in custom-tsx-styles.scss to apply styling
 const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
