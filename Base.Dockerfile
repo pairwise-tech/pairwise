@@ -11,20 +11,10 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
   && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
   && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
+COPY . .
+
 # Install Lerna
 RUN npm i -g lerna
 
-# Create app directory
-WORKDIR /usr/app
-
-FROM cypress AS base
-
-COPY . .
-
 # Install all dependencies with Lerna
 RUN lerna bootstrap
-
-FROM base as dependencies
-
-# Copy everything
-COPY . .
