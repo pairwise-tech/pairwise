@@ -2,7 +2,7 @@
 # It is used for running the top level docker-compose which runs the entire
 # backend application, database, and services.
 
-FROM pairwise-dependencies as pairwise-build
+FROM pairwise-dependencies
 
 COPY . .
 
