@@ -83,10 +83,13 @@ const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
         return Actions.updateUserEmailSuccess();
       } else {
         // Display the error message
-        if (result.error.status === 400) {
+        const { status } = result.error;
+        if (status === 400) {
           deps.toaster.error(
             result.error.message || "Failed to update email address...",
           );
+        } else if (status !== 401) {
+          deps.toaster.error("Failed to update email address...");
         }
         return Actions.updateUserEmailFailure();
       }
