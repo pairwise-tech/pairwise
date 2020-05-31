@@ -32,9 +32,9 @@ self.addEventListener("message", (event: MessageEvent) => {
     // @ts-ignore
     self.postMessage({ code: formatted, type, channel });
   } catch (err) {
-    console.warn(`Error encountered running Format Code: ${err.message}`);
     // The formatting may fail, which usually means the input is malformed
     // in some way and could not be formatted. In this case, ignore the
     // error and leave the code unchanged.
+    console.warn(`Error encountered running Format Code: ${err.message}`);
   }
 });

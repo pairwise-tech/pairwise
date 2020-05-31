@@ -320,7 +320,35 @@ const injectDependencies = (
   }
 
   result += codeString;
-  return result;
+
+  /**
+   * It's possible, given the user's input and the challenge requirements,
+   * that an error is thrown at this level (e.g. if dependencies are not
+   * imported by the user). We could consider solving this in different
+   * ways, but it's more relevant for challenges which use imports, e.g.
+   * React, which are less prevalent now, so for now I am just wrapping
+   * and throwing the compilation failed error. Without this, the error
+   * would instead propagate out uncaught, and the workspace would be
+   * trapped in the "tests loading" state.
+   */
+  const tryCatchResultString = `
+  try {
+    ${result}
+  } catch (err) {
+    window.parent.postMessage({
+      message: JSON.stringify([
+        {
+          testResult: false,
+          error: err.message + "\\n" + err.stack,
+          message: "The code should compile and not throw any errors.",
+        }
+      ]),
+      source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
+    }, ${TARGET_WINDOW_ORIGIN});
+  }
+  `;
+
+  return tryCatchResultString;
 };
 
 /**
@@ -465,7 +493,9 @@ try {
 
   try {
     (async function() {
+      console.log("RUNNING TESTS!");
       const results = await runTests();
+      console.log("GOT RESULTS!");
       window.parent.postMessage({
         message: JSON.stringify(results),
         source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}"
@@ -480,6 +510,8 @@ try {
     }, ${TARGET_WINDOW_ORIGIN});
   }
 } catch (err) {
+  console.log("~~~");
+  console.log(err.message);
   if (err.message === "INFINITE_LOOP") {
     window.parent.postMessage({
       message: JSON.stringify({
