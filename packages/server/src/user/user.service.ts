@@ -210,7 +210,7 @@ export class UserService {
 
     // Check if  the email is taken
     if (userWithEmail && userWithEmail.profile.uuid !== uuid) {
-      throw new BadRequestException("This email is already taken.");
+      throw new BadRequestException(ERROR_CODES.EMAIL_TAKEN);
     } else {
       // Find the user to verify the uuid is valid
       await this.findUserByUuidGetFullProfile(uuid);

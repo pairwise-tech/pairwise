@@ -11,6 +11,7 @@ enum ERROR_CODES {
   INVALID_CHALLENGE_ID = "The challengeId is invalid",
   INVALID_CODE_BLOB = "The code blob is invalid",
   MISSING_USER = "No user could be found",
+  EMAIL_TAKEN = "This email address is already taken",
   MISSING_EMAIL = "Email address is required, but is not provided",
   INVALID_PARAMETERS = "Invalid parameters provided",
   INVALID_FEEDBACK_TYPE = "Invalid feedback type used",

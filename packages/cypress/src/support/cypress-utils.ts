@@ -62,7 +62,7 @@ export const typeTextInCodeEditor = (text: string, shouldClear = true) => {
       .invoke("val", text)
       .trigger("input");
   } else {
-    cy.get(".monaco-editor textarea:first").type("text");
+    cy.get(".monaco-editor textarea:first").type(text, { force: true });
   }
 };
 
