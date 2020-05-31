@@ -1066,7 +1066,7 @@ class Workspace extends React.Component<IProps, IState> {
             source,
             message,
           );
-          this.setState({ testResultsLoading: false });
+          this.setState({ testResultsLoading: false, hideSuccessModal: true });
           break;
         }
         default: {
@@ -1084,6 +1084,12 @@ class Workspace extends React.Component<IProps, IState> {
 
   handleReceiveTestResults = () => {
     const { correct } = this.getTestPassedStatus();
+
+    // If the solution failed, disabled showing the success modal.
+    if (!correct) {
+      this.setState({ hideSuccessModal: true });
+    }
+
     /**
      * This is called with the results of the test and can be used to trigger
      * various events at this time such as displaying the challenge success
