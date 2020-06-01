@@ -18,10 +18,10 @@ FROM node:12-alpine AS pairwise-server-runtime
 WORKDIR /usr/src/app
 
 # Copy target folder with bundled index.js file
-COPY --from=pairwise-server-build /usr/app/packages/server/target /usr/src/app/target
+COPY --from=pairwise-server-build /packages/server/target /usr/src/app/target
 
 # Copy dist folder which includes migrations files (required for typeorm)
-COPY --from=pairwise-server-build /usr/app/packages/server/dist /usr/src/app/dist
+COPY --from=pairwise-server-build /packages/server/dist /usr/src/app/dist
 
 # Install typeorm (required to run migrations)
 RUN npm i -g typeorm
