@@ -2,7 +2,7 @@ import * as Babel from "@babel/standalone";
 import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
-import { TEST, PRODUCTION } from "./client-env";
+import { PRODUCTION } from "./client-env";
 import quote from "string-quote-x";
 import pipe from "ramda/src/pipe";
 
@@ -266,35 +266,15 @@ export const stripConsoleCalls = (codeString: string) => {
  * Transpile the code use Babel standalone module.
  */
 export const transpileCodeWithBabel = (codeString: string) => {
-  /**
-   * SUFFER!
-   *
-   * For some reason I couldn't get babel-standalone to transform class
-   * properties which would break React code in the test environment. Instead
-   * I just to the following hideous thing.
-   *
-   * TODO: Fix it and find a way to run everything through babel-standalone.
-   */
-  if (TEST) {
-    return require("babel-core").transform(codeString, {
-      presets: [
-        "@babel/preset-react",
-        ["@babel/preset-typescript", { isTSX: true, allExtensions: true }],
-      ],
-      plugins: ["@babel/plugin-proposal-class-properties"],
-    }).code;
-  } else {
-    // Define plugins, see Fuck! note above at Babel.registerPlugin
-    const plugins = PRODUCTION ? [] : ["loopProtection"];
-    return Babel.transform(codeString, {
-      presets: [
-        "es2017",
-        "react",
-        ["typescript", { isTSX: true, allExtensions: true }],
-      ],
-      plugins,
-    }).code;
-  }
+  const plugins = PRODUCTION ? [] : ["loopProtection"];
+  return Babel.transform(codeString, {
+    presets: [
+      "es2017",
+      "react",
+      ["typescript", { isTSX: true, allExtensions: true }],
+    ],
+    plugins,
+  }).code;
 };
 
 /**
