@@ -155,7 +155,7 @@ describe("Workspace Challenges", () => {
     // Verify the Success Modal appears when running the code
     cy.get("#gs-card").should("not.exist");
     click("pw-run-code");
-    cy.wait(250);
+    cy.wait(500);
     cy.get("#gs-card").should("exist");
   });
 
@@ -175,8 +175,9 @@ describe("Workspace Challenges", () => {
 
     // Verify the Success Modal appears when running the code
     cy.get("#gs-card").should("not.exist");
+
     click("pw-run-code");
-    cy.wait(250);
+    cy.wait(500);
     cy.get("#gs-card").should("exist");
   });
 
@@ -197,7 +198,7 @@ describe("Workspace Challenges", () => {
     // Verify the Success Modal appears when running the code
     cy.get("#gs-card").should("not.exist");
     click("pw-run-code");
-    cy.wait(250);
+    cy.wait(500);
     cy.get("#gs-card").should("exist");
   });
 });
@@ -213,7 +214,7 @@ describe("Success Modal", () => {
     cy.get("#gs-card").should("not.exist");
 
     click("pw-run-code");
-    cy.wait(250);
+    cy.wait(500);
     cy.get("#gs-card").should("exist");
   });
 
