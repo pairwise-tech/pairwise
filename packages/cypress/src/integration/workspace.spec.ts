@@ -4,7 +4,9 @@ import {
   getIframeBody,
   click,
   typeTextInCodeEditor,
-  elementContains,
+  checkTestResultStatus,
+  purchaseCourseForUser,
+  checkTestStatus,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -123,6 +125,83 @@ describe("Sandbox", () => {
   });
 });
 
+describe("Workspace Challenges", () => {
+  beforeEach(() => {
+    cy.visit(CLIENT_APP_URL);
+    cy.wait(TIMEOUT);
+    cy.contains("Welcome to Pairwise!");
+    click("login-signup-button");
+    click("github-login");
+
+    // React challenges are locked so purchase the course first
+    purchaseCourseForUser();
+  });
+
+  it("The workspace supports TypeScript challenges and they can be solved", () => {
+    // Visit a React challenge
+    cy.visit(`${CLIENT_APP_URL}/workspace/0KYYpigq9$/selective-transformation`);
+    cy.wait(TIMEOUT);
+
+    // Verify the challenge title
+    cy.contains("Selective Transformation");
+
+    // Tests are not complete yet
+    checkTestStatus("Success!", 0);
+    checkTestStatus("Incomplete...", 1);
+
+    // Enter solution
+    typeTextInCodeEditor(TYPESCRIPT_CHALLENGE_SOLUTION);
+
+    // Verify the Success Modal appears when running the code
+    cy.get("#gs-card").should("not.exist");
+    click("pw-run-code");
+    cy.wait(250);
+    cy.get("#gs-card").should("exist");
+  });
+
+  it("The workspace supports React challenges and they can be solved", () => {
+    // Visit a React challenge
+    cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
+    cy.wait(TIMEOUT);
+
+    // Verify the challenge title
+    cy.contains("Create a Controlled Input");
+
+    // Tests should fail
+    checkTestResultStatus("Incomplete...");
+
+    // Enter solution
+    typeTextInCodeEditor(REACT_CHALLENGE_SOLUTION);
+
+    // Verify the Success Modal appears when running the code
+    cy.get("#gs-card").should("not.exist");
+    click("pw-run-code");
+    cy.wait(250);
+    cy.get("#gs-card").should("exist");
+  });
+
+  it("The workspace supports Async/Await challenges and they can be solved", () => {
+    // Visit an async challenge
+    cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/write-an-async-function`);
+    cy.wait(TIMEOUT);
+
+    // Verify the challenge title
+    cy.contains("Write an Async Function");
+
+    // Tests should fail
+    checkTestResultStatus("Incomplete...");
+
+    // Enter solution
+    typeTextInCodeEditor(ASYNC_CHALLENGE_SOLUTION);
+
+    // Verify the Success Modal appears when running the code
+    cy.get("#gs-card").should("not.exist");
+    click("pw-run-code");
+    cy.wait(250);
+    cy.get("#gs-card").should("exist");
+  });
+});
+
 describe("Success Modal", () => {
   it("Should show the modal when and only when the run button is clicked", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
@@ -134,6 +213,7 @@ describe("Success Modal", () => {
     cy.get("#gs-card").should("not.exist");
 
     click("pw-run-code");
+    cy.wait(250);
     cy.get("#gs-card").should("exist");
   });
 
@@ -146,3 +226,88 @@ describe("Success Modal", () => {
     cy.get("#gs-card").should("not.exist");
   });
 });
+
+/** ===========================================================================
+ * Solution Code
+ * ============================================================================
+ */
+
+const TYPESCRIPT_CHALLENGE_SOLUTION = `
+const selectiveTransformation = (
+  list: any[],
+  conditionalFunction: (item: any) => boolean,
+  transformationFunction: (item: any) => any
+): any[] => {
+  return list.map(x => {
+    if (conditionalFunction(x)) {
+      return transformationFunction(x);
+    } else {
+      return x;
+    }
+  });
+};
+`;
+
+const REACT_CHALLENGE_SOLUTION = `
+import React from "react";
+import ReactDOM from "react-dom";
+
+interface IState {
+  value: string;
+}
+
+class App extends React.Component<{}, IState> {
+  constructor(props: {}) {
+    super(props);
+
+    this.state = {
+      value: "",
+    };
+  }
+
+  render(): JSX.Element {
+    const welcome: string = "Hello, React!";
+    console.log("Hello from the iframe!!!");
+    return (
+      <div>
+        <h1>{welcome}</h1>
+        <input value={this.state.value} onChange={this.handleChange} />
+      </div>
+    );
+  }
+
+  handleChange = (e: any) => {
+    this.setState({ value: e.target.value });
+  };
+}
+
+// Do not edit code below this line
+const Main = App;
+ReactDOM.render(<Main />, document.querySelector("#root"));
+`;
+
+const ASYNC_CHALLENGE_SOLUTION = `
+const makePromise = (shouldResolve: boolean = true) => {
+  return new Promise((resolve, reject) => {
+    if (shouldResolve) {
+      resolve("I promised!");
+    } else {
+      reject("Promise rejected!");
+    }
+  });
+}
+
+const fulfillThePromise = async (promiseShouldResolve: boolean = true) => {
+  try {
+    console.log("Fulfilling the promise...");
+    const resolutionValue = await makePromise(promiseShouldResolve);
+    console.log("The resolution value is: ", resolutionValue);
+    return resolutionValue;
+  } catch (rejectionValue) {
+    console.log("The rejection value is: ", rejectionValue);
+    return rejectionValue;
+  }
+};
+
+fulfillThePromise();
+`;

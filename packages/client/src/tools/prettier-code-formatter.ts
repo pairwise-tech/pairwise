@@ -10,24 +10,31 @@ import { format } from "prettier/standalone";
 type ParserPlugins = Partial<Options>;
 
 self.addEventListener("message", (event: MessageEvent) => {
-  const { code, type, channel } = event.data;
-  const parserPlugins: ParserPlugins =
-    type === "markup"
-      ? {
-          parser: "html",
-          plugins: [parserHtml, parserCss],
-        }
-      : {
-          parser: "typescript",
-          plugins: [parserTypescript],
-        };
-  const formatted = format(code, {
-    ...parserPlugins,
-    arrowParens: "always",
-    trailingComma: "es5",
-    tabWidth: 2,
-  });
+  try {
+    const { code, type, channel } = event.data;
+    const parserPlugins: ParserPlugins =
+      type === "markup"
+        ? {
+            parser: "html",
+            plugins: [parserHtml, parserCss],
+          }
+        : {
+            parser: "typescript",
+            plugins: [parserTypescript],
+          };
+    const formatted = format(code, {
+      ...parserPlugins,
+      arrowParens: "always",
+      trailingComma: "es5",
+      tabWidth: 2,
+    });
 
-  // @ts-ignore
-  self.postMessage({ code: formatted, type, channel });
+    // @ts-ignore
+    self.postMessage({ code: formatted, type, channel });
+  } catch (err) {
+    // The formatting may fail, which usually means the input is malformed
+    // in some way and could not be formatted. In this case, ignore the
+    // error and leave the code unchanged.
+    console.warn(`Error encountered running Format Code: ${err.message}`);
+  }
 });

@@ -49,7 +49,7 @@ describe("Payments APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("The courseId is invalid");
+        expect(response.body.message).toBe("The courseId is invalid.");
         done(error);
       });
   });
@@ -91,7 +91,7 @@ describe("Payments APIs", () => {
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("The courseId is invalid");
+        expect(response.body.message).toBe("The courseId is invalid.");
         done(error);
       });
   });
@@ -106,7 +106,7 @@ describe("Payments APIs", () => {
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("No user could be found");
+        expect(response.body.message).toBe("No user could be found.");
         done(error);
       });
   });
@@ -254,7 +254,7 @@ describe("Payments APIs", () => {
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
       .expect((error, response) => {
-        expect(error.body.message).toBe("The courseId is invalid");
+        expect(error.body.message).toBe("The courseId is invalid.");
       });
 
     // Refund requires a valid user
@@ -267,7 +267,7 @@ describe("Payments APIs", () => {
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
       .expect((error, response) => {
-        expect(error.body.message).toBe("No user could be found");
+        expect(error.body.message).toBe("No user could be found.");
       });
 
     // Refund the course

@@ -60,6 +60,9 @@ const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
 
+// Emails: disable by default
+const ENABLE_EMAILS = getenv.bool("ENABLE_EMAILS", false);
+
 // Google Email Service Account Credentials
 const GOOGLE_EMAIL_ACCOUNT_CLIENT_ID = getenv.string(
   "GOOGLE_EMAIL_ACCOUNT_CLIENT_ID",
@@ -113,6 +116,7 @@ const ENV = {
   GOOGLE_AUTHORIZATION_URL,
   SLACK_API_TOKEN,
   SLACK_ADMIN_IDS,
+  ENABLE_EMAILS,
   GOOGLE_EMAIL_ACCOUNT_CLIENT_ID,
   GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY,
   SENTRY_DSN,

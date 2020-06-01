@@ -1,9 +1,8 @@
 import * as Babel from "@babel/standalone";
-
 import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
-import { TEST, PRODUCTION } from "./client-env";
+import { PRODUCTION } from "./client-env";
 import quote from "string-quote-x";
 import pipe from "ramda/src/pipe";
 
@@ -267,35 +266,15 @@ export const stripConsoleCalls = (codeString: string) => {
  * Transpile the code use Babel standalone module.
  */
 export const transpileCodeWithBabel = (codeString: string) => {
-  /**
-   * SUFFER!
-   *
-   * For some reason I couldn't get babel-standalone to transform class
-   * properties which would break React code in the test environment. Instead
-   * I just to the following hideous thing.
-   *
-   * TODO: Fix it and find a way to run everything through babel-standalone.
-   */
-  if (TEST) {
-    return require("babel-core").transform(codeString, {
-      presets: [
-        "@babel/preset-react",
-        ["@babel/preset-typescript", { isTSX: true, allExtensions: true }],
-      ],
-      plugins: ["@babel/plugin-proposal-class-properties"],
-    }).code;
-  } else {
-    // Define plugins, see Fuck! note above at Babel.registerPlugin
-    const plugins = PRODUCTION ? [] : ["loopProtection"];
-    return Babel.transform(codeString, {
-      presets: [
-        "es2017",
-        "react",
-        ["typescript", { isTSX: true, allExtensions: true }],
-      ],
-      plugins,
-    }).code;
-  }
+  const plugins = PRODUCTION ? [] : ["loopProtection"];
+  return Babel.transform(codeString, {
+    presets: [
+      "es2017",
+      "react",
+      ["typescript", { isTSX: true, allExtensions: true }],
+    ],
+    plugins,
+  }).code;
 };
 
 /**
@@ -321,7 +300,35 @@ const injectDependencies = (
   }
 
   result += codeString;
-  return result;
+
+  /**
+   * It's possible, given the user's input and the challenge requirements,
+   * that an error is thrown at this level (e.g. if dependencies are not
+   * imported by the user). We could consider solving this in different
+   * ways, but it's more relevant for challenges which use imports, e.g.
+   * React, which are less prevalent now, so for now I am just wrapping
+   * and throwing the compilation failed error. Without this, the error
+   * would instead propagate out uncaught, and the workspace would be
+   * trapped in the "tests loading" state.
+   */
+  const tryCatchResultString = `
+  try {
+    ${result}
+  } catch (err) {
+    window.parent.postMessage({
+      message: JSON.stringify([
+        {
+          testResult: false,
+          error: err.message + "\\n" + err.stack,
+          message: "The code should compile and not throw any errors.",
+        }
+      ]),
+      source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
+    }, ${TARGET_WINDOW_ORIGIN});
+  }
+  `;
+
+  return tryCatchResultString;
 };
 
 /**
@@ -442,38 +449,36 @@ try {
     return testArray;
   }
 
-  function runTests() {
-    const tests = buildTestsFromCode()
-
-    const results = tests.reduce((agg, { message, test }) => {
+  async function runTests() {
+    const tests = buildTestsFromCode();
+    const testResults = await Promise.all(tests.map(async ({ message, test }) => {
       try {
-        const _result = test();
-
-        // TODO: At some point we will want to account for async tests, which will require
-        // changes here. Handle _result being a promise.
-        return agg.concat([{
+        const _result = await test();
+        return {
           message,
           testResult: true, // If we get here it didn't throw, so it passed
           error: null,
-        }]);
+        };
       } catch (err) {
-        return agg.concat([{
+        return {
           message,
           testResult: false,
           error: err.message + '\\n\\n' + err.stack,
-        }]);
+        };
       }
-    }, []);
+    }));
 
-    return results;
+    return testResults.flat();
   }
 
   try {
-    const results = runTests();
-    window.parent.postMessage({
-      message: JSON.stringify(results),
-      source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}"
-    }, ${TARGET_WINDOW_ORIGIN});
+    (async function() {
+      const results = await runTests();
+      window.parent.postMessage({
+        message: JSON.stringify(results),
+        source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}"
+      }, ${TARGET_WINDOW_ORIGIN});
+    })();
   } catch (err) {
     window.parent.postMessage({
       message: JSON.stringify({
@@ -532,6 +537,38 @@ export const tidyHtml = (html: string) => {
   const el = document.createElement("html");
   el.innerHTML = html;
   return el.innerHTML;
+};
+
+/**
+ * Process code string and test code for markup challenges to include the
+ * test code in an included script tag and ensure all of it is wrapped in
+ * a body tag. This can then be injected as the iframe source document.
+ *
+ * NOTE: Expectation library needs to be passed here from the workspace,
+ * it cannot be imported in this file or it will break in the test environment.
+ */
+export const getMarkupSrcDocument = (
+  code: string,
+  testCode: string,
+  expectationLibrary: string, // see NOTE
+): string => {
+  const testScript = getTestScripts(code, testCode, expectationLibrary);
+
+  // NOTE: Tidy html should ensure there is indeed a closing body tag
+  const tidySource = tidyHtml(code);
+
+  // Just to give us some warning if we ever hit this. Should be impossible...
+  if (!tidySource.includes("</body>")) {
+    console.warn(
+      "[Err] Could not append test code to closing body tag in markup challenge",
+    );
+  }
+
+  // TODO: There's no reason for us to inject the test script in sandbox
+  // mode, but the same applies to all challenge types so ideally we
+  // would standardize the testing pipeline to the point where we could
+  // include that logic in one place only.
+  return tidySource.replace("</body>", `${testScript}</body>`);
 };
 
 /**

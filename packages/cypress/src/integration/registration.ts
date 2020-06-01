@@ -5,6 +5,8 @@ import {
   typeTextInCodeEditor,
   elementContains,
   click,
+  checkTestResultStatus,
+  checkTestStatus,
 } from "../support/cypress-utils";
 
 /** ===========================================================================
@@ -40,7 +42,9 @@ describe("Account Creation Flow", () => {
     checkTestStatus("Incomplete...", 3);
     checkTestStatus("Incomplete...", 4);
     checkTestStatus("Incomplete...", 5);
-    typeTextInCodeEditor("<h2>2</h2><h3>3</h3><h4>4</h4><h5>5</h5><h6>6</h6>");
+    typeTextInCodeEditor(
+      "<h1>1</h1><h2>2</h2><h3>3</h3><h4>4</h4><h5>5</h5><h6>6</h6>",
+    );
     checkTestResultStatus("Success!", 6);
 
     goToNextChallenge();
@@ -109,28 +113,6 @@ describe("Account Creation Flow", () => {
  * Test Helpers
  * ============================================================================
  */
-
-type TestStatus = "Success!" | "Incomplete..." | string;
-
-/**
- * Helper to check test status.
- */
-const checkTestStatus = (status: TestStatus, index: number) => {
-  const id = `#test-result-status-${index}`;
-  cy.get(id).contains(status);
-};
-
-/**
- * Check the status of the test results.
- */
-const checkTestResultStatus = (
-  expectedStatus: TestStatus,
-  numberOfResults: number = 1,
-) => {
-  for (let i = 0; i < numberOfResults; i++) {
-    checkTestStatus(expectedStatus, i);
-  }
-};
 
 /**
  * Check that the challenges appear complete in the navigation overlay.

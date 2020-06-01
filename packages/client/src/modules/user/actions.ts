@@ -1,7 +1,7 @@
 import { IUserDto, UserUpdateOptions, UserSettings } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
-import { UserStoreState } from "./store";
+import { UserStoreState, EMAIL_VERIFICATION_STATUS } from "./store";
 
 /** ===========================================================================
  * Action Types
@@ -20,6 +20,8 @@ enum ActionTypesEnum {
   UPDATE_USER_EMAIL = "UPDATE_USER_EMAIL",
   UPDATE_USER_EMAIL_SUCCESS = "UPDATE_USER_EMAIL_SUCCESS",
   UPDATE_USER_EMAIL_FAILURE = "UPDATE_USER_EMAIL_FAILURE",
+
+  SET_EMAIL_VERIFICATION_STATUS = "SET_EMAIL_VERIFICATION_STATUS",
 
   UPDATE_USER_SETTINGS = "UPDATE_USER_SETTINGS",
   UPDATE_USER_SETTINGS_SUCCESS = "UPDATE_USER_SETTINGS_SUCCESS",
@@ -64,6 +66,10 @@ export const updateUserEmailSuccess = createAction(
 export const updateUserEmailFailure = createAction(
   ActionTypesEnum.UPDATE_USER_EMAIL_FAILURE,
 )();
+
+export const setEmailVerificationStatus = createAction(
+  ActionTypesEnum.SET_EMAIL_VERIFICATION_STATUS,
+)<EMAIL_VERIFICATION_STATUS>();
 
 export const updateUserSettings = createAction(
   ActionTypesEnum.UPDATE_USER_SETTINGS,

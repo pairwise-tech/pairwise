@@ -8,7 +8,7 @@
 # image instead of pairwise-runtime, well, you really don't want to
 # know that.
 
-FROM pairwise-dependencies AS pairwise-production-client
+FROM pairwise-dependencies
 
 COPY . .
 

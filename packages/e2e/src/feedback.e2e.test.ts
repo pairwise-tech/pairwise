@@ -45,7 +45,7 @@ describe("User Feedback APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("The challengeId is invalid");
+        expect(response.body.message).toBe("The challengeId is invalid.");
         done(error);
       });
   });
@@ -61,7 +61,7 @@ describe("User Feedback APIs", () => {
       .set("Authorization", authorizationHeader)
       .expect(400)
       .end((error, response) => {
-        expect(response.body.message).toBe("Invalid feedback type used");
+        expect(response.body.message).toBe("Invalid feedback type used.");
         done(error);
       });
   });

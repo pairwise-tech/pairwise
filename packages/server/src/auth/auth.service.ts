@@ -47,6 +47,12 @@ export class AuthService {
 
   public async sendEmailVerificationMessage(user: RequestUser, email: string) {
     if (validateEmailUpdateRequest(email)) {
+      // Check there the email is not taken
+      const existingUser = await this.userService.findUserByEmail(email);
+      if (existingUser) {
+        throw new BadRequestException(ERROR_CODES.EMAIL_TAKEN);
+      }
+
       const { uuid } = user.profile;
       const verificationLink = await this.generateUpdateEmailLink(email, uuid);
       await this.emailService.sendEmailVerificationLink(

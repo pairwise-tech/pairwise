@@ -35,7 +35,7 @@ const course: Course = FullstackTypeScript;
 
 /* Debug options, add challenge ids here to debug them directly: */
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["iFvzasqW"]);
+const TEST_ID_WHITELIST = new Set(["TL9i1z2rT"]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the
@@ -105,7 +105,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
     const challenges = course.modules.flatMap(m => m.challenges);
 
     /* For every challenge, execute the tests */
-    outerLoop: for (const challenge of challenges) {
+    for (const challenge of challenges) {
       if (DEBUG) {
         if (!TEST_ID_WHITELIST.has(challenge.id)) {
           continue;
@@ -117,101 +117,8 @@ describe("Linus should be able to pass all the challenges first try", () => {
         continue;
       }
 
-      const html = `<html><body></body></html>`;
-      let doc = html;
-
-      let script;
-
-      /* Process the different challenge types and get the test code */
-      switch (challenge.type) {
-        case "react": {
-          const code = await compileSolutionCode(challenge);
-          doc = `<html><body><div id="root"></div></body></html>`;
-          script = `${EXPECTATION_LIBRARY}\n${code}`;
-          break;
-        }
-        case "typescript": {
-          const code = await compileSolutionCode(challenge);
-          script = `${EXPECTATION_LIBRARY}\n${code}`;
-          break;
-        }
-        case "markup": {
-          doc = challenge.solutionCode;
-          script = `${EXPECTATION_LIBRARY}\n${getTestHarness(
-            "",
-            doc,
-            challenge.testCode,
-          )}`;
-          break;
-        }
-        case "section":
-        case "media":
-        case "project":
-        case "guided-project":
-        case "special-topic": {
-          /* No tests for these challenges */
-          log.skip(challenge);
-          continue outerLoop;
-        }
-        default: {
-          assertUnreachable(challenge.type);
-        }
-      }
-
-      let results: TestCase[] = [];
-
-      // The test code string might not be empty but still have no test code so we run this check.
-      const hasTestCode = stripComments(challenge.testCode).trim();
-
-      if (!hasTestCode) {
-        results = results.concat([
-          {
-            testResult: false,
-            test: "Zero test cases",
-            message: `No test cases found for challenge [${challenge.id}] ${challenge.title}. Maybe this should be a media challenge?`,
-          },
-        ]);
-      } else {
-        /* Load the document */
-        document.body.innerHTML = doc;
-
-        /* Add the message listener */
-        window.parent.postMessage = (data: IframeMessageEvent["data"]) => {
-          const { source, message } = data;
-          if (source === "TEST_RESULTS") {
-            results = JSON.parse(message);
-          }
-        };
-
-        try {
-          handleAbsurdScriptEvaluation(script);
-        } catch (err) {
-          console.error("Error thrown from window.eval!", err);
-
-          /* The test failed, enter a failed test case manually */
-          const failedTestCase = { testResult: false };
-          results = [failedTestCase as TestCase];
-        }
-
-        /**
-         * Wait for the test script to execute and post a message back to
-         * the message listener.
-         */
-        try {
-          await waitForResults({ results });
-        } catch (err) {
-          // waitForResults can throw, it may if the polling timeout is
-          // exceeded. Catch the error here and handle it as a failed test.
-          results = [
-            {
-              testResult: false,
-              test: "Running waitForResults to retrieve test results",
-              message:
-                "waitForResults threw and error, probably because of a timeout",
-            },
-          ];
-        }
-      }
+      // Run the tests on the challenge and get the results
+      const results = await executeTests(challenge);
 
       /**
        * Evaluate the test results. There are potentially many result objects
@@ -238,7 +145,167 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
     expect(failedTests).toEqual([]);
   });
+
+  test("Torvalds identifies failing tests", async () => {
+    // An example challenge with a failing solution
+    const failedChallengeTests: Challenge = {
+      id: "6f7$Xc4ap",
+      type: "typescript",
+      title: "Add Two Numbers",
+      instructions:
+        "Complete the function body below. The function should receive two numbers as input arguments and return the result of adding these numbers together.",
+      starterCode:
+        "const addTwoNumbers = (a: number, b: number) => {\n  // Your code here\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
+      solutionCode:
+        "const addTwoNumbers = (a: number, b: number) => {\n  return a * b;\n}\n\nconst result = addTwoNumbers(10, 20);\nconsole.log(result);\n",
+      testCode:
+        "const cases = [\n  { input: [1, 2], expected: 3 },\n  { input: [10, 50], expected: -600 },\n  { input: [-10, -50], expected: -6000 },\n  { input: [100, 500], expected: 1000 },\n  { input: [1123, 532142], expected: 533265 },\n  { input: [-10, 50], expected: 40 },\n  { input: [1, 500], expected: 501 },\n  { input: [842, 124], expected: 966 },\n  { input: [1000, 500], expected: 1500 },\n  { input: [-100, 100], expected: 0 },\n  { input: [2, 50234432], expected: 50234434 },\n];\n\ncases.forEach(x => {\n    const { input: [a, b], expected } = x;\n    test(`adding the inputs`, () => {\n        expect(addTwoNumbers(a,b)).toBe(expected)\n    })\n})",
+      content: "",
+      videoUrl: "",
+    };
+
+    // Run the tests on the challenge and get the results
+    const results = await executeTests(failedChallengeTests);
+
+    // Results should not be empty
+    expect(results.length).toBe(11);
+
+    // All test results should fail
+    for (const result of results) {
+      expect(result.testResult).toBe(false);
+      expect(typeof result.error).toBe("string");
+    }
+  });
 });
+
+/** ===========================================================================
+ * Test Runner
+ * ============================================================================
+ */
+
+const executeTests = async (challenge: Challenge) => {
+  const html = `<html><body></body></html>`;
+  let doc = html;
+  let script;
+
+  /* Process the different challenge types and get the test code */
+  switch (challenge.type) {
+    case "react": {
+      const code = await compileSolutionCode(challenge);
+      doc = `<html><body><div id="root"></div></body></html>`;
+      script = `${EXPECTATION_LIBRARY}\n${code}`;
+      break;
+    }
+    case "typescript": {
+      const code = await compileSolutionCode(challenge);
+      script = `${EXPECTATION_LIBRARY}\n${code}`;
+      break;
+    }
+    case "markup": {
+      doc = challenge.solutionCode;
+      script = `${EXPECTATION_LIBRARY}\n${getTestHarness(
+        "",
+        doc,
+        challenge.testCode,
+      )}`;
+      break;
+    }
+    case "section":
+    case "media":
+    case "project":
+    case "guided-project":
+    case "special-topic": {
+      /* No tests for these challenges */
+      log.skip(challenge);
+      // continue outerLoop;
+      return [];
+    }
+    default: {
+      assertUnreachable(challenge.type);
+    }
+  }
+
+  let results: TestCase[] = [];
+
+  // The test code string might not be empty but still have no test code so we run this check.
+  const hasTestCode = stripComments(challenge.testCode).trim();
+
+  if (!hasTestCode) {
+    results = results.concat([
+      {
+        testResult: false,
+        test: "Zero test cases",
+        message: `No test cases found for challenge [${challenge.id}] ${challenge.title}. Maybe this should be a media challenge?`,
+      },
+    ]);
+  } else {
+    /* Load the document */
+    document.body.innerHTML = doc;
+
+    /* Add the message listener */
+    window.parent.postMessage = (data: IframeMessageEvent["data"]) => {
+      const { source, message } = data;
+      if (source === "TEST_RESULTS") {
+        results = JSON.parse(message);
+      }
+    };
+
+    try {
+      handleAbsurdScriptEvaluation(script);
+    } catch (err) {
+      console.error("Error thrown from window.eval!", err);
+
+      /* The test failed, enter a failed test case manually */
+      const failedTestCase = { testResult: false };
+      results = [failedTestCase as TestCase];
+    }
+
+    try {
+      /**
+       * Recursively await the tests results: wait 10 times pausing 50 ms
+       * every time, and then fail after half a second if no test results
+       * are found.
+       *
+       * The timing thresholds here can be adjusted as needed.
+       */
+      const waitLoop = async (remainingTries = 10): Promise<void> => {
+        if (results.length > 0) {
+          // Test results have been received.
+          return;
+        } else if (remainingTries === 0) {
+          // Retry limit of ~500ms reached with no results - fail the test
+          results = [
+            {
+              testResult: false,
+              test: "Waiting for the tests to complete",
+              message:
+                "The waitLoop ran out of retries waiting to receive the test results.",
+            },
+          ];
+          return;
+        } else {
+          // Results not found yet, continue retrying
+          await wait(50);
+          return waitLoop(remainingTries - 1);
+        }
+      };
+
+      // Run the wait loop
+      await waitLoop();
+    } catch (err) {
+      // Catch any errors from above and populate a failure message
+      results = [
+        {
+          testResult: false,
+          test: "Waiting for the tests to complete",
+          message: `An error was thrown when waiting for the test results: ${err.message}`,
+        },
+      ];
+    }
+  }
+
+  return results;
+};
 
 /** ===========================================================================
  * Utils
@@ -268,48 +335,6 @@ const handleAbsurdScriptEvaluation = (script: string) => {
 const compileSolutionCode = async (challenge: Challenge) => {
   const { code } = await compileCodeString(challenge.solutionCode, challenge);
   return code;
-};
-
-/**
- * Create a method which takes the results array and polls it every poll
- * interval until it has values inside, and then resolves.
- */
-const pollResults = (results: TestCase[], poll: number) => {
-  return new Promise(function(resolve, _) {
-    setTimeout(() => {
-      if (results.length) {
-        if (DEBUG) {
-          console.log(results);
-        }
-        resolve("done");
-      }
-    }, poll);
-  });
-};
-
-/**
- * Timeout to race against the pollResults function. Throws if the timeout
- * is exceeded.
- */
-const timeout = async (limit: number) => {
-  await wait(limit);
-  throw new Error("Waiting for results but timeout exceeded!");
-};
-
-/**
- * Take the results and poll until it is populated, or else fail after some
- * generous time limit.
- */
-const waitForResults = async ({
-  poll = 10,
-  limit = 250,
-  results,
-}: {
-  poll?: number;
-  limit?: number;
-  results: TestCase[];
-}) => {
-  await Promise.race([pollResults(results, poll), timeout(limit)]);
 };
 
 /**

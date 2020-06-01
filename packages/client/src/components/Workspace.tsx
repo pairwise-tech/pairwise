@@ -34,9 +34,8 @@ import {
   compileCodeString,
   IframeMessageEvent,
   IFRAME_MESSAGE_TYPES,
-  getTestScripts,
-  tidyHtml,
   TestCase,
+  getMarkupSrcDocument,
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
@@ -73,10 +72,10 @@ import {
   Spacer,
   DragIgnorantFrameContainer,
   consoleRowStyles,
-  LowerSection,
   RevealSolutionLabel,
   RunButton,
   TestStatusTextTab,
+  LowerSection,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
@@ -96,34 +95,10 @@ const debug = require("debug")("client:Workspace");
 
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
+// NOTE: Element id is referenced in custom-tsx-styles.scss to apply styling
 const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
-
-// Given an iframe and the relevant code render it all as a script to the iframe's srcdoc
-const getMarkupSrcdoc = (
-  iframe: HTMLIFrameElement,
-  code: string,
-  testCode: string,
-): string => {
-  const testScript = getTestScripts(code, testCode, EXPECTATION_LIB);
-
-  // NOTE: Tidy html should ensure there is indeed a closing body tag
-  const tidySource = tidyHtml(code);
-
-  // Just to give us some warning if we ever hit this. Should be impossible...
-  if (!tidySource.includes("</body>")) {
-    console.warn(
-      "[Err] Could not append test code to closing body tag in markup challenge",
-    );
-  }
-
-  // TODO: There's no reason for us to inject the test script in sandbox
-  // mode, but the same applies to all challenge types so ideally we
-  // would standardize the testing pipeline to the point where we could
-  // include that logic in one place only.
-  return tidySource.replace("</body>", `${testScript}</body>`);
-};
 
 interface Log {
   data: ReadonlyArray<string>;
@@ -379,6 +354,7 @@ class Workspace extends React.Component<IProps, IState> {
       debug("[syntax highlight incoming]", event);
       const { classifications, identifier } = event.data;
       if (classifications && identifier) {
+        // Recognize message identifier sent from the worker
         if (identifier === "TSX_SYNTAX_HIGHLIGHTER") {
           requestAnimationFrame(() => {
             this.updateSyntaxDecorations(classifications);
@@ -709,17 +685,15 @@ class Workspace extends React.Component<IProps, IState> {
               hideSolution={this.props.handleToggleSolutionCode}
             />
           )}
-          <Tooltip content="Shortcut: opt+enter" position="left">
-            <RunButton
-              icon="play"
-              id="pw-run-code"
-              loading={testResultsLoading}
-              onClick={this.handleUserTriggeredTestRun}
-              aria-label="run the current editor code"
-            >
-              Run
-            </RunButton>
-          </Tooltip>
+          <RunButton
+            icon="play"
+            id="pw-run-code"
+            loading={testResultsLoading}
+            onClick={this.handleUserTriggeredTestRun}
+            aria-label="run the current editor code"
+          >
+            Run
+          </RunButton>
         </UpperRight>
         <LowerRight>
           <ButtonGroup vertical>
@@ -780,9 +754,9 @@ class Workspace extends React.Component<IProps, IState> {
                 />
                 <MenuItem
                   icon="download"
-                  aria-label="export as text"
                   onClick={this.handleExport}
-                  text="Export File"
+                  text="Export Code to File"
+                  aria-label="export code to file"
                 />
                 <MenuDivider />
                 <MenuItem
@@ -1092,7 +1066,7 @@ class Workspace extends React.Component<IProps, IState> {
             source,
             message,
           );
-          this.setState({ testResultsLoading: false });
+          this.setState({ testResultsLoading: false, hideSuccessModal: true });
           break;
         }
         default: {
@@ -1110,6 +1084,12 @@ class Workspace extends React.Component<IProps, IState> {
 
   handleReceiveTestResults = () => {
     const { correct } = this.getTestPassedStatus();
+
+    // If the solution failed, disabled showing the success modal.
+    if (!correct) {
+      this.setState({ hideSuccessModal: true });
+    }
+
     /**
      * This is called with the results of the test and can be used to trigger
      * various events at this time such as displaying the challenge success
@@ -1145,10 +1125,10 @@ class Workspace extends React.Component<IProps, IState> {
       let sourceDocument = "<!-- SHOULD_BE_OVERWRITTEN -->";
 
       if (this.props.challenge.type === "markup") {
-        sourceDocument = getMarkupSrcdoc(
-          this.iFrameRef,
+        sourceDocument = getMarkupSrcDocument(
           this.state.code,
           this.props.challenge.testCode,
+          EXPECTATION_LIB,
         );
       } else {
         const code = await this.compileAndTransformCodeString();
