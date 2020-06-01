@@ -7,15 +7,21 @@ FROM pairwise-runtime AS pairwise-server-build
 # Copy everything
 COPY . .
 
+RUN ls
+
 # Install Zeit ncc
 RUN npm i -g @zeit/ncc
 
 # Compile the server into a single js file
 RUN cd packages/server && ncc build dist/main.js --out target --source-map --minify
 
+RUN cd packages/server && ls
+
 FROM node:12-alpine AS pairwise-server-runtime
 
 WORKDIR /usr/src/app
+
+RUN ls
 
 # Copy target folder with bundled index.js file
 COPY --from=pairwise-server-build /usr/app/packages/server/target /usr/src/app/target
