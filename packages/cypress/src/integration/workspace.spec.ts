@@ -167,25 +167,17 @@ describe("Workspace Challenges", () => {
     // Verify the challenge title
     cy.contains("Create a Controlled Input");
 
-    console.log("---> CHECKING TESTS ARE INCOMPLETE");
-
     // Tests should fail
     checkTestResultStatus("Incomplete...");
-
-    console.log("---> ENTERING SOLUTION");
 
     // Enter solution
     typeTextInCodeEditor(REACT_CHALLENGE_SOLUTION);
 
-    console.log("---> CHECKING SUCCESS MODAL DOES NOT EXIST");
-
     // Verify the Success Modal appears when running the code
     cy.get("#gs-card").should("not.exist");
 
-    console.log("---> RUNNING CODE");
     click("pw-run-code");
     cy.wait(500);
-    console.log("---> CHECKING SUCCESS MODAL EXISTS");
     cy.get("#gs-card").should("exist");
   });
 
