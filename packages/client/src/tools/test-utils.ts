@@ -493,9 +493,7 @@ try {
 
   try {
     (async function() {
-      console.log("RUNNING TESTS!");
       const results = await runTests();
-      console.log("GOT RESULTS!");
       window.parent.postMessage({
         message: JSON.stringify(results),
         source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}"
@@ -510,8 +508,6 @@ try {
     }, ${TARGET_WINDOW_ORIGIN});
   }
 } catch (err) {
-  console.log("~~~");
-  console.log(err.message);
   if (err.message === "INFINITE_LOOP") {
     window.parent.postMessage({
       message: JSON.stringify({

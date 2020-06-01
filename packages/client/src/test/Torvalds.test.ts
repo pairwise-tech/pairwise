@@ -35,7 +35,7 @@ const course: Course = FullstackTypeScript;
 
 /* Debug options, add challenge ids here to debug them directly: */
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["iFvzasqW"]);
+const TEST_ID_WHITELIST = new Set(["TL9i1z2rT"]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the
@@ -193,25 +193,45 @@ describe("Linus should be able to pass all the challenges first try", () => {
           results = [failedTestCase as TestCase];
         }
 
-        /**
-         * Wait briefly for the test script to execute and post a message back
-         * to the message listener.
-         *
-         * NOTE: It could be an issue if the tests do not complete in 100
-         * milliseconds. If that's the case, we could try to implement some
-         * polling logic to wait until the tests are populated.
-         */
         try {
-          wait(100);
+          /**
+           * Recursively await the tests results: wait 10 times pausing 50 ms
+           * every time, and then fail after half a second if no test results
+           * are found.
+           *
+           * The timing thresholds here can be adjusted as needed.
+           */
+          const waitLoop = async (remainingTries = 10): Promise<void> => {
+            if (results.length > 0) {
+              // Test results have been received.
+              return;
+            } else if (remainingTries === 0) {
+              // Retry limit of ~500ms reached with no results - fail the test
+              results = [
+                {
+                  testResult: false,
+                  test: "Waiting for the tests to complete",
+                  message:
+                    "The waitLoop ran out of retries waiting to receive the test results.",
+                },
+              ];
+              return;
+            } else {
+              // Results not found yet, continue retrying
+              await wait(50);
+              return waitLoop(remainingTries - 1);
+            }
+          };
+
+          // Run the wait loop
+          await waitLoop();
         } catch (err) {
-          // waitForResults can throw, it may if the polling timeout is
-          // exceeded. Catch the error here and handle it as a failed test.
+          // Catch any errors from above and populate a failure message
           results = [
             {
               testResult: false,
-              test: "Running waitForResults to retrieve test results",
-              message:
-                "waitForResults threw and error, probably because of a timeout",
+              test: "Waiting for the tests to complete",
+              message: `An error was thrown when waiting for the test results: ${err.message}`,
             },
           ];
         }
