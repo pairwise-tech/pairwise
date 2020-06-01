@@ -9,13 +9,15 @@ COPY . .
 
 RUN ls
 
+RUN pwd
+
 # Install Zeit ncc
 RUN npm i -g @zeit/ncc
 
 # Compile the server into a single js file
 RUN cd packages/server && ncc build dist/main.js --out target --source-map --minify
 
-RUN cd packages/server && ls
+RUN cd packages/server && ls && pwd
 
 FROM node:12-alpine AS pairwise-server-runtime
 
