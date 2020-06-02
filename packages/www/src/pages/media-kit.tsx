@@ -62,7 +62,7 @@ Here you'll find info about:
         <Typography variant="h4">The Founders</Typography>
         <Markdown
           source={`
-Ian an Sean are both self-taught software engineers. They have no technical
+Ian and Sean are both self-taught software engineers. They have no technical
 degrees and didn't attend any coding bootcamps. As such, they're very familiar
 with teaching yourself to code. To be specific, they know that it's both possible *and*
 difficult. 
