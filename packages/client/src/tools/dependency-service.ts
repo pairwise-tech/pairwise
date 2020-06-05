@@ -67,9 +67,9 @@ class DependencyCacheClass {
           this.dependencies.set(packageName, { source });
           return source;
         } catch (err) {
-          throw new Error(
-            `Could not find dependency source for package ${packageName}`,
-          );
+          const msg = `[ERROR]: Failed to fetch source for ${packageName}. Error: ${err.message}`;
+          console.log(msg);
+          throw new Error(msg);
         }
       }
     }

@@ -162,10 +162,15 @@ describe("Workspace Challenges", () => {
   it("The workspace supports React challenges and they can be solved", () => {
     // Visit a React challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
+
+    // Regular challenge loading time
     cy.wait(TIMEOUT);
 
     // Verify the challenge title
     cy.contains("Create a Controlled Input");
+
+    // React challenges take longer to fully initialize
+    cy.wait(TIMEOUT);
 
     // Tests should fail
     checkTestResultStatus("Incomplete...");
