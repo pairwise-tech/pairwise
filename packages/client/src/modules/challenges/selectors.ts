@@ -186,6 +186,42 @@ export const getCurrentChallenge = createSelector(
 );
 
 /**
+ * Get the breadcrumbs path for a given challenge.
+ */
+export const breadcrumbPathSelector = createSelector(
+  [getCurrentChallenge, getCurrentModule],
+  (challenge, currentModule) => {
+    const challengeTitle = challenge?.title;
+    const moduleTitle = currentModule?.title;
+
+    if (!currentModule || !challenge) {
+      return null;
+    }
+
+    let sectionTitle;
+    for (const x of currentModule.challenges) {
+      if (x.type === "section") {
+        sectionTitle = x.title;
+      }
+
+      if (x.id === challenge.id) {
+        break;
+      }
+    }
+
+    if (!moduleTitle || !sectionTitle || !challengeTitle) {
+      return null;
+    }
+
+    return {
+      moduleTitle,
+      sectionTitle,
+      challengeTitle,
+    };
+  },
+);
+
+/**
  * Get the code blob for a challenge.
  */
 export const getBlobForCurrentChallenge = createSelector(

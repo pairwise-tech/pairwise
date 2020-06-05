@@ -1443,6 +1443,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
   revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
+  breadcrumbsPath: ChallengeSelectors.breadcrumbPathSelector(state),
   editModeAlternativeViewEnabled: ChallengeSelectors.editModeAlternativeViewEnabled(
     state,
   ),
@@ -1552,6 +1553,8 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       title: challenge.title,
       description: getSeoExcerpt(challenge),
     };
+
+    console.log(this.props.breadcrumbsPath);
 
     return (
       <React.Fragment>
