@@ -63,6 +63,7 @@
   },
   "scripts": {
     "prebuild": "yarn run compress-media-kit",
+    "prestart": "yarn run compress-media-kit",
     "build": "gatsby build",
     "compress-media-kit": "cd src/images && zip -9 -r media-kit.zip media-kit/",
     "develop": "yarn run start",
