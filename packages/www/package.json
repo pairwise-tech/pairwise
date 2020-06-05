@@ -63,6 +63,7 @@
   },
   "scripts": {
     "build": "gatsby build",
+    "compress-media-kit": "cd src/images && zip -9 -r media-kit.zip media-kit/",
     "develop": "yarn run start",
     "start:dev": "yarn run start",
     "format": "prettier --write '{__mocks__,src,test}/**/*.{js,ts,tsx}'",

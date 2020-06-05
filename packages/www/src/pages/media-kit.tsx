@@ -5,10 +5,51 @@ import {
   Section,
   SectionTitle,
   ConstrainWidth,
+  DESKTOP,
 } from '../components/components';
 import Layout from '../components/Layout';
 import SEO from '../components/SEO';
 import Typography from '@material-ui/core/Typography';
+import styled from 'styled-components';
+
+const Images = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-direction: column;
+  align-items: center;
+
+  a {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+  }
+
+  img {
+    max-width: 100%;
+    border: 1px solid #4e4e4e;
+    box-shadow: 0 3px 25px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s ease;
+    border-radius: 3px;
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  ${DESKTOP} {
+    flex-direction: row;
+    a {
+      margin-bottom: 0;
+      max-width: 100%;
+      width: 31%;
+    }
+  }
+`;
 
 const THE_IDEA = `
 ### Learning to code is hard but it doesn't have to be
@@ -45,17 +86,38 @@ const MediaKit = () => (
       description="Resources for media outlets interested in our story."
     />
     <Section>
+      <SectionTitle>Media Kit</SectionTitle>
+      <Typography style={{ marginBottom: 20 }} variant="h4">
+        Images of the platform
+      </Typography>
+      <a
+        style={{ display: 'block', marginBottom: 20, color: 'white' }}
+        href={require('file-loader!../images/media-kit.zip')}
+      >
+        Download All
+      </a>
+      <Images>
+        {[
+          {
+            url: require('../images/media-kit/mk-challenge-workspace.png'),
+            label: 'Challenge Workspace',
+          },
+          {
+            url: require('../images/media-kit/mk-challenge-navigation.png'),
+            label: 'Challenge Navigation',
+          },
+          {
+            url: require('../images/media-kit/mk-challenge-completion.png'),
+            label: 'Challenge Completion',
+          },
+        ].map((x, i) => (
+          <a key={i} href={x.url}>
+            <img src={x.url} alt={`Image of ${x.label}`} />
+            <small>{x.label}</small>
+          </a>
+        ))}
+      </Images>
       <ConstrainWidth>
-        <SectionTitle>Media Kit</SectionTitle>
-        <Markdown
-          source={`
-Here you'll find info about:
-
-- The idea
-- The founders
-- The future
-        `}
-        />
         <Typography variant="h4">The Idea</Typography>
         <Markdown source={THE_IDEA} />
 
