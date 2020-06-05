@@ -13,7 +13,16 @@ import {
   DefaultVideoWrapper,
   VideoWrapper,
 } from "./Shared";
-import { EditableText, Callout, Classes, Button } from "@blueprintjs/core";
+import {
+  EditableText,
+  Callout,
+  Classes,
+  Button,
+  IBreadcrumbProps,
+  Breadcrumb,
+  Icon,
+  Breadcrumbs,
+} from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import {
   PROSE_MAX_WIDTH,
@@ -96,6 +105,7 @@ const MediaArea = ({
   title,
   isEditMode,
   updateChallenge,
+  breadcrumbsPath,
 }: MediaAreaProps) => {
   const handleTitle = (x: string) =>
     updateChallenge({ id: challenge.id, challenge: { title: x } });
@@ -169,8 +179,28 @@ ID (video ID)
     });
   };
 
+  const BREADCRUMBS: IBreadcrumbProps[] = breadcrumbsPath.map(path => ({
+    // icon: "slash",
+    text: path,
+  }));
+  const renderCurrentBreadcrumb = ({
+    text,
+    ...restProps
+  }: IBreadcrumbProps) => {
+    // Customize rendering of last breadcrumb
+    return (
+      <Breadcrumb current {...restProps}>
+        {text}
+      </Breadcrumb>
+    );
+  };
+
   return (
     <SupplementaryContentContainer id={CONTENT_AREA_ID}>
+      <Breadcrumbs
+        items={BREADCRUMBS}
+        currentBreadcrumbRenderer={renderCurrentBreadcrumb}
+      />
       <TitleHeader>
         <EditableText
           value={title}
@@ -248,9 +278,10 @@ const MediaAreaContainer = (props: MediaAreaContainerProps) => {
 };
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
   title: Modules.selectors.challenges.getCurrentTitle(state) || "",
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
+  breadcrumbsPath: Modules.selectors.challenges.breadcrumbPathSelector(state),
 });
 
 const dispatchProps = {
@@ -262,6 +293,7 @@ type MediaAreaContainerProps = ReturnType<typeof mapStateToProps> &
 
 interface MediaAreaProps extends MediaAreaContainerProps {
   challenge: NonNullable<Challenge>;
+  breadcrumbsPath: string[];
 }
 
 export default connect(mapStateToProps, dispatchProps)(MediaAreaContainer);

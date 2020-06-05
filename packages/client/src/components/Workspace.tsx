@@ -1527,7 +1527,13 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   }
 
   render() {
-    const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
+    const {
+      challenge,
+      blob,
+      isLoadingBlob,
+      isUserLoading,
+      breadcrumbsPath,
+    } = this.props;
 
     if (!challenge || isLoadingBlob || isUserLoading) {
       return (
@@ -1554,7 +1560,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       description: getSeoExcerpt(challenge),
     };
 
-    console.log(this.props.breadcrumbsPath);
+    console.log(breadcrumbsPath);
 
     return (
       <React.Fragment>
