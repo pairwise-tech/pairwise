@@ -191,7 +191,7 @@ export const getCurrentChallenge = createSelector(
 export const breadcrumbPathSelector = createSelector(
   [getCurrentChallenge, getCurrentModule],
   (challenge, currentModule) => {
-    const challengeTitle = challenge?.title;
+    let challengeTitle: string | null | undefined = challenge?.title;
     const moduleTitle = currentModule?.title;
 
     if (!currentModule || !challenge) {
@@ -202,22 +202,24 @@ export const breadcrumbPathSelector = createSelector(
     for (const x of currentModule.challenges) {
       if (x.type === "section") {
         sectionTitle = x.title;
+
+        // Erase the challenge title if the challenge is the section
+        if (x.id === challenge.id) {
+          challengeTitle = null;
+        }
       }
 
+      // Once you found the challenge exit
       if (x.id === challenge.id) {
         break;
       }
     }
 
-    if (!moduleTitle || !sectionTitle || !challengeTitle) {
+    if (!moduleTitle || !sectionTitle) {
       return null;
     }
 
-    return {
-      moduleTitle,
-      sectionTitle,
-      challengeTitle,
-    };
+    return [moduleTitle, sectionTitle, challengeTitle].filter(Boolean);
   },
 );
 
