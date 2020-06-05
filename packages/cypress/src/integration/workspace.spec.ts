@@ -159,7 +159,7 @@ describe("Workspace Challenges", () => {
     cy.get("#gs-card").should("exist");
   });
 
-  it.only("The workspace supports React challenges and they can be solved", () => {
+  it("The workspace supports React challenges and they can be solved", () => {
     // Visit a React challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
 
