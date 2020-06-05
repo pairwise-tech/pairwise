@@ -24,5 +24,4 @@ public
 *.dump
 
 # Local Netlify folder
-.netlifysrc/images/media-kit.zip
-src/images/media-kit.zip
+.netlify
