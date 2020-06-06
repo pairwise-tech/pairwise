@@ -13,16 +13,7 @@ import {
   DefaultVideoWrapper,
   VideoWrapper,
 } from "./Shared";
-import {
-  EditableText,
-  Callout,
-  Classes,
-  Button,
-  IBreadcrumbProps,
-  Breadcrumb,
-  Icon,
-  Breadcrumbs,
-} from "@blueprintjs/core";
+import { EditableText, Callout, Classes, Button } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import {
   PROSE_MAX_WIDTH,
@@ -36,6 +27,7 @@ import { Challenge } from "@pairwise/common";
 import { isContentOnlyChallenge } from "tools/utils";
 import toaster from "tools/toast-utils";
 import { HIDE_EMBEDS } from "tools/client-env";
+import Breadcrumbs from "./Breadcrumbs";
 
 const VIDEO_DOM_ID = "pw-video-embed";
 
@@ -105,7 +97,6 @@ const MediaArea = ({
   title,
   isEditMode,
   updateChallenge,
-  breadcrumbsPath,
 }: MediaAreaProps) => {
   const handleTitle = (x: string) =>
     updateChallenge({ id: challenge.id, challenge: { title: x } });
@@ -179,28 +170,9 @@ ID (video ID)
     });
   };
 
-  const BREADCRUMBS: IBreadcrumbProps[] = breadcrumbsPath.map(path => ({
-    // icon: "slash",
-    text: path,
-  }));
-  const renderCurrentBreadcrumb = ({
-    text,
-    ...restProps
-  }: IBreadcrumbProps) => {
-    // Customize rendering of last breadcrumb
-    return (
-      <Breadcrumb current {...restProps}>
-        {text}
-      </Breadcrumb>
-    );
-  };
-
   return (
     <SupplementaryContentContainer id={CONTENT_AREA_ID}>
-      <Breadcrumbs
-        items={BREADCRUMBS}
-        currentBreadcrumbRenderer={renderCurrentBreadcrumb}
-      />
+      <Breadcrumbs type="media" />
       <TitleHeader>
         <EditableText
           value={title}
