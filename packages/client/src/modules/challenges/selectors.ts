@@ -195,9 +195,11 @@ export const isCurrentChallengeComplete = createSelector(
     const { currentCourseId, currentChallengeId } = activeIds;
     if (userProgressState && currentCourseId && currentChallengeId) {
       const courseProgress = userProgressState[currentCourseId];
-      const challengeStatus = courseProgress[currentChallengeId];
-      if (challengeStatus) {
-        return challengeStatus.complete;
+      if (courseProgress) {
+        const challengeStatus = courseProgress[currentChallengeId];
+        if (challengeStatus) {
+          return challengeStatus.complete;
+        }
       }
     }
 
