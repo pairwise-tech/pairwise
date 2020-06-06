@@ -192,15 +192,13 @@ export const getCurrentChallenge = createSelector(
 export const isCurrentChallengeComplete = createSelector(
   [getCurrentActiveIds, userProgress],
   (activeIds, userProgressState) => {
-    if (!userProgressState) {
-      return false;
-    }
-
     const { currentCourseId, currentChallengeId } = activeIds;
-    if (currentCourseId && currentChallengeId) {
+    if (userProgressState && currentCourseId && currentChallengeId) {
       const courseProgress = userProgressState[currentCourseId];
       const challengeStatus = courseProgress[currentChallengeId];
-      return challengeStatus.complete;
+      if (challengeStatus) {
+        return challengeStatus.complete;
+      }
     }
 
     return false;

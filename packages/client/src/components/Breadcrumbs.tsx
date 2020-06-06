@@ -28,6 +28,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
   }
 
   getBreadcrumbs = (breadcrumbsPath: string[]) => {
+    const { type, isCurrentChallengeComplete } = this.props;
     const crumbs: IBreadcrumbProps[] = [];
 
     // Get each breadcrumb
@@ -43,10 +44,13 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
       text: sectionCrumb,
     });
 
-    if (this.props.type === "workspace") {
+    if (type === "workspace") {
       crumbs.push({
-        icon: "application",
+        icon: isCurrentChallengeComplete ? "tick" : "application",
         text: challengeCrumb,
+        className: `breadcrumb-challenge-${
+          isCurrentChallengeComplete ? "complete" : ""
+        }`,
       });
     }
 
@@ -70,6 +74,9 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   breadcrumbsPath: Modules.selectors.challenges.breadcrumbPathSelector(state),
+  isCurrentChallengeComplete: Modules.selectors.challenges.isCurrentChallengeComplete(
+    state,
+  ),
 });
 
 const dispatchProps = {};
