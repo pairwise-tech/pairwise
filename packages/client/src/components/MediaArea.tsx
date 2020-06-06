@@ -172,6 +172,7 @@ ID (video ID)
 
   return (
     <SupplementaryContentContainer id={CONTENT_AREA_ID}>
+      <div style={{ height: 8 }} /> {/* Add some space */}
       <Breadcrumbs type="media" />
       <TitleHeader>
         <EditableText

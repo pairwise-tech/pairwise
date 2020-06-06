@@ -18,10 +18,12 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
     const crumbs = this.getBreadcrumbs(breadcrumbsPath);
 
     return (
-      <Breadcrumbs
-        items={crumbs}
-        currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
-      />
+      <div style={{ marginTop: 8 }}>
+        <Breadcrumbs
+          items={crumbs}
+          currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
+        />
+      </div>
     );
   }
 
@@ -30,19 +32,21 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
     const crumbs: IBreadcrumbProps[] = [];
 
     crumbs.push({
-      icon: "folder-close",
+      icon: "projects",
       text: breadcrumbsPath[0],
+      // className: "breadcrumb-path",
     });
 
     crumbs.push({
-      icon: "document",
+      icon: "folder-open",
       text: breadcrumbsPath[1],
+      // className: "breadcrumb-path",
     });
 
     if (type === "workspace") {
       crumbs.push({
-        icon: "applications",
-        text: breadcrumbsPath[3],
+        icon: "application",
+        text: breadcrumbsPath[2],
       });
     }
 
