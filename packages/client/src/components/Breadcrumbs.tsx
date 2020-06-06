@@ -28,25 +28,25 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
   }
 
   getBreadcrumbs = (breadcrumbsPath: string[]) => {
-    const { type } = this.props;
     const crumbs: IBreadcrumbProps[] = [];
+
+    // Get each breadcrumb
+    const [moduleCrumb, sectionCrumb, challengeCrumb] = breadcrumbsPath;
 
     crumbs.push({
       icon: "projects",
-      text: breadcrumbsPath[0],
-      // className: "breadcrumb-path",
+      text: moduleCrumb,
     });
 
     crumbs.push({
       icon: "folder-open",
-      text: breadcrumbsPath[1],
-      // className: "breadcrumb-path",
+      text: sectionCrumb,
     });
 
-    if (type === "workspace") {
+    if (this.props.type === "workspace") {
       crumbs.push({
         icon: "application",
-        text: breadcrumbsPath[2],
+        text: challengeCrumb,
       });
     }
 
