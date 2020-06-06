@@ -126,6 +126,12 @@ interface IState {
   workspaceEditorModelIdMap: ModelIdMap;
 }
 
+interface ICodeEditor {
+  language: string;
+  value: string;
+  onChange: (x: string) => any;
+}
+
 /** ===========================================================================
  * React Component
  * ============================================================================
