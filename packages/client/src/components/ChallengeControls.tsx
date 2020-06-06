@@ -78,6 +78,9 @@ const cardMapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   nextChallenge: Modules.selectors.challenges.nextPrevChallenges(state).next,
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
+  isCurrentChallengeComplete: Modules.selectors.challenges.isCurrentChallengeComplete(
+    state,
+  ),
 });
 
 const cardDispatchProps = {
@@ -95,6 +98,7 @@ const cardMergeProps = (
     e.preventDefault();
     methods.setFeedbackDialogState(!state.feedbackDialogOpen);
   },
+  isCurrentChallengeComplete: state.isCurrentChallengeComplete,
 });
 
 export const NextChallengeCard = connect(
@@ -106,12 +110,22 @@ export const NextChallengeCard = connect(
     challenge,
     nextChallenge,
     toggleFeedbackDialogOpen,
+    isCurrentChallengeComplete,
   }: ReturnType<typeof cardMergeProps>) => {
+    const complete = isCurrentChallengeComplete;
+
+    // Render text depending on challenge status
+    const text = complete ? "You just completed: " : "In Progress: ";
+
     return (
       <Card>
-        <Upper icon="info-sign" intent="none">
+        <Upper
+          intent="none"
+          icon={complete ? "tick" : "info-sign"}
+          className={complete ? "challenge-content-success" : ""}
+        >
           <Horizontal>
-            <p style={{ marginRight: 10 }}>You just completed:</p>
+            <p style={{ marginRight: 10 }}>{text}</p>
             <H5>{challenge?.title}</H5>
           </Horizontal>
           <Button
