@@ -219,7 +219,10 @@ export const breadcrumbPathSelector = createSelector(
       return null;
     }
 
-    return [moduleTitle, sectionTitle, challengeTitle].filter(Boolean);
+    const crumbs = [moduleTitle, sectionTitle, challengeTitle].filter(
+      Boolean,
+    ) as string[];
+    return crumbs;
   },
 );
 

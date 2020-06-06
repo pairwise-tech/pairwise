@@ -15,30 +15,48 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
       return null;
     }
 
-    const BREADCRUMBS: IBreadcrumbProps[] = breadcrumbsPath.map(path => ({
-      // icon: "slash",
-      text: path,
-    }));
-
-    const renderCurrentBreadcrumb = ({
-      text,
-      ...restProps
-    }: IBreadcrumbProps) => {
-      // Customize rendering of last breadcrumb
-      return (
-        <Breadcrumb current {...restProps}>
-          {text}
-        </Breadcrumb>
-      );
-    };
+    const crumbs = this.getBreadcrumbs(breadcrumbsPath);
 
     return (
       <Breadcrumbs
-        items={BREADCRUMBS}
-        currentBreadcrumbRenderer={renderCurrentBreadcrumb}
+        items={crumbs}
+        currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
       />
     );
   }
+
+  getBreadcrumbs = (breadcrumbsPath: string[]) => {
+    const { type } = this.props;
+    const crumbs: IBreadcrumbProps[] = [];
+
+    crumbs.push({
+      icon: "folder-close",
+      text: breadcrumbsPath[0],
+    });
+
+    crumbs.push({
+      icon: "document",
+      text: breadcrumbsPath[1],
+    });
+
+    if (type === "workspace") {
+      crumbs.push({
+        icon: "applications",
+        text: breadcrumbsPath[3],
+      });
+    }
+
+    return crumbs;
+  };
+
+  renderCurrentBreadcrumb = ({ text, ...restProps }: IBreadcrumbProps) => {
+    // Customize rendering of last breadcrumb
+    return (
+      <Breadcrumb current={this.props.type === "workspace"} {...restProps}>
+        {text}
+      </Breadcrumb>
+    );
+  };
 }
 
 /** ===========================================================================
