@@ -1560,8 +1560,6 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       description: getSeoExcerpt(challenge),
     };
 
-    console.log(breadcrumbsPath);
-
     return (
       <React.Fragment>
         <SEO {...seoMeta} />

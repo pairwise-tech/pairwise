@@ -4,7 +4,10 @@ import { connect } from "react-redux";
 import { IBreadcrumbProps, Breadcrumb, Breadcrumbs } from "@blueprintjs/core";
 
 /** ===========================================================================
- * Component
+ * Breadcrumbs Component
+ * ---------------------------------------------------------------------------
+ * Renders the module > section > challenge title breadcrumbs for a given
+ * challenge.
  * ============================================================================
  */
 
@@ -15,12 +18,10 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
       return null;
     }
 
-    const crumbs = this.getBreadcrumbs(breadcrumbsPath);
-
     return (
-      <div style={{ marginTop: 8 }}>
+      <div style={{ marginTop: 10 }}>
         <Breadcrumbs
-          items={crumbs}
+          items={this.getBreadcrumbs(breadcrumbsPath)}
           currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
         />
       </div>
@@ -34,23 +35,27 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
     // Get each breadcrumb
     const [moduleCrumb, sectionCrumb, challengeCrumb] = breadcrumbsPath;
 
+    /**
+     * Assemble the breadcrumbs:
+     */
+
     crumbs.push({
-      icon: "projects",
       text: moduleCrumb,
+      icon: "projects",
     });
 
     crumbs.push({
-      icon: "folder-open",
       text: sectionCrumb,
+      icon: "folder-open",
     });
 
     if (type === "workspace") {
       crumbs.push({
-        icon: isCurrentChallengeComplete ? "tick" : "application",
         text: challengeCrumb,
-        className: `breadcrumb-challenge-${
-          isCurrentChallengeComplete ? "complete" : ""
-        }`,
+        icon: isCurrentChallengeComplete ? "tick" : "application",
+        className: isCurrentChallengeComplete
+          ? "breadcrumb-challenge-complete"
+          : "",
       });
     }
 
@@ -58,7 +63,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
   };
 
   renderCurrentBreadcrumb = ({ text, ...restProps }: IBreadcrumbProps) => {
-    // Customize rendering of last breadcrumb
+    // Customize rendering of the last breadcrumb
     return (
       <Breadcrumb current={this.props.type === "workspace"} {...restProps}>
         {text}

@@ -201,6 +201,7 @@ export const isCurrentChallengeComplete = createSelector(
       }
     }
 
+    // Any problems above default to false
     return false;
   },
 );
