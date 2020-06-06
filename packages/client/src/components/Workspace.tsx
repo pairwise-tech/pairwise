@@ -1443,7 +1443,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
   revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
-  breadcrumbsPath: ChallengeSelectors.breadcrumbPathSelector(state),
   editModeAlternativeViewEnabled: ChallengeSelectors.editModeAlternativeViewEnabled(
     state,
   ),
@@ -1527,13 +1526,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   }
 
   render() {
-    const {
-      challenge,
-      blob,
-      isLoadingBlob,
-      isUserLoading,
-      breadcrumbsPath,
-    } = this.props;
+    const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
 
     if (!challenge || isLoadingBlob || isUserLoading) {
       return (
