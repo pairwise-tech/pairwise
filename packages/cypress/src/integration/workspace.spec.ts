@@ -172,8 +172,6 @@ describe("Workspace Challenges", () => {
     // Just give it a ton of time to load the React libraries!
     cy.wait(15 * 1000);
 
-    cy.wait(["@fetchReact", "@fetchReactDOM", "@fetchReactTestUtils"]);
-
     // Tests should fail
     checkTestResultStatus("Incomplete...");
 
