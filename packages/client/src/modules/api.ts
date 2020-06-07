@@ -425,15 +425,14 @@ class Api extends BaseApiClass {
     challengeId: string,
   ): Promise<Result<LastActiveChallengeIds, HttpResponseError>> => {
     const { headers, authenticated } = this.getRequestHeaders();
+    const options = { headers };
     if (authenticated) {
       const body = { courseId, challengeId };
       return this.httpHandler(async () => {
         return axios.post<LastActiveChallengeIds>(
           `${HOST}/user/active-challenge-ids`,
           body,
-          {
-            headers,
-          },
+          options,
         );
       });
     } else {

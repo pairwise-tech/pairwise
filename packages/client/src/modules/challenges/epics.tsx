@@ -625,7 +625,7 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
 /**
  * Save a code blob. Just take the blob and send it to the API to be saved.
  */
-const saveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
+const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.saveChallengeBlob)),
     pluck("payload"),
