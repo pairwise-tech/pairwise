@@ -32,6 +32,8 @@ enum ActionTypesEnum {
 
   SET_ACTIVE_CHALLENGE_IDS = "SET_ACTIVE_CHALLENGE_IDS",
 
+  UPDATE_LAST_ACTIVE_CHALLENGE_IDS = "UPDATE_LAST_ACTIVE_CHALLENGE_IDS",
+
   SET_MODULE_ID = "SET_MODULE_ID",
   SET_COURSE_ID = "SET_COURSE_ID",
 
@@ -224,6 +226,12 @@ export const setActiveChallengeIds = createAction(
   currentModuleId: string;
   currentCourseId: string;
   currentChallengeId: string;
+}>();
+
+export const updateLastActiveChallengeIds = createAction(
+  ActionTypesEnum.UPDATE_LAST_ACTIVE_CHALLENGE_IDS,
+)<{
+  challengeId: string;
 }>();
 
 export const fetchCurrentActiveCourseSuccess = createAction(

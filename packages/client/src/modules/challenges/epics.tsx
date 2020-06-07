@@ -491,6 +491,30 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
   );
 };
 
+const updateLastActiveChallengeIdsEpic: EpicSignature = (
+  action$,
+  state$,
+  deps,
+) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.updateLastActiveChallengeIds)),
+    pluck("payload"),
+    pluck("challengeId"),
+    mergeMap(async challengeId => {
+      const { challengeMap } = state$.value.challenges;
+      if (challengeMap && challengeId in challengeMap) {
+        const { courseId } = challengeMap[challengeId];
+        return deps.api.updateLastActiveChallengeIds(courseId, challengeId);
+      } else {
+        return new Err({
+          message: `Could not find challenge in challengeMap, id: ${challengeId}`,
+        });
+      }
+    }),
+    ignoreElements(),
+  );
+};
+
 /**
  * Initialize the sandbox with whatever challenge type was stored locally. This
  * is so you can select a sandbox challenge type and have that type remain on
@@ -798,6 +822,7 @@ export default combineEpics(
   setWorkspaceLoadedEpic,
   resetActiveChallengeIds,
   codepressDeleteToasterEpic,
+  updateLastActiveChallengeIdsEpic,
   challengeInitializationEpic,
   setAndSyncChallengeIdEpic,
   syncChallengeToUrlEpic,
