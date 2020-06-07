@@ -164,7 +164,11 @@ export class UserService {
   private async fillUserProfile(user: User) {
     const { payments, courses } = await this.getCourseForUser(user);
     const { progress } = await this.getProgressMapForUser(user);
-    const { profile, settings } = this.processUserEntity(user);
+    const {
+      profile,
+      settings,
+      lastActiveChallengeIds,
+    } = this.processUserEntity(user);
 
     const result: IUserDto = {
       profile,
@@ -172,6 +176,7 @@ export class UserService {
       courses,
       settings,
       progress,
+      lastActiveChallengeIds,
     };
 
     return result;
@@ -183,8 +188,8 @@ export class UserService {
   ) {
     const result = await this.userRepository.insert({
       ...profile,
-      lastActiveChallengeId: "",
       settings: JSON.stringify({}),
+      lastActiveChallengeIds: JSON.stringify({}),
     });
 
     // Look up the newly created user with the uuid from the insertion result
@@ -236,10 +241,11 @@ export class UserService {
     user: RequestUser,
     challengeId: string,
   ) {
-    await this.userRepository.update(
-      { uuid: user.profile.uuid },
-      { lastActiveChallengeId: challengeId },
-    );
+    // TODO: Implement
+    // await this.userRepository.update(
+    //   { uuid: user.profile.uuid },
+    //   { lastActiveChallengeId: challengeId },
+    // );
   }
 
   /**
@@ -259,9 +265,12 @@ export class UserService {
         ...deserializedSettings,
       };
 
+      const deserializedActiveIds = JSON.parse(user.lastActiveChallengeIds);
+
       const result = {
         settings,
         profile: user,
+        lastActiveChallengeIds: deserializedActiveIds,
       };
 
       return result;

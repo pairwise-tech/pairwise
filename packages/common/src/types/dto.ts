@@ -31,7 +31,6 @@ export interface UserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
-  lastActiveChallengeId: string;
 }
 
 /**
@@ -63,6 +62,7 @@ export interface IUserDto<Profile = UserProfile> {
   settings: UserSettings;
   courses: UserCourseAccessMap;
   progress: UserProgressMap;
+  lastActiveChallengeIds: { [key: string]: string };
 }
 
 export interface UserCourseAccessMap {

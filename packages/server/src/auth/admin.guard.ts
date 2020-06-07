@@ -57,7 +57,6 @@ export class AdminAuthGuard extends AuthGuard("jwt") {
         // so we create an obviously fake user profile here to return. All
         // of this should be removed once the proper admin UI is created.
         const FAKE_ADMIN_PROFILE: UserProfile = {
-          lastActiveChallengeId: "",
           uuid: "admin_uuid",
           email: "admin-access-token-user@pairwise.tech",
           givenName: "ADMIN",

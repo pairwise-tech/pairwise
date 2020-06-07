@@ -125,7 +125,6 @@ const removeExcessUserFields = user => {
     displayName: user.displayName,
     givenName: user.givenName,
     familyName: user.familyName,
-    lastActiveChallengeId: user.lastActiveChallengeId,
     settings: user.settings,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
