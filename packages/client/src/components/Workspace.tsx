@@ -1,14 +1,11 @@
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
-
 import truncate from "truncate";
-import { monaco, registerExternalLib, MonacoModel } from "../monaco";
 import {
   assertUnreachable,
   Challenge,
   DataBlob,
   MonacoEditorThemes,
+  CHALLENGE_TYPE,
+  UserSettings,
 } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -28,7 +25,6 @@ import {
 } from "../tools/constants";
 import { DIMENSIONS as D } from "../tools/dimensions";
 import toaster from "tools/toast-utils";
-import { types } from "../tools/jsx-types";
 import {
   getMarkupForCodeChallenge,
   compileCodeString,
@@ -51,7 +47,6 @@ import {
 } from "@blueprintjs/core";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import {
-  wait,
   composeWithProps,
   constructDataBlobFromChallenge,
   challengeRequiresWorkspace,
@@ -80,11 +75,11 @@ import {
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import { CODEPRESS } from "tools/client-env";
-import cx from "classnames";
 import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
 import pipe from "ramda/es/pipe";
 import SEO from "./SEO";
+import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
 
 const debug = require("debug")("client:Workspace");
 
@@ -96,7 +91,7 @@ const debug = require("debug")("client:Workspace");
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
 // NOTE: Element id is referenced in custom-tsx-styles.scss to apply styling
-const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
+export const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
@@ -112,10 +107,6 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
   },
 ];
 
-type MODEL_ID = string;
-type MODEL_TYPE = "workspace-editor" | "jsx-types";
-type ModelIdMap = Map<MODEL_TYPE, MODEL_ID>;
-
 interface IState {
   code: string;
   testResultsLoading: boolean;
@@ -123,14 +114,32 @@ interface IState {
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
   hideSuccessModal: boolean;
-  workspaceEditorModelIdMap: ModelIdMap;
 }
 
-interface ICodeEditor {
+export interface ICodeEditorOptions {
+  fontSize: number;
+}
+
+export interface ICodeEditorProps {
   language: string;
   value: string;
   onChange: (x: string) => any;
+  challengeType: CHALLENGE_TYPE;
+  userSettings: UserSettings;
+  editorOptions: ICodeEditorOptions;
 }
+
+export interface ICodeEditor extends React.Component<ICodeEditorProps> {
+  refresh(): Promise<void>;
+  initialize(): Promise<void>;
+  focus(): void;
+  cleanup(): void;
+  setTheme(theme: string): void;
+  updateOptions(options: Partial<ICodeEditorOptions>): void;
+}
+
+export const p = (s: string) =>
+  console.log(`%c${s}`, "font-size:18px;color:lime;");
 
 /** ===========================================================================
  * React Component
@@ -141,38 +150,19 @@ class Workspace extends React.Component<IProps, IState> {
   // Place to store user code when solution code is revealed
   userCode: string = "";
 
-  syntaxWorker: any = null;
-
-  // The wrapper class provided @monaco-editor/react. Confusingly,
-  // monacoWrapper.editor is not the editor instance but a collection of static
-  // methods and maybe a class as well. But they are different. Editor instance
-  // is needed for updating editor options, i.e. font size.
-  monacoWrapper: any = null;
-
   // A cancelable handler for refreshing the editor
   editorRefreshTimerHandler: Nullable<number> = null;
 
-  // The actual monaco editor instance.
-  editorInstance: Nullable<{
-    updateOptions: (x: MonacoEditorOptions) => void;
-  }> = null;
+  editor: Nullable<ICodeEditor> = null;
 
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   debouncedSaveCodeFunction: () => void;
   debouncedRenderPreviewFunction: () => void;
-  debouncedSyntaxHighlightFunction: (code: string) => void;
-
-  initializationPromise: Nullable<Promise<void>> = null;
 
   constructor(props: IProps) {
     super(props);
 
     this.debouncedRenderPreviewFunction = debounce(200, this.runChallengeTests);
-
-    this.debouncedSyntaxHighlightFunction = debounce(
-      250,
-      this.requestSyntaxHighlighting,
-    );
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
@@ -198,9 +188,6 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal: true,
 
       testResultsLoading: false,
-
-      // A map of the Monaco models the Workspace has created.
-      workspaceEditorModelIdMap: new Map(),
     };
   }
 
@@ -212,16 +199,12 @@ class Workspace extends React.Component<IProps, IState> {
       false,
     );
 
-    /* Initialize Monaco Editor and the SyntaxHighlightWorker */
-    await this.initializeMonaco();
-    this.initializeSyntaxHighlightWorker();
+    // TODO??
+    // await this.editor.initialize()
 
-    /* Handle some timing issue with Monaco initialization... */
-    // TODO: This might cause issues with an unmounted editor. Needs to be made
-    // cancellable.
-    await wait(500);
+    p("componentDidMount");
+
     this.runChallengeTests();
-    this.debouncedSyntaxHighlightFunction(this.state.code);
 
     subscribeCodeWorker(this.handleCodeFormatMessage);
 
@@ -230,6 +213,8 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentWillUnmount() {
+    p("componentWillUnmount");
+
     this.cleanupEditor();
     window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener(
@@ -245,6 +230,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
+    p("componentDidUpdate");
     /**
      * Handle toggling the solution code on and off.
      */
@@ -287,7 +273,8 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Handle changes in editor options
     if (prevProps.editorOptions !== this.props.editorOptions) {
-      this.editorInstance?.updateOptions(this.props.editorOptions);
+      // this.editorInstance?.updateOptions(this.props.editorOptions);
+      this.editor?.updateOptions(this.props.editorOptions);
     }
 
     // Handle changes in the editor theme
@@ -298,7 +285,7 @@ class Workspace extends React.Component<IProps, IState> {
         this.props.userSettings.theme,
         ")",
       );
-      this.setMonacoEditorTheme(this.props.userSettings.theme);
+      this.editor?.setTheme(this.props.userSettings.theme);
     }
 
     // Handle changes to isEditMode. If this is a code challenge and isEditMode
@@ -332,17 +319,18 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   refreshEditor = async () => {
-    await this.resetMonacoEditor();
-    this.setMonacoEditorValue();
+    p("refreshEditor");
+    await this.editor?.refresh();
+    // TODO??
+    // this.setMonacoEditorValue();
     if (this.iFrameRef) {
       this.runChallengeTests();
     }
   };
 
   tryToFocusEditor = () => {
-    if (this.editorInstance) {
-      // @ts-ignore .focus is a valid method...
-      this.editorInstance.focus();
+    if (this.editor) {
+      this.editor.focus();
     }
   };
 
@@ -351,181 +339,6 @@ class Workspace extends React.Component<IProps, IState> {
    */
   resetCodeWindow = () => {
     this.transformMonacoCode(() => this.props.challenge.starterCode);
-  };
-
-  initializeSyntaxHighlightWorker = () => {
-    this.syntaxWorker = new SyntaxHighlightWorker();
-
-    this.syntaxWorker.addEventListener("message", (event: any) => {
-      debug("[syntax highlight incoming]", event);
-      const { classifications, identifier } = event.data;
-      if (classifications && identifier) {
-        // Recognize message identifier sent from the worker
-        if (identifier === "TSX_SYNTAX_HIGHLIGHTER") {
-          requestAnimationFrame(() => {
-            this.updateSyntaxDecorations(classifications);
-          });
-        }
-      }
-    });
-  };
-
-  updateSyntaxDecorations = async (classifications: ReadonlyArray<any>) => {
-    if (!this.monacoWrapper || this.props.challenge.type === "markup") {
-      return;
-    }
-
-    const decorations = classifications.map(c => {
-      /**
-       * NOTE: Custom classNames to allow custom styling for the
-       * editor theme:
-       */
-      const inlineClassName = cx(
-        c.type ? `${c.kind} ${c.type}-of-${c.parentKind}` : c.kind,
-        {
-          highContrast:
-            this.props.userSettings.theme === MonacoEditorThemes.HIGH_CONTRAST,
-        },
-      );
-
-      return {
-        range: new this.monacoWrapper.Range(
-          c.startLine,
-          c.start,
-          c.endLine,
-          c.end,
-        ),
-        options: {
-          inlineClassName,
-        },
-      };
-    });
-
-    const model = this.findModelByType("workspace-editor");
-
-    // prevent exception when moving through challenges quickly
-    if (model) {
-      // @ts-ignore I think decorations exist.
-      const existing = model.decorations;
-      // @ts-ignore I think decorations exist.
-      model.decorations = model.deltaDecorations(existing || [], decorations);
-    }
-  };
-
-  initializeMonaco = async (): Promise<void> => {
-    if (this.initializationPromise) {
-      debug("[initializeMonaco] Monaco already initialized, skipping.");
-      return this.initializationPromise;
-    }
-
-    debug("[initializeMonaco] Monaco initializing...");
-
-    const initializationPromise = monaco
-      .init()
-      .then(mn => {
-        mn.languages.typescript.typescriptDefaults.setCompilerOptions({
-          strict: true,
-          noEmit: true,
-          jsx: mn.languages.typescript.JsxEmit.React,
-          typeRoots: ["node_modules/@types"],
-          allowNonTsExtensions: true,
-          target: mn.languages.typescript.ScriptTarget.ES2017,
-          module: mn.languages.typescript.ModuleKind.CommonJS,
-          moduleResolution: mn.languages.typescript.ModuleResolutionKind.NodeJs,
-        });
-
-        mn.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-          noSyntaxValidation: false,
-          noSemanticValidation: false,
-        });
-
-        this.monacoWrapper = mn;
-
-        debug("[initializeMonaco] Monaco initialized. Initializing editor...");
-        return this.initializeMonacoEditor();
-      })
-      .catch(error => {
-        console.error(
-          "An error occurred during initialization of Monaco: ",
-          error,
-        );
-        this.setState({ monacoInitializationError: true });
-      });
-
-    this.initializationPromise = initializationPromise;
-
-    return initializationPromise;
-  };
-
-  initializeMonacoEditor = async (): Promise<void> => {
-    if (!this.monacoWrapper) {
-      debug(
-        "[ERROR initializeMonacoEditor] Called before monaco was initialized!",
-      );
-    }
-
-    const mn = this.monacoWrapper;
-
-    const language = this.getMonacoLanguageFromChallengeType();
-
-    const options = {
-      theme: MonacoEditorThemes.DEFAULT,
-      automaticLayout: true,
-      tabSize: 2,
-      autoIndent: true,
-      formatOnPaste: true,
-      fixedOverflowWidgets: true,
-      multiCursorModifier: "ctrlCmd",
-      minimap: {
-        enabled: false,
-      },
-      ...this.props.editorOptions,
-    };
-
-    let workspaceEditorModel;
-
-    /* Markup challenges: */
-    if (this.props.challenge.type === "markup") {
-      workspaceEditorModel = mn.editor.createModel(this.state.code, language);
-    } else {
-      /* TypeScript and React challenges: */
-      workspaceEditorModel = mn.editor.createModel(
-        this.state.code,
-        language,
-        new mn.Uri.parse("file:///main.tsx"),
-      );
-    }
-
-    workspaceEditorModel.onDidChangeContent(this.handleEditorContentChange);
-
-    this.editorInstance = mn.editor.create(
-      document.getElementById(PAIRWISE_CODE_EDITOR_ID),
-      {
-        ...options,
-        model: workspaceEditorModel,
-      },
-    );
-
-    /**
-     * This is a separate model which provides JSX type information. See
-     * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
-     */
-    const jsxTypesModel = mn.editor.createModel(
-      types,
-      "typescript",
-      mn.Uri.parse("file:///index.d.ts"),
-    );
-
-    this.setMonacoEditorTheme(this.props.userSettings.theme);
-
-    // Record the model ids for the two created models to track them.
-    const workspaceEditorModelIdMap: ModelIdMap = new Map();
-    workspaceEditorModelIdMap.set("workspace-editor", workspaceEditorModel.id);
-    workspaceEditorModelIdMap.set("jsx-types", jsxTypesModel.id);
-
-    this.setState({ workspaceEditorModelIdMap });
-
-    debug("[initializeMonaco] Monaco editor initialized.");
   };
 
   getMonacoLanguageFromChallengeType = () => {
@@ -796,7 +609,17 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
           </Popover>
         </LowerRight>
-        <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} />
+        {/* <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} /> */}
+        <WorkspaceMonacoEditor
+          challengeType={this.props.challenge.type}
+          userSettings={this.props.userSettings}
+          editorOptions={this.props.editorOptions}
+          language={this.getMonacoLanguageFromChallengeType()}
+          value={this.state.code}
+          onChange={code => {
+            this.setState({ code });
+          }}
+        />
       </div>
     );
 
@@ -915,69 +738,15 @@ class Workspace extends React.Component<IProps, IState> {
     return `Tests: ${passedTests.length}/${testResults.length} Passed`;
   };
 
-  setMonacoEditorValue = () => {
-    const model = this.findModelByType("workspace-editor");
-    if (model) {
-      model.setValue(this.state.code);
-    }
-  };
-
-  setMonacoEditorTheme = (theme: string) => {
-    if (this.monacoWrapper) {
-      debug("[setMonacoEditorTheme]", theme);
-      this.monacoWrapper.editor.setTheme(theme);
-      this.debouncedSyntaxHighlightFunction(this.state.code);
-    } else {
-      debug("[setMonacoEditorTheme]", "No editor pressent");
-    }
-  };
-
-  addModuleTypeDefinitionsToMonaco = (packages: ReadonlyArray<string> = []) => {
-    /**
-     * TODO: Fetch @types/ package type definitions if they exist or fallback
-     * to the module declaration.
-     *
-     * See this:
-     * https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/workers/fetch-dependency-typings.js
-     */
-    const moduleDeclarations = packages.reduce(
-      (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
-      "",
-    );
-
-    if (this.monacoWrapper) {
-      registerExternalLib({
-        source: moduleDeclarations,
-      });
-    }
-  };
-
-  requestSyntaxHighlighting = (code: string) => {
-    if (this.syntaxWorker) {
-      debug("request syntax highlighting");
-      this.syntaxWorker.postMessage({ code });
-    }
-  };
-
-  handleEditorContentChange = (_: any) => {
-    const model = this.findModelByType("workspace-editor");
-    if (!model) {
-      console.warn("No model found when editor content changed!");
-      return;
-    }
-
-    const code = model.getValue();
-
+  handleEditorContentChange = (code: string) => {
     /**
      * Update the stored code value and then:
      *
-     * - Dispatch the syntax highlighting worker
      * - Save the code to local storage (debounced)
      * - Render the iframe preview (debounced)
      */
     this.setState({ code }, () => {
       this.debouncedSaveCodeFunction();
-      this.debouncedSyntaxHighlightFunction(code);
 
       /**
        * Only live preview markup challenges, for the UI.
@@ -1182,7 +951,8 @@ class Workspace extends React.Component<IProps, IState> {
       this.props.challenge,
     );
 
-    this.addModuleTypeDefinitionsToMonaco(dependencies);
+    // TODO??
+    // this.addModuleTypeDefinitionsToMonaco(dependencies);
 
     return code;
   };
@@ -1275,61 +1045,18 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  resetMonacoEditor = async () => {
-    this.cleanupEditor();
-    await this.initializeMonaco();
-    await this.initializeMonacoEditor();
-  };
-
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
-  };
-
-  private readonly disposeModels = () => {
-    const { workspaceEditorModelIdMap } = this.state;
-    const workspaceModelIds = new Set(workspaceEditorModelIdMap.values());
-    const remainingModelIds = new Map(workspaceEditorModelIdMap);
-
-    if (this.monacoWrapper) {
-      const models = this.monacoWrapper.editor.getModels();
-      for (const model of models) {
-        if (workspaceModelIds.has(model.id)) {
-          model.dispose();
-          remainingModelIds.delete(model.id);
-        }
-      }
-    }
-
-    /**
-     * I'm not sure if it matters that we update the tracked model
-     * ids and remove the removed ones... but anyway it happens.
-     */
-    this.setState({ workspaceEditorModelIdMap: remainingModelIds });
   };
 
   /**
    * Cleanup monaco editor resources
    */
   private readonly cleanupEditor = () => {
-    this.disposeModels();
-    this.editorInstance = null;
-  };
-
-  private readonly findModelByType = (
-    type: MODEL_TYPE,
-  ): Nullable<MonacoModel> => {
-    const { workspaceEditorModelIdMap } = this.state;
-    const modelId = workspaceEditorModelIdMap.get(type);
-
-    if (this.monacoWrapper) {
-      const models = this.monacoWrapper.editor.getModels();
-      const model = models.find((m: MonacoModel) => m.id === modelId);
-      if (model) {
-        return model;
-      }
+    if (this.editor) {
+      this.editor.cleanup();
+      this.editor = null;
     }
-
-    return null;
   };
 
   /**
@@ -1412,7 +1139,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   private readonly transformMonacoCode = (fn: (x: string) => string) => {
-    this.setState({ code: fn(this.state.code) }, this.setMonacoEditorValue);
+    this.setState({ code: fn(this.state.code) });
   };
 
   private readonly pauseAndRefreshEditor = async (timeout: number = 50) => {
