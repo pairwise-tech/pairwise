@@ -586,9 +586,6 @@ class LocalStorageHttpClass {
     // Update user progress
     this.setItem(KEYS.USER_PROGRESS_KEY, updatedProgressList);
 
-    // Update last active challenge ids
-    this.updateLastActiveChallengeIds(courseId, challengeId);
-
     return progress;
   };
 
