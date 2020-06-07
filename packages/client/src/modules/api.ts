@@ -423,18 +423,25 @@ class Api extends BaseApiClass {
   updateLastActiveChallengeIds = async (
     courseId: string,
     challengeId: string,
-  ) => {
+  ): Promise<Result<LastActiveChallengeIds, HttpResponseError>> => {
     const { headers, authenticated } = this.getRequestHeaders();
     if (authenticated) {
       const body = { courseId, challengeId };
       return this.httpHandler(async () => {
-        return axios.post<string>(`${HOST}/user/active-challenge-ids`, body, {
-          headers,
-        });
+        return axios.post<LastActiveChallengeIds>(
+          `${HOST}/user/active-challenge-ids`,
+          body,
+          {
+            headers,
+          },
+        );
       });
     } else {
-      localStorageHTTP.updateLastActiveChallengeIds(courseId, challengeId);
-      return new Ok("Success");
+      const result = localStorageHTTP.updateLastActiveChallengeIds(
+        courseId,
+        challengeId,
+      );
+      return new Ok(result);
     }
   };
 
@@ -593,13 +600,17 @@ class LocalStorageHttpClass {
     );
   };
 
-  updateLastActiveChallengeIds = (courseId: string, challengeId: string) => {
+  updateLastActiveChallengeIds = (
+    courseId: string,
+    challengeId: string,
+  ): LastActiveChallengeIds => {
     const lastActive = this.fetchLastActiveChallengeIds();
     const updated = {
       ...lastActive,
       [courseId]: challengeId,
     };
     this.setItem(KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY, updated);
+    return updated;
   };
 
   fetchChallengeHistory = (

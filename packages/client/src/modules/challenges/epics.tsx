@@ -528,7 +528,13 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
         });
       }
     }),
-    ignoreElements(),
+    map(result => {
+      if (result.value) {
+        return Actions.updateLastActiveChallengeIdsSuccess(result.value);
+      } else {
+        return Actions.updateLastActiveChallengeIdsFailure();
+      }
+    }),
   );
 
   return merge(respondToFetchBlob, updateActiveIdsEpic);

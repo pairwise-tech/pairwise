@@ -73,6 +73,15 @@ const user = createReducer<
 >(initialUserState)
   .handleAction(actions.logoutUser, () => initialUserState)
   .handleAction(
+    actions.updateLastActiveChallengeIdsSuccess,
+    (state, action) => {
+      return {
+        ...state,
+        lastActiveChallengeIds: action.payload,
+      };
+    },
+  )
+  .handleAction(
     [
       actions.fetchUserSuccess,
       actions.updateUserSuccess,

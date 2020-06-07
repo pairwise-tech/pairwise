@@ -251,15 +251,18 @@ export class UserService {
 
       const { courseId, challengeId } = lastActiveIds;
       const { lastActiveChallengeIds } = user;
-      const updated = {
+
+      const updatedActiveIds = {
         ...lastActiveChallengeIds,
         [courseId]: challengeId,
       };
 
       await this.userRepository.update(
         { uuid: user.profile.uuid },
-        { lastActiveChallengeIds: JSON.stringify(updated) },
+        { lastActiveChallengeIds: JSON.stringify(updatedActiveIds) },
       );
+
+      return updatedActiveIds;
     } catch (err) {
       console.log(
         `[ERROR]: Failed to update lastActiveChallengeIds for payload: ${JSON.stringify(

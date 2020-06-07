@@ -3,6 +3,7 @@ import {
   CourseSkeletonList,
   ICodeBlobDto,
   IProgressDto,
+  LastActiveChallengeIds,
 } from "@pairwise/common";
 import { createAction } from "typesafe-actions";
 import {
@@ -33,6 +34,8 @@ enum ActionTypesEnum {
   SET_ACTIVE_CHALLENGE_IDS = "SET_ACTIVE_CHALLENGE_IDS",
 
   UPDATE_LAST_ACTIVE_CHALLENGE_IDS = "UPDATE_LAST_ACTIVE_CHALLENGE_IDS",
+  UPDATE_LAST_ACTIVE_CHALLENGE_IDS_SUCCESS = "UPDATE_LAST_ACTIVE_CHALLENGE_IDS_SUCCESS",
+  UPDATE_LAST_ACTIVE_CHALLENGE_IDS_FAILURE = "UPDATE_LAST_ACTIVE_CHALLENGE_IDS_FAILURE",
 
   SET_MODULE_ID = "SET_MODULE_ID",
   SET_COURSE_ID = "SET_COURSE_ID",
@@ -230,9 +233,15 @@ export const setActiveChallengeIds = createAction(
 
 export const updateLastActiveChallengeIds = createAction(
   ActionTypesEnum.UPDATE_LAST_ACTIVE_CHALLENGE_IDS,
-)<{
-  challengeId: string;
-}>();
+)<{ challengeId: string }>();
+
+export const updateLastActiveChallengeIdsSuccess = createAction(
+  ActionTypesEnum.UPDATE_LAST_ACTIVE_CHALLENGE_IDS_SUCCESS,
+)<LastActiveChallengeIds>();
+
+export const updateLastActiveChallengeIdsFailure = createAction(
+  ActionTypesEnum.UPDATE_LAST_ACTIVE_CHALLENGE_IDS_FAILURE,
+)();
 
 export const fetchCurrentActiveCourseSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
