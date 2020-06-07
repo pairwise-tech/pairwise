@@ -5,6 +5,7 @@ import {
   HOST,
   fetchUserWithAccessToken,
 } from "./utils/e2e-utils";
+import { UserProfile, IUserDto } from "@pairwise/common";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs
@@ -79,7 +80,7 @@ describe("User Progress APIs", () => {
      * [0] Check that the user's lastActiveChallengeId starts as null.
      */
     user = await fetchUserWithAccessToken(accessToken);
-    expect(user.profile.lastActiveChallengeId).toBe("");
+    expect(user.lastActiveChallengeIds).toEqual({});
 
     /**
      * [1] Request returns 404 initially.
@@ -119,7 +120,9 @@ describe("User Progress APIs", () => {
      * [4] Check that the user's lastActiveChallengeId is updatd.
      */
     user = await fetchUserWithAccessToken(accessToken);
-    expect(user.profile.lastActiveChallengeId).toBe("9scykDold");
+    expect(user.lastActiveChallengeIds).toEqual({
+      fpvPtfu7s: "9scykDold",
+    });
 
     /**
      * [5] Update again.
@@ -173,7 +176,33 @@ describe("User Progress APIs", () => {
      */
     progress = await fetchProgressHistory("6T3GXc4ap");
     user = await fetchUserWithAccessToken(accessToken);
-    expect(user.profile.lastActiveChallengeId).toBe("6T3GXc4ap");
+    expect(user.lastActiveChallengeIds).toEqual({
+      fpvPtfu7s: "6T3GXc4ap",
+    });
+
+    /**
+     * [9] Update some challenge history from a different course.
+     */
+    await request(`${HOST}/blob`)
+      .post("/")
+      .send({
+        challengeId: "t$oXPf22$",
+        dataBlob: {
+          type: "challenge",
+          code: "// Some other code string!",
+        },
+      })
+      .set("Authorization", authorizationHeader)
+      .expect(201)
+      .expect(response => {
+        expect(response.text).toBe("Success");
+      });
+
+    user = await fetchUserWithAccessToken(accessToken);
+    expect(user.lastActiveChallengeIds).toEqual({
+      fpvPtfu7s: "6T3GXc4ap",
+      f76shgb2W: "t$oXPf22$",
+    });
 
     done();
   });
