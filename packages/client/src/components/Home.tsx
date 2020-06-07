@@ -54,14 +54,23 @@ class Home extends React.Component<IProps, IState> {
   }
 
   renderCourseItem = (skeleton: CourseSkeleton, i: number) => {
-    const { payments } = this.props.user;
+    const { payments, lastActiveChallengeIds } = this.props.user;
     const paidForCourse = payments?.find(p => p.courseId === skeleton.id);
     const firstCourseChallenge = skeleton.modules[0].challenges[0];
     const isCourseFree = skeleton.free;
     const canAccessCourse = paidForCourse || isCourseFree;
+    const courseId = skeleton.id;
 
     if (!firstCourseChallenge) {
       return null;
+    }
+
+    // Determine the course challenge to link to
+    let lastActiveChallengeExists = false;
+    let courseChallengeLinkId = firstCourseChallenge.id;
+    if (courseId in lastActiveChallengeIds) {
+      courseChallengeLinkId = courseId;
+      lastActiveChallengeExists = true;
     }
 
     return (
@@ -75,16 +84,20 @@ class Home extends React.Component<IProps, IState> {
         <CourseDescription>{skeleton.description}</CourseDescription>
         <ButtonsBox>
           {canAccessCourse ? (
-            <Link to={`workspace/${firstCourseChallenge.id}`}>
-              <Button large intent="success" className={`courseLinkContinue`}>
-                Start Now
+            <Link to={`workspace/${courseChallengeLinkId}`}>
+              <Button large intent="success" className="courseLinkContinue">
+                {lastActiveChallengeExists
+                  ? "Continue the Course"
+                  : "Start Now"}
               </Button>
             </Link>
           ) : (
             <>
-              <Link to={`workspace/${firstCourseChallenge.id}`}>
+              <Link to={`workspace/${courseChallengeLinkId}`}>
                 <Button large intent="success" id={`course-link-${i}-start`}>
-                  Start Now For Free
+                  {lastActiveChallengeExists
+                    ? "Continue the Course"
+                    : "Start Now for Free"}
                 </Button>
               </Link>
               <Button
