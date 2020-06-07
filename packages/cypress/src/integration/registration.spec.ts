@@ -66,6 +66,7 @@ describe("Account Creation Flow", () => {
     // Return home and reload
     click("header-home-link");
     cy.reload();
+    cy.wait(TIMEOUT);
 
     // Check the id updated
     click("course-link-0-start");
