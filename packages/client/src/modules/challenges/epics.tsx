@@ -492,6 +492,10 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
   );
 };
 
+/**
+ * Handle dispatching an update to last active challenge ids whenever a
+ * user fetches a code blob for a challenge.
+ */
 const updateLastActiveChallengeIdsEpic: EpicSignature = (
   action$,
   state$,
@@ -509,13 +513,6 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
     map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
   );
 
-  // Update active ids when a blob is updated
-  // const respondToUpdateBlob = action$.pipe(
-  //   filter(isActionOf(Actions.updateCurrentChallengeBlob)),
-  //   map(x => x.payload.challengeId),
-  //   map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
-  // );
-
   const updateActiveIdsEpic = action$.pipe(
     filter(isActionOf(Actions.updateLastActiveChallengeIds)),
     pluck("payload"),
@@ -524,7 +521,6 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
       const { challengeMap } = state$.value.challenges;
       if (challengeMap && challengeId in challengeMap) {
         const { courseId } = challengeMap[challengeId];
-        console.log(`UPDATING LAST ACTIVE IDS: ${courseId} - ${challengeId}`);
         return deps.api.updateLastActiveChallengeIds(courseId, challengeId);
       } else {
         return new Err({
@@ -535,11 +531,7 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
     ignoreElements(),
   );
 
-  return merge(
-    respondToFetchBlob,
-    // respondToUpdateBlob,
-    updateActiveIdsEpic,
-  );
+  return merge(respondToFetchBlob, updateActiveIdsEpic);
 };
 
 /**
