@@ -10,11 +10,13 @@ import {
   UserProgressMap,
   defaultUserSettings,
   UserProfile,
+  ILastActiveIdsDto,
 } from "@pairwise/common";
 import { RequestUser } from "src/types";
 import {
   validateUserUpdateDetails,
   validateEmailUpdateRequest,
+  validateLastActiveChallengeIdsPayload,
 } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
@@ -239,10 +241,15 @@ export class UserService {
 
   public async updateLastActiveChallengeIds(
     user: RequestUser,
-    courseId: string,
-    challengeId: string,
+    lastActiveIds: ILastActiveIdsDto,
   ) {
     try {
+      // Validate the request payload
+      if (!validateLastActiveChallengeIdsPayload(lastActiveIds)) {
+        throw new Error("Invalid payload");
+      }
+
+      const { courseId, challengeId } = lastActiveIds;
       const { lastActiveChallengeIds } = user;
       const updated = {
         ...lastActiveChallengeIds,
@@ -255,8 +262,11 @@ export class UserService {
       );
     } catch (err) {
       console.log(
-        `[ERROR]: Failed to update lastActiveChallengeIds for courseId: ${courseId}, challengeId: ${challengeId}`,
+        `[ERROR]: Failed to update lastActiveChallengeIds for payload: ${JSON.stringify(
+          lastActiveIds,
+        )}`,
       );
+      return new BadRequestException("Failed to perform operation");
     }
   }
 

@@ -41,12 +41,7 @@ export class UserController {
     @Body() activeIds: ILastActiveIdsDto,
     @Request() req: AuthenticatedRequest,
   ) {
-    const { courseId, challengeId } = activeIds;
-    return this.userService.updateLastActiveChallengeIds(
-      req.user,
-      courseId,
-      challengeId,
-    );
+    return this.userService.updateLastActiveChallengeIds(req.user, activeIds);
   }
 
   @UseGuards(AdminAuthGuard)
