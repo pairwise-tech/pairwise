@@ -18,6 +18,7 @@ enum ERROR_CODES {
   UNKNOWN_LOGIN_ERROR = "There was an unknown login error.",
   EMAIL_LOGIN_ERROR = "An error occurred in the email login flow.",
   FAILED_TO_SEND_EMAIL = "Failed to send email.",
+  OPERATION_FAILED = "Failed to perform operation.",
 }
 
 enum SUCCESS_CODES {

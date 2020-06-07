@@ -260,13 +260,14 @@ export class UserService {
         { uuid: user.profile.uuid },
         { lastActiveChallengeIds: JSON.stringify(updated) },
       );
+      console.log(`\n- UPDATED! ${courseId} - ${challengeId}\n`);
     } catch (err) {
       console.log(
         `[ERROR]: Failed to update lastActiveChallengeIds for payload: ${JSON.stringify(
           lastActiveIds,
         )}`,
       );
-      return new BadRequestException("Failed to perform operation");
+      throw new BadRequestException(ERROR_CODES.OPERATION_FAILED);
     }
   }
 

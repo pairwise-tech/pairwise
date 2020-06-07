@@ -5,7 +5,6 @@ import {
   HOST,
   fetchUserWithAccessToken,
 } from "./utils/e2e-utils";
-import { UserProfile, IUserDto } from "@pairwise/common";
 
 /** ===========================================================================
  * e2e Tests for /progress APIs
@@ -13,7 +12,6 @@ import { UserProfile, IUserDto } from "@pairwise/common";
  */
 
 describe("User Progress APIs", () => {
-  let user;
   let accessToken;
   let authorizationHeader;
 
@@ -64,9 +62,7 @@ describe("User Progress APIs", () => {
   });
 
   test("/challenge (POST) inserts and updates valid requests", async done => {
-    /**
-     * Helper to fetch progress history for a challenge id.
-     */
+    // Helper to fetch progress history for a challenge id.
     const fetchProgressHistory = async (challengeId: string) => {
       const result = await axios.get(`${HOST}/blob/${challengeId}`, {
         headers: {
@@ -76,23 +72,13 @@ describe("User Progress APIs", () => {
       return result.data;
     };
 
-    /**
-     * [0] Check that the user's lastActiveChallengeId starts as null.
-     */
-    user = await fetchUserWithAccessToken(accessToken);
-    expect(user.lastActiveChallengeIds).toEqual({});
-
-    /**
-     * [1] Request returns 404 initially.
-     */
+    // Request returns 404 initially.
     await request(`${HOST}/blob/9scykDold`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(404);
 
-    /**
-     * [2] Update the challenge history.
-     */
+    // Update the challenge history.
     await request(`${HOST}/blob`)
       .post("/")
       .send({
@@ -105,9 +91,7 @@ describe("User Progress APIs", () => {
         expect(response.text).toBe("Success");
       });
 
-    /**
-     * [3] Fetch the result and verify it contains the updated data.
-     */
+    // Fetch the result and verify it contains the updated data.
     let progress = await fetchProgressHistory("9scykDold");
     expect(progress.uuid).toBeDefined();
     expect(progress.challengeId).toBe("9scykDold");
@@ -116,17 +100,7 @@ describe("User Progress APIs", () => {
       type: "challenge",
     });
 
-    /**
-     * [4] Check that the user's lastActiveChallengeId is updatd.
-     */
-    user = await fetchUserWithAccessToken(accessToken);
-    expect(user.lastActiveChallengeIds).toEqual({
-      fpvPtfu7s: "9scykDold",
-    });
-
-    /**
-     * [5] Update again.
-     */
+    // Update again.
     await request(`${HOST}/blob`)
       .post("/")
       .send({
@@ -142,9 +116,7 @@ describe("User Progress APIs", () => {
         expect(response.text).toBe("Success");
       });
 
-    /**
-     * [6] Update some other challenge history.
-     */
+    // Update some other challenge history.
     await request(`${HOST}/blob`)
       .post("/")
       .send({
@@ -160,9 +132,7 @@ describe("User Progress APIs", () => {
         expect(response.text).toBe("Success");
       });
 
-    /**
-     * [7] Check the updated occurred correctly.
-     */
+    // Check the updated occurred correctly.
     progress = await fetchProgressHistory("9scykDold");
     expect(progress.uuid).toBeDefined();
     expect(progress.challengeId).toBe("9scykDold");
@@ -171,18 +141,10 @@ describe("User Progress APIs", () => {
       code: "console.log('Hello from Taiwan!');",
     });
 
-    /**
-     * [8] Check that the user's lastActiveChallengeId updated again.
-     */
+    // Check that the user's lastActiveChallengeId updated again.
     progress = await fetchProgressHistory("6T3GXc4ap");
-    user = await fetchUserWithAccessToken(accessToken);
-    expect(user.lastActiveChallengeIds).toEqual({
-      fpvPtfu7s: "6T3GXc4ap",
-    });
 
-    /**
-     * [9] Update some challenge history from a different course.
-     */
+    // Update some challenge history from a different course.
     await request(`${HOST}/blob`)
       .post("/")
       .send({
@@ -197,12 +159,6 @@ describe("User Progress APIs", () => {
       .expect(response => {
         expect(response.text).toBe("Success");
       });
-
-    user = await fetchUserWithAccessToken(accessToken);
-    expect(user.lastActiveChallengeIds).toEqual({
-      fpvPtfu7s: "6T3GXc4ap",
-      f76shgb2W: "t$oXPf22$",
-    });
 
     done();
   });
