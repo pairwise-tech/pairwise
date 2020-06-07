@@ -169,8 +169,8 @@ describe("Workspace Challenges", () => {
     // Verify the challenge title
     cy.contains("Create a Controlled Input");
 
-    // React challenges take longer to fully initialize
-    cy.wait(TIMEOUT * 2);
+    // OK! Just give it a ton of time to load the challenge.
+    cy.wait(TIMEOUT * 3);
 
     // Tests should fail
     checkTestResultStatus("Incomplete...");
