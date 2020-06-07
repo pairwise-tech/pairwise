@@ -48,6 +48,7 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
+import { getCurrentActiveIds } from "./selectors";
 
 const debug = require("debug")("client:challenges:epics");
 
@@ -496,23 +497,24 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
   state$,
   deps,
 ) => {
+  // Update active ids when a blob is fetched
   const respondToFetchBlob = action$.pipe(
     filter(isActionOf(Actions.fetchBlobForChallenge)),
     pluck("payload"),
+    filter(id => {
+      // Only update for current challenge (next and prev are also fetched)
+      const { currentChallengeId } = getCurrentActiveIds(state$.value);
+      return !!(currentChallengeId && currentChallengeId === id);
+    }),
     map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
   );
 
-  const respondToUpdateBlob = action$.pipe(
-    filter(isActionOf(Actions.updateCurrentChallengeBlob)),
-    map(x => x.payload.challengeId),
-    map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
-  );
-
-  const respondToUpdateUserProgress = action$.pipe(
-    filter(isActionOf(Actions.updateUserProgress)),
-    map(x => x.payload.challengeId),
-    map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
-  );
+  // Update active ids when a blob is updated
+  // const respondToUpdateBlob = action$.pipe(
+  //   filter(isActionOf(Actions.updateCurrentChallengeBlob)),
+  //   map(x => x.payload.challengeId),
+  //   map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
+  // );
 
   const updateActiveIdsEpic = action$.pipe(
     filter(isActionOf(Actions.updateLastActiveChallengeIds)),
@@ -522,6 +524,7 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
       const { challengeMap } = state$.value.challenges;
       if (challengeMap && challengeId in challengeMap) {
         const { courseId } = challengeMap[challengeId];
+        console.log(`UPDATING LAST ACTIVE IDS: ${courseId} - ${challengeId}`);
         return deps.api.updateLastActiveChallengeIds(courseId, challengeId);
       } else {
         return new Err({
@@ -534,8 +537,7 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
 
   return merge(
     respondToFetchBlob,
-    respondToUpdateBlob,
-    respondToUpdateUserProgress,
+    // respondToUpdateBlob,
     updateActiveIdsEpic,
   );
 };

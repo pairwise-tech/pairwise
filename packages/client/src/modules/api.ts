@@ -646,7 +646,12 @@ class LocalStorageHttpClass {
      * Handle failure/empty cases, and render toasts messages for the
      * user when appropriate.
      */
-    const { settings, blobs, progress } = this.getLocalDataToPersist();
+    const {
+      settings,
+      blobs,
+      progress,
+      lastActiveChallengeIds,
+    } = this.getLocalDataToPersist();
 
     /* Only show the toast migration messages if we are sure pre-existing progress exists */
     let shouldToast = false;
@@ -668,6 +673,7 @@ class LocalStorageHttpClass {
       this.persistBlobs(blobs),
       this.persistProgress(progress),
       this.persistSettings(settings),
+      this.persistLastActiveChallengeIds(lastActiveChallengeIds),
     ]);
 
     if (shouldToast) {
@@ -688,6 +694,7 @@ class LocalStorageHttpClass {
       settings: this.fetchUserSettings(),
       blobs: this.getBlobsForPersistence(),
       progress: this.getProgressForPersistence(),
+      lastActiveChallengeIds: this.fetchLastActiveChallengeIds(),
     };
   }
 
@@ -726,6 +733,22 @@ class LocalStorageHttpClass {
     } else {
       return createNonHttpResponseError("No progress updates to persist!");
     }
+  }
+
+  private async persistLastActiveChallengeIds(
+    lastActiveIds: LastActiveChallengeIds,
+  ) {
+    if (lastActiveIds) {
+      for (const [courseId, challengeId] of Object.entries(lastActiveIds)) {
+        const result = await API.updateLastActiveChallengeIds(
+          courseId,
+          challengeId,
+        );
+        this.removeItem(KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY);
+        return result;
+      }
+    }
+    return createNonHttpResponseError("No code blobs to persist!");
   }
 
   private async persistBlobs(blobs: Nullable<{ [key: string]: ICodeBlobDto }>) {
