@@ -3,6 +3,23 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
 import { IBreadcrumbProps, Breadcrumb, Breadcrumbs } from "@blueprintjs/core";
+import { CHALLENGE_TYPE } from "@pairwise/common";
+
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
+interface Breadcrumb {
+  title: string;
+  type: CHALLENGE_TYPE | "module";
+}
+
+export interface BreadcrumbsData {
+  module: Breadcrumb;
+  section: Nullable<Breadcrumb>;
+  challenge: Nullable<Breadcrumb>;
+}
 
 /** ===========================================================================
  * Breadcrumbs Component
@@ -29,30 +46,35 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
     );
   }
 
-  getBreadcrumbs = (breadcrumbsPath: string[]) => {
+  getBreadcrumbs = (breadcrumbs: BreadcrumbsData) => {
     const { type, isCurrentChallengeComplete } = this.props;
     const crumbs: IBreadcrumbProps[] = [];
 
     // Get each breadcrumb
-    const [moduleCrumb, sectionCrumb, challengeCrumb] = breadcrumbsPath;
+    const { module, section, challenge } = breadcrumbs;
 
     /**
      * Assemble the breadcrumbs:
      */
 
     crumbs.push({
-      text: moduleCrumb,
+      text: module.title,
       icon: "projects",
     });
 
-    crumbs.push({
-      text: sectionCrumb,
-      icon: "folder-open",
-    });
-
-    if (type === "workspace") {
+    if (section) {
       crumbs.push({
-        text: challengeCrumb,
+        text: section.title,
+        icon: "folder-open",
+      });
+    }
+
+    if (type === "workspace" && challenge) {
+      // NOTE: The challenge type is available in the breadcrumb if we wanted
+      // to render a more specific icon for challenges based on the their
+      // type in the future.
+      crumbs.push({
+        text: challenge.title,
         icon: isCurrentChallengeComplete ? "tick" : "code",
         className: isCurrentChallengeComplete
           ? "breadcrumb-challenge-complete"

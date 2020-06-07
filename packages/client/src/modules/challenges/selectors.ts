@@ -1,11 +1,12 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
-import { CodeChallengeBlob } from "@pairwise/common";
+import { CodeChallengeBlob, CHALLENGE_TYPE } from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
 import { SANDBOX_ID } from "tools/constants";
 import { findCourseById } from "tools/utils";
 import { userProgress } from "modules/user/selectors";
+import { BreadcrumbsData } from "components/Breadcrumbs";
 
 /** ===========================================================================
  * Selectors
@@ -213,15 +214,16 @@ export const isCurrentChallengeComplete = createSelector(
  */
 export const breadcrumbPathSelector = createSelector(
   [getCurrentChallenge, getCurrentModule],
-  (challenge, currentModule) => {
-    let challengeTitle: string | null | undefined = challenge?.title;
-    const moduleTitle = currentModule?.title;
-
+  (challenge, currentModule): Nullable<BreadcrumbsData> => {
+    // No crumbs if not module or challenge...
     if (!currentModule || !challenge) {
       return null;
     }
 
-    let sectionTitle;
+    let sectionTitle: Nullable<string> = null;
+    let challengeTitle: Nullable<string> = challenge.title;
+
+    // Find the parent section for the challenge
     for (const x of currentModule.challenges) {
       if (x.type === "section") {
         sectionTitle = x.title;
@@ -238,15 +240,15 @@ export const breadcrumbPathSelector = createSelector(
       }
     }
 
-    if (!moduleTitle || !sectionTitle) {
-      return null;
-    }
+    const { type } = challenge;
 
-    const crumbs = [moduleTitle, sectionTitle, challengeTitle].filter(
-      Boolean,
-    ) as string[];
+    const result: BreadcrumbsData = {
+      module: { title: currentModule.title, type: "module" },
+      section: sectionTitle ? { title: sectionTitle, type: "section" } : null,
+      challenge: challengeTitle ? { title: challengeTitle, type } : null,
+    };
 
-    return crumbs;
+    return result;
   },
 );
 

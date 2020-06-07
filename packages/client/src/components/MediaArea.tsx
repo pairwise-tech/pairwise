@@ -266,7 +266,6 @@ type MediaAreaContainerProps = ReturnType<typeof mapStateToProps> &
 
 interface MediaAreaProps extends MediaAreaContainerProps {
   challenge: NonNullable<Challenge>;
-  breadcrumbsPath: string[];
 }
 
 export default connect(mapStateToProps, dispatchProps)(MediaAreaContainer);
