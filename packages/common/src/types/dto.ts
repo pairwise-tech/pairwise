@@ -62,7 +62,7 @@ export interface IUserDto<Profile = UserProfile> {
   settings: UserSettings;
   courses: UserCourseAccessMap;
   progress: UserProgressMap;
-  lastActiveChallengeIds: { [key: string]: string };
+  lastActiveChallengeIds: LastActiveChallengeIds;
 }
 
 export interface UserCourseAccessMap {
@@ -71,6 +71,10 @@ export interface UserCourseAccessMap {
 
 export interface UserProgressMap {
   [key: string]: UserCourseStatus;
+}
+
+export interface LastActiveChallengeIds {
+  [key: string]: string;
 }
 
 /**
