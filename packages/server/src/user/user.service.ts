@@ -237,15 +237,21 @@ export class UserService {
     }
   }
 
-  public async updateLastActiveChallengeId(
+  public async updateLastActiveChallengeIds(
     user: RequestUser,
+    courseId: string,
     challengeId: string,
   ) {
-    // TODO: Implement
-    // await this.userRepository.update(
-    //   { uuid: user.profile.uuid },
-    //   { lastActiveChallengeId: challengeId },
-    // );
+    const { lastActiveChallengeIds } = user;
+    const updated = {
+      ...lastActiveChallengeIds,
+      [courseId]: challengeId,
+    };
+
+    await this.userRepository.update(
+      { uuid: user.profile.uuid },
+      { lastActiveChallengeIds: JSON.stringify(updated) },
+    );
   }
 
   /**

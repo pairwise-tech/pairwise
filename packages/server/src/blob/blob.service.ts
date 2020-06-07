@@ -27,14 +27,6 @@ export class BlobService {
       throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
     }
 
-    /**
-     * [SIDE EFFECT!]
-     *
-     * Update the lastActiveChallengeId on this user to be this challenge
-     * which they are fetching user code history for.
-     */
-    await this.userService.updateLastActiveChallengeId(user, challengeId);
-
     const blob = await this.userCodeBlobRepository.findOne({
       user: user.profile,
       challengeId,
@@ -62,6 +54,9 @@ export class BlobService {
   ) {
     /* Validate everything in the code blob */
     validateCodeBlob(challengeCodeDto);
+
+    // Update active challenge ids
+    this.handleUpdatingUserActiveChallenges(user, challengeCodeDto.challengeId);
 
     const existingBlob = await this.userCodeBlobRepository.findOne({
       user: user.profile,
@@ -116,5 +111,25 @@ export class BlobService {
     }
 
     return SUCCESS_CODES.OK;
+  }
+
+  /**
+   * Handle updating the lastActiveChallengeIds on this user to be this
+   * challenge.
+   */
+  private async handleUpdatingUserActiveChallenges(
+    user: RequestUser,
+    challengeId: string,
+  ) {
+    const context = ContentUtility.deriveChallengeContextFromId(challengeId);
+
+    if (context) {
+      const { course } = context;
+      await this.userService.updateLastActiveChallengeIds(
+        user,
+        course.id,
+        challengeId,
+      );
+    }
   }
 }
