@@ -89,9 +89,7 @@ class Home extends React.Component<IProps, IState> {
               to={`workspace/${courseChallengeLinkId}`}
             >
               <Button large intent="success" className="courseLinkContinue">
-                {lastActiveChallengeExists
-                  ? "Continue the Course"
-                  : "Start Now"}
+                {lastActiveChallengeExists ? "Resume Course" : "Start Now"}
               </Button>
             </Link>
           ) : (
@@ -102,7 +100,7 @@ class Home extends React.Component<IProps, IState> {
               >
                 <Button large intent="success">
                   {lastActiveChallengeExists
-                    ? "Continue the Course"
+                    ? "Resume Course"
                     : "Start Now for Free"}
                 </Button>
               </Link>
