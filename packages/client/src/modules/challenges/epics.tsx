@@ -496,7 +496,25 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
   state$,
   deps,
 ) => {
-  return action$.pipe(
+  const respondToFetchBlob = action$.pipe(
+    filter(isActionOf(Actions.fetchBlobForChallenge)),
+    pluck("payload"),
+    map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
+  );
+
+  const respondToUpdateBlob = action$.pipe(
+    filter(isActionOf(Actions.updateCurrentChallengeBlob)),
+    map(x => x.payload.challengeId),
+    map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
+  );
+
+  const respondToUpdateUserProgress = action$.pipe(
+    filter(isActionOf(Actions.updateUserProgress)),
+    map(x => x.payload.challengeId),
+    map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
+  );
+
+  const updateActiveIdsEpic = action$.pipe(
     filter(isActionOf(Actions.updateLastActiveChallengeIds)),
     pluck("payload"),
     pluck("challengeId"),
@@ -512,6 +530,13 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
       }
     }),
     ignoreElements(),
+  );
+
+  return merge(
+    respondToFetchBlob,
+    respondToUpdateBlob,
+    respondToUpdateUserProgress,
+    updateActiveIdsEpic,
   );
 };
 
