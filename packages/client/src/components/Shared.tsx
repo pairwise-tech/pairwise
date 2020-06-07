@@ -409,6 +409,7 @@ export const SupplementaryContentContainer = styled.div`
 `;
 
 export const TitleHeader = styled.h1`
+  margin-top: -6px; /* align closely with breadcrumbs */
   font-size: 3em;
 `;
 

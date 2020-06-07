@@ -228,7 +228,7 @@ const ApplicationContainer = (props: IProps) => {
               content="Submit Feedback"
             >
               <IconButton
-                icon="chat"
+                icon="comment"
                 style={{ marginLeft: 6, padding: 0 }}
                 aria-label="open/close feedback dialog"
                 onClick={toggleFeedbackDialogOpen}

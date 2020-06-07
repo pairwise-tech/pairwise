@@ -5,6 +5,8 @@ import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
 import { SANDBOX_ID } from "tools/constants";
 import { findCourseById } from "tools/utils";
+import { userProgress } from "modules/user/selectors";
+import { BreadcrumbsData } from "components/Breadcrumbs";
 
 /** ===========================================================================
  * Selectors
@@ -182,6 +184,71 @@ export const getCurrentChallenge = createSelector(
       ?.find(x => x.id === courseId)
       ?.modules?.find(x => x.id === moduleId)
       ?.challenges.find(x => x.id === challengeId);
+  },
+);
+
+/**
+ * Determine if the user has completed the current challenge.
+ */
+export const isCurrentChallengeComplete = createSelector(
+  [getCurrentActiveIds, userProgress],
+  (activeIds, userProgressState) => {
+    const { currentCourseId, currentChallengeId } = activeIds;
+    if (userProgressState && currentCourseId && currentChallengeId) {
+      const courseProgress = userProgressState[currentCourseId];
+      if (courseProgress) {
+        const challengeStatus = courseProgress[currentChallengeId];
+        if (challengeStatus) {
+          return challengeStatus.complete;
+        }
+      }
+    }
+
+    // Any problems above default to false
+    return false;
+  },
+);
+
+/**
+ * Get the breadcrumbs path for a given challenge.
+ */
+export const breadcrumbPathSelector = createSelector(
+  [getCurrentChallenge, getCurrentModule],
+  (challenge, currentModule): Nullable<BreadcrumbsData> => {
+    // No crumbs if not module or challenge...
+    if (!currentModule || !challenge) {
+      return null;
+    }
+
+    let sectionTitle: Nullable<string> = null;
+    let challengeTitle: Nullable<string> = challenge.title;
+
+    // Find the parent section for the challenge
+    for (const x of currentModule.challenges) {
+      if (x.type === "section") {
+        sectionTitle = x.title;
+
+        // Erase the challenge title if the challenge is the section
+        if (x.id === challenge.id) {
+          challengeTitle = null;
+        }
+      }
+
+      // Once you found the challenge exit
+      if (x.id === challenge.id) {
+        break;
+      }
+    }
+
+    const { type } = challenge;
+
+    const result: BreadcrumbsData = {
+      module: { title: currentModule.title, type: "module" },
+      section: sectionTitle ? { title: sectionTitle, type: "section" } : null,
+      challenge: challengeTitle ? { title: challengeTitle, type } : null,
+    };
+
+    return result;
   },
 );
 
