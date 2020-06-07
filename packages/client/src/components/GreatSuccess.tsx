@@ -210,7 +210,7 @@ const GreatSuccess: React.FC<Props> = ({
       <CardTitle>{challenge.title}</CardTitle>
       <p style={{ marginBottom: 20, fontSize: 20 }}>
         Congratulations, you've completed <strong>{challenge.title}</strong>.
-        Where to next?
+        Keep up the progress!
       </p>
       <ButtonActions>
         <Button

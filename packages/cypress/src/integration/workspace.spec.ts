@@ -16,7 +16,7 @@ import {
  * ============================================================================
  */
 
-describe("Workspace and Challenge Navigation Works", () => {
+describe.skip("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Pairwise", () => {
     cy.visit(CLIENT_APP_URL);
     cy.get("#product-title").contains("Pairwise");
@@ -89,7 +89,7 @@ describe("Workspace and Challenge Navigation Works", () => {
   });
 });
 
-describe("Sandbox", () => {
+describe.skip("Sandbox", () => {
   it("Sandbox should exist", () => {
     cy.visit(CLIENT_APP_URL);
     cy.get("#sandboxButton").click();
@@ -159,7 +159,7 @@ describe("Workspace Challenges", () => {
     cy.get("#gs-card").should("exist");
   });
 
-  it("The workspace supports React challenges and they can be solved", () => {
+  it.only("The workspace supports React challenges and they can be solved", () => {
     // Visit a React challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
 
@@ -169,8 +169,8 @@ describe("Workspace Challenges", () => {
     // Verify the challenge title
     cy.contains("Create a Controlled Input");
 
-    // React challenges take longer to fully initialize
-    cy.wait(TIMEOUT);
+    // Just give it a ton of time to load the React libraries!
+    cy.wait(15 * 1000);
 
     // Tests should fail
     checkTestResultStatus("Incomplete...");
@@ -208,7 +208,7 @@ describe("Workspace Challenges", () => {
   });
 });
 
-describe("Success Modal", () => {
+describe.skip("Success Modal", () => {
   it("Should show the modal when and only when the run button is clicked", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
     cy.contains("Incomplete");

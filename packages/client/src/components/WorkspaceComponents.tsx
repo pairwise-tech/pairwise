@@ -23,6 +23,7 @@ import {
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
+import Breadcrumbs from "./Breadcrumbs";
 
 /** ===========================================================================
  * Workspace Components
@@ -219,6 +220,7 @@ export const rowSeparatorProps = {
 export const ContentContainer = styled.div`
   height: 100%;
   padding: 8px;
+  padding-top: 0;
   padding-bottom: 16px;
   overflow-y: auto;
 `;
@@ -421,11 +423,15 @@ export const InstructionsViewEdit = connect(
   return (
     <div>
       <ChallengeTitleHeading>
-        <StyledEditableText
-          value={props.title}
-          onChange={handleTitle}
-          disabled={!isEditMode}
-        />
+        {isEditMode ? (
+          <StyledEditableText
+            value={props.title}
+            onChange={handleTitle}
+            disabled={!isEditMode}
+          />
+        ) : (
+          <Breadcrumbs type="workspace" />
+        )}
       </ChallengeTitleHeading>
       <Suspense fallback={<Loading />}>
         <ContentEditor

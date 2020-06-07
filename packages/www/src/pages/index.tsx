@@ -575,7 +575,7 @@ export const YoutubeEmbed = (props: { url: string }) => {
 const IntroVideo = () => {
   return (
     <div>
-      <SectionTitle>What is this?</SectionTitle>
+      <SectionTitle>What is Pairwise?</SectionTitle>
       <YoutubeEmbed url="https://www.youtube.com/embed/d2DShyE37T4" />
     </div>
   );
