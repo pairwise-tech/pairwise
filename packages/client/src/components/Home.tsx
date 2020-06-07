@@ -80,11 +80,14 @@ class Home extends React.Component<IProps, IState> {
         elevation={Elevation.FOUR}
         style={{ maxWidth: 515, marginTop: 24 }}
       >
-        <CourseTitle className={`courseLink`}>{skeleton.title}</CourseTitle>
+        <CourseTitle className="courseLink">{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
         <ButtonsBox>
           {canAccessCourse ? (
-            <Link to={`workspace/${courseChallengeLinkId}`}>
+            <Link
+              id={`course-link-${i}-start`}
+              to={`workspace/${courseChallengeLinkId}`}
+            >
               <Button large intent="success" className="courseLinkContinue">
                 {lastActiveChallengeExists
                   ? "Continue the Course"
@@ -93,8 +96,11 @@ class Home extends React.Component<IProps, IState> {
             </Link>
           ) : (
             <>
-              <Link to={`workspace/${courseChallengeLinkId}`}>
-                <Button large intent="success" id={`course-link-${i}-start`}>
+              <Link
+                id={`course-link-${i}-start`}
+                to={`workspace/${courseChallengeLinkId}`}
+              >
+                <Button large intent="success">
                   {lastActiveChallengeExists
                     ? "Continue the Course"
                     : "Start Now for Free"}

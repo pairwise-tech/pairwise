@@ -206,7 +206,11 @@ const ApplicationContainer = (props: IProps) => {
             onClick={toggleNavigationMap}
           />
           <ProductTitle id="product-title">
-            <Link to="/home" style={{ display: "flex", alignItems: "center" }}>
+            <Link
+              to="/home"
+              id="header-home-link"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               Pairwise
             </Link>
           </ProductTitle>
