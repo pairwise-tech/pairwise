@@ -10,13 +10,10 @@ import { CodeBlob } from "./blob.entity";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { validateCodeBlob } from "src/tools/validation";
 import { RequestUser } from "src/types";
-import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class BlobService {
   constructor(
-    private readonly userService: UserService,
-
     @InjectRepository(CodeBlob)
     private readonly userCodeBlobRepository: Repository<CodeBlob>,
   ) {}
@@ -54,9 +51,6 @@ export class BlobService {
   ) {
     /* Validate everything in the code blob */
     validateCodeBlob(challengeCodeDto);
-
-    // Update active challenge ids
-    this.handleUpdatingUserActiveChallenges(user, challengeCodeDto.challengeId);
 
     const existingBlob = await this.userCodeBlobRepository.findOne({
       user: user.profile,
@@ -111,25 +105,5 @@ export class BlobService {
     }
 
     return SUCCESS_CODES.OK;
-  }
-
-  /**
-   * Handle updating the lastActiveChallengeIds on this user to be this
-   * challenge.
-   */
-  private async handleUpdatingUserActiveChallenges(
-    user: RequestUser,
-    challengeId: string,
-  ) {
-    const context = ContentUtility.deriveChallengeContextFromId(challengeId);
-
-    if (context) {
-      const { course } = context;
-      await this.userService.updateLastActiveChallengeIds(
-        user,
-        course.id,
-        challengeId,
-      );
-    }
   }
 }

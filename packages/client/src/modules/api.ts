@@ -420,6 +420,24 @@ class Api extends BaseApiClass {
     }
   };
 
+  updateLastActiveChallengeIds = async (
+    courseId: string,
+    challengeId: string,
+  ) => {
+    const { headers, authenticated } = this.getRequestHeaders();
+    if (authenticated) {
+      const body = { courseId, challengeId };
+      return this.httpHandler(async () => {
+        return axios.post<string>(`${HOST}/user/active-challenge-ids`, body, {
+          headers,
+        });
+      });
+    } else {
+      localStorageHTTP.updateLastActiveChallengeIds(courseId, challengeId);
+      return new Ok("Success");
+    }
+  };
+
   updateCourseProgressBulk = async (userCourseProgress: UserCourseProgress) => {
     const { headers } = this.getRequestHeaders();
     return this.httpHandler(async () => {

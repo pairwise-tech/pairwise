@@ -98,6 +98,11 @@ export interface Payment {
   extraData?: string /* generic json data */;
 }
 
+export interface ILastActiveIdsDto {
+  courseId: string;
+  challengeId: string;
+}
+
 export type PAYMENT_STATUS = "CONFIRMED" | "REFUNDED";
 
 export type PAYMENT_TYPE = "ADMIN_GIFT" | "USER_PAID";

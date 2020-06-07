@@ -69,8 +69,8 @@ class Home extends React.Component<IProps, IState> {
     let lastActiveChallengeExists = false;
     let courseChallengeLinkId = firstCourseChallenge.id;
     if (courseId in lastActiveChallengeIds) {
-      courseChallengeLinkId = courseId;
       lastActiveChallengeExists = true;
+      courseChallengeLinkId = lastActiveChallengeIds[courseId];
     }
 
     return (

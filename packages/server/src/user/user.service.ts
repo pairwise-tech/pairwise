@@ -242,16 +242,22 @@ export class UserService {
     courseId: string,
     challengeId: string,
   ) {
-    const { lastActiveChallengeIds } = user;
-    const updated = {
-      ...lastActiveChallengeIds,
-      [courseId]: challengeId,
-    };
+    try {
+      const { lastActiveChallengeIds } = user;
+      const updated = {
+        ...lastActiveChallengeIds,
+        [courseId]: challengeId,
+      };
 
-    await this.userRepository.update(
-      { uuid: user.profile.uuid },
-      { lastActiveChallengeIds: JSON.stringify(updated) },
-    );
+      await this.userRepository.update(
+        { uuid: user.profile.uuid },
+        { lastActiveChallengeIds: JSON.stringify(updated) },
+      );
+    } catch (err) {
+      console.log(
+        `[ERROR]: Failed to update lastActiveChallengeIds for courseId: ${courseId}, challengeId: ${challengeId}`,
+      );
+    }
   }
 
   /**
