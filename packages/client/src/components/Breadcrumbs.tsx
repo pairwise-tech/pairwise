@@ -1,3 +1,4 @@
+import isMobile from "is-mobile";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
@@ -19,7 +20,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
     }
 
     return (
-      <div style={{ marginTop: 10 }}>
+      <div style={{ width: "100%", marginTop: 10 }}>
         <Breadcrumbs
           items={this.getBreadcrumbs(breadcrumbsPath)}
           currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
@@ -57,6 +58,11 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
           ? "breadcrumb-challenge-complete"
           : "",
       });
+    }
+
+    // On mobile truncate workspace breadcrumbs to only show the challenge
+    if (type === "workspace" && isMobile()) {
+      return crumbs.slice(2);
     }
 
     return crumbs;

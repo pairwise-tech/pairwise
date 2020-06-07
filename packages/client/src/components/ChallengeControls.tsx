@@ -115,7 +115,7 @@ export const NextChallengeCard = connect(
     const complete = isCurrentChallengeComplete;
 
     // Render text depending on challenge status
-    const text = complete ? "You just completed: " : "In Progress: ";
+    const text = complete ? "You completed: " : "In Progress: ";
 
     return (
       <Card>
