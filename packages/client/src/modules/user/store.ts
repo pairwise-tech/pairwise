@@ -7,6 +7,7 @@ import {
   UserProfile,
   defaultUserSettings,
   ChallengeStatus,
+  LastActiveChallengeIds,
 } from "@pairwise/common";
 import { AuthActionTypes } from "../auth";
 import { Actions as actions } from "../root-actions";
@@ -39,6 +40,7 @@ export interface UserState {
   settings: UserSettings;
   courses: Nullable<UserCourseAccessMap>;
   progress: Nullable<UserProgressMap>;
+  lastActiveChallengeIds: LastActiveChallengeIds;
 }
 
 export type UserStoreState = UserState;
@@ -53,9 +55,10 @@ export enum EMAIL_VERIFICATION_STATUS {
 const initialUserState = {
   profile: null,
   payments: null,
-  settings: defaultUserSettings,
   courses: null,
   progress: null,
+  lastActiveChallengeIds: {},
+  settings: defaultUserSettings,
 };
 
 export interface State {

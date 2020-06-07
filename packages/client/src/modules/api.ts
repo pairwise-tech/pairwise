@@ -17,6 +17,7 @@ import {
   UserProgressMap,
   defaultUserSettings,
   StripeStartCheckoutSuccessResponse,
+  LastActiveChallengeIds,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -261,6 +262,7 @@ class Api extends BaseApiClass {
        */
       const progress = localStorageHTTP.fetchUserProgressMap();
       const settings: UserSettings = localStorageHTTP.fetchUserSettings();
+      const lastActiveChallengeIds = localStorageHTTP.fetchLastActiveChallengeIds();
 
       const preAccountUser: UserStoreState = {
         settings,
@@ -268,6 +270,7 @@ class Api extends BaseApiClass {
         profile: null,
         courses: null,
         payments: null,
+        lastActiveChallengeIds,
       };
 
       return new Ok(preAccountUser);
@@ -472,6 +475,7 @@ enum KEYS {
   USER_SETTINGS = "USER_SETTINGS",
   USER_PROGRESS_KEY = "USER_PROGRESS_KEY",
   CHALLENGE_BLOB_KEY = "CHALLENGE_BLOB_KEY",
+  LAST_ACTIVE_CHALLENGE_IDS_KEY = "LAST_ACTIVE_CHALLENGE_IDS_KEY",
 }
 
 class LocalStorageHttpClass {
@@ -555,9 +559,29 @@ class LocalStorageHttpClass {
         })
       : [updatedProgress];
 
+    // Update user progress
     this.setItem(KEYS.USER_PROGRESS_KEY, updatedProgressList);
 
+    // Update last active challenge ids
+    this.updateLastActiveChallengeIds(courseId, challengeId);
+
     return progress;
+  };
+
+  fetchLastActiveChallengeIds = () => {
+    return this.getItem<LastActiveChallengeIds>(
+      KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY,
+      {},
+    );
+  };
+
+  updateLastActiveChallengeIds = (courseId: string, challengeId: string) => {
+    const lastActive = this.fetchLastActiveChallengeIds();
+    const updated = {
+      ...lastActive,
+      [courseId]: challengeId,
+    };
+    this.setItem(KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY, updated);
   };
 
   fetchChallengeHistory = (
@@ -721,7 +745,7 @@ class LocalStorageHttpClass {
     }
   }
 
-  private setItem(key: KEYS, value: any) {
+  private setItem<T extends {}>(key: KEYS, value: T) {
     const serialized = JSON.stringify(value);
     localStorage.setItem(key, serialized);
   }
