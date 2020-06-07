@@ -52,7 +52,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
     if (type === "workspace") {
       crumbs.push({
         text: challengeCrumb,
-        icon: isCurrentChallengeComplete ? "tick" : "application",
+        icon: isCurrentChallengeComplete ? "tick" : "code",
         className: isCurrentChallengeComplete
           ? "breadcrumb-challenge-complete"
           : "",
