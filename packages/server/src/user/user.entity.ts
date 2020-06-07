@@ -54,7 +54,7 @@ export class User {
   @Column({ type: "jsonb" })
   public settings: string;
 
-  @Column({ type: "jsonb" })
+  @Column({ type: "jsonb", default: `"{}"` })
   public lastActiveChallengeIds: string;
 
   @OneToMany(
