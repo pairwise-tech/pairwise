@@ -3084,7 +3084,7 @@
         },
         {
           "id": "if2EAwsyp",
-          "type": "special-topic",
+          "type": "media",
           "title": "Programming Styles",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
@@ -3095,7 +3095,7 @@
         },
         {
           "id": "gyGd9$$SJ",
-          "type": "special-topic",
+          "type": "media",
           "title": "Reading Code",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
@@ -3106,7 +3106,7 @@
         },
         {
           "id": "$BC2mfFgY",
-          "type": "special-topic",
+          "type": "media",
           "title": "Troubleshooting Problems When Coding",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
