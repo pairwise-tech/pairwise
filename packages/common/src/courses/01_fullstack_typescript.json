@@ -2973,6 +2973,17 @@
           "content": ""
         },
         {
+          "id": "cKVb6701A",
+          "type": "typescript",
+          "title": "Selective Filter",
+          "instructions": "You receive an arbitrarily complicated array structure. The array could contain other arrays, objects, or other values. For example: `[1, null, false, {}, [0, 2, 2], undefined, { name: \"Joe\" }, true]`. Create a function `selectiveFilter` which selectively filters items out of this array, but _also filters child arrays._\n\nFor instance, consider this example:\n\n```\n// An example input.\nconst input = [true, false, null, 1, 2, 3, [undefined, {}, 3]];\n\n// A filter function which filters values equal to 3.\nconst filterFunction = (x: any) => x === 3;\n\n// Use the function.\nconst output = selectiveFilter(input, filterFunction);\n\n// The expected result: 3 is filtered out twice.\nconst expectedOutput = [true, false, null, 1, 2, [undefined, {}]];\n\n```\n",
+          "testCode": "test(\"The `selectiveFilter` function should be defined.\", () => {\n  expect(selectiveFilter).toBeDefined();\n  expect(typeof selectiveFilter === \"function\").toBe(true);\n});\n\ntest(\"`selectiveFilter` function should filter lists of values correctly.\", () => {\n  let input = [1, 2, 3, null, true, false, undefined, [2, 3, 3, 3]];\n  let expected = [1, 2, null, true, false, undefined, [2]];\n  expect(selectiveFilter(input, (x) => x === 3)).toEqual(expected);\n\n  input = [\n    1,\n    null,\n    3,\n    null,\n    true,\n    false,\n    undefined,\n    [2, 3, 3, null, [null, null, 5, null, 100]],\n  ];\n  expected = [1, 3, true, false, undefined, [2, 3, 3, [5, 100]]];\n  expect(selectiveFilter(input, (x) => x === null)).toEqual(expected);\n\n  input = [\n    1,\n    null,\n    3,\n    null,\n    true,\n    undefined,\n    [\n      2,\n      false,\n      true,\n      false,\n      [true, true, true, null, 1500],\n      3,\n      3,\n      null,\n      [null, null, 5, null, 100],\n    ],\n  ];\n  expected = [\n    1,\n    null,\n    3,\n    null,\n    undefined,\n    [2, [null, 1500], 3, 3, null, [null, null, 5, null, 100]],\n  ];\n  expect(selectiveFilter(input, (x) => typeof x === \"boolean\")).toEqual(\n    expected\n  );\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "/**\n * Selectively deeply filter items out of an array using a given\n * filter function.\n */\nconst selectiveFilter = (list: any[], filterFunction: (x: any) => boolean): any[] => {\n  const result = [];\n\n  // Iterate through the list:\n  for (const x of list) {\n    // If the item is an array, recursively call selectiveFilter on the item\n    if (Array.isArray(x)) {\n      result.push(selectiveFilter(x, filterFunction));\n    } else if (!filterFunction(x)) {\n      // Otherwise push the item into the results list if it doesn't match the filter\n      result.push(x);\n    }\n  }\n\n  return result;\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
