@@ -13,8 +13,6 @@ import {
   Challenge,
   getChallengeSlug,
   CourseList,
-  IUserDto,
-  UserProfile,
   LastActiveChallengeIds,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
