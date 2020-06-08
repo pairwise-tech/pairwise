@@ -274,20 +274,30 @@ describe("Editor Functions", () => {
     );
   });
   it("Should increase or decrease font-size", () => {
-    // Increase
-    // NOTE: We assume 12px as the base font size. Hopefully the test env doesn't completely screw us by having some other value...
-    cy.get(".monaco-editor textarea").should("have.css", "font-size", "12px");
-    click("editor-increase-font-size");
-    cy.get(".monaco-editor textarea").should("have.css", "font-size", "14px");
-    click("editor-increase-font-size");
-    click("editor-increase-font-size");
-    cy.get(".monaco-editor textarea").should("have.css", "font-size", "18px");
+    cy.get(".monaco-editor textarea").then($textarea => {
+      const fs = parseInt($textarea.css("font-size"), 10);
+      cy.get(".monaco-editor textarea").should(
+        "have.css",
+        "font-size",
+        fs + "px",
+      );
 
-    click("editor-decrease-font-size");
-    click("editor-decrease-font-size");
-    cy.get(".monaco-editor textarea").should("have.css", "font-size", "14px");
-    click("editor-decrease-font-size");
-    cy.get(".monaco-editor textarea").should("have.css", "font-size", "12px");
+      click("editor-increase-font-size");
+
+      cy.get(".monaco-editor textarea").should(
+        "have.css",
+        "font-size",
+        fs + 2 + "px",
+      );
+
+      click("editor-decrease-font-size");
+
+      cy.get(".monaco-editor textarea").should(
+        "have.css",
+        "font-size",
+        fs + "px",
+      );
+    });
   });
 
   // NOTE: If we change the challenge then this test will fail. That sucks
