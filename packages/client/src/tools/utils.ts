@@ -64,7 +64,13 @@ export const isContentOnlyChallenge = (challenge: Challenge) => {
 /**
  * Determine if a challenge requires the workspace (code editor).
  */
-export const challengeRequiresWorkspace = (challenge: Challenge) => {
+export const challengeRequiresWorkspace = (
+  challenge: Challenge | null | undefined,
+) => {
+  if (!challenge) {
+    return false;
+  }
+
   const contentOnlyChallenge = isContentOnlyChallenge(challenge);
   return !contentOnlyChallenge;
 };

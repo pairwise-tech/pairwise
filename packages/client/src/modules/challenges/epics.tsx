@@ -210,7 +210,7 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
     mergeMap(deps.api.fetchCourses),
-    map(({ value: courses }) => {
+    mergeMap(({ value: courses }) => {
       if (courses) {
         const { location } = deps.router;
 
@@ -222,20 +222,33 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
           slug,
         } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
 
+        const actions: any[] = [
+          Actions.fetchCurrentActiveCourseSuccess({ courses }),
+        ];
+
         // Do not redirect unless the user is already on the workspace/
         if (location.pathname.includes("workspace")) {
           const subPath = slug + location.search + location.hash;
           deps.router.push(`/workspace/${subPath}`);
+          actions.push(
+            Actions.setActiveChallengeIds({
+              currentCourseId: courseId,
+              currentModuleId: moduleId,
+              currentChallengeId: challengeId,
+            }),
+          );
         }
 
-        return Actions.fetchCurrentActiveCourseSuccess({
-          courses,
-          currentChallengeId: challengeId,
-          currentModuleId: moduleId,
-          currentCourseId: courseId,
-        });
+        return of(...actions);
+
+        // return Actions.fetchCurrentActiveCourseSuccess({
+        //   courses,
+        //   currentChallengeId: challengeId,
+        //   currentModuleId: moduleId,
+        //   currentCourseId: courseId,
+        // });
       } else {
-        return Actions.fetchCurrentActiveCourseFailure();
+        return of(Actions.fetchCurrentActiveCourseFailure());
       }
     }),
   );
@@ -452,8 +465,9 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
   // Fetch on challenge initialization which does not fire a setChallengeId action
   const fetchOnChallengeInitEpic = action$.pipe(
     filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
-    map(x => x.payload.currentChallengeId),
-    map(Actions.fetchBlobForChallenge),
+    ignoreElements(),
+    // map(x => x.payload.currentChallengeId),
+    // map(Actions.fetchBlobForChallenge),
   );
 
   return merge(fetchOnNavEpic, fetchOnChallengeInitEpic);

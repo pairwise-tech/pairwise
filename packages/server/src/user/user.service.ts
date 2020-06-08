@@ -255,6 +255,7 @@ export class UserService {
       const updatedActiveIds = {
         ...lastActiveChallengeIds,
         [courseId]: challengeId,
+        lastActiveChallenge: challengeId,
       };
 
       await this.userRepository.update(

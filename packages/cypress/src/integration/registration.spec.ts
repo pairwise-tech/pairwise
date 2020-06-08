@@ -20,10 +20,10 @@ import {
  */
 
 describe("Account Creation Flow", () => {
-  it.only("Creating an account persists last active challenge ids correctly", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace`);
-    cy.wait(TIMEOUT);
-    cy.url().should("include", "workspace");
+  it("Creating an account persists last active challenge ids correctly", () => {
+    // cy.visit(`${CLIENT_APP_URL}/workspace`);
+    // cy.wait(TIMEOUT);
+    // cy.url().should("include", "workspace");
 
     // Visit a challenge in one course
     cy.visit(`${CLIENT_APP_URL}/workspace/EztzbqIDQ`);
@@ -74,9 +74,9 @@ describe("Account Creation Flow", () => {
   });
 
   it("Creating an account persists pre-login updates correctly", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace`);
+    cy.visit(`${CLIENT_APP_URL}/home`);
     cy.wait(TIMEOUT);
-    cy.url().should("include", "workspace");
+    cy.url().should("include", "home");
 
     /* Open the navigation menu and navigate to the first programming challenge: */
     click("navigation-menu-button");
@@ -132,9 +132,9 @@ describe("Account Creation Flow", () => {
   });
 
   it("User registration with no email shows a prompt to add email, but only after reload and only one time", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace`);
+    cy.visit(`${CLIENT_APP_URL}/home`);
     cy.wait(TIMEOUT);
-    cy.url().should("include", "workspace");
+    cy.url().should("include", "home");
 
     // Login with Facebook (defaults to { email: null })
     click("login-signup-button");

@@ -601,9 +601,10 @@ class LocalStorageHttpClass {
     challengeId: string,
   ): LastActiveChallengeIds => {
     const lastActive = this.fetchLastActiveChallengeIds();
-    const updated = {
+    const updated: LastActiveChallengeIds = {
       ...lastActive,
       [courseId]: challengeId,
+      lastActiveChallengeId: challengeId,
     };
     this.setItem(KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY, updated);
     return updated;

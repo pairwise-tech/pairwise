@@ -247,9 +247,9 @@ export const fetchCurrentActiveCourseSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
 )<{
   courses: Course[];
-  currentModuleId: string;
-  currentCourseId: string;
-  currentChallengeId: string;
+  // currentModuleId: string;
+  // currentCourseId: string;
+  // currentChallengeId: string;
 }>();
 
 export const fetchCurrentActiveCourseFailure = createAction(
