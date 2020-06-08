@@ -46,8 +46,8 @@ enum ActionTypesEnum {
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
   FETCH_NAVIGATION_SKELETON_FAILURE = "FETCH_NAVIGATION_SKELETON_FAILURE",
 
-  FETCH_CURRENT_ACTIVE_COURSE_SUCCESS = "FETCH_CURRENT_ACTIVE_COURSE_SUCCESS",
-  FETCH_CURRENT_ACTIVE_COURSE_FAILURE = "FETCH_CURRENT_ACTIVE_COURSE_FAILURE",
+  FETCH_COURSES_SUCCESS = "FETCH_COURSES_SUCCESS",
+  FETCH_COURSES_FAILURE = "FETCH_COURSES_FAILURE",
 
   SET_EDIT_MODE = "SET_EDIT_MODE",
 
@@ -244,11 +244,11 @@ export const updateLastActiveChallengeIdsFailure = createAction(
 )();
 
 export const fetchCoursesSuccess = createAction(
-  ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
+  ActionTypesEnum.FETCH_COURSES_SUCCESS,
 )<{ courses: Course[] }>();
 
 export const fetchCoursesFailure = createAction(
-  ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_FAILURE,
+  ActionTypesEnum.FETCH_COURSES_FAILURE,
 )();
 
 export const storeInverseChallengeMapping = createAction(

@@ -15,6 +15,7 @@ import {
   CourseList,
   IUserDto,
   UserProfile,
+  LastActiveChallengeIds,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -205,9 +206,7 @@ const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
 };
 
 /**
- * Can also initialize the challenge id from the url to load the first
- * challenge. Usually challenge ID get set via location change, but in this case
- * the location hasn't change.d
+ * Fetch the courses.
  */
 const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
@@ -223,39 +222,58 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+/**
+ * Handle initializing the challenge context. This epic will determine an
+ * active challenge set based on 1) the current url, 2) the last active
+ * challenge, and 3) by default the first challenge.
+ *
+ * We can revisit the fact that this means there is always an
+ * "active challenge", which could be problematic. For now, the main reason
+ * this is troublesome to avoid is that the navigation menu, which is available
+ * outside of the workspace, relies on the active course, module, and
+ * challenge.
+ */
 const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
   return combineLatest(
-    action$.pipe(filter(isActionOf(Actions.fetchCoursesSuccess))),
-    action$.pipe(filter(isActionOf(Actions.fetchUserSuccess))),
+    action$.pipe(
+      filter(isActionOf(Actions.fetchCoursesSuccess)),
+      map(x => x.payload.courses),
+    ),
+    action$.pipe(
+      filter(isActionOf(Actions.fetchUserSuccess)),
+      map(x => x.payload.lastActiveChallengeIds),
+    ),
   ).pipe(
-    // @ts-ignore how to type this correctly!?
-    mergeMap(([courses, user]: [CourseList, IUserDto<UserProfile>]) => {
-      const { location } = deps.router;
+    mergeMap(
+      // @ts-ignore how to type this correctly!?
+      ([courses, lastActiveIds]: [CourseList, LastActiveChallengeIds]) => {
+        const { location } = deps.router;
 
-      const { lastActiveChallengeIds } = user;
-      const lastActiveId = lastActiveChallengeIds.lastActiveChallengeId;
+        const lastActiveId = lastActiveIds.lastActiveChallengeId;
+        const deepLinkChallengeId = findChallengeIdInLocationIfExists(location);
+        const activeChallengeId = deepLinkChallengeId || lastActiveId || "";
+        const {
+          challengeId,
+          courseId,
+          moduleId,
+          slug,
+        } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
 
-      const deepLinkChallengeId = findChallengeIdInLocationIfExists(location);
-      const activeChallengeId = deepLinkChallengeId || lastActiveId || "";
-      const {
-        challengeId,
-        courseId,
-        moduleId,
-        slug,
-      } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
+        // Only redirect if they are on the workspace
+        if (location.pathname.includes("workspace")) {
+          const subPath = slug + location.search + location.hash;
+          deps.router.push(`/workspace/${subPath}`);
+        }
 
-      if (location.pathname.includes("workspace")) {
-        const subPath = slug + location.search + location.hash;
-        deps.router.push(`/workspace/${subPath}`);
-      }
-
-      return Actions.setActiveChallengeIds({
-        currentCourseId: courseId,
-        currentModuleId: moduleId,
-        currentChallengeId: challengeId,
-      });
-    }),
-    ignoreElements(),
+        return of(
+          Actions.setActiveChallengeIds({
+            currentCourseId: courseId,
+            currentModuleId: moduleId,
+            currentChallengeId: challengeId,
+          }),
+        );
+      },
+    ),
   );
 };
 
@@ -352,7 +370,7 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       // in the current active course. Currently putting this logic here.
       if (shouldUpdateCurrentCourse) {
         return of(
-          setChallengeIdAction,
+          // setChallengeIdAction,
           Actions.setActiveChallengeIds({
             currentChallengeId: id,
             currentModuleId: challenge.moduleId,
@@ -371,12 +389,7 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
  */
 const setAndSyncChallengeIdEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
-    filter(
-      isActionOf([
-        Actions.setAndSyncChallengeId,
-        Actions.setActiveChallengeIds,
-      ]),
-    ),
+    filter(isActionOf(Actions.setAndSyncChallengeId)),
     map(action => {
       const { challengeMap } = state$.value.challenges;
       const challengeId = action.payload.currentChallengeId;
@@ -443,8 +456,7 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
   state$,
   deps,
 ) => {
-  // Fetch when navigation changes, i.e. setChallengeId
-  const fetchOnNavEpic = action$.pipe(
+  return action$.pipe(
     filter(isActionOf([Actions.setChallengeId, Actions.setActiveChallengeIds])),
     pluck("payload"),
     pluck("currentChallengeId"),
@@ -466,16 +478,6 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
       return of(...actions);
     }),
   );
-
-  // Fetch on challenge initialization which does not fire a setChallengeId action
-  const fetchOnChallengeInitEpic = action$.pipe(
-    filter(isActionOf(Actions.fetchCoursesSuccess)),
-    ignoreElements(),
-    // map(x => x.payload.currentChallengeId),
-    // map(Actions.fetchBlobForChallenge),
-  );
-
-  return merge(fetchOnNavEpic, fetchOnChallengeInitEpic);
 };
 
 /**
