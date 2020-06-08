@@ -2995,6 +2995,17 @@
           "content": ""
         },
         {
+          "id": "ovT8@8aec",
+          "type": "typescript",
+          "title": "Palindromes",
+          "instructions": "More fun with words\\! A _palindrome_ is a word or phrase which reads the same forwards or backwards, such as `madam` or `racecar`. Implement a function, `isPalindrome` which accepts a string and returns `true` if it is a palindrome and `false` otherwise\\.",
+          "testCode": "test(\"The `isPalindrome` function should be defined.\", () => {\n  expect(isPalindrome).toBeDefined();\n  expect(typeof isPalindrome === \"function\").toBe(true);\n});\n\ntest(\"`isPalindrome` should identify palindroms correctly.\", () => {\n  expect(isPalindrome(\"\")).toBe(true);\n  expect(isPalindrome(\"racecar\")).toBe(true);\n  expect(isPalindrome(\"madam\")).toBe(true);\n  expect(isPalindrome(\"madddam\")).toBe(true);\n  expect(isPalindrome(\"xyx\")).toBe(true);\n  expect(isPalindrome(\"zzzzzzzzzz\")).toBe(true);\n\n  expect(isPalindrome(\"madamasdf\")).toBe(false);\n  expect(isPalindrome(\"maxdam\")).toBe(false);\n  expect(isPalindrome(\"maxdamzzzzzzz\")).toBe(false);\n  expect(isPalindrome(\"madam \")).toBe(false);\n  expect(isPalindrome(\"  madam \")).toBe(false);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here:",
+          "solutionCode": "/**\n * A function to identify palindromes.\n */\nconst isPalindrome = (x: string): boolean => {\n  // Iterate to the midpoint in the string and compare the left\n  // character to the right character at the same position. If they\n  // do not match, return false immediately.\n  for (let i = 0; i < x.length / 2; i++) {\n    const left = x.charAt(i);\n    const right = x.charAt(x.length - i - 1);\n\n    if (left !== right) {\n      return false;\n    }\n  }\n\n  // All characters matched - return true.\n  return true;\n}\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
