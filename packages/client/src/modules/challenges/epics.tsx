@@ -232,18 +232,18 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
  * challenge.
  */
 const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
-  return combineLatest(
-    action$.pipe(
-      filter(isActionOf(Actions.fetchCoursesSuccess)),
-      map(x => x.payload.courses),
-    ),
-    action$.pipe(
-      filter(isActionOf(Actions.fetchUserSuccess)),
-      map(x => x.payload.lastActiveChallengeIds),
-    ),
-  ).pipe(
+  const fetchCourses$ = action$.pipe(
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
+    map(x => x.payload.courses),
+  );
+
+  const fetchUser$ = action$.pipe(
+    filter(isActionOf(Actions.fetchUserSuccess)),
+    map(x => x.payload.lastActiveChallengeIds),
+  );
+
+  return combineLatest(fetchCourses$, fetchUser$).pipe(
     mergeMap(
-      // @ts-ignore how to type this correctly!?
       ([courses, lastActiveIds]: [CourseList, LastActiveChallengeIds]) => {
         const { location } = deps.router;
 
