@@ -8,6 +8,7 @@ import {
   ICodeEditor,
   ICodeEditorOptions,
   PAIRWISE_CODE_EDITOR_ID,
+  p,
 } from "./Workspace";
 import { monaco, registerExternalLib, MonacoModel } from "../monaco";
 import { MonacoEditorThemes } from "@pairwise/common";
@@ -42,6 +43,7 @@ export default class WorkspaceMonacoEditor
   // The actual monaco editor instance.
   editorInstance: Nullable<{
     updateOptions: (x: MonacoEditorOptions) => void;
+    focus(): void;
   }> = null;
 
   initializationPromise: Nullable<Promise<void>> = null;
@@ -195,11 +197,13 @@ export default class WorkspaceMonacoEditor
   };
 
   focus = () => {
-    // TODO
+    this.editorInstance?.focus();
   };
 
   refresh = async () => {
-    // TODO
+    this.cleanup();
+    await this.initializeMonaco();
+    await this.initializeMonacoEditor();
   };
 
   initialize = async () => {
@@ -339,6 +343,15 @@ export default class WorkspaceMonacoEditor
     return <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} />;
   }
 
+  componentDidUpdate() {
+    const currentValue = this.getMonacoEditorValue();
+    const nextValue = this.props.value;
+    p("MONACO_componetDidUpdate", currentValue, nextValue);
+    if (currentValue !== nextValue) {
+      this.setMonacoEditorValue();
+    }
+  }
+
   async componentDidMount() {
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
     await this.initializeMonaco();
@@ -351,6 +364,13 @@ export default class WorkspaceMonacoEditor
 
     this.debouncedSyntaxHighlightFunction(this.props.value);
   }
+
+  private readonly getMonacoEditorValue = () => {
+    const model = this.findModelByType("workspace-editor");
+    if (model) {
+      return model.getValue();
+    }
+  };
 
   private readonly disposeModels = () => {
     const { workspaceEditorModelIdMap } = this.state;

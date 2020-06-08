@@ -45,7 +45,6 @@ import {
   Popover,
   MenuDivider,
 } from "@blueprintjs/core";
-import { MonacoEditorOptions } from "modules/challenges/types";
 import {
   composeWithProps,
   constructDataBlobFromChallenge,
@@ -131,7 +130,7 @@ export interface ICodeEditorProps {
 
 export interface ICodeEditor extends React.Component<ICodeEditorProps> {
   refresh(): Promise<void>;
-  initialize(): Promise<void>;
+  // initialize(): Promise<void>;
   focus(): void;
   cleanup(): void;
   setTheme(theme: string): void;
@@ -523,6 +522,7 @@ class Workspace extends React.Component<IProps, IState> {
           <ButtonGroup vertical>
             <Tooltip content="Increase Font Size" position="left">
               <IconButton
+                id="editor-increase-font-size"
                 icon="plus"
                 aria-label="increase editor font size"
                 onClick={this.props.increaseFontSize}
@@ -530,6 +530,7 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
             <Tooltip content="Decrease Font Size" position="left">
               <IconButton
+                id="editor-decrease-font-size"
                 icon="minus"
                 aria-label="decrease editor font size"
                 onClick={this.props.decreaseFontSize}
@@ -539,6 +540,7 @@ class Workspace extends React.Component<IProps, IState> {
           <div style={{ marginBottom: 8 }} />
           <Tooltip content="Format Code" position="left">
             <IconButton
+              id="editor-format-code"
               icon="clean"
               aria-label="format editor code"
               onClick={this.handleFormatCode}
@@ -560,6 +562,7 @@ class Workspace extends React.Component<IProps, IState> {
                 )}
                 {!IS_SANDBOX && (
                   <MenuItem
+                    id="editor-toggle-full-screen"
                     icon={fullScreenEditor ? "collapse-all" : "expand-all"}
                     aria-label="toggle editor size"
                     onClick={this.props.toggleEditorSize}
@@ -571,12 +574,14 @@ class Workspace extends React.Component<IProps, IState> {
                   />
                 )}
                 <MenuItem
+                  id="editor-toggle-high-contrast"
                   icon="contrast"
                   aria-label="toggle high contrast mode"
                   onClick={this.props.toggleHighContrastMode}
                   text="Toggle High Contrast Mode"
                 />
                 <MenuItem
+                  id="editor-export-code"
                   icon="download"
                   onClick={this.handleExport}
                   text="Export Code to File"
@@ -584,6 +589,7 @@ class Workspace extends React.Component<IProps, IState> {
                 />
                 <MenuDivider />
                 <MenuItem
+                  id="editor-restore-initial-code"
                   icon="reset"
                   aria-label="reset editor"
                   onClick={this.resetCodeWindow}
@@ -591,6 +597,7 @@ class Workspace extends React.Component<IProps, IState> {
                 />
                 {!IS_SANDBOX && (
                   <MenuItem
+                    id="editor-toggle-solution-code"
                     icon={revealSolutionCode ? "application" : "applications"}
                     aria-label={
                       revealSolutionCode
@@ -610,7 +617,11 @@ class Workspace extends React.Component<IProps, IState> {
             position={Position.LEFT_BOTTOM}
           >
             <Tooltip content="More options..." position="left">
-              <IconButton aria-label="more options" icon="more" />
+              <IconButton
+                id="editor-more-options"
+                aria-label="more options"
+                icon="more"
+              />
             </Tooltip>
           </Popover>
         </LowerRight>
@@ -1070,6 +1081,7 @@ class Workspace extends React.Component<IProps, IState> {
    */
   private readonly handleCodeFormatMessage = (event: MessageEvent) => {
     const code = event.data?.code;
+    p("handleCodeFormatMessage", code);
     const channel = event.data?.channel;
     if (code && channel === CODE_FORMAT_CHANNEL) {
       this.transformMonacoCode(() => code);

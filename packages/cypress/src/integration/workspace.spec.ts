@@ -270,7 +270,7 @@ describe.only("Editor Functions", () => {
 
     cy.get(".monaco-editor textarea").should(
       "have.value",
-      "<h1>SUP SUP SUP</h1>",
+      "<h1>SUP SUP SUP</h1>\n",
     );
   });
   it("Should increase or decrease font-size");
