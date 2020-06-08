@@ -419,7 +419,7 @@ export const InstructionsViewEdit = connect(
     props.updateChallenge({ id: currentId, challenge: { title } });
 
   return (
-    <div>
+    <div id="workspace-panel-instructions">
       <ChallengeTitleHeading>
         <StyledEditableText
           value={props.title}

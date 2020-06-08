@@ -235,7 +235,7 @@ describe("Success Modal", () => {
   });
 });
 
-describe.only("Editor Functions", () => {
+describe("Editor Functions", () => {
   it("There should be a more options menu with buttons", () => {
     cy.visit(FIRTS_CHALLENGE_URL);
     cy.wait(TIMEOUT);
@@ -273,11 +273,64 @@ describe.only("Editor Functions", () => {
       "<h1>SUP SUP SUP</h1>\n",
     );
   });
-  it("Should increase or decrease font-size");
-  it("Should restore initial code");
-  it("Should reveal solution code");
-  it("Should support high contrast theme");
-  it("Shoudl support full-screen editing");
+  it("Should increase or decrease font-size", () => {
+    // Increase
+    // NOTE: We assume 12px as the base font size. Hopefully the test env doesn't completely screw us by having some other value...
+    cy.get(".monaco-editor textarea").should("have.css", "font-size", "12px");
+    click("editor-increase-font-size");
+    cy.get(".monaco-editor textarea").should("have.css", "font-size", "14px");
+    click("editor-increase-font-size");
+    click("editor-increase-font-size");
+    cy.get(".monaco-editor textarea").should("have.css", "font-size", "18px");
+
+    click("editor-decrease-font-size");
+    click("editor-decrease-font-size");
+    cy.get(".monaco-editor textarea").should("have.css", "font-size", "14px");
+    click("editor-decrease-font-size");
+    cy.get(".monaco-editor textarea").should("have.css", "font-size", "12px");
+  });
+
+  // NOTE: If we change the challenge then this test will fail. That sucks
+  const initialCode = "<h1>Pairwise</h1>\n";
+  const solutionCode = "<h1>Hello Pairwise!</h1>\n";
+  it("Should restore initial code", () => {
+    // NOTE: The code is assumed to be something other than initial becuase of the tests above
+    cy.get(".monaco-editor textarea").should("not.have.value", initialCode);
+    click("editor-more-options");
+    click("editor-restore-initial-code");
+    cy.get(".monaco-editor textarea").should("have.value", initialCode);
+  });
+  it("Should reveal solution code", () => {
+    cy.get(".monaco-editor textarea").should("have.value", initialCode);
+    click("editor-more-options");
+    click("editor-toggle-solution-code");
+    cy.contains("Viewing Solution Code");
+    cy.get(".monaco-editor textarea").should("have.value", solutionCode);
+
+    click("editor-more-options");
+    click("editor-toggle-solution-code");
+    cy.get(".monaco-editor textarea").should("have.value", initialCode);
+  });
+
+  it("Should support high contrast theme", () => {
+    cy.get(".hc-black").should("not.exist");
+    click("editor-more-options");
+    click("editor-toggle-high-contrast");
+    cy.get(".hc-black");
+    click("editor-more-options");
+    click("editor-toggle-high-contrast");
+    cy.get(".hc-black").should("not.exist");
+  });
+
+  it("Shoudl support full-screen editing", () => {
+    cy.get("#workspace-panel-instructions");
+    click("editor-more-options");
+    click("editor-toggle-full-screen");
+    cy.get("#workspace-panel-instructions").should("not.exist");
+    click("editor-more-options");
+    click("editor-toggle-full-screen");
+    cy.get("#workspace-panel-instructions");
+  });
 });
 
 /** ===========================================================================
