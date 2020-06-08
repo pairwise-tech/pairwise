@@ -21,10 +21,6 @@ import {
 
 describe("Account Creation Flow", () => {
   it("Creating an account persists last active challenge ids correctly", () => {
-    // cy.visit(`${CLIENT_APP_URL}/workspace`);
-    // cy.wait(TIMEOUT);
-    // cy.url().should("include", "workspace");
-
     // Visit a challenge in one course
     cy.visit(`${CLIENT_APP_URL}/workspace/EztzbqIDQ`);
     cy.wait(TIMEOUT);
@@ -61,7 +57,10 @@ describe("Account Creation Flow", () => {
 
     // Visit a different challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/Hvnu4UcaE`);
+    cy.wait(TIMEOUT);
+
     cy.visit(`${CLIENT_APP_URL}/workspace/66sfsGVp8`);
+    cy.wait(TIMEOUT);
 
     // Return home and reload
     click("header-home-link");
