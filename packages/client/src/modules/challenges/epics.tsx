@@ -222,14 +222,16 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
 
 /**
  * Handle initializing the challenge context. This epic will determine an
- * active challenge set based on 1) the current url, 2) the last active
- * challenge, and 3) by default the first challenge.
+ * active challenge set based on:
  *
- * We can revisit the fact that this means there is always an
- * "active challenge", which could be problematic. For now, the main reason
- * this is troublesome to avoid is that the navigation menu, which is available
- * outside of the workspace, relies on the active course, module, and
- * challenge.
+ * 1) the current url
+ * 2) the last active challenge
+ * 3) by default the first challenge in the TS course
+ *
+ * NOTE: It will only result in setting a currentChallengeId if the user
+ * is on the workspace. Otherwise, the current challenge will be null, but
+ * we will still default the course and module based on the above
+ * considerations.
  */
 const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
   const fetchCourses$ = action$.pipe(
