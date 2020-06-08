@@ -27,6 +27,7 @@ import { Challenge } from "@pairwise/common";
 import { isContentOnlyChallenge } from "tools/utils";
 import toaster from "tools/toast-utils";
 import { HIDE_EMBEDS } from "tools/client-env";
+import Breadcrumbs from "./Breadcrumbs";
 
 const VIDEO_DOM_ID = "pw-video-embed";
 
@@ -171,6 +172,8 @@ ID (video ID)
 
   return (
     <SupplementaryContentContainer id={CONTENT_AREA_ID}>
+      <div style={{ height: 8 }} /> {/* Add some space */}
+      <Breadcrumbs type="media" />
       <TitleHeader>
         <EditableText
           value={title}
@@ -248,9 +251,10 @@ const MediaAreaContainer = (props: MediaAreaContainerProps) => {
 };
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
   title: Modules.selectors.challenges.getCurrentTitle(state) || "",
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
+  breadcrumbsPath: Modules.selectors.challenges.breadcrumbPathSelector(state),
 });
 
 const dispatchProps = {
