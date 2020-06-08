@@ -37,7 +37,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
     }
 
     return (
-      <div style={{ width: "100%", marginTop: 10 }}>
+      <div style={{ width: "100%", marginTop: 10, marginBottom: 10 }}>
         <Breadcrumbs
           items={this.getBreadcrumbs(breadcrumbsPath)}
           currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
