@@ -339,6 +339,10 @@ export default class WorkspaceMonacoEditor
     }
   };
 
+  componentWillUnmount() {
+    this.cleanup();
+  }
+
   render() {
     return <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} />;
   }
