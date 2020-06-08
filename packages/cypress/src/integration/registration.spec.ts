@@ -72,7 +72,7 @@ describe("Account Creation Flow", () => {
     cy.url().should("include", "workspace/66sfsGVp8");
   });
 
-  it("Creating an account persists pre-login updates correctly", () => {
+  it.only("Creating an account persists pre-login updates correctly", () => {
     cy.visit(`${CLIENT_APP_URL}/home`);
     cy.wait(TIMEOUT);
     cy.url().should("include", "home");
@@ -206,9 +206,9 @@ const checkUrlDuringUserRegistrationProcess = (
   sso: "facebook" | "google" | "github",
   challengeIndex: number,
 ) => {
-  cy.visit(`${CLIENT_APP_URL}/workspace`);
+  cy.visit(`${CLIENT_APP_URL}/home`);
   cy.wait(TIMEOUT);
-  cy.url().should("include", "workspace");
+  cy.url().should("include", "home");
 
   // Open the navigation menu and navigate to the first programming challenge:
   click("navigation-menu-button");
