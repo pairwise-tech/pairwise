@@ -62,6 +62,7 @@ export const FrameContainer = styled.iframe`
 `;
 
 export const RunButton = styled(Button)`
+  z-index: 3;
   .bp3-icon {
     color: ${COLORS.NEON_GREEN} !important;
   }

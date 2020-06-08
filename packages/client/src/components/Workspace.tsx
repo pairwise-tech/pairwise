@@ -80,6 +80,7 @@ import pipe from "ramda/es/pipe";
 import SEO from "./SEO";
 import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
 import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
+import isMobile from "is-mobile";
 
 const debug = require("debug")("client:Workspace");
 
@@ -139,15 +140,6 @@ export interface ICodeEditor extends React.Component<ICodeEditorProps> {
   updateOptions(options: Partial<ICodeEditorOptions>): void;
 }
 
-// Just a debug measure...
-export const p = (s: string, ...args: any[]) => {
-  if (args.length) {
-    console.log(`%c${s} 👉 %o`, "font-size:18px;color:lime;", args);
-  } else {
-    console.log(`%c${s}`, "font-size:18px;color:lime;");
-  }
-};
-
 /** ===========================================================================
  * React Component
  * ============================================================================
@@ -184,8 +176,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.userCode = initialCode;
 
-    // TODO... we'd want totry to determine whether they are on mobile or not
-    const favorMobile = false;
+    const favorMobile = isMobile();
 
     this.state = {
       code: initialCode,
@@ -210,10 +201,7 @@ class Workspace extends React.Component<IProps, IState> {
       false,
     );
 
-    // TODO??
-    // await this.editor.initialize()
-
-    p("componentDidMount");
+    debug("componentDidMount");
 
     this.runChallengeTests();
 
@@ -224,7 +212,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentWillUnmount() {
-    p("componentWillUnmount");
+    debug("componentWillUnmount");
 
     this.cleanupEditor();
     window.removeEventListener("keydown", this.handleKeyPress);
@@ -241,7 +229,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
-    p("componentDidUpdate");
+    debug("componentDidUpdate");
     /**
      * Handle toggling the solution code on and off.
      */
@@ -330,10 +318,8 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   refreshEditor = async () => {
-    p("refreshEditor");
+    debug("refreshEditor");
     await this.editor?.refresh();
-    // TODO??
-    // this.setMonacoEditorValue();
     if (this.iFrameRef) {
       this.runChallengeTests();
     }
@@ -611,17 +597,6 @@ class Workspace extends React.Component<IProps, IState> {
                   onClick={this.resetCodeWindow}
                   text="Restore Initial Code"
                 />
-                <MenuItem
-                  id="editor-toggle-mobile"
-                  icon={this.state.favorMobile ? "desktop" : "mobile-phone"}
-                  aria-label="toggle editor size"
-                  onClick={this.toggleMobileView}
-                  text={
-                    this.state.favorMobile
-                      ? "Use Desktop Editor"
-                      : "Use Mobile Editor"
-                  }
-                />
                 {!IS_SANDBOX && (
                   <MenuItem
                     id="editor-toggle-solution-code"
@@ -639,6 +614,17 @@ class Workspace extends React.Component<IProps, IState> {
                     onClick={this.props.handleToggleSolutionCode}
                   />
                 )}
+                <MenuItem
+                  id="editor-toggle-mobile"
+                  icon={this.state.favorMobile ? "desktop" : "mobile-phone"}
+                  aria-label="toggle editor size"
+                  onClick={this.toggleMobileView}
+                  text={
+                    this.state.favorMobile
+                      ? "Use Desktop Editor"
+                      : "Use Mobile Editor"
+                  }
+                />
               </Menu>
             }
             position={Position.LEFT_BOTTOM}
@@ -783,7 +769,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleEditorContentChange = (code: string) => {
-    p("handleEditorContentChange", code);
+    debug("handleEditorContentChange", code);
     /**
      * Update the stored code value and then:
      *
@@ -1111,7 +1097,7 @@ class Workspace extends React.Component<IProps, IState> {
    */
   private readonly handleCodeFormatMessage = (event: MessageEvent) => {
     const code = event.data?.code;
-    p("handleCodeFormatMessage", code);
+    debug("handleCodeFormatMessage", code);
     const channel = event.data?.channel;
     if (code && channel === CODE_FORMAT_CHANNEL) {
       this.transformMonacoCode(() => code);

@@ -8,12 +8,11 @@ import {
   ICodeEditor,
   ICodeEditorOptions,
   PAIRWISE_CODE_EDITOR_ID,
-  p,
 } from "./Workspace";
 import { monaco, registerExternalLib, MonacoModel } from "../monaco";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
-import { wait } from "tools/utils";
+import { wait, pp } from "tools/utils";
 import { debounce } from "throttle-debounce";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import { types } from "tools/jsx-types";
@@ -350,7 +349,7 @@ export default class WorkspaceMonacoEditor
   componentDidUpdate() {
     const currentValue = this.getMonacoEditorValue();
     const nextValue = this.props.value;
-    p("MONACO_componetDidUpdate", currentValue, nextValue);
+    debug("componetDidUpdate", currentValue, nextValue);
     if (currentValue !== nextValue) {
       this.setMonacoEditorValue();
     }

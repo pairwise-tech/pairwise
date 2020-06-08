@@ -77,7 +77,7 @@ export const Text = styled.p`
 
 export const UpperRight = styled.div<{ isEditMode: boolean }>`
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   right: 20px;
   top: ${props => (props.isEditMode ? 45 : 10)}px;
   display: flex;
@@ -87,7 +87,7 @@ export const UpperRight = styled.div<{ isEditMode: boolean }>`
 
 export const LowerRight = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   right: 20px;
   bottom: 10px;
   display: flex;
