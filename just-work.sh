@@ -2,6 +2,7 @@
 # really just want things to run so you can get back to work.
 
 echo '[DO] Make sure yarn dependencies are up to date'
+npx lerna bootstrap
 yarn install
 
 echo '[DO] Stop running docker containers'
