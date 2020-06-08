@@ -79,6 +79,7 @@ import GreatSuccess from "./GreatSuccess";
 import pipe from "ramda/es/pipe";
 import SEO from "./SEO";
 import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
+import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
 
 const debug = require("debug")("client:Workspace");
 
@@ -113,6 +114,7 @@ interface IState {
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
   hideSuccessModal: boolean;
+  favorMobile: boolean;
 }
 
 export interface ICodeEditorOptions {
@@ -137,6 +139,7 @@ export interface ICodeEditor extends React.Component<ICodeEditorProps> {
   updateOptions(options: Partial<ICodeEditorOptions>): void;
 }
 
+// Just a debug measure...
 export const p = (s: string, ...args: any[]) => {
   if (args.length) {
     console.log(`%c${s} 👉 %o`, "font-size:18px;color:lime;", args);
@@ -181,6 +184,9 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.userCode = initialCode;
 
+    // TODO... we'd want totry to determine whether they are on mobile or not
+    const favorMobile = false;
+
     this.state = {
       code: initialCode,
       testResults: [],
@@ -192,6 +198,7 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal: true,
 
       testResultsLoading: false,
+      favorMobile,
     };
   }
 
@@ -363,6 +370,10 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
+  toggleMobileView = () => {
+    this.setState({ favorMobile: !this.state.favorMobile });
+  };
+
   /**
    * Switching tabs in the main code area, so that we can edit the starter code
    * and solution code of a challenge.
@@ -480,6 +491,11 @@ class Workspace extends React.Component<IProps, IState> {
       </Col>
     );
 
+    // Use different editors for different platforms
+    const CodeEditor = this.state.favorMobile
+      ? WorkspaceCodemirrorEditor
+      : WorkspaceMonacoEditor;
+
     const MONACO_CONTAINER = (
       <div style={{ height: "100%", position: "relative" }}>
         <GreatSuccess
@@ -595,6 +611,17 @@ class Workspace extends React.Component<IProps, IState> {
                   onClick={this.resetCodeWindow}
                   text="Restore Initial Code"
                 />
+                <MenuItem
+                  id="editor-toggle-mobile"
+                  icon={this.state.favorMobile ? "desktop" : "mobile-phone"}
+                  aria-label="toggle editor size"
+                  onClick={this.toggleMobileView}
+                  text={
+                    this.state.favorMobile
+                      ? "Use Desktop Editor"
+                      : "Use Mobile Editor"
+                  }
+                />
                 {!IS_SANDBOX && (
                   <MenuItem
                     id="editor-toggle-solution-code"
@@ -626,7 +653,7 @@ class Workspace extends React.Component<IProps, IState> {
           </Popover>
         </LowerRight>
         {/* <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} /> */}
-        <WorkspaceMonacoEditor
+        <CodeEditor
           ref={editor => {
             this.editor = editor;
           }}
