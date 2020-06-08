@@ -3017,6 +3017,17 @@
           "content": ""
         },
         {
+          "id": "WeSGi$Uri",
+          "type": "typescript",
+          "title": "Find a Sum of Two",
+          "instructions": "Given a list of numbers and a target sum, determine if any two numbers in the list can be added together to make the target sum. Assume only two such numbers exist, if they exist at all. Return these numbers as a tuple, i.e. `[number, number]`, or `null` if no such numbers exist.",
+          "testCode": "test(\"The `twoSum` function should be defined.\", () => {\n  expect(twoSum).toBeDefined();\n  expect(typeof twoSum === \"function\").toBe(true);\n});\n\ntest(\"`twoSum` should return the right result.\", () => {\n  expect(twoSum([1, 4, 9], 5)).toEqual([1, 4]);\n  expect(twoSum([1, 4, 9, 10, 20], 30)).toEqual([10, 20]);\n  expect(twoSum([9, 8, 7, 12, 14, 15], 26)).toEqual([12, 14]);\n\n  expect(twoSum([], 1)).toEqual(null);\n  expect(twoSum([9, 8, 7], 1)).toEqual(null);\n  expect(twoSum([1, 4, 9, 10, 20], 33)).toEqual(null);\n  expect(twoSum([9, 8, 7, 12, 14, 15], 260)).toEqual(null);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Matched result should be a list of the two numbers\ntype Result = [number, number];\n\n// Function signature\ntype TwoSumFunction = (list: number[], sum: number) => Result | null;\n\n// Your code here:",
+          "solutionCode": "// Matched result should be a list of the two numbers\ntype Result = [number, number];\n\n// Function signature\ntype TwoSumFunction = (list: number[], sum: number) => Result | null;\n\n// Two Sum function\nconst twoSum: TwoSumFunction = (list, sum) => {\n  // Create a set to track the numbers in the list\n  let numberSet = new Set();\n\n  // Iterate through the list and determine the required number at each\n  // value needed to add to the sum\n  for (const x of list) {\n    numberSet.add(x);\n    const difference = sum - x;\n\n    // If the required number if in the numberSet, you have a pair - return them!\n    if (numberSet.has(difference)) {\n      return [difference, x];\n    }\n  }\n\n  // No pairs found - return null.\n  return null;\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
