@@ -66,7 +66,7 @@ const searchEpic: EpicSignature = action$ => {
   const searchWorker: Worker = new SearchWorker();
 
   const buildSearchIndex$ = action$.pipe(
-    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
     map(x => x.payload.courses),
     take(1), // Only do this once.. for now
     tap(courses => {
@@ -215,41 +215,9 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(deps.api.fetchCourses),
     map(({ value: courses }) => {
       if (courses) {
-        const { location } = deps.router;
-
-        // const maybeChallengeId = findChallengeIdInLocationIfExists(location);
-        // const {
-        //   challengeId,
-        //   courseId,
-        //   moduleId,
-        //   slug,
-        // } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
-
-        // Do not redirect unless the user is already on the workspace/
-        if (location.pathname.includes("workspace")) {
-          // const subPath = slug + location.search + location.hash;
-          // deps.router.push(`/workspace/${subPath}`);
-          // actions.push(
-          //   Actions.setActiveChallengeIds({
-          //     currentCourseId: courseId,
-          //     currentModuleId: moduleId,
-          //     currentChallengeId: challengeId,
-          //   }),
-          // );
-        }
-
-        // return of(...actions);
-
-        return Actions.fetchCurrentActiveCourseSuccess({ courses });
-
-        // return Actions.fetchCurrentActiveCourseSuccess({
-        //   courses,
-        //   currentChallengeId: challengeId,
-        //   currentModuleId: moduleId,
-        //   currentCourseId: courseId,
-        // });
+        return Actions.fetchCoursesSuccess({ courses });
       } else {
-        return Actions.fetchCurrentActiveCourseFailure();
+        return Actions.fetchCoursesFailure();
       }
     }),
   );
@@ -257,15 +225,35 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
 
 const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
   return combineLatest(
-    action$.pipe(filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess))),
+    action$.pipe(filter(isActionOf(Actions.fetchCoursesSuccess))),
     action$.pipe(filter(isActionOf(Actions.fetchUserSuccess))),
   ).pipe(
     // @ts-ignore how to type this correctly!?
     mergeMap(([courses, user]: [CourseList, IUserDto<UserProfile>]) => {
-      console.log(courses);
-      console.log(user);
+      const { location } = deps.router;
 
-      return Actions.empty("No action taken");
+      const { lastActiveChallengeIds } = user;
+      const lastActiveId = lastActiveChallengeIds.lastActiveChallengeId;
+
+      const deepLinkChallengeId = findChallengeIdInLocationIfExists(location);
+      const activeChallengeId = deepLinkChallengeId || lastActiveId || "";
+      const {
+        challengeId,
+        courseId,
+        moduleId,
+        slug,
+      } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
+
+      if (location.pathname.includes("workspace")) {
+        const subPath = slug + location.search + location.hash;
+        deps.router.push(`/workspace/${subPath}`);
+      }
+
+      return Actions.setActiveChallengeIds({
+        currentCourseId: courseId,
+        currentModuleId: moduleId,
+        currentChallengeId: challengeId,
+      });
     }),
     ignoreElements(),
   );
@@ -274,7 +262,7 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
 const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
   return merge(
     action$.pipe(
-      filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+      filter(isActionOf(Actions.fetchCoursesSuccess)),
       map(({ payload: { courses } }) => {
         const challengeMap = createInverseChallengeMapping(courses);
         return challengeMap;
@@ -301,7 +289,7 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
  */
 const setWorkspaceLoadedEpic: EpicSignature = action$ => {
   return action$.pipe(
-    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
     delay(1000),
     map(() => Actions.setWorkspaceChallengeLoaded()),
   );
@@ -481,7 +469,7 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
 
   // Fetch on challenge initialization which does not fire a setChallengeId action
   const fetchOnChallengeInitEpic = action$.pipe(
-    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
     ignoreElements(),
     // map(x => x.payload.currentChallengeId),
     // map(Actions.fetchBlobForChallenge),

@@ -243,16 +243,11 @@ export const updateLastActiveChallengeIdsFailure = createAction(
   ActionTypesEnum.UPDATE_LAST_ACTIVE_CHALLENGE_IDS_FAILURE,
 )();
 
-export const fetchCurrentActiveCourseSuccess = createAction(
+export const fetchCoursesSuccess = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
-)<{
-  courses: Course[];
-  // currentModuleId: string;
-  // currentCourseId: string;
-  // currentChallengeId: string;
-}>();
+)<{ courses: Course[] }>();
 
-export const fetchCurrentActiveCourseFailure = createAction(
+export const fetchCoursesFailure = createAction(
   ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_FAILURE,
 )();
 
