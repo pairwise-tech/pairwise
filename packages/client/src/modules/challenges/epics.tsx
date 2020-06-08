@@ -12,6 +12,9 @@ import {
   SandboxBlob,
   Challenge,
   getChallengeSlug,
+  CourseList,
+  IUserDto,
+  UserProfile,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -210,36 +213,34 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
     mergeMap(deps.api.fetchCourses),
-    mergeMap(({ value: courses }) => {
+    map(({ value: courses }) => {
       if (courses) {
         const { location } = deps.router;
 
-        const maybeChallengeId = findChallengeIdInLocationIfExists(location);
-        const {
-          challengeId,
-          courseId,
-          moduleId,
-          slug,
-        } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
-
-        const actions: any[] = [
-          Actions.fetchCurrentActiveCourseSuccess({ courses }),
-        ];
+        // const maybeChallengeId = findChallengeIdInLocationIfExists(location);
+        // const {
+        //   challengeId,
+        //   courseId,
+        //   moduleId,
+        //   slug,
+        // } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
 
         // Do not redirect unless the user is already on the workspace/
         if (location.pathname.includes("workspace")) {
-          const subPath = slug + location.search + location.hash;
-          deps.router.push(`/workspace/${subPath}`);
-          actions.push(
-            Actions.setActiveChallengeIds({
-              currentCourseId: courseId,
-              currentModuleId: moduleId,
-              currentChallengeId: challengeId,
-            }),
-          );
+          // const subPath = slug + location.search + location.hash;
+          // deps.router.push(`/workspace/${subPath}`);
+          // actions.push(
+          //   Actions.setActiveChallengeIds({
+          //     currentCourseId: courseId,
+          //     currentModuleId: moduleId,
+          //     currentChallengeId: challengeId,
+          //   }),
+          // );
         }
 
-        return of(...actions);
+        // return of(...actions);
+
+        return Actions.fetchCurrentActiveCourseSuccess({ courses });
 
         // return Actions.fetchCurrentActiveCourseSuccess({
         //   courses,
@@ -248,9 +249,25 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
         //   currentCourseId: courseId,
         // });
       } else {
-        return of(Actions.fetchCurrentActiveCourseFailure());
+        return Actions.fetchCurrentActiveCourseFailure();
       }
     }),
+  );
+};
+
+const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
+  return combineLatest(
+    action$.pipe(filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess))),
+    action$.pipe(filter(isActionOf(Actions.fetchUserSuccess))),
+  ).pipe(
+    // @ts-ignore how to type this correctly!?
+    mergeMap(([courses, user]: [CourseList, IUserDto<UserProfile>]) => {
+      console.log(courses);
+      console.log(user);
+
+      return Actions.empty("No action taken");
+    }),
+    ignoreElements(),
   );
 };
 
@@ -854,6 +871,7 @@ const constructProgressDto = (
 export default combineEpics(
   hydrateSandboxType,
   contentSkeletonInitializationEpic,
+  initializeChallengeStateEpic,
   inverseChallengeMappingEpic,
   saveCourse,
   handleFetchCodeBlobForChallengeEpic,
