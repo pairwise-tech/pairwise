@@ -228,7 +228,7 @@ export const setActiveChallengeIds = createAction(
 )<{
   currentModuleId: string;
   currentCourseId: string;
-  currentChallengeId: string;
+  currentChallengeId: Nullable<string>;
 }>();
 
 export const updateLastActiveChallengeIds = createAction(
