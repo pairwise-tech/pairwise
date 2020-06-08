@@ -627,6 +627,9 @@ class Workspace extends React.Component<IProps, IState> {
         </LowerRight>
         {/* <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} /> */}
         <WorkspaceMonacoEditor
+          ref={editor => {
+            this.editor = editor;
+          }}
           challengeType={this.props.challenge.type}
           userSettings={this.props.userSettings}
           editorOptions={this.props.editorOptions}
