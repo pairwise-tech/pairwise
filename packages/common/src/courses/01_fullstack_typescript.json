@@ -3006,6 +3006,17 @@
           "content": ""
         },
         {
+          "id": "KUnicitO@x",
+          "type": "typescript",
+          "title": "Gridspace",
+          "instructions": "Given a 2D grid of `1`s and `0`s randomly spread around, reorganize it so all the `1`s are on the bottom. Fill up the rows from the bottom up, right to left. For instance:\n\n```\n// input:\n[\n  [1, 0, 0],\n  [1, 1, 0],\n  [1, 0, 1],\n]\n\n// output:\n[\n  [0, 0, 0],\n  [0, 1, 1],\n  [1, 1, 1],\n]\n\n```\n",
+          "testCode": "test(\"The `gridspace` function should be defined.\", () => {\n  expect(typeof gridspace === \"function\").toBe(true);\n});\n\ntest(\"The `gridspace` function should sort grids of `1`s and `0`s correctly.\", () => {\n  let input = [\n    [1, 1, 1],\n    [0, 0, 0],\n    [0, 1, 1],\n  ];\n  let expected = [\n    [0, 0, 0],\n    [0, 1, 1],\n    [1, 1, 1],\n  ];\n  expect(gridspace(input)).toEqual(expected);\n\n  input = [\n    [1, 1, 1, 0, 0, 1],\n    [1, 0, 1, 0, 0, 1],\n    [1, 0, 1, 0, 1, 1],\n  ];\n  expected = [\n    [0, 0, 0, 0, 0, 0],\n    [0, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1],\n  ];\n  expect(gridspace(input)).toEqual(expected);\n\n  input = [\n    [1, 1],\n    [1, 0],\n  ];\n  expected = [\n    [0, 1],\n    [1, 1],\n  ];\n  expect(gridspace(input)).toEqual(expected);\n\n  input = [\n    [1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1],\n    [1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1],\n    [1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1],\n  ];\n  expected = [\n    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],\n    [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],\n  ];\n  expect(gridspace(input)).toEqual(expected);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here:",
+          "solutionCode": "type Cell = 1 | 0;\n\n/**\n * Reorganize a grid of 1s and 0s.\n */\nconst gridspace = (grid: Cell[][]): Cell[][] => {\n  // Count of zeroes found\n  let zeroesCount = 0;\n\n  for (let i = 0; i < grid.length; i++) {\n    const row = grid[i];\n    for (let j = 0; j < row.length; j++) {\n      const cell = grid[i][j];\n      if (cell === 0) {\n        zeroesCount++;\n      }\n    }\n  }\n\n  let count = 0;\n\n  // Iterate back through the grid and update each cell\n  // based on its position and the count of zeroes\n  for (let i = 0; i < grid.length; i++) {\n    const row = grid[i];\n    for (let j = 0; j < row.length; j++) {\n      if (count < zeroesCount) {\n        grid[i][j] = 0;\n      } else {\n        grid[i][j] = 1;\n      }\n\n      count++;\n    }\n  }\n\n  return grid;\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
