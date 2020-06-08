@@ -16,6 +16,8 @@ import {
  * ============================================================================
  */
 
+const FIRTS_CHALLENGE_URL = `${CLIENT_APP_URL}/workspace/iSF4BNIl`;
+
 describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Pairwise", () => {
     cy.visit(CLIENT_APP_URL);
@@ -231,6 +233,51 @@ describe("Success Modal", () => {
     click("gs-card-close");
     cy.get("#gs-card").should("not.exist");
   });
+});
+
+describe.only("Editor Functions", () => {
+  it("There should be a more options menu with buttons", () => {
+    cy.visit(FIRTS_CHALLENGE_URL);
+    cy.wait(TIMEOUT);
+    click("editor-more-options");
+    [
+      "editor-export-code",
+      "editor-increase-font-size",
+      "editor-decrease-font-size",
+      "editor-format-code",
+      "editor-toggle-full-screen",
+      "editor-toggle-high-contrast",
+      "editor-restore-initial-code",
+      "editor-toggle-solution-code",
+    ]
+      .map(x => "#" + x)
+      .forEach(id => {
+        cy.get(id).should("be.visible");
+      });
+  });
+  it("Should format code when the format button is clicked", () => {
+    const unformattedCode = `
+<h1>SUP SUP SUP
+
+</h1>
+    `;
+    typeTextInCodeEditor(unformattedCode);
+
+    cy.get(".monaco-editor textarea").should("have.value", unformattedCode);
+
+    click("editor-more-options");
+    click("editor-format-code");
+
+    cy.get(".monaco-editor textarea").should(
+      "have.value",
+      "<h1>SUP SUP SUP</h1>",
+    );
+  });
+  it("Should increase or decrease font-size");
+  it("Should restore initial code");
+  it("Should reveal solution code");
+  it("Should support high contrast theme");
+  it("Shoudl support full-screen editing");
 });
 
 /** ===========================================================================
