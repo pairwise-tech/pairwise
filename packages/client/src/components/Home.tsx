@@ -68,6 +68,7 @@ class Home extends React.Component<IProps, IState> {
     // Determine the course challenge to link to
     let lastActiveChallengeExists = false;
     let courseChallengeLinkId = firstCourseChallenge.id;
+    console.log(lastActiveChallengeIds);
     if (courseId in lastActiveChallengeIds) {
       lastActiveChallengeExists = true;
       courseChallengeLinkId = lastActiveChallengeIds[courseId];

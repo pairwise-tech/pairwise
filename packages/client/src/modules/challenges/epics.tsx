@@ -257,17 +257,20 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
           slug,
         } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
 
+        let currentChallenge = null;
+
         // Only redirect if they are on the workspace
         if (location.pathname.includes("workspace")) {
           const subPath = slug + location.search + location.hash;
           deps.router.push(`/workspace/${subPath}`);
+          currentChallenge = challengeId;
         }
 
         return of(
           Actions.setActiveChallengeIds({
             currentCourseId: courseId,
             currentModuleId: moduleId,
-            currentChallengeId: challengeId,
+            currentChallengeId: currentChallenge,
           }),
         );
       },
@@ -458,7 +461,12 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
     filter(isActionOf([Actions.setChallengeId, Actions.setActiveChallengeIds])),
     pluck("payload"),
     pluck("currentChallengeId"),
+    filter(x => !!x),
     mergeMap(id => {
+      if (!id) {
+        return of(Actions.empty("No challenge id yet..."));
+      }
+
       const { next, prev } = deps.selectors.challenges.nextPrevChallenges(
         state$.value,
       );
