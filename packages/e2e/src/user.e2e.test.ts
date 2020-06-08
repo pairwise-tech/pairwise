@@ -305,13 +305,20 @@ describe("User APIs", () => {
     await updateChallengeIds("f76shgb2W", "7j8@a2tVR");
 
     // Check the state updated
-    await checkChallengeIds({ f76shgb2W: "7j8@a2tVR" });
+    await checkChallengeIds({
+      f76shgb2W: "7j8@a2tVR",
+      lastActiveChallenge: "7j8@a2tVR",
+    });
 
     // Update challenge in a different course
     await updateChallengeIds("fpvPtfu7s", "TL9i1z2rT");
 
     // Check the state updated and added the new course
-    await checkChallengeIds({ f76shgb2W: "7j8@a2tVR", fpvPtfu7s: "TL9i1z2rT" });
+    await checkChallengeIds({
+      f76shgb2W: "7j8@a2tVR",
+      fpvPtfu7s: "TL9i1z2rT",
+      lastActiveChallenge: "TL9i1z2rT",
+    });
 
     // Update both course challenges again
     await updateChallengeIds("fpvPtfu7s", "HB0P9thnMf");
@@ -321,6 +328,7 @@ describe("User APIs", () => {
     await checkChallengeIds({
       f76shgb2W: "kI0LDxpct",
       fpvPtfu7s: "HB0P9thnMf",
+      lastActiveChallenge: "kI0LDxpct",
     });
 
     done();
