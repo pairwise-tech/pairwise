@@ -73,7 +73,7 @@ export default class WorkspaceCodemirrorEditor
     // Codemirror needs to wait for the UI to be "set up" in order to do it's
     // dom measurements. It will silently just look terrible if we don't give it
     // a bit of time
-    await wait(300);
+    await wait(500);
 
     this.setState({ theWaitIsOver: true });
   }

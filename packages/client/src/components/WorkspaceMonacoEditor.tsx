@@ -361,8 +361,6 @@ export default class WorkspaceMonacoEditor
     this.initializeSyntaxHighlightWorker();
 
     /* Handle some timing issue with Monaco initialization... */
-    // TODO: This might cause issues with an unmounted editor. Needs to be made
-    // cancellable.
     await wait(500);
 
     this.debouncedSyntaxHighlightFunction(this.props.value);
