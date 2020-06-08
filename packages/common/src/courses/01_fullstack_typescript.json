@@ -2984,6 +2984,17 @@
           "content": ""
         },
         {
+          "id": "FBy3Ga7RD",
+          "type": "typescript",
+          "title": "Is Anagram",
+          "instructions": "An anagram is a word or phrase which can be rearranged into another word or phrase, reusing the same letters/spaces. For instance, `silent` is an anagram of `listen`. Implement a function `isAnagram` which accepts two string arguments and returns `true` if they are anagrams of each other.",
+          "testCode": "test(\"The `isAnagram` function should be defined\", () => {\n  expect(isAnagram).toBeDefined();\n  expect(typeof isAnagram === \"function\").toBe(true);\n});\n\ntest(\"The `isAnagram` function should identify anagrams correctly.\", () => {\n  expect(isAnagram(\"silent\", \"listen\")).toBe(true);\n  expect(isAnagram(\"angered\", \"enraged\")).toBe(true);\n  // expect(isAnagram(\"evil\", \"vile\")).toBe(true);\n  // expect(isAnagram(\"pat\", \"tap\")).toBe(true);\n  // expect(isAnagram(\"forty five\", \"over fifty\")).toBe(true);\n  // expect(isAnagram(\"I am Lord Voldemort\", \"Tom Marvolo Riddle\")).toBe(true);\n\n  expect(isAnagram(\"silent\", \"list!en\")).toBe(false);\n  expect(isAnagram(\"angerhed\", \"enraged\")).toBe(false);\n  expect(isAnagram(\"eavil\", \"vile\")).toBe(false);\n  expect(isAnagram(\"pat\", \"tafp\")).toBe(false);\n  expect(isAnagram(\"forty fifve\", \"over fifty\")).toBe(false);\n  expect(isAnagram(\"I am Lord Voldemort\", \"Tom Marvolo Rfiddle\")).toBe(false);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here:",
+          "solutionCode": "/**\n * A function to identify anagrams.\n */\nconst isAnagram = (a: string, b: string): boolean => {\n  let letterCount: { [key: string]: number } = {};\n\n  // Count all the letters in a\n  for (const letter of a) {\n    letterCount[letter] = (letterCount[letter] || 0) + 1;\n  }\n\n  // Count all the letters in b against the counts in a\n  for (const letter of b) {\n    if (letter in letterCount) {\n      letterCount[letter] = letterCount[letter] - 1;\n    } else {\n      // Found a letter with no match!\n      return false;\n    }\n  }\n\n  // Review all counts: they should all be at zero\n  for (const [_, count] of Object.entries(letterCount)) {\n    // Found a mismatched letter count, invalidating the anagram\n    if (count !== 0) {\n      return false;\n    }\n  }\n\n  // Letter counts match, the inputs must be anagrams\n  return true;\n};\n",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
