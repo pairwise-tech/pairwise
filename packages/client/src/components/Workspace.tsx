@@ -138,8 +138,13 @@ export interface ICodeEditor extends React.Component<ICodeEditorProps> {
   updateOptions(options: Partial<ICodeEditorOptions>): void;
 }
 
-export const p = (s: string) =>
-  console.log(`%c${s}`, "font-size:18px;color:lime;");
+export const p = (s: string, ...args: any[]) => {
+  if (args.length) {
+    console.log(`%c${s} 👉 %o`, "font-size:18px;color:lime;", args);
+  } else {
+    console.log(`%c${s}`, "font-size:18px;color:lime;");
+  }
+};
 
 /** ===========================================================================
  * React Component
@@ -616,9 +621,7 @@ class Workspace extends React.Component<IProps, IState> {
           editorOptions={this.props.editorOptions}
           language={this.getMonacoLanguageFromChallengeType()}
           value={this.state.code}
-          onChange={code => {
-            this.setState({ code });
-          }}
+          onChange={this.handleEditorContentChange}
         />
       </div>
     );
@@ -739,6 +742,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleEditorContentChange = (code: string) => {
+    p("handleEditorContentChange", code);
     /**
      * Update the stored code value and then:
      *
