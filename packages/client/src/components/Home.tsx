@@ -10,18 +10,11 @@ import { COLORS, PROSE_MAX_WIDTH, MOBILE } from "tools/constants";
 import SEO from "./SEO";
 
 /** ===========================================================================
- * Types & Config
- * ============================================================================
- */
-
-interface IState {}
-
-/** ===========================================================================
  * Home Component
  * ============================================================================
  */
 
-class Home extends React.Component<IProps, IState> {
+class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     return (
       <PageContainer>
@@ -65,7 +58,8 @@ class Home extends React.Component<IProps, IState> {
       return null;
     }
 
-    // Determine the course challenge to link to
+    // Determine the course challenge to link to, default to last active
+    // challenge ids
     let lastActiveChallengeExists = false;
     let courseChallengeLinkId = firstCourseChallenge.id;
     if (courseId in lastActiveChallengeIds) {
