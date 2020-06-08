@@ -2986,7 +2986,7 @@
         {
           "id": "FBy3Ga7RD",
           "type": "typescript",
-          "title": "Is Anagram",
+          "title": "Matching Anagrams",
           "instructions": "An anagram is a word or phrase which can be rearranged into another word or phrase, reusing the same letters/spaces. For instance, `silent` is an anagram of `listen`. Implement a function `isAnagram` which accepts two string arguments and returns `true` if they are anagrams of each other.",
           "testCode": "test(\"The `isAnagram` function should be defined\", () => {\n  expect(isAnagram).toBeDefined();\n  expect(typeof isAnagram === \"function\").toBe(true);\n});\n\ntest(\"The `isAnagram` function should identify anagrams correctly.\", () => {\n  expect(isAnagram(\"silent\", \"listen\")).toBe(true);\n  expect(isAnagram(\"angered\", \"enraged\")).toBe(true);\n  // expect(isAnagram(\"evil\", \"vile\")).toBe(true);\n  // expect(isAnagram(\"pat\", \"tap\")).toBe(true);\n  // expect(isAnagram(\"forty five\", \"over fifty\")).toBe(true);\n  // expect(isAnagram(\"I am Lord Voldemort\", \"Tom Marvolo Riddle\")).toBe(true);\n\n  expect(isAnagram(\"silent\", \"list!en\")).toBe(false);\n  expect(isAnagram(\"angerhed\", \"enraged\")).toBe(false);\n  expect(isAnagram(\"eavil\", \"vile\")).toBe(false);\n  expect(isAnagram(\"pat\", \"tafp\")).toBe(false);\n  expect(isAnagram(\"forty fifve\", \"over fifty\")).toBe(false);\n  expect(isAnagram(\"I am Lord Voldemort\", \"Tom Marvolo Rfiddle\")).toBe(false);\n});\n",
           "videoUrl": "",
