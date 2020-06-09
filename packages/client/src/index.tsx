@@ -23,8 +23,13 @@ import { SENTRY_DSN } from "tools/client-env";
 // Import service worker
 import * as serviceWorker from "./serviceWorker";
 
+// Polyfill smoothscroll. Some mobile browsers don't support this. #SafariTheNewIE
+import smoothscroll from "smoothscroll-polyfill";
+
 // Setup Sentry
 Sentry.init({ dsn: SENTRY_DSN });
+
+smoothscroll.polyfill();
 
 // Render Pairwise!
 ReactDOM.render(<Pairwise />, document.getElementById("root"));

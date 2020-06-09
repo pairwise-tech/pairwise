@@ -45,6 +45,7 @@ import {
   Popover,
   MenuDivider,
   Spinner,
+  Button,
 } from "@blueprintjs/core";
 import {
   composeWithProps,
@@ -83,6 +84,7 @@ import SEO from "./SEO";
 import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
 import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
 import isMobile from "is-mobile";
+import styled from "styled-components/macro";
 
 const debug = require("debug")("client:Workspace");
 
@@ -96,7 +98,7 @@ const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 // NOTE: Element id is referenced in custom-tsx-styles.scss to apply styling
 export const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
 
-type ConsoleLogMethods = "warn" | "info" | "error" | "log";
+// type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
 interface Log {
   data: ReadonlyArray<string>;
@@ -149,6 +151,43 @@ export interface ICodeEditor extends React.Component<ICodeEditorProps> {
  * ============================================================================
  */
 
+const MobileView = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .tabs {
+    height: 70vh; // This should be ignored in favor of flexing
+    flex: 1 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tab-selection {
+    flex-shrink: 0;
+  }
+
+  .panel {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    flex: 1 100%;
+  }
+
+  .panel-scroll {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  ${ContentContainer} {
+    width: 100vw;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+`;
+
 class Workspace extends React.Component<IProps, IState> {
   // Place to store user code when solution code is revealed
   userCode: string = "";
@@ -164,12 +203,20 @@ class Workspace extends React.Component<IProps, IState> {
 
   // Resize the workspace in response to the window resizing. If this happens
   // it's probably because a mobile user goes from portrait to landscape.
-  private readonly handleWindowResize = debounce(300, (e: UIEvent) => {
+  private readonly handleWindowResize = debounce(300, async (e: UIEvent) => {
     console.log(`resize ${window.innerWidth}x${window.innerHeight}`);
     this.setState({
       dimensions: getDimensions(window.innerWidth, window.innerHeight),
     });
     this.refreshLayout();
+
+    // The code editor needs to refresh before the iframe, otherwise the iframe
+    // goes blank.
+    //
+    // This could turn into memory leak city, since we're debouncing and waiting
+    // longer than the debounce. Silly promises, not being cancellable... ᕕ( ᐛ )ᕗ
+    await wait(500);
+    await this.iframeRenderPreview();
   });
 
   constructor(props: IProps) {
@@ -190,7 +237,13 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.userCode = initialCode;
 
-    const favorMobile = isMobile();
+    const dimensions = getDimensions();
+
+    // The reason for two checks here is that even on larger screens we still
+    // want to use the mobilve editor if this is detected as a tablet. Safari
+    // seems to handle monaco just fine but Android breaks, so android tablets
+    // should get codemirror
+    const favorMobile = isMobile() || dimensions.w < 700;
 
     this.state = {
       code: initialCode,
@@ -205,7 +258,7 @@ class Workspace extends React.Component<IProps, IState> {
       testResultsLoading: false,
       favorMobile,
 
-      dimensions: getDimensions(),
+      dimensions,
       shouldRefreshLayout: false,
     };
   }
@@ -678,11 +731,155 @@ class Workspace extends React.Component<IProps, IState> {
       </div>
     );
 
+    const getPreviewPane = ({ grid = true } = {}) => {
+      // Lots of repeptition here
+      if (!grid) {
+        return IS_REACT_CHALLENGE ? (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ flex: "1 100%" }}>
+              <DragIgnorantFrameContainer
+                id="iframe"
+                title="code-preview"
+                ref={this.setIframeRef}
+              />
+            </div>
+            <div style={{ flex: "1 100%" }}>
+              <Console variant="dark" logs={this.state.logs} />
+            </div>
+          </div>
+        ) : IS_TYPESCRIPT_CHALLENGE ? (
+          <div>
+            <Console variant="dark" logs={this.state.logs} />
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        ) : IS_MARKUP_CHALLENGE ? (
+          <div style={{ height: "100%" }}>
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+            />
+          </div>
+        ) : (
+          /* Handle other challenge types ~ */
+          <div id="the-div-that-should-not-render" />
+        );
+      }
+
+      return IS_REACT_CHALLENGE ? (
+        <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <RowsWrapper separatorProps={rowSeparatorProps}>
+            <Row initialHeight={D.PREVIEW_HEIGHT}>
+              <div style={{ height: "100%" }}>
+                <DragIgnorantFrameContainer
+                  id="iframe"
+                  title="code-preview"
+                  ref={this.setIframeRef}
+                />
+              </div>
+            </Row>
+            <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
+              <div>
+                <Console variant="dark" logs={this.state.logs} />
+              </div>
+            </Row>
+          </RowsWrapper>
+        </Col>
+      ) : IS_TYPESCRIPT_CHALLENGE ? (
+        <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+          <div>
+            <Console variant="dark" logs={this.state.logs} />
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        </Col>
+      ) : IS_MARKUP_CHALLENGE ? (
+        <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <div style={{ height: "100%" }}>
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+            />
+          </div>
+        </Col>
+      ) : (
+        /* Handle other challenge types ~ */
+        <div id="the-div-that-should-not-render" />
+      );
+    };
+
+    const renderMobile = () => (
+      <MobileView>
+        <ContentContainer
+          style={{ height: "auto", flexShrink: 0, maxHeight: "30vh" }}
+        >
+          <InstructionsViewEdit />
+        </ContentContainer>
+        <div className="tabs">
+          <div className="tab-selection">
+            <Button
+              onClick={() => {
+                document
+                  .querySelector("#panel-scroll-target")
+                  ?.scrollTo({ left: 0, behavior: "smooth" });
+              }}
+              icon="code"
+            >
+              Code
+            </Button>
+            <Button
+              onClick={() => {
+                document
+                  .querySelector("#panel-scroll-target")
+                  ?.scrollTo({ left: D.w, behavior: "smooth" });
+              }}
+              icon="eye-open"
+            >
+              Preview
+            </Button>
+            <Button
+              onClick={() => {
+                document
+                  .querySelector("#panel-scroll-target")
+                  ?.scrollTo({ left: D.w * 2, behavior: "smooth" });
+              }}
+              icon="th-disconnect"
+            >
+              Tests
+            </Button>
+          </div>
+          <div id="panel-scroll-target" className="panel">
+            <div className="panel-scroll">
+              <ContentContainer>{MONACO_CONTAINER}</ContentContainer>
+              <ContentContainer>
+                {getPreviewPane({ grid: false })}
+              </ContentContainer>
+              <ContentContainer>{WorkspaceTestContainer}; </ContentContainer>
+            </div>
+          </div>
+        </div>
+      </MobileView>
+    );
+
+    const renderForMobile = D.w < 700;
+
     return (
       <Container>
         <PageSection>
           <WorkspaceContainer>
-            {shouldRefreshLayout ? null : (
+            {renderForMobile ? (
+              renderMobile()
+            ) : shouldRefreshLayout ? null : (
               <ColsWrapper separatorProps={colSeparatorProps}>
                 <Col
                   initialWidth={D.EDITOR_PANEL_WIDTH}
@@ -722,59 +919,9 @@ class Workspace extends React.Component<IProps, IState> {
                     </RowsWrapper>
                   )}
                 </Col>
-                {IS_ALTERNATIVE_EDIT_VIEW ? (
-                  TestFullHeightEditor
-                ) : IS_REACT_CHALLENGE ? (
-                  <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                    <RowsWrapper separatorProps={rowSeparatorProps}>
-                      <Row initialHeight={D.PREVIEW_HEIGHT}>
-                        <div style={{ height: "100%" }}>
-                          <DragIgnorantFrameContainer
-                            id="iframe"
-                            title="code-preview"
-                            ref={this.setIframeRef}
-                          />
-                        </div>
-                      </Row>
-                      <Row
-                        style={consoleRowStyles}
-                        initialHeight={D.CONSOLE_HEIGHT}
-                      >
-                        <div>
-                          <Console variant="dark" logs={this.state.logs} />
-                        </div>
-                      </Row>
-                    </RowsWrapper>
-                  </Col>
-                ) : IS_TYPESCRIPT_CHALLENGE ? (
-                  <Col
-                    style={consoleRowStyles}
-                    initialHeight={D.WORKSPACE_HEIGHT}
-                  >
-                    <div>
-                      <Console variant="dark" logs={this.state.logs} />
-                      <DragIgnorantFrameContainer
-                        id="iframe"
-                        title="code-preview"
-                        ref={this.setIframeRef}
-                        style={{ visibility: "hidden", height: 0, width: 0 }}
-                      />
-                    </div>
-                  </Col>
-                ) : IS_MARKUP_CHALLENGE ? (
-                  <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                    <div style={{ height: "100%" }}>
-                      <DragIgnorantFrameContainer
-                        id="iframe"
-                        title="code-preview"
-                        ref={this.setIframeRef}
-                      />
-                    </div>
-                  </Col>
-                ) : (
-                  /* Handle other challenge types ~ */
-                  <div id="the-div-that-should-not-render" />
-                )}
+                {IS_ALTERNATIVE_EDIT_VIEW
+                  ? TestFullHeightEditor
+                  : getPreviewPane()}
               </ColsWrapper>
             )}
           </WorkspaceContainer>

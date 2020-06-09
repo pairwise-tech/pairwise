@@ -34,6 +34,8 @@ export const getDimensions = (
   const CONSOLE_HEIGHT = h * 0.4;
 
   const DIMENSIONS = {
+    w,
+    h,
     WORKSPACE_HEIGHT,
     EDITOR_PANEL_WIDTH,
     CHALLENGE_CONTENT_HEIGHT,
