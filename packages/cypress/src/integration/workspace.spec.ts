@@ -22,6 +22,12 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.get("#product-title").contains("Pairwise");
   });
 
+  it("Loading the app on /workspace redirects to the first challenge", () => {
+    cy.visit(`${CLIENT_APP_URL}/workspace`);
+    cy.contains("Hello, Pairwise!");
+    cy.url().should("include", "workspace/iSF4BNIl/hello-pairwise");
+  });
+
   it("Home route includes courses list", () => {
     cy.visit(`${CLIENT_APP_URL}/home`);
     cy.url().should("include", "home");
@@ -32,7 +38,7 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.contains("Fullstack TypeScript Course");
     cy.contains("Pairwise Library");
 
-    cy.get(".courseLinkContinue").click({ force: true });
+    click("course-link-0-start");
     cy.url().should("include", "workspace");
   });
 
@@ -43,10 +49,10 @@ describe("Workspace and Challenge Navigation Works", () => {
       return id;
     };
 
-    cy.visit(`${CLIENT_APP_URL}/workspace`);
+    cy.visit(`${CLIENT_APP_URL}/home`);
 
     cy.wait(TIMEOUT);
-    cy.url().should("include", "workspace");
+    cy.url().should("include", "home");
 
     /* Open the navigation menu and navigate to the first programming challenge: */
     click("navigation-menu-button");

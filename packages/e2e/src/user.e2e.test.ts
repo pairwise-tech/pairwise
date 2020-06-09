@@ -1,6 +1,11 @@
 import axios from "axios";
 import request from "supertest";
-import { fetchAccessToken, HOST } from "./utils/e2e-utils";
+import {
+  fetchAccessToken,
+  HOST,
+  fetchUserWithAccessToken,
+} from "./utils/e2e-utils";
+import { LastActiveChallengeIds } from "@pairwise/common";
 
 /** ===========================================================================
  * e2e Tests for /user APIs
@@ -206,6 +211,125 @@ describe("User APIs", () => {
     await expectInvalidRequest({ givenName: "" });
     await expectInvalidRequest({ familyName: "" });
     await expectInvalidRequest({ avatarUrl: "" });
+
+    done();
+  });
+
+  test("/active-challenge-ids (POST) validates requests correctly", async done => {
+    const accessToken = await fetchAccessToken();
+    const authorizationHeader = `Bearer ${accessToken}`;
+
+    await request(`${HOST}/user/active-challenge-ids`)
+      .post("/")
+      .send({
+        courseId: "",
+        challengeId: null,
+      })
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .then(error => {
+        expect(error.body.message).toBe("Failed to perform operation.");
+      });
+
+    await request(`${HOST}/user/active-challenge-ids`)
+      .post("/")
+      .send({
+        courseId: "blegh",
+        challengeId: "sa7sa7f7f",
+      })
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .then(error => {
+        expect(error.body.message).toBe("Failed to perform operation.");
+      });
+
+    await request(`${HOST}/user/active-challenge-ids`)
+      .post("/")
+      .send({
+        courseId: "fpvPtfu7s",
+        challengeId: "Vii7hQ1xd",
+      })
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .then(error => {
+        expect(error.body.message).toBe("Failed to perform operation.");
+      });
+
+    request(`${HOST}/user/active-challenge-ids`)
+      .post("/")
+      .send({
+        courseId: "fpvPtfu7s",
+        challengeId: "blargh",
+      })
+      .set("Authorization", authorizationHeader)
+      .expect(400)
+      .end((error, response) => {
+        expect(response.body.message).toBe("Failed to perform operation.");
+        done(error);
+      });
+  });
+
+  test("/active-challenge-ids (POST) updates last active challenge ids correctly", async done => {
+    const accessToken = await fetchAccessToken();
+    const authorizationHeader = `Bearer ${accessToken}`;
+
+    /**
+     * Helper to fetch progress history for a challenge id.
+     */
+    const updateChallengeIds = async (
+      courseId: string,
+      challengeId: string,
+    ) => {
+      const body = { courseId, challengeId };
+      const result = await axios.post(
+        `${HOST}/user/active-challenge-ids`,
+        body,
+        {
+          headers: {
+            Authorization: authorizationHeader,
+          },
+        },
+      );
+      return result.data;
+    };
+
+    const checkChallengeIds = async (expected: LastActiveChallengeIds) => {
+      const user = await fetchUserWithAccessToken(accessToken);
+      expect(user.lastActiveChallengeIds).toEqual(expected);
+    };
+
+    // Check initial state is {}
+    await checkChallengeIds({});
+
+    // Update a challenge
+    await updateChallengeIds("f76shgb2W", "7j8@a2tVR");
+
+    // Check the state updated
+    await checkChallengeIds({
+      f76shgb2W: "7j8@a2tVR",
+      lastActiveChallenge: "7j8@a2tVR",
+    });
+
+    // Update challenge in a different course
+    await updateChallengeIds("fpvPtfu7s", "TL9i1z2rT");
+
+    // Check the state updated and added the new course
+    await checkChallengeIds({
+      f76shgb2W: "7j8@a2tVR",
+      fpvPtfu7s: "TL9i1z2rT",
+      lastActiveChallenge: "TL9i1z2rT",
+    });
+
+    // Update both course challenges again
+    await updateChallengeIds("fpvPtfu7s", "HB0P9thnMf");
+    await updateChallengeIds("f76shgb2W", "kI0LDxpct");
+
+    // Check the state updated and added the new course
+    await checkChallengeIds({
+      f76shgb2W: "kI0LDxpct",
+      fpvPtfu7s: "HB0P9thnMf",
+      lastActiveChallenge: "kI0LDxpct",
+    });
 
     done();
   });

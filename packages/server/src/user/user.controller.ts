@@ -9,7 +9,7 @@ import {
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthenticatedRequest } from "src/types";
-import { UserUpdateOptions } from "@pairwise/common";
+import { ILastActiveIdsDto, UserUpdateOptions } from "@pairwise/common";
 import { AdminAuthGuard } from "src/auth/admin.guard";
 import { slackService, SlackService } from "src/slack/slack.service";
 
@@ -33,6 +33,15 @@ export class UserController {
     @Request() req: AuthenticatedRequest,
   ) {
     return this.userService.updateUser(req.user, updateDetails);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Post("active-challenge-ids")
+  public async updateLastActiveChallengeIds(
+    @Body() activeIds: ILastActiveIdsDto,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    return this.userService.updateLastActiveChallengeIds(req.user, activeIds);
   }
 
   @UseGuards(AdminAuthGuard)

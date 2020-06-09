@@ -17,6 +17,7 @@ import {
   UserProgressMap,
   defaultUserSettings,
   StripeStartCheckoutSuccessResponse,
+  LastActiveChallengeIds,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -261,6 +262,7 @@ class Api extends BaseApiClass {
        */
       const progress = localStorageHTTP.fetchUserProgressMap();
       const settings: UserSettings = localStorageHTTP.fetchUserSettings();
+      const lastActiveChallengeIds = localStorageHTTP.fetchLastActiveChallengeIds();
 
       const preAccountUser: UserStoreState = {
         settings,
@@ -268,6 +270,7 @@ class Api extends BaseApiClass {
         profile: null,
         courses: null,
         payments: null,
+        lastActiveChallengeIds,
       };
 
       return new Ok(preAccountUser);
@@ -417,6 +420,30 @@ class Api extends BaseApiClass {
     }
   };
 
+  updateLastActiveChallengeIds = async (
+    courseId: string,
+    challengeId: string,
+  ): Promise<Result<LastActiveChallengeIds, HttpResponseError>> => {
+    const { headers, authenticated } = this.getRequestHeaders();
+    const options = { headers };
+    if (authenticated) {
+      const body = { courseId, challengeId };
+      return this.httpHandler(async () => {
+        return axios.post<LastActiveChallengeIds>(
+          `${HOST}/user/active-challenge-ids`,
+          body,
+          options,
+        );
+      });
+    } else {
+      const result = localStorageHTTP.updateLastActiveChallengeIds(
+        courseId,
+        challengeId,
+      );
+      return new Ok(result);
+    }
+  };
+
   updateCourseProgressBulk = async (userCourseProgress: UserCourseProgress) => {
     const { headers } = this.getRequestHeaders();
     return this.httpHandler(async () => {
@@ -472,6 +499,7 @@ enum KEYS {
   USER_SETTINGS = "USER_SETTINGS",
   USER_PROGRESS_KEY = "USER_PROGRESS_KEY",
   CHALLENGE_BLOB_KEY = "CHALLENGE_BLOB_KEY",
+  LAST_ACTIVE_CHALLENGE_IDS_KEY = "LAST_ACTIVE_CHALLENGE_IDS_KEY",
 }
 
 class LocalStorageHttpClass {
@@ -555,9 +583,31 @@ class LocalStorageHttpClass {
         })
       : [updatedProgress];
 
+    // Update user progress
     this.setItem(KEYS.USER_PROGRESS_KEY, updatedProgressList);
 
     return progress;
+  };
+
+  fetchLastActiveChallengeIds = () => {
+    return this.getItem<LastActiveChallengeIds>(
+      KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY,
+      {},
+    );
+  };
+
+  updateLastActiveChallengeIds = (
+    courseId: string,
+    challengeId: string,
+  ): LastActiveChallengeIds => {
+    const lastActive = this.fetchLastActiveChallengeIds();
+    const updated: LastActiveChallengeIds = {
+      ...lastActive,
+      [courseId]: challengeId,
+      lastActiveChallengeId: challengeId,
+    };
+    this.setItem(KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY, updated);
+    return updated;
   };
 
   fetchChallengeHistory = (
@@ -604,7 +654,12 @@ class LocalStorageHttpClass {
      * Handle failure/empty cases, and render toasts messages for the
      * user when appropriate.
      */
-    const { settings, blobs, progress } = this.getLocalDataToPersist();
+    const {
+      settings,
+      blobs,
+      progress,
+      lastActiveChallengeIds,
+    } = this.getLocalDataToPersist();
 
     /* Only show the toast migration messages if we are sure pre-existing progress exists */
     let shouldToast = false;
@@ -626,6 +681,7 @@ class LocalStorageHttpClass {
       this.persistBlobs(blobs),
       this.persistProgress(progress),
       this.persistSettings(settings),
+      this.persistLastActiveChallengeIds(lastActiveChallengeIds),
     ]);
 
     if (shouldToast) {
@@ -646,6 +702,7 @@ class LocalStorageHttpClass {
       settings: this.fetchUserSettings(),
       blobs: this.getBlobsForPersistence(),
       progress: this.getProgressForPersistence(),
+      lastActiveChallengeIds: this.fetchLastActiveChallengeIds(),
     };
   }
 
@@ -686,6 +743,22 @@ class LocalStorageHttpClass {
     }
   }
 
+  private async persistLastActiveChallengeIds(
+    lastActiveIds: LastActiveChallengeIds,
+  ) {
+    if (lastActiveIds) {
+      for (const [courseId, challengeId] of Object.entries(lastActiveIds)) {
+        const result = await API.updateLastActiveChallengeIds(
+          courseId,
+          challengeId,
+        );
+        this.removeItem(KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY);
+        return result;
+      }
+    }
+    return createNonHttpResponseError("No code blobs to persist!");
+  }
+
   private async persistBlobs(blobs: Nullable<{ [key: string]: ICodeBlobDto }>) {
     if (blobs) {
       const result = await API.updateChallengeHistoryBulk(blobs);
@@ -721,7 +794,7 @@ class LocalStorageHttpClass {
     }
   }
 
-  private setItem(key: KEYS, value: any) {
+  private setItem<T extends {}>(key: KEYS, value: T) {
     const serialized = JSON.stringify(value);
     localStorage.setItem(key, serialized);
   }

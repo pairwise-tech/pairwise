@@ -1,6 +1,7 @@
 import axios from "axios";
 import querystring from "querystring";
 import request from "supertest";
+import { IUserDto } from "@pairwise/common";
 
 /** ===========================================================================
  * e2e Test Utils
@@ -40,7 +41,7 @@ export const fetchAdminAccessToken = async () => {
  * Helper to fetch a user given an accessToken.
  */
 export const fetchUserWithAccessToken = async (accessToken: string) => {
-  const result = await axios.get(`${HOST}/user/profile`, {
+  const result = await axios.get<IUserDto>(`${HOST}/user/profile`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

@@ -14,6 +14,8 @@ import {
   MonacoEditorThemes,
   IUserDto,
   UserProfile,
+  LastActiveChallengeIds,
+  ILastActiveIdsDto,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
@@ -144,6 +146,17 @@ export const validateUserUpdateDetails = (
   } catch (err) {
     return new Err(ERROR_CODES.INVALID_PARAMETERS);
   }
+};
+
+/**
+ * Validate a payload request for updating the last active challenge ids
+ * for a user.
+ */
+export const validateLastActiveChallengeIdsPayload = (
+  lastActiveIds: ILastActiveIdsDto,
+) => {
+  const { courseId, challengeId } = lastActiveIds;
+  return ContentUtility.challengeIdInCourseIsValid(courseId, challengeId);
 };
 
 /**

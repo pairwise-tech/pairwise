@@ -64,7 +64,13 @@ export const isContentOnlyChallenge = (challenge: Challenge) => {
 /**
  * Determine if a challenge requires the workspace (code editor).
  */
-export const challengeRequiresWorkspace = (challenge: Challenge) => {
+export const challengeRequiresWorkspace = (
+  challenge: Challenge | null | undefined,
+) => {
+  if (!challenge) {
+    return false;
+  }
+
   const contentOnlyChallenge = isContentOnlyChallenge(challenge);
   return !contentOnlyChallenge;
 };
@@ -372,7 +378,7 @@ export const findChallengeIdInLocationIfExists = ({
  * to sensible default options.
  *
  * NOTE: This function _____WILL_____ derive an ID, no mater what you pass it.
- * That's fine in a vaccum but the end result is that it's not (currently)
+ * That's fine in a vacuum but the end result is that it's not (currently)
  * possible for the challenge ID to be null. This means the app will always
  * think the first challenge is active if you're not on a route particular to
  * a challenge. This is not great, because saying the active challenge is

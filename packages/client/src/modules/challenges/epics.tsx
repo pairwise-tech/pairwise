@@ -12,6 +12,8 @@ import {
   SandboxBlob,
   Challenge,
   getChallengeSlug,
+  CourseList,
+  LastActiveChallengeIds,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -48,6 +50,7 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
+import { getCurrentActiveIds } from "./selectors";
 
 const debug = require("debug")("client:challenges:epics");
 
@@ -62,7 +65,7 @@ const searchEpic: EpicSignature = action$ => {
   const searchWorker: Worker = new SearchWorker();
 
   const buildSearchIndex$ = action$.pipe(
-    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
     map(x => x.payload.courses),
     take(1), // Only do this once.. for now
     tap(courses => {
@@ -201,9 +204,7 @@ const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
 };
 
 /**
- * Can also initialize the challenge id from the url to load the first
- * challenge. Usually challenge ID get set via location change, but in this case
- * the location hasn't change.d
+ * Fetch the courses.
  */
 const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
@@ -211,39 +212,78 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(deps.api.fetchCourses),
     map(({ value: courses }) => {
       if (courses) {
+        return Actions.fetchCoursesSuccess({ courses });
+      } else {
+        return Actions.fetchCoursesFailure();
+      }
+    }),
+  );
+};
+
+/**
+ * Handle initializing the challenge context. This epic will determine an
+ * active challenge set based on:
+ *
+ * 1) the current url
+ * 2) the last active challenge
+ * 3) by default the first challenge in the TS course
+ *
+ * NOTE: It will only result in setting a currentChallengeId if the user
+ * is on the workspace. Otherwise, the current challenge will be null, but
+ * we will still default the course and module based on the above
+ * considerations.
+ */
+const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
+  const fetchCourses$ = action$.pipe(
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
+    map(x => x.payload.courses),
+  );
+
+  const fetchUser$ = action$.pipe(
+    filter(isActionOf(Actions.fetchUserSuccess)),
+    map(x => x.payload.lastActiveChallengeIds),
+  );
+
+  return combineLatest(fetchCourses$, fetchUser$).pipe(
+    mergeMap(
+      ([courses, lastActiveIds]: [CourseList, LastActiveChallengeIds]) => {
         const { location } = deps.router;
 
-        const maybeChallengeId = findChallengeIdInLocationIfExists(location);
+        const lastActiveId = lastActiveIds.lastActiveChallengeId;
+        const deepLinkChallengeId = findChallengeIdInLocationIfExists(location);
+        const activeChallengeId = deepLinkChallengeId || lastActiveId || "";
         const {
           challengeId,
           courseId,
           moduleId,
           slug,
-        } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
+        } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
 
-        // Do not redirect unless the user is already on the workspace/
+        let currentChallenge = null;
+
+        // Only redirect if they are on the workspace
         if (location.pathname.includes("workspace")) {
           const subPath = slug + location.search + location.hash;
           deps.router.push(`/workspace/${subPath}`);
+          currentChallenge = challengeId;
         }
 
-        return Actions.fetchCurrentActiveCourseSuccess({
-          courses,
-          currentChallengeId: challengeId,
-          currentModuleId: moduleId,
-          currentCourseId: courseId,
-        });
-      } else {
-        return Actions.fetchCurrentActiveCourseFailure();
-      }
-    }),
+        return of(
+          Actions.setActiveChallengeIds({
+            currentCourseId: courseId,
+            currentModuleId: moduleId,
+            currentChallengeId: currentChallenge,
+          }),
+        );
+      },
+    ),
   );
 };
 
 const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
   return merge(
     action$.pipe(
-      filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+      filter(isActionOf(Actions.fetchCoursesSuccess)),
       map(({ payload: { courses } }) => {
         const challengeMap = createInverseChallengeMapping(courses);
         return challengeMap;
@@ -270,7 +310,7 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
  */
 const setWorkspaceLoadedEpic: EpicSignature = action$ => {
   return action$.pipe(
-    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
     delay(1000),
     map(() => Actions.setWorkspaceChallengeLoaded()),
   );
@@ -333,7 +373,7 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       // in the current active course. Currently putting this logic here.
       if (shouldUpdateCurrentCourse) {
         return of(
-          setChallengeIdAction,
+          // setChallengeIdAction,
           Actions.setActiveChallengeIds({
             currentChallengeId: id,
             currentModuleId: challenge.moduleId,
@@ -352,12 +392,7 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
  */
 const setAndSyncChallengeIdEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
-    filter(
-      isActionOf([
-        Actions.setAndSyncChallengeId,
-        Actions.setActiveChallengeIds,
-      ]),
-    ),
+    filter(isActionOf(Actions.setAndSyncChallengeId)),
     map(action => {
       const { challengeMap } = state$.value.challenges;
       const challengeId = action.payload.currentChallengeId;
@@ -424,12 +459,16 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
   state$,
   deps,
 ) => {
-  // Fetch when navigation changes, i.e. setChallengeId
-  const fetchOnNavEpic = action$.pipe(
+  return action$.pipe(
     filter(isActionOf([Actions.setChallengeId, Actions.setActiveChallengeIds])),
     pluck("payload"),
     pluck("currentChallengeId"),
+    filter(x => !!x),
     mergeMap(id => {
+      if (!id) {
+        return of(Actions.empty("No challenge id yet..."));
+      }
+
       const { next, prev } = deps.selectors.challenges.nextPrevChallenges(
         state$.value,
       );
@@ -447,15 +486,6 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
       return of(...actions);
     }),
   );
-
-  // Fetch on challenge initialization which does not fire a setChallengeId action
-  const fetchOnChallengeInitEpic = action$.pipe(
-    filter(isActionOf(Actions.fetchCurrentActiveCourseSuccess)),
-    map(x => x.payload.currentChallengeId),
-    map(Actions.fetchBlobForChallenge),
-  );
-
-  return merge(fetchOnNavEpic, fetchOnChallengeInitEpic);
 };
 
 /**
@@ -489,6 +519,54 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
       }
     }),
   );
+};
+
+/**
+ * Handle dispatching an update to last active challenge ids whenever a
+ * user fetches a code blob for a challenge.
+ */
+const updateLastActiveChallengeIdsEpic: EpicSignature = (
+  action$,
+  state$,
+  deps,
+) => {
+  // Update active ids when a blob is fetched
+  const respondToFetchBlob = action$.pipe(
+    filter(isActionOf(Actions.fetchBlobForChallenge)),
+    pluck("payload"),
+    filter(id => {
+      // Only update for current challenge (next and prev are also fetched)
+      const { currentChallengeId } = getCurrentActiveIds(state$.value);
+      return !!(currentChallengeId && currentChallengeId === id);
+    }),
+    map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
+  );
+
+  const updateActiveIdsEpic = action$.pipe(
+    filter(isActionOf(Actions.updateLastActiveChallengeIds)),
+    pluck("payload"),
+    pluck("challengeId"),
+    mergeMap(async challengeId => {
+      const { challengeMap } = state$.value.challenges;
+      if (challengeMap && challengeId in challengeMap) {
+        const { courseId } = challengeMap[challengeId];
+        return deps.api.updateLastActiveChallengeIds(courseId, challengeId);
+      } else {
+        return new Err({
+          message: `Could not find challenge in challengeMap, id: ${challengeId}`,
+        });
+      }
+    }),
+    map(result => {
+      if (result.value) {
+        return Actions.updateLastActiveChallengeIdsSuccess(result.value);
+      } else {
+        return Actions.updateLastActiveChallengeIdsFailure();
+      }
+    }),
+  );
+
+  return merge(respondToFetchBlob, updateActiveIdsEpic);
 };
 
 /**
@@ -791,6 +869,7 @@ const constructProgressDto = (
 export default combineEpics(
   hydrateSandboxType,
   contentSkeletonInitializationEpic,
+  initializeChallengeStateEpic,
   inverseChallengeMappingEpic,
   saveCourse,
   handleFetchCodeBlobForChallengeEpic,
@@ -798,6 +877,7 @@ export default combineEpics(
   setWorkspaceLoadedEpic,
   resetActiveChallengeIds,
   codepressDeleteToasterEpic,
+  updateLastActiveChallengeIdsEpic,
   challengeInitializationEpic,
   setAndSyncChallengeIdEpic,
   syncChallengeToUrlEpic,
