@@ -45,6 +45,7 @@ import {
   Popover,
   MenuDivider,
   Button,
+  Classes,
 } from "@blueprintjs/core";
 import {
   composeWithProps,
@@ -164,6 +165,15 @@ const MobileView = styled.div`
 
   .tab-selection {
     flex-shrink: 0;
+    display: flex;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.47);
+    justify-content: center;
+    position: relative;
+    z-index: 4;
+
+    .bp3-button {
+      flex: 1 100%;
+    }
   }
 
   .panel {
@@ -820,42 +830,44 @@ class Workspace extends React.Component<IProps, IState> {
     const renderMobile = () => (
       <MobileView>
         <ContentContainer
-          style={{ height: "auto", flexShrink: 0, maxHeight: "30vh" }}
+          style={{ height: "auto", flexShrink: 0, maxHeight: "20vh" }}
         >
           <InstructionsViewEdit />
         </ContentContainer>
         <div className="tabs">
           <div className="tab-selection">
-            <Button
-              onClick={() => {
-                document
-                  .querySelector("#panel-scroll-target")
-                  ?.scrollTo({ left: 0, behavior: "smooth" });
-              }}
-              icon="code"
-            >
-              Code
-            </Button>
-            <Button
-              onClick={() => {
-                document
-                  .querySelector("#panel-scroll-target")
-                  ?.scrollTo({ left: D.w, behavior: "smooth" });
-              }}
-              icon="eye-open"
-            >
-              Preview
-            </Button>
-            <Button
-              onClick={() => {
-                document
-                  .querySelector("#panel-scroll-target")
-                  ?.scrollTo({ left: D.w * 2, behavior: "smooth" });
-              }}
-              icon="th-disconnect"
-            >
-              Tests
-            </Button>
+            <ButtonGroup fill large>
+              <Button
+                onClick={() => {
+                  document
+                    .querySelector("#panel-scroll-target")
+                    ?.scrollTo({ left: 0, behavior: "smooth" });
+                }}
+                icon="code"
+              >
+                Code
+              </Button>
+              <Button
+                onClick={() => {
+                  document
+                    .querySelector("#panel-scroll-target")
+                    ?.scrollTo({ left: D.w, behavior: "smooth" });
+                }}
+                icon="eye-open"
+              >
+                Preview
+              </Button>
+              <Button
+                onClick={() => {
+                  document
+                    .querySelector("#panel-scroll-target")
+                    ?.scrollTo({ left: D.w * 2, behavior: "smooth" });
+                }}
+                icon="th-disconnect"
+              >
+                Tests
+              </Button>
+            </ButtonGroup>
           </div>
           <div id="panel-scroll-target" className="panel">
             <div className="panel-scroll">
