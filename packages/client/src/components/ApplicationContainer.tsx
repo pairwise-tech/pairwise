@@ -97,8 +97,11 @@ const Modals = () => (
  */
 const ApplicationContainer = (props: IProps) => {
   const {
+    user,
     location,
     challenge,
+    initialized,
+    logoutUser,
     updateChallenge,
     overlayVisible,
     workspaceLoading,
@@ -106,11 +109,9 @@ const ApplicationContainer = (props: IProps) => {
     toggleNavigationMap,
     showFeedbackButton,
     toggleFeedbackDialogOpen,
-    user,
     userAuthenticated,
-    logoutUser,
-    setSingleSignOnDialogState,
     initializeApp,
+    setSingleSignOnDialogState,
   } = props;
 
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
@@ -129,12 +130,13 @@ const ApplicationContainer = (props: IProps) => {
     return null;
   }
 
-  if (!challenge) {
+  if (!initialized) {
     return <LoadingOverlay visible={workspaceLoading} />;
   }
 
   const onWorkspaceRoute = location.includes("workspace");
-  const isSandbox = challenge.id === SANDBOX_ID && onWorkspaceRoute;
+  const isSandbox =
+    !!challenge && challenge.id === SANDBOX_ID && onWorkspaceRoute;
   const displayNavigationArrows = onWorkspaceRoute;
   const isWorkspaceRequired = challengeRequiresWorkspace(challenge);
   const showMediaAreaButton =
@@ -206,7 +208,11 @@ const ApplicationContainer = (props: IProps) => {
             onClick={toggleNavigationMap}
           />
           <ProductTitle id="product-title">
-            <Link to="/home" style={{ display: "flex", alignItems: "center" }}>
+            <Link
+              to="/home"
+              id="header-home-link"
+              style={{ display: "flex", alignItems: "center" }}
+            >
               Pairwise
             </Link>
           </ProductTitle>
@@ -241,10 +247,12 @@ const ApplicationContainer = (props: IProps) => {
                 items={SANDBOX_TYPE_CHOICES}
                 currentChallengeType={challenge?.type}
                 onItemSelect={x => {
-                  updateChallenge({
-                    id: challenge.id, // See NOTE
-                    challenge: { type: x.value },
-                  });
+                  if (challenge) {
+                    updateChallenge({
+                      id: challenge.id, // See NOTE
+                      challenge: { type: x.value },
+                    });
+                  }
                 }}
               />
             </Suspense>
@@ -334,29 +342,30 @@ const ApplicationContainer = (props: IProps) => {
         />
       )}
       <Switch>
-        <Route key={"workspace"} path="/workspace/:id" component={Workspace} />
-        <Route key={"home"} path="/home" component={Home} />
-        <Route key={"account"} path="/account" component={Account} />
-        <Route key={"mobile"} path="/mobile" component={MobileView} />
+        <Route key="workspace" path="/workspace" component={Workspace} />
+        <Route key="workspace" path="/workspace/:id" component={Workspace} />
+        <Route key="home" path="/home" component={Home} />
+        <Route key="account" path="/account" component={Account} />
+        <Route key="mobile" path="/mobile" component={MobileView} />
         {!isLoggedIn && (
           <Route
-            key={"authenticate"}
+            key="authenticate"
             path="/authenticate"
             component={AuthenticationForm}
           />
         )}
         <Route
-          key={"login"}
+          key="login"
           path="/login"
           component={() => <Redirect to="/authenticate" />}
         />
         <Route
-          key={"sign-up"}
+          key="sign-up"
           path="/sign-up"
           component={() => <Redirect to="/authenticate" />}
         />
         <Route
-          key={"logout"}
+          key="logout"
           path="/logout"
           component={() => <Redirect to="/home" />}
         />
@@ -622,6 +631,7 @@ const AccountDropdownButton = styled.div`
 const mapStateToProps = (state: ReduxStoreState) => ({
   location: Modules.selectors.app.locationSelector(state),
   user: Modules.selectors.user.userSelector(state),
+  initialized: Modules.selectors.app.appSelector(state).initialized,
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),

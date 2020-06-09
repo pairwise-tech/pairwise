@@ -31,7 +31,6 @@ export interface UserProfile {
   givenName: string;
   familyName: string;
   avatarUrl: string;
-  lastActiveChallengeId: string;
 }
 
 /**
@@ -63,6 +62,7 @@ export interface IUserDto<Profile = UserProfile> {
   settings: UserSettings;
   courses: UserCourseAccessMap;
   progress: UserProgressMap;
+  lastActiveChallengeIds: LastActiveChallengeIds;
 }
 
 export interface UserCourseAccessMap {
@@ -71,6 +71,11 @@ export interface UserCourseAccessMap {
 
 export interface UserProgressMap {
   [key: string]: UserCourseStatus;
+}
+
+export interface LastActiveChallengeIds {
+  [key: string]: string;
+  lastActiveChallengeId?: string;
 }
 
 /**
@@ -92,6 +97,11 @@ export interface Payment {
   status: PAYMENT_STATUS;
   paymentType: PAYMENT_TYPE;
   extraData?: string /* generic json data */;
+}
+
+export interface ILastActiveIdsDto {
+  courseId: string;
+  challengeId: string;
 }
 
 export type PAYMENT_STATUS = "CONFIRMED" | "REFUNDED";

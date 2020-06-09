@@ -2962,6 +2962,83 @@
           "content": ""
         },
         {
+          "id": "EAePMWB4t",
+          "type": "typescript",
+          "title": "Labyrinth",
+          "instructions": "You start at coordinates `0, 0` in a 2D grid labyrinth maze filled with `1`s and `0`s\\. Your job is to determine if you can traverse the maze to the opposite corner. Define a function, `traverseMaze`, to do this. You can only move directly down or directly right \\(not diagonally\\). You can assume the top left cell will always be open.\n\nFor instance, given this grid:\n\n```\n[\n  [0, 0, 1],\n  [0, 1, 0],\n  [1, 0, 0],\n]\n\n// should return false\n\n```\n\nThere is no way to traverse from the top left to the bottom right. However, in this grid you could:\n\n```\n[\n  [0, 0, 0],\n  [0, 1, 0],\n  [1, 0, 0],\n]\n\n// should return true\n\n```\n",
+          "testCode": "test(\"The `traverseMaze` function should be defined.\", () => {\n  expect(traverseMaze).toBeDefined();\n  expect(typeof traverseMaze === \"function\").toBe(true);\n});\n\ntest(\"`traverseMaze` returns `false` for non-traversable mazes.\", () => {\n  let maze = [\n    [0, 0, 1],\n    [0, 1, 1],\n    [1, 1, 0],\n  ];\n  expect(traverseMaze(maze)).toBe(false);\n\n  maze = [\n    [0, 0, 1, 0, 0, 0],\n    [0, 0, 1, 0, 0, 0],\n    [0, 0, 0, 0, 0, 0],\n    [0, 0, 1, 0, 0, 0],\n    [0, 0, 1, 0, 1, 0],\n    [0, 0, 1, 1, 0, 0],\n    [0, 1, 1, 0, 1, 1],\n    [0, 0, 1, 0, 0, 0],\n    \n  ];\n  expect(traverseMaze(maze)).toBe(false);\n\n  maze = [\n    [0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1],\n    [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],\n    [0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1],\n    [0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],\n  ];\n  expect(traverseMaze(maze)).toBe(false);\n});\n\ntest(\"`traverseMaze` returns `true` for traversable mazes.\", () => {\n  let maze = [\n    [0, 0, 0],\n    [0, 1, 0],\n    [1, 1, 0],\n  ];\n  expect(traverseMaze(maze)).toBe(true);\n\n  maze = [\n    [0, 0, 1, 0, 0, 0],\n    [0, 0, 1, 0, 0, 0],\n    [0, 0, 0, 0, 0, 0],\n    [0, 0, 1, 0, 0, 0],\n    [0, 0, 1, 0, 1, 0],\n    [0, 0, 1, 0, 0, 0],\n    [0, 1, 1, 0, 1, 1],\n    [0, 0, 1, 0, 0, 0],\n    \n  ];\n  expect(traverseMaze(maze)).toBe(true);\n\n  maze = [\n    [0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1],\n    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],\n    [0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1],\n    [0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0],\n  ];\n  expect(traverseMaze(maze)).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// A cell can be 1 or 0. A 1 represents a wall you cannot cross.\ntype Cell = \"1\" | \"0\";\n\n// The grid is a 2D collection of cells.\ntype Grid = Cell[][];\n\n// Given a maze grid, return true if you can traverse from the top left\n// to the bottom right corner, or false if you cannot.\ntype TraverseMazeFunction = (maze: Grid) => boolean;\n\n// Your code here:",
+          "solutionCode": "// A cell can be 1 or 0. A 1 represents a wall you cannot cross.\ntype Cell = 1 | 0;\n\n// The grid is a 2D collection of cells.\ntype Grid = Cell[][];\n\n// Given a maze grid, return true if you can traverse from the top left\n// to the bottom right corner, or false if you cannot.\ntype TraverseMazeFunction = (maze: Grid) => boolean;\n\n// Your code here:\nconst traverseMaze: TraverseMazeFunction = (maze) => {\n  let pathExists = false;\n\n  // Define x and y limits\n  const xLimit = maze[0].length - 1;\n  const yLimit = maze.length - 1;\n\n  // Recursive helper to find paths through the maze\n  const mazeHelper = (x: number, y: number) => {\n    const cell = maze[y][x];\n    // Short circuit if a path was found or we reached a wall\n    if (pathExists || cell === 1) {\n      return;\n    }\n\n    // If the opposite corner is reached, a path was found\n    if (x === xLimit && y === yLimit) {\n      pathExists = true;\n      return;\n    }\n\n    // Move right one\n    if (x < xLimit) {\n      mazeHelper(x + 1, y);\n    }\n\n    // Move down one\n    if (y < yLimit) {\n      mazeHelper(x, y + 1);\n    }\n  };\n\n  mazeHelper(0, 0);\n\n  return pathExists;\n};\n",
+          "content": ""
+        },
+        {
+          "id": "cKVb6701A",
+          "type": "typescript",
+          "title": "Selective Filter",
+          "instructions": "You receive an arbitrarily complicated array structure. The array could contain other arrays, objects, or other values. For example: `[1, null, false, {}, [0, 2, 2], undefined, { name: \"Joe\" }, true]`. Create a function `selectiveFilter` which selectively filters items out of this array, but _also filters child arrays._\n\nFor instance, consider this example:\n\n```\n// An example input.\nconst input = [true, false, null, 1, 2, 3, [undefined, {}, 3]];\n\n// A filter function which filters values equal to 3.\nconst filterFunction = (x: any) => x === 3;\n\n// Use the function.\nconst output = selectiveFilter(input, filterFunction);\n\n// The expected result: 3 is filtered out twice.\nconst expectedOutput = [true, false, null, 1, 2, [undefined, {}]];\n\n```\n",
+          "testCode": "test(\"The `selectiveFilter` function should be defined.\", () => {\n  expect(selectiveFilter).toBeDefined();\n  expect(typeof selectiveFilter === \"function\").toBe(true);\n});\n\ntest(\"`selectiveFilter` function should filter lists of values correctly.\", () => {\n  let input = [1, 2, 3, null, true, false, undefined, [2, 3, 3, 3]];\n  let expected = [1, 2, null, true, false, undefined, [2]];\n  expect(selectiveFilter(input, (x) => x === 3)).toEqual(expected);\n\n  input = [\n    1,\n    null,\n    3,\n    null,\n    true,\n    false,\n    undefined,\n    [2, 3, 3, null, [null, null, 5, null, 100]],\n  ];\n  expected = [1, 3, true, false, undefined, [2, 3, 3, [5, 100]]];\n  expect(selectiveFilter(input, (x) => x === null)).toEqual(expected);\n\n  input = [\n    1,\n    null,\n    3,\n    null,\n    true,\n    undefined,\n    [\n      2,\n      false,\n      true,\n      false,\n      [true, true, true, null, 1500],\n      3,\n      3,\n      null,\n      [null, null, 5, null, 100],\n    ],\n  ];\n  expected = [\n    1,\n    null,\n    3,\n    null,\n    undefined,\n    [2, [null, 1500], 3, 3, null, [null, null, 5, null, 100]],\n  ];\n  expect(selectiveFilter(input, (x) => typeof x === \"boolean\")).toEqual(\n    expected\n  );\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "/**\n * Selectively deeply filter items out of an array using a given\n * filter function.\n */\nconst selectiveFilter = (list: any[], filterFunction: (x: any) => boolean): any[] => {\n  const result = [];\n\n  // Iterate through the list:\n  for (const x of list) {\n    // If the item is an array, recursively call selectiveFilter on the item\n    if (Array.isArray(x)) {\n      result.push(selectiveFilter(x, filterFunction));\n    } else if (!filterFunction(x)) {\n      // Otherwise push the item into the results list if it doesn't match the filter\n      result.push(x);\n    }\n  }\n\n  return result;\n}",
+          "content": ""
+        },
+        {
+          "id": "FBy3Ga7RD",
+          "type": "typescript",
+          "title": "Matching Anagrams",
+          "instructions": "An anagram is a word or phrase which can be rearranged into another word or phrase, reusing the same letters/spaces. For instance, `silent` is an anagram of `listen`. Implement a function `isAnagram` which accepts two string arguments and returns `true` if they are anagrams of each other.",
+          "testCode": "test(\"The `isAnagram` function should be defined\", () => {\n  expect(isAnagram).toBeDefined();\n  expect(typeof isAnagram === \"function\").toBe(true);\n});\n\ntest(\"The `isAnagram` function should identify anagrams correctly.\", () => {\n  expect(isAnagram(\"silent\", \"listen\")).toBe(true);\n  expect(isAnagram(\"angered\", \"enraged\")).toBe(true);\n  // expect(isAnagram(\"evil\", \"vile\")).toBe(true);\n  // expect(isAnagram(\"pat\", \"tap\")).toBe(true);\n  // expect(isAnagram(\"forty five\", \"over fifty\")).toBe(true);\n  // expect(isAnagram(\"I am Lord Voldemort\", \"Tom Marvolo Riddle\")).toBe(true);\n\n  expect(isAnagram(\"silent\", \"list!en\")).toBe(false);\n  expect(isAnagram(\"angerhed\", \"enraged\")).toBe(false);\n  expect(isAnagram(\"eavil\", \"vile\")).toBe(false);\n  expect(isAnagram(\"pat\", \"tafp\")).toBe(false);\n  expect(isAnagram(\"forty fifve\", \"over fifty\")).toBe(false);\n  expect(isAnagram(\"I am Lord Voldemort\", \"Tom Marvolo Rfiddle\")).toBe(false);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here:",
+          "solutionCode": "/**\n * A function to identify anagrams.\n */\nconst isAnagram = (a: string, b: string): boolean => {\n  let letterCount: { [key: string]: number } = {};\n\n  // Count all the letters in a\n  for (const letter of a) {\n    letterCount[letter] = (letterCount[letter] || 0) + 1;\n  }\n\n  // Count all the letters in b against the counts in a\n  for (const letter of b) {\n    if (letter in letterCount) {\n      letterCount[letter] = letterCount[letter] - 1;\n    } else {\n      // Found a letter with no match!\n      return false;\n    }\n  }\n\n  // Review all counts: they should all be at zero\n  for (const [_, count] of Object.entries(letterCount)) {\n    // Found a mismatched letter count, invalidating the anagram\n    if (count !== 0) {\n      return false;\n    }\n  }\n\n  // Letter counts match, the inputs must be anagrams\n  return true;\n};\n",
+          "content": ""
+        },
+        {
+          "id": "ovT8@8aec",
+          "type": "typescript",
+          "title": "Palindromes",
+          "instructions": "More fun with words\\! A _palindrome_ is a word or phrase which reads the same forwards or backwards, such as `madam` or `racecar`. Implement a function, `isPalindrome` which accepts a string and returns `true` if it is a palindrome and `false` otherwise\\.",
+          "testCode": "test(\"The `isPalindrome` function should be defined.\", () => {\n  expect(isPalindrome).toBeDefined();\n  expect(typeof isPalindrome === \"function\").toBe(true);\n});\n\ntest(\"`isPalindrome` should identify palindroms correctly.\", () => {\n  expect(isPalindrome(\"\")).toBe(true);\n  expect(isPalindrome(\"racecar\")).toBe(true);\n  expect(isPalindrome(\"madam\")).toBe(true);\n  expect(isPalindrome(\"madddam\")).toBe(true);\n  expect(isPalindrome(\"xyx\")).toBe(true);\n  expect(isPalindrome(\"zzzzzzzzzz\")).toBe(true);\n\n  expect(isPalindrome(\"madamasdf\")).toBe(false);\n  expect(isPalindrome(\"maxdam\")).toBe(false);\n  expect(isPalindrome(\"maxdamzzzzzzz\")).toBe(false);\n  expect(isPalindrome(\"madam \")).toBe(false);\n  expect(isPalindrome(\"  madam \")).toBe(false);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here:",
+          "solutionCode": "/**\n * A function to identify palindromes.\n */\nconst isPalindrome = (x: string): boolean => {\n  // Iterate to the midpoint in the string and compare the left\n  // character to the right character at the same position. If they\n  // do not match, return false immediately.\n  for (let i = 0; i < x.length / 2; i++) {\n    const left = x.charAt(i);\n    const right = x.charAt(x.length - i - 1);\n\n    if (left !== right) {\n      return false;\n    }\n  }\n\n  // All characters matched - return true.\n  return true;\n}\n",
+          "content": ""
+        },
+        {
+          "id": "KUnicitO@x",
+          "type": "typescript",
+          "title": "Gridspace",
+          "instructions": "Given a 2D grid of `1`s and `0`s randomly spread around, reorganize it so all the `1`s are on the bottom. Fill up the rows from the bottom up, right to left. For instance:\n\n```\n// input:\n[\n  [1, 0, 0],\n  [1, 1, 0],\n  [1, 0, 1],\n]\n\n// output:\n[\n  [0, 0, 0],\n  [0, 1, 1],\n  [1, 1, 1],\n]\n\n```\n",
+          "testCode": "test(\"The `gridspace` function should be defined.\", () => {\n  expect(typeof gridspace === \"function\").toBe(true);\n});\n\ntest(\"The `gridspace` function should sort grids of `1`s and `0`s correctly.\", () => {\n  let input = [\n    [1, 1, 1],\n    [0, 0, 0],\n    [0, 1, 1],\n  ];\n  let expected = [\n    [0, 0, 0],\n    [0, 1, 1],\n    [1, 1, 1],\n  ];\n  expect(gridspace(input)).toEqual(expected);\n\n  input = [\n    [1, 1, 1, 0, 0, 1],\n    [1, 0, 1, 0, 0, 1],\n    [1, 0, 1, 0, 1, 1],\n  ];\n  expected = [\n    [0, 0, 0, 0, 0, 0],\n    [0, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1],\n  ];\n  expect(gridspace(input)).toEqual(expected);\n\n  input = [\n    [1, 1],\n    [1, 0],\n  ];\n  expected = [\n    [0, 1],\n    [1, 1],\n  ];\n  expect(gridspace(input)).toEqual(expected);\n\n  input = [\n    [1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1],\n    [1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1],\n    [1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1],\n  ];\n  expected = [\n    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],\n    [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],\n  ];\n  expect(gridspace(input)).toEqual(expected);\n});\n\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here:",
+          "solutionCode": "type Cell = 1 | 0;\n\n/**\n * Reorganize a grid of 1s and 0s.\n */\nconst gridspace = (grid: Cell[][]): Cell[][] => {\n  // Count of zeroes found\n  let zeroesCount = 0;\n\n  for (let i = 0; i < grid.length; i++) {\n    const row = grid[i];\n    for (let j = 0; j < row.length; j++) {\n      const cell = grid[i][j];\n      if (cell === 0) {\n        zeroesCount++;\n      }\n    }\n  }\n\n  let count = 0;\n\n  // Iterate back through the grid and update each cell\n  // based on its position and the count of zeroes\n  for (let i = 0; i < grid.length; i++) {\n    const row = grid[i];\n    for (let j = 0; j < row.length; j++) {\n      if (count < zeroesCount) {\n        grid[i][j] = 0;\n      } else {\n        grid[i][j] = 1;\n      }\n\n      count++;\n    }\n  }\n\n  return grid;\n};\n",
+          "content": ""
+        },
+        {
+          "id": "WeSGi$Uri",
+          "type": "typescript",
+          "title": "Find a Sum of Two",
+          "instructions": "Given a list of numbers and a target sum, determine if any two numbers in the list can be added together to make the target sum. Assume only two such numbers exist, if they exist at all. Return these numbers as a tuple, i.e. `[number, number]`, or `null` if no such numbers exist.",
+          "testCode": "test(\"The `twoSum` function should be defined.\", () => {\n  expect(twoSum).toBeDefined();\n  expect(typeof twoSum === \"function\").toBe(true);\n});\n\ntest(\"`twoSum` should return the right result.\", () => {\n  expect(twoSum([1, 4, 9], 5)).toEqual([1, 4]);\n  expect(twoSum([1, 4, 9, 10, 20], 30)).toEqual([10, 20]);\n  expect(twoSum([9, 8, 7, 12, 14, 15], 26)).toEqual([12, 14]);\n\n  expect(twoSum([], 1)).toEqual(null);\n  expect(twoSum([9, 8, 7], 1)).toEqual(null);\n  expect(twoSum([1, 4, 9, 10, 20], 33)).toEqual(null);\n  expect(twoSum([9, 8, 7, 12, 14, 15], 260)).toEqual(null);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Matched result should be a list of the two numbers\ntype Result = [number, number];\n\n// Function signature\ntype TwoSumFunction = (list: number[], sum: number) => Result | null;\n\n// Your code here:",
+          "solutionCode": "// Matched result should be a list of the two numbers\ntype Result = [number, number];\n\n// Function signature\ntype TwoSumFunction = (list: number[], sum: number) => Result | null;\n\n// Two Sum function\nconst twoSum: TwoSumFunction = (list, sum) => {\n  // Create a set to track the numbers in the list\n  let numberSet = new Set();\n\n  // Iterate through the list and determine the required number at each\n  // value needed to add to the sum\n  for (const x of list) {\n    numberSet.add(x);\n    const difference = sum - x;\n\n    // If the required number if in the numberSet, you have a pair - return them!\n    if (numberSet.has(difference)) {\n      return [difference, x];\n    }\n  }\n\n  // No pairs found - return null.\n  return null;\n}",
+          "content": ""
+        },
+        {
+          "id": "sHxmXm3sR",
+          "type": "typescript",
+          "title": "The Pairwise Operator",
+          "instructions": "A pairwise operator is an operator on a stream \\(think real\\-time list\\) of elements, which takes each successive element and groups it with the last element in the stream. For example, a pairwise operation on a stream of values: `[1, 3, 5, 7]` would output `[1, 3]`, `[3, 5]`, and `[5, 7]`.\n\nIn the editor is a `Stream` class which has some basic code setup for processing a stream of elements. The class has a `next` method which will be called to send new elements into the stream.\n\nImplement a `pairwise` operator on the `Stream` class which will provide the paired grouping behavior described above. The `pairwise` method should always return the previous pair of elements in the stream, whenever it is called. If fewer than 2 elements exist in the stream, the `pairwise` method should return `null`.",
+          "testCode": "test(\"The `Stream` class should be defined.\", () => {\n  const s = new Stream();\n  expect(s).toBeDefined();\n});\n\ntest(\"The `Stream` class should have a method called `pairwise`.\", () => {\n  const s = new Stream();\n  expect(typeof s.pairwise === \"function\").toBe(true);\n});\n\ntest(\"The `pairwise` method should always return the previous two elements sent into the stream.\", () => {\n  const s = new Stream();\n  expect(s.pairwise()).toEqual(null);\n  s.next(1);\n  expect(s.pairwise()).toEqual(null);\n  s.next(2);\n  expect(s.pairwise()).toEqual([1, 2]);\n  s.next(50);\n  expect(s.pairwise()).toEqual([2, 50]);\n  s.next(432);\n  s.next(500);\n  expect(s.pairwise()).toEqual([432, 500]);\n  s.next(11);\n  expect(s.pairwise()).toEqual([500, 11]);\n  s.next(7);\n  expect(s.pairwise()).toEqual([11, 7]);\n});\n",
+          "videoUrl": "",
+          "starterCode": "/**\n * An class to handle processing a stream of elements.\n */\nclass Stream {\n  elements: any[] = [];\n\n  next(element: any) {\n    this.elements.push(element);\n  }\n\n  // Your code here\n}",
+          "solutionCode": "/**\n * An class to handle processing a stream of elements.\n */\nclass Stream {\n  elements: any[] = [];\n\n  next(element: any) {\n    this.elements.push(element);\n  }\n\n  pairwise() {\n    // Not enough elements exist yet\n    if (this.elements.length < 2) {\n      return null;\n    } else {\n      // Get the last pair and return it\n      const len = this.elements.length;\n      const first = this.elements[len - 2];\n      const second = this.elements[len - 1];\n      return [first, second];\n    }\n  }\n}",
+          "content": ""
+        },
+        {
           "id": "9wRw1y5V",
           "type": "section",
           "title": "Projects",
@@ -3062,7 +3139,7 @@
         },
         {
           "id": "if2EAwsyp",
-          "type": "special-topic",
+          "type": "media",
           "title": "Programming Styles",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
@@ -3073,7 +3150,7 @@
         },
         {
           "id": "gyGd9$$SJ",
-          "type": "special-topic",
+          "type": "media",
           "title": "Reading Code",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
@@ -3084,7 +3161,7 @@
         },
         {
           "id": "$BC2mfFgY",
-          "type": "special-topic",
+          "type": "media",
           "title": "Troubleshooting Problems When Coding",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",

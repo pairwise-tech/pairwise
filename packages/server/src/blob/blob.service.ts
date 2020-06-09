@@ -10,13 +10,10 @@ import { CodeBlob } from "./blob.entity";
 import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
 import { validateCodeBlob } from "src/tools/validation";
 import { RequestUser } from "src/types";
-import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class BlobService {
   constructor(
-    private readonly userService: UserService,
-
     @InjectRepository(CodeBlob)
     private readonly userCodeBlobRepository: Repository<CodeBlob>,
   ) {}
@@ -26,14 +23,6 @@ export class BlobService {
     if (!ContentUtility.challengeIdIsValid(challengeId)) {
       throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
     }
-
-    /**
-     * [SIDE EFFECT!]
-     *
-     * Update the lastActiveChallengeId on this user to be this challenge
-     * which they are fetching user code history for.
-     */
-    await this.userService.updateLastActiveChallengeId(user, challengeId);
 
     const blob = await this.userCodeBlobRepository.findOne({
       user: user.profile,

@@ -20,10 +20,62 @@ import {
  */
 
 describe("Account Creation Flow", () => {
-  it("Creating an account persists pre-login updates correctly", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace`);
+  it("Creating an account persists last active challenge ids correctly", () => {
+    // Visit a challenge in one course
+    cy.visit(`${CLIENT_APP_URL}/workspace/EztzbqIDQ`);
     cy.wait(TIMEOUT);
-    cy.url().should("include", "workspace");
+
+    // Visit a challenge in the other course
+    cy.visit(`${CLIENT_APP_URL}/workspace/Vii7hQ1xd`);
+    cy.wait(TIMEOUT);
+
+    // Helper to check both of the above challenges are saved correctly
+    const checkTheHomeChallengeLinks = () => {
+      // Return to the home route
+      click("header-home-link");
+      click("course-link-0-start");
+      cy.url().should("include", "workspace/EztzbqIDQ");
+
+      click("header-home-link");
+      click("course-link-1-start");
+      cy.url().should("include", "workspace/Vii7hQ1xd");
+    };
+
+    cy.reload();
+
+    // Check the links prior to login
+    checkTheHomeChallengeLinks();
+
+    click("login-signup-button");
+    click("facebook-login");
+
+    // Allow some time for updates to sync
+    cy.wait(5000);
+
+    // Check the links again after login
+    checkTheHomeChallengeLinks();
+
+    // Visit a different challenge
+    cy.visit(`${CLIENT_APP_URL}/workspace/Hvnu4UcaE`);
+    cy.wait(TIMEOUT);
+
+    cy.visit(`${CLIENT_APP_URL}/workspace/66sfsGVp8`);
+    cy.wait(TIMEOUT);
+
+    // Return home and reload
+    click("header-home-link");
+    cy.reload();
+    cy.wait(TIMEOUT);
+
+    // Check the id updated
+    click("course-link-0-start");
+    cy.url().should("include", "workspace/66sfsGVp8");
+  });
+
+  it.only("Creating an account persists pre-login updates correctly", () => {
+    cy.visit(`${CLIENT_APP_URL}/home`);
+    cy.wait(TIMEOUT);
+    cy.url().should("include", "home");
 
     /* Open the navigation menu and navigate to the first programming challenge: */
     click("navigation-menu-button");
@@ -79,9 +131,9 @@ describe("Account Creation Flow", () => {
   });
 
   it("User registration with no email shows a prompt to add email, but only after reload and only one time", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace`);
+    cy.visit(`${CLIENT_APP_URL}/home`);
     cy.wait(TIMEOUT);
-    cy.url().should("include", "workspace");
+    cy.url().should("include", "home");
 
     // Login with Facebook (defaults to { email: null })
     click("login-signup-button");
@@ -154,9 +206,9 @@ const checkUrlDuringUserRegistrationProcess = (
   sso: "facebook" | "google" | "github",
   challengeIndex: number,
 ) => {
-  cy.visit(`${CLIENT_APP_URL}/workspace`);
+  cy.visit(`${CLIENT_APP_URL}/home`);
   cy.wait(TIMEOUT);
-  cy.url().should("include", "workspace");
+  cy.url().should("include", "home");
 
   // Open the navigation menu and navigate to the first programming challenge:
   click("navigation-menu-button");

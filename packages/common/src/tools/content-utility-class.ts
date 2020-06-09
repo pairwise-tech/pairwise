@@ -162,8 +162,8 @@ class ContentUtilityClass {
               challenges: courseModule.challenges.map(challenge => {
                 // The user can access the challenge if they can access the
                 // course or if the challenge is marked as free.
-                const cisChallengeFree = challenge.free;
-                const canAccessChallenge = canAccessModule || cisChallengeFree;
+                const isChallengeFree = challenge.free;
+                const canAccessChallenge = canAccessModule || isChallengeFree;
 
                 return {
                   ...challenge,
