@@ -12,7 +12,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
-import { debounce, throttle } from "throttle-debounce";
+import { debounce } from "throttle-debounce";
 import {
   requestCodeFormatting,
   subscribeCodeWorker,
@@ -44,12 +44,14 @@ import {
   Position,
   Popover,
   MenuDivider,
+  Spinner,
 } from "@blueprintjs/core";
 import {
   composeWithProps,
   constructDataBlobFromChallenge,
   challengeRequiresWorkspace,
   getFileExtensionByChallengeType,
+  wait,
 } from "tools/utils";
 import {
   Tab,
@@ -117,6 +119,7 @@ interface IState {
   hideSuccessModal: boolean;
   favorMobile: boolean;
   dimensions: ReturnType<typeof getDimensions>;
+  shouldRefreshLayout: boolean;
 }
 
 export interface ICodeEditorOptions {
@@ -161,8 +164,12 @@ class Workspace extends React.Component<IProps, IState> {
 
   // Resize the workspace in response to the window resizing. If this happens
   // it's probably because a mobile user goes from portrait to landscape.
-  private readonly handleWindowResize = throttle(100, (e: UIEvent) => {
+  private readonly handleWindowResize = debounce(300, (e: UIEvent) => {
     console.log(`resize ${window.innerWidth}x${window.innerHeight}`);
+    this.setState({
+      dimensions: getDimensions(window.innerWidth, window.innerHeight),
+    });
+    this.refreshLayout();
   });
 
   constructor(props: IProps) {
@@ -199,6 +206,7 @@ class Workspace extends React.Component<IProps, IState> {
       favorMobile,
 
       dimensions: getDimensions(),
+      shouldRefreshLayout: false,
     };
   }
 
@@ -417,6 +425,7 @@ class Workspace extends React.Component<IProps, IState> {
       testResultsLoading,
       hideSuccessModal,
       dimensions: D,
+      shouldRefreshLayout,
     } = this.state;
     const {
       challenge,
@@ -673,96 +682,101 @@ class Workspace extends React.Component<IProps, IState> {
       <Container>
         <PageSection>
           <WorkspaceContainer>
-            <ColsWrapper separatorProps={colSeparatorProps}>
-              <Col
-                initialWidth={D.EDITOR_PANEL_WIDTH}
-                initialHeight={D.WORKSPACE_HEIGHT}
-              >
-                {IS_FULLSCREEN || IS_ALTERNATIVE_EDIT_VIEW ? (
-                  <div
-                    style={{ height: "100%", background: C.BACKGROUND_CONSOLE }}
-                  >
-                    {MONACO_CONTAINER}
-                  </div>
-                ) : (
-                  <RowsWrapper separatorProps={rowSeparatorProps}>
-                    <Row
-                      initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
-                      style={{ background: C.BACKGROUND_CONTENT }}
-                    >
-                      <ContentContainer>
-                        <InstructionsViewEdit />
-                      </ContentContainer>
-                    </Row>
-                    <Row
-                      style={{ background: C.BACKGROUND_EDITOR }}
-                      initialHeight={D.EDITOR_HEIGHT}
-                    >
-                      {MONACO_CONTAINER}
-                    </Row>
-                    <Row
-                      initialHeight={D.TEST_CONTENT_HEIGHT}
-                      style={{ background: C.BACKGROUND_CONTENT }}
-                    >
-                      {WorkspaceTestContainer}
-                    </Row>
-                  </RowsWrapper>
-                )}
-              </Col>
-              {IS_ALTERNATIVE_EDIT_VIEW ? (
-                TestFullHeightEditor
-              ) : IS_REACT_CHALLENGE ? (
-                <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                  <RowsWrapper separatorProps={rowSeparatorProps}>
-                    <Row initialHeight={D.PREVIEW_HEIGHT}>
-                      <div style={{ height: "100%" }}>
-                        <DragIgnorantFrameContainer
-                          id="iframe"
-                          title="code-preview"
-                          ref={this.setIframeRef}
-                        />
-                      </div>
-                    </Row>
-                    <Row
-                      style={consoleRowStyles}
-                      initialHeight={D.CONSOLE_HEIGHT}
-                    >
-                      <div>
-                        <Console variant="dark" logs={this.state.logs} />
-                      </div>
-                    </Row>
-                  </RowsWrapper>
-                </Col>
-              ) : IS_TYPESCRIPT_CHALLENGE ? (
+            {shouldRefreshLayout ? null : (
+              <ColsWrapper separatorProps={colSeparatorProps}>
                 <Col
-                  style={consoleRowStyles}
+                  initialWidth={D.EDITOR_PANEL_WIDTH}
                   initialHeight={D.WORKSPACE_HEIGHT}
                 >
-                  <div>
-                    <Console variant="dark" logs={this.state.logs} />
-                    <DragIgnorantFrameContainer
-                      id="iframe"
-                      title="code-preview"
-                      ref={this.setIframeRef}
-                      style={{ visibility: "hidden", height: 0, width: 0 }}
-                    />
-                  </div>
+                  {IS_FULLSCREEN || IS_ALTERNATIVE_EDIT_VIEW ? (
+                    <div
+                      style={{
+                        height: "100%",
+                        background: C.BACKGROUND_CONSOLE,
+                      }}
+                    >
+                      {MONACO_CONTAINER}
+                    </div>
+                  ) : (
+                    <RowsWrapper separatorProps={rowSeparatorProps}>
+                      <Row
+                        initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
+                        style={{ background: C.BACKGROUND_CONTENT }}
+                      >
+                        <ContentContainer>
+                          <InstructionsViewEdit />
+                        </ContentContainer>
+                      </Row>
+                      <Row
+                        style={{ background: C.BACKGROUND_EDITOR }}
+                        initialHeight={D.EDITOR_HEIGHT}
+                      >
+                        {MONACO_CONTAINER}
+                      </Row>
+                      <Row
+                        initialHeight={D.TEST_CONTENT_HEIGHT}
+                        style={{ background: C.BACKGROUND_CONTENT }}
+                      >
+                        {WorkspaceTestContainer}
+                      </Row>
+                    </RowsWrapper>
+                  )}
                 </Col>
-              ) : IS_MARKUP_CHALLENGE ? (
-                <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                  <div style={{ height: "100%" }}>
-                    <DragIgnorantFrameContainer
-                      id="iframe"
-                      title="code-preview"
-                      ref={this.setIframeRef}
-                    />
-                  </div>
-                </Col>
-              ) : (
-                /* Handle other challenge types ~ */
-                <div />
-              )}
-            </ColsWrapper>
+                {IS_ALTERNATIVE_EDIT_VIEW ? (
+                  TestFullHeightEditor
+                ) : IS_REACT_CHALLENGE ? (
+                  <Col initialHeight={D.WORKSPACE_HEIGHT}>
+                    <RowsWrapper separatorProps={rowSeparatorProps}>
+                      <Row initialHeight={D.PREVIEW_HEIGHT}>
+                        <div style={{ height: "100%" }}>
+                          <DragIgnorantFrameContainer
+                            id="iframe"
+                            title="code-preview"
+                            ref={this.setIframeRef}
+                          />
+                        </div>
+                      </Row>
+                      <Row
+                        style={consoleRowStyles}
+                        initialHeight={D.CONSOLE_HEIGHT}
+                      >
+                        <div>
+                          <Console variant="dark" logs={this.state.logs} />
+                        </div>
+                      </Row>
+                    </RowsWrapper>
+                  </Col>
+                ) : IS_TYPESCRIPT_CHALLENGE ? (
+                  <Col
+                    style={consoleRowStyles}
+                    initialHeight={D.WORKSPACE_HEIGHT}
+                  >
+                    <div>
+                      <Console variant="dark" logs={this.state.logs} />
+                      <DragIgnorantFrameContainer
+                        id="iframe"
+                        title="code-preview"
+                        ref={this.setIframeRef}
+                        style={{ visibility: "hidden", height: 0, width: 0 }}
+                      />
+                    </div>
+                  </Col>
+                ) : IS_MARKUP_CHALLENGE ? (
+                  <Col initialHeight={D.WORKSPACE_HEIGHT}>
+                    <div style={{ height: "100%" }}>
+                      <DragIgnorantFrameContainer
+                        id="iframe"
+                        title="code-preview"
+                        ref={this.setIframeRef}
+                      />
+                    </div>
+                  </Col>
+                ) : (
+                  /* Handle other challenge types ~ */
+                  <div id="the-div-that-should-not-render" />
+                )}
+              </ColsWrapper>
+            )}
           </WorkspaceContainer>
         </PageSection>
       </Container>
@@ -1094,6 +1108,18 @@ class Workspace extends React.Component<IProps, IState> {
 
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
+  };
+
+  /**
+   * The resizable cols are not declarative in their sizing. They take initial
+   * dimensions but if we want to update their dimensions we need to completely
+   * rerender. That's what this "state flash" let's us do.
+   */
+  private readonly refreshLayout = () => {
+    this.setState({ shouldRefreshLayout: true });
+    wait(10).finally(() => {
+      this.setState({ shouldRefreshLayout: false });
+    });
   };
 
   /**
