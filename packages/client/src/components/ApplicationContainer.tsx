@@ -342,29 +342,30 @@ const ApplicationContainer = (props: IProps) => {
         />
       )}
       <Switch>
-        <Route key={"workspace"} path="/workspace/:id" component={Workspace} />
-        <Route key={"home"} path="/home" component={Home} />
-        <Route key={"account"} path="/account" component={Account} />
-        <Route key={"mobile"} path="/mobile" component={MobileView} />
+        <Route key="workspace" path="/workspace" component={Workspace} />
+        <Route key="workspace" path="/workspace/:id" component={Workspace} />
+        <Route key="home" path="/home" component={Home} />
+        <Route key="account" path="/account" component={Account} />
+        <Route key="mobile" path="/mobile" component={MobileView} />
         {!isLoggedIn && (
           <Route
-            key={"authenticate"}
+            key="authenticate"
             path="/authenticate"
             component={AuthenticationForm}
           />
         )}
         <Route
-          key={"login"}
+          key="login"
           path="/login"
           component={() => <Redirect to="/authenticate" />}
         />
         <Route
-          key={"sign-up"}
+          key="sign-up"
           path="/sign-up"
           component={() => <Redirect to="/authenticate" />}
         />
         <Route
-          key={"logout"}
+          key="logout"
           path="/logout"
           component={() => <Redirect to="/home" />}
         />
