@@ -417,6 +417,10 @@ const CardTitleContainer = styled.div`
     & > span {
       display: none;
     }
+
+    h1 {
+      font-size: 32px;
+    }
   }
 
   h1,

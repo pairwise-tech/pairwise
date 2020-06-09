@@ -829,11 +829,13 @@ class Workspace extends React.Component<IProps, IState> {
 
     const renderMobile = () => (
       <MobileView>
-        <ContentContainer
-          style={{ height: "auto", flexShrink: 0, maxHeight: "20vh" }}
-        >
-          <InstructionsViewEdit />
-        </ContentContainer>
+        {!IS_SANDBOX && (
+          <ContentContainer
+            style={{ height: "auto", flexShrink: 0, maxHeight: "25vh" }}
+          >
+            <InstructionsViewEdit />
+          </ContentContainer>
+        )}
         <div className="tabs">
           <div className="tab-selection">
             <ButtonGroup fill large>
@@ -842,6 +844,9 @@ class Workspace extends React.Component<IProps, IState> {
                   document
                     .querySelector("#panel-scroll-target")
                     ?.scrollTo({ left: 0, behavior: "smooth" });
+                  wait(400).then(() => {
+                    this.editor?.focus();
+                  });
                 }}
                 icon="code"
               >
@@ -857,16 +862,18 @@ class Workspace extends React.Component<IProps, IState> {
               >
                 Preview
               </Button>
-              <Button
-                onClick={() => {
-                  document
-                    .querySelector("#panel-scroll-target")
-                    ?.scrollTo({ left: D.w * 2, behavior: "smooth" });
-                }}
-                icon="th-disconnect"
-              >
-                Tests
-              </Button>
+              {!IS_SANDBOX && (
+                <Button
+                  onClick={() => {
+                    document
+                      .querySelector("#panel-scroll-target")
+                      ?.scrollTo({ left: D.w * 2, behavior: "smooth" });
+                  }}
+                  icon="th-disconnect"
+                >
+                  Tests
+                </Button>
+              )}
             </ButtonGroup>
           </div>
           <div id="panel-scroll-target" className="panel">
@@ -875,7 +882,9 @@ class Workspace extends React.Component<IProps, IState> {
               <ContentContainer>
                 {getPreviewPane({ grid: false })}
               </ContentContainer>
-              <ContentContainer>{WorkspaceTestContainer}; </ContentContainer>
+              {!IS_SANDBOX && (
+                <ContentContainer>{WorkspaceTestContainer}</ContentContainer>
+              )}
             </div>
           </div>
         </div>
