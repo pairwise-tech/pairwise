@@ -91,7 +91,7 @@ describe("Workspace and Challenge Navigation Works", () => {
   });
 });
 
-describe.skip("Sandbox", () => {
+describe("Sandbox", () => {
   it("Sandbox should exist", () => {
     cy.visit(CLIENT_APP_URL);
     cy.get("#sandboxButton").click();
@@ -161,7 +161,7 @@ describe("Workspace Challenges", () => {
     cy.get("#gs-card").should("exist");
   });
 
-  it.only("The workspace supports React challenges and they can be solved", () => {
+  it("The workspace supports React challenges and they can be solved", () => {
     // Visit a React challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
 
@@ -210,7 +210,7 @@ describe("Workspace Challenges", () => {
   });
 });
 
-describe.skip("Success Modal", () => {
+describe("Success Modal", () => {
   it("Should show the modal when and only when the run button is clicked", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
     cy.contains("Incomplete");
