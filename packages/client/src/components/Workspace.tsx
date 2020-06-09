@@ -44,7 +44,6 @@ import {
   Position,
   Popover,
   MenuDivider,
-  Spinner,
   Button,
 } from "@blueprintjs/core";
 import {
@@ -98,7 +97,7 @@ const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 // NOTE: Element id is referenced in custom-tsx-styles.scss to apply styling
 export const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
 
-// type ConsoleLogMethods = "warn" | "info" | "error" | "log";
+type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
 interface Log {
   data: ReadonlyArray<string>;
