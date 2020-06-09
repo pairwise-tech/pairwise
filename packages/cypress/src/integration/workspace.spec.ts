@@ -24,6 +24,12 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.get("#product-title").contains("Pairwise");
   });
 
+  it("Loading the app on /workspace redirects to the first challenge", () => {
+    cy.visit(`${CLIENT_APP_URL}/workspace`);
+    cy.contains("Hello, Pairwise!");
+    cy.url().should("include", "workspace/iSF4BNIl/hello-pairwise");
+  });
+
   it("Home route includes courses list", () => {
     cy.visit(`${CLIENT_APP_URL}/home`);
     cy.url().should("include", "home");
@@ -34,7 +40,7 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.contains("Fullstack TypeScript Course");
     cy.contains("Pairwise Library");
 
-    cy.get(".courseLinkContinue").click({ force: true });
+    click("course-link-0-start");
     cy.url().should("include", "workspace");
   });
 
@@ -45,10 +51,10 @@ describe("Workspace and Challenge Navigation Works", () => {
       return id;
     };
 
-    cy.visit(`${CLIENT_APP_URL}/workspace`);
+    cy.visit(`${CLIENT_APP_URL}/home`);
 
     cy.wait(TIMEOUT);
-    cy.url().should("include", "workspace");
+    cy.url().should("include", "home");
 
     /* Open the navigation menu and navigate to the first programming challenge: */
     click("navigation-menu-button");
@@ -161,7 +167,10 @@ describe("Workspace Challenges", () => {
     cy.get("#gs-card").should("exist");
   });
 
-  it("The workspace supports React challenges and they can be solved", () => {
+  // This test intermittently fails with an error like:
+  // AssertionError: Timed out retrying: Expected to find element: `#test-result-status-0`, but never found it.
+  // This may be due to some problems fetching the React package dependencies.
+  it.skip("The workspace supports React challenges and they can be solved", () => {
     // Visit a React challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
 

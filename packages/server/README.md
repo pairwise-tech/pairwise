@@ -46,9 +46,9 @@ $ yarn test
 $ yarn test:cov
 ```
 
-## Database Migrations
+## Update Nest
 
-If you make any change to any database `Entity`, you can generate a new migrations file by running:
+To update the various NestJS library dependencies, you can use the Nest CLI:
 
 ```bash
 # Install the Nest CLI if you don't have it
@@ -58,11 +58,9 @@ $ npm i -g @nestjs/cli
 $ nest update --force
 ```
 
-Where `MyMigrationName` is a name to describe the current migration. The second command will execute the migration against the database.
+## Database Migrations
 
-## Update Nest
-
-To update the various NestJS library dependencies, you can use the Nest CLI:
+If you make any change to any database `Entity`, you can generate a new migrations file by running:
 
 ```bash
 # Generate a new migration file
@@ -71,6 +69,8 @@ $ yarn migration:generate MyMigrationName
 # Run any pending migrations
 $ yarn migration:run
 ```
+
+Where `MyMigrationName` is a name to describe the current migration. The second command will execute the migration against the database.
 
 ## Deployment
 
