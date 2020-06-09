@@ -12,7 +12,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
-import { debounce } from "throttle-debounce";
+import { debounce, throttle } from "throttle-debounce";
 import {
   requestCodeFormatting,
   subscribeCodeWorker,
@@ -23,7 +23,7 @@ import {
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
 } from "../tools/constants";
-import { DIMENSIONS as D } from "../tools/dimensions";
+import { getDimensions } from "../tools/dimensions";
 import toaster from "tools/toast-utils";
 import {
   getMarkupForCodeChallenge,
@@ -116,6 +116,7 @@ interface IState {
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
   hideSuccessModal: boolean;
   favorMobile: boolean;
+  dimensions: ReturnType<typeof getDimensions>;
 }
 
 export interface ICodeEditorOptions {
@@ -158,6 +159,12 @@ class Workspace extends React.Component<IProps, IState> {
   debouncedSaveCodeFunction: () => void;
   debouncedRenderPreviewFunction: () => void;
 
+  // Resize the workspace in response to the window resizing. If this happens
+  // it's probably because a mobile user goes from portrait to landscape.
+  private readonly handleWindowResize = throttle(100, (e: UIEvent) => {
+    console.log(`resize ${window.innerWidth}x${window.innerHeight}`);
+  });
+
   constructor(props: IProps) {
     super(props);
 
@@ -190,10 +197,13 @@ class Workspace extends React.Component<IProps, IState> {
 
       testResultsLoading: false,
       favorMobile,
+
+      dimensions: getDimensions(),
     };
   }
 
   async componentDidMount() {
+    window.addEventListener("resize", this.handleWindowResize);
     document.addEventListener("keydown", this.handleKeyPress);
     window.addEventListener(
       "message",
@@ -215,6 +225,7 @@ class Workspace extends React.Component<IProps, IState> {
     debug("componentWillUnmount");
 
     this.cleanupEditor();
+    window.removeEventListener("resize", this.handleWindowResize);
     window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener(
       "message",
@@ -401,7 +412,12 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { correct: allTestsPassing } = this.getTestPassedStatus();
-    const { testResults, testResultsLoading, hideSuccessModal } = this.state;
+    const {
+      testResults,
+      testResultsLoading,
+      hideSuccessModal,
+      dimensions: D,
+    } = this.state;
     const {
       challenge,
       isEditMode,

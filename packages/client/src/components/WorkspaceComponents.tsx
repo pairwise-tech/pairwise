@@ -9,7 +9,7 @@ import {
   CONTENT_SERIALIZE_DEBOUNCE,
   SANDBOX_ID,
 } from "../tools/constants";
-import { DIMENSIONS as D, HEADER_HEIGHT } from "../tools/dimensions";
+import { getDimensions, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { Loading } from "./Shared";
 import {
@@ -24,6 +24,8 @@ import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
 import Breadcrumbs from "./Breadcrumbs";
+
+const D = getDimensions();
 
 /** ===========================================================================
  * Workspace Components
