@@ -23,6 +23,7 @@ const debug = require("debug")("client:WorkspaceCodemirrorEditor");
 
 interface IState {
   theWaitIsOver: boolean;
+  fontSize: number;
 }
 
 export default class WorkspaceCodemirrorEditor
@@ -34,11 +35,15 @@ export default class WorkspaceCodemirrorEditor
 
   state = {
     theWaitIsOver: false,
+    fontSize: this.props.editorOptions.fontSize || 16,
   };
 
   updateOptions = (options: Partial<ICodeEditorOptions>) => {
     debug("updateOptions", options);
-    // TODO...
+    const { fontSize } = options;
+    if (fontSize) {
+      this.setState({ fontSize });
+    }
   };
 
   refresh = async () => {
@@ -94,10 +99,10 @@ export default class WorkspaceCodemirrorEditor
       autoCloseBrackets: true,
       autoCloseTags: true,
     };
-    const { theWaitIsOver } = this.state;
+    const { theWaitIsOver, fontSize } = this.state;
 
     return (
-      <CodemirrorContainer id={PAIRWISE_CODE_EDITOR_ID}>
+      <CodemirrorContainer id={PAIRWISE_CODE_EDITOR_ID} style={{ fontSize }}>
         {theWaitIsOver && (
           <CodeMirror
             editorDidMount={editor => {
