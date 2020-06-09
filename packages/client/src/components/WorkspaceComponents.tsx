@@ -423,10 +423,12 @@ export const InstructionsViewEdit = connect(
   const handleTitle = (title: string) =>
     props.updateChallenge({ id: currentId, challenge: { title } });
 
+  const isMobile = D.w < 700;
+
   return (
     <div id="workspace-panel-instructions">
       <ChallengeTitleHeading>
-        {isEditMode ? (
+        {isMobile || isEditMode ? (
           <StyledEditableText
             value={props.title}
             onChange={handleTitle}

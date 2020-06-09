@@ -38,6 +38,8 @@ export default class WorkspaceCodemirrorEditor
     fontSize: this.props.editorOptions.fontSize || 16,
   };
 
+  private _isMounted: boolean = true;
+
   updateOptions = (options: Partial<ICodeEditorOptions>) => {
     debug("updateOptions", options);
     const { fontSize } = options;
@@ -68,6 +70,7 @@ export default class WorkspaceCodemirrorEditor
   cleanup = () => {
     debug("cleanup");
     this.codemirrorInstance = null;
+    this._isMounted = false;
   };
 
   componentWillUnmount() {
@@ -80,7 +83,9 @@ export default class WorkspaceCodemirrorEditor
     // a bit of time
     await wait(500);
 
-    this.setState({ theWaitIsOver: true });
+    if (this._isMounted) {
+      this.setState({ theWaitIsOver: true });
+    }
   }
 
   render() {

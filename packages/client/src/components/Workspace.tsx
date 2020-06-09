@@ -844,6 +844,7 @@ class Workspace extends React.Component<IProps, IState> {
                   document
                     .querySelector("#panel-scroll-target")
                     ?.scrollTo({ left: 0, behavior: "smooth" });
+                  // Instantly focusing ruins the animation
                   wait(400).then(() => {
                     this.editor?.focus();
                   });
@@ -858,9 +859,9 @@ class Workspace extends React.Component<IProps, IState> {
                     .querySelector("#panel-scroll-target")
                     ?.scrollTo({ left: D.w, behavior: "smooth" });
                 }}
-                icon="eye-open"
+                icon="console"
               >
-                Preview
+                Result
               </Button>
               {!IS_SANDBOX && (
                 <Button
