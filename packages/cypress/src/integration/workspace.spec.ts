@@ -16,7 +16,7 @@ import {
  * ============================================================================
  */
 
-describe.skip("Workspace and Challenge Navigation Works", () => {
+describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Pairwise", () => {
     cy.visit(CLIENT_APP_URL);
     cy.get("#product-title").contains("Pairwise");
@@ -89,7 +89,7 @@ describe.skip("Workspace and Challenge Navigation Works", () => {
   });
 });
 
-describe.skip("Sandbox", () => {
+describe("Sandbox", () => {
   it("Sandbox should exist", () => {
     cy.visit(CLIENT_APP_URL);
     cy.get("#sandboxButton").click();
@@ -159,7 +159,10 @@ describe("Workspace Challenges", () => {
     cy.get("#gs-card").should("exist");
   });
 
-  it.only("The workspace supports React challenges and they can be solved", () => {
+  // This test intermittently fails with an error like:
+  // AssertionError: Timed out retrying: Expected to find element: `#test-result-status-0`, but never found it.
+  // This may be due to some problems fetching the React package dependencies.
+  it.skip("The workspace supports React challenges and they can be solved", () => {
     // Visit a React challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
 
@@ -208,7 +211,7 @@ describe("Workspace Challenges", () => {
   });
 });
 
-describe.skip("Success Modal", () => {
+describe("Success Modal", () => {
   it("Should show the modal when and only when the run button is clicked", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
     cy.contains("Incomplete");
