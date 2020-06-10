@@ -80,6 +80,7 @@ import { CODEPRESS } from "tools/client-env";
 import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
 import pipe from "ramda/es/pipe";
+import partition from "ramda/es/partition";
 import SEO from "./SEO";
 import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
 import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
@@ -188,6 +189,44 @@ const MobileView = styled.div`
     height: 100%;
     display: flex;
     flex-direction: row;
+  }
+
+  .test-view-button {
+    & > span:first-child {
+      position: relative;
+      margin-left: 15px;
+    }
+  }
+
+  .test-container {
+    padding-top: 15px;
+  }
+
+  .mobile-tests-badge {
+    font-size: 10px;
+    position: absolute;
+    color: white;
+    top: 0;
+    left: 0;
+    border-radius: 100px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 3px;
+    line-height: 15px;
+    min-width: 15px;
+    font-weight: bold;
+    top: 50%;
+    transform: translate(-100%, -50%);
+    left: -5px;
+    color: black;
+
+    &.fail {
+      background: #e17e75;
+    }
+    &.success {
+      background: #95ecbe;
+    }
   }
 
   ${ContentContainer} {
@@ -827,64 +866,81 @@ class Workspace extends React.Component<IProps, IState> {
       );
     };
 
-    const renderMobile = () => (
-      <MobileView>
-        {!IS_SANDBOX && (
-          <div style={{ height: "auto", flexShrink: 0, maxHeight: "25vh" }}>
-            <InstructionsViewEdit isMobile />
-          </div>
-        )}
-        <div className="tabs">
-          <div className="tab-selection">
-            <ButtonGroup fill large>
-              <Button
-                onClick={() => {
-                  document
-                    .querySelector("#panel-scroll-target")
-                    ?.scrollTo({ left: 0, behavior: "smooth" });
-                }}
-                icon="code"
-              >
-                Challenge
-              </Button>
-              <Button
-                onClick={() => {
-                  document
-                    .querySelector("#panel-scroll-target")
-                    ?.scrollTo({ left: D.w, behavior: "smooth" });
-                }}
-                icon="console"
-              >
-                Result
-              </Button>
-              {!IS_SANDBOX && (
+    const renderMobile = () => {
+      const { failingTests } = this.getTestPassedStatus();
+      return (
+        <MobileView>
+          {!IS_SANDBOX && (
+            <div style={{ height: "auto", flexShrink: 0, maxHeight: "25vh" }}>
+              <InstructionsViewEdit isMobile />
+            </div>
+          )}
+          <div className="tabs">
+            <div className="tab-selection">
+              <ButtonGroup fill large>
                 <Button
                   onClick={() => {
                     document
                       .querySelector("#panel-scroll-target")
-                      ?.scrollTo({ left: D.w * 2, behavior: "smooth" });
+                      ?.scrollTo({ left: 0, behavior: "smooth" });
                   }}
-                  icon="th-disconnect"
+                  icon="code"
                 >
-                  Tests
+                  Challenge
                 </Button>
-              )}
-            </ButtonGroup>
-          </div>
-          <div id="panel-scroll-target" className="panel">
-            <div className="panel-scroll">
-              <ContentContainer>{MONACO_CONTAINER}</ContentContainer>
-              <ContentContainer>
-                {getPreviewPane({ grid: false })}
-              </ContentContainer>
-              {!IS_SANDBOX && (
-                <ContentContainer>{WorkspaceTestContainer}</ContentContainer>
-              )}
+                <Button
+                  onClick={() => {
+                    document
+                      .querySelector("#panel-scroll-target")
+                      ?.scrollTo({ left: D.w, behavior: "smooth" });
+                  }}
+                  icon="console"
+                >
+                  Result
+                </Button>
+                {!IS_SANDBOX && (
+                  <Button
+                    className="test-view-button"
+                    data-failing={failingTests.length}
+                    onClick={() => {
+                      document
+                        .querySelector("#panel-scroll-target")
+                        ?.scrollTo({ left: D.w * 2, behavior: "smooth" });
+                    }}
+                  >
+                    <small
+                      className={
+                        // tslint:disable-next-line: prefer-template
+                        "mobile-tests-badge " +
+                        (failingTests.length ? "fail" : "success")
+                      }
+                    >
+                      {failingTests.length > 9
+                        ? "9+"
+                        : failingTests.length || "✓"}
+                    </small>
+                    Tests
+                  </Button>
+                )}
+              </ButtonGroup>
+            </div>
+            <div id="panel-scroll-target" className="panel">
+              <div className="panel-scroll">
+                <ContentContainer>{MONACO_CONTAINER}</ContentContainer>
+                <ContentContainer>
+                  {getPreviewPane({ grid: false })}
+                </ContentContainer>
+                {!IS_SANDBOX && (
+                  <ContentContainer className="test-container">
+                    {WorkspaceTestContainer}
+                  </ContentContainer>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      </MobileView>
-    );
+        </MobileView>
+      );
+    };
 
     return (
       <Container>
@@ -945,12 +1001,14 @@ class Workspace extends React.Component<IProps, IState> {
 
   getTestPassedStatus = () => {
     const { testResults, testResultsLoading } = this.state;
-    const passedTests = testResults.filter(t => t.testResult);
+    const [passedTests, failingTests] = partition<TestCase>(t => t.testResult)(
+      testResults,
+    );
     const correct =
       !testResultsLoading &&
       passedTests.length > 0 &&
       passedTests.length === testResults.length;
-    return { correct, passedTests, testResults };
+    return { correct, passedTests, failingTests, testResults };
   };
 
   getTestSummaryString = () => {

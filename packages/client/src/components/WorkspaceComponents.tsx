@@ -8,6 +8,7 @@ import {
   COLORS,
   CONTENT_SERIALIZE_DEBOUNCE,
   SANDBOX_ID,
+  MOBILE,
 } from "../tools/constants";
 import { getDimensions, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
@@ -114,59 +115,12 @@ export const DragIgnorantFrameContainer = React.forwardRef(
   },
 );
 
-export const TestResultRow = ({
-  message,
-  testResult,
-  error,
-  index,
-}: TestCase & { index: number }) => {
-  const [showError, setShowError] = React.useState(false);
-  const toggleShowError = () => {
-    if (!error) {
-      return;
-    }
-    setShowError(!showError);
-  };
-
-  return (
-    <div>
-      <ContentDiv>
-        <MinimalButton
-          style={{ cursor: error ? "pointer" : "normal" }}
-          onClick={toggleShowError}
-        >
-          {error ? (
-            <Icon icon="error" intent="danger" />
-          ) : (
-            <Icon icon="tick-circle" intent="primary" />
-          )}
-        </MinimalButton>
-        <TestMessageHighlighter source={message} />
-        <div
-          style={{
-            display: "flex",
-            width: 140,
-            marginLeft: "auto",
-            flexDirection: "row",
-          }}
-        >
-          <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-          <SuccessFailureText
-            testResult={testResult}
-            id={`test-result-status-${index}`}
-          >
-            {testResult ? "Success!" : "Incomplete..."}
-          </SuccessFailureText>
-        </div>
-      </ContentDiv>
-      {error && (
-        <Collapse isOpen={showError}>
-          <Pre>{error}</Pre>
-        </Collapse>
-      )}
-    </div>
-  );
-};
+export const MinimalButton = styled.button`
+  appearance: none;
+  outline: none;
+  background: transparent;
+  border: none;
+`;
 
 const HighlightedMarkdown = (props: ReactMarkdownProps) => {
   return (
@@ -198,6 +152,97 @@ const TestMessageHighlighter = styled(HighlightedMarkdown)`
     background: ${editorColors.almostBlack};
   }
 `;
+
+export const ContentDiv = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0;
+  margin-top: 8px;
+  font-size: 15px;
+  font-weight: 200px;
+  padding-right: 8px;
+  color: ${C.TEXT_CONTENT};
+`;
+
+const TestStatus = styled.div`
+  display: flex;
+  width: 140;
+  margin-left: auto;
+  flex-direction: row;
+`;
+
+const StyledTestResultRow = styled.div`
+  @media ${MOBILE} {
+    position: relative;
+
+    ${MinimalButton} {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translateY(20%) scale(1.2);
+    }
+
+    ${ContentDiv}, ${TestStatus} {
+      padding-left: 20px;
+      display: block;
+      p {
+        display: inline-block;
+      }
+    }
+
+    ${TestMessageHighlighter} {
+      display: block;
+      padding-left: 20px;
+    }
+  }
+`;
+
+export const TestResultRow = ({
+  message,
+  testResult,
+  error,
+  index,
+}: TestCase & { index: number }) => {
+  const [showError, setShowError] = React.useState(false);
+  const toggleShowError = () => {
+    if (!error) {
+      return;
+    }
+    setShowError(!showError);
+  };
+
+  return (
+    <StyledTestResultRow>
+      <ContentDiv>
+        <MinimalButton
+          style={{ cursor: error ? "pointer" : "normal" }}
+          onClick={toggleShowError}
+        >
+          {error ? (
+            <Icon icon="error" intent="danger" />
+          ) : (
+            <Icon icon="tick-circle" intent="primary" />
+          )}
+        </MinimalButton>
+        <TestMessageHighlighter source={message} />
+        <TestStatus>
+          <b style={{ color: C.TEXT_TITLE }}>Status:</b>
+          <SuccessFailureText
+            testResult={testResult}
+            id={`test-result-status-${index}`}
+          >
+            {testResult ? "Success!" : "Incomplete..."}
+          </SuccessFailureText>
+        </TestStatus>
+      </ContentDiv>
+      {error && (
+        <Collapse isOpen={showError}>
+          <Pre>{error}</Pre>
+        </Collapse>
+      )}
+    </StyledTestResultRow>
+  );
+};
 
 export const consoleRowStyles = {
   paddingTop: 2,
@@ -237,24 +282,6 @@ export const ContentTitle = styled.h3`
   margin: 0;
   margin-bottom: 12px;
   color: ${C.TEXT_TITLE};
-`;
-
-export const MinimalButton = styled.button`
-  appearance: none;
-  outline: none;
-  background: transparent;
-  border: none;
-`;
-
-export const ContentDiv = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0;
-  margin-top: 8px;
-  font-size: 15px;
-  font-weight: 200px;
-  padding-right: 8px;
-  color: ${C.TEXT_CONTENT};
 `;
 
 export const SuccessFailureText = styled.p`
