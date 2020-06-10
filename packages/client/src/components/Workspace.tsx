@@ -157,6 +157,8 @@ export interface ICodeEditor extends React.Component<ICodeEditorProps> {
  * ============================================================================
  */
 
+const PANEL_SCROLL_ID = "panel-scroll-target";
+
 class Workspace extends React.Component<IProps, IState> {
   // Place to store user code when solution code is revealed
   userCode: string = "";
@@ -833,7 +835,7 @@ class Workspace extends React.Component<IProps, IState> {
                 <Button
                   onClick={() => {
                     document
-                      .querySelector("#panel-scroll-target")
+                      .getElementById(PANEL_SCROLL_ID)
                       ?.scrollTo({ left: 0, behavior: "smooth" });
                   }}
                   icon="code"
@@ -843,7 +845,7 @@ class Workspace extends React.Component<IProps, IState> {
                 <Button
                   onClick={() => {
                     document
-                      .querySelector("#panel-scroll-target")
+                      .getElementById(PANEL_SCROLL_ID)
                       ?.scrollTo({ left: D.w, behavior: "smooth" });
                   }}
                   icon="console"
@@ -856,7 +858,7 @@ class Workspace extends React.Component<IProps, IState> {
                     data-failing={failingTests.length}
                     onClick={() => {
                       document
-                        .querySelector("#panel-scroll-target")
+                        .getElementById(PANEL_SCROLL_ID)
                         ?.scrollTo({ left: D.w * 2, behavior: "smooth" });
                     }}
                   >
@@ -1165,7 +1167,7 @@ class Workspace extends React.Component<IProps, IState> {
     // Slide the preview window into view. Only applicable on mobile
     if (this.props.renderForMobile) {
       document
-        .querySelector("#panel-scroll-target")
+        .getElementById(PANEL_SCROLL_ID)
         ?.scrollTo({ left: this.state.dimensions.w, behavior: "smooth" });
     }
   };

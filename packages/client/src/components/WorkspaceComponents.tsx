@@ -429,12 +429,11 @@ export const InstructionsViewEdit = connect(
 )((props: InstructionsViewEditProps) => {
   const { isEditMode, currentId } = props;
   const [isCollapsed, setIsCollapsed] = React.useState(false);
+  const PANEL_ID = "workspace-panel-instructions";
 
   const toggleCollapsed = React.useCallback(() => {
     setIsCollapsed(!isCollapsed);
-    document
-      .querySelector("#workspace-panel-instructions")
-      ?.scrollTo({ top: 0 });
+    document.getElementById(PANEL_ID)?.scrollTo({ top: 0 });
   }, [isCollapsed, setIsCollapsed]);
 
   /**
@@ -465,7 +464,7 @@ export const InstructionsViewEdit = connect(
 
   return (
     <div
-      id="workspace-panel-instructions"
+      id={PANEL_ID}
       style={{
         transition: "all 0.2s ease",
         minHeight: 45,
