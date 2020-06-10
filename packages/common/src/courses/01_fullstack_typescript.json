@@ -89,8 +89,8 @@
           "title": "The h1 Tag",
           "instructions": "Right below the existing `p` tag add an `h1` tag with the text \"Hello\\!\" inside it. If you don't know where to start, watch the [video](#{\"component\":\"VideoPlayButton\"}) for some hints.",
           "starterCode": "<p>This is an HTML file. Add your code below this line</p>",
-          "solutionCode": "<p>This is an HTML file. Add your code below this line</p>\n<h1>Hello!</h1>",
-          "testCode": "test(\"There should be an `h1` tag with the text 'Hello!'\", () => {\n  expect(get(\"h1\").innerHTML).toBe(\"Hello!\");\n});\n",
+          "solutionCode": "<p>This is an HTML file. Add your code below this line</p>\n<h1>\n    Hello!\n</h1>",
+          "testCode": "test(\"There should be an `h1` tag with the text 'Hello!'\", () => {\n  expect(get(\"h1\").innerHTML.trim()).toBe(\"Hello!\");\n});\n",
           "videoUrl": "https://www.youtube.com/embed/o7G8vNxD4M0",
           "content": "We're starting off with some simple text text tags. The web is full of text so these are some of the most common tags you will find. For now the webpages we create may not look like much, just some different text here an there, but soon we will learn about how to make things look much more interesting."
         },
