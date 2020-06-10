@@ -474,7 +474,7 @@ export const InstructionsViewEdit = connect(
       <ChallengeTitleHeading>
         {isMobile || isEditMode ? (
           <div
-            style={{ display: "flex", marginBottom: 10 }}
+            style={{ display: "flex", alignItems: "center", marginBottom: 10 }}
             onClick={toggleCollapsed}
           >
             <RotatingIcon
