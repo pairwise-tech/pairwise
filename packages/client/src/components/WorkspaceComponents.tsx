@@ -571,3 +571,87 @@ export const AdminKeyboardShortcuts = connect(
   keyboardDispatchProps,
   keyboardMergeProps,
 )(AdminKeyboardShortcutsComponent);
+
+export const WorkspaceMobileView = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .tabs {
+    height: 70vh; // This should be ignored in favor of flexing
+    flex: 1 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tab-selection {
+    flex-shrink: 0;
+    display: flex;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.47);
+    justify-content: center;
+    position: relative;
+    z-index: 4;
+
+    .bp3-button {
+      flex: 1 100%;
+    }
+  }
+
+  .panel {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    flex: 1 100%;
+  }
+
+  .panel-scroll {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .test-view-button {
+    & > span:first-child {
+      position: relative;
+      margin-left: 15px;
+    }
+  }
+
+  .test-container {
+    padding-top: 15px;
+  }
+
+  .mobile-tests-badge {
+    font-size: 10px;
+    position: absolute;
+    color: white;
+    top: 0;
+    left: 0;
+    border-radius: 100px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 3px;
+    line-height: 15px;
+    min-width: 15px;
+    font-weight: bold;
+    top: 50%;
+    transform: translate(-100%, -50%);
+    left: -5px;
+    color: black;
+
+    &.fail {
+      background: #e17e75;
+    }
+    &.success {
+      background: #95ecbe;
+    }
+  }
+
+  ${ContentContainer} {
+    width: 100vw;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+`;
