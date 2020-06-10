@@ -27,7 +27,7 @@ describe("User APIs", () => {
     expect(profile.givenName).toBeDefined();
     expect(profile.familyName).toBeDefined();
     expect(settings).toBeDefined();
-    expect(settings.workspaceFontSize).toBe(12);
+    expect(settings.workspaceFontSize).toBe(16);
   });
 
   test("/user/profile (POST) a user can update their profile", async () => {
@@ -62,7 +62,7 @@ describe("User APIs", () => {
     expect(profile.email).toBe(originalProfile.email);
     expect(profile.givenName).toBe(originalProfile.givenName);
     expect(profile.familyName).toBe(originalProfile.familyName);
-    expect(originalSettings.workspaceFontSize).toBe(12);
+    expect(originalSettings.workspaceFontSize).toBe(16);
     expect(settings.workspaceFontSize).toBe(18);
     expect(settings.theme).toBe("hc-black");
   });
@@ -145,7 +145,7 @@ describe("User APIs", () => {
     const firstSettings = result.data.settings;
 
     expect(firstSettings.theme).toBe("vs-dark");
-    expect(firstSettings.workspaceFontSize).toBe(12);
+    expect(firstSettings.workspaceFontSize).toBe(16);
 
     /**
      * [2] Invalid update values are ignored.
