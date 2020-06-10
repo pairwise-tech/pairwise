@@ -106,7 +106,6 @@ export default class WorkspaceCodemirrorEditor
       mode,
       theme: "material-darker",
       lineNumbers: true,
-      cursorScrollMargin: 60,
       matchBrackets: true,
       matchTags: true,
       autoCloseBrackets: true,
