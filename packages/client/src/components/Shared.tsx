@@ -85,9 +85,9 @@ export const UpperRight = styled.div<{ isEditMode: boolean }>`
   align-items: flex-end;
 `;
 
-// This breaks the Icon typing, but also doesn't shout at us inthe console
+// This breaks the Icon typing, but also doesn't shout at us in the console
 export const RotatingIcon = styled(({ isRotated, id, ...props }) => {
-  return <Icon {...props} />;
+  return <Icon id={id} {...props} />;
 })<{ isRotated?: boolean; id: string }>`
   transform: ${props =>
     `rotate3d(0,0,1,${props.isRotated ? "0deg" : "-90deg"})`};
