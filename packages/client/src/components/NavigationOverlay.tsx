@@ -14,7 +14,7 @@ import {
   getChallengeSlug,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS, SANDBOX_ID } from "tools/constants";
+import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import {
   composeWithProps,
@@ -48,6 +48,7 @@ import {
 } from "./NavigationOverlayComponents";
 import { Select } from "@blueprintjs/select";
 import { IconButton, RotatingIcon } from "./Shared";
+import cx from "classnames";
 
 /** ===========================================================================
  * Types & Config
@@ -61,7 +62,20 @@ const CourseSelect = Select.ofType<CourseMetadata>();
  * ============================================================================
  */
 
-class NavigationOverlay extends React.Component<IProps> {
+class NavigationOverlay extends React.Component<
+  IProps,
+  { showModuleList: boolean }
+> {
+  state = {
+    showModuleList: false,
+  };
+
+  toggleModuleListOpen = () => {
+    this.setState({
+      showModuleList: !this.state.showModuleList,
+    });
+  };
+
   componentDidMount() {
     this.lockWindowScrolling();
   }
@@ -129,11 +143,12 @@ class NavigationOverlay extends React.Component<IProps> {
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
         <KeyboardShortcuts keymap={shortcutKeyMap as KeyMapProps} />
         <Col
+          className={cx("module-select", { open: this.state.showModuleList })}
           style={{ zIndex: 3 }}
           offsetX={overlayVisible ? 0 : -20}
           onClick={e => e.stopPropagation()}
         >
-          <ColTitle>
+          <ColTitle className="course-select">
             <CourseSelect
               filterable={false}
               items={courseListMetadata}
@@ -149,7 +164,13 @@ class NavigationOverlay extends React.Component<IProps> {
                 </ClickableColTitle>
               )}
             >
-              <Button text={course.title} rightIcon="chevron-down" />
+              <Button
+                style={{ whiteSpace: "nowrap" }}
+                fill
+                className="mobile-shrink"
+                text={course.title}
+                rightIcon="chevron-down"
+              />
             </CourseSelect>
           </ColTitle>
           <ColScroll>
@@ -161,6 +182,7 @@ class NavigationOverlay extends React.Component<IProps> {
           </ColScroll>
         </Col>
         <Col
+          className="challenge-select"
           offsetX={overlayVisible ? 0 : -60}
           style={{
             width: 600,
@@ -481,7 +503,7 @@ class NavigationOverlay extends React.Component<IProps> {
     const itemActive = sectionActive || challenge.id === challengeId;
 
     return (
-      <div
+      <ChallengeNavigationItem
         key={challenge.id}
         id={`challenge-${challenge.id}`}
         className={itemActive ? "active-item" : ""}
@@ -527,7 +549,7 @@ class NavigationOverlay extends React.Component<IProps> {
           </span>
         </Link>
         {this.renderChallengeCodepressButton(course, module, index)}
-      </div>
+      </ChallengeNavigationItem>
     );
   };
 
@@ -912,6 +934,12 @@ const HoverableBadge = styled.div`
   }
 `;
 
+const ChallengeNavigationItem = styled.div`
+  @media ${MOBILE} {
+    white-space: nowrap;
+  }
+`;
+
 const Col = styled.div<{ offsetX: number }>`
   display: flex;
   flex-direction: column;
@@ -922,6 +950,41 @@ const Col = styled.div<{ offsetX: number }>`
   z-index: 2;
   transition: all 0.2s ease-out;
   transform: translateX(${({ offsetX }) => `${offsetX}px`});
+
+  @media ${MOBILE} {
+    ${ModuleNavigationBase} {
+      white-space: nowrap;
+    }
+
+    .mobile-shrink {
+      transition: all 0.2s ease-out;
+    }
+
+    &.open {
+      .mobile-shrink {
+        .bp3-button-text {
+          width: 100%;
+          overflow: visible;
+        }
+      }
+    }
+
+    &.module-select {
+      // Use the 0vw trick to make sure animations are smooth
+      max-width: 100%;
+      min-width: 50px;
+      width: 0vw;
+      flex-shrink: 0;
+
+      &.open {
+        width: 90vw;
+      }
+
+      ${ModuleNumber} {
+        margin-right: 12px;
+      }
+    }
+  }
 `;
 
 const ColScroll = styled.div`
@@ -962,6 +1025,33 @@ const ColTitle = styled.div`
 
   p {
     margin: 0;
+  }
+
+  &.course-select {
+    padding: 0 6px;
+
+    .bp3-popover-wrapper,
+    .bp3-popover-target {
+      width: 100%;
+    }
+  }
+
+  @media ${MOBILE} {
+    &.course-select {
+      display: flex;
+      justify-content: center;
+    }
+    .mobile-shrink {
+      // Why is blueprint SO INSISTANT on their low-constrast icons??
+      .bp3-icon {
+        color: white !important;
+      }
+      .bp3-button-text {
+        width: 0%;
+        overflow: hidden;
+        margin: 0;
+      }
+    }
   }
 `;
 
