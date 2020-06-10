@@ -132,6 +132,12 @@ export default class WorkspaceCodemirrorEditor
 const CodemirrorContainer = styled.div`
   height: 100%;
 
+  // Custom comment styles. They were a very low-contrast gray before.
+  // The color used here is the same as monaco, so should be consistent
+  .cm-s-material-darker .cm-comment {
+    color: #608b4e;
+  }
+
   .react-codemirror2 {
     height: 100%;
 
