@@ -139,7 +139,6 @@ export interface ICodeEditorProps {
 
 export interface ICodeEditor extends React.Component<ICodeEditorProps> {
   refresh(): Promise<void>;
-  // initialize(): Promise<void>;
   focus(): void;
   cleanup(): void;
   setTheme(theme: string): void;
@@ -680,7 +679,6 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
           </Popover>
         </LowerRight>
-        {/* <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} /> */}
         <CodeEditor
           ref={editor => {
             this.editor = editor;
@@ -696,7 +694,7 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     const getPreviewPane = ({ grid = true } = {}) => {
-      // Lots of repeptition here
+      // Lots of repetition here
       if (!grid) {
         return IS_REACT_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>

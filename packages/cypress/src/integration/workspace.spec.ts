@@ -341,7 +341,7 @@ describe("Editor Functions", () => {
     cy.get(".hc-black").should("not.exist");
   });
 
-  it("Shoudl support full-screen editing", () => {
+  it("Should support full-screen editing", () => {
     cy.get("#workspace-panel-instructions");
     click("editor-more-options");
     click("editor-toggle-full-screen");
