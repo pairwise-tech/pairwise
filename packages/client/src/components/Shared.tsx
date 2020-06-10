@@ -442,7 +442,7 @@ export const Hr = styled.hr`
 `;
 
 export const SupplementaryContentContainer = styled.div`
-  padding: 25px;
+  padding: 50px 25px 25px 25px;
   background: #1e1e1e;
   position: relative;
   width: 100%;

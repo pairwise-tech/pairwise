@@ -91,6 +91,26 @@ $orange3: #ffdf75;
   background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z' fill='%235C7080'/%3E%3C/svg%3E");
 }
 
+// Fix broken svg icon. Same issue as above
+.bp3-breadcrumbs-collapsed:before {
+  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg fill='%235C7080'%3E%3Ccircle cx='2' cy='8.03' r='2'/%3E%3Ccircle cx='14' cy='8.03' r='2'/%3E%3Ccircle cx='8' cy='8.03' r='2'/%3E%3C/g%3E%3C/svg%3E")
+    50% no-repeat;
+}
+
+// Make the collapse menu more visible. Not meant to stand out, just not blend in like it was before
+.bp3-dark .bp3-breadcrumbs-collapsed {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+// Make the disabled collapsed items a bit more legible
+.bp3-dark .bp3-menu-item.bp3-disabled {
+  color: rgb(175, 175, 175) !important;
+}
+
+.bp3-breadcrumb {
+  white-space: nowrap;
+}
+
 .breadcrumb-challenge-complete {
   svg {
     fill: rgb(0, 255, 185) !important;
