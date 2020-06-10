@@ -1161,6 +1161,13 @@ class Workspace extends React.Component<IProps, IState> {
   handleUserTriggeredTestRun = () => {
     this.setState({ hideSuccessModal: false });
     this.runChallengeTests();
+
+    // Slide the preview window into view. Only applicable on mobile
+    if (this.props.renderForMobile) {
+      document
+        .querySelector("#panel-scroll-target")
+        ?.scrollTo({ left: this.state.dimensions.w, behavior: "smooth" });
+    }
   };
 
   // NOTE We manage the false loading state where test results are received. The
