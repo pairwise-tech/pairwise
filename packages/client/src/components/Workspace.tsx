@@ -830,11 +830,9 @@ class Workspace extends React.Component<IProps, IState> {
     const renderMobile = () => (
       <MobileView>
         {!IS_SANDBOX && (
-          <ContentContainer
-            style={{ height: "auto", flexShrink: 0, maxHeight: "25vh" }}
-          >
-            <InstructionsViewEdit />
-          </ContentContainer>
+          <div style={{ height: "auto", flexShrink: 0, maxHeight: "25vh" }}>
+            <InstructionsViewEdit isMobile />
+          </div>
         )}
         <div className="tabs">
           <div className="tab-selection">
@@ -844,14 +842,10 @@ class Workspace extends React.Component<IProps, IState> {
                   document
                     .querySelector("#panel-scroll-target")
                     ?.scrollTo({ left: 0, behavior: "smooth" });
-                  // Instantly focusing ruins the animation
-                  wait(400).then(() => {
-                    this.editor?.focus();
-                  });
                 }}
                 icon="code"
               >
-                Code
+                Challenge
               </Button>
               <Button
                 onClick={() => {
@@ -892,13 +886,11 @@ class Workspace extends React.Component<IProps, IState> {
       </MobileView>
     );
 
-    const renderForMobile = D.w < 700;
-
     return (
       <Container>
         <PageSection>
           <WorkspaceContainer>
-            {renderForMobile ? (
+            {this.props.renderForMobile ? (
               renderMobile()
             ) : shouldRefreshLayout ? null : (
               <ColsWrapper separatorProps={colSeparatorProps}>
@@ -1479,6 +1471,7 @@ type ConnectProps = ReturnType<typeof mergeProps>;
 interface IProps extends ConnectProps {
   blob: DataBlob;
   challenge: Challenge;
+  renderForMobile: boolean;
 }
 
 const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
@@ -1528,11 +1521,18 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       description: getSeoExcerpt(challenge),
     };
 
+    const renderForMobile = getDimensions().w < 700;
+
     return (
       <React.Fragment>
         <SEO {...seoMeta} />
         {requiresWorkspace && (
-          <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
+          <Workspace
+            {...this.props}
+            blob={codeBlob}
+            challenge={challenge}
+            renderForMobile={renderForMobile}
+          />
         )}
         {!isSandbox && (CODEPRESS || this.props.showMediaArea) && (
           <LowerSection withHeader={challenge.type === "media"}>

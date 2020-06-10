@@ -11,7 +11,7 @@ import {
 } from "../tools/constants";
 import { getDimensions, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { Loading } from "./Shared";
+import { Loading, RotatingIcon } from "./Shared";
 import {
   Icon,
   Collapse,
@@ -24,6 +24,7 @@ import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
 import Breadcrumbs from "./Breadcrumbs";
+import { pp } from "tools/utils";
 
 const D = getDimensions();
 
@@ -335,6 +336,7 @@ export const LoginSignupTextInteractive = styled(LoginSignupText)`
 `;
 
 export const ChallengeTitleHeading = styled.h1`
+  margin: 0;
   font-size: 1.2em;
   background: transparent;
   font-weight: bold;
@@ -391,13 +393,20 @@ const instructionsMapDispatch = {
 };
 
 type InstructionsViewEditProps = ReturnType<typeof instructionsMapState> &
-  typeof instructionsMapDispatch;
+  typeof instructionsMapDispatch & {
+    isMobile?: boolean;
+  };
 
 export const InstructionsViewEdit = connect(
   instructionsMapState,
   instructionsMapDispatch,
 )((props: InstructionsViewEditProps) => {
   const { isEditMode, currentId } = props;
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
+
+  const toggleCollapsed = React.useCallback(() => {
+    setIsCollapsed(!isCollapsed);
+  }, [isCollapsed, setIsCollapsed]);
 
   /**
    * @NOTE The function is memoized so that we're not constantly recreating the
@@ -426,14 +435,34 @@ export const InstructionsViewEdit = connect(
   const isMobile = D.w < 700;
 
   return (
-    <div id="workspace-panel-instructions">
+    <div
+      id="workspace-panel-instructions"
+      style={{
+        transition: "all 0.2s ease",
+        minHeight: 45,
+        height: !isMobile ? "auto" : isCollapsed ? "0vh" : "25vh",
+        overflow: isCollapsed ? "hidden" : "auto",
+        padding: "10px",
+      }}
+    >
       <ChallengeTitleHeading>
         {isMobile || isEditMode ? (
-          <StyledEditableText
-            value={props.title}
-            onChange={handleTitle}
-            disabled={!isEditMode}
-          />
+          <div
+            style={{ display: "flex", marginBottom: 10 }}
+            onClick={toggleCollapsed}
+          >
+            <RotatingIcon
+              isRotated={!isCollapsed}
+              iconSize={Icon.SIZE_LARGE}
+              icon={"caret-down"}
+              style={{ marginRight: 6 }}
+            />
+            <StyledEditableText
+              value={props.title}
+              onChange={handleTitle}
+              disabled={!isEditMode}
+            />
+          </div>
         ) : (
           <Breadcrumbs type="workspace" />
         )}
