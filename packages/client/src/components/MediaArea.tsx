@@ -31,7 +31,7 @@ import Breadcrumbs from "./Breadcrumbs";
 
 const VIDEO_DOM_ID = "pw-video-embed";
 
-const CONTENT_AREA_ID = "supplementary-content-container";
+export const CONTENT_AREA_ID = "supplementary-content-container";
 
 const TableOfContentsPlugin = (): SlatePlugin => {
   const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {
@@ -228,7 +228,7 @@ ID (video ID)
         <SmoothScrollButton
           icon="chevron-up"
           position="top"
-          positionOffset={40}
+          positionOffset={70}
           scrollToId="root"
           backgroundColor="#242423"
         />
