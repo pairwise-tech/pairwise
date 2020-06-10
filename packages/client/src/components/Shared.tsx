@@ -1,6 +1,9 @@
 import React, { SyntheticEvent, MouseEvent } from "react";
 import cx from "classnames";
-import styled, { CSSProperties } from "styled-components/macro";
+import styled, {
+  CSSProperties,
+  StyledComponent,
+} from "styled-components/macro";
 import {
   Button,
   Icon,
@@ -83,6 +86,15 @@ export const UpperRight = styled.div<{ isEditMode: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+`;
+
+// This breaks the Icon typing, but also doesn't shout at us inthe console
+export const RotatingIcon = styled(({ isRotated, id, ...props }) => {
+  return <Icon {...props} />;
+})<{ isRotated?: boolean; id: string }>`
+  transform: ${props =>
+    `rotate3d(0,0,1,${props.isRotated ? "0deg" : "-90deg"})`};
+  transition: transform 0.2s linear;
 `;
 
 export const LowerRight = styled.div`

@@ -47,7 +47,7 @@ import {
   ModuleNavigationBase,
 } from "./NavigationOverlayComponents";
 import { Select } from "@blueprintjs/select";
-import { IconButton } from "./Shared";
+import { IconButton, RotatingIcon } from "./Shared";
 
 /** ===========================================================================
  * Types & Config
@@ -802,12 +802,6 @@ const ModuleNavigationButton = ({
 }: { active?: boolean } & any) => (
   <ModuleNavigationButtonBase active={active} as="button" {...rest} />
 );
-
-const RotatingIcon = styled(Icon)<{ isRotated?: boolean; id: string }>`
-  transform: ${props =>
-    `rotate3d(0,0,1,${props.isRotated ? "0deg" : "-90deg"})`};
-  transition: transform 0.2s linear;
-`;
 
 interface ChallengeListItemIconProps {
   index: number;
