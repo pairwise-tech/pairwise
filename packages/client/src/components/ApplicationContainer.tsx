@@ -49,6 +49,7 @@ import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
 import MobileView from "./MobileView";
+import { CONTENT_AREA_ID } from "./MediaArea";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -337,7 +338,7 @@ const ApplicationContainer = (props: IProps) => {
           icon="chevron-down"
           position="bottom"
           positionOffset={-20}
-          scrollToId="supplementary-content-container"
+          scrollToId={CONTENT_AREA_ID}
           backgroundColor="rgba(29, 29, 29, 0.7)"
         />
       )}

@@ -221,7 +221,9 @@ const GreatSuccess: React.FC<Props> = ({
         </Button>
         <div style={{ marginLeft: "auto" }}>
           {challenge.content && (
-            <Button onClick={handleScrollToContent}>View Content</Button>
+            <Button onClick={handleScrollToContent} style={{ marginRight: 10 }}>
+              View Content
+            </Button>
           )}
           {challenge.videoUrl && (
             <Button
