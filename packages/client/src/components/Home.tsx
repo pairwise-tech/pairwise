@@ -10,18 +10,11 @@ import { COLORS, PROSE_MAX_WIDTH, MOBILE } from "tools/constants";
 import SEO from "./SEO";
 
 /** ===========================================================================
- * Types & Config
- * ============================================================================
- */
-
-interface IState {}
-
-/** ===========================================================================
  * Home Component
  * ============================================================================
  */
 
-class Home extends React.Component<IProps, IState> {
+class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     return (
       <PageContainer>
@@ -54,14 +47,24 @@ class Home extends React.Component<IProps, IState> {
   }
 
   renderCourseItem = (skeleton: CourseSkeleton, i: number) => {
-    const { payments } = this.props.user;
+    const { payments, lastActiveChallengeIds } = this.props.user;
     const paidForCourse = payments?.find(p => p.courseId === skeleton.id);
     const firstCourseChallenge = skeleton.modules[0].challenges[0];
     const isCourseFree = skeleton.free;
     const canAccessCourse = paidForCourse || isCourseFree;
+    const courseId = skeleton.id;
 
     if (!firstCourseChallenge) {
       return null;
+    }
+
+    // Determine the course challenge to link to, default to last active
+    // challenge ids
+    let lastActiveChallengeExists = false;
+    let courseChallengeLinkId = firstCourseChallenge.id;
+    if (courseId in lastActiveChallengeIds) {
+      lastActiveChallengeExists = true;
+      courseChallengeLinkId = lastActiveChallengeIds[courseId];
     }
 
     return (
@@ -71,20 +74,28 @@ class Home extends React.Component<IProps, IState> {
         elevation={Elevation.FOUR}
         style={{ maxWidth: 515, marginTop: 24 }}
       >
-        <CourseTitle className={`courseLink`}>{skeleton.title}</CourseTitle>
+        <CourseTitle className="courseLink">{skeleton.title}</CourseTitle>
         <CourseDescription>{skeleton.description}</CourseDescription>
         <ButtonsBox>
           {canAccessCourse ? (
-            <Link to={`workspace/${firstCourseChallenge.id}`}>
-              <Button large intent="success" className={`courseLinkContinue`}>
-                Start Now
+            <Link
+              id={`course-link-${i}-start`}
+              to={`workspace/${courseChallengeLinkId}`}
+            >
+              <Button large intent="success" className="courseLinkContinue">
+                {lastActiveChallengeExists ? "Resume Course" : "Start Now"}
               </Button>
             </Link>
           ) : (
             <>
-              <Link to={`workspace/${firstCourseChallenge.id}`}>
-                <Button large intent="success" id={`course-link-${i}-start`}>
-                  Start Now For Free
+              <Link
+                id={`course-link-${i}-start`}
+                to={`workspace/${courseChallengeLinkId}`}
+              >
+                <Button large intent="success">
+                  {lastActiveChallengeExists
+                    ? "Resume Course"
+                    : "Start Now for Free"}
                 </Button>
               </Link>
               <Button

@@ -3,6 +3,7 @@ import {
   CourseSkeletonList,
   ICodeBlobDto,
   IProgressDto,
+  LastActiveChallengeIds,
 } from "@pairwise/common";
 import { createAction } from "typesafe-actions";
 import {
@@ -32,6 +33,10 @@ enum ActionTypesEnum {
 
   SET_ACTIVE_CHALLENGE_IDS = "SET_ACTIVE_CHALLENGE_IDS",
 
+  UPDATE_LAST_ACTIVE_CHALLENGE_IDS = "UPDATE_LAST_ACTIVE_CHALLENGE_IDS",
+  UPDATE_LAST_ACTIVE_CHALLENGE_IDS_SUCCESS = "UPDATE_LAST_ACTIVE_CHALLENGE_IDS_SUCCESS",
+  UPDATE_LAST_ACTIVE_CHALLENGE_IDS_FAILURE = "UPDATE_LAST_ACTIVE_CHALLENGE_IDS_FAILURE",
+
   SET_MODULE_ID = "SET_MODULE_ID",
   SET_COURSE_ID = "SET_COURSE_ID",
 
@@ -41,8 +46,8 @@ enum ActionTypesEnum {
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
   FETCH_NAVIGATION_SKELETON_FAILURE = "FETCH_NAVIGATION_SKELETON_FAILURE",
 
-  FETCH_CURRENT_ACTIVE_COURSE_SUCCESS = "FETCH_CURRENT_ACTIVE_COURSE_SUCCESS",
-  FETCH_CURRENT_ACTIVE_COURSE_FAILURE = "FETCH_CURRENT_ACTIVE_COURSE_FAILURE",
+  FETCH_COURSES_SUCCESS = "FETCH_COURSES_SUCCESS",
+  FETCH_COURSES_FAILURE = "FETCH_COURSES_FAILURE",
 
   SET_EDIT_MODE = "SET_EDIT_MODE",
 
@@ -223,20 +228,27 @@ export const setActiveChallengeIds = createAction(
 )<{
   currentModuleId: string;
   currentCourseId: string;
-  currentChallengeId: string;
+  currentChallengeId: Nullable<string>;
 }>();
 
-export const fetchCurrentActiveCourseSuccess = createAction(
-  ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_SUCCESS,
-)<{
-  courses: Course[];
-  currentModuleId: string;
-  currentCourseId: string;
-  currentChallengeId: string;
-}>();
+export const updateLastActiveChallengeIds = createAction(
+  ActionTypesEnum.UPDATE_LAST_ACTIVE_CHALLENGE_IDS,
+)<{ challengeId: string }>();
 
-export const fetchCurrentActiveCourseFailure = createAction(
-  ActionTypesEnum.FETCH_CURRENT_ACTIVE_COURSE_FAILURE,
+export const updateLastActiveChallengeIdsSuccess = createAction(
+  ActionTypesEnum.UPDATE_LAST_ACTIVE_CHALLENGE_IDS_SUCCESS,
+)<LastActiveChallengeIds>();
+
+export const updateLastActiveChallengeIdsFailure = createAction(
+  ActionTypesEnum.UPDATE_LAST_ACTIVE_CHALLENGE_IDS_FAILURE,
+)();
+
+export const fetchCoursesSuccess = createAction(
+  ActionTypesEnum.FETCH_COURSES_SUCCESS,
+)<{ courses: Course[] }>();
+
+export const fetchCoursesFailure = createAction(
+  ActionTypesEnum.FETCH_COURSES_FAILURE,
 )();
 
 export const storeInverseChallengeMapping = createAction(

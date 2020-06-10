@@ -40,9 +40,6 @@ export class User {
   public familyName: string;
 
   @Column()
-  public lastActiveChallengeId: string;
-
-  @Column()
   public avatarUrl: string;
 
   @Column({ nullable: true })
@@ -56,6 +53,9 @@ export class User {
 
   @Column({ type: "jsonb" })
   public settings: string;
+
+  @Column({ type: "jsonb", default: `"{}"` })
+  public lastActiveChallengeIds: string;
 
   @OneToMany(
     type => Payments,

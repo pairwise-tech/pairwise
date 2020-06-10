@@ -546,13 +546,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     editModeAlternativeView: !state.editModeAlternativeView,
   }))
-  .handleAction(
-    actions.fetchCurrentActiveCourseSuccess,
-    (state, { payload }) => ({
-      ...state,
-      ...payload,
-    }),
-  );
+  .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
+    ...state,
+    ...payload,
+  }));
 
 /** ===========================================================================
  * Export
