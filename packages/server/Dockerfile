@@ -1,33 +1,54 @@
-# Take the production image and run the server. Note that if you
-# are debugging this locally you will need to provide the server
-# environment variables.
+# Take the production image and run the server.
 
-FROM pairwise-runtime AS pairwise-server-build
+FROM pairwise-runtime AS pairwise-production-server
 
-# Copy everything
 COPY . .
 
-# Install Zeit ncc
-RUN npm i -g @zeit/ncc
+# Set TypeORM environment variables
+# Other environment secrets are set in the production environment
+ENV TYPEORM_LOGGING=false
+ENV TYPEORM_SYNCHRONIZE=false
+ENV TYPEORM_ENTITIES=dist/**/*.entity.js
+ENV TYPEORM_MIGRATIONS=dist/migrations/**/*.js
+ENV TYPEORM_SUBSCRIBERS=dist/subscriber/**/*.js
+ENV TYPEORM_MIGRATIONS_DIR=src/migrations
 
-# Compile the server into a single js file
-RUN cd packages/server && ncc build dist/main.js --out target --source-map --minify
+# Launch Pairwise!
+CMD ["yarn", "server:prod"]
 
-FROM node:12-alpine AS pairwise-server-runtime
+# NOTE: The following is an optimized version of the production build
+# which reduces the size of the Docker image from over 4gb to less
+# than 200mb. HOWEVER, to run the migrations it still needs various packages
+# installed and the entities, which import from other libraries like
+# @pariwise/common.............................. Therefore, it wil fail
+# to start unless those dependencies are somehow provided.
 
-WORKDIR /usr/src/app
+# FROM pairwise-runtime AS pairwise-server-build
 
-# Copy target folder with bundled index.js file
-COPY --from=pairwise-server-build /packages/server/target /usr/src/app/target
+# # Copy everything
+# COPY . .
 
-# Copy dist folder which includes migrations files (required for typeorm)
-COPY --from=pairwise-server-build /packages/server/dist /usr/src/app/dist
+# # Install Zeit ncc
+# RUN npm i -g @zeit/ncc
 
-# Install typeorm (required to run migrations)
-RUN npm i -g typeorm
+# # Compile the server into a single js file
+# RUN cd packages/server && ncc build dist/main.js --out target --source-map --minify
 
-# Install pg (required by typeorm)
-RUN npm i -g pg
+# FROM node:12-alpine AS pairwise-server-runtime
 
-# Run the migrations and launch Pairwise!
-CMD ["sh", "-c", "typeorm migration:run && node target/index.js"]
+# WORKDIR /usr/src/app
+
+# # Copy target folder with bundled index.js file
+# COPY --from=pairwise-server-build /packages/server/target /usr/src/app/target
+
+# # Copy dist folder which includes migrations files (required for typeorm)
+# COPY --from=pairwise-server-build /packages/server/dist /usr/src/app/dist
+
+# # Install typeorm (required to run migrations)
+# RUN npm i -g typeorm
+
+# # Install pg (required by typeorm)
+# RUN npm i -g pg
+
+# # Run the migrations and launch Pairwise!
+# CMD ["sh", "-c", "typeorm migration:run && node target/index.js"]
