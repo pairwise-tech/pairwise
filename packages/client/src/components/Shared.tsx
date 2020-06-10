@@ -132,6 +132,8 @@ export interface IconNavLinkProps extends NavLinkProps {
   disabled: boolean;
   beforeText?: string;
   afterText?: string;
+  large?: boolean;
+  fill?: boolean;
 }
 
 export const preventDefault = (e: SyntheticEvent) => {
@@ -163,12 +165,14 @@ export const IconNavLink = styled(
      * it is include in the <a> props below...
      */
     // @ts-ignore
-    const { dispatch, ...rest } = props;
+    const { dispatch, fill, large, ...rest } = props;
 
     return (
       <NavLink
         className={cx(className, Classes.BUTTON, {
           [Classes.DISABLED]: disabled,
+          "bp3-large": large,
+          fill,
         })}
         {...rest}
         onClick={handleClick}
@@ -180,6 +184,10 @@ export const IconNavLink = styled(
     );
   },
 )`
+  &.fill {
+    width: 100%;
+  }
+
   &:hover .bp3-icon:only-child {
     color: white !important;
   }

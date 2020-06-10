@@ -5,12 +5,16 @@ import { IconNavLink } from "./Shared";
 import Modules, { ReduxStoreState } from "modules/root";
 import styled from "styled-components/macro";
 import { getChallengeSlug } from "@pairwise/common";
+import { MOBILE } from "tools/constants";
+import { getDimensions } from "tools/dimensions";
 
 interface ChallengeButtonProps {
   slug: string | null;
   id?: string;
   className?: string;
   style?: React.CSSProperties;
+  fill?: boolean;
+  large?: boolean;
 }
 
 export const PrevChallengeIconButton = connect((state: ReduxStoreState) => {
@@ -116,6 +120,7 @@ export const NextChallengeCard = connect(
 
     // Render text depending on challenge status
     const text = complete ? "You completed: " : "In Progress: ";
+    const isMobile = getDimensions().w < 700;
 
     return (
       <Card>
@@ -129,6 +134,8 @@ export const NextChallengeCard = connect(
             <H5>{challenge?.title}</H5>
           </Horizontal>
           <Button
+            className="feedback-button"
+            large={isMobile}
             intent="none"
             icon="comment"
             aria-label="open/close feedback dialog"
@@ -150,9 +157,27 @@ export const NextChallengeCard = connect(
               </H5>
             </Horizontal>
             <NextChallengeButton
+              fill={isMobile}
+              large={isMobile}
               slug={getChallengeSlug(nextChallenge)}
               className={Classes.INTENT_SUCCESS}
+              style={{
+                marginBottom: isMobile ? 20 : 0,
+              }}
             />
+            <MobileOnly>
+              <Button
+                fill
+                className="feedback-button"
+                large={isMobile}
+                intent="none"
+                icon="comment"
+                aria-label="open/close feedback dialog"
+                onClick={toggleFeedbackDialogOpen}
+              >
+                Feedback
+              </Button>
+            </MobileOnly>
           </>
         )}
       </Card>
@@ -160,12 +185,24 @@ export const NextChallengeCard = connect(
   },
 );
 
+const MobileOnly = styled.div`
+  display: none;
+  @media ${MOBILE} {
+    display: block;
+  }
+`;
+
 const Horizontal = styled.div`
   display: flex;
   align-items: center;
   & > * {
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  @media ${MOBILE} {
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
@@ -175,4 +212,13 @@ const Upper = styled(Callout)`
   align-items: center;
   padding: 5px;
   margin-bottom: 20px;
+
+  @media ${MOBILE} {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .feedback-button {
+      display: none;
+    }
+  }
 `;

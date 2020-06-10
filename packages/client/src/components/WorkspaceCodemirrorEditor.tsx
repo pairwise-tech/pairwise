@@ -38,7 +38,7 @@ export default class WorkspaceCodemirrorEditor
     fontSize: this.props.editorOptions.fontSize || 16,
   };
 
-  private _isMounted: boolean = true;
+  private _isMounted: boolean = false;
 
   updateOptions = (options: Partial<ICodeEditorOptions>) => {
     debug("updateOptions", options);
@@ -82,11 +82,14 @@ export default class WorkspaceCodemirrorEditor
   }
 
   async componentDidMount() {
+    this._isMounted = true;
+
     // Codemirror needs to wait for the UI to be "set up" in order to do it's
     // dom measurements. It will silently just look terrible if we don't give it
     // a bit of time
     await wait(500);
 
+    // Silly uncancellable promises...
     if (this._isMounted) {
       this.setState({ theWaitIsOver: true });
     }
