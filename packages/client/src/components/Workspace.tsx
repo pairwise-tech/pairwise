@@ -35,7 +35,13 @@ import {
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
-import { LowerRight, IconButton, UpperRight, Loading } from "./Shared";
+import {
+  LowerRight,
+  IconButton,
+  CodeEditorUpperRight,
+  Loading,
+  CodeEditorContainer,
+} from "./Shared";
 import {
   Tooltip,
   ButtonGroup,
@@ -523,8 +529,8 @@ class Workspace extends React.Component<IProps, IState> {
       ? WorkspaceCodemirrorEditor
       : WorkspaceMonacoEditor;
 
-    const MONACO_CONTAINER = (
-      <div style={{ height: "100%", position: "relative" }}>
+    const CODE_EDITOR_CONTAINER = (
+      <CodeEditorContainer>
         <GreatSuccess
           challenge={challenge}
           isOpen={IS_GREAT_SUCCESS_OPEN}
@@ -545,13 +551,15 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
-        <UpperRight isEditMode={isEditMode}>
+        <CodeEditorUpperRight isEditMode={isEditMode}>
           {revealSolutionCode && (
             <RevealSolutionLabel
               hideSolution={this.props.handleToggleSolutionCode}
             />
           )}
           <RunButton
+            fill
+            large={this.props.renderForMobile}
             icon="play"
             id="pw-run-code"
             loading={testResultsLoading}
@@ -560,19 +568,27 @@ class Workspace extends React.Component<IProps, IState> {
           >
             Run
           </RunButton>
-        </UpperRight>
+        </CodeEditorUpperRight>
         <LowerRight>
-          <ButtonGroup vertical>
-            <Tooltip content="Increase Font Size" position="left">
+          <ButtonGroup vertical={!this.props.renderForMobile}>
+            <Tooltip
+              content="Increase Font Size"
+              position={this.props.renderForMobile ? "top" : "left"}
+            >
               <IconButton
+                large={this.props.renderForMobile}
                 id="editor-increase-font-size"
                 icon="plus"
                 aria-label="increase editor font size"
                 onClick={this.props.increaseFontSize}
               />
             </Tooltip>
-            <Tooltip content="Decrease Font Size" position="left">
+            <Tooltip
+              content="Decrease Font Size"
+              position={this.props.renderForMobile ? "top" : "left"}
+            >
               <IconButton
+                large={this.props.renderForMobile}
                 id="editor-decrease-font-size"
                 icon="minus"
                 aria-label="decrease editor font size"
@@ -581,18 +597,21 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
           </ButtonGroup>
           <div style={{ marginBottom: 8 }} />
-          <Tooltip content="Format Code" position="left">
-            <IconButton
-              id="editor-format-code"
-              icon="clean"
-              aria-label="format editor code"
-              onClick={this.handleFormatCode}
-            />
-          </Tooltip>
+          {!this.props.renderForMobile && (
+            <Tooltip content="Format Code" position="left">
+              <IconButton
+                large={this.props.renderForMobile}
+                id="editor-format-code"
+                icon="clean"
+                aria-label="format editor code"
+                onClick={this.handleFormatCode}
+              />
+            </Tooltip>
+          )}
           <div style={{ marginBottom: 8 }} />
           <Popover
             content={
-              <Menu>
+              <Menu large>
                 {!IS_SANDBOX && isEditMode && (
                   <MenuItem
                     icon={
@@ -603,7 +622,7 @@ class Workspace extends React.Component<IProps, IState> {
                     onClick={this.props.toggleAlternativeEditView}
                   />
                 )}
-                {!IS_SANDBOX && (
+                {!IS_SANDBOX && !this.props.renderForMobile && (
                   <MenuItem
                     id="editor-toggle-full-screen"
                     icon={fullScreenEditor ? "collapse-all" : "expand-all"}
@@ -616,13 +635,24 @@ class Workspace extends React.Component<IProps, IState> {
                     }
                   />
                 )}
-                <MenuItem
-                  id="editor-toggle-high-contrast"
-                  icon="contrast"
-                  aria-label="toggle high contrast mode"
-                  onClick={this.props.toggleHighContrastMode}
-                  text="Toggle High Contrast Mode"
-                />
+                {!this.props.renderForMobile && (
+                  <MenuItem
+                    id="editor-format-code-mobile"
+                    icon="contrast"
+                    aria-label="toggle high contrast mode"
+                    onClick={this.props.toggleHighContrastMode}
+                    text="Toggle High Contrast Mode"
+                  />
+                )}
+                {this.props.renderForMobile && (
+                  <MenuItem
+                    id="editor-toggle-high-contrast"
+                    icon="clean"
+                    aria-label="format editor code"
+                    onClick={this.handleFormatCode}
+                    text="Auto-format Code"
+                  />
+                )}
                 <MenuItem
                   id="editor-export-code"
                   icon="download"
@@ -668,10 +698,18 @@ class Workspace extends React.Component<IProps, IState> {
                 />
               </Menu>
             }
-            position={Position.LEFT_BOTTOM}
+            position={
+              this.props.renderForMobile
+                ? Position.TOP_LEFT
+                : Position.LEFT_BOTTOM
+            }
           >
-            <Tooltip content="More options..." position="left">
+            <Tooltip
+              content="More options..."
+              position={this.props.renderForMobile ? "top" : "left"}
+            >
               <IconButton
+                large={this.props.renderForMobile}
                 id="editor-more-options"
                 aria-label="more options"
                 icon="more"
@@ -690,7 +728,7 @@ class Workspace extends React.Component<IProps, IState> {
           value={this.state.code}
           onChange={this.handleEditorContentChange}
         />
-      </div>
+      </CodeEditorContainer>
     );
 
     const getPreviewPane = ({ grid = true } = {}) => {
@@ -840,7 +878,9 @@ class Workspace extends React.Component<IProps, IState> {
             </div>
             <div id="panel-scroll-target" className="panel">
               <div className="panel-scroll">
-                <ContentContainer>{MONACO_CONTAINER}</ContentContainer>
+                <ContentContainer style={{ padding: 0 }}>
+                  {CODE_EDITOR_CONTAINER}
+                </ContentContainer>
                 <ContentContainer>
                   {getPreviewPane({ grid: false })}
                 </ContentContainer>
@@ -875,7 +915,7 @@ class Workspace extends React.Component<IProps, IState> {
                         background: C.BACKGROUND_CONSOLE,
                       }}
                     >
-                      {MONACO_CONTAINER}
+                      {CODE_EDITOR_CONTAINER}
                     </div>
                   ) : (
                     <RowsWrapper separatorProps={rowSeparatorProps}>
@@ -891,7 +931,7 @@ class Workspace extends React.Component<IProps, IState> {
                         style={{ background: C.BACKGROUND_EDITOR }}
                         initialHeight={D.EDITOR_HEIGHT}
                       >
-                        {MONACO_CONTAINER}
+                        {CODE_EDITOR_CONTAINER}
                       </Row>
                       <Row
                         initialHeight={D.TEST_CONTENT_HEIGHT}

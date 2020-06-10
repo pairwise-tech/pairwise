@@ -75,7 +75,12 @@ export const Text = styled.p`
   color: ${COLORS.TEXT_CONTENT};
 `;
 
-export const UpperRight = styled.div<{ isEditMode: boolean }>`
+// NOTE: Trying to bolt mobile styling onto the existing UI without changing any
+// DOM or desktop styles is a bit cumbersome. I regard the app as very much
+// desktop first so I wanted to touch desktop as little as possible. However,
+// rather than using a nice constraint-based layout I'm using an absolute pixel
+// value here becuase I don't want to rearrange the DOM.
+export const CodeEditorUpperRight = styled.div<{ isEditMode: boolean }>`
   position: absolute;
   z-index: 3;
   right: 20px;
@@ -83,6 +88,13 @@ export const UpperRight = styled.div<{ isEditMode: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
+  @media ${MOBILE} {
+    top: auto;
+    bottom: 20px;
+    right: 0;
+    left: 122px; // Yeah... I don't love this. See the NOTE
+  }
 `;
 
 // This breaks the Icon typing, but also doesn't shout at us in the console
@@ -101,6 +113,14 @@ export const LowerRight = styled.div`
   bottom: 10px;
   display: flex;
   flex-direction: column;
+
+  @media ${MOBILE} {
+    top: auto;
+    right: auto;
+    left: 0;
+    bottom: 20px;
+    flex-direction: row;
+  }
 `;
 
 export const FullScreenOverlay = styled.div`
@@ -307,6 +327,16 @@ export const HalfCircle = styled.div<HalfCircleProps>`
     props.position === "top" ? "bottom" : "top"}-right-radius: 90px;
 
   ${props => props.position}: ${props => props.positionOffset}px;
+`;
+
+export const CodeEditorContainer = styled.div`
+  height: 100%;
+  position: relative;
+
+  // Make room forcode editor controls
+  @media ${MOBILE} {
+    padding-bottom: 60px;
+  }
 `;
 
 type SmoothScrollButtonProps = {
