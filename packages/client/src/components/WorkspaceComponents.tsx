@@ -432,6 +432,9 @@ export const InstructionsViewEdit = connect(
 
   const toggleCollapsed = React.useCallback(() => {
     setIsCollapsed(!isCollapsed);
+    document
+      .querySelector("#workspace-panel-instructions")
+      ?.scrollTo({ top: 0 });
   }, [isCollapsed, setIsCollapsed]);
 
   /**
@@ -503,6 +506,22 @@ export const InstructionsViewEdit = connect(
           spellCheck={isEditMode}
           onChange={handleContent}
         />
+        {isMobile && (
+          <Button
+            large
+            style={{
+              marginTop: 20,
+              marginBottom: 20,
+              width: "100%",
+              textAlign: "center",
+              background: "rgba(96, 125, 139, 0.14)",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+            }}
+            onClick={toggleCollapsed}
+          >
+            Tap to hide
+          </Button>
+        )}
       </Suspense>
     </div>
   );
