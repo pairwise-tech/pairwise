@@ -576,6 +576,7 @@ class Workspace extends React.Component<IProps, IState> {
             <Tooltip
               content="Increase Font Size"
               position={this.props.renderForMobile ? "top" : "left"}
+              interactionKind={"hover-target"}
             >
               <IconButton
                 large={this.props.renderForMobile}
@@ -588,6 +589,7 @@ class Workspace extends React.Component<IProps, IState> {
             <Tooltip
               content="Decrease Font Size"
               position={this.props.renderForMobile ? "top" : "left"}
+              interactionKind={"hover-target"}
             >
               <IconButton
                 large={this.props.renderForMobile}
@@ -639,7 +641,7 @@ class Workspace extends React.Component<IProps, IState> {
                 )}
                 {!this.props.renderForMobile && (
                   <MenuItem
-                    id="editor-format-code-mobile"
+                    id="editor-toggle-high-contrast"
                     icon="contrast"
                     aria-label="toggle high contrast mode"
                     onClick={this.props.toggleHighContrastMode}
@@ -648,20 +650,22 @@ class Workspace extends React.Component<IProps, IState> {
                 )}
                 {this.props.renderForMobile && (
                   <MenuItem
-                    id="editor-toggle-high-contrast"
+                    id="editor-format-code-mobile"
                     icon="clean"
                     aria-label="format editor code"
                     onClick={this.handleFormatCode}
                     text="Auto-format Code"
                   />
                 )}
-                <MenuItem
-                  id="editor-export-code"
-                  icon="download"
-                  onClick={this.handleExport}
-                  text="Export Code to File"
-                  aria-label="export code to file"
-                />
+                {!this.props.renderForMobile && (
+                  <MenuItem
+                    id="editor-export-code"
+                    icon="download"
+                    onClick={this.handleExport}
+                    text="Export Code to File"
+                    aria-label="export code to file"
+                  />
+                )}
                 <MenuDivider />
                 <MenuItem
                   id="editor-restore-initial-code"
