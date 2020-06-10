@@ -25,7 +25,6 @@ import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
 import Breadcrumbs from "./Breadcrumbs";
-import { pp } from "tools/utils";
 
 const D = getDimensions();
 

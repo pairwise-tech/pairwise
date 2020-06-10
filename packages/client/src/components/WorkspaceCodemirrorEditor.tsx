@@ -54,6 +54,10 @@ export default class WorkspaceCodemirrorEditor
     // noop
   };
 
+  addModuleTypeDefinitionsToMonaco = (packages: string[] = []) => {
+    // No action - only applies to the Monaco editor.
+  };
+
   focus = () => {
     if (typeof this.codemirrorInstance?.focus === "function") {
       this.codemirrorInstance.focus();

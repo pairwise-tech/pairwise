@@ -1,9 +1,6 @@
 import React, { SyntheticEvent, MouseEvent } from "react";
 import cx from "classnames";
-import styled, {
-  CSSProperties,
-  StyledComponent,
-} from "styled-components/macro";
+import styled, { CSSProperties } from "styled-components/macro";
 import {
   Button,
   Icon,

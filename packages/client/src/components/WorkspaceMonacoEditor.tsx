@@ -12,7 +12,7 @@ import {
 import { monaco, registerExternalLib, MonacoModel } from "../monaco";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
-import { wait, pp } from "tools/utils";
+import { wait } from "tools/utils";
 import { debounce } from "throttle-debounce";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import { types } from "tools/jsx-types";
@@ -219,9 +219,8 @@ export default class WorkspaceMonacoEditor
     const code = model.getValue();
 
     /**
-     * Update the stored code value and then:
-     *
-     * - Dispatch the syntax highlighting worker
+     * Update the stored code value and then dispatch the syntax
+     * highlighting worker
      */
     this.props.onChange(code);
 
@@ -239,7 +238,7 @@ export default class WorkspaceMonacoEditor
     this.setMonacoEditorValue();
   };
 
-  addModuleTypeDefinitionsToMonaco = (packages: ReadonlyArray<string> = []) => {
+  addModuleTypeDefinitionsToMonaco = (packages: string[] = []) => {
     /**
      * TODO: Fetch @types/ package type definitions if they exist or fallback
      * to the module declaration.

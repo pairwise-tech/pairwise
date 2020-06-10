@@ -45,7 +45,6 @@ import {
   Popover,
   MenuDivider,
   Button,
-  Classes,
 } from "@blueprintjs/core";
 import {
   composeWithProps,
@@ -145,6 +144,7 @@ export interface ICodeEditor extends React.Component<ICodeEditorProps> {
   cleanup(): void;
   setTheme(theme: string): void;
   updateOptions(options: Partial<ICodeEditorOptions>): void;
+  addModuleTypeDefinitionsToMonaco(packages: string[]): void;
 }
 
 /** ===========================================================================
@@ -1230,8 +1230,9 @@ class Workspace extends React.Component<IProps, IState> {
       this.props.challenge,
     );
 
-    // TODO??
-    // this.addModuleTypeDefinitionsToMonaco(dependencies);
+    if (this.editor) {
+      this.editor.addModuleTypeDefinitionsToMonaco(dependencies);
+    }
 
     return code;
   };
