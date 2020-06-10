@@ -13,10 +13,6 @@ interface Dependency {
 type DependencyCache = Map<string, Dependency>;
 
 /**
- * TODO: Find a way to derive this file URLs dynamically from the package
- * name... I'm not sure how to do this as they can be arbitrarily placed
- * within a package and there is no canonical way to find the source file.
- *
  * However, we could just hard code these now for any libraries used within
  * the curriculum. It doesn't make very much sense for people to import other
  * libraries within the workspace itself, and anyway some error/warning could
@@ -57,6 +53,13 @@ class DependencyCacheClass {
            * the values there.
            */
           const uri = this.cdnLinks.get(packageName) as string;
+          /**
+           * NOTE: Sometimes these requests to unpkg can fail!
+           *
+           * We should review this later and try to make this more robust.
+           * Currently, the Cypress test for React challenges is disabled
+           * for this very reason.
+           */
           const response = await axios.get(uri, {
             headers: {
               "Content-Type": "application/json",

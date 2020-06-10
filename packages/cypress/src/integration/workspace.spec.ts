@@ -169,7 +169,9 @@ describe("Workspace Challenges", () => {
 
   // This test intermittently fails with an error like:
   // AssertionError: Timed out retrying: Expected to find element: `#test-result-status-0`, but never found it.
-  // This may be due to some problems fetching the React package dependencies.
+  // Edit: CONFIRMED that this fails because sometimes requests to unpkg fail,
+  // producing errors like this:
+  // [ERROR]: Failed to fetch source for react-dom-test-utils. Error: Network Error
   it.skip("The workspace supports React challenges and they can be solved", () => {
     // Visit a React challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
