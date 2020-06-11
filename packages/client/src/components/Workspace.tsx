@@ -848,12 +848,10 @@ class Workspace extends React.Component<IProps, IState> {
                 </Button>
                 <Button
                   onClick={() => {
-                    document
-                      .getElementById(PANEL_SCROLL_ID)
-                      ?.scrollTo({
-                        left: this.state.dimensions.w,
-                        behavior: "smooth",
-                      });
+                    document.getElementById(PANEL_SCROLL_ID)?.scrollTo({
+                      left: this.state.dimensions.w,
+                      behavior: "smooth",
+                    });
                   }}
                   icon="console"
                 >
@@ -864,12 +862,10 @@ class Workspace extends React.Component<IProps, IState> {
                     className="test-view-button"
                     data-failing={failingTests.length}
                     onClick={() => {
-                      document
-                        .getElementById(PANEL_SCROLL_ID)
-                        ?.scrollTo({
-                          left: this.state.dimensions.w * 2,
-                          behavior: "smooth",
-                        });
+                      document.getElementById(PANEL_SCROLL_ID)?.scrollTo({
+                        left: this.state.dimensions.w * 2,
+                        behavior: "smooth",
+                      });
                     }}
                   >
                     <small
