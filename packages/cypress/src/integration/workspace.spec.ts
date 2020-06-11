@@ -16,6 +16,8 @@ import {
  * ============================================================================
  */
 
+const FIRST_CHALLENGE_URL = `${CLIENT_APP_URL}/workspace/iSF4BNIl`;
+
 describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Pairwise", () => {
     cy.visit(CLIENT_APP_URL);
@@ -167,7 +169,9 @@ describe("Workspace Challenges", () => {
 
   // This test intermittently fails with an error like:
   // AssertionError: Timed out retrying: Expected to find element: `#test-result-status-0`, but never found it.
-  // This may be due to some problems fetching the React package dependencies.
+  // Edit: CONFIRMED that this fails because sometimes requests to unpkg fail,
+  // producing errors like this:
+  // [ERROR]: Failed to fetch source for react-dom-test-utils. Error: Network Error
   it.skip("The workspace supports React challenges and they can be solved", () => {
     // Visit a React challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
@@ -239,6 +243,115 @@ describe("Success Modal", () => {
   it("Should close when the close button is clicked", () => {
     click("gs-card-close");
     cy.get("#gs-card").should("not.exist");
+  });
+});
+
+describe("Editor Functions", () => {
+  it("There should be a more options menu with buttons", () => {
+    cy.visit(FIRST_CHALLENGE_URL);
+    cy.wait(TIMEOUT);
+    click("editor-more-options");
+    [
+      "editor-export-code",
+      "editor-increase-font-size",
+      "editor-decrease-font-size",
+      "editor-format-code",
+      "editor-toggle-full-screen",
+      "editor-toggle-high-contrast",
+      "editor-restore-initial-code",
+      "editor-toggle-solution-code",
+    ]
+      .map(x => "#" + x)
+      .forEach(id => {
+        cy.get(id).should("be.visible");
+      });
+  });
+  it("Should format code when the format button is clicked", () => {
+    const unformattedCode = `
+<h1>SUP SUP SUP
+
+</h1>
+    `;
+    typeTextInCodeEditor(unformattedCode);
+
+    cy.get(".monaco-editor textarea").should("have.value", unformattedCode);
+
+    click("editor-more-options");
+    click("editor-format-code");
+
+    cy.get(".monaco-editor textarea").should(
+      "have.value",
+      "<h1>SUP SUP SUP</h1>\n",
+    );
+  });
+  it("Should increase or decrease font-size", () => {
+    cy.get(".monaco-editor textarea").then($textarea => {
+      const fs = parseInt($textarea.css("font-size"), 10);
+      cy.log(`initial font size ${fs}`);
+      cy.get(".monaco-editor textarea").should(
+        "have.css",
+        "font-size",
+        fs + "px",
+      );
+
+      click("editor-increase-font-size");
+
+      cy.get(".monaco-editor textarea").should(
+        "have.css",
+        "font-size",
+        fs + 2 + "px",
+      );
+
+      click("editor-decrease-font-size");
+
+      cy.get(".monaco-editor textarea").should(
+        "have.css",
+        "font-size",
+        fs + "px",
+      );
+    });
+  });
+
+  // NOTE: If we change the challenge then this test will fail. That sucks
+  const initialCode = "<h1>Pairwise</h1>\n";
+  const solutionCode = "<h1>Hello Pairwise!</h1>\n";
+  it("Should restore initial code", () => {
+    // NOTE: The code is assumed to be something other than initial becuase of the tests above
+    cy.get(".monaco-editor textarea").should("not.have.value", initialCode);
+    click("editor-more-options");
+    click("editor-restore-initial-code");
+    cy.get(".monaco-editor textarea").should("have.value", initialCode);
+  });
+  it("Should reveal solution code", () => {
+    cy.get(".monaco-editor textarea").should("have.value", initialCode);
+    click("editor-more-options");
+    click("editor-toggle-solution-code");
+    cy.contains("Viewing Solution Code");
+    cy.get(".monaco-editor textarea").should("have.value", solutionCode);
+
+    click("editor-more-options");
+    click("editor-toggle-solution-code");
+    cy.get(".monaco-editor textarea").should("have.value", initialCode);
+  });
+
+  it("Should support high contrast theme", () => {
+    cy.get(".hc-black").should("not.exist");
+    click("editor-more-options");
+    click("editor-toggle-high-contrast");
+    cy.get(".hc-black");
+    click("editor-more-options");
+    click("editor-toggle-high-contrast");
+    cy.get(".hc-black").should("not.exist");
+  });
+
+  it("Should support full-screen editing", () => {
+    cy.get("#workspace-panel-instructions");
+    click("editor-more-options");
+    click("editor-toggle-full-screen");
+    cy.get("#workspace-panel-instructions").should("not.exist");
+    click("editor-more-options");
+    click("editor-toggle-full-screen");
+    cy.get("#workspace-panel-instructions");
   });
 });
 

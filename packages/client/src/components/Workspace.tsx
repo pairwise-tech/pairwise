@@ -1,14 +1,11 @@
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
-
 import truncate from "truncate";
-import { monaco, registerExternalLib, MonacoModel } from "../monaco";
 import {
   assertUnreachable,
   Challenge,
   DataBlob,
   MonacoEditorThemes,
+  CHALLENGE_TYPE,
+  UserSettings,
 } from "@pairwise/common";
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -26,9 +23,8 @@ import {
   SANDBOX_ID,
   MONACO_EDITOR_FONT_SIZE_STEP,
 } from "../tools/constants";
-import { DIMENSIONS as D } from "../tools/dimensions";
+import { getDimensions } from "../tools/dimensions";
 import toaster from "tools/toast-utils";
-import { types } from "../tools/jsx-types";
 import {
   getMarkupForCodeChallenge,
   compileCodeString,
@@ -39,7 +35,13 @@ import {
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
-import { LowerRight, IconButton, UpperRight, Loading } from "./Shared";
+import {
+  LowerRight,
+  IconButton,
+  CodeEditorUpperRight,
+  Loading,
+  CodeEditorContainer,
+} from "./Shared";
 import {
   Tooltip,
   ButtonGroup,
@@ -48,14 +50,14 @@ import {
   Position,
   Popover,
   MenuDivider,
+  Button,
 } from "@blueprintjs/core";
-import { MonacoEditorOptions } from "modules/challenges/types";
 import {
-  wait,
   composeWithProps,
   constructDataBlobFromChallenge,
   challengeRequiresWorkspace,
   getFileExtensionByChallengeType,
+  wait,
 } from "tools/utils";
 import {
   Tab,
@@ -76,15 +78,19 @@ import {
   RunButton,
   TestStatusTextTab,
   LowerSection,
+  WorkspaceMobileView,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { EXPECTATION_LIB } from "tools/browser-test-lib";
 import { CODEPRESS } from "tools/client-env";
-import cx from "classnames";
 import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
 import pipe from "ramda/es/pipe";
+import partition from "ramda/es/partition";
 import SEO from "./SEO";
+import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
+import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
+import isMobile from "is-mobile";
 
 const debug = require("debug")("client:Workspace");
 
@@ -96,7 +102,7 @@ const debug = require("debug")("client:Workspace");
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 
 // NOTE: Element id is referenced in custom-tsx-styles.scss to apply styling
-const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
+export const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
@@ -112,10 +118,6 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
   },
 ];
 
-type MODEL_ID = string;
-type MODEL_TYPE = "workspace-editor" | "jsx-types";
-type ModelIdMap = Map<MODEL_TYPE, MODEL_ID>;
-
 interface IState {
   code: string;
   testResultsLoading: boolean;
@@ -123,7 +125,31 @@ interface IState {
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
   hideSuccessModal: boolean;
-  workspaceEditorModelIdMap: ModelIdMap;
+  favorMobile: boolean;
+  dimensions: ReturnType<typeof getDimensions>;
+  shouldRefreshLayout: boolean;
+}
+
+export interface ICodeEditorOptions {
+  fontSize: number;
+}
+
+export interface ICodeEditorProps {
+  language: string;
+  value: string;
+  onChange: (x: string) => any;
+  challengeType: CHALLENGE_TYPE;
+  userSettings: UserSettings;
+  editorOptions: ICodeEditorOptions;
+}
+
+export interface ICodeEditor extends React.Component<ICodeEditorProps> {
+  refresh(): Promise<void>;
+  focus(): void;
+  cleanup(): void;
+  setTheme(theme: string): void;
+  updateOptions(options: Partial<ICodeEditorOptions>): void;
+  addModuleTypeDefinitionsToMonaco(packages: string[]): void;
 }
 
 /** ===========================================================================
@@ -131,42 +157,43 @@ interface IState {
  * ============================================================================
  */
 
+const PANEL_SCROLL_ID = "panel-scroll-target";
+
 class Workspace extends React.Component<IProps, IState> {
   // Place to store user code when solution code is revealed
   userCode: string = "";
 
-  syntaxWorker: any = null;
-
-  // The wrapper class provided @monaco-editor/react. Confusingly,
-  // monacoWrapper.editor is not the editor instance but a collection of static
-  // methods and maybe a class as well. But they are different. Editor instance
-  // is needed for updating editor options, i.e. font size.
-  monacoWrapper: any = null;
-
   // A cancelable handler for refreshing the editor
   editorRefreshTimerHandler: Nullable<number> = null;
 
-  // The actual monaco editor instance.
-  editorInstance: Nullable<{
-    updateOptions: (x: MonacoEditorOptions) => void;
-  }> = null;
+  editor: Nullable<ICodeEditor> = null;
 
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   debouncedSaveCodeFunction: () => void;
   debouncedRenderPreviewFunction: () => void;
-  debouncedSyntaxHighlightFunction: (code: string) => void;
 
-  initializationPromise: Nullable<Promise<void>> = null;
+  // Resize the workspace in response to the window resizing. If this happens
+  // it's probably because a mobile user goes from portrait to landscape.
+  private readonly handleWindowResize = debounce(300, async (e: UIEvent) => {
+    debug(`[handleWindowResize] ${window.innerWidth}x${window.innerHeight}`);
+    this.setState({
+      dimensions: getDimensions(window.innerWidth, window.innerHeight),
+    });
+    this.refreshLayout();
+
+    // The code editor needs to refresh before the iframe, otherwise the iframe
+    // goes blank.
+    //
+    // This could turn into memory leak city, since we're debouncing and waiting
+    // longer than the debounce. Silly promises, not being cancellable... ᕕ( ᐛ )ᕗ
+    await wait(500);
+    await this.iframeRenderPreview();
+  });
 
   constructor(props: IProps) {
     super(props);
 
     this.debouncedRenderPreviewFunction = debounce(200, this.runChallengeTests);
-
-    this.debouncedSyntaxHighlightFunction = debounce(
-      250,
-      this.requestSyntaxHighlighting,
-    );
 
     this.debouncedSaveCodeFunction = debounce(50, this.handleChangeEditorCode);
 
@@ -181,6 +208,14 @@ class Workspace extends React.Component<IProps, IState> {
 
     this.userCode = initialCode;
 
+    const dimensions = getDimensions();
+
+    // The reason for two checks here is that even on larger screens we still
+    // want to use the mobilve editor if this is detected as a tablet. Safari
+    // seems to handle monaco just fine but Android breaks, so android tablets
+    // should get codemirror
+    const favorMobile = isMobile() || dimensions.w < 700;
+
     this.state = {
       code: initialCode,
       testResults: [],
@@ -192,13 +227,15 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal: true,
 
       testResultsLoading: false,
+      favorMobile,
 
-      // A map of the Monaco models the Workspace has created.
-      workspaceEditorModelIdMap: new Map(),
+      dimensions,
+      shouldRefreshLayout: false,
     };
   }
 
   async componentDidMount() {
+    window.addEventListener("resize", this.handleWindowResize);
     document.addEventListener("keydown", this.handleKeyPress);
     window.addEventListener(
       "message",
@@ -206,16 +243,9 @@ class Workspace extends React.Component<IProps, IState> {
       false,
     );
 
-    /* Initialize Monaco Editor and the SyntaxHighlightWorker */
-    await this.initializeMonaco();
-    this.initializeSyntaxHighlightWorker();
+    debug("componentDidMount");
 
-    /* Handle some timing issue with Monaco initialization... */
-    // TODO: This might cause issues with an unmounted editor. Needs to be made
-    // cancellable.
-    await wait(500);
     this.runChallengeTests();
-    this.debouncedSyntaxHighlightFunction(this.state.code);
 
     subscribeCodeWorker(this.handleCodeFormatMessage);
 
@@ -224,7 +254,10 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentWillUnmount() {
+    debug("componentWillUnmount");
+
     this.cleanupEditor();
+    window.removeEventListener("resize", this.handleWindowResize);
     window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener(
       "message",
@@ -239,6 +272,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
+    debug("componentDidUpdate");
     /**
      * Handle toggling the solution code on and off.
      */
@@ -281,7 +315,8 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Handle changes in editor options
     if (prevProps.editorOptions !== this.props.editorOptions) {
-      this.editorInstance?.updateOptions(this.props.editorOptions);
+      // this.editorInstance?.updateOptions(this.props.editorOptions);
+      this.editor?.updateOptions(this.props.editorOptions);
     }
 
     // Handle changes in the editor theme
@@ -292,7 +327,7 @@ class Workspace extends React.Component<IProps, IState> {
         this.props.userSettings.theme,
         ")",
       );
-      this.setMonacoEditorTheme(this.props.userSettings.theme);
+      this.editor?.setTheme(this.props.userSettings.theme);
     }
 
     // Handle changes to isEditMode. If this is a code challenge and isEditMode
@@ -326,17 +361,16 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   refreshEditor = async () => {
-    await this.resetMonacoEditor();
-    this.setMonacoEditorValue();
+    debug("refreshEditor");
+    await this.editor?.refresh();
     if (this.iFrameRef) {
       this.runChallengeTests();
     }
   };
 
   tryToFocusEditor = () => {
-    if (this.editorInstance) {
-      // @ts-ignore .focus is a valid method...
-      this.editorInstance.focus();
+    if (this.editor) {
+      this.editor.focus();
     }
   };
 
@@ -345,181 +379,6 @@ class Workspace extends React.Component<IProps, IState> {
    */
   resetCodeWindow = () => {
     this.transformMonacoCode(() => this.props.challenge.starterCode);
-  };
-
-  initializeSyntaxHighlightWorker = () => {
-    this.syntaxWorker = new SyntaxHighlightWorker();
-
-    this.syntaxWorker.addEventListener("message", (event: any) => {
-      debug("[syntax highlight incoming]", event);
-      const { classifications, identifier } = event.data;
-      if (classifications && identifier) {
-        // Recognize message identifier sent from the worker
-        if (identifier === "TSX_SYNTAX_HIGHLIGHTER") {
-          requestAnimationFrame(() => {
-            this.updateSyntaxDecorations(classifications);
-          });
-        }
-      }
-    });
-  };
-
-  updateSyntaxDecorations = async (classifications: ReadonlyArray<any>) => {
-    if (!this.monacoWrapper || this.props.challenge.type === "markup") {
-      return;
-    }
-
-    const decorations = classifications.map(c => {
-      /**
-       * NOTE: Custom classNames to allow custom styling for the
-       * editor theme:
-       */
-      const inlineClassName = cx(
-        c.type ? `${c.kind} ${c.type}-of-${c.parentKind}` : c.kind,
-        {
-          highContrast:
-            this.props.userSettings.theme === MonacoEditorThemes.HIGH_CONTRAST,
-        },
-      );
-
-      return {
-        range: new this.monacoWrapper.Range(
-          c.startLine,
-          c.start,
-          c.endLine,
-          c.end,
-        ),
-        options: {
-          inlineClassName,
-        },
-      };
-    });
-
-    const model = this.findModelByType("workspace-editor");
-
-    // prevent exception when moving through challenges quickly
-    if (model) {
-      // @ts-ignore I think decorations exist.
-      const existing = model.decorations;
-      // @ts-ignore I think decorations exist.
-      model.decorations = model.deltaDecorations(existing || [], decorations);
-    }
-  };
-
-  initializeMonaco = async (): Promise<void> => {
-    if (this.initializationPromise) {
-      debug("[initializeMonaco] Monaco already initialized, skipping.");
-      return this.initializationPromise;
-    }
-
-    debug("[initializeMonaco] Monaco initializing...");
-
-    const initializationPromise = monaco
-      .init()
-      .then(mn => {
-        mn.languages.typescript.typescriptDefaults.setCompilerOptions({
-          strict: true,
-          noEmit: true,
-          jsx: mn.languages.typescript.JsxEmit.React,
-          typeRoots: ["node_modules/@types"],
-          allowNonTsExtensions: true,
-          target: mn.languages.typescript.ScriptTarget.ES2017,
-          module: mn.languages.typescript.ModuleKind.CommonJS,
-          moduleResolution: mn.languages.typescript.ModuleResolutionKind.NodeJs,
-        });
-
-        mn.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-          noSyntaxValidation: false,
-          noSemanticValidation: false,
-        });
-
-        this.monacoWrapper = mn;
-
-        debug("[initializeMonaco] Monaco initialized. Initializing editor...");
-        return this.initializeMonacoEditor();
-      })
-      .catch(error => {
-        console.error(
-          "An error occurred during initialization of Monaco: ",
-          error,
-        );
-        this.setState({ monacoInitializationError: true });
-      });
-
-    this.initializationPromise = initializationPromise;
-
-    return initializationPromise;
-  };
-
-  initializeMonacoEditor = async (): Promise<void> => {
-    if (!this.monacoWrapper) {
-      debug(
-        "[ERROR initializeMonacoEditor] Called before monaco was initialized!",
-      );
-    }
-
-    const mn = this.monacoWrapper;
-
-    const language = this.getMonacoLanguageFromChallengeType();
-
-    const options = {
-      theme: MonacoEditorThemes.DEFAULT,
-      automaticLayout: true,
-      tabSize: 2,
-      autoIndent: true,
-      formatOnPaste: true,
-      fixedOverflowWidgets: true,
-      multiCursorModifier: "ctrlCmd",
-      minimap: {
-        enabled: false,
-      },
-      ...this.props.editorOptions,
-    };
-
-    let workspaceEditorModel;
-
-    /* Markup challenges: */
-    if (this.props.challenge.type === "markup") {
-      workspaceEditorModel = mn.editor.createModel(this.state.code, language);
-    } else {
-      /* TypeScript and React challenges: */
-      workspaceEditorModel = mn.editor.createModel(
-        this.state.code,
-        language,
-        new mn.Uri.parse("file:///main.tsx"),
-      );
-    }
-
-    workspaceEditorModel.onDidChangeContent(this.handleEditorContentChange);
-
-    this.editorInstance = mn.editor.create(
-      document.getElementById(PAIRWISE_CODE_EDITOR_ID),
-      {
-        ...options,
-        model: workspaceEditorModel,
-      },
-    );
-
-    /**
-     * This is a separate model which provides JSX type information. See
-     * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
-     */
-    const jsxTypesModel = mn.editor.createModel(
-      types,
-      "typescript",
-      mn.Uri.parse("file:///index.d.ts"),
-    );
-
-    this.setMonacoEditorTheme(this.props.userSettings.theme);
-
-    // Record the model ids for the two created models to track them.
-    const workspaceEditorModelIdMap: ModelIdMap = new Map();
-    workspaceEditorModelIdMap.set("workspace-editor", workspaceEditorModel.id);
-    workspaceEditorModelIdMap.set("jsx-types", jsxTypesModel.id);
-
-    this.setState({ workspaceEditorModelIdMap });
-
-    debug("[initializeMonaco] Monaco editor initialized.");
   };
 
   getMonacoLanguageFromChallengeType = () => {
@@ -538,6 +397,10 @@ class Workspace extends React.Component<IProps, IState> {
         debug(`[getMonacoLanguageFromChallengeType] using "plaintext"`);
         return "plaintext";
     }
+  };
+
+  toggleMobileView = () => {
+    this.setState({ favorMobile: !this.state.favorMobile });
   };
 
   /**
@@ -581,7 +444,13 @@ class Workspace extends React.Component<IProps, IState> {
 
   render() {
     const { correct: allTestsPassing } = this.getTestPassedStatus();
-    const { testResults, testResultsLoading, hideSuccessModal } = this.state;
+    const {
+      testResults,
+      testResultsLoading,
+      hideSuccessModal,
+      dimensions: D,
+      shouldRefreshLayout,
+    } = this.state;
     const {
       challenge,
       isEditMode,
@@ -657,8 +526,13 @@ class Workspace extends React.Component<IProps, IState> {
       </Col>
     );
 
-    const MONACO_CONTAINER = (
-      <div style={{ height: "100%", position: "relative" }}>
+    // Use different editors for different platforms
+    const CodeEditor = this.state.favorMobile
+      ? WorkspaceCodemirrorEditor
+      : WorkspaceMonacoEditor;
+
+    const CODE_EDITOR_CONTAINER = (
+      <CodeEditorContainer>
         <GreatSuccess
           challenge={challenge}
           isOpen={IS_GREAT_SUCCESS_OPEN}
@@ -679,13 +553,15 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
-        <UpperRight isEditMode={isEditMode}>
+        <CodeEditorUpperRight isEditMode={isEditMode}>
           {revealSolutionCode && (
             <RevealSolutionLabel
               hideSolution={this.props.handleToggleSolutionCode}
             />
           )}
           <RunButton
+            fill
+            large={this.props.renderForMobile}
             icon="play"
             id="pw-run-code"
             loading={testResultsLoading}
@@ -694,18 +570,30 @@ class Workspace extends React.Component<IProps, IState> {
           >
             Run
           </RunButton>
-        </UpperRight>
+        </CodeEditorUpperRight>
         <LowerRight>
-          <ButtonGroup vertical>
-            <Tooltip content="Increase Font Size" position="left">
+          <ButtonGroup vertical={!this.props.renderForMobile}>
+            <Tooltip
+              content="Increase Font Size"
+              position={this.props.renderForMobile ? "top" : "left"}
+              interactionKind={"hover-target"}
+            >
               <IconButton
+                large={this.props.renderForMobile}
+                id="editor-increase-font-size"
                 icon="plus"
                 aria-label="increase editor font size"
                 onClick={this.props.increaseFontSize}
               />
             </Tooltip>
-            <Tooltip content="Decrease Font Size" position="left">
+            <Tooltip
+              content="Decrease Font Size"
+              position={this.props.renderForMobile ? "top" : "left"}
+              interactionKind={"hover-target"}
+            >
               <IconButton
+                large={this.props.renderForMobile}
+                id="editor-decrease-font-size"
                 icon="minus"
                 aria-label="decrease editor font size"
                 onClick={this.props.decreaseFontSize}
@@ -713,17 +601,21 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
           </ButtonGroup>
           <div style={{ marginBottom: 8 }} />
-          <Tooltip content="Format Code" position="left">
-            <IconButton
-              icon="clean"
-              aria-label="format editor code"
-              onClick={this.handleFormatCode}
-            />
-          </Tooltip>
+          {!this.props.renderForMobile && (
+            <Tooltip content="Format Code" position="left">
+              <IconButton
+                large={this.props.renderForMobile}
+                id="editor-format-code"
+                icon="clean"
+                aria-label="format editor code"
+                onClick={this.handleFormatCode}
+              />
+            </Tooltip>
+          )}
           <div style={{ marginBottom: 8 }} />
           <Popover
             content={
-              <Menu>
+              <Menu large>
                 {!IS_SANDBOX && isEditMode && (
                   <MenuItem
                     icon={
@@ -734,8 +626,9 @@ class Workspace extends React.Component<IProps, IState> {
                     onClick={this.props.toggleAlternativeEditView}
                   />
                 )}
-                {!IS_SANDBOX && (
+                {!IS_SANDBOX && !this.props.renderForMobile && (
                   <MenuItem
+                    id="editor-toggle-full-screen"
                     icon={fullScreenEditor ? "collapse-all" : "expand-all"}
                     aria-label="toggle editor size"
                     onClick={this.props.toggleEditorSize}
@@ -746,20 +639,36 @@ class Workspace extends React.Component<IProps, IState> {
                     }
                   />
                 )}
-                <MenuItem
-                  icon="contrast"
-                  aria-label="toggle high contrast mode"
-                  onClick={this.props.toggleHighContrastMode}
-                  text="Toggle High Contrast Mode"
-                />
-                <MenuItem
-                  icon="download"
-                  onClick={this.handleExport}
-                  text="Export Code to File"
-                  aria-label="export code to file"
-                />
+                {!this.props.renderForMobile && (
+                  <MenuItem
+                    id="editor-toggle-high-contrast"
+                    icon="contrast"
+                    aria-label="toggle high contrast mode"
+                    onClick={this.props.toggleHighContrastMode}
+                    text="Toggle High Contrast Mode"
+                  />
+                )}
+                {this.props.renderForMobile && (
+                  <MenuItem
+                    id="editor-format-code-mobile"
+                    icon="clean"
+                    aria-label="format editor code"
+                    onClick={this.handleFormatCode}
+                    text="Auto-format Code"
+                  />
+                )}
+                {!this.props.renderForMobile && (
+                  <MenuItem
+                    id="editor-export-code"
+                    icon="download"
+                    onClick={this.handleExport}
+                    text="Export Code to File"
+                    aria-label="export code to file"
+                  />
+                )}
                 <MenuDivider />
                 <MenuItem
+                  id="editor-restore-initial-code"
                   icon="reset"
                   aria-label="reset editor"
                   onClick={this.resetCodeWindow}
@@ -767,6 +676,7 @@ class Workspace extends React.Component<IProps, IState> {
                 />
                 {!IS_SANDBOX && (
                   <MenuItem
+                    id="editor-toggle-solution-code"
                     icon={revealSolutionCode ? "application" : "applications"}
                     aria-label={
                       revealSolutionCode
@@ -781,113 +691,270 @@ class Workspace extends React.Component<IProps, IState> {
                     onClick={this.props.handleToggleSolutionCode}
                   />
                 )}
+                <MenuItem
+                  id="editor-toggle-mobile"
+                  icon={this.state.favorMobile ? "desktop" : "mobile-phone"}
+                  aria-label="toggle editor size"
+                  onClick={this.toggleMobileView}
+                  text={
+                    this.state.favorMobile
+                      ? "Use Desktop Editor"
+                      : "Use Mobile Editor"
+                  }
+                />
               </Menu>
             }
-            position={Position.LEFT_BOTTOM}
+            position={
+              this.props.renderForMobile
+                ? Position.TOP_LEFT
+                : Position.LEFT_BOTTOM
+            }
           >
-            <Tooltip content="More options..." position="left">
-              <IconButton aria-label="more options" icon="more" />
+            <Tooltip
+              content="More options..."
+              position={this.props.renderForMobile ? "top" : "left"}
+            >
+              <IconButton
+                large={this.props.renderForMobile}
+                id="editor-more-options"
+                aria-label="more options"
+                icon="more"
+              />
             </Tooltip>
           </Popover>
         </LowerRight>
-        <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} />
-      </div>
+        <CodeEditor
+          ref={editor => {
+            this.editor = editor;
+          }}
+          challengeType={this.props.challenge.type}
+          userSettings={this.props.userSettings}
+          editorOptions={this.props.editorOptions}
+          language={this.getMonacoLanguageFromChallengeType()}
+          value={this.state.code}
+          onChange={this.handleEditorContentChange}
+        />
+      </CodeEditorContainer>
     );
+
+    const getPreviewPane = ({ grid = true } = {}) => {
+      // Lots of repetition here
+      if (!grid) {
+        return IS_REACT_CHALLENGE ? (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ flex: "1 100%" }}>
+              <DragIgnorantFrameContainer
+                id="iframe"
+                title="code-preview"
+                ref={this.setIframeRef}
+              />
+            </div>
+            <div style={{ flex: "1 100%" }}>
+              <Console variant="dark" logs={this.state.logs} />
+            </div>
+          </div>
+        ) : IS_TYPESCRIPT_CHALLENGE ? (
+          <div>
+            <Console variant="dark" logs={this.state.logs} />
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        ) : IS_MARKUP_CHALLENGE ? (
+          <div style={{ height: "100%" }}>
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+            />
+          </div>
+        ) : (
+          /* Handle other challenge types ~ */
+          <div id="the-div-that-should-not-render" />
+        );
+      }
+
+      return IS_REACT_CHALLENGE ? (
+        <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <RowsWrapper separatorProps={rowSeparatorProps}>
+            <Row initialHeight={D.PREVIEW_HEIGHT}>
+              <div style={{ height: "100%" }}>
+                <DragIgnorantFrameContainer
+                  id="iframe"
+                  title="code-preview"
+                  ref={this.setIframeRef}
+                />
+              </div>
+            </Row>
+            <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
+              <div>
+                <Console variant="dark" logs={this.state.logs} />
+              </div>
+            </Row>
+          </RowsWrapper>
+        </Col>
+      ) : IS_TYPESCRIPT_CHALLENGE ? (
+        <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+          <div>
+            <Console variant="dark" logs={this.state.logs} />
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        </Col>
+      ) : IS_MARKUP_CHALLENGE ? (
+        <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <div style={{ height: "100%" }}>
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+            />
+          </div>
+        </Col>
+      ) : (
+        /* Handle other challenge types ~ */
+        <div id="the-div-that-should-not-render" />
+      );
+    };
+
+    const renderMobile = () => {
+      const { failingTests } = this.getTestPassedStatus();
+      return (
+        <WorkspaceMobileView>
+          {!IS_SANDBOX && (
+            <div style={{ height: "auto", flexShrink: 0, maxHeight: "25vh" }}>
+              <InstructionsViewEdit isMobile />
+            </div>
+          )}
+          <div className="tabs">
+            <div className="tab-selection">
+              <ButtonGroup fill large>
+                <Button
+                  onClick={() => {
+                    document
+                      .getElementById(PANEL_SCROLL_ID)
+                      ?.scrollTo({ left: 0, behavior: "smooth" });
+                  }}
+                  icon="code"
+                >
+                  Code
+                </Button>
+                <Button
+                  onClick={() => {
+                    document.getElementById(PANEL_SCROLL_ID)?.scrollTo({
+                      left: this.state.dimensions.w,
+                      behavior: "smooth",
+                    });
+                  }}
+                  icon="console"
+                >
+                  Result
+                </Button>
+                {!IS_SANDBOX && (
+                  <Button
+                    className="test-view-button"
+                    data-failing={failingTests.length}
+                    onClick={() => {
+                      document.getElementById(PANEL_SCROLL_ID)?.scrollTo({
+                        left: this.state.dimensions.w * 2,
+                        behavior: "smooth",
+                      });
+                    }}
+                  >
+                    <small
+                      className={
+                        // tslint:disable-next-line: prefer-template
+                        "mobile-tests-badge " +
+                        (failingTests.length ? "fail" : "success")
+                      }
+                    >
+                      {failingTests.length > 9
+                        ? "9+"
+                        : failingTests.length || "✓"}
+                    </small>
+                    Tests
+                  </Button>
+                )}
+              </ButtonGroup>
+            </div>
+            <div id="panel-scroll-target" className="panel">
+              <div className="panel-scroll">
+                <ContentContainer style={{ padding: 0 }}>
+                  {CODE_EDITOR_CONTAINER}
+                </ContentContainer>
+                <ContentContainer>
+                  {getPreviewPane({ grid: false })}
+                </ContentContainer>
+                {!IS_SANDBOX && (
+                  <ContentContainer className="test-container">
+                    {WorkspaceTestContainer}
+                  </ContentContainer>
+                )}
+              </div>
+            </div>
+          </div>
+        </WorkspaceMobileView>
+      );
+    };
 
     return (
       <Container>
         <PageSection>
           <WorkspaceContainer>
-            <ColsWrapper separatorProps={colSeparatorProps}>
-              <Col
-                initialWidth={D.EDITOR_PANEL_WIDTH}
-                initialHeight={D.WORKSPACE_HEIGHT}
-              >
-                {IS_FULLSCREEN || IS_ALTERNATIVE_EDIT_VIEW ? (
-                  <div
-                    style={{ height: "100%", background: C.BACKGROUND_CONSOLE }}
-                  >
-                    {MONACO_CONTAINER}
-                  </div>
-                ) : (
-                  <RowsWrapper separatorProps={rowSeparatorProps}>
-                    <Row
-                      initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
-                      style={{ background: C.BACKGROUND_CONTENT }}
-                    >
-                      <ContentContainer>
-                        <InstructionsViewEdit />
-                      </ContentContainer>
-                    </Row>
-                    <Row
-                      style={{ background: C.BACKGROUND_EDITOR }}
-                      initialHeight={D.EDITOR_HEIGHT}
-                    >
-                      {MONACO_CONTAINER}
-                    </Row>
-                    <Row
-                      initialHeight={D.TEST_CONTENT_HEIGHT}
-                      style={{ background: C.BACKGROUND_CONTENT }}
-                    >
-                      {WorkspaceTestContainer}
-                    </Row>
-                  </RowsWrapper>
-                )}
-              </Col>
-              {IS_ALTERNATIVE_EDIT_VIEW ? (
-                TestFullHeightEditor
-              ) : IS_REACT_CHALLENGE ? (
-                <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                  <RowsWrapper separatorProps={rowSeparatorProps}>
-                    <Row initialHeight={D.PREVIEW_HEIGHT}>
-                      <div style={{ height: "100%" }}>
-                        <DragIgnorantFrameContainer
-                          id="iframe"
-                          title="code-preview"
-                          ref={this.setIframeRef}
-                        />
-                      </div>
-                    </Row>
-                    <Row
-                      style={consoleRowStyles}
-                      initialHeight={D.CONSOLE_HEIGHT}
-                    >
-                      <div>
-                        <Console variant="dark" logs={this.state.logs} />
-                      </div>
-                    </Row>
-                  </RowsWrapper>
-                </Col>
-              ) : IS_TYPESCRIPT_CHALLENGE ? (
+            {this.props.renderForMobile ? (
+              renderMobile()
+            ) : shouldRefreshLayout ? null : (
+              <ColsWrapper separatorProps={colSeparatorProps}>
                 <Col
-                  style={consoleRowStyles}
+                  initialWidth={D.EDITOR_PANEL_WIDTH}
                   initialHeight={D.WORKSPACE_HEIGHT}
                 >
-                  <div>
-                    <Console variant="dark" logs={this.state.logs} />
-                    <DragIgnorantFrameContainer
-                      id="iframe"
-                      title="code-preview"
-                      ref={this.setIframeRef}
-                      style={{ visibility: "hidden", height: 0, width: 0 }}
-                    />
-                  </div>
+                  {IS_FULLSCREEN || IS_ALTERNATIVE_EDIT_VIEW ? (
+                    <div
+                      style={{
+                        height: "100%",
+                        background: C.BACKGROUND_CONSOLE,
+                      }}
+                    >
+                      {CODE_EDITOR_CONTAINER}
+                    </div>
+                  ) : (
+                    <RowsWrapper separatorProps={rowSeparatorProps}>
+                      <Row
+                        initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
+                        style={{ background: C.BACKGROUND_CONTENT }}
+                      >
+                        <ContentContainer>
+                          <InstructionsViewEdit />
+                        </ContentContainer>
+                      </Row>
+                      <Row
+                        style={{ background: C.BACKGROUND_EDITOR }}
+                        initialHeight={D.EDITOR_HEIGHT}
+                      >
+                        {CODE_EDITOR_CONTAINER}
+                      </Row>
+                      <Row
+                        initialHeight={D.TEST_CONTENT_HEIGHT}
+                        style={{ background: C.BACKGROUND_CONTENT }}
+                      >
+                        {WorkspaceTestContainer}
+                      </Row>
+                    </RowsWrapper>
+                  )}
                 </Col>
-              ) : IS_MARKUP_CHALLENGE ? (
-                <Col initialHeight={D.WORKSPACE_HEIGHT}>
-                  <div style={{ height: "100%" }}>
-                    <DragIgnorantFrameContainer
-                      id="iframe"
-                      title="code-preview"
-                      ref={this.setIframeRef}
-                    />
-                  </div>
-                </Col>
-              ) : (
-                /* Handle other challenge types ~ */
-                <div />
-              )}
-            </ColsWrapper>
+                {IS_ALTERNATIVE_EDIT_VIEW
+                  ? TestFullHeightEditor
+                  : getPreviewPane()}
+              </ColsWrapper>
+            )}
           </WorkspaceContainer>
         </PageSection>
       </Container>
@@ -896,12 +963,14 @@ class Workspace extends React.Component<IProps, IState> {
 
   getTestPassedStatus = () => {
     const { testResults, testResultsLoading } = this.state;
-    const passedTests = testResults.filter(t => t.testResult);
+    const [passedTests, failingTests] = partition<TestCase>(t => t.testResult)(
+      testResults,
+    );
     const correct =
       !testResultsLoading &&
       passedTests.length > 0 &&
       passedTests.length === testResults.length;
-    return { correct, passedTests, testResults };
+    return { correct, passedTests, failingTests, testResults };
   };
 
   getTestSummaryString = () => {
@@ -909,69 +978,16 @@ class Workspace extends React.Component<IProps, IState> {
     return `Tests: ${passedTests.length}/${testResults.length} Passed`;
   };
 
-  setMonacoEditorValue = () => {
-    const model = this.findModelByType("workspace-editor");
-    if (model) {
-      model.setValue(this.state.code);
-    }
-  };
-
-  setMonacoEditorTheme = (theme: string) => {
-    if (this.monacoWrapper) {
-      debug("[setMonacoEditorTheme]", theme);
-      this.monacoWrapper.editor.setTheme(theme);
-      this.debouncedSyntaxHighlightFunction(this.state.code);
-    } else {
-      debug("[setMonacoEditorTheme]", "No editor pressent");
-    }
-  };
-
-  addModuleTypeDefinitionsToMonaco = (packages: ReadonlyArray<string> = []) => {
-    /**
-     * TODO: Fetch @types/ package type definitions if they exist or fallback
-     * to the module declaration.
-     *
-     * See this:
-     * https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/workers/fetch-dependency-typings.js
-     */
-    const moduleDeclarations = packages.reduce(
-      (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
-      "",
-    );
-
-    if (this.monacoWrapper) {
-      registerExternalLib({
-        source: moduleDeclarations,
-      });
-    }
-  };
-
-  requestSyntaxHighlighting = (code: string) => {
-    if (this.syntaxWorker) {
-      debug("request syntax highlighting");
-      this.syntaxWorker.postMessage({ code });
-    }
-  };
-
-  handleEditorContentChange = (_: any) => {
-    const model = this.findModelByType("workspace-editor");
-    if (!model) {
-      console.warn("No model found when editor content changed!");
-      return;
-    }
-
-    const code = model.getValue();
-
+  handleEditorContentChange = (code: string) => {
+    debug("handleEditorContentChange", code);
     /**
      * Update the stored code value and then:
      *
-     * - Dispatch the syntax highlighting worker
      * - Save the code to local storage (debounced)
      * - Render the iframe preview (debounced)
      */
     this.setState({ code }, () => {
       this.debouncedSaveCodeFunction();
-      this.debouncedSyntaxHighlightFunction(code);
 
       /**
        * Only live preview markup challenges, for the UI.
@@ -1153,6 +1169,13 @@ class Workspace extends React.Component<IProps, IState> {
   handleUserTriggeredTestRun = () => {
     this.setState({ hideSuccessModal: false });
     this.runChallengeTests();
+
+    // Slide the preview window into view. Only applicable on mobile
+    if (this.props.renderForMobile) {
+      document
+        .getElementById(PANEL_SCROLL_ID)
+        ?.scrollTo({ left: this.state.dimensions.w, behavior: "smooth" });
+    }
   };
 
   // NOTE We manage the false loading state where test results are received. The
@@ -1176,7 +1199,9 @@ class Workspace extends React.Component<IProps, IState> {
       this.props.challenge,
     );
 
-    this.addModuleTypeDefinitionsToMonaco(dependencies);
+    if (this.editor) {
+      this.editor.addModuleTypeDefinitionsToMonaco(dependencies);
+    }
 
     return code;
   };
@@ -1269,61 +1294,30 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  resetMonacoEditor = async () => {
-    this.cleanupEditor();
-    await this.initializeMonaco();
-    await this.initializeMonacoEditor();
-  };
-
   setIframeRef = (ref: HTMLIFrameElement) => {
     this.iFrameRef = ref;
   };
 
-  private readonly disposeModels = () => {
-    const { workspaceEditorModelIdMap } = this.state;
-    const workspaceModelIds = new Set(workspaceEditorModelIdMap.values());
-    const remainingModelIds = new Map(workspaceEditorModelIdMap);
-
-    if (this.monacoWrapper) {
-      const models = this.monacoWrapper.editor.getModels();
-      for (const model of models) {
-        if (workspaceModelIds.has(model.id)) {
-          model.dispose();
-          remainingModelIds.delete(model.id);
-        }
-      }
-    }
-
-    /**
-     * I'm not sure if it matters that we update the tracked model
-     * ids and remove the removed ones... but anyway it happens.
-     */
-    this.setState({ workspaceEditorModelIdMap: remainingModelIds });
+  /**
+   * The resizable cols are not declarative in their sizing. They take initial
+   * dimensions but if we want to update their dimensions we need to completely
+   * rerender. That's what this "state flash" let's us do.
+   */
+  private readonly refreshLayout = () => {
+    this.setState({ shouldRefreshLayout: true });
+    wait(10).finally(() => {
+      this.setState({ shouldRefreshLayout: false });
+    });
   };
 
   /**
    * Cleanup monaco editor resources
    */
   private readonly cleanupEditor = () => {
-    this.disposeModels();
-    this.editorInstance = null;
-  };
-
-  private readonly findModelByType = (
-    type: MODEL_TYPE,
-  ): Nullable<MonacoModel> => {
-    const { workspaceEditorModelIdMap } = this.state;
-    const modelId = workspaceEditorModelIdMap.get(type);
-
-    if (this.monacoWrapper) {
-      const models = this.monacoWrapper.editor.getModels();
-      const model = models.find((m: MonacoModel) => m.id === modelId);
-      if (model) {
-        return model;
-      }
+    if (this.editor) {
+      this.editor.cleanup();
+      this.editor = null;
     }
-
-    return null;
   };
 
   /**
@@ -1333,6 +1327,7 @@ class Workspace extends React.Component<IProps, IState> {
    */
   private readonly handleCodeFormatMessage = (event: MessageEvent) => {
     const code = event.data?.code;
+    debug("handleCodeFormatMessage", code);
     const channel = event.data?.channel;
     if (code && channel === CODE_FORMAT_CHANNEL) {
       this.transformMonacoCode(() => code);
@@ -1406,7 +1401,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   private readonly transformMonacoCode = (fn: (x: string) => string) => {
-    this.setState({ code: fn(this.state.code) }, this.setMonacoEditorValue);
+    this.setState({ code: fn(this.state.code) });
   };
 
   private readonly pauseAndRefreshEditor = async (timeout: number = 50) => {
@@ -1504,6 +1499,7 @@ type ConnectProps = ReturnType<typeof mergeProps>;
 interface IProps extends ConnectProps {
   blob: DataBlob;
   challenge: Challenge;
+  renderForMobile: boolean;
 }
 
 const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
@@ -1553,11 +1549,18 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       description: getSeoExcerpt(challenge),
     };
 
+    const renderForMobile = getDimensions().w < 700;
+
     return (
       <React.Fragment>
         <SEO {...seoMeta} />
         {requiresWorkspace && (
-          <Workspace {...this.props} blob={codeBlob} challenge={challenge} />
+          <Workspace
+            {...this.props}
+            blob={codeBlob}
+            challenge={challenge}
+            renderForMobile={renderForMobile}
+          />
         )}
         {!isSandbox && (CODEPRESS || this.props.showMediaArea) && (
           <LowerSection withHeader={challenge.type === "media"}>

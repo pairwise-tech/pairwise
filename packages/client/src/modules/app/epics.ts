@@ -46,27 +46,6 @@ const appInitializationEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-const mobileRedirectEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.initializeApp)),
-    filter(() => {
-      const hasSeen = deps.storage.getMobileRedirected();
-      const onMobileRoute = deps.router.location.pathname === "/mobile";
-      return isMobile() && !hasSeen && !onMobileRoute;
-    }),
-    tap(() => {
-      console.warn("[MOBILE DETECTED] Redirecting to mobile page");
-      deps.storage.setMobileRedirected(true);
-      deps.router.push("/mobile");
-    }),
-    ignoreElements(),
-    catchError((err, source) => {
-      captureSentryException(err);
-      return source;
-    }),
-  );
-};
-
 const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
@@ -312,5 +291,4 @@ export default combineEpics(
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
   analyticsEpic,
-  mobileRedirectEpic,
 );

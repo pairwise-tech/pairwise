@@ -75,6 +75,15 @@ export const challengeRequiresWorkspace = (
   return !contentOnlyChallenge;
 };
 
+// Pretty print. Just a debug function when you're existing logs ar a wee bit cluttered.
+export const pp = (s: string, ...args: any[]) => {
+  if (args.length) {
+    console.log(`%c${s} 👉 %o`, "font-size:18px;color:lime;", args);
+  } else {
+    console.log(`%c${s}`, "font-size:18px;color:lime;");
+  }
+};
+
 /**
  * Given a challenge and other relevant data, construct the
  * data blob to represent the user's progress on that challenge.

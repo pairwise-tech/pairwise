@@ -75,23 +75,52 @@ export const Text = styled.p`
   color: ${COLORS.TEXT_CONTENT};
 `;
 
-export const UpperRight = styled.div<{ isEditMode: boolean }>`
+// NOTE: Trying to bolt mobile styling onto the existing UI without changing any
+// DOM or desktop styles is a bit cumbersome. I regard the app as very much
+// desktop first so I wanted to touch desktop as little as possible. However,
+// rather than using a nice constraint-based layout I'm using an absolute pixel
+// value here becuase I don't want to rearrange the DOM.
+export const CodeEditorUpperRight = styled.div<{ isEditMode: boolean }>`
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   right: 20px;
   top: ${props => (props.isEditMode ? 45 : 10)}px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
+  @media ${MOBILE} {
+    top: auto;
+    bottom: 1px; // Just give a line of contrast in case our colors are the same as your phone UI (ios problem)
+    right: 0;
+    left: 122px; // Yeah... I don't love this. See the NOTE
+  }
+`;
+
+// This breaks the Icon typing, but also doesn't shout at us in the console
+export const RotatingIcon = styled(({ isRotated, id, ...props }) => {
+  return <Icon id={id} {...props} />;
+})<{ isRotated?: boolean; id: string }>`
+  transform: ${props =>
+    `rotate3d(0,0,1,${props.isRotated ? "0deg" : "-90deg"})`};
+  transition: transform 0.2s linear;
 `;
 
 export const LowerRight = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   right: 20px;
   bottom: 10px;
   display: flex;
   flex-direction: column;
+
+  @media ${MOBILE} {
+    top: auto;
+    right: auto;
+    left: 0;
+    bottom: 1px; // Just give a line of contrast in case our colors are the same as your phone UI (ios problem)
+    flex-direction: row;
+  }
 `;
 
 export const FullScreenOverlay = styled.div`
@@ -123,6 +152,8 @@ export interface IconNavLinkProps extends NavLinkProps {
   disabled: boolean;
   beforeText?: string;
   afterText?: string;
+  large?: boolean;
+  fill?: boolean;
 }
 
 export const preventDefault = (e: SyntheticEvent) => {
@@ -154,12 +185,14 @@ export const IconNavLink = styled(
      * it is include in the <a> props below...
      */
     // @ts-ignore
-    const { dispatch, ...rest } = props;
+    const { dispatch, fill, large, ...rest } = props;
 
     return (
       <NavLink
         className={cx(className, Classes.BUTTON, {
           [Classes.DISABLED]: disabled,
+          "bp3-large": large,
+          fill,
         })}
         {...rest}
         onClick={handleClick}
@@ -171,6 +204,10 @@ export const IconNavLink = styled(
     );
   },
 )`
+  &.fill {
+    width: 100%;
+  }
+
   &:hover .bp3-icon:only-child {
     color: white !important;
   }
@@ -290,6 +327,16 @@ export const HalfCircle = styled.div<HalfCircleProps>`
     props.position === "top" ? "bottom" : "top"}-right-radius: 90px;
 
   ${props => props.position}: ${props => props.positionOffset}px;
+`;
+
+export const CodeEditorContainer = styled.div`
+  height: 100%;
+  position: relative;
+
+  // Make room forcode editor controls
+  @media ${MOBILE} {
+    padding-bottom: 41px;
+  }
 `;
 
 type SmoothScrollButtonProps = {

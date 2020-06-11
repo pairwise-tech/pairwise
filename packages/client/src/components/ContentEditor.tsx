@@ -73,7 +73,7 @@ interface PWEditorComponentProps {
 }
 
 const StyledButton = styled(Button)`
-  &:hover .bp3-icon {
+  .bp3-icon {
     color: #da3a13 !important;
   }
 `;

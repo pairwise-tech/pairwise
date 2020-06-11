@@ -48,7 +48,6 @@ import { challengeRequiresWorkspace } from "tools/utils";
 import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
-import MobileView from "./MobileView";
 import { CONTENT_AREA_ID } from "./MediaArea";
 
 // Only show focus outline when tabbing around the UI
@@ -347,7 +346,6 @@ const ApplicationContainer = (props: IProps) => {
         <Route key="workspace" path="/workspace/:id" component={Workspace} />
         <Route key="home" path="/home" component={Home} />
         <Route key="account" path="/account" component={Account} />
-        <Route key="mobile" path="/mobile" component={MobileView} />
         {!isLoggedIn && (
           <Route
             key="authenticate"
@@ -413,6 +411,10 @@ const Header = styled.div`
 
   height: ${HEADER_HEIGHT}px;
   width: calc(100vw - 48);
+
+  @media ${MOBILE} {
+    position: absolute;
+  }
 
   &:after {
     content: "";

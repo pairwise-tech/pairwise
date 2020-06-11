@@ -210,7 +210,7 @@ export const stripAndExtractModuleImports = (codeString: string) => {
   const result = codeString.match(regex);
 
   let strippedImports = codeString;
-  let dependencies: ReadonlyArray<string> = [];
+  let dependencies: string[] = [];
 
   if (result) {
     for (const importStatement of result) {
@@ -280,9 +280,7 @@ export const transpileCodeWithBabel = (codeString: string) => {
 /**
  * Get all imported dependencies from the DependencyCacheService.
  */
-const fetchRequiredDependencies = async (
-  dependencies: ReadonlyArray<string>,
-) => {
+const fetchRequiredDependencies = async (dependencies: string[]) => {
   return Promise.all(dependencies.map(DependencyCacheService.getDependency));
 };
 
@@ -335,7 +333,7 @@ const injectDependencies = (
  * Fetch the required module dependencies and inject them into the code string.
  */
 export const createInjectDependenciesFunction = (
-  dependencies: readonly string[],
+  dependencies: string[],
 ) => async (codeString: string) => {
   /**
    * TODO: The following method could throw an error if an imported package

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Icon, Classes } from "@blueprintjs/core";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { CSSTransition } from "react-transition-group";
 import Confetti from "react-confetti";
 import { IRect } from "react-confetti/dist/types/Rect";
@@ -10,6 +10,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { NextChallengeButton } from "./ChallengeControls";
 import { connect } from "react-redux";
 import KeyboardShortcuts from "./KeyboardShortcuts";
+import { MOBILE } from "tools/constants";
 
 interface ConfettiModalProps {
   isOpen: boolean;
@@ -214,21 +215,24 @@ const GreatSuccess: React.FC<Props> = ({
       </p>
       <ButtonActions>
         <Button
+          large
+          className="feedback-button"
           onClick={() => props.setFeedbackDialogState(true)}
           icon="comment"
         >
           Have feedback?
         </Button>
-        <div style={{ marginLeft: "auto" }}>
+        <div className="right-buttons">
           {challenge.content && (
-            <Button onClick={handleScrollToContent} style={{ marginRight: 10 }}>
+            <Button large style={{ order: 3 }} onClick={handleScrollToContent}>
               View Content
             </Button>
           )}
           {challenge.videoUrl && (
             <Button
+              large
               rightIcon="video"
-              style={{ marginRight: 10 }}
+              style={{ order: 2 }}
               onClick={handlePlayVideo}
             >
               Watch Video
@@ -236,6 +240,13 @@ const GreatSuccess: React.FC<Props> = ({
           )}
           {nextChallenge && (
             <NextChallengeButton
+              style={{
+                order: 1,
+                minWidth: 40,
+                minHeight: 40,
+                padding: "5px 15px",
+                fontSize: 16,
+              }}
               className={Classes.INTENT_SUCCESS}
               slug={getChallengeSlug(nextChallenge)}
             />
@@ -250,6 +261,34 @@ const ButtonActions = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  .right-buttons {
+    margin-left: auto;
+  }
+
+  @media ${MOBILE} {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+
+    .feedback-button {
+      order: 2;
+    }
+
+    .right-buttons {
+      order: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 0;
+      width: 100%;
+
+      .bp3-intent-success {
+        margin-bottom: 20px;
+      }
+    }
+  }
 
   ${Classes.BUTTON} {
     margin-left: 10px;
@@ -371,6 +410,18 @@ const CardTitleContainer = styled.div`
   align-items: center;
   font-size: 22px;
   margin-bottom: 40px;
+
+  @media ${MOBILE} {
+    display: block;
+
+    & > span {
+      display: none;
+    }
+
+    h1 {
+      font-size: 32px;
+    }
+  }
 
   h1,
   .bp3-icon {
