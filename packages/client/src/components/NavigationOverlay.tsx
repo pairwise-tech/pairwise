@@ -185,7 +185,6 @@ class NavigationOverlay extends React.Component<
           className="challenge-select"
           offsetX={overlayVisible ? 0 : -60}
           style={{
-            width: 600,
             zIndex: 2,
           }}
           onClick={e => e.stopPropagation()}
@@ -784,6 +783,15 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
     align-items: center;
   }
 
+  @media ${MOBILE} {
+    .content span {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 60vw;
+    }
+  }
+
   &:hover {
     color: white !important;
     background: ${COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
@@ -924,6 +932,10 @@ const HoverableBadge = styled.div`
   position: relative;
   overflow: hidden;
 
+  @media ${MOBILE} {
+    display: none;
+  }
+
   &:hover {
     ${BadgeDefaultContent} {
       transform: translateY(-200%);
@@ -937,6 +949,8 @@ const HoverableBadge = styled.div`
 const ChallengeNavigationItem = styled.div`
   @media ${MOBILE} {
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
@@ -951,9 +965,17 @@ const Col = styled.div<{ offsetX: number }>`
   transition: all 0.2s ease-out;
   transform: translateX(${({ offsetX }) => `${offsetX}px`});
 
+  &.challenge-select {
+    width: 600px;
+  }
+
   @media ${MOBILE} {
     ${ModuleNavigationBase} {
       white-space: nowrap;
+    }
+
+    &.challenge-select {
+      width: 90vw;
     }
 
     .mobile-shrink {
