@@ -91,7 +91,7 @@ export const CodeEditorUpperRight = styled.div<{ isEditMode: boolean }>`
 
   @media ${MOBILE} {
     top: auto;
-    bottom: 0;
+    bottom: 1px; // Just give a line of contrast in case our colors are the same as your phone UI (ios problem)
     right: 0;
     left: 122px; // Yeah... I don't love this. See the NOTE
   }
@@ -118,7 +118,7 @@ export const LowerRight = styled.div`
     top: auto;
     right: auto;
     left: 0;
-    bottom: 0;
+    bottom: 1px; // Just give a line of contrast in case our colors are the same as your phone UI (ios problem)
     flex-direction: row;
   }
 `;
@@ -335,7 +335,7 @@ export const CodeEditorContainer = styled.div`
 
   // Make room forcode editor controls
   @media ${MOBILE} {
-    padding-bottom: 40px;
+    padding-bottom: 41px;
   }
 `;
 

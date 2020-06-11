@@ -844,7 +844,7 @@ class Workspace extends React.Component<IProps, IState> {
                   }}
                   icon="code"
                 >
-                  Challenge
+                  Code
                 </Button>
                 <Button
                   onClick={() => {
