@@ -1305,9 +1305,12 @@ class Workspace extends React.Component<IProps, IState> {
    */
   private readonly refreshLayout = () => {
     this.setState({ shouldRefreshLayout: true });
-    wait(10).finally(() => {
+    const reset = () => {
       this.setState({ shouldRefreshLayout: false });
-    });
+    };
+    wait(10)
+      .then(reset)
+      .catch(reset);
   };
 
   /**
