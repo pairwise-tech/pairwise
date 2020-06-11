@@ -55,6 +55,8 @@ export default class WorkspaceMonacoEditor
 
   debouncedSyntaxHighlightFunction: (code: string) => void;
 
+  private _isMounted = false;
+
   constructor(props: ICodeEditorProps) {
     super(props);
     this.debouncedSyntaxHighlightFunction = debounce(
@@ -180,7 +182,13 @@ export default class WorkspaceMonacoEditor
     workspaceEditorModelIdMap.set("workspace-editor", workspaceEditorModel.id);
     workspaceEditorModelIdMap.set("jsx-types", jsxTypesModel.id);
 
-    this.setState({ workspaceEditorModelIdMap });
+    if (this._isMounted) {
+      this.setState({ workspaceEditorModelIdMap });
+    } else {
+      debug(
+        "[initializeMonaco] Already unmounted. Will not set workspaceEditorModelIdMap...",
+      );
+    }
 
     debug("[initializeMonaco] Monaco editor initialized.");
   };
@@ -339,6 +347,7 @@ export default class WorkspaceMonacoEditor
 
   componentWillUnmount() {
     this.cleanup();
+    this._isMounted = false;
   }
 
   render() {
@@ -355,6 +364,7 @@ export default class WorkspaceMonacoEditor
   }
 
   async componentDidMount() {
+    this._isMounted = true;
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
     await this.initializeMonaco();
     this.initializeSyntaxHighlightWorker();

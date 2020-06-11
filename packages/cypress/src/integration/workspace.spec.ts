@@ -287,6 +287,7 @@ describe("Editor Functions", () => {
   it("Should increase or decrease font-size", () => {
     cy.get(".monaco-editor textarea").then($textarea => {
       const fs = parseInt($textarea.css("font-size"), 10);
+      cy.log(`initial font size ${fs}`);
       cy.get(".monaco-editor textarea").should(
         "have.css",
         "font-size",
