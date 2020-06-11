@@ -91,7 +91,7 @@ export const CodeEditorUpperRight = styled.div<{ isEditMode: boolean }>`
 
   @media ${MOBILE} {
     top: auto;
-    bottom: 20px;
+    bottom: 0;
     right: 0;
     left: 122px; // Yeah... I don't love this. See the NOTE
   }
@@ -118,7 +118,7 @@ export const LowerRight = styled.div`
     top: auto;
     right: auto;
     left: 0;
-    bottom: 20px;
+    bottom: 0;
     flex-direction: row;
   }
 `;
@@ -335,7 +335,7 @@ export const CodeEditorContainer = styled.div`
 
   // Make room forcode editor controls
   @media ${MOBILE} {
-    padding-bottom: 60px;
+    padding-bottom: 40px;
   }
 `;
 

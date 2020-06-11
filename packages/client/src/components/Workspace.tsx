@@ -175,7 +175,7 @@ class Workspace extends React.Component<IProps, IState> {
   // Resize the workspace in response to the window resizing. If this happens
   // it's probably because a mobile user goes from portrait to landscape.
   private readonly handleWindowResize = debounce(300, async (e: UIEvent) => {
-    console.log(`resize ${window.innerWidth}x${window.innerHeight}`);
+    debug(`[handleWindowResize] ${window.innerWidth}x${window.innerHeight}`);
     this.setState({
       dimensions: getDimensions(window.innerWidth, window.innerHeight),
     });
@@ -850,7 +850,10 @@ class Workspace extends React.Component<IProps, IState> {
                   onClick={() => {
                     document
                       .getElementById(PANEL_SCROLL_ID)
-                      ?.scrollTo({ left: D.w, behavior: "smooth" });
+                      ?.scrollTo({
+                        left: this.state.dimensions.w,
+                        behavior: "smooth",
+                      });
                   }}
                   icon="console"
                 >
@@ -863,7 +866,10 @@ class Workspace extends React.Component<IProps, IState> {
                     onClick={() => {
                       document
                         .getElementById(PANEL_SCROLL_ID)
-                        ?.scrollTo({ left: D.w * 2, behavior: "smooth" });
+                        ?.scrollTo({
+                          left: this.state.dimensions.w * 2,
+                          behavior: "smooth",
+                        });
                     }}
                   >
                     <small
