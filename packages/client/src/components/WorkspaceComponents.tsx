@@ -595,7 +595,6 @@ export const WorkspaceMobileView = styled.div`
   flex-direction: column;
 
   .tabs {
-    height: 70vh; // This should be ignored in favor of flexing
     flex: 1 100%;
     display: flex;
     flex-direction: column;
