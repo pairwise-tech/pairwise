@@ -224,13 +224,15 @@ describe("Workspace Challenges", () => {
 describe("Success Modal", () => {
   it("Should show the modal when and only when the run button is clicked", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
+    cy.wait(TIMEOUT);
+
     cy.contains("Incomplete");
     click("pw-run-code");
     cy.get("#gs-card").should("not.exist");
 
     typeTextInCodeEditor("<h1>Hello!</h1>");
-    cy.get("#gs-card").should("not.exist");
 
+    cy.get("#gs-card").should("not.exist");
     click("pw-run-code");
     cy.wait(TIMEOUT);
     cy.get("#gs-card").should("exist");
