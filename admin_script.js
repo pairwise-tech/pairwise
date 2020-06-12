@@ -138,16 +138,24 @@ const WHITELISTED_EMAILS = new Set([
   "ian989@gmail.com",
 ]);
 
+// Whitelist some users who don't have an email
+const WHITELIST_UUID_LIST = new Set(["89794e45-ee52-424e-9d79-77e1da64d7a0"]);
+
 /**
  * Remove ourselves from the user list.
  */
 const filterUsOut = user => {
-  const { email } = user;
+  const { email, uuid } = user;
   if (!email) {
     return true;
   }
 
-  if (email.includes("@pairwise.tech") || WHITELISTED_EMAILS.has(email)) {
+  const excludeUser =
+    WHITELIST_UUID_LIST.has(uuid) ||
+    WHITELISTED_EMAILS.has(email) ||
+    email.includes("@pairwise.tech");
+
+  if (excludeUser) {
     return false;
   } else {
     return true;
