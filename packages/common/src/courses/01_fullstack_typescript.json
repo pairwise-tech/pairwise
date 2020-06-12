@@ -117,6 +117,28 @@
           "content": ""
         },
         {
+          "id": "ab37hKKmv",
+          "type": "markup",
+          "title": "Opening and Closing Tags",
+          "instructions": "Here we have two tags: `h1` and `p`. One of them doesn't have a closing tag. Make sure both tags are properly closed. ",
+          "testCode": "test(\"There should be a `h1` tag\", () => {\n  expect(get(\"h1\")).toBeTruthy();\n});\n\ntest(\"There should be a `p` tag\", () => {\n  expect(get(\"p\")).toBeTruthy();\n});\n\ntest(\"The `h1` should have a closing tag\", () => {\n  expect(__user_code_string__).toMatch(/<h1/); // Make sure there's also an opening tag. Otherwise the test will pass for _just_ a closing tag\n  expect(__user_code_string__).toMatch(/\\/h1>/);\n});\n\ntest(\"The `p` should have a closing tag\", () => {\n  expect(__user_code_string__).toMatch(/<p/);\n  expect(__user_code_string__).toMatch(/\\/p>/);\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/x25o4tOLRYM",
+          "starterCode": "<!-- Something is wrong with the code below... -->\n<h1>Jello!</h1>\n<p>An amazing food",
+          "solutionCode": "<h1>Jello!</h1>\n<p>An amazing food</p>",
+          "content": ""
+        },
+        {
+          "id": "8XbaRXK0$",
+          "type": "markup",
+          "title": "Empty Tags and Content",
+          "instructions": "Add some content to the `h1` tag and the `p` tag so that something shows up in the preview.\n**Hint:** You can add any text you want inside the text. Try `hey` if you're not sure what to write. Check out the [video](#{\"component\":\"VideoPlayButton\"})if you're stuck.",
+          "testCode": "['h1', 'p'].forEach(tagName => {\n  test(\"The `\" + tagName + \"` tag should not be empty\", () => {\n    expect(get(tagName).innerText.trim()).not.toBe('');\n  });\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/9zOjFIKZc9Y",
+          "starterCode": "<!-- These tags are empty. Add some content in order to pass the tests -->\n<h1></h1>\n<p></p>",
+          "solutionCode": "<h1>hey</h1>\n<p>there</p>",
+          "content": ""
+        },
+        {
           "id": "MNNx8m4XV",
           "type": "markup",
           "title": "The Span Tag",
