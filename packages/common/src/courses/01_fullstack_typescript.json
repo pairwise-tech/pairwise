@@ -15,7 +15,7 @@
           "type": "markup",
           "title": "Hello, Pairwise!",
           "instructions": "There is an h1 tag in the code editor below which contains the text `Pairwise`. Your job is to change the text to say `Hello Pairwise!`. Once you finish, click the \"Run\" button in the editor, and, if you run into any problems, check out the [video](#{\"component\":\"VideoPlayButton\"}) explanation below\\!",
-          "testCode": "test('The `h1` tag should contain the text: `Hello Pairwise!`', () => {\n    expect(getText(\"h1\")).toBe(\"Hello Pairwise!\");\n});\n",
+          "testCode": "test(\"The `h1` tag should contain the text: `Hello Pairwise!`\", () => {\n  const contents = getAll(\"h1\").map((x) => x.innerHTML.trim());\n  expect(contents).toContain(\"Hello Pairwise!\");\n});\n",
           "videoUrl": "https://www.youtube.com/embed/qXxUGntJ11I",
           "starterCode": "<h1>Pairwise</h1>\n",
           "solutionCode": "<h1>Hello Pairwise!</h1>\n",
