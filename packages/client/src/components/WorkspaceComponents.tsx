@@ -17,6 +17,7 @@ import {
   Icon,
   Collapse,
   Pre,
+  Text,
   EditableText,
   Tooltip,
   Button,
@@ -473,23 +474,24 @@ export const InstructionsViewEdit = connect(
       }}
     >
       <ChallengeTitleHeading>
-        {isMobile || isEditMode ? (
-          <div
-            style={{ display: "flex", alignItems: "center", marginBottom: 10 }}
-            onClick={toggleCollapsed}
-          >
-            <RotatingIcon
-              isRotated={!isCollapsed}
-              iconSize={Icon.SIZE_LARGE}
-              icon={"caret-down"}
-              style={{ marginRight: 6 }}
-            />
+        {isEditMode ? (
+          <ChallengeTitleContainer>
             <StyledEditableText
               value={props.title}
               onChange={handleTitle}
               disabled={!isEditMode}
             />
-          </div>
+          </ChallengeTitleContainer>
+        ) : isMobile ? (
+          <ChallengeTitleContainer onClick={toggleCollapsed}>
+            <RotatingIcon
+              icon="caret-down"
+              isRotated={!isCollapsed}
+              iconSize={Icon.SIZE_LARGE}
+              style={{ marginRight: 6 }}
+            />
+            <Text>{props.title}</Text>
+          </ChallengeTitleContainer>
         ) : (
           <Breadcrumbs type="workspace" />
         )}
@@ -527,6 +529,12 @@ export const InstructionsViewEdit = connect(
 
 const StyledEditableText = styled(EditableText)`
   width: 100%;
+`;
+
+const ChallengeTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 `;
 
 const keyboardStateToProps = (state: ReduxStoreState) => ({
