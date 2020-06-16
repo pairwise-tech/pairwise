@@ -25,7 +25,6 @@ import {
   getViewedEmailPromptStatus,
   markEmailPromptAsViewed,
 } from "tools/storage-utils";
-import isMobile from "is-mobile";
 
 const debug = require("debug")("client:app:epics");
 
