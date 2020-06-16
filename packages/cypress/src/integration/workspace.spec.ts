@@ -236,15 +236,15 @@ describe("Success Modal", () => {
     click("pw-run-code");
     cy.wait(TIMEOUT);
     cy.get("#gs-card").should("exist");
+
+    // Close the success modal
+    click("gs-card-close");
+    cy.wait(TIMEOUT);
+    cy.get("#gs-card").should("not.exist");
   });
 
   it("Should have a feedback button", () => {
     cy.contains("Feedback");
-  });
-
-  it("Should close when the close button is clicked", () => {
-    click("gs-card-close");
-    cy.get("#gs-card").should("not.exist");
   });
 });
 
