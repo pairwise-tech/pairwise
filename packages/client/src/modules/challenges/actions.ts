@@ -30,7 +30,7 @@ enum ActionTypesEnum {
   SET_ANY_SYNC_CHALLENGE_ID = "SET_ANY_SYNC_CHALLENGE_ID",
   WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
 
-  SET_ACTIVE_CHALLENGE_IDS = "SET_ACTIVE_CHALLENGE_IDS",
+  SET_CHALLENGE_ID_CONTEXT = "SET_CHALLENGE_ID_CONTEXT",
 
   UPDATE_LAST_ACTIVE_CHALLENGE_IDS = "UPDATE_LAST_ACTIVE_CHALLENGE_IDS",
   UPDATE_LAST_ACTIVE_CHALLENGE_IDS_SUCCESS = "UPDATE_LAST_ACTIVE_CHALLENGE_IDS_SUCCESS",
@@ -213,8 +213,8 @@ export const setNavigationMapState = createAction(
   ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
 )<boolean>();
 
-export const setActiveChallengeIds = createAction(
-  ActionTypesEnum.SET_ACTIVE_CHALLENGE_IDS,
+export const setChallengeIdContext = createAction(
+  ActionTypesEnum.SET_CHALLENGE_ID_CONTEXT,
 )<{
   currentModuleId: string;
   currentCourseId: string;
