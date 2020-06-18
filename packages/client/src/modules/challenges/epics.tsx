@@ -149,7 +149,7 @@ const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
  * Some state changes result in a need to reset the ids for the active
  * course, module, or challenge. This epic is used to do that.
  */
-const resetActiveChallengeIds: EpicSignature = (action$, state$, deps) => {
+const resetChallengeContextEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.deleteChallenge, Actions.deleteCourseModule])),
     map(() => {
@@ -168,7 +168,7 @@ const resetActiveChallengeIds: EpicSignature = (action$, state$, deps) => {
             challengeId,
           } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
 
-          return Actions.setActiveChallengeIds({
+          return Actions.setChallengeIdContext({
             currentCourseId: courseId,
             currentModuleId: moduleId,
             currentChallengeId: challengeId,
@@ -269,7 +269,7 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
         }
 
         return of(
-          Actions.setActiveChallengeIds({
+          Actions.setChallengeIdContext({
             currentCourseId: courseId,
             currentModuleId: moduleId,
             currentChallengeId: currentChallenge,
@@ -370,7 +370,7 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       //   currentModuleId !== challenge.moduleId;
 
       return of(
-        Actions.setActiveChallengeIds({
+        Actions.setChallengeIdContext({
           currentChallengeId: id,
           currentModuleId: challenge.moduleId,
           currentCourseId: challenge.courseId,
@@ -384,7 +384,7 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       // if (shouldUpdateCurrentCourse) {
       //   return of(
       //     // setChallengeIdAction,
-      //     Actions.setActiveChallengeIds({
+      //     Actions.setChallengeIdContext({
       //       currentChallengeId: id,
       //       currentModuleId: challenge.moduleId,
       //       currentCourseId: challenge.courseId,
@@ -471,7 +471,7 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
   deps,
 ) => {
   return action$.pipe(
-    filter(isActionOf(Actions.setActiveChallengeIds)),
+    filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("currentChallengeId"),
     filter(x => !!x),
@@ -626,7 +626,7 @@ const hydrateSandboxType: EpicSignature = action$ => {
  */
 const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
   const saveOnNavEpic = action$.pipe(
-    filter(isActionOf(Actions.setActiveChallengeIds)),
+    filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("previousChallengeId"),
     filter(x => x !== null),
@@ -693,7 +693,7 @@ const completeContentOnlyChallengeEpic: EpicSignature = (
   deps,
 ) => {
   return action$.pipe(
-    filter(isActionOf(Actions.setActiveChallengeIds)),
+    filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("previousChallengeId"),
     filter(x => x !== null),
@@ -788,7 +788,7 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
  */
 const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.setActiveChallengeIds)),
+    filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("previousChallengeId"),
     map(previousChallengeId => {
@@ -891,7 +891,7 @@ export default combineEpics(
   handleFetchCodeBlobForChallengeEpic,
   fetchCodeBlobForChallengeEpic,
   setWorkspaceLoadedEpic,
-  resetActiveChallengeIds,
+  resetChallengeContextEpic,
   codepressDeleteToasterEpic,
   updateLastActiveChallengeIdsEpic,
   challengeInitializationEpic,
