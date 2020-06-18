@@ -342,58 +342,36 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       return shouldUpdate;
     }),
     mergeMap(id => {
-      const {
-        challengeMap,
-        // currentCourseId,
-        // currentModuleId,
-        currentChallengeId,
-      } = state$.value.challenges;
+      const { challengeMap, currentChallengeId } = state$.value.challenges;
+      const previousChallengeId = currentChallengeId as string;
 
       // Should not happen, filtered above
       if (!challengeMap) {
         return of(Actions.empty("No challengeMap found"));
       }
 
-      // const setChallengeIdAction = Actions.setChallengeId({
-      //   currentChallengeId: id,
-      //   previousChallengeId: currentChallengeId as string /* null is filtered above */,
-      // });
-
-      // Sandbox is handled directly
-      // if (id === SANDBOX_ID) {
-      //   return of(setChallengeIdAction);
-      // }
+      // Sandbox gets all sandbox ids!
+      if (id === SANDBOX_ID) {
+        return of(
+          Actions.setChallengeIdContext({
+            currentModuleId: SANDBOX_ID,
+            currentCourseId: SANDBOX_ID,
+            currentChallengeId: SANDBOX_ID,
+            previousChallengeId,
+          }),
+        );
+      }
 
       const challenge = challengeMap[id];
-      // const shouldUpdateCurrentCourse =
-      //   currentCourseId !== challenge.courseId ||
-      //   currentModuleId !== challenge.moduleId;
 
       return of(
         Actions.setChallengeIdContext({
           currentChallengeId: id,
           currentModuleId: challenge.moduleId,
           currentCourseId: challenge.courseId,
-          previousChallengeId: currentChallengeId as string,
+          previousChallengeId,
         }),
       );
-
-      // I'm not totally sure where this logic should go. The active
-      // course needs to be changed if the user selected a challenge not
-      // in the current active course. Currently putting this logic here.
-      // if (shouldUpdateCurrentCourse) {
-      //   return of(
-      //     // setChallengeIdAction,
-      //     Actions.setChallengeIdContext({
-      //       currentChallengeId: id,
-      //       currentModuleId: challenge.moduleId,
-      //       currentCourseId: challenge.courseId,
-      //       previousChallengeId: currentChallengeId as string,
-      //     }),
-      //   );
-      // } else {
-      //   return of(setChallengeIdAction);
-      // }
     }),
   );
 };
