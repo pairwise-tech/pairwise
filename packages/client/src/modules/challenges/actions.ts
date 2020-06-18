@@ -27,7 +27,6 @@ import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
  */
 
 enum ActionTypesEnum {
-  SET_CHALLENGE_ID = "SET_CHALLENGE_ID",
   SET_ANY_SYNC_CHALLENGE_ID = "SET_ANY_SYNC_CHALLENGE_ID",
   WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
 
@@ -137,15 +136,6 @@ export const setAndSyncChallengeId = createAction(
 }>();
 
 /**
- * NOTE: This action is used primarily within Redux state updates to
- * communicate the challenge id changing.
- */
-export const setChallengeId = createAction(ActionTypesEnum.SET_CHALLENGE_ID)<{
-  currentChallengeId: string;
-  previousChallengeId: string;
-}>();
-
-/**
  * NOTE: The canonical way to "set" a new challenge id is to navigate to it.
  * The URL is the source of truth for the current challenge. To programmatically
  * select a new challenge, you can use the following action, which will result
@@ -228,7 +218,8 @@ export const setActiveChallengeIds = createAction(
 )<{
   currentModuleId: string;
   currentCourseId: string;
-  currentChallengeId: Nullable<string>;
+  currentChallengeId: string;
+  previousChallengeId: Nullable<string>;
 }>();
 
 export const updateLastActiveChallengeIds = createAction(

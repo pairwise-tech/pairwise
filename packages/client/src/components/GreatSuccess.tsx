@@ -11,8 +11,14 @@ import { NextChallengeButton } from "./ChallengeControls";
 import { connect } from "react-redux";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { MOBILE } from "tools/constants";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
-interface ConfettiModalProps {
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
+interface ConfettiModalProps extends RouteComponentProps {
   isOpen: boolean;
   onClose?: () => any;
   onClickOutside?: () => any;
@@ -26,6 +32,11 @@ const getDimensions = () => ({
 
 // The colors from our logo
 const PAIRWISE_COLORS = ["#27C9DD", "#F3577A", "#F6FA88", "#49F480", "#FFB85A"];
+
+/** ===========================================================================
+ * Card Title Component
+ * ============================================================================
+ */
 
 // The title text of the modal. Will animate along with the modal.
 const CardTitle: React.FC<{ parentStage?: number }> = props => {
@@ -72,9 +83,14 @@ const CardTitle: React.FC<{ parentStage?: number }> = props => {
   );
 };
 
+/** ===========================================================================
+ * Confetti Modal Component
+ * ============================================================================
+ */
+
 const ConfettiModal: React.FC<ConfettiModalProps> = props => {
   const { width, height } = getDimensions();
-  // Deafult the confetti source to a rect at the center of the screen
+  // Default the confetti source to a rect at the center of the screen
   const contentRect = React.useRef<IRect>({
     x: width / 2,
     y: width / 2,
@@ -165,6 +181,11 @@ const ConfettiModal: React.FC<ConfettiModalProps> = props => {
   );
 };
 
+/** ===========================================================================
+ * Great Success Component
+ * ============================================================================
+ */
+
 interface GreatSuccessProps extends ConfettiModalProps {
   challenge: Challenge;
   onClose: () => any;
@@ -179,7 +200,7 @@ const GreatSuccess: React.FC<Props> = ({
   nextChallenge,
   ...props
 }) => {
-  const { onClose, setChallengeId } = props;
+  const { onClose } = props;
 
   const handleScrollToContent = React.useCallback(() => {
     onClose();
@@ -193,10 +214,8 @@ const GreatSuccess: React.FC<Props> = ({
   // Proceed to next challenge
   const proceed = () => {
     if (nextChallenge) {
-      setChallengeId({
-        currentChallengeId: nextChallenge.id,
-        previousChallengeId: challenge.id,
-      });
+      const slug = getChallengeSlug(nextChallenge);
+      props.history.push(`/workspace/${slug}`);
     }
   };
 
@@ -216,9 +235,9 @@ const GreatSuccess: React.FC<Props> = ({
       <ButtonActions>
         <Button
           large
+          icon="comment"
           className="feedback-button"
           onClick={() => props.setFeedbackDialogState(true)}
-          icon="comment"
         >
           Have feedback?
         </Button>
@@ -294,6 +313,11 @@ const ButtonActions = styled.div`
     margin-left: 10px;
   }
 `;
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
 
 const CloseButton = styled(Button)`
   position: absolute;
@@ -438,13 +462,24 @@ const CardTitleContainer = styled.div`
   }
 `;
 
+/** ===========================================================================
+ * Props
+ * ============================================================================
+ */
+
 const mapStateToProps = (state: ReduxStoreState) => ({
   nextChallenge: Modules.selectors.challenges.nextPrevChallenges(state).next,
 });
 
 const dispatchProps = {
-  setChallengeId: Modules.actions.challenges.setChallengeId,
   setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
 };
 
-export default connect(mapStateToProps, dispatchProps)(GreatSuccess);
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
+
+export default withRouter(
+  connect(mapStateToProps, dispatchProps)(GreatSuccess),
+);
