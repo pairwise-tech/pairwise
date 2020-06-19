@@ -161,10 +161,12 @@ describe("Workspace Challenges", () => {
     typeTextInCodeEditor(TYPESCRIPT_CHALLENGE_SOLUTION);
 
     // Verify the Success Modal appears when running the code
-    cy.get("#gs-card").should("not.exist");
+    // cy.get("#gs-card").should("not.exist");
+    cy.get("#gs-card").should("not.be.visible");
     click("pw-run-code");
     cy.wait(TIMEOUT);
-    cy.get("#gs-card").should("exist");
+    // cy.get("#gs-card").should("exist");
+    cy.get("#gs-card").should("be.visible");
   });
 
   // This test intermittently fails with an error like:
