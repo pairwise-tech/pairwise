@@ -50,7 +50,6 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
-import { getCurrentActiveIds } from "./selectors";
 
 const debug = require("debug")("client:challenges:epics");
 
