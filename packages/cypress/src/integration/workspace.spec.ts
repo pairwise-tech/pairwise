@@ -21,6 +21,10 @@ const FIRST_CHALLENGE_URL = `${CLIENT_APP_URL}/workspace/iSF4BNIl`;
 /**
  * Run the workspace tests and check the success modal transitions from
  * being not visible to visible.
+ *
+ * NOTE: This check has proven problematic in Cypress in the past. It
+ * failed often in CI. It may need some more work to make it more
+ * reliable/debug the causes of the failures.
  */
 const runCodeAssertionAndCheckGreatSuccess = () => {
   cy.get("#gs-card").should("not.be.visible");
@@ -175,11 +179,16 @@ describe("Workspace Challenges", () => {
     runCodeAssertionAndCheckGreatSuccess();
   });
 
-  // This test intermittently fails with an error like:
-  // AssertionError: Timed out retrying: Expected to find element: `#test-result-status-0`, but never found it.
-  // Edit: CONFIRMED that this fails because sometimes requests to unpkg fail,
-  // producing errors like this:
-  // [ERROR]: Failed to fetch source for react-dom-test-utils. Error: Network Error
+  /**
+   * NOTE: This test intermittently fails with an error like:
+   * AssertionError: Timed out retrying: Expected to find element: `#test-result-status-0`, but never found it.
+   *
+   * Edit: CONFIRMED that this fails because sometimes requests to unpkg fail,
+   * producing errors like this:
+   * [ERROR]: Failed to fetch source for react-dom-test-utils. Error: Network Error
+   *
+   * This issue should be resolved first before re-enabling this test.
+   */
   it.skip("The workspace supports React challenges and they can be solved", () => {
     // Visit a React challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
@@ -190,8 +199,8 @@ describe("Workspace Challenges", () => {
     // Verify the challenge title
     cy.contains("Create a Controlled Input");
 
-    // Just give it a ton of time to load the React libraries!
-    cy.wait(15 * 1000);
+    // Wait for workspace to load
+    cy.wait(TIMEOUT);
 
     // Tests should fail
     checkTestResultStatus("Incomplete...");
@@ -247,7 +256,7 @@ describe("Success Modal", () => {
   });
 });
 
-describe("Editor Functions", () => {
+describe("Workspace Editor Functions", () => {
   it("There should be a more options menu with buttons", () => {
     cy.visit(FIRST_CHALLENGE_URL);
     cy.wait(TIMEOUT);
@@ -267,6 +276,7 @@ describe("Editor Functions", () => {
         cy.get(id).should("be.visible");
       });
   });
+
   it("Should format code when the format button is clicked", () => {
     const unformattedCode = `
 <h1>SUP SUP SUP
@@ -285,6 +295,7 @@ describe("Editor Functions", () => {
       "<h1>SUP SUP SUP</h1>\n",
     );
   });
+
   it("Should increase or decrease font-size", () => {
     cy.get(".monaco-editor textarea").then($textarea => {
       const fs = parseInt($textarea.css("font-size"), 10);
@@ -316,13 +327,15 @@ describe("Editor Functions", () => {
   // NOTE: If we change the challenge then this test will fail. That sucks
   const initialCode = "<h1>Pairwise</h1>\n";
   const solutionCode = "<h1>Hello Pairwise!</h1>\n";
+
   it("Should restore initial code", () => {
-    // NOTE: The code is assumed to be something other than initial becuase of the tests above
+    // NOTE: The code is assumed to be something other than initial because of the tests above
     cy.get(".monaco-editor textarea").should("not.have.value", initialCode);
     click("editor-more-options");
     click("editor-restore-initial-code");
     cy.get(".monaco-editor textarea").should("have.value", initialCode);
   });
+
   it("Should reveal solution code", () => {
     cy.get(".monaco-editor textarea").should("have.value", initialCode);
     click("editor-more-options");
