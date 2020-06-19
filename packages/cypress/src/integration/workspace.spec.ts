@@ -18,6 +18,17 @@ import {
 
 const FIRST_CHALLENGE_URL = `${CLIENT_APP_URL}/workspace/iSF4BNIl`;
 
+/**
+ * Run the workspace tests and check the success modal transitions from
+ * being not visible to visible.
+ */
+const runCodeAssertionAndCheckGreatSuccess = () => {
+  cy.get("#gs-card").should("not.be.visible");
+  click("pw-run-code");
+  cy.wait(TIMEOUT);
+  cy.get("#gs-card").should("be.visible");
+};
+
 describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Pairwise", () => {
     cy.visit(CLIENT_APP_URL);
@@ -161,12 +172,7 @@ describe("Workspace Challenges", () => {
     typeTextInCodeEditor(TYPESCRIPT_CHALLENGE_SOLUTION);
 
     // Verify the Success Modal appears when running the code
-    // cy.get("#gs-card").should("not.exist");
-    cy.get("#gs-card").should("not.be.visible");
-    click("pw-run-code");
-    cy.wait(TIMEOUT);
-    // cy.get("#gs-card").should("exist");
-    cy.get("#gs-card").should("be.visible");
+    runCodeAssertionAndCheckGreatSuccess();
   });
 
   // This test intermittently fails with an error like:
@@ -194,11 +200,7 @@ describe("Workspace Challenges", () => {
     typeTextInCodeEditor(REACT_CHALLENGE_SOLUTION);
 
     // Verify the Success Modal appears when running the code
-    cy.get("#gs-card").should("not.exist");
-
-    click("pw-run-code");
-    cy.wait(TIMEOUT);
-    cy.get("#gs-card").should("exist");
+    runCodeAssertionAndCheckGreatSuccess();
   });
 
   it("The workspace supports Async/Await challenges and they can be solved", () => {
@@ -216,10 +218,7 @@ describe("Workspace Challenges", () => {
     typeTextInCodeEditor(ASYNC_CHALLENGE_SOLUTION);
 
     // Verify the Success Modal appears when running the code
-    cy.get("#gs-card").should("not.exist");
-    click("pw-run-code");
-    cy.wait(TIMEOUT);
-    cy.get("#gs-card").should("exist");
+    runCodeAssertionAndCheckGreatSuccess();
   });
 });
 
@@ -230,19 +229,17 @@ describe("Success Modal", () => {
 
     cy.contains("Incomplete");
     click("pw-run-code");
-    cy.get("#gs-card").should("not.exist");
+    cy.get("#gs-card").should("not.be.visible");
 
     typeTextInCodeEditor("<h1>Hello!</h1>");
 
-    cy.get("#gs-card").should("not.exist");
-    click("pw-run-code");
-    cy.wait(TIMEOUT);
-    cy.get("#gs-card").should("exist");
+    // Run the tests and check the success modal
+    runCodeAssertionAndCheckGreatSuccess();
 
     // Close the success modal
     click("gs-card-close");
     cy.wait(TIMEOUT);
-    cy.get("#gs-card").should("not.exist");
+    cy.get("#gs-card").should("not.be.visible");
   });
 
   it("Should have a feedback button", () => {
