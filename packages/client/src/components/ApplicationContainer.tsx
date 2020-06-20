@@ -274,7 +274,7 @@ const ApplicationContainer = (props: IProps) => {
               </ButtonGroup>
             </DesktopOnly>
           )}
-          {!isMobile && <OfficeHoursPopover />}
+          <OfficeHoursPopover />
           {!isMobile && (
             <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
               <Button

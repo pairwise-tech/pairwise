@@ -10,6 +10,7 @@ import {
 import { IconButton } from "./Shared";
 import styled from "styled-components/macro";
 import formatDistance from "date-fns/formatDistance";
+import format from "date-fns/format";
 import { connect } from "react-redux";
 import Modules from "modules/root";
 
@@ -65,16 +66,18 @@ interface Session {
 const SIXTY_MINUTES = 60 * 60 * 1000;
 
 const SESSIONS: Session[] = [
+  /* Use for testing the UI for active and non-active */
   // Current session
-  {
-    startDate: new Date().toISOString(), // TODO
-    // Our real livestream URL, supposedly.
-    url: "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ/live",
-  },
+  // {
+  //   startDate: new Date().toISOString(), // TODO
+  //   // Our real livestream URL, supposedly.
+  //   url: "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ/live",
+  // },
 
   // Next session
   {
-    startDate: new Date(new Date("2020-06-23").getTime()).toISOString(), // FAKE! TODO
+    startDate: "2020-06-27T08:30:00.000Z",
+
     // Our real livestream URL, supposedly.
     url: "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ/live",
   },
@@ -98,7 +101,7 @@ const CurrentSession = styled(({ session: { startDate }, ...props }) => {
 
   return (
     <div {...props}>
-      <h4>{start.toString()}</h4>
+      <h4>{format(start, "MMMM d 'at' p")}</h4>
 
       {/* TODO! */}
       <p style={{ marginTop: -10, marginBottom: 0 }}>
@@ -144,7 +147,7 @@ const OfficeHoursPopover = (props: Props) => {
             <SectionTitle
               icon={hasSession ? <InSessionIcon /> : <OutOfSessionIcon />}
             >
-              Pairwise Office Hours
+              Pairwise Live
             </SectionTitle>
             {hasSession ? inSessionMessage : outOfSessionMessage}
             {currentSession && (
@@ -182,7 +185,9 @@ const OfficeHoursPopover = (props: Props) => {
     >
       <Tooltip
         usePortal={false}
-        content={hasSession ? "Join office hours" : "View Scheduled Sessions"}
+        content={
+          hasSession ? "Join the Live Session" : "View Scheduled Sessions"
+        }
         position="bottom"
       >
         {currentSession ? (
@@ -202,6 +207,7 @@ const LiveIndicator = styled.div`
   &:before {
     ${LIVE_ICON_STYLES}
     content: "";
+    cursor: pointer;
     position: absolute;
     top: 50%;
     left: 50%;
