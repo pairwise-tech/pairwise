@@ -226,7 +226,7 @@ const ApplicationContainer = (props: IProps) => {
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
           <SearchBox />
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
-          <div style={{ marginLeft: 20 }} />
+          <div style={{ marginLeft: 10 }} />
           {!isMobile && <ShortcutKeysPopover />}
           {!isMobile && showFeedbackButton && (
             <Tooltip
@@ -283,12 +283,12 @@ const ApplicationContainer = (props: IProps) => {
                 content={mobileMenuItems}
                 position={Position.BOTTOM_RIGHT}
               >
-                <IconButton style={{ marginRight: 20 }} icon="more" />
+                <IconButton icon="more" />
               </Popover>
             </div>
           )}
           {/* user.profile is a redundant check... but now the types work */}
-          {isMobile ? null : isLoggedIn && user.profile ? (
+          {isLoggedIn && user.profile ? (
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>

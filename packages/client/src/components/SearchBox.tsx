@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { MOBILE, COLORS, SEARCH_QUERY_THRESHOLD } from "tools/constants";
 import { LineWrappedText } from "./Shared";
+import cx from "classnames";
 
 // NOTE: isClosed is kept in state because sometimes we want the search pane to
 // be closed even if there are search results. For example, the user clicks
@@ -101,6 +102,7 @@ const SearchBox = ({
 
   return (
     <Box
+      className={cx({ isClosed })}
       onClick={e => {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation(); // Necessary to prevent the background click which is outside the react event system
