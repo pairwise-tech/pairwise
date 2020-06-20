@@ -320,7 +320,7 @@ const setWorkspaceLoadedEpic: EpicSignature = action$ => {
  * dictate the current challenge id. This epic responds to location change
  * events and sets the challenge id if needed.
  */
-const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
+const syncChallengeContextToUrlEpic: EpicSignature = (action$, state$) => {
   return action$.pipe(
     filter(isActionOf(Actions.locationChange)),
     pluck("payload"),
@@ -829,7 +829,7 @@ export default combineEpics(
   codepressDeleteToasterEpic,
   updateLastActiveChallengeIdsEpic,
   challengeInitializationEpic,
-  syncChallengeToUrlEpic,
+  syncChallengeContextToUrlEpic,
   handleSaveCodeBlobEpic,
   saveCodeBlobEpic,
   handleAttemptChallengeEpic,
