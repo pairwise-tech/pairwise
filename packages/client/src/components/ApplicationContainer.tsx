@@ -117,6 +117,13 @@ const ApplicationContainer = (props: IProps) => {
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
   const isMobile = useMedia(MOBILE, false);
   const history = useHistory();
+  const [isSearchFocused, setIsSearchFocused] = React.useState(false);
+  const handleSearchFocus = React.useCallback(() => {
+    setIsSearchFocused(true);
+  }, [setIsSearchFocused]);
+  const handleSearchBlur = React.useCallback(() => {
+    setIsSearchFocused(false);
+  }, [setIsSearchFocused]);
 
   React.useEffect(() => {
     // We have to pass location in here to correctly capture the original
@@ -224,7 +231,7 @@ const ApplicationContainer = (props: IProps) => {
           </ControlsContainer>
         )}
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          <SearchBox />
+          <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
           {!isMobile && <ShortcutKeysPopover />}
@@ -278,17 +285,17 @@ const ApplicationContainer = (props: IProps) => {
             </Link>
           )}
           {isMobile && (
-            <div style={{ flexShrink: 0 }}>
+            <LastChildMargin style={{ flexShrink: 0 }}>
               <Popover
                 content={mobileMenuItems}
                 position={Position.BOTTOM_RIGHT}
               >
                 <IconButton icon="more" />
               </Popover>
-            </div>
+            </LastChildMargin>
           )}
           {/* user.profile is a redundant check... but now the types work */}
-          {isLoggedIn && user.profile ? (
+          {isSearchFocused ? null : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
@@ -464,6 +471,12 @@ const ProductTitle = styled.h1`
   /* Not vital to the product so hide it for thin views */
   @media ${MOBILE} {
     display: none;
+  }
+`;
+
+const LastChildMargin = styled.div`
+  &:last-child {
+    margin-right: 10px;
   }
 `;
 
