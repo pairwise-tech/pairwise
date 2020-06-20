@@ -502,3 +502,10 @@ export const DefaultVideoWrapper = styled(VideoWrapper)`
   justify-content: center;
   background: ${COLORS.BACKGROUND_CONTENT};
 `;
+
+export const LastChildMargin = styled.div`
+  &:last-child {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+`;
