@@ -215,6 +215,7 @@ const ApplicationContainer = (props: IProps) => {
             >
               Pairwise
             </Link>
+            <CurrentlyInBeta />
           </ProductTitle>
         </ControlsContainer>
         {CODEPRESS && (
@@ -427,7 +428,25 @@ const Header = styled.div`
   }
 `;
 
+const CurrentlyInBeta = styled.small`
+  display: block;
+  position: absolute;
+  top: 18%;
+  left: 100%;
+  transform: translate(-50%, -50%) scale(0.7);
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  background: #d81b82;
+  padding: 0px 6px;
+  box-shadow: 0 0 20px rgb(0, 0, 0);
+  border-radius: 100px;
+  &:before {
+    content: "BETA";
+  }
+`;
+
 const ProductTitle = styled.h1`
+  position: relative;
   margin: 0;
   color: white;
   font-weight: 100;
