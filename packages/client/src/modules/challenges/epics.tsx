@@ -49,7 +49,6 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
-import { ModifierBitMasks } from "@blueprintjs/core/lib/esm/components/hotkeys/hotkeyParser";
 
 const debug = require("debug")("client:challenges:epics");
 
