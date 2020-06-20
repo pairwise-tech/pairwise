@@ -1,6 +1,6 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
-import { CodeChallengeBlob } from "@pairwise/common";
+import { CodeChallengeBlob, getChallengeSlug } from "@pairwise/common";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
 import { SANDBOX_ID } from "tools/constants";

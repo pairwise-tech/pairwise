@@ -27,7 +27,6 @@ import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
  */
 
 enum ActionTypesEnum {
-  SET_ANY_SYNC_CHALLENGE_ID = "SET_ANY_SYNC_CHALLENGE_ID",
   WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
 
   SET_CHALLENGE_ID_CONTEXT = "SET_CHALLENGE_ID_CONTEXT",
@@ -111,7 +110,7 @@ export const requestSearchResults = createAction(
   ActionTypesEnum.REQUEST_SEARCH_RESULTS,
 )<string>();
 
-// TODO: Once i have a firm search result type add it here
+// TODO: Once I have a firm search result type add it here
 export const receiveSearchResults = createAction(
   ActionTypesEnum.RECEIVE_SEARCH_RESULTS,
 )<SearchResult[]>();
@@ -128,19 +127,6 @@ export const setAdminEditorTab = createAction(
   ActionTypesEnum.SET_ADMIN_EDITOR_TAB,
 )<ADMIN_EDITOR_TAB>();
 
-export const setAndSyncChallengeId = createAction(
-  ActionTypesEnum.SET_ANY_SYNC_CHALLENGE_ID,
-)<{
-  currentChallengeId: string;
-  previousChallengeId: string;
-}>();
-
-/**
- * NOTE: The canonical way to "set" a new challenge id is to navigate to it.
- * The URL is the source of truth for the current challenge. To programmatically
- * select a new challenge, you can use the following action, which will result
- * in the routing side effect occurring via an epic. Good luck!
- */
 export const fetchBlobForChallenge = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE,
 )<string>();

@@ -14,7 +14,7 @@ import {
   getChallengeSlug,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
+import { COLORS, MOBILE, SANDBOX_ID } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import {
   composeWithProps,
@@ -39,7 +39,12 @@ import KeyboardShortcuts, {
   VALID_SHORTCUT_KEYS_MAP,
   KeyMapProps,
 } from "./KeyboardShortcuts";
-import { NavLink, NavLinkProps } from "react-router-dom";
+import {
+  NavLink,
+  NavLinkProps,
+  withRouter,
+  RouteComponentProps,
+} from "react-router-dom";
 import {
   SortableModuleList,
   SortableChallengeList,
@@ -663,39 +668,24 @@ class NavigationOverlay extends React.Component<
   };
 
   navigateLeft = (e: KeyboardEvent) => {
-    const { challengeId, nextPrevChallengeIds } = this.props;
-    const { prev } = nextPrevChallengeIds;
-    if (prev && challengeId) {
-      this.props.setAndSyncChallengeId({
-        currentChallengeId: prev.id,
-        previousChallengeId: challengeId,
-      });
+    const { prev } = this.props.nextPrevChallengeIds;
+
+    if (prev) {
+      const slug = getChallengeSlug(prev);
+      this.props.history.push(`/workspace/${slug}`);
     }
   };
 
   navigateRight = (e: KeyboardEvent) => {
-    const { challengeId, nextPrevChallengeIds } = this.props;
-    const { next } = nextPrevChallengeIds;
-    if (next && challengeId) {
-      this.props.setAndSyncChallengeId({
-        currentChallengeId: next.id,
-        previousChallengeId: challengeId,
-      });
+    const { next } = this.props.nextPrevChallengeIds;
+    if (next) {
+      const slug = getChallengeSlug(next);
+      this.props.history.push(`/workspace/${slug}`);
     }
   };
 
   navigateToSandBox = () => {
-    /**
-     * NOTE: This will only work anyway if the user is already viewing
-     * the Workspace.
-     */
-    const { challengeId } = this.props;
-    if (challengeId) {
-      this.props.setAndSyncChallengeId({
-        currentChallengeId: SANDBOX_ID,
-        previousChallengeId: challengeId || "",
-      });
-    }
+    this.props.history.push(`/workspace/${SANDBOX_ID}`);
   };
 }
 
@@ -1064,7 +1054,7 @@ const ColTitle = styled.div`
       justify-content: center;
     }
     .mobile-shrink {
-      // Why is blueprint SO INSISTANT on their low-constrast icons??
+      // Why is blueprint SO INSISTENT on their low-contrast icons?!?
       .bp3-icon {
         color: white !important;
       }
@@ -1124,7 +1114,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const ChallengeActions = Modules.actions.challenges;
 
 const dispatchProps = {
-  setAndSyncChallengeId: ChallengeActions.setAndSyncChallengeId,
   setCurrentModule: ChallengeActions.setCurrentModule,
   setCurrentCourse: ChallengeActions.setCurrentCourse,
   createCourseModule: ChallengeActions.createCourseModule,
@@ -1158,7 +1147,7 @@ const mergeProps = (
 
 type ConnectProps = ReturnType<typeof mergeProps>;
 
-type IProps = ConnectProps & ComponentProps;
+type IProps = ConnectProps & ComponentProps & RouteComponentProps;
 
 interface ComponentProps {
   overlayVisible: boolean;
@@ -1171,4 +1160,6 @@ const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
  * ============================================================================
  */
 
-export default composeWithProps<ComponentProps>(withProps)(NavigationOverlay);
+export default composeWithProps<ComponentProps>(withProps)(
+  withRouter(NavigationOverlay),
+);

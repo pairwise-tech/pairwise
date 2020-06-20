@@ -11,7 +11,6 @@ import {
   ICodeBlobDto,
   SandboxBlob,
   Challenge,
-  getChallengeSlug,
   CourseList,
   LastActiveChallengeIds,
 } from "@pairwise/common";
@@ -50,6 +49,7 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
+import { ModifierBitMasks } from "@blueprintjs/core/lib/esm/components/hotkeys/hotkeyParser";
 
 const debug = require("debug")("client:challenges:epics");
 
@@ -261,7 +261,7 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
 
         const currentChallenge = challengeId;
 
-        // Only redirect if they are on the workspace
+        // Only redirect/update the url if they are on the workspace
         if (location.pathname.includes("workspace")) {
           const subPath = slug + location.search + location.hash;
           deps.router.push(`/workspace/${subPath}`);
@@ -345,7 +345,7 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       const previousChallengeId = currentChallengeId as string;
 
       // Should not happen, filtered above
-      if (!challengeMap) {
+      if (!challengeMap || !id) {
         return of(Actions.empty("No challengeMap found"));
       }
 
@@ -372,34 +372,6 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
         }),
       );
     }),
-  );
-};
-
-/**
- * Canonical way to set a new challenge id with an action.
- */
-const setAndSyncChallengeIdEpic: EpicSignature = (action$, state$, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.setAndSyncChallengeId)),
-    map(action => {
-      const { challengeMap } = state$.value.challenges;
-      const challengeId = action.payload.currentChallengeId;
-      const slug =
-        challengeMap && challengeId in challengeMap
-          ? getChallengeSlug(challengeMap[challengeId].challenge)
-          : challengeId; // If it doesn't exist that's ok. Client side 404
-      const { search = "", hash = "" } = deps.router.location;
-      return slug + search + hash;
-    }),
-    map(subPath => `/workspace/${subPath}`),
-    filter(nextPath => {
-      return nextPath !== deps.router.location.pathname;
-    }),
-    tap(nextPath => {
-      debug("[INFO setAndSyncChallengeEpic] Redirectin to new path:", nextPath);
-      deps.router.push(nextPath);
-    }),
-    ignoreElements(),
   );
 };
 
@@ -858,7 +830,6 @@ export default combineEpics(
   codepressDeleteToasterEpic,
   updateLastActiveChallengeIdsEpic,
   challengeInitializationEpic,
-  setAndSyncChallengeIdEpic,
   syncChallengeToUrlEpic,
   handleSaveCodeBlobEpic,
   saveCodeBlobEpic,

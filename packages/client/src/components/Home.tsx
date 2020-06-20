@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { CourseSkeleton } from "@pairwise/common";
+import { CourseSkeleton, getChallengeSlug } from "@pairwise/common";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -19,8 +19,8 @@ class Home extends React.Component<IProps, {}> {
     return (
       <PageContainer>
         <SEO
-          title={"Welcome to Pairwise"}
-          description={"Learn to code with hands-on challenges and projects"}
+          title="Welcome to Pairwise"
+          description="Learn to code with hands-on challenges and projects"
         />
         <ContentContainer>
           <PageTitle>Welcome to Pairwise!</PageTitle>
@@ -47,7 +47,8 @@ class Home extends React.Component<IProps, {}> {
   }
 
   renderCourseItem = (skeleton: CourseSkeleton, i: number) => {
-    const { payments, lastActiveChallengeIds } = this.props.user;
+    const { user, challengeMap } = this.props;
+    const { payments, lastActiveChallengeIds } = user;
     const paidForCourse = payments?.find(p => p.courseId === skeleton.id);
     const firstCourseChallenge = skeleton.modules[0].challenges[0];
     const isCourseFree = skeleton.free;
@@ -58,13 +59,23 @@ class Home extends React.Component<IProps, {}> {
       return null;
     }
 
-    // Determine the course challenge to link to, default to last active
-    // challenge ids
+    /**
+     * Determine the url slug for the last active challenge for the course
+     * to redirect to.
+     *
+     * TODO: This could be refactored to a selector.
+     */
     let lastActiveChallengeExists = false;
     let courseChallengeLinkId = firstCourseChallenge.id;
     if (courseId in lastActiveChallengeIds) {
       lastActiveChallengeExists = true;
       courseChallengeLinkId = lastActiveChallengeIds[courseId];
+    }
+
+    let slug = courseChallengeLinkId;
+    if (challengeMap && courseChallengeLinkId in challengeMap) {
+      const { challenge } = challengeMap[courseChallengeLinkId];
+      slug = getChallengeSlug(challenge);
     }
 
     return (
@@ -78,20 +89,14 @@ class Home extends React.Component<IProps, {}> {
         <CourseDescription>{skeleton.description}</CourseDescription>
         <ButtonsBox>
           {canAccessCourse ? (
-            <Link
-              id={`course-link-${i}-start`}
-              to={`workspace/${courseChallengeLinkId}`}
-            >
+            <Link id={`course-link-${i}-start`} to={`workspace/${slug}`}>
               <Button large intent="success" className="courseLinkContinue">
                 {lastActiveChallengeExists ? "Resume Course" : "Start Now"}
               </Button>
             </Link>
           ) : (
             <>
-              <Link
-                id={`course-link-${i}-start`}
-                to={`workspace/${courseChallengeLinkId}`}
-              >
+              <Link id={`course-link-${i}-start`} to={`workspace/${slug}`}>
                 <Button large intent="success">
                   {lastActiveChallengeExists
                     ? "Resume Course"
@@ -192,6 +197,7 @@ const BoldText = styled(CourseDescription)`
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
+  challengeMap: Modules.selectors.challenges.getChallengeMap(state),
 });
 
 const dispatchProps = {
