@@ -69,7 +69,7 @@ const SESSIONS: Session[] = [
   /* Use for testing the UI for active and non-active */
   // Current session
   // {
-  //   startDate: new Date().toISOString(), // TODO
+  //   startDate: new Date().toISOString(),
   //   // Our real livestream URL, supposedly.
   //   url: "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ/live",
   // },
@@ -102,8 +102,6 @@ const CurrentSession = styled(({ session: { startDate }, ...props }) => {
   return (
     <div {...props}>
       <h4>{format(start, "MMMM d 'at' p")}</h4>
-
-      {/* TODO! */}
       <p style={{ marginTop: -10, marginBottom: 0 }}>
         <em>{formatDistance(start, end, { addSuffix: true })}</em>
       </p>
