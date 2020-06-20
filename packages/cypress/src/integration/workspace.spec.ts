@@ -163,7 +163,7 @@ describe("Workspace Challenges", () => {
     // Verify the Success Modal appears when running the code
     cy.get("#gs-card").should("not.exist");
     click("pw-run-code");
-    cy.wait(500);
+    cy.wait(TIMEOUT);
     cy.get("#gs-card").should("exist");
   });
 
@@ -195,7 +195,7 @@ describe("Workspace Challenges", () => {
     cy.get("#gs-card").should("not.exist");
 
     click("pw-run-code");
-    cy.wait(500);
+    cy.wait(TIMEOUT);
     cy.get("#gs-card").should("exist");
   });
 
@@ -216,7 +216,7 @@ describe("Workspace Challenges", () => {
     // Verify the Success Modal appears when running the code
     cy.get("#gs-card").should("not.exist");
     click("pw-run-code");
-    cy.wait(500);
+    cy.wait(TIMEOUT);
     cy.get("#gs-card").should("exist");
   });
 });
@@ -224,25 +224,27 @@ describe("Workspace Challenges", () => {
 describe("Success Modal", () => {
   it("Should show the modal when and only when the run button is clicked", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
+    cy.wait(TIMEOUT);
+
     cy.contains("Incomplete");
     click("pw-run-code");
     cy.get("#gs-card").should("not.exist");
 
     typeTextInCodeEditor("<h1>Hello!</h1>");
-    cy.get("#gs-card").should("not.exist");
 
+    cy.get("#gs-card").should("not.exist");
     click("pw-run-code");
-    cy.wait(500);
+    cy.wait(TIMEOUT);
     cy.get("#gs-card").should("exist");
+
+    // Close the success modal
+    click("gs-card-close");
+    cy.wait(TIMEOUT);
+    cy.get("#gs-card").should("not.exist");
   });
 
   it("Should have a feedback button", () => {
     cy.contains("Feedback");
-  });
-
-  it("Should close when the close button is clicked", () => {
-    click("gs-card-close");
-    cy.get("#gs-card").should("not.exist");
   });
 });
 
