@@ -1,6 +1,10 @@
 import ENV from "../tools/server-env";
 import { WebClient, ErrorCode, WebAPICallResult } from "@slack/web-api";
-import { IFeedbackDto, ContentUtility } from "@pairwise/common";
+import {
+  IFeedbackDto,
+  ContentUtility,
+  IGenericFeedback,
+} from "@pairwise/common";
 import { RequestUser } from "src/types";
 import { GenericUserProfile } from "src/user/user.service";
 import { captureSentryException } from "src/tools/sentry-utils";
@@ -15,7 +19,13 @@ type SLACK_CHANNELS = "feedback" | "production";
 
 interface SlackFeedbackMessageData {
   feedbackDto: IFeedbackDto;
-  user: RequestUser;
+  user?: RequestUser;
+  config?: SlackMessageConfig;
+}
+
+interface SlackGenericFeedbackMessageData {
+  feedbackDto: IGenericFeedback;
+  user?: RequestUser;
   config?: SlackMessageConfig;
 }
 
@@ -100,6 +110,33 @@ export class SlackService {
     config,
   }: SlackFeedbackMessageData) {
     const message = this.formatFeedbackMessageUtil(feedbackDto, user);
+    await this.postMessageToChannel(message, {
+      channel: "feedback",
+      ...config,
+    });
+  }
+
+  public async postGenericFeedbackMessage({
+    feedbackDto,
+    user,
+    config,
+  }: SlackGenericFeedbackMessageData) {
+    const { uuid, email } = user ? user.profile : null;
+    const context = feedbackDto.context
+      ? feedbackDto.context
+      : "no context provided.";
+
+    const userString = email
+      ? email
+      : user
+      ? `user id: ${uuid}`
+      : "an unregistered user";
+
+    const message =
+      `New message received from *${userString}*:` +
+      "\n\n > ${feedbackDto.message}" +
+      `\n\n Context: ${context}`;
+
     await this.postMessageToChannel(message, {
       channel: "feedback",
       ...config,
