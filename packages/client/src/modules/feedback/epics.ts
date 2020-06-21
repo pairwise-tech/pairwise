@@ -4,7 +4,6 @@ import { isActionOf } from "typesafe-actions";
 import { Actions } from "modules/root-actions";
 import { combineEpics } from "redux-observable";
 import { FEEDBACK_DIALOG_TYPES } from "./actions";
-import { of } from "rxjs";
 
 /**
  * Submit feedback for a challenge.
@@ -54,12 +53,11 @@ const dismissFeedbackModalOnNavigationEpic: EpicSignature = action$ => {
   return action$.pipe(
     filter(isActionOf(Actions.locationChange)),
     mergeMap(() => {
-      return of(
-        ...[
-          Actions.setFeedbackState(""),
-          Actions.setFeedbackDialogState(FEEDBACK_DIALOG_TYPES.CLOSED),
-        ],
-      );
+      // Clear the feedback input and close the modal
+      return [
+        Actions.setFeedbackState(""),
+        Actions.setFeedbackDialogState(FEEDBACK_DIALOG_TYPES.CLOSED),
+      ];
     }),
   );
 };
