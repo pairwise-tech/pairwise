@@ -11,7 +11,6 @@ import {
   ICodeBlobDto,
   SandboxBlob,
   Challenge,
-  getChallengeSlug,
   CourseList,
   LastActiveChallengeIds,
 } from "@pairwise/common";
@@ -50,7 +49,6 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
-import { getCurrentActiveIds } from "./selectors";
 
 const debug = require("debug")("client:challenges:epics");
 
@@ -149,7 +147,7 @@ const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
  * Some state changes result in a need to reset the ids for the active
  * course, module, or challenge. This epic is used to do that.
  */
-const resetActiveChallengeIds: EpicSignature = (action$, state$, deps) => {
+const resetChallengeContextEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.deleteChallenge, Actions.deleteCourseModule])),
     map(() => {
@@ -168,10 +166,11 @@ const resetActiveChallengeIds: EpicSignature = (action$, state$, deps) => {
             challengeId,
           } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
 
-          return Actions.setActiveChallengeIds({
+          return Actions.setChallengeIdContext({
             currentCourseId: courseId,
             currentModuleId: moduleId,
             currentChallengeId: challengeId,
+            previousChallengeId: null,
           });
         }
       }
@@ -259,20 +258,20 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
           slug,
         } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
 
-        let currentChallenge = null;
+        const currentChallenge = challengeId;
 
-        // Only redirect if they are on the workspace
+        // Only redirect/update the url if they are on the workspace
         if (location.pathname.includes("workspace")) {
           const subPath = slug + location.search + location.hash;
           deps.router.push(`/workspace/${subPath}`);
-          currentChallenge = challengeId;
         }
 
         return of(
-          Actions.setActiveChallengeIds({
+          Actions.setChallengeIdContext({
             currentCourseId: courseId,
             currentModuleId: moduleId,
             currentChallengeId: currentChallenge,
+            previousChallengeId: null,
           }),
         );
       },
@@ -321,7 +320,7 @@ const setWorkspaceLoadedEpic: EpicSignature = action$ => {
  * dictate the current challenge id. This epic responds to location change
  * events and sets the challenge id if needed.
  */
-const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
+const syncChallengeContextToUrlEpic: EpicSignature = (action$, state$) => {
   return action$.pipe(
     filter(isActionOf(Actions.locationChange)),
     pluck("payload"),
@@ -341,77 +340,37 @@ const syncChallengeToUrlEpic: EpicSignature = (action$, state$) => {
       return shouldUpdate;
     }),
     mergeMap(id => {
-      const {
-        challengeMap,
-        currentCourseId,
-        currentModuleId,
-        currentChallengeId,
-      } = state$.value.challenges;
+      const { challengeMap, currentChallengeId } = state$.value.challenges;
+      const previousChallengeId = currentChallengeId as string;
 
       // Should not happen, filtered above
-      if (!challengeMap) {
+      if (!challengeMap || !id) {
         return of(Actions.empty("No challengeMap found"));
       }
 
-      const setChallengeIdAction = Actions.setChallengeId({
-        currentChallengeId: id,
-        previousChallengeId: currentChallengeId as string /* null is filtered above */,
-      });
-
-      // Sandbox is handled directly
+      // Sandbox gets all sandbox ids!
       if (id === SANDBOX_ID) {
-        return of(setChallengeIdAction);
+        return of(
+          Actions.setChallengeIdContext({
+            currentModuleId: SANDBOX_ID,
+            currentCourseId: SANDBOX_ID,
+            currentChallengeId: SANDBOX_ID,
+            previousChallengeId,
+          }),
+        );
       }
 
       const challenge = challengeMap[id];
-      const shouldUpdateCurrentCourse =
-        currentCourseId !== challenge.courseId ||
-        currentModuleId !== challenge.moduleId;
 
-      // I'm not totally sure where this logic should go. The active
-      // course needs to be changed if the user selected a challenge not
-      // in the current active course. Currently putting this logic here.
-      if (shouldUpdateCurrentCourse) {
-        return of(
-          // setChallengeIdAction,
-          Actions.setActiveChallengeIds({
-            currentChallengeId: id,
-            currentModuleId: challenge.moduleId,
-            currentCourseId: challenge.courseId,
-          }),
-        );
-      } else {
-        return of(setChallengeIdAction);
-      }
+      return of(
+        Actions.setChallengeIdContext({
+          currentChallengeId: id,
+          currentModuleId: challenge.moduleId,
+          currentCourseId: challenge.courseId,
+          previousChallengeId,
+        }),
+      );
     }),
-  );
-};
-
-/**
- * Canonical way to set a new challenge id with an action.
- */
-const setAndSyncChallengeIdEpic: EpicSignature = (action$, state$, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.setAndSyncChallengeId)),
-    map(action => {
-      const { challengeMap } = state$.value.challenges;
-      const challengeId = action.payload.currentChallengeId;
-      const slug =
-        challengeMap && challengeId in challengeMap
-          ? getChallengeSlug(challengeMap[challengeId].challenge)
-          : challengeId; // If it doesn't exist that's ok. Client side 404
-      const { search = "", hash = "" } = deps.router.location;
-      return slug + search + hash;
-    }),
-    map(subPath => `/workspace/${subPath}`),
-    filter(nextPath => {
-      return nextPath !== deps.router.location.pathname;
-    }),
-    tap(nextPath => {
-      debug("[INFO setAndSyncChallengeEpic] Redirectin to new path:", nextPath);
-      deps.router.push(nextPath);
-    }),
-    ignoreElements(),
   );
 };
 
@@ -460,7 +419,7 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
   deps,
 ) => {
   return action$.pipe(
-    filter(isActionOf([Actions.setChallengeId, Actions.setActiveChallengeIds])),
+    filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("currentChallengeId"),
     filter(x => !!x),
@@ -522,30 +481,18 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
 };
 
 /**
- * Handle dispatching an update to last active challenge ids whenever a
- * user fetches a code blob for a challenge.
+ * Handle dispatching an update to last active challenge ids whenever the
+ * current active challenge changes.
  */
 const updateLastActiveChallengeIdsEpic: EpicSignature = (
   action$,
   state$,
   deps,
 ) => {
-  // Update active ids when a blob is fetched
-  const respondToFetchBlob = action$.pipe(
-    filter(isActionOf(Actions.fetchBlobForChallenge)),
+  return action$.pipe(
+    filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
-    filter(id => {
-      // Only update for current challenge (next and prev are also fetched)
-      const { currentChallengeId } = getCurrentActiveIds(state$.value);
-      return !!(currentChallengeId && currentChallengeId === id);
-    }),
-    map(challengeId => Actions.updateLastActiveChallengeIds({ challengeId })),
-  );
-
-  const updateActiveIdsEpic = action$.pipe(
-    filter(isActionOf(Actions.updateLastActiveChallengeIds)),
-    pluck("payload"),
-    pluck("challengeId"),
+    pluck("currentChallengeId"),
     mergeMap(async challengeId => {
       const { challengeMap } = state$.value.challenges;
       if (challengeMap && challengeId in challengeMap) {
@@ -565,8 +512,6 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
       }
     }),
   );
-
-  return merge(respondToFetchBlob, updateActiveIdsEpic);
 };
 
 /**
@@ -615,15 +560,17 @@ const hydrateSandboxType: EpicSignature = action$ => {
  */
 const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
   const saveOnNavEpic = action$.pipe(
-    filter(isActionOf(Actions.setChallengeId)),
+    filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("previousChallengeId"),
+    filter(x => x !== null),
     map(challengeId => {
+      const id = challengeId as string; // it's not null
       const blobs = deps.selectors.challenges.getBlobCache(state$.value);
-      if (challengeId in blobs) {
+      if (id in blobs) {
         const codeBlob: ICodeBlobDto = {
-          challengeId,
-          dataBlob: blobs[challengeId],
+          challengeId: id,
+          dataBlob: blobs[id],
         };
         return new Ok(codeBlob);
       } else {
@@ -680,8 +627,11 @@ const completeContentOnlyChallengeEpic: EpicSignature = (
   deps,
 ) => {
   return action$.pipe(
-    filter(isActionOf(Actions.setChallengeId)),
-    map(({ payload: { previousChallengeId } }) => previousChallengeId),
+    filter(isActionOf(Actions.setChallengeIdContext)),
+    pluck("payload"),
+    pluck("previousChallengeId"),
+    filter(x => x !== null),
+    // map(({ payload: { previousChallengeId } }) => previousChallengeId),
     map(prevId => {
       // artificially construct the previous state in order to get the last
       // challenge using the getCurrentChallenge selector.
@@ -772,7 +722,7 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
  */
 const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.setChallengeId)),
+    filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("previousChallengeId"),
     map(previousChallengeId => {
@@ -875,12 +825,11 @@ export default combineEpics(
   handleFetchCodeBlobForChallengeEpic,
   fetchCodeBlobForChallengeEpic,
   setWorkspaceLoadedEpic,
-  resetActiveChallengeIds,
+  resetChallengeContextEpic,
   codepressDeleteToasterEpic,
   updateLastActiveChallengeIdsEpic,
   challengeInitializationEpic,
-  setAndSyncChallengeIdEpic,
-  syncChallengeToUrlEpic,
+  syncChallengeContextToUrlEpic,
   handleSaveCodeBlobEpic,
   saveCodeBlobEpic,
   handleAttemptChallengeEpic,

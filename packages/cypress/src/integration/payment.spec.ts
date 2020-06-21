@@ -24,7 +24,6 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 
     // // Prompted to login, login
     click("github-login");
-
     cy.wait(TIMEOUT);
 
     // Check that the post-login payment modal is visible

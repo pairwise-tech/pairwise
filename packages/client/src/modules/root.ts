@@ -111,6 +111,9 @@ const combinedEpic = combineEpics(
 
 const handleRootEpicError = (error: any, source: any) => {
   // Handle error side effects, e.g. report error
+  console.error("[ERROR] Uncaught error thrown from an epic: ", error);
+
+  // Return original source stream
   return source;
 };
 

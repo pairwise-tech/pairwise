@@ -174,9 +174,7 @@ export const purchaseCourseForUser = () => {
       }
     });
 
-  // Wait!
   cy.wait(TIMEOUT);
-
-  // Reload the page.
   cy.reload();
+  cy.wait(TIMEOUT);
 };

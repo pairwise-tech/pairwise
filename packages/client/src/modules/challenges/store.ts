@@ -445,8 +445,13 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     isEditMode: action.payload,
     editModeAlternativeView: false,
   }))
-  .handleAction(actions.setActiveChallengeIds, (state, { payload }) => ({
+  .handleAction(actions.setChallengeIdContext, (state, { payload }) => ({
     ...state,
+    adminTestTab: "testResults",
+    adminEditorTab: "starterCode",
+    loadingCurrentBlob: true,
+    displayNavigationMap: false,
+    revealWorkspaceSolution: false,
     currentModuleId: payload.currentModuleId,
     currentCourseId: payload.currentCourseId,
     currentChallengeId: payload.currentChallengeId,
@@ -500,15 +505,6 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     // Update the current module id to the first module in the course
     currentModuleId: state.courses?.find(c => c.id === action.payload)
       ?.modules[0].id as string,
-  }))
-  .handleAction(actions.setChallengeId, (state, action) => ({
-    ...state,
-    adminTestTab: "testResults",
-    adminEditorTab: "starterCode",
-    loadingCurrentBlob: true,
-    displayNavigationMap: false,
-    revealWorkspaceSolution: false,
-    currentChallengeId: action.payload.currentChallengeId,
   }))
   .handleAction(actions.requestSearchResults, (state, action) => ({
     ...state,
