@@ -134,7 +134,7 @@ export class SlackService {
       : "an unregistered user";
 
     const message =
-      `:mailbox_with_mail: New message received from *${userString}* (context: \`${context}\`):` +
+      `:envelope_with_arrow: New message received from *${userString}* (context: \`${context}\`):` +
       `\n\n \`\`\`${feedbackDto.message}\`\`\``;
 
     await this.postMessageToChannel(message, {
