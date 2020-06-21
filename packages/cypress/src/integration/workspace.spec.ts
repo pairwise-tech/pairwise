@@ -18,21 +18,6 @@ import {
 
 const FIRST_CHALLENGE_URL = `${CLIENT_APP_URL}/workspace/iSF4BNIl`;
 
-/**
- * Run the workspace tests and check the success modal transitions from
- * being not visible to visible.
- *
- * NOTE: This check has proven problematic in Cypress in the past. It
- * failed often in CI. It may need some more work to make it more
- * reliable/debug the causes of the failures.
- */
-const runCodeAssertionAndCheckGreatSuccess = () => {
-  cy.get("#gs-card").should("not.be.visible");
-  click("pw-run-code");
-  cy.wait(TIMEOUT);
-  cy.get("#gs-card").should("be.visible");
-};
-
 describe("Workspace and Challenge Navigation Works", () => {
   it("Workspace loads and contains title Pairwise", () => {
     cy.visit(CLIENT_APP_URL);
@@ -161,7 +146,7 @@ describe("Workspace Challenges", () => {
   });
 
   it("The workspace supports TypeScript challenges and they can be solved", () => {
-    // Visit a React challenge
+    // Visit a TypeScript challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/0KYYpigq9$/selective-transformation`);
     cy.wait(TIMEOUT);
 
@@ -176,7 +161,10 @@ describe("Workspace Challenges", () => {
     typeTextInCodeEditor(TYPESCRIPT_CHALLENGE_SOLUTION);
 
     // Verify the Success Modal appears when running the code
-    runCodeAssertionAndCheckGreatSuccess();
+    cy.get("#gs-card").should("not.be.visible");
+    click("pw-run-code");
+    cy.wait(TIMEOUT);
+    cy.get("#gs-card").should("be.visible");
   });
 
   /**
@@ -209,11 +197,14 @@ describe("Workspace Challenges", () => {
     typeTextInCodeEditor(REACT_CHALLENGE_SOLUTION);
 
     // Verify the Success Modal appears when running the code
-    runCodeAssertionAndCheckGreatSuccess();
+    cy.get("#gs-card").should("not.be.visible");
+    click("pw-run-code");
+    cy.wait(TIMEOUT);
+    cy.get("#gs-card").should("be.visible");
   });
 
   it("The workspace supports Async/Await challenges and they can be solved", () => {
-    // Visit an async challenge
+    // Visit an Async challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/write-an-async-function`);
     cy.wait(TIMEOUT);
 
@@ -227,7 +218,10 @@ describe("Workspace Challenges", () => {
     typeTextInCodeEditor(ASYNC_CHALLENGE_SOLUTION);
 
     // Verify the Success Modal appears when running the code
-    runCodeAssertionAndCheckGreatSuccess();
+    cy.get("#gs-card").should("not.be.visible");
+    click("pw-run-code");
+    cy.wait(TIMEOUT);
+    cy.get("#gs-card").should("be.visible");
   });
 });
 

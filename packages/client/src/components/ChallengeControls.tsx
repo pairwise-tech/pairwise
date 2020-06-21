@@ -7,6 +7,7 @@ import styled from "styled-components/macro";
 import { getChallengeSlug } from "@pairwise/common";
 import { MOBILE } from "tools/constants";
 import { getDimensions } from "tools/dimensions";
+import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 
 interface ChallengeButtonProps {
   slug: string | null;
@@ -98,9 +99,9 @@ const cardMergeProps = (
 ) => ({
   challenge: state.challenge,
   nextChallenge: state.nextChallenge,
-  toggleFeedbackDialogOpen: (e: React.MouseEvent) => {
+  openFeedbackDialog: (e: React.MouseEvent) => {
     e.preventDefault();
-    methods.setFeedbackDialogState(!state.feedbackDialogOpen);
+    methods.setFeedbackDialogState(FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK);
   },
   isCurrentChallengeComplete: state.isCurrentChallengeComplete,
 });
@@ -113,7 +114,7 @@ export const NextChallengeCard = connect(
   ({
     challenge,
     nextChallenge,
-    toggleFeedbackDialogOpen,
+    openFeedbackDialog,
     isCurrentChallengeComplete,
   }: ReturnType<typeof cardMergeProps>) => {
     const complete = isCurrentChallengeComplete;
@@ -138,8 +139,8 @@ export const NextChallengeCard = connect(
             large={isMobile}
             intent="none"
             icon="comment"
-            aria-label="open/close feedback dialog"
-            onClick={toggleFeedbackDialogOpen}
+            aria-label="open the feedback dialog"
+            onClick={openFeedbackDialog}
           >
             Feedback
           </Button>
@@ -172,8 +173,8 @@ export const NextChallengeCard = connect(
                 large={isMobile}
                 intent="none"
                 icon="comment"
-                aria-label="open/close feedback dialog"
-                onClick={toggleFeedbackDialogOpen}
+                aria-label="open the feedback dialog"
+                onClick={openFeedbackDialog}
               >
                 Feedback
               </Button>

@@ -1,7 +1,7 @@
 import { Controller, Req, Body, Post, UseGuards } from "@nestjs/common";
 import { AuthenticatedRequest } from "src/types";
 import { FeedbackService } from "./feedback.service";
-import { IFeedbackDto } from "@pairwise/common";
+import { IFeedbackDto, IGenericFeedback } from "@pairwise/common";
 import { CustomJwtAuthGuard } from "src/auth/jwt.guard";
 
 @Controller("feedback")
@@ -15,5 +15,14 @@ export class FeedbackController {
     @Req() req: AuthenticatedRequest,
   ) {
     return this.feedbackService.saveUserFeedback(req.user, feedbackDto);
+  }
+
+  @UseGuards(CustomJwtAuthGuard)
+  @Post("/general")
+  public sendFeedbackToSlack(
+    @Body() feedbackDto: IGenericFeedback,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    return this.feedbackService.sendGenericFeedback(feedbackDto, req.user);
   }
 }

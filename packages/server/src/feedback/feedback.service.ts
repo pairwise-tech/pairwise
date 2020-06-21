@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { IFeedbackDto } from "@pairwise/common";
+import { Injectable, BadRequestException } from "@nestjs/common";
+import { IFeedbackDto, IGenericFeedback } from "@pairwise/common";
 import { Feedback } from "./feedback.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -46,6 +46,20 @@ export class FeedbackService {
 
     /* Post feedback to Slack feedback channel */
     this.slackService.postFeedbackMessage({ feedbackDto, user });
+
+    return SUCCESS_CODES.OK;
+  }
+
+  public async sendGenericFeedback(
+    feedbackDto: IGenericFeedback,
+    user?: RequestUser,
+  ) {
+    // Require that a message string is present
+    if (!feedbackDto.message) {
+      throw new BadRequestException("No message sent in feedback");
+    }
+
+    this.slackService.postGenericFeedbackMessage({ feedbackDto, user });
 
     return SUCCESS_CODES.OK;
   }

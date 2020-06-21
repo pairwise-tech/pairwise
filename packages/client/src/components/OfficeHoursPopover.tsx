@@ -1,18 +1,12 @@
 import React from "react";
-import {
-  Popover,
-  Position,
-  Code,
-  Tooltip,
-  Button,
-  Classes,
-} from "@blueprintjs/core";
+import { Popover, Position, Tooltip, Button, Classes } from "@blueprintjs/core";
 import { IconButton } from "./Shared";
 import styled from "styled-components/macro";
 import formatDistance from "date-fns/formatDistance";
 import format from "date-fns/format";
 import { connect } from "react-redux";
 import Modules from "modules/root";
+import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 
 const Upper = styled.div`
   display: block;
@@ -122,7 +116,8 @@ const OfficeHoursPopover = (props: Props) => {
   const nextSession = SESSIONS.find(x => !inSession(x) && !isSessionPassed(x));
 
   const handleRequest = React.useCallback(() => {
-    props.setFeedbackDialogState(true);
+    props.setFeedbackDialogState(FEEDBACK_DIALOG_TYPES.PAIRWISE_LIVE_REQUEST);
+    // eslint-disable-next-line
   }, [props.setFeedbackDialogState, props.setFeedbackType]);
 
   const hasSession = Boolean(currentSession);
@@ -149,7 +144,11 @@ const OfficeHoursPopover = (props: Props) => {
             </SectionTitle>
             {hasSession ? inSessionMessage : outOfSessionMessage}
             {currentSession && (
-              <a href={currentSession.url} target="_blank">
+              <a
+                href={currentSession.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Button fill large intent={"success"}>
                   Join Session
                 </Button>

@@ -18,6 +18,7 @@ import {
   defaultUserSettings,
   StripeStartCheckoutSuccessResponse,
   LastActiveChallengeIds,
+  IGenericFeedback,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable } from "rxjs";
@@ -326,6 +327,15 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
       return axios.post<"Success">(`${HOST}/feedback`, feedback, {
+        headers,
+      });
+    });
+  };
+
+  submitGenericFeedback = async (feedback: IGenericFeedback) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.post<"Success">(`${HOST}/feedback/general`, feedback, {
         headers,
       });
     });

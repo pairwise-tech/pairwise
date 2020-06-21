@@ -130,6 +130,11 @@ export interface IFeedbackDto {
   type: FEEDBACK_TYPE;
 }
 
+export interface IGenericFeedback {
+  message: string;
+  context: string;
+}
+
 /** ===========================================================================
  * Code Blobs for Challenges
  * ----------------------------------------------------------------------------

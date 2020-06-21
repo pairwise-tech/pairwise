@@ -7,13 +7,13 @@ import * as actions from "./actions";
 export interface State {
   feedback?: string;
   feedbackType: Nullable<FEEDBACK_TYPE>;
-  feedbackDialogOpen: boolean;
+  feedbackDialogState: actions.FEEDBACK_DIALOG_TYPES;
 }
 
 const initialState = {
   feedback: undefined,
   feedbackType: null,
-  feedbackDialogOpen: false,
+  feedbackDialogState: actions.FEEDBACK_DIALOG_TYPES.CLOSED,
 };
 
 const feedback = createReducer<State, FeedbackActionTypes | AppActionTypes>(
@@ -21,7 +21,7 @@ const feedback = createReducer<State, FeedbackActionTypes | AppActionTypes>(
 )
   .handleAction(actions.setFeedbackDialogState, (state, action) => ({
     ...state,
-    feedbackDialogOpen: action.payload,
+    feedbackDialogState: action.payload,
   }))
   .handleAction(actions.setFeedbackState, (state, action) => ({
     ...state,
