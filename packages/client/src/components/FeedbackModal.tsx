@@ -69,6 +69,7 @@ const FeedbackModal = (props: Props) => {
           type: feedbackType,
           challengeId: currentChallenge.id,
         });
+        setFeedbackState("");
         closeFeedbackDialog();
       }
     } else {
@@ -77,6 +78,7 @@ const FeedbackModal = (props: Props) => {
           message: feedback,
           context: feedbackDialogState,
         });
+        setFeedbackState("");
         closeFeedbackDialog();
       }
     }

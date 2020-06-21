@@ -121,7 +121,9 @@ export class SlackService {
     user,
     config,
   }: SlackGenericFeedbackMessageData) {
-    const { uuid, email } = user ? user.profile : null;
+    const email = user && user.profile ? user.profile.email : null;
+    const uuid = user && user.profile ? user.profile.uuid : null;
+
     const context = feedbackDto.context
       ? feedbackDto.context
       : "no context provided.";
@@ -133,9 +135,9 @@ export class SlackService {
       : "an unregistered user";
 
     const message =
-      `New message received from *${userString}*:` +
-      "\n\n > ${feedbackDto.message}" +
-      `\n\n Context: ${context}`;
+      `:mailbox_with_mail: New message received from *${userString}*:` +
+      `\n\n \`\`\`${feedbackDto.message}\`\`\`` +
+      `\n\n Context: \`${context}\``;
 
     await this.postMessageToChannel(message, {
       channel: "feedback",

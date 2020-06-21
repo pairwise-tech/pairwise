@@ -11,7 +11,7 @@ import {
   distinct,
 } from "rxjs/operators";
 import { Observable, merge, defer, of, combineLatest } from "rxjs";
-import { isActionOf, isOfType } from "typesafe-actions";
+import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
 import { EpicSignature } from "../root";
