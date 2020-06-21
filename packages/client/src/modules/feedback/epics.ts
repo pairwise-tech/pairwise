@@ -3,6 +3,8 @@ import { filter, pluck, mergeMap, map } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { Actions } from "modules/root-actions";
 import { combineEpics } from "redux-observable";
+import { FEEDBACK_DIALOG_TYPES } from "./actions";
+import { of } from "rxjs";
 
 /**
  * Submit feedback for a challenge.
@@ -45,4 +47,25 @@ const submitGenericFeedbackEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-export default combineEpics(submitUserFeedbackEpic, submitGenericFeedbackEpic);
+/**
+ * Dismiss the feedback modal if any navigation event occurs.
+ */
+const dismissFeedbackModalOnNavigationEpic: EpicSignature = action$ => {
+  return action$.pipe(
+    filter(isActionOf(Actions.locationChange)),
+    mergeMap(() => {
+      return of(
+        ...[
+          Actions.setFeedbackState(""),
+          Actions.setFeedbackDialogState(FEEDBACK_DIALOG_TYPES.CLOSED),
+        ],
+      );
+    }),
+  );
+};
+
+export default combineEpics(
+  submitUserFeedbackEpic,
+  submitGenericFeedbackEpic,
+  dismissFeedbackModalOnNavigationEpic,
+);
