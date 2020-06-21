@@ -156,7 +156,7 @@ describe("Workspace Challenges", () => {
     click("login-signup-button");
     click("github-login");
 
-    // React challenges are locked so purchase the course first
+    // Purchase the course to unlock content
     purchaseCourseForUser();
   });
 
@@ -228,31 +228,6 @@ describe("Workspace Challenges", () => {
 
     // Verify the Success Modal appears when running the code
     runCodeAssertionAndCheckGreatSuccess();
-  });
-});
-
-describe("Success Modal", () => {
-  it("Should show the modal when and only when the run button is clicked", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace/9scykDold`); // The "Add a h1 Tag in HTML"
-    cy.wait(TIMEOUT);
-
-    cy.contains("Incomplete");
-    click("pw-run-code");
-    cy.get("#gs-card").should("not.be.visible");
-
-    typeTextInCodeEditor("<h1>Hello!</h1>");
-
-    // Run the tests and check the success modal
-    runCodeAssertionAndCheckGreatSuccess();
-
-    // Close the success modal
-    click("gs-card-close");
-    cy.wait(TIMEOUT);
-    cy.get("#gs-card").should("not.be.visible");
-  });
-
-  it("Should have a feedback button", () => {
-    cy.contains("Feedback");
   });
 });
 
