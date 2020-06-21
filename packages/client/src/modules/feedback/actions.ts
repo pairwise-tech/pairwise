@@ -6,6 +6,11 @@ import {
 } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
 enum ActionTypesEnum {
   SET_FEEDBACK_DIALOG_STATE = "SET_FEEDBACK_DIALOG_STATE",
   SET_FEEDBACK_STATE = "SET_FEEDBACK_STATE",
@@ -20,9 +25,26 @@ enum ActionTypesEnum {
   SUBMIT_GENERAL_FEEDBACK_FAILURE = "SUBMIT_GENERAL_FEEDBACK_FAILURE",
 }
 
+export enum FEEDBACK_DIALOG_TYPES {
+  // Modal is closed
+  CLOSED = "CLOSED",
+
+  // Modal handles submitting feedback for a challenge
+  CHALLENGE_FEEDBACK = "CHALLENGE_FEEDBACK",
+
+  // Modal handles submitting generic non-challenge specific feedback
+  ASK_A_QUESTION = "ASK_A_QUESTION",
+  PAIRWISE_LIVE_REQUEST = "PAIRWISE_LIVE_REQUEST",
+}
+
+/** ===========================================================================
+ * Actions
+ * ============================================================================
+ */
+
 export const setFeedbackDialogState = createAction(
   ActionTypesEnum.SET_FEEDBACK_DIALOG_STATE,
-)<boolean>();
+)<FEEDBACK_DIALOG_TYPES>();
 
 export const setFeedbackState = createAction(
   ActionTypesEnum.SET_FEEDBACK_STATE,

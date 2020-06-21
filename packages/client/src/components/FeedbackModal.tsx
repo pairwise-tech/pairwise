@@ -13,6 +13,8 @@ import {
 import FeedbackTypeMenu from "./FeedbackTypeMenu";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
+import { assertUnreachable } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -42,8 +44,10 @@ const FeedbackModal = (props: Props) => {
     currentChallenge,
     setFeedbackState,
     feedbackDialogOpen,
+    feedbackDialogState,
     submitUserFeedback,
-    toggleFeedbackDialogOpen,
+    closeFeedbackDialog,
+    submitGeneralFeedback,
   } = props;
 
   const { profile } = user;
@@ -58,13 +62,23 @@ const FeedbackModal = (props: Props) => {
 
   const handleSubmit = () => {
     validate();
-    if (feedback && feedbackType && currentChallenge) {
-      submitUserFeedback({
-        feedback,
-        type: feedbackType,
-        challengeId: currentChallenge.id,
-      });
-      toggleFeedbackDialogOpen();
+    if (feedbackDialogState === FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK) {
+      if (feedback && feedbackType && currentChallenge) {
+        submitUserFeedback({
+          feedback,
+          type: feedbackType,
+          challengeId: currentChallenge.id,
+        });
+        closeFeedbackDialog();
+      }
+    } else {
+      if (feedback) {
+        submitGeneralFeedback({
+          message: feedback,
+          context: feedbackDialogState,
+        });
+        closeFeedbackDialog();
+      }
     }
   };
 
@@ -75,24 +89,46 @@ const FeedbackModal = (props: Props) => {
       setTextAreaIntent("none");
     }
 
-    if (!feedbackType) {
-      setSelectIntent("danger");
-    } else {
-      setSelectIntent("none");
+    if (feedbackDialogState === FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK) {
+      if (!feedbackType) {
+        setSelectIntent("danger");
+      } else {
+        setSelectIntent("none");
+      }
     }
   };
 
-  // Construct the modal title, make it more explicit the feedback is
-  // specifically for a challenge.
-  const modalTitle = currentChallenge
-    ? `Feedback for ${currentChallenge.title} Challenge`
-    : "Feedback";
+  // Construct modal title based on the type of feedback being submitted.
+  let modalTitle = "";
+  let modalSubTitle = "";
+  switch (feedbackDialogState) {
+    case FEEDBACK_DIALOG_TYPES.CLOSED:
+      break;
+    case FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK:
+      if (currentChallenge) {
+        modalTitle = `Feedback for ${currentChallenge.title} Challenge`;
+        modalSubTitle = "Tell us what you think! How is the current challenge?";
+      } else {
+        console.warn("Expected a current challenge to exist...");
+      }
+      break;
+    case FEEDBACK_DIALOG_TYPES.ASK_A_QUESTION:
+      modalTitle = "Ask a Question";
+      modalSubTitle = "Submit any questions or feedback you have.";
+      break;
+    case FEEDBACK_DIALOG_TYPES.PAIRWISE_LIVE_REQUEST:
+      modalTitle = "Pairwise Live Request";
+      modalSubTitle = "Request a day/time which works well for your schedule.";
+      break;
+    default:
+      assertUnreachable(feedbackDialogState);
+  }
 
   return (
     <Dialog
       usePortal
       isOpen={feedbackDialogOpen}
-      onClose={toggleFeedbackDialogOpen}
+      onClose={closeFeedbackDialog}
       aria-labelledby="feedback-modal-title"
       aria-describedby="feedback-modal-description"
     >
@@ -105,19 +141,21 @@ const FeedbackModal = (props: Props) => {
           style={{ maxWidth: 500, textAlign: "left" }}
           id="feedback-modal-description"
         >
-          {`Tell us what you think! How is the current challenge?`}
+          {modalSubTitle}
         </ModalSubText>
         <DangerLabel show={selectIntent === "danger"}>
           Please select a feedback type!
         </DangerLabel>
-        <FeedbackTypeMenu
-          intent={selectIntent}
-          onItemSelect={(item, e) => {
-            setSelectIntent("none");
-            props.setFeedbackType(item.value);
-          }}
-          currentFeedbackType={feedbackType}
-        />
+        {feedbackDialogState === FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK && (
+          <FeedbackTypeMenu
+            intent={selectIntent}
+            onItemSelect={(item, e) => {
+              setSelectIntent("none");
+              props.setFeedbackType(item.value);
+            }}
+            currentFeedbackType={feedbackType}
+          />
+        )}
         <DangerLabel show={textAreaIntent === "danger"}>
           Enter some feedback so we know how to improve
         </DangerLabel>
@@ -167,7 +205,7 @@ const FeedbackModal = (props: Props) => {
           <Button
             large={true}
             style={{ marginRight: 10 }}
-            onClick={toggleFeedbackDialogOpen}
+            onClick={closeFeedbackDialog}
           >
             Close
           </Button>
@@ -220,6 +258,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   feedback: Modules.selectors.feedback.getFeedback(state),
   feedbackType: Modules.selectors.feedback.getFeedbackType(state),
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
+  feedbackDialogState: Modules.selectors.feedback.getFeedbackDialogState(state),
   currentChallenge: Modules.selectors.challenges.getCurrentChallenge(state),
   user: Modules.selectors.user.userSelector(state),
 });
@@ -229,6 +268,7 @@ const dispatchProps = {
   setFeedbackState: Modules.actions.feedback.setFeedbackState,
   setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
   submitUserFeedback: Modules.actions.feedback.submitUserFeedback,
+  submitGeneralFeedback: Modules.actions.feedback.submitGeneralFeedback,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
 };
 
@@ -240,8 +280,8 @@ const mergeProps = (
   ...props,
   ...methods,
   ...state,
-  toggleFeedbackDialogOpen: () => {
-    methods.setFeedbackDialogState(!state.feedbackDialogOpen);
+  closeFeedbackDialog: () => {
+    methods.setFeedbackDialogState(FEEDBACK_DIALOG_TYPES.CLOSED);
   },
 });
 

@@ -50,6 +50,7 @@ import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
 import { CONTENT_AREA_ID } from "./MediaArea";
 import OfficeHoursPopover from "./OfficeHoursPopover";
+import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -103,15 +104,14 @@ const ApplicationContainer = (props: IProps) => {
     challenge,
     initialized,
     logoutUser,
+    initializeApp,
     updateChallenge,
     overlayVisible,
     workspaceLoading,
     hasMediaContent,
     toggleNavigationMap,
-    showFeedbackButton,
-    toggleFeedbackDialogOpen,
+    openFeedbackDialog,
     userAuthenticated,
-    initializeApp,
     setSingleSignOnDialogState,
   } = props;
 
@@ -164,13 +164,11 @@ const ApplicationContainer = (props: IProps) => {
         }}
         text="Sandbox"
       />
-      {showFeedbackButton && (
-        <MenuItem
-          icon="help"
-          onClick={toggleFeedbackDialogOpen}
-          text="Submit Feedback"
-        />
-      )}
+      <MenuItem
+        icon="help"
+        onClick={openFeedbackDialog}
+        text="Submit Feedback"
+      />
       {isLoggedIn && (
         <MenuItem
           icon="user"
@@ -245,8 +243,8 @@ const ApplicationContainer = (props: IProps) => {
               <IconButton
                 icon="comment"
                 style={{ marginLeft: 6, padding: 0 }}
-                aria-label="open/close feedback dialog"
-                onClick={toggleFeedbackDialogOpen}
+                aria-label="open the feedback dialog"
+                onClick={openFeedbackDialog}
               />
             </Tooltip>
           )}
@@ -673,7 +671,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
-  showFeedbackButton: Modules.selectors.app.showFeedbackButton(state),
   hasMediaContent: Modules.selectors.challenges.getHasMediaContent(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
@@ -701,8 +698,12 @@ const mergeProps = (
   toggleNavigationMap: () => {
     methods.setNavigationMapState(!state.overlayVisible);
   },
-  toggleFeedbackDialogOpen: () => {
-    methods.setFeedbackDialogState(!state.feedbackDialogOpen);
+  openFeedbackDialog: () => {
+    methods.setFeedbackDialogState(
+      window.location.pathname.includes("workspace")
+        ? FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK
+        : FEEDBACK_DIALOG_TYPES.ASK_A_QUESTION,
+    );
   },
 });
 

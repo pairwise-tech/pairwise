@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { MOBILE } from "tools/constants";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 
 /** ===========================================================================
  * Types & Config
@@ -237,7 +238,11 @@ const GreatSuccess: React.FC<Props> = ({
           large
           icon="comment"
           className="feedback-button"
-          onClick={() => props.setFeedbackDialogState(true)}
+          onClick={() =>
+            props.setFeedbackDialogState(
+              FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK,
+            )
+          }
         >
           Have feedback?
         </Button>

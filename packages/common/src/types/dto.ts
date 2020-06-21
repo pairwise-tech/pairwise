@@ -132,7 +132,7 @@ export interface IFeedbackDto {
 
 export interface IGenericFeedback {
   message: string;
-  context?: string;
+  context: string;
 }
 
 /** ===========================================================================
