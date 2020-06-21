@@ -60,6 +60,13 @@ const FeedbackModal = (props: Props) => {
     setFeedbackState(e.target.value);
   };
 
+  const resetAndCloseModal = () => {
+    setFeedbackState("");
+    setTextAreaIntent("none");
+    setSelectIntent("none");
+    closeFeedbackDialog();
+  };
+
   const handleSubmit = () => {
     validate();
     if (feedbackDialogState === FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK) {
@@ -69,8 +76,7 @@ const FeedbackModal = (props: Props) => {
           type: feedbackType,
           challengeId: currentChallenge.id,
         });
-        setFeedbackState("");
-        closeFeedbackDialog();
+        resetAndCloseModal();
       }
     } else {
       if (feedback) {
@@ -78,8 +84,7 @@ const FeedbackModal = (props: Props) => {
           message: feedback,
           context: feedbackDialogState,
         });
-        setFeedbackState("");
-        closeFeedbackDialog();
+        resetAndCloseModal();
       }
     }
   };
@@ -130,7 +135,7 @@ const FeedbackModal = (props: Props) => {
     <Dialog
       usePortal
       isOpen={feedbackDialogOpen}
-      onClose={closeFeedbackDialog}
+      onClose={resetAndCloseModal}
       aria-labelledby="feedback-modal-title"
       aria-describedby="feedback-modal-description"
     >
@@ -207,7 +212,7 @@ const FeedbackModal = (props: Props) => {
           <Button
             large={true}
             style={{ marginRight: 10 }}
-            onClick={closeFeedbackDialog}
+            onClick={resetAndCloseModal}
           >
             Close
           </Button>

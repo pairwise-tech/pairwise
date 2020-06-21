@@ -699,8 +699,9 @@ const mergeProps = (
     methods.setNavigationMapState(!state.overlayVisible);
   },
   openFeedbackDialog: () => {
+    const { pathname } = window.location;
     methods.setFeedbackDialogState(
-      window.location.pathname.includes("workspace")
+      pathname.includes("workspace") && !pathname.includes("sandbox")
         ? FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK
         : FEEDBACK_DIALOG_TYPES.ASK_A_QUESTION,
     );
