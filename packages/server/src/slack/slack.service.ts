@@ -122,7 +122,6 @@ export class SlackService {
     config,
   }: SlackGenericFeedbackMessageData) {
     const email = user && user.profile ? user.profile.email : null;
-    const uuid = user && user.profile ? user.profile.uuid : null;
 
     const context = feedbackDto.context
       ? feedbackDto.context
@@ -131,7 +130,7 @@ export class SlackService {
     const userString = email
       ? email
       : user
-      ? `user id: ${uuid}`
+      ? `a user with no email`
       : "an unregistered user";
 
     const message =
