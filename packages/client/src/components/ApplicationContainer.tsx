@@ -49,6 +49,7 @@ import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
 import { CONTENT_AREA_ID } from "./MediaArea";
+import OfficeHoursPopover from "./OfficeHoursPopover";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -117,6 +118,13 @@ const ApplicationContainer = (props: IProps) => {
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
   const isMobile = useMedia(MOBILE, false);
   const history = useHistory();
+  const [isSearchFocused, setIsSearchFocused] = React.useState(false);
+  const handleSearchFocus = React.useCallback(() => {
+    setIsSearchFocused(true);
+  }, [setIsSearchFocused]);
+  const handleSearchBlur = React.useCallback(() => {
+    setIsSearchFocused(false);
+  }, [setIsSearchFocused]);
 
   React.useEffect(() => {
     // We have to pass location in here to correctly capture the original
@@ -215,6 +223,7 @@ const ApplicationContainer = (props: IProps) => {
             >
               Pairwise
             </Link>
+            <CurrentlyInBeta />
           </ProductTitle>
         </ControlsContainer>
         {CODEPRESS && (
@@ -223,9 +232,9 @@ const ApplicationContainer = (props: IProps) => {
           </ControlsContainer>
         )}
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          <SearchBox />
+          <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
-          <div style={{ marginLeft: 20 }} />
+          <div style={{ marginLeft: 10 }} />
           {!isMobile && <ShortcutKeysPopover />}
           {!isMobile && showFeedbackButton && (
             <Tooltip
@@ -265,6 +274,7 @@ const ApplicationContainer = (props: IProps) => {
               </ButtonGroup>
             </DesktopOnly>
           )}
+          <OfficeHoursPopover />
           {!isMobile && (
             <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
               <Button
@@ -277,17 +287,17 @@ const ApplicationContainer = (props: IProps) => {
             </Link>
           )}
           {isMobile && (
-            <div style={{ flexShrink: 0 }}>
+            <LastChildMargin style={{ flexShrink: 0 }}>
               <Popover
                 content={mobileMenuItems}
                 position={Position.BOTTOM_RIGHT}
               >
-                <IconButton style={{ marginRight: 20 }} icon="more" />
+                <IconButton icon="more" />
               </Popover>
-            </div>
+            </LastChildMargin>
           )}
           {/* user.profile is a redundant check... but now the types work */}
-          {isMobile ? null : isLoggedIn && user.profile ? (
+          {isSearchFocused ? null : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
@@ -427,7 +437,25 @@ const Header = styled.div`
   }
 `;
 
+const CurrentlyInBeta = styled.small`
+  display: block;
+  position: absolute;
+  top: 18%;
+  left: 100%;
+  transform: translate(-50%, -50%) scale(0.7);
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  background: #d81b82;
+  padding: 0px 6px;
+  box-shadow: 0 0 20px rgb(0, 0, 0);
+  border-radius: 100px;
+  &:before {
+    content: "BETA";
+  }
+`;
+
 const ProductTitle = styled.h1`
+  position: relative;
   margin: 0;
   color: white;
   font-weight: 100;
@@ -445,6 +473,12 @@ const ProductTitle = styled.h1`
   /* Not vital to the product so hide it for thin views */
   @media ${MOBILE} {
     display: none;
+  }
+`;
+
+const LastChildMargin = styled.div`
+  &:last-child {
+    margin-right: 10px;
   }
 `;
 

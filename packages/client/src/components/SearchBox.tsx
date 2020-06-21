@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { MOBILE, COLORS, SEARCH_QUERY_THRESHOLD } from "tools/constants";
 import { LineWrappedText } from "./Shared";
+import cx from "classnames";
 
 // NOTE: isClosed is kept in state because sometimes we want the search pane to
 // be closed even if there are search results. For example, the user clicks
@@ -19,6 +20,8 @@ const SearchBox = ({
   searchResults,
   isSearching,
   requestSearchResults,
+  onBlur,
+  onFocus,
 }: Props) => {
   const history = useHistory();
   const [searchText, setSearchText] = React.useState("");
@@ -90,6 +93,15 @@ const SearchBox = ({
     }
     setSelIndex(prev);
   }, [searchResults.length, selIndex]);
+  const handleFocus = React.useCallback(
+    (e: any) => {
+      setIsClosed(false);
+      // What is this linting? We need to know onFocus is defined, it's not unused at all.
+      // tslint:disable-next-line: no-unused-expression
+      onFocus && onFocus(e);
+    },
+    [setIsClosed, onFocus],
+  );
 
   // Show result box when search input is focused, there more chars in
   // the search query than specified by the threshold, and the search has
@@ -101,6 +113,7 @@ const SearchBox = ({
 
   return (
     <Box
+      className={cx({ isClosed })}
       onClick={e => {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation(); // Necessary to prevent the background click which is outside the react event system
@@ -114,9 +127,8 @@ const SearchBox = ({
         onChange={handleChange}
         value={searchText}
         placeholder="Search..."
-        onFocus={e => {
-          setIsClosed(false);
-        }}
+        onFocus={handleFocus}
+        onBlur={onBlur}
         inputRef={(ref: HTMLInputElement | null) => {
           searchInput = ref;
         }}
@@ -313,6 +325,13 @@ const dispatchProps = {
   requestSearchResults: Modules.actions.challenges.requestSearchResults,
 };
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+interface OwnProps {
+  onBlur?: (e: any) => any;
+  onFocus?: (e: any) => any;
+}
+
+type Props = ReturnType<typeof mapStateToProps> &
+  typeof dispatchProps &
+  OwnProps;
 
 export default connect(mapStateToProps, dispatchProps)(SearchBox);

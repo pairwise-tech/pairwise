@@ -11,7 +11,7 @@ import {
   distinct,
 } from "rxjs/operators";
 import { Observable, merge, defer, of, combineLatest } from "rxjs";
-import { isActionOf } from "typesafe-actions";
+import { isActionOf, isOfType } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
 import { EpicSignature } from "../root";
@@ -216,7 +216,7 @@ declare global {
 /**
  * An epic to send some custom events to amplitude.
  */
-const analyticsEpic: EpicSignature = action$ => {
+const analyticsEpic: EpicSignature = (action$, state$) => {
   const amp$ = defer<Observable<Window["amplitude"]>>(() =>
     of(window.amplitude),
   ).pipe(
@@ -255,6 +255,23 @@ const analyticsEpic: EpicSignature = action$ => {
     ignoreElements(),
   );
 
+  const revealSolutionAnalytic$ = action$.pipe(
+    filter(isActionOf(Actions.toggleRevealSolutionCode)),
+    pluck("payload"),
+    pluck("shouldReveal"),
+    tap(() => {
+      const { amplitude } = window;
+      const amp = amplitude?.getInstance();
+      const props = {
+        challengeId: state$.value.challenges.currentChallengeId,
+      };
+      if (amp) {
+        amp.logEvent("REVEAL_SOLUTION_CODE", props);
+      }
+    }),
+    ignoreElements(),
+  );
+
   const feedbackAnalytic$ = action$.pipe(
     filter(isActionOf(Actions.submitUserFeedback)),
     withLatestFrom(amp$),
@@ -267,7 +284,12 @@ const analyticsEpic: EpicSignature = action$ => {
     ignoreElements(),
   );
 
-  return merge(identityAnalytic$, completionAnalytic$, feedbackAnalytic$).pipe(
+  return merge(
+    identityAnalytic$,
+    completionAnalytic$,
+    feedbackAnalytic$,
+    revealSolutionAnalytic$,
+  ).pipe(
     catchError((err, stream) => {
       console.warn(`[Low Priority] Analytics error: ${err.message}`);
       captureSentryException(err);
