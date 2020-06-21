@@ -117,6 +117,7 @@ const OfficeHoursPopover = (props: Props) => {
 
   const handleRequest = React.useCallback(() => {
     props.setFeedbackDialogState(FEEDBACK_DIALOG_TYPES.PAIRWISE_LIVE_REQUEST);
+    // eslint-disable-next-line
   }, [props.setFeedbackDialogState, props.setFeedbackType]);
 
   const hasSession = Boolean(currentSession);
