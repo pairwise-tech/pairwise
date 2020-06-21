@@ -23,6 +23,6 @@ export class FeedbackController {
     @Body() feedbackDto: IGenericFeedback,
     @Req() req: AuthenticatedRequest,
   ) {
-    return this.feedbackService.sendFeedbackToSlack(feedbackDto, req.user);
+    return this.feedbackService.sendGenericFeedback(feedbackDto, req.user);
   }
 }

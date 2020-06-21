@@ -50,7 +50,7 @@ export class FeedbackService {
     return SUCCESS_CODES.OK;
   }
 
-  public async sendFeedbackToSlack(
+  public async sendGenericFeedback(
     feedbackDto: IGenericFeedback,
     user?: RequestUser,
   ) {

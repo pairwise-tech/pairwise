@@ -4,6 +4,9 @@ import { isActionOf } from "typesafe-actions";
 import { Actions } from "modules/root-actions";
 import { combineEpics } from "redux-observable";
 
+/**
+ * Submit feedback for a challenge.
+ */
 const submitUserFeedbackEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.submitUserFeedback)),
@@ -21,4 +24,25 @@ const submitUserFeedbackEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-export default combineEpics(submitUserFeedbackEpic);
+/**
+ * Submit generic feedback. These messages just get forwarded to
+ * our Slack directly.
+ */
+const submitGenericFeedbackEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.submitGeneralFeedback)),
+    pluck("payload"),
+    mergeMap(deps.api.submitGenericFeedback),
+    map(result => {
+      if (result.value) {
+        deps.toaster.success("Feedback Submitted Successfully!");
+        return Actions.submitGeneralFeedbackSuccess();
+      } else {
+        deps.toaster.error("Could not submit feedback!");
+        return Actions.submitGeneralFeedbackFailure(result.error);
+      }
+    }),
+  );
+};
+
+export default combineEpics(submitUserFeedbackEpic, submitGenericFeedbackEpic);

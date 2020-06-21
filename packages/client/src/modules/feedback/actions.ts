@@ -1,14 +1,23 @@
 import { createAction } from "typesafe-actions";
-import { FEEDBACK_TYPE, IFeedbackDto } from "@pairwise/common";
+import {
+  FEEDBACK_TYPE,
+  IFeedbackDto,
+  IGenericFeedback,
+} from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 
 enum ActionTypesEnum {
   SET_FEEDBACK_DIALOG_STATE = "SET_FEEDBACK_DIALOG_STATE",
   SET_FEEDBACK_STATE = "SET_FEEDBACK_STATE",
   SET_FEEDBACK_TYPE = "SET_FEEDBACK_TYPE",
+
   SUBMIT_USER_FEEDBACK = "SUBMIT_USER_FEEDBACK",
   SUBMIT_USER_FEEDBACK_SUCCESS = "SUBMIT_USER_FEEDBACK_SUCCESS",
   SUBMIT_USER_FEEDBACK_FAILURE = "SUBMIT_USER_FEEDBACK_FAILURE",
+
+  SUBMIT_GENERAL_FEEDBACK = "SUBMIT_GENERAL_FEEDBACK",
+  SUBMIT_GENERAL_FEEDBACK_SUCCESS = "SUBMIT_GENERAL_FEEDBACK_SUCCESS",
+  SUBMIT_GENERAL_FEEDBACK_FAILURE = "SUBMIT_GENERAL_FEEDBACK_FAILURE",
 }
 
 export const setFeedbackDialogState = createAction(
@@ -33,4 +42,16 @@ export const submitUserFeedbackSuccess = createAction(
 
 export const submitUserFeedbackFailure = createAction(
   ActionTypesEnum.SUBMIT_USER_FEEDBACK_FAILURE,
+)<HttpResponseError>();
+
+export const submitGeneralFeedback = createAction(
+  ActionTypesEnum.SUBMIT_GENERAL_FEEDBACK,
+)<IGenericFeedback>();
+
+export const submitGeneralFeedbackSuccess = createAction(
+  ActionTypesEnum.SUBMIT_GENERAL_FEEDBACK_SUCCESS,
+)();
+
+export const submitGeneralFeedbackFailure = createAction(
+  ActionTypesEnum.SUBMIT_GENERAL_FEEDBACK_FAILURE,
 )<HttpResponseError>();
