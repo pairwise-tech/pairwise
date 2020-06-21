@@ -234,7 +234,7 @@ const ApplicationContainer = (props: IProps) => {
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
           {!isMobile && <ShortcutKeysPopover />}
-          {!isMobile && showFeedbackButton && (
+          {!isMobile && (
             <Tooltip
               usePortal={false}
               position="bottom"
