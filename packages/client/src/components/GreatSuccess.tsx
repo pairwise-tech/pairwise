@@ -288,6 +288,9 @@ const ButtonActions = styled.div`
 
   .right-buttons {
     margin-left: auto;
+    button {
+      margin-right: 10px; // does not affect NextChallengeButton which is an as
+    }
   }
 
   @media ${MOBILE} {
