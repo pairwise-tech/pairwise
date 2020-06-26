@@ -254,7 +254,11 @@ const inBox = (box: string[], message: string): boolean => {
 // Check for a message in the console log box, but after some delay.
 // This is a helper for running tests in async challenges, where a challenge
 // may need to log a message but after waiting for some time.
-const checkBoxAsync = async (box: string[], message: string, delay: number) => {
+const checkBoxAsync = async (
+  box: string[],
+  message: string,
+  delay: number,
+): Promise<boolean> => {
   return new Promise(resolve => {
     setTimeout(() => {
       const result = inBox(box, message);

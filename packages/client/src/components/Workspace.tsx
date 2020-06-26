@@ -974,8 +974,8 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   getTestSummaryString = () => {
-    const { testResultsLoading } = this.state;
-    if (testResultsLoading) {
+    // Tests are still loading:
+    if (this.state.testResultsLoading) {
       return "Processing Test Results...";
     }
 

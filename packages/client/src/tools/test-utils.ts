@@ -523,7 +523,7 @@ export const getTestScripts = (
 ) => {
   return `
     <script id="test-code">
-    ${getTestHarness(getTestDependencies(testLib), userCode, testCode)}
+      ${getTestHarness(getTestDependencies(testLib), userCode, testCode)}
     </script>
   `;
 };
