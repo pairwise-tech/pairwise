@@ -186,6 +186,11 @@ var checkBoxAsync = function (box, message, delay) { return __awaiter(_this, voi
             })];
     });
 }); };
+var wait = function (time) { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        return [2, new Promise(function (resolve) { return setTimeout(resolve, time); })];
+    });
+}); };
 var fail = function () { return expect(false).toBe(true); };
 var pass = function () { return expect(true).toBe(true); };
 var __id = function () {
