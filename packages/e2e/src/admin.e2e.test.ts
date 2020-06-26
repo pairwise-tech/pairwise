@@ -71,7 +71,7 @@ describe("Admin (e2e)", () => {
     // 3. Delete the user
     await request(`${HOST}/user/admin/delete`)
       .post("/")
-      .send({ userEMail: userEmail })
+      .send({ userEmail })
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(201)
       .expect(response => {
