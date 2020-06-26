@@ -140,8 +140,8 @@ const WHITELISTED_EMAILS = new Set([
 
 // Whitelist some users who don't have an email
 const WHITELIST_UUID_LIST = new Set([
-  "89794e45-ee52-424e-9d79-77e1da64d7a0",
-  "cf26bc29-1591-479e-bb58-241c255cc331",
+  "89794e45-ee52-424e-9d79-77e1da64d7a0", // Ian
+  "cf26bc29-1591-479e-bb58-241c255cc331", // Peter
 ]);
 
 /**
