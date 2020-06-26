@@ -267,8 +267,11 @@ const executeTests = async (challenge: Challenge) => {
        * are found.
        *
        * The timing thresholds here can be adjusted as needed.
+       *
+       * TODO: Adjust the wait loop retry threshold depending on the challenge
+       * type. Async challenges should get a higher threshold,
        */
-      const waitLoop = async (remainingTries = 10): Promise<void> => {
+      const waitLoop = async (remainingTries = 150): Promise<void> => {
         if (results.length > 0) {
           // Test results have been received.
           return;
