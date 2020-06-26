@@ -267,6 +267,12 @@ const checkBoxAsync = async (
   });
 };
 
+// Wait some time... useful for pausing to let async challenges have some
+// time to complete some actions.
+const wait = async (time: number) => {
+  return new Promise(resolve => setTimeout(resolve, time));
+};
+
 // Helper to quickly fail a test.
 // @ts-ignore
 const fail = () => expect(false).toBe(true);
