@@ -67,7 +67,7 @@ export class UserController {
       adminUserEmail,
     });
 
-    const { userUuid } = body;
-    return this.userService.adminDeleteUserByUuid(userUuid);
+    const { userEmail } = body;
+    return this.userService.adminDeleteUserByEmail(userEmail);
   }
 }
