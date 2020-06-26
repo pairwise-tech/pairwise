@@ -127,7 +127,7 @@ const OfficeHoursPopover = (props: Props) => {
   const outOfSessionMessage = (
     <p>
       Currently Offline. See below for our next session. You can also request a
-      session (must be logged in).
+      session.
     </p>
   );
   return (

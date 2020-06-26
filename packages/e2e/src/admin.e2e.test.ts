@@ -54,8 +54,8 @@ describe("Admin (e2e)", () => {
     const adminAccessToken = await fetchAdminAccessToken();
 
     // 1. Create a regular user
-    const { user } = await createAuthenticatedUser("facebook");
-    const userUuid = user.profile.uuid;
+    const { user } = await createAuthenticatedUser("github");
+    const userEmail = user.profile.email;
 
     // 2. Get all users and check the user exists
     await request(`${HOST}/user/admin`)
@@ -63,15 +63,15 @@ describe("Admin (e2e)", () => {
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
       .expect(response => {
-        const userExists = response.body.find(u => u.uuid === userUuid);
+        const userExists = response.body.find(u => u.email === userEmail);
         expect(userExists).toBeDefined();
-        expect(userExists.uuid).toBe(userUuid);
+        expect(userExists.email).toBe(userEmail);
       });
 
     // 3. Delete the user
     await request(`${HOST}/user/admin/delete`)
       .post("/")
-      .send({ userUuid })
+      .send({ userEmail })
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(201)
       .expect(response => {
@@ -84,7 +84,7 @@ describe("Admin (e2e)", () => {
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
       .expect(response => {
-        const userExists = response.body.find(u => u.uuid === userUuid);
+        const userExists = response.body.find(u => u.email === userEmail);
         expect(userExists).toBe(undefined);
       });
   });
