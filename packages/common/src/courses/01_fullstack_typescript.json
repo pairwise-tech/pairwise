@@ -3275,6 +3275,17 @@
           "content": ""
         },
         {
+          "id": "pniSO@f2r",
+          "type": "typescript",
+          "title": "Interval Training",
+          "instructions": "Timers are a good way to start learning about asynchronous code. Timers allow you to run some code later in the future, or in an interval. In the last challenge we saw `setTimeout`, here we will take a look at `setInterval`, which lets you run some code repeatedly in an interval. The code below runs some code in an interval. It currently stops after 25 repetitions. Change it to stop after 10 instead.\n\n++NOTE:++ Both `setTimeout` and `setInterval` are built\\-in language features you can use anytime.",
+          "testCode": "const messages = [\n  `[\"Current Interval: 1\"]`,\n  `[\"Current Interval: 2\"]`,\n  `[\"Current Interval: 3\"]`,\n  `[\"Current Interval: 4\"]`,\n  `[\"Current Interval: 5\"]`,\n  `[\"Current Interval: 6\"]`,\n  `[\"Current Interval: 7\"]`,\n  `[\"Current Interval: 8\"]`,\n  `[\"Current Interval: 9\"]`,\n  `[\"Current Interval: 10\"]`,\n];\n\ntest(\"The code should log the interval message every `500` milliseconds until the `interval` is equal to `10` and then stop.\", async () => {\n  const checkBoxAsync = async () => {\n    return new Promise(resolve => {\n      setTimeout(() => {\n        let count = 0;\n        let result = true;\n\n        for (const message of messages) {\n          if (!result) {\n            continue;\n          }\n\n          result = inBox(__secret_log_box, message);\n        }\n\n        for (const x of __secret_log_box) {  \n          if (x.includes(\"Current Interval: \")) {\n            count++;\n          }\n        }\n\n        const solved = result && count === 10;\n        resolve(solved);\n      }, 5500);\n    });\n  };\n  const result = await checkBoxAsync();\n  expect(result).toBeTruthy();\n});\n",
+          "videoUrl": "",
+          "starterCode": "let interval = 0;\n\nconsole.log(\"Interval Started!\");\n\nconst intervalTraining = setInterval(() => {\n\n  interval++;\n  console.log(`Current Interval: ${interval}`);\n\n  if (interval === 25) {\n    console.log(\"Interval Stopped!\")\n    clearInterval(intervalTraining);\n  }\n\n}, 500);",
+          "solutionCode": "let interval = 0;\n\nconsole.log(\"Interval Started!\");\n\nconst intervalTraining = setInterval(() => {\n\n  interval++;\n  console.log(`Current Interval: ${interval}`);\n\n  if (interval === 10) {\n    console.log(\"Interval Stopped!\")\n    clearInterval(intervalTraining);\n  }\n\n}, 500);",
+          "content": ""
+        },
+        {
           "id": "5wHvxCBaG",
           "type": "typescript",
           "title": "Write an Async Function",
