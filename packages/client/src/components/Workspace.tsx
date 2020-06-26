@@ -211,7 +211,7 @@ class Workspace extends React.Component<IProps, IState> {
     const dimensions = getDimensions();
 
     // The reason for two checks here is that even on larger screens we still
-    // want to use the mobilve editor if this is detected as a tablet. Safari
+    // want to use the mobile editor if this is detected as a tablet. Safari
     // seems to handle monaco just fine but Android breaks, so android tablets
     // should get codemirror
     const favorMobile = isMobile() || dimensions.w < 700;
@@ -974,6 +974,11 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   getTestSummaryString = () => {
+    const { testResultsLoading } = this.state;
+    if (testResultsLoading) {
+      return "Processing Test Results...";
+    }
+
     const { passedTests, testResults } = this.getTestPassedStatus();
     return `Tests: ${passedTests.length}/${testResults.length} Passed`;
   };
@@ -1039,6 +1044,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     try {
       const { source, message } = event.data;
+      console.log(source);
       switch (source) {
         case IFRAME_MESSAGE_TYPES.LOG: {
           debug("[IFRAME_MESSAGE_TYPES.LOG]", message);
