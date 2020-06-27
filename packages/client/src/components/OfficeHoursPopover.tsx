@@ -43,9 +43,9 @@ const IN_SESSION_STYLES = `
 
 const UPCOMING_SESSION_STYLES = `
   ${LIVE_ICON_STYLES}
-  box-shadow: 0px 0px 7px #61ff00;
-  background: #a7ff72;
-  border: 1px solid #408a12;
+    box-shadow: 0px 0px 7px #FFB300;
+    background: #fffc72;
+    border: 1px solid #8a8612;
 `;
 
 const InSessionIcon = styled.div`
@@ -80,7 +80,7 @@ const SESSIONS: Session[] = [
 
   // Next session
   {
-    startDate: "2020-06-27T07:30:00.000Z",
+    startDate: "2020-06-27T08:30:00.000Z",
   },
 ].map(x => ({
   ...x,
@@ -147,6 +147,20 @@ type Props = typeof dispatchProps;
 const OfficeHoursPopover = (props: Props) => {
   const upcomingSession = SESSIONS.find(isUpcoming);
   const currentSession = SESSIONS.find(inSession);
+  const [upcomingSessionTime, setUpcomingSessionTime] = React.useState(
+    upcomingSession ? getRelativeTimeDistance(upcomingSession) : "",
+  );
+
+  // Update the UIso that the upcoming time will update
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setUpcomingSessionTime(
+        upcomingSession ? getRelativeTimeDistance(upcomingSession) : "",
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  });
 
   // TODO: Should filter to only find the _latest_ regardless of array order
   const nextSession = SESSIONS.find(x => !inSession(x) && !isSessionPassed(x));
@@ -180,12 +194,10 @@ const OfficeHoursPopover = (props: Props) => {
               {currentSession
                 ? "We’re online! Join us. Ask questions and get help learning to code."
                 : upcomingSession
-                ? `There's a session starting ${getRelativeTimeDistance(
-                    upcomingSession,
-                  )}`
+                ? `There's a session starting ${upcomingSessionTime}`
                 : "Currently Offline. See below for our next session. You can also request a session."}
             </p>
-            {currentSession && (
+            {currentSession ? (
               <a
                 href={currentSession.url}
                 target="_blank"
@@ -195,12 +207,22 @@ const OfficeHoursPopover = (props: Props) => {
                   Join Session
                 </Button>
               </a>
-            )}
+            ) : upcomingSession ? (
+              <a
+                href={upcomingSession.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button fill large>
+                  Join Session Early
+                </Button>
+              </a>
+            ) : null}
           </Upper>
           <Lower>
             {nextSession ? (
               <>
-                <SectionTitle icon="📆">Next Scheduled Session</SectionTitle>
+                <SectionTitle icon="📆">Scheduled Session</SectionTitle>
                 <CurrentSession session={nextSession} />
               </>
             ) : (
