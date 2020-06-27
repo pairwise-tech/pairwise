@@ -262,16 +262,10 @@ const executeTests = async (challenge: Challenge) => {
 
     try {
       /**
-       * Recursively await the tests results: wait 10 times pausing 50 ms
-       * every time, and then fail after half a second if no test results
-       * are found.
-       *
-       * The timing thresholds here can be adjusted as needed.
-       *
-       * TODO: Adjust the wait loop retry threshold depending on the challenge
-       * type. Async challenges should get a higher threshold,
+       * Recursively await the tests results. The timing thresholds is
+       * very high to allow for async tests to complete.
        */
-      const waitLoop = async (remainingTries = 150): Promise<void> => {
+      const waitLoop = async (remainingTries = 200): Promise<void> => {
         if (results.length > 0) {
           // Test results have been received.
           return;
