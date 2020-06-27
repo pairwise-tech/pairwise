@@ -3297,6 +3297,17 @@
           "content": ""
         },
         {
+          "id": "1tpHfrO1u",
+          "type": "section",
+          "title": "Async/Await",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Now that we've gotten the basics of asynchronous programming with a few challenges using timers, we're going to dive straight into the modern language syntax which allows us to write asynchronous functions: async/await. The async/await syntax is a newer language feature which allows us to very easily work with asynchronous code.\n\nWith async/await, you can write asynchronous code which \"appears\" synchronous. The result is it is much easier to write and reason about the execution of the code and the possible results.\n\nFor instance, consider this code snippet:\n\n```\nconst handleFetchUser = async () => {\n    try {\n        // This next line executes asynchronously\n        const user = await fetchUserAsync();\n        console.log(\"Got user: \", user);\n    } catch (err) {\n        console.log(\"Error fetching the user \", err);\n    }\n}\n\n```\n\nThe only new elements here are the `async` and `await` keywords\\. The rest should be familiar to you. The only different here is that the `fetchUserAsync` function \\(not defined\\) is an _asynchronous_ function which makes some request and returns a result sometime later in the future. You don't know _when_ that will happen. And, the request could fail\\! If it fails, you also don't know _when _that will happen.\n\nHowever, with the async/await syntax you can write the above code _as if_ it is actually synchronously. That is to say, by using the `await` keyword, the program will wait for the result from the `fetchUserAsync` function and once it gets the result that will be stored in the `user` variable\\. Alternatively, if it fails and throws and error you can catch this error with a normal `try/catch` construction\\.\n\nThis might seem very straightforward... and it is\\! Just wait until you see how asynchronous code was written before the async/await syntax was built into the language.\n\nSo, moving forward we will cover the async/await syntax in this section and get some practice writing asynchronous functions. Later, we will cover other language features and patterns related to handling asynchronous code: promises and callbacks."
+        },
+        {
           "id": "5wHvxCBaG",
           "type": "typescript",
           "title": "Write an Async Function",
@@ -3306,6 +3317,39 @@
           "starterCode": "/**\n * A function which makes a new promise and resolve or rejects\n * the promise based on the provided argument.\n */\nconst makePromise = (shouldResolve: boolean = true) => {\n  return new Promise((resolve, reject) => {\n    if (shouldResolve) {\n      resolve(\"I promised!\");\n    } else {\n      reject(\"Promise rejected!\");\n    }\n  });\n}\n\n/**\n * A function which calls the makePromise function to get the\n * resolved promise value. This function needs to be updated\n * to return the fulfilled promised result or rejection value.\n */\nconst fulfillThePromise = (promiseShouldResolve: boolean = true) => {\n  try {\n    console.log(\"Fulfilling the promise...\");\n    const resolutionValue = makePromise(promiseShouldResolve);\n    console.log(\"The resolution value is: \", resolutionValue);\n    return resolutionValue;\n  } catch (rejectionValue) {\n    console.log(\"The rejection value is: \", rejectionValue);\n    return rejectionValue;\n  }\n};\n\nfulfillThePromise();",
           "solutionCode": "/**\n * A function which makes a new promise and resolve or rejects\n * the promise based on the provided argument.\n */\nconst makePromise = (shouldResolve: boolean = true) => {\n  return new Promise((resolve, reject) => {\n    if (shouldResolve) {\n      resolve(\"I promised!\");\n    } else {\n      reject(\"Promise rejected!\");\n    }\n  });\n}\n\n/**\n * A function which calls the makePromise function to get the\n * resolved promise value. This function needs to be updated\n * to return the fulfilled promised result or rejection value.\n */\nconst fulfillThePromise = async (promiseShouldResolve: boolean = true) => {\n  try {\n    console.log(\"Fulfilling the promise...\");\n    const resolutionValue = await makePromise(promiseShouldResolve);\n    console.log(\"The resolution value is: \", resolutionValue);\n    return resolutionValue;\n  } catch (rejectionValue) {\n    console.log(\"The rejection value is: \", rejectionValue);\n    return rejectionValue;\n  }\n};\n\nfulfillThePromise();",
           "content": ""
+        },
+        {
+          "id": "Uw81b70ca",
+          "type": "section",
+          "title": "Promises and Callbacks",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this section we will take a look at the more fundamental building block used to work with asynchronous code: promises. A promise is a language construct which results some _future value._\n\nWe will also take a look at callbacks. Callbacks are used frequently with promises, and they were very widespread in working with asynchronous code before the development of the more modern async/await syntax. The term \"callback\" refers to passing in a function to another function, which is to be execute later."
+        },
+        {
+          "id": "2o@y8Hx6oD",
+          "type": "section",
+          "title": "HTTP and Networking",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Now that you have learned a lot of the basics of working with asynchronous code we'll get into more of the useful things you can start to use these skills with. This starts with making network requests using the hypertext transfer protocol \\(HTTP\\). You are probably familiar with HTTP from seeing it, or it's more secure cousin HTTPS, as a prefix for many web URLs, e.g. `https://app.pairwise.tech`.\n\nWhen you type in a web URL like this in a web browser and hit enter, the web browser is using the HTTP/HTTPS protocol to fetch the resource stored at that url. The web browser makes a network request and the protocol resolves the request and return a response, which is usually an HTML document for that URL. The HTML document often will continue links to other resources, like CSS and JS files which will then be downloaded. These together constitute a website and this entire process occurs asynchronously using networking and HTTP."
+        },
+        {
+          "id": "5EvCUSycn",
+          "type": "section",
+          "title": "APIs",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Now that we have the basics of HTTP covered we are going to dive into APIs: application programming interfaces. This somewhat confusing term will become crystal clear once you understand that meaning and start to work with APIs.\n\nAn API is basically a definition of rules for how you can interact with some computer system.\n\nIn a more abstract way, you can apply the idea of an API to basically all everyday objects. For instance, the API of a microwave is to get heated up food items you must be the food in the microwave and then running the microwave for 30 seconds or a minute. The API of the postal system is you must send a letter or package with paid postage and a properly formatted address to a post office and then it will be delivered. The API is the rules for how to interact with the system.\n\nSoftware systems also interact with each other, and these software systems will expose APIs to define these interactions. The APIs will define specific rules for how to interact with a software system: how to read data, how to write data, how to update data, how to delete data, and so on.\n\nWorking with APIs is a fundamental part of building modern software. For instance, the Pairwise application you are working through is constantly communicate with the API of our backend servers to send data for your course progress updates as you complete challenges. And, because APIs are involved with communicating with other running software systems, this communication typically occurs _asynchronously\\._\n\nAlso, it's important to keep in mind that when you use an API you are interacting with code you don't control directly which means there is always a chance your request could fail and throw an error\\! It's a best practice to always assume that API requests may fail and to design your programs to anticipate and try to handle those failure scenarios."
         },
         {
           "id": "Ak2JW7U45",
