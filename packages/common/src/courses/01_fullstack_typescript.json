@@ -3297,6 +3297,17 @@
           "content": ""
         },
         {
+          "id": "Vm5CE7v6d",
+          "type": "typescript",
+          "title": "Poll for the Response",
+          "instructions": "In the last challenge we saw a usage of `setInterval` to create an interval to run some code every interval of time. In this challenge, write your own `setIterval` from scratch to check the `data` field of the `response` object\\. Once `data` is no longer `null` \\(this will change sometime after your run the code... and it will happen in less than 2 seconds...\\) set this new value to the `result` variable which is also defined in the interval. Once this occurs, clear the interval so it stops running.\n\nFor instance, you can think of the sequence of events like this:\n\n1. The code is run.\n1. The interval starts checking the `response.data` value\\.\n1. This value is update sometime later, in less than 2 seconds.\n1. The interval notices the value has changed, and sets the result to the `result` variable\\.\n1. The interval is cancelled.\n\n",
+          "testCode": "test(\"The `result` variable should be updated to contain the value in `response.data` once this is changed from `null` to any other value.\", async () => {\n  await wait(1250);\n  const data = \"The value changed! 😬\";\n  response.data = data;\n  await wait(1000);\n  expect(result).toBe(data);\n});\n\ntest(\"The code should use `setInterval` to check the `response.data` value, and `clearInterval` to clear the interval once the value is set.\", async () => {\n  const code = __user_code_string__;\n  expect(code.includes(\"setInterval\")).toBeTruthy();\n  expect(code.includes(\"clearInterval\")).toBeTruthy();\n});\n",
+          "videoUrl": "",
+          "starterCode": "const response = { data: null };\n\nlet result: any;\n\n// Your code here:",
+          "solutionCode": "const response = { data: null };\n\nlet result: any;\n\nconst interval = setInterval(() => {\n  // Check if the response.data field changes, when it does\n  // clear the interval and update the result variable with\n  // the response data.\n  if (response.data !== null) {\n    clearInterval(interval);\n    result = response.data;\n  }\n}, 250);\n\n",
+          "content": ""
+        },
+        {
           "id": "1tpHfrO1u",
           "type": "section",
           "title": "Async/Await",
