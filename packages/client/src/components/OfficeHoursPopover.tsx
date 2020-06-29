@@ -31,23 +31,35 @@ const Container = styled.div`
 const LIVE_ICON_STYLES = `
   width: 16px;
   height: 16px;
+  border-radius: 50px;
+`;
+
+const IN_SESSION_STYLES = `
+  ${LIVE_ICON_STYLES}
+  box-shadow: 0px 0px 7px #61ff00;
   background: #a7ff72;
   border: 1px solid #408a12;
-  box-sizing: border-box;
-  box-shadow: 0px 0px 7px #61ff00;
-  border-radius: 50px;
+`;
+
+const UPCOMING_SESSION_STYLES = `
+  ${LIVE_ICON_STYLES}
+    box-shadow: 0px 0px 7px #FFB300;
+    background: #fffc72;
+    border: 1px solid #8a8612;
 `;
 
 const InSessionIcon = styled.div`
-  ${LIVE_ICON_STYLES}
+  ${IN_SESSION_STYLES}
+`;
+
+const UpcomingSessionIcon = styled.div`
+  ${UPCOMING_SESSION_STYLES}
 `;
 
 const OutOfSessionIcon = styled.div`
-  width: 16px;
-  height: 16px;
+  ${LIVE_ICON_STYLES}
   background: #c4c4c4;
   border: 1px solid #585858;
-  border-radius: 50px;
 `;
 
 interface Session {
@@ -64,18 +76,18 @@ const SESSIONS: Session[] = [
   // Current session
   // {
   //   startDate: new Date().toISOString(),
-  //   // Our real livestream URL, supposedly.
-  //   url: "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ/live",
   // },
 
   // Next session
   {
     startDate: "2020-06-27T08:30:00.000Z",
-
-    // Our real livestream URL, supposedly.
-    url: "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ/live",
   },
-];
+].map(x => ({
+  ...x,
+  // Our real livestream URL, supposedly. Since it doesn't change I'm just
+  // applying it to all sessions for now
+  url: "https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ/live",
+}));
 
 const inSession = (session: Session) => {
   const startTime = new Date(session.startDate).getTime();
@@ -85,19 +97,42 @@ const inSession = (session: Session) => {
   return startTime < now && now < endTime;
 };
 
+const isUpcoming = (session: Session) => {
+  const startTime = new Date(session.startDate).getTime();
+  const preStartTime = startTime - SIXTY_MINUTES;
+  const now = Date.now();
+
+  return preStartTime < now && now < startTime;
+};
+
+const getSessionStatus = (
+  session: Session,
+): "UPCOMING" | "IN_PROGRESS" | "PASSED" => {
+  return isUpcoming(session)
+    ? "UPCOMING"
+    : inSession(session)
+    ? "IN_PROGRESS"
+    : "PASSED";
+};
+
 const isSessionPassed = (session: Session) => {
   return new Date(session.startDate).getTime() < new Date().getTime();
 };
 
-const CurrentSession = styled(({ session: { startDate }, ...props }) => {
+const getRelativeTimeDistance = ({ startDate }: Session) => {
   const start = new Date(startDate);
   const end = Date.now();
+  return formatDistance(start, end, { addSuffix: true });
+};
+
+const CurrentSession = styled(({ session, ...props }) => {
+  const start = new Date(session.startDate);
 
   return (
     <div {...props}>
       <h4>{format(start, "MMMM d 'at' p")}</h4>
       <p style={{ marginTop: -10, marginBottom: 0 }}>
-        <em>{formatDistance(start, end, { addSuffix: true })}</em>
+        <em>{getRelativeTimeDistance(session)}</em>
       </p>
     </div>
   );
@@ -110,7 +145,22 @@ const CurrentSession = styled(({ session: { startDate }, ...props }) => {
 type Props = typeof dispatchProps;
 
 const OfficeHoursPopover = (props: Props) => {
+  const upcomingSession = SESSIONS.find(isUpcoming);
   const currentSession = SESSIONS.find(inSession);
+  const [upcomingSessionTime, setUpcomingSessionTime] = React.useState(
+    upcomingSession ? getRelativeTimeDistance(upcomingSession) : "",
+  );
+
+  // Update the UIso that the upcoming time will update
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setUpcomingSessionTime(
+        upcomingSession ? getRelativeTimeDistance(upcomingSession) : "",
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  });
 
   // TODO: Should filter to only find the _latest_ regardless of array order
   const nextSession = SESSIONS.find(x => !inSession(x) && !isSessionPassed(x));
@@ -120,16 +170,6 @@ const OfficeHoursPopover = (props: Props) => {
     // eslint-disable-next-line
   }, [props.setFeedbackDialogState, props.setFeedbackType]);
 
-  const hasSession = Boolean(currentSession);
-  const inSessionMessage = (
-    <p>We’re online! Join us. Ask questions and get help learning to code.</p>
-  );
-  const outOfSessionMessage = (
-    <p>
-      Currently Offline. See below for our next session. You can also request a
-      session.
-    </p>
-  );
   return (
     <Popover
       usePortal={false}
@@ -138,12 +178,26 @@ const OfficeHoursPopover = (props: Props) => {
         <Container>
           <Upper>
             <SectionTitle
-              icon={hasSession ? <InSessionIcon /> : <OutOfSessionIcon />}
+              icon={
+                currentSession ? (
+                  <InSessionIcon />
+                ) : upcomingSession ? (
+                  <UpcomingSessionIcon />
+                ) : (
+                  <OutOfSessionIcon />
+                )
+              }
             >
               Pairwise Live
             </SectionTitle>
-            {hasSession ? inSessionMessage : outOfSessionMessage}
-            {currentSession && (
+            <p>
+              {currentSession
+                ? "We’re online! Join us. Ask questions and get help learning to code."
+                : upcomingSession
+                ? `There's a session starting ${upcomingSessionTime}`
+                : "Currently Offline. See below for our next session. You can also request a session."}
+            </p>
+            {currentSession ? (
               <a
                 href={currentSession.url}
                 target="_blank"
@@ -153,17 +207,29 @@ const OfficeHoursPopover = (props: Props) => {
                   Join Session
                 </Button>
               </a>
-            )}
+            ) : upcomingSession ? (
+              <a
+                href={upcomingSession.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button fill large>
+                  Join Session Early
+                </Button>
+              </a>
+            ) : null}
           </Upper>
           <Lower>
             {nextSession ? (
               <>
-                <SectionTitle icon="📆">Next Scheduled Session</SectionTitle>
+                <SectionTitle icon="📆">Scheduled Session</SectionTitle>
                 <CurrentSession session={nextSession} />
               </>
             ) : (
               <>
-                <SectionTitle>No sessions currently scheduled.</SectionTitle>
+                <SectionTitle>
+                  No future sessions currently scheduled.
+                </SectionTitle>
               </>
             )}
           </Lower>
@@ -183,7 +249,11 @@ const OfficeHoursPopover = (props: Props) => {
       <Tooltip
         usePortal={false}
         content={
-          hasSession ? "Join the Live Session" : "View Scheduled Sessions"
+          currentSession
+            ? "Join the Live Session"
+            : upcomingSession
+            ? "Session Starting Soon"
+            : "View Scheduled Sessions"
         }
         position="bottom"
       >
@@ -191,6 +261,10 @@ const OfficeHoursPopover = (props: Props) => {
           <LiveIndicator>
             <IconButton icon="record" aria-label="View Scheduled Sessions" />
           </LiveIndicator>
+        ) : upcomingSession ? (
+          <UpcomingIndicator>
+            <IconButton icon="record" aria-label="View Scheduled Sessions" />
+          </UpcomingIndicator>
         ) : (
           <IconButton icon="record" aria-label="View Scheduled Sessions" />
         )}
@@ -202,7 +276,20 @@ const OfficeHoursPopover = (props: Props) => {
 const LiveIndicator = styled.div`
   position: relative;
   &:before {
-    ${LIVE_ICON_STYLES}
+    ${IN_SESSION_STYLES}
+    content: "";
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+`;
+
+const UpcomingIndicator = styled.div`
+  position: relative;
+  &:before {
+    ${UPCOMING_SESSION_STYLES}
     content: "";
     cursor: pointer;
     position: absolute;
