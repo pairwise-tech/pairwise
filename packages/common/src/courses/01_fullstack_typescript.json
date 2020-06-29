@@ -3376,12 +3376,23 @@
         {
           "id": "fjksTEhuVf",
           "type": "typescript",
-          "title": "Handle Async Errors",
+          "title": "Handling Async Errors",
           "instructions": "An important rule of thumb anytime you are working with asynchronous code is that the code could fail. In fact, it's not a bad idea to _always assume_ asynchronous code may be fail and try to handle failure scenarios. Unhandled errors could completely crash or disrupt your program\\!\n\nFortunately, the async/await syntax makes this very easy\\! You can simply wrap `await` statements in a regular `try/catch`. This will result in any errors being caught, where you can handle them. In the code editor we have created a helper function which will return a promise which will throw an error 1 second after it is created.\n\nModify the `safeAsync` function to catch this error and log it out to the console\\!",
           "testCode": "// Write your tests here:\ntest(\"`safeAsync` should be handle the error thrown by `waitAndThrowError`.\", async () => {\n  // Verify safeAsync does not throw an error\n  try {\n    await safeAsync();\n    expect(inBox(__secret_log_box, `[\"Here is the error! 💣\"]`)).toBeTruthy();\n\n    safeAsync();\n    await wait(1500);\n  } catch (e) {\n    fail();\n  }\n\n  // Verify waitAndThrowError throws an error:\n  try {\n    await waitAndThrowError();\n    fail();\n  } catch (e) {\n    pass();\n  }\n});\n",
           "videoUrl": "",
           "starterCode": "// A helper function which returns a promise which rejects after\n// waiting 1 second using setTimeout.\nconst waitAndThrowError = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(\"Here is the error! 💣\");\n    }, 1000);\n  })\n};\n\n// Transform this to an async/await function, and use a try/catch to\n// handle the error:\nconst safeAsync = () => {\n  waitAndThrowError();\n}\n\nsafeAsync();",
           "solutionCode": "// A helper function which returns a promise which rejects after\n// waiting 1 second using setTimeout.\nconst waitAndThrowError = () => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      reject(\"Here is the error! 💣\");\n    }, 1000);\n  })\n};\n\n// Transform this to an async/await function, and use a try/catch to\n// handle the error:\nconst safeAsync = async () => {\n  try {\n    await waitAndThrowError();\n  } catch (err) {\n    console.log(err);\n  }\n};\n\nsafeAsync();",
+          "content": ""
+        },
+        {
+          "id": "rShMOVugA",
+          "type": "typescript",
+          "title": "Quote of the Day",
+          "instructions": "In this challenge, let's get some practice writing an async function from scratch. Use the `fetch` method we saw in one of the previous challenges to fetch a quote of the day from a quotes API:\n\n```\n// Fetch the Quote of the Day:\nfetch(\"https://quotes.rest/qod\");\n\n```\n\nAs in the previous challenge, you will need to wrap `fetch` in an `async/await` function, and we recommend you also use `try/catch` to handle any possible errors\\! Create a function `quoteOfTheDay` to do this. The function should return the asynchronous result of calling the quotes API provided above.\n\n++NOTE:++ You can check out the [quotes API documentation here](https://quotes.rest/).",
+          "testCode": "test(\"The `quoteOfTheDay` function should be defined.\", () => {\n  expect(quoteOfTheDay).toBeDefined();\n  expect(typeof quoteOfTheDay).toBe(\"function\");\n});\n\ntest(\"The `quoteOfTheDay` function returns the result of using `fetch` to call the `https://quotes.rest/qod` API.\", async () => {\n  const solutionFn = async () => {\n    try {\n      const response = await fetch(\"https://quotes.rest/qod\");\n      const result = await response.json();\n      return result;\n    } catch (err) {\n      return null;\n    }\n  };\n\n  const expected = await solutionFn();\n  const result = await quoteOfTheDay();\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here:",
+          "solutionCode": "/**\n * Fetch the quote of the day.\n */\nconst quoteOfTheDay = async () => {\n  try {\n    const response = await fetch(\"https://quotes.rest/qod\");\n    const result = await response.json();\n    return result;\n  } catch (err) {\n    console.log(\"Error fetching data... \", err);\n  }\n};\n",
           "content": ""
         },
         {
