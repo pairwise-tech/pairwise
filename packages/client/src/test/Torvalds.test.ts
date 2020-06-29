@@ -45,7 +45,7 @@ const course: Course = FullstackTypeScript;
 // NOTE: Enable debug mode. Inspect challenges directly by id. Should
 // only be used for debugging.
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["Xgg$kgzsN", "@KFuMXp$c"]);
+const TEST_ID_WHITELIST = new Set(["5wHvxCBaG"]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the
