@@ -3363,6 +3363,17 @@
           "content": ""
         },
         {
+          "id": "EoK0U8Q$0",
+          "type": "typescript",
+          "title": "Fetching Data Asynchronously",
+          "instructions": "Now that you are familiar with the basics of the async/await syntax, let's use it to actually do something more useful. Let's fetch some data from a GitHub profile, like we saw in the Async intro video\\!\n\nThe `fetchGitHubProfileAsync` function is using the fetch API to fetch data from GitHub. The [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is  a built\\-in tool in the browser environment used to make network requests \\- we will see more on this later. For now, try to convert the `fetchGitHubProfileAsync`  into an async function and then await the result of calling the fetch method. You will also need to await the result of calling `response.json()` as well, because this also returns a promise.\n\nThe TypeScript editor type checking should help you make the changes. Try hovering the red underlines to see hints and suggestions.",
+          "testCode": "test(\"The `fetchGitHubProfileAsync` function should using `async/await` syntax and return the GitHub profile user data for whatever `username` is supplied to it.\", async () => {\n  let result = await fetchGitHubProfileAsync(\"bonham000\");\n  expect(result.id).toBe(18126719);\n\n  result = await fetchGitHubProfileAsync(\"torvalds\");\n  expect(result.id).toBe(1024025);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// An asynchronous function to fetch a user's information from GitHub.\nconst fetchGitHubProfileAsync = (username: string) => {\n  try {\n    const url = `https://api.github.com/users/${username}`;\n    console.log(`Fetching user: ${username}...`);\n    const response = fetch(url);\n    const result = response.json();\n    console.log(\"\\nResult:\");\n    console.log(result);\n    return result;\n  } catch (err) {\n    console.log(\"Error fetching user!\");\n    console.log(err);\n  }\n}\n\n// Fetch a user, trying adding your username here:\nconst user = \"torvalds\";\nfetchGitHubProfileAsync(user);",
+          "solutionCode": "// An asynchronous function to fetch a user's information from GitHub.\nconst fetchGitHubProfileAsync = async (username: string) => {\n  try {\n    const url = `https://api.github.com/users/${username}`;\n    console.log(`Fetching user: ${username}...`);\n    const response = await fetch(url);\n    const result = await response.json();\n    console.log(\"\\nResult:\");\n    console.log(result);\n    return result;\n  } catch (err) {\n    console.log(\"Error fetching user!\");\n    console.log(err);\n  }\n}\n\n// Fetch a user, trying adding your username here:\nconst user = \"torvalds\";\nfetchGitHubProfileAsync(user);",
+          "content": ""
+        },
+        {
           "id": "Uw81b70ca",
           "type": "section",
           "title": "Promises and Callbacks",
