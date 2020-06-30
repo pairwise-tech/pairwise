@@ -3418,6 +3418,17 @@
           "content": ""
         },
         {
+          "id": "MEjox@iw0",
+          "type": "typescript",
+          "title": "Rejecting Promises",
+          "instructions": "The callback function supplied to the `Promise` constructor is important to understand. This callback is used to \"complete\" the promise. This callback provides two additional functions: a \"resolve\" and \"reject\" function, which are used to handle the promise wrapped operation either resolving or rejected.\n\nCreate a new promise just like in the last challenge. This time, the promise should use the second function to reject\\! Pass in some argument to the `reject` method \\(e.g. this can represent an error message for why the rejection occurred.",
+          "testCode": "test(\"`myPromise` should be defined and should be a promise.\", () => {\n  expect(myPromise).toBeDefined();\n});\n\ntest(\"`myPromise` should reject to some value (not `undefined`).\", async () => {\n  expect(myPromise).toBeDefined();\n  try {\n    const result = await myPromise;\n    fail();\n  } catch (err) {\n    expect(err !== undefined).toBe(true);\n    pass();\n  }\n});",
+          "videoUrl": "",
+          "starterCode": "type PromiseExecutorFunction = (\n  resolve: (value?: unknown) => void, reject: (reason?: any) => void,\n) => void;\n\n// Your code here:\n",
+          "solutionCode": "type PromiseExecutorFunction = (\n    resolve: (value?: unknown) => void, reject: (reason?: any) => void,\n) => void;\n\n// Your code here:\n\nconst promiseCallback: PromiseExecutorFunction = (resolve, reject) => {\n    reject(\"Rejected!\");\n};\n\nconst myPromise = new Promise(promiseCallback);\n",
+          "content": ""
+        },
+        {
           "id": "2o@y8Hx6oD",
           "type": "section",
           "title": "HTTP and Networking",
