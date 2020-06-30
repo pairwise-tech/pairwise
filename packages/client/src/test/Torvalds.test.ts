@@ -45,7 +45,7 @@ const course: Course = FullstackTypeScript;
 // NOTE: Enable debug mode. Inspect challenges directly by id. Should
 // only be used for debugging.
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["5wHvxCBaG"]);
+const TEST_ID_WHITELIST = new Set(["MEjox@iw0"]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the
@@ -57,6 +57,7 @@ const TEST_ID_WHITELIST = new Set(["5wHvxCBaG"]);
 const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "Ao8hbaiP", // Test env seems to be having trouble calculating the midpoint of a bounding box.
   // "pUf7$Qi2y", // Could not test that p tags are white... WHY? See NOTE
+  // "MEjox@iw0",
 ]);
 
 // Enable or disable log info
