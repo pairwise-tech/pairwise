@@ -3484,6 +3484,39 @@
           "content": ""
         },
         {
+          "id": "sbfx9w1qI",
+          "type": "typescript",
+          "title": "Handling Multiple Promises",
+          "instructions": "The `Promise` object provides a few additional methods which are useful for handling future values. In this challenge, let's take a look at the `Promise.all` method which is useful when you have multiple promises you want to handle together.",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "6ZEqoWu6i",
+          "type": "typescript",
+          "title": "Settling All the Promises",
+          "instructions": "In contrast to `Promise.all`, its counterpart `Promise.allSettled` allows a series of promises to all fully complete. This means it will allow all the promises to reject or resolve, and return an array of the results. In contrast, `Promise.all` will reject whenever _any_ individual promises rejects.",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "Rz5BD8Php",
+          "type": "typescript",
+          "title": "Racing Promises",
+          "instructions": "Another rare, but useful, promise utility to be aware of is the `Promise.race` method\\. As you might guess, `Promise.race` allows you to race two promises against each other\\!",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "2o@y8Hx6oD",
           "type": "section",
           "title": "HTTP and Networking",
