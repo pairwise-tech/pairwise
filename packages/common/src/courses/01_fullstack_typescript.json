@@ -3509,11 +3509,11 @@
           "id": "Rz5BD8Php",
           "type": "typescript",
           "title": "Racing Promises",
-          "instructions": "Another rare, but useful, promise utility to be aware of is the `Promise.race` method\\. As you might guess, `Promise.race` allows you to race two promises against each other\\!",
-          "testCode": "test(\"`variable` should be defined\", () => {\n  pass();\n});\n",
+          "instructions": "Another rare, but useful, promise utility to be aware of is the `Promise.race` method\\. As you might guess, `Promise.race` allows you to race two promises against each other\\! [Promise\\.race](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race) accepts an iterable of promises, and resolves or rejects with the value from the _first_ promise to resolve or reject.\n\nImplement a function `racer` which accepts a list of promises and uses `promise.race` to return the result of the first promise which resolves or rejects.",
+          "testCode": "const __promiseFactoryUtil = (shouldResolve, timeLimit) => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (shouldResolve) {\n        resolve(`Resolved in ${timeLimit} time`);\n      } else {\n        reject(`Rejected in ${timeLimit} time`);\n      }\n    }, timeLimit);\n  });\n};\n\ntest(\"The `racer` function is defined.\", () => {\n  expect(typeof racer === \"function\").toBe(true);\n});\n\ntest(\"The `racer` function accepts a list of promises and returns the result value from the first promise to resolve or reject.\", async () => {\n  let promises = [\n    __promiseFactoryUtil(true, 50),\n    __promiseFactoryUtil(true, 150),\n    __promiseFactoryUtil(true, 500),\n    __promiseFactoryUtil(true, 1000),\n    __promiseFactoryUtil(true, 2000),\n  ];\n\n  let result = await racer(promises);\n  expect(result).toBe(\"Resolved in 50 time\");\n\n  promises = [\n    __promiseFactoryUtil(true, 50),\n    __promiseFactoryUtil(true, 150),\n    __promiseFactoryUtil(true, 500),\n    __promiseFactoryUtil(true, 1000),\n    __promiseFactoryUtil(false, 2),\n  ];\n\n  result = await racer(promises);\n  expect(result).toBe(\"Rejected in 2 time\");\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Your code here\nconst racer = async (promiseList: Promise<any>[]) => {\n  try {\n    const result = await Promise.race(promiseList);\n    return result;\n  } catch (err) {\n    return err;\n  }\n};\n",
           "content": ""
         },
         {
