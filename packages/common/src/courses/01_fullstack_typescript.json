@@ -3429,6 +3429,17 @@
           "content": ""
         },
         {
+          "id": "0Phhgr1T$d",
+          "type": "typescript",
+          "title": "Resolve a Promise in the Future",
+          "instructions": "The promises we created so far did not actually resolve to some value later in the future. Instead, they just resolved immediately when we called the `resolve` or `reject` callback functions. That doesn't make them _synchronously_, it just means we didn't really wait very long for the value to arrive.\n\nNow, let's construct a new promise from scratch \\- just like before. This time, inside the promise, use `setTimeout` to wait 1 second _and then_ call the `resolve` function\\. Pass in the string `I waited for 1 second!` to the `resolve` function\\. Using `setTimeout` like this is an easy way to construct an asynchronous value, which we can uses promises to wait for\\!",
+          "testCode": "test(\"`myPromise` should be defined and should be a promise.\", () => {\n  expect(myPromise).toBeDefined();\n});\n\ntest(\"`myPromise` should resolve after 1 second and produce the string value: `I waited for 1 second!`.\", async () => {\n  const now = Date.now();\n  const result = await myPromise;\n  const then = Date.now();\n  const time = then - now;\n  expect(time > 900).toBeTruthy();\n  expect(time < 11000).toBeTruthy();\n  expect(result).toBe(\"I waited for 1 second!\");\n});",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "// Your code here\nconst promiseCallback = (resolve: (value?: any) => void) => {\n  setTimeout(() => resolve(\"I waited for 1 second!\"), 1000);\n};\n\nconst myPromise = new Promise(promiseCallback);",
+          "content": ""
+        },
+        {
           "id": "2o@y8Hx6oD",
           "type": "section",
           "title": "HTTP and Networking",
