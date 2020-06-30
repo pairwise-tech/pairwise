@@ -3473,6 +3473,17 @@
           "content": ""
         },
         {
+          "id": "$AiChoqCt",
+          "type": "typescript",
+          "title": "Using .then and .catch with Promises",
+          "instructions": "You may wonder what the `.then` and `.catch` methods return. Confusingly, they also return promises\\! Additionally, you can chain these methods together:\n\n```typescript\nconst promise = new Promise((resolve, reject) => resolve(\"done!\"));\n\npromise.then(result => {\n    console.log(result);\n}).catch(err => {\n    console.log(err);\n});\n\n```\n\nThe `.then` method is called whenever the promise resolves and the `.catch` method is called whenever the promises rejects. Remember: only one of these future states can happen. A promise must _either_ resolve or reject.\n\nIn the editor below, modify the `handlePromise` method to use `.then` and `.catch` on the provided `promise` argument\\. In each callback, return the result argument \\(i.e. the resolved or rejected value\\). Then, return the entire result of calling these methods on the `promise` argument to return the fulfilled result.",
+          "testCode": "test(\"`fulfillThePromise` should return the resolved value of the promise provided to it.\", async () => {\n  const result = await fulfillThePromise(Promise.resolve(\"hi\"));\n  expect(result).toBe(\"hi\");\n});\n\ntest(\"`fulfillThePromise` should return the rejected value of the promise provided to it.\", async () => {\n  const result = await fulfillThePromise(Promise.reject(\"bleg\"));\n  expect(result).toBe(\"bleg\");\n});\n\ntest(\"`handlePromise` should use `.then` and `.catch`.\", async () => {\n  expect(__user_code_string__.includes(\".then\")).toBeTruthy();\n  expect(__user_code_string__.includes(\".catch\")).toBeTruthy();\n});\n",
+          "videoUrl": "",
+          "starterCode": "/**\n * Handle the promise fulfillment using the then/catch\n * methods on the promise object.\n */\nconst handlePromise = (promise: Promise<any>) => {\n  // Your code here:\n};\n\n/**\n * Handle fulfilling a provided promise using the handlePromise\n * funciton. Return the result.\n */\nconst fulfillThePromise = async (promise: Promise<any>) => {\n  try {\n    const result = await handlePromise(promise);\n    return result;\n  } catch (err) {\n    return err;\n  }\n};\n",
+          "solutionCode": "/**\n * Handle the promise fulfillment using the then/catch\n * methods on the promise object.\n */\nconst handlePromise = (promise: Promise<any>) => {\n  return promise.then(value => {\n    return value;\n  }).catch(err => {\n    return err;\n  });\n};\n\n/**\n * Handle fulfilling a provided promise using the handlePromise\n * funciton. Return the result.\n */\nconst fulfillThePromise = async (promise: Promise<any>) => {\n  try {\n    const result = await handlePromise(promise);\n    return result;\n  } catch (err) {\n    return err;\n  }\n};\n",
+          "content": ""
+        },
+        {
           "id": "2o@y8Hx6oD",
           "type": "section",
           "title": "HTTP and Networking",
