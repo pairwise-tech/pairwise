@@ -3530,13 +3530,24 @@
         {
           "id": "5EvCUSycn",
           "type": "section",
-          "title": "APIs",
+          "title": "Working with APIs",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
           "content": "Now that we have the basics of HTTP covered we are going to dive into APIs: application programming interfaces. This somewhat confusing term will become crystal clear once you understand that meaning and start to work with APIs.\n\nAn API is basically a definition of rules for how you can interact with some computer system.\n\nIn a more abstract way, you can apply the idea of an API to basically all everyday objects. For instance, the API of a microwave is to get heated up food items you must be the food in the microwave and then running the microwave for 30 seconds or a minute. The API of the postal system is you must send a letter or package with paid postage and a properly formatted address to a post office and then it will be delivered. The API is the rules for how to interact with the system.\n\nSoftware systems also interact with each other, and these software systems will expose APIs to define these interactions. The APIs will define specific rules for how to interact with a software system: how to read data, how to write data, how to update data, how to delete data, and so on.\n\nWorking with APIs is a fundamental part of building modern software. For instance, the Pairwise application you are working through is constantly communicate with the API of our backend servers to send data for your course progress updates as you complete challenges. And, because APIs are involved with communicating with other running software systems, this communication typically occurs _asynchronously\\._\n\nAlso, it's important to keep in mind that when you use an API you are interacting with code you don't control directly which means there is always a chance your request could fail and throw an error\\! It's a best practice to always assume that API requests may fail and to design your programs to anticipate and try to handle those failure scenarios."
+        },
+        {
+          "id": "MKAUs5o6D",
+          "type": "section",
+          "title": "Async Practice",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "A quick recap: we've covered the following so far:\n\n* Timers with `setTimeout` and `setInterval`.\n* Async functions with `async/await`.\n* Working with Promises and callbacks.\n* How to make network requests with the `fetch` API\\.\n* Basic networking with HTTP: `GET`, `POST`, `PUT`, and `DELETE`.\n* The basics of how APIs work.\n\n\nIt's a lot\\! You now have a solid foundation in working with asynchronous code and communicating with other services with APIs.\n\nIn this section, we will walk through some simple challenges to provide you with more practice using these skills.\n"
         },
         {
           "id": "Ak2JW7U45",
