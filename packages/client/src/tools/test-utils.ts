@@ -421,91 +421,95 @@ export const getTestHarness = (
   userCode: string,
   testCode: string,
 ): string => `
-try {
-  ${preamble}
+(async function() {
+  try {
+    ${preamble}
 
-  // Fixed helper constants to be used in the test environment.
-  ${TEST_HELPER_CONSTANTS}
+    // Fixed helper constants to be used in the test environment.
+    ${TEST_HELPER_CONSTANTS}
 
-  // use as a fallback when the only way to test user code is by regexp.
-  // purposefully named against conventions to avoid collisions with user vars
-  const ${
-    TEST_UTILS_GLOBALS_KEYS.__user_code_string__
-  } = ${prepareUserCodeString(userCode)};
+    // use as a fallback when the only way to test user code is by regexp.
+    // purposefully named against conventions to avoid collisions with user vars
+    const ${
+      TEST_UTILS_GLOBALS_KEYS.__user_code_string__
+    } = ${prepareUserCodeString(userCode)};
 
-  function buildTestsFromCode() {
-    const testArray = [];
-    const test = (message, fn) => {
-      testArray.push({
+    function buildTestsFromCode() {
+      const testArray = [];
+      const test = (message, fn) => {
+        testArray.push({
             message,
             test: fn,
-        })
+        });
+      }
+
+      ${testCode}
+
+      return testArray;
     }
 
-    ${testCode}
+    async function runTestsAsync() {
+      const tests = buildTestsFromCode();
+      const testResults = await Promise.all(tests.map(async ({ message, test }) => {
+        try {
+          const _result = await test();
+          return {
+            message,
+            testResult: true, // If we get here it didn't throw, so it passed
+            error: null,
+          };
+        } catch (err) {
+          return {
+            message,
+            testResult: false,
+            error: err.message + '\\n\\n' + err.stack,
+          };
+        }
+      }));
 
-    return testArray;
-  }
+      return testResults.flat();
+    }
 
-  async function runTests() {
-    const tests = buildTestsFromCode();
-    const testResults = await Promise.all(tests.map(async ({ message, test }) => {
-      try {
-        const _result = await test();
-        return {
-          message,
-          testResult: true, // If we get here it didn't throw, so it passed
-          error: null,
-        };
-      } catch (err) {
-        return {
-          message,
-          testResult: false,
-          error: err.message + '\\n\\n' + err.stack,
-        };
-      }
-    }));
-
-    return testResults.flat();
-  }
-
-  try {
-    (async function() {
-      const results = await runTests();
+    try {
+      const results = await runTestsAsync();
       window.parent.postMessage({
         message: JSON.stringify(results),
         source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}"
       }, ${TARGET_WINDOW_ORIGIN});
-    })();
+    } catch (err) {
+      window.parent.postMessage({
+        message: JSON.stringify([
+          {
+            testResult: false,
+            error: err.message + "\\n" + err.stack,
+            message: "Something failed with the tests. This should not happen in production.",
+          }
+        ]),
+        source: "${IFRAME_MESSAGE_TYPES.TEST_ERROR}"
+      }, ${TARGET_WINDOW_ORIGIN});
+    }
   } catch (err) {
-    window.parent.postMessage({
-      message: JSON.stringify({
-        error: err.message,
-      }),
-      source: "${IFRAME_MESSAGE_TYPES.TEST_ERROR}"
-    }, ${TARGET_WINDOW_ORIGIN});
+    if (err.message === "INFINITE_LOOP") {
+      window.parent.postMessage({
+        message: JSON.stringify({
+          error: err.message,
+        }),
+        source: "${IFRAME_MESSAGE_TYPES.INFINITE_LOOP}",
+      }, ${TARGET_WINDOW_ORIGIN});
+    } else {
+      window.parent.postMessage({
+        message: JSON.stringify([
+          {
+            testResult: false,
+            error: err.message + "\\n" + err.stack,
+            message: "The code should compile and not throw any errors.",
+          }
+        ]),
+        source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
+      }, ${TARGET_WINDOW_ORIGIN});
+    }
   }
-} catch (err) {
-  if (err.message === "INFINITE_LOOP") {
-    window.parent.postMessage({
-      message: JSON.stringify({
-        error: err.message,
-      }),
-      source: "${IFRAME_MESSAGE_TYPES.INFINITE_LOOP}",
-    }, ${TARGET_WINDOW_ORIGIN});
-  } else {
-    window.parent.postMessage({
-      message: JSON.stringify([
-        {
-          testResult: false,
-          error: err.message + "\\n" + err.stack,
-          message: "The code should compile and not throw any errors.",
-        }
-      ]),
-      source: "${IFRAME_MESSAGE_TYPES.TEST_RESULTS}",
-    }, ${TARGET_WINDOW_ORIGIN});
-  }
-}
+})();
 `;
 
 /**
@@ -518,11 +522,9 @@ export const getTestScripts = (
   testLib: string,
 ) => {
   return `
-    <script id="test-code">${getTestHarness(
-      getTestDependencies(testLib),
-      userCode,
-      testCode,
-    )}</script>
+    <script id="test-code">
+      ${getTestHarness(getTestDependencies(testLib), userCode, testCode)}
+    </script>
   `;
 };
 

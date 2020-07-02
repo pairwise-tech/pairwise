@@ -10,7 +10,7 @@ const MAX_LINE_LENGTH = 16;
 // @ts-ignore
 declare function test(message: string, testFunction: () => void): void;
 declare const __user_code_string__: string;
-declare const __secret_log_box: string;
+declare const __secret_log_box: string[];
 declare const __secret_warn_box: string[];
 declare const __secret_error_box: string[];
 declare const __secret_info_box: string[];
@@ -249,6 +249,28 @@ const parseLogBox = (box: string[]): string[] => {
 const inBox = (box: string[], message: string): boolean => {
   const result = box.find(m => m === message);
   return !!result;
+};
+
+// Check for a message in the console log box, but after some delay.
+// This is a helper for running tests in async challenges, where a challenge
+// may need to log a message but after waiting for some time.
+const checkBoxAsync = async (
+  box: string[],
+  message: string,
+  delay: number,
+): Promise<boolean> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const result = inBox(box, message);
+      resolve(result);
+    }, delay);
+  });
+};
+
+// Wait some time... useful for pausing to let async challenges have some
+// time to complete some actions.
+const wait = async (time: number) => {
+  return new Promise(resolve => setTimeout(resolve, time));
 };
 
 // Helper to quickly fail a test.

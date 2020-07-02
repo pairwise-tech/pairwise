@@ -205,11 +205,11 @@ describe("Workspace Challenges", () => {
 
   it("The workspace supports Async/Await challenges and they can be solved", () => {
     // Visit an Async challenge
-    cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/write-an-async-function`);
+    cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/the-await-keyword`);
     cy.wait(TIMEOUT);
 
     // Verify the challenge title
-    cy.contains("Write an Async Function");
+    cy.contains("The Await Keyword");
 
     // Tests should fail
     checkTestResultStatus("Incomplete...");
@@ -398,7 +398,7 @@ ReactDOM.render(<Main />, document.querySelector("#root"));
 `;
 
 const ASYNC_CHALLENGE_SOLUTION = `
-const makePromise = (shouldResolve: boolean = true) => {
+const makePromise = (shouldResolve: boolean) => {
   return new Promise((resolve, reject) => {
     if (shouldResolve) {
       resolve("I promised!");
@@ -408,7 +408,7 @@ const makePromise = (shouldResolve: boolean = true) => {
   });
 }
 
-const fulfillThePromise = async (promiseShouldResolve: boolean = true) => {
+const fulfillThePromise = async (promiseShouldResolve: boolean) => {
   try {
     console.log("Fulfilling the promise...");
     const resolutionValue = await makePromise(promiseShouldResolve);
@@ -419,6 +419,4 @@ const fulfillThePromise = async (promiseShouldResolve: boolean = true) => {
     return rejectionValue;
   }
 };
-
-fulfillThePromise();
 `;
