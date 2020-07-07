@@ -3528,6 +3528,50 @@
           "content": "Now that you have learned a lot of the basics of working with asynchronous code we'll get into more of the useful things you can start to use these skills with. This starts with making network requests using the hypertext transfer protocol \\(HTTP\\). You are probably familiar with HTTP from seeing it, or it's more secure cousin HTTPS, as a prefix for many web URLs, e.g. `https://app.pairwise.tech`.\n\nWhen you type in a web URL like this in a web browser and hit enter, the web browser is using the HTTP/HTTPS protocol to fetch the resource stored at that url. The web browser makes a network request and the protocol resolves the request and return a response, which is usually an HTML document for that URL. The HTML document often will continue links to other resources, like CSS and JS files which will then be downloaded. These together constitute a website and this entire process occurs asynchronously using networking and HTTP."
         },
         {
+          "id": "qIaveTrGu",
+          "type": "typescript",
+          "title": "GET Requests",
+          "instructions": "The HTTP `GET` request is used to retrieve data.",
+          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "TFgdPCNyW",
+          "type": "typescript",
+          "title": "POST Request",
+          "instructions": "The HTTP `POST` request is used send data to a server.",
+          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "u374HXzhc",
+          "type": "typescript",
+          "title": "PUT Request",
+          "instructions": "The HTTP `PUT` request is also used to send data to a server.",
+          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "TC7HwcXRc",
+          "type": "typescript",
+          "title": "DELETE Request",
+          "instructions": "The HTTP `DELETE` method is used to delete a specified resource.",
+          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "5EvCUSycn",
           "type": "section",
           "title": "Working with APIs",
