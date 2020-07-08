@@ -3530,7 +3530,7 @@
         {
           "id": "qIaveTrGu",
           "type": "typescript",
-          "title": "GET Requests",
+          "title": "GET Request",
           "instructions": "The HTTP `GET` request is used to retrieve data.",
           "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
           "videoUrl": "",
@@ -3570,6 +3570,50 @@
           "starterCode": "",
           "solutionCode": "",
           "content": ""
+        },
+        {
+          "id": "9H3df@@nF",
+          "type": "typescript",
+          "title": "HTTP Request Headers",
+          "instructions": "Headers are additional optional data which you can include in an HTTP request.",
+          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "8h2qN7py$",
+          "type": "typescript",
+          "title": "HTTP Response Status",
+          "instructions": "HTTP responses contain some data which indicate their status. Let's take a look at that here.",
+          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "jso8aTAKQ",
+          "type": "typescript",
+          "title": "The XMLHttpRequest Object",
+          "instructions": "Let's take a look at the scary [XMLHttpRequest object](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest).",
+          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "hx0KMlQN2",
+          "type": "media",
+          "title": "HTTP Fetch Library Options",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "We have seen a few different options for making HTTP requests so far."
         },
         {
           "id": "5EvCUSycn",
