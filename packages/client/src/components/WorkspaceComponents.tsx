@@ -279,6 +279,8 @@ export const Spacer = styled.div`
 
 export const ContentTitle = styled.h3`
   margin: 0;
+  margin-top: 4px;
+  margin-left: 2px;
   margin-bottom: 12px;
   color: ${C.TEXT_TITLE};
 `;

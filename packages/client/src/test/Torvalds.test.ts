@@ -15,7 +15,16 @@ import stripComments from "strip-comments";
  * ============================================================================
  */
 
-jest.setTimeout(30000);
+/**
+ * Huge timeout! This timeout applies to the entire running test time, and
+ * should be sufficient to run ALL of the challenge tests. This is a lot
+ * the timeout is excessively long.
+ *
+ * Check the waitForResultsUntilTimeout method in the test file below for
+ * the logic which handles timing out individual challenge tests. This timer
+ * logic is set to a maximum to 15 seconds.
+ */
+jest.setTimeout(100000);
 
 /**
  * Import the expectation library. Read the file directly with Node because
@@ -33,24 +42,29 @@ const courses = require("@pairwise/common").default;
 const { FullstackTypeScript } = courses;
 const course: Course = FullstackTypeScript;
 
-/* Debug options, add challenge ids here to debug them directly: */
+// NOTE: Enable debug mode. Inspect challenges directly by id. Should
+// only be used for debugging.
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["TL9i1z2rT"]);
+const TEST_ID_WHITELIST = new Set(["MEjox@iw0"]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the
 // world would you do this!?! Limitations of the JSDOM environment.
 // NOTE: I'm leaving this commented-out ID in here for now in case it happens
-// again in the future. The test env is bad at inheritted styles. That
-// particular test was failing becuase I had applied color:white; to the body
+// again in the future. The test env is bad at inherited styles. That
+// particular test was failing because I had applied color:white; to the body
 // tag and not p tags directly.
 const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "Ao8hbaiP", // Test env seems to be having trouble calculating the midpoint of a bounding box.
   // "pUf7$Qi2y", // Could not test that p tags are white... WHY? See NOTE
+  // "MEjox@iw0",
 ]);
 
-/* Enable or disable log info */
+// Enable or disable log info
 const LOG = true;
+
+// Enable logging messages from the test environment
+const ENABLE_TEST_LOG = false;
 
 /** ===========================================================================
  * Test
@@ -247,6 +261,10 @@ const executeTests = async (challenge: Challenge) => {
       const { source, message } = data;
       if (source === "TEST_RESULTS") {
         results = JSON.parse(message);
+      } else if (source === "LOG" && ENABLE_TEST_LOG) {
+        // Log messages sent out from the test code execution. Useful for
+        // debugging test failures.
+        console.log(message);
       }
     };
 
@@ -262,13 +280,14 @@ const executeTests = async (challenge: Challenge) => {
 
     try {
       /**
-       * Recursively await the tests results: wait 10 times pausing 50 ms
-       * every time, and then fail after half a second if no test results
-       * are found.
-       *
-       * The timing thresholds here can be adjusted as needed.
+       * Recursively await the tests results. The total limit is 15 seconds
+       * with an interval of 50 milliseconds. This should allow the majority
+       * of tests to complete quickly will still allowing a generous wait
+       * time for longer running tests, e.g. async tests.
        */
-      const waitLoop = async (remainingTries = 10): Promise<void> => {
+      const waitForResultsUntilTimeout = async (
+        remainingTries = 300,
+      ): Promise<void> => {
         if (results.length > 0) {
           // Test results have been received.
           return;
@@ -286,12 +305,12 @@ const executeTests = async (challenge: Challenge) => {
         } else {
           // Results not found yet, continue retrying
           await wait(50);
-          return waitLoop(remainingTries - 1);
+          return waitForResultsUntilTimeout(remainingTries - 1);
         }
       };
 
       // Run the wait loop
-      await waitLoop();
+      await waitForResultsUntilTimeout();
     } catch (err) {
       // Catch any errors from above and populate a failure message
       results = [
