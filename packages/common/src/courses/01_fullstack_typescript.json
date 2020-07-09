@@ -3531,11 +3531,11 @@
           "id": "qIaveTrGu",
           "type": "typescript",
           "title": "GET Request",
-          "instructions": "The HTTP `GET` request is used to retrieve data.",
-          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
+          "instructions": "The server we deployed is running at [https://pairwise\\-example\\-http\\-api.appspot.com](https://pairwise-example-http-api.appspot.com/). If you view that URL, you will see some text rendered in your browser. The browser is making a `GET` request to the index route `/` and displaying the response, which is that text.\n\nThe HTTP `GET` method is used to retrieve a resource, or, simply, to \"get\" some data. Browsers use GET requests to load webpages, but we can also make GET requests directly using the Fetch API. This is as simple as passing in the URL to the `fetch` method\\.\n\nWe have added an `/api` route to the server URL shown above. Make a `GET` request to this `/api` route, and return the response from the function in the editor.\n\n++NOTE:++ The server will return text. To transform the response object into just this text, you will need to call `response.text()`. That returns a promise, so you will need to `await` it\\! The function should return the resulting text from the response.",
+          "testCode": "test(\"`getRequest` should be a function.\", () => {\n  expect(typeof getRequest).toBe(\"function\");\n});\n\ntest(\"`getRequest` returns the text from the response from making a GET request to the `/api` route at the `https://pairwise-example-http-api.appspot.com` URL.\", async () => {\n  const solution = async () => {\n    const response = await fetch(\"https://pairwise-example-http-api.appspot.com/api\");\n    return response.text();\n  };\n\n  const result = await getRequest();\n  const expected = await solution();\n  expect(result).toEqual(expected);\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "const getRequest = async () => {\n  // Your code here:\n}",
+          "solutionCode": "const getRequest = async () => {\n  try {\n    // Make the GET request\n    const response = await fetch(\n      \"https://pairwise-example-http-api.appspot.com/api\"\n    );\n\n    // Retrieve the text from the response\n    const result = await response.text();\n\n    // Return the text result\n    return result;\n  } catch (err) {\n    // Log any errors\n    console.log(err.message);\n  }\n};\n",
           "content": ""
         },
         {
@@ -3616,15 +3616,15 @@
           "content": "We have seen a few different options for making HTTP requests so far."
         },
         {
-          "id": "5EvCUSycn",
-          "type": "section",
-          "title": "Working with APIs",
-          "instructions": "",
+          "id": "FkgTjFf5x",
+          "type": "typescript",
+          "title": "Using APIs",
+          "instructions": "You may have heard the term \"API\" before.",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Now that we have the basics of HTTP covered we are going to dive into APIs: application programming interfaces. This somewhat confusing term will become crystal clear once you understand that meaning and start to work with APIs.\n\nAn API is basically a definition of rules for how you can interact with some computer system.\n\nIn a more abstract way, you can apply the idea of an API to basically all everyday objects. For instance, the API of a microwave is to get heated up food items you must be the food in the microwave and then running the microwave for 30 seconds or a minute. The API of the postal system is you must send a letter or package with paid postage and a properly formatted address to a post office and then it will be delivered. The API is the rules for how to interact with the system.\n\nSoftware systems also interact with each other, and these software systems will expose APIs to define these interactions. The APIs will define specific rules for how to interact with a software system: how to read data, how to write data, how to update data, how to delete data, and so on.\n\nWorking with APIs is a fundamental part of building modern software. For instance, the Pairwise application you are working through is constantly communicate with the API of our backend servers to send data for your course progress updates as you complete challenges. And, because APIs are involved with communicating with other running software systems, this communication typically occurs _asynchronously\\._\n\nAlso, it's important to keep in mind that when you use an API you are interacting with code you don't control directly which means there is always a chance your request could fail and throw an error\\! It's a best practice to always assume that API requests may fail and to design your programs to anticipate and try to handle those failure scenarios."
+          "content": ""
         },
         {
           "id": "MKAUs5o6D",
