@@ -3642,7 +3642,7 @@
           "type": "typescript",
           "title": "Using APIs",
           "instructions": "You may have heard the term \"API\" before.",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
