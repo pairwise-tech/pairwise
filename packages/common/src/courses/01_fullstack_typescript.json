@@ -3322,6 +3322,17 @@
           "content": "# Examples\n\n```bash\n# Move the file hello.txt from the current directory \n# into the subdirectory named text_files\nmv hello.txt text_files/\n\n# Rename app.ts to project.ts\nmv app.ts project.ts\n\n```\n"
         },
         {
+          "id": "zXBZwIxTV",
+          "type": "media",
+          "title": "cp: Copy Files",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# Examples\n\n```bash\n# Copy the file hello.txt from the current directory \n# into the subdirectory named text_files\ncp hello.txt text_files/\n\n# Create a copy of app.ts named project.ts\ncp app.ts project.ts\n\n```\n"
+        },
+        {
           "id": "Ub2hNjGSBX",
           "type": "media",
           "title": "cat: See the Contents of Files",
@@ -3377,6 +3388,50 @@
           "content": "`man` stands for \"manual\" and can be used to view the manual for various commands. These documents or manuals are usually referred to as \"man pages.\" \n\nUnfortunately some man pages are great and some are not so helpful. We will see other ways to get help when we talk about installing software.\n# Examples\n\n```bash\n# View the manual for the `ls` command\nman ls\n\n```\n"
         },
         {
+          "id": "5jnjQLuUy",
+          "type": "media",
+          "title": "curl: Get Data from the Internet",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "* Get some weather \n* Get some reddit\n\n"
+        },
+        {
+          "id": "2Le38MD6M",
+          "type": "media",
+          "title": "Command Line Pipes",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "SwXV8lqFJb",
+          "type": "media",
+          "title": "Configuration Files and Aliases",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "* `.bashrc`\n* Creating your own `alias`es\\.\n\n"
+        },
+        {
+          "id": "z$JF$lDjH",
+          "type": "media",
+          "title": "Redirecting Output",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "```\ncurl URL > blah.txt \n\n```\nAKA downloading files"
+        },
+        {
           "id": "aR5Go1MLPe",
           "type": "media",
           "title": "brew and apt: Installing Software",
@@ -3396,7 +3451,139 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
+          "content": "# Examples\n\n```bash\n# Open the current directory with the default application.\n# On Mac the default is Finder, on Windows the default is Explorer\nopen .\n\n# Open a text file with your default editor. If you set VSCode to\n# be your default, this will open VSCode\nopen my-file.txt\n\n```\n"
+        },
+        {
+          "id": "gE6ayunrl",
+          "type": "media",
+          "title": "grep: Find Specific Code",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# Examples\n\n```bash\n# Search for the word \"Hello\" within the file app.ts\ngrep \"Hello\" app.ts\n\n# Do a case-insensitive search. This means that if it finds \"Hello\" or \"hello\"\n# either one counts as a match. Note that the difference is the capital \"H\"\ngrep -i \"Hello\" app.ts\n\n# Search for the text \"Hello\" in every file within the ./src directory. \n# -R stands for recursive, meaning every file that is located within \n# the target directory will be searched.\ngrep -R \"Hello\" ./src\n\n# Combine the two flags -R and -i to recursively search without worrying about\n# case.\ngrep -R -i \"Pairwise\" ./src\n\n```\n"
+        },
+        {
+          "id": "mkw5rDUzXB",
+          "type": "section",
+          "title": "Third-Party Software on the Command Line",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "You probably already know that you can install software on your computer. Things like VSCode, Firefox and Excel are all examples.\n\nYou can _also_ install software on the command line. You will just need a piece of software called a package manager. \n# Package Managers\n\nA package manager is somewhat like an app store for the command line. You use a package manager to install other software. A \"package\" is just another word for software.\n\n\n## apt: Windows and Linux\n\nOn Linux we have `apt`, which you will also have on Windows if you set up your system as we described earlier in this module \\(here's a [link](/workspace/RCm1HkcbQ) if you missed it\\). Linux already has a package manger installed and it's called `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\napt install <package>\n\n# List all the currently installed packages\napt list --installed\n\n# Show information for a specific package\napt show <package>\n\n# Search for a package\napt search <package>\n\n```\n\n## brew: Mac\n\nOn a Mac, things are not so simple. We have to install a third\\-party package manager called Homebrew. The latest instructions to install Homebrew can be found on their site: [https://brew.sh/](https://brew.sh/)\n\nAs of this writing the installation command is:\n\n```\n/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)\"\n\n```\n\nHomebrew uses a command called `brew`. Once you have `brew` installed you can start using it much like `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\nbrew install <package>\n\n# List all the currently installed packages\nbrew list\n\n# Show information for a specific package\nbrew info <package>\n\n# Search for a package\nbrew search <package>\n\n```\n"
+        },
+        {
+          "id": "$0ICxz1DQ",
+          "type": "media",
+          "title": "jq: Do Stuff with JSON",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
           "content": ""
+        },
+        {
+          "id": "@oPRSQI6V",
+          "type": "media",
+          "title": "ag: Another Way to Grep",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "iC$3Bijan",
+          "type": "media",
+          "title": "which: Is Something Installed?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Show `which` and `which -a`."
+        },
+        {
+          "id": "4u1gnF3N6",
+          "type": "media",
+          "title": "Configuring Your $PATH",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "What it is, how to configure it."
+        },
+        {
+          "id": "NvWDlHv9Z",
+          "type": "section",
+          "title": "Git",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The time has come to sit down and have a frank discussion about Git, a piece of software that is both extremely useful and extremely opaque from the outside.\n\nSo let's start with some questions:\n\n* How do keep different versions of my code?\n* How do I know what changed between two files, or two versions of the same file? \n* How do I ensure my code is backed up in case I accidentally delete it or Apple accidentally wipes my drive? \n* How do I collaborate with other programmers? \\(And what if we both edit the same file?\\)\n* If I accidentally break my app \\(this _will_ happen\\) how do I revert it back to a working version?\n\n\nNaturally, since we're talking about Git, Git is the answer to these questions. It's also why it's often hard to talk about Git—it has many uses. \n\nAlso, there is _even more_ Git can do than what I listed here. \n\n> Git is the epitome of a professional tool: Hard to learn but extremely useful.\n\nTo start out, let's just make sure you have a recent version of Git: \n\n```bash\n# Mac\nbrew install git\n\n# Windows/Linux\napt install git\n\n```\n"
+        },
+        {
+          "id": "0hH1Ze2Og",
+          "type": "media",
+          "title": "Getting Started with Git",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "```\ngit init\ngit status\ngit add .\ngit commit -m \"Sup\"\ngit log\n\n```\nExplain these commands. \nAlso show that git is so universal as to be built into vscode.\nAlso maybe set their `$EDITOR` var to vscode."
+        },
+        {
+          "id": "jLByUSItW",
+          "type": "media",
+          "title": "Git Branching",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "```\ngit branch\ngit checkout\ngit checkout -b \n\n```\n"
+        },
+        {
+          "id": "z3oxFVeAK",
+          "type": "media",
+          "title": "Git Remotes and Github",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "```\ngit remote add origin <url>\ngit push\ngit push -u origin master\ngit clone URL \n\n```\n\nWhy the hell \"origin\"?\nWhy the hell \"master\"?"
+        },
+        {
+          "id": "Hm4V0Ulo5",
+          "type": "media",
+          "title": "Reviewing Git History",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "```\ngit log # With more advanced flags. make an alias or two\ngit blame\ngit show\n\n```\n"
+        },
+        {
+          "id": "tKcyGPzpL",
+          "type": "media",
+          "title": "Fixing Mistakes in Commits",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "```\ngit commit --amend \n\n```\n"
         },
         {
           "id": "$EcZq5Ecg",
