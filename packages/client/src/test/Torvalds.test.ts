@@ -280,13 +280,13 @@ const executeTests = async (challenge: Challenge) => {
 
     try {
       /**
-       * Recursively await the tests results. The total limit is 15 seconds
+       * Recursively await the tests results. The total limit is 25 seconds
        * with an interval of 50 milliseconds. This should allow the majority
        * of tests to complete quickly will still allowing a generous wait
        * time for longer running tests, e.g. async tests.
        */
       const waitForResultsUntilTimeout = async (
-        remainingTries = 300,
+        remainingTries = 500,
       ): Promise<void> => {
         if (results.length > 0) {
           // Test results have been received.
