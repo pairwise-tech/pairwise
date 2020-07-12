@@ -3616,13 +3616,24 @@
           "content": ""
         },
         {
+          "id": "crFGCiQkX",
+          "type": "media",
+          "title": "HTTP Responses",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The result of an HTTP request is an HTTP response. The response contains the result of the request and other relevant information, for example the status of the request, the status code, response headers, etc. Understanding and working with HTTP responses is an important part of working with HTTP and APIs.\n# Response Status\n\nOne of the most important aspects of the response object is its status code. [HTTP status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) are used to represent the \"state\" of a response to a request. This is basically how you know if the request was successful or not. Don't forget \\- if you are ever making a network request the request could fail for 1,001 different reasons\\!\n\nThere are 5 main status code categories, \"one hundred\" level status codes, i.e. `100`, `101`, or `102`, \"two hundred\" level codes such as `200`, `201`, etc. and then `3.x.x`, `4.x.x`, and `5.x.x`. Generally, each level has a specific meaning:\n\n* `100`: Information response.\n* `200`: Success response.\n* `300`: Redirection response.\n* `400`: Client error \\(e.g. bad request or unauthorized\\).\n* `500`: Server error \\(the server failed to process the request for some reason\\).\n\n\nWithin each \"hundred\" level of status codes, a particular code is used to convey a specific reason/context in the response, e.g. `400` is used to represent that something was wrong with the client's request whereas `401` is used to indicate the client's request could not be fulfilled because the client does not have access or is unauthorized to make that request.\n\nOne of these codes will be included in the response object \\(e.g. the [Fetch Response object](https://developer.mozilla.org/en-US/docs/Web/API/Response)\\) in the result of making an HTTP request. For instance:\n\n```typescript\nconst makeRequest = async (url: string) => {\n    const response = await fetch(url);\n    // The status information is present on the response object:\n    const { status, statusText } = response;\n    console.log(status);\n    console.log(statusText);\n};\n\n```\n\nThe `statusText` is additional text associated with the response.\n\nThe response will also contain additional information, as mentioned above, such as response headers and the response type \\- feel free to read on the details more if you are interested.\n\nFor our purposes here, the main takeaway is to learn how to interpret HTTP response status codes. We will get some practice with that in the next challenge."
+        },
+        {
           "id": "8h2qN7py$",
           "type": "typescript",
           "title": "HTTP Response Status",
-          "instructions": "HTTP responses contain some data which indicate their status. Let's take a look at that here.",
-          "testCode": "test(\"Placeholder test\", () => {\n  expect(true).toBe(true);\n});\n",
+          "instructions": "In this challenge, we want to get a little preview into inspecting some of the aspects of the HTTP response object, namely the HTTP status code.",
+          "testCode": "test(\"`sendAuthorizationHeader` should be a function.\", () => {\n  expect(typeof sendAuthorizationHeader).toBe(\"function\");\n});\n\ntest(\"`sendAuthorizationHeader` returns the response from making a `GET` request to the `/api/headers` route and adds an `Authorization` header.\", async () => {\n  const solutionFn = async (id) => {\n    const url = `https://pairwise-example-http-api.appspot.com/api/headers`;\n    const options = {\n      headers: {\n        Authorization: `Bearer ${token}`,\n      },\n    };\n    const response = await fetch(url, options);\n    const result = await response.text();\n    return result;\n  };\n\n  const token = \"as7d68f89sa6f98as67fd98as6f9\";\n\n  const result = await sendAuthorizationHeader(token);\n  const expected = await solutionFn(token);\n  expect(result).toEqual(expected);\n});\n",
           "videoUrl": "",
-          "starterCode": "",
+          "starterCode": "/**\n *\n */\nconst inspectResponseCode = async (code: number) => {\n  try {\n    // URL to make the request to\n    // const url = `https://pairwise-example-http-api.appspot.com/api/${code}`;\n    const url = `http://localhost:5000/api/${code}`;\n\n    // Make the request\n    const response = await fetch(url);\n\n    console.log(response);\n    // console.log(response.status);\n    // console.log(response.statusText);\n  } catch (err) {\n    // Log any errors\n    console.log(err.message);\n  }\n};\n\nconst testRequest = async () => {\n  const result = await inspectResponseCode(500);\n};\n\n// Uncomment to test out your function! Try to modify the token\n// based on the results:\ntestRequest();",
           "solutionCode": "",
           "content": ""
         },
@@ -3668,7 +3679,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In this section we will get some practice working directly with APIs. We've selected 5 relatively simple public APIs which you can use which do not require any account, registration, or authentication. This is very useful from a practice perspective\\!\n\nIf you are interested in finding other free and pubic APIs, [here is a comprehensive list](https://github.com/public-apis/public-apis).\n\nEach challenge will give a short preview of what API will be used and describe what needs to be done. You will need to check out the linked documentation for that API and then build a function to handle making a request to that API.\n\nThe challenges should be easy to solve, but they should start to get you familiar with the process of working with APIs and reading their documentation.\n\nAll right, let's get started\\!"
+          "content": "In this section we will get some practice working directly with APIs. We've selected 5 relatively simple public APIs which you can use which do not require any account, registration, or authentication. This is very useful from a practice perspective\\!\n\nIf you are interested in finding other free and pubic APIs, [here is a comprehensive list](https://github.com/public-apis/public-apis).\n\nEach challenge will give a short preview of what API will be used and describe what needs to be done. You will need to check out the linked documentation for that API and then build a function to handle making a request to that API.\n\nThe challenges should be easy to solve, but they should start to get you familiar with the process of working with APIs and reading their documentation.\n\nAll right, let's dive in\\!"
         },
         {
           "id": "CgstSAbnS",
