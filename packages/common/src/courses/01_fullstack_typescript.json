@@ -3761,13 +3761,13 @@
         {
           "id": "u$qJVfDfE",
           "type": "media",
-          "title": "Build an Interactive Thesaurus",
+          "title": "Build an Interactive Dictionary",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Build a command line tool which allows you to view thesaurus results for a word input. For the resulting options, you can select any word to view other synonyms, or start over and enter a new word."
+          "content": "# Overview\n\nBuild a command line tool which allows you to view definitions and synonyms for English words.\n\nYou can use the [WordsAPI](https://www.wordsapi.com/) for this project. Like the Weatherstack API from the other challenge, you will need to sign up and get an access key to use this API. To do that, you will need to signup via [RapidAPI](https://rapidapi.com/) \\(which is actually a great service which will give you access to a number of other API providers as well\\).\n# User Stories\n\nYour command line program should allow a user to lookup words and view synonyms for words.\n\n* As a user, I am greeted with a prompt when I run the program which allows me to enter a word. When I type a word and press \"enter\" I see a list of definitions for that word \\(use the `/definitions` API\\).\n* As a user, after searching a word I have an option to view synonyms \\(use the `/synonyms` API\\), or search for another word.\n* As a user, errors from searching for invalid words are handled correctly and allow me to search for another word.\n\n\nOnce you have completed your project and pushed it to GitHub, enter your repository URL here to complete the challenge. Good luck\\!\n# Challenge\n\n* The WordsAPI provides a lot of different options. Consider enriching your program's functionality with some of the other API features like antonyms, rhymes, examples, frequency, etc.\n* Display the synonyms for words as selectable command line options which a user can navigate through using the up and down arrow keys and then select with the \"enter\" key. Selecting a synonym should then search and display the definition for that synonym.\n* Maintain a history of word searches the user has performed while the program is running. A user can view this history of words at any time as a list of selectable options and navigate to any word and view that definition again.\n* The program should cache results while it is running, so if a user selects or searches the same word more than once the program should return the cached result instead of making another request to the API.\n\n"
         },
         {
           "id": "zq3sEi606",
