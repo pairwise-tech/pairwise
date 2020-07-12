@@ -3734,7 +3734,40 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Now we will build some simple projects which make use of your new asynchronous programming abilities\\!"
+          "content": "Now we will build some simple projects which make use of your new asynchronous programming abilities\\!\n\nThese projects will require you to build simple NodeJS programs which you can run on the command line. They will involve various aspects of asynchronous programming we have learned about, such as querying APIs and working with asynchronous code. They will also require you to write a command line program which accepts user input.\n\nAccepting user input from a program is a topic we have not covered a lot yet, but it is inherently also an asynchronous type of operation. It is asynchronous in the sense that the user input arrives some time in the future"
+        },
+        {
+          "id": "KCmZ1fjHG",
+          "type": "project",
+          "title": "Query the Open Weather API",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Build a command line tool to allow a user to query the Open Weather API and fetch current weather information for some location."
+        },
+        {
+          "id": "vIQNdGED5",
+          "type": "project",
+          "title": "Rock Paper Scissors",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Build a command line game for the Rock Paper Scissors game. The game should allow a user to choose \"rock\" \"paper\" or \"scissors\" and play against a computer player which will randomly select an option as well."
+        },
+        {
+          "id": "u$qJVfDfE",
+          "type": "media",
+          "title": "Build an Interactive Thesaurus",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Build a command line tool which allows you to view thesaurus results for a word input. For the resulting options, you can select any word to view other synonyms, or start over and enter a new word."
         },
         {
           "id": "zq3sEi606",
