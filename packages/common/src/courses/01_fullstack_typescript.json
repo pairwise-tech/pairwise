@@ -3668,7 +3668,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In this section we would get some practice working directly with APIs. We've selected 5 relatively simple public APIs which you can use which do not require any account, registration, or authentication. This is very useful from a practice perspective\\!\n\nEach challenge will give a short preview of what API will be used and describe what needs to be done. You will need to check out the linked documentation for that API and the build a function to handle making a request to that API to fetch some resources.\n\nThe challenges should be easy to solve, but they should start to get you familiar with the process of working with APIs and reading their documentation.\n\nAll right, let's get started\\!"
+          "content": "In this section we would get some practice working directly with APIs. We've selected 5 relatively simple public APIs which you can use which do not require any account, registration, or authentication. This is very useful from a practice perspective\\!\n\nIf you are interested in finding other free and pubic APIs, [here is a comprehensive list](https://github.com/public-apis/public-apis).\n\nEach challenge will give a short preview of what API will be used and describe what needs to be done. You will need to check out the linked documentation for that API and the build a function to handle making a request to that API to fetch some resources.\n\nThe challenges should be easy to solve, but they should start to get you familiar with the process of working with APIs and reading their documentation.\n\nAll right, let's get started\\!"
         },
         {
           "id": "CgstSAbnS",
@@ -3734,7 +3734,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Now we will build some simple projects which make use of your new asynchronous programming abilities\\!\n\nThese projects will require you to build simple NodeJS programs which you can run on the command line. They will involve various aspects of asynchronous programming we have learned about, such as querying APIs and working with asynchronous code. They will also require you to write a command line program which accepts user input.\n\nAccepting user input from a program is a topic we have not covered a lot yet, but it is inherently also an asynchronous type of operation. It is asynchronous in the sense that the user input arrives some time in the future"
+          "content": "Now we will build some simple projects which make use of your new asynchronous programming abilities\\!\n\nThese projects will require you to build simple NodeJS programs which you can run on the command line. They will involve various aspects of asynchronous programming we have learned about, such as querying APIs and working with asynchronous code. They will also require you to write a command line program which accepts user input.\n\nAccepting user input from a program is a topic we have not covered a lot yet, but it is inherently also an asynchronous type of operation. It is asynchronous in the sense that the user input arrives at some undetermined time in the future."
         },
         {
           "id": "KCmZ1fjHG",
