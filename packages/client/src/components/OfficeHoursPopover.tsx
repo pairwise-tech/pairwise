@@ -105,16 +105,6 @@ const isUpcoming = (session: Session) => {
   return preStartTime < now && now < startTime;
 };
 
-const getSessionStatus = (
-  session: Session,
-): "UPCOMING" | "IN_PROGRESS" | "PASSED" => {
-  return isUpcoming(session)
-    ? "UPCOMING"
-    : inSession(session)
-    ? "IN_PROGRESS"
-    : "PASSED";
-};
-
 const isSessionPassed = (session: Session) => {
   return new Date(session.startDate).getTime() < new Date().getTime();
 };
