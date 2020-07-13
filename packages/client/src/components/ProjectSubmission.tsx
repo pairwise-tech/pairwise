@@ -192,16 +192,21 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   blob: Modules.selectors.challenges.getBlobForCurrentChallenge(state),
 });
 
+const ChallengeSelectors = Modules.actions.challenges;
+
 const dispatchProps = {
-  submitProject: Modules.actions.challenges.submitProject,
-  updateChallenge: Modules.actions.challenges.updateChallenge,
-  updateCurrentChallengeBlob:
-    Modules.actions.challenges.updateCurrentChallengeBlob,
+  submitProject: ChallengeSelectors.submitProject,
+  updateCurrentChallengeBlob: ChallengeSelectors.updateCurrentChallengeBlob,
 };
 
 type ProjectSubmissionProps = ReturnType<typeof mapStateToProps> &
   typeof dispatchProps;
 
+/**
+ * NOTE: This should be checked as a project type challenge wherever
+ * this component is rendered (e.g. from the MediaArea). As a result,
+ * this component can assume it's dealing with a project challenge.
+ */
 interface ComponentProps {
   challenge: Challenge;
 }
