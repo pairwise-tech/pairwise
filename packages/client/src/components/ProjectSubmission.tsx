@@ -6,6 +6,7 @@ import { Hr, TitleHeader } from "./Shared";
 import { Challenge, ProjectChallengeBlob } from "@pairwise/common";
 import { composeWithProps, constructDataBlobFromChallenge } from "tools/utils";
 import Modules, { ReduxStoreState } from "modules/root";
+import toaster from "tools/toast-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -100,6 +101,7 @@ class ProjectSubmission extends React.Component<IProps, IState> {
           className={Classes.INPUT}
         />
         <Button
+          disabled={!repoURL}
           intent="primary"
           style={{ marginTop: 24 }}
           onClick={this.handleSaveProjectDetails}
@@ -122,22 +124,57 @@ class ProjectSubmission extends React.Component<IProps, IState> {
     const { challenge, updateCurrentChallengeBlob } = this.props;
     const { projectURL, repoURL } = this.state;
 
+    // Validation
+    if (!repoURL) {
+      toaster.warn(`A repository URL is required to save project details.`);
+      return;
+    }
+    if (!validateProjectURL(repoURL)) {
+      toaster.warn(`Please submit a valid repository url: ${repoURL}`);
+      return;
+    } else if (!validateProjectURL(projectURL)) {
+      toaster.warn(`Please submit a valid project url: ${projectURL}`);
+      return;
+    }
+
     const blob = constructDataBlobFromChallenge({
       repoURL,
       projectURL,
       challenge,
     });
 
-    console.log("Repo: ", repoURL);
-    console.log("Project: ", projectURL);
-    console.log(blob);
-
     updateCurrentChallengeBlob({
       dataBlob: blob,
       challengeId: challenge.id,
     });
+
+    toaster.success("Project details submitted successfully!");
   };
 }
+
+/** ===========================================================================
+ * Styles and Utils
+ * ============================================================================
+ */
+
+/**
+ * Validate the url strings. The URL string can be empty or a valid URL.
+ */
+const validateProjectURL = (url: string) => {
+  return !!url ? isValidURL(url) : true;
+};
+
+/**
+ * Validate a string as a URL.
+ */
+const isValidURL = (url: string): boolean => {
+  try {
+    const check = new URL(url);
+    return !!check; // i.e. true
+  } catch (err) {
+    return false;
+  }
+};
 
 /** ===========================================================================
  * Props
