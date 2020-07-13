@@ -631,7 +631,6 @@ const completeContentOnlyChallengeEpic: EpicSignature = (
     pluck("payload"),
     pluck("previousChallengeId"),
     filter(x => x !== null),
-    // map(({ payload: { previousChallengeId } }) => previousChallengeId),
     map(prevId => {
       // artificially construct the previous state in order to get the last
       // challenge using the getCurrentChallenge selector.
@@ -649,6 +648,26 @@ const completeContentOnlyChallengeEpic: EpicSignature = (
       ) as Challenge;
     }),
     filter(isContentOnlyChallenge),
+    filter(x => x.type !== "project"), // Exclude projects
+    map(({ id }) => constructProgressDto(state$.value, id, true)),
+    map(result => {
+      if (result.value) {
+        return Actions.updateUserProgress(result.value);
+      } else {
+        return Actions.empty("Did not save user progress");
+      }
+    }),
+  );
+};
+
+/**
+ * Handle saving details for a project submission.
+ */
+const completeProjectSubmissionEpic: EpicSignature = (action$, state$) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.submitProject)),
+    pluck("payload"),
+    filter(x => x.type === "project"),
     map(({ id }) => constructProgressDto(state$.value, id, true)),
     map(result => {
       if (result.value) {
@@ -824,6 +843,7 @@ export default combineEpics(
   saveCourse,
   handleFetchCodeBlobForChallengeEpic,
   fetchCodeBlobForChallengeEpic,
+  completeProjectSubmissionEpic,
   setWorkspaceLoadedEpic,
   resetChallengeContextEpic,
   codepressDeleteToasterEpic,

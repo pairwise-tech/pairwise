@@ -121,7 +121,7 @@ class ProjectSubmission extends React.Component<IProps, IState> {
   };
 
   handleSaveProjectDetails = () => {
-    const { challenge, updateCurrentChallengeBlob } = this.props;
+    const { challenge, submitProject, updateCurrentChallengeBlob } = this.props;
     const { projectURL, repoURL } = this.state;
 
     // Validation
@@ -143,11 +143,16 @@ class ProjectSubmission extends React.Component<IProps, IState> {
       challenge,
     });
 
+    // Update the project blob
     updateCurrentChallengeBlob({
       dataBlob: blob,
       challengeId: challenge.id,
     });
 
+    // Mark the project as completed
+    submitProject(challenge);
+
+    // Optimistically show success toast
     toaster.success("Project details submitted successfully!");
   };
 }
@@ -186,6 +191,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
+  submitProject: Modules.actions.challenges.submitProject,
   updateChallenge: Modules.actions.challenges.updateChallenge,
   updateCurrentChallengeBlob:
     Modules.actions.challenges.updateCurrentChallengeBlob,
