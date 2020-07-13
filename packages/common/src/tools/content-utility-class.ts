@@ -84,7 +84,7 @@ class ContentUtilityClass {
               // code, solution, tests, etc.) from the challenge data in
               // the course skeleton. This is because all users can view
               // the skeleton, but not all course content, so the skeleton
-              // must be stripped off the additional content.
+              // must be stripped of the additional content.
               return {
                 id: challenge.id,
                 type: challenge.type,
@@ -118,14 +118,32 @@ class ContentUtilityClass {
       const courseWithFreeContent = {
         ...course,
         modules: course.modules.map(m => {
-          if (course.free || m.free) {
-            return m;
-          } else {
-            return {
-              ...m,
-              challenges: m.challenges.filter(c => c.free),
-            };
-          }
+          /**
+           * NOTE: Provide all content in the modules regardless of whether
+           * it is free or not, but add a flag which indicates if it is paid
+           * content.
+           */
+          const moduleFree = course.free || m.free;
+          return {
+            ...m,
+            challenges: m.challenges.map(c => {
+              const challengeFree = moduleFree || c.free;
+              return {
+                ...c,
+                isPaidContent: !challengeFree,
+              };
+            }),
+          };
+
+          // Re-enable to revert logic back to restricting free content:
+          // if (course.free || m.free) {
+          //   return m;
+          // } else {
+          //   return {
+          //     ...m,
+          //     challenges: m.challenges.filter(c => c.free),
+          //   };
+          // }
         }),
       };
 
@@ -145,6 +163,8 @@ class ContentUtilityClass {
         // id is included in the provided course access map (which represents
         // the courses the user has purchased) or if the entire course is
         // marked as free (e.g. the Pairwise Library course).
+        // NOTE: All content is currently provided. Revert the "canAccess"
+        // flags below to start restricting access again.
         const isCourseFree = course.free;
         const canAccessCourse = course.id in courseAccessMap || isCourseFree;
 
@@ -158,7 +178,10 @@ class ContentUtilityClass {
 
             return {
               ...courseModule,
-              userCanAccess: canAccessModule,
+              // All content is allowed for now:
+              userCanAccess: true,
+              // userCanAccess: canAccessModule,
+
               challenges: courseModule.challenges.map(challenge => {
                 // The user can access the challenge if they can access the
                 // course or if the challenge is marked as free.
@@ -167,7 +190,9 @@ class ContentUtilityClass {
 
                 return {
                   ...challenge,
-                  userCanAccess: canAccessChallenge,
+                  // All content is allowed for now:
+                  userCanAccess: true,
+                  // userCanAccess: canAccessChallenge,
                 };
               }),
             };
