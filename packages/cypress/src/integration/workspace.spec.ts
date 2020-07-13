@@ -241,12 +241,13 @@ it("Workspace projects can be completed by submitting valid project URLs", () =>
   cy.reload();
   cy.get("#repo-url-input").should("have.value", "");
 
+  const url = "https://github.com/pairwise-tech/pairwise-example-http-api";
+
   // Enter a valid url
-  cy.get("#repo-url-input").type(
-    "https://github.com/pairwise-tech/pairwise-example-http-api",
-  );
+  cy.get("#repo-url-input").type(url);
   click("project-submission-button");
   cy.contains("Project details submitted successfully!");
+  cy.get("#repo-url-input").should("have.value", url);
   cy.wait(TIMEOUT);
 
   // Verify the challenge is marked as complete
@@ -255,10 +256,7 @@ it("Workspace projects can be completed by submitting valid project URLs", () =>
   // Verify changes are maintained after reload
   cy.reload();
   cy.wait(TIMEOUT);
-  cy.get("#repo-url-input").should(
-    "have.value",
-    "https://github.com/pairwise-tech/pairwise-example-http-api",
-  );
+  cy.get("#repo-url-input").should("have.value", url);
 
   // Verify the challenge is marked as complete
   cy.get("#challenge-content-success").should("exist");
