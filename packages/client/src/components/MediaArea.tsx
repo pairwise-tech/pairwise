@@ -28,6 +28,7 @@ import { isContentOnlyChallenge, composeWithProps } from "tools/utils";
 import toaster from "tools/toast-utils";
 import { HIDE_EMBEDS } from "tools/client-env";
 import Breadcrumbs from "./Breadcrumbs";
+import ProjectSubmission from "./ProjectSubmission";
 
 /** ===========================================================================
  * Types & Config
@@ -56,9 +57,6 @@ const MediaArea = ({
 }: MediaAreaProps) => {
   const handleTitle = (x: string) =>
     updateChallenge({ id: challenge.id, challenge: { title: x } });
-
-  const [repoURL, setRepoURL] = React.useState("");
-  const [projectURL, setProjectURL] = React.useState("");
 
   const tableOfContents = React.useMemo(() => TableOfContentsPlugin(), []);
 
@@ -99,12 +97,6 @@ const MediaArea = ({
     });
 
     return results.find(Boolean);
-  };
-
-  // TODO: Update challenge blob
-  const handleSaveProjectDetails = () => {
-    console.log("Repo: ", repoURL);
-    console.log("Project: ", projectURL);
   };
 
   const handleVideoUrl = (e: ChangeEvent<HTMLInputElement>) => {
@@ -187,46 +179,7 @@ ID (video ID)
           </p>
         </Callout>
       )}
-      {IS_PROJECT && (
-        <div style={{ maxWidth: PROSE_MAX_WIDTH }}>
-          <Hr style={{ marginTop: 40, marginBottom: 20 }} />
-          <TitleHeader>
-            <EditableText
-              disabled
-              multiline
-              value="Project Submission"
-              onChange={() => console.warn("Should not happen")}
-            />
-          </TitleHeader>
-          <p>
-            Submit your project details here. Enter the GitHub repository URL
-            and a URL for the deployed project, if applicable.
-          </p>
-          <input
-            type="url"
-            value={repoURL}
-            onChange={e => setRepoURL(e.target.value)}
-            placeholder="GitHub Repository URL"
-            style={{ marginTop: 12, width: "100%" }}
-            className={Classes.INPUT}
-          />
-          <input
-            type="url"
-            value={projectURL}
-            onChange={e => setProjectURL(e.target.value)}
-            placeholder="Deployed Project URL (optional)"
-            style={{ marginTop: 12, width: "100%" }}
-            className={Classes.INPUT}
-          />
-          <Button
-            intent="primary"
-            style={{ marginTop: 24 }}
-            onClick={handleSaveProjectDetails}
-          >
-            Save Project Information
-          </Button>
-        </div>
-      )}
+      {IS_PROJECT && <ProjectSubmission challenge={challenge} />}
       <div style={{ maxWidth: PROSE_MAX_WIDTH }}>
         <Hr style={{ marginTop: 40, marginBottom: 20 }} />
         <NextChallengeCard />
