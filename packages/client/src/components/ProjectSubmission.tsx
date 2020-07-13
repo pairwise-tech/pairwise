@@ -103,6 +103,7 @@ class ProjectSubmission extends React.Component<IProps, IState> {
           className={Classes.INPUT}
         />
         <Button
+          id="project-submission-button"
           disabled={!repoURL}
           intent="primary"
           style={{ marginTop: 24 }}

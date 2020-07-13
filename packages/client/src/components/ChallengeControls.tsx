@@ -128,6 +128,7 @@ export const NextChallengeCard = connect(
         <Upper
           intent="none"
           icon={complete ? "tick" : "info-sign"}
+          id={complete ? "challenge-content-success" : ""}
           className={complete ? "challenge-content-success" : ""}
         >
           <Horizontal>
