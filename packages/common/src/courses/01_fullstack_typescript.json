@@ -3718,10 +3718,10 @@
           "id": "RBkHLlPHT",
           "type": "typescript",
           "title": "Micro URL API",
-          "instructions": "",
+          "instructions": "Micro URLs are short concise URLS which redirect to some longer URL. They are great for sharing and you have probably seen them a lot when sharing links from social media sites.\n\nThe way micro URLs or URL shorteners work is that some service takes a long URL and produces an arbitrary short URL from it. It then stores the association between these two URLs, probably in a database. When you make a request to the short URL, the service can use its database record to find the original URL and then redirect the request to that URL.\n\nThe [cleanuri service](https://cleanuri.com/) provides an API to do this, which you can easily try out on their website. Take a look at their service and then implement a class which makes use of their API to shorten URLs. Good luck\\!",
           "testCode": "test(\"Placeholder test.\", () => {\n  pass();\n});\n",
           "videoUrl": "",
-          "starterCode": "",
+          "starterCode": "interface UrlShortenerClass {\n  getMicroURL(url: string): Promise<string>;\n}\n\n// Your code here:",
           "solutionCode": "",
           "content": ""
         },
