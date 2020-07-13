@@ -60,7 +60,10 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
             </TooltipText>
           }
         >
-          <PaidContentLabel onClick={this.handlePurchaseCourse}>
+          <PaidContentLabel
+            id="paid-content-label"
+            onClick={this.handlePurchaseCourse}
+          >
             Paid Content
           </PaidContentLabel>
         </Tooltip>

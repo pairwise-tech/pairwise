@@ -60,4 +60,9 @@ const navigateToLockedChallenge = () => {
   click("navigation-menu-button");
   click("module-navigation-7");
   click("challenge-navigation-1");
+
+  // NOTE: The challenge will load. Click the paid content label to initiate
+  // the payment workflow. This can be removed when paid course access is
+  // restored to work normally again.
+  click("paid-content-label");
 };
