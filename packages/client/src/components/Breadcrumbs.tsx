@@ -40,33 +40,37 @@ export interface BreadcrumbsData {
 
 class BreadcrumbsPath extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { breadcrumbsPath, type } = this.props;
-    if (!breadcrumbsPath) {
+    const { breadcrumbsPath, type, challenge } = this.props;
+    if (!breadcrumbsPath || !challenge) {
       return null;
     }
 
+    const IS_PAID = challenge.isPaidContent;
+
     return (
       <BreadcrumbsBar type={type}>
-        <Tooltip
-          usePortal={false}
-          position="bottom"
-          content={
-            <TooltipText>
-              <span aria-label="warning emoji" role="img">
-                ⚠️
-              </span>{" "}
-              This is part of the paid course content. Purchase the course to
-              lock in access. Click the label for details.
-            </TooltipText>
-          }
-        >
-          <PaidContentLabel
-            id="paid-content-label"
-            onClick={this.handlePurchaseCourse}
+        {IS_PAID && (
+          <Tooltip
+            usePortal={false}
+            position="bottom"
+            content={
+              <TooltipText>
+                <span aria-label="warning emoji" role="img">
+                  ⚠️
+                </span>{" "}
+                This is part of the paid course content. Purchase the course to
+                lock in access. Click the label for details.
+              </TooltipText>
+            }
           >
-            Paid Content
-          </PaidContentLabel>
-        </Tooltip>
+            <PaidContentLabel
+              id="paid-content-label"
+              onClick={this.handlePurchaseCourse}
+            >
+              Paid Content
+            </PaidContentLabel>
+          </Tooltip>
+        )}
         <Breadcrumbs
           items={this.getBreadcrumbs(breadcrumbsPath)}
           currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
@@ -183,6 +187,7 @@ const TooltipText = styled.p`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   courseId: Modules.selectors.challenges.getCurrentCourseId(state),
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   breadcrumbsPath: Modules.selectors.challenges.breadcrumbPathSelector(state),
   isCurrentChallengeComplete: Modules.selectors.challenges.isCurrentChallengeComplete(
     state,

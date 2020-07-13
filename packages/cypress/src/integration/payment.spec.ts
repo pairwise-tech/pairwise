@@ -22,6 +22,11 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     // // Try to navigate to a locked challenge
     navigateToLockedChallenge();
 
+    // NOTE: The challenge will load. Click the paid content label to initiate
+    // the payment workflow. This can be removed when paid course access is
+    // restored to work normally again.
+    click("paid-content-label");
+
     // // Prompted to login, login
     click("github-login");
     cy.wait(TIMEOUT);
@@ -48,6 +53,8 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     // it will need to be updated if/when these challenges change (which
     // they will).
     cy.contains("It's time to start using some real databases!");
+    // Paid content label should not exist anymore
+    cy.get("#paid-content-label").should("not.exist");
     click("workspace-next-challenge-button");
     cy.contains(
       "Here we will see some examples of projects which use databases.",
@@ -60,9 +67,4 @@ const navigateToLockedChallenge = () => {
   click("navigation-menu-button");
   click("module-navigation-7");
   click("challenge-navigation-1");
-
-  // NOTE: The challenge will load. Click the paid content label to initiate
-  // the payment workflow. This can be removed when paid course access is
-  // restored to work normally again.
-  click("paid-content-label");
 };
