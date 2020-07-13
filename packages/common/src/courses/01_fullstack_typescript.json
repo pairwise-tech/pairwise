@@ -3729,10 +3729,10 @@
           "id": "aC5pqM5B6",
           "type": "typescript",
           "title": "Hacker News API",
-          "instructions": "",
+          "instructions": "You may have heard of [Hacker News](https://news.ycombinator.com/) before\\. If not, it's a leading site for news related to tech, computer science, and entrepreneurship. Many software engineers start their days reading HN\\! And, like many things tech focused, they have an API \\- check out the [documentation here](https://github.com/HackerNews/API).\n\nWrite a function `hackerNewsTopStories` to fetch the top 10 stories from Hacker News. Use the types defined in the editor as a guide.\n\n++HINT++: This will require a slightly more creative use of the Hacker News API to solve\\! You will have to make use of multiple APIs to get the final result.",
           "testCode": "test(\"Placeholder test.\", () => {\n  pass();\n});\n",
           "videoUrl": "",
-          "starterCode": "",
+          "starterCode": "interface TopStory {\n  id: number;\n  score: number;\n  time: string;\n  title: string;\n  url: string;\n  by: string;\n}\n\ntype HackerNewsTopStoriesFunction = () => Promise<TopStory[]>;\n\n// Your code here:",
           "solutionCode": "",
           "content": ""
         },
