@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { EditableText, Classes, Button } from "@blueprintjs/core";
 import { PROSE_MAX_WIDTH } from "tools/constants";
 import { Hr, TitleHeader } from "./Shared";
-import { Challenge } from "@pairwise/common";
-import { composeWithProps } from "tools/utils";
+import { Challenge, ProjectChallengeBlob } from "@pairwise/common";
+import { composeWithProps, constructDataBlobFromChallenge } from "tools/utils";
 import Modules, { ReduxStoreState } from "modules/root";
 
 /** ===========================================================================
@@ -15,6 +15,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 interface IState {
   projectURL: string;
   repoURL: string;
+  error: boolean;
 }
 
 /** ===========================================================================
@@ -29,6 +30,7 @@ class ProjectSubmission extends React.Component<IProps, IState> {
     this.state = {
       projectURL: "",
       repoURL: "",
+      error: false,
     };
   }
 
@@ -39,10 +41,33 @@ class ProjectSubmission extends React.Component<IProps, IState> {
     if (!blob) {
       return;
     }
+
+    // Should not happen, this component should only be rendered if the
+    // challenge is a project which means the associated blob should be
+    // a project blob
+    if (blob.type !== "project") {
+      console.error(
+        "Project Submission UI received the wrong challenge blob type: ",
+        blob.type,
+      );
+      this.setState({ error: true });
+    }
+
+    // Initialize with the stored data from the blob
+    const { url, repo } = blob as ProjectChallengeBlob;
+    this.setState({
+      repoURL: repo,
+      projectURL: url,
+    });
   }
 
-  render(): JSX.Element {
-    const { projectURL, repoURL } = this.state;
+  render(): Nullable<JSX.Element> {
+    const { error, projectURL, repoURL } = this.state;
+
+    if (error) {
+      return null;
+    }
+
     return (
       <div style={{ maxWidth: PROSE_MAX_WIDTH }}>
         <Hr style={{ marginTop: 40, marginBottom: 20 }} />
@@ -94,9 +119,23 @@ class ProjectSubmission extends React.Component<IProps, IState> {
   };
 
   handleSaveProjectDetails = () => {
+    const { challenge, updateCurrentChallengeBlob } = this.props;
     const { projectURL, repoURL } = this.state;
+
+    const blob = constructDataBlobFromChallenge({
+      repoURL,
+      projectURL,
+      challenge,
+    });
+
     console.log("Repo: ", repoURL);
     console.log("Project: ", projectURL);
+    console.log(blob);
+
+    updateCurrentChallengeBlob({
+      dataBlob: blob,
+      challengeId: challenge.id,
+    });
   };
 }
 
@@ -111,6 +150,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
+  updateCurrentChallengeBlob:
+    Modules.actions.challenges.updateCurrentChallengeBlob,
 };
 
 type ProjectSubmissionProps = ReturnType<typeof mapStateToProps> &
