@@ -85,6 +85,7 @@ class ProjectSubmission extends React.Component<IProps, IState> {
           a URL for the deployed project, if applicable.
         </p>
         <input
+          id="repo-url-input"
           type="url"
           value={repoURL}
           onChange={this.handleUpdateRepoURL}
@@ -93,6 +94,7 @@ class ProjectSubmission extends React.Component<IProps, IState> {
           className={Classes.INPUT}
         />
         <input
+          id="project-url-input"
           type="url"
           value={projectURL}
           onChange={this.handleUpdateProjectURL}
