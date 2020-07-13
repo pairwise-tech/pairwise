@@ -225,7 +225,7 @@ describe("Workspace Challenges", () => {
   });
 });
 
-it.only("Workspace projects can be completed by submitting valid project URLs", () => {
+it("Workspace projects can be completed by submitting valid project URLs", () => {
   // Visit an Async project
   cy.visit(`${CLIENT_APP_URL}/workspace/KCmZ1fjHG/current-weather-tool`);
   cy.wait(TIMEOUT);
@@ -246,11 +246,15 @@ it.only("Workspace projects can be completed by submitting valid project URLs", 
     "https://github.com/pairwise-tech/pairwise-example-http-api",
   );
   click("project-submission-button");
+  cy.contains("Project details submitted successfully!");
+  cy.wait(TIMEOUT);
 
   // Verify the challenge is marked as complete
   cy.get("#challenge-content-success").should("exist");
 
+  // Verify changes are maintained after reload
   cy.reload();
+  cy.wait(TIMEOUT);
   cy.get("#repo-url-input").should(
     "have.value",
     "https://github.com/pairwise-tech/pairwise-example-http-api",
