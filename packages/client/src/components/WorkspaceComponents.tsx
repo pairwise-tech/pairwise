@@ -519,6 +519,7 @@ export const InstructionsViewEdit = connect(
         height: !isMobile ? "auto" : isCollapsed ? "0vh" : "25vh",
         overflow: isCollapsed ? "hidden" : "auto",
         padding: "10px",
+        paddingTop: "4px",
       }}
     >
       <ChallengeTitleHeading>
