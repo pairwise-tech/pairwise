@@ -491,7 +491,12 @@ class Workspace extends React.Component<IProps, IState> {
           >
             Test Code
           </Tab>
-          {isEditMode && <TestStatusTextTab passing={allTestsPassing} />}
+          {isEditMode && (
+            <TestStatusTextTab
+              passing={allTestsPassing}
+              testsRunning={testResultsLoading}
+            />
+          )}
         </TabbedInnerNav>
         {this.props.isEditMode && this.props.adminTestTab === "testCode" ? (
           <ChallengeTestEditor />
@@ -501,7 +506,12 @@ class Workspace extends React.Component<IProps, IState> {
               {this.getTestSummaryString()}
             </ContentTitle>
             {testResults.map((x, i) => (
-              <TestResultRow key={i} {...x} index={i} />
+              <TestResultRow
+                {...x}
+                key={i}
+                index={i}
+                testsRunning={testResultsLoading}
+              />
             ))}
             <Spacer height={50} />
           </ContentContainer>
