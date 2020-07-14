@@ -379,6 +379,10 @@ class Workspace extends React.Component<IProps, IState> {
    */
   resetCodeWindow = () => {
     this.transformMonacoCode(() => this.props.challenge.starterCode);
+    // Hide the solution code if it was visible
+    if (this.props.revealSolutionCode) {
+      this.props.handleToggleSolutionCode();
+    }
   };
 
   getMonacoLanguageFromChallengeType = () => {
