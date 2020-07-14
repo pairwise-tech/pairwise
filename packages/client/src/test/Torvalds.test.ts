@@ -69,6 +69,9 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "hbAfMbUAT0",
   "RBkHLlPHT",
   "aC5pqM5B6",
+  // Two other challenges which also use external APIs:
+  "EoK0U8Q$0", // Fetching Data Asynchronously
+  "rShMOVugA", // Quote of the Day Challenge
   // **********
 ]);
 
