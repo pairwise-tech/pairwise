@@ -3685,11 +3685,11 @@
           "id": "CgstSAbnS",
           "type": "typescript",
           "title": "Advice Slip",
-          "instructions": "Let's write a class to provide some encouraging advice whenever you need it. The handy [Advice Slip API](https://api.adviceslip.com/) can do this for us\\!\n\nTake a look at the linked Advice Slip documentation page to see how to use it. Then, create a class `AdviceSlip` which implements the `AdviceSlipClass` interface in the editor below.",
-          "testCode": "test(\"Placeholder test.\", () => {\n  pass();\n});\n",
+          "instructions": "Let's write a class to provide some encouraging advice whenever you need it. The handy [Advice Slip API](https://api.adviceslip.com/) can do this for us\\!\n\nTake a look at the linked Advice Slip documentation page to see how to use it. Then, create a class `AdviceSlip` which implements the `AdviceSlipClass` interface in the editor below.\n\n++HINT:++ You will need to call `.json()` on the response data to get the JSON response.",
+          "testCode": "test(\"The `AdviceSlip` class should be defined.\", () => {\n  const x = new AdviceSlip();\n  expect(x).toBeDefined();\n});\n\ntest(\"The `AdviceSlip` class should have two methods, `getRandomAdvice` and `getAdviceById`.\", () => {\n  const x = new AdviceSlip();\n  expect(typeof x.getRandomAdvice).toBe(\"function\");\n});\n\ntest(\"The `getRandomAdvice` method should return a random advice.\", async () => {\n  const x = new AdviceSlip();\n  const { id, advice } = await x.getRandomAdvice();\n  expect(typeof id).toBe(\"number\");\n  expect(typeof advice).toBe(\"string\");\n});\n",
           "videoUrl": "",
-          "starterCode": "interface AdviceSlipClass {\n  getRandomAdvice(): Promise<string>;\n  getAdviceById(id: string): Promise<string>;\n}\n\n// Your code here:",
-          "solutionCode": "",
+          "starterCode": "interface Advice {\n  id: number;\n  advice: string;\n}\n\ninterface AdviceSlipClass {\n  getRandomAdvice(): Promise<Advice>;\n}\n\n// Your code here:\n",
+          "solutionCode": "interface Advice {\n  id: number;\n  advice: string;\n}\n\ninterface AdviceSlipClass {\n  getRandomAdvice(): Promise<Advice>;\n}\n\n// Your code here:\nclass AdviceSlip implements AdviceSlipClass {\n  private url = \"https://api.adviceslip.com/advice\";\n\n  async getRandomAdvice() {\n    try {\n      const result = await fetch(this.url);\n      const data = await result.json();\n      return data.slip;\n    } catch (err) {\n      return `Error fetching advice, error message: ${err.message}`;\n    }\n  }\n}\n",
           "content": ""
         },
         {
