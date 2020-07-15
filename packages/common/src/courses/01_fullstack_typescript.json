@@ -3228,10 +3228,10 @@
           "title": "Install Software: Mac",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/rgEscTU3szI",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "In this lesson we'll get set up for development on a Mac. This will be very simple because the most technical piece of software, the terminal, is already installed."
         },
         {
           "id": "RCm1HkcbQ",
@@ -3239,10 +3239,10 @@
           "title": "Install Software: Windows",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/pm4CKdu5K0c",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "In this lesson we'll set up your Windows development environment. The process is slightly more complex than on Mac, but once we're done both you'll be able to follow along with all other lessons including one's we recorded on Mac."
         },
         {
           "id": "wC56W3elQ",
