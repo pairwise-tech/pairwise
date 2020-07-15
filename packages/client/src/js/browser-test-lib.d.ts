@@ -1,7 +1,7 @@
 declare const MAX_LINE_LENGTH = 16;
 declare function test(message: string, testFunction: () => void): void;
 declare const __user_code_string__: string;
-declare const __secret_log_box: string;
+declare const __secret_log_box: string[];
 declare const __secret_warn_box: string[];
 declare const __secret_error_box: string[];
 declare const __secret_info_box: string[];
@@ -27,6 +27,8 @@ declare const deepEqual: (a: any, b: any) => boolean;
 declare const jsonDiff: (a: any, b: any) => string;
 declare const parseLogBox: (box: string[]) => string[];
 declare const inBox: (box: string[], message: string) => boolean;
+declare const checkBoxAsync: (box: string[], message: string, delay: number) => Promise<boolean>;
+declare const wait: (time: number) => Promise<unknown>;
 declare const fail: () => void;
 declare const pass: () => void;
 declare const __id: () => string;

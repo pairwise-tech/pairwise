@@ -24,74 +24,31 @@ import { SlatePlugin } from "rich-markdown-editor";
 import TableOfContents from "./TableOfContents";
 import ContentEditor from "./ContentEditor";
 import { Challenge } from "@pairwise/common";
-import { isContentOnlyChallenge } from "tools/utils";
+import { isContentOnlyChallenge, composeWithProps } from "tools/utils";
 import toaster from "tools/toast-utils";
 import { HIDE_EMBEDS } from "tools/client-env";
 import Breadcrumbs from "./Breadcrumbs";
+import ProjectSubmission from "./ProjectSubmission";
+
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
 
 const VIDEO_DOM_ID = "pw-video-embed";
 
 export const CONTENT_AREA_ID = "supplementary-content-container";
 
-const TableOfContentsPlugin = (): SlatePlugin => {
-  const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {
-    const children = next();
-    const showToc = TableOfContents.getHeadings(editor).size > 1;
-
-    return (
-      <FlexWrap>
-        <Flex>{children}</Flex>
-        {showToc && (
-          <FlexFixed>
-            <TableOfContents editor={editor} />
-          </FlexFixed>
-        )}
-      </FlexWrap>
-    );
-  };
-
-  return { renderEditor };
-};
-
-// const
-
-// NOTE: Overflow auto is necessary to prevent the child from overflowing... but
-// it doesn't add scroll bars. It just does what we actually want which is add
-// scroll bars to the elements that are too wide, but not the whole thing.
-const Flex = styled.div`
-  overflow: auto;
-  width: 100%;
-  max-width: ${PROSE_MAX_WIDTH}px;
-`;
-
-const FlexWrap = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-
-  @media ${MOBILE} {
-    flex-direction: column-reverse;
-  }
-`;
-
-const FlexFixed = styled.div`
-  position: relative;
-  width: 300px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  margin-left: 4%;
-
-  @media ${MOBILE} {
-    margin-left: 0;
-  }
-`;
+/** ===========================================================================
+ * Media Area Component
+ * ============================================================================
+ */
 
 /**
  * The media area. Where supplementary content and challenge videos live. The
  * media area can also serve as the standalone UI for a challenge that is all
  * information, without any interactive coding practice.
  */
-
 const MediaArea = ({
   challenge,
   title,
@@ -170,6 +127,8 @@ ID (video ID)
     });
   };
 
+  const IS_PROJECT = challenge.type === "project";
+
   return (
     <SupplementaryContentContainer id={CONTENT_AREA_ID}>
       <div style={{ height: 8 }} /> {/* Add some space */}
@@ -220,6 +179,7 @@ ID (video ID)
           </p>
         </Callout>
       )}
+      {IS_PROJECT && <ProjectSubmission challenge={challenge} />}
       <div style={{ maxWidth: PROSE_MAX_WIDTH }}>
         <Hr style={{ marginTop: 40, marginBottom: 20 }} />
         <NextChallengeCard />
@@ -237,38 +197,61 @@ ID (video ID)
   );
 };
 
-// This weirdness is just for type checking... the media area needs a firmly defined
-// challenge otherwise the react hooks get angry that they are being called
-// conditionally. The thing is, they depends on the challenge so they need the
-// challenge to be defined
-// NOTE: Maybe this logic could be a HOC someday.
-const MediaAreaContainer = (props: MediaAreaContainerProps) => {
-  if (!props.challenge) {
-    return <Loading />;
+/** ===========================================================================
+ * Styles and Utils
+ * ============================================================================
+ */
+
+const TableOfContentsPlugin = (): SlatePlugin => {
+  const renderEditor: SlatePlugin["renderEditor"] = (_, editor, next) => {
+    const children = next();
+    const showToc = TableOfContents.getHeadings(editor).size > 1;
+
+    return (
+      <FlexWrap>
+        <Flex>{children}</Flex>
+        {showToc && (
+          <FlexFixed>
+            <TableOfContents editor={editor} />
+          </FlexFixed>
+        )}
+      </FlexWrap>
+    );
+  };
+
+  return { renderEditor };
+};
+
+// NOTE: Overflow auto is necessary to prevent the child from overflowing... but
+// it doesn't add scroll bars. It just does what we actually want which is add
+// scroll bars to the elements that are too wide, but not the whole thing.
+const Flex = styled.div`
+  overflow: auto;
+  width: 100%;
+  max-width: ${PROSE_MAX_WIDTH}px;
+`;
+
+const FlexWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  @media ${MOBILE} {
+    flex-direction: column-reverse;
   }
+`;
 
-  return <MediaArea {...(props as MediaAreaProps)} />;
-};
+const FlexFixed = styled.div`
+  position: relative;
+  width: 300px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin-left: 4%;
 
-const mapStateToProps = (state: ReduxStoreState) => ({
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
-  title: Modules.selectors.challenges.getCurrentTitle(state) || "",
-  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
-  breadcrumbsPath: Modules.selectors.challenges.breadcrumbPathSelector(state),
-});
-
-const dispatchProps = {
-  updateChallenge: Modules.actions.challenges.updateChallenge,
-};
-
-type MediaAreaContainerProps = ReturnType<typeof mapStateToProps> &
-  typeof dispatchProps;
-
-interface MediaAreaProps extends MediaAreaContainerProps {
-  challenge: NonNullable<Challenge>;
-}
-
-export default connect(mapStateToProps, dispatchProps)(MediaAreaContainer);
+  @media ${MOBILE} {
+    margin-left: 0;
+  }
+`;
 
 // Get the origin param for embeds. Should be our site, but we also want embeds
 // to run locally for developing and testing.
@@ -378,3 +361,38 @@ export const scrollToVideoAndPlay = () => {
   // internally to play. Anyway, here we are.
   el.contentWindow.postMessage(PLAY_COMMAND, "https://www.youtube.com");
 };
+
+/** ===========================================================================
+ * Props
+ * ============================================================================
+ */
+
+const mapStateToProps = (state: ReduxStoreState) => ({
+  isEditMode: Modules.selectors.challenges.isEditMode(state),
+  title: Modules.selectors.challenges.getCurrentTitle(state) || "",
+  breadcrumbsPath: Modules.selectors.challenges.breadcrumbPathSelector(state),
+});
+
+const dispatchProps = {
+  updateChallenge: Modules.actions.challenges.updateChallenge,
+};
+
+type MediaAreaContainerProps = ReturnType<typeof mapStateToProps> &
+  typeof dispatchProps;
+
+interface MediaAreaComponentProps {
+  challenge: NonNullable<Challenge>;
+}
+
+interface MediaAreaProps
+  extends MediaAreaContainerProps,
+    MediaAreaComponentProps {}
+
+const withProps = connect(mapStateToProps, dispatchProps);
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
+
+export default composeWithProps<MediaAreaComponentProps>(withProps)(MediaArea);

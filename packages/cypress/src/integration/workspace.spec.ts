@@ -205,11 +205,11 @@ describe("Workspace Challenges", () => {
 
   it("The workspace supports Async/Await challenges and they can be solved", () => {
     // Visit an Async challenge
-    cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/write-an-async-function`);
+    cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/the-await-keyword`);
     cy.wait(TIMEOUT);
 
     // Verify the challenge title
-    cy.contains("Write an Async Function");
+    cy.contains("The Await Keyword");
 
     // Tests should fail
     checkTestResultStatus("Incomplete...");
@@ -223,6 +223,43 @@ describe("Workspace Challenges", () => {
     cy.wait(TIMEOUT);
     cy.get("#gs-card").should("be.visible");
   });
+});
+
+it("Workspace projects can be completed by submitting valid project URLs", () => {
+  // Visit an Async project
+  cy.visit(`${CLIENT_APP_URL}/workspace/KCmZ1fjHG/current-weather-tool`);
+  cy.wait(TIMEOUT);
+
+  // Verify the project title
+  cy.contains("Current Weather Tool");
+
+  // Enter an invalid url
+  cy.get("#repo-url-input").type("hello");
+  click("project-submission-button");
+  cy.contains("Please submit a valid repository url:");
+
+  cy.reload();
+  cy.get("#repo-url-input").should("have.value", "");
+
+  const url = "https://github.com/pairwise-tech/pairwise-example-http-api";
+
+  // Enter a valid url
+  cy.get("#repo-url-input").type(url);
+  click("project-submission-button");
+  cy.contains("Project details submitted successfully!");
+  cy.get("#repo-url-input").should("have.value", url);
+  cy.wait(TIMEOUT);
+
+  // Verify the challenge is marked as complete
+  cy.get("#challenge-content-success").should("exist");
+
+  // Verify changes are maintained after reload
+  cy.reload();
+  cy.wait(TIMEOUT);
+  cy.get("#repo-url-input").should("have.value", url);
+
+  // Verify the challenge is marked as complete
+  cy.get("#challenge-content-success").should("exist");
 });
 
 describe("Workspace Editor Functions", () => {
@@ -398,7 +435,7 @@ ReactDOM.render(<Main />, document.querySelector("#root"));
 `;
 
 const ASYNC_CHALLENGE_SOLUTION = `
-const makePromise = (shouldResolve: boolean = true) => {
+const makePromise = (shouldResolve: boolean) => {
   return new Promise((resolve, reject) => {
     if (shouldResolve) {
       resolve("I promised!");
@@ -408,7 +445,7 @@ const makePromise = (shouldResolve: boolean = true) => {
   });
 }
 
-const fulfillThePromise = async (promiseShouldResolve: boolean = true) => {
+const fulfillThePromise = async (promiseShouldResolve: boolean) => {
   try {
     console.log("Fulfilling the promise...");
     const resolutionValue = await makePromise(promiseShouldResolve);
@@ -419,6 +456,4 @@ const fulfillThePromise = async (promiseShouldResolve: boolean = true) => {
     return rejectionValue;
   }
 };
-
-fulfillThePromise();
 `;

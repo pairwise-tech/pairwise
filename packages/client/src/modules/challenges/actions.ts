@@ -4,6 +4,7 @@ import {
   ICodeBlobDto,
   IProgressDto,
   LastActiveChallengeIds,
+  Challenge,
 } from "@pairwise/common";
 import { createAction } from "typesafe-actions";
 import {
@@ -39,6 +40,8 @@ enum ActionTypesEnum {
   SET_COURSE_ID = "SET_COURSE_ID",
 
   SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
+
+  SUBMIT_PROJECT = "SUBMIT_PROJECT",
 
   FETCH_NAVIGATION_SKELETON = "FETCH_NAVIGATION_SKELETON",
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
@@ -198,6 +201,10 @@ export const fetchNavigationSkeletonFailure = createAction(
 export const setNavigationMapState = createAction(
   ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
 )<boolean>();
+
+export const submitProject = createAction(ActionTypesEnum.SUBMIT_PROJECT)<
+  Challenge
+>();
 
 export const setChallengeIdContext = createAction(
   ActionTypesEnum.SET_CHALLENGE_ID_CONTEXT,

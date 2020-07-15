@@ -89,10 +89,12 @@ export const pp = (s: string, ...args: any[]) => {
  * data blob to represent the user's progress on that challenge.
  */
 export const constructDataBlobFromChallenge = (args: {
-  code: string;
+  code?: string;
+  projectURL?: string;
+  repoURL?: string;
   challenge: Challenge;
 }): DataBlob => {
-  const { code, challenge } = args;
+  const { code = "", repoURL = "", projectURL = "", challenge } = args;
 
   if (challenge.id === SANDBOX_ID) {
     const blob: SandboxBlob = {
@@ -126,8 +128,8 @@ export const constructDataBlobFromChallenge = (args: {
     case "project": {
       const blob: ProjectChallengeBlob = {
         type: "project",
-        url: "",
-        repo: "",
+        repo: repoURL,
+        url: projectURL,
         timeLastWatched: 0,
       };
       return blob;

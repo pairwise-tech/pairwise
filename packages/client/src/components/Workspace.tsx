@@ -211,7 +211,7 @@ class Workspace extends React.Component<IProps, IState> {
     const dimensions = getDimensions();
 
     // The reason for two checks here is that even on larger screens we still
-    // want to use the mobilve editor if this is detected as a tablet. Safari
+    // want to use the mobile editor if this is detected as a tablet. Safari
     // seems to handle monaco just fine but Android breaks, so android tablets
     // should get codemirror
     const favorMobile = isMobile() || dimensions.w < 700;
@@ -379,6 +379,10 @@ class Workspace extends React.Component<IProps, IState> {
    */
   resetCodeWindow = () => {
     this.transformMonacoCode(() => this.props.challenge.starterCode);
+    // Hide the solution code if it was visible
+    if (this.props.revealSolutionCode) {
+      this.props.handleToggleSolutionCode();
+    }
   };
 
   getMonacoLanguageFromChallengeType = () => {
@@ -491,7 +495,12 @@ class Workspace extends React.Component<IProps, IState> {
           >
             Test Code
           </Tab>
-          {isEditMode && <TestStatusTextTab passing={allTestsPassing} />}
+          {isEditMode && (
+            <TestStatusTextTab
+              passing={allTestsPassing}
+              testsRunning={testResultsLoading}
+            />
+          )}
         </TabbedInnerNav>
         {this.props.isEditMode && this.props.adminTestTab === "testCode" ? (
           <ChallengeTestEditor />
@@ -501,7 +510,12 @@ class Workspace extends React.Component<IProps, IState> {
               {this.getTestSummaryString()}
             </ContentTitle>
             {testResults.map((x, i) => (
-              <TestResultRow key={i} {...x} index={i} />
+              <TestResultRow
+                {...x}
+                key={i}
+                index={i}
+                testsRunning={testResultsLoading}
+              />
             ))}
             <Spacer height={50} />
           </ContentContainer>
@@ -974,6 +988,11 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   getTestSummaryString = () => {
+    // Tests are still loading:
+    if (this.state.testResultsLoading) {
+      return "Processing Test Results...";
+    }
+
     const { passedTests, testResults } = this.getTestPassedStatus();
     return `Tests: ${passedTests.length}/${testResults.length} Passed`;
   };
@@ -1567,7 +1586,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
         )}
         {!isSandbox && (CODEPRESS || this.props.showMediaArea) && (
           <LowerSection withHeader={challenge.type === "media"}>
-            <MediaArea />
+            <MediaArea challenge={challenge} />
           </LowerSection>
         )}
       </React.Fragment>
