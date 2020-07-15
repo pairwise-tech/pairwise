@@ -3586,6 +3586,39 @@
           "content": "```\ngit commit --amend \n\n```\n"
         },
         {
+          "id": "QZB4sqjPc",
+          "type": "section",
+          "title": "TypeScript Workflow",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Now we're going to get started using TypeScript: **For real.**\n\nUp until this point we've been using TypeScript within Pairwise. We've done the work of setting up TS so you that you could get started programming immediately, without worrying about meaningless setup instructions.\n\nHowever, now that you've learned some programming being able to set up TypeScript takes on new meaning. This is how you will go from being good at online coding challenges to being a programmer.\n\nIn this section we'll cover setting up TypeScript on your own computer and how to get started working with it."
+        },
+        {
+          "id": "VxdxGx0Bq",
+          "type": "media",
+          "title": "Installing TypeScript and Node.js",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "yHEh@dZbm",
+          "type": "media",
+          "title": "Files and TypeScript Modules",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In all the previous challenges we kept our code to a single file. This is simple, but not always practical. Most apps will be at least a few thousand lines of code and there's no limit to how large a codebase can get. \n\nAs you're codebase grows you will want to start organizing it into separate files. TypeScript is happy to let us do this, but we need to learn some new syntax.\n# Import and Export\n\nWhen working on a TypeScript file you can `import` code from other files and `export` code for other files to use. Let's consider an example. We have two files, `app.ts` and `math.ts`. Both files are in the same directory.\n\n### app\\.ts\n\n```typescript\nimport { add, subtract } from \"./math\";\n\nconsole.log(`1 + 1 is ${add(1, 1)}`); // 1 + 1 is 2\nconsole.log(`1 - 1 is ${subtract(1, 1)}`); // 1 - 1 is 0\n\n```\n\n### math\\.ts\n\n```typescript\nexport const add = (a: number, b: number) => {\n  return a + b;\n};\n\nexport const subtract = (a: number, b: number) => {\n  return a - b;\n};\n\n```\n\n`app.ts` is able to `import` the two functions exported from `math.ts` using the special syntax for importing.\n# Syntax\n\nLet's describe the import and export syntax formally.\n\n## Import\n\nTo import from another file use:\n\n1. The `import` keyword followed by a space.\n1. The `{` character followed by the names of exports from the target file separated by commas and a closing `}` character\\.In our example this was `{ add, subtract }`.\n1. The `from` keyword\\.\n1. A string representing the path to another TS file _without_ the `.ts` file extension.In our example this was `./math`.\n\n\n## Export\n\nTo export from a file use:\n\n1. The `export` keyword placed in front of any top\\-level values in your file.\n\n\nSome more examples are in order:\n\n```typescript\n// Export a number\nexport const WIDTH = 1200;\n\n// Export a boolean\nexport const bool = true;\n\n// Export a string\nexport const name = \"Pairwise\";\n\n// Export arrays and objects\nexport const cats = [\n  { name: \"Maomi\", job: \"Sleeping\" },\n  { name: \"Larper\", job: \"Roleplay\" },  \n];\n\n// Export a function\nexport const toUpper = (s: string) => {\n  return s.toUpperCase();\n};\n\n```\n\nUsually you can just add the `export` keyword before existing values in your files in order to export them.\n# Special Cases\n\nNow we've explored the most common import/export usage let's look at some other patterns you'll find in the wild.\n\n## Default Imports and Exports\n\nIt is possible to define a \"default\" value to be exported from a file. Let's look at the syntax. Imagine we wanted to put each of our math functions into their own file. We could do the following:\n\n### add\\.ts\n\n```typescript\nconst add = (a: number, b: number) => a + b;\nexport default add;\n\n```\n\n### subtract\\.ts\n\n```typescript\nconst subtract = (a: number, b: number) => a - b;\nexport default subtract;\n\n```\n\nWe use the special `export default` syntax rather than simply the `export` keyword\\. This allows the importing file to avoid using bracket syntax:\n\n### app\\.ts\n\n```typescript\nimport add from \"./add\";\nimport subtract from \"./subtract\";\n\nconsole.log(`1 + 1 is ${add(1, 1)}`); // 1 + 1 is 2\nconsole.log(`1 - 1 is ${subtract(1, 1)}`); // 1 - 1 is 0\n\n```\n\nNotice that the file does exactly the same thing as `app.ts` from the beginning of this lesson, but the syntax for importing is slightly different.\n\n## index\\.ts\n\nAnother special case you will encounter is the special file `index.ts`. This file is special because you can import from it in a slightly different way than other files.\n\nAs another example, let's say you have a `./lib` directory in your project and within that directory you have an `index.ts` file\\. It's contents will be the same as our `math.ts` file from above.\n\n### index\\.ts\n\n```typescript\nexport const add = (a: number, b: number) => {\n  return a + b;\n};\n\nexport const subtract = (a: number, b: number) => {\n  return a - b;\n};\n\n```\n\nNow, if we want to import these functions rather than importing form `./lib/index` we would actually just import from `./lib`.\n\n### app\\.ts\n\n```typescript\nimport { add, subtract } from \"./lib\";\n\nconsole.log(`1 + 1 is ${add(1, 1)}`); // 1 + 1 is 2\nconsole.log(`1 - 1 is ${subtract(1, 1)}`); // 1 - 1 is 0\n\n```\n\nWhy? The filename `index.ts` is special. When you import from a **directory** rather than an individual file TypeScript will check for an `index.ts` file within that directory. If it finds it, that file will be used as the import."
+        },
+        {
           "id": "$EcZq5Ecg",
           "type": "section",
           "title": "Projects",
