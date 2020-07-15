@@ -58,6 +58,21 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "Ao8hbaiP", // Test env seems to be having trouble calculating the midpoint of a bounding box.
   // "pUf7$Qi2y", // Could not test that p tags are white... WHY? See NOTE
   // "MEjox@iw0",
+
+  // NOTE: The next 5 ids are the Async Module Practice with APIs challenges,
+  // which all call external service APIs. These are disabled in the test environment.
+  // These were tested after creation to ensure they worked, and then disabled.
+  // A better solution might be to somehow mock these external APIs (?).
+  // **********
+  "CgstSAbnS",
+  "yYHjlEO$4",
+  "hbAfMbUAT0",
+  "RBkHLlPHT",
+  "aC5pqM5B6",
+  // Two other challenges which also use external APIs:
+  "EoK0U8Q$0", // Fetching Data Asynchronously
+  "rShMOVugA", // Quote of the Day Challenge
+  // **********
 ]);
 
 // Enable or disable log info
@@ -280,13 +295,13 @@ const executeTests = async (challenge: Challenge) => {
 
     try {
       /**
-       * Recursively await the tests results. The total limit is 15 seconds
+       * Recursively await the tests results. The total limit is 25 seconds
        * with an interval of 50 milliseconds. This should allow the majority
        * of tests to complete quickly will still allowing a generous wait
        * time for longer running tests, e.g. async tests.
        */
       const waitForResultsUntilTimeout = async (
-        remainingTries = 300,
+        remainingTries = 500,
       ): Promise<void> => {
         if (results.length > 0) {
           // Test results have been received.

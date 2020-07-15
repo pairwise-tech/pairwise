@@ -1,14 +1,23 @@
+import styled from "styled-components/macro";
 import isMobile from "is-mobile";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
-import { IBreadcrumbProps, Breadcrumb, Breadcrumbs } from "@blueprintjs/core";
+import {
+  Tooltip,
+  IBreadcrumbProps,
+  Breadcrumb,
+  Breadcrumbs,
+} from "@blueprintjs/core";
 import { CHALLENGE_TYPE } from "@pairwise/common";
+import { COLORS } from "tools/constants";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
+
+type BreadcrumbsChallengeType = "workspace" | "media";
 
 interface Breadcrumb {
   title: string;
@@ -31,18 +40,42 @@ export interface BreadcrumbsData {
 
 class BreadcrumbsPath extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { breadcrumbsPath } = this.props;
-    if (!breadcrumbsPath) {
+    const { breadcrumbsPath, type, challenge } = this.props;
+    if (!breadcrumbsPath || !challenge) {
       return null;
     }
 
+    const IS_PAID = challenge.isPaidContent;
+
     return (
-      <div style={{ width: "100%", marginTop: 10, marginBottom: 10 }}>
+      <BreadcrumbsBar type={type}>
+        {IS_PAID && (
+          <Tooltip
+            usePortal={false}
+            position="bottom"
+            content={
+              <TooltipText>
+                <span aria-label="warning emoji" role="img">
+                  ⚠️
+                </span>{" "}
+                This is part of the paid course content. Purchase the course to
+                lock in access. Click the label for details.
+              </TooltipText>
+            }
+          >
+            <PaidContentLabel
+              id="paid-content-label"
+              onClick={this.handlePurchaseCourse}
+            >
+              Paid Content
+            </PaidContentLabel>
+          </Tooltip>
+        )}
         <Breadcrumbs
           items={this.getBreadcrumbs(breadcrumbsPath)}
           currentBreadcrumbRenderer={this.renderCurrentBreadcrumb}
         />
-      </div>
+      </BreadcrumbsBar>
     );
   }
 
@@ -98,7 +131,54 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
       </Breadcrumb>
     );
   };
+
+  handlePurchaseCourse = () => {
+    const { courseId } = this.props;
+    if (!courseId) {
+      return;
+    }
+
+    this.props.handlePaymentCourseIntent({ courseId, showToastWarning: true });
+  };
 }
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const BreadcrumbsBar = styled.div`
+  width: 100%;
+  font-weight: normal;
+  margin-top: ${({ type }: { type: BreadcrumbsChallengeType }) =>
+    type === "media" ? 10 : 0}px;
+  margin-bottom: 10px;
+`;
+
+const PaidContentLabel = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  height: 14px;
+  width: 90px;
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  color: ${COLORS.TEXT_DARK};
+  background: ${COLORS.SECONDARY_YELLOW};
+  padding: 2px 4px;
+  box-shadow: 0 0 20px rgb(0, 0, 0);
+  border-radius: 100px;
+
+  :hover {
+    cursor: pointer;
+  }
+`;
+
+const TooltipText = styled.p`
+  margin: 0;
+  font-size: 14px;
+`;
 
 /** ===========================================================================
  * Props
@@ -106,16 +186,20 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  courseId: Modules.selectors.challenges.getCurrentCourseId(state),
+  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   breadcrumbsPath: Modules.selectors.challenges.breadcrumbPathSelector(state),
   isCurrentChallengeComplete: Modules.selectors.challenges.isCurrentChallengeComplete(
     state,
   ),
 });
 
-const dispatchProps = {};
+const dispatchProps = {
+  handlePaymentCourseIntent: Modules.actions.payments.handlePaymentCourseIntent,
+};
 
 interface ComponentProps {
-  type: "workspace" | "media";
+  type: BreadcrumbsChallengeType;
 }
 
 type IProps = ComponentProps &

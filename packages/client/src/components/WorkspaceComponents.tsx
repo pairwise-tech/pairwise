@@ -201,7 +201,8 @@ export const TestResultRow = ({
   testResult,
   error,
   index,
-}: TestCase & { index: number }) => {
+  testsRunning,
+}: TestCase & { index: number; testsRunning: boolean }) => {
   const [showError, setShowError] = React.useState(false);
   const toggleShowError = () => {
     if (!error) {
@@ -210,6 +211,26 @@ export const TestResultRow = ({
     setShowError(!showError);
   };
 
+  const testStatus = testsRunning
+    ? "loading"
+    : testResult
+    ? "success"
+    : "failure";
+
+  const testCaseMessage = testsRunning
+    ? "Running..."
+    : testResult
+    ? "Success!"
+    : "Incomplete...";
+
+  const TestCaseIcon = testsRunning ? (
+    <Icon icon="time" intent="warning" />
+  ) : error ? (
+    <Icon icon="error" intent="danger" />
+  ) : (
+    <Icon icon="tick-circle" intent="primary" />
+  );
+
   return (
     <StyledTestResultRow>
       <ContentDiv>
@@ -217,21 +238,17 @@ export const TestResultRow = ({
           style={{ cursor: error ? "pointer" : "normal" }}
           onClick={toggleShowError}
         >
-          {error ? (
-            <Icon icon="error" intent="danger" />
-          ) : (
-            <Icon icon="tick-circle" intent="primary" />
-          )}
+          {TestCaseIcon}
         </MinimalButton>
         <TestMessageHighlighter source={message} />
         <TestStatus>
           <b style={{ color: C.TEXT_TITLE }}>Status:</b>
-          <SuccessFailureText
-            testResult={testResult}
+          <TestCaseStatusText
+            testStatus={testStatus}
             id={`test-result-status-${index}`}
           >
-            {testResult ? "Success!" : "Incomplete..."}
-          </SuccessFailureText>
+            {testCaseMessage}
+          </TestCaseStatusText>
         </TestStatus>
       </ContentDiv>
       {error && (
@@ -285,11 +302,19 @@ export const ContentTitle = styled.h3`
   color: ${C.TEXT_TITLE};
 `;
 
-export const SuccessFailureText = styled.p`
+export const TestCaseStatusText = styled.p`
   margin: 0;
   margin-left: 4px;
-  color: ${(props: { testResult: boolean }) =>
-    props.testResult ? C.SUCCESS : C.FAILURE};
+  color: ${({
+    testStatus,
+  }: {
+    testStatus: "success" | "failure" | "loading";
+  }) =>
+    testStatus === "loading"
+      ? C.SECONDARY_YELLOW
+      : testStatus === "success"
+      ? C.SUCCESS
+      : C.FAILURE};
 `;
 
 export const TabbedInnerNav = styled.div<{ show: boolean }>`
@@ -328,9 +353,18 @@ export const Tab = styled.div<{ active?: boolean }>`
   }
 `;
 
-const TestStatusText = styled.p<{ passing: boolean }>`
+const TestStatusText = styled.p`
   margin: 0;
-  color: ${props => (props.passing ? COLORS.NEON_GREEN : COLORS.FAILURE)};
+  color: ${({
+    testStatus,
+  }: {
+    testStatus: "success" | "failure" | "loading";
+  }) =>
+    testStatus === "loading"
+      ? C.SECONDARY_YELLOW
+      : testStatus === "success"
+      ? C.NEON_GREEN
+      : C.FAILURE};
 `;
 
 const StatusTab = styled.div`
@@ -339,13 +373,25 @@ const StatusTab = styled.div`
   position: absolute;
 `;
 
-export const TestStatusTextTab = ({ passing }: { passing: boolean }) => (
-  <StatusTab>
-    <TestStatusText passing={passing}>
-      {passing ? "Tests Passing" : "Tests Failing"}
-    </TestStatusText>
-  </StatusTab>
-);
+export const TestStatusTextTab = (props: {
+  testsRunning: boolean;
+  passing: boolean;
+}) => {
+  const { passing, testsRunning } = props;
+
+  const testStatus = testsRunning ? "loading" : passing ? "success" : "failure";
+
+  const message = testsRunning
+    ? "Running Tests"
+    : passing
+    ? "Tests Passing"
+    : "Tests Failing";
+  return (
+    <StatusTab>
+      <TestStatusText testStatus={testStatus}>{message}</TestStatusText>
+    </StatusTab>
+  );
+};
 
 export const LoginSignupText = styled.h1`
   margin-right: 12px;
@@ -473,6 +519,7 @@ export const InstructionsViewEdit = connect(
         height: !isMobile ? "auto" : isCollapsed ? "0vh" : "25vh",
         overflow: isCollapsed ? "hidden" : "auto",
         padding: "10px",
+        paddingTop: "4px",
       }}
     >
       <ChallengeTitleHeading>

@@ -117,6 +117,7 @@ export interface Challenge {
   solutionCode: string;
   content: string;
   free?: boolean;
+  isPaidContent?: boolean;
 }
 
 /** ===========================================================================
