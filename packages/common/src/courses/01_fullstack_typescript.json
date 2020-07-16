@@ -3272,7 +3272,7 @@
           "title": "Command Line Basics",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/zgvorOiYX1g",
           "starterCode": "",
           "solutionCode": "",
           "content": "In this section we'll show you how to use a terminal to communicate more directly with your computer."
@@ -3283,10 +3283,21 @@
           "title": "cd: Changing Directories",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/J682C_IaIDI",
           "starterCode": "",
           "solutionCode": "",
-          "content": "# Examples\n\n```bash\n# Move up a directory\ncd ..\n\n# Move to your home directory\ncd ~\n\n# Move to the directory my/projects/ within your home directory\ncd ~/my/projects/\n\n# Move to the directory \"documents\" within the current directory\ncd documents\n\n# Move to the absolute directory /var/log\ncd /var/log\n\n```\n"
+          "content": "# Examples\n\n```bash\n# Move up a directory\ncd ..\n\n# Move to your home directory\ncd ~\n\n# Move to the directory my/projects/ within your home directory\ncd ~/my/projects/\n\n# Move to the directory \"documents\" within the current directory\ncd documents\n\n# Move to the absolute directory /var/log\ncd /var/log\n\n```\n# Special Symbols and Variables\n\n\n## Paths\n\nChanging directories is tied closely to \"paths\" on the command line. The \"path\" is a way of describing a location on a computer's hard drive.\n\nFor example, the application Terminal.app on Mac computers is located at `/Applications/Utilities/Terminal.app`. This is an example of a path. It's an exact representation of a location on the hard drive.\n\n## Special Symbols and Variables\n\nWhen using paths there are special values that have a specific meaning. There are also variables you can use. Here are the most common:\n\n* `.` \\(a period character\\): The current directory. \n   * Example: `cd ./app` \\(Putting `.` and `/` together like this means \"The `app` directory relative to my current directory\\).\n* `..` \\(two period characters\\): The parent directory. \n   * Example `cd ..`.\n* `~` \\(a tilde character\\): Your home directory. We cover this more in the video. \n   * Example: `cd ~`.\n* `$HOME`: Also means the home directory. This is a variable. \n   * Example: `cd $HOME`.\n\n\nIf you're uncertain where a file is located but you can find it in Finder or File Explorer then you can drag the file into your terminal."
+        },
+        {
+          "id": "b4$MsxCKEC",
+          "type": "media",
+          "title": "ls: View the Contents of a Directory",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/GfvDgXxK3ZU",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# Examples\n\n```bash\n# View the contents of the current directory\nls\n\n# View the contents of your home directory\nls ~\n\n# View ALL the contents of the current directory,\n# including hidden files and folders\nls -a\n\n# View all the contents of the current directory\n# with additional information such as permissions\nls -la\n\n```\n\n`ls` stands for \"list\" as in \"list the contents of this directory.\"  The key takeaways for this lesson are:\n\n* You can view the contents of a directory with `ls`.\n* You can change the way `ls` works by using \"flags\" such as `-l`, `-a` and `-h`.\n* Flags can be \"combined\" by putting them all together after a single hyphen \\(`-`\\).\n* The \"long\" output of `ls` is most commonly used by programmers because it tells us a lot of information about files and folders in a concise way.\n\n"
         },
         {
           "id": "zpK@rvjLu",
@@ -3294,7 +3305,7 @@
           "title": "touch: Create Files",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/3q8r0UYs8cc",
           "starterCode": "",
           "solutionCode": "",
           "content": "# Examples\n\n```bash\n# Create a new file named app.ts\ntouch app.ts\n\n# Create a new file named hello.txt\ntouch hello.txt\n\n```\n"
@@ -3305,7 +3316,7 @@
           "title": "mv: Move or Rename Files",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/U737Q3h22tE",
           "starterCode": "",
           "solutionCode": "",
           "content": "# Examples\n\n```bash\n# Move the file hello.txt from the current directory \n# into the subdirectory named text_files\nmv hello.txt text_files/\n\n# Rename app.ts to project.ts\nmv app.ts project.ts\n\n```\n"
@@ -3316,43 +3327,10 @@
           "title": "cp: Copy Files",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/hae7y10YbOE",
           "starterCode": "",
           "solutionCode": "",
           "content": "# Examples\n\n```bash\n# Copy the file hello.txt from the current directory \n# into the subdirectory named text_files\ncp hello.txt text_files/\n\n# Create a copy of app.ts named project.ts\ncp app.ts project.ts\n\n```\n"
-        },
-        {
-          "id": "Ub2hNjGSBX",
-          "type": "media",
-          "title": "cat: See the Contents of Files",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "# Examples\n\n```bash\n# View the contents of hello.txt\ncat hello.txt\n\n# Veiw the contents of project.ts located in your home directory\ncat ~/project.ts\n\n```\n"
-        },
-        {
-          "id": "b4$MsxCKEC",
-          "type": "media",
-          "title": "ls: View the Contents of a Directory",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "# Examples\n\n```bash\n# View the contents of the current directory\nls\n\n# View the contents of your home directory\nls ~\n\n# View ALL the contents of the current directory,\n# including hidden files and folders\nls -a\n\n# View all the contents of the current directory\n# with additional information such as permissions\nls -la  \n\n```\n"
-        },
-        {
-          "id": "YLD3gKELgK",
-          "type": "media",
-          "title": "mkdir: Create Directories",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "# Examples\n\n```bash\n# Create a new directory named projects\nmkdir projects\n\n# Create a new directory named stuff. If \n# the parent directory (my/) doesn't exist then \n# create that too \nmkdir -p ~/my/stuff\n\n```\n"
         },
         {
           "id": "FtF4qr1qpt",
@@ -3360,10 +3338,32 @@
           "title": "rm: Remove Files and Directories",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/ohkqalnH_Fk",
           "starterCode": "",
           "solutionCode": "",
           "content": "# Examples\n\n```bash\n# Remove the file `hello.txt`\nrm hello.txt\n\n# Remove the directory `stuff` and all its contents\nrm -r stuff\n\n```\n"
+        },
+        {
+          "id": "YLD3gKELgK",
+          "type": "media",
+          "title": "mkdir: Create Directories",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/nlgtrVG1IXo",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# Examples\n\n```bash\n# Create a new directory named projects\nmkdir projects\n\n# Create a new directory named stuff. If \n# the parent directory (my/) doesn't exist then \n# create that too \nmkdir -p ~/my/stuff\n\n```\n"
+        },
+        {
+          "id": "Ub2hNjGSBX",
+          "type": "media",
+          "title": "cat: See the Contents of Files",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/PfuYM4fX6K4",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# Examples\n\n```bash\n# View the contents of hello.txt\ncat hello.txt\n\n# Veiw the contents of project.ts located in your home directory\ncat ~/project.ts\n\n```\n"
         },
         {
           "id": "95$rRtxch9",
@@ -3371,7 +3371,7 @@
           "title": "man: Get Help on the Command Line",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/rvu_4Y9-4sY",
           "starterCode": "",
           "solutionCode": "",
           "content": "`man` stands for \"manual\" and can be used to view the manual for various commands. These documents or manuals are usually referred to as \"man pages.\" \n\nUnfortunately some man pages are great and some are not so helpful. We will see other ways to get help when we talk about installing software.\n# Examples\n\n```bash\n# View the manual for the `ls` command\nman ls\n\n```\n"
@@ -3388,15 +3388,15 @@
           "content": "* Get some weather \n* Get some reddit\n\n"
         },
         {
-          "id": "2Le38MD6M",
+          "id": "K8Ne9$uSp",
           "type": "media",
-          "title": "Command Line Pipes",
+          "title": "Configuring Your Shell",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "* What the hell does \"shell\" mean\n* What is `bash`?\n* The `source` command\n* Configuring all config files to point to `.bashrc` via source commands\n   * We want to get `.profile` and `.bash_profile` both to point to `.bashrc`.\n   * Explicitly point out that doing this allows you not to know what order or under what circumstances these files load in.\n\n"
         },
         {
           "id": "SwXV8lqFJb",
@@ -3410,6 +3410,17 @@
           "content": "* `.bashrc`\n* Creating your own `alias`es\\.\n\n"
         },
         {
+          "id": "4u1gnF3N6",
+          "type": "media",
+          "title": "Configuring Your $PATH",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "* What is the PATH\n* How is it used? \n* How can we configure it?\n\n"
+        },
+        {
           "id": "z$JF$lDjH",
           "type": "media",
           "title": "Redirecting Output",
@@ -3418,29 +3429,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "```\ncurl URL > blah.txt \n\n```\nAKA downloading files"
-        },
-        {
-          "id": "aR5Go1MLPe",
-          "type": "media",
-          "title": "brew and apt: Installing Software",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "# Examples\n\n```bash\n# Move up a directory\ncd ..\n\n# Move to your home directory\ncd ~\n\n# Move to the directory my/projects/ within your home directory\ncd ~/my/projects/\n\n# Move to the directory \"documents\" within the current directory\ncd documents\n\n# Move to the absolute directory /var/log\ncd /var/log\n\n```\n"
-        },
-        {
-          "id": "55@@HTVA9s",
-          "type": "media",
-          "title": "open: Open Files",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "# Examples\n\n```bash\n# Open the current directory with the default application.\n# On Mac the default is Finder, on Windows the default is Explorer\nopen .\n\n# Open a text file with your default editor. If you set VSCode to\n# be your default, this will open VSCode\nopen my-file.txt\n\n```\n"
+          "content": "```\ncurl URL > blah.txt\n\n```\nAKA downloading files"
         },
         {
           "id": "gE6ayunrl",
@@ -3452,6 +3441,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "# Examples\n\n```bash\n# Search for the word \"Hello\" within the file app.ts\ngrep \"Hello\" app.ts\n\n# Do a case-insensitive search. This means that if it finds \"Hello\" or \"hello\"\n# either one counts as a match. Note that the difference is the capital \"H\"\ngrep -i \"Hello\" app.ts\n\n# Search for the text \"Hello\" in every file within the ./src directory. \n# -R stands for recursive, meaning every file that is located within \n# the target directory will be searched.\ngrep -R \"Hello\" ./src\n\n# Combine the two flags -R and -i to recursively search without worrying about\n# case.\ngrep -R -i \"Pairwise\" ./src\n\n```\n"
+        },
+        {
+          "id": "bo0s8ASKm",
+          "type": "media",
+          "title": "Environment Variables",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "* What are they?\n* How to access them?  `env` and `echo $VAR`.\n* You should hide them\n* How to set them?\n   * Show also that they are unset if you close and reopen, which is a segue into the next lesson on config\n\n"
         },
         {
           "id": "mkw5rDUzXB",
@@ -3496,17 +3496,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Show `which` and `which -a`."
-        },
-        {
-          "id": "4u1gnF3N6",
-          "type": "media",
-          "title": "Configuring Your $PATH",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "What it is, how to configure it."
         },
         {
           "id": "NvWDlHv9Z",
