@@ -245,7 +245,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     debug("componentDidMount");
 
-    this.runChallengeTests();
+    // this.runChallengeTests();
 
     subscribeCodeWorker(this.handleCodeFormatMessage);
 

@@ -2,7 +2,7 @@ import * as Babel from "@babel/standalone";
 import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
-import { PRODUCTION } from "./client-env";
+// import { PRODUCTION } from "./client-env";
 import quote from "string-quote-x";
 import pipe from "ramda/src/pipe";
 
@@ -168,26 +168,9 @@ const __interceptConsoleError = (...value) => {
 `;
 
 /**
- * Fuck!
- *
- * For some reason this breaks in the production build of the app and
- * produces some arcane Babel error. I don't know why. But the consequence
- * is challenges which require Babel transpilation stop working.
- *
- * TODO: Fix it!
+ * Register loop-protect Babel plugin.
  */
-if (!PRODUCTION) {
-  const INFINITE_LOOP_TIMEOUT = 2000;
-  /**
-   * Register loop-protect Babel plugin.
-   */
-  Babel.registerPlugin(
-    "loopProtection",
-    protect(INFINITE_LOOP_TIMEOUT, () => {
-      throw new Error("INFINITE_LOOP");
-    }),
-  );
-}
+Babel.registerPlugin("loopProtection", protect(2000));
 
 /** ===========================================================================
  * Test Utils
@@ -266,7 +249,9 @@ export const stripConsoleCalls = (codeString: string) => {
  * Transpile the code use Babel standalone module.
  */
 export const transpileCodeWithBabel = (codeString: string) => {
-  const plugins = PRODUCTION ? [] : ["loopProtection"];
+  console.log("POINT C");
+  // const plugins = PRODUCTION ? [] : ["loopProtection"];
+  const plugins = ["loopProtection"];
   return Babel.transform(codeString, {
     presets: [
       "es2017",
@@ -585,6 +570,7 @@ export const compileCodeString = async (
   sourceCodeString: string,
   challenge: Challenge,
 ) => {
+  console.log("POINT A");
   if (challenge.type === "markup") {
     const testScript = getTestScripts(sourceCodeString, challenge.testCode, "");
 
@@ -629,6 +615,7 @@ export const compileCodeString = async (
      * - Apply Babel transform steps
      * - Fetch and inject required modules into code string
      */
+    console.log("POINT B");
     const processedCodeString = await pipe(
       injectTestCode(challenge.testCode),
       hijackConsole,

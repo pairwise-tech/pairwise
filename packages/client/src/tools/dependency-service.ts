@@ -1,5 +1,9 @@
 import axios from "axios";
 
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import ReactNativeWebSourceUrl from "file-loader!../js/react-native-web-lib.js";
+
 /** ===========================================================================
  * Types & Config
  * ============================================================================
@@ -19,6 +23,7 @@ type DependencyCache = Map<string, Dependency>;
  * be provided if they tried to do that.
  */
 const CDN_PACKAGE_LINKS = {
+  "react-native-web": ReactNativeWebSourceUrl,
   react: "https://unpkg.com/react@16/umd/react.development.js",
   "react-dom": "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
   "react-dom-test-utils":
