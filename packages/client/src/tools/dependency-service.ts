@@ -7,6 +7,9 @@ import axios from "axios";
 
 let ReactNativeWebSourceUrl = "";
 
+/**
+ * Not very ideal, but Jest has some issues with the file-loader! Fine!
+ */
 if (process.env.NODE_ENV === "test") {
   const fs = require("fs");
   ReactNativeWebSourceUrl = fs.readFileSync("src/js/react-native-web-lib.js", {

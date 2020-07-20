@@ -3992,11 +3992,11 @@
           "id": "5sRkVVPmD",
           "type": "react",
           "title": "React Native MVP Challenge",
-          "instructions": "Build a mobile app\\!",
-          "testCode": "test(\"A `Button` element should be rendered with the `title` `\\\"Press the Button!\\\".`\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const divs = container.getElementsByTagName(\"div\");\n  let valid = false;\n  for (const d of divs) {\n    const text = d.innerText;\n    if (text === \"Press the Button\") {\n      valid = true;\n      break;\n    }\n  }\n  expect(valid).toBe(true);\n});\n",
+          "instructions": "Get started learning how to build mobile apps\\!",
+          "testCode": "test(\"A `Button` element should be rendered with the `title` `\\\"Press the Button!\\\".`\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const divs = container.getElementsByTagName(\"div\");\n  let valid = false;\n  for (const d of divs) {\n    const text = d.innerText;\n    if (text === \"Press the Button!\") {\n      valid = true;\n      break;\n    }\n  }\n  expect(valid).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native-web\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  render(): JSX.Element {\n    // Your code here:\n    return <View />;\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native-web\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  render(): JSX.Element {\n    // Your code here:\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n        <Button title=\"Press the Button!\" />\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
