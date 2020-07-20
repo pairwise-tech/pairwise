@@ -5,12 +5,14 @@ import axios from "axios";
  * ============================================================================
  */
 
+const IS_TEST = process.env.NODE_ENV === "test";
+
 let ReactNativeWebSourceUrl = "";
 
 /**
  * Not very ideal, but Jest has some issues with the file-loader! Fine!
  */
-if (process.env.NODE_ENV === "test") {
+if (IS_TEST) {
   const fs = require("fs");
   ReactNativeWebSourceUrl = fs.readFileSync("src/js/react-native-web-lib.js", {
     encoding: "utf8",
@@ -77,26 +79,9 @@ class DependencyCacheClass {
     } else {
       if (this.sourceLibraries.has(packageName)) {
         try {
-          /**
-           * TODO: Find a way to fetch the type definitions as well. Or,
-           * hard code them in the CDN_PACKAGE_LINKS constant and just use
-           * the values there.
-           */
+          // Get the source library:
           const uri = this.sourceLibraries.get(packageName) as string;
-          /**
-           * NOTE: Sometimes these requests to unpkg can fail!
-           *
-           * We should review this later and try to make this more robust.
-           * Currently, the Cypress test for React challenges is disabled
-           * for this very reason.
-           */
-          const response = await axios.get(uri, {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          });
-          const source = response.data;
+          const source = await this.fetchResource(uri);
           this.dependencies.set(packageName, { source });
           return source;
         } catch (err) {
@@ -105,6 +90,34 @@ class DependencyCacheClass {
           throw new Error(msg);
         }
       }
+    }
+  };
+
+  fetchResource = async (uri: string) => {
+    try {
+      /**
+       * If it's not a URL we are in test mode and it's the actual source
+       * file... this will throw and the source is returned. Yolo!
+       */
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const url = new URL(uri);
+      /**
+       * NOTE: Sometimes these requests to unpkg can fail!
+       *
+       * We should review this later and try to make this more robust.
+       * Currently, the Cypress test for React challenges is disabled
+       * for this very reason.
+       */
+      const response = await axios.get(uri, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      return response.data;
+    } catch (err) {
+      return uri;
     }
   };
 }
