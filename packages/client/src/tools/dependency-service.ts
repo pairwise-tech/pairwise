@@ -1,8 +1,22 @@
 import axios from "axios";
 
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import ReactNativeWebSourceUrl from "file-loader!../js/react-native-web-lib.js";
+/** ===========================================================================
+ * External Libraries
+ * ============================================================================
+ */
+
+let ReactNativeWebSourceUrl = "";
+
+if (process.env.NODE_ENV === "test") {
+  const fs = require("fs");
+  ReactNativeWebSourceUrl = fs.readFileSync("src/js/react-native-web-lib.js", {
+    encoding: "utf8",
+  });
+} else {
+  // @ts-ignore
+  // eslint-disable-next-line import/no-webpack-loader-syntax
+  ReactNativeWebSourceUrl = require("file-loader!../js/react-native-web-lib.js");
+}
 
 /** ===========================================================================
  * Types & Config
@@ -16,13 +30,17 @@ interface Dependency {
 
 type DependencyCache = Map<string, Dependency>;
 
+interface SourceLibraryMap {
+  [key: string]: string;
+}
+
 /**
  * However, we could just hard code these now for any libraries used within
  * the curriculum. It doesn't make very much sense for people to import other
  * libraries within the workspace itself, and anyway some error/warning could
  * be provided if they tried to do that.
  */
-const CDN_PACKAGE_LINKS = {
+const SOURCE_LIBRARY_MAP: SourceLibraryMap = {
   "react-native-web": ReactNativeWebSourceUrl,
   react: "https://unpkg.com/react@16/umd/react.development.js",
   "react-dom": "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
@@ -40,7 +58,11 @@ const CDN_PACKAGE_LINKS = {
 
 class DependencyCacheClass {
   dependencies: DependencyCache = new Map();
-  cdnLinks = new Map(Object.entries(CDN_PACKAGE_LINKS));
+  sourceLibraries = new Map();
+
+  constructor(sourceLibraryMap: SourceLibraryMap) {
+    this.sourceLibraries = new Map(Object.entries(sourceLibraryMap));
+  }
 
   getDependency = async (packageName: string) => {
     if (this.dependencies.has(packageName)) {
@@ -50,14 +72,14 @@ class DependencyCacheClass {
       const dependency = this.dependencies.get(packageName) as Dependency;
       return dependency.source;
     } else {
-      if (this.cdnLinks.has(packageName)) {
+      if (this.sourceLibraries.has(packageName)) {
         try {
           /**
            * TODO: Find a way to fetch the type definitions as well. Or,
            * hard code them in the CDN_PACKAGE_LINKS constant and just use
            * the values there.
            */
-          const uri = this.cdnLinks.get(packageName) as string;
+          const uri = this.sourceLibraries.get(packageName) as string;
           /**
            * NOTE: Sometimes these requests to unpkg can fail!
            *
@@ -89,6 +111,6 @@ class DependencyCacheClass {
  * ============================================================================
  */
 
-const DependencyCacheService = new DependencyCacheClass();
+const DependencyCacheService = new DependencyCacheClass(SOURCE_LIBRARY_MAP);
 
 export default DependencyCacheService;
