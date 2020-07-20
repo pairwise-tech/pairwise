@@ -77,7 +77,7 @@ const protect = (t, timeout, extra) => path => {
 module.exports = (timeout = 100) => {
   /**
    * NOTE: For some unknown reasons, we have to inline the function like
-   * this for it to work. Ha, take that!
+   * this for it to work. Ok!
    */
   const extra = `function bomberFunctionName(){throw new Error("INFINITE_LOOP")}`;
 

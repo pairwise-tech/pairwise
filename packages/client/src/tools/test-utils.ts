@@ -166,11 +166,6 @@ const __interceptConsoleError = (...value) => {
 }
 `;
 
-/**
- * Register loop-protect Babel plugin.
- */
-Babel.registerPlugin("loopProtection", protect(2000));
-
 /** ===========================================================================
  * Test Utils
  * ============================================================================
@@ -243,6 +238,11 @@ export const stripConsoleCalls = (codeString: string) => {
 
   return `${CONSOLE_NO_OP}${noOpConsole}`;
 };
+
+/**
+ * Register loop-protect Babel plugin.
+ */
+Babel.registerPlugin("loopProtection", protect(2000));
 
 /**
  * Transpile the code use Babel standalone module.
