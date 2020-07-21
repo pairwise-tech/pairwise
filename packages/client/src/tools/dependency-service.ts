@@ -50,7 +50,7 @@ if (IS_TEST) {
  * be provided if they tried to do that.
  */
 const SOURCE_LIBRARY_MAP: SourceLibraryMap = {
-  "react-native-web": ReactNativeWebSourceUrl,
+  "react-native": ReactNativeWebSourceUrl,
   react: "https://unpkg.com/react@16/umd/react.development.js",
   "react-dom": "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
   "react-dom-test-utils":
