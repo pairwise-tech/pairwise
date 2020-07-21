@@ -74,6 +74,7 @@ import {
   Spacer,
   DragIgnorantFrameContainer,
   consoleRowStyles,
+  EmptyPreviewCoverPanel,
   RevealSolutionLabel,
   RunButton,
   TestStatusTextTab,
@@ -470,8 +471,8 @@ class Workspace extends React.Component<IProps, IState> {
       revealSolutionCode,
       editModeAlternativeViewEnabled,
     } = this.props;
+    const NO_TESTS_RESULTS = testResults.length === 0;
     const { fullScreenEditor } = userSettings;
-
     const IS_ALTERNATIVE_EDIT_VIEW = editModeAlternativeViewEnabled;
     const IS_SANDBOX = challenge.id === SANDBOX_ID;
     const IS_FULLSCREEN = fullScreenEditor || IS_SANDBOX;
@@ -801,6 +802,10 @@ class Workspace extends React.Component<IProps, IState> {
 
       return IS_REACT_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
           <RowsWrapper separatorProps={rowSeparatorProps}>
             <Row initialHeight={D.PREVIEW_HEIGHT}>
               <div style={{ height: "100%" }}>
@@ -820,6 +825,10 @@ class Workspace extends React.Component<IProps, IState> {
         </Col>
       ) : IS_TYPESCRIPT_CHALLENGE ? (
         <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
           <div>
             <Console variant="dark" logs={this.state.logs} />
             <DragIgnorantFrameContainer
@@ -832,6 +841,10 @@ class Workspace extends React.Component<IProps, IState> {
         </Col>
       ) : IS_MARKUP_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
           <div style={{ height: "100%" }}>
             <DragIgnorantFrameContainer
               id="iframe"
