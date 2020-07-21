@@ -118,6 +118,9 @@ export const checkTestResultStatus = (
   expectedStatus: TestStatus,
   numberOfResults: number = 1,
 ) => {
+  // Run the code first
+  click("pw-run-code");
+
   for (let i = 0; i < numberOfResults; i++) {
     checkTestStatus(expectedStatus, i);
   }

@@ -74,7 +74,13 @@ const protect = (t, timeout, extra) => path => {
   body.unshiftContainer("body", inside);
 };
 
-module.exports = (timeout = 100, extra = null) => {
+module.exports = (timeout = 100) => {
+  /**
+   * NOTE: For some unknown reasons, we have to inline the function like
+   * this for it to work. Ok!
+   */
+  const extra = `function bomberFunctionName(){throw new Error("INFINITE_LOOP")}`;
+
   return ({ types: t, transform }) => {
     const node = extra
       ? transform(extra, { ast: true }).ast.program.body[0]

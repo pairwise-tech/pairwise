@@ -121,6 +121,45 @@ export const MinimalButton = styled.button`
   border: none;
 `;
 
+/**
+ * An overlay to display on top of the preview panel when no test results
+ * exist.
+ */
+export const EmptyPreviewCoverPanel = (props: {
+  visible: boolean;
+  runCodeHandler: () => void;
+}) => {
+  const { visible, runCodeHandler } = props;
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <PreviewCover>
+      <p>Run the code to get started.</p>
+      <RunButton
+        style={{ zIndex: 100, marginTop: 6 }}
+        icon="play"
+        onClick={runCodeHandler}
+      >
+        Run Code
+      </RunButton>
+    </PreviewCover>
+  );
+};
+
+const PreviewCover = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  color: white;
+  background: rgb(45, 45, 45);
+`;
+
 const HighlightedMarkdown = (props: ReactMarkdownProps) => {
   return (
     <Markdown
