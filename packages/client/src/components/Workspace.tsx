@@ -1231,6 +1231,11 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   startTestCancellationTimer = () => {
+    // Clear any existing timer
+    if (this.testCancellationTimer) {
+      clearTimeout(this.testCancellationTimer);
+    }
+
     // Allow 10 seconds for the tests to run
     this.testCancellationTimer = setTimeout(this.handleCancelTests, 10000);
   };
