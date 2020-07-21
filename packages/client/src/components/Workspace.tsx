@@ -1009,12 +1009,19 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   getTestSummaryString = () => {
-    // Tests are still loading:
+    // Tests are still loading
     if (this.state.testResultsLoading) {
       return "Processing Test Results...";
     }
 
     const { passedTests, testResults } = this.getTestPassedStatus();
+
+    // No results exist yet
+    if (testResults.length === 0) {
+      return "No test results yet.";
+    }
+
+    // Return status message
     return `Tests: ${passedTests.length}/${testResults.length} Passed`;
   };
 
