@@ -3385,7 +3385,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "* Get some weather \n* Get some reddit\n\n"
+          "content": "# Examples\n\n```bash\n# Send a GET request to http://example.com\n# and show the response on screen\ncurl 'http://example.com'\n\n# Same as above but also display request info and \n# all headers. -v stands for \"verbose.\" This is \n# useful for learning about HTTP and debugging.\ncurl -v 'http://example.com'\n\n# Store the results of a request in a file. \n# In other words, download the URL into a file.\ncurl 'http://example.com' > response.html\n\n# Send a POST request along with some data to the server.\ncurl -X POST -d '{ \"name\": \"Cat\" }' 'http://example.com'\n\n```\n"
         },
         {
           "id": "K8Ne9$uSp",
@@ -3396,18 +3396,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "* What the hell does \"shell\" mean\n* What is `bash`?\n* The `source` command\n* Configuring all config files to point to `.bashrc` via source commands\n   * We want to get `.profile` and `.bash_profile` both to point to `.bashrc`.\n   * Explicitly point out that doing this allows you not to know what order or under what circumstances these files load in.\n\n"
-        },
-        {
-          "id": "SwXV8lqFJb",
-          "type": "media",
-          "title": "Configuration Files and Aliases",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "* `.bashrc`\n* Creating your own `alias`es\\.\n\n"
+          "content": "# In this lesson we cover\n\n* What the hell does \"shell\" mean\n* What is `bash`?\n* The `source` command\\.\n* Configuring bash via `.bashrc`.\n* Creating simple aliases.\n* Basic environment variables using the `export` command\\.\n* Configuring all config files to point to `.bashrc` via source commands\n   * We want to get `.profile` and `.bash_profile` both to point to `.bashrc`.\n   * This setup allows you to ignore the specifics of how bash loads config files, since no matter which file it loads it will ultimately load `.bashrc`.\n\n# Environment\n\nThis lesson touches briefly on your shell environment and how to set and use environment variables. For more info check out the dedicated [lesson on environment variables](/workspace/bo0s8ASKm).\n# Jargon\n\nWe're getting deeper and deeper into the territory of opaque jargon, so let's go over what some things mean:\n\n## Terminal\n\nA graphical application that lets you use a shell. Terminal is a general term like \"word processor\" or \"web browser.\" On Mac computers we use the specific app \"Terminal.app.\" On Windows computers we use \"ubuntu.exe.\" \n\n## Shell\n\nA type of application which lets you control your computer via commands. Also known as a command line. Shell is a general term like \"word processor\" or \"web browser.\" Bash is the specific shell we use in this course.\n\n## Bash\n\nThe specific shell program we use in this course. Bash lets you use commands to control your computer. Bash is a specific shell. For example, if \"shell\" is like \"web browser\" then bash is like Chrome or Firefox.\n"
         },
         {
           "id": "4u1gnF3N6",
@@ -3419,6 +3408,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "* What is the PATH\n* How is it used? \n* How can we configure it?\n\n"
+        },
+        {
+          "id": "bo0s8ASKm",
+          "type": "media",
+          "title": "Environment Variables",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "* What are they?\n* How to access them?  `env` and `echo $VAR`.\n* You should hide them\n* How to set them?\n   * Show also that they are unset if you close and reopen, which is a segue into the next lesson on config\n\n"
         },
         {
           "id": "z$JF$lDjH",
@@ -3443,17 +3443,6 @@
           "content": "# Examples\n\n```bash\n# Search for the word \"Hello\" within the file app.ts\ngrep \"Hello\" app.ts\n\n# Do a case-insensitive search. This means that if it finds \"Hello\" or \"hello\"\n# either one counts as a match. Note that the difference is the capital \"H\"\ngrep -i \"Hello\" app.ts\n\n# Search for the text \"Hello\" in every file within the ./src directory. \n# -R stands for recursive, meaning every file that is located within \n# the target directory will be searched.\ngrep -R \"Hello\" ./src\n\n# Combine the two flags -R and -i to recursively search without worrying about\n# case.\ngrep -R -i \"Pairwise\" ./src\n\n```\n"
         },
         {
-          "id": "bo0s8ASKm",
-          "type": "media",
-          "title": "Environment Variables",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "* What are they?\n* How to access them?  `env` and `echo $VAR`.\n* You should hide them\n* How to set them?\n   * Show also that they are unset if you close and reopen, which is a segue into the next lesson on config\n\n"
-        },
-        {
           "id": "mkw5rDUzXB",
           "type": "section",
           "title": "Third-Party Software on the Command Line",
@@ -3463,17 +3452,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "You probably already know that you can install software on your computer. Things like VSCode, Firefox and Excel are all examples.\n\nYou can _also_ install software on the command line. You will just need a piece of software called a package manager. \n# Package Managers\n\nA package manager is somewhat like an app store for the command line. You use a package manager to install other software. A \"package\" is just another word for software.\n\n\n## apt: Windows and Linux\n\nOn Linux we have `apt`, which you will also have on Windows if you set up your system as we described earlier in this module \\(here's a [link](/workspace/RCm1HkcbQ) if you missed it\\). Linux already has a package manger installed and it's called `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\napt install <package>\n\n# List all the currently installed packages\napt list --installed\n\n# Show information for a specific package\napt show <package>\n\n# Search for a package\napt search <package>\n\n```\n\n## brew: Mac\n\nOn a Mac, things are not so simple. We have to install a third\\-party package manager called Homebrew. The latest instructions to install Homebrew can be found on their site: [https://brew.sh/](https://brew.sh/)\n\nAs of this writing the installation command is:\n\n```\n/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)\"\n\n```\n\nHomebrew uses a command called `brew`. Once you have `brew` installed you can start using it much like `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\nbrew install <package>\n\n# List all the currently installed packages\nbrew list\n\n# Show information for a specific package\nbrew info <package>\n\n# Search for a package\nbrew search <package>\n\n```\n"
-        },
-        {
-          "id": "$0ICxz1DQ",
-          "type": "media",
-          "title": "jq: Do Stuff with JSON",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": ""
         },
         {
           "id": "@oPRSQI6V",
@@ -4141,7 +4119,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "# Overview\n\nBuild a command line tool to allow a user to query the Open Weather API and fetch current weather information for some location.\n\nYou can use the [Weatherstack](https://weatherstack.com/) free public API for this project. They do have paid plans, but if you look at their [pricing model](https://weatherstack.com/product) they provide a free plan as long as you use less than 1,000 calls per month. This is a very common approach for API providers. A free tier provides limited functionality which allows developers to try out the service, and then paid tiers provide more advanced features or unlimited usage.\n\nTo use their API, you will have to sign up and obtain an _api key, _which in this case they refer to as an _access\\_key\\. _Basically, this is just a unique key you must obtain to use their API. To obtain it you can follow the steps in the [Getting Started Documentation](https://weatherstack.com/documentation). This key allows their service to authenticate your requests, and, if you have a paid plan, ensure you have access to the paid features.\n\nIt may feel tedious to read through their documentation and sign up for an account to get this API key, but in fact you will find that this process is an integral aspect of working as a developer \\- and this is one of the major lessons and takeaways from this module on Async Programming and APIs. You will very frequently have to work with 3rd party systems, and, if you are using or building production services, you often have to register and authenticate with the APIs you are consuming, just like we are doing here\\!\n\nThat's one reason why we chose this challenge. It's an easy introduction to this process of working with 3rd party APIs which enforce authentication logic. Now, on to the project details\\!\n# User Stories\n\nHere are some user stories for the project. They are relatively short and to the point:\n\n* As a user, I can run a program on the command line to fetch current weather details for some location.\n* As a user, I can pass in the location I want to search using an argument, e.g.\n   * Sample command: `node weather.js --location=Tokyo`.\n\n\nThat's it\\! You just have to build a simple NodeJS program which can be run on the command line and accepts an argument for the location you want to search the weather for. The program should then output the current weather information using the weather API we described above.\n\nAs in the other projects, build your project and push your code to GitHub. Then enter your project URL in this page to complete the project.\n# Hints\n\n* Take a look at the \"Current Weather\" API provided by Weatherstack and the \"Query Parameter\" section on how to provide a weather location. All of this information is in the [API Documentation](https://weatherstack.com/documentation).\n* There are a few libraries to help with reading command line arguments for NodeJS programs. While NodeJS has the built\\-in [process\\.argv](https://nodejs.org/docs/latest/api/process.html#process_process_argv), which you are free to explore, two other node modules you can use are:\n   * [yargs](https://www.npmjs.com/package/yargs)\n   * [command\\-line\\-args](https://www.npmjs.com/package/command-line-args)\n   * Take your pick from these, or search around and find another option\\!\n\n# Challenge\n\nIf you are interested in a challenge here's a few suggestions:\n\n* The Weatherstack API also provides some other options in addition to the current weather, such as historical weather and weather forecast. Take a look at these other APIs and consider adding some more options to your CLI tool to allow users to query these APIs as well.\n* Currently the program accepts a location argument. Modify your program to make the location argument optional. If it is not provided, the program should provide a prompt for the user to enter a location. Once a location is searched, the prompt should reappear so the user can search another location. Add error handling in case the location is invalid or the API request failed. In this case, the user should see some error output and be able to enter another location.\n\n"
+          "content": "# Overview\n\nBuild a command line tool to allow a user to query the Open Weather API and fetch current weather information for some location.\n\nYou can use the [Weatherstack](https://weatherstack.com/) free public API for this project. They do have paid plans, but if you look at their [pricing model](https://weatherstack.com/product) they provide a free plan as long as you use less than 1,000 calls per month. This is a very common approach for API providers. A free tier provides limited functionality which allows developers to try out the service, and then paid tiers provide more advanced features or unlimited usage.\n\nTo use their API, you will have to sign up and obtain an \\_api key, \\_which in this case they refer to as an _access\\_key_. Basically, this is just a unique key you must obtain to use their API. To obtain it you can follow the steps in the [Getting Started Documentation](https://weatherstack.com/documentation). This key allows their service to authenticate your requests, and, if you have a paid plan, ensure you have access to the paid features.\n\nIt may feel tedious to read through their documentation and sign up for an account to get this API key, but in fact you will find that this process is an integral aspect of working as a developer \\- and this is one of the major lessons and takeaways from this module on Async Programming and APIs. You will very frequently have to work with 3rd party systems, and, if you are using or building production services, you often have to register and authenticate with the APIs you are consuming, just like we are doing here\\!\n\nThat's one reason why we chose this challenge. It's an easy introduction to this process of working with 3rd party APIs which enforce authentication logic. Now, on to the project details\\!\n# User Stories\n\nHere are some user stories for the project. They are relatively short and to the point:\n\n* As a user, I can run a program on the command line to fetch current weather details for some location.\n* As a user, I can pass in the location I want to search using an argument, e.g.\n   * Sample command: `node weather.js --location=Tokyo`.\n\n\nThat's it\\! You just have to build a simple NodeJS program which can be run on the command line and accepts an argument for the location you want to search the weather for. The program should then output the current weather information using the weather API we described above.\n\nAs in the other projects, build your project and push your code to GitHub. Then enter your project URL in this page to complete the project.\n# Hints\n\n* Take a look at the \"Current Weather\" API provided by Weatherstack and the \"Query Parameter\" section on how to provide a weather location. All of this information is in the [API Documentation](https://weatherstack.com/documentation).\n* There are a few libraries to help with reading command line arguments for NodeJS programs. While NodeJS has the built\\-in [process\\.argv](https://nodejs.org/docs/latest/api/process.html#process_process_argv), which you are free to explore, two other node modules you can use are:\n   * [yargs](https://www.npmjs.com/package/yargs)\n   * [command\\-line\\-args](https://www.npmjs.com/package/command-line-args)\n   * Take your pick from these, or search around and find another option\\!\n\n# Challenge\n\nIf you are interested in a challenge here's a few suggestions:\n\n* The Weatherstack API also provides some other options in addition to the current weather, such as historical weather and weather forecast. Take a look at these other APIs and consider adding some more options to your CLI tool to allow users to query these APIs as well.\n* Currently the program accepts a location argument. Modify your program to make the location argument optional. If it is not provided, the program should provide a prompt for the user to enter a location. Once a location is searched, the prompt should reappear so the user can search another location. Add error handling in case the location is invalid or the API request failed. In this case, the user should see some error output and be able to enter another location.\n\n"
         },
         {
           "id": "vIQNdGED5",
