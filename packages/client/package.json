@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "codepress:build": "tsc --lib esnext --esModuleInterop --skipLibCheck codepress/src/*.ts",
-    "codepress:watch": "concurrently \"yarn run codepress:build -- -w\" \"nodemon --inspect ./codepress/src/index.js\"",
+    "codepress:watch": "concurrently \"yarn run codepress:build -- -w\" \"nodemon ./codepress/src/index.js\"",
     "setup:env": "cp sample.env .env",
     "prestart": "yarn run test:build",
     "start": "react-scripts start",
