@@ -249,8 +249,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     debug("componentDidMount");
 
-    // this.runChallengeTests();
-
     subscribeCodeWorker(this.handleCodeFormatMessage);
 
     /* Focus the editor whenever a challenge is loaded */
@@ -1271,7 +1269,7 @@ class Workspace extends React.Component<IProps, IState> {
   cancelTestRun = () => {
     this.setState({ testResultsLoading: false }, () => {
       toaster.warn(
-        "Tests cancelled because code did not finish executing in time. Check your code for problems and make sure you are connect to the internet!",
+        "Tests cancelled because your code took longer than 10 seconds to complete running. Check your code for problems and make sure your internet connection is stable!",
       );
     });
   };

@@ -38,6 +38,16 @@ if (IS_TEST) {
   });
   ReactNativeWebSourceUrl = () => lib;
 } else {
+  /**
+   * NOTE: This source file is a Webpack-bundled version of the react-native-web
+   * library. This is produced using the code in this repo:
+   *
+   * https://github.com/pairwise-tech/react-native-web-library
+   *
+   * The bundled output is then copied in the file which is imported here. To
+   * update this source code, the bundle will need to be regenerated using that
+   * helper repo and copied over here.
+   */
   // @ts-ignore
   // eslint-disable-next-line import/no-webpack-loader-syntax
   ReactNativeWebSourceUrl = require("file-loader!../js/react-native-web-lib.js");
