@@ -3432,6 +3432,17 @@
           "content": "* What are they?\n* How to access them?  `env` and `echo $VAR`.\n* You should hide them\n* How to set them?\n   * Show also that they are unset if you close and reopen, which is a segue into the next lesson on config\n\n"
         },
         {
+          "id": "uRWJVdzO3",
+          "type": "media",
+          "title": "Basic Security",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# TODO\n\n* Don't post screenshots of your `env` to twitter... \n* Sharing code without sharing secrets\n* Inline env vars\n\n"
+        },
+        {
           "id": "z$JF$lDjH",
           "type": "media",
           "title": "Redirecting Output",
@@ -3452,39 +3463,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "# Examples\n\n```bash\n# Search for the word \"Hello\" within the file app.ts\ngrep \"Hello\" app.ts\n\n# Do a case-insensitive search. This means that if it finds \"Hello\" or \"hello\"\n# either one counts as a match. Note that the difference is the capital \"H\"\ngrep -i \"Hello\" app.ts\n\n# Search for the text \"Hello\" in every file within the ./src directory. \n# -R stands for recursive, meaning every file that is located within \n# the target directory will be searched.\ngrep -R \"Hello\" ./src\n\n# Combine the two flags -R and -i to recursively search without worrying about\n# case.\ngrep -R -i \"Pairwise\" ./src\n\n```\n"
-        },
-        {
-          "id": "mkw5rDUzXB",
-          "type": "section",
-          "title": "Third-Party Software on the Command Line",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "You probably already know that you can install software on your computer. Things like VSCode, Firefox and Excel are all examples.\n\nYou can _also_ install software on the command line. You will just need a piece of software called a package manager. \n# Package Managers\n\nA package manager is somewhat like an app store for the command line. You use a package manager to install other software. A \"package\" is just another word for software.\n\n\n## apt: Windows and Linux\n\nOn Linux we have `apt`, which you will also have on Windows if you set up your system as we described earlier in this module \\(here's a [link](/workspace/RCm1HkcbQ) if you missed it\\). Linux already has a package manger installed and it's called `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\napt install <package>\n\n# List all the currently installed packages\napt list --installed\n\n# Show information for a specific package\napt show <package>\n\n# Search for a package\napt search <package>\n\n```\n\n## brew: Mac\n\nOn a Mac, things are not so simple. We have to install a third\\-party package manager called Homebrew. The latest instructions to install Homebrew can be found on their site: [https://brew.sh/](https://brew.sh/)\n\nAs of this writing the installation command is:\n\n```\n/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)\"\n\n```\n\nHomebrew uses a command called `brew`. Once you have `brew` installed you can start using it much like `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\nbrew install <package>\n\n# List all the currently installed packages\nbrew list\n\n# Show information for a specific package\nbrew info <package>\n\n# Search for a package\nbrew search <package>\n\n```\n"
-        },
-        {
-          "id": "bo0s8ASKm",
-          "type": "media",
-          "title": "Environment Variables",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "* What are they?\n* How to access them?  `env` and `echo $VAR`.\n* You should hide them\n* How to set them?\n   * Show also that they are unset if you close and reopen, which is a segue into the next lesson on config\n\n"
-        },
-        {
-          "id": "uRWJVdzO3",
-          "type": "media",
-          "title": "Basic Security",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "# TODO\n\n* Don't post screenshots of your `env` to twitter... \n* Sharing code without sharing secrets\n* Inline env vars\n\n"
         },
         {
           "id": "NvWDlHv9Z",
@@ -3619,15 +3597,15 @@
           "content": "Here is the special topics section for Developer Workflow where we will cover some additional content you may find interesting. Remember, the special topics contain optional material, but are recommended\\!"
         },
         {
-          "id": "bSclOkUbY",
-          "type": "typescript",
-          "title": "[EMPTY...]",
+          "id": "mkw5rDUzXB",
+          "type": "media",
+          "title": "Third-Party Software on the Command Line",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "You probably already know that you can install software on your computer. Things like VSCode, Firefox and Excel are all examples.\n\nYou can _also_ install software on the command line. You will just need a piece of software called a package manager. \n# Package Managers\n\nA package manager is somewhat like an app store for the command line. You use a package manager to install other software. A \"package\" is just another word for software.\n\n\n## apt: Windows and Linux\n\nOn Linux we have `apt`, which you will also have on Windows if you set up your system as we described earlier in this module \\(here's a [link](/workspace/RCm1HkcbQ) if you missed it\\). Linux already has a package manger installed and it's called `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\napt install <package>\n\n# List all the currently installed packages\napt list --installed\n\n# Show information for a specific package\napt show <package>\n\n# Search for a package\napt search <package>\n\n```\n\n## brew: Mac\n\nOn a Mac, things are not so simple. We have to install a third\\-party package manager called Homebrew. The latest instructions to install Homebrew can be found on their site: [https://brew.sh/](https://brew.sh/)\n\nAs of this writing the installation command is:\n\n```\n/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)\"\n\n```\n\nHomebrew uses a command called `brew`. Once you have `brew` installed you can start using it much like `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\nbrew install <package>\n\n# List all the currently installed packages\nbrew list\n\n# Show information for a specific package\nbrew info <package>\n\n# Search for a package\nbrew search <package>\n\n```\n"
         },
         {
           "id": "ToK3fsCUD",
