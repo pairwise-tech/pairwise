@@ -166,6 +166,9 @@ class Workspace extends React.Component<IProps, IState> {
   // A cancelable handler for refreshing the editor
   editorRefreshTimerHandler: Nullable<number> = null;
 
+  // A cancellation time for the tests/preview process
+  testCancellationTimer: Nullable<number> = null;
+
   editor: Nullable<ICodeEditor> = null;
 
   iFrameRef: Nullable<HTMLIFrameElement> = null;
@@ -268,6 +271,11 @@ class Workspace extends React.Component<IProps, IState> {
     // Cancel any pending refresh
     if (this.editorRefreshTimerHandler) {
       clearTimeout(this.editorRefreshTimerHandler);
+    }
+
+    // Cancel the cancellation timer, if it's active
+    if (this.testCancellationTimer) {
+      clearTimeout(this.testCancellationTimer);
     }
   }
 
@@ -1049,6 +1057,11 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
+    // Don't handle messages if the tests aren't running.
+    if (!this.state.testResults) {
+      return;
+    }
+
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
@@ -1058,6 +1071,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     try {
       const { source, message } = event.data;
+      console.log(`[RECEIVED MESSAGE], source: ${source}`);
       switch (source) {
         case IFRAME_MESSAGE_TYPES.LOG: {
           debug("[IFRAME_MESSAGE_TYPES.LOG]", message);
@@ -1208,8 +1222,31 @@ class Workspace extends React.Component<IProps, IState> {
         logs: DEFAULT_LOGS,
         testResultsLoading: true, // See NOTE
       },
-      this.iframeRenderPreview,
+      () => {
+        // Start the test cancellation timer and render the code preview
+        this.startTestCancellationTimer();
+        this.iframeRenderPreview();
+      },
     );
+  };
+
+  startTestCancellationTimer = () => {
+    // Allow 10 seconds for the tests to run
+    this.testCancellationTimer = setTimeout(this.handleCancelTests, 10000);
+  };
+
+  handleCancelTests = () => {
+    if (this.state.testResults) {
+      this.cancelTestRun();
+    }
+  };
+
+  cancelTestRun = () => {
+    this.setState({ testResultsLoading: false }, () => {
+      toaster.warn(
+        "Tests cancelled because code did not finish executing in time. Check your code for problems and make sure you are connect to the internet!",
+      );
+    });
   };
 
   compileAndTransformCodeString = async () => {
