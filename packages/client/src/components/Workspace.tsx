@@ -274,10 +274,8 @@ class Workspace extends React.Component<IProps, IState> {
       clearTimeout(this.editorRefreshTimerHandler);
     }
 
-    // Cancel the cancellation timer, if it's active
-    if (this.testCancellationTimer) {
-      clearTimeout(this.testCancellationTimer);
-    }
+    // Cancel the test cancellation timer
+    this.handleCancelCancellationTimer();
   }
 
   componentDidUpdate(prevProps: IProps) {
@@ -1078,7 +1076,7 @@ class Workspace extends React.Component<IProps, IState> {
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
     // Don't handle messages if the tests aren't running.
-    if (!this.state.testResults) {
+    if (!this.state.testResultsLoading) {
       return;
     }
 
@@ -1151,6 +1149,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleReceiveTestResults = () => {
+    this.handleCancelCancellationTimer();
     const { correct } = this.getTestPassedStatus();
 
     // If the solution failed, disabled showing the success modal.
@@ -1249,11 +1248,15 @@ class Workspace extends React.Component<IProps, IState> {
     );
   };
 
-  startTestCancellationTimer = () => {
+  handleCancelCancellationTimer = () => {
     // Clear any existing timer
     if (this.testCancellationTimer) {
       clearTimeout(this.testCancellationTimer);
     }
+  };
+
+  startTestCancellationTimer = () => {
+    this.handleCancelCancellationTimer();
 
     // Allow 10 seconds for the tests to run
     this.testCancellationTimer = setTimeout(this.handleCancelTests, 10000);
