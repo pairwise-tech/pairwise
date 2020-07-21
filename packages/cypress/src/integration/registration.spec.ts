@@ -72,7 +72,7 @@ describe("Account Creation Flow", () => {
     cy.url().should("include", "workspace/66sfsGVp8");
   });
 
-  it.only("Creating an account persists pre-login updates correctly", () => {
+  it("Creating an account persists pre-login updates correctly", () => {
     cy.visit(`${CLIENT_APP_URL}/home`);
     cy.wait(TIMEOUT);
     cy.url().should("include", "home");
@@ -88,6 +88,7 @@ describe("Account Creation Flow", () => {
 
     goToNextChallenge();
 
+    click("pw-run-code");
     checkTestStatus("Success!", 0);
     checkTestStatus("Incomplete...", 1);
     checkTestStatus("Incomplete...", 2);
@@ -187,6 +188,7 @@ const checkCourseState = () => {
   click("challenge-navigation-1");
 
   goToNextChallenge();
+  click("pw-run-code");
   elementContains("test-result-status-0", "Success!");
   goToNextChallenge();
   checkTestResultStatus("Success!", 6);

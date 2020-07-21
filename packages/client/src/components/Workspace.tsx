@@ -1071,7 +1071,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     try {
       const { source, message } = event.data;
-      console.log(`[RECEIVED MESSAGE], source: ${source}`);
       switch (source) {
         case IFRAME_MESSAGE_TYPES.LOG: {
           debug("[IFRAME_MESSAGE_TYPES.LOG]", message);
