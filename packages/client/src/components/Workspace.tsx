@@ -74,6 +74,7 @@ import {
   Spacer,
   DragIgnorantFrameContainer,
   consoleRowStyles,
+  EmptyPreviewCoverPanel,
   RevealSolutionLabel,
   RunButton,
   TestStatusTextTab,
@@ -166,6 +167,9 @@ class Workspace extends React.Component<IProps, IState> {
   // A cancelable handler for refreshing the editor
   editorRefreshTimerHandler: Nullable<number> = null;
 
+  // A cancellation time for the tests/preview process
+  testCancellationTimer: Nullable<number> = null;
+
   editor: Nullable<ICodeEditor> = null;
 
   iFrameRef: Nullable<HTMLIFrameElement> = null;
@@ -245,8 +249,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     debug("componentDidMount");
 
-    this.runChallengeTests();
-
     subscribeCodeWorker(this.handleCodeFormatMessage);
 
     /* Focus the editor whenever a challenge is loaded */
@@ -269,6 +271,9 @@ class Workspace extends React.Component<IProps, IState> {
     if (this.editorRefreshTimerHandler) {
       clearTimeout(this.editorRefreshTimerHandler);
     }
+
+    // Cancel the test cancellation timer
+    this.handleCancelCancellationTimer();
   }
 
   componentDidUpdate(prevProps: IProps) {
@@ -462,8 +467,8 @@ class Workspace extends React.Component<IProps, IState> {
       revealSolutionCode,
       editModeAlternativeViewEnabled,
     } = this.props;
+    const NO_TESTS_RESULTS = testResults.length === 0;
     const { fullScreenEditor } = userSettings;
-
     const IS_ALTERNATIVE_EDIT_VIEW = editModeAlternativeViewEnabled;
     const IS_SANDBOX = challenge.id === SANDBOX_ID;
     const IS_FULLSCREEN = fullScreenEditor || IS_SANDBOX;
@@ -793,6 +798,10 @@ class Workspace extends React.Component<IProps, IState> {
 
       return IS_REACT_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
           <RowsWrapper separatorProps={rowSeparatorProps}>
             <Row initialHeight={D.PREVIEW_HEIGHT}>
               <div style={{ height: "100%" }}>
@@ -812,6 +821,10 @@ class Workspace extends React.Component<IProps, IState> {
         </Col>
       ) : IS_TYPESCRIPT_CHALLENGE ? (
         <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
           <div>
             <Console variant="dark" logs={this.state.logs} />
             <DragIgnorantFrameContainer
@@ -824,6 +837,10 @@ class Workspace extends React.Component<IProps, IState> {
         </Col>
       ) : IS_MARKUP_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
           <div style={{ height: "100%" }}>
             <DragIgnorantFrameContainer
               id="iframe"
@@ -988,12 +1005,19 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   getTestSummaryString = () => {
-    // Tests are still loading:
+    // Tests are still loading
     if (this.state.testResultsLoading) {
       return "Processing Test Results...";
     }
 
     const { passedTests, testResults } = this.getTestPassedStatus();
+
+    // No results exist yet
+    if (testResults.length === 0) {
+      return "No test results yet.";
+    }
+
+    // Return status message
     return `Tests: ${passedTests.length}/${testResults.length} Passed`;
   };
 
@@ -1049,6 +1073,11 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
+    // Don't handle messages if the tests aren't running.
+    if (!this.state.testResultsLoading) {
+      return;
+    }
+
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
@@ -1118,6 +1147,7 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleReceiveTestResults = () => {
+    this.handleCancelCancellationTimer();
     const { correct } = this.getTestPassedStatus();
 
     // If the solution failed, disabled showing the success modal.
@@ -1208,8 +1238,40 @@ class Workspace extends React.Component<IProps, IState> {
         logs: DEFAULT_LOGS,
         testResultsLoading: true, // See NOTE
       },
-      this.iframeRenderPreview,
+      () => {
+        // Start the test cancellation timer and render the code preview
+        this.startTestCancellationTimer();
+        this.iframeRenderPreview();
+      },
     );
+  };
+
+  handleCancelCancellationTimer = () => {
+    // Clear any existing timer
+    if (this.testCancellationTimer) {
+      clearTimeout(this.testCancellationTimer);
+    }
+  };
+
+  startTestCancellationTimer = () => {
+    this.handleCancelCancellationTimer();
+
+    // Allow 10 seconds for the tests to run
+    this.testCancellationTimer = setTimeout(this.handleCancelTests, 10000);
+  };
+
+  handleCancelTests = () => {
+    if (this.state.testResults) {
+      this.cancelTestRun();
+    }
+  };
+
+  cancelTestRun = () => {
+    this.setState({ testResultsLoading: false }, () => {
+      toaster.warn(
+        "Tests cancelled because your code took longer than 10 seconds to complete running. Check your code for problems and make sure your internet connection is stable!",
+      );
+    });
   };
 
   compileAndTransformCodeString = async () => {

@@ -2,7 +2,6 @@ import * as Babel from "@babel/standalone";
 import DependencyCacheService from "./dependency-service";
 import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
-import { PRODUCTION } from "./client-env";
 import quote from "string-quote-x";
 import pipe from "ramda/src/pipe";
 
@@ -10,7 +9,7 @@ import pipe from "ramda/src/pipe";
 // NOTE: We will be dropping this string into another string so we want it stringified
 const TARGET_WINDOW_ORIGIN = JSON.stringify("*");
 
-// This not-so-robust code replacement exists becuase if we ourselves (using
+// This not-so-robust code replacement exists because if we ourselves (using
 // Codepress) added a script tag to a markup challenge we would accidentally
 // exit the entire script tag and everything would break. So the gist is, we
 // cannot allow the literal string "</script" into the user code string.
@@ -167,28 +166,6 @@ const __interceptConsoleError = (...value) => {
 }
 `;
 
-/**
- * Fuck!
- *
- * For some reason this breaks in the production build of the app and
- * produces some arcane Babel error. I don't know why. But the consequence
- * is challenges which require Babel transpilation stop working.
- *
- * TODO: Fix it!
- */
-if (!PRODUCTION) {
-  const INFINITE_LOOP_TIMEOUT = 2000;
-  /**
-   * Register loop-protect Babel plugin.
-   */
-  Babel.registerPlugin(
-    "loopProtection",
-    protect(INFINITE_LOOP_TIMEOUT, () => {
-      throw new Error("INFINITE_LOOP");
-    }),
-  );
-}
-
 /** ===========================================================================
  * Test Utils
  * ============================================================================
@@ -263,10 +240,15 @@ export const stripConsoleCalls = (codeString: string) => {
 };
 
 /**
+ * Register loop-protect Babel plugin.
+ */
+Babel.registerPlugin("loopProtection", protect(2000));
+
+/**
  * Transpile the code use Babel standalone module.
  */
 export const transpileCodeWithBabel = (codeString: string) => {
-  const plugins = PRODUCTION ? [] : ["loopProtection"];
+  const plugins = ["loopProtection"];
   return Babel.transform(codeString, {
     presets: [
       "es2017",

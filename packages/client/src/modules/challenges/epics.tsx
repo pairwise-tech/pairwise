@@ -248,7 +248,7 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
       ([courses, lastActiveIds]: [CourseList, LastActiveChallengeIds]) => {
         const { location } = deps.router;
 
-        const lastActiveId = lastActiveIds.lastActiveChallengeId;
+        const lastActiveId = lastActiveIds.lastActiveChallenge;
         const deepLinkChallengeId = findChallengeIdInLocationIfExists(location);
         const activeChallengeId = deepLinkChallengeId || lastActiveId || "";
         const {
@@ -492,17 +492,11 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
-    pluck("currentChallengeId"),
-    mergeMap(async challengeId => {
-      const { challengeMap } = state$.value.challenges;
-      if (challengeMap && challengeId in challengeMap) {
-        const { courseId } = challengeMap[challengeId];
-        return deps.api.updateLastActiveChallengeIds(courseId, challengeId);
-      } else {
-        return new Err({
-          message: `Could not find challenge in challengeMap, id: ${challengeId}`,
-        });
-      }
+    mergeMap(async ({ currentChallengeId, currentCourseId }) => {
+      return deps.api.updateLastActiveChallengeIds(
+        currentCourseId,
+        currentChallengeId,
+      );
     }),
     map(result => {
       if (result.value) {

@@ -75,7 +75,7 @@ export interface UserProgressMap {
 
 export interface LastActiveChallengeIds {
   [key: string]: string;
-  lastActiveChallengeId?: string;
+  lastActiveChallenge?: string;
 }
 
 /**

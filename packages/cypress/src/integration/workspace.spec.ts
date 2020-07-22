@@ -153,6 +153,9 @@ describe("Workspace Challenges", () => {
     // Verify the challenge title
     cy.contains("Selective Transformation");
 
+    // Run the code
+    click("pw-run-code");
+
     // Tests are not complete yet
     checkTestStatus("Success!", 0);
     checkTestStatus("Incomplete...", 1);
