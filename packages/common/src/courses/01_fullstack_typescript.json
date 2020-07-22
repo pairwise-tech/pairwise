@@ -3374,7 +3374,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "You probably already know that you can install software on your computer. Things like VSCode, Firefox and Excel are all examples.\n\nYou can _also_ install software on the command line. You will just need a piece of software called a package manager. \n# Package Managers\n\nA package manager is somewhat like an app store for the command line. You use a package manager to install other software. A \"package\" is just another word for software.\n\n\n## apt: Linux \\(and therefore Windows too\\)\n\nOn Linux we have `apt`, which you will also have on Windows if you set up your system as we described earlier in this module \\(here's a [link](/workspace/RCm1HkcbQ) if you missed it\\). Linux already has a package manger installed and it's called `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\napt install <package>\n\n# List all the currently installed packages\napt list --installed\n\n# Show information for a specific package\napt show <package>\n\n# Search for a package\napt search <package>\n\n```\n\nHowever, for the sake of simplicity throughout this course we're going to be using the `brew` package manger, which you installed during setup at the beginning of this module.\n# brew\n\n`brew` is a package manager that runs on both Mac and Windows \\(via Linux\\). It's relatively simple to use an open source. We're going to use it to install all the software we need that's not already installed on your computer.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\nbrew install <package>\n\n# List all the currently installed packages\nbrew list\n\n# Show information for a specific package\nbrew info <package>\n\n# Search for a package\nbrew search <package>\n\n```\n"
+          "content": "You probably already know that you can install software on your computer. Things like VSCode, Firefox and Excel are all examples.\n\nYou can _also_ install software on the command line. You will just need a piece of software called a package manager. \n# Package Managers\n\nA package manager is somewhat like an app store for the command line. You use a package manager to install other software. A \"package\" is just another word for software.\n\n\n## apt: Linux \\(and therefore Windows too\\)\n\nOn Linux we have `apt`, which you will also have on Windows if you set up your system as we described earlier in this module \\(here's a [link](/workspace/RCm1HkcbQ) if you missed it\\). Linux already has a package manger installed and it's called `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\napt install <package>\n\n# List all the currently installed packages\napt list --installed\n\n# Show information for a specific package\napt show <package>\n\n# Search for a package\napt search <package>\n\n```\n\n> However, for the sake of simplicity , ++throughout this course we're going to be using the \\+\\+++++`brew`++ package manger\\+\\+, which you installed during setup at the beginning of this module. [Here's the link](/workspace/wC56W3elQ) in case you missed it.\n# brew\n\n`brew` is a package manager that runs on both Mac and Windows \\(via Linux\\). It's relatively simple to use an open source. We're going to use it to install all the software we need that's not already installed on your computer.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\nbrew install <package>\n\n# List all the currently installed packages\nbrew list\n\n# Show information for a specific package\nbrew info <package>\n\n# Search for a package\nbrew search <package>\n\n```\n"
         },
         {
           "id": "95$rRtxch9",
@@ -3388,17 +3388,6 @@
           "content": "`man` stands for \"manual\" and can be used to view the manual for various commands. These documents or manuals are usually referred to as \"man pages.\" \n\nUnfortunately some man pages are great and some are not so helpful. We will see other ways to get help when we talk about installing software.\n# Examples\n\n```bash\n# View the manual for the `ls` command\nman ls\n\n```\n"
         },
         {
-          "id": "5jnjQLuUy",
-          "type": "media",
-          "title": "curl: Get Data from the Internet",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "# Examples\n\n```bash\n# Send a GET request to http://example.com\n# and show the response on screen\ncurl 'http://example.com'\n\n# Same as above but also display request info and \n# all headers. -v stands for \"verbose.\" This is \n# useful for learning about HTTP and debugging.\ncurl -v 'http://example.com'\n\n# Store the results of a request in a file. \n# In other words, download the URL into a file.\ncurl 'http://example.com' > response.html\n\n# Send a POST request along with some data to the server.\ncurl -X POST -d '{ \"name\": \"Cat\" }' 'http://example.com'\n\n```\n"
-        },
-        {
           "id": "K8Ne9$uSp",
           "type": "media",
           "title": "Configuring Your Shell",
@@ -3407,7 +3396,7 @@
           "videoUrl": "https://www.youtube.com/embed/PwbObSpI_60",
           "starterCode": "",
           "solutionCode": "",
-          "content": "# In this lesson we cover\n\n* What the hell does \"shell\" mean\n* What is `bash`?\n* The `source` command\\.\n* Configuring bash via `.bashrc`.\n* Creating simple aliases.\n* Basic environment variables using the `export` command\\.\n* Configuring all config files to point to `.bashrc` via source commands\n   * We want to get `.profile` and `.bash_profile` both to point to `.bashrc`.\n   * This setup allows you to ignore the specifics of how bash loads config files, since no matter which file it loads it will ultimately load `.bashrc`.\n\n# Environment\n\nThis lesson touches briefly on your shell environment and how to set and use environment variables. For more info check out the dedicated [lesson on environment variables](/workspace/bo0s8ASKm).\n# Jargon\n\nWe're getting deeper and deeper into the territory of opaque jargon, so let's go over what some things mean:\n\n## Terminal\n\nA graphical application that lets you use a shell. Terminal is a general term like \"word processor\" or \"web browser.\" On Mac computers we use the specific app \"Terminal.app.\" On Windows computers we use \"ubuntu.exe.\" \n\n## Shell\n\nA type of application which lets you control your computer via commands. Also known as a command line. Shell is a general term like \"word processor\" or \"web browser.\" Bash is the specific shell we use in this course.\n\n## Bash\n\nThe specific shell program we use in this course. Bash lets you use commands to control your computer. Bash is a specific shell. For example, if \"shell\" is like \"web browser\" then bash is like Chrome or Firefox.\n"
+          "content": "# In this lesson we cover\n\n* What the hell does \"shell\" mean\n* What is `bash`?\n* The `source` command\\.\n* Configuring bash via `.bashrc`.\n* Creating simple aliases.\n* Basic environment variables using the `export` command\\.\n* Configuring all config files to point to `.bashrc` via source commands\n   * We want to get `.profile` and `.bash_profile` both to point to `.bashrc`.\n   * This setup allows you to ignore the specifics of how bash loads config files, since no matter which file it loads it will ultimately load `.bashrc`.\n\n# Environment\n\nThis lesson touches briefly on your shell environment and how to set and use environment variables. For more info check out the dedicated [lesson on environment variables](/workspace/bo0s8ASKm).\n# Jargon\n\nWe're getting deeper and deeper into the territory of opaque jargon, so let's go over what some things mean:\n\n## Terminal\n\nA graphical application that lets you use a shell. Terminal is a general term like \"word processor\" or \"web browser.\" On Mac computers we use the specific app \"Terminal.app.\" On Windows computers we use \"ubuntu.exe.\" \n\n## Shell\n\nA type of application which lets you control your computer via commands. Also known as a command line. Shell is a general term like \"word processor\" or \"web browser.\" Bash is the specific shell we use in this course.\n\n## Bash\n\nThe specific shell program we use in this course. Bash lets you use commands to control your computer. Bash is a specific shell. For example, if \"shell\" is like \"web browser\" then bash is like Chrome or Firefox."
         },
         {
           "id": "4u1gnF3N6",
@@ -3415,10 +3404,10 @@
           "title": "Configuring Your $PATH",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/HvYBtVdnh4A",
           "starterCode": "",
           "solutionCode": "",
-          "content": "* What is the PATH\n* How is it used? \n* How can we configure it?\n\n"
+          "content": "* What is the PATH\n* That `$` in variables\n* How is it used? \n* How can we configure it?\n* Bash string interpolation\n\n"
         },
         {
           "id": "bo0s8ASKm",
@@ -3426,21 +3415,10 @@
           "title": "Environment Variables",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/A6hxf-hOyNg",
           "starterCode": "",
           "solutionCode": "",
           "content": "* What are they?\n* How to access them?  `env` and `echo $VAR`.\n* You should hide them\n* How to set them?\n   * Show also that they are unset if you close and reopen, which is a segue into the next lesson on config\n\n"
-        },
-        {
-          "id": "uRWJVdzO3",
-          "type": "media",
-          "title": "Basic Security",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "# TODO\n\n* Don't post screenshots of your `env` to twitter... \n* Sharing code without sharing secrets\n* Inline env vars\n\n"
         },
         {
           "id": "z$JF$lDjH",
@@ -3448,10 +3426,10 @@
           "title": "Redirecting Output",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/F5lBV_eK4PU",
           "starterCode": "",
           "solutionCode": "",
-          "content": "```\ncurl URL > blah.txt\n\n```\nAKA downloading files"
+          "content": "Redirecting output is useful in many cases. However, it might not be clear why until you've used the shell for a while. For now, just check out how we use redirection and know that it exists.\n# Example\n\n```bash\n# Download example.com into a HTML file\ncurl 'http://example.com' > example.html\n\n# Concatenate two files into one (this is where\n# \"cat\" gets its name)\ncat a.txt b.txt > ab.txt\n\n# Append \"Hello Pairwise\" to the end of a file\necho \"Hello Pairwise\" >> file.txt\n\n```\n# Redirection\n\nIn a shell, the output of any command can be put into a file. This is done using the `>` character\\.\n# curl\n\nIn this lesson we also introduce the `curl` command, which can be used to download files on the command line.\n\nMore generally, `curl` can be used to make any HTTP request. It's useful for testing your own APIs or using external APIs from the command line.\n\n## curl Examples\n\n```bash\n# Send a GET request to http://example.com\n# and show the response on screen\ncurl 'http://example.com'\n\n# Same as above but also display request info and \n# all headers. -v stands for \"verbose.\" This is \n# useful for learning about HTTP and debugging.\ncurl -v 'http://example.com'\n\n# Store the results of a request in a file. \n# In other words, download the URL into a file.\ncurl 'http://example.com' > response.html\n\n# Send a POST request along with some data to the server.\ncurl -X POST -d '{ \"name\": \"Cat\" }' 'http://example.com'\n\n```\n"
         },
         {
           "id": "gE6ayunrl",
@@ -3459,7 +3437,7 @@
           "title": "grep: Find Specific Code",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
+          "videoUrl": "https://www.youtube.com/embed/jVxuYITREZI",
           "starterCode": "",
           "solutionCode": "",
           "content": "# Examples\n\n```bash\n# Search for the word \"Hello\" within the file app.ts\ngrep \"Hello\" app.ts\n\n# Do a case-insensitive search. This means that if it finds \"Hello\" or \"hello\"\n# either one counts as a match. Note that the difference is the capital \"H\"\ngrep -i \"Hello\" app.ts\n\n# Search for the text \"Hello\" in every file within the ./src directory. \n# -R stands for recursive, meaning every file that is located within \n# the target directory will be searched.\ngrep -R \"Hello\" ./src\n\n# Combine the two flags -R and -i to recursively search without worrying about\n# case.\ngrep -R -i \"Pairwise\" ./src\n\n```\n"
@@ -3683,6 +3661,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Show `which` and `which -a`."
+        },
+        {
+          "id": "uRWJVdzO3",
+          "type": "media",
+          "title": "Basic Security",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# TODO\n\n* Don't post screenshots of your `env` to twitter... \n* Sharing code without sharing secrets\n* Inline env vars\n\n"
         }
       ]
     },
