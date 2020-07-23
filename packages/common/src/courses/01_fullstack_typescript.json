@@ -3443,6 +3443,72 @@
           "content": "# Examples\n\n```bash\n# Search for the word \"Hello\" within the file app.ts\ngrep \"Hello\" app.ts\n\n# Do a case-insensitive search. This means that if it finds \"Hello\" or \"hello\"\n# either one counts as a match. Note that the difference is the capital \"H\"\ngrep -i \"Hello\" app.ts\n\n# Search for the text \"Hello\" in every file within the ./src directory. \n# -R stands for recursive, meaning every file that is located within \n# the target directory will be searched.\ngrep -R \"Hello\" ./src\n\n# Combine the two flags -R and -i to recursively search without worrying about\n# case.\ngrep -R -i \"Pairwise\" ./src\n\n```\n"
         },
         {
+          "id": "QZB4sqjPc",
+          "type": "section",
+          "title": "TypeScript and Node.js",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Now we're going to get started using TypeScript: **For real.**\n\nUp until this point we've been using TypeScript within Pairwise. We've done the work of setting up TS so you that you could get started programming immediately, without worrying about meaningless setup instructions.\n\nHowever, now that you've learned some programming being able to set up TypeScript takes on new meaning. This is how you will go from being good at online coding challenges to being a programmer.\n\nIn this section we'll cover setting up TypeScript on your own computer and how to get started working with it."
+        },
+        {
+          "id": "VxdxGx0Bq",
+          "type": "media",
+          "title": "Installing TypeScript and Node.js",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/Gg3I0_pwz7M",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# Installing Node and Yarn\n\n```none\nbrew install node yarn\n\n```\n\nNow you have the following **three** commands available:\n\n* `node`\n* `npm`\n* `yarn`\n\n\nWe'll explore these commands in the next lessons.\n"
+        },
+        {
+          "id": "ImMbYcJtFM",
+          "type": "media",
+          "title": "Node.js",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/t3fJgPEiXfU",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Node\\.js is a JavaScript runtime, meaning it's a program that will run your JavaScript programs. Sweet\\! Why does this matter? \n# Why Node.js is a big deal\n\nNode\\.js is important because it allowed JavaScript to transcend browsers. In the past if you wanted to run JavaScript you needed a web browser. Nothing wrong with this in theory—everyone has a web browser and they are all free to download if you somehow don't have one. The problem is that browsers are limited. Using a browser you cannot access the filesystem, you cannot create an HTTP server, you can't interact with the operating system in any way. \n\n> Tangent: **This is a good thing.**\n> If it was possible for any website to access your computer you would be getting hacked ALL THE TIME. Thankfully that's not the case.\n\nNode\\.js did two very important things:\n\n* It allowed JS to run outside the browser\n* It allowed JS to interact with the operating system\n   * This means working with files, creating servers, etc.\n\n\n# Node\\.js and TypeScript\n\nSo, Node let's you run JavaScript. How does that relate to TypeScript? \n\nSince TypeScript can be compiled to JavaScript, Node implicitly lets you run TypeScript as well.\n\nIt works like this:\n\n* Write some TS code\n* Compile it to JS with `tsc`\n* Run it with `node`\n\n\n\n"
+        },
+        {
+          "id": "@WlezDPbF",
+          "type": "media",
+          "title": "Installing TypeScript Tools",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/03nlh1DE1T4",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this lesson we're going to get TypeScript set up on your computer. Once set up you are basically a full developer. Installing tools on the command line, and using those tools once installed, is a big portion of the job.\n\nThe specific tools we're installing today:\n\n* `tsc`: This is the TypeScript compiler and will turn your JavaScript code into TypeScript, which can be run via `node`.\n* `ts-node`: This command is a shortcut to compile _and_ run your code in one step.\n\n"
+        },
+        {
+          "id": "yHEh@dZbm",
+          "type": "media",
+          "title": "Files and TypeScript Modules",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/bzrpX0qj1nQ",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In all the previous challenges we kept our code to a single file. This is simple, but not always practical. Most apps will be at least a few thousand lines of code and there's no limit to how large a codebase can get. \n\nAs you're codebase grows you will want to start organizing it into separate files. TypeScript is happy to let us do this, but we need to learn some new syntax.\n# Import and Export\n\nWhen working on a TypeScript file you can `import` code from other files and `export` code for other files to use. Let's consider an example. We have two files, `app.ts` and `math.ts`. Both files are in the same directory.\n\n### app\\.ts\n\n```typescript\nimport { add, subtract } from \"./math\";\n\nconsole.log(`1 + 1 is ${add(1, 1)}`); // 1 + 1 is 2\nconsole.log(`1 - 1 is ${subtract(1, 1)}`); // 1 - 1 is 0\n\n```\n\n### math\\.ts\n\n```typescript\nexport const add = (a: number, b: number) => {\n  return a + b;\n};\n\nexport const subtract = (a: number, b: number) => {\n  return a - b;\n};\n\n```\n\n`app.ts` is able to `import` the two functions exported from `math.ts` using the special syntax for importing.\n# Syntax\n\nLet's describe the import and export syntax formally.\n\n## Import\n\nTo import from another file use:\n\n1. The `import` keyword followed by a space.\n1. The `{` character followed by the names of exports from the target file separated by commas and a closing `}` character\\.In our example this was `{ add, subtract }`.\n1. The `from` keyword\\.\n1. A string representing the path to another TS file _without_ the `.ts` file extension.In our example this was `./math`.\n\n\n## Export\n\nTo export from a file use:\n\n1. The `export` keyword placed in front of any top\\-level values in your file.\n\n\nSome more examples are in order:\n\n```typescript\n// Export a number\nexport const WIDTH = 1200;\n\n// Export a boolean\nexport const bool = true;\n\n// Export a string\nexport const name = \"Pairwise\";\n\n// Export arrays and objects\nexport const cats = [\n  { name: \"Maomi\", job: \"Sleeping\" },\n  { name: \"Larper\", job: \"Roleplay\" },  \n];\n\n// Export a function\nexport const toUpper = (s: string) => {\n  return s.toUpperCase();\n};\n\n```\n\nUsually you can just add the `export` keyword before existing values in your files in order to export them.\n# Special Cases\n\nNow we've explored the most common import/export usage let's look at some other patterns you'll find in the wild.\n\n## Default Imports and Exports\n\nIt is possible to define a \"default\" value to be exported from a file. Let's look at the syntax. Imagine we wanted to put each of our math functions into their own file. We could do the following:\n\n### add\\.ts\n\n```typescript\nconst add = (a: number, b: number) => a + b;\nexport default add;\n\n```\n\n### subtract\\.ts\n\n```typescript\nconst subtract = (a: number, b: number) => a - b;\nexport default subtract;\n\n```\n\nWe use the special `export default` syntax rather than simply the `export` keyword\\. This allows the importing file to avoid using bracket syntax:\n\n### app\\.ts\n\n```typescript\nimport add from \"./add\";\nimport subtract from \"./subtract\";\n\nconsole.log(`1 + 1 is ${add(1, 1)}`); // 1 + 1 is 2\nconsole.log(`1 - 1 is ${subtract(1, 1)}`); // 1 - 1 is 0\n\n```\n\nNotice that the file does exactly the same thing as `app.ts` from the beginning of this lesson, but the syntax for importing is slightly different.\n\n## index\\.ts\n\nAnother special case you will encounter is the special file `index.ts`. This file is special because you can import from it in a slightly different way than other files.\n\nAs another example, let's say you have a `./lib` directory in your project and within that directory you have an `index.ts` file\\. It's contents will be the same as our `math.ts` file from above.\n\n### index\\.ts\n\n```typescript\nexport const add = (a: number, b: number) => {\n  return a + b;\n};\n\nexport const subtract = (a: number, b: number) => {\n  return a - b;\n};\n\n```\n\nNow, if we want to import these functions rather than importing form `./lib/index` we would actually just import from `./lib`.\n\n### app\\.ts\n\n```typescript\nimport { add, subtract } from \"./lib\";\n\nconsole.log(`1 + 1 is ${add(1, 1)}`); // 1 + 1 is 2\nconsole.log(`1 - 1 is ${subtract(1, 1)}`); // 1 - 1 is 0\n\n```\n\nWhy? The filename `index.ts` is special. When you import from a **directory** rather than an individual file TypeScript will check for an `index.ts` file within that directory. If it finds it, that file will be used as the import."
+        },
+        {
+          "id": "hMGEFmhp7",
+          "type": "media",
+          "title": "Working With External Modules",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "https://www.youtube.com/embed/YiNCiZVYEPY",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# External Modules\n\nThis is just a fancy way of saying \"code that already exists\" or even \"other people's code.\" The latter description is less accurate though, since you can write your own modules and use them in other projects. In other words you can use external modules that you created.\n\n\n## Why?\n\nThe benefit of using external modules is that you gain access to an entire world of code that's already written and often well\\-tested. This means you can be way, **WAY** more productive than if you had to write everything yourself.\n# How to use external modules\n\nFirst, install something you want to use. In the video here we use the module [got,](https://github.com/sindresorhus/got) which is a TypeScript module that will let you make requests, similar to using `curl` from the command line.\n\nFor example, on the command line:\n```\nnpm install got\n\n```\n\nIn your TypeScript file:\n```typescript\nimport got from \"got\";\n\n```\n\nNote that importing an external file will use a path, such as `./path/to/file` while importing a module will simply be the module name, such as `got`.\n\nAside from the modules we will recommend throughout this course, you can search for modules in multiple ways:\n\n* Using Google. This may be obvious, but Google \\(or any search engine\\) can be helpful in finding modules.\n* [NPMS\\.io.](https://npms.io/) NPMS tries to be an actual search engine, creating their own relevance criteria and trying to show modules relevant to keywords. It's not perfect, but it helps.\n   * Both Yarn and NPM have module \"search\" features but they aren't very useful. As of this writing you can't use them for keyword search, which largely defeats the purpose of searching.\n* Other peoples code. When you read the source code of external modules they will almost always import even more modules. This way you can often find modules that might be hard to discover otherwise. \n\n"
+        },
+        {
           "id": "NvWDlHv9Z",
           "type": "section",
           "title": "Git",
@@ -3465,6 +3531,17 @@
           "content": "```\ngit init\ngit status\ngit add .\ngit commit -m \"Sup\"\ngit log\n\n```\nExplain these commands. \nAlso show that git is so universal as to be built into vscode.\nAlso maybe set their `$EDITOR` var to vscode."
         },
         {
+          "id": "h6loohjUm",
+          "type": "media",
+          "title": "Git Status and Stages",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "* What does staged mean?\n* `git status`\n* What does untracked mean?\n* What does modified mean?\n\n"
+        },
+        {
           "id": "jLByUSItW",
           "type": "media",
           "title": "Git Branching",
@@ -3473,7 +3550,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "```\ngit branch\ngit checkout\ngit checkout -b \n\n```\n"
+          "content": "```\ngit branch\ngit checkout\ngit checkout -b\ngit merge\n\n```\n"
         },
         {
           "id": "z3oxFVeAK",
@@ -3484,7 +3561,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "```\ngit remote add origin <url>\ngit push\ngit push -u origin master\ngit clone URL \n\n```\n\nWhy the hell \"origin\"?\nWhy the hell \"master\"?"
+          "content": "```\ngit remote add origin <url>\ngit push\ngit push -u origin master\ngit clone URL\n\n```\n\nWhy the hell \"origin\"?\nWhy the hell \"master\"?"
         },
         {
           "id": "Hm4V0Ulo5",
@@ -3498,6 +3575,17 @@
           "content": "```\ngit log # With more advanced flags. make an alias or two\ngit blame\ngit show\n\n```\n"
         },
         {
+          "id": "WaUGSSi$m",
+          "type": "media",
+          "title": "Git Diffs",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "```\ngit diff\n\n```\nAnd the same in VSCode."
+        },
+        {
           "id": "tKcyGPzpL",
           "type": "media",
           "title": "Fixing Mistakes in Commits",
@@ -3506,40 +3594,18 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "```\ngit commit --amend \n\n```\n"
+          "content": "```\ngit commit --amend\n\n```\n"
         },
         {
-          "id": "QZB4sqjPc",
-          "type": "section",
-          "title": "TypeScript and Node.js",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Now we're going to get started using TypeScript: **For real.**\n\nUp until this point we've been using TypeScript within Pairwise. We've done the work of setting up TS so you that you could get started programming immediately, without worrying about meaningless setup instructions.\n\nHowever, now that you've learned some programming being able to set up TypeScript takes on new meaning. This is how you will go from being good at online coding challenges to being a programmer.\n\nIn this section we'll cover setting up TypeScript on your own computer and how to get started working with it."
-        },
-        {
-          "id": "VxdxGx0Bq",
+          "id": "MFHICu5@8",
           "type": "media",
-          "title": "Installing TypeScript and Node.js",
+          "title": "Going Beyond Git Basics",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
-        },
-        {
-          "id": "yHEh@dZbm",
-          "type": "media",
-          "title": "Files and TypeScript Modules",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "In all the previous challenges we kept our code to a single file. This is simple, but not always practical. Most apps will be at least a few thousand lines of code and there's no limit to how large a codebase can get. \n\nAs you're codebase grows you will want to start organizing it into separate files. TypeScript is happy to let us do this, but we need to learn some new syntax.\n# Import and Export\n\nWhen working on a TypeScript file you can `import` code from other files and `export` code for other files to use. Let's consider an example. We have two files, `app.ts` and `math.ts`. Both files are in the same directory.\n\n### app\\.ts\n\n```typescript\nimport { add, subtract } from \"./math\";\n\nconsole.log(`1 + 1 is ${add(1, 1)}`); // 1 + 1 is 2\nconsole.log(`1 - 1 is ${subtract(1, 1)}`); // 1 - 1 is 0\n\n```\n\n### math\\.ts\n\n```typescript\nexport const add = (a: number, b: number) => {\n  return a + b;\n};\n\nexport const subtract = (a: number, b: number) => {\n  return a - b;\n};\n\n```\n\n`app.ts` is able to `import` the two functions exported from `math.ts` using the special syntax for importing.\n# Syntax\n\nLet's describe the import and export syntax formally.\n\n## Import\n\nTo import from another file use:\n\n1. The `import` keyword followed by a space.\n1. The `{` character followed by the names of exports from the target file separated by commas and a closing `}` character\\.In our example this was `{ add, subtract }`.\n1. The `from` keyword\\.\n1. A string representing the path to another TS file _without_ the `.ts` file extension.In our example this was `./math`.\n\n\n## Export\n\nTo export from a file use:\n\n1. The `export` keyword placed in front of any top\\-level values in your file.\n\n\nSome more examples are in order:\n\n```typescript\n// Export a number\nexport const WIDTH = 1200;\n\n// Export a boolean\nexport const bool = true;\n\n// Export a string\nexport const name = \"Pairwise\";\n\n// Export arrays and objects\nexport const cats = [\n  { name: \"Maomi\", job: \"Sleeping\" },\n  { name: \"Larper\", job: \"Roleplay\" },  \n];\n\n// Export a function\nexport const toUpper = (s: string) => {\n  return s.toUpperCase();\n};\n\n```\n\nUsually you can just add the `export` keyword before existing values in your files in order to export them.\n# Special Cases\n\nNow we've explored the most common import/export usage let's look at some other patterns you'll find in the wild.\n\n## Default Imports and Exports\n\nIt is possible to define a \"default\" value to be exported from a file. Let's look at the syntax. Imagine we wanted to put each of our math functions into their own file. We could do the following:\n\n### add\\.ts\n\n```typescript\nconst add = (a: number, b: number) => a + b;\nexport default add;\n\n```\n\n### subtract\\.ts\n\n```typescript\nconst subtract = (a: number, b: number) => a - b;\nexport default subtract;\n\n```\n\nWe use the special `export default` syntax rather than simply the `export` keyword\\. This allows the importing file to avoid using bracket syntax:\n\n### app\\.ts\n\n```typescript\nimport add from \"./add\";\nimport subtract from \"./subtract\";\n\nconsole.log(`1 + 1 is ${add(1, 1)}`); // 1 + 1 is 2\nconsole.log(`1 - 1 is ${subtract(1, 1)}`); // 1 - 1 is 0\n\n```\n\nNotice that the file does exactly the same thing as `app.ts` from the beginning of this lesson, but the syntax for importing is slightly different.\n\n## index\\.ts\n\nAnother special case you will encounter is the special file `index.ts`. This file is special because you can import from it in a slightly different way than other files.\n\nAs another example, let's say you have a `./lib` directory in your project and within that directory you have an `index.ts` file\\. It's contents will be the same as our `math.ts` file from above.\n\n### index\\.ts\n\n```typescript\nexport const add = (a: number, b: number) => {\n  return a + b;\n};\n\nexport const subtract = (a: number, b: number) => {\n  return a - b;\n};\n\n```\n\nNow, if we want to import these functions rather than importing form `./lib/index` we would actually just import from `./lib`.\n\n### app\\.ts\n\n```typescript\nimport { add, subtract } from \"./lib\";\n\nconsole.log(`1 + 1 is ${add(1, 1)}`); // 1 + 1 is 2\nconsole.log(`1 - 1 is ${subtract(1, 1)}`); // 1 - 1 is 0\n\n```\n\nWhy? The filename `index.ts` is special. When you import from a **directory** rather than an individual file TypeScript will check for an `index.ts` file within that directory. If it finds it, that file will be used as the import."
+          "content": "We've created this section to give you the bare minimum you need to be effective with Git. Why? Two reasons:\n\n* It's simply such a large tool that an entire course could be dedicated to it.\n* It would get boring.\n\n\nThat second point is key—it would get boring\\! Meaning ++it would not be useful++. In fact, it might be counterproductive. \n\nIf we try to teach you everything many of you, our students, will simply stop learning. This may not be you specifically but many will. We've seen it happen. It happened to me\\! That's not an interesting story though so I'll omit it. \n\nWhat's relevant is that it's your job with our help to strike a balance between learning everything and staying interested.\n\n> Aside: To all the skeptics thinking \"There's already been a lot of boring stuff in this course,\" the difference is some things are absolutely necessary. On the other hand, some things can be skipped over completely and you can learn them on the job when you need them.\n\n# Just a Tool\n\nRemember, Git is not useful on its own. It's useful as a tool to manage a codebase. So learn as much as you need to get started and learn more as you need it.\n# Advanced Git\n\nAlright, let's look at some more advanced Git uses.\n\n## git rebase\n\nThis is similar to `git merge` in that it combines two commit histories into one, however it will do so without a merge commit. This means your git history will be much more linear. This is useful when your changes logically are linear. \n\nFor example, when two developers work on completely separate features we can pretend they worked in sequence. Developer A pushes some commits, then Developer B pushes more commits on top of that. In practice they were working at the same time, but we can use `git rebase` to make our git history linear.\n\n## git bisect\n\n`bisect` tells git to help you search for a bug on your code. The gist is this:\n\n* Identify how to reproduce a bug in your code\n* Run git bisect\n\n\nNow the following will happen until the bug is found:\n\n* Git will run `checkout` on a past branch\n* Tell git whether or not the bug exists\n   * If a bug exists, git will check out a branch further in the past\n   * If the bug does not exist, git will check out a branch further in the future\n* The process will repeat\n\n\nWhat this does is automatically isolates the commit that introduced the bug. This is useful because you can look at the diff of that commit and greatly limit the code you have to look at. It's an extremely useful command, with a slight drawback:\n\n> `git bisect` relies on a meaningful git history to work.\n\nWhat this means is if you have a single commit with 5000 lines of changes, and that commit introduces a bug, `git bisect` doesn't help that much—5000 lines is still a lot to look through. The way to avoid this and produce a meaningful commit history is to bias towards smaller commits more often. \n\n## git reset\n\n`git reset` will revert changes. It's considered \"advanced\" simply because it can actually delete things and you won't be able to get them back. \n\nIf you delete a file or some code using your editor, git will keep track of those deletions. However, if you use `git reset --hard` you are telling git to revert changes _and_ completely discard them. This is a useful command, just like `rm` is a useful command, but if you're not careful you may end up deleting more than you want.\n# Ask Your Coworkers\n\nIf you end up working in a company, chances are there's at least one person \\(maybe only one person\\) who is an absolute Git Wizard™. These people are very valuable resources because you can ask them obscure questions that are hard to search for online.\n\nAs with everything we're teaching you, never be afraid to ask for help or look ignorant. Acknowledging you don't know is the first step towards knowing. \n\nMost likely you don't have coworkers you can ask yet, but this course teaches you everything you need to know to get a job.\n# More Git Resources\n\n* [Learn Git Branching](https://learngitbranching.js.org/) — A free online Git tutorial with visualizations. Highly recommended if you want to go deeper.\n* [Pro Git](https://git-scm.com/book/en/v2) — A free online book that really goes deep. It's a full textbook on Git.\n* [Git Docs](https://git-scm.com/docs) — A comprehensive list of reference material. Check out the \"Guides\" section for some more distilled knowledge.\n\n"
         },
         {
           "id": "$EcZq5Ecg",
