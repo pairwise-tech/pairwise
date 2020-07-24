@@ -260,7 +260,7 @@ class Workspace extends React.Component<IProps, IState> {
      * mechanism against infinite loops or recursion which can be very
      * hard for the user to recover from.
      */
-    if (this.props.challenge.type === "media") {
+    if (this.props.challenge.type === "markup") {
       this.runChallengeTests();
     }
 
