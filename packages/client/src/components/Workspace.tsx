@@ -251,6 +251,19 @@ class Workspace extends React.Component<IProps, IState> {
 
     subscribeCodeWorker(this.handleCodeFormatMessage);
 
+    /**
+     * Auto-run the tests for media challenges, because this makes more
+     * sense. This could adjust in the future for other challenge types
+     * if needed.
+     *
+     * Other challenge types do not auto-run now as a protection
+     * mechanism against infinite loops or recursion which can be very
+     * hard for the user to recover from.
+     */
+    if (this.props.challenge.type === "markup") {
+      this.runChallengeTests();
+    }
+
     /* Focus the editor whenever a challenge is loaded */
     this.tryToFocusEditor();
   }
