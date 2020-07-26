@@ -78,7 +78,7 @@
     "lunr": "^2.3.8",
     "monaco-editor": "^0.20.0",
     "node-sass": "^4.13.0",
-    "prettier": "^1.19.1",
+    "prettier": "2.0.5",
     "query-string": "^6.9.0",
     "ramda": "^0.26.1",
     "react": "^16.12.0",
@@ -114,7 +114,7 @@
     "ts-morph": "^5.0.0",
     "tslint": "^5.20.1",
     "typesafe-actions": "^5.1.0",
-    "typescript": "3.7.2",
+    "typescript": "3.9.7",
     "use-media": "^1.4.0",
     "workerize-loader": "^1.1.0"
   },

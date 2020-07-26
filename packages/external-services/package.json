@@ -32,9 +32,9 @@
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "morgan": "^1.9.1",
-    "prettier": "^1.19.1",
+    "prettier": "2.0.5",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.4"
+    "typescript": "3.9.7"
   },
   "dependencies": {
     "querystring": "^0.2.0",
