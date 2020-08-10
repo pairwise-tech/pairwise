@@ -80,7 +80,7 @@ export default class WorkspaceMonacoEditor
 
     const initializationPromise = monaco
       .init()
-      .then((mn) => {
+      .then(mn => {
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({
           strict: true,
           noEmit: true,
@@ -102,7 +102,7 @@ export default class WorkspaceMonacoEditor
         debug("[initializeMonaco] Monaco initialized. Initializing editor...");
         return this.initializeMonacoEditor();
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(
           "An error occurred during initialization of Monaco: ",
           error,
@@ -320,7 +320,7 @@ export default class WorkspaceMonacoEditor
       return;
     }
 
-    const decorations = classifications.map((c) => {
+    const decorations = classifications.map(c => {
       /**
        * NOTE: Custom classNames to allow custom styling for the
        * editor theme:

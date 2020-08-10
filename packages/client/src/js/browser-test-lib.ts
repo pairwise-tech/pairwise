@@ -236,7 +236,7 @@ const deepEqual = (a: any, b: any): boolean => {
     return (
       isObject(b) &&
       Object.keys(b).length == keys.length &&
-      keys.every((k) => deepEqual(a[k], b[k]))
+      keys.every(k => deepEqual(a[k], b[k]))
     );
   } else {
     return Object.is(a, b);
@@ -255,15 +255,15 @@ const jsonDiff = (a: any, b: any): string => {
 // to objects and extract the messages to help with writing test
 // assertions.
 const parseLogBox = (box: string[]): string[] => {
-  const parsedBoxLogs = box.map((x) => JSON.parse(x));
-  const messageBox = parsedBoxLogs.map((x) => x[0]);
+  const parsedBoxLogs = box.map(x => JSON.parse(x));
+  const messageBox = parsedBoxLogs.map(x => x[0]);
   return messageBox;
 };
 
 // Given a box of logged console messages (see above function) and
 // a message, return if the box contains that message exactly.
 const inBox = (box: string[], message: string): boolean => {
-  const result = box.find((m) => m === message);
+  const result = box.find(m => m === message);
   return !!result;
 };
 
@@ -275,7 +275,7 @@ const checkBoxAsync = async (
   message: string,
   delay: number,
 ): Promise<boolean> => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(() => {
       const result = inBox(box, message);
       resolve(result);
@@ -286,7 +286,7 @@ const checkBoxAsync = async (
 // Wait some time... useful for pausing to let async challenges have some
 // time to complete some actions.
 const wait = async (time: number) => {
-  return new Promise((resolve) => setTimeout(resolve, time));
+  return new Promise(resolve => setTimeout(resolve, time));
 };
 
 // Helper to quickly fail a test.
@@ -298,7 +298,11 @@ const pass = () => expect(true).toBe(true);
 
 // Generate a random string id
 const __id = () => {
-  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  return (
+    Math.random()
+      .toString(36)
+      .substring(2) + Date.now().toString(36)
+  );
 };
 
 // Generate a random number in a min...max range
@@ -475,7 +479,7 @@ class Expectation {
 }
 
 // @ts-ignore
-const expect = (x) => new Expectation(x);
+const expect = x => new Expectation(x);
 
 /* Expose Globals */
 // @ts-ignore
