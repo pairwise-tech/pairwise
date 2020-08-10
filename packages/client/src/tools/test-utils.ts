@@ -330,7 +330,7 @@ export const createInjectDependenciesFunction = (
   return codeWithDependencies;
 };
 
-const TEST_PREFIX = `
+const TEST_GATHERING_PREFIX = `
   const __USER_TEST_LIST__ = [];
   const it = (message, fn) => {
     __USER_TEST_LIST__.push({
@@ -352,12 +352,12 @@ const TEST_PREFIX = `
  * preview for the user and the test results for the workspace.
  */
 export const injectTestCode = (testCode: string) => (codeString: string) => {
-  const CODE = `${TEST_PREFIX}\n${codeString}`;
+  const CODE_WITH_TEST_PREFIX = `${TEST_GATHERING_PREFIX}\n${codeString}`;
   return `
     /* Via injectTestCode */
     {
       try {
-        ${CODE}
+        ${codeString}
       } catch (err) {
         if (err.message === "INFINITE_LOOP") {
           console.error("Infinite loop detected");
@@ -367,7 +367,11 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
       }
     }
     {
-      ${getTestHarness(stripConsoleCalls(CODE), CODE, testCode)}
+      ${getTestHarness(
+        stripConsoleCalls(CODE_WITH_TEST_PREFIX),
+        codeString,
+        testCode,
+      )}
     }
     `;
 };
