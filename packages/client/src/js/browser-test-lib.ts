@@ -9,6 +9,12 @@ const MAX_LINE_LENGTH = 16;
 // These are all defined elsewhere but they are present in the testing editor.
 // @ts-ignore
 declare function test(message: string, testFunction: () => void): void;
+/**
+ * The alternative name is to avoid name collisions with our own Jest named
+ * test functions (above declaration). It may be better to have the user
+ * also write Jest style test functions. We can revisit and get that to work
+ * later.
+ */
 // @ts-ignore
 declare function it(message: string, testFunction: () => void): void;
 declare const __user_code_string__: string;
@@ -16,6 +22,14 @@ declare const __secret_log_box: string[];
 declare const __secret_warn_box: string[];
 declare const __secret_error_box: string[];
 declare const __secret_info_box: string[];
+
+interface TestCase {
+  message: string;
+  test: (...args: any) => void;
+}
+
+// Special list of user tests for the testing and automation module challenges
+declare const __USER_TEST_LIST__: TestCase[];
 
 /**
  * A shortcut for document.querySelector

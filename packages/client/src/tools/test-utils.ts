@@ -331,11 +331,11 @@ export const createInjectDependenciesFunction = (
 };
 
 const TEST_PREFIX = `
-  const __TEST__ARRAY__ = [];
+  const __USER_TEST_LIST__ = [];
   const it = (message, fn) => {
-    __TEST__ARRAY__.push({
-        fn,
-        message,
+    __USER_TEST_LIST__.push({
+      message,
+      test: fn,
     });
   }
 `;
@@ -405,12 +405,6 @@ export const getMarkupForCodeChallenge = (
  * with Jest.
  */
 export const getTestDependencies = (testLib: string): string => testLib;
-
-// const sliceUserCode = (code: string) => {
-//   const index = code.indexOf("it(");
-//   const result = code.slice(index);
-//   return `${TEST_PREFIX}${result}`;
-// };
 
 /**
  * Get the test code string for a markup challenge.

@@ -4551,9 +4551,9 @@
           "type": "typescript",
           "title": "MVP Challenge",
           "instructions": "Write a simple test.",
-          "testCode": "test(\"Placeholder test...\", () => {\n  for (const { fn } of __TEST__ARRAY__) {\n    //const add = (a, b) => a + b;\n    fn();\n\n    try {\n      //const add = (a, b) => a - b;\n      fn();\n      fail();\n    } catch (err) {\n      pass();\n    }\n  }\n});\n",
+          "testCode": "test(\"The `add` function is defined using the `let` keyword.\", () => {\n  add = 5;\n  expect(add).toBe(5);\n});\n\ntest(\"The code tests the `add` function correctly.\", () => {\n  expect(__USER_TEST_LIST__.length > 0);\n  for (const { test } of __USER_TEST_LIST__) {\n    add = (a, b) => a + b;\n    test();\n\n    try {\n      add = (a, b) => a - b;\n      test();\n      fail();\n    } catch (err) {\n      pass();\n    }\n  }\n});\n",
           "videoUrl": "",
-          "starterCode": "const add = (x: number, y: number) => x - y;\n\nit(\"Add Function\", () => {\n  expect(add(1, 2)).toEqual(3);\n});\n",
+          "starterCode": "let add = (x: number, y: number) => x - y;\n\nit(\"Add Function\", () => {\n  expect(add(1, 2)).toEqual(3);\n  expect(add(2, 4)).toEqual(6);\n  expect(add(2, 4)).toEqual(7);\n});\n",
           "solutionCode": "",
           "content": ""
         },
