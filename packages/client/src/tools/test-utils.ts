@@ -357,7 +357,7 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
     /* Via injectTestCode */
     {
       try {
-        ${codeString}
+        ${CODE_WITH_TEST_PREFIX}
       } catch (err) {
         if (err.message === "INFINITE_LOOP") {
           console.error("Infinite loop detected");

@@ -6,6 +6,11 @@ declare const __secret_log_box: string[];
 declare const __secret_warn_box: string[];
 declare const __secret_error_box: string[];
 declare const __secret_info_box: string[];
+interface TestCase {
+    message: string;
+    test: (...args: any) => void;
+}
+declare const __USER_TEST_LIST__: TestCase[];
 declare const get: (selector: string) => HTMLElement;
 declare const getAll: (selector: string) => any;
 declare const getStyle: (el: HTMLElement, cssProp: string, pseudoSelector?: string) => string;
