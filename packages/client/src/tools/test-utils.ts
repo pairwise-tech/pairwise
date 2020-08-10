@@ -330,6 +330,16 @@ export const createInjectDependenciesFunction = (
   return codeWithDependencies;
 };
 
+const TEST_PREFIX = `
+  const __TEST__ARRAY__ = [];
+  const it = (message, fn) => {
+    __TEST__ARRAY__.push({
+        fn,
+        message,
+    });
+  }
+`;
+
 /**
  * Inject test code into a code string.
  *
@@ -342,11 +352,12 @@ export const createInjectDependenciesFunction = (
  * preview for the user and the test results for the workspace.
  */
 export const injectTestCode = (testCode: string) => (codeString: string) => {
+  const CODE = `${TEST_PREFIX}\n${codeString}`;
   return `
     /* Via injectTestCode */
     {
       try {
-        ${codeString}
+        ${CODE}
       } catch (err) {
         if (err.message === "INFINITE_LOOP") {
           console.error("Infinite loop detected");
@@ -356,7 +367,7 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
       }
     }
     {
-      ${getTestHarness(stripConsoleCalls(codeString), codeString, testCode)}
+      ${getTestHarness(stripConsoleCalls(CODE), CODE, testCode)}
     }
     `;
 };
@@ -394,6 +405,12 @@ export const getMarkupForCodeChallenge = (
  * with Jest.
  */
 export const getTestDependencies = (testLib: string): string => testLib;
+
+// const sliceUserCode = (code: string) => {
+//   const index = code.indexOf("it(");
+//   const result = code.slice(index);
+//   return `${TEST_PREFIX}${result}`;
+// };
 
 /**
  * Get the test code string for a markup challenge.

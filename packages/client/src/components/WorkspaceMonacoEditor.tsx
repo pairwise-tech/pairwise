@@ -9,6 +9,7 @@ import {
   ICodeEditorOptions,
   PAIRWISE_CODE_EDITOR_ID,
 } from "./Workspace";
+import { EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
 import { monaco, registerExternalLib, MonacoModel } from "../monaco";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
@@ -79,7 +80,7 @@ export default class WorkspaceMonacoEditor
 
     const initializationPromise = monaco
       .init()
-      .then(mn => {
+      .then((mn) => {
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({
           strict: true,
           noEmit: true,
@@ -101,7 +102,7 @@ export default class WorkspaceMonacoEditor
         debug("[initializeMonaco] Monaco initialized. Initializing editor...");
         return this.initializeMonacoEditor();
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(
           "An error occurred during initialization of Monaco: ",
           error,
@@ -256,7 +257,7 @@ export default class WorkspaceMonacoEditor
      */
     const moduleDeclarations = packages.reduce(
       (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
-      "",
+      `\n${EXPECTATION_LIB_TYPES}\n`,
     );
 
     if (this.monacoWrapper) {
@@ -308,7 +309,7 @@ export default class WorkspaceMonacoEditor
       return;
     }
 
-    const decorations = classifications.map(c => {
+    const decorations = classifications.map((c) => {
       /**
        * NOTE: Custom classNames to allow custom styling for the
        * editor theme:
@@ -357,7 +358,7 @@ export default class WorkspaceMonacoEditor
   componentDidUpdate() {
     const currentValue = this.getMonacoEditorValue();
     const nextValue = this.props.value;
-    debug("componetDidUpdate", currentValue, nextValue);
+    debug("componentDidUpdate", currentValue, nextValue);
     if (currentValue !== nextValue) {
       this.setMonacoEditorValue();
     }
