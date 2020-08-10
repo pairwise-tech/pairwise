@@ -194,7 +194,9 @@ var wait = function (time) { return __awaiter(_this, void 0, void 0, function ()
 var fail = function () { return expect(false).toBe(true); };
 var pass = function () { return expect(true).toBe(true); };
 var __id = function () {
-    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+    return (Math.random()
+        .toString(36)
+        .substring(2) + Date.now().toString(36));
 };
 var __randomInRange = function (min, max) {
     return Math.round(Math.random() * (max - min) + min);
