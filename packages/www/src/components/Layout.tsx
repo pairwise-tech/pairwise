@@ -19,7 +19,6 @@ import Slide from '@material-ui/core/Slide';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import styled from 'styled-components';
-import ChatWidget from '@papercups-io/chat-widget';
 
 import { parse as parseQuery } from 'querystring';
 
@@ -136,15 +135,6 @@ const Layout = ({ children, hideHeader = false }: LayoutProps) => {
           </div>
         </footer>
       </CodeRainSection>
-      <ChatWidget
-        title="Happy Coding"
-        subtitle="Have any questions or comments? 😊"
-        primaryColor="#00d084"
-        greeting=""
-        newMessagePlaceholder="Start typing..."
-        accountId="77d5095f-15ca-41a5-b982-2c910fc30d45"
-        baseUrl="https://app.papercups.io"
-      />
     </ThemeProvider>
   );
 };
