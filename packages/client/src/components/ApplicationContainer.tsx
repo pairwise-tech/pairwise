@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { useMedia } from "use-media";
 import { Redirect, Route, Switch, useHistory } from "react-router";
 import styled from "styled-components/macro";
+import ChatWidget from "@papercups-io/chat-widget";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { CODEPRESS } from "tools/client-env";
@@ -378,6 +379,25 @@ const ApplicationContainer = (props: IProps) => {
         />
         <Route key={4} component={() => <Redirect to="/home" />} />
       </Switch>
+      <ChatWidget
+        customer={
+          user.profile
+            ? {
+                // NOTE: These undefineds are just to pass the ChatWidget typing
+                name: user.profile.displayName || undefined,
+                email: user.profile.email || undefined,
+                external_id: user.profile.uuid || undefined,
+              }
+            : undefined
+        }
+        title="Happy Coding"
+        subtitle="Have any questions or comments? 😊"
+        primaryColor="#00d084"
+        greeting=""
+        newMessagePlaceholder="Start typing..."
+        accountId="77d5095f-15ca-41a5-b982-2c910fc30d45"
+        baseUrl="https://app.papercups.io"
+      />
     </React.Fragment>
   );
 };
