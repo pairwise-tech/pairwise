@@ -105,6 +105,8 @@ const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
 // NOTE: Element id is referenced in custom-tsx-styles.scss to apply styling
 export const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
 
+export const MOBILE_SCROLL_PANEL_ID = "panel-scroll-target";
+
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
 interface Log {
@@ -928,7 +930,7 @@ class Workspace extends React.Component<IProps, IState> {
                 )}
               </ButtonGroup>
             </div>
-            <div id="panel-scroll-target" className="panel">
+            <div id={MOBILE_SCROLL_PANEL_ID} className="panel">
               <div className="panel-scroll">
                 <ContentContainer style={{ padding: 0 }}>
                   {CODE_EDITOR_CONTAINER}

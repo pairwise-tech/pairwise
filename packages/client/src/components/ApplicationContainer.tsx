@@ -10,6 +10,7 @@ import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
+import Swipy from "swipyjs";
 import NavigationOverlay from "./NavigationOverlay";
 import {
   Button,
@@ -35,7 +36,7 @@ import {
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
-import Workspace from "./Workspace";
+import Workspace, { MOBILE_SCROLL_PANEL_ID } from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,
@@ -116,6 +117,7 @@ const ApplicationContainer = (props: IProps) => {
     toggleNavigationMap,
     openFeedbackDialog,
     userAuthenticated,
+    setNavigationMapState,
     setSingleSignOnDialogState,
   } = props;
 
@@ -137,6 +139,46 @@ const ApplicationContainer = (props: IProps) => {
     initializeApp({ location: window.location });
     setHasHandledRedirect(true);
   }, [initializeApp]);
+
+  /**
+   * Add a gesture handler to toggle the navigation menu.
+   */
+  React.useEffect(() => {
+    // Determine if a touch event came the code panel scroll area.
+    const isTouchEventOnEditor = (path: HTMLElement[]) => {
+      return !!path.find(x => x.id === MOBILE_SCROLL_PANEL_ID);
+    };
+
+    // Not available on desktop
+    if (!isMobile) {
+      return;
+    }
+
+    // Attach handler to the document
+    const swipeHandler = new Swipy(document.documentElement);
+
+    // Handle to swipe right
+    swipeHandler.on("swiperight", (touchEvent: any) => {
+      if (isTouchEventOnEditor(touchEvent.path)) {
+        return;
+      }
+
+      if (!overlayVisible) {
+        setNavigationMapState(true);
+      }
+    });
+
+    // Handle to swipe left
+    swipeHandler.on("swipeleft", (touchEvent: any) => {
+      if (isTouchEventOnEditor(touchEvent.path)) {
+        return;
+      }
+
+      if (overlayVisible) {
+        setNavigationMapState(false);
+      }
+    });
+  });
 
   if (!hasHandledRedirect) {
     return null;
