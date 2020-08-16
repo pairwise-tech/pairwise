@@ -10,7 +10,12 @@ import {
   PAIRWISE_CODE_EDITOR_ID,
 } from "./Workspace";
 import { TEST_EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
-import { monaco, registerExternalLib, MonacoModel } from "../monaco";
+import {
+  monaco,
+  registerExternalLib,
+  MonacoModel,
+  USER_IMPORTED_TYPES_LIB_NAME,
+} from "../monaco";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
 import { wait } from "tools/utils";
@@ -273,6 +278,7 @@ export default class WorkspaceMonacoEditor
     if (this.monacoWrapper) {
       registerExternalLib({
         source: moduleDeclarations,
+        name: USER_IMPORTED_TYPES_LIB_NAME,
       });
     }
   };
