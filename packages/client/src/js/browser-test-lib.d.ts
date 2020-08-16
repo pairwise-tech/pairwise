@@ -1,4 +1,3 @@
-declare function test(message: string, testFunction: () => void): void;
 declare const __user_code_string__: string;
 declare const __secret_log_box: string[];
 declare const __secret_warn_box: string[];

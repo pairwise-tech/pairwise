@@ -1,11 +1,15 @@
-/**
- * The alternative name is to avoid name collisions with our own Jest named
- * test functions (above declaration). It may be better to have the user
- * also write Jest style test functions. We can revisit and get that to work
- * later.
+/** ===========================================================================
+ * This file defines the Jest-like expectation library which is used in
+ * the Workspace tests and provided to the Workspace testing challenges
+ * for users to use.
+ *
+ * Because this is also user-facing, it is separated from the other
+ * browser-test-utils.
+ * ============================================================================
  */
+
 // @ts-ignore
-declare function it(message: string, testFunction: () => void): void;
+declare function test(message: string, testFunction: () => void): void;
 
 type Path = Array<string | number>;
 
@@ -321,9 +325,10 @@ class Expectation {
 // @ts-ignore
 const expect = x => new Expectation(x);
 
+/** ===========================================================================
+ * Expose expectation library as a global on the window
+ * ============================================================================
+ */
+
 // @ts-ignore
 window.expect = expect;
-// @ts-ignore
-window.assert = assert;
-// @ts-ignore
-window.assertEqual = assertEqual;

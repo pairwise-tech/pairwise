@@ -1,4 +1,4 @@
-declare function it(message: string, testFunction: () => void): void;
+declare function test(message: string, testFunction: () => void): void;
 declare type Path = Array<string | number>;
 declare class Expectation {
     value: any;

@@ -1,13 +1,16 @@
 /* eslint-disable */
 
-/**
- * This file is meant to be run within our testing iframe.
+/** ===========================================================================
+ * This file provides additional test utils and type definitions for
+ * our Workspace test environment.
+ * ============================================================================
  */
 
-// These are all defined elsewhere but they are present in the testing editor.
-// @ts-ignore
-declare function test(message: string, testFunction: () => void): void;
-
+/** ===========================================================================
+ * Type definitions for additional test utils which are provided in the
+ * test-utils file, e.g. see TEST_UTILS_GLOBALS.
+ * ============================================================================
+ */
 declare const __user_code_string__: string;
 declare const __secret_log_box: string[];
 declare const __secret_warn_box: string[];
@@ -21,6 +24,11 @@ interface TestCase {
 
 // Special list of user tests for the testing and automation module challenges
 declare const __USER_TEST_LIST__: TestCase[];
+
+/** ===========================================================================
+ * Global test helpers.
+ * ============================================================================
+ */
 
 /**
  * A shortcut for document.querySelector
@@ -170,7 +178,11 @@ const __randomInRange = (min, max) => {
   return Math.round(Math.random() * (max - min) + min);
 };
 
-/* Expose Globals */
+/** ===========================================================================
+ * Expose Globals
+ * ============================================================================
+ */
+
 // @ts-ignore
 window.get = get;
 // @ts-ignore

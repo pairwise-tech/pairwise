@@ -332,7 +332,7 @@ export const createInjectDependenciesFunction = (
 
 const TEST_GATHERING_PREFIX = `
   const __USER_TEST_LIST__ = [];
-  const it = (message, fn) => {
+  const test = (message, fn) => {
     __USER_TEST_LIST__.push({
       message,
       test: fn,
