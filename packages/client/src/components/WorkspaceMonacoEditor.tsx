@@ -9,7 +9,7 @@ import {
   ICodeEditorOptions,
   PAIRWISE_CODE_EDITOR_ID,
 } from "./Workspace";
-import { EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
+import { TEST_EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
 import { monaco, registerExternalLib, MonacoModel } from "../monaco";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
@@ -265,7 +265,7 @@ export default class WorkspaceMonacoEditor
      * the same library we are using for tests, but out of convenience this
      * is much easier for an MVP for testing challenges.
      */
-    const defaultLib = `\n${EXPECTATION_LIB_TYPES}\n`;
+    const defaultLib = `\n${TEST_EXPECTATION_LIB_TYPES}\n`;
     const moduleDeclarations = packages.reduce(
       (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
       defaultLib,

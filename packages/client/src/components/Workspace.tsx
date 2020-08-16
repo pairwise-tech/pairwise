@@ -82,7 +82,7 @@ import {
   WorkspaceMobileView,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
-import { EXPECTATION_LIB } from "tools/browser-test-lib";
+import { WORKSPACE_LIB } from "tools/browser-test-lib";
 import { CODEPRESS } from "tools/client-env";
 import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
@@ -1206,11 +1206,11 @@ class Workspace extends React.Component<IProps, IState> {
         sourceDocument = getMarkupSrcDocument(
           this.state.code,
           this.props.challenge.testCode,
-          EXPECTATION_LIB,
+          WORKSPACE_LIB,
         );
       } else {
         const code = await this.compileAndTransformCodeString();
-        sourceDocument = getMarkupForCodeChallenge(code, EXPECTATION_LIB);
+        sourceDocument = getMarkupForCodeChallenge(code, WORKSPACE_LIB);
       }
 
       this.iFrameRef.srcdoc = sourceDocument;
