@@ -162,7 +162,7 @@ const OfficeHoursPopover = (props: Props) => {
 
   return (
     <Popover
-      usePortal={false}
+      usePortal
       position={Position.BOTTOM}
       content={
         <Container>

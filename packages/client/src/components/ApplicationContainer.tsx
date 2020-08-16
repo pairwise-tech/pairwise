@@ -52,6 +52,7 @@ import { ShortcutKeysPopover } from "./KeyboardShortcuts";
 import { CONTENT_AREA_ID } from "./MediaArea";
 import OfficeHoursPopover from "./OfficeHoursPopover";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
+import { getChallengeSlug } from "@pairwise/common";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -117,6 +118,7 @@ const ApplicationContainer = (props: IProps) => {
     toggleNavigationMap,
     openFeedbackDialog,
     userAuthenticated,
+    nextPrevChallenges,
     setNavigationMapState,
     setSingleSignOnDialogState,
   } = props;
@@ -201,8 +203,32 @@ const ApplicationContainer = (props: IProps) => {
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
+  const { prev, next } = nextPrevChallenges;
+
   const mobileMenuItems = (
     <Menu>
+      <MenuItem
+        disabled={!prev}
+        icon="arrow-left"
+        text="Previous Challenge"
+        onClick={() => {
+          if (prev) {
+            const slug = getChallengeSlug(prev);
+            history.push(`/workspace/${slug}`);
+          }
+        }}
+      />
+      <MenuItem
+        disabled={!next}
+        icon="arrow-right"
+        text="Next Challenge"
+        onClick={() => {
+          if (next) {
+            const slug = getChallengeSlug(next);
+            history.push(`/workspace/${slug}`);
+          }
+        }}
+      />
       <MenuItem
         icon="code"
         onClick={() => {
@@ -341,7 +367,7 @@ const ApplicationContainer = (props: IProps) => {
             </LastChildMargin>
           )}
           {/* user.profile is a redundant check... but now the types work */}
-          {isSearchFocused ? null : isLoggedIn && user.profile ? (
+          {isMobile || isSearchFocused ? null : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
@@ -742,6 +768,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   hasMediaContent: Modules.selectors.challenges.getHasMediaContent(state),
+  nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),
