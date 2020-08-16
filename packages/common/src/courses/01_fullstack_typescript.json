@@ -1008,7 +1008,7 @@
           "type": "typescript",
           "title": "Strings",
           "instructions": "Modify `greeting` below so that it says \"Hello, my name is \" followed by your name\n",
-          "testCode": "test('`greeting` should equal the string `\"Hello, my name is {your name here}\"`', () =>\n  assert(/hello, my name is \\w+/i.test(greeting)));\n",
+          "testCode": "test('`greeting` should equal the string `\"Hello, my name is {your name here}\"`', () => {\n  expect(/hello, my name is \\w+/i.test(greeting)).toBe(true);\n});\n",
           "videoUrl": "https://www.youtube.com/embed/w4kz27N3p60",
           "starterCode": "const greeting = \"\";",
           "solutionCode": "const greeting = \"Hello, my name is Pete\";",
