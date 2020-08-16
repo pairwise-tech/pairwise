@@ -207,5 +207,3 @@ var Expectation = (function () {
 }());
 var expect = function (x) { return new Expectation(x); };
 window.expect = expect;
-window.assert = assert;
-window.assertEqual = assertEqual;

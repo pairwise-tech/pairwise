@@ -31,9 +31,4 @@ const WORKSPACE_LIB_TYPES = `
  * Isolate this module to isolate the raw-loader from being pulled into
  * the Jest test environment.
  */
-export {
-  WORKSPACE_LIB,
-  WORKSPACE_LIB_TYPES,
-  TEST_EXPECTATION_LIB,
-  TEST_EXPECTATION_LIB_TYPES,
-};
+export { WORKSPACE_LIB, WORKSPACE_LIB_TYPES, TEST_EXPECTATION_LIB_TYPES };
