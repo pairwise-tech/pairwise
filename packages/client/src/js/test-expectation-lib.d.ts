@@ -1,23 +1,10 @@
 declare function it(message: string, testFunction: () => void): void;
-declare const MAX_LINE_LENGTH = 16;
-declare const assert: (condition: boolean, message?: string) => boolean;
-declare const assertEqual: (a: any, b: any) => boolean;
-declare const deepEqual: (a: any, b: any) => boolean;
-declare const jsonDiff: (a: any, b: any) => string;
-declare const stringify: (x: any) => string;
-declare const truncateMiddle: (x: string) => string;
-declare const isObject: (value: any) => boolean;
 declare type Path = Array<string | number>;
-declare const hasIn: ([k, ...nextPath]: Path, obj: any) => boolean;
-declare const getIn: ([k, ...nextPath]: Path, obj: any, notSetValue?: any) => any;
-declare const methodNegationProxyHandler: {
-    get: (obj: Expectation, prop: string) => any;
-};
 declare class Expectation {
     value: any;
     not: Expectation;
+    MAX_LINE_LENGTH: number;
     constructor(value: any);
-    find(): boolean;
     toBe(expected: any): void;
     toEqual(expected: any): void;
     toBeGreaterThan(n: number): void;
@@ -32,5 +19,17 @@ declare class Expectation {
     toBeDefined(): void;
     toContain(val: any): void;
     toThrow(optionalFailureMessage?: string): void;
+    private assert;
+    private assertEqual;
+    private deepEqual;
+    private jsonDiff;
+    private stringify;
+    private truncateMiddle;
+    private isObject;
+    private hasIn;
+    methodNegationProxyHandler: {
+        get: (obj: Expectation, prop: string) => any;
+    };
+    private getIn;
 }
 declare const expect: (x: any) => Expectation;
