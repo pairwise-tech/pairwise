@@ -150,7 +150,10 @@ export interface ICodeEditor extends React.Component<ICodeEditorProps> {
   cleanup(): void;
   setTheme(theme: string): void;
   updateOptions(options: Partial<ICodeEditorOptions>): void;
-  addModuleTypeDefinitionsToMonaco(packages: string[]): void;
+  addModuleTypeDefinitionsToMonaco(
+    packages: string[],
+    isTestingAndAutomationChallenge: boolean,
+  ): void;
 }
 
 /** ===========================================================================
@@ -1288,13 +1291,17 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   compileAndTransformCodeString = async () => {
+    const { isTestingAndAutomationChallenge } = this.props;
     const { code, dependencies } = await compileCodeString(
       this.state.code,
       this.props.challenge,
     );
 
     if (this.editor) {
-      this.editor.addModuleTypeDefinitionsToMonaco(dependencies);
+      this.editor.addModuleTypeDefinitionsToMonaco(
+        dependencies,
+        isTestingAndAutomationChallenge,
+      );
     }
 
     return code;
@@ -1535,6 +1542,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
   revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
+  isTestingAndAutomationChallenge: ChallengeSelectors.isTestingAndAutomationChallenge(
+    state,
+  ),
   editModeAlternativeViewEnabled: ChallengeSelectors.editModeAlternativeViewEnabled(
     state,
   ),

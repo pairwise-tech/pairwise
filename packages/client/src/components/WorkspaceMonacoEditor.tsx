@@ -247,7 +247,10 @@ export default class WorkspaceMonacoEditor
     this.setMonacoEditorValue();
   };
 
-  addModuleTypeDefinitionsToMonaco = (packages: string[] = []) => {
+  addModuleTypeDefinitionsToMonaco = (
+    packages: string[],
+    isTestingAndAutomationChallenge: boolean,
+  ) => {
     /**
      * TODO: Fetch @types/ package type definitions if they exist or fallback
      * to the module declaration.
@@ -255,17 +258,13 @@ export default class WorkspaceMonacoEditor
      * See this:
      * https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/workers/fetch-dependency-typings.js
      *
-     * Provide our built-in expectation library. This is to provide types
-     * and code completion when solving testing challenges. Perhaps we
-     * shouldn't include this with all challenges... in that case we will need
-     * to selectively determine when the user is viewing a testing challenge.
-     *
-     * Also, it may be worth abbreviating the expectation/test library and
-     * types we provide to the user. It doesn't really make sense to provide
-     * the same library we are using for tests, but out of convenience this
-     * is much easier for an MVP for testing challenges.
+     * If the challenge is a testing/automation challenge we add the Jest-style
+     * expectation library as well. Otherwise, the default lib is empty.
      */
-    const defaultLib = `\n${TEST_EXPECTATION_LIB_TYPES}\n`;
+    const defaultLib = isTestingAndAutomationChallenge
+      ? `\n${TEST_EXPECTATION_LIB_TYPES}\n`
+      : "";
+
     const moduleDeclarations = packages.reduce(
       (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
       defaultLib,
