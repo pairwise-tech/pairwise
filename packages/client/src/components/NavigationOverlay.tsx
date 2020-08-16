@@ -110,6 +110,7 @@ class NavigationOverlay extends React.Component<
     const {
       course,
       module,
+      isMobile,
       isEditMode,
       challengeId,
       overlayVisible,
@@ -212,7 +213,8 @@ class NavigationOverlay extends React.Component<
                   </Tooltip>
                 )}
                 <Button onClick={this.toggleExpandCollapseAll}>
-                  {anySectionsOpen ? "Collapse" : "Expand"} All Sections
+                  {anySectionsOpen ? "Collapse" : "Expand"}
+                  {!isMobile ? " All Sections" : ""}
                 </Button>
               </div>
             )}
@@ -1150,6 +1152,7 @@ type ConnectProps = ReturnType<typeof mergeProps>;
 type IProps = ConnectProps & ComponentProps & RouteComponentProps;
 
 interface ComponentProps {
+  isMobile: boolean;
   overlayVisible: boolean;
 }
 

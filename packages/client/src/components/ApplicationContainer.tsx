@@ -249,7 +249,7 @@ const ApplicationContainer = (props: IProps) => {
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
       {CODEPRESS && <AdminKeyboardShortcuts />}
-      <NavigationOverlay overlayVisible={overlayVisible} />
+      <NavigationOverlay isMobile={isMobile} overlayVisible={overlayVisible} />
       <Header>
         <ControlsContainer
           style={{ height: "100%", marginRight: isMobile ? 0 : 40 }}
