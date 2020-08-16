@@ -11,8 +11,8 @@
 declare function test(message: string, testFunction: () => void): void;
 declare type Path = Array<string | number>;
 declare class Expectation {
+    not: Expectation;
     private value;
-    private not;
     private MAX_LINE_LENGTH;
     constructor(value: any);
     /**

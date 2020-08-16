@@ -15,9 +15,9 @@ declare function test(message: string, testFunction: () => void): void;
 type Path = Array<string | number>;
 
 class Expectation {
-  private value: any;
+  not: Expectation;
 
-  private not: Expectation;
+  private value: any;
 
   private MAX_LINE_LENGTH = 16;
 
@@ -331,8 +331,7 @@ class Expectation {
     if (k === undefined) {
       return true;
     } else if (obj.hasOwnProperty(k)) {
-      // @ts-ignore
-      return hasIn(nextPath, obj[k]);
+      return this.hasIn(nextPath, obj[k]);
     } else {
       return false;
     }
@@ -382,8 +381,7 @@ class Expectation {
       return obj;
     }
 
-    // @ts-ignore
-    return getIn(nextPath, obj[k]);
+    return this.getIn(nextPath, obj[k]);
   };
 }
 

@@ -74,8 +74,7 @@ var Expectation = /** @class */ (function () {
                 return true;
             }
             else if (obj.hasOwnProperty(k)) {
-                // @ts-ignore
-                return hasIn(nextPath, obj[k]);
+                return _this.hasIn(nextPath, obj[k]);
             }
             else {
                 return false;
@@ -122,8 +121,7 @@ var Expectation = /** @class */ (function () {
             if (k === undefined) {
                 return obj;
             }
-            // @ts-ignore
-            return getIn(nextPath, obj[k]);
+            return _this.getIn(nextPath, obj[k]);
         };
         this.value = value;
         this.not = new Proxy(this, this.methodNegationProxyHandler);
