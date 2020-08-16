@@ -57,6 +57,10 @@ FocusStyleManager.onlyShowFocusOnTabs();
 
 const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
 
+const Noop = () => null;
+
+const ChatWidget = React.lazy(() => import("@papercups-io/chat-widget"));
+
 const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
   { value: "markup", label: "HTML/CSS" },
   { value: "typescript", label: "TypeScript" },
@@ -378,6 +382,30 @@ const ApplicationContainer = (props: IProps) => {
         />
         <Route key={4} component={() => <Redirect to="/home" />} />
       </Switch>
+      {/* We don't care about showing a loading state for this */}
+      {process.env.REACT_APP_CI ? null : (
+        <Suspense fallback={<Noop />}>
+          <ChatWidget
+            customer={
+              user.profile
+                ? {
+                    // NOTE: These undefineds are just to pass the ChatWidget typing
+                    name: user.profile.displayName || undefined,
+                    email: user.profile.email || undefined,
+                    external_id: user.profile.uuid || undefined,
+                  }
+                : undefined
+            }
+            title="Happy Coding"
+            subtitle="Have any questions or comments? 😊"
+            primaryColor="#00d084"
+            greeting=""
+            newMessagePlaceholder="Start typing..."
+            accountId="77d5095f-15ca-41a5-b982-2c910fc30d45"
+            baseUrl="https://app.papercups.io"
+          />
+        </Suspense>
+      )}
     </React.Fragment>
   );
 };
