@@ -1,7 +1,8 @@
 /** ===========================================================================
  * This file defines the Jest-like expectation library which is used in
  * the Workspace tests and provided to the Workspace testing challenges
- * for users to use.
+ * for users to use. These library mimics the Jest library (and the
+ * method comments are generally adapted from the @types/jest file).
  *
  * Because this is also user-facing, it is separated from the other
  * browser-test-utils.
@@ -14,21 +15,29 @@ declare function test(message: string, testFunction: () => void): void;
 type Path = Array<string | number>;
 
 class Expectation {
-  value: any;
+  private value: any;
 
-  not: Expectation;
+  private not: Expectation;
 
-  MAX_LINE_LENGTH = 16;
+  private MAX_LINE_LENGTH = 16;
 
   constructor(value: any) {
     this.value = value;
     this.not = new Proxy(this, this.methodNegationProxyHandler);
   }
 
+  /**
+   * Checks that a value is what you expect. Does not perform deep equality
+   * comparisons.
+   */
   toBe(expected: any) {
     this.assertEqual(this.value, expected);
   }
 
+  /**
+   * Assert that a value equals and expected value, performing deep
+   * equality checks when appropriate.
+   */
   toEqual(expected: any) {
     this.assert(
       this.deepEqual(this.value, expected),
@@ -37,10 +46,16 @@ class Expectation {
     );
   }
 
+  /**
+   * For comparing floating point numbers.
+   */
   toBeGreaterThan(n: number) {
     this.assert(this.value > n, `[Assert] Expected ${this.value} > ${n} (GT)`);
   }
 
+  /**
+   * For comparing floating point numbers.
+   */
   toBeGreaterThanOrEqual(n: number) {
     this.assert(
       this.value >= n,
@@ -48,10 +63,16 @@ class Expectation {
     );
   }
 
+  /**
+   * For comparing floating point numbers.
+   */
   toBeLessThan(n: number) {
     this.assert(this.value < n, `[Assert] Expected ${this.value} < ${n} (LT)`);
   }
 
+  /**
+   * For comparing floating point numbers.
+   */
   toBeLessThanOrEqual(n: number) {
     this.assert(
       this.value <= n,
@@ -59,6 +80,9 @@ class Expectation {
     );
   }
 
+  /**
+   * Check that a string matches a regular expression.
+   */
   toMatch(strOrReg: string | RegExp) {
     let matched = false;
     if (typeof this.value !== "string") {
@@ -86,6 +110,19 @@ class Expectation {
     );
   }
 
+  /**
+   * Use to check if property at provided reference keyPath exists for an object.
+   * For checking deeply nested properties in an object you may use dot notation or an array containing
+   * the keyPath for deep references.
+   *
+   * Optionally, you can provide a value to check if it's equal to the value present at keyPath
+   * on the target object. This matcher uses 'deep equality' (like `toEqual()`) and recursively checks
+   * the equality of all fields.
+   *
+   * @example
+   *
+   * expect(houseForSale).toHaveProperty('kitchen.area', 20);
+   */
   toHaveProperty(keyPath: Path | string, optionalTestValue?: any) {
     if (typeof keyPath === "string") {
       keyPath = keyPath.split(".");
@@ -107,16 +144,28 @@ class Expectation {
     }
   }
 
+  /**
+   * Use when you don't care what a value is, you just want to ensure a value
+   * is true in a boolean context. In JavaScript, there are six falsy values:
+   * `false`, `0`, `''`, `null`, `undefined`, and `NaN`. Everything else is truthy.
+   */
   toBeTruthy() {
     this.assertEqual(Boolean(this.value), true);
   }
 
+  /**
+   * When you don't care what a value is, you just want to
+   * ensure a value is false in a boolean context.
+   */
   toBeFalsy() {
     this.assertEqual(Boolean(this.value), false);
   }
 
-  // Note: See Jest source code. I'm not sure why they divide by 2.
-  // https://github.com/facebook/jest/blob/2a92e7f49fa35b219e5099d56b0179bccc1bf53e/packages/expect/src/matchers.ts#L170
+  /**
+   * Using exact equality with floating point numbers is a bad idea.
+   * Rounding means that intuitive things fail.
+   * The default for numDigits is 2.
+   */
   toBeCloseTo(expected: number, precision: number = 2) {
     const received = this.value;
 
@@ -145,7 +194,9 @@ class Expectation {
     } else if (received === -Infinity && expected === -Infinity) {
       pass = true; // -Infinity - -Infinity is NaN
     } else {
-      expectedDiff = Math.pow(10, -precision) / 2; // See NOTE
+      // Note: See Jest source code. I'm not sure why they divide by 2.
+      // https://github.com/facebook/jest/blob/2a92e7f49fa35b219e5099d56b0179bccc1bf53e/packages/expect/src/matchers.ts#L170
+      expectedDiff = Math.pow(10, -precision) / 2;
       receivedDiff = Math.abs(expected - received);
       pass = receivedDiff < expectedDiff;
     }
@@ -156,10 +207,21 @@ class Expectation {
     );
   }
 
+  /**
+   * Ensure that a variable is not undefined.
+   */
   toBeDefined() {
     this.assertEqual(typeof this.value !== "undefined", true);
   }
 
+  /**
+   * Used when you want to check that an item is in a list.
+   * For testing the items in the list, this uses `===`, a strict equality check.
+   *
+   * Optionally, you can provide a type for the expected value via a generic.
+   * This is particularly useful for ensuring expected objects have the right
+   * structure.
+   */
   toContain(val: any) {
     const isValid = Array.isArray(this.value) || typeof this.value === "string";
     this.assert(
@@ -172,6 +234,9 @@ class Expectation {
     );
   }
 
+  /**
+   * Used to test that a function throws when it is called.
+   */
   toThrow(optionalFailureMessage?: string) {
     let didThrow = false;
     let errorMessage;

@@ -29,7 +29,7 @@
     "test:watch": "yarn jest",
     "test:unit": "yarn jest --watchAll=false",
     "test:update-snapshots": "yarn jest --updateSnapshot",
-    "js:build": "tsc --lib esnext,dom --esModuleInterop --skipLibCheck --removeComments --declaration src/js/browser-test-lib.ts src/js/test-expectation-lib.ts",
+    "js:build": "tsc --lib esnext,dom --esModuleInterop --skipLibCheck --declaration src/js/browser-test-lib.ts src/js/test-expectation-lib.ts",
     "lint": "yarn prettier && yarn tslint && yarn tsc",
     "pretest": "yarn run js:build",
     "test": "yarn lint && yarn test:unit"
