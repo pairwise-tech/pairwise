@@ -9,7 +9,13 @@ import {
   ICodeEditorOptions,
   PAIRWISE_CODE_EDITOR_ID,
 } from "./Workspace";
-import { monaco, registerExternalLib, MonacoModel } from "../monaco";
+import { TEST_EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
+import {
+  monaco,
+  registerExternalLib,
+  MonacoModel,
+  USER_IMPORTED_TYPES_LIB_NAME,
+} from "../monaco";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
 import { wait } from "tools/utils";
@@ -246,22 +252,33 @@ export default class WorkspaceMonacoEditor
     this.setMonacoEditorValue();
   };
 
-  addModuleTypeDefinitionsToMonaco = (packages: string[] = []) => {
+  addModuleTypeDefinitionsToMonaco = (
+    packages: string[],
+    isTestingAndAutomationChallenge: boolean,
+  ) => {
     /**
      * TODO: Fetch @types/ package type definitions if they exist or fallback
      * to the module declaration.
      *
      * See this:
      * https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/workers/fetch-dependency-typings.js
+     *
+     * If the challenge is a testing/automation challenge we add the Jest-style
+     * expectation library as well. Otherwise, the default lib is empty.
      */
+    const defaultLib = isTestingAndAutomationChallenge
+      ? `\n${TEST_EXPECTATION_LIB_TYPES}\n`
+      : "";
+
     const moduleDeclarations = packages.reduce(
       (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
-      "",
+      defaultLib,
     );
 
     if (this.monacoWrapper) {
       registerExternalLib({
         source: moduleDeclarations,
+        name: USER_IMPORTED_TYPES_LIB_NAME,
       });
     }
   };
@@ -357,7 +374,7 @@ export default class WorkspaceMonacoEditor
   componentDidUpdate() {
     const currentValue = this.getMonacoEditorValue();
     const nextValue = this.props.value;
-    debug("componetDidUpdate", currentValue, nextValue);
+    debug("componentDidUpdate", currentValue, nextValue);
     if (currentValue !== nextValue) {
       this.setMonacoEditorValue();
     }

@@ -1,3 +1,4 @@
+/* eslint-disable */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,150 +36,102 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
-var MAX_LINE_LENGTH = 16;
+/** ===========================================================================
+ * Global test helpers.
+ * ============================================================================
+ */
+/**
+ * A shortcut for document.querySelector
+ * @param {string} selector CSS Selector
+ */
 var get = function (selector) { return document.querySelector(selector); };
+/**
+ * A shortcut for getting an array of all elements that match the selector
+ * @param {string} selector CSS Selector
+ */
 var getAll = function (selector) {
     return Array.prototype.slice.call(document.querySelectorAll(selector));
 };
+/**
+ * A wrapper around window.getComputedStyle
+ *
+ * @param {Element} el DOM Element
+ * @param {string} cssProp CSS property name. I.e. "background-color"
+ */
 var getStyle = function (el, cssProp, pseudoSelector) {
     if (pseudoSelector === void 0) { pseudoSelector = null; }
     var view = el.ownerDocument && el.ownerDocument.defaultView
         ? el.ownerDocument.defaultView
         : window;
     var style = view.getComputedStyle(el, pseudoSelector);
+    // @ts-ignore
     return style.getPropertyValue(cssProp) || style[cssProp];
 };
+/**
+ * Get the innerHTML from an element given an HTML selector.
+ *
+ * NOTE: This is called getText so it's more clear it is the method to use
+ * for getting and performing assertions on text content of HTML elements.
+ * That is because using .innerText will break in our unit test environment,
+ * so we don't want to use it. Naming this method getText should more strongly
+ * suggest to use this when performing text assertions.
+ *
+ * NOTE: This approach is advisable to be used to get text for HTML elements
+ * because it will work in both the app and unit testing environment.
+ */
 var getText = function (selector) {
     try {
         var element = get(selector);
+        // @ts-ignore
         var html = element.innerHTML;
         return html.trim();
     }
     catch (err) {
-        throw err;
+        throw err; // Just rethrow
     }
 };
 var css = function (propName, value) {
     var dummy = get("#dummy-test-div");
+    // Create the dummy div if not present
     if (!dummy) {
         dummy = document.createElement("div");
         dummy.id = "dummy-test-div";
         dummy.style.display = "none";
         document.body.appendChild(dummy);
     }
+    // Grab the initial style so that we can reset later
+    // @ts-ignore
     var initial = dummy.style[propName];
+    // Set the new style and get the style as computed by the browser
+    // @ts-ignore
     dummy.style[propName] = value;
     var result = getStyle(dummy, propName);
+    // Reset to the initial value on the dummy el
+    // @ts-ignore
     dummy.style[propName] = initial;
     return result;
 };
 var cssColor = function (value) { return css("color", value); };
-var assert = function (condition, message) {
-    if (message === void 0) { message = "Assertion Failed"; }
-    if (!condition) {
-        throw new Error(message);
-    }
-    return true;
-};
-var assertEqual = function (a, b) {
-    if (a !== b) {
-        var typeA = typeof a;
-        var typeB = typeof b;
-        throw new Error("[Assert] Expected " + typeA + " argument " + a + " to equal " + typeB + " argument " + b);
-    }
-    return true;
-};
-var methodNegationProxyHandler = {
-    get: function (obj, prop) {
-        if (typeof obj[prop] !== "function") {
-            return obj[prop];
-        }
-        return function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            try {
-                obj[prop].apply(obj, args);
-            }
-            catch (err) {
-                return;
-            }
-            throw new Error("[Negation] Expected " + obj.value + " NOT " + prop + "(" + args.join(", ") + ")");
-        };
-    }
-};
-var hasIn = function (_a, obj) {
-    var k = _a[0], nextPath = _a.slice(1);
-    if (k === undefined) {
-        return true;
-    }
-    else if (obj.hasOwnProperty(k)) {
-        return hasIn(nextPath, obj[k]);
-    }
-    else {
-        return false;
-    }
-};
-var getIn = function (_a, obj, notSetValue) {
-    var k = _a[0], nextPath = _a.slice(1);
-    if (notSetValue === void 0) { notSetValue = undefined; }
-    if (k === undefined) {
-        return obj;
-    }
-    return getIn(nextPath, obj[k]);
-};
-var stringify = function (x) { return JSON.stringify(x, null, 2); };
-var truncateMiddle = function (x) {
-    if (typeof x !== "string") {
-        return x;
-    }
-    var lines = x.split("\n");
-    if (lines.length > MAX_LINE_LENGTH) {
-        return (lines.slice(0, MAX_LINE_LENGTH / 2).join("\n") +
-            ("\n... [" + (lines.length - MAX_LINE_LENGTH) + " lines omitted] ...\n") +
-            lines.slice(-(MAX_LINE_LENGTH / 2)).join("\n"));
-    }
-    else {
-        return x;
-    }
-};
-var isObject = function (value) {
-    return value !== null && !Array.isArray(value) && typeof value === "object";
-};
-var deepEqual = function (a, b) {
-    if (Array.isArray(a)) {
-        return (Array.isArray(b) &&
-            a.length === b.length &&
-            a.every(function (x, i) { return deepEqual(x, b[i]); }));
-    }
-    else if (isObject(a)) {
-        var keys = Object.keys(a);
-        return (isObject(b) &&
-            Object.keys(b).length == keys.length &&
-            keys.every(function (k) { return deepEqual(a[k], b[k]); }));
-    }
-    else {
-        return Object.is(a, b);
-    }
-};
-var jsonDiff = function (a, b) {
-    var aStrings = stringify(a);
-    var bStrings = stringify(b);
-    return "Expected: " + truncateMiddle(aStrings) + "\nReceived: " + truncateMiddle(bStrings);
-};
+// Helper to parse the boxes of console messages and convert them
+// to objects and extract the messages to help with writing test
+// assertions.
 var parseLogBox = function (box) {
     var parsedBoxLogs = box.map(function (x) { return JSON.parse(x); });
     var messageBox = parsedBoxLogs.map(function (x) { return x[0]; });
     return messageBox;
 };
+// Given a box of logged console messages (see above function) and
+// a message, return if the box contains that message exactly.
 var inBox = function (box, message) {
     var result = box.find(function (m) { return m === message; });
     return !!result;
 };
+// Check for a message in the console log box, but after some delay.
+// This is a helper for running tests in async challenges, where a challenge
+// may need to log a message but after waiting for some time.
 var checkBoxAsync = function (box, message, delay) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2, new Promise(function (resolve) {
+        return [2 /*return*/, new Promise(function (resolve) {
                 setTimeout(function () {
                     var result = inBox(box, message);
                     resolve(result);
@@ -186,136 +139,37 @@ var checkBoxAsync = function (box, message, delay) { return __awaiter(_this, voi
             })];
     });
 }); };
+// Wait some time... useful for pausing to let async challenges have some
+// time to complete some actions.
 var wait = function (time) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2, new Promise(function (resolve) { return setTimeout(resolve, time); })];
+        return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, time); })];
     });
 }); };
+// Helper to quickly fail a test.
+// @ts-ignore
 var fail = function () { return expect(false).toBe(true); };
+// Helper to quickly pass a test.
 var pass = function () { return expect(true).toBe(true); };
+// Generate a random string id
 var __id = function () {
     return (Math.random()
         .toString(36)
         .substring(2) + Date.now().toString(36));
 };
+// Generate a random number in a min...max range
 var __randomInRange = function (min, max) {
     return Math.round(Math.random() * (max - min) + min);
 };
-var Expectation = (function () {
-    function Expectation(value) {
-        this.value = value;
-        this.not = new Proxy(this, methodNegationProxyHandler);
-    }
-    Expectation.prototype.toBe = function (expected) {
-        assertEqual(this.value, expected);
-    };
-    Expectation.prototype.toEqual = function (expected) {
-        assert(deepEqual(this.value, expected), "[Assert] Expected deep equality but got:\n" +
-            jsonDiff(this.value, expected));
-    };
-    Expectation.prototype.toBeGreaterThan = function (n) {
-        assert(this.value > n, "[Assert] Expected " + this.value + " > " + n + " (GT)");
-    };
-    Expectation.prototype.toBeGreaterThanOrEqual = function (n) {
-        assert(this.value >= n, "[Assert] Expected " + this.value + " >= " + n + " (GTE)");
-    };
-    Expectation.prototype.toBeLessThan = function (n) {
-        assert(this.value < n, "[Assert] Expected " + this.value + " < " + n + " (LT)");
-    };
-    Expectation.prototype.toBeLessThanOrEqual = function (n) {
-        assert(this.value <= n, "[Assert] Expected " + this.value + " <= " + n + " (LTE)");
-    };
-    Expectation.prototype.toMatch = function (strOrReg) {
-        var matched = false;
-        if (typeof this.value !== "string") {
-            assert(false, "[Assert] toMatch cannot match a non-string value:" + this.value);
-            return;
-        }
-        else if (typeof strOrReg === "string") {
-            matched = this.value.includes(strOrReg);
-        }
-        else if (strOrReg.constructor === RegExp) {
-            matched = strOrReg.test(this.value);
-        }
-        else {
-            assert(false, "[Assert] toMatch passed invalid value. Use a string or a RegExp");
-        }
-        assert(matched, "[Assert] Expected \"" + truncateMiddle(this.value) + "\" to match " + strOrReg);
-    };
-    Expectation.prototype.toHaveProperty = function (keyPath, optionalTestValue) {
-        if (typeof keyPath === "string") {
-            keyPath = keyPath.split(".");
-        }
-        var hasProperty = hasIn(keyPath, this.value);
-        if (optionalTestValue) {
-            assert(hasProperty && deepEqual(getIn(keyPath, this.value), optionalTestValue), "[Assert] Expected to have property " + keyPath.join("."));
-        }
-        else {
-            assert(hasProperty, "[Assert] Expected at path " + keyPath.join(".") + ":\n" + truncateMiddle(stringify(optionalTestValue)) + "\nReceived: " + truncateMiddle(stringify(this.value)));
-        }
-    };
-    Expectation.prototype.toBeTruthy = function () {
-        assertEqual(Boolean(this.value), true);
-    };
-    Expectation.prototype.toBeFalsy = function () {
-        assertEqual(Boolean(this.value), false);
-    };
-    Expectation.prototype.toBeCloseTo = function (expected, precision) {
-        if (precision === void 0) { precision = 2; }
-        var received = this.value;
-        if (typeof expected !== "number") {
-            assert(false, "[Assert] toBeCloseTo passed invalid value. Needs a number but got: " + expected);
-            return;
-        }
-        if (typeof expected !== "number") {
-            assert(false, "[Assert] toBeCloseTo called but expectation contained invalid value. " + received);
-            return;
-        }
-        var pass = false;
-        var expectedDiff = 0;
-        var receivedDiff = 0;
-        if (received === Infinity && expected === Infinity) {
-            pass = true;
-        }
-        else if (received === -Infinity && expected === -Infinity) {
-            pass = true;
-        }
-        else {
-            expectedDiff = Math.pow(10, -precision) / 2;
-            receivedDiff = Math.abs(expected - received);
-            pass = receivedDiff < expectedDiff;
-        }
-        assert(pass, "[Assert] toBeCloseTo expected " + expected + " to differ from " + received + " by less than " + expectedDiff + ". Actual diff was " + receivedDiff);
-    };
-    Expectation.prototype.toBeDefined = function () {
-        assertEqual(typeof this.value !== "undefined", true);
-    };
-    Expectation.prototype.toContain = function (val) {
-        var isValid = Array.isArray(this.value) || typeof this.value === "string";
-        assert(isValid, "[Assert] toContain used on invalid value " + stringify(this.value));
-        assert(this.value.includes(val), val + " not found in " + stringify(this.value));
-    };
-    Expectation.prototype.toThrow = function (optionalFailureMessage) {
-        var didThrow = false;
-        var errorMessage;
-        try {
-            this.value();
-        }
-        catch (err) {
-            didThrow = true;
-            errorMessage = err.message;
-        }
-        var defaultMessage = "[Assert] Expected code/function to not throw, but received this error message: " + errorMessage;
-        var message = optionalFailureMessage || defaultMessage;
-        assert(didThrow, message);
-    };
-    return Expectation;
-}());
-var expect = function (x) { return new Expectation(x); };
+/** ===========================================================================
+ * Expose Globals
+ * ============================================================================
+ */
+// @ts-ignore
 window.get = get;
+// @ts-ignore
 window.getAll = getAll;
+// @ts-ignore
 window.getStyle = getStyle;
+// @ts-ignore
 window.getText = getText;
-window.assert = assert;
-window.assertEqual = assertEqual;
-window.expect = expect;

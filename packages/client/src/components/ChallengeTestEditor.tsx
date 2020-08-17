@@ -17,7 +17,7 @@ import { CodeFormatMessageEvent, TEST_UTILS_GLOBALS } from "tools/test-utils";
 import { MonacoEditorThemes } from "@pairwise/common";
 import toaster from "tools/toast-utils";
 import { copyToClipboard } from "tools/utils";
-import { EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
+import { WORKSPACE_LIB_TYPES } from "tools/browser-test-lib";
 
 const debug = require("debug")("client:ChallengeTestEditor");
 
@@ -116,7 +116,7 @@ const ChallengeTestEditor = (props: Props) => {
   React.useEffect(() => {
     registerExternalLib({
       name: "pairwise-test-lib.d.ts",
-      source: EXPECTATION_LIB_TYPES,
+      source: WORKSPACE_LIB_TYPES,
     });
   }, []);
 

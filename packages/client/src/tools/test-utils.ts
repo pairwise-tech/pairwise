@@ -330,6 +330,16 @@ export const createInjectDependenciesFunction = (
   return codeWithDependencies;
 };
 
+const TEST_GATHERING_PREFIX = `
+  const __USER_TEST_LIST__ = [];
+  const test = (message, fn) => {
+    __USER_TEST_LIST__.push({
+      message,
+      test: fn,
+    });
+  }
+`;
+
 /**
  * Inject test code into a code string.
  *
@@ -342,11 +352,12 @@ export const createInjectDependenciesFunction = (
  * preview for the user and the test results for the workspace.
  */
 export const injectTestCode = (testCode: string) => (codeString: string) => {
+  const CODE_WITH_TEST_PREFIX = `${TEST_GATHERING_PREFIX}\n${codeString}`;
   return `
     /* Via injectTestCode */
     {
       try {
-        ${codeString}
+        ${CODE_WITH_TEST_PREFIX}
       } catch (err) {
         if (err.message === "INFINITE_LOOP") {
           console.error("Infinite loop detected");
@@ -356,7 +367,11 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
       }
     }
     {
-      ${getTestHarness(stripConsoleCalls(codeString), codeString, testCode)}
+      ${getTestHarness(
+        stripConsoleCalls(CODE_WITH_TEST_PREFIX),
+        codeString,
+        testCode,
+      )}
     }
     `;
 };

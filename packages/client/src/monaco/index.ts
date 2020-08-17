@@ -6,6 +6,12 @@ const debug = require("debug")("client:Workspace:monaco");
 // Quicker reference type for the Monaco model
 export type MonacoModel = MonacoEditor.editor.ITextModel;
 
+/**
+ * Unique name to identify injected type definitions for user imported
+ * modules.
+ */
+export const USER_IMPORTED_TYPES_LIB_NAME = "imported-user-module-types";
+
 // Name is optional, but recommended. The case where we don't use the name is
 // where the external lib is dynamic. Currently this is the case with stripping
 // out module imports and adding a definition for each of them. Just to make the
@@ -35,7 +41,13 @@ const addExtraLibs = (mn: typeof MonacoEditor) => {
     .filter(lib => !addedLibs.has(lib.source))
     .forEach(lib => {
       debug("[REGISTERING EXTERNAL LIB]", lib);
-      addedLibs.add(lib.source);
+      /**
+       * Do not cache user imported module type definitions, they can change
+       * between challenges and will need to be updated again.
+       */
+      if (lib.name !== USER_IMPORTED_TYPES_LIB_NAME) {
+        addedLibs.add(lib.source);
+      }
       mn.languages.typescript.typescriptDefaults.addExtraLib(
         lib.source,
         lib.name ? `ts:filename/${lib.name}` : undefined,
@@ -57,7 +69,7 @@ const initializePairwiseMonaco = (): Promise<typeof MonacoEditor> => {
       debug(message, err);
       console.error(message);
 
-      // If this fails due to our code try laoding up the editor anyway.
+      // If this fails due to our code try loading up the editor anyway.
       // NOTE: This might be not be a great idea. My thinking is that it would be
       // better for the user if the editor loaded up anyway without additional
       // libs, but maybe it would just break the experience if not tha app since

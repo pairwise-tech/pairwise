@@ -26,13 +26,26 @@ import stripComments from "strip-comments";
  */
 jest.setTimeout(100000);
 
+const options = { encoding: "utf8" };
+
 /**
  * Import the expectation library. Read the file directly with Node because
  * Jest doesn't understand Webpack raw-loader. Take that Jest!
  */
-const EXPECTATION_LIBRARY = fs.readFileSync("src/js/browser-test-lib.js", {
-  encoding: "utf8",
-});
+const BROWSER_TEST_LIBRARY = fs.readFileSync(
+  "src/js/browser-test-lib.js",
+  options,
+);
+
+const TEST_EXPECTATION_LIBRARY = fs.readFileSync(
+  "src/js/test-expectation-lib.js",
+  options,
+);
+
+const WORKSPACE_LIB = `
+  ${BROWSER_TEST_LIBRARY}
+  ${TEST_EXPECTATION_LIBRARY}
+`;
 
 /**
  * Import the courses directly. In the future if there are multiple courses
@@ -222,17 +235,17 @@ const executeTests = async (challenge: Challenge) => {
     case "react": {
       const code = await compileSolutionCode(challenge);
       doc = `<html><body><div id="root"></div></body></html>`;
-      script = `${EXPECTATION_LIBRARY}\n${code}`;
+      script = `${WORKSPACE_LIB}\n${code}`;
       break;
     }
     case "typescript": {
       const code = await compileSolutionCode(challenge);
-      script = `${EXPECTATION_LIBRARY}\n${code}`;
+      script = `${WORKSPACE_LIB}\n${code}`;
       break;
     }
     case "markup": {
       doc = challenge.solutionCode;
-      script = `${EXPECTATION_LIBRARY}\n${getTestHarness(
+      script = `${WORKSPACE_LIB}\n${getTestHarness(
         "",
         doc,
         challenge.testCode,

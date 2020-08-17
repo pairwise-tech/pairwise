@@ -1,15 +1,16 @@
 // Store the Jest-provided expect here since it's about to get overwritten.
 //
 // NOTE Because of the require file below and the global definitions TS thinks that
-// `expect` has _already_ been overwitten, which is not true so we can just
-// ignore and force the defintion as seen below.
+// `expect` has _already_ been overwritten, which is not true so we can just
+// ignore and force the definition as seen below.
 // @ts-ignore See NOTE
 const presume: jest.Expect = expect;
 
-// Will overwrite a number of globals including `expect`. Using require becuase
+// Will overwrite a number of globals including `expect`. Using require because
 // using `import` seems to hoist this causing presume to be defined after expect
 // is already overwritten
 require("./browser-test-lib");
+require("./test-expectation-lib");
 
 test("Browser lib should define expect globally", () => {
   presume(expect).not.toBe(presume); // Function was overwritten

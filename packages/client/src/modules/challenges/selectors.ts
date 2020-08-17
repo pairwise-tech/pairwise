@@ -210,7 +210,23 @@ export const isCurrentChallengeComplete = createSelector(
 );
 
 /**
- * Get the breadcrumbs path for a given challenge.
+ * Determine if the current challenge is in the Testing & Automation module,
+ * using that module's current id.
+ */
+export const isTestingAndAutomationChallenge = createSelector(
+  getCurrentModuleId,
+  id => {
+    const TESTING_AND_AUTOMATION_MODULE_ID = "ZzVuDVNP";
+    if (id && id === TESTING_AND_AUTOMATION_MODULE_ID) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+);
+
+/**
+ * Get the breadcrumbs path for a, g;iven challenge.
  */
 export const breadcrumbPathSelector = createSelector(
   [getCurrentChallenge, getCurrentModule],
