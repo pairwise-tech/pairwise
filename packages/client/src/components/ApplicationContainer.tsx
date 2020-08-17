@@ -289,7 +289,7 @@ const ApplicationContainer = (props: IProps) => {
           </ControlsContainer>
         )}
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          {!isSandbox && (
+          {(!isSandbox || !isMobile) && (
             <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
           )}
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
@@ -389,7 +389,7 @@ const ApplicationContainer = (props: IProps) => {
                 </div>
               </div>
             </AccountDropdownButton>
-          ) : isSandbox ? (
+          ) : isSandbox && isMobile ? (
             <Button
               icon="user"
               id="login-signup-button"
