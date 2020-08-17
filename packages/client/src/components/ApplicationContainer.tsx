@@ -10,6 +10,7 @@ import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
+import Swipy from "swipyjs";
 import NavigationOverlay from "./NavigationOverlay";
 import {
   Button,
@@ -35,7 +36,7 @@ import {
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
-import Workspace from "./Workspace";
+import Workspace, { MOBILE_SCROLL_PANEL_ID } from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,
@@ -51,6 +52,7 @@ import { ShortcutKeysPopover } from "./KeyboardShortcuts";
 import { CONTENT_AREA_ID } from "./MediaArea";
 import OfficeHoursPopover from "./OfficeHoursPopover";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
+import { getChallengeSlug } from "@pairwise/common";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -116,6 +118,8 @@ const ApplicationContainer = (props: IProps) => {
     toggleNavigationMap,
     openFeedbackDialog,
     userAuthenticated,
+    nextPrevChallenges,
+    setNavigationMapState,
     setSingleSignOnDialogState,
   } = props;
 
@@ -138,6 +142,51 @@ const ApplicationContainer = (props: IProps) => {
     setHasHandledRedirect(true);
   }, [initializeApp]);
 
+  /**
+   * Add a gesture handler to toggle the navigation menu.
+   */
+  React.useEffect(() => {
+    // Determine if a touch event came the code panel scroll area.
+    const isTouchEventOnEditor = (path: HTMLElement[]) => {
+      return !!path.find(x => x.id === MOBILE_SCROLL_PANEL_ID);
+    };
+
+    // Not available on desktop
+    if (!isMobile) {
+      return;
+    }
+
+    // Attach handler to the document
+    const swipeHandler = new Swipy(document.documentElement);
+
+    // Handle to swipe right
+    swipeHandler.on("swiperight", (touchEvent: any) => {
+      if (isTouchEventOnEditor(touchEvent.path)) {
+        return;
+      }
+
+      if (!overlayVisible) {
+        setNavigationMapState(true);
+      }
+    });
+
+    // Handle to swipe left
+    swipeHandler.on("swipeleft", (touchEvent: any) => {
+      if (isTouchEventOnEditor(touchEvent.path)) {
+        return;
+      }
+
+      if (overlayVisible) {
+        setNavigationMapState(false);
+      }
+    });
+
+    // Remove native event listeners on unmount
+    return () => {
+      swipeHandler.unbind();
+    };
+  });
+
   if (!hasHandledRedirect) {
     return null;
   }
@@ -159,8 +208,40 @@ const ApplicationContainer = (props: IProps) => {
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
+  const { prev, next } = nextPrevChallenges;
+
   const mobileMenuItems = (
     <Menu>
+      <MenuItem
+        disabled={!prev}
+        icon="arrow-left"
+        text="Previous Challenge"
+        onClick={() => {
+          if (prev) {
+            const slug = getChallengeSlug(prev);
+            history.push(`/workspace/${slug}`);
+          }
+        }}
+      />
+      <MenuItem
+        disabled={!next}
+        icon="arrow-right"
+        text="Next Challenge"
+        onClick={() => {
+          if (next) {
+            const slug = getChallengeSlug(next);
+            history.push(`/workspace/${slug}`);
+          }
+        }}
+      />
+      <MenuDivider />
+      <MenuItem
+        icon="home"
+        onClick={() => {
+          history.push("/home");
+        }}
+        text="Home"
+      />
       <MenuItem
         icon="code"
         onClick={() => {
@@ -173,32 +254,6 @@ const ApplicationContainer = (props: IProps) => {
         onClick={openFeedbackDialog}
         text="Submit Feedback"
       />
-      {isLoggedIn && (
-        <MenuItem
-          icon="user"
-          text="Account"
-          onClick={() => {
-            history.push("/account");
-          }}
-        />
-      )}
-      <MenuDivider />
-      {isLoggedIn ? (
-        <MenuItem
-          icon="log-out"
-          text="Log out..."
-          onClick={() => {
-            logoutUser();
-            history.push("/logout");
-          }}
-        />
-      ) : (
-        <MenuItem
-          icon="log-in"
-          text="Login or Signup"
-          onClick={() => setSingleSignOnDialogState(true)}
-        />
-      )}
     </Menu>
   );
 
@@ -207,7 +262,7 @@ const ApplicationContainer = (props: IProps) => {
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
       {CODEPRESS && <AdminKeyboardShortcuts />}
-      <NavigationOverlay overlayVisible={overlayVisible} />
+      <NavigationOverlay isMobile={isMobile} overlayVisible={overlayVisible} />
       <Header>
         <ControlsContainer
           style={{ height: "100%", marginRight: isMobile ? 0 : 40 }}
@@ -234,7 +289,9 @@ const ApplicationContainer = (props: IProps) => {
           </ControlsContainer>
         )}
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
+          {(!isSandbox || !isMobile) && (
+            <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
+          )}
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
           {!isMobile && <ShortcutKeysPopover />}
@@ -289,7 +346,9 @@ const ApplicationContainer = (props: IProps) => {
             </Link>
           )}
           {isMobile && (
-            <LastChildMargin style={{ flexShrink: 0 }}>
+            <LastChildMargin
+              style={{ flexShrink: 0, marginRight: isLoggedIn ? 6 : 0 }}
+            >
               <Popover
                 content={mobileMenuItems}
                 position={Position.BOTTOM_RIGHT}
@@ -303,11 +362,13 @@ const ApplicationContainer = (props: IProps) => {
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
-                  <CreateAccountText className="account-menu">
-                    {!user.profile.givenName
-                      ? "Welcome!"
-                      : `Welcome, ${user.profile.givenName}!`}
-                  </CreateAccountText>
+                  {!isMobile && (
+                    <CreateAccountText className="account-menu">
+                      {!user.profile.givenName
+                        ? "Welcome!"
+                        : `Welcome, ${user.profile.givenName}!`}
+                    </CreateAccountText>
+                  )}
                   <ProfileIcon avatar={user.profile.avatarUrl} />
                 </UserBio>
                 <div className="dropdown-links">
@@ -328,6 +389,18 @@ const ApplicationContainer = (props: IProps) => {
                 </div>
               </div>
             </AccountDropdownButton>
+          ) : isSandbox && isMobile ? (
+            <Button
+              icon="user"
+              id="login-signup-button"
+              style={{
+                margin: "0 10px",
+                border: "1px solid rgba(255, 255, 255, 0.23)",
+                flexShrink: 0,
+                whiteSpace: "nowrap",
+              }}
+              onClick={() => setSingleSignOnDialogState(true)}
+            />
           ) : (
             <Button
               id="login-signup-button"
@@ -659,6 +732,7 @@ const AccountDropdownButton = styled.div`
     z-index: 1000;
     display: none;
     position: absolute;
+    right: 0;
     min-width: 215px;
     box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
     background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
@@ -700,6 +774,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   hasMediaContent: Modules.selectors.challenges.getHasMediaContent(state),
+  nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),
