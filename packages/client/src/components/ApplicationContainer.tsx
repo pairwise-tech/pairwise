@@ -180,6 +180,11 @@ const ApplicationContainer = (props: IProps) => {
         setNavigationMapState(false);
       }
     });
+
+    // Remove native event listeners on unmount
+    return () => {
+      swipeHandler.unbind();
+    };
   });
 
   if (!hasHandledRedirect) {
