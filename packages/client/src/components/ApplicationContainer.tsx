@@ -234,6 +234,14 @@ const ApplicationContainer = (props: IProps) => {
           }
         }}
       />
+      <MenuDivider />
+      <MenuItem
+        icon="home"
+        onClick={() => {
+          history.push("/home");
+        }}
+        text="Home"
+      />
       <MenuItem
         icon="code"
         onClick={() => {
@@ -246,32 +254,6 @@ const ApplicationContainer = (props: IProps) => {
         onClick={openFeedbackDialog}
         text="Submit Feedback"
       />
-      {isLoggedIn && (
-        <MenuItem
-          icon="user"
-          text="Account"
-          onClick={() => {
-            history.push("/account");
-          }}
-        />
-      )}
-      <MenuDivider />
-      {isLoggedIn ? (
-        <MenuItem
-          icon="log-out"
-          text="Log out..."
-          onClick={() => {
-            logoutUser();
-            history.push("/logout");
-          }}
-        />
-      ) : (
-        <MenuItem
-          icon="log-in"
-          text="Login or Signup"
-          onClick={() => setSingleSignOnDialogState(true)}
-        />
-      )}
     </Menu>
   );
 
@@ -307,7 +289,9 @@ const ApplicationContainer = (props: IProps) => {
           </ControlsContainer>
         )}
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
+          {!isSandbox && (
+            <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
+          )}
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
           {!isMobile && <ShortcutKeysPopover />}
@@ -362,7 +346,9 @@ const ApplicationContainer = (props: IProps) => {
             </Link>
           )}
           {isMobile && (
-            <LastChildMargin style={{ flexShrink: 0 }}>
+            <LastChildMargin
+              style={{ flexShrink: 0, marginRight: isLoggedIn ? 6 : 0 }}
+            >
               <Popover
                 content={mobileMenuItems}
                 position={Position.BOTTOM_RIGHT}
@@ -372,15 +358,17 @@ const ApplicationContainer = (props: IProps) => {
             </LastChildMargin>
           )}
           {/* user.profile is a redundant check... but now the types work */}
-          {isMobile || isSearchFocused ? null : isLoggedIn && user.profile ? (
+          {isSearchFocused ? null : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
-                  <CreateAccountText className="account-menu">
-                    {!user.profile.givenName
-                      ? "Welcome!"
-                      : `Welcome, ${user.profile.givenName}!`}
-                  </CreateAccountText>
+                  {!isMobile && (
+                    <CreateAccountText className="account-menu">
+                      {!user.profile.givenName
+                        ? "Welcome!"
+                        : `Welcome, ${user.profile.givenName}!`}
+                    </CreateAccountText>
+                  )}
                   <ProfileIcon avatar={user.profile.avatarUrl} />
                 </UserBio>
                 <div className="dropdown-links">
@@ -401,6 +389,18 @@ const ApplicationContainer = (props: IProps) => {
                 </div>
               </div>
             </AccountDropdownButton>
+          ) : isSandbox ? (
+            <Button
+              icon="user"
+              id="login-signup-button"
+              style={{
+                margin: "0 10px",
+                border: "1px solid rgba(255, 255, 255, 0.23)",
+                flexShrink: 0,
+                whiteSpace: "nowrap",
+              }}
+              onClick={() => setSingleSignOnDialogState(true)}
+            />
           ) : (
             <Button
               id="login-signup-button"
@@ -732,6 +732,7 @@ const AccountDropdownButton = styled.div`
     z-index: 1000;
     display: none;
     position: absolute;
+    right: 0;
     min-width: 215px;
     box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
     background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
