@@ -1,5 +1,6 @@
 declare module "@babel/standalone";
 declare module "console-feed";
+declare module "swipyjs";
 
 type Nullable<T> = T | null;
 
