@@ -146,11 +146,6 @@ const ApplicationContainer = (props: IProps) => {
    * Add a gesture handler to toggle the navigation menu.
    */
   React.useEffect(() => {
-    // Determine if a touch event came the code panel scroll area.
-    const isTouchEventOnEditor = (path: HTMLElement[]) => {
-      return !!path.find(x => x.id === MOBILE_SCROLL_PANEL_ID);
-    };
-
     // Not available on desktop
     if (!isMobile) {
       return;
@@ -161,7 +156,7 @@ const ApplicationContainer = (props: IProps) => {
 
     // Handle to swipe right
     swipeHandler.on("swiperight", (touchEvent: any) => {
-      if (isTouchEventOnEditor(touchEvent.path)) {
+      if (isTouchEventOnEditor(touchEvent)) {
         return;
       }
 
@@ -172,7 +167,7 @@ const ApplicationContainer = (props: IProps) => {
 
     // Handle to swipe left
     swipeHandler.on("swipeleft", (touchEvent: any) => {
-      if (isTouchEventOnEditor(touchEvent.path)) {
+      if (isTouchEventOnEditor(touchEvent)) {
         return;
       }
 
@@ -495,7 +490,7 @@ const LoadingOverlay = (props: { visible: boolean }) => (
 );
 
 /** ===========================================================================
- * Styles
+ * Styles & Utils
  * ============================================================================
  */
 
@@ -759,6 +754,38 @@ const AccountDropdownButton = styled.div`
     color: ${COLORS.TEXT_HOVER};
   }
 `;
+
+/**
+ * Determine if a touch event came the code panel scroll area.
+ *
+ * NOTE: Safari has lacking compatibility for TouchEvents so in Safari we
+ * recursively walk backwards up the DOM tree looking for the mobile
+ * scroll panel element by its id.
+ */
+const isTouchEventOnEditor = (touchEvent: any) => {
+  try {
+    // For most browsers:
+    if (touchEvent.path) {
+      return !!touchEvent.path.find(
+        (x: HTMLElement) => x.id === MOBILE_SCROLL_PANEL_ID,
+      );
+    } else {
+      // For Safari:
+      let node = touchEvent.srcElement.parentNode;
+      // document.parentNode is null so this should terminate eventually
+      while (node) {
+        if (node.id === MOBILE_SCROLL_PANEL_ID) {
+          return true;
+        } else {
+          node = node.parentNode;
+        }
+      }
+      return false;
+    }
+  } catch (err) {
+    return false;
+  }
+};
 
 /** ===========================================================================
  * Props
