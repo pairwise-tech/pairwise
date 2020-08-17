@@ -161,16 +161,14 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
       <SlideOut show={isEditMode && !hidden}>
         <ChallengeInsertionMenu />
         {challenge && <GitContributionInfo challenge={challenge} />}
-        <Tooltip content="Save" position={Position.BOTTOM}>
-          <Button
-            icon="saved"
-            large
-            minimal
-            intent={isDirty ? "primary" : "none"}
-            disabled={!isDirty}
-            onClick={handleSave}
-          ></Button>
-        </Tooltip>
+        <Button
+          large
+          minimal
+          icon="saved"
+          disabled={!isDirty}
+          onClick={handleSave}
+          intent={isDirty ? "primary" : "none"}
+        />
         {canDelete && (
           <Tooltip content="Delete" position={Position.BOTTOM}>
             <Button
