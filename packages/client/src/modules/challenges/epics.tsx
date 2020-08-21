@@ -342,20 +342,26 @@ const syncChallengeContextToUrlEpic: EpicSignature = (action$, state$) => {
     mergeMap(id => {
       const { challengeMap, currentChallengeId } = state$.value.challenges;
       const previousChallengeId = currentChallengeId as string;
+      const { currentCourseId, currentModuleId } = state$.value.challenges;
 
-      // Should not happen, filtered above
-      if (!challengeMap || !id) {
-        return of(Actions.empty("No challengeMap found"));
+      // Should not happen, current challenge status should exist and
+      // is filtered above
+      if (!challengeMap || !id || !currentCourseId || !currentModuleId) {
+        return of(
+          Actions.empty(
+            "Failed to sync challenge context to url... some state was missing (should not happen).",
+          ),
+        );
       }
 
-      // Sandbox gets all sandbox ids!
+      // Sandbox gets sandbox challenge id but course/module do not change
       if (id === SANDBOX_ID) {
         return of(
           Actions.setChallengeIdContext({
-            currentModuleId: SANDBOX_ID,
-            currentCourseId: SANDBOX_ID,
-            currentChallengeId: SANDBOX_ID,
+            currentModuleId,
+            currentCourseId,
             previousChallengeId,
+            currentChallengeId: SANDBOX_ID,
           }),
         );
       }
