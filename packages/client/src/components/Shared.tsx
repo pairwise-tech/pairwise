@@ -144,6 +144,7 @@ export const OverlayText = styled.p`
   margin: 0;
   font-size: 42px;
   font-weight: 200;
+  text-align: center;
   color: ${COLORS.PRIMARY_GREEN};
 `;
 
