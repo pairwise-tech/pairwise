@@ -145,17 +145,19 @@ class NavigationOverlay extends React.Component<
       "cmd+/": this.props.toggleEditorSize,
     };
 
-    const ExpandCollapseButton = isMobile ? (
-      anySectionsOpen ? (
+    // Render different expand/collapse button on mobile for better layout
+    let ExpandCollapseButton;
+    if (isMobile) {
+      ExpandCollapseButton = anySectionsOpen ? (
         <Icon icon="collapse-all" />
       ) : (
         <Icon icon="expand-all" />
-      )
-    ) : anySectionsOpen ? (
-      "Collapse All Sections"
-    ) : (
-      "Expand All Sections"
-    );
+      );
+    } else {
+      ExpandCollapseButton = anySectionsOpen
+        ? "Collapse All Sections"
+        : "Expand All Sections";
+    }
 
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
