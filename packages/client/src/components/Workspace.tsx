@@ -676,7 +676,7 @@ class Workspace extends React.Component<IProps, IState> {
                     text="Toggle High Contrast Mode"
                   />
                 )}
-                {isMobile && (
+                {isMobileView && (
                   <MenuItem
                     id="editor-format-code-mobile"
                     icon="clean"
@@ -685,7 +685,7 @@ class Workspace extends React.Component<IProps, IState> {
                     text="Auto-format Code"
                   />
                 )}
-                {!isMobile && (
+                {!isMobileView && (
                   <MenuItem
                     id="editor-export-code"
                     icon="download"
@@ -855,7 +855,7 @@ class Workspace extends React.Component<IProps, IState> {
         <WorkspaceMobileView>
           {!IS_SANDBOX && (
             <div style={{ height: "auto", flexShrink: 0, maxHeight: "25vh" }}>
-              <InstructionsViewEdit isMobile />
+              <InstructionsViewEdit isMobile={isMobileView} />
             </div>
           )}
           <div className="tabs">
