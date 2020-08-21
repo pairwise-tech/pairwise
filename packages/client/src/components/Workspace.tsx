@@ -91,7 +91,6 @@ import partition from "ramda/es/partition";
 import SEO from "./SEO";
 import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
 import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
-import isMobile from "is-mobile";
 
 const debug = require("debug")("client:Workspace");
 
@@ -479,6 +478,7 @@ class Workspace extends React.Component<IProps, IState> {
       shouldRefreshLayout,
     } = this.state;
     const {
+      isMobile,
       challenge,
       isEditMode,
       userSettings,
@@ -598,7 +598,7 @@ class Workspace extends React.Component<IProps, IState> {
           )}
           <RunButton
             fill
-            large={this.props.renderForMobile}
+            large={isMobile}
             icon="play"
             id="pw-run-code"
             loading={testResultsLoading}
@@ -609,14 +609,15 @@ class Workspace extends React.Component<IProps, IState> {
           </RunButton>
         </CodeEditorUpperRight>
         <LowerRight>
-          <ButtonGroup vertical={!this.props.renderForMobile}>
+          <ButtonGroup vertical={!isMobile}>
             <Tooltip
+              disabled={isMobile}
               content="Increase Font Size"
-              position={this.props.renderForMobile ? "top" : "left"}
+              position={isMobile ? "top" : "left"}
               interactionKind={"hover-target"}
             >
               <IconButton
-                large={this.props.renderForMobile}
+                large={isMobile}
                 id="editor-increase-font-size"
                 icon="plus"
                 aria-label="increase editor font size"
@@ -624,12 +625,13 @@ class Workspace extends React.Component<IProps, IState> {
               />
             </Tooltip>
             <Tooltip
+              disabled={isMobile}
               content="Decrease Font Size"
-              position={this.props.renderForMobile ? "top" : "left"}
+              position={isMobile ? "top" : "left"}
               interactionKind={"hover-target"}
             >
               <IconButton
-                large={this.props.renderForMobile}
+                large={isMobile}
                 id="editor-decrease-font-size"
                 icon="minus"
                 aria-label="decrease editor font size"
@@ -638,10 +640,10 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
           </ButtonGroup>
           <div style={{ marginBottom: 8 }} />
-          {!this.props.renderForMobile && (
+          {!isMobile && (
             <Tooltip content="Format Code" position="left">
               <IconButton
-                large={this.props.renderForMobile}
+                large={isMobile}
                 id="editor-format-code"
                 icon="clean"
                 aria-label="format editor code"
@@ -663,7 +665,7 @@ class Workspace extends React.Component<IProps, IState> {
                     onClick={this.props.toggleAlternativeEditView}
                   />
                 )}
-                {!IS_SANDBOX && !this.props.renderForMobile && (
+                {!IS_SANDBOX && !isMobile && (
                   <MenuItem
                     id="editor-toggle-full-screen"
                     icon={fullScreenEditor ? "collapse-all" : "expand-all"}
@@ -676,7 +678,7 @@ class Workspace extends React.Component<IProps, IState> {
                     }
                   />
                 )}
-                {!this.props.renderForMobile && (
+                {!isMobile && (
                   <MenuItem
                     id="editor-toggle-high-contrast"
                     icon="contrast"
@@ -685,7 +687,7 @@ class Workspace extends React.Component<IProps, IState> {
                     text="Toggle High Contrast Mode"
                   />
                 )}
-                {this.props.renderForMobile && (
+                {isMobile && (
                   <MenuItem
                     id="editor-format-code-mobile"
                     icon="clean"
@@ -694,7 +696,7 @@ class Workspace extends React.Component<IProps, IState> {
                     text="Auto-format Code"
                   />
                 )}
-                {!this.props.renderForMobile && (
+                {!isMobile && (
                   <MenuItem
                     id="editor-export-code"
                     icon="download"
@@ -741,18 +743,14 @@ class Workspace extends React.Component<IProps, IState> {
                 />
               </Menu>
             }
-            position={
-              this.props.renderForMobile
-                ? Position.TOP_LEFT
-                : Position.LEFT_BOTTOM
-            }
+            position={isMobile ? Position.TOP_LEFT : Position.LEFT_BOTTOM}
           >
             <Tooltip
               content="More options..."
-              position={this.props.renderForMobile ? "top" : "left"}
+              position={isMobile ? "top" : "left"}
             >
               <IconButton
-                large={this.props.renderForMobile}
+                large={isMobile}
                 id="editor-more-options"
                 aria-label="more options"
                 icon="more"
@@ -957,7 +955,7 @@ class Workspace extends React.Component<IProps, IState> {
       <Container>
         <PageSection>
           <WorkspaceContainer>
-            {this.props.renderForMobile ? (
+            {isMobile ? (
               renderMobile()
             ) : shouldRefreshLayout ? null : (
               <ColsWrapper separatorProps={colSeparatorProps}>
@@ -1238,7 +1236,7 @@ class Workspace extends React.Component<IProps, IState> {
     this.runChallengeTests();
 
     // Slide the preview window into view. Only applicable on mobile
-    if (this.props.renderForMobile) {
+    if (isMobile) {
       document
         .getElementById(PANEL_SCROLL_ID)
         ?.scrollTo({ left: this.state.dimensions.w, behavior: "smooth" });
@@ -1608,7 +1606,7 @@ type ConnectProps = ReturnType<typeof mergeProps>;
 interface IProps extends ConnectProps {
   blob: DataBlob;
   challenge: Challenge;
-  renderForMobile: boolean;
+  isMobile: boolean;
 }
 
 const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
@@ -1658,7 +1656,8 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       description: getSeoExcerpt(challenge),
     };
 
-    const renderForMobile = getDimensions().w < 700;
+    // Proxy for mobile
+    const isMobile = getDimensions().w < 700;
 
     return (
       <React.Fragment>
@@ -1668,7 +1667,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
             {...this.props}
             blob={codeBlob}
             challenge={challenge}
-            renderForMobile={renderForMobile}
+            isMobile={isMobile}
           />
         )}
         {!isSandbox && (CODEPRESS || this.props.showMediaArea) && (

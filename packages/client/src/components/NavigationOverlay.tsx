@@ -214,6 +214,7 @@ class NavigationOverlay extends React.Component<
               <Row>
                 {challengeId && moduleContainsActiveChallenge && (
                   <Tooltip
+                    disabled={isMobile}
                     position="bottom"
                     content="Scroll to Active Challenge"
                   >
