@@ -91,6 +91,7 @@ import partition from "ramda/es/partition";
 import SEO from "./SEO";
 import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
 import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
+import isMobile from "is-mobile";
 
 const debug = require("debug")("client:Workspace");
 
@@ -127,7 +128,6 @@ interface IState {
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
   hideSuccessModal: boolean;
-  favorMobile: boolean;
   dimensions: ReturnType<typeof getDimensions>;
   shouldRefreshLayout: boolean;
 }
@@ -218,12 +218,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     const dimensions = getDimensions();
 
-    // The reason for two checks here is that even on larger screens we still
-    // want to use the mobile editor if this is detected as a tablet. Safari
-    // seems to handle monaco just fine but Android breaks, so android tablets
-    // should get codemirror
-    const favorMobile = isMobile() || dimensions.w < 700;
-
     this.state = {
       code: initialCode,
       testResults: [],
@@ -235,7 +229,6 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal: true,
 
       testResultsLoading: false,
-      favorMobile,
 
       dimensions,
       shouldRefreshLayout: false,
@@ -425,10 +418,6 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  toggleMobileView = () => {
-    this.setState({ favorMobile: !this.state.favorMobile });
-  };
-
   /**
    * Switching tabs in the main code area, so that we can edit the starter code
    * and solution code of a challenge.
@@ -472,16 +461,16 @@ class Workspace extends React.Component<IProps, IState> {
     const { correct: allTestsPassing } = this.getTestPassedStatus();
     const {
       testResults,
-      testResultsLoading,
-      hideSuccessModal,
       dimensions: D,
+      hideSuccessModal,
+      testResultsLoading,
       shouldRefreshLayout,
     } = this.state;
     const {
-      isMobile,
       challenge,
       isEditMode,
       userSettings,
+      isMobileView,
       revealSolutionCode,
       editModeAlternativeViewEnabled,
     } = this.props;
@@ -564,7 +553,7 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     // Use different editors for different platforms
-    const CodeEditor = this.state.favorMobile
+    const CodeEditor = isMobileView
       ? WorkspaceCodemirrorEditor
       : WorkspaceMonacoEditor;
 
@@ -598,7 +587,7 @@ class Workspace extends React.Component<IProps, IState> {
           )}
           <RunButton
             fill
-            large={isMobile}
+            large={isMobileView}
             icon="play"
             id="pw-run-code"
             loading={testResultsLoading}
@@ -609,15 +598,15 @@ class Workspace extends React.Component<IProps, IState> {
           </RunButton>
         </CodeEditorUpperRight>
         <LowerRight>
-          <ButtonGroup vertical={!isMobile}>
+          <ButtonGroup vertical={!isMobileView}>
             <Tooltip
-              disabled={isMobile}
+              disabled={isMobileView}
               content="Increase Font Size"
-              position={isMobile ? "top" : "left"}
+              position={isMobileView ? "top" : "left"}
               interactionKind={"hover-target"}
             >
               <IconButton
-                large={isMobile}
+                large={isMobileView}
                 id="editor-increase-font-size"
                 icon="plus"
                 aria-label="increase editor font size"
@@ -625,13 +614,13 @@ class Workspace extends React.Component<IProps, IState> {
               />
             </Tooltip>
             <Tooltip
-              disabled={isMobile}
+              disabled={isMobileView}
               content="Decrease Font Size"
-              position={isMobile ? "top" : "left"}
+              position={isMobileView ? "top" : "left"}
               interactionKind={"hover-target"}
             >
               <IconButton
-                large={isMobile}
+                large={isMobileView}
                 id="editor-decrease-font-size"
                 icon="minus"
                 aria-label="decrease editor font size"
@@ -640,10 +629,10 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
           </ButtonGroup>
           <div style={{ marginBottom: 8 }} />
-          {!isMobile && (
+          {!isMobileView && (
             <Tooltip content="Format Code" position="left">
               <IconButton
-                large={isMobile}
+                large={isMobileView}
                 id="editor-format-code"
                 icon="clean"
                 aria-label="format editor code"
@@ -665,7 +654,7 @@ class Workspace extends React.Component<IProps, IState> {
                     onClick={this.props.toggleAlternativeEditView}
                   />
                 )}
-                {!IS_SANDBOX && !isMobile && (
+                {!IS_SANDBOX && !isMobileView && (
                   <MenuItem
                     id="editor-toggle-full-screen"
                     icon={fullScreenEditor ? "collapse-all" : "expand-all"}
@@ -678,7 +667,7 @@ class Workspace extends React.Component<IProps, IState> {
                     }
                   />
                 )}
-                {!isMobile && (
+                {!isMobileView && (
                   <MenuItem
                     id="editor-toggle-high-contrast"
                     icon="contrast"
@@ -730,27 +719,16 @@ class Workspace extends React.Component<IProps, IState> {
                     onClick={this.props.handleToggleSolutionCode}
                   />
                 )}
-                <MenuItem
-                  id="editor-toggle-mobile"
-                  icon={this.state.favorMobile ? "desktop" : "mobile-phone"}
-                  aria-label="toggle editor size"
-                  onClick={this.toggleMobileView}
-                  text={
-                    this.state.favorMobile
-                      ? "Use Desktop Editor"
-                      : "Use Mobile Editor"
-                  }
-                />
               </Menu>
             }
-            position={isMobile ? Position.TOP_LEFT : Position.LEFT_BOTTOM}
+            position={isMobileView ? Position.TOP_LEFT : Position.LEFT_BOTTOM}
           >
             <Tooltip
               content="More options..."
-              position={isMobile ? "top" : "left"}
+              position={isMobileView ? "top" : "left"}
             >
               <IconButton
-                large={isMobile}
+                large={isMobileView}
                 id="editor-more-options"
                 aria-label="more options"
                 icon="more"
@@ -955,7 +933,7 @@ class Workspace extends React.Component<IProps, IState> {
       <Container>
         <PageSection>
           <WorkspaceContainer>
-            {isMobile ? (
+            {isMobileView ? (
               renderMobile()
             ) : shouldRefreshLayout ? null : (
               <ColsWrapper separatorProps={colSeparatorProps}>
@@ -1236,7 +1214,7 @@ class Workspace extends React.Component<IProps, IState> {
     this.runChallengeTests();
 
     // Slide the preview window into view. Only applicable on mobile
-    if (isMobile) {
+    if (this.props.isMobileView) {
       document
         .getElementById(PANEL_SCROLL_ID)
         ?.scrollTo({ left: this.state.dimensions.w, behavior: "smooth" });
@@ -1606,7 +1584,7 @@ type ConnectProps = ReturnType<typeof mergeProps>;
 interface IProps extends ConnectProps {
   blob: DataBlob;
   challenge: Challenge;
-  isMobile: boolean;
+  isMobileView: boolean;
 }
 
 const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
@@ -1656,8 +1634,11 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
       description: getSeoExcerpt(challenge),
     };
 
-    // Proxy for mobile
-    const isMobile = getDimensions().w < 700;
+    // The reason for two checks here is that even on larger screens we still
+    // want to use the mobile editor if this is detected as a tablet. Safari
+    // seems to handle monaco just fine but Android breaks, so android tablets
+    // should get codemirror
+    const isMobileView = isMobile() || getDimensions().w < 700;
 
     return (
       <React.Fragment>
@@ -1667,7 +1648,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
             {...this.props}
             blob={codeBlob}
             challenge={challenge}
-            isMobile={isMobile}
+            isMobileView={isMobileView}
           />
         )}
         {!isSandbox && (CODEPRESS || this.props.showMediaArea) && (
