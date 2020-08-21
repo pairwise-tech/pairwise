@@ -3533,13 +3533,13 @@
         {
           "id": "h6loohjUm",
           "type": "media",
-          "title": "Git Status and Stages",
+          "title": "Git Status",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "* What does staged mean?\n* `git status`\n* What does untracked mean?\n* What does modified mean?\n\n"
+          "content": "How do you know what's going on with your git repository? You can simply ask git. Run\n\n```\ngit status\n\n```\n\nSimple\\! Or is it? Let's say you run `git status` and you see this. What does it mean?\n\n```none\nOn branch master\nYour branch is up to date with 'origin/master'.\n\nChanges not staged for commit:\n  (use \"git add/rm <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tdeleted:    package.json\n\tmodified:   yarn.lock\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tnew-file.ts\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n\n```\n\nLets add a flag to `git status` and see if it makes things any clearer. We can run `git status --short` and we will see:\n\n```none\n D package.json\n M yarn.lock\n?? new-file.ts\n\n```\n\nIt's definitely more concise, but probably still unclear. \n# How git thinks about your files\n\nIn the world of git, a file is in one of these states:\n\n* `untracked`: This means git found a file that it know about. Usually this happens when you add a new file to your project. Git calls it \"untracked\" because once you commit a file git starts \"tracking\" it.\n* `modified`: This means a file has changed since last commit. You will see this all the time. After all, you're a programmer. Modifying text files is a big part of your job.\n* `deleted`: This means a file was previously commit but has been deleted. Does that odd? How does git know about a file that doesn't exist?\\!\n   * This is part of git's power. Even if you delete entire files you can bring them back later using git. Once you've commit something it can almost always be recovered.\n* Ignored:  Git never tells you it's ignoring a file because otherwise it wouldn't be true. You can tell git to ignore files you don't want tracked. \n   * For example, when you compile your TS code it produces a bunch of JS code. However, since the JS code is entirely generated from the TS code you don't actually want to track it. There's no need to track it. To get that JS code all you need is the TS code, so you will ignore the JS code.\n   * Using git you can ignore things by adding them to a special file called `.gitignore` \\(Note the dot in the filename\\).\n\n\n\n## Git Status\n\nNow let's look at that output from before again:\n\n```none\nOn branch master\nYour branch is up to date with 'origin/master'.\n\nChanges not staged for commit:\n  (use \"git add/rm <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tdeleted:    package.json\n\tmodified:   yarn.lock\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tnew-file.ts\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n\n```\n\nLet's ignore the first two lines because we will address them in later lessons. Focus on everything _after_ `Changes not staged for commit:`.\n\nGit is trying to be helpful here. It's saying you can use `add` or `rm` to update what files will be included in the next commit. You can also use `restore` to discard changes you've made.\n\nNow it tells us about our individual files:\n\n```none\ndeleted:    package.json\nmodified:   yarn.lock\n\n```\n\nIt's saying we've deleted the file `package.json` and modified the file `yarn.lock`.\n\nContinuing down we see:\n\n```none\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tnew-file.ts\n\n```\n\nHere git is telling us there is a new file named `new-file.ts` which we have neither commit nor ignored. We can add it to the next commit using `git add`.\n\n## The short form\n\nTry not to be intimidated by all that text. If you read through it line by line you will notice that git is generally trying to give you hints as to how to proceed depending on what you want to do.\n\nHowever, if you prefer to just know about the files themselves you can use the short form from earlier: `git status --short`.\n\n```none\n D package.json\n M yarn.lock\n?? new-file.ts\n\n```\n\nThis is giving us the same information about the file but in much shorter form. Feel free to use this if you find it easier to read. You can even created an alias \\(maybe `gs`?\\) if you find it too long to type.\n# Conclusion\n\n* Use `git status` to find out the status of your project.\n* You will quickly get used to reading this output because you will see it a lot.\n\n"
         },
         {
           "id": "jLByUSItW",
@@ -3605,7 +3605,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "We've created this section to give you the bare minimum you need to be effective with Git. Why? Two reasons:\n\n* It's simply such a large tool that an entire course could be dedicated to it.\n* It would get boring.\n\n\nThat second point is key—it would get boring\\! Meaning ++it would not be useful++. In fact, it might be counterproductive. \n\nIf we try to teach you everything many of you, our students, will simply stop learning. This may not be you specifically but many will. We've seen it happen. It happened to me\\! That's not an interesting story though so I'll omit it. \n\nWhat's relevant is that it's your job with our help to strike a balance between learning everything and staying interested.\n\n> Aside: To all the skeptics thinking \"There's already been a lot of boring stuff in this course,\" the difference is some things are absolutely necessary. On the other hand, some things can be skipped over completely and you can learn them on the job when you need them.\n# Just a Tool\n\nRemember, Git is not useful on its own. It's useful as a tool to manage a codebase. So learn as much as you need to get started and learn more as you need it.\n# Advanced Git\n\nAlright, let's look at some more advanced Git uses.\n\n## git rebase\n\nThis is similar to `git merge` in that it combines two commit histories into one, however it will do so without a merge commit. This means your git history will be much more linear. This is useful when your changes logically are linear. \n\nFor example, when two developers work on completely separate features we can pretend they worked in sequence. Developer A pushes some commits, then Developer B pushes more commits on top of that. In practice they were working at the same time, but we can use `git rebase` to make our git history linear.\n\n## git bisect\n\n`bisect` tells git to help you search for a bug on your code. The gist is this:\n\n* Identify how to reproduce a bug in your code\n* Run git bisect\n\n\nNow the following will happen until the bug is found:\n\n* Git will run `checkout` on a past branch\n* Tell git whether or not the bug exists\n   * If a bug exists, git will check out a branch further in the past\n   * If the bug does not exist, git will check out a branch further in the future\n* The process will repeat\n\n\nWhat this does is automatically isolates the commit that introduced the bug. This is useful because you can look at the diff of that commit and greatly limit the code you have to look at. It's an extremely useful command, with a slight drawback:\n\n> `git bisect` relies on a meaningful git history to work.\n\nWhat this means is if you have a single commit with 5000 lines of changes, and that commit introduces a bug, `git bisect` doesn't help that much—5000 lines is still a lot to look through. The way to avoid this and produce a meaningful commit history is to bias towards smaller commits more often. \n\n## git reset\n\n`git reset` will revert changes. It's considered \"advanced\" simply because it can actually delete things and you won't be able to get them back. \n\nIf you delete a file or some code using your editor, git will keep track of those deletions. However, if you use `git reset --hard` you are telling git to revert changes _and_ completely discard them. This is a useful command, just like `rm` is a useful command, but if you're not careful you may end up deleting more than you want.\n# Ask Your Coworkers\n\nIf you end up working in a company, chances are there's at least one person \\(maybe only one person\\) who is an absolute Git Wizard™. These people are very valuable resources because you can ask them obscure questions that are hard to search for online.\n\nAs with everything we're teaching you, never be afraid to ask for help or look ignorant. Acknowledging you don't know is the first step towards knowing. \n\nMost likely you don't have coworkers you can ask yet, but this course teaches you everything you need to know to get a job.\n# More Git Resources\n\n* [Learn Git Branching](https://learngitbranching.js.org/) — A free online Git tutorial with visualizations. Highly recommended if you want to go deeper.\n* [Pro Git](https://git-scm.com/book/en/v2) — A free online book that really goes deep. It's a full textbook on Git.\n* [Git Docs](https://git-scm.com/docs) — A comprehensive list of reference material. Check out the \"Guides\" section for some more distilled knowledge.\n\n"
+          "content": "We've created this section to give you the bare minimum you need to be effective with Git. Why not more? Two reasons:\n\n* It's simply such a large tool that an entire course could be dedicated to it.\n* It would get boring.\n\n\nThat second point is key—it would get boring\\! Meaning ++it would not be useful++. In fact, it might be counterproductive. \n\nIf we try to teach you everything many of you, our students, will simply stop learning. This may not be you specifically but many will. We've seen it happen. It happened to me\\! That's not an interesting story though so I'll omit it. \n\nWhat's relevant is that it's your job with our help to strike a balance between learning everything and staying interested.\n\n> Aside: To all the skeptics thinking \"There's already been a lot of boring stuff in this course...\" the difference is some things are absolutely necessary. On the other hand, some things can be skipped over completely and you can learn them on the job when you need them.\n# Just a Tool\n\nRemember, Git is not useful on its own. It's useful as a tool to manage a codebase. So learn as much as you need to get started and learn more as you need it.\n# Advanced Git\n\nStill here? Are you sure you want to read more? You can skip the rest of this lesson entirely if you want to. Alright, since you're still here let's look at some more advanced Git uses.\n\n## git rebase\n\nThis is similar to `git merge` in that it combines two commit histories into one, however it will do so without a merge commit. This means your git history will be much more linear. This is useful when your changes logically are linear. \n\nFor example, when two developers work on completely separate features we can pretend they worked in sequence. Developer A pushes some commits, then Developer B pushes more commits on top of that. In practice they were working at the same time, but we can use `git rebase` to make our git history linear.\n\n## git bisect\n\n`bisect` tells git to help you search for a bug on your code. The gist is this:\n\n* Identify how to reproduce a bug in your code. This could be running an automated test, clicking a button, etc. Figure out how to make the bug happen consistently.\n* Run git bisect.\n\n\nNow the following will happen until the bug is found:\n\n* Git will  `checkout` a past branch.\n* Tell git whether or not the bug exists.\n   * If a bug exists, git will check out a branch further in the past.\n   * If the bug does not exist, git will check out a branch further in the future.\n* The process will repeat until git has helped you identify exactly which commit introduced the bug.\n\n\nWhat this does is automatically isolates the commit that introduced the bug. This is useful because you can look at the diff of that commit and greatly limit the code you have to look at. It's an extremely useful command, with a slight drawback:\n\n> `git bisect` relies on a meaningful git history to work.\n\nWhat this means is if you have a single commit with 5000 lines of changes, and that commit introduces a bug, `git bisect` doesn't help that much—5000 lines is still a lot to look through. The way to avoid this and produce a meaningful commit history is to bias towards smaller commits more often. \n\n## git reset\n\n`git reset` will revert changes. It's considered \"advanced\" simply because it can actually delete things and you won't be able to get them back. \n\nIf you delete a file or some code using your editor, git will keep track of those deletions. However, if you use `git reset --hard` you are telling git to revert changes _and_ completely discard them. This is a useful command, just like `rm` is a useful command, but if you're not careful you may end up deleting more than you want.\n# Ask Your Coworkers\n\nIf you end up working in a company, chances are there's at least one person \\(maybe only one person\\) who is an absolute Git Wizard™. These people are very valuable resources because you can ask them obscure questions that are hard to search for online.\n\nAs with everything we're teaching you, never be afraid to ask for help or look ignorant. Acknowledging you don't know is the first step towards knowing. \n\nMost likely you don't have coworkers you can ask yet, but this course teaches you everything you need to know to get a job.\n# More Git Resources\n\n* [Learn Git Branching](https://learngitbranching.js.org/) — A free online Git tutorial with visualizations. Highly recommended if you want to go deeper.\n* [Pro Git](https://git-scm.com/book/en/v2) — A free online book that really goes deep. It's a full textbook on Git.\n* [Git Docs](https://git-scm.com/docs) — A comprehensive list of reference material. Check out the \"Guides\" section for some more distilled knowledge.\n\n"
         },
         {
           "id": "$EcZq5Ecg",
@@ -3660,7 +3660,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "TODO: This content has not yet been written."
         },
         {
           "id": "ZpmwkFp0r",
@@ -3671,7 +3671,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "# TODO\n\n* What to do when commands don't want to pipe...\n\n"
+          "content": "TODO: This content has not yet been written.\nWhat to do when commands don't want to pipe...\n"
         },
         {
           "id": "CLkUN2Zhg",
@@ -3682,7 +3682,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "# TODO\n\n* Namely, sybolic linking. `ln -ls`\n* Useful because sometimes you want things in more than one place at once\n   * We'll make use of this in the dotfiles project\n\n"
+          "content": "TODO: This content has not yet been written.\n\n* Namely, sybolic linking. `ln -ls`\n* Useful because sometimes you want things in more than one place at once\n   * We'll make use of this in the dotfiles project\n\n"
         },
         {
           "id": "48aH563rG",
@@ -3693,18 +3693,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
-        },
-        {
-          "id": "@oPRSQI6V",
-          "type": "media",
-          "title": "ag: Another Way to Grep",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": ""
+          "content": "TODO: This content has not yet been written."
         },
         {
           "id": "$0ICxz1DQ",
@@ -3715,7 +3704,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "TODO: This content has not yet been written."
         },
         {
           "id": "iC$3Bijan",
@@ -3726,7 +3715,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Show `which` and `which -a`."
+          "content": "TODO: This content has not yet been written.\n\n*  `which` and `which -a`.\n\n"
         },
         {
           "id": "uRWJVdzO3",
@@ -3737,7 +3726,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "# TODO\n\n* Don't post screenshots of your `env` to twitter... \n* Sharing code without sharing secrets\n* Inline env vars\n\n"
+          "content": "TODO: This content has not yet been written.\n\n* Don't post screenshots of your `env` to twitter... \n* Sharing code without sharing secrets\n* Inline env vars\n\n"
         }
       ]
     },
