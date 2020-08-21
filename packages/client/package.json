@@ -40,7 +40,6 @@
     "@blueprintjs/core": "^3.22.3",
     "@blueprintjs/select": "^3.11.2",
     "@monaco-editor/react": "~3.1.2",
-    "@papercups-io/chat-widget": "^1.0.24",
     "@sentry/browser": "^5.12.4",
     "@types/classnames": "^2.2.9",
     "@types/express-fileupload": "^1.1.2",
