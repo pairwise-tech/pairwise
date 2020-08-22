@@ -514,7 +514,7 @@ export const InstructionsViewEdit = connect(
   instructionsMapState,
   instructionsMapDispatch,
 )((props: InstructionsViewEditProps) => {
-  const { isEditMode, currentId } = props;
+  const { isEditMode, currentId, isMobile } = props;
   const [isCollapsed, setIsCollapsed] = React.useState(false);
   const PANEL_ID = "workspace-panel-instructions";
 
@@ -546,8 +546,6 @@ export const InstructionsViewEdit = connect(
 
   const handleTitle = (title: string) =>
     props.updateChallenge({ id: currentId, challenge: { title } });
-
-  const isMobile = D.w < 700;
 
   return (
     <div

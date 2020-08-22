@@ -145,6 +145,20 @@ class NavigationOverlay extends React.Component<
       "cmd+/": this.props.toggleEditorSize,
     };
 
+    // Render different expand/collapse button on mobile for better layout
+    let ExpandCollapseButton;
+    if (isMobile) {
+      ExpandCollapseButton = anySectionsOpen ? (
+        <Icon icon="collapse-all" />
+      ) : (
+        <Icon icon="expand-all" />
+      );
+    } else {
+      ExpandCollapseButton = anySectionsOpen
+        ? "Collapse All Sections"
+        : "Expand All Sections";
+    }
+
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
         <KeyboardShortcuts keymap={shortcutKeyMap as KeyMapProps} />
@@ -197,11 +211,12 @@ class NavigationOverlay extends React.Component<
         >
           <SpecialLeftShadow />
           <ColTitle>
-            <p>{module.title}</p>
+            <p style={{ fontSize: isMobile ? 13 : 18 }}>{module.title}</p>
             {hasSections && !isEditMode && (
-              <div>
+              <Row>
                 {challengeId && moduleContainsActiveChallenge && (
                   <Tooltip
+                    disabled={isMobile}
                     position="bottom"
                     content="Scroll to Active Challenge"
                   >
@@ -213,10 +228,9 @@ class NavigationOverlay extends React.Component<
                   </Tooltip>
                 )}
                 <Button onClick={this.toggleExpandCollapseAll}>
-                  {anySectionsOpen ? "Collapse" : "Expand"}
-                  {!isMobile ? " All Sections" : ""}
+                  {ExpandCollapseButton}
                 </Button>
-              </div>
+              </Row>
             )}
           </ColTitle>
           <ColScroll>
@@ -711,6 +725,13 @@ const AddNavItemPositionContainer = styled.div`
   top: 100%;
   left: 50%;
   position: absolute;
+`;
+
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
 `;
 
 interface AddNavItemButtonProps {
