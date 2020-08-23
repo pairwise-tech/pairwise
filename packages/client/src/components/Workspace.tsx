@@ -235,6 +235,7 @@ class Workspace extends React.Component<IProps, IState> {
       dimensions,
       shouldRefreshLayout: false,
 
+      // Default to iOS
       mobileDevicePreviewType: "ios",
     };
   }
@@ -685,8 +686,8 @@ class Workspace extends React.Component<IProps, IState> {
                 )}
                 {isReactNativeChallenge && (
                   <MenuItem
-                    id="editor-toggle-mobile-device-preview"
                     icon="mobile-phone"
+                    id="editor-toggle-mobile-device-preview"
                     aria-label="toggle mobile device preview setting"
                     onClick={this.toggleMobileDevicePreview}
                     text={
@@ -788,7 +789,7 @@ class Workspace extends React.Component<IProps, IState> {
           </div>
         ) : IS_REACT_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ flex: "1 100%", paddingTop: 2 }}>
+            <div style={{ flex: "1 100%" }}>
               <DragIgnorantFrameContainer
                 id="iframe"
                 title="code-preview"

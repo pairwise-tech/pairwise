@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 
 /** ===========================================================================
- * HTML * UI for Mobile Device Previews.
+ * HTML & UI for Mobile Device Previews.
  * ----------------------------------------------------------------------------
  * See https://marvelapp.github.io/devices.css/ for details. We are using
  * the adapted version of this project which allows for resize-able mobile
@@ -24,12 +24,12 @@ interface MobilePreviewUIProps {
 }
 
 const MobilePreviewUI = (props: MobilePreviewUIProps) => {
-  const DeviceUI =
-    props.device === "ios" ? IPhoneXMobilePreview : GalaxyNotePreview;
+  const { device, children } = props;
+  const DeviceUI = device === "ios" ? IPhoneXMobilePreview : GalaxyNotePreview;
 
   return (
     <MobilePreviewContainer>
-      <DeviceUI>{props.children}</DeviceUI>
+      <DeviceUI>{children}</DeviceUI>
     </MobilePreviewContainer>
   );
 };
