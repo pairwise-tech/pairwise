@@ -473,6 +473,7 @@ class Workspace extends React.Component<IProps, IState> {
       userSettings,
       isMobileView,
       revealSolutionCode,
+      isReactNativeChallenge,
       editModeAlternativeViewEnabled,
     } = this.props;
     const NO_TESTS_RESULTS = testResults.length === 0;
@@ -481,6 +482,7 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_SANDBOX = challenge.id === SANDBOX_ID;
     const IS_FULLSCREEN = fullScreenEditor || IS_SANDBOX;
     const IS_REACT_CHALLENGE = challenge.type === "react";
+    const IS_REACT_NATIVE_CHALLENGE = isReactNativeChallenge;
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
     const IS_GREAT_SUCCESS_OPEN =
@@ -754,16 +756,27 @@ class Workspace extends React.Component<IProps, IState> {
     const getPreviewPane = ({ grid = true } = {}) => {
       // Lots of repetition here
       if (!grid) {
-        return IS_REACT_CHALLENGE ? (
+        return IS_REACT_NATIVE_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ flex: "1 100%" }}>
-              <IPhoneXMobilePreview>
-                <DragIgnorantFrameContainer
-                  id="iframe"
-                  title="code-preview"
-                  ref={this.setIframeRef}
-                />
-              </IPhoneXMobilePreview>
+              <DragIgnorantFrameContainer
+                id="iframe"
+                title="code-preview"
+                ref={this.setIframeRef}
+              />
+            </div>
+            <div style={{ flex: "1 100%" }}>
+              <Console variant="dark" logs={this.state.logs} />
+            </div>
+          </div>
+        ) : IS_REACT_CHALLENGE ? (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ flex: "1 100%" }}>
+              <DragIgnorantFrameContainer
+                id="iframe"
+                title="code-preview"
+                ref={this.setIframeRef}
+              />
             </div>
             <div style={{ flex: "1 100%" }}>
               <Console variant="dark" logs={this.state.logs} />
@@ -793,7 +806,7 @@ class Workspace extends React.Component<IProps, IState> {
         );
       }
 
-      return IS_REACT_CHALLENGE ? (
+      return IS_REACT_NATIVE_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}
@@ -809,6 +822,29 @@ class Workspace extends React.Component<IProps, IState> {
                     ref={this.setIframeRef}
                   />
                 </IPhoneXMobilePreview>
+              </div>
+            </Row>
+            <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
+              <div>
+                <Console variant="dark" logs={this.state.logs} />
+              </div>
+            </Row>
+          </RowsWrapper>
+        </Col>
+      ) : IS_REACT_CHALLENGE ? (
+        <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
+          <RowsWrapper separatorProps={rowSeparatorProps}>
+            <Row initialHeight={D.PREVIEW_HEIGHT}>
+              <div style={{ height: "100%" }}>
+                <DragIgnorantFrameContainer
+                  id="iframe"
+                  title="code-preview"
+                  ref={this.setIframeRef}
+                />
               </div>
             </Row>
             <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
@@ -1525,6 +1561,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
   revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
+  isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
   isTestingAndAutomationChallenge: ChallengeSelectors.isTestingAndAutomationChallenge(
     state,
   ),

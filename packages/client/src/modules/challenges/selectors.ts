@@ -226,6 +226,19 @@ export const isTestingAndAutomationChallenge = createSelector(
 );
 
 /**
+ * Determine if the current challenge is in the Mobile Development module,
+ * using that module's current id.
+ */
+export const isReactNativeChallenge = createSelector(getCurrentModuleId, id => {
+  const REACT_NATIVE_MODULE_ID = "D1JR2EXa";
+  if (id && id === REACT_NATIVE_MODULE_ID) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+/**
  * Get the breadcrumbs path for a, g;iven challenge.
  */
 export const breadcrumbPathSelector = createSelector(
