@@ -13,6 +13,7 @@ import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
+import { IPhoneXMobilePreview } from "./MobileDevicePreview";
 import {
   requestCodeFormatting,
   subscribeCodeWorker,
@@ -756,11 +757,13 @@ class Workspace extends React.Component<IProps, IState> {
         return IS_REACT_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ flex: "1 100%" }}>
-              <DragIgnorantFrameContainer
-                id="iframe"
-                title="code-preview"
-                ref={this.setIframeRef}
-              />
+              <IPhoneXMobilePreview>
+                <DragIgnorantFrameContainer
+                  id="iframe"
+                  title="code-preview"
+                  ref={this.setIframeRef}
+                />
+              </IPhoneXMobilePreview>
             </div>
             <div style={{ flex: "1 100%" }}>
               <Console variant="dark" logs={this.state.logs} />
@@ -799,11 +802,13 @@ class Workspace extends React.Component<IProps, IState> {
           <RowsWrapper separatorProps={rowSeparatorProps}>
             <Row initialHeight={D.PREVIEW_HEIGHT}>
               <div style={{ height: "100%" }}>
-                <DragIgnorantFrameContainer
-                  id="iframe"
-                  title="code-preview"
-                  ref={this.setIframeRef}
-                />
+                <IPhoneXMobilePreview>
+                  <DragIgnorantFrameContainer
+                    id="iframe"
+                    title="code-preview"
+                    ref={this.setIframeRef}
+                  />
+                </IPhoneXMobilePreview>
               </div>
             </Row>
             <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
