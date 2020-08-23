@@ -40,3 +40,15 @@ export const GalaxyNotePreview = (props: { children: JSX.Element }) => {
     </div>
   );
 };
+
+export const NexusPreview = (props: { children: JSX.Element }) => {
+  return (
+    <div className="marvel-device nexus5">
+      <div className="top-bar"></div>
+      <div className="sleep"></div>
+      <div className="volume"></div>
+      <div className="camera"></div>
+      <div className="screen">{props.children}</div>
+    </div>
+  );
+};

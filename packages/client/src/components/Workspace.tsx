@@ -13,7 +13,7 @@ import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
-import { IPhoneXMobilePreview } from "./MobileDevicePreview";
+import { IPhoneXMobilePreview, GalaxyNotePreview } from "./MobileDevicePreview";
 import {
   requestCodeFormatting,
   subscribeCodeWorker,
@@ -122,6 +122,8 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
   },
 ];
 
+type MobileDevice = "ios" | "android";
+
 interface IState {
   code: string;
   testResultsLoading: boolean;
@@ -131,6 +133,7 @@ interface IState {
   hideSuccessModal: boolean;
   dimensions: ReturnType<typeof getDimensions>;
   shouldRefreshLayout: boolean;
+  mobileDevicePreview: MobileDevice;
 }
 
 export interface ICodeEditorOptions {
@@ -233,6 +236,8 @@ class Workspace extends React.Component<IProps, IState> {
 
       dimensions,
       shouldRefreshLayout: false,
+
+      mobileDevicePreview: "ios",
     };
   }
 
@@ -466,6 +471,7 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal,
       testResultsLoading,
       shouldRefreshLayout,
+      mobileDevicePreview,
     } = this.state;
     const {
       challenge,
@@ -679,6 +685,19 @@ class Workspace extends React.Component<IProps, IState> {
                     text="Toggle High Contrast Mode"
                   />
                 )}
+                {isReactNativeChallenge && (
+                  <MenuItem
+                    id="editor-toggle-mobile-device-preview"
+                    icon="mobile-phone"
+                    aria-label="toggle mobile device preview setting"
+                    onClick={this.toggleMobileDevicePreview}
+                    text={
+                      mobileDevicePreview === "ios"
+                        ? "Use Android Mobile Device"
+                        : "Use iOS Mobile Device"
+                    }
+                  />
+                )}
                 {isMobileView && (
                   <MenuItem
                     id="editor-format-code-mobile"
@@ -754,16 +773,24 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     const getPreviewPane = ({ grid = true } = {}) => {
+      // Get the appropriate mobile device
+      const MobileDevicePreviewUI =
+        mobileDevicePreview === "ios"
+          ? IPhoneXMobilePreview
+          : GalaxyNotePreview;
+
       // Lots of repetition here
       if (!grid) {
         return IS_REACT_NATIVE_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ flex: "1 100%" }}>
-              <DragIgnorantFrameContainer
-                id="iframe"
-                title="code-preview"
-                ref={this.setIframeRef}
-              />
+              <MobileDevicePreviewUI>
+                <DragIgnorantFrameContainer
+                  id="iframe"
+                  title="code-preview"
+                  ref={this.setIframeRef}
+                />
+              </MobileDevicePreviewUI>
             </div>
             <div style={{ flex: "1 100%" }}>
               <Console variant="dark" logs={this.state.logs} />
@@ -815,13 +842,13 @@ class Workspace extends React.Component<IProps, IState> {
           <RowsWrapper separatorProps={rowSeparatorProps}>
             <Row initialHeight={D.PREVIEW_HEIGHT}>
               <div style={{ height: "100%" }}>
-                <IPhoneXMobilePreview>
+                <MobileDevicePreviewUI>
                   <DragIgnorantFrameContainer
                     id="iframe"
                     title="code-preview"
                     ref={this.setIframeRef}
                   />
-                </IPhoneXMobilePreview>
+                </MobileDevicePreviewUI>
               </div>
             </Row>
             <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
@@ -1026,6 +1053,12 @@ class Workspace extends React.Component<IProps, IState> {
       </Container>
     );
   }
+
+  toggleMobileDevicePreview = () => {
+    this.setState(({ mobileDevicePreview: x }) => ({
+      mobileDevicePreview: x === "ios" ? "android" : "ios",
+    }));
+  };
 
   getTestPassedStatus = () => {
     const { testResults, testResultsLoading } = this.state;
