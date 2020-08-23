@@ -1055,9 +1055,12 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   toggleMobileDevicePreview = () => {
-    this.setState(({ mobileDevicePreview: x }) => ({
-      mobileDevicePreview: x === "ios" ? "android" : "ios",
-    }));
+    this.setState(
+      ({ mobileDevicePreview: x }) => ({
+        mobileDevicePreview: x === "ios" ? "android" : "ios",
+      }),
+      this.iframeRenderPreview,
+    );
   };
 
   getTestPassedStatus = () => {
