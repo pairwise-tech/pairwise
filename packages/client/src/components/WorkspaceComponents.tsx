@@ -687,6 +687,7 @@ export const WorkspaceMobileView = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
 
   .tabs {
     flex: 1 100%;

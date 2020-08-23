@@ -7,7 +7,7 @@ import React from "react";
  * ============================================================================
  */
 
-export const IPhoneXMobilePreview = (props: { children: JSX.Element }) => {
+const IPhoneXMobilePreview = (props: { children: JSX.Element }) => {
   return (
     <div className="marvel-device iphone8plus black">
       <div className="top-bar"></div>
@@ -23,7 +23,7 @@ export const IPhoneXMobilePreview = (props: { children: JSX.Element }) => {
   );
 };
 
-export const GalaxyNotePreview = (props: { children: JSX.Element }) => {
+const GalaxyNotePreview = (props: { children: JSX.Element }) => {
   return (
     <div className="marvel-device note8">
       <div className="inner"></div>
@@ -41,7 +41,7 @@ export const GalaxyNotePreview = (props: { children: JSX.Element }) => {
   );
 };
 
-export const NexusPreview = (props: { children: JSX.Element }) => {
+const NexusPreview = (props: { children: JSX.Element }) => {
   return (
     <div className="marvel-device nexus5">
       <div className="top-bar"></div>
@@ -52,3 +52,10 @@ export const NexusPreview = (props: { children: JSX.Element }) => {
     </div>
   );
 };
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
+
+export { IPhoneXMobilePreview, GalaxyNotePreview, NexusPreview };

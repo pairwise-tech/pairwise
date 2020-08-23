@@ -783,7 +783,7 @@ class Workspace extends React.Component<IProps, IState> {
       if (!grid) {
         return IS_REACT_NATIVE_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ flex: "1 100%" }}>
+            <div style={{ flex: "1 100%", paddingTop: 2 }}>
               <MobileDevicePreviewUI>
                 <DragIgnorantFrameContainer
                   id="iframe"
@@ -792,20 +792,20 @@ class Workspace extends React.Component<IProps, IState> {
                 />
               </MobileDevicePreviewUI>
             </div>
-            <div style={{ flex: "1 100%" }}>
+            <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
               <Console variant="dark" logs={this.state.logs} />
             </div>
           </div>
         ) : IS_REACT_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ flex: "1 100%" }}>
+            <div style={{ flex: "1 100%", paddingTop: 2 }}>
               <DragIgnorantFrameContainer
                 id="iframe"
                 title="code-preview"
                 ref={this.setIframeRef}
               />
             </div>
-            <div style={{ flex: "1 100%" }}>
+            <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
               <Console variant="dark" logs={this.state.logs} />
             </div>
           </div>
