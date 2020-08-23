@@ -13,7 +13,7 @@ import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
-import { IPhoneXMobilePreview, GalaxyNotePreview } from "./MobileDevicePreview";
+import MobileDeviceUI, { MobileDevicePreviewType } from "./MobileDevicePreview";
 import {
   requestCodeFormatting,
   subscribeCodeWorker,
@@ -122,8 +122,6 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
   },
 ];
 
-type MobileDevice = "ios" | "android";
-
 interface IState {
   code: string;
   testResultsLoading: boolean;
@@ -133,7 +131,7 @@ interface IState {
   hideSuccessModal: boolean;
   dimensions: ReturnType<typeof getDimensions>;
   shouldRefreshLayout: boolean;
-  mobileDevicePreview: MobileDevice;
+  mobileDevicePreviewType: MobileDevicePreviewType;
 }
 
 export interface ICodeEditorOptions {
@@ -237,7 +235,7 @@ class Workspace extends React.Component<IProps, IState> {
       dimensions,
       shouldRefreshLayout: false,
 
-      mobileDevicePreview: "ios",
+      mobileDevicePreviewType: "ios",
     };
   }
 
@@ -471,7 +469,7 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal,
       testResultsLoading,
       shouldRefreshLayout,
-      mobileDevicePreview,
+      mobileDevicePreviewType,
     } = this.state;
     const {
       challenge,
@@ -692,7 +690,7 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="toggle mobile device preview setting"
                     onClick={this.toggleMobileDevicePreview}
                     text={
-                      mobileDevicePreview === "ios"
+                      mobileDevicePreviewType === "ios"
                         ? "Use Android Mobile Device"
                         : "Use iOS Mobile Device"
                     }
@@ -773,25 +771,17 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     const getPreviewPane = ({ grid = true } = {}) => {
-      // Get the appropriate mobile device
-      const MobileDevicePreviewUI =
-        mobileDevicePreview === "ios"
-          ? IPhoneXMobilePreview
-          : GalaxyNotePreview;
-
       // Lots of repetition here
       if (!grid) {
         return IS_REACT_NATIVE_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ flex: "1 100%", paddingTop: 2 }}>
-              <MobileDevicePreviewUI>
-                <DragIgnorantFrameContainer
-                  id="iframe"
-                  title="code-preview"
-                  ref={this.setIframeRef}
-                />
-              </MobileDevicePreviewUI>
-            </div>
+            <MobileDeviceUI device={mobileDevicePreviewType}>
+              <DragIgnorantFrameContainer
+                id="iframe"
+                title="code-preview"
+                ref={this.setIframeRef}
+              />
+            </MobileDeviceUI>
             <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
               <Console variant="dark" logs={this.state.logs} />
             </div>
@@ -841,15 +831,13 @@ class Workspace extends React.Component<IProps, IState> {
           />
           <RowsWrapper separatorProps={rowSeparatorProps}>
             <Row initialHeight={D.PREVIEW_HEIGHT}>
-              <div style={{ height: "100%" }}>
-                <MobileDevicePreviewUI>
-                  <DragIgnorantFrameContainer
-                    id="iframe"
-                    title="code-preview"
-                    ref={this.setIframeRef}
-                  />
-                </MobileDevicePreviewUI>
-              </div>
+              <MobileDeviceUI device={mobileDevicePreviewType}>
+                <DragIgnorantFrameContainer
+                  id="iframe"
+                  title="code-preview"
+                  ref={this.setIframeRef}
+                />
+              </MobileDeviceUI>
             </Row>
             <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
               <div>
@@ -1056,8 +1044,8 @@ class Workspace extends React.Component<IProps, IState> {
 
   toggleMobileDevicePreview = () => {
     this.setState(
-      ({ mobileDevicePreview: x }) => ({
-        mobileDevicePreview: x === "ios" ? "android" : "ios",
+      ({ mobileDevicePreviewType: x }) => ({
+        mobileDevicePreviewType: x === "ios" ? "android" : "ios",
       }),
       this.iframeRenderPreview,
     );

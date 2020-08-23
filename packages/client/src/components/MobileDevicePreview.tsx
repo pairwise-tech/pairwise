@@ -1,9 +1,41 @@
 import React from "react";
+import styled from "styled-components/macro";
 
 /** ===========================================================================
- * HTML for Mobile Device Previews
+ * HTML * UI for Mobile Device Previews.
  * ----------------------------------------------------------------------------
- * See https://marvelapp.github.io/devices.css/ for details.
+ * See https://marvelapp.github.io/devices.css/ for details. We are using
+ * the adapted version of this project which allows for resize-able mobile
+ * devices (https://github.com/philipkiely/devices.css).
+ *
+ * The device styles and size settings are provided in the
+ * mobile-device-styles.min.css file.
+ *
+ * NOTE: Currently this only supports default iOS and Android views. It could
+ * be expanded in the future to support other device previews if we wanted.
+ * ============================================================================
+ */
+
+export type MobileDevicePreviewType = "ios" | "android";
+
+interface MobilePreviewUIProps {
+  device: MobileDevicePreviewType;
+  children: JSX.Element;
+}
+
+const MobilePreviewUI = (props: MobilePreviewUIProps) => {
+  const DeviceUI =
+    props.device === "ios" ? IPhoneXMobilePreview : GalaxyNotePreview;
+
+  return (
+    <MobilePreviewContainer>
+      <DeviceUI>{props.children}</DeviceUI>
+    </MobilePreviewContainer>
+  );
+};
+
+/** ===========================================================================
+ * Device Styles
  * ============================================================================
  */
 
@@ -41,6 +73,7 @@ const GalaxyNotePreview = (props: { children: JSX.Element }) => {
   );
 };
 
+/* eslint-disable */
 const NexusPreview = (props: { children: JSX.Element }) => {
   return (
     <div className="marvel-device nexus5">
@@ -53,9 +86,17 @@ const NexusPreview = (props: { children: JSX.Element }) => {
   );
 };
 
+const MobilePreviewContainer = styled.div`
+  padding-top: 6px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export { IPhoneXMobilePreview, GalaxyNotePreview, NexusPreview };
+export default MobilePreviewUI;
