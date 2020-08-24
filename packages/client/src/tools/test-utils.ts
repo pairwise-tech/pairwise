@@ -142,6 +142,7 @@ let ${TEST_UTILS_GLOBALS_KEYS.__secret_error_box} = [];
 let ${TEST_UTILS_GLOBALS_KEYS.__secret_info_box} = [];
 
 const __interceptConsoleLog = (...value) => {
+  console.log(value);
   const message = JSON.stringify(value, __replacer);
   __secret_log_box.push(message);
   window.parent.postMessage({ message, source: "LOG" }, ${TARGET_WINDOW_ORIGIN});

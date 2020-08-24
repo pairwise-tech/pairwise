@@ -162,6 +162,39 @@ var __randomInRange = function (min, max) {
     return Math.round(Math.random() * (max - min) + min);
 };
 /** ===========================================================================
+ * React Native Web Test Helpers
+ * ============================================================================
+ */
+// Determine if a text element exists with the given text for a
+// React Native challenge.
+var reactNativeTextExists = function (text) {
+    // Text components are rendered as divs:
+    var containers = document.getElementsByTagName("div");
+    // @ts-ignore
+    for (var _i = 0, containers_1 = containers; _i < containers_1.length; _i++) {
+        var div = containers_1[_i];
+        if (div.innerHTML === text) {
+            return true;
+        }
+    }
+    return false;
+};
+// Determine if a button element exists with the given text for a
+// React Native challenge.
+var reactNativeButtonWithTextExists = function (text) {
+    // Buttons are rendered as divs with a button role:
+    var buttons = document.querySelectorAll('[role="button"]');
+    // @ts-ignore
+    for (var _i = 0, buttons_1 = buttons; _i < buttons_1.length; _i++) {
+        var button = buttons_1[_i];
+        // @ts-ignore
+        if (button.firstChild.innerHTML === text) {
+            return true;
+        }
+    }
+    return false;
+};
+/** ===========================================================================
  * Expose Globals
  * ============================================================================
  */
@@ -173,3 +206,7 @@ window.getAll = getAll;
 window.getStyle = getStyle;
 // @ts-ignore
 window.getText = getText;
+// @ts-ignore
+window.reactNativeTextExists = reactNativeTextExists;
+// @ts-ignore
+window.reactNativeButtonWithTextExists = reactNativeButtonWithTextExists;

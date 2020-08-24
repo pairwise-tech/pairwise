@@ -179,6 +179,44 @@ const __randomInRange = (min, max) => {
 };
 
 /** ===========================================================================
+ * React Native Web Test Helpers
+ * ============================================================================
+ */
+
+// Determine if a text element exists with the given text for a
+// React Native challenge.
+const reactNativeTextExists = (text: string) => {
+  // Text components are rendered as divs:
+  const containers = document.getElementsByTagName("div");
+
+  // @ts-ignore
+  for (const div of containers) {
+    if (div.innerHTML === text) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+// Determine if a button element exists with the given text for a
+// React Native challenge.
+const reactNativeButtonWithTextExists = (text: string) => {
+  // Buttons are rendered as divs with a button role:
+  const buttons = document.querySelectorAll('[role="button"]');
+
+  // @ts-ignore
+  for (const button of buttons) {
+    // @ts-ignore
+    if (button.firstChild.innerHTML === text) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+/** ===========================================================================
  * Expose Globals
  * ============================================================================
  */
@@ -191,3 +229,7 @@ window.getAll = getAll;
 window.getStyle = getStyle;
 // @ts-ignore
 window.getText = getText;
+// @ts-ignore
+window.reactNativeTextExists = reactNativeTextExists;
+// @ts-ignore
+window.reactNativeButtonWithTextExists = reactNativeButtonWithTextExists;
