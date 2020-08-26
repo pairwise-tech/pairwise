@@ -13,6 +13,7 @@ import React from "react";
 import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
 import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
+import MobileDeviceUI, { MobileDevicePreviewType } from "./MobileDevicePreview";
 import {
   requestCodeFormatting,
   subscribeCodeWorker,
@@ -130,6 +131,7 @@ interface IState {
   hideSuccessModal: boolean;
   dimensions: ReturnType<typeof getDimensions>;
   shouldRefreshLayout: boolean;
+  mobileDevicePreviewType: MobileDevicePreviewType;
 }
 
 export interface ICodeEditorOptions {
@@ -232,6 +234,9 @@ class Workspace extends React.Component<IProps, IState> {
 
       dimensions,
       shouldRefreshLayout: false,
+
+      // Default to iOS
+      mobileDevicePreviewType: "ios",
     };
   }
 
@@ -465,6 +470,7 @@ class Workspace extends React.Component<IProps, IState> {
       hideSuccessModal,
       testResultsLoading,
       shouldRefreshLayout,
+      mobileDevicePreviewType,
     } = this.state;
     const {
       challenge,
@@ -472,6 +478,7 @@ class Workspace extends React.Component<IProps, IState> {
       userSettings,
       isMobileView,
       revealSolutionCode,
+      isReactNativeChallenge,
       editModeAlternativeViewEnabled,
     } = this.props;
     const NO_TESTS_RESULTS = testResults.length === 0;
@@ -480,6 +487,7 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_SANDBOX = challenge.id === SANDBOX_ID;
     const IS_FULLSCREEN = fullScreenEditor || IS_SANDBOX;
     const IS_REACT_CHALLENGE = challenge.type === "react";
+    const IS_REACT_NATIVE_CHALLENGE = isReactNativeChallenge;
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
     const IS_GREAT_SUCCESS_OPEN =
@@ -676,6 +684,19 @@ class Workspace extends React.Component<IProps, IState> {
                     text="Toggle High Contrast Mode"
                   />
                 )}
+                {isReactNativeChallenge && (
+                  <MenuItem
+                    icon="mobile-phone"
+                    id="editor-toggle-mobile-device-preview"
+                    aria-label="toggle mobile device preview setting"
+                    onClick={this.toggleMobileDevicePreview}
+                    text={
+                      mobileDevicePreviewType === "ios"
+                        ? "Use Android Mobile Device"
+                        : "Use iOS Mobile Device"
+                    }
+                  />
+                )}
                 {isMobileView && (
                   <MenuItem
                     id="editor-format-code-mobile"
@@ -753,7 +774,20 @@ class Workspace extends React.Component<IProps, IState> {
     const getPreviewPane = ({ grid = true } = {}) => {
       // Lots of repetition here
       if (!grid) {
-        return IS_REACT_CHALLENGE ? (
+        return IS_REACT_NATIVE_CHALLENGE ? (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <MobileDeviceUI device={mobileDevicePreviewType}>
+              <DragIgnorantFrameContainer
+                id="iframe"
+                title="code-preview"
+                ref={this.setIframeRef}
+              />
+            </MobileDeviceUI>
+            <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
+              <Console variant="dark" logs={this.state.logs} />
+            </div>
+          </div>
+        ) : IS_REACT_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ flex: "1 100%" }}>
               <DragIgnorantFrameContainer
@@ -762,7 +796,7 @@ class Workspace extends React.Component<IProps, IState> {
                 ref={this.setIframeRef}
               />
             </div>
-            <div style={{ flex: "1 100%" }}>
+            <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
               <Console variant="dark" logs={this.state.logs} />
             </div>
           </div>
@@ -790,7 +824,30 @@ class Workspace extends React.Component<IProps, IState> {
         );
       }
 
-      return IS_REACT_CHALLENGE ? (
+      return IS_REACT_NATIVE_CHALLENGE ? (
+        <Col initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
+          <RowsWrapper separatorProps={rowSeparatorProps}>
+            <Row initialHeight={D.PREVIEW_HEIGHT}>
+              <MobileDeviceUI device={mobileDevicePreviewType}>
+                <DragIgnorantFrameContainer
+                  id="iframe"
+                  title="code-preview"
+                  ref={this.setIframeRef}
+                />
+              </MobileDeviceUI>
+            </Row>
+            <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
+              <div>
+                <Console variant="dark" logs={this.state.logs} />
+              </div>
+            </Row>
+          </RowsWrapper>
+        </Col>
+      ) : IS_REACT_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}
@@ -985,6 +1042,15 @@ class Workspace extends React.Component<IProps, IState> {
       </Container>
     );
   }
+
+  toggleMobileDevicePreview = () => {
+    this.setState(
+      ({ mobileDevicePreviewType: x }) => ({
+        mobileDevicePreviewType: x === "ios" ? "android" : "ios",
+      }),
+      this.iframeRenderPreview,
+    );
+  };
 
   getTestPassedStatus = () => {
     const { testResults, testResultsLoading } = this.state;
@@ -1520,6 +1586,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
   revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
+  isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
   isTestingAndAutomationChallenge: ChallengeSelectors.isTestingAndAutomationChallenge(
     state,
   ),

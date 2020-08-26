@@ -63,3 +63,9 @@ declare const fail: () => void;
 declare const pass: () => void;
 declare const __id: () => string;
 declare const __randomInRange: (min: any, max: any) => number;
+/** ===========================================================================
+ * React Native Web Test Helpers
+ * ============================================================================
+ */
+declare const reactNativeTextExists: (text: string) => boolean;
+declare const reactNativeButtonWithTextExists: (text: string) => boolean;
