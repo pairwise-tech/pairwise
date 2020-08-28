@@ -4432,6 +4432,17 @@
           "content": "In this module you will learn about databases, the technology responsible for storing all of the data used by modern software applications. Databases are crucial to building modern software applications. They are responsible for storing and backing up the data which makes your applications valuable. Whether it's user profiles, chat messages, transaction records, inventory, or anything else, these are all stored and persisted in a database.\n\nAt a basic level, a database is just a hard disk on a computer where information is stored. As we will see, there are several different types of databases, which are all used for different purposes. Like many things in software engineering, there are tradeoffs to choosing one database type over another.\n\nThe two most common types of databases are relational and non\\-relational. SQL is the canonical relational database, which you may have heard of before.  A SQL database defines a strict schema for what data and relationships between data look like. If you are using a SQL database you can rely on the database schema to enforce integrity for your data.\n\nOn the other hand, a non\\-relational database doesn't have a strict schema like a SQL database does. Non\\-relational databases are great when you have unstructured data, data in inconsistent formats, data with an unknown format, or other types of flexible requirements. Common non\\-relational databases are MongoDB and Redis, along with several others.\n\nIn this module, we will learn the basics for these different types of databases and get some practice working directly writing, reading, and updating data. This will give you the core skillset required to build a CRUD app \\(Create Read Update Delete\\).\n\nLet's get started\\!"
         },
         {
+          "id": "2W$NOg9P@",
+          "type": "typescript",
+          "title": "Try to Use SQL",
+          "instructions": "A `users` table exists in a SQL database. Try to insert a new user\\!",
+          "testCode": "test(\"A user named Ryan with email ryan@mail.com should be created using a SQL `INSERT INTO` statement.\", async () => {\n  const TEST_SQL = \"SELECT * FROM users\";\n  const result = await executePostgresQuery(SQL, \"\", TEST_SQL);\n  const first = result.rows[0];\n  expect(first.name).toBe(\"Ryan\");\n  expect(first.email).toBe(\"ryan@mail.com\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your SQL here:\nconst SQL = \"\";",
+          "solutionCode": "// Your SQL here:\nconst SQL = \"INSERT INTO users (name, email) VALUES ('Ryan', 'ryan@mail.com');\";",
+          "content": ""
+        },
+        {
           "id": "K9UYTfwcy",
           "type": "section",
           "title": "Projects",

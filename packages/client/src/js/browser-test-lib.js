@@ -161,6 +161,45 @@ var __id = function () {
 var __randomInRange = function (min, max) {
     return Math.round(Math.random() * (max - min) + min);
 };
+/**
+ * SQL!
+ */
+var executePostgresQuery = function (userSQL, preSQL, postSQL) {
+    if (preSQL === void 0) { preSQL = ""; }
+    if (postSQL === void 0) { postSQL = ""; }
+    return __awaiter(_this, void 0, void 0, function () {
+        var url, body, result, data, err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 3, , 4]);
+                    url = "http://localhost:5000/postgres/query";
+                    body = JSON.stringify({ userSQL: userSQL, preSQL: preSQL, postSQL: postSQL });
+                    return [4 /*yield*/, fetch(url, {
+                            method: "post",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            body: body
+                        })];
+                case 1:
+                    result = _a.sent();
+                    return [4 /*yield*/, result.json()];
+                case 2:
+                    data = _a.sent();
+                    return [2 /*return*/, data];
+                case 3:
+                    err_1 = _a.sent();
+                    // Fail by default if error
+                    console.log(err_1);
+                    fail();
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+};
 /** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================

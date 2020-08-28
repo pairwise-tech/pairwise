@@ -63,6 +63,10 @@ declare const fail: () => void;
 declare const pass: () => void;
 declare const __id: () => string;
 declare const __randomInRange: (min: any, max: any) => number;
+/**
+ * SQL!
+ */
+declare const executePostgresQuery: (userSQL: any, preSQL?: string, postSQL?: string) => Promise<any>;
 /** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================

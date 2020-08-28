@@ -178,6 +178,30 @@ const __randomInRange = (min, max) => {
   return Math.round(Math.random() * (max - min) + min);
 };
 
+/**
+ * SQL!
+ */
+const executePostgresQuery = async (userSQL, preSQL = "", postSQL = "") => {
+  try {
+    const url = "http://localhost:5000/postgres/query";
+    const body = JSON.stringify({ userSQL, preSQL, postSQL });
+    const result = await fetch(url, {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body,
+    });
+    const data = await result.json();
+    return data;
+  } catch (err) {
+    // Fail by default if error
+    console.log(err);
+    fail();
+  }
+};
+
 /** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================
