@@ -3564,6 +3564,17 @@
           "content": "```\ngit branch\ngit checkout\ngit checkout -b\ngit merge\n\n```\n"
         },
         {
+          "id": "kaZw2eUl0",
+          "type": "media",
+          "title": "SSH — Files as Passwords",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# SSH\n\nMuch like git, SSH is a foundational command. However, depending on what work you do as a developer you may not use it nearly as often. For this reason we've not dedicated a large portion of the module to SSH. \n\nIn this lesson we're just showing you how to get SSH set up for use with Github.\n# What is it for? \n\nSSH is a \"remote login program,\" which just means it lets you log in to computers on the internet—computers that are not physically present in your home or office. In other words: Servers. \n\nSSH is a tool you can use to remotely log in to servers.\n\nIn order to let you log in SSH of course has to support authentication. This can be done by simply typing in a password but more commonly it's done using a \"password file\" called an SSH key.\n\nUsing SSH as an authentication mechanism, other services like Github allow you to do things on their platform that only you should be able to do. Such as create new repositories on your account.\n\nThis is why we cover SSH here—it enables you to seamlessly work with Github from the command line.\n# There's More\n\nAs I mentioned, SSH is useful for logging in to remote servers. Depending on how much work you do with servers you will end up using SSH quite a bit.\n\nWe'll discuss this feature of SSH more when we cover deploying servers.\n"
+        },
+        {
           "id": "z3oxFVeAK",
           "type": "media",
           "title": "Git Remotes and Github",
@@ -3583,7 +3594,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Let's review some commands:\n\n```bash\ngit log\ngit blame\ngit show\n\n```\n# How are these commands used?\n\n\n## Log\n\n`git log` shows you chronological history of the project. It answers the general question \"What happened?\"\n\n## Blame\n\n`git blame` shows you who changed specific code and why. It answers the specific question \"What happened _here_?\" \n\nThink of `git blame` as a mapping from code to commit messages.\n\n## Show\n\n`git show` shows you all the changes introduced by a specific commit. It answers the specific question \"What code did this commit change?\"\n\nThink of `git show` as a mapping from commit messages to code.\n"
+          "content": "Let's review some commands:\n\n```bash\ngit log\ngit blame\ngit show\n\n```\n# How are these commands used?\n\n\n## Log\n\n`git log` shows you chronological history of the project. It answers the general question \"What happened?\"\n\n## Blame\n\n`git blame` shows you who changed specific code and why. It answers the specific question \"What happened _here_?\" \n\nThink of `git blame` as a mapping from code to commit messages.\n\n## Show\n\n`git show` shows you all the changes introduced by a specific commit. It answers the specific question \"What code did this commit change?\"\n\nThink of `git show` as a mapping from commit messages to code."
         },
         {
           "id": "WaUGSSi$m",
@@ -3594,7 +3605,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In this lesson we're finally focusing on the differences, the specific changes we make to our files. All this talk of git's amazing ability to track changes and we've barely looked at the actual changes\\! Let's git into it. Today we're focusing on one command:\n\n```none\ngit diff\n\n```\n\n"
+          "content": "In this lesson we're finally focusing on the differences, the specific changes we make to our files. All this talk of git's amazing ability to track changes and we've barely looked at the actual changes\\! Let's git into it. Today we're focusing on one command:\n\n```none\ngit diff\n\n```\n"
         },
         {
           "id": "tKcyGPzpL",
