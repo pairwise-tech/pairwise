@@ -189,12 +189,16 @@ const __randomInRange = (min, max) => {
  * ============================================================================
  */
 
+// const DATABASE_CHALLENGE_API = "http://localhost:5000";
+const DATABASE_CHALLENGE_API =
+  "https://database-challenge-api.uc.r.appspot.com";
+
 /**
  * Helper for SQL code challenges.
  */
 const executePostgresQuery = async (userSQL, preSQL = "", postSQL = "") => {
   try {
-    const url = "http://localhost:5000/postgres/query";
+    const url = `${DATABASE_CHALLENGE_API}/postgres/query`;
     const body = JSON.stringify({ userSQL, preSQL, postSQL });
     const headers = {
       Accept: "application/json",
@@ -219,7 +223,7 @@ const executePostgresQuery = async (userSQL, preSQL = "", postSQL = "") => {
  */
 const executeMongoDBQuery = async args => {
   try {
-    const url = "http://localhost:5000/mongodb/query";
+    const url = `${DATABASE_CHALLENGE_API}/mongodb/query`;
     const body = JSON.stringify({ args });
     const headers = {
       Accept: "application/json",
