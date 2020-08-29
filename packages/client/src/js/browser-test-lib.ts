@@ -189,6 +189,26 @@ const __randomInRange = (min, max) => {
  * ============================================================================
  */
 
+/**
+ * Mock a MongoClient API to help test MongoDB challenges. This approach
+ * feels workable for a first version. Alternatively, we may need/want
+ * to just arbitrarily execute NodeJS code, which may come with the backend
+ * challenges anyway.
+ */
+class MockMongoCollection {
+  private args: any = null;
+
+  private getArgs() {
+    return this.args;
+  }
+
+  public async insertOne(args: any): Promise<any> {
+    this.args = args;
+  }
+}
+
+const usersCollection = new MockMongoCollection();
+
 // const DATABASE_CHALLENGE_API = "http://localhost:5000";
 const DATABASE_CHALLENGE_API =
   "https://database-challenge-api.uc.r.appspot.com";

@@ -173,6 +173,24 @@ var __randomInRange = function (min, max) {
  */
 // const DATABASE_CHALLENGE_API = "http://localhost:5000";
 var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+var MockMongoCollection = /** @class */ (function () {
+    function MockMongoCollection() {
+        this.args = null;
+    }
+    MockMongoCollection.prototype.getArgs = function () {
+        return this.args;
+    };
+    MockMongoCollection.prototype.insertOne = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.args = args;
+                return [2 /*return*/];
+            });
+        });
+    };
+    return MockMongoCollection;
+}());
+var usersCollection = new MockMongoCollection();
 /**
  * Helper for SQL code challenges.
  */

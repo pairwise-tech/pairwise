@@ -74,6 +74,12 @@ declare const __randomInRange: (min: any, max: any) => number;
  * ============================================================================
  */
 declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+declare class MockMongoCollection {
+    private args;
+    private getArgs;
+    insertOne(args: any): Promise<any>;
+}
+declare const usersCollection: MockMongoCollection;
 /**
  * Helper for SQL code challenges.
  */
