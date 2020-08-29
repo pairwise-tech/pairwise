@@ -88,6 +88,7 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   // *************************************************************************
   // Database challenge, which relies on the external Database Challenge API:
   "2W$NOg9P@",
+  "wf9ggEKbq",
 ]);
 
 // Enable or disable log info
