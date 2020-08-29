@@ -178,23 +178,60 @@ const __randomInRange = (min, max) => {
   return Math.round(Math.random() * (max - min) + min);
 };
 
+/** ===========================================================================
+ * Database Challenge API Helpers
+ * ----------------------------------------------------------------------------
+ * These utils rely on the database-challenge-api which executes database
+ * queries against a database and returns results to be checked with
+ * assertions in the test environment.
+ *
+ * Reference: https://github.com/pairwise-tech/database-challenge-api
+ * ============================================================================
+ */
+
 /**
- * SQL!
+ * Helper for SQL code challenges.
  */
 const executePostgresQuery = async (userSQL, preSQL = "", postSQL = "") => {
   try {
     const url = "http://localhost:5000/postgres/query";
     const body = JSON.stringify({ userSQL, preSQL, postSQL });
-    const result = await fetch(url, {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(url, {
       body,
+      headers,
+      method: "post",
     });
-    const data = await result.json();
-    return data;
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    // Fail by default if error
+    console.log(err);
+    fail();
+  }
+};
+
+/**
+ * Helper for MongoDB code challenges.
+ */
+const executeMongoDBQuery = async args => {
+  try {
+    const url = "http://localhost:5000/mongodb/query";
+    const body = JSON.stringify({ args });
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(url, {
+      body,
+      headers,
+      method: "post",
+    });
+    const result = await response.json();
+    return result;
   } catch (err) {
     // Fail by default if error
     console.log(err);
