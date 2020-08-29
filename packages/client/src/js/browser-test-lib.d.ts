@@ -63,10 +63,25 @@ declare const fail: () => void;
 declare const pass: () => void;
 declare const __id: () => string;
 declare const __randomInRange: (min: any, max: any) => number;
+/** ===========================================================================
+ * Database Challenge API Helpers
+ * ----------------------------------------------------------------------------
+ * These utils rely on the database-challenge-api which executes database
+ * queries against a database and returns results to be checked with
+ * assertions in the test environment.
+ *
+ * Reference: https://github.com/pairwise-tech/database-challenge-api
+ * ============================================================================
+ */
+declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
- * SQL!
+ * Helper for SQL code challenges.
  */
 declare const executePostgresQuery: (userSQL: any, preSQL?: string, postSQL?: string) => Promise<any>;
+/**
+ * Helper for MongoDB code challenges.
+ */
+declare const executeMongoDBQuery: (args: any) => Promise<any>;
 /** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================

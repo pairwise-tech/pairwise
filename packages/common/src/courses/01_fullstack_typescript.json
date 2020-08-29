@@ -4434,7 +4434,7 @@
         {
           "id": "2W$NOg9P@",
           "type": "typescript",
-          "title": "Getting started with SQL",
+          "title": "Getting Started with SQL",
           "instructions": "A `users` table exists in a SQL database. Try to insert a new user\\!",
           "testCode": "test(\"A user named Ryan with email ryan@mail.com should be created using a SQL `INSERT INTO` statement.\", async () => {\n  const TEST_SQL = \"SELECT * FROM users\";\n  const result = await executePostgresQuery(SQL, \"\", TEST_SQL);\n  const first = result.rows[0];\n  expect(first.name).toBe(\"Ryan\");\n  expect(first.email).toBe(\"ryan@mail.com\");\n});\n",
           "videoUrl": "",
