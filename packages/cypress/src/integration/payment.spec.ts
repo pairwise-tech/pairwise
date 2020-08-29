@@ -56,9 +56,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     // Paid content label should not exist anymore
     cy.get("#paid-content-label").should("not.exist");
     click("nextButton");
-    cy.contains(
-      "It's time to start using some real databases! In these projects you will build simple applications which interact with a real, live database!",
-    );
+    cy.contains("Getting Started with MongoDB");
   });
 });
 

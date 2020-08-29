@@ -171,8 +171,12 @@ var __randomInRange = function (min, max) {
  * Reference: https://github.com/pairwise-tech/database-challenge-api
  * ============================================================================
  */
-// const DATABASE_CHALLENGE_API = "http://localhost:5000";
-var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+/**
+ * Mock a MongoClient API to help test MongoDB challenges. This approach
+ * feels workable for a first version. Alternatively, we may need/want
+ * to just arbitrarily execute NodeJS code, which may come with the backend
+ * challenges anyway.
+ */
 var MockMongoCollection = /** @class */ (function () {
     function MockMongoCollection() {
         this.args = null;
@@ -191,6 +195,12 @@ var MockMongoCollection = /** @class */ (function () {
     return MockMongoCollection;
 }());
 var usersCollection = new MockMongoCollection();
+/**
+ * Switch the database URL if you need to test and run the Database Challenge
+ * API server locally:
+ */
+// const DATABASE_CHALLENGE_API = "http://localhost:5000";
+var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */
