@@ -162,6 +162,122 @@ var __randomInRange = function (min, max) {
     return Math.round(Math.random() * (max - min) + min);
 };
 /** ===========================================================================
+ * Database Challenge API Helpers
+ * ----------------------------------------------------------------------------
+ * These utils rely on the database-challenge-api which executes database
+ * queries against a database and returns results to be checked with
+ * assertions in the test environment.
+ *
+ * Reference: https://github.com/pairwise-tech/database-challenge-api
+ * ============================================================================
+ */
+/**
+ * Mock a MongoClient API to help test MongoDB challenges. This approach
+ * feels workable for a first version. Alternatively, we may need/want
+ * to just arbitrarily execute NodeJS code, which may come with the backend
+ * challenges anyway.
+ */
+var MockMongoCollection = /** @class */ (function () {
+    function MockMongoCollection() {
+        this.args = null;
+    }
+    MockMongoCollection.prototype.getArgs = function () {
+        return this.args;
+    };
+    MockMongoCollection.prototype.insertOne = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.args = args;
+                return [2 /*return*/];
+            });
+        });
+    };
+    return MockMongoCollection;
+}());
+var usersCollection = new MockMongoCollection();
+/**
+ * Switch the database URL if you need to test and run the Database Challenge
+ * API server locally:
+ */
+// const DATABASE_CHALLENGE_API = "http://localhost:5000";
+var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+/**
+ * Helper for SQL code challenges.
+ */
+var executePostgresQuery = function (userSQL, preSQL, postSQL) {
+    if (preSQL === void 0) { preSQL = ""; }
+    if (postSQL === void 0) { postSQL = ""; }
+    return __awaiter(_this, void 0, void 0, function () {
+        var url, body, headers, response, result, err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 3, , 4]);
+                    url = DATABASE_CHALLENGE_API + "/postgres/query";
+                    body = JSON.stringify({ userSQL: userSQL, preSQL: preSQL, postSQL: postSQL });
+                    headers = {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    };
+                    return [4 /*yield*/, fetch(url, {
+                            body: body,
+                            headers: headers,
+                            method: "post"
+                        })];
+                case 1:
+                    response = _a.sent();
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    result = _a.sent();
+                    return [2 /*return*/, result];
+                case 3:
+                    err_1 = _a.sent();
+                    // Fail by default if error
+                    console.log(err_1);
+                    fail();
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+};
+/**
+ * Helper for MongoDB code challenges.
+ */
+var executeMongoDBQuery = function (args) { return __awaiter(_this, void 0, void 0, function () {
+    var url, body, headers, response, result, err_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                url = DATABASE_CHALLENGE_API + "/mongodb/query";
+                body = JSON.stringify({ args: args });
+                headers = {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                };
+                return [4 /*yield*/, fetch(url, {
+                        body: body,
+                        headers: headers,
+                        method: "post"
+                    })];
+            case 1:
+                response = _a.sent();
+                return [4 /*yield*/, response.json()];
+            case 2:
+                result = _a.sent();
+                return [2 /*return*/, result];
+            case 3:
+                err_2 = _a.sent();
+                // Fail by default if error
+                console.log(err_2);
+                fail();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+/** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================
  */

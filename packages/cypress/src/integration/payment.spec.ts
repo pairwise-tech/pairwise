@@ -52,13 +52,11 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     // NOTE: This relies on fixed text and the existing challenge list,
     // it will need to be updated if/when these challenges change (which
     // they will).
-    cy.contains("It's time to start using some real databases!");
+    cy.contains("Getting Started with SQL");
     // Paid content label should not exist anymore
     cy.get("#paid-content-label").should("not.exist");
-    click("workspace-next-challenge-button");
-    cy.contains(
-      "Here we will see some examples of projects which use databases.",
-    );
+    click("nextButton");
+    cy.contains("Getting Started with MongoDB");
   });
 });
 

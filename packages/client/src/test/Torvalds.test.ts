@@ -68,24 +68,27 @@ const TEST_ID_WHITELIST = new Set(["5sRkVVPmD"]);
 // particular test was failing because I had applied color:white; to the body
 // tag and not p tags directly.
 const DANGEROUSLY_SKIP_CHALLENGE = new Set([
-  "Ao8hbaiP", // Test env seems to be having trouble calculating the midpoint of a bounding box.
-  // "pUf7$Qi2y", // Could not test that p tags are white... WHY? See NOTE
-  // "MEjox@iw0",
-
+  // *************************************************************************
+  // Test env seems to be having trouble calculating the midpoint of a bounding box.
+  "Ao8hbaiP",
+  // *************************************************************************
   // NOTE: The next 5 ids are the Async Module Practice with APIs challenges,
   // which all call external service APIs. These are disabled in the test environment.
   // These were tested after creation to ensure they worked, and then disabled.
   // A better solution might be to somehow mock these external APIs (?).
-  // **********
   "CgstSAbnS",
   "yYHjlEO$4",
   "hbAfMbUAT0",
   "RBkHLlPHT",
   "aC5pqM5B6",
+  // *************************************************************************
   // Two other challenges which also use external APIs:
   "EoK0U8Q$0", // Fetching Data Asynchronously
   "rShMOVugA", // Quote of the Day Challenge
-  // **********
+  // *************************************************************************
+  // Database challenge, which relies on the external Database Challenge API:
+  "2W$NOg9P@",
+  "wf9ggEKbq",
 ]);
 
 // Enable or disable log info

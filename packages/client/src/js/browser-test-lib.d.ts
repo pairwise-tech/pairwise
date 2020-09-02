@@ -64,6 +64,41 @@ declare const pass: () => void;
 declare const __id: () => string;
 declare const __randomInRange: (min: any, max: any) => number;
 /** ===========================================================================
+ * Database Challenge API Helpers
+ * ----------------------------------------------------------------------------
+ * These utils rely on the database-challenge-api which executes database
+ * queries against a database and returns results to be checked with
+ * assertions in the test environment.
+ *
+ * Reference: https://github.com/pairwise-tech/database-challenge-api
+ * ============================================================================
+ */
+/**
+ * Mock a MongoClient API to help test MongoDB challenges. This approach
+ * feels workable for a first version. Alternatively, we may need/want
+ * to just arbitrarily execute NodeJS code, which may come with the backend
+ * challenges anyway.
+ */
+declare class MockMongoCollection {
+    private args;
+    private getArgs;
+    insertOne(args: any): Promise<any>;
+}
+declare const usersCollection: MockMongoCollection;
+/**
+ * Switch the database URL if you need to test and run the Database Challenge
+ * API server locally:
+ */
+declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+/**
+ * Helper for SQL code challenges.
+ */
+declare const executePostgresQuery: (userSQL: any, preSQL?: string, postSQL?: string) => Promise<any>;
+/**
+ * Helper for MongoDB code challenges.
+ */
+declare const executeMongoDBQuery: (args: any) => Promise<any>;
+/** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================
  */
