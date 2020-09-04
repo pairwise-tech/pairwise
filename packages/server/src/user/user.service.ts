@@ -15,7 +15,6 @@ import {
 import { RequestUser } from "src/types";
 import {
   validateUserUpdateDetails,
-  validateEmailUpdateRequest,
   validateLastActiveChallengeIdsPayload,
 } from "src/tools/validation";
 import { ProgressService } from "src/progress/progress.service";

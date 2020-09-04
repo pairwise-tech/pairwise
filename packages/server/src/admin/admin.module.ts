@@ -1,13 +1,12 @@
 import { Module } from "@nestjs/common";
 import { AdminController } from "./admin.controller";
 import { AdminService } from "./admin.service";
-import { FeedbackService } from "src/feedback/feedback.service";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { Feedback } from "src/feedback/feedback.entity";
+import { FeedbackModule } from "src/feedback/feedback.module";
+import { UsersModule } from "src/user/user.module";
 
 @Module({
+  imports: [UsersModule, FeedbackModule],
   controllers: [AdminController],
-  providers: [AdminService, FeedbackService],
-  imports: [TypeOrmModule.forFeature([Feedback])],
+  providers: [AdminService],
 })
 export class AdminModule {}

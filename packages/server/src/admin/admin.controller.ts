@@ -1,9 +1,18 @@
-import { Request, Controller, UseGuards, Get, Param } from "@nestjs/common";
+import {
+  Request,
+  Controller,
+  UseGuards,
+  Get,
+  Param,
+  Post,
+  Body,
+} from "@nestjs/common";
 import { AdminAuthGuard } from "src/auth/admin.guard";
 import { AuthenticatedRequest } from "src/types";
 import { AdminService } from "./admin.service";
 import { slackService, SlackService } from "src/slack/slack.service";
 import { FeedbackService } from "src/feedback/feedback.service";
+import { UserService } from "src/user/user.service";
 
 // HTTP Methods
 export type HTTP_METHOD = "GET" | "PUT" | "POST" | "DELETE";
@@ -22,6 +31,8 @@ export class AdminController {
   private readonly slackService: SlackService = slackService;
 
   constructor(
+    private readonly userService: UserService,
+
     private readonly adminService: AdminService,
 
     private readonly feedbackService: FeedbackService,
@@ -58,5 +69,32 @@ export class AdminController {
     });
 
     return this.feedbackService.getFeedbackForChallenge(challengeId);
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/admin")
+  async getAllUsers(@Request() req: AuthenticatedRequest) {
+    const adminUserEmail = req.user.profile.email;
+    this.slackService.postAdminActionAwarenessMessage({
+      httpMethod: "GET",
+      requestPath: "admin/users",
+      adminUserEmail,
+    });
+
+    // return this.userService.adminGetAllUsers();
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Post("/admin/delete")
+  async deleteUser(@Body() body, @Request() req: AuthenticatedRequest) {
+    const adminUserEmail = req.user.profile.email;
+    this.slackService.postAdminActionAwarenessMessage({
+      httpMethod: "DELETE",
+      requestPath: "admin",
+      adminUserEmail,
+    });
+
+    const { userEmail } = body;
+    // return this.userService.adminDeleteUserByEmail(userEmail);
   }
 }

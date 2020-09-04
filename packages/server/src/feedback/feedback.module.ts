@@ -9,5 +9,6 @@ import { UsersModule } from "src/user/user.module";
   controllers: [FeedbackController],
   providers: [FeedbackService],
   imports: [TypeOrmModule.forFeature([Feedback]), UsersModule],
+  exports: [FeedbackService],
 })
 export class FeedbackModule {}
