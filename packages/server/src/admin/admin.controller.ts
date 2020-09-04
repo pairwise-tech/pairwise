@@ -13,6 +13,7 @@ import { AdminService } from "./admin.service";
 import { slackService, SlackService } from "../slack/slack.service";
 import { FeedbackService } from "../feedback/feedback.service";
 import { UserService } from "../user/user.service";
+import { PaymentsService } from "../payments/payments.service";
 
 // HTTP Methods
 export type HTTP_METHOD = "GET" | "PUT" | "POST" | "DELETE";
@@ -35,6 +36,8 @@ export class AdminController {
 
     private readonly userService: UserService,
 
+    private readonly paymentsService: PaymentsService,
+
     private readonly feedbackService: FeedbackService,
   ) {}
 
@@ -50,6 +53,51 @@ export class AdminController {
     });
 
     return this.adminService.adminEndpoint();
+  }
+
+  // An admin API to allow admin users to effectively purchase a course for
+  // a user. This may have actual utility, e.g. to allow us to gift the
+  // course for free to early beta testers or friends. In addition, it is
+  // helpful as a workaround to test the payments flow using Cypress.
+  @UseGuards(AdminAuthGuard)
+  @Post("/purchase-course")
+  public async purchaseCourseForUser(
+    @Body() body,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    this.postAdminStatusMessage(req, "POST", "admin/purchase-course");
+
+    const { userEmail, courseId } = body;
+    return this.paymentsService.handlePurchaseCourseByAdmin(
+      userEmail,
+      courseId,
+    );
+  }
+
+  // An admin API to handle refunding a course for a user.
+  @UseGuards(AdminAuthGuard)
+  @Post("/refund-course")
+  public async refundCourseForUser(
+    @Body() body,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    this.postAdminStatusMessage(req, "POST", "admin/refund-course");
+
+    const { userEmail, courseId } = body;
+    return this.paymentsService.handleRefundCourseByAdmin(userEmail, courseId);
+  }
+
+  private postAdminStatusMessage(
+    req: AuthenticatedRequest,
+    httpMethod: HTTP_METHOD,
+    requestPath: ADMIN_URLS,
+  ) {
+    const adminUserEmail = req.user.profile.email;
+    this.slackService.postAdminActionAwarenessMessage({
+      httpMethod,
+      requestPath,
+      adminUserEmail,
+    });
   }
 
   @UseGuards(AdminAuthGuard)

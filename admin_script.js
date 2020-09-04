@@ -63,8 +63,8 @@ const RequestHeaders = {
 const ADMIN_INDEX_URL = `${SERVER_URL}/admin`;
 const GET_ALL_USERS_URL = `${SERVER_URL}/admin/users`;
 const DELETE_USER_URL = `${SERVER_URL}/admin/users/delete`;
-const PURCHASE_COURSE_URL = `${SERVER_URL}/payments/admin/purchase-course`;
-const REFUND_COURSE_URL = `${SERVER_URL}/payments/admin/refund-course`;
+const PURCHASE_COURSE_URL = `${SERVER_URL}/admin/purchase-course`;
+const REFUND_COURSE_URL = `${SERVER_URL}/admin/refund-course`;
 
 class Log {
   constructor(action) {
