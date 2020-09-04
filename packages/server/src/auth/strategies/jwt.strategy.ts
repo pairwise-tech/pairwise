@@ -1,8 +1,8 @@
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import ENV from "src/tools/server-env";
-import { UserService } from "src/user/user.service";
+import ENV from "../../tools/server-env";
+import { UserService } from "../../user/user.service";
 
 export interface JwtPassportPayload {
   email: string;

@@ -14,14 +14,13 @@ import {
   MonacoEditorThemes,
   IUserDto,
   UserProfile,
-  LastActiveChallengeIds,
   ILastActiveIdsDto,
 } from "@pairwise/common";
 import validator from "validator";
 import { BadRequestException } from "@nestjs/common";
 import { ERROR_CODES } from "./constants";
-import { ProgressDto } from "src/progress/progress.dto";
-import { RequestUser } from "src/types";
+import { ProgressDto } from "../progress/progress.dto";
+import { RequestUser } from "../types";
 
 /** ===========================================================================
  * Validation Utils

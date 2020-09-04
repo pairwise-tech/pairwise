@@ -7,12 +7,12 @@ import {
   Post,
   Body,
 } from "@nestjs/common";
-import { AdminAuthGuard } from "src/auth/admin.guard";
-import { AuthenticatedRequest } from "src/types";
+import { AdminAuthGuard } from "../auth/admin.guard";
+import { AuthenticatedRequest } from "../types";
 import { AdminService } from "./admin.service";
-import { slackService, SlackService } from "src/slack/slack.service";
-import { FeedbackService } from "src/feedback/feedback.service";
-import { UserService } from "src/user/user.service";
+import { slackService, SlackService } from "../slack/slack.service";
+import { FeedbackService } from "../feedback/feedback.service";
+import { UserService } from "../user/user.service";
 
 // HTTP Methods
 export type HTTP_METHOD = "GET" | "PUT" | "POST" | "DELETE";
@@ -31,9 +31,9 @@ export class AdminController {
   private readonly slackService: SlackService = slackService;
 
   constructor(
-    private readonly userService: UserService,
-
     private readonly adminService: AdminService,
+
+    private readonly userService: UserService,
 
     private readonly feedbackService: FeedbackService,
   ) {}
@@ -81,7 +81,7 @@ export class AdminController {
       adminUserEmail,
     });
 
-    // return this.userService.adminGetAllUsers();
+    return this.userService.adminGetAllUsers();
   }
 
   @UseGuards(AdminAuthGuard)
@@ -95,6 +95,6 @@ export class AdminController {
     });
 
     const { userEmail } = body;
-    // return this.userService.adminDeleteUserByEmail(userEmail);
+    return this.userService.adminDeleteUserByEmail(userEmail);
   }
 }

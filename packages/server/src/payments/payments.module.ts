@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { PaymentsController } from "./payments.controller";
 import { PaymentsService } from "./payments.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UsersModule } from "src/user/user.module";
+import { UsersModule } from "../user/user.module";
 import { Payments } from "./payments.entity";
 
 @Module({

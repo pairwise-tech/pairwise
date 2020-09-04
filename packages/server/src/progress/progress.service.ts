@@ -9,13 +9,13 @@ import {
   UserCourseProgress,
   IProgressDto,
 } from "@pairwise/common";
-import { SUCCESS_CODES } from "src/tools/constants";
-import { RequestUser } from "src/types";
+import { SUCCESS_CODES } from "../tools/constants";
+import { RequestUser } from "../types";
 import {
   validateAndSanitizeProgressItem,
   validateChallengeProgressDto,
-} from "src/tools/validation";
-import { captureSentryException } from "src/tools/sentry-utils";
+} from "../tools/validation";
+import { captureSentryException } from "../tools/sentry-utils";
 
 @Injectable()
 export class ProgressService {

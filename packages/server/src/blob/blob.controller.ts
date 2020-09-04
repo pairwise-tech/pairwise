@@ -11,10 +11,10 @@ import {
 } from "@nestjs/common";
 import { BlobDto } from "./blob.dto";
 import { AuthGuard } from "@nestjs/passport";
-import { AuthenticatedRequest } from "src/types";
+import { AuthenticatedRequest } from "../types";
 import { BlobService } from "./blob.service";
 import { CodeBlobBulk } from "@pairwise/common";
-import { SUCCESS_CODES } from "src/tools/constants";
+import { SUCCESS_CODES } from "../tools/constants";
 
 @Controller("blob")
 export class BlobController {

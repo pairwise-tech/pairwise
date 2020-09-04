@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
 import { AuthController } from "./auth.controller";
 import { FacebookStrategy } from "./strategies/facebook.strategy";
-import { UsersModule } from "src/user/user.module";
+import { UsersModule } from "../user/user.module";
 import { AuthService } from "./auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./strategies/jwt.strategy";
-import ENV from "src/tools/server-env";
+import ENV from "../tools/server-env";
 import { GitHubStrategy } from "./strategies/github.strategy";
 import { GoogleStrategy } from "./strategies/google.strategy";
 

@@ -11,9 +11,9 @@ import {
 import { ProgressDto } from "./progress.dto";
 import { ProgressService } from "./progress.service";
 import { AuthGuard } from "@nestjs/passport";
-import { AuthenticatedRequest } from "src/types";
+import { AuthenticatedRequest } from "../types";
 import { UserCourseProgress } from "@pairwise/common";
-import { SUCCESS_CODES } from "src/tools/constants";
+import { SUCCESS_CODES } from "../tools/constants";
 
 @Controller("progress")
 export class ProgressController {

@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import ENV from "../tools/server-env";
-import { ERROR_CODES } from "src/tools/constants";
-import { captureSentryException } from "src/tools/sentry-utils";
+import { ERROR_CODES } from "../tools/constants";
+import { captureSentryException } from "../tools/sentry-utils";
 import {
   getWelcomeEmailContents,
   getMagicEmailLinkContents,

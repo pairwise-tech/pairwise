@@ -7,10 +7,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Progress } from "src/progress/progress.entity";
-import { Payments } from "src/payments/payments.entity";
-import { Feedback } from "src/feedback/feedback.entity";
-import { CodeBlob } from "src/blob/blob.entity";
+import { Progress } from "../progress/progress.entity";
+import { Payments } from "../payments/payments.entity";
+import { Feedback } from "../feedback/feedback.entity";
+import { CodeBlob } from "../blob/blob.entity";
 
 /** ===========================================================================
  * Entity

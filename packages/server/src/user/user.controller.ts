@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { AuthGuard } from "@nestjs/passport";
-import { AuthenticatedRequest } from "src/types";
+import { AuthenticatedRequest } from "../types";
 import { ILastActiveIdsDto, UserUpdateOptions } from "@pairwise/common";
 
 @Controller("user")

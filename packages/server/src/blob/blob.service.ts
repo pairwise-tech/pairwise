@@ -7,9 +7,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ContentUtility, ICodeBlobDto, CodeBlobBulk } from "@pairwise/common";
 import { CodeBlob } from "./blob.entity";
-import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
-import { validateCodeBlob } from "src/tools/validation";
-import { RequestUser } from "src/types";
+import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
+import { validateCodeBlob } from "../tools/validation";
+import { RequestUser } from "../types";
 
 @Injectable()
 export class BlobService {

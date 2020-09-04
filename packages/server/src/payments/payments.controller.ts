@@ -10,11 +10,11 @@ import {
   Body,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { AuthenticatedRequest } from "src/types";
+import { AuthenticatedRequest } from "../types";
 import { PaymentsService } from "./payments.service";
-import { AdminAuthGuard } from "src/auth/admin.guard";
-import { HTTP_METHOD, ADMIN_URLS } from "src/admin/admin.controller";
-import { SlackService, slackService } from "src/slack/slack.service";
+import { AdminAuthGuard } from "../auth/admin.guard";
+import { HTTP_METHOD, ADMIN_URLS } from "../admin/admin.controller";
+import { SlackService, slackService } from "../slack/slack.service";
 
 @Controller("payments")
 export class PaymentsController {

@@ -2,7 +2,7 @@ import { Injectable, BadRequestException } from "@nestjs/common";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Payments } from "src/payments/payments.entity";
+import { Payments } from "../payments/payments.entity";
 import {
   IUserDto,
   UserUpdateOptions,
@@ -12,16 +12,16 @@ import {
   UserProfile,
   ILastActiveIdsDto,
 } from "@pairwise/common";
-import { RequestUser } from "src/types";
+import { RequestUser } from "../types";
 import {
   validateUserUpdateDetails,
   validateLastActiveChallengeIdsPayload,
-} from "src/tools/validation";
-import { ProgressService } from "src/progress/progress.service";
-import { ERROR_CODES, SUCCESS_CODES } from "src/tools/constants";
-import { SlackService, slackService } from "src/slack/slack.service";
-import { SigninStrategy } from "src/auth/auth.service";
-import { EmailService, emailService } from "src/email/email.service";
+} from "../tools/validation";
+import { ProgressService } from "../progress/progress.service";
+import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
+import { SlackService, slackService } from "../slack/slack.service";
+import { SigninStrategy } from "../auth/auth.service";
+import { EmailService, emailService } from "../email/email.service";
 
 export interface GenericUserProfile {
   email: string;

@@ -1,8 +1,8 @@
 import { Controller, Req, Body, Post, UseGuards } from "@nestjs/common";
-import { AuthenticatedRequest } from "src/types";
+import { AuthenticatedRequest } from "../types";
 import { FeedbackService } from "./feedback.service";
 import { IFeedbackDto, IGenericFeedback } from "@pairwise/common";
-import { CustomJwtAuthGuard } from "src/auth/jwt.guard";
+import { CustomJwtAuthGuard } from "../auth/jwt.guard";
 
 @Controller("feedback")
 export class FeedbackController {

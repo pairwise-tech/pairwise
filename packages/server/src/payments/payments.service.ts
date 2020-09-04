@@ -5,17 +5,17 @@ import {
   BadRequestException,
   InternalServerErrorException,
 } from "@nestjs/common";
-import { RequestUser } from "src/types";
+import { RequestUser } from "../types";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payments } from "./payments.entity";
 import { Repository } from "typeorm";
-import { SUCCESS_CODES, ERROR_CODES } from "src/tools/constants";
+import { SUCCESS_CODES, ERROR_CODES } from "../tools/constants";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import {
   validatePaymentRequest,
   validateRefundRequest,
-} from "src/tools/validation";
-import ENV from "src/tools/server-env";
+} from "../tools/validation";
+import ENV from "../tools/server-env";
 import {
   Payment,
   StripeStartCheckoutSuccessResponse,
@@ -23,9 +23,9 @@ import {
   ContentUtility,
   CourseMetadata,
 } from "@pairwise/common";
-import { UserService } from "src/user/user.service";
-import { captureSentryException } from "src/tools/sentry-utils";
-import { slackService, SlackService } from "src/slack/slack.service";
+import { UserService } from "../user/user.service";
+import { captureSentryException } from "../tools/sentry-utils";
+import { slackService, SlackService } from "../slack/slack.service";
 
 /** ===========================================================================
  * Types & Config

@@ -1,8 +1,8 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 
 import { ContentUtility } from "@pairwise/common";
-import { RequestUser } from "src/types";
-import { ERROR_CODES } from "src/tools/constants";
+import { RequestUser } from "../types";
+import { ERROR_CODES } from "../tools/constants";
 
 @Injectable()
 export class ContentService {

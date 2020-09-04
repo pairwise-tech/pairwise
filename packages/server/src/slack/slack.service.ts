@@ -5,11 +5,11 @@ import {
   ContentUtility,
   IGenericFeedback,
 } from "@pairwise/common";
-import { RequestUser } from "src/types";
-import { GenericUserProfile } from "src/user/user.service";
-import { captureSentryException } from "src/tools/sentry-utils";
-import { ADMIN_URLS, HTTP_METHOD } from "src/admin/admin.controller";
-import { SigninStrategy } from "src/auth/auth.service";
+import { RequestUser } from "../types";
+import { GenericUserProfile } from "../user/user.service";
+import { captureSentryException } from "../tools/sentry-utils";
+import { ADMIN_URLS, HTTP_METHOD } from "../admin/admin.controller";
+import { SigninStrategy } from "../auth/auth.service";
 
 /** ===========================================================================
  * Types & Config
