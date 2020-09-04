@@ -55,10 +55,15 @@ export class UserService {
     private readonly paymentsRepository: Repository<Payments>,
   ) {}
 
+  // Return one user for the admin API
+  public async adminGetUser(email: string) {
+    return this.findUserByEmailGetFullProfile(email);
+  }
+
+  // Return all users and join with payments.
+  // NOTE: This does not handle pagination. But that's probably not a
+  // problem until we have 10_000s of users. Ha!
   public async adminGetAllUsers() {
-    // Return all users and join with payments.
-    // NOTE: This does not handle pagination. But that's probably not a
-    // problem until we have 10_000s of users. Ha!
     return this.userRepository
       .createQueryBuilder("user")
       .leftJoinAndSelect("user.challengeProgressHistory", "progress")

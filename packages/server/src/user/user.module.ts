@@ -7,9 +7,9 @@ import { Payments } from "../payments/payments.entity";
 import { ProgressModule } from "../progress/progress.module";
 
 @Module({
+  imports: [TypeOrmModule.forFeature([User, Payments]), ProgressModule],
   controllers: [UserController],
   providers: [UserService],
-  imports: [TypeOrmModule.forFeature([User, Payments]), ProgressModule],
   exports: [UserService],
 })
 export class UsersModule {}

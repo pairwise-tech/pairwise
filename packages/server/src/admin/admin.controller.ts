@@ -22,6 +22,7 @@ export type HTTP_METHOD = "GET" | "PUT" | "POST" | "DELETE";
 // messages to Slack
 export type ADMIN_URLS =
   | "admin"
+  | "admin/user"
   | "admin/users"
   | "admin/feedback/:challengeId"
   | "admin/purchase-course"
@@ -117,6 +118,20 @@ export class AdminController {
     });
 
     return this.feedbackService.getFeedbackForChallenge(challengeId);
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/user/:email")
+  async getUser(@Param() params, @Request() req: AuthenticatedRequest) {
+    const { email } = params;
+    const adminUserEmail = req.user.profile.email;
+    this.slackService.postAdminActionAwarenessMessage({
+      httpMethod: "GET",
+      requestPath: "admin/user",
+      adminUserEmail,
+    });
+
+    return this.userService.adminGetUser(email);
   }
 
   @UseGuards(AdminAuthGuard)
