@@ -37,7 +37,7 @@ describe("Admin (e2e)", () => {
 
   test("/users/admin (GET) get all users", async () => {
     const adminAccessToken = await fetchAdminAccessToken();
-    return request(`${HOST}/user/admin`)
+    return request(`${HOST}/admin/users`)
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
@@ -58,7 +58,7 @@ describe("Admin (e2e)", () => {
     const userEmail = user.profile.email;
 
     // 2. Get all users and check the user exists
-    await request(`${HOST}/user/admin`)
+    await request(`${HOST}/admin/users`)
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
@@ -69,7 +69,7 @@ describe("Admin (e2e)", () => {
       });
 
     // 3. Delete the user
-    await request(`${HOST}/user/admin/delete`)
+    await request(`${HOST}/admin/users/delete`)
       .post("/")
       .send({ userEmail })
       .set("Authorization", `Bearer ${adminAccessToken}`)
@@ -79,7 +79,7 @@ describe("Admin (e2e)", () => {
       });
 
     // 4. Verify the user no longer exists
-    return request(`${HOST}/user/admin`)
+    return request(`${HOST}/admin/users`)
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)

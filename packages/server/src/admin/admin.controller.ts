@@ -72,7 +72,7 @@ export class AdminController {
   }
 
   @UseGuards(AdminAuthGuard)
-  @Get("/admin")
+  @Get("/users")
   async getAllUsers(@Request() req: AuthenticatedRequest) {
     const adminUserEmail = req.user.profile.email;
     this.slackService.postAdminActionAwarenessMessage({
@@ -85,7 +85,7 @@ export class AdminController {
   }
 
   @UseGuards(AdminAuthGuard)
-  @Post("/admin/delete")
+  @Post("/users/delete")
   async deleteUser(@Body() body, @Request() req: AuthenticatedRequest) {
     const adminUserEmail = req.user.profile.email;
     this.slackService.postAdminActionAwarenessMessage({
