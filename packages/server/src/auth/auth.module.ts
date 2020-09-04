@@ -21,6 +21,7 @@ import { GoogleStrategy } from "./strategies/google.strategy";
     }),
     UsersModule,
   ],
+  controllers: [AuthController],
   providers: [
     JwtStrategy,
     GitHubStrategy,
@@ -28,7 +29,6 @@ import { GoogleStrategy } from "./strategies/google.strategy";
     FacebookStrategy,
     AuthService,
   ],
-  controllers: [AuthController],
   exports: [AuthService],
 })
 export class AuthModule {}
