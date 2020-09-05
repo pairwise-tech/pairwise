@@ -37,7 +37,7 @@ const app = createReducer<
    */
   .handleAction(
     [UserActions.fetchUserFailure, ChallengeActions.fetchCoursesFailure],
-    (state, action) => ({
+    state => ({
       ...state,
       initializationError: true,
     }),
