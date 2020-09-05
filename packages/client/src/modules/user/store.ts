@@ -56,7 +56,7 @@ const initialUserState = {
   profile: null,
   payments: null,
   courses: null,
-  progress: null,
+  progress: {},
   lastActiveChallengeIds: {},
   settings: defaultUserSettings,
 };

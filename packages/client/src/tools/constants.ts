@@ -6,6 +6,7 @@
 export const COLORS = {
   SUCCESS: "#2ee3ff",
   FAILURE: "#fc426d",
+  LIGHT_FAILURE: "#ff7a8a",
   PRIMARY_BLUE: "#2ee3ff",
   PRIMARY_GREEN: "rgb(0, 255, 185)",
   SECONDARY_PINK: "#f50057",
