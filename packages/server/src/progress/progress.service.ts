@@ -71,7 +71,9 @@ export class ProgressService {
         [challengeId]: statusObject,
       };
 
-      console.log("No entity exists, creating and inserting a new one!");
+      console.log(
+        "No progress entity exists, creating and inserting a new one!",
+      );
       const newProgressEntry: Partial<Progress> = {
         user: user.profile,
         courseId,
@@ -146,7 +148,7 @@ export class ProgressService {
         const { courseId, progress } = sanitizedEntity;
 
         console.log(
-          `[BULK]: Persisting user course progress for courseId: ${courseId}`,
+          `Persisting user course progress for courseId: ${courseId}`,
         );
 
         const newProgressEntry: Partial<Progress> = {
@@ -157,10 +159,6 @@ export class ProgressService {
         await this.progressRepository.insert(newProgressEntry);
       } catch (err) {
         captureSentryException(err);
-        console.log(
-          "[BULK ERROR]: Error occurring processing one of the user course progress insertions",
-          err,
-        );
       }
     }
 

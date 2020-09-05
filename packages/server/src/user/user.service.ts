@@ -22,6 +22,7 @@ import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
 import { SlackService, slackService } from "../slack/slack.service";
 import { SigninStrategy } from "../auth/auth.service";
 import { EmailService, emailService } from "../email/email.service";
+import { logErrorMessage } from "../tools/sentry-utils";
 
 export interface GenericUserProfile {
   email: string;
@@ -269,10 +270,11 @@ export class UserService {
 
       return updatedActiveIds;
     } catch (err) {
-      console.log(
-        `[ERROR]: Failed to update lastActiveChallengeIds for payload: ${JSON.stringify(
+      logErrorMessage(
+        `Failed to update lastActiveChallengeIds for payload: ${JSON.stringify(
           lastActiveIds,
         )}`,
+        err,
       );
       throw new BadRequestException(ERROR_CODES.OPERATION_FAILED);
     }

@@ -88,19 +88,6 @@ export class AdminController {
     return this.paymentsService.handleRefundCourseByAdmin(userEmail, courseId);
   }
 
-  private postAdminStatusMessage(
-    req: AuthenticatedRequest,
-    httpMethod: HTTP_METHOD,
-    requestPath: ADMIN_URLS,
-  ) {
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      httpMethod,
-      requestPath,
-      adminUserEmail,
-    });
-  }
-
   @UseGuards(AdminAuthGuard)
   @Get("/feedback/:challengeId")
   public async getFeedbackForChallenge(
@@ -159,5 +146,18 @@ export class AdminController {
 
     const { userEmail } = body;
     return this.userService.adminDeleteUserByEmail(userEmail);
+  }
+
+  private postAdminStatusMessage(
+    req: AuthenticatedRequest,
+    httpMethod: HTTP_METHOD,
+    requestPath: ADMIN_URLS,
+  ) {
+    const adminUserEmail = req.user.profile.email;
+    this.slackService.postAdminActionAwarenessMessage({
+      httpMethod,
+      requestPath,
+      adminUserEmail,
+    });
   }
 }

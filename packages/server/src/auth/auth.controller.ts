@@ -16,7 +16,7 @@ import ENV from "../tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
 import { SUCCESS_CODES } from "../tools/constants";
-import { captureSentryMessage } from "../tools/sentry-utils";
+import { captureSentryException } from "../tools/sentry-utils";
 import { AuthenticatedRequest } from "../types";
 
 @Controller("auth")
@@ -159,8 +159,10 @@ export class AuthController {
     if (typeof referrerUrl === "string" && referrerUrl.includes(clientUrl)) {
       return referrerUrl;
     } else {
-      captureSentryMessage(
-        `Received invalid referrer in user logic redirect! Received: ${referrerUrl}`,
+      captureSentryException(
+        new Error(
+          `Received invalid referrer in user logic redirect! Received: ${referrerUrl}`,
+        ),
       );
       return clientUrl;
     }
