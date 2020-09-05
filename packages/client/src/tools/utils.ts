@@ -608,8 +608,9 @@ export const getGravatarUrlFromEmail = (email: string): string => {
 };
 
 /**
- * Determine if a user avatar URL is using Gravatar.
+ * Determine if a user avatar URL is using Gravatar using a simple match
+ * against the URL.
  */
 export const isUsingGravatar = (avatarUrl?: string): boolean => {
-  return !!avatarUrl && avatarUrl.includes("https://s.gravatar.com/avatar");
+  return !!avatarUrl && avatarUrl.includes("gravatar.com");
 };
