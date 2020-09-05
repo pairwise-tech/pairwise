@@ -1,8 +1,8 @@
 # Pairwise Nest Server
 
-## Description
-
 This is the [Nest](https://github.com/nestjs/nest) server application for Pairwise.
+
+## Description
 
 To become familiar with the APIs feel free to run the server and access the generated Swagger documentation at `http://localhost:9000/api`.
 
@@ -57,6 +57,31 @@ $ npm i -g @nestjs/cli
 # Update Nest libraries
 $ nest update --force
 ```
+
+## Nest Dependency Injection
+
+NestJS using [dependency injection](https://docs.nestjs.com/providers#dependency-injection) to manage dependencies between different modules. The following is a guideline for the usage of this pattern in NestJS:
+
+```typescript
+// Example definition of a NestJS Module:
+@Module({
+  imports: [TypeOrmModule.forFeature([Payments]), UsersModule],
+  controllers: [PaymentsController],
+  providers: [PaymentsService],
+  exports: [PaymentsService],
+})
+export class PaymentsModule {}
+```
+
+The main takeaways here are:
+
+1. It is not required for a module to have any imports or exports.
+2. Any providers which are used in other modules must be exported from the module they are defined in.
+3. For a module to have access to a provider in another module, that module must be imported in the module which requires it.
+4. A module's controller exposes API handlers, and typically only depends on the provider service of the same module.
+5. A module's provider typically contains business logic and dependencies (e.g. database, other providers, etc.).
+
+Summary: **Export providers, import modules.**
 
 ## Database Migrations
 
