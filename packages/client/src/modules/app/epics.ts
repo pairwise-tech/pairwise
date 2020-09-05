@@ -9,6 +9,7 @@ import {
   withLatestFrom,
   catchError,
   distinct,
+  mapTo,
 } from "rxjs/operators";
 import { Observable, merge, defer, of, combineLatest } from "rxjs";
 import { isActionOf } from "typesafe-actions";
@@ -66,6 +67,36 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
 };
 
 /**
+ * Fetching courses or user should not fail, but if it does there is some
+ * real issue (e.g. the server is down).
+ */
+const appInitializationFailedEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf([Actions.fetchUserFailure, Actions.fetchCoursesFailure])),
+    tap(action => {
+      // Report this to Sentry so we know about it.
+      captureSentryException(
+        new Error(`App initialization failed! Action type: ${action.type}`),
+      );
+    }),
+    mapTo(Actions.appInitializationFailed()),
+  );
+};
+
+const emailUpdateSuccessToastEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("appInitializationType"),
+    filter(type => type === APP_INITIALIZATION_TYPE.EMAIL_UPDATED),
+    tap(() => {
+      deps.toaster.success("Email updated successfully!");
+    }),
+    ignoreElements(),
+  );
+};
+
+/**
  * After the initialization is complete, strip the query parameters from the
  * original url.
  */
@@ -83,22 +114,6 @@ const stripInitialParameters: EpicSignature = (action$, _, deps) => {
       const { router } = deps;
       debug(`Removing query parameters: ${router.location.search}`);
       router.replace(router.location.pathname);
-    }),
-    ignoreElements(),
-  );
-};
-
-/**
- * Show a success toast when a user opens the email verification link.
- */
-const emailUpdateSuccessToastEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.captureAppInitializationUrl)),
-    pluck("payload"),
-    pluck("appInitializationType"),
-    filter(type => type === APP_INITIALIZATION_TYPE.EMAIL_UPDATED),
-    tap(() => {
-      deps.toaster.success("Email updated successfully!");
     }),
     ignoreElements(),
   );
@@ -305,6 +320,7 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
 
 export default combineEpics(
   appInitializationEpic,
+  appInitializationFailedEpic,
   appInitializeCaptureUrlEpic,
   stripInitialParameters,
   emailUpdateSuccessToastEpic,

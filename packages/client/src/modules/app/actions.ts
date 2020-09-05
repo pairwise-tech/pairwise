@@ -15,6 +15,7 @@ enum ActionTypesEnum {
   CAPTURE_APP_INITIALIZATION_URL = "CAPTURE_APP_INITIALIZATION_URL",
   TOGGLE_PAGE_SCROLL_LOCK = "TOGGLE_PAGE_SCROLL_LOCK",
   LOCATION_CHANGE = "LOCATION_CHANGE",
+  APP_INITIALIZATION_FAILED = "APP_INITIALIZATION_FAILED",
 }
 
 /** ===========================================================================
@@ -51,3 +52,7 @@ export const captureAppInitializationUrl = createAction(
   params: ParsedQuery<string>;
   appInitializationType: APP_INITIALIZATION_TYPE;
 }>();
+
+export const appInitializationFailed = createAction(
+  ActionTypesEnum.APP_INITIALIZATION_FAILED,
+)();
