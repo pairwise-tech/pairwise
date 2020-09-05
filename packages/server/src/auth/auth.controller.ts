@@ -12,12 +12,12 @@ import { AuthGuard } from "@nestjs/passport";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
 import { AuthService, SigninStrategy } from "./auth.service";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
-import ENV from "src/tools/server-env";
+import ENV from "../tools/server-env";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
 import querystring from "querystring";
-import { SUCCESS_CODES } from "src/tools/constants";
-import { captureSentryMessage } from "src/tools/sentry-utils";
-import { AuthenticatedRequest } from "src/types";
+import { SUCCESS_CODES } from "../tools/constants";
+import { captureSentryException } from "../tools/sentry-utils";
+import { AuthenticatedRequest } from "../types";
 
 @Controller("auth")
 export class AuthController {
@@ -159,8 +159,10 @@ export class AuthController {
     if (typeof referrerUrl === "string" && referrerUrl.includes(clientUrl)) {
       return referrerUrl;
     } else {
-      captureSentryMessage(
-        `Received invalid referrer in user logic redirect! Received: ${referrerUrl}`,
+      captureSentryException(
+        new Error(
+          `Received invalid referrer in user logic redirect! Received: ${referrerUrl}`,
+        ),
       );
       return clientUrl;
     }

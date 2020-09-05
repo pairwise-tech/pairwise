@@ -1,7 +1,7 @@
 import { Controller, Get, Req, UseGuards, Param } from "@nestjs/common";
 import { ContentService } from "./content.service";
-import { AuthenticatedRequest } from "src/types";
-import { CustomJwtAuthGuard } from "src/auth/jwt.guard";
+import { AuthenticatedRequest } from "../types";
+import { CustomJwtAuthGuard } from "../auth/jwt.guard";
 
 @Controller("content")
 export class ContentController {

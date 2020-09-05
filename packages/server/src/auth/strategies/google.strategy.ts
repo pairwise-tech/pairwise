@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Strategy as GooglePassportStrategy } from "passport-google-oauth20";
 import { use } from "passport";
-import ENV from "src/tools/server-env";
+import ENV from "../../tools/server-env";
 
 export interface GoogleProfile {
   provider: "google";

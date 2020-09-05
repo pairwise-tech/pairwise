@@ -33,6 +33,7 @@ import {
   OverlayText,
   LoadingInline,
   DesktopOnly,
+  OverlaySmallText,
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
@@ -115,6 +116,7 @@ const ApplicationContainer = (props: IProps) => {
     openFeedbackDialog,
     userAuthenticated,
     nextPrevChallenges,
+    initializationError,
     setNavigationMapState,
     setSingleSignOnDialogState,
   } = props;
@@ -182,7 +184,9 @@ const ApplicationContainer = (props: IProps) => {
     return null;
   }
 
-  if (!initialized) {
+  if (initializationError) {
+    return <ErrorOverlay />;
+  } else if (!initialized) {
     return <LoadingOverlay visible={workspaceLoading} />;
   }
 
@@ -457,6 +461,22 @@ const LoadingOverlay = (props: { visible: boolean }) => (
   >
     <div>
       <OverlayText id="pw-loading-overlay">Launching Pairwise...</OverlayText>
+    </div>
+  </FullScreenOverlay>
+);
+
+const ErrorOverlay = () => (
+  <FullScreenOverlay visible data-selector="full-screen-overlay">
+    <div>
+      <OverlayText error id="pw-loading-overlay">
+        An error occurred when loading Pairwise...{" "}
+        <span aria-label=":(" role="img">
+          😓
+        </span>
+      </OverlayText>
+      <OverlaySmallText>
+        We apologize for the inconvenience! You can try to reload the page.
+      </OverlaySmallText>
     </div>
   </FullScreenOverlay>
 );
@@ -774,6 +794,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   hasMediaContent: Modules.selectors.challenges.getHasMediaContent(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
+  initializationError: Modules.selectors.app.appSelector(state)
+    .initializationError,
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),

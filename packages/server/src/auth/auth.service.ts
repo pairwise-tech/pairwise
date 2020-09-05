@@ -4,14 +4,14 @@ import { JwtPassportSignPayload } from "./strategies/jwt.strategy";
 import { FacebookProfileWithCredentials } from "./strategies/facebook.strategy";
 import { GitHubProfileWithCredentials } from "./strategies/github.strategy";
 import { GoogleProfileWithCredentials } from "./strategies/google.strategy";
-import { GenericUserProfile, UserService } from "src/user/user.service";
+import { GenericUserProfile, UserService } from "../user/user.service";
 import { UserProfile, Ok, Err, Result } from "@pairwise/common";
-import { ERROR_CODES } from "src/tools/constants";
-import { captureSentryException } from "src/tools/sentry-utils";
-import ENV from "src/tools/server-env";
-import { emailService, EmailService } from "src/email/email.service";
-import { validateEmailUpdateRequest } from "src/tools/validation";
-import { RequestUser } from "src/types";
+import { ERROR_CODES } from "../tools/constants";
+import { captureSentryException } from "../tools/sentry-utils";
+import ENV from "../tools/server-env";
+import { emailService, EmailService } from "../email/email.service";
+import { validateEmailUpdateRequest } from "../tools/validation";
+import { RequestUser } from "../types";
 
 export type SigninStrategy = "Email" | "GitHub" | "Facebook" | "Google";
 

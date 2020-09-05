@@ -4,10 +4,11 @@
     "source.fixAll.tslint": true
   },
   "editor.formatOnSave": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
   "eslint.validate": [
     "javascript",
     "javascriptreact",
-    { "language": "typescript", "autoFix": true },
-    { "language": "typescriptreact", "autoFix": true }
+    "typescript",
+    "typescriptreact"
   ]
 }

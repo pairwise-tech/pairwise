@@ -3,10 +3,10 @@ import { IFeedbackDto, IGenericFeedback } from "@pairwise/common";
 import { Feedback } from "./feedback.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { RequestUser } from "src/types";
-import { SUCCESS_CODES } from "src/tools/constants";
-import { validateFeedbackDto } from "src/tools/validation";
-import { SlackService, slackService } from "src/slack/slack.service";
+import { RequestUser } from "../types";
+import { SUCCESS_CODES } from "../tools/constants";
+import { validateFeedbackDto } from "../tools/validation";
+import { SlackService, slackService } from "../slack/slack.service";
 
 @Injectable()
 export class FeedbackService {

@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
-
 import { AppService } from "./app.service";
 import { AppController } from "./app.controller";
 import { AuthModule } from "./auth/auth.module";
@@ -35,12 +34,12 @@ const typeormOptions: TypeOrmModuleOptions = {
     TypeOrmModule.forRoot(typeormOptions),
     AuthModule,
     BlobModule,
-    UsersModule,
     ContentModule,
     ProgressModule,
     PaymentsModule,
-    AdminModule,
     FeedbackModule,
+    UsersModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

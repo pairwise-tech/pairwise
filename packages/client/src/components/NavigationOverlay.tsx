@@ -118,7 +118,11 @@ class NavigationOverlay extends React.Component<
     } = this.props;
 
     if (!course || !module) {
-      console.warn("[WARN] No module or course found! ->", course, module);
+      console.warn(
+        "[NAVIGATION OVERLAY WARNING] No module or course found! ->",
+        course,
+        module,
+      );
       return null;
     }
 

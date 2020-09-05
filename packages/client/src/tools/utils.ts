@@ -1,3 +1,4 @@
+import md5 from "md5";
 import shortid from "shortid";
 import { compose } from "redux";
 import {
@@ -594,4 +595,22 @@ export const copyToClipboard = (text: string) => {
   el.select();
   document.execCommand("copy");
   document.body.removeChild(el);
+};
+
+/**
+ * Convert an email address to the Gravatar supported avatar link.
+ *
+ * See details here: https://en.gravatar.com/site/implement/hash/
+ */
+export const getGravatarUrlFromEmail = (email: string): string => {
+  const hash = md5(email.trim().toLowerCase());
+  return `https://s.gravatar.com/avatar/${hash}?s=80`;
+};
+
+/**
+ * Determine if a user avatar URL is using Gravatar using a simple match
+ * against the URL.
+ */
+export const isUsingGravatar = (avatarUrl?: string): boolean => {
+  return !!avatarUrl && avatarUrl.includes("gravatar.com");
 };

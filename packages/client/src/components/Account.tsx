@@ -1,12 +1,22 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { Classes, Button } from "@blueprintjs/core";
+import { Classes, Button, Checkbox } from "@blueprintjs/core";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text, PageTitle, ProfileIcon } from "./Shared";
+import {
+  PageContainer,
+  Text,
+  PageTitle,
+  ProfileIcon,
+  ExternalLink,
+} from "./Shared";
 import { COLORS } from "tools/constants";
 import { Payment } from "@pairwise/common";
-import { formatDate } from "tools/utils";
+import {
+  formatDate,
+  getGravatarUrlFromEmail,
+  isUsingGravatar,
+} from "tools/utils";
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 
 /** ===========================================================================
@@ -21,7 +31,7 @@ interface IState {
   displayName: string;
   editMode: boolean;
   editedEmail: boolean;
-  editedProfile: boolean;
+  editAvatarUseGravatar: boolean;
 }
 
 /** ===========================================================================
@@ -40,7 +50,7 @@ class Account extends React.Component<IProps, IState> {
       displayName: "",
       editMode: false,
       editedEmail: false,
-      editedProfile: false,
+      editAvatarUseGravatar: false,
     };
   }
 
@@ -58,6 +68,9 @@ class Account extends React.Component<IProps, IState> {
       return null;
     }
 
+    const avatarUrl = profile.avatarUrl;
+    const usingGravatar = isUsingGravatar(avatarUrl);
+
     return (
       <PageContainer>
         <PageTitle>Account</PageTitle>
@@ -67,6 +80,37 @@ class Account extends React.Component<IProps, IState> {
           style={{ marginBottom: 12 }}
           avatar={profile.avatarUrl}
         />
+        {edit && !usingGravatar ? (
+          <div style={{ marginTop: 12, marginBottom: 24 }}>
+            <Checkbox
+              checked={this.state.editAvatarUseGravatar}
+              label="Use Gravatar for my avatar icon"
+              onChange={() =>
+                this.setState({
+                  editAvatarUseGravatar: !this.state.editAvatarUseGravatar,
+                })
+              }
+            />
+            <TextItem>
+              This will set your avatar based on your email address.
+            </TextItem>
+            <TextItem>
+              You will need to add an avatar icon with a Gravatar account.{" "}
+              <ExternalLink link="https://en.gravatar.com/support/what-is-gravatar/">
+                Learn more here
+              </ExternalLink>
+              .
+            </TextItem>
+          </div>
+        ) : (
+          <TextItem style={{ marginBottom: 24 }}>
+            Profile is currently using Gravatar for the avatar icon.{" "}
+            <ExternalLink link="https://en.gravatar.com/support/what-is-gravatar/">
+              Learn more here
+            </ExternalLink>
+            .
+          </TextItem>
+        )}
         <TextItem id="profile-given-name">
           <Bold>Given Name:</Bold> {!edit && profile.givenName}
         </TextItem>
@@ -79,7 +123,6 @@ class Account extends React.Component<IProps, IState> {
             value={this.state.givenName}
             onChange={event =>
               this.setState({
-                editedProfile: true,
                 givenName: event.target.value,
               })
             }
@@ -97,7 +140,6 @@ class Account extends React.Component<IProps, IState> {
             value={this.state.familyName}
             onChange={event =>
               this.setState({
-                editedProfile: true,
                 familyName: event.target.value,
               })
             }
@@ -115,7 +157,6 @@ class Account extends React.Component<IProps, IState> {
             value={this.state.displayName}
             onChange={event =>
               this.setState({
-                editedProfile: true,
                 displayName: event.target.value,
               })
             }
@@ -243,16 +284,30 @@ class Account extends React.Component<IProps, IState> {
   };
 
   handleSaveChanges = () => {
-    const { editedProfile, editedEmail } = this.state;
+    const { editedEmail, editAvatarUseGravatar } = this.state;
 
-    if (editedProfile) {
-      const userDetails = {
-        givenName: this.state.givenName,
-        familyName: this.state.familyName,
-        displayName: this.state.displayName,
-      };
-      this.props.updateUser(userDetails);
+    let avatarUrl = this.props.user.profile?.avatarUrl;
+    const usingGravatar = isUsingGravatar(avatarUrl);
+
+    const applyGravatar = usingGravatar || editAvatarUseGravatar;
+    const email = this.state.email || this.props.user.profile?.email;
+
+    /**
+     * Update the avatar URL if the user changed their email and if they are
+     * using Gravatar for their avatar icon.
+     */
+    if (email && applyGravatar) {
+      avatarUrl = getGravatarUrlFromEmail(email);
     }
+
+    const userDetails = {
+      avatarUrl,
+      givenName: this.state.givenName,
+      familyName: this.state.familyName,
+      displayName: this.state.displayName,
+    };
+
+    this.props.updateUser(userDetails);
 
     if (editedEmail && this.state.email !== this.props.user.profile?.email) {
       this.props.updateUserEmail(this.state.email);
@@ -261,7 +316,6 @@ class Account extends React.Component<IProps, IState> {
     this.setState({
       editMode: false,
       editedEmail: false,
-      editedProfile: false,
     });
   };
 

@@ -145,7 +145,17 @@ export const OverlayText = styled.p`
   font-size: 42px;
   font-weight: 200;
   text-align: center;
-  color: ${COLORS.PRIMARY_GREEN};
+  color: ${(props: { error?: boolean }) =>
+    props.error ? COLORS.LIGHT_FAILURE : COLORS.PRIMARY_GREEN};
+`;
+
+export const OverlaySmallText = styled.p`
+  margin: 0;
+  margin-top: 32px;
+  font-size: 22px;
+  font-weight: 200;
+  text-align: center;
+  color: ${COLORS.LIGHT_FAILURE};
 `;
 
 export interface IconNavLinkProps extends NavLinkProps {

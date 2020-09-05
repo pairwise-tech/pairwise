@@ -5,9 +5,9 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Progress } from "./progress.entity";
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Progress])],
   controllers: [ProgressController],
   providers: [ProgressService],
-  imports: [TypeOrmModule.forFeature([Progress])],
-  exports: [TypeOrmModule, ProgressService],
+  exports: [ProgressService],
 })
 export class ProgressModule {}
