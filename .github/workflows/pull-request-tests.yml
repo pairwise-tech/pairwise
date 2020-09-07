@@ -22,6 +22,7 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
           image_name: pairwise-dependencies
+          pull_image_and_stages: false
 
       - name: Setup NodeJS Environment
         uses: actions/setup-node@v1
