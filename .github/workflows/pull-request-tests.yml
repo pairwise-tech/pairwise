@@ -30,12 +30,12 @@ jobs:
           image_name: pairwise-dependencies
 
       # Login to GitHub container registry
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: docker.pkg.github.com
-          username: bonham000
-          password: "${{ secrets.GITHUB_TOKEN }}"
+      # - name: Login to GitHub Container Registry
+      #   uses: docker/login-action@v1
+      #   with:
+      #     registry: docker.pkg.github.com
+      #     username: bonham000
+      #     password: "${{ secrets.GITHUB_TOKEN }}"
 
       # Build the application
       - name: Build application
