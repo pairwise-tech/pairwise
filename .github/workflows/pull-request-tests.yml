@@ -29,7 +29,7 @@ jobs:
           registry: docker.pkg.github.com
           image_name: pairwise-dependencies
           dockerfile: Base.Dockerfile
-          # pull_image_and_stages: false
+          pull_image_and_stages: false
 
       # Install the application dependencies
       # - name: Install dependencies
