@@ -19,17 +19,17 @@ jobs:
         with:
           node-version: 10.x
 
+      # Install dependencies, if any package.json or lock files have changed
       - name: Install and cache dependencies
-        # Docs: https://github.com/marketplace/actions/build-docker-images-using-cache
         uses: whoan/docker-build-with-cache-action@v5
         with:
           username: bonham000
-          # No need to manually set this secret. GitHub does it on your behalf:
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
-          image_name: pairwise-dependencies
           dockerfile: Base.Dockerfile
+          image_name: pairwise-dependencies
 
+      # Login to GitHub container registry
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
