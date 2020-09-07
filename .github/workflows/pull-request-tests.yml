@@ -22,7 +22,7 @@ jobs:
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
           image_name: pairwise-dependencies
-          dockerfile: "$context/Base.Dockerfile"
+          dockerfile: Base.Dockerfile
           pull_image_and_stages: false
 
       - name: Setup NodeJS Environment
