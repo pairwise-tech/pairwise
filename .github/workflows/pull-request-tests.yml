@@ -1,3 +1,7 @@
+# This workflow runs tests against pull requests. The workflow runs unit
+# tests for all packages and the e2e test suite. In favor or speed the test
+# workflow omits the client package build and the cypress tests. These are
+# run in the full deploy pipeline before app deployments.
 name: Pull Request Tests
 
 on:

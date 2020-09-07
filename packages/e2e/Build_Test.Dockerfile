@@ -1,5 +1,6 @@
 # This is the same as the Build.Dockerfile but it pulls from the GitHub 
-# container registry which is used to cache docker image build layers in CI.
+# container registry which is used to cache docker image build layers in CI,
+# and it omits the client build. This is used for the CI test workflow.
 
 FROM docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest as build
 
