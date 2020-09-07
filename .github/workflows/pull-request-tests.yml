@@ -14,6 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      # Docs: https://github.com/marketplace/actions/build-docker-images-using-cache
+      - uses: whoan/docker-build-with-cache-action@master
+        with:
+          username: bonham000
+          # No need to manually set this secret. GitHub does it on your behalf:
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
+          image_name: pairwise-dependencies
+
       - name: Setup NodeJS Environment
         uses: actions/setup-node@v1
         with:
