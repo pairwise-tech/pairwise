@@ -63,7 +63,7 @@ jobs:
 
       # Build the application
       - name: Build the application
-        run: yarn docker:build:ci
+        run: yarn docker:build:ci_deploy
 
       # Run all package unit tests
       - name: Run static and unit tests

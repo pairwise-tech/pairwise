@@ -31,7 +31,7 @@ jobs:
 
       # Build the application
       - name: Build application
-        run: yarn docker:build:ci
+        run: yarn docker:build:ci_test
 
       # Run all package unit tests
       - name: Run static and unit tests
@@ -40,7 +40,3 @@ jobs:
       # Run e2e tests
       - name: Run e2e tests
         run: yarn e2e
-
-      # Run Cypress tests
-      - name: Run Cypress tests
-        run: yarn cypress
