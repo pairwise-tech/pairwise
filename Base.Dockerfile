@@ -41,6 +41,10 @@ COPY packages/external-services/package.json /app/packages/external-services/
 COPY packages/server/package.json /app/packages/server/
 COPY packages/server/yarn.lock /app/packages/server/
 
+# Copy www dependency files
+COPY packages/www/package.json /app/packages/www/
+COPY packages/www/yarn.lock /app/packages/www/
+
 # Install all dependencies
 RUN yarn install
 
