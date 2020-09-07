@@ -63,8 +63,8 @@ jobs:
           dockerfile: Base.Dockerfile
 
       # Install the application dependencies
-      - name: Install dependencies
-        run: yarn docker:dependencies
+      # - name: Install dependencies
+      #   run: yarn docker:dependencies
 
       # Build the application
       - name: Build the application
