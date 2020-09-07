@@ -48,6 +48,7 @@
     "build": "yarn common:build && lerna run build --parallel",
     "docker:dependencies": "docker build -t pairwise-dependencies -f Base.Dockerfile .",
     "docker:build": "docker build -t pairwise-runtime -f packages/e2e/Build.Dockerfile .",
+    "docker:build:ci": "docker build -t pairwise-runtime -f packages/e2e/Build_CI.Dockerfile .",
     "docker:test": "docker build -t test -f packages/e2e/Test.Dockerfile .",
     "docker:prod-server-build": "docker build -t pairwise-server-runtime -f packages/server/Dockerfile .",
     "docker:prod-server-start": "docker run -d -t --net=host pairwise-server-runtime",
