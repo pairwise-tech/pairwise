@@ -29,7 +29,14 @@ jobs:
           registry: docker.pkg.github.com
           image_name: pairwise-dependencies
           dockerfile: Base.Dockerfile
-          pull_image_and_stages: false
+          # pull_image_and_stages: false
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: bonham000
+          password: "${{ secrets.GITHUB_TOKEN }}"
 
       # Install the application dependencies
       # - name: Install dependencies
