@@ -51,9 +51,20 @@ jobs:
         with:
           node-version: 10.x
 
+      - name: Install and cache dependencies
+        # Docs: https://github.com/marketplace/actions/build-docker-images-using-cache
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: bonham000
+          # No need to manually set this secret. GitHub does it on your behalf:
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
+          image_name: pairwise-dependencies
+          dockerfile: Base.Dockerfile
+
       # Install the application dependencies
-      - name: Install dependencies
-        run: yarn docker:dependencies
+      # - name: Install dependencies
+      #   run: yarn docker:dependencies
 
       # Build the application
       - name: Build the application
