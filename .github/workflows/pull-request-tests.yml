@@ -14,8 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Docs: https://github.com/marketplace/actions/build-docker-images-using-cache
-      - uses: whoan/docker-build-with-cache-action@v5
+      - name: Setup NodeJS Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+
+      - name: Install and cache dependencies
+        # Docs: https://github.com/marketplace/actions/build-docker-images-using-cache
+        uses: whoan/docker-build-with-cache-action@v5
         with:
           username: bonham000
           # No need to manually set this secret. GitHub does it on your behalf:
@@ -25,14 +31,9 @@ jobs:
           dockerfile: Base.Dockerfile
           pull_image_and_stages: false
 
-      - name: Setup NodeJS Environment
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10.x
-
       # Install the application dependencies
-      - name: Install dependencies
-        run: yarn docker:dependencies
+      # - name: Install dependencies
+      #   run: yarn docker:dependencies
 
       # Build the application
       - name: Build application
