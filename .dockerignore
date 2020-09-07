@@ -8,3 +8,6 @@ packages/**/node_modules
 # an issue. 
 **/.git
 !.git/
+
+secrets
+pairwise-users.json
