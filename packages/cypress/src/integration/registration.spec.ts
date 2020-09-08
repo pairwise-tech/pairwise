@@ -225,7 +225,7 @@ const checkUrlDuringUserRegistrationProcess = (
   click(`${sso}-login`);
 
   cy.wait(1500);
-  cy.url().should("be", url);
+  cy.url().should("have.value", url);
 
   cy.get("#account-menu-dropdown").trigger("mouseover");
   click("logout-link");
