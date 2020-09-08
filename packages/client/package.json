@@ -117,7 +117,6 @@
     "ts-morph": "^5.0.0",
     "tslint": "^5.20.1",
     "typesafe-actions": "^5.1.0",
-    "typescript": "3.7.2",
     "use-media": "^1.4.0",
     "workerize-loader": "^1.1.0"
   },
@@ -132,7 +131,8 @@
     "express": "^4.17.1",
     "lerna": "^3.19.0",
     "morgan": "^1.9.1",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "typescript": "3.7.2"
   },
   "eslintConfig": {
     "extends": "react-app"
