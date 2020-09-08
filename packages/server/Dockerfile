@@ -24,23 +24,3 @@ RUN npm install pg@7.15.1 typeorm@0.2.25
 
 # Run the migrations and launch Pairwise!
 CMD ["sh", "-c", "./node_modules/.bin/typeorm migration:run && node target/index.js"]
-
-# Old Version:
-
-# # Take the production image and run the server.
-
-# FROM pairwise-runtime AS pairwise-production-server
-
-# COPY . .
-
-# # Set TypeORM environment variables
-# # Other environment secrets are set in the production environment
-# ENV TYPEORM_LOGGING=false
-# ENV TYPEORM_SYNCHRONIZE=false
-# ENV TYPEORM_ENTITIES=dist/**/*.entity.js
-# ENV TYPEORM_MIGRATIONS=dist/migrations/**/*.js
-# ENV TYPEORM_SUBSCRIBERS=dist/subscriber/**/*.js
-# ENV TYPEORM_MIGRATIONS_DIR=src/migrations
-
-# # Launch Pairwise!
-# CMD ["yarn", "server:prod"]

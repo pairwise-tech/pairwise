@@ -1,8 +1,7 @@
-# This Dockerfile takes the dependencies build and runs the build steps
-# for all the packages. This is used to produce a full application build
-# which is then used for the various test stages.
+# This is the same as the Build.Dockerfile but it pulls from the GitHub 
+# container registry which is used to cache docker image build layers in CI.
 
-FROM pairwise-dependencies as build
+FROM docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest as build
 
 COPY . .
 

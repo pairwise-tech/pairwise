@@ -51,13 +51,19 @@ jobs:
         with:
           node-version: 10.x
 
-      # Install the application dependencies
-      - name: Install dependencies
-        run: yarn docker:dependencies
+      # Install dependencies, if any package.json or lock files have changed
+      - name: Install and cache dependencies
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: bonham000
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
+          dockerfile: Base.Dockerfile
+          image_name: pairwise-dependencies
 
       # Build the application
       - name: Build the application
-        run: yarn docker:build
+        run: yarn docker:build:ci_deploy
 
       # Run all package unit tests
       - name: Run static and unit tests
