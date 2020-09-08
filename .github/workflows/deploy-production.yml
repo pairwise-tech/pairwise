@@ -143,7 +143,7 @@ jobs:
       - name: Build the pairwise.tech static site
         run: |
           docker run \
-            --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public:rw" pairwise-dependencies /bin/bash -c 'yarn www:build'
+            --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public:rw" docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest /bin/bash -c 'yarn www:build'
 
       # Deploy the static WWW site to Cloud Storage
       - name: Deploy pairwise.tech static site
