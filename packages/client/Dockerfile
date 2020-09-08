@@ -4,11 +4,11 @@
 # rebuilding here will capture the correct production URL which will
 # be set in the environment.
 
-# If you want to know why this also has to use the pairwise-dependencies
-# image instead of pairwise-runtime, well, you really don't want to
-# know that.
+# If running locally, use this instead:
+# FROM pairwise-dependencies
 
-FROM pairwise-dependencies
+# Pulls from the GitHub Container Registry:
+FROM docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest as build
 
 COPY . .
 
