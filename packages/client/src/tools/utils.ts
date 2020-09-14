@@ -392,7 +392,7 @@ export const findChallengeIdInLocationIfExists = ({
  */
 export const deriveIdsFromCourseWithDefaults = (
   courses: CourseList,
-  maybeChallengeId: Nullable<string>,
+  maybeChallengeId: Nullable<string> = null,
 ) => {
   const defaultCourse = courses[0];
   const challengeMap = createInverseChallengeMapping(courses);

@@ -221,16 +221,12 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
 
 /**
  * Handle initializing the challenge context. This epic will determine an
- * active challenge set based on:
+ * active challenge based on the current url first and the last active
+ * challenge second. If these don't exist, the current challenge ID will
+ * be null.
  *
- * 1) the current url
- * 2) the last active challenge
- * 3) by default the first challenge in the TS course
- *
- * NOTE: It will only result in setting a currentChallengeId if the user
- * is on the workspace. Otherwise, the current challenge will be null, but
- * we will still default the course and module based on the above
- * considerations.
+ * The Redirect will only occur if user is on /workspace/ and there is an
+ * active challenge.
  */
 const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
   const fetchCourses$ = action$.pipe(
@@ -252,13 +248,11 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
         const deepLinkChallengeId = findChallengeIdInLocationIfExists(location);
         const activeChallengeId = deepLinkChallengeId || lastActiveId || null;
         const {
-          challengeId,
+          slug,
           courseId,
           moduleId,
-          slug,
+          challengeId,
         } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
-
-        const currentChallenge = challengeId;
 
         // Only redirect/update the url if they are on the workspace
         if (location.pathname.includes("workspace") && slug) {
@@ -270,7 +264,7 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
           Actions.setChallengeIdContext({
             currentCourseId: courseId,
             currentModuleId: moduleId,
-            currentChallengeId: currentChallenge,
+            currentChallengeId: challengeId,
             previousChallengeId: null,
           }),
         );
