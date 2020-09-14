@@ -170,42 +170,6 @@ describe("Workspace Challenges", () => {
     cy.get("#gs-card").should("be.visible");
   });
 
-  /**
-   * NOTE: This test intermittently fails with an error like:
-   * AssertionError: Timed out retrying: Expected to find element: `#test-result-status-0`, but never found it.
-   *
-   * Edit: CONFIRMED that this fails because sometimes requests to unpkg fail,
-   * producing errors like this:
-   * [ERROR]: Failed to fetch source for react-dom-test-utils. Error: Network Error
-   *
-   * This issue should be resolved first before re-enabling this test.
-   */
-  it.skip("The workspace supports React challenges and they can be solved", () => {
-    // Visit a React challenge
-    cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
-
-    // Regular challenge loading time
-    cy.wait(TIMEOUT);
-
-    // Verify the challenge title
-    cy.contains("Create a Controlled Input");
-
-    // Wait for workspace to load
-    cy.wait(TIMEOUT);
-
-    // Tests should fail
-    checkTestResultStatus("Incomplete...");
-
-    // Enter solution
-    typeTextInCodeEditor(REACT_CHALLENGE_SOLUTION);
-
-    // Verify the Success Modal appears when running the code
-    cy.get("#gs-card").should("not.be.visible");
-    click("pw-run-code");
-    cy.wait(TIMEOUT);
-    cy.get("#gs-card").should("be.visible");
-  });
-
   it("The workspace supports Async/Await challenges and they can be solved", () => {
     // Visit an Async challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/the-await-keyword`);
@@ -226,6 +190,42 @@ describe("Workspace Challenges", () => {
     cy.wait(TIMEOUT);
     cy.get("#gs-card").should("be.visible");
   });
+});
+
+/**
+ * NOTE: This test intermittently fails with an error like:
+ * AssertionError: Timed out retrying: Expected to find element: `#test-result-status-0`, but never found it.
+ *
+ * Edit: CONFIRMED that this fails because sometimes requests to unpkg fail,
+ * producing errors like this:
+ * [ERROR]: Failed to fetch source for react-dom-test-utils. Error: Network Error
+ *
+ * This issue should be resolved first before re-enabling this test.
+ */
+it.skip("The workspace supports React challenges and they can be solved", () => {
+  // Visit a React challenge
+  cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
+
+  // Regular challenge loading time
+  cy.wait(TIMEOUT);
+
+  // Verify the challenge title
+  cy.contains("Create a Controlled Input");
+
+  // Wait for workspace to load
+  cy.wait(TIMEOUT);
+
+  // Tests should fail
+  checkTestResultStatus("Incomplete...");
+
+  // Enter solution
+  typeTextInCodeEditor(REACT_CHALLENGE_SOLUTION);
+
+  // Verify the Success Modal appears when running the code
+  cy.get("#gs-card").should("not.be.visible");
+  click("pw-run-code");
+  cy.wait(TIMEOUT);
+  cy.get("#gs-card").should("be.visible");
 });
 
 it("Workspace projects can be completed by submitting valid project URLs", () => {
