@@ -24,10 +24,16 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.get("#product-title").contains("Pairwise");
   });
 
-  it("Loading the app on /workspace redirects to the first challenge", () => {
+  // it("Loading the app on /workspace redirects to the first challenge", () => {
+  //   cy.visit(`${CLIENT_APP_URL}/workspace`);
+  //   cy.contains("Hello, Pairwise!");
+  //   cy.url().should("include", "workspace/iSF4BNIl/hello-pairwise");
+  // });
+
+  it("Loading the app on /workspace redirects to the home route", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace`);
-    cy.contains("Hello, Pairwise!");
-    cy.url().should("include", "workspace/iSF4BNIl/hello-pairwise");
+    cy.contains("Welcome to Pairwise!");
+    cy.url().should("include", "home");
   });
 
   it("Home route includes courses list", () => {
