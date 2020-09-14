@@ -398,7 +398,7 @@ export const deriveIdsFromCourseWithDefaults = (
   const challengeMap = createInverseChallengeMapping(courses);
   const challengeId = maybeChallengeId;
 
-  let slug = null;
+  let slug = challengeId;
   let courseId = defaultCourse.id;
   let moduleId = defaultCourse.modules[0].id;
 

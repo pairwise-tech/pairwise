@@ -254,6 +254,11 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
           challengeId,
         } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
 
+        console.log(slug);
+        console.log(courseId);
+        console.log(moduleId);
+        console.log(challengeId);
+
         // Handle redirects:
         if (location.pathname.includes("workspace")) {
           if (slug) {
