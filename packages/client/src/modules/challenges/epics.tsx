@@ -250,7 +250,7 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
 
         const lastActiveId = lastActiveIds.lastActiveChallenge;
         const deepLinkChallengeId = findChallengeIdInLocationIfExists(location);
-        const activeChallengeId = deepLinkChallengeId || lastActiveId || "";
+        const activeChallengeId = deepLinkChallengeId || lastActiveId || null;
         const {
           challengeId,
           courseId,
@@ -261,7 +261,7 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
         const currentChallenge = challengeId;
 
         // Only redirect/update the url if they are on the workspace
-        if (location.pathname.includes("workspace")) {
+        if (location.pathname.includes("workspace") && slug) {
           const subPath = slug + location.search + location.hash;
           deps.router.push(`/workspace/${subPath}`);
         }
@@ -490,18 +490,16 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
  * Handle dispatching an update to last active challenge ids whenever the
  * current active challenge changes.
  */
-const updateLastActiveChallengeIdsEpic: EpicSignature = (
-  action$,
-  state$,
-  deps,
-) => {
+const updateLastActiveChallengeIdsEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
+    filter(x => x.currentChallengeId !== null),
     mergeMap(async ({ currentChallengeId, currentCourseId }) => {
+      const challengeId = currentChallengeId as string; // Checked above
       return deps.api.updateLastActiveChallengeIds(
         currentCourseId,
-        currentChallengeId,
+        challengeId,
       );
     }),
     map(result => {

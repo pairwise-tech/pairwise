@@ -211,7 +211,7 @@ export const setChallengeIdContext = createAction(
 )<{
   currentModuleId: string;
   currentCourseId: string;
-  currentChallengeId: string;
+  currentChallengeId: Nullable<string>;
   previousChallengeId: Nullable<string>;
 }>();
 
