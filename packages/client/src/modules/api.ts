@@ -758,6 +758,11 @@ class LocalStorageHttpClass {
   ) {
     if (lastActiveIds) {
       for (const [courseId, challengeId] of Object.entries(lastActiveIds)) {
+        // Skip the lastActiveChallenge key
+        if (courseId === "lastActiveChallenge") {
+          continue;
+        }
+
         await API.updateLastActiveChallengeIds(courseId, challengeId);
       }
 
