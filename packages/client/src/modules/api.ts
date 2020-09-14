@@ -758,15 +758,14 @@ class LocalStorageHttpClass {
   ) {
     if (lastActiveIds) {
       for (const [courseId, challengeId] of Object.entries(lastActiveIds)) {
-        const result = await API.updateLastActiveChallengeIds(
-          courseId,
-          challengeId,
-        );
-        this.removeItem(KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY);
-        return result;
+        await API.updateLastActiveChallengeIds(courseId, challengeId);
       }
+
+      this.removeItem(KEYS.LAST_ACTIVE_CHALLENGE_IDS_KEY);
     }
-    return createNonHttpResponseError("No code blobs to persist!");
+    return createNonHttpResponseError(
+      "No last active challenge IDs to persist!",
+    );
   }
 
   private async persistBlobs(blobs: Nullable<{ [key: string]: ICodeBlobDto }>) {
