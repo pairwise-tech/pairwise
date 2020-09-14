@@ -31,7 +31,7 @@ describe("Workspace and Challenge Navigation Works", () => {
   });
 
   it("Loading the app on /workspace/iSF4BNIl redirects to the first challenge", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace`);
+    cy.visit(`${CLIENT_APP_URL}/workspace/iSF4BNIl`);
     cy.contains("Hello, Pairwise!");
     cy.url().should("include", "workspace/iSF4BNIl/hello-pairwise");
   });
