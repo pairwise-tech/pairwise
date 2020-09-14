@@ -254,10 +254,14 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
           challengeId,
         } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
 
-        // Only redirect/update the url if they are on the workspace
-        if (location.pathname.includes("workspace") && slug) {
-          const subPath = slug + location.search + location.hash;
-          deps.router.push(`/workspace/${subPath}`);
+        // Handle redirects:
+        if (location.pathname.includes("workspace")) {
+          if (slug) {
+            const subPath = slug + location.search + location.hash;
+            deps.router.push(`/workspace/${subPath}`);
+          } else {
+            deps.router.push(`/home`);
+          }
         }
 
         return of(
