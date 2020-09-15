@@ -12,6 +12,7 @@
 
 (defn hello []
   [:<>
+   [:h1 "Here's an example using a state atom"]
    [:p "Hello, admin-client is running!"]
    [:p "Here's an example of using a component with state:"]
    [click-counter click-count]])

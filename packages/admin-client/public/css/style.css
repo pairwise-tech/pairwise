@@ -29,3 +29,7 @@ a:active {
 .flex .right {
   margin-left: auto;
 }
+
+.routed {
+  padding: 20px;
+}
