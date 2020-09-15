@@ -74,7 +74,8 @@
    [Link {:href "/"} "Home"]
    [Link {:href "/about"} "About"]
    [Link {:href "/hello"} "Hello"]
-   [:div
+   [:div.right
+    {:style {:min-width 200}}
     [:p (str "Current Page: " (:route @state))]]])
 
 (defn App
