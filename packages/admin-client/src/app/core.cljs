@@ -1,6 +1,7 @@
 (ns app.core
   "This namespace contains your application and is the entrypoint for 'yarn start'."
   (:require [reagent.core :as r]
+            ["@blueprintjs/core" :refer (Button) :as blueprint]
             [app.hello :refer [hello]]))
 
 (defn get-initial-state
@@ -54,6 +55,7 @@
   []
   [:div.home
    [:h1 "You're on the home page"]
+   [:> Button {:intent "success"} "did it"]
    [:p "We made it"]])
 
 (defn About
