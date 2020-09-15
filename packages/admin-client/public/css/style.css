@@ -1,0 +1,22 @@
+body {
+  background: #222;
+  color: white;
+}
+
+a,
+a:visited {
+  color: #03a9f4;
+}
+
+a:hover,
+a.active {
+  color: #ffeb3b;
+}
+
+a:active {
+  color: white;
+}
+
+.Header a {
+  padding: 20px;
+}
