@@ -1,7 +1,7 @@
 (ns app.core
   "This namespace contains your application and is the entrypoint for 'yarn start'."
   (:require [reagent.core :as r]
-            ["@blueprintjs/core" :refer (Button) :as blueprint]
+            ["@blueprintjs/core" :as bp]
             [app.hello :refer [hello]]))
 
 (defn get-initial-state
@@ -32,6 +32,7 @@
   "Initialize the App. Run one-time setup."
   []
   (println "Initializing APP with state", @state)
+  (-> bp/FocusStyleManager .onlyShowFocusOnTabs)
   (swap! state update :route (constantly (href->pathname js/location.href))) ;; Set initial route from URL
   (add-watch state :app-state handle-state-change)
   (fn [] (remove-watch state :app-state)))
@@ -55,7 +56,7 @@
   []
   [:div.home
    [:h1 "You're on the home page"]
-   [:> Button {:intent "success"} "did it"]
+   [:> bp/Button {:intent "primary" :on-click #(println "sup")} "did it"]
    [:p "We made it"]])
 
 (defn About
