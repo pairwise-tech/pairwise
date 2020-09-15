@@ -120,7 +120,7 @@
     "ts-morph": "^5.0.0",
     "tslint": "^5.20.1",
     "typesafe-actions": "^5.1.0",
-    "typescript": "^3.7.4",
+    "typescript": "3.7.2",
     "use-media": "^1.4.0",
     "workerize-loader": "^1.1.0"
   },
