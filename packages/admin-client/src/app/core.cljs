@@ -1,6 +1,7 @@
 (ns app.core
   "This namespace contains your application and is the entrypoint for 'yarn start'."
   (:require [reagent.core :as r]
+            [clojure.string :refer [starts-with?]]
             ["@blueprintjs/core" :as bp]
             [app.hello :refer [hello]]))
 
@@ -42,21 +43,37 @@
   (reset! state {:route "/"})
   (swap! state update :route (constantly "/from-const")))
 
+(defn omit-keys
+  [coll xs]
+  (assert (map? coll) "omit-keys only operates on maps")
+  (let [excluded-keys (set xs)]
+    (->> coll
+         (filter (fn [[k _]]
+                   (not (excluded-keys k))))
+         (into {}))))
+
+(comment
+  (omit-keys {:a true :b false} [:a :c]))
+
 (defn Link
   [props & children]
   (let [handle-click (fn [e]
                        (.preventDefault e)
-                       (swap! state update :route (constantly (click->href e))))]
+                       (swap! state update :route (constantly (click->href e))))
+        active? (fn [href]
+                  (if (:exact props)
+                    (= (:route @state) href)
+                    (starts-with? (:route @state) href)))]
     (fn [props & children]
       [:a (merge {:on-click handle-click
-                  :class (if (= (:href props) (:route @state)) "active")}
-                 props) children])))
+                  :class (if (active? (:href props)) "active")}
+                 (omit-keys props [:exact])) children])))
 
 (defn Home
   []
   [:div.home
    [:h1 "You're on the home page"]
-   [:> bp/Button {:intent "primary" :on-click #(println "sup")} "did it"]
+   [:> bp/Button {:intent "success" :on-click #(println "sup")} "did it"]
    [:p "We made it"]])
 
 (defn About
@@ -74,7 +91,7 @@
 
 (defn Header []
   [:nav.flex.Header
-   [Link {:href "/"} "Home"]
+   [Link {:href "/" :exact true} "Home"]
    [Link {:href "/about"} "About"]
    [Link {:href "/hello"} "Hello"]
    [:div.right
