@@ -82,8 +82,9 @@ const pairwise = async () => {
   /* Start the app */
   await app.listen(PORT);
 
-  console.log(`\n- NestJS app launched on:    http://localhost:${PORT}/`);
-  console.log(`- View Swagger API docs:     http://localhost:${PORT}/api\n`);
+  console.log(`\n- NestJS server running on:    http://localhost:${PORT}/`);
+  console.log(`- View Swagger API docs:       http://localhost:${PORT}/api`);
+  console.log(`- Using client url:            ${ENV.CLIENT_URL}\n`);
   console.log(`Pairwise Launched!\n`);
 };
 
