@@ -1,7 +1,7 @@
 /** ===========================================================================
  * This file defines the Jest-like expectation library which is used in
  * the Workspace tests and provided to the Workspace testing challenges
- * for users to use. These library mimics the Jest library (and the
+ * for users. These library mimics the Jest library (and the
  * method comments are generally adapted from the @types/jest file).
  *
  * Because this is also user-facing, it is separated from the other
