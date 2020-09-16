@@ -9,17 +9,14 @@ export class ContentController {
 
   @UseGuards(CustomJwtAuthGuard)
   @Get("/skeletons")
-  public fetchCourseSkeletons(
-    @Param() params,
-    @Req() req: AuthenticatedRequest,
-  ) {
+  public fetchCourseSkeletons(@Req() req: AuthenticatedRequest) {
     const { user } = req;
     return this.challengeService.fetchCourseSkeletons(user);
   }
 
   @UseGuards(CustomJwtAuthGuard)
   @Get("/courses")
-  public fetchCourseContent(@Param() params, @Req() req: AuthenticatedRequest) {
+  public fetchCourseContent(@Req() req: AuthenticatedRequest) {
     return this.challengeService.fetchCourses(req.user);
   }
 }

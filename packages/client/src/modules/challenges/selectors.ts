@@ -120,9 +120,9 @@ export const getCurrentCourse = createSelector([challengesState], state => {
 });
 
 export const getCurrentCourseSkeleton = createSelector(
-  [challengesState],
-  state => {
-    return state.courseSkeletons?.find(x => x.id === state.currentCourseId);
+  [challengesState, getCurrentCourseId],
+  (challenges, courseId) => {
+    return challenges.courseSkeletons?.find(x => x.id === courseId);
   },
 );
 
@@ -226,20 +226,27 @@ export const isTestingAndAutomationChallenge = createSelector(
 );
 
 /**
- * Determine if the current challenge is in the Mobile Development module,
- * using that module's current id.
+ * Determine if the current challenge is in the Mobile Development module
+ * using that module's current id and the hard-coded module id for the
+ * React Native challenges.
  */
-export const isReactNativeChallenge = createSelector(getCurrentModuleId, id => {
-  const REACT_NATIVE_MODULE_ID = "D1JR2EXa";
-  if (id && id === REACT_NATIVE_MODULE_ID) {
-    return true;
-  } else {
+export const isReactNativeChallenge = createSelector(
+  [getChallengeMap, getCurrentChallengeId],
+  (challengeMap, challengeId) => {
+    if (challengeMap && challengeId) {
+      const challenge = challengeMap[challengeId];
+      if (challenge) {
+        const REACT_NATIVE_MODULE_ID = "D1JR2EXa";
+        return challenge.moduleId === REACT_NATIVE_MODULE_ID;
+      }
+    }
+
     return false;
-  }
-});
+  },
+);
 
 /**
- * Get the breadcrumbs path for a, g;iven challenge.
+ * Get the breadcrumbs path for a, given challenge.
  */
 export const breadcrumbPathSelector = createSelector(
   [getCurrentChallenge, getCurrentModule],

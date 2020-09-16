@@ -14,7 +14,7 @@ import {
   getChallengeSlug,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS, MOBILE, SANDBOX_ID } from "tools/constants";
+import { COLORS, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import {
   composeWithProps,
@@ -35,16 +35,7 @@ import {
   Position,
   Button,
 } from "@blueprintjs/core";
-import KeyboardShortcuts, {
-  VALID_SHORTCUT_KEYS_MAP,
-  KeyMapProps,
-} from "./KeyboardShortcuts";
-import {
-  NavLink,
-  NavLinkProps,
-  withRouter,
-  RouteComponentProps,
-} from "react-router-dom";
+import { NavLink, NavLinkProps, RouteComponentProps } from "react-router-dom";
 import {
   SortableModuleList,
   SortableChallengeList,
@@ -138,17 +129,6 @@ class NavigationOverlay extends React.Component<
       c => c.id === challengeId,
     );
 
-    // Define the available shortcut keys, only valid key combinations
-    // are allowed.
-    const shortcutKeyMap: Partial<VALID_SHORTCUT_KEYS_MAP> = {
-      escape: this.handleClose,
-      "cmd+shift+k": this.navigateToSandBox,
-      "cmd+j": this.handleToggleNavigationMap,
-      "cmd+;": this.navigateLeft,
-      "cmd+'": this.navigateRight,
-      "cmd+/": this.props.toggleEditorSize,
-    };
-
     // Render different expand/collapse button on mobile for better layout
     let ExpandCollapseButton;
     if (isMobile) {
@@ -165,7 +145,6 @@ class NavigationOverlay extends React.Component<
 
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
-        <KeyboardShortcuts keymap={shortcutKeyMap as KeyMapProps} />
         <Col
           className={cx("module-select", { open: this.state.showModuleList })}
           style={{ zIndex: 3 }}
@@ -682,31 +661,6 @@ class NavigationOverlay extends React.Component<
       return true; /* Default to open */
     }
   };
-
-  handleToggleNavigationMap = () => {
-    this.props.setNavigationMapState(!this.props.overlayVisible);
-  };
-
-  navigateLeft = (e: KeyboardEvent) => {
-    const { prev } = this.props.nextPrevChallengeIds;
-
-    if (prev) {
-      const slug = getChallengeSlug(prev);
-      this.props.history.push(`/workspace/${slug}`);
-    }
-  };
-
-  navigateRight = (e: KeyboardEvent) => {
-    const { next } = this.props.nextPrevChallengeIds;
-    if (next) {
-      const slug = getChallengeSlug(next);
-      this.props.history.push(`/workspace/${slug}`);
-    }
-  };
-
-  navigateToSandBox = () => {
-    this.props.history.push(`/workspace/${SANDBOX_ID}`);
-  };
 }
 
 /** ===========================================================================
@@ -1124,14 +1078,12 @@ const NavIcons = styled.span`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
-  userSettings: Modules.selectors.user.userSettings(state),
   userProgress: Modules.selectors.user.userProgress(state),
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   courseListMetadata: Modules.selectors.challenges.courseListMetadata(state),
-  nextPrevChallengeIds: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   navigationAccordionViewState: Modules.selectors.challenges.getNavigationSectionAccordionViewState(
     state,
@@ -1150,44 +1102,24 @@ const dispatchProps = {
   deleteChallenge: ChallengeActions.deleteChallenge,
   reorderChallengeList: ChallengeActions.reorderChallengeList,
   reorderModuleList: ChallengeActions.reorderModuleList,
-  updateUserSettings: Modules.actions.user.updateUserSettings,
   setNavigationMapState: ChallengeActions.setNavigationMapState,
   toggleSectionAccordionView: ChallengeActions.toggleSectionAccordionView,
-  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   handlePaymentCourseIntent: Modules.actions.payments.handlePaymentCourseIntent,
 };
 
-const mergeProps = (
-  state: ReturnType<typeof mapStateToProps>,
-  methods: typeof dispatchProps,
-  props: {},
-) => ({
-  ...props,
-  ...methods,
-  ...state,
-  toggleEditorSize: () => {
-    methods.updateUserSettings({
-      fullScreenEditor: !state.userSettings.fullScreenEditor,
-    });
-  },
-});
-
-type ConnectProps = ReturnType<typeof mergeProps>;
+type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
 type IProps = ConnectProps & ComponentProps & RouteComponentProps;
 
 interface ComponentProps {
   isMobile: boolean;
-  overlayVisible: boolean;
 }
 
-const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
+const withProps = connect(mapStateToProps, dispatchProps);
 
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default composeWithProps<ComponentProps>(withProps)(
-  withRouter(NavigationOverlay),
-);
+export default composeWithProps<ComponentProps>(withProps)(NavigationOverlay);
