@@ -120,9 +120,9 @@ export const getCurrentCourse = createSelector([challengesState], state => {
 });
 
 export const getCurrentCourseSkeleton = createSelector(
-  [challengesState],
-  state => {
-    return state.courseSkeletons?.find(x => x.id === state.currentCourseId);
+  [challengesState, getCurrentCourseId],
+  (challenges, courseId) => {
+    return challenges.courseSkeletons?.find(x => x.id === courseId);
   },
 );
 
