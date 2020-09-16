@@ -16,34 +16,17 @@ RUN npm i -g lerna
 
 WORKDIR /app
 
-# Dependencies
+# Copy dependency-related files
 COPY package.json /app/
 COPY yarn.lock /app/
 COPY lerna.json /app/
-
-# Copy client dependency files
 COPY packages/client/package.json /app/packages/client/
-COPY packages/client/yarn.lock /app/packages/client/
-
-# Copy common dependency files
 COPY packages/common/package.json /app/packages/common/
-
-# Copy cypress dependency files
 COPY packages/cypress/package.json /app/packages/cypress/
-
-# Copy e2e dependency files
 COPY packages/e2e/package.json /app/packages/e2e/
-
-# Copy external-services dependency files
 COPY packages/external-services/package.json /app/packages/external-services/
-
-# Copy server dependency files
 COPY packages/server/package.json /app/packages/server/
-COPY packages/server/yarn.lock /app/packages/server/
-
-# Copy www dependency files
 COPY packages/www/package.json /app/packages/www/
-COPY packages/www/yarn.lock /app/packages/www/
 
 # Install all dependencies
 RUN yarn install

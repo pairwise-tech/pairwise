@@ -41,4 +41,3 @@ docker
 # Local files which should not be committed
 secrets
 pairwise-users.json
-packages/client/build
