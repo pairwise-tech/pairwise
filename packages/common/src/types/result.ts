@@ -5,11 +5,9 @@
  *
  * Reference: https://doc.rust-lang.org/rust-by-example/error/result.html
  *
- * It always also to provide robust type checking around operations which
- * may have a failure status, and to avoid arbitrarily throwing and catching
- * errors to communicate failure. This is especially useful because TypeScript
- * provides no utility to type check thrown errors. Thrown errors are like
- * an any type on fire in TypeScript. The Result type helps us avoid that.
+ * The Result type allows us to provide type checking to operations which may
+ * fail, since in TypeScript there is no way to convey type information in
+ * functions which may "throw" an error.
  * ============================================================================
  */
 
