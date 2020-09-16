@@ -11,14 +11,14 @@ import KeyboardShortcuts, {
 import { withRouter, RouteComponentProps } from "react-router-dom";
 
 /** ===========================================================================
- * ApplicationKeyboardShortcuts Class
+ * GlobalKeyboardShortcuts Class
  * ----------------------------------------------------------------------------
  * This provides global keyboard shortcuts for controlling various actions
  * throughout the app.
  * ============================================================================
  */
 
-class ApplicationKeyboardShortcuts extends React.Component<IProps, {}> {
+class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     // Only valid key combinations are allowed for available shortcuts:
     const shortcutKeyMap: Partial<VALID_SHORTCUT_KEYS_MAP> = {
@@ -110,5 +110,5 @@ const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
  */
 
 export default composeWithProps<ComponentProps>(withProps)(
-  withRouter(ApplicationKeyboardShortcuts),
+  withRouter(GlobalKeyboardShortcuts),
 );
