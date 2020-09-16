@@ -54,6 +54,7 @@ import { CONTENT_AREA_ID } from "./MediaArea";
 import OfficeHoursPopover from "./OfficeHoursPopover";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
+import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -256,8 +257,9 @@ const ApplicationContainer = (props: IProps) => {
     <React.Fragment>
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
+      <GlobalKeyboardShortcuts />
       {CODEPRESS && <AdminKeyboardShortcuts />}
-      <NavigationOverlay isMobile={isMobile} overlayVisible={overlayVisible} />
+      <NavigationOverlay isMobile={isMobile} />
       <Header>
         <ControlsContainer
           style={{ height: "100%", marginRight: isMobile ? 0 : 40 }}
