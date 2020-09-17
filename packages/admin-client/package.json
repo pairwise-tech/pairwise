@@ -5,6 +5,8 @@
   "scripts": {
     "sc": "shadow-cljs",
     "server": "shadow-cljs stop && shadow-cljs start",
+    "prestart": "yarn",
+    "prebuild": "yarn",
     "start": "shadow-cljs watch app",
     "cards": "shadow-cljs watch cards",
     "build": "yarn clean && shadow-cljs release app",

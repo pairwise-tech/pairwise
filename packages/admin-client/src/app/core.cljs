@@ -2,8 +2,47 @@
   "This namespace contains your application and is the entrypoint for 'yarn start'."
   (:require [reagent.core :as r]
             [clojure.string :refer [starts-with?]]
+            [clojure.spec.alpha :as spec]
+            [clojure.spec.gen.alpha :as gen]
+            [clojure.test.check.generators]
             ["@blueprintjs/core" :as bp]
             [app.hello :refer [hello]]))
+
+;; Generate emails. They are all at gmamil.com, but i'm not sure how to combine
+;; multiple string generators yet
+(def string-alnum-gen (gen/such-that #(and (not= % "") (> (count %) 5)) (gen/string-alphanumeric)))
+(def email-host-gen (spec/gen #{"gmail.com" "hotmail.com" "yahoo.com.tw" "protonmail.com" "fastmail.io"}))
+
+;; NOTE Spec or requires a keyword along with the predicate to help identify
+;; which test failed. Not sure why spec/and doesn't require this though
+;; (spec/def ::email (spec/or :string string? :nil nil?))
+;; NOTE Use the nilable helper rather than or if you just want nilable values
+(spec/def ::email
+  (spec/with-gen
+    (spec/and string?
+              #(re-matches #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$" %))
+    #(gen/fmap (fn [[a b]] (str a "@" b))
+               (gen/tuple string-alnum-gen email-host-gen))))
+
+(spec/def ::name (spec/nilable string?))
+(spec/def ::user (spec/keys :req-un [::email ::name]))
+
+(comment
+  (gen/sample (gen/tuple string-alnum-gen email-host-gen))
+  (spec/valid? string? "")
+  (spec/valid? nil? "hey")
+
+  (spec/valid? ::user {:name "Ian" :email "mail@mail.com"})
+
+  (spec/valid? ::email "hey@mail.com")
+  (spec/valid? ::email "hey")
+  (spec/valid? ::email "")
+  (spec/valid? ::email nil)
+  (spec/valid? ::email 9)
+
+  (gen/sample (spec/gen ::email))
+  (gen/sample (spec/gen int?))
+  (gen/sample (spec/gen ::user)))
 
 (defn get-initial-state
   [& {:as overrides}]
@@ -103,7 +142,7 @@
   (app-init)
   (fn []
     [:div.main
-     {:class "merge-class"}
+     {:class "merge-class"} ;; Just showing myself that classes will be merged
      [Header]
      [:hr]
      [:div.routed
