@@ -61,10 +61,15 @@
 
 (defn get-initial-state
   [& {:as overrides}]
-  (let [defaults {:route "/"}]
+  (let [defaults {:route "/"
+                  :users {}}]
     (merge defaults overrides)))
 
 (def state (r/atom (get-initial-state)))
+
+;; FIXME This should be behind a flag probably. Just for debugging
+;; NOTE You CANNOT use "app" as the key on window. It breaks _EVERYTHING_. That's unfortunate
+(aset js/window "pw" #js{:getState #(clj->js @state)})
 
 (defn e->href [e] (-> e .-target .-href))
 
@@ -79,7 +84,7 @@
 
 (defn handle-state-change
   [_k _state prev-state next-state]
-  (println "State just changed!" prev-state next-state)
+  #_(println "State just changed!" prev-state next-state)
   (when (not= (:route prev-state) (:route next-state))
     (js/history.pushState {} "" (:route next-state))))
 
@@ -130,20 +135,35 @@
                   :class (if (active? (:href props)) "active")}
                  (omit-keys props [:exact])) children])))
 
-(let [a (for [user (gen/sample (spec/gen ::user))]
-          (:guid user))
-      b (map :guid (gen/sample (spec/gen ::user)))]
-  (println (= a b)))
-
 (defn fetch-users
   []
   (for [user (gen/sample (spec/gen ::user))] user))
 
+(defn list->resource-map
+  [xs derive-key]
+  (->> xs
+       (reduce (fn [agg, x] (conj agg {(derive-key x) x})) {})))
+
+(comment
+  (let [a (for [user (gen/sample (spec/gen ::user))]
+            (:guid user))
+        b (map :guid (gen/sample (spec/gen ::user)))]
+    (println (= a b)))
+
+  (let [xs (gen/sample (spec/gen ::user) 3)]
+    (-> xs
+        (list->resource-map :guid)
+        (count))))
+
+(defn store-users!
+  [users])
+
 (comment (fetch-users))
 
 (defn Users
-  ([] [Users []])
+  ([] [Users (get @state :users [])])
   ([users]
+   (assert (map? users) "Users component must be passed a map")
    (if (empty? users)
      [:div.users "No users :("]
      [:div.users
@@ -151,7 +171,7 @@
       [:p "A list of users can go here"]
       [:> bp/Button {:on-click #(println "should fetch")} "Fetch Users"]
       [:div.user-list
-       (for [u users]
+       (for [u (vals users)]
          [:div
           {:key (:guid u)}
           [:p [:strong "guid:"] " " (-> u :guid str)]
@@ -163,12 +183,15 @@
 
 (defn UserDetails
   []
-  (let [guid (route->guid (:route @state))]
-    (if-not guid
+  (let [guid (route->guid (:route @state))
+        user (get (:users @state) (uuid guid))] ;; FIXME Having to convert the string guid to a uuid is pretty confusing. Should probably just use strings
+    (if-not user
       [:div [:h1 "User Not Found"] [:p "No user found for guid."]]
       [:div
        [:h1 "User Details"]
-       [:p [:string "guid: "] guid]])))
+       [:p [:string "guid: "] guid]
+       [:p [:string "name: "] (:name user)]
+       [:p [:string "email: "] (:email user)]])))
 
 (defn Home
   []
@@ -202,7 +225,8 @@
 (defn App
   []
   (let [_ (app-init)
-        users (fetch-users)]
+        _ (go (let [users (fetch-users)]
+                (swap! state update :users merge (list->resource-map users :guid))))]
     (fn []
       [:div.main
        {:class "merge-class"} ;; Just showing myself that classes will be merged
@@ -211,7 +235,7 @@
        [:div.routed
         (let [route (:route @state)]
           (cond
-            (= route "/") [Users users]
+            (= route "/") [Users]
             (route->guid route) [UserDetails]
             (= route "/about") [About]
             (= route "/hello") [hello]
