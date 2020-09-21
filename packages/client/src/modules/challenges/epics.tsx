@@ -468,10 +468,10 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
       const cachedItem = blobCache[id];
 
       // If blob is cached return the cached item, otherwise fetch it:
-      if (cachedItem && cachedItem.blob) {
+      if (cachedItem && cachedItem.dataBlob) {
         return Actions.fetchBlobForChallengeSuccess({
           challengeId: id,
-          dataBlob: cachedItem.blob,
+          dataBlob: cachedItem.dataBlob,
         });
       } else {
         const result = await deps.api.fetchChallengeHistory(id);
@@ -568,10 +568,10 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
       const id = challengeId as string; // it's not null
       const blobs = deps.selectors.challenges.getBlobCache(state$.value);
       const cachedItem = blobs[id];
-      if (cachedItem && cachedItem.blob) {
+      if (cachedItem && cachedItem.dataBlob) {
         const codeBlob: ICodeBlobDto = {
           challengeId: id,
-          dataBlob: cachedItem.blob,
+          dataBlob: cachedItem.dataBlob,
         };
         return new Ok(codeBlob);
       } else {

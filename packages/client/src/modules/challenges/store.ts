@@ -42,7 +42,7 @@ interface AccordionViewState {
 }
 
 interface BlobCacheItem {
-  blob?: DataBlob;
+  dataBlob?: DataBlob;
   isLoading: boolean;
 }
 
@@ -464,7 +464,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state.blobCache,
       [action.payload.challengeId]: {
         isLoading: false,
-        blob: action.payload.dataBlob,
+        dataBlob: action.payload.dataBlob,
       },
     },
   }))
@@ -474,7 +474,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state.blobCache,
       [action.payload]: {
         isLoading: true,
-        blob: state.blobCache[action.payload]?.blob,
+        dataBlob: state.blobCache[action.payload]?.dataBlob,
       },
     },
   }))
@@ -484,7 +484,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state.blobCache,
       [action.payload.challengeId]: {
         isLoading: false,
-        blob: action.payload.dataBlob,
+        dataBlob: action.payload.dataBlob,
       },
     },
   }))
@@ -494,7 +494,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state.blobCache,
       [action.payload.challengeId]: {
         isLoading: false,
-        blob: state.blobCache[action.payload.challengeId]?.blob,
+        dataBlob: state.blobCache[action.payload.challengeId]?.dataBlob,
       },
     },
   }))

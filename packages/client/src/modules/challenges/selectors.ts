@@ -324,7 +324,7 @@ export const getBlobForCurrentChallenge = createSelector(
     }
 
     if (challenge.id in blobs) {
-      const blob = blobs[challenge.id].blob;
+      const blob = blobs[challenge.id].dataBlob;
       if (blob) {
         return blob;
       }
