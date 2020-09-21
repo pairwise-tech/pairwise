@@ -302,7 +302,12 @@ export const breadcrumbPathSelector = createSelector(
  * Get the code blob for a challenge.
  */
 export const getBlobForCurrentChallenge = createSelector(
-  [isLoadingCurrentBlob, getBlobCache, getCurrentChallenge, isEditMode],
+  [
+    isLoadingCurrentChallengeBlob,
+    getBlobCache,
+    getCurrentChallenge,
+    isEditMode,
+  ],
   (isLoading, blobs, challenge, isEdit) => {
     if (isLoading) {
       return null;
@@ -321,11 +326,16 @@ export const getBlobForCurrentChallenge = createSelector(
             code: challenge[tab],
           };
           return editorChallengeBlob;
-        } else {
-          return blobs[challenge.id];
+        } else if (challenge.id in blobs) {
+          const blob = blobs[challenge.id].blob;
+          if (blob) {
+            return blob;
+          }
         }
       }
     }
+
+    return null;
   },
 );
 
