@@ -465,20 +465,24 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
     pluck("payload"),
     mergeMap(async id => {
       const blobCache = state$.value.challenges.blobCache;
-      if (id in blobCache) {
-        return new Ok({
+      const cachedItem = blobCache[id];
+
+      // If blob is cached return the cached item, otherwise fetch it:
+      if (cachedItem && cachedItem.blob) {
+        return Actions.fetchBlobForChallengeSuccess({
           challengeId: id,
-          dataBlob: blobCache[id],
+          dataBlob: cachedItem.blob,
         });
       } else {
-        return deps.api.fetchChallengeHistory(id);
-      }
-    }),
-    map(result => {
-      if (result.value) {
-        return Actions.fetchBlobForChallengeSuccess(result.value);
-      } else {
-        return Actions.fetchBlobForChallengeFailure(result.error);
+        const result = await deps.api.fetchChallengeHistory(id);
+        if (result.value) {
+          return Actions.fetchBlobForChallengeSuccess(result.value);
+        } else {
+          return Actions.fetchBlobForChallengeFailure({
+            challengeId: id,
+            err: result.error,
+          });
+        }
       }
     }),
   );

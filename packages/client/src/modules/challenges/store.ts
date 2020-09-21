@@ -53,7 +53,7 @@ export interface State {
   currentChallengeId: Nullable<string>;
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
-  blobCache: { [key: string]: DataBlob };
+  blobCache: { [key: string]: { blob?: DataBlob; isLoading: boolean } };
   loadingCurrentBlob: boolean;
   adminTestTab: ADMIN_TEST_TAB;
   adminEditorTab: ADMIN_EDITOR_TAB;
@@ -460,24 +460,42 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     blobCache: {
       ...state.blobCache,
-      [action.payload.challengeId]: action.payload.dataBlob,
+      [action.payload.challengeId]: {
+        ...action.payload.dataBlob,
+        isLoading: false,
+      },
     },
   }))
   .handleAction(actions.fetchBlobForChallenge, (state, action) => ({
     ...state,
     loadingCurrentBlob: true,
+    blobCache: {
+      ...state.blobCache,
+      [action.payload]: {
+        isLoading: true,
+      },
+    },
   }))
   .handleAction(actions.fetchBlobForChallengeSuccess, (state, action) => ({
     ...state,
     loadingCurrentBlob: false,
     blobCache: {
       ...state.blobCache,
-      [action.payload.challengeId]: action.payload.dataBlob,
+      [action.payload.challengeId]: {
+        ...action.payload.dataBlob,
+        isLoading: false,
+      },
     },
   }))
   .handleAction(actions.fetchBlobForChallengeFailure, (state, action) => ({
     ...state,
     loadingCurrentBlob: false,
+    blobCache: {
+      ...state.blobCache,
+      [action.payload.challengeId]: {
+        isLoading: false,
+      },
+    },
   }))
   .handleAction(actions.setWorkspaceChallengeLoaded, (state, action) => ({
     ...state,
