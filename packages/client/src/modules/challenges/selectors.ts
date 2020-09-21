@@ -299,7 +299,8 @@ export const breadcrumbPathSelector = createSelector(
 );
 
 /**
- * Get the code blob for a challenge.
+ * Get the code blob for a challenge. Defaults to null if various
+ * expected pieces of state do not exist.
  */
 export const getBlobForCurrentChallenge = createSelector(
   [
@@ -307,31 +308,25 @@ export const getBlobForCurrentChallenge = createSelector(
     getBlobCache,
     getCurrentChallenge,
     isEditMode,
+    adminEditorTabSelector,
   ],
-  (isLoading, blobs, challenge, isEdit) => {
-    if (isLoading) {
+  (isLoading, blobs, challenge, isEdit, adminTab) => {
+    if (isLoading || !challenge) {
       return null;
-    } else {
-      if (!challenge) {
-        return null;
-      } else {
-        if (isEdit) {
-          /**
-           * TODO: Should be adminEditorTab state after moving it from the
-           * Workspace to Redux Store:
-           */
-          const tab = "starterCode";
-          const editorChallengeBlob: CodeChallengeBlob = {
-            type: "challenge",
-            code: challenge[tab],
-          };
-          return editorChallengeBlob;
-        } else if (challenge.id in blobs) {
-          const blob = blobs[challenge.id].blob;
-          if (blob) {
-            return blob;
-          }
-        }
+    }
+
+    if (isEdit) {
+      const editorChallengeBlob: CodeChallengeBlob = {
+        type: "challenge",
+        code: challenge[adminTab],
+      };
+      return editorChallengeBlob;
+    }
+
+    if (challenge.id in blobs) {
+      const blob = blobs[challenge.id].blob;
+      if (blob) {
+        return blob;
       }
     }
 
