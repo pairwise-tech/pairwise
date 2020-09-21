@@ -41,6 +41,12 @@ interface AccordionViewState {
   [key: string]: boolean;
 }
 
+/**
+ * The challenge blobs represent the user's past history on a challenge,
+ * and they get fetched one by one by id. The blobCache stores the blob
+ * data and loading status for each blob. The workspace waits for blobs
+ * to load before rendering.
+ */
 interface BlobCacheItem {
   dataBlob?: DataBlob;
   isLoading: boolean;
