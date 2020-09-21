@@ -59,7 +59,6 @@ export interface State {
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
   blobCache: { [key: string]: BlobCacheItem };
-  loadingCurrentBlob: boolean;
   adminTestTab: ADMIN_TEST_TAB;
   adminEditorTab: ADMIN_EDITOR_TAB;
   navigationSectionAccordionViewState: AccordionViewState;
@@ -82,7 +81,6 @@ const initialState: State = {
   challengeMap: null,
   sandboxChallenge: defaultSandboxChallenge,
   blobCache: {},
-  loadingCurrentBlob: true,
   adminTestTab: "testResults",
   adminEditorTab: "starterCode",
   navigationSectionAccordionViewState: {},
@@ -454,7 +452,6 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     adminTestTab: "testResults",
     adminEditorTab: "starterCode",
-    loadingCurrentBlob: true,
     displayNavigationMap: false,
     revealWorkspaceSolution: false,
     currentModuleId: payload.currentModuleId,
@@ -473,7 +470,6 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   }))
   .handleAction(actions.fetchBlobForChallenge, (state, action) => ({
     ...state,
-    loadingCurrentBlob: true,
     blobCache: {
       ...state.blobCache,
       [action.payload]: {
@@ -484,7 +480,6 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   }))
   .handleAction(actions.fetchBlobForChallengeSuccess, (state, action) => ({
     ...state,
-    loadingCurrentBlob: false,
     blobCache: {
       ...state.blobCache,
       [action.payload.challengeId]: {
@@ -495,7 +490,6 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   }))
   .handleAction(actions.fetchBlobForChallengeFailure, (state, action) => ({
     ...state,
-    loadingCurrentBlob: false,
     blobCache: {
       ...state.blobCache,
       [action.payload.challengeId]: {
