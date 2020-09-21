@@ -103,9 +103,19 @@ export const getBlobCache = createSelector(
   state => state.blobCache,
 );
 
-export const isLoadingBlob = createSelector(
-  [challengesState],
-  state => state.loadingCurrentBlob,
+export const isLoadingCurrentChallengeBlob = createSelector(
+  [getCurrentChallengeId, getBlobCache],
+  (id, cache) => {
+    if (id) {
+      const cachedBlob = cache[id];
+      if (cachedBlob) {
+        return cachedBlob.isLoading;
+      }
+    }
+
+    // Default case is true if we have no cache data
+    return true;
+  },
 );
 
 export const workspaceLoadingSelector = createSelector(
@@ -292,7 +302,7 @@ export const breadcrumbPathSelector = createSelector(
  * Get the code blob for a challenge.
  */
 export const getBlobForCurrentChallenge = createSelector(
-  [isLoadingBlob, getBlobCache, getCurrentChallenge, isEditMode],
+  [isLoadingCurrentBlob, getBlobCache, getCurrentChallenge, isEditMode],
   (isLoading, blobs, challenge, isEdit) => {
     if (isLoading) {
       return null;
