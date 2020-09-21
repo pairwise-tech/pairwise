@@ -567,10 +567,11 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
     map(challengeId => {
       const id = challengeId as string; // it's not null
       const blobs = deps.selectors.challenges.getBlobCache(state$.value);
-      if (id in blobs) {
+      const cachedItem = blobs[id];
+      if (cachedItem && cachedItem.blob) {
         const codeBlob: ICodeBlobDto = {
           challengeId: id,
-          dataBlob: blobs[id],
+          dataBlob: cachedItem.blob,
         };
         return new Ok(codeBlob);
       } else {

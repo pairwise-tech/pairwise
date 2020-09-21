@@ -1649,6 +1649,7 @@ const mergeProps = (
 type ConnectProps = ReturnType<typeof mergeProps>;
 
 interface IProps extends ConnectProps {
+  blob: DataBlob;
   challenge: Challenge;
   isMobileView: boolean;
 }
