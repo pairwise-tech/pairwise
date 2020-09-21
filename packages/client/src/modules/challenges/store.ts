@@ -41,6 +41,11 @@ interface AccordionViewState {
   [key: string]: boolean;
 }
 
+interface BlobCacheItem {
+  blob?: DataBlob;
+  isLoading: boolean;
+}
+
 export interface State {
   workspaceLoading: boolean;
   isEditMode: boolean;
@@ -53,7 +58,7 @@ export interface State {
   currentChallengeId: Nullable<string>;
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
-  blobCache: { [key: string]: { blob?: DataBlob; isLoading: boolean } };
+  blobCache: { [key: string]: BlobCacheItem };
   loadingCurrentBlob: boolean;
   adminTestTab: ADMIN_TEST_TAB;
   adminEditorTab: ADMIN_EDITOR_TAB;
@@ -461,8 +466,8 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     blobCache: {
       ...state.blobCache,
       [action.payload.challengeId]: {
-        ...action.payload.dataBlob,
         isLoading: false,
+        blob: action.payload.dataBlob,
       },
     },
   }))
@@ -473,6 +478,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state.blobCache,
       [action.payload]: {
         isLoading: true,
+        blob: state.blobCache[action.payload]?.blob,
       },
     },
   }))
@@ -482,8 +488,8 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     blobCache: {
       ...state.blobCache,
       [action.payload.challengeId]: {
-        ...action.payload.dataBlob,
         isLoading: false,
+        blob: action.payload.dataBlob,
       },
     },
   }))
@@ -494,6 +500,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state.blobCache,
       [action.payload.challengeId]: {
         isLoading: false,
+        blob: state.blobCache[action.payload.challengeId]?.blob,
       },
     },
   }))
