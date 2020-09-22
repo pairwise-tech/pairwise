@@ -149,6 +149,10 @@ describe("Linus should be able to pass all the challenges first try", () => {
     /* Get all the challenges */
     const challenges = course.modules.flatMap(m => m.challenges);
 
+    let passed = 0;
+    let failed = 0;
+    let skipped = 0;
+
     /* For every challenge, execute the tests */
     for (const challenge of challenges) {
       if (DEBUG) {
@@ -158,6 +162,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
       }
 
       if (DANGEROUSLY_SKIP_CHALLENGE.has(challenge.id)) {
+        skipped++;
         log.skipDangerously(challenge);
         continue;
       }
@@ -179,14 +184,20 @@ describe("Linus should be able to pass all the challenges first try", () => {
       }
 
       if (currentFailedTests.length) {
+        failed++;
         log.fail(challenge);
       } else {
+        passed++;
         log.success(challenge);
       }
 
       // Add any failed tests for the current challenge to the overall list.
       failedTests = failedTests.concat(currentFailedTests);
     }
+
+    console.log(`-> Challenge Tests Passed:  ${passed}`);
+    console.log(`-> Challenge Tests Skipped: ${skipped}`);
+    console.log(`-> Challenge Tests Failed:  ${failed}`);
 
     expect(failedTests).toEqual([]);
   });
