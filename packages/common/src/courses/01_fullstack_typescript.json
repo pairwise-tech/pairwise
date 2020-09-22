@@ -4646,6 +4646,17 @@
           "content": ""
         },
         {
+          "id": "cpGNKdx5s",
+          "type": "typescript",
+          "title": "Testing Functions which Throw Errors",
+          "instructions": "We have a `validateAge` function in the editor below, which throws an error if the provided `age` is below 18. There are many ways to write validation logic and throwing errors is not the only way to handle invalid states—however that's not the point here.\n\nThe point of this challenge is that you may find yourself wanting to test a function which can throw an error. We can do that here. Write a test which checks the `validateAge` function and ensures that it throws an error for invalid age arguments. Take a look at [Jest's toThrow method](https://Testing%20a%20Function%20to%20Remove%20Keys%20from%20Objects) for help.",
+          "testCode": "test(\"The `validateAge` function is defined using the `let` keyword.\", () => {\n  validateAge = 5;\n  expect(validateAge).toBe(5);\n});\n\ntest(\"At least one test exists in a `test` block.\", () => {\n  expect(__USER_TEST_LIST__.length > 0).toBe(true);\n});\n\ntest(\"The tests check the expected behavior of `validateAge` correctly.\", () => {\n  expect(__USER_TEST_LIST__.length > 0).toBe(true);\n\n  for (const { test } of __USER_TEST_LIST__) {\n    try {\n      validateAge = (age) => {\n        console.log(age);\n        if (age < 18) {\n          throw new Error(\"Too young!\");\n        }\n      };\n      test();\n    } catch (err) {\n      fail();\n    }\n\n    let didFail = false;\n    try {\n      validateAge = (age) => age;\n      test();\n      didFail = true;\n    } catch (err) {\n      // Do nothing...\n    }\n\n    if (didFail) {\n      fail();\n    }\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "// A function to valid age\nlet validateAge = (age: number) => {\n  if (age < 18) {\n    throw new Error(\"Too young!\");\n  }\n};\n\n// Your code here",
+          "solutionCode": "// A function to valid age\nlet validateAge = (age: number) => {\n  if (age < 18) {\n    throw new Error(\"Too young!\");\n  }\n};\n\n// Your code here\ntest(\"The validateAge function checks ages correctly.\", () => {\n  const invalid = [1, 3, 5, 7, 8, 13, 15];\n  for (const age of invalid) {\n    expect(() => validateAge(age)).toThrow();\n  }\n\n  const valid = [19, 21, 26, 32, 38, 42, 45, 55, 78];\n  for (const age of valid) {\n    expect(validateAge(age)).toBe(undefined);\n  }\n});\n",
+          "content": ""
+        },
+        {
           "id": "QDmiOTwAY",
           "type": "section",
           "title": "Automation",
