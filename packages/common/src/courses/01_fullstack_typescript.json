@@ -4657,6 +4657,116 @@
           "content": ""
         },
         {
+          "id": "2j9vhRMjW",
+          "type": "typescript",
+          "title": "Testing a Validation Function",
+          "instructions": "",
+          "testCode": "test(\"Placeholder test...\", () => {\n  pass();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "zdV1F5Bdb",
+          "type": "typescript",
+          "title": "Testing a More Complex Function",
+          "instructions": "",
+          "testCode": "test(\"Placeholder test...\", () => {\n  pass();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "gYpNeTnG1",
+          "type": "typescript",
+          "title": "Testing Classes",
+          "instructions": "",
+          "testCode": "test(\"Placeholder test...\", () => {\n  pass();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "zCbzABROtb",
+          "type": "typescript",
+          "title": "Testing Asynchronous Functions",
+          "instructions": "",
+          "testCode": "test(\"Placeholder test...\", () => {\n  pass();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "v1sB3gaFR",
+          "type": "media",
+          "title": "Mocks and Snapshot Testing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "qU36RQTcK",
+          "type": "media",
+          "title": "Setting Up and Running Jest",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "oNwi40jtp",
+          "type": "media",
+          "title": "Test Organization",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "yKI$72Y7v",
+          "type": "media",
+          "title": "Integration Testing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "4X8ks1Rz$",
+          "type": "media",
+          "title": "End-To-End Testing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "X$k7oerdc",
+          "type": "media",
+          "title": "Some Testing Advice",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "QDmiOTwAY",
           "type": "section",
           "title": "Automation",
