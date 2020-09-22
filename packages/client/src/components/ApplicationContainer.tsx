@@ -108,6 +108,7 @@ const ApplicationContainer = (props: IProps) => {
     challenge,
     initialized,
     logoutUser,
+    userLoading,
     initializeApp,
     updateChallenge,
     overlayVisible,
@@ -355,7 +356,9 @@ const ApplicationContainer = (props: IProps) => {
             </LastChildMargin>
           )}
           {/* user.profile is a redundant check... but now the types work */}
-          {isSearchFocused ? null : isLoggedIn && user.profile ? (
+          {isSearchFocused || userLoading ? (
+            <div style={{ width: 8 }} />
+          ) : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
@@ -789,6 +792,7 @@ const isTouchEventOnEditor = (touchEvent: any) => {
 const mapStateToProps = (state: ReduxStoreState) => ({
   location: Modules.selectors.app.locationSelector(state),
   user: Modules.selectors.user.userSelector(state),
+  userLoading: Modules.selectors.user.loading(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
