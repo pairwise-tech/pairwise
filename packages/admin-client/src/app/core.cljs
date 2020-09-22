@@ -7,7 +7,7 @@
             [clojure.spec.alpha :as spec]
             [clojure.spec.gen.alpha :as gen]
             [clojure.test.check.generators]
-            [ajax.core :as ajax]
+            ["axios" :as axios]
             ["@blueprintjs/core" :as bp]
             [app.hello :refer [hello]]))
 
@@ -21,6 +21,26 @@
 ;; (spec/def ::email (spec/or :string string? :nil nil?))
 ;; NOTE Use the nilable helper rather than or if you just want nilable values
 
+;; These should be overwritten in the edn config file or on the command line via
+;; --config-merge
+(goog-define NODE_ENV "_UNSET_")
+(goog-define ADMIN_TOKEN "_UNSET_")
+(comment
+  app.core/NODE_ENV
+  app.core/ADMIN_TOKEN)
+
+(def request-headers #js{:headers {:admin_access_token ADMIN_TOKEN}})
+
+(def ADMIN_URL "https://pairwise-production-server-ous2w5vwba-uc.a.run.app/admin")
+
+(def ->url #(str ADMIN_URL %))
+(comment
+  (->url "/users")
+  (-> axios
+      (.get (->url "/users") request-headers)
+      (.then #(-> % .-data))
+      (.then #(aset js/window "_data" %))
+      (.catch #(println "Got an error!" %))))
 
 (spec/def ::guid uuid?)
 (spec/def ::email
@@ -150,6 +170,9 @@
       [:h1 "Users"]
       [:p "A list of users can go here"]
       [:> bp/Button {:on-click #(println "should fetch")} "Fetch Users"]
+      [:div.config
+       [:h3 [:strong "NODE_ENV="] [:span {:style {:color "red"}} NODE_ENV]]
+       [:h3 [:strong "ADMIN_TOKEN="] [:span {:style {:color "red"}} ADMIN_TOKEN]]]
       [:div.user-list
        (for [u users]
          [:div
@@ -208,6 +231,13 @@
        {:class "merge-class"} ;; Just showing myself that classes will be merged
        [Header]
        [:hr]
+       (if (empty? ADMIN_TOKEN)
+         [:div.no-auth
+          [:h1 "No ADMIN_TOKEN found"]
+          [:p
+           "The app could not find " [:code "ADMIN_TOKEN"]
+           " in your local environment. Without this token we have no way of
+           authenticating with the server."]])
        [:div.routed
         (let [route (:route @state)]
           (cond

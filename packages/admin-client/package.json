@@ -4,18 +4,18 @@
   "private": true,
   "scripts": {
     "sc": "shadow-cljs",
-    "server": "shadow-cljs stop && shadow-cljs start",
+    "server": "shadow-cljs stop && shadow-cljs start --config-merge \"{:closure-defines {app.core/ADMIN_TOKEN $ADMIN_TOKEN}}\"",
     "prestart": "yarn",
     "prebuild": "yarn",
-    "start": "shadow-cljs watch app",
+    "start": "export ADMIN_TOKEN=$ADMIN_TOKEN && shadow-cljs watch app --config-merge \"{:closure-defines {app.core/ADMIN_TOKEN $ADMIN_TOKEN}}\"",
     "cards": "shadow-cljs watch cards",
     "build": "yarn clean && shadow-cljs release app",
     "test": "shadow-cljs compile test && node out/test.js",
     "test:watch": "shadow-cljs watch test --config-merge \"{:autorun true}\"",
     "e2e": "shadow-cljs compile e2e && node out/e2e.js",
     "report": "shadow-cljs run shadow.cljs.build-report app report.html",
-    "lint": "clj-kondo --lint src",
-    "format": "zprint-clj --hang -i \"./src/**/*.{clj,cljs,cljc,edn}\" -o ./ && zprint-clj -i \"./*.edn\" -o ./",
+    "lint": "clj-kondo --lint client",
+    "format": "zprint-clj --hang -i \"./client/**/*.{clj,cljs,cljc,edn}\" -o ./ && zprint-clj -i \"./*.edn\" -o ./",
     "clean": "rimraf public/js"
   },
   "devDependencies": {
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "3.22.3",
+    "axios": "^0.20.0",
     "create-react-class": "~15.6.3",
     "react": "~16.8.0",
     "react-dom": "~16.8.0"
