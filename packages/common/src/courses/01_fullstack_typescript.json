@@ -1326,7 +1326,7 @@
           "id": "6l0NR0XE",
           "type": "typescript",
           "title": "Comparing Null and Undefined Equality",
-          "instructions": "You can compared `null` and `undefined` just like numbers and strings. They are all primitive values, a single `null` is identical to any other `null` value you may come across.",
+          "instructions": "You can compare `null` and `undefined` just like numbers and strings. They are all primitive values, a single `null` is identical to any other `null` value you may come across.",
           "testCode": "test(\"Both variables `anUndefinedVariable` and `explicitlyUndefined` should be equal to undefined\", () => {\n    expect(anUndefinedVariable).toBe(undefined);\n    expect(explicitlyUndefined).toBe(undefined);\n});",
           "videoUrl": "https://www.youtube.com/embed/VONkj9hWCjc",
           "starterCode": "let anUndefinedVariable;\nconst explicitlyUndefined = \"a real value\";\n\nif (anUndefinedVariable === explicitlyUndefined) {\n    console.log(\"Both values are equal to undefined!\");\n}",
