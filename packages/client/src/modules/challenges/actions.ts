@@ -140,7 +140,7 @@ export const fetchBlobForChallengeSuccess = createAction(
 
 export const fetchBlobForChallengeFailure = createAction(
   ActionTypesEnum.FETCH_BLOB_FOR_CHALLENGE_FAILURE,
-)<HttpResponseError>();
+)<{ challengeId: string; err: HttpResponseError }>();
 
 export const handleAttemptChallenge = createAction(
   ActionTypesEnum.CHALLENGE_ATTEMPTED,

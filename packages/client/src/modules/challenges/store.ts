@@ -41,6 +41,17 @@ interface AccordionViewState {
   [key: string]: boolean;
 }
 
+/**
+ * The challenge blobs represent the user's past history on a challenge,
+ * and they get fetched one by one by id. The blobCache stores the blob
+ * data and loading status for each blob. The workspace waits for blobs
+ * to load before rendering.
+ */
+interface BlobCacheItem {
+  dataBlob?: DataBlob;
+  isLoading: boolean;
+}
+
 export interface State {
   workspaceLoading: boolean;
   isEditMode: boolean;
@@ -53,8 +64,7 @@ export interface State {
   currentChallengeId: Nullable<string>;
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
-  blobCache: { [key: string]: DataBlob };
-  loadingCurrentBlob: boolean;
+  blobCache: { [key: string]: BlobCacheItem };
   adminTestTab: ADMIN_TEST_TAB;
   adminEditorTab: ADMIN_EDITOR_TAB;
   navigationSectionAccordionViewState: AccordionViewState;
@@ -77,7 +87,6 @@ const initialState: State = {
   challengeMap: null,
   sandboxChallenge: defaultSandboxChallenge,
   blobCache: {},
-  loadingCurrentBlob: true,
   adminTestTab: "testResults",
   adminEditorTab: "starterCode",
   navigationSectionAccordionViewState: {},
@@ -449,7 +458,6 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     adminTestTab: "testResults",
     adminEditorTab: "starterCode",
-    loadingCurrentBlob: true,
     displayNavigationMap: false,
     revealWorkspaceSolution: false,
     currentModuleId: payload.currentModuleId,
@@ -460,24 +468,41 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     blobCache: {
       ...state.blobCache,
-      [action.payload.challengeId]: action.payload.dataBlob,
+      [action.payload.challengeId]: {
+        isLoading: false,
+        dataBlob: action.payload.dataBlob,
+      },
     },
   }))
   .handleAction(actions.fetchBlobForChallenge, (state, action) => ({
     ...state,
-    loadingCurrentBlob: true,
+    blobCache: {
+      ...state.blobCache,
+      [action.payload]: {
+        isLoading: true,
+        dataBlob: state.blobCache[action.payload]?.dataBlob,
+      },
+    },
   }))
   .handleAction(actions.fetchBlobForChallengeSuccess, (state, action) => ({
     ...state,
-    loadingCurrentBlob: false,
     blobCache: {
       ...state.blobCache,
-      [action.payload.challengeId]: action.payload.dataBlob,
+      [action.payload.challengeId]: {
+        isLoading: false,
+        dataBlob: action.payload.dataBlob,
+      },
     },
   }))
   .handleAction(actions.fetchBlobForChallengeFailure, (state, action) => ({
     ...state,
-    loadingCurrentBlob: false,
+    blobCache: {
+      ...state.blobCache,
+      [action.payload.challengeId]: {
+        isLoading: false,
+        dataBlob: state.blobCache[action.payload.challengeId]?.dataBlob,
+      },
+    },
   }))
   .handleAction(actions.setWorkspaceChallengeLoaded, (state, action) => ({
     ...state,

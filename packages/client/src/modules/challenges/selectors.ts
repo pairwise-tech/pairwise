@@ -103,9 +103,19 @@ export const getBlobCache = createSelector(
   state => state.blobCache,
 );
 
-export const isLoadingBlob = createSelector(
-  [challengesState],
-  state => state.loadingCurrentBlob,
+export const isLoadingCurrentChallengeBlob = createSelector(
+  [getCurrentChallengeId, getBlobCache],
+  (id, cache) => {
+    if (id) {
+      const cachedBlob = cache[id];
+      if (cachedBlob) {
+        return cachedBlob.isLoading;
+      }
+    }
+
+    // Default case is true if we have no cache data
+    return true;
+  },
 );
 
 export const workspaceLoadingSelector = createSelector(
@@ -289,33 +299,31 @@ export const breadcrumbPathSelector = createSelector(
 );
 
 /**
- * Get the code blob for a challenge.
+ * Get the code blob for a challenge. Defaults to null if various
+ * expected pieces of state do not exist.
  */
 export const getBlobForCurrentChallenge = createSelector(
-  [isLoadingBlob, getBlobCache, getCurrentChallenge, isEditMode],
-  (isLoading, blobs, challenge, isEdit) => {
-    if (isLoading) {
+  [
+    isLoadingCurrentChallengeBlob,
+    getBlobCache,
+    getCurrentChallenge,
+    isEditMode,
+    adminEditorTabSelector,
+  ],
+  (isLoading, blobs, challenge, isEdit, adminTab) => {
+    if (isLoading || !challenge) {
       return null;
-    } else {
-      if (!challenge) {
-        return null;
-      } else {
-        if (isEdit) {
-          /**
-           * TODO: Should be adminEditorTab state after moving it from the
-           * Workspace to Redux Store:
-           */
-          const tab = "starterCode";
-          const editorChallengeBlob: CodeChallengeBlob = {
-            type: "challenge",
-            code: challenge[tab],
-          };
-          return editorChallengeBlob;
-        } else {
-          return blobs[challenge.id];
-        }
-      }
     }
+
+    if (isEdit) {
+      const editorChallengeBlob: CodeChallengeBlob = {
+        type: "challenge",
+        code: challenge[adminTab],
+      };
+      return editorChallengeBlob;
+    }
+
+    return blobs[challenge.id]?.dataBlob || null;
   },
 );
 
