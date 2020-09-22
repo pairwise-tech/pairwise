@@ -323,14 +323,7 @@ export const getBlobForCurrentChallenge = createSelector(
       return editorChallengeBlob;
     }
 
-    if (challenge.id in blobs) {
-      const blob = blobs[challenge.id].dataBlob;
-      if (blob) {
-        return blob;
-      }
-    }
-
-    return null;
+    return blobs[challenge.id]?.dataBlob || null;
   },
 );
 
