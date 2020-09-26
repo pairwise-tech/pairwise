@@ -1577,7 +1577,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isEditMode: ChallengeSelectors.isEditMode(state),
   isDirty: ChallengeSelectors.isDirty(state),
   isUserLoading: Modules.selectors.user.loading(state),
-  isLoadingBlob: ChallengeSelectors.isLoadingBlob(state),
   challenge: ChallengeSelectors.getCurrentChallenge(state),
   userSettings: Modules.selectors.user.userSettings(state),
   editorOptions: Modules.selectors.user.editorOptions(state),
@@ -1586,6 +1585,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
   revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
+  isLoadingBlob: ChallengeSelectors.isLoadingCurrentChallengeBlob(state),
   isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
   isTestingAndAutomationChallenge: ChallengeSelectors.isTestingAndAutomationChallenge(
     state,
