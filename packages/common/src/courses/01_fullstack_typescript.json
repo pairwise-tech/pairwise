@@ -4277,7 +4277,7 @@
         },
         {
           "id": "u$qJVfDfE",
-          "type": "media",
+          "type": "project",
           "title": "Build an Interactive Dictionary",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
