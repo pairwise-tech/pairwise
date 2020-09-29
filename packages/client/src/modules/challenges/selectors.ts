@@ -256,7 +256,11 @@ export const isReactNativeChallenge = createSelector(
 );
 
 /**
- * Get the breadcrumbs path for a, given challenge.
+ * Get the breadcrumbs path for a given challenge. We need to take the
+ * current challenge id and look it up in its course/module to assemble the
+ * correct breadcrumbs path. This is because the currentModule state we track
+ * actually can change when you click around the NavigationOverlay...
+ * (kind of a bug... or not?).
  */
 export const breadcrumbPathSelector = createSelector(
   [getCurrentChallengeId, getChallengeMap, courseList],
@@ -266,9 +270,7 @@ export const breadcrumbPathSelector = createSelector(
       return null;
     }
 
-    /**
-     * We need to find the current challenge and module in the  course list...
-     */
+    // We need to find the current challenge and module in the  course list...
     const challengeMeta = challengeMap[id];
     const currentCourse = courses?.find(c => c.id === challengeMeta.courseId);
     const currentModule = currentCourse?.modules.find(
