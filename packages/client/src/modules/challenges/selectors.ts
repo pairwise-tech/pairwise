@@ -259,9 +259,25 @@ export const isReactNativeChallenge = createSelector(
  * Get the breadcrumbs path for a, given challenge.
  */
 export const breadcrumbPathSelector = createSelector(
-  [getCurrentChallenge, getCurrentModule],
-  (challenge, currentModule): Nullable<BreadcrumbsData> => {
+  [getCurrentChallengeId, getChallengeMap, courseList],
+  (id, challengeMap, courses): Nullable<BreadcrumbsData> => {
     // No crumbs if not module or challenge...
+    if (!id || !challengeMap) {
+      return null;
+    }
+
+    /**
+     * We need to find the current challenge and module in the  course list...
+     */
+    const challengeMeta = challengeMap[id];
+    const currentCourse = courses?.find(c => c.id === challengeMeta.courseId);
+    const currentModule = currentCourse?.modules.find(
+      m => m.id === challengeMeta.moduleId,
+    );
+    const challenge = currentModule?.challenges.find(
+      c => c.id === challengeMeta.challenge.id,
+    );
+
     if (!currentModule || !challenge) {
       return null;
     }
