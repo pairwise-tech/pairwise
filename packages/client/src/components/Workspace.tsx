@@ -388,7 +388,7 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   /**
-   * for on-markup challenges (react, TS), enable the user to
+   * For non-markup challenges (React, TS), enable the user to
    * preview test messages without the tests being run
    */
   getDefaultTestResultsState = () => {
