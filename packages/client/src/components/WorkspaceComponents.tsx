@@ -241,7 +241,12 @@ export const TestResultRow = ({
   error,
   index,
   testsRunning,
-}: TestCase & { index: number; testsRunning: boolean }) => {
+  isPreviewTestResults,
+}: TestCase & {
+  index: number;
+  testsRunning: boolean;
+  isPreviewTestResults: boolean;
+}) => {
   const [showError, setShowError] = React.useState(false);
   const toggleShowError = () => {
     if (!error) {
@@ -250,19 +255,25 @@ export const TestResultRow = ({
     setShowError(!showError);
   };
 
-  const testStatus = testsRunning
+  const testStatus = isPreviewTestResults
+    ? "no-results"
+    : testsRunning
     ? "loading"
     : testResult
     ? "success"
     : "failure";
 
-  const testCaseMessage = testsRunning
+  const testCaseMessage = isPreviewTestResults
+    ? "No results"
+    : testsRunning
     ? "Running..."
     : testResult
     ? "Success!"
     : "Incomplete...";
 
-  const TestCaseIcon = testsRunning ? (
+  const TestCaseIcon = isPreviewTestResults ? (
+    <Icon icon="circle" intent="warning" />
+  ) : testsRunning ? (
     <Icon icon="time" intent="warning" />
   ) : error ? (
     <Icon icon="error" intent="danger" />
@@ -344,12 +355,13 @@ export const ContentTitle = styled.h3`
 export const TestCaseStatusText = styled.p`
   margin: 0;
   margin-left: 4px;
+  white-space: nowrap;
   color: ${({
     testStatus,
   }: {
-    testStatus: "success" | "failure" | "loading";
+    testStatus: "success" | "failure" | "loading" | "no-results";
   }) =>
-    testStatus === "loading"
+    testStatus === "loading" || testStatus === "no-results"
       ? C.SECONDARY_YELLOW
       : testStatus === "success"
       ? C.SUCCESS

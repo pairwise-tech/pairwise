@@ -641,6 +641,45 @@ export const compileCodeString = async (
 };
 
 /**
+ * A helper run when a new challenge is loaded to enable the user to preview
+ * test messages without the tests being run (which is disabled for TS
+ * challenges to avoid infinite loops / recursion which can be very
+ * hard for the user to recover from)
+ */
+export const buildPreviewTestResultsFromCode = (
+  testCode: string,
+): { results?: TestCase[]; error?: Error } => {
+  const codeString = `(function () {
+    const previewTestResults = [];
+
+    const test = (message) => {
+      previewTestResults.push({
+          message,
+          testResult: false
+      });
+    }
+
+    ${testCode}
+
+    return previewTestResults;
+  })();`;
+
+  try {
+    // only eval'ing Pairwise test code
+    // tslint:disable-next-line
+    const results = eval(codeString);
+
+    return {
+      results,
+    };
+  } catch (error) {
+    return {
+      error,
+    };
+  }
+};
+
+/**
  * An array of 100 random string values which is populated in the
  * test environment to use as a source of fixed data for writing
  * challenge tests.

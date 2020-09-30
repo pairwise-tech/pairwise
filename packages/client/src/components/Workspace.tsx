@@ -33,6 +33,7 @@ import {
   IFRAME_MESSAGE_TYPES,
   TestCase,
   getMarkupSrcDocument,
+  buildPreviewTestResultsFromCode,
 } from "../tools/test-utils";
 import ChallengeTestEditor from "./ChallengeTestEditor";
 import MediaArea from "./MediaArea";
@@ -126,6 +127,7 @@ interface IState {
   code: string;
   testResultsLoading: boolean;
   testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
+  isPreviewTestResults: boolean;
   monacoInitializationError: boolean;
   logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
   hideSuccessModal: boolean;
@@ -219,10 +221,15 @@ class Workspace extends React.Component<IProps, IState> {
     this.userCode = initialCode;
 
     const dimensions = getDimensions();
+    const {
+      testResults,
+      isPreviewTestResults,
+    } = this.getDefaultTestResultsState();
 
     this.state = {
       code: initialCode,
-      testResults: [],
+      testResults,
+      isPreviewTestResults,
       logs: DEFAULT_LOGS,
       monacoInitializationError: false,
 
@@ -380,6 +387,34 @@ class Workspace extends React.Component<IProps, IState> {
     }
   }
 
+  /**
+   * for on-markup challenges (react, TS), enable the user to
+   * preview test messages without the tests being run
+   */
+  getDefaultTestResultsState = () => {
+    if (this.props.challenge.type !== "markup") {
+      const { error, results } = buildPreviewTestResultsFromCode(
+        this.props.challenge.testCode,
+      );
+
+      if (results?.length) {
+        return {
+          testResults: results,
+          isPreviewTestResults: true,
+        };
+      } else {
+        console.log(
+          `[getPreviewTestResults] buildPreviewTestResultsFromCode failed: ${error}`,
+        );
+      }
+    }
+
+    return {
+      testResults: [],
+      isPreviewTestResults: false,
+    };
+  };
+
   refreshEditor = async () => {
     debug("refreshEditor");
     await this.editor?.refresh();
@@ -471,6 +506,7 @@ class Workspace extends React.Component<IProps, IState> {
       testResultsLoading,
       shouldRefreshLayout,
       mobileDevicePreviewType,
+      isPreviewTestResults,
     } = this.state;
     const {
       challenge,
@@ -535,6 +571,7 @@ class Workspace extends React.Component<IProps, IState> {
                 key={i}
                 index={i}
                 testsRunning={testResultsLoading}
+                isPreviewTestResults={isPreviewTestResults}
               />
             ))}
             <Spacer height={50} />
@@ -1073,7 +1110,7 @@ class Workspace extends React.Component<IProps, IState> {
     const { passedTests, testResults } = this.getTestPassedStatus();
 
     // No results exist yet
-    if (testResults.length === 0) {
+    if (testResults.length === 0 || this.state.isPreviewTestResults) {
       return "No test results yet.";
     }
 
@@ -1297,6 +1334,7 @@ class Workspace extends React.Component<IProps, IState> {
       {
         logs: DEFAULT_LOGS,
         testResultsLoading: true, // See NOTE
+        isPreviewTestResults: false,
       },
       () => {
         // Start the test cancellation timer and render the code preview
