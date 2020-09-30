@@ -403,7 +403,7 @@ class Workspace extends React.Component<IProps, IState> {
           isPreviewTestResults: true,
         };
       } else {
-        console.log(
+        debug(
           `[getPreviewTestResults] buildPreviewTestResultsFromCode failed: ${error}`,
         );
       }
