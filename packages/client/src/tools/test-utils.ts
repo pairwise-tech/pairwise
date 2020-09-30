@@ -645,6 +645,14 @@ export const compileCodeString = async (
  * test messages without the tests being run (which is disabled for TS
  * challenges to avoid infinite loops / recursion which can be very
  * hard for the user to recover from)
+ *
+ * NOTE:
+ * This regex only works if the last comma on the test's first line
+ * is the comma which separates the function's two arguments (message, cb).
+ * If a test happened to be on a single line and the test code had a comma
+ * in it, this regex would break / show something funny in the UI. As of this
+ * commit, there are no instances of this in the codebase, and it seems
+ * unlikely that it will ever happen given that this would be bad practice
  */
 export const buildPreviewTestResultsFromCode = (
   testCode: string,
