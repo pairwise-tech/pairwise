@@ -649,25 +649,17 @@ export const compileCodeString = async (
 export const buildPreviewTestResultsFromCode = (
   testCode: string,
 ): { results?: TestCase[]; error?: Error } => {
-  const codeString = `(function () {
-    const previewTestResults = [];
-
-    const test = (message) => {
-      previewTestResults.push({
-          message,
-          testResult: false
-      });
-    }
-
-    ${testCode}
-
-    return previewTestResults;
-  })();`;
-
   try {
-    // only eval'ing Pairwise test code
-    // tslint:disable-next-line
-    const results = eval(codeString);
+    const matches = testCode.match(/(?<=test\().+,/g) ?? [];
+    const results = matches.map(match => ({
+      message: match.slice(1, -2),
+      testResult: false,
+      test: "",
+    }));
+
+    if (results.length === 0) {
+      throw new Error("Unable to extract test messages from test code!");
+    }
 
     return {
       results,
