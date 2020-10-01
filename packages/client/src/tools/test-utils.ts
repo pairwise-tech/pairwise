@@ -647,20 +647,18 @@ export const compileCodeString = async (
  * hard for the user to recover from)
  *
  * NOTE:
- * This regex only works if the last comma on the test's first line
- * is the comma which separates the function's two arguments (message, cb).
- * If a test happened to be on a single line and the test code had a comma
- * in it, this regex would break / show something funny in the UI. As of this
- * commit, there are no instances of this in the codebase, and it seems
- * unlikely that it will ever happen given that this would be bad practice
+ * The regex below could be simplified, but matching on the beginning of the
+ * test callback helps it to be a bit closer to foolproof in case a test happens
+ * to be on a single line, e.g. test("...", () => {...});
  */
 export const buildPreviewTestResultsFromCode = (
   testCode: string,
 ): { results?: TestCase[]; error?: Error } => {
   try {
-    const matches = testCode.match(/(?<=test\().+,/g) ?? [];
+    const re = /(?<=test\().+,\s?(?:async)?\s?\(\)\s?=>/g;
+    const matches = testCode.match(re) ?? [];
     const results = matches.map(match => ({
-      message: match.slice(1, -2),
+      message: match.slice(1, match.lastIndexOf(",") - 1),
       testResult: false,
       test: "",
     }));
