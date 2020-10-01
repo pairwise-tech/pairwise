@@ -284,12 +284,18 @@ export const TestResultRow = ({
   return (
     <StyledTestResultRow>
       <ContentDiv>
-        <MinimalButton
-          style={{ cursor: error ? "pointer" : "normal" }}
-          onClick={toggleShowError}
+        <Tooltip
+          position="right"
+          disabled={!Boolean(error)}
+          content={showError ? "Hide error" : "Show error"}
         >
-          {TestCaseIcon}
-        </MinimalButton>
+          <MinimalButton
+            style={{ cursor: error ? "pointer" : "normal" }}
+            onClick={toggleShowError}
+          >
+            {TestCaseIcon}
+          </MinimalButton>
+        </Tooltip>
         <TestMessageHighlighter source={message} />
         <TestStatus>
           <b style={{ color: C.TEXT_TITLE }}>Status:</b>
