@@ -130,10 +130,10 @@ with teaching yourself to code. To be specific, they know that it's both possibl
 difficult. 
 
 Late in 2019 the two set out to build a prototype. Initially the project was
-called "Prototype X" and it was about as rough a rough draft can get and still
+called "Prototype X" and it was about as rough as a rough draft can get and still
 work. The prototype went up surprisingly quickly. In just a few weeks the first
 usable version of what would later become Pairwise was born. Ian and Sean had
-something to could show to users. For a few weeks they did just that.
+something they could show to users. For a few weeks they did just that.
 
 However, as first-time founders they quickly got *really* excited about the
 product. They stopped meeting with users in order to focus fully on building
@@ -145,7 +145,7 @@ content for the first course: Introduction to Programming.
         <Markdown
           source={`
 It's really exciting to have the first sections of the course done. Pairwise
-haws hundreds of challenges and video explanations. It represents the most
+has hundreds of challenges and video explanations. It represents the most
 widely accessible and low friction approach to teaching programming yet. 
 
 ### The first cohort
