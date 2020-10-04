@@ -189,8 +189,8 @@
           "instructions": "Webpages would not be very useful without the ability to enter information and support user interactions. In fact, submitting text to a webpage is one of the most common interactions. How do we enter text in an HTML document? We can use the `input` tag\\. It's very easy, actually. Try to add an `input` tag in the HTML document below. The input tag behaves very similarly to the tags we have already seen.\n\nOnce you figure it out, try typing in the input element in the preview\\! Great\\!",
           "testCode": "test(\"The HTML document should contain an `input` tag.\", () => {\n  expect(get(\"input\") !== null).toBe(true);\n});\n",
           "videoUrl": "https://www.youtube.com/embed/ZMVfhC-m7H8",
-          "starterCode": "<div>\n  <h1>We want to enter some text</h1>\n  <p>Any text!</p>\n  <div>\n    <b>Let the user decide!</b>\n  </div>\n  <div>\n    <italic>Let's add an \"input\" tag here:</italic>\n  </div>\n</div>\n",
-          "solutionCode": "<div>\n  <h1>We want to enter some text</h1>\n  <p>Any text!</p>\n  <div>\n    <b>Let the user decide!</b>\n  </div>\n  <div>\n    <italic>Let's add an \"input\" tag here:</italic>\n  </div>\n  <input />\n</div>\n",
+          "starterCode": "<div>\n  <h1>We want to enter some text</h1>\n  <p>Any text!</p>\n  <div>\n    <b>Let the user decide!</b>\n  </div>\n  <div>\n    <em>Let's add an \"input\" tag here:</em>\n  </div>\n</div>\n",
+          "solutionCode": "<div>\n  <h1>We want to enter some text</h1>\n  <p>Any text!</p>\n  <div>\n    <b>Let the user decide!</b>\n  </div>\n  <div>\n    <em>Let's add an \"input\" tag here:</em>\n  </div>\n  <input />\n</div>\n",
           "content": ""
         },
         {
