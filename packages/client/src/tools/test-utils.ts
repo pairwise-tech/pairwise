@@ -641,6 +641,43 @@ export const compileCodeString = async (
 };
 
 /**
+ * A helper run when a new challenge is loaded to enable the user to preview
+ * test messages without the tests being run (which is disabled for TS
+ * challenges to avoid infinite loops / recursion which can be very
+ * hard for the user to recover from)
+ *
+ * NOTE:
+ * The regex below could be simplified, but matching on the beginning of the
+ * test callback helps it to be a bit closer to foolproof in case a test happens
+ * to be on a single line, e.g. test("...", () => {...});
+ */
+export const buildPreviewTestResultsFromCode = (
+  testCode: string,
+): { results?: TestCase[]; error?: Error } => {
+  try {
+    const re = /(?<=test\().+,\s?(?:async)?\s?\(\)\s?=>/g;
+    const matches = testCode.match(re) ?? [];
+    const results = matches.map(match => ({
+      message: match.slice(1, match.lastIndexOf(",") - 1),
+      testResult: false,
+      test: "",
+    }));
+
+    if (results.length === 0) {
+      throw new Error("Unable to extract test messages from test code!");
+    }
+
+    return {
+      results,
+    };
+  } catch (error) {
+    return {
+      error,
+    };
+  }
+};
+
+/**
  * An array of 100 random string values which is populated in the
  * test environment to use as a source of fixed data for writing
  * challenge tests.
