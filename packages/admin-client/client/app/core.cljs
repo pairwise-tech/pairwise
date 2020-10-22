@@ -1,6 +1,5 @@
 (ns app.core
   "This namespace contains your application and is the entrypoint for 'yarn start'."
-  (:require-macros [clojure.core.async :refer [go go-loop]])
   (:require [reagent.core :as r]
             [clojure.core.async :as async :refer [>! <! chan]]
             [clojure.string :refer [starts-with?]]
@@ -29,20 +28,20 @@
   app.core/NODE_ENV
   app.core/ADMIN_TOKEN)
 
-(def request-headers #js{:headers {:admin_access_token ADMIN_TOKEN}})
+(def request-headers (clj->js {:headers {:admin_access_token ADMIN_TOKEN}}))
 
 (def ADMIN_URL "https://pairwise-production-server-ous2w5vwba-uc.a.run.app/admin")
 
 (def ->url #(str ADMIN_URL %))
 (comment
-  (->url "/users")
+  (console.log (->url "/users"))
   (-> axios
       (.get (->url "/users") request-headers)
       (.then #(-> % .-data))
       (.then #(aset js/window "_data" %))
       (.catch #(println "Got an error!" %))))
 
-(spec/def ::guid uuid?)
+(spec/def ::id uuid?)
 (spec/def ::email
   (spec/with-gen
     (spec/and string?
@@ -59,7 +58,7 @@
 (js/console.log #js{:hey "you"})
 
 (spec/def ::name (spec/nilable string?))
-(spec/def ::user (spec/keys :req-un [::guid ::email ::name]))
+(spec/def ::user (spec/keys :req-un [::id ::email ::name]))
 
 (comment
   (gen/sample (gen/tuple string-alnum-gen email-host-gen))
@@ -67,7 +66,7 @@
   (spec/valid? nil? "hey")
 
   ;; Hm, not actually sure what a uuid is
-  (spec/valid? ::user {:guid (uuid "3f716909-e631-4458-b820-6a46cf5113b0") :name "Ian" :email "mail@mail.com"})
+  (spec/valid? ::user {:id (uuid "3f716909-e631-4458-b820-6a46cf5113b0") :name "Ian" :email "mail@mail.com"})
 
   (spec/valid? ::email "hey@mail.com")
   (spec/valid? ::email "hey")
@@ -81,10 +80,14 @@
 
 (defn get-initial-state
   [& {:as overrides}]
-  (let [defaults {:route "/"}]
+  (let [defaults {:route "/" :users {}}]
     (merge defaults overrides)))
 
 (def state (r/atom (get-initial-state)))
+
+(aset js/window "axios" axios)
+(aset js/window "hdrs" request-headers)
+(aset js/window "getState" (fn [] (clj->js @state)))
 
 (defn e->href [e] (-> e .-target .-href))
 
@@ -151,18 +154,47 @@
                  (omit-keys props [:exact])) children])))
 
 (let [a (for [user (gen/sample (spec/gen ::user))]
-          (:guid user))
-      b (map :guid (gen/sample (spec/gen ::user)))]
+          (:id user))
+      b (map :id (gen/sample (spec/gen ::user)))]
   (println (= a b)))
+
+;; (defn fetch-users
+;;   []
+;;   (for [user (gen/sample (spec/gen ::user))] user))
+
+(defn index-by
+  [xs k]
+  (->> xs
+       (reduce
+        (fn [agg m] (assoc agg (get m k) m))
+        {})))
+
+(comment
+    (index-by [{:id "wee" :name "jubles"} {:id "sup" :name "HOO"}] :id))
+
+(def heyhey (atom nil))
+
+(-> @heyhey (->> (take 2)) (index-by "uuid"))
+(-> @state :users vals)
 
 (defn fetch-users
   []
-  (for [user (gen/sample (spec/gen ::user))] user))
+  (-> axios
+      (.get (->url "/users") request-headers)
+      (.then #(-> % .-data))
+      (.then (fn [x]
+               (aset js/window "_data" x)
+               (reset! heyhey (js->clj x))
+               (swap! state update :users #(-> x
+                                               js->clj
+                                               (index-by "uuid")))))
+      (.catch #(println "Got an error!" %))))
 
 (comment (fetch-users))
 
+;; TODO FIX DATA Mapping!!
 (defn Users
-  ([] [Users []])
+  ([] [Users (-> @state :users vals)])
   ([users]
    (if (empty? users)
      [:div.users "No users :("]
@@ -176,22 +208,22 @@
       [:div.user-list
        (for [u users]
          [:div
-          {:key (:guid u)}
-          [:p [:strong "guid:"] " " (-> u :guid str)]
+          {:key (:id u)}
+          [:p [:strong "id:"] " " (-> u :id str)]
           [:p [:string "name:"] " " (or (:name u) "<Unknown>")]
           [:p [:string "email:"] " " (:email u)]
-          [Link {:href (str "users/" (:guid u))} "View"]])]])))
+          [Link {:href (str "users/" (:id u))} "View"]])]])))
 
-(defn route->guid [route] (second (re-matches #"/users/([\w-]+)" route)))
+(defn route->id [route] (second (re-matches #"/users/([\w-]+)" route)))
 
 (defn UserDetails
   []
-  (let [guid (route->guid (:route @state))]
-    (if-not guid
-      [:div [:h1 "User Not Found"] [:p "No user found for guid."]]
+  (let [id (route->id (:route @state))]
+    (if-not id
+      [:div [:h1 "User Not Found"] [:p "No user found for id."]]
       [:div
        [:h1 "User Details"]
-       [:p [:string "guid: "] guid]])))
+       [:p [:string "id: "] id]])))
 
 (defn Home
   []
@@ -225,7 +257,7 @@
 (defn App
   []
   (let [_ (app-init)
-        users (fetch-users)]
+        _ (fetch-users)]
     (fn []
       [:div.main
        {:class "merge-class"} ;; Just showing myself that classes will be merged
@@ -241,8 +273,8 @@
        [:div.routed
         (let [route (:route @state)]
           (cond
-            (= route "/") [Users users]
-            (route->guid route) [UserDetails]
+            (= route "/") [Users]
+            (route->id route) [UserDetails]
             (= route "/about") [About]
             (= route "/hello") [hello]
             :else [NotFound]))]])))
