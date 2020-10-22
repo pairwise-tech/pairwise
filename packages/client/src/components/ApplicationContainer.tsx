@@ -430,6 +430,7 @@ const ApplicationContainer = (props: IProps) => {
         <Route key="workspace" path="/workspace" component={Workspace} />
         <Route key="workspace" path="/workspace/:id" component={Workspace} />
         <Route key="home" path="/home" component={Home} />
+        <Route key="404" path="/404" component={LostPage} />
         <Route key="account" path="/account" component={Account} />
         {!isLoggedIn && (
           <Route
@@ -751,6 +752,41 @@ const AccountDropdownButton = styled.div`
     color: ${COLORS.TEXT_HOVER};
   }
 `;
+
+const LostPageContainer = styled.div`
+  margin-top: 150px;
+  padding: 50px;
+  max-width: 650px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+`;
+
+/**
+ * A simple 404 UI.
+ */
+const LostPage = () => (
+  <LostPageContainer style={{ marginTop: 150 }}>
+    <h1>404: Page Not Found</h1>
+    <p>
+      In your journey to learn programming, you may often encountered this
+      error, which is in fact an HTTP response status code. A response code of
+      404 means the requested resource could not be found.
+    </p>
+    <p>
+      But alas, this is not a Pairwise challenge! You are in fact lost, and this
+      is a real 404 error. You must have visited a url which is wrong or does
+      not exist.
+    </p>
+    <p>
+      Please consider returning <Link to="/home">home</Link> to find your way
+      again.
+    </p>
+  </LostPageContainer>
+);
 
 /**
  * Determine if a touch event came the code panel scroll area.

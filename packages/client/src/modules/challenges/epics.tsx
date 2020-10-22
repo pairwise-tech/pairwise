@@ -342,6 +342,28 @@ const setWorkspaceLoadedEpic: EpicSignature = action$ => {
 };
 
 /**
+ * Handle redirecting the user if the are on the workspace/ route but
+ * with an incorrect challenge id, or some other non-workspace valid path.
+ */
+const lostUserEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.storeInverseChallengeMapping)),
+    filter(() => {
+      return deps.router.location.pathname.includes("workspace");
+    }),
+    tap(() => {
+      const { currentChallengeId, challengeMap } = state$.value.challenges;
+      if (challengeMap && currentChallengeId) {
+        if (!challengeMap[currentChallengeId]) {
+          deps.router.push("/404");
+        }
+      }
+    }),
+    ignoreElements(),
+  );
+};
+
+/**
  * Sync the challenge id to the url epic. Allow the workspace url to
  * dictate the current challenge id. This epic responds to location change
  * events and sets the challenge id if needed.
@@ -874,6 +896,7 @@ export default combineEpics(
   fetchCodeBlobForChallengeEpic,
   completeProjectSubmissionEpic,
   setWorkspaceLoadedEpic,
+  lostUserEpic,
   resetChallengeContextAfterDeletionEpic,
   codepressDeleteToasterEpic,
   updateLastActiveChallengeIdsEpic,

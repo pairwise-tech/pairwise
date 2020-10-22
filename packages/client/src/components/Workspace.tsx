@@ -1714,12 +1714,16 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   render() {
     const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
 
-    if (!challenge || isLoadingBlob || isUserLoading) {
+    if (isLoadingBlob || isUserLoading) {
       return (
         <div style={{ marginTop: 150 }}>
           <Loading />
         </div>
       );
+    } else if (!challenge) {
+      // A challenge did not load... this should be handled with a 404 page
+      // elsewhere, but adding this here for type-checking.
+      return null;
     }
 
     /**
