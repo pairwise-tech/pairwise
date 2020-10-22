@@ -238,7 +238,7 @@ export const getSectionProgress = (
   courseId: string,
 ) => {
   return sectionChallenges.reduce(
-    (acc, { id }) =>
+    (acc: number, { id }) =>
       getChallengeProgress(userProgressMap, courseId, id) === "COMPLETE"
         ? acc + 1
         : acc,
