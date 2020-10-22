@@ -4712,6 +4712,17 @@
           "content": "..."
         },
         {
+          "id": "nwJ$A$2sF",
+          "type": "media",
+          "title": "Additional Jest Features",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "qU36RQTcK",
           "type": "media",
           "title": "Setting Up and Running Jest",
@@ -4809,6 +4820,83 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In these special topics we will cover some additional topics related to testing software and automation. There are many tools and skills which are useful to learn or be aware of in this area. Here we will cover some of these, and also present some fascinating debugging war stories."
+        },
+        {
+          "id": "CFGNmn@Va",
+          "type": "media",
+          "title": "Regression Testing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "p6zw0DFcp",
+          "type": "media",
+          "title": "Smoke Testing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "yRbsegwJs",
+          "type": "media",
+          "title": "Stress Testing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "NaVGTkbZ4",
+          "type": "media",
+          "title": "Fuzzing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "pUxKN2l2u",
+          "type": "media",
+          "title": "Split Testing (A/B Testing)",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "fgIlzO7F@",
+          "type": "media",
+          "title": "Beta Testing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "uhN@tgz0R",
+          "type": "media",
+          "title": "Chaos Monkey",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
         }
       ]
     },
