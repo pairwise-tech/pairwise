@@ -4604,7 +4604,7 @@
         {
           "id": "wQ66ODZrbC",
           "type": "media",
-          "title": "Introducing Jest",
+          "title": "Introducing Unit Testing with Jest",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
@@ -4615,7 +4615,7 @@
         {
           "id": "kGOefnhFl",
           "type": "typescript",
-          "title": "Write Your First Test",
+          "title": "Write Your First Jest Test",
           "instructions": "Write a simple test to test the behavior of an `add` function\\. A global Jest\\-style `expect` library exists for you to perform assertions. You can write a test like this:\n\n```typescript\ntest(\"The add function adds numbers correctly.\", () => {\n  expect(add(1, 2)).toEqual(3);\n});\n\n```\n",
           "testCode": "test(\"The `add` function is defined using the `let` keyword.\", () => {\n  add = 5;\n  expect(add).toBe(5);\n});\n\ntest(\"At least one test exists in a `test` block.\", () => {\n  expect(__USER_TEST_LIST__.length > 0).toBe(true);\n});\n\ntest(\"The tests check the expected behavior of `add` correctly.\", () => {\n  expect(__USER_TEST_LIST__.length > 0).toBe(true);\n  for (const { test } of __USER_TEST_LIST__) {\n    add = (a, b) => a + b;\n    test();\n\n    try {\n      add = (a, b) => a - b;\n      test();\n      fail();\n    } catch (err) {\n      pass();\n    }\n  }\n});\n",
           "videoUrl": "",
@@ -4778,6 +4778,17 @@
           "content": "..."
         },
         {
+          "id": "8gYWsIVO$",
+          "type": "media",
+          "title": "Testing Automation",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "QDmiOTwAY",
           "type": "section",
           "title": "Automation",
@@ -4897,6 +4908,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "..."
+        },
+        {
+          "id": "Jdf0MWZX2",
+          "type": "media",
+          "title": "QA Testing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
         }
       ]
     },
