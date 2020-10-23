@@ -36,14 +36,17 @@ interface SlackAccountCreationMessageData {
   config?: SlackMessageConfig;
 }
 
-interface SlackAdminMessageData {
+export interface AdminRequestOptions {
   requestPath: ADMIN_URLS;
   httpMethod: HTTP_METHOD;
   adminUserEmail: string;
+}
+
+interface SlackAdminMessageData extends AdminRequestOptions {
   config?: SlackMessageConfig;
 }
 
-interface SlackAdminErrorMessageData {
+interface SlackAdminErrorMessageData extends AdminRequestOptions {
   error: string;
 }
 
@@ -165,8 +168,13 @@ export class SlackService {
     }
   }
 
-  public async postAdminErrorMessage({ error }: SlackAdminErrorMessageData) {
-    const message = `An error occurred with an admin API request, here's what we know: ${error}`;
+  public async postAdminErrorMessage({
+    error,
+    httpMethod,
+    requestPath,
+    adminUserEmail,
+  }: SlackAdminErrorMessageData) {
+    const message = `:skull_and_crossbones: Admin API request for *[${httpMethod}]:* \`${requestPath}\` from user: \`${adminUserEmail}\` failed, here's what we known: ${error}`;
     await this.postMessageToChannel(message, { channel: "production" });
   }
 

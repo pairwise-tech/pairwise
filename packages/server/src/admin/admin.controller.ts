@@ -11,7 +11,11 @@ import {
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthenticatedRequest } from "../types";
 import { AdminService } from "./admin.service";
-import { slackService, SlackService } from "../slack/slack.service";
+import {
+  slackService,
+  SlackService,
+  AdminRequestOptions,
+} from "../slack/slack.service";
 import { FeedbackService } from "../feedback/feedback.service";
 import { UserService } from "../user/user.service";
 import { PaymentsService } from "../payments/payments.service";
@@ -47,17 +51,19 @@ export class AdminController {
   @UseGuards(AdminAuthGuard)
   @Get()
   public async adminIndex(@Request() req: AuthenticatedRequest) {
+    const adminUserEmail = req.user.profile.email;
+    const options: AdminRequestOptions = {
+      httpMethod: "GET",
+      requestPath: "admin",
+      adminUserEmail,
+    };
+
     try {
-      const adminUserEmail = req.user.profile.email;
       const result = await this.adminService.adminEndpoint();
-      this.slackService.postAdminActionAwarenessMessage({
-        httpMethod: "GET",
-        requestPath: "admin",
-        adminUserEmail,
-      });
+      this.slackService.postAdminActionAwarenessMessage(options);
       return result;
     } catch (err) {
-      this.handleError(err);
+      this.handleError(err, options);
     }
   }
 
@@ -71,16 +77,22 @@ export class AdminController {
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {
+    const { userEmail, courseId } = body;
+    const options: AdminRequestOptions = {
+      httpMethod: "POST",
+      requestPath: "admin/purchase-course",
+      adminUserEmail: req.user.profile.email,
+    };
+
     try {
-      const { userEmail, courseId } = body;
       const result = await this.paymentsService.handlePurchaseCourseByAdmin(
         userEmail,
         courseId,
       );
-      this.postAdminStatusMessage(req, "POST", "admin/purchase-course");
+      this.slackService.postAdminActionAwarenessMessage(options);
       return result;
     } catch (err) {
-      this.handleError(err);
+      this.handleError(err, options);
     }
   }
 
@@ -91,16 +103,22 @@ export class AdminController {
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {
+    const { userEmail, courseId } = body;
+    const options: AdminRequestOptions = {
+      httpMethod: "POST",
+      requestPath: "admin/refund-course",
+      adminUserEmail: req.user.profile.email,
+    };
+
     try {
-      const { userEmail, courseId } = body;
       const result = await this.paymentsService.handleRefundCourseByAdmin(
         userEmail,
         courseId,
       );
-      this.postAdminStatusMessage(req, "POST", "admin/refund-course");
+      this.slackService.postAdminActionAwarenessMessage(options);
       return result;
     } catch (err) {
-      this.handleError(err);
+      this.handleError(err, options);
     }
   }
 
@@ -110,93 +128,88 @@ export class AdminController {
     @Param() params,
     @Request() req: AuthenticatedRequest,
   ) {
+    const { challengeId } = params;
+    // Post status message to Slack
+    const adminUserEmail = req.user.profile.email;
+    const options: AdminRequestOptions = {
+      httpMethod: "POST",
+      requestPath: "admin/feedback/:challengeId",
+      adminUserEmail,
+    };
+
     try {
-      const { challengeId } = params;
-      // Post status message to Slack
-      const adminUserEmail = req.user.profile.email;
       const result = await this.feedbackService.getFeedbackForChallenge(
         challengeId,
       );
-      this.slackService.postAdminActionAwarenessMessage({
-        httpMethod: "POST",
-        requestPath: "admin/feedback/:challengeId",
-        adminUserEmail,
-      });
+      this.slackService.postAdminActionAwarenessMessage(options);
       return result;
     } catch (err) {
-      this.handleError(err);
+      this.handleError(err, options);
     }
   }
 
   @UseGuards(AdminAuthGuard)
   @Get("/user/:email")
   async getUser(@Param() params, @Request() req: AuthenticatedRequest) {
+    const { email } = params;
+    const adminUserEmail = req.user.profile.email;
+    const options: AdminRequestOptions = {
+      httpMethod: "GET",
+      requestPath: "admin/user",
+      adminUserEmail,
+    };
+
     try {
-      const { email } = params;
-      const adminUserEmail = req.user.profile.email;
       const result = await this.userService.adminGetUser(email);
-      this.slackService.postAdminActionAwarenessMessage({
-        httpMethod: "GET",
-        requestPath: "admin/user",
-        adminUserEmail,
-      });
+      this.slackService.postAdminActionAwarenessMessage(options);
       return result;
     } catch (err) {
-      this.handleError(err);
+      this.handleError(err, options);
     }
   }
 
   @UseGuards(AdminAuthGuard)
   @Get("/users")
   async getAllUsers(@Request() req: AuthenticatedRequest) {
+    const adminUserEmail = req.user.profile.email;
+    const options: AdminRequestOptions = {
+      httpMethod: "GET",
+      requestPath: "admin/users",
+      adminUserEmail,
+    };
+
     try {
-      const adminUserEmail = req.user.profile.email;
       const result = await this.userService.adminGetAllUsers();
-      this.slackService.postAdminActionAwarenessMessage({
-        httpMethod: "GET",
-        requestPath: "admin/users",
-        adminUserEmail,
-      });
+      this.slackService.postAdminActionAwarenessMessage(options);
       return result;
     } catch (err) {
-      this.handleError(err);
+      this.handleError(err, options);
     }
   }
 
   @UseGuards(AdminAuthGuard)
   @Post("/users/delete")
   async deleteUser(@Body() body, @Request() req: AuthenticatedRequest) {
+    const adminUserEmail = req.user.profile.email;
+    const { userEmail } = body;
+    const options: AdminRequestOptions = {
+      httpMethod: "DELETE",
+      requestPath: "admin",
+      adminUserEmail,
+    };
+
     try {
-      const adminUserEmail = req.user.profile.email;
-      const { userEmail } = body;
       const result = await this.userService.adminDeleteUserByEmail(userEmail);
-      this.slackService.postAdminActionAwarenessMessage({
-        httpMethod: "DELETE",
-        requestPath: "admin",
-        adminUserEmail,
-      });
+      this.slackService.postAdminActionAwarenessMessage(options);
       return result;
     } catch (err) {
-      this.handleError(err);
+      this.handleError(err, options);
     }
   }
 
   // Log the error to Slack and throw an exception in response
-  private handleError(err: Error) {
-    this.slackService.postAdminErrorMessage({ error: err.message });
+  private handleError(err: Error, options: AdminRequestOptions) {
+    this.slackService.postAdminErrorMessage({ ...options, error: err.message });
     throw new HttpException(err.message, 500);
-  }
-
-  private postAdminStatusMessage(
-    req: AuthenticatedRequest,
-    httpMethod: HTTP_METHOD,
-    requestPath: ADMIN_URLS,
-  ) {
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      httpMethod,
-      requestPath,
-      adminUserEmail,
-    });
   }
 }
