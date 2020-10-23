@@ -166,7 +166,8 @@ export class SlackService {
   }
 
   public async postAdminErrorMessage({ error }: SlackAdminErrorMessageData) {
-    await this.postMessageToChannel(error, { channel: "production" });
+    const message = `An error occurred with an admin API request, here's what we know: ${error}`;
+    await this.postMessageToChannel(message, { channel: "production" });
   }
 
   private async postMessageToChannel(
