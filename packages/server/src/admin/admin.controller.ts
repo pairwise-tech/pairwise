@@ -210,6 +210,7 @@ export class AdminController {
   // Log the error to Slack and throw an exception in response
   private handleError(err: Error, options: AdminRequestOptions) {
     this.slackService.postAdminErrorMessage({ ...options, error: err.message });
-    throw new HttpException(err.message, 500);
+    // Rethrow the original error
+    throw err;
   }
 }
