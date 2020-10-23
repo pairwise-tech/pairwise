@@ -43,6 +43,10 @@ interface SlackAdminMessageData {
   config?: SlackMessageConfig;
 }
 
+interface SlackAdminErrorMessageData {
+  error: string;
+}
+
 interface SlackMessageConfig {
   channel?: SLACK_CHANNELS;
   mentionAdmins?: boolean;
@@ -159,6 +163,10 @@ export class SlackService {
         ...config,
       });
     }
+  }
+
+  public async postAdminErrorMessage({ error }: SlackAdminErrorMessageData) {
+    await this.postMessageToChannel(error, { channel: "production" });
   }
 
   private async postMessageToChannel(

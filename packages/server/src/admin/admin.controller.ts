@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Body,
+  HttpException,
 } from "@nestjs/common";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthenticatedRequest } from "../types";
@@ -46,14 +47,18 @@ export class AdminController {
   @UseGuards(AdminAuthGuard)
   @Get()
   public async adminIndex(@Request() req: AuthenticatedRequest) {
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      httpMethod: "GET",
-      requestPath: "admin",
-      adminUserEmail,
-    });
-
-    return this.adminService.adminEndpoint();
+    try {
+      const adminUserEmail = req.user.profile.email;
+      const result = await this.adminService.adminEndpoint();
+      this.slackService.postAdminActionAwarenessMessage({
+        httpMethod: "GET",
+        requestPath: "admin",
+        adminUserEmail,
+      });
+      return result;
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   // An admin API to allow admin users to effectively purchase a course for
@@ -66,13 +71,17 @@ export class AdminController {
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {
-    this.postAdminStatusMessage(req, "POST", "admin/purchase-course");
-
-    const { userEmail, courseId } = body;
-    return this.paymentsService.handlePurchaseCourseByAdmin(
-      userEmail,
-      courseId,
-    );
+    try {
+      const { userEmail, courseId } = body;
+      const result = await this.paymentsService.handlePurchaseCourseByAdmin(
+        userEmail,
+        courseId,
+      );
+      this.postAdminStatusMessage(req, "POST", "admin/purchase-course");
+      return result;
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   // An admin API to handle refunding a course for a user.
@@ -82,10 +91,17 @@ export class AdminController {
     @Body() body,
     @Request() req: AuthenticatedRequest,
   ) {
-    this.postAdminStatusMessage(req, "POST", "admin/refund-course");
-
-    const { userEmail, courseId } = body;
-    return this.paymentsService.handleRefundCourseByAdmin(userEmail, courseId);
+    try {
+      const { userEmail, courseId } = body;
+      const result = await this.paymentsService.handleRefundCourseByAdmin(
+        userEmail,
+        courseId,
+      );
+      this.postAdminStatusMessage(req, "POST", "admin/refund-course");
+      return result;
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   @UseGuards(AdminAuthGuard)
@@ -94,58 +110,81 @@ export class AdminController {
     @Param() params,
     @Request() req: AuthenticatedRequest,
   ) {
-    const { challengeId } = params;
-
-    // Post status message to Slack
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      httpMethod: "POST",
-      requestPath: "admin/feedback/:challengeId",
-      adminUserEmail,
-    });
-
-    return this.feedbackService.getFeedbackForChallenge(challengeId);
+    try {
+      const { challengeId } = params;
+      // Post status message to Slack
+      const adminUserEmail = req.user.profile.email;
+      const result = await this.feedbackService.getFeedbackForChallenge(
+        challengeId,
+      );
+      this.slackService.postAdminActionAwarenessMessage({
+        httpMethod: "POST",
+        requestPath: "admin/feedback/:challengeId",
+        adminUserEmail,
+      });
+      return result;
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   @UseGuards(AdminAuthGuard)
   @Get("/user/:email")
   async getUser(@Param() params, @Request() req: AuthenticatedRequest) {
-    const { email } = params;
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      httpMethod: "GET",
-      requestPath: "admin/user",
-      adminUserEmail,
-    });
-
-    return this.userService.adminGetUser(email);
+    try {
+      const { email } = params;
+      const adminUserEmail = req.user.profile.email;
+      const result = await this.userService.adminGetUser(email);
+      this.slackService.postAdminActionAwarenessMessage({
+        httpMethod: "GET",
+        requestPath: "admin/user",
+        adminUserEmail,
+      });
+      return result;
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   @UseGuards(AdminAuthGuard)
   @Get("/users")
   async getAllUsers(@Request() req: AuthenticatedRequest) {
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      httpMethod: "GET",
-      requestPath: "admin/users",
-      adminUserEmail,
-    });
-
-    return this.userService.adminGetAllUsers();
+    try {
+      const adminUserEmail = req.user.profile.email;
+      const result = await this.userService.adminGetAllUsers();
+      this.slackService.postAdminActionAwarenessMessage({
+        httpMethod: "GET",
+        requestPath: "admin/users",
+        adminUserEmail,
+      });
+      return result;
+    } catch (err) {
+      this.handleError(err);
+    }
   }
 
   @UseGuards(AdminAuthGuard)
   @Post("/users/delete")
   async deleteUser(@Body() body, @Request() req: AuthenticatedRequest) {
-    const adminUserEmail = req.user.profile.email;
-    this.slackService.postAdminActionAwarenessMessage({
-      httpMethod: "DELETE",
-      requestPath: "admin",
-      adminUserEmail,
-    });
+    try {
+      const adminUserEmail = req.user.profile.email;
+      const { userEmail } = body;
+      const result = await this.userService.adminDeleteUserByEmail(userEmail);
+      this.slackService.postAdminActionAwarenessMessage({
+        httpMethod: "DELETE",
+        requestPath: "admin",
+        adminUserEmail,
+      });
+      return result;
+    } catch (err) {
+      this.handleError(err);
+    }
+  }
 
-    const { userEmail } = body;
-    return this.userService.adminDeleteUserByEmail(userEmail);
+  // Log the error to Slack and throw an exception in response
+  private handleError(err: Error) {
+    this.slackService.postAdminErrorMessage({ error: err.message });
+    throw new HttpException(err.message, 500);
   }
 
   private postAdminStatusMessage(
