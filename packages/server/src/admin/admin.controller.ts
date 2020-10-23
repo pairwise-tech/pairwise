@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Body,
-  HttpException,
 } from "@nestjs/common";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthenticatedRequest } from "../types";
