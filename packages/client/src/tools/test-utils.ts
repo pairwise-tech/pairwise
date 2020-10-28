@@ -655,10 +655,29 @@ export const buildPreviewTestResultsFromCode = (
   testCode: string,
 ): { results?: TestCase[]; error?: Error } => {
   try {
-    const re = /(?<=test\().+,\s?(?:async)?\s?\(\)\s?=>/g;
-    const matches = testCode.match(re) ?? [];
-    const results = matches.map(match => ({
-      message: match.slice(1, match.lastIndexOf(",") - 1),
+    // NOTE: This g-flag is EXTREMELY IMPORTANT! Infinite loops can arrise
+    // without it. The JS exec api is quite terrible IMO, but it get's the job
+    // done. match on the other hand _should_ get the job done but only returns
+    // the first match if used in global mode. WHY!? WHYYYYY.
+    const re = /test\s*\(\s*["'](.+)["']/g;
+    const arr = [];
+
+    // Don't look at me! Just kidding, but if you're wondering why this code is
+    // so odd it's becuase using exec is very error prone, so I prefer to use a
+    // code generator:
+    // https://regex101.com/r/TbA60E/3/codegen?language=javascript
+    let m;
+    while ((m = re.exec(testCode)) !== null) {
+      // This is necessary to avoid infinite loops with zero-width matches
+      if (m.index === re.lastIndex) {
+        re.lastIndex++;
+      }
+
+      arr.push(m[1]);
+    }
+
+    const results = arr.map(message => ({
+      message,
       testResult: false,
       test: "",
     }));
