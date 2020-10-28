@@ -667,6 +667,7 @@ export const buildPreviewTestResultsFromCode = (
     // code generator:
     // https://regex101.com/r/TbA60E/3/codegen?language=javascript
     let m;
+    // tslint:disable-next-line: no-conditional-assignment
     while ((m = re.exec(testCode)) !== null) {
       // This is necessary to avoid infinite loops with zero-width matches
       if (m.index === re.lastIndex) {
