@@ -31,4 +31,11 @@ describe("test test-utils.ts functions", () => {
     const result = buildPreviewTestResultsFromCode(testCode);
     expect(result).toMatchSnapshot();
   });
+
+  test("buildPreviewTestResultsFromCode handles escaped quotes correctly", () => {
+    // tslint:disable-next-line
+    const testCode = 'test("Hey there \\" you are amazing", () => {...})';
+    const result = buildPreviewTestResultsFromCode(testCode);
+    expect(result).toMatchSnapshot();
+  });
 });

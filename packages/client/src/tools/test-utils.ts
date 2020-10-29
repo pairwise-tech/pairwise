@@ -647,41 +647,24 @@ export const compileCodeString = async (
  * hard for the user to recover from)
  *
  * NOTE:
- * The regex below could be simplified, but matching on the beginning of the
- * test callback helps it to be a bit closer to foolproof in case a test happens
- * to be on a single line, e.g. test("...", () => {...});
+ * The regex below is very simple to match the test case message following
+ * such as ... in the pattern test("...", () => { }). It should be noted
+ * that a more complex regex produced an iOS specific error which previously
+ * caused the entire app to fail to load. -.0
  */
 export const buildPreviewTestResultsFromCode = (
   testCode: string,
 ): { results?: TestCase[]; error?: Error } => {
   try {
-    // NOTE: This g-flag is EXTREMELY IMPORTANT! Infinite loops can arrise
-    // without it. The JS exec api is quite terrible IMO, but it get's the job
-    // done. match on the other hand _should_ get the job done but only returns
-    // the first match if used in global mode. WHY!? WHYYYYY.
-    const re = /test\s*\(\s*["'](.+)["']/g;
-    const arr = [];
-
-    // Don't look at me! Just kidding, but if you're wondering why this code is
-    // so odd it's becuase using exec is very error prone, so I prefer to use a
-    // code generator:
-    // https://regex101.com/r/TbA60E/3/codegen?language=javascript
-    let m;
-    // tslint:disable-next-line: no-conditional-assignment
-    while ((m = re.exec(testCode)) !== null) {
-      // This is necessary to avoid infinite loops with zero-width matches
-      if (m.index === re.lastIndex) {
-        re.lastIndex++;
-      }
-
-      arr.push(m[1]);
-    }
-
-    const results = arr.map(message => ({
-      message,
-      testResult: false,
-      test: "",
-    }));
+    const pattern = /test\("(.*)",/g;
+    const matches = testCode.match(pattern) ?? [];
+    const results = matches.map(match => {
+      return {
+        test: "",
+        testResult: false,
+        message: match.slice(6, match.length - 2),
+      };
+    });
 
     if (results.length === 0) {
       throw new Error("Unable to extract test messages from test code!");
