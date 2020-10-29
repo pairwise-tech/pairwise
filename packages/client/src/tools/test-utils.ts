@@ -656,7 +656,7 @@ export const buildPreviewTestResultsFromCode = (
   testCode: string,
 ): { results?: TestCase[]; error?: Error } => {
   try {
-    const pattern = /test\("(.*)",/g;
+    const pattern = /test\(["'](.*)["'],/g;
     const matches = testCode.match(pattern) ?? [];
     const results = matches.map(match => {
       return {

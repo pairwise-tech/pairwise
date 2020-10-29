@@ -12,6 +12,18 @@ Object {
 }
 `;
 
+exports[`test test-utils.ts functions buildPreviewTestResultsFromCode handles single quotes correctly 1`] = `
+Object {
+  "results": Array [
+    Object {
+      "message": "This test case uses single quotes...",
+      "test": "",
+      "testResult": false,
+    },
+  ],
+}
+`;
+
 exports[`test test-utils.ts functions buildPreviewTestResultsFromCode returns an error if testCode does not match regex 1`] = `
 Object {
   "error": [Error: Unable to extract test messages from test code!],
