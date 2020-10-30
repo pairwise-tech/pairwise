@@ -222,6 +222,7 @@ const summarizeUserProgress = users => {
   let usersWithoutEmail = 0;
   let leaderChallengeCount = 0;
   let numberOfUsersWithZeroChallengesComplete = 0;
+  let nonZeroChallengeUsers = 0;
 
   for (const user of withProgressSummaries) {
     const { completedChallengeList } = user;
@@ -240,6 +241,8 @@ const summarizeUserProgress = users => {
 
     if (completedChallengeList.length === 0) {
       numberOfUsersWithZeroChallengesComplete++;
+    } else {
+      nonZeroChallengeUsers++;
     }
 
     const userCreated = new Date(user.createdAt).getTime();
@@ -262,8 +265,11 @@ const summarizeUserProgress = users => {
   }
 
   const totalUsers = sortedByCompletedChallenges.length;
-  const averageChallengesCompletedPerUser = Math.round(
-    totalChallengesCompleted / totalUsers,
+
+  // The average challenge completed count excludes users with zero
+  // challenges completed
+  const averageChallengesCompletedPerNonZeroUser = Math.round(
+    totalChallengesCompleted / nonZeroChallengeUsers,
   );
 
   // Create summary with total user count
@@ -277,7 +283,7 @@ const summarizeUserProgress = users => {
     },
     leaderboard: {
       leaderChallengeCount,
-      averageChallengesCompletedPerUser,
+      averageChallengesCompletedPerNonZeroUser,
       numberOfUsersWithZeroChallengesComplete,
     },
     users: sortedByCompletedChallenges,
