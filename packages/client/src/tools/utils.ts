@@ -603,3 +603,32 @@ export const getGravatarUrlFromEmail = (email: string): string => {
 export const isUsingGravatar = (avatarUrl?: string): boolean => {
   return !!avatarUrl && avatarUrl.includes("gravatar.com");
 };
+
+type OS = "Mac" | "iOS" | "Windows" | "Android" | "Linux";
+
+/**
+ * Determine client OS, code from this StackOverflow post:
+ * https://stackoverflow.com/questions/38241480/detect-macos-ios-windows-android-and-linux-os-with-js
+ */
+export const getClientOS = (): Nullable<OS> => {
+  const userAgent = window.navigator.userAgent;
+  const platform = window.navigator.platform;
+  const macPlatforms = new Set(["Macintosh", "MacIntel", "MacPPC", "Mac68K"]);
+  const windowsPlatforms = new Set(["Win32", "Win64", "Windows", "WinCE"]);
+  const iosPlatforms = new Set(["iPhone", "iPad", "iPod"]);
+  let os: Nullable<OS> = null;
+
+  if (macPlatforms.has(platform)) {
+    os = "Mac";
+  } else if (iosPlatforms.has(platform)) {
+    os = "iOS";
+  } else if (windowsPlatforms.has(platform)) {
+    os = "Windows";
+  } else if (/Android/.test(userAgent)) {
+    os = "Android";
+  } else if (!os && /Linux/.test(platform)) {
+    os = "Linux";
+  }
+
+  return os;
+};
