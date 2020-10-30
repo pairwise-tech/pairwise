@@ -7,13 +7,21 @@ const values = {};
 
 let maxX = 0;
 let maxY = 0;
+let totalChallenges = 0;
+let userCount = json.users.length;
 
 // Tally up all the users by completed challenge count
 for (const user of json.users) {
   const { total } = user.completedChallenges;
   values[total] = (values[total] || 0) + 1;
   maxY = Math.max(maxY, total);
+  totalChallenges += total;
+  if (total === 0) {
+    userCount--;
+  }
 }
+
+let average = totalChallenges / userCount;
 
 let x = 0;
 let chart = {};
@@ -70,4 +78,13 @@ for (const [x, y] of data) {
   }
 }
 
+console.log("");
+console.log(
+  `- Total Challenges Completed: ${totalChallenges.toLocaleString()}`,
+);
+console.log(
+  `- Average Challenges/User (excluding 0 challenge users): ${average.toFixed(
+    0,
+  )}`,
+);
 console.log("");
