@@ -205,9 +205,10 @@
   (-> @state :users vals (->> (map keywordize-keys) (take 10)))
   (-> @state :users vals (->> (map keywordize-keys)) first user->name))
 
+
 ;; TODO FIX DATA Mapping!!
 (defn Users
-  ([] [Users (-> @state :users vals)])
+  ([] [Users (-> @state :users vals (->> (take 10)))])
   ([users]
    (if (empty? users)
      [:div.users "No users :("]
@@ -219,7 +220,29 @@
        [:h3 [:strong "NODE_ENV="] [:span {:style {:color "red"}} NODE_ENV]]
        [:h3 [:strong "ADMIN_TOKEN="] [:span {:style {:color "red"}} ADMIN_TOKEN]]]
       [:div.user-list
-       (for [u (->> users (map keywordize-keys))]
+       [:p "showing 10 users"]
+       [:> bp/HTMLTable {:bordered true :condensed true :striped true}
+(let [users (-> @state :users vals)
+      ks (-> users first keys)
+      cells [:uuid :email :updatedAt :createdAt :familyName :givenName :displayName]]
+  [:p "Full key list:"]
+  [:pre (clj->js ks)]
+  [:table
+        [:thead
+         [:tr (for [k cells] [:td (name k)])]]
+        [:tbody
+         (for [u users]
+           [:tr
+            (for [k cells]
+              (let [x (get u k)]
+                (case k
+                  :email [:td [:a {:href (str "mailto:" x)} x]]
+                  [:td x])))
+            [:td [Link {:href (str "users/" (:uuid u))} "View"]]
+            ])]])
+        ]]
+      [:div.user-list
+       (for [u (->> users (take 10) (map keywordize-keys))]
          [:div
           {:key (:uuid u)}
           [:p [:strong "id:"] " " (-> u :uuid str)]
