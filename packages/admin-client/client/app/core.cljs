@@ -2,7 +2,8 @@
   "This namespace contains your application and is the entrypoint for 'yarn start'."
   (:require [reagent.core :as r]
             [clojure.core.async :as async :refer [>! <! chan]]
-            [clojure.string :refer [starts-with?]]
+            [clojure.string :refer [starts-with? join]]
+            [clojure.walk :refer [keywordize-keys]]
             [clojure.spec.alpha :as spec]
             [clojure.spec.gen.alpha :as gen]
             [clojure.test.check.generators]
@@ -34,7 +35,7 @@
 
 (def ->url #(str ADMIN_URL %))
 (comment
-  (console.log (->url "/users"))
+  (js/console.log (->url "/users"))
   (-> axios
       (.get (->url "/users") request-headers)
       (.then #(-> % .-data))
@@ -190,7 +191,16 @@
                                                (index-by "uuid")))))
       (.catch #(println "Got an error!" %))))
 
+(defn user->name
+  [user]
+  (let [name (join " " [(:givenName user) (:familyName user)])]
+    (if-not (empty? name)
+      name
+      "<Unknown>")))
+
 (comment (fetch-users))
+(comment
+  (-> @state :users vals (->> (map keywordize-keys)) first user->name))
 
 ;; TODO FIX DATA Mapping!!
 (defn Users
@@ -206,13 +216,13 @@
        [:h3 [:strong "NODE_ENV="] [:span {:style {:color "red"}} NODE_ENV]]
        [:h3 [:strong "ADMIN_TOKEN="] [:span {:style {:color "red"}} ADMIN_TOKEN]]]
       [:div.user-list
-       (for [u users]
+       (for [u (->> users (map keywordize-keys))]
          [:div
-          {:key (:id u)}
-          [:p [:strong "id:"] " " (-> u :id str)]
-          [:p [:string "name:"] " " (or (:name u) "<Unknown>")]
+          {:key (:uuid u)}
+          [:p [:strong "id:"] " " (-> u :uuid str)]
+          [:p [:string "name:"] " " (user->name u)]
           [:p [:string "email:"] " " (:email u)]
-          [Link {:href (str "users/" (:id u))} "View"]])]])))
+          [Link {:href (str "users/" (:uuid u))} "View"]])]])))
 
 (defn route->id [route] (second (re-matches #"/users/([\w-]+)" route)))
 
