@@ -17,16 +17,19 @@ RUN npm i -g lerna
 WORKDIR /app
 
 # Copy dependency-related files
-COPY package.json /app/
 COPY yarn.lock /app/
 COPY lerna.json /app/
-COPY packages/client/package.json /app/packages/client/
-COPY packages/common/package.json /app/packages/common/
-COPY packages/cypress/package.json /app/packages/cypress/
-COPY packages/e2e/package.json /app/packages/e2e/
-COPY packages/external-services/package.json /app/packages/external-services/
-COPY packages/server/package.json /app/packages/server/
-COPY packages/www/package.json /app/packages/www/
+
+# I don't think the package.json files are necessary here? yarn.lock should
+# be sufficient?
+# COPY package.json /app/
+# COPY packages/client/package.json /app/packages/client/
+# COPY packages/common/package.json /app/packages/common/
+# COPY packages/cypress/package.json /app/packages/cypress/
+# COPY packages/e2e/package.json /app/packages/e2e/
+# COPY packages/external-services/package.json /app/packages/external-services/
+# COPY packages/server/package.json /app/packages/server/
+# COPY packages/www/package.json /app/packages/www/
 
 # Install all dependencies
 RUN yarn install
