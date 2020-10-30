@@ -59,7 +59,7 @@
     "test:e2e": "cd packages/e2e && HOST=http://server:9000 yarn test:e2e",
     "cypress": "docker-compose -f packages/cypress/docker-compose.yml up --abort-on-container-exit",
     "test:cypress": "cd packages/cypress && yarn cypress:ci",
-    "graph": "node scripts/users_graph.js"
+    "stats": "node scripts/user_stats.js"
   },
   "resolutions": {
     "minipass": "2.7.0",
