@@ -140,6 +140,13 @@
 (comment
   (omit-keys {:a true :b false} [:a :c]))
 
+(defn user->name
+  [user]
+  (let [name (join " " [(:givenName user) (:familyName user)])]
+    (if-not (empty? name)
+      name
+      "<Unknown>")))
+
 (defn Link
   [props & children]
   (let [handle-click (fn [e]
@@ -188,18 +195,14 @@
                (reset! heyhey (js->clj x))
                (swap! state update :users #(-> x
                                                js->clj
-                                               (index-by "uuid")))))
+                                               (->> (map keywordize-keys))
+                                               (index-by :uuid)))))
       (.catch #(println "Got an error!" %))))
-
-(defn user->name
-  [user]
-  (let [name (join " " [(:givenName user) (:familyName user)])]
-    (if-not (empty? name)
-      name
-      "<Unknown>")))
 
 (comment (fetch-users))
 (comment
+  (-> @state :users type)
+  (-> @state :users vals (->> (map keywordize-keys) (take 10)))
   (-> @state :users vals (->> (map keywordize-keys)) first user->name))
 
 ;; TODO FIX DATA Mapping!!
@@ -226,14 +229,31 @@
 
 (defn route->id [route] (second (re-matches #"/users/([\w-]+)" route)))
 
+(-> @state :route route->id)
+
+(let [id (route->id (:route @state))
+        user (-> @state :users (keyword id))
+        _ (-> @state :users (keyword  "3e212705-a76e-4f87-8fe8-3028878d7906") )]
+    user)
+
+(->> @state :users (take 2))
+
 (defn UserDetails
   []
-  (let [id (route->id (:route @state))]
+  (let [id (route->id (:route @state))
+        user (-> @state :users (get id))
+        _ (-> @state :users (get  "3e212705-a76e-4f87-8fe8-3028878d7906"))]
     (if-not id
       [:div [:h1 "User Not Found"] [:p "No user found for id."]]
-      [:div
-       [:h1 "User Details"]
-       [:p [:string "id: "] id]])))
+      (do
+        (aset js/window "usr" (clj->js user))
+        [:div
+          [:h1 "User Details"]
+          [:p [:string "id: "] id]
+         [:p [:string "name: "] (user->name user)]
+         [:p [:string "email: "]
+          [:a {:href (str "mailto:" (:email user))} (:email user)]]
+         ]))))
 
 (defn Home
   []
