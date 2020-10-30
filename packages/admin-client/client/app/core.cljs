@@ -7,6 +7,7 @@
             [clojure.spec.alpha :as spec]
             [clojure.spec.gen.alpha :as gen]
             [clojure.test.check.generators]
+            [tick.alpha.api :as t]
             ["axios" :as axios]
             ["@blueprintjs/core" :as bp]
             [app.hello :refer [hello]]))
@@ -300,19 +301,63 @@
 
 (defn Header []
   [:nav.flex.Header
-   [Link {:href "/" :exact true} "Users"]
+   [Link {:href "/" :exact true} "Dashboard"]
+   [Link {:href "/users"} "Users"]
    [Link {:href "/about"} "About"]
    [Link {:href "/hello"} "Hello"]
    [:div.right
     {:style {:min-width 200}}
     [:p (str "Current Page: " (:route @state))]]])
 
+(def GOLD "#ffeb3b")
+
+(defn within-last-7-days
+  [x]
+  (let [past (t/- (t/date) (t/new-period 7 :days))]
+    (= (t/relation past x) :precedes)))
+
+
+(comment
+(t/relation (t/yesterday) (t/tomorrow))
+(within-last-7-days (t/- (t/date) (t/new-period 20 :days)))
+(-> @state
+    :users
+    vals
+    first
+    :createdAt
+    t/date
+    )
+  )
+
+;; (t/today)
+;; (t/now)
+;; (t/- (t/instant) (t/new-period 7 :days))
+
+(defn Dashboard []
+  (let [users (-> @state :users vals)
+        n (count users)
+        seven-day-users (->> users (filter (fn [u]
+                                           (-> u :createdAt t/date within-last-7-days))))]
+    [:div.Dashboard
+
+     [:> bp/Card  {:interactive true :elevation 3
+                   :style {:margin-bottom 10}}
+      [:h3 "Users"]
+      [:h1 {:style {:color GOLD}} n]
+      [:small "Total registered users. Does not include users who didn't sign up."]]
+     [:> bp/Card {:interactive true :elevation 3}
+      [:h3 "Signups Last 7 Days"]
+      [:h1 {:style {:color GOLD}} (count seven-day-users)]
+      [:small "Signups since"]]
+
+     ]))
+
 (defn App
   []
   (let [_ (app-init)
         _ (fetch-users)]
     (fn []
-      [:div.main
+      [:div.main.bp3-dark
        {:class "merge-class"} ;; Just showing myself that classes will be merged
        [Header]
        [:hr]
@@ -326,7 +371,8 @@
        [:div.routed
         (let [route (:route @state)]
           (cond
-            (= route "/") [Users]
+            (= route "/") [Dashboard]
+            (= route "/users") [Users]
             (route->id route) [UserDetails]
             (= route "/about") [About]
             (= route "/hello") [hello]
