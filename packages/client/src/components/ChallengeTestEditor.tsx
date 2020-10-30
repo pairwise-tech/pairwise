@@ -55,6 +55,9 @@ const ChallengeTestEditor = (props: Props) => {
   const handleEditorReady: EditorDidMount = (getValue, editor) => {
     valueGetter.current = getValue;
     setIsReady(true);
+
+    // Format the code when the editor loses focus
+    editor.onDidBlurEditorText(handleFormatCode);
   };
 
   const handleUpdate = () => {

@@ -147,6 +147,7 @@ export interface ICodeEditorProps {
   challengeType: CHALLENGE_TYPE;
   userSettings: UserSettings;
   editorOptions: ICodeEditorOptions;
+  onDidBlurEditorText: () => void;
 }
 
 export interface ICodeEditor extends React.Component<ICodeEditorProps> {
@@ -798,6 +799,7 @@ class Workspace extends React.Component<IProps, IState> {
           ref={editor => {
             this.editor = editor;
           }}
+          onDidBlurEditorText={this.handleAutoFormatCodeOnBlur}
           challengeType={this.props.challenge.type}
           userSettings={this.props.userSettings}
           editorOptions={this.props.editorOptions}
@@ -1571,6 +1573,12 @@ class Workspace extends React.Component<IProps, IState> {
         or Notepad (Windows). Linux users you probably already know what you're
         doing.`,
       );
+    }
+  };
+
+  private readonly handleAutoFormatCodeOnBlur = () => {
+    if (this.props.isEditMode) {
+      this.handleFormatCode();
     }
   };
 

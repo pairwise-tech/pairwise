@@ -22,6 +22,7 @@ import { wait } from "tools/utils";
 import { debounce } from "throttle-debounce";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import { types } from "tools/jsx-types";
+import { IDisposable } from "monaco-editor";
 
 const debug = require("debug")("client:WorkspaceMonacoEditor");
 
@@ -43,12 +44,15 @@ export default class WorkspaceMonacoEditor
   // is needed for updating editor options, i.e. font size.
   monacoWrapper: any = null;
 
+  onBlurDisposable: Nullable<IDisposable> = null;
+
   syntaxWorker: any = null;
 
   // The actual monaco editor instance.
   editorInstance: Nullable<{
     updateOptions: (x: MonacoEditorOptions) => void;
     focus(): void;
+    onDidBlurEditorText(fn: () => void): IDisposable;
   }> = null;
 
   initializationPromise: Nullable<Promise<void>> = null;
@@ -69,6 +73,32 @@ export default class WorkspaceMonacoEditor
       250,
       this.requestSyntaxHighlighting,
     );
+  }
+
+  async componentDidMount() {
+    this._isMounted = true;
+    /* Initialize Monaco Editor and the SyntaxHighlightWorker */
+    await this.initializeMonaco();
+    this.initializeSyntaxHighlightWorker();
+
+    /* Handle some timing issue with Monaco initialization... */
+    await wait(500);
+
+    this.debouncedSyntaxHighlightFunction(this.props.value);
+  }
+
+  componentDidUpdate() {
+    const currentValue = this.getMonacoEditorValue();
+    const nextValue = this.props.value;
+    debug("componentDidUpdate", currentValue, nextValue);
+    if (currentValue !== nextValue) {
+      this.setMonacoEditorValue();
+    }
+  }
+
+  componentWillUnmount() {
+    this.cleanup();
+    this._isMounted = false;
   }
 
   updateOptions = (options: ICodeEditorOptions) => {
@@ -181,6 +211,11 @@ export default class WorkspaceMonacoEditor
 
     if (this.editorInstance) {
       this.setTheme(this.props.userSettings.theme);
+
+      // Add handler for auto-formatting text on editor blur
+      this.onBlurDisposable = this.editorInstance.onDidBlurEditorText(
+        this.props.onDidBlurEditorText,
+      );
     }
 
     // Record the model ids for the two created models to track them.
@@ -217,10 +252,6 @@ export default class WorkspaceMonacoEditor
     this.cleanup();
     await this.initializeMonaco();
     await this.initializeMonacoEditor();
-  };
-
-  initialize = async () => {
-    // TODO
   };
 
   handleEditorContentChange = () => {
@@ -318,6 +349,10 @@ export default class WorkspaceMonacoEditor
   readonly cleanup = () => {
     this.disposeModels();
     this.editorInstance = null;
+
+    if (this.onBlurDisposable) {
+      this.onBlurDisposable.dispose();
+    }
   };
 
   updateSyntaxDecorations = async (classifications: ReadonlyArray<any>) => {
@@ -362,34 +397,8 @@ export default class WorkspaceMonacoEditor
     }
   };
 
-  componentWillUnmount() {
-    this.cleanup();
-    this._isMounted = false;
-  }
-
   render() {
     return <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} />;
-  }
-
-  componentDidUpdate() {
-    const currentValue = this.getMonacoEditorValue();
-    const nextValue = this.props.value;
-    debug("componentDidUpdate", currentValue, nextValue);
-    if (currentValue !== nextValue) {
-      this.setMonacoEditorValue();
-    }
-  }
-
-  async componentDidMount() {
-    this._isMounted = true;
-    /* Initialize Monaco Editor and the SyntaxHighlightWorker */
-    await this.initializeMonaco();
-    this.initializeSyntaxHighlightWorker();
-
-    /* Handle some timing issue with Monaco initialization... */
-    await wait(500);
-
-    this.debouncedSyntaxHighlightFunction(this.props.value);
   }
 
   private readonly getMonacoEditorValue = () => {
