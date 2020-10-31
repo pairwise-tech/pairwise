@@ -19,6 +19,7 @@ let maxY = 0;
 let totalChallenges = 0;
 let userCount = json.users.length;
 let zeroChallengeUsers = 0;
+let powerUsers = 0;
 
 const leaderboard = {};
 
@@ -29,6 +30,10 @@ for (const user of json.users) {
   // Tally leaders with names
   const name = user.displayName ? `${user.displayName}` : "no name";
   leaderboard[total] = `${user.email} (${name})`;
+
+  if (total >= 50) {
+    powerUsers++;
+  }
 
   // Count all challenges
   values[total] = (values[total] || 0) + 1;
@@ -105,6 +110,7 @@ console.log(
   `- Challenges Completed in Last Week: ${stats.challengesCompletedInLastWeek}`,
 );
 console.log(`- Top Leader: ${json.leaderboard.leaderChallengeCount}`);
+console.log(`- Power Users (50+ Challenges Completed): ${powerUsers}`);
 console.log(`- No Email Users: ${stats.usersWithoutEmail}`);
 console.log(`- Zero Challenge Users: ${zeroChallengeUsers}`);
 
