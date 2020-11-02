@@ -202,7 +202,7 @@ console.log("\n- Overall Course Progress Distribution:\n");
 for (const [x, y] of courseProgressData) {
   const width = Math.floor(y / scalingFactor);
   const gap = Math.floor(maxCourseProgress / scalingFactor) - width;
-  const suffix = `${" ".repeat(gap)} ${y}`;
+  const suffix = `${y < 10 ? "" : " "}${" ".repeat(gap)} ${y}`;
   const item = y < 10 ? "▍" : block.repeat(width);
   const count = `${space(+x + 1)} - ${space(+x + COURSE_SPACER, false)}`;
   console.log(`${count}:  ${item}   ${suffix}`);
