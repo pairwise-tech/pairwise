@@ -1,6 +1,22 @@
 const fs = require("fs");
 
-const json = JSON.parse(fs.readFileSync("pairwise-users.json", "utf8"));
+const users = "pairwise-users.json";
+const course = "packages/common/src/courses/01_fullstack_typescript.json";
+
+const json = JSON.parse(fs.readFileSync(users, "utf8"));
+const courseJSON = JSON.parse(fs.readFileSync(course, "utf8"));
+
+const ChallengeMap = new Map();
+
+for (const m of courseJSON.modules) {
+  for (const c of m.challenges) {
+    ChallengeMap.set(c.id, 0);
+  }
+}
+
+console.log(ChallengeMap);
+
+const totalCourseChallenges = ChallengeMap.size;
 
 /** ===========================================================================
  * Tally up some stats on user data
@@ -108,6 +124,9 @@ console.log(
 );
 console.log(
   `- Challenges Completed in Last Week: ${stats.challengesCompletedInLastWeek}`,
+);
+console.log(
+  `- Total Challenges in Course: ${totalCourseChallenges.toLocaleString()}`,
 );
 console.log(`- Top Leader: ${json.leaderboard.leaderChallengeCount}`);
 console.log(`- Power Users (50+ Challenges Completed): ${powerUsers}`);
