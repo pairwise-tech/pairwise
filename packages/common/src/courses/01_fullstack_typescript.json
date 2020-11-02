@@ -4725,7 +4725,18 @@
         {
           "id": "v1sB3gaFR",
           "type": "media",
-          "title": "Mocks and Snapshot Testing",
+          "title": "Using Mocks with Jest",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# External Test Dependencies\n\nThe code you write tests for often has various external dependencies, e.g. imported libraries, remote services and APIs, and so on. You often do not want to have to rely on these externalities in your test environment. For instance, consider that you have a function which calls a server API. If you are writing unit tests, you don't want to actually make the network request to the server. If you did, your tests would need that server to be running and available anytime the tests run. This dependency could lead to your tests failing even when your code works. For example, what if at some point the network request failed \\(for any reason whatsoever\\)? Your tests would then consequently fail. While it is true that you generally would want to ensure that your server is running and available, that should not be the concern of unit tests for the code which interacts with server responses. On top of this, relying on network requests would generally make your tests take a lot longer to run.\n# Mocking Dependencies\n\nHow can we deal with this problem?\n\nA common solution is the idea of \"mocking\". We can mock external services and dependencies in the test environment such that they produce a predictable outcome. For instance, we could mock the external API such that it provides a fixed response, or mock it such that it provides an error response, and then write tests to ensure our code behaves correctly in either case.\n# Mocking with Jest\n\nJest provides versatile support for mocking in a test environment. For instance, if the API call described above was implemented using axios, it could be mocked in Jest using some code like this:\n\n```\nimport axios from 'axios';\n\nclass Users {\n  static all() {\n    return axios.get('/users.json').then(resp => resp.data);\n  }\n}\n\njest.mock('axios');\n\ntest('should fetch users', () => {\n  const users = [{name: 'Bob'}];\n  const resp = {data: users};\n  axios.get.mockResolvedValue(resp);\n\n  return Users.all().then(data => expect(data).toEqual(users));\n});\n\n```\n\nThis effectively mocks the call to `/users.json` and returns the fixed `resp` data\\. This example is taken directly from the [Jest documentation on Mock Functions](https://jestjs.io/docs/en/mock-functions), which we would encourage you to review. Using mocks with Jest, we can mock the behavior of:\n\n* Regular functions\n* Function return values\n* Imported libraries and modules\n\n# Using Mocks Effectively\n\nMocks are a very useful tool in your toolbox for writing tests. Using mocks effectively can help to decouple your tests from external dependencies, therefore isolating the behavior you care about testing. Moreover, they can allow you to more easily test certain aspects of your code which would otherwise prove hard to test \\(e.g. code which makes network requests or interacts with external modules\\). An effective use of mocking can make your tests more versatile, useful, and less brittle."
+        },
+        {
+          "id": "qUXuU6Tyr",
+          "type": "media",
+          "title": "Snapshot Testing",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
