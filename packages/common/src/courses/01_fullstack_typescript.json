@@ -4681,12 +4681,12 @@
         {
           "id": "gYpNeTnG1",
           "type": "typescript",
-          "title": "Testing Classes",
-          "instructions": "",
-          "testCode": "test(\"Placeholder test...\", () => {\n  pass();\n});\n",
+          "title": "Testing a Racecar Class",
+          "instructions": "Testing classes is not too different from testing functions. You can write unit tests which test entire classes in isolation, or, which test specific behavior or aspects of a given class in isolation.\n\nWell written classes should generally encapsulate a specific functionality or behavior, and as a result your tests for these classes should test that that behavior works correctly.\n\nIn the editor below we have a simple class to represent a racecar. Write some tests for this class to ensure the racecar can speed up and slow down correctly.",
+          "testCode": "test(\"The `RaceCar` class exists.\", () => {\n  const car = new RaceCar(10);\n  expect(car).toBeDefined();\n  expect(RaceCar).toBeDefined();\n});\n\ntest(\"At least one test exists in a `test` block.\", () => {\n  expect(__USER_TEST_LIST__.length > 0).toBe(true);\n});\n\ntest(\"The tests check the expected behavior of `RaceCar` class correctly.\", () => {\n  expect(__USER_TEST_LIST__.length > 0).toBe(true);\n\n  for (const { test } of __USER_TEST_LIST__) {\n    try {\n      test();\n    } catch (err) {\n      fail();\n    }\n  }\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "/**\n * A simple class to represent a racecar which can accelerate\n * and decelerate.\n *\n * NOTE: Do not change the code for the RaceCar class.\n */\nclass RaceCar {\n  running = false;\n  speed = 0;\n  maxSpeed = 0;\n\n  constructor(maxSpeed: number) {\n    this.maxSpeed = maxSpeed;\n  }\n\n  accelerate = () => {\n    if (this.speed < this.maxSpeed) {\n      this.speed++;\n    }\n  };\n\n  decelerate = () => {\n    if (this.speed > 0) {\n      this.speed--;\n    }\n  };\n\n  getSpeed = () => {\n    return this.speed;\n  };\n}\n\n// Your code here:\n",
+          "solutionCode": "/**\n * A simple class to represent a racecar which can accelerate\n * and decelerate.\n *\n * NOTE: Do not change the code for the RaceCar class.\n */\nclass RaceCar {\n  running = false;\n  speed = 0;\n  maxSpeed = 0;\n\n  constructor(maxSpeed: number) {\n    this.maxSpeed = maxSpeed;\n  }\n\n  accelerate = () => {\n    if (this.speed < this.maxSpeed) {\n      this.speed++;\n    }\n  };\n\n  decelerate = () => {\n    if (this.speed > 0) {\n      this.speed--;\n    }\n  };\n\n  getSpeed = () => {\n    return this.speed;\n  };\n}\n\n// Your code here:\ntest(\"The RaceCar class operates correctly\", () => {\n  let car = new RaceCar(10);\n\n  // A helper function to accelerate and decelerate the car a number of times\n  const race = (times: number, direction: \"up\" | \"down\") => {\n    let count = 0;\n    let fn = direction === \"up\" ? car.accelerate : car.decelerate;\n\n    while (count < times) {\n      fn();\n      count++;\n    }\n  };\n\n  race(5, \"up\");\n  expect(car.getSpeed()).toBe(5);\n  race(10, \"up\");\n  expect(car.getSpeed()).toBe(10);\n\n  race(20, \"down\");\n  expect(car.getSpeed()).toBe(0);\n\n  car = new RaceCar(100);\n\n  race(15, \"up\");\n  race(15, \"up\");\n  race(15, \"up\");\n  race(15, \"up\");\n  race(15, \"up\");\n  expect(car.getSpeed()).toBe(75);\n  race(50, \"up\");\n  expect(car.getSpeed()).toBe(100);\n\n  race(20, \"down\");\n  expect(car.getSpeed()).toBe(80);\n  race(79, \"down\");\n  expect(car.getSpeed()).toBe(1);\n  race(100, \"down\");\n  expect(car.getSpeed()).toBe(0);\n});\n",
           "content": ""
         },
         {
@@ -4695,6 +4695,17 @@
           "title": "Testing Asynchronous Functions",
           "instructions": "",
           "testCode": "test(\"Placeholder test...\", () => {\n  pass();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "e8LMnAF1U",
+          "type": "typescript",
+          "title": "Test Driven Development",
+          "instructions": "...",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
