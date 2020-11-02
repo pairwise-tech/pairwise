@@ -6,38 +6,43 @@ const course = "packages/common/src/courses/01_fullstack_typescript.json";
 const json = JSON.parse(fs.readFileSync(users, "utf8"));
 const courseJSON = JSON.parse(fs.readFileSync(course, "utf8"));
 
-const ChallengeMap = new Map();
-
-for (const m of courseJSON.modules) {
-  for (const c of m.challenges) {
-    ChallengeMap.set(c.id, 0);
-  }
-}
-
-console.log(ChallengeMap);
-
-const totalCourseChallenges = ChallengeMap.size;
-
 /** ===========================================================================
- * Tally up some stats on user data
+ * Growth Stats Script
+ * ----------------------------------------------------------------------------
+ * This is a very ad-hoc script to tally up various user/growth stats and
+ * user/course progress visualizations for quick reference. The code is
+ * written quickly and not necessarily well designed.
  * ============================================================================
  */
 
 const block = "█";
 const values = {};
 
-const SPACER = 5;
+const CHALLENGE_SPACER = 5;
+const COURSE_SPACER = 10;
 const LEADER_COUNT = 10;
 
 const stats = json.stats;
-let maxX = 0;
+let maxChallengeProgress = 0;
+let maxCourseProgress = 0;
 let maxY = 0;
 let totalChallenges = 0;
 let userCount = json.users.length;
 let zeroChallengeUsers = 0;
 let powerUsers = 0;
+let scalingFactor = 10;
 
 const leaderboard = {};
+const ChallengeMap = new Map();
+
+// Reduce all the challenges into an ordered list by challenge id
+for (const m of courseJSON.modules) {
+  for (const c of m.challenges) {
+    ChallengeMap.set(c.id, 0);
+  }
+}
+
+const totalCourseChallenges = ChallengeMap.size;
 
 // Tally up all the users by completed challenge count
 for (const user of json.users) {
@@ -59,32 +64,61 @@ for (const user of json.users) {
     userCount--;
     zeroChallengeUsers++;
   }
+
+  // Tally up all completed challenge ids
+  for (const id of user.completedChallengeIds) {
+    if (ChallengeMap.has(id)) {
+      const count = ChallengeMap.get(id) || 0;
+      ChallengeMap.set(id, count + 1);
+    }
+  }
 }
 
 let average = totalChallenges / userCount;
 
 let x = 0;
-let chart = {};
 let current = -1;
+let challengeSummary = {};
 
-// Truncate into blocks of 5
+// Truncate into blocks for easier visualization
 while (current < maxY) {
   current++;
 
   if (current in values) {
-    chart[x] = (chart[x] || 0) + values[current];
+    challengeSummary[x] = (challengeSummary[x] || 0) + values[current];
   }
 
-  if (current % SPACER === 0) {
-    x += SPACER;
+  if (current % CHALLENGE_SPACER === 0) {
+    x += CHALLENGE_SPACER;
   }
 }
 
-const data = Object.entries(chart).reverse();
+x = 0;
+current = 0;
+let courseSummary = {};
+
+// Truncate into blocks for easier visualization
+for (const [_, v] of ChallengeMap) {
+  current++;
+
+  courseSummary[x] = (courseSummary[x] || 0) + v;
+
+  if (current % COURSE_SPACER === 0) {
+    x += COURSE_SPACER;
+  }
+}
+
+const userProgressData = Object.entries(challengeSummary).reverse();
+const courseProgressData = Object.entries(courseSummary).reverse();
+
+// Get the max completed in the truncated
+for (const [_, y] of userProgressData) {
+  maxChallengeProgress = Math.max(maxChallengeProgress, y);
+}
 
 // Get the max completed in the truncated blocks
-for (const [x, y] of data) {
-  maxX = Math.max(maxX, y);
+for (const [_, y] of courseProgressData) {
+  maxCourseProgress = Math.max(maxCourseProgress, y);
 }
 
 // Helper to space values evenly
@@ -104,7 +138,7 @@ const space = (value, spaceBefore = true) => {
 };
 
 /** ===========================================================================
- * Print out results
+ * Print Out Results
  * ============================================================================
  */
 
@@ -149,9 +183,9 @@ for (const [score, name] of leaders) {
 
 console.log("\n- User Challenge Progress Distribution:\n");
 
-// Print out the data to the console
-for (const [x, y] of data) {
-  const gap = maxX - y;
+// Print out the user progress distribution to the console
+for (const [x, y] of userProgressData) {
+  const gap = maxChallengeProgress - y;
   const suffix = `${" ".repeat(gap)} ${y}`;
 
   if (x === "0") {
@@ -160,6 +194,18 @@ for (const [x, y] of data) {
     const count = `${space(x - 4)} - ${space(x, false)}`;
     console.log(`${count}:  ${block.repeat(y)} ${suffix}`);
   }
+}
+
+console.log("\n- Overall Course Progress Distribution:\n");
+
+// Print out the course progress distribution to the console
+for (const [x, y] of courseProgressData) {
+  const width = Math.floor(y / scalingFactor);
+  const gap = Math.floor(maxCourseProgress / scalingFactor) - width;
+  const suffix = `${" ".repeat(gap)} ${y}`;
+  const item = y < 10 ? "▍" : block.repeat(width);
+  const count = `${space(+x + 1)} - ${space(+x + COURSE_SPACER, false)}`;
+  console.log(`${count}:  ${item}   ${suffix}`);
 }
 
 console.log("");
