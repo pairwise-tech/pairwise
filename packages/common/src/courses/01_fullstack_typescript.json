@@ -4830,7 +4830,18 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "The projects for this module will give you some experience writing your own tests, debugging tests, and building some simple automation tools. Get ready, you will enjoy this\\!"
+          "content": "The projects for this module will give you some experience writing your own tests, debugging tests, and building some simple automation tools.\n\nGenerally, it's wise to develop tests in parallel with the software development process. You can do that via test\\-driven development or by simply adding tests for new features after you finish working on them. This is much easier when you still have the context for the code you've been working on fresh in your mind. Moreover, if you spend a few days or weeks adding a lot of new code, you will generally not feel inclined to go back through and add tests for all of this new code. It's a lot easier to add tests as you go. This is a good rule of thumb to get in mind, and it's useful to get in the habit of writing tests.\n\nHowever, in our case, we have only now introduced the concept and tools for testing software. As a result, all of your previous projects still exist \\(probably without tests\\). For the projects in this module on the subject of testing, we will go back and try to add tests for a few of your previous projects. If you're lucky, you may even find some bugs you were not aware of\\!"
+        },
+        {
+          "id": "vBMqdL@Vf3",
+          "type": "project",
+          "title": "Test Your Tic Tac Toe Game",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Remember your [Tic Tac Toe game](https://app.pairwise.tech/workspace/zweKy6cg/tic-tac-toe) from the programming module way back?\n\nIt's a fairly simple game and clear rules. Revisit your code for this game and try to add tests for this. Since the game before was implemented in the Pairwise workspace you can now move this to a separate repository and host it in your GitHub portfolio \\(if you haven't already\\).\n\nYou will want to install Jest, e.g. `yarn add jest`, and follow the [setup instructions](https://jestjs.io/docs/en/getting-started). Then, add some test cases for your Tic Tac Toe game until you feel satisfied you've covered the game logic and any edge cases which could occur.\n\n> Edge cases refers to rare but possible events which may happen but are probably not expected. Edge cases are important to take into account when designing software. They are a good source of major issues since unless you consider edge cases it's likely your code is not expecting them... which can result in errors, crashes, or unexpected behavior.\n> \n> As a simple example imagine you have a user input and the user inputs an empty string, or it is a number field and the user inputs a negative number. Are these values allowed? What happens if these inputs occur? It's also a good practice to try to keep edge cases in mind when designing and testing software.\n\n\n"
         },
         {
           "id": "Qb@0mALhz",
