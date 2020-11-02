@@ -4764,7 +4764,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "You are free to organize tests in your codebase anyway you see fit. However, there are some common patterns which more common than others. For instance, two common ways are to group your tests all in one place or to group your tests next to the files which they correspond to.\n\nIf you follow the first pattern, you will generally have a separate `tests/` folder, within which are all the tests for your codebase. For example, your file structure may look like this:\n\n```\nproject\n│   README.md\n│   ...\n│\n└───src\n│   └───utils\n│   │   helpers.ts\n│   └───ui\n│   │   App.tsx\n│   │   Login.tsx\n│   │   ...\n│   │\n│   └───tests\n│       │   helpers.test.ts\n│       │   App.test.tsx\n│       │   ...\n...\n\n```\n\nThis style of organization keeps your test code separate from the code which it tests.\n\nThe other option is to group them together:\n\n```\nproject\n│   README.md\n│   ...\n│\n└───src\n│   └───utils\n│   │   helpers.ts\n│   │   helpers.test.ts\n│   └───ui\n│   │   App.tsx\n│   │   App.test.tsx\n│   │   Login.tsx\n│   │   ...\n│   │\n...\n\n```\n\nThere is really no right or wrong here, the best option is to try to determine an organization which is clear, simple, and easy to understand. Experiment with a few different options until you find something you like\\! One easy rule of thumb to remember here is to ask yourself how easy it would be for someone new to understand the organization of your codebase."
         },
         {
           "id": "yKI$72Y7v",
