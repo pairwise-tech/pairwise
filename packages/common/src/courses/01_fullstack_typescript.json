@@ -4885,18 +4885,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In these special topics we will cover some additional topics related to testing software and automation. There are many tools and skills which are useful to learn or be aware of in this area. Here we will cover some of these, and also present some fascinating debugging war stories.\n\nIn particular, we will briefly cover a few additional types of testing which we did not cover in the main module challenges. These include:\n\n* **Regression Testing:** ensuring that code changes do not break previously tested and deployed software.\n* **Stress Testing:** subjecting software to extreme conditions to determine performance limits.\n* **Fuzzing:** an automated technique for generating random inputs for testing software.\n* **Split Testing:** testing two versions of a feature to evaluate relative performance.\n* **Manual Testing:** the process non\\-automated inspection and evaluation of software.\n* **Beta Testing:** testing an initial product release with end\\-users.\n* **Chaos Engineering:** subjecting production software systems to stress to ensure resiliency and robustness.\n\n"
-        },
-        {
-          "id": "CFGNmn@Va",
-          "type": "media",
-          "title": "Regression Testing",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
+          "content": "In these special topics we will cover some additional topics related to testing software and automation. There are many tools and skills which are useful to learn or be aware of in this area. Here we will cover some of these, and also present some fascinating debugging war stories.\n\nIn particular, we will briefly cover a few additional types of testing which we did not cover in the main module challenges. These include:\n\n* **Stress Testing:** subjecting software to extreme conditions to determine performance limits.\n* **Fuzz Testing:** an automated technique for generating random inputs for testing software.\n* **Split Testing:** testing two versions of a feature to evaluate relative performance.\n* **Manual Testing:** the process non\\-automated inspection and evaluation of software.\n* **Beta Testing:** testing an initial product release with end\\-users.\n* **Chaos Engineering:** subjecting production software systems to stress to ensure resiliency and robustness.\n\n"
         },
         {
           "id": "yRbsegwJs",
@@ -4907,18 +4896,18 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "All software has limits. Stress testing refers to the concept of testing software systems under conditions of stress, e.g. high traffic or usage, to determine realistic performance limits. For instance, imagine you are running a server application. How many users can your server handle? How many requests per second can your server handle? What is your scaling strategy? For most server, high traffic can overload the server and result in performance degradation and failure. This could result in your entire system going offline under high demand conditions \\(usually when you would want your service to be most reliable\\). Stress testing is a technique to determine the limits where your service performance would begin to experience degradation.\n\nStress testing your application could involve deploying your server in a production\\-like environment and then hammering it with network requests until it crashes or the response time begins to slow down. Once you have an idea of the traffic and request limits, you can incorporate this information into your production deployment strategy. For example, you could add monitoring if your traffic begins to approach the level of traffic you identified in your stress tests. You could also develop scaling strategies which attempt to scale your application if the traffic increases dramatically.\n\nStress testing is an important consideration for products as they begin to scale, mission\\-critical services, and services which expect to have high traffic scenarios \\(e.g. real\\-time applications\\).\n\nIf you are interested in exploring the idea of stress testing further, [Artillery](https://artillery.io/docs/guides/overview/welcome.html) is a useful testing toolkit which can be used for stress and load testing."
         },
         {
           "id": "NaVGTkbZ4",
           "type": "media",
-          "title": "Fuzzing",
+          "title": "Fuzz Testing",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "[Fuzz testing](https://en.wikipedia.org/wiki/Fuzzing#:~:text=Fuzzing%20or%20fuzz%20testing%20is,assertions,%20or%20potential%20memory%20leaks.) is an interesting testing technique which involves formulating invalid or semi\\-valid inputs to a software system, usually in a largely automated way, to search for various software failures and unhandled edge cases which have been overlooked by the software system.\n\nFor instance, imagine a \\(very simple\\) user registration form which expects an input body:\n\n```\ninterface registrationBody {\n    name: string;\n    email: string;\n    password: string;\n}\n\n```\n\nFuzz testing the associated user registration service might involve using a fuzzing tool to generate many different inputs and testing if they produce the expected behavior. Inputs might include registration bodies which have `name` and `password` but no `email`, or very long values for each of these fields, or non\\-string values. Or, the fuzz testing could submit arbitrary data which doesn't resemble the expected registration body at all.\n\nThis is a very simple example, but you can see how an approach like this can easily subject a system to a variety of input which may not necessarily be expected or tested in normal test cases.\n\nFuzz testing is not a very common or widely used testing approach, but it's quite interesting and worth keeping in mind. It is also a useful technique to find potential security flaws or exploits."
         },
         {
           "id": "pUxKN2l2u",
@@ -4929,7 +4918,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "[Split testing](https://en.wikipedia.org/wiki/A/B_testing), also referred to as A/B testing, is a product and user research testing approach used to evaluate different alternatives on product and feature design. The basic idea is to design a controlled experiment which tests a simple hypothesis using two variations.\n\nTo explain let's look at an example. Imagine you have a signup flow on your website. You want to optimize for user signups, and so you explore two different feature designs:\n\n* A single form which asks for all user details, including name, address, email, etc. After signup a user must confirm their email.\n* A single input which only asks for user email first. This is followed by an email confirmation, after which the user must complete the rest of the signup form details.\n\n\nYou develop both feature designs and deploy both in a split test experiment. This allows you to gather real data from the production environment to evaluate the efficacy of each approach. Ideally, you have a large enough sample size to derive statistical meaning from the results, and, ideally, the results point to one of the other design producing better outcomes.\n\nSurprisingly, split tests often produce outcomes that may not be expected by user researchers, engineers, or product managers. They are a very useful way to gain insights into your product and determine the best ways to optimize certain features for user engagement and business value.\n\nMany tools exist to help make split testing easy for startups and small projects and larger companies often have split test deeply engrained into their product development process. Split testing can be an invaluable tool for startups and larger companies to optimize their product development process and avoid the common pitfall of making product designs which actually have deleterious impacts on user experience.\n"
         },
         {
           "id": "Jdf0MWZX2",
@@ -4940,7 +4929,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "Most of the testing approaches we have described so far are automated or can be greatly enhanced using automation. However, often the simplest and most direct approach to testing software is manual testing. This is also the most intuitive and probably the first thing you will do as a developer.\n\nOnce you develop some code, anything from a simple function to an app, you will probably just try to use it and see if you get the right results. This is often one of the fastest and most direct ways to get feedback on what you've built.\n\nManual testing like this is great for early prototypes and small\\-scale products which are developing very rapidly, however, it is very costly in terms of time, it does not scale well, and it is not consistently repeatable. As a result, automated testing tends to be preferable as a system scales. However, in the end your systems will always be tested manually by end users, so it can be useful to also retain some level of manual testing of your own products to ensure high quality and avoid bugs. This could be accomplished through [dog\\-fooding](https://en.wikipedia.org/wiki/Eating_your_own_dog_food) or very specific manual QA processes.\n\nAs you develop a new feature or product, it can be useful to start with manual testing and once your feature begins to stabilize you then start to translate the manual testing you were doing into automated tests which can be run repeatedly.\n\nOne of the great benefits of manual testing is that you can always interact with a system in ways which are impossible to define using automated techniques. Think of manual testing like test driving a new model of a car before mass production and release. The test driver will always be able to stress test the car and subject it to various conditions which could not be duplicated in other environments. This is a crucial part of the development process to ensure the car holds up in these real\\-life conditions.\n\nManual testing software is similar, except software release cycles tend to be much faster than car release cycles. As a result, manual testing can be more expensive for software products—your job as the developer is to weigh the tradeoffs and determine when manual testing can be useful to you and your team."
         },
         {
           "id": "fgIlzO7F@",
