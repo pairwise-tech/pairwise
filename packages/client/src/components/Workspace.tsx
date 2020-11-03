@@ -343,7 +343,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Handle changes in editor options
     if (prevProps.editorOptions !== this.props.editorOptions) {
-      // this.editorInstance?.updateOptions(this.props.editorOptions);
       this.editor?.updateOptions(this.props.editorOptions);
     }
 
