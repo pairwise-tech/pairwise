@@ -4885,7 +4885,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In these special topics we will cover some additional topics related to testing software and automation. There are many tools and skills which are useful to learn or be aware of in this area. Here we will cover some of these, and also present some fascinating debugging war stories.\n\nIn particular, we will briefly cover a few additional types of testing which we did not cover in the main module challenges. These include:\n\n* **Stress Testing:** subjecting software to extreme conditions to determine performance limits.\n* **Fuzz Testing:** an automated technique for generating random inputs for testing software.\n* **Split Testing:** testing two versions of a feature to evaluate relative performance.\n* **Manual Testing:** the process non\\-automated inspection and evaluation of software.\n* **Beta Testing:** testing an initial product release with end\\-users.\n* **Chaos Engineering:** subjecting production software systems to stress to ensure resiliency and robustness.\n\n"
+          "content": "In these special topics we will cover some additional topics related to testing software and automation. There are many tools and skills which are useful to learn or be aware of in this area. Here we will cover some of these, and also present some fascinating debugging war stories.\n\nIn particular, we will briefly cover a few additional types of testing which we did not cover in the main module challenges. These include:\n\n* **Stress Testing:** subjecting software to extreme conditions to determine performance limits.\n* **Fuzz Testing:** an automated technique for generating random inputs for testing software.\n* **Split Testing:** testing two versions of a feature to evaluate relative performance.\n* **Manual Testing:** the process non\\-automated inspection and evaluation of software.\n* **Alpha and Beta Testing:** testing an initial product release with end\\-users.\n* **Chaos Engineering:** subjecting production software systems to stress to ensure resiliency and robustness.\n\n"
         },
         {
           "id": "yRbsegwJs",
@@ -4934,13 +4934,13 @@
         {
           "id": "fgIlzO7F@",
           "type": "media",
-          "title": "Beta Testing",
+          "title": "Alpha and Beta Testing",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "The previous lesson introduced manual testing, the process of manually inspecting and using software. Alpha and beta testing is also a form of manually testing which targets end users more directly and is specifically tailored to the software release process.\n# Alpha Testing\n\nAlpha testing is essentially manual testing software, specifically prior to a new release, by the internal employees or stakeholders who are responsible for developing the software product. You can imagine a team developing a new prototype and the testing in internally within the company to try to evaluate any flaws, bugs, or defects before releasing it externally.\n# Beta Testing\n\nBeta testing is similar to alpha testing except that it involves actual end users of the product. You have probably heard of the term \"beta testing\" before and may have even participated in beta testing software products yourself. A beta test allows real users to interact with the software in as realistic an environment as possible. Beta testing precedes a new product release or major feature update, and is the last major check to try to find any unresolved or unidentified issues before releasing the product.\n# In Practice\n\nAlpha and beta testing is especially expensive because these techniques involves actually gathering and coordinating users to test a product. However, they can generate the most useful feedback—not only will users tend to find issues and bugs you missed, but they can provide qualitative feedback on the product design and usefulness. In the end, you are developing software to create products to solve a problem in the real world. Alpha and beta testing are a great way to determine from real users whether you have solved that problem or not.\n"
         },
         {
           "id": "uhN@tgz0R",
