@@ -4885,23 +4885,12 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In these special topics we will cover some additional topics related to testing software and automation. There are many tools and skills which are useful to learn or be aware of in this area. Here we will cover some of these, and also present some fascinating debugging war stories."
+          "content": "In these special topics we will cover some additional topics related to testing software and automation. There are many tools and skills which are useful to learn or be aware of in this area. Here we will cover some of these, and also present some fascinating debugging war stories.\n\nIn particular, we will briefly cover a few additional types of testing which we did not cover in the main module challenges. These include:\n\n* **Regression Testing:** ensuring that code changes do not break previously tested and deployed software.\n* **Stress Testing:** subjecting software to extreme conditions to determine performance limits.\n* **Fuzzing:** an automated technique for generating random inputs for testing software.\n* **Split Testing:** testing two versions of a feature to evaluate relative performance.\n* **Manual Testing:** the process non\\-automated inspection and evaluation of software.\n* **Beta Testing:** testing an initial product release with end\\-users.\n* **Chaos Engineering:** subjecting production software systems to stress to ensure resiliency and robustness.\n\n"
         },
         {
           "id": "CFGNmn@Va",
           "type": "media",
           "title": "Regression Testing",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
-        },
-        {
-          "id": "p6zw0DFcp",
-          "type": "media",
-          "title": "Smoke Testing",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
@@ -4943,6 +4932,17 @@
           "content": "..."
         },
         {
+          "id": "Jdf0MWZX2",
+          "type": "media",
+          "title": "Manual Testing",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "fgIlzO7F@",
           "type": "media",
           "title": "Beta Testing",
@@ -4956,24 +4956,13 @@
         {
           "id": "uhN@tgz0R",
           "type": "media",
-          "title": "Chaos Monkey",
+          "title": "Chaos Engineering",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
           "content": "..."
-        },
-        {
-          "id": "Jdf0MWZX2",
-          "type": "media",
-          "title": "QA Testing",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": ""
         }
       ]
     },
