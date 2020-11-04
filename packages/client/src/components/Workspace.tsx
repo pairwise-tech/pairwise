@@ -148,6 +148,7 @@ export interface ICodeEditorProps {
   userSettings: UserSettings;
   editorOptions: ICodeEditorOptions;
   onDidBlurEditorText: () => void;
+  onDidInitializeMonacoEditor: () => void;
 }
 
 export interface ICodeEditor extends React.Component<ICodeEditorProps> {
@@ -386,6 +387,13 @@ class Workspace extends React.Component<IProps, IState> {
       this.pauseAndRefreshEditor();
     }
   }
+
+  /**
+   * Handle any actions after the Monaco editor is initialized.
+   */
+  onDidInitializeMonacoEditor = () => {
+    this.addModuleDependenciesOnMount();
+  };
 
   /**
    * For non-markup challenges (React, TS), enable the user to
@@ -805,6 +813,7 @@ class Workspace extends React.Component<IProps, IState> {
           language={this.getMonacoLanguageFromChallengeType()}
           value={this.state.code}
           onChange={this.handleEditorContentChange}
+          onDidInitializeMonacoEditor={this.onDidInitializeMonacoEditor}
         />
       </CodeEditorContainer>
     );
@@ -1374,12 +1383,12 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   compileAndTransformCodeString = async () => {
-    const { isTestingAndAutomationChallenge } = this.props;
     const { code, dependencies } = await compileCodeString(
       this.state.code,
       this.props.challenge,
     );
 
+    const { isTestingAndAutomationChallenge } = this.props;
     if (this.editor) {
       this.editor.addModuleTypeDefinitionsToMonaco(
         dependencies,
@@ -1388,6 +1397,16 @@ class Workspace extends React.Component<IProps, IState> {
     }
 
     return code;
+  };
+
+  /**
+   * This method calls the compileAndTransformCodeString method, which has the
+   * side effect of add relevant type definitions to the Monaco editor based
+   * on the current challenge code. This avoids the issue where these are not
+   * present when the challenge first loads.
+   */
+  addModuleDependenciesOnMount = () => {
+    this.compileAndTransformCodeString();
   };
 
   handleCompilationError = (error: Error) => {

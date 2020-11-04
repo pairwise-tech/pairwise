@@ -232,6 +232,9 @@ export default class WorkspaceMonacoEditor
     }
 
     debug("[initializeMonaco] Monaco editor initialized.");
+
+    // Call parent callback to trigger any events on Monaco initialization
+    this.props.onDidInitializeMonacoEditor();
   };
 
   setTheme = (theme: string) => {
@@ -306,7 +309,9 @@ export default class WorkspaceMonacoEditor
       defaultLib,
     );
 
+    console.log("HI!!!");
     if (this.monacoWrapper) {
+      console.log("WRAPPED!");
       registerExternalLib({
         source: moduleDeclarations,
         name: USER_IMPORTED_TYPES_LIB_NAME,

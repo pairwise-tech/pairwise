@@ -50,7 +50,7 @@ export default class WorkspaceCodemirrorEditor
 
   refresh = async () => {
     debug("noop(refresh)");
-    // Unecessary for the controlled component, but required by the ICodeEditor spec
+    // Unnecessary for the controlled component, but required by the ICodeEditor spec
     // noop
   };
 
