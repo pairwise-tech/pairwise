@@ -5028,6 +5028,17 @@
           "content": ""
         },
         {
+          "id": "XjkSEgt2g",
+          "type": "typescript",
+          "title": "Debug the Reverse Iterator",
+          "instructions": "A function is written below to iterate through a list backwards and construct a new list, without modifying the original list. But, something is wrong with it... your job is to find the issue and fix it\\!",
+          "testCode": "test(\"The `reverseIterator` function should be defined.\", () => {\n  expect(typeof reverseIterator).toBe(\"function\");\n});\n\ntest(\"The `reverseIterator` function should return a new list without modifying the original list.\", () => {\n  const list = [1, 2, 3];\n  const result = reverseIterator(list);\n  expect(list !== result).toBe(true);\n});\n\ntest(\"The `reverseIterator` function should return a new list with the items in the original list in reverse order.\", () => {\n  let list = [1, 2, 3];\n  let result = reverseIterator(list);\n  let expected = [3, 2, 1];\n  expect(list !== result).toBe(true);\n  expect(result).toEqual(expected);\n\n  list = [\"a\", \"b\", \"c\", \"d\", \"e\"];\n  result = reverseIterator(list);\n  expected = [\"e\", \"d\", \"c\", \"b\", \"a\"];\n  expect(list !== result).toBe(true);\n  expect(result).toEqual(expected);\n\n  list = [true, false, null, undefined, { hello: \"blah\" }];\n  result = reverseIterator(list);\n  expected = [{ hello: \"blah\" }, undefined, null, false, true];\n  expect(list !== result).toBe(true);\n  expect(result).toEqual(expected);\n\n  list = [];\n  result = reverseIterator(list);\n  expected = [];\n  expect(list !== result).toBe(true);\n  expect(result).toEqual(expected);\n\n  list = [null];\n  result = reverseIterator(list);\n  expected = [null];\n  expect(list !== result).toBe(true);\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "const reverseIterator = (list: any[]) => {\n  const reverseOrder = [];\n  for (let i = list.length; i > 0; i--) {\n    reverseOrder.push(list[i]);\n  }\n  return reverseOrder;\n};\n",
+          "solutionCode": "const reverseIterator = (list: any[]) => {\n  // NOTE: Another solution could be the following:\n  // return list.slice().reverse();\n\n  // Fix the off-by-one array indexing:\n  const reverseOrder = [];\n  for (let i = list.length - 1; i >= 0; i--) {\n    reverseOrder.push(list[i]);\n  }\n  return reverseOrder;\n};\n",
+          "content": ""
+        },
+        {
           "id": "C3aOJmAu3",
           "type": "section",
           "title": "Projects",
