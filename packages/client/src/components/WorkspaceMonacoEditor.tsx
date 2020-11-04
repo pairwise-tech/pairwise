@@ -309,9 +309,7 @@ export default class WorkspaceMonacoEditor
       defaultLib,
     );
 
-    console.log("HI!!!");
     if (this.monacoWrapper) {
-      console.log("WRAPPED!");
       registerExternalLib({
         source: moduleDeclarations,
         name: USER_IMPORTED_TYPES_LIB_NAME,
