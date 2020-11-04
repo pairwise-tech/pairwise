@@ -5061,6 +5061,17 @@
           "content": ""
         },
         {
+          "id": "yEly9kNYj",
+          "type": "typescript",
+          "title": "Working with Linked Lists",
+          "instructions": "A [linked list](https://en.wikipedia.org/wiki/Linked_list#:~:text=In%20computer%20science,%20a%20linked,which%20together%20represent%20a%20sequence.) is a data structure similar to an array, in which each item contains a reference to the next item. In the editor below there is a function `listToArray` which should take a linked list and reduce it to a plain array contain all of the `value`s in the linked list. But... there are some problems with the code as it is written currently\\!",
+          "testCode": "test(\"The `listToArray` function should be defined.\", () => {\n  expect(typeof listToArray).toBe(\"function\");\n});\n\ntest(\"The `listToArray` function should be correctly reduce a linked list to an array of the list values.\", () => {\n  class LL {\n    value = null;\n    next = null;\n    constructor(value) {\n      this.value = value;\n    }\n  }\n\n  const list = new LL(100);\n  const next = new LL(500);\n  list.next = next;\n  next.next = new LL(30);\n  let expected = [100, 500, 30];\n  let result = listToArray(list);\n  expect(result).toEqual(expected);\n\n  const a = new LL(1);\n  const b = new LL(2);\n  const c = new LL(3);\n  const d = new LL(4);\n  const e = new LL(5);\n  const f = new LL(6);\n  const g = new LL(7);\n  const h = new LL(8);\n  const i = new LL(9);\n  a.next = b;\n  b.next = c;\n  c.next = d;\n  d.next = e;\n  e.next = f;\n  f.next = g;\n  g.next = h;\n  h.next = i;\n\n  result = listToArray(a);\n  expected = [1, 2, 3, 4, 5, 6, 7, 8, 9];\n  expect(result).toEqual(expected);\n\n  expect(listToArray(null)).toEqual([]);\n  expect(listToArray(new LL(0))).toEqual([0]);\n  expect(listToArray(new LL(1001))).toEqual([1001]);\n});\n",
+          "videoUrl": "",
+          "starterCode": "interface List<T extends {}> {\n  value: T;\n  next: List<T> | null;\n}\n\nconst listToArray = (linkedList: List<any>): any[] => {\n  const result = [];\n\n  let current = linkedList.value;\n  while (current.next !== null) {\n    result.push(current.value);\n    current = current.next;\n  }\n\n  return result;\n};\n",
+          "solutionCode": "interface List<T extends {}> {\n  value: T;\n  next: List<T> | null;\n}\n\nconst listToArray = (linkedList: List<any>): any[] => {\n  const result = [];\n\n  // Traversing linked lists can be tricky!\n  let current: List<any> | null = linkedList;\n  while (current !== null) {\n    result.push(current.value);\n    current = current.next;\n  }\n\n  return result;\n};\n",
+          "content": ""
+        },
+        {
           "id": "C3aOJmAu3",
           "type": "section",
           "title": "Projects",
