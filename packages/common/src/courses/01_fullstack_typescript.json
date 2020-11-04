@@ -4973,6 +4973,17 @@
           "content": "You probably have some sense of how to debug and refactor code if you've made it this far in the course. Refactoring, if the term isn't familiar to you, is just the process of revisiting some previously written code and re\\-writing it to improve the organization, readability, or maintainability of the code \\- or, just to fix bugs or errors.\n\nAs you move forward as a developer, you will start to observe that code becomes legacy code immediately once it is written, and legacy is often prone to bugs and errors and in need of refactoring. As it terms out, the skills of debugging and refactoring are indispensable for software developers. They are as important as writing code correctly from scratch.\n\nIn this module, we will equip you with tools and techniques which will make you more effective at debugging code, and we will walk through some strategies for refactoring code as well. In addition, we will provide a number of challenges were there is some mistake in the code that you must find, debug and fix. There will be other challenges to give you specific practice refactoring existing code to change the design or organization.\n\nLet's dive in\\!"
         },
         {
+          "id": "wMSYQIGg9",
+          "type": "section",
+          "title": "Refactoring",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Once code is written, it instantly becomes legacy code. As software projects evolve, requirements change and legacy code tends to quickly become outdated. Refactoring is the activity is re\\-writing previously written legacy code in order to bring it up to date, fix issues or bugs, or improve the code design or organization."
+        },
+        {
           "id": "tSp1Fup3m",
           "type": "media",
           "title": "Named Function Arguments",
@@ -4993,6 +5004,17 @@
           "starterCode": "interface IPerson {\n  firstName: string;\n  lastName: string;\n  age: number;\n  profession: string;\n  member: boolean;\n  email: string;\n  getName(): string;\n  getAge(): number;\n  getEmail(): string;\n  getProfession(): string;\n  isMember(): boolean;\n}\n\n/**\n * Having more than 2 or 3 arguments to a function is generally not preferable,\n * because it becomes less clear when you call the function what all the arguments\n * correspond to.\n * \n * Instead of this, refactor the function to accept a single object argument which\n * has named fields for each of the required parameters.\n * \n * You will also need to refactor the function body.\n */\nconst createPerson = (\n  firstName: string,\n  lastName: string,\n  age: number,\n  email: string,\n  profession: string,\n  isMember: boolean,\n) => {\n  /**\n   * Extra challenge: Refactor this inline object declaration to use a class\n   * instead.\n   */\n  const person: IPerson = {\n    firstName,\n    lastName,\n    age,\n    email,\n    profession,\n    member: isMember,\n    getName() {\n      return `${firstName} ${lastName}`;\n    },\n    getAge() {\n      return age;\n    },\n    getEmail() {\n      return email;\n    },\n    getProfession() {\n      return profession;\n    },\n    isMember() {\n      return isMember;\n    }\n  };\n\n  return person;\n};\n\n// Change code here:\nconst person = createPerson(\"Jim\", \"Lewis II\", 15, \"jim@mail.com\", \"Carpenter\", true);\nconsole.log(person.getName());",
           "solutionCode": "interface IPerson {\n  firstName: string;\n  lastName: string;\n  age: number;\n  profession: string;\n  member: boolean;\n  email: string;\n  getName(): string;\n  getAge(): number;\n  getEmail(): string;\n  getProfession(): string;\n  isMember(): boolean;\n}\n\ninterface CreatePersonArguments {\n  firstName: string,\n  lastName: string,\n  age: number,\n  email: string,\n  profession: string,\n  isMember: boolean;\n}\n\nclass PersonClass implements IPerson {\n  firstName: string;\n  lastName: string;\n  age: number;\n  email: string;\n  profession: string;\n  member: boolean;\n\n  constructor(args: CreatePersonArguments) {\n    this.firstName = args.firstName;\n    this.lastName = args.lastName;\n    this.age = args.age;\n    this.email = args.email;\n    this.profession = args.profession;\n    this.member = args.isMember;\n  }\n\n  getName() {\n    return `${this.firstName} ${this.lastName}`;\n  }\n  getAge() {\n    return this.age;\n  }\n  getEmail() {\n    return this.email;\n  }\n  getProfession() {\n    return this.profession;\n  }\n  isMember() {\n    return this.member;\n  }\n}\n\n/**\n * Create a new person class using an object with named parameter fields.\n */\nconst createPerson = (args: CreatePersonArguments) => {\n  const person = new PersonClass(args);\n  return person;\n};\n\n// Change code here:\nconst person = createPerson({\n  firstName: \"Jim\",\n  lastName: \"Lewis\",\n  age: 15,\n  email: \"jim@mail.com\",\n  profession: \"Carpenter\",\n  isMember: true,\n});\n\nconsole.log(person.getName());",
           "content": ""
+        },
+        {
+          "id": "GkXns72X7Q",
+          "type": "section",
+          "title": "Debugging",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "You've already had plenty of hands\\-on experience debugging. Whenever code you write has an issue, of any kind, you will find yourself involved in the task of debugging to try to locate the issue and fix it."
         },
         {
           "id": "C3aOJmAu3",
