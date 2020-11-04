@@ -5017,6 +5017,17 @@
           "content": "You've already had plenty of hands\\-on experience debugging. Whenever code you write has an issue, of any kind, you will find yourself involved in the task of debugging to try to locate the issue and fix it."
         },
         {
+          "id": "vbjDVyVCV",
+          "type": "typescript",
+          "title": "Debug the Sanitize Object Function",
+          "instructions": "The code in the editor has a bug. Find it and fix it to get the tests passing\\!",
+          "testCode": "test(\"The `sanitizeObject` function should be defined.\", () => {\n  expect(typeof sanitizeObject).toBe(\"function\");\n});\n\ntest(\"The `sanitizeObject` function should sanitize objects according to the provided `sanitizeFn` and return the new object as a result.\", () => {\n  let input = { a: \"a\", b: \"b\", c: null };\n  let result = sanitizeObject(input, (x) => x !== null);\n  let expected = {\n    a: \"a\",\n    b: \"b\",\n  };\n  expect(result).toEqual(expected);\n\n  input = { a: \"a\", b: \"b\", c: null };\n  result = sanitizeObject(input, (x) => x !== \"a\");\n  expected = {\n    b: \"b\",\n    c: null,\n  };\n  expect(result).toEqual(expected);\n\n  input = { a: \"a\", b: \"b\", c: null };\n  result = sanitizeObject(input, (x) => x !== undefined);\n  expected = {\n    a: \"a\",\n    b: \"b\",\n    c: null,\n  };\n  expect(result).toEqual(expected);\n\n  input = { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8 };\n  result = sanitizeObject(input, (x) => x > 4);\n  expected = {\n    e: 5,\n    f: 6,\n    g: 7,\n    h: 8,\n  };\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "const sanitizeObject = (\n  obj: { [key: string]: any },\n  sanitizeFn: (value: any) => boolean\n) => {\n  const sanitizedObject: any = {};\n\n  Object.entries(obj).forEach(([key, value]) => {\n    if (sanitizeFn(value)) {\n      sanitizedObject[key] = value;\n    }\n  });\n\n  return obj;\n};\n",
+          "solutionCode": "const sanitizeObject = (\n  obj: { [key: string]: any },\n  sanitizeFn: (value: any) => boolean\n) => {\n  const sanitizedObject: any = {};\n\n  Object.entries(obj).forEach(([key, value]) => {\n    if (sanitizeFn(value)) {\n      sanitizedObject[key] = value;\n    }\n  });\n\n  // Return the sanitized object, not the original one!\n  return sanitizedObject;\n};\n",
+          "content": ""
+        },
+        {
           "id": "C3aOJmAu3",
           "type": "section",
           "title": "Projects",
