@@ -5017,6 +5017,17 @@
           "content": ""
         },
         {
+          "id": "ziawzuFty",
+          "type": "typescript",
+          "title": "Variable Naming Conventions",
+          "instructions": "It's important to give any named values in a program intelligible names so your future self and your colleagues will have a better idea of what the intent of the code is. However... naming is one of the [three hard problems of Computer Science](https://martinfowler.com/bliki/TwoHardThings.html).\n\nThe naming conventions in the editor below are... well, we will leave it to you to form your own judgement. Work with the code and see if you can come up with some better names. But, don't stop there\\! Make any improvements you like until you are satisfied with the result.",
+          "testCode": "test(\"The `variable` names `l` `r` `x`, at the very least, should be changed to something more descriptive.\", () => {\n  expect(() => {\n    expect(l).toBe(undefined);\n  }).toThrow();\n  expect(() => {\n    expect(r).toBe(undefined);\n  }).toThrow();\n  expect(() => {\n    expect(x).toBe(undefined);\n  }).toThrow();\n});\n\ntest(\"The variable `r` should be changed to `result` and it should include only the items from the list of numbers which are larger than the `max` value.\", () => {\n  for (const x of result) {\n    expect(x > max).toBe(true);\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const l = [1, 2, 5, 7, 8, 10, 105, 550, 9, 82, 13, 75, 83];\nconst max = 50;\n\nlet r = [];\nlet x = l.length;\n\nfor (let i = 0; i < x; i++) {\n  const c = l[i];\n  if (c > max) {\n    r[r.length] = c;\n  }\n}\n",
+          "solutionCode": "const list = [1, 2, 5, 7, 8, 10, 105, 550, 9, 82, 13, 75, 83];\nconst max = 50;\n\n/**\n * We can clean up the code by abstracting the filtering logic\n * into a function, renaming poorly named variables, and making\n * a few other improvements.\n */\nconst filterListByMaxValues = (list: any[], max: number) => {\n  let result = [];\n  for (let i = 0; i < list.length; i++) {\n    const item = list[i];\n    if (item > max) {\n      result.push(item);\n    }\n  }\n  return result;\n};\n\nconst result = filterListByMaxValues(list, max);\n",
+          "content": ""
+        },
+        {
           "id": "GkXns72X7Q",
           "type": "section",
           "title": "Debugging",
