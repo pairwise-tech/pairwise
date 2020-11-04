@@ -5039,6 +5039,17 @@
           "content": ""
         },
         {
+          "id": "vfkUh@b$j",
+          "type": "typescript",
+          "title": "Debug the Truth Teller",
+          "instructions": "A function is written below to count the number of fields in an object which are `true`. But, it does not return the correct count right now... what could the problem be?",
+          "testCode": "test(\"The `truthTeller` function should be defined.\", () => {\n  expect(typeof truthTeller).toBe(\"function\");\n});\n\ntest(\"The `truthTeller` function should be return the correct count for object fields which are set to the boolean `true`.\", () => {\n  let input = { a: \"a\", b: true, c: true };\n  let result = truthTeller(input);\n  expect(result).toBe(2);\n\n  input = { a: \"a\", b: true, c: true, d: \"bleg\", e: 5, g: 10, m: true };\n  result = truthTeller(input);\n  expect(result).toBe(3);\n\n  input = { a: \"a\", b: \"true\" };\n  result = truthTeller(input);\n  expect(result).toBe(0);\n\n  input = { a: \"a\", b: \"true\", c: true };\n  result = truthTeller(input);\n  expect(result).toBe(1);\n});\n\ntest(\"The `truthTeller` function should count deeply nested objects correctly, and return a count of all the `true` values in the object.\", () => {\n  let input = { a: \"a\", b: true, c: true, d: { x: true, y: { v: true } } };\n  let result = truthTeller(input);\n  expect(result).toBe(4);\n\n  input = {\n    a: \"a\",\n    b: true,\n    c: true,\n    d: \"bleg\",\n    e: 5,\n    g: 10,\n    m: true,\n    x: { r: true, y: { z: true, bar: [1, 2, 3, { h: true }] } },\n  };\n  result = truthTeller(input);\n  expect(result).toBe(6);\n\n  input = { a: { b: { c: { d: { e: true } } } } };\n  result = truthTeller(input);\n  expect(result).toBe(1);\n\n  input = { a: { b: { c: { d: { e: \"true\" } } } } };\n  result = truthTeller(input);\n  expect(result).toBe(0);\n});\n",
+          "videoUrl": "",
+          "starterCode": "const truthTeller = (obj: { [key: string]: any }): number => {\n  let count = 0;\n\n  for (const [k, v] of Object.entries(truthTeller)) {\n    if (v == true) {\n      count += 1;\n    }\n  }\n\n  return count;\n};\n",
+          "solutionCode": "const truthTeller = (obj: { [key: string]: any }): number => {\n  let count = 0;\n\n  for (const [k, v] of Object.entries(obj)) {\n    // Recurse on non-primitive fields to handle nested objects:\n    if (typeof v === \"object\") {\n      count += truthTeller(v);\n    } else {\n      // Use triple equals to ensure equality checks are correct\n      if (v === true) {\n        count += 1;\n      }\n    }\n  }\n\n  return count;\n};\n",
+          "content": ""
+        },
+        {
           "id": "C3aOJmAu3",
           "type": "section",
           "title": "Projects",
