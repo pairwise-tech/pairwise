@@ -5006,6 +5006,17 @@
           "content": ""
         },
         {
+          "id": "PuyOOH@hoo",
+          "type": "typescript",
+          "title": "Code Should be DRY",
+          "instructions": "The programming phrase \"DRY\" stands for **Don't Repeat Yourself** and refers to the principle that you want to try to avoid repeating code. If you ever find yourself writing the same code two or three times, you should consider refactoring it into a helper function or class.\n\nRepeated code is more error\\-prone, more expensive to maintain, and, simply, just doesn't make sense. Once you've solved something one time there is no need to solve it again\\! If you ever catch yourself copy\\-pasting some code you have previously written, ask yourself if there is a way to refactor it to avoid repeating it.\n\nThe code in the editor could be consolidated to clean it up a lot. See if you can refactor it in a way which satisfies the tests\\!",
+          "testCode": "test(\"There should only be 1 call to the console `log` method.\", () => {\n  // console.log has already been replaced by our interceptor...\n  const code = __user_code_string__.match(/__interceptConsoleLog/g);\n  expect(code.length).toBe(1);\n});\n\ntest(\"All the items in the `cart` should be logged to the console.\", () => {\n  const logs = __secret_log_box;\n  for (const x of cart) {\n    expect(inBox(logs, x));\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const cart = [\n  \"apples\",\n  \"oranges\",\n  \"blueberries\",\n  \"bagels\",\n  \"crackers\",\n  \"cereal\",\n  \"milk\",\n  \"cookies\",\n];\n\nconsole.log(cart[0]);\nconsole.log(cart[1]);\nconsole.log(cart[2]);\nconsole.log(cart[3]);\nconsole.log(cart[4]);\nconsole.log(cart[5]);\nconsole.log(cart[6]);\nconsole.log(cart[7]);\n",
+          "solutionCode": "const cart = [\n  \"apples\",\n  \"oranges\",\n  \"blueberries\",\n  \"bagels\",\n  \"crackers\",\n  \"cereal\",\n  \"milk\",\n  \"cookies\",\n];\n\n/**\n * We can create a helper function to abstract the action\n * of logging items in any list.\n */\nconst logItemsInList = (list: any[]): void => {\n  list.forEach((x) => console.log(x));\n};\n\nlogItemsInList(cart);\n",
+          "content": ""
+        },
+        {
           "id": "GkXns72X7Q",
           "type": "section",
           "title": "Debugging",
