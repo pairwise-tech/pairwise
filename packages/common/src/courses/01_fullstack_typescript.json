@@ -5028,6 +5028,17 @@
           "content": ""
         },
         {
+          "id": "o2LtOPfgxo",
+          "type": "typescript",
+          "title": "Refactoring Repeated Code in Tic Tac Toe",
+          "instructions": "Imagine we have a Tic Tac Toe game \\(yes, we love this game\\), and the game is finished and we want to reset the game board. We could go through the board and manually reset every cell on the board, however this is tedious, error\\-prone, and doesn't respect the DRY principle. Moreover, this might seem ok for a simple 3\\-by\\-3 Tic Tac Toe board, but what if it was a different game with a larger or more complex board structure?\n\nRefactor the `resetTicTacToeBoard` function in the editor to avoid manually updating every cell position on the board. Your refactored function should be flexible enough to reset _any_ sized 2\\-dimensional grid such that every cell is reset to contain `null`.",
+          "testCode": "test(\"The `resetTicTacToeBoard` function should be defined.\", () => {\n  expect(typeof resetTicTacToeBoard).toBe(\"function\");\n});\n\ntest(\"The `resetTicTacToeBoard` function should reset a given Tic Tac Toe board, or any 2-dimensional grid, so every cell is reset to `null`.\", () => {\n  let board = [\n    [\"X\", \"O\", \"O\"],\n    [\"X\", \"X\", \"O\"],\n    [null, null, \"X\"],\n  ];\n  let result = resetTicTacToeBoard(board);\n  let expected = [\n    [null, null, null],\n    [null, null, null],\n    [null, null, null],\n  ];\n  expect(result).toEqual(expected);\n\n  board = [\n    [\"X\", \"O\", \"O\", \"Y\", \"A\"],\n    [\"X\", \"X\", \"O\", \"L\", \"M\"],\n    [null, null, \"X\", null, \"hi\"],\n  ];\n  result = resetTicTacToeBoard(board);\n  expected = [\n    [null, null, null, null, null],\n    [null, null, null, null, null],\n    [null, null, null, null, null],\n  ];\n  expect(result).toEqual(expected);\n\n  board = [[\"X\"]];\n  result = resetTicTacToeBoard(board);\n  expected = [[null]];\n  expect(result).toEqual(expected);\n\n  board = [[]];\n  result = resetTicTacToeBoard(board);\n  expected = [[]];\n  expect(result).toEqual(expected);\n});\n",
+          "videoUrl": "",
+          "starterCode": "type Cell = \"X\" | \"O\" | null;\ntype Board = Cell[][];\n\nconst resetTicTacToeBoard = (board: Board): Board => {\n  // Reset top row\n  board[0][0] = null;\n  board[0][1] = null;\n  board[0][2] = null;\n\n  // Reset middle row\n  board[1][0] = null;\n  board[1][1] = null;\n  board[1][2] = null;\n\n  // Reset bottom row\n  board[2][0] = null;\n  board[2][1] = null;\n  board[2][2] = null;\n\n  return board;\n};\n\nconst board: Board = [\n  [\"X\", \"O\", \"O\"],\n  [\"X\", \"X\", \"O\"],\n  [null, null, \"X\"],\n];\n\nconst result = resetTicTacToeBoard(board);\nconsole.log(result);\n",
+          "solutionCode": "type Cell = \"X\" | \"O\" | null;\ntype Board = Cell[][];\n\nconst resetTicTacToeBoard = (board: Board): Board => {\n  // A nested for loop can iterate through every cell on the board\n  for (let i = 0; i < board.length; i++) {\n    for (let j = 0; j < board[i].length; j++) {\n      board[i][j] = null;\n    }\n  }\n\n  return board;\n};\n\nconst board: Board = [\n  [\"X\", \"O\", \"O\"],\n  [\"X\", \"X\", \"O\"],\n  [null, null, \"X\"],\n];\n\nconst result = resetTicTacToeBoard(board);\nconsole.log(result);\n",
+          "content": ""
+        },
+        {
           "id": "GkXns72X7Q",
           "type": "section",
           "title": "Debugging",
