@@ -5118,7 +5118,7 @@
         {
           "id": "5VL9dBK0M",
           "type": "project",
-          "title": "Refactor Legacy Project Code",
+          "title": "Refactor a Legacy Project",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
