@@ -5116,6 +5116,17 @@
           "content": "There are two projects for this section. The first will have you download the source code for a project and debug some failing tests. The second involves revisiting one of your previously completed projects and refactoring the code based on what you have learned so far in this module."
         },
         {
+          "id": "5VL9dBK0M",
+          "type": "project",
+          "title": "Refactor Legacy Project Code",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, choose one of your earlier completed projects and revisit it and try to refactor the code you wrote before. As you go through the journey of writing code, you will learn a lot and it's often a surprising experience to return to code you wrote in the past. You may be surprised by what you have written before\\!\n\nRevisit one of the earlier projects \\(the TypeScript Programming projects are a great choice, since those were quite early\\) and review your code now that you have progressed much further through the curriculum. Ask yourself some questions:\n\n* Does the code still make sense to you?\n* Is it easy to read and understand?\n* Is it well written and well designed?\n* Would you do anything differently today?\n* Would it be easy to change?\n* Is it extensible?\n* Is it tested?\n* Is it well documented?\n\n\nRefactor your code based on what you have learned. You can even go as far as completely re\\-writing the project from scratch. This is often a perfectly viable refactoring strategy—sometimes you just need a clean slate to start with some fresh ideas rather than trying to adjust some brittle, bug\\-ridden legacy code.\n\n> ++Remember:++ One of the sure things about software is that it _will_ change in the future\\! The project/product/company/user/customer requirements and your understanding of them always tends to change over time which forces your code to change along the way. Well designed code is code which is _easy to refactor and change in the future._\n\nThe important takeaway here is about the _process_ of refactoring. This is an important skill to develop and the best way is through practice. Try to first review the code you want to refactor, then develop a plan and some ideas for how you want to refactor it, and then try to execute that plan in a methodical way. Ideally, you should be using version control and breaking down your changes into small, clear commits.\n\nGood luck\\!"
+        },
+        {
           "id": "5iJetMlK0",
           "type": "section",
           "title": "Guided Projects",
