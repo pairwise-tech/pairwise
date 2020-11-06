@@ -353,6 +353,12 @@ const lostUserEpic: EpicSignature = (action$, state$, deps) => {
     }),
     tap(() => {
       const { currentChallengeId, challengeMap } = state$.value.challenges;
+
+      // Sandbox is OK
+      if (currentChallengeId === SANDBOX_ID) {
+        return;
+      }
+
       if (challengeMap && currentChallengeId) {
         if (!challengeMap[currentChallengeId]) {
           deps.router.push("/404");
