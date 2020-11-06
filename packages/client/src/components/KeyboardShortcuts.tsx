@@ -6,6 +6,7 @@ import { Position, Popover, Tooltip } from "@blueprintjs/core";
 import { IconButton } from "./Shared";
 import styled from "styled-components";
 import { COLORS } from "tools/constants";
+import { getClientOS } from "../tools/utils";
 
 const debug = require("debug")("client:KeyboardShortcuts");
 
@@ -188,6 +189,15 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
  */
 
 export const ShortcutKeysPopover = () => {
+  /**
+   * NOTE: Only provide the shortcuts on MacOS for now, until we implement
+   * them on Windows/Linux.
+   */
+  const OS = getClientOS();
+  if (OS !== "Mac") {
+    return null;
+  }
+
   return (
     <Popover
       usePortal={false}

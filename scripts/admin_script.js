@@ -37,8 +37,16 @@ const TEST = "TEST";
 const PURCHASE = "PURCHASE";
 const REFUND = "REFUND";
 const GET_USERS = "GET_USERS";
+const GET_USER = "GET_USER";
 const DELETE_USER = "DELETE_USER";
-const VALID_ACTIONS = new Set([TEST, PURCHASE, REFUND, GET_USERS, DELETE_USER]);
+const VALID_ACTIONS = new Set([
+  TEST,
+  PURCHASE,
+  REFUND,
+  GET_USERS,
+  GET_USER,
+  DELETE_USER,
+]);
 
 const validateActionType = actionType => {
   if (VALID_ACTIONS.has(actionType)) {
@@ -61,6 +69,7 @@ const RequestHeaders = {
 
 // Admin API urls
 const ADMIN_INDEX_URL = `${SERVER_URL}/admin`;
+const GET_USER_URL = `${SERVER_URL}/admin/user`;
 const GET_ALL_USERS_URL = `${SERVER_URL}/admin/users`;
 const DELETE_USER_URL = `${SERVER_URL}/admin/users/delete`;
 const PURCHASE_COURSE_URL = `${SERVER_URL}/admin/purchase-course`;
@@ -213,6 +222,7 @@ const summarizeUserProgress = users => {
   let usersWithoutEmail = 0;
   let leaderChallengeCount = 0;
   let numberOfUsersWithZeroChallengesComplete = 0;
+  let nonZeroChallengeUsers = 0;
 
   for (const user of withProgressSummaries) {
     const { completedChallengeList } = user;
@@ -231,6 +241,8 @@ const summarizeUserProgress = users => {
 
     if (completedChallengeList.length === 0) {
       numberOfUsersWithZeroChallengesComplete++;
+    } else {
+      nonZeroChallengeUsers++;
     }
 
     const userCreated = new Date(user.createdAt).getTime();
@@ -253,8 +265,11 @@ const summarizeUserProgress = users => {
   }
 
   const totalUsers = sortedByCompletedChallenges.length;
-  const averageChallengesCompletedPerUser = Math.round(
-    totalChallengesCompleted / totalUsers,
+
+  // The average challenge completed count excludes users with zero
+  // challenges completed
+  const averageChallengesCompletedPerNonZeroUser = Math.round(
+    totalChallengesCompleted / nonZeroChallengeUsers,
   );
 
   // Create summary with total user count
@@ -268,7 +283,7 @@ const summarizeUserProgress = users => {
     },
     leaderboard: {
       leaderChallengeCount,
-      averageChallengesCompletedPerUser,
+      averageChallengesCompletedPerNonZeroUser,
       numberOfUsersWithZeroChallengesComplete,
     },
     users: sortedByCompletedChallenges,
@@ -311,10 +326,32 @@ const getAllUsers = async () => {
   }
 };
 
+// Get a single user by email
+const getUserByEmail = async email => {
+  try {
+    if (!email) {
+      throw new Error(
+        "Must provide USER_EMAIL environment variables to fetch a user!",
+      );
+    }
+    log.start();
+    const result = await axios.get(`${GET_USER_URL}/${email}`, RequestHeaders);
+    const filename = "pairwise-user-detail.json";
+    log.finish(
+      `Fetch user with email ${email} successfully. Writing results to file: ${filename}`,
+    );
+    const user = JSON.stringify(result.data, null, 2);
+    fs.writeFileSync(filename, user, "utf-8");
+    console.log("Done!");
+  } catch (err) {
+    log.fail(err);
+  }
+};
+
 // Fully delete a user account
 const deleteUserByEmail = async userEmail => {
   try {
-    if (!USER_EMAIL) {
+    if (!userEmail) {
       throw new Error(
         "Must provide USER_EMAIL environment variables to delete a user!",
       );
@@ -374,6 +411,8 @@ const runScript = () => {
   switch (SCRIPT_ACTION) {
     case TEST:
       return testAdminIndexRoute();
+    case GET_USER:
+      return getUserByEmail(USER_EMAIL);
     case GET_USERS:
       return getAllUsers();
     case DELETE_USER:

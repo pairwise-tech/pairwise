@@ -13,6 +13,7 @@ import {
   Challenge,
   CourseList,
   LastActiveChallengeIds,
+  getChallengeSlug,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
@@ -40,7 +41,6 @@ import {
   SEARCH_QUERY_THRESHOLD,
 } from "tools/constants";
 import {
-  findCourseById,
   deriveIdsFromCourseWithDefaults,
   findChallengeIdInLocationIfExists,
   createInverseChallengeMapping,
@@ -144,38 +144,66 @@ const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
 };
 
 /**
- * Some state changes result in a need to reset the ids for the active
- * course, module, or challenge. This epic is used to do that.
+ * After a challenge or module is deleted when running Codepress, some side
+ * effects are required. This epic takes care of that: updating the URL and
+ * triggering the setChallengeIdContext actions to indicate the challenge id
+ * context has changed.
  */
-const resetChallengeContextEpic: EpicSignature = (action$, state$, deps) => {
+const resetChallengeContextAfterDeletionEpic: EpicSignature = (
+  action$,
+  state$,
+  deps,
+) => {
   return action$.pipe(
     filter(isActionOf([Actions.deleteChallenge, Actions.deleteCourseModule])),
     map(() => {
-      const { courses, currentCourseId } = state$.value.challenges;
+      const {
+        courses,
+        challengeMap,
+        currentCourseId,
+        currentModuleId,
+        currentChallengeId,
+      } = state$.value.challenges;
 
-      if (currentCourseId && courses) {
-        const course = findCourseById(currentCourseId, courses);
-        if (course) {
-          const maybeChallengeId = findChallengeIdInLocationIfExists(
-            deps.router.location,
+      if (currentCourseId && currentModuleId && courses) {
+        const { location } = deps.router;
+
+        if (currentChallengeId && challengeMap) {
+          const slug = getChallengeSlug(
+            challengeMap[currentChallengeId].challenge,
           );
-
-          const {
-            courseId,
-            moduleId,
-            challengeId,
-          } = deriveIdsFromCourseWithDefaults(courses, maybeChallengeId);
-
-          return Actions.setChallengeIdContext({
-            currentCourseId: courseId,
-            currentModuleId: moduleId,
-            currentChallengeId: challengeId,
-            previousChallengeId: null,
-          });
+          if (slug) {
+            const subPath = slug + location.search + location.hash;
+            deps.router.push(`/workspace/${subPath}`);
+          }
+        } else {
+          /**
+           * NOTE: The context reset logic in the challenges store resets the
+           * challenge id to the previous challenge. If it's the first
+           * challenge in the list, this will result in null in which case we
+           * just redirect /home.
+           *
+           * This handles the edge cases of deleting the first challenge
+           * and having a challenge list of only 1 challenge, which is then
+           * deleted.
+           */
+          deps.toaster.warn(
+            "Could not find challenge to redirect to after deletion, redirecting home instead.",
+          );
+          deps.router.push(`/home`);
         }
+
+        return Actions.setChallengeIdContext({
+          currentCourseId,
+          currentModuleId,
+          currentChallengeId,
+          previousChallengeId: null,
+        });
       }
 
-      return Actions.empty("Tried to set active challenge ids but could not");
+      return Actions.empty(
+        "Failed to reset challenge context correctly after deletion action.",
+      );
     }),
   );
 };
@@ -310,6 +338,28 @@ const setWorkspaceLoadedEpic: EpicSignature = action$ => {
     filter(isActionOf(Actions.fetchCoursesSuccess)),
     delay(1000),
     map(() => Actions.setWorkspaceChallengeLoaded()),
+  );
+};
+
+/**
+ * Handle redirecting the user if the are on the workspace/ route but
+ * with an incorrect challenge id, or some other non-workspace valid path.
+ */
+const lostUserEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.storeInverseChallengeMapping)),
+    filter(() => {
+      return deps.router.location.pathname.includes("workspace");
+    }),
+    tap(() => {
+      const { currentChallengeId, challengeMap } = state$.value.challenges;
+      if (challengeMap && currentChallengeId) {
+        if (!challengeMap[currentChallengeId]) {
+          deps.router.push("/404");
+        }
+      }
+    }),
+    ignoreElements(),
   );
 };
 
@@ -846,7 +896,8 @@ export default combineEpics(
   fetchCodeBlobForChallengeEpic,
   completeProjectSubmissionEpic,
   setWorkspaceLoadedEpic,
-  resetChallengeContextEpic,
+  lostUserEpic,
+  resetChallengeContextAfterDeletionEpic,
   codepressDeleteToasterEpic,
   updateLastActiveChallengeIdsEpic,
   challengeInitializationEpic,

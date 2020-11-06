@@ -147,6 +147,7 @@ export interface ICodeEditorProps {
   challengeType: CHALLENGE_TYPE;
   userSettings: UserSettings;
   editorOptions: ICodeEditorOptions;
+  onDidBlurEditorText: () => void;
 }
 
 export interface ICodeEditor extends React.Component<ICodeEditorProps> {
@@ -342,7 +343,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Handle changes in editor options
     if (prevProps.editorOptions !== this.props.editorOptions) {
-      // this.editorInstance?.updateOptions(this.props.editorOptions);
       this.editor?.updateOptions(this.props.editorOptions);
     }
 
@@ -798,6 +798,7 @@ class Workspace extends React.Component<IProps, IState> {
           ref={editor => {
             this.editor = editor;
           }}
+          onDidBlurEditorText={this.handleAutoFormatCodeOnBlur}
           challengeType={this.props.challenge.type}
           userSettings={this.props.userSettings}
           editorOptions={this.props.editorOptions}
@@ -1574,6 +1575,12 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
+  private readonly handleAutoFormatCodeOnBlur = () => {
+    if (this.props.isEditMode) {
+      this.handleFormatCode();
+    }
+  };
+
   private readonly handleFormatCode = () => {
     try {
       requestCodeFormatting({
@@ -1714,12 +1721,16 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   render() {
     const { challenge, blob, isLoadingBlob, isUserLoading } = this.props;
 
-    if (!challenge || isLoadingBlob || isUserLoading) {
+    if (isLoadingBlob || isUserLoading) {
       return (
         <div style={{ marginTop: 150 }}>
           <Loading />
         </div>
       );
+    } else if (!challenge) {
+      // A challenge did not load... this should be handled with a 404 page
+      // elsewhere, but adding this here for type-checking.
+      return null;
     }
 
     /**

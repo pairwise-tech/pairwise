@@ -17,9 +17,9 @@ RUN npm i -g lerna
 WORKDIR /app
 
 # Copy dependency-related files
-COPY package.json /app/
 COPY yarn.lock /app/
 COPY lerna.json /app/
+COPY package.json /app/
 COPY packages/client/package.json /app/packages/client/
 COPY packages/common/package.json /app/packages/common/
 COPY packages/cypress/package.json /app/packages/cypress/

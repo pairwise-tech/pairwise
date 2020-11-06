@@ -248,6 +248,56 @@ const reorderModuleList = (
   return over(lens, move(moduleOldIndex, moduleNewIndex), courses);
 };
 
+/**
+ * Find the challenge before the module or challenge which was deleted, to
+ * reset the challenge ids context after a content item is deleted using
+ * Codepress.
+ *
+ * This function just walks through the course/modules/challenges list until
+ * it finds the item matching the deleted id and then it returns the
+ * appropriate context ids for the previous item in the list.
+ *
+ * If the deleted item is first in the list, this will result in null being
+ * returned, which will lead the app to redirect to /home (see the
+ * challenge epic: resetChallengeContextAfterDeletionEpic).
+ */
+const getNewChallengeContextAfterContentDeletion = (
+  challengeOrModuleId: string,
+  courseList: CourseList,
+) => {
+  let currentModuleId = null;
+  let currentCourseId = null;
+  let currentChallengeId = null;
+
+  for (const course of courseList) {
+    currentCourseId = course.id;
+
+    for (const mod of course.modules) {
+      if (mod.id === challengeOrModuleId) {
+        return {
+          currentModuleId,
+          currentCourseId,
+          currentChallengeId,
+        };
+      }
+
+      currentModuleId = mod.id;
+
+      for (const challenge of mod.challenges) {
+        if (challenge.id === challengeOrModuleId) {
+          return {
+            currentModuleId,
+            currentCourseId,
+            currentChallengeId,
+          };
+        }
+
+        currentChallengeId = challenge.id;
+      }
+    }
+  }
+};
+
 /** ===========================================================================
  * Store
  * ============================================================================
@@ -294,44 +344,6 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
           ...action.payload.module,
           userCanAccess: true,
         },
-      }),
-    };
-  })
-  .handleAction(actions.deleteCourseModule, (state, { payload }) => {
-    const { courses, courseSkeletons } = state;
-
-    if (!courses || !courseSkeletons) {
-      return state;
-    }
-
-    const { id, courseId } = payload;
-
-    let updatedModules: ModuleList = [];
-
-    const updatedCourses = courses.map(c => {
-      if (c.id === courseId) {
-        updatedModules = c.modules.filter(m => m.id !== id);
-        return {
-          ...c,
-          modules: updatedModules,
-        };
-      } else {
-        return c;
-      }
-    });
-
-    return {
-      ...state,
-      courses: updatedCourses,
-      courseSkeletons: courseSkeletons.map(c => {
-        if (c.id === courseId) {
-          return {
-            ...c,
-            modules: c.modules.filter(m => m.id !== id),
-          };
-        } else {
-          return c;
-        }
       }),
     };
   })
@@ -401,8 +413,57 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       CourseSkeletonList
     >(courseSkeletons, action.payload);
 
+    const ids = getNewChallengeContextAfterContentDeletion(
+      action.payload.challengeId,
+      courses,
+    );
+
     return {
       ...state,
+      ...ids,
+      courses: updatedCourses,
+      courseSkeletons: updatedCourseSkeletons,
+    };
+  })
+  .handleAction(actions.deleteCourseModule, (state, { payload }) => {
+    const { courses, courseSkeletons } = state;
+
+    if (!courses || !courseSkeletons) {
+      return state;
+    }
+
+    const { id, courseId } = payload;
+
+    let updatedModules: ModuleList = [];
+
+    const updatedCourses = courses.map(c => {
+      if (c.id === courseId) {
+        updatedModules = c.modules.filter(m => m.id !== id);
+        return {
+          ...c,
+          modules: updatedModules,
+        };
+      } else {
+        return c;
+      }
+    });
+
+    const updatedCourseSkeletons = courseSkeletons.map(c => {
+      if (c.id === courseId) {
+        return {
+          ...c,
+          modules: c.modules.filter(m => m.id !== id),
+        };
+      } else {
+        return c;
+      }
+    });
+
+    const ids = getNewChallengeContextAfterContentDeletion(id, courses);
+
+    return {
+      ...state,
+      ...ids,
       courses: updatedCourses,
       courseSkeletons: updatedCourseSkeletons,
     };
