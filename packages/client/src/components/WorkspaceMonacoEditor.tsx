@@ -232,6 +232,9 @@ export default class WorkspaceMonacoEditor
     }
 
     debug("[initializeMonaco] Monaco editor initialized.");
+
+    // Call parent callback to trigger any events on Monaco initialization
+    this.props.onDidInitializeMonacoEditor();
   };
 
   setTheme = (theme: string) => {

@@ -154,7 +154,7 @@ export const generateEmptyModule = (): Module => ({
 });
 
 const starterTestCode = `// Write your tests here:
-test("\`variable\` should be defined", () => {
+test("\`variable\` should be defined.", () => {
   expect(variable).toBeDefined();
 });
 `;
