@@ -4638,6 +4638,17 @@
           "content": "Navigating around an app works completely differently on mobile compared to web navigation."
         },
         {
+          "id": "NC@Y7um$f",
+          "type": "media",
+          "title": "Gestures in React Native",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Mobile apps allow users to directly interact with the screen using gestures—this is not possible on mobile. React Native provides fairly advanced support for handling different gesture\\-based interactions."
+        },
+        {
           "id": "Qw5lX@ehl",
           "type": "section",
           "title": "Layout & Styling in React Native",
@@ -4825,6 +4836,17 @@
           "content": "We would be remiss if we did not leave at least one challenge on how to debug and troubleshoot errors in React Native apps."
         },
         {
+          "id": "WdzIz2LKv",
+          "type": "media",
+          "title": "Integrating Native Modules",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Sometimes, you have to write native code directly to support the feature you want. React Native provides a way for you to do this."
+        },
+        {
           "id": "6D9jc3AZi",
           "type": "section",
           "title": "Projects",
@@ -4834,6 +4856,39 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Now we will get some experience building and deploying your own mobile apps\\! You can install these on your own mobile phone and use them wherever you go. "
+        },
+        {
+          "id": "Rkb69ObaFQ",
+          "type": "project",
+          "title": "Build a Note Taking Mobile App",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, build a simple note\\-taking application with React Native. The final product should adhere to the following requirements:\n\n* A user can create new notes.\n* A user can edit notes.\n* A user can delete notes.\n\n\nThe notes should be stored locally on the device \\(no need to use a server and database—unless you want a challenge\\!\\)\n---\n\nFeel free to get as creative as you want with this project\\!\n\nThe requirements are fairly simple, the main point here is to get hands\\-on experience developing with React Native and experiment with the different features it provides.\n"
+        },
+        {
+          "id": "CSvqlpGt3A",
+          "type": "project",
+          "title": "React Native Real Time Messaging App",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, create a real\\-time messaging application using React Native.\n\nThis will be a harder project, and require a server. The basic requirement is simple: A user can connect and message other users in real\\-time. For this you will need to create a server and expose a `WebSockets` connection which your app can connect to. This connection will allow you to send data back and forth from the mobile app to the server. Unlike HTTP, you can send data both ways, i.e. your server can send messages to the client as well.\n\nThe implementation can be simple: no need for a database to store message history or any special features like chat channels, reply functionality, and so on. It can just be a simple feed of real\\-time messages. Feel free to implement more advanced features if you want\\!\n"
+        },
+        {
+          "id": "fYkyw@AjY",
+          "type": "project",
+          "title": "Build Your Own React Native App",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, build an app of your choice in React Native\\!\n\nTry to think of something you would actually use or find enjoyable to build. These are the best projects because they help you maintain a high level of motivation around the project.\n\nIdeally, try to use some features that are specific to React Native, e.g. the camera, or gestures, or biometrics.\n\nDon't forget to use Expo to test out your app on your phone\\!"
         },
         {
           "id": "fo@lZIRdV",
