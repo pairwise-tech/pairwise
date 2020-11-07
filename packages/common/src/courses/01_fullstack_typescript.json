@@ -4770,6 +4770,17 @@
           "content": "Another behavior on mobile which doesn't really have a corollary on the web is push notifications."
         },
         {
+          "id": "jfCiJSXh1",
+          "type": "media",
+          "title": "App Backgrounding",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Backgrounding an app is a specific event which you can capture and use to trigger events."
+        },
+        {
           "id": "dQU0hN@EF",
           "type": "section",
           "title": "App Development with Expo",
