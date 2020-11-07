@@ -4756,7 +4756,73 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Another behavior on mobile which doesn't really have a corrolary on the web is push notifications."
+          "content": "Another behavior on mobile which doesn't really have a corollary on the web is push notifications."
+        },
+        {
+          "id": "dQU0hN@EF",
+          "type": "section",
+          "title": "App Development with Expo",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The standard way to develop React Native apps is with the tool Expo."
+        },
+        {
+          "id": "TJGD6$Oox",
+          "type": "media",
+          "title": "Developing Apps with Expo",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Expo provides a powerful development environment for working on React Native apps."
+        },
+        {
+          "id": "Vqpm0PM9D",
+          "type": "media",
+          "title": "Deploying React Native Apps",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Expo also provides a streamlined workflow for deploying native apps built with React Native."
+        },
+        {
+          "id": "Q77AX$fi2",
+          "type": "media",
+          "title": "Dealing with the App Stores",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "If you deploy a website to the internet, you just have to host your code somewhere and anyone can access it. If you want to deploy a mobile app, on the other hand, your code must be accepted by the App Store review process for whichever store you want your app to be available in."
+        },
+        {
+          "id": "ezpnF$rQ2",
+          "type": "media",
+          "title": "Handling App Upgrades",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "On the web, whenever a visitor loads your site they will see the most updated version you have deployed. Mobile apps, however, have to be updated \\(by the developer and user\\) through a more manual process."
+        },
+        {
+          "id": "YQXDYc85O",
+          "type": "media",
+          "title": "Debugging with React Native",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "We would be remiss if we did not leave at least one challenge on how to debug and troubleshoot errors in React Native apps."
         },
         {
           "id": "6D9jc3AZi",
