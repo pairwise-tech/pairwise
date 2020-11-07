@@ -4627,6 +4627,17 @@
           "content": ""
         },
         {
+          "id": "meX6ch93N",
+          "type": "media",
+          "title": "Navigation in React Native",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Navigating around an app works completely differently on mobile compared to web navigation."
+        },
+        {
           "id": "Qw5lX@ehl",
           "type": "section",
           "title": "Layout & Styling in React Native",
@@ -4680,6 +4691,72 @@
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "solutionCode": "",
           "content": ""
+        },
+        {
+          "id": "JVwMY$VT@",
+          "type": "section",
+          "title": "Mobile & Platform Idiosyncrasies",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Real world iOS and Android devices have various idiosyncrasies which are unique to one device and not the other. React Native does its best to support each and allow you to interact with native, platform specific elements on either device."
+        },
+        {
+          "id": "fzlZJE$BPP",
+          "type": "media",
+          "title": "The Platform Module",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The `Platform` module is a specific import from React Native which provides information about the current device the app is running on."
+        },
+        {
+          "id": "WQz01T8sI",
+          "type": "media",
+          "title": "The Android Back Handler",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Android devices have a hardware button which is used to trigger \"back\" navigation events on the device."
+        },
+        {
+          "id": "0QMHS3Yz6",
+          "type": "media",
+          "title": "Mobile Specific Components",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In addition to platform specific elements, there are also many features supported by mobile which just do not exist on web, or are typically not used or less relevant in the context of an app. The camera is a great example—on mobile apps it is very common to perform some interaction with a camera but on web this is extremely rare \\(aside from video calls\\)."
+        },
+        {
+          "id": "Qe8LlJ8ft",
+          "type": "media",
+          "title": "Accessibility in React Native",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Accessibility in React Native works differently to how accessibility work in the web, but it is equally important."
+        },
+        {
+          "id": "9SOBO4pBb",
+          "type": "media",
+          "title": "Handling Push Notifications",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Another behavior on mobile which doesn't really have a corrolary on the web is push notifications."
         },
         {
           "id": "6D9jc3AZi",
