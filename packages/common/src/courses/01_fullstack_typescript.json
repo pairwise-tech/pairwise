@@ -4911,6 +4911,72 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Here we will cover some other topics related to mobile app development. For instance, we will discuss some details about how React Native works and also touch on other cross platform frameworks such as Flutter."
+        },
+        {
+          "id": "3yJ@zenVOw",
+          "type": "special-topic",
+          "title": "React Native Architecture & Performance",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this special topic, we will discuss the architecture and performance of React Native."
+        },
+        {
+          "id": "Nsdizd9BZ",
+          "type": "special-topic",
+          "title": "React Native vs. Native Apps",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "You may have heard the term \"native\" apps a lot. What does it mean and how does React Native compare to them?"
+        },
+        {
+          "id": "PcqZs51DA3",
+          "type": "special-topic",
+          "title": "Other Cross-Platform Frameworks",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "React Native is not the only cross\\-platform mobile framework—there are a few others as well."
+        },
+        {
+          "id": "$Gz5fSFwn",
+          "type": "special-topic",
+          "title": "Electron for Cross Platform Desktop Apps",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Electron is a framework like React Native which you can use to build native desktop apps."
+        },
+        {
+          "id": "Hi8C2MJQr",
+          "type": "special-topic",
+          "title": "React Native Web",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "React Native Web is a project which allows you to build a web project using the React Native modules and APIs. This effectively allows you to more easily share code between web and mobile projects."
+        },
+        {
+          "id": "s18GS4TQU",
+          "type": "special-topic",
+          "title": "Progressive Web Apps",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Progressive Web Apps \\(PWAs\\) are another interesting topic when it comes to mobile app development."
         }
       ]
     },
