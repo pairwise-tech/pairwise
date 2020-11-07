@@ -4546,7 +4546,7 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
@@ -4557,7 +4557,7 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
@@ -4568,7 +4568,7 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
@@ -4579,7 +4579,7 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
@@ -4590,7 +4590,7 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
@@ -4601,7 +4601,7 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
@@ -4612,7 +4612,7 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
@@ -4623,7 +4623,7 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
@@ -4667,18 +4667,18 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
           "id": "j$AG2ECQE",
-          "type": "typescript",
+          "type": "react",
           "title": "Add Some Style to a Mobile UI",
           "instructions": "Let's improve the style to the app UI we have here.",
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
@@ -4689,18 +4689,18 @@
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
           "id": "fkx7YqjKA",
-          "type": "typescript",
+          "type": "react",
           "title": "React Native Flexbox Challenge",
           "instructions": "Let's use flexbox to change the app layout in this example.",
           "testCode": "const setup = () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n};\n\ntest('A `Text` element should be rendered with the text `\"Welcome to React Native!\"`.', () => {\n  setup();\n  expect(reactNativeTextExists(\"Welcome to React Native!\")).toBe(true);\n});\n",
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
-          "solutionCode": "",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {

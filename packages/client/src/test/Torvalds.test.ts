@@ -18,13 +18,13 @@ import stripComments from "strip-comments";
 /**
  * Huge timeout! This timeout applies to the entire running test time, and
  * should be sufficient to run ALL of the challenge tests. This is a lot
- * the timeout is excessively long.
+ * so the timeout is excessively long.
  *
  * Check the waitForResultsUntilTimeout method in the test file below for
  * the logic which handles timing out individual challenge tests. This timer
  * logic is set to a maximum to 15 seconds.
  */
-jest.setTimeout(100000);
+jest.setTimeout(150000); // -> 2.5 minutes
 
 const options = { encoding: "utf8" };
 
@@ -58,7 +58,7 @@ const course: Course = FullstackTypeScript;
 // NOTE: Enable debug mode. Inspect challenges directly by id. Should
 // only be used for debugging.
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["5sRkVVPmD"]);
+const TEST_ID_WHITELIST = new Set(["LITUB9VZ6"]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the
