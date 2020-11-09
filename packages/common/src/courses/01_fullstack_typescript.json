@@ -4561,6 +4561,17 @@
           "content": ""
         },
         {
+          "id": "zKZu8XMJz",
+          "type": "react",
+          "title": "Style Some Text in React Native",
+          "instructions": "We will cover styling and layout in more detail in the next section, but as a quick preview try to style the `Text` component `red`. In React Native, CSS styles are [applied in JavaScript as inline styles](https://reactnative.dev/docs/style). Components which support styling support a `style` prop, which is just a plain object of JavaScript styles.",
+          "testCode": "test(\"The `App` component should render the text `This text should be red.`.\", () => {\n  const text = \"This text should be red.\";\n  expect(reactNativeTextExists(text)).toBe(true);\n});\n\ntest(\"The text `This text should be red.` should be styled `red`.\", () => {\n  const cssRed = cssColor(\"red\");\n  const text = \"This text should be red.\";\n  const containers = document.getElementsByTagName(\"div\");\n\n  let passed = false;\n  for (const div of containers) {\n    if (div.innerHTML === text) {\n      const color = div.style.color;\n      expect(color).toBe(cssRed);\n      passed = true;\n    }\n  }\n\n  if (!passed) {\n    throw new Error(\"The text should be styled red.\");\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  render(): JSX.Element {\n    return <View />;\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text style={{ color: \"red\" }}>This text should be red.</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "content": ""
+        },
+        {
           "id": "I7N8njKZh",
           "type": "react",
           "title": "The TextInput Component",
