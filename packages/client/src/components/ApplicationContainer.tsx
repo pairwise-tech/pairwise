@@ -67,15 +67,6 @@ const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
   { value: "react", label: "React" },
 ];
 
-/** ===========================================================================
- * Types & Config
- * ============================================================================
- */
-
-interface IState {
-  hasHandledRedirect: boolean;
-}
-
 // All the application modal components:
 const Modals = () => (
   <>

@@ -249,14 +249,16 @@ Babel.registerPlugin("loopProtection", protect(2000));
  */
 export const transpileCodeWithBabel = (codeString: string) => {
   const plugins = ["loopProtection"];
-  return Babel.transform(codeString, {
+  const { code } = Babel.transform(codeString, {
     presets: [
       "es2017",
       "react",
       ["typescript", { isTSX: true, allExtensions: true }],
     ],
     plugins,
-  }).code;
+  });
+
+  return code;
 };
 
 /**

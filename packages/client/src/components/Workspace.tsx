@@ -1407,21 +1407,8 @@ class Workspace extends React.Component<IProps, IState> {
        * compileCodeString function, we catch that here and display a generic
        * "Code Must Compile" error.
        */
-      const invalidCodeError = [
-        {
-          test: "",
-          testResult: false,
-          error: "The code should compile with no errors.",
-          message: "The code should compile with no errors.",
-        },
-      ];
-
-      this.setState(
-        {
-          testResultsLoading: false,
-          testResults: invalidCodeError,
-        },
-        this.handleReceiveTestResults,
+      this.handleCompilationError(
+        new Error("The code should compile with no errors."),
       );
 
       return "";
@@ -1451,6 +1438,14 @@ class Workspace extends React.Component<IProps, IState> {
 
   handleCompilationError = (error: Error) => {
     debug("[handleCompilationError]", error);
+    const testResults = [
+      {
+        test: "",
+        testResult: false,
+        error: error.message,
+        message: error.message,
+      },
+    ];
     const log = Decode([
       {
         method: "error",
@@ -1458,7 +1453,7 @@ class Workspace extends React.Component<IProps, IState> {
       },
     ]);
     this.updateWorkspaceConsole(log);
-    this.setState({ testResultsLoading: false });
+    this.setState({ testResults, testResultsLoading: false });
   };
 
   updateWorkspaceConsole = (log: Log) => {
