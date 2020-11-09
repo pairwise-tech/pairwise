@@ -58,7 +58,7 @@ const course: Course = FullstackTypeScript;
 // NOTE: Enable debug mode. Inspect challenges directly by id. Should
 // only be used for debugging.
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["LITUB9VZ6"]);
+const TEST_ID_WHITELIST = new Set(["61iScTEvN"]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the
@@ -86,9 +86,13 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "EoK0U8Q$0", // Fetching Data Asynchronously
   "rShMOVugA", // Quote of the Day Challenge
   // *************************************************************************
-  // Database challenge, which relies on the external Database Challenge API:
+  // Database challenges, which rely on the external Database Challenge API:
   "2W$NOg9P@",
   "wf9ggEKbq",
+  // *************************************************************************
+  // React Native challenges:
+  "zKZu8XMJz", // Some issue checking CSS styles
+  "61iScTEvN", // Another styles issue
 ]);
 
 // Enable or disable log info
