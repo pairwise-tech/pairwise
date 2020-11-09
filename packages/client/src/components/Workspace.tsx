@@ -250,6 +250,8 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   async componentDidMount() {
+    debug("componentDidMount");
+
     window.addEventListener("resize", this.handleWindowResize);
     document.addEventListener("keydown", this.handleKeyPress);
     window.addEventListener(
@@ -257,8 +259,6 @@ class Workspace extends React.Component<IProps, IState> {
       this.handleReceiveMessageFromCodeRunner,
       false,
     );
-
-    debug("componentDidMount");
 
     subscribeCodeWorker(this.handleCodeFormatMessage);
 
@@ -1383,7 +1383,59 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   compileAndTransformCodeString = async () => {
-    const { code, dependencies } = await compileCodeString(
+    try {
+      const { code, dependencies } = await compileCodeString(
+        this.state.code,
+        this.props.challenge,
+      );
+
+      const { isTestingAndAutomationChallenge } = this.props;
+      if (this.editor) {
+        this.editor.addModuleTypeDefinitionsToMonaco(
+          dependencies,
+          isTestingAndAutomationChallenge,
+        );
+      }
+
+      return code;
+    } catch (err) {
+      /**
+       * NOTE: It is possible some syntax errors will cause the Babel transform
+       * method to throw an error. This was happening to users previously and
+       * resulting in uncaught errors which were reported to Sentry. If
+       * something like that happens, or if any other error occurs from the
+       * compileCodeString function, we catch that here and display a generic
+       * "Code Must Compile" error.
+       */
+      const invalidCodeError = [
+        {
+          test: "",
+          testResult: false,
+          error: "The code should compile with no errors.",
+          message: "The code should compile with no errors.",
+        },
+      ];
+
+      this.setState(
+        {
+          testResultsLoading: false,
+          testResults: invalidCodeError,
+        },
+        this.handleReceiveTestResults,
+      );
+
+      return "";
+    }
+  };
+
+  /**
+   * This method extracts the module dependencies from the current challenge
+   * code and adds them to the Monaco editor after the editor has initialized,
+   * avoiding the issue where the initial code will display type errors
+   * which are invalid.
+   */
+  addModuleDependenciesOnMount = async () => {
+    const { dependencies } = await compileCodeString(
       this.state.code,
       this.props.challenge,
     );
@@ -1395,18 +1447,6 @@ class Workspace extends React.Component<IProps, IState> {
         isTestingAndAutomationChallenge,
       );
     }
-
-    return code;
-  };
-
-  /**
-   * This method calls the compileAndTransformCodeString method, which has the
-   * side effect of add relevant type definitions to the Monaco editor based
-   * on the current challenge code. This avoids the issue where these are not
-   * present when the challenge first loads.
-   */
-  addModuleDependenciesOnMount = () => {
-    this.compileAndTransformCodeString();
   };
 
   handleCompilationError = (error: Error) => {
