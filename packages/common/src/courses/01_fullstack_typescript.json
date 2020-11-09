@@ -4638,6 +4638,17 @@
           "content": ""
         },
         {
+          "id": "HvmlmMwCf",
+          "type": "react",
+          "title": "Create a Simple Mobile UI",
+          "instructions": "Now let's bring together everything we've learned so far. Below is a blank canvas. Complete it by creating any mobile UI you can imagine and render the following components: a `View`, `Text`, `Button`, `Switch`, and either a `ScrollView` or `FlatList` component\\. Try to get creative with styling as well\\!",
+          "testCode": "test(\"The `App` component should be defined.\", () => {\n  expect(typeof App).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nclass App extends React.Component<{}, {}> {\n  render(): JSX.Element | null {\n    return null;\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nclass App extends React.Component<{}, {}> {\n  render(): JSX.Element | null {\n    return null;\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "content": ""
+        },
+        {
           "id": "meX6ch93N",
           "type": "media",
           "title": "Navigation in React Native",
@@ -4651,7 +4662,7 @@
         {
           "id": "NC@Y7um$f",
           "type": "media",
-          "title": "Gestures in React Native",
+          "title": "Handling Gestures",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
