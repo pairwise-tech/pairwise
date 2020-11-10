@@ -4660,17 +4660,6 @@
           "content": "Mobile apps allow users to directly interact with the screen using gestures, which provides for different interactions than the click\\-based interactions native to web, and also handle navigation and routing very differently from web experiences.\n# Handling Gestures\n\nSo far, we've seen some React Native elements which natively allow us to handle various gesture events. These are the `Button`, `Touchable`, and the `ScrollView` and related list views. Each of these supports a specific gesture interaction by default, whether that is a simple press event or a scroll/swipe event. React Native provides [these components out of the box](https://reactnative.dev/docs/handling-touches), and also a more detailed [gesture responder system](https://reactnative.dev/docs/gesture-responder-system) for handling customized gestures and behavior.\n\nFor most use cases, the basic React Native components will provide the gesture support you need.\n# Navigating Between Screens\n\nAnother common use of gestures is for navigation between different views and screens on mobile devices. This is a very common user experience shared by many apps, and each platform \\(iOS and Android\\) tends to follow a standard pattern for navigating between different screens.\n\nThe standard way to [handle navigation in React Native](https://reactnative.dev/docs/navigation) is to rely on the community supported library [React Navigation](https://reactnavigation.org/), which provides an easy to use API for declaratively adding multiple screens with navigation to your app. Here is a simple example:\n\n```typescript\nfunction DetailsScreen() {\n  return (\n    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>\n      <Text>Details Screen</Text>\n    </View>\n  );\n}\n\nconst Stack = createStackNavigator();\n\nfunction App() {\n  return (\n    <NavigationContainer>\n      <Stack.Navigator initialRouteName=\"Home\">\n        <Stack.Screen name=\"Home\" component={HomeScreen} />\n        <Stack.Screen name=\"Details\" component={DetailsScreen} />\n      </Stack.Navigator>\n    </NavigationContainer>\n  );\n}\n\n```\n\nReact Navigation provides support for common navigation schemes, such as the [tab](https://reactnavigation.org/docs/tab-based-navigation) and [drawer](https://reactnavigation.org/docs/drawer-based-navigation) based navigation systems. These will by default support the common gestures users are accustomed to using for screen navigation, such as swiping to open the side drawer in a drawer based navigation system.\n\nReact Navigation provides many other features for additional customization, such as passing parameters to screens on navigation, nested navigators, header support, deep\\-linking to specific screens, and more. We encourage you to try to use React Navigation in your own apps in the projects later in this section. As a React library, it's fairly easy to use. The main challenge is wrapping your head around the conceptual difference of app navigation on mobile compared to web."
         },
         {
-          "id": "meX6ch93N",
-          "type": "media",
-          "title": "Navigation in React Native",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Navigating around an app works completely differently on mobile compared to web navigation."
-        },
-        {
           "id": "Qw5lX@ehl",
           "type": "section",
           "title": "Layout & Styling in React Native",
@@ -4679,7 +4668,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "React Native supports a subset of CSS and applies CSS through inline styles."
+          "content": "[Layout and styling for React Native](https://reactnative.dev/docs/style) is very similar to using CSS on the web. This is one of the features of React Native which makes it especially easy for web developments to quickly transition to React Native and start building apps productively.\n# Styling with CSS\n\nIn React Native styles are applied through JavaScript. There are no separate `.css` files\\. We've seen a preview of this in the last section. This is how to style some text red and increase the font size, for instance:\n\n```typescript\nconst RedTitle = (text: string) => (\n    <Text style={{ color: \"red\", fontSize: 24 }}>\n        {text}\n    </Text>\n);\n\n```\n\nPretty straightforward\\!\n\nIn general, the majority of the styles you are familiar with using in CSS will work the same way in React Native. One different is that all of the property names are written using camel casing instead of hyphens, e.g. `fontSize` instead of `font-size`. The majority of the React Native UI primitives accept a `style` prop which is an object of CSS styles.\n# Layout\n\nHandling layout in React Native is also fairly easy. Here, you will primarily rely on flexbox. You can also provide fixed `width` and `height` values to most components to give them fixed dimensions.\n\nIn general, flexbox works the same on mobile as it does on web except the default values are different. On mobile, the `flexDirection` value defaults to column instead of row. This makes sense, when you consider that most mobile layouts are more \"top to bottom\" rather than \"left to right\". In addition to this, the `flex` parameter only supports a single number rather than multiple numbers.\n\nWhen you want a view to take up the full space available to it, simply provide `flex: 1`. From here, you can use a combination of `flexDirection`, `alignItems`, and `justifyContent` to achieve the desired layout.\n\nTake a look at the React Native docs on [Layout with Flexbox](https://reactnative.dev/docs/flexbox) for a more thorough breakdown of how it works.\n# Style and Layout on Mobile\n\nYou may find that layout on mobile is easier to achieve than on web. While it is true that mobile devices vary slightly in dimension, they are all quite similar and you cannot manually resize the viewing window like you can on a desktop or laptop. Moreover, there is less screen space available on mobile so this tends to simplify the UI for any particular view. Once you get some practice building mobile UIs, you may find you like it more than web\\!\n"
         },
         {
           "id": "LITUB9VZ6",
@@ -4724,6 +4713,17 @@
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\nimport ReactNativeWeb from \"react-native\";\n\nconst { Text, View, Button } = ReactNativeWeb;\n\nclass App extends React.Component<{}, {}> {\n  componentDidMount() {\n    console.log(\"React Native is cool!\");\n  }\n\n  render(): JSX.Element {\n    return (\n      <View>\n        <Text>Welcome to React Native!</Text>\n      </View>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
+        },
+        {
+          "id": "P4xfaI7wn8",
+          "type": "media",
+          "title": "CSS-in-JS",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
         },
         {
           "id": "JVwMY$VT@",
