@@ -4649,6 +4649,17 @@
           "content": ""
         },
         {
+          "id": "NC@Y7um$f",
+          "type": "media",
+          "title": "Handling Gestures & Navigation",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Mobile apps allow users to directly interact with the screen using gestures, which provides for different interactions than the click\\-based interactions native to web, and also handle navigation and routing very differently from web experiences.\n# Handling Gestures\n\nSo far, we've seen some React Native elements which natively allow us to handle various gesture events. These are the `Button`, `Touchable`, and the `ScrollView` and related list views. Each of these supports a specific gesture interaction by default, whether that is a simple press event or a scroll/swipe event. React Native provides [these components out of the box](https://reactnative.dev/docs/handling-touches), and also a more detailed [gesture responder system](https://reactnative.dev/docs/gesture-responder-system) for handling customized gestures and behavior.\n\nFor most use cases, the basic React Native components will provide the gesture support you need.\n# Navigating Between Screens\n\nAnother common use of gestures is for navigation between different views and screens on mobile devices. This is a very common user experience shared by many apps, and each platform \\(iOS and Android\\) tends to follow a standard pattern for navigating between different screens.\n\nThe standard way to [handle navigation in React Native](https://reactnative.dev/docs/navigation) is to rely on the community supported library [React Navigation](https://reactnavigation.org/), which provides an easy to use API for declaratively adding multiple screens with navigation to your app. Here is a simple example:\n\n```typescript\nfunction DetailsScreen() {\n  return (\n    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>\n      <Text>Details Screen</Text>\n    </View>\n  );\n}\n\nconst Stack = createStackNavigator();\n\nfunction App() {\n  return (\n    <NavigationContainer>\n      <Stack.Navigator initialRouteName=\"Home\">\n        <Stack.Screen name=\"Home\" component={HomeScreen} />\n        <Stack.Screen name=\"Details\" component={DetailsScreen} />\n      </Stack.Navigator>\n    </NavigationContainer>\n  );\n}\n\n```\n\nReact Navigation provides support for common navigation schemes, such as the [tab](https://reactnavigation.org/docs/tab-based-navigation) and [drawer](https://reactnavigation.org/docs/drawer-based-navigation) based navigation systems. These will by default support the common gestures users are accustomed to using for screen navigation, such as swiping to open the side drawer in a drawer based navigation system.\n\nReact Navigation provides many other features for additional customization, such as passing parameters to screens on navigation, nested navigators, header support, deep\\-linking to specific screens, and more. We encourage you to try to use React Navigation in your own apps in the projects later in this section. As a React library, it's fairly easy to use. The main challenge is wrapping your head around the conceptual difference of app navigation on mobile compared to web."
+        },
+        {
           "id": "meX6ch93N",
           "type": "media",
           "title": "Navigation in React Native",
@@ -4658,17 +4669,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Navigating around an app works completely differently on mobile compared to web navigation."
-        },
-        {
-          "id": "NC@Y7um$f",
-          "type": "media",
-          "title": "Handling Gestures",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Mobile apps allow users to directly interact with the screen using gestures—this is not possible on mobile. React Native provides fairly advanced support for handling different gesture\\-based interactions."
         },
         {
           "id": "Qw5lX@ehl",
