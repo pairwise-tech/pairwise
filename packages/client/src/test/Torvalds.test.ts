@@ -94,6 +94,7 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "zKZu8XMJz", // Some issue checking CSS styles
   "61iScTEvN", // Another styles issue
   "LITUB9VZ6", // More styling issues
+  "fkx7YqjKA", // Styling...
 ]);
 
 // Enable or disable log info
