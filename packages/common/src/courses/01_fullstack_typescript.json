@@ -4706,13 +4706,13 @@
         {
           "id": "P4xfaI7wn8",
           "type": "media",
-          "title": "CSS-in-JS",
+          "title": "CSS-in-JS Libraries with React Native",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "A trend in UI programming of recent years is the concept of \"CSS\\-in\\-JS\" which was probably first pioneered by React's ability to use inline styles directly with React's declarative JSX components. Initially, this was looked at with some apprehension by the community, because the notion of \"Separation of Concerns\" implied the markup, style, and logic should be separated into independent technical concerns, i.e. HTML, CSS, and JavaScript. However, as React's evolution has proven, this organization may not make as much sense.\n\nInstead, the trend has been the reverse: multiple concerns have tended to become consolidated into the UI code itself, i.e React components. This actually makes a lot of sense, if you stop to think about it. If you have some code for a form, it makes sense that the logic and styling for that form is in the same place as the markup for the form. The result is more modular, well\\-organized code. You no longer have to try to track down where some style is being applied by searching through CSS class hierarchies and/or inspecting the DOM to see which parent element a style has been inherited from.\n---\n\nThis trend for styling really gained momentum with the various CSS\\-in\\-JS libraries we covered in the React module:\n\n* [Styled Components](https://styled-components.com/)\n* [Emotion](https://emotion.sh/docs/introduction)\n\n\nAnd, all of these can generally be used with React Native as well. In fact, we recommend using libraries like this as a great way to modularize your styles and improve your code readability. For example, here is an [example of using Styled Components with React Native](https://styled-components.com/docs/basics#react-native):\n\n```typescript\nimport React from 'react'\nimport styled from 'styled-components/native'\n\nconst StyledView = styled.View`\n  background-color: papayawhip;\n`\n\nconst StyledText = styled.Text`\n  color: palevioletred;\n`\n\nclass MyReactNativeComponent extends React.Component {\n  render() {\n    return (\n      <StyledView>\n        <StyledText>Hello World!</StyledText>\n      </StyledView>\n    )\n  }\n}\n\n```\n\nAs you can see, what you have learned and use with web programming translates very directly into React Native\\!\n\nWe encourage you to try to integrate one of these libraries when working on the projects later in this module."
         },
         {
           "id": "JVwMY$VT@",
