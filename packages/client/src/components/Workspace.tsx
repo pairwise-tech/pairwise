@@ -1180,11 +1180,6 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
-    // Don't handle messages if the tests aren't running.
-    if (!this.state.testResultsLoading) {
-      return;
-    }
-
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];

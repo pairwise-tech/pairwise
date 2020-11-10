@@ -351,15 +351,44 @@ const TEST_GATHERING_PREFIX = `
  * is also modified and removed.
  *
  * Together, this creates one code string which is executed to produce the
- * preview for the user and the test results for the workspace.
+ * preview for the user and the test results for the workspace, while running
+ * the tests in isolation from the code which generates the user-facing
+ * preview.
  */
-export const injectTestCode = (testCode: string) => (codeString: string) => {
-  const CODE_WITH_TEST_PREFIX = `${TEST_GATHERING_PREFIX}\n${codeString}`;
+export const injectTestCode = (challenge: Challenge) => (
+  codeString: string,
+) => {
+  const { type, testCode } = challenge;
+
+  /**
+   * NOTE: In React challenges, we want to avoid calling ReactDOM.render
+   * twice in the altered test code. This interferes with the original
+   * ReactDOM.render in the user code. The tests can either test the user
+   * rendered React UI directly or use the ReactTestUtils to render and
+   * test components.
+   *
+   * This is not very elegant... and could be changed to make it more
+   * robust or refactored entirely.
+   */
+  let code = codeString;
+  if (type === "react") {
+    code = codeString.replace(
+      `ReactDOM.render(<Main />, document.querySelector("#root"));`,
+      "",
+    );
+  }
+
+  const CODE_WITH_TEST_PREFIX = `${TEST_GATHERING_PREFIX}\n${code}`;
+  const testCodeString = stripConsoleCalls(CODE_WITH_TEST_PREFIX);
+
   return `
-    /* Via injectTestCode */
+    /**
+     * This is the user challenge code which produces the user visible output
+     * for the iframe or console in the Workspace:
+     */
     {
       try {
-        ${CODE_WITH_TEST_PREFIX}
+        ${codeString}
       } catch (err) {
         if (err.message === "INFINITE_LOOP") {
           console.error("Infinite loop detected");
@@ -368,12 +397,12 @@ export const injectTestCode = (testCode: string) => (codeString: string) => {
         }
       }
     }
+    /**
+     * This is the altered challenge test code which handles test execution
+     * and passes test results back to the parent window for the Workspace:
+     */
     {
-      ${getTestHarness(
-        stripConsoleCalls(CODE_WITH_TEST_PREFIX),
-        codeString,
-        testCode,
-      )}
+      ${getTestHarness(testCodeString, codeString, testCode)}
     }
     `;
 };
@@ -413,16 +442,17 @@ export const getMarkupForCodeChallenge = (
 export const getTestDependencies = (testLib: string): string => testLib;
 
 /**
- * Get the test code string for a markup challenge.
+ * Get the test code string for a challenge. This constructs the test script
+ * for a challenge given the current challenge code and the test code.
  */
 export const getTestHarness = (
-  preamble: string,
-  userCode: string,
-  testCode: string,
+  testCodeString: string,
+  originalUnalteredUserCodeString: string,
+  challengeTestCode: string,
 ): string => `
 (async function() {
   try {
-    ${preamble}
+    ${testCodeString}
 
     // Fixed helper constants to be used in the test environment.
     ${TEST_HELPER_CONSTANTS}
@@ -431,7 +461,7 @@ export const getTestHarness = (
     // purposefully named against conventions to avoid collisions with user vars
     const ${
       TEST_UTILS_GLOBALS_KEYS.__user_code_string__
-    } = ${prepareUserCodeString(userCode)};
+    } = ${prepareUserCodeString(originalUnalteredUserCodeString)};
 
     function buildTestsFromCode() {
       const testArray = [];
@@ -442,7 +472,7 @@ export const getTestHarness = (
         });
       }
 
-      ${testCode}
+      ${challengeTestCode}
 
       return testArray;
     }
@@ -629,7 +659,7 @@ export const compileCodeString = async (
      * - Fetch and inject required modules into code string
      */
     const processedCodeString = await pipe(
-      injectTestCode(challenge.testCode),
+      injectTestCode(challenge),
       hijackConsole,
       transpileCodeWithBabel,
       injectModuleDependenciesFn,
