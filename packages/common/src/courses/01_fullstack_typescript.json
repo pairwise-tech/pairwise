@@ -4902,6 +4902,17 @@
           "content": "# Installation and Setup\n\nDeveloping React Native apps with Expo is quite easy and straightforward. The first step is to [install the Expo CLI](https://docs.expo.io/workflow/expo-cli/):\n\n```bash\nnpm install --global expo-cli\n\n```\n\nOnce it's complete, create your new app:\n\n```\nexpo init my-react-native-app\n\n```\n \nYou will see some interactive options, probably similar to this:\n\n```\n? Choose a template: (Use arrow keys)\n  ----- Managed workflow -----\n❯ blank                 a minimal app as clean as an empty canvas\n  blank (TypeScript)    same as blank but with TypeScript configuration\n  tabs (TypeScript)     several example screens and tabs using react-navigation and TypeScript\n  ----- Bare workflow -----\n  minimal               bare and minimal, just the essentials to get you started\n  minimal (TypeScript)  same as minimal but with TypeScript configuration\n\n```\n\nWe recommended starting with the Managed workflow and of course choosing TypeScript. Once you select an option Expo will proceed to install dependencies and bootstrap starter code. Once it's finished, you can `cd` into your new project directly.\n# Development\n\nOnce you have your project bootstrapped, you can start the Expo development server in your project root directory with the `yarn start` command or but just running the Expo CLI command directly: `expo start`. This will launch the Expo development server and present you with a few options for how to open your app. You can either open it with the iOS simulator \\(only on Mac\\), with an Android emulator \\(see more [details on setting that up here](https://docs.expo.io/workflow/android-studio-emulator/)\\), on web, or on a mobile device using [Expo Client](https://expo.io/tools#client).\n\nIf you are working on a Mac, the iOS simulator is a good choice for local development and you can select from several different iPhone versions. You will need to go through the [iOS simulator instructions](https://docs.expo.io/workflow/ios-simulator/).\n\nFor any platform, Expo Client is a great choice. The Expo Client app is a mobile app you install on your phone which allows you to connect to the Expo development server you are running locally and immediately preview your app as you develop it. This is one of the best options for really get a genuine look and feel for how your app will behave. We encourage you to try this out.\n\nOnce you have Expo Client installed, open it and find an option to scan the QR code which should be present in your terminal where the Expo development server is running.\n# Practice\n\nIf you've made it this far, we encourage you to continue with the [basic tutorial in the Expo docs](https://docs.expo.io/tutorial/text/). This will reiterate many of the concepts we introduced earlier in this module, but it will be great to try them out locally on your own computer in a real React Native environment. Play around with the result until you are comfortable working with the Expo development environment\\!"
         },
         {
+          "id": "YQXDYc85O",
+          "type": "media",
+          "title": "Errors and Debugging with React Native",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# Errors in Development\n\nOf course, you will run into errors with React Native like any other software and knowing how to debug and troubleshoot these is a critical skill.\n\nReact Native and Expo provide a helpful experience for debugging. That is to say, they make it very obvious when an error has happened. Here is what an uncaught error looks like when running the app locally on the iOS simulator:\n\n![The UI of an Error](/assets/YQXDYc85O/7e0d3e35168b62a14f7d15a2ca897442_error-expo.png)\nThe Expo development server, whether you are viewing it through the command line or in the web UI, will display a stacktrace of the error and a more readable stacktrace will be displayed on the device itself. This makes debugging errors pretty easy, and it's hard to miss when errors occur\\! You can read more about errors and debugging [here](https://docs.expo.io/get-started/errors/).\n\nThis works pretty well when you are developing apps locally. But what about in production?\n# Errors in Production\n\nIn production, errors are more troublesome. By default, Expo will reload your app in production if the app experiences a fatal JS error. If the error occurs quickly after your app loads, it will crash and will not recover. In addition to this, you should be aware that a React Native app is a combination of JavaScript code and native code. If an error occurs in the native code, this could also cause your app to crash.\n\nWe recommend tracking and reporting errors in production with a tool like Sentry. Expo also provides utilities for detecting app crash events and reporting them. You can read more about these details [here](https://docs.expo.io/guides/errors/).\n"
+        },
+        {
           "id": "Vqpm0PM9D",
           "type": "media",
           "title": "Deploying React Native Apps",
@@ -4922,17 +4933,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "On the web, whenever a visitor loads your site they will see the most updated version you have deployed. Mobile apps, however, have to be updated \\(by the developer and user\\) through a more manual process."
-        },
-        {
-          "id": "YQXDYc85O",
-          "type": "media",
-          "title": "Debugging with React Native",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "We would be remiss if we did not leave at least one challenge on how to debug and troubleshoot errors in React Native apps."
         },
         {
           "id": "WdzIz2LKv",
