@@ -4811,7 +4811,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "Another feature common to mobile apps which is not shared with the web is the \"splash screen\" which is basically the default loading screen/image which is displayed when an app is launching. On the web this is of course just a blank webpage, but for mobile apps most apps display a default app screen or image during launch.\n\nIf you develop you app using Expo \\(we cover this in the next section\\), it is easy to add and configure a splash screen. Adding a splash screen image is as simple as referencing an image file in your `app.json` configuration file \\([see more details here](https://docs.expo.io/guides/splash-screens/)\\).\n\nFrom there, you can also customize the splash screen behavior using Expo to optimize your app's launch experience. [See more details on that here](https://docs.expo.io/versions/latest/sdk/splash-screen/).\n\nThis is one of the many subtle details of mobile development which can really elevate your app from an average to an excellent level of user experience."
         },
         {
           "id": "WQz01T8sI",
