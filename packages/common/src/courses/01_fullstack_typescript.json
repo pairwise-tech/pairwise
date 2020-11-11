@@ -4668,7 +4668,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "When building React applications for web, it's often wise to use a UI Kit library so you can avoid building and styling more complex UI components from scratch. The same is true for React Native. You may want to build and style your own specific set of components, especially for each platform. But, if you are optimizing for productivity and reducing the amount of code you have to write from scratch, using a UI kit library is a great option.\n\nOne such choice for React Native is [React Native Paper](https://callstack.github.io/react-native-paper/) which provides a cross\\-platform set of [Material Design](https://material.io/design/introduction) components for React Native.\n\nThis library is a great option if you are looking to get off the ground quickly prototyping or building a new app.\n\nHere's an example of some of the React Native Paper components from their website:\n\n![A example of React Native Paper components.](/assets/TYwQkwqXTs/1dec07c4f06cb10dee7a8adb9f6aaa47_react-native-paper.png)\n"
+          "content": "When building React applications for web, it's often wise to use a UI Kit library so you can avoid building and styling more complex UI components from scratch. The same is true for React Native. You may want to build and style your own specific set of components, especially for each platform. But, if you are optimizing for productivity and reducing the amount of code you have to write from scratch, using a UI kit library is a great option.\n\nOne such choice for React Native is [React Native Paper](https://callstack.github.io/react-native-paper/) which provides a cross\\-platform set of [Material Design](https://material.io/design/introduction) components for React Native.\n\nThis library is a great option if you are looking to get off the ground quickly prototyping or building a new app.\n\nHere's an example of some of the React Native Paper components from their website:\n\n![A example of a few React Native Paper components.](/assets/TYwQkwqXTs/1dec07c4f06cb10dee7a8adb9f6aaa47_react-native-paper.png)\n"
         },
         {
           "id": "Qw5lX@ehl",
@@ -5024,7 +5024,7 @@
         },
         {
           "id": "3yJ@zenVOw",
-          "type": "special-topic",
+          "type": "media",
           "title": "React Native Architecture & Performance",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
@@ -5035,7 +5035,7 @@
         },
         {
           "id": "Nsdizd9BZ",
-          "type": "special-topic",
+          "type": "media",
           "title": "React Native vs. Native Apps",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
@@ -5046,7 +5046,7 @@
         },
         {
           "id": "PcqZs51DA3",
-          "type": "special-topic",
+          "type": "media",
           "title": "Other Cross-Platform Frameworks",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
@@ -5057,7 +5057,7 @@
         },
         {
           "id": "$Gz5fSFwn",
-          "type": "special-topic",
+          "type": "media",
           "title": "Electron for Cross Platform Desktop Apps",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
@@ -5068,7 +5068,7 @@
         },
         {
           "id": "Hi8C2MJQr",
-          "type": "special-topic",
+          "type": "media",
           "title": "React Native Web",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
@@ -5079,7 +5079,7 @@
         },
         {
           "id": "s18GS4TQU",
-          "type": "special-topic",
+          "type": "media",
           "title": "Progressive Web Apps",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
