@@ -4668,7 +4668,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "React Native UI kits blegh."
+          "content": "When building React applications for web, it's often wise to use a UI Kit library so you can avoid building and styling more complex UI components from scratch. The same is true for React Native. You may want to build and style your own specific set of components, especially for each platform. But, if you are optimizing for productivity and reducing the amount of code you have to write from scratch, using a UI kit library is a great option.\n\nOne such choice for React Native is [React Native Paper](https://callstack.github.io/react-native-paper/) which provides a cross\\-platform set of [Material Design](https://material.io/design/introduction) components for React Native.\n\nThis library is a great option if you are looking to get off the ground quickly prototyping or building a new app.\n\nHere's an example of some of the React Native Paper components from their website:\n\n![A example of React Native Paper components.](/assets/TYwQkwqXTs/1dec07c4f06cb10dee7a8adb9f6aaa47_react-native-paper.png)\n"
         },
         {
           "id": "Qw5lX@ehl",
