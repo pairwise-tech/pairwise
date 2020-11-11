@@ -4888,7 +4888,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "The standard way to develop React Native apps is with the tool Expo."
+          "content": "Over the past few years [Expo](https://expo.io/) has emerged as the standard solution to develop and publish React Native apps. React Native even encourages Expo directly now\\!\n\nExpo is a versatile toolkit for developing, building, and publishing apps built with React Native. The Expo ecosystem provides a number of use tools which can empower you as a React Native development, such as:\n\n* [Expo Client](https://expo.io/tools#client): an app which allows you to seamlessly preview and develop React Native apps directly on a mobile device.\n* [Expo Snack](https://expo.io/tools#snack): a simple way for sharing experiences built with React Native.\n* [Expo CLI](https://expo.io/tools#cli): the Expo command line tool for running the build server, compiling app bundles, and uploading them to the app stores.\n* [Expo Push API](https://docs.expo.io/push-notifications/sending-notifications/): Expo's build\\-in service for handling push notifications.\n\n\nIf you work with React Native, you will quickly start to appreciate the breadth of utility Expo offers you. In this section, we will walk through the main steps in the React Native app development lifecycle with Expo:\n\n* Developing apps locally using the Expo CLI and other tools.\n* Building and publishing React Native apps.\n* Handling upgrades.\n* Debugging React Native apps.\n* Integrating native code.\n\n"
         },
         {
           "id": "TJGD6$Oox",
@@ -5020,7 +5020,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "We've covered the basics of developing with React Native so far in this module. That will take you a long way toward building your own mobile apps. However, mobile app development is a broad field with a lot of room for specialization.\n\nIn these special topics, we will cover a few additional points which are useful to know in addition to the preceding content. In particular, we will cover React Native in a little more depth, discuss native app development, and "
+          "content": "We've covered the basics of developing with React Native so far in this module. That will take you a long way toward building your own mobile apps. However, mobile app development is a broad field with a lot of room for specialization.\n\nIn these special topics, we will cover a few additional points which are useful to know in addition to the preceding content. In particular, we will cover React Native in a little more depth, discuss native app development, and take a look at other cross platform frameworks."
         },
         {
           "id": "3yJ@zenVOw",
