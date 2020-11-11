@@ -4756,7 +4756,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "The [StatusBar component](https://reactnative.dev/docs/statusbar) is a custom component which allows you to control the app status bar. What is the \"status bar\" you might ask?\n\n![iOS Status Bar](/assets/n4uliz1i@p/bb15f11a8346151eea1dda5c8a86abce_status-bar.png)\n\nThe status bar is just this bit of UI at the top of the screen where some details about the phone are displayed. Typically, you want the status bar to match the current UI/theme of the screen you are viewing. For instance, if the screen UI is dark, you probably want the status bar to also be dark, rather than light.\n\nThe `StatusBar` component lets you control these details. The component accepts a few different props to give you control over the status bar, but the simplest usage is just to display the two default variations for light and dark themed screens:\n\n```\nconst Screen = (\n    <View>\n        <StatusBar barStyle={theme === \"dark\" ? \"dark-content\" : \"light-content\"} />\n    </View>\n);\n\n```\n\nAssuming you have a `theme` valued defined above, this code will result in a status bar rendered with dark content when the theme is `dark` and light content otherwise.\n\nTake a look at the [StatusBar docs](https://reactnative.dev/docs/statusbar#barstyle) to learn more about the different customization which is supported."
         },
         {
           "id": "2aowggDDr",
