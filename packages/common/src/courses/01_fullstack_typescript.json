@@ -4737,6 +4737,83 @@
           "content": "The `Platform` module is a specific import from React Native which provides information about the current device the app is running on."
         },
         {
+          "id": "Y9To6lsUC",
+          "type": "media",
+          "title": "The Activity Indicator Component",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "n4uliz1i@p",
+          "type": "media",
+          "title": "The StatusBar Component",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "2aowggDDr",
+          "type": "media",
+          "title": "The InputAccessoryView Component",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "SMGZcHuhn$",
+          "type": "media",
+          "title": "The SafeAreaView Component",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "5a1J0wk0$",
+          "type": "media",
+          "title": "The KeyboardAvoidView",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "7j7zL2aRW",
+          "type": "media",
+          "title": "The AsyncStorage Module",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "hpxztrtI6",
+          "type": "media",
+          "title": "The Splash Screen",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "WQz01T8sI",
           "type": "media",
           "title": "The Android Back Handler",
@@ -4746,17 +4823,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Android devices have a hardware button which is used to trigger \"back\" navigation events on the device."
-        },
-        {
-          "id": "0QMHS3Yz6",
-          "type": "media",
-          "title": "Mobile Specific Components",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "In addition to platform specific elements, there are also many features supported by mobile which just do not exist on web, or are typically not used or less relevant in the context of an app. The camera is a great example—on mobile apps it is very common to perform some interaction with a camera but on web this is extremely rare \\(aside from video calls\\)."
         },
         {
           "id": "Qe8LlJ8ft",
