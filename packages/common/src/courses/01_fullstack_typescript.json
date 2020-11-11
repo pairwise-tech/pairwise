@@ -4739,13 +4739,13 @@
         {
           "id": "Y9To6lsUC",
           "type": "media",
-          "title": "The Activity Indicator Component",
+          "title": "The ActivityIndicator Component",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "Handling loading states is a common requirement for frontend applications. Data is often loading and you need to show your users an appropriate indication of this.\n\nOn the web, every application and designer tends to have its own unique style of indicating loading. On mobile, however, each platform tends to have a canonical loading indicator. It is usually preferable to use this standard loading  indicator to provide a more consistent experience for users.\n\nReact Native provides a component just for this: the [ActivityIndicator component](https://reactnative.dev/docs/activityindicator), which you can use with a few simple options:\n\n```typescript\nimport { ActivityIndicator } from \"react-native\";\n\nconst App = () => (\n  <View>\n    <ActivityIndicator />\n    <ActivityIndicator size=\"large\" />\n    <ActivityIndicator size=\"small\" color=\"#0000ff\" />\n    <ActivityIndicator size=\"large\" color=\"#00ff00\" />\n  </View>\n);\n\n```\n\nThis will display the loading indicator you are used to seeing on either iOS or Android."
         },
         {
           "id": "n4uliz1i@p",
