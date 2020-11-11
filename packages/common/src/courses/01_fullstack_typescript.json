@@ -4899,7 +4899,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Expo provides a powerful development environment for working on React Native apps."
+          "content": "# Installation and Setup\n\nDeveloping React Native apps with Expo is quite easy and straightforward. The first step is to [install the Expo CLI](https://docs.expo.io/workflow/expo-cli/):\n\n```bash\nnpm install --global expo-cli\n\n```\n\nOnce it's complete, create your new app:\n\n```\nexpo init my-react-native-app\n\n```\n \nYou will see some interactive options, probably similar to this:\n\n```\n? Choose a template: (Use arrow keys)\n  ----- Managed workflow -----\n❯ blank                 a minimal app as clean as an empty canvas\n  blank (TypeScript)    same as blank but with TypeScript configuration\n  tabs (TypeScript)     several example screens and tabs using react-navigation and TypeScript\n  ----- Bare workflow -----\n  minimal               bare and minimal, just the essentials to get you started\n  minimal (TypeScript)  same as minimal but with TypeScript configuration\n\n```\n\nWe recommended starting with the Managed workflow and of course choosing TypeScript. Once you select an option Expo will proceed to install dependencies and bootstrap starter code. Once it's finished, you can `cd` into your new project directly.\n# Development\n\nOnce you have your project bootstrapped, you can start the Expo development server in your project root directory with the `yarn start` command or but just running the Expo CLI command directly: `expo start`. This will launch the Expo development server and present you with a few options for how to open your app. You can either open it with the iOS simulator \\(only on Mac\\), with an Android emulator \\(see more [details on setting that up here](https://docs.expo.io/workflow/android-studio-emulator/)\\), on web, or on a mobile device using [Expo Client](https://expo.io/tools#client).\n\nIf you are working on a Mac, the iOS simulator is a good choice for local development and you can select from several different iPhone versions. You will need to go through the [iOS simulator instructions](https://docs.expo.io/workflow/ios-simulator/).\n\nFor any platform, Expo Client is a great choice. The Expo Client app is a mobile app you install on your phone which allows you to connect to the Expo development server you are running locally and immediately preview your app as you develop it. This is one of the best options for really get a genuine look and feel for how your app will behave. We encourage you to try this out.\n\nOnce you have Expo Client installed, open it and find an option to scan the QR code which should be present in your terminal where the Expo development server is running.\n# Practice\n\nIf you've made it this far, we encourage you to continue with the [basic tutorial in the Expo docs](https://docs.expo.io/tutorial/text/). This will reiterate many of the concepts we introduced earlier in this module, but it will be great to try them out locally on your own computer in a real React Native environment. Play around with the result until you are comfortable working with the Expo development environment\\!"
         },
         {
           "id": "Vqpm0PM9D",
@@ -4911,17 +4911,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Expo also provides a streamlined workflow for deploying native apps built with React Native."
-        },
-        {
-          "id": "Q77AX$fi2",
-          "type": "media",
-          "title": "Dealing with the App Stores",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "If you deploy a website to the internet, you just have to host your code somewhere and anyone can access it. If you want to deploy a mobile app, on the other hand, your code must be accepted by the App Store review process for whichever store you want your app to be available in."
         },
         {
           "id": "ezpnF$rQ2",
