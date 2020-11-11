@@ -4717,13 +4717,13 @@
         {
           "id": "JVwMY$VT@",
           "type": "section",
-          "title": "Mobile & Platform Idiosyncrasies",
+          "title": "Mobile & Platform APIs",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Real world iOS and Android devices have various idiosyncrasies which are unique to one device and not the other. React Native does its best to support each and allow you to interact with native, platform specific elements on either device."
+          "content": "Mobile apps support various features which simply do not exist or have any analogous equivalent on the web. In addition, when developing for mobile you have to support both iOS and Android devices, which are inherently different. A good example of this is the Android hardware back button, iOS simply has no equivalent of this feature. Another example is push notifications, which are a basic feature of mobile apps but typically not present in web apps. This section will cover some of the mobile and platform specific features and APIs which you should be aware of when developing with React Native.\n\nIn particular, we will cover:\n\n* The `Platform` module\\.\n* The `ActivityIndicator` component\\.\n* The `StatusBar` component\\.\n* The `InputAccessoryView` component\\.\n* The `SafeAreaView` component\\.\n* The `KeyboardAvoidingView` component\\.\n* The `AsyncStorage` module\\.\n* The splash screen.\n* The Android back handler.\n* Supporting accessibility.\n* Handling push notifications.\n* App backgrounding.\n\n"
         },
         {
           "id": "fzlZJE$BPP",
@@ -4761,7 +4761,7 @@
         {
           "id": "Qe8LlJ8ft",
           "type": "media",
-          "title": "Accessibility in React Native",
+          "title": "React Native Accessibility",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
