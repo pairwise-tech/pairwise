@@ -4866,7 +4866,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Another behavior on mobile which doesn't really have a corollary on the web is push notifications."
+          "content": "Push notifications are another important feature of mobile apps which do not really have a corollary on web. Push notifications basically require you to be able to send data to a mobile app. On the web, this type of \"server to client\" communication can be achieved via web sockets, but not with HTTP \\(although you could simulate it by using polling\\).\n\nFor mobile apps, push notification support requires integration with Apple's Push Notification service or Firebase Cloud Messaging. You could send notifications to your app via web sockets, just like in web, but the key different with push notifications is that they are a custom UI notification displayed on the device itself. To achieve this you must follow the rules prescribed by each platform.\n\nLuckily, if you build and deploy your app with Expo \\(we will cover this in the next section\\) adding support for push notifications is extremely easy. Basically, you simply retrieve a unique Expo push token within your app \\(this token is unique to each user's app installation\\) and then make a request to Expo's Push API with this token and the notification you wish to send. It's really exceptionally easy.\n\nIn your app, you can also add custom logic to handle receiving or listening for notifications.\n\nFor more details, see the [Expo documentation on push notifications here](https://docs.expo.io/push-notifications/overview/)."
         },
         {
           "id": "jfCiJSXh1",
