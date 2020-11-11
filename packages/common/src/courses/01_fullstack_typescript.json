@@ -4668,7 +4668,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "React Native UI "
+          "content": "React Native UI kits blegh."
         },
         {
           "id": "Qw5lX@ehl",
@@ -4838,13 +4838,13 @@
         {
           "id": "NjMBCc51t",
           "type": "media",
-          "title": "Alert API",
+          "title": "The Alert Dialog",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "The Alert module allows you to display a native alert dialog after some action occurs in your app. You can customize the alert behavior and handle the user interaction with the provided controls.\n\nOn iOS, this would render the standard iOS alert dialog:\n\n![iOS Alert Dialog.](/assets/NjMBCc51t/d3992f07bd9e7caf0d27560e23b95d60_ios-alert.png)\n\nYou can attach custom handlers for each action taken.\n\nHere is an example usage taken from the [React Native docs](https://reactnative.dev/docs/alert):\n\n```\n// Works on both Android and iOS\nAlert.alert(\n  'Alert Title',\n  'My Alert Msg',\n  [\n    {\n      text: 'Ask me later',\n      onPress: () => console.log('Ask me later pressed')\n    },\n    {\n      text: 'Cancel',\n      onPress: () => console.log('Cancel Pressed'),\n      style: 'cancel'\n    },\n    { text: 'OK', onPress: () => console.log('OK Pressed') }\n  ],\n  { cancelable: false }\n);\n\n```\n"
         },
         {
           "id": "Qe8LlJ8ft",
