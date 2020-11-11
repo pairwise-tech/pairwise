@@ -4849,13 +4849,13 @@
         {
           "id": "Qe8LlJ8ft",
           "type": "media",
-          "title": "React Native Accessibility",
+          "title": "Supporting Accessibility in React Native",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Accessibility in React Native works differently to how accessibility work in the web, but it is equally important."
+          "content": "Accessibility is an important consideration for building web and mobile apps and ensures that your apps can accommodate all users. Both iOS and Android platforms provide support for interacting with assistive technologies such as screen readers, and React Native provides support for allowing your apps to integrate with these technologies.\n\nThe basic approach for handling accessibility in React Native involves passing a variety of props to UI elements which need to be accessible. [Here are the docs covering this in detail](https://reactnative.dev/docs/accessibility#accessibility-actions). The most common props are present in the following example:\n\n```typescript\n<TouchableOpacity\n  accessible={true}\n  accessibilityLabel=\"Go back\"\n  accessibilityHint=\"Navigates to the previous screen\"\n  onPress={onPress}>\n  <View style={styles.button}>\n    <Text style={styles.buttonText}>Back</Text>\n  </View>\n</TouchableOpacity>\n\n```\n\nThe `accessible` prop tells React Native that the element should interact with assistive devices and the `accessibilityLabel` communicates the intention of interacting with the element.\n\nThe other basic React Native primitives may be partially accessible by default. For instance, a `Button` is accessible but you may need to provide your own `accessibilityLabel` to indicate the intent of the button:\n\n```\n<Button\n  onPress={onPressLearnMore}\n  title=\"Learn More\"\n  color=\"#841584\"\n  accessibilityLabel=\"Learn more about this purple button\"\n/>\n\n```\n\nAnother important prop is the `accessibilityRole` prop, which is used to indicate the \"role\" of a specific UI element. This must conform to a [set list of roles](https://reactnative.dev/docs/accessibility#accessibilityrole), such as alert, button, header, menu, link, and so on.\n\nImplementing these props where appropriate can go a long way toward enabling your applications for all users, but there is a lot more to accessibility\\! We encourage you to browse through the full page in the React Native docs as a starting point if you want to learn more."
         },
         {
           "id": "9SOBO4pBb",
