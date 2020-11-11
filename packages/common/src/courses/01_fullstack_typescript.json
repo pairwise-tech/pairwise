@@ -5020,7 +5020,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Here we will cover some other topics related to mobile app development. For instance, we will discuss some details about how React Native works and also touch on other cross platform frameworks such as Flutter."
+          "content": "We've covered the basics of developing with React Native so far in this module. That will take you a long way toward building your own mobile apps. However, mobile app development is a broad field with a lot of room for specialization.\n\nIn these special topics, we will cover a few additional points which are useful to know in addition to the preceding content. In particular, we will cover React Native in a little more depth, discuss native app development, and "
         },
         {
           "id": "3yJ@zenVOw",
