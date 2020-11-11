@@ -4800,7 +4800,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "In the same way that web browsers provide a `localStorage` module to allow applications to store site\\-specific data in the form of key/value pairs, mobile applications also provide an analogous storage utility.\n\nIn React Native, this the [AsyncStorage module](https://github.com/react-native-async-storage/async-storage), which has been moved out of React Native core to a community owned project.\n\nThis module provides a straightforward API for storing and reading data:\n\n```\nimport AsyncStorage from '@react-native-async-storage/async-storage';\n\nconst storeData = async (value) => {\n  try {\n    const jsonValue = JSON.stringify(value)\n    await AsyncStorage.setItem('@storage_Key', jsonValue)\n  } catch (e) {\n    // saving error\n  }\n}\n\nconst getData = async () => {\n  try {\n    const value = await AsyncStorage.getItem('@storage_Key')\n    if(value !== null) {\n      // value previously stored\n    }\n  } catch(e) {\n    // error reading value\n  }\n}\n\n```\n\nThis allows your apps to store and retrieve data locally. One downside, however, is that Async Storage is unencrypted. If you need an encrypted alternative, take a look at the [React Native Encrypted Storage library](https://www.npmjs.com/package/react-native-encrypted-storage), but note that this requires linking native code \\(we will cover this later in more detail\\)."
         },
         {
           "id": "hpxztrtI6",
