@@ -4767,7 +4767,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "The [InputAccessoryView](https://reactnative.dev/docs/inputaccessoryview) is a special component which is rendered on iOS above the keyboard whenever a text input is focused for typing.\n\n![iOS InputAccessoryView](/assets/2aowggDDr/caa05c9aba65e57dabc913b14eacfe48_input-accessory-view.png)\n\nYou can use this component to render custom controls within the input accessory view or modify its styles:\n\n```typescript\n<InputAccessoryView nativeID={inputAccessoryViewID}>\n  <Button\n    onPress={() => setText(initialText)}\n    title=\"Reset Text\"\n  />\n</InputAccessoryView>\n\n```\n"
         },
         {
           "id": "SMGZcHuhn$",
