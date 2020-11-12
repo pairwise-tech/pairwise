@@ -5064,7 +5064,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Progressive Web Apps \\(PWAs\\) are another interesting topic when it comes to mobile app development."
+          "content": "There is one final topic we want to touch on in this section on mobile: the elusive concept of the Progressive web app \\(PWA\\). Progressive web apps are another option for building mobile experience. Think of a PWA like a web application but with additional functionality built\\-in and with the intent that the entire application works on mobile. What other functionality? Things like:\n\n* The app can work offline.\n* Push notifications are supported.\n* The app has a home screen icon.\n* The app is responsive and interactive on mobile.\n\n\nThere are various other criteria and features, which are covered pretty well by the [page on Wikipedia](https://en.wikipedia.org/wiki/Progressive_web_application). Basically, think of a PWA like a glorified web app, largely custom designed for mobile.\n\nWhy would someone choose a PWA?\n\nWell, if you build a PWA you can use the entirety of the web stack and completely avoid mobile development and all of the additional complexity it entails. You can have one codebase, one build and deployment pipeline, and a single app experience. Updates would be delivered immediately to your users. This has a lot of advantages, and is the right choice for many experiences. As far as we can tell, PWAs have not caught on to a great extent within the industry, but they are prominent enough to warrant this short lesson on them.\n"
         }
       ]
     },
