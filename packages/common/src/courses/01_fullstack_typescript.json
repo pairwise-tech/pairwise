@@ -5042,7 +5042,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Electron is a framework like React Native which you can use to build native desktop apps."
+          "content": "In addition to using React to build mobile apps, you can use it to target other platforms as well. [Electron](https://www.electronjs.org/) is a framework like React Native which you can use to build native desktop apps. For example, did you know these desktop apps are all built with Electron \\(meaning, using HTML, CSS, and JavaScript\\):\n\n* VC Code\n* Slack\n* Skype\n* Discord\n* WhatsApp \\(desktop\\)\n* Atom\n\n\nYou have likely used VS Code, as part of this course, which should demonstrate the type of experience you can build on desktop leveraging web technologies. The web stack becomes more versatile and powerful overtime, and today you can utilize web technologies to build experiences for web, mobile, desktop, [TV](https://reactnative.dev/docs/building-for-tv), and even [VR](https://facebook.github.io/react-360/).\n\nFor a fun challenge, try to rebuild one of your earlier projects using Electron. You can check out their [getting started documentation here](https://www.electronjs.org/docs/tutorial/quick-start). See how much code you can reuse from your original project\\!\n"
         },
         {
           "id": "Hi8C2MJQr",
