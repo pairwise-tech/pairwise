@@ -5031,7 +5031,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "React Native is not the only cross\\-platform mobile framework—there are a few others as well."
+          "content": "React Native is not the only cross\\-platform mobile framework—there are a few others as well. We chose React Native here because it leverages all of the same technologies we have already covered which are fundamental to the web: mainly, TypeScript and React. This makes picking up React Native for a web developer the fast and most obvious choice. Also, and probably for this reason, React Native is one of the leading cross\\-platform frameworks out there right now.\n\nHowever, there are a few others which are worth knowing about:\n\n* [Flutter](https://flutter.dev/)\n* [Ionic](https://ionicframework.com/)\n* [Xamarin](https://dotnet.microsoft.com/apps/xamarin)\n* [Cordova](https://cordova.apache.org/)\n\n\nOf these four, Flutter is probably one of the most interesting options. [Flutter](https://flutter.dev/) is Google's solution to building cross\\-platform experiences and leverages their [Dart programming language](https://dart.dev/). If you wanted to dive into another cross\\-platform framework after React Native, we would recommend taking a look at Flutter."
         },
         {
           "id": "$Gz5fSFwn",
