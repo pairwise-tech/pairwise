@@ -588,13 +588,25 @@ class Workspace extends React.Component<IProps, IState> {
       </>
     );
 
+    // Allow the content in the Console to scroll if it overflows
+    const ScrollableWorkspaceConsole = (
+      <div
+        style={{
+          height: "100%",
+          overflow: "scroll",
+          paddingBottom: 6,
+          overscrollBehavior: "none",
+        }}
+      >
+        <Console variant="dark" logs={this.state.logs} />
+      </div>
+    );
+
     const TestFullHeightEditor = (
       <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
         <>{IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}</>
         <div>
-          {!IS_ALTERNATIVE_EDIT_VIEW && (
-            <Console variant="dark" logs={this.state.logs} />
-          )}
+          {!IS_ALTERNATIVE_EDIT_VIEW && ScrollableWorkspaceConsole}
           <DragIgnorantFrameContainer
             id="iframe"
             title="code-preview"
@@ -818,6 +830,8 @@ class Workspace extends React.Component<IProps, IState> {
       </CodeEditorContainer>
     );
 
+    // grid refers to the re-sizeable grid layout, which is not present
+    // on mobile.
     const getPreviewPane = ({ grid = true } = {}) => {
       // Lots of repetition here
       if (!grid) {
@@ -888,9 +902,7 @@ class Workspace extends React.Component<IProps, IState> {
               </MobileDeviceUI>
             </Row>
             <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
-              <div>
-                <Console variant="dark" logs={this.state.logs} />
-              </div>
+              {ScrollableWorkspaceConsole}
             </Row>
           </RowsWrapper>
         </Col>
@@ -911,9 +923,7 @@ class Workspace extends React.Component<IProps, IState> {
               </div>
             </Row>
             <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
-              <div>
-                <Console variant="dark" logs={this.state.logs} />
-              </div>
+              {ScrollableWorkspaceConsole}
             </Row>
           </RowsWrapper>
         </Col>
@@ -923,8 +933,8 @@ class Workspace extends React.Component<IProps, IState> {
             visible={NO_TESTS_RESULTS}
             runCodeHandler={this.runChallengeTests}
           />
+          {ScrollableWorkspaceConsole}
           <div>
-            <Console variant="dark" logs={this.state.logs} />
             <DragIgnorantFrameContainer
               id="iframe"
               title="code-preview"
@@ -1184,7 +1194,7 @@ class Workspace extends React.Component<IProps, IState> {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
       this.transformUnserializableLogs(data);
-      this.updateWorkspaceConsole({ data, method });
+      this.ScrollableWorkspaceConsole({ data, method });
     };
 
     try {
@@ -1447,11 +1457,11 @@ class Workspace extends React.Component<IProps, IState> {
         data: [error.message],
       },
     ]);
-    this.updateWorkspaceConsole(log);
+    this.ScrollableWorkspaceConsole(log);
     this.setState({ testResults, testResultsLoading: false });
   };
 
-  updateWorkspaceConsole = (log: Log) => {
+  ScrollableWorkspaceConsole = (log: Log) => {
     this.setState(
       ({ logs }) => ({
         logs: [...logs, log],
