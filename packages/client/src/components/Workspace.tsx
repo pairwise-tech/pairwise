@@ -250,6 +250,8 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   async componentDidMount() {
+    debug("componentDidMount");
+
     window.addEventListener("resize", this.handleWindowResize);
     document.addEventListener("keydown", this.handleKeyPress);
     window.addEventListener(
@@ -257,8 +259,6 @@ class Workspace extends React.Component<IProps, IState> {
       this.handleReceiveMessageFromCodeRunner,
       false,
     );
-
-    debug("componentDidMount");
 
     subscribeCodeWorker(this.handleCodeFormatMessage);
 
@@ -588,13 +588,25 @@ class Workspace extends React.Component<IProps, IState> {
       </>
     );
 
+    // Allow the content in the Console to scroll if it overflows
+    const ScrollableWorkspaceConsole = (
+      <div
+        style={{
+          height: "100%",
+          overflow: "scroll",
+          paddingBottom: 6,
+          overscrollBehavior: "none",
+        }}
+      >
+        <Console variant="dark" logs={this.state.logs} />
+      </div>
+    );
+
     const TestFullHeightEditor = (
       <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
         <>{IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}</>
         <div>
-          {!IS_ALTERNATIVE_EDIT_VIEW && (
-            <Console variant="dark" logs={this.state.logs} />
-          )}
+          {!IS_ALTERNATIVE_EDIT_VIEW && ScrollableWorkspaceConsole}
           <DragIgnorantFrameContainer
             id="iframe"
             title="code-preview"
@@ -818,6 +830,8 @@ class Workspace extends React.Component<IProps, IState> {
       </CodeEditorContainer>
     );
 
+    // grid refers to the re-sizeable grid layout, which is not present
+    // on mobile.
     const getPreviewPane = ({ grid = true } = {}) => {
       // Lots of repetition here
       if (!grid) {
@@ -888,9 +902,7 @@ class Workspace extends React.Component<IProps, IState> {
               </MobileDeviceUI>
             </Row>
             <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
-              <div>
-                <Console variant="dark" logs={this.state.logs} />
-              </div>
+              {ScrollableWorkspaceConsole}
             </Row>
           </RowsWrapper>
         </Col>
@@ -911,9 +923,7 @@ class Workspace extends React.Component<IProps, IState> {
               </div>
             </Row>
             <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
-              <div>
-                <Console variant="dark" logs={this.state.logs} />
-              </div>
+              {ScrollableWorkspaceConsole}
             </Row>
           </RowsWrapper>
         </Col>
@@ -923,8 +933,8 @@ class Workspace extends React.Component<IProps, IState> {
             visible={NO_TESTS_RESULTS}
             runCodeHandler={this.runChallengeTests}
           />
+          {ScrollableWorkspaceConsole}
           <div>
-            <Console variant="dark" logs={this.state.logs} />
             <DragIgnorantFrameContainer
               id="iframe"
               title="code-preview"
@@ -1180,16 +1190,11 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleReceiveMessageFromCodeRunner = (event: IframeMessageEvent) => {
-    // Don't handle messages if the tests aren't running.
-    if (!this.state.testResultsLoading) {
-      return;
-    }
-
     const handleLogMessage = (message: any, method: ConsoleLogMethods) => {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
       this.transformUnserializableLogs(data);
-      this.updateWorkspaceConsole({ data, method });
+      this.ScrollableWorkspaceConsole({ data, method });
     };
 
     try {
@@ -1383,7 +1388,46 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   compileAndTransformCodeString = async () => {
-    const { code, dependencies } = await compileCodeString(
+    try {
+      const { code, dependencies } = await compileCodeString(
+        this.state.code,
+        this.props.challenge,
+      );
+
+      const { isTestingAndAutomationChallenge } = this.props;
+      if (this.editor) {
+        this.editor.addModuleTypeDefinitionsToMonaco(
+          dependencies,
+          isTestingAndAutomationChallenge,
+        );
+      }
+
+      return code;
+    } catch (err) {
+      /**
+       * NOTE: It is possible some syntax errors will cause the Babel transform
+       * method to throw an error. This was happening to users previously and
+       * resulting in uncaught errors which were reported to Sentry. If
+       * something like that happens, or if any other error occurs from the
+       * compileCodeString function, we catch that here and display a generic
+       * "Code Must Compile" error.
+       */
+      this.handleCompilationError(
+        new Error("The code should compile with no errors."),
+      );
+
+      return "";
+    }
+  };
+
+  /**
+   * This method extracts the module dependencies from the current challenge
+   * code and adds them to the Monaco editor after the editor has initialized,
+   * avoiding the issue where the initial code will display type errors
+   * which are invalid.
+   */
+  addModuleDependenciesOnMount = async () => {
+    const { dependencies } = await compileCodeString(
       this.state.code,
       this.props.challenge,
     );
@@ -1395,33 +1439,29 @@ class Workspace extends React.Component<IProps, IState> {
         isTestingAndAutomationChallenge,
       );
     }
-
-    return code;
-  };
-
-  /**
-   * This method calls the compileAndTransformCodeString method, which has the
-   * side effect of add relevant type definitions to the Monaco editor based
-   * on the current challenge code. This avoids the issue where these are not
-   * present when the challenge first loads.
-   */
-  addModuleDependenciesOnMount = () => {
-    this.compileAndTransformCodeString();
   };
 
   handleCompilationError = (error: Error) => {
     debug("[handleCompilationError]", error);
+    const testResults = [
+      {
+        test: "",
+        testResult: false,
+        error: error.message,
+        message: error.message,
+      },
+    ];
     const log = Decode([
       {
         method: "error",
         data: [error.message],
       },
     ]);
-    this.updateWorkspaceConsole(log);
-    this.setState({ testResultsLoading: false });
+    this.ScrollableWorkspaceConsole(log);
+    this.setState({ testResults, testResultsLoading: false });
   };
 
-  updateWorkspaceConsole = (log: Log) => {
+  ScrollableWorkspaceConsole = (log: Log) => {
     this.setState(
       ({ logs }) => ({
         logs: [...logs, log],

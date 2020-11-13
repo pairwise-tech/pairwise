@@ -152,20 +152,20 @@ console.log(
   `- Total Challenges Completed: ${totalChallenges.toLocaleString()}`,
 );
 console.log(
+  `- Challenges Completed in Last Week: ${stats.challengesCompletedInLastWeek}`,
+);
+console.log(
   `- Average Challenges/User (excluding zero challenge users): ${average.toFixed(
     0,
   )}`,
 );
-console.log(
-  `- Challenges Completed in Last Week: ${stats.challengesCompletedInLastWeek}`,
-);
+console.log(`- Power Users (50+ Challenges Completed): ${powerUsers}`);
+console.log(`- Top Leader: ${json.leaderboard.leaderChallengeCount}`);
+console.log(`- No Email Users: ${stats.usersWithoutEmail}`);
+console.log(`- Zero Challenge Users: ${zeroChallengeUsers}`);
 console.log(
   `- Total Challenges in Course: ${totalCourseChallenges.toLocaleString()}`,
 );
-console.log(`- Top Leader: ${json.leaderboard.leaderChallengeCount}`);
-console.log(`- Power Users (50+ Challenges Completed): ${powerUsers}`);
-console.log(`- No Email Users: ${stats.usersWithoutEmail}`);
-console.log(`- Zero Challenge Users: ${zeroChallengeUsers}`);
 
 const leaders = Object.entries(leaderboard)
   .reverse()
