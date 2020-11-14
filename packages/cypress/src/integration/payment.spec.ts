@@ -22,11 +22,6 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     // // Try to navigate to a locked challenge
     navigateToLockedChallenge();
 
-    // NOTE: The challenge will load. Click the paid content label to initiate
-    // the payment workflow. This can be removed when paid course access is
-    // restored to work normally again.
-    click("paid-content-label");
-
     // // Prompted to login, login
     click("github-login");
     cy.wait(TIMEOUT);

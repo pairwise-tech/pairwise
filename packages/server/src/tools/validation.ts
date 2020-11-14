@@ -28,7 +28,7 @@ import { RequestUser } from "../types";
  */
 
 const validateTimeLastWatched = (time: number) => {
-  if (!time || typeof time !== "number" || time < 0) {
+  if (isNaN(time) || time < 0) {
     return true;
   }
 
@@ -73,7 +73,8 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
       const { url, repo, timeLastWatched } = dataBlob;
       if (validateTimeLastWatched(timeLastWatched)) {
         throw new BadRequestException("Invalid timeLastWatched value received");
-      } else if (!validator.isURL(url)) {
+      } else if (!!url && !validator.isURL(url)) {
+        // Only validate url if it is present (it is optional)
         throw new BadRequestException("Invalid url value received for project");
       } else if (!validator.isURL(repo)) {
         throw new BadRequestException(

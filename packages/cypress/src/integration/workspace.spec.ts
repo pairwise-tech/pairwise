@@ -139,18 +139,21 @@ describe("Sandbox", () => {
   });
 });
 
+/**
+ * A quick helper to open the app, create an account, and then signin. The
+ * purchaseCourseForUser util does not do this because the payment tests
+ * handle signin separately.
+ */
+const handleCreateAccountAndPurchaseCourse = () => {
+  cy.visit(CLIENT_APP_URL);
+  cy.wait(TIMEOUT);
+  cy.contains("Welcome to Pairwise!");
+  click("login-signup-button");
+  click("github-login");
+  purchaseCourseForUser();
+};
+
 describe("Workspace Challenges", () => {
-  beforeEach(() => {
-    cy.visit(CLIENT_APP_URL);
-    cy.wait(TIMEOUT);
-    cy.contains("Welcome to Pairwise!");
-    click("login-signup-button");
-    click("github-login");
-
-    // Purchase the course to unlock content
-    purchaseCourseForUser();
-  });
-
   /**
    * NOTE: The workspace tests tend to fail inconsistently. This is frustrating
    * and I'm not sure why, but it tends to be because the #gs-card cannot be
@@ -185,6 +188,8 @@ describe("Workspace Challenges", () => {
   });
 
   it.skip("The workspace supports Async/Await challenges and they can be solved", () => {
+    handleCreateAccountAndPurchaseCourse();
+
     // Visit an Async challenge
     cy.visit(`${CLIENT_APP_URL}/workspace/5wHvxCBaG/the-await-keyword`);
     cy.wait(TIMEOUT);
@@ -217,6 +222,8 @@ describe("Workspace Challenges", () => {
  * This issue should be resolved first before re-enabling this test.
  */
 it.skip("The workspace supports React challenges and they can be solved", () => {
+  handleCreateAccountAndPurchaseCourse();
+
   // Visit a React challenge
   cy.visit(`${CLIENT_APP_URL}/workspace/50f7f8sUV/create-a-controlled-input`);
 
@@ -243,7 +250,8 @@ it.skip("The workspace supports React challenges and they can be solved", () => 
 });
 
 it("Workspace projects can be completed by submitting valid project URLs", () => {
-  // Visit an Async project
+  handleCreateAccountAndPurchaseCourse();
+
   cy.visit(`${CLIENT_APP_URL}/workspace/KCmZ1fjHG/current-weather-tool`);
   cy.wait(TIMEOUT);
 
