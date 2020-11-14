@@ -72,6 +72,15 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
  * to the TypeScript course.
  */
 const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
+  /**
+   * NOTE: We wait for the user and courses to be fetched before handling
+   * the next step. We need the course list to validate the courseId param
+   * and the user is needed to correctly handle the payment intent step,
+   * which is after this.
+   *
+   * None of this will happen if either the user or course fails to fetch
+   * successfully, but that is probably OK.
+   */
   const userFetchedSuccess$ = action$.pipe(
     filter(isActionOf(Actions.fetchUserSuccess)),
   );
@@ -97,6 +106,7 @@ const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
     pluck("params"),
     pluck("courseId"),
     map((id: any) => {
+      // A set of course ids which exist
       const courseIds = new Set(
         state$.value.challenges.courseSkeletons?.map(x => x.id),
       );
