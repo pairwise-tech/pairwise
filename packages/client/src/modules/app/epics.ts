@@ -85,6 +85,7 @@ const purchaseCourseDeepLinkEpic: EpicSignature = action$ => {
     map(id => {
       // Default to the TypeScript course id
       const TYPESCRIPT_COURSE_ID = "fpvPtfu7s";
+      // NOTE: The courseId param is not validated anywhere...
       const courseId = typeof id === "string" ? id : TYPESCRIPT_COURSE_ID;
       return Actions.handlePaymentCourseIntent({ courseId });
     }),
