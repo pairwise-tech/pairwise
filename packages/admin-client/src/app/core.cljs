@@ -171,13 +171,15 @@
       [:p "A list of users can go here"]
       [:> bp/Button {:on-click #(println "should fetch")} "Fetch Users"]
       [:div.user-list
-       (for [u (vals users)]
-         [:div
-          {:key (:guid u)}
-          [:p [:strong "guid:"] " " (-> u :guid str)]
-          [:p [:string "name:"] " " (or (:name u) "<Unknown>")]
-          [:p [:string "email:"] " " (:email u)]
-          [Link {:href (str "users/" (:guid u))} "View"]])]])))
+       (->> (vals users)
+            (map-indexed (fn [i u]
+                           [:div
+                            {:key (:guid u)
+                             :class (when (zero? (mod i 2)) "even")}
+                            [:p [:strong "guid:"] " " (-> u :guid str)]
+                            [:p [:string "name:"] " " (or (:name u) "<Unknown>")]
+                            [:p [:string "email:"] " " (:email u)]
+                            [Link {:href (str "users/" (:guid u))} "View"]])))]])))
 
 (defn route->guid [route] (second (re-matches #"/users/([\w-]+)" route)))
 

@@ -33,3 +33,7 @@ a:active {
 .routed {
   padding: 20px;
 }
+
+.users .even {
+  background: #333;
+}

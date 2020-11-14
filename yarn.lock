@@ -2616,6 +2616,23 @@
     resize-observer-polyfill "^1.5.1"
     tslib "~1.9.0"
 
+"@blueprintjs/core@^3.31.0":
+  version "3.31.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.31.0.tgz#75702c3cdcb84cf28ba1e9e856b7b863700d8cc4"
+  integrity sha512-kfCYeyY2ojTMU5hxURNCwV4jQNDmLjTMOPImtbdW3Z7gHwiT2OA9qgNCkM0lhUjv0vyZ5py+AtZalx2FOH6PiA==
+  dependencies:
+    "@blueprintjs/icons" "^3.20.1"
+    "@types/dom4" "^2.0.1"
+    classnames "^2.2"
+    dom4 "^2.1.5"
+    normalize.css "^8.0.1"
+    popper.js "^1.16.1"
+    react-lifecycles-compat "^3.0.4"
+    react-popper "^1.3.7"
+    react-transition-group "^2.9.0"
+    resize-observer-polyfill "^1.5.1"
+    tslib "~1.13.0"
+
 "@blueprintjs/icons@^3.12.0":
   version "3.13.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.13.0.tgz#bff93a9ea5ced03afd2b3a65ddf4bb90bda485e4"
@@ -2623,6 +2640,14 @@
   dependencies:
     classnames "^2.2"
     tslib "~1.9.0"
+
+"@blueprintjs/icons@^3.20.1":
+  version "3.20.1"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.20.1.tgz#fde6bf4daaf644947497f19aa2c4b853ffc623df"
+  integrity sha512-BYXr2oOeKlcYoqpbCj2qCmTvAMf1HEM98v0yo024NXKFcnBdcf9ZF3/y4vmrRUijSJ2JLLCR+a0XE3lhweFWow==
+  dependencies:
+    classnames "^2.2"
+    tslib "~1.13.0"
 
 "@blueprintjs/select@^3.11.2":
   version "3.11.2"
@@ -2632,6 +2657,17 @@
     "@blueprintjs/core" "^3.20.0"
     classnames "^2.2"
     tslib "~1.9.0"
+
+"@blueprintjs/table@^3.8.13":
+  version "3.8.13"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/table/-/table-3.8.13.tgz#034b2e21669ed168508245354a2238fe071807a5"
+  integrity sha512-5IAlTNOp7Hxe8g77rHNh+C/sT5JbPeQcJxk2Xwx66lDIvYIYQb6NjWQoaqdrYyzre/k1b2+0SJC6xWDucP4f4Q==
+  dependencies:
+    "@blueprintjs/core" "^3.31.0"
+    classnames "^2.2"
+    prop-types "^15.7.2"
+    react-lifecycles-compat "^3.0.4"
+    tslib "~1.13.0"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
@@ -16810,13 +16846,28 @@ minipass-pipeline@^1.2.2:
   dependencies:
     minipass "^3.0.0"
 
-minipass@2.7.0, minipass@^2.6.0, minipass@^2.8.6, minipass@^2.9.0, minipass@^3.0.0, minipass@^3.1.1:
+minipass@^2.6.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/minipass/-/minipass-2.7.0.tgz#c01093a82287c8331f08f1075499fef124888796"
   integrity sha512-+CbZuJ4uEiuTL9s5Z/ULkuRg1O9AvVqVvceaBrhbYHIy1R3dPO7FMmG0nZLD0//ZzZq0MUOjwdBQvk+w1JHUqQ==
   dependencies:
     safe-buffer "^5.1.2"
     yallist "^3.0.0"
+
+minipass@^2.8.6, minipass@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/minipass/-/minipass-2.9.0.tgz#e713762e7d3e32fed803115cf93e04bca9fcc9a6"
+  integrity sha512-wxfUjg9WebH+CUDX/CdbRlh5SmfZiy/hpkxaRI16Y9W56Pa75sWgd/rvFilSgrauD9NyFymP/+JFV3KwzIsJeg==
+  dependencies:
+    safe-buffer "^5.1.2"
+    yallist "^3.0.0"
+
+minipass@^3.0.0, minipass@^3.1.1:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/minipass/-/minipass-3.1.3.tgz#7d42ff1f39635482e15f9cdb53184deebd5815fd"
+  integrity sha512-Mgd2GdMVzY+x3IJ+oHnVM+KG3lA5c8tnabyJKmHSaG2kAGpudxuOf8ToDkhumF7UzME7DecbQE9uOZhNm7PuJg==
+  dependencies:
+    yallist "^4.0.0"
 
 minizlib@^1.2.1:
   version "1.3.3"
@@ -18637,6 +18688,11 @@ popper.js@^1.14.1, popper.js@^1.14.4, popper.js@^1.15.0:
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.0.tgz#2e1816bcbbaa518ea6c2e15a466f4cb9c6e2fbb3"
   integrity sha512-+G+EkOPoE5S/zChTpmBSSDYmhXJ5PsW8eMhH8cP/CQHMFPBG/kC9Y5IIw6qNYgdJ+/COf0ddY2li28iHaZRSjw==
+
+popper.js@^1.16.1:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
+  integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
 
 portfinder@^1.0.25:
   version "1.0.25"
@@ -23977,6 +24033,11 @@ tslib@2.0.1, tslib@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.1.tgz#410eb0d113e5b6356490eec749603725b021b43e"
   integrity sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==
+
+tslib@~1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
+  integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
 
 tslib@~1.9.0:
   version "1.9.3"
