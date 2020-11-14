@@ -4307,6 +4307,39 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "As a programmer you will spend a lot of time working with and debugging asynchronous code. In these special topics, we will try to cover some more esoteric and advanced material related to writing asynchronous code and working with APIs to make you a more effective software developer."
+        },
+        {
+          "id": "OGthmtfif",
+          "type": "media",
+          "title": "Postman",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Postman is a useful tool for working with HTTP based REST APIs."
+        },
+        {
+          "id": "9X5FTdXbQ",
+          "type": "media",
+          "title": "GraphQL",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "GraphQL is a query language for APIs."
+        },
+        {
+          "id": "L8fsnMhzg",
+          "type": "media",
+          "title": "RPC",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "RPC is "
         }
       ]
     },
