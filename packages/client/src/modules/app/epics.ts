@@ -67,6 +67,31 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
 };
 
 /**
+ * Start the payment intent flow if a user deep links to it. The deep
+ * link is to /purchase and can accept a courseId param or default
+ * to the TypeScript course.
+ */
+const purchaseCourseDeepLinkEpic: EpicSignature = action$ => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    filter(
+      x =>
+        x.appInitializationType ===
+        APP_INITIALIZATION_TYPE.PURCHASE_COURSE_FLOW,
+    ),
+    pluck("params"),
+    pluck("courseId"),
+    map(id => {
+      // Default to the TypeScript course id
+      const TYPESCRIPT_COURSE_ID = "fpvPtfu7s";
+      const courseId = typeof id === "string" ? id : TYPESCRIPT_COURSE_ID;
+      return Actions.handlePaymentCourseIntent({ courseId });
+    }),
+  );
+};
+
+/**
  * Fetching courses or user should not fail, but if it does there is some
  * real issue (e.g. the server is down).
  */
@@ -322,6 +347,7 @@ export default combineEpics(
   appInitializationEpic,
   appInitializationFailedEpic,
   appInitializeCaptureUrlEpic,
+  purchaseCourseDeepLinkEpic,
   stripInitialParameters,
   emailUpdateSuccessToastEpic,
   promptToAddEmailEpic,
