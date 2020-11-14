@@ -42,3 +42,4 @@ docker
 secrets
 pairwise-users.json
 pairwise-user-detail.json
+tmp
