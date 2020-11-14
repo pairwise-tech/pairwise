@@ -71,9 +71,23 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
  * link is to /purchase and can accept a courseId param or default
  * to the TypeScript course.
  */
-const purchaseCourseDeepLinkEpic: EpicSignature = action$ => {
-  return action$.pipe(
+const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
+  const userFetchedSuccess$ = action$.pipe(
+    filter(isActionOf(Actions.fetchUserSuccess)),
+  );
+  const courseFetchedSuccess$ = action$.pipe(
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
+  );
+  const captureAppInitUrl$ = action$.pipe(
     filter(isActionOf(Actions.captureAppInitializationUrl)),
+  );
+
+  return combineLatest(
+    captureAppInitUrl$,
+    userFetchedSuccess$,
+    courseFetchedSuccess$,
+  ).pipe(
+    map(x => x[0]), // Extract the app initialization payload
     pluck("payload"),
     filter(
       x =>
@@ -82,12 +96,19 @@ const purchaseCourseDeepLinkEpic: EpicSignature = action$ => {
     ),
     pluck("params"),
     pluck("courseId"),
-    map(id => {
+    map((id: any) => {
+      const courseIds = new Set(
+        state$.value.challenges.courseSkeletons?.map(x => x.id),
+      );
+
       // Default to the TypeScript course id
       const TYPESCRIPT_COURSE_ID = "fpvPtfu7s";
       // NOTE: The courseId param is not validated anywhere...
-      const courseId = typeof id === "string" ? id : TYPESCRIPT_COURSE_ID;
-      return Actions.handlePaymentCourseIntent({ courseId });
+      const courseId = courseIds.has(id) ? id : TYPESCRIPT_COURSE_ID;
+      return Actions.handlePaymentCourseIntent({
+        courseId,
+        showToastWarning: true,
+      });
     }),
   );
 };
@@ -227,6 +248,7 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   }).pipe(
     tap(location => {
       try {
+        // tslint:disable-next-line
         // @ts-ignore
         window.ga("set", "page", location.pathname + location.search);
         // @ts-ignore
