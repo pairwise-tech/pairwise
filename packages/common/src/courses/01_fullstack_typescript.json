@@ -4309,6 +4309,28 @@
           "content": "As a programmer you will spend a lot of time working with and debugging asynchronous code. In these special topics, we will try to cover some more esoteric and advanced material related to writing asynchronous code and working with APIs to make you a more effective software developer."
         },
         {
+          "id": "tZ$XMrxzK",
+          "type": "media",
+          "title": "\"Callback Hell\" aka A History of Async",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Before async/await, JavaScript had somewhat primitive capabilities for programming asynchronous code. The most common construct was to use callbacks to handle the results of asynchronous operations. But, this had major downsides. Fortunately, the async/await syntax vastly improved on how JavaScript develops can write asynchronous code. However, you may still find callback\\-ridden code in legacy codebases in the wild or in your future company. This lesson will cover the history of async in JavaScript in a bit more detail and also explain the notion of \"Callback Hell\"."
+        },
+        {
+          "id": "3sKGSQZoE",
+          "type": "media",
+          "title": "Debugging Network Requests",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The Chrome devtools provide many useful debugging features, some of which we have seen already. One such feature is the network tab, which monitors HTTP network requests and other types of requests made to and from the current webpage. This tab allows you to inspect a lot of information about the requests, such as the request headers, the request body, the request response, and the response status. Learning how to use network tab is a great skill to have to debug and troubleshoot issues with network requests."
+        },
+        {
           "id": "OGthmtfif",
           "type": "media",
           "title": "Postman",
@@ -4328,18 +4350,29 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "GraphQL is a query language for APIs."
+          "content": "GraphQL is a structured, statically\\-typed query language for APIs."
         },
         {
           "id": "L8fsnMhzg",
           "type": "media",
-          "title": "RPC",
+          "title": "Remote Procedure Call (RPC)",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "RPC is "
+          "content": "RPC is stands for Remote Procedure Call and is another type of API which involves remotely invoking a subroutine or function on another computer or network."
+        },
+        {
+          "id": "eyuFfQ1t5W",
+          "type": "media",
+          "title": "Generators",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Generators are another construct which exists in JavaScript which combine some elements of a function and an iterable. A generator is basically a function which can be stopped or paused in mid execution."
         }
       ]
     },
