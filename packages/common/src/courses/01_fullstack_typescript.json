@@ -4339,7 +4339,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Postman is a useful tool for working with HTTP based REST APIs."
+          "content": "[Postman](https://www.postman.com/) is a useful tool for working with HTTP based REST APIs. Postman provides many features, the most basic of which is provide a simple interface which allows you to send HTTP requests to a given API.\n\nHere is a screenshot of using Postman to send a POST request to the Pairwise HTTP API server we used for the challenges earlier in this module:\n\n![An example of sending a POST request using Postman.](/assets/OGthmtfif/ace5929898fa7b2fc8359212c64bd521_postman.png)\n\nYou can see we can easily add the request URL, the HTTP request type, the request body, and then submit the request and see the response in the lower panel. This allows you to easily send network requests to test out if a server is working or if the APIs you have designed are functioning as intended. You can use it against servers deployed on the internet or running locally on `localhost`, which is useful for local server and API development.\n\nWe would recommend downloading and trying to use Postman as you work with 3rd party APIs or develop your own APIs. This is a great tool to have available in your toolkit.\n"
         },
         {
           "id": "9X5FTdXbQ",
