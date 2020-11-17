@@ -4306,7 +4306,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "As a programmer you will spend a lot of time working with and debugging asynchronous code. In these special topics, we will try to cover some more esoteric and advanced material related to writing asynchronous code and working with APIs to make you a more effective software developer."
+          "content": "In this module we covered the basics of working with asynchronous code in TypeScript and the fundamentals of APIs and making network requests with HTTP. The core concepts presented so far will take you a long way in building real world application.\n\nHowever, the subject of asynchronous programming and APIs goes well beyond what we covered here. In these special topics we will cover a few additional content areas and tools:\n\n* A history of async in JavaScript\n* How to debug network requests with Chrome devtools\n* Postman: a useful tool for API development\n* GraphQL: a new and popular API design scheme\n* RPC: an alternative to REST APIs\n* Generators: a cool JavaScript feature which creates \"pausable\" functions\n* Swagger: an API documentation tool\n\n"
         },
         {
           "id": "tZ$XMrxzK",
