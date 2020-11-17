@@ -4365,13 +4365,13 @@
         },
         {
           "id": "eyuFfQ1t5W",
-          "type": "media",
+          "type": "typescript",
           "title": "Generators",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "instructions": "Generators are a special JavaScript construct which basically combines functions and iterables to allow you to write a function which can be \"paused\".",
+          "testCode": "test(\"The `yieldResults` function should be defined.\", () => {\n  expect(typeof yieldResults).toBe(\"function\");\n});\n\ntest(\"The `yieldResults` function accepts a generator and returns an array of all of the result values yield by that generator.\", () => {\n  function* __generator() {\n    yield 1000;\n    yield 2000;\n    yield 3000;\n    yield 4000;\n    yield 5000;\n  }\n\n  const results = yieldResults(__generator());\n  const expected = [\n    {\n      value: 1000,\n      done: false,\n    },\n    {\n      value: 2000,\n      done: false,\n    },\n    {\n      value: 3000,\n      done: false,\n    },\n    {\n      value: 4000,\n      done: false,\n    },\n    {\n      value: 5000,\n      done: false,\n    },\n  ];\n\n  expect(results).toEqual(expected);\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "function* generator() {\n  yield 1;\n  yield 2;\n  yield 3;\n  yield 4;\n  yield 5;\n}\n\nconst yieldResults = (generator: Generator<any, any, any>) => {\n  // Your code here:\n};\n",
+          "solutionCode": "function* generator() {\n  yield 1;\n  yield 2;\n  yield 3;\n  yield 4;\n  yield 5;\n}\n\nconst yieldResults = (generator: Generator) => {\n  let result = generator.next();\n\n  let results = [];\n\n  while (!result.done) {\n    results.push(result);\n    result = generator.next();\n  }\n\n  return results;\n};\n\nconst gen = generator();\nconst results = yieldResults(gen);\nconsole.log(results);\n",
           "content": "Generators are another construct which exists in JavaScript which combine some elements of a function and an iterable. A generator is basically a function which can be stopped or paused in mid execution."
         },
         {
