@@ -27,6 +27,9 @@ import { RequestUser } from "../types";
  * ============================================================================
  */
 
+/**
+ * The time must be a positive number, or zero.
+ */
 const validateTimeLastWatched = (time: number) => {
   if (isNaN(time) || time < 0) {
     return true;
