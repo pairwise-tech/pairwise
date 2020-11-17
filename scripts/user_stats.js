@@ -1,10 +1,11 @@
 const fs = require("fs");
 
 const users = "pairwise-users.json";
-const course = "packages/common/src/courses/01_fullstack_typescript.json";
+const fullstackTypeScript =
+  "packages/common/src/courses/01_fullstack_typescript.json";
 
 const json = JSON.parse(fs.readFileSync(users, "utf8"));
-const courseJSON = JSON.parse(fs.readFileSync(course, "utf8"));
+const courseJSON = JSON.parse(fs.readFileSync(fullstackTypeScript, "utf8"));
 
 /** ===========================================================================
  * Growth Stats Script
@@ -164,7 +165,7 @@ console.log(`- Top Leader: ${json.leaderboard.leaderChallengeCount}`);
 console.log(`- No Email Users: ${stats.usersWithoutEmail}`);
 console.log(`- Zero Challenge Users: ${zeroChallengeUsers}`);
 console.log(
-  `- Total Challenges in Course: ${totalCourseChallenges.toLocaleString()}`,
+  `- Total Challenges in FullStack TypeScript Course: ${totalCourseChallenges.toLocaleString()}`,
 );
 
 const leaders = Object.entries(leaderboard)
