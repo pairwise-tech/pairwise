@@ -67,6 +67,63 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
 };
 
 /**
+ * Start the payment intent flow if a user deep links to it. The deep
+ * link is to /purchase and can accept a courseId param or default
+ * to the TypeScript course.
+ */
+const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
+  /**
+   * NOTE: We wait for the user and courses to be fetched before handling
+   * the next step. We need the course list to validate the courseId param
+   * and the user is needed to correctly handle the payment intent step,
+   * which is after this.
+   *
+   * None of this will happen if either the user or course fails to fetch
+   * successfully, but that is probably OK.
+   */
+  const userFetchedSuccess$ = action$.pipe(
+    filter(isActionOf(Actions.fetchUserSuccess)),
+  );
+  const courseFetchedSuccess$ = action$.pipe(
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
+  );
+  const captureAppInitUrl$ = action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+  );
+
+  return combineLatest(
+    captureAppInitUrl$,
+    userFetchedSuccess$,
+    courseFetchedSuccess$,
+  ).pipe(
+    map(x => x[0]), // Extract the app initialization payload
+    pluck("payload"),
+    filter(
+      x =>
+        x.appInitializationType ===
+        APP_INITIALIZATION_TYPE.PURCHASE_COURSE_FLOW,
+    ),
+    pluck("params"),
+    pluck("courseId"),
+    map((id: any) => {
+      // A set of course ids which exist
+      const courseIds = new Set(
+        state$.value.challenges.courseSkeletons?.map(x => x.id),
+      );
+
+      // Default to the TypeScript course id
+      const TYPESCRIPT_COURSE_ID = "fpvPtfu7s";
+      // NOTE: The courseId param is not validated anywhere...
+      const courseId = courseIds.has(id) ? id : TYPESCRIPT_COURSE_ID;
+      return Actions.handlePaymentCourseIntent({
+        courseId,
+        showToastWarning: true,
+      });
+    }),
+  );
+};
+
+/**
  * Fetching courses or user should not fail, but if it does there is some
  * real issue (e.g. the server is down).
  */
@@ -201,6 +258,7 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   }).pipe(
     tap(location => {
       try {
+        // tslint:disable-next-line
         // @ts-ignore
         window.ga("set", "page", location.pathname + location.search);
         // @ts-ignore
@@ -322,6 +380,7 @@ export default combineEpics(
   appInitializationEpic,
   appInitializationFailedEpic,
   appInitializeCaptureUrlEpic,
+  purchaseCourseDeepLinkEpic,
   stripInitialParameters,
   emailUpdateSuccessToastEpic,
   promptToAddEmailEpic,

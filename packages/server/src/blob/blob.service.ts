@@ -63,9 +63,7 @@ export class BlobService {
       dataBlob: JSON.stringify(challengeCodeDto.dataBlob),
     };
 
-    /**
-     * Upsert (no typeorm method exist, ha, ha):
-     */
+    // Upsert blob (no typeorm method exists for this operation):
     if (existingBlob) {
       await this.userCodeBlobRepository.update(
         {
@@ -74,6 +72,7 @@ export class BlobService {
         blob,
       );
     } else {
+      // Insert new blob:
       await this.userCodeBlobRepository.insert({
         user: user.profile,
         challengeId: challengeCodeDto.challengeId,

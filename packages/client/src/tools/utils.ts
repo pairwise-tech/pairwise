@@ -450,6 +450,7 @@ export enum APP_INITIALIZATION_TYPE {
   ACCOUNT_CREATED = "ACCOUNT_CREATED",
   PAYMENT_SUCCESS = "PAYMENT_SUCCESS",
   PAYMENT_CANCELLED = "PAYMENT_CANCELLED",
+  PURCHASE_COURSE_FLOW = "PURCHASE_COURSE_FLOW",
   AUTHENTICATION_FAILURE = "AUTHENTICATION_FAILURE",
 }
 
@@ -494,6 +495,12 @@ export const parseInitialUrlToInitializationType = (
     checkParamsExist(params, ["strategy"])
   ) {
     return APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE;
+  }
+
+  // A deep link into the payment flow, which also expects a courseId
+  // param, e.g. https://app.pairwise.tech/purchase?courseId="fpvPtfu7s"
+  if (path === "/purchase") {
+    return APP_INITIALIZATION_TYPE.PURCHASE_COURSE_FLOW;
   }
 
   // A user returned from the checkout flow after cancelling:

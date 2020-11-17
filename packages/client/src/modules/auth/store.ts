@@ -39,7 +39,6 @@ const auth = createReducer<State, AuthActionTypes>(initialState)
   }))
   .handleAction(actions.storeAccessTokenSuccess, (state, action) => ({
     ...state,
-    singleSignOnDialogOpen: false,
     accessToken: action.payload.accessToken,
   }))
   .handleAction(actions.loginByEmail, state => ({
@@ -55,7 +54,8 @@ const auth = createReducer<State, AuthActionTypes>(initialState)
   .handleAction(actions.loginByEmailFailure, state => ({
     ...state,
     emailLoginRequestLoading: false,
-  }));
+  }))
+  .handleAction(actions.logoutUser, (state, action) => initialState);
 
 /** ===========================================================================
  * Export
