@@ -4373,6 +4373,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Generators are another construct which exists in JavaScript which combine some elements of a function and an iterable. A generator is basically a function which can be stopped or paused in mid execution."
+        },
+        {
+          "id": "3XSAaJhTB",
+          "type": "media",
+          "title": "Swagger",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "[Swagger](https://swagger.io/) is an API documentation tool which is commonly used to document REST APIs. You may encounter it as you interact with other APIs in the future or if you build your own APIs."
         }
       ]
     },
