@@ -4322,13 +4322,13 @@
         {
           "id": "3sKGSQZoE",
           "type": "media",
-          "title": "Debugging Network Requests",
+          "title": "The Chrome Devtools Network Tab",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "The Chrome devtools provide many useful debugging features, some of which we have seen already. One such feature is the network tab, which monitors HTTP network requests and other types of requests made to and from the current webpage. This tab allows you to inspect a lot of information about the requests, such as the request headers, the request body, the request response, and the response status. Learning how to use network tab is a great skill to have to debug and troubleshoot issues with network requests."
+          "content": "The Chrome devtools provide many useful debugging features, some of which we have seen already. One such feature is the network tab, which monitors HTTP network requests and other types of requests made to and from the current webpage. This tab allows you to inspect a lot of information about the requests, such as the request headers, the request body, the request response, and the response status. Learning how to use network tab is a great skill to have to debug and troubleshoot issues with network requests.\n\n++NOTE:++ You can open the Chrome devtools by selecting _View \\> Developer \\> Developer Tools_.\n\n![The Chrome Devtools network tab inspecting the /courses request for the Pairwise app](/assets/3sKGSQZoE/73d5d3acef9231dc64e5e2c6032b5124_devtools.png)\n\nThe above shows an example of inspecting a webpage \\(the Pairwise app\\) using the Chrome devtools. On the Network tab, we can see details about network requests the page made. This is an easy way to see what services a webpage may be talking to. You can then select any specific request to see additional details, such as the request and response headers and the response status and data.\n\nThe network tab also provides a lot of other information, such as how long it took requests to load \\(this can be helpful for identifying performance bottlenecks or slow APIs\\). The network devtools also allow you to change various settings related to networking. You can simulate slower connection environments, disable the cache, preserve the network log across page reload or redirect actions, and so on.\n\nAs a client application developer, your apps will always be in communication with various backend services and the API layer is a key place where things can go wrong. Being able to use the network tab to debug issues is an important skill to have as a developer."
         },
         {
           "id": "OGthmtfif",
