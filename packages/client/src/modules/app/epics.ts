@@ -115,6 +115,16 @@ const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
       const TYPESCRIPT_COURSE_ID = "fpvPtfu7s";
       // NOTE: The courseId param is not validated anywhere...
       const courseId = courseIds.has(id) ? id : TYPESCRIPT_COURSE_ID;
+
+      // Check if the user has already paid for the course, just in case...
+      const { payments } = state$.value.user.user;
+      const userPaid = payments?.find(p => p.courseId === courseId);
+      if (userPaid) {
+        return Actions.empty(
+          `Handling /purchase deep link but it turns out user has already paid for the course, id: ${courseId}`,
+        );
+      }
+
       return Actions.handlePaymentCourseIntent({
         courseId,
         showToastWarning: true,
@@ -257,10 +267,10 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
     return unsub;
   }).pipe(
     tap(location => {
+      const page = `${location.pathname}${location.search}`;
       try {
-        // tslint:disable-next-line
         // @ts-ignore
-        window.ga("set", "page", location.pathname + location.search);
+        window.ga("set", "page", page);
         // @ts-ignore
         window.ga("send", "pageview");
       } catch (err) {

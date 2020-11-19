@@ -1,5 +1,5 @@
 import request from "supertest";
-import { fetchAccessToken, HOST } from "./utils/e2e-utils";
+import { HOST } from "./utils/e2e-utils";
 
 /** ===========================================================================
  * e2e Tests for /challenge APIs
@@ -7,14 +7,6 @@ import { fetchAccessToken, HOST } from "./utils/e2e-utils";
  */
 
 describe("Challenge APIs", () => {
-  let accessToken;
-  let authorizationHeader;
-
-  beforeAll(async () => {
-    accessToken = await fetchAccessToken();
-    authorizationHeader = `Bearer ${accessToken}`;
-  });
-
   test("/content/skeletons (GET)", () => {
     return request(`${HOST}/content/skeletons`)
       .get("/")
