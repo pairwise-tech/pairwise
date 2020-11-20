@@ -5751,6 +5751,50 @@
           "content": "In this module, you will learn about how modern software is deployed and delivered to users. This is one of the last important topics on your journey to becoming a software engineer\\!\n\nIt's not enough to just write your apps, you have to still deploy them so users can access them\\! This can be a lot more complicated than you may think at first.\n\nYour client application must be hosted somewhere so it can be served quickly to your users when they visit a page and make a request for your app.\n\nYour server must be deployed in the cloud somewhere, possibly with multiple instances running. You need to have monitoring, alerting, and logging so you know if your server encounters any issues, failures, or errors. Maybe you also need rate limiting, caching, and other configuration and setup.\n\nYou database must be deployed, backed up, and possibly supplied with read replicas for performance. It should be secure and only accessible by your production server or possibly administrator users.\n\nAnd that's just a very simple setup\\!\n\nFinally, as your team makes changes to your applications updates should be delivered and deployed to your production system continuously. You never want to hit a big red \"Deploy the App\" button. Ideally, deployments ship continuously as you merge code, tests run automatically and stop deployments when they fail, and your technical team can focus their efforts on building business logic and features rather than fighting fires or troubleshooting manual deployment nightmare scenarios.\n\nAs you can start to see... this world of \"devops\" \\(developer operations\\) is a lot more complex than it may seem at first. That's why it is such an important skillset to be familiar with as a developer. Having an effective devops and infrastructure setup can make the difference between a team being agile, shipping quickly, and out\\-running their competition and a team which is constantly fighting fires and afraid to deploy any new code because of regressions and brittle build pipelines.\n\nLet's get started\\!"
         },
         {
+          "id": "JMhVosid4",
+          "type": "section",
+          "title": "Deploying Directly to a Machine",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The traditional solution to deploying servers and databases was to simply install and run the software you needed directly on a dedicated machine, or on a virtual private server."
+        },
+        {
+          "id": "bKhH6ouY3",
+          "type": "media",
+          "title": "Deploy a Server to Digital Ocean",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "BGyJVQF3lL",
+          "type": "section",
+          "title": "Cloud Hosting & Deployment",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Almost all modern software deployment has migrated to the cloud. Computing infrastructure has become virtualized and commoditized and is now available at mass scale and low cost to software developers and most of the major technology companies offer cloud hosting solutions now: AWS with Amazon, GCP with Google, Azure with Microsoft, and so on.\n\nDeploying and hosting applications, services, and databases has numerous advantages:\n\n* Infrastructure maintenance and costs are abstracted away.\n* Hardware risk and failures are abstracted away.\n* Scaling is much easier.\n* Valuable features can be switched on and off, as needed, without requiring substantial infrastructure changes or expertise.\n* Services are more reliable.\n\n"
+        },
+        {
+          "id": "gGYkBO$Yf",
+          "type": "media",
+          "title": "What is DevOps?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "3odGQPJTI",
           "type": "section",
           "title": "Projects",
