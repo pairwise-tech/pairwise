@@ -5795,6 +5795,61 @@
           "content": "..."
         },
         {
+          "id": "FROIjiRaH",
+          "type": "media",
+          "title": "Cloud Hosting Overview",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "3LbUWlPlZq",
+          "type": "media",
+          "title": "Deployment Automation: CI/CD",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "5SCjCOQwsi",
+          "type": "media",
+          "title": "Logging, Monitoring, and Reporting",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "$@kraNyU0",
+          "type": "media",
+          "title": "Deploy a Server + Database with Heroku",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "03kfmEpdu",
+          "type": "media",
+          "title": "Deploy a Frontend with Netlify",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "3odGQPJTI",
           "type": "section",
           "title": "Projects",
@@ -5826,6 +5881,39 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In these special topics we will start to delve into the vast world of devops, infrastructure, and software deployment. Modern, secure, applications at scale require very complex infrastructure setups so they can be highly available, reliable, and fault\\-tolerant for users. In these lessons, we will try to illustrate what devops looks like for more complex systems and introduce some more advanced technologies, such as Docker, Kubernetes, Chef, Terraform, and others.\n\nDon't worry if these seem over your head\\! It's enough at this stage to just have a rough understanding of what these technologies are and why they are useful for production systems."
+        },
+        {
+          "id": "PWVGn7tt4",
+          "type": "media",
+          "title": "What is Docker?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "hU@oatYsK",
+          "type": "media",
+          "title": "What is Kubernetes?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "J3ArHHwhp",
+          "type": "media",
+          "title": "What is Serverless Architecture?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
         }
       ]
     },
