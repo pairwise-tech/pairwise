@@ -4328,6 +4328,17 @@
           "content": "### Congratulations\\!\n\nNow you have learned all of the fundamental basics of programming. You know the ins and outs of a popular programming language, you have a set of tools to work as a modern developer, and you understand how to write code which interacts with other computer systems. This is an important milestone in your learning journey\\!\n\nWhat you have learned so far will be transferrable to any other programming language you decide to learn in the future\\! Take a moment to congratulate yourself, and get ready to dive further down the rabbit hole.\n---\n\n### Enter React\n\nNow we will embark on the journey of the learning numerous tools, libraries, and frameworks which will equip you to build modern, real\\-world applications. Software engineers do not write everything from scratch. Instead, they use existing software as much as possible. React is the first tool like this for you to learn.\n\nReact is a library for building user interfaces.\n\nThe site you are looking at right now is built with React. React is built and open sourced by Facebook, and if you use any of the Facebook products you have used applications powered by React. React is very popular and the leading choice for building user interfaces. In the software development industry, React is one of the most in demand skills. In addition, it's very versatile. You can write web apps, mobile apps, and even desktop apps using React.\n\nBut what is a user interface library, exactly?\n\nIt's a tool which let's you build the frontend, or user interface, of an application very easily. It provides abstractions to handle common tasks and operations efficiently, safely, and easily. For example, consider this code:\n\n```typescript\nconst Greeting = (name?: string) => {\n    return (\n        <div>\n            <h1>\n                {name ? `Hello, ${name}` : \"Hello and welcome!\"}\n            </h1>\n        </div>\n    );\n};\n\n```\n\nThis code may look strange, and slightly \\(un\\)familiar to you. It may look like TypeScript. Or it may remind you of HTML. Or it may resemble a mishmash of both together. Well, it's exactly that\\! Another name for it is JSX \\(a syntax extension of JavaScript\\), but you will come to recognize this simply as _React\\._\n\nWhat it does is simple. It's a function which greets you by `name`, if you provide the function with a `name` argument, otherwise it displays a default greeting. React allows you to build HTML directly with the power of a programming language.\n\nIn this module, we will learn all about it\\!"
         },
         {
+          "id": "Ai2zBq30p",
+          "type": "react",
+          "title": "You're First React Code",
+          "instructions": "Change the `div` tag in the following React code to `h1`.",
+          "testCode": "// Write your tests here:\ntest(\"The `div` should be an `h1`\", () => {\n  expect(get(\"h1\")).not.toBe(null);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// We `import` React and ReactDOM so that we can use them later\n// Importing React here may seem odd, since it doesn't appear in \n// the rest of our code. See the JSX challenge for why this is.\nimport React from \"react\";\nimport ReactDOM from \"react-dom\";\n\n// This is our component. Change the <div> tag to an <h1>\nconst App = () => {\n  return (\n    <div>Coding with React</div>\n  );\n}\n\n// Here we use ReactDOM to \"render\" the component we created.\nReactDOM.render(<App />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "// We `import` React and ReactDOM so that we can use them later\n// Importing React here may seem odd, since it doesn't appear in \n// the rest of our code. See the JSX challenge for why this is.\nimport React from \"react\";\nimport ReactDOM from \"react-dom\";\n\n// This is our component. Change the <div> tag to an <h1>\nconst App = () => {\n  return (\n    <h1>Coding with React</h1>\n  );\n}\n\n// Here we use ReactDOM to \"render\" the component we created.\nReactDOM.render(<App />, document.querySelector(\"#root\"));\n",
+          "content": ""
+        },
+        {
           "id": "i8zTVf5Xy",
           "type": "section",
           "title": "Rendering with React",
@@ -4392,6 +4403,17 @@
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst App = () => {\n  return <div>Hey there</div>; // TODO: add properties to this div tag\n};\n\n// This is the root element of our React app. For now you can\n// just assume that a div with an id of \"root\" exists in the browser\nconst root = document.querySelector(\"#root\");\n\nReactDOM.render(<App />, root);\n",
           "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst App = () => {\n  return <div id=\"my-div\" className=\"page\">Hey there</div>; // TODO: add properties to this div tag\n};\n\n// This is the root element of our React app. For now you can\n// just assume that a div with an id of \"root\" exists in the browser\nconst root = document.querySelector(\"#root\");\n\nReactDOM.render(<App />, root);\n",
           "content": "This lesson should help you get familiar with the strange `className` syntax of JSX as well as the way string properties are passed to JSX tags."
+        },
+        {
+          "id": "$ayz1aCft",
+          "type": "react",
+          "title": "Converting to JSX",
+          "instructions": "Convert the following code to use JSX instead of `React.createElement`.\n\nExample:\n\n```typescript\nReact.createElement(\"h3\", null, \"This is an h3 tag\"); // => <h3>This is an h3 tag</h3>\nReact.createElement(HomePage, null, \"Welcome Home\"); // => <HomePage>Welcome Home</HomePage>\n\n```\n",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst App = () => {\n  return React.createElement(\"div\", null, \"Coding with React\");\n};\n\nReactDOM.render(React.createElement(App), document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst App = () => {\n  return <div>Coding with React</div>;\n};\n\nReactDOM.render(<App />, document.querySelector(\"#root\"));\n",
+          "content": ""
         },
         {
           "id": "GvmPhcIQN",
