@@ -10,7 +10,6 @@ import { CodeBlob } from "./blob.entity";
 import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
 import { validateCodeBlob } from "../tools/validation";
 import { RequestUser } from "../types";
-import { captureSentryException } from "../tools/sentry-utils";
 
 @Injectable()
 export class BlobService {
@@ -50,7 +49,7 @@ export class BlobService {
     challengeCodeDto: ICodeBlobDto,
     user: RequestUser,
   ) {
-    /* Validate everything in the code blob */
+    // Validate the code blob, this will throw if invalid:
     validateCodeBlob(challengeCodeDto);
 
     const existingBlob = await this.userCodeBlobRepository.findOne({
@@ -90,12 +89,11 @@ export class BlobService {
       try {
         /**
          * This method performs input validation, but it could fail if the
-         * input is mal-formed. If it does, don't just silent fail and continue
-         * the total operation.
+         * input is mal-formed. Allow failures and continue for other entries.
          */
         await this.updateUserCodeBlob(blob, user);
       } catch (err) {
-        captureSentryException(err);
+        // No action, errors will be reported by updateUserCodeBlob.
       }
     }
 
