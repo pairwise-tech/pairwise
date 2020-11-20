@@ -5850,6 +5850,17 @@
           "content": "..."
         },
         {
+          "id": "PWVGn7tt4",
+          "type": "media",
+          "title": "What is Docker?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "3odGQPJTI",
           "type": "section",
           "title": "Projects",
@@ -5859,6 +5870,39 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In these projects we will put to practice some of the principles you have just learned. In fact, you already have experience with deploying software because you have been deploying your projects for your portfolio from the very beginning.\n\nHere, we will apply some of the devops best practices we have learned to some of your deployed projects."
+        },
+        {
+          "id": "SCh1dPhbg",
+          "type": "project",
+          "title": "Create a CI/CD Pipeline",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, add a testing pipeline to one of your projects which can run on GitHub Actions."
+        },
+        {
+          "id": "ZJ3EhQkuN",
+          "type": "project",
+          "title": "Dockerize a Server",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, use Docker to create a container for running a server."
+        },
+        {
+          "id": "X2xJUDejx",
+          "type": "project",
+          "title": "Deploy a FullStack Application",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, deploy server, database, and frontend for one of your projects."
         },
         {
           "id": "qVh4wMjVh",
@@ -5883,9 +5927,9 @@
           "content": "In these special topics we will start to delve into the vast world of devops, infrastructure, and software deployment. Modern, secure, applications at scale require very complex infrastructure setups so they can be highly available, reliable, and fault\\-tolerant for users. In these lessons, we will try to illustrate what devops looks like for more complex systems and introduce some more advanced technologies, such as Docker, Kubernetes, Chef, Terraform, and others.\n\nDon't worry if these seem over your head\\! It's enough at this stage to just have a rough understanding of what these technologies are and why they are useful for production systems."
         },
         {
-          "id": "PWVGn7tt4",
+          "id": "@n23EyYGI",
           "type": "media",
-          "title": "What is Docker?",
+          "title": "Monolith vs. Microservices",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
