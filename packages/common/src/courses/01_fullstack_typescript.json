@@ -5753,7 +5753,7 @@
         {
           "id": "JMhVosid4",
           "type": "section",
-          "title": "Deploying Directly to a Machine",
+          "title": "Deploying to a Physical Machine",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
@@ -5764,7 +5764,7 @@
         {
           "id": "bKhH6ouY3",
           "type": "media",
-          "title": "Deploy a Server to Digital Ocean",
+          "title": "Deploy to a VPS",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
@@ -5775,7 +5775,7 @@
         {
           "id": "BGyJVQF3lL",
           "type": "section",
-          "title": "Cloud Hosting & Deployment",
+          "title": "Deploying to the Cloud",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
