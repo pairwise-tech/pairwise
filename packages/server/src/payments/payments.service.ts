@@ -88,7 +88,12 @@ export class PaymentsService {
   ) {
     const courseMetadata = ContentUtility.getCourseMetadata(courseId);
     if (!courseMetadata) {
-      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+      const err = new BadRequestException(
+        ERROR_CODES.INVALID_COURSE_ID,
+        `Invalid courseId, received: ${courseId}`,
+      );
+      captureSentryException(err);
+      throw err;
     } else {
       try {
         const session = await this.createStripeCheckoutSession(
@@ -103,11 +108,13 @@ export class PaymentsService {
         return result;
       } catch (err) {
         // I saw this happen once. If it happens more, we could create retry
-        // logic here...
-        captureSentryException(err);
-        throw new InternalServerErrorException(
-          "Failed to initialize checkout session",
+        // logic here or debug the issue.
+        const error = new InternalServerErrorException(
+          "Failed to initialize Stripe checkout session",
+          err,
         );
+        captureSentryException(error);
+        throw error;
       }
     }
   }
@@ -141,13 +148,25 @@ export class PaymentsService {
         // Post message to Slack
         this.slackService.postCoursePurchaseMessage();
 
+        /**
+         * TODO: We should deliver an email confirmation to users. Do they
+         * receive an email confirmation from Stripe?
+         */
+
         return SUCCESS_CODES.OK;
       } else {
         // Handle other event types...
+        captureSentryException(
+          `Unexpected event type in Stripe checkout flow: ${event.type}`,
+        );
       }
     } catch (err) {
-      captureSentryException(err);
-      throw new BadRequestException(`Webhook Error: ${err.message}`);
+      const error = new InternalServerErrorException(
+        `Stripe Webhook Error`,
+        err,
+      );
+      captureSentryException(error);
+      throw error;
     }
   }
 
