@@ -4520,15 +4520,81 @@
           "content": "In this module you will learn about databases, the technology responsible for storing all of the data used by modern software applications. Databases are crucial to building modern software applications. They are responsible for storing and backing up the data which makes your applications valuable. Whether it's user profiles, chat messages, transaction records, inventory, or anything else, these are all stored and persisted in a database.\n\nAt a basic level, a database is just a hard disk on a computer where information is stored. As we will see, there are several different types of databases, which are all used for different purposes. Like many things in software engineering, there are tradeoffs to choosing one database type over another.\n\nThe two most common types of databases are relational and non\\-relational. SQL is the canonical relational database, which you may have heard of before.  A SQL database defines a strict schema for what data and relationships between data look like. If you are using a SQL database you can rely on the database schema to enforce integrity for your data.\n\nOn the other hand, a non\\-relational database doesn't have a strict schema like a SQL database does. Non\\-relational databases are great when you have unstructured data, data in inconsistent formats, data with an unknown format, or other types of flexible requirements. Common non\\-relational databases are MongoDB and Redis, along with several others.\n\nIn this module, we will learn the basics for these different types of databases and get some practice working directly writing, reading, and updating data. This will give you the core skillset required to build a CRUD app \\(Create Read Update Delete\\).\n\nLet's get started\\!"
         },
         {
+          "id": "uDMmWREE8",
+          "type": "section",
+          "title": "Relational Databases: SQL",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "A `users` table exists in a SQL database. You can think of a SQL database like a huge excel spreadsheet. Rows are data entries and columns define specific data which can exist. For instance, consider this simple schema for a table of users:\n\n```none\nid   | name     | username     | email        | created_id\n----------------------------------------------------------\n1    | Joe      | joe_coder    | joe@mail.com | Sat Nov 21 2020 13:05:45 GMT+0800\n\n```\n\nA SQL database is a structured relationship of rows and columns. Each entry must adhere a data type which is defined by the SQL schema."
+        },
+        {
           "id": "2W$NOg9P@",
           "type": "typescript",
-          "title": "Getting Started with SQL",
-          "instructions": "A `users` table exists in a SQL database. Try to insert a new user using the `INSERT INTO` statement\\!",
-          "testCode": "test(\"A user named Ryan with email ryan@mail.com should be created using a SQL `INSERT INTO` statement.\", async () => {\n  const TEST_SQL = \"SELECT * FROM users\";\n  const result = await executePostgresQuery(SQL, \"\", TEST_SQL);\n  console.log(result);\n  const first = result.rows[0];\n  expect(first.name).toBe(\"Ryan\");\n  expect(first.email).toBe(\"ryan@mail.com\");\n});\n",
+          "title": "The SQL SELECT Statement",
+          "instructions": "A `users` table exists in a SQL database. To query data in a table, you can use the `SELECT` statement\\.",
+          "testCode": "test(\"A user named Ryan with email ryan@mail.com should be created using a SQL `INSERT INTO` statement.\", async () => {\n  try {\n    const INSERT =\n      \"DELETE FROM users; INSERT INTO users (name, email) VALUES ('Ryan', 'ryan@mail.com'), ('Jim', 'jim@mail.com'), ('Fred', 'fred@mail.com');\";\n    const result = await executePostgresQuery(INSERT, SQL, SQL);\n\n    const first = result.rows[0];\n    expect(first.name).toBe(\"Ryan\");\n    expect(first.email).toBe(\"ryan@mail.com\");\n\n    const second = result.rows[1];\n    expect(second.name).toBe(\"Jim\");\n    expect(second.email).toBe(\"jim@mail.com\");\n\n    const third = result.rows[2];\n    expect(third.name).toBe(\"Fred\");\n    expect(third.email).toBe(\"fred@mail.com\");\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your SQL here:\nconst SQL = \"\";\n",
+          "solutionCode": "// Your SQL here:\nconst SQL = \"SELECT * FROM users\";\n",
+          "content": ""
+        },
+        {
+          "id": "ogGvBc5sl",
+          "type": "typescript",
+          "title": "The SQL INSERT INTO Statement",
+          "instructions": "We can insert new data into a SQL table with the `INSERT INTO` SQL statement.",
+          "testCode": "test(\"A user named Ryan with email ryan@mail.com should be created using a SQL `INSERT INTO` statement.\", async () => {\n  try {\n    const DROP = \"DELETE FROM users;\";\n    const SELECT = \"SELECT * FROM users\";\n    const result = await executePostgresQuery(DROP, SQL, SELECT);\n    const first = result.rows[0];\n    expect(first.name).toBe(\"Ryan\");\n    expect(first.email).toBe(\"ryan@mail.com\");\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your SQL here:\nconst SQL = \"\";\n",
+          "solutionCode": "// Your SQL here:\nconst SQL = \"INSERT INTO users (name, email) VALUES ('Ryan', 'ryan@mail.com');\";\n",
+          "content": ""
+        },
+        {
+          "id": "Q6wrmX6TN",
+          "type": "typescript",
+          "title": "The SQL UPDATE Statement",
+          "instructions": "To update an existing database entry, we can use the `UPDATE` statement\\.",
+          "testCode": "test(\"`variable` should be defined.\", () => {\n  pass();\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your SQL here:\nconst SQL = \"\";\n",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "LzZJLUJI0",
+          "type": "typescript",
+          "title": "The SQL DELETE Statement",
+          "instructions": "To remove a row from a SQL database, we can use the `DELETE` statement\\.",
+          "testCode": "test(\"`variable` should be defined.\", () => {\n  pass();\n});\n",
           "videoUrl": "",
           "starterCode": "// Your SQL here:\nconst SQL = \"\";",
-          "solutionCode": "// Your SQL here:\nconst SQL = \"INSERT INTO users (name, email) VALUES ('Ryan', 'ryan@mail.com');\";",
+          "solutionCode": "// Your SQL here:\nconst SQL = \"\";",
           "content": ""
+        },
+        {
+          "id": "GgJrDl$br",
+          "type": "media",
+          "title": "Other SQL Statements",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "We have covered the main SQL statements which exist to query, insert, update, and delete data in a SQL database. There are a few other SQL statements to be aware of, in addition to these basic ones."
+        },
+        {
+          "id": "zrf$D7rpQ",
+          "type": "section",
+          "title": "Non-Relational Databases",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Non\\-relational databases, in contrast to relational databases, do not define specific relationships between data and are better suited for storing unstructured data."
         },
         {
           "id": "wf9ggEKbq",
