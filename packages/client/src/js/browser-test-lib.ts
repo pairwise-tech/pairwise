@@ -221,10 +221,17 @@ const DATABASE_CHALLENGE_API =
 /**
  * Helper for SQL code challenges.
  */
-const executePostgresQuery = async (userSQL, preSQL = "", postSQL = "") => {
+const executePostgresQuery = async (
+  preSqlQuery: string,
+  userSqlQuery: string,
+  postSqlQuery: string,
+) => {
   try {
     const url = `${DATABASE_CHALLENGE_API}/postgres/query`;
-    const body = JSON.stringify({ userSQL, preSQL, postSQL });
+    const userQuery = userSqlQuery;
+    const preQuery = preSqlQuery || "";
+    const postQuery = postSqlQuery || "";
+    const body = JSON.stringify({ userQuery, preQuery, postQuery });
     const headers = {
       Accept: "application/json",
       "Content-Type": "application/json",

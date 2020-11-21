@@ -204,43 +204,42 @@ var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */
-var executePostgresQuery = function (userSQL, preSQL, postSQL) {
-    if (preSQL === void 0) { preSQL = ""; }
-    if (postSQL === void 0) { postSQL = ""; }
-    return __awaiter(_this, void 0, void 0, function () {
-        var url, body, headers, response, result, err_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 3, , 4]);
-                    url = DATABASE_CHALLENGE_API + "/postgres/query";
-                    body = JSON.stringify({ userSQL: userSQL, preSQL: preSQL, postSQL: postSQL });
-                    headers = {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    };
-                    return [4 /*yield*/, fetch(url, {
-                            body: body,
-                            headers: headers,
-                            method: "post"
-                        })];
-                case 1:
-                    response = _a.sent();
-                    return [4 /*yield*/, response.json()];
-                case 2:
-                    result = _a.sent();
-                    return [2 /*return*/, result];
-                case 3:
-                    err_1 = _a.sent();
-                    // Fail by default if error
-                    console.log(err_1);
-                    fail();
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
-        });
+var executePostgresQuery = function (preSqlQuery, userSqlQuery, postSqlQuery) { return __awaiter(_this, void 0, void 0, function () {
+    var url, userQuery, preQuery, postQuery, body, headers, response, result, err_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                url = DATABASE_CHALLENGE_API + "/postgres/query";
+                userQuery = userSqlQuery;
+                preQuery = preSqlQuery || "";
+                postQuery = postSqlQuery || "";
+                body = JSON.stringify({ userQuery: userQuery, preQuery: preQuery, postQuery: postQuery });
+                headers = {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                };
+                return [4 /*yield*/, fetch(url, {
+                        body: body,
+                        headers: headers,
+                        method: "post"
+                    })];
+            case 1:
+                response = _a.sent();
+                return [4 /*yield*/, response.json()];
+            case 2:
+                result = _a.sent();
+                return [2 /*return*/, result];
+            case 3:
+                err_1 = _a.sent();
+                // Fail by default if error
+                console.log(err_1);
+                fail();
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
     });
-};
+}); };
 /**
  * Helper for MongoDB code challenges.
  */

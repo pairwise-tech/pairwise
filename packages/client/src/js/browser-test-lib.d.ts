@@ -93,7 +93,7 @@ declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.apps
 /**
  * Helper for SQL code challenges.
  */
-declare const executePostgresQuery: (userSQL: any, preSQL?: string, postSQL?: string) => Promise<any>;
+declare const executePostgresQuery: (preSqlQuery: string, userSqlQuery: string, postSqlQuery: string) => Promise<any>;
 /**
  * Helper for MongoDB code challenges.
  */
