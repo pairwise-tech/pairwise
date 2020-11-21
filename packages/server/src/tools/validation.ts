@@ -21,6 +21,7 @@ import { BadRequestException } from "@nestjs/common";
 import { ERROR_CODES } from "./constants";
 import { ProgressDto } from "../progress/progress.dto";
 import { RequestUser } from "../types";
+import { captureSentryException } from "./sentry-utils";
 
 /** ===========================================================================
  * Validation Utils
@@ -43,63 +44,93 @@ const validateTimeLastWatched = (time: number) => {
  * before it is saved in the database.
  */
 export const validateCodeBlob = (blob: ICodeBlobDto) => {
-  if (!blob.dataBlob.type) {
-    throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
-  }
-
-  if (!BlobTypeSet.has(blob.dataBlob.type)) {
-    throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
-  }
-
-  if (!ContentUtility.challengeIdIsValid(blob.challengeId)) {
-    throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
-  }
-
-  const { dataBlob } = blob;
-
-  switch (dataBlob.type) {
-    case "challenge": {
-      const { code } = dataBlob;
-      if (!code || typeof code !== "string") {
-        throw new BadRequestException("Invalid ChallengeBlob");
-      }
-      break;
+  try {
+    if (!blob.dataBlob.type) {
+      throw new BadRequestException(
+        ERROR_CODES.INVALID_CODE_BLOB,
+        "Missing blob type",
+      );
     }
-    case "video": {
-      const { timeLastWatched } = dataBlob;
-      if (validateTimeLastWatched(timeLastWatched)) {
-        throw new BadRequestException("Invalid timeLastWatched value received");
-      }
-      break;
+
+    if (!BlobTypeSet.has(blob.dataBlob.type)) {
+      throw new BadRequestException(
+        ERROR_CODES.INVALID_CODE_BLOB,
+        "Invalid blob type",
+      );
     }
-    case "project": {
-      const { url, repo, timeLastWatched } = dataBlob;
-      if (validateTimeLastWatched(timeLastWatched)) {
-        throw new BadRequestException("Invalid timeLastWatched value received");
-      } else if (!!url && !validator.isURL(url)) {
-        // Only validate url if it is present (it is optional)
-        throw new BadRequestException("Invalid url value received for project");
-      } else if (!validator.isURL(repo)) {
+
+    if (!ContentUtility.challengeIdIsValid(blob.challengeId)) {
+      throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
+    }
+
+    const { dataBlob } = blob;
+
+    switch (dataBlob.type) {
+      case "challenge": {
+        const { code } = dataBlob;
+        if (!code || typeof code !== "string") {
+          throw new BadRequestException(
+            ERROR_CODES.INVALID_CODE_BLOB,
+            `Invalid blob code value, received: ${JSON.stringify(code)}`,
+          );
+        }
+        break;
+      }
+      case "video": {
+        const { timeLastWatched } = dataBlob;
+        if (validateTimeLastWatched(timeLastWatched)) {
+          throw new BadRequestException(
+            ERROR_CODES.INVALID_CODE_BLOB,
+            `Invalid timeLastWatched value, received: ${timeLastWatched}`,
+          );
+        }
+        break;
+      }
+      case "project": {
+        const { url, repo, timeLastWatched } = dataBlob;
+        if (validateTimeLastWatched(timeLastWatched)) {
+          throw new BadRequestException(
+            ERROR_CODES.INVALID_CODE_BLOB,
+            `Invalid timeLastWatched value, received: ${timeLastWatched}`,
+          );
+        } else if (!!url && !validator.isURL(url)) {
+          // Only validate url if it is present (it is optional)
+          throw new BadRequestException(
+            ERROR_CODES.INVALID_CODE_BLOB,
+            `Invalid url value received for project, received: ${url}`,
+          );
+        } else if (!validator.isURL(repo)) {
+          throw new BadRequestException(
+            ERROR_CODES.INVALID_CODE_BLOB,
+            `Invalid repo url value received for project, received: ${repo}`,
+          );
+        }
+        break;
+      }
+      case "guided_project": {
+        const { timeLastWatched } = dataBlob;
+        if (validateTimeLastWatched(timeLastWatched)) {
+          throw new BadRequestException(
+            ERROR_CODES.INVALID_CODE_BLOB,
+            `Invalid timeLastWatched value, received: ${timeLastWatched}`,
+          );
+        }
+        break;
+      }
+      case "sandbox": {
         throw new BadRequestException(
-          "Invalid repo url value received for project",
+          ERROR_CODES.INVALID_CODE_BLOB,
+          "Sandbox blob is not supported yet!",
         );
       }
-      break;
-    }
-    case "guided_project": {
-      const { timeLastWatched } = dataBlob;
-      if (validateTimeLastWatched(timeLastWatched)) {
-        throw new BadRequestException("Invalid timeLastWatched value received");
+      default: {
+        const { type } = dataBlob;
+        return assertUnreachable(type);
       }
-      break;
     }
-    case "sandbox": {
-      throw new BadRequestException("Sandbox blob is not supported yet!");
-    }
-    default: {
-      const { type } = dataBlob;
-      return assertUnreachable(type);
-    }
+  } catch (err) {
+    captureSentryException(err);
+    throw err;
   }
 };
 
@@ -107,13 +138,24 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
  * Validate the input request to update user progress history.
  */
 export const validateChallengeProgressDto = (progressDto: ProgressDto) => {
-  const { courseId, challengeId } = progressDto;
-  if (!ContentUtility.courseIdIsValid(courseId)) {
-    throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
-  } else if (
-    !ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)
-  ) {
-    throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
+  try {
+    const { courseId, challengeId } = progressDto;
+    if (!ContentUtility.courseIdIsValid(courseId)) {
+      throw new BadRequestException(
+        ERROR_CODES.INVALID_COURSE_ID,
+        `Invalid course id, received: ${challengeId}`,
+      );
+    } else if (
+      !ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)
+    ) {
+      throw new BadRequestException(
+        ERROR_CODES.INVALID_CHALLENGE_ID,
+        `Invalid challenge id, received: ${challengeId}`,
+      );
+    }
+  } catch (err) {
+    captureSentryException(err);
+    throw err;
   }
 };
 
@@ -147,6 +189,7 @@ export const validateUserUpdateDetails = (
     const sanitizedUpdate = sanitizeObject(updateDetails);
     return new Ok(sanitizedUpdate);
   } catch (err) {
+    captureSentryException(err);
     return new Err(ERROR_CODES.INVALID_PARAMETERS);
   }
 };
@@ -238,39 +281,50 @@ const sanitizeObject = (obj: any) => {
  * Return a sanitized object which can be persisted confidently.
  */
 export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
-  const { progress, courseId } = entity;
+  try {
+    const { progress, courseId } = entity;
 
-  if (!ContentUtility.courseIdIsValid(courseId)) {
-    throw new Error(ERROR_CODES.INVALID_COURSE_ID);
-  }
+    if (!ContentUtility.courseIdIsValid(courseId)) {
+      throw new BadRequestException(
+        ERROR_CODES.INVALID_COURSE_ID,
+        `Course id is invalid, received: ${courseId}`,
+      );
+    }
 
-  const sanitizedProgress = Object.entries(progress).reduce(
-    (sanitized, [challengeId, status]) => {
-      /**
-       * Validate the progress item:
-       */
-      if (ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)) {
-        if (typeof status.complete === "boolean") {
-          return {
-            ...sanitized,
-            [challengeId]: status,
-          };
+    const sanitizedProgress = Object.entries(progress).reduce(
+      (sanitized, [challengeId, status]) => {
+        /**
+         * Validate the progress item:
+         */
+        if (ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)) {
+          if (typeof status.complete === "boolean") {
+            return {
+              ...sanitized,
+              [challengeId]: status,
+            };
+          }
+
+          return sanitized;
         }
+      },
+      {},
+    );
 
-        return sanitized;
-      }
-    },
-    {},
-  );
-
-  if (Object.keys(sanitizedProgress).length > 0) {
-    const result: ProgressEntity = {
-      courseId,
-      progress: sanitizedProgress,
-    };
-    return result;
-  } else {
-    throw new Error(ERROR_CODES.INVALID_PARAMETERS);
+    if (Object.keys(sanitizedProgress).length > 0) {
+      const result: ProgressEntity = {
+        courseId,
+        progress: sanitizedProgress,
+      };
+      return result;
+    } else {
+      throw new BadRequestException(
+        ERROR_CODES.INVALID_PARAMETERS,
+        `Invalid progress item, received: ${JSON.stringify(entity)}`,
+      );
+    }
+  } catch (err) {
+    captureSentryException(err);
+    throw err;
   }
 };
 
