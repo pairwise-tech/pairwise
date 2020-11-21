@@ -86,6 +86,10 @@ export class PaymentsService {
     requestUser: RequestUser,
     courseId: string,
   ) {
+    console.log(
+      `[STRIPE]: Running handleCreatePaymentIntent for user: ${requestUser.profile.uuid} and courseId: ${courseId}`,
+    );
+
     const courseMetadata = ContentUtility.getCourseMetadata(courseId);
     if (!courseMetadata) {
       const err = new BadRequestException(
@@ -128,6 +132,7 @@ export class PaymentsService {
     signature: string,
   ) {
     try {
+      console.log(`[STRIPE]: Running handleStripeCheckoutSuccessWebhook`);
       // You must use the raw body:
       // @ts-ignore - the raw body is added by custom code in main.ts
       const { rawBody } = request;
