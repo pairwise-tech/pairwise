@@ -89,7 +89,7 @@ declare const usersCollection: MockMongoCollection;
  * Switch the database URL if you need to test and run the Database Challenge
  * API server locally:
  */
-declare const DATABASE_CHALLENGE_API = "http://localhost:5000";
+declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */

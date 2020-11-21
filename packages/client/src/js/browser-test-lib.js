@@ -199,9 +199,8 @@ var usersCollection = new MockMongoCollection();
  * Switch the database URL if you need to test and run the Database Challenge
  * API server locally:
  */
-var DATABASE_CHALLENGE_API = "http://localhost:5000";
-// const DATABASE_CHALLENGE_API =
-//   "https://database-challenge-api.uc.r.appspot.com";
+// const DATABASE_CHALLENGE_API = "http://localhost:5000";
+var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */
@@ -231,7 +230,6 @@ var executePostgresQuery = function (preSqlQuery, userSqlQuery, postSqlQuery) { 
                 return [4 /*yield*/, response.text()];
             case 2:
                 text = _a.sent();
-                console.log(text);
                 throw new Error(text);
             case 3: return [4 /*yield*/, response.json()];
             case 4:
