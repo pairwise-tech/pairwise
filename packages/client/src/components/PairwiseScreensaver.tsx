@@ -88,7 +88,6 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
     const quote = quotes[0];
     return (
       <ScreensaverOverlay
-        visible
         angle={angle}
         gradient={gradient}
         data-selector="pairwise-screensaver-overlay"
@@ -208,6 +207,45 @@ const QUOTE_LIST: Quote[] = [
       "If debugging is the process of removing software bugs, then programming must be the process of putting them in.",
     author: "Edsger Dijkstra",
   },
+  {
+    text: "Testing shows the presence, not the absence of bugs.",
+    author: "Edsger Dijkstra",
+  },
+  {
+    text:
+      "Computers are good at following instructions, but not at reading your mind.",
+    author: "Donald Knuth",
+  },
+  {
+    text:
+      "Computers are incredibly fast, accurate and stupid. Human beings are incredibly slow, inaccurate and brilliant. Together they are powerful beyond imagination.",
+    author: "Albert Einstein",
+  },
+  {
+    text:
+      "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
+    author: "Brian Kernighan",
+  },
+  {
+    text:
+      "Inside every well-written large program is a well-written small program.",
+    author: "Tony Hoare",
+  },
+  {
+    text:
+      "Everybody should learn to program a computer, because it teaches you how to think.",
+    author: "Steve Jobs",
+  },
+  {
+    text:
+      "Whether you want to uncover the secrets of the universe, or you just want to pursue a career in the 21st century, basic computer programming is an essential skill to learn.",
+    author: "Stephen Hawking",
+  },
+  {
+    text:
+      "I think it's fair to say that personal computers have become the most empowering tool we've ever created. They're tools of communication, they're tools of creativity, and they can be shaped by their user.",
+    author: "Bill Gates",
+  },
 ];
 
 /** ===========================================================================
@@ -295,7 +333,6 @@ const GRADIENTS: Gradient[] = [
 
 interface ScreensaverOverlayProps {
   angle: number;
-  visible: boolean;
   gradient: Gradient;
 }
 
@@ -309,18 +346,15 @@ const ScreensaverOverlay = styled.div<ScreensaverOverlayProps>`
   position: fixed;
   z-index: 1500;
   overflow: hidden;
-  visibility: ${({ visible = true }: { visible?: boolean }) =>
-    visible ? "visible" : "hidden"};
 
   background: ${props => {
     const { a, b, c, d } = props.gradient.colors;
     return `linear-gradient(${props.angle}deg, ${a}, ${b}, ${c}, ${d})`;
   }};
   background-size: 600% 600%;
-
-  -webkit-animation: PairwiseScreensaver 60s ease infinite;
-  -moz-animation: PairwiseScreensaver 60s ease infinite;
   animation: PairwiseScreensaver 60s ease infinite;
+  -moz-animation: PairwiseScreensaver 60s ease infinite;
+  -webkit-animation: PairwiseScreensaver 60s ease infinite;
 
   @-webkit-keyframes PairwiseScreensaver {
     0% {
