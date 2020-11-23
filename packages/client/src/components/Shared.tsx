@@ -293,7 +293,7 @@ export const ModalContainer = styled.div`
 `;
 
 export const ModalTitleText = styled.h1`
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 300;
   text-align: center;
   color: ${COLORS.TEXT_WHITE};
