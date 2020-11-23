@@ -58,7 +58,7 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
 
     this.showQuote(500);
 
-    this.interval = setInterval(this.updateQuote, 25000);
+    this.interval = setInterval(this.updateQuote, 12500);
   }
 
   componentWillUnmount() {
@@ -78,7 +78,7 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
         <ContentBlock coordinates={coordinates} visible={quoteBlockVisible}>
           <img width={85} height={85} src={PairwiseLogo} alt="Pairwise Logo" />
           <QuoteBlock>
-            <Quote>"{quote.text}"</Quote>
+            <QuoteText>“{quote.text}”</QuoteText>
             <Author>― {quote.author}</Author>
           </QuoteBlock>
         </ContentBlock>
@@ -110,7 +110,7 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
   };
 
   getNextQuote = () => {
-    return QUOTES[getRandomNumber(0, QUOTES.length - 1)];
+    return QUOTE_LIST[getRandomNumber(0, QUOTE_LIST.length - 1)];
   };
 
   getContentBlockCoordinates = () => {
@@ -129,7 +129,7 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
-const QUOTES: Quote[] = [
+const QUOTE_LIST: Quote[] = [
   {
     text:
       "Programs must be written for people to read, and only incidentally for machines to execute.",
@@ -154,30 +154,34 @@ const QUOTES: Quote[] = [
       "Take time to learn the closest thing that we have to a SUPERPOWER - Code.",
     author: "Sharen Eddings",
   },
-  // {
-  //   text: "",
-  //   author: "",
-  // },
-  // {
-  //   text: "",
-  //   author: "",
-  // },
-  // {
-  //   text: "",
-  //   author: "",
-  // },
-  // {
-  //   text: "",
-  //   author: "",
-  // },
-  // {
-  //   text: "",
-  //   author: "",
-  // },
-  // {
-  //   text: "",
-  //   author: "",
-  // },
+  {
+    text:
+      "Delivering good software today is often better than perfect software tomorrow, so finish things and ship.",
+    author: "David Thomas",
+  },
+  {
+    text:
+      "Programming isn't about what you know; it's about what you can figure out.",
+    author: "Chris Pine",
+  },
+  {
+    text:
+      "When to use iterative development? You should use iterative development only on projects that you want to succeed.",
+    author: "Martin Fowler",
+  },
+  {
+    text: "Make it work, make it right, make it fast.",
+    author: "Kent Beck",
+  },
+  {
+    text: "Deleted code is debugged code.",
+    author: "Jeff Sickel",
+  },
+  {
+    text:
+      "If debugging is the process of removing software bugs, then programming must be the process of putting them in.",
+    author: "Edsger Dijkstra",
+  },
 ];
 
 /** ===========================================================================
@@ -207,7 +211,7 @@ const QuoteBlock = styled.div`
   padding-left: 24px;
 `;
 
-const Quote = styled.p`
+const QuoteText = styled.p`
   font-family: "Courier New", Courier, monospace;
   color: white;
   font-size: 16px;
