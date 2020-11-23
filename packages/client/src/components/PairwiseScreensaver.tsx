@@ -18,7 +18,7 @@ interface IProps {
 }
 
 interface IState {
-  quote: Quote;
+  quotes: Quote[];
   coordinates: Coordinates;
   quoteBlockVisible: boolean;
 }
@@ -48,7 +48,7 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
 
     this.state = {
       quoteBlockVisible: false,
-      quote: this.getNextQuote(),
+      quotes: this.shuffleQuotesList(),
       coordinates: this.getContentBlockCoordinates(),
     };
   }
@@ -71,8 +71,13 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
     }
   }
 
+  shuffleQuotesList = () => {
+    return QUOTE_LIST.slice().sort(() => 0.5 - Math.random());
+  };
+
   render() {
-    const { quote, quoteBlockVisible, coordinates } = this.state;
+    const { quotes, quoteBlockVisible, coordinates } = this.state;
+    const quote = quotes[0];
     return (
       <ScreensaverOverlay visible data-selector="pairwise-screensaver-overlay">
         <ContentBlock coordinates={coordinates} visible={quoteBlockVisible}>
@@ -94,23 +99,27 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
   };
 
   showQuote = (delay: number) => {
-    this.timer = setTimeout(
-      () =>
-        this.setState({
-          quoteBlockVisible: true,
-          quote: this.getNextQuote(),
-          coordinates: this.getContentBlockCoordinates(),
-        }),
-      delay,
-    );
+    this.timer = setTimeout(() => {
+      this.setState(ps => {
+        if (ps.quotes.length === 1) {
+          return {
+            quoteBlockVisible: true,
+            quotes: this.shuffleQuotesList(),
+            coordinates: this.getContentBlockCoordinates(),
+          };
+        } else {
+          return {
+            quoteBlockVisible: true,
+            quotes: ps.quotes.slice(1),
+            coordinates: this.getContentBlockCoordinates(),
+          };
+        }
+      });
+    }, delay);
   };
 
   updateQuote = () => {
     this.setState({ quoteBlockVisible: false }, () => this.showQuote(1500));
-  };
-
-  getNextQuote = () => {
-    return QUOTE_LIST[getRandomNumber(0, QUOTE_LIST.length - 1)];
   };
 
   getContentBlockCoordinates = () => {
@@ -201,10 +210,10 @@ const ContentBlock = styled.div<{ visible: boolean; coordinates: Coordinates }>`
   align-items: center;
   background-color: rgba(15, 15, 15, 0.875);
   opacity: ${(props: { visible: boolean }) => (props.visible ? 1 : 0)};
-  -webkit-transition: opacity 1s linear;
-  -moz-transition: opacity 1s linear;
-  -o-transition: opacity 1s linear;
-  transition: opacity 1s linear;
+  -webkit-transition: opacity 1500ms linear;
+  -moz-transition: opacity 1500ms linear;
+  -o-transition: opacity 1500ms linear;
+  transition: opacity 1500ms linear;
 `;
 
 const QuoteBlock = styled.div`
@@ -212,15 +221,15 @@ const QuoteBlock = styled.div`
 `;
 
 const QuoteText = styled.p`
-  font-family: "Courier New", Courier, monospace;
   color: white;
   font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
 `;
 
 const Author = styled.p`
-  font-family: Verdana, Geneva, sans-serif;
   color: white;
   font-size: 14px;
+  font-family: Verdana, Geneva, sans-serif;
 `;
 
 const DismissText = styled.p`
@@ -249,7 +258,7 @@ const ScreensaverOverlay = styled.div<ScreensaverOverlayProps>`
     visible ? "visible" : "hidden"};
 
   background: linear-gradient(270deg, #f3577a, #27c9dd, #ffb85a, #f6fa88);
-  background-size: 800% 800%;
+  background-size: 600% 600%;
 
   -webkit-animation: PairwiseScreensaver 60s ease infinite;
   -moz-animation: PairwiseScreensaver 60s ease infinite;
