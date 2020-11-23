@@ -323,10 +323,18 @@ const GRADIENTS: Gradient[] = [
   },
   {
     colors: {
-      a: "#a04efc",
-      b: "#942ad1",
-      c: "#621fde",
-      d: "#6f24c9",
+      a: "#4284f5",
+      b: "#3faef2",
+      c: "#3be5f7",
+      d: "#27c9dd",
+    },
+  },
+  {
+    colors: {
+      a: "#f54582",
+      b: "#f754a3",
+      c: "#fc3864",
+      d: "#f3577a",
     },
   },
 ];

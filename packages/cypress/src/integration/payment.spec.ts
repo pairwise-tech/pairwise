@@ -47,7 +47,7 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     // NOTE: This relies on fixed text and the existing challenge list,
     // it will need to be updated if/when these challenges change (which
     // they will).
-    cy.contains("Getting Started with SQL");
+    cy.contains("The SQL SELECT Statement");
     // Paid content label should not exist anymore
     cy.get("#paid-content-label").should("not.exist");
     click("nextButton");
@@ -59,5 +59,5 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
 const navigateToLockedChallenge = () => {
   click("navigation-menu-button");
   click("module-navigation-7");
-  click("challenge-navigation-1");
+  click("challenge-navigation-2");
 };
