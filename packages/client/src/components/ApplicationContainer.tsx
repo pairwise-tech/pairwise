@@ -34,6 +34,7 @@ import {
   LoadingInline,
   DesktopOnly,
   OverlaySmallText,
+  PairwiseOpenCloseLogo,
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
@@ -246,9 +247,13 @@ const ApplicationContainer = (props: IProps) => {
     </Menu>
   );
 
+  const show = true;
+  if (show) {
+    return <PairwiseScreensaver />;
+  }
+
   return (
     <React.Fragment>
-      <PairwiseScreensaver />
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
       <GlobalKeyboardShortcuts />
@@ -573,86 +578,6 @@ const ControlsContainer = styled.div`
   flex-direction: row;
 `;
 
-type OpenCloseLogoProps = { isOpen?: boolean } & React.SVGProps<SVGSVGElement>;
-
-const OpenCloseLogo = ({ isOpen = false, ...props }: OpenCloseLogoProps) => {
-  return (
-    <svg
-      width="24.44"
-      height="20"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <g fillRule="nonzero" fill="none" transform="scale(0.37)">
-        <rect
-          fill="#27C9DD"
-          x="0"
-          y="0"
-          width={isOpen ? 50 : 12}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#FFB85A"
-          x="0"
-          y="46"
-          width={isOpen ? 50 : 15}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#F3577A"
-          x="0"
-          y="16"
-          width={isOpen ? 50 : 25}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#F6FA88"
-          x="0"
-          y="31"
-          width={isOpen ? 50 : 34}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#F3577A"
-          x={!isOpen ? 24 : 56}
-          y="46"
-          width={isOpen ? 10 : 42}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#FFB85A"
-          x={!isOpen ? 42 : 56}
-          y="31"
-          width={isOpen ? 10 : 24}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#49F480"
-          x={!isOpen ? 21 : 56}
-          y="0"
-          width={isOpen ? 10 : 45}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#27C9DD"
-          x={!isOpen ? 33 : 56}
-          y="16"
-          width={isOpen ? 10 : 33}
-          height="8"
-          rx="3.774"
-        />
-      </g>
-    </svg>
-  );
-};
-
 const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   <Button
     minimal
@@ -661,7 +586,7 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
     aria-label="Open navigation map"
     {...rest}
   >
-    <OpenCloseLogo isOpen={overlayVisible} />
+    <PairwiseOpenCloseLogo isOpen={overlayVisible} />
   </Button>
 ))`
   appearance: none;
