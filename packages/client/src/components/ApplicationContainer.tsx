@@ -52,7 +52,7 @@ import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
 import { CONTENT_AREA_ID } from "./MediaArea";
-import PairwiseLivePopover from "./PairwiseLivePopover";
+import PomodoroTimer from "./PomodoroTimer";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
 import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
@@ -289,7 +289,7 @@ const ApplicationContainer = (props: IProps) => {
           )}
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
-          {!isMobile && <ShortcutKeysPopover />}
+          {!isMobile && <PomodoroTimer />}
           {!isMobile && (
             <Tooltip
               usePortal={false}
@@ -298,12 +298,28 @@ const ApplicationContainer = (props: IProps) => {
             >
               <IconButton
                 icon="comment"
-                style={{ marginLeft: 6, padding: 0 }}
+                style={{ padding: 0 }}
                 aria-label="Open the feedback dialog"
                 onClick={openFeedbackDialog}
               />
             </Tooltip>
           )}
+          {!isMobile && <ShortcutKeysPopover />}
+          {!isMobile && (
+            <Tooltip
+              usePortal={false}
+              position="bottom"
+              content="Launch Pairwise Screensaver"
+            >
+              <IconButton
+                icon="media"
+                style={{ padding: 0 }}
+                aria-label="Start the Pairwise Screensaver"
+                onClick={() => setScreensaverState(true)}
+              />
+            </Tooltip>
+          )}
+          {/* <PairwiseLivePopover /> */}
           {isSandbox && (
             <Suspense fallback={<LoadingInline />}>
               <LazyChallengeTypeMenu
@@ -328,21 +344,6 @@ const ApplicationContainer = (props: IProps) => {
               </ButtonGroup>
             </DesktopOnly>
           )}
-          {!isMobile && (
-            <Tooltip
-              usePortal={false}
-              position="bottom"
-              content="Launch Pairwise Screensaver"
-            >
-              <IconButton
-                icon="media"
-                style={{ padding: 0 }}
-                aria-label="Start the Pairwise Screensaver"
-                onClick={() => setScreensaverState(true)}
-              />
-            </Tooltip>
-          )}
-          <PairwiseLivePopover />
           {!isMobile && (
             <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
               <Button
