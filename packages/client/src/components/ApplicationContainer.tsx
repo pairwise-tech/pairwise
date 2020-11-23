@@ -548,7 +548,7 @@ const CurrentlyInBeta = styled.small`
   transform: translate(-50%, -50%) scale(0.7);
   font-weight: bold;
   letter-spacing: 1.2px;
-  background: #d81b82;
+  background: ${COLORS.SECONDARY_PINK};
   padding: 0px 6px;
   box-shadow: 0 0 20px rgb(0, 0, 0);
   border-radius: 100px;
