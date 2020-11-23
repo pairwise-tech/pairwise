@@ -18,6 +18,8 @@ interface IProps {
 }
 
 interface IState {
+  angle: number;
+  gradient: Gradient;
   quotes: Quote[];
   coordinates: Coordinates;
   quoteBlockVisible: boolean;
@@ -49,7 +51,9 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
     this.state = {
       quoteBlockVisible: false,
       quotes: this.shuffleQuotesList(),
+      angle: getRandomNumber(60, 300),
       coordinates: this.getContentBlockCoordinates(),
+      gradient: GRADIENTS[getRandomNumber(0, GRADIENTS.length)],
     };
   }
 
@@ -69,17 +73,26 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
     if (this.interval) {
       clearInterval(this.interval);
     }
+
+    document.removeEventListener("keydown", this.handleKeypress);
   }
 
-  shuffleQuotesList = () => {
-    return QUOTE_LIST.slice().sort(() => 0.5 - Math.random());
-  };
-
   render() {
-    const { quotes, quoteBlockVisible, coordinates } = this.state;
+    const {
+      quotes,
+      angle,
+      gradient,
+      coordinates,
+      quoteBlockVisible,
+    } = this.state;
     const quote = quotes[0];
     return (
-      <ScreensaverOverlay visible data-selector="pairwise-screensaver-overlay">
+      <ScreensaverOverlay
+        visible
+        angle={angle}
+        gradient={gradient}
+        data-selector="pairwise-screensaver-overlay"
+      >
         <ContentBlock coordinates={coordinates} visible={quoteBlockVisible}>
           <img width={85} height={85} src={PairwiseLogo} alt="Pairwise Logo" />
           <QuoteBlock>
@@ -96,6 +109,10 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
     if (event.key === "Escape") {
       this.props.setScreensaverState(false);
     }
+  };
+
+  shuffleQuotesList = () => {
+    return QUOTE_LIST.slice().sort(() => 0.5 - Math.random());
   };
 
   showQuote = (delay: number) => {
@@ -240,8 +257,46 @@ const DismissText = styled.p`
   color: rgb(25, 25, 25);
 `;
 
+interface Gradient {
+  colors: {
+    a: string;
+    b: string;
+    c: string;
+    d: string;
+  };
+}
+
+const GRADIENTS: Gradient[] = [
+  {
+    colors: {
+      a: "#f3577a",
+      b: "#27c9dd",
+      c: "#ffb85a",
+      d: "#f6fa88",
+    },
+  },
+  {
+    colors: {
+      a: "#4af0bb",
+      b: "#47f5e1",
+      c: "#59d478",
+      d: "#27cc84",
+    },
+  },
+  {
+    colors: {
+      a: "#a04efc",
+      b: "#942ad1",
+      c: "#621fde",
+      d: "#6f24c9",
+    },
+  },
+];
+
 interface ScreensaverOverlayProps {
+  angle: number;
   visible: boolean;
+  gradient: Gradient;
 }
 
 const ScreensaverOverlay = styled.div<ScreensaverOverlayProps>`
@@ -257,7 +312,10 @@ const ScreensaverOverlay = styled.div<ScreensaverOverlayProps>`
   visibility: ${({ visible = true }: { visible?: boolean }) =>
     visible ? "visible" : "hidden"};
 
-  background: linear-gradient(270deg, #f3577a, #27c9dd, #ffb85a, #f6fa88);
+  background: ${props => {
+    const { a, b, c, d } = props.gradient.colors;
+    return `linear-gradient(${props.angle}deg, ${a}, ${b}, ${c}, ${d})`;
+  }};
   background-size: 600% 600%;
 
   -webkit-animation: PairwiseScreensaver 60s ease infinite;
