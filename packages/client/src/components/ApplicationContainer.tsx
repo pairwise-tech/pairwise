@@ -55,6 +55,7 @@ import OfficeHoursPopover from "./OfficeHoursPopover";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
 import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
+import PairwiseScreensaver from "./PairwiseScreensaver";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -247,6 +248,7 @@ const ApplicationContainer = (props: IProps) => {
 
   return (
     <React.Fragment>
+      <PairwiseScreensaver />
       <Modals />
       <LoadingOverlay visible={workspaceLoading} />
       <GlobalKeyboardShortcuts />
