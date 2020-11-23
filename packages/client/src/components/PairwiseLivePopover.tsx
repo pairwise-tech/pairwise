@@ -134,7 +134,7 @@ const CurrentSession = styled(({ session, ...props }) => {
 
 type Props = typeof dispatchProps;
 
-const OfficeHoursPopover = (props: Props) => {
+const PairwiseLivePopover = (props: Props) => {
   const upcomingSession = SESSIONS.find(isUpcoming);
   const currentSession = SESSIONS.find(inSession);
   const [upcomingSessionTime, setUpcomingSessionTime] = React.useState(
@@ -243,20 +243,20 @@ const OfficeHoursPopover = (props: Props) => {
             ? "Join the Live Session"
             : upcomingSession
             ? "Session Starting Soon"
-            : "View Scheduled Sessions"
+            : "Pairwise Live"
         }
         position="bottom"
       >
         {currentSession ? (
           <LiveIndicator>
-            <IconButton icon="record" aria-label="View Scheduled Sessions" />
+            <IconButton icon="record" aria-label="Pairwise Live" />
           </LiveIndicator>
         ) : upcomingSession ? (
           <UpcomingIndicator>
-            <IconButton icon="record" aria-label="View Scheduled Sessions" />
+            <IconButton icon="record" aria-label="Pairwise Live" />
           </UpcomingIndicator>
         ) : (
-          <IconButton icon="record" aria-label="View Scheduled Sessions" />
+          <IconButton icon="record" aria-label="Pairwise Live" />
         )}
       </Tooltip>
     </Popover>
@@ -317,4 +317,4 @@ const dispatchProps = {
  * ============================================================================
  */
 
-export default connect(null, dispatchProps)(OfficeHoursPopover);
+export default connect(null, dispatchProps)(PairwiseLivePopover);

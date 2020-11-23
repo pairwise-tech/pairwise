@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import PairwiseLogo from "../icons/logo-square@1024.png";
+import { setScreensaverState } from "../modules/app/actions";
 
 /** ===========================================================================
  * Types & Config
@@ -12,7 +13,9 @@ interface Coordinates {
   y: number;
 }
 
-interface IProps {}
+interface IProps {
+  setScreensaverState: typeof setScreensaverState;
+}
 
 interface IState {
   quote: Quote;
@@ -31,6 +34,8 @@ const getRandomNumber = (min: number, max: number) => {
 
 /** ===========================================================================
  * Pairwise Screensaver Component
+ * ----------------------------------------------------------------------------
+ * - Gradient animation created with https://www.gradient-animator.com/.
  * ============================================================================
  */
 
@@ -43,12 +48,14 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
 
     this.state = {
       quoteBlockVisible: false,
-      quote: this.getRandomQuote(),
+      quote: this.getNextQuote(),
       coordinates: this.getContentBlockCoordinates(),
     };
   }
 
   componentDidMount() {
+    document.addEventListener("keydown", this.handleKeypress);
+
     this.showQuote(500);
 
     this.interval = setInterval(this.updateQuote, 25000);
@@ -64,12 +71,34 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
     }
   }
 
+  render() {
+    const { quote, quoteBlockVisible, coordinates } = this.state;
+    return (
+      <ScreensaverOverlay visible data-selector="pairwise-screensaver-overlay">
+        <ContentBlock coordinates={coordinates} visible={quoteBlockVisible}>
+          <img width={85} height={85} src={PairwiseLogo} alt="Pairwise Logo" />
+          <QuoteBlock>
+            <Quote>"{quote.text}"</Quote>
+            <Author>― {quote.author}</Author>
+          </QuoteBlock>
+        </ContentBlock>
+        <DismissText>Pairwise Screensaver | Press ESC to exit.</DismissText>
+      </ScreensaverOverlay>
+    );
+  }
+
+  handleKeypress = (event: KeyboardEvent) => {
+    if (event.key === "Escape") {
+      this.props.setScreensaverState(false);
+    }
+  };
+
   showQuote = (delay: number) => {
     this.timer = setTimeout(
       () =>
         this.setState({
           quoteBlockVisible: true,
-          quote: this.getRandomQuote(),
+          quote: this.getNextQuote(),
           coordinates: this.getContentBlockCoordinates(),
         }),
       delay,
@@ -80,7 +109,7 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
     this.setState({ quoteBlockVisible: false }, () => this.showQuote(1500));
   };
 
-  getRandomQuote = () => {
+  getNextQuote = () => {
     return QUOTES[getRandomNumber(0, QUOTES.length - 1)];
   };
 
@@ -93,21 +122,6 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
     };
     return coordinates;
   };
-
-  render() {
-    const { quote, quoteBlockVisible, coordinates } = this.state;
-    return (
-      <ScreensaverOverlay visible data-selector="pairwise-screensaver-overlay">
-        <ContentBlock coordinates={coordinates} visible={quoteBlockVisible}>
-          <img width={85} height={85} src={PairwiseLogo} alt="Pairwise Logo" />
-          <QuoteBlock>
-            <Quote>"{quote.text}"</Quote>
-            <Author>― {quote.author}</Author>
-          </QuoteBlock>
-        </ContentBlock>
-      </ScreensaverOverlay>
-    );
-  }
 }
 
 /** ===========================================================================
@@ -205,13 +219,18 @@ const Author = styled.p`
   font-size: 14px;
 `;
 
+const DismissText = styled.p`
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 10px;
+  color: rgb(25, 25, 25);
+`;
+
 interface ScreensaverOverlayProps {
   visible: boolean;
 }
 
-/**
- * Gradient animation created with https://www.gradient-animator.com/.
- */
 const ScreensaverOverlay = styled.div<ScreensaverOverlayProps>`
   top: 0;
   left: 0;
@@ -225,12 +244,12 @@ const ScreensaverOverlay = styled.div<ScreensaverOverlayProps>`
   visibility: ${({ visible = true }: { visible?: boolean }) =>
     visible ? "visible" : "hidden"};
 
-  background-size: 800% 800%;
   background: linear-gradient(270deg, #f3577a, #27c9dd, #ffb85a, #f6fa88);
+  background-size: 800% 800%;
 
-  -webkit-animation: PairwiseScreensaver 120s ease infinite;
-  -moz-animation: PairwiseScreensaver 120s ease infinite;
-  animation: PairwiseScreensaver 120s ease infinite;
+  -webkit-animation: PairwiseScreensaver 60s ease infinite;
+  -moz-animation: PairwiseScreensaver 60s ease infinite;
+  animation: PairwiseScreensaver 60s ease infinite;
 
   @-webkit-keyframes PairwiseScreensaver {
     0% {

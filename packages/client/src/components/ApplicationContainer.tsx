@@ -52,7 +52,7 @@ import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
 import { CONTENT_AREA_ID } from "./MediaArea";
-import OfficeHoursPopover from "./OfficeHoursPopover";
+import PairwiseLivePopover from "./PairwiseLivePopover";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
 import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
@@ -107,6 +107,8 @@ const ApplicationContainer = (props: IProps) => {
     overlayVisible,
     workspaceLoading,
     hasMediaContent,
+    setScreensaverState,
+    screensaverVisible,
     toggleNavigationMap,
     openFeedbackDialog,
     userAuthenticated,
@@ -183,6 +185,8 @@ const ApplicationContainer = (props: IProps) => {
     return <ErrorOverlay />;
   } else if (!initialized) {
     return <LoadingOverlay visible={workspaceLoading} />;
+  } else if (screensaverVisible) {
+    return <PairwiseScreensaver setScreensaverState={setScreensaverState} />;
   }
 
   const onWorkspaceRoute = location.includes("workspace");
@@ -247,11 +251,6 @@ const ApplicationContainer = (props: IProps) => {
     </Menu>
   );
 
-  const show = true;
-  if (show) {
-    return <PairwiseScreensaver />;
-  }
-
   return (
     <React.Fragment>
       <Modals />
@@ -300,7 +299,7 @@ const ApplicationContainer = (props: IProps) => {
               <IconButton
                 icon="comment"
                 style={{ marginLeft: 6, padding: 0 }}
-                aria-label="open the feedback dialog"
+                aria-label="Open the feedback dialog"
                 onClick={openFeedbackDialog}
               />
             </Tooltip>
@@ -329,7 +328,21 @@ const ApplicationContainer = (props: IProps) => {
               </ButtonGroup>
             </DesktopOnly>
           )}
-          <OfficeHoursPopover />
+          {!isMobile && (
+            <Tooltip
+              usePortal={false}
+              position="bottom"
+              content="Launch Pairwise Screensaver"
+            >
+              <IconButton
+                icon="media"
+                style={{ padding: 0 }}
+                aria-label="Start the Pairwise Screensaver"
+                onClick={() => setScreensaverState(true)}
+              />
+            </Tooltip>
+          )}
+          <PairwiseLivePopover />
           {!isMobile && (
             <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
               <Button
@@ -743,9 +756,10 @@ const isTouchEventOnEditor = (touchEvent: any) => {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  location: Modules.selectors.app.locationSelector(state),
   user: Modules.selectors.user.userSelector(state),
   userLoading: Modules.selectors.user.loading(state),
+  location: Modules.selectors.app.locationSelector(state),
+  screensaverVisible: Modules.selectors.app.screensaverVisible(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
@@ -762,6 +776,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   logoutUser: Modules.actions.auth.logoutUser,
+  setScreensaverState: Modules.actions.app.setScreensaverState,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,

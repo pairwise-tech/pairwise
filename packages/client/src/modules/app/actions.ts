@@ -16,6 +16,7 @@ enum ActionTypesEnum {
   TOGGLE_PAGE_SCROLL_LOCK = "TOGGLE_PAGE_SCROLL_LOCK",
   LOCATION_CHANGE = "LOCATION_CHANGE",
   APP_INITIALIZATION_FAILED = "APP_INITIALIZATION_FAILED",
+  SET_SCREENSAVER_STATE = "SET_SCREENSAVER_STATE",
 }
 
 /** ===========================================================================
@@ -56,3 +57,7 @@ export const captureAppInitializationUrl = createAction(
 export const appInitializationFailed = createAction(
   ActionTypesEnum.APP_INITIALIZATION_FAILED,
 )();
+
+export const setScreensaverState = createAction(
+  ActionTypesEnum.SET_SCREENSAVER_STATE,
+)<boolean>();
