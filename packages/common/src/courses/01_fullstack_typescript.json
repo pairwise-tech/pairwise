@@ -3641,17 +3641,6 @@
           "content": "In this section, you will learn how to build applications on your own computer\\! You will learn how to download the software you need, manage a codebase using version control, Git, and GitHub, and deploy your software projects for the world to see\\!"
         },
         {
-          "id": "s2smKN6w6",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "In this section we will present some guided explanations for building and deploying your own applications."
-        },
-        {
           "id": "l$ZcH5bp5",
           "type": "section",
           "title": "Special Topics",
@@ -4287,17 +4276,6 @@
           "content": "# Overview\n\nBuild a command line tool which allows you to view definitions and synonyms for English words.\n\nYou can use the [WordsAPI](https://www.wordsapi.com/) for this project. Like the Weatherstack API from the other challenge, you will need to sign up and get an access key to use this API. To do that, you will need to signup via [RapidAPI](https://rapidapi.com/) \\(which is actually a great service which will give you access to a number of other API providers as well\\).\n# User Stories\n\nYour command line program should allow a user to lookup words and view synonyms for words.\n\n* As a user, I am greeted with a prompt when I run the program which allows me to enter a word. When I type a word and press \"enter\" I see a list of definitions for that word \\(use the `/definitions` API\\).\n* As a user, after searching a word I have an option to view synonyms \\(use the `/synonyms` API\\), or search for another word.\n* As a user, errors from searching for invalid words are handled correctly and allow me to search for another word.\n\n\nOnce you have completed your project and pushed it to GitHub, enter your repository URL here to complete the challenge. Good luck\\!\n# Challenge\n\n* The WordsAPI provides a lot of different options. Consider enriching your program's functionality with some of the other API features like antonyms, rhymes, examples, frequency, etc.\n* Display the synonyms for words as selectable command line options which a user can navigate through using the up and down arrow keys and then select with the \"enter\" key. Selecting a synonym should then search and display the definition for that synonym.\n* Maintain a history of word searches the user has performed while the program is running. A user can view this history of words at any time as a list of selectable options and navigate to any word and view that definition again.\n* The program should cache results while it is running, so if a user selects or searches the same word more than once the program should return the cached result instead of making another request to the API.\n\n"
         },
         {
-          "id": "zq3sEi606",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here we will walk through some guided explanations of building and working with APIs. This should give you a sense of how these skills can be applied in the real\\-world applications."
-        },
-        {
           "id": "WdG@C4ceE",
           "type": "section",
           "title": "Special Topics",
@@ -4390,7 +4368,7 @@
     {
       "free": false,
       "id": "ZdkSjC9P",
-      "title": "UI Programming",
+      "title": "Frontend",
       "challenges": [
         {
           "free": true,
@@ -4427,17 +4405,6 @@
           "content": "In the React projects section you will build some real\\-world projects using React. Get ready, this will be your first major projects to showcase in your portfolio\\!"
         },
         {
-          "id": "O1AV1pQs@",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Now that you've had some experience building UIs with React, we will walk through some example projects which use React to build complex frontend web applications. This should give you a sense of what production React applications look like and how more complex applications can be designed."
-        },
-        {
           "id": "iJAcbGybh",
           "type": "section",
           "title": "Special Topics",
@@ -4453,7 +4420,7 @@
     {
       "free": false,
       "id": "EmSvFhW8",
-      "title": "Server Programming",
+      "title": "Backend",
       "challenges": [
         {
           "free": true,
@@ -4477,17 +4444,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "For these projects we will actually write and deploy a server application. Get ready, this is going to be fun\\!"
-        },
-        {
-          "id": "OWwTKTH@c",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "In this section we will walk through some projects which illustrate the backend engineering principles you have learned in some sample production applications."
         },
         {
           "id": "hY2nZf$si",
@@ -4617,17 +4573,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "It's time to start using some real databases\\! In these projects you will build simple applications which interact with a real, live database\\!"
-        },
-        {
-          "id": "gRGsfvdMM",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here we will see some examples of projects which use databases. This should give you some idea of the more complex applications of databases which can exist in real applications."
         },
         {
           "id": "qe2LFM0mp",
@@ -5122,17 +5067,6 @@
           "content": "For this project, build an app of your choice in React Native\\!\n\nTry to think of something you would actually use or find enjoyable to build. These are the best projects because they help you maintain a high level of motivation around the project.\n\nIdeally, try to use some features that are specific to React Native, e.g. the camera, or gestures, or biometrics.\n\nDon't forget to use Expo Client to test out your app on your phone\\!"
         },
         {
-          "id": "fo@lZIRdV",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here we will walk through an example app build with React Native so you can see clearly what the full workflow looks like for building, developing, and deploying a mobile app built with React Native."
-        },
-        {
           "id": "YL1saaMKQ",
           "type": "section",
           "title": "Special Topics",
@@ -5214,7 +5148,7 @@
     {
       "free": false,
       "id": "ZzVuDVNP",
-      "title": "Testing & Automation",
+      "title": "Testing Software",
       "challenges": [
         {
           "free": true,
@@ -5515,17 +5449,6 @@
           "content": "For this project, choose one of your previous frontend UI projects and add Cypress tests for your application. Try to add a few different test cases which perform assertions on the major features or actions which your app provides. For instance, if you were testing a note\\-taking application, you would want to create test cases to verify a user can create, view, edit, and delete notes through the UI.\n\nTake a look at the guides for [installing and getting started with Cypress](https://docs.cypress.io/guides/getting-started/installing-cypress.html) to begin. It's actually quite easy to work with\\! Don't worry about adding automation to your tests \\(unless you want a challenge\\!\\). The point of this project is to get comfortable working with Cypress. Try to add a set of Cypress tests which you can run from your project by just running the project locally. For example, you can run your app locally and the point Cypress to that URL, e.g. `localhost:3000`.\n\nThis would involve:\n\n* Running your app locally, e.g. with `yarn start`.\n* Running Cypress, e.g. with `yarn run cypress open` \\([see here for more details](https://docs.cypress.io/guides/getting-started/installing-cypress.html#Opening-Cypress)\\) and pointing Cypress to the local port your app is running on.\n\n\nYou could then start with a simple test like this:\n\n```typescript\ndescribe(\"The Home Page\", () => {\n  it(\"successfully loads\", () => {\n    cy.visit(\"http://localhost:3000\");\n  });\n});\n\n```\n\nTry to get creative and add a variety of test cases, good luck\\!"
         },
         {
-          "id": "Qb@0mALhz",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here we will show you how the Pairwise application is tested\\! We have built an extensive suite of tests which continuously run throughout our development workflow to ensure the important features of the platform continue working correctly. This allows us to confidently push updates and new features quickly and on a routine basis\\!"
-        },
-        {
           "id": "mqUy13W10",
           "type": "section",
           "title": "Special Topics",
@@ -5776,17 +5699,6 @@
           "content": "For this project, choose one of your earlier completed projects and revisit it and try to refactor the code you wrote before. As you go through the journey of writing code, you will learn a lot and it's often a surprising experience to return to code you wrote in the past. You may be surprised by what you have written before\\!\n\nRevisit one of the earlier projects \\(the TypeScript Programming projects are a great choice, since those were quite early\\) and review your code now that you have progressed much further through the curriculum. Ask yourself some questions:\n\n* Does the code still make sense to you?\n* Is it easy to read and understand?\n* Is it well written and well designed?\n* Would you do anything differently today?\n* Would it be easy to change?\n* Is it extensible?\n* Is it tested?\n* Is it well documented?\n\n\nRefactor your code based on what you have learned. You can even go as far as completely re\\-writing the project from scratch. This is often a perfectly viable refactoring strategy—sometimes you just need a clean slate to start with some fresh ideas rather than trying to adjust some brittle, bug\\-ridden legacy code.\n\n> ++Remember:++ One of the sure things about software is that it _will_ change in the future\\! The project/product/company/user/customer requirements and your understanding of them always tends to change over time which forces your code to change along the way. Well designed code is code which is _easy to refactor and change in the future._\n\nThe important takeaway here is about the _process_ of refactoring. This is an important skill to develop and the best way is through practice. Try to first review the code you want to refactor, then develop a plan and some ideas for how you want to refactor it, and then try to execute that plan in a methodical way. Ideally, you should be using version control and breaking down your changes into small, clear commits.\n\nGood luck\\!"
         },
         {
-          "id": "5iJetMlK0",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here we will walk through a real\\-world example of debugging errors in production and refactoring an application to avoid the errors in the future."
-        },
-        {
           "id": "j@5yd8P9$",
           "type": "section",
           "title": "Special Topics",
@@ -5971,17 +5883,6 @@
           "content": "For this project, deploy server, database, and frontend for one of your projects."
         },
         {
-          "id": "qVh4wMjVh",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "In this guided project, we will walk through more complex examples of devops setups in production applications. This should illustrate some devops principles in practice and give you more familiarity with why devops is important for software developers to understand."
-        },
-        {
           "id": "GzyZTY8jb",
           "type": "section",
           "title": "Special Topics",
@@ -6030,7 +5931,7 @@
     {
       "free": false,
       "id": "GgP1rkAa",
-      "title": "Capstone Project",
+      "title": "Capstone Projects",
       "challenges": [
         {
           "free": true,
@@ -6054,17 +5955,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "The projects in this final section are fullstack applications which will really test your abilities as a programmer\\! These projects are the culmination of all of the hard work and practice you have put in to work to this point.\n\nThese projects will be challenging, but if you can complete them they will give you a portfolio which will really standout and they will prove that you have acquired all the skills necessary to work as a software developer."
-        },
-        {
-          "id": "379M1tAlW",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here, at the very end we present a guided walkthrough of a fullstack application which can illustrate how all the principles and skills you have learned in this course fit together to create a working product."
         },
         {
           "id": "DVy0PqE5j",
