@@ -33,7 +33,6 @@ describe.skip("Stress Test the Server", () => {
           const randomString = faker.lorem.sentences();
 
           const body = {
-            courseId: "fpvPtfu7s",
             challengeId: "9scykDold",
             dataBlob: { code: randomString, type: "challenge" },
           };
@@ -61,6 +60,7 @@ describe.skip("Stress Test the Server", () => {
     const end = Date.now();
     const time = (end - start) / 1000;
     const RPS = TOTAL_REQUESTS / time;
+
     console.log(`Handled ${TOTAL_REQUESTS} requests in ${time} seconds.`);
     console.log(`That's about ${RPS.toLocaleString()} requests per second.`);
 
