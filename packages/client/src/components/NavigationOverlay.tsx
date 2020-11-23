@@ -519,7 +519,7 @@ class NavigationOverlay extends React.Component<
         style={{ position: "relative", ...style }}
       >
         <ChallengeLink
-          locked={!challenge.userCanAccess}
+          locked={challenge.userCanAccess ? "false" : "true"}
           to={`/workspace/${getChallengeSlug(challenge)}`}
           id={`challenge-navigation-${index}`}
           isActive={() => itemActive}
@@ -720,7 +720,7 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
 `;
 
 interface ChallengeLinkProps extends NavLinkProps {
-  locked: boolean;
+  locked: "true" | "false"; // To circumvent a React DOM attribute warning message...
   active?: boolean;
 }
 
@@ -750,7 +750,7 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
     transform: scale(0);
     width: 3px;
     background: ${props =>
-      props.locked ? "rgb(135,135,135)" : COLORS.GRADIENT_GREEN};
+      props.locked === "true" ? "rgb(135,135,135)" : COLORS.GRADIENT_GREEN};
   }
 
   &.active {

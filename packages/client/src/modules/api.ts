@@ -205,7 +205,9 @@ class Api extends BaseApiClass {
       let courses: CourseList;
       if (ENV.DEV) {
         const courseList = require("@pairwise/common").default;
-        courses = Object.values(courseList);
+        // NOTE: Hard-coded to only show the FullstackTypeScript Course
+        courses = [courseList.FullstackTypeScript];
+        // courses = Object.values(courseList);
       } else if (ENV.CODEPRESS) {
         courses = await this.codepressApi.getAll().toPromise();
       } else {
@@ -225,7 +227,9 @@ class Api extends BaseApiClass {
   fetchCourseSkeletons = async () => {
     if (ENV.DEV) {
       const courseMap = require("@pairwise/common").default;
-      const courses: CourseSkeletonList = Object.values(courseMap);
+      // NOTE: Hard-coded to only show the FullstackTypeScript Course
+      const courses: CourseSkeletonList = [courseMap.FullstackTypeScript];
+      // const courses: CourseSkeletonList = [courseMap.FullstackTypeScript];
       const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
       return new Ok(courseSkeletonList);
     } else if (ENV.CODEPRESS) {
