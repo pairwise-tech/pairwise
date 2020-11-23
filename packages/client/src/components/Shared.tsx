@@ -108,7 +108,10 @@ export const RotatingIcon = styled(({ isRotated, id, ...props }) => {
   );
 })<{ isRotated?: boolean; id: string; icon: string }>`
   transform: ${props =>
-    `rotate3d(0,0,1,${props.isRotated ? "0deg" : "-90deg"})`};
+    `rotate3d(0,0,1,${
+      // Do not rotate icon for locked content
+      props.isRotated || props.icon === "lock" ? "0deg" : "-90deg"
+    })`};
   transition: transform 0.2s linear;
 `;
 

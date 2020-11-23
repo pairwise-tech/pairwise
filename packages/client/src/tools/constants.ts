@@ -18,7 +18,7 @@ export const COLORS = {
   TEXT_WHITE: "rgb(250,250,250)",
   TEXT_HOVER: "rgb(245, 245, 245)",
   TEXT_TITLE: "rgb(200, 200, 200)",
-  TEXT_CONTENT: "rgb(165, 165, 165)",
+  TEXT_CONTENT: "rgb(195, 195, 195)",
   TEXT_CONTENT_BRIGHT: "rgb(225, 225, 225)",
   TEXT_DARK: "rgb(40,40,40)",
   DRAGGABLE_SLIDER: "#2E2E2E",

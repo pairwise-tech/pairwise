@@ -25,22 +25,21 @@ class Home extends React.Component<IProps, {}> {
         <ContentContainer>
           <PageTitle>Welcome to Pairwise!</PageTitle>
           <ContentText>
-            Pairwise is a platform where you can learn to code and build a
-            portfolio of projects to get hired as a software developer. It's
-            free to get started with no signup required, and the HTML and
-            programming course is free for anyone to complete. You can easily
-            create an account anytime to track your progress.
+            Pairwise is the best place to learn to code to build your own app or
+            start a career in software development. The Pairwise FullStack Web
+            Development Course is currently in{" "}
+            <b style={{ color: COLORS.TEXT_WHITE }}>BETA</b> and available to
+            purchase. The core modules which cover HTML, CSS, and TypeScript
+            will always be free.
           </ContentText>
           <ContentText>
-            To learn more about our product and courses, take a look at our{" "}
+            To learn more about Pairwise,{" "}
             <ExternalLink link="https://pairwise.tech">
-              Product Page
+              take a look here
             </ExternalLink>
             .
           </ContentText>
-          <BoldText>Select a course below to get started now!</BoldText>
         </ContentContainer>
-        <PageTitle>Content</PageTitle>
         {this.props.skeletons?.map(this.renderCourseItem)}
       </PageContainer>
     );
