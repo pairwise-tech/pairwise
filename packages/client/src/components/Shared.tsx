@@ -79,7 +79,7 @@ export const Text = styled.p`
 // DOM or desktop styles is a bit cumbersome. I regard the app as very much
 // desktop first so I wanted to touch desktop as little as possible. However,
 // rather than using a nice constraint-based layout I'm using an absolute pixel
-// value here becuase I don't want to rearrange the DOM.
+// value here because I don't want to rearrange the DOM.
 export const CodeEditorUpperRight = styled.div<{ isEditMode: boolean }>`
   position: absolute;
   z-index: 3;
@@ -99,8 +99,14 @@ export const CodeEditorUpperRight = styled.div<{ isEditMode: boolean }>`
 
 // This breaks the Icon typing, but also doesn't shout at us in the console
 export const RotatingIcon = styled(({ isRotated, id, ...props }) => {
-  return <Icon id={id} {...props} />;
-})<{ isRotated?: boolean; id: string }>`
+  return (
+    <Icon
+      id={id}
+      color={props.icon === "lock" ? "rgb(150,150,150)" : undefined}
+      {...props}
+    />
+  );
+})<{ isRotated?: boolean; id: string; icon: string }>`
   transform: ${props =>
     `rotate3d(0,0,1,${props.isRotated ? "0deg" : "-90deg"})`};
   transition: transform 0.2s linear;

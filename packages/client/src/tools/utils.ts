@@ -193,16 +193,16 @@ export const getChallengeIcon = (
   userCanAccess: boolean,
   challengeProgress?: CHALLENGE_PROGRESS,
 ): IconName => {
+  if (!userCanAccess) {
+    return "lock";
+  }
+
   if (
     challengeProgress &&
     type !== "section" &&
     challengeProgress === "COMPLETE"
   ) {
     return "tick";
-  }
-
-  if (!userCanAccess) {
-    return "lock";
   }
 
   if (type === "section") {

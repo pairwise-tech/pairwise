@@ -14,6 +14,7 @@ export const COLORS = {
   SECONDARY_ORANGE: "#FFB85A",
   HEADER_BORDER: "#176191",
   LIGHT_GREY: "#404040",
+  WHITE: "rgb(250,250,250)",
   TEXT_WHITE: "rgb(250,250,250)",
   TEXT_HOVER: "rgb(245, 245, 245)",
   TEXT_TITLE: "rgb(200, 200, 200)",
