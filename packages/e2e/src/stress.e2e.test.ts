@@ -1,27 +1,28 @@
 import { HOST, fetchAccessToken } from "./utils/e2e-utils";
 import axios from "axios";
 import faker from "faker";
+import { Err, Ok } from "@pairwise/common";
+
+jest.setTimeout(100000);
 
 /** ===========================================================================
  * e2e Stress Tests
- * ----------------------------------------------------------------------------
- * Seems to average around 100 rps [1].
  * ===========================================================================
  */
 
-const NUMBER_OF_USERS = 15;
-const NUMBER_OF_REQUESTS_PER_USER = 5;
+const NUMBER_OF_USERS = 50;
+const NUMBER_OF_REQUESTS_PER_USER = 25;
 const TOTAL_REQUESTS = NUMBER_OF_USERS * NUMBER_OF_REQUESTS_PER_USER;
 
 describe.skip("Stress Test the Server", () => {
   test("Create users and hit the /progress/challenge endpoint repeatedly", async done => {
-    /* Wait 1 second to allow other tests to complete first */
+    // Wait 1 second to allow other tests to complete first
     await new Promise((_: any) => setTimeout(_, 1000));
 
     const start = Date.now();
 
     const testAPI = async () => {
-      const results = await Promise.all(
+      return Promise.all(
         new Array(NUMBER_OF_REQUESTS_PER_USER).fill(1).map(async () => {
           const accessToken = await fetchAccessToken();
           const authorizationHeader = `Bearer ${accessToken}`;
@@ -32,36 +33,44 @@ describe.skip("Stress Test the Server", () => {
           const randomString = faker.lorem.sentences();
 
           const body = {
+            courseId: "fpvPtfu7s",
             challengeId: "9scykDold",
             dataBlob: { code: randomString, type: "challenge" },
           };
 
-          const response = await axios.post(
-            `${HOST}/progress/challenge`,
-            body,
-            {
+          try {
+            const response = await axios.post(`${HOST}/blob`, body, {
               headers,
-            },
-          );
-          return response.data;
+            });
+            return new Ok(response.data);
+          } catch (err) {
+            console.log(err);
+            return new Err(err);
+          }
         }),
       );
-
-      for (const result of results) {
-        expect(result).toBe("Success");
-      }
     };
 
-    await Promise.all(
+    const results = await Promise.all(
       new Array(NUMBER_OF_USERS).fill(1).map(async () => testAPI()),
     );
 
-    /* [1] */
+    const flattenedResults = results.reduce((flat, x) => flat.concat(x));
+    const valid = flattenedResults.filter(x => !!x.value);
+
     const end = Date.now();
-    const time = end - start;
-    const RPS = (TOTAL_REQUESTS / time) * 1000;
-    console.log(`Handled ${TOTAL_REQUESTS} requests in ${time} milliseconds.`);
-    console.log(`That's about ${RPS} requests per second.`);
+    const time = (end - start) / 1000;
+    const RPS = TOTAL_REQUESTS / time;
+    console.log(`Handled ${TOTAL_REQUESTS} requests in ${time} seconds.`);
+    console.log(`That's about ${RPS.toLocaleString()} requests per second.`);
+
+    if (valid.length !== TOTAL_REQUESTS) {
+      throw new Error(
+        `Stress Test failed! Attempted ${TOTAL_REQUESTS} total requests but only ${valid.length} succeeded.`,
+      );
+    } else {
+      expect(true).toBe(true);
+    }
 
     done();
   });
