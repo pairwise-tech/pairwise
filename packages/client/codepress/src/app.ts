@@ -107,10 +107,14 @@ class CourseAPI {
          * course filenames are sorted before they are read so they
          * will be in a predicable order here.
          */
+
+        // NOTE: Pairwise Library is not included for now.
+        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [PairwiseContent, FullstackTypeScript] = courses;
 
         // Manually match the order provided by ContentUtilityClass:
-        const courseList = [FullstackTypeScript, PairwiseContent];
+        const courseList = [FullstackTypeScript];
         this.cache = makeCache(courseList);
         return this.resolveFromCache();
       });

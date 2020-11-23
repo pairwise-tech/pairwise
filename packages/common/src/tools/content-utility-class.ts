@@ -1,4 +1,8 @@
-import PairwiseLibrary from "../courses/00_pairwise_library.json";
+/**
+ * NOTE: This course is hidden for now. Simply uncomment it and add it to the
+ * courseList at the bottom of the file to restore it.
+ */
+// import PairwiseLibrary from "../courses/00_pairwise_library.json";
 import FullstackTypeScript from "../courses/01_fullstack_typescript.json";
 import {
   CourseList,
@@ -252,7 +256,8 @@ class ContentUtilityClass {
  * ============================================================================
  */
 
-const courseList = [FullstackTypeScript, PairwiseLibrary];
+// Add any additional courses to this list:
+const courseList = [FullstackTypeScript];
 
 const ContentUtility = new ContentUtilityClass(courseList as CourseList);
 
