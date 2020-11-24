@@ -4489,7 +4489,7 @@
         {
           "id": "wf9ggEKbq",
           "type": "typescript",
-          "title": "Getting Started with MongoDB",
+          "title": "MongoDB Intro Challenge",
           "instructions": "Let's insert a user into a MongoDB collection using the `insertOne` method\\. A [MongoDB collection](https://docs.mongodb.com/manual/reference/method/js-collection/) is available for you to use under the name `usersCollection`. Good luck\\!",
           "testCode": "test(\"A user named Joe with email joe@mail.com should be created using MongoDB `insertOne` query.\", async () => {\n  const name = \"Joe\";\n  const email = \"joe-blega-blogga@mail.com\";\n  await insertUser({ name, email });\n  const args = usersCollection.getArgs();\n  const result = await executeMongoDBQuery(args);\n\n  console.log(result);\n  expect(result.name).toBe(name);\n  expect(result.email).toBe(email);\n  expect(typeof result._id).toBe(\"string\");\n});\n",
           "videoUrl": "",
@@ -4506,7 +4506,18 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "It's time to start using some real databases\\! In these projects you will build simple applications which interact with a real, live database\\!"
+          "content": "Now let's get some practice working with real databases."
+        },
+        {
+          "id": "RJQvHawqD",
+          "type": "project",
+          "title": "Setup a PostgreSQL Database",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, write some SQL scripts to create a PostgreSQL database to represent an e\\-commerce store from scratch which defines tables according to the following requirements:\n\n* 3 Tables exist for products customers, and orders.\n* The `Customers` table should contain customer entries.\n* The `Products` table should contain entries for products in the store.\n* The `Orders` table should reference the product and customer for an order. Assume an order only references a single product.\n* The tables schema adhere to the following pseudocode definitions:\n\n\n```\nProduct {\n    id           // Unique id for product\n    name         // Product name\n    description  // Product description\n    price        // Product price (a number, e.g. 100 = $100.00).\n}\n\nCustomer {\n    id           // Unique id for customer\n    username     // Customer username\n    email        // Customer email address\n    address      // Customer address\n}\n\nOrder {\n    date         // Date type for when the order occurred\n    product      // Reference to the product contained in the order\n    customer     // Reference to the customer the order belongs to\n}\n\n```\n\n"
         },
         {
           "id": "qe2LFM0mp",
