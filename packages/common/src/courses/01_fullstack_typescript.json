@@ -4467,13 +4467,13 @@
         {
           "id": "GgJrDl$br",
           "type": "media",
-          "title": "Creating and Altering Tables",
+          "title": "Managing Databases and Tables",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "We have covered the main SQL statements which exist to query, insert, update, and delete data in a SQL database. There are a few other SQL statements to be aware of, in addition to these basic ones."
+          "content": "We have covered the main SQL statements which exist to query, insert, update, and delete data in a SQL database. There are a few other SQL statements to be aware of, in addition to these basic ones. We can also use SQL to create and alter tables, and to create and remove databases.\n\nA SQL database server can support multiple \"databases\", each of which can contain multiple tables. Database administrator users will be able to create and remove databases, and can access specific rights and privileges to other users with regard to make database and table updates.\n# SQL Database Commands\n\nIn SQL, we can create a new database with a command like:\n\n```\nCREATE DATABASE databasename;\n\n```\n\nAssuming your user has the rights to create a database, this command will create a database with the `databasename` you provided in the query.\n# SQL Table Commands\n\nLet's assume we create a new database called `testdatabase`.\n\n```\nCREATE DATABASE testdatabase;\n\n```\n\nThen, we want to add a table to it called `users`:\n\n```\nCREATE TABLE IF NOT EXISTS users (\n  id SERIAL PRIMARY KEY,\n  name VARCHAR(100),\n  email VARCHAR(100) UNIQUE NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n)\n\n```\n\nNow, let's say we want to add a new column for a `username`:\n\n```\nALTER TABLE users\nADD username VARCHAR(100);\n\n```\n# Removing Databases and Tables\n\nFinally, let's say we want to drop the table and then drop the database as well:\n\n```\nDROP TABLE users\nDROP DATABASE test_database\n\n```\n\nAs you can see, it is fairly straightforward to implement these basic operations with the direct, declarative syntax of SQL. Other operations can be achieved with some variations of the above, e.g. dropping columns from tables:\n\n```\nALTER TABLE users\nDROP COLUMN username;\n\n```\n"
         },
         {
           "id": "zrf$D7rpQ",
@@ -4484,7 +4484,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Non\\-relational databases, in contrast to relational databases, do not define specific relationships between data and are better suited for storing unstructured data."
+          "content": "In this section, we will introduce non\\-relational databases, which, in contrast to SQL databases, are better suited for storing unstructured documents of data."
         },
         {
           "id": "wf9ggEKbq",
@@ -4518,6 +4518,39 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In these special topics we will cover a lot of supplementary topics related to databases. As you might guess database engineering is a broad and vast topic, with a lot of room for specialization. Here, we will cover some other popular database technologies and discuss other topics such as performance and scalability."
+        },
+        {
+          "id": "J$MLen2D@",
+          "type": "media",
+          "title": "Scaling Databases",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "EpZqtPin5",
+          "type": "media",
+          "title": "Redis",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "4GxSyiQoW",
+          "type": "media",
+          "title": "Graph Databases",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
         }
       ]
     },
