@@ -4446,11 +4446,11 @@
           "id": "Q6wrmX6TN",
           "type": "typescript",
           "title": "The SQL UPDATE Statement",
-          "instructions": "To update an existing database entry, we can use the `UPDATE` statement\\.",
-          "testCode": "test(\"`variable` should be defined.\", () => {\n  pass();\n});\n",
+          "instructions": "To update an existing database entry, we can use the `UPDATE` statement:\n\n```\nUPDATE table_name\nSET column1 = value1, column2 = value2, ...\nWHERE condition;\n\n```\n\nThe \"condition\" is basically a clause you must supply so the SQL statement knows how to match the entry you are updating. For instance, if we are updating a user with name Fred, the condition could be `where name = 'Fred'`. In the editor below, write a SQL statement to change the email address of a user using an `UPDATE` statement\\.",
+          "testCode": "test(\"A user named Vance with email `vance@gmail.com` exists. Let's update his email address to `vance500@gmail.com`.\", async () => {\n  try {\n    const INSERT =\n      \"DELETE FROM users; INSERT INTO users (name, username, email) VALUES ('Vance', 'vance-guy', 'vance@gmail.com');\";\n    const SELECT = \"SELECT * FROM users\";\n    const result = await executePostgresQuery(INSERT, SQL, SELECT);\n    console.log(result);\n    const first = result.rows[0];\n    expect(first.name).toBe(\"Vance\");\n    expect(first.email).toBe(\"vance500@gmail.com\");\n  } catch (err) {\n    throw err;\n  }\n});\n",
           "videoUrl": "",
           "starterCode": "// Your SQL here:\nconst SQL = \"\";\n",
-          "solutionCode": "",
+          "solutionCode": "// Your SQL here:\nconst SQL =\n  \"UPDATE users SET email = 'vance500@gmail.com' where email = 'vance@gmail.com'\";\n",
           "content": ""
         },
         {
