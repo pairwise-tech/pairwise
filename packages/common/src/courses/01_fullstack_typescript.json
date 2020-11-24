@@ -4457,11 +4457,11 @@
           "id": "LzZJLUJI0",
           "type": "typescript",
           "title": "The SQL DELETE Statement",
-          "instructions": "To remove a row from a SQL database, we can use the `DELETE` statement\\.",
-          "testCode": "test(\"`variable` should be defined.\", () => {\n  pass();\n});\n",
+          "instructions": "To remove a row from a SQL database, we can use the `DELETE` statement, also supplying a `WHERE` condition, as follows:\n\n```\nDELETE FROM table_name WHERE condition;\n\n```\n\nWe have our same `Vance` user in the database, now with our updated email: `vance500@gmail.com`. Let's remove him with a `DELETE` statement\\!",
+          "testCode": "test(\"A user named Vance with email `vance500@gmail.com` exists. Let's remove him using a SQL `DELETE` statement.\", async () => {\n  try {\n    const INSERT =\n      \"DELETE FROM users; INSERT INTO users (name, username, email) VALUES ('Vance', 'vance-guy', 'vance500@gmail.com');\";\n    const SELECT = \"SELECT * FROM users\";\n    const result = await executePostgresQuery(INSERT, SQL, SELECT);\n    console.warn(\"[QUERY RESULT FROM TEST ENVIRONMENT]:\");\n    console.log(result);\n    expect(result.rows.length).toBe(0);\n  } catch (err) {\n    throw err;\n  }\n});\n",
           "videoUrl": "",
           "starterCode": "// Your SQL here:\nconst SQL = \"\";",
-          "solutionCode": "// Your SQL here:\nconst SQL = \"\";",
+          "solutionCode": "// Your SQL here:\nconst SQL = \"DELETE from users WHERE email = 'vance500@gmail.com'\";\n",
           "content": ""
         },
         {
