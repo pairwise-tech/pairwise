@@ -26,6 +26,7 @@ import {
 import { UserService } from "../user/user.service";
 import { captureSentryException } from "../tools/sentry-utils";
 import { slackService, SlackService } from "../slack/slack.service";
+import { emailService, EmailService } from "../email/email.service";
 
 /** ===========================================================================
  * Types & Config
@@ -56,6 +57,7 @@ interface PurchaseCourseRequest {
 export class PaymentsService {
   private readonly stripe: Stripe;
   private readonly slackService: SlackService;
+  private readonly emailService: EmailService;
 
   private COURSE_CURRENCY: string;
   private PAIRWISE_ICON_URL: string;
@@ -73,9 +75,8 @@ export class PaymentsService {
     });
 
     this.stripe = stripe;
-
-    // Initialize Slack service
     this.slackService = slackService;
+    this.emailService = emailService;
 
     this.PAIRWISE_ICON_URL = ENV.PAIRWISE_CHECKOUT_ICON;
     this.COURSE_CURRENCY = PRICING_CONSTANTS.ACCEPTED_CURRENCY;
@@ -150,13 +151,12 @@ export class PaymentsService {
           `[STRIPE]: Checkout session completed event received for user: ${email} and course: ${courseId}`,
         );
         await this.handlePurchaseCourseRequest({ userEmail: email, courseId });
+
         // Post message to Slack
         this.slackService.postCoursePurchaseMessage();
 
-        /**
-         * TODO: We should deliver an email confirmation to users. Do they
-         * receive an email confirmation from Stripe?
-         */
+        // Send payment confirmation email to the user
+        this.emailService.sendPaymentConfirmationEmail(email);
 
         return SUCCESS_CODES.OK;
       } else {

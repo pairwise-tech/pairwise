@@ -6,6 +6,7 @@ import {
   getWelcomeEmailContents,
   getMagicEmailLinkContents,
   getVerificationLinkContents,
+  getPaymentConfirmationEmail,
 } from "./templates/index";
 
 /** ===========================================================================
@@ -58,7 +59,7 @@ export class EmailService {
       ...getMagicEmailLinkContents(link),
     };
 
-    await this.email(request);
+    await this.email(request, true);
   }
 
   public async sendEmailVerificationLink(email: string, link: string) {
@@ -67,7 +68,7 @@ export class EmailService {
       ...getVerificationLinkContents(link),
     };
 
-    await this.email(request);
+    await this.email(request, true);
   }
 
   public async sendWelcomeEmail(email: string) {
@@ -79,7 +80,19 @@ export class EmailService {
     await this.email(request, false);
   }
 
-  private async email(emailRequest: EmailRequest, shouldEscalateError = true) {
+  public async sendPaymentConfirmationEmail(email: string) {
+    const request: EmailRequest = {
+      recipient: email,
+      ...getPaymentConfirmationEmail(),
+    };
+
+    await this.email(request, false);
+  }
+
+  private async email(
+    emailRequest: EmailRequest,
+    shouldEscalateError: boolean,
+  ) {
     const { subject, text, html, recipient } = emailRequest;
 
     /**
