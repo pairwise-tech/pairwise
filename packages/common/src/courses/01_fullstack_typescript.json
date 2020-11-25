@@ -4529,39 +4529,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In these special topics we will cover a lot of supplementary topics related to databases. As you might guess database engineering is a broad and vast topic, with a lot of room for specialization. Here, we will cover some other popular database technologies and discuss other topics such as performance and scalability."
-        },
-        {
-          "id": "J$MLen2D@",
-          "type": "media",
-          "title": "Scaling Databases",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
-        },
-        {
-          "id": "EpZqtPin5",
-          "type": "media",
-          "title": "Redis",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
-        },
-        {
-          "id": "4GxSyiQoW",
-          "type": "media",
-          "title": "Graph Databases",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
         }
       ]
     },
