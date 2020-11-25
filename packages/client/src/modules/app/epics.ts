@@ -281,6 +281,11 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
   );
 };
 
+/** ===========================================================================
+ * Analytics Epics
+ * ============================================================================
+ */
+
 interface AmplitudeInstance {
   setUserId: (x: string) => void;
   logEvent: (x: string, opts?: any) => void;
@@ -294,6 +299,15 @@ declare global {
   interface Window {
     amplitude?: Amplitude;
   }
+}
+
+export enum ANALYTICS_EVENTS {
+  RETURNING_USER = "RETURNING_USER",
+  CHALLENGE_COMPLETE = "CHALLENGE_COMPLETE",
+  REVEAL_SOLUTION_CODE = "REVEAL_SOLUTION_CODE",
+  FEEDBACK_SUBMITTED = "FEEDBACK_SUBMITTED",
+  LAUNCH_SCREENSAVER = "LAUNCH_SCREENSAVER",
+  START_POMODORO_SESSION = "START_POMODORO_SESSION",
 }
 
 /**
@@ -315,7 +329,7 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
       const amp = amplitude?.getInstance();
       if (amp && profile) {
         amp.setUserId(profile.uuid);
-        amp.logEvent("RETURNING_USER", {
+        amp.logEvent(ANALYTICS_EVENTS.RETURNING_USER, {
           email: profile.email || "<EMAIL_UNKNOWN>",
         });
       }
@@ -332,7 +346,7 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
       const amp = amplitude?.getInstance();
       const { complete, ...props } = x.payload;
       if (amp) {
-        amp.logEvent("CHALLENGE_COMPLETE", props);
+        amp.logEvent(ANALYTICS_EVENTS.CHALLENGE_COMPLETE, props);
       }
     }),
     ignoreElements(),
@@ -349,7 +363,7 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
         challengeId: state$.value.challenges.currentChallengeId,
       };
       if (amp) {
-        amp.logEvent("REVEAL_SOLUTION_CODE", props);
+        amp.logEvent(ANALYTICS_EVENTS.REVEAL_SOLUTION_CODE, props);
       }
     }),
     ignoreElements(),
@@ -359,10 +373,20 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
     filter(isActionOf(Actions.submitUserFeedback)),
     withLatestFrom(amp$),
     tap(([x, amp]) => {
-      amp.logEvent("FEEDBACK_SUBMITTED", {
+      amp.logEvent(ANALYTICS_EVENTS.FEEDBACK_SUBMITTED, {
         challengeId: x.payload.challengeId,
         type: x.payload.type,
       });
+    }),
+    ignoreElements(),
+  );
+
+  const screensaverAnalytic$ = action$.pipe(
+    filter(isActionOf(Actions.setScreensaverState)),
+    filter(x => !!x.payload),
+    withLatestFrom(amp$),
+    tap(([_, amp]) => {
+      amp.logEvent(ANALYTICS_EVENTS.LAUNCH_SCREENSAVER);
     }),
     ignoreElements(),
   );
@@ -372,6 +396,7 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
     completionAnalytic$,
     feedbackAnalytic$,
     revealSolutionAnalytic$,
+    screensaverAnalytic$,
   ).pipe(
     catchError((err, stream) => {
       console.warn(`[Low Priority] Analytics error: ${err.message}`);

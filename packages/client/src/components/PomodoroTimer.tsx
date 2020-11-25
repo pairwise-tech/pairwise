@@ -4,6 +4,7 @@ import { IconButton, ExternalLink } from "./Shared";
 import styled from "styled-components";
 import { COLORS } from "tools/constants";
 import toaster from "../tools/toast-utils";
+import { ANALYTICS_EVENTS } from "../modules/app/epics";
 
 /** ===========================================================================
  * Types & Config
@@ -187,6 +188,17 @@ export class PomodoroTimer extends React.Component<IProps, IState> {
         toaster.warn("Pomodoro session stopped.");
       },
     );
+  };
+
+  logAnalyticsEvent = () => {
+    try {
+      const amp = window?.amplitude?.getInstance();
+      if (amp) {
+        amp.logEvent(ANALYTICS_EVENTS.START_POMODORO_SESSION);
+      }
+    } catch (err) {
+      // Nothing...
+    }
   };
 }
 
