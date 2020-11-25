@@ -36,7 +36,8 @@
     "schema:log": "yarn typeorm schema:log",
     "migrations:reset": "yarn schema:drop && rm -rf src/migrations && mkdir src/migrations",
     "db:reset": "yarn schema:drop && yarn setup:db",
-    "db": "docker-compose up"
+    "db": "docker-compose up",
+    "edit:email": "open -a \"Google Chrome\" src/email/templates/index.html"
   },
   "dependencies": {
     "@nestjs/cli": "7.5.1",

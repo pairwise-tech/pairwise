@@ -9,6 +9,10 @@
  * https://htmlemail.io/inline/ to convert the HTML document to inline-styles
  * to use as an email, and then copy the result into this file here.
  *
+ * The HTML files are preserved in this folder, in addition to an index.html
+ * which is used for editing HTML content directly. Open this with the
+ * edit:email npm command.
+ *
  * NOTE: The conversion tool may not work perfectly! You should verify the
  * output is correct, and you may need to search and use a different tool.
  * ============================================================================
@@ -132,5 +136,122 @@ export const getWelcomeEmailContents = () => {
     subject: "Welcome to Pairwise! 💫",
     html: WELCOME_HTML,
     text: WELCOME_TEXT,
+  };
+};
+
+/** ===========================================================================
+ * Payment Confirmation Email
+ * ============================================================================
+ */
+
+const PAYMENT_CONFIRMATION_HTML = `
+<html>
+  <body style="margin: 0; padding: 0; color: rgb(35, 35, 35); background-color: rgb(245, 245, 245); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', sans-serif;">
+    <div class="top" style="padding-top: 32px; padding-bottom: 32px; background-color: rgb(35, 35, 35);">
+      <div class="top-content" style="text-align: center; margin: auto; max-width: 500px;">
+        <img alt="Pairwise Logo" src="https://avatars0.githubusercontent.com/u/59724684?s=200&v=4" style="height: 100px; width: 100px;" width="100" height="100">
+        <h1 style="margin: 12px; color: white; font-size: 36px;">Thank You!</h1>
+      </div>
+    </div>
+    <div class="bottom" style="margin: auto; max-width: 500px; padding-top: 12px; padding-bottom: 36px;">
+      <div class="bottom-content" style="padding: 10px; max-width: 525px;">
+        <h2>Thank you for purchasing the Pairwise FullStack Web Development Course!</h2>
+        <p>
+          We genuinely appreciate your support, and hope to provide you with the best learning experience possible. In addition to the
+          initial modules which cover HTML, CSS, and TypeScript, the course covers the following topics:
+        </p>
+        <ul>
+          <li style="font-style: italic;">
+            Async Programming & APIs
+          </li>
+          <li style="font-style: italic;">
+            Frontend Programming
+          </li>
+          <li style="font-style: italic;">
+            Backend Programming
+          </li>
+          <li style="font-style: italic;">
+            Databases
+          </li>
+          <li style="font-style: italic;">
+            Mobile Development
+          </li>
+          <li style="font-style: italic;">
+            Testing Software
+          </li>
+          <li style="font-style: italic;">
+            Refactoring & Debugging
+          </li>
+          <li style="font-style: italic;">
+            Delivery & Deployment
+          </li>
+          <li style="font-style: italic;">
+            Capstone Projects
+          </li>
+          <li style="font-style: italic;">
+            Career & Interview
+          </li>
+        </ul>
+        <p>
+          We recommend trying to work through the course in the sequence it is presented in. However, you are free to skip
+          around as you see fit.
+        </p>
+        <p>
+          <b>NOTE:</b> The course is still in beta right now. What this means is a lot of content is still being actively developed.
+          You will see the course content changing frequently, and new features being added to the platform.
+        </p>
+        <h2>Thanks again! 🎉</h2>
+        <i>- Sean, Pairwise Founder</i>
+        <div class="break" style="margin-top: 16px; height: 1px; width: 100%; background-color: rgb(35, 35, 35);"></div>
+        <p class="small-text" style="font-size: 12px;">
+          Follow us on:
+          <a target="_blank" href="https://www.youtube.com/channel/UCG52QHurjYWfqFBQR_60EUQ" style="color: blue; text-decoration: none;">YouTube</a>
+          |
+          <a target="_blank" href="https://twitter.com/PairwiseTech" style="color: blue; text-decoration: none;">Twitter</a>
+        </p>
+        <p class="small-text" style="font-size: 12px;">
+          * If you have any questions, please just respond to this email. You can also request a refund up to
+          30 days after your purchase.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+`;
+
+const PAYMENT_CONFIRMATION_TEXT = `
+Thank you for purchasing the Pairwise FullStack Web Development Course!
+
+We genuinely appreciate your support, and hope to provide you with the best learning experience possible. In addition to the initial modules which cover HTML, CSS, and TypeScript, the course covers the following topics:
+
+- Async Programming & APIs
+- Frontend Programming
+- Backend Programming
+- Databases
+- Mobile Development
+- Testing Software
+- Refactoring & Debugging
+- Delivery & Deployment
+- Capstone Projects
+- Career & Interview
+
+We recommend trying to work through the course in the sequence it is presented in. However, you are free to skip around as you see fit.
+
+NOTE: The course is still in beta right now. What this means is a lot of content is still being actively developed. You will see the course content changing frequently, and new features being added to the platform.
+
+Thanks again! 🎉
+
+- Sean, Pairwise Founder
+
+* If you have any questions, please just respond to this email. You can also request a refund up to 30 days after your purchase.
+`;
+
+export const getPaymentConfirmationEmail = () => {
+  return {
+    subject: "Pairwise Payment Confirmation 💫",
+    html: PAYMENT_CONFIRMATION_HTML,
+    text: PAYMENT_CONFIRMATION_TEXT,
   };
 };

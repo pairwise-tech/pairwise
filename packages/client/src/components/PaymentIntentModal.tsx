@@ -4,12 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
-import {
-  ModalContainer,
-  ModalTitleText,
-  ModalSubText,
-  Loading,
-} from "./Shared";
+import { ModalContainer, ModalTitleText, Loading } from "./Shared";
 import { COLORS } from "tools/constants";
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 
@@ -45,8 +40,8 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
       checkoutLoading,
       emailVerificationStatus,
     } = this.props;
-    const { profile } = user;
 
+    const { profile } = user;
     if (!courseToPurchase || !profile) {
       return null;
     }
@@ -69,31 +64,37 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
           </ModalContainer>
         ) : hasEmail ? (
           <ModalContainer>
-            <ModalTitleText>Purchase Course</ModalTitleText>
-            <ModalSubText>
-              Purchasing the <CourseTitle>{courseToPurchase.title}</CourseTitle>{" "}
-              course will give you full lifetime access to the course content
-              and is fully refundable up to 60 days.
-            </ModalSubText>
-            <ModalSubText>
-              <b>Please note: </b>We are still building the course content! We
-              will be continuously adding additional content as we complete it,
-              and aim for the initial version of the course to be completed by
-              the end of 2020. Your course purchase will give you access to all
-              of the course content which we add in the future.
-            </ModalSubText>
+            <ModalTitleText>Pairwise Beta Launch</ModalTitleText>
+            <Text>
+              The Pairwise <CourseTitle>{courseToPurchase.title}</CourseTitle>{" "}
+              is currently for sale. If you are reading this, you are one of the
+              early Pairwise users. Thank you for your support! Our goal is to
+              provide you with the best learning experience possible.
+            </Text>
+            <Text>
+              You can now purchase the course for <PriceText>$50 USD</PriceText>
+              . This will allow you to lock in full lifetime access to all of
+              the existing and future content.
+            </Text>
+            <Text>
+              The HTML & CSS and TypeScript modules will remain free and
+              accessible to everyone.
+            </Text>
             <Button
               large
               intent="primary"
               id="start-checkout-button"
-              style={{ marginTop: 20 }}
+              style={{ marginTop: 20, marginBottom: 20 }}
               onClick={() => this.confirmPurchase(courseToPurchase.id)}
             >
               Start Checkout
             </Button>
-            <SmallPoint>
+            <SmallPointText>
               You will be redirected to Stripe to complete the checkout process.
-            </SmallPoint>
+            </SmallPointText>
+            <SmallPointText>
+              * Purchases are fully refundable up to 30 days after payment.
+            </SmallPointText>
           </ModalContainer>
         ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.LOADING ? (
           <ModalContainer>
@@ -103,17 +104,15 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
         ) : emailVerificationStatus === EMAIL_VERIFICATION_STATUS.SENT ? (
           <ModalContainer>
             <ModalTitleText>Email Sent</ModalTitleText>
-            <ModalSubText>
-              Please check your email for further instructions.
-            </ModalSubText>
+            <Text>Please check your email for further instructions.</Text>
           </ModalContainer>
         ) : (
           <ModalContainer>
             <ModalTitleText>Enter Email</ModalTitleText>
-            <ModalSubText>
+            <Text>
               Please provide your email to continue the checkout for{" "}
               <CourseTitle>{courseToPurchase.title}</CourseTitle>.
-            </ModalSubText>
+            </Text>
             <EmailForm
               onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
                 e.preventDefault();
@@ -164,14 +163,27 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
-const SmallPoint = styled.p`
-  font-size: 12px;
-  margin-top: 26px;
-  color: ${COLORS.TEXT_CONTENT};
-`;
-
 const CourseTitle = styled.b`
   color: ${COLORS.PRIMARY_GREEN};
+`;
+
+const Text = styled.p`
+  margin-top: 8px;
+  text-align: center;
+  font-weight: 300;
+  color: ${COLORS.TEXT_WHITE};
+`;
+
+const PriceText = styled.b`
+  font-weight: bold;
+  color: ${COLORS.SECONDARY_YELLOW};
+`;
+
+const SmallPointText = styled.p`
+  font-size: 12px;
+  margin-top: 0px;
+  font-weight: 100;
+  color: ${COLORS.TEXT_WHITE};
 `;
 
 const EmailForm = styled.form`

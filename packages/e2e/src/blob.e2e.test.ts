@@ -140,21 +140,22 @@ describe("User Progress APIs", () => {
     // Check that the user's lastActiveChallengeId updated again.
     progress = await fetchProgressHistory("6T3GXc4ap");
 
-    // Update some challenge history from a different course.
-    await request(`${HOST}/blob`)
-      .post("/")
-      .send({
-        challengeId: "t$oXPf22$",
-        dataBlob: {
-          type: "challenge",
-          code: "// Some other code string!",
-        },
-      })
-      .set("Authorization", authorizationHeader)
-      .expect(201)
-      .expect(response => {
-        expect(response.text).toBe("Success");
-      });
+    // NOTE: The other course is not available.
+    // // Update some challenge history from a different course.
+    // await request(`${HOST}/blob`)
+    //   .post("/")
+    //   .send({
+    //     challengeId: "t$oXPf22$",
+    //     dataBlob: {
+    //       type: "challenge",
+    //       code: "// Some other code string!",
+    //     },
+    //   })
+    //   .set("Authorization", authorizationHeader)
+    //   .expect(201)
+    //   .expect(response => {
+    //     expect(response.text).toBe("Success");
+    //   });
 
     done();
   });

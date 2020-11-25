@@ -18,3 +18,8 @@ export const locationSelector = createSelector(
   appSelector,
   app => app.location,
 );
+
+export const screensaverVisible = createSelector(
+  appSelector,
+  app => app.screensaver,
+);

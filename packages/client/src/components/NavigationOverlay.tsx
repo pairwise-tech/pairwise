@@ -491,7 +491,13 @@ class NavigationOverlay extends React.Component<
     const ChallengeIconUI = isEditMode
       ? SortableHandle(ChallengeListItemIcon)
       : ChallengeListItemIcon;
+
     const toggleSection = (e: React.MouseEvent) => {
+      // Disabled for locked content
+      if (!challenge.userCanAccess) {
+        return;
+      }
+
       // Section should not expand/collapse if there are no challenges
       if (sectionChallenges.length > 0) {
         e.preventDefault();
@@ -512,7 +518,8 @@ class NavigationOverlay extends React.Component<
         className={itemActive ? "active-item" : ""}
         style={{ position: "relative", ...style }}
       >
-        <Link
+        <ChallengeLink
+          locked={challenge.userCanAccess ? "false" : "true"}
           to={`/workspace/${getChallengeSlug(challenge)}`}
           id={`challenge-navigation-${index}`}
           isActive={() => itemActive}
@@ -526,7 +533,7 @@ class NavigationOverlay extends React.Component<
             <span style={{ marginLeft: 10 }}>{challenge.title}</span>
           </span>
           <span>
-            {isSection ? (
+            {isSection && challenge.userCanAccess ? (
               <HoverableBadge onClick={toggleSection}>
                 <BadgeDefaultContent>
                   {sectionChallengesComplete} of {sectionChallengeCount}{" "}
@@ -550,7 +557,7 @@ class NavigationOverlay extends React.Component<
               </NavIcons>
             )}
           </span>
-        </Link>
+        </ChallengeLink>
         {this.renderChallengeCodepressButton(course, module, index)}
       </ChallengeNavigationItem>
     );
@@ -712,7 +719,12 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
   }
 `;
 
-const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
+interface ChallengeLinkProps extends NavLinkProps {
+  locked: "true" | "false"; // To circumvent a React DOM attribute warning message...
+  active?: boolean;
+}
+
+const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   cursor: pointer;
   padding: 12px;
   border: 1px solid transparent;
@@ -737,7 +749,8 @@ const Link = styled(NavLink)<NavLinkProps & { active?: boolean }>`
     transition: all 0.15s ease-out;
     transform: scale(0);
     width: 3px;
-    background: ${COLORS.GRADIENT_GREEN};
+    background: ${props =>
+      props.locked === "true" ? "rgb(135,135,135)" : COLORS.GRADIENT_GREEN};
   }
 
   &.active {
@@ -842,19 +855,25 @@ const ChallengeListItemIcon = ({
     }
   }
 
+  if (!challenge.userCanAccess) {
+    tooltipContent = "You must purchase the course to access this challenge.";
+  }
+
+  const icon = getChallengeIcon(
+    challenge.type,
+    challenge.userCanAccess,
+    challengeProgress,
+  );
+
   return (
     <Tooltip
       content={tooltipContent}
       disabled={!isSection && challengeProgress === "NOT_ATTEMPTED"}
     >
       <RotatingIcon
+        icon={icon}
         isRotated={isSectionOpen}
         iconSize={Icon.SIZE_LARGE}
-        icon={getChallengeIcon(
-          challenge.type,
-          challenge.userCanAccess,
-          challengeProgress,
-        )}
         id={`challenge-${index}-icon-${challengeProgress}`}
         className={challenge.type !== "section" ? iconExtraClass : ""}
         {...props}

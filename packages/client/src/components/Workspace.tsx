@@ -271,7 +271,10 @@ class Workspace extends React.Component<IProps, IState> {
      * mechanism against infinite loops or recursion which can be very
      * hard for the user to recover from.
      */
-    if (this.props.challenge.type === "markup") {
+    if (
+      this.props.challenge.type === "markup" &&
+      this.props.challenge.id !== SANDBOX_ID
+    ) {
       this.runChallengeTests();
     }
 

@@ -3641,17 +3641,6 @@
           "content": "In this section, you will learn how to build applications on your own computer\\! You will learn how to download the software you need, manage a codebase using version control, Git, and GitHub, and deploy your software projects for the world to see\\!"
         },
         {
-          "id": "s2smKN6w6",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "In this section we will present some guided explanations for building and deploying your own applications."
-        },
-        {
           "id": "l$ZcH5bp5",
           "type": "section",
           "title": "Special Topics",
@@ -3674,28 +3663,6 @@
           "content": "You probably already know that you can install software on your computer. Things like VSCode, Firefox and Excel are all examples.\n\nYou can _also_ install software on the command line. You will just need a piece of software called a package manager. \n# Package Managers\n\nA package manager is somewhat like an app store for the command line. You use a package manager to install other software. A \"package\" is just another word for software.\n\n\n## apt: Windows and Linux\n\nOn Linux we have `apt`, which you will also have on Windows if you set up your system as we described earlier in this module \\(here's a [link](/workspace/RCm1HkcbQ) if you missed it\\). Linux already has a package manger installed and it's called `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\napt install <package>\n\n# List all the currently installed packages\napt list --installed\n\n# Show information for a specific package\napt show <package>\n\n# Search for a package\napt search <package>\n\n```\n\n## brew: Mac\n\nOn a Mac, things are not so simple. We have to install a third\\-party package manager called Homebrew. The latest instructions to install Homebrew can be found on their site: [https://brew.sh/](https://brew.sh/)\n\nAs of this writing the installation command is:\n\n```\n/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)\"\n\n```\n\nHomebrew uses a command called `brew`. Once you have `brew` installed you can start using it much like `apt`.\n\n### Examples\n\nIn the examples below I'll use `<package>` to denote any package you might want to install. When you want a specific package be sure to replace `<package>` with the specific thing you want to install.\n\n```bash\n# Install a specific package\nbrew install <package>\n\n# List all the currently installed packages\nbrew list\n\n# Show information for a specific package\nbrew info <package>\n\n# Search for a package\nbrew search <package>\n\n```\n"
         },
         {
-          "id": "ToK3fsCUD",
-          "type": "media",
-          "title": "Pipes and Composition",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "TODO: This content has not yet been written."
-        },
-        {
-          "id": "ZpmwkFp0r",
-          "type": "media",
-          "title": "xargs: More pipes!",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "TODO: This content has not yet been written.\nWhat to do when commands don't want to pipe...\n"
-        },
-        {
           "id": "CLkUN2Zhg",
           "type": "media",
           "title": "ln: Linking",
@@ -3705,50 +3672,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "Sometimes you want the same file or directory in several places at once. How does that work? With links. Specifically, symbolic links. \"Sym links\" for short.\n# Symbolic Links\n\nThe `ln` command will create links. This command is a bit odd though, because we _always_ use it with the `-s` flag, which means symbolic.\n\nLet's say you have a `Photos/` directory located at `/Users/me/Documents/Archive/Photos`. This is where you keep all your photos because the parent directory, `Archive/` is automatically backed up. However, that path is sort of long and annoying to use. What do you do? \n\nCreate a symbolic link\\!\n\nLet's create a link to that file from your Desktop.\n\n```bash\nln -s /Users/me/Documents/Archive/Photos /Users/me/Desktop/Photos\n\n```\n\nNow you can access your photos right from your desktop, but the files haven't moved. They are all still in the `Archive/` directory and will all still be backed up like before. In other words, it's as if your files are in two places at once.\n\nThis is what Symbolic Links let you do.\n# Shortcuts and Aliases\n\nIn fact, this whole \"files in multiple places\" idea is so common that you're probably already familiar with it as either a \"shortcut\" or an \"alias\" depending on your operating system.\n\n* Windows uses \"Shortcuts\"\n* Mac uses \"Aliases\n\n\nThey are the same thing, a \"link\" from one location on your file system to another.\n# Why is this useful?\n\nThere is at least one very common use cases for symbolic links:\n\n* You want your code in a repo somewhere on your computer, but you also want it in your `$PATH` so it can be run or used in some way.\n\n\nFor example, when we solve the Dotfiles project we'll be using sym links to keep our actual code in a repo but still pretend our files are located directly in the user directory. "
-        },
-        {
-          "id": "48aH563rG",
-          "type": "media",
-          "title": "bash: The program to run all programs",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "TODO: This content has not yet been written."
-        },
-        {
-          "id": "$0ICxz1DQ",
-          "type": "media",
-          "title": "jq: Do Stuff with JSON",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "TODO: This content has not yet been written."
-        },
-        {
-          "id": "iC$3Bijan",
-          "type": "media",
-          "title": "which: Is Something Installed?",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "TODO: This content has not yet been written.\n\n*  `which` and `which -a`.\n\n"
-        },
-        {
-          "id": "uRWJVdzO3",
-          "type": "media",
-          "title": "Basic Security",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "TODO: This content has not yet been written.\n\n* Don't post screenshots of your `env` to twitter... \n* Sharing code without sharing secrets\n* Inline env vars\n\n"
         }
       ]
     },
@@ -4287,17 +4210,6 @@
           "content": "# Overview\n\nBuild a command line tool which allows you to view definitions and synonyms for English words.\n\nYou can use the [WordsAPI](https://www.wordsapi.com/) for this project. Like the Weatherstack API from the other challenge, you will need to sign up and get an access key to use this API. To do that, you will need to signup via [RapidAPI](https://rapidapi.com/) \\(which is actually a great service which will give you access to a number of other API providers as well\\).\n# User Stories\n\nYour command line program should allow a user to lookup words and view synonyms for words.\n\n* As a user, I am greeted with a prompt when I run the program which allows me to enter a word. When I type a word and press \"enter\" I see a list of definitions for that word \\(use the `/definitions` API\\).\n* As a user, after searching a word I have an option to view synonyms \\(use the `/synonyms` API\\), or search for another word.\n* As a user, errors from searching for invalid words are handled correctly and allow me to search for another word.\n\n\nOnce you have completed your project and pushed it to GitHub, enter your repository URL here to complete the challenge. Good luck\\!\n# Challenge\n\n* The WordsAPI provides a lot of different options. Consider enriching your program's functionality with some of the other API features like antonyms, rhymes, examples, frequency, etc.\n* Display the synonyms for words as selectable command line options which a user can navigate through using the up and down arrow keys and then select with the \"enter\" key. Selecting a synonym should then search and display the definition for that synonym.\n* Maintain a history of word searches the user has performed while the program is running. A user can view this history of words at any time as a list of selectable options and navigate to any word and view that definition again.\n* The program should cache results while it is running, so if a user selects or searches the same word more than once the program should return the cached result instead of making another request to the API.\n\n"
         },
         {
-          "id": "zq3sEi606",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here we will walk through some guided explanations of building and working with APIs. This should give you a sense of how these skills can be applied in the real\\-world applications."
-        },
-        {
           "id": "WdG@C4ceE",
           "type": "section",
           "title": "Special Topics",
@@ -4390,7 +4302,7 @@
     {
       "free": false,
       "id": "ZdkSjC9P",
-      "title": "UI Programming",
+      "title": "Frontend Development",
       "challenges": [
         {
           "free": true,
@@ -4427,17 +4339,6 @@
           "content": "In the React projects section you will build some real\\-world projects using React. Get ready, this will be your first major projects to showcase in your portfolio\\!"
         },
         {
-          "id": "O1AV1pQs@",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Now that you've had some experience building UIs with React, we will walk through some example projects which use React to build complex frontend web applications. This should give you a sense of what production React applications look like and how more complex applications can be designed."
-        },
-        {
           "id": "iJAcbGybh",
           "type": "section",
           "title": "Special Topics",
@@ -4453,7 +4354,7 @@
     {
       "free": false,
       "id": "EmSvFhW8",
-      "title": "Server Programming",
+      "title": "Backend Development",
       "challenges": [
         {
           "free": true,
@@ -4477,17 +4378,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "For these projects we will actually write and deploy a server application. Get ready, this is going to be fun\\!"
-        },
-        {
-          "id": "OWwTKTH@c",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "In this section we will walk through some projects which illustrate the backend engineering principles you have learned in some sample production applications."
         },
         {
           "id": "hY2nZf$si",
@@ -4520,20 +4410,86 @@
           "content": "In this module you will learn about databases, the technology responsible for storing all of the data used by modern software applications. Databases are crucial to building modern software applications. They are responsible for storing and backing up the data which makes your applications valuable. Whether it's user profiles, chat messages, transaction records, inventory, or anything else, these are all stored and persisted in a database.\n\nAt a basic level, a database is just a hard disk on a computer where information is stored. As we will see, there are several different types of databases, which are all used for different purposes. Like many things in software engineering, there are tradeoffs to choosing one database type over another.\n\nThe two most common types of databases are relational and non\\-relational. SQL is the canonical relational database, which you may have heard of before.  A SQL database defines a strict schema for what data and relationships between data look like. If you are using a SQL database you can rely on the database schema to enforce integrity for your data.\n\nOn the other hand, a non\\-relational database doesn't have a strict schema like a SQL database does. Non\\-relational databases are great when you have unstructured data, data in inconsistent formats, data with an unknown format, or other types of flexible requirements. Common non\\-relational databases are MongoDB and Redis, along with several others.\n\nIn this module, we will learn the basics for these different types of databases and get some practice working directly writing, reading, and updating data. This will give you the core skillset required to build a CRUD app \\(Create Read Update Delete\\).\n\nLet's get started\\!"
         },
         {
+          "id": "uDMmWREE8",
+          "type": "section",
+          "title": "Relational Databases: SQL",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# Intro\n\nYou can think of relational databases like excel spreadsheets. They consist of columns, which define what types of data can exist, and rows which contain actual data entries. Relational databases represent data with pre\\-defined relationships. These relationships are defined by a database schema. The concept is not too dissimilar from using types in a programming language like TypeScript. For instance, a database schema could define a column for a user's name which must be a string\\-like value up to a specific length.\n# Relational vs. Non\\-Relational\n\nFirst let's setup the distinction between relational and non\\-relational databases. This is probably the highest level distinction for different types of databases.\n\n* **Relational/SQL**: structured data with pre\\-defined types and relationships.\n   * Data is stored in tables.\n   * Examples include MySQL, PostgreSQL, Oracle.\n* **Non\\-relational/NoSQL**: unstructured data, with flexible types and relationships.\n   * Data is usually stored as documents, e.g. as JSON.\n   * Examples include MongoDB, Cassandra, Redis. \n\n\nIn this section, we will be covering relational databases, specifically [PostgreSQL](https://www.postgresql.org/) which is a very widely used open\\-source SQL database. In the next section, we will provide an overview of non\\-relational databases, such as MongoDB.\n\nIn brief, SQL databases are the right choice we you know in advance what your data will look like. Generally, SQL databases are the right choice for many types of applications. NoSQL databases on the other hand, are a great choice if you genuinely do not know what the data you will be storing will look like, or if there are very flexible or variable data requirements. NoSQL databases essentially allow you to store unstructured data without knowing in advance what it looks like.\n# A Quick Example\n\nHere is a simple representation of what some relational database entries might look like:\n\n```none\nid   | name     | username     | email         | created_id\n------------------------------------------------------------------------------------\n1    | Joe      | joe_coder    | joe@mail.com  | 2020-10-23 02:37:59.655231\n2    | Ryan     | ryan_z       | ryan@mail.com | 2020-11-15 14:42:21.111234\n3    | Sara     | sara         | sara@mail.com | 2020-11-23 22:13:59.112321\n\n```\n\nThis table might be created with an initial SQL query like this:\n\n```\nCREATE TABLE IF NOT EXISTS users (\n  id SERIAL PRIMARY KEY,\n  name VARCHAR(100),\n  username VARCHAR(100),\n  email VARCHAR(100) UNIQUE NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n)\n\n```\n# Structured Query Language: SQL\n\n[SQL](https://en.wikipedia.org/wiki/SQL) stands for \"Structured Query Language\" and is a query language for interacting with the structured data in relational database management systems. Broadly, these are also often referred to as SQL databases. As you can see from the above SQL example, SQL is a command\\-like language. Queries succeed or fail according to strict rules.\n\nThe above query interacts with a SQL database and creates a new table called users, only if that table does not yet exist. A SQL database can contain multiple tables, which are basically ways to separate and organize data. In the Excel spreadsheet analogy, tables are basically sheets. And, like in Excel, tables can contain references to other tables. For example, let's say we were building a chat application. We may have a `users` table such as we have defined above and then separately a `messages` table\\. The messages table could contain a column which references the users table, to indicate who is the author and recipient for each message.\n\nThe above SQL query for the `users` table defines certain rules and constraints for the data in the table. For instance, the `NOT NULL` constraint means that any data stored in a \"not null\" column cannot be `null`. If you tried to insert data into such a column with a `null` value, the transaction would fail. Likewise, the `UNIQUE` constraint on the `email` column constrains the `email` value for each row to be unique. If you try to insert a user with an email address which matches an email already held by another user, that query will fail.\n\nThe ability to defined data constraints like this is one of the powerful features of a SQL databases. It provides the developer with a high degree of control and is one of the many ways to ensure data integrity.\n# Properties of SQL Databases\n\nSQL databases provide certain features or properties which are important to be aware of:\n\n* **SQL:** they support SQL which allows tables and data to be created, updated, and removed.\n* **Data integrity:** SQL databases adhere to many data integrity rules, such that you can define types and constraints for values and relationships \\(such as the `NOT NULL` constraint above.\n* **Transaction support:** SQL databases support transactions, which are effectively a logical grouping of SQL statements which either occur in their entirety or not at all. SQL transactions are [ACID](https://en.wikipedia.org/wiki/ACID) compliant\\.\n\n\nThe data stored by a software application is usually incredibly important and valuable. SQL databases allow you to store data in a structured way which conforms to predefined constraints and relationships. This means you can have a high degree of certainty around the validity of the data stored in a SQL database.\n# Basic SQL Statements\n\nIn this section, we will cover some basic SQL query statements which are useful for performing simple operations on an SQL database. We will learn how to insert, update, and remove data, and also see how to create and alter tables and even databases."
+        },
+        {
           "id": "2W$NOg9P@",
           "type": "typescript",
-          "title": "Getting Started with SQL",
-          "instructions": "A `users` table exists in a SQL database. Try to insert a new user using the `INSERT INTO` statement\\!",
-          "testCode": "test(\"A user named Ryan with email ryan@mail.com should be created using a SQL `INSERT INTO` statement.\", async () => {\n  const TEST_SQL = \"SELECT * FROM users\";\n  const result = await executePostgresQuery(SQL, \"\", TEST_SQL);\n  console.log(result);\n  const first = result.rows[0];\n  expect(first.name).toBe(\"Ryan\");\n  expect(first.email).toBe(\"ryan@mail.com\");\n});\n",
+          "title": "The SQL SELECT Statement",
+          "instructions": "A `users` table exists in a SQL database. To query data in a table, you can use the `SELECT` statement\\. The basic syntax for the select statement is:\n\n```\nSELECT column1, column2, ... FROM table_name;\n\n```\n\nWhere you must name the columns you wish to select from the table, or, you can use the catch all `*` to select all the columns at once.\n\n> ++NOTE:++ The `SQL` query in the editor will be executed against a database within which a `users` table exists. Simply fill in the query as you see fit to solve the challenge, running the code will execute the query against this database.\n",
+          "testCode": "test(\"The `SQL` value contains a `SELECT` statement which selects all the rows and columns from the `users` table.\", async () => {\n  try {\n    const INSERT =\n      \"DELETE FROM users; INSERT INTO users (name, email) VALUES ('Ryan', 'ryan@mail.com'), ('Jim', 'jim@mail.com'), ('Fred', 'fred@mail.com');\";\n    const result = await executePostgresQuery(INSERT, SQL, SQL);\n\n    const first = result.rows[0];\n    expect(first.name).toBe(\"Ryan\");\n    expect(first.email).toBe(\"ryan@mail.com\");\n\n    const second = result.rows[1];\n    expect(second.name).toBe(\"Jim\");\n    expect(second.email).toBe(\"jim@mail.com\");\n\n    const third = result.rows[2];\n    expect(third.name).toBe(\"Fred\");\n    expect(third.email).toBe(\"fred@mail.com\");\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your SQL here:\nconst SQL = \"\";\n",
+          "solutionCode": "// Your SQL here:\nconst SQL = \"SELECT * FROM users\";\n",
+          "content": ""
+        },
+        {
+          "id": "ogGvBc5sl",
+          "type": "typescript",
+          "title": "The SQL INSERT INTO Statement",
+          "instructions": "We can insert new data into a SQL table with the `INSERT INTO` SQL statement. Like the `SELECT` statement, inserting data adheres to a simple syntax:\n\n```\nINSERT INTO table_name (column1, column2, column3, ...)\nVALUES (value1, value2, value3, ...);\n\n```\n\nWhere the column values refer to the column names, and the `VALUES` refer to the actual values you wish to insert \\(these need to be quoted\\). Try to insert an entry into our `users` table for a user with name `'Ryan'` and email `'ryan@mail.com'`.",
+          "testCode": "test(\"A user named Ryan with email ryan@mail.com should be created using a SQL `INSERT INTO` statement.\", async () => {\n  try {\n    const DROP = \"DELETE FROM users;\";\n    const SELECT = \"SELECT * FROM users\";\n    const result = await executePostgresQuery(DROP, SQL, SELECT);\n    console.warn(\"[QUERY RESULT FROM TEST ENVIRONMENT]:\");\n    console.log(result);\n    const first = result.rows[0];\n    expect(first.name).toBe(\"Ryan\");\n    expect(first.email).toBe(\"ryan@mail.com\");\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your SQL here:\nconst SQL = \"\";\n",
+          "solutionCode": "// Your SQL here:\nconst SQL = \"INSERT INTO users (name, email) VALUES ('Ryan', 'ryan@mail.com');\";\n",
+          "content": ""
+        },
+        {
+          "id": "Q6wrmX6TN",
+          "type": "typescript",
+          "title": "The SQL UPDATE Statement",
+          "instructions": "To update an existing database entry, we can use the `UPDATE` statement:\n\n```\nUPDATE table_name\nSET column1 = value1, column2 = value2, ...\nWHERE condition;\n\n```\n\nThe \"condition\" is basically a clause you must supply so the SQL statement knows how to match the entry you are updating. For instance, if we are updating a user with name Fred, the condition could be `where name = 'Fred'`. In the editor below, write a SQL statement to change the email address of a user using an `UPDATE` statement\\.",
+          "testCode": "test(\"A user named Vance with email `vance@gmail.com` exists. Let's update his email address to `vance500@gmail.com`.\", async () => {\n  try {\n    const INSERT =\n      \"DELETE FROM users; INSERT INTO users (name, username, email) VALUES ('Vance', 'vance-guy', 'vance@gmail.com');\";\n    const SELECT = \"SELECT * FROM users\";\n    const result = await executePostgresQuery(INSERT, SQL, SELECT);\n    console.warn(\"[QUERY RESULT FROM TEST ENVIRONMENT]:\");\n    console.log(result);\n    const first = result.rows[0];\n    expect(first.name).toBe(\"Vance\");\n    expect(first.email).toBe(\"vance500@gmail.com\");\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your SQL here:\nconst SQL = \"\";\n",
+          "solutionCode": "// Your SQL here:\nconst SQL =\n  \"UPDATE users SET email = 'vance500@gmail.com' where email = 'vance@gmail.com'\";\n",
+          "content": ""
+        },
+        {
+          "id": "LzZJLUJI0",
+          "type": "typescript",
+          "title": "The SQL DELETE Statement",
+          "instructions": "To remove a row from a SQL database, we can use the `DELETE` statement, also supplying a `WHERE` condition, as follows:\n\n```\nDELETE FROM table_name WHERE condition;\n\n```\n\nWe have our same `Vance` user in the database, now with our updated email: `vance500@gmail.com`. Let's remove him with a `DELETE` statement\\!",
+          "testCode": "test(\"A user named Vance with email `vance500@gmail.com` exists. Let's remove him using a SQL `DELETE` statement.\", async () => {\n  try {\n    const INSERT =\n      \"DELETE FROM users; INSERT INTO users (name, username, email) VALUES ('Vance', 'vance-guy', 'vance500@gmail.com');\";\n    const SELECT = \"SELECT * FROM users\";\n    const result = await executePostgresQuery(INSERT, SQL, SELECT);\n    console.warn(\"[QUERY RESULT FROM TEST ENVIRONMENT]:\");\n    console.log(result);\n    expect(result.rows.length).toBe(0);\n  } catch (err) {\n    throw err;\n  }\n});\n",
           "videoUrl": "",
           "starterCode": "// Your SQL here:\nconst SQL = \"\";",
-          "solutionCode": "// Your SQL here:\nconst SQL = \"INSERT INTO users (name, email) VALUES ('Ryan', 'ryan@mail.com');\";",
+          "solutionCode": "// Your SQL here:\nconst SQL = \"DELETE from users WHERE email = 'vance500@gmail.com'\";\n",
           "content": ""
+        },
+        {
+          "id": "GgJrDl$br",
+          "type": "media",
+          "title": "Managing Databases and Tables",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "We have covered the main SQL statements which exist to query, insert, update, and delete data in a SQL database. There are a few other SQL statements to be aware of, in addition to these basic ones. We can also use SQL to create and alter tables, and to create and remove databases.\n\nA SQL database server can support multiple \"databases\", each of which can contain multiple tables. Database administrator users will be able to create and remove databases, and can access specific rights and privileges to other users with regard to make database and table updates.\n# SQL Database Commands\n\nIn SQL, we can create a new database with a command like:\n\n```\nCREATE DATABASE databasename;\n\n```\n\nAssuming your user has the rights to create a database, this command will create a database with the `databasename` you provided in the query.\n# SQL Table Commands\n\nLet's assume we create a new database called `testdatabase`.\n\n```\nCREATE DATABASE testdatabase;\n\n```\n\nThen, we want to add a table to it called `users`:\n\n```\nCREATE TABLE IF NOT EXISTS users (\n  id SERIAL PRIMARY KEY,\n  name VARCHAR(100),\n  email VARCHAR(100) UNIQUE NOT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n)\n\n```\n\nNow, let's say we want to add a new column for a `username`:\n\n```\nALTER TABLE users\nADD username VARCHAR(100);\n\n```\n# Removing Databases and Tables\n\nFinally, let's say we want to drop the table and then drop the database as well:\n\n```\nDROP TABLE users\nDROP DATABASE test_database\n\n```\n\nAs you can see, it is fairly straightforward to implement these basic operations with the direct, declarative syntax of SQL. Other operations can be achieved with some variations of the above, e.g. dropping columns from tables:\n\n```\nALTER TABLE users\nDROP COLUMN username;\n\n```\n"
+        },
+        {
+          "id": "zrf$D7rpQ",
+          "type": "section",
+          "title": "Non-Relational Databases",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "In this section, we will introduce non\\-relational databases, which, in contrast to SQL databases, are better suited for storing unstructured documents of data."
         },
         {
           "id": "wf9ggEKbq",
           "type": "typescript",
-          "title": "Getting Started with MongoDB",
+          "title": "MongoDB Intro Challenge",
           "instructions": "Let's insert a user into a MongoDB collection using the `insertOne` method\\. A [MongoDB collection](https://docs.mongodb.com/manual/reference/method/js-collection/) is available for you to use under the name `usersCollection`. Good luck\\!",
           "testCode": "test(\"A user named Joe with email joe@mail.com should be created using MongoDB `insertOne` query.\", async () => {\n  const name = \"Joe\";\n  const email = \"joe-blega-blogga@mail.com\";\n  await insertUser({ name, email });\n  const args = usersCollection.getArgs();\n  const result = await executeMongoDBQuery(args);\n\n  console.log(result);\n  expect(result.name).toBe(name);\n  expect(result.email).toBe(email);\n  expect(typeof result._id).toBe(\"string\");\n});\n",
           "videoUrl": "",
@@ -4550,18 +4506,18 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "It's time to start using some real databases\\! In these projects you will build simple applications which interact with a real, live database\\!"
+          "content": "Now let's get some practice working with real databases."
         },
         {
-          "id": "gRGsfvdMM",
-          "type": "section",
-          "title": "Guided Projects",
+          "id": "RJQvHawqD",
+          "type": "project",
+          "title": "Setup a PostgreSQL Database",
           "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Here we will see some examples of projects which use databases. This should give you some idea of the more complex applications of databases which can exist in real applications."
+          "content": "For this project, write some SQL scripts to create a PostgreSQL database to represent an e\\-commerce store from scratch which defines tables according to the following requirements:\n\n* 3 Tables exist for products customers, and orders.\n* The `Customers` table should contain customer entries.\n* The `Products` table should contain entries for products in the store.\n* The `Orders` table should reference the product and customer for an order. Assume an order only references a single product.\n* The tables schema adhere to the following pseudocode definitions:\n\n\n```\nProduct {\n    id           // Unique id for product\n    name         // Product name\n    description  // Product description\n    price        // Product price (a number, e.g. 100 = $100.00).\n}\n\nCustomer {\n    id           // Unique id for customer\n    username     // Customer username\n    email        // Customer email address\n    address      // Customer address\n}\n\nOrder {\n    date         // Date type for when the order occurred\n    product      // Reference to the product contained in the order\n    customer     // Reference to the customer the order belongs to\n}\n\n```\n\n"
         },
         {
           "id": "qe2LFM0mp",
@@ -4573,6 +4529,39 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In these special topics we will cover a lot of supplementary topics related to databases. As you might guess database engineering is a broad and vast topic, with a lot of room for specialization. Here, we will cover some other popular database technologies and discuss other topics such as performance and scalability."
+        },
+        {
+          "id": "J$MLen2D@",
+          "type": "media",
+          "title": "Scaling Databases",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "EpZqtPin5",
+          "type": "media",
+          "title": "Redis",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "4GxSyiQoW",
+          "type": "media",
+          "title": "Graph Databases",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
         }
       ]
     },
@@ -5056,17 +5045,6 @@
           "content": "For this project, build an app of your choice in React Native\\!\n\nTry to think of something you would actually use or find enjoyable to build. These are the best projects because they help you maintain a high level of motivation around the project.\n\nIdeally, try to use some features that are specific to React Native, e.g. the camera, or gestures, or biometrics.\n\nDon't forget to use Expo Client to test out your app on your phone\\!"
         },
         {
-          "id": "fo@lZIRdV",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here we will walk through an example app build with React Native so you can see clearly what the full workflow looks like for building, developing, and deploying a mobile app built with React Native."
-        },
-        {
           "id": "YL1saaMKQ",
           "type": "section",
           "title": "Special Topics",
@@ -5148,7 +5126,7 @@
     {
       "free": false,
       "id": "ZzVuDVNP",
-      "title": "Testing & Automation",
+      "title": "Testing Software",
       "challenges": [
         {
           "free": true,
@@ -5449,17 +5427,6 @@
           "content": "For this project, choose one of your previous frontend UI projects and add Cypress tests for your application. Try to add a few different test cases which perform assertions on the major features or actions which your app provides. For instance, if you were testing a note\\-taking application, you would want to create test cases to verify a user can create, view, edit, and delete notes through the UI.\n\nTake a look at the guides for [installing and getting started with Cypress](https://docs.cypress.io/guides/getting-started/installing-cypress.html) to begin. It's actually quite easy to work with\\! Don't worry about adding automation to your tests \\(unless you want a challenge\\!\\). The point of this project is to get comfortable working with Cypress. Try to add a set of Cypress tests which you can run from your project by just running the project locally. For example, you can run your app locally and the point Cypress to that URL, e.g. `localhost:3000`.\n\nThis would involve:\n\n* Running your app locally, e.g. with `yarn start`.\n* Running Cypress, e.g. with `yarn run cypress open` \\([see here for more details](https://docs.cypress.io/guides/getting-started/installing-cypress.html#Opening-Cypress)\\) and pointing Cypress to the local port your app is running on.\n\n\nYou could then start with a simple test like this:\n\n```typescript\ndescribe(\"The Home Page\", () => {\n  it(\"successfully loads\", () => {\n    cy.visit(\"http://localhost:3000\");\n  });\n});\n\n```\n\nTry to get creative and add a variety of test cases, good luck\\!"
         },
         {
-          "id": "Qb@0mALhz",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here we will show you how the Pairwise application is tested\\! We have built an extensive suite of tests which continuously run throughout our development workflow to ensure the important features of the platform continue working correctly. This allows us to confidently push updates and new features quickly and on a routine basis\\!"
-        },
-        {
           "id": "mqUy13W10",
           "type": "section",
           "title": "Special Topics",
@@ -5710,17 +5677,6 @@
           "content": "For this project, choose one of your earlier completed projects and revisit it and try to refactor the code you wrote before. As you go through the journey of writing code, you will learn a lot and it's often a surprising experience to return to code you wrote in the past. You may be surprised by what you have written before\\!\n\nRevisit one of the earlier projects \\(the TypeScript Programming projects are a great choice, since those were quite early\\) and review your code now that you have progressed much further through the curriculum. Ask yourself some questions:\n\n* Does the code still make sense to you?\n* Is it easy to read and understand?\n* Is it well written and well designed?\n* Would you do anything differently today?\n* Would it be easy to change?\n* Is it extensible?\n* Is it tested?\n* Is it well documented?\n\n\nRefactor your code based on what you have learned. You can even go as far as completely re\\-writing the project from scratch. This is often a perfectly viable refactoring strategy—sometimes you just need a clean slate to start with some fresh ideas rather than trying to adjust some brittle, bug\\-ridden legacy code.\n\n> ++Remember:++ One of the sure things about software is that it _will_ change in the future\\! The project/product/company/user/customer requirements and your understanding of them always tends to change over time which forces your code to change along the way. Well designed code is code which is _easy to refactor and change in the future._\n\nThe important takeaway here is about the _process_ of refactoring. This is an important skill to develop and the best way is through practice. Try to first review the code you want to refactor, then develop a plan and some ideas for how you want to refactor it, and then try to execute that plan in a methodical way. Ideally, you should be using version control and breaking down your changes into small, clear commits.\n\nGood luck\\!"
         },
         {
-          "id": "5iJetMlK0",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here we will walk through a real\\-world example of debugging errors in production and refactoring an application to avoid the errors in the future."
-        },
-        {
           "id": "j@5yd8P9$",
           "type": "section",
           "title": "Special Topics",
@@ -5751,6 +5707,116 @@
           "content": "In this module, you will learn about how modern software is deployed and delivered to users. This is one of the last important topics on your journey to becoming a software engineer\\!\n\nIt's not enough to just write your apps, you have to still deploy them so users can access them\\! This can be a lot more complicated than you may think at first.\n\nYour client application must be hosted somewhere so it can be served quickly to your users when they visit a page and make a request for your app.\n\nYour server must be deployed in the cloud somewhere, possibly with multiple instances running. You need to have monitoring, alerting, and logging so you know if your server encounters any issues, failures, or errors. Maybe you also need rate limiting, caching, and other configuration and setup.\n\nYou database must be deployed, backed up, and possibly supplied with read replicas for performance. It should be secure and only accessible by your production server or possibly administrator users.\n\nAnd that's just a very simple setup\\!\n\nFinally, as your team makes changes to your applications updates should be delivered and deployed to your production system continuously. You never want to hit a big red \"Deploy the App\" button. Ideally, deployments ship continuously as you merge code, tests run automatically and stop deployments when they fail, and your technical team can focus their efforts on building business logic and features rather than fighting fires or troubleshooting manual deployment nightmare scenarios.\n\nAs you can start to see... this world of \"devops\" \\(developer operations\\) is a lot more complex than it may seem at first. That's why it is such an important skillset to be familiar with as a developer. Having an effective devops and infrastructure setup can make the difference between a team being agile, shipping quickly, and out\\-running their competition and a team which is constantly fighting fires and afraid to deploy any new code because of regressions and brittle build pipelines.\n\nLet's get started\\!"
         },
         {
+          "id": "JMhVosid4",
+          "type": "section",
+          "title": "Deploying to a Physical Machine",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The traditional solution to deploying servers and databases was to simply install and run the software you needed directly on a dedicated machine, or on a virtual private server."
+        },
+        {
+          "id": "bKhH6ouY3",
+          "type": "media",
+          "title": "Deploy to a VPS",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "BGyJVQF3lL",
+          "type": "section",
+          "title": "Deploying to the Cloud",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Almost all modern software deployment has migrated to the cloud. Computing infrastructure has become virtualized and commoditized and is now available at mass scale and low cost to software developers and most of the major technology companies offer cloud hosting solutions now: AWS with Amazon, GCP with Google, Azure with Microsoft, and so on.\n\nDeploying and hosting applications, services, and databases has numerous advantages:\n\n* Infrastructure maintenance and costs are abstracted away.\n* Hardware risk and failures are abstracted away.\n* Scaling is much easier.\n* Valuable features can be switched on and off, as needed, without requiring substantial infrastructure changes or expertise.\n* Services are more reliable.\n\n"
+        },
+        {
+          "id": "gGYkBO$Yf",
+          "type": "media",
+          "title": "What is DevOps?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "FROIjiRaH",
+          "type": "media",
+          "title": "Cloud Hosting Overview",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "3LbUWlPlZq",
+          "type": "media",
+          "title": "Deployment Automation: CI/CD",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "5SCjCOQwsi",
+          "type": "media",
+          "title": "Logging, Monitoring, and Reporting",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "$@kraNyU0",
+          "type": "media",
+          "title": "Deploy a Server + Database with Heroku",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "03kfmEpdu",
+          "type": "media",
+          "title": "Deploy a Frontend with Netlify",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "PWVGn7tt4",
+          "type": "media",
+          "title": "What is Docker?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "3odGQPJTI",
           "type": "section",
           "title": "Projects",
@@ -5762,15 +5828,37 @@
           "content": "In these projects we will put to practice some of the principles you have just learned. In fact, you already have experience with deploying software because you have been deploying your projects for your portfolio from the very beginning.\n\nHere, we will apply some of the devops best practices we have learned to some of your deployed projects."
         },
         {
-          "id": "qVh4wMjVh",
-          "type": "section",
-          "title": "Guided Projects",
+          "id": "SCh1dPhbg",
+          "type": "project",
+          "title": "Create a CI/CD Pipeline",
           "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "In this guided project, we will walk through more complex examples of devops setups in production applications. This should illustrate some devops principles in practice and give you more familiarity with why devops is important for software developers to understand."
+          "content": "For this project, add a testing pipeline to one of your projects which can run on GitHub Actions."
+        },
+        {
+          "id": "ZJ3EhQkuN",
+          "type": "project",
+          "title": "Dockerize a Server",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, use Docker to create a container for running a server."
+        },
+        {
+          "id": "X2xJUDejx",
+          "type": "project",
+          "title": "Deploy a FullStack Application",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, deploy server, database, and frontend for one of your projects."
         },
         {
           "id": "GzyZTY8jb",
@@ -5782,13 +5870,46 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In these special topics we will start to delve into the vast world of devops, infrastructure, and software deployment. Modern, secure, applications at scale require very complex infrastructure setups so they can be highly available, reliable, and fault\\-tolerant for users. In these lessons, we will try to illustrate what devops looks like for more complex systems and introduce some more advanced technologies, such as Docker, Kubernetes, Chef, Terraform, and others.\n\nDon't worry if these seem over your head\\! It's enough at this stage to just have a rough understanding of what these technologies are and why they are useful for production systems."
+        },
+        {
+          "id": "@n23EyYGI",
+          "type": "media",
+          "title": "Monolith vs. Microservices",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "hU@oatYsK",
+          "type": "media",
+          "title": "What is Kubernetes?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "J3ArHHwhp",
+          "type": "media",
+          "title": "What is Serverless Architecture?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
         }
       ]
     },
     {
       "free": false,
       "id": "GgP1rkAa",
-      "title": "Capstone Project",
+      "title": "Capstone Projects",
       "challenges": [
         {
           "free": true,
@@ -5812,17 +5933,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "The projects in this final section are fullstack applications which will really test your abilities as a programmer\\! These projects are the culmination of all of the hard work and practice you have put in to work to this point.\n\nThese projects will be challenging, but if you can complete them they will give you a portfolio which will really standout and they will prove that you have acquired all the skills necessary to work as a software developer."
-        },
-        {
-          "id": "379M1tAlW",
-          "type": "section",
-          "title": "Guided Projects",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"Write your test assertion here\", () => {\n  expect(true).toBe(true);\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "Here, at the very end we present a guided walkthrough of a fullstack application which can illustrate how all the principles and skills you have learned in this course fit together to create a working product."
         },
         {
           "id": "DVy0PqE5j",

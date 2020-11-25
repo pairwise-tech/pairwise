@@ -1,4 +1,5 @@
 import axios from "axios";
+import toaster from "./toast-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -107,8 +108,9 @@ class DependencyCacheClass {
           return lib;
         } catch (err) {
           const msg = `[ERROR]: Failed to fetch source for ${packageName}. Error: ${err.message}`;
-          console.log(msg);
-          throw new Error(msg);
+          console.error(msg);
+          toaster.warn(`Failed to fetch imported dependency: ${packageName}`);
+          return "";
         }
       } else {
         console.warn(`No source library exists for package: ${packageName}`);

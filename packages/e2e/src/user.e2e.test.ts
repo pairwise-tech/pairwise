@@ -302,34 +302,45 @@ describe("User APIs", () => {
     await checkChallengeIds({});
 
     // Update a challenge
-    await updateChallengeIds("f76shgb2W", "7j8@a2tVR");
+    await updateChallengeIds("fpvPtfu7s", "TL9i1z2rT");
 
     // Check the state updated
     await checkChallengeIds({
-      f76shgb2W: "7j8@a2tVR",
-      lastActiveChallenge: "7j8@a2tVR",
-    });
-
-    // Update challenge in a different course
-    await updateChallengeIds("fpvPtfu7s", "TL9i1z2rT");
-
-    // Check the state updated and added the new course
-    await checkChallengeIds({
-      f76shgb2W: "7j8@a2tVR",
       fpvPtfu7s: "TL9i1z2rT",
       lastActiveChallenge: "TL9i1z2rT",
     });
 
-    // Update both course challenges again
-    await updateChallengeIds("fpvPtfu7s", "HB0P9thnMf");
-    await updateChallengeIds("f76shgb2W", "kI0LDxpct");
+    await updateChallengeIds("fpvPtfu7s", "sfxItMSR");
+    await updateChallengeIds("fpvPtfu7s", "Fpw0qzGv");
+    await updateChallengeIds("fpvPtfu7s", "4rq4ezCu");
 
-    // Check the state updated and added the new course
+    // Check the state updated
     await checkChallengeIds({
-      f76shgb2W: "kI0LDxpct",
-      fpvPtfu7s: "HB0P9thnMf",
-      lastActiveChallenge: "kI0LDxpct",
+      fpvPtfu7s: "4rq4ezCu",
+      lastActiveChallenge: "4rq4ezCu",
     });
+
+    // NOTE: Separate course is not available right now:
+    // // Update challenge in a different course
+    // await updateChallengeIds("f76shgb2W", "7j8@a2tVR");
+
+    // // Check the state updated and added the new course
+    // await checkChallengeIds({
+    //   f76shgb2W: "7j8@a2tVR",
+    //   fpvPtfu7s: "TL9i1z2rT",
+    //   lastActiveChallenge: "TL9i1z2rT",
+    // });
+
+    // // Update both course challenges again
+    // await updateChallengeIds("fpvPtfu7s", "HB0P9thnMf");
+    // await updateChallengeIds("f76shgb2W", "kI0LDxpct");
+
+    // // Check the state updated and added the new course
+    // await checkChallengeIds({
+    //   f76shgb2W: "kI0LDxpct",
+    //   fpvPtfu7s: "HB0P9thnMf",
+    //   lastActiveChallenge: "kI0LDxpct",
+    // });
 
     done();
   });

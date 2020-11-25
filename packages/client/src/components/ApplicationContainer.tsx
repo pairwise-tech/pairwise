@@ -34,6 +34,7 @@ import {
   LoadingInline,
   DesktopOnly,
   OverlaySmallText,
+  PairwiseOpenCloseLogo,
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
@@ -51,10 +52,11 @@ import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
 import { CONTENT_AREA_ID } from "./MediaArea";
-import OfficeHoursPopover from "./OfficeHoursPopover";
+import PomodoroTimer from "./PomodoroTimer";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
 import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
+import PairwiseScreensaver from "./PairwiseScreensaver";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -105,6 +107,8 @@ const ApplicationContainer = (props: IProps) => {
     overlayVisible,
     workspaceLoading,
     hasMediaContent,
+    setScreensaverState,
+    screensaverVisible,
     toggleNavigationMap,
     openFeedbackDialog,
     userAuthenticated,
@@ -181,6 +185,8 @@ const ApplicationContainer = (props: IProps) => {
     return <ErrorOverlay />;
   } else if (!initialized) {
     return <LoadingOverlay visible={workspaceLoading} />;
+  } else if (screensaverVisible) {
+    return <PairwiseScreensaver setScreensaverState={setScreensaverState} />;
   }
 
   const onWorkspaceRoute = location.includes("workspace");
@@ -283,7 +289,7 @@ const ApplicationContainer = (props: IProps) => {
           )}
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
-          {!isMobile && <ShortcutKeysPopover />}
+          {!isMobile && <PomodoroTimer />}
           {!isMobile && (
             <Tooltip
               usePortal={false}
@@ -292,12 +298,28 @@ const ApplicationContainer = (props: IProps) => {
             >
               <IconButton
                 icon="comment"
-                style={{ marginLeft: 6, padding: 0 }}
-                aria-label="open the feedback dialog"
+                style={{ padding: 0 }}
+                aria-label="Open the feedback dialog"
                 onClick={openFeedbackDialog}
               />
             </Tooltip>
           )}
+          {!isMobile && <ShortcutKeysPopover />}
+          {!isMobile && (
+            <Tooltip
+              usePortal={false}
+              position="bottom"
+              content="Launch Pairwise Screensaver"
+            >
+              <IconButton
+                icon="media"
+                style={{ padding: 0 }}
+                aria-label="Start the Pairwise Screensaver"
+                onClick={() => setScreensaverState(true)}
+              />
+            </Tooltip>
+          )}
+          {/* <PairwiseLivePopover /> */}
           {isSandbox && (
             <Suspense fallback={<LoadingInline />}>
               <LazyChallengeTypeMenu
@@ -322,7 +344,6 @@ const ApplicationContainer = (props: IProps) => {
               </ButtonGroup>
             </DesktopOnly>
           )}
-          <OfficeHoursPopover />
           {!isMobile && (
             <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
               <Button
@@ -527,7 +548,7 @@ const CurrentlyInBeta = styled.small`
   transform: translate(-50%, -50%) scale(0.7);
   font-weight: bold;
   letter-spacing: 1.2px;
-  background: #d81b82;
+  background: ${COLORS.SECONDARY_PINK};
   padding: 0px 6px;
   box-shadow: 0 0 20px rgb(0, 0, 0);
   border-radius: 100px;
@@ -571,86 +592,6 @@ const ControlsContainer = styled.div`
   flex-direction: row;
 `;
 
-type OpenCloseLogoProps = { isOpen?: boolean } & React.SVGProps<SVGSVGElement>;
-
-const OpenCloseLogo = ({ isOpen = false, ...props }: OpenCloseLogoProps) => {
-  return (
-    <svg
-      width="24.44"
-      height="20"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <g fillRule="nonzero" fill="none" transform="scale(0.37)">
-        <rect
-          fill="#27C9DD"
-          x="0"
-          y="0"
-          width={isOpen ? 50 : 12}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#FFB85A"
-          x="0"
-          y="46"
-          width={isOpen ? 50 : 15}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#F3577A"
-          x="0"
-          y="16"
-          width={isOpen ? 50 : 25}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#F6FA88"
-          x="0"
-          y="31"
-          width={isOpen ? 50 : 34}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#F3577A"
-          x={!isOpen ? 24 : 56}
-          y="46"
-          width={isOpen ? 10 : 42}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#FFB85A"
-          x={!isOpen ? 42 : 56}
-          y="31"
-          width={isOpen ? 10 : 24}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#49F480"
-          x={!isOpen ? 21 : 56}
-          y="0"
-          width={isOpen ? 10 : 45}
-          height="8"
-          rx="3.774"
-        />
-        <rect
-          fill="#27C9DD"
-          x={!isOpen ? 33 : 56}
-          y="16"
-          width={isOpen ? 10 : 33}
-          height="8"
-          rx="3.774"
-        />
-      </g>
-    </svg>
-  );
-};
-
 const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   <Button
     minimal
@@ -659,7 +600,7 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
     aria-label="Open navigation map"
     {...rest}
   >
-    <OpenCloseLogo isOpen={overlayVisible} />
+    <PairwiseOpenCloseLogo isOpen={overlayVisible} />
   </Button>
 ))`
   appearance: none;
@@ -816,9 +757,10 @@ const isTouchEventOnEditor = (touchEvent: any) => {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  location: Modules.selectors.app.locationSelector(state),
   user: Modules.selectors.user.userSelector(state),
   userLoading: Modules.selectors.user.loading(state),
+  location: Modules.selectors.app.locationSelector(state),
+  screensaverVisible: Modules.selectors.app.screensaverVisible(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
@@ -835,6 +777,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   logoutUser: Modules.actions.auth.logoutUser,
+  setScreensaverState: Modules.actions.app.setScreensaverState,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,

@@ -221,10 +221,17 @@ const DATABASE_CHALLENGE_API =
 /**
  * Helper for SQL code challenges.
  */
-const executePostgresQuery = async (userSQL, preSQL = "", postSQL = "") => {
+const executePostgresQuery = async (
+  preSqlQuery: string,
+  userSqlQuery: string,
+  postSqlQuery: string,
+) => {
   try {
     const url = `${DATABASE_CHALLENGE_API}/postgres/query`;
-    const body = JSON.stringify({ userSQL, preSQL, postSQL });
+    const userQuery = userSqlQuery;
+    const preQuery = preSqlQuery || "";
+    const postQuery = postSqlQuery || "";
+    const body = JSON.stringify({ userQuery, preQuery, postQuery });
     const headers = {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -234,12 +241,17 @@ const executePostgresQuery = async (userSQL, preSQL = "", postSQL = "") => {
       headers,
       method: "post",
     });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+
     const result = await response.json();
     return result;
   } catch (err) {
-    // Fail by default if error
-    console.log(err);
-    fail();
+    // Throw err to fail test
+    throw err;
   }
 };
 
@@ -262,9 +274,8 @@ const executeMongoDBQuery = async args => {
     const result = await response.json();
     return result;
   } catch (err) {
-    // Fail by default if error
-    console.log(err);
-    fail();
+    // Throw err to fail test
+    throw err;
   }
 };
 

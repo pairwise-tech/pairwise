@@ -25,20 +25,12 @@ describe("Account Creation Flow", () => {
     cy.visit(`${CLIENT_APP_URL}/workspace/EztzbqIDQ`);
     cy.wait(TIMEOUT);
 
-    // Visit a challenge in the other course
-    cy.visit(`${CLIENT_APP_URL}/workspace/Vii7hQ1xd`);
-    cy.wait(TIMEOUT);
-
     // Helper to check both of the above challenges are saved correctly
     const checkTheHomeChallengeLinks = () => {
       // Return to the home route
       click("header-home-link");
       click("course-link-0-start");
       cy.url().should("include", "workspace/EztzbqIDQ");
-
-      click("header-home-link");
-      click("course-link-1-start");
-      cy.url().should("include", "workspace/Vii7hQ1xd");
     };
 
     cy.reload();
