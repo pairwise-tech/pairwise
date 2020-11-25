@@ -46,12 +46,13 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     // challenges loaded and are now accessible:
     // NOTE: This relies on fixed text and the existing challenge list,
     // it will need to be updated if/when these challenges change (which
-    // they will).
+    // they will). We could update it to read from the courses file directly
+    // to determine the challenge ids and titles to test.
     cy.contains("The SQL SELECT Statement");
     // Paid content label should not exist anymore
     cy.get("#paid-content-label").should("not.exist");
     click("nextButton");
-    cy.contains("Getting Started with MongoDB");
+    cy.contains("The SQL INSERT INTO Statement");
   });
 });
 

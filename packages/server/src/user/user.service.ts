@@ -67,6 +67,7 @@ export class UserService {
   public async adminGetAllUsers() {
     return this.userRepository
       .createQueryBuilder("user")
+      .leftJoinAndSelect("user.payments", "payments")
       .leftJoinAndSelect("user.challengeProgressHistory", "progress")
       .getMany();
   }
