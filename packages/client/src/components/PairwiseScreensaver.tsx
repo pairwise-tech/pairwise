@@ -329,14 +329,6 @@ const GRADIENTS: Gradient[] = [
       d: "#27c9dd",
     },
   },
-  {
-    colors: {
-      a: "#f54582",
-      b: "#f754a3",
-      c: "#fc3864",
-      d: "#f3577a",
-    },
-  },
 ];
 
 interface ScreensaverOverlayProps {

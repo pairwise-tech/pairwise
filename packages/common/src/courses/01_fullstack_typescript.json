@@ -14,18 +14,18 @@
           "id": "iSF4BNIl",
           "type": "markup",
           "title": "Hello, Pairwise!",
-          "instructions": "There is an h1 tag in the code editor below which contains the text `Pairwise`. Your job is to change the text to say `Hello Pairwise!`. Once you finish, click the \"Run\" button in the editor, and, if you run into any problems, check out the [video](#{\"component\":\"VideoPlayButton\"}) explanation below\\!",
+          "instructions": "There is an HTML `h1` tag in the code editor below which contains a greeting message for you. This HTML is rendered in a live preview to the right \\- take a look\\! Your job is to change the text to say `Hello Pairwise!`. Once you finish, click the \"Run\" button in the editor. If you run into any problems, check out the [video](#{\"component\":\"VideoPlayButton\"}) explanation below\\!",
           "testCode": "test(\"The `h1` tag should contain the text: `Hello Pairwise!`\", () => {\n  const contents = getAll(\"h1\").map((x) => x.innerHTML.trim());\n  expect(contents).toContain(\"Hello Pairwise!\");\n});\n",
           "videoUrl": "https://www.youtube.com/embed/qXxUGntJ11I",
-          "starterCode": "<h1>Pairwise</h1>\n",
+          "starterCode": "<h1>\n  Welcome to Pairwise Workspace.\n</h1>\n",
           "solutionCode": "<h1>Hello Pairwise!</h1>\n",
-          "content": "## A Quick Note About the Videos\n\nMany \\(but not all\\) challenges will have these videos lessons to walk through solving the challenge. The videos are intended as supplementary material to go in addition to the challenge. We recommend trying to solve the challenge on your own first and if you get totally stuck or lost, then using the video to see a full explanation.\n\nThe videos are intended to help you avoid ever getting lost and not knowing how to proceed. We want Pairwise students to be fully supported throughout the entire curriculum.\n\nIn addition, we cover a lot of other topics and interesting points in the videos, so we recommend watching these even if you solve the challenge successfully on your own. The videos are usually short and should only take a few minutes to watch."
+          "content": "## A Quick Note About the Videos\n\nMany \\(but not all\\) challenges will have these videos lessons to walk through solving the challenge. The videos are intended as supplementary material to go in addition to the challenge. We recommend trying to solve the challenge on your own first and if you get totally stuck or lost, then using the video to see a full explanation.\n\nThe videos are intended to help you avoid ever getting lost and not knowing how to proceed.\n\nHaving said that, feel free to move on to the next challenge\\!"
         },
         {
           "id": "Oqha$qtc",
           "type": "markup",
           "title": "Style HTML with CSS",
-          "instructions": "HTML provides the structure, CSS provides the _style_. Take a look at the editor and the preview on the right. That white title isn't too hot though... See if you can turn the `h1` title from `white` to `gold` color\\! Remember, there is a [video](#{\"component\":\"VideoPlayButton\"}) below to help guide you if you get stuck\\!",
+          "instructions": "HTML provides the content, CSS provides the _style_. Take a look at the code in the editor and the preview on the right. That white title feels out of place... See if you can turn the `h1` title from `white` to `gold` color\\! Remember, there is a [video](#{\"component\":\"VideoPlayButton\"}) below to help guide you if you get stuck\\!\n\n> ++NOTE:++ Don't worry if you don't know what some of these terms are yet. These are some short intro challenges to help familiarize you with the Pairwise workspace. All of these topics are explained in detail later on.\n",
           "testCode": "test(\"The `h1` title should have a `gold` CSS `color` property.\", () => {\n  const title = get(\"h1\");\n  const style = getStyle(title, \"color\");\n  expect(style).toBe(cssColor(\"gold\"));\n});\n",
           "videoUrl": "https://www.youtube.com/embed/RwNvQZuVdSs",
           "starterCode": "<html>\n  <header>\n    <style>\n      body {\n        background: #204678;\n        padding-left: 12px;\n        padding-right: 12px;\n      }\n      h1 {\n        /* Here! Look Here! */\n        color: white;\n      }\n      p {\n        color: tomato;\n      }\n    </style>\n  </header>\n  <body>\n    <div>\n      <h1>Welcome to Pairwise!</h1>\n      <p>\n        CSS let's you change the color and shape of HTML!\n      </p>\n    </div>\n  </body>\n</html>\n",
@@ -39,7 +39,7 @@
           "instructions": "Let's start with something very simple. Take a look at the code editor below. There you will find two functions, the `addTwoNumbers` function \\(which is complete\\) and the `subtractTwoNumbers` function \\(which is incomplete\\). This challenge is a little harder than the previous two \\- if you feel lost, check out the [video](#{\"component\":\"VideoPlayButton\"}) for some help\\!\n\nTake a look at the code and the comments \\(green colored text\\). Try to complete the `subtractTwoNumbers` function\\! When you are finished, press the \"Run\" button to run your code against the tests\\!",
           "testCode": "const tests = [\n  [3234, 435],\n  [32134, 46645],\n  [31234, 2342231],\n  [321341, 4234],\n  [3234, 2342],\n  [92342, 437],\n  [2343, 432324],\n  [233, 235],\n  [36579, 444],\n  [3, 12],\n];\n\ntest(\"The `addTwoNumbers` function should add the arguments together and return the result.\", () => {\n  for (const testCase of tests) {\n    expect(addTwoNumbers(...testCase)).toBe(testCase[0] + testCase[1]);\n  }\n});\n\ntest(\"The `subtractTwoNumbers` function should accept two arguments and return the result of subtracting the second from the first.\", () => {\n  for (const testCase of tests) {\n    expect(subtractTwoNumbers(...testCase)).toBe(testCase[0] - testCase[1]);\n  }\n});\n",
           "videoUrl": "https://www.youtube.com/embed/uLwyU-vfY0c",
-          "starterCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction addTwoNumbers(a: number, b: number) {\n  return a + b;\n}\n\n/**\n * A function which takes two numbers and subtracts\n * the second from the first.\n */\nfunction subtractTwoNumbers(a: number, b: number) {\n  // Hello!!! Write your solution on the next line here:\n  \n}\n",
+          "starterCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction addTwoNumbers(a: number, b: number) {\n  return a + b;\n}\n\n/**\n * A function which takes two numbers and subtracts\n * the second from the first.\n */\nfunction subtractTwoNumbers(a: number, b: number) {\n  // Hello!!! Write your solution on the next line here:\n}\n",
           "solutionCode": "/**\n * A function which takes two numbers and adds them\n * together.\n */\nfunction addTwoNumbers(a: number, b: number) {\n  return a + b;\n}\n\n/**\n * A function which takes two numbers and subtracts\n * the second from the first.\n */\nfunction subtractTwoNumbers(a: number, b: number) {\n  // Your code here\n  return a - b;\n}\n",
           "content": ""
         },
@@ -70,7 +70,7 @@
           "videoUrl": "https://www.youtube.com/embed/Lfh4fPzrCyk",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Welcome to Module 1\\! We'll be using HTML and CSS to lay a foundation for programming and get some practice writing real code.\n# What you will do in this module\n\n* Write a bunch of real code\n* Build your own web page\n* Put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n# Why are we learning this?\n\nWe _love_ the question \"why\" and we'll answer that in the [introductory lesson on HTML](/workspace/5ziJI35f#h-why-are-we-learning-html).\n\nOnward\\!"
+          "content": "Welcome to the first Module\\! We'll be using HTML and CSS to lay a foundation for programming and get some practice writing real code.\n# What you will do in this module\n\n* Write a bunch of real code\n* Build your own web page\n* Put a website online\n\n\nThe challenges in this module will move fast and include a lot of video content. These are your first steps into the world of programming, and if you continue along this path you'll look back some day and remember where it all started: Right here\\!\n# Why are we learning this?\n\nWe _love_ the question \"why\" and we'll answer that in the [introductory lesson on HTML](/workspace/5ziJI35f#h-why-are-we-learning-html).\n\nOnward\\!"
         },
         {
           "id": "5ziJI35f",
@@ -4529,39 +4529,6 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "In these special topics we will cover a lot of supplementary topics related to databases. As you might guess database engineering is a broad and vast topic, with a lot of room for specialization. Here, we will cover some other popular database technologies and discuss other topics such as performance and scalability."
-        },
-        {
-          "id": "J$MLen2D@",
-          "type": "media",
-          "title": "Scaling Databases",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
-        },
-        {
-          "id": "EpZqtPin5",
-          "type": "media",
-          "title": "Redis",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
-        },
-        {
-          "id": "4GxSyiQoW",
-          "type": "media",
-          "title": "Graph Databases",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
         }
       ]
     },
