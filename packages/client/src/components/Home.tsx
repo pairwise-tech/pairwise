@@ -25,16 +25,16 @@ class Home extends React.Component<IProps, {}> {
         <ContentContainer>
           <PageTitle>Welcome to Pairwise!</PageTitle>
           <ContentText>
-            Pairwise is the best place to learn to code to build your own app or
-            start a career in software development. The Pairwise FullStack
-            Course is currently in{" "}
-            <b
-              style={{ color: COLORS.TEXT_WHITE, textDecoration: "underline" }}
-            >
-              BETA
-            </b>{" "}
-            and available to purchase. The core modules which cover HTML, CSS,
-            and TypeScript will always be free.
+            Pairwise is the best place to learn to code and start a career in
+            software development. The Pairwise FullStack TypeScript Course is
+            currently in{" "}
+            <Bold style={{ textDecoration: "underline " }}>BETA</Bold> and
+            available to purchase now for <Bold>$50 USD</Bold>. The first three
+            modules which cover HTML, CSS, and TypeScript will remain free.
+          </ContentText>
+          <ContentText>
+            Purchasing the course will lock-in lifetime access to all of the
+            content and features which we are actively developing.
           </ContentText>
           <ContentText>
             To learn more about Pairwise,{" "}
@@ -132,7 +132,7 @@ class Home extends React.Component<IProps, {}> {
  */
 
 const ContentContainer = styled.div`
-  max-width: ${PROSE_MAX_WIDTH - 275}px;
+  max-width: ${PROSE_MAX_WIDTH - 325}px;
   margin-bottom: 24px;
 
   p {
@@ -146,6 +146,10 @@ const ContentText = styled(Text)`
 
 const CourseTitle = styled.h2`
   margin-top: 10px;
+  color: ${COLORS.TEXT_WHITE};
+`;
+
+const Bold = styled.b`
   color: ${COLORS.TEXT_WHITE};
 `;
 
