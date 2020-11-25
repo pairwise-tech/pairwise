@@ -135,6 +135,7 @@ const removeExcessUserFields = user => {
     givenName: user.givenName,
     familyName: user.familyName,
     settings: user.settings,
+    payments: user.payments,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
@@ -145,6 +146,7 @@ const WHITELISTED_EMAILS = new Set([
   "sean.smith.2009@gmail.com",
   "pweinberg633@gmail.com",
   "ian989@gmail.com",
+  "ian@iansinnott.com",
 ]);
 
 // Whitelist some users who don't have an email

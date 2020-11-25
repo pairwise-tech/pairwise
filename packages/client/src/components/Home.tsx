@@ -26,11 +26,15 @@ class Home extends React.Component<IProps, {}> {
           <PageTitle>Welcome to Pairwise!</PageTitle>
           <ContentText>
             Pairwise is the best place to learn to code to build your own app or
-            start a career in software development. The Pairwise FullStack Web
-            Development Course is currently in{" "}
-            <b style={{ color: COLORS.TEXT_WHITE }}>BETA</b> and available to
-            purchase. The core modules which cover HTML, CSS, and TypeScript
-            will always be free.
+            start a career in software development. The Pairwise FullStack
+            Course is currently in{" "}
+            <b
+              style={{ color: COLORS.TEXT_WHITE, textDecoration: "underline" }}
+            >
+              BETA
+            </b>{" "}
+            and available to purchase. The core modules which cover HTML, CSS,
+            and TypeScript will always be free.
           </ContentText>
           <ContentText>
             To learn more about Pairwise,{" "}
@@ -128,7 +132,7 @@ class Home extends React.Component<IProps, {}> {
  */
 
 const ContentContainer = styled.div`
-  max-width: ${PROSE_MAX_WIDTH - 250}px;
+  max-width: ${PROSE_MAX_WIDTH - 275}px;
   margin-bottom: 24px;
 
   p {
