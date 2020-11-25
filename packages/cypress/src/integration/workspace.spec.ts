@@ -116,13 +116,13 @@ describe("Sandbox", () => {
   });
 
   it("Sandbox should load when coming directly to URL", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace/sandbox`); // The "Welcome to pairwise" challenge (no workspace)
+    cy.visit(`${CLIENT_APP_URL}/workspace/sandbox`);
     cy.url().should("include", "/sandbox");
     cy.get("#sandboxButton").should("have.attr", "disabled");
   });
 
   it("Sandbox should load when coming from non-workspace challenge", () => {
-    cy.visit(`${CLIENT_APP_URL}/workspace/yxZjmD0o`); // The "Welcome to pairwise" challenge (no workspace)
+    cy.visit(`${CLIENT_APP_URL}/workspace/yxZjmD0o`);
     cy.get("#pairwise-code-editor").should("not.exist");
     click("sandboxButton");
     click("selectChallengeType");
@@ -353,8 +353,8 @@ describe("Workspace Editor Functions", () => {
     });
   });
 
-  // NOTE: If we change the challenge then this test will fail. That sucks
-  const initialCode = "<h1>Pairwise</h1>\n";
+  // NOTE: If we change the challenge then this test will fail.
+  const initialCode = "<h1>\n  Welcome to Pairwise Workspace.\n</h1>\n";
   const solutionCode = "<h1>Hello Pairwise!</h1>\n";
 
   it("Should restore initial code", () => {
