@@ -195,7 +195,7 @@ class AuthenticationFormComponent extends React.Component<
         )}
         <ModalSubText>
           Create an account with one-click for free. Your account will be used
-          to save your progress as you work on the courses.
+          to save your progress as you work on the Pairwise course.
         </ModalSubText>
         <ModalSubText>
           By creating a Pairwise account you are agreeing to our{" "}
