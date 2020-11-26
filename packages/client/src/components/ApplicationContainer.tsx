@@ -413,18 +413,18 @@ const ApplicationContainer = (props: IProps) => {
               onClick={() => setSingleSignOnDialogState(true)}
             />
           ) : (
-            <Button
+            <LoginSignupButton
               id="login-signup-button"
-              style={{
-                margin: "0 10px",
-                border: "1px solid rgba(255, 255, 255, 0.23)",
-                flexShrink: 0,
-                whiteSpace: "nowrap",
-              }}
+              // style={{
+              //   margin: "0 10px",
+              //   border: "1px solid rgba(255, 255, 255, 0.23)",
+              //   flexShrink: 0,
+              //   whiteSpace: "nowrap",
+              // }}
               onClick={() => setSingleSignOnDialogState(true)}
             >
               Login or Signup
-            </Button>
+            </LoginSignupButton>
           )}
         </ControlsContainer>
       </Header>
@@ -537,6 +537,49 @@ const Header = styled.div`
     right: 0;
     height: ${BORDER}px;
     background: ${COLORS.GRADIENT_GREEN};
+  }
+`;
+
+// NOTE: CSS from https://codepen.io/alphardex/pen/vYEYGzp.
+const LoginSignupButton = styled(Button)`
+  position: relative;
+  margin: 0 10px;
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  --border-width: 1px;
+  border-radius: var(--border-width);
+
+  &::after {
+    position: absolute;
+    content: "";
+    top: calc(-1 * var(--border-width));
+    left: calc(-1 * var(--border-width));
+    z-index: -1;
+    width: calc(100% + var(--border-width) * 2);
+    height: calc(100% + var(--border-width) * 2);
+    background: linear-gradient(
+      60deg,
+      hsl(224, 85%, 66%),
+      hsl(269, 85%, 66%),
+      hsl(347, 87%, 65%),
+      hsl(359, 85%, 66%),
+      hsl(62, 92%, 76%),
+      hsl(89, 85%, 66%),
+      hsl(139, 89%, 62%),
+      hsl(187, 73%, 51%)
+    );
+
+    background-size: 300% 300%;
+    background-position: 0 50%;
+    border-radius: calc(2 * var(--border-width));
+    animation: moveGradient 4s alternate infinite;
+  }
+
+  @keyframes moveGradient {
+    50% {
+      background-position: 100% 50%;
+    }
   }
 `;
 
