@@ -20,7 +20,10 @@ import { STATUS_CODES } from "http";
 
 @Injectable()
 export class ProgressService {
-  progressRecord = [];
+  // Real-time user challenge progress tracking:
+  time: number;
+  challenges = 0;
+  progress: { [uuid: string]: { challengeIds: Set<string> } } = {};
 
   constructor(
     @InjectRepository(Progress)
@@ -133,39 +136,21 @@ export class ProgressService {
       timeCompleted,
     };
 
-    /**
-     * Add record to progress record list.
-     */
-    const record = {
-      challengeId,
-      timeCompleted,
-      uuid: user.profile.uuid,
-      user: "Pairwise User",
-      complete,
-    };
-
-    this.progressRecord.push(record);
+    // Track user progress record
+    this.addToProgressRecord(user.profile.uuid, challengeId);
 
     return result;
   }
 
   public async updateUserProgressHistoryAnonymous(
+    uuid: string,
     challengeProgressDto: ProgressDto,
   ): Promise<string> {
     validateChallengeProgressDto(challengeProgressDto);
-    const { challengeId, complete, timeCompleted } = challengeProgressDto;
+    const { challengeId } = challengeProgressDto;
 
-    /**
-     * Add record to progress record list.
-     */
-    const record = {
-      challengeId,
-      timeCompleted,
-      user: "Anonymous User",
-      complete,
-    };
-
-    this.progressRecord.push(record);
+    // Track user progress record
+    this.addToProgressRecord(uuid, challengeId);
 
     return STATUS_CODES.OK;
   }
@@ -203,32 +188,50 @@ export class ProgressService {
     return SUCCESS_CODES.OK;
   }
 
+  addToProgressRecord = (uuid: string, challengeId: string) => {
+    if (!challengeId || !uuid) {
+      return;
+    }
+
+    if (!this.time) {
+      this.time = Date.now();
+    }
+
+    const records = this.progress;
+    if (uuid in records) {
+      const record = records[uuid];
+      if (!record.challengeIds.has(challengeId)) {
+        this.challenges++;
+        record.challengeIds.add(challengeId);
+      }
+    } else {
+      this.challenges++;
+      records[uuid] = {
+        challengeIds: new Set([challengeId]),
+      };
+    }
+  };
+
   /**
    * TODO: Anonymize user uuids to random names.
    */
   public async retrieveProgressRecords() {
-    const records = this.progressRecord;
-    if (records.length === 0) {
+    const records = this.progress;
+
+    if (!this.time) {
       return "No records yet...";
     }
 
     const now = Date.now();
 
-    const since = (time: string) => {
+    const since = (time: number) => {
       const seconds = (now - new Date(time).getTime()) / 1000;
       return seconds;
     };
 
-    const data = records.map(x => ({
-      user: x.user,
-      state: x.complete ? "Complete" : "Incomplete",
-      challengeId: x.challengeId,
-      updated: `${since(x.timeCompleted)} seconds ago`,
-    }));
-
-    // Check if empty
-    const last = since(records[0].timeCompleted);
-    const status = `${records.length} challenges updated in the last ${last} seconds.`;
+    const data = Object.values(records).map(x => Array.from(x.challengeIds));
+    const last = since(this.time);
+    const status = `${this.challenges} challenges updated in the last ${last} seconds.`;
 
     return {
       status,

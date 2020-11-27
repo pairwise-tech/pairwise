@@ -36,6 +36,7 @@ import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/utils";
 import { UserStoreState } from "./user/store";
 import { captureSentryException } from "../tools/sentry-utils";
+import { v4 as uuidv4 } from "uuid";
 
 /** ===========================================================================
  * Types & Config
@@ -200,6 +201,9 @@ class BaseApiClass {
 
 class Api extends BaseApiClass {
   codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
+
+  // Generate anonymous session id for real-time user progress metrics
+  anonID = uuidv4();
 
   fetchCourses = async (): Promise<Result<CourseList, HttpResponseError>> => {
     try {
@@ -379,9 +383,13 @@ class Api extends BaseApiClass {
 
       try {
         // Dispatch /progress event for anonymous user for tracking
-        axios.post<IProgressDto>(`${HOST}/progress/anonymous`, progress, {
-          headers,
-        });
+        axios.post<IProgressDto>(
+          `${HOST}/progress/anonymous/${this.anonID}`,
+          progress,
+          {
+            headers,
+          },
+        );
       } catch (err) {
         captureSentryException(err);
       }

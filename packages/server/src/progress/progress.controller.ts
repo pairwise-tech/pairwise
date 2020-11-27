@@ -7,6 +7,7 @@ import {
   ValidationPipe,
   Get,
   Req,
+  Param,
 } from "@nestjs/common";
 import { ProgressDto } from "./progress.dto";
 import { ProgressService } from "./progress.service";
@@ -30,12 +31,14 @@ export class ProgressController {
     return this.progressService.retrieveProgressRecords();
   }
 
-  @Post("/anonymous")
+  @Post("/anonymous/:uuid")
   @UsePipes(ValidationPipe)
   public updateUserChallengeProgressAnonymous(
+    @Param() params,
     @Body() challengeProgressDto: ProgressDto,
   ) {
     return this.progressService.updateUserProgressHistoryAnonymous(
+      params.uuid,
       challengeProgressDto,
     );
   }
