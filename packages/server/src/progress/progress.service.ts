@@ -19,6 +19,8 @@ import { captureSentryException } from "../tools/sentry-utils";
 
 @Injectable()
 export class ProgressService {
+  progressRecord = [];
+
   constructor(
     @InjectRepository(Progress)
     private readonly progressRepository: Repository<Progress>,
@@ -129,6 +131,19 @@ export class ProgressService {
       complete,
       timeCompleted,
     };
+
+    /**
+     * Add record to progress record list.
+     */
+    const record = {
+      challengeId,
+      timeCompleted,
+      uuid: user.profile.uuid,
+      complete,
+    };
+
+    this.progressRecord.push(record);
+
     return result;
   }
 
@@ -163,5 +178,29 @@ export class ProgressService {
     }
 
     return SUCCESS_CODES.OK;
+  }
+
+  public async retrieveProgressRecords() {
+    const records = this.progressRecord;
+    const now = Date.now();
+
+    const since = (time: string) => {
+      const seconds = (now - new Date(time).getTime()) / 1000;
+      return seconds;
+    };
+
+    const data = records.map(x => ({
+      state: x.complete ? "Complete" : "Incomplete",
+      challengeId: x.challengeId,
+      updated: `${since(x.timeCompleted)} seconds ago`,
+    }));
+
+    const last = since(records[0].timeCompleted);
+    const status = `${records.length} challenges updated in the last ${last} seconds.`;
+
+    return {
+      status,
+      records: data,
+    };
   }
 }

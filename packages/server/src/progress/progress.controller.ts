@@ -25,6 +25,11 @@ export class ProgressController {
     return this.progressService.fetchUserProgress(req.user.profile.uuid);
   }
 
+  @Get("/records")
+  public retrieveLiveProgressRecords() {
+    return this.progressService.retrieveProgressRecords();
+  }
+
   @UseGuards(AuthGuard("jwt"))
   @Post()
   @UsePipes(ValidationPipe)
