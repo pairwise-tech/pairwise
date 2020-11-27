@@ -18,12 +18,14 @@ import {
 import { captureSentryException } from "../tools/sentry-utils";
 import { STATUS_CODES } from "http";
 
+type User = "Anonymous User" | "Pairwise User";
+
 @Injectable()
 export class ProgressService {
   // Real-time user challenge progress tracking:
   time: number;
   challenges = 0;
-  progress: { [uuid: string]: { challengeIds: Set<string> } } = {};
+  progress: { [uuid: string]: { user: User; challengeIds: Set<string> } } = {};
 
   constructor(
     @InjectRepository(Progress)
@@ -137,7 +139,7 @@ export class ProgressService {
     };
 
     // Track user progress record
-    this.addToProgressRecord(user.profile.uuid, challengeId);
+    this.addToProgressRecord(user.profile.uuid, "Pairwise User", challengeId);
 
     return result;
   }
@@ -150,7 +152,7 @@ export class ProgressService {
     const { challengeId } = challengeProgressDto;
 
     // Track user progress record
-    this.addToProgressRecord(uuid, challengeId);
+    this.addToProgressRecord(uuid, "Anonymous User", challengeId);
 
     return STATUS_CODES.OK;
   }
@@ -188,7 +190,7 @@ export class ProgressService {
     return SUCCESS_CODES.OK;
   }
 
-  addToProgressRecord = (uuid: string, challengeId: string) => {
+  addToProgressRecord = (uuid: string, user: User, challengeId: string) => {
     if (!challengeId || !uuid) {
       return;
     }
@@ -207,6 +209,7 @@ export class ProgressService {
     } else {
       this.challenges++;
       records[uuid] = {
+        user,
         challengeIds: new Set([challengeId]),
       };
     }
@@ -229,7 +232,10 @@ export class ProgressService {
       return seconds;
     };
 
-    const data = Object.values(records).map(x => Array.from(x.challengeIds));
+    const data = Object.values(records).map(x => ({
+      user: x.user,
+      challengeIds: Array.from(x.challengeIds),
+    }));
     const last = since(this.time);
     const status = `${this.challenges} challenges updated in the last ${last} seconds.`;
 
