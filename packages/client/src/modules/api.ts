@@ -35,6 +35,7 @@ import { SANDBOX_ID } from "tools/constants";
 import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/utils";
 import { UserStoreState } from "./user/store";
+import { captureSentryException } from "../tools/sentry-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -375,6 +376,16 @@ class Api extends BaseApiClass {
       });
     } else {
       const result = localStorageHTTP.updateUserProgress(progress);
+
+      try {
+        // Dispatch /progress event for anonymous user for tracking
+        axios.post<IProgressDto>(`${HOST}/progress/anonymous`, progress, {
+          headers,
+        });
+      } catch (err) {
+        captureSentryException(err);
+      }
+
       return new Ok(result);
     }
   };

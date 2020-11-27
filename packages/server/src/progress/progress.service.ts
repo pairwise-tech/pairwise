@@ -16,6 +16,7 @@ import {
   validateChallengeProgressDto,
 } from "../tools/validation";
 import { captureSentryException } from "../tools/sentry-utils";
+import { STATUS_CODES } from "http";
 
 @Injectable()
 export class ProgressService {
@@ -139,12 +140,34 @@ export class ProgressService {
       challengeId,
       timeCompleted,
       uuid: user.profile.uuid,
+      user: "Pairwise User",
       complete,
     };
 
     this.progressRecord.push(record);
 
     return result;
+  }
+
+  public async updateUserProgressHistoryAnonymous(
+    challengeProgressDto: ProgressDto,
+  ): Promise<string> {
+    validateChallengeProgressDto(challengeProgressDto);
+    const { challengeId, complete, timeCompleted } = challengeProgressDto;
+
+    /**
+     * Add record to progress record list.
+     */
+    const record = {
+      challengeId,
+      timeCompleted,
+      user: "Anonymous User",
+      complete,
+    };
+
+    this.progressRecord.push(record);
+
+    return STATUS_CODES.OK;
   }
 
   public async persistUserCourseProgress(
@@ -180,8 +203,15 @@ export class ProgressService {
     return SUCCESS_CODES.OK;
   }
 
+  /**
+   * TODO: Anonymize user uuids to random names.
+   */
   public async retrieveProgressRecords() {
     const records = this.progressRecord;
+    if (records.length === 0) {
+      return "No records yet...";
+    }
+
     const now = Date.now();
 
     const since = (time: string) => {
@@ -190,11 +220,13 @@ export class ProgressService {
     };
 
     const data = records.map(x => ({
+      user: x.user,
       state: x.complete ? "Complete" : "Incomplete",
       challengeId: x.challengeId,
       updated: `${since(x.timeCompleted)} seconds ago`,
     }));
 
+    // Check if empty
     const last = since(records[0].timeCompleted);
     const status = `${records.length} challenges updated in the last ${last} seconds.`;
 

@@ -30,6 +30,16 @@ export class ProgressController {
     return this.progressService.retrieveProgressRecords();
   }
 
+  @Post("/anonymous")
+  @UsePipes(ValidationPipe)
+  public updateUserChallengeProgressAnonymous(
+    @Body() challengeProgressDto: ProgressDto,
+  ) {
+    return this.progressService.updateUserProgressHistoryAnonymous(
+      challengeProgressDto,
+    );
+  }
+
   @UseGuards(AuthGuard("jwt"))
   @Post()
   @UsePipes(ValidationPipe)
