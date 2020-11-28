@@ -18,7 +18,6 @@ import {
   validateChallengeProgressDto,
 } from "../tools/validation";
 import { captureSentryException } from "../tools/sentry-utils";
-import { STATUS_CODES } from "http";
 
 type User = "Anonymous User" | "Pairwise User";
 
@@ -157,7 +156,7 @@ export class ProgressService {
     // Track user progress record
     this.addToProgressRecord(uuid, "Anonymous User", challengeId);
 
-    return STATUS_CODES.OK;
+    return SUCCESS_CODES.OK;
   }
 
   public async persistUserCourseProgress(
@@ -209,6 +208,7 @@ export class ProgressService {
       id = this.uuidMap.get(id);
     } else {
       id = shortid();
+      this.uuidMap.set(uuid, id);
     }
 
     if (id in records) {
