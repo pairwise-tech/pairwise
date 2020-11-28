@@ -1,3 +1,4 @@
+import shortid from "shortid";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -26,7 +27,8 @@ export class ProgressService {
   // Real-time user challenge progress tracking:
   time: number;
   challenges = 0;
-  progress: { [uuid: string]: { user: User; challengeIds: Set<string> } } = {};
+  uuidMap = new Map<string, string>();
+  progress: { [id: string]: { user: string; challengeIds: Set<string> } } = {};
 
   constructor(
     @InjectRepository(Progress)
@@ -201,24 +203,29 @@ export class ProgressService {
     }
 
     const records = this.progress;
-    if (uuid in records) {
-      const record = records[uuid];
+
+    let id;
+    if (this.uuidMap.has(uuid)) {
+      id = this.uuidMap.get(id);
+    } else {
+      id = shortid();
+    }
+
+    if (id in records) {
+      const record = records[id];
       if (!record.challengeIds.has(challengeId)) {
         this.challenges++;
         record.challengeIds.add(challengeId);
       }
     } else {
       this.challenges++;
-      records[uuid] = {
-        user,
+      records[id] = {
+        user: `${user} - ${id}`,
         challengeIds: new Set([challengeId]),
       };
     }
   };
 
-  /**
-   * TODO: Anonymize user uuids to random names.
-   */
   public async retrieveProgressRecords() {
     const records = this.progress;
 
@@ -229,12 +236,16 @@ export class ProgressService {
     const now = Date.now();
 
     const since = (time: number) => {
-      const seconds = (now - new Date(time).getTime()) / 1000;
-      return seconds;
+      const minutes = (now - new Date(time).getTime()) / 1000 / 60;
+      return minutes.toFixed(2);
     };
 
+    let count = 0;
+
     const data = Object.values(records).map(x => {
-      const challengeIds = Array.from(x.challengeIds).map(id => {
+      const challenges = Array.from(x.challengeIds).map(id => {
+        count++;
+
         // Add the challenge title for context
         const { challenge } = ContentUtility.deriveChallengeContextFromId(id);
         return `${id} - ${challenge.title}`;
@@ -242,12 +253,13 @@ export class ProgressService {
 
       return {
         user: x.user,
-        challengeIds,
+        challenges,
       };
     });
 
+    const users = Object.keys(records).length;
     const last = since(this.time);
-    const status = `${this.challenges} challenges updated in the last ${last} seconds.`;
+    const status = `${count} challenges updated in the last ${last} minutes by ${users} users.`;
 
     return {
       status,
