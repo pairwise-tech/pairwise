@@ -205,7 +205,7 @@ export class ProgressService {
 
     let id;
     if (this.uuidMap.has(uuid)) {
-      id = this.uuidMap.get(id);
+      id = this.uuidMap.get(uuid);
     } else {
       id = shortid();
       this.uuidMap.set(uuid, id);
