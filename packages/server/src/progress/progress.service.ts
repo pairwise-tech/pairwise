@@ -8,6 +8,7 @@ import {
   UserCourseStatus,
   UserCourseProgress,
   IProgressDto,
+  ContentUtility,
 } from "@pairwise/common";
 import { SUCCESS_CODES } from "../tools/constants";
 import { RequestUser } from "../types";
@@ -232,10 +233,19 @@ export class ProgressService {
       return seconds;
     };
 
-    const data = Object.values(records).map(x => ({
-      user: x.user,
-      challengeIds: Array.from(x.challengeIds),
-    }));
+    const data = Object.values(records).map(x => {
+      const challengeIds = Array.from(x.challengeIds).map(id => {
+        // Add the challenge title for context
+        const { challenge } = ContentUtility.deriveChallengeContextFromId(id);
+        return `${id} - ${challenge.title}`;
+      });
+
+      return {
+        user: x.user,
+        challengeIds,
+      };
+    });
+
     const last = since(this.time);
     const status = `${this.challenges} challenges updated in the last ${last} seconds.`;
 
