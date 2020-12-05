@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, MouseEvent } from "react";
+import React, { SyntheticEvent } from "react";
 import cx from "classnames";
 import styled, { CSSProperties } from "styled-components/macro";
 import {
@@ -309,44 +309,12 @@ export const ModalTitleText = styled.h1`
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
+// @ts-ignore
 export const ModalSubText = styled(ModalTitleText)`
   font-size: 16px;
   margin-top: 12px;
   max-width: 350px;
   font-weight: 300;
-`;
-
-/**
- * Used to Smooth Scroll from Workspace to Content Area and Vice Versa
- */
-interface HalfCircleProps {
-  position: "top" | "bottom";
-  positionOffset: number;
-  backgroundColor: string;
-}
-
-export const HalfCircle = styled.div<HalfCircleProps>`
-  &:hover {
-    background: ${props => props.backgroundColor};
-  }
-
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  height: 30px;
-  justify-content: center;
-  left: 50%;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  transition: background 0.3s;
-  width: 60px;
-
-  border-${props =>
-    props.position === "top" ? "bottom" : "top"}-left-radius: 90px;
-  border-${props =>
-    props.position === "top" ? "bottom" : "top"}-right-radius: 90px;
-
-  ${props => props.position}: ${props => props.positionOffset}px;
 `;
 
 export const CodeEditorContainer = styled.div`
@@ -358,36 +326,6 @@ export const CodeEditorContainer = styled.div`
     padding-bottom: 41px;
   }
 `;
-
-type SmoothScrollButtonProps = {
-  icon: "chevron-down" | "chevron-up";
-  scrollToId: string;
-} & HalfCircleProps;
-
-export const SmoothScrollButton = ({
-  icon,
-  scrollToId,
-  position,
-  positionOffset,
-  backgroundColor,
-}: SmoothScrollButtonProps) => {
-  return (
-    <HalfCircle
-      position={position}
-      positionOffset={positionOffset}
-      backgroundColor={backgroundColor}
-      onClick={(e: MouseEvent) => {
-        e.preventDefault();
-        const el = document.getElementById(scrollToId);
-        el?.scrollIntoView({
-          behavior: "smooth",
-        });
-      }}
-    >
-      <Icon iconSize={22} icon={icon} />
-    </HalfCircle>
-  );
-};
 
 /**
  * the getRenderItemList and labelByType functions are helpers used by our
