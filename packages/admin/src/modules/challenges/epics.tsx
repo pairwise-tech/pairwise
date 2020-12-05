@@ -1,7 +1,3 @@
-// @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import SearchWorker from "workerize-loader!tools/lunr-search-worker";
-
 import {
   Course,
   IProgressDto,
@@ -16,7 +12,7 @@ import {
   getChallengeSlug,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
-import { merge, of, combineLatest, Observable, partition } from "rxjs";
+import { merge, of, combineLatest } from "rxjs";
 import {
   catchError,
   delay,
@@ -27,18 +23,12 @@ import {
   pluck,
   ignoreElements,
   debounceTime,
-  distinctUntilChanged,
-  take,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature, ReduxStoreState } from "../root";
 import { Actions } from "../root-actions";
 import {
   SANDBOX_ID,
-  SEARCH,
-  SEARCH_SUCCESS,
-  BUILD_SEARCH_INDEX,
-  SEARCH_QUERY_THRESHOLD,
 } from "tools/constants";
 import {
   deriveIdsFromCourseWithDefaults,
@@ -47,84 +37,12 @@ import {
   isContentOnlyChallenge,
   getChallengeProgress,
 } from "tools/utils";
-import { SearchResultEvent } from "./types";
 import React from "react";
-
-const debug = require("debug")("client:challenges:epics");
 
 /** ===========================================================================
  * Epics
  * ============================================================================
  */
-
-const searchEpic: EpicSignature = action$ => {
-  // Initialize the search worker. This could get dropped into deps if we need
-  // it elsewhere but I don't think we do
-  const searchWorker: Worker = new SearchWorker();
-
-  const buildSearchIndex$ = action$.pipe(
-    filter(isActionOf(Actions.fetchCoursesSuccess)),
-    map(x => x.payload.courses),
-    take(1), // Only do this once.. for now
-    tap(courses => {
-      searchWorker.postMessage({
-        type: BUILD_SEARCH_INDEX,
-        payload: courses,
-      });
-    }),
-    ignoreElements(),
-  );
-
-  // Stream of incoming search strings that we split on the length of the
-  // search. If the search is less than N chars (see below) consider it too
-  // small and clear the result so that stale search results aren't hanging
-  // around in the UI. Otherwise do the search.
-  const [_search$, _clearSearch$] = partition(
-    action$.pipe(
-      filter(isActionOf(Actions.requestSearchResults)),
-      map(x => x.payload),
-    ),
-    x => x.length > SEARCH_QUERY_THRESHOLD,
-  );
-
-  const search$ = _search$.pipe(
-    distinctUntilChanged(),
-    debounceTime(200),
-    tap(x => {
-      searchWorker.postMessage({
-        type: SEARCH,
-        payload: x,
-      });
-    }),
-    ignoreElements(),
-  );
-
-  const clearSearch$ = _clearSearch$.pipe(
-    map(() => []), // Empty array will clear the search
-    map(Actions.receiveSearchResults),
-  );
-
-  // All search results from the worker.
-  // NOTE: Since this is async the way it's current written there is no
-  // guarantee the most recent search result we get back corresponds to the most
-  // recent string the user has typed
-  const searchResult$ = new Observable<SearchResultEvent>(obs => {
-    const listener = (message: SearchResultEvent) => obs.next(message);
-    searchWorker.addEventListener("message", listener);
-    return () => searchWorker.removeEventListener("message", listener);
-  }).pipe(
-    tap(message => {
-      // This is the stream of all messages from the worker before it's filtered
-      debug("[INFO searchWorker]", message);
-    }),
-    map(x => x.data),
-    filter(x => x.type === SEARCH_SUCCESS),
-    map(x => x.payload),
-    map(Actions.receiveSearchResults),
-  );
-
-  return merge(buildSearchIndex$, search$, clearSearch$, searchResult$);
-};
 
 /**
  * Fetch the course content skeletons when the app launches.
@@ -912,7 +830,6 @@ export default combineEpics(
   saveCodeBlobEpic,
   handleAttemptChallengeEpic,
   updateUserProgressEpic,
-  searchEpic,
   completeContentOnlyChallengeEpic,
   showSectionToastEpic,
 );

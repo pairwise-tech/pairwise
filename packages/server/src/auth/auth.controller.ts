@@ -156,6 +156,10 @@ export class AuthController {
     const referrerUrl: string | undefined = req.headers.referer;
     const clientUrl = ENV.CLIENT_URL;
 
+    console.log(req.headers);
+    console.log("REFERRER URL:");
+    console.log(referrerUrl);
+
     if (typeof referrerUrl === "string" && referrerUrl.includes(clientUrl)) {
       return referrerUrl;
     } else {

@@ -18,6 +18,7 @@ import {
 import { FeedbackService } from "../feedback/feedback.service";
 import { UserService } from "../user/user.service";
 import { PaymentsService } from "../payments/payments.service";
+import { SUCCESS_CODES } from "../tools/constants";
 
 // HTTP Methods
 export type HTTP_METHOD = "GET" | "PUT" | "POST" | "DELETE";
@@ -64,6 +65,13 @@ export class AdminController {
     } catch (err) {
       this.handleError(err, options);
     }
+  }
+
+  /* admin authentication endpoint */
+  @UseGuards(AdminAuthGuard)
+  @Get("/authenticate")
+  public async adminLogin(@Request() req: AuthenticatedRequest) {
+    return SUCCESS_CODES.OK;
   }
 
   // An admin API to allow admin users to effectively purchase a course for

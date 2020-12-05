@@ -136,12 +136,10 @@ const ApplicationContainer = (props: IProps) => {
       <LoadingOverlay visible={workspaceLoading} />
       <SingleSignOnModal />
       <Header>
-        <ControlsContainer
-          style={{ height: "100%", marginRight: isMobile ? 0 : 40 }}
-        >
+        <ControlsContainer style={{ height: "100%", width: 350 }}>
           <NavIconButton
             overlayVisible={overlayVisible}
-            style={{ color: "white", marginRight: isMobile ? 15 : 20 }}
+            style={{ color: "white", marginRight: 20 }}
             onClick={() => null}
           />
           <ProductTitle id="product-title">
@@ -150,9 +148,8 @@ const ApplicationContainer = (props: IProps) => {
               id="header-home-link"
               style={{ display: "flex", alignItems: "center" }}
             >
-              Pairwise
+              Pairwise Admin
             </Link>
-            <CurrentlyInBeta />
           </ProductTitle>
         </ControlsContainer>
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
@@ -218,15 +215,9 @@ const ApplicationContainer = (props: IProps) => {
           ) : (
             <LoginSignupButton
               id="login-signup-button"
-              // style={{
-              //   margin: "0 10px",
-              //   border: "1px solid rgba(255, 255, 255, 0.23)",
-              //   flexShrink: 0,
-              //   whiteSpace: "nowrap",
-              // }}
               onClick={() => setSingleSignOnDialogState(true)}
             >
-              Login or Signup
+              Admin Login
             </LoginSignupButton>
           )}
         </ControlsContainer>
@@ -366,23 +357,6 @@ const LoginSignupButton = styled(Button)`
     50% {
       background-position: 100% 50%;
     }
-  }
-`;
-
-const CurrentlyInBeta = styled.small`
-  display: block;
-  position: absolute;
-  top: 18%;
-  left: 100%;
-  transform: translate(-50%, -50%) scale(0.7);
-  font-weight: bold;
-  letter-spacing: 1.2px;
-  background: ${COLORS.SECONDARY_PINK};
-  padding: 0px 6px;
-  box-shadow: 0 0 20px rgb(0, 0, 0);
-  border-radius: 100px;
-  &:before {
-    content: "ADMIN UI";
   }
 `;
 

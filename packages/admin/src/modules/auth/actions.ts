@@ -1,3 +1,5 @@
+import { IUserDto } from "@pairwise/common";
+import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
 
 /** ===========================================================================
@@ -11,14 +13,11 @@ enum ActionTypesEnum {
   STORE_ACCESS_TOKEN = "STORE_ACCESS_TOKEN",
   STORE_ACCESS_TOKEN_SUCCESS = "STORE_ACCESS_TOKEN_SUCCESS",
 
-  INITIATE_BULK_PERSISTENCE = "INITIATE_BULK_PERSISTENCE",
-  BULK_PERSISTENCE_COMPLETE = "BULK_PERSISTENCE_COMPLETE",
-
   LOGOUT = "LOGOUT",
 
-  LOGIN_BY_EMAIL = "LOGIN_BY_EMAIL",
-  LOGIN_BY_EMAIL_SUCCESS = "LOGIN_BY_EMAIL_SUCCESS",
-  LOGIN_BY_EMAIL_FAILURE = "LOGIN_BY_EMAIL_FAILURE",
+  ADMIN_USER_LOGIN = "ADMIN_USER_LOGIN",
+  ADMIN_USER_LOGIN_SUCCESS = "ADMIN_USER_LOGIN_SUCCESS",
+  ADMIN_USER_LOGIN_FAILURE = "ADMIN_USER_LOGIN_FAILURE",
 }
 
 /** ===========================================================================
@@ -41,24 +40,14 @@ export const storeAccessTokenSuccess = createAction(
   ActionTypesEnum.STORE_ACCESS_TOKEN_SUCCESS,
 )<{ accessToken: string; accountCreated: boolean }>();
 
-export const initiateBulkPersistence = createAction(
-  ActionTypesEnum.INITIATE_BULK_PERSISTENCE,
-)();
-
-export const bulkPersistenceComplete = createAction(
-  ActionTypesEnum.BULK_PERSISTENCE_COMPLETE,
-)();
-
 export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
 
-export const loginByEmail = createAction(ActionTypesEnum.LOGIN_BY_EMAIL)<{
-  email: string;
-}>();
+export const adminUserLogin = createAction(ActionTypesEnum.ADMIN_USER_LOGIN)();
 
-export const loginByEmailSuccess = createAction(
-  ActionTypesEnum.LOGIN_BY_EMAIL_SUCCESS,
-)();
+export const adminUserLoginSuccess = createAction(
+  ActionTypesEnum.ADMIN_USER_LOGIN_SUCCESS,
+)<IUserDto>();
 
-export const loginByEmailFailure = createAction(
-  ActionTypesEnum.LOGIN_BY_EMAIL_FAILURE,
-)();
+export const adminUserLoginFailure = createAction(
+  ActionTypesEnum.ADMIN_USER_LOGIN_FAILURE,
+)<HttpResponseError>();

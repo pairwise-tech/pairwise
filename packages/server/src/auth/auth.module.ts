@@ -17,7 +17,7 @@ import { GoogleStrategy } from "./strategies/google.strategy";
     }),
     JwtModule.register({
       secret: ENV.JWT_SECRET,
-      signOptions: { expiresIn: "365 days" }, // Expire in one year, boom baby!
+      signOptions: { expiresIn: "365 days" }, // Expire in one year, boom!
     }),
     UsersModule,
   ],

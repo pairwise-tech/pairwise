@@ -24,14 +24,6 @@ const initialState = {
 };
 
 const auth = createReducer<State, AuthActionTypes>(initialState)
-  .handleAction(actions.initiateBulkPersistence, (state, action) => ({
-    ...state,
-    bulkPersistenceInProgress: true,
-  }))
-  .handleAction(actions.bulkPersistenceComplete, (state, action) => ({
-    ...state,
-    bulkPersistenceInProgress: false,
-  }))
   .handleAction(actions.setSingleSignOnDialogState, (state, action) => ({
     ...state,
     emailRequestSent: false,
@@ -40,20 +32,6 @@ const auth = createReducer<State, AuthActionTypes>(initialState)
   .handleAction(actions.storeAccessTokenSuccess, (state, action) => ({
     ...state,
     accessToken: action.payload.accessToken,
-  }))
-  .handleAction(actions.loginByEmail, state => ({
-    ...state,
-    emailRequestSent: false,
-    emailLoginRequestLoading: true,
-  }))
-  .handleAction(actions.loginByEmailSuccess, state => ({
-    ...state,
-    emailRequestSent: true,
-    emailLoginRequestLoading: false,
-  }))
-  .handleAction(actions.loginByEmailFailure, state => ({
-    ...state,
-    emailLoginRequestLoading: false,
   }))
   .handleAction(actions.logoutUser, (state, action) => initialState);
 

@@ -1,4 +1,3 @@
-import * as EmailValidator from "email-validator";
 import { combineEpics } from "redux-observable";
 import {
   filter,
@@ -8,11 +7,9 @@ import {
   mergeMap,
   pluck,
   map,
-  mapTo,
-  mergeMapTo,
-  switchMap,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
+import API from "modules/api";
 import { of } from "rxjs";
 import {
   setAccessTokenInLocalStorage,
@@ -49,14 +46,8 @@ const accessTokenInitializationEpic: EpicSignature = (action$, _, deps) => {
       let accountCreated = false;
       let token = getAccessTokenFromLocalStorage();
 
-      if (appInitializationType === APP_INITIALIZATION_TYPE.ACCOUNT_CREATED) {
-        accountCreated = true;
-        token = accessToken as string;
-        console.log("User signin occurred, new account created!");
-        deps.toaster.success("Welcome to Pairwise! 🎉");
-      } else if (appInitializationType === APP_INITIALIZATION_TYPE.SIGN_IN) {
+      if (appInitializationType === APP_INITIALIZATION_TYPE.SIGN_IN) {
         accountCreated = false;
-        console.log("Existing user signin occurred!");
         token = accessToken as string;
       }
 
@@ -97,65 +88,35 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
     }),
     mergeMap(({ payload }) => {
       const { accessToken } = payload;
-      return of(
-        Actions.storeAccessTokenSuccess(payload),
-        Actions.initializeAppSuccess({ accessToken }),
-      );
+      if (accessToken) {
+        return of(
+          Actions.storeAccessTokenSuccess(payload),
+          Actions.initializeAppSuccess({ accessToken }),
+        );
+      } else {
+        return of(
+          Actions.adminUserLoginFailure({ message: "No access token" }),
+          Actions.initializeAppSuccess({ accessToken }),
+        );
+      }
     }),
   );
 };
 
-/**
- * This epic should only run one time per user: the first time the user creates
- * an account which will result in the access token initialization flow with
- * the { accountCreated: true } field.
- *
- * In this case, we want to start a process to persist any of their local
- * saved progress to their new account on the server.
- */
-const accountCreationEpic: EpicSignature = (action$, _, deps) => {
+const adminUserLoginEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.storeAccessTokenSuccess)),
-    pluck("payload"),
-    pluck("accountCreated"),
-    filter(Boolean),
-    mapTo(Actions.initiateBulkPersistence()),
-  );
-};
-
-/* Nice! */
-const bulkPersistenceEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.initiateBulkPersistence)),
-    mergeMap(deps.api.handleDataPersistenceForNewAccount),
-    mergeMapTo(of(Actions.fetchUser(), Actions.bulkPersistenceComplete())),
-  );
-};
-
-// Dispatch a request for a magic email login link
-const loginByEmailEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.loginByEmail)),
-    pluck("payload"),
-    pluck("email"),
-    switchMap(async email => {
-      // Validate email address
-      const valid = EmailValidator.validate(email);
-      if (!valid) {
-        deps.toaster.warn("Please enter a valid email.");
-        return Actions.loginByEmailFailure();
-      }
-
-      // Send the request
-      const result = await deps.api.loginByEmail(email);
+    filter(x => !!x.payload.accessToken),
+    mergeMap(API.adminUserLogin),
+    mergeMap(result => {
       if (result.value) {
-        deps.toaster.success(
-          "Email sent! Please check your inbox and follow the instructions.",
-        );
-        return Actions.loginByEmailSuccess();
+        return of(Actions.fetchUser());
       } else {
-        deps.toaster.warn("Could not send email...");
-        return Actions.loginByEmailFailure();
+        deps.toaster.error("Unauthorized, get out!");
+        return of(
+          Actions.adminUserLoginFailure(result.error),
+          Actions.logoutUser(),
+        );
       }
     }),
   );
@@ -185,8 +146,6 @@ const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
 export default combineEpics(
   accessTokenInitializationEpic,
   storeAccessTokenEpic,
-  accountCreationEpic,
-  bulkPersistenceEpic,
-  loginByEmailEpic,
+  adminUserLoginEpic,
   logoutUserSuccessEpic,
 );

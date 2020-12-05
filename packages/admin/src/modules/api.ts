@@ -182,7 +182,7 @@ class BaseApiClass {
     logoutUserInLocalStorage();
     await wait(1500); /* Wait so they can read the message... */
 
-    window.location.reload();
+    // window.location.reload();
   };
 }
 
@@ -250,6 +250,15 @@ class Api extends BaseApiClass {
       });
     });
   };
+
+  adminUserLogin = async () => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.get<CourseSkeletonList>(`${HOST}/admin/authenticate`, {
+        headers,
+      });
+    });
+  }
 
   fetchUserProfile = async () => {
     const { headers, authenticated } = this.getRequestHeaders();
