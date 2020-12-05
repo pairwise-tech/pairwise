@@ -8,7 +8,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { COLORS, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
-import Home from "./Home";
+import AdminSummary from "./AdminSummary";
 import Index from "./Index";
 import {
   Button,
@@ -215,7 +215,9 @@ const ApplicationContainer = (props: IProps) => {
             component={() => <Redirect to="/home" />}
           />
         )}
-        {isLoggedIn && <Route key="home" path="/home" component={Home} />}
+        {isLoggedIn && (
+          <Route key="home" path="/home" component={AdminSummary} />
+        )}
         <Route exact key="index" path="/" component={Index} />
         <Route
           key="logout"

@@ -6,7 +6,6 @@
   "scripts": {
     "setup:env": "cp sample.env .env",
     "start": "react-scripts start",
-    "start:dev": "REACT_APP_DEV=true yarn run start",
     "build:common": "cd ../common && yarn run build",
     "start:https": "REACT_APP_HOST=https://localhost:9000 HTTPS=true yarn run start",
     "start:prod": "serve build -s -p 3000",

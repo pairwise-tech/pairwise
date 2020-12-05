@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer } from "./Shared";
+import { summarizeUserProgress } from "../tools/admin-utils";
 
 /** ===========================================================================
  * Home Component
@@ -11,12 +12,39 @@ import { PageContainer } from "./Shared";
 
 class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
+    const { usersList, usersListLoading } = this.props;
+    if (usersListLoading) {
+      return null;
+    }
+
+    const summary = summarizeUserProgress(usersList);
     return (
       <PageContainer>
         <ContentContainer>
-          <Title>
-            Pairwise Admin Active, {this.props.usersList.length} users loaded.
-          </Title>
+          <h2>Current Stats:</h2>
+          <Stat>
+            <b>Total Users:</b> {summary.stats.totalUsers.toLocaleString()}
+          </Stat>
+          <Stat>
+            <b>New Users Last Week:</b>{" "}
+            {summary.stats.newUsersInLastWeek.toLocaleString()}
+          </Stat>
+          <Stat>
+            <b>Total Challenges Completed:</b>{" "}
+            {summary.stats.totalChallengesCompleted.toLocaleString()}
+          </Stat>
+          <Stat>
+            <b>Challenges Completed in Last Week:</b>{" "}
+            {summary.stats.challengesCompletedInLastWeek.toLocaleString()}
+          </Stat>
+          <Stat>
+            <b>Average Challenges/User:</b>{" "}
+            {summary.leaderboard.averageChallengesCompletedPerNonZeroUser.toLocaleString()}
+          </Stat>
+          <Stat>
+            <b>Leader Challenge Count:</b>{" "}
+            {summary.leaderboard.leaderChallengeCount.toLocaleString()}
+          </Stat>
         </ContentContainer>
       </PageContainer>
     );
@@ -29,12 +57,12 @@ class Home extends React.Component<IProps, {}> {
  */
 
 const ContentContainer = styled.div`
-  padding: 12px;
+  padding: 2px 12px;
 `;
 
-const Title = styled.code`
-  margin-top: 16px;
-  font-size: 16px;
+const Stat = styled.p`
+  margin-top: 12px;
+  font-size: 14px;
 `;
 
 /** ===========================================================================
@@ -44,6 +72,7 @@ const Title = styled.code`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   usersList: Modules.selectors.users.usersState(state).users,
+  usersListLoading: Modules.selectors.users.usersState(state).loading,
 });
 
 const dispatchProps = {};
