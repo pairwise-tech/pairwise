@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer } from "./Shared";
-import SEO from "./SEO";
 
 /** ===========================================================================
  * Home Component
@@ -14,10 +13,6 @@ class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     return (
       <PageContainer>
-        <SEO
-          title="Welcome to Pairwise"
-          description="Learn to code with hands-on challenges and projects"
-        />
         <ContentContainer>
           <Title>Pairwise Admin Active, {this.props.usersList.length} users loaded.</Title>
         </ContentContainer>

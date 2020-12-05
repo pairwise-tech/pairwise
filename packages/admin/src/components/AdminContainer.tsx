@@ -28,9 +28,7 @@ import {
   OverlaySmallText,
   PairwiseOpenCloseLogo,
 } from "./Shared";
-import SingleSignOnModal, {
-  AuthenticationForm,
-} from "components/SingleSignOnModal";
+import SingleSignOnModal from "components/SingleSignOnModal";
 import { getChallengeSlug } from "@pairwise/common";
 
 // Only show focus outline when tabbing around the UI
