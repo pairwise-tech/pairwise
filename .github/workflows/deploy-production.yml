@@ -62,9 +62,9 @@ jobs:
           dockerfile: Base.Dockerfile
           image_name: pairwise-dependencies
 
-      # # Build the application
-      # - name: Build the application
-      #   run: yarn docker:build:ci_deploy
+      # Build the application
+      - name: Build the application
+        run: yarn docker:build:ci_deploy
 
       # # Run all package unit tests
       # - name: Run static and unit tests
