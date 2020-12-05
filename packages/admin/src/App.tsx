@@ -4,7 +4,6 @@ import { Router as ReactRouter } from "react-router-dom";
 import ApplicationContainer from "components/ApplicationContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
 import { NODE_ENV } from "tools/client-env";
-import ScrollToTop from "components/ScrollToTop";
 import { DarkTheme, FullScreenOverlay, OverlayText } from "components/Shared";
 import { captureSentryException } from "tools/sentry-utils";
 
@@ -66,7 +65,6 @@ class Pairwise extends React.Component<IProps, IState> {
     return (
       <ReduxProvider store={store}>
         <ReactRouter history={history}>
-          <ScrollToTop />
           <DarkTheme>
             <ApplicationContainer />
           </DarkTheme>

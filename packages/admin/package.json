@@ -1,7 +1,7 @@
 {
-  "name": "@pairwise/client",
+  "name": "@pairwise/admin",
   "version": "0.0.1",
-  "description": "Pairwise React Client Application",
+  "description": "Pairwise Admin UI",
   "private": true,
   "scripts": {
     "codepress:build": "tsc --lib esnext --esModuleInterop --skipLibCheck codepress/src/*.ts",

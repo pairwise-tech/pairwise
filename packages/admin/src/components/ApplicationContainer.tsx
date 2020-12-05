@@ -1,19 +1,15 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { useMedia } from "use-media";
 import { Redirect, Route, Switch, useHistory } from "react-router";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
-import { CODEPRESS } from "tools/client-env";
 import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
-import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
-import Swipy from "swipyjs";
 import {
   Button,
-  ButtonGroup,
   FocusStyleManager,
   Tooltip,
   Menu,
@@ -28,35 +24,14 @@ import {
   IconButton,
   FullScreenOverlay,
   OverlayText,
-  LoadingInline,
-  DesktopOnly,
   OverlaySmallText,
   PairwiseOpenCloseLogo,
 } from "./Shared";
-import { MOBILE_SCROLL_PANEL_ID } from "./Workspace";
-import { ChallengeTypeOption } from "./ChallengeTypeMenu";
-import {
-  PrevChallengeIconButton,
-  NextChallengeIconButton,
-} from "./ChallengeControls";
-import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
-import { ShortcutKeysPopover } from "./KeyboardShortcuts";
-import PomodoroTimer from "./PomodoroTimer";
-import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
-import PairwiseScreensaver from "./PairwiseScreensaver";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
-
-const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
-
-const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
-  { value: "markup", label: "HTML/CSS" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "react", label: "React" },
-];
 
 /** ===========================================================================
  * ApplicationContainer
@@ -82,30 +57,18 @@ const ApplicationContainer = (props: IProps) => {
     logoutUser,
     userLoading,
     initializeApp,
-    updateChallenge,
     overlayVisible,
     workspaceLoading,
     setScreensaverState,
-    screensaverVisible,
-    toggleNavigationMap,
-    openFeedbackDialog,
     userAuthenticated,
     nextPrevChallenges,
     initializationError,
-    setNavigationMapState,
     setSingleSignOnDialogState,
   } = props;
 
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
   const isMobile = useMedia(MOBILE, false);
   const history = useHistory();
-  const [isSearchFocused, setIsSearchFocused] = React.useState(false);
-  const handleSearchFocus = React.useCallback(() => {
-    setIsSearchFocused(true);
-  }, [setIsSearchFocused]);
-  const handleSearchBlur = React.useCallback(() => {
-    setIsSearchFocused(false);
-  }, [setIsSearchFocused]);
 
   React.useEffect(() => {
     // We have to pass location in here to correctly capture the original
@@ -115,46 +78,6 @@ const ApplicationContainer = (props: IProps) => {
     setHasHandledRedirect(true);
   }, [initializeApp]);
 
-  /**
-   * Add a gesture handler to toggle the navigation menu.
-   */
-  React.useEffect(() => {
-    // Not available on desktop
-    if (!isMobile) {
-      return;
-    }
-
-    // Attach handler to the document
-    const swipeHandler = new Swipy(document.documentElement);
-
-    // Handle to swipe right
-    swipeHandler.on("swiperight", (touchEvent: any) => {
-      if (isTouchEventOnEditor(touchEvent)) {
-        return;
-      }
-
-      if (!overlayVisible) {
-        setNavigationMapState(true);
-      }
-    });
-
-    // Handle to swipe left
-    swipeHandler.on("swipeleft", (touchEvent: any) => {
-      if (isTouchEventOnEditor(touchEvent)) {
-        return;
-      }
-
-      if (overlayVisible) {
-        setNavigationMapState(false);
-      }
-    });
-
-    // Remove native event listeners on unmount
-    return () => {
-      swipeHandler.unbind();
-    };
-  });
-
   if (!hasHandledRedirect) {
     return null;
   }
@@ -163,14 +86,12 @@ const ApplicationContainer = (props: IProps) => {
     return <ErrorOverlay />;
   } else if (!initialized) {
     return <LoadingOverlay visible={workspaceLoading} />;
-  } else if (screensaverVisible) {
-    return <PairwiseScreensaver setScreensaverState={setScreensaverState} />;
   }
 
   const onWorkspaceRoute = location.includes("workspace");
   const isSandbox =
     !!challenge && challenge.id === SANDBOX_ID && onWorkspaceRoute;
-  const displayNavigationArrows = onWorkspaceRoute;
+
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
   const { prev, next } = nextPrevChallenges;
@@ -214,11 +135,6 @@ const ApplicationContainer = (props: IProps) => {
         }}
         text="Sandbox"
       />
-      <MenuItem
-        icon="help"
-        onClick={openFeedbackDialog}
-        text="Submit Feedback"
-      />
     </Menu>
   );
 
@@ -232,7 +148,7 @@ const ApplicationContainer = (props: IProps) => {
           <NavIconButton
             overlayVisible={overlayVisible}
             style={{ color: "white", marginRight: isMobile ? 15 : 20 }}
-            onClick={toggleNavigationMap}
+            onClick={() => null}
           />
           <ProductTitle id="product-title">
             <Link
@@ -245,33 +161,9 @@ const ApplicationContainer = (props: IProps) => {
             <CurrentlyInBeta />
           </ProductTitle>
         </ControlsContainer>
-        {CODEPRESS && (
-          <ControlsContainer style={{ flexShrink: 0 }}>
-            <EditingToolbar />
-          </ControlsContainer>
-        )}
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          {(!isSandbox || !isMobile) && (
-            <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
-          )}
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
-          {!isMobile && <PomodoroTimer />}
-          {!isMobile && (
-            <Tooltip
-              usePortal={false}
-              position="bottom"
-              content="Submit Feedback"
-            >
-              <IconButton
-                icon="comment"
-                style={{ padding: 0 }}
-                aria-label="Open the feedback dialog"
-                onClick={openFeedbackDialog}
-              />
-            </Tooltip>
-          )}
-          {!isMobile && <ShortcutKeysPopover />}
           {!isMobile && (
             <Tooltip
               usePortal={false}
@@ -285,31 +177,6 @@ const ApplicationContainer = (props: IProps) => {
                 onClick={() => setScreensaverState(true)}
               />
             </Tooltip>
-          )}
-          {/* <PairwiseLivePopover /> */}
-          {isSandbox && (
-            <Suspense fallback={<LoadingInline />}>
-              <LazyChallengeTypeMenu
-                items={SANDBOX_TYPE_CHOICES}
-                currentChallengeType={challenge?.type}
-                onItemSelect={x => {
-                  if (challenge) {
-                    updateChallenge({
-                      id: challenge.id, // See NOTE
-                      challenge: { type: x.value },
-                    });
-                  }
-                }}
-              />
-            </Suspense>
-          )}
-          {displayNavigationArrows && (
-            <DesktopOnly>
-              <ButtonGroup style={{ marginLeft: 6 }}>
-                <PrevChallengeIconButton id="prevButton" />
-                <NextChallengeIconButton id="nextButton" />
-              </ButtonGroup>
-            </DesktopOnly>
           )}
           {!isMobile && (
             <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
@@ -334,7 +201,7 @@ const ApplicationContainer = (props: IProps) => {
               </Popover>
             </LastChildMargin>
           )}
-          {isSearchFocused || userLoading ? (
+          {userLoading ? (
             <div style={{ width: 8 }} />
           ) : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
@@ -712,38 +579,6 @@ const LostPage = () => (
   </LostPageContainer>
 );
 
-/**
- * Determine if a touch event came the code panel scroll area.
- *
- * NOTE: Safari has lacking compatibility for TouchEvents so in Safari we
- * recursively walk backwards up the DOM tree looking for the mobile
- * scroll panel element by its id.
- */
-const isTouchEventOnEditor = (touchEvent: any) => {
-  try {
-    // For most browsers:
-    if (touchEvent.path) {
-      return !!touchEvent.path.find(
-        (x: HTMLElement) => x.id === MOBILE_SCROLL_PANEL_ID,
-      );
-    } else {
-      // For Safari:
-      let node = touchEvent.srcElement.parentNode;
-      // document.parentNode is null so this should terminate eventually
-      while (node) {
-        if (node.id === MOBILE_SCROLL_PANEL_ID) {
-          return true;
-        } else {
-          node = node.parentNode;
-        }
-      }
-      return false;
-    }
-  } catch (err) {
-    return false;
-  }
-};
-
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -787,17 +622,6 @@ const mergeProps = (
   ...props,
   ...methods,
   ...state,
-  toggleNavigationMap: () => {
-    methods.setNavigationMapState(!state.overlayVisible);
-  },
-  openFeedbackDialog: () => {
-    const { pathname } = window.location;
-    methods.setFeedbackDialogState(
-      pathname.includes("workspace") && !pathname.includes("sandbox")
-        ? FEEDBACK_DIALOG_TYPES.CHALLENGE_FEEDBACK
-        : FEEDBACK_DIALOG_TYPES.ASK_A_QUESTION,
-    );
-  },
 });
 
 type IProps = ReturnType<typeof mergeProps>;
