@@ -6,12 +6,9 @@ import {
   ignoreElements,
   pluck,
   delay,
-  withLatestFrom,
-  catchError,
-  distinct,
   mapTo,
 } from "rxjs/operators";
-import { Observable, merge, defer, of, combineLatest } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
@@ -60,73 +57,6 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
         params,
         location,
         appInitializationType,
-      });
-    }),
-  );
-};
-
-/**
- * Start the payment intent flow if a user deep links to it. The deep
- * link is to /purchase and can accept a courseId param or default
- * to the TypeScript course.
- */
-const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
-  /**
-   * NOTE: We wait for the user and courses to be fetched before handling
-   * the next step. We need the course list to validate the courseId param
-   * and the user is needed to correctly handle the payment intent step,
-   * which is after this.
-   *
-   * None of this will happen if either the user or course fails to fetch
-   * successfully, but that is probably OK.
-   */
-  const userFetchedSuccess$ = action$.pipe(
-    filter(isActionOf(Actions.fetchUserSuccess)),
-  );
-  const courseFetchedSuccess$ = action$.pipe(
-    filter(isActionOf(Actions.fetchCoursesSuccess)),
-  );
-  const captureAppInitUrl$ = action$.pipe(
-    filter(isActionOf(Actions.captureAppInitializationUrl)),
-  );
-
-  return combineLatest(
-    captureAppInitUrl$,
-    userFetchedSuccess$,
-    courseFetchedSuccess$,
-  ).pipe(
-    map(x => x[0]), // Extract the app initialization payload
-    pluck("payload"),
-    filter(
-      x =>
-        x.appInitializationType ===
-        APP_INITIALIZATION_TYPE.PURCHASE_COURSE_FLOW,
-    ),
-    pluck("params"),
-    pluck("courseId"),
-    map((id: any) => {
-      // A set of course ids which exist
-      const courseIds = new Set(
-        state$.value.challenges.courseSkeletons?.map(x => x.id),
-      );
-
-      // Default to the TypeScript course id
-      const TYPESCRIPT_COURSE_ID = "fpvPtfu7s";
-      // NOTE: The courseId param is not validated anywhere...
-      const courseId = courseIds.has(id) ? id : TYPESCRIPT_COURSE_ID;
-
-      // Check if the user has already paid for the course, just in case...
-      const { payments } = state$.value.user.user;
-      const userPaid = payments?.find(p => p.courseId === courseId);
-      if (userPaid) {
-        return Actions.empty(
-          `Handling /purchase deep link but it turns out user has already paid for the course, id: ${courseId}`,
-        );
-      }
-
-      return Actions.handlePaymentCourseIntent({
-        courseId,
-        showToastWarning: true,
       });
     }),
   );
@@ -275,130 +205,6 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
 };
 
 /** ===========================================================================
- * Analytics Epics
- * ============================================================================
- */
-
-interface AmplitudeInstance {
-  setUserId: (x: string) => void;
-  logEvent: (x: string, opts?: any) => void;
-}
-
-interface Amplitude {
-  getInstance: () => AmplitudeInstance;
-}
-
-declare global {
-  interface Window {
-    amplitude?: Amplitude;
-  }
-}
-
-export enum ANALYTICS_EVENTS {
-  RETURNING_USER = "RETURNING_USER",
-  CHALLENGE_COMPLETE = "CHALLENGE_COMPLETE",
-  REVEAL_SOLUTION_CODE = "REVEAL_SOLUTION_CODE",
-  FEEDBACK_SUBMITTED = "FEEDBACK_SUBMITTED",
-  LAUNCH_SCREENSAVER = "LAUNCH_SCREENSAVER",
-  START_POMODORO_SESSION = "START_POMODORO_SESSION",
-}
-
-/**
- * An epic to send some custom events to amplitude.
- */
-const analyticsEpic: EpicSignature = (action$, state$) => {
-  const amp$ = defer<Observable<Window["amplitude"]>>(() =>
-    of(window.amplitude),
-  ).pipe(
-    filter((x): x is Amplitude => Boolean(x)),
-    map(x => x.getInstance()),
-  );
-
-  const identityAnalytic$ = action$.pipe(
-    filter(isActionOf(Actions.fetchUserSuccess)),
-    tap(x => {
-      const { amplitude } = window;
-      const { profile } = x.payload;
-      const amp = amplitude?.getInstance();
-      if (amp && profile) {
-        amp.setUserId(profile.uuid);
-        amp.logEvent(ANALYTICS_EVENTS.RETURNING_USER, {
-          email: profile.email || "<EMAIL_UNKNOWN>",
-        });
-      }
-    }),
-    ignoreElements(),
-  );
-
-  const completionAnalytic$ = action$.pipe(
-    filter(isActionOf(Actions.updateUserProgress)),
-    filter(x => x.payload.complete),
-    distinct(x => x.payload.challengeId), // Do not double-log completion of the same challenge
-    tap(x => {
-      const { amplitude } = window;
-      const amp = amplitude?.getInstance();
-      const { complete, ...props } = x.payload;
-      if (amp) {
-        amp.logEvent(ANALYTICS_EVENTS.CHALLENGE_COMPLETE, props);
-      }
-    }),
-    ignoreElements(),
-  );
-
-  const revealSolutionAnalytic$ = action$.pipe(
-    filter(isActionOf(Actions.toggleRevealSolutionCode)),
-    pluck("payload"),
-    pluck("shouldReveal"),
-    tap(() => {
-      const { amplitude } = window;
-      const amp = amplitude?.getInstance();
-      const props = {
-        challengeId: state$.value.challenges.currentChallengeId,
-      };
-      if (amp) {
-        amp.logEvent(ANALYTICS_EVENTS.REVEAL_SOLUTION_CODE, props);
-      }
-    }),
-    ignoreElements(),
-  );
-
-  const feedbackAnalytic$ = action$.pipe(
-    filter(isActionOf(Actions.submitUserFeedback)),
-    withLatestFrom(amp$),
-    tap(([x, amp]) => {
-      amp.logEvent(ANALYTICS_EVENTS.FEEDBACK_SUBMITTED, {
-        challengeId: x.payload.challengeId,
-        type: x.payload.type,
-      });
-    }),
-    ignoreElements(),
-  );
-
-  const screensaverAnalytic$ = action$.pipe(
-    filter(isActionOf(Actions.setScreensaverState)),
-    filter(x => !!x.payload),
-    withLatestFrom(amp$),
-    tap(([_, amp]) => {
-      amp.logEvent(ANALYTICS_EVENTS.LAUNCH_SCREENSAVER);
-    }),
-    ignoreElements(),
-  );
-
-  return merge(
-    identityAnalytic$,
-    completionAnalytic$,
-    feedbackAnalytic$,
-    revealSolutionAnalytic$,
-    screensaverAnalytic$,
-  ).pipe(
-    catchError((err, stream) => {
-      console.warn(`[Low Priority] Analytics error: ${err.message}`);
-      return stream; // Do not collapse the stream
-    }),
-  );
-};
-
-/** ===========================================================================
  * Export
  * ============================================================================
  */
@@ -407,11 +213,9 @@ export default combineEpics(
   appInitializationEpic,
   appInitializationFailedEpic,
   appInitializeCaptureUrlEpic,
-  purchaseCourseDeepLinkEpic,
   stripInitialParameters,
   emailUpdateSuccessToastEpic,
   promptToAddEmailEpic,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
-  analyticsEpic,
 );

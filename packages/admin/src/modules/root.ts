@@ -12,13 +12,11 @@ import toaster from "tools/toast-utils";
 
 import App, { AppActionTypes, AppState } from "./app";
 import Auth, { AuthActionTypes, AuthState } from "./auth";
-import Payments, { PaymentsActionTypes, PaymentsState } from "./payments";
 import Challenges, {
   ChallengesActionTypes,
   ChallengesState,
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./user";
-import Feedback, { FeedbackActionTypes, FeedbackState } from "./feedback";
 import * as Storage from "../tools/storage-utils";
 
 /** ===========================================================================
@@ -30,17 +28,13 @@ export type ReduxActionTypes =
   | AppActionTypes
   | ChallengesActionTypes
   | UserActionTypes
-  | AuthActionTypes
-  | PaymentsActionTypes
-  | FeedbackActionTypes;
+  | AuthActionTypes;
 
 export const selectors = {
   app: App.selector,
   auth: Auth.selector,
   user: User.selector,
   challenges: Challenges.selector,
-  payments: Payments.selector,
-  feedback: Feedback.selector,
 };
 
 export const actions = {
@@ -48,8 +42,6 @@ export const actions = {
   auth: Auth.actions,
   user: User.actions,
   challenges: Challenges.actions,
-  payments: Payments.actions,
-  feedback: Feedback.actions,
 };
 
 export const Modules = {
@@ -67,8 +59,6 @@ export interface ReduxStoreState {
   auth: AuthState;
   user: UserState;
   challenges: ChallengesState;
-  payments: PaymentsState;
-  feedback: FeedbackState;
 }
 
 const rootReducer = combineReducers({
@@ -76,8 +66,6 @@ const rootReducer = combineReducers({
   auth: Auth.store,
   user: User.store,
   challenges: Challenges.store,
-  payments: Payments.store,
-  feedback: Feedback.store,
 });
 
 /** ===========================================================================
@@ -105,8 +93,6 @@ const combinedEpic = combineEpics(
   User.epics,
   Auth.epics,
   Challenges.epics,
-  Payments.epics,
-  Feedback.epics,
 );
 
 const handleRootEpicError = (error: any, source: any) => {

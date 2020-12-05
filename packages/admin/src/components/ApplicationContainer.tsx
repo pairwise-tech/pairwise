@@ -60,7 +60,6 @@ const ApplicationContainer = (props: IProps) => {
     initializeApp,
     overlayVisible,
     workspaceLoading,
-    setScreensaverState,
     userAuthenticated,
     nextPrevChallenges,
     initializationError,
@@ -563,7 +562,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
-  feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   hasMediaContent: Modules.selectors.challenges.getHasMediaContent(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   initializationError: Modules.selectors.app.appSelector(state)
@@ -581,7 +579,6 @@ const dispatchProps = {
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   updateChallenge: Modules.actions.challenges.updateChallenge,
-  setFeedbackDialogState: Modules.actions.feedback.setFeedbackDialogState,
 };
 
 const mergeProps = (
