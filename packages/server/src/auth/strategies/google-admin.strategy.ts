@@ -24,6 +24,11 @@ export interface GoogleProfileWithCredentials {
   refreshToken: string;
 }
 
+/**
+ * NOTE: This passport strategy is specifically used for admin authentication.
+ * It uses a separate callback which validates the provided user against a
+ * set of whitelisted admin emails.
+ */
 @Injectable()
 export class GoogleAdminStrategy {
   constructor() {

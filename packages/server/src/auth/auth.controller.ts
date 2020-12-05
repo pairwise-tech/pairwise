@@ -152,9 +152,7 @@ export class AuthController {
     if (result.value) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
-      // const ADMIN_URL = "http://admin.pairwise.tech";
-      const ADMIN_URL = "https://nifty-banach-a30134.netlify.app";
-      return res.redirect(`${ADMIN_URL}?${params}`);
+      return res.redirect(`${ENV.ADMIN_CLIENT_URL}?${params}`);
     } else {
       return this.handleLoginError(res, "Google");
     }
