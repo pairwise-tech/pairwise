@@ -238,7 +238,7 @@ const LoadingOverlay = (props: { visible: boolean }) => (
   >
     <div>
       <OverlayText id="pw-loading-overlay">
-        Launching Pairwise Admin Portal...
+        Launching Pairwise Admin...
       </OverlayText>
     </div>
   </FullScreenOverlay>

@@ -11,6 +11,8 @@ COPY . .
 # Read from the build environment args
 ARG REACT_APP_HOST
 
+RUN echo REACT_APP_HOST
+
 # Install Netlify CLI
 RUN npm i -g netlify-cli
 
