@@ -198,6 +198,8 @@ class Api extends BaseApiClass {
           headers,
         });
       });
+    } else {
+      return createNonHttpResponseError("Unauthorized.")
     }
   };
 }

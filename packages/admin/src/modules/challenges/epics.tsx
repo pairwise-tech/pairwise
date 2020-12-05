@@ -14,7 +14,6 @@ import {
 import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest } from "rxjs";
 import {
-  catchError,
   delay,
   filter,
   map,
@@ -35,7 +34,6 @@ import {
   findChallengeIdInLocationIfExists,
   createInverseChallengeMapping,
   isContentOnlyChallenge,
-  getChallengeProgress,
 } from "tools/utils";
 import React from "react";
 
@@ -352,26 +350,6 @@ const syncChallengeContextToUrlEpic: EpicSignature = (action$, state$) => {
   );
 };
 
-const saveCourse: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.saveCourse)),
-    map(x => x.payload),
-    mergeMap(payload => {
-      return deps.api.codepressApi.save(payload).pipe(
-        map(Actions.saveCourseSuccess),
-        tap(() => deps.toaster.success("Saved 👍")),
-        catchError(err =>
-          of(Actions.saveCourseFailure(err)).pipe(
-            tap(() => {
-              deps.toaster.error("Could not save!");
-            }),
-          ),
-        ),
-      );
-    }),
-  );
-};
-
 /**
  * Fetches a code blob for a challenge when the challenge id changes. Code
  * blobs are fetched individually whenever a challenge loads, and then
@@ -421,69 +399,6 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
       }
 
       return of(...actions);
-    }),
-  );
-};
-
-/**
- * Handle actually fetching the code blob. Check the cache first, otherwise
- * fetch it from the API.
- */
-const fetchCodeBlobForChallengeEpic: EpicSignature = (
-  action$,
-  state$,
-  deps,
-) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.fetchBlobForChallenge)),
-    pluck("payload"),
-    mergeMap(async id => {
-      const blobCache = state$.value.challenges.blobCache;
-      const cachedItem = blobCache[id];
-
-      // If blob is cached return the cached item, otherwise fetch it:
-      if (cachedItem && cachedItem.dataBlob) {
-        return Actions.fetchBlobForChallengeSuccess({
-          challengeId: id,
-          dataBlob: cachedItem.dataBlob,
-        });
-      } else {
-        const result = await deps.api.fetchChallengeHistory(id);
-        if (result.value) {
-          return Actions.fetchBlobForChallengeSuccess(result.value);
-        } else {
-          return Actions.fetchBlobForChallengeFailure({
-            challengeId: id,
-            err: result.error,
-          });
-        }
-      }
-    }),
-  );
-};
-
-/**
- * Handle dispatching an update to last active challenge ids whenever the
- * current active challenge changes.
- */
-const updateLastActiveChallengeIdsEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.setChallengeIdContext)),
-    pluck("payload"),
-    filter(x => x.currentChallengeId !== null),
-    mergeMap(async ({ currentChallengeId, currentCourseId }) => {
-      const challengeId = currentChallengeId as string; // Checked above
-      return deps.api.updateLastActiveChallengeIds(
-        currentCourseId,
-        challengeId,
-      );
-    }),
-    map(result => {
-      if (result.value) {
-        return Actions.updateLastActiveChallengeIdsSuccess(result.value);
-      } else {
-        return Actions.updateLastActiveChallengeIdsFailure();
-      }
     }),
   );
 };
@@ -574,24 +489,6 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
 };
 
 /**
- * Save a code blob. Just take the blob and send it to the API to be saved.
- */
-const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.saveChallengeBlob)),
-    pluck("payload"),
-    mergeMap(deps.api.updateChallengeHistory),
-    map(result => {
-      if (result.value) {
-        return Actions.saveChallengeBlobSuccess();
-      } else {
-        return Actions.saveChallengeBlobFailure(result.error);
-      }
-    }),
-  );
-};
-
-/**
  * NOTE: content only challenges do not have tests, though we still want them to
  * appear as completed in the challenge map. Any time we navigate away from a
  * content only challenge, consider it completed.
@@ -674,36 +571,6 @@ const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
         return Actions.updateUserProgress(result.value);
       } else {
         return Actions.empty("Did not save user progress");
-      }
-    }),
-  );
-};
-
-/**
- * Handle saving a user progress update. Just send the progress update
- * to the API to be saved.
- */
-const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.updateUserProgress)),
-    filter(({ payload }) => {
-      // Only update the progress if the challenge is NOT already complete.
-      const { progress } = state$.value.user.user;
-      const { challengeId, courseId } = payload;
-      const challengeProgress = getChallengeProgress(
-        progress,
-        courseId,
-        challengeId,
-      );
-      return challengeProgress !== "COMPLETE";
-    }),
-    pluck("payload"),
-    mergeMap(deps.api.updateUserProgress),
-    map(result => {
-      if (result.value) {
-        return Actions.updateUserProgressSuccess(result.value);
-      } else {
-        return Actions.updateUserProgressFailure(result.error);
       }
     }),
   );
@@ -815,21 +682,16 @@ export default combineEpics(
   contentSkeletonInitializationEpic,
   initializeChallengeStateEpic,
   inverseChallengeMappingEpic,
-  saveCourse,
   handleFetchCodeBlobForChallengeEpic,
-  fetchCodeBlobForChallengeEpic,
   completeProjectSubmissionEpic,
   setWorkspaceLoadedEpic,
   lostUserEpic,
   resetChallengeContextAfterDeletionEpic,
   codepressDeleteToasterEpic,
-  updateLastActiveChallengeIdsEpic,
   challengeInitializationEpic,
   syncChallengeContextToUrlEpic,
   handleSaveCodeBlobEpic,
-  saveCodeBlobEpic,
   handleAttemptChallengeEpic,
-  updateUserProgressEpic,
   completeContentOnlyChallengeEpic,
   showSectionToastEpic,
 );
