@@ -9,6 +9,7 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
 import ENV from "../tools/server-env";
 import { GitHubStrategy } from "./strategies/github.strategy";
 import { GoogleStrategy } from "./strategies/google.strategy";
+import { GoogleAdminStrategy } from "./strategies/google-admin.strategy";
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { GoogleStrategy } from "./strategies/google.strategy";
     }),
     JwtModule.register({
       secret: ENV.JWT_SECRET,
-      signOptions: { expiresIn: "365 days" }, // Expire in one year, boom baby!
+      signOptions: { expiresIn: "365 days" }, // Expire in one year, boom!
     }),
     UsersModule,
   ],
@@ -26,6 +27,7 @@ import { GoogleStrategy } from "./strategies/google.strategy";
     JwtStrategy,
     GitHubStrategy,
     GoogleStrategy,
+    GoogleAdminStrategy,
     FacebookStrategy,
     AuthService,
   ],

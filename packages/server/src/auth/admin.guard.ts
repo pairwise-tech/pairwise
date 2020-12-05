@@ -25,6 +25,13 @@ const ADMIN_TOKEN = getenv(
 );
 
 /**
+ * Returns true is the provided email is whitelisted as an admin user.
+ */
+export const isAdminEmail = (email: string) => {
+  return ADMIN_EMAILS.has(email);
+};
+
+/**
  * Admin authentication guard. Requires jwt authentication and then only
  * allows whitelisted admin email addresses.
  */
@@ -38,7 +45,7 @@ export class AdminAuthGuard extends AuthGuard("jwt") {
       // Allow whitelisted users to pass:
       if (user) {
         const { email } = user.profile;
-        if (ADMIN_EMAILS.has(email)) {
+        if (isAdminEmail(email)) {
           return user;
         }
       }

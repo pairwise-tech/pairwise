@@ -104,11 +104,18 @@ export class SlackService {
     adminUserEmail,
     config,
   }: SlackAdminMessageData) {
-    const alert = `:sunglasses: Action taken by Admin User: \`${adminUserEmail}\`. Requested admin API: *[${httpMethod}]:* \`${requestPath}\`.`;
-    await this.postMessageToChannel(alert, {
-      channel: "production",
-      ...config,
-    });
+    console.log(
+      `Handling admin request for admin API: *[${httpMethod}]:* \`${requestPath}\` by user: ${adminUserEmail}`,
+    );
+
+    // Only report for admin access token users
+    if (adminUserEmail === "admin-access-token-user@pairwise.tech") {
+      const alert = `:sunglasses: Action taken by Admin User: \`${adminUserEmail}\`. Requested admin API: *[${httpMethod}]:* \`${requestPath}\`.`;
+      await this.postMessageToChannel(alert, {
+        channel: "production",
+        ...config,
+      });
+    }
   }
 
   public async postFeedbackMessage({

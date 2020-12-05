@@ -135,6 +135,29 @@ export class AuthController {
     }
   }
 
+  @UseGuards(AuthGuard("google-admin"))
+  @Get("admin")
+  public async googleAdmin(@Req() req) {
+    /* passport handles redirection to the SSO provider */
+  }
+
+  @UseGuards(AuthGuard("google-admin"))
+  @Get("google-admin/callback")
+  public async googleAdminLogin(
+    @Req() req: Request & { user: GoogleProfileWithCredentials },
+    @Res() res,
+  ) {
+    const result = await this.authService.handleGoogleAdminSignin(req.user);
+
+    if (result.value) {
+      const { token, accountCreated } = result.value;
+      const params = this.getQueryParams(token, accountCreated);
+      return res.redirect(`${ENV.ADMIN_CLIENT_URL}?${params}`);
+    } else {
+      return this.handleLoginError(res, "Google");
+    }
+  }
+
   /**
    * Stringify the parameters into query parameters.
    */

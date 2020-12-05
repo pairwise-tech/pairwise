@@ -27,6 +27,7 @@ const PRODUCTION = ENVIRONMENT === "production";
 // Services
 const CLIENT_URL = getenv.string("CLIENT_URL");
 const SERVER_HOST_URL = getenv.string("SERVER_HOST_URL");
+const ADMIN_CLIENT_URL = getenv.string("ADMIN_CLIENT_URL");
 const HTTPS = getenv.bool("HTTPS", false);
 
 // Stripe
@@ -96,6 +97,7 @@ const ENV = {
   HTTPS,
   CLIENT_URL,
   SERVER_HOST_URL,
+  ADMIN_CLIENT_URL,
   STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SIGNING_SECRET,
   JWT_SECRET,

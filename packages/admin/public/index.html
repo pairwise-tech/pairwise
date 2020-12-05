@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <link rel="icon" type="image/png" href="%PUBLIC_URL%/fav-circle.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Pairwise Admin Dashboard" />
+    <link rel="apple-touch-icon" href="logo192.png" />
+
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Pairwise Admin</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <div id="pw-initial-loading">
+      <style>
+        @keyframes pw-spin {
+          from {
+            transform: rotateZ(0deg);
+          }
+          to {
+            transform: rotateZ(360deg);
+          }
+        }
+        /* prettier-ignore */
+        body, html { background-color: #1e1e1e; }
+        /* prettier-ignore */
+        .pw-initial-loading { top: 0; left: 0; right: 0; bottom: 0; position: absolute; }
+        svg.pw-initial-loading {
+          position: absolute;
+          top: 50%; /* Fallback if calc() is not supported */
+          left: 50%;
+          top: calc(50% - 39px); /* 39 == width/2 */
+          left: calc(50% - 39px);
+          animation: pw-spin 1s ease-in-out infinite;
+        }
+      </style>
+      <!-- prettier-ignore -->
+      <svg class="pw-initial-loading" width="78" height="78" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 78 78">
+        <g transform="rotate(-90 39 39)">
+          <circle cx="39" cy="39" r="36" fill="none" stroke="#555" stroke-width="6" ></circle>
+          <circle cx="39" cy="39" r="36" fill="none" stroke="#75FBBE" stroke-width="6" stroke-dasharray="226.1946710584651" stroke-dashoffset="113.09733552923255" stroke-linecap="round" class="circle" ></circle>
+        </g>
+      </svg>
+      <script>
+        // Clear this loading spinner once the app has loaded. This is a polling
+        // mechanism. It would be perhaps cleaner to use the actual app init event
+        // but this way everything is located here. The rest of the app doesn't even need
+        // to know that this exists.
+        const interval = setInterval(() => {
+          if (document.querySelector("#root").firstChild) {
+            clearInterval(interval);
+            const el = document.querySelector(".pw-initial-loading");
+            el.parentElement.removeChild(el);
+          }
+        }, 100);
+      </script>
+    </div>
+  </body>
+</html>

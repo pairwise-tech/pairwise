@@ -12,6 +12,7 @@ import ENV from "../tools/server-env";
 import { emailService, EmailService } from "../email/email.service";
 import { validateEmailUpdateRequest } from "../tools/validation";
 import { RequestUser } from "../types";
+import { isAdminEmail } from "./admin.guard";
 
 export type SigninStrategy = "Email" | "GitHub" | "Facebook" | "Google";
 
@@ -313,6 +314,35 @@ export class AuthService {
       }
     } catch (err) {
       captureSentryException(err);
+      return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
+    }
+  }
+
+  public async handleGoogleAdminSignin(
+    requestProfile: GoogleProfileWithCredentials,
+  ): LoginServiceReturnType {
+    try {
+      const googleAccountId = requestProfile.profile.id;
+      const existingUser = await this.userService.findByGoogleProfileId(
+        googleAccountId,
+      );
+
+      if (existingUser) {
+        const user = existingUser;
+        const email = user.profile.email;
+
+        if (isAdminEmail(email)) {
+          const token = this.getJwtAccessToken(existingUser.profile);
+          return new Ok({ token, accountCreated: false });
+        } else {
+          throw new Error("Unauthorized.");
+        }
+      } else {
+        throw new Error(
+          "Account creation not supported for admin authentication.",
+        );
+      }
+    } catch (err) {
       return new Err(ERROR_CODES.UNKNOWN_LOGIN_ERROR);
     }
   }
