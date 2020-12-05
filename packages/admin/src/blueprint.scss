@@ -1,0 +1,129 @@
+// This file overrides Blueprint color variable definitions with custom colors
+// to use. To find color variable names to change, you can manually inspect
+// an element to find the color and then lookup that color value in the
+// Blueprint source code to find the associated SASS variable name:
+// https://github.com/palantir/blueprint/blob/develop/packages/core/src/common/_colors.scss
+
+$primary1: rgb(13, 100, 74);
+$primary2: rgb(21, 150, 111);
+$primary3: rgb(16, 202, 146);
+$primary4: rgb(0, 255, 177);
+$primary5: rgb(68, 241, 189);
+$primary6: rgb(89, 241, 196);
+$gradient-green: linear-gradient(
+  90deg,
+  $primary3 22%,
+  rgba(0, 255, 211, 1) 74%
+);
+
+$light-gray3: rgb(55, 55, 55);
+
+$gray4: rgb(105, 105, 105);
+
+$dark-gray4: rgb(50, 50, 50);
+$dark-gray5: rgb(40, 40, 40);
+
+// WOW! What an assignment! Blueprint JS does not want to be customized, so we
+// just have to work with the variable names it's already using.
+$blue1: $primary1;
+$blue2: $primary2;
+$blue3: $primary3;
+$blue4: $primary4;
+$blue5: $primary5;
+
+$green1: $primary1;
+$green2: $primary2;
+$green3: $primary3;
+$green4: $primary4;
+$green5: $primary5;
+
+$orange3: #ffdf75;
+
+@import "@blueprintjs/core/src/blueprint.scss";
+
+.course-card {
+  box-shadow: 0 1px 2px rgba(25, 25, 25, 0.15);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.course-card:hover {
+  background: rgb(40, 40, 40);
+  box-shadow: 0 15px 25px rgba(20, 20, 20, 0.8);
+}
+
+.bp3-popover-content {
+  color: white !important;
+}
+
+.blueprint-toaster {
+  z-index: 5000 !important;
+}
+
+.bp3-toast-container {
+  .bp3-button-text {
+    color: rgb(50, 50, 50) !important;
+  }
+
+  // Override Blueprint warning intent styles for Toast only
+  .bp3-intent-warning {
+    color: rgb(50, 50, 50) !important;
+    background-color: #ffdf75 !important;
+
+    .bp3-icon {
+      color: transparent;
+      background: transparent;
+
+      svg {
+        fill: rgb(50, 50, 50) !important;
+      }
+    }
+  }
+}
+
+// Overwrite blueprint Callout icon color for intent="none". It had a blue-ish hue before
+.bp3-callout.bp3-callout-icon > .bp3-icon:first-child {
+  color: dimgray;
+}
+
+// Avoid some blueprint SCSS build complexities. See more details
+// here: https://github.com/palantir/blueprint/issues/2821
+.bp3-breadcrumbs > li:after {
+  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z' fill='%235C7080'/%3E%3C/svg%3E");
+}
+
+// Fix broken svg icon. Same issue as above
+.bp3-breadcrumbs-collapsed:before {
+  background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg fill='%235C7080'%3E%3Ccircle cx='2' cy='8.03' r='2'/%3E%3Ccircle cx='14' cy='8.03' r='2'/%3E%3Ccircle cx='8' cy='8.03' r='2'/%3E%3C/g%3E%3C/svg%3E")
+    50% no-repeat;
+}
+
+// Checkbox check marks
+.bp3-control.bp3-checkbox input:checked ~ .bp3-control-indicator::before {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12 5c-.28 0-.53.11-.71.29L7 9.59l-2.29-2.3a1.003 1.003 0 0 0-1.42 1.42l3 3c.18.18.43.29.71.29s.53-.11.71-.29l5-5A1.003 1.003 0 0 0 12 5z' fill='rgba(255,255,255,1)'/%3E%3C/svg%3E");
+}
+
+// Make the collapse menu more visible. Not meant to stand out, just not blend in like it was before
+.bp3-dark .bp3-breadcrumbs-collapsed {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+// Make the disabled collapsed items a bit more legible
+.bp3-dark .bp3-menu-item.bp3-disabled {
+  color: rgb(175, 175, 175) !important;
+}
+
+.bp3-breadcrumb {
+  white-space: nowrap;
+}
+
+.breadcrumb-challenge-complete {
+  svg {
+    fill: rgb(0, 255, 185) !important;
+  }
+}
+
+.challenge-content-success > .bp3-icon-tick {
+  svg {
+    fill: rgb(0, 255, 185) !important;
+  }
+}
