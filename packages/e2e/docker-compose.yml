@@ -21,6 +21,7 @@ services:
       ENVIRONMENT: development
       CLIENT_URL: http://client:3000
       SERVER_HOST_URL: http://server:9000
+      ADMIN_CLIENT_URL: http://admin:3000 # FYI, not a real service
       # Database
       TYPEORM_HOST: db
       TYPEORM_USERNAME: postgres

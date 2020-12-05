@@ -63,7 +63,7 @@ jobs:
           image_name: pairwise-dependencies
 
       # Build the application
-      - name: Build the application
+      - name: Build all packages
         run: yarn docker:build:ci_deploy
 
       # Run all package unit tests
@@ -79,13 +79,14 @@ jobs:
         run: yarn cypress
 
       # Setup gcloud CLI
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - name: Setup gcloud CLI
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
 
       # Configure gcloud CLI
-      - name: Setup gcloud CLI
+      - name: Set gcloud project ID
         run: |
           gcloud config set project $CLOUD_RUN_PROJECT_ID
 
@@ -94,19 +95,19 @@ jobs:
         run: gcloud auth configure-docker
 
       # Build the server application directly (instead of using Google Cloud Build)
-      - name: Build the production server application
+      - name: Build the server application
         run: |
           docker build \
             --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
             -t pairwise-production \
             -f packages/server/Dockerfile .
 
-      # Push the production server image to gcloud
-      - name: Push the production server image to GCR
+      # Push the server image to gcloud
+      - name: Push the server image to GCR
         run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
 
       # Deploy the image to Cloud Run
-      - name: Deploy the production server to Google Cloud Run
+      - name: Deploy the server to Google Cloud Run
         run: |
           gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
             --region $RUN_REGION \
@@ -114,7 +115,7 @@ jobs:
             --platform managed
 
       # Build the client application directly (instead of using Netlify)
-      - name: Build the production client application
+      - name: Build the client workspace application
         run: |
           docker build \
             --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL \
