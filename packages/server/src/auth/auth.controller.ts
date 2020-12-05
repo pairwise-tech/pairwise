@@ -147,7 +147,7 @@ export class AuthController {
     @Req() req: Request & { user: GoogleProfileWithCredentials },
     @Res() res,
   ) {
-    const result = await this.authService.handleGoogleSignin(req.user);
+    const result = await this.authService.handleGoogleAdminSignin(req.user);
 
     if (result.value) {
       const { token, accountCreated } = result.value;
