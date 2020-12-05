@@ -1,7 +1,4 @@
-import {
-  CourseList,
-  LastActiveChallengeIds,
-} from "@pairwise/common";
+import { CourseList, LastActiveChallengeIds } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
 import { of, combineLatest } from "rxjs";
 import {
