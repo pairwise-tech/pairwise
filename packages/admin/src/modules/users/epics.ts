@@ -32,6 +32,4 @@ const fetchUsersEpic: EpicSignature = (action$, _, deps) => {
  * ============================================================================
  */
 
-export default combineEpics(
-  fetchUsersEpic,
-);
+export default combineEpics(fetchUsersEpic);

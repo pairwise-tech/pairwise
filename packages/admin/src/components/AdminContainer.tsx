@@ -217,11 +217,14 @@ const ApplicationContainer = (props: IProps) => {
       </Header>
       <Switch>
         {isLoggedIn && (
-          <Route exact key="admin-redirect" path="/" component={() => <Redirect to="/home" />} />
+          <Route
+            exact
+            key="admin-redirect"
+            path="/"
+            component={() => <Redirect to="/home" />}
+          />
         )}
-        {isLoggedIn && (
-          <Route key="home" path="/home" component={Home} />
-        )}
+        {isLoggedIn && <Route key="home" path="/home" component={Home} />}
         <Route exact key="index" path="/" component={Index} />
         <Route
           key="logout"

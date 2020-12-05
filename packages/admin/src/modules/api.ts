@@ -188,7 +188,7 @@ class Api extends BaseApiClass {
         headers,
       });
     });
-  }
+  };
 
   fetchUsersList = async () => {
     return this.httpHandler(async () => {
@@ -197,7 +197,7 @@ class Api extends BaseApiClass {
         headers,
       });
     });
-  }
+  };
 
   fetchUserProfile = async () => {
     const { headers, authenticated } = this.getRequestHeaders();

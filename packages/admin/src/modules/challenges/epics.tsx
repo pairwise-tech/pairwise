@@ -26,9 +26,7 @@ import {
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature, ReduxStoreState } from "../root";
 import { Actions } from "../root-actions";
-import {
-  SANDBOX_ID,
-} from "tools/constants";
+import { SANDBOX_ID } from "tools/constants";
 import {
   deriveIdsFromCourseWithDefaults,
   findChallengeIdInLocationIfExists,

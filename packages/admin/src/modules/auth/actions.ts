@@ -1,4 +1,3 @@
-import { IUserDto } from "@pairwise/common";
 import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
 

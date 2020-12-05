@@ -110,10 +110,7 @@ const adminUserLoginEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(API.adminUserLogin),
     mergeMap(result => {
       if (result.value) {
-        return of(
-          Actions.fetchAdminUser(),
-          Actions.adminUserLoginSuccess(),
-        );
+        return of(Actions.fetchAdminUser(), Actions.adminUserLoginSuccess());
       } else {
         deps.toaster.error("Unauthorized, get out!");
         return of(

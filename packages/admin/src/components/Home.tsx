@@ -14,7 +14,9 @@ class Home extends React.Component<IProps, {}> {
     return (
       <PageContainer>
         <ContentContainer>
-          <Title>Pairwise Admin Active, {this.props.usersList.length} users loaded.</Title>
+          <Title>
+            Pairwise Admin Active, {this.props.usersList.length} users loaded.
+          </Title>
         </ContentContainer>
       </PageContainer>
     );

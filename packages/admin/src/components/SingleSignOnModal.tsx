@@ -1,19 +1,13 @@
 import { Dialog, Classes } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
-import {
-  GithubLoginButton,
-  createButton,
-} from "react-social-login-buttons";
+import { GithubLoginButton, createButton } from "react-social-login-buttons";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import * as ENV from "tools/client-env";
 import { composeWithProps } from "tools/utils";
 import { removeEphemeralPurchaseCourseId } from "tools/storage-utils";
-import {
-  ModalTitleText,
-  ModalContainer,
-} from "./Shared";
+import { ModalTitleText, ModalContainer } from "./Shared";
 import { COLORS } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
 
@@ -56,30 +50,28 @@ class AuthenticationFormComponent extends React.Component<{}, {}> {
   render(): JSX.Element {
     return (
       <ModalContainer>
-        <ModalTitleText id="sso-modal-title">
-          Login
-        </ModalTitleText>
-          <SocialButtonsContainer>
-            <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
-              <GoogleLoginButton
-                className="sso-button"
-                style={{
-                  ...ssoButtonStyles,
-                  padding: 0,
-                  paddingBottom: 2,
-                }}
-              >
-                <LoginButtonText style={{ marginLeft: 2 }}>
-                  Sign in with Google
-                </LoginButtonText>
-              </GoogleLoginButton>
-            </LoginLink>
-            <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
-              <GithubLoginButton className="sso-button" style={ssoButtonStyles}>
-                <LoginButtonText>Sign in with GitHub</LoginButtonText>
-              </GithubLoginButton>
-            </LoginLink>
-          </SocialButtonsContainer>
+        <ModalTitleText id="sso-modal-title">Login</ModalTitleText>
+        <SocialButtonsContainer>
+          <LoginLink id="google-login" href={`${ENV.HOST}/auth/google`}>
+            <GoogleLoginButton
+              className="sso-button"
+              style={{
+                ...ssoButtonStyles,
+                padding: 0,
+                paddingBottom: 2,
+              }}
+            >
+              <LoginButtonText style={{ marginLeft: 2 }}>
+                Sign in with Google
+              </LoginButtonText>
+            </GoogleLoginButton>
+          </LoginLink>
+          <LoginLink id="github-login" href={`${ENV.HOST}/auth/github`}>
+            <GithubLoginButton className="sso-button" style={ssoButtonStyles}>
+              <LoginButtonText>Sign in with GitHub</LoginButtonText>
+            </GithubLoginButton>
+          </LoginLink>
+        </SocialButtonsContainer>
       </ModalContainer>
     );
   }

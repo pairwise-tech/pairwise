@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { ReduxStoreState } from "modules/root";
 import { PageContainer } from "./Shared";
-import SEO from "./SEO";
 import PairwiseLogo from "../icons/logo-square@1024.png";
 
 /** ===========================================================================
@@ -15,10 +14,6 @@ class Index extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     return (
       <PageContainer>
-        <SEO
-          title="Welcome to Pairwise"
-          description="Learn to code with hands-on challenges and projects"
-        />
         <ContentContainer>
           <Logo src={PairwiseLogo} alt="Pairwise Logo" />
           <Title>Pairwise Admin</Title>

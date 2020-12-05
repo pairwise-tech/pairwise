@@ -21,7 +21,10 @@ export const emailVerificationStatus = createSelector(
   state => state.emailVerificationStatus,
 );
 
-export const adminUserSelector = createSelector(adminUserState, state => state.user);
+export const adminUserSelector = createSelector(
+  adminUserState,
+  state => state.user,
+);
 
 export const adminUserProfile = createSelector(
   adminUserState,
