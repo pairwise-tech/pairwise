@@ -10,7 +10,6 @@
     "build:common": "cd ../common && yarn run build",
     "start:https": "REACT_APP_HOST=https://localhost:9000 HTTPS=true yarn run start",
     "start:prod": "serve build -s -p 3000",
-    "prebuild": "yarn run build:common && yarn run js:build",
     "build": "react-scripts build",
     "postbuild": "cp _redirects build/",
     "jest": "react-scripts test",
