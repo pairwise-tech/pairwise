@@ -44,7 +44,8 @@ jobs:
   deploy-production:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repo
+        uses: actions/checkout@v2
 
       # Setup NodeJS
       - name: Setup NodeJS Environment
