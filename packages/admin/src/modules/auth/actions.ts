@@ -46,7 +46,7 @@ export const adminUserLogin = createAction(ActionTypesEnum.ADMIN_USER_LOGIN)();
 
 export const adminUserLoginSuccess = createAction(
   ActionTypesEnum.ADMIN_USER_LOGIN_SUCCESS,
-)<IUserDto>();
+)();
 
 export const adminUserLoginFailure = createAction(
   ActionTypesEnum.ADMIN_USER_LOGIN_FAILURE,

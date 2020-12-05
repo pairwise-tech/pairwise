@@ -14,6 +14,7 @@ import {
 import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/utils";
 import { UserStoreState } from "./user/store";
+import { AdminUserView } from "./users/store";
 
 /** ===========================================================================
  * Types & Config
@@ -189,6 +190,15 @@ class Api extends BaseApiClass {
     });
   }
 
+  fetchUsersList = async () => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.get<AdminUserView[]>(`${HOST}/admin/users`, {
+        headers,
+      });
+    });
+  }
+
   fetchUserProfile = async () => {
     const { headers, authenticated } = this.getRequestHeaders();
 
@@ -199,7 +209,7 @@ class Api extends BaseApiClass {
         });
       });
     } else {
-      return createNonHttpResponseError("Unauthorized.")
+      return createNonHttpResponseError("Unauthorized.");
     }
   };
 }
