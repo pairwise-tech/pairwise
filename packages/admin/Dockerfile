@@ -25,4 +25,4 @@ RUN yarn common:build
 RUN yarn admin:build
 
 # Deploy the admin client
-CMD netlify deploy --prod --site $NETLIFY_ADMIN_SITE_ID --auth $NETLIFY_ADMIN_AUTH_TOKEN --dir packages/admin/build --message "Pairwise Admin Client Deployed (commit $GITHUB_SHA)"
+CMD netlify deploy --prod --site $NETLIFY_ADMIN_SITE_ID --auth $NETLIFY_AUTH_TOKEN --dir packages/admin/build --message "Pairwise Admin Client Deployed (commit $GITHUB_SHA)"
