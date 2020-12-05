@@ -6,7 +6,7 @@ import {
   CourseSkeletonList,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import * as ENV from "tools/client-env";
+import * as ENV from "tools/admin-env";
 import {
   getAccessTokenFromLocalStorage,
   logoutUserInLocalStorage,

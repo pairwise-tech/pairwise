@@ -3,7 +3,7 @@ import { applyMiddleware, createStore, Middleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createEpicMiddleware } from "redux-observable";
 
-import * as ENV from "../tools/client-env";
+import * as ENV from "../tools/admin-env";
 import api from "./api";
 import {
   EpicDependencies,

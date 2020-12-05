@@ -1,4 +1,4 @@
-import * as ENV from "tools/client-env";
+import * as ENV from "tools/admin-env";
 import React from "react";
 import { connect } from "react-redux";
 import { useMedia } from "use-media";
@@ -123,6 +123,8 @@ const ApplicationContainer = (props: IProps) => {
     </Menu>
   );
 
+  console.log(ENV.HOST);
+
   return (
     <React.Fragment>
       <LoadingOverlay visible={workspaceLoading} />
@@ -235,7 +237,9 @@ const LoadingOverlay = (props: { visible: boolean }) => (
     data-selector="full-screen-overlay"
   >
     <div>
-      <OverlayText id="pw-loading-overlay">Launching Pairwise...</OverlayText>
+      <OverlayText id="pw-loading-overlay">
+        Launching Pairwise Admin Portal...
+      </OverlayText>
     </div>
   </FullScreenOverlay>
 );
