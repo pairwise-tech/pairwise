@@ -62,79 +62,79 @@ jobs:
           dockerfile: Base.Dockerfile
           image_name: pairwise-dependencies
 
-      # # Build the application
-      # - name: Build the application
-      #   run: yarn docker:build:ci_deploy
+      # Build the application
+      - name: Build the application
+        run: yarn docker:build:ci_deploy
 
-      # # Run all package unit tests
-      # - name: Run static and unit tests
-      #   run: yarn docker:test
+      # Run all package unit tests
+      - name: Run static and unit tests
+        run: yarn docker:test
 
-      # # Run e2e tests
-      # - name: Run e2e tests
-      #   run: yarn e2e
+      # Run e2e tests
+      - name: Run e2e tests
+        run: yarn e2e
 
-      # # Run Cypress tests
-      # - name: Run Cypress tests
-      #   run: yarn cypress
+      # Run Cypress tests
+      - name: Run Cypress tests
+        run: yarn cypress
 
-      # # Setup gcloud CLI
-      # - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-      #   with:
-      #     service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-      #     service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
 
-      # # Configure gcloud CLI
-      # - name: Setup gcloud CLI
-      #   run: |
-      #     gcloud config set project $CLOUD_RUN_PROJECT_ID
+      # Configure gcloud CLI
+      - name: Setup gcloud CLI
+        run: |
+          gcloud config set project $CLOUD_RUN_PROJECT_ID
 
-      # # Configure Docker to use gcloud
-      # - name: Configure Docker with gcloud
-      #   run: gcloud auth configure-docker
+      # Configure Docker to use gcloud
+      - name: Configure Docker with gcloud
+        run: gcloud auth configure-docker
 
-      # # Build the server application directly (instead of using Google Cloud Build)
-      # - name: Build the production server application
-      #   run: |
-      #     docker build \
-      #       --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
-      #       -t pairwise-production \
-      #       -f packages/server/Dockerfile .
+      # Build the server application directly (instead of using Google Cloud Build)
+      - name: Build the production server application
+        run: |
+          docker build \
+            --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
+            -t pairwise-production \
+            -f packages/server/Dockerfile .
 
-      # # Push the production server image to gcloud
-      # - name: Push the production server image to GCR
-      #   run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
+      # Push the production server image to gcloud
+      - name: Push the production server image to GCR
+        run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
 
-      # # Deploy the image to Cloud Run
-      # - name: Deploy the production server to Google Cloud Run
-      #   run: |
-      #     gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
-      #       --region $RUN_REGION \
-      #       --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
-      #       --platform managed
+      # Deploy the image to Cloud Run
+      - name: Deploy the production server to Google Cloud Run
+        run: |
+          gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
+            --region $RUN_REGION \
+            --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
+            --platform managed
 
-      # # Build the client application directly (instead of using Netlify)
-      # - name: Build the production client application
-      #   run: |
-      #     docker build \
-      #       --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL \
-      #       --build-arg REACT_APP_STRIPE_API_KEY=$STRIPE_PUBLISHABLE_KEY \
-      #       --build-arg REACT_APP_SENTRY_DSN=$CLIENT_SENTRY_DSN \
-      #       -t pairwise-production-client \
-      #       -f packages/client/Dockerfile .
+      # Build the client application directly (instead of using Netlify)
+      - name: Build the production client application
+        run: |
+          docker build \
+            --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL \
+            --build-arg REACT_APP_STRIPE_API_KEY=$STRIPE_PUBLISHABLE_KEY \
+            --build-arg REACT_APP_SENTRY_DSN=$CLIENT_SENTRY_DSN \
+            -t pairwise-production-client \
+            -f packages/client/Dockerfile .
 
-      # # Deploy client workspace on Netlify (no builds occur on Netlify)
-      # # (docs: https://github.com/netlify/cli/blob/master/docs/commands/deploy.md)
-      # # Note that in Netlify the production branch is set to some non-existent
-      # # branch, "master-x", to prevent automatically publishing. The only path to
-      # # publish the production client is this step right here:
-      # - name: Deploy the client workspace to Netlify
-      #   run: |
-      #     docker run \
-      #       --env GITHUB_SHA=$GITHUB_SHA \
-      #       --env NETLIFY_SITE_ID=$NETLIFY_SITE_ID \
-      #       --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
-      #       -t pairwise-production-client
+      # Deploy client workspace on Netlify (no builds occur on Netlify)
+      # (docs: https://github.com/netlify/cli/blob/master/docs/commands/deploy.md)
+      # Note that in Netlify the production branch is set to some non-existent
+      # branch, "master-x", to prevent automatically publishing. The only path to
+      # publish the production client is this step right here:
+      - name: Deploy the client workspace to Netlify
+        run: |
+          docker run \
+            --env GITHUB_SHA=$GITHUB_SHA \
+            --env NETLIFY_SITE_ID=$NETLIFY_SITE_ID \
+            --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
+            -t pairwise-production-client
 
       # Same setup as workspace client
       - name: Build the admin client application
