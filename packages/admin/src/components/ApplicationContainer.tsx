@@ -11,7 +11,6 @@ import { HEADER_HEIGHT } from "tools/dimensions";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
 import Swipy from "swipyjs";
-import NavigationOverlay from "./NavigationOverlay";
 import {
   Button,
   ButtonGroup,
@@ -24,11 +23,9 @@ import {
   Popover,
   Icon,
 } from "@blueprintjs/core";
-import Account from "./Account";
 import {
   ProfileIcon,
   IconButton,
-  SmoothScrollButton,
   FullScreenOverlay,
   OverlayText,
   LoadingInline,
@@ -36,26 +33,18 @@ import {
   OverlaySmallText,
   PairwiseOpenCloseLogo,
 } from "./Shared";
-import SingleSignOnModal from "./SingleSignOnModal";
-import FeedbackModal from "./FeedbackModal";
-import Workspace, { MOBILE_SCROLL_PANEL_ID } from "./Workspace";
+import { MOBILE_SCROLL_PANEL_ID } from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
 } from "./ChallengeControls";
-import PaymentCourseModal from "./PaymentIntentModal";
-import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
-import PaymentSuccessModal from "./PaymentSuccessModal";
-import { challengeRequiresWorkspace } from "tools/utils";
 import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
-import { CONTENT_AREA_ID } from "./MediaArea";
 import PomodoroTimer from "./PomodoroTimer";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
-import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
 import PairwiseScreensaver from "./PairwiseScreensaver";
 
 // Only show focus outline when tabbing around the UI
@@ -68,16 +57,6 @@ const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
   { value: "typescript", label: "TypeScript" },
   { value: "react", label: "React" },
 ];
-
-// All the application modal components:
-const Modals = () => (
-  <>
-    <SingleSignOnModal />
-    <PaymentCourseModal />
-    <PaymentSuccessModal />
-    <FeedbackModal />
-  </>
-);
 
 /** ===========================================================================
  * ApplicationContainer
@@ -106,7 +85,6 @@ const ApplicationContainer = (props: IProps) => {
     updateChallenge,
     overlayVisible,
     workspaceLoading,
-    hasMediaContent,
     setScreensaverState,
     screensaverVisible,
     toggleNavigationMap,
@@ -193,13 +171,6 @@ const ApplicationContainer = (props: IProps) => {
   const isSandbox =
     !!challenge && challenge.id === SANDBOX_ID && onWorkspaceRoute;
   const displayNavigationArrows = onWorkspaceRoute;
-  const isWorkspaceRequired = challengeRequiresWorkspace(challenge);
-  const showMediaAreaButton =
-    displayNavigationArrows &&
-    challenge &&
-    isWorkspaceRequired &&
-    (CODEPRESS || hasMediaContent);
-
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
   const { prev, next } = nextPrevChallenges;
@@ -253,11 +224,7 @@ const ApplicationContainer = (props: IProps) => {
 
   return (
     <React.Fragment>
-      <Modals />
       <LoadingOverlay visible={workspaceLoading} />
-      <GlobalKeyboardShortcuts />
-      {CODEPRESS && <AdminKeyboardShortcuts />}
-      <NavigationOverlay isMobile={isMobile} />
       <Header>
         <ControlsContainer
           style={{ height: "100%", marginRight: isMobile ? 0 : 40 }}
@@ -428,21 +395,9 @@ const ApplicationContainer = (props: IProps) => {
           )}
         </ControlsContainer>
       </Header>
-      {showMediaAreaButton && (
-        <SmoothScrollButton
-          icon="chevron-down"
-          position="bottom"
-          positionOffset={-20}
-          scrollToId={CONTENT_AREA_ID}
-          backgroundColor="rgba(29, 29, 29, 0.7)"
-        />
-      )}
       <Switch>
-        <Route key="workspace" path="/workspace" component={Workspace} />
-        <Route key="workspace" path="/workspace/:id" component={Workspace} />
         <Route key="home" path="/home" component={Home} />
         <Route key="404" path="/404" component={LostPage} />
-        <Route key="account" path="/account" component={Account} />
         {!isLoggedIn && (
           <Route
             key="authenticate"
@@ -453,11 +408,6 @@ const ApplicationContainer = (props: IProps) => {
         <Route
           key="login"
           path="/login"
-          component={() => <Redirect to="/authenticate" />}
-        />
-        <Route
-          key="sign-up"
-          path="/sign-up"
           component={() => <Redirect to="/authenticate" />}
         />
         <Route
