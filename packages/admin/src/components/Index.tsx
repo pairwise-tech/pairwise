@@ -1,16 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import Modules, { ReduxStoreState } from "modules/root";
+import { ReduxStoreState } from "modules/root";
 import { PageContainer } from "./Shared";
 import SEO from "./SEO";
+import PairwiseLogo from "../icons/logo-square@1024.png";
 
 /** ===========================================================================
  * Home Component
  * ============================================================================
  */
 
-class Home extends React.Component<IProps, {}> {
+class Index extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     return (
       <PageContainer>
@@ -19,7 +20,8 @@ class Home extends React.Component<IProps, {}> {
           description="Learn to code with hands-on challenges and projects"
         />
         <ContentContainer>
-          <Title>Pairwise Admin Active, {this.props.usersList.length} users loaded.</Title>
+          <Logo src={PairwiseLogo} alt="Pairwise Logo" />
+          <Title>Pairwise Admin</Title>
         </ContentContainer>
       </PageContainer>
     );
@@ -32,7 +34,11 @@ class Home extends React.Component<IProps, {}> {
  */
 
 const ContentContainer = styled.div`
-  padding: 12px;
+  padding-top: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 const Title = styled.code`
@@ -40,14 +46,17 @@ const Title = styled.code`
   font-size: 16px;
 `;
 
+const Logo = styled.img`
+  width: 225px;
+  height: 225px;
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
  */
 
-const mapStateToProps = (state: ReduxStoreState) => ({
-  usersList: Modules.selectors.users.usersState(state).users,
-});
+const mapStateToProps = (state: ReduxStoreState) => ({});
 
 const dispatchProps = {};
 
@@ -62,4 +71,4 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default withProps(Home);
+export default withProps(Index);

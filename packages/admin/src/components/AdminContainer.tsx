@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import Home from "./Home";
+import Index from "./Index";
 import {
   Button,
   FocusStyleManager,
@@ -217,26 +218,20 @@ const ApplicationContainer = (props: IProps) => {
         </ControlsContainer>
       </Header>
       <Switch>
-        <Route key="home" path="/home" component={Home} />
-        <Route key="404" path="/404" component={LostPage} />
-        {!isLoggedIn && (
-          <Route
-            key="authenticate"
-            path="/authenticate"
-            component={AuthenticationForm}
-          />
+        {isLoggedIn && (
+          <Route exact key="admin-redirect" path="/" component={() => <Redirect to="/home" />} />
         )}
-        <Route
-          key="login"
-          path="/login"
-          component={() => <Redirect to="/authenticate" />}
-        />
+        {isLoggedIn && (
+          <Route key="home" path="/home" component={Home} />
+        )}
+        <Route exact key="index" path="/" component={Index} />
         <Route
           key="logout"
           path="/logout"
-          component={() => <Redirect to="/home" />}
+          component={() => <Redirect to="/" />}
         />
-        <Route key={4} component={() => <Redirect to="/home" />} />
+        <Route key="404" path="/404" component={LostPage} />
+        <Route key={4} component={() => <Redirect to="/" />} />
       </Switch>
     </React.Fragment>
   );
