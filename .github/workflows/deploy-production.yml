@@ -33,8 +33,9 @@ env:
   GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
   GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
   PRODUCTION_SERVER_URL: ${{ secrets.PRODUCTION_SERVER_URL }}
-  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_WORKSPACE_AUTH_TOKEN }}
   NETLIFY_SITE_ID: ${{ secrets.NETLIFY_WORKSPACE_SITE_ID }}
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_WORKSPACE_AUTH_TOKEN }}
+  NETLIFY_ADMIN_SITE_ID: ${{ secrets.NETLIFY_ADMIN_SITE_ID }}
   STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
   CLIENT_SENTRY_DSN: ${{ secrets.CLIENT_SENTRY_DSN }}
   SLACK_STATUS_BOT_ACCESS_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
@@ -134,6 +135,23 @@ jobs:
             --env NETLIFY_SITE_ID=$NETLIFY_SITE_ID \
             --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
             -t pairwise-production-client
+
+      # Same setup as workspace client
+      - name: Build the admin client application
+        run: |
+          docker build \
+            --build-arg REACT_APP_HOST=$PRODUCTION_SERVER_URL \
+            -t pairwise-admin-client \
+            -f packages/admin/Dockerfile .
+
+      # Same setup as workspace client
+      - name: Deploy the admin client to Netlify
+        run: |
+          docker run \
+            --env GITHUB_SHA=$GITHUB_SHA \
+            --env NETLIFY_SITE_ID=$NETLIFY_ADMIN_SITE_ID \
+            --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
+            -t pairwise-admin-client
 
       # NOTE: We need the static files to be available to the host environment,
       # thus the use of volumes here. This is because we want to use the

@@ -14,11 +14,6 @@ COPY . .
 
 # Read from the build environment args
 ARG REACT_APP_HOST
-ARG REACT_APP_STRIPE_API_KEY
-ARG REACT_APP_SENTRY_DSN
-
-# Enable Google Analytics
-ENV REACT_APP_ENABLE_ANALYTICS=true
 
 # Install Netlify CLI
 RUN npm i -g netlify-cli
@@ -26,8 +21,8 @@ RUN npm i -g netlify-cli
 # Build common
 RUN yarn common:build
 
-# Build the production client app
-RUN yarn client:build
+# Build the admin client dashboard
+RUN yarn admin:build
 
-# Deploy the client application
-CMD netlify deploy --prod --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --dir packages/client/build --message "Pairwise Client Deployed (commit $GITHUB_SHA)"
+# Deploy the admin client
+CMD netlify deploy --prod --site $NETLIFY_ADMIN_SITE_ID --auth $NETLIFY_ADMIN_AUTH_TOKEN --dir packages/admin/build --message "Pairwise Admin Client Deployed (commit $GITHUB_SHA)"

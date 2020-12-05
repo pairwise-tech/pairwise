@@ -33,16 +33,13 @@ export interface AdminUserView {
   uuid: string;
 }
 
-const users = createReducer<any[], UsersActionTypes | AuthActionTypes>(
-  [],
-).handleAction(actions.fetchUsersSuccess, (state, action) => action.payload);
+const users = createReducer<any[], UsersActionTypes | AuthActionTypes>([]).handleAction(
+  actions.fetchUsersSuccess, (state, action) => action.payload,
+);
 
 const loading = createReducer<boolean, UsersActionTypes | AuthActionTypes>(
   true,
-).handleAction(
-  [actions.fetchUsersSuccess, actions.fetchUsersFailure],
-  () => false,
-);
+).handleAction([actions.fetchUsersSuccess, actions.fetchUsersFailure], () => false);
 
 const rootReducer = combineReducers({
   users,
