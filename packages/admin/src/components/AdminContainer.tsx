@@ -28,7 +28,6 @@ import {
   OverlaySmallText,
   PairwiseOpenCloseLogo,
 } from "./Shared";
-import SingleSignOnModal from "components/SingleSignOnModal";
 import { getChallengeSlug } from "@pairwise/common";
 
 // Only show focus outline when tabbing around the UI
@@ -127,7 +126,6 @@ const ApplicationContainer = (props: IProps) => {
   return (
     <React.Fragment>
       <LoadingOverlay visible={workspaceLoading} />
-      <SingleSignOnModal />
       <Header>
         <ControlsContainer style={{ height: "100%", width: 350 }}>
           <NavIconButton
