@@ -12,16 +12,16 @@ import { Actions } from "../root-actions";
 
 const fetchUserEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.fetchUser)),
+    filter(isActionOf(Actions.fetchAdminUser)),
     mergeMap(API.fetchUserProfile),
     map(result => {
       if (result.value) {
-        return Actions.fetchUserSuccess(result.value);
+        return Actions.fetchAdminUserSuccess(result.value);
       } else {
         deps.toaster.warn(
           "An issue occurred with the Pairwise servers and we could not retrieve your user profile right now.\n\n You are not logged in currently.",
         );
-        return Actions.fetchUserFailure(result.error);
+        return Actions.fetchAdminUserFailure(result.error);
       }
     }),
   );

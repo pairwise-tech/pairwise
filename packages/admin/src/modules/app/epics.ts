@@ -68,7 +68,7 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
  */
 const appInitializationFailedEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf([Actions.fetchUserFailure, Actions.fetchCoursesFailure])),
+    filter(isActionOf([Actions.fetchAdminUserFailure, Actions.fetchCoursesFailure])),
     mapTo(Actions.appInitializationFailed()),
   );
 };
@@ -123,7 +123,7 @@ const promptToAddEmailEpic: EpicSignature = (action$, _, deps) => {
 
   // Get users who are registered but have no email
   const userFetchedSuccessNoEmail$ = action$.pipe(
-    filter(isActionOf(Actions.fetchUserSuccess)),
+    filter(isActionOf(Actions.fetchAdminUserSuccess)),
     pluck("payload"),
     filter(user => {
       const USER_SIGNED_UP = !!user.profile;

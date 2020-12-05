@@ -522,8 +522,8 @@ const LostPage = () => (
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  user: Modules.selectors.user.userSelector(state),
-  userLoading: Modules.selectors.user.loading(state),
+  user: Modules.selectors.admin.adminUserSelector(state),
+  userLoading: Modules.selectors.admin.loading(state),
   location: Modules.selectors.app.locationSelector(state),
   screensaverVisible: Modules.selectors.app.screensaverVisible(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,

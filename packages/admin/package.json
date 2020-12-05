@@ -24,7 +24,6 @@
     "test:unit": "yarn jest --watchAll=false",
     "test:update-snapshots": "yarn jest --updateSnapshot",
     "lint": "yarn prettier && yarn tslint && yarn tsc",
-    "pretest": "yarn run js:build",
     "test": "yarn lint && yarn test:unit"
   },
   "dependencies": {

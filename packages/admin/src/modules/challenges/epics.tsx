@@ -179,7 +179,7 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
   );
 
   const fetchUser$ = action$.pipe(
-    filter(isActionOf(Actions.fetchUserSuccess)),
+    filter(isActionOf(Actions.fetchAdminUserSuccess)),
     map(x => x.payload.lastActiveChallengeIds),
   );
 

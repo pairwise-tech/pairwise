@@ -111,7 +111,7 @@ const adminUserLoginEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(result => {
       if (result.value) {
         return of(
-          Actions.fetchUser(),
+          Actions.fetchAdminUser(),
           Actions.adminUserLoginSuccess(),
         );
       } else {

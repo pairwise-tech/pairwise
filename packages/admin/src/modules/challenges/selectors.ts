@@ -5,7 +5,7 @@ import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
 import { SANDBOX_ID } from "tools/constants";
 import { findCourseById } from "tools/utils";
-import { userProgress } from "modules/user/selectors";
+import { adminUserProgress } from "modules/admin/selectors";
 
 /** ===========================================================================
  * Selectors
@@ -200,7 +200,7 @@ export const getCurrentChallenge = createSelector(
  * Determine if the user has completed the current challenge.
  */
 export const isCurrentChallengeComplete = createSelector(
-  [getCurrentActiveIds, userProgress],
+  [getCurrentActiveIds, adminUserProgress],
   (activeIds, userProgressState) => {
     const { currentCourseId, currentChallengeId } = activeIds;
     if (userProgressState && currentCourseId && currentChallengeId) {

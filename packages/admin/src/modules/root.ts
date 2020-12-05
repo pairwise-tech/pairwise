@@ -16,7 +16,7 @@ import Challenges, {
   ChallengesActionTypes,
   ChallengesState,
 } from "./challenges";
-import User, { UserActionTypes, UserState } from "./user";
+import User, { UserActionTypes, UserState } from "./admin";
 import Users, { UsersActionTypes, UsersState } from "./users";
 import * as Storage from "../tools/storage-utils";
 
@@ -35,7 +35,7 @@ export type ReduxActionTypes =
 export const selectors = {
   app: App.selector,
   auth: Auth.selector,
-  user: User.selector,
+  admin: User.selector,
   users: Users.selector,
   challenges: Challenges.selector,
 };
@@ -43,7 +43,7 @@ export const selectors = {
 export const actions = {
   app: App.actions,
   auth: Auth.actions,
-  user: User.actions,
+  admin: User.actions,
   users: Users.actions,
   challenges: Challenges.actions,
 };
@@ -61,7 +61,7 @@ export const Modules = {
 export interface ReduxStoreState {
   app: AppState;
   auth: AuthState;
-  user: UserState;
+  admin: UserState;
   users: UsersState;
   challenges: ChallengesState;
 }
@@ -69,7 +69,7 @@ export interface ReduxStoreState {
 const rootReducer = combineReducers({
   app: App.store,
   auth: Auth.store,
-  user: User.store,
+  admin: User.store,
   users: Users.store,
   challenges: Challenges.store,
 });

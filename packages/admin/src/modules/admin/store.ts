@@ -73,7 +73,7 @@ const user = createReducer<
   .handleAction(actions.logoutUser, () => initialUserState)
   .handleAction(
     [
-      actions.fetchUserSuccess,
+      actions.fetchAdminUserSuccess,
     ],
     (state, action) => ({
       ...state,
@@ -83,7 +83,7 @@ const user = createReducer<
 
 const loading = createReducer<boolean, UserActionTypes | AuthActionTypes>(
   true,
-).handleAction([actions.fetchUserSuccess, actions.fetchUserFailure, actions.adminUserLoginFailure], () => false);
+).handleAction([actions.fetchAdminUserSuccess, actions.fetchAdminUserFailure, actions.adminUserLoginFailure], () => false);
 
 const rootReducer = combineReducers({
   user,

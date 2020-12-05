@@ -13,7 +13,7 @@ import {
 } from "tools/storage-utils";
 import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/utils";
-import { UserStoreState } from "./user/store";
+import { UserStoreState } from "./admin/store";
 import { AdminUserView } from "./users/store";
 
 /** ===========================================================================
