@@ -4,15 +4,10 @@
   "description": "Pairwise Admin UI",
   "private": true,
   "scripts": {
-    "codepress:build": "tsc --lib esnext --esModuleInterop --skipLibCheck codepress/src/*.ts",
-    "codepress:watch": "concurrently \"yarn run codepress:build -- -w\" \"nodemon ./codepress/src/index.js\"",
     "setup:env": "cp sample.env .env",
-    "prestart": "yarn run js:build",
     "start": "react-scripts start",
     "start:dev": "REACT_APP_DEV=true yarn run start",
-    "prestart:codepress": "yarn run build:common",
     "build:common": "cd ../common && yarn run build",
-    "start:codepress": "concurrently \"yarn run codepress:watch\" \"REACT_APP_CODEPRESS=true HTTPS=false yarn run start\"",
     "start:https": "REACT_APP_HOST=https://localhost:9000 HTTPS=true yarn run start",
     "start:prod": "serve build -s -p 3000",
     "prebuild": "yarn run build:common && yarn run js:build",
@@ -29,7 +24,6 @@
     "test:watch": "yarn jest",
     "test:unit": "yarn jest --watchAll=false",
     "test:update-snapshots": "yarn jest --updateSnapshot",
-    "js:build": "tsc --lib esnext,dom --esModuleInterop --skipLibCheck --declaration src/js/browser-test-lib.ts src/js/test-expectation-lib.ts",
     "lint": "yarn prettier && yarn tslint && yarn tsc",
     "pretest": "yarn run js:build",
     "test": "yarn lint && yarn test:unit"
