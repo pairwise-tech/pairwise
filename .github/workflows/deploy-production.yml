@@ -78,40 +78,40 @@ jobs:
       # - name: Run Cypress tests
       #   run: yarn cypress
 
-      # # Setup gcloud CLI
-      # - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-      #   with:
-      #     service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-      #     service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
 
-      # # Configure gcloud CLI
-      # - name: Setup gcloud CLI
-      #   run: |
-      #     gcloud config set project $CLOUD_RUN_PROJECT_ID
+      # Configure gcloud CLI
+      - name: Setup gcloud CLI
+        run: |
+          gcloud config set project $CLOUD_RUN_PROJECT_ID
 
-      # # Configure Docker to use gcloud
-      # - name: Configure Docker with gcloud
-      #   run: gcloud auth configure-docker
+      # Configure Docker to use gcloud
+      - name: Configure Docker with gcloud
+        run: gcloud auth configure-docker
 
-      # # Build the server application directly (instead of using Google Cloud Build)
-      # - name: Build the production server application
-      #   run: |
-      #     docker build \
-      #       --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
-      #       -t pairwise-production \
-      #       -f packages/server/Dockerfile .
+      # Build the server application directly (instead of using Google Cloud Build)
+      - name: Build the production server application
+        run: |
+          docker build \
+            --tag gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
+            -t pairwise-production \
+            -f packages/server/Dockerfile .
 
-      # # Push the production server image to gcloud
-      # - name: Push the production server image to GCR
-      #   run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
+      # Push the production server image to gcloud
+      - name: Push the production server image to GCR
+        run: docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA
 
-      # # Deploy the image to Cloud Run
-      # - name: Deploy the production server to Google Cloud Run
-      #   run: |
-      #     gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
-      #       --region $RUN_REGION \
-      #       --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
-      #       --platform managed
+      # Deploy the image to Cloud Run
+      - name: Deploy the production server to Google Cloud Run
+        run: |
+          gcloud run deploy $CLOUD_RUN_SERVICE_NAME \
+            --region $RUN_REGION \
+            --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
+            --platform managed
 
       # # Build the client application directly (instead of using Netlify)
       # - name: Build the production client application
