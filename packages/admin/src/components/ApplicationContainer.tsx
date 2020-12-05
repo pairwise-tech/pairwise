@@ -11,7 +11,6 @@ import Home from "./Home";
 import {
   Button,
   FocusStyleManager,
-  Tooltip,
   Menu,
   MenuItem,
   MenuDivider,
@@ -27,7 +26,9 @@ import {
   OverlaySmallText,
   PairwiseOpenCloseLogo,
 } from "./Shared";
-import { AuthenticationForm } from "components/SingleSignOnModal";
+import SingleSignOnModal, {
+  AuthenticationForm,
+} from "components/SingleSignOnModal";
 import { getChallengeSlug } from "@pairwise/common";
 
 // Only show focus outline when tabbing around the UI
@@ -128,19 +129,13 @@ const ApplicationContainer = (props: IProps) => {
         }}
         text="Home"
       />
-      <MenuItem
-        icon="code"
-        onClick={() => {
-          history.push("/workspace/sandbox");
-        }}
-        text="Sandbox"
-      />
     </Menu>
   );
 
   return (
     <React.Fragment>
       <LoadingOverlay visible={workspaceLoading} />
+      <SingleSignOnModal />
       <Header>
         <ControlsContainer
           style={{ height: "100%", marginRight: isMobile ? 0 : 40 }}
@@ -164,31 +159,6 @@ const ApplicationContainer = (props: IProps) => {
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
           {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
           <div style={{ marginLeft: 10 }} />
-          {!isMobile && (
-            <Tooltip
-              usePortal={false}
-              position="bottom"
-              content="Launch Pairwise Screensaver"
-            >
-              <IconButton
-                icon="media"
-                style={{ padding: 0 }}
-                aria-label="Start the Pairwise Screensaver"
-                onClick={() => setScreensaverState(true)}
-              />
-            </Tooltip>
-          )}
-          {!isMobile && (
-            <Link style={{ color: "white" }} to={"/workspace/sandbox"}>
-              <Button
-                id="sandboxButton"
-                disabled={isSandbox}
-                style={{ marginLeft: 10 }}
-              >
-                Sandbox
-              </Button>
-            </Link>
-          )}
           {isMobile && (
             <LastChildMargin
               style={{ flexShrink: 0, marginRight: isLoggedIn ? 6 : 0 }}
@@ -413,7 +383,7 @@ const CurrentlyInBeta = styled.small`
   box-shadow: 0 0 20px rgb(0, 0, 0);
   border-radius: 100px;
   &:before {
-    content: "BETA";
+    content: "ADMIN UI";
   }
 `;
 
@@ -448,7 +418,7 @@ const LastChildMargin = styled.div`
 const ControlsContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   flex-direction: row;
 `;
 

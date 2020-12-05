@@ -21,7 +21,6 @@ import {
   parseInitialUrlToInitializationType,
   APP_INITIALIZATION_TYPE,
 } from "tools/utils";
-import { captureSentryException } from "tools/sentry-utils";
 import {
   getViewedEmailPromptStatus,
   markEmailPromptAsViewed,
@@ -140,12 +139,6 @@ const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
 const appInitializationFailedEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.fetchUserFailure, Actions.fetchCoursesFailure])),
-    tap(action => {
-      // Report this to Sentry so we know about it.
-      captureSentryException(
-        new Error(`App initialization failed! Action type: ${action.type}`),
-      );
-    }),
     mapTo(Actions.appInitializationFailed()),
   );
 };
@@ -400,7 +393,6 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
   ).pipe(
     catchError((err, stream) => {
       console.warn(`[Low Priority] Analytics error: ${err.message}`);
-      captureSentryException(err);
       return stream; // Do not collapse the stream
     }),
   );

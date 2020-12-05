@@ -35,7 +35,6 @@ import { SANDBOX_ID } from "tools/constants";
 import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/utils";
 import { UserStoreState } from "./user/store";
-import { captureSentryException } from "../tools/sentry-utils";
 import { v4 as uuidv4 } from "uuid";
 
 /** ===========================================================================
@@ -391,7 +390,7 @@ class Api extends BaseApiClass {
           },
         );
       } catch (err) {
-        captureSentryException(err);
+        // nothing
       }
 
       return new Ok(result);
