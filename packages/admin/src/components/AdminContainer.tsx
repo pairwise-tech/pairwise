@@ -123,8 +123,6 @@ const ApplicationContainer = (props: IProps) => {
     </Menu>
   );
 
-  console.log(ENV.HOST);
-
   return (
     <React.Fragment>
       <LoadingOverlay visible={workspaceLoading} />
@@ -200,7 +198,7 @@ const ApplicationContainer = (props: IProps) => {
               id="login-signup-button"
               onClick={() => {
                 // Redirect
-                window.location.href = `${ENV.HOST}/auth/google`;
+                window.location.href = `${ENV.HOST}/auth/admin`;
               }}
             >
               Admin Login

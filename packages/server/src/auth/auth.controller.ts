@@ -135,6 +135,29 @@ export class AuthController {
     }
   }
 
+  @UseGuards(AuthGuard("google-admin"))
+  @Get("admin")
+  public async googleAdmin(@Req() req) {
+    /* passport handles redirection to the SSO provider */
+  }
+
+  @UseGuards(AuthGuard("google-admin"))
+  @Get("google-admin/callback")
+  public async googleAdminLogin(
+    @Req() req: Request & { user: GoogleProfileWithCredentials },
+    @Res() res,
+  ) {
+    const result = await this.authService.handleGoogleSignin(req.user);
+
+    if (result.value) {
+      const { token, accountCreated } = result.value;
+      const params = this.getQueryParams(token, accountCreated);
+      return res.redirect(`http://admin.pairwise.tech?${params}`);
+    } else {
+      return this.handleLoginError(res, "Google");
+    }
+  }
+
   /**
    * Stringify the parameters into query parameters.
    */
@@ -155,10 +178,6 @@ export class AuthController {
     // @ts-ignore
     const referrerUrl: string | undefined = req.headers.referer;
     const clientUrl = ENV.CLIENT_URL;
-
-    console.log(req.headers);
-    console.log("REFERRER URL:");
-    console.log(referrerUrl);
 
     if (typeof referrerUrl === "string" && referrerUrl.includes(clientUrl)) {
       return referrerUrl;
