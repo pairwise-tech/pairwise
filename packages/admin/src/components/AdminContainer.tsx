@@ -1,3 +1,4 @@
+import * as ENV from "tools/client-env";
 import React from "react";
 import { connect } from "react-redux";
 import { useMedia } from "use-media";
@@ -183,16 +184,6 @@ const ApplicationContainer = (props: IProps) => {
                   <ProfileIcon avatar={user.profile.avatarUrl} />
                 </UserBio>
                 <div className="dropdown-links">
-                  <Link
-                    id="account-link"
-                    to="/account"
-                    style={{
-                      borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
-                    }}
-                  >
-                    <Icon icon="user" style={{ marginRight: 10 }} />
-                    Account
-                  </Link>
                   <Link to="/logout" id="logout-link" onClick={logoutUser}>
                     <Icon icon="log-out" style={{ marginRight: 10 }} />
                     Logout
@@ -215,7 +206,10 @@ const ApplicationContainer = (props: IProps) => {
           ) : (
             <LoginSignupButton
               id="login-signup-button"
-              onClick={() => setSingleSignOnDialogState(true)}
+              onClick={() => {
+                // Redirect
+                window.location.href = `${ENV.HOST}/auth/google`;
+              }}
             >
               Admin Login
             </LoginSignupButton>

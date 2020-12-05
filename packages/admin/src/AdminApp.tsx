@@ -1,7 +1,7 @@
 import React, { ErrorInfo } from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import { Router as ReactRouter } from "react-router-dom";
-import ApplicationContainer from "components/ApplicationContainer";
+import AdminContainer from "components/AdminContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
 import { NODE_ENV } from "tools/client-env";
 import { DarkTheme, FullScreenOverlay, OverlayText } from "components/Shared";
@@ -22,7 +22,7 @@ interface IProps {}
  * ============================================================================
  */
 
-class Pairwise extends React.Component<IProps, IState> {
+class PairwiseAdminApp extends React.Component<IProps, IState> {
   static getDerivedStateFromError() {
     return { hasError: true };
   }
@@ -64,7 +64,7 @@ class Pairwise extends React.Component<IProps, IState> {
       <ReduxProvider store={store}>
         <ReactRouter history={history}>
           <DarkTheme>
-            <ApplicationContainer />
+            <AdminContainer />
           </DarkTheme>
         </ReactRouter>
       </ReduxProvider>
@@ -77,4 +77,4 @@ class Pairwise extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
-export default Pairwise;
+export default PairwiseAdminApp;

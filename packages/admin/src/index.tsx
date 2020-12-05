@@ -13,7 +13,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 // Import application
-import Pairwise from "./App";
+import Pairwise from "./AdminApp";
 
 // Import service worker
 import * as serviceWorker from "./serviceWorker";
