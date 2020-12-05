@@ -6,7 +6,7 @@ import { Redirect, Route, Switch, useHistory } from "react-router";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
-import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
+import { COLORS, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import Home from "./Home";
 import Index from "./Index";
@@ -52,13 +52,10 @@ FocusStyleManager.onlyShowFocusOnTabs();
 const ApplicationContainer = (props: IProps) => {
   const {
     user,
-    location,
-    challenge,
     initialized,
     logoutUser,
     userLoading,
     initializeApp,
-    overlayVisible,
     workspaceLoading,
     userAuthenticated,
     nextPrevChallenges,
@@ -87,10 +84,6 @@ const ApplicationContainer = (props: IProps) => {
   } else if (!initialized) {
     return <LoadingOverlay visible={workspaceLoading} />;
   }
-
-  const onWorkspaceRoute = location.includes("workspace");
-  const isSandbox =
-    !!challenge && challenge.id === SANDBOX_ID && onWorkspaceRoute;
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
@@ -138,9 +131,9 @@ const ApplicationContainer = (props: IProps) => {
       <Header>
         <ControlsContainer style={{ height: "100%", width: 350 }}>
           <NavIconButton
-            overlayVisible={overlayVisible}
-            style={{ color: "white", marginRight: 20 }}
+            overlayVisible
             onClick={() => null}
+            style={{ color: "white", marginRight: 20 }}
           />
           <ProductTitle id="product-title">
             <Link
@@ -190,7 +183,7 @@ const ApplicationContainer = (props: IProps) => {
                 </div>
               </div>
             </AccountDropdownButton>
-          ) : isSandbox && isMobile ? (
+          ) : isMobile ? (
             <Button
               icon="user"
               id="login-signup-button"
@@ -524,9 +517,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   screensaverVisible: Modules.selectors.app.screensaverVisible(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
-  challenge: Modules.selectors.challenges.getCurrentChallenge(state),
-  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
-  hasMediaContent: Modules.selectors.challenges.getHasMediaContent(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   initializationError: Modules.selectors.app.appSelector(state)
     .initializationError,
@@ -538,11 +528,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const dispatchProps = {
   logoutUser: Modules.actions.auth.logoutUser,
   setScreensaverState: Modules.actions.app.setScreensaverState,
-  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
-  updateChallenge: Modules.actions.challenges.updateChallenge,
 };
 
 const mergeProps = (

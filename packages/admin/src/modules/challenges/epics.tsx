@@ -1,18 +1,9 @@
 import {
-  Course,
-  IProgressDto,
-  Err,
-  Ok,
-  Result,
-  ICodeBlobDto,
-  SandboxBlob,
-  Challenge,
   CourseList,
   LastActiveChallengeIds,
-  getChallengeSlug,
 } from "@pairwise/common";
 import { combineEpics } from "redux-observable";
-import { merge, of, combineLatest } from "rxjs";
+import { of, combineLatest } from "rxjs";
 import {
   delay,
   filter,
@@ -21,17 +12,14 @@ import {
   tap,
   pluck,
   ignoreElements,
-  debounceTime,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
-import { EpicSignature, ReduxStoreState } from "../root";
+import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { SANDBOX_ID } from "tools/constants";
 import {
   deriveIdsFromCourseWithDefaults,
   findChallengeIdInLocationIfExists,
-  createInverseChallengeMapping,
-  isContentOnlyChallenge,
 } from "tools/utils";
 import React from "react";
 
@@ -54,93 +42,6 @@ const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
         return Actions.fetchNavigationSkeletonFailure(error);
       }
     }),
-  );
-};
-
-/**
- * After a challenge or module is deleted when running Codepress, some side
- * effects are required. This epic takes care of that: updating the URL and
- * triggering the setChallengeIdContext actions to indicate the challenge id
- * context has changed.
- */
-const resetChallengeContextAfterDeletionEpic: EpicSignature = (
-  action$,
-  state$,
-  deps,
-) => {
-  return action$.pipe(
-    filter(isActionOf([Actions.deleteChallenge, Actions.deleteCourseModule])),
-    map(() => {
-      const {
-        courses,
-        challengeMap,
-        currentCourseId,
-        currentModuleId,
-        currentChallengeId,
-      } = state$.value.challenges;
-
-      if (currentCourseId && currentModuleId && courses) {
-        const { location } = deps.router;
-
-        if (currentChallengeId && challengeMap) {
-          const slug = getChallengeSlug(
-            challengeMap[currentChallengeId].challenge,
-          );
-          if (slug) {
-            const subPath = slug + location.search + location.hash;
-            deps.router.push(`/workspace/${subPath}`);
-          }
-        } else {
-          /**
-           * NOTE: The context reset logic in the challenges store resets the
-           * challenge id to the previous challenge. If it's the first
-           * challenge in the list, this will result in null in which case we
-           * just redirect /home.
-           *
-           * This handles the edge cases of deleting the first challenge
-           * and having a challenge list of only 1 challenge, which is then
-           * deleted.
-           */
-          deps.toaster.warn(
-            "Could not find challenge to redirect to after deletion, redirecting home instead.",
-          );
-          deps.router.push(`/home`);
-        }
-
-        return Actions.setChallengeIdContext({
-          currentCourseId,
-          currentModuleId,
-          currentChallengeId,
-          previousChallengeId: null,
-        });
-      }
-
-      return Actions.empty(
-        "Failed to reset challenge context correctly after deletion action.",
-      );
-    }),
-  );
-};
-
-/**
- * Show a toast when a module or challenge is deleted for a better UX.
- */
-const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
-  return action$.pipe(
-    filter(isActionOf([Actions.deleteChallenge, Actions.deleteCourseModule])),
-    tap(action => {
-      let message = "";
-      if (isActionOf(Actions.deleteChallenge, action)) {
-        message = "Challenge deleted successfully!";
-      } else if (isActionOf(Actions.deleteCourseModule, action)) {
-        message = "Module deleted successfully!";
-      }
-
-      if (message) {
-        deps.toaster.warn(message, { icon: "take-action" });
-      }
-    }),
-    ignoreElements(),
   );
 };
 
@@ -216,30 +117,6 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
         );
       },
     ),
-  );
-};
-
-const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
-  return merge(
-    action$.pipe(
-      filter(isActionOf(Actions.fetchCoursesSuccess)),
-      map(({ payload: { courses } }) => {
-        const challengeMap = createInverseChallengeMapping(courses);
-        return challengeMap;
-      }),
-    ),
-    action$.pipe(
-      filter(isActionOf(Actions.createChallenge)),
-      map(() => state$.value.challenges.courses),
-      filter(x => Boolean(x)),
-      map(courses => {
-        return createInverseChallengeMapping(
-          courses as Course[], // TS doesn't know that this is not null due to filter above
-        );
-      }),
-    ),
-  ).pipe(
-    map(challengeMap => Actions.storeInverseChallengeMapping(challengeMap)),
   );
 };
 
@@ -349,232 +226,6 @@ const syncChallengeContextToUrlEpic: EpicSignature = (action$, state$) => {
 };
 
 /**
- * Fetches a code blob for a challenge when the challenge id changes. Code
- * blobs are fetched individually whenever a challenge loads, and then
- * cached locally in Redux state. When a challenge is first viewed, the code
- * blob will be fetched from the API, if the challenge is viewed again, the
- * blob will be fetched from the local Redux blob cache.
- *
- * This epic will receive the current challenge id, and then determine the
- * next and previously challenge ids, and dispatch requests to fetch all
- * of these. This could be adjusted later... but the idea is to try to prefetch
- * the challenge blobs ahead of the user navigating to the challenge. Since
- * the fetch epic always checks the cache first, this should not result in
- * multiple API requests.
- *
- * NOTE: If the API fails to find a blob, it will return a 404 error. This is
- * used to clearly differentiate when the Workspace should default to showing
- * the initial starter code for a challenge (and when instead it should show
- * an empty editor, if, for instance the user cleared all the editor code).
- */
-const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
-  action$,
-  state$,
-  deps,
-) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.setChallengeIdContext)),
-    pluck("payload"),
-    pluck("currentChallengeId"),
-    filter(x => !!x),
-    mergeMap(id => {
-      if (!id) {
-        return of(Actions.empty("No challenge id yet..."));
-      }
-
-      const { next, prev } = deps.selectors.challenges.nextPrevChallenges(
-        state$.value,
-      );
-
-      const actions = [Actions.fetchBlobForChallenge(id)];
-
-      if (next) {
-        actions.push(Actions.fetchBlobForChallenge(next.id));
-      }
-
-      if (prev) {
-        actions.push(Actions.fetchBlobForChallenge(prev.id));
-      }
-
-      return of(...actions);
-    }),
-  );
-};
-
-/**
- * Initialize the sandbox with whatever challenge type was stored locally. This
- * is so you can select a sandbox challenge type and have that type remain on
- * page reload.
- *
- * The underlying reason this is necessary is that the workspace will look at
- * challenge.type rather than blob.challengeType when determining what type of
- * code is running. With normal challenges this is fine, the type never changes
- * except in edit mode, but the sandbox is a special case.
- *
- * @NOTE The workspace will throw an error if we fire an update challenge action
- * before it is loaded, so combine latest is just used to ensure that the update
- * is not fired before the workspace is ready
- */
-const hydrateSandboxType: EpicSignature = action$ => {
-  // See NOTE
-  const workspaceLoaded$ = action$.pipe(
-    filter(isActionOf(Actions.setWorkspaceChallengeLoaded)),
-  );
-  const sandboxCodeFetched$ = action$.pipe(
-    filter(isActionOf(Actions.fetchBlobForChallengeSuccess)),
-    filter(x => x.payload.challengeId === "sandbox"),
-  );
-
-  return combineLatest(workspaceLoaded$, sandboxCodeFetched$).pipe(
-    map(([_, x]) => x.payload),
-    map(x => {
-      const blob = x.dataBlob as SandboxBlob;
-      return Actions.updateChallenge({
-        id: SANDBOX_ID,
-        challenge: {
-          type: blob.challengeType,
-        },
-      });
-    }),
-  );
-};
-
-/**
- * Handles saving a code blob, this occurs whenever the challenge id changes
- * and it saves the code blob for the previous challenge. This epic just
- * finds the blob to save and then dispatches the action which actually saves
- * the blob.
- */
-const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
-  const saveOnNavEpic = action$.pipe(
-    filter(isActionOf(Actions.setChallengeIdContext)),
-    pluck("payload"),
-    pluck("previousChallengeId"),
-    filter(x => x !== null),
-    map(challengeId => {
-      const id = challengeId as string; // it's not null
-      const blobs = deps.selectors.challenges.getBlobCache(state$.value);
-      const cachedItem = blobs[id];
-      if (cachedItem && cachedItem.dataBlob) {
-        const codeBlob: ICodeBlobDto = {
-          challengeId: id,
-          dataBlob: cachedItem.dataBlob,
-        };
-        return new Ok(codeBlob);
-      } else {
-        return new Err("No blob found");
-      }
-    }),
-    map(result => {
-      if (result.value) {
-        return Actions.saveChallengeBlob(result.value);
-      } else {
-        return Actions.empty("No blob saved");
-      }
-    }),
-  );
-
-  const saveOnUpdateEpic = action$.pipe(
-    filter(isActionOf(Actions.updateCurrentChallengeBlob)),
-    // Do not save if the solution code is revealed
-    filter(() => !state$.value.challenges.revealWorkspaceSolution),
-    debounceTime(500),
-    map(x => x.payload),
-    map(Actions.saveChallengeBlob),
-  );
-
-  return merge(saveOnNavEpic, saveOnUpdateEpic);
-};
-
-/**
- * NOTE: content only challenges do not have tests, though we still want them to
- * appear as completed in the challenge map. Any time we navigate away from a
- * content only challenge, consider it completed.
- */
-const completeContentOnlyChallengeEpic: EpicSignature = (
-  action$,
-  state$,
-  deps,
-) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.setChallengeIdContext)),
-    pluck("payload"),
-    pluck("previousChallengeId"),
-    filter(x => x !== null),
-    map(prevId => {
-      // artificially construct the previous state in order to get the last
-      // challenge using the getCurrentChallenge selector.
-      const prevState = {
-        ...state$.value,
-        challenges: {
-          ...state$.value.challenges,
-          currentChallengeId: prevId,
-        },
-      };
-      // it should be impossible for previousChallengeId to be null
-      // or empty so it should be safe to cast this as a Challenge
-      return deps.selectors.challenges.getCurrentChallenge(
-        prevState,
-      ) as Challenge;
-    }),
-    filter(isContentOnlyChallenge),
-    filter(x => x.type !== "project"), // Exclude projects
-    map(({ id }) => constructProgressDto(state$.value, id, true)),
-    map(result => {
-      if (result.value) {
-        return Actions.updateUserProgress(result.value);
-      } else {
-        return Actions.empty("Did not save user progress");
-      }
-    }),
-  );
-};
-
-/**
- * Handle saving details for a project submission.
- */
-const completeProjectSubmissionEpic: EpicSignature = (action$, state$) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.submitProject)),
-    pluck("payload"),
-    filter(x => x.type === "project"),
-    map(({ id }) => constructProgressDto(state$.value, id, true)),
-    map(result => {
-      if (result.value) {
-        return Actions.updateUserProgress(result.value);
-      } else {
-        return Actions.empty("Did not save user progress");
-      }
-    }),
-  );
-};
-
-/**
- * Handle attempting a challenge. This epic constructs a user progress update
- * after a challenge is attempted and then dispatches an action to save this
- * progress update. If challenge is complete (all tests passed), we mark the
- * challenge as completed, if there are failing tests, mark it as attempted.
- */
-const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.handleAttemptChallenge)),
-    // Do not save if solution code is revealed
-    filter(() => !state$.value.challenges.revealWorkspaceSolution),
-    pluck("payload"),
-    map(({ challengeId, complete }) =>
-      constructProgressDto(state$.value, challengeId, complete),
-    ),
-    map(result => {
-      if (result.value) {
-        return Actions.updateUserProgress(result.value);
-      } else {
-        return Actions.empty("Did not save user progress");
-      }
-    }),
-  );
-};
-
-/**
  * If the current challenge is consecutively after the challenge the
  * user is navigating away from, and the current challenge is a section,
  * show a toast to let the user know they have begun a new course section
@@ -643,53 +294,16 @@ const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
 };
 
 /** ===========================================================================
- * Utils
- * ============================================================================
- */
-
-const constructProgressDto = (
-  state: ReduxStoreState,
-  challengeId: string,
-  complete: boolean,
-): Result<IProgressDto, string> => {
-  const courseId = state.challenges.currentCourseId;
-  if (courseId) {
-    const payload: IProgressDto = {
-      courseId,
-      complete,
-      challengeId,
-      timeCompleted: new Date(),
-    };
-
-    return new Ok(payload);
-  } else {
-    const msg =
-      "[WARNING!]: No active course id found in challenge completion epic, this shouldn't happen...";
-    console.warn(msg);
-    return new Err(msg);
-  }
-};
-
-/** ===========================================================================
  * Export
  * ============================================================================
  */
 
 export default combineEpics(
-  hydrateSandboxType,
   contentSkeletonInitializationEpic,
   initializeChallengeStateEpic,
-  inverseChallengeMappingEpic,
-  handleFetchCodeBlobForChallengeEpic,
-  completeProjectSubmissionEpic,
   setWorkspaceLoadedEpic,
   lostUserEpic,
-  resetChallengeContextAfterDeletionEpic,
-  codepressDeleteToasterEpic,
   challengeInitializationEpic,
   syncChallengeContextToUrlEpic,
-  handleSaveCodeBlobEpic,
-  handleAttemptChallengeEpic,
-  completeContentOnlyChallengeEpic,
   showSectionToastEpic,
 );
