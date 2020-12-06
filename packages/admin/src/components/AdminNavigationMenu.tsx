@@ -7,7 +7,6 @@ import {
   ModuleSkeleton,
   ModuleSkeletonList,
   CHALLENGE_PROGRESS,
-  CourseMetadata,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, MOBILE } from "tools/constants";
@@ -15,19 +14,7 @@ import { HEADER_HEIGHT } from "tools/dimensions";
 import { composeWithProps } from "tools/utils";
 import { Button } from "@blueprintjs/core";
 import { NavLink, NavLinkProps, RouteComponentProps } from "react-router-dom";
-import {
-  ModuleNumber,
-  ModuleNavigationBase,
-} from "./AdminNavigationComponents";
-import { Select } from "@blueprintjs/select";
 import cx from "classnames";
-
-/** ===========================================================================
- * Types & Config
- * ============================================================================
- */
-
-const CourseSelect = Select.ofType<CourseMetadata>();
 
 /** ===========================================================================
  * React Class
@@ -70,13 +57,7 @@ class AdminNavigationMenu extends React.Component<
   };
 
   render(): Nullable<JSX.Element> {
-    const {
-      course,
-      module,
-      isMobile,
-      overlayVisible,
-      courseListMetadata,
-    } = this.props;
+    const { course, module, overlayVisible } = this.props;
 
     if (!course || !module) {
       console.warn(
@@ -96,48 +77,15 @@ class AdminNavigationMenu extends React.Component<
           onClick={e => e.stopPropagation()}
         >
           <ColTitle className="course-select">
-            <CourseSelect
-              filterable={false}
-              items={courseListMetadata}
-              itemDisabled={c => c.id === course.id}
-              onItemSelect={({ id }) => null}
-              itemRenderer={({ title, id }, { handleClick }) => (
-                <ClickableColTitle
-                  key={id}
-                  disabled={id === course.id}
-                  onClick={handleClick}
-                >
-                  {title}
-                </ClickableColTitle>
-              )}
-            >
-              <Button
-                style={{ whiteSpace: "nowrap" }}
-                fill
-                className="mobile-shrink"
-                text={course.title}
-                rightIcon="chevron-down"
-              />
-            </CourseSelect>
+            <Button
+              fill
+              className="mobile-shrink"
+              text="Pairwise Admin Menu"
+              style={{ whiteSpace: "nowrap" }}
+            />
           </ColTitle>
           <ColScroll>
             {this.renderSortableModuleList(course, module, course.modules)}
-          </ColScroll>
-        </Col>
-        <Col
-          className="challenge-select"
-          offsetX={overlayVisible ? 0 : -60}
-          style={{
-            zIndex: 2,
-          }}
-          onClick={e => e.stopPropagation()}
-        >
-          <SpecialLeftShadow />
-          <ColTitle>
-            <p style={{ fontSize: isMobile ? 13 : 18 }}>{module.title}</p>
-          </ColTitle>
-          <ColScroll>
-            <DoneScrolling />
           </ColScroll>
         </Col>
       </Overlay>
@@ -159,29 +107,6 @@ class AdminNavigationMenu extends React.Component<
         </ModuleNavigationButton>
       </React.Fragment>
     );
-    // return moduleList.map((m, i) => {
-    //   return this.renderModuleNavigationItem(module.id, m, i);
-    // });
-  };
-
-  renderModuleNavigationItem = (
-    activeModuleId: string,
-    module: ModuleSkeleton,
-    index: number,
-  ) => {
-    return (
-      <ModuleNavigationButton
-        key={module.id}
-        id={`module-navigation-${index}`}
-        active={module.id === activeModuleId}
-        // onClick={() => this.props.setCurrentModule(module.id)}
-      >
-        <span>
-          <ModuleNumber>{index}</ModuleNumber>
-          {module.title}
-        </span>
-      </ModuleNavigationButton>
-    );
   };
 
   handleClose = () => {
@@ -196,14 +121,53 @@ class AdminNavigationMenu extends React.Component<
  * ============================================================================
  */
 
-const DoneScrolling = styled((props: any) => (
-  <div {...props}>
-    <p style={{ opacity: 0.8 }}>You're at the end of the list!</p>
-    <p>{"🎉"}</p>
-  </div>
-))`
+const ModuleNumber = styled.code`
+  font-size: 12px;
+  display: inline-block;
+  padding: 5px;
+  color: #ea709c;
+  background: #3a3a3a;
+  width: 24px;
   text-align: center;
-  margin: 40px 0;
+  line-height: 12px;
+  border-radius: 4px;
+  box-shadow: inset 0px 0px 2px 0px #ababab;
+  margin-right: 8px;
+`;
+
+const ModuleNavigationBase = styled.div<{ active?: boolean }>`
+  cursor: pointer;
+  padding-left: 12px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-right: 2px;
+  font-size: 18px;
+  border: 1px solid transparent;
+  border-bottom-color: ${COLORS.LIGHT_GREY};
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  position: relative;
+
+  span {
+    display: flex;
+    align-items: center;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transition: all 0.15s ease-out;
+    transform: scale(${({ active }) => (active ? 1 : 0)});
+    width: 3px;
+    background: ${COLORS.GRADIENT_GREEN};
+  }
 `;
 
 interface AddNavItemButtonProps {
@@ -316,19 +280,6 @@ interface ChallengeListItemIconProps {
   challengeProgress: CHALLENGE_PROGRESS;
   onClick: (e: React.MouseEvent) => any;
 }
-
-// The shadow that appears in the overlay nav for separating the module column
-// from the challenge column
-const SpecialLeftShadow = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 3;
-  box-shadow: rgba(0, 0, 0, 0.22) 10px 0px 10px 0px inset;
-  width: 80px;
-  pointer-events: none;
-`;
 
 const Col = styled.div<{ offsetX: number }>`
   display: flex;
@@ -449,21 +400,6 @@ const ColTitle = styled.div`
         margin: 0;
       }
     }
-  }
-`;
-
-const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
-  border-left: ${props =>
-    props.disabled
-      ? `3px solid ${COLORS.NEON_GREEN}`
-      : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
-
-  :hover {
-    cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
-    background: ${props =>
-      props.disabled
-        ? COLORS.BACKGROUND_NAVIGATION_ITEM
-        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
   }
 `;
 

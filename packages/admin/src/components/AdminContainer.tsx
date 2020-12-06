@@ -55,11 +55,13 @@ const ApplicationContainer = (props: IProps) => {
     initialized,
     logoutUser,
     userLoading,
+    overlayVisible,
     initializeApp,
     workspaceLoading,
     userAuthenticated,
     nextPrevChallenges,
     initializationError,
+    setNavigationMapState,
     setSingleSignOnDialogState,
   } = props;
 
@@ -131,8 +133,8 @@ const ApplicationContainer = (props: IProps) => {
       <Header>
         <ControlsContainer style={{ height: "100%", width: 350 }}>
           <NavIconButton
-            overlayVisible
-            onClick={() => null}
+            overlayVisible={overlayVisible}
+            onClick={() => setNavigationMapState(!overlayVisible)}
             style={{ color: "white", marginRight: 20 }}
           />
           <ProductTitle id="product-title">
@@ -524,6 +526,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   initializationError: Modules.selectors.app.appSelector(state)
     .initializationError,
+  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),
@@ -535,6 +538,7 @@ const dispatchProps = {
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
+  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
 };
 
 const mergeProps = (
