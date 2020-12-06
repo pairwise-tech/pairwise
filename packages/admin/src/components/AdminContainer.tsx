@@ -55,7 +55,6 @@ const AdminContainer = (props: IProps) => {
     userAuthenticated,
     initializationError,
     setNavigationMapState,
-    setSingleSignOnDialogState,
   } = props;
 
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);

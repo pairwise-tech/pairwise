@@ -27,8 +27,5 @@
   "include": [
     "src",
     "admin-declarations.d.ts"
-  ],
-  "exclude": [
-    "src/js/*"
   ]
 }

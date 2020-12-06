@@ -1,13 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ChallengeSkeleton, CHALLENGE_PROGRESS } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import { composeWithProps } from "tools/utils";
 import { Button } from "@blueprintjs/core";
-import { NavLink, NavLinkProps, RouteComponentProps } from "react-router-dom";
+import { NavLink, RouteComponentProps } from "react-router-dom";
 import cx from "classnames";
 
 /** ===========================================================================
@@ -149,16 +148,6 @@ const ModuleNavigationBase = styled.div<{ active?: boolean }>`
   }
 `;
 
-interface AddNavItemButtonProps {
-  onClick: () => any;
-  show: boolean;
-}
-
-interface ChallengeLinkProps extends NavLinkProps {
-  locked: "true" | "false"; // To circumvent a React DOM attribute warning message...
-  active?: boolean;
-}
-
 const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
   active?: boolean;
 }>`
@@ -183,14 +172,6 @@ const ModuleNavigationButton = ({
   <ModuleNavigationButtonBase active={active} as="button" {...rest} />
 );
 
-interface ChallengeListItemIconProps {
-  index: number;
-  challenge: ChallengeSkeleton;
-  isSectionOpen?: boolean;
-  challengeProgress: CHALLENGE_PROGRESS;
-  onClick: (e: React.MouseEvent) => any;
-}
-
 const Col = styled.div<{ offsetX: number }>`
   display: flex;
   flex-direction: column;
@@ -214,10 +195,6 @@ const Col = styled.div<{ offsetX: number }>`
     &.challenge-select {
       width: 90vw;
     }
-
-    /* .mobile-shrink {
-      transition: all 0.2s ease-out;
-    } */
   }
 `;
 
