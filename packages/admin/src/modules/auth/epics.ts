@@ -18,7 +18,7 @@ import {
 } from "tools/storage-utils";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
-import { APP_INITIALIZATION_TYPE } from "tools/utils";
+import { APP_INITIALIZATION_TYPE } from "tools/admin-utils";
 
 /** ===========================================================================
  * Epics

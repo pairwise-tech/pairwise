@@ -12,7 +12,7 @@ import {
   logoutUserInLocalStorage,
 } from "tools/storage-utils";
 import toaster from "tools/toast-utils";
-import { wait, mapCourseSkeletonInDev } from "tools/utils";
+import { wait, mapCourseSkeletonInDev } from "tools/admin-utils";
 import { UserStoreState } from "./admin/store";
 import { AdminUserView } from "./users/store";
 

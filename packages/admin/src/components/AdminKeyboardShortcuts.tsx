@@ -1,8 +1,7 @@
 import { connect } from "react-redux";
 import { getChallengeSlug } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS, SANDBOX_ID } from "tools/constants";
-import { composeWithProps } from "tools/utils";
+import { COLORS } from "tools/constants";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import allPass from "ramda/es/allPass";
 import React from "react";
@@ -11,7 +10,7 @@ import difference from "ramda/es/difference";
 import { Position, Popover, Tooltip } from "@blueprintjs/core";
 import { IconButton } from "./AdminComponents";
 import styled from "styled-components";
-import { getClientOS } from "../tools/utils";
+import { getClientOS, composeWithProps } from "../tools/admin-utils";
 
 const debug = require("debug")("client:KeyboardShortcuts");
 
@@ -299,10 +298,6 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       const slug = getChallengeSlug(next);
       this.props.history.push(`/workspace/${slug}`);
     }
-  };
-
-  navigateToSandBox = () => {
-    this.props.history.push(`/workspace/${SANDBOX_ID}`);
   };
 }
 

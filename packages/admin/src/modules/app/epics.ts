@@ -8,7 +8,7 @@ import {
   delay,
   mapTo,
 } from "rxjs/operators";
-import { Observable, combineLatest } from "rxjs";
+import { Observable } from "rxjs";
 import { isActionOf } from "typesafe-actions";
 import { Location } from "history";
 import { combineEpics } from "redux-observable";
@@ -17,11 +17,7 @@ import { Actions } from "../root-actions";
 import {
   parseInitialUrlToInitializationType,
   APP_INITIALIZATION_TYPE,
-} from "tools/utils";
-import {
-  getViewedEmailPromptStatus,
-  markEmailPromptAsViewed,
-} from "tools/storage-utils";
+} from "tools/admin-utils";
 
 const debug = require("debug")("client:app:epics");
 
@@ -111,52 +107,6 @@ const stripInitialParameters: EpicSignature = (action$, _, deps) => {
   );
 };
 
-/**
- * When the app loads, prompt registered users to enter their email if their
- * email doesn't exist yet.
- */
-const promptToAddEmailEpic: EpicSignature = (action$, _, deps) => {
-  const appInitializedSuccess$ = action$.pipe(
-    filter(isActionOf(Actions.captureAppInitializationUrl)),
-    pluck("payload"),
-    pluck("appInitializationType"),
-    filter(type => type === APP_INITIALIZATION_TYPE.DEFAULT),
-  );
-
-  // Get users who are registered but have no email
-  const userFetchedSuccessNoEmail$ = action$.pipe(
-    filter(isActionOf(Actions.fetchAdminUserSuccess)),
-    pluck("payload"),
-    filter(user => {
-      const USER_SIGNED_UP = !!user.profile;
-      const NO_EMAIL = !user.profile?.email;
-      return USER_SIGNED_UP && NO_EMAIL;
-    }),
-  );
-
-  return combineLatest(appInitializedSuccess$, userFetchedSuccessNoEmail$).pipe(
-    filter(() => {
-      // Filter if they have already seen the prompt before.
-      const viewedEmailPromptBefore = getViewedEmailPromptStatus();
-      return !viewedEmailPromptBefore;
-    }),
-    tap(() => {
-      const redirect = () => deps.router.push("/account");
-      deps.toaster.warn("Please add your email to receive course updates.", {
-        action: {
-          onClick: redirect,
-          text: "Setup Email",
-        },
-      });
-    }),
-    tap(() => {
-      // After showing this, mark it as viewed so the user never sees it again.
-      markEmailPromptAsViewed();
-    }),
-    ignoreElements(),
-  );
-};
-
 const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.captureAppInitializationUrl)),
@@ -217,7 +167,6 @@ export default combineEpics(
   appInitializeCaptureUrlEpic,
   stripInitialParameters,
   emailUpdateSuccessToastEpic,
-  promptToAddEmailEpic,
   notifyOnAuthenticationFailureEpic,
   locationChangeEpic,
 );

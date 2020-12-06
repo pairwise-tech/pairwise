@@ -2,7 +2,7 @@ import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
-import { findCourseById } from "tools/utils";
+import { findCourseById } from "tools/admin-utils";
 import { adminUserProgress } from "modules/admin/selectors";
 
 /** ===========================================================================

@@ -3,6 +3,8 @@
  * ============================================================================
  */
 
+export const HEADER_HEIGHT = 60;
+
 export const COLORS = {
   SUCCESS: "#2ee3ff",
   FAILURE: "#fc426d",
@@ -46,10 +48,6 @@ export const COLORS = {
   BORDER_MODAL: "rgb(100,100,100)",
 };
 
-export const MONACO_EDITOR_INITIAL_FONT_SIZE = 12;
-// How much to increase or decrease font size with each interaction
-export const MONACO_EDITOR_FONT_SIZE_STEP = 2;
-
 /**
  * A cap on prose width so that we don't end up with super wide text. This was
  * originally created for the media area where there is currently no other UI
@@ -62,32 +60,13 @@ export const PROSE_MAX_WIDTH = 900;
  * ============================================================================
  */
 
-// Thse are not within some actions file because they are not action creators.
+// These are not within some actions file because they are not action creators.
 // They are message types for the search worker
 export const SEARCH = "SEARCH";
 export const SEARCH_SUCCESS = "SEARCH_SUCCESS";
 export const BUILD_SEARCH_INDEX = "BUILD_SEARCH_INDEX_SUCCESS";
 export const BUILD_SEARCH_INDEX_SUCCESS = "BUILD_SEARCH_INDEX_SUCCESS";
 export const BUILD_SEARCH_INDEX_FAILURE = "BUILD_SEARCH_INDEX_FAILURE";
-
-// the threshold for how many chars in a query before we start searching
-export const SEARCH_QUERY_THRESHOLD = 2;
-
-/**
- * Serializing the rich content editor state into markdown could have a perf
- * impact if we did it to often, so this is the debounce timeout for that
- * serialization.
- */
-export const CONTENT_SERIALIZE_DEBOUNCE = 600;
-
-/**
- * The special ID used for the code sandbox. The sandbox will not be persisted
- * along with the other challenges and online lives in the users browser
- *
- * NOTE: This id will appear on the browser URL, and can be deep linked to, so
- * it should be at least passably memorable.
- */
-export const SANDBOX_ID = "sandbox";
 
 // Media queries
 export const MOBILE = `(max-width: 768px)`;
