@@ -31,6 +31,9 @@ import {
 import { getChallengeSlug } from "@pairwise/common";
 import AdminNavigationMenu from "./AdminNavigationMenu";
 import AdminKeyboardShortcuts from "./AdminKeyboardShortcuts";
+import AdminUsersPage from "./AdminUsersPage";
+import AdminPaymentsPage from "./AdminPaymentsPage";
+import AdminFeedbackPage from "./AdminFeedbackPage";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -222,7 +225,20 @@ const ApplicationContainer = (props: IProps) => {
           />
         )}
         {isLoggedIn && (
-          <Route key="home" path="/home" component={AdminSummary} />
+          <>
+            <Route key="home" path="/home" component={AdminSummary} />
+            <Route key="users" path="/users" component={AdminUsersPage} />
+            <Route
+              key="payments"
+              path="/payments"
+              component={AdminPaymentsPage}
+            />
+            <Route
+              key="feedback"
+              path="/feedback"
+              component={AdminFeedbackPage}
+            />
+          </>
         )}
         <Route exact key="index" path="/" component={Index} />
         <Route

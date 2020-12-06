@@ -84,27 +84,30 @@ class AdminNavigationMenu extends React.Component<
               style={{ whiteSpace: "nowrap" }}
             />
           </ColTitle>
-          <ColScroll>
-            {this.renderSortableModuleList(course, module, course.modules)}
-          </ColScroll>
+          <ColScroll>{this.renderSortableModuleList()}</ColScroll>
         </Col>
       </Overlay>
     );
   }
 
-  renderSortableModuleList = (
-    course: CourseSkeleton,
-    module: ModuleSkeleton,
-    moduleList: ModuleSkeletonList,
-  ) => {
+  renderSortableModuleList = () => {
     return (
       <React.Fragment>
-        <ModuleNavigationButton>
-          <span>Users</span>
-        </ModuleNavigationButton>
-        <ModuleNavigationButton>
-          <span>Payments</span>
-        </ModuleNavigationButton>
+        <NavLink to="/users">
+          <ModuleNavigationButton>
+            <span>Users</span>
+          </ModuleNavigationButton>
+        </NavLink>
+        <NavLink to="/payments">
+          <ModuleNavigationButton>
+            <span>Payments</span>
+          </ModuleNavigationButton>
+        </NavLink>
+        <NavLink to="/feedback">
+          <ModuleNavigationButton>
+            <span>Feedback</span>
+          </ModuleNavigationButton>
+        </NavLink>
       </React.Fragment>
     );
   };
