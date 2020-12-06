@@ -30,6 +30,7 @@ import {
 } from "./Shared";
 import { getChallengeSlug } from "@pairwise/common";
 import AdminNavigationMenu from "./AdminNavigationMenu";
+import AdminKeyboardShortcuts from "./AdminKeyboardShortcuts";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -130,6 +131,7 @@ const ApplicationContainer = (props: IProps) => {
     <React.Fragment>
       <LoadingOverlay visible={workspaceLoading} />
       <AdminNavigationMenu isMobile={isMobile} />
+      <AdminKeyboardShortcuts />
       <Header>
         <ControlsContainer style={{ height: "100%", width: 350 }}>
           <NavIconButton
