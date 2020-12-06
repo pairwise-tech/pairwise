@@ -1,15 +1,12 @@
-# Pairwise Client Application
+# Pairwise Admin Client Application
 
-This is the Pairwise client application! This is the core product which provides the curriculum and workspace to users. This package also includes `codepress` which is an internal CMS tool for managing and writing course content. Codepress is built directly into the client application.
+This package contains the Pairwise Admin client, which is a dashboard UI used for performing admin actions.
 
 # Getting Started
 
 ```shell
 # Run the application
-$ yarn start:dev
-
-# Run Codepress
-$ yarn start:codepress
+$ yarn start
 
 # Run the tests
 $ yarn test
@@ -20,7 +17,7 @@ $ yarn build
 
 # Tests
 
-The unit tests for this package includes a test suite to test all of the challenges solution code against their test code. You can see it in `Torvalds.test.ts`.
+Jest is setup but this package doesn't have any tests yet.
 
 # HTTPS for Local Development
 

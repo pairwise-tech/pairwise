@@ -10,6 +10,7 @@ This project is managed using Lerna, and contains the following packages:
 
 | Package                                                                                               | Description                                       |
 | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| [admin](https://github.com/pairwise-tech/pairwise/tree/master/packages/admin)                         | React admin client application                    |
 | [client](https://github.com/pairwise-tech/pairwise/tree/master/packages/client)                       | React client application                          |
 | [common](https://github.com/pairwise-tech/pairwise/tree/master/packages/common)                       | Shared code, utils, and types                     |
 | [cypress](https://github.com/pairwise-tech/pairwise/tree/master/packages/cypress)                     | Cypress end-to-end test suite                     |
@@ -97,8 +98,11 @@ $ yarn db
 # Start the server
 $ yarn server:dev
 
-# Start the client
+# Start the client workspace
 $ yarn client
+
+# Start the admin client
+$ yarn admin
 
 # Start the client in development mode (no server required)
 $ yarn client:dev
