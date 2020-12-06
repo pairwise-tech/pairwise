@@ -1,13 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import {
-  ChallengeSkeleton,
-  CourseSkeleton,
-  ModuleSkeleton,
-  ModuleSkeletonList,
-  CHALLENGE_PROGRESS,
-} from "@pairwise/common";
+import { ChallengeSkeleton, CHALLENGE_PROGRESS } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
@@ -57,16 +51,7 @@ class AdminNavigationMenu extends React.Component<
   };
 
   render(): Nullable<JSX.Element> {
-    const { course, module, overlayVisible } = this.props;
-
-    if (!course || !module) {
-      console.warn(
-        "[NAVIGATION OVERLAY WARNING] No module or course found! ->",
-        course,
-        module,
-      );
-      return null;
-    }
+    const { overlayVisible } = this.props;
 
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
@@ -93,6 +78,11 @@ class AdminNavigationMenu extends React.Component<
   renderSortableModuleList = () => {
     return (
       <React.Fragment>
+        <NavLink to="/stats">
+          <ModuleNavigationButton>
+            <span>Stats</span>
+          </ModuleNavigationButton>
+        </NavLink>
         <NavLink to="/users">
           <ModuleNavigationButton>
             <span>Users</span>
@@ -123,20 +113,6 @@ class AdminNavigationMenu extends React.Component<
  * Styles
  * ============================================================================
  */
-
-const ModuleNumber = styled.code`
-  font-size: 12px;
-  display: inline-block;
-  padding: 5px;
-  color: #ea709c;
-  background: #3a3a3a;
-  width: 24px;
-  text-align: center;
-  line-height: 12px;
-  border-radius: 4px;
-  box-shadow: inset 0px 0px 2px 0px #ababab;
-  margin-right: 8px;
-`;
 
 const ModuleNavigationBase = styled.div<{ active?: boolean }>`
   cursor: pointer;
@@ -182,75 +158,6 @@ interface ChallengeLinkProps extends NavLinkProps {
   locked: "true" | "false"; // To circumvent a React DOM attribute warning message...
   active?: boolean;
 }
-
-const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
-  cursor: pointer;
-  padding: 12px;
-  border: 1px solid transparent;
-  border-bottom-color: ${COLORS.LIGHT_GREY};
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-align: left;
-  outline: none;
-  color: ${COLORS.TEXT_TITLE} !important;
-  background: transparent;
-  position: relative;
-
-  &:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    transition: all 0.15s ease-out;
-    transform: scale(0);
-    width: 3px;
-    background: ${props =>
-      props.locked === "true" ? "rgb(135,135,135)" : COLORS.GRADIENT_GREEN};
-  }
-
-  &.active {
-    color: white !important;
-    background: ${COLORS.BACKGROUND_MODAL};
-    &:after {
-      transform: scale(1);
-    }
-  }
-
-  .content {
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-  }
-
-  @media ${MOBILE} {
-    .content span {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      max-width: 60vw;
-    }
-  }
-
-  &:hover {
-    color: white !important;
-    background: ${COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
-    &:after {
-      transform: scale(1);
-    }
-  }
-
-  .iconComplete {
-    color: ${COLORS.NEON_GREEN} !important;
-  }
-
-  .iconIncomplete {
-    color: ${COLORS.SECONDARY_YELLOW} !important;
-  }
-`;
 
 const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
   active?: boolean;
@@ -308,33 +215,9 @@ const Col = styled.div<{ offsetX: number }>`
       width: 90vw;
     }
 
-    .mobile-shrink {
+    /* .mobile-shrink {
       transition: all 0.2s ease-out;
-    }
-
-    &.open {
-      .mobile-shrink {
-        .bp3-button-text {
-          width: 100%;
-          overflow: visible;
-        }
-      }
-    }
-
-    &.module-select {
-      max-width: 100%;
-      min-width: 50px;
-      width: 0vw;
-      flex-shrink: 0;
-
-      &.open {
-        width: 90vw;
-      }
-
-      ${ModuleNumber} {
-        margin-right: 12px;
-      }
-    }
+    } */
   }
 `;
 
@@ -392,17 +275,6 @@ const ColTitle = styled.div`
       display: flex;
       justify-content: center;
     }
-    .mobile-shrink {
-      // Why is blueprint SO INSISTENT on their low-contrast icons?!?
-      .bp3-icon {
-        color: white !important;
-      }
-      .bp3-button-text {
-        width: 0%;
-        overflow: hidden;
-        margin: 0;
-      }
-    }
   }
 `;
 
@@ -412,10 +284,6 @@ const ColTitle = styled.div`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  module: Modules.selectors.challenges.getCurrentModule(state),
-  course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
-  challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
-  courseListMetadata: Modules.selectors.challenges.courseListMetadata(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
 });
 

@@ -2,7 +2,7 @@ import * as ENV from "tools/admin-env";
 import React from "react";
 import { connect } from "react-redux";
 import { useMedia } from "use-media";
-import { Redirect, Route, Switch, useHistory } from "react-router";
+import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
@@ -10,25 +10,14 @@ import { COLORS, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import AdminSummary from "./AdminSummary";
 import Index from "./Index";
-import {
-  Button,
-  FocusStyleManager,
-  Menu,
-  MenuItem,
-  MenuDivider,
-  Position,
-  Popover,
-  Icon,
-} from "@blueprintjs/core";
+import { Button, FocusStyleManager, Icon } from "@blueprintjs/core";
 import {
   ProfileIcon,
-  IconButton,
   FullScreenOverlay,
   OverlayText,
   OverlaySmallText,
   PairwiseOpenCloseLogo,
 } from "./Shared";
-import { getChallengeSlug } from "@pairwise/common";
 import AdminNavigationMenu from "./AdminNavigationMenu";
 import AdminKeyboardShortcuts from "./AdminKeyboardShortcuts";
 import AdminUsersPage from "./AdminUsersPage";
@@ -39,7 +28,7 @@ import AdminFeedbackPage from "./AdminFeedbackPage";
 FocusStyleManager.onlyShowFocusOnTabs();
 
 /** ===========================================================================
- * ApplicationContainer
+ * AdminContainer
  * ----------------------------------------------------------------------------
  * This is the top level component which renders the overall app structure,
  * including the routing Switch to render all child routes.
@@ -53,7 +42,7 @@ FocusStyleManager.onlyShowFocusOnTabs();
  * after a login event, which is delivered to the app via a redirect url
  * parameter.
  */
-const ApplicationContainer = (props: IProps) => {
+const AdminContainer = (props: IProps) => {
   const {
     user,
     initialized,
@@ -63,7 +52,6 @@ const ApplicationContainer = (props: IProps) => {
     initializeApp,
     workspaceLoading,
     userAuthenticated,
-    nextPrevChallenges,
     initializationError,
     setNavigationMapState,
     setSingleSignOnDialogState,
@@ -71,7 +59,6 @@ const ApplicationContainer = (props: IProps) => {
 
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
   const isMobile = useMedia(MOBILE, false);
-  const history = useHistory();
 
   React.useEffect(() => {
     // We have to pass location in here to correctly capture the original
@@ -93,54 +80,26 @@ const ApplicationContainer = (props: IProps) => {
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
-  const { prev, next } = nextPrevChallenges;
-
-  const mobileMenuItems = (
-    <Menu>
-      <MenuItem
-        disabled={!prev}
-        icon="arrow-left"
-        text="Previous Challenge"
-        onClick={() => {
-          if (prev) {
-            const slug = getChallengeSlug(prev);
-            history.push(`/workspace/${slug}`);
-          }
-        }}
-      />
-      <MenuItem
-        disabled={!next}
-        icon="arrow-right"
-        text="Next Challenge"
-        onClick={() => {
-          if (next) {
-            const slug = getChallengeSlug(next);
-            history.push(`/workspace/${slug}`);
-          }
-        }}
-      />
-      <MenuDivider />
-      <MenuItem
-        icon="home"
-        onClick={() => {
-          history.push("/home");
-        }}
-        text="Home"
-      />
-    </Menu>
-  );
-
   return (
     <React.Fragment>
       <LoadingOverlay visible={workspaceLoading} />
       <AdminNavigationMenu isMobile={isMobile} />
       <AdminKeyboardShortcuts />
       <Header>
-        <ControlsContainer style={{ height: "100%", width: 350 }}>
+        <ControlsContainer
+          style={{
+            height: "100%",
+            marginRight: 0,
+            width: isMobile ? "auto" : 350,
+          }}
+        >
           <NavIconButton
             overlayVisible={overlayVisible}
             onClick={() => setNavigationMapState(!overlayVisible)}
-            style={{ color: "white", marginRight: 20 }}
+            style={{
+              color: "white",
+              marginRight: isMobile ? 15 : 20,
+            }}
           />
           <ProductTitle id="product-title">
             <Link
@@ -153,20 +112,6 @@ const ApplicationContainer = (props: IProps) => {
           </ProductTitle>
         </ControlsContainer>
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
-          <div style={{ marginLeft: 10 }} />
-          {isMobile && (
-            <LastChildMargin
-              style={{ flexShrink: 0, marginRight: isLoggedIn ? 6 : 0 }}
-            >
-              <Popover
-                content={mobileMenuItems}
-                position={Position.BOTTOM_RIGHT}
-              >
-                <IconButton icon="more" />
-              </Popover>
-            </LastChildMargin>
-          )}
           {userLoading ? (
             <div style={{ width: 8 }} />
           ) : isLoggedIn && user.profile ? (
@@ -221,12 +166,12 @@ const ApplicationContainer = (props: IProps) => {
             exact
             key="admin-redirect"
             path="/"
-            component={() => <Redirect to="/home" />}
+            component={() => <Redirect to="/stats" />}
           />
         )}
         {isLoggedIn && (
           <>
-            <Route key="home" path="/home" component={AdminSummary} />
+            <Route key="stats" path="/stats" component={AdminSummary} />
             <Route key="users" path="/users" component={AdminUsersPage} />
             <Route
               key="payments"
@@ -389,17 +334,11 @@ const ProductTitle = styled.h1`
   }
 `;
 
-const LastChildMargin = styled.div`
-  &:last-child {
-    margin-right: 10px;
-  }
-`;
-
 const ControlsContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   flex-direction: row;
+  justify-content: flex-end;
 `;
 
 const NavIconButton = styled(({ overlayVisible, ...rest }) => (
@@ -559,23 +498,13 @@ const dispatchProps = {
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
 };
 
-const mergeProps = (
-  state: ReturnType<typeof mapStateToProps>,
-  methods: typeof dispatchProps,
-  props: {},
-) => ({
-  ...props,
-  ...methods,
-  ...state,
-});
+type IProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-type IProps = ReturnType<typeof mergeProps>;
-
-const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
+const withProps = connect(mapStateToProps, dispatchProps);
 
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default withProps(ApplicationContainer);
+export default withProps(AdminContainer);
