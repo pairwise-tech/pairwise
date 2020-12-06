@@ -11,6 +11,8 @@ import { HttpResponseError } from "modules/api";
 enum ActionTypesEnum {
   WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
 
+  SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
+
   SET_CHALLENGE_ID_CONTEXT = "SET_CHALLENGE_ID_CONTEXT",
 
   FETCH_NAVIGATION_SKELETON = "FETCH_NAVIGATION_SKELETON",
@@ -64,3 +66,7 @@ export const fetchCoursesFailure = createAction(
 export const storeInverseChallengeMapping = createAction(
   ActionTypesEnum.STORE_INVERSE_CHALLENGE_MAP,
 )<InverseChallengeMapping>();
+
+export const setNavigationMapState = createAction(
+  ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
+)<boolean>();

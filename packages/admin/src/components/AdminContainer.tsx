@@ -2,39 +2,33 @@ import * as ENV from "tools/admin-env";
 import React from "react";
 import { connect } from "react-redux";
 import { useMedia } from "use-media";
-import { Redirect, Route, Switch, useHistory } from "react-router";
+import { Redirect, Route, Switch } from "react-router";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
-import { COLORS, MOBILE } from "tools/constants";
-import { HEADER_HEIGHT } from "tools/dimensions";
+import { COLORS, HEADER_HEIGHT, MOBILE } from "tools/constants";
 import AdminSummary from "./AdminSummary";
 import Index from "./Index";
-import {
-  Button,
-  FocusStyleManager,
-  Menu,
-  MenuItem,
-  MenuDivider,
-  Position,
-  Popover,
-  Icon,
-} from "@blueprintjs/core";
+import Swipy from "swipyjs";
+import { Button, FocusStyleManager, Icon } from "@blueprintjs/core";
 import {
   ProfileIcon,
-  IconButton,
   FullScreenOverlay,
   OverlayText,
   OverlaySmallText,
   PairwiseOpenCloseLogo,
-} from "./Shared";
-import { getChallengeSlug } from "@pairwise/common";
+} from "./AdminComponents";
+import AdminNavigationMenu from "./AdminNavigationMenu";
+import AdminKeyboardShortcuts from "./AdminKeyboardShortcuts";
+import AdminUsersPage from "./AdminUsersPage";
+import AdminPaymentsPage from "./AdminPaymentsPage";
+import AdminFeedbackPage from "./AdminFeedbackPage";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
 
 /** ===========================================================================
- * ApplicationContainer
+ * AdminContainer
  * ----------------------------------------------------------------------------
  * This is the top level component which renders the overall app structure,
  * including the routing Switch to render all child routes.
@@ -48,23 +42,22 @@ FocusStyleManager.onlyShowFocusOnTabs();
  * after a login event, which is delivered to the app via a redirect url
  * parameter.
  */
-const ApplicationContainer = (props: IProps) => {
+const AdminContainer = (props: IProps) => {
   const {
     user,
     initialized,
     logoutUser,
     userLoading,
+    overlayVisible,
     initializeApp,
     workspaceLoading,
     userAuthenticated,
-    nextPrevChallenges,
     initializationError,
-    setSingleSignOnDialogState,
+    setNavigationMapState,
   } = props;
 
   const [hasHandledRedirect, setHasHandledRedirect] = React.useState(false);
   const isMobile = useMedia(MOBILE, false);
-  const history = useHistory();
 
   React.useEffect(() => {
     // We have to pass location in here to correctly capture the original
@@ -73,6 +66,38 @@ const ApplicationContainer = (props: IProps) => {
     initializeApp({ location: window.location });
     setHasHandledRedirect(true);
   }, [initializeApp]);
+
+  /**
+   * Add a gesture handler to toggle the navigation menu.
+   */
+  React.useEffect(() => {
+    // Not available on desktop
+    if (!isMobile) {
+      return;
+    }
+
+    // Attach handler to the document
+    const swipeHandler = new Swipy(document.documentElement);
+
+    // Handle to swipe right
+    swipeHandler.on("swiperight", () => {
+      if (!overlayVisible) {
+        setNavigationMapState(true);
+      }
+    });
+
+    // Handle to swipe left
+    swipeHandler.on("swipeleft", () => {
+      if (overlayVisible) {
+        setNavigationMapState(false);
+      }
+    });
+
+    // Remove native event listeners on unmount
+    return () => {
+      swipeHandler.unbind();
+    };
+  });
 
   if (!hasHandledRedirect) {
     return null;
@@ -86,80 +111,44 @@ const ApplicationContainer = (props: IProps) => {
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
-  const { prev, next } = nextPrevChallenges;
-
-  const mobileMenuItems = (
-    <Menu>
-      <MenuItem
-        disabled={!prev}
-        icon="arrow-left"
-        text="Previous Challenge"
-        onClick={() => {
-          if (prev) {
-            const slug = getChallengeSlug(prev);
-            history.push(`/workspace/${slug}`);
-          }
-        }}
-      />
-      <MenuItem
-        disabled={!next}
-        icon="arrow-right"
-        text="Next Challenge"
-        onClick={() => {
-          if (next) {
-            const slug = getChallengeSlug(next);
-            history.push(`/workspace/${slug}`);
-          }
-        }}
-      />
-      <MenuDivider />
-      <MenuItem
-        icon="home"
-        onClick={() => {
-          history.push("/home");
-        }}
-        text="Home"
-      />
-    </Menu>
-  );
-
   return (
     <React.Fragment>
       <LoadingOverlay visible={workspaceLoading} />
+      <AdminNavigationMenu isMobile={isMobile} />
+      <AdminKeyboardShortcuts />
       <Header>
-        <ControlsContainer style={{ height: "100%", width: 350 }}>
-          <NavIconButton
-            overlayVisible
-            onClick={() => null}
-            style={{ color: "white", marginRight: 20 }}
-          />
-          <ProductTitle id="product-title">
-            <Link
-              to="/home"
-              id="header-home-link"
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              Pairwise Admin
-            </Link>
-          </ProductTitle>
+        <ControlsContainer
+          style={{
+            height: "100%",
+            marginRight: 0,
+            width: isMobile ? "auto" : 350,
+          }}
+        >
+          {isLoggedIn && (
+            <>
+              <NavIconButton
+                overlayVisible={overlayVisible}
+                onClick={() => setNavigationMapState(!overlayVisible)}
+                style={{
+                  color: "white",
+                  marginRight: isMobile ? 15 : 20,
+                }}
+              />
+              <ProductTitle id="product-title">
+                <Link
+                  to="/home"
+                  id="header-home-link"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  Pairwise Admin
+                </Link>
+              </ProductTitle>
+            </>
+          )}
         </ControlsContainer>
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          {/* A spacer div. Applying this style to the icon button throws off the tooltip positioning */}
-          <div style={{ marginLeft: 10 }} />
-          {isMobile && (
-            <LastChildMargin
-              style={{ flexShrink: 0, marginRight: isLoggedIn ? 6 : 0 }}
-            >
-              <Popover
-                content={mobileMenuItems}
-                position={Position.BOTTOM_RIGHT}
-              >
-                <IconButton icon="more" />
-              </Popover>
-            </LastChildMargin>
-          )}
           {userLoading ? (
-            <div style={{ width: 8 }} />
+            <p style={{ margin: 0, marginRight: 10 }}>Loading...</p>
           ) : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
@@ -181,18 +170,6 @@ const ApplicationContainer = (props: IProps) => {
                 </div>
               </div>
             </AccountDropdownButton>
-          ) : isMobile ? (
-            <Button
-              icon="user"
-              id="login-signup-button"
-              style={{
-                margin: "0 10px",
-                border: "1px solid rgba(255, 255, 255, 0.23)",
-                flexShrink: 0,
-                whiteSpace: "nowrap",
-              }}
-              onClick={() => setSingleSignOnDialogState(true)}
-            />
           ) : (
             <LoginSignupButton
               id="login-signup-button"
@@ -212,11 +189,24 @@ const ApplicationContainer = (props: IProps) => {
             exact
             key="admin-redirect"
             path="/"
-            component={() => <Redirect to="/home" />}
+            component={() => <Redirect to="/stats" />}
           />
         )}
         {isLoggedIn && (
-          <Route key="home" path="/home" component={AdminSummary} />
+          <>
+            <Route key="stats" path="/stats" component={AdminSummary} />
+            <Route key="users" path="/users" component={AdminUsersPage} />
+            <Route
+              key="payments"
+              path="/payments"
+              component={AdminPaymentsPage}
+            />
+            <Route
+              key="feedback"
+              path="/feedback"
+              component={AdminFeedbackPage}
+            />
+          </>
         )}
         <Route exact key="index" path="/" component={Index} />
         <Route
@@ -367,17 +357,11 @@ const ProductTitle = styled.h1`
   }
 `;
 
-const LastChildMargin = styled.div`
-  &:last-child {
-    margin-right: 10px;
-  }
-`;
-
 const ControlsContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   flex-direction: row;
+  justify-content: flex-end;
 `;
 
 const NavIconButton = styled(({ overlayVisible, ...rest }) => (
@@ -522,6 +506,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   initializationError: Modules.selectors.app.appSelector(state)
     .initializationError,
+  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
     state,
   ),
@@ -533,25 +518,16 @@ const dispatchProps = {
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
+  setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
 };
 
-const mergeProps = (
-  state: ReturnType<typeof mapStateToProps>,
-  methods: typeof dispatchProps,
-  props: {},
-) => ({
-  ...props,
-  ...methods,
-  ...state,
-});
+type IProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-type IProps = ReturnType<typeof mergeProps>;
-
-const withProps = connect(mapStateToProps, dispatchProps, mergeProps);
+const withProps = connect(mapStateToProps, dispatchProps);
 
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default withProps(ApplicationContainer);
+export default withProps(AdminContainer);

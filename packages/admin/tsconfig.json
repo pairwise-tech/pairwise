@@ -26,9 +26,6 @@
   },
   "include": [
     "src",
-    "global.d.ts"
-  ],
-  "exclude": [
-    "src/js/*"
+    "admin-declarations.d.ts"
   ]
 }

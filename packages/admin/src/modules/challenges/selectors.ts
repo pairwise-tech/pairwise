@@ -2,7 +2,7 @@ import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 import { ReduxStoreState } from "modules/root";
 import prop from "ramda/es/prop";
-import { findCourseById } from "tools/utils";
+import { findCourseById } from "tools/admin-utils";
 import { adminUserProgress } from "modules/admin/selectors";
 
 /** ===========================================================================
@@ -21,6 +21,11 @@ export const isDirty = createSelector([challengesState], prop("isDirty"));
 export const getChallengeMap = createSelector(
   [challengesState],
   state => state.challengeMap,
+);
+
+export const navigationOverlayVisible = createSelector(
+  [challengesState],
+  challenges => challenges.displayNavigationMap,
 );
 
 export const getCurrentCourseId = createSelector(

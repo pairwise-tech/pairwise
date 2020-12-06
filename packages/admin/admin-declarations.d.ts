@@ -1,5 +1,7 @@
 type Nullable<T> = T | null;
 
+declare module "swipyjs";
+
 declare module "string-quote-x" {
   const quote: (str: string) => string;
   export default quote;

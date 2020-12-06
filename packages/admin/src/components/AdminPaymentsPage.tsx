@@ -3,21 +3,17 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { ReduxStoreState } from "modules/root";
 import { PageContainer } from "./AdminComponents";
-import PairwiseLogo from "../icons/logo-square@1024.png";
 
 /** ===========================================================================
  * Home Component
  * ============================================================================
  */
 
-class Index extends React.Component<IProps, {}> {
+class AdminPaymentsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     return (
       <PageContainer>
-        <ContentContainer>
-          <Logo src={PairwiseLogo} alt="Pairwise Logo" />
-          <Title>Pairwise Admin</Title>
-        </ContentContainer>
+        <Title>Payments</Title>
       </PageContainer>
     );
   }
@@ -28,22 +24,9 @@ class Index extends React.Component<IProps, {}> {
  * ============================================================================
  */
 
-const ContentContainer = styled.div`
-  padding-top: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-`;
-
-const Title = styled.code`
+const Title = styled.h1`
   margin-top: 16px;
   font-size: 16px;
-`;
-
-const Logo = styled.img`
-  width: 225px;
-  height: 225px;
 `;
 
 /** ===========================================================================
@@ -66,4 +49,4 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default withProps(Index);
+export default withProps(AdminPaymentsPage);
