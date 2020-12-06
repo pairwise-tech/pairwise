@@ -9,7 +9,7 @@ import React from "react";
 import tap from "ramda/es/tap";
 import difference from "ramda/es/difference";
 import { Position, Popover, Tooltip } from "@blueprintjs/core";
-import { IconButton } from "./Shared";
+import { IconButton } from "./AdminComponents";
 import styled from "styled-components";
 import { getClientOS } from "../tools/utils";
 

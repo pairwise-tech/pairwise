@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer } from "./Shared";
+import { PageContainer } from "./AdminComponents";
 import { summarizeUserProgress } from "../tools/admin-utils";
 
 /** ===========================================================================

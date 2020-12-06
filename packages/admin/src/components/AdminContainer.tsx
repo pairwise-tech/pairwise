@@ -18,7 +18,7 @@ import {
   OverlayText,
   OverlaySmallText,
   PairwiseOpenCloseLogo,
-} from "./Shared";
+} from "./AdminComponents";
 import AdminNavigationMenu from "./AdminNavigationMenu";
 import AdminKeyboardShortcuts from "./AdminKeyboardShortcuts";
 import AdminUsersPage from "./AdminUsersPage";
