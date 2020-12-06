@@ -29,6 +29,7 @@ import {
   PairwiseOpenCloseLogo,
 } from "./Shared";
 import { getChallengeSlug } from "@pairwise/common";
+import AdminNavigationMenu from "./AdminNavigationMenu";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -126,6 +127,7 @@ const ApplicationContainer = (props: IProps) => {
   return (
     <React.Fragment>
       <LoadingOverlay visible={workspaceLoading} />
+      <AdminNavigationMenu isMobile={isMobile} />
       <Header>
         <ControlsContainer style={{ height: "100%", width: 350 }}>
           <NavIconButton

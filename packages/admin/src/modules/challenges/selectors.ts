@@ -23,6 +23,11 @@ export const getChallengeMap = createSelector(
   state => state.challengeMap,
 );
 
+export const navigationOverlayVisible = createSelector(
+  [challengesState],
+  challenges => challenges.displayNavigationMap,
+);
+
 export const getCurrentCourseId = createSelector(
   [challengesState],
   prop("currentCourseId"),
