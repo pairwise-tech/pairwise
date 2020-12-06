@@ -38,8 +38,8 @@ export const LoadingInline = () => {
 export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 25px;
-  margin-top: 60px;
+  padding: 25px 12px;
+  margin-top: 32px;
 `;
 
 export const ButtonCore = styled.button`

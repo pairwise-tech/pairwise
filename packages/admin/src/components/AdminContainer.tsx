@@ -10,6 +10,7 @@ import { COLORS, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import AdminSummary from "./AdminSummary";
 import Index from "./Index";
+import Swipy from "swipyjs";
 import { Button, FocusStyleManager, Icon } from "@blueprintjs/core";
 import {
   ProfileIcon,
@@ -67,6 +68,38 @@ const AdminContainer = (props: IProps) => {
     initializeApp({ location: window.location });
     setHasHandledRedirect(true);
   }, [initializeApp]);
+
+  /**
+   * Add a gesture handler to toggle the navigation menu.
+   */
+  React.useEffect(() => {
+    // Not available on desktop
+    if (!isMobile) {
+      return;
+    }
+
+    // Attach handler to the document
+    const swipeHandler = new Swipy(document.documentElement);
+
+    // Handle to swipe right
+    swipeHandler.on("swiperight", () => {
+      if (!overlayVisible) {
+        setNavigationMapState(true);
+      }
+    });
+
+    // Handle to swipe left
+    swipeHandler.on("swipeleft", () => {
+      if (overlayVisible) {
+        setNavigationMapState(false);
+      }
+    });
+
+    // Remove native event listeners on unmount
+    return () => {
+      swipeHandler.unbind();
+    };
+  });
 
   if (!hasHandledRedirect) {
     return null;

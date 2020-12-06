@@ -24,7 +24,7 @@ class AdminUsersPage extends React.Component<IProps, {}> {
  * ============================================================================
  */
 
-const Title = styled.code`
+const Title = styled.h1`
   margin-top: 16px;
   font-size: 16px;
 `;

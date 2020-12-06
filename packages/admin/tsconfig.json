@@ -26,7 +26,7 @@
   },
   "include": [
     "src",
-    "global.d.ts"
+    "admin-declaration.d.ts"
   ],
   "exclude": [
     "src/js/*"
