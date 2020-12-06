@@ -279,7 +279,9 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
   };
 
   handleToggleNavigationMap = () => {
-    this.props.setNavigationMapState(!this.props.overlayVisible);
+    if (this.props.userAuthenticated) {
+      this.props.setNavigationMapState(!this.props.overlayVisible);
+    }
   };
 
   navigateLeft = (e: KeyboardEvent) => {
@@ -310,6 +312,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
   nextPrevChallengeIds: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
 });

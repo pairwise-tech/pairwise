@@ -126,27 +126,31 @@ const AdminContainer = (props: IProps) => {
             width: isMobile ? "auto" : 350,
           }}
         >
-          <NavIconButton
-            overlayVisible={overlayVisible}
-            onClick={() => setNavigationMapState(!overlayVisible)}
-            style={{
-              color: "white",
-              marginRight: isMobile ? 15 : 20,
-            }}
-          />
-          <ProductTitle id="product-title">
-            <Link
-              to="/home"
-              id="header-home-link"
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              Pairwise Admin
-            </Link>
-          </ProductTitle>
+          {isLoggedIn && (
+            <>
+              <NavIconButton
+                overlayVisible={overlayVisible}
+                onClick={() => setNavigationMapState(!overlayVisible)}
+                style={{
+                  color: "white",
+                  marginRight: isMobile ? 15 : 20,
+                }}
+              />
+              <ProductTitle id="product-title">
+                <Link
+                  to="/home"
+                  id="header-home-link"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  Pairwise Admin
+                </Link>
+              </ProductTitle>
+            </>
+          )}
         </ControlsContainer>
         <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
           {userLoading ? (
-            <div style={{ width: 8 }} />
+            <p style={{ margin: 0, marginRight: 10 }}>Loading...</p>
           ) : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
@@ -168,18 +172,6 @@ const AdminContainer = (props: IProps) => {
                 </div>
               </div>
             </AccountDropdownButton>
-          ) : isMobile ? (
-            <Button
-              icon="user"
-              id="login-signup-button"
-              style={{
-                margin: "0 10px",
-                border: "1px solid rgba(255, 255, 255, 0.23)",
-                flexShrink: 0,
-                whiteSpace: "nowrap",
-              }}
-              onClick={() => setSingleSignOnDialogState(true)}
-            />
           ) : (
             <LoginSignupButton
               id="login-signup-button"
