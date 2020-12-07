@@ -6,6 +6,12 @@ import { InputGroup } from "@blueprintjs/core";
 import { KeyboardShortcuts } from "./AdminKeyboardShortcuts";
 import cx from "classnames";
 import { COLORS } from "../tools/constants";
+import toaster from "../tools/toast-utils";
+
+/** ===========================================================================
+ * AdminSearchBox Component
+ * ============================================================================
+ */
 
 // NOTE: isClosed is kept in state because sometimes we want the search pane to
 // be closed even if there are search results. For example, the user clicks
@@ -55,6 +61,16 @@ const AdminSearchBox = ({ onBlur, onFocus }: Props) => {
     [],
   );
 
+  // Handle Enter to trigger search
+  const handleKeyPress = React.useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter" && !!searchText) {
+        toaster.warn("Search Coming Soon...");
+      }
+    },
+    [searchText],
+  );
+
   return (
     <Box
       className={cx({ isClosed })}
@@ -69,6 +85,7 @@ const AdminSearchBox = ({ onBlur, onFocus }: Props) => {
         id="search-input"
         autoComplete="off"
         onChange={handleChange}
+        onKeyDown={handleKeyPress}
         value={searchText}
         placeholder="Enter a challenge id, user uuid, email, etc."
         onFocus={handleFocus}
@@ -85,6 +102,11 @@ const AdminSearchBox = ({ onBlur, onFocus }: Props) => {
     </Box>
   );
 };
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
 
 const Input = styled(InputGroup)`
   input#search-input {
@@ -126,6 +148,11 @@ const Box = styled.div`
   position: relative;
 `;
 
+/** ===========================================================================
+ * Props
+ * ============================================================================
+ */
+
 const mapStateToProps = (state: ReduxStoreState) => ({});
 
 const dispatchProps = {};
@@ -138,5 +165,10 @@ interface OwnProps {
 type Props = ReturnType<typeof mapStateToProps> &
   typeof dispatchProps &
   OwnProps;
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default connect(mapStateToProps, dispatchProps)(AdminSearchBox);
