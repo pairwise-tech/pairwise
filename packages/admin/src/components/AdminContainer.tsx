@@ -22,6 +22,7 @@ import AdminKeyboardShortcuts from "./AdminKeyboardShortcuts";
 import AdminUsersPage from "./AdminUsersPage";
 import AdminPaymentsPage from "./AdminPaymentsPage";
 import AdminFeedbackPage from "./AdminFeedbackPage";
+import AdminSearchBox from "./AdminSearchBox";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -145,39 +146,45 @@ const AdminContainer = (props: IProps) => {
             </>
           )}
         </ControlsContainer>
-        <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          {userLoading ? (
-            <p style={{ margin: 0, marginRight: 10 }}>Loading...</p>
-          ) : isLoggedIn && user.profile ? (
-            <AccountDropdownButton>
-              <div id="account-menu-dropdown" className="account-menu-dropdown">
-                <UserBio>
-                  <CreateAccountText className="account-menu">
-                    {!user.profile.givenName
-                      ? "Hi, Admin"
-                      : `Hi, ${user.profile.givenName}!`}
-                  </CreateAccountText>
-                  <Icon icon="shield" />
-                </UserBio>
-                <div className="dropdown-links">
-                  <Link to="/logout" id="logout-link" onClick={logoutUser}>
-                    <Icon icon="log-out" style={{ marginRight: 10 }} />
-                    Logout
-                  </Link>
+        <ControlsContainer style={{ marginLeft: 0, width: "100%" }}>
+          <>
+            {isLoggedIn && <AdminSearchBox />}
+            {userLoading ? (
+              <p style={{ margin: 0, marginRight: 10 }}>Loading...</p>
+            ) : isLoggedIn && user.profile ? (
+              <AccountDropdownButton>
+                <div
+                  id="account-menu-dropdown"
+                  className="account-menu-dropdown"
+                >
+                  <UserBio>
+                    <CreateAccountText className="account-menu">
+                      {!user.profile.givenName
+                        ? "Hi, Admin"
+                        : `Hi, ${user.profile.givenName}!`}
+                    </CreateAccountText>
+                    <Icon icon="shield" />
+                  </UserBio>
+                  <div className="dropdown-links">
+                    <Link to="/logout" id="logout-link" onClick={logoutUser}>
+                      <Icon icon="log-out" style={{ marginRight: 10 }} />
+                      Logout
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </AccountDropdownButton>
-          ) : (
-            <LoginSignupButton
-              id="login-signup-button"
-              onClick={() => {
-                // Redirect
-                window.location.href = `${ENV.HOST}/auth/admin`;
-              }}
-            >
-              Admin Login
-            </LoginSignupButton>
-          )}
+              </AccountDropdownButton>
+            ) : (
+              <LoginSignupButton
+                id="login-signup-button"
+                onClick={() => {
+                  // Redirect
+                  window.location.href = `${ENV.HOST}/auth/admin`;
+                }}
+              >
+                Admin Login
+              </LoginSignupButton>
+            )}
+          </>
         </ControlsContainer>
       </Header>
       <Switch>
