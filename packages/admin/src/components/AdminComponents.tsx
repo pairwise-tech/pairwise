@@ -22,7 +22,7 @@ export const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
 export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 25px 12px;
+  padding: 18px 6px;
   margin-top: 32px;
 `;
 
