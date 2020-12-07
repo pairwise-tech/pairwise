@@ -24,10 +24,7 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
  * ============================================================================
  */
 
-const Title = styled.h1`
-  margin-top: 16px;
-  font-size: 16px;
-`;
+const Title = styled.h2``;
 
 /** ===========================================================================
  * Props
