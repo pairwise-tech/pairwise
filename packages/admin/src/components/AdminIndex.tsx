@@ -10,7 +10,7 @@ import PairwiseLogo from "../icons/logo-square@1024.png";
  * ============================================================================
  */
 
-class Index extends React.Component<IProps, {}> {
+class AdminIndex extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     return (
       <PageContainer>
@@ -66,4 +66,4 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default withProps(Index);
+export default withProps(AdminIndex);

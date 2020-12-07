@@ -8,7 +8,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { COLORS, HEADER_HEIGHT, MOBILE } from "tools/constants";
 import AdminSummary from "./AdminSummary";
-import Index from "./Index";
+import AdminIndex from "./AdminIndex";
 import Swipy from "swipyjs";
 import { Button, FocusStyleManager, Icon } from "@blueprintjs/core";
 import {
@@ -208,7 +208,7 @@ const AdminContainer = (props: IProps) => {
             />
           </>
         )}
-        <Route exact key="index" path="/" component={Index} />
+        <Route exact key="index" path="/" component={AdminIndex} />
         <Route
           key="logout"
           path="/logout"

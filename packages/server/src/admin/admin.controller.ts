@@ -19,6 +19,7 @@ import { FeedbackService } from "../feedback/feedback.service";
 import { UserService } from "../user/user.service";
 import { PaymentsService } from "../payments/payments.service";
 import { SUCCESS_CODES } from "../tools/constants";
+import { ProgressService } from "../progress/progress.service";
 
 // HTTP Methods
 export type HTTP_METHOD = "GET" | "PUT" | "POST" | "DELETE";
@@ -45,6 +46,8 @@ export class AdminController {
     private readonly paymentsService: PaymentsService,
 
     private readonly feedbackService: FeedbackService,
+
+    private readonly progressService: ProgressService,
   ) {}
 
   /* Placeholder/test admin endpoint */
@@ -212,6 +215,12 @@ export class AdminController {
     } catch (err) {
       this.handleError(err, options);
     }
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/progress")
+  public retrieveLiveProgressRecords() {
+    return this.progressService.retrieveProgressRecords();
   }
 
   // Log the error to Slack and throw an exception in response

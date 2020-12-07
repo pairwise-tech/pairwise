@@ -9,7 +9,6 @@ import {
   map,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
-import API from "modules/api";
 import { of } from "rxjs";
 import {
   setAccessTokenInLocalStorage,
@@ -107,7 +106,7 @@ const adminUserLoginEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.storeAccessTokenSuccess)),
     filter(x => !!x.payload.accessToken),
-    mergeMap(API.adminUserLogin),
+    mergeMap(deps.api.adminUserLogin),
     mergeMap(result => {
       if (result.value) {
         return of(Actions.fetchAdminUser(), Actions.adminUserLoginSuccess());

@@ -15,6 +15,7 @@ import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/admin-utils";
 import { UserStoreState } from "./admin/store";
 import { AdminUserView } from "./users/store";
+import { ProgressRecords } from "./realtime/store";
 
 /** ===========================================================================
  * Types & Config
@@ -194,6 +195,15 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
       return axios.get<AdminUserView[]>(`${HOST}/admin/users`, {
+        headers,
+      });
+    });
+  };
+
+  fetchProgressRecords = async () => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.get<ProgressRecords>(`${HOST}/admin/progress`, {
         headers,
       });
     });

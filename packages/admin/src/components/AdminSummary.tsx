@@ -12,7 +12,7 @@ import { summarizeUserProgress } from "../tools/admin-utils";
 
 class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { usersList, usersListLoading } = this.props;
+    const { usersList, usersListLoading, progressRecords } = this.props;
     if (usersListLoading) {
       return null;
     }
@@ -45,6 +45,7 @@ class Home extends React.Component<IProps, {}> {
             <b>Leader Challenge Count:</b>{" "}
             {summary.leaderboard.leaderChallengeCount.toLocaleString()}
           </Stat>
+          {progressRecords ? JSON.stringify(progressRecords) : "No records yet"}
         </ContentContainer>
       </PageContainer>
     );
@@ -73,6 +74,7 @@ const Stat = styled.p`
 const mapStateToProps = (state: ReduxStoreState) => ({
   usersList: Modules.selectors.users.usersState(state).users,
   usersListLoading: Modules.selectors.users.usersState(state).loading,
+  progressRecords: Modules.selectors.realtime.progressRecordsSelector(state),
 });
 
 const dispatchProps = {};
