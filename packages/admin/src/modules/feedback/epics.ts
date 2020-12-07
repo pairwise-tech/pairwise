@@ -1,7 +1,6 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap } from "rxjs/operators";
+import { filter, mergeMap, map } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
-import API from "modules/api";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 
@@ -10,18 +9,18 @@ import { Actions } from "../root-actions";
  * ============================================================================
  */
 
-const fetchUsersEpic: EpicSignature = (action$, _, deps) => {
+/**
+ * Fetch all user feedback records.
+ */
+const fetchAllFeedbackEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.fetchAdminUserSuccess)),
-    mergeMap(API.fetchUsersList),
+    filter(isActionOf([Actions.fetchAllFeedback, Actions.fetchAdminUser])),
+    mergeMap(deps.api.fetchAllFeedbackRecords),
     map(result => {
       if (result.value) {
-        return Actions.fetchUsersSuccess(result.value);
+        return Actions.fetchAllFeedbackSuccess(result.value);
       } else {
-        deps.toaster.warn(
-          "An issue occurred with the Pairwise servers and we could not retrieve your user profile right now.\n\n You are not logged in currently.",
-        );
-        return Actions.fetchUsersFailure(result.error);
+        return Actions.fetchAllFeedbackFailure(result.error);
       }
     }),
   );
@@ -32,4 +31,4 @@ const fetchUsersEpic: EpicSignature = (action$, _, deps) => {
  * ============================================================================
  */
 
-export default combineEpics(fetchUsersEpic);
+export default combineEpics(fetchAllFeedbackEpic);

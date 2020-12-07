@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ReduxStoreState } from "modules/root";
-import { PageContainer } from "./AdminComponents";
+import Modules, { ReduxStoreState } from "modules/root";
+import { PageContainer, JsonComponent } from "./AdminComponents";
 
 /** ===========================================================================
  * Home Component
@@ -14,6 +14,7 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
     return (
       <PageContainer>
         <Title>Feedback</Title>
+        <JsonComponent data={this.props.feedbackRecords} />
       </PageContainer>
     );
   }
@@ -24,17 +25,16 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
  * ============================================================================
  */
 
-const Title = styled.h1`
-  margin-top: 16px;
-  font-size: 16px;
-`;
+const Title = styled.h2``;
 
 /** ===========================================================================
  * Props
  * ============================================================================
  */
 
-const mapStateToProps = (state: ReduxStoreState) => ({});
+const mapStateToProps = (state: ReduxStoreState) => ({
+  feedbackRecords: Modules.selectors.feedback.feedbackRecordsSelector(state),
+});
 
 const dispatchProps = {};
 

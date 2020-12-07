@@ -8,11 +8,10 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { COLORS, HEADER_HEIGHT, MOBILE } from "tools/constants";
 import AdminSummary from "./AdminSummary";
-import Index from "./Index";
+import AdminIndex from "./AdminIndex";
 import Swipy from "swipyjs";
 import { Button, FocusStyleManager, Icon } from "@blueprintjs/core";
 import {
-  ProfileIcon,
   FullScreenOverlay,
   OverlayText,
   OverlaySmallText,
@@ -105,7 +104,7 @@ const AdminContainer = (props: IProps) => {
 
   if (initializationError) {
     return <ErrorOverlay />;
-  } else if (!initialized) {
+  } else if (!initialized || userLoading) {
     return <LoadingOverlay visible={workspaceLoading} />;
   }
 
@@ -153,14 +152,12 @@ const AdminContainer = (props: IProps) => {
             <AccountDropdownButton>
               <div id="account-menu-dropdown" className="account-menu-dropdown">
                 <UserBio>
-                  {!isMobile && (
-                    <CreateAccountText className="account-menu">
-                      {!user.profile.givenName
-                        ? "Welcome!"
-                        : `Welcome, ${user.profile.givenName}!`}
-                    </CreateAccountText>
-                  )}
-                  <ProfileIcon avatar={user.profile.avatarUrl} />
+                  <CreateAccountText className="account-menu">
+                    {!user.profile.givenName
+                      ? "Hi"
+                      : `Hi, ${user.profile.givenName}!`}
+                  </CreateAccountText>
+                  <Icon icon="shield" />
                 </UserBio>
                 <div className="dropdown-links">
                   <Link to="/logout" id="logout-link" onClick={logoutUser}>
@@ -208,7 +205,7 @@ const AdminContainer = (props: IProps) => {
             />
           </>
         )}
-        <Route exact key="index" path="/" component={Index} />
+        <Route exact key="index" path="/" component={AdminIndex} />
         <Route
           key="logout"
           path="/logout"
@@ -416,6 +413,7 @@ const CreateAccountText = styled.h1`
 `;
 
 const AccountDropdownButton = styled.div`
+  margin-right: 4px;
   flex-shrink: 0;
 
   .account-menu-dropdown {

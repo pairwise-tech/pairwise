@@ -9,7 +9,6 @@ import {
   map,
 } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
-import API from "modules/api";
 import { of } from "rxjs";
 import {
   setAccessTokenInLocalStorage,
@@ -90,32 +89,16 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
       const { accessToken } = payload;
       if (accessToken) {
         return of(
+          Actions.fetchAdminUser(),
           Actions.storeAccessTokenSuccess(payload),
           Actions.initializeAppSuccess({ accessToken }),
         );
       } else {
-        return of(
-          Actions.adminUserLoginFailure({ message: "No access token" }),
-          Actions.initializeAppSuccess({ accessToken }),
-        );
-      }
-    }),
-  );
-};
-
-const adminUserLoginEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.storeAccessTokenSuccess)),
-    filter(x => !!x.payload.accessToken),
-    mergeMap(API.adminUserLogin),
-    mergeMap(result => {
-      if (result.value) {
-        return of(Actions.fetchAdminUser(), Actions.adminUserLoginSuccess());
-      } else {
         deps.toaster.error("Unauthorized, get out!");
         return of(
-          Actions.adminUserLoginFailure(result.error),
           Actions.logoutUser(),
+          Actions.storeAccessTokenFailure(),
+          Actions.initializeAppSuccess({ accessToken }),
         );
       }
     }),
@@ -146,6 +129,5 @@ const logoutUserSuccessEpic: EpicSignature = (action$, _, deps) => {
 export default combineEpics(
   accessTokenInitializationEpic,
   storeAccessTokenEpic,
-  adminUserLoginEpic,
   logoutUserSuccessEpic,
 );

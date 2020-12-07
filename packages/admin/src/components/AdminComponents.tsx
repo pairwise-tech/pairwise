@@ -1,3 +1,4 @@
+import JSONPretty from "react-json-pretty";
 import React from "react";
 import cx from "classnames";
 import styled, { CSSProperties } from "styled-components/macro";
@@ -22,7 +23,7 @@ export const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
 export const PageContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 25px 12px;
+  padding: 20px 18px;
   margin-top: 32px;
 `;
 
@@ -87,6 +88,23 @@ export const OverlaySmallText = styled.p`
   text-align: center;
   color: ${COLORS.LIGHT_FAILURE};
 `;
+
+export const JsonComponent = (data: any) => {
+  return (
+    <JSONPretty
+      id="json-pretty"
+      data={data}
+      theme={{
+        key: "color:#fc426d;",
+        value: "color:#e97cff;",
+        string: "color:#ffd755;",
+        main:
+          "background:rgb(35,35,35);padding:8px;max-width:90vw;width:max-content;overflow:scroll;",
+      }}
+      style={{ fontSize: 14 }}
+    />
+  );
+};
 
 type PairwiseOpenCloseLogoProps = { isOpen?: boolean } & React.SVGProps<
   SVGSVGElement

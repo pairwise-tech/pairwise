@@ -18,6 +18,9 @@ import Challenges, {
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./admin";
 import Users, { UsersActionTypes, UsersState } from "./users";
+import Payments, { PaymentsActionTypes, PaymentsState } from "./payments";
+import Feedback, { FeedbackActionTypes, FeedbackState } from "./feedback";
+import Realtime, { RealtimeActionTypes, RealtimeState } from "./realtime";
 import * as Storage from "../tools/storage-utils";
 
 /** ===========================================================================
@@ -30,13 +33,19 @@ export type ReduxActionTypes =
   | ChallengesActionTypes
   | UserActionTypes
   | UsersActionTypes
-  | AuthActionTypes;
+  | AuthActionTypes
+  | PaymentsActionTypes
+  | FeedbackActionTypes
+  | RealtimeActionTypes;
 
 export const selectors = {
   app: App.selector,
   auth: Auth.selector,
   admin: User.selector,
   users: Users.selector,
+  realtime: Realtime.selector,
+  feedback: Feedback.selector,
+  payments: Payments.selector,
   challenges: Challenges.selector,
 };
 
@@ -45,6 +54,9 @@ export const actions = {
   auth: Auth.actions,
   admin: User.actions,
   users: Users.actions,
+  feedback: Feedback.actions,
+  realtime: Realtime.actions,
+  payments: Payments.actions,
   challenges: Challenges.actions,
 };
 
@@ -63,6 +75,9 @@ export interface ReduxStoreState {
   auth: AuthState;
   admin: UserState;
   users: UsersState;
+  realtime: RealtimeState;
+  feedback: FeedbackState;
+  payments: PaymentsState;
   challenges: ChallengesState;
 }
 
@@ -71,6 +86,9 @@ const rootReducer = combineReducers({
   auth: Auth.store,
   admin: User.store,
   users: Users.store,
+  realtime: Realtime.store,
+  feedback: Feedback.store,
+  payments: Payments.store,
   challenges: Challenges.store,
 });
 
@@ -99,6 +117,9 @@ const combinedEpic = combineEpics(
   User.epics,
   Users.epics,
   Auth.epics,
+  Realtime.epics,
+  Feedback.epics,
+  Payments.epics,
   Challenges.epics,
 );
 

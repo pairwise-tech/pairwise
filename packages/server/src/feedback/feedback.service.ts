@@ -17,6 +17,10 @@ export class FeedbackService {
     private readonly feedbackRepository: Repository<Feedback>,
   ) {}
 
+  public async getAllFeedback() {
+    return this.feedbackRepository.find();
+  }
+
   public async getFeedbackForChallenge(challengeId: string) {
     return this.feedbackRepository.find({
       where: {

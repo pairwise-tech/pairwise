@@ -19,6 +19,7 @@ import { FeedbackService } from "../feedback/feedback.service";
 import { UserService } from "../user/user.service";
 import { PaymentsService } from "../payments/payments.service";
 import { SUCCESS_CODES } from "../tools/constants";
+import { ProgressService } from "../progress/progress.service";
 
 // HTTP Methods
 export type HTTP_METHOD = "GET" | "PUT" | "POST" | "DELETE";
@@ -29,7 +30,9 @@ export type ADMIN_URLS =
   | "admin"
   | "admin/user"
   | "admin/users"
+  | "admin/feedback"
   | "admin/feedback/:challengeId"
+  | "admin/payments"
   | "admin/purchase-course"
   | "admin/refund-course";
 
@@ -45,6 +48,8 @@ export class AdminController {
     private readonly paymentsService: PaymentsService,
 
     private readonly feedbackService: FeedbackService,
+
+    private readonly progressService: ProgressService,
   ) {}
 
   /* Placeholder/test admin endpoint */
@@ -65,13 +70,6 @@ export class AdminController {
     } catch (err) {
       this.handleError(err, options);
     }
-  }
-
-  /* admin authentication endpoint */
-  @UseGuards(AdminAuthGuard)
-  @Get("/authenticate")
-  public async adminLogin(@Request() req: AuthenticatedRequest) {
-    return SUCCESS_CODES.OK;
   }
 
   // An admin API to allow admin users to effectively purchase a course for
@@ -122,6 +120,46 @@ export class AdminController {
         userEmail,
         courseId,
       );
+      this.slackService.postAdminActionAwarenessMessage(options);
+      return result;
+    } catch (err) {
+      this.handleError(err, options);
+    }
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/payments")
+  public async getAllPaymentRecords(@Request() req: AuthenticatedRequest) {
+    // Post status message to Slack
+    const adminUserEmail = req.user.profile.email;
+    const options: AdminRequestOptions = {
+      httpMethod: "GET",
+      requestPath: "admin/feedback",
+      adminUserEmail,
+    };
+
+    try {
+      const result = await this.paymentsService.fetchAllPaymentRecords();
+      this.slackService.postAdminActionAwarenessMessage(options);
+      return result;
+    } catch (err) {
+      this.handleError(err, options);
+    }
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/feedback")
+  public async getAllFeedback(@Request() req: AuthenticatedRequest) {
+    // Post status message to Slack
+    const adminUserEmail = req.user.profile.email;
+    const options: AdminRequestOptions = {
+      httpMethod: "GET",
+      requestPath: "admin/payments",
+      adminUserEmail,
+    };
+
+    try {
+      const result = await this.feedbackService.getAllFeedback();
       this.slackService.postAdminActionAwarenessMessage(options);
       return result;
     } catch (err) {
@@ -212,6 +250,12 @@ export class AdminController {
     } catch (err) {
       this.handleError(err, options);
     }
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/progress")
+  public retrieveLiveProgressRecords() {
+    return this.progressService.retrieveProgressRecords();
   }
 
   // Log the error to Slack and throw an exception in response
