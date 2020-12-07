@@ -383,15 +383,20 @@ const ApplicationContainer = (props: IProps) => {
                   <ProfileIcon avatar={user.profile.avatarUrl} />
                 </UserBio>
                 <div className="dropdown-links">
+                  <Link id="account-link" to="/account">
+                    <Icon icon="user" style={{ marginRight: 10 }} />
+                    My Account
+                  </Link>
                   <Link
-                    id="account-link"
-                    to="/account"
+                    id="pairwise-about-link"
+                    target="__blank"
+                    to={{ pathname: "https://www.pairwise.tech/" }}
                     style={{
                       borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
                     }}
                   >
-                    <Icon icon="user" style={{ marginRight: 10 }} />
-                    Account
+                    <Icon icon="info-sign" style={{ marginRight: 10 }} />
+                    About Pairwise
                   </Link>
                   <Link to="/logout" id="logout-link" onClick={logoutUser}>
                     <Icon icon="log-out" style={{ marginRight: 10 }} />
