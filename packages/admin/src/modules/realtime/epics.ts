@@ -14,7 +14,7 @@ import { Actions } from "../root-actions";
  */
 const fetchProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.fetchProgressRecords)),
+    filter(isActionOf([Actions.fetchProgressRecords, Actions.fetchAdminUser])),
     mergeMap(deps.api.fetchProgressRecords),
     map(result => {
       if (result.value) {

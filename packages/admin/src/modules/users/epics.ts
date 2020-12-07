@@ -12,7 +12,7 @@ import { Actions } from "../root-actions";
 
 const fetchUsersEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf(Actions.adminUserLoginSuccess)),
+    filter(isActionOf(Actions.fetchAdminUserSuccess)),
     mergeMap(API.fetchUsersList),
     map(result => {
       if (result.value) {

@@ -1,4 +1,3 @@
-import { HttpResponseError } from "modules/api";
 import { createAction } from "typesafe-actions";
 
 /** ===========================================================================
@@ -11,12 +10,9 @@ enum ActionTypesEnum {
 
   STORE_ACCESS_TOKEN = "STORE_ACCESS_TOKEN",
   STORE_ACCESS_TOKEN_SUCCESS = "STORE_ACCESS_TOKEN_SUCCESS",
+  STORE_ACCESS_TOKEN_FAILURE = "STORE_ACCESS_TOKEN_FAILURE",
 
   LOGOUT = "LOGOUT",
-
-  ADMIN_USER_LOGIN = "ADMIN_USER_LOGIN",
-  ADMIN_USER_LOGIN_SUCCESS = "ADMIN_USER_LOGIN_SUCCESS",
-  ADMIN_USER_LOGIN_FAILURE = "ADMIN_USER_LOGIN_FAILURE",
 }
 
 /** ===========================================================================
@@ -39,14 +35,8 @@ export const storeAccessTokenSuccess = createAction(
   ActionTypesEnum.STORE_ACCESS_TOKEN_SUCCESS,
 )<{ accessToken: string; accountCreated: boolean }>();
 
-export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
-
-export const adminUserLogin = createAction(ActionTypesEnum.ADMIN_USER_LOGIN)();
-
-export const adminUserLoginSuccess = createAction(
-  ActionTypesEnum.ADMIN_USER_LOGIN_SUCCESS,
+export const storeAccessTokenFailure = createAction(
+  ActionTypesEnum.STORE_ACCESS_TOKEN_FAILURE,
 )();
 
-export const adminUserLoginFailure = createAction(
-  ActionTypesEnum.ADMIN_USER_LOGIN_FAILURE,
-)<HttpResponseError>();
+export const logoutUser = createAction(ActionTypesEnum.LOGOUT)();
