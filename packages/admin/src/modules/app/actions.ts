@@ -1,7 +1,7 @@
 import { createAction } from "typesafe-actions";
 import { Location as HistoryLocation } from "history";
 import { ParsedQuery } from "query-string";
-import { APP_INITIALIZATION_TYPE } from "tools/utils";
+import { APP_INITIALIZATION_TYPE } from "tools/admin-utils";
 
 /** ===========================================================================
  * Action Types

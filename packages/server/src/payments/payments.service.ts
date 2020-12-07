@@ -82,6 +82,11 @@ export class PaymentsService {
     this.COURSE_CURRENCY = PRICING_CONSTANTS.ACCEPTED_CURRENCY;
   }
 
+  // Retrieve all the existing payment records
+  public async fetchAllPaymentRecords() {
+    return this.paymentsRepository.find();
+  }
+
   // Creates a payment intent using Stripe
   public async handleCreatePaymentIntent(
     requestUser: RequestUser,

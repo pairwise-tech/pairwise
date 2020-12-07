@@ -2,8 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer } from "./Shared";
+import { PageContainer, JsonComponent } from "./AdminComponents";
 import { summarizeUserProgress } from "../tools/admin-utils";
+import { COLORS } from "../tools/constants";
+import { ProgressRecords } from "../modules/realtime/store";
 
 /** ===========================================================================
  * Home Component
@@ -12,7 +14,7 @@ import { summarizeUserProgress } from "../tools/admin-utils";
 
 class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { usersList, usersListLoading } = this.props;
+    const { usersList, usersListLoading, progressRecords } = this.props;
     if (usersListLoading) {
       return null;
     }
@@ -20,35 +22,56 @@ class Home extends React.Component<IProps, {}> {
     const summary = summarizeUserProgress(usersList);
     return (
       <PageContainer>
-        <ContentContainer>
-          <h2>Current Stats:</h2>
-          <Stat>
-            <b>Total Users:</b> {summary.stats.totalUsers.toLocaleString()}
-          </Stat>
-          <Stat>
-            <b>New Users Last Week:</b>{" "}
-            {summary.stats.newUsersInLastWeek.toLocaleString()}
-          </Stat>
-          <Stat>
-            <b>Total Challenges Completed:</b>{" "}
+        <h2>Current Stats:</h2>
+        <Stat>
+          <b>Total Users:</b>{" "}
+          <Value>{summary.stats.totalUsers.toLocaleString()}</Value>
+        </Stat>
+        <Stat>
+          <b>New Users Last Week:</b>{" "}
+          <Value>{summary.stats.newUsersInLastWeek.toLocaleString()}</Value>
+        </Stat>
+        <Stat>
+          <b>Total Challenges Completed:</b>{" "}
+          <Value>
             {summary.stats.totalChallengesCompleted.toLocaleString()}
-          </Stat>
-          <Stat>
-            <b>Challenges Completed in Last Week:</b>{" "}
+          </Value>
+        </Stat>
+        <Stat>
+          <b>Challenges Completed in Last Week:</b>{" "}
+          <Value>
             {summary.stats.challengesCompletedInLastWeek.toLocaleString()}
-          </Stat>
-          <Stat>
-            <b>Average Challenges/User:</b>{" "}
+          </Value>
+        </Stat>
+        <Stat>
+          <b>Average Challenges/User:</b>{" "}
+          <Value>
             {summary.leaderboard.averageChallengesCompletedPerNonZeroUser.toLocaleString()}
-          </Stat>
-          <Stat>
-            <b>Leader Challenge Count:</b>{" "}
+          </Value>
+        </Stat>
+        <Stat>
+          <b>Leader Challenge Count:</b>{" "}
+          <Value>
             {summary.leaderboard.leaderChallengeCount.toLocaleString()}
-          </Stat>
-        </ContentContainer>
+          </Value>
+        </Stat>
+        <h2>Recent Challenge Progress:</h2>
+        {progressRecords
+          ? this.renderProgressRecords(progressRecords)
+          : "No records yet"}
       </PageContainer>
     );
   }
+
+  renderProgressRecords = (progressRecords: ProgressRecords) => {
+    const { status, records } = progressRecords;
+    return (
+      <>
+        <p style={{ color: "white", fontStyle: "italic" }}>{status}</p>
+        <JsonComponent data={records} />
+      </>
+    );
+  };
 }
 
 /** ===========================================================================
@@ -56,13 +79,17 @@ class Home extends React.Component<IProps, {}> {
  * ============================================================================
  */
 
-const ContentContainer = styled.div`
-  padding: 2px 12px;
-`;
-
 const Stat = styled.p`
+  max-width: 425px;
   margin-top: 12px;
   font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  color: ${COLORS.TEXT_CONTENT_BRIGHT};
+`;
+
+const Value = styled.span`
+  color: ${COLORS.PRIMARY_GREEN};
 `;
 
 /** ===========================================================================
@@ -73,6 +100,7 @@ const Stat = styled.p`
 const mapStateToProps = (state: ReduxStoreState) => ({
   usersList: Modules.selectors.users.usersState(state).users,
   usersListLoading: Modules.selectors.users.usersState(state).loading,
+  progressRecords: Modules.selectors.realtime.progressRecordsSelector(state),
 });
 
 const dispatchProps = {};

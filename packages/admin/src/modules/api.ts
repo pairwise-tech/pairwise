@@ -12,9 +12,12 @@ import {
   logoutUserInLocalStorage,
 } from "tools/storage-utils";
 import toaster from "tools/toast-utils";
-import { wait, mapCourseSkeletonInDev } from "tools/utils";
+import { wait, mapCourseSkeletonInDev } from "tools/admin-utils";
 import { UserStoreState } from "./admin/store";
 import { AdminUserView } from "./users/store";
+import { ProgressRecords } from "./realtime/store";
+import { FeedbackRecord } from "./feedback/store";
+import { PaymentRecord } from "./payments/store";
 
 /** ===========================================================================
  * Types & Config
@@ -194,6 +197,33 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
       return axios.get<AdminUserView[]>(`${HOST}/admin/users`, {
+        headers,
+      });
+    });
+  };
+
+  fetchProgressRecords = async () => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.get<ProgressRecords>(`${HOST}/admin/progress`, {
+        headers,
+      });
+    });
+  };
+
+  fetchAllFeedbackRecords = async () => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.get<FeedbackRecord[]>(`${HOST}/admin/feedback`, {
+        headers,
+      });
+    });
+  };
+
+  fetchAllPaymentRecords = async () => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.get<PaymentRecord[]>(`${HOST}/admin/payments`, {
         headers,
       });
     });

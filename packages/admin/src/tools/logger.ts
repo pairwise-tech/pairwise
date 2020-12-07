@@ -5,8 +5,8 @@ import { createLogger } from "redux-logger";
  * ============================================================================
  */
 
-const TITLE = "#15B06D";
-const ACTION = "#ff6647";
+const TITLE = "#ff6647";
+const ACTION = "#ffe75e";
 const NEXT_STATE = "#50adfa";
 
 const logger = createLogger({

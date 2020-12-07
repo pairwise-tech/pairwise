@@ -79,11 +79,7 @@ const user = createReducer<
 const loading = createReducer<boolean, UserActionTypes | AuthActionTypes>(
   true,
 ).handleAction(
-  [
-    actions.fetchAdminUserSuccess,
-    actions.fetchAdminUserFailure,
-    actions.adminUserLoginFailure,
-  ],
+  [actions.fetchAdminUserSuccess, actions.fetchAdminUserFailure],
   () => false,
 );
 

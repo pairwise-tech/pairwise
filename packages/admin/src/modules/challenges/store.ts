@@ -22,6 +22,7 @@ interface BlobCacheItem {
 }
 
 export interface State {
+  displayNavigationMap: boolean;
   workspaceLoading: boolean;
   courses: Nullable<CourseList>;
   courseSkeletons: Nullable<CourseSkeletonList>;
@@ -33,6 +34,7 @@ export interface State {
 }
 
 const initialState: State = {
+  displayNavigationMap: false,
   courses: null,
   courseSkeletons: null,
   workspaceLoading: true,
@@ -64,6 +66,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.setWorkspaceChallengeLoaded, (state, action) => ({
     ...state,
     workspaceLoading: false,
+  }))
+  .handleAction(actions.setNavigationMapState, (state, action) => ({
+    ...state,
+    displayNavigationMap: action.payload,
   }))
   .handleAction(App.actions.locationChange, (state, action) => ({
     ...state,

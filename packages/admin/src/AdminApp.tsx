@@ -4,7 +4,11 @@ import { Router as ReactRouter } from "react-router-dom";
 import AdminContainer from "components/AdminContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
 import { NODE_ENV } from "tools/admin-env";
-import { DarkTheme, FullScreenOverlay, OverlayText } from "components/Shared";
+import {
+  DarkTheme,
+  FullScreenOverlay,
+  OverlayText,
+} from "components/AdminComponents";
 
 /** ===========================================================================
  * Types
