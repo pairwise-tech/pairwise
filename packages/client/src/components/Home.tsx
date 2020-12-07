@@ -38,10 +38,7 @@ class Home extends React.Component<IProps, {}> {
           </ContentText>
           <ContentText>
             To learn more about Pairwise,{" "}
-            <ExternalLink link="https://pairwise.tech">
-              take a look here
-            </ExternalLink>
-            .
+            <ExternalLink link="https://pairwise.tech">go here</ExternalLink>.
           </ContentText>
         </ContentContainer>
         {this.props.skeletons?.map(this.renderCourseItem)}
