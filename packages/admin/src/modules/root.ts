@@ -18,6 +18,7 @@ import Challenges, {
 } from "./challenges";
 import User, { UserActionTypes, UserState } from "./admin";
 import Users, { UsersActionTypes, UsersState } from "./users";
+import Feedback, { FeedbackActionTypes, FeedbackState } from "./feedback";
 import Realtime, { RealtimeActionTypes, RealtimeState } from "./realtime";
 import * as Storage from "../tools/storage-utils";
 
@@ -32,6 +33,7 @@ export type ReduxActionTypes =
   | UserActionTypes
   | UsersActionTypes
   | AuthActionTypes
+  | FeedbackActionTypes
   | RealtimeActionTypes;
 
 export const selectors = {
@@ -40,6 +42,7 @@ export const selectors = {
   admin: User.selector,
   users: Users.selector,
   realtime: Realtime.selector,
+  feedback: Feedback.selector,
   challenges: Challenges.selector,
 };
 
@@ -48,6 +51,7 @@ export const actions = {
   auth: Auth.actions,
   admin: User.actions,
   users: Users.actions,
+  feedback: Feedback.actions,
   realtime: Realtime.actions,
   challenges: Challenges.actions,
 };
@@ -68,6 +72,7 @@ export interface ReduxStoreState {
   admin: UserState;
   users: UsersState;
   realtime: RealtimeState;
+  feedback: FeedbackState;
   challenges: ChallengesState;
 }
 
@@ -77,6 +82,7 @@ const rootReducer = combineReducers({
   admin: User.store,
   users: Users.store,
   realtime: Realtime.store,
+  feedback: Feedback.store,
   challenges: Challenges.store,
 });
 
@@ -106,6 +112,7 @@ const combinedEpic = combineEpics(
   Users.epics,
   Auth.epics,
   Realtime.epics,
+  Feedback.epics,
   Challenges.epics,
 );
 

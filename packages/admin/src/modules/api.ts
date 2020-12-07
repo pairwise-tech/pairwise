@@ -16,6 +16,7 @@ import { wait, mapCourseSkeletonInDev } from "tools/admin-utils";
 import { UserStoreState } from "./admin/store";
 import { AdminUserView } from "./users/store";
 import { ProgressRecords } from "./realtime/store";
+import { FeedbackRecord } from "./feedback/store";
 
 /** ===========================================================================
  * Types & Config
@@ -204,6 +205,15 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
       return axios.get<ProgressRecords>(`${HOST}/admin/progress`, {
+        headers,
+      });
+    });
+  };
+
+  fetchAllFeedbackRecords = async () => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.get<FeedbackRecord[]>(`${HOST}/admin/feedback`, {
         headers,
       });
     });
