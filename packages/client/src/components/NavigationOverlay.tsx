@@ -10,7 +10,6 @@ import {
   ChallengeSkeletonList,
   ModuleSkeletonList,
   CHALLENGE_PROGRESS,
-  CourseMetadata,
   getChallengeSlug,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -42,7 +41,6 @@ import {
   ModuleNumber,
   ModuleNavigationBase,
 } from "./NavigationOverlayComponents";
-import { Select } from "@blueprintjs/select";
 import { IconButton, RotatingIcon } from "./Shared";
 import cx from "classnames";
 
@@ -51,7 +49,7 @@ import cx from "classnames";
  * ============================================================================
  */
 
-const CourseSelect = Select.ofType<CourseMetadata>();
+// const CourseSelect = Select.ofType<CourseMetadata>();
 
 /** ===========================================================================
  * React Class
@@ -105,7 +103,6 @@ class NavigationOverlay extends React.Component<
       isEditMode,
       challengeId,
       overlayVisible,
-      courseListMetadata,
     } = this.props;
 
     if (!course || !module) {
@@ -152,7 +149,18 @@ class NavigationOverlay extends React.Component<
           onClick={e => e.stopPropagation()}
         >
           <ColTitle className="course-select">
-            <CourseSelect
+            <Button
+              fill
+              style={{ whiteSpace: "nowrap" }}
+              className="mobile-shrink"
+              text="Curriculum Details"
+              rightIcon="document-open"
+              onClick={() =>
+                window.open("https://www.pairwise.tech/curriculum", "_blank")
+              }
+            />
+            {/* NOTE: Course Select Menu for multiple courses: */}
+            {/* <CourseSelect
               filterable={false}
               items={courseListMetadata}
               itemDisabled={c => c.id === course.id}
@@ -174,7 +182,7 @@ class NavigationOverlay extends React.Component<
                 text={course.title}
                 rightIcon="chevron-down"
               />
-            </CourseSelect>
+            </CourseSelect> */}
           </ColTitle>
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
@@ -1067,20 +1075,21 @@ const ColTitle = styled.div`
   }
 `;
 
-const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
-  border-left: ${props =>
-    props.disabled
-      ? `3px solid ${COLORS.NEON_GREEN}`
-      : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
+// NOTE: Used for the course multi-select, which is currently disabled.
+// const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
+//   border-left: ${props =>
+//     props.disabled
+//       ? `3px solid ${COLORS.NEON_GREEN}`
+//       : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
 
-  :hover {
-    cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
-    background: ${props =>
-      props.disabled
-        ? COLORS.BACKGROUND_NAVIGATION_ITEM
-        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
-  }
-`;
+//   :hover {
+//     cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
+//     background: ${props =>
+//       props.disabled
+//         ? COLORS.BACKGROUND_NAVIGATION_ITEM
+//         : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
+//   }
+// `;
 
 const NavIcons = styled.span`
   display: inline-block;
