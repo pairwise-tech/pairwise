@@ -21,6 +21,7 @@ COPY yarn.lock /app/
 COPY lerna.json /app/
 COPY package.json /app/
 COPY packages/client/package.json /app/packages/client/
+COPY packages/admin/package.json /app/packages/admin/
 COPY packages/common/package.json /app/packages/common/
 COPY packages/cypress/package.json /app/packages/cypress/
 COPY packages/e2e/package.json /app/packages/e2e/
