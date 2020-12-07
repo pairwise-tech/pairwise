@@ -49,7 +49,6 @@ const AdminContainer = (props: IProps) => {
     userLoading,
     overlayVisible,
     initializeApp,
-    workspaceLoading,
     userAuthenticated,
     initializationError,
     setNavigationMapState,
@@ -102,17 +101,18 @@ const AdminContainer = (props: IProps) => {
     return null;
   }
 
+  const ready = !initialized || userLoading;
+
   if (initializationError) {
     return <ErrorOverlay />;
-  } else if (!initialized || userLoading) {
-    return <LoadingOverlay visible={workspaceLoading} />;
+  } else if (ready) {
+    return <LoadingOverlay visible />;
   }
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
   return (
     <React.Fragment>
-      <LoadingOverlay visible={workspaceLoading} />
       <AdminNavigationMenu isMobile={isMobile} />
       <AdminKeyboardShortcuts />
       <Header>
@@ -154,7 +154,7 @@ const AdminContainer = (props: IProps) => {
                 <UserBio>
                   <CreateAccountText className="account-menu">
                     {!user.profile.givenName
-                      ? "Hi"
+                      ? "Hi, Admin"
                       : `Hi, ${user.profile.givenName}!`}
                   </CreateAccountText>
                   <Icon icon="shield" />
@@ -498,22 +498,15 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.admin.adminUserSelector(state),
   userLoading: Modules.selectors.admin.loading(state),
   location: Modules.selectors.app.locationSelector(state),
-  screensaverVisible: Modules.selectors.app.screensaverVisible(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
-  nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   initializationError: Modules.selectors.app.appSelector(state)
     .initializationError,
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
-  workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
-    state,
-  ),
 });
 
 const dispatchProps = {
   logoutUser: Modules.actions.auth.logoutUser,
-  setScreensaverState: Modules.actions.app.setScreensaverState,
-  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,

@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import { getChallengeSlug } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "tools/constants";
 import { withRouter, RouteComponentProps } from "react-router-dom";
@@ -282,23 +281,6 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       this.props.setNavigationMapState(!this.props.overlayVisible);
     }
   };
-
-  navigateLeft = (e: KeyboardEvent) => {
-    const { prev } = this.props.nextPrevChallengeIds;
-
-    if (prev) {
-      const slug = getChallengeSlug(prev);
-      this.props.history.push(`/workspace/${slug}`);
-    }
-  };
-
-  navigateRight = (e: KeyboardEvent) => {
-    const { next } = this.props.nextPrevChallengeIds;
-    if (next) {
-      const slug = getChallengeSlug(next);
-      this.props.history.push(`/workspace/${slug}`);
-    }
-  };
 }
 
 /** ===========================================================================
@@ -308,7 +290,6 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
-  nextPrevChallengeIds: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
 });
 

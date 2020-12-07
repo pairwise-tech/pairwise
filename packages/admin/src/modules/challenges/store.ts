@@ -1,5 +1,5 @@
 import { createReducer } from "typesafe-actions";
-import { CourseList, CourseSkeletonList, DataBlob } from "@pairwise/common";
+import { CourseList, CourseSkeletonList } from "@pairwise/common";
 import * as actions from "./actions";
 import App, { AppActionTypes } from "../app/index";
 import { InverseChallengeMapping } from "./types";
@@ -10,39 +10,18 @@ import { ChallengesActionTypes } from "./index";
  * ============================================================================
  */
 
-/**
- * The challenge blobs represent the user's past history on a challenge,
- * and they get fetched one by one by id. The blobCache stores the blob
- * data and loading status for each blob. The workspace waits for blobs
- * to load before rendering.
- */
-interface BlobCacheItem {
-  dataBlob?: DataBlob;
-  isLoading: boolean;
-}
-
 export interface State {
-  displayNavigationMap: boolean;
-  workspaceLoading: boolean;
   courses: Nullable<CourseList>;
   courseSkeletons: Nullable<CourseSkeletonList>;
-  currentModuleId: Nullable<string>;
-  currentCourseId: Nullable<string>;
-  currentChallengeId: Nullable<string>;
   challengeMap: Nullable<InverseChallengeMapping>;
-  isDirty: boolean;
+  displayNavigationMap: boolean;
 }
 
 const initialState: State = {
-  displayNavigationMap: false,
   courses: null,
   courseSkeletons: null,
-  workspaceLoading: true,
-  currentModuleId: null,
-  currentCourseId: null,
-  currentChallengeId: null,
   challengeMap: null,
-  isDirty: false,
+  displayNavigationMap: false,
 };
 
 /** ===========================================================================
@@ -53,20 +32,6 @@ const initialState: State = {
 const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   initialState,
 )
-  .handleAction(actions.setChallengeIdContext, (state, { payload }) => ({
-    ...state,
-    adminTestTab: "testResults",
-    adminEditorTab: "starterCode",
-    displayNavigationMap: false,
-    revealWorkspaceSolution: false,
-    currentModuleId: payload.currentModuleId,
-    currentCourseId: payload.currentCourseId,
-    currentChallengeId: payload.currentChallengeId,
-  }))
-  .handleAction(actions.setWorkspaceChallengeLoaded, (state, action) => ({
-    ...state,
-    workspaceLoading: false,
-  }))
   .handleAction(actions.setNavigationMapState, (state, action) => ({
     ...state,
     displayNavigationMap: action.payload,
