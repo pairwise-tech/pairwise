@@ -18,9 +18,6 @@ const fetchUserEpic: EpicSignature = (action$, _, deps) => {
       if (result.value) {
         return Actions.fetchAdminUserSuccess(result.value);
       } else {
-        deps.toaster.warn(
-          "An issue occurred with the Pairwise servers and we could not retrieve your user profile right now.\n\n You are not logged in currently.",
-        );
         return Actions.fetchAdminUserFailure(result.error);
       }
     }),

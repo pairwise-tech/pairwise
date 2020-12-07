@@ -121,13 +121,11 @@ class BaseApiClass {
      * error handling higher up into the epics layer. Then again, logout
      * should RARELY occur, so... blegh.
      */
-    toaster.error("Your session has expired, please login again.", {
-      icon: "user",
-    });
+    toaster.error("Unauthorized!", { icon: "user" });
     logoutUserInLocalStorage();
     await wait(1500); /* Wait so they can read the message... */
 
-    // window.location.reload();
+    window.location.reload();
   };
 }
 

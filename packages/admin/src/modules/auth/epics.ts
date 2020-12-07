@@ -67,25 +67,12 @@ const accessTokenInitializationEpic: EpicSignature = (action$, _, deps) => {
 const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.storeAccessToken)),
-    tap(({ payload }) => {
+    pluck("payload"),
+    tap(payload => {
       const { accessToken } = payload;
-
-      /**
-       * Redirect the user if the are on a protected route... This could
-       * be done with React Router but I like using epics.
-       *
-       * /account is probably the only protected route like this, but more
-       * could be added in the future if needed.
-       */
-      if (!accessToken) {
-        if (deps.router.location.pathname.includes("account")) {
-          deps.router.push(`/home`);
-        }
-      }
-
       setAccessTokenInLocalStorage(accessToken);
     }),
-    mergeMap(({ payload }) => {
+    mergeMap(payload => {
       const { accessToken } = payload;
       if (accessToken) {
         return of(
@@ -94,11 +81,12 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
           Actions.initializeAppSuccess({ accessToken }),
         );
       } else {
-        deps.toaster.error("Unauthorized, get out!");
+        // deps.toaster.error("Unauthorized, get out!");
         return of(
-          Actions.logoutUser(),
+          // Actions.logoutUser(),
           Actions.storeAccessTokenFailure(),
           Actions.initializeAppSuccess({ accessToken }),
+          Actions.fetchAdminUserFailure({ message: "Unauthorized" }),
         );
       }
     }),

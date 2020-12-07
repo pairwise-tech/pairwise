@@ -123,35 +123,12 @@ export const parseInitialUrlToInitializationType = (
     }
   }
 
-  // A user updated their email successfully:
-  if (path === "/account" && checkParamsExist(params, ["emailUpdated"])) {
-    if (params.emailUpdated === "true") {
-      return APP_INITIALIZATION_TYPE.EMAIL_UPDATED;
-    }
-  }
-
   // There was some error during authentication.
   if (
     path === "/authentication-failure" &&
     checkParamsExist(params, ["strategy"])
   ) {
     return APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE;
-  }
-
-  // A deep link into the payment flow, which also expects a courseId
-  // param, e.g. https://app.pairwise.tech/purchase?courseId="fpvPtfu7s"
-  if (path === "/purchase") {
-    return APP_INITIALIZATION_TYPE.PURCHASE_COURSE_FLOW;
-  }
-
-  // A user returned from the checkout flow after cancelling:
-  if (path === "/payment-cancelled") {
-    return APP_INITIALIZATION_TYPE.PAYMENT_CANCELLED;
-  }
-
-  // A user returned from the checkout flow after payment success:
-  if (path === "/payment-success" && checkParamsExist(params, ["courseId"])) {
-    return APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS;
   }
 
   // Default category:
