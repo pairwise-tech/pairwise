@@ -4560,6 +4560,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-json-pretty@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@types/react-json-pretty/-/react-json-pretty-2.2.0.tgz#fd15e84dc65af99e378004de8197a9d24e7afe65"
+  integrity sha512-Qs/nWJZFQD0e+g5NeWlNbsY2q1EKJqGxtbZz/5eqTsM6Zd6xUcrmGKakDUcukQvOBYGZtsfHcXbL5ipoY6Ee5A==
+  dependencies:
+    react-json-pretty "*"
+
 "@types/react-native@*":
   version "0.60.26"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.60.26.tgz#cfbb02c39cd162240d59f4922b5bdeb0c212f90d"
@@ -19774,7 +19781,7 @@ react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.0, react-i
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
-react-json-pretty@^2.2.0:
+react-json-pretty@*, react-json-pretty@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/react-json-pretty/-/react-json-pretty-2.2.0.tgz#9ba907d2b08d87e90456d87b6025feeceb8f63cf"
   integrity sha512-3UMzlAXkJ4R8S4vmkRKtvJHTewG4/rn1Q18n0zqdu/ipZbUPLVZD+QwC7uVcD/IAY3s8iNVHlgR2dMzIUS0n1A==

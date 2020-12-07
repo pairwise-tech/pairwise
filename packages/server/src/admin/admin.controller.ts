@@ -133,6 +133,26 @@ export class AdminController {
   }
 
   @UseGuards(AdminAuthGuard)
+  @Get("/feedback")
+  public async getAllFeedback(@Request() req: AuthenticatedRequest) {
+    // Post status message to Slack
+    const adminUserEmail = req.user.profile.email;
+    const options: AdminRequestOptions = {
+      httpMethod: "POST",
+      requestPath: "admin/feedback/:challengeId",
+      adminUserEmail,
+    };
+
+    try {
+      const result = await this.feedbackService.getAllFeedback();
+      this.slackService.postAdminActionAwarenessMessage(options);
+      return result;
+    } catch (err) {
+      this.handleError(err, options);
+    }
+  }
+
+  @UseGuards(AdminAuthGuard)
   @Get("/feedback/:challengeId")
   public async getFeedbackForChallenge(
     @Param() params,
