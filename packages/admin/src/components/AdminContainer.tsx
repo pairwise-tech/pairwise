@@ -105,7 +105,7 @@ const AdminContainer = (props: IProps) => {
 
   if (initializationError) {
     return <ErrorOverlay />;
-  } else if (!initialized) {
+  } else if (!initialized || userLoading) {
     return <LoadingOverlay visible={workspaceLoading} />;
   }
 
