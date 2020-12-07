@@ -30,7 +30,9 @@ export type ADMIN_URLS =
   | "admin"
   | "admin/user"
   | "admin/users"
+  | "admin/feedback"
   | "admin/feedback/:challengeId"
+  | "admin/payments"
   | "admin/purchase-course"
   | "admin/refund-course";
 
@@ -68,13 +70,6 @@ export class AdminController {
     } catch (err) {
       this.handleError(err, options);
     }
-  }
-
-  /* admin authentication endpoint */
-  @UseGuards(AdminAuthGuard)
-  @Get("/authenticate")
-  public async adminLogin(@Request() req: AuthenticatedRequest) {
-    return SUCCESS_CODES.OK;
   }
 
   // An admin API to allow admin users to effectively purchase a course for
@@ -133,13 +128,33 @@ export class AdminController {
   }
 
   @UseGuards(AdminAuthGuard)
+  @Get("/payments")
+  public async getAllPaymentRecords(@Request() req: AuthenticatedRequest) {
+    // Post status message to Slack
+    const adminUserEmail = req.user.profile.email;
+    const options: AdminRequestOptions = {
+      httpMethod: "GET",
+      requestPath: "admin/feedback",
+      adminUserEmail,
+    };
+
+    try {
+      const result = await this.paymentsService.fetchAllPaymentRecords();
+      this.slackService.postAdminActionAwarenessMessage(options);
+      return result;
+    } catch (err) {
+      this.handleError(err, options);
+    }
+  }
+
+  @UseGuards(AdminAuthGuard)
   @Get("/feedback")
   public async getAllFeedback(@Request() req: AuthenticatedRequest) {
     // Post status message to Slack
     const adminUserEmail = req.user.profile.email;
     const options: AdminRequestOptions = {
-      httpMethod: "POST",
-      requestPath: "admin/feedback/:challengeId",
+      httpMethod: "GET",
+      requestPath: "admin/payments",
       adminUserEmail,
     };
 

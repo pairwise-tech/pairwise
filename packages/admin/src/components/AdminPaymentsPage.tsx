@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { ReduxStoreState } from "modules/root";
-import { PageContainer } from "./AdminComponents";
+import Modules, { ReduxStoreState } from "modules/root";
+import { PageContainer, JsonComponent } from "./AdminComponents";
 
 /** ===========================================================================
  * Home Component
@@ -14,6 +14,7 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
     return (
       <PageContainer>
         <Title>Payments</Title>
+        <JsonComponent data={this.props.paymentRecords} />
       </PageContainer>
     );
   }
@@ -31,7 +32,9 @@ const Title = styled.h2``;
  * ============================================================================
  */
 
-const mapStateToProps = (state: ReduxStoreState) => ({});
+const mapStateToProps = (state: ReduxStoreState) => ({
+  paymentRecords: Modules.selectors.payments.paymentRecordsSelector(state),
+});
 
 const dispatchProps = {};
 

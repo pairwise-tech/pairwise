@@ -1,32 +1,32 @@
 import { createReducer } from "typesafe-actions";
 import * as actions from "./actions";
-import { FeedbackActionTypes } from "./index";
-import { IFeedbackDto } from "@pairwise/common";
+import { PaymentsActionTypes } from "./index";
+import { Payment } from "@pairwise/common";
 
 /** ===========================================================================
  * App Store
  * ============================================================================
  */
 
-export interface FeedbackRecord extends IFeedbackDto {
+export interface PaymentRecord extends Payment {
   uuid: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface State {
-  feedbackRecords: FeedbackRecord[];
+  paymentRecords: any[];
 }
 
 const initialState = {
-  feedbackRecords: [],
+  paymentRecords: [],
 };
 
-const auth = createReducer<State, FeedbackActionTypes>(
+const payments = createReducer<State, PaymentsActionTypes>(
   initialState,
-).handleAction(actions.fetchAllFeedbackSuccess, (state, action) => ({
+).handleAction(actions.fetchAllPaymentsSuccess, (state, action) => ({
   ...state,
-  feedbackRecords: action.payload,
+  paymentRecords: action.payload,
 }));
 
 /** ===========================================================================
@@ -34,4 +34,4 @@ const auth = createReducer<State, FeedbackActionTypes>(
  * ============================================================================
  */
 
-export default auth;
+export default payments;
