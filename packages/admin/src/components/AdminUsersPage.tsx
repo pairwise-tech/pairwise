@@ -2,23 +2,94 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, JsonComponent } from "./AdminComponents";
+import {
+  PageContainer,
+  JsonComponent,
+  DataCard,
+  KeyValue,
+} from "./AdminComponents";
+import { Collapse, Button } from "@blueprintjs/core";
+import { AdminUserView } from "../modules/users/store";
 
 /** ===========================================================================
- * Home Component
+ * AdminUsersPage Component
  * ============================================================================
  */
 
-class AdminUsersPage extends React.Component<IProps, {}> {
+interface IState {
+  uuid: Nullable<string>;
+}
+
+class AdminUsersPage extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      uuid: null,
+    };
+  }
+
   render(): Nullable<JSX.Element> {
     const { users } = this.props;
     return (
       <PageContainer>
         <Title>Users List</Title>
-        {users ? <JsonComponent data={users} /> : null}
+        {users && users.map(this.renderUsersList)}
       </PageContainer>
     );
   }
+
+  renderUsersList = (user: AdminUserView) => {
+    const showDetails = this.state.uuid === user.uuid;
+    return (
+      <DataCard key={user.uuid}>
+        <KeyValue label="Email" value={user.email} />
+        <KeyValue label="uuid" value={user.uuid} code />
+        <Button
+          style={{ marginTop: 6, marginBottom: 12 }}
+          onClick={() => {
+            if (showDetails) {
+              this.setState({ uuid: null });
+            } else {
+              this.setState({ uuid: user.uuid });
+            }
+          }}
+        >
+          {showDetails ? "Hide" : "View"} Details
+        </Button>
+        <Collapse isOpen={showDetails}>
+          <KeyValue label="Given Name" value={user.givenName} />
+          <KeyValue label="Family Name" value={user.familyName} />
+          <KeyValue label="Display Name" value={user.displayName} />
+          <KeyValue
+            label="facebookAccountId"
+            value={user.facebookAccountId}
+            code
+          />
+          <KeyValue label="githubAccountId" value={user.githubAccountId} code />
+          <KeyValue label="googleAccountId" value={user.googleAccountId} code />
+          <KeyValue
+            label="createdAt"
+            value={new Date(user.createdAt).toLocaleString()}
+          />
+          <KeyValue
+            label="updatedAt"
+            value={new Date(user.updatedAt).toLocaleString()}
+          />
+          <div style={{ height: 12 }} />
+          <JsonComponent title="Payments:" data={user.payments} />
+          <JsonComponent
+            title="Challenge Progress:"
+            data={user.challengeProgressHistory}
+          />
+          <JsonComponent
+            title="Settings:"
+            data={JSON.parse(String(user.settings))}
+          />
+        </Collapse>
+      </DataCard>
+    );
+  };
 }
 
 /** ===========================================================================

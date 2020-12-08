@@ -2,6 +2,7 @@ import { compose } from "redux";
 import { CourseList, CourseSkeleton } from "@pairwise/common";
 import { ParsedQuery } from "query-string";
 import { AdminUserView } from "../modules/users/store";
+import toaster from "../tools/toast-utils";
 
 /**
  * Artificially wait the provided amount of time.
@@ -326,4 +327,12 @@ export const summarizeUserProgress = (users: AdminUserView[]) => {
   };
 
   return summary;
+};
+
+export const copyToClipboard = (text: Nullable<string>) => {
+  if (text) {
+    navigator.clipboard.writeText(text).then(() => {
+      toaster.success(`Copied: ${text}`);
+    });
+  }
 };

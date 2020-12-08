@@ -31,6 +31,10 @@ body {
   font-size: 16px;
 }
 
+p {
+  font-family: Avenir, Arial, Helvetica, sans-serif;
+}
+
 code,
 pre {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
