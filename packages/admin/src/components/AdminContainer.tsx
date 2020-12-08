@@ -7,7 +7,7 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { COLORS, HEADER_HEIGHT, MOBILE } from "tools/constants";
-import AdminSummary from "./AdminSummary";
+import AdminStatsPage from "./AdminStatsPage";
 import AdminIndex from "./AdminIndex";
 import Swipy from "swipyjs";
 import { Button, FocusStyleManager, Icon } from "@blueprintjs/core";
@@ -198,7 +198,7 @@ const AdminContainer = (props: IProps) => {
         )}
         {isLoggedIn && (
           <>
-            <Route key="stats" path="/stats" component={AdminSummary} />
+            <Route key="stats" path="/stats" component={AdminStatsPage} />
             <Route key="users" path="/users" component={AdminUsersPage} />
             <Route
               key="payments"

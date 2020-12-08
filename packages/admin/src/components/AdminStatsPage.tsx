@@ -2,7 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, JsonComponent } from "./AdminComponents";
+import {
+  PageContainer,
+  JsonComponent,
+  DataCard,
+  KeyValue,
+} from "./AdminComponents";
 import { summarizeUserProgress } from "../tools/admin-utils";
 import { COLORS } from "../tools/constants";
 import { ProgressRecords } from "../modules/realtime/store";
@@ -12,7 +17,7 @@ import { ProgressRecords } from "../modules/realtime/store";
  * ============================================================================
  */
 
-class Home extends React.Component<IProps, {}> {
+class AdminStatsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const { usersList, usersListLoading, progressRecords } = this.props;
     if (usersListLoading) {
@@ -68,7 +73,17 @@ class Home extends React.Component<IProps, {}> {
     return (
       <>
         <p style={{ color: "white", fontStyle: "italic" }}>{status}</p>
-        <JsonComponent data={records} />
+        {records.map(record => {
+          return (
+            <DataCard key={record.user}>
+              <KeyValue label="User" value={record.user} />
+              <JsonComponent
+                title="Challenges Completed:"
+                data={record.challenges}
+              />
+            </DataCard>
+          );
+        })}
       </>
     );
   };
@@ -116,4 +131,4 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default withProps(Home);
+export default withProps(AdminStatsPage);

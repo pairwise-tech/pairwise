@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, JsonComponent } from "./AdminComponents";
+import { PageContainer, DataCard, KeyValue } from "./AdminComponents";
 
 /** ===========================================================================
  * Home Component
@@ -14,7 +14,20 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
     return (
       <PageContainer>
         <Title>Feedback</Title>
-        <JsonComponent data={this.props.feedbackRecords} />
+        {this.props.feedbackRecords.map(feedback => {
+          return (
+            <DataCard key={feedback.uuid}>
+              <KeyValue label="Type" value={feedback.type} />
+              <KeyValue label="ChallengeId" value={feedback.challengeId} />
+              <KeyValue label="Feedback" value={feedback.feedback} />
+              <KeyValue label="uuid" value={feedback.uuid} code />
+              <KeyValue
+                label="createdAt"
+                value={new Date(feedback.createdAt).toDateString()}
+              />
+            </DataCard>
+          );
+        })}
       </PageContainer>
     );
   }
