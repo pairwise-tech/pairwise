@@ -42,8 +42,10 @@ const deleteFeedbackByUuidEpic: EpicSignature = (action$, _, deps) => {
     mergeMap(deps.api.deleteFeedbackByUuid),
     map(result => {
       if (result.value) {
+        deps.toaster.success("Feedback record deleted.");
         return Actions.deleteFeedbackByUuidSuccess(result.value);
       } else {
+        deps.toaster.error(`Failed to delete feedback record, ${result.error}`);
         return Actions.deleteFeedbackByUuidFailure(result.error);
       }
     }),

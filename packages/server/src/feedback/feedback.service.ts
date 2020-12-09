@@ -55,7 +55,7 @@ export class FeedbackService {
   }
 
   public async deleteFeedbackByUuid(uuid: string) {
-    const feedback = await this.feedbackRepository.findOne({ where: uuid });
+    const feedback = await this.feedbackRepository.findOne({ where: { uuid } });
     if (feedback) {
       await this.feedbackRepository.remove(feedback);
     }
