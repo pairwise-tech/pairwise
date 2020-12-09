@@ -8,6 +8,7 @@ import {
   KeyValue,
   SummaryText,
 } from "./AdminComponents";
+import { Button } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Home Component
@@ -16,7 +17,7 @@ import {
 
 class AdminFeedbackPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { feedbackRecords } = this.props;
+    const { feedbackRecords, deleteFeedbackByUuid } = this.props;
     return (
       <PageContainer>
         <Title>Feedback</Title>
@@ -35,6 +36,13 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
                 label="createdAt"
                 value={new Date(feedback.createdAt).toDateString()}
               />
+              <Button
+                intent="danger"
+                style={{ marginTop: 6 }}
+                onClick={() => deleteFeedbackByUuid(feedback.uuid)}
+              >
+                Delete Feedback Record
+              </Button>
             </DataCard>
           );
         })}
@@ -59,7 +67,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   feedbackRecords: Modules.selectors.feedback.feedbackRecordsSelector(state),
 });
 
-const dispatchProps = {};
+const dispatchProps = {
+  deleteFeedbackByUuid: Modules.actions.feedback.deleteFeedbackByUuid,
+};
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 

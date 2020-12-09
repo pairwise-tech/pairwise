@@ -455,18 +455,6 @@ const AccountDropdownButton = styled.div`
   }
 `;
 
-const LostPageContainer = styled.div`
-  margin-top: 150px;
-  padding: 50px;
-  max-width: 650px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-`;
-
 /** ===========================================================================
  * Props
  * ============================================================================
