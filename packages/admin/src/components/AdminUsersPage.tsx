@@ -7,6 +7,7 @@ import {
   JsonComponent,
   DataCard,
   KeyValue,
+  SummaryText,
 } from "./AdminComponents";
 import { Collapse, Button } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
@@ -34,6 +35,9 @@ class AdminUsersPage extends React.Component<IProps, IState> {
     return (
       <PageContainer>
         <Title>Users List</Title>
+        <SummaryText>
+          There are currently {users.length} total registered users.
+        </SummaryText>
         {users && users.map(this.renderUsersList)}
       </PageContainer>
     );

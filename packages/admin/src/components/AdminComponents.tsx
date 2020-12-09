@@ -90,11 +90,15 @@ export const OverlaySmallText = styled.p`
   color: ${COLORS.LIGHT_FAILURE};
 `;
 
+export const SummaryText = styled.p`
+  margin-bottom: 25px;
+`;
+
 export const DataCard = styled(Card)`
   margin-top: 12px;
   max-width: 625px;
   overflow-x: scroll;
-  background: ${COLORS.BACKGROUND_MODAL} !important;
+  background: ${COLORS.BACKGROUND_CARD} !important;
 `;
 
 export const KeyValue = ({

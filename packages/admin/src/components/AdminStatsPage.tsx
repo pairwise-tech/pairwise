@@ -30,7 +30,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
       <PageContainer>
         <Row>
           <h2>Current Stats:</h2>
-          <Button onClick={this.props.refreshStats}>Refresh</Button>
+          <Button onClick={this.props.refreshStats}>Refresh Stats</Button>
         </Row>
         <Stat>
           <b>Total Users:</b>{" "}

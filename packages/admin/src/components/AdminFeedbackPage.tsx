@@ -2,7 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, DataCard, KeyValue } from "./AdminComponents";
+import {
+  PageContainer,
+  DataCard,
+  KeyValue,
+  SummaryText,
+} from "./AdminComponents";
 
 /** ===========================================================================
  * Home Component
@@ -11,10 +16,15 @@ import { PageContainer, DataCard, KeyValue } from "./AdminComponents";
 
 class AdminFeedbackPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
+    const { feedbackRecords } = this.props;
     return (
       <PageContainer>
         <Title>Feedback</Title>
-        {this.props.feedbackRecords.map(feedback => {
+        <SummaryText>
+          There are a total of {feedbackRecords.length} feedback records
+          submitted.
+        </SummaryText>
+        {feedbackRecords.map(feedback => {
           return (
             <DataCard key={feedback.uuid}>
               <KeyValue label="Type" value={feedback.type} />

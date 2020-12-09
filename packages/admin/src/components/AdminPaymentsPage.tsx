@@ -2,7 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, DataCard, KeyValue } from "./AdminComponents";
+import {
+  PageContainer,
+  DataCard,
+  KeyValue,
+  SummaryText,
+} from "./AdminComponents";
 
 /** ===========================================================================
  * Home Component
@@ -11,10 +16,14 @@ import { PageContainer, DataCard, KeyValue } from "./AdminComponents";
 
 class AdminPaymentsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
+    const { paymentRecords } = this.props;
     return (
       <PageContainer>
-        <Title>Payments</Title>
-        {this.props.paymentRecords.map(payment => {
+        <Title>Course Payments</Title>
+        <SummaryText>
+          There are currently {paymentRecords.length} total payments.
+        </SummaryText>
+        {paymentRecords.map(payment => {
           return (
             <DataCard key={payment.uuid}>
               <KeyValue label="status" value={payment.status} />

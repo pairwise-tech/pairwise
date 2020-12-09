@@ -23,6 +23,7 @@ import AdminUsersPage from "./AdminUsersPage";
 import AdminPaymentsPage from "./AdminPaymentsPage";
 import AdminFeedbackPage from "./AdminFeedbackPage";
 import AdminSearchBox from "./AdminSearchBox";
+import Hugh from "../icons/hugh.jpg";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -136,7 +137,7 @@ const AdminContainer = (props: IProps) => {
               />
               <ProductTitle id="product-title">
                 <Link
-                  to="/home"
+                  to="/stats"
                   id="header-home-link"
                   style={{ display: "flex", alignItems: "center" }}
                 >
@@ -163,7 +164,13 @@ const AdminContainer = (props: IProps) => {
                         ? "Hi, Admin"
                         : `Hi, ${user.profile.givenName}!`}
                     </CreateAccountText>
-                    <Icon icon="shield" />
+                    <img
+                      src={Hugh}
+                      width={32}
+                      height={32}
+                      alt="Profile Avatar"
+                      style={{ borderRadius: "50%" }}
+                    />
                   </UserBio>
                   <div className="dropdown-links">
                     <Link to="/logout" id="logout-link" onClick={logoutUser}>
@@ -189,14 +196,6 @@ const AdminContainer = (props: IProps) => {
       </Header>
       <Switch>
         {isLoggedIn && (
-          <Route
-            exact
-            key="admin-redirect"
-            path="/"
-            component={() => <Redirect to="/stats" />}
-          />
-        )}
-        {isLoggedIn && (
           <>
             <Route key="stats" path="/stats" component={AdminStatsPage} />
             <Route key="users" path="/users" component={AdminUsersPage} />
@@ -209,6 +208,12 @@ const AdminContainer = (props: IProps) => {
               key="feedback"
               path="/feedback"
               component={AdminFeedbackPage}
+            />
+            <Route
+              exact
+              path="/"
+              key="admin-redirect"
+              component={() => <Redirect to="/stats" />}
             />
           </>
         )}
@@ -490,7 +495,7 @@ const LostPage = () => (
       not exist.
     </p>
     <p>
-      Please consider returning <Link to="/home">home</Link> to find your way
+      Please consider returning <Link to="/stats">home</Link> to find your way
       again.
     </p>
   </LostPageContainer>

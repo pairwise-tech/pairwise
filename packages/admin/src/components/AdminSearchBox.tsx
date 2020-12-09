@@ -129,15 +129,15 @@ const Input = styled(InputGroup)`
     }
 
     ::placeholder {
-      color: ${COLORS.TEXT_CONTENT};
+      color: ${COLORS.TEXT_PLACEHOLDER};
     }
 
     :-ms-input-placeholder {
-      color: ${COLORS.TEXT_CONTENT};
+      color: ${COLORS.TEXT_PLACEHOLDER};
     }
 
     ::-ms-input-placeholder {
-      color: ${COLORS.TEXT_CONTENT};
+      color: ${COLORS.TEXT_PLACEHOLDER};
     }
   }
 `;
