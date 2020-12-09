@@ -34,7 +34,7 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
                 label="datePaid"
                 value={new Date(payment.datePaid).toDateString()}
               />
-              <KeyValue label="uuid" value={payment.uuid} code />
+              <KeyValue label="uuid" value={payment.uuid} code allowCopy />
               <KeyValue label="extraData" value={payment.extraData} />
               <KeyValue
                 label="createdAt"

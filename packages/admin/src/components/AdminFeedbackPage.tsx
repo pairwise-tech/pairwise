@@ -29,9 +29,13 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
           return (
             <DataCard key={feedback.uuid}>
               <KeyValue label="Type" value={feedback.type} />
-              <KeyValue label="ChallengeId" value={feedback.challengeId} />
+              <KeyValue
+                label="ChallengeId"
+                value={feedback.challengeId}
+                allowCopy
+              />
               <KeyValue label="Feedback" value={feedback.feedback} />
-              <KeyValue label="uuid" value={feedback.uuid} code />
+              <KeyValue label="uuid" value={feedback.uuid} code allowCopy />
               <KeyValue
                 label="createdAt"
                 value={new Date(feedback.createdAt).toDateString()}

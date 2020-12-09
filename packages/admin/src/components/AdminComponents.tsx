@@ -102,11 +102,13 @@ export const DataCard = styled(Card)`
 `;
 
 export const KeyValue = ({
+  allowCopy,
   code,
   label,
   value,
 }: {
   code?: boolean;
+  allowCopy?: boolean;
   label: string;
   value: Nullable<string>;
 }) => (
@@ -114,12 +116,17 @@ export const KeyValue = ({
     <Key>{label}:</Key>
     {code ? (
       value ? (
-        <CodeValue onClick={() => copyToClipboard(value)}>{value}</CodeValue>
+        <CodeValue
+          allowCopy={!!allowCopy}
+          onClick={() => (allowCopy ? copyToClipboard(value) : null)}
+        >
+          {value}
+        </CodeValue>
       ) : (
         <Code>null</Code>
       )
     ) : (
-      <Value onClick={() => copyToClipboard(value)}>
+      <Value allowCopy={!!allowCopy} onClick={() => copyToClipboard(value)}>
         {value ? value : <Code>null</Code>}
       </Value>
     )}
@@ -127,7 +134,7 @@ export const KeyValue = ({
 );
 
 export const LabelRow = styled.div`
-  height: 26px;
+  min-height: 26px;
   display: flex;
   flex-direction: row;
 
@@ -143,25 +150,30 @@ export const Key = styled(Text)`
   font-family: Avenir, Arial, Helvetica, sans-serif;
 `;
 
-export const Value = styled.p`
+export const Value = styled.p<{ allowCopy: boolean }>`
   color: ${COLORS.TEXT_CONTENT} !important;
 
-  :hover {
-    cursor: pointer;
-    color: ${COLORS.TEXT_HOVER} !important;
-  }
+  ${props =>
+    props.allowCopy &&
+    `
+    :hover {
+      cursor: pointer;
+      color: ${COLORS.TEXT_HOVER} !important;
+    }
+  `}
 
   @media ${MOBILE} {
     margin-top: 4px;
   }
 `;
 
-export const CodeValue = styled(Code)`
+export const CodeValue = styled(Code)<{ allowCopy: boolean }>`
+  padding-bottom: 0;
   color: #e97cff !important;
   background: ${COLORS.BACKGROUND_CONTENT} !important;
 
   :hover {
-    cursor: pointer;
+    cursor: ${props => (props.allowCopy ? "pointer" : "auto")};
   }
 
   @media ${MOBILE} {

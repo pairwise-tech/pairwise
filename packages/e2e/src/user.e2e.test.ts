@@ -193,28 +193,6 @@ describe("User APIs", () => {
     done();
   });
 
-  test("/user/profile (POST) non-empty fields cannot be set to empty", async done => {
-    const accessToken = await fetchAccessToken();
-
-    const expectInvalidRequest = async (userUpdate: any) => {
-      await request(`${HOST}/user/profile`)
-        .post("/")
-        .send(userUpdate)
-        .set("Authorization", `Bearer ${accessToken}`)
-        .expect(400)
-        .then(error => {
-          expect(error.body.message).toBe("Invalid parameters provided.");
-        });
-    };
-
-    await expectInvalidRequest({ displayName: "" });
-    await expectInvalidRequest({ givenName: "" });
-    await expectInvalidRequest({ familyName: "" });
-    await expectInvalidRequest({ avatarUrl: "" });
-
-    done();
-  });
-
   test("/active-challenge-ids (POST) validates requests correctly", async done => {
     const accessToken = await fetchAccessToken();
     const authorizationHeader = `Bearer ${accessToken}`;
