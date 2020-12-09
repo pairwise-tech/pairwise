@@ -195,7 +195,7 @@ jobs:
 
   notifications:
     name: Notifications
-    needs: ["sever-deploy", "client-deploy", "admin-deploy", "www-deploy"]
+    needs: ["server-deploy", "client-deploy", "admin-deploy", "www-deploy"]
     runs-on: ubuntu-latest
 
     steps:
