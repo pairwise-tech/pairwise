@@ -41,7 +41,7 @@ env:
   SLACK_STATUS_BOT_ACCESS_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
 
 jobs:
-  deploy-production:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -79,6 +79,12 @@ jobs:
       - name: Run Cypress tests
         run: yarn cypress
 
+  server-deploy:
+    name: Server Deploy
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
       # Setup gcloud CLI
       - name: Setup gcloud CLI
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -115,6 +121,12 @@ jobs:
             --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
             --platform managed
 
+  client-deploy:
+    name: Client Deploy
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
       # Build the client application directly (instead of using Netlify)
       - name: Build the client workspace application
         run: |
@@ -138,6 +150,12 @@ jobs:
             --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
             -t pairwise-production-client
 
+  admin-deploy:
+    name: Admin Deploy
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
       # Same setup as workspace client
       - name: Build the admin client application
         run: |
@@ -155,6 +173,12 @@ jobs:
             --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
             -t pairwise-admin-client
 
+  www-deploy:
+    name: WWW Deploy
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
       # NOTE: We need the static files to be available to the host environment,
       # thus the use of volumes here. This is because we want to use the
       # authenticated and authorized gsutil to deploy the site, and if we
@@ -168,6 +192,16 @@ jobs:
       # Deploy the static WWW site to Cloud Storage
       - name: Deploy pairwise.tech static site
         run: gsutil -m rsync -r packages/www/public gs://www.pairwise.tech
+
+  notifications:
+    name: Notifications
+    needs: ["sever-deploy", "client-deploy", "admin-deploy", "www-deploy"]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dependant is Running
+        run: |
+          echo "All jobs passed"
 
       # Send Slack notification if workflow succeeds
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
