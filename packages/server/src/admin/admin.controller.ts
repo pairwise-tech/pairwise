@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Body,
+  Delete,
 } from "@nestjs/common";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthenticatedRequest } from "../types";
@@ -30,6 +31,7 @@ export type ADMIN_URLS =
   | "admin/user"
   | "admin/users"
   | "admin/feedback"
+  | "admin/feedback/:uuid"
   | "admin/feedback/:challengeId"
   | "admin/payments"
   | "admin/purchase-course"
@@ -185,6 +187,30 @@ export class AdminController {
       const result = await this.feedbackService.getFeedbackForChallenge(
         challengeId,
       );
+      this.slackService.postAdminActionAwarenessMessage(options);
+      return result;
+    } catch (err) {
+      this.handleError(err, options);
+    }
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Delete("/feedback/:uuid")
+  public async deleteFeedbackByUuid(
+    @Param() params,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    const { uuid } = params;
+    // Post status message to Slack
+    const adminUserEmail = req.user.profile.email;
+    const options: AdminRequestOptions = {
+      httpMethod: "DELETE",
+      requestPath: "admin/feedback/:uuid",
+      adminUserEmail,
+    };
+
+    try {
+      const result = await this.feedbackService.deleteFeedbackByUuid(uuid);
       this.slackService.postAdminActionAwarenessMessage(options);
       return result;
     } catch (err) {

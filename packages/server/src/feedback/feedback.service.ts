@@ -54,6 +54,14 @@ export class FeedbackService {
     return SUCCESS_CODES.OK;
   }
 
+  public async deleteFeedbackByUuid(uuid: string) {
+    const feedback = await this.feedbackRepository.findOne({ where: uuid });
+    if (feedback) {
+      await this.feedbackRepository.remove(feedback);
+    }
+    return SUCCESS_CODES.OK;
+  }
+
   public async sendGenericFeedback(
     feedbackDto: IGenericFeedback,
     user?: RequestUser,

@@ -11,6 +11,10 @@ enum ActionTypesEnum {
   FETCH_ALL_FEEDBACK = "FETCH_ALL_FEEDBACK",
   FETCH_ALL_FEEDBACK_SUCCESS = "FETCH_ALL_FEEDBACK_SUCCESS",
   FETCH_ALL_FEEDBACK_FAILURE = "FETCH_ALL_FEEDBACK_FAILURE",
+
+  DELETE_FEEDBACK = "DELETE_FEEDBACK",
+  DELETE_FEEDBACK_SUCCESS = "DELETE_FEEDBACK_SUCCESS",
+  DELETE_FEEDBACK_FAILURE = "DELETE_FEEDBACK_FAILURE",
 }
 
 /** ===========================================================================
@@ -28,4 +32,16 @@ export const fetchAllFeedbackSuccess = createAction(
 
 export const fetchAllFeedbackFailure = createAction(
   ActionTypesEnum.FETCH_ALL_FEEDBACK_FAILURE,
+)<HttpResponseError>();
+
+export const deleteFeedbackByUuid = createAction(
+  ActionTypesEnum.DELETE_FEEDBACK,
+)<string>();
+
+export const deleteFeedbackByUuidSuccess = createAction(
+  ActionTypesEnum.DELETE_FEEDBACK_SUCCESS,
+)<string>();
+
+export const deleteFeedbackByUuidFailure = createAction(
+  ActionTypesEnum.DELETE_FEEDBACK_FAILURE,
 )<HttpResponseError>();

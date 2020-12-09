@@ -218,6 +218,15 @@ class Api extends BaseApiClass {
     });
   };
 
+  deleteFeedbackByUuid = async (uuid: string) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.delete<string>(`${HOST}/admin/feedback/${uuid}`, {
+        headers,
+      });
+    });
+  };
+
   fetchAllPaymentRecords = async () => {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
