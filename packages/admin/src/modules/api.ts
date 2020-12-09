@@ -15,7 +15,7 @@ import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/admin-utils";
 import { UserStoreState } from "./admin/store";
 import { AdminUserView } from "./users/store";
-import { ProgressRecords } from "./realtime/store";
+import { ProgressRecords } from "./stats/store";
 import { FeedbackRecord } from "./feedback/store";
 import { PaymentRecord } from "./payments/store";
 

@@ -8,6 +8,8 @@ import { ProgressRecords } from "./store";
  */
 
 enum ActionTypesEnum {
+  REFRESH_STATS = "REFRESH_STATS",
+
   FETCH_PROGRESS_RECORDS = "FETCH_PROGRESS_RECORDS",
   FETCH_PROGRESS_RECORDS_SUCCESS = "FETCH_PROGRESS_RECORDS_SUCCESS",
   FETCH_PROGRESS_RECORDS_FAILURE = "FETCH_PROGRESS_RECORDS_FAILURE",
@@ -17,6 +19,8 @@ enum ActionTypesEnum {
  * Actions
  * ============================================================================
  */
+
+export const refreshStats = createAction(ActionTypesEnum.REFRESH_STATS)();
 
 export const fetchProgressRecords = createAction(
   ActionTypesEnum.FETCH_PROGRESS_RECORDS,

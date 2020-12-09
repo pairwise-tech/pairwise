@@ -292,7 +292,7 @@ const Header = styled.div`
     left: 0;
     right: 0;
     height: ${BORDER}px;
-    background: ${COLORS.GRADIENT_GREEN};
+    background: ${COLORS.GRADIENT_PINK};
   }
 `;
 

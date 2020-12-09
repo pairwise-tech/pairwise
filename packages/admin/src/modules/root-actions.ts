@@ -5,7 +5,7 @@ import * as User from "./admin/actions";
 import * as Users from "./users/actions";
 import * as Feedback from "./feedback/actions";
 import * as Payments from "./payments/actions";
-import * as Realtime from "./realtime/actions";
+import * as Stats from "./stats/actions";
 
 /** ===========================================================================
  * All Actions
@@ -17,7 +17,7 @@ export const Actions = {
   ...Auth,
   ...User,
   ...Users,
-  ...Realtime,
+  ...Stats,
   ...Feedback,
   ...Payments,
   ...Challenges,
