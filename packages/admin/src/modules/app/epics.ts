@@ -64,9 +64,7 @@ const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
  */
 const appInitializationFailedEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(
-      isActionOf([Actions.fetchAdminUserFailure, Actions.fetchCoursesFailure]),
-    ),
+    filter(isActionOf(Actions.fetchCoursesFailure)),
     mapTo(Actions.appInitializationFailed()),
   );
 };

@@ -13,30 +13,9 @@ export const authState = (state: ReduxStoreState) => {
 
 export const authSelector = createSelector([authState], identity);
 
-export const singleSignOnDialogState = createSelector(
-  authSelector,
-  authStateResult => {
-    return authStateResult.singleSignOnDialogOpen;
-  },
-);
-
-export const emailRequestSent = createSelector(
-  authSelector,
-  authStateResult => {
-    return authStateResult.emailRequestSent;
-  },
-);
-
 export const userAuthenticated = createSelector(
   authSelector,
   authStateResult => {
     return Boolean(authStateResult.accessToken);
-  },
-);
-
-export const loginEmailRequestLoading = createSelector(
-  authSelector,
-  authStateResult => {
-    return authStateResult.emailLoginRequestLoading;
   },
 );

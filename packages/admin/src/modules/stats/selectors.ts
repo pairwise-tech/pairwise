@@ -6,11 +6,11 @@ import { ReduxStoreState } from "modules/root";
  * ============================================================================
  */
 
-export const realtimeState = (state: ReduxStoreState) => {
-  return state.realtime;
+export const statsState = (state: ReduxStoreState) => {
+  return state.stats;
 };
 
 export const progressRecordsSelector = createSelector(
-  [realtimeState],
+  [statsState],
   x => x.progressRecords,
 );

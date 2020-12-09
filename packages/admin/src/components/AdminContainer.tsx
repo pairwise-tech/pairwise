@@ -7,7 +7,7 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { Link } from "react-router-dom";
 import { COLORS, HEADER_HEIGHT, MOBILE } from "tools/constants";
-import AdminSummary from "./AdminSummary";
+import AdminStatsPage from "./AdminStatsPage";
 import AdminIndex from "./AdminIndex";
 import Swipy from "swipyjs";
 import { Button, FocusStyleManager, Icon } from "@blueprintjs/core";
@@ -22,6 +22,8 @@ import AdminKeyboardShortcuts from "./AdminKeyboardShortcuts";
 import AdminUsersPage from "./AdminUsersPage";
 import AdminPaymentsPage from "./AdminPaymentsPage";
 import AdminFeedbackPage from "./AdminFeedbackPage";
+import AdminSearchBox from "./AdminSearchBox";
+import Hugh from "../icons/hugh.jpg";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -49,7 +51,6 @@ const AdminContainer = (props: IProps) => {
     userLoading,
     overlayVisible,
     initializeApp,
-    workspaceLoading,
     userAuthenticated,
     initializationError,
     setNavigationMapState,
@@ -102,17 +103,26 @@ const AdminContainer = (props: IProps) => {
     return null;
   }
 
+  const ready = !initialized || userLoading;
+
   if (initializationError) {
     return <ErrorOverlay />;
-  } else if (!initialized || userLoading) {
-    return <LoadingOverlay visible={workspaceLoading} />;
+  } else if (ready) {
+    return <LoadingOverlay visible />;
   }
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
+  const authRoutes = [
+    <Route key="stats" path="/stats" component={AdminStatsPage} />,
+    <Route key="users" path="/users" component={AdminUsersPage} />,
+    <Route key="payments" path="/payments" component={AdminPaymentsPage} />,
+    <Route key="feedback" path="/feedback" component={AdminFeedbackPage} />,
+    <Route key="redirect" component={() => <Redirect to="/stats" />} />,
+  ];
+
   return (
     <React.Fragment>
-      <LoadingOverlay visible={workspaceLoading} />
       <AdminNavigationMenu isMobile={isMobile} />
       <AdminKeyboardShortcuts />
       <Header>
@@ -135,7 +145,7 @@ const AdminContainer = (props: IProps) => {
               />
               <ProductTitle id="product-title">
                 <Link
-                  to="/home"
+                  to="/stats"
                   id="header-home-link"
                   style={{ display: "flex", alignItems: "center" }}
                 >
@@ -145,74 +155,65 @@ const AdminContainer = (props: IProps) => {
             </>
           )}
         </ControlsContainer>
-        <ControlsContainer style={{ marginLeft: "0", width: "100%" }}>
-          {userLoading ? (
-            <p style={{ margin: 0, marginRight: 10 }}>Loading...</p>
-          ) : isLoggedIn && user.profile ? (
-            <AccountDropdownButton>
-              <div id="account-menu-dropdown" className="account-menu-dropdown">
-                <UserBio>
-                  <CreateAccountText className="account-menu">
-                    {!user.profile.givenName
-                      ? "Hi"
-                      : `Hi, ${user.profile.givenName}!`}
-                  </CreateAccountText>
-                  <Icon icon="shield" />
-                </UserBio>
-                <div className="dropdown-links">
-                  <Link to="/logout" id="logout-link" onClick={logoutUser}>
-                    <Icon icon="log-out" style={{ marginRight: 10 }} />
-                    Logout
-                  </Link>
+        <ControlsContainer style={{ marginLeft: 0, width: "100%" }}>
+          <>
+            {isLoggedIn && <AdminSearchBox />}
+            {userLoading ? (
+              <p style={{ margin: 0, marginRight: 10 }}>Loading...</p>
+            ) : isLoggedIn && user.profile ? (
+              <AccountDropdownButton>
+                <div
+                  id="account-menu-dropdown"
+                  className="account-menu-dropdown"
+                >
+                  <UserBio>
+                    <CreateAccountText className="account-menu">
+                      {!user.profile.givenName
+                        ? "Hi, Admin"
+                        : `Hi, ${user.profile.givenName}!`}
+                    </CreateAccountText>
+                    <img
+                      src={Hugh}
+                      width={32}
+                      height={32}
+                      alt="Profile Avatar"
+                      style={{ borderRadius: "50%" }}
+                    />
+                  </UserBio>
+                  <div className="dropdown-links">
+                    <Link to="/logout" id="logout-link" onClick={logoutUser}>
+                      <Icon icon="log-out" style={{ marginRight: 10 }} />
+                      Logout
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </AccountDropdownButton>
-          ) : (
-            <LoginSignupButton
-              id="login-signup-button"
-              onClick={() => {
-                // Redirect
-                window.location.href = `${ENV.HOST}/auth/admin`;
-              }}
-            >
-              Admin Login
-            </LoginSignupButton>
-          )}
+              </AccountDropdownButton>
+            ) : (
+              <LoginSignupButton
+                id="login-signup-button"
+                onClick={() => {
+                  // Trigger signin with auth url redirect
+                  window.location.href = `${ENV.HOST}/auth/admin`;
+                }}
+              >
+                Admin Login
+              </LoginSignupButton>
+            )}
+          </>
         </ControlsContainer>
       </Header>
       <Switch>
-        {isLoggedIn && (
-          <Route
-            exact
-            key="admin-redirect"
-            path="/"
-            component={() => <Redirect to="/stats" />}
-          />
-        )}
-        {isLoggedIn && (
-          <>
-            <Route key="stats" path="/stats" component={AdminSummary} />
-            <Route key="users" path="/users" component={AdminUsersPage} />
-            <Route
-              key="payments"
-              path="/payments"
-              component={AdminPaymentsPage}
-            />
-            <Route
-              key="feedback"
-              path="/feedback"
-              component={AdminFeedbackPage}
-            />
-          </>
-        )}
+        {isLoggedIn ? authRoutes : null}
         <Route exact key="index" path="/" component={AdminIndex} />
         <Route
           key="logout"
           path="/logout"
           component={() => <Redirect to="/" />}
         />
-        <Route key="404" path="/404" component={LostPage} />
-        <Route key={4} component={() => <Redirect to="/" />} />
+        <Route
+          key="redirect"
+          component={() => <Redirect to={isLoggedIn ? "/stats" : "/"} />}
+        />
       </Switch>
     </React.Fragment>
   );
@@ -285,7 +286,7 @@ const Header = styled.div`
     left: 0;
     right: 0;
     height: ${BORDER}px;
-    background: ${COLORS.GRADIENT_GREEN};
+    background: ${COLORS.GRADIENT_PINK};
   }
 `;
 
@@ -454,41 +455,6 @@ const AccountDropdownButton = styled.div`
   }
 `;
 
-const LostPageContainer = styled.div`
-  margin-top: 150px;
-  padding: 50px;
-  max-width: 650px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-`;
-
-/**
- * A simple 404 UI.
- */
-const LostPage = () => (
-  <LostPageContainer style={{ marginTop: 150 }}>
-    <h1>404: Page Not Found</h1>
-    <p>
-      In your journey to learn programming, you may often encountered this
-      error, which is in fact an HTTP response status code. A response code of
-      404 means the requested resource could not be found.
-    </p>
-    <p>
-      But alas, this is not a Pairwise challenge! You are in fact lost, and this
-      is a real 404 error. You must have visited a url which is wrong or does
-      not exist.
-    </p>
-    <p>
-      Please consider returning <Link to="/home">home</Link> to find your way
-      again.
-    </p>
-  </LostPageContainer>
-);
-
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -498,22 +464,15 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.admin.adminUserSelector(state),
   userLoading: Modules.selectors.admin.loading(state),
   location: Modules.selectors.app.locationSelector(state),
-  screensaverVisible: Modules.selectors.app.screensaverVisible(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
-  nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
   initializationError: Modules.selectors.app.appSelector(state)
     .initializationError,
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
-  workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
-    state,
-  ),
 });
 
 const dispatchProps = {
   logoutUser: Modules.actions.auth.logoutUser,
-  setScreensaverState: Modules.actions.app.setScreensaverState,
-  setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,
   storeAccessToken: Modules.actions.auth.storeAccessToken,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,

@@ -3,7 +3,7 @@
  * ============================================================================
  */
 
-const ACCESS_TOKEN_STORAGE_KEY = "ACCESS_TOKEN_STORAGE_KEY";
+const ADMIN_ACCESS_TOKEN_STORAGE_KEY = "ADMIN_ACCESS_TOKEN_STORAGE_KEY";
 const MOBILE_REDIRECT_KEY = "PW_MOBILE_REDIRECTED";
 
 /** ===========================================================================
@@ -25,7 +25,7 @@ export const setMobileRedirected = (x: boolean): void => {
  * Set the access token.
  */
 export const setAccessTokenInLocalStorage = (accessToken: string) => {
-  localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, accessToken);
+  localStorage.setItem(ADMIN_ACCESS_TOKEN_STORAGE_KEY, accessToken);
 };
 
 /**
@@ -38,7 +38,7 @@ export const logoutUserInLocalStorage = () => setAccessTokenInLocalStorage("");
  */
 export const getAccessTokenFromLocalStorage = () => {
   try {
-    const token = localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+    const token = localStorage.getItem(ADMIN_ACCESS_TOKEN_STORAGE_KEY);
     if (token) {
       return token;
     }

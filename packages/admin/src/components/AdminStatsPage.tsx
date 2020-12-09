@@ -2,17 +2,23 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, JsonComponent } from "./AdminComponents";
+import {
+  PageContainer,
+  JsonComponent,
+  DataCard,
+  KeyValue,
+} from "./AdminComponents";
 import { summarizeUserProgress } from "../tools/admin-utils";
 import { COLORS } from "../tools/constants";
-import { ProgressRecords } from "../modules/realtime/store";
+import { ProgressRecords } from "../modules/stats/store";
+import { Button } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Home Component
  * ============================================================================
  */
 
-class Home extends React.Component<IProps, {}> {
+class AdminStatsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const { usersList, usersListLoading, progressRecords } = this.props;
     if (usersListLoading) {
@@ -22,7 +28,10 @@ class Home extends React.Component<IProps, {}> {
     const summary = summarizeUserProgress(usersList);
     return (
       <PageContainer>
-        <h2>Current Stats:</h2>
+        <Row>
+          <h2>Current Stats:</h2>
+          <Button onClick={this.props.refreshStats}>Refresh Stats</Button>
+        </Row>
         <Stat>
           <b>Total Users:</b>{" "}
           <Value>{summary.stats.totalUsers.toLocaleString()}</Value>
@@ -68,7 +77,19 @@ class Home extends React.Component<IProps, {}> {
     return (
       <>
         <p style={{ color: "white", fontStyle: "italic" }}>{status}</p>
-        <JsonComponent data={records} />
+        {records
+          ? records.map(record => {
+              return (
+                <DataCard key={record.user}>
+                  <KeyValue label="User" value={record.user} />
+                  <JsonComponent
+                    title="Challenges Completed:"
+                    data={record.challenges}
+                  />
+                </DataCard>
+              );
+            })
+          : "No records yet..."}
       </>
     );
   };
@@ -92,6 +113,13 @@ const Value = styled.span`
   color: ${COLORS.PRIMARY_GREEN};
 `;
 
+const Row = styled.div`
+  max-width: 425px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -100,10 +128,12 @@ const Value = styled.span`
 const mapStateToProps = (state: ReduxStoreState) => ({
   usersList: Modules.selectors.users.usersState(state).users,
   usersListLoading: Modules.selectors.users.usersState(state).loading,
-  progressRecords: Modules.selectors.realtime.progressRecordsSelector(state),
+  progressRecords: Modules.selectors.stats.progressRecordsSelector(state),
 });
 
-const dispatchProps = {};
+const dispatchProps = {
+  refreshStats: Modules.actions.stats.refreshStats,
+};
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
@@ -116,4 +146,4 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default withProps(Home);
+export default withProps(AdminStatsPage);

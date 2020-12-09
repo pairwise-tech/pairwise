@@ -171,7 +171,7 @@ const Header = ({ siteTitle = 'Pairwise' }: HeaderProps) => {
         <Nav isOpen={isOpen}>
           <NavLink to="/curriculum">Curriculum</NavLink>
           <NavLink to="/faq">FAQ</NavLink>
-          <NavLink to="/about">About</NavLink>
+          {/* <NavLink to="/about">About</NavLink> */}
           <NavLink to="/contact">Contact</NavLink>
           <Button
             style={{ marginLeft: 10 }}

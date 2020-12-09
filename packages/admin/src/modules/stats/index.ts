@@ -4,14 +4,14 @@ import * as selector from "./selectors";
 import store, { State } from "./store";
 import { ActionType } from "typesafe-actions";
 
-const realtime = {
+const stats = {
   actions,
   epics,
   store,
   selector,
 };
 
-export type RealtimeState = State;
-export type RealtimeActionTypes = ActionType<typeof actions>;
+export type StatsState = State;
+export type StatsActionTypes = ActionType<typeof actions>;
 
-export default realtime;
+export default stats;

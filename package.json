@@ -51,7 +51,7 @@
     "tsc": "lerna run tsc",
     "test": "lerna run test",
     "build": "yarn common:build && lerna run build --parallel",
-    "docker:dependencies": "docker build -t pairwise-dependencies -f Base.Dockerfile .",
+    "docker:dependencies": "docker build -t pairwise-dependencies -f BaseCache.Dockerfile .",
     "docker:build": "docker build -t pairwise-runtime -f packages/e2e/Build.Dockerfile .",
     "docker:build:ci_test": "docker build -t pairwise-runtime -f packages/e2e/Build_Test.Dockerfile .",
     "docker:build:ci_deploy": "docker build -t pairwise-runtime -f packages/e2e/Build_Deploy.Dockerfile .",

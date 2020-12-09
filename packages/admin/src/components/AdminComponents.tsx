@@ -2,8 +2,9 @@ import JSONPretty from "react-json-pretty";
 import React from "react";
 import cx from "classnames";
 import styled, { CSSProperties } from "styled-components/macro";
-import { Button, Classes } from "@blueprintjs/core";
-import { COLORS } from "../tools/constants";
+import { Button, Code, Card, Text, Classes } from "@blueprintjs/core";
+import { COLORS, MOBILE } from "../tools/constants";
+import { copyToClipboard } from "../tools/admin-utils";
 
 /** ===========================================================================
  * Admin Components
@@ -89,20 +90,117 @@ export const OverlaySmallText = styled.p`
   color: ${COLORS.LIGHT_FAILURE};
 `;
 
-export const JsonComponent = (data: any) => {
+export const SummaryText = styled.p`
+  margin-bottom: 25px;
+`;
+
+export const DataCard = styled(Card)`
+  margin-top: 12px;
+  max-width: 625px;
+  overflow-x: scroll;
+  background: ${COLORS.BACKGROUND_CARD} !important;
+`;
+
+export const KeyValue = ({
+  code,
+  label,
+  value,
+}: {
+  code?: boolean;
+  label: string;
+  value: Nullable<string>;
+}) => (
+  <LabelRow>
+    <Key>{label}:</Key>
+    {code ? (
+      value ? (
+        <CodeValue onClick={() => copyToClipboard(value)}>{value}</CodeValue>
+      ) : (
+        <Code>null</Code>
+      )
+    ) : (
+      <Value onClick={() => copyToClipboard(value)}>
+        {value ? value : <Code>null</Code>}
+      </Value>
+    )}
+  </LabelRow>
+);
+
+export const LabelRow = styled.div`
+  height: 26px;
+  display: flex;
+  flex-direction: row;
+
+  @media ${MOBILE} {
+    height: 52px;
+    flex-direction: column;
+  }
+`;
+
+export const Key = styled(Text)`
+  width: 250px;
+  font-weight: 500;
+  font-family: Avenir, Arial, Helvetica, sans-serif;
+`;
+
+export const Value = styled.p`
+  color: ${COLORS.TEXT_CONTENT} !important;
+
+  :hover {
+    cursor: pointer;
+    color: ${COLORS.TEXT_HOVER} !important;
+  }
+
+  @media ${MOBILE} {
+    margin-top: 4px;
+  }
+`;
+
+export const CodeValue = styled(Code)`
+  color: #e97cff !important;
+  background: ${COLORS.BACKGROUND_CONTENT} !important;
+
+  :hover {
+    cursor: pointer;
+  }
+
+  @media ${MOBILE} {
+    margin-top: 4px;
+  }
+`;
+
+export const JsonComponent = ({
+  data,
+  title,
+}: {
+  data: any;
+  title?: string;
+}) => {
+  let json;
+  if (Object.keys(data).length === 0) {
+    json = <p>No data available.</p>;
+  } else {
+    json = (
+      <JSONPretty
+        id="json-pretty"
+        data={data}
+        theme={{
+          key: "color:#fc426d;",
+          value: "color:#e97cff;",
+          string: "color:#ffd755;",
+          main:
+            "background:rgb(35,35,35);padding:8px;max-width:80vw;width:max-content;overflow:scroll;",
+        }}
+        style={{ fontSize: 14 }}
+      />
+    );
+  }
+
   return (
-    <JSONPretty
-      id="json-pretty"
-      data={data}
-      theme={{
-        key: "color:#fc426d;",
-        value: "color:#e97cff;",
-        string: "color:#ffd755;",
-        main:
-          "background:rgb(35,35,35);padding:8px;max-width:90vw;width:max-content;overflow:scroll;",
-      }}
-      style={{ fontSize: 14 }}
-    />
+    <>
+      <p>{title}</p>
+      {json}
+    </>
   );
 };
 

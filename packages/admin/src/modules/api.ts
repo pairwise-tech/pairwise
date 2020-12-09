@@ -15,7 +15,7 @@ import toaster from "tools/toast-utils";
 import { wait, mapCourseSkeletonInDev } from "tools/admin-utils";
 import { UserStoreState } from "./admin/store";
 import { AdminUserView } from "./users/store";
-import { ProgressRecords } from "./realtime/store";
+import { ProgressRecords } from "./stats/store";
 import { FeedbackRecord } from "./feedback/store";
 import { PaymentRecord } from "./payments/store";
 
@@ -121,13 +121,11 @@ class BaseApiClass {
      * error handling higher up into the epics layer. Then again, logout
      * should RARELY occur, so... blegh.
      */
-    toaster.error("Your session has expired, please login again.", {
-      icon: "user",
-    });
+    toaster.error("Unauthorized!", { icon: "user" });
     logoutUserInLocalStorage();
     await wait(1500); /* Wait so they can read the message... */
 
-    // window.location.reload();
+    window.location.reload();
   };
 }
 
@@ -215,6 +213,15 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
       return axios.get<FeedbackRecord[]>(`${HOST}/admin/feedback`, {
+        headers,
+      });
+    });
+  };
+
+  deleteFeedbackByUuid = async (uuid: string) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.delete<string>(`${HOST}/admin/feedback/${uuid}`, {
         headers,
       });
     });

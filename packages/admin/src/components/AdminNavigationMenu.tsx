@@ -62,6 +62,7 @@ class AdminNavigationMenu extends React.Component<
           <ColTitle className="course-select">
             <Button
               fill
+              icon="shield"
               className="mobile-shrink"
               text="Pairwise Admin Menu"
               style={{ whiteSpace: "nowrap" }}

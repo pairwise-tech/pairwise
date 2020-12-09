@@ -9,11 +9,7 @@ import { HttpResponseError } from "modules/api";
  */
 
 enum ActionTypesEnum {
-  WORKSPACE_CHALLENGE_LOADED = "WORKSPACE_CHALLENGE_LOADED",
-
   SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
-
-  SET_CHALLENGE_ID_CONTEXT = "SET_CHALLENGE_ID_CONTEXT",
 
   FETCH_NAVIGATION_SKELETON = "FETCH_NAVIGATION_SKELETON",
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
@@ -30,10 +26,6 @@ enum ActionTypesEnum {
  * ============================================================================
  */
 
-export const setWorkspaceChallengeLoaded = createAction(
-  ActionTypesEnum.WORKSPACE_CHALLENGE_LOADED,
-)();
-
 export const fetchNavigationSkeleton = createAction(
   ActionTypesEnum.FETCH_NAVIGATION_SKELETON,
 )();
@@ -45,15 +37,6 @@ export const fetchNavigationSkeletonSuccess = createAction(
 export const fetchNavigationSkeletonFailure = createAction(
   ActionTypesEnum.FETCH_NAVIGATION_SKELETON_FAILURE,
 )<HttpResponseError>();
-
-export const setChallengeIdContext = createAction(
-  ActionTypesEnum.SET_CHALLENGE_ID_CONTEXT,
-)<{
-  currentModuleId: string;
-  currentCourseId: string;
-  currentChallengeId: Nullable<string>;
-  previousChallengeId: Nullable<string>;
-}>();
 
 export const fetchCoursesSuccess = createAction(
   ActionTypesEnum.FETCH_COURSES_SUCCESS,
