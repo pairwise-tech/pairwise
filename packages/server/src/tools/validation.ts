@@ -216,9 +216,9 @@ export const validateEmailUpdateRequest = (value: string) => {
   }
 };
 
-const checkStringField = (value: any, canBeEmpty = false) => {
+const checkStringField = (value: any, rejectEmptyValues = false) => {
   if (typeof value === "string") {
-    if (!canBeEmpty && value === "") {
+    if (rejectEmptyValues && value === "") {
       throw new Error("Field cannot be empty!");
     }
 
