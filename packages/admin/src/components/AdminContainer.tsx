@@ -113,6 +113,14 @@ const AdminContainer = (props: IProps) => {
 
   const isLoggedIn = userAuthenticated && user.profile !== null;
 
+  const authRoutes = [
+    <Route key="stats" path="/stats" component={AdminStatsPage} />,
+    <Route key="users" path="/users" component={AdminUsersPage} />,
+    <Route key="payments" path="/payments" component={AdminPaymentsPage} />,
+    <Route key="feedback" path="/feedback" component={AdminFeedbackPage} />,
+    <Route key="redirect" component={() => <Redirect to="/stats" />} />,
+  ];
+
   return (
     <React.Fragment>
       <AdminNavigationMenu isMobile={isMobile} />
@@ -184,7 +192,7 @@ const AdminContainer = (props: IProps) => {
               <LoginSignupButton
                 id="login-signup-button"
                 onClick={() => {
-                  // Redirect
+                  // Trigger signin with auth url redirect
                   window.location.href = `${ENV.HOST}/auth/admin`;
                 }}
               >
@@ -195,36 +203,17 @@ const AdminContainer = (props: IProps) => {
         </ControlsContainer>
       </Header>
       <Switch>
-        {isLoggedIn && (
-          <>
-            <Route key="stats" path="/stats" component={AdminStatsPage} />
-            <Route key="users" path="/users" component={AdminUsersPage} />
-            <Route
-              key="payments"
-              path="/payments"
-              component={AdminPaymentsPage}
-            />
-            <Route
-              key="feedback"
-              path="/feedback"
-              component={AdminFeedbackPage}
-            />
-            <Route
-              exact
-              path="/"
-              key="admin-redirect"
-              component={() => <Redirect to="/stats" />}
-            />
-          </>
-        )}
+        {isLoggedIn ? authRoutes : null}
         <Route exact key="index" path="/" component={AdminIndex} />
         <Route
           key="logout"
           path="/logout"
           component={() => <Redirect to="/" />}
         />
-        <Route key="404" path="/404" component={LostPage} />
-        <Route key={4} component={() => <Redirect to="/" />} />
+        <Route
+          key="redirect"
+          component={() => <Redirect to={isLoggedIn ? "/stats" : "/"} />}
+        />
       </Switch>
     </React.Fragment>
   );
@@ -477,29 +466,6 @@ const LostPageContainer = styled.div`
   flex-direction: column;
   text-align: center;
 `;
-
-/**
- * A simple 404 UI.
- */
-const LostPage = () => (
-  <LostPageContainer style={{ marginTop: 150 }}>
-    <h1>404: Page Not Found</h1>
-    <p>
-      In your journey to learn programming, you may often encountered this
-      error, which is in fact an HTTP response status code. A response code of
-      404 means the requested resource could not be found.
-    </p>
-    <p>
-      But alas, this is not a Pairwise challenge! You are in fact lost, and this
-      is a real 404 error. You must have visited a url which is wrong or does
-      not exist.
-    </p>
-    <p>
-      Please consider returning <Link to="/stats">home</Link> to find your way
-      again.
-    </p>
-  </LostPageContainer>
-);
 
 /** ===========================================================================
  * Props
