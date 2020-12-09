@@ -47,8 +47,8 @@ class AdminUsersPage extends React.Component<IProps, IState> {
     const showDetails = this.state.uuid === user.uuid;
     return (
       <DataCard key={user.uuid}>
-        <KeyValue label="Email" value={user.email} />
-        <KeyValue label="uuid" value={user.uuid} code />
+        <KeyValue label="Email" value={user.email} allowCopy />
+        <KeyValue label="uuid" value={user.uuid} code allowCopy />
         <Button
           style={{ marginTop: 6, marginBottom: 12 }}
           onClick={() => {
