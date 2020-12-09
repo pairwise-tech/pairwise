@@ -73,17 +73,19 @@ class AdminStatsPage extends React.Component<IProps, {}> {
     return (
       <>
         <p style={{ color: "white", fontStyle: "italic" }}>{status}</p>
-        {records.map(record => {
-          return (
-            <DataCard key={record.user}>
-              <KeyValue label="User" value={record.user} />
-              <JsonComponent
-                title="Challenges Completed:"
-                data={record.challenges}
-              />
-            </DataCard>
-          );
-        })}
+        {records
+          ? records.map(record => {
+              return (
+                <DataCard key={record.user}>
+                  <KeyValue label="User" value={record.user} />
+                  <JsonComponent
+                    title="Challenges Completed:"
+                    data={record.challenges}
+                  />
+                </DataCard>
+              );
+            })
+          : "No records yet..."}
       </>
     );
   };
