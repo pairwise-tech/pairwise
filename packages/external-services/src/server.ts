@@ -4,7 +4,7 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import mockAuth from "./mock-auth";
-import { purchaseCourseForUserByAdmin } from "./admin-util";
+import { purchaseCourseForUserByAdmin } from "./admin-auth-util";
 import { PORT, SERVER } from "./config";
 
 /** ===========================================================================
