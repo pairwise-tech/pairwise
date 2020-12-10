@@ -14,3 +14,8 @@ export const progressRecordsSelector = createSelector(
   [statsState],
   x => x.progressRecords,
 );
+
+export const statsLoadingSelector = createSelector(
+  [statsState],
+  x => x.loading,
+);

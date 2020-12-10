@@ -18,9 +18,19 @@ export const getChallengeMap = createSelector(
   state => state.challengeMap,
 );
 
+export const challengeDetailId = createSelector(
+  [challengesState],
+  state => state.challengeDetailId,
+);
+
 export const navigationOverlayVisible = createSelector(
   [challengesState],
   challenges => challenges.displayNavigationMap,
+);
+
+export const menuSelectItemIndex = createSelector(
+  [challengesState],
+  challenges => challenges.keySelectedMenuItemIndex,
 );
 
 export const courseList = createSelector(

@@ -22,14 +22,6 @@ interface IState {
 }
 
 class AdminUsersPage extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      uuid: null,
-    };
-  }
-
   render(): Nullable<JSX.Element> {
     const { users } = this.props;
     return (
@@ -44,11 +36,44 @@ class AdminUsersPage extends React.Component<IProps, IState> {
   }
 
   renderUsersList = (user: AdminUserView) => {
+    return <AdminUserComponent user={user} />;
+  };
+}
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const Title = styled.h2``;
+
+interface AdminUserComponentProps {
+  user: AdminUserView;
+}
+
+interface AdminUserComponentState {
+  uuid: Nullable<string>;
+}
+
+export class AdminUserComponent extends React.Component<
+  AdminUserComponentProps,
+  AdminUserComponentState
+> {
+  constructor(props: AdminUserComponentProps) {
+    super(props);
+
+    this.state = {
+      uuid: null,
+    };
+  }
+
+  render(): JSX.Element {
+    const { user } = this.props;
     const showDetails = this.state.uuid === user.uuid;
     return (
       <DataCard key={user.uuid}>
         <KeyValue label="Email" value={user.email} allowCopy />
-        <KeyValue label="uuid" value={user.uuid} code allowCopy />
+        <KeyValue label="uuid" value={user.uuid} code />
         <Button
           style={{ marginTop: 6, marginBottom: 12 }}
           onClick={() => {
@@ -93,15 +118,8 @@ class AdminUsersPage extends React.Component<IProps, IState> {
         </Collapse>
       </DataCard>
     );
-  };
+  }
 }
-
-/** ===========================================================================
- * Styles
- * ============================================================================
- */
-
-const Title = styled.h2``;
 
 /** ===========================================================================
  * Props

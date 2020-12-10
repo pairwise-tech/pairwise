@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, mergeMap, map } from "rxjs/operators";
+import { filter, mergeMap, map, delay } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
@@ -21,6 +21,7 @@ const fetchProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
         Actions.fetchProgressRecords,
       ]),
     ),
+    delay(750),
     mergeMap(deps.api.fetchProgressRecords),
     map(result => {
       if (result.value) {

@@ -30,9 +30,10 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
             <DataCard key={feedback.uuid}>
               <KeyValue label="Type" value={feedback.type} />
               <KeyValue
+                code
+                isChallengeId
                 label="ChallengeId"
                 value={feedback.challengeId}
-                allowCopy
               />
               <KeyValue label="Feedback" value={feedback.feedback} />
               <KeyValue label="uuid" value={feedback.uuid} code allowCopy />

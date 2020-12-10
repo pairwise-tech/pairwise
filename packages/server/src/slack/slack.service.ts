@@ -8,7 +8,6 @@ import {
 import { RequestUser } from "../types";
 import { GenericUserProfile } from "../user/user.service";
 import { captureSentryException } from "../tools/sentry-utils";
-import { ADMIN_URLS, HTTP_METHOD } from "../admin/admin.controller";
 import { SigninStrategy } from "../auth/auth.service";
 
 /** ===========================================================================
@@ -37,8 +36,6 @@ interface SlackAccountCreationMessageData {
 }
 
 export interface AdminRequestOptions {
-  requestPath: ADMIN_URLS;
-  httpMethod: HTTP_METHOD;
   adminUserEmail: string;
 }
 
@@ -99,18 +96,16 @@ export class SlackService {
   }
 
   public async postAdminActionAwarenessMessage({
-    httpMethod,
-    requestPath,
     adminUserEmail,
     config,
   }: SlackAdminMessageData) {
     console.log(
-      `Handling admin request for admin API: *[${httpMethod}]:* \`${requestPath}\` by user: ${adminUserEmail}`,
+      `Handling admin request for admin API by user: ${adminUserEmail}`,
     );
 
     // Only report for admin access token users
     if (adminUserEmail === "admin-access-token-user@pairwise.tech") {
-      const alert = `:sunglasses: Action taken by Admin User: \`${adminUserEmail}\`. Requested admin API: *[${httpMethod}]:* \`${requestPath}\`.`;
+      const alert = `:sunglasses: Action taken by Admin User: \`${adminUserEmail}\`.`;
       await this.postMessageToChannel(alert, {
         channel: "production",
         ...config,
@@ -177,11 +172,9 @@ export class SlackService {
 
   public async postAdminErrorMessage({
     error,
-    httpMethod,
-    requestPath,
     adminUserEmail,
   }: SlackAdminErrorMessageData) {
-    const message = `:skull_and_crossbones: Admin API request for *[${httpMethod}]:* \`${requestPath}\` from user: \`${adminUserEmail}\` failed, here's what we known: ${error}`;
+    const message = `:skull_and_crossbones: Admin API request for user: \`${adminUserEmail}\` failed, here's what we known: ${error}`;
     await this.postMessageToChannel(message, { channel: "production" });
   }
 

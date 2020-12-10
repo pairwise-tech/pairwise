@@ -1,8 +1,10 @@
+import { validate as validateEmail } from "email-validator";
 import { compose } from "redux";
 import { CourseList, CourseSkeleton } from "@pairwise/common";
 import { ParsedQuery } from "query-string";
 import { AdminUserView } from "../modules/users/store";
 import toaster from "../tools/toast-utils";
+import { AdminSearchResult } from "../components/AdminSearchPage";
 
 /**
  * Artificially wait the provided amount of time.
@@ -334,5 +336,24 @@ export const copyToClipboard = (text: Nullable<string>) => {
     navigator.clipboard.writeText(text).then(() => {
       toaster.success(`Copied: ${text}`);
     });
+  }
+};
+
+/**
+ * Parse an admin search query with simple logic.
+ */
+export const parseSearchQuery = (
+  query: string,
+): Nullable<AdminSearchResult> => {
+  if (!query) {
+    return null;
+  }
+
+  if (validateEmail(query)) {
+    return { type: "email", value: query };
+  } else if (query.length < 10) {
+    return { type: "challengeId", value: query };
+  } else {
+    return { type: "uuid", value: query };
   }
 };

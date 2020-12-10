@@ -1,8 +1,11 @@
 import { createReducer } from "typesafe-actions";
-import { CourseList, CourseSkeletonList } from "@pairwise/common";
+import {
+  CourseList,
+  CourseSkeletonList,
+  InverseChallengeMapping,
+} from "@pairwise/common";
 import * as actions from "./actions";
 import App, { AppActionTypes } from "../app/index";
-import { InverseChallengeMapping } from "./types";
 import { ChallengesActionTypes } from "./index";
 
 /** ===========================================================================
@@ -11,10 +14,12 @@ import { ChallengesActionTypes } from "./index";
  */
 
 export interface State {
+  keySelectedMenuItemIndex: Nullable<number>;
   courses: Nullable<CourseList>;
   courseSkeletons: Nullable<CourseSkeletonList>;
   challengeMap: Nullable<InverseChallengeMapping>;
   displayNavigationMap: boolean;
+  challengeDetailId: Nullable<string>;
 }
 
 const initialState: State = {
@@ -22,6 +27,8 @@ const initialState: State = {
   courseSkeletons: null,
   challengeMap: null,
   displayNavigationMap: false,
+  keySelectedMenuItemIndex: null,
+  challengeDetailId: null,
 };
 
 /** ===========================================================================
@@ -36,9 +43,19 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     displayNavigationMap: action.payload,
   }))
+  .handleAction(actions.setMenuItemSelectIndex, (state, action) => ({
+    ...state,
+    keySelectedMenuItemIndex: action.payload,
+  }))
+  .handleAction(actions.setChallengeDetailId, (state, action) => ({
+    ...state,
+    challengeDetailId: action.payload,
+  }))
   .handleAction(App.actions.locationChange, (state, action) => ({
     ...state,
+    challengeDetailId: null,
     displayNavigationMap: false,
+    keySelectedMenuItemIndex: null,
   }))
   .handleAction(actions.storeInverseChallengeMapping, (state, action) => ({
     ...state,

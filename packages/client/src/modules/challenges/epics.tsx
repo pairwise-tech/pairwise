@@ -11,6 +11,7 @@ import {
   ICodeBlobDto,
   SandboxBlob,
   Challenge,
+  createInverseChallengeMapping,
   CourseList,
   LastActiveChallengeIds,
   getChallengeSlug,
@@ -43,7 +44,6 @@ import {
 import {
   deriveIdsFromCourseWithDefaults,
   findChallengeIdInLocationIfExists,
-  createInverseChallengeMapping,
   isContentOnlyChallenge,
   getChallengeProgress,
 } from "tools/utils";

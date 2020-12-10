@@ -1,4 +1,4 @@
-import { Challenge, Module, Course, CourseList } from "@pairwise/common";
+import { Challenge, Module, CourseList } from "@pairwise/common";
 import { BUILD_SEARCH_INDEX, SEARCH, SEARCH_SUCCESS } from "tools/constants";
 
 /** ===========================================================================
@@ -10,17 +10,6 @@ import { BUILD_SEARCH_INDEX, SEARCH, SEARCH_SUCCESS } from "tools/constants";
  *     - Challenge List (many challenges: {challengeData})
  * ============================================================================
  */
-
-export interface InverseChallengeMapping {
-  [k: string]: {
-    courseId: string;
-    moduleId: string;
-    challenge: {
-      id: string;
-      title: string;
-    };
-  };
-}
 
 export interface ChallengeCreationPayload {
   insertionIndex: number; // Index at which to insert this new challenge

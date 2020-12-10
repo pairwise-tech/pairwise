@@ -1,6 +1,9 @@
-import { Course, CourseSkeletonList } from "@pairwise/common";
+import {
+  Course,
+  CourseSkeletonList,
+  InverseChallengeMapping,
+} from "@pairwise/common";
 import { createAction } from "typesafe-actions";
-import { InverseChallengeMapping } from "./types";
 import { HttpResponseError } from "modules/api";
 
 /** ===========================================================================
@@ -19,6 +22,10 @@ enum ActionTypesEnum {
   FETCH_COURSES_FAILURE = "FETCH_COURSES_FAILURE",
 
   STORE_INVERSE_CHALLENGE_MAP = "STORE_INVERSE_CHALLENGE_MAP",
+
+  SET_MENU_ITEM_SELECT_INDEX = "SET_MENU_ITEM_SELECT_INDEX",
+
+  SET_CHALLENGE_DETAIL_ID = "SET_CHALLENGE_DETAIL_ID",
 }
 
 /** ===========================================================================
@@ -53,3 +60,11 @@ export const storeInverseChallengeMapping = createAction(
 export const setNavigationMapState = createAction(
   ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
 )<boolean>();
+
+export const setMenuItemSelectIndex = createAction(
+  ActionTypesEnum.SET_MENU_ITEM_SELECT_INDEX,
+)<number>();
+
+export const setChallengeDetailId = createAction(
+  ActionTypesEnum.SET_CHALLENGE_DETAIL_ID,
+)<Nullable<string>>();

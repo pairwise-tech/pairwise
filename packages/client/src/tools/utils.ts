@@ -15,7 +15,7 @@ import {
   ChallengeSkeletonList,
   ProjectChallengeBlob,
   CourseList,
-  Course,
+  createInverseChallengeMapping,
   UserProgressMap,
   CourseSkeleton,
   getChallengeSlug,
@@ -23,7 +23,6 @@ import {
 import { SANDBOX_ID } from "./constants";
 import { Location } from "history";
 import { IconName } from "@blueprintjs/core";
-import { InverseChallengeMapping } from "modules/challenges/types";
 import { ParsedQuery } from "query-string";
 
 /** ===========================================================================
@@ -331,48 +330,6 @@ export const partitionChallengesBySection = (
 export const findCourseById = (courseId: string, courses: CourseList) => {
   const course = courses.find(c => c.id === courseId);
   return course;
-};
-
-/**
- * Given a list of courses, create a mapping of all challenge ids to both their
- * module id and course id. Since our URLs don't (currently) indicate course or
- * module we need to derive the course and module for a given challenge ID. This
- * derives all such relationships in one go so it can be referenced later.
- */
-export const createInverseChallengeMapping = (
-  courses: Course[],
-): InverseChallengeMapping => {
-  const result = courses.reduce((challengeMap, c) => {
-    const courseId = c.id;
-    const cx = c.modules.reduce((courseChallengeMap, m) => {
-      const moduleId = m.id;
-      const mx = m.challenges.reduce((moduleChallengeMap, challenge) => {
-        return {
-          ...moduleChallengeMap,
-          [challenge.id]: {
-            moduleId,
-            courseId,
-            challenge: {
-              id: challenge.id,
-              title: challenge.title,
-            },
-          },
-        };
-      }, {});
-
-      return {
-        ...courseChallengeMap,
-        ...mx,
-      };
-    }, {});
-
-    return {
-      ...challengeMap,
-      ...cx,
-    };
-  }, {});
-
-  return result;
 };
 
 /**
