@@ -12,7 +12,6 @@ import {
 } from "./AdminComponents";
 import { Collapse, Button, Alert, Intent } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
-import { COLORS } from "../tools/constants";
 
 /** ===========================================================================
  * AdminUsersPage Component
