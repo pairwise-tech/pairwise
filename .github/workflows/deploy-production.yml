@@ -261,7 +261,7 @@ jobs:
   # Provide a success confirmation to Slack when all the jobs pass
   deploy-production-success:
     name: Deploy Production Success
-    needs: ["server-deploy", "client-deploy", "admin-deploy", "www-deploy"]
+    needs: ["server-deploy", "client-deploy", "admin-deploy", "website-deploy"]
     runs-on: ubuntu-latest
 
     steps:
