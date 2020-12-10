@@ -1,6 +1,6 @@
 # FROM pairwise-runtime AS pairwise-server-build
 
-FROM docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest as build
+FROM docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest AS pairwise-server-build
 
 # Copy everything
 COPY . .
