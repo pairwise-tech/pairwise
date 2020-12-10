@@ -4,6 +4,7 @@ import {
   Challenge,
   CourseList,
   CourseSkeletonList,
+  InverseChallengeMapping,
   DataBlob,
   ModuleList,
 } from "@pairwise/common";
@@ -15,7 +16,6 @@ import * as actions from "./actions";
 import App, { AppActionTypes } from "../app/index";
 import {
   ChallengeCreationPayload,
-  InverseChallengeMapping,
   ModuleCreationPayload,
   ChallengeDeletePayload,
   ChallengeReorderPayload,
