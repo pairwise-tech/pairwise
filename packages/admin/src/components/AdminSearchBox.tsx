@@ -6,21 +6,16 @@ import { InputGroup } from "@blueprintjs/core";
 import { KeyboardShortcuts } from "./AdminKeyboardShortcuts";
 import cx from "classnames";
 import { COLORS } from "../tools/constants";
-import toaster from "../tools/toast-utils";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 /** ===========================================================================
  * AdminSearchBox Component
  * ============================================================================
  */
 
-// NOTE: isClosed is kept in state because sometimes we want the search pane to
-// be closed even if there are search results. For example, the user clicks
-// outside the search pane. In such a case there are still results but we don't
-// want to show the pane. When the search pane is focused we always show the
-// result box, so we can report when there are no search results to the user.
-const AdminSearchBox = ({ onBlur, onFocus }: Props) => {
+const AdminSearchBox = (props: Props) => {
   const [searchText, setSearchText] = React.useState("");
-  const [isClosed, setIsClosed] = React.useState(false); // See NOTE
+  const [isClosed, setIsClosed] = React.useState(false);
 
   let searchInput: Nullable<HTMLInputElement> = null;
 
@@ -45,11 +40,8 @@ const AdminSearchBox = ({ onBlur, onFocus }: Props) => {
   const handleFocus = React.useCallback(
     (e: any) => {
       setIsClosed(false);
-      // What is this linting? We need to know onFocus is defined, it's not unused at all.
-      // tslint:disable-next-line: no-unused-expression
-      onFocus && onFocus(e);
     },
-    [setIsClosed, onFocus],
+    [setIsClosed],
   );
 
   const handleChange = React.useCallback(
@@ -65,10 +57,10 @@ const AdminSearchBox = ({ onBlur, onFocus }: Props) => {
   const handleKeyPress = React.useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" && !!searchText) {
-        toaster.warn("Search Coming Soon...");
+        props.history.push(`/search/${searchText}`);
       }
     },
-    [searchText],
+    [searchText, props.history],
   );
 
   return (
@@ -89,7 +81,6 @@ const AdminSearchBox = ({ onBlur, onFocus }: Props) => {
         value={searchText}
         placeholder="Enter a challenge id, user uuid, email, etc."
         onFocus={handleFocus}
-        onBlur={onBlur}
         inputRef={(ref: HTMLInputElement | null) => {
           searchInput = ref;
         }}
@@ -157,18 +148,15 @@ const mapStateToProps = (state: ReduxStoreState) => ({});
 
 const dispatchProps = {};
 
-interface OwnProps {
-  onBlur?: (e: any) => any;
-  onFocus?: (e: any) => any;
-}
-
 type Props = ReturnType<typeof mapStateToProps> &
   typeof dispatchProps &
-  OwnProps;
+  RouteComponentProps;
 
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default connect(mapStateToProps, dispatchProps)(AdminSearchBox);
+export default withRouter(
+  connect(mapStateToProps, dispatchProps)(AdminSearchBox),
+);

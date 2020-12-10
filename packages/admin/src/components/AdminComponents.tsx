@@ -5,6 +5,7 @@ import styled from "styled-components/macro";
 import { Button, Code, Card, Text, Classes } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { copyToClipboard } from "../tools/admin-utils";
+import { Link } from "react-router-dom";
 
 /** ===========================================================================
  * Admin Components
@@ -75,36 +76,53 @@ export const DataCard = styled(Card)`
 `;
 
 export const KeyValue = ({
-  allowCopy,
   code,
   label,
   value,
+  allowCopy,
+  allowLinkToDetail,
 }: {
   code?: boolean;
   allowCopy?: boolean;
+  allowLinkToDetail?: boolean;
   label: string;
   value: Nullable<string>;
-}) => (
-  <LabelRow>
-    <Key>{label}:</Key>
-    {code ? (
-      value ? (
-        <CodeValue
-          allowCopy={!!allowCopy}
-          onClick={() => (allowCopy ? copyToClipboard(value) : null)}
-        >
-          {value}
-        </CodeValue>
+}) => {
+  const handleClickValue = () => {
+    if (allowLinkToDetail) {
+      window.location.href = "";
+    } else if (allowCopy) {
+      copyToClipboard(value);
+    }
+  };
+
+  return (
+    <LabelRow>
+      <Key>{label}:</Key>
+      {code ? (
+        value ? (
+          allowLinkToDetail ? (
+            <Link to={`/search/${value}`}>
+              <CodeValue allowCopy={!!allowCopy || !!allowLinkToDetail}>
+                {value}
+              </CodeValue>
+            </Link>
+          ) : (
+            <CodeValue allowCopy={!!allowCopy} onClick={handleClickValue}>
+              {value}
+            </CodeValue>
+          )
+        ) : (
+          <Code>null</Code>
+        )
       ) : (
-        <Code>null</Code>
-      )
-    ) : (
-      <Value allowCopy={!!allowCopy} onClick={() => copyToClipboard(value)}>
-        {value ? value : <Code>null</Code>}
-      </Value>
-    )}
-  </LabelRow>
-);
+        <Value allowCopy={!!allowCopy} onClick={handleClickValue}>
+          {value ? value : <Code>null</Code>}
+        </Value>
+      )}
+    </LabelRow>
+  );
+};
 
 export const LabelRow = styled.div`
   min-height: 26px;
