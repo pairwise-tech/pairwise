@@ -236,6 +236,28 @@ class Api extends BaseApiClass {
     });
   };
 
+  giftCourseForUser = async (userEmail: string) => {
+    return this.httpHandler(async () => {
+      // Course id is hard-coded for now
+      const body = { userEmail, courseId: "fpvPtfu7s" };
+      const { headers } = this.getRequestHeaders();
+      return axios.post<string>(`${HOST}/admin/purchase-course`, body, {
+        headers,
+      });
+    });
+  };
+
+  refundCourseForUser = async (userEmail: string) => {
+    return this.httpHandler(async () => {
+      // Course id is hard-coded for now
+      const body = { userEmail, courseId: "fpvPtfu7s" };
+      const { headers } = this.getRequestHeaders();
+      return axios.post<string>(`${HOST}/admin/refund-course`, body, {
+        headers,
+      });
+    });
+  };
+
   fetchUserProfile = async () => {
     const { headers, authenticated } = this.getRequestHeaders();
 

@@ -200,6 +200,11 @@ export const CodeValue = styled(Code)<{ copy: string }>`
   }
 `;
 
+export const CodeText = styled(Code)`
+  color: #e97cff !important;
+  background: ${COLORS.BACKGROUND_CONTENT} !important;
+`;
+
 export const JsonComponent = ({
   data,
   title,

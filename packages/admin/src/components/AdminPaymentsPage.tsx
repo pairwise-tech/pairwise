@@ -28,7 +28,7 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
             <DataCard key={payment.uuid}>
               <KeyValue label="status" value={payment.status} />
               <KeyValue label="paymentType" value={payment.paymentType} />
-              <KeyValue label="courseId" value={payment.courseId} />
+              <KeyValue label="courseId" value={payment.courseId} code />
               <KeyValue label="amountPaid" value={payment.amountPaid} />
               <KeyValue
                 label="datePaid"
