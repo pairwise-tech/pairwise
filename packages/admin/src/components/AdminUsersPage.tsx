@@ -8,6 +8,7 @@ import {
   DataCard,
   KeyValue,
   SummaryText,
+  ExternalLink,
 } from "./AdminComponents";
 import { Collapse, Button, Alert, Intent } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
@@ -121,7 +122,6 @@ class AdminUserBaseComponent extends React.Component<
         <div style={{ marginTop: 12, marginBottom: 12 }}>
           <Button
             icon="info-sign"
-            style={{ marginRight: 12 }}
             onClick={() => {
               if (showDetails) {
                 this.setState({ uuid: null });
@@ -131,6 +131,11 @@ class AdminUserBaseComponent extends React.Component<
             }}
           >
             {showDetails ? "Hide" : "View"} User Details
+          </Button>
+          <Button style={{ marginLeft: 12, marginRight: 12 }} icon="inbox">
+            <ExternalLink link={`mailto:${user.email}`}>
+              Email User
+            </ExternalLink>
           </Button>
           {!payment ? (
             <Button
@@ -147,9 +152,7 @@ class AdminUserBaseComponent extends React.Component<
               Refund Course
             </Button>
           ) : (
-            <span style={{ color: COLORS.GRAY_TEXT }}>
-              Payment has been refunded.
-            </span>
+            <Button disabled>Payment has been refunded.</Button>
           )}
         </div>
         <Collapse isOpen={showDetails}>

@@ -9,6 +9,7 @@ import {
   SummaryText,
 } from "./AdminComponents";
 import { Button } from "@blueprintjs/core";
+import { Link } from "react-router-dom";
 
 /** ===========================================================================
  * Home Component
@@ -39,15 +40,15 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
               />
               <KeyValue label="Feedback" value={feedback.feedback} />
               <KeyValue
-                label="Author"
-                value={email ? email : "Anonymous"}
                 allowCopy
+                label="Feedback Author"
+                value={email ? email : "Anonymous"}
               />
               <KeyValue
+                allowCopy
+                code={!!user}
                 label="Author uuid"
                 value={user ? user.uuid : "n/a"}
-                code
-                allowCopy
               />
               <KeyValue
                 label="createdAt"
@@ -60,6 +61,13 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
               >
                 Delete Feedback Record
               </Button>
+              {user && (
+                <Link to={`/search/${user.uuid}`}>
+                  <Button style={{ marginTop: 6, marginLeft: 12 }}>
+                    View Feedback Author
+                  </Button>
+                </Link>
+              )}
             </DataCard>
           );
         })}
