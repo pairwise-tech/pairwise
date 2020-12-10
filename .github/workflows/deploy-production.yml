@@ -1,17 +1,11 @@
-# This is the source of truth for Pairwise Production.
-#
-# This workflow deploys the server and both client applications to
-# production. It runs whenever a commit hits master. The deployments are
-# as follows:
+# This is the production deploy workflow which builds and tests all the
+# packages and then deploys all of the services in parallel:
 #
 # - Server: Deployed to Google Cloud Run
 # - Client Workspace: Deployed with Netlify
-# - WWW Landing Page: Deployed via Google with Cloud Storage
+# - Admin UI: Deployed with Netlify
+# - Website: Deployed via Google with Cloud Storage
 #
-# This workflow builds everything and runs the same full test suite which
-# runs against pull requests and then deploys each of the applications. It
-# takes a long time to run, but it is glorious.
-
 # Reference docs:
 # https://github.com/GoogleCloudPlatform/github-actions/blob/master/example-workflows/cloud-run/.github/workflows/cloud-run.yml
 # https://cloud.google.com/run/docs/building/containers
@@ -68,17 +62,17 @@ jobs:
       - name: Build all packages
         run: yarn docker:build:ci_deploy
 
-      # # Run all package unit tests
-      # - name: Run static and unit tests
-      #   run: yarn docker:test
+      # Run all package unit tests
+      - name: Run static and unit tests
+        run: yarn docker:test
 
-      # # Run e2e tests
-      # - name: Run e2e tests
-      #   run: yarn e2e
+      # Run e2e tests
+      - name: Run e2e tests
+        run: yarn e2e
 
-      # # Run Cypress tests
-      # - name: Run Cypress tests
-      #   run: yarn cypress
+      # Run Cypress tests
+      - name: Run Cypress tests
+        run: yarn cypress
 
       # Send Slack notification if workflow fails
       - name: Notify Slack on workflow failure
@@ -110,7 +104,7 @@ jobs:
 
       # Setup gcloud CLI
       - name: Setup gcloud CLI
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud
         with:
           service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
