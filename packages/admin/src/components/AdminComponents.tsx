@@ -132,7 +132,7 @@ export const Key = styled(Text)`
 
 export const Value = styled.p<{ copy: string }>`
   height: auto;
-  width: 350px;
+  max-width: 350px;
   color: ${COLORS.TEXT_CONTENT} !important;
 
   ${props =>
@@ -214,10 +214,10 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
   const { challenge, courseId, moduleId } = props;
   return (
     <DataCard key={challenge.id}>
-      <KeyValue label="type" value={challenge.type} />
-      <KeyValue label="title" value={challenge.title} />
-      <KeyValue label="instructions" value={challenge.instructions} />
-      <KeyValue label="content" value={challenge.content} />
+      <KeyValue label="Challenge Type" value={challenge.type} />
+      <KeyValue label="Title" value={challenge.title} />
+      <KeyValue label="Instructions" value={challenge.instructions} />
+      <KeyValue label="Content" value={challenge.content} />
       <KeyValue label="challengeId" value={challenge.id} code allowCopy />
       <KeyValue label="moduleId" value={moduleId} code allowCopy />
       <KeyValue label="courseId" value={courseId} code allowCopy />

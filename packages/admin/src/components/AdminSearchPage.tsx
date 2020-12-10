@@ -77,7 +77,12 @@ class AdminSearchPage extends React.Component<IProps, {}> {
         if (user) {
           return <AdminUserComponent user={user} />;
         } else {
-          return <p>No user could be found with this email.</p>;
+          return (
+            <p>
+              No user could be found with this uuid. Note that non-user uuid
+              searches are not supported.
+            </p>
+          );
         }
       }
       case "challengeId": {
@@ -93,7 +98,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
           return (
             <p>
               No challenge could be found with this id. It could be a module or
-              course id.
+              course id (not supported for search by id).
             </p>
           );
         }
