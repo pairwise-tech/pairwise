@@ -1,12 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, SummaryText } from "./AdminComponents";
+import {
+  PageContainer,
+  SummaryText,
+  ChallengeContextCard,
+} from "./AdminComponents";
 import { RouteComponentProps } from "react-router-dom";
 import { parseSearchQuery } from "../tools/admin-utils";
 import { AdminUserComponent } from "./AdminUsersPage";
 import { assertUnreachable } from "@pairwise/common";
+import { COLORS } from "../tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -34,7 +38,9 @@ class AdminSearchPage extends React.Component<IProps, {}> {
         {result ? (
           <>
             <SummaryText>
-              Displaying results for search query: <i>{params.query}</i>
+              Displaying results for search query{" "}
+              <i style={{ color: COLORS.SECONDARY_YELLOW }}>{params.query}</i>,
+              identified as <b>{result.type}</b>.
             </SummaryText>
             {this.renderSearchResult(result)}
           </>
@@ -81,9 +87,15 @@ class AdminSearchPage extends React.Component<IProps, {}> {
 
         const id = result.value;
         if (id in challengeMap) {
-          return <p>{JSON.stringify(challengeMap[id])}</p>;
+          const result = challengeMap[id];
+          return <ChallengeContextCard {...result} />;
         } else {
-          return <p>No challenge could be found with this id.</p>;
+          return (
+            <p>
+              No challenge could be found with this id. It could be a module or
+              course id.
+            </p>
+          );
         }
       }
       default: {

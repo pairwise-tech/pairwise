@@ -115,7 +115,7 @@ export class AdminController {
   }
 
   @UseGuards(AdminAuthGuard)
-  @Get("/payments")
+  @Get("/content")
   public async getAllCourses(@Request() req: AuthenticatedRequest) {
     const adminUserEmail = req.user.profile.email;
 

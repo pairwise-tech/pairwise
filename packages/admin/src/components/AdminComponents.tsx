@@ -5,6 +5,7 @@ import styled from "styled-components/macro";
 import { Button, Code, Card, Text, Classes } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { copyToClipboard } from "../tools/admin-utils";
+import { Challenge } from "@pairwise/common";
 
 /** ===========================================================================
  * Admin Components
@@ -85,23 +86,29 @@ export const KeyValue = ({
   allowCopy?: boolean;
   value: Nullable<string>;
 }) => {
-  const handleCopy = () => copyToClipboard(value);
+  const handleCopy = () => {
+    if (allowCopy) {
+      copyToClipboard(value);
+    }
+  };
   return (
     <LabelRow>
       <Key>{label}:</Key>
-      {code ? (
-        value ? (
-          <CodeValue allowCopy={!!allowCopy} onClick={handleCopy}>
-            {value}
-          </CodeValue>
+      <span>
+        {code ? (
+          value ? (
+            <CodeValue copy={(!!allowCopy).toString()} onClick={handleCopy}>
+              {value}
+            </CodeValue>
+          ) : (
+            <Code>null</Code>
+          )
         ) : (
-          <Code>null</Code>
-        )
-      ) : (
-        <Value allowCopy={!!allowCopy} onClick={handleCopy}>
-          {value ? value : <Code>null</Code>}
-        </Value>
-      )}
+          <Value copy={(!!allowCopy).toString()} onClick={handleCopy}>
+            {value ? value : <Code>null</Code>}
+          </Value>
+        )}
+      </span>
     </LabelRow>
   );
 };
@@ -112,22 +119,24 @@ export const LabelRow = styled.div`
   flex-direction: row;
 
   @media ${MOBILE} {
-    height: 52px;
+    min-height: 52px;
     flex-direction: column;
   }
 `;
 
 export const Key = styled(Text)`
-  width: 250px;
+  width: 225px;
   font-weight: 500;
   font-family: Avenir, Arial, Helvetica, sans-serif;
 `;
 
-export const Value = styled.p<{ allowCopy: boolean }>`
+export const Value = styled.p<{ copy: string }>`
+  height: auto;
+  width: 350px;
   color: ${COLORS.TEXT_CONTENT} !important;
 
   ${props =>
-    props.allowCopy &&
+    props.copy === "true" &&
     `
     :hover {
       cursor: pointer;
@@ -140,13 +149,13 @@ export const Value = styled.p<{ allowCopy: boolean }>`
   }
 `;
 
-export const CodeValue = styled(Code)<{ allowCopy: boolean }>`
-  padding-bottom: 0;
+export const CodeValue = styled(Code)<{ copy: string }>`
+  height: auto;
   color: #e97cff !important;
   background: ${COLORS.BACKGROUND_CONTENT} !important;
 
   :hover {
-    cursor: ${props => (props.allowCopy ? "pointer" : "auto")};
+    cursor: ${props => (props.copy === "true" ? "pointer" : "auto")};
   }
 
   @media ${MOBILE} {
@@ -192,6 +201,27 @@ export const JsonComponent = ({
       <p>{title}</p>
       {json}
     </>
+  );
+};
+
+interface ChallengeContextCardProps {
+  courseId: string;
+  moduleId: string;
+  challenge: Challenge;
+}
+
+export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
+  const { challenge, courseId, moduleId } = props;
+  return (
+    <DataCard key={challenge.id}>
+      <KeyValue label="type" value={challenge.type} />
+      <KeyValue label="title" value={challenge.title} />
+      <KeyValue label="instructions" value={challenge.instructions} />
+      <KeyValue label="content" value={challenge.content} />
+      <KeyValue label="challengeId" value={challenge.id} code allowCopy />
+      <KeyValue label="moduleId" value={moduleId} code allowCopy />
+      <KeyValue label="courseId" value={courseId} code allowCopy />
+    </DataCard>
   );
 };
 

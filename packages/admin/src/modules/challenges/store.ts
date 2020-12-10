@@ -1,8 +1,11 @@
 import { createReducer } from "typesafe-actions";
-import { CourseList, CourseSkeletonList } from "@pairwise/common";
+import {
+  CourseList,
+  CourseSkeletonList,
+  InverseChallengeMapping,
+} from "@pairwise/common";
 import * as actions from "./actions";
 import App, { AppActionTypes } from "../app/index";
-import { InverseChallengeMapping } from "./types";
 import { ChallengesActionTypes } from "./index";
 
 /** ===========================================================================

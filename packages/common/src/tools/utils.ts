@@ -1,4 +1,4 @@
-import { Course } from "../types/courses";
+import { Course, Challenge } from "../types/courses";
 
 /**
  * Assert a condition cannot occur. Used for writing exhaustive switch
@@ -38,10 +38,7 @@ export interface InverseChallengeMapping {
   [k: string]: {
     courseId: string;
     moduleId: string;
-    challenge: {
-      id: string;
-      title: string;
-    };
+    challenge: Challenge;
   };
 }
 
@@ -64,10 +61,7 @@ export const createInverseChallengeMapping = (
           [challenge.id]: {
             moduleId,
             courseId,
-            challenge: {
-              id: challenge.id,
-              title: challenge.title,
-            },
+            challenge,
           },
         };
       }, {});

@@ -1,6 +1,9 @@
-import { Course, CourseSkeletonList } from "@pairwise/common";
+import {
+  Course,
+  CourseSkeletonList,
+  InverseChallengeMapping,
+} from "@pairwise/common";
 import { createAction } from "typesafe-actions";
-import { InverseChallengeMapping } from "./types";
 import { HttpResponseError } from "modules/api";
 
 /** ===========================================================================
