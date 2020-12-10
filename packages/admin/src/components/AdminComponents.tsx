@@ -1,3 +1,4 @@
+import Markdown from "react-markdown";
 import JSONPretty from "react-json-pretty";
 import React from "react";
 import cx from "classnames";
@@ -80,10 +81,12 @@ export const KeyValue = ({
   label,
   value,
   allowCopy,
+  renderAsMarkdown,
 }: {
   code?: boolean;
   label: string;
   allowCopy?: boolean;
+  renderAsMarkdown?: boolean;
   value: Nullable<string>;
 }) => {
   const handleCopy = () => {
@@ -104,9 +107,17 @@ export const KeyValue = ({
             <Code>null</Code>
           )
         ) : (
-          <Value copy={(!!allowCopy).toString()} onClick={handleCopy}>
-            {value ? value : <Code>null</Code>}
-          </Value>
+          <ValueContainer copy={(!!allowCopy).toString()} onClick={handleCopy}>
+            {value ? (
+              renderAsMarkdown ? (
+                <Markdown source={value} />
+              ) : (
+                <Value>{value}</Value>
+              )
+            ) : (
+              <Code>null</Code>
+            )}
+          </ValueContainer>
         )}
       </span>
     </LabelRow>
@@ -130,10 +141,9 @@ export const Key = styled(Text)`
   font-family: Avenir, Arial, Helvetica, sans-serif;
 `;
 
-export const Value = styled.p<{ copy: string }>`
+const ValueContainer = styled.div<{ copy: string }>`
   height: auto;
   max-width: 350px;
-  color: ${COLORS.TEXT_CONTENT} !important;
 
   ${props =>
     props.copy === "true" &&
@@ -143,6 +153,10 @@ export const Value = styled.p<{ copy: string }>`
       color: ${COLORS.TEXT_HOVER} !important;
     }
   `}
+`;
+
+export const Value = styled.p`
+  color: ${COLORS.TEXT_CONTENT} !important;
 
   @media ${MOBILE} {
     margin-top: 4px;
@@ -172,7 +186,7 @@ export const JsonComponent = ({
 }) => {
   let json;
   if (Object.keys(data).length === 0) {
-    json = <p>No data available.</p>;
+    json = <p style={{ color: "rgb(100,100,100)" }}>No data available.</p>;
   } else {
     json = (
       <JSONPretty
@@ -216,12 +230,62 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
     <DataCard key={challenge.id}>
       <KeyValue label="Challenge Type" value={challenge.type} />
       <KeyValue label="Title" value={challenge.title} />
-      <KeyValue label="Instructions" value={challenge.instructions} />
-      <KeyValue label="Content" value={challenge.content} />
+      <KeyValue
+        label="Instructions"
+        value={challenge.instructions}
+        renderAsMarkdown
+      />
+      <KeyValue label="Content" value={challenge.content} renderAsMarkdown />
       <KeyValue label="challengeId" value={challenge.id} code allowCopy />
       <KeyValue label="moduleId" value={moduleId} code allowCopy />
       <KeyValue label="courseId" value={courseId} code allowCopy />
+      <BreakLine />
+      <LabelRow>
+        <ExternalLink
+          link={`https://app.pairwise.tech/workspace/${challenge.id}`}
+        >
+          Open Challenge in Pairwise
+        </ExternalLink>
+      </LabelRow>
+      <LabelRow>
+        <ExternalLink link={`http://localhost:3000/workspace/${challenge.id}`}>
+          Open Challenge in Codepress
+        </ExternalLink>
+      </LabelRow>
     </DataCard>
+  );
+};
+
+const BreakLine = styled.div`
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border: 1px solid transparent;
+  border-top-color: black;
+  border-bottom-color: #353535;
+`;
+
+// Quick shorthand component for rendering an href link to an external URL.
+// NOTE: This is basically duplicated in the client workspace package. We
+// could at some point consolidate shared UI components in the common
+// package, but there doesn't feel to be a strong need to do so now.
+export const ExternalLink = ({
+  link,
+  style,
+  children,
+}: {
+  link: string;
+  children: string;
+  style?: React.CSSProperties;
+}) => {
+  return (
+    <a
+      href={link}
+      target="__blank"
+      rel="noopener noreferrer"
+      style={{ ...style }}
+    >
+      {children}
+    </a>
   );
 };
 
