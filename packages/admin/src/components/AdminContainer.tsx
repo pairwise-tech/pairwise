@@ -120,14 +120,18 @@ const AdminContainer = (props: IProps) => {
     <Route key="users" path="/users" component={AdminUsersPage} />,
     <Route key="payments" path="/payments" component={AdminPaymentsPage} />,
     <Route key="feedback" path="/feedback" component={AdminFeedbackPage} />,
-    <Route key="search" path="/search/:query?" component={AdminSearchPage} />,
+    <Route
+      key="search"
+      path="/search/:query?"
+      component={() => <AdminSearchPage isMobile={isMobile} />}
+    />,
     <Route key="redirect" component={() => <Redirect to="/stats" />} />,
   ];
 
   return (
     <React.Fragment>
       <AdminNavigationMenu isMobile={isMobile} />
-      <AdminChallengeDetailModal />
+      <AdminChallengeDetailModal isMobile={isMobile} />
       <AdminKeyboardShortcuts />
       <Header>
         <ControlsContainer

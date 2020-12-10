@@ -3,8 +3,8 @@ import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, SummaryText } from "./AdminComponents";
-import { RouteComponentProps } from "react-router-dom";
-import { parseSearchQuery } from "../tools/admin-utils";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { parseSearchQuery, composeWithProps } from "../tools/admin-utils";
 import { AdminUserComponent } from "./AdminUsersPage";
 import { assertUnreachable } from "@pairwise/common";
 import { COLORS } from "../tools/constants";
@@ -17,8 +17,8 @@ import { ChallengeContextCard } from "./AdminChallengeDetailModal";
  */
 
 export interface AdminSearchResult {
-  type: "email" | "uuid" | "challengeId";
   value: string;
+  type: "email" | "uuid" | "challengeId";
 }
 
 /** ===========================================================================
@@ -59,7 +59,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
   }
 
   renderSearchResult = (result: AdminSearchResult) => {
-    const { users, challengeMap } = this.props;
+    const { users, challengeMap, isMobile } = this.props;
     const matchValues = (a: string, b: string) => {
       if (!a || !b) {
         return false;
@@ -98,7 +98,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
         const id = result.value;
         if (id in challengeMap) {
           const result = challengeMap[id];
-          return <ChallengeContextCard {...result} />;
+          return <ChallengeContextCard {...result} isMobile={isMobile} />;
         } else {
           return (
             <p>
@@ -139,7 +139,11 @@ const dispatchProps = {};
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-type IProps = ConnectProps & RouteComponentProps;
+interface ComponentProps {
+  isMobile: boolean;
+}
+
+type IProps = ConnectProps & RouteComponentProps & ComponentProps;
 
 const withProps = connect(mapStateToProps, dispatchProps);
 
@@ -148,4 +152,6 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default withProps(AdminSearchPage);
+export default composeWithProps<ComponentProps>(withProps)(
+  withRouter(AdminSearchPage),
+);

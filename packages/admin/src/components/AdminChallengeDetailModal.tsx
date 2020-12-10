@@ -1,4 +1,4 @@
-import { Dialog, Classes } from "@blueprintjs/core";
+import { Dialog, Classes, Button } from "@blueprintjs/core";
 import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -11,6 +11,7 @@ import {
   LabelRow,
   ExternalLink,
 } from "./AdminComponents";
+import { COLORS } from "../tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -27,6 +28,7 @@ interface IState {}
 class AdminChallengeDetailModal extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
     const {
+      isMobile,
       challengeMap,
       challengeDetailId,
       setChallengeDetailId,
@@ -40,6 +42,15 @@ class AdminChallengeDetailModal extends React.Component<IProps, IState> {
 
     return (
       <Dialog
+        style={{
+          padding: 24,
+          width: 900,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: COLORS.BACKGROUND_LOWER_SECTION,
+        }}
+        usePortal
         className={Classes.DARK}
         isOpen={challengeDetailId !== null}
         onClose={() => {
@@ -47,13 +58,19 @@ class AdminChallengeDetailModal extends React.Component<IProps, IState> {
         }}
       >
         {result ? (
-          <ChallengeContextCard {...result} />
+          <ChallengeContextCard {...result} isMobile={isMobile} />
         ) : (
           <p>
             A challenge could not be found with this id:{" "}
             <i>{challengeDetailId}</i>
           </p>
         )}
+        <Button
+          style={{ marginTop: 24 }}
+          onClick={() => setChallengeDetailId(null)}
+        >
+          Close Challenge Context
+        </Button>
       </Dialog>
     );
   }
@@ -68,10 +85,11 @@ interface ChallengeContextCardProps {
   courseId: string;
   moduleId: string;
   challenge: Challenge;
+  isMobile: boolean;
 }
 
 export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
-  const { challenge, courseId, moduleId } = props;
+  const { challenge, courseId, moduleId, isMobile } = props;
   return (
     <DataCard key={challenge.id}>
       <KeyValue label="Challenge Type" value={challenge.type} />
@@ -93,11 +111,15 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
           Open Challenge in Pairwise
         </ExternalLink>
       </LabelRow>
-      <LabelRow>
-        <ExternalLink link={`http://localhost:3000/workspace/${challenge.id}`}>
-          Open Challenge in Codepress
-        </ExternalLink>
-      </LabelRow>
+      {!isMobile && (
+        <LabelRow>
+          <ExternalLink
+            link={`http://localhost:3000/workspace/${challenge.id}`}
+          >
+            Open Challenge in Codepress
+          </ExternalLink>
+        </LabelRow>
+      )}
     </DataCard>
   );
 };
@@ -116,7 +138,9 @@ const dispatchProps = {
   setChallengeDetailId: Modules.actions.challenges.setChallengeDetailId,
 };
 
-interface ComponentProps {}
+interface ComponentProps {
+  isMobile: boolean;
+}
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 

@@ -5,7 +5,9 @@ import cx from "classnames";
 import styled from "styled-components/macro";
 import { Button, Code, Card, Text, Classes } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
-import { copyToClipboard } from "../tools/admin-utils";
+import { copyToClipboard, composeWithProps } from "../tools/admin-utils";
+import { connect } from "react-redux";
+import Modules from "../modules/root";
 
 /** ===========================================================================
  * Admin Components
@@ -70,43 +72,44 @@ export const SummaryText = styled.p`
 
 export const DataCard = styled(Card)`
   margin-top: 12px;
-  max-width: 625px;
+  max-width: 825px;
   overflow-x: scroll;
   background: ${COLORS.BACKGROUND_CARD} !important;
 `;
 
-export const KeyValue = ({
+export const KeyValueComponent = ({
   code,
   label,
   value,
   allowCopy,
+  isChallengeId,
   renderAsMarkdown,
-}: {
-  code?: boolean;
-  label: string;
-  allowCopy?: boolean;
-  renderAsMarkdown?: boolean;
-  value: Nullable<string>;
-}) => {
+  setChallengeDetailId,
+}: KeyValueComponentProps) => {
   const handleCopy = () => {
-    if (allowCopy) {
+    if (isChallengeId) {
+      setChallengeDetailId(value);
+    } else if (allowCopy) {
       copyToClipboard(value);
     }
   };
+
+  const canClick = !!allowCopy || !!isChallengeId;
+
   return (
     <LabelRow>
       <Key>{label}:</Key>
       <span>
         {code ? (
           value ? (
-            <CodeValue copy={(!!allowCopy).toString()} onClick={handleCopy}>
+            <CodeValue copy={canClick.toString()} onClick={handleCopy}>
               {value}
             </CodeValue>
           ) : (
             <Code>null</Code>
           )
         ) : (
-          <ValueContainer copy={(!!allowCopy).toString()} onClick={handleCopy}>
+          <ValueContainer copy={canClick.toString()} onClick={handleCopy}>
             {value ? (
               renderAsMarkdown ? (
                 <Markdown source={value} />
@@ -122,6 +125,27 @@ export const KeyValue = ({
     </LabelRow>
   );
 };
+
+interface KeyValueProps {
+  code?: boolean;
+  label: string;
+  allowCopy?: boolean;
+  isChallengeId?: boolean;
+  renderAsMarkdown?: boolean;
+  value: Nullable<string>;
+}
+
+const dispatchProps = {
+  setChallengeDetailId: Modules.actions.challenges.setChallengeDetailId,
+};
+
+type KeyValueComponentProps = KeyValueProps & typeof dispatchProps;
+
+const withProps = connect(null, dispatchProps);
+
+export const KeyValue = composeWithProps<KeyValueProps>(withProps)(
+  KeyValueComponent,
+);
 
 export const LabelRow = styled.div`
   min-height: 26px;
@@ -142,7 +166,7 @@ export const Key = styled(Text)`
 
 const ValueContainer = styled.div<{ copy: string }>`
   height: auto;
-  max-width: 350px;
+  max-width: 550px;
 
   ${props =>
     props.copy === "true" &&

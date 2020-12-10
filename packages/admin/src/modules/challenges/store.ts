@@ -53,6 +53,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   }))
   .handleAction(App.actions.locationChange, (state, action) => ({
     ...state,
+    challengeDetailId: null,
     displayNavigationMap: false,
     keySelectedMenuItemIndex: null,
   }))
