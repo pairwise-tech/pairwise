@@ -1,10 +1,13 @@
+import Markdown from "react-markdown";
 import JSONPretty from "react-json-pretty";
 import React from "react";
 import cx from "classnames";
-import styled, { CSSProperties } from "styled-components/macro";
+import styled from "styled-components/macro";
 import { Button, Code, Card, Text, Classes } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
-import { copyToClipboard } from "../tools/admin-utils";
+import { copyToClipboard, composeWithProps } from "../tools/admin-utils";
+import { connect } from "react-redux";
+import Modules from "../modules/root";
 
 /** ===========================================================================
  * Admin Components
@@ -27,33 +30,6 @@ export const PageContainer = styled.div`
   padding: 20px 18px;
   margin-top: 32px;
 `;
-
-export const ProfileIcon = ({
-  avatar,
-  width,
-  height,
-  style,
-}: {
-  avatar: string;
-  width?: number;
-  height?: number;
-  style?: CSSProperties;
-}) => {
-  const PAIRWISE_LOGO =
-    "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
-
-  const src = avatar ? avatar : PAIRWISE_LOGO;
-
-  return (
-    <img
-      src={src}
-      width={width || 32}
-      height={height || 32}
-      alt="Profile Avatar"
-      style={{ borderRadius: "50%", ...style }}
-    />
-  );
-};
 
 export const FullScreenOverlay = styled.div`
   top: 0;
@@ -96,41 +72,79 @@ export const SummaryText = styled.p`
 
 export const DataCard = styled(Card)`
   margin-top: 12px;
-  max-width: 625px;
+  max-width: 825px;
   overflow-x: scroll;
   background: ${COLORS.BACKGROUND_CARD} !important;
 `;
 
-export const KeyValue = ({
-  allowCopy,
+export const KeyValueComponent = ({
   code,
   label,
   value,
-}: {
+  allowCopy,
+  isChallengeId,
+  renderAsMarkdown,
+  setChallengeDetailId,
+}: KeyValueComponentProps) => {
+  const handleCopy = () => {
+    if (isChallengeId) {
+      setChallengeDetailId(value);
+    } else if (allowCopy) {
+      copyToClipboard(value);
+    }
+  };
+
+  const canClick = !!allowCopy || !!isChallengeId;
+
+  return (
+    <LabelRow>
+      <Key>{label}:</Key>
+      <span>
+        {code ? (
+          value ? (
+            <CodeValue copy={canClick.toString()} onClick={handleCopy}>
+              {value}
+            </CodeValue>
+          ) : (
+            <Code>null</Code>
+          )
+        ) : (
+          <ValueContainer copy={canClick.toString()} onClick={handleCopy}>
+            {value ? (
+              renderAsMarkdown ? (
+                <Markdown source={value} />
+              ) : (
+                <Value>{value}</Value>
+              )
+            ) : (
+              <Code>null</Code>
+            )}
+          </ValueContainer>
+        )}
+      </span>
+    </LabelRow>
+  );
+};
+
+interface KeyValueProps {
   code?: boolean;
-  allowCopy?: boolean;
   label: string;
+  allowCopy?: boolean;
+  isChallengeId?: boolean;
+  renderAsMarkdown?: boolean;
   value: Nullable<string>;
-}) => (
-  <LabelRow>
-    <Key>{label}:</Key>
-    {code ? (
-      value ? (
-        <CodeValue
-          allowCopy={!!allowCopy}
-          onClick={() => (allowCopy ? copyToClipboard(value) : null)}
-        >
-          {value}
-        </CodeValue>
-      ) : (
-        <Code>null</Code>
-      )
-    ) : (
-      <Value allowCopy={!!allowCopy} onClick={() => copyToClipboard(value)}>
-        {value ? value : <Code>null</Code>}
-      </Value>
-    )}
-  </LabelRow>
+}
+
+const dispatchProps = {
+  setChallengeDetailId: Modules.actions.challenges.setChallengeDetailId,
+};
+
+type KeyValueComponentProps = KeyValueProps & typeof dispatchProps;
+
+const withProps = connect(null, dispatchProps);
+
+export const KeyValue = composeWithProps<KeyValueProps>(withProps)(
+  KeyValueComponent,
 );
 
 export const LabelRow = styled.div`
@@ -139,41 +153,46 @@ export const LabelRow = styled.div`
   flex-direction: row;
 
   @media ${MOBILE} {
-    height: 52px;
+    min-height: 52px;
     flex-direction: column;
   }
 `;
 
 export const Key = styled(Text)`
-  width: 250px;
+  width: 225px;
   font-weight: 500;
   font-family: Avenir, Arial, Helvetica, sans-serif;
 `;
 
-export const Value = styled.p<{ allowCopy: boolean }>`
-  color: ${COLORS.TEXT_CONTENT} !important;
+const ValueContainer = styled.div<{ copy: string }>`
+  height: auto;
+  max-width: 550px;
 
   ${props =>
-    props.allowCopy &&
+    props.copy === "true" &&
     `
     :hover {
       cursor: pointer;
       color: ${COLORS.TEXT_HOVER} !important;
     }
   `}
+`;
+
+export const Value = styled.p`
+  color: ${COLORS.TEXT_CONTENT} !important;
 
   @media ${MOBILE} {
     margin-top: 4px;
   }
 `;
 
-export const CodeValue = styled(Code)<{ allowCopy: boolean }>`
-  padding-bottom: 0;
+export const CodeValue = styled(Code)<{ copy: string }>`
+  height: auto;
   color: #e97cff !important;
   background: ${COLORS.BACKGROUND_CONTENT} !important;
 
   :hover {
-    cursor: ${props => (props.allowCopy ? "pointer" : "auto")};
+    cursor: ${props => (props.copy === "true" ? "pointer" : "auto")};
   }
 
   @media ${MOBILE} {
@@ -190,7 +209,7 @@ export const JsonComponent = ({
 }) => {
   let json;
   if (Object.keys(data).length === 0) {
-    json = <p>No data available.</p>;
+    json = <p style={{ color: "rgb(100,100,100)" }}>No data available.</p>;
   } else {
     json = (
       <JSONPretty
@@ -200,8 +219,14 @@ export const JsonComponent = ({
           key: "color:#fc426d;",
           value: "color:#e97cff;",
           string: "color:#ffd755;",
-          main:
-            "background:rgb(35,35,35);padding:8px;max-width:80vw;width:max-content;overflow:scroll;",
+          main: `
+              padding: 8px;
+              max-width: 80vw;
+              width: max-content;
+              overflow: scroll;
+              overscroll-behavior: none;
+              background: rgb(35,35,35);
+            `,
         }}
         style={{ fontSize: 14 }}
       />
@@ -213,6 +238,39 @@ export const JsonComponent = ({
       <p>{title}</p>
       {json}
     </>
+  );
+};
+
+export const BreakLine = styled.div`
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border: 1px solid transparent;
+  border-top-color: black;
+  border-bottom-color: #353535;
+`;
+
+// Quick shorthand component for rendering an href link to an external URL.
+// NOTE: This is basically duplicated in the client workspace package. We
+// could at some point consolidate shared UI components in the common
+// package, but there doesn't feel to be a strong need to do so now.
+export const ExternalLink = ({
+  link,
+  style,
+  children,
+}: {
+  link: string;
+  children: string;
+  style?: React.CSSProperties;
+}) => {
+  return (
+    <a
+      href={link}
+      target="__blank"
+      rel="noopener noreferrer"
+      style={{ ...style }}
+    >
+      {children}
+    </a>
   );
 };
 

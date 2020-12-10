@@ -10,6 +10,10 @@ import { Position, Popover, Tooltip } from "@blueprintjs/core";
 import { IconButton } from "./AdminComponents";
 import styled from "styled-components";
 import { getClientOS, composeWithProps } from "../tools/admin-utils";
+import {
+  ADMIN_MENU_MAX_INDEX,
+  ADMIN_MENU_ITEMS_ROUTES,
+} from "./AdminNavigationMenu";
 
 const debug = require("debug")("client:KeyboardShortcuts");
 
@@ -28,6 +32,9 @@ type ShortcutKeyHandler = (e: KeyboardEvent) => any;
 const SHORTCUT_KEYS = {
   "cmd+j": "Toggle Navigation Map",
   "cmd+p": "Focus Search Bar",
+  enter: "Select menu item",
+  arrowup: "Select menu item up",
+  arrowdown: "Select menu item down",
 };
 
 /**
@@ -263,7 +270,10 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     // Only valid key combinations are allowed for available shortcuts:
     const shortcutKeyMap: Partial<VALID_SHORTCUT_KEYS_MAP> = {
+      enter: this.selectMenuItem,
       escape: this.handleClose,
+      arrowup: this.handleSelectMenuUp,
+      arrowdown: this.handleSelectMenuDown,
       "cmd+j": this.handleToggleNavigationMap,
     };
 
@@ -281,6 +291,40 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       this.props.setNavigationMapState(!this.props.overlayVisible);
     }
   };
+
+  selectMenuItem = () => {
+    const { menuSelectItemIndex } = this.props;
+    if (menuSelectItemIndex !== null) {
+      const path = ADMIN_MENU_ITEMS_ROUTES[menuSelectItemIndex];
+      this.props.history.push(`/${path}`);
+    }
+  };
+
+  handleSelectMenuUp = () => {
+    if (this.props.overlayVisible) {
+      const { setMenuItemSelectIndex, menuSelectItemIndex } = this.props;
+      if (menuSelectItemIndex === null) {
+        setMenuItemSelectIndex(0);
+      } else if (menuSelectItemIndex === 0) {
+        setMenuItemSelectIndex(ADMIN_MENU_MAX_INDEX);
+      } else {
+        setMenuItemSelectIndex(menuSelectItemIndex - 1);
+      }
+    }
+  };
+
+  handleSelectMenuDown = () => {
+    if (this.props.overlayVisible) {
+      const { setMenuItemSelectIndex, menuSelectItemIndex } = this.props;
+      if (menuSelectItemIndex === null) {
+        setMenuItemSelectIndex(0);
+      } else if (menuSelectItemIndex === ADMIN_MENU_MAX_INDEX) {
+        setMenuItemSelectIndex(0);
+      } else {
+        setMenuItemSelectIndex(menuSelectItemIndex + 1);
+      }
+    }
+  };
 }
 
 /** ===========================================================================
@@ -290,11 +334,13 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
+  menuSelectItemIndex: Modules.selectors.challenges.menuSelectItemIndex(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
 });
 
 const dispatchProps = {
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
+  setMenuItemSelectIndex: Modules.actions.challenges.setMenuItemSelectIndex,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

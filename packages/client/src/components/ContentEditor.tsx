@@ -12,12 +12,12 @@ import { Editor } from "slate-react";
 import { Leaf, Selection, Block, Mark } from "slate";
 import { List } from "immutable";
 import { CODEPRESS_HOST } from "tools/client-env";
-import { InverseChallengeMapping } from "modules/challenges/types";
 import pipe from "ramda/es/pipe";
 import tryCatch from "ramda/es/tryCatch";
 import { Dictionary } from "ramda";
 import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
 import { Button } from "@blueprintjs/core";
+import { InverseChallengeMapping } from "@pairwise/common";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 

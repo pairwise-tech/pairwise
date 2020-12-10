@@ -4,13 +4,13 @@ import {
   ICodeBlobDto,
   IProgressDto,
   LastActiveChallengeIds,
+  InverseChallengeMapping,
   Challenge,
 } from "@pairwise/common";
 import { createAction } from "typesafe-actions";
 import {
   ChallengeCreationPayload,
   ChallengeUpdatePayload,
-  InverseChallengeMapping,
   ModuleCreationPayload,
   ModuleUpdatePayload,
   ModuleDeletePayload,

@@ -24,6 +24,8 @@ import AdminPaymentsPage from "./AdminPaymentsPage";
 import AdminFeedbackPage from "./AdminFeedbackPage";
 import AdminSearchBox from "./AdminSearchBox";
 import Hugh from "../icons/hugh.jpg";
+import AdminSearchPage from "./AdminSearchPage";
+import AdminChallengeDetailModal from "./AdminChallengeDetailModal";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -118,12 +120,18 @@ const AdminContainer = (props: IProps) => {
     <Route key="users" path="/users" component={AdminUsersPage} />,
     <Route key="payments" path="/payments" component={AdminPaymentsPage} />,
     <Route key="feedback" path="/feedback" component={AdminFeedbackPage} />,
+    <Route
+      key="search"
+      path="/search/:query?"
+      component={() => <AdminSearchPage isMobile={isMobile} />}
+    />,
     <Route key="redirect" component={() => <Redirect to="/stats" />} />,
   ];
 
   return (
     <React.Fragment>
       <AdminNavigationMenu isMobile={isMobile} />
+      <AdminChallengeDetailModal isMobile={isMobile} />
       <AdminKeyboardShortcuts />
       <Header>
         <ControlsContainer
@@ -346,7 +354,7 @@ const ProductTitle = styled.h1`
   }
 
   a:hover {
-    color: ${COLORS.PRIMARY_GREEN};
+    color: ${COLORS.LIGHT_PINK};
   }
 
   /* Not vital to the product so hide it for thin views */

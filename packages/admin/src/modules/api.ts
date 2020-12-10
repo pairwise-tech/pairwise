@@ -152,7 +152,7 @@ class Api extends BaseApiClass {
         // courses = Object.values(courseList);
       } else {
         const { headers } = this.getRequestHeaders();
-        const result = await axios.get<CourseList>(`${HOST}/content/courses`, {
+        const result = await axios.get<CourseList>(`${HOST}/admin/content`, {
           headers,
         });
         courses = result.data;

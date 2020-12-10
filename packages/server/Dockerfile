@@ -1,10 +1,18 @@
-FROM pairwise-runtime AS pairwise-server-build
+# FROM pairwise-runtime AS pairwise-server-build
+
+FROM docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest AS pairwise-server-build
 
 # Copy everything
 COPY . .
 
 # Install Zeit ncc
 RUN npm i -g @zeit/ncc
+
+# Build common
+RUN yarn common:build
+
+# Build server
+RUN yarn server:build
 
 # Compile the server into a single js file
 RUN cd packages/server && ncc build dist/main.js --out target --source-map --minify

@@ -3,6 +3,7 @@ import { filter, map, mergeMap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
+import { createInverseChallengeMapping } from "@pairwise/common";
 
 /** ===========================================================================
  * Epics
@@ -43,6 +44,16 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.fetchCoursesSuccess)),
+    map(({ payload: { courses } }) => {
+      const challengeMap = createInverseChallengeMapping(courses);
+      return Actions.storeInverseChallengeMapping(challengeMap);
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -51,4 +62,5 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
 export default combineEpics(
   contentSkeletonInitializationEpic,
   challengeInitializationEpic,
+  inverseChallengeMappingEpic,
 );
