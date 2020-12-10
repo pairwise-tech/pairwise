@@ -149,15 +149,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
       # Install dependencies, if any package.json or lock files have changed
-      - name: Install Docker image
-        uses: whoan/docker-build-with-cache-action@v5
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
         with:
+          registry: docker.pkg.github.com
           username: bonham000
           password: "${{ secrets.GITHUB_TOKEN }}"
-          registry: docker.pkg.github.com
-          dockerfile: BaseCache.Dockerfile
-          image_name: pairwise-dependencies
 
       # Build the client application directly (instead of using Netlify)
       - name: Build the client workspace application
