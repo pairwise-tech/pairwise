@@ -1,7 +1,7 @@
 import JSONPretty from "react-json-pretty";
 import React from "react";
 import cx from "classnames";
-import styled, { CSSProperties } from "styled-components/macro";
+import styled from "styled-components/macro";
 import { Button, Code, Card, Text, Classes } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { copyToClipboard } from "../tools/admin-utils";
@@ -27,33 +27,6 @@ export const PageContainer = styled.div`
   padding: 20px 18px;
   margin-top: 32px;
 `;
-
-export const ProfileIcon = ({
-  avatar,
-  width,
-  height,
-  style,
-}: {
-  avatar: string;
-  width?: number;
-  height?: number;
-  style?: CSSProperties;
-}) => {
-  const PAIRWISE_LOGO =
-    "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
-
-  const src = avatar ? avatar : PAIRWISE_LOGO;
-
-  return (
-    <img
-      src={src}
-      width={width || 32}
-      height={height || 32}
-      alt="Profile Avatar"
-      style={{ borderRadius: "50%", ...style }}
-    />
-  );
-};
 
 export const FullScreenOverlay = styled.div`
   top: 0;
@@ -200,8 +173,14 @@ export const JsonComponent = ({
           key: "color:#fc426d;",
           value: "color:#e97cff;",
           string: "color:#ffd755;",
-          main:
-            "background:rgb(35,35,35);padding:8px;max-width:80vw;width:max-content;overflow:scroll;",
+          main: `
+              padding: 8px;
+              max-width: 80vw;
+              width: max-content;
+              overflow: scroll;
+              overscroll-behavior: none;
+              background: rgb(35,35,35);
+            `,
         }}
         style={{ fontSize: 14 }}
       />

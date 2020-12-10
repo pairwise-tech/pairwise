@@ -20,10 +20,7 @@ import { Button } from "@blueprintjs/core";
 
 class AdminStatsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { usersList, usersListLoading, progressRecords } = this.props;
-    if (usersListLoading) {
-      return null;
-    }
+    const { usersList, progressRecords, statsLoading } = this.props;
 
     const summary = summarizeUserProgress(usersList);
     return (
@@ -32,42 +29,48 @@ class AdminStatsPage extends React.Component<IProps, {}> {
           <h2>Current Stats:</h2>
           <Button onClick={this.props.refreshStats}>Refresh Stats</Button>
         </Row>
-        <Stat>
-          <b>Total Users:</b>{" "}
-          <Value>{summary.stats.totalUsers.toLocaleString()}</Value>
-        </Stat>
-        <Stat>
-          <b>New Users Last Week:</b>{" "}
-          <Value>{summary.stats.newUsersInLastWeek.toLocaleString()}</Value>
-        </Stat>
-        <Stat>
-          <b>Total Challenges Completed:</b>{" "}
-          <Value>
-            {summary.stats.totalChallengesCompleted.toLocaleString()}
-          </Value>
-        </Stat>
-        <Stat>
-          <b>Challenges Completed in Last Week:</b>{" "}
-          <Value>
-            {summary.stats.challengesCompletedInLastWeek.toLocaleString()}
-          </Value>
-        </Stat>
-        <Stat>
-          <b>Average Challenges/User:</b>{" "}
-          <Value>
-            {summary.leaderboard.averageChallengesCompletedPerNonZeroUser.toLocaleString()}
-          </Value>
-        </Stat>
-        <Stat>
-          <b>Leader Challenge Count:</b>{" "}
-          <Value>
-            {summary.leaderboard.leaderChallengeCount.toLocaleString()}
-          </Value>
-        </Stat>
-        <h2>Recent Challenge Progress:</h2>
-        {progressRecords
-          ? this.renderProgressRecords(progressRecords)
-          : "No records yet"}
+        {statsLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <Stat>
+              <b>Total Users:</b>{" "}
+              <Value>{summary.stats.totalUsers.toLocaleString()}</Value>
+            </Stat>
+            <Stat>
+              <b>New Users Last Week:</b>{" "}
+              <Value>{summary.stats.newUsersInLastWeek.toLocaleString()}</Value>
+            </Stat>
+            <Stat>
+              <b>Total Challenges Completed:</b>{" "}
+              <Value>
+                {summary.stats.totalChallengesCompleted.toLocaleString()}
+              </Value>
+            </Stat>
+            <Stat>
+              <b>Challenges Completed in Last Week:</b>{" "}
+              <Value>
+                {summary.stats.challengesCompletedInLastWeek.toLocaleString()}
+              </Value>
+            </Stat>
+            <Stat>
+              <b>Average Challenges/User:</b>{" "}
+              <Value>
+                {summary.leaderboard.averageChallengesCompletedPerNonZeroUser.toLocaleString()}
+              </Value>
+            </Stat>
+            <Stat>
+              <b>Leader Challenge Count:</b>{" "}
+              <Value>
+                {summary.leaderboard.leaderChallengeCount.toLocaleString()}
+              </Value>
+            </Stat>
+            <h2>Recent Challenge Progress:</h2>
+            {progressRecords
+              ? this.renderProgressRecords(progressRecords)
+              : "No records yet"}
+          </>
+        )}
       </PageContainer>
     );
   }
@@ -127,6 +130,7 @@ const Row = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   usersList: Modules.selectors.users.usersState(state).users,
+  statsLoading: Modules.selectors.stats.statsLoadingSelector(state),
   usersListLoading: Modules.selectors.users.usersState(state).loading,
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),
 });
