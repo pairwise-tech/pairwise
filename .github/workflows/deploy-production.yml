@@ -67,17 +67,28 @@ jobs:
       - name: Build all packages
         run: yarn docker:build:ci_deploy
 
-      # Run all package unit tests
-      - name: Run static and unit tests
-        run: yarn docker:test
+      # # Run all package unit tests
+      # - name: Run static and unit tests
+      #   run: yarn docker:test
 
-      # Run e2e tests
-      - name: Run e2e tests
-        run: yarn e2e
+      # # Run e2e tests
+      # - name: Run e2e tests
+      #   run: yarn e2e
 
-      # Run Cypress tests
-      - name: Run Cypress tests
-        run: yarn cypress
+      # # Run Cypress tests
+      # - name: Run Cypress tests
+      #   run: yarn cypress
+
+      # Send Slack notification if workflow fails
+      - name: Notify Slack on workflow failure
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          color: danger
+          status: FAILED
+          channel_id: CTBG8AT0B
 
   server-deploy:
     name: Server Deploy
@@ -121,12 +132,33 @@ jobs:
             --image gcr.io/$CLOUD_RUN_PROJECT_ID/$CLOUD_RUN_SERVICE_NAME:$GITHUB_SHA \
             --platform managed
 
+      # Send Slack notification if workflow fails
+      - name: Notify Slack on workflow failure
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          color: danger
+          status: FAILED
+          channel_id: CTBG8AT0B
+
   client-deploy:
     name: Client Deploy
     needs: build-and-test
     runs-on: ubuntu-latest
 
     steps:
+      # Install dependencies, if any package.json or lock files have changed
+      - name: Install Docker image
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          username: bonham000
+          password: "${{ secrets.GITHUB_TOKEN }}"
+          registry: docker.pkg.github.com
+          dockerfile: BaseCache.Dockerfile
+          image_name: pairwise-dependencies
+
       # Build the client application directly (instead of using Netlify)
       - name: Build the client workspace application
         run: |
@@ -149,6 +181,17 @@ jobs:
             --env NETLIFY_SITE_ID=$NETLIFY_SITE_ID \
             --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
             -t pairwise-production-client
+
+      # Send Slack notification if workflow fails
+      - name: Notify Slack on workflow failure
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          color: danger
+          status: FAILED
+          channel_id: CTBG8AT0B
 
   admin-deploy:
     name: Admin Deploy
@@ -173,8 +216,19 @@ jobs:
             --env NETLIFY_AUTH_TOKEN=$NETLIFY_AUTH_TOKEN \
             -t pairwise-admin-client
 
-  www-deploy:
-    name: WWW Deploy
+      # Send Slack notification if workflow fails
+      - name: Notify Slack on workflow failure
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          color: danger
+          status: FAILED
+          channel_id: CTBG8AT0B
+
+  website-deploy:
+    name: Website Deploy
     needs: build-and-test
     runs-on: ubuntu-latest
 
@@ -193,17 +247,29 @@ jobs:
       - name: Deploy pairwise.tech static site
         run: gsutil -m rsync -r packages/www/public gs://www.pairwise.tech
 
-  notifications:
-    name: Notifications
+    # Send Slack notification if workflow fails
+      - name: Notify Slack on workflow failure
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          color: danger
+          status: FAILED
+          channel_id: CTBG8AT0B
+
+  # Provide a success confirmation to Slack when all the jobs pass
+  deploy-production-success:
+    name: Deploy Production Success
     needs: ["server-deploy", "client-deploy", "admin-deploy", "www-deploy"]
     runs-on: ubuntu-latest
 
     steps:
-      - name: Dependant is Running
+      - name: Placeholder job step
         run: |
           echo "All jobs passed"
 
-      # Send Slack notification if workflow succeeds
+      # Send Slack notification
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
       - name: Notify Slack on workflow success
         if: success()
@@ -214,14 +280,3 @@ jobs:
           channel_id: CTBG8AT0B
           status: SUCCESS
           color: good
-
-      # Send Slack notification if workflow fails
-      - name: Notify Slack on workflow failure
-        if: failure()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          channel_id: CTBG8AT0B
-          status: FAILED
-          color: danger
