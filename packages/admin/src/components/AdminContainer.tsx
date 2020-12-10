@@ -25,6 +25,7 @@ import AdminFeedbackPage from "./AdminFeedbackPage";
 import AdminSearchBox from "./AdminSearchBox";
 import Hugh from "../icons/hugh.jpg";
 import AdminSearchPage from "./AdminSearchPage";
+import AdminChallengeDetailModal from "./AdminChallengeDetailModal";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -126,6 +127,7 @@ const AdminContainer = (props: IProps) => {
   return (
     <React.Fragment>
       <AdminNavigationMenu isMobile={isMobile} />
+      <AdminChallengeDetailModal />
       <AdminKeyboardShortcuts />
       <Header>
         <ControlsContainer

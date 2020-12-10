@@ -19,6 +19,7 @@ export interface State {
   courseSkeletons: Nullable<CourseSkeletonList>;
   challengeMap: Nullable<InverseChallengeMapping>;
   displayNavigationMap: boolean;
+  challengeDetailId: Nullable<string>;
 }
 
 const initialState: State = {
@@ -27,6 +28,7 @@ const initialState: State = {
   challengeMap: null,
   displayNavigationMap: false,
   keySelectedMenuItemIndex: null,
+  challengeDetailId: null,
 };
 
 /** ===========================================================================
@@ -44,6 +46,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.setMenuItemSelectIndex, (state, action) => ({
     ...state,
     keySelectedMenuItemIndex: action.payload,
+  }))
+  .handleAction(actions.setChallengeDetailId, (state, action) => ({
+    ...state,
+    challengeDetailId: action.payload,
   }))
   .handleAction(App.actions.locationChange, (state, action) => ({
     ...state,

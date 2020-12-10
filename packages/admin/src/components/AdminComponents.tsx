@@ -6,7 +6,6 @@ import styled from "styled-components/macro";
 import { Button, Code, Card, Text, Classes } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { copyToClipboard } from "../tools/admin-utils";
-import { Challenge } from "@pairwise/common";
 
 /** ===========================================================================
  * Admin Components
@@ -218,45 +217,7 @@ export const JsonComponent = ({
   );
 };
 
-interface ChallengeContextCardProps {
-  courseId: string;
-  moduleId: string;
-  challenge: Challenge;
-}
-
-export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
-  const { challenge, courseId, moduleId } = props;
-  return (
-    <DataCard key={challenge.id}>
-      <KeyValue label="Challenge Type" value={challenge.type} />
-      <KeyValue label="Title" value={challenge.title} />
-      <KeyValue
-        label="Instructions"
-        value={challenge.instructions}
-        renderAsMarkdown
-      />
-      <KeyValue label="Content" value={challenge.content} renderAsMarkdown />
-      <KeyValue label="challengeId" value={challenge.id} code allowCopy />
-      <KeyValue label="moduleId" value={moduleId} code allowCopy />
-      <KeyValue label="courseId" value={courseId} code allowCopy />
-      <BreakLine />
-      <LabelRow>
-        <ExternalLink
-          link={`https://app.pairwise.tech/workspace/${challenge.id}`}
-        >
-          Open Challenge in Pairwise
-        </ExternalLink>
-      </LabelRow>
-      <LabelRow>
-        <ExternalLink link={`http://localhost:3000/workspace/${challenge.id}`}>
-          Open Challenge in Codepress
-        </ExternalLink>
-      </LabelRow>
-    </DataCard>
-  );
-};
-
-const BreakLine = styled.div`
+export const BreakLine = styled.div`
   margin-top: 12px;
   margin-bottom: 12px;
   border: 1px solid transparent;

@@ -2,17 +2,14 @@ import styled from "styled-components/macro";
 import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
-import {
-  PageContainer,
-  SummaryText,
-  ChallengeContextCard,
-} from "./AdminComponents";
+import { PageContainer, SummaryText } from "./AdminComponents";
 import { RouteComponentProps } from "react-router-dom";
 import { parseSearchQuery } from "../tools/admin-utils";
 import { AdminUserComponent } from "./AdminUsersPage";
 import { assertUnreachable } from "@pairwise/common";
 import { COLORS } from "../tools/constants";
 import { Code } from "@blueprintjs/core";
+import { ChallengeContextCard } from "./AdminChallengeDetailModal";
 
 /** ===========================================================================
  * Types & Config

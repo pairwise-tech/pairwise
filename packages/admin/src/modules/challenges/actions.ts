@@ -24,6 +24,8 @@ enum ActionTypesEnum {
   STORE_INVERSE_CHALLENGE_MAP = "STORE_INVERSE_CHALLENGE_MAP",
 
   SET_MENU_ITEM_SELECT_INDEX = "SET_MENU_ITEM_SELECT_INDEX",
+
+  SET_CHALLENGE_DETAIL_ID = "SET_CHALLENGE_DETAIL_ID",
 }
 
 /** ===========================================================================
@@ -62,3 +64,7 @@ export const setNavigationMapState = createAction(
 export const setMenuItemSelectIndex = createAction(
   ActionTypesEnum.SET_MENU_ITEM_SELECT_INDEX,
 )<number>();
+
+export const setChallengeDetailId = createAction(
+  ActionTypesEnum.SET_CHALLENGE_DETAIL_ID,
+)<Nullable<string>>();
