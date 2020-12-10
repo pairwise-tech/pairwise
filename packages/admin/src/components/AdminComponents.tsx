@@ -5,7 +5,6 @@ import styled from "styled-components/macro";
 import { Button, Code, Card, Text, Classes } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { copyToClipboard } from "../tools/admin-utils";
-import { Link } from "react-router-dom";
 
 /** ===========================================================================
  * Admin Components
@@ -80,43 +79,26 @@ export const KeyValue = ({
   label,
   value,
   allowCopy,
-  allowLinkToDetail,
 }: {
   code?: boolean;
-  allowCopy?: boolean;
-  allowLinkToDetail?: boolean;
   label: string;
+  allowCopy?: boolean;
   value: Nullable<string>;
 }) => {
-  const handleClickValue = () => {
-    if (allowLinkToDetail) {
-      window.location.href = "";
-    } else if (allowCopy) {
-      copyToClipboard(value);
-    }
-  };
-
+  const handleCopy = () => copyToClipboard(value);
   return (
     <LabelRow>
       <Key>{label}:</Key>
       {code ? (
         value ? (
-          allowLinkToDetail ? (
-            <Link to={`/search/${value}`}>
-              <CodeValue allowCopy={!!allowCopy || !!allowLinkToDetail}>
-                {value}
-              </CodeValue>
-            </Link>
-          ) : (
-            <CodeValue allowCopy={!!allowCopy} onClick={handleClickValue}>
-              {value}
-            </CodeValue>
-          )
+          <CodeValue allowCopy={!!allowCopy} onClick={handleCopy}>
+            {value}
+          </CodeValue>
         ) : (
           <Code>null</Code>
         )
       ) : (
-        <Value allowCopy={!!allowCopy} onClick={handleClickValue}>
+        <Value allowCopy={!!allowCopy} onClick={handleCopy}>
           {value ? value : <Code>null</Code>}
         </Value>
       )}

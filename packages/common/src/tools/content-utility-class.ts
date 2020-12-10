@@ -249,6 +249,10 @@ class ContentUtilityClass {
 
     return false;
   };
+
+  getCourseIds = () => {
+    return this.courses.map(c => c.id);
+  };
 }
 
 /** ===========================================================================

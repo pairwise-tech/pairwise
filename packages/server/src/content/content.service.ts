@@ -1,5 +1,4 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
-
 import { ContentUtility } from "@pairwise/common";
 import { RequestUser } from "../types";
 import { ERROR_CODES } from "../tools/constants";
@@ -13,6 +12,17 @@ export class ContentService {
     } else {
       return ContentUtility.getCourseNavigationSkeletons();
     }
+  }
+
+  public fetchAllCoursesForAdmin() {
+    const ids = ContentUtility.getCourseIds();
+
+    // Construct course access map with all course ids
+    const courseAccessMap = ids.reduce(
+      (map, id) => ({ ...map, [id]: true }),
+      {},
+    );
+    return ContentUtility.getCourses(courseAccessMap);
   }
 
   public fetchCourses(user: RequestUser) {

@@ -5,6 +5,8 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, SummaryText } from "./AdminComponents";
 import { RouteComponentProps } from "react-router-dom";
 import { parseSearchQuery } from "../tools/admin-utils";
+import { AdminUserComponent } from "./AdminUsersPage";
+import { assertUnreachable } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -25,6 +27,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const params: any = this.props.match.params;
     const result = parseSearchQuery(params.query);
+
     return (
       <PageContainer>
         <h2>Search Results</h2>
@@ -33,6 +36,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
             <SummaryText>
               Displaying results for search query: <i>{params.query}</i>
             </SummaryText>
+            {this.renderSearchResult(result)}
           </>
         ) : (
           <SummaryText>
@@ -42,6 +46,51 @@ class AdminSearchPage extends React.Component<IProps, {}> {
       </PageContainer>
     );
   }
+
+  renderSearchResult = (result: AdminSearchResult) => {
+    const { users, challengeMap } = this.props;
+    const matchValues = (a: string, b: string) => {
+      if (!a || !b) {
+        return false;
+      } else {
+        return a.toLowerCase() === b.toLowerCase();
+      }
+    };
+
+    switch (result.type) {
+      case "email": {
+        const user = users.find(u => matchValues(u.email, result.value));
+        if (user) {
+          return <AdminUserComponent user={user} />;
+        } else {
+          return <p>No user could be found with this email.</p>;
+        }
+      }
+      case "uuid": {
+        const user = users.find(u => matchValues(u.uuid, result.value));
+        if (user) {
+          return <AdminUserComponent user={user} />;
+        } else {
+          return <p>No user could be found with this email.</p>;
+        }
+      }
+      case "challengeId": {
+        if (!challengeMap) {
+          return <p>Loading challenges...</p>;
+        }
+
+        const id = result.value;
+        if (id in challengeMap) {
+          return <p>{JSON.stringify(challengeMap[id])}</p>;
+        } else {
+          return <p>No challenge could be found with this id.</p>;
+        }
+      }
+      default: {
+        assertUnreachable(result.type);
+      }
+    }
+  };
 }
 
 /** ===========================================================================
@@ -56,6 +105,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
+  challengeMap: Modules.selectors.challenges.getChallengeMap(state),
 });
 
 const dispatchProps = {};

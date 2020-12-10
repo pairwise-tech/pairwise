@@ -1,3 +1,5 @@
+import { Course } from "../types/courses";
+
 /**
  * Assert a condition cannot occur. Used for writing exhaustive switch
  * blocks guarantee every value is handled.
@@ -30,4 +32,57 @@ export const getChallengeSlug = ({
   title: string;
 }) => {
   return `${id}/${sluggify(title)}`;
+};
+
+export interface InverseChallengeMapping {
+  [k: string]: {
+    courseId: string;
+    moduleId: string;
+    challenge: {
+      id: string;
+      title: string;
+    };
+  };
+}
+
+/**
+ * Given a list of courses, create a mapping of all challenge ids to both their
+ * module id and course id. Since our URLs don't (currently) indicate course or
+ * module we need to derive the course and module for a given challenge ID. This
+ * derives all such relationships in one go so it can be referenced later.
+ */
+export const createInverseChallengeMapping = (
+  courses: Course[],
+): InverseChallengeMapping => {
+  const result = courses.reduce((challengeMap, c) => {
+    const courseId = c.id;
+    const cx = c.modules.reduce((courseChallengeMap, m) => {
+      const moduleId = m.id;
+      const mx = m.challenges.reduce((moduleChallengeMap, challenge) => {
+        return {
+          ...moduleChallengeMap,
+          [challenge.id]: {
+            moduleId,
+            courseId,
+            challenge: {
+              id: challenge.id,
+              title: challenge.title,
+            },
+          },
+        };
+      }, {});
+
+      return {
+        ...courseChallengeMap,
+        ...mx,
+      };
+    }, {});
+
+    return {
+      ...challengeMap,
+      ...cx,
+    };
+  }, {});
+
+  return result;
 };
