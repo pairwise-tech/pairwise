@@ -97,8 +97,8 @@ class AdminSearchPage extends React.Component<IProps, {}> {
 
         const id = result.value;
         if (id in challengeMap) {
-          const result = challengeMap[id];
-          return <ChallengeContextCard {...result} isMobile={isMobile} />;
+          const mapItem = challengeMap[id];
+          return <ChallengeContextCard {...mapItem} isMobile={isMobile} />;
         } else {
           return (
             <p>
