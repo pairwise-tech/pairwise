@@ -26,6 +26,8 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
           submitted.
         </SummaryText>
         {feedbackRecords.map(feedback => {
+          const { user } = feedback;
+          const email = user?.email;
           return (
             <DataCard key={feedback.uuid}>
               <KeyValue label="Type" value={feedback.type} />
@@ -36,7 +38,17 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
                 value={feedback.challengeId}
               />
               <KeyValue label="Feedback" value={feedback.feedback} />
-              <KeyValue label="uuid" value={feedback.uuid} code allowCopy />
+              <KeyValue
+                label="Author"
+                value={email ? email : "Anonymous"}
+                allowCopy
+              />
+              <KeyValue
+                label="Author uuid"
+                value={user ? user.uuid : "n/a"}
+                code
+                allowCopy
+              />
               <KeyValue
                 label="createdAt"
                 value={new Date(feedback.createdAt).toDateString()}

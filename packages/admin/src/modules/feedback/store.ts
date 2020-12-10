@@ -1,7 +1,7 @@
 import { createReducer } from "typesafe-actions";
 import * as actions from "./actions";
 import { FeedbackActionTypes } from "./index";
-import { IFeedbackDto } from "@pairwise/common";
+import { IFeedbackDto, UserProfile } from "@pairwise/common";
 
 /** ===========================================================================
  * App Store
@@ -10,6 +10,7 @@ import { IFeedbackDto } from "@pairwise/common";
 
 export interface FeedbackRecord extends IFeedbackDto {
   uuid: string;
+  user: Nullable<UserProfile>;
   createdAt: string;
   updatedAt: string;
 }
