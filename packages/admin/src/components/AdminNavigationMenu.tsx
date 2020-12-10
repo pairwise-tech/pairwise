@@ -8,6 +8,17 @@ import { Button } from "@blueprintjs/core";
 import { NavLink, RouteComponentProps } from "react-router-dom";
 import cx from "classnames";
 
+export const ADMIN_MENU_ITEMS_ROUTES = [
+  "stats",
+  "users",
+  "payments",
+  "feedback",
+  "search",
+];
+
+// Represents the max index for the routes listed in the admin nav menu
+export const ADMIN_MENU_MAX_INDEX = ADMIN_MENU_ITEMS_ROUTES.length - 1;
+
 /** ===========================================================================
  * React Class
  * ============================================================================
@@ -68,36 +79,26 @@ class AdminNavigationMenu extends React.Component<
               style={{ whiteSpace: "nowrap" }}
             />
           </ColTitle>
-          <ColScroll>{this.renderSortableModuleList()}</ColScroll>
+          <ColScroll>{this.renderAdminMenuLinks()}</ColScroll>
         </Col>
       </Overlay>
     );
   }
 
-  renderSortableModuleList = () => {
+  renderAdminMenuLinks = () => {
+    const { menuSelectItemIndex } = this.props;
     return (
-      <React.Fragment>
-        <NavLink to="/stats">
-          <ModuleNavigationButton>
-            <span>Stats</span>
-          </ModuleNavigationButton>
-        </NavLink>
-        <NavLink to="/users">
-          <ModuleNavigationButton>
-            <span>Users</span>
-          </ModuleNavigationButton>
-        </NavLink>
-        <NavLink to="/payments">
-          <ModuleNavigationButton>
-            <span>Payments</span>
-          </ModuleNavigationButton>
-        </NavLink>
-        <NavLink to="/feedback">
-          <ModuleNavigationButton>
-            <span>Feedback</span>
-          </ModuleNavigationButton>
-        </NavLink>
-      </React.Fragment>
+      <div style={{ marginTop: 1, marginBottom: 1 }}>
+        {ADMIN_MENU_ITEMS_ROUTES.map((path, index) => {
+          return (
+            <NavLink to={`/${path}`} key={path}>
+              <ModuleNavigationButton selected={menuSelectItemIndex === index}>
+                <span>{path.toUpperCase().slice(0, 1) + path.slice(1)}</span>
+              </ModuleNavigationButton>
+            </NavLink>
+          );
+        })}
+      </div>
     );
   };
 
@@ -151,11 +152,21 @@ const ModuleNavigationBase = styled.div<{ active?: boolean }>`
 // @ts-ignore
 const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
   active?: boolean;
+  selected?: boolean;
 }>`
   outline: none;
   color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
   background: ${({ active }) =>
     active ? COLORS.BACKGROUND_MODAL : "transparent"};
+
+  ${props =>
+    props.selected &&
+    `
+      outline-width: 1px;
+      outline-style: outset;
+      outline-color: ${COLORS.FAILURE};
+      background: ${COLORS.BACKGROUND_DROPDOWN_MENU_HOVER};
+    `}
 
   &:hover {
     color: white;
@@ -263,6 +274,7 @@ const ColTitle = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
+  menuSelectItemIndex: Modules.selectors.challenges.menuSelectItemIndex(state),
 });
 
 const ChallengeActions = Modules.actions.challenges;

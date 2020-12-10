@@ -57,10 +57,11 @@ const AdminSearchBox = (props: Props) => {
   const handleKeyPress = React.useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" && !!searchText) {
+        searchInput?.blur();
         props.history.push(`/search/${searchText}`);
       }
     },
-    [searchText, props.history],
+    [searchText, searchInput, props.history],
   );
 
   return (

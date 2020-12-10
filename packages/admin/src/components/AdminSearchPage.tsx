@@ -1,3 +1,4 @@
+import styled from "styled-components/macro";
 import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -11,6 +12,7 @@ import { parseSearchQuery } from "../tools/admin-utils";
 import { AdminUserComponent } from "./AdminUsersPage";
 import { assertUnreachable } from "@pairwise/common";
 import { COLORS } from "../tools/constants";
+import { Code } from "@blueprintjs/core";
 
 /** ===========================================================================
  * Types & Config
@@ -44,9 +46,15 @@ class AdminSearchPage extends React.Component<IProps, {}> {
             </SummaryText>
             {this.renderSearchResult(result)}
           </>
-        ) : (
+        ) : params.query ? (
           <SummaryText>
             <i>{params.query}</i> is an invalid search query.
+          </SummaryText>
+        ) : (
+          <SummaryText>
+            Some details are searchable. Press <Code>⌘+P</Code> and search for a
+            user <CodeText>email</CodeText>, <CodeText>uuid</CodeText>, or{" "}
+            <CodeText>challengeId</CodeText>.
           </SummaryText>
         )}
       </PageContainer>
@@ -114,6 +122,11 @@ class AdminSearchPage extends React.Component<IProps, {}> {
  * Styles
  * ============================================================================
  */
+
+const CodeText = styled(Code)`
+  color: #e97cff !important;
+  background: ${COLORS.BACKGROUND_CONTENT} !important;
+`;
 
 /** ===========================================================================
  * Props

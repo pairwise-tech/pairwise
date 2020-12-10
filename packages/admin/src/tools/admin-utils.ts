@@ -345,6 +345,10 @@ export const copyToClipboard = (text: Nullable<string>) => {
 export const parseSearchQuery = (
   query: string,
 ): Nullable<AdminSearchResult> => {
+  if (!query) {
+    return null;
+  }
+
   if (validateEmail(query)) {
     return { type: "email", value: query };
   } else if (query.length < 10) {

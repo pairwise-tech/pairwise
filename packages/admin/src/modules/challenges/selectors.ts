@@ -23,6 +23,11 @@ export const navigationOverlayVisible = createSelector(
   challenges => challenges.displayNavigationMap,
 );
 
+export const menuSelectItemIndex = createSelector(
+  [challengesState],
+  challenges => challenges.keySelectedMenuItemIndex,
+);
+
 export const courseList = createSelector(
   [challengesState],
   challenges => challenges.courses,

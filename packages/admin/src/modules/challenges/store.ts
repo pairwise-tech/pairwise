@@ -14,6 +14,7 @@ import { ChallengesActionTypes } from "./index";
  */
 
 export interface State {
+  keySelectedMenuItemIndex: Nullable<number>;
   courses: Nullable<CourseList>;
   courseSkeletons: Nullable<CourseSkeletonList>;
   challengeMap: Nullable<InverseChallengeMapping>;
@@ -25,6 +26,7 @@ const initialState: State = {
   courseSkeletons: null,
   challengeMap: null,
   displayNavigationMap: false,
+  keySelectedMenuItemIndex: null,
 };
 
 /** ===========================================================================
@@ -39,9 +41,14 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     displayNavigationMap: action.payload,
   }))
+  .handleAction(actions.setMenuItemSelectIndex, (state, action) => ({
+    ...state,
+    keySelectedMenuItemIndex: action.payload,
+  }))
   .handleAction(App.actions.locationChange, (state, action) => ({
     ...state,
     displayNavigationMap: false,
+    keySelectedMenuItemIndex: null,
   }))
   .handleAction(actions.storeInverseChallengeMapping, (state, action) => ({
     ...state,

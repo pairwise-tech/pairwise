@@ -24,7 +24,7 @@ import AdminPaymentsPage from "./AdminPaymentsPage";
 import AdminFeedbackPage from "./AdminFeedbackPage";
 import AdminSearchBox from "./AdminSearchBox";
 import Hugh from "../icons/hugh.jpg";
-import AdminDetailPage from "./AdminSearchPage";
+import AdminSearchPage from "./AdminSearchPage";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -119,7 +119,7 @@ const AdminContainer = (props: IProps) => {
     <Route key="users" path="/users" component={AdminUsersPage} />,
     <Route key="payments" path="/payments" component={AdminPaymentsPage} />,
     <Route key="feedback" path="/feedback" component={AdminFeedbackPage} />,
-    <Route key="search" path="/search/:query" component={AdminDetailPage} />,
+    <Route key="search" path="/search/:query?" component={AdminSearchPage} />,
     <Route key="redirect" component={() => <Redirect to="/stats" />} />,
   ];
 

@@ -66,9 +66,11 @@ class AdminStatsPage extends React.Component<IProps, {}> {
               </Value>
             </Stat>
             <h2>Recent Challenge Progress:</h2>
-            {progressRecords
-              ? this.renderProgressRecords(progressRecords)
-              : "No records yet"}
+            {progressRecords ? (
+              this.renderProgressRecords(progressRecords)
+            ) : (
+              <p style={{ color: COLORS.GRAY_TEXT }}>No records yet...</p>
+            )}
           </>
         )}
       </PageContainer>
@@ -80,19 +82,21 @@ class AdminStatsPage extends React.Component<IProps, {}> {
     return (
       <>
         <p style={{ color: "white", fontStyle: "italic" }}>{status}</p>
-        {records
-          ? records.map(record => {
-              return (
-                <DataCard key={record.user}>
-                  <KeyValue label="User" value={record.user} />
-                  <JsonComponent
-                    title="Challenges Completed:"
-                    data={record.challenges}
-                  />
-                </DataCard>
-              );
-            })
-          : "No records yet..."}
+        {records ? (
+          records.map(record => {
+            return (
+              <DataCard key={record.user}>
+                <KeyValue label="User" value={record.user} />
+                <JsonComponent
+                  title="Challenges Completed:"
+                  data={record.challenges}
+                />
+              </DataCard>
+            );
+          })
+        ) : (
+          <p style={{ color: COLORS.GRAY_TEXT }}>No records yet...</p>
+        )}
       </>
     );
   };
