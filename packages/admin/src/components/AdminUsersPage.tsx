@@ -133,7 +133,10 @@ class AdminUserBaseComponent extends React.Component<
             {showDetails ? "Hide" : "View"} User Details
           </Button>
           <Button style={{ marginLeft: 12, marginRight: 12 }} icon="inbox">
-            <ExternalLink link={`mailto:${user.email}`}>
+            <ExternalLink
+              style={{ color: "white" }}
+              link={`mailto:${user.email}`}
+            >
               Email User
             </ExternalLink>
           </Button>
