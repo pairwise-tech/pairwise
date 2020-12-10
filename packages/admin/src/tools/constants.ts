@@ -11,6 +11,7 @@ export const COLORS = {
   LIGHT_FAILURE: "#ff7a8a",
   PRIMARY_BLUE: "#2ee3ff",
   PRIMARY_GREEN: "rgb(0, 255, 185)",
+  LIGHT_PINK: "#fc426d",
   SECONDARY_PINK: "#f50057",
   SECONDARY_YELLOW: "#ffdf75",
   SECONDARY_ORANGE: "#FFB85A",

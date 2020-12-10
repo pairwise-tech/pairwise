@@ -30,7 +30,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
           <Button onClick={this.props.refreshStats}>Refresh Stats</Button>
         </Row>
         {statsLoading ? (
-          <p>Loading...</p>
+          <p style={{ color: COLORS.GRAY_TEXT }}>Loading...</p>
         ) : (
           <>
             <Stat>

@@ -354,7 +354,7 @@ const ProductTitle = styled.h1`
   }
 
   a:hover {
-    color: ${COLORS.PRIMARY_GREEN};
+    color: ${COLORS.LIGHT_PINK};
   }
 
   /* Not vital to the product so hide it for thin views */
