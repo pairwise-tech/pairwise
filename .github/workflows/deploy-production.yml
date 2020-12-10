@@ -42,6 +42,7 @@ env:
 
 jobs:
   build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -96,6 +97,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      # Install dependencies, if any package.json or lock files have changed
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: bonham000
+          password: "${{ secrets.GITHUB_TOKEN }}"
+
       # Setup gcloud CLI
       - name: Setup gcloud CLI
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -200,6 +212,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      # Install dependencies, if any package.json or lock files have changed
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: bonham000
+          password: "${{ secrets.GITHUB_TOKEN }}"
+
       # Same setup as workspace client
       - name: Build the admin client application
         run: |
@@ -234,6 +257,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      # Install dependencies, if any package.json or lock files have changed
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: bonham000
+          password: "${{ secrets.GITHUB_TOKEN }}"
+
       # NOTE: We need the static files to be available to the host environment,
       # thus the use of volumes here. This is because we want to use the
       # authenticated and authorized gsutil to deploy the site, and if we
@@ -260,8 +294,8 @@ jobs:
           channel_id: CTBG8AT0B
 
   # Provide a success confirmation to Slack when all the jobs pass
-  deploy-production-success:
-    name: Deploy Production Success
+  deploy-success-notification:
+    name: Deploy Success Notification
     needs: ["server-deploy", "client-deploy", "admin-deploy", "website-deploy"]
     runs-on: ubuntu-latest
 
