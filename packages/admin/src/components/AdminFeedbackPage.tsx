@@ -58,7 +58,6 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
               <CardButtonRow>
                 <CardButton
                   intent="danger"
-                  style={{ marginTop: 6 }}
                   onClick={() => deleteFeedbackByUuid(feedback.uuid)}
                 >
                   Delete Feedback Record
