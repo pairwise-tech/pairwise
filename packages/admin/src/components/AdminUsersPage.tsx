@@ -8,9 +8,11 @@ import {
   DataCard,
   KeyValue,
   SummaryText,
+  CardButton,
+  CardButtonRow,
   ExternalLink,
 } from "./AdminComponents";
-import { Collapse, Button, Alert, Intent } from "@blueprintjs/core";
+import { Collapse, Alert, Intent } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
 
 /** ===========================================================================
@@ -118,8 +120,8 @@ class AdminUserBaseComponent extends React.Component<
         </Alert>
         <KeyValue label="Email" value={user.email} allowCopy />
         <KeyValue label="uuid" value={user.uuid} code />
-        <div style={{ marginTop: 12, marginBottom: 12 }}>
-          <Button
+        <CardButtonRow>
+          <CardButton
             icon="info-sign"
             onClick={() => {
               if (showDetails) {
@@ -130,33 +132,33 @@ class AdminUserBaseComponent extends React.Component<
             }}
           >
             {showDetails ? "Hide" : "View"} User Details
-          </Button>
-          <Button style={{ marginLeft: 12, marginRight: 12 }} icon="inbox">
+          </CardButton>
+          <CardButton icon="inbox">
             <ExternalLink
               style={{ color: "white" }}
               link={`mailto:${user.email}`}
             >
               Email User
             </ExternalLink>
-          </Button>
+          </CardButton>
           {!payment ? (
-            <Button
+            <CardButton
               icon="dollar"
               onClick={() => this.setState({ alert: "gift" })}
             >
               Gift Course
-            </Button>
+            </CardButton>
           ) : payment.status === "CONFIRMED" ? (
-            <Button
+            <CardButton
               icon="dollar"
               onClick={() => this.setState({ alert: "refund" })}
             >
               Refund Course
-            </Button>
+            </CardButton>
           ) : (
-            <Button disabled>Payment has been refunded.</Button>
+            <CardButton disabled>Payment has been refunded.</CardButton>
           )}
-        </div>
+        </CardButtonRow>
         <Collapse isOpen={showDetails}>
           <KeyValue label="Given Name" value={user.givenName} />
           <KeyValue label="Family Name" value={user.familyName} />

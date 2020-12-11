@@ -7,8 +7,9 @@ import {
   DataCard,
   KeyValue,
   SummaryText,
+  CardButtonRow,
+  CardButton,
 } from "./AdminComponents";
-import { Button } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 
 /** ===========================================================================
@@ -54,20 +55,25 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
                 label="createdAt"
                 value={new Date(feedback.createdAt).toDateString()}
               />
-              <Button
-                intent="danger"
-                style={{ marginTop: 6 }}
-                onClick={() => deleteFeedbackByUuid(feedback.uuid)}
-              >
-                Delete Feedback Record
-              </Button>
-              {user && (
-                <Link to={`/search/${user.uuid}`}>
-                  <Button style={{ marginTop: 6, marginLeft: 12 }}>
-                    View Feedback Author
-                  </Button>
-                </Link>
-              )}
+              <CardButtonRow>
+                <CardButton
+                  intent="danger"
+                  style={{ marginTop: 6 }}
+                  onClick={() => deleteFeedbackByUuid(feedback.uuid)}
+                >
+                  Delete Feedback Record
+                </CardButton>
+                {user && (
+                  <CardButton>
+                    <Link
+                      style={{ color: "white" }}
+                      to={`/search/${user.uuid}`}
+                    >
+                      View Feedback Author
+                    </Link>
+                  </CardButton>
+                )}
+              </CardButtonRow>
             </DataCard>
           );
         })}
