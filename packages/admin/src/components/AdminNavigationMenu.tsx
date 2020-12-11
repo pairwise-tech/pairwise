@@ -163,7 +163,7 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
     props.selected &&
     `
       outline-width: 1px;
-      outline-style: outset;
+      outline-style: solid;
       outline-color: ${COLORS.FAILURE};
       background: ${COLORS.BACKGROUND_DROPDOWN_MENU_HOVER};
     `}

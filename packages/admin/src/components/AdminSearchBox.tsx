@@ -59,6 +59,8 @@ const AdminSearchBox = (props: Props) => {
       if (e.key === "Enter" && !!searchText) {
         searchInput?.blur();
         props.history.push(`/search/${searchText}`);
+      } else if (e.key === "Escape") {
+        searchInput?.blur();
       }
     },
     [searchText, searchInput, props.history],
