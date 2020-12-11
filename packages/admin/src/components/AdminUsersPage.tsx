@@ -90,6 +90,12 @@ class AdminUserBaseComponent extends React.Component<
     const { user } = this.props;
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
+    // Count up all the user's completed challenges
+    const challengeTotal = user.challengeProgressHistory.reduce(
+      (total: number, courseProgress: any) =>
+        total + Object.keys(JSON.parse(courseProgress.progress)).length,
+      0,
+    );
     return (
       <DataCard key={user.uuid}>
         <Alert
@@ -120,7 +126,10 @@ class AdminUserBaseComponent extends React.Component<
         </Alert>
         <KeyValue label="Email" value={user.email} allowCopy />
         <KeyValue label="uuid" value={user.uuid} code />
-        <CardButtonRow>
+        <SummaryText>
+          User has completed {challengeTotal} challenges.
+        </SummaryText>
+        <CardButtonRow style={{ marginBottom: 24 }}>
           <CardButton
             icon="info-sign"
             onClick={() => {
