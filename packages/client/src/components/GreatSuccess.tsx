@@ -57,7 +57,6 @@ const CUSTOM_SUCCESS_MESSAGES: { [key: string]: JSX.Element | string } = {
       give you the skills to build modern websites and apps. These challenges
       are intended as a short demonstration of how the Pairwise curriculum works
       - there are hundreds of additional challenges ahead waiting for you!
-      Choose <strong>Next Challenge</strong>.
     </span>
   ),
 };
