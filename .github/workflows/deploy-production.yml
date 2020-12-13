@@ -272,9 +272,9 @@ jobs:
           docker run \
             --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public:rw" docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest /bin/bash -c 'yarn www:build'
 
-      # Deploy the static WWW site to Cloud Storage
+      # Deploy the static website site to Cloud Storage
       - name: Deploy pairwise.tech static site
-        run: gsutil -m rsync -r packages/www/public gs://www.pairwise.tech
+        run: gsutil cp -r packages/www/public gs://www.pairwise.tech
 
     # Send Slack notification if workflow fails
       - name: Notify Slack on workflow failure
