@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import Confetti from "react-confetti";
 import { IRect } from "react-confetti/dist/types/Rect";
 import { Challenge, getChallengeSlug } from "@pairwise/common";
-import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
+import { scrollToVideoAndPlay } from "./MediaArea";
 import Modules, { ReduxStoreState } from "modules/root";
 import { NextChallengeButton } from "./ChallengeControls";
 import { connect } from "react-redux";
@@ -33,6 +33,52 @@ const getDimensions = () => ({
 
 // The colors from our logo
 const PAIRWISE_COLORS = ["#27C9DD", "#F3577A", "#F6FA88", "#49F480", "#FFB85A"];
+
+const CUSTOM_SUCCESS_MESSAGES: { [key: string]: JSX.Element | string } = {
+  // challenge id : custom message
+  iSF4BNIl: (
+    <span>
+      Great job, you solved the first intro challenge! The Pairwise Curriculum
+      is composed of hundreds of small challenges like this because we believe
+      writing code is the best way to learn. Choose{" "}
+      <strong>Next Challenge</strong> to try and solve another.
+    </span>
+  ),
+  Oqha$qtc: (
+    <span>
+      Awesome! Now you've seen a bit of HTML and CSS which are the foundation of
+      the modern web. The next challenge will introduce you to a programming
+      language.
+    </span>
+  ),
+  Sbb4Nf76s: (
+    <span>
+      Excellent! Now you have a taste of HTML, CSS, and TypeScript, which will
+      give you the skills to build modern websites and apps. These challenges
+      are intended as a short demonstration of how the Pairwise curriculum works
+      - there are hundreds of additional challenges ahead waiting for you!
+      Choose <strong>Next Challenge</strong>.
+    </span>
+  ),
+};
+
+const renderSuccessMessage = (challenge: Challenge) => {
+  if (challenge.id in CUSTOM_SUCCESS_MESSAGES) {
+    const customMessage = CUSTOM_SUCCESS_MESSAGES[challenge.id];
+    return customMessage;
+  } else {
+    // Some titles already end in ! so no need for a .
+    const punctuation =
+      challenge.title.charAt(challenge.title.length - 1) === "!" ? "" : ".";
+
+    return (
+      <span>
+        Congratulations, you've completed <strong>{challenge.title}</strong>
+        {punctuation} Keep up the progress!
+      </span>
+    );
+  }
+};
 
 /** ===========================================================================
  * Card Title Component
@@ -203,10 +249,6 @@ const GreatSuccess: React.FC<Props> = ({
 }) => {
   const { onClose } = props;
 
-  const handleScrollToContent = React.useCallback(() => {
-    onClose();
-    scrollToContentArea();
-  }, [onClose]);
   const handlePlayVideo = React.useCallback(() => {
     onClose();
     scrollToVideoAndPlay();
@@ -229,10 +271,7 @@ const GreatSuccess: React.FC<Props> = ({
         }}
       />
       <CardTitle>{challenge.title}</CardTitle>
-      <p style={{ marginBottom: 20, fontSize: 20 }}>
-        Congratulations, you've completed <strong>{challenge.title}</strong>.
-        Keep up the progress!
-      </p>
+      <SuccessMessageText>{renderSuccessMessage(challenge)}</SuccessMessageText>
       <ButtonActions>
         <Button
           large
@@ -247,11 +286,6 @@ const GreatSuccess: React.FC<Props> = ({
           Have feedback?
         </Button>
         <div className="right-buttons">
-          {challenge.content && (
-            <Button large style={{ order: 3 }} onClick={handleScrollToContent}>
-              View Content
-            </Button>
-          )}
           {challenge.videoUrl && (
             <Button
               large
@@ -289,7 +323,7 @@ const ButtonActions = styled.div`
   .right-buttons {
     margin-left: auto;
     button {
-      margin-right: 10px; // does not affect NextChallengeButton which is an as
+      margin-right: 10px;
     }
   }
 
@@ -319,6 +353,15 @@ const ButtonActions = styled.div`
 
   ${Classes.BUTTON} {
     margin-left: 10px;
+  }
+`;
+
+const SuccessMessageText = styled.p`
+  margin-bottom: 20px;
+  font-size: 20px;
+
+  @media ${MOBILE} {
+    font-size: 16px;
   }
 `;
 
