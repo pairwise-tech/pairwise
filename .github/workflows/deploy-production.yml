@@ -67,7 +67,7 @@ jobs:
       - name: Build the pairwise.tech static site
         run: |
           docker run \
-            --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public:rw" docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest /bin/bash -c 'yarn www:build'
+            --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public" docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest /bin/bash -c 'yarn www:build'
 
       - name: Debug 1
         run: ls
