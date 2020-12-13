@@ -58,6 +58,13 @@ jobs:
           dockerfile: BaseCache.Dockerfile
           image_name: pairwise-dependencies
 
+      # Setup gcloud CLI
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+
 
       # NOTE: We need the static files to be available to the host environment,
       # thus the use of volumes here. This is because we want to use the
