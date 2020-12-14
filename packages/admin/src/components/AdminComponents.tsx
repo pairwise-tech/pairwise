@@ -383,7 +383,7 @@ export const CardButtonRow = styled.div`
 `;
 
 export const CardButton = styled(Button)`
-  margin-left: 12px;
+  margin-right: 8px;
 
   @media ${MOBILE} {
     margin-left: 0;
