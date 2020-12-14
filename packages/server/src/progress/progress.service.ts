@@ -221,8 +221,8 @@ export class ProgressService {
     } else {
       this.challenges++;
       records[id] = {
-        user: `${user} - ${id}`,
         challengeIds: new Set([challengeId]),
+        user: user === "Anonymous User" ? `${user} - ${id}` : id,
       };
     }
   };

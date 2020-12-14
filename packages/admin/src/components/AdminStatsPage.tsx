@@ -7,11 +7,13 @@ import {
   JsonComponent,
   DataCard,
   KeyValue,
+  CardButton,
 } from "./AdminComponents";
 import { summarizeUserProgress } from "../tools/admin-utils";
 import { COLORS } from "../tools/constants";
 import { ProgressRecords } from "../modules/stats/store";
 import { Button } from "@blueprintjs/core";
+import { Link } from "react-router-dom";
 
 /** ===========================================================================
  * Home Component
@@ -84,9 +86,28 @@ class AdminStatsPage extends React.Component<IProps, {}> {
         <p style={{ color: "white", fontStyle: "italic" }}>{status}</p>
         {records ? (
           records.map(record => {
+            const IS_REGISTERED_USER = !record.user.includes("Anonymous");
             return (
               <DataCard key={record.user}>
-                <KeyValue label="User" value={record.user} />
+                <KeyValue
+                  allowCopy
+                  label="User"
+                  value={record.user}
+                  code={IS_REGISTERED_USER}
+                />
+                {IS_REGISTERED_USER && (
+                  <CardButton
+                    icon="user"
+                    style={{ marginTop: 12, marginBottom: 16 }}
+                  >
+                    <Link
+                      style={{ color: "white" }}
+                      to={`/search/${record.user}`}
+                    >
+                      View User
+                    </Link>
+                  </CardButton>
+                )}
                 <JsonComponent
                   title="Challenges Completed:"
                   data={record.challenges}
