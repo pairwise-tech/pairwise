@@ -26,18 +26,37 @@ class Home extends React.Component<IProps, {}> {
           <PageTitle>Welcome to Pairwise!</PageTitle>
           <ContentText>
             Pairwise is the best place to learn to code and start a career in
-            software development. The Pairwise FullStack TypeScript Course is
-            currently in{" "}
+            software development.
+          </ContentText>
+          <ContentText style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}>
+            What's the value in Pairwise?
+          </ContentText>
+          <ContentText>
+            Most coding bootcamps cost $10,000 USD or more, while a computer
+            science degree from a university is even more expensive and takes
+            years to complete.
+          </ContentText>
+          <ContentText>
+            While many free programming education resources exist online, it's
+            hard to find a single coherent curriculum to take you from beginner
+            to expert. That's what Pairwise is. A single, linear curriculum
+            which starts you coding and solving problems from Day 1.
+          </ContentText>
+          <ContentText style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}>
+            What do I get?
+          </ContentText>
+          <ContentText>
+            The Pairwise FullStack TypeScript Course is currently in{" "}
             <Bold style={{ textDecoration: "underline " }}>BETA</Bold> and
-            available to purchase now for <Bold>$50 USD</Bold>. The first three
-            modules which cover HTML, CSS, and TypeScript will remain free.
+            available to purchase now for{" "}
+            <Bold style={{ color: COLORS.SECONDARY_YELLOW }}>$50 USD</Bold>.
+            This includes all of the modules you can view in the course
+            navigation menu, and covers HTML & CSS, basic programming, frontend
+            and backend development, mobile development, and other skills like
+            testing and deploying software.
           </ContentText>
           <ContentText>
-            Purchasing the course will lock-in lifetime access to all of the
-            content and features which we are actively developing.
-          </ContentText>
-          <ContentText>
-            To learn more about Pairwise,{" "}
+            To see more about what you will learn,{" "}
             <ExternalLink link="https://pairwise.tech">go here</ExternalLink>.
           </ContentText>
         </ContentContainer>
@@ -129,7 +148,7 @@ class Home extends React.Component<IProps, {}> {
  */
 
 const ContentContainer = styled.div`
-  max-width: ${PROSE_MAX_WIDTH - 325}px;
+  max-width: ${PROSE_MAX_WIDTH - 150}px;
   margin-bottom: 24px;
 
   p {

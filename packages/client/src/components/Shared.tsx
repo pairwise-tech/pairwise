@@ -141,6 +141,7 @@ export const FullScreenOverlay = styled.div`
   height: 100vh;
   z-index: 500;
   position: fixed;
+  padding: 12px;
   display: flex;
   align-items: center;
   justify-content: center;

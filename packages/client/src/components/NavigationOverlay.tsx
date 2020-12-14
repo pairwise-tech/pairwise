@@ -34,7 +34,12 @@ import {
   Position,
   Button,
 } from "@blueprintjs/core";
-import { NavLink, NavLinkProps, RouteComponentProps } from "react-router-dom";
+import {
+  NavLink,
+  NavLinkProps,
+  RouteComponentProps,
+  Link,
+} from "react-router-dom";
 import {
   SortableModuleList,
   SortableChallengeList,
@@ -149,16 +154,27 @@ class NavigationOverlay extends React.Component<
           onClick={e => e.stopPropagation()}
         >
           <ColTitle className="course-select">
-            <Button
-              fill
-              style={{ whiteSpace: "nowrap" }}
-              className="mobile-shrink"
-              text="Curriculum Details"
-              rightIcon="document-open"
-              onClick={() =>
-                window.open("https://www.pairwise.tech/curriculum", "_blank")
-              }
-            />
+            {isMobile ? (
+              <Link style={{ width: "auto" }} to="/home">
+                <Button
+                  fill
+                  rightIcon="home"
+                  className="mobile-shrink"
+                  style={{ whiteSpace: "nowrap" }}
+                ></Button>
+              </Link>
+            ) : (
+              <Button
+                fill
+                style={{ whiteSpace: "nowrap" }}
+                className="mobile-shrink"
+                text="Curriculum Details"
+                rightIcon="document-open"
+                onClick={() =>
+                  window.open("https://www.pairwise.tech/curriculum", "_blank")
+                }
+              />
+            )}
             {/* NOTE: Course Select Menu for multiple courses: */}
             {/* <CourseSelect
               filterable={false}
