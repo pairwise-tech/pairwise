@@ -22,16 +22,24 @@ import { Link } from "react-router-dom";
 
 class AdminStatsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { usersList, progressRecords, statsLoading } = this.props;
+    const {
+      usersList,
+      statsLoading,
+      progressRecords,
+      usersListLoading,
+    } = this.props;
 
+    // Wait for stats and users list to load
+    const loading = usersListLoading || statsLoading;
     const summary = summarizeUserProgress(usersList);
+
     return (
       <PageContainer>
         <Row>
           <h2>Current Stats:</h2>
           <Button onClick={this.props.refreshStats}>Refresh Stats</Button>
         </Row>
-        {statsLoading ? (
+        {loading ? (
           <p style={{ color: COLORS.GRAY_TEXT }}>Loading...</p>
         ) : (
           <>
