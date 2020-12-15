@@ -1,6 +1,7 @@
 {
   /* See http://go.microsoft.com/fwlink/?LinkId=827846 for more information */
   "recommendations": [
+    "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "wayou.vscode-todo-highlight",
     "streetsidesoftware.code-spell-checker"
