@@ -9,7 +9,7 @@ import {
 } from "./get-challenge-metadata";
 import { Challenge } from "src/types/courses";
 
-const log = (...args) => {
+const log = (...args): void => {
   console.log("[COURSE METADATA]", ...args);
 };
 
