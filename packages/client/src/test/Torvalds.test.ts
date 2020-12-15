@@ -96,6 +96,26 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   "61iScTEvN", // Another styles issue
   "LITUB9VZ6", // More styling issues
   "fkx7YqjKA", // Styling...
+
+  // *************************************************************************
+  // Testing Software challenges: Jest "tests cannot be nested" WTF!
+  "kGOefnhFl",
+  "l0IkyZi$m",
+  "2EkzeSu52",
+  "cpGNKdx5s",
+  "2j9vhRMjW",
+  "zdV1F5Bdb",
+  "gYpNeTnG1",
+  "zCbzABROtb",
+  "e8LMnAF1U",
+  "Vd0gFPl5V",
+  "v1sB3gaFR",
+  "qUXuU6Tyr",
+  "qU36RQTcK",
+  "oNwi40jtp",
+  "yKI$72Y7v",
+  "4X8ks1Rz",
+  "8gYWsIVO",
 ]);
 
 // Enable or disable log info
