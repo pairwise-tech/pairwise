@@ -45,6 +45,11 @@ jobs:
       - name: Run e2e tests
         run: yarn e2e
 
+      # Run Cypress tests
+      # Enable this step to run the Cypress tests for PR workflows, if needed
+      - name: Run Cypress tests
+        run: yarn cypress
+
       # Send Slack notification if workflow succeeds
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
       - name: Notify Slack on workflow success
