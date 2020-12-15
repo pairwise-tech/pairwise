@@ -35,7 +35,9 @@ jobs:
 
       # Build the packages
       - name: Build packages
-        run: yarn docker:build:ci_test
+        # run: yarn docker:build:ci_test
+        # [1] Enable this for a full build if you want to enable Cypress:
+        run: yarn docker:build:ci_deploy
 
       # Run all package unit tests
       - name: Run static and unit tests
@@ -46,7 +48,7 @@ jobs:
         run: yarn e2e
 
       # Run Cypress tests
-      # Enable this step to run the Cypress tests for PR workflows, if needed
+      # [2] Enable this step to run the Cypress tests for PR workflows:
       - name: Run Cypress tests
         run: yarn cypress
 
