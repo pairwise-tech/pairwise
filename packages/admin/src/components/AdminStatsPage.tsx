@@ -48,7 +48,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
               <Value>{summary.stats.totalUsers.toLocaleString()}</Value>
             </Stat>
             <Stat>
-              <b>New Users Last Week:</b>{" "}
+              <b>New Users in Last 7 Days:</b>{" "}
               <Value>{summary.stats.newUsersInLastWeek.toLocaleString()}</Value>
             </Stat>
             <Stat>
@@ -58,7 +58,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
               </Value>
             </Stat>
             <Stat>
-              <b>Challenges Completed in Last Week:</b>{" "}
+              <b>Challenges Completed in Last 7 Days:</b>{" "}
               <Value>
                 {summary.stats.challengesCompletedInLastWeek.toLocaleString()}
               </Value>
