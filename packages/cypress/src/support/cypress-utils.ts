@@ -83,7 +83,6 @@ export const getIframeBody = () => {
       // "document" element, it is stored in "contentDocument" property Cypress
       // "its" command can access deep properties using dot notation
       // https://on.cypress.io/its
-      // @ts-ignore TS Doesn't understand this one, but it's valid
       .its("0.contentDocument")
       .should("exist")
       .its("body") // Get the document. Automatically retries until body is loaded
@@ -116,7 +115,7 @@ export const checkTestStatus = (status: TestStatus, index: number) => {
  */
 export const checkTestResultStatus = (
   expectedStatus: TestStatus,
-  numberOfResults: number = 1,
+  numberOfResults = 1,
 ) => {
   // Run the code first
   click("pw-run-code");
