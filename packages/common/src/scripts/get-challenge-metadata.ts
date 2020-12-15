@@ -5,7 +5,7 @@ import * as ChildProcess from "child_process";
 import { Course, ChallengeMetadata } from "src/types/courses";
 import bytes from "bytes";
 
-// tslint:disable-next-line: no-var-requires
+// eslint-disable-next-line
 const debug = require("debug")("common:get-challenge-metadata");
 
 const exec = promisify(ChildProcess.exec);
@@ -80,11 +80,10 @@ const isNumeric = str => {
 // how it works and it's what lets the reducer grab the content and tack it on
 // to the last object.
 export const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
-  // This seems simply too dynamic for TS, which is fair. It cannot gaurantee
+  // This seems simply too dynamic for TS, which is fair. It cannot guarantee
   // what I'm telling it, but we're working on the assumption that the passed in
   // string really is a git porcelain string and TS can't help us with the
   // specific format of a string
-  // @ts-ignore
   return str
     .trim()
     .split(/^(\t.+$)/m) // Very important regex. See NOTE
