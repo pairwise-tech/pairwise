@@ -1,2 +1,3 @@
 # Ignore compiled browser JS test lib file
 src/js/browser-test-lib.js
+src/js/test-expectation-lib.js
