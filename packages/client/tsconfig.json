@@ -30,7 +30,6 @@
     "client-declarations.d.ts"
   ],
   "exclude": [
-    "src/js/*",
-    "../../node_modules/**/*"
+    "src/js/*"
   ]
 }
