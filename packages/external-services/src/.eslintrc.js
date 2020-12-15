@@ -19,6 +19,9 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   rules: {
-    "@typescript-eslint/explicit-function-return-type": ["warn"],
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
   },
 };
