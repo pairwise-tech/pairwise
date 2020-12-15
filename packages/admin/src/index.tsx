@@ -30,6 +30,7 @@ try {
   // Expose the debug module so we can call __debug.enable(...) from the
   // console. Otherwise we would have to set the localStorage key directly,
   // which is error prone since the lib might change its key at some point
+  // eslint-disable-next-line
   // @ts-ignore
   window.__debug = require("debug");
 } catch (err) {

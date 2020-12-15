@@ -35,7 +35,7 @@ We use the following libraries across the codebase, here are some quick links to
 - [Passport](http://www.passportjs.org/docs/): (Easy) authentication.
 - [Jest](https://jestjs.io/docs/en/getting-started): The Test Runner.
 - [Cypress](https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell): You will love it.
-- [TSLint](https://palantir.github.io/tslint/): Write code according to the rules.
+- [ESLint](https://eslint.org/): Write code according to the rules.
 - [Prettier](https://prettier.io/docs/en/options.html): Make the code pretty.
 - [Gatsby](https://www.gatsbyjs.org/docs/): The best static sites.
 - [Lerna](https://lerna.js.org/): All the code, all the repos.

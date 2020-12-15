@@ -19,8 +19,6 @@ import {
   APP_INITIALIZATION_TYPE,
 } from "tools/admin-utils";
 
-const debug = require("debug")("client:app:epics");
-
 /** ===========================================================================
  * Epics
  * ============================================================================
@@ -98,7 +96,6 @@ const stripInitialParameters: EpicSignature = (action$, _, deps) => {
         `[WARN]: Query parameters being removed on app initialization!`,
       );
       const { router } = deps;
-      debug(`Removing query parameters: ${router.location.search}`);
       router.replace(router.location.pathname);
     }),
     ignoreElements(),
@@ -138,20 +135,7 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
     });
 
     return unsub;
-  }).pipe(
-    tap(location => {
-      const page = `${location.pathname}${location.search}`;
-      try {
-        // @ts-ignore
-        window.ga("set", "page", page);
-        // @ts-ignore
-        window.ga("send", "pageview");
-      } catch (err) {
-        debug("[INFO] Google analytics related error:", err.message);
-      }
-    }),
-    map(Actions.locationChange),
-  );
+  }).pipe(map(Actions.locationChange));
 };
 
 /** ===========================================================================
