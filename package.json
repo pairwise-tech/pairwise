@@ -68,7 +68,7 @@
     "edit:email": "cd packages/server && yarn edit:email"
   },
   "resolutions": {
-    "minipass": "2.7.0",
+    "babel-loader": "8.1.0",
     "**/@types/slate": "0.44.11"
   },
   "workspaces": [

@@ -310,6 +310,7 @@ export const ModalTitleText = styled.h1`
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
+// @ts-ignore
 export const ModalSubText = styled(ModalTitleText)`
   font-size: 16px;
   margin-top: 12px;

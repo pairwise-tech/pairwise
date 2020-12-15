@@ -3,10 +3,28 @@
   "version": "0.0.1",
   "description": "The Pairwise Website",
   "author": "Pairwise Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spawnia/gatsby-starter-typescript-graphql"
+  },
+  "scripts": {
+    "build": "gatsby build",
+    "compress-media-kit": "cd src/images && zip -9 -r media-kit.zip media-kit/",
+    "develop": "yarn run start",
+    "start:dev": "yarn run start",
+    "format": "prettier --write '{__mocks__,src,test}/**/*.{js,ts,tsx}'",
+    "lint": "eslint src/**/*.{js,ts,tsx}",
+    "lint:fix": "yarn run lint --fix",
+    "start": "gatsby develop",
+    "start:prod": "gatsby serve",
+    "serve": "yarn run start:prod",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
+    "codegen": "graphql-codegen --config graphql-codegen.yml"
+  },
   "dependencies": {
     "@material-ui/core": "4.8.3",
     "@material-ui/icons": "4.5.1",
-    "add": "2.0.6",
     "gatsby": "2.19.21",
     "gatsby-image": "2.2.38",
     "gatsby-plugin-amplitude-analytics": "2.0.0",
@@ -57,22 +75,8 @@
     "husky": "3.1.0",
     "lint-staged": "9.5.0",
     "prettier": "1.19.1",
-    "typescript": "3.7.4",
+    "typescript": "4.1.3",
     "typescript-styled-plugin": "0.14.0"
-  },
-  "scripts": {
-    "build": "gatsby build",
-    "compress-media-kit": "cd src/images && zip -9 -r media-kit.zip media-kit/",
-    "develop": "yarn run start",
-    "start:dev": "yarn run start",
-    "format": "prettier --write '{__mocks__,src,test}/**/*.{js,ts,tsx}'",
-    "lint": "eslint src/**/*.{js,ts,tsx}",
-    "lint:fix": "yarn run lint --fix",
-    "start": "gatsby develop",
-    "start:prod": "gatsby serve",
-    "serve": "yarn run start:prod",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
-    "codegen": "graphql-codegen --config graphql-codegen.yml"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -97,10 +101,5 @@
     "gatsby",
     "typescript",
     "graphql"
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/spawnia/gatsby-starter-typescript-graphql"
-  }
+  ]
 }
