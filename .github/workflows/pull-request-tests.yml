@@ -1,7 +1,9 @@
 # This workflow runs tests against pull requests. The workflow runs unit
 # tests for all packages and the e2e test suite. In favor or speed the test
 # workflow omits the client package build and the cypress tests. These are
-# run in the full deploy pipeline before app deployments.
+# run in the full deploy pipeline before app deployments, but can also be
+# enabled below if you wish to have Cypress run against a PR to verify
+# changes more thoroughly. If so, see steps [1] and [2] below.
 name: Pull Request Tests
 
 on:
@@ -35,9 +37,9 @@ jobs:
 
       # Build the packages
       - name: Build packages
-        # run: yarn docker:build:ci_test
+        run: yarn docker:build:ci_test
         # [1] Enable this for a full build if you want to enable Cypress:
-        run: yarn docker:build:ci_deploy
+        # run: yarn docker:build:ci_deploy
 
       # Run all package unit tests
       - name: Run static and unit tests
@@ -49,8 +51,8 @@ jobs:
 
       # Run Cypress tests
       # [2] Enable this step to run the Cypress tests for PR workflows:
-      - name: Run Cypress tests
-        run: yarn cypress
+      # - name: Run Cypress tests
+      #   run: yarn cypress
 
       # Send Slack notification if workflow succeeds
       # (docs: https://github.com/voxmedia/github-action-slack-notify-build)
