@@ -9,9 +9,6 @@ import {
 } from "./get-challenge-metadata";
 import { Challenge } from "src/types/courses";
 
-// tslint:disable-next-line: no-var-requires
-const debug = require("debug")("common:build-metadata-index");
-
 const log = (...args) => {
   console.log("[COURSE METADATA]", ...args);
 };
