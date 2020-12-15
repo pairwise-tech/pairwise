@@ -200,6 +200,13 @@ export const CodeValue = styled(Code)<{ copy: string }>`
   }
 `;
 
+export const CodeText = styled(Code)`
+  color: #e97cff !important;
+  background: ${COLORS.BACKGROUND_CONTENT} !important;
+`;
+
+export const JSON_COMPONENT_ID = "json-component";
+
 export const JsonComponent = ({
   data,
   title,
@@ -213,7 +220,7 @@ export const JsonComponent = ({
   } else {
     json = (
       <JSONPretty
-        id="json-pretty"
+        id={JSON_COMPONENT_ID}
         data={data}
         theme={{
           key: "color:#fc426d;",
@@ -222,9 +229,8 @@ export const JsonComponent = ({
           main: `
               padding: 8px;
               max-width: 80vw;
-              width: max-content;
               overflow: scroll;
-              overscroll-behavior: none;
+              width: max-content;
               background: rgb(35,35,35);
             `,
         }}
@@ -362,5 +368,25 @@ export const PairwiseOpenCloseLogo = ({
 export const IconButton = styled(Button)`
   &:hover .bp3-icon:only-child {
     color: white !important;
+  }
+`;
+
+export const CardButtonRow = styled.div`
+  margin-top: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: row;
+
+  @media ${MOBILE} {
+    flex-direction: column;
+  }
+`;
+
+export const CardButton = styled(Button)`
+  margin-right: 8px;
+
+  @media ${MOBILE} {
+    margin-left: 0;
+    margin-top: 6px;
   }
 `;

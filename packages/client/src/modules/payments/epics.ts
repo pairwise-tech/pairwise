@@ -144,7 +144,7 @@ const getStripeJsLibrary = (): Nullable<StripeLibrary> => {
 // a few times in case the library is not loaded yet. Blegh!
 const handleRedirectToStripeCheckoutFlow = async (
   sessionId: string,
-  retries: number = 3,
+  retries = 3,
 ): Promise<any> => {
   const library = getStripeJsLibrary();
   if (library === null) {

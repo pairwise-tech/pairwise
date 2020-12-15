@@ -8,8 +8,6 @@ import styled from "styled-components";
 import { COLORS } from "tools/constants";
 import { getClientOS } from "../tools/utils";
 
-const debug = require("debug")("client:KeyboardShortcuts");
-
 /** ===========================================================================
  * Keyboard Shortcuts
  * ============================================================================
@@ -167,14 +165,11 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
       },
       [],
     );
-
-    debug("Setting up listeners");
     listeners.forEach(fn => {
       document.addEventListener("keydown", fn);
     });
 
     return () => {
-      debug("Removing listeners");
       listeners.forEach(fn => {
         document.removeEventListener("keydown", fn);
       });

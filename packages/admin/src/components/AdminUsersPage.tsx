@@ -1,15 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
+  CodeText,
   PageContainer,
   JsonComponent,
   DataCard,
   KeyValue,
   SummaryText,
+  CardButton,
+  CardButtonRow,
+  ExternalLink,
 } from "./AdminComponents";
-import { Collapse, Button } from "@blueprintjs/core";
+import { Collapse, Alert, Intent } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
 
 /** ===========================================================================
@@ -26,7 +29,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
     const { users } = this.props;
     return (
       <PageContainer>
-        <Title>Users List</Title>
+        <h2>Users List</h2>
         <SummaryText>
           There are currently {users.length} total registered users.
         </SummaryText>
@@ -36,56 +39,135 @@ class AdminUsersPage extends React.Component<IProps, IState> {
   }
 
   renderUsersList = (user: AdminUserView) => {
-    return <AdminUserComponent user={user} />;
+    return <AdminUserComponent key={user.uuid} user={user} />;
   };
 }
 
 /** ===========================================================================
- * Styles
+ * Props & Export
  * ============================================================================
  */
 
-const Title = styled.h2``;
+const mapStateToProps = (state: ReduxStoreState) => ({
+  users: Modules.selectors.users.usersState(state).users,
+});
 
-interface AdminUserComponentProps {
-  user: AdminUserView;
-}
+const dispatchProps = {};
+
+type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+
+type IProps = ConnectProps;
+
+const withProps = connect(mapStateToProps, dispatchProps);
+
+export default withProps(AdminUsersPage);
+
+/** ===========================================================================
+ * AdminUserBaseComponent
+ * ============================================================================
+ */
 
 interface AdminUserComponentState {
   uuid: Nullable<string>;
+  alert: null | "gift" | "refund";
 }
 
-export class AdminUserComponent extends React.Component<
-  AdminUserComponentProps,
+class AdminUserBaseComponent extends React.Component<
+  AdminUserBaseComponentProps,
   AdminUserComponentState
 > {
-  constructor(props: AdminUserComponentProps) {
+  constructor(props: AdminUserBaseComponentProps) {
     super(props);
 
     this.state = {
       uuid: null,
+      alert: null,
     };
   }
 
   render(): JSX.Element {
+    const { alert } = this.state;
     const { user } = this.props;
     const showDetails = this.state.uuid === user.uuid;
+    const payment = user.payments[0];
+    // Count up all the user's completed challenges
+    const challengeTotal = user.challengeProgressHistory.reduce(
+      (total: number, courseProgress: any) =>
+        total + Object.keys(JSON.parse(courseProgress.progress)).length,
+      0,
+    );
     return (
       <DataCard key={user.uuid}>
+        <Alert
+          icon="dollar"
+          canEscapeKeyCancel
+          canOutsideClickCancel
+          className="bp3-dark"
+          isOpen={alert !== null}
+          cancelButtonText="Cancel"
+          intent={Intent.DANGER}
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
+          confirmButtonText={alert === "gift" ? "Gift Course" : "Refund Course"}
+        >
+          {alert === "gift" ? (
+            <p>
+              Are you sure you want to gift the course to{" "}
+              <CodeText>{user.email}</CodeText>?
+            </p>
+          ) : (
+            <p>
+              Are you sure you want to refund the course payment for{" "}
+              <CodeText>{user.email}</CodeText>?<br />
+              <br />
+              You will also need to refund the payment transaction in Stripe.
+            </p>
+          )}
+        </Alert>
         <KeyValue label="Email" value={user.email} allowCopy />
         <KeyValue label="uuid" value={user.uuid} code />
-        <Button
-          style={{ marginTop: 6, marginBottom: 12 }}
-          onClick={() => {
-            if (showDetails) {
-              this.setState({ uuid: null });
-            } else {
-              this.setState({ uuid: user.uuid });
-            }
-          }}
-        >
-          {showDetails ? "Hide" : "View"} Details
-        </Button>
+        <SummaryText>
+          User has completed {challengeTotal} challenges.
+        </SummaryText>
+        <CardButtonRow style={{ marginBottom: 24 }}>
+          <CardButton
+            icon="info-sign"
+            onClick={() => {
+              if (showDetails) {
+                this.setState({ uuid: null });
+              } else {
+                this.setState({ uuid: user.uuid });
+              }
+            }}
+          >
+            {showDetails ? "Hide" : "View"} User Details
+          </CardButton>
+          <CardButton icon="inbox">
+            <ExternalLink
+              style={{ color: "white" }}
+              link={`mailto:${user.email}`}
+            >
+              Email User
+            </ExternalLink>
+          </CardButton>
+          {!payment ? (
+            <CardButton
+              icon="dollar"
+              onClick={() => this.setState({ alert: "gift" })}
+            >
+              Gift Course
+            </CardButton>
+          ) : payment.status === "CONFIRMED" ? (
+            <CardButton
+              icon="dollar"
+              onClick={() => this.setState({ alert: "refund" })}
+            >
+              Refund Course
+            </CardButton>
+          ) : (
+            <CardButton disabled>Payment has been refunded.</CardButton>
+          )}
+        </CardButtonRow>
         <Collapse isOpen={showDetails}>
           <KeyValue label="Given Name" value={user.givenName} />
           <KeyValue label="Family Name" value={user.familyName} />
@@ -119,28 +201,37 @@ export class AdminUserComponent extends React.Component<
       </DataCard>
     );
   }
+
+  handleCancel = () => {
+    this.setState({ alert: null });
+  };
+
+  handleConfirm = () => {
+    if (this.state.alert === "gift") {
+      this.props.giftCourseForUser(this.props.user.email);
+    } else {
+      this.props.refundCourseForUser(this.props.user.email);
+    }
+
+    this.setState({ alert: null });
+  };
 }
 
 /** ===========================================================================
- * Props
+ * Props & Export
  * ============================================================================
  */
 
-const mapStateToProps = (state: ReduxStoreState) => ({
-  users: Modules.selectors.users.usersState(state).users,
-});
+const coursePaymentProps = {
+  giftCourseForUser: Modules.actions.payments.giftCourseForUser,
+  refundCourseForUser: Modules.actions.payments.refundCourseForUser,
+};
 
-const dispatchProps = {};
+type AdminUserBaseComponentProps = typeof coursePaymentProps & {
+  user: AdminUserView;
+};
 
-type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
-
-type IProps = ConnectProps;
-
-const withProps = connect(mapStateToProps, dispatchProps);
-
-/** ===========================================================================
- * Export
- * ============================================================================
- */
-
-export default withProps(AdminUsersPage);
+export const AdminUserComponent = connect(
+  null,
+  coursePaymentProps,
+)(AdminUserBaseComponent);

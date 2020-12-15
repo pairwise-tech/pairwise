@@ -3,7 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Markdown from 'react-markdown';
 import Paper from '@material-ui/core/Paper';
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
@@ -674,11 +674,6 @@ const ColRow = styled.div`
 `;
 
 const GetEarlyAccess = () => {
-  const [email, setEmail] = useState<string>('');
-  const handleChange = (e: any) => {
-    setEmail(e.target.value);
-  };
-
   return (
     <div id={EMAIL_SIGNUP_SECTION_ID}>
       <SectionTitle>Start learning right now</SectionTitle>

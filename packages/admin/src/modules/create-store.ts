@@ -52,6 +52,7 @@ const configureStore = () => {
     composeWithDevTools(applyMiddleware(...middleware)),
   );
 
+  // eslint-disable-next-line
   // @ts-ignore
   epicMiddleware.run(rootEpic);
 
@@ -74,10 +75,13 @@ const store = configureStore();
  * Meant for dev mode, to manually dispatch actions via the browser console.
  */
 export const exposeGlobals = () => {
+  // eslint-disable-next-line
   // @ts-ignore
   window.Modules = Modules;
+  // eslint-disable-next-line
   // @ts-ignore
   window.getState = store.getState;
+  // eslint-disable-next-line
   // @ts-ignore
   window.dispatch = store.dispatch;
 };

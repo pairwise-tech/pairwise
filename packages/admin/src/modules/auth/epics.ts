@@ -81,9 +81,7 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
           Actions.initializeAppSuccess({ accessToken }),
         );
       } else {
-        // deps.toaster.error("Unauthorized, get out!");
         return of(
-          // Actions.logoutUser(),
           Actions.storeAccessTokenFailure(),
           Actions.initializeAppSuccess({ accessToken }),
           Actions.fetchAdminUserFailure({ message: "Unauthorized" }),

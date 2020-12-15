@@ -146,6 +146,7 @@ class Api extends BaseApiClass {
     try {
       let courses: CourseList;
       if (ENV.DEV) {
+        // eslint-disable-next-line
         const courseList = require("@pairwise/common").default;
         // NOTE: Hard-coded to only show the FullstackTypeScript Course
         courses = [courseList.FullstackTypeScript];
@@ -166,6 +167,7 @@ class Api extends BaseApiClass {
 
   fetchCourseSkeletons = async () => {
     if (ENV.DEV) {
+      // eslint-disable-next-line
       const courseMap = require("@pairwise/common").default;
       // NOTE: Hard-coded to only show the FullstackTypeScript Course
       const courses: CourseSkeletonList = [courseMap.FullstackTypeScript];
@@ -231,6 +233,28 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
       return axios.get<PaymentRecord[]>(`${HOST}/admin/payments`, {
+        headers,
+      });
+    });
+  };
+
+  giftCourseForUser = async (userEmail: string) => {
+    return this.httpHandler(async () => {
+      // Course id is hard-coded for now
+      const body = { userEmail, courseId: "fpvPtfu7s" };
+      const { headers } = this.getRequestHeaders();
+      return axios.post<string>(`${HOST}/admin/purchase-course`, body, {
+        headers,
+      });
+    });
+  };
+
+  refundCourseForUser = async (userEmail: string) => {
+    return this.httpHandler(async () => {
+      // Course id is hard-coded for now
+      const body = { userEmail, courseId: "fpvPtfu7s" };
+      const { headers } = this.getRequestHeaders();
+      return axios.post<string>(`${HOST}/admin/refund-course`, body, {
         headers,
       });
     });

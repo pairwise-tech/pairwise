@@ -207,7 +207,8 @@ export class ProgressService {
     if (this.uuidMap.has(uuid)) {
       id = this.uuidMap.get(uuid);
     } else {
-      id = shortid();
+      // Generate id for Anonymous users
+      id = user === "Pairwise User" ? uuid : shortid();
       this.uuidMap.set(uuid, id);
     }
 
@@ -220,8 +221,8 @@ export class ProgressService {
     } else {
       this.challenges++;
       records[id] = {
-        user: `${user} - ${id}`,
         challengeIds: new Set([challengeId]),
+        user: user === "Anonymous User" ? `${user} - ${id}` : id,
       };
     }
   };

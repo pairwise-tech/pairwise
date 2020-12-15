@@ -2,19 +2,15 @@
 // so the TS file _will be_ compiled for us.
 
 // @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import EXPECTATION_LIB from "!raw-loader!../js/browser-test-lib.js";
 
 // @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import EXPECTATION_LIB_TYPES from "!raw-loader!../js/browser-test-lib.d.ts";
 
 // @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import TEST_EXPECTATION_LIB from "!raw-loader!../js/test-expectation-lib.js";
 
 // @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import TEST_EXPECTATION_LIB_TYPES from "!raw-loader!../js/test-expectation-lib.d.ts";
 
 const WORKSPACE_LIB = `

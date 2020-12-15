@@ -57,6 +57,7 @@ const Deemphasize = styled.div`
 `;
 
 const Layout = ({ children, hideHeader = false }: LayoutProps) => {
+  // eslint-disable-next-line
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {

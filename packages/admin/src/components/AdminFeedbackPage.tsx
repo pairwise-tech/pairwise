@@ -7,8 +7,10 @@ import {
   DataCard,
   KeyValue,
   SummaryText,
+  CardButtonRow,
+  CardButton,
 } from "./AdminComponents";
-import { Button } from "@blueprintjs/core";
+import { Link } from "react-router-dom";
 
 /** ===========================================================================
  * Home Component
@@ -26,6 +28,8 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
           submitted.
         </SummaryText>
         {feedbackRecords.map(feedback => {
+          const { user } = feedback;
+          const email = user?.email;
           return (
             <DataCard key={feedback.uuid}>
               <KeyValue label="Type" value={feedback.type} />
@@ -36,18 +40,39 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
                 value={feedback.challengeId}
               />
               <KeyValue label="Feedback" value={feedback.feedback} />
-              <KeyValue label="uuid" value={feedback.uuid} code allowCopy />
+              <KeyValue
+                allowCopy
+                label="Feedback Author"
+                value={email ? email : "Anonymous"}
+              />
+              <KeyValue
+                allowCopy
+                code={!!user}
+                label="Author uuid"
+                value={user ? user.uuid : "n/a"}
+              />
               <KeyValue
                 label="createdAt"
                 value={new Date(feedback.createdAt).toDateString()}
               />
-              <Button
-                intent="danger"
-                style={{ marginTop: 6 }}
-                onClick={() => deleteFeedbackByUuid(feedback.uuid)}
-              >
-                Delete Feedback Record
-              </Button>
+              <CardButtonRow>
+                <CardButton
+                  intent="danger"
+                  onClick={() => deleteFeedbackByUuid(feedback.uuid)}
+                >
+                  Delete Feedback Record
+                </CardButton>
+                {user && (
+                  <CardButton>
+                    <Link
+                      style={{ color: "white" }}
+                      to={`/search/${user.uuid}`}
+                    >
+                      View Feedback Author
+                    </Link>
+                  </CardButton>
+                )}
+              </CardButtonRow>
             </DataCard>
           );
         })}

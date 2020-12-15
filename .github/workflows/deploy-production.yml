@@ -270,13 +270,20 @@ jobs:
       - name: Build the pairwise.tech static site
         run: |
           docker run \
-            --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public:rw" docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest /bin/bash -c 'yarn www:build'
+            --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public" docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest /bin/bash -c 'yarn www:build'
 
-      # Deploy the static WWW site to Cloud Storage
+      # Setup gcloud CLI to use gsutil
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+
+      # Deploy the static site to Cloud Storage
       - name: Deploy pairwise.tech static site
         run: gsutil -m rsync -r packages/www/public gs://www.pairwise.tech
 
-    # Send Slack notification if workflow fails
+      # Send Slack notification if workflow fails
       - name: Notify Slack on workflow failure
         if: failure()
         env:

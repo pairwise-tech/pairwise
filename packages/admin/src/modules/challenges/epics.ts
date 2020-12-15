@@ -32,7 +32,7 @@ const contentSkeletonInitializationEpic: EpicSignature = (action$, _, deps) => {
  */
 const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
-    filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
+    filter(isActionOf(Actions.storeAccessTokenSuccess)),
     mergeMap(deps.api.fetchCourses),
     map(({ value: courses }) => {
       if (courses) {

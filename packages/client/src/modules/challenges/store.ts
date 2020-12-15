@@ -27,8 +27,6 @@ import { defaultSandboxChallenge } from "tools/utils";
 import { ChallengesActionTypes } from "./index";
 import { view } from "ramda";
 
-const debug = require("debug")("client:challenge:store");
-
 /** ===========================================================================
  * Challenges Store
  * ============================================================================
@@ -123,8 +121,6 @@ const getChallengeLens = (courses: CourseList, payload: ChallengeUpdate) => {
     "challenges",
     challengeIndex,
   ];
-
-  debug("[INFO] keyPath", keyPath);
 
   return lensPath(keyPath);
 };
@@ -306,6 +302,7 @@ const getNewChallengeContextAfterContentDeletion = (
 const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   initialState,
 )
+  // @ts-ignore
   .handleAction(actions.createChallenge, (state, action) => {
     const { courses, courseSkeletons } = state;
 
@@ -326,6 +323,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       }),
     };
   })
+  // @ts-ignore
   .handleAction(actions.createCourseModule, (state, action) => {
     const { courses, courseSkeletons } = state;
 
@@ -347,6 +345,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       }),
     };
   })
+  // @ts-ignore
   .handleAction(actions.updateChallenge, (state, action) => {
     const { courses, courseSkeletons } = state;
     const { id, challenge } = action.payload;
@@ -468,6 +467,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       courseSkeletons: updatedCourseSkeletons,
     };
   })
+  // @ts-ignore
   .handleAction(actions.reorderChallengeList, (state, action) => {
     const { courses, courseSkeletons } = state;
 
@@ -482,6 +482,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       courseSkeletons: reorderChallengeList(courseSkeletons, action.payload),
     };
   })
+  // @ts-ignore
   .handleAction(actions.reorderModuleList, (state, action) => {
     const { courses, courseSkeletons } = state;
 
@@ -496,6 +497,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       courseSkeletons: reorderModuleList(courseSkeletons, action.payload),
     };
   })
+  // @ts-ignore
   .handleAction(actions.updateCourseModule, (state, action) => {
     const { courses, courseSkeletons } = state;
 

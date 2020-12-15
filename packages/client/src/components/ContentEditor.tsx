@@ -143,8 +143,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
     let totalLength = 0;
     let index = -1;
 
-    // @ts-ignore What is wrong with these typings??? Lists are iterable
-    for (const { text } of leaves) {
+    for (const { text } of leaves.toArray()) {
       totalLength += text.length;
       index += 1;
       if (sel.start.offset < totalLength) {
@@ -311,6 +310,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
     const chars = startBlock.text.slice(0, selection.start.offset).trim();
     const type = getType(chars);
 
+    // eslint-disable-next-line
     // @ts-ignore Slate React types depend on the wrong version of @types/slate...
     if (type && !editor.isSelectionInTable()) {
       // only shortcuts to change heading size should work in headings
@@ -334,6 +334,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
         checked = false;
       }
 
+      // eslint-disable-next-line
       // @ts-ignore Slate types are not great
       editor.withoutNormalizing(c => {
         c.moveFocusToStartOfNode(startBlock)
@@ -417,7 +418,11 @@ const MarkdownShortcuts = (): SlatePlugin => {
           return next();
         }
 
-        return <InlineComponent node={node} children={children} data={data} />;
+        return (
+          <InlineComponent node={node} data={data}>
+            {children}
+          </InlineComponent>
+        );
       }
       default:
         return next();

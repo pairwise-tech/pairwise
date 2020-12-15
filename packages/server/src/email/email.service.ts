@@ -29,7 +29,7 @@ interface EmailRequest {
  */
 export class EmailService {
   private transporter: any;
-  private emailAddress: string = "sean@pairwise.tech";
+  private emailAddress = "sean@pairwise.tech";
 
   constructor() {
     // Read it and weep: https://github.com/googleapis/google-api-nodejs-client/issues/1110#issuecomment-546147468

@@ -7,11 +7,13 @@ import {
   JsonComponent,
   DataCard,
   KeyValue,
+  CardButton,
 } from "./AdminComponents";
 import { summarizeUserProgress } from "../tools/admin-utils";
 import { COLORS } from "../tools/constants";
 import { ProgressRecords } from "../modules/stats/store";
 import { Button } from "@blueprintjs/core";
+import { Link } from "react-router-dom";
 
 /** ===========================================================================
  * Home Component
@@ -20,16 +22,24 @@ import { Button } from "@blueprintjs/core";
 
 class AdminStatsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { usersList, progressRecords, statsLoading } = this.props;
+    const {
+      usersList,
+      statsLoading,
+      progressRecords,
+      usersListLoading,
+    } = this.props;
 
+    // Wait for stats and users list to load
+    const loading = usersListLoading || statsLoading;
     const summary = summarizeUserProgress(usersList);
+
     return (
       <PageContainer>
         <Row>
           <h2>Current Stats:</h2>
           <Button onClick={this.props.refreshStats}>Refresh Stats</Button>
         </Row>
-        {statsLoading ? (
+        {loading ? (
           <p style={{ color: COLORS.GRAY_TEXT }}>Loading...</p>
         ) : (
           <>
@@ -84,9 +94,28 @@ class AdminStatsPage extends React.Component<IProps, {}> {
         <p style={{ color: "white", fontStyle: "italic" }}>{status}</p>
         {records ? (
           records.map(record => {
+            const IS_REGISTERED_USER = !record.user.includes("Anonymous");
             return (
               <DataCard key={record.user}>
-                <KeyValue label="User" value={record.user} />
+                <KeyValue
+                  allowCopy
+                  label="User"
+                  value={record.user}
+                  code={IS_REGISTERED_USER}
+                />
+                {IS_REGISTERED_USER && (
+                  <CardButton
+                    icon="user"
+                    style={{ marginTop: 12, marginBottom: 16 }}
+                  >
+                    <Link
+                      style={{ color: "white" }}
+                      to={`/search/${record.user}`}
+                    >
+                      View User
+                    </Link>
+                  </CardButton>
+                )}
                 <JsonComponent
                   title="Challenges Completed:"
                   data={record.challenges}

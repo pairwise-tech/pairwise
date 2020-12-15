@@ -19,8 +19,6 @@ import toaster from "tools/toast-utils";
 import { copyToClipboard } from "tools/utils";
 import { WORKSPACE_LIB_TYPES } from "tools/browser-test-lib";
 
-const debug = require("debug")("client:ChallengeTestEditor");
-
 /** ===========================================================================
  * Types & Config
  * ============================================================================
@@ -106,8 +104,6 @@ const ChallengeTestEditor = (props: Props) => {
           id: challengeId,
           challenge: { testCode: code },
         });
-      } else {
-        debug("[INFO] Test Editor -- No code passed via message event", e);
       }
     };
 

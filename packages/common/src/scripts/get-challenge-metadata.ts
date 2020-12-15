@@ -5,7 +5,7 @@ import * as ChildProcess from "child_process";
 import { Course, ChallengeMetadata } from "src/types/courses";
 import bytes from "bytes";
 
-// tslint:disable-next-line: no-var-requires
+// eslint-disable-next-line
 const debug = require("debug")("common:get-challenge-metadata");
 
 const exec = promisify(ChildProcess.exec);
@@ -80,11 +80,10 @@ const isNumeric = str => {
 // how it works and it's what lets the reducer grab the content and tack it on
 // to the last object.
 export const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
-  // This seems simply too dynamic for TS, which is fair. It cannot gaurantee
+  // This seems simply too dynamic for TS, which is fair. It cannot guarantee
   // what I'm telling it, but we're working on the assumption that the passed in
   // string really is a git porcelain string and TS can't help us with the
   // specific format of a string
-  // @ts-ignore
   return str
     .trim()
     .split(/^(\t.+$)/m) // Very important regex. See NOTE
@@ -100,7 +99,6 @@ export const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
 
       const [commitLine, ...meta] = chunk.trim().split("\n");
       const blame = meta.reduce(
-        // tslint:disable-next-line: variable-name
         (_agg, line) => {
           const [k, ...rest] = line.split(" ");
           const value = rest.join(" ");
@@ -231,7 +229,6 @@ const getGitMetadata = async ({
 type CourseFiles = ReturnType<typeof readCourseFilesFromDisk>;
 
 export const buildFilePorcelain = async (courseFiles: CourseFiles) => {
-  // tslint:disable-next-line: variable-name
   const _tmp = await Promise.all(
     courseFiles
       .map(x => x.filepath)

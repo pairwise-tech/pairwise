@@ -16,6 +16,7 @@ import {
   OverlayText,
   OverlaySmallText,
   PairwiseOpenCloseLogo,
+  JSON_COMPONENT_ID,
 } from "./AdminComponents";
 import AdminNavigationMenu from "./AdminNavigationMenu";
 import AdminKeyboardShortcuts from "./AdminKeyboardShortcuts";
@@ -82,14 +83,22 @@ const AdminContainer = (props: IProps) => {
     const swipeHandler = new Swipy(document.documentElement);
 
     // Handle to swipe right
-    swipeHandler.on("swiperight", () => {
+    swipeHandler.on("swiperight", (touchEvent: any) => {
+      if (isTouchEventOnEditor(touchEvent)) {
+        return;
+      }
+
       if (!overlayVisible) {
         setNavigationMapState(true);
       }
     });
 
     // Handle to swipe left
-    swipeHandler.on("swipeleft", () => {
+    swipeHandler.on("swipeleft", (touchEvent: any) => {
+      if (isTouchEventOnEditor(touchEvent)) {
+        return;
+      }
+
       if (overlayVisible) {
         setNavigationMapState(false);
       }
@@ -462,6 +471,31 @@ const AccountDropdownButton = styled.div`
     color: ${COLORS.TEXT_HOVER};
   }
 `;
+
+const isTouchEventOnEditor = (touchEvent: any) => {
+  try {
+    // For most browsers:
+    if (touchEvent.path) {
+      return !!touchEvent.path.find(
+        (x: HTMLElement) => x.id === JSON_COMPONENT_ID,
+      );
+    } else {
+      // For Safari:
+      let node = touchEvent.srcElement.parentNode;
+      // document.parentNode is null so this should terminate eventually
+      while (node) {
+        if (node.id === JSON_COMPONENT_ID) {
+          return true;
+        } else {
+          node = node.parentNode;
+        }
+      }
+      return false;
+    }
+  } catch (err) {
+    return false;
+  }
+};
 
 /** ===========================================================================
  * Props

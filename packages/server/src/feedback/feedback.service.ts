@@ -18,7 +18,15 @@ export class FeedbackService {
   ) {}
 
   public async getAllFeedback() {
-    return this.feedbackRepository.find();
+    // Find all feedback and join with user
+    return this.feedbackRepository.find({
+      join: {
+        alias: "feedback",
+        leftJoinAndSelect: {
+          user: "feedback.user",
+        },
+      },
+    });
   }
 
   public async getFeedbackForChallenge(challengeId: string) {

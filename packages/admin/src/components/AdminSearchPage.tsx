@@ -1,8 +1,7 @@
-import styled from "styled-components/macro";
 import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, SummaryText } from "./AdminComponents";
+import { CodeText, PageContainer, SummaryText } from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { parseSearchQuery, composeWithProps } from "../tools/admin-utils";
 import { AdminUserComponent } from "./AdminUsersPage";
@@ -114,16 +113,6 @@ class AdminSearchPage extends React.Component<IProps, {}> {
     }
   };
 }
-
-/** ===========================================================================
- * Styles
- * ============================================================================
- */
-
-const CodeText = styled(Code)`
-  color: #e97cff !important;
-  background: ${COLORS.BACKGROUND_CONTENT} !important;
-`;
 
 /** ===========================================================================
  * Props

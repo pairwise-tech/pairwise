@@ -38,7 +38,7 @@ declare const getAll: (selector: string) => any;
  * @param {Element} el DOM Element
  * @param {string} cssProp CSS property name. I.e. "background-color"
  */
-declare const getStyle: (el: HTMLElement, cssProp: string, pseudoSelector?: string) => string;
+declare const getStyle: (el: HTMLElement, cssProp: string, pseudoSelector?: string | null) => string;
 /**
  * Get the innerHTML from an element given an HTML selector.
  *

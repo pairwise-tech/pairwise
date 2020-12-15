@@ -141,6 +141,7 @@ export const FullScreenOverlay = styled.div`
   height: 100vh;
   z-index: 500;
   position: fixed;
+  padding: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -309,6 +310,7 @@ export const ModalTitleText = styled.h1`
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
+// @ts-ignore
 export const ModalSubText = styled(ModalTitleText)`
   font-size: 16px;
   margin-top: 12px;

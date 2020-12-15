@@ -33,7 +33,7 @@ import { ParsedQuery } from "query-string";
 /**
  * Artificially wait the provided amount of time.
  */
-export const wait = async (time: number = 1000) => {
+export const wait = async (time = 1000) => {
   await new Promise((_: any) => setTimeout(_, time));
 };
 
