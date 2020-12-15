@@ -55,12 +55,15 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
     if (!BlobTypeSet.has(blob.dataBlob.type)) {
       throw new BadRequestException(
         ERROR_CODES.INVALID_CODE_BLOB,
-        "Invalid blob type",
+        `Invalid blob type, received: ${blob.dataBlob.type}`,
       );
     }
 
     if (!ContentUtility.challengeIdIsValid(blob.challengeId)) {
-      throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
+      throw new BadRequestException(
+        ERROR_CODES.INVALID_CHALLENGE_ID,
+        `Invalid blob type, received: ${blob.challengeId}`,
+      );
     }
 
     const { dataBlob } = blob;
@@ -386,7 +389,10 @@ export const validateRefundRequest = (
  */
 export const validateFeedbackDto = (feedbackDto: IFeedbackDto) => {
   if (!ContentUtility.challengeIdIsValid(feedbackDto.challengeId)) {
-    throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
+    throw new BadRequestException(
+      ERROR_CODES.INVALID_CHALLENGE_ID,
+      `Invalid blob type, received: ${feedbackDto.challengeId}`,
+    );
   } else if (!feedbackTypeSet.has(feedbackDto.type)) {
     throw new BadRequestException(ERROR_CODES.INVALID_FEEDBACK_TYPE);
   }
