@@ -17,6 +17,7 @@ Cypress.Screenshot.defaults({
   screenshotOnRunFailure: true,
 });
 
+// eslint-disable-next-line
 Cypress.on("uncaught:exception", (err, runnable) => {
   // returning false here prevents Cypress from
   // failing the test

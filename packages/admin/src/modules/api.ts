@@ -146,6 +146,7 @@ class Api extends BaseApiClass {
     try {
       let courses: CourseList;
       if (ENV.DEV) {
+        // eslint-disable-next-line
         const courseList = require("@pairwise/common").default;
         // NOTE: Hard-coded to only show the FullstackTypeScript Course
         courses = [courseList.FullstackTypeScript];
@@ -166,6 +167,7 @@ class Api extends BaseApiClass {
 
   fetchCourseSkeletons = async () => {
     if (ENV.DEV) {
+      // eslint-disable-next-line
       const courseMap = require("@pairwise/common").default;
       // NOTE: Hard-coded to only show the FullstackTypeScript Course
       const courses: CourseSkeletonList = [courseMap.FullstackTypeScript];

@@ -33,6 +33,7 @@ let ReactNativeWebSourceUrl: Source = "";
  * Not very ideal, but Jest has some issues with the file-loader! Fine!
  */
 if (IS_TEST) {
+  // eslint-disable-next-line
   const fs = require("fs");
   const lib = fs.readFileSync("src/js/react-native-web-lib.js", {
     encoding: "utf8",
@@ -49,8 +50,8 @@ if (IS_TEST) {
    * update this source code, the bundle will need to be regenerated using that
    * helper repo and copied over here.
    */
+  // eslint-disable-next-line
   // @ts-ignore
-  // eslint-disable-next-line import/no-webpack-loader-syntax
   ReactNativeWebSourceUrl = require("file-loader!../js/react-native-web-lib.js");
 }
 
@@ -96,7 +97,7 @@ class DependencyCacheClass {
         try {
           // Get the source library:
           const resolver = this.sourceLibraries.get(packageName);
-          let lib: string = "";
+          let lib = "";
 
           if (typeof resolver === "function") {
             lib = resolver();

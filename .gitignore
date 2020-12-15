@@ -38,6 +38,9 @@ docker
 # Misc backup files
 *.bak
 
+# ESLint cache
+.eslintcache
+
 # Local files which should not be committed
 secrets
 pairwise-users.json

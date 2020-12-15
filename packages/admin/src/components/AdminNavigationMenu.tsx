@@ -149,7 +149,6 @@ const ModuleNavigationBase = styled.div<{ active?: boolean }>`
   }
 `;
 
-// @ts-ignore
 const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
   active?: boolean;
   selected?: boolean;

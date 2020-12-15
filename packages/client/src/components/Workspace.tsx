@@ -95,8 +95,6 @@ import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
 import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
 import isMobile from "is-mobile";
 
-const debug = require("debug")("client:Workspace");
-
 /** ===========================================================================
  * Types & Config
  * ============================================================================
@@ -172,7 +170,7 @@ const PANEL_SCROLL_ID = "panel-scroll-target";
 
 class Workspace extends React.Component<IProps, IState> {
   // Place to store user code when solution code is revealed
-  userCode: string = "";
+  userCode = "";
 
   // A cancelable handler for refreshing the editor
   editorRefreshTimerHandler: Nullable<number> = null;
@@ -189,7 +187,6 @@ class Workspace extends React.Component<IProps, IState> {
   // Resize the workspace in response to the window resizing. If this happens
   // it's probably because a mobile user goes from portrait to landscape.
   private readonly handleWindowResize = debounce(300, async (e: UIEvent) => {
-    debug(`[handleWindowResize] ${window.innerWidth}x${window.innerHeight}`);
     this.setState({
       dimensions: getDimensions(window.innerWidth, window.innerHeight),
     });
@@ -250,8 +247,6 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   async componentDidMount() {
-    debug("componentDidMount");
-
     window.addEventListener("resize", this.handleWindowResize);
     document.addEventListener("keydown", this.handleKeyPress);
     window.addEventListener(
@@ -283,8 +278,6 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentWillUnmount() {
-    debug("componentWillUnmount");
-
     this.cleanupEditor();
     window.removeEventListener("resize", this.handleWindowResize);
     window.removeEventListener("keydown", this.handleKeyPress);
@@ -304,11 +297,6 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: IProps) {
-    debug("componentDidUpdate");
-    /**
-     * Handle toggling the solution code on and off.
-     */
-
     // Solution is toggled ON:
     if (!prevProps.revealSolutionCode && this.props.revealSolutionCode) {
       // Store the user code and set the solution code as the workspace
@@ -352,12 +340,6 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Handle changes in the editor theme
     if (prevProps.userSettings.theme !== this.props.userSettings.theme) {
-      debug(
-        "[componentDidUpdate setting theme] (prev, next) (",
-        prevProps.userSettings.theme,
-        this.props.userSettings.theme,
-        ")",
-      );
       this.editor?.setTheme(this.props.userSettings.theme);
     }
 
@@ -414,7 +396,7 @@ class Workspace extends React.Component<IProps, IState> {
           isPreviewTestResults: true,
         };
       } else {
-        debug(
+        console.warn(
           `[getPreviewTestResults] buildPreviewTestResultsFromCode failed: ${error}`,
         );
       }
@@ -427,7 +409,6 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   refreshEditor = async () => {
-    debug("refreshEditor");
     await this.editor?.refresh();
     if (this.iFrameRef) {
       this.runChallengeTests();
@@ -457,14 +438,11 @@ class Workspace extends React.Component<IProps, IState> {
     switch (type) {
       case "react":
       case "typescript":
-        debug(`[getMonacoLanguageFromChallengeType] using "typescript"`);
         return "typescript";
       case "markup":
-        debug(`[getMonacoLanguageFromChallengeType] using "html"`);
         return "html";
       default:
         console.warn(`[WARNING] Invalid challenge type for monaco: ${type}`);
-        debug(`[getMonacoLanguageFromChallengeType] using "plaintext"`);
         return "plaintext";
     }
   };
@@ -1012,7 +990,6 @@ class Workspace extends React.Component<IProps, IState> {
                   >
                     <small
                       className={
-                        // tslint:disable-next-line: prefer-template
                         "mobile-tests-badge " +
                         (failingTests.length ? "fail" : "success")
                       }
@@ -1142,7 +1119,6 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleEditorContentChange = (code: string) => {
-    debug("handleEditorContentChange", code);
     /**
      * Update the stored code value and then:
      *
@@ -1204,29 +1180,23 @@ class Workspace extends React.Component<IProps, IState> {
       const { source, message } = event.data;
       switch (source) {
         case IFRAME_MESSAGE_TYPES.LOG: {
-          debug("[IFRAME_MESSAGE_TYPES.LOG]", message);
           return handleLogMessage(message, "log");
         }
         case IFRAME_MESSAGE_TYPES.INFO: {
-          debug("[IFRAME_MESSAGE_TYPES.INFO]", message);
           return handleLogMessage(message, "info");
         }
         case IFRAME_MESSAGE_TYPES.WARN: {
-          debug("[IFRAME_MESSAGE_TYPES.WARN]", message);
           return handleLogMessage(message, "warn");
         }
         case IFRAME_MESSAGE_TYPES.ERROR: {
-          debug("[IFRAME_MESSAGE_TYPES.ERROR]", message);
           return handleLogMessage(message, "error");
         }
         case IFRAME_MESSAGE_TYPES.INFINITE_LOOP: {
-          debug("[IFRAME_MESSAGE_TYPES.INFINITE_LOOP]", message);
           toaster.toast.clear(); /* Clear existing toasts */
           toaster.warn("Please check your code for infinite loops!");
           break;
         }
         case IFRAME_MESSAGE_TYPES.TEST_RESULTS: {
-          debug("[IFRAME_MESSAGE_TYPES.TEST_RESULTS]", message);
           const results = JSON.parse(message);
           if (!Array.isArray(results)) {
             console.warn("[bad things]", results);
@@ -1239,7 +1209,6 @@ class Workspace extends React.Component<IProps, IState> {
           break;
         }
         case IFRAME_MESSAGE_TYPES.TEST_ERROR: {
-          debug("[IFRAME_MESSAGE_TYPES.TEST_ERROR]", message);
           console.warn(
             "[ERR] Something went wrong with the tests:",
             source,
@@ -1285,10 +1254,6 @@ class Workspace extends React.Component<IProps, IState> {
         challengeId: this.props.challenge.id,
         complete: correct,
       });
-    } else {
-      debug(
-        "[INFO] Starter code not changed. Not firing handleAttemptChallenge.",
-      );
     }
   };
 
@@ -1445,7 +1410,6 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   handleCompilationError = (error: Error) => {
-    debug("[handleCompilationError]", error);
     const testResults = [
       {
         test: "",
@@ -1576,7 +1540,6 @@ class Workspace extends React.Component<IProps, IState> {
    */
   private readonly handleCodeFormatMessage = (event: MessageEvent) => {
     const code = event.data?.code;
-    debug("handleCodeFormatMessage", code);
     const channel = event.data?.channel;
     if (code && channel === CODE_FORMAT_CHANNEL) {
       this.transformMonacoCode(() => code);
@@ -1659,12 +1622,9 @@ class Workspace extends React.Component<IProps, IState> {
     this.setState({ code: fn(this.state.code) });
   };
 
-  private readonly pauseAndRefreshEditor = async (timeout: number = 50) => {
+  private readonly pauseAndRefreshEditor = async (timeout = 50) => {
     // Be sure to cancel any in-flight timeout before setting up a new one
     if (this.editorRefreshTimerHandler) {
-      debug(
-        "[WARN pauseAndRefreshEditor] Refresh already in progress. Ignoring.",
-      );
       clearTimeout(this.editorRefreshTimerHandler);
     }
 

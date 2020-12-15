@@ -1,8 +1,6 @@
 import { monaco as Monaco } from "@monaco-editor/react";
 import * as MonacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 
-const debug = require("debug")("client:Workspace:monaco");
-
 // Quicker reference type for the Monaco model
 export type MonacoModel = MonacoEditor.editor.ITextModel;
 
@@ -26,8 +24,8 @@ interface ExternalLibrary {
 const libs: ExternalLibrary[] = [
   {
     name: "monaco-type-patches.d.ts",
+    // eslint-disable-next-line
     // @ts-ignore
-    // eslint-disable-next-line import/no-webpack-loader-syntax
     source: require("!raw-loader!../monaco-type-patches.d.ts"),
   },
 ];
@@ -40,7 +38,6 @@ const addExtraLibs = (mn: typeof MonacoEditor) => {
   libs
     .filter(lib => !addedLibs.has(lib.source))
     .forEach(lib => {
-      debug("[REGISTERING EXTERNAL LIB]", lib);
       /**
        * Do not cache user imported module type definitions, they can change
        * between challenges and will need to be updated again.
@@ -66,7 +63,6 @@ const initializePairwiseMonaco = (): Promise<typeof MonacoEditor> => {
     .then(addExtraLibs)
     .catch(err => {
       const message = "[Monaco Lib Error] Could not add extra libs";
-      debug(message, err);
       console.error(message);
 
       // If this fails due to our code try loading up the editor anyway.

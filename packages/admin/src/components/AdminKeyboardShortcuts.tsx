@@ -15,8 +15,6 @@ import {
   ADMIN_MENU_ITEMS_ROUTES,
 } from "./AdminNavigationMenu";
 
-const debug = require("debug")("client:KeyboardShortcuts");
-
 /** ===========================================================================
  * Keyboard Shortcuts
  * ============================================================================
@@ -173,13 +171,11 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
       [],
     );
 
-    debug("Setting up listeners");
     listeners.forEach(fn => {
       document.addEventListener("keydown", fn);
     });
 
     return () => {
-      debug("Removing listeners");
       listeners.forEach(fn => {
         document.removeEventListener("keydown", fn);
       });

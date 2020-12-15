@@ -175,6 +175,7 @@ export class AuthController {
    * the request referrer appears to be invalid.
    */
   private getRedirectUrl = (req: Request) => {
+    // eslint-disable-next-line
     // @ts-ignore
     const referrerUrl: string | undefined = req.headers.referer;
     const clientUrl = ENV.CLIENT_URL;

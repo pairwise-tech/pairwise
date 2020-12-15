@@ -37,7 +37,7 @@ module.exports = {
         // Defines where to place the tracking script - `true` in the head and `false` in the body
         // GA recommends putting this in the head so here we are.
         head: true,
-        // Aparently required in germany? https://www.gatsbyjs.org/packages/gatsby-plugin-google-analytics/#anonymize
+        // Apparently required in germany? https://www.gatsbyjs.org/packages/gatsby-plugin-google-analytics/#anonymize
         anonymize: true,
       },
     },

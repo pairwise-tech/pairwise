@@ -146,13 +146,11 @@ const buildSearchResult = (result: ISearchResult): SearchResult => {
     // keys of matchLocations are known it's still inferred as string[] and as
     // far as I can tell there is know way to override this assumption. The
     // explicit typing on _result will give us some type support though
-    const resultMatches: SearchResultMatch[] = Object.keys(
-      matchLocationsByFields,
-    )
+    const resultMatches: any = Object.keys(matchLocationsByFields)
       // @ts-ignore
       .reduce(reducer, []);
 
-    return resultMatches;
+    return resultMatches as SearchResultMatch[];
   });
 
   return {

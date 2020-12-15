@@ -22,7 +22,8 @@
     "baseUrl": "src",
     "sourceMap": true,
     "inlineSources": true,
-    "sourceRoot": "/"
+    "sourceRoot": "/",
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src",

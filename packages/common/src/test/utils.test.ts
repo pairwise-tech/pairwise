@@ -3,8 +3,8 @@ import { assertUnreachable, getChallengeSlug } from "../tools/utils";
 describe("Tools > Utils", () => {
   test("assertUnreachable", () => {
     expect(() => {
-      // @ts-ignore
-      assertUnreachable({ value: "some value " });
+      const value = { value: "some value " };
+      assertUnreachable(value as never);
     }).toThrow();
   });
 

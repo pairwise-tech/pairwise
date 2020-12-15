@@ -18,9 +18,6 @@ import "codemirror/addon/edit/matchtags.js";
 import "codemirror/addon/edit/closebrackets.js";
 import "codemirror/addon/edit/closetag.js";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const debug = require("debug")("client:WorkspaceCodemirrorEditor");
-
 interface IState {
   theWaitIsOver: boolean;
   fontSize: number;
@@ -38,10 +35,9 @@ export default class WorkspaceCodemirrorEditor
     fontSize: this.props.editorOptions.fontSize || 16,
   };
 
-  private _isMounted: boolean = false;
+  private _isMounted = false;
 
   updateOptions = (options: Partial<ICodeEditorOptions>) => {
-    debug("updateOptions", options);
     const { fontSize } = options;
     if (fontSize) {
       this.setState({ fontSize });
@@ -49,7 +45,6 @@ export default class WorkspaceCodemirrorEditor
   };
 
   refresh = async () => {
-    debug("noop(refresh)");
     // Unnecessary for the controlled component, but required by the ICodeEditor spec
     // noop
   };
@@ -65,14 +60,12 @@ export default class WorkspaceCodemirrorEditor
   };
 
   setTheme = (theme: string) => {
-    debug("noop(setTheme)");
     // We don't support this for codemirror since it's only a stopgap while the
     // user is on mobile, but it's required by the ICodeEditor spec
     // noop
   };
 
   cleanup = () => {
-    debug("cleanup");
     this.codemirrorInstance = null;
     this._isMounted = false;
   };

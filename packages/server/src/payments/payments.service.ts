@@ -140,6 +140,7 @@ export class PaymentsService {
     try {
       console.log(`[STRIPE]: Running handleStripeCheckoutSuccessWebhook`);
       // You must use the raw body:
+      // eslint-disable-next-line
       // @ts-ignore - the raw body is added by custom code in main.ts
       const { rawBody } = request;
       const event = this.stripe.webhooks.constructEvent(

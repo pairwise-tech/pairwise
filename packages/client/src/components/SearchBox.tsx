@@ -97,7 +97,6 @@ const SearchBox = ({
     (e: any) => {
       setIsClosed(false);
       // What is this linting? We need to know onFocus is defined, it's not unused at all.
-      // tslint:disable-next-line: no-unused-expression
       onFocus && onFocus(e);
     },
     [setIsClosed, onFocus],

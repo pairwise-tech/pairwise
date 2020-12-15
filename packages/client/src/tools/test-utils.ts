@@ -97,8 +97,8 @@ type TEST_UTILS_GLOBALS_KEYS = {
   [key in keyof typeof TEST_UTILS_GLOBALS]: string;
 };
 
-// Just recreate the TEST_UTILS_GLOBALS object, mapping the keys
-// as the values.
+// Just recreate the TEST_UTILS_GLOBALS object, mapping the keys as the values.
+// eslint-disable-next-line
 // @ts-ignore - whatever TypeScript!
 const TEST_UTILS_GLOBALS_KEYS: TEST_UTILS_GLOBALS_KEYS = Object.keys(
   TEST_UTILS_GLOBALS,

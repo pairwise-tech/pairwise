@@ -9,10 +9,7 @@ import {
 } from "./get-challenge-metadata";
 import { Challenge } from "src/types/courses";
 
-// tslint:disable-next-line: no-var-requires
-const debug = require("debug")("common:build-metadata-index");
-
-const log = (...args) => {
+const log = (...args): void => {
   console.log("[COURSE METADATA]", ...args);
 };
 
@@ -86,7 +83,6 @@ const main = async () => {
       videoChallenges: allChallenges.filter(x => x.videoUrl).length,
       todoChallenges: allChallenges.filter(hasTodo).map(x => x.id),
     },
-    // tslint:disable-next-line: object-literal-key-quotes
     challenges: {},
   };
 

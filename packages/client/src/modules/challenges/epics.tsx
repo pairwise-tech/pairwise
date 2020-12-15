@@ -1,5 +1,4 @@
 // @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import SearchWorker from "workerize-loader!tools/lunr-search-worker";
 
 import {
@@ -49,8 +48,6 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
-
-const debug = require("debug")("client:challenges:epics");
 
 /** ===========================================================================
  * Epics
@@ -115,7 +112,6 @@ const searchEpic: EpicSignature = action$ => {
   }).pipe(
     tap(message => {
       // This is the stream of all messages from the worker before it's filtered
-      debug("[INFO searchWorker]", message);
     }),
     map(x => x.data),
     filter(x => x.type === SEARCH_SUCCESS),

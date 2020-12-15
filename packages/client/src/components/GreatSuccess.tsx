@@ -202,8 +202,10 @@ const ConfettiModal: React.FC<ConfettiModalProps> = props => {
             )}
             <div className="inner">
               {React.Children.map(props.children, child => {
+                // eslint-disable-next-line
                 // @ts-ignore What's going on here? Why are the official types not passing for child.type?
                 if (child.type === CardTitle) {
+                  // eslint-disable-next-line
                   // @ts-ignore Same as above. This is totally valid, not sure why TS is complaining
                   return React.cloneElement(child, { parentStage: stage });
                 } else {

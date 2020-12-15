@@ -1,5 +1,4 @@
 // @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 
 import React from "react";
@@ -23,8 +22,6 @@ import { debounce } from "throttle-debounce";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import { types } from "tools/jsx-types";
 import { IDisposable } from "monaco-editor";
-
-const debug = require("debug")("client:WorkspaceMonacoEditor");
 
 type MODEL_ID = string;
 type MODEL_TYPE = "workspace-editor" | "jsx-types";
@@ -90,7 +87,6 @@ export default class WorkspaceMonacoEditor
   componentDidUpdate() {
     const currentValue = this.getMonacoEditorValue();
     const nextValue = this.props.value;
-    debug("componentDidUpdate", currentValue, nextValue);
     if (currentValue !== nextValue) {
       this.setMonacoEditorValue();
     }
@@ -107,11 +103,8 @@ export default class WorkspaceMonacoEditor
 
   initializeMonaco = async (): Promise<void> => {
     if (this.initializationPromise) {
-      debug("[initializeMonaco] Monaco already initialized, skipping.");
       return this.initializationPromise;
     }
-
-    debug("[initializeMonaco] Monaco initializing...");
 
     const initializationPromise = monaco
       .init()
@@ -134,7 +127,6 @@ export default class WorkspaceMonacoEditor
 
         this.monacoWrapper = mn;
 
-        debug("[initializeMonaco] Monaco initialized. Initializing editor...");
         return this.initializeMonacoEditor();
       })
       .catch(error => {
@@ -152,7 +144,7 @@ export default class WorkspaceMonacoEditor
 
   initializeMonacoEditor = async (): Promise<void> => {
     if (!this.monacoWrapper) {
-      debug(
+      console.warn(
         "[ERROR initializeMonacoEditor] Called before monaco was initialized!",
       );
     }
@@ -226,12 +218,10 @@ export default class WorkspaceMonacoEditor
     if (this._isMounted) {
       this.setState({ workspaceEditorModelIdMap });
     } else {
-      debug(
+      console.warn(
         "[initializeMonaco] Already unmounted. Will not set workspaceEditorModelIdMap...",
       );
     }
-
-    debug("[initializeMonaco] Monaco editor initialized.");
 
     // Call parent callback to trigger any events on Monaco initialization
     this.props.onDidInitializeMonacoEditor();
@@ -239,11 +229,8 @@ export default class WorkspaceMonacoEditor
 
   setTheme = (theme: string) => {
     if (this.monacoWrapper) {
-      debug("[setMonacoEditorTheme]", theme);
       this.monacoWrapper.editor.setTheme(theme);
       this.debouncedSyntaxHighlightFunction(this.props.value);
-    } else {
-      debug("[setMonacoEditorTheme]", "No editor pressent");
     }
   };
 
@@ -319,7 +306,6 @@ export default class WorkspaceMonacoEditor
 
   requestSyntaxHighlighting = (code: string) => {
     if (this.syntaxWorker) {
-      debug("request syntax highlighting");
       this.syntaxWorker.postMessage({ code });
     }
   };
@@ -336,7 +322,6 @@ export default class WorkspaceMonacoEditor
     this.syntaxWorker = new SyntaxHighlightWorker();
 
     this.syntaxWorker.addEventListener("message", (event: any) => {
-      debug("[syntax highlight incoming]", event);
       const { classifications, identifier } = event.data;
       if (classifications && identifier) {
         // Recognize message identifier sent from the worker
