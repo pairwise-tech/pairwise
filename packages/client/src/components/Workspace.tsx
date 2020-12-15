@@ -10,7 +10,12 @@ import {
 import { Console, Decode } from "console-feed";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
-import { Col, ColsWrapper, Row, RowsWrapper } from "react-grid-resizable";
+import {
+  Col,
+  ColsWrapper,
+  Row,
+  RowsWrapper,
+} from "../js/react-grid-resizable/index.js";
 import { connect } from "react-redux";
 import { debounce } from "throttle-debounce";
 import MobileDeviceUI, { MobileDevicePreviewType } from "./MobileDevicePreview";
