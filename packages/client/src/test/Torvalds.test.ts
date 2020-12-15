@@ -51,6 +51,7 @@ const WORKSPACE_LIB = `
  * Import the courses directly. In the future if there are multiple courses
  * this could be slightly refactored to just use all the courses.
  */
+// eslint-disable-next-line
 const courses = require("@pairwise/common").default;
 const { FullstackTypeScript } = courses;
 const course: Course = FullstackTypeScript;
