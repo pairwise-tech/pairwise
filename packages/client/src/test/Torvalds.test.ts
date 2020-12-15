@@ -394,8 +394,8 @@ const handleAbsurdScriptEvaluation = (script: string) => {
   // eslint-disable-next-line
   window.eval(script);
 
-  // @ts-ignore
   // eslint-disable-next-line
+  // @ts-ignore
   expect = JestExpect;
 };
 

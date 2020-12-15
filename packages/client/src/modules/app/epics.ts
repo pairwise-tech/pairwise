@@ -27,8 +27,6 @@ import {
   markEmailPromptAsViewed,
 } from "tools/storage-utils";
 
-const debug = require("debug")("client:app:epics");
-
 /** ===========================================================================
  * Epics
  * ============================================================================
@@ -179,7 +177,6 @@ const stripInitialParameters: EpicSignature = (action$, _, deps) => {
         `[WARN]: Query parameters being removed on app initialization!`,
       );
       const { router } = deps;
-      debug(`Removing query parameters: ${router.location.search}`);
       router.replace(router.location.pathname);
     }),
     ignoreElements(),
@@ -274,7 +271,7 @@ const locationChangeEpic: EpicSignature = (_, __, deps) => {
         // @ts-ignore
         window.ga("send", "pageview");
       } catch (err) {
-        debug("[INFO] Google analytics related error:", err.message);
+        // Nothing
       }
     }),
     map(Actions.locationChange),

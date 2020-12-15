@@ -83,6 +83,7 @@ export const RunButton = styled(Button)`
  * NOTE: This is currently a very specific case, but could be refactored into a
  * HOC if it became necessary for other components.
  */
+// eslint-disable-next-line
 export const DragIgnorantFrameContainer = React.forwardRef(
   ({ style = {}, ...props }: any, ref: any) => {
     const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -164,6 +165,7 @@ const HighlightedMarkdown = (props: ReactMarkdownProps) => {
   return (
     <Markdown
       renderers={{
+        // eslint-disable-next-line
         inlineCode: ({ value }: { value: string }) => (
           <code className="code">{value}</code>
         ),

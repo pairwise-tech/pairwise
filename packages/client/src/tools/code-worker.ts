@@ -1,6 +1,6 @@
-// Import Workers:
+// Import Worker:
+// eslint-disable-next-line
 // @ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import CodeFormatWorker from "workerize-loader!./prettier-code-formatter";
 
 import { CodeFormatMessage, CodeFormatMessageEvent } from "./test-utils";

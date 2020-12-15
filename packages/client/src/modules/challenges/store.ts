@@ -27,8 +27,6 @@ import { defaultSandboxChallenge } from "tools/utils";
 import { ChallengesActionTypes } from "./index";
 import { view } from "ramda";
 
-const debug = require("debug")("client:challenge:store");
-
 /** ===========================================================================
  * Challenges Store
  * ============================================================================
@@ -123,8 +121,6 @@ const getChallengeLens = (courses: CourseList, payload: ChallengeUpdate) => {
     "challenges",
     challengeIndex,
   ];
-
-  debug("[INFO] keyPath", keyPath);
 
   return lensPath(keyPath);
 };
@@ -316,6 +312,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     return {
       ...state,
       courses: insertChallenge(courses, action.payload),
+      // eslint-disable-next-line
       // @ts-ignore
       courseSkeletons: insertChallenge(courseSkeletons, {
         ...action.payload,
@@ -337,6 +334,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state,
       courses: insertModule(courses, action.payload),
 
+      // eslint-disable-next-line
       // @ts-ignore
       courseSkeletons: insertModule(courseSkeletons, {
         ...action.payload,
@@ -381,6 +379,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     const isDirty =
       state.isDirty ||
       (existingChallenge &&
+        // eslint-disable-next-line
         // @ts-ignore TS really needs to fix Object.keys typings. Returns string, but we want keyof X
         Object.keys(challenge).some((k: keyof Challenge) => {
           return challenge[k] !== existingChallenge[k];
@@ -390,6 +389,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       ...state,
       isDirty,
       courses: updateChallenge(courses, update),
+      // eslint-disable-next-line
       // @ts-ignore
       courseSkeletons: updateChallenge(courseSkeletons, update),
     };
@@ -478,6 +478,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     return {
       ...state,
       courses: reorderChallengeList(courses, action.payload),
+      // eslint-disable-next-line
       // @ts-ignore
       courseSkeletons: reorderChallengeList(courseSkeletons, action.payload),
     };
@@ -492,6 +493,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     return {
       ...state,
       courses: reorderModuleList(courses, action.payload),
+      // eslint-disable-next-line
       // @ts-ignore
       courseSkeletons: reorderModuleList(courseSkeletons, action.payload),
     };
@@ -506,6 +508,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     return {
       ...state,
       courses: updateModule(courses, action.payload),
+      // eslint-disable-next-line
       // @ts-ignore
       courseSkeletons: updateModule(courseSkeletons, action.payload),
     };

@@ -166,7 +166,7 @@ class Expectation {
    * Rounding means that intuitive things fail.
    * The default for numDigits is 2.
    */
-  toBeCloseTo(expected: number, precision: number = 2) {
+  toBeCloseTo(expected: number, precision = 2) {
     const received = this.value;
 
     if (typeof expected !== "number") {
@@ -294,8 +294,8 @@ class Expectation {
   };
 
   private jsonDiff = (a: any, b: any): string => {
-    let aStrings = this.stringify(a);
-    let bStrings = this.stringify(b);
+    const aStrings = this.stringify(a);
+    const bStrings = this.stringify(b);
     return `Expected: ${this.truncateMiddle(
       aStrings,
     )}\nReceived: ${this.truncateMiddle(bStrings)}`;
