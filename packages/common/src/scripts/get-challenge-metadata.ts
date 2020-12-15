@@ -99,7 +99,6 @@ export const parseGitPorcelain = (str: string): GitPorcelainFormat[] => {
 
       const [commitLine, ...meta] = chunk.trim().split("\n");
       const blame = meta.reduce(
-        // tslint:disable-next-line: variable-name
         (_agg, line) => {
           const [k, ...rest] = line.split(" ");
           const value = rest.join(" ");
@@ -230,7 +229,6 @@ const getGitMetadata = async ({
 type CourseFiles = ReturnType<typeof readCourseFilesFromDisk>;
 
 export const buildFilePorcelain = async (courseFiles: CourseFiles) => {
-  // tslint:disable-next-line: variable-name
   const _tmp = await Promise.all(
     courseFiles
       .map(x => x.filepath)

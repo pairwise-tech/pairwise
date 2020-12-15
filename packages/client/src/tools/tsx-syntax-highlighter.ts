@@ -48,7 +48,6 @@ function getNodeType(parent: any, node: any) {
 }
 
 function getParentRanges(node: any) {
-  // tslint:disable-next-line
   const ranges: Array<any> = [];
   const [start, end] = nodeToRange(node);
   let lastEnd = start;

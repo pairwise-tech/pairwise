@@ -29,7 +29,6 @@
 // add new command to the existing Cypress interface
 // eslint-disable-next-line
 declare module Cypress {
-  // tslint:disable-next-line interface-name
   interface Chainable {
     foo: () => string;
   }

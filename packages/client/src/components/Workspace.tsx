@@ -990,7 +990,6 @@ class Workspace extends React.Component<IProps, IState> {
                   >
                     <small
                       className={
-                        // tslint:disable-next-line: prefer-template
                         "mobile-tests-badge " +
                         (failingTests.length ? "fail" : "success")
                       }
