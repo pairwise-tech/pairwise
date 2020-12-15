@@ -157,7 +157,7 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect((error, response) => {
+      .expect(error => {
         expect(error.body.message).toBe(
           "User has already paid for this course",
         );
@@ -228,7 +228,7 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect((error, response) => {
+      .expect(error => {
         expect(error.body.message).toBe(
           "The user has not purchased this course",
         );
@@ -253,7 +253,7 @@ describe("Payments APIs", () => {
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect((error, response) => {
+      .expect(error => {
         expect(error.body.message).toBe("The courseId is invalid.");
       });
 
@@ -266,7 +266,7 @@ describe("Payments APIs", () => {
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect((error, response) => {
+      .expect(error => {
         expect(error.body.message).toBe("No user could be found.");
       });
 
@@ -286,7 +286,7 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect((error, response) => {
+      .expect(error => {
         expect(error.body.message).toBe("The course is already refunded");
       });
 

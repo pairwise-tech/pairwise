@@ -64,7 +64,7 @@ describe("Auth APIs", () => {
 /**
  * Perform basic assertions on newly created user.
  */
-const checkUser = user => {
+const checkUser = (user: any) => {
   const { profile, payments } = user;
   expect(profile.email).toBeDefined();
   expect(profile.displayName).toBeDefined();

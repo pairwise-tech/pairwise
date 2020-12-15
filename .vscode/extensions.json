@@ -3,7 +3,6 @@
   "recommendations": [
     "esbenp.prettier-vscode",
     "wayou.vscode-todo-highlight",
-    "streetsidesoftware.code-spell-checker",
-    "ms-vscode.vscode-typescript-tslint-plugin"
+    "streetsidesoftware.code-spell-checker"
   ]
 }
