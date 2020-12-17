@@ -149,13 +149,16 @@ export class AuthController {
   ) {
     const result = await this.authService.handleGoogleAdminSignin(req.user);
 
+    // Client URL here is the admin client
+    const clientUrl = ENV.ADMIN_CLIENT_URL;
+
     if (result.value) {
       const { token, accountCreated } = result.value;
       const params = this.getQueryParams(token, accountCreated);
-      return res.redirect(`${ENV.ADMIN_CLIENT_URL}?${params}`);
+      return res.redirect(`${clientUrl}?${params}`);
     } else {
       return res.redirect(
-        `${ENV.ADMIN_CLIENT_URL}/authentication-failure?strategy=google`,
+        `${clientUrl}/authentication-failure?strategy=google`,
       );
     }
   }
