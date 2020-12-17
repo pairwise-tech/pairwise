@@ -154,7 +154,9 @@ export class AuthController {
       const params = this.getQueryParams(token, accountCreated);
       return res.redirect(`${ENV.ADMIN_CLIENT_URL}?${params}`);
     } else {
-      return this.handleLoginError(res, "Google");
+      return res.redirect(
+        `${ENV.GOOGLE_EMAIL_ACCOUNT_CLIENT_ID}/authentication-failure?strategy=google`,
+      );
     }
   }
 
