@@ -117,8 +117,8 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
     delay(1500),
     tap(params => {
       deps.toaster.error(
-        `Login failed! An unknown error occurred when trying to log you ` +
-          `in with ${params.strategy}. Please try again.`,
+        `Login failed! An error occurred when trying to log you ` +
+          `in with ${params.strategy}.`,
         { timeout: 10000 },
       );
     }),
