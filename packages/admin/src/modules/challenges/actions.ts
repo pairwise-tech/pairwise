@@ -80,7 +80,7 @@ export const fetchPullRequestContext = createAction(
 
 export const fetchPullRequestContextSuccess = createAction(
   ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT_SUCCESS,
-)<PullRequestContext>();
+)<PullRequestContext[]>();
 
 export const fetchPullRequestContextFailure = createAction(
   ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT_FAILURE,

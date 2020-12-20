@@ -265,7 +265,7 @@ export class AdminController {
          */
         const lineDiffs = patch
           .split("\n")
-          .filter(x => x.includes("@@"))
+          .filter(x => /@@(.*)@@/.test(x))
           .map(x => x.match(/\+(.*)\,/).pop());
 
         /**

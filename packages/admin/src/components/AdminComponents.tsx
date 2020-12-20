@@ -158,9 +158,15 @@ export const LabelRow = styled.div`
   }
 `;
 
-export const Key = styled(Text)`
+export const Key = styled(Text)<{ style?: React.CSSProperties }>`
   width: 225px;
   font-weight: 500;
+  font-family: Avenir, Arial, Helvetica, sans-serif;
+`;
+
+export const DiffTitle = styled.h3`
+  margin-top: 8px;
+  margin-bottom: 8px;
   font-family: Avenir, Arial, Helvetica, sans-serif;
 `;
 

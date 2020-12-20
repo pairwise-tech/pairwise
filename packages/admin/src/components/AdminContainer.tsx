@@ -138,7 +138,7 @@ const AdminContainer = (props: IProps) => {
     <Route
       key="pull-requests"
       path="/pull-requests/:pull?"
-      component={AdminPullRequestPage}
+      component={() => <AdminPullRequestPage isMobile={isMobile} />}
     />,
     <Route key="redirect" component={() => <Redirect to="/stats" />} />,
   ];

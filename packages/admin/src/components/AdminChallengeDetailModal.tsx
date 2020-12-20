@@ -10,6 +10,7 @@ import {
   BreakLine,
   LabelRow,
   ExternalLink,
+  DiffTitle,
 } from "./AdminComponents";
 import { COLORS } from "../tools/constants";
 
@@ -86,12 +87,31 @@ interface ChallengeContextCardProps {
   moduleId: string;
   challenge: Challenge;
   isMobile: boolean;
+  diffType?: "updated" | "original";
 }
 
 export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
-  const { challenge, courseId, moduleId, isMobile } = props;
+  const { challenge, courseId, moduleId, isMobile, diffType } = props;
+  const isDiffCard = !!diffType;
   return (
     <DataCard key={challenge.id}>
+      {isDiffCard && (
+        <LabelRow>
+          <DiffTitle
+            style={{
+              color:
+                diffType === "original"
+                  ? COLORS.TEXT_TITLE
+                  : COLORS.SECONDARY_YELLOW,
+            }}
+          >
+            {diffType === "original"
+              ? "Original Challenge"
+              : "Updated Challenge"}
+          </DiffTitle>
+        </LabelRow>
+      )}
+      {isDiffCard && <BreakLine />}
       <KeyValue label="Challenge Type" value={challenge.type} />
       <KeyValue label="Title" value={challenge.title} />
       <KeyValue

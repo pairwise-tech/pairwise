@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap, pluck } from "rxjs/operators";
+import { filter, map, mergeMap, pluck, tap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
@@ -57,7 +57,7 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
 /**
  * Fetch the diff context for a pull request id number.
  */
-const fetchPullRequestContextEpic: EpicSignature = (action$, _, deps) => {
+const fetchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.fetchPullRequestContext)),
     pluck("payload"),

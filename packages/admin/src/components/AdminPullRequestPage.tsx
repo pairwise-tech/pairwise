@@ -2,17 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
-import {
-  PageContainer,
-  DataCard,
-  KeyValue,
-  SummaryText,
-  CardButtonRow,
-  CardButton,
-} from "./AdminComponents";
-import { Link } from "react-router-dom";
+import { PageContainer, SummaryText } from "./AdminComponents";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { Button, InputGroup } from "@blueprintjs/core";
-import { COLORS } from "../tools/constants";
+import { COLORS, MOBILE } from "../tools/constants";
+import { PullRequestContext } from "../modules/challenges/store";
+import { ChallengeContextCard } from "./AdminChallengeDetailModal";
+import { composeWithProps } from "../tools/admin-utils";
+import toaster from "../tools/toast-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -37,6 +34,13 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
     };
   }
 
+  componentDidMount() {
+    const params: any = this.props.match.params;
+    if (params.pull) {
+      this.triggerSearch(params.pull);
+    }
+  }
+
   render(): Nullable<JSX.Element> {
     const { pullRequestContext, pullRequestContextLoading } = this.props;
     return (
@@ -45,36 +49,83 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
         <SummaryText>
           Enter a pull request number to view a content diff.
         </SummaryText>
-        <Row>
-          <Input
-            fill
-            leftIcon="search"
-            id="pull-input"
-            autoComplete="off"
-            value={this.state.pull}
-            onChange={this.handleChange}
-            onSubmit={this.handleSearchPullRequest}
-            placeholder="Enter a GitHub pull request number"
-          />
-          <Button onClick={this.handleSearchPullRequest}>Search</Button>
-        </Row>
+        <form>
+          <Row>
+            <Input
+              fill
+              leftIcon="search"
+              id="pull-input"
+              autoComplete="off"
+              value={this.state.pull}
+              onChange={this.handleChange}
+              onSubmit={this.handleSearchPullRequest}
+              placeholder="Enter a GitHub pull request number"
+            />
+            <Button type="submit" onClick={this.handleSearchPullRequest}>
+              Search
+            </Button>
+          </Row>
+        </form>
         {pullRequestContextLoading ? (
           <SummaryText>Loading...</SummaryText>
+        ) : pullRequestContext ? (
+          pullRequestContext.map(this.renderPullRequestContext)
         ) : (
-          JSON.stringify(pullRequestContext)
+          <SummaryText>No results found.</SummaryText>
         )}
       </PageContainer>
     );
   }
 
+  renderPullRequestContext = (context: PullRequestContext) => {
+    return (
+      <ChallengeDiff key={context.id}>
+        <ChallengeContextCard
+          diffType="updated"
+          isMobile={false}
+          courseId={context.courseId}
+          moduleId={context.moduleId}
+          challenge={context.updatedChallenge}
+        />
+        {!this.props.isMobile && <div style={{ width: 22 }} />}
+        {context.originalChallenge ? (
+          <ChallengeContextCard
+            diffType="original"
+            isMobile={false}
+            courseId={context.courseId}
+            moduleId={context.moduleId}
+            challenge={context.originalChallenge}
+          />
+        ) : (
+          <SummaryText>No original challenge exists.</SummaryText>
+        )}
+      </ChallengeDiff>
+    );
+  };
+
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ pull: e.target.value });
   };
 
-  handleSearchPullRequest = () => {
-    const { pull } = this.state;
+  handleSearchPullRequest = (e: any) => {
+    e.preventDefault();
+    /**
+     * Trigger the search through a url update so the result pages
+     * is deep linked.
+     */
+    this.props.history.push(`pull-requests/${this.state.pull}`);
+  };
+
+  triggerSearch = (pull: string | number) => {
     const id = Number(pull);
-    this.props.fetchPullRequestContext(id);
+
+    if (isNaN(id)) {
+      toaster.warn("Invalid pull id provided - must be a number!");
+    } else {
+      this.setState({ pull: "" }, () => {
+        this.props.fetchPullRequestContext(id);
+      });
+    }
   };
 }
 
@@ -91,6 +142,15 @@ const Row = styled.div`
   flex-direction: row;
   margin-top: 4px;
   margin-bottom: 22px;
+`;
+
+const ChallengeDiff = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  @media ${MOBILE} {
+    flex-direction: column;
+  }
 `;
 
 const Input = styled(InputGroup)`
@@ -146,7 +206,11 @@ const dispatchProps = {
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-type IProps = ConnectProps;
+interface ComponentProps {
+  isMobile: boolean;
+}
+
+type IProps = ConnectProps & RouteComponentProps & ComponentProps;
 
 const withProps = connect(mapStateToProps, dispatchProps);
 
@@ -155,4 +219,6 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default withProps(AdminPullRequestPage);
+export default composeWithProps<ComponentProps>(withProps)(
+  withRouter(AdminPullRequestPage),
+);

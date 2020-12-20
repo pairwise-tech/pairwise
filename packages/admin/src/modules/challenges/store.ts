@@ -30,7 +30,7 @@ export interface State {
   displayNavigationMap: boolean;
   challengeDetailId: Nullable<string>;
   pullRequestLoading: boolean;
-  pullRequestContext: Nullable<PullRequestContext>;
+  pullRequestContext: Nullable<PullRequestContext[]>;
 }
 
 const initialState: State = {

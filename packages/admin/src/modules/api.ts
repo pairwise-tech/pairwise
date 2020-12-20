@@ -278,7 +278,7 @@ class Api extends BaseApiClass {
   fetchPullRequestContext = async (pull: number) => {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
-      return axios.get<PullRequestContext>(
+      return axios.get<PullRequestContext[]>(
         `${HOST}/admin/pull-requests/${pull}`,
         {
           headers,
