@@ -5671,40 +5671,18 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "It's not enough to just write an app. You have to deploy your code into a production environment. For modern software applications, this entails quite a lot of detail and complexity which is not always apparent to someone starting at. For instance, consider some of the following points:\n\n* Production software needs to be deployed in a reliable way. What if your server crashes? How do you handle downtime? How do you handle high\\-traffic scenarios? Can you server setup scale to meet increases in demand?\n* How do you deal with errors in production? Do you have logging, monitoring, reporting, and alerting setup so you can be aware of errors and have tools to track them down?\n* How is your database set up and deployed? Do you have backups? Do you have read replicas? Is it secure? How does your application access the database?\n* How is your client application served to users? Is caching involved?\n* How is your software deployed? Modern software teams like to ship many updates to production code. Are your deployments automated, or do you have someone pushing the \"big red button\"?\n\n\nAs you can see, there is quite a lot involved here. And, realistically, these are just some of the bare minimum requirements you would need to consider for a production setup. Many more complex systems go way beyond this.\n\n---\n\nBroadly, we are referring to these topics as software delivery and deployment, but you may also see them referred to by other names as well, e.g. \"DevOps\" \\(development and operations\\), \"infrastructure\", or CI/CD \\(continuous integration and continuous deployment\\). Overall, they refer to the subject area of how software goes from development to deployment in production and how the production environment is managed and maintained. This is a large and important area of modern software development, which is increasing important for any developer to be familiar with."
-        },
-        {
-          "id": "JMhVosid4",
-          "type": "section",
-          "title": "Deploying to a Physical Machine",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "In the past, developers tended to deploy servers directly on computers they had access to. This could be their own personal computer or a computer they owned and controlled somewhere in a physical location, or a virtual computer they have access to \\(e.g. VPS\\). Over time, the emergence of cloud computing has seen a major shift in software deployment methods from this original approach to cloud deployments. The advantage of cloud deployments is that it effectively abstracts all aspects of a physical machine away \\(e.g. hardware maintenance and failures, scaling, etc.\\). The result is a more reliable and scalable infrastructure at a lower cost.\n\nWe will cover cloud deployments in more detail in the next section. However, before we get there, it's useful to have a basic understanding of the principles involved with deploying directly to a machine and some of the associated tools and skills. We will cover those topics briefly in this section."
+          "content": "# What is Software Deployment?\n\nIt's not enough to just write an app. You have to deploy your code into a production environment. For modern software applications, this entails quite a lot of detail and complexity which is not always apparent to someone starting at. For instance, consider some of the following points:\n\n* Production software needs to be deployed in a reliable way. What if your server crashes? How do you handle downtime? How do you handle high\\-traffic scenarios? Can you server setup scale to meet increases in demand?\n* How do you deal with errors in production? Do you have logging, monitoring, reporting, and alerting setup so you can be aware of errors and have tools to track them down?\n* How is your database set up and deployed? Do you have backups? Do you have read replicas? Is it secure? How does your application access the database?\n* How is your client application served to users? Is caching involved?\n* How is your software deployed? Modern software teams like to ship many updates to production code. Are your deployments automated, or do you have someone pushing the \"big red button\"?\n\n\nAs you can see, there is quite a lot involved here. And, realistically, these are just some of the bare minimum requirements you would need to consider for a production setup. Many more complex systems go way beyond this.\n---\n# DevOps\n\nBroadly, we are referring to these topics as software delivery and deployment, but you may also see them referred to by other names as well, e.g. \"DevOps\" \\(development and operations\\), \"infrastructure\", or CI/CD \\(continuous integration and continuous deployment\\). Overall, they refer to the subject area of how software goes from development to deployment in production and how the production environment is managed and maintained. This is a large and important area of modern software development, which is increasing important for any developer to be familiar with.\n# Modern Deployments use Cloud Infrastructure\n\nAs we mentioned in the last section, the emergence of cloud computing has seen most modern software applications move from traditional deployment setups to cloud infrastructure. Computing infrastructure has become virtualized and commoditized and is now available at mass scale and low cost to software developers and most of the major technology companies offer cloud hosting solutions now: AWS with Amazon, GCP with Google, Azure with Microsoft, and so on. Only in a few instances do companies still run and manage their own data centers directly.\n\nDeploying and hosting applications, services, and databases through cloud providers has numerous advantages:\n\n* Infrastructure maintenance and costs are abstracted away.\n* Hardware risk and failures are abstracted away.\n* Scaling is built\\-in.\n* Providers have service reliability guarantees.\n* Certain features can be switched on and off, as needed, without requiring substantial infrastructure changes or expertise.\n\n\nHowever, there are also some disadvantages, such as:\n\n* Vendor lock\\-in.\n* You must learn all of the ins and outs of navigating a specific cloud providers infrastructure.\n* You no longer have full control over your services and data.\n\n\nIn this section, we will cover some of the main topics relevant to managing software deployments with a cloud setup. Because each cloud provider is different, and is likely to change over time, we will try to focus more on the high level concepts and less on the implementation details specific to one provider or another. The topics we will cover include:\n\n* DevOps\n* Cloud Hosting\n* CI/CD\n* Logging, Monitoring, and Reporting\n* Deploying an application with Heroku\n* Deploying a frontend with Netlify\n* Docker\n\n"
         },
         {
           "id": "bKhH6ouY3",
           "type": "media",
-          "title": "Deploy to a VPS",
+          "title": "Traditional vs. Cloud Deployments",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
           "content": "..."
-        },
-        {
-          "id": "BGyJVQF3lL",
-          "type": "section",
-          "title": "Deploying to the Cloud",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "As we mentioned in the last section, the emergence of cloud computing has seen most modern software applications move from traditional deployment setups to cloud infrastructure. Computing infrastructure has become virtualized and commoditized and is now available at mass scale and low cost to software developers and most of the major technology companies offer cloud hosting solutions now: AWS with Amazon, GCP with Google, Azure with Microsoft, and so on. Only in a few instances do companies still run and manage their own data centers directly.\n\nDeploying and hosting applications, services, and databases through cloud providers has numerous advantages:\n\n* Infrastructure maintenance and costs are abstracted away.\n* Hardware risk and failures are abstracted away.\n* Scaling is built\\-in.\n* Providers have service reliability guarantees.\n* Certain features can be switched on and off, as needed, without requiring substantial infrastructure changes or expertise.\n\n\nHowever, there are also some disadvantages, such as:\n\n* Vendor lock\\-in.\n* You must learn all of the ins and outs of navigating a specific cloud providers infrastructure.\n* You no longer have full control over your services and data.\n\n\nIn this section, we will cover some of the main topics relevant to managing software deployments with a cloud setup. Because each cloud provider is different, and is likely to change over time, we will try to focus more on the high level concepts and less on the implementation details specific to one provider or another. The topics we will cover include:\n\n* DevOps\n* Cloud Hosting\n* CI/CD\n* Logging, Monitoring, and Reporting\n* Deploying an application with Heroku\n* Deploying a frontend with Netlify\n* Docker\n\n"
         },
         {
           "id": "gGYkBO$Yf",
@@ -5775,7 +5753,7 @@
         {
           "id": "PWVGn7tt4",
           "type": "media",
-          "title": "What is Docker?",
+          "title": "Introduction to Docker",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
