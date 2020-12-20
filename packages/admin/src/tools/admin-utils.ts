@@ -23,6 +23,13 @@ export const composeWithProps = <T extends {}>(
   return compose(...fns);
 };
 
+/**
+ * Capitalize some text.
+ */
+export const capitalize = (text: string) => {
+  return text.toUpperCase().slice(0, 1) + text.slice(1);
+};
+
 type OS = "Mac" | "iOS" | "Windows" | "Android" | "Linux";
 
 /**

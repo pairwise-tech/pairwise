@@ -5,6 +5,7 @@ import {
 } from "@pairwise/common";
 import { createAction } from "typesafe-actions";
 import { HttpResponseError } from "modules/api";
+import { PullRequestContext } from "./store";
 
 /** ===========================================================================
  * Action Types
@@ -26,6 +27,10 @@ enum ActionTypesEnum {
   SET_MENU_ITEM_SELECT_INDEX = "SET_MENU_ITEM_SELECT_INDEX",
 
   SET_CHALLENGE_DETAIL_ID = "SET_CHALLENGE_DETAIL_ID",
+
+  FETCH_PULL_REQUEST_CONTEXT = "FETCH_PULL_REQUEST_CONTEXT",
+  FETCH_PULL_REQUEST_CONTEXT_SUCCESS = "FETCH_PULL_REQUEST_CONTEXT_SUCCESS",
+  FETCH_PULL_REQUEST_CONTEXT_FAILURE = "FETCH_PULL_REQUEST_CONTEXT_FAILURE",
 }
 
 /** ===========================================================================
@@ -68,3 +73,15 @@ export const setMenuItemSelectIndex = createAction(
 export const setChallengeDetailId = createAction(
   ActionTypesEnum.SET_CHALLENGE_DETAIL_ID,
 )<Nullable<string>>();
+
+export const fetchPullRequestContext = createAction(
+  ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT,
+)<number>();
+
+export const fetchPullRequestContextSuccess = createAction(
+  ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT_SUCCESS,
+)<PullRequestContext>();
+
+export const fetchPullRequestContextFailure = createAction(
+  ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT_FAILURE,
+)<HttpResponseError>();

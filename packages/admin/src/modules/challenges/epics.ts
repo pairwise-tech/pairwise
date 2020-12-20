@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap } from "rxjs/operators";
+import { filter, map, mergeMap, pluck } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
@@ -54,6 +54,25 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
   );
 };
 
+/**
+ * Fetch the diff context for a pull request id number.
+ */
+const fetchPullRequestContextEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.fetchPullRequestContext)),
+    pluck("payload"),
+    mergeMap(deps.api.fetchPullRequestContext),
+    map(({ value, error }) => {
+      if (value) {
+        return Actions.fetchPullRequestContextSuccess(value);
+      } else {
+        deps.toaster.warn("Failed to fetch pull request context...");
+        return Actions.fetchPullRequestContextFailure(error);
+      }
+    }),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -63,4 +82,5 @@ export default combineEpics(
   contentSkeletonInitializationEpic,
   challengeInitializationEpic,
   inverseChallengeMappingEpic,
+  fetchPullRequestContextEpic,
 );

@@ -18,6 +18,7 @@ import { AdminUserView } from "./users/store";
 import { ProgressRecords } from "./stats/store";
 import { FeedbackRecord } from "./feedback/store";
 import { PaymentRecord } from "./payments/store";
+import { PullRequestContext } from "./challenges/store";
 
 /** ===========================================================================
  * Types & Config
@@ -272,6 +273,18 @@ class Api extends BaseApiClass {
     } else {
       return createNonHttpResponseError("Unauthorized.");
     }
+  };
+
+  fetchPullRequestContext = async (pull: number) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.get<PullRequestContext>(
+        `${HOST}/admin/pull-requests/${pull}`,
+        {
+          headers,
+        },
+      );
+    });
   };
 }
 

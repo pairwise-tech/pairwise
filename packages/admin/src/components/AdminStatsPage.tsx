@@ -66,7 +66,10 @@ class AdminStatsPage extends React.Component<IProps, {}> {
             <Stat>
               <b>Average Challenges/User:</b>{" "}
               <Value>
-                {summary.leaderboard.averageChallengesCompletedPerNonZeroUser.toLocaleString()}
+                {summary.leaderboard.averageChallengesCompletedPerNonZeroUser >
+                0
+                  ? summary.leaderboard.averageChallengesCompletedPerNonZeroUser.toLocaleString()
+                  : 0}
               </Value>
             </Stat>
             <Stat>
