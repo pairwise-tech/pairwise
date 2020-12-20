@@ -127,7 +127,8 @@ class AdminUserBaseComponent extends React.Component<
         <KeyValue label="Email" value={user.email} allowCopy />
         <KeyValue label="uuid" value={user.uuid} code />
         <SummaryText>
-          User has completed {challengeTotal} challenges.
+          User has completed {challengeTotal}{" "}
+          {challengeTotal === 1 ? "challenge" : "challenges"}.
         </SummaryText>
         <CardButtonRow style={{ marginBottom: 24 }}>
           <CardButton
