@@ -48,6 +48,7 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
+import PartyParrot from "../../icons/partyparrot.gif";
 
 /** ===========================================================================
  * Epics
@@ -836,14 +837,14 @@ const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
             <span style={{ display: "flex", alignItems: "center" }}>
               <img
                 style={{
-                  display: "inline-block",
                   height: 10,
-                  transform: "translateY(-5px) scale(2.5)",
                   paddingLeft: 13,
                   paddingRight: 15,
+                  display: "inline-block",
+                  transform: "translateY(-5px) scale(2.5)",
                 }}
-                src={require("../../icons/partyparrot.gif")}
                 alt="Party Parrot"
+                src={PartyParrot}
               />
               {`Starting section ${nextChallenge.title}!`}
             </span>
