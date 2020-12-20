@@ -1007,12 +1007,12 @@
           "id": "UnMCiU0Z",
           "type": "typescript",
           "title": "Strings",
-          "instructions": "Modify `greeting` below so that it says \"Hello, my name is \" followed by your name\n",
+          "instructions": "In TypeScript, strings are used to represent text, or data that can be represented by text, and are given the type `string` \\(not to be confused with `String` – noticing a pattern [here](/scrollTarget/supplementary-content-container)?\\). Strings are expressed as a string of characters surrounded by single or double quotes, `\"like this\"`.\n\nModify the expression below so that `greeting` is equal to \"Hello, my name is \" followed by your name.",
           "testCode": "test('`greeting` should equal the string `\"Hello, my name is {your name here}\"`', () => {\n  expect(/hello, my name is \\w+/i.test(greeting)).toBe(true);\n});\n",
           "videoUrl": "https://www.youtube.com/embed/w4kz27N3p60",
-          "starterCode": "const greeting = \"\";",
+          "starterCode": "const greeting = \"\";\n",
           "solutionCode": "const greeting = \"Hello, my name is Pete\";",
-          "content": "In TypeScript, strings are used to represent text, or data that can be represented by text, and are given the type `string` \\(not to be confused with `String` – noticing a pattern here?\\). Strings are expressed as a string of characters surrounded by single or double quotes, `\"like this\"`.\n\n## string not String\n\nOk, last warning\\! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway: TypeScript is a **case\\-sensitive** language, and it is _not_ safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip**\n> TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc.\n"
+          "content": "## string not String\n\nOk, last warning\\! Like `number` and `Number`, `string` and `String` is an important distinction. What `String` refers to is outside the scope of this discussion, and we don't want you to get bogged down in that; the important takeaway for now is: TypeScript is a **case\\-sensitive** language, and it is _not_ safe to assume that `something` and `SomeThing` are the same, whatever that something is.\n\n> **Tip**\n> TypeScript is a case sensitive language, and primitive types are always referred to in all lowercase, e.g. `string`, `number`, `boolean`, etc.\n"
         },
         {
           "id": "qNF6Faom",
