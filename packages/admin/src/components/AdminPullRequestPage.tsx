@@ -22,7 +22,7 @@ interface IState {
 }
 
 /** ===========================================================================
- * Home Component
+ * AdminPullRequestPage Component
  * ============================================================================
  */
 
@@ -44,7 +44,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const { pull, useDarkTheme } = this.state;
+    const { useDarkTheme } = this.state;
     const { pullRequestContext, pullRequestContextLoading } = this.props;
     return (
       <PageContainer>
@@ -126,6 +126,11 @@ interface DiffContentProps {
   diffContent: PullRequestContext[];
 }
 
+/**
+ * Uses this cool diff viewer component:
+ *
+ * - https://github.com/praneshr/react-diff-viewer
+ */
 class DiffContent extends React.PureComponent<DiffContentProps, {}> {
   render(): JSX.Element {
     return (
