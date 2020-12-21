@@ -164,12 +164,6 @@ export const Key = styled(Text)<{ style?: React.CSSProperties }>`
   font-family: Avenir, Arial, Helvetica, sans-serif;
 `;
 
-export const DiffTitle = styled.h3`
-  margin-top: 8px;
-  margin-bottom: 8px;
-  font-family: Avenir, Arial, Helvetica, sans-serif;
-`;
-
 const ValueContainer = styled.div<{ copy: string }>`
   height: auto;
   max-width: 550px;
