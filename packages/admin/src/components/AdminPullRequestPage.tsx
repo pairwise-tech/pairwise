@@ -146,8 +146,15 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
   }
 
   renderPullRequestContext = (context: PullRequestContext) => {
-    const isNewChallenge = !context.originalChallenge;
-    const title = isNewChallenge ? "New Challenge" : "Updated Challenge";
+    const isDeletedChallenge = !context.updatedChallenge;
+    const isNewChallenge = !context.originalChallenge && !isDeletedChallenge;
+
+    const title = isDeletedChallenge
+      ? "Deleted Challenge"
+      : isNewChallenge
+      ? "New Challenge"
+      : "Updated Challenge";
+
     return (
       <div key={context.id}>
         <ChallengeDiffCard>
