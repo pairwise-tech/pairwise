@@ -153,11 +153,16 @@ interface DiffContentProps {
  */
 class DiffContent extends React.PureComponent<DiffContentProps, {}> {
   render(): JSX.Element {
-    return (
-      <React.Fragment>
-        {this.props.diffContent.map(this.renderPullRequestContext)}
-      </React.Fragment>
-    );
+    const { diffContent } = this.props;
+    if (Array.isArray(diffContent)) {
+      return (
+        <React.Fragment>
+          {this.props.diffContent.map(this.renderPullRequestContext)}
+        </React.Fragment>
+      );
+    } else {
+      return <SummaryText>{diffContent}</SummaryText>;
+    }
   }
 
   renderPullRequestContext = (context: PullRequestContext) => {
