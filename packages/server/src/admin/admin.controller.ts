@@ -311,19 +311,30 @@ export class AdminController {
          * and construct content context to return in the response.
          */
         const prDiffContext = challengeIds.map(id => {
-          const { challenge: originalChallenge } = originalChallengeMap[id];
-          const {
-            moduleId,
-            courseId,
-            challenge: updatedChallenge,
-          } = pullRequestChallengeMap[id];
+          // May be undefined if updated challenge is new:
+          const originalChallengeMeta = originalChallengeMap[id];
+          // May be undefined if updated challenge is a deletion:
+          const updatedChallengeMeta = pullRequestChallengeMap[id];
+
+          // One of them should exist...
+          const existing = originalChallengeMap
+            ? originalChallengeMap
+            : updatedChallengeMeta;
+
+          const { moduleId, courseId } = existing;
+          const originalChallenge = originalChallengeMeta
+            ? originalChallengeMeta.challenge
+            : null;
+          const updatedChallenge = updatedChallengeMeta
+            ? updatedChallengeMeta.challenge
+            : null;
 
           return {
             id,
             moduleId,
             courseId,
-            originalChallenge,
             updatedChallenge,
+            originalChallenge,
           };
         });
 

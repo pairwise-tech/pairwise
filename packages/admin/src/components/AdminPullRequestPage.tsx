@@ -8,6 +8,7 @@ import {
   SummaryText,
   PageContainer,
   PullRequestDiffInput,
+  ExternalLink,
 } from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Button, Card, Switch } from "@blueprintjs/core";
@@ -42,21 +43,21 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    const params: any = this.props.match.params;
-    if (params.pull) {
-      this.triggerSearch(params.pull);
+    const id = this.getPullIdFromParams();
+    if (id) {
+      this.triggerSearch(id);
     }
   }
 
   render(): Nullable<JSX.Element> {
     const { useDarkTheme } = this.state;
     const { pullRequestContext, pullRequestContextLoading } = this.props;
+    const id = this.getPullIdFromParams();
+    const showLink = !pullRequestContextLoading && !!pullRequestContext && !!id;
+    const prURL = `https://github.com/pairwise-tech/pairwise/pull/${id}`;
     return (
       <PageContainer>
         <Title>Pull Request Content Diffs</Title>
-        <SummaryText>
-          Enter a pull request number to view a content diff.
-        </SummaryText>
         <form>
           <Row>
             <PullRequestDiffInput
@@ -77,9 +78,14 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
         <Switch
           checked={useDarkTheme}
           onChange={this.toggleDiffTheme}
-          style={{ marginTop: 12, marginBottom: 24 }}
+          style={{ marginTop: 12, marginBottom: 22 }}
           label={useDarkTheme ? "Dark Theme (on)" : "Dark Theme (off)"}
         />
+        {showLink && (
+          <SummaryText>
+            Showing diff for: <ExternalLink link={prURL}>{prURL}</ExternalLink>
+          </SummaryText>
+        )}
         {pullRequestContextLoading ? (
           <SummaryText style={{ color: COLORS.SECONDARY_YELLOW }}>
             Loading pull request diff content...
@@ -124,6 +130,15 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
       });
     }
   };
+
+  getPullIdFromParams = () => {
+    const params: any = this.props.match.params;
+    if (params.pull) {
+      return params.pull;
+    }
+
+    return null;
+  };
 }
 
 interface DiffContentProps {
@@ -146,6 +161,7 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
   }
 
   renderPullRequestContext = (context: PullRequestContext) => {
+    console.log(context);
     const isDeletedChallenge = !context.updatedChallenge;
     const isNewChallenge = !context.originalChallenge && !isDeletedChallenge;
 
@@ -183,8 +199,8 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
                 <ReactDiffViewer
                   splitView
                   useDarkTheme={this.props.useDarkTheme}
-                  oldValue={context.originalChallenge.content}
-                  newValue={context.updatedChallenge.content}
+                  oldValue={context.originalChallenge?.content}
+                  newValue={context.updatedChallenge?.content}
                 />
               </ChallengeDiff>
             </>
