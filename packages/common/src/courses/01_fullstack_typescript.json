@@ -1084,7 +1084,7 @@
           "id": "AB2T4DCt",
           "type": "typescript",
           "title": "Fix Me!",
-          "instructions": "Hover over `theMeaningOfLife` to see a helpful linter error, and then fix the problem.",
+          "instructions": "Hover over `theMeaningOfLife` to see a helpful linter error, and then fix the problem. \nIf you get stuck, revisit the [challenge on strings](/workspace/UnMCiU0Z).",
           "testCode": "test('`theMeaningOfLife` should be of type `string`', () => expect(typeof theMeaningOfLife).toBe(\"string\"))",
           "videoUrl": "https://www.youtube.com/embed/J1UHcKpw7xA",
           "starterCode": "const theMeaningOfLife: string = 42;",
