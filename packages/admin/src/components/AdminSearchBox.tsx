@@ -2,11 +2,10 @@ import React from "react";
 import { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { InputGroup } from "@blueprintjs/core";
 import { KeyboardShortcuts } from "./AdminKeyboardShortcuts";
 import cx from "classnames";
-import { COLORS } from "../tools/constants";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { Input } from "./AdminComponents";
 
 /** ===========================================================================
  * AdminSearchBox Component
@@ -79,7 +78,7 @@ const AdminSearchBox = (props: Props) => {
       <Input
         fill
         leftIcon="search"
-        id="search-input"
+        id="admin-input"
         autoComplete="off"
         onChange={handleChange}
         onKeyDown={handleKeyPress}
@@ -103,40 +102,6 @@ const AdminSearchBox = (props: Props) => {
  * Styles
  * ============================================================================
  */
-
-const Input = styled(InputGroup)`
-  input#search-input {
-    color: white;
-    transition: all 0.15s ease-out;
-    background: #3a3a3a;
-    width: 100%;
-    display: block;
-
-    &:hover {
-      box-shadow: 0 0 0 1px #10ca92, 0 0 0 1px #10ca92,
-        0 0 0 3px rgba(16, 202, 146, 0.1), inset 0 0 0 1px rgba(16, 22, 26, 0.1),
-        inset 0 1px 1px rgba(16, 22, 26, 0.1);
-    }
-
-    &:focus {
-      border: none;
-      outline: none;
-      color: white;
-    }
-
-    ::placeholder {
-      color: ${COLORS.TEXT_PLACEHOLDER};
-    }
-
-    :-ms-input-placeholder {
-      color: ${COLORS.TEXT_PLACEHOLDER};
-    }
-
-    ::-ms-input-placeholder {
-      color: ${COLORS.TEXT_PLACEHOLDER};
-    }
-  }
-`;
 
 const Box = styled.div`
   flex: 1 100%;

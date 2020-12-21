@@ -1,13 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
+import ReactDiffViewer from "react-diff-viewer";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, SummaryText } from "./AdminComponents";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
-import { Button, InputGroup } from "@blueprintjs/core";
+import {
+  KeyValue,
+  SummaryText,
+  PageContainer,
+  PullRequestDiffInput,
+} from "./AdminComponents";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Button, Card, Switch } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { PullRequestContext } from "../modules/challenges/store";
-import { ChallengeContextCard } from "./AdminChallengeDetailModal";
 import { composeWithProps } from "../tools/admin-utils";
 import toaster from "../tools/toast-utils";
 
@@ -18,10 +23,11 @@ import toaster from "../tools/toast-utils";
 
 interface IState {
   pull: string;
+  useDarkTheme: boolean;
 }
 
 /** ===========================================================================
- * Home Component
+ * AdminPullRequestPage Component
  * ============================================================================
  */
 
@@ -31,6 +37,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
 
     this.state = {
       pull: "",
+      useDarkTheme: false,
     };
   }
 
@@ -42,6 +49,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
+    const { useDarkTheme } = this.state;
     const { pullRequestContext, pullRequestContextLoading } = this.props;
     return (
       <PageContainer>
@@ -51,7 +59,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
         </SummaryText>
         <form>
           <Row>
-            <Input
+            <PullRequestDiffInput
               fill
               leftIcon="search"
               id="pull-input"
@@ -66,41 +74,30 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
             </Button>
           </Row>
         </form>
+        <Switch
+          checked={useDarkTheme}
+          onChange={this.toggleDiffTheme}
+          style={{ marginTop: 12, marginBottom: 24 }}
+          label={useDarkTheme ? "Dark Theme (on)" : "Dark Theme (off)"}
+        />
         {pullRequestContextLoading ? (
-          <SummaryText>Loading...</SummaryText>
+          <SummaryText style={{ color: COLORS.SECONDARY_YELLOW }}>
+            Loading pull request diff content...
+          </SummaryText>
         ) : pullRequestContext ? (
-          pullRequestContext.map(this.renderPullRequestContext)
+          <DiffContent
+            diffContent={pullRequestContext}
+            useDarkTheme={this.state.useDarkTheme}
+          />
         ) : (
-          <SummaryText>No results found.</SummaryText>
+          <SummaryText>No results found for pull request.</SummaryText>
         )}
       </PageContainer>
     );
   }
 
-  renderPullRequestContext = (context: PullRequestContext) => {
-    return (
-      <ChallengeDiff key={context.id}>
-        <ChallengeContextCard
-          diffType="updated"
-          isMobile={false}
-          courseId={context.courseId}
-          moduleId={context.moduleId}
-          challenge={context.updatedChallenge}
-        />
-        {!this.props.isMobile && <div style={{ width: 22 }} />}
-        {context.originalChallenge ? (
-          <ChallengeContextCard
-            diffType="original"
-            isMobile={false}
-            courseId={context.courseId}
-            moduleId={context.moduleId}
-            challenge={context.originalChallenge}
-          />
-        ) : (
-          <SummaryText>No original challenge exists.</SummaryText>
-        )}
-      </ChallengeDiff>
-    );
+  toggleDiffTheme = () => {
+    this.setState(ps => ({ useDarkTheme: !ps.useDarkTheme }));
   };
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +110,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
      * Trigger the search through a url update so the result pages
      * is deep linked.
      */
-    this.props.history.push(`pull-requests/${this.state.pull}`);
+    this.props.history.push(`/pull-requests/${this.state.pull}`);
   };
 
   triggerSearch = (pull: string | number) => {
@@ -126,6 +123,68 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
         this.props.fetchPullRequestContext(id);
       });
     }
+  };
+}
+
+interface DiffContentProps {
+  useDarkTheme: boolean;
+  diffContent: PullRequestContext[];
+}
+
+/**
+ * Uses this cool diff viewer component:
+ *
+ * - https://github.com/praneshr/react-diff-viewer
+ */
+class DiffContent extends React.PureComponent<DiffContentProps, {}> {
+  render(): JSX.Element {
+    return (
+      <React.Fragment>
+        {this.props.diffContent.map(this.renderPullRequestContext)}
+      </React.Fragment>
+    );
+  }
+
+  renderPullRequestContext = (context: PullRequestContext) => {
+    const isNewChallenge = !context.originalChallenge;
+    const title = isNewChallenge ? "New Challenge" : "Updated Challenge";
+    return (
+      <div key={context.id}>
+        <ChallengeDiffCard>
+          <DiffTitle>{title}</DiffTitle>
+          <KeyValue code isChallengeId label="challengeId" value={context.id} />
+          <KeyValue code label="moduleId" value={context.moduleId} />
+          <KeyValue code label="courseId" value={context.courseId} />
+          {isNewChallenge && (
+            <>
+              <KeyValue
+                renderAsMarkdown
+                label="Instructions"
+                value={context.updatedChallenge.instructions}
+              />
+              <KeyValue
+                renderAsMarkdown
+                label="Content"
+                value={context.updatedChallenge.content}
+              />
+            </>
+          )}
+          {!isNewChallenge && (
+            <>
+              <div style={{ height: 18 }} />
+              <ChallengeDiff>
+                <ReactDiffViewer
+                  splitView
+                  useDarkTheme={this.props.useDarkTheme}
+                  oldValue={context.originalChallenge.content}
+                  newValue={context.updatedChallenge.content}
+                />
+              </ChallengeDiff>
+            </>
+          )}
+        </ChallengeDiffCard>
+      </div>
+    );
   };
 }
 
@@ -144,6 +203,13 @@ const Row = styled.div`
   margin-bottom: 22px;
 `;
 
+const DiffTitle = styled.h3`
+  margin-top: 8px;
+  margin-bottom: 16px;
+  color: ${COLORS.SECONDARY_YELLOW};
+  font-family: Avenir, Arial, Helvetica, sans-serif;
+`;
+
 const ChallengeDiff = styled.div`
   display: flex;
   flex-direction: row;
@@ -153,39 +219,9 @@ const ChallengeDiff = styled.div`
   }
 `;
 
-const Input = styled(InputGroup)`
-  margin-right: 6px;
-
-  input#pull-input {
-    display: block;
-    color: white;
-    transition: all 0.15s ease-out;
-    background: #3a3a3a;
-
-    &:hover {
-      box-shadow: 0 0 0 1px #10ca92, 0 0 0 1px #10ca92,
-        0 0 0 3px rgba(16, 202, 146, 0.1), inset 0 0 0 1px rgba(16, 22, 26, 0.1),
-        inset 0 1px 1px rgba(16, 22, 26, 0.1);
-    }
-
-    &:focus {
-      border: none;
-      outline: none;
-      color: white;
-    }
-
-    ::placeholder {
-      color: ${COLORS.TEXT_PLACEHOLDER};
-    }
-
-    :-ms-input-placeholder {
-      color: ${COLORS.TEXT_PLACEHOLDER};
-    }
-
-    ::-ms-input-placeholder {
-      color: ${COLORS.TEXT_PLACEHOLDER};
-    }
-  }
+const ChallengeDiffCard = styled(Card)`
+  margin-top: 12px;
+  background: ${COLORS.BACKGROUND_CARD} !important;
 `;
 
 /** ===========================================================================
