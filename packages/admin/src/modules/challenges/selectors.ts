@@ -61,3 +61,13 @@ export const courseListMetadata = createSelector([challengesState], state => {
     return [];
   }
 });
+
+export const pullRequestContext = createSelector(
+  [challengesState],
+  state => state.pullRequestContext,
+);
+
+export const pullRequestContextLoading = createSelector(
+  [challengesState],
+  state => state.pullRequestLoading,
+);

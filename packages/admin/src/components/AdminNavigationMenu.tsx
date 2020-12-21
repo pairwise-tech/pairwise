@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT, MOBILE } from "tools/constants";
-import { composeWithProps } from "tools/admin-utils";
+import { capitalize, composeWithProps } from "tools/admin-utils";
 import { Button } from "@blueprintjs/core";
 import { NavLink, RouteComponentProps } from "react-router-dom";
 import cx from "classnames";
@@ -14,6 +14,7 @@ export const ADMIN_MENU_ITEMS_ROUTES = [
   "payments",
   "feedback",
   "search",
+  "pull-requests",
 ];
 
 // Represents the max index for the routes listed in the admin nav menu
@@ -93,7 +94,12 @@ class AdminNavigationMenu extends React.Component<
           return (
             <NavLink to={`/${path}`} key={path}>
               <ModuleNavigationButton selected={menuSelectItemIndex === index}>
-                <span>{path.toUpperCase().slice(0, 1) + path.slice(1)}</span>
+                <span>
+                  {path
+                    .split("-")
+                    .map(capitalize)
+                    .join(" ")}
+                </span>
               </ModuleNavigationButton>
             </NavLink>
           );
