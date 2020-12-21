@@ -3,9 +3,14 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import ReactDiffViewer from "react-diff-viewer";
 import Modules, { ReduxStoreState } from "modules/root";
-import { KeyValue, PageContainer, SummaryText } from "./AdminComponents";
+import {
+  KeyValue,
+  SummaryText,
+  PageContainer,
+  PullRequestDiffInput,
+} from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Button, Card, InputGroup, Switch } from "@blueprintjs/core";
+import { Button, Card, Switch } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { PullRequestContext } from "../modules/challenges/store";
 import { composeWithProps } from "../tools/admin-utils";
@@ -54,7 +59,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
         </SummaryText>
         <form>
           <Row>
-            <Input
+            <PullRequestDiffInput
               fill
               leftIcon="search"
               id="pull-input"
@@ -76,7 +81,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
           label={useDarkTheme ? "Dark Theme (on)" : "Dark Theme (off)"}
         />
         {pullRequestContextLoading ? (
-          <SummaryText style={{ color: COLORS.TEXT_CONTENT }}>
+          <SummaryText style={{ color: COLORS.SECONDARY_YELLOW }}>
             Loading pull request diff content...
           </SummaryText>
         ) : pullRequestContext ? (
@@ -217,41 +222,6 @@ const ChallengeDiff = styled.div`
 const ChallengeDiffCard = styled(Card)`
   margin-top: 12px;
   background: ${COLORS.BACKGROUND_CARD} !important;
-`;
-
-const Input = styled(InputGroup)`
-  margin-right: 6px;
-
-  input#pull-input {
-    display: block;
-    color: white;
-    transition: all 0.15s ease-out;
-    background: #3a3a3a;
-
-    &:hover {
-      box-shadow: 0 0 0 1px #10ca92, 0 0 0 1px #10ca92,
-        0 0 0 3px rgba(16, 202, 146, 0.1), inset 0 0 0 1px rgba(16, 22, 26, 0.1),
-        inset 0 1px 1px rgba(16, 22, 26, 0.1);
-    }
-
-    &:focus {
-      border: none;
-      outline: none;
-      color: white;
-    }
-
-    ::placeholder {
-      color: ${COLORS.TEXT_PLACEHOLDER};
-    }
-
-    :-ms-input-placeholder {
-      color: ${COLORS.TEXT_PLACEHOLDER};
-    }
-
-    ::-ms-input-placeholder {
-      color: ${COLORS.TEXT_PLACEHOLDER};
-    }
-  }
 `;
 
 /** ===========================================================================
