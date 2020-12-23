@@ -1117,7 +1117,7 @@
           "id": "KbkT6v8g",
           "type": "typescript",
           "title": "Any in Action",
-          "instructions": "Change the values below to match their variable names. This is a simple challenge just to demonstrate that any type can be assigned to something annotated as `any`.",
+          "instructions": "Change the values assigned to the values below so that their data types match their variable names. This is a simple challenge just to demonstrate that any type can be assigned to something annotated as `any`.",
           "testCode": "test('`iAmAString` should be of type `string`', () => expect(typeof iAmAString).toBe(\"string\"))\ntest('`iAmANumber` should be of type `number`', () => expect(typeof iAmANumber).toBe(\"number\"))\ntest('`iAmNull` should be `null`', () => expect(iAmNull).toBe(null))\ntest('`iAmUndefined` should be `undefined`', () => expect(iAmUndefined).toBe(undefined))\n",
           "videoUrl": "https://www.youtube.com/embed/BWdiuK_6vog",
           "starterCode": "const iAmAString: any = undefined;\nconst iAmANumber: any = null;\nconst iAmNull: any = 71919;\nconst iAmUndefined: any = \"not undefined yet!\";",
