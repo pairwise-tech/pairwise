@@ -1,3 +1,4 @@
+import { isMobile } from "react-device-detect";
 import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
@@ -58,7 +59,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
   }
 
   renderSearchResult = (result: AdminSearchResult) => {
-    const { users, challengeMap, isMobile } = this.props;
+    const { users, challengeMap } = this.props;
     const matchValues = (a: string, b: string) => {
       if (!a || !b) {
         return false;
@@ -128,9 +129,7 @@ const dispatchProps = {};
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-interface ComponentProps {
-  isMobile: boolean;
-}
+interface ComponentProps {}
 
 type IProps = ConnectProps & RouteComponentProps & ComponentProps;
 

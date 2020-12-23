@@ -233,7 +233,7 @@ export const fetchCoursesSuccess = createAction(
 
 export const fetchCoursesFailure = createAction(
   ActionTypesEnum.FETCH_COURSES_FAILURE,
-)();
+)<HttpResponseError>();
 
 export const storeInverseChallengeMapping = createAction(
   ActionTypesEnum.STORE_INVERSE_CHALLENGE_MAP,

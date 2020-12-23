@@ -48,6 +48,7 @@ import {
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
+import PartyParrot from "../../icons/partyparrot.gif";
 
 /** ===========================================================================
  * Epics
@@ -233,11 +234,11 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
     mergeMap(deps.api.fetchCourses),
-    map(({ value: courses }) => {
-      if (courses) {
-        return Actions.fetchCoursesSuccess({ courses });
+    map(result => {
+      if (result.value) {
+        return Actions.fetchCoursesSuccess({ courses: result.value });
       } else {
-        return Actions.fetchCoursesFailure();
+        return Actions.fetchCoursesFailure(result.error);
       }
     }),
   );
@@ -765,14 +766,21 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserProgress)),
     filter(({ payload }) => {
-      // Only update the progress if the challenge is NOT already complete.
       const { progress } = state$.value.user.user;
       const { challengeId, courseId } = payload;
+
+      // Disregard the Sandbox
+      if (challengeId === SANDBOX_ID) {
+        return false;
+      }
+
       const challengeProgress = getChallengeProgress(
         progress,
         courseId,
         challengeId,
       );
+
+      // Only update the progress if the challenge is NOT already complete.
       return challengeProgress !== "COMPLETE";
     }),
     pluck("payload"),
@@ -836,14 +844,14 @@ const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
             <span style={{ display: "flex", alignItems: "center" }}>
               <img
                 style={{
-                  display: "inline-block",
                   height: 10,
-                  transform: "translateY(-5px) scale(2.5)",
                   paddingLeft: 13,
                   paddingRight: 15,
+                  display: "inline-block",
+                  transform: "translateY(-5px) scale(2.5)",
                 }}
-                src={require("../../icons/partyparrot.gif")}
                 alt="Party Parrot"
+                src={PartyParrot}
               />
               {`Starting section ${nextChallenge.title}!`}
             </span>
