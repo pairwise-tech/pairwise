@@ -1,3 +1,4 @@
+import { isMobile } from "react-device-detect";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
@@ -8,10 +9,11 @@ import {
   SummaryText,
   PageContainer,
   PullRequestDiffInput,
+  ExternalLink,
 } from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Button, Card, Switch } from "@blueprintjs/core";
-import { COLORS, MOBILE } from "../tools/constants";
+import { COLORS } from "../tools/constants";
 import { PullRequestContext } from "../modules/challenges/store";
 import { composeWithProps } from "../tools/admin-utils";
 import toaster from "../tools/toast-utils";
@@ -42,21 +44,21 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    const params: any = this.props.match.params;
-    if (params.pull) {
-      this.triggerSearch(params.pull);
+    const id = this.getPullIdFromParams();
+    if (id) {
+      this.triggerSearch(id);
     }
   }
 
   render(): Nullable<JSX.Element> {
     const { useDarkTheme } = this.state;
     const { pullRequestContext, pullRequestContextLoading } = this.props;
+    const id = this.getPullIdFromParams();
+    const showLink = !pullRequestContextLoading && !!pullRequestContext && !!id;
+    const prURL = `https://github.com/pairwise-tech/pairwise/pull/${id}`;
     return (
       <PageContainer>
         <Title>Pull Request Content Diffs</Title>
-        <SummaryText>
-          Enter a pull request number to view a content diff.
-        </SummaryText>
         <form>
           <Row>
             <PullRequestDiffInput
@@ -77,15 +79,21 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
         <Switch
           checked={useDarkTheme}
           onChange={this.toggleDiffTheme}
-          style={{ marginTop: 12, marginBottom: 24 }}
+          style={{ marginTop: 12, marginBottom: 22 }}
           label={useDarkTheme ? "Dark Theme (on)" : "Dark Theme (off)"}
         />
+        {showLink && (
+          <SummaryText>
+            Showing diff for: <ExternalLink link={prURL}>{prURL}</ExternalLink>
+          </SummaryText>
+        )}
         {pullRequestContextLoading ? (
           <SummaryText style={{ color: COLORS.SECONDARY_YELLOW }}>
             Loading pull request diff content...
           </SummaryText>
         ) : pullRequestContext ? (
           <DiffContent
+            isMobile={isMobile}
             diffContent={pullRequestContext}
             useDarkTheme={this.state.useDarkTheme}
           />
@@ -124,9 +132,19 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
       });
     }
   };
+
+  getPullIdFromParams = () => {
+    const params: any = this.props.match.params;
+    if (params.pull) {
+      return params.pull;
+    }
+
+    return null;
+  };
 }
 
 interface DiffContentProps {
+  isMobile: boolean;
   useDarkTheme: boolean;
   diffContent: PullRequestContext[];
 }
@@ -138,16 +156,28 @@ interface DiffContentProps {
  */
 class DiffContent extends React.PureComponent<DiffContentProps, {}> {
   render(): JSX.Element {
-    return (
-      <React.Fragment>
-        {this.props.diffContent.map(this.renderPullRequestContext)}
-      </React.Fragment>
-    );
+    const { diffContent } = this.props;
+    if (Array.isArray(diffContent)) {
+      return (
+        <React.Fragment>
+          {this.props.diffContent.map(this.renderPullRequestContext)}
+        </React.Fragment>
+      );
+    } else {
+      return <SummaryText>{diffContent}</SummaryText>;
+    }
   }
 
   renderPullRequestContext = (context: PullRequestContext) => {
-    const isNewChallenge = !context.originalChallenge;
-    const title = isNewChallenge ? "New Challenge" : "Updated Challenge";
+    const isDeletedChallenge = !context.updatedChallenge;
+    const isNewChallenge = !context.originalChallenge && !isDeletedChallenge;
+
+    const title = isDeletedChallenge
+      ? "Deleted Challenge"
+      : isNewChallenge
+      ? "New Challenge"
+      : "Updated Challenge";
+
     return (
       <div key={context.id}>
         <ChallengeDiffCard>
@@ -170,17 +200,15 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
             </>
           )}
           {!isNewChallenge && (
-            <>
+            <ChallengeDiff>
               <div style={{ height: 18 }} />
-              <ChallengeDiff>
-                <ReactDiffViewer
-                  splitView
-                  useDarkTheme={this.props.useDarkTheme}
-                  oldValue={context.originalChallenge.content}
-                  newValue={context.updatedChallenge.content}
-                />
-              </ChallengeDiff>
-            </>
+              <ReactDiffViewer
+                splitView={!this.props.isMobile}
+                useDarkTheme={this.props.useDarkTheme}
+                oldValue={context.originalChallenge?.content}
+                newValue={context.updatedChallenge?.content}
+              />
+            </ChallengeDiff>
           )}
         </ChallengeDiffCard>
       </div>
@@ -211,12 +239,7 @@ const DiffTitle = styled.h3`
 `;
 
 const ChallengeDiff = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  @media ${MOBILE} {
-    flex-direction: column;
-  }
+  overflow-x: scroll;
 `;
 
 const ChallengeDiffCard = styled(Card)`
@@ -242,9 +265,7 @@ const dispatchProps = {
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-interface ComponentProps {
-  isMobile: boolean;
-}
+interface ComponentProps {}
 
 type IProps = ConnectProps & RouteComponentProps & ComponentProps;
 

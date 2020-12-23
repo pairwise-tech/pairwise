@@ -6,8 +6,7 @@ FROM pairwise-dependencies
 
 COPY . .
 
-# Setup server environment
-RUN yarn server:setup
+RUN echo "[NOTICE]: Using existing project .env files."
 
 # Build common
 RUN yarn common:build

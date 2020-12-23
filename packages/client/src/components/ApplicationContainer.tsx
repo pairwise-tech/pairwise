@@ -10,7 +10,6 @@ import { COLORS, SANDBOX_ID, MOBILE } from "tools/constants";
 import { HEADER_HEIGHT } from "tools/dimensions";
 import EditingToolbar from "./EditingToolbar";
 import Home from "./Home";
-import Swipy from "swipyjs";
 import NavigationOverlay from "./NavigationOverlay";
 import {
   Button,
@@ -57,6 +56,7 @@ import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { getChallengeSlug } from "@pairwise/common";
 import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
 import PairwiseScreensaver from "./PairwiseScreensaver";
+import NavigationSwipeHandler from "./MobileSwipeHandler";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -136,46 +136,6 @@ const ApplicationContainer = (props: IProps) => {
     initializeApp({ location: window.location });
     setHasHandledRedirect(true);
   }, [initializeApp]);
-
-  /**
-   * Add a gesture handler to toggle the navigation menu.
-   */
-  React.useEffect(() => {
-    // Not available on desktop
-    if (!isMobile) {
-      return;
-    }
-
-    // Attach handler to the document
-    const swipeHandler = new Swipy(document.documentElement);
-
-    // Handle to swipe right
-    swipeHandler.on("swiperight", (touchEvent: any) => {
-      if (isTouchEventOnEditor(touchEvent)) {
-        return;
-      }
-
-      if (!overlayVisible) {
-        setNavigationMapState(true);
-      }
-    });
-
-    // Handle to swipe left
-    swipeHandler.on("swipeleft", (touchEvent: any) => {
-      if (isTouchEventOnEditor(touchEvent)) {
-        return;
-      }
-
-      if (overlayVisible) {
-        setNavigationMapState(false);
-      }
-    });
-
-    // Remove native event listeners on unmount
-    return () => {
-      swipeHandler.unbind();
-    };
-  });
 
   if (!hasHandledRedirect) {
     return null;
@@ -257,6 +217,11 @@ const ApplicationContainer = (props: IProps) => {
       <LoadingOverlay visible={workspaceLoading} />
       <GlobalKeyboardShortcuts />
       {CODEPRESS && <AdminKeyboardShortcuts />}
+      <NavigationSwipeHandler
+        isMobile={isMobile}
+        overlayVisible={overlayVisible}
+        setNavigationMapState={setNavigationMapState}
+      />
       <NavigationOverlay isMobile={isMobile} />
       <Header>
         <ControlsContainer
@@ -766,38 +731,6 @@ const LostPage = () => (
     </p>
   </LostPageContainer>
 );
-
-/**
- * Determine if a touch event came the code panel scroll area.
- *
- * NOTE: Safari has lacking compatibility for TouchEvents so in Safari we
- * recursively walk backwards up the DOM tree looking for the mobile
- * scroll panel element by its id.
- */
-const isTouchEventOnEditor = (touchEvent: any) => {
-  try {
-    // For most browsers:
-    if (touchEvent.path) {
-      return !!touchEvent.path.find(
-        (x: HTMLElement) => x.id === MOBILE_SCROLL_PANEL_ID,
-      );
-    } else {
-      // For Safari:
-      let node = touchEvent.srcElement.parentNode;
-      // document.parentNode is null so this should terminate eventually
-      while (node) {
-        if (node.id === MOBILE_SCROLL_PANEL_ID) {
-          return true;
-        } else {
-          node = node.parentNode;
-        }
-      }
-      return false;
-    }
-  } catch (err) {
-    return false;
-  }
-};
 
 /** ===========================================================================
  * Props
