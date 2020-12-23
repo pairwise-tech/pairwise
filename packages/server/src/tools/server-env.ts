@@ -61,6 +61,8 @@ const GOOGLE_AUTHORIZATION_URL = getenv.string("GOOGLE_AUTHORIZATION_URL", "");
 const SLACK_API_TOKEN = getenv.string("SLACK_API_TOKEN", "");
 const SLACK_ADMIN_IDS = getenv.array("SLACK_ADMIN_IDS", "string", []);
 
+const GITHUB_API_TOKEN = getenv.string("GITHUB_API_TOKEN", "");
+
 // Emails: disable by default
 const ENABLE_EMAILS = getenv.bool("ENABLE_EMAILS", false);
 
@@ -116,6 +118,7 @@ const ENV = {
   GOOGLE_PROFILE_URL,
   GOOGLE_TOKEN_URL,
   GOOGLE_AUTHORIZATION_URL,
+  GITHUB_API_TOKEN,
   SLACK_API_TOKEN,
   SLACK_ADMIN_IDS,
   ENABLE_EMAILS,

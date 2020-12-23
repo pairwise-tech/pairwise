@@ -27,6 +27,7 @@ import AdminSearchBox from "./AdminSearchBox";
 import Hugh from "../icons/hugh.jpg";
 import AdminSearchPage from "./AdminSearchPage";
 import AdminChallengeDetailModal from "./AdminChallengeDetailModal";
+import AdminPullRequestPage from "./AdminPullRequestPage";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -133,6 +134,11 @@ const AdminContainer = (props: IProps) => {
       key="search"
       path="/search/:query?"
       component={() => <AdminSearchPage isMobile={isMobile} />}
+    />,
+    <Route
+      key="pull-requests"
+      path="/pull-requests/:pull?"
+      component={() => <AdminPullRequestPage isMobile={isMobile} />}
     />,
     <Route key="redirect" component={() => <Redirect to="/stats" />} />,
   ];

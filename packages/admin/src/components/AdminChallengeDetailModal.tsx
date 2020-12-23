@@ -92,8 +92,8 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
   const { challenge, courseId, moduleId, isMobile } = props;
   return (
     <DataCard key={challenge.id}>
-      <KeyValue label="Challenge Type" value={challenge.type} />
       <KeyValue label="Title" value={challenge.title} />
+      <KeyValue label="Challenge Type" value={challenge.type} />
       <KeyValue
         label="Instructions"
         value={challenge.instructions}
