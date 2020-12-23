@@ -1,5 +1,6 @@
 import { createReducer } from "typesafe-actions";
 import {
+  Challenge,
   CourseList,
   CourseSkeletonList,
   InverseChallengeMapping,
@@ -13,6 +14,14 @@ import { ChallengesActionTypes } from "./index";
  * ============================================================================
  */
 
+export interface PullRequestContext {
+  id: string;
+  moduleId: string;
+  courseId: string;
+  originalChallenge: Challenge;
+  updatedChallenge: Challenge;
+}
+
 export interface State {
   keySelectedMenuItemIndex: Nullable<number>;
   courses: Nullable<CourseList>;
@@ -20,6 +29,8 @@ export interface State {
   challengeMap: Nullable<InverseChallengeMapping>;
   displayNavigationMap: boolean;
   challengeDetailId: Nullable<string>;
+  pullRequestLoading: boolean;
+  pullRequestContext: Nullable<PullRequestContext[]>;
 }
 
 const initialState: State = {
@@ -29,6 +40,8 @@ const initialState: State = {
   displayNavigationMap: false,
   keySelectedMenuItemIndex: null,
   challengeDetailId: null,
+  pullRequestLoading: false,
+  pullRequestContext: null,
 };
 
 /** ===========================================================================
@@ -56,6 +69,20 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     challengeDetailId: null,
     displayNavigationMap: false,
     keySelectedMenuItemIndex: null,
+  }))
+  .handleAction(actions.fetchPullRequestContext, (state, action) => ({
+    ...state,
+    pullRequestLoading: true,
+  }))
+  .handleAction(actions.fetchPullRequestContextSuccess, (state, action) => ({
+    ...state,
+    pullRequestLoading: false,
+    pullRequestContext: action.payload,
+  }))
+  .handleAction(actions.fetchPullRequestContextFailure, (state, action) => ({
+    ...state,
+    pullRequestLoading: false,
+    pullRequestContext: null,
   }))
   .handleAction(actions.storeInverseChallengeMapping, (state, action) => ({
     ...state,

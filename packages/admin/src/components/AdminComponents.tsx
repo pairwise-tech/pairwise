@@ -3,7 +3,14 @@ import JSONPretty from "react-json-pretty";
 import React from "react";
 import cx from "classnames";
 import styled from "styled-components/macro";
-import { Button, Code, Card, Text, Classes } from "@blueprintjs/core";
+import {
+  Button,
+  Code,
+  Card,
+  Text,
+  Classes,
+  InputGroup,
+} from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { copyToClipboard, composeWithProps } from "../tools/admin-utils";
 import { connect } from "react-redux";
@@ -158,7 +165,7 @@ export const LabelRow = styled.div`
   }
 `;
 
-export const Key = styled(Text)`
+export const Key = styled(Text)<{ style?: React.CSSProperties }>`
   width: 225px;
   font-weight: 500;
   font-family: Avenir, Arial, Helvetica, sans-serif;
@@ -389,4 +396,41 @@ export const CardButton = styled(Button)`
     margin-left: 0;
     margin-top: 6px;
   }
+`;
+
+export const Input = styled(InputGroup)`
+  input#admin-input {
+    color: white;
+    display: block;
+    background: #3a3a3a;
+    transition: all 0.15s ease-out;
+
+    &:hover {
+      box-shadow: 0 0 0 1px #10ca92, 0 0 0 1px #10ca92,
+        0 0 0 3px rgba(16, 202, 146, 0.1), inset 0 0 0 1px rgba(16, 22, 26, 0.1),
+        inset 0 1px 1px rgba(16, 22, 26, 0.1);
+    }
+
+    &:focus {
+      border: none;
+      outline: none;
+      color: white;
+    }
+
+    ::placeholder {
+      color: ${COLORS.TEXT_PLACEHOLDER};
+    }
+
+    :-ms-input-placeholder {
+      color: ${COLORS.TEXT_PLACEHOLDER};
+    }
+
+    ::-ms-input-placeholder {
+      color: ${COLORS.TEXT_PLACEHOLDER};
+    }
+  }
+`;
+
+export const PullRequestDiffInput = styled(Input)`
+  margin-right: 6px;
 `;
