@@ -1,3 +1,4 @@
+import { isMobile } from "react-device-detect";
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
@@ -12,7 +13,7 @@ import {
 } from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Button, Card, Switch } from "@blueprintjs/core";
-import { COLORS, MOBILE } from "../tools/constants";
+import { COLORS } from "../tools/constants";
 import { PullRequestContext } from "../modules/challenges/store";
 import { composeWithProps } from "../tools/admin-utils";
 import toaster from "../tools/toast-utils";
@@ -43,6 +44,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
+    console.log("MOUNTING");
     const id = this.getPullIdFromParams();
     if (id) {
       this.triggerSearch(id);
@@ -92,6 +94,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
           </SummaryText>
         ) : pullRequestContext ? (
           <DiffContent
+            isMobile={isMobile}
             diffContent={pullRequestContext}
             useDarkTheme={this.state.useDarkTheme}
           />
@@ -142,6 +145,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
 }
 
 interface DiffContentProps {
+  isMobile: boolean;
   useDarkTheme: boolean;
   diffContent: PullRequestContext[];
 }
@@ -166,7 +170,6 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
   }
 
   renderPullRequestContext = (context: PullRequestContext) => {
-    console.log(context);
     const isDeletedChallenge = !context.updatedChallenge;
     const isNewChallenge = !context.originalChallenge && !isDeletedChallenge;
 
@@ -198,17 +201,15 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
             </>
           )}
           {!isNewChallenge && (
-            <>
+            <ChallengeDiff>
               <div style={{ height: 18 }} />
-              <ChallengeDiff>
-                <ReactDiffViewer
-                  splitView
-                  useDarkTheme={this.props.useDarkTheme}
-                  oldValue={context.originalChallenge?.content}
-                  newValue={context.updatedChallenge?.content}
-                />
-              </ChallengeDiff>
-            </>
+              <ReactDiffViewer
+                splitView={!this.props.isMobile}
+                useDarkTheme={this.props.useDarkTheme}
+                oldValue={context.originalChallenge?.content}
+                newValue={context.updatedChallenge?.content}
+              />
+            </ChallengeDiff>
           )}
         </ChallengeDiffCard>
       </div>
@@ -239,12 +240,7 @@ const DiffTitle = styled.h3`
 `;
 
 const ChallengeDiff = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  @media ${MOBILE} {
-    flex-direction: column;
-  }
+  overflow-x: scroll;
 `;
 
 const ChallengeDiffCard = styled(Card)`
@@ -270,9 +266,7 @@ const dispatchProps = {
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-interface ComponentProps {
-  isMobile: boolean;
-}
+interface ComponentProps {}
 
 type IProps = ConnectProps & RouteComponentProps & ComponentProps;
 
