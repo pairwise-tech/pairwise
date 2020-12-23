@@ -110,12 +110,8 @@ class NavigationOverlay extends React.Component<
       overlayVisible,
     } = this.props;
 
+    // Course or model is still loading
     if (!course || !module) {
-      console.warn(
-        "[NAVIGATION OVERLAY WARNING] No module or course found! ->",
-        course,
-        module,
-      );
       return null;
     }
 

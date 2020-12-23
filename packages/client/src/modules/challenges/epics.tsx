@@ -234,11 +234,11 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
     mergeMap(deps.api.fetchCourses),
-    map(({ value: courses }) => {
-      if (courses) {
-        return Actions.fetchCoursesSuccess({ courses });
+    map(result => {
+      if (result.value) {
+        return Actions.fetchCoursesSuccess({ courses: result.value });
       } else {
-        return Actions.fetchCoursesFailure();
+        return Actions.fetchCoursesFailure(result.error);
       }
     }),
   );

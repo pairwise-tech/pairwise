@@ -135,11 +135,17 @@ const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
  * Fetching courses or user should not fail, but if it does there is some
  * real issue (e.g. the server is down).
  */
-const appInitializationFailedEpic: EpicSignature = (action$, _, deps) => {
+const appInitializationFailedEpic: EpicSignature = action$ => {
   return action$.pipe(
     filter(isActionOf([Actions.fetchUserFailure, Actions.fetchCoursesFailure])),
+    filter(action => {
+      // Ajax status 0 can occur, I think, when a request is aborted because a
+      // user is navigating away from a page. This could happen if a user
+      // decides to navigate back while Pairwise is loading, and in such cases
+      // we don't want to report request failures as errors.
+      return action.payload.status !== 0;
+    }),
     tap(action => {
-      // Report this to Sentry so we know about it.
       captureSentryException(
         new Error(`App initialization failed! Action type: ${action.type}`),
       );
