@@ -44,7 +44,6 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    console.log("MOUNTING");
     const id = this.getPullIdFromParams();
     if (id) {
       this.triggerSearch(id);
