@@ -147,7 +147,11 @@ const appInitializationFailedEpic: EpicSignature = action$ => {
     }),
     tap(action => {
       captureSentryException(
-        new Error(`App initialization failed! Action type: ${action.type}`),
+        new Error(
+          `App initialization failed! What we know: ${JSON.stringify(
+            action.payload,
+          )}`,
+        ),
       );
     }),
     mapTo(Actions.appInitializationFailed()),
