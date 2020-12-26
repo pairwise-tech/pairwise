@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { ReduxStoreState } from "modules/root";
+import { UserCourseAccessMap } from "@pairwise/common";
 
 /** ===========================================================================
  * Selectors
@@ -36,6 +37,20 @@ export const userSettings = createSelector(
 export const userCourses = createSelector(
   userState,
   state => state.user.courses,
+);
+
+export const hasPurchasedTypeScriptCourse = createSelector(
+  [userCourses],
+  (courses: Nullable<UserCourseAccessMap>) => {
+    // Use the hard-coded TS course id...
+    const TS_COURSE_ID = "fpvPtfu7s";
+
+    if (courses && TS_COURSE_ID in courses) {
+      return true;
+    } else {
+      return false;
+    }
+  },
 );
 
 export const userPayments = createSelector(
