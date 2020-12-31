@@ -27,7 +27,9 @@ import AdminSearchBox from "./AdminSearchBox";
 import Hugh from "../icons/hugh.jpg";
 import AdminSearchPage from "./AdminSearchPage";
 import AdminChallengeDetailModal from "./AdminChallengeDetailModal";
-import AdminPullRequestPage from "./AdminPullRequestPage";
+import AdminPullRequestPage, {
+  PULL_REQUEST_DIFF_VIEW_ID,
+} from "./AdminPullRequestPage";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -446,6 +448,17 @@ interface NavigationSwipeHandlerProps {
 }
 
 /**
+ * HTML ids of various UI elements which need to have the swipe behavior
+ * disabled. This UI elements tend to have horizontally overflowing content,
+ * so the horizontal swipe needs to be able to scroll the content instead
+ * of open the navigation menu.
+ */
+const swipeDismissElementIds = new Set([
+  JSON_COMPONENT_ID,
+  PULL_REQUEST_DIFF_VIEW_ID,
+]);
+
+/**
  * The navigation swipe handler component which handles detecting swipe
  * events on mobile and toggling the navigation side menu.
  */
@@ -456,15 +469,15 @@ const NavigationSwipeHandler = (props: NavigationSwipeHandlerProps) => {
     try {
       // For most browsers:
       if (touchEvent.path) {
-        return !!touchEvent.path.find(
-          (x: HTMLElement) => x.id === JSON_COMPONENT_ID,
+        return !!touchEvent.path.find((x: HTMLElement) =>
+          swipeDismissElementIds.has(x.id),
         );
       } else {
         // For Safari:
         let node = touchEvent.srcElement.parentNode;
         // document.parentNode is null so this should terminate eventually
         while (node) {
-          if (node.id === JSON_COMPONENT_ID) {
+          if (swipeDismissElementIds.has(node.id)) {
             return true;
           } else {
             node = node.parentNode;

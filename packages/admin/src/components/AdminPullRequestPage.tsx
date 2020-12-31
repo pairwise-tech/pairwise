@@ -126,6 +126,8 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
   };
 }
 
+export const PULL_REQUEST_DIFF_VIEW_ID = "pull-request-diff-view";
+
 interface DiffContentProps {
   isMobile: boolean;
   useDarkTheme: boolean;
@@ -183,7 +185,7 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
             </>
           )}
           {!isNewChallenge && (
-            <ChallengeDiff>
+            <ChallengeDiff id={PULL_REQUEST_DIFF_VIEW_ID}>
               <div style={{ height: 18 }} />
               <ReactDiffViewer
                 splitView={!this.props.isMobile}
