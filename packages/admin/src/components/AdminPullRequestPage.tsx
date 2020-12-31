@@ -39,7 +39,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
 
     this.state = {
       pull: "",
-      useDarkTheme: false,
+      useDarkTheme: true,
     };
   }
 
