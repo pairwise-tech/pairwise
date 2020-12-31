@@ -39,15 +39,8 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
 
     this.state = {
       pull: "",
-      useDarkTheme: false,
+      useDarkTheme: true,
     };
-  }
-
-  componentDidMount() {
-    const id = this.getPullIdFromParams();
-    if (id) {
-      this.triggerSearch(id);
-    }
   }
 
   render(): Nullable<JSX.Element> {
@@ -63,6 +56,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
           <Row>
             <PullRequestDiffInput
               fill
+              autoFocus
               leftIcon="search"
               id="pull-input"
               autoComplete="off"
@@ -116,21 +110,10 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
     e.preventDefault();
     /**
      * Trigger the search through a url update so the result pages
-     * is deep linked.
+     * is deep linked. The actual search occurs in the challenge/epics
+     * as a result of the route location change.
      */
     this.props.history.push(`/pull-requests/${this.state.pull}`);
-  };
-
-  triggerSearch = (pull: string | number) => {
-    const id = Number(pull);
-
-    if (isNaN(id)) {
-      toaster.warn("Invalid pull id provided - must be a number!");
-    } else {
-      this.setState({ pull: "" }, () => {
-        this.props.fetchPullRequestContext(id);
-      });
-    }
   };
 
   getPullIdFromParams = () => {
@@ -142,6 +125,8 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
     return null;
   };
 }
+
+export const PULL_REQUEST_DIFF_VIEW_ID = "pull-request-diff-view";
 
 interface DiffContentProps {
   isMobile: boolean;
@@ -200,7 +185,7 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
             </>
           )}
           {!isNewChallenge && (
-            <ChallengeDiff>
+            <ChallengeDiff id={PULL_REQUEST_DIFF_VIEW_ID}>
               <div style={{ height: 18 }} />
               <ReactDiffViewer
                 splitView={!this.props.isMobile}
