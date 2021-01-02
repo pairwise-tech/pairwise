@@ -5866,7 +5866,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Congratulations\\! You have completed all the course material and you're not ready to get your hands dirty building real world applications\\! You are definitely ready for a job, but you still need a portfolio of rockstar projects to prove it to your future employer. That's what this section is all about: letting you loose to build some amazing projects to impress everyone around you. Let's get started\\!"
+          "content": "Congratulations\\! You have completed all the Pairwise course material. It's been a long journey and we know you've put in a lot of work to reach this point.\n\nThis final module is about creating fullstack applications to really bring together all the skills you have learned so far and round out your portfolio. These applications will help you see the full picture of how a modern app is built and be the most valuable additions to your portfolio."
         },
         {
           "id": "NTkZ2fFGp",
@@ -5878,6 +5878,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "The projects in this final section are fullstack applications which will really test your abilities as a programmer\\! These projects are the culmination of all of the hard work and practice you have put in to work to this point.\n\nThese projects will be challenging, but if you can complete them they will give you a portfolio which will really standout and they will prove that you have acquired all the skills necessary to work as a software developer."
+        },
+        {
+          "id": "aaSCD25GK",
+          "type": "project",
+          "title": "A Fullstack Note-Taking App",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project create a note\\-taking application which allows users to record notes. Choose from one of the following two levels of difficulty:\n\n## Level 1:\n\nFrontend \\+ backend.\n* The app should allow users to add new notes, edit notes, and delete notes.\n* The same features as the frontend\\-only app, but now with a backend server and database to store the notes.\n* You can choose any backend architecture.\n* Authentication is not required, but you will need some way to uniquely associate notes with the current user. We would encourage adding authentication for this, but for simplicity you could make the notes specific to the current browser and generate a unique id associated with that browser.\n\n\n## Level 2:\n\nFrontend \\+ backend \\+ mobile.\n* The same features as above but the app works on mobile. You can either adapt the UI to work on mobile or build a separate mobile app for the mobile experience.\n* The app supports authentication to identify users.\n\n---\n\nOf course, we recommend following all of the best practices we have presented throughout the Pairwise course for this project. This would include, for instance:\n\n* Using good code styling conventions and version control\n* Adding tests for your project\n* Using CI/CD workflows to automate deployments\n* Using code comments and documentation where appropriate\n\n\nWhen you are finished with your project add the links for it below\\!"
         },
         {
           "id": "DVy0PqE5j",
