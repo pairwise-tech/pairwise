@@ -5882,13 +5882,46 @@
         {
           "id": "aaSCD25GK",
           "type": "project",
-          "title": "A Fullstack Note-Taking App",
+          "title": "Fullstack Note-Taking App",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
           "content": "For this project create a note\\-taking application which allows users to record notes. Choose from one of the following two levels of difficulty:\n\n## Level 1:\n\nFrontend \\+ backend.\n* The app should allow users to add new notes, edit notes, and delete notes.\n* The same features as the frontend\\-only app, but now with a backend server and database to store the notes.\n* You can choose any backend architecture.\n* Authentication is not required, but you will need some way to uniquely associate notes with the current user. We would encourage adding authentication for this, but for simplicity you could make the notes specific to the current browser and generate a unique id associated with that browser.\n\n\n## Level 2:\n\nFrontend \\+ backend \\+ mobile.\n* The same features as above but the app works on mobile. You can either adapt the UI to work on mobile or build a separate mobile app for the mobile experience.\n* The app supports authentication to identify users.\n\n---\n\nOf course, we recommend following all of the best practices we have presented throughout the Pairwise course for this project. This would include, for instance:\n\n* Using good code styling conventions and version control\n* Adding tests for your project\n* Using CI/CD workflows to automate deployments\n* Using code comments and documentation where appropriate\n\n\nWhen you are finished with your project add the links for it below\\!"
+        },
+        {
+          "id": "u0WIqVZKs",
+          "type": "project",
+          "title": "Real Time Tic-Tac-Toe",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Remember the Tic\\-Tac\\-Toe game from the TypeScript Programming module a long time again? Let's revisit it but this time create a real\\-time multiplayer version. Your game should:\n\n* Allow users to connect and play one another in real\\-time.\n* Users accessing the app can select a username and then be displayed as online \\(no need for user authentication \\+ accounts, unless you want a challenge\\!\\). Users can propose to play a Tic\\-Tac\\-Toe game with other players who are also online.\n* When in a game, the app uses Web Sockets to handle the game logic in real\\-time for both players.\n* While waiting for other players, a user can also opt to play a game against the computer.\n* The app supports multiple concurrent users and games at the same time.\n\n\nWhen you have completed your project share it with your friends and try playing a few games with them\\!\n\n---\n\nAlso, if you are tired of Tic\\-Tac\\-Toe feel free to replace this game with any other game you might like to implement instead. Remember, these projects are less about the exact rules we define here and more about giving you the real world experience of building apps and writing a lot of code to solve problems and be creative. The most important thing is for you to be motivated and excited about what you're working on and get a lot of experience writing code and learning new skills—good luck\\!\n"
+        },
+        {
+          "id": "YraF7sMav",
+          "type": "project",
+          "title": "Study App",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, create a study application to help users learn specific skills or subject areas. The app should support a few types of study methods.\n\n* A user can add a new study topic.\n* Users can browse public study topics created by other users.\n* For each study topic, a user can add a quiz of content. The quiz can be a simply multiple choice quiz.\n* For each study topic, a user can also go through the quiz to test their knowledge.\n* A user can set a topic to be private or public. Public topics are viewable by anyone who accesses the site, private topics are available only to the user.\n* The application supports user accounts and user authentication. A user must have an account to create topics, but can try out public quizzes without any account.\n* As a bonus, consider adding other types of study options such as flashcards, true/false questions, fill\\-in\\-the\\-blank questions, etc.\n\n"
+        },
+        {
+          "id": "g3q2PiwZ1",
+          "type": "project",
+          "title": "Custom App",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this final project, design an app of your choice. This can be anything from a game to a tool to an app idea you find interesting, creative, or useful. Try to put some thought into this and create something you actually need or think could be useful\\! The best projects are those you build with a genuine interest in solving a real world problem.\n\nThis is the final capstone project for the Pairwise curriculum, so don't be afraid to go all out\\!"
         },
         {
           "id": "DVy0PqE5j",
