@@ -5891,6 +5891,24 @@
           "content": "✨ Congratulations on making it this far\\!\\!\\! ✨\n\nIn this final special topics series we will present summary content, wisdom, reflections, meta\\-content, and other parting advice for you on your journey as a software developer.\n\nHere we will discuss how to get a job as a developer, how to navigate the application and interview process, how to negotiate and understand job offers, and the overall job market. We will also address some trends and predictions in the software industry, and touch on a few other skills and technologies that you might find interesting to extend your learning journey with.\n\nWith these lessons in hand, you will be 100% equipped to go out into the world and get your first job\\! Your first team will be impressed by the depth and breadth of your knowledge.\n\nSincere congratulations from all of us at Pairwise for reaching this point\\! 💫⭐️🌟"
         }
       ]
+    },
+    {
+      "id": "OoCQh6nWy",
+      "title": "Career & Interview",
+      "challenges": [
+        {
+          "id": "GBtSftk@B",
+          "type": "section",
+          "title": "Coming Soon!",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "The **Career & Interview** module content is coming soon.\n\nThis module will cover:\n\n* How to create a Resume and portfolio to showcase your skills\n* How to prepare for software engineering interviews\n* Practicing and answering algorithm questions\n* Navigating the job market and applying to positions\n* Interacting with recruiters\n* Negotiating job offers\n* Advice for starting the your first job\n* Advice for moving through your career as a developer\n\n"
+        }
+      ],
+      "free": false
     }
   ]
 }
