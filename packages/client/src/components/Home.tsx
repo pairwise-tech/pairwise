@@ -16,6 +16,7 @@ import SEO from "./SEO";
 
 class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
+    const { hasPurchasedTypeScriptCourse } = this.props;
     return (
       <PageContainer>
         <SEO
@@ -28,37 +29,55 @@ class Home extends React.Component<IProps, {}> {
             Pairwise is the best place to learn to code and start a career in
             software development.
           </ContentText>
-          <ContentText style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}>
-            What's the value in Pairwise?
-          </ContentText>
-          <ContentText>
-            Most coding bootcamps cost $10,000 USD or more, while a computer
-            science degree from a university is even more expensive and takes
-            years to complete.
-          </ContentText>
-          <ContentText>
-            While many free programming education resources exist online, it's
-            hard to find a single coherent curriculum to take you from beginner
-            to expert. That's what Pairwise is. A single, linear curriculum
-            which starts you coding and solving problems from Day 1.
-          </ContentText>
-          <ContentText style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}>
-            What do I get?
-          </ContentText>
-          <ContentText>
-            The Pairwise FullStack TypeScript Course is currently in{" "}
-            <Bold style={{ textDecoration: "underline " }}>BETA</Bold> and
-            available to purchase now for{" "}
-            <Bold style={{ color: COLORS.SECONDARY_YELLOW }}>$50 USD</Bold>.
-            This includes all of the modules you can view in the course
-            navigation menu, and covers HTML & CSS, basic programming, frontend
-            and backend development, mobile development, and other skills like
-            testing and deploying software.
-          </ContentText>
-          <ContentText>
-            To see more about what you will learn,{" "}
-            <ExternalLink link="https://pairwise.tech">go here</ExternalLink>.
-          </ContentText>
+          {hasPurchasedTypeScriptCourse ? (
+            <ContentText>
+              Thank you for purchasing the Pairwise Course! You have lifetime
+              access. Please enjoy the course content, and feel free to contact
+              me anytime at: <b>sean@pairwise.tech</b>.
+            </ContentText>
+          ) : (
+            <>
+              <ContentText
+                style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
+              >
+                What's the value in Pairwise?
+              </ContentText>
+              <ContentText>
+                Most coding bootcamps cost $10,000 USD or more, while a computer
+                science degree from a university is even more expensive and
+                takes years to complete.
+              </ContentText>
+              <ContentText>
+                While many free programming education resources exist online,
+                it's hard to find a single coherent curriculum to take you from
+                beginner to expert. That's what Pairwise is. A single, linear
+                curriculum which starts you coding and solving problems from Day
+                1.
+              </ContentText>
+              <ContentText
+                style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
+              >
+                What do I get?
+              </ContentText>
+              <ContentText>
+                The Pairwise FullStack TypeScript Course is currently in{" "}
+                <Bold style={{ textDecoration: "underline " }}>BETA</Bold> and
+                available to purchase now for{" "}
+                <Bold style={{ color: COLORS.SECONDARY_YELLOW }}>$50 USD</Bold>.
+                This includes all of the modules you can view in the course
+                navigation menu, and covers HTML & CSS, basic programming,
+                frontend and backend development, mobile development, and other
+                skills like testing and deploying software.
+              </ContentText>
+              <ContentText>
+                To see more about what you will learn,{" "}
+                <ExternalLink link="https://pairwise.tech">
+                  go here
+                </ExternalLink>
+                .
+              </ContentText>
+            </>
+          )}
         </ContentContainer>
         {this.props.skeletons?.map(this.renderCourseItem)}
       </PageContainer>
@@ -215,6 +234,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
+  hasPurchasedTypeScriptCourse: Modules.selectors.user.hasPurchasedTypeScriptCourse(
+    state,
+  ),
 });
 
 const dispatchProps = {

@@ -55,6 +55,31 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
 };
 
 /**
+ * Trigger a search for a pull request diff when the pull id in the url
+ * changes.
+ */
+const searchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.locationChange)),
+    pluck("payload"),
+    pluck("pathname"),
+    filter(x => x.includes("/pull-requests/")),
+    map(path => {
+      const idParam = path.split("/")[2];
+      const id = Number(idParam);
+      if (!id || isNaN(id)) {
+        deps.toaster.warn("Invalid pull id provided - must be a number!");
+        return Actions.empty(
+          "Route change occurred by there is an invalid pull request id.",
+        );
+      } else {
+        return Actions.fetchPullRequestContext(id);
+      }
+    }),
+  );
+};
+
+/**
  * Fetch the diff context for a pull request id number.
  */
 const fetchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
@@ -82,5 +107,6 @@ export default combineEpics(
   contentSkeletonInitializationEpic,
   challengeInitializationEpic,
   inverseChallengeMappingEpic,
+  searchPullRequestContextEpic,
   fetchPullRequestContextEpic,
 );
