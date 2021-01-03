@@ -68,7 +68,10 @@ const searchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
       const idParam = path.split("/")[2];
       const id = Number(idParam);
       if (!id || isNaN(id)) {
-        deps.toaster.warn("Invalid pull id provided - must be a number!");
+        // Do not alert if there is no id param
+        if (!!id) {
+          deps.toaster.warn("Invalid pull id provided - must be a number!");
+        }
         return Actions.empty(
           "Route change occurred by there is an invalid pull request id.",
         );
