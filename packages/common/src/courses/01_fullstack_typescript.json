@@ -5792,7 +5792,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "For this project, use Docker to create a container for running a server."
+          "content": "For this project, use [Docker](https://www.docker.com/) to create a container for running one of the server projects you have completed previously. For a reference, you can take a look at the [NodeJS example of dockerizing a server](https://nodejs.org/en/docs/guides/nodejs-docker-webapp/).\n\nThe result should be a [Dockerfile](https://docs.docker.com/engine/reference/builder/) which allows one to build an image for your server with a `docker build` command and then start your server using `docker run`. Running the server in this way should also expose the server on a `localhost` port so other applications can access it.\n\nAs you go through this project, try to get familiar with running the various Docker commands on your local system and understand what the important parts of a Dockerfile are."
         },
         {
           "id": "X2xJUDejx",
