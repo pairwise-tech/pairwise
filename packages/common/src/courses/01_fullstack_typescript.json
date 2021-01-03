@@ -5781,7 +5781,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "For this project, add a testing pipeline to one of your projects which can run on GitHub Actions."
+          "content": "For this project, choose one of your previously completed projects and add a CI/CD workflow for it using GitHub Actions. Ideally, choose a previous project which you have already deployed and then add two workflows:\n\n* **A PR Tests Workflow:** This workflow should run the project unit tests, linting, and type checking against pull requests. Update the settings for your repository to require that pull requests must pass all status checks before they can be merged.\n* **A Deploy Workflow: **This workflow should handle deploying your project whenever new commits are pushed to the main project branch.\n\n\nA CI/CD workflow like this will effectively automate all the major steps you want for your project. The result is you just follow normal git workflow \\(making, reviewing, and merging PRs\\) and the CI/CD workflow handles running your tests and deploying your code for you.\n\nBe sure to check out the [GitHub Actions documentation](https://docs.github.com/en/free-pro-team@latest/actions) for a reference when creating these workflows if you need help.\n"
         },
         {
           "id": "ZJ3EhQkuN",
