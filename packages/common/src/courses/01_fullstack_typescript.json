@@ -5797,13 +5797,13 @@
         {
           "id": "X2xJUDejx",
           "type": "project",
-          "title": "Deploy a FullStack Application",
+          "title": "Deploy a Server + Database",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "For this project, deploy server, database, and frontend for one of your projects."
+          "content": "For this project, choose one of your previous server/database projects, or create a new one, which together uses a server and database. Next, deploy all of these with a cloud provider of your choice. We would recommend choosing AWS, GCP, Heroku, or Digital Ocean, but feel free to choose any cloud provider you want to experiment with.\n\nUltimately, many of the principles for deploying and managing software in the cloud are applicable regardless of which particular cloud provider you are using—you end up just having to learn the specific ins\\-and\\-outs of that provider. For instance, setting up a SQL database in AWS is in principle basically the same as setting up a SQL database in GCP, but to actually do it you must follow completely different procedures depending on which cloud provider you are using, including potentially different configuration settings or terminology. As a result, part of the skill of working as an infrastructure or devops engineer is not just in understanding the principles for designing scalable and reliable architectures but also the details of the particular cloud provider you are working with. As a result, it's helpful to simply be acquainted with the process of figuring out how to use a specific cloud provider.\n\nWhen completed, you should have:\n\n* A server deployed and running in the cloud.\n* A database running in the cloud which your server connects to.\n\n\nFor a bonus, try to think about how your server would handle scaling? What if there are 1,000 concurrent users? How about logging, monitoring, and alerting? Consider integrating Sentry with your application to report errors, or experiment to see how to view the current logs for your running service. Also, we would of course recommend dockerizing the server you are deploying here."
         },
         {
           "id": "GzyZTY8jb",
