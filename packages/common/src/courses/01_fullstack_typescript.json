@@ -3641,6 +3641,17 @@
           "content": "In this section, you will learn how to build applications on your own computer\\! You will learn how to download the software you need, manage a codebase using version control, Git, and GitHub, and deploy your software projects for the world to see\\!"
         },
         {
+          "id": "lS79YU3zA",
+          "type": "project",
+          "title": "Create Your First Git Project",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project you will go through all the setup steps necessary to work independently on your own machine. Refer to the previous challenges in this module for how to complete each of these, but once you are finished you should have the following installed and setup on your local computer:\n\n* VSCode\n* Homebrew\n* NodeJS\n* A command line environment \\(e.g. Terminal, iTerm\\)\n* Git\n\n\nNow, head over to [https://github.com](https://github.com/) and create an account. This will be the account you use to create code repositories and build up your portfolio projects for the Pairwise curriculum.\n\nOnce you have completed these steps and have everything setup let's create your first actual code repository which you can submit to complete this project. Follow these steps:\n\n* Create a new repository in GitHub \\(you can choose the \"empty\" template option\\).\n* Pull the repository to your local computer \\([refer to this](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/about-authentication-to-github#authenticating-with-the-command-line) to authenticate with GitHub from the command line if you have not already\\).\n* Once you have the code on your local computer go ahead and add a new file, e.g. a `README.md` file\\. Feel free to write anything you like in this file, such as \"My first GitHub repo\\!\".\n* When you've finished creating this file, use `git add` and `git commit` to commit your changes with a helpful commit message. Then, use `git push` to push your code changes.\n* Return to GitHub and refresh your repository page to confirm that your repository now shows the changes you just made.\n\n\nAdd the link to your GitHub repository when you have completed all the above steps\\!"
+        },
+        {
           "id": "l$ZcH5bp5",
           "type": "section",
           "title": "Special Topics",
