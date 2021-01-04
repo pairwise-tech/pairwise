@@ -420,7 +420,14 @@ export const getMarkupForCodeChallenge = (
   deps: string,
 ) => `
 <html>
-  <head></head>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
   <body>
     <div id="root" />
     <script id="test-dependencies">${getTestDependencies(deps)}</script>
