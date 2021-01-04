@@ -5869,7 +5869,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "# Intro \n\n[Kubernetes](https://kubernetes.io/) is a technology developed and open sourced by Google which is used for container orchestration. What does this mean? We've learned about \"containers\" with the challenges on Docker before, and we've seen a glimpse of what microservices architectures are in the previous challenge. A \"container orchestration\" framework like Kubernetes is responsible for organizing and coordinating the infrastructure deployment of multiple containerized services. That is to say, assuming you have a suite of services which all can be represented as containers using a technology like Docker, Kubernetes allows you to coordinate the deployment of all of these services in a production environment, including service updates, re\\-deployments, re\\-starts, and scaling.\n\n"
         },
         {
           "id": "J3ArHHwhp",
