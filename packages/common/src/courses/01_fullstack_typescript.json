@@ -3663,6 +3663,17 @@
           "content": "For this project, we will follow the same steps from before but this time actually install some dependencies and create an npm project. Follow these steps:\n\n* Create a new directory locally, navigate to that directory with in the command line and run `yarn init` \\(or `npm` if you choose to use `npm`\\).\n* Answer the setup questions about your project \\(you can change these details later\\).\n* Yarn will create a new directory for you.\n* Install TypeScript in your project `yarn add -D typescript`.\n* Take a look at your `package.json` file after the above step completes, you should see `typescript` listed as a dependency.\n* Now, create a `tsconfig.json` file \\(see [here](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) for details\\) and a `src/` folder\\.\n* Create a new TypeScript file, e.g. `index.ts` in the `src/` folder and add any TypeScript code you like in this file, e.g. some functions, loops, console statements, etc.\n* Add a command in the `scripts` section of the `package.json` file to compile your project code using TypeScript, e.g. by running `tsc`.\n* Try compiling your code and look for the `.js` files in the build output. Experiment with trying to compile some code with type errors and see how the TypeScript compiler responds.\n* You can now run these JavaScript files directly with NodeJS, e.g. `node build/index.js`.\n\n\nOnce you have completed all of these steps, commit your code and push your code to a new GitHub repository.\n"
         },
         {
+          "id": "TpczPGzgl",
+          "type": "project",
+          "title": "Upload Your Previous Projects",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this final Developer Workflow project, let's revisit your original projects from the HTML & CSS modules and the TypeScript programming modules. Create new GitHub repositories to hold the code from these projects and then add your projects and push them to GitHub. For the TypeScript projects, follow similar steps to the previous projects so you can actually setup and run your projects locally. For the HTML & CSS projects, you can just include the files directly \\(you can just open `.html` files locally on your computer with an internet browser to preview how they look\\).\n\nFeel free to organize these projects in any way that you like—for instance you can put them all in a single repository, or create a separate repository for each project. The main purpose of this is twofold:\n\n* Increase your familiarity with working with Git and GitHub and your local development environment.\n* Start building up your portfolio of projects which showcase the code you have written.\n\n\nWhen you have completed the above steps, add the link to your repo below \\(or just the link to one of the repos if you choose to create multiple repos\\)."
+        },
+        {
           "id": "l$ZcH5bp5",
           "type": "section",
           "title": "Special Topics",
