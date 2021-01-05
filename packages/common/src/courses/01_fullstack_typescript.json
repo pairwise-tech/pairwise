@@ -4416,6 +4416,17 @@
           "content": ""
         },
         {
+          "id": "8fy7Bflao",
+          "type": "react",
+          "title": "Component Props",
+          "instructions": "The last challenge introduced us to the idea of \"props\" in React. Props are a way of passing data to components. Remember, everything in React is a \"component\" and UIs are just nested hierarchies of components, which means you have parent components which render children components. Props allow you to pass data from parent to child components and follow React's \"one\\-way data follow\".\n\nLet's say you have a `User` component which expects a `name` prop\\. You could render it like this in React:\n\n```\nconst name = \"Sam\";\nconst component = <User name={name} />\n\n```\n\nUpdate the `App` component in the editor below to render the `User` component, providing all of the required props.",
+          "testCode": "test(\"The `App` and `User` components should be defined.\", () => {\n  expect(typeof App !== \"undefined\").toBe(true);\n  expect(typeof User !== \"undefined\").toBe(true);\n});\n\ntest(\"The `App` component should render the `User` component and provide the specified `UserProps` correctly.\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const element = container.querySelector(\"div\");\n\n  const h1 = element.querySelectorAll(\"h1\");\n  expect(h1.length).toBe(1);\n\n  const p = element.querySelectorAll(\"p\");\n  expect(p.length).toBe(3);\n});\n",
+          "videoUrl": "",
+          "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface UserProps {\n  name: string;\n  username: string;\n  email: string;\n}\n\n// NOTE: Do not change the User component, as the tests rely on it\nconst User = (props: UserProps) => {\n  return (\n    <div style={{ paddingLeft: 16 }}>\n      <h1>User</h1>\n      <p>\n        <span style={{ fontWeight: \"bold\" }}>Name:</span> {props.name}\n      </p>\n      <p>\n        <span style={{ fontWeight: \"bold\" }}>Username:</span> {props.username}\n      </p>\n      <p>\n        <span style={{ fontWeight: \"bold\" }}>Email:</span> {props.email}\n      </p>\n    </div>\n  );\n};\n\nconst App = () => {\n  return null;\n};\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface UserProps {\n  name: string;\n  username: string;\n  email: string;\n}\n\n// NOTE: Do not change the User component, as the tests rely on it\nconst User = (props: UserProps) => {\n  return (\n    <div style={{ paddingLeft: 16 }}>\n      <h1>User</h1>\n      <p>\n        <span style={{ fontWeight: \"bold\" }}>Name:</span> {props.name}\n      </p>\n      <p>\n        <span style={{ fontWeight: \"bold\" }}>Username:</span> {props.username}\n      </p>\n      <p>\n        <span style={{ fontWeight: \"bold\" }}>Email:</span> {props.email}\n      </p>\n    </div>\n  );\n};\n\nconst App = () => {\n  return <User name=\"Sam\" username=\"sammy\" email=\"sam@pairwise.tech\" />;\n};\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "content": ""
+        },
+        {
           "id": "50f7f8sUV",
           "type": "react",
           "title": "Create a Controlled Input",
