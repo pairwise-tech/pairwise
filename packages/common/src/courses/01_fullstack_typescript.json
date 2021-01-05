@@ -4352,7 +4352,7 @@
         {
           "id": "xv3X7eri9",
           "type": "section",
-          "title": "React Basics",
+          "title": "React & JSX Basics",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
@@ -4391,6 +4391,17 @@
           "videoUrl": "",
           "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst JSX = (\n  <div>\n    <h1>This is JSX</h1>\n    <h3>JSX lets your write \"HTML\" in JavaScript!</h3>\n    <p>React components return JSX elements.</p>\n  </div>\n);\n\n// Do not edit code below this line\nconst Main = () => JSX;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst JSX = (\n  <div\n    style={{\n      display: \"flex\",\n      flexDirection: \"column\",\n      alignItems: \"center\",\n      justifyContent: \"center\",\n    }}\n  >\n    <h1 style={{ color: \"red\" }}>This is JSX</h1>\n    <h3 style={{ textDecoration: \"underline\" }}>\n      JSX lets your write \"HTML\" in JavaScript!\n    </h3>\n    <p style={{ fontStyle: \"italic\" }}>React components return JSX elements.</p>\n  </div>\n);\n\n// Do not edit code below this line\nconst Main = () => JSX;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "content": ""
+        },
+        {
+          "id": "rtLnUHpob",
+          "type": "react",
+          "title": "Variables in JSX",
+          "instructions": "Because JSX is essentially an extension to regular JavaScript syntax, you have all of the capabilities of JavaScript natively present. This means you can return JSX from functions, assign it to variables, and render dynamic variables directly in JavaScript, simply using brackets.\n\nFor example, if you have a variable such as `name`, you can interpolate this directly in JSX like so: `<p>{name}</p>`. This will render the value of name in the `p` tag\\. Try it out in the challenge below\\!",
+          "testCode": "test(\"The `JSX` variable should be defined.\", () => {\n  expect(typeof JSX === \"undefined\").toBe(false);\n});\n\ntest(\"The `JSX` constant return UI elements which render out the `name` variable in the `h1` tag, e.g. `A variable in JSX: Jacob` should be rendered. The JSX should use the `name` variable directly.\", () => {\n  let container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  let h1 = container.querySelector(\"h1\");\n  expect(h1.innerText).toBe(\"A variable in JSX: Joe\");\n  __user_code_string__.includes(\"{name}\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst name = \"Joe\";\n\nconst JSX = (\n  <div>\n    <p>In JSX you can render variables directly:</p>\n    <i>Using brackets!</i>\n    <h1>A variable in JSX: </h1>\n  </div>\n);\n\n// Do not edit code below this line\nconst Main = () => JSX;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst name = \"Joe\";\n\nconst JSX = (\n  <div>\n    <p>In JSX you can render variables directly:</p>\n    <i>Using brackets!</i>\n    <h1>A variable in JSX: {name}</h1>\n  </div>\n);\n\n// Do not edit code below this line\nconst Main = () => JSX;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
           "content": ""
         },
         {
