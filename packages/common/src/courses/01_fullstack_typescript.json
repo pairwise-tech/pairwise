@@ -4449,6 +4449,17 @@
           "content": ""
         },
         {
+          "id": "f87aSW05u",
+          "type": "react",
+          "title": "Rendering Lists of Items",
+          "instructions": "The last challenge provided a list of items as a prop to a child component. It turns out that rendering lists of elements is an extremely common UI pattern. Lists of search results, lists of comments, lists of videos, etc. etc.\n\nHow can we render a list of items in React? Well, since React is just JavaScript, we can leverage the power of programming to do this. Specifically, in React the conventional practice for rendering lists is to use a `map` operation over an array of items and return JSX elements for every item in the list you want to render. Put simply that would look like:\n\n```\nconst JSXList = items.map(x => <p>X is: {x}</p>);\n\n```\n\nWe have a list of names defined in the editor below. Go ahead and try to render them out using the `map` operator\\!\n\n> ++NOTE:++ In React you need to provide every item in a list like this a unique `key` prop\\. We will cover this in the next challenge.\n",
+          "testCode": "test(\"The `App` and `NamesList` components should be defined.\", () => {\n  expect(typeof App !== \"undefined\").toBe(true);\n  expect(typeof NamesList !== \"undefined\").toBe(true);\n});\n\ntest(\"The `ItemsList` component should render an `h1` tag which displays the number of items in the `items` prop.\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n\n  const elements = document.querySelectorAll(\"h5\");\n  const namesSet = new Set(names);\n  expect(namesSet.size).toBe(elements.length);\n  for (const e of elements) {\n    expect(namesSet.has(e.innerHTML)).toBe(true);\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst names: string[] = [\n  \"Sam\",\n  \"Joe\",\n  \"Fred\",\n  \"Ryan\",\n  \"Sara\",\n  \"Alfred\",\n  \"Vance\",\n  \"Spencer\",\n  \"Corrine\",\n  \"Jacob\",\n  \"Jen\",\n];\n\n// Update this component to return the list of names\nconst NamesList = () => {\n  return <div />;\n};\n\nconst App = () => {\n  return <NamesList />;\n};\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nconst names: string[] = [\n  \"Sam\",\n  \"Joe\",\n  \"Fred\",\n  \"Ryan\",\n  \"Sara\",\n  \"Alfred\",\n  \"Vance\",\n  \"Spencer\",\n  \"Corrine\",\n  \"Jacob\",\n  \"Jen\",\n];\n\n// Update this component to return the list of names\nconst NamesList = () => {\n  return (\n    <div>\n      {names.map((name) => (\n        <h5>{name}</h5>\n      ))}\n    </div>\n  );\n};\n\nconst App = () => {\n  return <NamesList />;\n};\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "content": ""
+        },
+        {
           "id": "50f7f8sUV",
           "type": "react",
           "title": "Create a Controlled Input",
