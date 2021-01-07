@@ -4559,6 +4559,17 @@
           "content": ""
         },
         {
+          "id": "8a7sHJ7sY",
+          "type": "react",
+          "title": "Component Lifecycle",
+          "instructions": "In this challenge, we will introduce [React component lifecycle](https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class). Components, like other objects or functions in a program, may be \"created\" and \"destroyed\". These events create what is called the component \"lifecycle\" and React gives us specific methods we can use to hook into the component lifecycle. For instance, when a component first loads and is rendered to the page it is created, or \"mounted\". If later the user navigates away from that page, the component is no longer needed and will be destroyed, or \"unmounted\".\n\nReact provides us methods such as `componentDidMount` and `componentWillUnmount` to hook into these lifecycle events. It's important to take the component lifecycle into account to handle proper component initialization and to responsibly clean up any resources the component may be relying on.\n\nIn this challenge, create a `componentDidMount` method which updates the component's state to reflect the fact that the component is now mounted.",
+          "testCode": "test(\"The `App` component should be defined.\", () => {\n  expect(App).toBeDefined();\n});\n\ntest(\"The `App` component should use the `componentDidMount` lifecycle hook to update the `mounted` state field to `true`, once the component has mounted.\", () => {\n  const container = document.createElement(\"div\");\n  ReactTestUtils.act(() => {\n    ReactDOM.render(<Main />, container);\n  });\n  const span = container.querySelector(\"span\");\n  expect(span.innerHTML).toBe(\"true\");\n  expect(__user_code_string__.includes(\"componentDidMount\")).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface IState {\n  mounted: string;\n}\n\nclass App extends React.Component<{}, IState> {\n  // We can also initalize React class component state outside of a\n  // constructor function by using the property shorthand initalizer\n  // syntax, like so:\n  state = {\n    mounted: false,\n  };\n\n  // Your code here:\n\n  render(): JSX.Element {\n    return (\n      <div>\n        <p>\n          Component Mounted: <span>{JSON.stringify(this.state.mounted)}</span>\n        </p>\n      </div>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\ninterface IState {\n  mounted: string;\n}\n\nclass App extends React.Component<{}, IState> {\n  // We can also initalize React class component state outside of a\n  // constructor function by using the property shorthand initalizer\n  // syntax, like so:\n  state = {\n    mounted: false,\n  };\n\n  // Your code here:\n  componentDidMount() {\n    this.setState({ mounted: true });\n  }\n\n  render(): JSX.Element {\n    return (\n      <div>\n        <p>\n          Component Mounted: <span>{JSON.stringify(this.state.mounted)}</span>\n        </p>\n      </div>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "content": ""
+        },
+        {
           "id": "wmBDaJz5Q",
           "type": "section",
           "title": "Projects",
