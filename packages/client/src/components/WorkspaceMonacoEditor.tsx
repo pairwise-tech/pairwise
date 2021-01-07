@@ -22,10 +22,21 @@ import { debounce } from "throttle-debounce";
 import { MonacoEditorOptions } from "modules/challenges/types";
 import { IDisposable } from "monaco-editor";
 
+/**
+ * NOTE: The following imports external library @types/ type definitions.
+ * To add more in the future, find the source file and add it following the
+ * same pattern as below for react and react-dom. These libraries are
+ * added to monaco using the addExtraLib method (see below in the monaco
+ * initialization code).
+ *
+ * Note also that in the case of the @types/react library, I manually
+ * added other imported reference into the file we import here.
+ */
+
 // eslint-disable-next-line
-const reactTypes = require("!raw-loader!../monaco/react.d.ts");
+const REACT_D_TS = require("!raw-loader!../monaco/react.d.ts");
 // eslint-disable-next-line
-const reactDomTypes = require("!raw-loader!../monaco/react-dom.d.ts");
+const REACT_DOM_D_TS = require("!raw-loader!../monaco/react-dom.d.ts");
 
 // The above type definitions are supported
 const SUPPORTED_LIB_TYPE_DEFINITIONS = new Set(["react", "react-dom"]);
@@ -183,16 +194,18 @@ export default class WorkspaceMonacoEditor
       jsx: "react",
     });
 
-    // Add type definitions for React and ReactDOM
+    // Add type definitions for react and react-dom, for React challenges
     if (this.props.challengeType === "react") {
+      const path = "file:///node_modules/@types";
+
       mn.languages.typescript.typescriptDefaults.addExtraLib(
-        reactTypes,
-        "file:///node_modules/@types/react/index.d.ts",
+        REACT_D_TS,
+        `${path}/react/index.d.ts`,
       );
 
       mn.languages.typescript.typescriptDefaults.addExtraLib(
-        reactDomTypes,
-        "file:///node_modules/@types/react-dom/index.d.ts",
+        REACT_DOM_D_TS,
+        `${path}/react-dom/index.d.ts`,
       );
     }
 
@@ -308,7 +321,8 @@ export default class WorkspaceMonacoEditor
       : "";
 
     const moduleDeclarations = packages
-      .filter(x => SUPPORTED_LIB_TYPE_DEFINITIONS.has(x))
+      // Filter out the library names we have added @types/ files for
+      .filter(lib => SUPPORTED_LIB_TYPE_DEFINITIONS.has(lib))
       .reduce(
         (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
         defaultLib,
