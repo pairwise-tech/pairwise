@@ -11,8 +11,8 @@ import {
 import { TEST_EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
 import {
   monaco,
-  registerExternalLib,
   MonacoModel,
+  registerExternalLib,
   USER_IMPORTED_TYPES_LIB_NAME,
 } from "../monaco";
 import { MonacoEditorThemes } from "@pairwise/common";
@@ -20,8 +20,15 @@ import cx from "classnames";
 import { wait } from "tools/utils";
 import { debounce } from "throttle-debounce";
 import { MonacoEditorOptions } from "modules/challenges/types";
-import { types } from "tools/jsx-types";
 import { IDisposable } from "monaco-editor";
+
+// eslint-disable-next-line
+const reactTypes = require("!raw-loader!../monaco/react.d.ts");
+// eslint-disable-next-line
+const reactDomTypes = require("!raw-loader!../monaco/react-dom.d.ts");
+
+// The above type definitions are supported
+const SUPPORTED_LIB_TYPE_DEFINITIONS = new Set(["react", "react-dom"]);
 
 type MODEL_ID = string;
 type MODEL_TYPE = "workspace-editor" | "jsx-types";
@@ -112,6 +119,7 @@ export default class WorkspaceMonacoEditor
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({
           strict: true,
           noEmit: true,
+          esModuleInterop: true,
           jsx: mn.languages.typescript.JsxEmit.React,
           typeRoots: ["node_modules/@types"],
           allowNonTsExtensions: true,
@@ -169,15 +177,34 @@ export default class WorkspaceMonacoEditor
 
     let workspaceEditorModel;
 
+    // WHY!?
+    mn.languages.typescript.typescriptDefaults.setCompilerOptions({
+      esModuleInterop: true,
+      jsx: "react",
+    });
+
+    // Add type definitions for React and ReactDOM
+    if (this.props.challengeType === "react") {
+      mn.languages.typescript.typescriptDefaults.addExtraLib(
+        reactTypes,
+        "file:///node_modules/@types/react/index.d.ts",
+      );
+
+      mn.languages.typescript.typescriptDefaults.addExtraLib(
+        reactDomTypes,
+        "file:///node_modules/@types/react-dom/index.d.ts",
+      );
+    }
+
     /* Markup challenges: */
     if (this.props.challengeType === "markup") {
       workspaceEditorModel = mn.editor.createModel(this.props.value, language);
     } else {
-      /* TypeScript and React challenges: */
+      // TypeScript and React challenges:
       workspaceEditorModel = mn.editor.createModel(
         this.props.value,
         language,
-        new mn.Uri.parse("file:///main.tsx"),
+        mn.Uri.parse("file:///main.tsx"),
       );
     }
 
@@ -189,16 +216,6 @@ export default class WorkspaceMonacoEditor
         ...options,
         model: workspaceEditorModel,
       },
-    );
-
-    /**
-     * This is a separate model which provides JSX type information. See
-     * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
-     */
-    const jsxTypesModel = mn.editor.createModel(
-      types,
-      "typescript",
-      mn.Uri.parse("file:///index.d.ts"),
     );
 
     if (this.editorInstance) {
@@ -213,7 +230,6 @@ export default class WorkspaceMonacoEditor
     // Record the model ids for the two created models to track them.
     const workspaceEditorModelIdMap: ModelIdMap = new Map();
     workspaceEditorModelIdMap.set("workspace-editor", workspaceEditorModel.id);
-    workspaceEditorModelIdMap.set("jsx-types", jsxTypesModel.id);
 
     if (this._isMounted) {
       this.setState({ workspaceEditorModelIdMap });
@@ -291,10 +307,12 @@ export default class WorkspaceMonacoEditor
       ? `\n${TEST_EXPECTATION_LIB_TYPES}\n`
       : "";
 
-    const moduleDeclarations = packages.reduce(
-      (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
-      defaultLib,
-    );
+    const moduleDeclarations = packages
+      .filter(x => SUPPORTED_LIB_TYPE_DEFINITIONS.has(x))
+      .reduce(
+        (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
+        defaultLib,
+      );
 
     if (this.monacoWrapper) {
       registerExternalLib({

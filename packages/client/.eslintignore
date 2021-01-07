@@ -2,3 +2,7 @@
 src/js/browser-test-lib.js
 src/js/test-expectation-lib.js
 src/js/react-grid-resizable
+
+# 3rd party react type definitions
+src/monaco/react.d.ts
+src/monaco/react-dom.d.ts

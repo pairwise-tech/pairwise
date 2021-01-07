@@ -1,2 +1,6 @@
 src/js/**/*.js
 src/js/**/*.d.ts
+
+# 3rd party react type definitions
+src/monaco/react.d.ts
+src/monaco/react-dom.d.ts
