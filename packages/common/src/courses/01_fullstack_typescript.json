@@ -4603,6 +4603,17 @@
           "content": ""
         },
         {
+          "id": "GOy$sOYNf",
+          "type": "react",
+          "title": "Component Composition",
+          "instructions": "So far we have seen a lot of the features React has to offer but all of our examples are quite simple. You may be wondering what a more complex React application might look like. Well, React is very flexible and really benefits from composition and it's component model. Remember, everything in React is a component and component's can be composed together.\n\nJust as we had a parent and child component in the last few examples, you can build arbitrarily complex component hierarchies in React where parent components have many children. With other libraries like [React Router](https://reactrouter.com/) and [Redux](https://redux.js.org/), you can adding routing/navigation and global state management.\n\nTo get a taste of this, create three components in the editor below. One, the `App` should render both of the other components, `Header` and `Page`. Add whatever content you like in the components and try to imagine how this simple architecture might evolve to support a more complex application, like the way you are currently looking at\\!",
+          "testCode": "test(\"The `App`, `Header`, and `Page` components should be defined\", () => {\n  expect(App).toBeDefined();\n  expect(Header).toBeDefined();\n  expect(Page).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "solutionCode": "import React from \"react\";\nimport ReactDOM from \"react-dom\";\n\nclass Header extends React.Component {\n  render() {\n    return <h3>This is the header component.</h3>;\n  }\n}\n\nclass Page extends React.Component {\n  render() {\n    return <h3>This is the page component.</h3>;\n  }\n}\n\nclass App extends React.Component {\n  render() {\n    return (\n      <div>\n        <Header />\n        <Page />\n      </div>\n    );\n  }\n}\n\n// Do not edit code below this line\nconst Main = App;\nReactDOM.render(<Main />, document.querySelector(\"#root\"));\n",
+          "content": ""
+        },
+        {
           "id": "wmBDaJz5Q",
           "type": "section",
           "title": "Projects",
