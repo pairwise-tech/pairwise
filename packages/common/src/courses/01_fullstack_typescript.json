@@ -4636,6 +4636,50 @@
           "content": "In the React projects section you will build some real\\-world projects using React. Get ready, this will be your first major projects to showcase in your portfolio\\!"
         },
         {
+          "id": "$AVNHGtdF4",
+          "type": "project",
+          "title": "To-Do List",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
+          "id": "f8a76sHdF4",
+          "type": "project",
+          "title": "Flashcards App",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "ajSUGSAdF4",
+          "type": "project",
+          "title": "Tic-Tac-Toe Game UI",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
+          "id": "s89a01IdF4",
+          "type": "project",
+          "title": "Conway's Game of Life",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
+        },
+        {
           "id": "iJAcbGybh",
           "type": "section",
           "title": "Special Topics",
@@ -4645,6 +4689,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "One of the reasons for React's success is its simplicity. Then again, over last few years React has become a broad topic. Even the React library itself has become more complicated with newer features like Hooks and Suspense.\n\nIn these special topics lessons, we will cover some of the more advanced features of React, in addition to other supplementary topics related to frontend app architecture and technology trends."
+        },
+        {
+          "id": "DWMvEEzct",
+          "type": "media",
+          "title": "CSS-in-JS",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "..."
         },
         {
           "id": "XeR5zpfRR",
@@ -4677,7 +4732,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "..."
         }
       ]
     },
