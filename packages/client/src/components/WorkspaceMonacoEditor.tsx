@@ -188,14 +188,14 @@ export default class WorkspaceMonacoEditor
 
     let workspaceEditorModel;
 
-    // WHY!?
-    mn.languages.typescript.typescriptDefaults.setCompilerOptions({
-      esModuleInterop: true,
-      jsx: "react",
-    });
-
     // Add type definitions for react and react-dom, for React challenges
     if (this.props.challengeType === "react") {
+      // WHY!?
+      mn.languages.typescript.typescriptDefaults.setCompilerOptions({
+        esModuleInterop: true,
+        jsx: "react",
+      });
+
       const path = "file:///node_modules/@types";
 
       mn.languages.typescript.typescriptDefaults.addExtraLib(
