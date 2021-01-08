@@ -10,7 +10,7 @@
  */
 
 // @ts-ignore
-declare function test(message: string, testFunction: () => void): void;
+const test = (message: string, fn: () => void) => undefined;
 
 type Path = Array<string | number>;
 

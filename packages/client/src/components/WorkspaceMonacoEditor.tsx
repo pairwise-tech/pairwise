@@ -8,7 +8,10 @@ import {
   ICodeEditorOptions,
   PAIRWISE_CODE_EDITOR_ID,
 } from "./Workspace";
-import { TEST_EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
+import {
+  EXPRESS_JS_LIB_TYPES,
+  TEST_EXPECTATION_LIB_TYPES,
+} from "tools/browser-test-lib";
 import {
   monaco,
   MonacoModel,
@@ -39,7 +42,11 @@ const REACT_D_TS = require("!raw-loader!../monaco/react.d.ts");
 const REACT_DOM_D_TS = require("!raw-loader!../monaco/react-dom.d.ts");
 
 // The above type definitions are supported
-const SUPPORTED_LIB_TYPE_DEFINITIONS = new Set(["react", "react-dom"]);
+const SUPPORTED_LIB_TYPE_DEFINITIONS = new Set([
+  "react",
+  "react-dom",
+  "express",
+]);
 
 type MODEL_ID = string;
 type MODEL_TYPE = "workspace-editor" | "jsx-types";
@@ -188,6 +195,8 @@ export default class WorkspaceMonacoEditor
 
     let workspaceEditorModel;
 
+    const path = "file:///node_modules/@types";
+
     // Add type definitions for react and react-dom, for React challenges
     if (this.props.challengeType === "react") {
       // WHY!?
@@ -195,8 +204,6 @@ export default class WorkspaceMonacoEditor
         jsx: "react",
         esModuleInterop: true,
       });
-
-      const path = "file:///node_modules/@types";
 
       mn.languages.typescript.typescriptDefaults.addExtraLib(
         REACT_D_TS,
@@ -209,7 +216,23 @@ export default class WorkspaceMonacoEditor
       );
     }
 
-    /* Markup challenges: */
+    // Add express-js lib type definitions for Backend module challenges
+    if (this.props.isBackendModuleChallenge) {
+      this.monacoWrapper.languages.typescript.typescriptDefaults.addExtraLib(
+        EXPRESS_JS_LIB_TYPES,
+        `${path}/express/index.d.ts`,
+      );
+    }
+
+    // Add test expectation lib for Software Testing challenges
+    if (this.props.isTestingAndAutomationChallenge) {
+      this.monacoWrapper.languages.typescript.typescriptDefaults.addExtraLib(
+        TEST_EXPECTATION_LIB_TYPES,
+        `expectation-lib/index.d.ts`,
+      );
+    }
+
+    // Markup challenges:
     if (this.props.challengeType === "markup") {
       workspaceEditorModel = mn.editor.createModel(this.props.value, language);
     } else {
@@ -302,29 +325,14 @@ export default class WorkspaceMonacoEditor
     this.setMonacoEditorValue();
   };
 
-  addModuleTypeDefinitionsToMonaco = (
-    packages: string[],
-    isTestingAndAutomationChallenge: boolean,
-  ) => {
-    /**
-     * TODO: Fetch @types/ package type definitions if they exist or fallback
-     * to the module declaration.
-     *
-     * See this:
-     * https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/workers/fetch-dependency-typings.js
-     *
-     * If the challenge is a testing/automation challenge we add the Jest-style
-     * expectation library as well. Otherwise, the default lib is empty.
-     */
-    const defaultLib = isTestingAndAutomationChallenge
-      ? `\n${TEST_EXPECTATION_LIB_TYPES}\n`
-      : "";
+  addModuleTypeDefinitionsToMonaco = (packages: string[]) => {
+    const defaultLib = "";
 
     const moduleDeclarations = packages
       // Filter out the library names we have added @types/ files for
-      .filter(lib => SUPPORTED_LIB_TYPE_DEFINITIONS.has(lib))
+      .filter(lib => !SUPPORTED_LIB_TYPE_DEFINITIONS.has(lib))
       .reduce(
-        (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
+        (declarations, name) => `${declarations}\ndeclare module "${name}";`,
         defaultLib,
       );
 
