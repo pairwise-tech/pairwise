@@ -4831,6 +4831,50 @@
           "content": ""
         },
         {
+          "id": "hYyAMmblu",
+          "type": "media",
+          "title": "Errors and the Express Response Object",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "So far, we've only return ordinary strings in response to requests using the `response.send` method\\. However, there are a variety of ways we may want to respond to requests, including sending JSON data, sending failure codes and error messages, and even redirecting the user. Express allows us to do all of these things. Here we will go through a few of these other capabilities."
+        },
+        {
+          "id": "wTRu49V6K",
+          "type": "media",
+          "title": "An Example ExpressJS Server",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "# Intro\n\nThe last few challenges gave us an introduction to how we can create a new Express server and define route handlers for different APIs. We saw how to define routes for the main HTTP methods, how to pass information with the request body, route params, and query string params, and how to return data with the response object. These are the fundamentals for creating an Express server. Here, we will tie all these concepts together by demonstrating what a full server file my look like."
+        },
+        {
+          "id": "4eSDjDhhT",
+          "type": "media",
+          "title": "Connecting to a Database",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Once you have an Express server setup, one of the other fundamental pieces you will need is a database \\(more on databases coming in the next module\\). For now, let's look at a basic setup for how we could configure an Express server with a database."
+        },
+        {
+          "id": "41a@0Z9HX",
+          "type": "media",
+          "title": "Other Backend NodeJS Frameworks",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Express is only one of several different backend server frameworks for NodeJS. Express is one of the most lightweight and flexible options. It leaves it up to you to do a lot of work building out the application. There are other options which provide more of a full framework. Let's look at some of those here."
+        },
+        {
           "id": "WkU2mKHxZ",
           "type": "section",
           "title": "Projects",
