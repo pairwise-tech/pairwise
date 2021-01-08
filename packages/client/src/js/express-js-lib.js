@@ -3,7 +3,26 @@ var express = function () {
     var port = null;
     var isListening = false;
     var routes = [];
-    var toPathKey = function (http, path) { return http + "-" + path; };
+    var parseQueryString = function (queryString) {
+        var params = {};
+        var index = queryString.indexOf("?");
+        var q = queryString.slice(index + 1);
+        var pairs = q.split("&");
+        for (var i = 0; i < pairs.length; i++) {
+            var pair = pairs[i].split("=");
+            params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+        }
+        return params;
+    };
+    var toPathKey = function (http, path) {
+        var paramsIndex = path.indexOf("?");
+        if (paramsIndex === -1) {
+            return http + "-" + path;
+        }
+        else {
+            return http + "-" + path.slice(0, paramsIndex);
+        }
+    };
     var handler = function (path, pathKey, payload) {
         var _loop_1 = function (route, handler_1) {
             if (route === pathKey) {
@@ -11,7 +30,8 @@ var express = function () {
                         var res = {
                             send: function (value) { return resolve(value); }
                         };
-                        var req = { body: payload };
+                        var params = parseQueryString(path);
+                        var req = { body: payload, params: params };
                         try {
                             handler_1(req, res);
                         }

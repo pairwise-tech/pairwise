@@ -4798,6 +4798,17 @@
           "content": ""
         },
         {
+          "id": "ausy8aysG",
+          "type": "typescript",
+          "title": "Accessing Query String Params",
+          "instructions": "Express also allows us to access [query string params](https://en.wikipedia.org/wiki/Query_string) in route handlers. Query string parameters allow us to pass data in a route URL, e.g. like this `pairwise.api?id=asd867f9as6f8`. In this URL, everything following the `?` is a query string of key/value pairs separated by `=`. Multiple parameters can be provided and separated with `&`.\n\nIn the editor below, define a router handler for the path `/query` which accepts GET requests and looks for a `data` query string parameter. You can access the current query string parameters on the `request.params` object which Express provides you in the route handler. Return a string `Here is the data: <param data here>` which provides whatever data was provided in the query string parameter.",
+          "testCode": "test(\"The Express `app` should be defined.\", () => {\n  expect(app).toBeDefined();\n});\n\ntest(\"The Express `app` should have a GET request route handler at `/query` which accepts a query string parameter of `data` and returns a string `Here is the data: ` which includes whatever data was provided in the query string param.\", async () => {\n  let result = await app.request.get(\"/query?data=hello\");\n  expect(result).toBe(\"Here is the data: hello\");\n\n  result = await app.request.get(\"/query?data=9a8s7df90das7f09s7a0\");\n  expect(result).toBe(\"Here is the data: 9a8s7df90das7f09s7a0\");\n\n  result = await app.request.get(\"/query?data=jello\");\n  expect(result).toBe(\"Here is the data: jello\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "const app = express();\nconst port = 3000;\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n",
+          "solutionCode": "const app = express();\nconst port = 3000;\n\napp.get(\"/query\", (req, res) => {\n  const { params } = req;\n  res.send(`Here is the data: ${params.data}`);\n});\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n",
+          "content": ""
+        },
+        {
           "id": "WkU2mKHxZ",
           "type": "section",
           "title": "Projects",

@@ -9,7 +9,28 @@ const express = () => {
   let isListening = false;
   const routes: Array<[string, RouteHandler]> = [];
 
-  const toPathKey = (http: string, path: string) => `${http}-${path}`;
+  const parseQueryString = (queryString: string) => {
+    const params = {};
+    const index = queryString.indexOf("?");
+    const q = queryString.slice(index + 1);
+    const pairs = q.split("&");
+
+    for (let i = 0; i < pairs.length; i++) {
+      const pair = pairs[i].split("=");
+      params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+    }
+
+    return params;
+  };
+
+  const toPathKey = (http: string, path: string) => {
+    const paramsIndex = path.indexOf("?");
+    if (paramsIndex === -1) {
+      return `${http}-${path}`;
+    } else {
+      return `${http}-${path.slice(0, paramsIndex)}`;
+    }
+  };
 
   const handler = (path: string, pathKey: string, payload?: RequestBody) => {
     for (const [route, handler] of routes) {
@@ -18,7 +39,8 @@ const express = () => {
           const res = {
             send: (value: any) => resolve(value),
           };
-          const req = { body: payload };
+          const params = parseQueryString(path);
+          const req = { body: payload, params };
           try {
             handler(req, res);
           } catch (err) {
