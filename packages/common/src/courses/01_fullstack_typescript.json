@@ -4806,7 +4806,7 @@
           "videoUrl": "",
           "starterCode": "const app = express();\nconst port = 3000;\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n",
           "solutionCode": "const app = express();\nconst port = 3000;\n\napp.get(\"/query\", (req, res) => {\n  const { params } = req;\n  res.send(`Here is the data: ${params.data}`);\n});\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n",
-          "content": ""
+          "content": "Express also supports defining route parameters like this:\n\n```\napp.get('/users/:userId/books/:bookId', function (req, res) {\n  res.send(req.params)\n});\n\n```\n\nThis would allow you to submit a request via a URL like `/users/sad907f0ads78f80asa/books/8s9ad7f0asf7a0` and those two ids would be extracted to a `params` object with keys matching the names defined in the route URL, like this:\n\n```\nreq.params = {\n    userId: \"sad907f0ads78f80asa\",\n    bookId: \"8s9ad7f0asf7a0\",\n};\n\n```\n\nThis is another option for defining routes which allow the user to pass information through in the request which you can use when designing API endpoints.\n\n> ++NOTE:++ These route parameters are not supported in the mocked version of Express we are using in the Pairwise workspace.\n"
         },
         {
           "id": "WkU2mKHxZ",
