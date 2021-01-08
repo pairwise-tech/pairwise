@@ -4820,6 +4820,17 @@
           "content": ""
         },
         {
+          "id": "Mns15093i",
+          "type": "typescript",
+          "title": "Handling PUT and DELETE Requests",
+          "instructions": "As you might guess, we can handle PUT and DELETE requests following the same pattern as GET and POST requests. These also allow us to access `request.body`, route params, and query string params if they are provided.\n\nIn the editor below, define PUT and DELETE route handlers according to the test cases below.",
+          "testCode": "test(\"The Express `app` should be defined.\", () => {\n  expect(app).toBeDefined();\n});\n\ntest(\"The Express `app` should have a PUT request route handler for the route `/shop` which returns the string `Handling PUT request for route /shop`\", async () => {\n  const result = await app.request.put(\"/shop\");\n  expect(result).toBe(\"Handling PUT request for route /shop\");\n});\n\ntest(\"The Express `app` should have a DELETE request route handler for the route `/shop` which returns the string `Handling DELETE request for route /shop, id: <id>` where `id` is a query string param `id`.\", async () => {\n  const result = await app.request.delete(\"/shop?id=9a0sd7f90as7f90sa\");\n  expect(result).toBe(\n    \"Handling DELETE request for route /shop, id: 9a0sd7f90as7f90sa\"\n  );\n});\n",
+          "videoUrl": "",
+          "starterCode": "const app = express();\nconst port = 3000;\n\n// Your code here:\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n\n",
+          "solutionCode": "const app = express();\nconst port = 3000;\n\napp.put(\"/shop\", (req, res) => {\n  res.send(\"Handling PUT request for route /shop\");\n});\n\napp.delete(\"/shop\", (req, res) => {\n  const { params } = req;\n  res.send(`Handling DELETE request for route /shop, id: ${params.id}`);\n});\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n",
+          "content": ""
+        },
+        {
           "id": "WkU2mKHxZ",
           "type": "section",
           "title": "Projects",
