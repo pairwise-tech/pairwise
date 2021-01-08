@@ -192,8 +192,8 @@ export default class WorkspaceMonacoEditor
     if (this.props.challengeType === "react") {
       // WHY!?
       mn.languages.typescript.typescriptDefaults.setCompilerOptions({
-        esModuleInterop: true,
         jsx: "react",
+        esModuleInterop: true,
       });
 
       const path = "file:///node_modules/@types";
