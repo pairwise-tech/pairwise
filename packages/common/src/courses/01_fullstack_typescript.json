@@ -4809,6 +4809,17 @@
           "content": "Express also supports defining route parameters like this:\n\n```\napp.get('/users/:userId/books/:bookId', function (req, res) {\n  res.send(req.params)\n});\n\n```\n\nThis would allow you to submit a request via a URL like `/users/sad907f0ads78f80asa/books/8s9ad7f0asf7a0` and those two ids would be extracted to a `params` object with keys matching the names defined in the route URL, like this:\n\n```\nreq.params = {\n    userId: \"sad907f0ads78f80asa\",\n    bookId: \"8s9ad7f0asf7a0\",\n};\n\n```\n\nThis is another option for defining routes which allow the user to pass information through in the request which you can use when designing API endpoints.\n\n> ++NOTE:++ These route parameters are not supported in the mocked version of Express we are using in the Pairwise workspace.\n"
         },
         {
+          "id": "KfOps097J",
+          "type": "typescript",
+          "title": "Handling a POST Request",
+          "instructions": "We can also handle POST requests by using the `post` method\\. This follows the same pattern as the `get` method handler: a route path and a handler function which accepts a request and response object.\n\nDefine a POST request handler in the editor for the route `user`. Normally, POST requests pass data on the request body, which you can access in Express via `request.body`. Use `console.log` to log out this data, and then return the string `OK`. Use the commented code in the editor to simulate this request against your server.",
+          "testCode": "test(\"The Express `app` should be defined.\", () => {\n  expect(app).toBeDefined();\n});\n\ntest(\"The Express `app` should have a POST request route handler for the route `/user` which logs out the request body and then returns `OK`.\", async () => {\n  const result = await app.request.post(\"/user\", { name: \"Sam\" });\n  expect(result).toBe(\"OK\");\n});\n",
+          "videoUrl": "",
+          "starterCode": "const app = express();\nconst port = 3000;\n\n// Your code here:\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n\n// Uncomment this code to simulate the POST request:\n// const body = {\n//   user: \"Sam\",\n//   email: \"sam@pairwise.tech\",\n// };\n\n// app.request.post(\"/user\", body);\n",
+          "solutionCode": "const app = express();\nconst port = 3000;\n\napp.post(\"/user\", (req, res) => {\n  console.log(req.body);\n  res.send(\"OK\");\n});\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n\n// Uncomment this code to simulate the POST request:\n// const body = {\n//   user: \"Sam\",\n//   email: \"sam@pairwise.tech\",\n// };\n\n// app.request.post(\"/user\", body);\n",
+          "content": ""
+        },
+        {
           "id": "WkU2mKHxZ",
           "type": "section",
           "title": "Projects",
