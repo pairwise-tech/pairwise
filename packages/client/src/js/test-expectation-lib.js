@@ -9,7 +9,6 @@
  * ============================================================================
  */
 // @ts-ignore
-// declare function test(message: string, testFunction: () => void): void;
 var test = function (message, fn) { return undefined; };
 var Expectation = /** @class */ (function () {
     function Expectation(value) {

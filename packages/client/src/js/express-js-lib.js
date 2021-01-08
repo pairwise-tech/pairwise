@@ -1,10 +1,12 @@
 /* eslint-disable */
 var express = function () {
+    var port = null;
+    var isListening = false;
     var routes = [];
     var toPathKey = function (http, path) { return http + "-" + path; };
-    var handler = function (path, payload) {
+    var handler = function (path, pathKey, payload) {
         var _loop_1 = function (route, handler_1) {
-            if (route === path) {
+            if (route === pathKey) {
                 return { value: new Promise(function (resolve, reject) {
                         var res = {
                             send: function (value) { return resolve(value); }
@@ -31,20 +33,26 @@ var express = function () {
         request: {
             get: function (path, payload) {
                 var pathKey = toPathKey("get", path);
-                return handler(pathKey);
+                return handler(path, pathKey, payload);
             },
             put: function (path, payload) {
                 var pathKey = toPathKey("put", path);
-                return handler(pathKey);
+                return handler(path, pathKey, payload);
             },
             post: function (path, payload) {
                 var pathKey = toPathKey("post", path);
-                return handler(pathKey);
+                return handler(path, pathKey, payload);
             },
             "delete": function (path, payload) {
                 var pathKey = toPathKey("delete", path);
-                return handler(pathKey);
+                return handler(path, pathKey, payload);
             }
+        },
+        getState: function () {
+            return {
+                port: port,
+                isListening: isListening
+            };
         },
         get: function (path, handler) {
             var pathKey = toPathKey("get", path);
@@ -82,7 +90,9 @@ var express = function () {
                 throw new Error("Handler must be a function");
             }
         },
-        listen: function (port, callback) {
+        listen: function (serverPort, callback) {
+            port = serverPort;
+            isListening = true;
             callback();
             return;
         }

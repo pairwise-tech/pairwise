@@ -4754,14 +4754,25 @@
           "content": "To build a fullstack application you need two pieces: a frontend and backend. You've already learned how to build a frontend user interface with React \\- now we will dive into building servers on the backend.\n\nA server fulfills the role of handling requests from applications and storing application data. For instance, the server for Pairwise receives numerous requests as you work through the course. The client frontend sends updates on your progress which the server processes and records. When you signup and login the server handles these requests and creates a user entry for you in a database which the server can access. It stores your progress in association with this user. And, it does this for all the users who access Pairwise. The server is \\(should be\\) always available to handle requests from client applications.\n\nServers may seem daunting\\! But don't worry, they are just computer programs and you learned everything you need to write computer programs in the first course modules. Servers are just composed of functions, classes, and data structures.\n\nIn general, a typical server exposes an API for clients to send it requests. It then has a layer of business logic which handles processing client requests, storing and updating data. Then, finally, it has another layer which is responsible for interacting with a database and persisting or retrieving data.\n\nAs you might imagine, there are many tools and libraries for writing server applications which provide some of the common scaffolding and features modern servers require.\n\nIn this module, we will learn about some of these tools and get some practice building and thinking about some of the common components servers use. By the end you will be writing and deploying your own servers. Get excited, let's go\\!"
         },
         {
-          "id": "KE1E9Wc9J",
+          "id": "a7s653B9J",
           "type": "typescript",
           "title": "Create an Express Server",
-          "instructions": "Express is a library for quickly creating an HTTP server with NodeJS.",
+          "instructions": "Express is a library for quickly creating an HTTP server with NodeJS. Create a new express app and set it to listen on a port.",
+          "testCode": "test(\"The Express `app` should be defined.\", () => {\n  expect(app).toBeDefined();\n});\n\ntest(\"The Express `app` should start up and be running on port `5000`.\", async () => {\n  const state = app.getState();\n  expect(state.port).toBe(5000);\n  expect(state.isListening).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Your code here",
+          "solutionCode": "const app = express();\nconst port = 5000;\n\napp.listen(port, () => {\n  console.log(`Express app listening on port: ${port}`);\n});\n",
+          "content": ""
+        },
+        {
+          "id": "KE1E9Wc9J",
+          "type": "typescript",
+          "title": "Create an Index Route",
+          "instructions": "Let's create an index route to handle requests to the index page `/`, this route handler should return the string `Hello World!`.",
           "testCode": "test(\"The Express `app` should be defined.\", () => {\n  expect(app).toBeDefined();\n});\n\ntest(\"The Express `app` should have a GET request route handler which returns the string `Hello World!`.\", async () => {\n  const result = await app.request.get(\"/\");\n  expect(result).toBe(\"Hello World!\");\n});\n",
           "videoUrl": "",
-          "starterCode": "const app = express();\nconst port = 3000;\n\napp.get(\"/\", (req, res) => {\n  res.send(\"Hello World!\");\n});\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n",
-          "solutionCode": "",
+          "starterCode": "const app = express();\nconst port = 3000;\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n",
+          "solutionCode": "const app = express();\nconst port = 3000;\n\napp.get(\"/\", (req, res) => {\n  res.send(\"Hello World!\");\n});\n\napp.listen(port, () => {\n  console.log(`Example app listening at http://localhost:${port}`);\n});\n",
           "content": ""
         },
         {

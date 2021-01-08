@@ -7,9 +7,13 @@ declare const express: () => {
         post: (path: string, payload: RequestBody) => Promise<unknown>;
         delete: (path: string, payload: RequestBody) => Promise<unknown>;
     };
+    getState: () => {
+        port: any;
+        isListening: boolean;
+    };
     get: (path: string, handler: RouteHandler) => void;
     post: (path: string, handler: RouteHandler) => void;
     put: (path: string, handler: RouteHandler) => void;
     delete: (path: string, handler: RouteHandler) => void;
-    listen: (port: number, callback: () => void) => void;
+    listen: (serverPort: number, callback: () => void) => void;
 };
