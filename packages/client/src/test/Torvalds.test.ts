@@ -42,9 +42,12 @@ const TEST_EXPECTATION_LIBRARY = fs.readFileSync(
   options,
 );
 
+const EXPRESS_JS_LIBRARY = fs.readFileSync("src/js/express-js-lib.js", options);
+
 const WORKSPACE_LIB = `
   ${BROWSER_TEST_LIBRARY}
   ${TEST_EXPECTATION_LIBRARY}
+  ${EXPRESS_JS_LIBRARY}
 `;
 
 /**

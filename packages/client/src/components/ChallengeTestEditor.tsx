@@ -17,7 +17,10 @@ import { CodeFormatMessageEvent, TEST_UTILS_GLOBALS } from "tools/test-utils";
 import { MonacoEditorThemes } from "@pairwise/common";
 import toaster from "tools/toast-utils";
 import { copyToClipboard } from "tools/utils";
-import { WORKSPACE_LIB_TYPES } from "tools/browser-test-lib";
+import {
+  WORKSPACE_LIB_TYPES,
+  EXPRESS_JS_LIB_TYPES,
+} from "tools/browser-test-lib";
 
 /** ===========================================================================
  * Types & Config
@@ -118,6 +121,16 @@ const ChallengeTestEditor = (props: Props) => {
       source: WORKSPACE_LIB_TYPES,
     });
   }, []);
+
+  React.useEffect(() => {
+    // Add express library for Backend Module challenges
+    if (props.isBackendModuleChallenge) {
+      registerExternalLib({
+        name: "express-lib.d.ts",
+        source: EXPRESS_JS_LIB_TYPES,
+      });
+    }
+  }, [props.isBackendModuleChallenge]);
 
   return (
     <div
