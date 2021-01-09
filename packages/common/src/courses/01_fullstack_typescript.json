@@ -5946,13 +5946,13 @@
         {
           "id": "4EM0@GUSG",
           "type": "project",
-          "title": "Choose Another Project to Test",
+          "title": "Test the Post+Comment API",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "For this project, choose any other project you previously completed and add tests for it. It can be a Pairwise project, or any other personal project you have worked on.\n\nA great option would be to test an API. You can usually think of APIs much like functions which have inputs and outputs and should adhere to certain behavior. For instance a user signup API should succeed if all the right data is provided and return a predictable response or fail otherwise with a predictable failure code. This predictable behavior makes APIs good targets for testing. Moreover, it's great if you can build testing for key APIs such as user signup—doing so would allow you to ensure that despite changes to your software system the behavior provided by these APIs continues to function correctly. However, such tests would likely be integration tests since they test the entire behavior of a server API and may require you to run the server in the test environment. Feel free to take on that challenge if you are feeling ambitious\\!\n\nIf you choose one of the backend projects, ideally the tests include some level of integrations tests. If you choose a frontend project, ideally the tests include some level of UI testing or end\\-to\\-end testing. However, you can also simply add unit tests for any of the projects you have previously completed.\n\nTry to keep the testing pyramid in mind as you think about which projects to test and how to test them.\n\nGood luck\\!"
+          "content": "For this project, let's revisit our Post\\+Comment API from before. This API allows for some more complex behavior and is a great option for us to write some tests for. Create suite of API tests which walk through all of the various actions a user could take with this API, such as:\n\n* Creating a new post\n* Editing a post\n* Deleting a post\n* Commenting on a post\n* Editing a comment\n* Deleting a comment\n\n\nYour tests should try to cover various edge cases such as:\n\n* Deleting a post with comments also deletes the comments\n* Trying to delete a post with an invalid `id` has no effect\n* Deleting a comment only deletes that comment, other comments are unaffected.\n\n"
         },
         {
           "id": "l3yJBFpRz",
@@ -6487,7 +6487,7 @@
         {
           "id": "g3q2PiwZ1",
           "type": "project",
-          "title": "Custom App",
+          "title": "Personal App Project",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
