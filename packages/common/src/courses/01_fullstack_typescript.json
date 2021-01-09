@@ -4888,7 +4888,7 @@
         {
           "id": "FHJBVEWBr",
           "type": "project",
-          "title": "Basic CRUD API",
+          "title": "Build an E-Commerce Store CRUD API",
           "instructions": "",
           "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
           "videoUrl": "",
@@ -4916,7 +4916,18 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "For this project, design an API which allows you to send and schedule emails. You can use the [NodeJS Nodemailer](https://nodemailer.com/about/) library for this.\n\nYour service should expose a single API: `/email` which accepts a payload like this:\n\n```typescript\ninterface EmailRequestPayload {\n    from: string; // The sender email\n    to: string; // The reciepient\n    subject: string; // The email's subject\n    text: string; // The email's text content\n    html?: string; // Alternative HTML to send in the email\n    scheduleTime?: Date; // An optional time in the future to send the email\n}\n\n```\n\nThe main feature of this email service is the ability to schedule emails in the future. Once your server receives an email request, it should send the email immediately unless a `scheduleTime` parameter is supplied. If this `scheduleTime` provided is supplied, the server should wait until that time in the future to send the email. Regardless, the API request should succeed once the server accepts the request, even if the email is scheduled for later. It's up to you to figure out how to schedule and send the email later\\!\n\nOnce you have com"
+          "content": "For this project, design an API which allows you to send and schedule emails. You can use the [NodeJS Nodemailer](https://nodemailer.com/about/) library for this.\n\nYour service should expose a single API: `/email` which accepts a payload like this:\n\n```typescript\ninterface EmailRequestPayload {\n    from: string; // The sender email\n    to: string; // The reciepient\n    subject: string; // The email's subject\n    text: string; // The email's text content\n    html?: string; // Alternative HTML to send in the email\n    scheduleTime?: Date; // An optional time in the future to send the email\n}\n\n```\n\nThe main feature of this email service is the ability to schedule emails in the future. Once your server receives an email request, it should send the email immediately unless a `scheduleTime` parameter is supplied. If this `scheduleTime` provided is supplied, the server should wait until that time in the future to send the email. Regardless, the API request should succeed once the server accepts the request, even if the email is scheduled for later. It's up to you to figure out how to schedule and send the email later\\!"
+        },
+        {
+          "id": "SaFdyNz6O",
+          "type": "project",
+          "title": "Build a User Authentication System",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, build an API which allows users to create accounts and authenticate themselves. For authentication, you can choose between these three options, or provide multiple of the following:\n\n* Email \\+ password registration: a user must provide an email and password combination to create an account.\n* Email magic link: a user can create an account or sign in by requesting a special link be sent to their email.\n* Single sign on: you can integrate with SSO providers like GitHub, Facebook, and Google to allow users to sign in with a single click. For this option, you can use the [PassportJS library](http://www.passportjs.org/).\n\n\nYour server should expose APIs to allow users to signup and create an account. Once a user is authenticated, they should be able to access a protected API `/user` which returns their user details. Trying to access this API without being authenticated should fail with a `401` error\\.\n\nFor a user system like this, it can be a lot more intuitive to have an actual frontend to view the account options and user data. Feel free to create a barebones UI for this project as well. If you build a UI, also create an option for the user to logout.\n\nOnce a user has authenticated themselves, you will need somehow associate their current session so you know it is authenticated. You can use JSON web tokens to do this \\(e.g see the [express\\-jwt](https://www.npmjs.com/package/express-jwt) library\\). [JSON web tokens](https://en.wikipedia.org/wiki/JSON_Web_Token) are used for the purpose of authenticating users for web services.\n\nAgain, like the previous projects feel free to store all of the data temporarily in\\-memory.\n"
         },
         {
           "id": "hY2nZf$si",
@@ -5057,6 +5068,28 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "For this project, write some SQL scripts to create a PostgreSQL database to represent an e\\-commerce store from scratch which defines tables according to the following requirements:\n\n* 3 Tables exist for products customers, and orders.\n* The `Customers` table should contain customer entries.\n* The `Products` table should contain entries for products in the store.\n* The `Orders` table should reference the product and customer for an order. Assume an order only references a single product.\n* The tables schema adhere to the following pseudocode definitions:\n\n\n```\nProduct {\n    id           // Unique id for product\n    name         // Product name\n    description  // Product description\n    price        // Product price (a number, e.g. 100 = $100.00).\n}\n\nCustomer {\n    id           // Unique id for customer\n    username     // Customer username\n    email        // Customer email address\n    address      // Customer address\n}\n\nOrder {\n    date         // Date type for when the order occurred\n    product      // Reference to the product contained in the order\n    customer     // Reference to the customer the order belongs to\n}\n\n```\n\n"
+        },
+        {
+          "id": "fLzdCGu1@",
+          "type": "project",
+          "title": "Implement a Database for the E-Commerce API",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Now that we've covered databases, let's revisit the CRUD API project from the Backend Module for the e\\-commerce products list. For this project, you will want to integrate a database with your CRUD API to store the items more permanently. We would recommend using a Postgres, but feel free to use a non\\-relational database like Mongo if you like—or, try both to get a feeling for the tradeoffs and differences between each option.\n\nOnce you have completed this project, you should be able to create, update, and delete items using your CRUD API and always retrieve a persistent copy from the database regardless of the state of your server. Basically, you are just moving the storage layer from in\\-memory to a persistent datastore. Once complete, you should be able to stop and restart your server and still retrieve records you created from before the server was stopped."
+        },
+        {
+          "id": "6EIsZyhIQ",
+          "type": "project",
+          "title": "Implement a Database for the Post+Comment API",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Let's do this same thing for the Post\\+Comment API we designed in the Backend Module. Add a database for your server which persistently stores the post and comment records. Again, feel free to use Postgres or Mongo based on which you think is more a suitable solution \\(either is possible\\).\n\nOnce finished, you server API should remain the same but your server should now store posts and comments persistently in a database rather than locally in\\-memory."
         },
         {
           "id": "qe2LFM0mp",
