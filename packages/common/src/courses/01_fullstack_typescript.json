@@ -4710,18 +4710,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "# Intro\n\nThere are actually quite a few steps between the source code of a frontend application and the code you actually view and use in a browser \\(for instance the Pairwise source code and the code running the application you are using right now\\). Your source code may be organized in a number of files, for instance, but a browser application tends to be compiled into a single JavaScript script tag to run. How is this accomplished? It turns out the \"build\" process for JavaScript applications is quite a complex topic with a lot of history.\n# Webpack\n\nAs the web development ecosystem matured over the past several years, there were a variety of code bundling tools which emerged to help bundle code and build production grade applications. Without going into too much detail, over time [webpack](https://webpack.js.org/) became the dominant solution for bundling code. Webpack is a bundler which can process source code and bundle assets together to produce optimized build outputs which can be efficiently delivered to users. Webpack is a versatile module bundler and allows for a lot of customization. This is not always necessary, and developers wanted a more streamlined solution. Enter Create React App.\n# Create React App\n\n[Create React App](https://github.com/facebook/create-react-app) is the default starter kit for React applications which allows you to quickly bootstrap a new React application from scratch. Simply run `npx create-react-app my-app` where `my-app` is your app name and Create React App will walk you through some setup questions and then scaffold out a new project for you. Create React App relies on webpack under the hood and you can always eject from the default configuration to manage the webpack setup directly, if you need this.\n\nOnce you have a application, simply running `yarn build` will build a production version of your application and compile everything into a `public` folder of static assets which you can then serve directly for your application. Various tools like [Surge](https://surge.sh/), [Netlify](https://www.netlify.com/), and [Zeit](https://vercel.com/) allow for quick deployment of frontend static sites and can be used to serve this build output.\n\nWhen working on your own frontend React projects, we would strongly recommend using Create React App to bootstrap the project and then using one of the above mentioned services to deploy the finish site to the internet.\n"
-        },
-        {
-          "id": "3mm44p1$1",
-          "type": "media",
-          "title": "Advanced React Topics",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
+          "content": "# Intro\n\nThere are actually quite a few steps between the source code of a frontend application and the code you actually view and use in a browser \\(for instance the Pairwise source code and the code running the application you are using right now\\). Your source code may be organized in a number of files, for instance, but a browser application tends to be compiled into a single JavaScript script tag to run. How is this accomplished? It turns out the \"build\" process for JavaScript applications is quite a complex topic with a lot of history.\n# Webpack\n\nAs the web development ecosystem matured over the past several years, there were a variety of code bundling tools which emerged to help bundle code and build production grade applications. Without going into too much detail, over time [webpack](https://webpack.js.org/) became the dominant solution for bundling code. Webpack is a bundler which can process source code and bundle assets together to produce optimized build outputs which can be efficiently delivered to users. Webpack is a versatile module bundler and allows for a lot of customization. This is not always necessary, and developers wanted a more streamlined solution. Enter Create React App.\n# Create React App\n\n[Create React App](https://github.com/facebook/create-react-app) is the default starter kit for React applications which allows you to quickly bootstrap a new React application from scratch. Simply run `npx create-react-app my-app` where `my-app` is your app name and Create React App will walk you through some setup questions and then scaffold out a new project for you. Create React App relies on webpack under the hood and you can always eject from the default configuration to manage the webpack setup directly, if you need this.\n\nOnce you have a application, simply running `yarn build` will build a production version of your application and compile everything into a `public` folder of static assets which you can then serve directly for your application. Various tools like [Surge](https://surge.sh/), [Netlify](https://www.netlify.com/), and [Zeit](https://vercel.com/) allow for quick deployment of frontend static sites and can be used to serve this build output.\n\nWhen working on your own frontend React projects, we would strongly recommend using Create React App to bootstrap the project and then using one of the above mentioned services to deploy the finish site to the internet."
         }
       ]
     },
@@ -6309,7 +6298,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "In this challenge we will walkthrough an example of deploying and service and database to Heroku."
         },
         {
           "id": "03kfmEpdu",
@@ -6320,7 +6309,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "In this challenge we will walkthrough how to deploy a React UI using Netlify."
         },
         {
           "id": "3odGQPJTI",
