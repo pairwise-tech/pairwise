@@ -4644,7 +4644,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": ""
+          "content": "For this project, create a UI with React which allows you to manage a to\\-do list. This is the archetypal programming project, so we have to go ahead and get it out of the way now\\!\n\nYour to\\-do app should allow you to do:\n\n* Create new to\\-do items.\n* Edit to\\-do items.\n* Mark to\\-do items as complete. \n* Remove/delete to\\-do items.\n* The app should store to\\-do items in the [browser local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) so the data persists after page refresh events.\n\n\nOnce you have completed your project, add the links to it below.\n"
         },
         {
           "id": "f8a76sHdF4",
@@ -4655,7 +4655,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
+          "content": "For this project, create a flashcards UI study app. The app should allow users to:\n\n* Create a deck of flashcards on a specific study topic. Users can create multiple topics, and each card has a front and back.\n* View the list of study topics and view the cards in each topic.\n* Edit the cards in a topic, edit a topic, and remove cards and topics.\n* Study a topic. When studying a topic, the user should be presented with the flashcards in random order and can flip over the card to see the back by clicking or pressing the Space key.\n\n\nOnce you have completed the project, consider adding some programming study terms for your to practice and review\\!\n\nThis project involves quite a lot of UI components and business logic. Try to think through the user stories and plan out your implementation before getting started.\n"
         },
         {
           "id": "ajSUGSAdF4",
@@ -4666,18 +4666,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "..."
-        },
-        {
-          "id": "s89a01IdF4",
-          "type": "project",
-          "title": "Conway's Game of Life",
-          "instructions": "",
-          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
-          "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
-          "content": "..."
+          "content": "Here at Pairwise, we love playing Tic\\-Tac\\-Toe. Let's revisit our Tic\\-Tac\\-Toe game from the Programming Module and create a UI to actually play against. Your Tic\\-Tac\\-Toe Game UI should:\n\n* Display a game board and allow users to play against a computer.\n* A user can click in any square to play, and choose to play as \"X\"s or \"O\"s.\n* Restart a game after completing a round.\n* See a record of their current wins/losses in the current game session.\n\n\nSince this will involve reusing or rewriting the Tic\\-Tac\\-Toe game logic your created before, it may be interesting to reflect on your previous approach and see if you would do anything different now that you have a little more experience programming.\n\nOnce you complete the project don't forget to play a few rounds against the computer\\!"
         },
         {
           "id": "iJAcbGybh",
@@ -4872,7 +4861,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Express is only one of several different backend server frameworks for NodeJS. Express is one of the most lightweight and flexible options. It leaves it up to you to do a lot of work building out the application. There are other options which provide more of a full framework. Let's look at some of those here."
+          "content": "Express is only one of several different backend server frameworks for NodeJS. Express is one of the most lightweight and flexible options. It leaves it up to you to do a lot of work building out the application. There are other options which provide more of a full framework. These other frameworks are useful if you want something more structured which follows design patterns for implementing common backend features such as connecting to a database, handling user authentication, error handling, etc.\n# NestJS\n\nOne such framework is [NestJS](https://nestjs.com/). Nest uses Express under the hood and provides a framework for building highly scalable server\\-side applications. Nest combines elements of object\\-oriented programming and functional programming to create an application architecture for quickly building out complex, loosely\\-coupled server applications. Nest includes a CLI which is useful for creating new projects and adding new Nest modules to an existing project.\n\nNest makes use of decorators and dependency injection to provide a very declarative and loosely coupled pattern for building a server.\n\n```\nimport { Controller, Get } from '@nestjs/common';\n\n@Controller('cats')\nexport class CatsController {\n  @Get()\n  findAll(): string {\n    return 'This action returns all cats';\n  }\n}\n\n```\n\nThis is an example from the Nest documentation for a `CatsController`. The `@Get` decorator declares that the `findAll` method should handle default index route requests to the `cats` route, which is specified in the `@Controller` decorator\\. The Nest architecture revolves around the concept of modules where each module is composed of a controller, provider, and optionally database entities. Modules can access code in other modules through dependency injection and the use of decorators. In the above example, the code would belong to a \"CatsModule\". This module could share code with other modules, and also access code in other modules, if necessary. However, the modules are loosely coupled and the code sharing occurs through dependency injection. This is a very flexible pattern which allows your server to grow in complexity without increasing the coupling between different modules.\n\nNest provides patterns for many common server features, including databases, websockets, graphql, microservices, and more. As such, it is a good option when building a if you want to avoid re\\-implementing a lot of these common patterns from scratch.\n\nThe Pairwise backend, for instance, is built using Nest."
         },
         {
           "id": "WkU2mKHxZ",
