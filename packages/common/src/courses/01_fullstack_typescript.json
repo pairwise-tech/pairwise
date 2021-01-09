@@ -4908,6 +4908,17 @@
           "content": "In this project we will expand on the CRUD API from the last project. Here, we want to create an API which allows users to create posts and comment on posts. This will be a little more complex because a comment for instance must be associated with an existing post.\n\nAgain, here there's no need to add a database yet. You can store everything in\\-memory. This helps to keep things simple and allows you to focus on the business logic for managing the posts and comments and the API design.\n\nSpecifically, your project should expose APIs for a `/posts` endpoint:\n\n* GET: returns a list of all posts, including comments\n* POST: accepts a payload for a post, e.g. `author`, `contents` \\(for now, don't worry about user authentication or user accounts\\).\n* PUT: edits a post based on its `id` \\(you can assign a unique `id` when you create the post\\).\n* DELETE: deletes a post by `id`.\n\n\nIn addition to the posts API, there should be a `/comments` API which allows you to comment on existing posts:\n\n* POST: accepts a comment payload and a post `id` and appends the comment to that post.\n* PUT: updates an existing comment by `id`.\n* DELETE: deletes an existing comment by `id`.\n\n\nIf you want, you can also add APIs for retrieving comments by their `id`, or individual posts by `id`.\n\nAs you design the APIs, think about what data structures you will use to represent the posts and comments and how you will manage the update operations for these data structures. And, just like the last challenge, be sure to consider different edge cases and failure scenarios.\n\nYou want your to be resilient to failure—you should try to handle any possible errors which could occur and then still be prepared to handle unexpected errors. Despite any errors, you server should continue running and be available to handle requests.\n"
         },
         {
+          "id": "QsEOQ9QSw",
+          "type": "project",
+          "title": "Create an Email Service API",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "For this project, design an API which allows you to send and schedule emails. You can use the [NodeJS Nodemailer](https://nodemailer.com/about/) library for this.\n\nYour service should expose a single API: `/email` which accepts a payload like this:\n\n```typescript\ninterface EmailRequestPayload {\n    from: string; // The sender email\n    to: string; // The reciepient\n    subject: string; // The email's subject\n    text: string; // The email's text content\n    html?: string; // Alternative HTML to send in the email\n    scheduleTime?: Date; // An optional time in the future to send the email\n}\n\n```\n\nThe main feature of this email service is the ability to schedule emails in the future. Once your server receives an email request, it should send the email immediately unless a `scheduleTime` parameter is supplied. If this `scheduleTime` provided is supplied, the server should wait until that time in the future to send the email. Regardless, the API request should succeed once the server accepts the request, even if the email is scheduled for later. It's up to you to figure out how to schedule and send the email later\\!\n\nOnce you have com"
+        },
+        {
           "id": "hY2nZf$si",
           "type": "section",
           "title": "Special Topics",
