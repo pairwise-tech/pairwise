@@ -4917,6 +4917,17 @@
           "starterCode": "",
           "solutionCode": "",
           "content": "The world of building severs is vast and fascinating. There are many topics to learn about, from design patterns to scaling to security and so on and so forth. We will try to give you a taste of some of these different topics here, to broaden your  knowledge and give you an idea of how diverse and deep the world of backend development is."
+        },
+        {
+          "id": "ugtkb7OS1",
+          "type": "media",
+          "title": "What is Serverless?",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Serverless is a relatively new computing paradigm which has gained some traction over the years. Serverless computing refers to a different code execution model which does not involve running a server which is constantly online. Instead, computing resources and hardware are allocated on demand for short\\-term tasks. You can think of it like calling a function, in fact, this model is also referred to as \"functions as a service\", i.e. FaaS. Serverless programs are programs which expose an external API and can be invoked anytime.\n\nServerless functions are ideal for small computing tasks which need to be invoked on demand by external users or applications. With serverless products, the user typically only pays for the resources actually used and does not pay for the ongoing cost to setup and run a server. As a result FaaS is a very cost effective option for smaller services or tasks. However, serverless computing can also be used to create scalable backends for web applications and services. Because serverless functions are deployed on demand in temporary containers, there is really no limit to how many you can deploy at once. As a result, serverless architecture are very easy to scale up and demand as usage changes over time.\n\nThe major cloud providers have serverless offerings for deploying applications. Here are the relevant pages for [GCP](https://cloud.google.com/serverless) and [AWS](https://aws.amazon.com/serverless/) if you want to learn more. Although some serverless frameworks allow you to write simple functions which can be invoked from the outside, serverless is more of a computational model. Services like Google Cloud Run allow you to run regular web services with a serverless framework. In fact, this is how the Pairwise backend is deployed. This allows the Pairwise backend to potentially scale up and down with traffic changes very easily.\n\nServerless is a new and very interesting computing paradigm which we expect will grow in usage and popularity in the coming years. If you are interested, we recommend trying to build one of the backend API projects using a serverless architecture\\!"
         }
       ]
     },
