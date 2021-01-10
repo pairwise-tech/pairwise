@@ -256,6 +256,68 @@ export const isReactNativeChallenge = createSelector(
 );
 
 /**
+ * Determine if the current challenge is in the Databases module
+ * using that module's current id and the hard-coded module id for the
+ * Database challenges.
+ */
+export const isDatabaseChallenge = createSelector(
+  [getChallengeMap, getCurrentChallengeId],
+  (challengeMap, challengeId) => {
+    if (challengeMap && challengeId) {
+      const challenge = challengeMap[challengeId];
+      if (challenge) {
+        const DATABASE_MODULE_ID = "f0pDYSOV";
+        return challenge.moduleId === DATABASE_MODULE_ID;
+      }
+    }
+
+    return false;
+  },
+);
+
+/**
+ * Derive if the current challenge is a SQL challenge within the Databases
+ * module. Since sections are not actually part of the data structure, use
+ * challenges of type "section" as bookends to find the challenges that belong
+ * to the SQL Database section within the module.
+ */
+export const isSqlChallenge = createSelector(
+  [getCurrentChallengeId, courseSkeletons, isDatabaseChallenge],
+  (challengeId, courseSkeletons, isDatabaseChallenge) => {
+    if (isDatabaseChallenge && challengeId) {
+      const DATABASE_MODULE_ID = "f0pDYSOV";
+      const SQL_SECTION_ID = "uDMmWREE8";
+      const TYPESCRIPT_COURSE_ID = "fpvPtfu7s";
+
+      const databaseChallenges = courseSkeletons
+        ?.find(({ id }) => id === TYPESCRIPT_COURSE_ID)
+        ?.modules.find(({ id }) => id === DATABASE_MODULE_ID)?.challenges;
+
+      if (databaseChallenges) {
+        const startIndex = databaseChallenges.findIndex(
+          ({ id }) => id === SQL_SECTION_ID,
+        );
+        const fromStart = databaseChallenges.slice(startIndex);
+        const endIndex = fromStart.findIndex(
+          ({ type }, i) => i !== 0 && type === "section",
+        );
+
+        const sqlChallengeMap = fromStart
+          .slice(0, endIndex)
+          .reduce<{ [k: string]: true }>((acc, curr) => {
+            acc[curr.id] = true;
+            return acc;
+          }, {});
+
+        return !!sqlChallengeMap[challengeId];
+      }
+    }
+
+    return false;
+  },
+);
+
+/**
  * Get the breadcrumbs path for a given challenge. We need to take the
  * current challenge id and look it up in its course/module to assemble the
  * correct breadcrumbs path. This is because the currentModule state we track

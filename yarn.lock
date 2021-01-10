@@ -1832,7 +1832,7 @@
     resize-observer-polyfill "^1.5.1"
     tslib "~1.9.0"
 
-"@blueprintjs/core@^3.20.0":
+"@blueprintjs/core@^3.20.0", "@blueprintjs/core@^3.36.0":
   version "3.36.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.36.0.tgz#0a271092050c17b84f29426594708180a1b5401a"
   integrity sha512-7VUyF+qWelDysajK0Xowlou+iqbGAFfGaM3znpmm7OEEIli5XRWjG9rhNuEk3sP7zbdOJpyqh5PAPDQvm5Sxmg==
@@ -1865,6 +1865,17 @@
     "@blueprintjs/core" "^3.20.0"
     classnames "^2.2"
     tslib "~1.9.0"
+
+"@blueprintjs/table@^3.8.18":
+  version "3.8.18"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/table/-/table-3.8.18.tgz#1d85c4b06eea73e4937a9dca4313b77b3407c11f"
+  integrity sha512-ZEAQ5uyDwHy9lDsWXEGWMle0oi5NWnOT1hMmmyP7BK1ulSflX4/PQ1K2mzbBbHK1wAiWpFDUvCX9K39k0wOemA==
+  dependencies:
+    "@blueprintjs/core" "^3.36.0"
+    classnames "^2.2"
+    prop-types "^15.7.2"
+    react-lifecycles-compat "^3.0.4"
+    tslib "~1.13.0"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"

@@ -99,6 +99,7 @@ import SEO from "./SEO";
 import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
 import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
 import isMobile from "is-mobile";
+import { Cell, Column, Table } from "@blueprintjs/table";
 
 /** ===========================================================================
  * Types & Config
@@ -507,6 +508,7 @@ class Workspace extends React.Component<IProps, IState> {
       isEditMode,
       userSettings,
       isMobileView,
+      isSqlChallenge,
       revealSolutionCode,
       isReactNativeChallenge,
       editModeAlternativeViewEnabled,
@@ -520,6 +522,7 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_REACT_NATIVE_CHALLENGE = isReactNativeChallenge;
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
+    const IS_SQL_CHALLENGE = isSqlChallenge;
     const IS_GREAT_SUCCESS_OPEN =
       allTestsPassing &&
       !hideSuccessModal &&
@@ -573,6 +576,51 @@ class Workspace extends React.Component<IProps, IState> {
         )}
       </>
     );
+
+    const SQLResultsTable = () => {
+      interface ISqlRow {
+        [key: string]: any;
+      }
+
+      interface ISqlResults {
+        rowCount: number;
+        rows: ISqlRow[];
+      }
+
+      if (!this.state.logs[1]) {
+        return <div>Execute SQL to see your results!</div>;
+      }
+
+      const sqlResult = this.state.logs[1].data[0] as ISqlResults;
+      const columnNames = Object.keys(sqlResult.rows[0]);
+
+      const cellRenderer = (rowIndex: number, columnIndex: number) => {
+        return (
+          <Cell>{sqlResult.rows[rowIndex][columnNames[columnIndex]]}</Cell>
+        );
+      };
+
+      return (
+        <div
+          style={{
+            height: "100%",
+            overflow: "scroll",
+            paddingBottom: 6,
+            overscrollBehavior: "none",
+          }}
+        >
+          <Table numRows={sqlResult.rowCount}>
+            {columnNames.map((name, i) => (
+              <Column
+                name={name}
+                key={`${i}_${name}`}
+                cellRenderer={cellRenderer}
+              />
+            ))}
+          </Table>
+        </div>
+      );
+    };
 
     // Allow the content in the Console to scroll if it overflows
     const ScrollableWorkspaceConsole = (
@@ -871,7 +919,23 @@ class Workspace extends React.Component<IProps, IState> {
         );
       }
 
-      return IS_REACT_NATIVE_CHALLENGE ? (
+      return IS_SQL_CHALLENGE ? (
+        <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
+          {SQLResultsTable()}
+          <div>
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        </Col>
+      ) : IS_REACT_NATIVE_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}
@@ -1178,7 +1242,7 @@ class Workspace extends React.Component<IProps, IState> {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
       this.transformUnserializableLogs(data);
-      this.ScrollableWorkspaceConsole({ data, method });
+      this.scrollableWorkspaceConsole({ data, method });
     };
 
     try {
@@ -1429,11 +1493,11 @@ class Workspace extends React.Component<IProps, IState> {
         data: [error.message],
       },
     ]);
-    this.ScrollableWorkspaceConsole(log);
+    this.scrollableWorkspaceConsole(log);
     this.setState({ testResults, testResultsLoading: false });
   };
 
-  ScrollableWorkspaceConsole = (log: Log) => {
+  scrollableWorkspaceConsole = (log: Log) => {
     this.setState(
       ({ logs }) => ({
         logs: [...logs, log],
@@ -1659,6 +1723,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
   isLoadingBlob: ChallengeSelectors.isLoadingCurrentChallengeBlob(state),
   isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
+  isSqlChallenge: ChallengeSelectors.isSqlChallenge(state),
   isTestingAndAutomationChallenge: ChallengeSelectors.isTestingAndAutomationChallenge(
     state,
   ),
