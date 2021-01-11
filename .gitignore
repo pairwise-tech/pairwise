@@ -43,6 +43,7 @@ docker
 
 # Local files which should not be committed
 secrets
+user-emails.json
 pairwise-users.json
 pairwise-user-detail.json
 tmp

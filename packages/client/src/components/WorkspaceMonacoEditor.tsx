@@ -8,11 +8,14 @@ import {
   ICodeEditorOptions,
   PAIRWISE_CODE_EDITOR_ID,
 } from "./Workspace";
-import { TEST_EXPECTATION_LIB_TYPES } from "tools/browser-test-lib";
+import {
+  EXPRESS_JS_LIB_TYPES,
+  TEST_EXPECTATION_LIB_TYPES,
+} from "tools/browser-test-lib";
 import {
   monaco,
-  registerExternalLib,
   MonacoModel,
+  registerExternalLib,
   USER_IMPORTED_TYPES_LIB_NAME,
 } from "../monaco";
 import { MonacoEditorThemes } from "@pairwise/common";
@@ -20,8 +23,30 @@ import cx from "classnames";
 import { wait } from "tools/utils";
 import { debounce } from "throttle-debounce";
 import { MonacoEditorOptions } from "modules/challenges/types";
-import { types } from "tools/jsx-types";
 import { IDisposable } from "monaco-editor";
+
+/**
+ * NOTE: The following imports external library @types/ type definitions.
+ * To add more in the future, find the source file and add it following the
+ * same pattern as below for react and react-dom. These libraries are
+ * added to monaco using the addExtraLib method (see below in the monaco
+ * initialization code).
+ *
+ * Note also that in the case of the @types/react library, I manually
+ * added other imported reference into the file we import here.
+ */
+
+// eslint-disable-next-line
+const REACT_D_TS = require("!raw-loader!../monaco/react.d.ts");
+// eslint-disable-next-line
+const REACT_DOM_D_TS = require("!raw-loader!../monaco/react-dom.d.ts");
+
+// The above type definitions are supported
+const SUPPORTED_LIB_TYPE_DEFINITIONS = new Set([
+  "react",
+  "react-dom",
+  "express",
+]);
 
 type MODEL_ID = string;
 type MODEL_TYPE = "workspace-editor" | "jsx-types";
@@ -112,6 +137,7 @@ export default class WorkspaceMonacoEditor
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({
           strict: true,
           noEmit: true,
+          esModuleInterop: true,
           jsx: mn.languages.typescript.JsxEmit.React,
           typeRoots: ["node_modules/@types"],
           allowNonTsExtensions: true,
@@ -169,15 +195,52 @@ export default class WorkspaceMonacoEditor
 
     let workspaceEditorModel;
 
-    /* Markup challenges: */
+    const path = "file:///node_modules/@types";
+
+    // Add type definitions for react and react-dom, for React challenges
+    if (this.props.challengeType === "react") {
+      // WHY!?
+      mn.languages.typescript.typescriptDefaults.setCompilerOptions({
+        jsx: "react",
+        esModuleInterop: true,
+      });
+
+      mn.languages.typescript.typescriptDefaults.addExtraLib(
+        REACT_D_TS,
+        `${path}/react/index.d.ts`,
+      );
+
+      mn.languages.typescript.typescriptDefaults.addExtraLib(
+        REACT_DOM_D_TS,
+        `${path}/react-dom/index.d.ts`,
+      );
+    }
+
+    // Add express-js lib type definitions for Backend module challenges
+    if (this.props.isBackendModuleChallenge) {
+      this.monacoWrapper.languages.typescript.typescriptDefaults.addExtraLib(
+        EXPRESS_JS_LIB_TYPES,
+        `${path}/express/index.d.ts`,
+      );
+    }
+
+    // Add test expectation lib for Software Testing challenges
+    if (this.props.isTestingAndAutomationChallenge) {
+      this.monacoWrapper.languages.typescript.typescriptDefaults.addExtraLib(
+        TEST_EXPECTATION_LIB_TYPES,
+        `expectation-lib/index.d.ts`,
+      );
+    }
+
+    // Markup challenges:
     if (this.props.challengeType === "markup") {
       workspaceEditorModel = mn.editor.createModel(this.props.value, language);
     } else {
-      /* TypeScript and React challenges: */
+      // TypeScript and React challenges:
       workspaceEditorModel = mn.editor.createModel(
         this.props.value,
         language,
-        new mn.Uri.parse("file:///main.tsx"),
+        mn.Uri.parse("file:///main.tsx"),
       );
     }
 
@@ -189,16 +252,6 @@ export default class WorkspaceMonacoEditor
         ...options,
         model: workspaceEditorModel,
       },
-    );
-
-    /**
-     * This is a separate model which provides JSX type information. See
-     * this for more details: https://github.com/cancerberoSgx/jsx-alone/blob/master/jsx-explorer/HOWTO_JSX_MONACO.md.
-     */
-    const jsxTypesModel = mn.editor.createModel(
-      types,
-      "typescript",
-      mn.Uri.parse("file:///index.d.ts"),
     );
 
     if (this.editorInstance) {
@@ -213,7 +266,6 @@ export default class WorkspaceMonacoEditor
     // Record the model ids for the two created models to track them.
     const workspaceEditorModelIdMap: ModelIdMap = new Map();
     workspaceEditorModelIdMap.set("workspace-editor", workspaceEditorModel.id);
-    workspaceEditorModelIdMap.set("jsx-types", jsxTypesModel.id);
 
     if (this._isMounted) {
       this.setState({ workspaceEditorModelIdMap });
@@ -273,28 +325,16 @@ export default class WorkspaceMonacoEditor
     this.setMonacoEditorValue();
   };
 
-  addModuleTypeDefinitionsToMonaco = (
-    packages: string[],
-    isTestingAndAutomationChallenge: boolean,
-  ) => {
-    /**
-     * TODO: Fetch @types/ package type definitions if they exist or fallback
-     * to the module declaration.
-     *
-     * See this:
-     * https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/workers/fetch-dependency-typings.js
-     *
-     * If the challenge is a testing/automation challenge we add the Jest-style
-     * expectation library as well. Otherwise, the default lib is empty.
-     */
-    const defaultLib = isTestingAndAutomationChallenge
-      ? `\n${TEST_EXPECTATION_LIB_TYPES}\n`
-      : "";
+  addModuleTypeDefinitionsToMonaco = (packages: string[]) => {
+    const defaultLib = "";
 
-    const moduleDeclarations = packages.reduce(
-      (typeDefs, name) => `${typeDefs}\ndeclare module "${name}";`,
-      defaultLib,
-    );
+    const moduleDeclarations = packages
+      // Filter out the library names we have added @types/ files for
+      .filter(lib => !SUPPORTED_LIB_TYPE_DEFINITIONS.has(lib))
+      .reduce(
+        (declarations, name) => `${declarations}\ndeclare module "${name}";`,
+        defaultLib,
+      );
 
     if (this.monacoWrapper) {
       registerExternalLib({

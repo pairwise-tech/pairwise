@@ -256,6 +256,25 @@ export const isReactNativeChallenge = createSelector(
 );
 
 /**
+ * Determine if the current challenge is in the Backend module
+ * using that module's current id and the hard-coded module id.
+ */
+export const isBackendModuleChallenge = createSelector(
+  [getChallengeMap, getCurrentChallengeId],
+  (challengeMap, challengeId) => {
+    if (challengeMap && challengeId) {
+      const challenge = challengeMap[challengeId];
+      if (challenge) {
+        const BACKEND_MODULE_ID = "EmSvFhW8";
+        return challenge.moduleId === BACKEND_MODULE_ID;
+      }
+    }
+
+    return false;
+  },
+);
+
+/**
  * Get the breadcrumbs path for a given challenge. We need to take the
  * current challenge id and look it up in its course/module to assemble the
  * correct breadcrumbs path. This is because the currentModule state we track
