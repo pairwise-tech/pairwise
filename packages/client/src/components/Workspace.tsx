@@ -588,37 +588,37 @@ class Workspace extends React.Component<IProps, IState> {
       }
 
       if (!this.state.logs[1]) {
-        return <div>Execute SQL to see your results!</div>;
+        return (
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            Execute SQL to see your results!
+          </div>
+        );
       }
 
       const sqlResult = this.state.logs[1].data[0] as ISqlResults;
       const columnNames = Object.keys(sqlResult.rows[0]);
 
-      const cellRenderer = (rowIndex: number, columnIndex: number) => {
-        return (
-          <Cell>{sqlResult.rows[rowIndex][columnNames[columnIndex]]}</Cell>
-        );
+      const cellRenderer = (columnName: string) => (rowIndex: number) => {
+        return <Cell>{sqlResult.rows[rowIndex][columnName]}</Cell>;
       };
 
       return (
-        <div
-          style={{
-            height: "100%",
-            overflow: "scroll",
-            paddingBottom: 6,
-            overscrollBehavior: "none",
-          }}
-        >
-          <Table numRows={sqlResult.rowCount}>
-            {columnNames.map((name, i) => (
-              <Column
-                name={name}
-                key={`${i}_${name}`}
-                cellRenderer={cellRenderer}
-              />
-            ))}
-          </Table>
-        </div>
+        <Table numRows={sqlResult.rowCount}>
+          {columnNames.map((name, i) => (
+            <Column
+              name={name}
+              key={`${i}_${name}`}
+              cellRenderer={cellRenderer(name)}
+            />
+          ))}
+        </Table>
       );
     };
 
