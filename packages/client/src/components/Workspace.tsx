@@ -587,7 +587,12 @@ class Workspace extends React.Component<IProps, IState> {
         rows: ISqlRow[];
       }
 
-      if (!this.state.logs[1]) {
+      // not the best way to isolate our sql data
+      const sqlResults = this.state.logs
+        .filter(({ data }) => data[0]?.rows && data[0].rowCount)
+        .map(({ data }) => data[0]) as ISqlResults[];
+
+      if (!sqlResults.length) {
         return (
           <div
             style={{
@@ -602,8 +607,11 @@ class Workspace extends React.Component<IProps, IState> {
         );
       }
 
-      const sqlResult = this.state.logs[1].data[0] as ISqlResults;
-      const columnNames = Object.keys(sqlResult.rows[0]);
+      // currently only rendering one table for the first results
+      // can be improved to show a table for every sql log / results
+      // from multiple queries
+      const sqlResult = sqlResults[0];
+      const columnKeys = Object.keys(sqlResult.rows[0]);
 
       const cellRenderer = (columnName: string) => (rowIndex: number) => {
         return <Cell>{sqlResult.rows[rowIndex][columnName]}</Cell>;
@@ -611,7 +619,7 @@ class Workspace extends React.Component<IProps, IState> {
 
       return (
         <Table numRows={sqlResult.rowCount}>
-          {columnNames.map((name, i) => (
+          {columnKeys.map((name, i) => (
             <Column
               name={name}
               key={`${i}_${name}`}
