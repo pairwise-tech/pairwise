@@ -42,9 +42,12 @@ const TEST_EXPECTATION_LIBRARY = fs.readFileSync(
   options,
 );
 
+const EXPRESS_JS_LIBRARY = fs.readFileSync("src/js/express-js-lib.js", options);
+
 const WORKSPACE_LIB = `
   ${BROWSER_TEST_LIBRARY}
   ${TEST_EXPECTATION_LIBRARY}
+  ${EXPRESS_JS_LIBRARY}
 `;
 
 /**
@@ -59,7 +62,7 @@ const course: Course = FullstackTypeScript;
 // NOTE: Enable debug mode. Inspect challenges directly by id. Should
 // only be used for debugging.
 const DEBUG = false;
-const TEST_ID_WHITELIST = new Set(["LITUB9VZ6"]);
+const TEST_ID_WHITELIST = new Set(["ifuAxpSly"]);
 
 // Allow manually skipping challenges. It's dangerous because this means these
 // are challenges with tests that will _NOT_ be tested in the UI. Why in the

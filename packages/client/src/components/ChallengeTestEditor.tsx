@@ -17,7 +17,10 @@ import { CodeFormatMessageEvent, TEST_UTILS_GLOBALS } from "tools/test-utils";
 import { MonacoEditorThemes } from "@pairwise/common";
 import toaster from "tools/toast-utils";
 import { copyToClipboard } from "tools/utils";
-import { WORKSPACE_LIB_TYPES } from "tools/browser-test-lib";
+import {
+  WORKSPACE_LIB_TYPES,
+  EXPRESS_JS_LIB_TYPES,
+} from "tools/browser-test-lib";
 
 /** ===========================================================================
  * Types & Config
@@ -118,6 +121,16 @@ const ChallengeTestEditor = (props: Props) => {
       source: WORKSPACE_LIB_TYPES,
     });
   }, []);
+
+  React.useEffect(() => {
+    // Add express library for Backend Module challenges
+    if (props.isBackendModuleChallenge) {
+      registerExternalLib({
+        name: "express-lib.d.ts",
+        source: EXPRESS_JS_LIB_TYPES,
+      });
+    }
+  }, [props.isBackendModuleChallenge]);
 
   return (
     <div
@@ -253,6 +266,12 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   editorOptions: Modules.selectors.user.editorOptions(state),
   userSettings: Modules.selectors.user.userSettings(state),
+  isBackendModuleChallenge: Modules.selectors.challenges.isBackendModuleChallenge(
+    state,
+  ),
+  isTestingAndAutomationChallenge: Modules.selectors.challenges.isTestingAndAutomationChallenge(
+    state,
+  ),
   challengeTestCode: Modules.selectors.challenges.getCurrentChallengeTestCode(
     state,
   ),

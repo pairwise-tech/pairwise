@@ -1,4 +1,9 @@
 # Ignore compiled browser JS test lib file
+src/js/express-lib.js
 src/js/browser-test-lib.js
 src/js/test-expectation-lib.js
 src/js/react-grid-resizable
+
+# 3rd party react type definitions
+src/monaco/react.d.ts
+src/monaco/react-dom.d.ts

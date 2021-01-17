@@ -26,7 +26,7 @@ const libs: ExternalLibrary[] = [
     name: "monaco-type-patches.d.ts",
     // eslint-disable-next-line
     // @ts-ignore
-    source: require("!raw-loader!../monaco-type-patches.d.ts"),
+    source: require("!raw-loader!./monaco-type-patches.d.ts"),
   },
 ];
 

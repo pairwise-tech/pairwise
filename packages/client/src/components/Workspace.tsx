@@ -89,7 +89,7 @@ import {
   WorkspaceMobileView,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
-import { WORKSPACE_LIB } from "tools/browser-test-lib";
+import { WORKSPACE_LIB, EXPRESS_JS_LIB } from "tools/browser-test-lib";
 import { CODEPRESS } from "tools/client-env";
 import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
@@ -153,6 +153,8 @@ export interface ICodeEditorProps {
   editorOptions: ICodeEditorOptions;
   onDidBlurEditorText: () => void;
   onDidInitializeMonacoEditor: () => void;
+  isBackendModuleChallenge: boolean;
+  isTestingAndAutomationChallenge: boolean;
 }
 
 export interface ICodeEditor extends React.Component<ICodeEditorProps> {
@@ -161,10 +163,7 @@ export interface ICodeEditor extends React.Component<ICodeEditorProps> {
   cleanup(): void;
   setTheme(theme: string): void;
   updateOptions(options: Partial<ICodeEditorOptions>): void;
-  addModuleTypeDefinitionsToMonaco(
-    packages: string[],
-    isTestingAndAutomationChallenge: boolean,
-  ): void;
+  addModuleTypeDefinitionsToMonaco(packages: string[]): void;
 }
 
 /** ===========================================================================
@@ -868,6 +867,10 @@ class Workspace extends React.Component<IProps, IState> {
           value={this.state.code}
           onChange={this.handleEditorContentChange}
           onDidInitializeMonacoEditor={this.onDidInitializeMonacoEditor}
+          isBackendModuleChallenge={this.props.isBackendModuleChallenge}
+          isTestingAndAutomationChallenge={
+            this.props.isTestingAndAutomationChallenge
+          }
         />
       </CodeEditorContainer>
     );
@@ -1353,8 +1356,15 @@ class Workspace extends React.Component<IProps, IState> {
           WORKSPACE_LIB,
         );
       } else {
+        let libs = WORKSPACE_LIB;
+
+        // Add express library for backend module challenges
+        if (this.props.isBackendModuleChallenge) {
+          libs += EXPRESS_JS_LIB;
+        }
+
         const code = await this.compileAndTransformCodeString();
-        sourceDocument = getMarkupForCodeChallenge(code, WORKSPACE_LIB);
+        sourceDocument = getMarkupForCodeChallenge(code, libs);
       }
 
       this.iFrameRef.srcdoc = sourceDocument;
@@ -1439,12 +1449,8 @@ class Workspace extends React.Component<IProps, IState> {
         this.props.challenge,
       );
 
-      const { isTestingAndAutomationChallenge } = this.props;
       if (this.editor) {
-        this.editor.addModuleTypeDefinitionsToMonaco(
-          dependencies,
-          isTestingAndAutomationChallenge,
-        );
+        this.editor.addModuleTypeDefinitionsToMonaco(dependencies);
       }
 
       return code;
@@ -1477,12 +1483,8 @@ class Workspace extends React.Component<IProps, IState> {
       this.props.challenge,
     );
 
-    const { isTestingAndAutomationChallenge } = this.props;
     if (this.editor) {
-      this.editor.addModuleTypeDefinitionsToMonaco(
-        dependencies,
-        isTestingAndAutomationChallenge,
-      );
+      this.editor.addModuleTypeDefinitionsToMonaco(dependencies);
     }
   };
 
@@ -1732,6 +1734,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isLoadingBlob: ChallengeSelectors.isLoadingCurrentChallengeBlob(state),
   isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
   isSqlChallenge: ChallengeSelectors.isSqlChallenge(state),
+  isBackendModuleChallenge: ChallengeSelectors.isBackendModuleChallenge(state),
   isTestingAndAutomationChallenge: ChallengeSelectors.isTestingAndAutomationChallenge(
     state,
   ),

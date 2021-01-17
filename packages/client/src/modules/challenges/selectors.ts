@@ -256,6 +256,25 @@ export const isReactNativeChallenge = createSelector(
 );
 
 /**
+ * Determine if the current challenge is in the Backend module
+ * using that module's current id and the hard-coded module id.
+ */
+export const isBackendModuleChallenge = createSelector(
+  [getChallengeMap, getCurrentChallengeId],
+  (challengeMap, challengeId) => {
+    if (challengeMap && challengeId) {
+      const challenge = challengeMap[challengeId];
+      if (challenge) {
+        const BACKEND_MODULE_ID = "EmSvFhW8";
+        return challenge.moduleId === BACKEND_MODULE_ID;
+      }
+    }
+
+    return false;
+  },
+);
+
+/**
  * Determine if the current challenge is in the Databases module
  * using that module's current id and the hard-coded module id for the
  * Database challenges.

@@ -8,7 +8,7 @@
  * browser-test-utils.
  * ============================================================================
  */
-declare function test(message: string, testFunction: () => void): void;
+declare const test: (message: string, fn: () => void) => any;
 declare type Path = Array<string | number>;
 declare class Expectation {
     not: Expectation;

@@ -8,6 +8,8 @@
  * browser-test-utils.
  * ============================================================================
  */
+// @ts-ignore
+var test = function (message, fn) { return undefined; };
 var Expectation = /** @class */ (function () {
     function Expectation(value) {
         var _this = this;
