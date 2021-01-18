@@ -21,11 +21,13 @@ import {
   EditableText,
   Tooltip,
   Button,
+  Spinner,
 } from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
 import Breadcrumbs from "./Breadcrumbs";
+import { Table, Cell, Column } from "@blueprintjs/table";
 
 const D = getDimensions();
 
@@ -786,3 +788,105 @@ export const WorkspaceMobileView = styled.div`
     flex-grow: 0;
   }
 `;
+
+/**
+ * Types and components for displaying SQL Results as table
+ */
+interface ISqlResultTableProps {
+  logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
+  testResultsLoading: boolean;
+}
+
+export const SQLResultsTable = (props: ISqlResultTableProps) => {
+  interface ISqlRow {
+    [key: string]: any;
+  }
+
+  interface ISqlResults {
+    rowCount: number;
+    rows: ISqlRow[];
+  }
+
+  interface ITableWrapperProps {
+    isMulti: boolean;
+    children: React.ReactNode;
+  }
+
+  // this component returns either a div or fragment container depending on if
+  // there's multiple tables to show. This optimizes the styling/behavior when
+  // there's only a single table (css solutions didn't seem to look as good)
+  const TableWrapper = (props: ITableWrapperProps) => {
+    return props.isMulti ? (
+      <div
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        {props.children}
+      </div>
+    ) : (
+      <>{props.children}</>
+    );
+  };
+
+  const NoSqlResultsWrapper = styled.div`
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  `;
+
+  // isolating logs that represent SQL results by looking for the presence
+  // of certain keys which we know are a part of SQL logs. Not ideal...
+  const sqlResults = props.logs
+    .filter(({ data }) => data[0]?.rows && data[0].rowCount)
+    .map(({ data }) => data[0]) as ISqlResults[];
+
+  if (!sqlResults.length && props.testResultsLoading) {
+    return (
+      <NoSqlResultsWrapper>
+        <div
+          style={{
+            marginBottom: 15,
+          }}
+        >
+          Waiting for results...
+        </div>
+        <Spinner intent="primary" />
+      </NoSqlResultsWrapper>
+    );
+  }
+
+  // this should only show if we fail to log the SQL output from the tests
+  if (!sqlResults.length && !props.testResultsLoading) {
+    return <NoSqlResultsWrapper>No SQL Results</NoSqlResultsWrapper>;
+  }
+
+  return (
+    <>
+      {sqlResults.map((sqlResult, i) => {
+        const columnKeys = Object.keys(sqlResult.rows[0]);
+
+        const cellRenderer = (columnName: string) => (rowIndex: number) => {
+          return <Cell>{sqlResult.rows[rowIndex][columnName]}</Cell>;
+        };
+
+        return (
+          <TableWrapper isMulti={sqlResults.length > 1}>
+            <Table numRows={sqlResult.rowCount} key={i}>
+              {columnKeys.map((name, i) => (
+                <Column
+                  name={name}
+                  key={`${i}_${name}`}
+                  id={`${i}_${name}`}
+                  cellRenderer={cellRenderer(name)}
+                />
+              ))}
+            </Table>
+          </TableWrapper>
+        );
+      })}
+    </>
+  );
+};

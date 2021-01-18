@@ -87,6 +87,7 @@ import {
   TestStatusTextTab,
   LowerSection,
   WorkspaceMobileView,
+  SQLResultsTable,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { WORKSPACE_LIB, EXPRESS_JS_LIB } from "tools/browser-test-lib";
@@ -99,7 +100,6 @@ import SEO from "./SEO";
 import WorkspaceMonacoEditor from "./WorkspaceMonacoEditor";
 import WorkspaceCodemirrorEditor from "./WorkspaceCodemirrorEditor";
 import isMobile from "is-mobile";
-import { Cell, Column, Table } from "@blueprintjs/table";
 
 /** ===========================================================================
  * Types & Config
@@ -494,6 +494,7 @@ class Workspace extends React.Component<IProps, IState> {
   render() {
     const { correct: allTestsPassing } = this.getTestPassedStatus();
     const {
+      logs,
       testResults,
       dimensions: D,
       hideSuccessModal,
@@ -512,7 +513,7 @@ class Workspace extends React.Component<IProps, IState> {
       isReactNativeChallenge,
       editModeAlternativeViewEnabled,
     } = this.props;
-    const NO_TESTS_RESULTS = testResults.length === 0;
+    const NO_TESTS_RESULTS = testResults.length === 0 || isPreviewTestResults;
     const { fullScreenEditor } = userSettings;
     const IS_ALTERNATIVE_EDIT_VIEW = editModeAlternativeViewEnabled;
     const IS_SANDBOX = challenge.id === SANDBOX_ID;
@@ -575,59 +576,6 @@ class Workspace extends React.Component<IProps, IState> {
         )}
       </>
     );
-
-    const SQLResultsTable = () => {
-      interface ISqlRow {
-        [key: string]: any;
-      }
-
-      interface ISqlResults {
-        rowCount: number;
-        rows: ISqlRow[];
-      }
-
-      // not the best way to isolate our sql data
-      const sqlResults = this.state.logs
-        .filter(({ data }) => data[0]?.rows && data[0].rowCount)
-        .map(({ data }) => data[0]) as ISqlResults[];
-
-      if (!sqlResults.length) {
-        return (
-          <div
-            style={{
-              height: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            Execute SQL to see your results!
-          </div>
-        );
-      }
-
-      // currently only rendering one table for the first results
-      // can be improved to show a table for every sql log / results
-      // from multiple queries
-      const sqlResult = sqlResults[0];
-      const columnKeys = Object.keys(sqlResult.rows[0]);
-
-      const cellRenderer = (columnName: string) => (rowIndex: number) => {
-        return <Cell>{sqlResult.rows[rowIndex][columnName]}</Cell>;
-      };
-
-      return (
-        <Table numRows={sqlResult.rowCount}>
-          {columnKeys.map((name, i) => (
-            <Column
-              name={name}
-              key={`${i}_${name}`}
-              cellRenderer={cellRenderer(name)}
-            />
-          ))}
-        </Table>
-      );
-    };
 
     // Allow the content in the Console to scroll if it overflows
     const ScrollableWorkspaceConsole = (
@@ -880,7 +828,18 @@ class Workspace extends React.Component<IProps, IState> {
     const getPreviewPane = ({ grid = true } = {}) => {
       // Lots of repetition here
       if (!grid) {
-        return IS_REACT_NATIVE_CHALLENGE ? (
+        return IS_SQL_CHALLENGE ? (
+          // this className ensures consistent bg-color with the table itself
+          <div style={{ height: "100%" }} className="bp3-table-container">
+            {SQLResultsTable({ logs, testResultsLoading })}
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        ) : IS_REACT_NATIVE_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <MobileDeviceUI device={mobileDevicePreviewType}>
               <DragIgnorantFrameContainer
@@ -931,12 +890,13 @@ class Workspace extends React.Component<IProps, IState> {
       }
 
       return IS_SQL_CHALLENGE ? (
-        <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+        // this className ensures consistent bg-color with the table itself
+        <Col className="bp3-table-container" initialHeight={D.WORKSPACE_HEIGHT}>
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}
             runCodeHandler={this.runChallengeTests}
           />
-          {SQLResultsTable()}
+          {SQLResultsTable({ logs, testResultsLoading })}
           <div>
             <DragIgnorantFrameContainer
               id="iframe"
