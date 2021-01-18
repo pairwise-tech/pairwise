@@ -4,6 +4,7 @@ import "normalize.css";
 // Import Blueprint styles
 import "./blueprint.scss";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+import "@blueprintjs/table/lib/css/table.css";
 
 // Import app styles
 import "./index.css";

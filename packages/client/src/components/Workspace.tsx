@@ -87,6 +87,7 @@ import {
   TestStatusTextTab,
   LowerSection,
   WorkspaceMobileView,
+  SQLResultsTable,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { WORKSPACE_LIB, EXPRESS_JS_LIB } from "tools/browser-test-lib";
@@ -493,6 +494,7 @@ class Workspace extends React.Component<IProps, IState> {
   render() {
     const { correct: allTestsPassing } = this.getTestPassedStatus();
     const {
+      logs,
       testResults,
       dimensions: D,
       hideSuccessModal,
@@ -506,11 +508,12 @@ class Workspace extends React.Component<IProps, IState> {
       isEditMode,
       userSettings,
       isMobileView,
+      isSqlChallenge,
       revealSolutionCode,
       isReactNativeChallenge,
       editModeAlternativeViewEnabled,
     } = this.props;
-    const NO_TESTS_RESULTS = testResults.length === 0;
+    const NO_TESTS_RESULTS = testResults.length === 0 || isPreviewTestResults;
     const { fullScreenEditor } = userSettings;
     const IS_ALTERNATIVE_EDIT_VIEW = editModeAlternativeViewEnabled;
     const IS_SANDBOX = challenge.id === SANDBOX_ID;
@@ -519,6 +522,7 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_REACT_NATIVE_CHALLENGE = isReactNativeChallenge;
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
+    const IS_SQL_CHALLENGE = isSqlChallenge;
     const IS_GREAT_SUCCESS_OPEN =
       allTestsPassing &&
       !hideSuccessModal &&
@@ -824,7 +828,18 @@ class Workspace extends React.Component<IProps, IState> {
     const getPreviewPane = ({ grid = true } = {}) => {
       // Lots of repetition here
       if (!grid) {
-        return IS_REACT_NATIVE_CHALLENGE ? (
+        return IS_SQL_CHALLENGE ? (
+          // this className ensures consistent bg-color with the table itself
+          <div style={{ height: "100%" }} className="bp3-table-container">
+            {SQLResultsTable({ logs, testResultsLoading })}
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        ) : IS_REACT_NATIVE_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <MobileDeviceUI device={mobileDevicePreviewType}>
               <DragIgnorantFrameContainer
@@ -874,7 +889,24 @@ class Workspace extends React.Component<IProps, IState> {
         );
       }
 
-      return IS_REACT_NATIVE_CHALLENGE ? (
+      return IS_SQL_CHALLENGE ? (
+        // this className ensures consistent bg-color with the table itself
+        <Col className="bp3-table-container" initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
+          {SQLResultsTable({ logs, testResultsLoading })}
+          <div>
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        </Col>
+      ) : IS_REACT_NATIVE_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}
@@ -1181,7 +1213,7 @@ class Workspace extends React.Component<IProps, IState> {
       const msg = JSON.parse(message);
       const data: ReadonlyArray<any> = [...msg];
       this.transformUnserializableLogs(data);
-      this.ScrollableWorkspaceConsole({ data, method });
+      this.scrollableWorkspaceConsole({ data, method });
     };
 
     try {
@@ -1431,11 +1463,11 @@ class Workspace extends React.Component<IProps, IState> {
         data: [error.message],
       },
     ]);
-    this.ScrollableWorkspaceConsole(log);
+    this.scrollableWorkspaceConsole(log);
     this.setState({ testResults, testResultsLoading: false });
   };
 
-  ScrollableWorkspaceConsole = (log: Log) => {
+  scrollableWorkspaceConsole = (log: Log) => {
     this.setState(
       ({ logs }) => ({
         logs: [...logs, log],
@@ -1661,6 +1693,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
   isLoadingBlob: ChallengeSelectors.isLoadingCurrentChallengeBlob(state),
   isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
+  isSqlChallenge: ChallengeSelectors.isSqlChallenge(state),
   isBackendModuleChallenge: ChallengeSelectors.isBackendModuleChallenge(state),
   isTestingAndAutomationChallenge: ChallengeSelectors.isTestingAndAutomationChallenge(
     state,

@@ -21,11 +21,13 @@ import {
   EditableText,
   Tooltip,
   Button,
+  Spinner,
 } from "@blueprintjs/core";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
 import Breadcrumbs from "./Breadcrumbs";
+import { Table, Cell, Column } from "@blueprintjs/table";
 
 const D = getDimensions();
 
@@ -786,3 +788,118 @@ export const WorkspaceMobileView = styled.div`
     flex-grow: 0;
   }
 `;
+
+/**
+ * Types and components for displaying SQL Results as table
+ */
+interface Log {
+  method: string;
+  data: ReadonlyArray<any>;
+}
+
+interface ISqlResultTableProps {
+  logs: ReadonlyArray<Log>;
+  testResultsLoading: boolean;
+}
+
+export const SQLResultsTable = (props: ISqlResultTableProps) => {
+  interface ISqlResult {
+    rowCount: number;
+    command: string;
+    rows: {
+      [key: string]: any;
+    }[];
+  }
+
+  interface ITableWrapperProps {
+    isMulti: boolean;
+    children: React.ReactNode;
+  }
+
+  // this component returns either a div or fragment container depending on if
+  // there's multiple tables to show. This optimizes the styling/behavior when
+  // there's only a single table (css solutions didn't seem to look as good)
+  const TableWrapper = (props: ITableWrapperProps) => {
+    return props.isMulti ? (
+      <div
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        {props.children}
+      </div>
+    ) : (
+      <>{props.children}</>
+    );
+  };
+
+  // This function returns the renderer that is responsible for rendering each
+  // cell of the results table and provides closure over the required variables
+  const getCellRenderer = (sqlResult: ISqlResult, columnName: string) => {
+    return function cellRenderer(rowIndex: number) {
+      return <Cell>{sqlResult.rows[rowIndex][columnName]}</Cell>;
+    };
+  };
+
+  const NoSqlResultsWrapper = styled.div`
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  `;
+
+  // isolating logs that represent SQL results by looking for the presence
+  // of certain keys which we know are a part of SQL logs. Not ideal...
+  // For now, we're only expecting to results from SELECT statements
+  const isSqlResult = ({ data }: Log) =>
+    data[0].rowCount && data[0]?.command === "SELECT";
+
+  // casting to make this easier to work with. Also not ideal..
+  const sqlResults = props.logs
+    .filter(isSqlResult)
+    .map(({ data }) => data[0]) as ISqlResult[];
+
+  if (!sqlResults.length && props.testResultsLoading) {
+    return (
+      <NoSqlResultsWrapper>
+        <div
+          style={{
+            marginBottom: 15,
+          }}
+        >
+          Waiting for results...
+        </div>
+        <Spinner intent="primary" />
+      </NoSqlResultsWrapper>
+    );
+  }
+
+  // this should only show if we fail to log the SQL output from the tests
+  if (!sqlResults.length && !props.testResultsLoading) {
+    return <NoSqlResultsWrapper>No SQL Results</NoSqlResultsWrapper>;
+  }
+
+  return (
+    <>
+      {sqlResults.map((sqlResult, i) => {
+        const columnKeys = Object.keys(sqlResult.rows[0]);
+
+        return (
+          <TableWrapper isMulti={sqlResults.length > 1} key={`sql_table_${i}`}>
+            <Table numRows={sqlResult.rowCount}>
+              {columnKeys.map((name, i) => (
+                <Column
+                  name={name}
+                  id={`sql_column_${i}_${name}`}
+                  key={`sql_column_${i}_${name}`}
+                  cellRenderer={getCellRenderer(sqlResult, name)}
+                />
+              ))}
+            </Table>
+          </TableWrapper>
+        );
+      })}
+    </>
+  );
+};
