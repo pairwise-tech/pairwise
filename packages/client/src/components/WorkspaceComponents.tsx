@@ -792,14 +792,20 @@ export const WorkspaceMobileView = styled.div`
 /**
  * Types and components for displaying SQL Results as table
  */
+interface Log {
+  method: string;
+  data: ReadonlyArray<any>;
+}
+
 interface ISqlResultTableProps {
-  logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
+  logs: ReadonlyArray<Log>;
   testResultsLoading: boolean;
 }
 
 export const SQLResultsTable = (props: ISqlResultTableProps) => {
   interface ISqlResult {
     rowCount: number;
+    command: string;
     rows: {
       [key: string]: any;
     }[];
@@ -845,8 +851,13 @@ export const SQLResultsTable = (props: ISqlResultTableProps) => {
 
   // isolating logs that represent SQL results by looking for the presence
   // of certain keys which we know are a part of SQL logs. Not ideal...
+  // For now, we're only expecting to results from SELECT statements
+  const isSqlResult = ({ data }: Log) =>
+    data[0].rowCount && data[0]?.command === "SELECT";
+
+  // casting to make this easier to work with. Also not ideal..
   const sqlResults = props.logs
-    .filter(({ data }) => data[0]?.rows && data[0].rowCount)
+    .filter(isSqlResult)
     .map(({ data }) => data[0]) as ISqlResult[];
 
   if (!sqlResults.length && props.testResultsLoading) {
