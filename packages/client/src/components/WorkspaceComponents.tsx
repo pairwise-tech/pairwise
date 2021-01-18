@@ -798,13 +798,11 @@ interface ISqlResultTableProps {
 }
 
 export const SQLResultsTable = (props: ISqlResultTableProps) => {
-  interface ISqlRow {
-    [key: string]: any;
-  }
-
-  interface ISqlResults {
+  interface ISqlResult {
     rowCount: number;
-    rows: ISqlRow[];
+    rows: {
+      [key: string]: any;
+    }[];
   }
 
   interface ITableWrapperProps {
@@ -829,6 +827,14 @@ export const SQLResultsTable = (props: ISqlResultTableProps) => {
     );
   };
 
+  // This function returns the renderer that is responsible for rendering each
+  // cell of the results table and provides closure over the required variables
+  const getCellRenderer = (sqlResult: ISqlResult, columnName: string) => {
+    return function cellRenderer(rowIndex: number) {
+      return <Cell>{sqlResult.rows[rowIndex][columnName]}</Cell>;
+    };
+  };
+
   const NoSqlResultsWrapper = styled.div`
     height: 100%;
     display: flex;
@@ -841,7 +847,7 @@ export const SQLResultsTable = (props: ISqlResultTableProps) => {
   // of certain keys which we know are a part of SQL logs. Not ideal...
   const sqlResults = props.logs
     .filter(({ data }) => data[0]?.rows && data[0].rowCount)
-    .map(({ data }) => data[0]) as ISqlResults[];
+    .map(({ data }) => data[0]) as ISqlResult[];
 
   if (!sqlResults.length && props.testResultsLoading) {
     return (
@@ -868,19 +874,15 @@ export const SQLResultsTable = (props: ISqlResultTableProps) => {
       {sqlResults.map((sqlResult, i) => {
         const columnKeys = Object.keys(sqlResult.rows[0]);
 
-        const cellRenderer = (columnName: string) => (rowIndex: number) => {
-          return <Cell>{sqlResult.rows[rowIndex][columnName]}</Cell>;
-        };
-
         return (
-          <TableWrapper isMulti={sqlResults.length > 1}>
-            <Table numRows={sqlResult.rowCount} key={i}>
+          <TableWrapper isMulti={sqlResults.length > 1} key={`sql_table_${i}`}>
+            <Table numRows={sqlResult.rowCount}>
               {columnKeys.map((name, i) => (
                 <Column
                   name={name}
-                  key={`${i}_${name}`}
-                  id={`${i}_${name}`}
-                  cellRenderer={cellRenderer(name)}
+                  id={`sql_column_${i}_${name}`}
+                  key={`sql_column_${i}_${name}`}
+                  cellRenderer={getCellRenderer(sqlResult, name)}
                 />
               ))}
             </Table>
