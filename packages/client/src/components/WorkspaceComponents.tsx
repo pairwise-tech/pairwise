@@ -837,7 +837,8 @@ export const SQLResultsTable = (props: ISqlResultTableProps) => {
   // cell of the results table and provides closure over the required variables
   const getCellRenderer = (sqlResult: ISqlResult, columnName: string) => {
     return function cellRenderer(rowIndex: number) {
-      return <Cell>{sqlResult.rows[rowIndex][columnName]}</Cell>;
+      const val = sqlResult.rows[rowIndex][columnName] ?? "[null]";
+      return <Cell>{val}</Cell>;
     };
   };
 
