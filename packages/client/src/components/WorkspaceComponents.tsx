@@ -888,7 +888,7 @@ export const SQLResultsTable = (props: ISqlResultTableProps) => {
 
         return (
           <TableWrapper isMulti={sqlResults.length > 1} key={`sql_table_${i}`}>
-            <Table numRows={sqlResult.rowCount}>
+            <Table enableRowResizing={false} numRows={sqlResult.rowCount}>
               {columnKeys.map((name, i) => (
                 <Column
                   name={name}
