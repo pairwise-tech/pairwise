@@ -5008,10 +5008,32 @@
           "type": "typescript",
           "title": "The AND clause",
           "instructions": "`WHERE` lets us write very basic filters in our SQL queries. Let's see how we can combine `WHERE` with `AND` to write more complex filter conditions. \n\nOnce you're familiar with `WHERE`, the `AND` clause is pretty intuitive. Just know that `AND` always comes after a `WHERE` condition\\. Here's how the syntax looks:\n\n```none\nSELECT columns\nFROM table\nWHERE some_condition AND another_condition\n\n```\n\n> ++TIP:++ It's common to break up queries on different lines like this to make complicated queries easier to read.\n\nLet's use `WHERE` and `AND` to build upon our last query and select all crime movies from 2010 \\(note: the year column is not numeric, so you still need to wrap it in single quotes in your queries, e.g. `year = '1984'`\\).",
-          "testCode": "test(\"The `SQL` value contains a `SELECT` statement which selects all rows from the `movie` table that have the genre `Crime`\", async () => {\n  try {\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n\n    // all results are Crime genre\n    const isNotCrime = result.rows.filter(({ genre }) => genre !== \"Crime\");\n    expect(isNotCrime.length).toBe(0);\n\n    // all results are from 2010\n    const isNot2010 = result.rows.filter(({ year }) => year !== \"2010\");\n    expect(isNot2010.length).toBe(0);\n\n    // there should be 5 rows\n    expect(result.rowCount).toBe(5);\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "testCode": "test(\"The `SQL` value contains a `SELECT` statement which selects all rows from the `movie` table that have the genre 'Crime' and are from the year 2010\", async () => {\n  try {\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n\n    // all results are Crime genre\n    const isNotCrime = result.rows.filter(({ genre }) => genre !== \"Crime\");\n    expect(isNotCrime.length).toBe(0);\n\n    // all results are from 2010\n    const isNot2010 = result.rows.filter(({ year }) => year !== \"2010\");\n    expect(isNot2010.length).toBe(0);\n\n    // there should be 5 rows\n    expect(result.rowCount).toBe(5);\n  } catch (err) {\n    throw err;\n  }\n});\n",
           "videoUrl": "",
           "starterCode": "const SQL = `\nSELECT id, title, genre, year, rated\nFROM movie\nWHERE genre = 'Crime'\n-- your code here\n`;\n",
           "solutionCode": "const SQL = `\nSELECT id, title, genre, year, rated\nFROM movie\nWHERE genre = 'Crime'\nAND year = '2010'\n`;\n",
+          "content": ""
+        },
+        {
+          "id": "exRKTrTQ53",
+          "type": "typescript",
+          "title": "AND again...",
+          "instructions": "`AND` clauses can be chained after a `WHERE` clause to create even more specific filters:\n\n```\nSELECT columns\nFROM table \nWHERE some_condition\n    AND another_condition\n    AND yet_another_condition\n\n```\n\nUse a `WHERE` clause with two `AND`s to find all crime movies from 2010 that are rated PG\\-13.\n\nOnce you've solved the challenge, experiment with different `WHERE` / `AND` combinations to see how easy it can be to filter your datasets and produce different results\\!",
+          "testCode": "test(\"The `SQL` variable contains a `SELECT` statement which selects all rows from the `movie` table that have the genre 'Crime', are rated PG-13 and are from the year 2010\", async () => {\n  try {\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n\n    const x = result.rows.filter(\n      ({ genre }) => genre !== \"Crime\" && year !== \"2010\" && rated !== \"PG-13\"\n    );\n\n    expect(x.length).toBe(0);\n\n    // there should be 3 rows\n    expect(result.rowCount).toBe(2);\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const SQL = `\nSELECT id, title, genre, year, rated\nFROM movie\nWHERE genre = 'Crime'\n-- your code here\n`;\n",
+          "solutionCode": "const SQL = `\nSELECT id, title, genre, year, rated\nFROM movie\nWHERE genre = 'Crime'\nAND rated = 'PG-13'\nAND year = '2010'\n`;\n",
+          "content": ""
+        },
+        {
+          "id": "DfnyaGCiN",
+          "type": "typescript",
+          "title": "Comparison Conditions",
+          "instructions": "So far, our `WHERE` and `AND` conditions have just been simple `=` comparisons, e.g. `genre = 'Crime'`. However, conditions can be any valid expression that evaluates to true or false. For example, the familiar `<`, `<=`, `>`, `<=` comparison operators can be used to compare a cell's value with a value we define in our conditions.\n\nIf a user of the application that uses this database wanted to know what the best dramas were, our go\\-to datapoint would be the `rotten_tomatoes_rating` column:\n\n```none\n... WHERE rotten_tomatoes_rating >= { number }\n\n```\n\nSimilarly, if the user wanted to settle in for a really long movie, we could filter on the `runtime_min` column\\. Note that both `rotten_tomatoes_rating` and `runtime_min` are integer data types, so their values don't need to be wrapped in quotes, e.g. `runtime_min < 60`.\n\nWrite a query with a filter condition \\(or conditions\\) to select all dramas with a Rotten Tomatoes rating of 75 or better and a runtime of two and half hours or more. You can include as few or as many columns as you'd like in your query's `SELECT` statement\\.\n\nGood luck, you're on your own for this one\\!",
+          "testCode": "test(\"The value of the `SQL` variable contains a `SELECT` statement which selects all rows from the `movie` table that have the genre 'Drama', a 75 or better Rotten Tomatoes rating, and a runtime of 2 1/2 hours or longer\", async () => {\n  try {\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n\n    const x = result.rows.filter(\n      ({ genre }) =>\n        genre !== \"Drama\" && rotten_tomatoes_rating < 75 && runtime_min < 150\n    );\n\n    expect(x.length).toBe(0);\n\n    // there should be 16 rows\n    expect(result.rowCount).toBe(16);\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const SQL = `\n-- remove this comment and write your query here\n`;\n",
+          "solutionCode": "const SQL = `\nselect * from movie \nwhere genre = 'Drama' \n  and rotten_tomatoes_rating >= 75 \n  and runtime_min >= 150\n`;\n",
           "content": ""
         },
         {
