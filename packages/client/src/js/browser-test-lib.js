@@ -326,8 +326,8 @@ var usersCollection = new MockMongoCollection();
  * Switch the database URL if you need to test and run the Database Challenge
  * API server locally:
  */
-const DATABASE_CHALLENGE_API = "http://localhost:5000";
-// var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+// const DATABASE_CHALLENGE_API = "http://localhost:5000";
+var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */
