@@ -1397,7 +1397,9 @@ class Workspace extends React.Component<IProps, IState> {
   cancelTestRun = () => {
     this.setState({ testResultsLoading: false }, () => {
       toaster.warn(
-        "Tests cancelled because your code took longer than 10 seconds to complete running. Check your code for problems and make sure your internet connection is stable!",
+        `${
+          this.props.challenge.id === SANDBOX_ID ? "Code execution" : "Tests"
+        } cancelled because your code took longer than 10 seconds to complete running. Check your code for problems and make sure your internet connection is stable!`,
       );
     });
   };
