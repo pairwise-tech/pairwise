@@ -88,6 +88,8 @@ declare const usersCollection: MockMongoCollection;
 /**
  * Switch the database URL if you need to test and run the Database Challenge
  * API server locally:
+ *
+ * TODO: Maybe this should get read from the environment...
  */
 declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
