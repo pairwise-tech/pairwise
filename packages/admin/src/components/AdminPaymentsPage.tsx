@@ -23,7 +23,7 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
         <SummaryText>
           There are currently {paymentRecords.length} total payments.
         </SummaryText>
-        {paymentRecords.map(payment => {
+        {paymentRecords.reverse().map(payment => {
           return (
             <DataCard key={payment.uuid}>
               <KeyValue label="status" value={payment.status} />
