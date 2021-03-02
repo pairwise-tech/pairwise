@@ -159,7 +159,7 @@ export class PaymentsService {
         await this.handlePurchaseCourseRequest({ userEmail: email, courseId });
 
         // Post message to Slack
-        this.slackService.postCoursePurchaseMessage();
+        this.slackService.postCoursePurchaseMessage(email);
 
         // Send payment confirmation email to the user
         this.emailService.sendPaymentConfirmationEmail(email);
