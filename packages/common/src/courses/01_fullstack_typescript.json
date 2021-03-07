@@ -5125,6 +5125,72 @@
           "content": ""
         },
         {
+          "id": "EnwGWEoLN",
+          "type": "typescript",
+          "title": "The COUNT Function",
+          "instructions": "Just like JavaScript \\(and nearly all high\\-level programming languages\\), PostgresSQL has many built\\-in functions to help you work with large amounts of data, and to make working with various data types easier \\(such as strings, numbers, and dates\\). You can also create your own functions\\!\n\nThis is an extremely broad topic, and we encourage you to explore it on your own, as there's too much to cover meaningfully here. This [official Postgres documentation](https://www.postgresql.org/docs/9.2/functions.html) and this [Google search](https://www.google.com/search?q=postgressql%20functions) are good places to start if you're interested.\n\nFor now, we're just going to introduce a single, but very useful, function that will help you with the next few challenges: the `COUNT` function\\. `COUNT` is known as an [aggregate function](https://www.postgresql.org/docs/9.4/tutorial-agg.html), and intuitively, it does just what you think it will: count things\\!\n\nLet's look at the simplest example, counting all rows in a table:\n\n```\nSELECT COUNT(*) FROM table\n\n```\n\nThe `COUNT` function takes a single argument, and when a `*` character is provided, it tells the database engine to count all rows in the given table. This query will return a single column called \"count\" with only a single row containing the row count. Try this out in the editor below by writing a query that counts all the rows in the `movie` table\\.",
+          "testCode": "test(\"The `SQL` value contains a SQL query that counts all the rows in the `movie` table.\", async () => {\n  try {\n    const countQuery = \"SELECT count(*) FROM movie\";\n    const expectedResult = await executePostgresQuery(\n      null,\n      countQuery,\n      countQuery\n    );\n\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n\n    // must have rows to test keys\n    expect(result.rowCount).toBe(1);\n\n    // result should only include the count col\n    const keys = Object.keys(result.rows[0]);\n    expect(keys).toEqual([\"count\"]);\n\n    // counts should match\n    expect(result.rows[0].count).toEqual(expectedResult.rows[0].count);\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const SQL = `\n-- remove this comment and write your query here\n`;\n",
+          "solutionCode": "const SQL = `\nSELECT COUNT(*) FROM movie\n`;\n",
+          "content": ""
+        },
+        {
+          "id": "4LAL2bAsrH",
+          "type": "typescript",
+          "title": "Counting by Column",
+          "instructions": "In addition to counting all rows in a table using `COUNT(*)`, you can also use an pass an expression argument to the function: `COUNT(expression)`. Most commonly this expression is a single column:\n\n```\nSELECT COUNT(column_name) FROM table\n\n```\n\nThis behaves a bit differently in that the returned row count will count all rows in which the value in the provided column is \\_not \\_null. In other words, the following two queries are equivalent:\n\n```none\nSELECT COUNT(column_name) FROM table\n\n-- ^^ is equivalent to:\nSELECT COUNT(*) FROM table WHERE column_a IS NOT null\n\n```\n\nIn the editor below, write a query that counts all rows from the `movie` table in which `rotten_tomatoes_rating` is not null by passing the column name to the `COUNT` function\\.",
+          "testCode": "test(\"The `SQL` value contains a SQL query that counts all the rows in the `movie` table where `rotten_tomatoes_rating` is not null.\", async () => {\n  try {\n    const countQuery = \"SELECT count(rotten_tomatoes_rating) FROM movie\";\n    const expectedResult = await executePostgresQuery(\n      null,\n      countQuery,\n      countQuery\n    );\n\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n\n    // must have rows to test keys\n    expect(result.rowCount).toBe(1);\n\n    // result should only include the count col\n    const keys = Object.keys(result.rows[0]);\n    expect(keys).toEqual([\"count\"]);\n\n    // counts should match\n    expect(result.rows[0].count).toEqual(expectedResult.rows[0].count);\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const SQL = `\n-- remove this comment and write your query here\n`;",
+          "solutionCode": "const SQL = `\nSELECT COUNT(rotten_tomatoes_rating) FROM movie\n`;\n",
+          "content": ""
+        },
+        {
+          "id": "jnPsb7B2q",
+          "type": "typescript",
+          "title": "Counting Distinct Values",
+          "instructions": "Another common use\\-case for the `COUNT` function is to count the number of distinct values in a column. The syntax looks like this:\n\n```\nSELECT COUNT(DISTINCT column_name) FROM table\n\n```\n\nIn our `movie` table, we might be interested in counting how many distinct movie titles are in the database – is it the same number as there are rows in the table, or are there any movies with the same name?\n\nTry writing a query to count the distinct titles in the `movie` table\\. Once you've passed the challenge, try counting all the rows again and see if the numbers match\\!",
+          "testCode": "test(\"The `SQL` value contains a SQL query that counts all the distinct tiles in `movie` table.\", async () => {\n  try {\n    const countQuery = \"SELECT count(distinct title) FROM movie\";\n    const expectedResult = await executePostgresQuery(\n      null,\n      countQuery,\n      countQuery\n    );\n\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n\n    // must have rows to test keys\n    expect(result.rowCount).toBe(1);\n\n    // result should only include the count col\n    const keys = Object.keys(result.rows[0]);\n    expect(keys).toEqual([\"count\"]);\n\n    // counts should match\n    expect(result.rows[0].count).toEqual(expectedResult.rows[0].count);\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const SQL = `\n-- remove this comment and write your query here\n`;\n",
+          "solutionCode": "const SQL = `\nSELECT COUNT(DISTINCT title) FROM movie\n`;\n",
+          "content": ""
+        },
+        {
+          "id": "sinu3XtS9",
+          "type": "typescript",
+          "title": "The GROUP BY Clause",
+          "instructions": "Now that you're comfortable with the `COUNT` function, let's look at another common and very useful clause which is very powerful for working with aggregated data \\(like the result of a count function\\): the `GROUP BY` clause\\.\n\n`GROUP BY` lets us group identical data and is almost always used with some aggregate function to gain some additional insight about that data. A very common use\\-case is to count all the occurrences of a particular value in a single query. For example, we've seen that we can use `COUNT` to count all the rows in a table, and by adding a `WHERE` clause, we can count all rows only when a particular condition is satisfied. To count all rows where the genre is \"Comedy\" we can use:\n\n```\nSELECT COUNT(*) FROM movie WHERE genre = 'Comedy'\n\n```\n\nBut what if we want to count the number of films in each genre in a single query? This is where `GROUP BY` shines\\. An example might look like this:\n\n```\nSELECT column_name, COUNT(column_name)\nFROM table\nGROUP BY column_name\n\n```\n\n> ++NOTE:++ In more complicated queries that may contain `WHERE` and `ORDER BY` clauses, `GROUP BY` must always come after `WHERE` and and before `ORDER BY`.\n\nTry copying the above example into the editor below, but instead of `column_name` use `genre`. The result of this query should have two columns: genre and count, where count represents the number of films in each genre. In other words, the query is grouping our data by each identical genre and providing a count of the number of rows that have been grouped together.\n\nHopefully this all makes sense, but don't worry if it doesn't just yet – especially as queries get more complex, `GROUP BY` can be a difficult concept to wrap your head around at first, and a deeper understanding will come with experience.",
+          "testCode": "test(\"The `SQL` value contains a SQL query that counts all the rows in the `movie` table.\", async () => {\n  try {\n    const query = `SELECT genre, COUNT(genre) FROM movie GROUP BY genre`;\n    const expectedResult = await executePostgresQuery(null, query, query);\n\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n\n    // must have rows to test keys\n    expect(result.rowCount).toBeGreaterThan(0);\n\n    // result should only include these cols\n    const keys = Object.keys(result.rows[0]);\n    expect(keys.length).toEqual(2);\n    expect(keys).toContain(\"count\");\n    expect(keys).toContain(\"genre\");\n\n    // counts should match\n    expect(result.rows).toEqual(expectedResult.rows);\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const SQL = `\n-- remove this comment and write your query here\n`;\n",
+          "solutionCode": "const SQL = `\nSELECT genre, COUNT(genre)\nFROM movie\nGROUP BY genre\n`;\n",
+          "content": ""
+        },
+        {
+          "id": "OfmIBiktX",
+          "type": "typescript",
+          "title": "Combining GROUP BY with ORDER BY",
+          "instructions": "Our query from the last challenge can be improved, as the order of the results isn't particularly useful. Let's try to fix that by combining `ORDER BY` with the same query from the previous challenge.\n\nWhen using `ORDER BY` in queries that have functions in their `SELECT` list, you have a few choices. Let's try to order our result by count descending. To do this you can re\\-write the function in the `ORDER BY` clause \\(e.g. `ORDER BY COUNT(genre) DESC`\\) or refer to the position the function is in in the `SELECT` list \\(with 1 being the first position\\). In our example, `genre` is in position 1 and `COUNT(genre)` is in position 2 \\(e.g. `ORDER BY 2 DESC`\\). Give it a try\\!",
+          "testCode": "test(\"The `SQL` value contains a SQL query that counts all the rows in the `movie` table.\", async () => {\n  try {\n    const query = `SELECT genre, COUNT(genre) FROM movie GROUP BY genre ORDER BY 2 DESC`;\n    const expectedResult = await executePostgresQuery(null, query, query);\n\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n\n    // must have rows to test keys\n    expect(result.rowCount).toBeGreaterThan(0);\n\n    // result should only include these cols\n    const keys = Object.keys(result.rows[0]);\n    expect(keys.length).toEqual(2);\n    expect(keys).toContain(\"count\");\n    expect(keys).toContain(\"genre\");\n\n    // counts should match\n    expect(result.rows).toEqual(expectedResult.rows);\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const SQL = `\nSELECT genre, COUNT(genre)\nFROM movie\nGROUP BY genre\n-- add an ORDER BY clause here\n`;\n",
+          "solutionCode": "const SQL = `\nSELECT genre, COUNT(genre)\nFROM movie\nGROUP BY genre\nORDER BY 2 DESC\n`;\n",
+          "content": ""
+        },
+        {
+          "id": "XYliURkbb",
+          "type": "typescript",
+          "title": "More Powerful GROUP BY Queries",
+          "instructions": "Great\\! In the last couple of challenges, we essentially created a report that tells us how many movies we have in each genre in our `movie` table and have presented it in a meaningful way. In our case, the `movie` table is static and will not grow over time, but this is not the norm – imagine how useful this could be as a real database you're working with continues to grow?\n\nLearning `GROUP BY` well can help you grow from knowing how to write some basic `SELECT` statements that help you understand your data a bit better to being able to write powerful queries that return meaningful reports that help you \\(and your customers or business stakeholders\\) gain some deeper insights into your data.\n\nOur last example is still pretty basic, and while we won't cover it here, we wanted to show a more complex query using `GROUP BY` and some additional built\\-in functions to give you an idea of the possibilities. The query in the editor below produces a much cleaner report by using aliases to give our columns more meaningful names, and is more complex, grouping results by year as well as genre for a specific subset of years, and ordering each grouping by genre, year, and max rating.\n\nTry modifying the query to produce different results, and if you see something you don't recognize, we encourage you to look it up\\! This course provides a good introduction, but most learning you'll do on any topic will come from experience and situations like this – it is not at all uncommon to come across something new while you're on the job, even as a seasoned, professional software engineer. What's important is what you do when that happens. Good research skills will go a long way towards making you a better engineer\\!",
+          "testCode": "test(\"Try experimenting with the query in the editor to produce different results!\", async () => {\n  try {\n    const result = await executePostgresQuery(null, SQL, SQL);\n    console.log(result);\n  } catch (err) {\n    throw err;\n  }\n});\n",
+          "videoUrl": "",
+          "starterCode": "const SQL = `\nSELECT\n    genre as \"Genre\"\n  , year as \"Year\"\n  , count(genre) as \"Number of Films\"\n  , concat(cast(max(rotten_tomatoes_rating) as text), '%')\n      as \"Best IMDB Rating\"\nFROM movie\nWHERE year >= '2005' AND year <= '2010'\nGROUP BY genre, year\nORDER BY genre, year, 3 desc\n`;\n",
+          "solutionCode": "",
+          "content": ""
+        },
+        {
           "id": "ogGvBc5sl",
           "type": "typescript",
           "title": "The SQL INSERT INTO Statement",
