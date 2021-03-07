@@ -5191,6 +5191,17 @@
           "content": ""
         },
         {
+          "id": "35$K4omI5",
+          "type": "media",
+          "title": "Inserting, Updating, and Deleting",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "So far, we've only learned how to write `SELECT` queries from existing data. But what about modifying that data, or deleting it? And what about inserting new rows? In the following challenges, we'll take a look at how to write queries for these important use\\-cases.\n\nOnward\\!"
+        },
+        {
           "id": "ogGvBc5sl",
           "type": "typescript",
           "title": "The SQL INSERT INTO Statement",
