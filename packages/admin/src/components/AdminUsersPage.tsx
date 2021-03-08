@@ -33,7 +33,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
         <SummaryText>
           There are currently {users.length} total registered users.
         </SummaryText>
-        {users && users.map(this.renderUsersList)}
+        {users && users.reverse().map(this.renderUsersList)}
       </PageContainer>
     );
   }

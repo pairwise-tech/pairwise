@@ -27,7 +27,7 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
           There are a total of {feedbackRecords.length} feedback records
           submitted.
         </SummaryText>
-        {feedbackRecords.map(feedback => {
+        {feedbackRecords.reverse().map(feedback => {
           const { user } = feedback;
           const email = user?.email;
           return (

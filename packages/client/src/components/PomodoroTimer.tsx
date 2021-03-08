@@ -161,6 +161,8 @@ export class PomodoroTimer extends React.Component<IProps, IState> {
               },
             );
           } else {
+            // Cancel the currently running timer first before restarting
+            this.cancelTimer();
             this.setState({ sessionCount: sessionCount + 1 }, this.startTimer);
           }
         }

@@ -150,7 +150,7 @@ const loginByEmailEpic: EpicSignature = (action$, _, deps) => {
       const result = await deps.api.loginByEmail(email);
       if (result.value) {
         deps.toaster.success(
-          "Email sent! Please check your inbox and follow the instructions.",
+          "Email sent! If you don't see it, you may need to check your spam or junk folder.",
         );
         return Actions.loginByEmailSuccess();
       } else {
