@@ -89,9 +89,11 @@ declare const usersCollection: MockMongoCollection;
  * Switch the database URL if you need to test and run the Database Challenge
  * API server locally:
  *
- * TODO: Maybe this should get read from the environment...
+ * TODO: It might be nice if this DATABASE_CHALLENGE_API was an environment
+ * variable, but this is a little tricky because these files are built
+ * independently and then just included directly as JS in runtime.
  */
-declare const DATABASE_CHALLENGE_API = "http://localhost:5000";
+declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */
