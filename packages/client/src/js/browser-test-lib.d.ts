@@ -91,7 +91,7 @@ declare const usersCollection: MockMongoCollection;
  *
  * TODO: Maybe this should get read from the environment...
  */
-declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+declare const DATABASE_CHALLENGE_API = "http://localhost:5000";
 /**
  * Helper for SQL code challenges.
  */

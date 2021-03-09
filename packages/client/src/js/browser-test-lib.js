@@ -201,8 +201,8 @@ var usersCollection = new MockMongoCollection();
  *
  * TODO: Maybe this should get read from the environment...
  */
-// const DATABASE_CHALLENGE_API = "http://localhost:5000";
-var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+var DATABASE_CHALLENGE_API = "http://localhost:5000";
+// const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */
