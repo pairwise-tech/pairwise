@@ -92,7 +92,28 @@ const DANGEROUSLY_SKIP_CHALLENGE = new Set([
   // *************************************************************************
   // Database challenges, which rely on the external Database Challenge API:
   "2W$NOg9P@",
-  "wf9ggEKbq",
+  "a06u3l6bq",
+  "LvJ5cydPJ",
+  "uV1$K76hF",
+  "exRKTrTQ53",
+  "DfnyaGCiN",
+  "Zp3SXuzsQ",
+  "HEVmqrnq9O",
+  "JEKexIggwe",
+  "S0x08sXPyb",
+  "R1df1YKNu",
+  "@y2Fske3k",
+  "1UZ0kAsQG",
+  "LS11pYav1",
+  "EnwGWEoLN",
+  "4LAL2bAsrH",
+  "jnPsb7B2q",
+  "sinu3XtS9",
+  "OfmIBiktX",
+  "XYliURkbb",
+  "ogGvBc5sl",
+  "Q6wrmX6TN",
+  "LzZJLUJI0",
   // *************************************************************************
   // React Native challenges:
   "zKZu8XMJz", // Some issue checking CSS styles

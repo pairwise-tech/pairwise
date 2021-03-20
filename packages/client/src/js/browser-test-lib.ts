@@ -212,6 +212,10 @@ const usersCollection = new MockMongoCollection();
 /**
  * Switch the database URL if you need to test and run the Database Challenge
  * API server locally:
+ *
+ * TODO: It might be nice if this DATABASE_CHALLENGE_API was an environment
+ * variable, but this is a little tricky because these files are built
+ * independently and then just included directly as JS in runtime.
  */
 
 // const DATABASE_CHALLENGE_API = "http://localhost:5000";
