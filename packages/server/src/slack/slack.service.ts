@@ -160,8 +160,9 @@ export class SlackService {
     config,
   }: SlackAccountCreationMessageData) {
     if (accountCreated) {
-      const name = profile.displayName;
-      const nameSnippet = name ? ` for *${profile.displayName}* ` : " ";
+      // Display user profile name or default to email
+      const moniker = profile.displayName || profile.email;
+      const nameSnippet = moniker ? ` for *${profile.displayName}* ` : " ";
       const message = `New account created${nameSnippet}using ${signinStrategy} strategy :tada:`;
       await this.postMessageToChannel(message, {
         channel: "production",
