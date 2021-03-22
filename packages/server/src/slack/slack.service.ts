@@ -162,7 +162,7 @@ export class SlackService {
     if (accountCreated) {
       // Display user profile name or default to email
       const moniker = profile.displayName || profile.email;
-      const nameSnippet = moniker ? ` for *${profile.displayName}* ` : " ";
+      const nameSnippet = moniker ? ` for *${moniker}* ` : " ";
       const message = `New account created${nameSnippet}using ${signinStrategy} strategy :tada:`;
       await this.postMessageToChannel(message, {
         channel: "production",
