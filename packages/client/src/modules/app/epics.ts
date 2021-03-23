@@ -145,15 +145,19 @@ const appInitializationFailedEpic: EpicSignature = action$ => {
       // we don't want to report request failures as errors.
       return action.payload.status !== 0;
     }),
-    tap(action => {
-      captureSentryException(
-        new Error(
-          `App initialization failed! What we know: ${JSON.stringify(
-            action.payload,
-          )}`,
-        ),
-      );
-    }),
+    // This would often throw with the error:
+    // App initialization failed! What we know: {"status":400,"statusText":"Request Failed","message":"Request Failed"}
+    // I'm not sure why this would happen. Suppressing the Sentry reports for now.
+    // This could be re-enabled and debugged in the future if necessary.
+    // tap(action => {
+    //   captureSentryException(
+    //     new Error(
+    //       `App initialization failed! What we know: ${JSON.stringify(
+    //         action.payload,
+    //       )}`,
+    //     ),
+    //   );
+    // }),
     mapTo(Actions.appInitializationFailed()),
   );
 };

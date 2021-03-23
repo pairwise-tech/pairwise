@@ -482,35 +482,63 @@ class ContentEditor extends React.Component<Props> {
   render() {
     const { history, plugins = [], challengeMap, ...props } = this.props;
     return (
-      <EditorExternalStyles>
-        <RichMarkdownEditor
-          plugins={[...plugins, markdownShortcuts]}
-          theme={editorTheme}
-          onSearchLink={this.getSearchLinks}
-          uploadImage={this.handleFileUpload}
-          onShowToast={message => {
-            toaster.toast.show({
-              message,
-            });
-          }}
-          onClickLink={href => {
-            const scrollTarget = getScrollTarget(href);
-
-            if (scrollTarget) {
-              const el = document.getElementById(scrollTarget);
-              el?.scrollIntoView({
-                behavior: "smooth",
+      <ErrorBoundary>
+        <EditorExternalStyles>
+          <RichMarkdownEditor
+            plugins={[...plugins, markdownShortcuts]}
+            theme={editorTheme}
+            onSearchLink={this.getSearchLinks}
+            uploadImage={this.handleFileUpload}
+            onShowToast={message => {
+              toaster.toast.show({
+                message,
               });
-            } else if (isInternalLink(href, challengeMap)) {
-              history.push(href);
-            } else {
-              window.open(href, "_blank");
-            }
-          }}
-          {...props}
-        />
-      </EditorExternalStyles>
+            }}
+            onClickLink={href => {
+              const scrollTarget = getScrollTarget(href);
+
+              if (scrollTarget) {
+                const el = document.getElementById(scrollTarget);
+                el?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              } else if (isInternalLink(href, challengeMap)) {
+                history.push(href);
+              } else {
+                window.open(href, "_blank");
+              }
+            }}
+            {...props}
+          />
+        </EditorExternalStyles>
+      </ErrorBoundary>
     );
+  }
+}
+
+/**
+ * An error boundary to prevent errors from propagating up with being
+ * caught from the lazy loaded RichMarkdownEditor. This does not do
+ * anything except suppress the thrown error.
+ */
+class ErrorBoundary extends React.Component {
+  constructor(props: any) {
+    super(props);
+
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: any) {
+    // Update state with the error condition
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    // You can also log the error to an error reporting service...
+  }
+
+  render() {
+    return this.props.children;
   }
 }
 
