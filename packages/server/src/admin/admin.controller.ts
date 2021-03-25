@@ -9,7 +9,6 @@ import {
   Body,
   Delete,
   InternalServerErrorException,
-  Res,
 } from "@nestjs/common";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthenticatedRequest } from "../types";
@@ -24,7 +23,6 @@ import { UserService } from "../user/user.service";
 import { PaymentsService } from "../payments/payments.service";
 import { ProgressService } from "../progress/progress.service";
 import { ContentService } from "../content/content.service";
-import { Response } from "@sentry/node";
 import { createInverseChallengeMapping } from "@pairwise/common";
 import ENV from "../tools/server-env";
 import { captureSentryException } from "../tools/sentry-utils";

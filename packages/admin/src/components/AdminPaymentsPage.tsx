@@ -8,21 +8,33 @@ import {
   KeyValue,
   SummaryText,
 } from "./AdminComponents";
+import { PaymentRecord } from "../modules/payments/store";
 
 /** ===========================================================================
- * Home Component
+ * AdminPaymentsPage Component
  * ============================================================================
  */
 
 class AdminPaymentsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const { paymentRecords } = this.props;
+    const totalUserPayments = estimateTotalRevenue(paymentRecords);
+    const COURSE_PRICE = 50;
+    const totalRevenue = totalUserPayments * COURSE_PRICE;
     return (
       <PageContainer>
         <Title>Course Payments</Title>
-        <SummaryText>
-          There are currently {paymentRecords.length} total payments.
-        </SummaryText>
+        {totalUserPayments > 0 ? (
+          <SummaryText>
+            There are currently {totalUserPayments} total user payments, for a
+            total of ${totalRevenue} revenue.
+          </SummaryText>
+        ) : (
+          <SummaryText>
+            There are currently {paymentRecords.length} total payments.
+          </SummaryText>
+        )}
+
         {paymentRecords.reverse().map(payment => {
           return (
             <DataCard key={payment.uuid}>
@@ -34,7 +46,7 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
                 label="datePaid"
                 value={new Date(payment.datePaid).toDateString()}
               />
-              <KeyValue label="uuid" value={payment.uuid} code allowCopy />
+              <KeyValue label="uuid (payment)" value={payment.uuid} />
               <KeyValue label="extraData" value={payment.extraData} />
               <KeyValue
                 label="createdAt"
@@ -58,6 +70,25 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
  */
 
 const Title = styled.h2``;
+
+/**
+ * Helper to estimate the total collected course revenue.
+ */
+const estimateTotalRevenue = (payments: PaymentRecord[]) => {
+  let total = 0;
+
+  for (const x of payments) {
+    if (x.paymentType === "USER_PAID") {
+      total++;
+    }
+  }
+
+  // Decrement the total by 1
+  // (the first real course payment was made as a test)
+  total--;
+
+  return total;
+};
 
 /** ===========================================================================
  * Props

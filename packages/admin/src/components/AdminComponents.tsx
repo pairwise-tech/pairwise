@@ -94,6 +94,10 @@ export const KeyValueComponent = ({
   setChallengeDetailId,
 }: KeyValueComponentProps) => {
   const handleCopy = () => {
+    if (typeof value !== "string") {
+      return;
+    }
+
     if (isChallengeId) {
       setChallengeDetailId(value);
     } else if (allowCopy) {
@@ -117,7 +121,7 @@ export const KeyValueComponent = ({
           )
         ) : (
           <ValueContainer copy={canClick.toString()} onClick={handleCopy}>
-            {value ? (
+            {typeof value === "string" ? (
               renderAsMarkdown ? (
                 <Markdown source={value} />
               ) : (
@@ -139,7 +143,7 @@ interface KeyValueProps {
   allowCopy?: boolean;
   isChallengeId?: boolean;
   renderAsMarkdown?: boolean;
-  value: Nullable<string>;
+  value: number | string | null | undefined;
 }
 
 const dispatchProps = {

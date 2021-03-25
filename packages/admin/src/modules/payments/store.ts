@@ -15,7 +15,7 @@ export interface PaymentRecord extends Payment {
 }
 
 export interface State {
-  paymentRecords: any[];
+  paymentRecords: PaymentRecord[];
 }
 
 const initialState = {
