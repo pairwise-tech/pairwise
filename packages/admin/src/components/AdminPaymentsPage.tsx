@@ -27,7 +27,7 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
         {totalUserPayments > 0 ? (
           <SummaryText>
             There are currently {totalUserPayments} total user payments, for a
-            total of ${totalRevenue} revenue.
+            total of ${totalRevenue.toFixed(2)} in course revenue.
           </SummaryText>
         ) : (
           <SummaryText>
