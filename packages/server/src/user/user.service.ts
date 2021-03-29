@@ -367,10 +367,19 @@ export class UserService {
     // Update all users with a lowercase version of their email
     for (const user of users) {
       const { uuid, email } = user;
-      const newEmail = email.toLowerCase();
-      console.log(`-> Updating emails: ${email} to ${newEmail}`);
-      await this.updateUserEmail(newEmail, uuid);
+      // Avoid null email cases
+      if (email) {
+        const newEmail = email.toLowerCase();
+        if (email !== newEmail) {
+          console.log(`-> Updating emails: ${email} to ${newEmail}`);
+          await this.updateUserEmail(newEmail, uuid);
+        } else {
+          console.log(`-> Skipping ${email}`);
+        }
+      }
     }
+
+    return "OK";
   }
 
   // Standardize emails to lower case to avoid duplicates based on
