@@ -73,8 +73,7 @@ export class UserService {
       .getMany();
   }
 
-  public async adminDeleteUserByEmail(emailString: string) {
-    const email = this.standardizeEmail(emailString);
+  public async adminDeleteUserByEmail(email: string) {
     const user = await this.findUserByEmail(email);
 
     if (!user) {
@@ -204,7 +203,7 @@ export class UserService {
     signinStrategy: SigninStrategy,
   ) {
     // Standardize profile email if it exists
-    const email = !!profile.email
+    const email = profile.email
       ? this.standardizeEmail(profile.email)
       : undefined;
 
@@ -360,26 +359,6 @@ export class UserService {
     );
 
     return { progress };
-  }
-
-  public async adminEmailMigrationMethod() {
-    const users = await this.adminGetAllUsers();
-    // Update all users with a lowercase version of their email
-    for (const user of users) {
-      const { uuid, email } = user;
-      // Avoid null email cases
-      if (email) {
-        const newEmail = email.toLowerCase();
-        if (email !== newEmail) {
-          console.log(`-> Updating emails: ${email} to ${newEmail}`);
-          await this.updateUserEmail(newEmail, uuid);
-        } else {
-          console.log(`-> Skipping ${email}`);
-        }
-      }
-    }
-
-    return "OK";
   }
 
   // Standardize emails to lower case to avoid duplicates based on

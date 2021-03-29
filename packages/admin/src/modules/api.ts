@@ -286,19 +286,6 @@ class Api extends BaseApiClass {
       );
     });
   };
-
-  emailMigration = async () => {
-    return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.post<PullRequestContext[]>(
-        `${HOST}/admin/migration-backdoor`,
-        undefined,
-        {
-          headers,
-        },
-      );
-    });
-  };
 }
 
 /** ===========================================================================

@@ -38,7 +38,6 @@ class AdminStatsPage extends React.Component<IProps, {}> {
         <Row>
           <h2>Current Stats:</h2>
           <Button onClick={this.props.refreshStats}>Refresh Stats</Button>
-          <Button onClick={this.props.emailMigration}>Email Migration</Button>
         </Row>
         {loading ? (
           <p style={{ color: COLORS.GRAY_TEXT }}>Loading...</p>
@@ -174,7 +173,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   refreshStats: Modules.actions.stats.refreshStats,
-  emailMigration: Modules.actions.users.emailMigration,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

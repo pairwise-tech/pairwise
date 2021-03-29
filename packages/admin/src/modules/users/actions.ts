@@ -11,8 +11,6 @@ enum ActionTypesEnum {
   FETCH_USERS = "FETCH_USERS",
   FETCH_USERS_SUCCESS = "FETCH_USERS_SUCCESS",
   FETCH_USERS_FAILURE = "FETCH_USERS_FAILURE",
-
-  EMAIL_MIGRATION = "EMAIL_MIGRATION",
 }
 
 /** ===========================================================================
@@ -29,5 +27,3 @@ export const fetchUsersSuccess = createAction(
 export const fetchUsersFailure = createAction(
   ActionTypesEnum.FETCH_USERS_FAILURE,
 )<HttpResponseError>();
-
-export const emailMigration = createAction(ActionTypesEnum.EMAIL_MIGRATION)();

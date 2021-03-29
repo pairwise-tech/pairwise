@@ -27,7 +27,6 @@ import { ContentService } from "../content/content.service";
 import { createInverseChallengeMapping } from "@pairwise/common";
 import ENV from "../tools/server-env";
 import { captureSentryException } from "../tools/sentry-utils";
-import { SUCCESS_CODES } from "../tools/constants";
 
 @Controller("admin")
 export class AdminController {
@@ -249,13 +248,6 @@ export class AdminController {
   @Get("/progress")
   public retrieveLiveProgressRecords() {
     return this.progressService.retrieveProgressRecords();
-  }
-
-  @UseGuards(AdminAuthGuard)
-  @Post("/migration-backdoor")
-  public async adminBackdoorAPI() {
-    await this.userService.adminEmailMigrationMethod();
-    return SUCCESS_CODES.OK;
   }
 
   // Log the error to Slack and throw an exception in response
