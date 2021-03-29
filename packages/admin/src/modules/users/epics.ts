@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap } from "rxjs/operators";
+import { filter, ignoreElements, map, mergeMap } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import API from "modules/api";
 import { EpicSignature } from "../root";
@@ -30,9 +30,18 @@ const fetchUsersEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
+const emailMigrationEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.emailMigration)),
+    mergeMap(API.emailMigration),
+    map(() => deps.toaster.success("Success!")),
+    ignoreElements(),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
  */
 
-export default combineEpics(fetchUsersEpic);
+export default combineEpics(fetchUsersEpic, emailMigrationEpic);

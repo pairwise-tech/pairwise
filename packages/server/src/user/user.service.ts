@@ -86,6 +86,11 @@ export class UserService {
     return SUCCESS_CODES.OK;
   }
 
+  public async adminDeleteUserByUuid(uuid: string) {
+    await this.userRepository.delete({ uuid });
+    return SUCCESS_CODES.OK;
+  }
+
   public async findUserByEmail(email: string) {
     const user = await this.userRepository.findOne({ email });
     return this.processUserEntity(user);
@@ -345,5 +350,16 @@ export class UserService {
     );
 
     return { progress };
+  }
+
+  public async adminEmailMigrationMethod() {
+    const users = await this.adminGetAllUsers();
+    // Update all users with a lowercase version of their email
+    for (const user of users) {
+      const { uuid, email } = user;
+      const newEmail = email.toLowerCase();
+      console.log(`-> Updating emails: ${email} to ${newEmail}`);
+      await this.updateUserEmail(newEmail, uuid);
+    }
   }
 }

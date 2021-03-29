@@ -22,12 +22,14 @@ const SERVER_URL = process.env.SERVER_URL || "http://localhost:9000";
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "local_admin_token";
 const COURSE_ID = process.env.COURSE_ID;
 const USER_EMAIL = process.env.USER_EMAIL;
+const USER_UUID = process.env.USER_UUID;
 const SCRIPT_ACTION = process.env.SCRIPT_ACTION;
 
 console.log(`\n- Running admin script! Received environment config:\n`);
 console.log(`- SCRIPT_ACTION: ${SCRIPT_ACTION}`);
 console.log(`- COURSE_ID: ${COURSE_ID}`);
 console.log(`- USER_EMAIL: ${USER_EMAIL}`);
+console.log(`- USER_UUID: ${USER_UUID}`);
 console.log(`- SERVER_URL: ${SERVER_URL}`);
 console.log(`- ADMIN_TOKEN: ${ADMIN_TOKEN.slice(0, 25)}...`);
 console.log(`\nRunning script!\n`);
@@ -38,14 +40,16 @@ const PURCHASE = "PURCHASE";
 const REFUND = "REFUND";
 const GET_USERS = "GET_USERS";
 const GET_USER = "GET_USER";
-const DELETE_USER = "DELETE_USER";
+const DELETE_USER_BY_EMAIL = "DELETE_USER_BY_EMAIL";
+const DELETE_USER_BY_UUID = "DELETE_USER_BY_UUID";
 const VALID_ACTIONS = new Set([
   TEST,
   PURCHASE,
   REFUND,
   GET_USERS,
   GET_USER,
-  DELETE_USER,
+  DELETE_USER_BY_EMAIL,
+  DELETE_USER_BY_UUID,
 ]);
 
 const validateActionType = actionType => {
@@ -350,17 +354,35 @@ const getUserByEmail = async email => {
   }
 };
 
-// Fully delete a user account
+// Fully delete a user account by email
 const deleteUserByEmail = async userEmail => {
   try {
     if (!userEmail) {
       throw new Error(
-        "Must provide USER_EMAIL environment variables to delete a user!",
+        "Must provide USER_EMAIL environment variables to delete a user by email!",
       );
     }
 
     log.start();
     const body = { userEmail };
+    const result = await axios.post(DELETE_USER_URL, body, RequestHeaders);
+    log.finish(result.data);
+  } catch (err) {
+    log.fail(err);
+  }
+};
+
+// Fully delete a user account by uuid
+const deleteUserByUuid = async uuid => {
+  try {
+    if (!userEmail) {
+      throw new Error(
+        "Must provide USER_UUID environment variables to delete a user by uuid!",
+      );
+    }
+
+    log.start();
+    const body = { uuid };
     const result = await axios.post(DELETE_USER_URL, body, RequestHeaders);
     log.finish(result.data);
   } catch (err) {
@@ -417,8 +439,10 @@ const runScript = () => {
       return getUserByEmail(USER_EMAIL);
     case GET_USERS:
       return getAllUsers();
-    case DELETE_USER:
+    case DELETE_USER_BY_EMAIL:
       return deleteUserByEmail(USER_EMAIL);
+    case DELETE_USER_BY_UUID:
+      return deleteUserByUuid(USER_UUID);
     case PURCHASE:
       return purchaseCourseForUserByAdmin(USER_EMAIL, COURSE_ID);
     case REFUND:

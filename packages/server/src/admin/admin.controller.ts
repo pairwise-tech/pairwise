@@ -9,6 +9,7 @@ import {
   Body,
   Delete,
   InternalServerErrorException,
+  BadRequestException,
 } from "@nestjs/common";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthenticatedRequest } from "../types";
@@ -218,12 +219,26 @@ export class AdminController {
   @Post("/users/delete")
   async deleteUser(@Body() body, @Request() req: AuthenticatedRequest) {
     const adminUserEmail = req.user.profile.email;
-    const { userEmail } = body;
+
+    // Delete supports userEmail or uuid to identify a user for deletion.
+    const { userEmail, uuid } = body;
+
+    if (userEmail && uuid) {
+      throw new BadRequestException(
+        "Please supply only one user identifying parameter at a time.",
+      );
+    }
 
     try {
-      const result = await this.userService.adminDeleteUserByEmail(userEmail);
-      this.slackService.postAdminActionAwarenessMessage({ adminUserEmail });
-      return result;
+      if (userEmail) {
+        const result = await this.userService.adminDeleteUserByEmail(userEmail);
+        this.slackService.postAdminActionAwarenessMessage({ adminUserEmail });
+        return result;
+      } else if (uuid) {
+        const result = await this.userService.adminDeleteUserByUuid(uuid);
+        this.slackService.postAdminActionAwarenessMessage({ adminUserEmail });
+        return result;
+      }
     } catch (err) {
       this.handleError(err, { adminUserEmail });
     }
@@ -233,6 +248,12 @@ export class AdminController {
   @Get("/progress")
   public retrieveLiveProgressRecords() {
     return this.progressService.retrieveProgressRecords();
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Post("/migration-backdoor")
+  public adminBackdoorAPI() {
+    return this.userService.adminEmailMigrationMethod();
   }
 
   // Log the error to Slack and throw an exception in response
