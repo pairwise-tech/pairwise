@@ -57,7 +57,8 @@ export class UserService {
   ) {}
 
   // Return one user for the admin API
-  public async adminGetUser(email: string) {
+  public async adminGetUser(emailString: string) {
+    const email = this.standardizeEmail(emailString);
     return this.findUserByEmailGetFullProfile(email);
   }
 
@@ -72,7 +73,8 @@ export class UserService {
       .getMany();
   }
 
-  public async adminDeleteUserByEmail(email: string) {
+  public async adminDeleteUserByEmail(emailString: string) {
+    const email = this.standardizeEmail(emailString);
     const user = await this.findUserByEmail(email);
 
     if (!user) {
@@ -91,7 +93,8 @@ export class UserService {
     return SUCCESS_CODES.OK;
   }
 
-  public async findUserByEmail(email: string) {
+  public async findUserByEmail(emailString: string) {
+    const email = this.standardizeEmail(emailString);
     const user = await this.userRepository.findOne({ email });
     return this.processUserEntity(user);
   }
@@ -164,7 +167,8 @@ export class UserService {
    * email address! This is currently used only by the Admin Service
    * to perform Admin actions.
    */
-  public async findUserByEmailGetFullProfile(email: string) {
+  public async findUserByEmailGetFullProfile(emailString: string) {
+    const email = this.standardizeEmail(emailString);
     const user = await this.userRepository.findOne({ email });
 
     if (!user) {
@@ -199,8 +203,14 @@ export class UserService {
     profile: GenericUserProfile,
     signinStrategy: SigninStrategy,
   ) {
+    // Standardize profile email if it exists
+    const email = !!profile.email
+      ? this.standardizeEmail(profile.email)
+      : undefined;
+
     const result = await this.userRepository.insert({
       ...profile,
+      email,
       settings: JSON.stringify({}),
       lastActiveChallengeIds: JSON.stringify({}),
     });
@@ -216,8 +226,8 @@ export class UserService {
     });
 
     // Send Welcome email, if the user has an email address
-    if (profile.email) {
-      this.emailService.sendWelcomeEmail(profile.email);
+    if (email) {
+      this.emailService.sendWelcomeEmail(email);
     }
 
     return user;
@@ -361,5 +371,11 @@ export class UserService {
       console.log(`-> Updating emails: ${email} to ${newEmail}`);
       await this.updateUserEmail(newEmail, uuid);
     }
+  }
+
+  // Standardize emails to lower case to avoid duplicates based on
+  // inconsistent casing
+  private standardizeEmail(emailString) {
+    return emailString.toLowerCase();
   }
 }

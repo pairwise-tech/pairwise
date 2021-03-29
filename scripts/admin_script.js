@@ -375,7 +375,7 @@ const deleteUserByEmail = async userEmail => {
 // Fully delete a user account by uuid
 const deleteUserByUuid = async uuid => {
   try {
-    if (!userEmail) {
+    if (!uuid) {
       throw new Error(
         "Must provide USER_UUID environment variables to delete a user by uuid!",
       );

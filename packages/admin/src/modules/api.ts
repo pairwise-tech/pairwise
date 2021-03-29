@@ -292,6 +292,7 @@ class Api extends BaseApiClass {
       const { headers } = this.getRequestHeaders();
       return axios.post<PullRequestContext[]>(
         `${HOST}/admin/migration-backdoor`,
+        undefined,
         {
           headers,
         },
