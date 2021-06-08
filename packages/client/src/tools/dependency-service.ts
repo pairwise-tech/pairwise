@@ -14,11 +14,14 @@ interface Dependency {
 type DependencyCache = Map<string, Dependency>;
 
 interface SourceLibraryMap {
-  [key: string]: Source;
+  [key: string]: Module_Source;
 }
 
-type SourceFn = () => string;
-type Source = string | SourceFn;
+interface ModuleDefinition {
+  default: string;
+}
+
+type Module_Source = string | ModuleDefinition;
 
 const IS_TEST = process.env.NODE_ENV === "test";
 
@@ -27,7 +30,7 @@ const IS_TEST = process.env.NODE_ENV === "test";
  * ============================================================================
  */
 
-let ReactNativeWebSourceUrl: Source = "";
+let ReactNativeWebSourceUrl: Module_Source = "";
 
 /**
  * Not very ideal, but Jest has some issues with the file-loader! Fine!
@@ -38,7 +41,7 @@ if (IS_TEST) {
   const lib = fs.readFileSync("src/js/react-native-web-lib.js", {
     encoding: "utf8",
   });
-  ReactNativeWebSourceUrl = () => lib;
+  ReactNativeWebSourceUrl = { default: lib };
 } else {
   /**
    * NOTE: This source file is a Webpack-bundled version of the react-native-web
@@ -52,7 +55,7 @@ if (IS_TEST) {
    */
   // eslint-disable-next-line
   // @ts-ignore
-  ReactNativeWebSourceUrl = require("file-loader!../js/react-native-web-lib.js");
+  ReactNativeWebSourceUrl = require("!!raw-loader!../js/react-native-web-lib.js");
 }
 
 /**
@@ -99,16 +102,16 @@ class DependencyCacheClass {
           const resolver = this.sourceLibraries.get(packageName);
           let lib = "";
 
-          if (typeof resolver === "function") {
-            lib = resolver();
-          } else {
+          if (typeof resolver === "string") {
             lib = await this.fetchResource(resolver);
+          } else {
+            lib = resolver.default;
           }
 
           this.dependencyCache.set(packageName, { source: lib });
           return lib;
         } catch (err) {
-          const msg = `[ERROR]: Failed to fetch source for ${packageName}. Error: ${err.message}`;
+          const msg = `[ERROR]: Failed to fetch source for ${packageName}. Error message: ${err.message}`;
           console.error(msg);
           toaster.warn(`Failed to fetch imported dependency: ${packageName}`);
           return "";
