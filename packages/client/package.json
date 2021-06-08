@@ -92,6 +92,7 @@
     "prettier": "1.19.1",
     "query-string": "6.9.0",
     "ramda": "0.26.1",
+    "raw-loader": "^4.0.2",
     "react": "16.12.0",
     "react-codemirror2": "7.2.1",
     "react-confetti": "5.0.1",
@@ -156,5 +157,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:9000"
+  "proxy": "http://localhost:9000",
+  "secure": "false"
 }
