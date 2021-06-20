@@ -198,10 +198,24 @@ class Account extends React.Component<IProps, IState> {
                 * Please enter your email to receive course and product updates.
               </TextItem>
             ) : (
-              <TextItem style={{ color: COLORS.TEXT_CONTENT, fontSize: 12 }}>
-                * Note: To change your email you will need to verify the new
-                email address.
-              </TextItem>
+              <>
+                <TextItem style={{ color: COLORS.TEXT_CONTENT, fontSize: 12 }}>
+                  * Note I: To change your email you will need to verify the new
+                  email address.
+                </TextItem>
+                <TextItem
+                  style={{
+                    fontSize: 12,
+                    maxWidth: 525,
+                    color: COLORS.TEXT_CONTENT,
+                  }}
+                >
+                  * Note II: Your account is identified using your email
+                  address. If you sign in with an SSO provider, the associated
+                  social profile <b>must match</b> your current account email,
+                  otherwise a new account will be created.
+                </TextItem>
+              </>
             )}
           </>
         )}
