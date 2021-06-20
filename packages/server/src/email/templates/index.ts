@@ -122,7 +122,6 @@ const WELCOME_HTML = `
     </div>
   </body>
 </html>
-
 `;
 
 const WELCOME_TEXT = `
