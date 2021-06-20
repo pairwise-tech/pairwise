@@ -16,6 +16,7 @@ import { Button, Card, Switch } from "@blueprintjs/core";
 import { COLORS } from "../tools/constants";
 import { PullRequestContext } from "../modules/challenges/store";
 import { composeWithProps } from "../tools/admin-utils";
+import { InverseChallengeMapping } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -44,7 +45,11 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
 
   render(): Nullable<JSX.Element> {
     const { useDarkTheme } = this.state;
-    const { pullRequestContext, pullRequestContextLoading } = this.props;
+    const {
+      challengeMap,
+      pullRequestContext,
+      pullRequestContextLoading,
+    } = this.props;
     const id = this.getPullIdFromParams();
     const showLink = !pullRequestContextLoading && !!pullRequestContext && !!id;
     const prURL = `https://github.com/pairwise-tech/pairwise/pull/${id}`;
@@ -87,6 +92,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
         ) : pullRequestContext ? (
           <DiffContent
             isMobile={isMobile}
+            challengeMap={challengeMap}
             diffContent={pullRequestContext}
             useDarkTheme={this.state.useDarkTheme}
           />
@@ -131,6 +137,7 @@ interface DiffContentProps {
   isMobile: boolean;
   useDarkTheme: boolean;
   diffContent: PullRequestContext[];
+  challengeMap: Nullable<InverseChallengeMapping>;
 }
 
 /**
@@ -153,6 +160,7 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
   }
 
   renderPullRequestContext = (context: PullRequestContext) => {
+    const { challengeMap } = this.props;
     const isDeletedChallenge = !context.updatedChallenge;
     const isNewChallenge = !context.originalChallenge && !isDeletedChallenge;
 
@@ -162,13 +170,25 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
       ? "New Challenge"
       : "Updated Challenge";
 
+    const notFoundChallenge = {
+      moduleId: "undetermined",
+      courseId: "undetermined",
+    };
+
+    const challengeDetails = challengeMap
+      ? challengeMap[context.id]
+      : notFoundChallenge;
+
+    const moduleId = context.moduleId || challengeDetails.moduleId;
+    const courseId = context.courseId || challengeDetails.courseId;
+
     return (
       <div key={context.id}>
         <ChallengeDiffCard>
           <DiffTitle>{title}</DiffTitle>
           <KeyValue code isChallengeId label="challengeId" value={context.id} />
-          <KeyValue code label="moduleId" value={context.moduleId} />
-          <KeyValue code label="courseId" value={context.courseId} />
+          <KeyValue code label="moduleId" value={moduleId} />
+          <KeyValue code label="courseId" value={courseId} />
           {isNewChallenge && (
             <>
               <KeyValue
@@ -272,6 +292,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   pullRequestContextLoading: Modules.selectors.challenges.pullRequestContextLoading(
     state,
   ),
+  challengeMap: Modules.selectors.challenges.getChallengeMap(state),
 });
 
 const dispatchProps = {
