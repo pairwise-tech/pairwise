@@ -97,6 +97,13 @@ const WELCOME_HTML = `
           just respond to this email to contact us directly. We love to hear
           from students and will try to reply to you directly.
         </p>
+        <p>
+          By the way, your account is uniquely identified by your email address.
+          If you use another SSO provider to sign in, that account <b>must</b> match
+          your existing email address, otherwise it will create a new account. Try 
+          to keep this in mind if you use another SSO provider to sign in in the 
+          future.
+        </p>
         <h2>Thanks again! 🎉</h2>
         <i>- The Pairwise Team</i>
         <div class="break" style="margin-top: 16px; height: 1px; width: 100%; background-color: rgb(35, 35, 35);"></div>
@@ -110,6 +117,7 @@ const WELCOME_HTML = `
     </div>
   </body>
 </html>
+
 `;
 
 const WELCOME_TEXT = `
@@ -125,6 +133,8 @@ Intro to Programming: https://app.pairwise.tech/workspace/2qKcNab8/intro
 The curriculum is a linear series of challenges, projects and videos you can solve on your own time and schedule. We try to walk through all the skills and technologies required for you to learn how to build real world applications and land a job as a software engineer.
 
 If you ever have problems or suggestions, there is a feedback feature built into the Pairwise workspace for you to use. Or, feel free to just respond to this email to contact us directly. We love to hear from students and will try to reply to you directly.
+
+By the way, your account is uniquely identified by your email address. If you use another SSO provider to sign in, that account <b>must</b> match your existing email address, otherwise it will create a new account. Try  to keep this in mind if you use another SSO provider to sign in in the future.
 
 Thanks again! 🎉
 
