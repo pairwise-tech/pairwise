@@ -1,5 +1,5 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap, pluck, tap } from "rxjs/operators";
+import { filter, map, mergeMap, pluck } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
@@ -55,6 +55,19 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
 };
 
 /**
+ * Fetch the pull request content on app load, if there the url
+ * includes a pull request id.
+ */
+const fetchPullRequestContextOnAppLoadEpic: EpicSignature = action$ => {
+  return action$.pipe(
+    filter(isActionOf(Actions.initializeApp)),
+    map(() => window.location.pathname),
+    filter(x => x.includes("pull-requests")),
+    map(path => Actions.handleSearchPullRequest(path)),
+  );
+};
+
+/**
  * Trigger a search for a pull request diff when the pull id in the url
  * changes.
  */
@@ -64,6 +77,18 @@ const searchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
     pluck("payload"),
     pluck("pathname"),
     filter(x => x.includes("/pull-requests/")),
+    map(path => Actions.handleSearchPullRequest(path)),
+  );
+};
+
+/**
+ * Parse a possible pull request id and handle fetching the pull request
+ * context.
+ */
+const handleSearchPullRequestEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.handleSearchPullRequest)),
+    pluck("payload"),
     map(path => {
       const idParam = path.split("/")[2];
       const id = Number(idParam);
@@ -111,5 +136,7 @@ export default combineEpics(
   challengeInitializationEpic,
   inverseChallengeMappingEpic,
   searchPullRequestContextEpic,
+  handleSearchPullRequestEpic,
   fetchPullRequestContextEpic,
+  fetchPullRequestContextOnAppLoadEpic,
 );

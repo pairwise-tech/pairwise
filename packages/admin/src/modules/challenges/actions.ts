@@ -28,6 +28,8 @@ enum ActionTypesEnum {
 
   SET_CHALLENGE_DETAIL_ID = "SET_CHALLENGE_DETAIL_ID",
 
+  HANDLE_FETCH_PULL_REQUEST_CONTEXT = "HANDLE_FETCH_PULL_REQUEST_CONTEXT",
+
   FETCH_PULL_REQUEST_CONTEXT = "FETCH_PULL_REQUEST_CONTEXT",
   FETCH_PULL_REQUEST_CONTEXT_SUCCESS = "FETCH_PULL_REQUEST_CONTEXT_SUCCESS",
   FETCH_PULL_REQUEST_CONTEXT_FAILURE = "FETCH_PULL_REQUEST_CONTEXT_FAILURE",
@@ -73,6 +75,10 @@ export const setMenuItemSelectIndex = createAction(
 export const setChallengeDetailId = createAction(
   ActionTypesEnum.SET_CHALLENGE_DETAIL_ID,
 )<Nullable<string>>();
+
+export const handleSearchPullRequest = createAction(
+  ActionTypesEnum.HANDLE_FETCH_PULL_REQUEST_CONTEXT,
+)<string>();
 
 export const fetchPullRequestContext = createAction(
   ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT,
