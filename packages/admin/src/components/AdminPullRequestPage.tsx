@@ -16,7 +16,6 @@ import { Button, Card, Switch } from "@blueprintjs/core";
 import { COLORS } from "../tools/constants";
 import { PullRequestContext } from "../modules/challenges/store";
 import { composeWithProps } from "../tools/admin-utils";
-import toaster from "../tools/toast-utils";
 
 /** ===========================================================================
  * Types & Config
@@ -184,19 +183,50 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
               />
             </>
           )}
-          {!isNewChallenge && (
-            <ChallengeDiff id={PULL_REQUEST_DIFF_VIEW_ID}>
-              <div style={{ height: 18 }} />
-              <ReactDiffViewer
-                splitView={!this.props.isMobile}
-                useDarkTheme={this.props.useDarkTheme}
-                oldValue={context.originalChallenge?.content}
-                newValue={context.updatedChallenge?.content}
-              />
-            </ChallengeDiff>
-          )}
+          {!isNewChallenge && this.renderDiffContent(context)}
         </ChallengeDiffCard>
       </div>
+    );
+  };
+
+  renderDiffContent = (context: PullRequestContext) => {
+    const { originalChallenge, updatedChallenge } = context;
+
+    /**
+     * Either content or instruction fields may have been changed. Check
+     * and render both separately.
+     */
+    const contentDiff =
+      originalChallenge?.content !== updatedChallenge?.content;
+    const instructionsDiff =
+      originalChallenge?.instructions !== updatedChallenge?.instructions;
+
+    return (
+      <ChallengeDiff id={PULL_REQUEST_DIFF_VIEW_ID}>
+        <div style={{ height: 18 }} />
+        {contentDiff && (
+          <>
+            <DiffTitle>Content Diff:</DiffTitle>
+            <ReactDiffViewer
+              splitView={!this.props.isMobile}
+              useDarkTheme={this.props.useDarkTheme}
+              oldValue={context.originalChallenge?.content}
+              newValue={context.updatedChallenge?.content}
+            />
+          </>
+        )}
+        {instructionsDiff && (
+          <>
+            <DiffTitle>Instructions Diff:</DiffTitle>
+            <ReactDiffViewer
+              splitView={!this.props.isMobile}
+              useDarkTheme={this.props.useDarkTheme}
+              oldValue={context.originalChallenge?.instructions}
+              newValue={context.updatedChallenge?.instructions}
+            />
+          </>
+        )}
+      </ChallengeDiff>
     );
   };
 }
