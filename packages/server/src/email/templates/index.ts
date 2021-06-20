@@ -5,7 +5,12 @@
  * as the Welcome Email, you can find the original email HTML in this same
  * sub-folder.
  *
- * You can edit this HTML directly, and then use a conversion tool like
+ * The original HTML files are preserved here to make editing them and
+ * previewing the result easier. Note that these files are not actually used
+ * by the application, however. Instead, the inline text and HTML in this
+ * file (which are produced from the HTML files) are used.
+ *
+ * You can edit these HTML files directly, and then use a conversion tool like
  * https://htmlemail.io/inline/ to convert the HTML document to inline-styles
  * to use as an email, and then copy the result into this file here.
  *
@@ -256,6 +261,8 @@ Thanks again! 🎉
 - Sean, Pairwise Founder
 
 * If you have any questions, please just respond to this email. You can also request a refund up to 30 days after your purchase.
+
+* By the way, your course purchase is linked to your account for this email address. If you login with a different SSO provider in the future (which is associated with another email address) a <i>new</i> Pairwise account will be created and you may be confused. Pairwise identifies accounts by relying on unique email addresses. Always login to Pairwise using the same SSO provider or email address to avoid any problems, thank you!
 `;
 
 export const getPaymentConfirmationEmail = () => {
