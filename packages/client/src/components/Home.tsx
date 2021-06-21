@@ -53,8 +53,8 @@ class Home extends React.Component<IProps, {}> {
                   expensive and takes years to complete.
                 </ContentText>
                 <ContentText>
-                  Pairwise is the most affordable and fastest way to learn these
-                  skills in the modern world.
+                  Pairwise is the fastest and most affordable way to learn these
+                  skills.
                 </ContentText>
                 <ContentText
                   style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}

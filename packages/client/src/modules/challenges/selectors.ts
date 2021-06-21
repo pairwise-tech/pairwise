@@ -433,7 +433,7 @@ export const getBlobForCurrentChallenge = createSelector(
  * to get the current course.
  */
 export const userCourseProgressSummary = createSelector(
-  [getCurrentCourse, userProgress],
+  [getCurrentCourseSkeleton, userProgress],
   (course, progress) => {
     if (!course || !progress) {
       return;
