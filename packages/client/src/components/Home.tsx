@@ -6,7 +6,7 @@ import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle, ExternalLink } from "./Shared";
-import { COLORS, PROSE_MAX_WIDTH, MOBILE } from "tools/constants";
+import { COLORS, MOBILE } from "tools/constants";
 import SEO from "./SEO";
 
 /** ===========================================================================
@@ -16,70 +16,104 @@ import SEO from "./SEO";
 
 class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { hasPurchasedTypeScriptCourse } = this.props;
+    const {
+      userCourseProgressSummary,
+      hasPurchasedTypeScriptCourse,
+    } = this.props;
     return (
       <PageContainer>
         <SEO
           title="Welcome to Pairwise"
           description="Learn to code with hands-on challenges and projects"
         />
-        <ContentContainer>
-          <PageTitle>Welcome to Pairwise!</PageTitle>
-          <ContentText>
-            Pairwise is the best place to learn to code and start a career in
-            software development.
-          </ContentText>
-          {hasPurchasedTypeScriptCourse ? (
-            <ContentText>
-              Thank you for purchasing the Pairwise Course! You have lifetime
-              access. Please enjoy the course content, and feel free to contact
-              me anytime at: <b>sean@pairwise.tech</b>.
-            </ContentText>
-          ) : (
-            <>
-              <ContentText
-                style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
-              >
-                What's the value in Pairwise?
-              </ContentText>
+        <FlexContainer>
+          <ContentContainer style={{ paddingRight: 50, marginBottom: 25 }}>
+            <PageTitle>Welcome to Pairwise!</PageTitle>
+            {hasPurchasedTypeScriptCourse ? (
               <ContentText>
-                Most coding bootcamps cost $10,000 USD or more, while a computer
-                science degree from a university is even more expensive and
-                takes years to complete.
+                Thank you for purchasing the Pairwise Course! You have lifetime
+                access. Please enjoy the course content, and feel free to
+                contact me anytime at: <b>sean@pairwise.tech</b>.
               </ContentText>
-              <ContentText>
-                While many free programming education resources exist online,
-                it's hard to find a single coherent curriculum to take you from
-                beginner to expert. That's what Pairwise is. A single, linear
-                curriculum which starts you coding and solving problems from Day
-                1.
-              </ContentText>
-              <ContentText
-                style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
-              >
-                What do I get?
-              </ContentText>
-              <ContentText>
-                The Pairwise FullStack TypeScript Course is currently in{" "}
-                <Bold style={{ textDecoration: "underline " }}>BETA</Bold> and
-                available to purchase now for{" "}
-                <Bold style={{ color: COLORS.SECONDARY_YELLOW }}>$50 USD</Bold>.
-                This includes all of the modules you can view in the course
-                navigation menu, and covers HTML & CSS, basic programming,
-                frontend and backend development, mobile development, and other
-                skills like testing and deploying software.
-              </ContentText>
-              <ContentText>
-                To see more about what you will learn,{" "}
-                <ExternalLink link="https://pairwise.tech">
-                  go here
-                </ExternalLink>
-                .
-              </ContentText>
-            </>
-          )}
-        </ContentContainer>
-        {this.props.skeletons?.map(this.renderCourseItem)}
+            ) : (
+              <>
+                <ContentText
+                  style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
+                >
+                  What is Pairwise?
+                </ContentText>
+                <ContentText>
+                  Pairwise is a single curriculum of challenges and projects
+                  which you can use to learn all of the fundamental skills to
+                  build modern web and mobile applications.
+                </ContentText>
+                <ContentText>
+                  Most coding bootcamps cost $10,000 USD or more, while a
+                  computer science degree from a university is even more
+                  expensive and takes years to complete.
+                </ContentText>
+                <ContentText>
+                  Pairwise is the most affordable and fastest way to learn these
+                  skills in the modern world.
+                </ContentText>
+                <ContentText
+                  style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
+                >
+                  What do I get?
+                </ContentText>
+                <ContentText>
+                  The Pairwise FullStack TypeScript Course is currently in{" "}
+                  <Bold style={{ textDecoration: "underline " }}>BETA</Bold> and
+                  available to purchase now for{" "}
+                  <Bold style={{ color: COLORS.SECONDARY_YELLOW }}>
+                    $50 USD
+                  </Bold>
+                  . This includes all of the modules you can view in the course
+                  navigation menu, and covers HTML & CSS, basic programming,
+                  frontend and backend development, mobile development, and
+                  other skills like testing and deploying software.
+                </ContentText>
+                <ContentText>
+                  To see more about what you will learn,{" "}
+                  <ExternalLink link="https://pairwise.tech">
+                    go here
+                  </ExternalLink>
+                  .
+                </ContentText>
+              </>
+            )}
+            {this.props.skeletons?.map(this.renderCourseItem)}
+          </ContentContainer>
+          <ContentContainer>
+            {userCourseProgressSummary && (
+              <>
+                <PageTitle>Course Progress</PageTitle>
+                <ContentText>
+                  You have completed {userCourseProgressSummary.totalCompleted}{" "}
+                  out of {userCourseProgressSummary.totalChallenges} challenges.
+                </ContentText>
+                <ProgressBar>
+                  <ProgressComplete
+                    progress={userCourseProgressSummary.percentComplete}
+                  />
+                </ProgressBar>
+                {Array.from(userCourseProgressSummary.summary.entries()).map(
+                  ([id, stats]) => {
+                    const { title, completed, total } = stats;
+                    return (
+                      <ModuleProgressBar key={id}>
+                        <ModuleProgressPercentage>
+                          {((completed / total) * 100).toFixed(0)}%
+                        </ModuleProgressPercentage>
+                        <ModuleProgressTitle>{title}</ModuleProgressTitle>
+                      </ModuleProgressBar>
+                    );
+                  },
+                )}
+              </>
+            )}
+          </ContentContainer>
+        </FlexContainer>
       </PageContainer>
     );
   }
@@ -167,12 +201,58 @@ class Home extends React.Component<IProps, {}> {
  */
 
 const ContentContainer = styled.div`
-  max-width: ${PROSE_MAX_WIDTH - 150}px;
-  margin-bottom: 24px;
+  flex: 1;
 
   p {
     font-size: 18px;
   }
+`;
+
+const FlexContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  @media ${MOBILE} {
+    flex-direction: column;
+  }
+`;
+
+const ProgressBar = styled.div`
+  height: 30px;
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  border-radius: 1px;
+  background: ${COLORS.PROGRESS_BACKGROUND};
+`;
+
+const ProgressComplete = styled.div<{ progress: number }>`
+  height: 30px;
+  width: ${props => props.progress}%;
+  background: ${COLORS.PROGRESS_COMPLETE};
+`;
+
+const ModuleProgressBar = styled.div`
+  margin-top: 2px;
+  display: flex;
+  flex-direction: row;
+`;
+
+const ModuleProgressTitle = styled.div`
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 4px;
+  width: 250px;
+  background: ${COLORS.TEXT_DARK};
+`;
+
+const ModuleProgressPercentage = styled.div`
+  width: 50px;
+  padding-top: 3px;
+  padding-left: 3px;
+  padding-bottom: 3px;
+  background: ${COLORS.PROGRESS_BACKGROUND};
 `;
 
 const ContentText = styled(Text)`
@@ -234,6 +314,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
+  userCourseProgressSummary: Modules.selectors.challenges.userCourseProgressSummary(
+    state,
+  ),
   hasPurchasedTypeScriptCourse: Modules.selectors.user.hasPurchasedTypeScriptCourse(
     state,
   ),

@@ -426,6 +426,61 @@ export const getBlobForCurrentChallenge = createSelector(
   },
 );
 
+/**
+ * Return a map summary of user progress through the course.
+ *
+ * NOTE: This assumes only 1 existing course and use getCurrentCourse
+ * to get the current course.
+ */
+export const userCourseProgressSummary = createSelector(
+  [getCurrentCourse, userProgress],
+  (course, progress) => {
+    if (!course || !progress) {
+      return;
+    }
+
+    const summary = new Map();
+    let totalChallenges = 0;
+    let totalCompleted = 0;
+
+    const userCrouseProgress = progress[course.id];
+
+    for (const module of course.modules) {
+      const id = module.id;
+      const title = module.title;
+
+      const stats = {
+        id,
+        title,
+        total: 0,
+        completed: 0,
+      };
+
+      for (const challenge of module.challenges) {
+        totalChallenges++;
+        stats.total++;
+        if (userCrouseProgress[challenge.id]?.complete) {
+          stats.completed++;
+          totalCompleted++;
+        }
+      }
+
+      summary.set(id, stats);
+    }
+
+    const stats = {
+      summary,
+      totalCompleted,
+      totalChallenges,
+      courseId: course.id,
+      courseTitle: course.title,
+      percentComplete: (totalCompleted / totalChallenges) * 100,
+    };
+
+    return stats;
+  },
+);
+
 export const getCurrentChallengeTestCode = createSelector(
   [getCurrentChallenge],
   c => c?.testCode,
