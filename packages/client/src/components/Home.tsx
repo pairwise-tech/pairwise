@@ -100,10 +100,11 @@ class Home extends React.Component<IProps, {}> {
                 {Array.from(userCourseProgressSummary.summary.entries()).map(
                   ([id, stats]) => {
                     const { title, completed, total } = stats;
+                    const percent = total === 0 ? 0 : (completed / total) * 100;
                     return (
                       <ModuleProgressBar key={id}>
                         <ModuleProgressPercentage>
-                          {((completed / total) * 100).toFixed(0)}%
+                          {percent.toFixed(0)}%
                         </ModuleProgressPercentage>
                         <ModuleProgressTitle>{title}</ModuleProgressTitle>
                       </ModuleProgressBar>
@@ -221,8 +222,8 @@ const FlexContainer = styled.div`
 const ProgressBar = styled.div`
   height: 30px;
   width: 100%;
-  margin-top: 6px;
-  margin-bottom: 12px;
+  margin-top: 8px;
+  margin-bottom: 10px;
   border-radius: 1px;
   background: ${COLORS.PROGRESS_BACKGROUND};
 `;

@@ -459,7 +459,7 @@ export const userCourseProgressSummary = createSelector(
       for (const challenge of module.challenges) {
         totalChallenges++;
         stats.total++;
-        if (userCrouseProgress[challenge.id]?.complete) {
+        if (userCrouseProgress && userCrouseProgress[challenge.id]?.complete) {
           stats.completed++;
           totalCompleted++;
         }
@@ -468,13 +468,15 @@ export const userCourseProgressSummary = createSelector(
       summary.set(id, stats);
     }
 
+    const percentComplete = (totalCompleted / totalChallenges) * 100;
+
     const stats = {
       summary,
       totalCompleted,
       totalChallenges,
+      percentComplete,
       courseId: course.id,
       courseTitle: course.title,
-      percentComplete: (totalCompleted / totalChallenges) * 100,
     };
 
     return stats;
