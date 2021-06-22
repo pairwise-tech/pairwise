@@ -1366,7 +1366,6 @@ class Workspace extends React.Component<IProps, IState> {
 
         const code = await this.compileAndTransformCodeString();
         sourceDocument = getMarkupForCodeChallenge(code, libs);
-        console.log(sourceDocument);
       }
 
       this.iFrameRef.srcdoc = sourceDocument;
