@@ -58,8 +58,6 @@ import { Select } from "@blueprintjs/select";
 
 const CourseSelect = Select.ofType<CourseMetadata>();
 
-const ALLOW_MULTIPLE_COURSES = true;
-
 /** ===========================================================================
  * React Class
  * ============================================================================
@@ -164,7 +162,7 @@ class NavigationOverlay extends React.Component<
                   style={{ whiteSpace: "nowrap" }}
                 ></Button>
               </Link>
-            ) : ALLOW_MULTIPLE_COURSES ? (
+            ) : (
               <CourseSelect
                 filterable={false}
                 items={courseListMetadata}
@@ -188,17 +186,6 @@ class NavigationOverlay extends React.Component<
                   rightIcon="chevron-down"
                 />
               </CourseSelect>
-            ) : (
-              <Button
-                fill
-                style={{ whiteSpace: "nowrap" }}
-                className="mobile-shrink"
-                text="Curriculum Details"
-                rightIcon="document-open"
-                onClick={() =>
-                  window.open("https://www.pairwise.tech/curriculum", "_blank")
-                }
-              />
             )}
           </ColTitle>
           <ColScroll>
