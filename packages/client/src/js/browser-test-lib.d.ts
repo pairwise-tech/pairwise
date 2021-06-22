@@ -103,7 +103,7 @@ declare const executePostgresQuery: (preSqlQuery: string, userSqlQuery: string, 
  */
 declare const executeMongoDBQuery: (args: any) => Promise<any>;
 declare const PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
-interface RustTestResult {
+interface AlternateLanguageTestResult {
     stdout: string;
     stderr: string;
     testResult: string;
@@ -111,11 +111,19 @@ interface RustTestResult {
 /**
  * Process a test result from a Rust test.
  */
-declare const handleRustTestResult: (result: RustTestResult) => void;
+declare const handleAlternateLanguageTestResult: (result: AlternateLanguageTestResult) => void;
 /**
  * Execute Rust code.
  */
-declare const executeRustChallengeTests: (codeString: string, testString: string) => Promise<RustTestResult>;
+declare const executeRustChallengeTests: (codeString: string, testString: string) => Promise<AlternateLanguageTestResult>;
+/**
+ * Execute Python code.
+ */
+declare const executePythonChallengeTests: (codeString: string, testString: string) => Promise<AlternateLanguageTestResult>;
+/**
+ * Execute Python code.
+ */
+declare const executeGolangChallengeTests: (codeString: string, testString: string) => Promise<AlternateLanguageTestResult>;
 /** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================

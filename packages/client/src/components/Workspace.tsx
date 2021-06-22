@@ -522,9 +522,15 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_FULLSCREEN = fullScreenEditor || IS_SANDBOX;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_REACT_NATIVE_CHALLENGE = isReactNativeChallenge;
-    const IS_RUST_CHALLENGE = challenge.type === "rust";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
+
+    const IS_RUST_CHALLENGE = challenge.type === "rust";
+    const IS_PYTHON_CHALLENGE = challenge.type === "python";
+    const IS_GOLANG_CHALLENGE = challenge.type === "golang";
+    const IS_ALTERNATE_LANGUAGE_CHALLENGE =
+      IS_RUST_CHALLENGE || IS_PYTHON_CHALLENGE || IS_GOLANG_CHALLENGE;
+
     const IS_SQL_CHALLENGE = isSqlChallenge;
     const IS_GREAT_SUCCESS_OPEN =
       allTestsPassing &&
@@ -878,7 +884,7 @@ class Workspace extends React.Component<IProps, IState> {
               style={{ visibility: "hidden", height: 0, width: 0 }}
             />
           </div>
-        ) : IS_RUST_CHALLENGE ? (
+        ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
           <div>
             <Console variant="dark" logs={this.state.logs} />
             <DragIgnorantFrameContainer
@@ -977,7 +983,7 @@ class Workspace extends React.Component<IProps, IState> {
             />
           </div>
         </Col>
-      ) : IS_RUST_CHALLENGE ? (
+      ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
         <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}

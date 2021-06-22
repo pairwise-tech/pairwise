@@ -61,7 +61,9 @@ const challengeTypeChoiceMap: ChallengeTypeChoiceMap = {
   project: "Project",
   "guided-project": "Guided Project",
   "special-topic": "Special Topic",
-  rust: "Rust Language",
+  rust: "Rust",
+  python: "Python",
+  golang: "Golang",
 };
 
 const mapChallengeTypeEntries = (

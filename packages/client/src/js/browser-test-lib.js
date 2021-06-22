@@ -285,7 +285,7 @@ var PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
 /**
  * Process a test result from a Rust test.
  */
-var handleRustTestResult = function (result) {
+var handleAlternateLanguageTestResult = function (result) {
     var stdout = result.stdout, stderr = result.stderr, testResult = result.testResult;
     var isValid = testResult === "true";
     if (isValid) {
@@ -334,6 +334,84 @@ var executeRustChallengeTests = function (codeString, testString) { return __awa
                 err_3 = _a.sent();
                 // Throw err to fail test
                 throw err_3;
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+/**
+ * Execute Python code.
+ */
+var executePythonChallengeTests = function (codeString, testString) { return __awaiter(_this, void 0, void 0, function () {
+    var url, body, headers, response, text, result, err_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 5, , 6]);
+                url = PAIRWISE_CODE_RUNNER_API + "/api/python";
+                body = JSON.stringify({ codeString: codeString, testString: testString });
+                headers = {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                };
+                return [4 /*yield*/, fetch(url, {
+                        body: body,
+                        headers: headers,
+                        method: "post"
+                    })];
+            case 1:
+                response = _a.sent();
+                if (!!response.ok) return [3 /*break*/, 3];
+                return [4 /*yield*/, response.text()];
+            case 2:
+                text = _a.sent();
+                throw new Error(text);
+            case 3: return [4 /*yield*/, response.json()];
+            case 4:
+                result = _a.sent();
+                return [2 /*return*/, result];
+            case 5:
+                err_4 = _a.sent();
+                // Throw err to fail test
+                throw err_4;
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+/**
+ * Execute Python code.
+ */
+var executeGolangChallengeTests = function (codeString, testString) { return __awaiter(_this, void 0, void 0, function () {
+    var url, body, headers, response, text, result, err_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 5, , 6]);
+                url = PAIRWISE_CODE_RUNNER_API + "/api/golang";
+                body = JSON.stringify({ codeString: codeString, testString: testString });
+                headers = {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                };
+                return [4 /*yield*/, fetch(url, {
+                        body: body,
+                        headers: headers,
+                        method: "post"
+                    })];
+            case 1:
+                response = _a.sent();
+                if (!!response.ok) return [3 /*break*/, 3];
+                return [4 /*yield*/, response.text()];
+            case 2:
+                text = _a.sent();
+                throw new Error(text);
+            case 3: return [4 /*yield*/, response.json()];
+            case 4:
+                result = _a.sent();
+                return [2 /*return*/, result];
+            case 5:
+                err_5 = _a.sent();
+                // Throw err to fail test
+                throw err_5;
             case 6: return [2 /*return*/];
         }
     });

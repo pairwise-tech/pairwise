@@ -286,7 +286,7 @@ const executeMongoDBQuery = async args => {
 const PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
 // const PAIRWISE_CODE_RUNNER_API = "";
 
-interface RustTestResult {
+interface AlternateLanguageTestResult {
   stdout: string;
   stderr: string;
   testResult: string;
@@ -295,7 +295,7 @@ interface RustTestResult {
 /**
  * Process a test result from a Rust test.
  */
-const handleRustTestResult = (result: RustTestResult) => {
+const handleAlternateLanguageTestResult = (result: AlternateLanguageTestResult) => {
   const { stdout, stderr, testResult } = result;
   const isValid = testResult === "true";
   if (isValid) {
@@ -315,9 +315,75 @@ const handleRustTestResult = (result: RustTestResult) => {
 const executeRustChallengeTests = async (
   codeString: string,
   testString: string,
-): Promise<RustTestResult> => {
+): Promise<AlternateLanguageTestResult> => {
   try {
     const url = `${PAIRWISE_CODE_RUNNER_API}/api/rust`;
+    const body = JSON.stringify({ codeString, testString });
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(url, {
+      body,
+      headers,
+      method: "post",
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    // Throw err to fail test
+    throw err;
+  }
+};
+
+/**
+ * Execute Python code.
+ */
+ const executePythonChallengeTests = async (
+  codeString: string,
+  testString: string,
+): Promise<AlternateLanguageTestResult> => {
+  try {
+    const url = `${PAIRWISE_CODE_RUNNER_API}/api/python`;
+    const body = JSON.stringify({ codeString, testString });
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(url, {
+      body,
+      headers,
+      method: "post",
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    // Throw err to fail test
+    throw err;
+  }
+};
+
+/**
+ * Execute Python code.
+ */
+ const executeGolangChallengeTests = async (
+  codeString: string,
+  testString: string,
+): Promise<AlternateLanguageTestResult> => {
+  try {
+    const url = `${PAIRWISE_CODE_RUNNER_API}/api/golang`;
     const body = JSON.stringify({ codeString, testString });
     const headers = {
       Accept: "application/json",

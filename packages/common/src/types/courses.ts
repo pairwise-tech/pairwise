@@ -83,8 +83,10 @@ export type CHALLENGE_TYPE =
   | "project"
   | "guided-project"
   | "special-topic"
-  // Rust
-  | "rust";
+  // Other Languages
+  | "rust"
+  | "python"
+  | "golang";
 
 export type CHALLENGE_PROGRESS = "NOT_ATTEMPTED" | "INCOMPLETE" | "COMPLETE";
 

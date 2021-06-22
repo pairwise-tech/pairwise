@@ -626,7 +626,11 @@ export const compileCodeString = async (
   sourceCodeString: string,
   challenge: Challenge,
 ) => {
-  if (challenge.type === "rust") {
+  const { type } = challenge;
+  const IS_ALTERNATE_LANGUAGE =
+    type === "rust" || type === "golang" || type === "python";
+
+  if (IS_ALTERNATE_LANGUAGE) {
     const processedCodeString = await pipe(
       injectTestCode(challenge),
       hijackConsole,
