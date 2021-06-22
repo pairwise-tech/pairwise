@@ -295,16 +295,19 @@ interface AlternateLanguageTestResult {
 /**
  * Process a test result from a Rust test.
  */
-const handleAlternateLanguageTestResult = (result: AlternateLanguageTestResult) => {
+const handleAlternateLanguageTestResult = (
+  result: AlternateLanguageTestResult,
+  log: (message: string) => void,
+) => {
   const { stdout, stderr, testResult } = result;
   const isValid = testResult === "true";
   if (isValid) {
     if (stdout !== "") {
-      console.log(stdout);
+      log(stdout);
     }
     pass();
   } else {
-    console.log(stderr);
+    log(stderr);
     fail();
   }
 };
@@ -345,7 +348,7 @@ const executeRustChallengeTests = async (
 /**
  * Execute Python code.
  */
- const executePythonChallengeTests = async (
+const executePythonChallengeTests = async (
   codeString: string,
   testString: string,
 ): Promise<AlternateLanguageTestResult> => {
@@ -378,7 +381,7 @@ const executeRustChallengeTests = async (
 /**
  * Execute Python code.
  */
- const executeGolangChallengeTests = async (
+const executeGolangChallengeTests = async (
   codeString: string,
   testString: string,
 ): Promise<AlternateLanguageTestResult> => {

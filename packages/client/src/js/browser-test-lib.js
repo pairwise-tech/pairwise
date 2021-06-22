@@ -285,17 +285,17 @@ var PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
 /**
  * Process a test result from a Rust test.
  */
-var handleAlternateLanguageTestResult = function (result) {
+var handleAlternateLanguageTestResult = function (result, log) {
     var stdout = result.stdout, stderr = result.stderr, testResult = result.testResult;
     var isValid = testResult === "true";
     if (isValid) {
         if (stdout !== "") {
-            console.log(stdout);
+            log(stdout);
         }
         pass();
     }
     else {
-        console.log(stderr);
+        log(stderr);
         fail();
     }
 };
