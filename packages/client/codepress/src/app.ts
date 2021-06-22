@@ -112,10 +112,10 @@ class CourseAPI {
         // NOTE: Only the Fullstack TypeScript course is included for now.
         // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [PairwiseContent, FullstackTypeScript, Rust] = courses;
+        const [PairwiseContent, FullstackTypeScript, Rust, Python] = courses;
 
         // Manually match the order provided by ContentUtilityClass:
-        const courseList = [Rust, FullstackTypeScript];
+        const courseList = [FullstackTypeScript, Rust, Python];
         this.cache = makeCache(courseList);
         return this.resolveFromCache();
       });

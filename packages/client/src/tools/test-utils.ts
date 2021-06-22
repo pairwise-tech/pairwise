@@ -381,7 +381,8 @@ export const injectTestCode = (challenge: Challenge) => (
   const CODE_WITH_TEST_PREFIX = `${TEST_GATHERING_PREFIX}\n${code}`;
   const testCodeString = stripConsoleCalls(CODE_WITH_TEST_PREFIX);
 
-  if (type === "rust") {
+  // Handle alternate language challenges
+  if (type === "rust" || type === "python" || type === "golang") {
     code = getTestHarness("", codeString, testCode);
     return code;
   }
@@ -631,6 +632,7 @@ export const compileCodeString = async (
     type === "rust" || type === "golang" || type === "python";
 
   if (IS_ALTERNATE_LANGUAGE) {
+    console.warn("HELLO");
     const processedCodeString = await pipe(
       injectTestCode(challenge),
       hijackConsole,

@@ -441,6 +441,10 @@ class Workspace extends React.Component<IProps, IState> {
     const { type } = this.props.challenge;
 
     switch (type) {
+      case "golang":
+        return "golang";
+      case "python":
+        return "python";
       case "rust":
         return "rust";
       case "react":
@@ -1362,6 +1366,7 @@ class Workspace extends React.Component<IProps, IState> {
 
         const code = await this.compileAndTransformCodeString();
         sourceDocument = getMarkupForCodeChallenge(code, libs);
+        console.log(sourceDocument);
       }
 
       this.iFrameRef.srcdoc = sourceDocument;
