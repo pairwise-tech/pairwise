@@ -4,6 +4,7 @@ import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
 import quote from "string-quote-x";
 import pipe from "ramda/src/pipe";
+import { isAlternateLanguageChallenge } from "./utils";
 
 // TODO: This could be made more secure
 // NOTE: We will be dropping this string into another string so we want it stringified
@@ -382,7 +383,7 @@ export const injectTestCode = (challenge: Challenge) => (
   const testCodeString = stripConsoleCalls(CODE_WITH_TEST_PREFIX);
 
   // Handle alternate language challenges
-  if (type === "rust" || type === "python" || type === "golang") {
+  if (isAlternateLanguageChallenge(challenge)) {
     code = getTestHarness("", codeString, testCode);
     return code;
   }
@@ -627,11 +628,7 @@ export const compileCodeString = async (
   sourceCodeString: string,
   challenge: Challenge,
 ) => {
-  const { type } = challenge;
-  const IS_ALTERNATE_LANGUAGE =
-    type === "rust" || type === "golang" || type === "python";
-
-  if (IS_ALTERNATE_LANGUAGE) {
+  if (isAlternateLanguageChallenge(challenge)) {
     console.warn("HELLO");
     const processedCodeString = await pipe(
       injectTestCode(challenge),

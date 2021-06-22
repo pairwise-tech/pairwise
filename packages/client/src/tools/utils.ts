@@ -608,3 +608,12 @@ export const getClientOS = (): Nullable<OS> => {
 
   return os;
 };
+
+/**
+ * Determine if a challenge is an alternate language challenge which
+ * requires custom code execution support.
+ */
+export const isAlternateLanguageChallenge = (challenge: Challenge): boolean => {
+  const { type } = challenge;
+  return type === "rust" || type === "python" || type === "golang";
+};

@@ -65,6 +65,7 @@ import {
   challengeRequiresWorkspace,
   getFileExtensionByChallengeType,
   wait,
+  isAlternateLanguageChallenge,
 } from "tools/utils";
 import {
   Tab,
@@ -528,12 +529,9 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_REACT_NATIVE_CHALLENGE = isReactNativeChallenge;
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
-
-    const IS_RUST_CHALLENGE = challenge.type === "rust";
-    const IS_PYTHON_CHALLENGE = challenge.type === "python";
-    const IS_GOLANG_CHALLENGE = challenge.type === "golang";
-    const IS_ALTERNATE_LANGUAGE_CHALLENGE =
-      IS_RUST_CHALLENGE || IS_PYTHON_CHALLENGE || IS_GOLANG_CHALLENGE;
+    const IS_ALTERNATE_LANGUAGE_CHALLENGE = isAlternateLanguageChallenge(
+      challenge,
+    );
 
     const IS_SQL_CHALLENGE = isSqlChallenge;
     const IS_GREAT_SUCCESS_OPEN =
@@ -1425,8 +1423,15 @@ class Workspace extends React.Component<IProps, IState> {
   startTestCancellationTimer = () => {
     this.handleCancelCancellationTimer();
 
+    const timeout = this.getTestTimeout();
+
     // Allow 10 seconds for the tests to run
-    this.testCancellationTimer = setTimeout(this.handleCancelTests, 10000);
+    this.testCancellationTimer = setTimeout(this.handleCancelTests, timeout);
+  };
+
+  getTestTimeout = () => {
+    // Allow alternate language challenges more execution time
+    return isAlternateLanguageChallenge(this.props.challenge) ? 25000 : 10000;
   };
 
   handleCancelTests = () => {
@@ -1437,10 +1442,12 @@ class Workspace extends React.Component<IProps, IState> {
 
   cancelTestRun = () => {
     this.setState({ testResultsLoading: false }, () => {
+      const timeout = this.getTestTimeout();
+      const seconds = timeout / 1000;
       toaster.warn(
         `${
           this.props.challenge.id === SANDBOX_ID ? "Code execution" : "Tests"
-        } cancelled because your code took longer than 10 seconds to complete running. Check your code for problems and make sure your internet connection is stable!`,
+        } cancelled because your code took longer than ${seconds} seconds to complete running. Check your code for problems and make sure your internet connection is stable!`,
       );
     });
   };
@@ -1593,7 +1600,7 @@ class Workspace extends React.Component<IProps, IState> {
   /**
    * The resizable cols are not declarative in their sizing. They take initial
    * dimensions but if we want to update their dimensions we need to completely
-   * rerender. That's what this "state flash" let's us do.
+   * re-render. That's what this "state flash" let's us do.
    */
   private readonly refreshLayout = () => {
     this.setState({ shouldRefreshLayout: true });
