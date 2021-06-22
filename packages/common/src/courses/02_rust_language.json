@@ -1,0 +1,26 @@
+{
+  "price": 0,
+  "free": true,
+  "id": "alosiqu45",
+  "title": "Rust",
+  "description": "Coding challenges to learn the Rust programming language.",
+  "modules": [
+    {
+      "id": "alosiuqwk",
+      "title": "Rust Basics",
+      "challenges": [
+        {
+          "id": "S@Ghw6X75",
+          "type": "typescript",
+          "title": "Rust Proof of Concept Challenge",
+          "instructions": "Pairwise supports writing and running Rust code.",
+          "testCode": "test(\"Test\", async () => {\n  pass();\n  const a = \"hi\";\n  const b = \"hello\";\n  const result = await executeRustChallengeTests(a, b);\n  expect(result).toBe(true);\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": ""
+        }
+      ]
+    }
+  ]
+}

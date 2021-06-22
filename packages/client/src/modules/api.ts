@@ -77,7 +77,7 @@ interface CodepressAPI {
   save: (c: Course) => Observable<any>;
 }
 
-export const makeCodepressApi = (endpoint: string): CodepressAPI => {
+export const createCodepressAPI = (endpoint: string): CodepressAPI => {
   return {
     getAll: () => {
       return fromFetch(`${endpoint}/courses`, { mode: "cors" }).pipe(
@@ -200,7 +200,7 @@ class BaseApiClass {
  */
 
 class Api extends BaseApiClass {
-  codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
+  codepressApi = createCodepressAPI(ENV.CODEPRESS_HOST);
 
   // Generate anonymous session id for real-time user progress metrics
   anonID = uuidv4();

@@ -4,6 +4,7 @@
  */
 // import PairwiseLibrary from "../courses/00_pairwise_library.json";
 import FullstackTypeScript from "../courses/01_fullstack_typescript.json";
+// import Rust from "../courses/02_rust_language.json";
 import {
   CourseList,
   CourseSkeletonList,

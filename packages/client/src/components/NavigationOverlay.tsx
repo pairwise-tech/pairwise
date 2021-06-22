@@ -11,6 +11,7 @@ import {
   ModuleSkeletonList,
   CHALLENGE_PROGRESS,
   getChallengeSlug,
+  CourseMetadata,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, MOBILE } from "tools/constants";
@@ -48,13 +49,16 @@ import {
 } from "./NavigationOverlayComponents";
 import { IconButton, RotatingIcon } from "./Shared";
 import cx from "classnames";
+import { Select } from "@blueprintjs/select";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
 
-// const CourseSelect = Select.ofType<CourseMetadata>();
+const CourseSelect = Select.ofType<CourseMetadata>();
+
+const ALLOW_MULTIPLE_COURSES = true;
 
 /** ===========================================================================
  * React Class
@@ -108,6 +112,7 @@ class NavigationOverlay extends React.Component<
       isEditMode,
       challengeId,
       overlayVisible,
+      courseListMetadata,
     } = this.props;
 
     // Course or model is still loading
@@ -159,6 +164,30 @@ class NavigationOverlay extends React.Component<
                   style={{ whiteSpace: "nowrap" }}
                 ></Button>
               </Link>
+            ) : ALLOW_MULTIPLE_COURSES ? (
+              <CourseSelect
+                filterable={false}
+                items={courseListMetadata}
+                itemDisabled={c => c.id === course.id}
+                onItemSelect={({ id }) => this.props.setCurrentCourse(id)}
+                itemRenderer={({ title, id }, { handleClick }) => (
+                  <ClickableColTitle
+                    key={id}
+                    disabled={id === course.id}
+                    onClick={(e: any) => handleClick(e)}
+                  >
+                    {title}
+                  </ClickableColTitle>
+                )}
+              >
+                <Button
+                  style={{ whiteSpace: "nowrap" }}
+                  fill
+                  className="mobile-shrink"
+                  text={course.title}
+                  rightIcon="chevron-down"
+                />
+              </CourseSelect>
             ) : (
               <Button
                 fill
@@ -171,30 +200,6 @@ class NavigationOverlay extends React.Component<
                 }
               />
             )}
-            {/* NOTE: Course Select Menu for multiple courses: */}
-            {/* <CourseSelect
-              filterable={false}
-              items={courseListMetadata}
-              itemDisabled={c => c.id === course.id}
-              onItemSelect={({ id }) => this.props.setCurrentCourse(id)}
-              itemRenderer={({ title, id }, { handleClick }) => (
-                <ClickableColTitle
-                  key={id}
-                  disabled={id === course.id}
-                  onClick={handleClick}
-                >
-                  {title}
-                </ClickableColTitle>
-              )}
-            >
-              <Button
-                style={{ whiteSpace: "nowrap" }}
-                fill
-                className="mobile-shrink"
-                text={course.title}
-                rightIcon="chevron-down"
-              />
-            </CourseSelect> */}
           </ColTitle>
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
@@ -1088,20 +1093,20 @@ const ColTitle = styled.div`
 `;
 
 // NOTE: Used for the course multi-select, which is currently disabled.
-// const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
-//   border-left: ${props =>
-//     props.disabled
-//       ? `3px solid ${COLORS.NEON_GREEN}`
-//       : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
+const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
+  border-left: ${props =>
+    props.disabled
+      ? `3px solid ${COLORS.NEON_GREEN}`
+      : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
 
-//   :hover {
-//     cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
-//     background: ${props =>
-//       props.disabled
-//         ? COLORS.BACKGROUND_NAVIGATION_ITEM
-//         : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
-//   }
-// `;
+  :hover {
+    cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
+    background: ${props =>
+      props.disabled
+        ? COLORS.BACKGROUND_NAVIGATION_ITEM
+        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
+  }
+`;
 
 const NavIcons = styled.span`
   display: inline-block;

@@ -821,7 +821,7 @@
           "type": "typescript",
           "title": "Comment the Code!",
           "instructions": "Here we will get some practice writing your first comments. There are two syntax choices for adding comments in TypeScript: `//` and `/* ... */`. The double slash `//` can be used to create single line comments and the `/* ... */` can be used to create single\\-line or multi\\-line comments.\n\nThe code editor is empty\\! Get some practice writing your own comments by adding at least one comment using either comment syntax.",
-          "testCode": "test(\"A comment should exist using the `//` or `/* ... */` comment syntax.\", () => {\n  const code = __user_code_string__;\n  const includesCommentSyntax = code.includes(\"//\") || (code.includes(\"/*\") && code.includes(\"*/\"));\n  expect(includesCommentSyntax).toBe(true);\n});\n",
+          "testCode": "test(\"A comment should exist using the `//` or `/* ... */` comment syntax.\", () => {\n  const code = __user_code_string__;\n  const includesCommentSyntax =\n    code.includes(\"//\") || (code.includes(\"/*\") && code.includes(\"*/\"));\n  expect(includesCommentSyntax).toBe(true);\n});\n",
           "videoUrl": "https://www.youtube.com/embed/JaCTQcsulOA",
           "starterCode": "",
           "solutionCode": "// This is a single line comment!\n\n/* This is also a single line comment! */\n\n/**\n * This is a multie-line comment!\n */",

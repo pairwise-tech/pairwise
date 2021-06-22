@@ -283,6 +283,42 @@ const executeMongoDBQuery = async args => {
   }
 };
 
+const PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
+// const PAIRWISE_CODE_RUNNER_API = "";
+
+/**
+ * Execute Rust code.
+ */
+const executeRustChallengeTests = async (
+  codeString: string,
+  testString: string,
+) => {
+  try {
+    const url = `${PAIRWISE_CODE_RUNNER_API}/api/rust`;
+    const body = JSON.stringify({ codeString, testString });
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(url, {
+      body,
+      headers,
+      method: "post",
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    // Throw err to fail test
+    throw err;
+  }
+};
+
 /** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================

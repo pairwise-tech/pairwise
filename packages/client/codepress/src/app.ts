@@ -9,6 +9,7 @@ import fileUpload from "express-fileupload";
 
 import { Course, ContentUtilityClass, CourseList } from "@pairwise/common";
 
+// eslint-disable-next-line
 const debug = require("debug")("codepress:app");
 
 const readdir = promisify(fs.readdir);
@@ -108,13 +109,13 @@ class CourseAPI {
          * will be in a predicable order here.
          */
 
-        // NOTE: Pairwise Library is not included for now.
+        // NOTE: Only the Fullstack TypeScript course is included for now.
         // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [PairwiseContent, FullstackTypeScript] = courses;
+        const [PairwiseContent, FullstackTypeScript, Rust] = courses;
 
         // Manually match the order provided by ContentUtilityClass:
-        const courseList = [FullstackTypeScript];
+        const courseList = [Rust, FullstackTypeScript];
         this.cache = makeCache(courseList);
         return this.resolveFromCache();
       });
@@ -188,8 +189,9 @@ app.get("/courses", (_, res) => {
 app.get("/skeletons", (_, res) => {
   api.courses
     .getAll()
-    .then((xs: Course[]) => {
-      const util = new ContentUtilityClass(xs);
+    .then((xs: any) => {
+      const courseList = xs as Course[];
+      const util = new ContentUtilityClass(courseList);
 
       // Codepress user "purchased" all existing courses
       const allAccessPass = xs
