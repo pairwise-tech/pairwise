@@ -88,11 +88,12 @@ class AdminStatsPage extends React.Component<IProps, {}> {
               </Value>
             </Stat>
             <Stat>
-              <b>Total Payments:</b>{" "}
+              <b>Total Number of Payments:</b>{" "}
               <Value>{totalNumberOfPayments.toLocaleString()}</Value>
             </Stat>
             <Stat>
-              <b>Total Revenue:</b> <Value>${totalRevenue.toFixed(2)}</Value>
+              <b>Total Course Revenue:</b>{" "}
+              <Value>${totalRevenue.toFixed(2)}</Value>
             </Stat>
             <h2>Recent Challenge Progress:</h2>
             {progressRecords ? (
