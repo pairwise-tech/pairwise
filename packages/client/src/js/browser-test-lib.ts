@@ -209,15 +209,6 @@ class MockMongoCollection {
 
 const usersCollection = new MockMongoCollection();
 
-/**
- * Switch the database URL if you need to test and run the Database Challenge
- * API server locally:
- *
- * TODO: It might be nice if this DATABASE_CHALLENGE_API was an environment
- * variable, but this is a little tricky because these files are built
- * independently and then just included directly as JS in runtime.
- */
-
 // const DATABASE_CHALLENGE_API = "http://localhost:5000";
 const DATABASE_CHALLENGE_API =
   "https://database-challenge-api.uc.r.appspot.com";
@@ -283,8 +274,9 @@ const executeMongoDBQuery = async args => {
   }
 };
 
-const PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
-// const PAIRWISE_CODE_RUNNER_API = "";
+// const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
+const PAIRWISE_CODE_RUNNER_API =
+  "https://pairwise-code-runner-api.uc.r.appspot.com";
 
 interface AlternateLanguageTestResult {
   stdout: string;
