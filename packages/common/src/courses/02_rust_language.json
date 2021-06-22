@@ -3,7 +3,7 @@
   "free": true,
   "id": "alosiqu45",
   "title": "Rust",
-  "description": "Rust is a statically typed programming language which excels at performance and safety.",
+  "description": "Rust is a statically typed, multi paradigm programming language which excels at performance and safety.",
   "modules": [
     {
       "id": "alosiuqwk",

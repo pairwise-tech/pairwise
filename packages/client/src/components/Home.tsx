@@ -48,9 +48,9 @@ class Home extends React.Component<IProps, {}> {
                   build modern web and mobile applications.
                 </ContentText>
                 <ContentText>
-                  Most coding bootcamps cost $10,000 USD or more, while a
-                  computer science degree from a university is even more
-                  expensive and takes years to complete.
+                  Most coding bootcamps cost $10,000 USD or more, and a computer
+                  science degree from a university is even more expensive and
+                  takes years to complete.
                 </ContentText>
                 <ContentText>
                   Pairwise is the fastest and most affordable way to learn these
@@ -59,7 +59,7 @@ class Home extends React.Component<IProps, {}> {
                 <ContentText
                   style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
                 >
-                  What do I get?
+                  How much does it cost?
                 </ContentText>
                 <ContentText>
                   The Pairwise FullStack TypeScript Course is currently in{" "}
@@ -74,9 +74,9 @@ class Home extends React.Component<IProps, {}> {
                   other skills like testing and deploying software.
                 </ContentText>
                 <ContentText>
-                  To see more about what you will learn,{" "}
+                  To see more about what you will learn, you can{" "}
                   <ExternalLink link="https://pairwise.tech">
-                    go here
+                    visit this page
                   </ExternalLink>
                   .
                 </ContentText>
@@ -127,6 +127,8 @@ class Home extends React.Component<IProps, {}> {
     const isCourseFree = skeleton.free;
     const canAccessCourse = paidForCourse || isCourseFree;
     const courseId = skeleton.id;
+
+    console.log(lastActiveChallengeIds);
 
     if (!firstCourseChallenge) {
       return null;
