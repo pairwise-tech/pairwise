@@ -8,7 +8,7 @@ import {
   KeyValue,
   SummaryText,
 } from "./AdminComponents";
-import { PaymentRecord } from "../modules/payments/store";
+import { estimateTotalPaymentsRevenue } from "../tools/admin-utils";
 
 /** ===========================================================================
  * AdminPaymentsPage Component
@@ -18,16 +18,17 @@ import { PaymentRecord } from "../modules/payments/store";
 class AdminPaymentsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const { paymentRecords } = this.props;
-    const totalUserPayments = estimateTotalRevenue(paymentRecords);
-    const COURSE_PRICE = 50;
-    const totalRevenue = totalUserPayments * COURSE_PRICE;
+    const {
+      totalRevenue,
+      totalNumberOfPayments,
+    } = estimateTotalPaymentsRevenue(paymentRecords);
     return (
       <PageContainer>
         <Title>Course Payments</Title>
-        {totalUserPayments > 0 ? (
+        {totalNumberOfPayments > 0 ? (
           <SummaryText>
-            There are currently {totalUserPayments} total user payments, for a
-            total of ${totalRevenue.toFixed(2)} in course revenue.
+            There are currently {totalNumberOfPayments} total user payments, for
+            a total of ${totalRevenue.toFixed(2)} in course revenue.
           </SummaryText>
         ) : (
           <SummaryText>
@@ -70,25 +71,6 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
  */
 
 const Title = styled.h2``;
-
-/**
- * Helper to estimate the total collected course revenue.
- */
-const estimateTotalRevenue = (payments: PaymentRecord[]) => {
-  let total = 0;
-
-  for (const x of payments) {
-    if (x.paymentType === "USER_PAID") {
-      total++;
-    }
-  }
-
-  // Decrement the total by 1
-  // (the first real course payment was made as a test)
-  total--;
-
-  return total;
-};
 
 /** ===========================================================================
  * Props

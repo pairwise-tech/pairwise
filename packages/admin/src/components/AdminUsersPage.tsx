@@ -27,16 +27,45 @@ interface IState {
 class AdminUsersPage extends React.Component<IProps, IState> {
   render(): Nullable<JSX.Element> {
     const { users } = this.props;
+    const usersExist = users && users.length > 0;
     return (
       <PageContainer>
         <h2>Users List</h2>
-        <SummaryText>
-          There are currently {users.length} total registered users.
-        </SummaryText>
-        {users && users.reverse().map(this.renderUsersList)}
+        {usersExist ? (
+          this.renderUsers(users)
+        ) : (
+          <SummaryText>
+            There are currently {users.length} total registered users.
+          </SummaryText>
+        )}
       </PageContainer>
     );
   }
+
+  renderUsers = (users: AdminUserView[]) => {
+    const zeroChallengeUsers = [];
+    const usersWithProgress = [];
+
+    // Separate users with progress history and those with none
+    for (const user of users) {
+      if (Object.keys(user.challengeProgressHistory).length === 0) {
+        zeroChallengeUsers.push(user);
+      } else {
+        usersWithProgress.push(user);
+      }
+    }
+
+    return (
+      <>
+        <SummaryText style={{ maxWidth: 550 }}>
+          There are currently {users.length} total registered users. A total of{" "}
+          {zeroChallengeUsers.length} have completed zero challenges, and are
+          excluded from the following list:
+        </SummaryText>
+        {usersWithProgress.map(this.renderUsersList)}
+      </>
+    );
+  };
 
   renderUsersList = (user: AdminUserView) => {
     return <AdminUserComponent key={user.uuid} user={user} />;

@@ -52,8 +52,8 @@ export enum MonacoEditorThemes {
 
 export const defaultUserSettings: UserSettings = {
   workspaceFontSize: 16,
-  theme: MonacoEditorThemes.DEFAULT,
   fullScreenEditor: false,
+  theme: MonacoEditorThemes.DEFAULT,
 };
 
 export interface IUserDto<Profile = UserProfile> {
