@@ -111,7 +111,7 @@ interface AlternateLanguageTestResult {
 /**
  * Process a test result from a Rust test.
  */
-declare const handleAlternateLanguageTestResult: (result: AlternateLanguageTestResult, log: (message: string) => void) => void;
+declare const handleAlternateLanguageTestResult: (result: AlternateLanguageTestResult, consoleMethod?: (message: string) => void) => void;
 /**
  * Execute Rust code.
  */

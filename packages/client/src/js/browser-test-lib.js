@@ -285,7 +285,17 @@ var PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
 /**
  * Process a test result from a Rust test.
  */
-var handleAlternateLanguageTestResult = function (result, log) {
+var handleAlternateLanguageTestResult = function (result, consoleMethod) {
+    if (consoleMethod === void 0) { consoleMethod = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return null;
+    }; }
+    // TODO: Debug how to access the hijacked console log method here, rather
+    // than having to pass it in from the calling function:
+    var log = typeof consoleMethod !== "function" ? function () { return null; } : consoleMethod;
     var stdout = result.stdout, stderr = result.stderr, testResult = result.testResult;
     var isValid = testResult === "true";
     if (isValid) {

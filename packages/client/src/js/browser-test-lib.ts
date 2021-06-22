@@ -297,8 +297,12 @@ interface AlternateLanguageTestResult {
  */
 const handleAlternateLanguageTestResult = (
   result: AlternateLanguageTestResult,
-  log: (message: string) => void,
+  consoleMethod: (message: string) => void = (...args: any) => null,
 ) => {
+  // TODO: Debug how to access the hijacked console log method here, rather
+  // than having to pass it in from the calling function:
+  const log = typeof consoleMethod !== "function" ? () => null : consoleMethod;
+
   const { stdout, stderr, testResult } = result;
   const isValid = testResult === "true";
   if (isValid) {
