@@ -109,7 +109,8 @@ export const constructDataBlobFromChallenge = (args: {
     case "section":
     case "react":
     case "typescript":
-    case "markup": {
+    case "markup":
+    case "rust": {
       const blob: CodeChallengeBlob = {
         code,
         type: "challenge",
@@ -521,6 +522,7 @@ export const getFileExtensionByChallengeType = (challenge: Challenge) => {
   const HTML = "html";
   const REACT = "tsx";
   const TYPESCRIPT = "ts";
+  const RUST = "rs";
 
   switch (type) {
     case "markup":
@@ -529,6 +531,8 @@ export const getFileExtensionByChallengeType = (challenge: Challenge) => {
       return { name, ext: REACT };
     case "typescript":
       return { name, ext: TYPESCRIPT };
+    case "rust":
+      return { name, ext: RUST };
     case "media":
     case "section":
     case "project":

@@ -282,7 +282,23 @@ var executeMongoDBQuery = function (args) { return __awaiter(_this, void 0, void
     });
 }); };
 var PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
-// const PAIRWISE_CODE_RUNNER_API = "";
+/**
+ * Process a test result from a Rust test.
+ */
+var handleRustTestResult = function (result) {
+    var stdout = result.stdout, stderr = result.stderr, testResult = result.testResult;
+    var isValid = testResult === "true";
+    if (isValid) {
+        if (stdout !== "") {
+            console.log(stdout);
+        }
+        pass();
+    }
+    else {
+        console.log(stderr);
+        fail();
+    }
+};
 /**
  * Execute Rust code.
  */

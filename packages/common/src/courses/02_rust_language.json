@@ -11,13 +11,13 @@
       "challenges": [
         {
           "id": "S@Ghw6X75",
-          "type": "typescript",
+          "type": "rust",
           "title": "Rust Proof of Concept Challenge",
-          "instructions": "Pairwise supports writing and running Rust code.",
-          "testCode": "test(\"Test\", async () => {\n  pass();\n  const a = \"hi\";\n  const b = \"hello\";\n  const result = await executeRustChallengeTests(a, b);\n  expect(result).toBe(true);\n});\n",
+          "instructions": "Pairwise supports writing and running Rust code. Create a function `add` which adds two numbers together. The function must be written using [Rust](https://www.rust-lang.org/). Good luck.",
+          "testCode": "test(\"The `add` function should exist and add two numbers together.\", async () => {\n  const RUST_CODE_STRING = __user_code_string__;\n\n  const RUST_TEST_STRING = `\n    fn test<'a>() -> bool {\n      let mut result = add(10, 5);\n      let mut expected = 15;\n      if result != expected {\n          return false;\n      }\n\n      result = add(100, 200);\n      expected = 300;\n      if result != expected {\n          return false;\n      }\n\n      result = add(10, 25);\n      expected = 35;\n      if result != expected {\n          return false;\n      }\n\n      result = add(-15, 15);\n      expected = 0;\n      if result != expected {\n          return false;\n      }\n\n      result = add(1000, -2000);\n      expected = -1000;\n      if result != expected {\n          return false;\n      }\n\n      true\n    }\n  `;\n\n  const result = await executeRustChallengeTests(\n    RUST_CODE_STRING,\n    RUST_TEST_STRING\n  );\n\n  const isValid = result.testResult === \"true\";\n  if (isValid) {\n    if (result.stdout !== \"\") {\n      console.log(result.stdout);\n    }\n    pass();\n  } else {\n    console.log(result.stderr);\n    fail();\n  }\n});\n",
           "videoUrl": "",
-          "starterCode": "",
-          "solutionCode": "",
+          "starterCode": "// Write an add function using Rust\n",
+          "solutionCode": "// Write an add function using Rust\nfn add(a: i32, b: i32) -> i32 {\n  a + b\n}",
           "content": ""
         }
       ]

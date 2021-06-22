@@ -286,13 +286,36 @@ const executeMongoDBQuery = async args => {
 const PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
 // const PAIRWISE_CODE_RUNNER_API = "";
 
+interface RustTestResult {
+  stdout: string;
+  stderr: string;
+  testResult: string;
+}
+
+/**
+ * Process a test result from a Rust test.
+ */
+const handleRustTestResult = (result: RustTestResult) => {
+  const { stdout, stderr, testResult } = result;
+  const isValid = testResult === "true";
+  if (isValid) {
+    if (stdout !== "") {
+      console.log(stdout);
+    }
+    pass();
+  } else {
+    console.log(stderr);
+    fail();
+  }
+};
+
 /**
  * Execute Rust code.
  */
 const executeRustChallengeTests = async (
   codeString: string,
   testString: string,
-) => {
+): Promise<RustTestResult> => {
   try {
     const url = `${PAIRWISE_CODE_RUNNER_API}/api/rust`;
     const body = JSON.stringify({ codeString, testString });

@@ -381,6 +381,11 @@ export const injectTestCode = (challenge: Challenge) => (
   const CODE_WITH_TEST_PREFIX = `${TEST_GATHERING_PREFIX}\n${code}`;
   const testCodeString = stripConsoleCalls(CODE_WITH_TEST_PREFIX);
 
+  if (type === "rust") {
+    code = getTestHarness("", codeString, testCode);
+    return code;
+  }
+
   return `
     /**
      * This is the user challenge code which produces the user visible output
@@ -621,7 +626,14 @@ export const compileCodeString = async (
   sourceCodeString: string,
   challenge: Challenge,
 ) => {
-  if (challenge.type === "markup") {
+  if (challenge.type === "rust") {
+    const processedCodeString = await pipe(
+      injectTestCode(challenge),
+      hijackConsole,
+    )(sourceCodeString);
+
+    return { code: processedCodeString, dependencies: [""] };
+  } else if (challenge.type === "markup") {
     const testScript = getTestScripts(sourceCodeString, challenge.testCode, "");
 
     // NOTE: Tidy html should ensure there is indeed a closing body tag

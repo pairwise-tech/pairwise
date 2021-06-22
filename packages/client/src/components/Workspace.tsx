@@ -441,6 +441,8 @@ class Workspace extends React.Component<IProps, IState> {
     const { type } = this.props.challenge;
 
     switch (type) {
+      case "rust":
+        return "rust";
       case "react":
       case "typescript":
         return "typescript";
@@ -520,6 +522,7 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_FULLSCREEN = fullScreenEditor || IS_SANDBOX;
     const IS_REACT_CHALLENGE = challenge.type === "react";
     const IS_REACT_NATIVE_CHALLENGE = isReactNativeChallenge;
+    const IS_RUST_CHALLENGE = challenge.type === "rust";
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
     const IS_SQL_CHALLENGE = isSqlChallenge;
@@ -875,6 +878,16 @@ class Workspace extends React.Component<IProps, IState> {
               style={{ visibility: "hidden", height: 0, width: 0 }}
             />
           </div>
+        ) : IS_RUST_CHALLENGE ? (
+          <div>
+            <Console variant="dark" logs={this.state.logs} />
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
         ) : IS_MARKUP_CHALLENGE ? (
           <div style={{ height: "100%" }}>
             <DragIgnorantFrameContainer
@@ -949,6 +962,22 @@ class Workspace extends React.Component<IProps, IState> {
           </RowsWrapper>
         </Col>
       ) : IS_TYPESCRIPT_CHALLENGE ? (
+        <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
+          {ScrollableWorkspaceConsole}
+          <div>
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        </Col>
+      ) : IS_RUST_CHALLENGE ? (
         <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}
@@ -1299,9 +1328,11 @@ class Workspace extends React.Component<IProps, IState> {
 
   iframeRenderPreview = async (): Promise<void> => {
     if (!this.iFrameRef || !this.iFrameRef.contentWindow) {
-      console.warn("[iframe] Not yet mounted");
+      console.warn("[iframe] Not yet mounted.");
       return;
     }
+
+    const { type } = this.props.challenge;
 
     // Process the code string and create an HTML document to render
     // to the iframe.
@@ -1309,7 +1340,7 @@ class Workspace extends React.Component<IProps, IState> {
       // Should give some searchable text should we encounter this.
       let sourceDocument = "<!-- SHOULD_BE_OVERWRITTEN -->";
 
-      if (this.props.challenge.type === "markup") {
+      if (type === "markup") {
         sourceDocument = getMarkupSrcDocument(
           this.state.code,
           this.props.challenge.testCode,

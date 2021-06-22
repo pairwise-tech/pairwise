@@ -103,10 +103,19 @@ declare const executePostgresQuery: (preSqlQuery: string, userSqlQuery: string, 
  */
 declare const executeMongoDBQuery: (args: any) => Promise<any>;
 declare const PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
+interface RustTestResult {
+    stdout: string;
+    stderr: string;
+    testResult: string;
+}
+/**
+ * Process a test result from a Rust test.
+ */
+declare const handleRustTestResult: (result: RustTestResult) => void;
 /**
  * Execute Rust code.
  */
-declare const executeRustChallengeTests: (codeString: string, testString: string) => Promise<any>;
+declare const executeRustChallengeTests: (codeString: string, testString: string) => Promise<RustTestResult>;
 /** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================
