@@ -9,7 +9,10 @@ import {
   KeyValue,
   CardButton,
 } from "./AdminComponents";
-import { summarizeUserProgress } from "../tools/admin-utils";
+import {
+  estimateTotalPaymentsRevenue,
+  summarizeUserProgress,
+} from "../tools/admin-utils";
 import { COLORS } from "../tools/constants";
 import { ProgressRecords } from "../modules/stats/store";
 import { Button } from "@blueprintjs/core";
@@ -25,6 +28,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
     const {
       usersList,
       statsLoading,
+      paymentRecords,
       progressRecords,
       usersListLoading,
     } = this.props;
@@ -32,6 +36,11 @@ class AdminStatsPage extends React.Component<IProps, {}> {
     // Wait for stats and users list to load
     const loading = usersListLoading || statsLoading;
     const summary = summarizeUserProgress(usersList);
+
+    const {
+      totalRevenue,
+      totalNumberOfPayments,
+    } = estimateTotalPaymentsRevenue(paymentRecords);
 
     return (
       <PageContainer>
@@ -77,6 +86,13 @@ class AdminStatsPage extends React.Component<IProps, {}> {
               <Value>
                 {summary.leaderboard.leaderChallengeCount.toLocaleString()}
               </Value>
+            </Stat>
+            <Stat>
+              <b>Total Payments:</b>{" "}
+              <Value>{totalNumberOfPayments.toLocaleString()}</Value>
+            </Stat>
+            <Stat>
+              <b>Total Revenue:</b> <Value>${totalRevenue.toFixed(2)}</Value>
             </Stat>
             <h2>Recent Challenge Progress:</h2>
             {progressRecords ? (
@@ -169,6 +185,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   statsLoading: Modules.selectors.stats.statsLoadingSelector(state),
   usersListLoading: Modules.selectors.users.usersState(state).loading,
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),
+  paymentRecords: Modules.selectors.payments.paymentRecordsSelector(state),
 });
 
 const dispatchProps = {

@@ -4,6 +4,7 @@ import { CourseList, CourseSkeleton } from "@pairwise/common";
 import { ParsedQuery } from "query-string";
 import { AdminUserView } from "../modules/users/store";
 import toaster from "../tools/toast-utils";
+import { PaymentRecord } from "../modules/payments/store";
 import { AdminSearchResult } from "../components/AdminSearchPage";
 
 /**
@@ -363,4 +364,31 @@ export const parseSearchQuery = (
   } else {
     return { type: "uuid", value: query };
   }
+};
+
+/**
+ * Helper to estimate the total collected course revenue.
+ */
+export const estimateTotalPaymentsRevenue = (payments: PaymentRecord[]) => {
+  // The first real course payment was made as a test, and
+  // we want to exclude it here
+  const ORIGINAL_TEST_PAYMENT = "518e98a0-dd35-419d-89ce-ede79e14932c";
+
+  let totalRevenue = 0;
+  let totalNumberOfPayments = 0;
+
+  for (const x of payments) {
+    if (x.uuid === ORIGINAL_TEST_PAYMENT) {
+      continue;
+    }
+    if (x.paymentType === "USER_PAID") {
+      totalNumberOfPayments++;
+      totalRevenue += x.amountPaid;
+    }
+  }
+
+  // Adjust revenue from cents to dollars
+  const dollars = totalRevenue / 100;
+
+  return { totalNumberOfPayments, totalRevenue: dollars };
 };
