@@ -3,7 +3,7 @@
   "free": true,
   "id": "asiuq8e7l",
   "title": "Python",
-  "description": "Coding challenges to learn the Python programming language.",
+  "description": "Python is an interpreted, high-level general-purpose high level programming language.",
   "modules": [
     {
       "id": "apoqLskrZ",
@@ -29,6 +29,17 @@
           "videoUrl": "",
           "starterCode": "# Write your code here\n",
           "solutionCode": "# This function concatenates an arbitrary number of input strings\ndef concatenate(*strings):\n  result = \"\"\n  for x in strings:\n    result += x\n  return result",
+          "content": ""
+        },
+        {
+          "id": "NfB1A9Sn3",
+          "type": "python",
+          "title": "Sum Array",
+          "instructions": "You are given a list of elements. Write a function `sumList` which returns the sum of adding all of the elements in the input list.",
+          "testCode": "test(\"`sumList` should be accept a list of numbers and return their sum.\", async () => {\n  const CODE = __user_code_string__;\n  const TEST_STRING = `\ndef test():\n  result = sumList([1,2,3,4,5])\n  expected = 15\n  if result != expected:\n    return False\n\n  result = sumList([100,200,300,400,500,10000])\n  expected = 11500\n  if result != expected:\n    return False\n\n  result = sumList([])\n  expected = 0\n  if result != expected:\n    return False\n\n  result = sumList([-5,5])\n  expected = 0\n  if result != expected:\n    return False\n\n  result = sumList([2,2,2,2,2,2,2,2,2,2,2,2])\n  expected = 24\n  if result != expected:\n    return False\n\n  result = sumList([500,500,500,500,500,2500,95000])\n  expected = 100000\n  if result != expected:\n    return False\n\n  return True\n`;\n\n  const result = await executePythonChallengeTests(CODE, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "# Write your function here",
+          "solutionCode": "# Write your function here\ndef sumList(list):\n  sum = 0\n  for x in list:\n    sum += x\n  return sum\n",
           "content": ""
         }
       ]
