@@ -85,14 +85,6 @@ declare class MockMongoCollection {
     insertOne(args: any): Promise<any>;
 }
 declare const usersCollection: MockMongoCollection;
-/**
- * Switch the database URL if you need to test and run the Database Challenge
- * API server locally:
- *
- * TODO: It might be nice if this DATABASE_CHALLENGE_API was an environment
- * variable, but this is a little tricky because these files are built
- * independently and then just included directly as JS in runtime.
- */
 declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
@@ -102,7 +94,7 @@ declare const executePostgresQuery: (preSqlQuery: string, userSqlQuery: string, 
  * Helper for MongoDB code challenges.
  */
 declare const executeMongoDBQuery: (args: any) => Promise<any>;
-declare const PAIRWISE_CODE_RUNNER_API = "http://localhost:6001";
+declare const PAIRWISE_CODE_RUNNER_API = "https://pairwise-code-runner-api.uc.r.appspot.com";
 interface AlternateLanguageTestResult {
     stdout: string;
     stderr: string;
