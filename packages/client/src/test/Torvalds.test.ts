@@ -327,6 +327,10 @@ const executeTests = async (challenge: Challenge) => {
       // continue outerLoop;
       return [];
     }
+    case "rust": {
+      log.skip(challenge);
+      return [];
+    }
     default: {
       assertUnreachable(challenge.type);
     }
