@@ -37,6 +37,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 /** ===========================================================================
+ * Environment Variables
+ * ----------------------------------------------------------------------------
+ * NOTE: This file does not support importing or exporting any values.
+ * ============================================================================
+ */
+// const DATABASE_CHALLENGE_API = "http://localhost:5000";
+var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+// const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
+var PAIRWISE_CODE_RUNNER_API = "https://pairwise-code-runner-api.uc.r.appspot.com";
+/** ===========================================================================
  * Global test helpers.
  * ============================================================================
  */
@@ -195,8 +205,6 @@ var MockMongoCollection = /** @class */ (function () {
     return MockMongoCollection;
 }());
 var usersCollection = new MockMongoCollection();
-// const DATABASE_CHALLENGE_API = "http://localhost:5000";
-var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */
@@ -273,7 +281,6 @@ var executeMongoDBQuery = function (args) { return __awaiter(_this, void 0, void
         }
     });
 }); };
-var PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
 /**
  * Process a test result from a Rust test.
  */

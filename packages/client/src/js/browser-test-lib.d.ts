@@ -19,6 +19,14 @@ interface TestCase {
 }
 declare const __USER_TEST_LIST__: TestCase[];
 /** ===========================================================================
+ * Environment Variables
+ * ----------------------------------------------------------------------------
+ * NOTE: This file does not support importing or exporting any values.
+ * ============================================================================
+ */
+declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+declare const PAIRWISE_CODE_RUNNER_API = "https://pairwise-code-runner-api.uc.r.appspot.com";
+/** ===========================================================================
  * Global test helpers.
  * ============================================================================
  */
@@ -85,7 +93,6 @@ declare class MockMongoCollection {
     insertOne(args: any): Promise<any>;
 }
 declare const usersCollection: MockMongoCollection;
-declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */
@@ -94,7 +101,6 @@ declare const executePostgresQuery: (preSqlQuery: string, userSqlQuery: string, 
  * Helper for MongoDB code challenges.
  */
 declare const executeMongoDBQuery: (args: any) => Promise<any>;
-declare const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
 interface Output {
     code: number;
     stdout: string;

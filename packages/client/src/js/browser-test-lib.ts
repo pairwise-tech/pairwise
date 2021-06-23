@@ -26,6 +26,21 @@ interface TestCase {
 declare const __USER_TEST_LIST__: TestCase[];
 
 /** ===========================================================================
+ * Environment Variables
+ * ----------------------------------------------------------------------------
+ * NOTE: This file does not support importing or exporting any values.
+ * ============================================================================
+ */
+
+// const DATABASE_CHALLENGE_API = "http://localhost:5000";
+const DATABASE_CHALLENGE_API =
+  "https://database-challenge-api.uc.r.appspot.com";
+
+// const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
+const PAIRWISE_CODE_RUNNER_API =
+  "https://pairwise-code-runner-api.uc.r.appspot.com";
+
+/** ===========================================================================
  * Global test helpers.
  * ============================================================================
  */
@@ -209,10 +224,6 @@ class MockMongoCollection {
 
 const usersCollection = new MockMongoCollection();
 
-// const DATABASE_CHALLENGE_API = "http://localhost:5000";
-const DATABASE_CHALLENGE_API =
-  "https://database-challenge-api.uc.r.appspot.com";
-
 /**
  * Helper for SQL code challenges.
  */
@@ -273,10 +284,6 @@ const executeMongoDBQuery = async args => {
     throw err;
   }
 };
-
-// const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
-const PAIRWISE_CODE_RUNNER_API =
-  "https://pairwise-code-runner-api.uc.r.appspot.com";
 
 interface Output {
   code: number;
