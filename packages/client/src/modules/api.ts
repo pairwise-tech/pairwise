@@ -589,7 +589,6 @@ class LocalStorageHttpClass {
     let updatedProgress: ProgressEntity;
     const timeCompleted = new Date();
 
-    /* ugh */
     if (existingCourseProgress) {
       updatedProgress = {
         courseId,
@@ -607,16 +606,16 @@ class LocalStorageHttpClass {
       };
     }
 
-    /* ugh */
-    const updatedProgressList = progressList.length
-      ? progressList.map(p => {
-          if (p.courseId === progress.courseId) {
-            return updatedProgress;
-          } else {
-            return p;
-          }
-        })
-      : [updatedProgress];
+    const updatedProgressList =
+      progressList.length === 0
+        ? [updatedProgress]
+        : progressList.concat(updatedProgress).map(p => {
+            if (p.courseId === progress.courseId) {
+              return updatedProgress;
+            } else {
+              return p;
+            }
+          });
 
     // Update user progress
     this.setItem(KEYS.USER_PROGRESS_KEY, updatedProgressList);

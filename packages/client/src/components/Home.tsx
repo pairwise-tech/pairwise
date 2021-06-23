@@ -128,8 +128,6 @@ class Home extends React.Component<IProps, {}> {
     const canAccessCourse = paidForCourse || isCourseFree;
     const courseId = skeleton.id;
 
-    console.log(lastActiveChallengeIds);
-
     if (!firstCourseChallenge) {
       return null;
     }
