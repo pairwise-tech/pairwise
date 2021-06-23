@@ -1,4 +1,3 @@
-"use strict";
 /* eslint-disable */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -36,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
+var _this = this;
 /** ===========================================================================
  * Global test helpers.
  * ============================================================================
@@ -130,7 +129,7 @@ var inBox = function (box, message) {
 // Check for a message in the console log box, but after some delay.
 // This is a helper for running tests in async challenges, where a challenge
 // may need to log a message but after waiting for some time.
-var checkBoxAsync = function (box, message, delay) { return __awaiter(void 0, void 0, void 0, function () {
+var checkBoxAsync = function (box, message, delay) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, new Promise(function (resolve) {
                 setTimeout(function () {
@@ -142,7 +141,7 @@ var checkBoxAsync = function (box, message, delay) { return __awaiter(void 0, vo
 }); };
 // Wait some time... useful for pausing to let async challenges have some
 // time to complete some actions.
-var wait = function (time) { return __awaiter(void 0, void 0, void 0, function () {
+var wait = function (time) { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, time); })];
     });
@@ -201,7 +200,7 @@ var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 /**
  * Helper for SQL code challenges.
  */
-var executePostgresQuery = function (preSqlQuery, userSqlQuery, postSqlQuery) { return __awaiter(void 0, void 0, void 0, function () {
+var executePostgresQuery = function (preSqlQuery, userSqlQuery, postSqlQuery) { return __awaiter(_this, void 0, void 0, function () {
     var url, userQuery, preQuery, postQuery, body, headers, response, text, result, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -243,7 +242,7 @@ var executePostgresQuery = function (preSqlQuery, userSqlQuery, postSqlQuery) { 
 /**
  * Helper for MongoDB code challenges.
  */
-var executeMongoDBQuery = function (args) { return __awaiter(void 0, void 0, void 0, function () {
+var executeMongoDBQuery = function (args) { return __awaiter(_this, void 0, void 0, function () {
     var url, body, headers, response, result, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -274,8 +273,7 @@ var executeMongoDBQuery = function (args) { return __awaiter(void 0, void 0, voi
         }
     });
 }); };
-// const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
-var PAIRWISE_CODE_RUNNER_API = "https://pairwise-code-runner-api.uc.r.appspot.com";
+var PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
 /**
  * Process a test result from a Rust test.
  */
@@ -292,23 +290,35 @@ var handleAlternateLanguageTestResult = function (result, consoleMethod) {
     var log = typeof consoleMethod !== "function" ? function () { return null; } : consoleMethod;
     // Log result from preview
     if (result.previewOutput.code === 0) {
-        log(result.previewOutput.stdout);
+        var logs = result.previewOutput.stdout;
+        if (logs !== "") {
+            log(logs);
+        }
     }
     else {
-        log(result.previewOutput.stderr);
+        var logs = result.previewOutput.stderr;
+        if (logs !== "") {
+            log(logs);
+        }
     }
     if (result.passed) {
         pass();
     }
     else {
-        // Fail with error output from test result standard error
-        throw new Error(result.testOutput.stderr);
+        // The code compiled and ran, but failed the test cases
+        if (result.testOutput.code === 0) {
+            throw new Error("The code ran successfully but failed the test cases.");
+        }
+        else {
+            // Fail with error output from test result standard error
+            throw new Error(result.testOutput.stderr || "An error occurred.");
+        }
     }
 };
 /**
  * Execute Rust code.
  */
-var executeRustChallengeTests = function (codeString, testString) { return __awaiter(void 0, void 0, void 0, function () {
+var executeRustChallengeTests = function (codeString, testString) { return __awaiter(_this, void 0, void 0, function () {
     var url, body, headers, response, text, result, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -347,7 +357,7 @@ var executeRustChallengeTests = function (codeString, testString) { return __awa
 /**
  * Execute Python code.
  */
-var executePythonChallengeTests = function (codeString, testString) { return __awaiter(void 0, void 0, void 0, function () {
+var executePythonChallengeTests = function (codeString, testString) { return __awaiter(_this, void 0, void 0, function () {
     var url, body, headers, response, text, result, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -386,7 +396,7 @@ var executePythonChallengeTests = function (codeString, testString) { return __a
 /**
  * Execute Python code.
  */
-var executeGolangChallengeTests = function (codeString, testString) { return __awaiter(void 0, void 0, void 0, function () {
+var executeGolangChallengeTests = function (codeString, testString) { return __awaiter(_this, void 0, void 0, function () {
     var url, body, headers, response, text, result, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {

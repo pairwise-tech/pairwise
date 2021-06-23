@@ -274,17 +274,17 @@ const executeMongoDBQuery = async args => {
   }
 };
 
-// const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
-const PAIRWISE_CODE_RUNNER_API =
-  "https://pairwise-code-runner-api.uc.r.appspot.com";
+const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
+// const PAIRWISE_CODE_RUNNER_API =
+//   "https://pairwise-code-runner-api.uc.r.appspot.com";
 
-export interface Output {
+interface Output {
   code: number;
   stdout: string;
   stderr: string;
 }
 
-export interface AlternateLanguageTestResult {
+interface AlternateLanguageTestResult {
   passed: boolean;
   testOutput: Output;
   previewOutput: Output;
@@ -303,16 +303,27 @@ const handleAlternateLanguageTestResult = (
 
   // Log result from preview
   if (result.previewOutput.code === 0) {
-    log(result.previewOutput.stdout);
+    const logs = result.previewOutput.stdout;
+    if (logs !== "") {
+      log(logs);
+    }
   } else {
-    log(result.previewOutput.stderr);
+    const logs = result.previewOutput.stderr;
+    if (logs !== "") {
+      log(logs);
+    }
   }
 
   if (result.passed) {
     pass();
   } else {
-    // Fail with error output from test result standard error
-    throw new Error(result.testOutput.stderr);
+    // The code compiled and ran, but failed the test cases
+    if (result.testOutput.code === 0) {
+      throw new Error("The code ran successfully but failed the test cases.");
+    } else {
+      // Fail with error output from test result standard error
+      throw new Error(result.testOutput.stderr || "An error occurred.");
+    }
   }
 };
 
