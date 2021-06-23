@@ -278,10 +278,16 @@ const executeMongoDBQuery = async args => {
 const PAIRWISE_CODE_RUNNER_API =
   "https://pairwise-code-runner-api.uc.r.appspot.com";
 
-interface AlternateLanguageTestResult {
+export interface Output {
+  code: number;
   stdout: string;
   stderr: string;
-  testResult: string;
+}
+
+export interface AlternateLanguageTestResult {
+  passed: boolean;
+  testOutput: Output;
+  previewOutput: Output;
 }
 
 /**
@@ -295,16 +301,18 @@ const handleAlternateLanguageTestResult = (
   // than having to pass it in from the calling function:
   const log = typeof consoleMethod !== "function" ? () => null : consoleMethod;
 
-  const { stdout, stderr, testResult } = result;
-  const isValid = testResult === "true";
-  if (isValid) {
-    if (stdout !== "") {
-      log(stdout);
-    }
+  // Log result from preview
+  if (result.previewOutput.code === 0) {
+    log(result.previewOutput.stdout);
+  } else {
+    log(result.previewOutput.stderr);
+  }
+
+  if (result.passed) {
     pass();
   } else {
-    log(stderr);
-    fail();
+    // Fail with error output from test result standard error
+    throw new Error(result.testOutput.stderr);
   }
 };
 
