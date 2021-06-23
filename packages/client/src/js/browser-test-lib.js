@@ -42,10 +42,14 @@ var _this = this;
  * NOTE: This file does not support importing or exporting any values.
  * ============================================================================
  */
-// const DATABASE_CHALLENGE_API = "http://localhost:5000";
 var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
-// const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
 var PAIRWISE_CODE_RUNNER_API = "https://pairwise-code-runner-api.uc.r.appspot.com";
+var DEV = false;
+DEV = true; // Enable to use code execution APIs in development
+if (DEV) {
+    DATABASE_CHALLENGE_API = "http://localhost:5000";
+    PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
+}
 /** ===========================================================================
  * Global test helpers.
  * ============================================================================

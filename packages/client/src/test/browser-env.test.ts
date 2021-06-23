@@ -13,17 +13,15 @@ const BROWSER_TEST_LIBRARY = fs.readFileSync(
  * which merge to the main branch in production.
  */
 describe("Check browser-test-lib environment variables", () => {
+  const DEV_COMMENT = `// DEV = true; // Enable to use code execution APIs in development`;
+
   test("Check DATABASE_CHALLENGE_API", () => {
-    const line = BROWSER_TEST_LIBRARY.includes(
-      `// const DATABASE_CHALLENGE_API = "http://localhost:5000";`,
-    );
+    const line = BROWSER_TEST_LIBRARY.includes(DEV_COMMENT);
     expect(line).toBe(true);
   });
 
   test("Check PAIRWISE_CODE_RUNNER_API", () => {
-    const line = BROWSER_TEST_LIBRARY.includes(
-      `// const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";`,
-    );
+    const line = BROWSER_TEST_LIBRARY.includes(DEV_COMMENT);
     expect(line).toBe(true);
   });
 });
