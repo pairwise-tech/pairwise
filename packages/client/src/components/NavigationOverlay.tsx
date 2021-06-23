@@ -92,7 +92,25 @@ class NavigationOverlay extends React.Component<
 
   componentDidUpdate() {
     this.lockWindowScrolling();
+
+    this.maybeScrollSelectedItemIntoView();
   }
+
+  maybeScrollSelectedItemIntoView = () => {
+    const { menuSelectIndex } = this.props;
+    if (menuSelectIndex === null) {
+      return;
+    }
+
+    const elements = document.getElementsByClassName("selected-item");
+    const element = elements[0];
+
+    if (element && elements.length === 1) {
+      if (!this.isElementVisible(element)) {
+        this.scrollToSelectedChallenge();
+      }
+    }
+  };
 
   lockWindowScrolling = () => {
     if (this.props.overlayVisible) {
@@ -100,6 +118,16 @@ class NavigationOverlay extends React.Component<
     } else {
       document.body.style.overflow = "visible";
     }
+  };
+
+  isElementVisible = (element: Element) => {
+    const rect = element.getBoundingClientRect();
+    const viewHeight = Math.max(
+      document.documentElement.clientHeight,
+      window.innerHeight,
+    );
+
+    return !(rect.bottom > viewHeight || rect.top < 115);
   };
 
   render(): Nullable<JSX.Element> {
@@ -331,6 +359,16 @@ class NavigationOverlay extends React.Component<
     }
   };
 
+  scrollToSelectedChallenge = () => {
+    // Find the currently active element
+    const elements = document.getElementsByClassName("selected-item");
+    const element = elements[0];
+    // There should only be one active element...
+    if (element && elements.length === 1) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   // This can be used to expand or collapse all sections in the current module.
   toggleExpandCollapseAll = () => {
     const challengeList = this.props.module?.challenges;
@@ -442,9 +480,14 @@ class NavigationOverlay extends React.Component<
     module: ModuleSkeleton,
     index: number,
   ) => {
+    const { menuSelectIndex, menuSelectColumn } = this.props;
+    const isMenuItemSelected =
+      menuSelectColumn === "MODULE" && menuSelectIndex === index;
+
     return (
       <ModuleNavigationButton
         key={module.id}
+        menuSelected={isMenuItemSelected}
         id={`module-navigation-${index}`}
         active={module.id === activeModuleId}
         onClick={() => this.props.setCurrentModule(module.id)}
@@ -468,7 +511,12 @@ class NavigationOverlay extends React.Component<
     challenge: ChallengeSkeleton;
     style?: React.CSSProperties;
   }) => {
-    const { challengeId, isEditMode } = this.props;
+    const {
+      isEditMode,
+      challengeId,
+      menuSelectIndex,
+      menuSelectColumn,
+    } = this.props;
     const {
       index,
       module,
@@ -480,6 +528,9 @@ class NavigationOverlay extends React.Component<
       sectionChallenges = [],
       style = {},
     } = args;
+
+    const isMenuItemSelected =
+      menuSelectColumn === "CHALLENGE" && menuSelectIndex === index;
 
     const challengeProgress = getChallengeProgress(
       this.props.userProgress,
@@ -523,14 +574,23 @@ class NavigationOverlay extends React.Component<
       : !!sectionChallenges.find(c => c.id === challengeId);
     const itemActive = sectionActive || challenge.id === challengeId;
 
+    let className = "";
+    if (itemActive) {
+      className += " active-item";
+    }
+    if (isMenuItemSelected) {
+      className += " selected-item";
+    }
+
     return (
       <ChallengeNavigationItem
         key={challenge.id}
+        className={className}
         id={`challenge-${challenge.id}`}
-        className={itemActive ? "active-item" : ""}
         style={{ position: "relative", ...style }}
       >
         <ChallengeLink
+          menuSelected={isMenuItemSelected}
           locked={challenge.userCanAccess ? "false" : "true"}
           to={`/workspace/${getChallengeSlug(challenge)}`}
           id={`challenge-navigation-${index}`}
@@ -734,6 +794,7 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
 interface ChallengeLinkProps extends NavLinkProps {
   locked: "true" | "false"; // To circumvent a React DOM attribute warning message...
   active?: boolean;
+  menuSelected: boolean;
 }
 
 const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
@@ -747,9 +808,11 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   justify-content: space-between;
   text-align: left;
   outline: none;
-  color: ${COLORS.TEXT_TITLE} !important;
-  background: transparent;
   position: relative;
+  color: ${({ menuSelected }) =>
+    menuSelected ? "white" : COLORS.TEXT_TITLE} !important;
+  background: ${({ menuSelected }) =>
+    menuSelected ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER : "transparent"};
 
   &:after {
     content: "";
@@ -807,11 +870,17 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
 
 const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
   active?: boolean;
+  menuSelected: boolean;
 }>`
   outline: none;
-  color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
-  background: ${({ active }) =>
-    active ? COLORS.BACKGROUND_MODAL : "transparent"};
+  color: ${({ active, menuSelected }) =>
+    active || menuSelected ? "white" : COLORS.TEXT_TITLE};
+  background: ${({ active, menuSelected }) =>
+    active
+      ? COLORS.BACKGROUND_MODAL
+      : menuSelected
+      ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER
+      : "transparent"};
 
   &:hover {
     color: white;
@@ -824,9 +893,15 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
 
 const ModuleNavigationButton = ({
   active,
+  menuSelected,
   ...rest
-}: { active?: boolean } & any) => (
-  <ModuleNavigationButtonBase active={active} as="button" {...rest} />
+}: { active?: boolean; menuSelected: boolean } & any) => (
+  <ModuleNavigationButtonBase
+    active={active}
+    menuSelected={menuSelected}
+    as="button"
+    {...rest}
+  />
 );
 
 interface ChallengeListItemIconProps {
@@ -1114,6 +1189,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
+  menuSelectIndex: Modules.selectors.challenges.menuSelectIndex(state),
+  menuSelectColumn: Modules.selectors.challenges.menuSelectColumn(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   courseListMetadata: Modules.selectors.challenges.courseListMetadata(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),

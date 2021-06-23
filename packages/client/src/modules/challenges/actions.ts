@@ -102,6 +102,9 @@ enum ActionTypesEnum {
   // convention though so I'm open to suggestions
   REQUEST_SEARCH_RESULTS = "REQUEST_SEARCH_RESULTS",
   RECEIVE_SEARCH_RESULTS = "RECEIVE_SEARCH_RESULTS",
+
+  SET_MENU_SELECT_COLUMN = "SET_MENU_SELECT_COLUMN",
+  SET_MENU_SELECT_INDEX = "SET_MENU_SELECT_INDEX",
 }
 
 /** ===========================================================================
@@ -290,3 +293,11 @@ export const toggleRevealSolutionCode = createAction(
 export const toggleEditModeAlternativeView = createAction(
   ActionTypesEnum.TOGGLE_EDIT_MODE_ALTERNATIVE_VIEW,
 )();
+
+export const setMenuSelectColumn = createAction(
+  ActionTypesEnum.SET_MENU_SELECT_COLUMN,
+)<"MODULE" | "CHALLENGE">();
+
+export const setMenuSelectIndex = createAction(
+  ActionTypesEnum.SET_MENU_SELECT_INDEX,
+)<number>();

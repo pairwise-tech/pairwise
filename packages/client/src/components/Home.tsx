@@ -224,7 +224,6 @@ const ProgressBar = styled.div`
   width: 100%;
   margin-top: 8px;
   margin-bottom: 10px;
-  border-radius: 1px;
   background: ${COLORS.PROGRESS_BACKGROUND};
 `;
 
@@ -241,10 +240,10 @@ const ModuleProgressBar = styled.div`
 `;
 
 const ModuleProgressTitle = styled.div`
+  width: 265px;
   padding-top: 3px;
+  padding-left: 5px;
   padding-bottom: 3px;
-  padding-left: 4px;
-  width: 250px;
   background: ${COLORS.TEXT_DARK};
 `;
 

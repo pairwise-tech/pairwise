@@ -41,6 +41,28 @@
           "starterCode": "# Write your function here",
           "solutionCode": "# Write your function here\ndef sumList(list):\n  sum = 0\n  for x in list:\n    sum += x\n  return sum\n",
           "content": ""
+        },
+        {
+          "id": "nZOzo$GUxo",
+          "type": "python",
+          "title": "Build String",
+          "instructions": "You are given two string inputs `letters` and `target`. Your job is to determine if you can use the characters in the first input to construct the second, using each letter only one time. For instance:\n\n```\n(\"apples\", \"app\") -> True\n(\"apples\", \"able\") -> False\n\n```\n\nNote that an empty string can be constructed from any string input, including empty string.",
+          "testCode": "const TEST = `\ndef test():\n  result = constructString(\"apples\", \"app\")\n  expected = True\n  if result != expected:\n    return False\n    \n  result = constructString(\"apples\", \"able\")\n  expected = False\n  if result != expected:\n    return False\n\n  result = constructString(\"apples\", \"\")\n  expected = True\n  if result != expected:\n    return False\n  \n  result = constructString(\"\", \"\")\n  expected = True\n  if result != expected:\n    return False\n\n  result = constructString(\"8asfd9as90fsadf9856asdf7asfsa6f9saf\", \"8asfd9s90fsadf985asdf7asfsaf9saf\")\n  expected = True\n  if result != expected:\n    return False\n\n  result = constructString(\"sadfljhlaksfhioasuydfioasSRTAWEAWSFGSDRTasrfsafsafdsa\", \"sadfljhlaksfhioasuydfioasSRTAWEAWSFGSDRTasrfsafsafds\")\n  expected = True\n  if result != expected:\n    return False\n\n  result = constructString(\"safljhlaksfhioasuydfioasSRTAWEAWSFGSDRTasrfsafsafdsa\", \"sadfljhlaksfhioasuydfioasSRTAWEAWSFGSDRTasrfsafsafds\")\n  expected = False\n  if result != expected:\n    return False\n\n  result = constructString(\"\", \"x\")\n  expected = False\n  if result != expected:\n    return False\n\n  return True\n`;\n\ntest(\"`constructString` should return `True` if the second string input can be constructed from the first.\", async () => {\n  const CODE = __user_code_string__;\n  const result = await executePythonChallengeTests(CODE, TEST);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "# Write your code here\ndef constructString(letters, target):",
+          "solutionCode": " # Helper method to determine if a letter can be placed\ndef canUseLetter(letters, target, usedIndexes):\n  index = 0\n  for x in letters:\n    if x == target:\n      if index in usedIndexes:\n        c = 1\n      else:\n        usedIndexes.add(index)\n        return True\n    index += 1\n  return -1\n\ndef constructString(letters, target):\n  usedIndexes = set()\n  for c in target:\n    availableIndex = canUseLetter(letters, c, usedIndexes)\n    if availableIndex == -1:\n      return False\n  return True\n",
+          "content": ""
+        },
+        {
+          "id": "ox2$I6JFj",
+          "type": "python",
+          "title": "Add to a Tuple",
+          "instructions": "Write a function `tupleAppend` which accepts a tuple as the first argument and an item to be added to the tuple as the second argument. Add the item and return a new tuple. Note that the input tuple may be empty.",
+          "testCode": "const TEST = `\ndef test():\n  result = tupleAppend((1,2,3), 5)\n  expected = (1,2,3,5)\n  if result != expected:\n    return False\n\n  result = tupleAppend((1,2,3,7,8,9), 5)\n  expected = (1,2,3,7,8,9,5)\n  if result != expected:\n    return False\n\n  result = tupleAppend((-1,-1,-1,5000), 5)\n  expected = (-1,-1,-1,5000,5)\n  if result != expected:\n    return False\n    \n  result = tupleAppend((234,543,345,342,34,1234,2314,432,1213,4432,14), 1892734012)\n  expected = (234, 543, 345, 342, 34, 1234, 2314, 432, 1213, 4432, 14, 1892734012)\n  if result != expected:\n    return False\n\n  result = tupleAppend((), 5690690)\n  expected = (5690690)\n  if result != expected:\n    return False\n\n  return True\n`;\n\ntest(\"`tupleAppend` should be defined and return a new tuple which is the result of adding the second argument to the first tuple argument.\", async () => {\n  const CODE = __user_code_string__;\n  const result = await executePythonChallengeTests(CODE, TEST);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "# Write your code here\n",
+          "solutionCode": "# Append an item to a tuple and return a new tuple\ndef tupleAppend(t, item):\n  if len(t) == 0:\n    return (item)\n\n  tupleList = list(t)\n  tupleList.append(item)\n  return tuple(tupleList)\n",
+          "content": ""
         }
       ]
     }

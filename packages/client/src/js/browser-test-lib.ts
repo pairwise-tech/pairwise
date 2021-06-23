@@ -32,13 +32,13 @@ declare const __USER_TEST_LIST__: TestCase[];
  * ============================================================================
  */
 
-// const DATABASE_CHALLENGE_API = "http://localhost:5000";
-const DATABASE_CHALLENGE_API =
-  "https://database-challenge-api.uc.r.appspot.com";
+const DATABASE_CHALLENGE_API = "http://localhost:5000";
+// const DATABASE_CHALLENGE_API =
+//   "https://database-challenge-api.uc.r.appspot.com";
 
-// const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
-const PAIRWISE_CODE_RUNNER_API =
-  "https://pairwise-code-runner-api.uc.r.appspot.com";
+const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
+// const PAIRWISE_CODE_RUNNER_API =
+//   "https://pairwise-code-runner-api.uc.r.appspot.com";
 
 /** ===========================================================================
  * Global test helpers.

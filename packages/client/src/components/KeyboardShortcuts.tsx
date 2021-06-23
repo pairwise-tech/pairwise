@@ -35,7 +35,12 @@ const SHORTCUT_KEYS = {
  * changes depending on the context.
  */
 interface NonMappedKeys {
+  enter: ShortcutKeyHandler;
   escape: ShortcutKeyHandler;
+  arrowup: ShortcutKeyHandler;
+  arrowdown: ShortcutKeyHandler;
+  arrowleft: ShortcutKeyHandler;
+  arrowright: ShortcutKeyHandler;
   "cmd+shift+e": ShortcutKeyHandler; // Codepress editing toolbar
 }
 

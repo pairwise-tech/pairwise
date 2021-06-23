@@ -93,7 +93,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
             </Stat>
             <Stat>
               <b>Total Course Revenue:</b>{" "}
-              <Value>${totalRevenue.toFixed(2)}</Value>
+              <Value>${totalRevenue.toFixed(0)}</Value>
             </Stat>
             <h2>Recent Challenge Progress:</h2>
             {progressRecords ? (

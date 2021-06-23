@@ -70,6 +70,8 @@ export interface State {
   isSearching: boolean;
   revealWorkspaceSolution: boolean;
   isDirty: boolean;
+  menuSelectColumn: "MODULE" | "CHALLENGE";
+  menuSelectIndex: number | null;
 }
 
 const initialState: State = {
@@ -92,6 +94,8 @@ const initialState: State = {
   isSearching: false,
   revealWorkspaceSolution: false,
   isDirty: false,
+  menuSelectColumn: "CHALLENGE",
+  menuSelectIndex: null,
 };
 
 /** ===========================================================================
@@ -625,6 +629,14 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.setAdminEditorTab, (state, action) => ({
     ...state,
     adminEditorTab: action.payload,
+  }))
+  .handleAction(actions.setMenuSelectColumn, (state, action) => ({
+    ...state,
+    menuSelectColumn: action.payload,
+  }))
+  .handleAction(actions.setMenuSelectIndex, (state, action) => ({
+    ...state,
+    menuSelectIndex: action.payload,
   }))
   .handleAction(actions.toggleEditModeAlternativeView, (state, action) => ({
     ...state,

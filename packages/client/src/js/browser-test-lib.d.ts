@@ -24,8 +24,8 @@ declare const __USER_TEST_LIST__: TestCase[];
  * NOTE: This file does not support importing or exporting any values.
  * ============================================================================
  */
-declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
-declare const PAIRWISE_CODE_RUNNER_API = "https://pairwise-code-runner-api.uc.r.appspot.com";
+declare const DATABASE_CHALLENGE_API = "http://localhost:5000";
+declare const PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
 /** ===========================================================================
  * Global test helpers.
  * ============================================================================
