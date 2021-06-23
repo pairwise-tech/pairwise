@@ -10,6 +10,17 @@
       "title": "Rust Basics",
       "challenges": [
         {
+          "id": "1UMWYNFnEH",
+          "type": "section",
+          "title": "The Rust Language",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Rust is a powerful programming language which offers the speed of a compiled language like C\\+\\+ but with many of the abstractions and safety guarantees present in higher level languages. It does this with the help of a sophisticated compiler system.\n\nThese Rust challenges in Pairwise are very introductory and experimental. They may be expanded in the future into a more complete course on programming in Rust."
+        },
+        {
           "id": "S@Ghw6X75",
           "type": "rust",
           "title": "Intro to Rust",
@@ -18,6 +29,17 @@
           "videoUrl": "",
           "starterCode": "// Write an add function using Rust\n",
           "solutionCode": "// Write an add function using Rust\nfn add(a: i32, b: i32) -> i32 {\n  a + b\n}\n",
+          "content": ""
+        },
+        {
+          "id": "y4tgWGLOS",
+          "type": "rust",
+          "title": "Fill a Vector",
+          "instructions": "In Rust you can use a [Vec](https://doc.rust-lang.org/std/vec/struct.Vec.html) struct to represent a list of items. Write a function fillVector which takes a single integer input parameter and returns a vector with containing all of the integers up to and including the input parameter.\n\n```\nfillVector(10) // -> Vec[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n\n```\n\n**Note: **You can assume the input will not be negative, but it may be zero.",
+          "testCode": "const TEST_STRING = `\n    fn test() -> bool {\n      fn fillVectorSolution(max: i64) -> Vec<i64> {\n        let mut current = 0;\n        let mut v = Vec::new();\n        while current <= max {\n          v.push(current);\n          current = current + 1;\n        }\n        v\n      }\n\n      fn compareVectors(v1: Vec<i64>, v2: Vec<i64>) -> bool {\n        let mut index = 0;\n        for x in &v1 {\n          let other = &v2[index];\n          if x != other {\n            return false;\n          }\n\n          index = index + 1;\n        }\n        true\n      }\n      \n      fn compare(value: i64) -> bool {\n        let mut result = fillVector(value);\n        let mut expected = fillVectorSolution(value);\n        if compareVectors(result.to_owned(), expected.to_owned()) == false {\n          return false;\n        }\n        true\n      }\n      \n      let mut value = 5;\n      let values = vec![0, 1, 6, 12, 15, 26, 88, 900];\n      for v in values {\n        if compare(v) == false {\n          return false;\n        }\n      }\n      true\n    }\n  `;\n\ntest(\"`fillVector` should accept an integer argument and return a new vector of all of the integers up to and including that integer argument.\", async () => {\n  const CODE_STRING = __user_code_string__;\n\n  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);\n\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here:\n",
+          "solutionCode": "// Fill up a vector\nfn fillVector(max: i64) -> Vec<i64> {\n  let mut current = 0;\n  let mut result = Vec::new();\n  while current <= max {\n    result.push(current);\n    current = current + 1;\n  }\n  return result;\n}\n",
           "content": ""
         }
       ]

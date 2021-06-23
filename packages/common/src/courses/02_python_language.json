@@ -10,6 +10,17 @@
       "title": "Python Basics",
       "challenges": [
         {
+          "id": "HdTMXJ1y7",
+          "type": "section",
+          "title": "Programming in Python",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Python is a high level, general purpose interpreted programming language. It is used in a wide variety of applications, especially for writing simple scripts or tools and in various math, science, data science, and machine learning applications. It is also a very friendly language to learn, and it is one of the common languages recommended to learn first for someone new to programming.\n\nThese Python challenges in Pairwise are very introductory and experimental. They may be expanded in the future into a more complete course on programming in Python."
+        },
+        {
           "id": "6Qez1$Vnl",
           "type": "python",
           "title": "Intro to Python",
