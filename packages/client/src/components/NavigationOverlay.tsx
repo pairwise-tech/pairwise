@@ -195,7 +195,19 @@ class NavigationOverlay extends React.Component<
                 filterable={false}
                 items={courseListMetadata}
                 itemDisabled={c => c.id === course.id}
-                onItemSelect={({ id }) => this.props.setCurrentCourse(id)}
+                onItemSelect={({ id }) => {
+                  this.props.setCurrentCourse(id);
+                }}
+                popoverProps={{
+                  onClosed: () => {
+                    // Blur the damn element to avoid keyboard interactions
+                    // opening the select menu again later.
+                    if (document.activeElement) {
+                      // @ts-ignore
+                      document.activeElement.blur();
+                    }
+                  },
+                }}
                 itemRenderer={({ title, id }, { handleClick }) => (
                   <ClickableColTitle
                     key={id}
@@ -207,11 +219,11 @@ class NavigationOverlay extends React.Component<
                 )}
               >
                 <Button
-                  style={{ whiteSpace: "nowrap" }}
                   fill
-                  className="mobile-shrink"
                   text={course.title}
                   rightIcon="chevron-down"
+                  className="mobile-shrink"
+                  style={{ whiteSpace: "nowrap" }}
                 />
               </CourseSelect>
             )}
@@ -487,7 +499,7 @@ class NavigationOverlay extends React.Component<
     return (
       <ModuleNavigationButton
         key={module.id}
-        menuSelected={isMenuItemSelected}
+        selected={isMenuItemSelected}
         id={`module-navigation-${index}`}
         active={module.id === activeModuleId}
         onClick={() => this.props.setCurrentModule(module.id)}
@@ -590,7 +602,7 @@ class NavigationOverlay extends React.Component<
         style={{ position: "relative", ...style }}
       >
         <ChallengeLink
-          menuSelected={isMenuItemSelected}
+          selected={isMenuItemSelected}
           locked={challenge.userCanAccess ? "false" : "true"}
           to={`/workspace/${getChallengeSlug(challenge)}`}
           id={`challenge-navigation-${index}`}
@@ -794,7 +806,7 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
 interface ChallengeLinkProps extends NavLinkProps {
   locked: "true" | "false"; // To circumvent a React DOM attribute warning message...
   active?: boolean;
-  menuSelected: boolean;
+  selected: boolean;
 }
 
 const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
@@ -809,10 +821,10 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   text-align: left;
   outline: none;
   position: relative;
-  color: ${({ menuSelected }) =>
-    menuSelected ? "white" : COLORS.TEXT_TITLE} !important;
-  background: ${({ menuSelected }) =>
-    menuSelected ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER : "transparent"};
+  color: ${({ selected }) =>
+    selected ? "white" : COLORS.TEXT_TITLE} !important;
+  background: ${({ selected }) =>
+    selected ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER : "transparent"};
 
   &:after {
     content: "";
@@ -893,12 +905,12 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
 
 const ModuleNavigationButton = ({
   active,
-  menuSelected,
+  selected,
   ...rest
-}: { active?: boolean; menuSelected: boolean } & any) => (
+}: { active?: boolean; selected: boolean } & any) => (
   <ModuleNavigationButtonBase
     active={active}
-    menuSelected={menuSelected}
+    selected={selected}
     as="button"
     {...rest}
   />

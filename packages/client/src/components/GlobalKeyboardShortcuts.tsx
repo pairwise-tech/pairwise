@@ -174,7 +174,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
     this.props.setMenuSelectIndex(0);
   };
 
-  handleSelectMenuUp = () => {
+  handleSelectMenuUp = (e: KeyboardEvent) => {
     if (this.props.overlayVisible) {
       const { menuSelectIndex, setMenuSelectIndex } = this.props;
       const relevantList = this.getCurrentModuleOrChallengeList();
