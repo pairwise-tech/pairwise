@@ -443,7 +443,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     switch (type) {
       case "golang":
-        return "golang";
+        return "go";
       case "python":
         return "python";
       case "rust":

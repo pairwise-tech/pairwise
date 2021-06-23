@@ -8,7 +8,19 @@
     {
       "id": "aslloqpsI",
       "title": "Golang Basics",
-      "challenges": []
+      "challenges": [
+        {
+          "id": "sEI9mXJbt",
+          "type": "golang",
+          "title": "Intro to Golang",
+          "instructions": "Write a function `add` using Go which takes two numbers and adds them together. [Golang](https://golang.org/) is an open source programming language that makes it easy to build simple, reliable, and efficient software.",
+          "testCode": "test(\"The `add` function should be defined and add two numbers together.\", async () => {\n  const CODE = __user_code_string__;\n  const TEST_STRING = `\n    func test() bool {\n      result := add(2, 3)\n      if result == 5 {\n        return true\n      } else {\n        return false\n      }\t\n    }\n  `;\n\n  const result = await executeGolangChallengeTests(CODE, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your function here\n",
+          "solutionCode": "// Write your function here\nfunc add(x int, y int) int {\n  return x + y\n}",
+          "content": ""
+        }
+      ]
     }
   ]
 }
