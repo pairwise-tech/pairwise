@@ -37,6 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 /** ===========================================================================
+ * This file provides additional test utils and type definitions for
+ * our Workspace test environment.
+ * ============================================================================
+ */
+/** ===========================================================================
  * Environment Variables
  * ----------------------------------------------------------------------------
  * NOTE: This file does not support importing or exporting any values.

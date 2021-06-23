@@ -4,6 +4,15 @@
  * ============================================================================
  */
 /** ===========================================================================
+ * Environment Variables
+ * ----------------------------------------------------------------------------
+ * NOTE: This file does not support importing or exporting any values.
+ * ============================================================================
+ */
+declare let DATABASE_CHALLENGE_API: string;
+declare let PAIRWISE_CODE_RUNNER_API: string;
+declare let DEV: boolean;
+/** ===========================================================================
  * Type definitions for additional test utils which are provided in the
  * test-utils file, e.g. see TEST_UTILS_GLOBALS.
  * ============================================================================
@@ -18,15 +27,6 @@ interface TestCase {
     test: (...args: any) => void;
 }
 declare const __USER_TEST_LIST__: TestCase[];
-/** ===========================================================================
- * Environment Variables
- * ----------------------------------------------------------------------------
- * NOTE: This file does not support importing or exporting any values.
- * ============================================================================
- */
-declare let DATABASE_CHALLENGE_API: string;
-declare let PAIRWISE_CODE_RUNNER_API: string;
-declare let DEV: boolean;
 /** ===========================================================================
  * Global test helpers.
  * ============================================================================

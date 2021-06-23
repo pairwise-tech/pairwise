@@ -7,25 +7,6 @@
  */
 
 /** ===========================================================================
- * Type definitions for additional test utils which are provided in the
- * test-utils file, e.g. see TEST_UTILS_GLOBALS.
- * ============================================================================
- */
-declare const __user_code_string__: string;
-declare const __secret_log_box: string[];
-declare const __secret_warn_box: string[];
-declare const __secret_error_box: string[];
-declare const __secret_info_box: string[];
-
-interface TestCase {
-  message: string;
-  test: (...args: any) => void;
-}
-
-// Special list of user tests for the testing and automation module challenges
-declare const __USER_TEST_LIST__: TestCase[];
-
-/** ===========================================================================
  * Environment Variables
  * ----------------------------------------------------------------------------
  * NOTE: This file does not support importing or exporting any values.
@@ -45,6 +26,25 @@ if (DEV) {
   DATABASE_CHALLENGE_API = "http://localhost:5000";
   PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
 }
+
+/** ===========================================================================
+ * Type definitions for additional test utils which are provided in the
+ * test-utils file, e.g. see TEST_UTILS_GLOBALS.
+ * ============================================================================
+ */
+declare const __user_code_string__: string;
+declare const __secret_log_box: string[];
+declare const __secret_warn_box: string[];
+declare const __secret_error_box: string[];
+declare const __secret_info_box: string[];
+
+interface TestCase {
+  message: string;
+  test: (...args: any) => void;
+}
+
+// Special list of user tests for the testing and automation module challenges
+declare const __USER_TEST_LIST__: TestCase[];
 
 /** ===========================================================================
  * Global test helpers.
