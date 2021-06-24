@@ -127,10 +127,8 @@ const fetchChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
     mergeMap(deps.api.fetchChallengeMeta),
     map(({ value: meta, error }) => {
       if (meta) {
-        console.log(meta);
         return Actions.fetchChallengeMetaSuccess(meta);
       } else {
-        console.log(error);
         return Actions.fetchChallengeMetaFailure(error);
       }
     }),
