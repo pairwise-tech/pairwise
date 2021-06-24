@@ -1,6 +1,5 @@
 import styled from "styled-components/macro";
-import { EditorDidMount } from "@monaco-editor/react";
-import { ControlledEditor, registerExternalLib } from "../monaco";
+import ControlledEditor, { registerExternalLib } from "../monaco";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
@@ -21,6 +20,7 @@ import {
   WORKSPACE_LIB_TYPES,
   EXPRESS_JS_LIB_TYPES,
 } from "tools/browser-test-lib";
+import { OnMount } from "@monaco-editor/react";
 
 /** ===========================================================================
  * Types & Config
@@ -53,8 +53,8 @@ const ChallengeTestEditor = (props: Props) => {
     return valueGetter.current();
   };
 
-  const handleEditorReady: EditorDidMount = (getValue, editor) => {
-    valueGetter.current = getValue;
+  const handleEditorReady: OnMount = (editor, monaco) => {
+    // valueGetter.current = getValue;
     setIsReady(true);
 
     // Format the code when the editor loses focus
@@ -145,7 +145,7 @@ const ChallengeTestEditor = (props: Props) => {
       <ControlledEditor
         height="100%"
         language="javascript"
-        editorDidMount={handleEditorReady}
+        onMount={handleEditorReady}
         value={props.challengeTestCode}
         theme={MonacoEditorThemes.DEFAULT}
         options={{
@@ -240,6 +240,7 @@ const UtilBox = styled.div`
 `;
 
 const CopyText = styled.p`
+  font-size: 12px;
   margin: 0;
 `;
 

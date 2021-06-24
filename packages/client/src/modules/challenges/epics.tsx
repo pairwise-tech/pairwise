@@ -745,6 +745,7 @@ const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
     filter(isActionOf(Actions.handleAttemptChallenge)),
     // Do not save if solution code is revealed
     filter(() => !state$.value.challenges.revealWorkspaceSolution),
+    filter(action => action.payload.challengeId === SANDBOX_ID),
     pluck("payload"),
     map(({ challengeId, complete }) =>
       constructProgressDto(state$.value, challengeId, complete),

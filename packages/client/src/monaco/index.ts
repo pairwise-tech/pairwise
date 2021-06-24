@@ -1,4 +1,4 @@
-import { monaco as Monaco } from "@monaco-editor/react";
+import Editor, { loader } from "@monaco-editor/react";
 import * as MonacoEditor from "monaco-editor/esm/vs/editor/editor.api";
 
 // Quicker reference type for the Monaco model
@@ -38,6 +38,7 @@ const addExtraLibs = (mn: typeof MonacoEditor) => {
   libs
     .filter(lib => !addedLibs.has(lib.source))
     .forEach(lib => {
+      const name = lib.name ? `file:///${lib.name}` : undefined;
       /**
        * Do not cache user imported module type definitions, they can change
        * between challenges and will need to be updated again.
@@ -45,21 +46,16 @@ const addExtraLibs = (mn: typeof MonacoEditor) => {
       if (lib.name !== USER_IMPORTED_TYPES_LIB_NAME) {
         addedLibs.add(lib.source);
       }
-      mn.languages.typescript.typescriptDefaults.addExtraLib(
-        lib.source,
-        lib.name ? `ts:filename/${lib.name}` : undefined,
-      );
-      mn.languages.typescript.javascriptDefaults.addExtraLib(
-        lib.source,
-        lib.name ? `ts:filename/${lib.name}` : undefined,
-      );
+      mn.languages.typescript.typescriptDefaults.addExtraLib(lib.source, name);
+      mn.languages.typescript.javascriptDefaults.addExtraLib(lib.source, name);
     });
 
   return mn;
 };
 
 const initializePairwiseMonaco = (): Promise<typeof MonacoEditor> => {
-  return Monaco.init()
+  return loader
+    .init()
     .then(addExtraLibs)
     .catch(err => {
       const message = "[Monaco Lib Error] Could not add extra libs";
@@ -70,7 +66,7 @@ const initializePairwiseMonaco = (): Promise<typeof MonacoEditor> => {
       // better for the user if the editor loaded up anyway without additional
       // libs, but maybe it would just break the experience if not tha app since
       // certain things wouldn't type check.
-      return Monaco.init();
+      return loader.init();
     });
 };
 
@@ -81,14 +77,15 @@ export const registerExternalLib = (lib: ExternalLibrary) => {
 
 // Wrap the Monaco object so that initialization includes the extra lib helper
 // but is still invoked by calling code, rather than invoking immediately here.
-export const monaco = new Proxy(Monaco, {
-  get: (obj: typeof Monaco, prop: "init" | "config") => {
-    if (prop === "init") {
-      return initializePairwiseMonaco;
-    } else {
-      return obj[prop];
-    }
-  },
-});
+// export const monaco = new Proxy(Monaco, {
+//   get: (obj: typeof Monaco, prop: "init" | "config") => {
+//     if (prop === "init") {
+//       return initializePairwiseMonaco;
+//     } else {
+//       return obj[prop];
+//     }
+//   },
+// });
+export const monaco = initializePairwiseMonaco;
 
-export { ControlledEditor } from "@monaco-editor/react";
+export default Editor;

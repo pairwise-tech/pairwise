@@ -18,6 +18,7 @@ import {
   registerExternalLib,
   USER_IMPORTED_TYPES_LIB_NAME,
 } from "../monaco";
+import Editor, { loader } from "@monaco-editor/react";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
 import { wait } from "tools/utils";
@@ -100,7 +101,7 @@ export default class WorkspaceMonacoEditor
   async componentDidMount() {
     this._isMounted = true;
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
-    await this.initializeMonaco();
+    // await this.initializeMonaco();
     this.initializeSyntaxHighlightWorker();
 
     /* Handle some timing issue with Monaco initialization... */
@@ -131,7 +132,7 @@ export default class WorkspaceMonacoEditor
       return this.initializationPromise;
     }
 
-    const initializationPromise = monaco
+    const initializationPromise = loader
       .init()
       .then(mn => {
         mn.languages.typescript.typescriptDefaults.setCompilerOptions({

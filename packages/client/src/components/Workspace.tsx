@@ -537,9 +537,10 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_SQL_CHALLENGE = isSqlChallenge;
     const IS_GREAT_SUCCESS_OPEN =
       allTestsPassing &&
-      !hideSuccessModal &&
       !isEditMode &&
-      !revealSolutionCode;
+      !hideSuccessModal &&
+      !revealSolutionCode &&
+      challenge.id !== SANDBOX_ID;
 
     const handleCloseSuccessModal = () => {
       this.setState({ hideSuccessModal: true });
@@ -829,13 +830,13 @@ class Workspace extends React.Component<IProps, IState> {
           ref={editor => {
             this.editor = editor;
           }}
-          onDidBlurEditorText={this.handleAutoFormatCodeOnBlur}
-          challengeType={this.props.challenge.type}
+          value={this.state.code}
           userSettings={this.props.userSettings}
           editorOptions={this.props.editorOptions}
-          language={this.getMonacoLanguageFromChallengeType()}
-          value={this.state.code}
           onChange={this.handleEditorContentChange}
+          challengeType={this.props.challenge.type}
+          language={this.getMonacoLanguageFromChallengeType()}
+          onDidBlurEditorText={this.handleAutoFormatCodeOnBlur}
           onDidInitializeMonacoEditor={this.onDidInitializeMonacoEditor}
           isBackendModuleChallenge={this.props.isBackendModuleChallenge}
           isTestingAndAutomationChallenge={

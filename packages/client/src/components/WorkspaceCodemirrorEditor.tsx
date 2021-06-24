@@ -85,7 +85,7 @@ export default class WorkspaceCodemirrorEditor
     // a bit of time
     await wait(500);
 
-    // Silly uncancellable promises...
+    // Silly un-cancellable promises...
     if (this._isMounted) {
       this.setState({ theWaitIsOver: true });
     }
@@ -94,10 +94,12 @@ export default class WorkspaceCodemirrorEditor
   render() {
     const { language } = this.props;
 
-    // NOTE: We need htmlmixed if we want CSS to get highlighted in HTML code
-    const mode = language === "html" ? "htmlmixed" : `${this.props.language}`;
-
-    console.log(mode);
+    let mode = language;
+    if (language === "html") {
+      mode = "htmlmixed";
+    } else if (language === "typescript") {
+      mode = "text/typescript";
+    }
 
     const options = {
       mode,
@@ -118,8 +120,8 @@ export default class WorkspaceCodemirrorEditor
             editorDidMount={editor => {
               this.codemirrorInstance = editor;
             }}
-            value={this.props.value}
             options={options}
+            value={this.props.value}
             onBeforeChange={(editor, data, value) => {
               this.props.onChange(value);
             }}
