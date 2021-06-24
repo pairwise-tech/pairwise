@@ -98,6 +98,7 @@ const initialState: State = {
   menuSelectColumn: "CHALLENGE",
   menuSelectIndex: null,
   useCodemirror: true,
+  // useCodemirror: false,
 };
 
 /** ===========================================================================

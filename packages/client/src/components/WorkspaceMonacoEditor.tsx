@@ -18,7 +18,7 @@ import {
   registerExternalLib,
   USER_IMPORTED_TYPES_LIB_NAME,
 } from "../monaco";
-import Editor, { loader } from "@monaco-editor/react";
+import Editor, { loader, OnMount } from "@monaco-editor/react";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
 import { wait } from "tools/utils";
@@ -280,6 +280,10 @@ export default class WorkspaceMonacoEditor
     this.props.onDidInitializeMonacoEditor();
   };
 
+  editorOnMount: OnMount = (editor, monaco) => {
+    console.log("editor on mount");
+  };
+
   setTheme = (theme: string) => {
     if (this.monacoWrapper) {
       this.monacoWrapper.editor.setTheme(theme);
@@ -297,14 +301,15 @@ export default class WorkspaceMonacoEditor
     await this.initializeMonacoEditor();
   };
 
-  handleEditorContentChange = () => {
-    const model = this.findModelByType("workspace-editor");
-    if (!model) {
-      console.warn("No model found when editor content changed!");
-      return;
-    }
+  handleEditorContentChange = (value: string | undefined) => {
+    // const model = this.findModelByType("workspace-editor");
+    // if (!model) {
+    //   console.warn("No model found when editor content changed!");
+    //   return;
+    // }
 
-    const code = model.getValue();
+    // const code = model.getValue();
+    const code = value || "";
 
     /**
      * Update the stored code value and then dispatch the syntax
@@ -427,7 +432,29 @@ export default class WorkspaceMonacoEditor
   };
 
   render() {
-    return <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} />;
+    // return <div id={PAIRWISE_CODE_EDITOR_ID} style={{ height: "100%" }} />;
+
+    return (
+      <Editor
+        options={{
+          tabSize: 2,
+          autoIndent: "full",
+          formatOnPaste: true,
+          automaticLayout: true,
+          fixedOverflowWidgets: true,
+          multiCursorModifier: "ctrlCmd",
+          minimap: {
+            enabled: false,
+          },
+        }}
+        path="pairwise-monaco-editor.ts"
+        value={this.props.value}
+        onMount={this.editorOnMount}
+        language={this.props.language}
+        theme={MonacoEditorThemes.DEFAULT}
+        onChange={this.handleEditorContentChange}
+      />
+    );
   }
 
   private readonly getMonacoEditorValue = () => {

@@ -21,6 +21,7 @@ import {
   EXPRESS_JS_LIB_TYPES,
 } from "tools/browser-test-lib";
 import { OnMount } from "@monaco-editor/react";
+import { editor } from "monaco-editor";
 
 /** ===========================================================================
  * Types & Config
@@ -42,6 +43,7 @@ const ChallengeTestEditor = (props: Props) => {
     increaseFontSize,
     decreaseFontSize,
   } = props;
+  const editorRef = React.useRef<editor.IStandaloneCodeEditor>(null);
   const valueGetter = React.useRef<() => string>(() => "");
   const [isReady, setIsReady] = React.useState(false);
 
@@ -50,7 +52,12 @@ const ChallengeTestEditor = (props: Props) => {
       console.warn("getEditorValue called before editor was ready");
     }
 
-    return valueGetter.current();
+    // return valueGetter.current();
+    if (editorRef.current) {
+      return editorRef.current.getValue();
+    }
+
+    return "";
   };
 
   const handleEditorReady: OnMount = (editor, monaco) => {
@@ -59,6 +66,9 @@ const ChallengeTestEditor = (props: Props) => {
 
     // Format the code when the editor loses focus
     editor.onDidBlurEditorText(handleFormatCode);
+
+    // @ts-ignore
+    editorRef.current = editor;
   };
 
   const handleUpdate = () => {
@@ -144,6 +154,7 @@ const ChallengeTestEditor = (props: Props) => {
     >
       <ControlledEditor
         height="100%"
+        path="challenge-test-editor.ts"
         language="javascript"
         onMount={handleEditorReady}
         value={props.challengeTestCode}
