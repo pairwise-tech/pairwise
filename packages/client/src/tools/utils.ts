@@ -109,7 +109,10 @@ export const constructDataBlobFromChallenge = (args: {
     case "section":
     case "react":
     case "typescript":
-    case "markup": {
+    case "markup":
+    case "python":
+    case "golang":
+    case "rust": {
       const blob: CodeChallengeBlob = {
         code,
         type: "challenge",
@@ -152,31 +155,99 @@ export const generateEmptyModule = (): Module => ({
   free: false /* All challenges are locked by default */,
 });
 
-const starterTestCode = `// Write your tests here:
-test("\`variable\` should be defined.", () => {
-  expect(variable).toBeDefined();
+const starterTestCodeTypeScript = `test("\`example\` function should...", () => {
+  pass();
 });
 `;
 
-export const generateEmptyChallenge = (
-  overwrite: Partial<Challenge> = {},
-): Challenge => ({
-  id: shortid.generate(),
-  type: "typescript",
-  title: "[EMPTY...]",
-  instructions: "",
-  testCode: starterTestCode,
-  videoUrl: "",
-  starterCode: "",
-  solutionCode: "",
-  content: "",
-  ...overwrite,
+const starterTestCodePython = `const TEST_STRING = \`
+def test():
+  return True
+\`;
+
+test("The \`example\` function should ...", async () => {
+  const CODE_STRING = __user_code_string__;
+  const result = await executePythonChallengeTests(CODE, TEST_STRING);
+  handleAlternateLanguageTestResult(result, console.log);
+});
+`;
+
+const starterTestCodeRust = `const TEST_STRING = \`
+fn test() -> bool {
+  true
+}
+\`;
+
+test("The \`example\` function should...", async () => {
+  const CODE_STRING = __user_code_string__;
+  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);
+  handleAlternateLanguageTestResult(result, console.log);
 });
 
+`;
+
+const starterTestCodeGolang = `const TEST_STRING = \`
+func test() bool {  
+  return true
+}
+\`;
+
+test("The \`example\` function should...", async () => {
+  const CODE = __user_code_string__;
+  const result = await executeGolangChallengeTests(CODE, TEST_STRING);
+  handleAlternateLanguageTestResult(result, console.log);
+});
+
+`;
+
+const defaultTestCodeOptions = {
+  typescript: starterTestCodeTypeScript,
+  python: starterTestCodePython,
+  rust: starterTestCodeRust,
+  golang: starterTestCodeGolang,
+};
+
+export const generateEmptyChallenge = (args: {
+  id?: string;
+  overwrite?: Partial<Challenge>;
+}): Challenge => {
+  const { id, overwrite } = args;
+
+  // Default:
+  let type: CHALLENGE_TYPE = "typescript";
+
+  // Use hard-coded course ids
+  if (id === "asiuq8e7l") {
+    type = "python";
+  } else if (id === "alosiqu45") {
+    type = "rust";
+  } else if (id === "aiqu278z9") {
+    type = "golang";
+  }
+
+  const defaultTestCode = defaultTestCodeOptions[type];
+  const testCode = !!defaultTestCode ? defaultTestCode : "";
+
+  return {
+    type,
+    id: shortid.generate(),
+    title: "[EMPTY...]",
+    instructions: "",
+    testCode,
+    videoUrl: "",
+    starterCode: "",
+    solutionCode: "",
+    content: "",
+    ...overwrite,
+  };
+};
+
 export const defaultSandboxChallenge = generateEmptyChallenge({
-  id: SANDBOX_ID, // Important. This is how the app knows it's the sandbox challenge
-  title: "Sandbox",
-  type: "markup",
+  overwrite: {
+    id: SANDBOX_ID, // Important. This is how the app knows it's the sandbox challenge
+    title: "Sandbox",
+    type: "markup",
+  },
 });
 
 export const defaultSandboxBlob = constructDataBlobFromChallenge({
@@ -521,6 +592,9 @@ export const getFileExtensionByChallengeType = (challenge: Challenge) => {
   const HTML = "html";
   const REACT = "tsx";
   const TYPESCRIPT = "ts";
+  const RUST = "rs";
+  const PYTHON = "py";
+  const GOLANG = "go";
 
   switch (type) {
     case "markup":
@@ -529,6 +603,12 @@ export const getFileExtensionByChallengeType = (challenge: Challenge) => {
       return { name, ext: REACT };
     case "typescript":
       return { name, ext: TYPESCRIPT };
+    case "rust":
+      return { name, ext: RUST };
+    case "python":
+      return { name, ext: PYTHON };
+    case "golang":
+      return { name, ext: GOLANG };
     case "media":
     case "section":
     case "project":
@@ -595,4 +675,13 @@ export const getClientOS = (): Nullable<OS> => {
   }
 
   return os;
+};
+
+/**
+ * Determine if a challenge is an alternate language challenge which
+ * requires custom code execution support.
+ */
+export const isAlternateLanguageChallenge = (challenge: Challenge): boolean => {
+  const { type } = challenge;
+  return type === "rust" || type === "python" || type === "golang";
 };

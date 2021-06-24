@@ -4,6 +4,7 @@ import { Challenge, CHALLENGE_TYPE } from "@pairwise/common";
 import protect from "../js/loop-protect-lib.js";
 import quote from "string-quote-x";
 import pipe from "ramda/src/pipe";
+import { isAlternateLanguageChallenge } from "./utils";
 
 // TODO: This could be made more secure
 // NOTE: We will be dropping this string into another string so we want it stringified
@@ -381,6 +382,12 @@ export const injectTestCode = (challenge: Challenge) => (
   const CODE_WITH_TEST_PREFIX = `${TEST_GATHERING_PREFIX}\n${code}`;
   const testCodeString = stripConsoleCalls(CODE_WITH_TEST_PREFIX);
 
+  // Handle alternate language challenges
+  if (isAlternateLanguageChallenge(challenge)) {
+    code = getTestHarness("", codeString, testCode);
+    return code;
+  }
+
   return `
     /**
      * This is the user challenge code which produces the user visible output
@@ -621,7 +628,15 @@ export const compileCodeString = async (
   sourceCodeString: string,
   challenge: Challenge,
 ) => {
-  if (challenge.type === "markup") {
+  if (isAlternateLanguageChallenge(challenge)) {
+    console.warn("HELLO");
+    const processedCodeString = await pipe(
+      injectTestCode(challenge),
+      hijackConsole,
+    )(sourceCodeString);
+
+    return { code: processedCodeString, dependencies: [""] };
+  } else if (challenge.type === "markup") {
     const testScript = getTestScripts(sourceCodeString, challenge.testCode, "");
 
     // NOTE: Tidy html should ensure there is indeed a closing body tag

@@ -246,6 +246,11 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
             />
           </>
         )}
+        {!contentDiff && !instructionsDiff && (
+          <DiffTitle>
+            No diff exists for the challenge content or instructions.
+          </DiffTitle>
+        )}
       </ChallengeDiff>
     );
   };

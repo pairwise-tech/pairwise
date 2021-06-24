@@ -74,6 +74,7 @@ export interface ChallengeMetadataIndex {
 export type CourseList = Course[];
 
 export type CHALLENGE_TYPE =
+  // Primary Course (TypeScript)
   | "react"
   | "typescript"
   | "markup"
@@ -81,7 +82,11 @@ export type CHALLENGE_TYPE =
   | "section"
   | "project"
   | "guided-project"
-  | "special-topic";
+  | "special-topic"
+  // Other Languages
+  | "rust"
+  | "python"
+  | "golang";
 
 export type CHALLENGE_PROGRESS = "NOT_ATTEMPTED" | "INCOMPLETE" | "COMPLETE";
 

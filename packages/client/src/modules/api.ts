@@ -77,7 +77,7 @@ interface CodepressAPI {
   save: (c: Course) => Observable<any>;
 }
 
-export const makeCodepressApi = (endpoint: string): CodepressAPI => {
+export const createCodepressAPI = (endpoint: string): CodepressAPI => {
   return {
     getAll: () => {
       return fromFetch(`${endpoint}/courses`, { mode: "cors" }).pipe(
@@ -200,7 +200,7 @@ class BaseApiClass {
  */
 
 class Api extends BaseApiClass {
-  codepressApi = makeCodepressApi(ENV.CODEPRESS_HOST);
+  codepressApi = createCodepressAPI(ENV.CODEPRESS_HOST);
 
   // Generate anonymous session id for real-time user progress metrics
   anonID = uuidv4();
@@ -589,7 +589,6 @@ class LocalStorageHttpClass {
     let updatedProgress: ProgressEntity;
     const timeCompleted = new Date();
 
-    /* ugh */
     if (existingCourseProgress) {
       updatedProgress = {
         courseId,
@@ -607,16 +606,16 @@ class LocalStorageHttpClass {
       };
     }
 
-    /* ugh */
-    const updatedProgressList = progressList.length
-      ? progressList.map(p => {
-          if (p.courseId === progress.courseId) {
-            return updatedProgress;
-          } else {
-            return p;
-          }
-        })
-      : [updatedProgress];
+    const updatedProgressList =
+      progressList.length === 0
+        ? [updatedProgress]
+        : progressList.concat(updatedProgress).map(p => {
+            if (p.courseId === progress.courseId) {
+              return updatedProgress;
+            } else {
+              return p;
+            }
+          });
 
     // Update user progress
     this.setItem(KEYS.USER_PROGRESS_KEY, updatedProgressList);

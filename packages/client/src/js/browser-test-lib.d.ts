@@ -4,6 +4,16 @@
  * ============================================================================
  */
 /** ===========================================================================
+ * Environment Variables
+ * ----------------------------------------------------------------------------
+ * NOTE: This file does not support importing or exporting any values.
+ * ============================================================================
+ */
+declare const guessIfEnvironmentIsDevelopment: () => boolean;
+declare let DATABASE_CHALLENGE_API: string;
+declare let PAIRWISE_CODE_RUNNER_API: string;
+declare const DEV: boolean;
+/** ===========================================================================
  * Type definitions for additional test utils which are provided in the
  * test-utils file, e.g. see TEST_UTILS_GLOBALS.
  * ============================================================================
@@ -86,15 +96,6 @@ declare class MockMongoCollection {
 }
 declare const usersCollection: MockMongoCollection;
 /**
- * Switch the database URL if you need to test and run the Database Challenge
- * API server locally:
- *
- * TODO: It might be nice if this DATABASE_CHALLENGE_API was an environment
- * variable, but this is a little tricky because these files are built
- * independently and then just included directly as JS in runtime.
- */
-declare const DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
-/**
  * Helper for SQL code challenges.
  */
 declare const executePostgresQuery: (preSqlQuery: string, userSqlQuery: string, postSqlQuery: string) => Promise<any>;
@@ -102,6 +103,32 @@ declare const executePostgresQuery: (preSqlQuery: string, userSqlQuery: string, 
  * Helper for MongoDB code challenges.
  */
 declare const executeMongoDBQuery: (args: any) => Promise<any>;
+interface Output {
+    code: number;
+    stdout: string;
+    stderr: string;
+}
+interface AlternateLanguageTestResult {
+    passed: boolean;
+    testOutput: Output;
+    previewOutput: Output;
+}
+/**
+ * Process a test result from a Rust test.
+ */
+declare const handleAlternateLanguageTestResult: (result: AlternateLanguageTestResult, consoleMethod?: (message: string) => void) => void;
+/**
+ * Execute Rust code.
+ */
+declare const executeRustChallengeTests: (codeString: string, testString: string) => Promise<AlternateLanguageTestResult>;
+/**
+ * Execute Python code.
+ */
+declare const executePythonChallengeTests: (codeString: string, testString: string) => Promise<AlternateLanguageTestResult>;
+/**
+ * Execute Python code.
+ */
+declare const executeGolangChallengeTests: (codeString: string, testString: string) => Promise<AlternateLanguageTestResult>;
 /** ===========================================================================
  * React Native Web Test Helpers
  * ============================================================================

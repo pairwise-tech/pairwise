@@ -65,6 +65,7 @@ import {
   challengeRequiresWorkspace,
   getFileExtensionByChallengeType,
   wait,
+  isAlternateLanguageChallenge,
 } from "tools/utils";
 import {
   Tab,
@@ -123,7 +124,7 @@ interface Log {
 const DEFAULT_LOGS: ReadonlyArray<Log> = [
   {
     method: "info",
-    data: ["console output will be rendered here:"],
+    data: ["log output will be rendered here:"],
   },
 ];
 
@@ -200,7 +201,7 @@ class Workspace extends React.Component<IProps, IState> {
     // The code editor needs to refresh before the iframe, otherwise the iframe
     // goes blank.
     //
-    // This could turn into memory leak city, since we're debouncing and waiting
+    // This could turn into memory leak city, since we're de-bouncing and waiting
     // longer than the debounce. Silly promises, not being cancellable... ᕕ( ᐛ )ᕗ
     await wait(500);
     await this.iframeRenderPreview();
@@ -441,6 +442,12 @@ class Workspace extends React.Component<IProps, IState> {
     const { type } = this.props.challenge;
 
     switch (type) {
+      case "golang":
+        return "go";
+      case "python":
+        return "python";
+      case "rust":
+        return "rust";
       case "react":
       case "typescript":
         return "typescript";
@@ -510,6 +517,7 @@ class Workspace extends React.Component<IProps, IState> {
       isMobileView,
       isSqlChallenge,
       revealSolutionCode,
+      useCodemirrorEditor,
       isReactNativeChallenge,
       editModeAlternativeViewEnabled,
     } = this.props;
@@ -522,6 +530,10 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_REACT_NATIVE_CHALLENGE = isReactNativeChallenge;
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
+    const IS_ALTERNATE_LANGUAGE_CHALLENGE = isAlternateLanguageChallenge(
+      challenge,
+    );
+
     const IS_SQL_CHALLENGE = isSqlChallenge;
     const IS_GREAT_SUCCESS_OPEN =
       allTestsPassing &&
@@ -607,9 +619,10 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     // Use different editors for different platforms
-    const CodeEditor = isMobileView
-      ? WorkspaceCodemirrorEditor
-      : WorkspaceMonacoEditor;
+    const CodeEditor =
+      isMobileView || useCodemirrorEditor
+        ? WorkspaceCodemirrorEditor
+        : WorkspaceMonacoEditor;
 
     const CODE_EDITOR_CONTAINER = (
       <CodeEditorContainer>
@@ -726,8 +739,17 @@ class Workspace extends React.Component<IProps, IState> {
                     id="editor-toggle-high-contrast"
                     icon="contrast"
                     aria-label="toggle high contrast mode"
-                    onClick={this.props.toggleHighContrastMode}
                     text="Toggle High Contrast Mode"
+                    onClick={this.props.toggleHighContrastMode}
+                  />
+                )}
+                {!isMobileView && (
+                  <MenuItem
+                    id="editor-toggle-codemirror-editor"
+                    icon="application"
+                    aria-label="toggle codemirror editor"
+                    text="Toggle Alternate Editor"
+                    onClick={this.props.toggleCodemirrorEditor}
                   />
                 )}
                 {isReactNativeChallenge && (
@@ -875,6 +897,16 @@ class Workspace extends React.Component<IProps, IState> {
               style={{ visibility: "hidden", height: 0, width: 0 }}
             />
           </div>
+        ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
+          <div>
+            <Console variant="dark" logs={this.state.logs} />
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
         ) : IS_MARKUP_CHALLENGE ? (
           <div style={{ height: "100%" }}>
             <DragIgnorantFrameContainer
@@ -949,6 +981,22 @@ class Workspace extends React.Component<IProps, IState> {
           </RowsWrapper>
         </Col>
       ) : IS_TYPESCRIPT_CHALLENGE ? (
+        <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+          <EmptyPreviewCoverPanel
+            visible={NO_TESTS_RESULTS}
+            runCodeHandler={this.runChallengeTests}
+          />
+          {ScrollableWorkspaceConsole}
+          <div>
+            <DragIgnorantFrameContainer
+              id="iframe"
+              title="code-preview"
+              ref={this.setIframeRef}
+              style={{ visibility: "hidden", height: 0, width: 0 }}
+            />
+          </div>
+        </Col>
+      ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
         <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}
@@ -1299,9 +1347,11 @@ class Workspace extends React.Component<IProps, IState> {
 
   iframeRenderPreview = async (): Promise<void> => {
     if (!this.iFrameRef || !this.iFrameRef.contentWindow) {
-      console.warn("[iframe] Not yet mounted");
+      console.warn("[iframe] Not yet mounted.");
       return;
     }
+
+    const { type } = this.props.challenge;
 
     // Process the code string and create an HTML document to render
     // to the iframe.
@@ -1309,7 +1359,7 @@ class Workspace extends React.Component<IProps, IState> {
       // Should give some searchable text should we encounter this.
       let sourceDocument = "<!-- SHOULD_BE_OVERWRITTEN -->";
 
-      if (this.props.challenge.type === "markup") {
+      if (type === "markup") {
         sourceDocument = getMarkupSrcDocument(
           this.state.code,
           this.props.challenge.testCode,
@@ -1384,8 +1434,15 @@ class Workspace extends React.Component<IProps, IState> {
   startTestCancellationTimer = () => {
     this.handleCancelCancellationTimer();
 
+    const timeout = this.getTestTimeout();
+
     // Allow 10 seconds for the tests to run
-    this.testCancellationTimer = setTimeout(this.handleCancelTests, 10000);
+    this.testCancellationTimer = setTimeout(this.handleCancelTests, timeout);
+  };
+
+  getTestTimeout = () => {
+    // Allow alternate language challenges more execution time
+    return isAlternateLanguageChallenge(this.props.challenge) ? 25000 : 10000;
   };
 
   handleCancelTests = () => {
@@ -1396,10 +1453,12 @@ class Workspace extends React.Component<IProps, IState> {
 
   cancelTestRun = () => {
     this.setState({ testResultsLoading: false }, () => {
+      const timeout = this.getTestTimeout();
+      const seconds = timeout / 1000;
       toaster.warn(
         `${
           this.props.challenge.id === SANDBOX_ID ? "Code execution" : "Tests"
-        } cancelled because your code took longer than 10 seconds to complete running. Check your code for problems and make sure your internet connection is stable!`,
+        } cancelled because your code took longer than ${seconds} seconds to complete running. Check your code for problems and make sure your internet connection is stable!`,
       );
     });
   };
@@ -1552,7 +1611,7 @@ class Workspace extends React.Component<IProps, IState> {
   /**
    * The resizable cols are not declarative in their sizing. They take initial
    * dimensions but if we want to update their dimensions we need to completely
-   * rerender. That's what this "state flash" let's us do.
+   * re-render. That's what this "state flash" let's us do.
    */
   private readonly refreshLayout = () => {
     this.setState({ shouldRefreshLayout: true });
@@ -1693,6 +1752,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
   revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
+  useCodemirrorEditor: ChallengeSelectors.useCodemirrorEditor(state),
   isLoadingBlob: ChallengeSelectors.isLoadingCurrentChallengeBlob(state),
   isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
   isSqlChallenge: ChallengeSelectors.isSqlChallenge(state),
@@ -1710,6 +1770,7 @@ const dispatchProps = {
   setAdminEditorTab: ChallengeActions.setAdminEditorTab,
   updateChallenge: ChallengeActions.updateChallenge,
   updateUserSettings: Modules.actions.user.updateUserSettings,
+  toggleCodemirrorEditor: ChallengeActions.toggleCodemirrorEditor,
   handleAttemptChallenge: ChallengeActions.handleAttemptChallenge,
   toggleRevealSolutionCode: ChallengeActions.toggleRevealSolutionCode,
   updateCurrentChallengeBlob: ChallengeActions.updateCurrentChallengeBlob,

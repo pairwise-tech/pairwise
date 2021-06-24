@@ -48,9 +48,9 @@ class Home extends React.Component<IProps, {}> {
                   build modern web and mobile applications.
                 </ContentText>
                 <ContentText>
-                  Most coding bootcamps cost $10,000 USD or more, while a
-                  computer science degree from a university is even more
-                  expensive and takes years to complete.
+                  Most coding bootcamps cost $10,000 USD or more, and a computer
+                  science degree from a university is even more expensive and
+                  takes years to complete.
                 </ContentText>
                 <ContentText>
                   Pairwise is the fastest and most affordable way to learn these
@@ -59,7 +59,7 @@ class Home extends React.Component<IProps, {}> {
                 <ContentText
                   style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
                 >
-                  What do I get?
+                  How much does it cost?
                 </ContentText>
                 <ContentText>
                   The Pairwise FullStack TypeScript Course is currently in{" "}
@@ -74,11 +74,12 @@ class Home extends React.Component<IProps, {}> {
                   other skills like testing and deploying software.
                 </ContentText>
                 <ContentText>
-                  To see more about what you will learn,{" "}
+                  To see more about what you will learn, you can{" "}
                   <ExternalLink link="https://pairwise.tech">
-                    go here
+                    visit this page
                   </ExternalLink>
-                  .
+                  . There are also additional languages in development, which
+                  you can see below.
                 </ContentText>
               </>
             )}
@@ -224,7 +225,6 @@ const ProgressBar = styled.div`
   width: 100%;
   margin-top: 8px;
   margin-bottom: 10px;
-  border-radius: 1px;
   background: ${COLORS.PROGRESS_BACKGROUND};
 `;
 
@@ -241,10 +241,10 @@ const ModuleProgressBar = styled.div`
 `;
 
 const ModuleProgressTitle = styled.div`
+  width: 265px;
   padding-top: 3px;
+  padding-left: 5px;
   padding-bottom: 3px;
-  padding-left: 4px;
-  width: 250px;
   background: ${COLORS.TEXT_DARK};
 `;
 

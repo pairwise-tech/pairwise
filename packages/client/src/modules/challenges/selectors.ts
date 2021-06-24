@@ -22,6 +22,21 @@ export const challengesSelector = createSelector([challengesState], identity);
 export const isEditMode = createSelector([challengesState], prop("isEditMode"));
 export const isDirty = createSelector([challengesState], prop("isDirty"));
 
+export const menuSelectColumn = createSelector(
+  [challengesState],
+  x => x.menuSelectColumn,
+);
+
+export const menuSelectIndex = createSelector(
+  [challengesState],
+  x => x.menuSelectIndex,
+);
+
+export const useCodemirrorEditor = createSelector(
+  [challengesState],
+  x => x.useCodemirror,
+);
+
 export const editModeAlternativeViewEnabled = createSelector(
   [challengesState],
   x => x.editModeAlternativeView,

@@ -70,6 +70,9 @@ export interface State {
   isSearching: boolean;
   revealWorkspaceSolution: boolean;
   isDirty: boolean;
+  menuSelectColumn: "MODULE" | "CHALLENGE";
+  menuSelectIndex: number | null;
+  useCodemirror: boolean;
 }
 
 const initialState: State = {
@@ -92,6 +95,9 @@ const initialState: State = {
   isSearching: false,
   revealWorkspaceSolution: false,
   isDirty: false,
+  menuSelectColumn: "CHALLENGE",
+  menuSelectIndex: null,
+  useCodemirror: false,
 };
 
 /** ===========================================================================
@@ -626,9 +632,21 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     adminEditorTab: action.payload,
   }))
+  .handleAction(actions.setMenuSelectColumn, (state, action) => ({
+    ...state,
+    menuSelectColumn: action.payload,
+  }))
+  .handleAction(actions.setMenuSelectIndex, (state, action) => ({
+    ...state,
+    menuSelectIndex: action.payload,
+  }))
   .handleAction(actions.toggleEditModeAlternativeView, (state, action) => ({
     ...state,
     editModeAlternativeView: !state.editModeAlternativeView,
+  }))
+  .handleAction(actions.toggleCodemirrorEditor, (state, action) => ({
+    ...state,
+    useCodemirror: !state.useCodemirror,
   }))
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,

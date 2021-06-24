@@ -7,6 +7,40 @@
  */
 
 /** ===========================================================================
+ * Environment Variables
+ * ----------------------------------------------------------------------------
+ * NOTE: This file does not support importing or exporting any values.
+ * ============================================================================
+ */
+
+// Environment should be dev if running on localhost...
+const guessIfEnvironmentIsDevelopment = () => {
+  try {
+    const location = window.location.ancestorOrigins[0];
+    if (location === "http://localhost:3000") {
+      return true;
+    }
+  } catch (err) {
+    return false;
+  }
+
+  return false;
+};
+
+let DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+
+let PAIRWISE_CODE_RUNNER_API =
+  "https://pairwise-code-runner-api.uc.r.appspot.com";
+
+const DEV = guessIfEnvironmentIsDevelopment();
+
+// Reset to localhost in local development environment
+if (DEV) {
+  DATABASE_CHALLENGE_API = "http://localhost:5000";
+  PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
+}
+
+/** ===========================================================================
  * Type definitions for additional test utils which are provided in the
  * test-utils file, e.g. see TEST_UTILS_GLOBALS.
  * ============================================================================
@@ -210,19 +244,6 @@ class MockMongoCollection {
 const usersCollection = new MockMongoCollection();
 
 /**
- * Switch the database URL if you need to test and run the Database Challenge
- * API server locally:
- *
- * TODO: It might be nice if this DATABASE_CHALLENGE_API was an environment
- * variable, but this is a little tricky because these files are built
- * independently and then just included directly as JS in runtime.
- */
-
-// const DATABASE_CHALLENGE_API = "http://localhost:5000";
-const DATABASE_CHALLENGE_API =
-  "https://database-challenge-api.uc.r.appspot.com";
-
-/**
  * Helper for SQL code challenges.
  */
 const executePostgresQuery = async (
@@ -275,6 +296,154 @@ const executeMongoDBQuery = async args => {
       headers,
       method: "post",
     });
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    // Throw err to fail test
+    throw err;
+  }
+};
+
+interface Output {
+  code: number;
+  stdout: string;
+  stderr: string;
+}
+
+interface AlternateLanguageTestResult {
+  passed: boolean;
+  testOutput: Output;
+  previewOutput: Output;
+}
+
+/**
+ * Process a test result from a Rust test.
+ */
+const handleAlternateLanguageTestResult = (
+  result: AlternateLanguageTestResult,
+  consoleMethod: (message: string) => void = (...args: any) => null,
+) => {
+  // TODO: Debug how to access the hijacked console log method here, rather
+  // than having to pass it in from the calling function:
+  const log = typeof consoleMethod !== "function" ? () => null : consoleMethod;
+
+  // Log result from preview
+  if (result.previewOutput.code === 0) {
+    const logs = result.previewOutput.stdout;
+    if (logs !== "") {
+      log(logs);
+    }
+  } else {
+    const logs = result.previewOutput.stderr;
+    if (logs !== "") {
+      log(logs);
+    }
+  }
+
+  if (result.passed) {
+    pass();
+  } else {
+    // The code compiled and ran, but failed the test cases
+    if (result.testOutput.code === 0) {
+      throw new Error("The code ran successfully but failed the test cases.");
+    } else {
+      // Fail with error output from test result standard error
+      throw new Error(result.testOutput.stderr || "An error occurred.");
+    }
+  }
+};
+
+/**
+ * Execute Rust code.
+ */
+const executeRustChallengeTests = async (
+  codeString: string,
+  testString: string,
+): Promise<AlternateLanguageTestResult> => {
+  try {
+    const url = `${PAIRWISE_CODE_RUNNER_API}/api/rust`;
+    const body = JSON.stringify({ codeString, testString });
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(url, {
+      body,
+      headers,
+      method: "post",
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    // Throw err to fail test
+    throw err;
+  }
+};
+
+/**
+ * Execute Python code.
+ */
+const executePythonChallengeTests = async (
+  codeString: string,
+  testString: string,
+): Promise<AlternateLanguageTestResult> => {
+  try {
+    const url = `${PAIRWISE_CODE_RUNNER_API}/api/python`;
+    const body = JSON.stringify({ codeString, testString });
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(url, {
+      body,
+      headers,
+      method: "post",
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    // Throw err to fail test
+    throw err;
+  }
+};
+
+/**
+ * Execute Python code.
+ */
+const executeGolangChallengeTests = async (
+  codeString: string,
+  testString: string,
+): Promise<AlternateLanguageTestResult> => {
+  try {
+    const url = `${PAIRWISE_CODE_RUNNER_API}/api/golang`;
+    const body = JSON.stringify({ codeString, testString });
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(url, {
+      body,
+      headers,
+      method: "post",
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text);
+    }
+
     const result = await response.json();
     return result;
   } catch (err) {

@@ -37,6 +37,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 /** ===========================================================================
+ * This file provides additional test utils and type definitions for
+ * our Workspace test environment.
+ * ============================================================================
+ */
+/** ===========================================================================
+ * Environment Variables
+ * ----------------------------------------------------------------------------
+ * NOTE: This file does not support importing or exporting any values.
+ * ============================================================================
+ */
+// Environment should be dev if running on localhost...
+var guessIfEnvironmentIsDevelopment = function () {
+    try {
+        var location_1 = window.location.ancestorOrigins[0];
+        if (location_1 === "http://localhost:3000") {
+            return true;
+        }
+    }
+    catch (err) {
+        return false;
+    }
+    return false;
+};
+var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
+var PAIRWISE_CODE_RUNNER_API = "https://pairwise-code-runner-api.uc.r.appspot.com";
+var DEV = guessIfEnvironmentIsDevelopment();
+// Reset to localhost in local development environment
+if (DEV) {
+    DATABASE_CHALLENGE_API = "http://localhost:5000";
+    PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
+}
+/** ===========================================================================
  * Global test helpers.
  * ============================================================================
  */
@@ -196,16 +228,6 @@ var MockMongoCollection = /** @class */ (function () {
 }());
 var usersCollection = new MockMongoCollection();
 /**
- * Switch the database URL if you need to test and run the Database Challenge
- * API server locally:
- *
- * TODO: It might be nice if this DATABASE_CHALLENGE_API was an environment
- * variable, but this is a little tricky because these files are built
- * independently and then just included directly as JS in runtime.
- */
-// const DATABASE_CHALLENGE_API = "http://localhost:5000";
-var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
-/**
  * Helper for SQL code challenges.
  */
 var executePostgresQuery = function (preSqlQuery, userSqlQuery, postSqlQuery) { return __awaiter(_this, void 0, void 0, function () {
@@ -278,6 +300,164 @@ var executeMongoDBQuery = function (args) { return __awaiter(_this, void 0, void
                 // Throw err to fail test
                 throw err_2;
             case 4: return [2 /*return*/];
+        }
+    });
+}); };
+/**
+ * Process a test result from a Rust test.
+ */
+var handleAlternateLanguageTestResult = function (result, consoleMethod) {
+    if (consoleMethod === void 0) { consoleMethod = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return null;
+    }; }
+    // TODO: Debug how to access the hijacked console log method here, rather
+    // than having to pass it in from the calling function:
+    var log = typeof consoleMethod !== "function" ? function () { return null; } : consoleMethod;
+    // Log result from preview
+    if (result.previewOutput.code === 0) {
+        var logs = result.previewOutput.stdout;
+        if (logs !== "") {
+            log(logs);
+        }
+    }
+    else {
+        var logs = result.previewOutput.stderr;
+        if (logs !== "") {
+            log(logs);
+        }
+    }
+    if (result.passed) {
+        pass();
+    }
+    else {
+        // The code compiled and ran, but failed the test cases
+        if (result.testOutput.code === 0) {
+            throw new Error("The code ran successfully but failed the test cases.");
+        }
+        else {
+            // Fail with error output from test result standard error
+            throw new Error(result.testOutput.stderr || "An error occurred.");
+        }
+    }
+};
+/**
+ * Execute Rust code.
+ */
+var executeRustChallengeTests = function (codeString, testString) { return __awaiter(_this, void 0, void 0, function () {
+    var url, body, headers, response, text, result, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 5, , 6]);
+                url = PAIRWISE_CODE_RUNNER_API + "/api/rust";
+                body = JSON.stringify({ codeString: codeString, testString: testString });
+                headers = {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                };
+                return [4 /*yield*/, fetch(url, {
+                        body: body,
+                        headers: headers,
+                        method: "post"
+                    })];
+            case 1:
+                response = _a.sent();
+                if (!!response.ok) return [3 /*break*/, 3];
+                return [4 /*yield*/, response.text()];
+            case 2:
+                text = _a.sent();
+                throw new Error(text);
+            case 3: return [4 /*yield*/, response.json()];
+            case 4:
+                result = _a.sent();
+                return [2 /*return*/, result];
+            case 5:
+                err_3 = _a.sent();
+                // Throw err to fail test
+                throw err_3;
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+/**
+ * Execute Python code.
+ */
+var executePythonChallengeTests = function (codeString, testString) { return __awaiter(_this, void 0, void 0, function () {
+    var url, body, headers, response, text, result, err_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 5, , 6]);
+                url = PAIRWISE_CODE_RUNNER_API + "/api/python";
+                body = JSON.stringify({ codeString: codeString, testString: testString });
+                headers = {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                };
+                return [4 /*yield*/, fetch(url, {
+                        body: body,
+                        headers: headers,
+                        method: "post"
+                    })];
+            case 1:
+                response = _a.sent();
+                if (!!response.ok) return [3 /*break*/, 3];
+                return [4 /*yield*/, response.text()];
+            case 2:
+                text = _a.sent();
+                throw new Error(text);
+            case 3: return [4 /*yield*/, response.json()];
+            case 4:
+                result = _a.sent();
+                return [2 /*return*/, result];
+            case 5:
+                err_4 = _a.sent();
+                // Throw err to fail test
+                throw err_4;
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
+/**
+ * Execute Python code.
+ */
+var executeGolangChallengeTests = function (codeString, testString) { return __awaiter(_this, void 0, void 0, function () {
+    var url, body, headers, response, text, result, err_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 5, , 6]);
+                url = PAIRWISE_CODE_RUNNER_API + "/api/golang";
+                body = JSON.stringify({ codeString: codeString, testString: testString });
+                headers = {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                };
+                return [4 /*yield*/, fetch(url, {
+                        body: body,
+                        headers: headers,
+                        method: "post"
+                    })];
+            case 1:
+                response = _a.sent();
+                if (!!response.ok) return [3 /*break*/, 3];
+                return [4 /*yield*/, response.text()];
+            case 2:
+                text = _a.sent();
+                throw new Error(text);
+            case 3: return [4 /*yield*/, response.json()];
+            case 4:
+                result = _a.sent();
+                return [2 /*return*/, result];
+            case 5:
+                err_5 = _a.sent();
+                // Throw err to fail test
+                throw err_5;
+            case 6: return [2 /*return*/];
         }
     });
 }); };

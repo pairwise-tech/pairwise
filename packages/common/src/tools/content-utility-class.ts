@@ -1,9 +1,10 @@
-/**
- * NOTE: This course is hidden for now. Simply uncomment it and add it to the
- * courseList at the bottom of the file to restore it.
- */
+// Library course is hidden for now.
 // import PairwiseLibrary from "../courses/00_pairwise_library.json";
 import FullstackTypeScript from "../courses/01_fullstack_typescript.json";
+import Python from "../courses/02_python_language.json";
+import Rust from "../courses/03_rust_language.json";
+import Golang from "../courses/04_golang_language.json";
+
 import {
   CourseList,
   CourseSkeletonList,
@@ -261,7 +262,7 @@ class ContentUtilityClass {
  */
 
 // Add any additional courses to this list:
-const courseList = [FullstackTypeScript];
+const courseList = [FullstackTypeScript, Python, Rust, Golang];
 
 const ContentUtility = new ContentUtilityClass(courseList as CourseList);
 

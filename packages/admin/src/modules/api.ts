@@ -170,9 +170,7 @@ class Api extends BaseApiClass {
     if (ENV.DEV) {
       // eslint-disable-next-line
       const courseMap = require("@pairwise/common").default;
-      // NOTE: Hard-coded to only show the FullstackTypeScript Course
-      const courses: CourseSkeletonList = [courseMap.FullstackTypeScript];
-      // const courses: CourseSkeletonList = [courseMap.FullstackTypeScript];
+      const courses: CourseSkeletonList = Object.values(courseMap);
       const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
       return new Ok(courseSkeletonList);
     }

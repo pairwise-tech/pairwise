@@ -1,0 +1,81 @@
+{
+  "price": 0,
+  "free": true,
+  "id": "asiuq8e7l",
+  "title": "Python",
+  "description": "Python is an interpreted, high-level general-purpose high level programming language.",
+  "modules": [
+    {
+      "id": "apoqLskrZ",
+      "title": "Python Basics",
+      "challenges": [
+        {
+          "id": "HdTMXJ1y7",
+          "type": "section",
+          "title": "Programming in Python",
+          "instructions": "",
+          "testCode": "// Write your tests here:\ntest(\"`variable` should be defined.\", () => {\n  expect(variable).toBeDefined();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
+          "content": "Python is a high level, general purpose interpreted programming language. It is used in a wide variety of applications, especially for writing simple scripts or tools and in various math, science, data science, and machine learning applications. It is also a very friendly language to learn, and it is one of the common languages recommended to learn first for someone new to programming.\n\nThese Python challenges in Pairwise are very introductory and experimental. They may be expanded in the future into a more complete course on programming in Python."
+        },
+        {
+          "id": "6Qez1$Vnl",
+          "type": "python",
+          "title": "Intro to Python",
+          "instructions": "Write a function to add two numbers using [Python](https://www.python.org/). Python is a general purpose high level programming language with a wide variety of applications, including writing simple scripts, building APIs, and creating servers. It is also commonly used in data science and machine learning.",
+          "testCode": "test(\"The `add` function should be defined and add two numbers together.\", async () => {\n  const CODE = __user_code_string__;\n  const TEST_STRING = `\ndef test():\n  result = add(10, 15)\n  expected = (25)\n  if result != expected:\n    return False\n\n  result = add(100, 150)\n  expected = (250)\n  if result != expected:\n    return False\n\n  result = add(-10, 10)\n  expected = (0)\n  if result != expected:\n    return False\n\n  result = add(1000, 5000)\n  expected = (6000)\n  if result != expected:\n    return False\n\n  result = add(250, -150)\n  expected = (100)\n  if result != expected:\n    return False\n\n  return True\n`;\n\n  const result = await executePythonChallengeTests(CODE, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "# Write a function to add two numbers together",
+          "solutionCode": "# Write a function to add two numbers together\ndef add(a, b):\n  return a + b;\n",
+          "content": ""
+        },
+        {
+          "id": "pKPYv9Mmy",
+          "type": "python",
+          "title": "Concatenate Strings",
+          "instructions": "Write a function `concatenate` which accepts an arbitrary number \\(0 to N\\) of string input arguments and returns the result of concatenating these strings together.",
+          "testCode": "test(\"The `concatenate` function should accept an arbitrary number of input strings and concatenate them all together.\", async () => {\n  const CODE = __user_code_string__;\n  const TEST_STRING = `\ndef test():\n  result = concatenate(\"a\", \"b\", \"c\")\n  expected = \"abc\"\n  if result != expected:\n    return False\n\n  result = concatenate(\"hi\", \"hi\", \"blegh\", \"hi\")\n  expected = \"hihibleghhi\"\n  if result != expected:\n    return False\n\n  result = concatenate(\"apple\", \"banana\", \"strawberry\")\n  expected = \"applebananastrawberry\"\n  if result != expected:\n    return False\n\n  result = concatenate(\"cake\", \"brownie\")\n  expected = \"cakebrownie\"\n  if result != expected:\n    return False\n\n  result = concatenate(\"chair\", \"table\", \"fred\", \"a\", \"b\", \"c\", \"d\", \"e\")\n  expected = \"chairtablefredabcde\"\n  if result != expected:\n    return False\n\n  result = concatenate()\n  expected = \"\"\n  if result != expected:\n    return False\n\n  return True\n`;\n\n  const result = await executePythonChallengeTests(CODE, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "# Write your code here\n",
+          "solutionCode": "# This function concatenates an arbitrary number of input strings\ndef concatenate(*strings):\n  result = \"\"\n  for x in strings:\n    result += x\n  return result",
+          "content": ""
+        },
+        {
+          "id": "NfB1A9Sn3",
+          "type": "python",
+          "title": "Sum Array",
+          "instructions": "You are given a list of elements. Write a function `sumList` which returns the sum of adding all of the elements in the input list.",
+          "testCode": "test(\"`sumList` should be accept a list of numbers and return their sum.\", async () => {\n  const CODE = __user_code_string__;\n  const TEST_STRING = `\ndef test():\n  result = sumList([1,2,3,4,5])\n  expected = 15\n  if result != expected:\n    return False\n\n  result = sumList([100,200,300,400,500,10000])\n  expected = 11500\n  if result != expected:\n    return False\n\n  result = sumList([])\n  expected = 0\n  if result != expected:\n    return False\n\n  result = sumList([-5,5])\n  expected = 0\n  if result != expected:\n    return False\n\n  result = sumList([2,2,2,2,2,2,2,2,2,2,2,2])\n  expected = 24\n  if result != expected:\n    return False\n\n  result = sumList([500,500,500,500,500,2500,95000])\n  expected = 100000\n  if result != expected:\n    return False\n\n  return True\n`;\n\n  const result = await executePythonChallengeTests(CODE, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "# Write your function here",
+          "solutionCode": "# Write your function here\ndef sumList(list):\n  sum = 0\n  for x in list:\n    sum += x\n  return sum\n",
+          "content": ""
+        },
+        {
+          "id": "nZOzo$GUxo",
+          "type": "python",
+          "title": "Build String",
+          "instructions": "You are given two string inputs `letters` and `target`. Your job is to determine if you can use the characters in the first input to construct the second, using each letter only one time. For instance:\n\n```\n(\"apples\", \"app\") -> True\n(\"apples\", \"able\") -> False\n\n```\n\nNote that an empty string can be constructed from any string input, including empty string.",
+          "testCode": "const TEST = `\ndef test():\n  result = constructString(\"apples\", \"app\")\n  expected = True\n  if result != expected:\n    return False\n    \n  result = constructString(\"apples\", \"able\")\n  expected = False\n  if result != expected:\n    return False\n\n  result = constructString(\"apples\", \"\")\n  expected = True\n  if result != expected:\n    return False\n  \n  result = constructString(\"\", \"\")\n  expected = True\n  if result != expected:\n    return False\n\n  result = constructString(\"8asfd9as90fsadf9856asdf7asfsa6f9saf\", \"8asfd9s90fsadf985asdf7asfsaf9saf\")\n  expected = True\n  if result != expected:\n    return False\n\n  result = constructString(\"sadfljhlaksfhioasuydfioasSRTAWEAWSFGSDRTasrfsafsafdsa\", \"sadfljhlaksfhioasuydfioasSRTAWEAWSFGSDRTasrfsafsafds\")\n  expected = True\n  if result != expected:\n    return False\n\n  result = constructString(\"safljhlaksfhioasuydfioasSRTAWEAWSFGSDRTasrfsafsafdsa\", \"sadfljhlaksfhioasuydfioasSRTAWEAWSFGSDRTasrfsafsafds\")\n  expected = False\n  if result != expected:\n    return False\n\n  result = constructString(\"\", \"x\")\n  expected = False\n  if result != expected:\n    return False\n\n  return True\n`;\n\ntest(\"`constructString` should return `True` if the second string input can be constructed from the first.\", async () => {\n  const CODE = __user_code_string__;\n  const result = await executePythonChallengeTests(CODE, TEST);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "# Write your code here\ndef constructString(letters, target):",
+          "solutionCode": " # Helper method to determine if a letter can be placed\ndef canUseLetter(letters, target, usedIndexes):\n  index = 0\n  for x in letters:\n    if x == target:\n      if index in usedIndexes:\n        c = 1\n      else:\n        usedIndexes.add(index)\n        return True\n    index += 1\n  return -1\n\ndef constructString(letters, target):\n  usedIndexes = set()\n  for c in target:\n    availableIndex = canUseLetter(letters, c, usedIndexes)\n    if availableIndex == -1:\n      return False\n  return True\n",
+          "content": ""
+        },
+        {
+          "id": "ox2$I6JFj",
+          "type": "python",
+          "title": "Add to a Tuple",
+          "instructions": "Write a function `tupleAppend` which accepts a tuple as the first argument and an item to be added to the tuple as the second argument. Add the item and return a new tuple. Note that the input tuple may be empty.",
+          "testCode": "const TEST = `\ndef test():\n  result = tupleAppend((1,2,3), 5)\n  expected = (1,2,3,5)\n  if result != expected:\n    return False\n\n  result = tupleAppend((1,2,3,7,8,9), 5)\n  expected = (1,2,3,7,8,9,5)\n  if result != expected:\n    return False\n\n  result = tupleAppend((-1,-1,-1,5000), 5)\n  expected = (-1,-1,-1,5000,5)\n  if result != expected:\n    return False\n    \n  result = tupleAppend((234,543,345,342,34,1234,2314,432,1213,4432,14), 1892734012)\n  expected = (234, 543, 345, 342, 34, 1234, 2314, 432, 1213, 4432, 14, 1892734012)\n  if result != expected:\n    return False\n\n  result = tupleAppend((), 5690690)\n  expected = (5690690)\n  if result != expected:\n    return False\n\n  return True\n`;\n\ntest(\"`tupleAppend` should be defined and return a new tuple which is the result of adding the second argument to the first tuple argument.\", async () => {\n  const CODE = __user_code_string__;\n  const result = await executePythonChallengeTests(CODE, TEST);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "# Write your code here\n",
+          "solutionCode": "# Append an item to a tuple and return a new tuple\ndef tupleAppend(t, item):\n  if len(t) == 0:\n    return (item)\n\n  tupleList = list(t)\n  tupleList.append(item)\n  return tuple(tupleList)\n",
+          "content": ""
+        }
+      ]
+    }
+  ]
+}

@@ -327,6 +327,12 @@ const executeTests = async (challenge: Challenge) => {
       // continue outerLoop;
       return [];
     }
+    case "python":
+    case "golang":
+    case "rust": {
+      log.skip(challenge);
+      return [];
+    }
     default: {
       assertUnreachable(challenge.type);
     }

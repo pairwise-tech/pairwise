@@ -11,6 +11,7 @@ import {
   ModuleSkeletonList,
   CHALLENGE_PROGRESS,
   getChallengeSlug,
+  CourseMetadata,
 } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, MOBILE } from "tools/constants";
@@ -48,13 +49,14 @@ import {
 } from "./NavigationOverlayComponents";
 import { IconButton, RotatingIcon } from "./Shared";
 import cx from "classnames";
+import { Select } from "@blueprintjs/select";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
 
-// const CourseSelect = Select.ofType<CourseMetadata>();
+const CourseSelect = Select.ofType<CourseMetadata>();
 
 /** ===========================================================================
  * React Class
@@ -90,7 +92,25 @@ class NavigationOverlay extends React.Component<
 
   componentDidUpdate() {
     this.lockWindowScrolling();
+
+    this.maybeScrollSelectedItemIntoView();
   }
+
+  maybeScrollSelectedItemIntoView = () => {
+    const { menuSelectIndex } = this.props;
+    if (menuSelectIndex === null) {
+      return;
+    }
+
+    const elements = document.getElementsByClassName("selected-item");
+    const element = elements[0];
+
+    if (element && elements.length === 1) {
+      if (!this.isElementVisible(element)) {
+        this.scrollToSelectedChallenge();
+      }
+    }
+  };
 
   lockWindowScrolling = () => {
     if (this.props.overlayVisible) {
@@ -98,6 +118,16 @@ class NavigationOverlay extends React.Component<
     } else {
       document.body.style.overflow = "visible";
     }
+  };
+
+  isElementVisible = (element: Element) => {
+    const rect = element.getBoundingClientRect();
+    const viewHeight = Math.max(
+      document.documentElement.clientHeight,
+      window.innerHeight,
+    );
+
+    return !(rect.bottom > viewHeight || rect.top < 115);
   };
 
   render(): Nullable<JSX.Element> {
@@ -108,6 +138,7 @@ class NavigationOverlay extends React.Component<
       isEditMode,
       challengeId,
       overlayVisible,
+      courseListMetadata,
     } = this.props;
 
     // Course or model is still loading
@@ -160,41 +191,42 @@ class NavigationOverlay extends React.Component<
                 ></Button>
               </Link>
             ) : (
-              <Button
-                fill
-                style={{ whiteSpace: "nowrap" }}
-                className="mobile-shrink"
-                text="Curriculum Details"
-                rightIcon="document-open"
-                onClick={() =>
-                  window.open("https://www.pairwise.tech/curriculum", "_blank")
-                }
-              />
+              <CourseSelect
+                filterable={false}
+                items={courseListMetadata}
+                itemDisabled={c => c.id === course.id}
+                onItemSelect={({ id }) => {
+                  this.props.setCurrentCourse(id);
+                }}
+                popoverProps={{
+                  onClosed: () => {
+                    // Blur the damn element to avoid keyboard interactions
+                    // opening the select menu again later.
+                    if (document.activeElement) {
+                      // @ts-ignore
+                      document.activeElement.blur();
+                    }
+                  },
+                }}
+                itemRenderer={({ title, id }, { handleClick }) => (
+                  <ClickableColTitle
+                    key={id}
+                    disabled={id === course.id}
+                    onClick={(e: any) => handleClick(e)}
+                  >
+                    {title}
+                  </ClickableColTitle>
+                )}
+              >
+                <Button
+                  fill
+                  text={course.title}
+                  rightIcon="chevron-down"
+                  className="mobile-shrink"
+                  style={{ whiteSpace: "nowrap" }}
+                />
+              </CourseSelect>
             )}
-            {/* NOTE: Course Select Menu for multiple courses: */}
-            {/* <CourseSelect
-              filterable={false}
-              items={courseListMetadata}
-              itemDisabled={c => c.id === course.id}
-              onItemSelect={({ id }) => this.props.setCurrentCourse(id)}
-              itemRenderer={({ title, id }, { handleClick }) => (
-                <ClickableColTitle
-                  key={id}
-                  disabled={id === course.id}
-                  onClick={handleClick}
-                >
-                  {title}
-                </ClickableColTitle>
-              )}
-            >
-              <Button
-                style={{ whiteSpace: "nowrap" }}
-                fill
-                className="mobile-shrink"
-                text={course.title}
-                rightIcon="chevron-down"
-              />
-            </CourseSelect> */}
           </ColTitle>
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
@@ -339,6 +371,16 @@ class NavigationOverlay extends React.Component<
     }
   };
 
+  scrollToSelectedChallenge = () => {
+    // Find the currently active element
+    const elements = document.getElementsByClassName("selected-item");
+    const element = elements[0];
+    // There should only be one active element...
+    if (element && elements.length === 1) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   // This can be used to expand or collapse all sections in the current module.
   toggleExpandCollapseAll = () => {
     const challengeList = this.props.module?.challenges;
@@ -450,9 +492,14 @@ class NavigationOverlay extends React.Component<
     module: ModuleSkeleton,
     index: number,
   ) => {
+    const { menuSelectIndex, menuSelectColumn } = this.props;
+    const isMenuItemSelected =
+      menuSelectColumn === "MODULE" && menuSelectIndex === index;
+
     return (
       <ModuleNavigationButton
         key={module.id}
+        menu_selected={isMenuItemSelected}
         id={`module-navigation-${index}`}
         active={module.id === activeModuleId}
         onClick={() => this.props.setCurrentModule(module.id)}
@@ -476,7 +523,12 @@ class NavigationOverlay extends React.Component<
     challenge: ChallengeSkeleton;
     style?: React.CSSProperties;
   }) => {
-    const { challengeId, isEditMode } = this.props;
+    const {
+      isEditMode,
+      challengeId,
+      menuSelectIndex,
+      menuSelectColumn,
+    } = this.props;
     const {
       index,
       module,
@@ -488,6 +540,9 @@ class NavigationOverlay extends React.Component<
       sectionChallenges = [],
       style = {},
     } = args;
+
+    const isMenuItemSelected =
+      menuSelectColumn === "CHALLENGE" && menuSelectIndex === index;
 
     const challengeProgress = getChallengeProgress(
       this.props.userProgress,
@@ -531,14 +586,23 @@ class NavigationOverlay extends React.Component<
       : !!sectionChallenges.find(c => c.id === challengeId);
     const itemActive = sectionActive || challenge.id === challengeId;
 
+    let className = "";
+    if (itemActive) {
+      className += " active-item";
+    }
+    if (isMenuItemSelected) {
+      className += " selected-item";
+    }
+
     return (
       <ChallengeNavigationItem
         key={challenge.id}
+        className={className}
         id={`challenge-${challenge.id}`}
-        className={itemActive ? "active-item" : ""}
         style={{ position: "relative", ...style }}
       >
         <ChallengeLink
+          selected={isMenuItemSelected}
           locked={challenge.userCanAccess ? "false" : "true"}
           to={`/workspace/${getChallengeSlug(challenge)}`}
           id={`challenge-navigation-${index}`}
@@ -658,7 +722,10 @@ class NavigationOverlay extends React.Component<
       courseId: course.id,
       moduleId: module.id,
       insertionIndex: index + 1,
-      challenge: generateEmptyChallenge(overrides),
+      challenge: generateEmptyChallenge({
+        id: course.id,
+        overwrite: overrides,
+      }),
     });
   };
 
@@ -742,6 +809,7 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
 interface ChallengeLinkProps extends NavLinkProps {
   locked: "true" | "false"; // To circumvent a React DOM attribute warning message...
   active?: boolean;
+  selected: boolean;
 }
 
 const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
@@ -755,9 +823,11 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   justify-content: space-between;
   text-align: left;
   outline: none;
-  color: ${COLORS.TEXT_TITLE} !important;
-  background: transparent;
   position: relative;
+  color: ${({ selected }) =>
+    selected ? "white" : COLORS.TEXT_TITLE} !important;
+  background: ${({ selected }) =>
+    selected ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER : "transparent"};
 
   &:after {
     content: "";
@@ -815,11 +885,17 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
 
 const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
   active?: boolean;
+  menu_selected: boolean;
 }>`
   outline: none;
-  color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
-  background: ${({ active }) =>
-    active ? COLORS.BACKGROUND_MODAL : "transparent"};
+  color: ${({ active, menu_selected }) =>
+    active || menu_selected ? "white" : COLORS.TEXT_TITLE};
+  background: ${({ active, menu_selected }) =>
+    active
+      ? COLORS.BACKGROUND_MODAL
+      : menu_selected
+      ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER
+      : "transparent"};
 
   &:hover {
     color: white;
@@ -832,9 +908,15 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
 
 const ModuleNavigationButton = ({
   active,
+  menu_selected,
   ...rest
-}: { active?: boolean } & any) => (
-  <ModuleNavigationButtonBase active={active} as="button" {...rest} />
+}: { active?: boolean; menu_selected: boolean } & any) => (
+  <ModuleNavigationButtonBase
+    as="button"
+    active={active}
+    menu_selected={menu_selected}
+    {...rest}
+  />
 );
 
 interface ChallengeListItemIconProps {
@@ -1088,20 +1170,20 @@ const ColTitle = styled.div`
 `;
 
 // NOTE: Used for the course multi-select, which is currently disabled.
-// const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
-//   border-left: ${props =>
-//     props.disabled
-//       ? `3px solid ${COLORS.NEON_GREEN}`
-//       : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
+const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
+  border-left: ${props =>
+    props.disabled
+      ? `3px solid ${COLORS.NEON_GREEN}`
+      : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
 
-//   :hover {
-//     cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
-//     background: ${props =>
-//       props.disabled
-//         ? COLORS.BACKGROUND_NAVIGATION_ITEM
-//         : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
-//   }
-// `;
+  :hover {
+    cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
+    background: ${props =>
+      props.disabled
+        ? COLORS.BACKGROUND_NAVIGATION_ITEM
+        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
+  }
+`;
 
 const NavIcons = styled.span`
   display: inline-block;
@@ -1122,6 +1204,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
+  menuSelectIndex: Modules.selectors.challenges.menuSelectIndex(state),
+  menuSelectColumn: Modules.selectors.challenges.menuSelectColumn(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   courseListMetadata: Modules.selectors.challenges.courseListMetadata(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),

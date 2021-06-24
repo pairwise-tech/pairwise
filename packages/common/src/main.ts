@@ -1,5 +1,8 @@
-import PairwiseLibrary from "./courses/00_pairwise_library.json";
+// import PairwiseLibrary from "./courses/00_pairwise_library.json";
 import FullstackTypeScript from "./courses/01_fullstack_typescript.json";
+import Python from "./courses/02_python_language.json";
+import Rust from "./courses/03_rust_language.json";
+import Golang from "./courses/04_golang_language.json";
 
 import ContentUtility, {
   ContentUtilityClass,
@@ -26,8 +29,11 @@ export { ContentUtility, ContentUtilityClass };
  * Courses
  */
 const Courses = {
+  // PairwiseLibrary,
   FullstackTypeScript,
-  PairwiseLibrary,
+  Python,
+  Rust,
+  Golang,
 };
 
 export default Courses;

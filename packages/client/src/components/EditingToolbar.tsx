@@ -32,9 +32,9 @@ import { generateEmptyChallenge } from "tools/utils";
 import { IconButton } from "./Shared";
 
 const CONTRIBUTOR_IMAGES = {
-  "Ian Sinnott": require("./img/ian.jpg"),
-  "Sean Smith": require("./img/sean.png"),
-  "Peter Weinberg": require("./img/pete.jpg"),
+  "Ian Sinnott": require("./img/ian.jpg").default,
+  "Sean Smith": require("./img/sean.png").default,
+  "Peter Weinberg": require("./img/pete.jpg").default,
 };
 
 /** ===========================================================================
@@ -61,6 +61,9 @@ const challengeTypeChoiceMap: ChallengeTypeChoiceMap = {
   project: "Project",
   "guided-project": "Guided Project",
   "special-topic": "Special Topic",
+  rust: "Rust",
+  python: "Python",
+  golang: "Golang",
 };
 
 const mapChallengeTypeEntries = (
@@ -203,7 +206,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
 const mapInsertionMenuState = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
-  courseId: Modules.selectors.challenges.getCurrentCourseSkeleton(state)?.id,
+  course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
 });
 
@@ -216,7 +219,7 @@ const mergeInsertionMenuProps = (
   methods: typeof insertionMenuDispatchProps,
   props: RouteComponentProps,
 ) => {
-  if (!state.module || !state.isEditMode || !state.courseId) {
+  if (!state.module || !state.isEditMode || !state.course) {
     return {
       isEditMode: state.isEditMode,
       insertPrevChallenge: () => console.warn("Called outside of edit mode."),
@@ -224,9 +227,9 @@ const mergeInsertionMenuProps = (
     };
   }
 
-  const courseId = state.courseId;
+  const courseId = state.course.id;
   const moduleId = state.module.id;
-  const newChallenge = generateEmptyChallenge();
+  const newChallenge = generateEmptyChallenge({ id: state.course.id });
   const index = state.module.challenges.findIndex(
     x => x.id === state.challengeId,
   );
