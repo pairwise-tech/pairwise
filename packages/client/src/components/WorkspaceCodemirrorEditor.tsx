@@ -12,6 +12,9 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material-darker.css";
 import "codemirror/mode/xml/xml.js";
 import "codemirror/mode/javascript/javascript.js";
+import "codemirror/mode/python/python.js";
+import "codemirror/mode/rust/rust.js";
+import "codemirror/mode/go/go.js";
 import "codemirror/mode/htmlmixed/htmlmixed.js";
 import "codemirror/addon/edit/matchbrackets.js";
 import "codemirror/addon/edit/matchtags.js";
@@ -92,8 +95,9 @@ export default class WorkspaceCodemirrorEditor
     const { language } = this.props;
 
     // NOTE: We need htmlmixed if we want CSS to get highlighted in HTML code
-    const mode =
-      language === "html" ? "htmlmixed" : `text/${this.props.language}`;
+    const mode = language === "html" ? "htmlmixed" : `${this.props.language}`;
+
+    console.log(mode);
 
     const options = {
       mode,

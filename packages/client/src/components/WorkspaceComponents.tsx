@@ -180,6 +180,7 @@ const HighlightedMarkdown = (props: ReactMarkdownProps) => {
 const TestMessageHighlighter = styled(HighlightedMarkdown)`
   p {
     margin: 0;
+    margin-right: 12px;
   }
 
   .code {

@@ -124,7 +124,7 @@ interface Log {
 const DEFAULT_LOGS: ReadonlyArray<Log> = [
   {
     method: "info",
-    data: ["console output will be rendered here:"],
+    data: ["log output will be rendered here:"],
   },
 ];
 
@@ -201,7 +201,7 @@ class Workspace extends React.Component<IProps, IState> {
     // The code editor needs to refresh before the iframe, otherwise the iframe
     // goes blank.
     //
-    // This could turn into memory leak city, since we're debouncing and waiting
+    // This could turn into memory leak city, since we're de-bouncing and waiting
     // longer than the debounce. Silly promises, not being cancellable... ᕕ( ᐛ )ᕗ
     await wait(500);
     await this.iframeRenderPreview();
