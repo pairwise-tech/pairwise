@@ -155,22 +155,68 @@ export const generateEmptyModule = (): Module => ({
   free: false /* All challenges are locked by default */,
 });
 
-const starterTestCode = `// Write your tests here:
-test("\`variable\` should be defined.", () => {
-  expect(variable).toBeDefined();
+const starterTestCodeTypeScript = `test("\`example\` function should...", () => {
+  pass();
 });
 `;
+
+const starterTestCodePython = `const TEST_STRING = \`
+def test():
+  return True
+\`;
+
+test("The \`example\` function should ...", async () => {
+  const CODE_STRING = __user_code_string__;
+  const result = await executePythonChallengeTests(CODE, TEST_STRING);
+  handleAlternateLanguageTestResult(result, console.log);
+});
+`;
+
+const starterTestCodeRust = `const TEST_STRING = \`
+fn test() -> bool {
+  true
+}
+\`;
+
+test("The \`example\` function should...", async () => {
+  const CODE_STRING = __user_code_string__;
+  const result = await executeRustChallengeTests(CODE_STRING, TEST_STRING);
+  handleAlternateLanguageTestResult(result, console.log);
+});
+
+`;
+
+const starterTestCodeGolang = `const TEST_STRING = \`
+func test() bool {  
+  return true
+}
+\`;
+
+test("The \`example\` function should...", async () => {
+  const CODE = __user_code_string__;
+  const result = await executeGolangChallengeTests(CODE, TEST_STRING);
+  handleAlternateLanguageTestResult(result, console.log);
+});
+
+`;
+
+const defaultTestCodeOptions = {
+  typescript: starterTestCodeTypeScript,
+  python: starterTestCodePython,
+  rust: starterTestCodeRust,
+  golang: starterTestCodeGolang,
+};
 
 export const generateEmptyChallenge = (args: {
   id?: string;
   overwrite?: Partial<Challenge>;
 }): Challenge => {
   const { id, overwrite } = args;
-  console.log(id);
 
   // Default:
   let type: CHALLENGE_TYPE = "typescript";
 
+  // Use hard-coded course ids
   if (id === "asiuq8e7l") {
     type = "python";
   } else if (id === "alosiqu45") {
@@ -179,12 +225,15 @@ export const generateEmptyChallenge = (args: {
     type = "golang";
   }
 
+  const defaultTestCode = defaultTestCodeOptions[type];
+  const testCode = !!defaultTestCode ? defaultTestCode : "";
+
   return {
     type,
     id: shortid.generate(),
     title: "[EMPTY...]",
     instructions: "",
-    testCode: starterTestCode,
+    testCode,
     videoUrl: "",
     starterCode: "",
     solutionCode: "",

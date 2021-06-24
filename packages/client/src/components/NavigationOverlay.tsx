@@ -722,7 +722,10 @@ class NavigationOverlay extends React.Component<
       courseId: course.id,
       moduleId: module.id,
       insertionIndex: index + 1,
-      challenge: generateEmptyChallenge(overrides),
+      challenge: generateEmptyChallenge({
+        id: course.id,
+        overwrite: overrides,
+      }),
     });
   };
 
