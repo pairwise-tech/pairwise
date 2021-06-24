@@ -42,7 +42,7 @@ describe("Workspace and Challenge Navigation Works", () => {
     cy.contains("Welcome to Pairwise!");
 
     // These are currently the two courses we have
-    cy.contains("Fullstack TypeScript Course");
+    cy.contains("Fullstack TypeScript");
 
     click("course-link-0-start");
     cy.url().should("include", "workspace");
