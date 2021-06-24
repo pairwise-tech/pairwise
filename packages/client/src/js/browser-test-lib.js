@@ -50,7 +50,7 @@ var _this = this;
 var DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 var PAIRWISE_CODE_RUNNER_API = "https://pairwise-code-runner-api.uc.r.appspot.com";
 var DEV = false;
-// DEV = true; // Enable to use code execution APIs in development
+DEV = true; // Enable to use code execution APIs in development
 if (DEV) {
     DATABASE_CHALLENGE_API = "http://localhost:5000";
     PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";

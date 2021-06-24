@@ -30,6 +30,17 @@
           "starterCode": "// Write your function here\n",
           "solutionCode": "// Write your function here\nfunc add(x int, y int) int {\n  return x + y\n}",
           "content": ""
+        },
+        {
+          "id": "$AwWGU3$h",
+          "type": "golang",
+          "title": "Capitalize a String",
+          "instructions": "Write a function `capitalize` which accepts a string and returns the capitalized version, i.e. a new string with only the first letter capitalized. For instance `capitalize(hello, world) // -> \"Hello, world\"`. You can assume the first letter of the string input will either be a valid letter or empty string.",
+          "testCode": "const TEST_STRING = `\n  func test() bool {\n    result := capitalize(\"hello\")\n    if result != \"Hello\" {\n      return false\n    }\n\n    return true\n  }\n`;\n\ntest(\"The `capitalize` function should be defined and return the capitalized version of any string passed to it.\", async () => {\n  const CODE = __user_code_string__;\n  const result = await executeGolangChallengeTests(CODE, TEST_STRING);\n  handleAlternateLanguageTestResult(result, console.log);\n});\n",
+          "videoUrl": "",
+          "starterCode": "// Write your code here\n",
+          "solutionCode": "// Capitalize a string\nfunc capitalize(str string) string {\n  return strings.Title(strings.ToLower())\n}",
+          "content": ""
         }
       ]
     }

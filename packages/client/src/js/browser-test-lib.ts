@@ -20,7 +20,7 @@ let PAIRWISE_CODE_RUNNER_API =
 
 let DEV = false;
 
-// DEV = true; // Enable to use code execution APIs in development
+DEV = true; // Enable to use code execution APIs in development
 
 if (DEV) {
   DATABASE_CHALLENGE_API = "http://localhost:5000";
