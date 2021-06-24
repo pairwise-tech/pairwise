@@ -29,6 +29,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
       usersList,
       statsLoading,
       paymentRecords,
+      courseSkeletons,
       progressRecords,
       usersListLoading,
     } = this.props;
@@ -45,7 +46,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
     return (
       <PageContainer>
         <Row>
-          <h2>Current Stats:</h2>
+          <Title>Current Stats:</Title>
           <Button onClick={this.props.refreshStats}>Refresh Stats</Button>
         </Row>
         {loading ? (
@@ -95,7 +96,29 @@ class AdminStatsPage extends React.Component<IProps, {}> {
               <b>Total Course Revenue:</b>{" "}
               <Value>${totalRevenue.toFixed(0)}</Value>
             </Stat>
-            <h2>Recent Challenge Progress:</h2>
+            <Title>Course Summaries:</Title>
+            {courseSkeletons && courseSkeletons.length > 0 && (
+              <Stat>
+                <span>Course Title</span>
+                <span>Number of Challenges</span>
+              </Stat>
+            )}
+            {courseSkeletons?.map(skeleton => {
+              const { id, title, modules } = skeleton;
+              const challenges: number = modules.reduce(
+                (total, courseModule) => {
+                  return total + courseModule.challenges.length;
+                },
+                0,
+              );
+              return (
+                <Stat key={id}>
+                  <b>{title}</b>
+                  <Value>{challenges}</Value>
+                </Stat>
+              );
+            })}
+            <Title>Recent Challenge Progress:</Title>
             {progressRecords ? (
               this.renderProgressRecords(progressRecords)
             ) : (
@@ -176,6 +199,10 @@ const Row = styled.div`
   justify-content: space-between;
 `;
 
+const Title = styled.h2`
+  color: ${COLORS.SECONDARY_YELLOW};
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
@@ -187,6 +214,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   usersListLoading: Modules.selectors.users.usersState(state).loading,
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),
   paymentRecords: Modules.selectors.payments.paymentRecordsSelector(state),
+  courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
 });
 
 const dispatchProps = {
