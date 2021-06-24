@@ -550,6 +550,7 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     filter(x => x.currentChallengeId !== null),
+    filter(x => x.currentChallengeId !== SANDBOX_ID),
     mergeMap(async ({ currentChallengeId, currentCourseId }) => {
       const challengeId = currentChallengeId as string; // Checked above
       return deps.api.updateLastActiveChallengeIds(

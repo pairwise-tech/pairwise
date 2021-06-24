@@ -499,7 +499,7 @@ class NavigationOverlay extends React.Component<
     return (
       <ModuleNavigationButton
         key={module.id}
-        selected={isMenuItemSelected}
+        menu_selected={isMenuItemSelected}
         id={`module-navigation-${index}`}
         active={module.id === activeModuleId}
         onClick={() => this.props.setCurrentModule(module.id)}
@@ -885,15 +885,15 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
 
 const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
   active?: boolean;
-  menuSelected: boolean;
+  menu_selected: boolean;
 }>`
   outline: none;
-  color: ${({ active, menuSelected }) =>
-    active || menuSelected ? "white" : COLORS.TEXT_TITLE};
-  background: ${({ active, menuSelected }) =>
+  color: ${({ active, menu_selected }) =>
+    active || menu_selected ? "white" : COLORS.TEXT_TITLE};
+  background: ${({ active, menu_selected }) =>
     active
       ? COLORS.BACKGROUND_MODAL
-      : menuSelected
+      : menu_selected
       ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER
       : "transparent"};
 
@@ -908,13 +908,13 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
 
 const ModuleNavigationButton = ({
   active,
-  selected,
+  menu_selected,
   ...rest
-}: { active?: boolean; selected: boolean } & any) => (
+}: { active?: boolean; menu_selected: boolean } & any) => (
   <ModuleNavigationButtonBase
-    active={active}
-    selected={selected}
     as="button"
+    active={active}
+    menu_selected={menu_selected}
     {...rest}
   />
 );

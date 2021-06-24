@@ -78,7 +78,8 @@ class Home extends React.Component<IProps, {}> {
                   <ExternalLink link="https://pairwise.tech">
                     visit this page
                   </ExternalLink>
-                  .
+                  . There are also additional languages in development, which
+                  you can see below.
                 </ContentText>
               </>
             )}
