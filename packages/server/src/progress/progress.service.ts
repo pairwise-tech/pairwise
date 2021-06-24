@@ -18,6 +18,7 @@ import {
   validateChallengeProgressDto,
 } from "../tools/validation";
 import { captureSentryException } from "../tools/sentry-utils";
+import { ChallengeMetaService } from "../challenge-meta/challenge-meta.service";
 
 type User = "Anonymous User" | "Pairwise User";
 
@@ -32,6 +33,8 @@ export class ProgressService {
   constructor(
     @InjectRepository(Progress)
     private readonly progressRepository: Repository<Progress>,
+
+    private readonly challengeMetaService: ChallengeMetaService,
   ) {}
 
   public async fetchProgressHistoryForCourse(courseId: string) {
@@ -55,9 +58,9 @@ export class ProgressService {
     validateChallengeProgressDto(challengeProgressDto);
 
     const {
+      complete,
       courseId,
       challengeId,
-      complete,
       timeCompleted,
     } = challengeProgressDto;
     const user = requestUser;
@@ -90,6 +93,13 @@ export class ProgressService {
         progress: JSON.stringify(status),
       };
 
+      if (complete) {
+        // Increment the challenge completion count
+        this.challengeMetaService.incrementChallengeCompletionCount(
+          challengeId,
+        );
+      }
+
       /**
        * Insert:
        */
@@ -99,6 +109,13 @@ export class ProgressService {
         existingEntry.progress,
       );
       const existingStatus = existingProgress[challengeId];
+
+      // If previously incomplete, and now complete, increment challenge count
+      if (!existingStatus.complete && complete) {
+        this.challengeMetaService.incrementChallengeCompletionCount(
+          challengeId,
+        );
+      }
 
       // Preserve the original time completed, if a second request is
       // received for a challenge progress update

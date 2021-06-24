@@ -17,12 +17,27 @@ export class ChallengeMetaService {
         challengeId,
       });
       if (result) {
-        return result;
+        return result.numberOfTimesCompleted;
       } else {
         return 0;
       }
     } catch (err) {
       return 0;
     }
+  }
+
+  public async incrementChallengeCompletionCount(challengeId: string) {
+    const result = await this.challengeMetaRepository.findOne({
+      challengeId,
+    });
+
+    const count = !!result ? result.numberOfTimesCompleted : 0;
+
+    await this.challengeMetaRepository
+      .createQueryBuilder("challengeMeta")
+      .update(ChallengeMeta)
+      .where({ uuid: result.uuid })
+      .set({ numberOfTimesCompleted: count })
+      .execute();
   }
 }
