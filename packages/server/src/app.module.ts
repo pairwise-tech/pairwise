@@ -12,6 +12,7 @@ import { AdminModule } from "./admin/admin.module";
 import { FeedbackModule } from "./feedback/feedback.module";
 import { BlobModule } from "./blob/blob.module";
 import ENV from "./tools/server-env";
+import { ChallengeMetaModule } from "./challenge-meta/challenge-meta.module";
 
 /**
  * NOTE: The TypeORM options are ALL supplied here. You cannot mix and match
@@ -40,6 +41,7 @@ const typeormOptions: TypeOrmModuleOptions = {
     FeedbackModule,
     UsersModule,
     AdminModule,
+    ChallengeMetaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
