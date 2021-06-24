@@ -32,6 +32,11 @@ export const menuSelectIndex = createSelector(
   x => x.menuSelectIndex,
 );
 
+export const useCodemirrorEditor = createSelector(
+  [challengesState],
+  x => x.useCodemirror,
+);
+
 export const editModeAlternativeViewEnabled = createSelector(
   [challengesState],
   x => x.editModeAlternativeView,

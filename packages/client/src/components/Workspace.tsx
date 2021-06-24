@@ -517,6 +517,7 @@ class Workspace extends React.Component<IProps, IState> {
       isMobileView,
       isSqlChallenge,
       revealSolutionCode,
+      useCodemirrorEditor,
       isReactNativeChallenge,
       editModeAlternativeViewEnabled,
     } = this.props;
@@ -618,9 +619,10 @@ class Workspace extends React.Component<IProps, IState> {
     );
 
     // Use different editors for different platforms
-    const CodeEditor = isMobileView
-      ? WorkspaceCodemirrorEditor
-      : WorkspaceMonacoEditor;
+    const CodeEditor =
+      isMobileView || useCodemirrorEditor
+        ? WorkspaceCodemirrorEditor
+        : WorkspaceMonacoEditor;
 
     const CODE_EDITOR_CONTAINER = (
       <CodeEditorContainer>
@@ -737,8 +739,17 @@ class Workspace extends React.Component<IProps, IState> {
                     id="editor-toggle-high-contrast"
                     icon="contrast"
                     aria-label="toggle high contrast mode"
-                    onClick={this.props.toggleHighContrastMode}
                     text="Toggle High Contrast Mode"
+                    onClick={this.props.toggleHighContrastMode}
+                  />
+                )}
+                {!isMobileView && (
+                  <MenuItem
+                    id="editor-toggle-codemirror-editor"
+                    icon="application"
+                    aria-label="toggle codemirror editor"
+                    text="Toggle Alternate Editor"
+                    onClick={this.props.toggleCodemirrorEditor}
                   />
                 )}
                 {isReactNativeChallenge && (
@@ -1741,6 +1752,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
   revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
+  useCodemirrorEditor: ChallengeSelectors.useCodemirrorEditor(state),
   isLoadingBlob: ChallengeSelectors.isLoadingCurrentChallengeBlob(state),
   isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
   isSqlChallenge: ChallengeSelectors.isSqlChallenge(state),
@@ -1758,6 +1770,7 @@ const dispatchProps = {
   setAdminEditorTab: ChallengeActions.setAdminEditorTab,
   updateChallenge: ChallengeActions.updateChallenge,
   updateUserSettings: Modules.actions.user.updateUserSettings,
+  toggleCodemirrorEditor: ChallengeActions.toggleCodemirrorEditor,
   handleAttemptChallenge: ChallengeActions.handleAttemptChallenge,
   toggleRevealSolutionCode: ChallengeActions.toggleRevealSolutionCode,
   updateCurrentChallengeBlob: ChallengeActions.updateCurrentChallengeBlob,

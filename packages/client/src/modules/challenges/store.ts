@@ -72,6 +72,7 @@ export interface State {
   isDirty: boolean;
   menuSelectColumn: "MODULE" | "CHALLENGE";
   menuSelectIndex: number | null;
+  useCodemirror: boolean;
 }
 
 const initialState: State = {
@@ -96,6 +97,7 @@ const initialState: State = {
   isDirty: false,
   menuSelectColumn: "CHALLENGE",
   menuSelectIndex: null,
+  useCodemirror: false,
 };
 
 /** ===========================================================================
@@ -641,6 +643,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.toggleEditModeAlternativeView, (state, action) => ({
     ...state,
     editModeAlternativeView: !state.editModeAlternativeView,
+  }))
+  .handleAction(actions.toggleCodemirrorEditor, (state, action) => ({
+    ...state,
+    useCodemirror: !state.useCodemirror,
   }))
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,

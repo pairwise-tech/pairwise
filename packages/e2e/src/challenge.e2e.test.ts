@@ -16,7 +16,7 @@ describe("Challenge APIs", () => {
 
         // Check course title
         const firstCourse = response.body[0];
-        expect(firstCourse.title).toBe("Fullstack TypeScript Course");
+        expect(firstCourse.title).toBe("Fullstack TypeScript");
 
         /* Assert all of the challenge content has be sanitized: */
         for (const course of response.body) {
@@ -41,7 +41,7 @@ describe("Challenge APIs", () => {
         expect(Array.isArray(response.body)).toBe(true);
         // Check course
         const course = response.body[0];
-        expect(course.title).toBe("Fullstack TypeScript Course");
+        expect(course.title).toBe("Fullstack TypeScript");
         expect(Array.isArray(course.modules)).toBeTruthy();
       });
   });
