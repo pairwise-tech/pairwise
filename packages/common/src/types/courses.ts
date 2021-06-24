@@ -126,6 +126,16 @@ export interface Challenge {
 }
 
 /** ===========================================================================
+ * Challenge Meta Database Entity
+ * ============================================================================
+ */
+
+export interface ChallengeMeta {
+  challengeId: string;
+  numberOfTimesCompleted: number;
+}
+
+/** ===========================================================================
  * Course Skeleton
  * ----------------------------------------------------------------------------
  * This is a modified version of the course content which strips out the actual

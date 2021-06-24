@@ -1,4 +1,5 @@
 import {
+  ChallengeMeta,
   Course,
   CourseSkeletonList,
   InverseChallengeMapping,
@@ -33,6 +34,10 @@ enum ActionTypesEnum {
   FETCH_PULL_REQUEST_CONTEXT = "FETCH_PULL_REQUEST_CONTEXT",
   FETCH_PULL_REQUEST_CONTEXT_SUCCESS = "FETCH_PULL_REQUEST_CONTEXT_SUCCESS",
   FETCH_PULL_REQUEST_CONTEXT_FAILURE = "FETCH_PULL_REQUEST_CONTEXT_FAILURE",
+
+  FETCH_CHALLENGE_META = "FETCH_CHALLENGE_META",
+  FETCH_CHALLENGE_META_SUCCESS = "FETCH_CHALLENGE_META_SUCCESS",
+  FETCH_CHALLENGE_META_FAILURE = "FETCH_CHALLENGE_META_FAILURE",
 }
 
 /** ===========================================================================
@@ -90,4 +95,16 @@ export const fetchPullRequestContextSuccess = createAction(
 
 export const fetchPullRequestContextFailure = createAction(
   ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT_FAILURE,
+)<HttpResponseError>();
+
+export const fetchChallengeMeta = createAction(
+  ActionTypesEnum.FETCH_CHALLENGE_META,
+)<string>();
+
+export const fetchChallengeMetaSuccess = createAction(
+  ActionTypesEnum.FETCH_CHALLENGE_META_SUCCESS,
+)<ChallengeMeta>();
+
+export const fetchChallengeMetaFailure = createAction(
+  ActionTypesEnum.FETCH_CHALLENGE_META_FAILURE,
 )<HttpResponseError>();

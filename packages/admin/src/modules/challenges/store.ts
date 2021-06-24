@@ -1,6 +1,7 @@
 import { createReducer } from "typesafe-actions";
 import {
   Challenge,
+  ChallengeMeta,
   CourseList,
   CourseSkeletonList,
   InverseChallengeMapping,
@@ -31,6 +32,7 @@ export interface State {
   challengeDetailId: Nullable<string>;
   pullRequestLoading: boolean;
   pullRequestContext: Nullable<PullRequestContext[]>;
+  challengeMeta: Nullable<ChallengeMeta>;
 }
 
 const initialState: State = {
@@ -42,6 +44,7 @@ const initialState: State = {
   challengeDetailId: null,
   pullRequestLoading: false,
   pullRequestContext: null,
+  challengeMeta: null,
 };
 
 /** ===========================================================================
@@ -91,6 +94,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,
     courseSkeletons: action.payload,
+  }))
+  .handleAction(actions.fetchChallengeMetaSuccess, (state, action) => ({
+    ...state,
+    challengeMeta: action.payload,
   }))
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,

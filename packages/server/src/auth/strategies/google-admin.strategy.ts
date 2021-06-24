@@ -42,9 +42,9 @@ export class GoogleAdminStrategy {
         {
           clientID: ENV.GOOGLE_CLIENT_ID,
           clientSecret: ENV.GOOGLE_CLIENT_SECRET,
-          userProfileURL: ENV.GOOGLE_PROFILE_URL,
-          tokenURL: ENV.GOOGLE_TOKEN_URL,
-          authorizationURL: ENV.GOOGLE_TOKEN_URL,
+          userProfileURL: ENV.GOOGLE_ADMIN_PROFILE_URL,
+          tokenURL: ENV.GOOGLE_ADMIN_TOKEN_URL,
+          authorizationURL: ENV.GOOGLE_ADMIN_TOKEN_URL,
           callbackURL: `${ENV.SERVER_HOST_URL}/auth/google-admin/callback`,
           scope: ["profile", "email"],
         },

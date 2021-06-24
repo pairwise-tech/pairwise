@@ -110,8 +110,16 @@ export class ProgressService {
       );
       const existingStatus = existingProgress[challengeId];
 
-      // If previously incomplete, and now complete, increment challenge count
-      if (!existingStatus.complete && complete) {
+      /**
+       * The challenge is either complete for the first time, if was possibly
+       * incomplete before and is now complete. Figure it out and increment
+       * the number of challenge completions accordingly.
+       */
+      const FIRST_COMPLETE = !existingStatus && complete;
+      const COMPLETED_ON_RETRY =
+        existingStatus && !existingStatus.complete && complete;
+
+      if (FIRST_COMPLETE || COMPLETED_ON_RETRY) {
         this.challengeMetaService.incrementChallengeCompletionCount(
           challengeId,
         );

@@ -1,9 +1,18 @@
 import { combineEpics } from "redux-observable";
-import { filter, map, mergeMap, pluck } from "rxjs/operators";
+import {
+  filter,
+  ignoreElements,
+  map,
+  mergeMap,
+  tap,
+  pluck,
+} from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { createInverseChallengeMapping } from "@pairwise/common";
+import { parseSearchQuery } from "../../tools/admin-utils";
+import { AdminSearchResult } from "../../components/AdminSearchPage";
 
 /** ===========================================================================
  * Epics
@@ -64,6 +73,67 @@ const fetchPullRequestContextOnAppLoadEpic: EpicSignature = action$ => {
     map(() => window.location.pathname),
     filter(x => x.includes("pull-requests")),
     map(path => Actions.handleSearchPullRequest(path)),
+  );
+};
+
+const fetchChallengeMetaIfSearchIsChallengeId = (path: string) => {
+  if (path.includes("/search/")) {
+    const query = parseSearchQuery(path.split("/")[2]);
+    if (query) {
+      const { type, value } = query;
+      if (type === "challengeId") {
+        return Actions.fetchChallengeMeta(value);
+      }
+    }
+  }
+
+  return Actions.empty("No challengeId present in search.");
+};
+
+const handleChallengeIdSearchInitializationEpic: EpicSignature = (
+  action$,
+  state$,
+  deps,
+) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("location"),
+    pluck("pathname"),
+    map(fetchChallengeMetaIfSearchIsChallengeId),
+  );
+};
+
+const handleChallengeIdSearchEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.locationChange)),
+    pluck("payload"),
+    pluck("pathname"),
+    map(fetchChallengeMetaIfSearchIsChallengeId),
+  );
+};
+
+/**
+ * Fetch challenge meta for a challenge.
+ */
+const fetchChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(
+      isActionOf([Actions.fetchChallengeMeta, Actions.setChallengeDetailId]),
+    ),
+    map(x => x.payload),
+    // @ts-ignore
+    filter(x => x !== null),
+    mergeMap(deps.api.fetchChallengeMeta),
+    map(({ value: meta, error }) => {
+      if (meta) {
+        console.log(meta);
+        return Actions.fetchChallengeMetaSuccess(meta);
+      } else {
+        console.log(error);
+        return Actions.fetchChallengeMetaFailure(error);
+      }
+    }),
   );
 };
 
@@ -136,6 +206,9 @@ export default combineEpics(
   challengeInitializationEpic,
   inverseChallengeMappingEpic,
   searchPullRequestContextEpic,
+  handleChallengeIdSearchInitializationEpic,
+  handleChallengeIdSearchEpic,
+  fetchChallengeMetaEpic,
   handleSearchPullRequestEpic,
   fetchPullRequestContextEpic,
   fetchPullRequestContextOnAppLoadEpic,

@@ -3,6 +3,7 @@ import {
   Err,
   Ok,
   Result,
+  ChallengeMeta,
   CourseSkeletonList,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -223,6 +224,15 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       const { headers } = this.getRequestHeaders();
       return axios.delete<string>(`${HOST}/admin/feedback/${uuid}`, {
+        headers,
+      });
+    });
+  };
+
+  fetchChallengeMeta = async (id: string) => {
+    return this.httpHandler(async () => {
+      const { headers } = this.getRequestHeaders();
+      return axios.get<ChallengeMeta>(`${HOST}/challenge-meta/${id}`, {
         headers,
       });
     });

@@ -17,15 +17,20 @@ export class ChallengeMetaService {
   }
 
   public async fetchChallengeMeta(challengeId: string) {
+    const emptyMeta = {
+      challengeId,
+      numberOfTimesCompleted: 0,
+    };
+
     try {
       const result = await this.lookupChallengeMeta(challengeId);
       if (result) {
-        return result.numberOfTimesCompleted;
+        return result;
       } else {
-        return 0;
+        return emptyMeta;
       }
     } catch (err) {
-      return 0;
+      return emptyMeta;
     }
   }
 

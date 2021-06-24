@@ -211,9 +211,7 @@ class Api extends BaseApiClass {
       if (ENV.DEV) {
         // eslint-disable-next-line
         const courseList = require("@pairwise/common").default;
-        // NOTE: Hard-coded to only show the FullstackTypeScript Course
-        courses = [courseList.FullstackTypeScript];
-        // courses = Object.values(courseList);
+        courses = Object.values(courseList);
       } else if (ENV.CODEPRESS) {
         courses = await this.codepressApi.getAll().toPromise();
       } else {
@@ -234,9 +232,7 @@ class Api extends BaseApiClass {
     if (ENV.DEV) {
       // eslint-disable-next-line
       const courseMap = require("@pairwise/common").default;
-      // NOTE: Hard-coded to only show the FullstackTypeScript Course
-      const courses: CourseSkeletonList = [courseMap.FullstackTypeScript];
-      // const courses: CourseSkeletonList = [courseMap.FullstackTypeScript];
+      const courses: CourseSkeletonList = Object.values(courseMap);
       const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
       return new Ok(courseSkeletonList);
     } else if (ENV.CODEPRESS) {

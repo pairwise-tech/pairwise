@@ -11,12 +11,11 @@ const ADMIN_EMAIL = "pairwise-dev-admin-user@pairwise.tech";
 // Randomly return true of false
 const yesOrNo = () => Math.floor(Math.random() * 100) > 50;
 
+const PAIRWISE = "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4";
+const LINUS = "https://avatars0.githubusercontent.com/u/1024025?s=460&v=4";
+
 // Choose a random default profile avatar image.
-const getRandomProfileImage = () => {
-  return yesOrNo()
-    ? "https://avatars0.githubusercontent.com/u/59724684?s=200&v=4"
-    : "https://avatars0.githubusercontent.com/u/1024025?s=460&v=4";
-};
+const getRandomProfileImage = () => (yesOrNo() ? LINUS : PAIRWISE);
 
 const generateNewProfileFields = () => {
   const id = faker.random.uuid();
@@ -80,16 +79,16 @@ class MockAuth {
   }
 
   // Creates an Admin user. See note in server file.
-  generateNewGoogleProfile() {
-    const { id, first, last, name, picture } = generateNewProfileFields();
-
+  generateGoogleAdminProfile() {
+    const id = "fa09sd7fsa09f0as7df09sa87fsa0";
     return {
+      id,
       sub: id,
-      name,
-      picture,
+      name: "Linus Torvalds",
+      picture: LINUS,
       email: ADMIN_EMAIL,
-      given_name: first,
-      family_name: last,
+      given_name: "Linus",
+      family_name: "Torvalds",
       locale: "en",
       email_verified: true,
     };
