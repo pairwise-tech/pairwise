@@ -161,25 +161,44 @@ test("\`variable\` should be defined.", () => {
 });
 `;
 
-export const generateEmptyChallenge = (
-  overwrite: Partial<Challenge> = {},
-): Challenge => ({
-  id: shortid.generate(),
-  type: "typescript",
-  title: "[EMPTY...]",
-  instructions: "",
-  testCode: starterTestCode,
-  videoUrl: "",
-  starterCode: "",
-  solutionCode: "",
-  content: "",
-  ...overwrite,
-});
+export const generateEmptyChallenge = (args: {
+  id?: string;
+  overwrite?: Partial<Challenge>;
+}): Challenge => {
+  const { id, overwrite } = args;
+  console.log(id);
+
+  // Default:
+  let type: CHALLENGE_TYPE = "typescript";
+
+  if (id === "asiuq8e7l") {
+    type = "python";
+  } else if (id === "alosiqu45") {
+    type = "rust";
+  } else if (id === "aiqu278z9") {
+    type = "golang";
+  }
+
+  return {
+    type,
+    id: shortid.generate(),
+    title: "[EMPTY...]",
+    instructions: "",
+    testCode: starterTestCode,
+    videoUrl: "",
+    starterCode: "",
+    solutionCode: "",
+    content: "",
+    ...overwrite,
+  };
+};
 
 export const defaultSandboxChallenge = generateEmptyChallenge({
-  id: SANDBOX_ID, // Important. This is how the app knows it's the sandbox challenge
-  title: "Sandbox",
-  type: "markup",
+  overwrite: {
+    id: SANDBOX_ID, // Important. This is how the app knows it's the sandbox challenge
+    title: "Sandbox",
+    type: "markup",
+  },
 });
 
 export const defaultSandboxBlob = constructDataBlobFromChallenge({
