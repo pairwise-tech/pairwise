@@ -7,10 +7,10 @@ import { ChallengeMetaService } from "./challenge-meta.service";
 export class ChallengeMetaController {
   constructor(private readonly challengeMetaService: ChallengeMetaService) {}
 
-  // @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("jwt"))
   @Get(":id")
   public fetchChallengeMeta(@Param() params, @Req() req: AuthenticatedRequest) {
     const { id } = params;
-    return this.challengeMetaService.fetchChallengeMeta(req.user, id);
+    return this.challengeMetaService.fetchChallengeMeta(id);
   }
 }

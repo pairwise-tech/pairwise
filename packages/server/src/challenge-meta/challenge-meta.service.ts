@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { RequestUser } from "../types";
 import { ChallengeMeta } from "./challenge-meta.entity";
 
 @Injectable()
@@ -11,11 +10,15 @@ export class ChallengeMetaService {
     private readonly challengeMetaRepository: Repository<ChallengeMeta>,
   ) {}
 
-  public async fetchChallengeMeta(user: RequestUser, challengeId: string) {
+  private async lookupChallengeMeta(challengeId: string) {
+    return this.challengeMetaRepository.findOne({
+      challengeId,
+    });
+  }
+
+  public async fetchChallengeMeta(challengeId: string) {
     try {
-      const result = await this.challengeMetaRepository.findOne({
-        challengeId,
-      });
+      const result = await this.lookupChallengeMeta(challengeId);
       if (result) {
         return result.numberOfTimesCompleted;
       } else {
@@ -27,17 +30,23 @@ export class ChallengeMetaService {
   }
 
   public async incrementChallengeCompletionCount(challengeId: string) {
-    const result = await this.challengeMetaRepository.findOne({
-      challengeId,
-    });
+    const result = await this.lookupChallengeMeta(challengeId);
 
-    const count = !!result ? result.numberOfTimesCompleted : 0;
+    if (!result) {
+      const meta = {
+        challengeId,
+        numberOfTimesCompleted: 1,
+      };
+      await this.challengeMetaRepository.insert(meta);
+    } else {
+      const count = result.numberOfTimesCompleted + 1;
 
-    await this.challengeMetaRepository
-      .createQueryBuilder("challengeMeta")
-      .update(ChallengeMeta)
-      .where({ uuid: result.uuid })
-      .set({ numberOfTimesCompleted: count })
-      .execute();
+      await this.challengeMetaRepository
+        .createQueryBuilder("challengeMeta")
+        .update(ChallengeMeta)
+        .where({ uuid: result.uuid })
+        .set({ numberOfTimesCompleted: count })
+        .execute();
+    }
   }
 }

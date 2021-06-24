@@ -8,5 +8,6 @@ import { ChallengeMetaService } from "./challenge-meta.service";
   imports: [TypeOrmModule.forFeature([ChallengeMeta])],
   controllers: [ChallengeMetaController],
   providers: [ChallengeMetaService],
+  exports: [ChallengeMetaService],
 })
 export class ChallengeMetaModule {}
