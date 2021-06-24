@@ -13,15 +13,28 @@
  * ============================================================================
  */
 
+// Environment should be dev if running on localhost...
+const guessIfEnvironmentIsDevelopment = () => {
+  try {
+    const location = window.location.ancestorOrigins[0];
+    if (location === "http://localhost:3000") {
+      return true;
+    }
+  } catch (err) {
+    return false;
+  }
+
+  return false;
+};
+
 let DATABASE_CHALLENGE_API = "https://database-challenge-api.uc.r.appspot.com";
 
 let PAIRWISE_CODE_RUNNER_API =
   "https://pairwise-code-runner-api.uc.r.appspot.com";
 
-let DEV = false;
+const DEV = guessIfEnvironmentIsDevelopment();
 
-DEV = true; // Enable to use code execution APIs in development
-
+// Reset to localhost in local development environment
 if (DEV) {
   DATABASE_CHALLENGE_API = "http://localhost:5000";
   PAIRWISE_CODE_RUNNER_API = "http://localhost:8080";
