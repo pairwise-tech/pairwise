@@ -32,9 +32,9 @@ import { generateEmptyChallenge } from "tools/utils";
 import { IconButton } from "./Shared";
 
 const CONTRIBUTOR_IMAGES = {
-  "Ian Sinnott": require("./img/ian.jpg"),
-  "Sean Smith": require("./img/sean.png"),
-  "Peter Weinberg": require("./img/pete.jpg"),
+  "Ian Sinnott": require("./img/ian.jpg").default,
+  "Sean Smith": require("./img/sean.png").default,
+  "Peter Weinberg": require("./img/pete.jpg").default,
 };
 
 /** ===========================================================================
