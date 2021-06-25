@@ -85,7 +85,7 @@ class Home extends React.Component<IProps, {}> {
             )}
             {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
-          <ContentContainer>
+          <CourseProgressContainer>
             {userCourseProgressSummary && (
               <>
                 <PageTitle>Course Progress</PageTitle>
@@ -114,7 +114,7 @@ class Home extends React.Component<IProps, {}> {
                 )}
               </>
             )}
-          </ContentContainer>
+          </CourseProgressContainer>
         </FlexContainer>
       </PageContainer>
     );
@@ -207,6 +207,12 @@ const ContentContainer = styled.div`
 
   p {
     font-size: 18px;
+  }
+`;
+
+const CourseProgressContainer = styled(ContentContainer)`
+  @media ${MOBILE} {
+    padding-bottom: 25px;
   }
 `;
 

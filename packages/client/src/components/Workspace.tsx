@@ -109,9 +109,7 @@ import isMobile from "is-mobile";
 
 const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN_EDITOR";
 
-const PANEL_SCROLL_ID = "panel-scroll-target";
-
-export const MOBILE_SCROLL_PANEL_ID = "panel-scroll-target";
+export const MOBILE_SCROLL_PANEL_ID = "mobile-scroll-panel";
 
 type ConsoleLogMethods = "warn" | "info" | "error" | "log";
 
@@ -408,6 +406,7 @@ class Workspace extends React.Component<IProps, IState> {
                 {...x}
                 key={i}
                 index={i}
+                isMobileView={isMobileView}
                 testsRunning={testResultsLoading}
                 isPreviewTestResults={isPreviewTestResults}
               />
@@ -477,9 +476,9 @@ class Workspace extends React.Component<IProps, IState> {
           )}
           <RunButton
             fill
-            large={isMobileView}
             icon="play"
             id="pw-run-code"
+            large={isMobileView}
             loading={testResultsLoading}
             onClick={this.handleUserTriggeredTestRun}
             aria-label="run the current editor code"
@@ -868,7 +867,7 @@ class Workspace extends React.Component<IProps, IState> {
                 <Button
                   onClick={() => {
                     document
-                      .getElementById(PANEL_SCROLL_ID)
+                      .getElementById(MOBILE_SCROLL_PANEL_ID)
                       ?.scrollTo({ left: 0, behavior: "smooth" });
                   }}
                   icon="code"
@@ -877,7 +876,7 @@ class Workspace extends React.Component<IProps, IState> {
                 </Button>
                 <Button
                   onClick={() => {
-                    document.getElementById(PANEL_SCROLL_ID)?.scrollTo({
+                    document.getElementById(MOBILE_SCROLL_PANEL_ID)?.scrollTo({
                       left: this.state.dimensions.w,
                       behavior: "smooth",
                     });
@@ -891,10 +890,12 @@ class Workspace extends React.Component<IProps, IState> {
                     className="test-view-button"
                     data-failing={failingTests.length}
                     onClick={() => {
-                      document.getElementById(PANEL_SCROLL_ID)?.scrollTo({
-                        left: this.state.dimensions.w * 2,
-                        behavior: "smooth",
-                      });
+                      document
+                        .getElementById(MOBILE_SCROLL_PANEL_ID)
+                        ?.scrollTo({
+                          left: this.state.dimensions.w * 2,
+                          behavior: "smooth",
+                        });
                     }}
                   >
                     <small
@@ -1309,8 +1310,8 @@ class Workspace extends React.Component<IProps, IState> {
     // Slide the preview window into view. Only applicable on mobile
     if (this.props.isMobileView) {
       document
-        .getElementById(PANEL_SCROLL_ID)
-        ?.scrollTo({ left: this.state.dimensions.w, behavior: "smooth" });
+        .getElementById(MOBILE_SCROLL_PANEL_ID)
+        ?.scrollTo({ left: this.state.dimensions.w * 2, behavior: "smooth" });
     }
   };
 

@@ -178,6 +178,9 @@ const HighlightedMarkdown = (props: ReactMarkdownProps) => {
 };
 
 const TestMessageHighlighter = styled(HighlightedMarkdown)`
+  margin: 0;
+  padding: 0;
+
   p {
     margin: 0;
     margin-right: 12px;
@@ -217,6 +220,7 @@ const TestStatus = styled.div`
 const StyledTestResultRow = styled.div`
   @media ${MOBILE} {
     position: relative;
+    margin-bottom: 12px;
 
     ${MinimalButton} {
       position: absolute;
@@ -245,10 +249,12 @@ export const TestResultRow = ({
   testResult,
   error,
   index,
+  isMobileView,
   testsRunning,
   isPreviewTestResults,
 }: TestCase & {
   index: number;
+  isMobileView: boolean;
   testsRunning: boolean;
   isPreviewTestResults: boolean;
 }) => {
@@ -289,18 +295,27 @@ export const TestResultRow = ({
   return (
     <StyledTestResultRow>
       <ContentDiv>
-        <Tooltip
-          position="right"
-          disabled={!Boolean(error)}
-          content={showError ? "Hide error" : "Show error"}
-        >
+        {isMobileView ? (
           <MinimalButton
             style={{ cursor: error ? "pointer" : "normal" }}
             onClick={toggleShowError}
           >
             {TestCaseIcon}
           </MinimalButton>
-        </Tooltip>
+        ) : (
+          <Tooltip
+            position="right"
+            disabled={!Boolean(error)}
+            content={showError ? "Hide error" : "Show error"}
+          >
+            <MinimalButton
+              style={{ cursor: error ? "pointer" : "normal" }}
+              onClick={toggleShowError}
+            >
+              {TestCaseIcon}
+            </MinimalButton>
+          </Tooltip>
+        )}
         <TestMessageHighlighter source={message} />
         <TestStatus>
           <b style={{ color: C.TEXT_TITLE }}>Status:</b>

@@ -37,7 +37,7 @@ import {
 } from "./Shared";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
-import Workspace, { MOBILE_SCROLL_PANEL_ID } from "./Workspace";
+import Workspace from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,

@@ -60,7 +60,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
         <SummaryText style={{ maxWidth: 550 }}>
           There are currently {users.length} total registered users. A total of{" "}
           {zeroChallengeUsers.length} have completed zero challenges, and are
-          excluded from the following list:
+          excluded from the following list.
         </SummaryText>
         {usersWithProgress.map(this.renderUsersList)}
       </>

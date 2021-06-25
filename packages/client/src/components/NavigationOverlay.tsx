@@ -167,52 +167,41 @@ class NavigationOverlay extends React.Component<
           onClick={e => e.stopPropagation()}
         >
           <ColTitle className="course-select">
-            {isMobile ? (
-              <Link style={{ width: "auto" }} to="/home">
-                <Button
-                  fill
-                  rightIcon="home"
-                  className="mobile-shrink"
-                  style={{ whiteSpace: "nowrap" }}
-                ></Button>
-              </Link>
-            ) : (
-              <CourseSelect
-                filterable={false}
-                items={courseListMetadata}
-                itemDisabled={c => c.id === course.id}
-                onItemSelect={({ id }) => {
-                  this.props.setCurrentCourse(id);
-                }}
-                popoverProps={{
-                  onClosed: () => {
-                    // Blur the damn element to avoid keyboard interactions
-                    // opening the select menu again later.
-                    if (document.activeElement) {
-                      // @ts-ignore
-                      document.activeElement.blur();
-                    }
-                  },
-                }}
-                itemRenderer={({ title, id }, { handleClick }) => (
-                  <ClickableColTitle
-                    key={id}
-                    disabled={id === course.id}
-                    onClick={(e: any) => handleClick(e)}
-                  >
-                    {title}
-                  </ClickableColTitle>
-                )}
-              >
-                <Button
-                  fill
-                  text={course.title}
-                  rightIcon="chevron-down"
-                  className="mobile-shrink"
-                  style={{ whiteSpace: "nowrap" }}
-                />
-              </CourseSelect>
-            )}
+            <CourseSelect
+              filterable={false}
+              items={courseListMetadata}
+              itemDisabled={c => c.id === course.id}
+              onItemSelect={({ id }) => {
+                this.props.setCurrentCourse(id);
+              }}
+              popoverProps={{
+                onClosed: () => {
+                  // Blur the damn element to avoid keyboard interactions
+                  // opening the select menu again later.
+                  if (document.activeElement) {
+                    // @ts-ignore
+                    document.activeElement.blur();
+                  }
+                },
+              }}
+              itemRenderer={({ title, id }, { handleClick }) => (
+                <ClickableColTitle
+                  key={id}
+                  disabled={id === course.id}
+                  onClick={(e: any) => handleClick(e)}
+                >
+                  {title}
+                </ClickableColTitle>
+              )}
+            >
+              <Button
+                fill
+                rightIcon="chevron-down"
+                className="mobile-shrink"
+                style={{ whiteSpace: "nowrap" }}
+                text={isMobile ? "" : course.title}
+              />
+            </CourseSelect>
           </ColTitle>
           <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
@@ -549,6 +538,7 @@ class NavigationOverlay extends React.Component<
     style?: React.CSSProperties;
   }) => {
     const {
+      isMobile,
       isEditMode,
       challengeId,
       menuSelectIndex,
@@ -583,6 +573,7 @@ class NavigationOverlay extends React.Component<
     const isSectionOpen = this.getCurrentAccordionViewState(challenge.id);
     const iconProps = {
       index,
+      isMobile,
       challenge,
       isSectionOpen,
       challengeProgress,
@@ -946,16 +937,18 @@ const ModuleNavigationButton = ({
 
 interface ChallengeListItemIconProps {
   index: number;
-  challenge: ChallengeSkeleton;
+  isMobile: boolean;
   isSectionOpen?: boolean;
+  challenge: ChallengeSkeleton;
   challengeProgress: CHALLENGE_PROGRESS;
   onClick: (e: React.MouseEvent) => any;
 }
 
 const ChallengeListItemIcon = ({
   index,
-  isSectionOpen,
+  isMobile,
   challenge,
+  isSectionOpen,
   challengeProgress,
   ...props
 }: ChallengeListItemIconProps) => {
@@ -995,7 +988,9 @@ const ChallengeListItemIcon = ({
   return (
     <Tooltip
       content={tooltipContent}
-      disabled={!isSection && challengeProgress === "NOT_ATTEMPTED"}
+      disabled={
+        isMobile || (!isSection && challengeProgress === "NOT_ATTEMPTED")
+      }
     >
       <RotatingIcon
         icon={icon}
