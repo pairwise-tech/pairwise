@@ -523,9 +523,9 @@ class Workspace extends React.Component<IProps, IState> {
           {!isMobileView && !IS_ALTERNATE_LANGUAGE_CHALLENGE && (
             <Tooltip content="Format Code" position="left">
               <IconButton
+                icon="clean"
                 large={isMobileView}
                 id="editor-format-code"
-                icon="clean"
                 aria-label="format editor code"
                 onClick={this.handleRequestCodeFormatting}
               />

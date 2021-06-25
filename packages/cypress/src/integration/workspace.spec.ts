@@ -307,16 +307,15 @@ describe("Workspace Editor Functions", () => {
   });
 
   it("Should format code when the format button is clicked", () => {
+    cy.visit(FIRST_CHALLENGE_URL);
+    cy.wait(TIMEOUT);
     const unformattedCode = `
 <h1>SUP SUP SUP
 
 </h1>
     `;
+
     typeTextInCodeEditor(unformattedCode);
-
-    cy.get(".monaco-editor textarea").should("have.value", unformattedCode);
-
-    click("editor-more-options");
     click("editor-format-code");
 
     cy.get(".monaco-editor textarea").should(
