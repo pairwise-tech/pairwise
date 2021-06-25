@@ -1,5 +1,6 @@
 import styled from "styled-components/macro";
-import ControlledEditor, { registerExternalLib } from "../monaco";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import Editor from "@monaco-editor/react";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
@@ -16,216 +17,209 @@ import { CodeFormatMessageEvent, TEST_UTILS_GLOBALS } from "tools/test-utils";
 import { MonacoEditorThemes } from "@pairwise/common";
 import toaster from "tools/toast-utils";
 import { copyToClipboard } from "tools/utils";
-import {
-  WORKSPACE_LIB_TYPES,
-  EXPRESS_JS_LIB_TYPES,
-} from "tools/browser-test-lib";
 import { OnMount } from "@monaco-editor/react";
-import { editor } from "monaco-editor";
 
 /** ===========================================================================
  * Types & Config
  * ============================================================================
  */
 
-const CODE_FORMAT_CHANNEL = "TEST_EDITOR";
+const CODE_FORMAT_CHANNEL = "CODEPRESS_TEST_EDITOR";
+
+export const CHALLENGE_TEST_EDITOR = "challenge-test-editor.ts";
+
+interface IState {
+  mounted: boolean;
+}
 
 /** ===========================================================================
  * React Component
  * ============================================================================
  */
+class ChallengeTestEditor extends React.Component<IProps, IState> {
+  debouncedHandleUpdate: () => void;
+  editor: Nullable<monaco.editor.IStandaloneCodeEditor> = null;
 
-const ChallengeTestEditor = (props: Props) => {
-  const {
-    challengeId,
-    updateChallenge,
-    editorOptions,
-    increaseFontSize,
-    decreaseFontSize,
-  } = props;
-  const editorRef = React.useRef<editor.IStandaloneCodeEditor>(null);
-  const valueGetter = React.useRef<() => string>(() => "");
-  const [isReady, setIsReady] = React.useState(false);
+  constructor(props: IProps) {
+    super(props);
 
-  const getEditorValue = () => {
-    if (!isReady) {
+    this.state = {
+      mounted: false,
+    };
+
+    this.debouncedHandleUpdate = debounce(200, this.handleEditorValueUpdate);
+  }
+
+  componentDidMount() {
+    subscribeCodeWorker(this.handleCodeFormat);
+  }
+
+  componentWillUnmount() {
+    unsubscribeCodeWorker(this.handleCodeFormat);
+  }
+
+  editorOnMount: OnMount = (editor, monaco) => {
+    // Format the code when the editor loses focus
+    editor.onDidBlurEditorText(this.requestCodeFormatting);
+
+    this.editor = editor;
+
+    this.setState({ mounted: true });
+  };
+
+  render(): JSX.Element {
+    const {
+      editorOptions,
+      increaseFontSize,
+      decreaseFontSize,
+      challengeTestCode,
+    } = this.props;
+
+    return (
+      <div
+        style={{
+          color: "white",
+          position: "relative",
+          height: "calc(100% - 50px)",
+          background: COLORS.BACKGROUND_CONSOLE,
+        }}
+        onKeyUp={this.debouncedHandleUpdate}
+      >
+        <Editor
+          height="100%"
+          language="typescript"
+          path={CHALLENGE_TEST_EDITOR}
+          value={challengeTestCode}
+          onMount={this.editorOnMount}
+          theme={MonacoEditorThemes.DEFAULT}
+          options={{
+            formatOnType: true,
+            formatOnPaste: true,
+            minimap: {
+              enabled: false,
+            },
+            ...editorOptions,
+          }}
+        />
+        <LowerRight>
+          <ButtonGroup vertical style={{ marginBottom: 8 }}>
+            <Tooltip content="Increase Font Size" position="left">
+              <IconButton
+                icon="plus"
+                aria-label="increase editor font size"
+                onClick={increaseFontSize}
+              />
+            </Tooltip>
+            <Tooltip content="Decrease Font Size" position="left">
+              <IconButton
+                icon="minus"
+                aria-label="decrease editor font size"
+                onClick={decreaseFontSize}
+              />
+            </Tooltip>
+          </ButtonGroup>
+          <Tooltip content="Format Code" position="left">
+            <IconButton
+              icon="clean"
+              aria-label="format editor code"
+              onClick={this.requestCodeFormatting}
+            />
+          </Tooltip>
+          <Popover
+            canEscapeKeyClose
+            content={
+              <TestUtilsPopover>
+                <TestUtilsTitle>Global Test Utils</TestUtilsTitle>
+                {Object.entries(TEST_UTILS_GLOBALS).map(
+                  ([globalValue, description]) => {
+                    return (
+                      <UtilBox
+                        key={globalValue}
+                        onClick={() => {
+                          copyToClipboard(globalValue);
+                          toaster.success(`"${globalValue}" copied!`);
+                        }}
+                      >
+                        <CopyText>
+                          <Code>{globalValue}</Code>
+                        </CopyText>
+                        <DescriptionText>{description}</DescriptionText>
+                      </UtilBox>
+                    );
+                  },
+                )}
+              </TestUtilsPopover>
+            }
+          >
+            <Tooltip content="View Test Utils" position="left">
+              <IconButton icon="more" aria-label="test utils helpers" />
+            </Tooltip>
+          </Popover>
+        </LowerRight>
+      </div>
+    );
+  }
+
+  getEditorValue = () => {
+    if (!this.state.mounted) {
       console.warn("getEditorValue called before editor was ready");
     }
 
-    // return valueGetter.current();
-    if (editorRef.current) {
-      return editorRef.current.getValue();
+    if (this.editor) {
+      return this.editor.getValue();
     }
 
     return "";
   };
 
-  const handleEditorReady: OnMount = (editor, monaco) => {
-    // valueGetter.current = getValue;
-    setIsReady(true);
+  handleEditorValueUpdate = () => {
+    const { challengeId, challengeTestCode } = this.props;
 
-    // Format the code when the editor loses focus
-    editor.onDidBlurEditorText(handleFormatCode);
-
-    // @ts-ignore
-    editorRef.current = editor;
-  };
-
-  const handleUpdate = () => {
     if (!challengeId) {
       console.warn("[ERROR] No challenge ID provided");
       return;
     }
 
-    const testCode = getEditorValue();
-
-    // Since we're using a keyup handler this helps to make it function like a change handler.
-    const shouldUpdate = testCode !== props.challengeTestCode;
+    const testCode = this.getEditorValue();
+    const shouldUpdate = testCode !== challengeTestCode;
 
     if (shouldUpdate) {
-      updateChallenge({
+      this.props.updateChallenge({
         id: challengeId,
         challenge: { testCode },
       });
     }
   };
 
-  const updateHandler = React.useRef(debounce(200, handleUpdate));
-
-  const handleFormatCode = () => {
-    if (!challengeId) {
+  requestCodeFormatting = () => {
+    if (!this.props.challengeId) {
       console.warn("[ERROR] No challenge ID provided");
       return;
     }
+
     requestCodeFormatting({
-      code: getEditorValue(),
       type: "typescript",
+      code: this.getEditorValue(),
       channel: CODE_FORMAT_CHANNEL,
     });
   };
 
-  React.useEffect(() => {
-    const handleCodeFormat = (e: CodeFormatMessageEvent) => {
-      if (!challengeId) {
-        console.warn("[ERROR] No challenge ID provided");
-        return;
-      }
+  handleCodeFormat = (e: CodeFormatMessageEvent) => {
+    const { challengeId, updateChallenge } = this.props;
+    if (!challengeId) {
+      console.warn("[ERROR] No challenge ID provided");
+      return;
+    }
 
-      const { code, channel } = e.data;
-      if (code && channel === CODE_FORMAT_CHANNEL) {
-        updateChallenge({
-          id: challengeId,
-          challenge: { testCode: code },
-        });
-      }
-    };
-
-    subscribeCodeWorker(handleCodeFormat);
-
-    return () => unsubscribeCodeWorker(handleCodeFormat);
-  }, [updateChallenge, challengeId]);
-
-  React.useEffect(() => {
-    registerExternalLib({
-      name: "pairwise-test-lib.d.ts",
-      source: WORKSPACE_LIB_TYPES,
-    });
-  }, []);
-
-  React.useEffect(() => {
-    // Add express library for Backend Module challenges
-    if (props.isBackendModuleChallenge) {
-      registerExternalLib({
-        name: "express-lib.d.ts",
-        source: EXPRESS_JS_LIB_TYPES,
+    const { code, channel } = e.data;
+    if (code && channel === CODE_FORMAT_CHANNEL) {
+      updateChallenge({
+        id: challengeId,
+        challenge: { testCode: code },
       });
     }
-  }, [props.isBackendModuleChallenge]);
-
-  return (
-    <div
-      style={{
-        height: "calc(100% - 50px)",
-        color: "white",
-        position: "relative",
-        background: COLORS.BACKGROUND_CONSOLE,
-      }}
-      onKeyUp={updateHandler.current}
-    >
-      <ControlledEditor
-        height="100%"
-        path="challenge-test-editor.ts"
-        language="javascript"
-        onMount={handleEditorReady}
-        value={props.challengeTestCode}
-        theme={MonacoEditorThemes.DEFAULT}
-        options={{
-          formatOnType: true,
-          formatOnPaste: true,
-          minimap: {
-            enabled: false,
-          },
-          ...editorOptions,
-        }}
-      />
-      <LowerRight>
-        <ButtonGroup vertical style={{ marginBottom: 8 }}>
-          <Tooltip content="Increase Font Size" position="left">
-            <IconButton
-              icon="plus"
-              aria-label="increase editor font size"
-              onClick={increaseFontSize}
-            />
-          </Tooltip>
-          <Tooltip content="Decrease Font Size" position="left">
-            <IconButton
-              icon="minus"
-              aria-label="decrease editor font size"
-              onClick={decreaseFontSize}
-            />
-          </Tooltip>
-        </ButtonGroup>
-        <Tooltip content="Format Code" position="left">
-          <IconButton
-            icon="clean"
-            aria-label="format editor code"
-            onClick={handleFormatCode}
-          />
-        </Tooltip>
-        <Popover
-          canEscapeKeyClose
-          content={
-            <TestUtilsPopover>
-              <TestUtilsTitle>Global Test Utils</TestUtilsTitle>
-              {Object.entries(TEST_UTILS_GLOBALS).map(
-                ([globalValue, description]) => {
-                  return (
-                    <UtilBox
-                      key={globalValue}
-                      onClick={() => {
-                        copyToClipboard(globalValue);
-                        toaster.success(`"${globalValue}" copied!`);
-                      }}
-                    >
-                      <CopyText>
-                        <Code>{globalValue}</Code>
-                      </CopyText>
-                      <DescriptionText>{description}</DescriptionText>
-                    </UtilBox>
-                  );
-                },
-              )}
-            </TestUtilsPopover>
-          }
-        >
-          <Tooltip content="View Test Utils" position="left">
-            <IconButton icon="more" aria-label="test utils helpers" />
-          </Tooltip>
-        </Popover>
-      </LowerRight>
-    </div>
-  );
-};
+  };
+}
 
 /** ===========================================================================
  * Styles
@@ -314,7 +308,7 @@ const mergeProps = (
     }),
 });
 
-type Props = ReturnType<typeof mergeProps>;
+type IProps = ReturnType<typeof mergeProps>;
 
 /** ===========================================================================
  * Export

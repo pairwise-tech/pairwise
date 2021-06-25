@@ -19,6 +19,15 @@ import EXPRESS_JS_LIB from "!raw-loader!../js/express-js-lib.js";
 // @ts-ignore
 import EXPRESS_JS_LIB_TYPES from "!raw-loader!../js/express-js-lib.d.ts";
 
+// @ts-ignore
+import MONACO_TYPE_PATCHES from "!raw-loader!../monaco-types/monaco-type-patches.d.ts";
+
+// @ts-ignore
+import REACT_D_TS from "!raw-loader!../monaco-types/react.d.ts";
+
+// @ts-ignore
+import REACT_DOM_D_TS from "!raw-loader!../monaco-types/react-dom.d.ts";
+
 const WORKSPACE_LIB = `
   ${EXPECTATION_LIB}
   ${TEST_EXPECTATION_LIB}
@@ -34,8 +43,11 @@ const WORKSPACE_LIB_TYPES = `
  * the Jest test environment.
  */
 export {
+  MONACO_TYPE_PATCHES,
   WORKSPACE_LIB,
   WORKSPACE_LIB_TYPES,
+  REACT_D_TS,
+  REACT_DOM_D_TS,
   TEST_EXPECTATION_LIB_TYPES,
   EXPRESS_JS_LIB,
   EXPRESS_JS_LIB_TYPES,

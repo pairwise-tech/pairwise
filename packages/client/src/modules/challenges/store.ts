@@ -97,8 +97,8 @@ const initialState: State = {
   isDirty: false,
   menuSelectColumn: "CHALLENGE",
   menuSelectIndex: null,
-  useCodemirror: true,
-  // useCodemirror: false,
+  // useCodemirror: true,
+  useCodemirror: false,
 };
 
 /** ===========================================================================

@@ -9,8 +9,8 @@ import "@blueprintjs/table/lib/css/table.css";
 // Import app styles
 import "./index.css";
 
-// TSX styles to apply to React/TSX challenges
-import "./custom-tsx-styles.scss";
+// TSX styles to apply to React/TSX challenges for Monaco
+import "./monaco-tsx-styles.scss";
 
 // Import Libraries
 import React from "react";

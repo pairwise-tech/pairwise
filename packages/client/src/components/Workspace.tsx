@@ -91,7 +91,7 @@ import {
   SQLResultsTable,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
-import { WORKSPACE_LIB, EXPRESS_JS_LIB } from "tools/browser-test-lib";
+import { WORKSPACE_LIB, EXPRESS_JS_LIB } from "tools/browser-libraries";
 import { CODEPRESS } from "tools/client-env";
 import traverse from "traverse";
 import GreatSuccess from "./GreatSuccess";
@@ -107,10 +107,9 @@ import isMobile from "is-mobile";
  * ============================================================================
  */
 
-const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN";
+const CODE_FORMAT_CHANNEL = "WORKSPACE_MAIN_EDITOR";
 
-// NOTE: Element id is referenced in custom-tsx-styles.scss to apply styling
-export const PAIRWISE_CODE_EDITOR_ID = "pairwise-code-editor";
+const PANEL_SCROLL_ID = "panel-scroll-target";
 
 export const MOBILE_SCROLL_PANEL_ID = "panel-scroll-target";
 
@@ -130,15 +129,15 @@ const DEFAULT_LOGS: ReadonlyArray<Log> = [
 
 interface IState {
   code: string;
+  hideSuccessModal: boolean;
   testResultsLoading: boolean;
-  testResults: ReadonlyArray<TestCase>; // TODO: This should no longer be necessary after testString is up and running
+  shouldRefreshLayout: boolean;
   isPreviewTestResults: boolean;
   monacoInitializationError: boolean;
-  logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
-  hideSuccessModal: boolean;
+  testResults: ReadonlyArray<TestCase>;
   dimensions: ReturnType<typeof getDimensions>;
-  shouldRefreshLayout: boolean;
   mobileDevicePreviewType: MobileDevicePreviewType;
+  logs: ReadonlyArray<{ data: ReadonlyArray<any>; method: string }>;
 }
 
 export interface ICodeEditorOptions {
@@ -146,33 +145,24 @@ export interface ICodeEditorOptions {
 }
 
 export interface ICodeEditorProps {
-  language: string;
   value: string;
-  onChange: (x: string) => any;
-  challengeType: CHALLENGE_TYPE;
+  language: string;
+  isEditMode: boolean;
+  onChange: (x: string) => void;
   userSettings: UserSettings;
+  challengeType: CHALLENGE_TYPE;
   editorOptions: ICodeEditorOptions;
   onDidBlurEditorText: () => void;
-  onDidInitializeMonacoEditor: () => void;
   isBackendModuleChallenge: boolean;
   isTestingAndAutomationChallenge: boolean;
 }
 
-export interface ICodeEditor extends React.Component<ICodeEditorProps> {
-  refresh(): Promise<void>;
-  focus(): void;
-  cleanup(): void;
-  setTheme(theme: string): void;
-  updateOptions(options: Partial<ICodeEditorOptions>): void;
-  addModuleTypeDefinitionsToMonaco(packages: string[]): void;
-}
+export interface ICodeEditor extends React.Component<ICodeEditorProps> {}
 
 /** ===========================================================================
  * React Component
  * ============================================================================
  */
-
-const PANEL_SCROLL_ID = "panel-scroll-target";
 
 class Workspace extends React.Component<IProps, IState> {
   // Place to store user code when solution code is revealed
@@ -183,8 +173,6 @@ class Workspace extends React.Component<IProps, IState> {
 
   // A cancellation time for the tests/preview process
   testCancellationTimer: Nullable<number> = null;
-
-  editor: Nullable<ICodeEditor> = null;
 
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   debouncedSaveCodeFunction: () => void;
@@ -278,13 +266,9 @@ class Workspace extends React.Component<IProps, IState> {
     ) {
       this.runChallengeTests();
     }
-
-    /* Focus the editor whenever a challenge is loaded */
-    this.tryToFocusEditor();
   }
 
   componentWillUnmount() {
-    this.cleanupEditor();
     window.removeEventListener("resize", this.handleWindowResize);
     window.removeEventListener("keydown", this.handleKeyPress);
     window.removeEventListener(
@@ -325,39 +309,31 @@ class Workspace extends React.Component<IProps, IState> {
       );
     }
 
-    const fullScreenChange =
-      prevProps.userSettings.fullScreenEditor !==
-      this.props.userSettings.fullScreenEditor;
-    const editViewChange =
-      prevProps.editModeAlternativeViewEnabled !==
-      this.props.editModeAlternativeViewEnabled;
+    // const fullScreenChange =
+    //   prevProps.userSettings.fullScreenEditor !==
+    //   this.props.userSettings.fullScreenEditor;
+    // const editViewChange =
+    //   prevProps.editModeAlternativeViewEnabled !==
+    //   this.props.editModeAlternativeViewEnabled;
 
     /**
      * Refresh the editor if the editor views are changed.
      */
-    if (fullScreenChange || editViewChange) {
-      this.refreshEditor();
-    }
+    // if (fullScreenChange || editViewChange) {
+    //   this.refreshEditor();
+    // }
 
     // Handle changes in editor options
     if (prevProps.editorOptions !== this.props.editorOptions) {
-      this.editor?.updateOptions(this.props.editorOptions);
+      // this.editor?.updateOptions(this.props.editorOptions);
     }
 
     // Handle changes in the editor theme
     if (prevProps.userSettings.theme !== this.props.userSettings.theme) {
-      this.editor?.setTheme(this.props.userSettings.theme);
+      // this.editor?.setTheme(this.props.userSettings.theme);
     }
 
-    // Handle changes to isEditMode. If this is a code challenge and isEditMode
-    // has changed, then update.
-    //
-    // This update is currently necessary to get the correct code into the
-    // editor when switching edit mode. For example: I'm in codepress but just
-    // using the app as a user. I type some code in the editor, which gets
-    // persisted.  I then switch to edit mode. At that point we need to replace
-    // the editor code--which has changed--with the starter code so that I can
-    // edit it.
+    // Reset the code if the user toggles in and out of isEditMode.
     if (
       "code" in this.props.blob &&
       prevProps.isEditMode !== this.props.isEditMode
@@ -378,13 +354,6 @@ class Workspace extends React.Component<IProps, IState> {
       this.pauseAndRefreshEditor();
     }
   }
-
-  /**
-   * Handle any actions after the Monaco editor is initialized.
-   */
-  onDidInitializeMonacoEditor = () => {
-    this.addModuleDependenciesOnMount();
-  };
 
   /**
    * For non-markup challenges (React, TS), enable the user to
@@ -415,15 +384,8 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   refreshEditor = async () => {
-    await this.editor?.refresh();
     if (this.iFrameRef) {
       this.runChallengeTests();
-    }
-  };
-
-  tryToFocusEditor = () => {
-    if (this.editor) {
-      this.editor.focus();
     }
   };
 
@@ -471,7 +433,6 @@ class Workspace extends React.Component<IProps, IState> {
         code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
       },
       async () => {
-        await this.refreshEditor();
         this.props.setAdminEditorTab(tab);
       },
     );
@@ -483,17 +444,6 @@ class Workspace extends React.Component<IProps, IState> {
    */
   handleTestTabClick = async (tab: ADMIN_TEST_TAB) => {
     if (tab !== this.props.adminTestTab) {
-      /**
-       * NOTE: The reason for this additional logic is to "refresh" the test
-       * results when one of us clicks back to the test results tab. That tab is
-       * the only tab from the perspective of end users so this should only ever
-       * happen when we are editing via codepress.
-       */
-
-      if (tab === "testResults") {
-        await this.refreshEditor();
-      }
-
       this.props.setAdminTestTab(tab);
     }
   };
@@ -704,7 +654,7 @@ class Workspace extends React.Component<IProps, IState> {
                 id="editor-format-code"
                 icon="clean"
                 aria-label="format editor code"
-                onClick={this.handleFormatCode}
+                onClick={this.handleRequestCodeFormatting}
               />
             </Tooltip>
           )}
@@ -771,7 +721,7 @@ class Workspace extends React.Component<IProps, IState> {
                     id="editor-format-code-mobile"
                     icon="clean"
                     aria-label="format editor code"
-                    onClick={this.handleFormatCode}
+                    onClick={this.handleRequestCodeFormatting}
                     text="Auto-format Code"
                   />
                 )}
@@ -827,9 +777,7 @@ class Workspace extends React.Component<IProps, IState> {
           </Popover>
         </LowerRight>
         <CodeEditor
-          ref={editor => {
-            this.editor = editor;
-          }}
+          isEditMode={isEditMode}
           value={this.state.code}
           userSettings={this.props.userSettings}
           editorOptions={this.props.editorOptions}
@@ -837,7 +785,6 @@ class Workspace extends React.Component<IProps, IState> {
           challengeType={this.props.challenge.type}
           language={this.getMonacoLanguageFromChallengeType()}
           onDidBlurEditorText={this.handleAutoFormatCodeOnBlur}
-          onDidInitializeMonacoEditor={this.onDidInitializeMonacoEditor}
           isBackendModuleChallenge={this.props.isBackendModuleChallenge}
           isTestingAndAutomationChallenge={
             this.props.isTestingAndAutomationChallenge
@@ -1219,8 +1166,6 @@ class Workspace extends React.Component<IProps, IState> {
 
       /**
        * Only live preview markup challenges, for the UI.
-       *
-       * TODO: Revisit this for React challenges.
        */
       if (this.props.challenge.type === "markup") {
         this.debouncedRenderPreviewFunction();
@@ -1471,10 +1416,6 @@ class Workspace extends React.Component<IProps, IState> {
         this.props.challenge,
       );
 
-      if (this.editor) {
-        this.editor.addModuleTypeDefinitionsToMonaco(dependencies);
-      }
-
       return code;
     } catch (err) {
       /**
@@ -1490,23 +1431,6 @@ class Workspace extends React.Component<IProps, IState> {
       );
 
       return "";
-    }
-  };
-
-  /**
-   * This method extracts the module dependencies from the current challenge
-   * code and adds them to the Monaco editor after the editor has initialized,
-   * avoiding the issue where the initial code will display type errors
-   * which are invalid.
-   */
-  addModuleDependenciesOnMount = async () => {
-    const { dependencies } = await compileCodeString(
-      this.state.code,
-      this.props.challenge,
-    );
-
-    if (this.editor) {
-      this.editor.addModuleTypeDefinitionsToMonaco(dependencies);
     }
   };
 
@@ -1625,16 +1549,6 @@ class Workspace extends React.Component<IProps, IState> {
   };
 
   /**
-   * Cleanup monaco editor resources
-   */
-  private readonly cleanupEditor = () => {
-    if (this.editor) {
-      this.editor.cleanup();
-      this.editor = null;
-    }
-  };
-
-  /**
    * Run the auto formatter on the code in the code window. This replaces the code currently present.
    * NOTE: An incoming message is fired when the worker is ready, so we can't
    * assume there is code coming over the wire.
@@ -1703,11 +1617,11 @@ class Workspace extends React.Component<IProps, IState> {
 
   private readonly handleAutoFormatCodeOnBlur = () => {
     if (this.props.isEditMode) {
-      this.handleFormatCode();
+      this.handleRequestCodeFormatting();
     }
   };
 
-  private readonly handleFormatCode = () => {
+  private readonly handleRequestCodeFormatting = () => {
     try {
       requestCodeFormatting({
         code: this.state.code,
