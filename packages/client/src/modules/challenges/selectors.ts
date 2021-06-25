@@ -472,8 +472,14 @@ export const userCourseProgressSummary = createSelector(
       };
 
       for (const challenge of module.challenges) {
-        totalChallenges++;
+        // Exclude sections from completed challenge counts
+        if (challenge.type === "section") {
+          continue;
+        }
+
         stats.total++;
+        totalChallenges++;
+
         if (userCrouseProgress && userCrouseProgress[challenge.id]?.complete) {
           stats.completed++;
           totalCompleted++;

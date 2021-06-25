@@ -58,6 +58,10 @@ import { Select } from "@blueprintjs/select";
 
 const CourseSelect = Select.ofType<CourseMetadata>();
 
+// Class names for active and selected elements in the navigation overlay
+const ACTIVE_CHALLENGE_CLASS_NAME = "active-challenge";
+const SELECTED_ITEM_CLASS_NAME = "selected-item";
+
 /** ===========================================================================
  * React Class
  * ============================================================================
@@ -90,45 +94,27 @@ class NavigationOverlay extends React.Component<
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps: IProps) {
     this.lockWindowScrolling();
 
     this.maybeScrollSelectedItemIntoView();
-  }
 
-  maybeScrollSelectedItemIntoView = () => {
-    const { menuSelectIndex } = this.props;
-    if (menuSelectIndex === null) {
-      return;
-    }
+    if (this.props.overlayVisible) {
+      // Scroll to active challenge if overlay was previously closed
+      if (!prevProps.overlayVisible) {
+        this.scrollToChallenge();
+      }
 
-    const elements = document.getElementsByClassName("selected-item");
-    const element = elements[0];
-
-    if (element && elements.length === 1) {
-      if (!this.isElementVisible(element)) {
-        this.scrollToSelectedChallenge();
+      // If rendering the overlay, blur the active element, which is probably
+      // the workspace editor, to allow keyboard interactions to control
+      // the NavigationOverlay selection
+      const el = document.activeElement;
+      if (el) {
+        // @ts-ignore
+        document.activeElement.blur();
       }
     }
-  };
-
-  lockWindowScrolling = () => {
-    if (this.props.overlayVisible) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "visible";
-    }
-  };
-
-  isElementVisible = (element: Element) => {
-    const rect = element.getBoundingClientRect();
-    const viewHeight = Math.max(
-      document.documentElement.clientHeight,
-      window.innerHeight,
-    );
-
-    return !(rect.bottom > viewHeight || rect.top < 115);
-  };
+  }
 
   render(): Nullable<JSX.Element> {
     const {
@@ -361,9 +347,48 @@ class NavigationOverlay extends React.Component<
     );
   };
 
+  maybeScrollSelectedItemIntoView = () => {
+    const { menuSelectIndex } = this.props;
+    if (menuSelectIndex === null) {
+      return;
+    }
+
+    const elements = document.getElementsByClassName(SELECTED_ITEM_CLASS_NAME);
+    const element = elements[0];
+
+    if (element && elements.length === 1) {
+      if (this.isElementOffScreen(element)) {
+        this.scrollToSelectedChallenge();
+      }
+    }
+  };
+
+  lockWindowScrolling = () => {
+    if (this.props.overlayVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  };
+
+  isElementOffScreen = (element: Element) => {
+    const rect = element.getBoundingClientRect();
+    const viewHeight = Math.max(
+      document.documentElement.clientHeight,
+      window.innerHeight,
+    );
+
+    const AT_TOP = rect.top < 115;
+    const AT_BOTTOM = rect.bottom > viewHeight;
+    return AT_TOP || AT_BOTTOM;
+  };
+
   scrollToChallenge = () => {
     // Find the currently active element
-    const elements = document.getElementsByClassName("active-item");
+    const elements = document.getElementsByClassName(
+      ACTIVE_CHALLENGE_CLASS_NAME,
+    );
+
     const element = elements[0];
     // There should only be one active element...
     if (element && elements.length === 1) {
@@ -372,8 +397,8 @@ class NavigationOverlay extends React.Component<
   };
 
   scrollToSelectedChallenge = () => {
-    // Find the currently active element
-    const elements = document.getElementsByClassName("selected-item");
+    // Find the currently selected element
+    const elements = document.getElementsByClassName(SELECTED_ITEM_CLASS_NAME);
     const element = elements[0];
     // There should only be one active element...
     if (element && elements.length === 1) {
@@ -588,10 +613,10 @@ class NavigationOverlay extends React.Component<
 
     let className = "";
     if (itemActive) {
-      className += " active-item";
+      className += ACTIVE_CHALLENGE_CLASS_NAME;
     }
     if (isMenuItemSelected) {
-      className += " selected-item";
+      className += ` ${SELECTED_ITEM_CLASS_NAME}`;
     }
 
     return (

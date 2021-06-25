@@ -184,7 +184,14 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       }
 
       if (menuSelectIndex === null) {
-        setMenuSelectIndex(this.getDefaultMenuItemIndex(relevantList));
+        // Default is up or down one from current default index, which is
+        // the selected challenge or 0
+        const defaultSelection = this.getDefaultMenuItemIndex(relevantList);
+        if (defaultSelection === 0) {
+          setMenuSelectIndex(relevantList.length - 1);
+        } else {
+          setMenuSelectIndex(defaultSelection - 1);
+        }
       } else if (menuSelectIndex === 0) {
         setMenuSelectIndex(relevantList.length - 1);
       } else {
@@ -203,7 +210,14 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       }
 
       if (menuSelectIndex === null) {
-        setMenuSelectIndex(this.getDefaultMenuItemIndex(relevantList));
+        // Default is up or down one from current default index, which is
+        // the selected challenge or 0
+        const defaultSelection = this.getDefaultMenuItemIndex(relevantList);
+        if (defaultSelection === relevantList.length - 1) {
+          setMenuSelectIndex(0);
+        } else {
+          setMenuSelectIndex(defaultSelection + 1);
+        }
       } else if (menuSelectIndex === relevantList.length - 1) {
         setMenuSelectIndex(0);
       } else {

@@ -462,7 +462,7 @@ class Workspace extends React.Component<IProps, IState> {
       !revealSolutionCode &&
       challenge.id !== SANDBOX_ID;
 
-    // Use different editors for different platforms
+    // Default to code mirror for mobile and for alternate challenges
     const CodeEditor =
       isMobileView || useCodemirrorEditor || IS_ALTERNATE_LANGUAGE_CHALLENGE
         ? WorkspaceCodemirrorEditor
@@ -613,7 +613,8 @@ class Workspace extends React.Component<IProps, IState> {
             </Tooltip>
           </ButtonGroup>
           <div style={{ marginBottom: 8 }} />
-          {!isMobileView && (
+          {/* Code formatting is available only for HTML/CSS/TS challenges */}
+          {!isMobileView && !IS_ALTERNATE_LANGUAGE_CHALLENGE && (
             <Tooltip content="Format Code" position="left">
               <IconButton
                 large={isMobileView}
