@@ -309,30 +309,6 @@ class Workspace extends React.Component<IProps, IState> {
       );
     }
 
-    // const fullScreenChange =
-    //   prevProps.userSettings.fullScreenEditor !==
-    //   this.props.userSettings.fullScreenEditor;
-    // const editViewChange =
-    //   prevProps.editModeAlternativeViewEnabled !==
-    //   this.props.editModeAlternativeViewEnabled;
-
-    /**
-     * Refresh the editor if the editor views are changed.
-     */
-    // if (fullScreenChange || editViewChange) {
-    //   this.refreshEditor();
-    // }
-
-    // Handle changes in editor options
-    if (prevProps.editorOptions !== this.props.editorOptions) {
-      // this.editor?.updateOptions(this.props.editorOptions);
-    }
-
-    // Handle changes in the editor theme
-    if (prevProps.userSettings.theme !== this.props.userSettings.theme) {
-      // this.editor?.setTheme(this.props.userSettings.theme);
-    }
-
     // Reset the code if the user toggles in and out of isEditMode.
     if (
       "code" in this.props.blob &&
@@ -344,7 +320,7 @@ class Workspace extends React.Component<IProps, IState> {
       } else {
         // Switching FROM edit mode TO user mode
         const userCode = this.props.blob.code || "";
-        this.setState({ code: userCode }, this.refreshEditor);
+        this.setState({ code: userCode }, this.runChallengeTests);
       }
     }
 
@@ -381,12 +357,6 @@ class Workspace extends React.Component<IProps, IState> {
       testResults: [],
       isPreviewTestResults: false,
     };
-  };
-
-  refreshEditor = async () => {
-    if (this.iFrameRef) {
-      this.runChallengeTests();
-    }
   };
 
   /**
@@ -492,9 +462,11 @@ class Workspace extends React.Component<IProps, IState> {
       !revealSolutionCode &&
       challenge.id !== SANDBOX_ID;
 
-    const handleCloseSuccessModal = () => {
-      this.setState({ hideSuccessModal: true });
-    };
+    // Use different editors for different platforms
+    const CodeEditor =
+      isMobileView || useCodemirrorEditor || IS_ALTERNATE_LANGUAGE_CHALLENGE
+        ? WorkspaceCodemirrorEditor
+        : WorkspaceMonacoEditor;
 
     const WorkspaceTestContainer = (
       <>
@@ -569,19 +541,13 @@ class Workspace extends React.Component<IProps, IState> {
       </Col>
     );
 
-    // Use different editors for different platforms
-    const CodeEditor =
-      isMobileView || useCodemirrorEditor
-        ? WorkspaceCodemirrorEditor
-        : WorkspaceMonacoEditor;
-
     const CODE_EDITOR_CONTAINER = (
       <CodeEditorContainer>
         <GreatSuccess
           challenge={challenge}
           isOpen={IS_GREAT_SUCCESS_OPEN}
-          onClose={handleCloseSuccessModal}
-          onClickOutside={handleCloseSuccessModal}
+          onClose={this.handleCloseSuccessModal}
+          onClickOutside={this.handleCloseSuccessModal}
         />
         <TabbedInnerNav show={isEditMode}>
           <Tab
@@ -1116,6 +1082,10 @@ class Workspace extends React.Component<IProps, IState> {
     );
   }
 
+  handleCloseSuccessModal = () => {
+    this.setState({ hideSuccessModal: true });
+  };
+
   toggleMobileDevicePreview = () => {
     this.setState(
       ({ mobileDevicePreviewType: x }) => ({
@@ -1356,6 +1326,10 @@ class Workspace extends React.Component<IProps, IState> {
   // testResultsLoading to false we would run into cases where the tests hadn't
   // finished running yet.
   runChallengeTests = async () => {
+    if (!this.iFrameRef) {
+      return;
+    }
+
     this.setState(
       {
         logs: DEFAULT_LOGS,
@@ -1643,7 +1617,10 @@ class Workspace extends React.Component<IProps, IState> {
       clearTimeout(this.editorRefreshTimerHandler);
     }
 
-    this.editorRefreshTimerHandler = setTimeout(this.refreshEditor, timeout);
+    this.editorRefreshTimerHandler = setTimeout(
+      this.runChallengeTests,
+      timeout,
+    );
   };
 }
 

@@ -71,6 +71,17 @@ class WorkspaceMonacoEditor extends React.Component<ICodeEditorProps, IState>
     this.debouncedSyntaxHighlightFunction(this.props.value);
   }
 
+  componentDidUpdate(nextProps: ICodeEditorProps) {
+    if (nextProps.isEditMode && this.monaco) {
+      const root = "file:///node_modules/@types";
+      const getPath = (name: string) => `${root}/${name}/index.d.ts`;
+      this.monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        WORKSPACE_LIB_TYPES,
+        getPath("pairwise-workspace"),
+      );
+    }
+  }
+
   editorOnMount: OnMount = (editor, monaco) => {
     const model = editor.getModel();
     if (model) {
@@ -79,33 +90,33 @@ class WorkspaceMonacoEditor extends React.Component<ICodeEditorProps, IState>
       this.setState({ workspaceEditorModelIdMap });
     }
 
-    this.handleAddExtraLibs(monaco);
+    const root = "file:///node_modules/@types";
+    const getPath = (name: string) => `${root}/${name}/index.d.ts`;
 
-    this.monaco = monaco;
-
-    editor.focus();
-  };
-
-  handleAddExtraLibs = (monaco: Monaco) => {
-    const handleAddExtraLib = (types: string, name: string) => {
-      const root = "file:///node_modules/@types";
-      const path = `${root}/${name}/index.d.ts`;
-      const { addExtraLib } = monaco.languages.typescript.typescriptDefaults;
-      addExtraLib(types, path);
-    };
-
-    handleAddExtraLib(MONACO_TYPE_PATCHES, "monaco-type-patches");
+    monaco.languages.typescript.typescriptDefaults.addExtraLib(
+      MONACO_TYPE_PATCHES,
+      getPath("monaco-type-patches"),
+    );
 
     if (this.props.isEditMode) {
-      handleAddExtraLib(WORKSPACE_LIB_TYPES, "pairwise-workspace");
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        WORKSPACE_LIB_TYPES,
+        getPath("pairwise-workspace"),
+      );
     }
 
     if (this.props.isBackendModuleChallenge) {
-      handleAddExtraLib(EXPRESS_JS_LIB_TYPES, "express");
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        EXPRESS_JS_LIB_TYPES,
+        getPath("express"),
+      );
     }
 
     if (this.props.isTestingAndAutomationChallenge) {
-      handleAddExtraLib(TEST_EXPECTATION_LIB_TYPES, "expectation-lib");
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        TEST_EXPECTATION_LIB_TYPES,
+        getPath("expectation-lib"),
+      );
     }
 
     if (this.props.challengeType === "react") {
@@ -117,9 +128,20 @@ class WorkspaceMonacoEditor extends React.Component<ICodeEditorProps, IState>
         allowSyntheticDefaultImports: true,
       });
 
-      handleAddExtraLib(REACT_D_TS, "react");
-      handleAddExtraLib(REACT_DOM_D_TS, "react-dom");
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        REACT_D_TS,
+        getPath("react"),
+      );
+
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        REACT_DOM_D_TS,
+        getPath("react-dom"),
+      );
     }
+
+    this.monaco = monaco;
+
+    editor.focus();
   };
 
   render() {
