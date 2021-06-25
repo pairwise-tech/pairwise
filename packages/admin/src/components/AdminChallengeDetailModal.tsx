@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "../tools/admin-utils";
-import { Challenge } from "@pairwise/common";
+import { Challenge, ChallengeMeta } from "@pairwise/common";
 import {
   DataCard,
   KeyValue,
@@ -30,6 +30,7 @@ class AdminChallengeDetailModal extends React.Component<IProps, IState> {
     const {
       isMobile,
       challengeMap,
+      challengeMeta,
       challengeDetailId,
       setChallengeDetailId,
     } = this.props;
@@ -58,7 +59,11 @@ class AdminChallengeDetailModal extends React.Component<IProps, IState> {
         }}
       >
         {result ? (
-          <ChallengeContextCard {...result} isMobile={isMobile} />
+          <ChallengeContextCard
+            {...result}
+            isMobile={isMobile}
+            challengeMeta={challengeMeta}
+          />
         ) : (
           <p>
             A challenge could not be found with this id:{" "}
@@ -86,10 +91,17 @@ interface ChallengeContextCardProps {
   moduleId: string;
   challenge: Challenge;
   isMobile: boolean;
+  challengeMeta: Nullable<ChallengeMeta>;
 }
 
 export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
-  const { challenge, courseId, moduleId, isMobile } = props;
+  const { challenge, courseId, moduleId, isMobile, challengeMeta } = props;
+
+  let numberOfTimeCompleted = null;
+  if (challengeMeta && challengeMeta.challengeId === challenge.id) {
+    numberOfTimeCompleted = challengeMeta.numberOfTimesCompleted;
+  }
+
   return (
     <DataCard key={challenge.id}>
       <KeyValue label="Title" value={challenge.title} />
@@ -120,6 +132,11 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
           </ExternalLink>
         </LabelRow>
       )}
+      {!numberOfTimeCompleted !== null && (
+        <LabelRow style={{ marginTop: 8 }}>
+          This challenge has been completed {numberOfTimeCompleted} times.
+        </LabelRow>
+      )}
     </DataCard>
   );
 };
@@ -130,6 +147,7 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  challengeMeta: Modules.selectors.challenges.challengeMeta(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
   challengeDetailId: Modules.selectors.challenges.challengeDetailId(state),
 });

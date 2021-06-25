@@ -1,13 +1,10 @@
 import React from "react";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import {
-  ICodeEditorProps,
-  ICodeEditor,
-  ICodeEditorOptions,
-  PAIRWISE_CODE_EDITOR_ID,
-} from "./Workspace";
+import { ICodeEditorProps, ICodeEditor, ICodeEditorOptions } from "./Workspace";
 import { wait } from "tools/utils";
 import styled from "styled-components/macro";
+
+// Import codemirror theme files
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material-darker.css";
 import "codemirror/mode/xml/xml.js";
@@ -21,51 +18,40 @@ import "codemirror/addon/edit/matchtags.js";
 import "codemirror/addon/edit/closebrackets.js";
 import "codemirror/addon/edit/closetag.js";
 
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
 interface IState {
   theWaitIsOver: boolean;
-  fontSize: number;
 }
 
-export default class WorkspaceCodemirrorEditor
+interface MockedCodeMirrorEditor {
+  focus(): void;
+}
+
+/** ===========================================================================
+ * WorkspaceCodemirrorEditor
+ * ============================================================================
+ */
+
+class WorkspaceCodemirrorEditor
   extends React.Component<ICodeEditorProps, IState>
   implements ICodeEditor {
   // The TS lib doesn't type their editor... p(●｀□´●)q
   // So I'm just going to make up a type
-  codemirrorInstance: Nullable<{ focus(): void }> = null;
+  codemirrorInstance: Nullable<MockedCodeMirrorEditor> = null;
 
   state = {
     theWaitIsOver: false,
-    fontSize: this.props.editorOptions.fontSize || 16,
   };
 
   private _isMounted = false;
 
-  updateOptions = (options: Partial<ICodeEditorOptions>) => {
-    const { fontSize } = options;
-    if (fontSize) {
-      this.setState({ fontSize });
-    }
-  };
-
-  refresh = async () => {
-    // Unnecessary for the controlled component, but required by the ICodeEditor spec
-    // noop
-  };
-
-  addModuleTypeDefinitionsToMonaco = (packages: string[] = []) => {
-    // No action - only applies to the Monaco editor.
-  };
-
-  focus = () => {
-    if (typeof this.codemirrorInstance?.focus === "function") {
-      this.codemirrorInstance.focus();
-    }
-  };
-
-  setTheme = (theme: string) => {
-    // We don't support this for codemirror since it's only a stopgap while the
-    // user is on mobile, but it's required by the ICodeEditor spec
-    // noop
+  editorDidMount = (editor: MockedCodeMirrorEditor) => {
+    this.codemirrorInstance = editor;
+    editor.focus();
   };
 
   cleanup = () => {
@@ -85,41 +71,42 @@ export default class WorkspaceCodemirrorEditor
     // a bit of time
     await wait(500);
 
-    // Silly uncancellable promises...
+    // Silly un-cancellable promises...
     if (this._isMounted) {
       this.setState({ theWaitIsOver: true });
     }
   }
 
   render() {
-    const { language } = this.props;
+    const { language, editorOptions } = this.props;
+    const { theWaitIsOver } = this.state;
+    const { fontSize } = editorOptions;
 
-    // NOTE: We need htmlmixed if we want CSS to get highlighted in HTML code
-    const mode = language === "html" ? "htmlmixed" : `${this.props.language}`;
-
-    console.log(mode);
+    let mode = language;
+    if (language === "html") {
+      mode = "htmlmixed";
+    } else if (language === "typescript") {
+      mode = "text/typescript";
+    }
 
     const options = {
       mode,
       theme: "material-darker",
+      matchTags: true,
       lineNumbers: true,
       lineWrapping: true,
-      matchBrackets: true,
-      matchTags: true,
-      autoCloseBrackets: true,
       autoCloseTags: true,
+      matchBrackets: true,
+      autoCloseBrackets: true,
     };
-    const { theWaitIsOver, fontSize } = this.state;
 
     return (
-      <CodemirrorContainer id={PAIRWISE_CODE_EDITOR_ID} style={{ fontSize }}>
+      <CodemirrorContainer style={{ fontSize }}>
         {theWaitIsOver && (
           <CodeMirror
-            editorDidMount={editor => {
-              this.codemirrorInstance = editor;
-            }}
-            value={this.props.value}
             options={options}
+            value={this.props.value}
+            editorDidMount={this.editorDidMount}
             onBeforeChange={(editor, data, value) => {
               this.props.onChange(value);
             }}
@@ -129,6 +116,11 @@ export default class WorkspaceCodemirrorEditor
     );
   }
 }
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
 
 const CodemirrorContainer = styled.div`
   height: 100%;
@@ -147,3 +139,10 @@ const CodemirrorContainer = styled.div`
     }
   }
 `;
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
+
+export default WorkspaceCodemirrorEditor;

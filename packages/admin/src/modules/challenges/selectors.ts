@@ -23,6 +23,11 @@ export const challengeDetailId = createSelector(
   state => state.challengeDetailId,
 );
 
+export const challengeMeta = createSelector(
+  [challengesState],
+  state => state.challengeMeta,
+);
+
 export const navigationOverlayVisible = createSelector(
   [challengesState],
   challenges => challenges.displayNavigationMap,

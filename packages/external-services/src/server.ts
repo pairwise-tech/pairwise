@@ -94,15 +94,38 @@ app.post("/google/token", (req, res) => {
 });
 
 /**
- * Authenticated Google request for a user profile.
+ * [GET] Fixed Google admin user profile.
  *
- * NOTE: The Google SSO login in development/testing creates a user
- * with a fixed email. The email can be whitelisted as an admin user
- * email to allow Google SSO to create an admin user for testing in
- * these environments.
+ * NOTE: The Google SSO login in development/testing creates a user with
+ * the fixed admin email, which can be used for testing admin features
+ * locally.
  */
 app.get("/google/profile", (req, res) => {
-  const profile = mockAuth.generateNewGoogleProfile();
+  const profile = mockAuth.generateGoogleAdminProfile();
+  res.json(profile);
+});
+
+/**
+ * [GET] request for a Google access token for ADMIN login.
+ */
+app.get("/google-admin/token", (req, res) => {
+  res.redirect(
+    `${SERVER}/auth/google-admin/callback?code=vAExoIBVcI3vY26dV5b0KCWm2L95z9IW3P4pEu7HbLCq2TLMpyQv89B9zBe95Bj6worI74a81JEWN&scope=email+profile+https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email+openid?authuser=0&session_state=1dbd561a75553a324b87c0a0452692ae39ecda66..14cb&prompt=consent`,
+  );
+});
+
+/**
+ * [POST] request for a Google access token for ADMIN login.
+ */
+app.post("/google-admin/token", (req, res) => {
+  res.json(mockAuth.getGoogleAccessToken());
+});
+
+/**
+ * [GET] Fixed Google admin user profile.
+ */
+app.get("/google-admin/profile", (req, res) => {
+  const profile = mockAuth.generateGoogleAdminProfile();
   res.json(profile);
 });
 

@@ -5,18 +5,18 @@ import { CustomJwtAuthGuard } from "../auth/jwt.guard";
 
 @Controller("content")
 export class ContentController {
-  constructor(private readonly challengeService: ContentService) {}
+  constructor(private readonly contentService: ContentService) {}
 
   @UseGuards(CustomJwtAuthGuard)
   @Get("/skeletons")
   public fetchCourseSkeletons(@Req() req: AuthenticatedRequest) {
     const { user } = req;
-    return this.challengeService.fetchCourseSkeletons(user);
+    return this.contentService.fetchCourseSkeletons(user);
   }
 
   @UseGuards(CustomJwtAuthGuard)
   @Get("/courses")
   public fetchCourseContent(@Req() req: AuthenticatedRequest) {
-    return this.challengeService.fetchCourses(req.user);
+    return this.contentService.fetchCourses(req.user);
   }
 }
