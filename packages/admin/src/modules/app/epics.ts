@@ -18,6 +18,7 @@ import {
   parseInitialUrlToInitializationType,
   APP_INITIALIZATION_TYPE,
 } from "tools/admin-utils";
+import { DEV } from "../../tools/admin-env";
 
 /** ===========================================================================
  * Epics
@@ -106,21 +107,19 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
-    filter(
-      x =>
-        x.appInitializationType ===
-        APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE,
-    ),
-    pluck("params"),
-    // wait for the "Launching Pairwise..." overlay to disappear as the
-    // UI/UX of toast over overlay looks a bit off
-    delay(1500),
-    tap(params => {
-      deps.toaster.error(
-        `Login failed! An error occurred when trying to log you ` +
-          `in with ${params.strategy}.`,
-        { timeout: 10000 },
-      );
+    pluck("appInitializationType"),
+    filter(type => type === APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE),
+    delay(500),
+    tap(() => {
+      const { host } = window.location;
+      if (host === "localhost" || host === "127.0.0.1:3007") {
+        deps.toaster.error(
+          `Failed to login. For local development, be sure you created an account first by logging into the workspace using Google.`,
+          { timeout: 6000 },
+        );
+      } else {
+        deps.toaster.error(`Failed to login.`, { timeout: 6000 });
+      }
     }),
     ignoreElements(),
   );

@@ -111,23 +111,21 @@ class BaseApiClass {
     return new Err(formattedError);
   };
 
+  /**
+   * Remove the local access token and force the window to reload to handle
+   * forced logout:
+   **/
   handleForcedLogout = async () => {
-    /**
-     * Remove the local access token and force the window to reload to handle
-     * forced logout:
-     *
-     * TODO: This works easily but it would be nice to surface this error
-     * higher up to then just update the application state correctly and
-     * avoid a forced reload. The forced reload is a little jarring. The
-     * logic to do this already exists, it would just require moving this
-     * error handling higher up into the epics layer. Then again, logout
-     * should RARELY occur, so... blegh.
-     */
-    toaster.error("Unauthorized!", { icon: "user" });
-    logoutUserInLocalStorage();
-    await wait(1500); /* Wait so they can read the message... */
+    const currentAccessToken = getAccessTokenFromLocalStorage();
 
-    window.location.reload();
+    // Only display if the token is not removed already, to prevent multiple
+    // messages
+    if (currentAccessToken !== "") {
+      toaster.error("Unauthorized!", { icon: "user" });
+      logoutUserInLocalStorage();
+      await wait(500);
+      window.location.reload();
+    }
   };
 }
 
