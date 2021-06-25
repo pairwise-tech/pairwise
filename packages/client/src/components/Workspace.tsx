@@ -220,23 +220,16 @@ class Workspace extends React.Component<IProps, IState> {
     } = this.getDefaultTestResultsState();
 
     this.state = {
-      code: initialCode,
+      dimensions,
       testResults,
+      code: initialCode,
       isPreviewTestResults,
       logs: DEFAULT_LOGS,
-      monacoInitializationError: false,
-
-      // This is what allows the user to close the success modal since it's
-      // otherwise based on passing test status.
       hideSuccessModal: true,
-
       testResultsLoading: false,
-
-      dimensions,
       shouldRefreshLayout: false,
-
-      // Default to iOS
       mobileDevicePreviewType: "ios",
+      monacoInitializationError: false,
     };
   }
 
@@ -330,93 +323,6 @@ class Workspace extends React.Component<IProps, IState> {
       this.pauseAndRefreshEditor();
     }
   }
-
-  /**
-   * For non-markup challenges (React, TS), enable the user to
-   * preview test messages without the tests being run
-   */
-  getDefaultTestResultsState = () => {
-    if (this.props.challenge.type !== "markup") {
-      const { error, results } = buildPreviewTestResultsFromCode(
-        this.props.challenge.testCode,
-      );
-
-      if (results?.length) {
-        return {
-          testResults: results,
-          isPreviewTestResults: true,
-        };
-      } else {
-        console.warn(
-          `[getPreviewTestResults] buildPreviewTestResultsFromCode failed: ${error}`,
-        );
-      }
-    }
-
-    return {
-      testResults: [],
-      isPreviewTestResults: false,
-    };
-  };
-
-  /**
-   * Reset the code editor content to the starterCode.
-   */
-  resetCodeWindow = () => {
-    this.transformMonacoCode(() => this.props.challenge.starterCode);
-    // Hide the solution code if it was visible
-    if (this.props.revealSolutionCode) {
-      this.props.handleToggleSolutionCode();
-    }
-  };
-
-  getMonacoLanguageFromChallengeType = () => {
-    const { type } = this.props.challenge;
-
-    switch (type) {
-      case "golang":
-        return "go";
-      case "python":
-        return "python";
-      case "rust":
-        return "rust";
-      case "react":
-      case "typescript":
-        return "typescript";
-      case "markup":
-        return "html";
-      default:
-        console.warn(`[WARNING] Invalid challenge type for monaco: ${type}`);
-        return "plaintext";
-    }
-  };
-
-  /**
-   * Switching tabs in the main code area, so that we can edit the starter code
-   * and solution code of a challenge.
-   *
-   * NOTE: When switching to the solution code default to the starter code.
-   */
-  handleEditorTabClick = async (tab: ADMIN_EDITOR_TAB) => {
-    this.setState(
-      {
-        code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
-      },
-      async () => {
-        this.props.setAdminEditorTab(tab);
-      },
-    );
-  };
-
-  /**
-   * Switch tabs in the test area of the workspace. So that we can see test
-   * results and write tests using different tabs.
-   */
-  handleTestTabClick = async (tab: ADMIN_TEST_TAB) => {
-    if (tab !== this.props.adminTestTab) {
-      this.props.setAdminTestTab(tab);
-    }
-  };
 
   render() {
     const { correct: allTestsPassing } = this.getTestPassedStatus();
@@ -1083,6 +989,93 @@ class Workspace extends React.Component<IProps, IState> {
     );
   }
 
+  /**
+   * For non-markup challenges (React, TS), enable the user to
+   * preview test messages without the tests being run
+   */
+  getDefaultTestResultsState = () => {
+    if (this.props.challenge.type !== "markup") {
+      const { error, results } = buildPreviewTestResultsFromCode(
+        this.props.challenge.testCode,
+      );
+
+      if (results?.length) {
+        return {
+          testResults: results,
+          isPreviewTestResults: true,
+        };
+      } else {
+        console.warn(
+          `[getPreviewTestResults] buildPreviewTestResultsFromCode failed: ${error}`,
+        );
+      }
+    }
+
+    return {
+      testResults: [],
+      isPreviewTestResults: false,
+    };
+  };
+
+  /**
+   * Reset the code editor content to the starterCode.
+   */
+  resetCodeWindow = () => {
+    this.transformMonacoCode(() => this.props.challenge.starterCode);
+    // Hide the solution code if it was visible
+    if (this.props.revealSolutionCode) {
+      this.props.handleToggleSolutionCode();
+    }
+  };
+
+  getMonacoLanguageFromChallengeType = () => {
+    const { type } = this.props.challenge;
+
+    switch (type) {
+      case "golang":
+        return "go";
+      case "python":
+        return "python";
+      case "rust":
+        return "rust";
+      case "react":
+      case "typescript":
+        return "typescript";
+      case "markup":
+        return "html";
+      default:
+        console.warn(`[WARNING] Invalid challenge type for monaco: ${type}`);
+        return "plaintext";
+    }
+  };
+
+  /**
+   * Switching tabs in the main code area, so that we can edit the starter code
+   * and solution code of a challenge.
+   *
+   * NOTE: When switching to the solution code default to the starter code.
+   */
+  handleEditorTabClick = async (tab: ADMIN_EDITOR_TAB) => {
+    this.setState(
+      {
+        code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
+      },
+      async () => {
+        this.props.setAdminEditorTab(tab);
+      },
+    );
+  };
+
+  /**
+   * Switch tabs in the test area of the workspace. So that we can see test
+   * results and write tests using different tabs.
+   */
+  handleTestTabClick = async (tab: ADMIN_TEST_TAB) => {
+    if (tab !== this.props.adminTestTab) {
+      this.props.setAdminTestTab(tab);
+    }
+  };
+
   handleCloseSuccessModal = () => {
     this.setState({ hideSuccessModal: true });
   };
@@ -1386,7 +1379,7 @@ class Workspace extends React.Component<IProps, IState> {
 
   compileAndTransformCodeString = async () => {
     try {
-      const { code, dependencies } = await compileCodeString(
+      const { code } = await compileCodeString(
         this.state.code,
         this.props.challenge,
       );

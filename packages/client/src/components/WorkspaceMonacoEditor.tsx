@@ -13,7 +13,7 @@ import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
 import { wait } from "tools/utils";
 import { debounce } from "throttle-debounce";
-import { editor, IDisposable } from "monaco-editor";
+import { editor } from "monaco-editor";
 
 // @ts-ignore
 import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
@@ -43,15 +43,13 @@ class WorkspaceMonacoEditor extends React.Component<ICodeEditorProps, IState>
   implements ICodeEditor {
   monaco: Nullable<Monaco> = null;
 
-  onBlurDisposable: Nullable<IDisposable> = null;
-
   syntaxWorker: any = null;
+
+  debouncedSyntaxHighlightFunction: (code: string) => void;
 
   state: IState = {
     workspaceEditorModelIdMap: new Map(),
   };
-
-  debouncedSyntaxHighlightFunction: (code: string) => void;
 
   constructor(props: ICodeEditorProps) {
     super(props);
@@ -123,9 +121,9 @@ class WorkspaceMonacoEditor extends React.Component<ICodeEditorProps, IState>
       monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
         jsx: 2,
         noEmit: true,
-        target: monaco.languages.typescript.ScriptTarget.ES2016,
         allowNonTsExtensions: true,
         allowSyntheticDefaultImports: true,
+        target: monaco.languages.typescript.ScriptTarget.ES2016,
       });
 
       monaco.languages.typescript.typescriptDefaults.addExtraLib(
