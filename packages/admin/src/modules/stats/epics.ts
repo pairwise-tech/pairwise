@@ -15,7 +15,7 @@ import { Actions } from "../root-actions";
 const refreshStatsEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.locationChange)),
-    filter(x => x.payload.pathname === "/stats"),
+    filter((x) => x.payload.pathname === "/stats"),
     map(() => Actions.refreshStats()),
   );
 };
@@ -34,7 +34,7 @@ const fetchProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
     ),
     delay(750),
     mergeMap(deps.api.fetchProgressRecords),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.fetchProgressRecordsSuccess(result.value);
       } else {

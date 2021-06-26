@@ -18,10 +18,8 @@ import { estimateTotalPaymentsRevenue } from "../tools/admin-utils";
 class AdminPaymentsPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const { paymentRecords } = this.props;
-    const {
-      totalRevenue,
-      totalNumberOfPayments,
-    } = estimateTotalPaymentsRevenue(paymentRecords);
+    const { totalRevenue, totalNumberOfPayments } =
+      estimateTotalPaymentsRevenue(paymentRecords);
     return (
       <PageContainer>
         <Title>Course Payments</Title>
@@ -36,7 +34,7 @@ class AdminPaymentsPage extends React.Component<IProps, {}> {
           </SummaryText>
         )}
 
-        {paymentRecords.reverse().map(payment => {
+        {paymentRecords.reverse().map((payment) => {
           return (
             <DataCard key={payment.uuid}>
               <KeyValue label="status" value={payment.status} />

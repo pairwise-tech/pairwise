@@ -67,12 +67,12 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
  * Fetch the pull request content on app load, if there the url
  * includes a pull request id.
  */
-const fetchPullRequestContextOnAppLoadEpic: EpicSignature = action$ => {
+const fetchPullRequestContextOnAppLoadEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
     map(() => window.location.pathname),
-    filter(x => x.includes("pull-requests")),
-    map(path => Actions.handleSearchPullRequest(path)),
+    filter((x) => x.includes("pull-requests")),
+    map((path) => Actions.handleSearchPullRequest(path)),
   );
 };
 
@@ -121,9 +121,9 @@ const fetchChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
     filter(
       isActionOf([Actions.fetchChallengeMeta, Actions.setChallengeDetailId]),
     ),
-    map(x => x.payload),
+    map((x) => x.payload),
     // @ts-ignore
-    filter(x => x !== null),
+    filter((x) => x !== null),
     mergeMap(deps.api.fetchChallengeMeta),
     map(({ value: meta, error }) => {
       if (meta) {
@@ -144,8 +144,8 @@ const searchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
     filter(isActionOf(Actions.locationChange)),
     pluck("payload"),
     pluck("pathname"),
-    filter(x => x.includes("/pull-requests/")),
-    map(path => Actions.handleSearchPullRequest(path)),
+    filter((x) => x.includes("/pull-requests/")),
+    map((path) => Actions.handleSearchPullRequest(path)),
   );
 };
 
@@ -157,7 +157,7 @@ const handleSearchPullRequestEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.handleSearchPullRequest)),
     pluck("payload"),
-    map(path => {
+    map((path) => {
       const idParam = path.split("/")[2];
       const id = Number(idParam);
       if (!id || isNaN(id)) {

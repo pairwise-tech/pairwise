@@ -12,5 +12,5 @@ export const feedbackState = (state: ReduxStoreState) => {
 
 export const feedbackRecordsSelector = createSelector(
   [feedbackState],
-  x => x.feedbackRecords,
+  (x) => x.feedbackRecords,
 );

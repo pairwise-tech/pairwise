@@ -45,11 +45,8 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
 
   render(): Nullable<JSX.Element> {
     const { useDarkTheme } = this.state;
-    const {
-      challengeMap,
-      pullRequestContext,
-      pullRequestContextLoading,
-    } = this.props;
+    const { challengeMap, pullRequestContext, pullRequestContextLoading } =
+      this.props;
     const id = this.getPullIdFromParams();
     const showLink = !pullRequestContextLoading && !!pullRequestContext && !!id;
     const prURL = `https://github.com/pairwise-tech/pairwise/pull/${id}`;
@@ -104,7 +101,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
   }
 
   toggleDiffTheme = () => {
-    this.setState(ps => ({ useDarkTheme: !ps.useDarkTheme }));
+    this.setState((ps) => ({ useDarkTheme: !ps.useDarkTheme }));
   };
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -294,9 +291,8 @@ const ChallengeDiffCard = styled(Card)`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   pullRequestContext: Modules.selectors.challenges.pullRequestContext(state),
-  pullRequestContextLoading: Modules.selectors.challenges.pullRequestContextLoading(
-    state,
-  ),
+  pullRequestContextLoading:
+    Modules.selectors.challenges.pullRequestContextLoading(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
 });
 

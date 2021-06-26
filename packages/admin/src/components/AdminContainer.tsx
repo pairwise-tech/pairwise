@@ -378,7 +378,7 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   rect {
     transition: all 0.2s ease;
     &:nth-child(-n + 4) {
-      filter: grayscale(${props => (props.overlayVisible ? 1 : 0)});
+      filter: grayscale(${(props) => (props.overlayVisible ? 1 : 0)});
     }
   }
 `;
@@ -544,8 +544,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   location: Modules.selectors.app.locationSelector(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,
   userAuthenticated: Modules.selectors.auth.userAuthenticated(state),
-  initializationError: Modules.selectors.app.appSelector(state)
-    .initializationError,
+  initializationError:
+    Modules.selectors.app.appSelector(state).initializationError,
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
 });
 

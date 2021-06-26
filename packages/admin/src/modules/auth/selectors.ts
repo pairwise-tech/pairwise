@@ -15,7 +15,7 @@ export const authSelector = createSelector([authState], identity);
 
 export const userAuthenticated = createSelector(
   authSelector,
-  authStateResult => {
+  (authStateResult) => {
     return Boolean(authStateResult.accessToken);
   },
 );

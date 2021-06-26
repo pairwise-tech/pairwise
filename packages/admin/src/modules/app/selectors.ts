@@ -16,5 +16,5 @@ export const appSelector = createSelector([appState], identity);
 
 export const locationSelector = createSelector(
   appSelector,
-  app => app.location,
+  (app) => app.location,
 );

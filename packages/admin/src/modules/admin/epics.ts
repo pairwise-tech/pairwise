@@ -14,7 +14,7 @@ const fetchUserEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.fetchAdminUser)),
     mergeMap(API.fetchUserProfile),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.fetchAdminUserSuccess(result.value);
       } else {

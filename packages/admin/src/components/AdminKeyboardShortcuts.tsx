@@ -94,7 +94,7 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
     };
 
     const makePredicate = (commandString: string) => {
-      const chars = commandString.split("+").map(x => x.toLowerCase());
+      const chars = commandString.split("+").map((x) => x.toLowerCase());
 
       // Support mapping the whitelisted single chars. The whole whitelist thing
       // is meant ot prevent us from willy-nilly mapping single keys since that
@@ -123,7 +123,7 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
       const meta = chars
         .slice(0, -1)
         .map(
-          tap(x => {
+          tap((x) => {
             // Just some validation
             if (x === "option") {
               throw new Error(
@@ -137,7 +137,7 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
             }
           }),
         )
-        .map(x => metaMap[x])
+        .map((x) => metaMap[x])
         .filter(Boolean);
       // All meta keys not included in the sequence
       const inverseMeta = difference(Object.values(metaMap), meta);
@@ -171,12 +171,12 @@ const KeyboardShortcuts = ({ keymap }: KeyboardShortcutsProps) => {
       [],
     );
 
-    listeners.forEach(fn => {
+    listeners.forEach((fn) => {
       document.addEventListener("keydown", fn);
     });
 
     return () => {
-      listeners.forEach(fn => {
+      listeners.forEach((fn) => {
         document.removeEventListener("keydown", fn);
       });
     };

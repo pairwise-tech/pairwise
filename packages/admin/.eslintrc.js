@@ -12,12 +12,7 @@ module.exports = {
       version: "detect",
     },
   },
-  extends: [
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended",
-  ],
+  extends: ["plugin:react/recommended", "plugin:prettier/recommended"],
   rules: {
     "react/prop-types": "off",
     "react/no-unescaped-entities": "off",

@@ -70,7 +70,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
 
     switch (result.type) {
       case "email": {
-        const user = users.find(u => matchValues(u.email, result.value));
+        const user = users.find((u) => matchValues(u.email, result.value));
         if (user) {
           return <AdminUserComponent user={user} />;
         } else {
@@ -78,7 +78,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
         }
       }
       case "uuid": {
-        const user = users.find(u => matchValues(u.uuid, result.value));
+        const user = users.find((u) => matchValues(u.uuid, result.value));
         if (user) {
           return <AdminUserComponent user={user} />;
         } else {

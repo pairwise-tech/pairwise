@@ -38,10 +38,8 @@ class AdminStatsPage extends React.Component<IProps, {}> {
     const loading = usersListLoading || statsLoading;
     const summary = summarizeUserProgress(usersList);
 
-    const {
-      totalRevenue,
-      totalNumberOfPayments,
-    } = estimateTotalPaymentsRevenue(paymentRecords);
+    const { totalRevenue, totalNumberOfPayments } =
+      estimateTotalPaymentsRevenue(paymentRecords);
 
     return (
       <PageContainer>
@@ -105,7 +103,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
                 <span>Number of Challenges</span>
               </Stat>
             )}
-            {courseSkeletons?.map(skeleton => {
+            {courseSkeletons?.map((skeleton) => {
               const { id, title, modules } = skeleton;
               const challenges: number = modules.reduce(
                 (total, courseModule) => {
@@ -138,7 +136,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
       <>
         <p style={{ color: "white", fontStyle: "italic" }}>{status}</p>
         {records ? (
-          records.map(record => {
+          records.map((record) => {
             const IS_REGISTERED_USER = !record.user.includes("Anonymous");
             return (
               <DataCard key={record.user}>

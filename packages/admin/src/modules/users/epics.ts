@@ -20,7 +20,7 @@ const fetchUsersEpic: EpicSignature = (action$, _, deps) => {
       ]),
     ),
     mergeMap(API.fetchUsersList),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.fetchUsersSuccess(result.value);
       } else {
