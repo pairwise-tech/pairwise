@@ -232,7 +232,10 @@ class NavigationOverlay extends React.Component<
                     />
                   </Tooltip>
                 )}
-                <Button onClick={this.toggleExpandCollapseAll}>
+                <Button
+                  style={{ width: 160 }}
+                  onClick={this.toggleExpandCollapseAll}
+                >
                   {ExpandCollapseButton}
                 </Button>
               </Row>
@@ -808,8 +811,8 @@ const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
   transition: all 0.15s ease-out;
   font-weight: bold;
   font-size: 12px;
-  cursor: pointer;
   outline: none;
+  cursor: pointer;
   border-radius: 100px;
   &:hover {
     transform: translate(-50%, -50%) scale(1.3);
@@ -1115,9 +1118,7 @@ const Col = styled.div<{ offsetX: number }>`
   }
 `;
 
-const ColScroll = styled.div`
-  overflow: auto;
-`;
+const ColScroll = styled.div``;
 
 const Overlay = styled.div<{ visible: boolean }>`
   top: ${HEADER_HEIGHT}px;
