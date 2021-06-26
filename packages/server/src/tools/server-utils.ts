@@ -13,8 +13,14 @@ import ENV from "./server-env";
  * ============================================================================
  */
 
+const PAIRWISE_REPO_BASE =
+  "https://api.github.com/repos/pairwise-tech/pairwise";
+
+/**
+ * Fetch PR diff.
+ */
 const fetchPullRequestDiff = async (pullRequestNumber: number) => {
-  const url = `https://api.github.com/repos/pairwise-tech/pairwise/pulls/${pullRequestNumber}/files`;
+  const url = `${PAIRWISE_REPO_BASE}/pulls/${pullRequestNumber}/files`;
   const result = await axios.get(url, {
     headers: {
       Accept: "application/vnd.github.v3+json",
@@ -24,8 +30,11 @@ const fetchPullRequestDiff = async (pullRequestNumber: number) => {
   return result.data;
 };
 
+/**
+ * Fetch individual file blob.
+ */
 const fetchFileBlob = async (fileSHA: string) => {
-  const url = `https://api.github.com/repos/pairwise-tech/pairwise/git/blobs/${fileSHA}`;
+  const url = `${PAIRWISE_REPO_BASE}/git/blobs/${fileSHA}`;
   const result = await axios.get(url, {
     headers: {
       Accept: "application/vnd.github.VERSION.raw",
@@ -128,7 +137,7 @@ export const parsePullRequestDiff = async (
             const updatedChallengeMeta = pullRequestChallengeMap[id];
 
             // One of them should exist...
-            const existing = originalChallengeMap
+            const existing = originalChallengeMeta
               ? originalChallengeMeta
               : updatedChallengeMeta;
 
