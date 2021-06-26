@@ -34,7 +34,7 @@ import { wait, APP_INITIALIZATION_TYPE } from "tools/utils";
  *
  * In either case, remove this ephemeral token.
  */
-const coursePaymentInitializeEpic: EpicSignature = action$ => {
+const coursePaymentInitializeEpic: EpicSignature = (action$) => {
   return combineLatest(
     action$.pipe(filter(isActionOf(Actions.fetchNavigationSkeletonSuccess))),
     action$.pipe(filter(isActionOf(Actions.storeAccessTokenSuccess))),
@@ -47,7 +47,7 @@ const coursePaymentInitializeEpic: EpicSignature = action$ => {
         /* Validate that the course id exists */
         const id = getEphemeralPurchaseCourseId();
 
-        const course = skeletons.find(c => c.id === id);
+        const course = skeletons.find((c) => c.id === id);
         if (id && course) {
           return of(
             Actions.setPaymentCourseId({ courseId: id }),
@@ -110,7 +110,7 @@ const startCheckoutEpic: EpicSignature = (action$, state$, deps) => {
     pluck("payload"),
     pluck("courseId"),
     mergeMap(deps.api.createCheckoutSession),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.startCheckoutSuccess(result.value);
       } else {
@@ -173,7 +173,7 @@ const redirectToStripeCheckoutEpic: EpicSignature = (action$, state$, deps) => {
     filter(isActionOf(Actions.startCheckoutSuccess)),
     pluck("payload"),
     pluck("stripeCheckoutSessionId"),
-    mergeMap(async id => {
+    mergeMap(async (id) => {
       try {
         await handleRedirectToStripeCheckoutFlow(id);
         return Actions.redirectToStripeSuccess();
@@ -197,7 +197,7 @@ const handlePaymentCancelledSideEffectEpic: EpicSignature = (
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     pluck("appInitializationType"),
-    filter(type => type === APP_INITIALIZATION_TYPE.PAYMENT_CANCELLED),
+    filter((type) => type === APP_INITIALIZATION_TYPE.PAYMENT_CANCELLED),
     tap(() => deps.toaster.warn("Payment flow cancelled.")),
     ignoreElements(),
   );
@@ -205,16 +205,17 @@ const handlePaymentCancelledSideEffectEpic: EpicSignature = (
 
 // Handle an app initialization which results from a payment success redirect
 // and dispatch an action to signify a successful payment occurred.
-const handlePaymentSuccessEpic: EpicSignature = action$ => {
+const handlePaymentSuccessEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     filter(
-      x => x.appInitializationType === APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS,
+      (x) =>
+        x.appInitializationType === APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS,
     ),
     pluck("params"),
-    map(x => x.courseId as string),
-    map(courseId => Actions.setPaymentSuccess({ courseId })),
+    map((x) => x.courseId as string),
+    map((courseId) => Actions.setPaymentSuccess({ courseId })),
   );
 };
 

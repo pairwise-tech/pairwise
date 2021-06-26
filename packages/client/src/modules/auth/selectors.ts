@@ -15,28 +15,28 @@ export const authSelector = createSelector([authState], identity);
 
 export const singleSignOnDialogState = createSelector(
   authSelector,
-  authStateResult => {
+  (authStateResult) => {
     return authStateResult.singleSignOnDialogOpen;
   },
 );
 
 export const emailRequestSent = createSelector(
   authSelector,
-  authStateResult => {
+  (authStateResult) => {
     return authStateResult.emailRequestSent;
   },
 );
 
 export const userAuthenticated = createSelector(
   authSelector,
-  authStateResult => {
+  (authStateResult) => {
     return Boolean(authStateResult.accessToken);
   },
 );
 
 export const loginEmailRequestLoading = createSelector(
   authSelector,
-  authStateResult => {
+  (authStateResult) => {
     return authStateResult.emailLoginRequestLoading;
   },
 );

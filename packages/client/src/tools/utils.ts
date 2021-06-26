@@ -399,7 +399,7 @@ export const partitionChallengesBySection = (
  * Find a course by id in the course list.
  */
 export const findCourseById = (courseId: string, courses: CourseList) => {
-  const course = courses.find(c => c.id === courseId);
+  const course = courses.find((c) => c.id === courseId);
   return course;
 };
 
@@ -451,12 +451,12 @@ export const deriveIdsFromCourseWithDefaults = (
 export const mapCourseSkeletonInDev = (courseSkeleton: CourseSkeleton) => {
   return {
     ...courseSkeleton,
-    modules: courseSkeleton.modules.map(m => {
+    modules: courseSkeleton.modules.map((m) => {
       return {
         ...m,
         free: true,
         userCanAccess: true,
-        challenges: m.challenges.map(c => {
+        challenges: m.challenges.map((c) => {
           return {
             ...c,
             userCanAccess: true,
@@ -564,10 +564,10 @@ export const logWhatChanged = (
   b: { [k: string]: any },
 ) => {
   Object.keys(b)
-    .filter(key => {
+    .filter((key) => {
       return a[key] !== b[key];
     })
-    .forEach(key => {
+    .forEach((key) => {
       const ax = a[key];
       const bx = b[key];
       console.log(

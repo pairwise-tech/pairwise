@@ -17,9 +17,7 @@ interface CodepressNavigationContextMenuProps {
  * ============================================================================
  */
 
-export default class CodepressNavigationContextMenu extends React.PureComponent<
-  CodepressNavigationContextMenuProps
-> {
+export default class CodepressNavigationContextMenu extends React.PureComponent<CodepressNavigationContextMenuProps> {
   componentWillUnmount() {
     ContextMenu.hide(); /* Remove this code and you will suffer */
   }

@@ -59,7 +59,7 @@ const SEO = ({
       title={title}
       titleTemplate={`%s | Pairwise Workspace`}
     >
-      {metaTags.map(meta => {
+      {metaTags.map((meta) => {
         return <meta key={Object.values(meta).join("-")} {...meta} />;
       })}
     </Helmet>

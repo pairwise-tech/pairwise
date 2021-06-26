@@ -114,13 +114,13 @@ interface ChallengeUpdate {
 }
 
 const getChallengeLens = (courses: CourseList, payload: ChallengeUpdate) => {
-  const courseIndex = courses.findIndex(c => c.id === payload.courseId);
+  const courseIndex = courses.findIndex((c) => c.id === payload.courseId);
   const moduleIndex = courses[courseIndex].modules.findIndex(
-    m => m.id === payload.moduleId,
+    (m) => m.id === payload.moduleId,
   );
   const challengeIndex = courses[courseIndex].modules[
     moduleIndex
-  ].challenges.findIndex(ch => ch.id === payload.id);
+  ].challenges.findIndex((ch) => ch.id === payload.id);
   const keyPath: any[] = [
     courseIndex,
     "modules",
@@ -161,15 +161,15 @@ const deleteChallengeFromCourse = <T extends CourseList | CourseSkeletonList>(
 
   const courseList: CourseList = courses as CourseList; /* ugh */
 
-  const updatedCourses = courseList.map(c => {
+  const updatedCourses = courseList.map((c) => {
     if (c.id === courseId) {
       return {
         ...c,
-        modules: c.modules.map(m => {
+        modules: c.modules.map((m) => {
           if (m.id === moduleId) {
             return {
               ...m,
-              challenges: m.challenges.filter(ch => ch.id !== challengeId),
+              challenges: m.challenges.filter((ch) => ch.id !== challengeId),
             };
           } else {
             return m;
@@ -191,9 +191,9 @@ interface ModuleUpdate {
 }
 
 const updateModule = (courses: CourseList, update: ModuleUpdate) => {
-  const courseIndex = courses.findIndex(c => c.id === update.courseId);
+  const courseIndex = courses.findIndex((c) => c.id === update.courseId);
   const moduleIndex = courses[courseIndex].modules.findIndex(
-    m => m.id === update.id,
+    (m) => m.id === update.id,
   );
   const lens = lensPath([courseIndex, "modules", moduleIndex]);
   return over(lens, (x: Module) => ({ ...x, ...update.module }), courses);
@@ -203,7 +203,7 @@ const insertModule = (
   courses: CourseList,
   payload: ModuleCreationPayload,
 ): CourseList => {
-  const courseIndex = courses.findIndex(x => x.id === payload.courseId);
+  const courseIndex = courses.findIndex((x) => x.id === payload.courseId);
   const lens = lensPath([courseIndex, "modules"]);
   return over(lens, insert(payload.insertionIndex, payload.module), courses);
 };
@@ -213,9 +213,9 @@ const insertChallenge = (
   insertion: ChallengeCreationPayload,
 ): CourseList => {
   const { moduleId, courseId, insertionIndex, challenge } = insertion;
-  const courseIndex = courses.findIndex(x => x.id === courseId);
+  const courseIndex = courses.findIndex((x) => x.id === courseId);
   const moduleIndex = courses[courseIndex].modules.findIndex(
-    m => m.id === moduleId,
+    (m) => m.id === moduleId,
   );
   const lens = lensPath([courseIndex, "modules", moduleIndex, "challenges"]);
   return over(lens, insert(insertionIndex, challenge), courses);
@@ -225,16 +225,12 @@ const reorderChallengeList = (
   courses: CourseList,
   challengeReorderPayload: ChallengeReorderPayload,
 ) => {
-  const {
-    courseId,
-    moduleId,
-    challengeOldIndex,
-    challengeNewIndex,
-  } = challengeReorderPayload;
+  const { courseId, moduleId, challengeOldIndex, challengeNewIndex } =
+    challengeReorderPayload;
 
-  const courseIndex = courses.findIndex(x => x.id === courseId);
+  const courseIndex = courses.findIndex((x) => x.id === courseId);
   const moduleIndex = courses[courseIndex].modules.findIndex(
-    m => m.id === moduleId,
+    (m) => m.id === moduleId,
   );
   const lens = lensPath([courseIndex, "modules", moduleIndex, "challenges"]);
   return over(lens, move(challengeOldIndex, challengeNewIndex), courses);
@@ -246,7 +242,7 @@ const reorderModuleList = (
 ) => {
   const { courseId, moduleOldIndex, moduleNewIndex } = moduleReorderPayload;
 
-  const courseIndex = courses.findIndex(x => x.id === courseId);
+  const courseIndex = courses.findIndex((x) => x.id === courseId);
   const lens = lensPath([courseIndex, "modules"]);
   return over(lens, move(moduleOldIndex, moduleNewIndex), courses);
 };
@@ -400,7 +396,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       courseSkeletons: updateChallenge(courseSkeletons, update),
     };
   })
-  .handleAction(actions.saveCourseSuccess, state => ({
+  .handleAction(actions.saveCourseSuccess, (state) => ({
     ...state,
     isDirty: false,
   }))
@@ -415,9 +411,11 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       courses,
       action.payload,
     );
-    const updatedCourseSkeletons = deleteChallengeFromCourse<
-      CourseSkeletonList
-    >(courseSkeletons, action.payload);
+    const updatedCourseSkeletons =
+      deleteChallengeFromCourse<CourseSkeletonList>(
+        courseSkeletons,
+        action.payload,
+      );
 
     const ids = getNewChallengeContextAfterContentDeletion(
       action.payload.challengeId,
@@ -442,9 +440,9 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
 
     let updatedModules: ModuleList = [];
 
-    const updatedCourses = courses.map(c => {
+    const updatedCourses = courses.map((c) => {
       if (c.id === courseId) {
-        updatedModules = c.modules.filter(m => m.id !== id);
+        updatedModules = c.modules.filter((m) => m.id !== id);
         return {
           ...c,
           modules: updatedModules,
@@ -454,11 +452,11 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
       }
     });
 
-    const updatedCourseSkeletons = courseSkeletons.map(c => {
+    const updatedCourseSkeletons = courseSkeletons.map((c) => {
       if (c.id === courseId) {
         return {
           ...c,
-          modules: c.modules.filter(m => m.id !== id),
+          modules: c.modules.filter((m) => m.id !== id),
         };
       } else {
         return c;
@@ -598,7 +596,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     currentCourseId: action.payload,
     // Update the current module id to the first module in the course
-    currentModuleId: state.courses?.find(c => c.id === action.payload)
+    currentModuleId: state.courses?.find((c) => c.id === action.payload)
       ?.modules[0].id as string,
   }))
   .handleAction(actions.requestSearchResults, (state, action) => ({

@@ -16,10 +16,8 @@ import SEO from "./SEO";
 
 class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const {
-      userCourseProgressSummary,
-      hasPurchasedTypeScriptCourse,
-    } = this.props;
+    const { userCourseProgressSummary, hasPurchasedTypeScriptCourse } =
+      this.props;
     return (
       <PageContainer>
         <SEO
@@ -123,7 +121,7 @@ class Home extends React.Component<IProps, {}> {
   renderCourseItem = (skeleton: CourseSkeleton, i: number) => {
     const { user, challengeMap } = this.props;
     const { payments, lastActiveChallengeIds } = user;
-    const paidForCourse = payments?.find(p => p.courseId === skeleton.id);
+    const paidForCourse = payments?.find((p) => p.courseId === skeleton.id);
     const firstCourseChallenge = skeleton.modules[0].challenges[0];
     const isCourseFree = skeleton.free;
     const canAccessCourse = paidForCourse || isCourseFree;
@@ -236,7 +234,7 @@ const ProgressBar = styled.div`
 
 const ProgressComplete = styled.div<{ progress: number }>`
   height: 30px;
-  width: ${props => props.progress}%;
+  width: ${(props) => props.progress}%;
   background: ${COLORS.PROGRESS_COMPLETE};
 `;
 
@@ -321,12 +319,10 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
-  userCourseProgressSummary: Modules.selectors.challenges.userCourseProgressSummary(
-    state,
-  ),
-  hasPurchasedTypeScriptCourse: Modules.selectors.user.hasPurchasedTypeScriptCourse(
-    state,
-  ),
+  userCourseProgressSummary:
+    Modules.selectors.challenges.userCourseProgressSummary(state),
+  hasPurchasedTypeScriptCourse:
+    Modules.selectors.user.hasPurchasedTypeScriptCourse(state),
 });
 
 const dispatchProps = {

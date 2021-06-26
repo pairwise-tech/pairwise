@@ -189,9 +189,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   courseId: Modules.selectors.challenges.getCurrentCourseId(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   breadcrumbsPath: Modules.selectors.challenges.breadcrumbPathSelector(state),
-  isCurrentChallengeComplete: Modules.selectors.challenges.isCurrentChallengeComplete(
-    state,
-  ),
+  isCurrentChallengeComplete:
+    Modules.selectors.challenges.isCurrentChallengeComplete(state),
 });
 
 const dispatchProps = {

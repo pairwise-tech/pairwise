@@ -172,8 +172,8 @@ export default class TableOfContents extends React.Component<
 }
 
 const Wrapper = styled.div`
-  font-family: ${props => props.theme.fontFamily};
-  font-weight: ${props => props.theme.fontWeight};
+  font-family: ${(props) => props.theme.fontFamily};
+  font-weight: ${(props) => props.theme.fontWeight};
   font-size: 1em;
   line-height: 1.4;
   z-index: 5;

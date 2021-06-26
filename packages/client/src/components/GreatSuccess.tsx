@@ -85,7 +85,7 @@ const renderSuccessMessage = (challenge: Challenge) => {
  */
 
 // The title text of the modal. Will animate along with the modal.
-const CardTitle: React.FC<{ parentStage?: number }> = props => {
+const CardTitle: React.FC<{ parentStage?: number }> = (props) => {
   const [stage, setStage] = React.useState(0);
   const nextStage = () => setStage(stage + 1);
 
@@ -134,7 +134,7 @@ const CardTitle: React.FC<{ parentStage?: number }> = props => {
  * ============================================================================
  */
 
-const ConfettiModal: React.FC<ConfettiModalProps> = props => {
+const ConfettiModal: React.FC<ConfettiModalProps> = (props) => {
   const { width, height } = getDimensions();
   // Default the confetti source to a rect at the center of the screen
   const contentRect = React.useRef<IRect>({
@@ -201,7 +201,7 @@ const ConfettiModal: React.FC<ConfettiModalProps> = props => {
               />
             )}
             <div className="inner">
-              {React.Children.map(props.children, child => {
+              {React.Children.map(props.children, (child) => {
                 // eslint-disable-next-line
                 // @ts-ignore What's going on here? Why are the official types not passing for child.type?
                 if (child.type === CardTitle) {

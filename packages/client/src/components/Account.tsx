@@ -121,7 +121,7 @@ class Account extends React.Component<IProps, IState> {
             placeholder="Enter your given name"
             className={Classes.INPUT}
             value={this.state.givenName}
-            onChange={event =>
+            onChange={(event) =>
               this.setState({
                 givenName: event.target.value,
               })
@@ -138,7 +138,7 @@ class Account extends React.Component<IProps, IState> {
             placeholder="Enter your family name"
             className={Classes.INPUT}
             value={this.state.familyName}
-            onChange={event =>
+            onChange={(event) =>
               this.setState({
                 familyName: event.target.value,
               })
@@ -155,7 +155,7 @@ class Account extends React.Component<IProps, IState> {
             placeholder="Enter a display name"
             className={Classes.INPUT}
             value={this.state.displayName}
-            onChange={event =>
+            onChange={(event) =>
               this.setState({
                 displayName: event.target.value,
               })
@@ -182,7 +182,7 @@ class Account extends React.Component<IProps, IState> {
               <InputField
                 type="text"
                 className={Classes.INPUT}
-                onChange={event =>
+                onChange={(event) =>
                   this.setState({
                     editedEmail: true,
                     email: event.target.value,
@@ -272,7 +272,7 @@ class Account extends React.Component<IProps, IState> {
     if (!skeletons) {
       return id;
     } else {
-      const course = skeletons.find(c => c.id === id);
+      const course = skeletons.find((c) => c.id === id);
       if (course) {
         return course.title;
       }
@@ -384,9 +384,8 @@ const Controls = styled.div`
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
-  emailVerificationStatus: Modules.selectors.user.emailVerificationStatus(
-    state,
-  ),
+  emailVerificationStatus:
+    Modules.selectors.user.emailVerificationStatus(state),
 });
 
 const dispatchProps = {

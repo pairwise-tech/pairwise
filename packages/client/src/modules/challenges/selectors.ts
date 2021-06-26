@@ -24,37 +24,37 @@ export const isDirty = createSelector([challengesState], prop("isDirty"));
 
 export const menuSelectColumn = createSelector(
   [challengesState],
-  x => x.menuSelectColumn,
+  (x) => x.menuSelectColumn,
 );
 
 export const menuSelectIndex = createSelector(
   [challengesState],
-  x => x.menuSelectIndex,
+  (x) => x.menuSelectIndex,
 );
 
 export const useCodemirrorEditor = createSelector(
   [challengesState],
-  x => x.useCodemirror,
+  (x) => x.useCodemirror,
 );
 
 export const editModeAlternativeViewEnabled = createSelector(
   [challengesState],
-  x => x.editModeAlternativeView,
+  (x) => x.editModeAlternativeView,
 );
 
 export const adminTestTabSelector = createSelector(
   [challengesState],
-  x => x.adminTestTab,
+  (x) => x.adminTestTab,
 );
 
 export const adminEditorTabSelector = createSelector(
   [challengesState],
-  x => x.adminEditorTab,
+  (x) => x.adminEditorTab,
 );
 
 export const getChallengeMap = createSelector(
   [challengesState],
-  state => state.challengeMap,
+  (state) => state.challengeMap,
 );
 
 export const getCurrentCourseId = createSelector(
@@ -85,17 +85,17 @@ export const getCurrentActiveIds = createSelector(
 
 export const navigationOverlayVisible = createSelector(
   [challengesState],
-  challenges => challenges.displayNavigationMap,
+  (challenges) => challenges.displayNavigationMap,
 );
 
 export const getSearchResults = createSelector(
   [challengesState],
-  challenges => challenges.searchResults,
+  (challenges) => challenges.searchResults,
 );
 
 export const getIsSearching = createSelector(
   [challengesState],
-  challenges => challenges.isSearching,
+  (challenges) => challenges.isSearching,
 );
 
 export const getNavigationSectionAccordionViewState = createSelector(
@@ -105,17 +105,17 @@ export const getNavigationSectionAccordionViewState = createSelector(
 
 export const courseList = createSelector(
   [challengesState],
-  challenges => challenges.courses,
+  (challenges) => challenges.courses,
 );
 
 export const courseSkeletons = createSelector(
   [challengesState],
-  challenges => challenges.courseSkeletons,
+  (challenges) => challenges.courseSkeletons,
 );
 
 export const getBlobCache = createSelector(
   [challengesState],
-  state => state.blobCache,
+  (state) => state.blobCache,
 );
 
 export const isLoadingCurrentChallengeBlob = createSelector(
@@ -135,37 +135,37 @@ export const isLoadingCurrentChallengeBlob = createSelector(
 
 export const workspaceLoadingSelector = createSelector(
   [challengesState],
-  challenges => {
+  (challenges) => {
     return challenges.workspaceLoading;
   },
 );
 
-export const getCurrentCourse = createSelector([challengesState], state => {
-  return state.courses?.find(x => x.id === state.currentCourseId);
+export const getCurrentCourse = createSelector([challengesState], (state) => {
+  return state.courses?.find((x) => x.id === state.currentCourseId);
 });
 
 export const getCurrentCourseSkeleton = createSelector(
   [challengesState, getCurrentCourseId],
   (challenges, courseId) => {
-    return challenges.courseSkeletons?.find(x => x.id === courseId);
+    return challenges.courseSkeletons?.find((x) => x.id === courseId);
   },
 );
 
-export const getCourseSkeletons = createSelector([challengesState], state => {
+export const getCourseSkeletons = createSelector([challengesState], (state) => {
   return state.courseSkeletons;
 });
 
 export const getCurrentModule = createSelector(
   [getCurrentCourseSkeleton, getCurrentModuleId],
   (course, moduleId) => {
-    return course?.modules.find(x => x.id === moduleId);
+    return course?.modules.find((x) => x.id === moduleId);
   },
 );
 
 // Get an array of course metadata for the current course list
-export const courseListMetadata = createSelector([challengesState], state => {
+export const courseListMetadata = createSelector([challengesState], (state) => {
   if (state.courses) {
-    return state.courses.map(course => ({
+    return state.courses.map((course) => ({
       id: course.id,
       title: course.title,
       description: course.description,
@@ -206,9 +206,9 @@ export const getCurrentChallenge = createSelector(
     const moduleId = challengeMap?.[challengeId]?.moduleId;
 
     return state.courses
-      ?.find(x => x.id === courseId)
-      ?.modules?.find(x => x.id === moduleId)
-      ?.challenges.find(x => x.id === challengeId);
+      ?.find((x) => x.id === courseId)
+      ?.modules?.find((x) => x.id === moduleId)
+      ?.challenges.find((x) => x.id === challengeId);
   },
 );
 
@@ -240,7 +240,7 @@ export const isCurrentChallengeComplete = createSelector(
  */
 export const isTestingAndAutomationChallenge = createSelector(
   getCurrentModuleId,
-  id => {
+  (id) => {
     const TESTING_AND_AUTOMATION_MODULE_ID = "ZzVuDVNP";
     if (id && id === TESTING_AND_AUTOMATION_MODULE_ID) {
       return true;
@@ -368,12 +368,12 @@ export const breadcrumbPathSelector = createSelector(
 
     // We need to find the current challenge and module in the  course list...
     const challengeMeta = challengeMap[id];
-    const currentCourse = courses?.find(c => c.id === challengeMeta.courseId);
+    const currentCourse = courses?.find((c) => c.id === challengeMeta.courseId);
     const currentModule = currentCourse?.modules.find(
-      m => m.id === challengeMeta.moduleId,
+      (m) => m.id === challengeMeta.moduleId,
     );
     const challenge = currentModule?.challenges.find(
-      c => c.id === challengeMeta.challenge.id,
+      (c) => c.id === challengeMeta.challenge.id,
     );
 
     if (!currentModule || !challenge) {
@@ -506,34 +506,34 @@ export const userCourseProgressSummary = createSelector(
 
 export const getCurrentChallengeTestCode = createSelector(
   [getCurrentChallenge],
-  c => c?.testCode,
+  (c) => c?.testCode,
 );
 
 export const getCurrentTitle = createSelector(
   [getCurrentChallenge],
-  challenge => challenge?.title,
+  (challenge) => challenge?.title,
 );
 
 export const getCurrentId = createSelector(
   [getCurrentChallenge],
-  challenge => challenge?.id,
+  (challenge) => challenge?.id,
 );
 
 export const getCurrentInstructions = createSelector(
   [getCurrentChallenge],
-  challenge => challenge?.instructions,
+  (challenge) => challenge?.instructions,
 );
 
 export const getHasMediaContent = createSelector(
   [getCurrentChallenge],
-  challenge => {
+  (challenge) => {
     return !!(challenge?.content || challenge?.videoUrl);
   },
 );
 
 export const revealSolutionCode = createSelector(
   [challengesState],
-  x => x.revealWorkspaceSolution,
+  (x) => x.revealWorkspaceSolution,
 );
 
 /**
@@ -541,7 +541,7 @@ export const revealSolutionCode = createSelector(
  */
 export const firstUnfinishedChallenge = createSelector(
   challengesState,
-  challenges => {
+  (challenges) => {
     const { currentCourseId, currentChallengeId } = challenges;
 
     if (currentCourseId && currentChallengeId && challenges.courses) {
@@ -568,9 +568,9 @@ export const firstUnfinishedChallenge = createSelector(
  */
 export const allChallengesInCurrentCourse = createSelector(
   [getCurrentCourse],
-  course => {
+  (course) => {
     const list = course?.modules
-      .map(x => x.challenges)
+      .map((x) => x.challenges)
       .reduce((agg, x) => agg.concat(x)); // Flatten
     return list;
   },
@@ -583,7 +583,7 @@ export const nextPrevChallenges = createSelector(
   [allChallengesInCurrentCourse, getCurrentChallengeId],
   (challenges, challengeId) => {
     const i: number | undefined = challenges?.findIndex(
-      x => x.id === challengeId,
+      (x) => x.id === challengeId,
     );
 
     if (i === undefined || i === -1) {

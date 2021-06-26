@@ -77,14 +77,14 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
   getCurrentModuleOrChallengeList = () => {
     const { courseSkeletons, currentActiveIds, menuSelectColumn } = this.props;
     const course = courseSkeletons?.find(
-      x => x.id === currentActiveIds.currentCourseId,
+      (x) => x.id === currentActiveIds.currentCourseId,
     );
     if (course) {
       if (menuSelectColumn === "MODULE") {
         return course.modules;
       } else {
         return course.modules.find(
-          x => x.id === currentActiveIds.currentModuleId,
+          (x) => x.id === currentActiveIds.currentModuleId,
         )?.challenges;
       }
     }

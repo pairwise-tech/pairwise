@@ -43,9 +43,9 @@ export const fetchUserFailure = createAction(
   ActionTypesEnum.FETCH_USER_FAILURE,
 )<HttpResponseError>();
 
-export const updateUser = createAction(ActionTypesEnum.UPDATE_USER)<
-  UserUpdateOptions
->();
+export const updateUser = createAction(
+  ActionTypesEnum.UPDATE_USER,
+)<UserUpdateOptions>();
 
 export const updateUserSuccess = createAction(
   ActionTypesEnum.UPDATE_USER_SUCCESS,
@@ -55,9 +55,9 @@ export const updateUserFailure = createAction(
   ActionTypesEnum.UPDATE_USER_FAILURE,
 )<HttpResponseError>();
 
-export const updateUserEmail = createAction(ActionTypesEnum.UPDATE_USER_EMAIL)<
-  string
->();
+export const updateUserEmail = createAction(
+  ActionTypesEnum.UPDATE_USER_EMAIL,
+)<string>();
 
 export const updateUserEmailSuccess = createAction(
   ActionTypesEnum.UPDATE_USER_EMAIL_SUCCESS,

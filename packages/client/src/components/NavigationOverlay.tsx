@@ -133,15 +133,15 @@ class NavigationOverlay extends React.Component<
     }
 
     const sectionIds = module.challenges
-      .filter(x => x.type === "section")
-      .map(x => x.id);
+      .filter((x) => x.type === "section")
+      .map((x) => x.id);
     const hasSections = sectionIds.length > 0;
     const anySectionsOpen =
       hasSections && sectionIds.some(this.getCurrentAccordionViewState);
 
     // Check if the current module contains the current challenge
     const moduleContainsActiveChallenge = module.challenges.find(
-      c => c.id === challengeId,
+      (c) => c.id === challengeId,
     );
 
     // Render different expand/collapse button on mobile for better layout
@@ -164,13 +164,13 @@ class NavigationOverlay extends React.Component<
           className={cx("module-select", { open: this.state.showModuleList })}
           style={{ zIndex: 3 }}
           offsetX={overlayVisible ? 0 : -20}
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <ColTitle className="course-select">
             <CourseSelect
               filterable={false}
               items={courseListMetadata}
-              itemDisabled={c => c.id === course.id}
+              itemDisabled={(c) => c.id === course.id}
               onItemSelect={({ id }) => {
                 this.props.setCurrentCourse(id);
               }}
@@ -217,7 +217,7 @@ class NavigationOverlay extends React.Component<
           style={{
             zIndex: 2,
           }}
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <SpecialLeftShadow />
           <ColTitle>
@@ -289,7 +289,7 @@ class NavigationOverlay extends React.Component<
           renderModuleCodepressButton: this.renderModuleCodepressButton,
         }}
         helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
-        onSortEnd={sortEndResult =>
+        onSortEnd={(sortEndResult) =>
           this.handleSortModulesEnd(course, sortEndResult)
         }
       />
@@ -329,7 +329,7 @@ class NavigationOverlay extends React.Component<
           renderChallengeNavigationItem: this.renderChallengeNavigationItem,
         }}
         helperClass="sortable-list-helper-class" /* Used to fix a z-index issue which caused the dragging element to be invisible */
-        onSortEnd={sortEndResult =>
+        onSortEnd={(sortEndResult) =>
           this.handleSortChallengesEnd(course, module, sortEndResult)
         }
       />
@@ -405,12 +405,12 @@ class NavigationOverlay extends React.Component<
 
     const sectionIds = challengeList
       .filter(({ type }) => type === "section")
-      .map(x => x.id);
+      .map((x) => x.id);
     const anyOpen = sectionIds.some(this.getCurrentAccordionViewState);
 
     // Go through each section and expand or collapse it.
     sectionIds
-      .map(id => ({ sectionId: id, open: !anyOpen }))
+      .map((id) => ({ sectionId: id, open: !anyOpen }))
       .forEach(this.props.toggleSectionAccordionView);
   };
 
@@ -441,7 +441,7 @@ class NavigationOverlay extends React.Component<
     /**
      * Render the section blocks.
      */
-    return sectionBlocks.map(block => {
+    return sectionBlocks.map((block) => {
       serialIndex++;
       if (block.section) {
         const sectionExpanded = this.getCurrentAccordionViewState(
@@ -599,7 +599,7 @@ class NavigationOverlay extends React.Component<
     // Section is active if it is collapsed and includes the current challenge
     const sectionActive = sectionExpanded
       ? false
-      : !!sectionChallenges.find(c => c.id === challengeId);
+      : !!sectionChallenges.find((c) => c.id === challengeId);
     const itemActive = sectionActive || challenge.id === challengeId;
 
     let className = "";
@@ -751,17 +751,16 @@ class NavigationOverlay extends React.Component<
     }
   };
 
-  handleClickChallenge = (userCanAccess: boolean, courseId: string) => (
-    event: any,
-  ) => {
-    if (!userCanAccess) {
-      event.preventDefault();
-      this.props.handlePaymentCourseIntent({
-        courseId,
-        showToastWarning: true,
-      });
-    }
-  };
+  handleClickChallenge =
+    (userCanAccess: boolean, courseId: string) => (event: any) => {
+      if (!userCanAccess) {
+        event.preventDefault();
+        this.props.handlePaymentCourseIntent({
+          courseId,
+          showToastWarning: true,
+        });
+      }
+    };
 
   getCurrentAccordionViewState = (sectionId: string) => {
     const { navigationAccordionViewState } = this.props;
@@ -810,7 +809,7 @@ interface AddNavItemButtonProps {
 const AddNavItemButton = styled(({ show, ...props }: AddNavItemButtonProps) => {
   return <button {...props}>+</button>;
 })`
-  transform: translate(-50%, -50%) scale(${props => (props.show ? 1 : 0)});
+  transform: translate(-50%, -50%) scale(${(props) => (props.show ? 1 : 0)});
   transition: all 0.15s ease-out;
   font-weight: bold;
   font-size: 12px;
@@ -855,7 +854,7 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
     transition: all 0.15s ease-out;
     transform: scale(0);
     width: 3px;
-    background: ${props =>
+    background: ${(props) =>
       props.locked === "true" ? "rgb(135,135,135)" : COLORS.GRADIENT_GREEN};
   }
 
@@ -1133,9 +1132,9 @@ const Overlay = styled.div<{ visible: boolean }>`
   z-index: 15;
   position: fixed;
   background: rgba(0, 0, 0, 0.85);
-  visibility: ${props => (props.visible ? "visible" : "hidden")};
-  opacity: ${props => (props.visible ? "1" : "0")};
-  pointer-events: ${props => (props.visible ? "all" : "none")};
+  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+  opacity: ${(props) => (props.visible ? "1" : "0")};
+  pointer-events: ${(props) => (props.visible ? "all" : "none")};
   display: flex;
   transition: all 0.2s ease-out;
 `;
@@ -1191,14 +1190,14 @@ const ColTitle = styled.div`
 
 // NOTE: Used for the course multi-select, which is currently disabled.
 const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
-  border-left: ${props =>
+  border-left: ${(props) =>
     props.disabled
       ? `3px solid ${COLORS.NEON_GREEN}`
       : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
 
   :hover {
-    cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
-    background: ${props =>
+    cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+    background: ${(props) =>
       props.disabled
         ? COLORS.BACKGROUND_NAVIGATION_ITEM
         : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
@@ -1229,9 +1228,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   courseListMetadata: Modules.selectors.challenges.courseListMetadata(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
-  navigationAccordionViewState: Modules.selectors.challenges.getNavigationSectionAccordionViewState(
-    state,
-  ),
+  navigationAccordionViewState:
+    Modules.selectors.challenges.getNavigationSectionAccordionViewState(state),
 });
 
 const ChallengeActions = Modules.actions.challenges;

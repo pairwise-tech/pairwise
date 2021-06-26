@@ -272,15 +272,12 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   editorOptions: Modules.selectors.user.editorOptions(state),
   userSettings: Modules.selectors.user.userSettings(state),
-  isBackendModuleChallenge: Modules.selectors.challenges.isBackendModuleChallenge(
-    state,
-  ),
-  isTestingAndAutomationChallenge: Modules.selectors.challenges.isTestingAndAutomationChallenge(
-    state,
-  ),
-  challengeTestCode: Modules.selectors.challenges.getCurrentChallengeTestCode(
-    state,
-  ),
+  isBackendModuleChallenge:
+    Modules.selectors.challenges.isBackendModuleChallenge(state),
+  isTestingAndAutomationChallenge:
+    Modules.selectors.challenges.isTestingAndAutomationChallenge(state),
+  challengeTestCode:
+    Modules.selectors.challenges.getCurrentChallengeTestCode(state),
 });
 
 const dispatchProps = {

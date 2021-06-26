@@ -35,7 +35,7 @@ const ChallengeTypeMenu = ({
   onItemSelect,
   tooltip = true,
 }: Props) => {
-  const activeItem = items.find(x => x.value === currentChallengeType);
+  const activeItem = items.find((x) => x.value === currentChallengeType);
   return (
     <div style={{ flexShrink: 0, marginLeft: 10, marginRight: 10 }}>
       <ChallengeTypeSelect

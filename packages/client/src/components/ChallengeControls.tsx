@@ -83,9 +83,8 @@ const cardMapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   nextChallenge: Modules.selectors.challenges.nextPrevChallenges(state).next,
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
-  isCurrentChallengeComplete: Modules.selectors.challenges.isCurrentChallengeComplete(
-    state,
-  ),
+  isCurrentChallengeComplete:
+    Modules.selectors.challenges.isCurrentChallengeComplete(state),
 });
 
 const cardDispatchProps = {

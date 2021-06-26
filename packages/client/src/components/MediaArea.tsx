@@ -83,12 +83,12 @@ const MediaArea = ({
 
   const extractVideoId = (s: string) => {
     const rs: Array<(x: string) => string | undefined | null> = [
-      x => x.match(/https:\/\/www.youtube.com\/embed\/(.+)\/?/)?.[1],
-      x => x.match(/https:\/\/youtu.be\/(.+)\/?/)?.[1],
-      x => new URL(x).searchParams.get("v"),
+      (x) => x.match(/https:\/\/www.youtube.com\/embed\/(.+)\/?/)?.[1],
+      (x) => x.match(/https:\/\/youtu.be\/(.+)\/?/)?.[1],
+      (x) => new URL(x).searchParams.get("v"),
     ];
 
-    const results = rs.map(fn => {
+    const results = rs.map((fn) => {
       try {
         return fn(s);
       } catch (err) {
@@ -276,9 +276,8 @@ export const YoutubeEmbed = (props: { url: string }) => {
   const width = 728;
   const height = 410;
 
-  const [isEmbedHidden, setIsEmbedHidden] = React.useState<boolean>(
-    HIDE_EMBEDS,
-  );
+  const [isEmbedHidden, setIsEmbedHidden] =
+    React.useState<boolean>(HIDE_EMBEDS);
 
   if (isEmbedHidden) {
     return (

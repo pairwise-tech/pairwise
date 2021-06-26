@@ -189,7 +189,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
             tooltip={false}
             items={CHALLENGE_TYPE_CHOICES}
             currentChallengeType={challenge?.type}
-            onItemSelect={x => {
+            onItemSelect={(x) => {
               props.updateChallenge({
                 id: challenge?.id || "", // See NOTE
                 challenge: { type: x.value },
@@ -231,7 +231,7 @@ const mergeInsertionMenuProps = (
   const moduleId = state.module.id;
   const newChallenge = generateEmptyChallenge({ id: state.course.id });
   const index = state.module.challenges.findIndex(
-    x => x.id === state.challengeId,
+    (x) => x.id === state.challengeId,
   );
 
   return {
@@ -291,10 +291,8 @@ const ChallengeInsertionMenu = connectChallengeInsertion(
 );
 
 const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
-  const [
-    allMetadata,
-    setAllMetadata,
-  ] = React.useState<ChallengeMetadataIndex | null>(null);
+  const [allMetadata, setAllMetadata] =
+    React.useState<ChallengeMetadataIndex | null>(null);
   const [error, setError] = React.useState(false);
   const [isGitInfoOpen, setIsGitInfoOpen] = React.useState(false);
   const handleToggleGitInfo = () => setIsGitInfoOpen(!isGitInfoOpen);
@@ -305,7 +303,7 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
         // @ts-ignore
         setAllMetadata(x as ChallengeMetadataIndex);
       })
-      .catch(err => {
+      .catch((err) => {
         setError(true);
       });
   }, []);
@@ -326,18 +324,14 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
     content = <Spinner />;
   } else {
     const meta = allMetadata.challenges[challenge.id];
-    const {
-      contributors,
-      contributionsBy,
-      latestUpdate,
-      earliestUpdate,
-    } = meta.gitMetadata;
+    const { contributors, contributionsBy, latestUpdate, earliestUpdate } =
+      meta.gitMetadata;
     const dateString = dateFromIso(latestUpdate.authorDate);
     content = (
       <>
         <h3 style={{ display: "flex", alignItems: "center", marginTop: 0 }}>
           <span style={{ marginRight: 20 }}>Contributors</span>
-          {contributors.map(name => (
+          {contributors.map((name) => (
             <ContributorAvatar
               key={name}
               name={name}
@@ -501,7 +495,7 @@ const ContributorAvatar = ({ name, contributions }: ContributorAvatarProps) => {
         alt={name}
       />
       <MinimalCard>
-        {contributions.map(commit => (
+        {contributions.map((commit) => (
           <a
             style={{
               display: "block",
@@ -530,9 +524,9 @@ const SlideOut = styled.div<{ show: boolean }>`
   display: flex;
   align-items: center;
   transition: all 0.2s ease-out;
-  opacity: ${props => (props.show ? 1 : 0)};
-  pointer-events: ${props => (props.show ? "all" : "none")};
-  transform: ${props => (props.show ? "translateX(0)" : "translateX(-10px)")};
+  opacity: ${(props) => (props.show ? 1 : 0)};
+  pointer-events: ${(props) => (props.show ? "all" : "none")};
+  transform: ${(props) => (props.show ? "translateX(0)" : "translateX(-10px)")};
 `;
 
 /** ===========================================================================

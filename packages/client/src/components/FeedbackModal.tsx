@@ -241,7 +241,7 @@ interface FeedbackInputProps {
 
 const FeedbackInput = styled(TextArea)<FeedbackInputProps>`
   resize: vertical !important;
-  margin-top: ${props => props.margintop}px;
+  margin-top: ${(props) => props.margintop}px;
   background: #323232 !important;
 `;
 
@@ -253,7 +253,7 @@ const DangerLabel = styled.label<DangerLabelProps>`
   color: #de4648;
   margin: 10px 0;
   font-weight: bold;
-  display: ${props => (props.show ? "block" : "none")};
+  display: ${(props) => (props.show ? "block" : "none")};
 `;
 
 /** ===========================================================================

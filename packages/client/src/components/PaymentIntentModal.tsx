@@ -34,12 +34,8 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
   }
 
   render(): Nullable<JSX.Element> {
-    const {
-      user,
-      courseToPurchase,
-      checkoutLoading,
-      emailVerificationStatus,
-    } = this.props;
+    const { user, courseToPurchase, checkoutLoading, emailVerificationStatus } =
+      this.props;
 
     const { profile } = user;
     if (!courseToPurchase || !profile) {
@@ -125,7 +121,9 @@ class PaymentCourseModal extends React.Component<IProps, IState> {
                 className={Classes.INPUT}
                 placeholder="Enter your email"
                 value={this.state.email}
-                onChange={event => this.setState({ email: event.target.value })}
+                onChange={(event) =>
+                  this.setState({ email: event.target.value })
+                }
               />
               <Button
                 text="Save Email"
@@ -210,9 +208,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   checkoutLoading: Modules.selectors.payments.checkoutLoading(state),
   modalOpen: Modules.selectors.payments.paymentIntentModalState(state),
   courseToPurchase: Modules.selectors.payments.paymentIntentCourse(state),
-  emailVerificationStatus: Modules.selectors.user.emailVerificationStatus(
-    state,
-  ),
+  emailVerificationStatus:
+    Modules.selectors.user.emailVerificationStatus(state),
 });
 
 const dispatchProps = {

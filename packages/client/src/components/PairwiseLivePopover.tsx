@@ -82,7 +82,7 @@ const SESSIONS: Session[] = [
   {
     startDate: "2020-06-27T08:30:00.000Z",
   },
-].map(x => ({
+].map((x) => ({
   ...x,
   // Our real livestream URL, supposedly. Since it doesn't change I'm just
   // applying it to all sessions for now
@@ -153,7 +153,9 @@ const PairwiseLivePopover = (props: Props) => {
   });
 
   // TODO: Should filter to only find the _latest_ regardless of array order
-  const nextSession = SESSIONS.find(x => !inSession(x) && !isSessionPassed(x));
+  const nextSession = SESSIONS.find(
+    (x) => !inSession(x) && !isSessionPassed(x),
+  );
 
   const handleRequest = React.useCallback(() => {
     props.setFeedbackDialogState(FEEDBACK_DIALOG_TYPES.PAIRWISE_LIVE_REQUEST);

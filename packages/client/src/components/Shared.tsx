@@ -84,7 +84,7 @@ export const CodeEditorUpperRight = styled.div<{ isEditMode: boolean }>`
   position: absolute;
   z-index: 3;
   right: 20px;
-  top: ${props => (props.isEditMode ? 45 : 10)}px;
+  top: ${(props) => (props.isEditMode ? 45 : 10)}px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -107,7 +107,7 @@ export const RotatingIcon = styled(({ isRotated, id, ...props }) => {
     />
   );
 })<{ isRotated?: boolean; id: string; icon: string }>`
-  transform: ${props =>
+  transform: ${(props) =>
     `rotate3d(0,0,1,${
       // Do not rotate icon for locked content
       props.isRotated || props.icon === "lock" ? "0deg" : "-90deg"
@@ -329,7 +329,7 @@ interface HalfCircleProps {
 
 export const HalfCircle = styled.div<HalfCircleProps>`
   &:hover {
-    background: ${props => props.backgroundColor};
+    background: ${(props) => props.backgroundColor};
   }
 
   align-items: center;
@@ -343,12 +343,12 @@ export const HalfCircle = styled.div<HalfCircleProps>`
   transition: background 0.3s;
   width: 60px;
 
-  border-${props =>
+  border-${(props) =>
     props.position === "top" ? "bottom" : "top"}-left-radius: 90px;
-  border-${props =>
+  border-${(props) =>
     props.position === "top" ? "bottom" : "top"}-right-radius: 90px;
 
-  ${props => props.position}: ${props => props.positionOffset}px;
+  ${(props) => props.position}: ${(props) => props.positionOffset}px;
 `;
 
 export const CodeEditorContainer = styled.div`
@@ -414,9 +414,9 @@ export const getRenderItemList = (listMinWidth: number) => {
 };
 
 export function labelByType<
-  T extends { value: FEEDBACK_TYPE | CHALLENGE_TYPE; label: string }
+  T extends { value: FEEDBACK_TYPE | CHALLENGE_TYPE; label: string },
 >(type: string | undefined, items: T[]) {
-  const item = items.find(x => x.value === type);
+  const item = items.find((x) => x.value === type);
   return item?.label || type;
 }
 
@@ -532,9 +532,9 @@ export const LastChildMargin = styled.div`
   }
 `;
 
-type PairwiseOpenCloseLogoProps = { isOpen?: boolean } & React.SVGProps<
-  SVGSVGElement
->;
+type PairwiseOpenCloseLogoProps = {
+  isOpen?: boolean;
+} & React.SVGProps<SVGSVGElement>;
 
 export const PairwiseOpenCloseLogo = ({
   isOpen = false,

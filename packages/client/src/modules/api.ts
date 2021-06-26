@@ -236,10 +236,7 @@ class Api extends BaseApiClass {
       const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
       return new Ok(courseSkeletonList);
     } else if (ENV.CODEPRESS) {
-      return this.codepressApi
-        .getSkeletons()
-        .pipe(map(Ok.of))
-        .toPromise();
+      return this.codepressApi.getSkeletons().pipe(map(Ok.of)).toPromise();
     }
 
     return this.httpHandler(async () => {
@@ -270,7 +267,8 @@ class Api extends BaseApiClass {
        */
       const progress = localStorageHTTP.fetchUserProgressMap();
       const settings: UserSettings = localStorageHTTP.fetchUserSettings();
-      const lastActiveChallengeIds = localStorageHTTP.fetchLastActiveChallengeIds();
+      const lastActiveChallengeIds =
+        localStorageHTTP.fetchLastActiveChallengeIds();
 
       const preAccountUser: UserStoreState = {
         settings,
@@ -579,7 +577,7 @@ class LocalStorageHttpClass {
 
     const progressList = this.fetchUserProgress();
     const existingCourseProgress = progressList.find(
-      p => p.courseId === courseId,
+      (p) => p.courseId === courseId,
     );
 
     let updatedProgress: ProgressEntity;
@@ -605,7 +603,7 @@ class LocalStorageHttpClass {
     const updatedProgressList =
       progressList.length === 0
         ? [updatedProgress]
-        : progressList.concat(updatedProgress).map(p => {
+        : progressList.concat(updatedProgress).map((p) => {
             if (p.courseId === progress.courseId) {
               return updatedProgress;
             } else {
@@ -684,12 +682,8 @@ class LocalStorageHttpClass {
      * Handle failure/empty cases, and render toasts messages for the
      * user when appropriate.
      */
-    const {
-      settings,
-      blobs,
-      progress,
-      lastActiveChallengeIds,
-    } = this.getLocalDataToPersist();
+    const { settings, blobs, progress, lastActiveChallengeIds } =
+      this.getLocalDataToPersist();
 
     /* Only show the toast migration messages if we are sure pre-existing progress exists */
     let shouldToast = false;

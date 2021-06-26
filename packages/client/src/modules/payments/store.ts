@@ -39,7 +39,7 @@ const payments = createReducer<State, PaymentsActionTypes>(initialState)
   }))
   .handleAction(
     [actions.redirectToStripeSuccess, actions.redirectToStripeFailure],
-    state => ({
+    (state) => ({
       ...state,
       checkoutLoading: false,
     }),

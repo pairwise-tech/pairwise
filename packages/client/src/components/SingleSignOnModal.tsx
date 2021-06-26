@@ -109,7 +109,9 @@ class AuthenticationFormComponent extends React.Component<
                 placeholder="Enter your email"
                 value={this.state.email}
                 disabled={loginEmailRequestLoading}
-                onChange={event => this.setState({ email: event.target.value })}
+                onChange={(event) =>
+                  this.setState({ email: event.target.value })
+                }
               />
               <EmailButtonsContainer>
                 <Button
@@ -226,9 +228,8 @@ class AuthenticationFormComponent extends React.Component<
 export const AuthenticationForm = connect(
   (state: ReduxStoreState) => ({
     emailRequestSent: Modules.selectors.auth.emailRequestSent(state),
-    loginEmailRequestLoading: Modules.selectors.auth.loginEmailRequestLoading(
-      state,
-    ),
+    loginEmailRequestLoading:
+      Modules.selectors.auth.loginEmailRequestLoading(state),
   }),
   {
     dispatchLoginByEmailRequest: Modules.actions.auth.loginByEmail,

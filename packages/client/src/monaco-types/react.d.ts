@@ -46,7 +46,7 @@ export type PropertyValue<TValue> = TValue extends Array<infer AValue>
 
 export interface StandardLonghandProperties<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * The CSS **`align-content`** property sets the distribution of space between and around content items along a flexbox's cross-axis or a grid's block axis.
@@ -5094,7 +5094,7 @@ export interface StandardLonghandProperties<
 
 export interface StandardShorthandProperties<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * The `**all**` shorthand CSS property resets all of an element's properties except `unicode-bidi`, `direction`, and CSS Custom Properties. It can set properties to their initial or inherited values, or to the values specified in another stylesheet origin.
@@ -5693,14 +5693,13 @@ export interface StandardShorthandProperties<
 
 export interface StandardProperties<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends StandardLonghandProperties<TLength, TTime>,
+  TTime = string & {},
+> extends StandardLonghandProperties<TLength, TTime>,
     StandardShorthandProperties<TLength, TTime> {}
 
 export interface VendorLonghandProperties<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * The **`animation-delay`** CSS property specifies the amount of time to wait from applying the animation to an element before beginning to perform the animation. The animation can start later, immediately from its beginning, or immediately and partway through the animation.
@@ -7498,7 +7497,7 @@ export interface VendorLonghandProperties<
 
 export interface VendorShorthandProperties<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * The **`animation`** shorthand CSS property applies an animation between styles. It is a shorthand for `animation-name`, `animation-duration`, `animation-timing-function`, `animation-delay`, `animation-iteration-count`, `animation-direction`, `animation-fill-mode`, and `animation-play-state`.
@@ -7648,14 +7647,13 @@ export interface VendorShorthandProperties<
 
 export interface VendorProperties<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends VendorLonghandProperties<TLength, TTime>,
+  TTime = string & {},
+> extends VendorLonghandProperties<TLength, TTime>,
     VendorShorthandProperties<TLength, TTime> {}
 
 export interface ObsoleteProperties<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * In combination with `elevation`, the **`azimuth`** CSS property enables different audio sources to be positioned spatially for aural presentation. This is important in that it provides a natural way to tell several voices apart, as each can be positioned to originate at a different location on the sound stage. Stereo output produce a lateral sound stage, while binaural headphones and multi-speaker setups allow for a fully three-dimensional stage.
@@ -8677,7 +8675,7 @@ export interface ObsoleteProperties<
 
 export interface SvgProperties<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   alignmentBaseline?: Property.AlignmentBaseline;
   baselineShift?: Property.BaselineShift<TLength>;
@@ -8749,7 +8747,7 @@ export interface Properties<TLength = (string & {}) | 0, TTime = string & {}>
 
 export interface StandardLonghandPropertiesHyphen<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * The CSS **`align-content`** property sets the distribution of space between and around content items along a flexbox's cross-axis or a grid's block axis.
@@ -13797,7 +13795,7 @@ export interface StandardLonghandPropertiesHyphen<
 
 export interface StandardShorthandPropertiesHyphen<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * The `**all**` shorthand CSS property resets all of an element's properties except `unicode-bidi`, `direction`, and CSS Custom Properties. It can set properties to their initial or inherited values, or to the values specified in another stylesheet origin.
@@ -14396,14 +14394,13 @@ export interface StandardShorthandPropertiesHyphen<
 
 export interface StandardPropertiesHyphen<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends StandardLonghandPropertiesHyphen<TLength, TTime>,
+  TTime = string & {},
+> extends StandardLonghandPropertiesHyphen<TLength, TTime>,
     StandardShorthandPropertiesHyphen<TLength, TTime> {}
 
 export interface VendorLonghandPropertiesHyphen<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * The **`animation-delay`** CSS property specifies the amount of time to wait from applying the animation to an element before beginning to perform the animation. The animation can start later, immediately from its beginning, or immediately and partway through the animation.
@@ -15542,9 +15539,7 @@ export interface VendorLonghandPropertiesHyphen<
    *
    * **Initial value**: `0`
    */
-  "-webkit-border-bottom-left-radius"?: Property.BorderBottomLeftRadius<
-    TLength
-  >;
+  "-webkit-border-bottom-left-radius"?: Property.BorderBottomLeftRadius<TLength>;
   /**
    * The **`border-bottom-right-radius`** CSS property rounds the top-left corner of an element by specifying the radius (or the radius of the semi-major and semi-minor axes) of the ellipse defining the curvature of the corner.
    *
@@ -15552,9 +15547,7 @@ export interface VendorLonghandPropertiesHyphen<
    *
    * **Initial value**: `0`
    */
-  "-webkit-border-bottom-right-radius"?: Property.BorderBottomRightRadius<
-    TLength
-  >;
+  "-webkit-border-bottom-right-radius"?: Property.BorderBottomRightRadius<TLength>;
   /**
    * The **`border-image-slice`** CSS property divides the image specified by `border-image-source` into regions. These regions form the components of an element's border image.
    *
@@ -16205,7 +16198,7 @@ export interface VendorLonghandPropertiesHyphen<
 
 export interface VendorShorthandPropertiesHyphen<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * The **`animation`** shorthand CSS property applies an animation between styles. It is a shorthand for `animation-name`, `animation-duration`, `animation-timing-function`, `animation-delay`, `animation-iteration-count`, `animation-direction`, `animation-fill-mode`, and `animation-play-state`.
@@ -16355,14 +16348,13 @@ export interface VendorShorthandPropertiesHyphen<
 
 export interface VendorPropertiesHyphen<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends VendorLonghandPropertiesHyphen<TLength, TTime>,
+  TTime = string & {},
+> extends VendorLonghandPropertiesHyphen<TLength, TTime>,
     VendorShorthandPropertiesHyphen<TLength, TTime> {}
 
 export interface ObsoletePropertiesHyphen<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   /**
    * In combination with `elevation`, the **`azimuth`** CSS property enables different audio sources to be positioned spatially for aural presentation. This is important in that it provides a natural way to tell several voices apart, as each can be positioned to originate at a different location on the sound stage. Stereo output produce a lateral sound stage, while binaural headphones and multi-speaker setups allow for a fully three-dimensional stage.
@@ -16995,9 +16987,7 @@ export interface ObsoletePropertiesHyphen<
    *
    * @deprecated
    */
-  "-moz-outline-radius-bottomleft"?: Property.MozOutlineRadiusBottomleft<
-    TLength
-  >;
+  "-moz-outline-radius-bottomleft"?: Property.MozOutlineRadiusBottomleft<TLength>;
   /**
    * In Mozilla applications, the **`-moz-outline-radius-bottomright`** CSS property can be used to round the bottom-right corner of an element's `outline`.
    *
@@ -17007,9 +16997,7 @@ export interface ObsoletePropertiesHyphen<
    *
    * @deprecated
    */
-  "-moz-outline-radius-bottomright"?: Property.MozOutlineRadiusBottomright<
-    TLength
-  >;
+  "-moz-outline-radius-bottomright"?: Property.MozOutlineRadiusBottomright<TLength>;
   /**
    * In Mozilla applications, the **`-moz-outline-radius-topleft`** CSS property can be used to round the top-left corner of an element's `outline`.
    *
@@ -17388,7 +17376,7 @@ export interface ObsoletePropertiesHyphen<
 
 export interface SvgPropertiesHyphen<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > {
   "alignment-baseline"?: Property.AlignmentBaseline;
   "baseline-shift"?: Property.BaselineShift<TLength>;
@@ -17454,16 +17442,15 @@ export interface SvgPropertiesHyphen<
 
 export interface PropertiesHyphen<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends StandardPropertiesHyphen<TLength, TTime>,
+  TTime = string & {},
+> extends StandardPropertiesHyphen<TLength, TTime>,
     VendorPropertiesHyphen<TLength, TTime>,
     ObsoletePropertiesHyphen<TLength, TTime>,
     SvgPropertiesHyphen<TLength, TTime> {}
 
 export type StandardLonghandPropertiesFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof StandardLonghandProperties<TLength, TTime>]:
     | StandardLonghandProperties<TLength, TTime>[P]
@@ -17472,7 +17459,7 @@ export type StandardLonghandPropertiesFallback<
 
 export type StandardShorthandPropertiesFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof StandardShorthandProperties<TLength, TTime>]:
     | StandardShorthandProperties<TLength, TTime>[P]
@@ -17481,14 +17468,13 @@ export type StandardShorthandPropertiesFallback<
 
 export interface StandardPropertiesFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends StandardLonghandPropertiesFallback<TLength, TTime>,
+  TTime = string & {},
+> extends StandardLonghandPropertiesFallback<TLength, TTime>,
     StandardShorthandPropertiesFallback<TLength, TTime> {}
 
 export type VendorLonghandPropertiesFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof VendorLonghandProperties<TLength, TTime>]:
     | VendorLonghandProperties<TLength, TTime>[P]
@@ -17497,7 +17483,7 @@ export type VendorLonghandPropertiesFallback<
 
 export type VendorShorthandPropertiesFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof VendorShorthandProperties<TLength, TTime>]:
     | VendorShorthandProperties<TLength, TTime>[P]
@@ -17506,14 +17492,13 @@ export type VendorShorthandPropertiesFallback<
 
 export interface VendorPropertiesFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends VendorLonghandPropertiesFallback<TLength, TTime>,
+  TTime = string & {},
+> extends VendorLonghandPropertiesFallback<TLength, TTime>,
     VendorShorthandPropertiesFallback<TLength, TTime> {}
 
 export type ObsoletePropertiesFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof ObsoleteProperties<TLength, TTime>]:
     | ObsoleteProperties<TLength, TTime>[P]
@@ -17522,7 +17507,7 @@ export type ObsoletePropertiesFallback<
 
 export type SvgPropertiesFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof SvgProperties<TLength, TTime>]:
     | SvgProperties<TLength, TTime>[P]
@@ -17531,16 +17516,15 @@ export type SvgPropertiesFallback<
 
 export interface PropertiesFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends StandardPropertiesFallback<TLength, TTime>,
+  TTime = string & {},
+> extends StandardPropertiesFallback<TLength, TTime>,
     VendorPropertiesFallback<TLength, TTime>,
     ObsoletePropertiesFallback<TLength, TTime>,
     SvgPropertiesFallback<TLength, TTime> {}
 
 export type StandardLonghandPropertiesHyphenFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof StandardLonghandPropertiesHyphen<TLength, TTime>]:
     | StandardLonghandPropertiesHyphen<TLength, TTime>[P]
@@ -17549,7 +17533,7 @@ export type StandardLonghandPropertiesHyphenFallback<
 
 export type StandardShorthandPropertiesHyphenFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof StandardShorthandPropertiesHyphen<TLength, TTime>]:
     | StandardShorthandPropertiesHyphen<TLength, TTime>[P]
@@ -17558,14 +17542,13 @@ export type StandardShorthandPropertiesHyphenFallback<
 
 export interface StandardPropertiesHyphenFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends StandardLonghandPropertiesHyphenFallback<TLength, TTime>,
+  TTime = string & {},
+> extends StandardLonghandPropertiesHyphenFallback<TLength, TTime>,
     StandardShorthandPropertiesHyphenFallback<TLength, TTime> {}
 
 export type VendorLonghandPropertiesHyphenFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof VendorLonghandPropertiesHyphen<TLength, TTime>]:
     | VendorLonghandPropertiesHyphen<TLength, TTime>[P]
@@ -17574,7 +17557,7 @@ export type VendorLonghandPropertiesHyphenFallback<
 
 export type VendorShorthandPropertiesHyphenFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof VendorShorthandPropertiesHyphen<TLength, TTime>]:
     | VendorShorthandPropertiesHyphen<TLength, TTime>[P]
@@ -17583,14 +17566,13 @@ export type VendorShorthandPropertiesHyphenFallback<
 
 export interface VendorPropertiesHyphenFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends VendorLonghandPropertiesHyphenFallback<TLength, TTime>,
+  TTime = string & {},
+> extends VendorLonghandPropertiesHyphenFallback<TLength, TTime>,
     VendorShorthandPropertiesHyphenFallback<TLength, TTime> {}
 
 export type ObsoletePropertiesHyphenFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof ObsoletePropertiesHyphen<TLength, TTime>]:
     | ObsoletePropertiesHyphen<TLength, TTime>[P]
@@ -17599,7 +17581,7 @@ export type ObsoletePropertiesHyphenFallback<
 
 export type SvgPropertiesHyphenFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
+  TTime = string & {},
 > = {
   [P in keyof SvgPropertiesHyphen<TLength, TTime>]:
     | SvgPropertiesHyphen<TLength, TTime>[P]
@@ -17608,9 +17590,8 @@ export type SvgPropertiesHyphenFallback<
 
 export interface PropertiesHyphenFallback<
   TLength = (string & {}) | 0,
-  TTime = string & {}
->
-  extends StandardPropertiesHyphenFallback<TLength, TTime>,
+  TTime = string & {},
+> extends StandardPropertiesHyphenFallback<TLength, TTime>,
     VendorPropertiesHyphenFallback<TLength, TTime>,
     ObsoletePropertiesHyphenFallback<TLength, TTime>,
     SvgPropertiesHyphenFallback<TLength, TTime> {}
@@ -21130,7 +21111,7 @@ export namespace Property {
 export namespace AtRule {
   export interface CounterStyle<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > {
     additiveSymbols?: string;
     fallback?: string;
@@ -21146,7 +21127,7 @@ export namespace AtRule {
 
   export interface CounterStyleHyphen<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > {
     "additive-symbols"?: string;
     fallback?: string;
@@ -21162,7 +21143,7 @@ export namespace AtRule {
 
   export type CounterStyleFallback<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > = {
     [P in keyof CounterStyle<TLength, TTime>]:
       | CounterStyle<TLength, TTime>[P]
@@ -21171,7 +21152,7 @@ export namespace AtRule {
 
   export type CounterStyleHyphenFallback<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > = {
     [P in keyof CounterStyleHyphen<TLength, TTime>]:
       | CounterStyleHyphen<TLength, TTime>[P]
@@ -21194,7 +21175,7 @@ export namespace AtRule {
 
   export interface FontFaceHyphen<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > {
     "-moz-font-feature-settings"?: FontFeatureSettings;
     "font-display"?: FontDisplay;
@@ -21211,7 +21192,7 @@ export namespace AtRule {
 
   export type FontFaceFallback<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > = {
     [P in keyof FontFace<TLength, TTime>]:
       | FontFace<TLength, TTime>[P]
@@ -21220,7 +21201,7 @@ export namespace AtRule {
 
   export type FontFaceHyphenFallback<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > = {
     [P in keyof FontFaceHyphen<TLength, TTime>]:
       | FontFaceHyphen<TLength, TTime>[P]
@@ -21233,7 +21214,7 @@ export namespace AtRule {
 
   export interface PageHyphen<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > {
     size?: Size<TLength>;
   }
@@ -21246,7 +21227,7 @@ export namespace AtRule {
 
   export type PageHyphenFallback<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > = {
     [P in keyof PageHyphen<TLength, TTime>]:
       | PageHyphen<TLength, TTime>[P]
@@ -21261,7 +21242,7 @@ export namespace AtRule {
 
   export interface PropertyHyphen<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > {
     inherits?: Inherits;
     "initial-value"?: string;
@@ -21270,7 +21251,7 @@ export namespace AtRule {
 
   export type PropertyFallback<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > = {
     [P in keyof Property<TLength, TTime>]:
       | Property<TLength, TTime>[P]
@@ -21279,7 +21260,7 @@ export namespace AtRule {
 
   export type PropertyHyphenFallback<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > = {
     [P in keyof PropertyHyphen<TLength, TTime>]:
       | PropertyHyphen<TLength, TTime>[P]
@@ -21314,7 +21295,7 @@ export namespace AtRule {
 
   export interface ViewportHyphen<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > {
     "-ms-height"?: Height<TLength>;
     "-ms-max-height"?: MaxHeight<TLength>;
@@ -21343,7 +21324,7 @@ export namespace AtRule {
 
   export type ViewportFallback<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > = {
     [P in keyof Viewport<TLength, TTime>]:
       | Viewport<TLength, TTime>[P]
@@ -21352,7 +21333,7 @@ export namespace AtRule {
 
   export type ViewportHyphenFallback<
     TLength = (string & {}) | 0,
-    TTime = string & {}
+    TTime = string & {},
   > = {
     [P in keyof ViewportHyphen<TLength, TTime>]:
       | ViewportHyphen<TLength, TTime>[P]
@@ -22129,7 +22110,7 @@ declare namespace React {
       | ForwardRefExoticComponent<any>
       | { new (props: any): Component<any> }
       | ((props: any, context?: any) => ReactElement | null)
-      | keyof JSX.IntrinsicElements
+      | keyof JSX.IntrinsicElements,
   > =
     // need to check first if `ref` is a valid prop for ts@3.0
     // otherwise it will infer `{}` instead of `never`
@@ -22161,7 +22142,7 @@ declare namespace React {
     P = any,
     T extends string | JSXElementConstructor<any> =
       | string
-      | JSXElementConstructor<any>
+      | JSXElementConstructor<any>,
   > {
     type: T;
     props: P;
@@ -22170,7 +22151,10 @@ declare namespace React {
 
   interface ReactComponentElement<
     T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
-    P = Pick<ComponentProps<T>, Exclude<keyof ComponentProps<T>, "key" | "ref">>
+    P = Pick<
+      ComponentProps<T>,
+      Exclude<keyof ComponentProps<T>, "key" | "ref">
+    >,
   > extends ReactElement<P, Exclude<T, number>> {}
 
   /**
@@ -22201,7 +22185,7 @@ declare namespace React {
   // string fallback for custom web-components
   interface DOMElement<
     P extends HTMLAttributes<T> | SVGAttributes<T>,
-    T extends Element
+    T extends Element,
   > extends ReactElement<P, string> {
     ref: LegacyRef<T>;
   }
@@ -22212,7 +22196,7 @@ declare namespace React {
 
   interface DetailedReactHTMLElement<
     P extends HTMLAttributes<T>,
-    T extends HTMLElement
+    T extends HTMLElement,
   > extends DOMElement<P, T> {
     type: keyof ReactHTML;
   }
@@ -22268,7 +22252,7 @@ declare namespace React {
 
   interface DetailedHTMLFactory<
     P extends HTMLAttributes<T>,
-    T extends HTMLElement
+    T extends HTMLElement,
   > extends DOMFactory<P, T> {
     (
       props?: (ClassAttributes<T> & P) | null,
@@ -22329,7 +22313,7 @@ declare namespace React {
   function createFactory<
     P,
     T extends Component<P, ComponentState>,
-    C extends ComponentClass<P>
+    C extends ComponentClass<P>,
   >(type: ClassType<P, T, C>): CFactory<P, T>;
   function createFactory<P>(type: ComponentClass<P>): Factory<P>;
 
@@ -22381,7 +22365,7 @@ declare namespace React {
   function createElement<
     P extends {},
     T extends Component<P, ComponentState>,
-    C extends ComponentClass<P>
+    C extends ComponentClass<P>,
   >(
     type: ClassType<P, T, C>,
     props?: (ClassAttributes<T> & P) | null,
@@ -22725,7 +22709,7 @@ declare namespace React {
   type ClassType<
     P,
     T extends Component<P, ComponentState>,
-    C extends ComponentClass<P>
+    C extends ComponentClass<P>,
   > = C & (new (props: P, context?: any) => T);
 
   //
@@ -22975,7 +22959,7 @@ declare namespace React {
    * or ComponentPropsWithoutRef when refs are not supported.
    */
   type ComponentProps<
-    T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>
+    T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
   > = T extends JSXElementConstructor<infer P>
     ? P
     : T extends keyof JSX.IntrinsicElements
@@ -23055,9 +23039,8 @@ declare namespace React {
     ? A
     : never;
   // The identity check is done with the SameValue algorithm (Object.is), which is stricter than ===
-  type ReducerStateWithoutAction<
-    R extends ReducerWithoutAction<any>
-  > = R extends ReducerWithoutAction<infer S> ? S : never;
+  type ReducerStateWithoutAction<R extends ReducerWithoutAction<any>> =
+    R extends ReducerWithoutAction<infer S> ? S : never;
   // TODO (TypeScript 3.0): ReadonlyArray<unknown>
   type DependencyList = ReadonlyArray<any>;
 
@@ -25349,9 +25332,7 @@ declare namespace React {
 
 // naked 'any' type in a conditional type will short circuit and union both the then/else branches
 // so boolean is only resolved for T = any
-type IsExactlyAny<T> = boolean extends (T extends never
-? true
-: false)
+type IsExactlyAny<T> = boolean extends (T extends never ? true : false)
   ? true
   : false;
 
