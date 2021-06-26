@@ -121,10 +121,10 @@ class BaseApiClass {
     // Only display if the token is not removed already, to prevent multiple
     // messages
     if (currentAccessToken !== "") {
-      toaster.error("Unauthorized!", { icon: "user" });
-      logoutUserInLocalStorage();
-      await wait(500);
-      window.location.reload();
+      // toaster.error("Unauthorized!", { icon: "user" });
+      // logoutUserInLocalStorage();
+      // await wait(500);
+      // window.location.reload();
     }
   };
 }

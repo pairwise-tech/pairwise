@@ -299,6 +299,7 @@ export const PairwiseOpenCloseLogo = ({
   ...props
 }: PairwiseOpenCloseLogoProps) => {
   return (
+    // @ts-ignore
     <svg
       width="24.44"
       height="20"
