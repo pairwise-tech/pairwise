@@ -33,7 +33,7 @@ export class BlobService {
       /**
        * Deserialize data blob before sending back to the client.
        */
-      const deserialized = {
+      const deserialized: ICodeBlobDto = {
         ...blob,
         dataBlob: JSON.parse(blob.dataBlob),
       };

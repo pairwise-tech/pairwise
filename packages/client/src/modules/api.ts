@@ -130,7 +130,8 @@ class BaseApiClass {
     };
 
     const authenticated = !!token;
-    return { headers, authenticated };
+    const config = { headers };
+    return { config, authenticated };
   };
 
   formatHttpError = (error: AxiosError): HttpResponseError => {
@@ -215,10 +216,11 @@ class Api extends BaseApiClass {
       } else if (ENV.CODEPRESS) {
         courses = await this.codepressApi.getAll().toPromise();
       } else {
-        const { headers } = this.getRequestHeaders();
-        const result = await axios.get<CourseList>(`${HOST}/content/courses`, {
-          headers,
-        });
+        const { config } = this.getRequestHeaders();
+        const result = await axios.get<CourseList>(
+          `${HOST}/content/courses`,
+          config,
+        );
         courses = result.data;
       }
 
@@ -240,21 +242,17 @@ class Api extends BaseApiClass {
     }
 
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<CourseSkeletonList>(`${HOST}/content/skeletons`, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.get<CourseSkeletonList>(`${HOST}/content/skeletons`, config);
     });
   };
 
   fetchUserProfile = async () => {
-    const { headers, authenticated } = this.getRequestHeaders();
+    const { config, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
       return this.httpHandler(async () => {
-        return axios.get<UserStoreState>(`${HOST}/user/profile`, {
-          headers,
-        });
+        return axios.get<UserStoreState>(`${HOST}/user/profile`, config);
       });
     } else {
       /**
@@ -304,58 +302,53 @@ class Api extends BaseApiClass {
 
   updateUser = async (userDetails: UserUpdateOptions) => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.post<IUserDto>(`${HOST}/user/profile`, userDetails, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.post<IUserDto>(`${HOST}/user/profile`, userDetails, config);
     });
   };
 
   updateUserEmail = async (email: string) => {
     return this.httpHandler(async () => {
-      const headers = this.getRequestHeaders();
+      const { config } = this.getRequestHeaders();
       const body = { email };
-      return axios.post<"Success">(`${HOST}/auth/update-email`, body, headers);
+      return axios.post<"Success">(`${HOST}/auth/update-email`, body, config);
     });
   };
 
   loginByEmail = async (email: string) => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
+      const { config } = this.getRequestHeaders();
       const body = { email };
-      const options = { headers };
-      return axios.post<string>(`${HOST}/auth/email`, body, options);
+      return axios.post<string>(`${HOST}/auth/email`, body, config);
     });
   };
 
   submitUserFeedback = async (feedback: IFeedbackDto) => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.post<"Success">(`${HOST}/feedback`, feedback, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.post<"Success">(`${HOST}/feedback`, feedback, config);
     });
   };
 
   submitGenericFeedback = async (feedback: IGenericFeedback) => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.post<"Success">(`${HOST}/feedback/general`, feedback, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.post<"Success">(
+        `${HOST}/feedback/general`,
+        feedback,
+        config,
+      );
     });
   };
 
   fetchUserProgress = async (): Promise<
     Result<UserCourseProgress, HttpResponseError>
   > => {
-    const { headers, authenticated } = this.getRequestHeaders();
+    const { config, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
       return this.httpHandler(async () => {
-        return axios.get<UserCourseProgress>(`${HOST}/progress`, {
-          headers,
-        });
+        return axios.get<UserCourseProgress>(`${HOST}/progress`, config);
       });
     } else {
       const result = localStorageHTTP.fetchUserProgress();
@@ -366,13 +359,11 @@ class Api extends BaseApiClass {
   updateUserProgress = async (
     progress: IProgressDto,
   ): Promise<Result<IProgressDto, HttpResponseError>> => {
-    const { headers, authenticated } = this.getRequestHeaders();
+    const { config, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
       return this.httpHandler(async () => {
-        return axios.post<IProgressDto>(`${HOST}/progress`, progress, {
-          headers,
-        });
+        return axios.post<IProgressDto>(`${HOST}/progress`, progress, config);
       });
     } else {
       const result = localStorageHTTP.updateUserProgress(progress);
@@ -382,9 +373,7 @@ class Api extends BaseApiClass {
         axios.post<IProgressDto>(
           `${HOST}/progress/anonymous/${this.anonID}`,
           progress,
-          {
-            headers,
-          },
+          config,
         );
       } catch (err) {
         captureSentryException(err);
@@ -411,13 +400,11 @@ class Api extends BaseApiClass {
       return new Ok(result);
     }
 
-    const { headers, authenticated } = this.getRequestHeaders();
+    const { config, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
       return this.httpHandler(async () => {
-        return axios.get<ICodeBlobDto>(`${HOST}/blob/${challengeId}`, {
-          headers,
-        });
+        return axios.get<ICodeBlobDto>(`${HOST}/blob/${challengeId}`, config);
       });
     } else {
       return localStorageHTTP.fetchChallengeHistory(challengeId);
@@ -436,12 +423,10 @@ class Api extends BaseApiClass {
       return new Ok(dataBlob);
     }
 
-    const { headers, authenticated } = this.getRequestHeaders();
+    const { config, authenticated } = this.getRequestHeaders();
     if (authenticated) {
       return this.httpHandler(async () => {
-        return axios.post<ICodeBlobDto>(`${HOST}/blob`, dataBlob, {
-          headers,
-        });
+        return axios.post<ICodeBlobDto>(`${HOST}/blob`, dataBlob, config);
       });
     } else {
       const result = localStorageHTTP.updateChallengeHistory(dataBlob);
@@ -453,15 +438,14 @@ class Api extends BaseApiClass {
     courseId: string,
     challengeId: string,
   ): Promise<Result<LastActiveChallengeIds, HttpResponseError>> => {
-    const { headers, authenticated } = this.getRequestHeaders();
-    const options = { headers };
+    const { config, authenticated } = this.getRequestHeaders();
     if (authenticated) {
       const body = { courseId, challengeId };
       return this.httpHandler(async () => {
         return axios.post<LastActiveChallengeIds>(
           `${HOST}/user/active-challenge-ids`,
           body,
-          options,
+          config,
         );
       });
     } else {
@@ -474,24 +458,24 @@ class Api extends BaseApiClass {
   };
 
   updateCourseProgressBulk = async (userCourseProgress: UserCourseProgress) => {
-    const { headers } = this.getRequestHeaders();
+    const { config } = this.getRequestHeaders();
     return this.httpHandler(async () => {
       return axios.post<ICodeBlobDto>(
         `${HOST}/progress/bulk`,
         userCourseProgress,
-        {
-          headers,
-        },
+        config,
       );
     });
   };
 
   updateChallengeHistoryBulk = async (codeBlobBulk: CodeBlobBulk) => {
-    const { headers } = this.getRequestHeaders();
+    const { config } = this.getRequestHeaders();
     return this.httpHandler(async () => {
-      return axios.post<ICodeBlobDto>(`${HOST}/blob/bulk`, codeBlobBulk, {
-        headers,
-      });
+      return axios.post<ICodeBlobDto>(
+        `${HOST}/blob/bulk`,
+        codeBlobBulk,
+        config,
+      );
     });
   };
 
@@ -500,14 +484,12 @@ class Api extends BaseApiClass {
   };
 
   createCheckoutSession = async (courseId: string) => {
-    const { headers } = this.getRequestHeaders();
+    const { config } = this.getRequestHeaders();
     return this.httpHandler(async () => {
       return axios.post<StripeStartCheckoutSuccessResponse>(
         `${HOST}/payments/checkout/${courseId}`,
         {},
-        {
-          headers,
-        },
+        config,
       );
     });
   };
