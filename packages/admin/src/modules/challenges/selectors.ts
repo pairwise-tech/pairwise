@@ -15,47 +15,47 @@ export const challengesSelector = createSelector([challengesState], identity);
 
 export const getChallengeMap = createSelector(
   [challengesState],
-  state => state.challengeMap,
+  (state) => state.challengeMap,
 );
 
 export const challengeDetailId = createSelector(
   [challengesState],
-  state => state.challengeDetailId,
+  (state) => state.challengeDetailId,
 );
 
 export const challengeMeta = createSelector(
   [challengesState],
-  state => state.challengeMeta,
+  (state) => state.challengeMeta,
 );
 
 export const navigationOverlayVisible = createSelector(
   [challengesState],
-  challenges => challenges.displayNavigationMap,
+  (challenges) => challenges.displayNavigationMap,
 );
 
 export const menuSelectItemIndex = createSelector(
   [challengesState],
-  challenges => challenges.keySelectedMenuItemIndex,
+  (challenges) => challenges.keySelectedMenuItemIndex,
 );
 
 export const courseList = createSelector(
   [challengesState],
-  challenges => challenges.courses,
+  (challenges) => challenges.courses,
 );
 
 export const courseSkeletons = createSelector(
   [challengesState],
-  challenges => challenges.courseSkeletons,
+  (challenges) => challenges.courseSkeletons,
 );
 
-export const getCourseSkeletons = createSelector([challengesState], state => {
+export const getCourseSkeletons = createSelector([challengesState], (state) => {
   return state.courseSkeletons;
 });
 
 // Get an array of course metadata for the current course list
-export const courseListMetadata = createSelector([challengesState], state => {
+export const courseListMetadata = createSelector([challengesState], (state) => {
   if (state.courses) {
-    return state.courses.map(course => ({
+    return state.courses.map((course) => ({
       id: course.id,
       title: course.title,
       description: course.description,
@@ -69,10 +69,10 @@ export const courseListMetadata = createSelector([challengesState], state => {
 
 export const pullRequestContext = createSelector(
   [challengesState],
-  state => state.pullRequestContext,
+  (state) => state.pullRequestContext,
 );
 
 export const pullRequestContextLoading = createSelector(
   [challengesState],
-  state => state.pullRequestLoading,
+  (state) => state.pullRequestLoading,
 );

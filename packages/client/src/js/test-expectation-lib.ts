@@ -286,7 +286,7 @@ class Expectation {
       return (
         this.isObject(b) &&
         Object.keys(b).length === keys.length &&
-        keys.every(k => this.deepEqual(a[k], b[k]))
+        keys.every((k) => this.deepEqual(a[k], b[k]))
       );
     } else {
       return Object.is(a, b);
@@ -386,7 +386,7 @@ class Expectation {
 }
 
 // @ts-ignore
-const expect = x => new Expectation(x);
+const expect = (x) => new Expectation(x);
 
 /** ===========================================================================
  * Expose expectation library as a global on the window

@@ -37,12 +37,12 @@ const appInitializationEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
+const appInitializeCaptureUrlEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
     pluck("payload"),
     pluck("location"),
-    map(location => {
+    map((location) => {
       const params = queryString.parse(location.search);
       const appInitializationType = parseInitialUrlToInitializationType(
         location.pathname,
@@ -73,7 +73,7 @@ const emailUpdateSuccessToastEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     pluck("appInitializationType"),
-    filter(type => type === APP_INITIALIZATION_TYPE.EMAIL_UPDATED),
+    filter((type) => type === APP_INITIALIZATION_TYPE.EMAIL_UPDATED),
     tap(() => {
       deps.toaster.success("Email updated successfully!");
     }),
@@ -91,7 +91,7 @@ const stripInitialParameters: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     pluck("params"),
     // Only proceed if there are captured query parameters to remove
-    filter(params => Object.keys(params).length > 0),
+    filter((params) => Object.keys(params).length > 0),
     tap(() => {
       console.warn(
         `[WARN]: Query parameters being removed on app initialization!`,
@@ -108,7 +108,7 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     pluck("appInitializationType"),
-    filter(type => type === APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE),
+    filter((type) => type === APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE),
     delay(500),
     tap(() => {
       const { host } = window.location;
@@ -128,8 +128,8 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
 // This epic creates a new stream of locations the user visits. The tap is just
 // to make google analytics work with our SPA
 const locationChangeEpic: EpicSignature = (_, __, deps) => {
-  return new Observable<Location>(obs => {
-    const unsub = deps.router.listen(location => {
+  return new Observable<Location>((obs) => {
+    const unsub = deps.router.listen((location) => {
       obs.next(location);
     });
 

@@ -15,7 +15,7 @@ const NUMBER_OF_REQUESTS_PER_USER = 25;
 const TOTAL_REQUESTS = NUMBER_OF_USERS * NUMBER_OF_REQUESTS_PER_USER;
 
 describe.skip("Stress Test the Server", () => {
-  test("Create users and hit the /progress/challenge endpoint repeatedly", async done => {
+  test("Create users and hit the /progress/challenge endpoint repeatedly", async (done) => {
     // Wait 1 second to allow other tests to complete first
     await new Promise((_: any) => setTimeout(_, 1000));
 
@@ -26,15 +26,16 @@ describe.skip("Stress Test the Server", () => {
         new Array(NUMBER_OF_REQUESTS_PER_USER).fill(1).map(async () => {
           const accessToken = await fetchAccessToken();
           const authorizationHeader = `Bearer ${accessToken}`;
-          const headers = {
-            Authorization: authorizationHeader,
-          };
+          const headers = { Authorization: authorizationHeader };
 
           const randomString = faker.lorem.sentences();
 
           const body = {
             challengeId: "9scykDold",
-            dataBlob: { code: randomString, type: "challenge" },
+            dataBlob: {
+              code: randomString,
+              type: "challenge",
+            },
           };
 
           try {
@@ -55,7 +56,7 @@ describe.skip("Stress Test the Server", () => {
     );
 
     const flattenedResults = results.reduce((flat, x) => flat.concat(x));
-    const valid = flattenedResults.filter(x => !!x.value);
+    const valid = flattenedResults.filter((x) => !!x.value);
 
     const end = Date.now();
     const time = (end - start) / 1000;

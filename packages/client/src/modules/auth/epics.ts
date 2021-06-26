@@ -42,7 +42,7 @@ const accessTokenInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
-    map(payload => {
+    map((payload) => {
       const { params, appInitializationType } = payload;
       const { accessToken } = params;
 
@@ -138,7 +138,7 @@ const loginByEmailEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.loginByEmail)),
     pluck("payload"),
     pluck("email"),
-    switchMap(async email => {
+    switchMap(async (email) => {
       // Validate email address
       const valid = EmailValidator.validate(email);
       if (!valid) {

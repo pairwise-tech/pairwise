@@ -61,7 +61,7 @@ export function unstable_renderSubtreeIntoContainer<T extends Element>(
 ): T;
 export function unstable_renderSubtreeIntoContainer<
   P,
-  T extends Component<P, ComponentState>
+  T extends Component<P, ComponentState>,
 >(
   parentComponent: Component<any>,
   element: CElement<P, T>,

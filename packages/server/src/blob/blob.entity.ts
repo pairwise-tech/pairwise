@@ -31,11 +31,9 @@ export class CodeBlob {
   @Column({ type: "jsonb" })
   public dataBlob: string;
 
-  @ManyToOne(
-    type => User,
-    user => user.challengeCodeHistory,
-    { onDelete: "CASCADE" },
-  )
+  @ManyToOne((type) => User, (user) => user.challengeCodeHistory, {
+    onDelete: "CASCADE",
+  })
   public user: User;
 
   @CreateDateColumn({ type: "timestamp" })

@@ -16,9 +16,7 @@ describe("User APIs", () => {
   test("/user/profile (GET) a user can fetch their profile", async () => {
     const accessToken = await fetchAccessToken();
     const result = await axios.get(`${HOST}/user/profile`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
 
     const { profile, settings } = result.data;
@@ -32,11 +30,7 @@ describe("User APIs", () => {
 
   test("/user/profile (POST) a user can update their profile", async () => {
     const accessToken = await fetchAccessToken();
-    const headers = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
+    const headers = { headers: { Authorization: `Bearer ${accessToken}` } };
 
     const result = await axios.get(`${HOST}/user/profile`, headers);
     const originalProfile = result.data.profile;
@@ -70,9 +64,10 @@ describe("User APIs", () => {
   test("/user/profile (POST) rejects email parameters", async () => {
     const accessToken = await fetchAccessToken();
 
-    const randomString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".slice(
-      Math.floor(Math.random() * 50),
-    );
+    const randomString =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".slice(
+        Math.floor(Math.random() * 50),
+      );
     const email = `${randomString}@pairwise.tech`;
 
     return request(`${HOST}/user/profile`)
@@ -80,22 +75,19 @@ describe("User APIs", () => {
       .send({ email })
       .set("Authorization", `Bearer ${accessToken}`)
       .expect(400)
-      .then(error => {
+      .then((error) => {
         expect(error.body.message).toBe("Invalid parameters provided.");
       });
   });
 
-  test("/auth/update-email (POST) accepts a new email but does not update the user profile email yet", async done => {
+  test("/auth/update-email (POST) accepts a new email but does not update the user profile email yet", async (done) => {
     const accessToken = await fetchAccessToken();
-    const headers = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
+    const headers = { headers: { Authorization: `Bearer ${accessToken}` } };
 
-    const randomString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".slice(
-      Math.floor(Math.random() * 50),
-    );
+    const randomString =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".slice(
+        Math.floor(Math.random() * 50),
+      );
     const email = `${randomString}@pairwise.tech`;
 
     request(`${HOST}/auth/update-email`)
@@ -112,13 +104,9 @@ describe("User APIs", () => {
     done();
   });
 
-  test("/user/profile (POST) filters invalid parameters, and updates settings correctly", async done => {
+  test("/user/profile (POST) filters invalid parameters, and updates settings correctly", async (done) => {
     const accessToken = await fetchAccessToken();
-    const headers = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
+    const headers = { headers: { Authorization: `Bearer ${accessToken}` } };
 
     const handleUpdateUser = async (userUpdate: { [key: string]: any }) => {
       await request(`${HOST}/user/profile`)
@@ -193,7 +181,7 @@ describe("User APIs", () => {
     done();
   });
 
-  test("/active-challenge-ids (POST) validates requests correctly", async done => {
+  test("/active-challenge-ids (POST) validates requests correctly", async (done) => {
     const accessToken = await fetchAccessToken();
     const authorizationHeader = `Bearer ${accessToken}`;
 
@@ -205,7 +193,7 @@ describe("User APIs", () => {
       })
       .set("Authorization", authorizationHeader)
       .expect(400)
-      .then(error => {
+      .then((error) => {
         expect(error.body.message).toBe("Failed to perform operation.");
       });
 
@@ -217,7 +205,7 @@ describe("User APIs", () => {
       })
       .set("Authorization", authorizationHeader)
       .expect(400)
-      .then(error => {
+      .then((error) => {
         expect(error.body.message).toBe("Failed to perform operation.");
       });
 
@@ -229,7 +217,7 @@ describe("User APIs", () => {
       })
       .set("Authorization", authorizationHeader)
       .expect(400)
-      .then(error => {
+      .then((error) => {
         expect(error.body.message).toBe("Failed to perform operation.");
       });
 
@@ -247,7 +235,7 @@ describe("User APIs", () => {
       });
   });
 
-  test("/active-challenge-ids (POST) updates last active challenge ids correctly", async done => {
+  test("/active-challenge-ids (POST) updates last active challenge ids correctly", async (done) => {
     const accessToken = await fetchAccessToken();
     const authorizationHeader = `Bearer ${accessToken}`;
 
@@ -258,15 +246,14 @@ describe("User APIs", () => {
       courseId: string,
       challengeId: string,
     ) => {
-      const body = { courseId, challengeId };
+      const body = {
+        courseId,
+        challengeId,
+      };
       const result = await axios.post(
         `${HOST}/user/active-challenge-ids`,
         body,
-        {
-          headers: {
-            Authorization: authorizationHeader,
-          },
-        },
+        { headers: { Authorization: authorizationHeader } },
       );
       return result.data;
     };

@@ -113,7 +113,7 @@ const SearchBox = ({
   return (
     <Box
       className={cx({ isClosed })}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation(); // Necessary to prevent the background click which is outside the react event system
       }}
@@ -197,7 +197,7 @@ const SearchResultItem = ({
     <div {...rest}>
       <h3>{underlineText(result.title, searchText)}</h3>
       {result.matches
-        .filter(x => x.foundIn !== "title") // Skip title matches, since we display the title above
+        .filter((x) => x.foundIn !== "title") // Skip title matches, since we display the title above
         .map((x, i) => {
           return (
             <LineWrappedText key={i}>
@@ -250,7 +250,7 @@ const StyledSearchResultItem = styled(SearchResultItem)`
   padding: 4px 10px;
   cursor: pointer;
   border-bottom: 1px solid #636363;
-  background: ${props => (props.active ? "#4c4c4c" : "transparent")};
+  background: ${(props) => (props.active ? "#4c4c4c" : "transparent")};
   /* See NOTE */
   & > * {
     pointer-events: none;

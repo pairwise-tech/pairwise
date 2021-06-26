@@ -1,9 +1,9 @@
 import { createReducer } from "typesafe-actions";
 import {
-  Challenge,
   ChallengeMeta,
   CourseList,
   CourseSkeletonList,
+  PullRequestDiffContext,
   InverseChallengeMapping,
 } from "@pairwise/common";
 import * as actions from "./actions";
@@ -15,14 +15,6 @@ import { ChallengesActionTypes } from "./index";
  * ============================================================================
  */
 
-export interface PullRequestContext {
-  id: string;
-  moduleId: string;
-  courseId: string;
-  originalChallenge: Challenge;
-  updatedChallenge: Challenge;
-}
-
 export interface State {
   keySelectedMenuItemIndex: Nullable<number>;
   courses: Nullable<CourseList>;
@@ -31,7 +23,7 @@ export interface State {
   displayNavigationMap: boolean;
   challengeDetailId: Nullable<string>;
   pullRequestLoading: boolean;
-  pullRequestContext: Nullable<PullRequestContext[]>;
+  pullRequestContext: Nullable<PullRequestDiffContext[]>;
   challengeMeta: Nullable<ChallengeMeta>;
 }
 

@@ -1,6 +1,10 @@
 import axios from "axios";
 import { InternalServerErrorException } from "@nestjs/common";
-import { CourseList, createInverseChallengeMapping } from "@pairwise/common";
+import {
+  CourseList,
+  createInverseChallengeMapping,
+  PullRequestDiffContext,
+} from "@pairwise/common";
 import { captureSentryException } from "./sentry-utils";
 import ENV from "./server-env";
 
@@ -37,8 +41,8 @@ const fetchFileBlob = async (fileSHA: string) => {
  */
 export const parsePullRequestDiff = async (
   pullRequestId: string,
-  courses: CourseList,
-) => {
+  currentCourseList: CourseList,
+): Promise<PullRequestDiffContext[] | string> => {
   try {
     const id = Number(pullRequestId);
     if (!id || typeof id !== "number") {
@@ -60,11 +64,11 @@ export const parsePullRequestDiff = async (
     const python = diff.find(matchFile("02_python_language"));
     const rust = diff.find(matchFile("03_rust_language"));
     const go = diff.find(matchFile("04_golang_language"));
-    const courses = [ts, python, rust, go];
+    const courses = [ts, python, rust, go].filter(Boolean);
 
     if (courses.length > 0) {
       const result = await Promise.all(
-        courses.filter(Boolean).map(async courseDiffFile => {
+        courses.map(async (courseDiffFile) => {
           const { sha, patch } = courseDiffFile;
           /**
            * Extract all the git file annotations which denote changed line
@@ -72,8 +76,8 @@ export const parsePullRequestDiff = async (
            */
           const lineDiffs = patch
             .split("\n")
-            .filter(x => /@@(.*)@@/.test(x))
-            .map(x => x.match(/\+(.*)\,/).pop());
+            .filter((x) => /@@(.*)@@/.test(x))
+            .map((x) => x.match(/\+(.*)\,/).pop());
 
           /**
            * Fetch the blob for the course JSON in file in this PR. Convert
@@ -90,7 +94,7 @@ export const parsePullRequestDiff = async (
            */
           let currentChallengeId = null;
           const challengeIds = [];
-          const lineNumberSet = new Set(lineDiffs.map(line => +line));
+          const lineNumberSet = new Set(lineDiffs.map((line) => +line));
 
           for (let i = 1; i < jsonByLines.length + 1; i++) {
             const lineNumber = i;
@@ -109,14 +113,15 @@ export const parsePullRequestDiff = async (
            * Lookup up the original challenge (if it exists) and the updated
            * challenge.
            */
-          const originalChallengeMap = createInverseChallengeMapping(courses);
+          const originalChallengeMap =
+            createInverseChallengeMapping(currentCourseList);
           const pullRequestChallengeMap = createInverseChallengeMapping([blob]);
 
           /**
            * Map over the identified altered challenge ids from the pull request
            * and construct content context to return in the response.
            */
-          const prDiffContext = challengeIds.map(id => {
+          const prDiffContext = challengeIds.map((id) => {
             // May be undefined if updated challenge is new:
             const originalChallengeMeta = originalChallengeMap[id];
             // May be undefined if updated challenge is a deletion:
@@ -124,7 +129,7 @@ export const parsePullRequestDiff = async (
 
             // One of them should exist...
             const existing = originalChallengeMap
-              ? originalChallengeMap
+              ? originalChallengeMeta
               : updatedChallengeMeta;
 
             const { moduleId, courseId } = existing;
@@ -150,8 +155,8 @@ export const parsePullRequestDiff = async (
 
       // Flatten the results and remove null id diffs
       return result
-        .reduce((flat, diff) => flat.concat(diff))
-        .filter(x => x.id !== null);
+        .reduce((flat, diff) => flat.concat(diff), [])
+        .filter((x) => x.id !== null);
     } else {
       return "No course JSON has been modified in this PR.";
     }

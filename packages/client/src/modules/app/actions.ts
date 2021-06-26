@@ -34,9 +34,9 @@ enum ActionTypesEnum {
  */
 export const empty = createAction(ActionTypesEnum.EMPTY_ACTION)<string>();
 
-export const locationChange = createAction(ActionTypesEnum.LOCATION_CHANGE)<
-  HistoryLocation
->();
+export const locationChange = createAction(
+  ActionTypesEnum.LOCATION_CHANGE,
+)<HistoryLocation>();
 
 export const initializeApp = createAction(ActionTypesEnum.INITIALIZE_APP)<{
   location: Location;

@@ -39,8 +39,10 @@ interface IState {
  * ============================================================================
  */
 
-class WorkspaceMonacoEditor extends React.Component<ICodeEditorProps, IState>
-  implements ICodeEditor {
+class WorkspaceMonacoEditor
+  extends React.Component<ICodeEditorProps, IState>
+  implements ICodeEditor
+{
   monaco: Nullable<Monaco> = null;
 
   syntaxWorker: any = null;
@@ -201,7 +203,7 @@ class WorkspaceMonacoEditor extends React.Component<ICodeEditorProps, IState>
     if (!monaco || this.props.challengeType === "markup") {
       return;
     }
-    const decorations = classifications.map(c => {
+    const decorations = classifications.map((c) => {
       // Custom class names which are styled in the monaco-tsx-styles file
       const inlineClassName = cx(
         c.type ? `${c.kind} ${c.type}-of-${c.parentKind}` : c.kind,

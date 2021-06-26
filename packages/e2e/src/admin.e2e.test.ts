@@ -13,9 +13,7 @@ import {
 
 describe("Admin (e2e)", () => {
   test("/admin (GET) index route returns 401 for unauthenticated users", () => {
-    return request(`${HOST}/admin`)
-      .get("/")
-      .expect(401);
+    return request(`${HOST}/admin`).get("/").expect(401);
   });
 
   test("/admin (GET) index route returns 401 for normal users", async () => {
@@ -41,7 +39,7 @@ describe("Admin (e2e)", () => {
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
-      .expect(response => {
+      .expect((response) => {
         expect(Array.isArray(response.body)).toBe(true);
         expect(response.body.length >= 1).toBe(true);
       });
@@ -62,8 +60,8 @@ describe("Admin (e2e)", () => {
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
-      .expect(response => {
-        const userExists = response.body.find(u => u.email === userEmail);
+      .expect((response) => {
+        const userExists = response.body.find((u) => u.email === userEmail);
         expect(userExists).toBeDefined();
         expect(userExists.email).toBe(userEmail);
       });
@@ -74,7 +72,7 @@ describe("Admin (e2e)", () => {
       .send({ userEmail })
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
@@ -83,8 +81,8 @@ describe("Admin (e2e)", () => {
       .get("/")
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
-      .expect(response => {
-        const userExists = response.body.find(u => u.email === userEmail);
+      .expect((response) => {
+        const userExists = response.body.find((u) => u.email === userEmail);
         expect(userExists).toBe(undefined);
       });
   });

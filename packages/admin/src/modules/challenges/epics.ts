@@ -67,12 +67,12 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
  * Fetch the pull request content on app load, if there the url
  * includes a pull request id.
  */
-const fetchPullRequestContextOnAppLoadEpic: EpicSignature = action$ => {
+const fetchPullRequestContextOnAppLoadEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
     map(() => window.location.pathname),
-    filter(x => x.includes("pull-requests")),
-    map(path => Actions.handleSearchPullRequest(path)),
+    filter((x) => x.includes("pull-requests")),
+    map((path) => Actions.handleSearchPullRequest(path)),
   );
 };
 
@@ -121,9 +121,9 @@ const fetchChallengeMetaEpic: EpicSignature = (action$, state$, deps) => {
     filter(
       isActionOf([Actions.fetchChallengeMeta, Actions.setChallengeDetailId]),
     ),
-    map(x => x.payload),
+    map((x) => x.payload),
     // @ts-ignore
-    filter(x => x !== null),
+    filter((x) => x !== null),
     mergeMap(deps.api.fetchChallengeMeta),
     map(({ value: meta, error }) => {
       if (meta) {
@@ -144,8 +144,8 @@ const searchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
     filter(isActionOf(Actions.locationChange)),
     pluck("payload"),
     pluck("pathname"),
-    filter(x => x.includes("/pull-requests/")),
-    map(path => Actions.handleSearchPullRequest(path)),
+    filter((x) => x.includes("/pull-requests/")),
+    map((path) => Actions.handleSearchPullRequest(path)),
   );
 };
 
@@ -157,7 +157,7 @@ const handleSearchPullRequestEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.handleSearchPullRequest)),
     pluck("payload"),
-    map(path => {
+    map((path) => {
       const idParam = path.split("/")[2];
       const id = Number(idParam);
       if (!id || isNaN(id)) {
@@ -185,7 +185,13 @@ const fetchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
     mergeMap(deps.api.fetchPullRequestContext),
     map(({ value, error }) => {
       if (value) {
-        return Actions.fetchPullRequestContextSuccess(value);
+        // Empty results are returned as a string message
+        if (typeof value === "string") {
+          deps.toaster.warn("No diff available for this pull request.");
+          return Actions.fetchPullRequestContextFailure(error);
+        } else {
+          return Actions.fetchPullRequestContextSuccess(value);
+        }
       } else {
         deps.toaster.warn("Failed to fetch pull request context...");
         return Actions.fetchPullRequestContextFailure(error);

@@ -49,7 +49,7 @@ export const PageSection = styled.div`
 
 export const LowerSection = styled.div<{ withHeader?: boolean }>`
   width: 100vw;
-  height: ${props =>
+  height: ${(props) =>
     props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
   border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
   background: ${C.BACKGROUND_LOWER_SECTION};
@@ -396,7 +396,7 @@ export const TestCaseStatusText = styled.p`
 
 export const TabbedInnerNav = styled.div<{ show: boolean }>`
   position: relative;
-  display: ${props => (props.show ? "flex" : "none")};
+  display: ${(props) => (props.show ? "flex" : "none")};
   align-items: center;
   border-bottom: 1px solid black;
 `;
@@ -406,11 +406,11 @@ export const Tab = styled.div<{ active?: boolean }>`
   padding: 7px 20px;
   cursor: pointer;
   position: relative;
-  background: ${props => (props.active ? "#1e1e1e" : "transparent")};
-  color: ${props => (props.active ? "white" : "gray")};
-  border: 1px solid ${props => (props.active ? "black" : "transparent")};
+  background: ${(props) => (props.active ? "#1e1e1e" : "transparent")};
+  color: ${(props) => (props.active ? "white" : "gray")};
+  border: 1px solid ${(props) => (props.active ? "black" : "transparent")};
   border-top: 2px solid
-    ${props => (props.active ? COLORS.PRIMARY_GREEN : "transparent")};
+    ${(props) => (props.active ? COLORS.PRIMARY_GREEN : "transparent")};
   border-bottom: none;
   transition: all 0.2s ease-out;
 
@@ -426,7 +426,7 @@ export const Tab = styled.div<{ active?: boolean }>`
     left: 0;
     right: 0;
     height: 1px;
-    background: ${props => (props.active ? "#1e1e1e" : "transparent")};
+    background: ${(props) => (props.active ? "#1e1e1e" : "transparent")};
   }
 `;
 
@@ -664,10 +664,10 @@ const ChallengeTitleContainer = styled.div`
 const keyboardStateToProps = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   course: Modules.selectors.challenges.getCurrentCourse(state),
-  prevChallengeId: Modules.selectors.challenges.nextPrevChallenges(state).prev
-    ?.id,
-  nextChallengeId: Modules.selectors.challenges.nextPrevChallenges(state).next
-    ?.id,
+  prevChallengeId:
+    Modules.selectors.challenges.nextPrevChallenges(state).prev?.id,
+  nextChallengeId:
+    Modules.selectors.challenges.nextPrevChallenges(state).next?.id,
   currentChallengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
 });
 

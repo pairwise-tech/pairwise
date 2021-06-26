@@ -41,13 +41,12 @@ const camelCaseToHpyhenCase = (s: string) => {
  * still looks odd including camelCase names within the template. Still, since
  * TS will yell at you this shouldn't be an issue.
  */
-const forwardStyleProp = (propName: keyof React.CSSProperties) => (
-  props: SectionProps,
-) => {
-  return props.style && props.style[propName]
-    ? `${camelCaseToHpyhenCase(propName)}: ${props.style.boxShadow};`
-    : null;
-};
+const forwardStyleProp =
+  (propName: keyof React.CSSProperties) => (props: SectionProps) => {
+    return props.style && props.style[propName]
+      ? `${camelCaseToHpyhenCase(propName)}: ${props.style.boxShadow};`
+      : null;
+  };
 
 const DARK_BG = '#2d2d2d';
 

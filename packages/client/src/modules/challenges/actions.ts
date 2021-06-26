@@ -123,13 +123,13 @@ export const receiveSearchResults = createAction(
   ActionTypesEnum.RECEIVE_SEARCH_RESULTS,
 )<SearchResult[]>();
 
-export const setEditMode = createAction(ActionTypesEnum.SET_EDIT_MODE)<
-  boolean
->();
+export const setEditMode = createAction(
+  ActionTypesEnum.SET_EDIT_MODE,
+)<boolean>();
 
-export const setAdminTestTab = createAction(ActionTypesEnum.SET_ADMIN_TEST_TAB)<
-  ADMIN_TEST_TAB
->();
+export const setAdminTestTab = createAction(
+  ActionTypesEnum.SET_ADMIN_TEST_TAB,
+)<ADMIN_TEST_TAB>();
 
 export const setAdminEditorTab = createAction(
   ActionTypesEnum.SET_ADMIN_EDITOR_TAB,
@@ -179,13 +179,13 @@ export const saveChallengeBlobFailure = createAction(
   ActionTypesEnum.SAVE_CHALLENGE_BLOB_FAILURE,
 )<HttpResponseError>();
 
-export const setCurrentModule = createAction(ActionTypesEnum.SET_MODULE_ID)<
-  string
->();
+export const setCurrentModule = createAction(
+  ActionTypesEnum.SET_MODULE_ID,
+)<string>();
 
-export const setCurrentCourse = createAction(ActionTypesEnum.SET_COURSE_ID)<
-  string
->();
+export const setCurrentCourse = createAction(
+  ActionTypesEnum.SET_COURSE_ID,
+)<string>();
 
 export const setWorkspaceChallengeLoaded = createAction(
   ActionTypesEnum.WORKSPACE_CHALLENGE_LOADED,
@@ -207,9 +207,9 @@ export const setNavigationMapState = createAction(
   ActionTypesEnum.SET_NAVIGATION_MAP_STATE,
 )<boolean>();
 
-export const submitProject = createAction(ActionTypesEnum.SUBMIT_PROJECT)<
-  Challenge
->();
+export const submitProject = createAction(
+  ActionTypesEnum.SUBMIT_PROJECT,
+)<Challenge>();
 
 export const setChallengeIdContext = createAction(
   ActionTypesEnum.SET_CHALLENGE_ID_CONTEXT,
@@ -252,33 +252,33 @@ export const saveCourseFailure = createAction(
   ActionTypesEnum.SAVE_COURSE_FAILURE,
 )<any>();
 
-export const createChallenge = createAction(ActionTypesEnum.CREATE_CHALLENGE)<
-  ChallengeCreationPayload
->();
+export const createChallenge = createAction(
+  ActionTypesEnum.CREATE_CHALLENGE,
+)<ChallengeCreationPayload>();
 
-export const updateChallenge = createAction(ActionTypesEnum.UPDATE_CHALLENGE)<
-  ChallengeUpdatePayload
->();
+export const updateChallenge = createAction(
+  ActionTypesEnum.UPDATE_CHALLENGE,
+)<ChallengeUpdatePayload>();
 
-export const deleteChallenge = createAction(ActionTypesEnum.DELETE_CHALLENGE)<
-  ChallengeDeletePayload
->();
+export const deleteChallenge = createAction(
+  ActionTypesEnum.DELETE_CHALLENGE,
+)<ChallengeDeletePayload>();
 
 export const reorderChallengeList = createAction(
   ActionTypesEnum.REORDER_CHALLENGE_LIST,
 )<ChallengeReorderPayload>();
 
-export const createCourseModule = createAction(ActionTypesEnum.CREATE_MODULE)<
-  ModuleCreationPayload
->();
+export const createCourseModule = createAction(
+  ActionTypesEnum.CREATE_MODULE,
+)<ModuleCreationPayload>();
 
-export const updateCourseModule = createAction(ActionTypesEnum.UPDATE_MODULE)<
-  ModuleUpdatePayload
->();
+export const updateCourseModule = createAction(
+  ActionTypesEnum.UPDATE_MODULE,
+)<ModuleUpdatePayload>();
 
-export const deleteCourseModule = createAction(ActionTypesEnum.DELETE_MODULE)<
-  ModuleDeletePayload
->();
+export const deleteCourseModule = createAction(
+  ActionTypesEnum.DELETE_MODULE,
+)<ModuleDeletePayload>();
 
 export const reorderModuleList = createAction(
   ActionTypesEnum.REORDER_MODULE_LIST,

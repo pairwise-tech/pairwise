@@ -10,4 +10,4 @@ export const usersState = (state: ReduxStoreState) => {
   return state.users;
 };
 
-export const loading = createSelector(usersState, state => state.loading);
+export const loading = createSelector(usersState, (state) => state.loading);

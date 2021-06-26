@@ -41,21 +41,21 @@ const getAccessTokenForAdmin = async (): Promise<string> => {
   await request(`${SERVER}/auth/google`)
     .get("/")
     .expect(302)
-    .then(response => {
+    .then((response) => {
       authorizationRedirect = response.header.location;
     });
 
   await request(authorizationRedirect)
     .get("/")
     .expect(302)
-    .then(response => {
+    .then((response) => {
       loginRedirect = response.header.location;
     });
 
   await request(loginRedirect)
     .get("/")
     .expect(302)
-    .then(response => {
+    .then((response) => {
       accessToken = getAccessTokenFromRedirect(response.header.location);
     });
 

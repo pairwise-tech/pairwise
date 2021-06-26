@@ -3,7 +3,7 @@ import * as path from "path";
 import { execSync } from "child_process";
 
 import {
-  getChallengMetadata,
+  getChallengeMetadata,
   readCourseFilesFromDisk,
   buildFilePorcelain,
 } from "./get-challenge-metadata";
@@ -15,8 +15,8 @@ const log = (...args): void => {
 
 const hasTodo = (challenge: Challenge) => {
   return Object.values(challenge)
-    .filter(x => typeof x === "string")
-    .some(x => x.toLowerCase().includes("todo"));
+    .filter((x) => typeof x === "string")
+    .some((x) => x.toLowerCase().includes("todo"));
 };
 
 const main = async () => {
@@ -44,7 +44,7 @@ const main = async () => {
       .trim()
       .split("\n")
       .filter(Boolean) // Remove empty strings
-      .filter(s => !s.includes("metadata.json")); // See NOTE
+      .filter((s) => !s.includes("metadata.json")); // See NOTE
 
     if (!filesChanged.length) {
       log(
@@ -54,7 +54,7 @@ const main = async () => {
     }
 
     log("The following course files have changed:");
-    log(filesChanged.map(x => `- ${x}`).join("\n"));
+    log(filesChanged.map((x) => `- ${x}`).join("\n"));
     log("Index will be rebuilt.");
   }
 
@@ -71,17 +71,17 @@ const main = async () => {
   const filePorcelain = await buildFilePorcelain(courseFiles);
 
   const allChallenges = courseFiles
-    .map(x => x.json)
-    .flatMap(x => x.modules)
-    .flatMap(x => x.challenges);
+    .map((x) => x.json)
+    .flatMap((x) => x.modules)
+    .flatMap((x) => x.challenges);
 
   const result = {
     "@@PAIRWISE": {
       buildCommit: currentCommit,
       totalChallenges: allChallenges.length,
-      codeChallenges: allChallenges.filter(x => x.solutionCode).length,
-      videoChallenges: allChallenges.filter(x => x.videoUrl).length,
-      todoChallenges: allChallenges.filter(hasTodo).map(x => x.id),
+      codeChallenges: allChallenges.filter((x) => x.solutionCode).length,
+      videoChallenges: allChallenges.filter((x) => x.videoUrl).length,
+      todoChallenges: allChallenges.filter(hasTodo).map((x) => x.id),
     },
     challenges: {},
   };
@@ -90,11 +90,11 @@ const main = async () => {
   // 1000%. All the git commands are run with max concurrency.
   const allMetadata = await Promise.all(
     allChallenges.map(({ id }) => {
-      return getChallengMetadata(id, courseFiles, filePorcelain);
+      return getChallengeMetadata(id, courseFiles, filePorcelain);
     }),
   );
 
-  allMetadata.forEach(metadata => {
+  allMetadata.forEach((metadata) => {
     result.challenges[metadata.challenge.id] = metadata;
   });
 

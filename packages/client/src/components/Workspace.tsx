@@ -212,10 +212,8 @@ class Workspace extends React.Component<IProps, IState> {
     this.userCode = initialCode;
 
     const dimensions = getDimensions();
-    const {
-      testResults,
-      isPreviewTestResults,
-    } = this.getDefaultTestResultsState();
+    const { testResults, isPreviewTestResults } =
+      this.getDefaultTestResultsState();
 
     this.state = {
       dimensions,
@@ -354,9 +352,8 @@ class Workspace extends React.Component<IProps, IState> {
     const IS_REACT_NATIVE_CHALLENGE = isReactNativeChallenge;
     const IS_MARKUP_CHALLENGE = challenge.type === "markup";
     const IS_TYPESCRIPT_CHALLENGE = challenge.type === "typescript";
-    const IS_ALTERNATE_LANGUAGE_CHALLENGE = isAlternateLanguageChallenge(
-      challenge,
-    );
+    const IS_ALTERNATE_LANGUAGE_CHALLENGE =
+      isAlternateLanguageChallenge(challenge);
 
     const IS_SQL_CHALLENGE = isSqlChallenge;
     const IS_GREAT_SUCCESS_OPEN =
@@ -1092,9 +1089,9 @@ class Workspace extends React.Component<IProps, IState> {
 
   getTestPassedStatus = () => {
     const { testResults, testResultsLoading } = this.state;
-    const [passedTests, failingTests] = partition<TestCase>(t => t.testResult)(
-      testResults,
-    );
+    const [passedTests, failingTests] = partition<TestCase>(
+      (t) => t.testResult,
+    )(testResults);
     const correct =
       !testResultsLoading &&
       passedTests.length > 0 &&
@@ -1464,7 +1461,7 @@ class Workspace extends React.Component<IProps, IState> {
    * original logs.
    */
   transformUnserializableLogs = (data: ReadonlyArray<any>) => {
-    traverse(data).forEach(function(x) {
+    traverse(data).forEach(function (x) {
       if (x === "__transform_undefined__") {
         this.update(undefined);
         return;
@@ -1512,9 +1509,7 @@ class Workspace extends React.Component<IProps, IState> {
     const reset = () => {
       this.setState({ shouldRefreshLayout: false });
     };
-    wait(10)
-      .then(reset)
-      .catch(reset);
+    wait(10).then(reset).catch(reset);
   };
 
   /**
@@ -1556,7 +1551,7 @@ class Workspace extends React.Component<IProps, IState> {
 
       // We create the download link initially and then just reuse it on
       // subsequent uses. Not sure if actually appending to the dom is necessary,
-      // just worried some brwosers migth not allow a click on an element that
+      // just worried some browsers might not allow a click on an element that
       // couldn't realistically be clicked since it's not in the DOM
       if (!link) {
         link = document.createElement("a");
@@ -1644,12 +1639,10 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
   isSqlChallenge: ChallengeSelectors.isSqlChallenge(state),
   isBackendModuleChallenge: ChallengeSelectors.isBackendModuleChallenge(state),
-  isTestingAndAutomationChallenge: ChallengeSelectors.isTestingAndAutomationChallenge(
-    state,
-  ),
-  editModeAlternativeViewEnabled: ChallengeSelectors.editModeAlternativeViewEnabled(
-    state,
-  ),
+  isTestingAndAutomationChallenge:
+    ChallengeSelectors.isTestingAndAutomationChallenge(state),
+  editModeAlternativeViewEnabled:
+    ChallengeSelectors.editModeAlternativeViewEnabled(state),
 });
 
 const dispatchProps = {
@@ -1727,6 +1720,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   componentDidMount() {
     window.addEventListener("beforeunload", this.warnUnsavedEdits);
   }
+
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.warnUnsavedEdits);
   }
@@ -1741,7 +1735,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
         </div>
       );
     } else if (!challenge) {
-      // A challenge did not load... this should be handled with a 404 page
+      // A challenge did not load... this should be handled by a 404 page
       // elsewhere, but adding this here for type-checking.
       return null;
     }

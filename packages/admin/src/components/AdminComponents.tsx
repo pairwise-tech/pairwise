@@ -154,9 +154,8 @@ type KeyValueComponentProps = KeyValueProps & typeof dispatchProps;
 
 const withProps = connect(null, dispatchProps);
 
-export const KeyValue = composeWithProps<KeyValueProps>(withProps)(
-  KeyValueComponent,
-);
+export const KeyValue =
+  composeWithProps<KeyValueProps>(withProps)(KeyValueComponent);
 
 export const LabelRow = styled.div`
   min-height: 26px;
@@ -179,7 +178,7 @@ const ValueContainer = styled.div<{ copy: string }>`
   height: auto;
   max-width: 550px;
 
-  ${props =>
+  ${(props) =>
     props.copy === "true" &&
     `
     :hover {
@@ -203,7 +202,7 @@ export const CodeValue = styled(Code)<{ copy: string }>`
   background: ${COLORS.BACKGROUND_CONTENT} !important;
 
   :hover {
-    cursor: ${props => (props.copy === "true" ? "pointer" : "auto")};
+    cursor: ${(props) => (props.copy === "true" ? "pointer" : "auto")};
   }
 
   @media ${MOBILE} {
@@ -291,15 +290,16 @@ export const ExternalLink = ({
   );
 };
 
-type PairwiseOpenCloseLogoProps = { isOpen?: boolean } & React.SVGProps<
-  SVGSVGElement
->;
+type PairwiseOpenCloseLogoProps = {
+  isOpen?: boolean;
+} & React.SVGProps<SVGSVGElement>;
 
 export const PairwiseOpenCloseLogo = ({
   isOpen = false,
   ...props
 }: PairwiseOpenCloseLogoProps) => {
   return (
+    // @ts-ignore
     <svg
       width="24.44"
       height="20"

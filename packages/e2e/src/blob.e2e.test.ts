@@ -16,12 +16,15 @@ describe("User Progress APIs", () => {
     authorizationHeader = `Bearer ${accessToken}`;
   });
 
-  test("/challenge (POST) requires an authenticated user", async done => {
+  test("/challenge (POST) requires an authenticated user", async (done) => {
     request(`${HOST}/blob`)
       .post("/")
       .send({
         challengeId: "9scykDold",
-        dataBlob: { code: "console.log('hello');", type: "challenge" },
+        dataBlob: {
+          code: "console.log('hello');",
+          type: "challenge",
+        },
       })
       .set("Authorization", "Bearer as8fd7a0")
       .expect(401)
@@ -31,7 +34,7 @@ describe("User Progress APIs", () => {
       });
   });
 
-  test("/challenge (GET) rejects invalid challenge ids", async done => {
+  test("/challenge (GET) rejects invalid challenge ids", async (done) => {
     request(`${HOST}/blob/fs78dfa79adsf7saf`)
       .get("/")
       .set("Authorization", authorizationHeader)
@@ -42,12 +45,15 @@ describe("User Progress APIs", () => {
       });
   });
 
-  test("/challenge (POST) rejects invalid challenge ids", async done => {
+  test("/challenge (POST) rejects invalid challenge ids", async (done) => {
     request(`${HOST}/blob`)
       .post("/")
       .send({
         challengeId: "sa7sa7f7f",
-        dataBlob: { code: "console.log('hello');", type: "challenge" },
+        dataBlob: {
+          code: "console.log('hello');",
+          type: "challenge",
+        },
       })
       .set("Authorization", authorizationHeader)
       .expect(400)
@@ -57,13 +63,11 @@ describe("User Progress APIs", () => {
       });
   });
 
-  test("/challenge (POST) inserts and updates valid requests", async done => {
+  test("/challenge (POST) inserts and updates valid requests", async (done) => {
     // Helper to fetch progress history for a challenge id.
     const fetchProgressHistory = async (challengeId: string) => {
       const result = await axios.get(`${HOST}/blob/${challengeId}`, {
-        headers: {
-          Authorization: authorizationHeader,
-        },
+        headers: { Authorization: authorizationHeader },
       });
       return result.data;
     };
@@ -79,11 +83,14 @@ describe("User Progress APIs", () => {
       .post("/")
       .send({
         challengeId: "9scykDold",
-        dataBlob: { code: "console.log('Hello!!!')", type: "challenge" },
+        dataBlob: {
+          code: "console.log('Hello!!!')",
+          type: "challenge",
+        },
       })
       .set("Authorization", authorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
@@ -108,7 +115,7 @@ describe("User Progress APIs", () => {
       })
       .set("Authorization", authorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
@@ -124,7 +131,7 @@ describe("User Progress APIs", () => {
       })
       .set("Authorization", authorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 

@@ -70,7 +70,7 @@ const AdminSearchBox = (props: Props) => {
   return (
     <Box
       className={cx({ isClosed })}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation(); // Necessary to prevent the background click which is outside the react event system
       }}

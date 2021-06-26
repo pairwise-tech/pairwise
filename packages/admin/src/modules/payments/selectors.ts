@@ -12,5 +12,5 @@ export const paymentsState = (state: ReduxStoreState) => {
 
 export const paymentRecordsSelector = createSelector(
   [paymentsState],
-  x => x.paymentRecords,
+  (x) => x.paymentRecords,
 );

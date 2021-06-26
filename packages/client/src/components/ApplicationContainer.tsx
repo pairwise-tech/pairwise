@@ -290,7 +290,7 @@ const ApplicationContainer = (props: IProps) => {
               <LazyChallengeTypeMenu
                 items={SANDBOX_TYPE_CHOICES}
                 currentChallengeType={challenge?.type}
-                onItemSelect={x => {
+                onItemSelect={(x) => {
                   if (challenge) {
                     updateChallenge({
                       id: challenge.id, // See NOTE
@@ -385,12 +385,6 @@ const ApplicationContainer = (props: IProps) => {
           ) : (
             <LoginSignupButton
               id="login-signup-button"
-              // style={{
-              //   margin: "0 10px",
-              //   border: "1px solid rgba(255, 255, 255, 0.23)",
-              //   flexShrink: 0,
-              //   whiteSpace: "nowrap",
-              // }}
               onClick={() => setSingleSignOnDialogState(true)}
             >
               Login or Signup
@@ -635,7 +629,7 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   rect {
     transition: all 0.2s ease;
     &:nth-child(-n + 4) {
-      filter: grayscale(${props => (props.overlayVisible ? 1 : 0)});
+      filter: grayscale(${(props) => (props.overlayVisible ? 1 : 0)});
     }
   }
 `;
@@ -749,11 +743,10 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   feedbackDialogOpen: Modules.selectors.feedback.getFeedbackDialogOpen(state),
   hasMediaContent: Modules.selectors.challenges.getHasMediaContent(state),
   nextPrevChallenges: Modules.selectors.challenges.nextPrevChallenges(state),
-  initializationError: Modules.selectors.app.appSelector(state)
-    .initializationError,
-  workspaceLoading: Modules.selectors.challenges.workspaceLoadingSelector(
-    state,
-  ),
+  initializationError:
+    Modules.selectors.app.appSelector(state).initializationError,
+  workspaceLoading:
+    Modules.selectors.challenges.workspaceLoadingSelector(state),
 });
 
 const dispatchProps = {

@@ -8,20 +8,20 @@ export const feedbackState = (state: ReduxStoreState) => {
 
 export const getFeedbackDialogOpen = createSelector(
   feedbackState,
-  state => state.feedbackDialogState !== FEEDBACK_DIALOG_TYPES.CLOSED,
+  (state) => state.feedbackDialogState !== FEEDBACK_DIALOG_TYPES.CLOSED,
 );
 
 export const getFeedbackDialogState = createSelector(
   feedbackState,
-  state => state.feedbackDialogState,
+  (state) => state.feedbackDialogState,
 );
 
 export const getFeedback = createSelector(
   feedbackState,
-  state => state.feedback,
+  (state) => state.feedback,
 );
 
 export const getFeedbackType = createSelector(
   feedbackState,
-  state => state.feedbackType,
+  (state) => state.feedbackType,
 );

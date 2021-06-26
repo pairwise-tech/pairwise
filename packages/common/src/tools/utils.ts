@@ -17,7 +17,7 @@ export const sluggify = (s: string) => {
   return s
     .toLowerCase()
     .split(" ")
-    .map(x => x.replace(/[^A-Za-z0-9]/g, "").trim()) //  Replace non alphanumeric chars except space. See NOTE
+    .map((x) => x.replace(/[^A-Za-z0-9]/g, "").trim()) //  Replace non alphanumeric chars except space. See NOTE
     .filter(Boolean)
     .join("-");
 };

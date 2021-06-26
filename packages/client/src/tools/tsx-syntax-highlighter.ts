@@ -44,7 +44,7 @@ function nodeToRange(node: any) {
 }
 
 function getNodeType(parent: any, node: any) {
-  return Object.keys(parent).find(key => parent[key] === node);
+  return Object.keys(parent).find((key) => parent[key] === node);
 }
 
 function getParentRanges(node: any) {
@@ -52,7 +52,7 @@ function getParentRanges(node: any) {
   const [start, end] = nodeToRange(node);
   let lastEnd = start;
 
-  ts.forEachChild(node, child => {
+  ts.forEachChild(node, (child) => {
     const [nodeStart, nodeEnd] = nodeToRange(child);
 
     ranges.push({
@@ -75,11 +75,11 @@ function getParentRanges(node: any) {
 function addChildNodes(node: any, lines: any, classifications: any) {
   const parentKind = ts.SyntaxKind[node.kind];
 
-  ts.forEachChild(node, id => {
+  ts.forEachChild(node, (id) => {
     const type = getNodeType(node, id);
 
     classifications.push(
-      ...getParentRanges(id).map(innerNode => {
+      ...getParentRanges(id).map((innerNode) => {
         const { start, end } = innerNode;
         const { offset, line: startLine } = getLineNumberAndOffset(
           start,
@@ -104,7 +104,7 @@ function addChildNodes(node: any, lines: any, classifications: any) {
 }
 
 // Respond to message from parent thread
-self.addEventListener("message", event => {
+self.addEventListener("message", (event) => {
   const { code } = event.data;
   try {
     const classifications: ReadonlyArray<any> = [];

@@ -84,7 +84,7 @@ export const CodeEditorUpperRight = styled.div<{ isEditMode: boolean }>`
   position: absolute;
   z-index: 3;
   right: 20px;
-  top: ${props => (props.isEditMode ? 45 : 10)}px;
+  top: ${(props) => (props.isEditMode ? 45 : 10)}px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -107,7 +107,7 @@ export const RotatingIcon = styled(({ isRotated, id, ...props }) => {
     />
   );
 })<{ isRotated?: boolean; id: string; icon: string }>`
-  transform: ${props =>
+  transform: ${(props) =>
     `rotate3d(0,0,1,${
       // Do not rotate icon for locked content
       props.isRotated || props.icon === "lock" ? "0deg" : "-90deg"
@@ -329,7 +329,7 @@ interface HalfCircleProps {
 
 export const HalfCircle = styled.div<HalfCircleProps>`
   &:hover {
-    background: ${props => props.backgroundColor};
+    background: ${(props) => props.backgroundColor};
   }
 
   align-items: center;
@@ -343,19 +343,25 @@ export const HalfCircle = styled.div<HalfCircleProps>`
   transition: background 0.3s;
   width: 60px;
 
-  border-${props =>
-    props.position === "top" ? "bottom" : "top"}-left-radius: 90px;
-  border-${props =>
-    props.position === "top" ? "bottom" : "top"}-right-radius: 90px;
+  border-top-left-radius: ${(props) => (props.position === "top" ? 0 : 90)}px;
+  border-top-right-radius: ${(props) => (props.position === "top" ? 0 : 90)}px;
 
-  ${props => props.position}: ${props => props.positionOffset}px;
+  border-bottom-left-radius: ${(props) =>
+    props.position === "top" ? 90 : 0}px;
+  border-bottom-right-radius: ${(props) =>
+    props.position === "top" ? 90 : 0}px;
+
+  top: ${(props) =>
+    props.position === "top" ? `${props.positionOffset}px` : undefined};
+  bottom: ${(props) =>
+    props.position === "bottom" ? `${props.positionOffset}px` : undefined};
 `;
 
 export const CodeEditorContainer = styled.div`
   height: 100%;
   position: relative;
 
-  // Make room forcode editor controls
+  // Make room for code editor controls
   @media ${MOBILE} {
     padding-bottom: 41px;
   }
@@ -414,9 +420,9 @@ export const getRenderItemList = (listMinWidth: number) => {
 };
 
 export function labelByType<
-  T extends { value: FEEDBACK_TYPE | CHALLENGE_TYPE; label: string }
+  T extends { value: FEEDBACK_TYPE | CHALLENGE_TYPE; label: string },
 >(type: string | undefined, items: T[]) {
-  const item = items.find(x => x.value === type);
+  const item = items.find((x) => x.value === type);
   return item?.label || type;
 }
 
@@ -532,15 +538,16 @@ export const LastChildMargin = styled.div`
   }
 `;
 
-type PairwiseOpenCloseLogoProps = { isOpen?: boolean } & React.SVGProps<
-  SVGSVGElement
->;
+type PairwiseOpenCloseLogoProps = {
+  isOpen?: boolean;
+} & React.SVGProps<SVGSVGElement>;
 
 export const PairwiseOpenCloseLogo = ({
   isOpen = false,
   ...props
 }: PairwiseOpenCloseLogoProps) => {
   return (
+    // @ts-ignore
     <svg
       width="24.44"
       height="20"

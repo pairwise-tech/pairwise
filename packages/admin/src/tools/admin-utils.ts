@@ -64,7 +64,7 @@ export const getClientOS = (): Nullable<OS> => {
  * Find a course by id in the course list.
  */
 export const findCourseById = (courseId: string, courses: CourseList) => {
-  const course = courses.find(c => c.id === courseId);
+  const course = courses.find((c) => c.id === courseId);
   return course;
 };
 
@@ -75,12 +75,12 @@ export const findCourseById = (courseId: string, courses: CourseList) => {
 export const mapCourseSkeletonInDev = (courseSkeleton: CourseSkeleton) => {
   return {
     ...courseSkeleton,
-    modules: courseSkeleton.modules.map(m => {
+    modules: courseSkeleton.modules.map((m) => {
       return {
         ...m,
         free: true,
         userCanAccess: true,
-        challenges: m.challenges.map(c => {
+        challenges: m.challenges.map((c) => {
           return {
             ...c,
             userCanAccess: true,
@@ -226,7 +226,7 @@ const filterUsOut = (user: AdminUserView) => {
 };
 
 export const summarizeUserProgress = (users: AdminUserView[]) => {
-  const withProgressSummaries = users.filter(filterUsOut).map(user => {
+  const withProgressSummaries = users.filter(filterUsOut).map((user) => {
     // Format the progress history
     const formattedProgress = formatChallengeProgress(
       user.challengeProgressHistory,

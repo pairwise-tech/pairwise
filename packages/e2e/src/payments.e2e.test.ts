@@ -32,7 +32,7 @@ describe("Payments APIs", () => {
     adminAuthorizationHeader = `Bearer ${adminAccessToken}`;
   });
 
-  test("/payments/checkout (POST) should require authentication", async done => {
+  test("/payments/checkout (POST) should require authentication", async (done) => {
     request(`${HOST}/payments/checkout/fpvPtfu7s`)
       .post("/")
       .set("Authorization", "Bearer asd97f8809as7fsa")
@@ -43,7 +43,7 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/payments/checkout (POST) rejects invalid course ids", async done => {
+  test("/payments/checkout (POST) rejects invalid course ids", async (done) => {
     request(`${HOST}/payments/checkout/zsdfasfsafsa`)
       .post("/")
       .set("Authorization", authorizationHeader)
@@ -59,14 +59,14 @@ describe("Payments APIs", () => {
       .post("/")
       .set("Authorization", authorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         const { body } = response;
         expect(body.stripeCheckoutSessionId).toBeDefined();
         expect(typeof body.stripeCheckoutSessionId).toBe("string");
       });
   });
 
-  test("/admin/purchase-course (POST) requires admin authentication", async done => {
+  test("/admin/purchase-course (POST) requires admin authentication", async (done) => {
     request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send({
@@ -81,7 +81,7 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/admin/purchase-course (POST) requires a valid course id", async done => {
+  test("/admin/purchase-course (POST) requires a valid course id", async (done) => {
     request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send({
@@ -96,7 +96,7 @@ describe("Payments APIs", () => {
       });
   });
 
-  test("/admin/purchase-course (POST) requires the email of an existing user", async done => {
+  test("/admin/purchase-course (POST) requires the email of an existing user", async (done) => {
     request(`${HOST}/admin/purchase-course`)
       .post("/")
       .send({
@@ -120,17 +120,17 @@ describe("Payments APIs", () => {
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
     const userWithCourse = await fetchUserWithAccessToken(accessToken);
     const { payments } = userWithCourse;
-    const course = payments.find(p => p.courseId === "fpvPtfu7s");
+    const course = payments.find((p) => p.courseId === "fpvPtfu7s");
     expect(course).toBeDefined();
   });
 
-  test("/admin/purchase-course (POST) rejects requests if a user has already purchased the course", async done => {
+  test("/admin/purchase-course (POST) rejects requests if a user has already purchased the course", async (done) => {
     // Get a new user:
     accessToken = await fetchAccessToken();
     authorizationHeader = `Bearer ${accessToken}`;
@@ -147,7 +147,7 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
@@ -157,7 +157,7 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect(error => {
+      .expect((error) => {
         expect(error.body.message).toBe(
           "User has already paid for this course",
         );
@@ -166,7 +166,7 @@ describe("Payments APIs", () => {
     done();
   });
 
-  test("/admin/refund-course (POST) allows courses to be refunded", async done => {
+  test("/admin/refund-course (POST) allows courses to be refunded", async (done) => {
     // Get a new user:
     accessToken = await fetchAccessToken();
     authorizationHeader = `Bearer ${accessToken}`;
@@ -183,13 +183,13 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
     const userWithCourse = await fetchUserWithAccessToken(accessToken);
     const { payments } = userWithCourse;
-    const course = payments.find(p => p.courseId === "fpvPtfu7s");
+    const course = payments.find((p) => p.courseId === "fpvPtfu7s");
     expect(course.status).toBe("CONFIRMED");
 
     // Refund the course
@@ -198,20 +198,20 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
     const userWithCourseRefunded = await fetchUserWithAccessToken(accessToken);
     const refundedCourse = userWithCourseRefunded.payments.find(
-      p => p.courseId === "fpvPtfu7s",
+      (p) => p.courseId === "fpvPtfu7s",
     );
     expect(refundedCourse.status).toBe("REFUNDED");
 
     done();
   });
 
-  test("/admin/refund-course (POST) invalid refund requests are rejected", async done => {
+  test("/admin/refund-course (POST) invalid refund requests are rejected", async (done) => {
     // Get a new user:
     accessToken = await fetchAccessToken();
     authorizationHeader = `Bearer ${accessToken}`;
@@ -228,7 +228,7 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect(error => {
+      .expect((error) => {
         expect(error.body.message).toBe(
           "The user has not purchased this course",
         );
@@ -240,7 +240,7 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
@@ -253,7 +253,7 @@ describe("Payments APIs", () => {
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect(error => {
+      .expect((error) => {
         expect(error.body.message).toBe("The courseId is invalid.");
       });
 
@@ -266,7 +266,7 @@ describe("Payments APIs", () => {
       })
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect(error => {
+      .expect((error) => {
         expect(error.body.message).toBe("No user could be found.");
       });
 
@@ -276,7 +276,7 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
@@ -286,7 +286,7 @@ describe("Payments APIs", () => {
       .send(body)
       .set("Authorization", adminAuthorizationHeader)
       .expect(400)
-      .expect(error => {
+      .expect((error) => {
         expect(error.body.message).toBe("The course is already refunded");
       });
 

@@ -217,7 +217,7 @@ const checkUrlDuringUserRegistrationProcess = (
   cy.wait(TIMEOUT);
 
   // Get url and check it is the same after reload
-  cy.url().then(url => {
+  cy.url().then((url) => {
     // Login
     click("login-signup-button");
     click(`${sso}-login`);

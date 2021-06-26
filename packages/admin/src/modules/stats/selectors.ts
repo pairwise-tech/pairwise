@@ -12,10 +12,10 @@ export const statsState = (state: ReduxStoreState) => {
 
 export const progressRecordsSelector = createSelector(
   [statsState],
-  x => x.progressRecords,
+  (x) => x.progressRecords,
 );
 
 export const statsLoadingSelector = createSelector(
   [statsState],
-  x => x.loading,
+  (x) => x.loading,
 );

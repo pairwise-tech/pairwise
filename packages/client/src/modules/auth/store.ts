@@ -41,17 +41,17 @@ const auth = createReducer<State, AuthActionTypes>(initialState)
     ...state,
     accessToken: action.payload.accessToken,
   }))
-  .handleAction(actions.loginByEmail, state => ({
+  .handleAction(actions.loginByEmail, (state) => ({
     ...state,
     emailRequestSent: false,
     emailLoginRequestLoading: true,
   }))
-  .handleAction(actions.loginByEmailSuccess, state => ({
+  .handleAction(actions.loginByEmailSuccess, (state) => ({
     ...state,
     emailRequestSent: true,
     emailLoginRequestLoading: false,
   }))
-  .handleAction(actions.loginByEmailFailure, state => ({
+  .handleAction(actions.loginByEmailFailure, (state) => ({
     ...state,
     emailLoginRequestLoading: false,
   }))

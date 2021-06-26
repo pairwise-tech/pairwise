@@ -15,7 +15,7 @@ const fetchUserEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.storeAccessTokenSuccess, Actions.fetchUser])),
     mergeMap(API.fetchUserProfile),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.fetchUserSuccess(result.value);
       } else {
@@ -33,7 +33,7 @@ const updateUserEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.updateUser)),
     pluck("payload"),
     mergeMap(API.updateUser),
-    map(result => {
+    map((result) => {
       if (result.value) {
         deps.toaster.success("Profile Updated 👍");
         return Actions.updateUserSuccess(result.value);
@@ -58,7 +58,7 @@ const updateUserEmailEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.updateUserEmail)),
     pluck("payload"),
-    mergeMap(async email => {
+    mergeMap(async (email) => {
       const valid = validate(email);
       if (!valid) {
         deps.toaster.error("Please enter a valid email...");
@@ -93,7 +93,7 @@ const updateUserSettingsEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.updateUserSettings)),
     pluck("payload"),
     mergeMap(API.updateUserSettings),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.updateUserSettingsSuccess(result.value);
       } else {

@@ -13,7 +13,7 @@ const submitUserFeedbackEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.submitUserFeedback)),
     pluck("payload"),
     mergeMap(deps.api.submitUserFeedback),
-    map(result => {
+    map((result) => {
       if (result.value) {
         deps.toaster.success("Feedback Submitted Successfully!");
         return Actions.submitUserFeedbackSuccess();
@@ -34,7 +34,7 @@ const submitGenericFeedbackEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.submitGeneralFeedback)),
     pluck("payload"),
     mergeMap(deps.api.submitGenericFeedback),
-    map(result => {
+    map((result) => {
       if (result.value) {
         deps.toaster.success("Feedback Submitted Successfully!");
         return Actions.submitGeneralFeedbackSuccess();
@@ -49,7 +49,7 @@ const submitGenericFeedbackEpic: EpicSignature = (action$, _, deps) => {
 /**
  * Dismiss the feedback modal if any navigation event occurs.
  */
-const dismissFeedbackModalOnNavigationEpic: EpicSignature = action$ => {
+const dismissFeedbackModalOnNavigationEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf(Actions.locationChange)),
     mergeMap(() => {

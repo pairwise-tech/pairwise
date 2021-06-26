@@ -78,13 +78,8 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
   }
 
   render() {
-    const {
-      quotes,
-      angle,
-      gradient,
-      coordinates,
-      quoteBlockVisible,
-    } = this.state;
+    const { quotes, angle, gradient, coordinates, quoteBlockVisible } =
+      this.state;
     const quote = quotes[0];
     return (
       <ScreensaverOverlay
@@ -116,7 +111,7 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
 
   showQuote = (delay: number) => {
     this.timer = setTimeout(() => {
-      this.setState(ps => {
+      this.setState((ps) => {
         if (ps.quotes.length === 1) {
           return {
             quoteBlockVisible: true,
@@ -156,18 +151,15 @@ class PairwiseScreensaver extends React.Component<IProps, IState> {
 
 const QUOTE_LIST: Quote[] = [
   {
-    text:
-      "Programs must be written for people to read, and only incidentally for machines to execute.",
+    text: "Programs must be written for people to read, and only incidentally for machines to execute.",
     author: "Harold Abelson",
   },
   {
-    text:
-      "Everyone knows that debugging is twice as hard as writing a program in the first place. So if you're as clever as you can be when you write it, how will you ever debug it?",
+    text: "Everyone knows that debugging is twice as hard as writing a program in the first place. So if you're as clever as you can be when you write it, how will you ever debug it?",
     author: "Brian Kernighan",
   },
   {
-    text:
-      "Is it possible that software is not like anything else, that it is meant to be discarded: that the whole point is to always see it as a soap bubble?",
+    text: "Is it possible that software is not like anything else, that it is meant to be discarded: that the whole point is to always see it as a soap bubble?",
     author: "Alan J Perlis",
   },
   {
@@ -175,23 +167,19 @@ const QUOTE_LIST: Quote[] = [
     author: "Donald Knuth",
   },
   {
-    text:
-      "Take time to learn the closest thing that we have to a SUPERPOWER - Code.",
+    text: "Take time to learn the closest thing that we have to a SUPERPOWER - Code.",
     author: "Sharen Eddings",
   },
   {
-    text:
-      "Delivering good software today is often better than perfect software tomorrow, so finish things and ship.",
+    text: "Delivering good software today is often better than perfect software tomorrow, so finish things and ship.",
     author: "David Thomas",
   },
   {
-    text:
-      "Programming isn't about what you know; it's about what you can figure out.",
+    text: "Programming isn't about what you know; it's about what you can figure out.",
     author: "Chris Pine",
   },
   {
-    text:
-      "When to use iterative development? You should use iterative development only on projects that you want to succeed.",
+    text: "When to use iterative development? You should use iterative development only on projects that you want to succeed.",
     author: "Martin Fowler",
   },
   {
@@ -203,8 +191,7 @@ const QUOTE_LIST: Quote[] = [
     author: "Jeff Sickel",
   },
   {
-    text:
-      "If debugging is the process of removing software bugs, then programming must be the process of putting them in.",
+    text: "If debugging is the process of removing software bugs, then programming must be the process of putting them in.",
     author: "Edsger Dijkstra",
   },
   {
@@ -212,38 +199,31 @@ const QUOTE_LIST: Quote[] = [
     author: "Edsger Dijkstra",
   },
   {
-    text:
-      "Computers are good at following instructions, but not at reading your mind.",
+    text: "Computers are good at following instructions, but not at reading your mind.",
     author: "Donald Knuth",
   },
   {
-    text:
-      "Computers are incredibly fast, accurate and stupid. Human beings are incredibly slow, inaccurate and brilliant. Together they are powerful beyond imagination.",
+    text: "Computers are incredibly fast, accurate and stupid. Human beings are incredibly slow, inaccurate and brilliant. Together they are powerful beyond imagination.",
     author: "Albert Einstein",
   },
   {
-    text:
-      "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
+    text: "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
     author: "Brian Kernighan",
   },
   {
-    text:
-      "Inside every well-written large program is a well-written small program.",
+    text: "Inside every well-written large program is a well-written small program.",
     author: "Tony Hoare",
   },
   {
-    text:
-      "Everybody should learn to program a computer, because it teaches you how to think.",
+    text: "Everybody should learn to program a computer, because it teaches you how to think.",
     author: "Steve Jobs",
   },
   {
-    text:
-      "Whether you want to uncover the secrets of the universe, or you just want to pursue a career in the 21st century, basic computer programming is an essential skill to learn.",
+    text: "Whether you want to uncover the secrets of the universe, or you just want to pursue a career in the 21st century, basic computer programming is an essential skill to learn.",
     author: "Stephen Hawking",
   },
   {
-    text:
-      "I think it's fair to say that personal computers have become the most empowering tool we've ever created. They're tools of communication, they're tools of creativity, and they can be shaped by their user.",
+    text: "I think it's fair to say that personal computers have become the most empowering tool we've ever created. They're tools of communication, they're tools of creativity, and they can be shaped by their user.",
     author: "Bill Gates",
   },
 ];
@@ -255,8 +235,8 @@ const QUOTE_LIST: Quote[] = [
 
 const ContentBlock = styled.div<{ visible: boolean; coordinates: Coordinates }>`
   padding: 20px;
-  top: ${props => props.coordinates.y}px;
-  left: ${props => props.coordinates.x}px;
+  top: ${(props) => props.coordinates.y}px;
+  left: ${(props) => props.coordinates.x}px;
   width: 600px;
   min-height: 150px;
   position: absolute;
@@ -347,7 +327,7 @@ const ScreensaverOverlay = styled.div<ScreensaverOverlayProps>`
   z-index: 1500;
   overflow: hidden;
 
-  background: ${props => {
+  background: ${(props) => {
     const { a, b, c, d } = props.gradient.colors;
     return `linear-gradient(${props.angle}deg, ${a}, ${b}, ${c}, ${d})`;
   }};

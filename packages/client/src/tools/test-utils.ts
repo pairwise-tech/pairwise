@@ -317,21 +317,20 @@ const injectDependencies = (
 /**
  * Fetch the required module dependencies and inject them into the code string.
  */
-export const createInjectDependenciesFunction = (
-  dependencies: string[],
-) => async (codeString: string) => {
-  /**
-   * TODO: The following method could throw an error if an imported package
-   * cannot be found, this should be handled somewhere.
-   */
-  const dependencySourceList = await fetchRequiredDependencies(dependencies);
-  const codeWithDependencies = injectDependencies(
-    codeString,
-    dependencySourceList,
-  );
+export const createInjectDependenciesFunction =
+  (dependencies: string[]) => async (codeString: string) => {
+    /**
+     * TODO: The following method could throw an error if an imported package
+     * cannot be found, this should be handled somewhere.
+     */
+    const dependencySourceList = await fetchRequiredDependencies(dependencies);
+    const codeWithDependencies = injectDependencies(
+      codeString,
+      dependencySourceList,
+    );
 
-  return codeWithDependencies;
-};
+    return codeWithDependencies;
+  };
 
 const TEST_GATHERING_PREFIX = `
   const __USER_TEST_LIST__ = [];
@@ -356,39 +355,38 @@ const TEST_GATHERING_PREFIX = `
  * the tests in isolation from the code which generates the user-facing
  * preview.
  */
-export const injectTestCode = (challenge: Challenge) => (
-  codeString: string,
-) => {
-  const { type, testCode } = challenge;
+export const injectTestCode =
+  (challenge: Challenge) => (codeString: string) => {
+    const { type, testCode } = challenge;
 
-  /**
-   * NOTE: In React challenges, we want to avoid calling ReactDOM.render
-   * twice in the altered test code. This interferes with the original
-   * ReactDOM.render in the user code. The tests can either test the user
-   * rendered React UI directly or use the ReactTestUtils to render and
-   * test components.
-   *
-   * This is not very elegant... and could be changed to make it more
-   * robust or refactored entirely.
-   */
-  let code = codeString;
-  if (type === "react") {
-    code = codeString.replace(
-      `ReactDOM.render(<Main />, document.querySelector("#root"));`,
-      "",
-    );
-  }
+    /**
+     * NOTE: In React challenges, we want to avoid calling ReactDOM.render
+     * twice in the altered test code. This interferes with the original
+     * ReactDOM.render in the user code. The tests can either test the user
+     * rendered React UI directly or use the ReactTestUtils to render and
+     * test components.
+     *
+     * This is not very elegant... and could be changed to make it more
+     * robust or refactored entirely.
+     */
+    let code = codeString;
+    if (type === "react") {
+      code = codeString.replace(
+        `ReactDOM.render(<Main />, document.querySelector("#root"));`,
+        "",
+      );
+    }
 
-  const CODE_WITH_TEST_PREFIX = `${TEST_GATHERING_PREFIX}\n${code}`;
-  const testCodeString = stripConsoleCalls(CODE_WITH_TEST_PREFIX);
+    const CODE_WITH_TEST_PREFIX = `${TEST_GATHERING_PREFIX}\n${code}`;
+    const testCodeString = stripConsoleCalls(CODE_WITH_TEST_PREFIX);
 
-  // Handle alternate language challenges
-  if (isAlternateLanguageChallenge(challenge)) {
-    code = getTestHarness("", codeString, testCode);
-    return code;
-  }
+    // Handle alternate language challenges
+    if (isAlternateLanguageChallenge(challenge)) {
+      code = getTestHarness("", codeString, testCode);
+      return code;
+    }
 
-  return `
+    return `
     /**
      * This is the user challenge code which produces the user visible output
      * for the iframe or console in the Workspace:
@@ -412,7 +410,7 @@ export const injectTestCode = (challenge: Challenge) => (
       ${getTestHarness(testCodeString, codeString, testCode)}
     }
     `;
-};
+  };
 
 /**
  * Get the full html content string for the iframe, injected the user code
@@ -662,9 +660,8 @@ export const compileCodeString = async (
 
     return { code: sourceDocument, dependencies: [""] };
   } else {
-    const { code: sourceCode, dependencies } = stripAndExtractModuleImports(
-      sourceCodeString,
-    );
+    const { code: sourceCode, dependencies } =
+      stripAndExtractModuleImports(sourceCodeString);
 
     const injectModuleDependenciesFn = createInjectDependenciesFunction(
       challenge.type === "react"
@@ -712,7 +709,7 @@ export const buildPreviewTestResultsFromCode = (
   try {
     const pattern = /test\(["'](.*)["'],/g;
     const matches = testCode.match(pattern) ?? [];
-    const results = matches.map(match => {
+    const results = matches.map((match) => {
       return {
         test: "",
         testResult: false,

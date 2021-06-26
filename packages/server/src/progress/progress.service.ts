@@ -57,12 +57,8 @@ export class ProgressService {
   ): Promise<IProgressDto> {
     validateChallengeProgressDto(challengeProgressDto);
 
-    const {
-      complete,
-      courseId,
-      challengeId,
-      timeCompleted,
-    } = challengeProgressDto;
+    const { complete, courseId, challengeId, timeCompleted } =
+      challengeProgressDto;
     const user = requestUser;
 
     console.log(
@@ -268,8 +264,8 @@ export class ProgressService {
 
     let count = 0;
 
-    const data = Object.values(records).map(x => {
-      const challenges = Array.from(x.challengeIds).map(id => {
+    const data = Object.values(records).map((x) => {
+      const challenges = Array.from(x.challengeIds).map((id) => {
         count++;
 
         // Add the challenge title for context

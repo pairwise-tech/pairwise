@@ -3,10 +3,10 @@ import {
   Course,
   CourseSkeletonList,
   InverseChallengeMapping,
+  PullRequestDiffContext,
 } from "@pairwise/common";
 import { createAction } from "typesafe-actions";
 import { HttpResponseError } from "modules/api";
-import { PullRequestContext } from "./store";
 
 /** ===========================================================================
  * Action Types
@@ -91,7 +91,7 @@ export const fetchPullRequestContext = createAction(
 
 export const fetchPullRequestContextSuccess = createAction(
   ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT_SUCCESS,
-)<PullRequestContext[]>();
+)<PullRequestDiffContext[]>();
 
 export const fetchPullRequestContextFailure = createAction(
   ActionTypesEnum.FETCH_PULL_REQUEST_CONTEXT_FAILURE,

@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class MigrateToLastActiveChallengeIds1591537888973
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = "MigrateToLastActiveChallengeIds1591537888973";
 
   public async up(queryRunner: QueryRunner): Promise<void> {

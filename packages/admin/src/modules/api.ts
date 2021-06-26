@@ -5,6 +5,7 @@ import {
   Result,
   ChallengeMeta,
   CourseSkeletonList,
+  PullRequestDiffContext,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import * as ENV from "tools/admin-env";
@@ -19,7 +20,6 @@ import { AdminUserView } from "./users/store";
 import { ProgressRecords } from "./stats/store";
 import { FeedbackRecord } from "./feedback/store";
 import { PaymentRecord } from "./payments/store";
-import { PullRequestContext } from "./challenges/store";
 
 /** ===========================================================================
  * Types & Config
@@ -34,8 +34,6 @@ export interface HttpResponseError {
   status?: number;
   statusText?: string;
 }
-
-type MaybeFailedResponse = Result<any, HttpResponseError>;
 
 const HOST = ENV.HOST; /* NestJS Server URL */
 
@@ -76,7 +74,8 @@ class BaseApiClass {
     };
 
     const authenticated = !!token;
-    return { headers, authenticated };
+    const config = { headers };
+    return { config, authenticated };
   };
 
   formatHttpError = (error: AxiosError): HttpResponseError => {
@@ -123,7 +122,7 @@ class BaseApiClass {
     if (currentAccessToken !== "") {
       toaster.error("Unauthorized!", { icon: "user" });
       logoutUserInLocalStorage();
-      await wait(500);
+      await wait(1000);
       window.location.reload();
     }
   };
@@ -152,10 +151,11 @@ class Api extends BaseApiClass {
         courses = [courseList.FullstackTypeScript];
         // courses = Object.values(courseList);
       } else {
-        const { headers } = this.getRequestHeaders();
-        const result = await axios.get<CourseList>(`${HOST}/admin/content`, {
-          headers,
-        });
+        const { config } = this.getRequestHeaders();
+        const result = await axios.get<CourseList>(
+          `${HOST}/admin/content`,
+          config,
+        );
         courses = result.data;
       }
 
@@ -175,73 +175,60 @@ class Api extends BaseApiClass {
     }
 
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<CourseSkeletonList>(`${HOST}/content/skeletons`, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.get<CourseSkeletonList>(`${HOST}/content/skeletons`, config);
     });
   };
 
   adminUserLogin = async () => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<CourseSkeletonList>(`${HOST}/admin/authenticate`, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.get<CourseSkeletonList>(
+        `${HOST}/admin/authenticate`,
+        config,
+      );
     });
   };
 
   fetchUsersList = async () => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<AdminUserView[]>(`${HOST}/admin/users`, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.get<AdminUserView[]>(`${HOST}/admin/users`, config);
     });
   };
 
   fetchProgressRecords = async () => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<ProgressRecords>(`${HOST}/admin/progress`, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.get<ProgressRecords>(`${HOST}/admin/progress`, config);
     });
   };
 
   fetchAllFeedbackRecords = async () => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<FeedbackRecord[]>(`${HOST}/admin/feedback`, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.get<FeedbackRecord[]>(`${HOST}/admin/feedback`, config);
     });
   };
 
   deleteFeedbackByUuid = async (uuid: string) => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.delete<string>(`${HOST}/admin/feedback/${uuid}`, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.delete<string>(`${HOST}/admin/feedback/${uuid}`, config);
     });
   };
 
   fetchChallengeMeta = async (id: string) => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<ChallengeMeta>(`${HOST}/challenge-meta/${id}`, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.get<ChallengeMeta>(`${HOST}/challenge-meta/${id}`, config);
     });
   };
 
   fetchAllPaymentRecords = async () => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<PaymentRecord[]>(`${HOST}/admin/payments`, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.get<PaymentRecord[]>(`${HOST}/admin/payments`, config);
     });
   };
 
@@ -249,10 +236,8 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       // Course id is hard-coded for now
       const body = { userEmail, courseId: "fpvPtfu7s" };
-      const { headers } = this.getRequestHeaders();
-      return axios.post<string>(`${HOST}/admin/purchase-course`, body, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.post<string>(`${HOST}/admin/purchase-course`, body, config);
     });
   };
 
@@ -260,21 +245,17 @@ class Api extends BaseApiClass {
     return this.httpHandler(async () => {
       // Course id is hard-coded for now
       const body = { userEmail, courseId: "fpvPtfu7s" };
-      const { headers } = this.getRequestHeaders();
-      return axios.post<string>(`${HOST}/admin/refund-course`, body, {
-        headers,
-      });
+      const { config } = this.getRequestHeaders();
+      return axios.post<string>(`${HOST}/admin/refund-course`, body, config);
     });
   };
 
   fetchUserProfile = async () => {
-    const { headers, authenticated } = this.getRequestHeaders();
+    const { config, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
       return this.httpHandler(async () => {
-        return axios.get<UserStoreState>(`${HOST}/user/profile`, {
-          headers,
-        });
+        return axios.get<UserStoreState>(`${HOST}/user/profile`, config);
       });
     } else {
       return createNonHttpResponseError("Unauthorized.");
@@ -283,12 +264,10 @@ class Api extends BaseApiClass {
 
   fetchPullRequestContext = async (pull: number) => {
     return this.httpHandler(async () => {
-      const { headers } = this.getRequestHeaders();
-      return axios.get<PullRequestContext[]>(
+      const { config } = this.getRequestHeaders();
+      return axios.get<PullRequestDiffContext[] | string>(
         `${HOST}/admin/pull-requests/${pull}`,
-        {
-          headers,
-        },
+        config,
       );
     });
   };

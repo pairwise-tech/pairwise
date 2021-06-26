@@ -26,11 +26,11 @@ const app = createReducer<State, AppActionTypes>(initialState)
     ...state,
     screensaver: action.payload,
   }))
-  .handleAction(actions.initializeAppSuccess, state => ({
+  .handleAction(actions.initializeAppSuccess, (state) => ({
     ...state,
     initialized: true,
   }))
-  .handleAction(actions.appInitializationFailed, state => ({
+  .handleAction(actions.appInitializationFailed, (state) => ({
     ...state,
     initializationError: true,
   }))

@@ -1,4 +1,4 @@
-import { CHALLENGE_TYPE } from "./courses";
+import { Challenge, CHALLENGE_TYPE } from "./courses";
 
 /** ===========================================================================
  * DTO interfaces
@@ -252,4 +252,17 @@ export type UserCourseProgress = ProgressEntity[];
 
 export interface StripeStartCheckoutSuccessResponse {
   stripeCheckoutSessionId: string;
+}
+
+/** ===========================================================================
+ * Pull Request Diff Context
+ * ============================================================================
+ */
+
+export interface PullRequestDiffContext {
+  id: string;
+  moduleId: string;
+  courseId: string;
+  updatedChallenge: Challenge;
+  originalChallenge: Challenge;
 }

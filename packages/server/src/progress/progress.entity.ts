@@ -31,11 +31,9 @@ export class Progress {
   @Column({ type: "jsonb", nullable: true })
   public progress: string;
 
-  @ManyToOne(
-    type => User,
-    user => user.challengeProgressHistory,
-    { onDelete: "CASCADE" },
-  )
+  @ManyToOne((type) => User, (user) => user.challengeProgressHistory, {
+    onDelete: "CASCADE",
+  })
   public user: User;
 
   @CreateDateColumn({ type: "timestamp" })

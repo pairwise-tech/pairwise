@@ -38,7 +38,7 @@ const accessTokenInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
-    map(payload => {
+    map((payload) => {
       const { params, appInitializationType } = payload;
       const { accessToken } = params;
 
@@ -68,11 +68,11 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.storeAccessToken)),
     pluck("payload"),
-    tap(payload => {
+    tap((payload) => {
       const { accessToken } = payload;
       setAccessTokenInLocalStorage(accessToken);
     }),
-    mergeMap(payload => {
+    mergeMap((payload) => {
       const { accessToken } = payload;
       if (accessToken) {
         return of(

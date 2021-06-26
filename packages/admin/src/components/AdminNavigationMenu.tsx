@@ -69,7 +69,7 @@ class AdminNavigationMenu extends React.Component<
           className={cx("module-select", { open: this.state.showModuleList })}
           style={{ zIndex: 3 }}
           offsetX={overlayVisible ? 0 : -20}
-          onClick={e => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <ColTitle className="course-select">
             <Button
@@ -94,12 +94,7 @@ class AdminNavigationMenu extends React.Component<
           return (
             <NavLink to={`/${path}`} key={path}>
               <ModuleNavigationButton selected={menuSelectItemIndex === index}>
-                <span>
-                  {path
-                    .split("-")
-                    .map(capitalize)
-                    .join(" ")}
-                </span>
+                <span>{path.split("-").map(capitalize).join(" ")}</span>
               </ModuleNavigationButton>
             </NavLink>
           );
@@ -164,7 +159,7 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
   background: ${({ active }) =>
     active ? COLORS.BACKGROUND_MODAL : "transparent"};
 
-  ${props =>
+  ${(props) =>
     props.selected &&
     `
       outline-width: 1px;
@@ -227,9 +222,9 @@ const Overlay = styled.div<{ visible: boolean }>`
   z-index: 15;
   position: fixed;
   background: rgba(0, 0, 0, 0.85);
-  visibility: ${props => (props.visible ? "visible" : "hidden")};
-  opacity: ${props => (props.visible ? "1" : "0")};
-  pointer-events: ${props => (props.visible ? "all" : "none")};
+  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+  opacity: ${(props) => (props.visible ? "1" : "0")};
+  pointer-events: ${(props) => (props.visible ? "all" : "none")};
   display: flex;
   transition: all 0.2s ease-out;
 `;

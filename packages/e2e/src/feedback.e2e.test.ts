@@ -19,7 +19,7 @@ describe("User Feedback APIs", () => {
     authorizationHeader = `Bearer ${accessToken}`;
   });
 
-  test("/feedback (POST) requires an authenticated user", async done => {
+  test("/feedback (POST) requires an authenticated user", async (done) => {
     request(`${HOST}/feedback`)
       .post("/")
       .send({
@@ -34,7 +34,7 @@ describe("User Feedback APIs", () => {
       });
   });
 
-  test("/feedback (POST) rejects invalid challenge ids", async done => {
+  test("/feedback (POST) rejects invalid challenge ids", async (done) => {
     request(`${HOST}/feedback`)
       .post("/")
       .send({
@@ -50,7 +50,7 @@ describe("User Feedback APIs", () => {
       });
   });
 
-  test("/feedback (POST) rejects feedback with an invalid feedback type", async done => {
+  test("/feedback (POST) rejects feedback with an invalid feedback type", async (done) => {
     request(`${HOST}/feedback`)
       .post("/")
       .send({
@@ -66,7 +66,7 @@ describe("User Feedback APIs", () => {
       });
   });
 
-  test("/feedback (POST) inserts feedback entries correctly", async done => {
+  test("/feedback (POST) inserts feedback entries correctly", async (done) => {
     await request(`${HOST}/feedback`)
       .post("/")
       .send({
@@ -76,7 +76,7 @@ describe("User Feedback APIs", () => {
       })
       .set("Authorization", authorizationHeader)
       .expect(201)
-      .expect(response => {
+      .expect((response) => {
         expect(response.text).toBe("Success");
       });
 
@@ -84,7 +84,7 @@ describe("User Feedback APIs", () => {
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(401)
-      .expect(response => {
+      .expect((response) => {
         expect(response.body.error).toBe("Unauthorized");
       });
 
@@ -98,7 +98,7 @@ describe("User Feedback APIs", () => {
       })
       .set("Authorization", `Bearer ${adminAccessToken}`)
       .expect(200)
-      .expect(response => {
+      .expect((response) => {
         const entry = response.body[0];
         expect(entry.type).toBe("TOO_HARD");
         expect(entry.feedback).toBe("This challenge is too hard!");

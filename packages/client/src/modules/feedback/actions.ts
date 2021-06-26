@@ -50,9 +50,9 @@ export const setFeedbackState = createAction(
   ActionTypesEnum.SET_FEEDBACK_STATE,
 )<string>();
 
-export const setFeedbackType = createAction(ActionTypesEnum.SET_FEEDBACK_TYPE)<
-  FEEDBACK_TYPE
->();
+export const setFeedbackType = createAction(
+  ActionTypesEnum.SET_FEEDBACK_TYPE,
+)<FEEDBACK_TYPE>();
 
 export const submitUserFeedback = createAction(
   ActionTypesEnum.SUBMIT_USER_FEEDBACK,

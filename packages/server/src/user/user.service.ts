@@ -180,11 +180,8 @@ export class UserService {
   private async fillUserProfile(user: User) {
     const { payments, courses } = await this.getCourseForUser(user);
     const { progress } = await this.getProgressMapForUser(user);
-    const {
-      profile,
-      settings,
-      lastActiveChallengeIds,
-    } = this.processUserEntity(user);
+    const { profile, settings, lastActiveChallengeIds } =
+      this.processUserEntity(user);
 
     const result: IUserDto = {
       profile,

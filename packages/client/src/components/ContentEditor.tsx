@@ -38,9 +38,9 @@ const uploadFile = (
     body: formData,
     redirect: "follow",
   })
-    .then(x => x.json())
-    .then(x => x.data.filepath)
-    .catch(err => {
+    .then((x) => x.json())
+    .then((x) => x.data.filepath)
+    .catch((err) => {
       console.warn("[ERR]", err);
       toaster.error(`Could not upload\n${err.message}`);
     });
@@ -50,7 +50,7 @@ const uploadFile = (
 const encodeHash = pipe(
   (x: any) => JSON.stringify(x),
   encodeURIComponent,
-  x => `#${x}`,
+  (x) => `#${x}`,
 );
 
 // Decode a URL hash containing a JSON object
@@ -60,7 +60,7 @@ const decodeHash = tryCatch(
     decodeURIComponent,
     JSON.parse,
   ),
-  err => {
+  (err) => {
     console.warn("[decodeHash] Could not decode hash.", err.message);
     return null;
   },
@@ -79,7 +79,7 @@ const StyledButton = styled(Button)`
 `;
 
 // An inline button that the user can click to quickly jump to our video.
-const VideoPlayButton: React.FC<PWEditorComponentProps> = props => {
+const VideoPlayButton: React.FC<PWEditorComponentProps> = (props) => {
   return (
     <StyledButton
       id="VideoPlayButton"
@@ -93,11 +93,11 @@ const VideoPlayButton: React.FC<PWEditorComponentProps> = props => {
 };
 
 // A button that will scroll down to the content area of teh page
-const ContentScrollButton: React.FC<PWEditorComponentProps> = props => {
+const ContentScrollButton: React.FC<PWEditorComponentProps> = (props) => {
   return (
     <a
       href="#content-area"
-      onClick={e => {
+      onClick={(e) => {
         e.preventDefault();
         scrollToContentArea();
       }}
@@ -154,7 +154,7 @@ const MarkdownShortcuts = (): SlatePlugin => {
     return -1;
   };
 
-  const keydownWhitelist = new Set(inlineShortcuts.map(x => x.shortcut[0]));
+  const keydownWhitelist = new Set(inlineShortcuts.map((x) => x.shortcut[0]));
 
   // On special char handles inline markdown shortcuts. Support shortcuts are
   // listed in inlineShortcuts array
@@ -336,13 +336,11 @@ const MarkdownShortcuts = (): SlatePlugin => {
 
       // eslint-disable-next-line
       // @ts-ignore Slate types are not great
-      editor.withoutNormalizing(c => {
-        c.moveFocusToStartOfNode(startBlock)
-          .delete()
-          .setBlocks({
-            type,
-            data: { checked },
-          });
+      editor.withoutNormalizing((c) => {
+        c.moveFocusToStartOfNode(startBlock).delete().setBlocks({
+          type,
+          data: { checked },
+        });
 
         if (type === "list-item") {
           if (checked !== undefined) {
@@ -466,7 +464,7 @@ class ContentEditor extends React.Component<Props> {
     return timer(600)
       .pipe(
         map(() => {
-          return this.props.searchResults.map(x => ({
+          return this.props.searchResults.map((x) => ({
             title: x.title,
             url: `/workspace/${x.id}`,
           }));
@@ -489,12 +487,12 @@ class ContentEditor extends React.Component<Props> {
             theme={editorTheme}
             onSearchLink={this.getSearchLinks}
             uploadImage={this.handleFileUpload}
-            onShowToast={message => {
+            onShowToast={(message) => {
               toaster.toast.show({
                 message,
               });
             }}
-            onClickLink={href => {
+            onClickLink={(href) => {
               const scrollTarget = getScrollTarget(href);
 
               if (scrollTarget) {

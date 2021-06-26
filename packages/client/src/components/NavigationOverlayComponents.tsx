@@ -100,7 +100,7 @@ const SortableModuleItem = SortableElement(
                   <DraggableModuleHandle />
                   <NavUpdateField
                     value={module.title}
-                    onChange={e => {
+                    onChange={(e) => {
                       updateCourseModule({
                         id: module.id,
                         courseId: course.id,

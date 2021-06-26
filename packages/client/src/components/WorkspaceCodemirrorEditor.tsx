@@ -38,7 +38,8 @@ interface MockedCodeMirrorEditor {
 
 class WorkspaceCodemirrorEditor
   extends React.Component<ICodeEditorProps, IState>
-  implements ICodeEditor {
+  implements ICodeEditor
+{
   // The TS lib doesn't type their editor... p(●｀□´●)q
   // So I'm just going to make up a type
   codemirrorInstance: Nullable<MockedCodeMirrorEditor> = null;

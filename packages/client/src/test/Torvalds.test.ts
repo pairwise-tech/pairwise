@@ -172,7 +172,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
 
     // Get all the challenges
     const challenges = course.modules
-      .map(m => m.challenges)
+      .map((m) => m.challenges)
       .reduce((flat, c) => flat.concat(c));
 
     // Check all the module ids
@@ -198,7 +198,7 @@ describe("Linus should be able to pass all the challenges first try", () => {
     let failedTests: string[] = [];
 
     /* Get all the challenges */
-    const challenges = course.modules.flatMap(m => m.challenges);
+    const challenges = course.modules.flatMap((m) => m.challenges);
 
     let passed = 0;
     let failed = 0;

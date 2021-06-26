@@ -44,12 +44,12 @@ const appInitializationEpic: EpicSignature = (action$, _, deps) => {
   );
 };
 
-const appInitializeCaptureUrlEpic: EpicSignature = action$ => {
+const appInitializeCaptureUrlEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf(Actions.initializeApp)),
     pluck("payload"),
     pluck("location"),
-    map(location => {
+    map((location) => {
       const params = queryString.parse(location.search);
       const appInitializationType = parseInitialUrlToInitializationType(
         location.pathname,
@@ -94,10 +94,10 @@ const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
     userFetchedSuccess$,
     courseFetchedSuccess$,
   ).pipe(
-    map(x => x[0]), // Extract the app initialization payload
+    map((x) => x[0]), // Extract the app initialization payload
     pluck("payload"),
     filter(
-      x =>
+      (x) =>
         x.appInitializationType ===
         APP_INITIALIZATION_TYPE.PURCHASE_COURSE_FLOW,
     ),
@@ -106,7 +106,7 @@ const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
     map((id: any) => {
       // A set of course ids which exist
       const courseIds = new Set(
-        state$.value.challenges.courseSkeletons?.map(x => x.id),
+        state$.value.challenges.courseSkeletons?.map((x) => x.id),
       );
 
       // Default to the TypeScript course id
@@ -116,7 +116,7 @@ const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
 
       // Check if the user has already paid for the course, just in case...
       const { payments } = state$.value.user.user;
-      const userPaid = payments?.find(p => p.courseId === courseId);
+      const userPaid = payments?.find((p) => p.courseId === courseId);
       if (userPaid) {
         return Actions.empty(
           `Handling /purchase deep link but it turns out user has already paid for the course, id: ${courseId}`,
@@ -135,10 +135,10 @@ const purchaseCourseDeepLinkEpic: EpicSignature = (action$, state$) => {
  * Fetching courses or user should not fail, but if it does there is some
  * real issue (e.g. the server is down).
  */
-const appInitializationFailedEpic: EpicSignature = action$ => {
+const appInitializationFailedEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf([Actions.fetchUserFailure, Actions.fetchCoursesFailure])),
-    filter(action => {
+    filter((action) => {
       // Ajax status 0 can occur, I think, when a request is aborted because a
       // user is navigating away from a page. This could happen if a user
       // decides to navigate back while Pairwise is loading, and in such cases
@@ -167,7 +167,7 @@ const emailUpdateSuccessToastEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     pluck("appInitializationType"),
-    filter(type => type === APP_INITIALIZATION_TYPE.EMAIL_UPDATED),
+    filter((type) => type === APP_INITIALIZATION_TYPE.EMAIL_UPDATED),
     tap(() => {
       deps.toaster.success("Email updated successfully!");
     }),
@@ -185,7 +185,7 @@ const stripInitialParameters: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     pluck("params"),
     // Only proceed if there are captured query parameters to remove
-    filter(params => Object.keys(params).length > 0),
+    filter((params) => Object.keys(params).length > 0),
     tap(() => {
       console.warn(
         `[WARN]: Query parameters being removed on app initialization!`,
@@ -206,14 +206,14 @@ const promptToAddEmailEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     pluck("appInitializationType"),
-    filter(type => type === APP_INITIALIZATION_TYPE.DEFAULT),
+    filter((type) => type === APP_INITIALIZATION_TYPE.DEFAULT),
   );
 
   // Get users who are registered but have no email
   const userFetchedSuccessNoEmail$ = action$.pipe(
     filter(isActionOf(Actions.fetchUserSuccess)),
     pluck("payload"),
-    filter(user => {
+    filter((user) => {
       const USER_SIGNED_UP = !!user.profile;
       const NO_EMAIL = !user.profile?.email;
       return USER_SIGNED_UP && NO_EMAIL;
@@ -248,7 +248,7 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     filter(
-      x =>
+      (x) =>
         x.appInitializationType ===
         APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE,
     ),
@@ -256,7 +256,7 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
     // wait for the "Launching Pairwise..." overlay to disappear as the
     // UI/UX of toast over overlay looks a bit off
     delay(1500),
-    tap(params => {
+    tap((params) => {
       deps.toaster.error(
         `Login failed! An unknown error occurred when trying to log you ` +
           `in with ${params.strategy}. Please try again.`,
@@ -270,14 +270,14 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
 // This epic creates a new stream of locations the user visits. The tap is just
 // to make google analytics work with our SPA
 const locationChangeEpic: EpicSignature = (_, __, deps) => {
-  return new Observable<Location>(obs => {
-    const unsub = deps.router.listen(location => {
+  return new Observable<Location>((obs) => {
+    const unsub = deps.router.listen((location) => {
       obs.next(location);
     });
 
     return unsub;
   }).pipe(
-    tap(location => {
+    tap((location) => {
       const page = `${location.pathname}${location.search}`;
       try {
         // @ts-ignore
@@ -329,12 +329,12 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
     of(window.amplitude),
   ).pipe(
     filter((x): x is Amplitude => Boolean(x)),
-    map(x => x.getInstance()),
+    map((x) => x.getInstance()),
   );
 
   const identityAnalytic$ = action$.pipe(
     filter(isActionOf(Actions.fetchUserSuccess)),
-    tap(x => {
+    tap((x) => {
       const { amplitude } = window;
       const { profile } = x.payload;
       const amp = amplitude?.getInstance();
@@ -350,9 +350,9 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
 
   const completionAnalytic$ = action$.pipe(
     filter(isActionOf(Actions.updateUserProgress)),
-    filter(x => x.payload.complete),
-    distinct(x => x.payload.challengeId), // Do not double-log completion of the same challenge
-    tap(x => {
+    filter((x) => x.payload.complete),
+    distinct((x) => x.payload.challengeId), // Do not double-log completion of the same challenge
+    tap((x) => {
       const { amplitude } = window;
       const amp = amplitude?.getInstance();
       const { complete, ...props } = x.payload;
@@ -394,7 +394,7 @@ const analyticsEpic: EpicSignature = (action$, state$) => {
 
   const screensaverAnalytic$ = action$.pipe(
     filter(isActionOf(Actions.setScreensaverState)),
-    filter(x => !!x.payload),
+    filter((x) => !!x.payload),
     withLatestFrom(amp$),
     tap(([_, amp]) => {
       amp.logEvent(ANALYTICS_EVENTS.LAUNCH_SCREENSAVER);

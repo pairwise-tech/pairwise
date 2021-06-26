@@ -39,8 +39,8 @@ const documentLookup: { [k: string]: SearchDocument } = {};
 const buildSearchDocuments = (courses: CourseList): SearchDocument[] => {
   const getDocuments = (course: Course) =>
     course.modules
-      .flatMap(x => x.challenges)
-      .map(x => ({
+      .flatMap((x) => x.challenges)
+      .map((x) => ({
         id: x.id,
         courseName: course.title,
         title: toPlainText(x.title),
@@ -126,7 +126,7 @@ const buildResultMatch = (
 const buildSearchResult = (result: ISearchResult): SearchResult => {
   const doc = documentLookup[result.ref];
   const metadata = result.matchData.metadata;
-  const matches: SearchResultMatch[] = Object.keys(metadata).flatMap(term => {
+  const matches: SearchResultMatch[] = Object.keys(metadata).flatMap((term) => {
     const matchLocationsByFields = metadata[term];
     const reducer = (
       agg: SearchResultMatch[],
@@ -179,7 +179,7 @@ const createIndexer = (documents: SearchDocument[]) => {
     this.ref(identifier);
 
     // Set the search fields
-    searchFields.forEach(fieldName => {
+    searchFields.forEach((fieldName) => {
       this.field(fieldName);
     });
 
@@ -188,7 +188,7 @@ const createIndexer = (documents: SearchDocument[]) => {
     this.metadataWhitelist = ["position"];
 
     // Very important. Add all the documents to the index
-    documents.forEach(x => {
+    documents.forEach((x) => {
       this.add(x);
     });
   };
@@ -229,7 +229,7 @@ self.addEventListener("message", (event: SearchMessageEvent) => {
         const indexer = createIndexer(documents);
 
         // Add all the documents to the lookup for use in constructing excerpts
-        documents.forEach(x => {
+        documents.forEach((x) => {
           documentLookup[x.id] = x;
         });
 

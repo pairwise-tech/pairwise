@@ -55,16 +55,16 @@ import PartyParrot from "../../icons/partyparrot.gif";
  * ============================================================================
  */
 
-const searchEpic: EpicSignature = action$ => {
+const searchEpic: EpicSignature = (action$) => {
   // Initialize the search worker. This could get dropped into deps if we need
   // it elsewhere but I don't think we do
   const searchWorker: Worker = new SearchWorker();
 
   const buildSearchIndex$ = action$.pipe(
     filter(isActionOf(Actions.fetchCoursesSuccess)),
-    map(x => x.payload.courses),
+    map((x) => x.payload.courses),
     take(1), // Only do this once.. for now
-    tap(courses => {
+    tap((courses) => {
       searchWorker.postMessage({
         type: BUILD_SEARCH_INDEX,
         payload: courses,
@@ -80,15 +80,15 @@ const searchEpic: EpicSignature = action$ => {
   const [_search$, _clearSearch$] = partition(
     action$.pipe(
       filter(isActionOf(Actions.requestSearchResults)),
-      map(x => x.payload),
+      map((x) => x.payload),
     ),
-    x => x.length > SEARCH_QUERY_THRESHOLD,
+    (x) => x.length > SEARCH_QUERY_THRESHOLD,
   );
 
   const search$ = _search$.pipe(
     distinctUntilChanged(),
     debounceTime(200),
-    tap(x => {
+    tap((x) => {
       searchWorker.postMessage({
         type: SEARCH,
         payload: x,
@@ -106,17 +106,17 @@ const searchEpic: EpicSignature = action$ => {
   // NOTE: Since this is async the way it's current written there is no
   // guarantee the most recent search result we get back corresponds to the most
   // recent string the user has typed
-  const searchResult$ = new Observable<SearchResultEvent>(obs => {
+  const searchResult$ = new Observable<SearchResultEvent>((obs) => {
     const listener = (message: SearchResultEvent) => obs.next(message);
     searchWorker.addEventListener("message", listener);
     return () => searchWorker.removeEventListener("message", listener);
   }).pipe(
-    tap(message => {
+    tap((message) => {
       // This is the stream of all messages from the worker before it's filtered
     }),
-    map(x => x.data),
-    filter(x => x.type === SEARCH_SUCCESS),
-    map(x => x.payload),
+    map((x) => x.data),
+    filter((x) => x.type === SEARCH_SUCCESS),
+    map((x) => x.payload),
     map(Actions.receiveSearchResults),
   );
 
@@ -211,7 +211,7 @@ const resetChallengeContextAfterDeletionEpic: EpicSignature = (
 const codepressDeleteToasterEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.deleteChallenge, Actions.deleteCourseModule])),
-    tap(action => {
+    tap((action) => {
       let message = "";
       if (isActionOf(Actions.deleteChallenge, action)) {
         message = "Challenge deleted successfully!";
@@ -234,7 +234,7 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf([Actions.initializeApp, Actions.logoutUser])),
     mergeMap(deps.api.fetchCourses),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.fetchCoursesSuccess({ courses: result.value });
       } else {
@@ -256,12 +256,12 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
 const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
   const fetchCourses$ = action$.pipe(
     filter(isActionOf(Actions.fetchCoursesSuccess)),
-    map(x => x.payload.courses),
+    map((x) => x.payload.courses),
   );
 
   const fetchUser$ = action$.pipe(
     filter(isActionOf(Actions.fetchUserSuccess)),
-    map(x => x.payload.lastActiveChallengeIds),
+    map((x) => x.payload.lastActiveChallengeIds),
   );
 
   return combineLatest(fetchCourses$, fetchUser$).pipe(
@@ -272,12 +272,8 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
         const lastActiveId = lastActiveIds.lastActiveChallenge;
         const deepLinkChallengeId = findChallengeIdInLocationIfExists(location);
         const activeChallengeId = deepLinkChallengeId || lastActiveId || null;
-        const {
-          slug,
-          courseId,
-          moduleId,
-          challengeId,
-        } = deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
+        const { slug, courseId, moduleId, challengeId } =
+          deriveIdsFromCourseWithDefaults(courses, activeChallengeId);
 
         // Handle redirects:
         if (location.pathname.includes("workspace")) {
@@ -314,15 +310,15 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
     action$.pipe(
       filter(isActionOf(Actions.createChallenge)),
       map(() => state$.value.challenges.courses),
-      filter(x => Boolean(x)),
-      map(courses => {
+      filter((x) => Boolean(x)),
+      map((courses) => {
         return createInverseChallengeMapping(
           courses as Course[], // TS doesn't know that this is not null due to filter above
         );
       }),
     ),
   ).pipe(
-    map(challengeMap => Actions.storeInverseChallengeMapping(challengeMap)),
+    map((challengeMap) => Actions.storeInverseChallengeMapping(challengeMap)),
   );
 };
 
@@ -330,7 +326,7 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
  * Add a brief pause to display a loading overlay on top of the workspace
  * to allow Monaco to fully initialize.
  */
-const setWorkspaceLoadedEpic: EpicSignature = action$ => {
+const setWorkspaceLoadedEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf(Actions.fetchCoursesSuccess)),
     delay(1000),
@@ -376,7 +372,7 @@ const syncChallengeContextToUrlEpic: EpicSignature = (action$, state$) => {
     filter(isActionOf(Actions.locationChange)),
     pluck("payload"),
     map(findChallengeIdInLocationIfExists),
-    filter(id => {
+    filter((id) => {
       const { challengeMap, currentChallengeId } = state$.value.challenges;
       // Don't proceed if we're lacking an id or the challenge map
       if (!challengeMap || !id) {
@@ -390,7 +386,7 @@ const syncChallengeContextToUrlEpic: EpicSignature = (action$, state$) => {
 
       return shouldUpdate;
     }),
-    mergeMap(id => {
+    mergeMap((id) => {
       const { challengeMap, currentChallengeId } = state$.value.challenges;
       const previousChallengeId = currentChallengeId as string;
       const { currentCourseId, currentModuleId } = state$.value.challenges;
@@ -434,12 +430,12 @@ const syncChallengeContextToUrlEpic: EpicSignature = (action$, state$) => {
 const saveCourse: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.saveCourse)),
-    map(x => x.payload),
-    mergeMap(payload => {
+    map((x) => x.payload),
+    mergeMap((payload) => {
       return deps.api.codepressApi.save(payload).pipe(
         map(Actions.saveCourseSuccess),
         tap(() => deps.toaster.success("Saved 👍")),
-        catchError(err =>
+        catchError((err) =>
           of(Actions.saveCourseFailure(err)).pipe(
             tap(() => {
               deps.toaster.error("Could not save!");
@@ -479,8 +475,8 @@ const handleFetchCodeBlobForChallengeEpic: EpicSignature = (
     filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("currentChallengeId"),
-    filter(x => !!x),
-    mergeMap(id => {
+    filter((x) => !!x),
+    mergeMap((id) => {
       if (!id) {
         return of(Actions.empty("No challenge id yet..."));
       }
@@ -516,7 +512,7 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
   return action$.pipe(
     filter(isActionOf(Actions.fetchBlobForChallenge)),
     pluck("payload"),
-    mergeMap(async id => {
+    mergeMap(async (id) => {
       const blobCache = state$.value.challenges.blobCache;
       const cachedItem = blobCache[id];
 
@@ -549,8 +545,8 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (action$, _, deps) => {
   return action$.pipe(
     filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
-    filter(x => x.currentChallengeId !== null),
-    filter(x => x.currentChallengeId !== SANDBOX_ID),
+    filter((x) => x.currentChallengeId !== null),
+    filter((x) => x.currentChallengeId !== SANDBOX_ID),
     mergeMap(async ({ currentChallengeId, currentCourseId }) => {
       const challengeId = currentChallengeId as string; // Checked above
       return deps.api.updateLastActiveChallengeIds(
@@ -558,7 +554,7 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (action$, _, deps) => {
         challengeId,
       );
     }),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.updateLastActiveChallengeIdsSuccess(result.value);
       } else {
@@ -582,19 +578,19 @@ const updateLastActiveChallengeIdsEpic: EpicSignature = (action$, _, deps) => {
  * before it is loaded, so combine latest is just used to ensure that the update
  * is not fired before the workspace is ready
  */
-const hydrateSandboxType: EpicSignature = action$ => {
+const hydrateSandboxType: EpicSignature = (action$) => {
   // See NOTE
   const workspaceLoaded$ = action$.pipe(
     filter(isActionOf(Actions.setWorkspaceChallengeLoaded)),
   );
   const sandboxCodeFetched$ = action$.pipe(
     filter(isActionOf(Actions.fetchBlobForChallengeSuccess)),
-    filter(x => x.payload.challengeId === "sandbox"),
+    filter((x) => x.payload.challengeId === "sandbox"),
   );
 
   return combineLatest(workspaceLoaded$, sandboxCodeFetched$).pipe(
     map(([_, x]) => x.payload),
-    map(x => {
+    map((x) => {
       const blob = x.dataBlob as SandboxBlob;
       return Actions.updateChallenge({
         id: SANDBOX_ID,
@@ -617,8 +613,8 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
     filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("previousChallengeId"),
-    filter(x => x !== null),
-    map(challengeId => {
+    filter((x) => x !== null),
+    map((challengeId) => {
       const id = challengeId as string; // it's not null
       const blobs = deps.selectors.challenges.getBlobCache(state$.value);
       const cachedItem = blobs[id];
@@ -632,7 +628,7 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
         return new Err("No blob found");
       }
     }),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.saveChallengeBlob(result.value);
       } else {
@@ -646,7 +642,7 @@ const handleSaveCodeBlobEpic: EpicSignature = (action$, state$, deps) => {
     // Do not save if the solution code is revealed
     filter(() => !state$.value.challenges.revealWorkspaceSolution),
     debounceTime(500),
-    map(x => x.payload),
+    map((x) => x.payload),
     map(Actions.saveChallengeBlob),
   );
 
@@ -661,7 +657,7 @@ const saveCodeBlobEpic: EpicSignature = (action$, _, deps) => {
     filter(isActionOf(Actions.saveChallengeBlob)),
     pluck("payload"),
     mergeMap(deps.api.updateChallengeHistory),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.saveChallengeBlobSuccess();
       } else {
@@ -685,8 +681,8 @@ const completeContentOnlyChallengeEpic: EpicSignature = (
     filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("previousChallengeId"),
-    filter(x => x !== null),
-    map(prevId => {
+    filter((x) => x !== null),
+    map((prevId) => {
       // artificially construct the previous state in order to get the last
       // challenge using the getCurrentChallenge selector.
       const prevState = {
@@ -703,9 +699,9 @@ const completeContentOnlyChallengeEpic: EpicSignature = (
       ) as Challenge;
     }),
     filter(isContentOnlyChallenge),
-    filter(x => x.type !== "project"), // Exclude projects
+    filter((x) => x.type !== "project"), // Exclude projects
     map(({ id }) => constructProgressDto(state$.value, id, true)),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.updateUserProgress(result.value);
       } else {
@@ -722,9 +718,9 @@ const completeProjectSubmissionEpic: EpicSignature = (action$, state$) => {
   return action$.pipe(
     filter(isActionOf(Actions.submitProject)),
     pluck("payload"),
-    filter(x => x.type === "project"),
+    filter((x) => x.type === "project"),
     map(({ id }) => constructProgressDto(state$.value, id, true)),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.updateUserProgress(result.value);
       } else {
@@ -744,12 +740,12 @@ const handleAttemptChallengeEpic: EpicSignature = (action$, state$) => {
   return action$.pipe(
     filter(isActionOf(Actions.handleAttemptChallenge)),
     filter(() => !state$.value.challenges.revealWorkspaceSolution),
-    filter(action => action.payload.challengeId !== SANDBOX_ID),
+    filter((action) => action.payload.challengeId !== SANDBOX_ID),
     pluck("payload"),
     map(({ challengeId, complete }) =>
       constructProgressDto(state$.value, challengeId, complete),
     ),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.updateUserProgress(result.value);
       } else {
@@ -786,7 +782,7 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
     }),
     pluck("payload"),
     mergeMap(deps.api.updateUserProgress),
-    map(result => {
+    map((result) => {
       if (result.value) {
         return Actions.updateUserProgressSuccess(result.value);
       } else {
@@ -806,12 +802,9 @@ const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
     filter(isActionOf(Actions.setChallengeIdContext)),
     pluck("payload"),
     pluck("previousChallengeId"),
-    map(previousChallengeId => {
-      const {
-        currentCourseId,
-        currentModuleId,
-        courseSkeletons,
-      } = state$.value.challenges;
+    map((previousChallengeId) => {
+      const { currentCourseId, currentModuleId, courseSkeletons } =
+        state$.value.challenges;
 
       const challenges = courseSkeletons
         ?.find(({ id }) => id === currentCourseId)
@@ -821,7 +814,7 @@ const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
         return {
           challenges,
           prevChallengeIndex: challenges.findIndex(
-            c => c.id === previousChallengeId,
+            (c) => c.id === previousChallengeId,
           ),
         };
       }

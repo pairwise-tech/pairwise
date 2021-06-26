@@ -22,11 +22,11 @@ const initialState = {
 };
 
 const app = createReducer<State, AppActionTypes>(initialState)
-  .handleAction(actions.initializeAppSuccess, state => ({
+  .handleAction(actions.initializeAppSuccess, (state) => ({
     ...state,
     initialized: true,
   }))
-  .handleAction(actions.appInitializationFailed, state => ({
+  .handleAction(actions.appInitializationFailed, (state) => ({
     ...state,
     initializationError: true,
   }))
