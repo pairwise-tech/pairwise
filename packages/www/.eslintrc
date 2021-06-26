@@ -3,20 +3,8 @@
   "env": {
     "browser": true
   },
-  "extends": [
-    "standard",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "prettier/standard",
-    "prettier/@typescript-eslint",
-    "prettier/react",
-    "plugin:prettier/recommended"
-  ],
-  "plugins": [
-    "@typescript-eslint",
-    "prettier",
-    "react"
-  ],
+  "extends": ["prettier"],
+  "plugins": ["@typescript-eslint", "prettier", "react"],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
