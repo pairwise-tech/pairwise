@@ -1,6 +1,6 @@
-// Import Worker:
-// eslint-disable-next-line
+// Import code format worker:
 // @ts-ignore
+// eslint-disable-next-line
 import CodeFormatWorker from "workerize-loader!./prettier-code-formatter";
 
 import { CodeFormatMessage, CodeFormatMessageEvent } from "./test-utils";
