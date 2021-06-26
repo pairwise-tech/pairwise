@@ -185,9 +185,7 @@ var fail = function () { return expect(false).toBe(true); };
 var pass = function () { return expect(true).toBe(true); };
 // Generate a random string id
 var __id = function () {
-    return (Math.random()
-        .toString(36)
-        .substring(2) + Date.now().toString(36));
+    return Math.random().toString(36).substring(2) + Date.now().toString(36);
 };
 // Generate a random number in a min...max range
 var __randomInRange = function (min, max) {

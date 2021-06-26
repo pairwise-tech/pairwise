@@ -547,7 +547,7 @@ export const parseInitialUrlToInitializationType = (
 
 // Format a date, e.g. 2020-02-15T13:10:18.920Z -> Saturday, February 15, 2020
 export const formatDate = (rawDate: Date) => {
-  const options = {
+  const options: Intl.DateTimeFormatOptions = {
     weekday: "long",
     year: "numeric",
     month: "long",
