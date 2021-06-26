@@ -1,3 +1,6 @@
+// @ts-ignore
+import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
+
 import React from "react";
 import { ICodeEditorProps, ICodeEditor } from "./Workspace";
 import {
@@ -14,9 +17,6 @@ import cx from "classnames";
 import { wait } from "tools/utils";
 import { debounce } from "throttle-debounce";
 import { editor } from "monaco-editor";
-
-// @ts-ignore
-import SyntaxHighlightWorker from "workerize-loader!../tools/tsx-syntax-highlighter";
 import { CHALLENGE_TEST_EDITOR } from "./ChallengeTestEditor";
 
 /** ===========================================================================
@@ -25,6 +25,10 @@ import { CHALLENGE_TEST_EDITOR } from "./ChallengeTestEditor";
  */
 
 const PAIRWISE_MONACO_EDITOR = "pairwise-monaco-editor.tsx";
+
+// This id is used to apply .tsx syntax highlighting styles for
+// the Monaco editor. The styles are found in monaco-tsx-styles.scss.
+const PAIRWISE_EDITOR_ID = "pairwise-code-editor";
 
 type MODEL_ID = string;
 type MODEL_TYPE = typeof CHALLENGE_TEST_EDITOR | typeof PAIRWISE_MONACO_EDITOR;
@@ -65,13 +69,14 @@ class WorkspaceMonacoEditor
     /* Initialize Monaco Editor and the SyntaxHighlightWorker */
     this.initializeSyntaxHighlightWorker();
 
-    /* Handle some timing issue with Monaco initialization... */
-    await wait(500);
+    // Pause briefly before dispatching syntax highlighting request
+    await wait(250);
 
     this.debouncedSyntaxHighlightFunction(this.props.value);
   }
 
   componentDidUpdate(nextProps: ICodeEditorProps) {
+    // Apply workspace lib if edit mode is enabled
     if (nextProps.isEditMode && this.monaco) {
       const root = "file:///node_modules/@types";
       const getPath = (name: string) => `${root}/${name}/index.d.ts`;
@@ -146,7 +151,7 @@ class WorkspaceMonacoEditor
 
   render() {
     return (
-      <div id="pairwise-code-editor" style={{ height: "100%" }}>
+      <div id={PAIRWISE_EDITOR_ID} style={{ height: "100%" }}>
         <Editor
           options={{
             tabSize: 2,
@@ -178,8 +183,10 @@ class WorkspaceMonacoEditor
   };
 
   requestSyntaxHighlighting = (code: string) => {
-    if (this.syntaxWorker) {
-      this.syntaxWorker.postMessage({ code });
+    if (this.props.challengeType === "react") {
+      if (this.syntaxWorker) {
+        this.syntaxWorker.postMessage({ code });
+      }
     }
   };
 
@@ -203,6 +210,7 @@ class WorkspaceMonacoEditor
     if (!monaco || this.props.challengeType === "markup") {
       return;
     }
+
     const decorations = classifications.map((c) => {
       // Custom class names which are styled in the monaco-tsx-styles file
       const inlineClassName = cx(

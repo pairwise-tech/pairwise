@@ -1,7 +1,7 @@
 {
   "name": "@pairwise/admin",
   "version": "0.0.1",
-  "description": "Pairwise Admin UI",
+  "description": "Pairwise admin dashboard",
   "private": true,
   "scripts": {
     "setup:env": "cp sample.env .env",

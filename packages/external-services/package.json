@@ -2,7 +2,7 @@
   "name": "@pairwise/external-services",
   "version": "0.0.1",
   "private": true,
-  "description": "A simple Express Server to mock external service APIs for testing and development",
+  "description": "An Express server to mock external service APIs for testing and development",
   "files": [
     "dist"
   ],

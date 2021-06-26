@@ -1,7 +1,7 @@
 {
   "name": "@pairwise/server",
   "version": "0.0.1",
-  "description": "Pairwise NestJS Server Application",
+  "description": "Pairwise NestJS server application",
   "private": true,
   "scripts": {
     "prebuild": "rimraf dist",

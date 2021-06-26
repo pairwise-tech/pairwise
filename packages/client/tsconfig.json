@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -25,11 +21,6 @@
     "sourceRoot": "/",
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src",
-    "client-declarations.d.ts"
-  ],
-  "exclude": [
-    "src/js/*"
-  ]
+  "include": ["src", "client-declarations.d.ts"],
+  "exclude": ["src/js/*"]
 }

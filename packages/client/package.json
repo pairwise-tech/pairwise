@@ -1,7 +1,7 @@
 {
   "name": "@pairwise/client",
   "version": "0.0.1",
-  "description": "Pairwise React Client Application",
+  "description": "Pairwise client workspace application",
   "private": true,
   "scripts": {
     "codepress:build": "tsc --lib esnext --esModuleInterop --skipLibCheck codepress/src/*.ts",
@@ -16,7 +16,8 @@
     "start:https": "REACT_APP_HOST=https://localhost:9000 HTTPS=true yarn run start",
     "start:prod": "serve build -s -p 3000",
     "prebuild": "yarn run build:common && yarn run js:build",
-    "build": "react-scripts build",
+    "_build": "react-scripts build",
+    "build": "react-scripts --max_old_space_size=8192 build",
     "postbuild": "cp _redirects build/",
     "jest": "react-scripts test",
     "eject": "react-scripts eject",

@@ -9,14 +9,19 @@ import fileUpload from "express-fileupload";
 
 import { Course, ContentUtilityClass, CourseList } from "@pairwise/common";
 
-// eslint-disable-next-line
-const debug = require("debug")("codepress:app");
+/** ===========================================================================
+ * Codepress Server
+ * ----------------------------------------------------------------------------
+ * This which handles serving course data when the app is running
+ * in Codepress and saving changes.
+ * ============================================================================
+ */
 
 const readdir = promisify(fs.readdir);
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
-const makeCache = data => {
+const makeCache = (data) => {
   return data.reduce((agg, x) => {
     return {
       ...agg,
@@ -37,8 +42,6 @@ class CourseAPI {
 
     // Where the course files are saved
     this.basedir = path.resolve(__dirname, basedir);
-
-    debug(`[INFO] Initialized with basedir: ${this.basedir}`);
 
     // A cache to hold on to data once read from disk... this is probably
     // premature optimization though so it might be removed later
@@ -76,16 +79,16 @@ class CourseAPI {
 
   getAll = () => {
     return readdir(this.basedir)
-      .then(filenames => {
+      .then((filenames) => {
         // Sort the filenames for a definitive order:
-        return filenames.sort().map(x => path.resolve(this.basedir, x));
+        return filenames.sort().map((x) => path.resolve(this.basedir, x));
       })
-      .then(filepaths =>
+      .then((filepaths) =>
         Promise.all(
-          filepaths.map(x => {
+          filepaths.map((x) => {
             return readFile(x, { encoding: "utf8" })
               .then(JSON.parse)
-              .then(course => {
+              .then((course) => {
                 this.filepaths[course.id] = x;
                 return course;
               });
@@ -165,7 +168,7 @@ app.post("/assets/:resourceId", (req, res, next) => {
   const filepath = path.join(absDir, filename);
 
   console.log(`[UPLOAD] saving file for ${resourceId} at ${filepath}`);
-  file.mv(filepath, err => {
+  file.mv(filepath, (err) => {
     if (err) {
       next(err);
       return;
@@ -182,7 +185,7 @@ app.post("/assets/:resourceId", (req, res, next) => {
 
 app.get("/courses", (_, res) => {
   // NOTE: This returns the entire course and doesn't filter free content.
-  api.courses.getAll().then(courses =>
+  api.courses.getAll().then((courses) =>
     res.send({
       status: "OK",
       data: courses,
@@ -199,7 +202,7 @@ app.get("/skeletons", (_, res) => {
 
       // Codepress user "purchased" all existing courses
       const allAccessPass = xs
-        .map(x => x.id)
+        .map((x) => x.id)
         .reduce((courseIdMap, id) => {
           return {
             ...courseIdMap,
@@ -209,7 +212,7 @@ app.get("/skeletons", (_, res) => {
 
       return util.getCourseNavigationSkeletons(allAccessPass);
     })
-    .then(skeletons => {
+    .then((skeletons) => {
       res.send({
         status: "OK",
         data: skeletons,
@@ -218,7 +221,7 @@ app.get("/skeletons", (_, res) => {
 });
 
 app.get("/courses/:id", (req, res) => {
-  api.courses.get(req.params.id).then(course => {
+  api.courses.get(req.params.id).then((course) => {
     res.send({
       status: "OK",
       data: course,
@@ -249,5 +252,10 @@ app.use((err, _, res, __) => {
     error: err.message,
   });
 });
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default app;

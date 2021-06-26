@@ -1056,7 +1056,7 @@ class Workspace extends React.Component<IProps, IState> {
   handleEditorTabClick = async (tab: ADMIN_EDITOR_TAB) => {
     this.setState(
       {
-        code: this.props.challenge[tab] || this.props.challenge.starterCode, // See NOTE
+        code: this.props.challenge[tab] || this.props.challenge.starterCode,
       },
       async () => {
         this.props.setAdminEditorTab(tab);
@@ -1092,10 +1092,12 @@ class Workspace extends React.Component<IProps, IState> {
     const [passedTests, failingTests] = partition<TestCase>(
       (t) => t.testResult,
     )(testResults);
+
     const correct =
       !testResultsLoading &&
       passedTests.length > 0 &&
       passedTests.length === testResults.length;
+
     return { correct, passedTests, failingTests, testResults };
   };
 

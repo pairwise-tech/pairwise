@@ -1,6 +1,6 @@
 import React from "react";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import { ICodeEditorProps, ICodeEditor, ICodeEditorOptions } from "./Workspace";
+import { ICodeEditorProps, ICodeEditor } from "./Workspace";
 import { wait } from "tools/utils";
 import styled from "styled-components/macro";
 
@@ -55,15 +55,6 @@ class WorkspaceCodemirrorEditor
     editor.focus();
   };
 
-  cleanup = () => {
-    this.codemirrorInstance = null;
-    this._isMounted = false;
-  };
-
-  componentWillUnmount() {
-    this.cleanup();
-  }
-
   async componentDidMount() {
     this._isMounted = true;
 
@@ -78,10 +69,15 @@ class WorkspaceCodemirrorEditor
     }
   }
 
+  componentWillUnmount() {
+    this.codemirrorInstance = null;
+    this._isMounted = false;
+  }
+
   render() {
     const { language, editorOptions } = this.props;
-    const { theWaitIsOver } = this.state;
     const { fontSize } = editorOptions;
+    const { theWaitIsOver } = this.state;
 
     let mode = language;
     if (language === "html") {
@@ -90,15 +86,23 @@ class WorkspaceCodemirrorEditor
       mode = "text/typescript";
     }
 
+    const CODE_MIRROR_THEMES = [
+      "material-darker",
+      "material-palenight",
+      "ayu-dark",
+      "ayu-mirage",
+      "solarized-dark",
+    ];
+
     const options = {
       mode,
-      theme: "material-darker",
       matchTags: true,
       lineNumbers: true,
       lineWrapping: true,
       autoCloseTags: true,
       matchBrackets: true,
       autoCloseBrackets: true,
+      theme: CODE_MIRROR_THEMES[2],
     };
 
     return (
@@ -108,7 +112,7 @@ class WorkspaceCodemirrorEditor
             options={options}
             value={this.props.value}
             editorDidMount={this.editorDidMount}
-            onBeforeChange={(editor, data, value) => {
+            onBeforeChange={(_editor, _data, value) => {
               this.props.onChange(value);
             }}
           />

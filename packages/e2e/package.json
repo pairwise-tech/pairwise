@@ -1,7 +1,7 @@
 {
   "name": "@pairwise/e2e",
   "version": "0.0.1",
-  "description": "Pairwise e2e test suite",
+  "description": "Pairwise e2e test suite for all backend APIs",
   "private": true,
   "main": "dist/e2e.js",
   "scripts": {

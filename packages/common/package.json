@@ -1,7 +1,7 @@
 {
   "name": "@pairwise/common",
   "version": "0.0.1",
-  "description": "Pairwise shared utilities and types",
+  "description": "Pairwise shared utilities, components, and types",
   "private": true,
   "scripts": {
     "prebuild": "yarn run build:metadata",
