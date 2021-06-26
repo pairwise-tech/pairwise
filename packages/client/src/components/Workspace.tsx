@@ -151,6 +151,7 @@ export interface ICodeEditorProps {
   challengeType: CHALLENGE_TYPE;
   editorOptions: ICodeEditorOptions;
   onDidBlurEditorText: () => void;
+  isReactNativeChallenge: boolean;
   isBackendModuleChallenge: boolean;
   isTestingAndAutomationChallenge: boolean;
 }
@@ -654,6 +655,7 @@ class Workspace extends React.Component<IProps, IState> {
           challengeType={this.props.challenge.type}
           language={this.getMonacoLanguageFromChallengeType()}
           onDidBlurEditorText={this.handleAutoFormatCodeOnBlur}
+          isReactNativeChallenge={isReactNativeChallenge}
           isBackendModuleChallenge={this.props.isBackendModuleChallenge}
           isTestingAndAutomationChallenge={
             this.props.isTestingAndAutomationChallenge

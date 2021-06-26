@@ -106,6 +106,7 @@ class DependencyCacheClass {
             lib = await this.fetchResource(resolver);
           } else {
             lib = resolver.default;
+            console.log(lib);
           }
 
           this.dependencyCache.set(packageName, { source: lib });

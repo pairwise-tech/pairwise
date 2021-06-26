@@ -144,6 +144,26 @@ class WorkspaceMonacoEditor
       );
     }
 
+    if (this.props.isReactNativeChallenge) {
+      // TODO: Create a better type declaration
+      const REACT_NATIVE_D_TS = `declare module "react-native" {
+        declare const View: any;
+        declare const Text: any;
+        declare const Button: any;
+        declare const TextInput: any;
+        declare const Switch: any;
+        declare const FlatList: any;
+        declare const ScrollView: any;
+        declare const Touchable: any;
+        declare const TouchableOpacity: any;
+      }`;
+
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        REACT_NATIVE_D_TS,
+        getPath("react-native-web"),
+      );
+    }
+
     this.monaco = monaco;
 
     editor.focus();
