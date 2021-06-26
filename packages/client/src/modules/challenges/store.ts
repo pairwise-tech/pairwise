@@ -32,8 +32,11 @@ import { view } from "ramda";
  * ============================================================================
  */
 
-export type ADMIN_TEST_TAB = "testResults" | "testCode";
-export type ADMIN_EDITOR_TAB = "starterCode" | "solutionCode";
+// instructions are available in alternate edit mode
+export type ADMIN_EDITOR_TAB = "instructions" | "starterCode" | "solutionCode";
+
+// console view is available in alternate edit mode
+export type ADMIN_TEST_TAB = "testResults" | "testCode" | "console";
 
 interface AccordionViewState {
   [key: string]: boolean;
@@ -522,6 +525,9 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     isEditMode: action.payload,
     editModeAlternativeView: false,
+    // Reset to default whenever isEditMode changes
+    adminTestTab: "testResults",
+    adminEditorTab: "starterCode",
   }))
   .handleAction(actions.setChallengeIdContext, (state, { payload }) => ({
     ...state,
@@ -642,6 +648,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   }))
   .handleAction(actions.toggleEditModeAlternativeView, (state, action) => ({
     ...state,
+    adminTestTab: "testResults",
     editModeAlternativeView: !state.editModeAlternativeView,
   }))
   .handleAction(actions.toggleCodemirrorEditor, (state, action) => ({

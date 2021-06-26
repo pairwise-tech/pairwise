@@ -21,6 +21,8 @@ export const getDimensions = (
 
   const EDITOR_PANEL_WIDTH = w * 0.65;
 
+  const HALF_WIDTH = w * 0.5;
+
   // Left panel default measurements
   const CHALLENGE_CONTENT_HEIGHT = WORKSPACE_PANEL_HEIGHT * 0.2;
   const EDITOR_HEIGHT = WORKSPACE_PANEL_HEIGHT * 0.5;
@@ -45,6 +47,7 @@ export const getDimensions = (
   const DIMENSIONS = {
     w,
     h,
+    HALF_WIDTH,
     WORKSPACE_HEIGHT,
     EDITOR_PANEL_WIDTH,
     CHALLENGE_CONTENT_HEIGHT,

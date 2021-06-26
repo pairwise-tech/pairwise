@@ -184,7 +184,7 @@ class Workspace extends React.Component<IProps, IState> {
     this.setState({
       dimensions: getDimensions(window.innerWidth, window.innerHeight),
     });
-    this.refreshLayout();
+    this.refreshGridLayout();
 
     // The code editor needs to refresh before the iframe, otherwise the iframe
     // goes blank.
@@ -321,12 +321,27 @@ class Workspace extends React.Component<IProps, IState> {
       this.pauseAndRefreshEditor();
     }
 
+    // Refresh grid layout when Codepress alternate edit mode changes
+    if (
+      prevProps.editModeAlternativeViewEnabled !==
+      this.props.editModeAlternativeViewEnabled
+    ) {
+      this.refreshGridLayout();
+    }
+
+    // Instructions panel collapse state toggled
     if (
       prevProps.isInstructionsViewCollapsed !==
       this.props.isInstructionsViewCollapsed
     ) {
-      document.getElementById(INSTRUCTIONS_VIEW_PANEL_ID)?.scrollTo({ top: 0 });
-      this.refreshLayout();
+      // Side effect doesn't apply on mobile
+      if (!this.props.isMobileView) {
+        document
+          .getElementById(INSTRUCTIONS_VIEW_PANEL_ID)
+          ?.scrollTo({ top: 0 });
+
+        this.refreshGridLayout();
+      }
     }
   }
 
@@ -380,31 +395,67 @@ class Workspace extends React.Component<IProps, IState> {
         ? WorkspaceCodemirrorEditor
         : WorkspaceMonacoEditor;
 
+    // Allow the content in the Console to scroll if it overflows
+    const ScrollableWorkspaceConsole = (
+      <div
+        style={{
+          height: "100%",
+          overflow: "scroll",
+          paddingBottom: 6,
+          overscrollBehavior: "none",
+        }}
+      >
+        <Console variant="dark" logs={this.state.logs} />
+      </div>
+    );
+
     const WorkspaceTestContainer = (
       <>
         <TabbedInnerNav show={isEditMode}>
           <Tab
-            onClick={() => this.handleTestTabClick("testResults")}
             active={this.props.adminTestTab === "testResults"}
+            onClick={() => this.handleTestTabClick("testResults")}
           >
             Test Results
           </Tab>
           <Tab
-            onClick={() => this.handleTestTabClick("testCode")}
             active={this.props.adminTestTab === "testCode"}
+            onClick={() => this.handleTestTabClick("testCode")}
           >
             Test Code
           </Tab>
+          {IS_ALTERNATIVE_EDIT_VIEW && (
+            <Tab
+              active={this.props.adminTestTab === "console"}
+              onClick={() => this.handleTestTabClick("console")}
+            >
+              Console
+            </Tab>
+          )}
           {isEditMode && (
             <TestStatusTextTab
               passing={allTestsPassing}
               testsRunning={testResultsLoading}
+              IconButtonProp={
+                <Tooltip
+                  position="right"
+                  interactionKind="hover-target"
+                  content="Toggle Alternate Edit View"
+                >
+                  <IconButton
+                    icon="panel-stats"
+                    id="alternate-edit-mode-toggle"
+                    aria-label="toggle alternate edit mode"
+                    onClick={this.props.toggleAlternativeEditView}
+                  />
+                </Tooltip>
+              }
             />
           )}
         </TabbedInnerNav>
         {this.props.isEditMode && this.props.adminTestTab === "testCode" ? (
           <ChallengeTestEditor />
-        ) : (
+        ) : this.props.adminTestTab === "testResults" ? (
           <ContentContainer>
             <ContentTitle style={{ marginBottom: 12 }}>
               {this.getTestSummaryString()}
@@ -421,24 +472,13 @@ class Workspace extends React.Component<IProps, IState> {
             ))}
             <Spacer height={50} />
           </ContentContainer>
+        ) : (
+          <>{ScrollableWorkspaceConsole}</>
         )}
       </>
     );
 
-    // Allow the content in the Console to scroll if it overflows
-    const ScrollableWorkspaceConsole = (
-      <div
-        style={{
-          height: "100%",
-          overflow: "scroll",
-          paddingBottom: 6,
-          overscrollBehavior: "none",
-        }}
-      >
-        <Console variant="dark" logs={this.state.logs} />
-      </div>
-    );
-
+    // Codepress test editor full height
     const TestFullHeightEditor = (
       <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
         <>{IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}</>
@@ -463,6 +503,14 @@ class Workspace extends React.Component<IProps, IState> {
           onClickOutside={this.handleCloseSuccessModal}
         />
         <TabbedInnerNav show={isEditMode}>
+          {IS_ALTERNATIVE_EDIT_VIEW && (
+            <Tab
+              onClick={() => this.handleEditorTabClick("instructions")}
+              active={this.props.adminEditorTab === "instructions"}
+            >
+              Instructions
+            </Tab>
+          )}
           <Tab
             onClick={() => this.handleEditorTabClick("starterCode")}
             active={this.props.adminEditorTab === "starterCode"}
@@ -476,201 +524,203 @@ class Workspace extends React.Component<IProps, IState> {
             Solution
           </Tab>
         </TabbedInnerNav>
-        <CodeEditorUpperRight isEditMode={isEditMode}>
-          {revealSolutionCode && (
-            <RevealSolutionLabel
-              hideSolution={this.props.handleToggleSolutionCode}
-            />
-          )}
-          <RunButton
-            fill
-            icon="play"
-            id="pw-run-code"
-            large={isMobileView}
-            loading={testResultsLoading}
-            onClick={this.handleUserTriggeredTestRun}
-            aria-label="run the current editor code"
-          >
-            Run
-          </RunButton>
-        </CodeEditorUpperRight>
-        <LowerRight>
-          <ButtonGroup vertical={!isMobileView}>
-            <Tooltip
-              disabled={isMobileView}
-              content="Increase Font Size"
-              position={isMobileView ? "top" : "left"}
-              interactionKind={"hover-target"}
-            >
-              <IconButton
+        {this.props.adminEditorTab === "instructions" ? (
+          <ContentContainer>
+            <InstructionsViewEdit />
+          </ContentContainer>
+        ) : (
+          <>
+            <CodeEditorUpperRight isEditMode={isEditMode}>
+              {revealSolutionCode && (
+                <RevealSolutionLabel
+                  hideSolution={this.props.handleToggleSolutionCode}
+                />
+              )}
+              <RunButton
+                fill
+                icon="play"
+                id="pw-run-code"
                 large={isMobileView}
-                id="editor-increase-font-size"
-                icon="plus"
-                aria-label="increase editor font size"
-                onClick={this.props.increaseFontSize}
-              />
-            </Tooltip>
-            <Tooltip
-              disabled={isMobileView}
-              content="Decrease Font Size"
-              position={isMobileView ? "top" : "left"}
-              interactionKind={"hover-target"}
-            >
-              <IconButton
-                large={isMobileView}
-                id="editor-decrease-font-size"
-                icon="minus"
-                aria-label="decrease editor font size"
-                onClick={this.props.decreaseFontSize}
-              />
-            </Tooltip>
-          </ButtonGroup>
-          <div style={{ marginBottom: 8 }} />
-          {/* Code formatting is available only for HTML/CSS/TS challenges */}
-          {!isMobileView && !IS_ALTERNATE_LANGUAGE_CHALLENGE && (
-            <Tooltip content="Format Code" position="left">
-              <IconButton
-                icon="clean"
-                large={isMobileView}
-                id="editor-format-code"
-                aria-label="format editor code"
-                onClick={this.handleRequestCodeFormatting}
-              />
-            </Tooltip>
-          )}
-          <div style={{ marginBottom: 8 }} />
-          <Popover
-            content={
-              <Menu large>
-                {!IS_SANDBOX && isEditMode && (
-                  <MenuItem
-                    icon={
-                      IS_ALTERNATIVE_EDIT_VIEW ? "application" : "applications"
-                    }
-                    text="Toggle Alternative Edit Mode"
-                    aria-label="toggle alternative edit mode"
-                    onClick={this.props.toggleAlternativeEditView}
+                loading={testResultsLoading}
+                onClick={this.handleUserTriggeredTestRun}
+                aria-label="run the current editor code"
+              >
+                Run
+              </RunButton>
+            </CodeEditorUpperRight>
+            <LowerRight>
+              <ButtonGroup vertical={!isMobileView}>
+                <Tooltip
+                  disabled={isMobileView}
+                  content="Increase Font Size"
+                  position={isMobileView ? "top" : "left"}
+                  interactionKind={"hover-target"}
+                >
+                  <IconButton
+                    large={isMobileView}
+                    id="editor-increase-font-size"
+                    icon="plus"
+                    aria-label="increase editor font size"
+                    onClick={this.props.increaseFontSize}
                   />
-                )}
-                {!IS_SANDBOX && !isMobileView && (
-                  <MenuItem
-                    id="editor-toggle-full-screen"
-                    icon={fullScreenEditor ? "collapse-all" : "expand-all"}
-                    aria-label="toggle editor size"
-                    onClick={this.props.toggleEditorSize}
-                    text={
-                      fullScreenEditor
-                        ? "Regular Size Editor"
-                        : "Full Screen Editor"
-                    }
+                </Tooltip>
+                <Tooltip
+                  disabled={isMobileView}
+                  content="Decrease Font Size"
+                  position={isMobileView ? "top" : "left"}
+                  interactionKind={"hover-target"}
+                >
+                  <IconButton
+                    large={isMobileView}
+                    id="editor-decrease-font-size"
+                    icon="minus"
+                    aria-label="decrease editor font size"
+                    onClick={this.props.decreaseFontSize}
                   />
-                )}
-                {!isMobileView && (
-                  <MenuItem
-                    id="editor-toggle-high-contrast"
-                    icon="contrast"
-                    aria-label="toggle high contrast mode"
-                    text="Toggle High Contrast Mode"
-                    onClick={this.props.toggleHighContrastMode}
-                  />
-                )}
-                {!isMobileView && (
-                  <MenuItem
-                    id="editor-toggle-codemirror-editor"
-                    icon="application"
-                    aria-label="toggle codemirror editor"
-                    text="Toggle Alternate Editor"
-                    onClick={this.props.toggleCodemirrorEditor}
-                  />
-                )}
-                {isReactNativeChallenge && (
-                  <MenuItem
-                    icon="mobile-phone"
-                    id="editor-toggle-mobile-device-preview"
-                    aria-label="toggle mobile device preview setting"
-                    onClick={this.toggleMobileDevicePreview}
-                    text={
-                      mobileDevicePreviewType === "ios"
-                        ? "Use Android Mobile Device"
-                        : "Use iOS Mobile Device"
-                    }
-                  />
-                )}
-                {isMobileView && (
-                  <MenuItem
-                    id="editor-format-code-mobile"
+                </Tooltip>
+              </ButtonGroup>
+              <div style={{ marginBottom: 8 }} />
+              {/* Code formatting is available only for HTML/CSS/TS challenges */}
+              {!isMobileView && !IS_ALTERNATE_LANGUAGE_CHALLENGE && (
+                <Tooltip content="Format Code" position="left">
+                  <IconButton
                     icon="clean"
+                    large={isMobileView}
+                    id="editor-format-code"
                     aria-label="format editor code"
                     onClick={this.handleRequestCodeFormatting}
-                    text="Auto-format Code"
                   />
-                )}
-                {!isMobileView && (
-                  <MenuItem
-                    id="editor-export-code"
-                    icon="download"
-                    onClick={this.handleExport}
-                    text="Export Code to File"
-                    aria-label="export code to file"
+                </Tooltip>
+              )}
+              <div style={{ marginBottom: 8 }} />
+              <Popover
+                content={
+                  <Menu large>
+                    {!IS_SANDBOX && !isMobileView && (
+                      <MenuItem
+                        id="editor-toggle-full-screen"
+                        icon={fullScreenEditor ? "collapse-all" : "expand-all"}
+                        aria-label="toggle editor size"
+                        onClick={this.props.toggleEditorSize}
+                        text={
+                          fullScreenEditor
+                            ? "Regular Size Editor"
+                            : "Full Screen Editor"
+                        }
+                      />
+                    )}
+                    {!isMobileView && (
+                      <MenuItem
+                        id="editor-toggle-high-contrast"
+                        icon="contrast"
+                        aria-label="toggle high contrast mode"
+                        text="Toggle High Contrast Mode"
+                        onClick={this.props.toggleHighContrastMode}
+                      />
+                    )}
+                    {!isMobileView && (
+                      <MenuItem
+                        id="editor-toggle-codemirror-editor"
+                        icon="application"
+                        aria-label="toggle codemirror editor"
+                        text="Toggle Alternate Editor"
+                        onClick={this.props.toggleCodemirrorEditor}
+                      />
+                    )}
+                    {isReactNativeChallenge && (
+                      <MenuItem
+                        icon="mobile-phone"
+                        id="editor-toggle-mobile-device-preview"
+                        aria-label="toggle mobile device preview setting"
+                        onClick={this.toggleMobileDevicePreview}
+                        text={
+                          mobileDevicePreviewType === "ios"
+                            ? "Use Android Mobile Device"
+                            : "Use iOS Mobile Device"
+                        }
+                      />
+                    )}
+                    {isMobileView && (
+                      <MenuItem
+                        id="editor-format-code-mobile"
+                        icon="clean"
+                        aria-label="format editor code"
+                        onClick={this.handleRequestCodeFormatting}
+                        text="Auto-format Code"
+                      />
+                    )}
+                    {!isMobileView && (
+                      <MenuItem
+                        id="editor-export-code"
+                        icon="download"
+                        onClick={this.handleExport}
+                        text="Export Code to File"
+                        aria-label="export code to file"
+                      />
+                    )}
+                    <MenuDivider />
+                    <MenuItem
+                      id="editor-restore-initial-code"
+                      icon="reset"
+                      aria-label="reset editor"
+                      onClick={this.resetCodeWindow}
+                      text="Restore Initial Code"
+                    />
+                    {!IS_SANDBOX && (
+                      <MenuItem
+                        id="editor-toggle-solution-code"
+                        icon={
+                          revealSolutionCode ? "application" : "applications"
+                        }
+                        aria-label={
+                          revealSolutionCode
+                            ? "hide solution code"
+                            : "reveal solution code"
+                        }
+                        text={
+                          revealSolutionCode
+                            ? "Hide Solution Code"
+                            : "Reveal Solution Code"
+                        }
+                        onClick={this.props.handleToggleSolutionCode}
+                      />
+                    )}
+                  </Menu>
+                }
+                position={
+                  isMobileView ? Position.TOP_LEFT : Position.LEFT_BOTTOM
+                }
+              >
+                <Tooltip
+                  content="More options..."
+                  position={isMobileView ? "top" : "left"}
+                >
+                  <IconButton
+                    large={isMobileView}
+                    id="editor-more-options"
+                    aria-label="more options"
+                    icon="more"
                   />
-                )}
-                <MenuDivider />
-                <MenuItem
-                  id="editor-restore-initial-code"
-                  icon="reset"
-                  aria-label="reset editor"
-                  onClick={this.resetCodeWindow}
-                  text="Restore Initial Code"
-                />
-                {!IS_SANDBOX && (
-                  <MenuItem
-                    id="editor-toggle-solution-code"
-                    icon={revealSolutionCode ? "application" : "applications"}
-                    aria-label={
-                      revealSolutionCode
-                        ? "hide solution code"
-                        : "reveal solution code"
-                    }
-                    text={
-                      revealSolutionCode
-                        ? "Hide Solution Code"
-                        : "Reveal Solution Code"
-                    }
-                    onClick={this.props.handleToggleSolutionCode}
-                  />
-                )}
-              </Menu>
-            }
-            position={isMobileView ? Position.TOP_LEFT : Position.LEFT_BOTTOM}
-          >
-            <Tooltip
-              content="More options..."
-              position={isMobileView ? "top" : "left"}
-            >
-              <IconButton
-                large={isMobileView}
-                id="editor-more-options"
-                aria-label="more options"
-                icon="more"
-              />
-            </Tooltip>
-          </Popover>
-        </LowerRight>
-        <CodeEditor
-          isEditMode={isEditMode}
-          value={this.state.code}
-          userSettings={this.props.userSettings}
-          editorOptions={this.props.editorOptions}
-          onChange={this.handleEditorContentChange}
-          challengeType={this.props.challenge.type}
-          language={this.getMonacoLanguageFromChallengeType()}
-          onDidBlurEditorText={this.handleAutoFormatCodeOnBlur}
-          isReactNativeChallenge={isReactNativeChallenge}
-          isBackendModuleChallenge={this.props.isBackendModuleChallenge}
-          isTestingAndAutomationChallenge={
-            this.props.isTestingAndAutomationChallenge
-          }
-        />
+                </Tooltip>
+              </Popover>
+            </LowerRight>
+            <CodeEditor
+              isEditMode={isEditMode}
+              value={this.state.code}
+              userSettings={this.props.userSettings}
+              editorOptions={this.props.editorOptions}
+              onChange={this.handleEditorContentChange}
+              challengeType={this.props.challenge.type}
+              language={this.getMonacoLanguageFromChallengeType()}
+              onDidBlurEditorText={this.handleAutoFormatCodeOnBlur}
+              isReactNativeChallenge={isReactNativeChallenge}
+              isBackendModuleChallenge={this.props.isBackendModuleChallenge}
+              isTestingAndAutomationChallenge={
+                this.props.isTestingAndAutomationChallenge
+              }
+            />
+          </>
+        )}
       </CodeEditorContainer>
     );
 
@@ -954,7 +1004,11 @@ class Workspace extends React.Component<IProps, IState> {
             ) : shouldRefreshLayout ? null : (
               <ColsWrapper separatorProps={colSeparatorProps}>
                 <Col
-                  initialWidth={D.EDITOR_PANEL_WIDTH}
+                  initialWidth={
+                    IS_ALTERNATIVE_EDIT_VIEW
+                      ? D.HALF_WIDTH
+                      : D.EDITOR_PANEL_WIDTH
+                  }
                   initialHeight={D.WORKSPACE_HEIGHT}
                 >
                   {IS_FULLSCREEN || IS_ALTERNATIVE_EDIT_VIEW ? (
@@ -1077,14 +1131,18 @@ class Workspace extends React.Component<IProps, IState> {
    * NOTE: When switching to the solution code default to the starter code.
    */
   handleEditorTabClick = async (tab: ADMIN_EDITOR_TAB) => {
-    this.setState(
-      {
-        code: this.props.challenge[tab] || this.props.challenge.starterCode,
-      },
-      async () => {
-        this.props.setAdminEditorTab(tab);
-      },
-    );
+    if (tab === "instructions") {
+      this.props.setAdminEditorTab(tab);
+    } else {
+      this.setState(
+        {
+          code: this.props.challenge[tab] || this.props.challenge.starterCode,
+        },
+        () => {
+          this.props.setAdminEditorTab(tab);
+        },
+      );
+    }
   };
 
   /**
@@ -1529,7 +1587,8 @@ class Workspace extends React.Component<IProps, IState> {
    * dimensions but if we want to update their dimensions we need to completely
    * re-render. That's what this "state flash" let's us do.
    */
-  private readonly refreshLayout = () => {
+  private readonly refreshGridLayout = () => {
+    console.log("REFRESHING");
     const reset = () => {
       this.setState({ shouldRefreshLayout: false }, this.iframeRenderPreview);
     };

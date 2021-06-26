@@ -445,16 +445,21 @@ const TestStatusText = styled.p`
 `;
 
 const StatusTab = styled.div`
-  top: 7px;
-  right: 12px;
+  top: 3px;
+  right: 8px;
   position: absolute;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const TestStatusTextTab = (props: {
   testsRunning: boolean;
   passing: boolean;
+  IconButtonProp: JSX.Element;
 }) => {
-  const { passing, testsRunning } = props;
+  const { passing, testsRunning, IconButtonProp } = props;
 
   const testStatus = testsRunning ? "loading" : passing ? "success" : "failure";
 
@@ -463,9 +468,13 @@ export const TestStatusTextTab = (props: {
     : passing
     ? "Tests Passing"
     : "Tests Failing";
+
   return (
     <StatusTab>
-      <TestStatusText testStatus={testStatus}>{message}</TestStatusText>
+      <TestStatusText style={{ marginRight: 8 }} testStatus={testStatus}>
+        {message}
+      </TestStatusText>
+      {IconButtonProp}
     </StatusTab>
   );
 };
