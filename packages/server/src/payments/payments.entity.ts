@@ -43,11 +43,7 @@ export class Payments {
   @Column({ type: "json", nullable: true })
   public extraData: string;
 
-  @ManyToOne(
-    type => User,
-    user => user.payments,
-    { onDelete: "CASCADE" },
-  )
+  @ManyToOne((type) => User, (user) => user.payments, { onDelete: "CASCADE" })
   public user: User;
 
   @CreateDateColumn({ type: "timestamp" })

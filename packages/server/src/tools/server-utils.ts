@@ -64,7 +64,7 @@ export const parsePullRequestDiff = async (
 
     if (courses.length > 0) {
       const result = await Promise.all(
-        courses.filter(Boolean).map(async courseDiffFile => {
+        courses.filter(Boolean).map(async (courseDiffFile) => {
           const { sha, patch } = courseDiffFile;
           /**
            * Extract all the git file annotations which denote changed line
@@ -72,8 +72,8 @@ export const parsePullRequestDiff = async (
            */
           const lineDiffs = patch
             .split("\n")
-            .filter(x => /@@(.*)@@/.test(x))
-            .map(x => x.match(/\+(.*)\,/).pop());
+            .filter((x) => /@@(.*)@@/.test(x))
+            .map((x) => x.match(/\+(.*)\,/).pop());
 
           /**
            * Fetch the blob for the course JSON in file in this PR. Convert
@@ -90,7 +90,7 @@ export const parsePullRequestDiff = async (
            */
           let currentChallengeId = null;
           const challengeIds = [];
-          const lineNumberSet = new Set(lineDiffs.map(line => +line));
+          const lineNumberSet = new Set(lineDiffs.map((line) => +line));
 
           for (let i = 1; i < jsonByLines.length + 1; i++) {
             const lineNumber = i;
@@ -116,7 +116,7 @@ export const parsePullRequestDiff = async (
            * Map over the identified altered challenge ids from the pull request
            * and construct content context to return in the response.
            */
-          const prDiffContext = challengeIds.map(id => {
+          const prDiffContext = challengeIds.map((id) => {
             // May be undefined if updated challenge is new:
             const originalChallengeMeta = originalChallengeMap[id];
             // May be undefined if updated challenge is a deletion:
@@ -151,7 +151,7 @@ export const parsePullRequestDiff = async (
       // Flatten the results and remove null id diffs
       return result
         .reduce((flat, diff) => flat.concat(diff))
-        .filter(x => x.id !== null);
+        .filter((x) => x.id !== null);
     } else {
       return "No course JSON has been modified in this PR.";
     }

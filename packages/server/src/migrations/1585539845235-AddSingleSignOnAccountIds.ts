@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class AddSingleSignOnAccountIds1585539845235
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = "AddSingleSignOnAccountIds1585539845235";
 
   public async up(queryRunner: QueryRunner): Promise<any> {

@@ -35,13 +35,9 @@ export class Feedback implements IFeedbackDto {
   @Column()
   public type: FEEDBACK_TYPE;
 
-  @ManyToOne(
-    type => User,
-    user => user.userFeedback,
-    {
-      onDelete: "CASCADE",
-    },
-  )
+  @ManyToOne((type) => User, (user) => user.userFeedback, {
+    onDelete: "CASCADE",
+  })
   public user: User;
 
   @CreateDateColumn({ type: "timestamp" })

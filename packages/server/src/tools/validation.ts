@@ -348,7 +348,7 @@ export const validatePaymentRequest = (
   }
 
   const existingCoursePayment = user.payments.find(
-    p => p.courseId === courseId,
+    (p) => p.courseId === courseId,
   );
 
   // The user must no have already paid for the course
@@ -373,7 +373,7 @@ export const validateRefundRequest = (
   }
 
   const existingCoursePayment = user.payments.find(
-    p => p.courseId === courseId,
+    (p) => p.courseId === courseId,
   );
 
   // The course must exist and not be refunded already

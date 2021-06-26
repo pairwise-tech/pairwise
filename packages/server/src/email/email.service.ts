@@ -33,10 +33,11 @@ export class EmailService {
 
   constructor() {
     // Read it and weep: https://github.com/googleapis/google-api-nodejs-client/issues/1110#issuecomment-546147468
-    const GOOGLE_EMAIL_PRIVATE_KEY = ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY.replace(
-      new RegExp("\\\\n", "g"),
-      "\n",
-    );
+    const GOOGLE_EMAIL_PRIVATE_KEY =
+      ENV.GOOGLE_EMAIL_ACCOUNT_PRIVATE_KEY.replace(
+        new RegExp("\\\\n", "g"),
+        "\n",
+      );
 
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",

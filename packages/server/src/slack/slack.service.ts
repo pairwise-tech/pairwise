@@ -84,7 +84,7 @@ export class SlackService {
 
   constructor() {
     this.client = new WebClient(ENV.SLACK_API_TOKEN);
-    this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS.map(id => `<@${id}>`).join(
+    this.adminMentionMarkup = ENV.SLACK_ADMIN_IDS.map((id) => `<@${id}>`).join(
       " ",
     );
   }

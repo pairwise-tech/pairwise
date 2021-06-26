@@ -57,31 +57,22 @@ export class User {
   @Column({ type: "jsonb", default: `"{}"` })
   public lastActiveChallengeIds: string;
 
-  @OneToMany(
-    type => Payments,
-    payments => payments.user,
-  )
+  @OneToMany((type) => Payments, (payments) => payments.user)
   @JoinColumn()
   public payments: Payments;
 
   @OneToMany(
-    type => Progress,
-    challengeProgressHistory => challengeProgressHistory.user,
+    (type) => Progress,
+    (challengeProgressHistory) => challengeProgressHistory.user,
   )
   @JoinColumn()
   public challengeProgressHistory: Progress;
 
-  @OneToMany(
-    type => CodeBlob,
-    codeBlob => codeBlob.user,
-  )
+  @OneToMany((type) => CodeBlob, (codeBlob) => codeBlob.user)
   @JoinColumn()
   public challengeCodeHistory: CodeBlob;
 
-  @OneToMany(
-    type => Feedback,
-    userFeedback => userFeedback.user,
-  )
+  @OneToMany((type) => Feedback, (userFeedback) => userFeedback.user)
   @JoinColumn()
   public userFeedback: Feedback;
 
