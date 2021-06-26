@@ -34,7 +34,7 @@ app.get("/", (req, res) =>
  * Facebook authorization request.
  */
 app.get("/facebook/authorize", (req, res) => {
-  res.redirect(`${SERVER}/auth/facebook/callback?code=4c409cbcfbd1e11cb6f3`);
+  res.redirect(`${SERVER}/auth/facebook/callback?code=as7d6f0sa6f0sa76f0fas`);
 });
 
 /**
@@ -82,7 +82,7 @@ app.get("/github/profile", (req, res) => {
  */
 app.get("/google/token", (req, res) => {
   res.redirect(
-    `${SERVER}/auth/google/callback?code=vAExoIBVcI3vY26dV5b0KCWm2L95z9IW3P4pEu7HbLCq2TLMpyQv89B9zBe95Bj6worI74a81JEWN&scope=email+profile+https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email+openid?authuser=0&session_state=1dbd561a75553a324b87c0a0452692ae39ecda66..14cb&prompt=consent`,
+    `${SERVER}/auth/google/callback?code=${mockAuth.getGoogleCallbackCode()}`,
   );
 });
 
@@ -110,7 +110,7 @@ app.get("/google/profile", (req, res) => {
  */
 app.get("/google-admin/token", (req, res) => {
   res.redirect(
-    `${SERVER}/auth/google-admin/callback?code=vAExoIBVcI3vY26dV5b0KCWm2L95z9IW3P4pEu7HbLCq2TLMpyQv89B9zBe95Bj6worI74a81JEWN&scope=email+profile+https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email+openid?authuser=0&session_state=1dbd561a75553a324b87c0a0452692ae39ecda66..14cb&prompt=consent`,
+    `${SERVER}/auth/google-admin/callback?code=${mockAuth.getGoogleCallbackCode()}`,
   );
 });
 
