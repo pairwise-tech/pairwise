@@ -28,8 +28,8 @@ interface GitPorcelainFormat {
   content: string;
 }
 
-const camelCase = str => {
-  const capitalize = s => s.slice(0, 1).toUpperCase() + s.slice(1);
+const camelCase = (str) => {
+  const capitalize = (s) => s.slice(0, 1).toUpperCase() + s.slice(1);
   const [head, ...tail] = str.split("-");
   return head + tail.map(capitalize).join("");
 };
@@ -41,7 +41,7 @@ const camelCase = str => {
 // docs it looks like git line indexes are actually 1-based not 0-based.
 const getFileLocation = ({ raw, challenge }) => {
   const lines = raw.split("\n");
-  const start = lines.findIndex(line =>
+  const start = lines.findIndex((line) =>
     line.includes(`"id": "${challenge.id}"`),
   ); // See NOTE
   const end = start + Object.keys(challenge).length; // See NOTE
@@ -53,7 +53,7 @@ const getFileLocation = ({ raw, challenge }) => {
     "\n" +
       lines
         .slice(start, end)
-        .map(s => s.slice(0, 80))
+        .map((s) => s.slice(0, 80))
         .join("\n"),
   );
 
@@ -63,7 +63,7 @@ const getFileLocation = ({ raw, challenge }) => {
   };
 };
 
-const isNumeric = str => {
+const isNumeric = (str) => {
   return /^\d+$/.test(str);
 };
 
@@ -192,8 +192,8 @@ const getGitMetadata = async ({
   // some lines in a json object appear copy-pasted due to simply being default
   // values. Such as an empty video URL.
   const blameLines = sortLatestFirst(
-    porcelainLines.filter(x => x.authorTime >= initialCommitLine.authorTime), // See NOTE
-  ).map(x => ({
+    porcelainLines.filter((x) => x.authorTime >= initialCommitLine.authorTime), // See NOTE
+  ).map((x) => ({
     commit: x.commit.slice(0, 8),
     summary: x.summary,
     author: x.author,
@@ -203,7 +203,7 @@ const getGitMetadata = async ({
   // Use a Set to get distinct (unique) entries. Duplicate authors are
   // unavoidable without this, since every blame line has an author and there
   // are only three of us as of this commit.
-  const contributors = [...new Set<string>(blameLines.map(x => x.author))];
+  const contributors = [...new Set<string>(blameLines.map((x) => x.author))];
 
   // Aggregate commits by each author
   const contributionsBy = blameLines.reduce((agg, x) => {
@@ -214,7 +214,7 @@ const getGitMetadata = async ({
       [x.author]: Array.from(set),
     };
   }, {});
-  const edits = new Set(blameLines.map(x => x.commit)).size;
+  const edits = new Set(blameLines.map((x) => x.commit)).size;
 
   return {
     lineRange: [gitStart, gitEnd],
@@ -231,8 +231,8 @@ type CourseFiles = ReturnType<typeof readCourseFilesFromDisk>;
 export const buildFilePorcelain = async (courseFiles: CourseFiles) => {
   const _tmp = await Promise.all(
     courseFiles
-      .map(x => x.filepath)
-      .map(async filepath => ({
+      .map((x) => x.filepath)
+      .map(async (filepath) => ({
         filepath,
         porcelain: await getPorcelainForFile(filepath),
       })),
@@ -278,7 +278,7 @@ export const getChallengMetadata = async (
         console.error(`${id} -> [MODULE] ${mod.title}`);
       }
 
-      const challengeIndex = challenges.findIndex(x => x.id === id);
+      const challengeIndex = challenges.findIndex((x) => x.id === id);
       const challenge = challenges[challengeIndex];
 
       if (challenge) {
@@ -318,9 +318,9 @@ export const readCourseFilesFromDisk = (
 ) => {
   const courseFiles = fs
     .readdirSync(path.resolve(courseRoot))
-    .filter(filename => filename.match(/^\d\d/)) // Only numbered course files
-    .map(filename => path.resolve(courseRoot, filename))
-    .map(filepath => {
+    .filter((filename) => filename.match(/^\d\d/)) // Only numbered course files
+    .map((filename) => path.resolve(courseRoot, filename))
+    .map((filepath) => {
       const raw = fs.readFileSync(filepath, { encoding: "utf-8" });
       return {
         filename: path.basename(filepath),

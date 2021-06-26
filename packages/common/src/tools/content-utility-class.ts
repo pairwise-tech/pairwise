@@ -74,16 +74,16 @@ class ContentUtilityClass {
      * is necessary to still provide an overview of all the course data to the
      * client.
      */
-    this.courseNavigationSkeletons = courses.map(course => {
+    this.courseNavigationSkeletons = courses.map((course) => {
       return {
         ...course,
-        modules: course.modules.map(courseModule => {
+        modules: course.modules.map((courseModule) => {
           return {
             id: courseModule.id,
             title: courseModule.title,
             free: courseModule.free,
             userCanAccess: courseModule.free,
-            challenges: courseModule.challenges.map(challenge => {
+            challenges: courseModule.challenges.map((challenge) => {
               // NOTE: The reason for reassigning values specifically like
               // this is to exclude the other challenge information (e.g.
               // code, solution, tests, etc.) from the challenge data in
@@ -106,7 +106,7 @@ class ContentUtilityClass {
   };
 
   getCourses = (userCourseAccessMap: UserCourseAccessMap) => {
-    return this.courses.map(course => {
+    return this.courses.map((course) => {
       const accessLevel: COURSE_ACCESS_LEVEL =
         course.id in userCourseAccessMap ? "PAID" : "FREE";
 
@@ -115,21 +115,21 @@ class ContentUtilityClass {
   };
 
   getCourseContent = (courseId: string, accessLevel: COURSE_ACCESS_LEVEL) => {
-    const course = this.courses.find(c => c.id === courseId);
+    const course = this.courses.find((c) => c.id === courseId);
 
     if (accessLevel === "FREE") {
       // Transform the course to only include free modules and free
       // challenges.
       const courseWithFreeContent = {
         ...course,
-        modules: course.modules.map(m => {
+        modules: course.modules.map((m) => {
           // Re-enable to revert logic back to restricting free content:
           if (course.free || m.free) {
             return m;
           } else {
             return {
               ...m,
-              challenges: m.challenges.filter(c => c.free),
+              challenges: m.challenges.filter((c) => c.free),
             };
           }
         }),
@@ -146,7 +146,7 @@ class ContentUtilityClass {
     courseAccessMap: UserCourseAccessMap = {},
   ) => {
     const skeletonsWithAccessInformation = this.courseNavigationSkeletons.map(
-      course => {
+      (course) => {
         // The user can access all the content in the course if the course
         // id is included in the provided course access map (which represents
         // the courses the user has purchased) or if the entire course is
@@ -158,7 +158,7 @@ class ContentUtilityClass {
 
         return {
           ...course,
-          modules: course.modules.map(courseModule => {
+          modules: course.modules.map((courseModule) => {
             // The user can access the module if they can access the course
             // or if the module is marked as free.
             const isModuleFree = courseModule.free;
@@ -168,7 +168,7 @@ class ContentUtilityClass {
               ...courseModule,
               userCanAccess: canAccessModule,
 
-              challenges: courseModule.challenges.map(challenge => {
+              challenges: courseModule.challenges.map((challenge) => {
                 // The user can access the challenge if they can access the
                 // course or if the challenge is marked as free.
                 const isChallengeFree = challenge.free;
@@ -189,7 +189,7 @@ class ContentUtilityClass {
   };
 
   getCourseMetadata = (courseId: string): CourseMetadata => {
-    const course = this.courses.find(c => c.id === courseId);
+    const course = this.courses.find((c) => c.id === courseId);
     if (course) {
       return {
         id: course.id,
@@ -208,7 +208,7 @@ class ContentUtilityClass {
       return null;
     }
 
-    const courseId = Array.from(this.courseIdSet.values()).find(id =>
+    const courseId = Array.from(this.courseIdSet.values()).find((id) =>
       this.challengeIdInCourseIsValid(id, challengeId),
     );
 
@@ -252,7 +252,7 @@ class ContentUtilityClass {
   };
 
   getCourseIds = () => {
-    return this.courses.map(c => c.id);
+    return this.courses.map((c) => c.id);
   };
 }
 
