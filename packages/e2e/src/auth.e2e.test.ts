@@ -6,13 +6,9 @@ import { createAuthenticatedUser } from "./utils/e2e-utils";
  */
 
 describe("Auth APIs", () => {
-  test("/auth/facebook (GET) - valid", async done => {
-    const {
-      user,
-      loginRedirect,
-      finalRedirect,
-      authorizationRedirect,
-    } = await createAuthenticatedUser("facebook");
+  test("/auth/facebook (GET) - valid", async (done) => {
+    const { user, loginRedirect, finalRedirect, authorizationRedirect } =
+      await createAuthenticatedUser("facebook");
 
     expect(
       authorizationRedirect.includes("response_type=code&redirect_uri="),
@@ -24,13 +20,9 @@ describe("Auth APIs", () => {
     done();
   });
 
-  test("/auth/github (GET) - valid", async done => {
-    const {
-      user,
-      loginRedirect,
-      finalRedirect,
-      authorizationRedirect,
-    } = await createAuthenticatedUser("github");
+  test("/auth/github (GET) - valid", async (done) => {
+    const { user, loginRedirect, finalRedirect, authorizationRedirect } =
+      await createAuthenticatedUser("github");
 
     expect(
       authorizationRedirect.includes("response_type=code&redirect_uri="),
@@ -42,13 +34,9 @@ describe("Auth APIs", () => {
     done();
   });
 
-  test("/auth/google (GET) - valid", async done => {
-    const {
-      user,
-      loginRedirect,
-      finalRedirect,
-      authorizationRedirect,
-    } = await createAuthenticatedUser("google");
+  test("/auth/google (GET) - valid", async (done) => {
+    const { user, loginRedirect, finalRedirect, authorizationRedirect } =
+      await createAuthenticatedUser("google");
 
     expect(
       authorizationRedirect.includes("response_type=code&redirect_uri="),

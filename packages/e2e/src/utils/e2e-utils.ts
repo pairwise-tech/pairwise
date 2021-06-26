@@ -42,9 +42,7 @@ export const fetchAdminAccessToken = async () => {
  */
 export const fetchUserWithAccessToken = async (accessToken: string) => {
   const result = await axios.get<IUserDto>(`${HOST}/user/profile`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+    headers: { Authorization: `Bearer ${accessToken}` },
   });
 
   const user = result.data;
@@ -66,29 +64,27 @@ export const createAuthenticatedUser = async (
   await request(`${HOST}/auth/${provider}`)
     .get("/")
     .expect(302)
-    .then(response => {
+    .then((response) => {
       authorizationRedirect = response.header.location;
     });
 
   await request(authorizationRedirect)
     .get("/")
     .expect(302)
-    .then(response => {
+    .then((response) => {
       loginRedirect = response.header.location;
     });
 
   await request(loginRedirect)
     .get("/")
     .expect(302)
-    .then(response => {
+    .then((response) => {
       finalRedirect = response.header.location;
       accessToken = getAccessTokenFromRedirect(response.header.location);
     });
 
   const result = await axios.get(`${HOST}/user/profile`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+    headers: { Authorization: `Bearer ${accessToken}` },
   });
 
   const user = result.data;

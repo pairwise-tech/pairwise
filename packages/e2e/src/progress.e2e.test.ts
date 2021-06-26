@@ -17,7 +17,7 @@ describe("User Progress APIs", () => {
     authorizationHeader = `Bearer ${accessToken}`;
   });
 
-  test("/progress (POST) should require authentication", async done => {
+  test("/progress (POST) should require authentication", async (done) => {
     request(`${HOST}/progress`)
       .post("/")
       .send({
@@ -34,7 +34,7 @@ describe("User Progress APIs", () => {
       });
   });
 
-  test("/progress (POST) rejects invalid courseIds", async done => {
+  test("/progress (POST) rejects invalid courseIds", async (done) => {
     request(`${HOST}/progress`)
       .post("/")
       .send({
@@ -51,7 +51,7 @@ describe("User Progress APIs", () => {
       });
   });
 
-  test("/progress (POST) rejects invalid challengeIds", async done => {
+  test("/progress (POST) rejects invalid challengeIds", async (done) => {
     request(`${HOST}/progress`)
       .post("/")
       .send({
@@ -68,7 +68,7 @@ describe("User Progress APIs", () => {
       });
   });
 
-  test("/progress (POST) requires a valid timeCompleted field", async done => {
+  test("/progress (POST) requires a valid timeCompleted field", async (done) => {
     request(`${HOST}/progress`)
       .post("/")
       .send({
@@ -87,7 +87,7 @@ describe("User Progress APIs", () => {
       });
   });
 
-  test("/progress (POST) requires a valid input object", async done => {
+  test("/progress (POST) requires a valid input object", async (done) => {
     request(`${HOST}/progress`)
       .post("/")
       .send({
@@ -104,12 +104,10 @@ describe("User Progress APIs", () => {
       });
   });
 
-  test("/progress (POST) handles valid insertions correctly", async done => {
+  test("/progress (POST) handles valid insertions correctly", async (done) => {
     const updateProgressItem = async (progress: IProgressDto) => {
       return axios.post(`${HOST}/progress`, progress, {
-        headers: {
-          Authorization: authorizationHeader,
-        },
+        headers: { Authorization: authorizationHeader },
       });
     };
 

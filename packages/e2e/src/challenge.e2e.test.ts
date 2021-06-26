@@ -11,7 +11,7 @@ describe("Challenge APIs", () => {
     return request(`${HOST}/content/skeletons`)
       .get("/")
       .expect(200)
-      .expect(response => {
+      .expect((response) => {
         expect(Array.isArray(response.body)).toBeTruthy();
 
         // Check course title
@@ -37,7 +37,7 @@ describe("Challenge APIs", () => {
     return request(`${HOST}/content/courses`)
       .get("/")
       .expect(200)
-      .expect(response => {
+      .expect((response) => {
         expect(Array.isArray(response.body)).toBe(true);
         // Check course
         const course = response.body[0];

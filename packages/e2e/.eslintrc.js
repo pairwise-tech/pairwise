@@ -3,23 +3,11 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: "module",
-    ecmaFeatures: {
-      jsx: true,
-    },
+    ecmaFeatures: { jsx: true },
   },
-  settings: {
-    react: {
-      version: "detect",
-    },
-  },
-  extends: [
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended",
-  ],
+  settings: { react: { version: "detect" } },
+  extends: ["prettier"],
   rules: {
-    "react/prop-types": "off",
     "react/no-unescaped-entities": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
