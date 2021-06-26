@@ -206,6 +206,9 @@ These steps will be necessary if for instance the `node_module` dependencies for
 $ yarn
 
 # Runs the builds for all packages, building @pairwise/common first
+# NOTE: You may need to increase the memory allocation for Docker on your
+# local machine for the build to execute successfully. If you see out of
+# memory errors from the client build, this is probably why.
 $ yarn build
 
 # Build the base Docker image which has all dependencies installed
