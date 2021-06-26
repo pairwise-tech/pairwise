@@ -12,7 +12,7 @@ module.exports = {
       version: "detect",
     },
   },
-  extends: ["plugin:react/recommended", "plugin:prettier/recommended"],
+  extends: ["prettier"],
   rules: {
     "react/prop-types": "off",
     "react/no-unescaped-entities": "off",
