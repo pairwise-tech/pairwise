@@ -535,12 +535,15 @@ const instructionsMapState = (state: ReduxStoreState) => ({
   instructions:
     Modules.selectors.challenges.getCurrentInstructions(state) || "",
   title: Modules.selectors.challenges.getCurrentTitle(state) || "",
+  isInstructionsViewCollapsed:
+    Modules.selectors.challenges.isInstructionsViewCollapsed(state),
   currentId: Modules.selectors.challenges.getCurrentId(state) || "",
   isEditMode: Modules.selectors.challenges.isEditMode(state),
 });
 
 const instructionsMapDispatch = {
   updateChallenge: Modules.actions.challenges.updateChallenge,
+  toggleInstructionsView: Modules.actions.challenges.toggleInstructionsView,
 };
 
 type InstructionsViewEditProps = ReturnType<typeof instructionsMapState> &
@@ -548,18 +551,19 @@ type InstructionsViewEditProps = ReturnType<typeof instructionsMapState> &
     isMobile?: boolean;
   };
 
+export const INSTRUCTIONS_VIEW_PANEL_ID = "workspace-panel-instructions";
+
 export const InstructionsViewEdit = connect(
   instructionsMapState,
   instructionsMapDispatch,
 )((props: InstructionsViewEditProps) => {
-  const { isEditMode, currentId, isMobile } = props;
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
-  const PANEL_ID = "workspace-panel-instructions";
-
-  const toggleCollapsed = React.useCallback(() => {
-    setIsCollapsed(!isCollapsed);
-    document.getElementById(PANEL_ID)?.scrollTo({ top: 0 });
-  }, [isCollapsed, setIsCollapsed]);
+  const {
+    isMobile,
+    currentId,
+    isEditMode,
+    toggleInstructionsView,
+    isInstructionsViewCollapsed,
+  } = props;
 
   /**
    * @NOTE The function is memoized so that we're not constantly recreating the
@@ -587,14 +591,15 @@ export const InstructionsViewEdit = connect(
 
   return (
     <div
-      id={PANEL_ID}
+      id={INSTRUCTIONS_VIEW_PANEL_ID}
       style={{
-        transition: "all 0.2s ease",
         minHeight: 45,
-        height: !isMobile ? "auto" : isCollapsed ? "0vh" : "25vh",
-        overflow: isCollapsed ? "hidden" : "auto",
         padding: "10px",
         paddingTop: "4px",
+        transition: "all 0.2s ease",
+        overflow: isInstructionsViewCollapsed ? "hidden" : "auto",
+        // height: !isMobile ? "auto" : isInstructionsViewCollapsed ? "0vh" : "25vh",
+        height: isInstructionsViewCollapsed ? "0vh" : "25vh",
       }}
     >
       <ChallengeTitleHeading>
@@ -607,17 +612,21 @@ export const InstructionsViewEdit = connect(
             />
           </ChallengeTitleContainer>
         ) : isMobile ? (
-          <ChallengeTitleContainer onClick={toggleCollapsed}>
+          <ChallengeTitleContainer onClick={toggleInstructionsView}>
             <RotatingIcon
               icon="caret-down"
-              isRotated={!isCollapsed}
               iconSize={Icon.SIZE_LARGE}
               style={{ marginRight: 6 }}
+              isRotated={!isInstructionsViewCollapsed}
             />
             <Text>{props.title}</Text>
           </ChallengeTitleContainer>
         ) : (
-          <Breadcrumbs type="workspace" />
+          <Breadcrumbs
+            type="workspace"
+            panelId={INSTRUCTIONS_VIEW_PANEL_ID}
+            toggleCollapsed={toggleInstructionsView}
+          />
         )}
       </ChallengeTitleHeading>
       <Suspense fallback={<Loading />}>
@@ -625,10 +634,10 @@ export const InstructionsViewEdit = connect(
           toc={false}
           autoFocus={false}
           placeholder="Write something beautiful..."
-          defaultValue={props.instructions}
           readOnly={!isEditMode}
           spellCheck={isEditMode}
           onChange={handleContent}
+          defaultValue={props.instructions}
         />
         {isMobile && (
           <Button
@@ -641,7 +650,7 @@ export const InstructionsViewEdit = connect(
               background: "rgba(96, 125, 139, 0.14)",
               border: "1px solid rgba(255, 255, 255, 0.12)",
             }}
-            onClick={toggleCollapsed}
+            onClick={toggleInstructionsView}
           >
             Tap to hide
           </Button>

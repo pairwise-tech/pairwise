@@ -5,9 +5,9 @@ import React from "react";
 import { connect } from "react-redux";
 import {
   Tooltip,
-  IBreadcrumbProps,
   Breadcrumb,
   Breadcrumbs,
+  BreadcrumbProps,
 } from "@blueprintjs/core";
 import { CHALLENGE_TYPE } from "@pairwise/common";
 import { COLORS } from "tools/constants";
@@ -40,15 +40,32 @@ export interface BreadcrumbsData {
 
 class BreadcrumbsPath extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { breadcrumbsPath, type, challenge } = this.props;
+    const {
+      type,
+      challenge,
+      panelId = "",
+      toggleCollapsed,
+      breadcrumbsPath,
+    } = this.props;
+
     if (!breadcrumbsPath || !challenge) {
       return null;
     }
 
     const IS_PAID = challenge.isPaidContent;
+    const CAN_COLLAPSE = typeof toggleCollapsed === "function";
 
     return (
-      <BreadcrumbsBar type={type}>
+      <BreadcrumbsBar
+        type={type}
+        canCollapse={CAN_COLLAPSE}
+        id={panelId}
+        onClick={() => {
+          if (!IS_PAID && typeof toggleCollapsed === "function") {
+            toggleCollapsed();
+          }
+        }}
+      >
         {IS_PAID && (
           <Tooltip
             usePortal={false}
@@ -81,7 +98,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
 
   getBreadcrumbs = (breadcrumbs: BreadcrumbsData) => {
     const { type, isCurrentChallengeComplete } = this.props;
-    const crumbs: IBreadcrumbProps[] = [];
+    const crumbs: BreadcrumbProps[] = [];
 
     // Get each breadcrumb
     const { module, section, challenge } = breadcrumbs;
@@ -120,13 +137,25 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
       return crumbs.slice(2);
     }
 
+    if (this.props.isInstructionsViewCollapsed) {
+      return [crumbs[crumbs.length - 1]];
+    }
+
     return crumbs;
   };
 
-  renderCurrentBreadcrumb = ({ text, ...restProps }: IBreadcrumbProps) => {
-    // Customize rendering of the last breadcrumb
+  // Customize rendering of the last breadcrumb
+  renderCurrentBreadcrumb = ({ text, ...restProps }: BreadcrumbProps) => {
+    const icon = this.props.isInstructionsViewCollapsed
+      ? "caret-down"
+      : restProps.icon;
+
     return (
-      <Breadcrumb current={this.props.type === "workspace"} {...restProps}>
+      <Breadcrumb
+        current={this.props.type === "workspace"}
+        {...restProps}
+        icon={icon}
+      >
         {text}
       </Breadcrumb>
     );
@@ -147,12 +176,20 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
  * ============================================================================
  */
 
-const BreadcrumbsBar = styled.div`
+const BreadcrumbsBar = styled.div<{
+  canCollapse: boolean;
+  type: BreadcrumbsChallengeType;
+}>`
   width: 100%;
   font-weight: normal;
-  margin-top: ${({ type }: { type: BreadcrumbsChallengeType }) =>
-    type === "media" ? 10 : 0}px;
   margin-bottom: 10px;
+  margin-top: ${(props) => (props.type === "media" ? 10 : 0)}px;
+
+  .bp3-breadcrumb {
+    :hover {
+      cursor: ${(props) => (props.canCollapse ? "pointer" : "default")};
+    }
+  }
 `;
 
 const PaidContentLabel = styled.div`
@@ -189,6 +226,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   courseId: Modules.selectors.challenges.getCurrentCourseId(state),
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   breadcrumbsPath: Modules.selectors.challenges.breadcrumbPathSelector(state),
+  isInstructionsViewCollapsed:
+    Modules.selectors.challenges.isInstructionsViewCollapsed(state),
   isCurrentChallengeComplete:
     Modules.selectors.challenges.isCurrentChallengeComplete(state),
 });
@@ -199,6 +238,8 @@ const dispatchProps = {
 
 interface ComponentProps {
   type: BreadcrumbsChallengeType;
+  panelId?: string;
+  toggleCollapsed?: () => void;
 }
 
 type IProps = ComponentProps &

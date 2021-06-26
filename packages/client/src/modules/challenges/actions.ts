@@ -107,6 +107,8 @@ enum ActionTypesEnum {
   SET_MENU_SELECT_INDEX = "SET_MENU_SELECT_INDEX",
 
   TOGGLE_CODEMIRROR_EDITOR = "TOGGLE_CODEMIRROR_EDITOR",
+
+  TOGGLE_INSTRUCTIONS_VIEW = "TOGGLE_INSTRUCTIONS_VIEW",
 }
 
 /** ===========================================================================
@@ -306,4 +308,8 @@ export const setMenuSelectIndex = createAction(
 
 export const toggleCodemirrorEditor = createAction(
   ActionTypesEnum.TOGGLE_CODEMIRROR_EDITOR,
+)();
+
+export const toggleInstructionsView = createAction(
+  ActionTypesEnum.TOGGLE_INSTRUCTIONS_VIEW,
 )();

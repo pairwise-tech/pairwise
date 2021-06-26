@@ -73,6 +73,7 @@ export interface State {
   menuSelectColumn: "MODULE" | "CHALLENGE";
   menuSelectIndex: number | null;
   useCodemirror: boolean;
+  isInstructionsViewCollapsed: boolean;
 }
 
 const initialState: State = {
@@ -97,8 +98,8 @@ const initialState: State = {
   isDirty: false,
   menuSelectColumn: "CHALLENGE",
   menuSelectIndex: null,
-  // useCodemirror: true,
   useCodemirror: false,
+  isInstructionsViewCollapsed: false,
 };
 
 /** ===========================================================================
@@ -646,6 +647,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.toggleCodemirrorEditor, (state, action) => ({
     ...state,
     useCodemirror: !state.useCodemirror,
+  }))
+  .handleAction(actions.toggleInstructionsView, (state, action) => ({
+    ...state,
+    isInstructionsViewCollapsed: !state.isInstructionsViewCollapsed,
   }))
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,

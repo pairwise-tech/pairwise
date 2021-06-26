@@ -89,6 +89,7 @@ import {
   LowerSection,
   WorkspaceMobileView,
   SQLResultsTable,
+  INSTRUCTIONS_VIEW_PANEL_ID,
 } from "./WorkspaceComponents";
 import { ADMIN_TEST_TAB, ADMIN_EDITOR_TAB } from "modules/challenges/store";
 import { WORKSPACE_LIB, EXPRESS_JS_LIB } from "tools/browser-libraries";
@@ -319,6 +320,14 @@ class Workspace extends React.Component<IProps, IState> {
     if (prevProps.challenge.type !== this.props.challenge.type) {
       this.pauseAndRefreshEditor();
     }
+
+    if (
+      prevProps.isInstructionsViewCollapsed !==
+      this.props.isInstructionsViewCollapsed
+    ) {
+      document.getElementById(INSTRUCTIONS_VIEW_PANEL_ID)?.scrollTo({ top: 0 });
+      this.refreshLayout();
+    }
   }
 
   render() {
@@ -342,6 +351,7 @@ class Workspace extends React.Component<IProps, IState> {
       revealSolutionCode,
       useCodemirrorEditor,
       isReactNativeChallenge,
+      isInstructionsViewCollapsed,
       editModeAlternativeViewEnabled,
     } = this.props;
     const NO_TESTS_RESULTS = testResults.length === 0 || isPreviewTestResults;
@@ -764,7 +774,7 @@ class Workspace extends React.Component<IProps, IState> {
             runCodeHandler={this.runChallengeTests}
           />
           <RowsWrapper separatorProps={rowSeparatorProps}>
-            <Row initialHeight={D.PREVIEW_HEIGHT}>
+            <Row initialHeight={D.PREVIEW_REACT_NATIVE_HEIGHT}>
               <MobileDeviceUI device={mobileDevicePreviewType}>
                 <DragIgnorantFrameContainer
                   id="iframe"
@@ -773,7 +783,10 @@ class Workspace extends React.Component<IProps, IState> {
                 />
               </MobileDeviceUI>
             </Row>
-            <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
+            <Row
+              style={consoleRowStyles}
+              initialHeight={D.PREVIEW_CONSOLE_REACT_NATIVE_HEIGHT}
+            >
               {ScrollableWorkspaceConsole}
             </Row>
           </RowsWrapper>
@@ -956,7 +969,11 @@ class Workspace extends React.Component<IProps, IState> {
                   ) : (
                     <RowsWrapper separatorProps={rowSeparatorProps}>
                       <Row
-                        initialHeight={D.CHALLENGE_CONTENT_HEIGHT}
+                        initialHeight={
+                          isInstructionsViewCollapsed
+                            ? D.CHALLENGE_CONTENT_HEIGHT_COLLAPSED
+                            : D.CHALLENGE_CONTENT_HEIGHT
+                        }
                         style={{ background: C.BACKGROUND_CONTENT }}
                       >
                         <ContentContainer>
@@ -965,7 +982,11 @@ class Workspace extends React.Component<IProps, IState> {
                       </Row>
                       <Row
                         style={{ background: C.BACKGROUND_EDITOR }}
-                        initialHeight={D.EDITOR_HEIGHT}
+                        initialHeight={
+                          isInstructionsViewCollapsed
+                            ? D.EDITOR_HEIGHT_INSTRUCTIONS_COLLAPSED
+                            : D.EDITOR_HEIGHT
+                        }
                       >
                         {CODE_EDITOR_CONTAINER}
                       </Row>
@@ -1509,11 +1530,11 @@ class Workspace extends React.Component<IProps, IState> {
    * re-render. That's what this "state flash" let's us do.
    */
   private readonly refreshLayout = () => {
-    this.setState({ shouldRefreshLayout: true });
     const reset = () => {
       this.setState({ shouldRefreshLayout: false });
     };
-    wait(10).then(reset).catch(reset);
+
+    this.setState({ shouldRefreshLayout: true }, reset);
   };
 
   /**
@@ -1642,6 +1663,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isLoadingBlob: ChallengeSelectors.isLoadingCurrentChallengeBlob(state),
   isReactNativeChallenge: ChallengeSelectors.isReactNativeChallenge(state),
   isSqlChallenge: ChallengeSelectors.isSqlChallenge(state),
+  isInstructionsViewCollapsed:
+    Modules.selectors.challenges.isInstructionsViewCollapsed(state),
   isBackendModuleChallenge: ChallengeSelectors.isBackendModuleChallenge(state),
   isTestingAndAutomationChallenge:
     ChallengeSelectors.isTestingAndAutomationChallenge(state),
