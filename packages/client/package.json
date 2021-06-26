@@ -32,7 +32,8 @@
     "test:update-snapshots": "yarn jest --updateSnapshot",
     "js:build": "tsc --lib esnext,dom --esModuleInterop --skipLibCheck --declaration src/js/browser-test-lib.ts src/js/test-expectation-lib.ts src/js/express-js-lib.ts",
     "pretest": "yarn run js:build",
-    "test": "yarn lint && yarn test:unit"
+    "test": "yarn lint && yarn test:unit",
+    "analyze": "source-map-explorer 'build/static/js/*.js' --html source-map-analyze-result.html"
   },
   "dependencies": {
     "@babel/plugin-proposal-optional-chaining": "7.7.5",
@@ -117,6 +118,7 @@
     "serve": "11.3.0",
     "shortid": "2.2.15",
     "smoothscroll-polyfill": "0.4.4",
+    "source-map-explorer": "^2.5.2",
     "string-quote-x": "3.1.2",
     "strip-comments": "2.0.1",
     "styled-components": "5.2.1",
