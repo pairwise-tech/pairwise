@@ -385,12 +385,6 @@ const ApplicationContainer = (props: IProps) => {
           ) : (
             <LoginSignupButton
               id="login-signup-button"
-              // style={{
-              //   margin: "0 10px",
-              //   border: "1px solid rgba(255, 255, 255, 0.23)",
-              //   flexShrink: 0,
-              //   whiteSpace: "nowrap",
-              // }}
               onClick={() => setSingleSignOnDialogState(true)}
             >
               Login or Signup

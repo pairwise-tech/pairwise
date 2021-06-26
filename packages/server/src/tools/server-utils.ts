@@ -1,6 +1,10 @@
 import axios from "axios";
 import { InternalServerErrorException } from "@nestjs/common";
-import { CourseList, createInverseChallengeMapping } from "@pairwise/common";
+import {
+  Challenge,
+  CourseList,
+  createInverseChallengeMapping,
+} from "@pairwise/common";
 import { captureSentryException } from "./sentry-utils";
 import ENV from "./server-env";
 
@@ -31,14 +35,22 @@ const fetchFileBlob = async (fileSHA: string) => {
   return result.data;
 };
 
+interface PullRequestDiffContext {
+  id: any;
+  moduleId: string;
+  courseId: string;
+  updatedChallenge: Challenge;
+  originalChallenge: Challenge;
+}
+
 /**
  * Accept a pull request id and fetch pull request diff metadata from GitHub
  * in order to provide diff content context for admin client.
  */
 export const parsePullRequestDiff = async (
   pullRequestId: string,
-  courses: CourseList,
-) => {
+  currentCourseList: CourseList,
+): Promise<PullRequestDiffContext[] | string> => {
   try {
     const id = Number(pullRequestId);
     if (!id || typeof id !== "number") {
@@ -60,11 +72,11 @@ export const parsePullRequestDiff = async (
     const python = diff.find(matchFile("02_python_language"));
     const rust = diff.find(matchFile("03_rust_language"));
     const go = diff.find(matchFile("04_golang_language"));
-    const courses = [ts, python, rust, go];
+    const courses = [ts, python, rust, go].filter(Boolean);
 
     if (courses.length > 0) {
       const result = await Promise.all(
-        courses.filter(Boolean).map(async (courseDiffFile) => {
+        courses.map(async (courseDiffFile) => {
           const { sha, patch } = courseDiffFile;
           /**
            * Extract all the git file annotations which denote changed line
@@ -109,7 +121,8 @@ export const parsePullRequestDiff = async (
            * Lookup up the original challenge (if it exists) and the updated
            * challenge.
            */
-          const originalChallengeMap = createInverseChallengeMapping(courses);
+          const originalChallengeMap =
+            createInverseChallengeMapping(currentCourseList);
           const pullRequestChallengeMap = createInverseChallengeMapping([blob]);
 
           /**
@@ -124,7 +137,7 @@ export const parsePullRequestDiff = async (
 
             // One of them should exist...
             const existing = originalChallengeMap
-              ? originalChallengeMap
+              ? originalChallengeMeta
               : updatedChallengeMeta;
 
             const { moduleId, courseId } = existing;
@@ -150,7 +163,7 @@ export const parsePullRequestDiff = async (
 
       // Flatten the results and remove null id diffs
       return result
-        .reduce((flat, diff) => flat.concat(diff))
+        .reduce((flat, diff) => flat.concat(diff), [])
         .filter((x) => x.id !== null);
     } else {
       return "No course JSON has been modified in this PR.";
