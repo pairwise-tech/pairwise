@@ -3,7 +3,7 @@ import * as path from "path";
 import { execSync } from "child_process";
 
 import {
-  getChallengMetadata,
+  getChallengeMetadata,
   readCourseFilesFromDisk,
   buildFilePorcelain,
 } from "./get-challenge-metadata";
@@ -90,7 +90,7 @@ const main = async () => {
   // 1000%. All the git commands are run with max concurrency.
   const allMetadata = await Promise.all(
     allChallenges.map(({ id }) => {
-      return getChallengMetadata(id, courseFiles, filePorcelain);
+      return getChallengeMetadata(id, courseFiles, filePorcelain);
     }),
   );
 

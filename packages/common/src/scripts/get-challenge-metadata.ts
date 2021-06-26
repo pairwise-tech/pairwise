@@ -248,7 +248,7 @@ export const buildFilePorcelain = async (courseFiles: CourseFiles) => {
   return result;
 };
 
-export const getChallengMetadata = async (
+export const getChallengeMetadata = async (
   id: string,
   courseFiles: CourseFiles = readCourseFilesFromDisk(),
   filePorcelain?: { [k: string]: GitPorcelainFormat[] },
@@ -335,7 +335,7 @@ export const readCourseFilesFromDisk = (
 
 const main = async () => {
   const id = process.argv[2];
-  const foundIn = await getChallengMetadata(id);
+  const foundIn = await getChallengeMetadata(id);
 
   if (foundIn) {
     console.log(
