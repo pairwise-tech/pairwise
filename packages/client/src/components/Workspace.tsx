@@ -1551,7 +1551,7 @@ class Workspace extends React.Component<IProps, IState> {
 
       // We create the download link initially and then just reuse it on
       // subsequent uses. Not sure if actually appending to the dom is necessary,
-      // just worried some brwosers migth not allow a click on an element that
+      // just worried some browsers might not allow a click on an element that
       // couldn't realistically be clicked since it's not in the DOM
       if (!link) {
         link = document.createElement("a");
@@ -1720,6 +1720,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
   componentDidMount() {
     window.addEventListener("beforeunload", this.warnUnsavedEdits);
   }
+
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.warnUnsavedEdits);
   }
@@ -1734,7 +1735,7 @@ class WorkspaceLoadingContainer extends React.Component<ConnectProps, {}> {
         </div>
       );
     } else if (!challenge) {
-      // A challenge did not load... this should be handled with a 404 page
+      // A challenge did not load... this should be handled by a 404 page
       // elsewhere, but adding this here for type-checking.
       return null;
     }

@@ -14,9 +14,11 @@ import {
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Button, Card, Switch } from "@blueprintjs/core";
 import { COLORS } from "../tools/constants";
-import { PullRequestContext } from "../modules/challenges/store";
 import { composeWithProps } from "../tools/admin-utils";
-import { InverseChallengeMapping } from "@pairwise/common";
+import {
+  InverseChallengeMapping,
+  PullRequestDiffContext,
+} from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -133,7 +135,7 @@ export const PULL_REQUEST_DIFF_VIEW_ID = "pull-request-diff-view";
 interface DiffContentProps {
   isMobile: boolean;
   useDarkTheme: boolean;
-  diffContent: PullRequestContext[];
+  diffContent: PullRequestDiffContext[];
   challengeMap: Nullable<InverseChallengeMapping>;
 }
 
@@ -156,7 +158,7 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
     }
   }
 
-  renderPullRequestContext = (context: PullRequestContext) => {
+  renderPullRequestContext = (context: PullRequestDiffContext) => {
     const { challengeMap } = this.props;
     const isDeletedChallenge = !context.updatedChallenge;
     const isNewChallenge = !context.originalChallenge && !isDeletedChallenge;
@@ -206,7 +208,7 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
     );
   };
 
-  renderDiffContent = (context: PullRequestContext) => {
+  renderDiffContent = (context: PullRequestDiffContext) => {
     const { originalChallenge, updatedChallenge } = context;
 
     /**

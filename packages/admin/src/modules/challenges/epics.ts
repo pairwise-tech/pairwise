@@ -185,7 +185,13 @@ const fetchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
     mergeMap(deps.api.fetchPullRequestContext),
     map(({ value, error }) => {
       if (value) {
-        return Actions.fetchPullRequestContextSuccess(value);
+        // Empty results are returned as a string message
+        if (typeof value === "string") {
+          deps.toaster.warn("No diff available for this pull request.");
+          return Actions.fetchPullRequestContextFailure(error);
+        } else {
+          return Actions.fetchPullRequestContextSuccess(value);
+        }
       } else {
         deps.toaster.warn("Failed to fetch pull request context...");
         return Actions.fetchPullRequestContextFailure(error);

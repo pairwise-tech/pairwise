@@ -5,6 +5,7 @@ import {
   Result,
   ChallengeMeta,
   CourseSkeletonList,
+  PullRequestDiffContext,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import * as ENV from "tools/admin-env";
@@ -19,7 +20,6 @@ import { AdminUserView } from "./users/store";
 import { ProgressRecords } from "./stats/store";
 import { FeedbackRecord } from "./feedback/store";
 import { PaymentRecord } from "./payments/store";
-import { PullRequestContext } from "./challenges/store";
 
 /** ===========================================================================
  * Types & Config
@@ -265,7 +265,7 @@ class Api extends BaseApiClass {
   fetchPullRequestContext = async (pull: number) => {
     return this.httpHandler(async () => {
       const { config } = this.getRequestHeaders();
-      return axios.get<PullRequestContext[]>(
+      return axios.get<PullRequestDiffContext[] | string>(
         `${HOST}/admin/pull-requests/${pull}`,
         config,
       );

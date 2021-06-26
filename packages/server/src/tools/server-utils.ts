@@ -1,9 +1,9 @@
 import axios from "axios";
 import { InternalServerErrorException } from "@nestjs/common";
 import {
-  Challenge,
   CourseList,
   createInverseChallengeMapping,
+  PullRequestDiffContext,
 } from "@pairwise/common";
 import { captureSentryException } from "./sentry-utils";
 import ENV from "./server-env";
@@ -34,14 +34,6 @@ const fetchFileBlob = async (fileSHA: string) => {
   });
   return result.data;
 };
-
-interface PullRequestDiffContext {
-  id: any;
-  moduleId: string;
-  courseId: string;
-  updatedChallenge: Challenge;
-  originalChallenge: Challenge;
-}
 
 /**
  * Accept a pull request id and fetch pull request diff metadata from GitHub
