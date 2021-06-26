@@ -20,8 +20,8 @@
   "dependencies": {
     "@cypress/webpack-preprocessor": "4.1.1",
     "cypress": "7.6.0",
-    "eslint": "7.15.0",
-    "eslint-config-prettier": "7.0.0",
+    "eslint": "7.29.0",
+    "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsdoc": "30.7.8",
     "eslint-plugin-prefer-arrow": "1.2.2",

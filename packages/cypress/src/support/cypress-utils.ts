@@ -54,10 +54,7 @@ export const typeTextInCodeEditor = (text: string) => {
   const clearEditorCommand =
     Cypress.platform === "darwin" ? "{cmd}a{backspace}" : "{ctrl}a{backspace}";
 
-  cy.get(".monaco-editor textarea:first")
-    .click()
-    .clear()
-    .type(text);
+  cy.get(".monaco-editor textarea:first").click().clear().type(text);
 
   // Clear the editor
   // cy.get(".monaco-editor textarea:first").type(clearEditorCommand);
@@ -159,7 +156,7 @@ export const purchaseCourseForUser = () => {
   let dispatchedAdminRequest = false;
   cy.get("#user-email")
     .invoke("text")
-    .then(email => {
+    .then((email) => {
       // Only dispatch a single request
       if (!dispatchedAdminRequest) {
         dispatchedAdminRequest = true;
@@ -168,7 +165,7 @@ export const purchaseCourseForUser = () => {
 
         // You better use cy.request for this and not any other HTTP library
         cy.request("POST", EXTERNAL_SERVICES_ADMIN_PAYMENT_URL, body).should(
-          response => {
+          (response) => {
             // Fail immediately if the response is bad so it's clear why
             // the test failed
             if (response.body !== "OK") {

@@ -70,7 +70,7 @@ describe("Workspace and Challenge Navigation Works", () => {
     const checkPrev = () => {
       cy.wait(TIMEOUT);
       cy.get("#prevButton").click();
-      cy.url().then(url => {
+      cy.url().then((url) => {
         const id = getChallengeId(url);
         expect(url).to.not.equal(challengeId);
         challengeId = id;
@@ -80,7 +80,7 @@ describe("Workspace and Challenge Navigation Works", () => {
     const checkNext = () => {
       cy.wait(TIMEOUT);
       cy.get("#nextButton").click();
-      cy.url().then(url => {
+      cy.url().then((url) => {
         const id = getChallengeId(url);
         expect(url).to.not.equal(challengeId);
         challengeId = id;
@@ -131,9 +131,7 @@ describe("Sandbox", () => {
 
     cy.wait(TIMEOUT);
 
-    getIframeBody()
-      .find(".just-typed-this")
-      .should("include.text", `Testing`);
+    getIframeBody().find(".just-typed-this").should("include.text", `Testing`);
   });
 });
 
@@ -300,8 +298,8 @@ describe("Workspace Editor Functions", () => {
       "editor-restore-initial-code",
       "editor-toggle-solution-code",
     ]
-      .map(x => "#" + x)
-      .forEach(id => {
+      .map((x) => "#" + x)
+      .forEach((id) => {
         cy.get(id).should("be.visible");
       });
   });
@@ -325,7 +323,7 @@ describe("Workspace Editor Functions", () => {
   });
 
   it("Should increase or decrease font-size", () => {
-    cy.get(".monaco-editor textarea").then($textarea => {
+    cy.get(".monaco-editor textarea").then(($textarea) => {
       const fs = parseInt($textarea.css("font-size"), 10);
       cy.log(`initial font size ${fs}`);
       cy.get(".monaco-editor textarea").should(
