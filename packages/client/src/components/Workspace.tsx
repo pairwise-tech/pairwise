@@ -1531,7 +1531,7 @@ class Workspace extends React.Component<IProps, IState> {
    */
   private readonly refreshLayout = () => {
     const reset = () => {
-      this.setState({ shouldRefreshLayout: false });
+      this.setState({ shouldRefreshLayout: false }, this.iframeRenderPreview);
     };
 
     this.setState({ shouldRefreshLayout: true }, reset);
