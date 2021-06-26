@@ -6,7 +6,8 @@ import styled from "styled-components/macro";
 
 // Import codemirror theme files
 import "codemirror/lib/codemirror.css";
-import "codemirror/theme/material-darker.css";
+// import "codemirror/theme/material-darker.css";
+import "codemirror/theme/ayu-dark.css";
 import "codemirror/mode/xml/xml.js";
 import "codemirror/mode/javascript/javascript.js";
 import "codemirror/mode/python/python.js";
@@ -87,11 +88,11 @@ class WorkspaceCodemirrorEditor
     }
 
     const CODE_MIRROR_THEMES = [
-      "material-darker",
-      "material-palenight",
       "ayu-dark",
-      "ayu-mirage",
-      "solarized-dark",
+      // The following do not have any .css files imported
+      // "ayu-mirage",
+      // "material-darker",
+      // "solarized-dark",
     ];
 
     const options = {
@@ -102,7 +103,7 @@ class WorkspaceCodemirrorEditor
       autoCloseTags: true,
       matchBrackets: true,
       autoCloseBrackets: true,
-      theme: CODE_MIRROR_THEMES[2],
+      theme: CODE_MIRROR_THEMES[0],
     };
 
     return (
