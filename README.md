@@ -216,6 +216,9 @@ $ yarn docker:dependencies
 
 # Rebuild the docker compose for running the app
 $ yarn up:build
+
+# Shut down docker-compose services
+$ yarn down
 ```
 
 If you feel like you having issues with Docker or it is running slowly, you can run `docker system prune` to remove any older unused resources and images.

@@ -55,6 +55,8 @@ To update the various NestJS library dependencies, you can use the Nest CLI:
 $ npm i -g @nestjs/cli
 
 # Update Nest libraries
+# NOTE: It may not work with yarn... but it will print out the dependencies you need
+# to update. Just copy paste them into a yarn add command.
 $ nest update --force
 ```
 
