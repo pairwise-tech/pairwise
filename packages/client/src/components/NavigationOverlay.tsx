@@ -35,12 +35,7 @@ import {
   Position,
   Button,
 } from "@blueprintjs/core";
-import {
-  NavLink,
-  NavLinkProps,
-  RouteComponentProps,
-  Link,
-} from "react-router-dom";
+import { NavLink, NavLinkProps, RouteComponentProps } from "react-router-dom";
 import {
   SortableModuleList,
   SortableChallengeList,

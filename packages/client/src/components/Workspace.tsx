@@ -1588,7 +1588,6 @@ class Workspace extends React.Component<IProps, IState> {
    * re-render. That's what this "state flash" let's us do.
    */
   private readonly refreshGridLayout = () => {
-    console.log("REFRESHING");
     const reset = () => {
       this.setState({ shouldRefreshLayout: false }, this.iframeRenderPreview);
     };

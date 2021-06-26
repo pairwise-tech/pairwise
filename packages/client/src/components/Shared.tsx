@@ -26,7 +26,7 @@ export const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
   return <div className={cx(className, Classes.DARK)} {...props} />;
 };
 
-// TODO: This could be made a bit more friendly. Maybe a spinner of some sort
+// TODO: This could be made a bit more friendly. Maybe a spinner of some sort.
 export const Loading = styled(Spinner)`
   margin-top: 10px;
 `;

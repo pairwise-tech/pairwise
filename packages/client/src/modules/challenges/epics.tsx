@@ -523,7 +523,7 @@ const fetchCodeBlobForChallengeEpic: EpicSignature = (
           dataBlob: cachedItem.dataBlob,
         });
       } else {
-        const result = await deps.api.fetchChallengeHistory(id);
+        const result = await deps.api.fetchChallengeBlob(id);
         if (result.value) {
           return Actions.fetchBlobForChallengeSuccess(result.value);
         } else {

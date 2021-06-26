@@ -383,7 +383,7 @@ class Api extends BaseApiClass {
     }
   };
 
-  fetchChallengeHistory = async (
+  fetchChallengeBlob = async (
     challengeId: string,
   ): Promise<Result<ICodeBlobDto, HttpResponseError>> => {
     /**

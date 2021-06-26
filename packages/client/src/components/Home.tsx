@@ -16,8 +16,12 @@ import SEO from "./SEO";
 
 class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { userCourseProgressSummary, hasPurchasedTypeScriptCourse } =
-      this.props;
+    const {
+      currentCourse,
+      userCourseProgressSummary,
+      hasPurchasedTypeScriptCourse,
+    } = this.props;
+
     return (
       <PageContainer>
         <SEO
@@ -84,12 +88,13 @@ class Home extends React.Component<IProps, {}> {
             {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
           <CourseProgressContainer>
-            {userCourseProgressSummary && (
+            {userCourseProgressSummary && currentCourse && (
               <>
                 <PageTitle>Course Progress</PageTitle>
                 <ContentText>
                   You have completed {userCourseProgressSummary.totalCompleted}{" "}
-                  out of {userCourseProgressSummary.totalChallenges} challenges.
+                  out of {userCourseProgressSummary.totalChallenges} challenges
+                  in the {currentCourse.title} Course.
                 </ContentText>
                 <ProgressBar>
                   <ProgressComplete
@@ -134,8 +139,6 @@ class Home extends React.Component<IProps, {}> {
     /**
      * Determine the url slug for the last active challenge for the course
      * to redirect to.
-     *
-     * TODO: This could be refactored to a selector.
      */
     let lastActiveChallengeExists = false;
     let courseChallengeLinkId = firstCourseChallenge.id;
@@ -227,7 +230,7 @@ const FlexContainer = styled.div`
 const ProgressBar = styled.div`
   height: 30px;
   width: 100%;
-  margin-top: 8px;
+  margin-top: 10px;
   margin-bottom: 10px;
   background: ${COLORS.PROGRESS_BACKGROUND};
 `;
@@ -317,6 +320,7 @@ const ButtonsBox = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
+  currentCourse: Modules.selectors.challenges.getCurrentCourse(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
   userCourseProgressSummary:

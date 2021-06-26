@@ -660,10 +660,10 @@ const AccountDropdownButton = styled.div`
   }
 
   .dropdown-links {
+    right: 0;
     z-index: 1000;
     display: none;
     position: absolute;
-    right: 0;
     min-width: 215px;
     box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
     background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
