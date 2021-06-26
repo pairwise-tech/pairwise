@@ -38,7 +38,9 @@ export class Feedback implements IFeedbackDto {
   @ManyToOne(
     type => User,
     user => user.userFeedback,
-    { onDelete: "CASCADE" },
+    {
+      onDelete: "CASCADE",
+    },
   )
   public user: User;
 
