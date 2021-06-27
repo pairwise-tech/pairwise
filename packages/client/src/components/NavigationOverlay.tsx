@@ -32,6 +32,7 @@ import {
   MenuItem,
   Position,
   Button,
+  IconSize,
 } from "@blueprintjs/core";
 import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
 import { NavLink, NavLinkProps, RouteComponentProps } from "react-router-dom";
@@ -648,7 +649,7 @@ class NavigationOverlay extends React.Component<
                     position="left"
                     content="Includes Video"
                   >
-                    <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
+                    <Icon iconSize={IconSize.LARGE} icon="video" />
                   </Tooltip2>
                 )}
               </NavIcons>
@@ -991,7 +992,7 @@ const ChallengeListItemIcon = ({
       <RotatingIcon
         icon={icon}
         isRotated={isSectionOpen}
-        iconSize={Icon.SIZE_LARGE}
+        iconSize={IconSize.LARGE}
         id={`challenge-${index}-icon-${challengeProgress}`}
         className={challenge.type !== "section" ? iconExtraClass : ""}
         {...props}

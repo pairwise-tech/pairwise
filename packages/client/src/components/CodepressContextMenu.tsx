@@ -1,5 +1,6 @@
 import React from "react";
-import { ContextMenu, Menu, MenuItem } from "@blueprintjs/core";
+import { Menu, MenuItem } from "@blueprintjs/core";
+import { ContextMenu2 } from "@blueprintjs/popover2";
 import { DarkTheme } from "./Shared";
 
 /** ===========================================================================
@@ -17,25 +18,12 @@ interface CodepressNavigationContextMenuProps {
  * ============================================================================
  */
 
-export default class CodepressNavigationContextMenu extends React.PureComponent<CodepressNavigationContextMenuProps> {
-  componentWillUnmount() {
-    ContextMenu.hide(); /* Remove this code and you will suffer */
-  }
-
+class CodepressNavigationContextMenu extends React.PureComponent<CodepressNavigationContextMenuProps> {
   render() {
-    return (
-      <div onContextMenu={this.showContextMenu}>{this.props.children}</div>
-    );
-  }
+    const label =
+      this.props.type === "MODULE" ? "Delete Module" : "Delete Challenge";
 
-  showContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-
-    const { type } = this.props;
-    const label = type === "MODULE" ? "Delete Module" : "Delete Challenge";
-    const coordinates = { left: e.clientX, top: e.clientY };
-
-    const Context = (
+    const ContextMenu = (
       <DarkTheme>
         <Menu>
           <MenuItem
@@ -47,6 +35,15 @@ export default class CodepressNavigationContextMenu extends React.PureComponent<
       </DarkTheme>
     );
 
-    ContextMenu.show(Context, coordinates);
-  };
+    return (
+      <ContextMenu2 content={ContextMenu}>{this.props.children}</ContextMenu2>
+    );
+  }
 }
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
+
+export default CodepressNavigationContextMenu;
