@@ -7,6 +7,7 @@ import {
   PageContainer,
   Text,
   PageTitle,
+  SecondaryTitle,
   ProfileIcon,
   ExternalLink,
 } from "./SharedComponents";
@@ -249,6 +250,11 @@ class Account extends React.Component<IProps, IState> {
             {payments.map(this.renderPaymentDetails)}
           </>
         )}
+        <SecondaryTitle style={{ marginTop: 24 }}>Questions?</SecondaryTitle>
+        <Text>
+          Feel free to reach out to <b>sean@pairwise.tech</b> if you need to
+          contact someone directly.
+        </Text>
       </PageContainer>
     );
   }
@@ -256,7 +262,10 @@ class Account extends React.Component<IProps, IState> {
   renderPaymentDetails = (payment: Payment, index: number) => {
     return (
       <React.Fragment key={payment.courseId}>
-        <PaymentTitle id={`account-payment-details-${index}`}>
+        <PaymentTitle
+          style={{ color: COLORS.SECONDARY_YELLOW }}
+          id={`account-payment-details-${index}`}
+        >
           {this.getCourseTitleFromId(payment.courseId)}
         </PaymentTitle>
         <PaymentDetail>• Duration: Lifetime Access.</PaymentDetail>

@@ -38,9 +38,8 @@ class Home extends React.Component<IProps, {}> {
             <PageTitle>Welcome to Pairwise!</PageTitle>
             {hasPurchasedTypeScriptCourse ? (
               <ContentText>
-                Thank you for purchasing the Pairwise Course! You have lifetime
-                access. Please enjoy the course content, and feel free to
-                contact me anytime at: <b>sean@pairwise.tech</b>.
+                Thank you for purchasing the Pairwise Course! Please enjoy the
+                content and good luck in your journey learning to code.
               </ContentText>
             ) : (
               <>
