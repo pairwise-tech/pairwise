@@ -14,7 +14,7 @@ import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity
 import {
   validatePaymentRequest,
   validateRefundRequest,
-} from "../tools/validation";
+} from "../tools/validation-utils";
 import ENV from "../tools/server-env";
 import {
   Payment,

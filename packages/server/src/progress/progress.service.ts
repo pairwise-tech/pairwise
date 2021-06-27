@@ -16,7 +16,7 @@ import { RequestUser } from "../types";
 import {
   validateAndSanitizeProgressItem,
   validateChallengeProgressDto,
-} from "../tools/validation";
+} from "../tools/validation-utils";
 import { captureSentryException } from "../tools/sentry-utils";
 import { ChallengeMetaService } from "../challenge-meta/challenge-meta.service";
 

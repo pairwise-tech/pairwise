@@ -10,7 +10,7 @@ import { ERROR_CODES } from "../tools/constants";
 import { captureSentryException } from "../tools/sentry-utils";
 import ENV from "../tools/server-env";
 import { emailService, EmailService } from "../email/email.service";
-import { validateEmailUpdateRequest } from "../tools/validation";
+import { validateEmailUpdateRequest } from "../tools/validation-utils";
 import { RequestUser } from "../types";
 import { isAdminEmail } from "./admin.guard";
 

@@ -5,7 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { RequestUser } from "../types";
 import { SUCCESS_CODES } from "../tools/constants";
-import { validateFeedbackDto } from "../tools/validation";
+import { validateFeedbackDto } from "../tools/validation-utils";
 import { SlackService, slackService } from "../slack/slack.service";
 
 @Injectable()

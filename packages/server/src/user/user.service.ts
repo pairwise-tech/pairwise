@@ -16,7 +16,7 @@ import { RequestUser } from "../types";
 import {
   validateUserUpdateDetails,
   validateLastActiveChallengeIdsPayload,
-} from "../tools/validation";
+} from "../tools/validation-utils";
 import { ProgressService } from "../progress/progress.service";
 import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
 import { SlackService, slackService } from "../slack/slack.service";

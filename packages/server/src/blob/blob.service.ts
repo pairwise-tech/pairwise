@@ -8,7 +8,7 @@ import { Repository } from "typeorm";
 import { ContentUtility, ICodeBlobDto, CodeBlobBulk } from "@pairwise/common";
 import { CodeBlob } from "./blob.entity";
 import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
-import { validateCodeBlob } from "../tools/validation";
+import { validateCodeBlob } from "../tools/validation-utils";
 import { RequestUser } from "../types";
 
 @Injectable()
