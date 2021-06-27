@@ -5,6 +5,11 @@ import { Actions } from "modules/root-actions";
 import { combineEpics } from "redux-observable";
 import { FEEDBACK_DIALOG_TYPES } from "./actions";
 
+/** ===========================================================================
+ * Epics
+ * ============================================================================
+ */
+
 /**
  * Submit feedback for a challenge.
  */
@@ -61,6 +66,11 @@ const dismissFeedbackModalOnNavigationEpic: EpicSignature = (action$) => {
     }),
   );
 };
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default combineEpics(
   submitUserFeedbackEpic,

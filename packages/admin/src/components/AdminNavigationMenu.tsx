@@ -71,7 +71,7 @@ class AdminNavigationMenu extends React.Component<
           offsetX={overlayVisible ? 0 : -20}
           onClick={(e) => e.stopPropagation()}
         >
-          <ColTitle className="course-select">
+          <ColTitle>
             <Button
               fill
               icon="shield"

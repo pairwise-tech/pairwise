@@ -1,18 +1,10 @@
 import { combineEpics } from "redux-observable";
-import {
-  filter,
-  ignoreElements,
-  map,
-  mergeMap,
-  tap,
-  pluck,
-} from "rxjs/operators";
+import { filter, map, mergeMap, pluck } from "rxjs/operators";
 import { isActionOf } from "typesafe-actions";
 import { EpicSignature } from "../root";
 import { Actions } from "../root-actions";
 import { createInverseChallengeMapping } from "@pairwise/common";
 import { parseSearchQuery } from "../../tools/admin-utils";
-import { AdminSearchResult } from "../../components/AdminSearchPage";
 
 /** ===========================================================================
  * Epics
