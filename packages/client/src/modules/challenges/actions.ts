@@ -300,11 +300,11 @@ export const toggleEditModeAlternativeView = createAction(
 
 export const setMenuSelectColumn = createAction(
   ActionTypesEnum.SET_MENU_SELECT_COLUMN,
-)<"MODULE" | "CHALLENGE">();
+)<"modules" | "challenges">();
 
 export const setMenuSelectIndex = createAction(
   ActionTypesEnum.SET_MENU_SELECT_INDEX,
-)<number>();
+)<{ modules?: Nullable<number>; challenges?: Nullable<number> }>();
 
 export const toggleCodemirrorEditor = createAction(
   ActionTypesEnum.TOGGLE_CODEMIRROR_EDITOR,

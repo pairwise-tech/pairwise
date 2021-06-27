@@ -333,8 +333,8 @@ class NavigationOverlay extends React.Component<
   };
 
   maybeScrollSelectedItemIntoView = () => {
-    const { menuSelectIndex } = this.props;
-    if (menuSelectIndex === null) {
+    const { selectedIndex } = this.props.menuSelectState;
+    if (selectedIndex === null) {
       return;
     }
 
@@ -502,9 +502,9 @@ class NavigationOverlay extends React.Component<
     module: ModuleSkeleton,
     index: number,
   ) => {
-    const { menuSelectIndex, menuSelectColumn } = this.props;
+    const { selectedIndex, menuSelectColumn } = this.props.menuSelectState;
     const isMenuItemSelected =
-      menuSelectColumn === "MODULE" && menuSelectIndex === index;
+      menuSelectColumn === "modules" && selectedIndex === index;
 
     return (
       <ModuleNavigationButton
@@ -533,13 +533,7 @@ class NavigationOverlay extends React.Component<
     challenge: ChallengeSkeleton;
     style?: React.CSSProperties;
   }) => {
-    const {
-      isMobile,
-      isEditMode,
-      challengeId,
-      menuSelectIndex,
-      menuSelectColumn,
-    } = this.props;
+    const { isMobile, isEditMode, challengeId, menuSelectState } = this.props;
     const {
       index,
       module,
@@ -552,8 +546,9 @@ class NavigationOverlay extends React.Component<
       style = {},
     } = args;
 
+    const { selectedIndex, menuSelectColumn } = menuSelectState;
     const isMenuItemSelected =
-      menuSelectColumn === "CHALLENGE" && menuSelectIndex === index;
+      menuSelectColumn === "challenges" && selectedIndex === index;
 
     const challengeProgress = getChallengeProgress(
       this.props.userProgress,
@@ -1219,7 +1214,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isEditMode: Modules.selectors.challenges.isEditMode(state),
   module: Modules.selectors.challenges.getCurrentModule(state),
   course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
-  menuSelectIndex: Modules.selectors.challenges.menuSelectIndex(state),
+  menuSelectState: Modules.selectors.challenges.menuSelectState(state),
   menuSelectColumn: Modules.selectors.challenges.menuSelectColumn(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   courseListMetadata: Modules.selectors.challenges.courseListMetadata(state),
