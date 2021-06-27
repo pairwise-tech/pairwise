@@ -9,7 +9,7 @@ import {
   PageTitle,
   ProfileIcon,
   ExternalLink,
-} from "./Shared";
+} from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { Payment } from "@pairwise/common";
 import {

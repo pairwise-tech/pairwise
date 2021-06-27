@@ -5,7 +5,11 @@ import ApplicationContainer from "components/ApplicationContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
 import { NODE_ENV } from "tools/client-env";
 import ScrollToTop from "components/ScrollToTop";
-import { DarkTheme, FullScreenOverlay, OverlayText } from "components/Shared";
+import {
+  DarkTheme,
+  FullScreenOverlay,
+  OverlayText,
+} from "components/SharedComponents";
 import { captureSentryException } from "tools/sentry-utils";
 
 /** ===========================================================================

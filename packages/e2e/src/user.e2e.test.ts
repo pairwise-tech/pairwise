@@ -266,46 +266,48 @@ describe("User APIs", () => {
     // Check initial state is {}
     await checkChallengeIds({});
 
+    const TS = "fpvPtfu7s";
+    const RUST = "alosiqu45";
+
     // Update a challenge
-    await updateChallengeIds("fpvPtfu7s", "TL9i1z2rT");
+    await updateChallengeIds(TS, "TL9i1z2rT");
 
     // Check the state updated
     await checkChallengeIds({
-      fpvPtfu7s: "TL9i1z2rT",
+      [TS]: "TL9i1z2rT",
       lastActiveChallenge: "TL9i1z2rT",
     });
 
-    await updateChallengeIds("fpvPtfu7s", "sfxItMSR");
-    await updateChallengeIds("fpvPtfu7s", "Fpw0qzGv");
-    await updateChallengeIds("fpvPtfu7s", "4rq4ezCu");
+    await updateChallengeIds(TS, "sfxItMSR");
+    await updateChallengeIds(TS, "Fpw0qzGv");
+    await updateChallengeIds(TS, "4rq4ezCu");
 
     // Check the state updated
     await checkChallengeIds({
-      fpvPtfu7s: "4rq4ezCu",
+      [TS]: "4rq4ezCu",
       lastActiveChallenge: "4rq4ezCu",
     });
 
-    // NOTE: Separate course is not available right now:
-    // // Update challenge in a different course
-    // await updateChallengeIds("f76shgb2W", "7j8@a2tVR");
+    // Update challenge in a different course
+    await updateChallengeIds(RUST, "S@Ghw6X75");
 
-    // // Check the state updated and added the new course
-    // await checkChallengeIds({
-    //   f76shgb2W: "7j8@a2tVR",
-    //   fpvPtfu7s: "TL9i1z2rT",
-    //   lastActiveChallenge: "TL9i1z2rT",
-    // });
+    // Check the state updated and added the new course
+    await checkChallengeIds({
+      [TS]: "4rq4ezCu",
+      [RUST]: "S@Ghw6X75",
+      lastActiveChallenge: "S@Ghw6X75",
+    });
 
-    // // Update both course challenges again
-    // await updateChallengeIds("fpvPtfu7s", "HB0P9thnMf");
-    // await updateChallengeIds("f76shgb2W", "kI0LDxpct");
+    // Update both course challenges again
+    await updateChallengeIds(TS, "HB0P9thnMf");
+    await updateChallengeIds(RUST, "Qug@7dDI$");
 
-    // // Check the state updated and added the new course
-    // await checkChallengeIds({
-    //   f76shgb2W: "kI0LDxpct",
-    //   fpvPtfu7s: "HB0P9thnMf",
-    //   lastActiveChallenge: "kI0LDxpct",
-    // });
+    // Check the state updated and added the new course
+    await checkChallengeIds({
+      [TS]: "HB0P9thnMf",
+      [RUST]: "Qug@7dDI$",
+      lastActiveChallenge: "Qug@7dDI$",
+    });
 
     done();
   });

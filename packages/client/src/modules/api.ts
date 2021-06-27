@@ -21,7 +21,7 @@ import {
   IGenericFeedback,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Observable } from "rxjs";
+import { Observable, lastValueFrom } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { map, switchMap } from "rxjs/operators";
 import * as ENV from "tools/client-env";
@@ -214,7 +214,7 @@ class Api extends BaseApiClass {
         const courseList = require("@pairwise/common").default;
         courses = Object.values(courseList);
       } else if (ENV.CODEPRESS) {
-        courses = await this.codepressApi.getAll().toPromise();
+        courses = await lastValueFrom(this.codepressApi.getAll());
       } else {
         const { config } = this.getRequestHeaders();
         const result = await axios.get<CourseList>(
@@ -238,7 +238,7 @@ class Api extends BaseApiClass {
       const courseSkeletonList = courses.map(mapCourseSkeletonInDev);
       return new Ok(courseSkeletonList);
     } else if (ENV.CODEPRESS) {
-      return this.codepressApi.getSkeletons().pipe(map(Ok.of)).toPromise();
+      return lastValueFrom(this.codepressApi.getSkeletons().pipe(map(Ok.of)));
     }
 
     return this.httpHandler(async () => {

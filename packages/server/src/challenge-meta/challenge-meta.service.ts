@@ -1,7 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { ContentUtility } from "@pairwise/common";
 import { ChallengeMeta } from "./challenge-meta.entity";
+import { ERROR_CODES } from "../tools/constants";
 
 @Injectable()
 export class ChallengeMetaService {
@@ -11,6 +13,11 @@ export class ChallengeMetaService {
   ) {}
 
   private async lookupChallengeMeta(challengeId: string) {
+    // Verify the challenge id is valid
+    if (!ContentUtility.challengeIdIsValid(challengeId)) {
+      throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
+    }
+
     return this.challengeMetaRepository.findOne({
       challengeId,
     });
@@ -22,14 +29,10 @@ export class ChallengeMetaService {
       numberOfTimesCompleted: 0,
     };
 
-    try {
-      const result = await this.lookupChallengeMeta(challengeId);
-      if (result) {
-        return result;
-      } else {
-        return emptyMeta;
-      }
-    } catch (err) {
+    const result = await this.lookupChallengeMeta(challengeId);
+    if (result) {
+      return result;
+    } else {
       return emptyMeta;
     }
   }

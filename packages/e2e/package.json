@@ -18,16 +18,9 @@
     "test:watch": "yarn test:e2e --watch",
     "test:debug": "yarn test:e2e --watch -f src/user.e2e.test.ts"
   },
-  "directories": {
-    "dist": "dist"
-  },
-  "typings": "dist/main.d.ts",
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "@types/jest": "26.0.19",
-    "axios": "0.19.0",
+    "axios": "0.21.1",
     "eslint": "7.29.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.22.1",
@@ -38,5 +31,12 @@
     "prettier": "2.3.1",
     "supertest": "4.0.2",
     "typescript": "4.3.4"
-  }
+  },
+  "directories": {
+    "dist": "dist"
+  },
+  "typings": "dist/main.d.ts",
+  "files": [
+    "dist"
+  ]
 }

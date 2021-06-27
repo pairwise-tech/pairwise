@@ -48,17 +48,16 @@ import {
   CodeEditorUpperRight,
   Loading,
   CodeEditorContainer,
-} from "./Shared";
+} from "./SharedComponents";
 import {
-  Tooltip,
   ButtonGroup,
   Menu,
   MenuItem,
   Position,
-  Popover,
   MenuDivider,
   Button,
 } from "@blueprintjs/core";
+import { Tooltip2, Popover2 } from "@blueprintjs/popover2";
 import {
   composeWithProps,
   constructDataBlobFromChallenge,
@@ -346,7 +345,6 @@ class Workspace extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { correct: allTestsPassing } = this.getTestPassedStatus();
     const {
       logs,
       testResults,
@@ -369,8 +367,10 @@ class Workspace extends React.Component<IProps, IState> {
       isInstructionsViewCollapsed,
       editModeAlternativeViewEnabled,
     } = this.props;
-    const NO_TESTS_RESULTS = testResults.length === 0 || isPreviewTestResults;
     const { fullScreenEditor } = userSettings;
+    const { failingTests, correct: allTestsPassing } =
+      this.getTestPassedStatus();
+    const NO_TESTS_RESULTS = testResults.length === 0 || isPreviewTestResults;
     const IS_ALTERNATIVE_EDIT_VIEW = editModeAlternativeViewEnabled;
     const IS_SANDBOX = challenge.id === SANDBOX_ID;
     const IS_FULLSCREEN = fullScreenEditor || IS_SANDBOX;
@@ -437,7 +437,7 @@ class Workspace extends React.Component<IProps, IState> {
               passing={allTestsPassing}
               testsRunning={testResultsLoading}
               IconButtonProp={
-                <Tooltip
+                <Tooltip2
                   position="right"
                   interactionKind="hover-target"
                   content="Toggle Alternate Edit View"
@@ -448,7 +448,7 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="toggle alternate edit mode"
                     onClick={this.props.toggleAlternativeEditView}
                   />
-                </Tooltip>
+                </Tooltip2>
               }
             />
           )}
@@ -550,7 +550,7 @@ class Workspace extends React.Component<IProps, IState> {
             </CodeEditorUpperRight>
             <LowerRight>
               <ButtonGroup vertical={!isMobileView}>
-                <Tooltip
+                <Tooltip2
                   disabled={isMobileView}
                   content="Increase Font Size"
                   position={isMobileView ? "top" : "left"}
@@ -563,8 +563,8 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="increase editor font size"
                     onClick={this.props.increaseFontSize}
                   />
-                </Tooltip>
-                <Tooltip
+                </Tooltip2>
+                <Tooltip2
                   disabled={isMobileView}
                   content="Decrease Font Size"
                   position={isMobileView ? "top" : "left"}
@@ -577,12 +577,12 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="decrease editor font size"
                     onClick={this.props.decreaseFontSize}
                   />
-                </Tooltip>
+                </Tooltip2>
               </ButtonGroup>
               <div style={{ marginBottom: 8 }} />
               {/* Code formatting is available only for HTML/CSS/TS challenges */}
               {!isMobileView && !IS_ALTERNATE_LANGUAGE_CHALLENGE && (
-                <Tooltip content="Format Code" position="left">
+                <Tooltip2 content="Format Code" position="left">
                   <IconButton
                     icon="clean"
                     large={isMobileView}
@@ -590,10 +590,10 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="format editor code"
                     onClick={this.handleRequestCodeFormatting}
                   />
-                </Tooltip>
+                </Tooltip2>
               )}
               <div style={{ marginBottom: 8 }} />
-              <Popover
+              <Popover2
                 content={
                   <Menu large>
                     {!IS_SANDBOX && !isMobileView && (
@@ -691,7 +691,7 @@ class Workspace extends React.Component<IProps, IState> {
                   isMobileView ? Position.TOP_LEFT : Position.LEFT_BOTTOM
                 }
               >
-                <Tooltip
+                <Tooltip2
                   content="More options..."
                   position={isMobileView ? "top" : "left"}
                 >
@@ -701,8 +701,8 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="more options"
                     icon="more"
                   />
-                </Tooltip>
-              </Popover>
+                </Tooltip2>
+              </Popover2>
             </LowerRight>
             <CodeEditor
               isEditMode={isEditMode}
@@ -724,30 +724,35 @@ class Workspace extends React.Component<IProps, IState> {
       </CodeEditorContainer>
     );
 
-    // grid refers to the re-sizeable grid layout, which is not present
-    // on mobile.
-    const getPreviewPane = ({ grid = true } = {}) => {
-      // Lots of repetition here
-      if (!grid) {
+    const iFrameNormal = (
+      <DragIgnorantFrameContainer
+        id="iframe"
+        title="code-preview"
+        ref={this.setIframeRef}
+      />
+    );
+
+    const iFrameHidden = (
+      <DragIgnorantFrameContainer
+        id="iframe"
+        title="code-preview"
+        ref={this.setIframeRef}
+        style={{ visibility: "hidden", height: 0, width: 0 }}
+      />
+    );
+
+    const getPreviewPane = (isMobile: boolean = false) => {
+      if (isMobile) {
         return IS_SQL_CHALLENGE ? (
           // this className ensures consistent bg-color with the table itself
           <div style={{ height: "100%" }} className="bp3-table-container">
             {SQLResultsTable({ logs, testResultsLoading })}
-            <DragIgnorantFrameContainer
-              id="iframe"
-              title="code-preview"
-              ref={this.setIframeRef}
-              style={{ visibility: "hidden", height: 0, width: 0 }}
-            />
+            {iFrameNormal}
           </div>
         ) : IS_REACT_NATIVE_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <MobileDeviceUI device={mobileDevicePreviewType}>
-              <DragIgnorantFrameContainer
-                id="iframe"
-                title="code-preview"
-                ref={this.setIframeRef}
-              />
+              {iFrameNormal}
             </MobileDeviceUI>
             <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
               <Console variant="dark" logs={this.state.logs} />
@@ -755,13 +760,7 @@ class Workspace extends React.Component<IProps, IState> {
           </div>
         ) : IS_REACT_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ flex: "1 100%" }}>
-              <DragIgnorantFrameContainer
-                id="iframe"
-                title="code-preview"
-                ref={this.setIframeRef}
-              />
-            </div>
+            <div style={{ flex: "1 100%" }}>{iFrameNormal}</div>
             <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
               <Console variant="dark" logs={this.state.logs} />
             </div>
@@ -769,31 +768,15 @@ class Workspace extends React.Component<IProps, IState> {
         ) : IS_TYPESCRIPT_CHALLENGE ? (
           <div>
             <Console variant="dark" logs={this.state.logs} />
-            <DragIgnorantFrameContainer
-              id="iframe"
-              title="code-preview"
-              ref={this.setIframeRef}
-              style={{ visibility: "hidden", height: 0, width: 0 }}
-            />
+            {iFrameHidden}
           </div>
         ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
           <div>
             <Console variant="dark" logs={this.state.logs} />
-            <DragIgnorantFrameContainer
-              id="iframe"
-              title="code-preview"
-              ref={this.setIframeRef}
-              style={{ visibility: "hidden", height: 0, width: 0 }}
-            />
+            {iFrameHidden}
           </div>
         ) : IS_MARKUP_CHALLENGE ? (
-          <div style={{ height: "100%" }}>
-            <DragIgnorantFrameContainer
-              id="iframe"
-              title="code-preview"
-              ref={this.setIframeRef}
-            />
-          </div>
+          <div style={{ height: "100%" }}>{iFrameNormal}</div>
         ) : (
           /* Handle other challenge types ~ */
           <div id="the-div-that-should-not-render" />
@@ -808,14 +791,7 @@ class Workspace extends React.Component<IProps, IState> {
             runCodeHandler={this.runChallengeTests}
           />
           {SQLResultsTable({ logs, testResultsLoading })}
-          <div>
-            <DragIgnorantFrameContainer
-              id="iframe"
-              title="code-preview"
-              ref={this.setIframeRef}
-              style={{ visibility: "hidden", height: 0, width: 0 }}
-            />
-          </div>
+          <div>{iFrameHidden}</div>
         </Col>
       ) : IS_REACT_NATIVE_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
@@ -826,11 +802,7 @@ class Workspace extends React.Component<IProps, IState> {
           <RowsWrapper separatorProps={rowSeparatorProps}>
             <Row initialHeight={D.PREVIEW_REACT_NATIVE_HEIGHT}>
               <MobileDeviceUI device={mobileDevicePreviewType}>
-                <DragIgnorantFrameContainer
-                  id="iframe"
-                  title="code-preview"
-                  ref={this.setIframeRef}
-                />
+                {iFrameNormal}
               </MobileDeviceUI>
             </Row>
             <Row
@@ -849,13 +821,7 @@ class Workspace extends React.Component<IProps, IState> {
           />
           <RowsWrapper separatorProps={rowSeparatorProps}>
             <Row initialHeight={D.PREVIEW_HEIGHT}>
-              <div style={{ height: "100%" }}>
-                <DragIgnorantFrameContainer
-                  id="iframe"
-                  title="code-preview"
-                  ref={this.setIframeRef}
-                />
-              </div>
+              <div style={{ height: "100%" }}>{iFrameNormal}</div>
             </Row>
             <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
               {ScrollableWorkspaceConsole}
@@ -869,14 +835,7 @@ class Workspace extends React.Component<IProps, IState> {
             runCodeHandler={this.runChallengeTests}
           />
           {ScrollableWorkspaceConsole}
-          <div>
-            <DragIgnorantFrameContainer
-              id="iframe"
-              title="code-preview"
-              ref={this.setIframeRef}
-              style={{ visibility: "hidden", height: 0, width: 0 }}
-            />
-          </div>
+          <div>{iFrameHidden}</div>
         </Col>
       ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
         <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
@@ -885,14 +844,7 @@ class Workspace extends React.Component<IProps, IState> {
             runCodeHandler={this.runChallengeTests}
           />
           {ScrollableWorkspaceConsole}
-          <div>
-            <DragIgnorantFrameContainer
-              id="iframe"
-              title="code-preview"
-              ref={this.setIframeRef}
-              style={{ visibility: "hidden", height: 0, width: 0 }}
-            />
-          </div>
+          <div>{iFrameHidden}</div>
         </Col>
       ) : IS_MARKUP_CHALLENGE ? (
         <Col initialHeight={D.WORKSPACE_HEIGHT}>
@@ -900,13 +852,7 @@ class Workspace extends React.Component<IProps, IState> {
             visible={NO_TESTS_RESULTS}
             runCodeHandler={this.runChallengeTests}
           />
-          <div style={{ height: "100%" }}>
-            <DragIgnorantFrameContainer
-              id="iframe"
-              title="code-preview"
-              ref={this.setIframeRef}
-            />
-          </div>
+          <div style={{ height: "100%" }}>{iFrameNormal}</div>
         </Col>
       ) : (
         /* Handle other challenge types ~ */
@@ -914,93 +860,86 @@ class Workspace extends React.Component<IProps, IState> {
       );
     };
 
-    const renderMobile = () => {
-      const { failingTests } = this.getTestPassedStatus();
-      return (
-        <WorkspaceMobileView>
-          {!IS_SANDBOX && (
-            <div style={{ height: "auto", flexShrink: 0, maxHeight: "25vh" }}>
-              <InstructionsViewEdit isMobile={isMobileView} />
-            </div>
-          )}
-          <div className="tabs">
-            <div className="tab-selection">
-              <ButtonGroup fill large>
+    const mobileView = isMobileView && (
+      <WorkspaceMobileView>
+        {!IS_SANDBOX && (
+          <div style={{ height: "auto", flexShrink: 0, maxHeight: "25vh" }}>
+            <InstructionsViewEdit isMobile={isMobileView} />
+          </div>
+        )}
+        <div className="tabs">
+          <div className="tab-selection">
+            <ButtonGroup fill large>
+              <Button
+                onClick={() => {
+                  document
+                    .getElementById(MOBILE_SCROLL_PANEL_ID)
+                    ?.scrollTo({ left: 0, behavior: "smooth" });
+                }}
+                icon="code"
+              >
+                Code
+              </Button>
+              <Button
+                onClick={() => {
+                  document.getElementById(MOBILE_SCROLL_PANEL_ID)?.scrollTo({
+                    left: this.state.dimensions.w,
+                    behavior: "smooth",
+                  });
+                }}
+                icon="console"
+              >
+                Result
+              </Button>
+              {!IS_SANDBOX && (
                 <Button
-                  onClick={() => {
-                    document
-                      .getElementById(MOBILE_SCROLL_PANEL_ID)
-                      ?.scrollTo({ left: 0, behavior: "smooth" });
-                  }}
-                  icon="code"
-                >
-                  Code
-                </Button>
-                <Button
+                  className="test-view-button"
+                  data-failing={failingTests.length}
                   onClick={() => {
                     document.getElementById(MOBILE_SCROLL_PANEL_ID)?.scrollTo({
-                      left: this.state.dimensions.w,
+                      left: this.state.dimensions.w * 2,
                       behavior: "smooth",
                     });
                   }}
-                  icon="console"
                 >
-                  Result
-                </Button>
-                {!IS_SANDBOX && (
-                  <Button
-                    className="test-view-button"
-                    data-failing={failingTests.length}
-                    onClick={() => {
-                      document
-                        .getElementById(MOBILE_SCROLL_PANEL_ID)
-                        ?.scrollTo({
-                          left: this.state.dimensions.w * 2,
-                          behavior: "smooth",
-                        });
-                    }}
+                  <small
+                    className={
+                      "mobile-tests-badge " +
+                      (failingTests.length ? "fail" : "success")
+                    }
                   >
-                    <small
-                      className={
-                        "mobile-tests-badge " +
-                        (failingTests.length ? "fail" : "success")
-                      }
-                    >
-                      {failingTests.length > 9
-                        ? "9+"
-                        : failingTests.length || "✓"}
-                    </small>
-                    Tests
-                  </Button>
-                )}
-              </ButtonGroup>
-            </div>
-            <div id={MOBILE_SCROLL_PANEL_ID} className="panel">
-              <div className="panel-scroll">
-                <ContentContainer style={{ padding: 0 }}>
-                  {CODE_EDITOR_CONTAINER}
+                    {failingTests.length > 9
+                      ? "9+"
+                      : failingTests.length || "✓"}
+                  </small>
+                  Tests
+                </Button>
+              )}
+            </ButtonGroup>
+          </div>
+          <div id={MOBILE_SCROLL_PANEL_ID} className="panel">
+            <div className="panel-scroll">
+              <ContentContainer style={{ padding: 0 }}>
+                {CODE_EDITOR_CONTAINER}
+              </ContentContainer>
+              <ContentContainer>{getPreviewPane(true)}</ContentContainer>
+              {!IS_SANDBOX && (
+                <ContentContainer className="test-container">
+                  {WorkspaceTestContainer}
                 </ContentContainer>
-                <ContentContainer>
-                  {getPreviewPane({ grid: false })}
-                </ContentContainer>
-                {!IS_SANDBOX && (
-                  <ContentContainer className="test-container">
-                    {WorkspaceTestContainer}
-                  </ContentContainer>
-                )}
-              </div>
+              )}
             </div>
           </div>
-        </WorkspaceMobileView>
-      );
-    };
+        </div>
+      </WorkspaceMobileView>
+    );
 
     return (
       <Container>
         <PageSection>
           <WorkspaceContainer>
             {isMobileView ? (
-              renderMobile()
+              mobileView
             ) : shouldRefreshLayout ? null : (
               <ColsWrapper separatorProps={colSeparatorProps}>
                 <Col

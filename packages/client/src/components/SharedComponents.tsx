@@ -342,6 +342,7 @@ export const HalfCircle = styled.div<HalfCircleProps>`
   transform: translate(-50%, -50%);
   transition: background 0.3s;
   width: 60px;
+  z-index: 100;
 
   border-top-left-radius: ${(props) => (props.position === "top" ? 0 : 90)}px;
   border-top-right-radius: ${(props) => (props.position === "top" ? 0 : 90)}px;

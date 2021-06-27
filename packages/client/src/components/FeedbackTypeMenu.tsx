@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@blueprintjs/core";
 import { Select, IListItemsProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE } from "@pairwise/common";
-import { getRenderItemList, labelByType } from "./Shared";
+import { getRenderItemList, labelByType } from "./SharedComponents";
 
 const MENU_WIDTH = 195;
 

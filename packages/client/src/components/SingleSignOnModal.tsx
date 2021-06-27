@@ -16,7 +16,7 @@ import {
   ModalContainer,
   ModalSubText,
   ExternalLink,
-} from "./Shared";
+} from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
 

@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Tooltip, Classes, Card, H5, Button, Callout } from "@blueprintjs/core";
-import { IconNavLink } from "./Shared";
+import { Classes, Card, H5, Button, Callout } from "@blueprintjs/core";
+import { Tooltip2 } from "@blueprintjs/popover2";
+import { IconNavLink } from "./SharedComponents";
 import Modules, { ReduxStoreState } from "modules/root";
 import styled from "styled-components/macro";
 import { getChallengeSlug } from "@pairwise/common";
@@ -28,7 +29,7 @@ export const PrevChallengeIconButton = connect((state: ReduxStoreState) => {
     ? "Previous Challenge"
     : "Already at the first challenge";
   return (
-    <Tooltip content={tooltipMessage}>
+    <Tooltip2 content={tooltipMessage}>
       <IconNavLink
         disabled={!slug}
         icon="chevron-left"
@@ -36,7 +37,7 @@ export const PrevChallengeIconButton = connect((state: ReduxStoreState) => {
         to={`/workspace/${slug}`}
         {...props}
       />
-    </Tooltip>
+    </Tooltip2>
   );
 });
 
@@ -50,7 +51,7 @@ export const NextChallengeIconButton = connect((state: ReduxStoreState) => {
     ? "Next Challenge"
     : "Already at the last challenge";
   return (
-    <Tooltip content={tooltipMessage}>
+    <Tooltip2 content={tooltipMessage}>
       <IconNavLink
         disabled={!slug}
         icon="chevron-right"
@@ -58,7 +59,7 @@ export const NextChallengeIconButton = connect((state: ReduxStoreState) => {
         to={`/workspace/${slug}`}
         {...props}
       />
-    </Tooltip>
+    </Tooltip2>
   );
 });
 

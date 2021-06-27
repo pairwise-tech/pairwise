@@ -1,6 +1,7 @@
 import React from "react";
-import { Popover, Position, Tooltip, Button, Classes } from "@blueprintjs/core";
-import { IconButton } from "./Shared";
+import { Position, Button, Classes } from "@blueprintjs/core";
+import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
+import { IconButton } from "./SharedComponents";
 import styled from "styled-components/macro";
 import formatDistance from "date-fns/formatDistance";
 import format from "date-fns/format";
@@ -163,7 +164,7 @@ const PairwiseLivePopover = (props: Props) => {
   }, [props.setFeedbackDialogState, props.setFeedbackType]);
 
   return (
-    <Popover
+    <Popover2
       usePortal
       position={Position.BOTTOM}
       content={
@@ -238,7 +239,7 @@ const PairwiseLivePopover = (props: Props) => {
         </Container>
       }
     >
-      <Tooltip
+      <Tooltip2
         usePortal={false}
         content={
           currentSession
@@ -260,8 +261,8 @@ const PairwiseLivePopover = (props: Props) => {
         ) : (
           <IconButton icon="record" aria-label="Pairwise Live" />
         )}
-      </Tooltip>
-    </Popover>
+      </Tooltip2>
+    </Popover2>
   );
 };
 

@@ -5,7 +5,12 @@ import { CourseSkeleton, getChallengeSlug } from "@pairwise/common";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text, PageTitle, ExternalLink } from "./Shared";
+import {
+  PageContainer,
+  Text,
+  PageTitle,
+  ExternalLink,
+} from "./SharedComponents";
 import { COLORS, MOBILE } from "tools/constants";
 import SEO from "./SEO";
 
@@ -94,7 +99,7 @@ class Home extends React.Component<IProps, {}> {
                 <ContentText>
                   You have completed {userCourseProgressSummary.totalCompleted}{" "}
                   out of {userCourseProgressSummary.totalChallenges} challenges
-                  in the {currentCourse.title} Course.
+                  in the <b>{currentCourse.title} Course</b>.
                 </ContentText>
                 <ProgressBar>
                   <ProgressComplete

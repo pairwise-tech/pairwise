@@ -6,7 +6,7 @@ import styled from "styled-components/macro";
 import { COLORS, SANDBOX_ID } from "tools/constants";
 import Modules, { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
-import { timer } from "rxjs";
+import { lastValueFrom, timer } from "rxjs";
 import { map } from "rxjs/operators";
 import { Editor } from "slate-react";
 import { Leaf, Selection, Block, Mark } from "slate";
@@ -461,16 +461,16 @@ class ContentEditor extends React.Component<Props> {
     this.props.requestSearchResults(searchTerm);
 
     // An arbitrary amount of time later just pass the search results in
-    return timer(600)
-      .pipe(
+    return lastValueFrom(
+      timer(600).pipe(
         map(() => {
           return this.props.searchResults.map((x) => ({
             title: x.title,
             url: `/workspace/${x.id}`,
           }));
         }),
-      )
-      .toPromise();
+      ),
+    );
   };
 
   handleFileUpload = (file: File): Promise<string> => {

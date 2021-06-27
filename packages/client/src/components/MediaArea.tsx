@@ -12,7 +12,7 @@ import {
   Hr,
   DefaultVideoWrapper,
   VideoWrapper,
-} from "./Shared";
+} from "./SharedComponents";
 import { EditableText, Callout, Classes, Button } from "@blueprintjs/core";
 import { NextChallengeCard } from "./ChallengeControls";
 import {

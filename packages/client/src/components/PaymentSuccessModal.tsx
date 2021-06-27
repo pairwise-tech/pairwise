@@ -5,7 +5,11 @@ import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
-import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
+import {
+  ModalContainer,
+  ModalTitleText,
+  ModalSubText,
+} from "./SharedComponents";
 import { COLORS } from "tools/constants";
 
 /** ===========================================================================

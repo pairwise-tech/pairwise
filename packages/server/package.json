@@ -37,6 +37,7 @@
     "migrations:reset": "yarn schema:drop && rm -rf src/migrations && mkdir src/migrations",
     "db:reset": "yarn schema:drop && yarn setup:db",
     "db": "docker-compose up",
+    "db:down": "docker-compose down",
     "edit:email": "open -a \"Google Chrome\" src/email/templates/index.html"
   },
   "dependencies": {
@@ -64,7 +65,7 @@
     "eslint-plugin-prefer-arrow": "1.2.2",
     "getenv": "1.0.0",
     "morgan": "1.9.1",
-    "nodemailer": "6.4.6",
+    "nodemailer": "6.6.2",
     "passport": "0.4.1",
     "passport-facebook": "3.0.0",
     "passport-github": "1.1.0",
@@ -73,7 +74,7 @@
     "pg": "7.15.1",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.0",
-    "rxjs": "6.5.3",
+    "rxjs": "^7.1.0",
     "shortid": "2.2.16",
     "stripe": "8.17.0",
     "swagger-ui-express": "4.1.2",

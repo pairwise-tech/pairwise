@@ -11,8 +11,9 @@ import {
   requestCodeFormatting,
 } from "tools/code-worker";
 import { COLORS, MONACO_EDITOR_FONT_SIZE_STEP } from "tools/constants";
-import { LowerRight, IconButton } from "./Shared";
-import { Tooltip, ButtonGroup, Popover } from "@blueprintjs/core";
+import { LowerRight, IconButton } from "./SharedComponents";
+import { ButtonGroup } from "@blueprintjs/core";
+import { Tooltip2, Popover2 } from "@blueprintjs/popover2";
 import { CodeFormatMessageEvent, TEST_UTILS_GLOBALS } from "tools/test-utils";
 import { MonacoEditorThemes } from "@pairwise/common";
 import toaster from "tools/toast-utils";
@@ -103,29 +104,29 @@ class ChallengeTestEditor extends React.Component<IProps, IState> {
         />
         <LowerRight>
           <ButtonGroup vertical style={{ marginBottom: 8 }}>
-            <Tooltip content="Increase Font Size" position="left">
+            <Tooltip2 content="Increase Font Size" position="left">
               <IconButton
                 icon="plus"
                 aria-label="increase editor font size"
                 onClick={increaseFontSize}
               />
-            </Tooltip>
-            <Tooltip content="Decrease Font Size" position="left">
+            </Tooltip2>
+            <Tooltip2 content="Decrease Font Size" position="left">
               <IconButton
                 icon="minus"
                 aria-label="decrease editor font size"
                 onClick={decreaseFontSize}
               />
-            </Tooltip>
+            </Tooltip2>
           </ButtonGroup>
-          <Tooltip content="Format Code" position="left">
+          <Tooltip2 content="Format Code" position="left">
             <IconButton
               icon="clean"
               aria-label="format editor code"
               onClick={this.requestCodeFormatting}
             />
-          </Tooltip>
-          <Popover
+          </Tooltip2>
+          <Popover2
             canEscapeKeyClose
             content={
               <TestUtilsPopover>
@@ -151,10 +152,10 @@ class ChallengeTestEditor extends React.Component<IProps, IState> {
               </TestUtilsPopover>
             }
           >
-            <Tooltip content="View Test Utils" position="left">
+            <Tooltip2 content="View Test Utils" position="left">
               <IconButton icon="more" aria-label="test utils helpers" />
-            </Tooltip>
-          </Popover>
+            </Tooltip2>
+          </Popover2>
         </LowerRight>
       </div>
     );

@@ -1,11 +1,10 @@
 import * as React from "react";
 import styled from "styled-components/macro";
 import { Editor } from "slate-react";
-
 import { Block } from "slate";
 import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
 import { PROSE_MAX_WIDTH, COLORS, MOBILE } from "tools/constants";
-import { LineWrappedText } from "./Shared";
+import { LineWrappedText } from "./SharedComponents";
 
 const TOP_SPACING = 80;
 
