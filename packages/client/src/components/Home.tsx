@@ -99,7 +99,7 @@ class Home extends React.Component<IProps, {}> {
                 <ContentText>
                   You have completed {userCourseProgressSummary.totalCompleted}{" "}
                   out of {userCourseProgressSummary.totalChallenges} challenges
-                  in the {currentCourse.title} Course.
+                  in the <b>{currentCourse.title} Course</b>.
                 </ContentText>
                 <ProgressBar>
                   <ProgressComplete

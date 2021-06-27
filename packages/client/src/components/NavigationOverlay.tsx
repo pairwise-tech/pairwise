@@ -198,7 +198,7 @@ class NavigationOverlay extends React.Component<
               />
             </CourseSelect>
           </ColTitle>
-          <ColScroll isEditMode={isEditMode}>
+          <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             <div style={{ position: "relative" }}>
               {this.renderModuleCodepressButton(course, -1)}
@@ -207,11 +207,9 @@ class NavigationOverlay extends React.Component<
           </ColScroll>
         </Col>
         <Col
+          style={{ zIndex: 2 }}
           className="challenge-select"
           offsetX={overlayVisible ? 0 : -60}
-          style={{
-            zIndex: 2,
-          }}
           onClick={(e) => e.stopPropagation()}
         >
           <SpecialLeftShadow />
@@ -241,7 +239,7 @@ class NavigationOverlay extends React.Component<
               </Row>
             )}
           </ColTitle>
-          <ColScroll isEditMode={isEditMode}>
+          <ColScroll>
             {/* In case of no challenges yet, or to add one at the start, here's a button */}
             {this.renderChallengeCodepressButton(course, module, -1)}
             {this.renderSortableChallengeList(
@@ -1118,8 +1116,8 @@ const Col = styled.div<{ offsetX: number }>`
   }
 `;
 
-const ColScroll = styled.div<{ isEditMode: boolean }>`
-  overflow: ${(props) => (props.isEditMode ? "none" : "auto")};
+const ColScroll = styled.div`
+  overflow: auto;
 `;
 
 const Overlay = styled.div<{ visible: boolean }>`
