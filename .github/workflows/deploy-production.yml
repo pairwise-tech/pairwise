@@ -12,11 +12,11 @@
 
 name: Deploy Production
 
-# Only deploy on commits to the master branch
+# Only deploy on commits to the main branch
 on:
   push:
     branches:
-      - master
+      - main
 
 # Environment variables available to all jobs and steps in this workflow
 env:

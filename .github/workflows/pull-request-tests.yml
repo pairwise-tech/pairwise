@@ -9,7 +9,7 @@ name: Pull Request Tests
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 env:
   CI: true
