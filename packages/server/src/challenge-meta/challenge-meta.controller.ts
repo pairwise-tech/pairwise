@@ -10,7 +10,6 @@ export class ChallengeMetaController {
   @UseGuards(AuthGuard("jwt"))
   @Get(":id")
   public fetchChallengeMeta(@Param() params, @Req() req: AuthenticatedRequest) {
-    const { id } = params;
-    return this.challengeMetaService.fetchChallengeMeta(id);
+    return this.challengeMetaService.fetchChallengeMeta(params.id);
   }
 }

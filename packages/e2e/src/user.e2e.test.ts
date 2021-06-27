@@ -12,7 +12,7 @@ import { LastActiveChallengeIds } from "@pairwise/common";
  * ============================================================================
  */
 
-describe.only("User APIs", () => {
+describe("User APIs", () => {
   test("/user/profile (GET) a user can fetch their profile", async () => {
     const accessToken = await fetchAccessToken();
     const result = await axios.get(`${HOST}/user/profile`, {
@@ -235,7 +235,7 @@ describe.only("User APIs", () => {
       });
   });
 
-  test.only("/active-challenge-ids (POST) updates last active challenge ids correctly", async (done) => {
+  test("/active-challenge-ids (POST) updates last active challenge ids correctly", async (done) => {
     const accessToken = await fetchAccessToken();
     const authorizationHeader = `Bearer ${accessToken}`;
 
