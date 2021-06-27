@@ -230,6 +230,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
     if (this.props.overlayVisible) {
       const { menuSelectState, setMenuSelectIndex, menuSelectColumn } =
         this.props;
+
       const { selectedIndex } = menuSelectState;
       const relevantList = this.getCurrentModuleOrChallengeList();
 
@@ -245,8 +246,18 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
 
       let TARGET_INDEX;
 
-      // If we are in a collapsed section we want to search for the next
-      // section to select
+      /**
+       * If we are in a collapsed section we want to search for the next
+       * section to select.
+       *
+       * NOTE: Because we are in a collapsed section, there
+       * MUST be a section in the list to find, so this should not result
+       * in an infinite loop, unless there are other indexing bugs. Or, so
+       * it would seem. Same goes for the other loop for navigating down.
+       *
+       * In the case there is only one section, we would just always reselect
+       * the same section, rather than collapsing into an infinite loop.
+       */
       if (inCollapsedSection) {
         let nextSectionIndex = null;
         let index = currentIndex - 1;
@@ -313,7 +324,8 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
         let index = currentIndex + 1;
         while (nextSectionIndex === null) {
           // After reaching the last item, reset index to the start of the list
-          if (index === relevantList.length - 1) {
+          // NOTE: >= accounts for final challenges which are empty sections...
+          if (index >= relevantList.length - 1) {
             nextSectionIndex = 0;
           } else {
             const nextItem = relevantList[index];
@@ -409,7 +421,9 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
     } else {
       const challenge = relevantList[selectedIndex];
       if (!challenge) {
+        // Nothing to do if there is no challenge
       } else if (!challenge.userCanAccess) {
+        // Also cannot access locked challenges this way
         toaster.warn("You must purchase the course to access this challenge.");
       } else if (navigationAccordionViewState[challenge.id] === false) {
         // If section is collapsed, expand it
