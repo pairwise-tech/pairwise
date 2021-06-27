@@ -8,7 +8,7 @@ import { fetchAccessToken, HOST } from "./utils/e2e-utils";
  * ============================================================================
  */
 
-describe.only("Challenge Meta APIs", () => {
+describe("Challenge Meta APIs", () => {
   let accessToken;
   let authorizationHeader;
 
@@ -25,13 +25,22 @@ describe.only("Challenge Meta APIs", () => {
   });
 
   test("Challenge Meta tracks challenge completed counts correctly", async (done) => {
-    const getCurrentMeta = async (challengeId: string) => {
-      return axios.get<ChallengeMeta>(`${HOST}/challenge-meta/${challengeId}`, {
-        headers: { Authorization: authorizationHeader },
-      });
+    const getCurrentMetaChallengeCount = async (challengeId: string) => {
+      const config = { headers: { Authorization: authorizationHeader } };
+      const result = await axios.get<ChallengeMeta>(
+        `${HOST}/challenge-meta/${challengeId}`,
+        config,
+      );
+
+      return result.data.numberOfTimesCompleted;
     };
 
-    let meta = await getCurrentMeta("5ziJI35f");
+    /**
+     * NOTE: If any other e2e tests updated this same challenge id,
+     * they would conflict with this test and possibly produce spurious
+     * results.
+     */
+    let count = await getCurrentMetaChallengeCount("hU@oatYsK");
 
     const updateProgressItem = async (progress: IProgressDto) => {
       return axios.post(`${HOST}/progress`, progress, {
@@ -42,20 +51,20 @@ describe.only("Challenge Meta APIs", () => {
     const challengeOneTime = new Date();
     await updateProgressItem({
       complete: false,
-      challengeId: "5ziJI35f",
+      challengeId: "hU@oatYsK",
       courseId: "fpvPtfu7s",
       timeCompleted: challengeOneTime,
     });
 
     // numberOfTimesCompleted should not be updated yet
-    let expected = meta.data.numberOfTimesCompleted;
-    meta = await getCurrentMeta("5ziJI35f");
-    expect(meta.data.numberOfTimesCompleted).toBe(expected);
+    let expected = count;
+    count = await getCurrentMetaChallengeCount("hU@oatYsK");
+    expect(count).toBe(expected);
 
     // Complete the challenge
     await updateProgressItem({
       complete: true,
-      challengeId: "5ziJI35f",
+      challengeId: "hU@oatYsK",
       courseId: "fpvPtfu7s",
       timeCompleted: new Date(),
     });
@@ -71,15 +80,15 @@ describe.only("Challenge Meta APIs", () => {
     // Complete the challenge again with the same user
     await updateProgressItem({
       complete: true,
-      challengeId: "5ziJI35f",
+      challengeId: "hU@oatYsK",
       courseId: "fpvPtfu7s",
       timeCompleted: new Date(),
     });
 
     // Update meta count
-    expected = meta.data.numberOfTimesCompleted + 1;
-    meta = await getCurrentMeta("5ziJI35f");
-    expect(meta.data.numberOfTimesCompleted).toBe(expected);
+    expected = count + 1;
+    count = await getCurrentMetaChallengeCount("hU@oatYsK");
+    expect(count).toBe(expected);
 
     // Create new user
     accessToken = await fetchAccessToken();
@@ -88,18 +97,18 @@ describe.only("Challenge Meta APIs", () => {
     // Complete the same challenge again
     await updateProgressItem({
       complete: true,
-      challengeId: "5ziJI35f",
+      challengeId: "hU@oatYsK",
       courseId: "fpvPtfu7s",
       timeCompleted: new Date(),
     });
 
     // Check that the numberOfTimesCompleted has updated again
-    request(`${HOST}/challenge-meta/5ziJI35f`)
+    request(`${HOST}/challenge-meta/hU@oatYsK`)
       .get("/")
       .set("Authorization", authorizationHeader)
       .expect(200)
       .end((error, response) => {
-        expected = meta.data.numberOfTimesCompleted + 1;
+        expected = count + 1;
         expect(response.body.numberOfTimesCompleted).toBe(expected);
         done(error);
       });
