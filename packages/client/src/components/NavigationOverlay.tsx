@@ -42,7 +42,7 @@ import {
   ModuleNumber,
   ModuleNavigationBase,
 } from "./NavigationOverlayComponents";
-import { IconButton, RotatingIcon } from "./Shared";
+import { IconButton, RotatingIcon } from "./SharedComponents";
 import cx from "classnames";
 import { Select } from "@blueprintjs/select";
 

@@ -2,7 +2,7 @@ import React, { ChangeEvent } from "react";
 import { connect } from "react-redux";
 import { EditableText, Classes, Button } from "@blueprintjs/core";
 import { PROSE_MAX_WIDTH } from "tools/constants";
-import { Hr, TitleHeader } from "./Shared";
+import { Hr, TitleHeader } from "./SharedComponents";
 import { Challenge, ProjectChallengeBlob } from "@pairwise/common";
 import { composeWithProps, constructDataBlobFromChallenge } from "tools/utils";
 import Modules, { ReduxStoreState } from "modules/root";

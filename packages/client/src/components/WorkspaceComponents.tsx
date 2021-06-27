@@ -12,7 +12,7 @@ import {
 } from "../tools/constants";
 import { getDimensions, HEADER_HEIGHT } from "../tools/dimensions";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { Loading, RotatingIcon } from "./Shared";
+import { Loading, RotatingIcon } from "./SharedComponents";
 import {
   Icon,
   Collapse,

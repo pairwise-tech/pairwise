@@ -1,7 +1,7 @@
 import React from "react";
 import { Position, Button, Classes } from "@blueprintjs/core";
 import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
-import { IconButton } from "./Shared";
+import { IconButton } from "./SharedComponents";
 import styled from "styled-components/macro";
 import formatDistance from "date-fns/formatDistance";
 import format from "date-fns/format";

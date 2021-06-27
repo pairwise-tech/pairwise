@@ -1,7 +1,7 @@
 import React from "react";
 import { Position, Button } from "@blueprintjs/core";
 import { Tooltip2, Popover2 } from "@blueprintjs/popover2";
-import { IconButton, ExternalLink } from "./Shared";
+import { IconButton, ExternalLink } from "./SharedComponents";
 import styled from "styled-components";
 import { COLORS } from "tools/constants";
 import toaster from "../tools/toast-utils";

@@ -4,7 +4,7 @@ import { Button, Icon } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
 import { Select, IListItemsProps } from "@blueprintjs/select";
 import { getChallengeIcon } from "tools/utils";
-import { getRenderItemList, labelByType } from "./Shared";
+import { getRenderItemList, labelByType } from "./SharedComponents";
 
 /** ===========================================================================
  * Types & Config

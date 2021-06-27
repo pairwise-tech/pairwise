@@ -1,7 +1,11 @@
 import React, { ChangeEvent, useState } from "react";
 import Modules, { ReduxStoreState } from "modules/root";
 import { connect } from "react-redux";
-import { ModalContainer, ModalTitleText, ModalSubText } from "./Shared";
+import {
+  ModalContainer,
+  ModalTitleText,
+  ModalSubText,
+} from "./SharedComponents";
 import {
   Dialog,
   TextArea,

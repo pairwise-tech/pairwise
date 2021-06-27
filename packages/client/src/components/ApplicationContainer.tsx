@@ -33,7 +33,7 @@ import {
   DesktopOnly,
   OverlaySmallText,
   PairwiseOpenCloseLogo,
-} from "./Shared";
+} from "./SharedComponents";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
 import Workspace from "./Workspace";

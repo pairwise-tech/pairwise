@@ -5,7 +5,12 @@ import { CourseSkeleton, getChallengeSlug } from "@pairwise/common";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
-import { PageContainer, Text, PageTitle, ExternalLink } from "./Shared";
+import {
+  PageContainer,
+  Text,
+  PageTitle,
+  ExternalLink,
+} from "./SharedComponents";
 import { COLORS, MOBILE } from "tools/constants";
 import SEO from "./SEO";
 

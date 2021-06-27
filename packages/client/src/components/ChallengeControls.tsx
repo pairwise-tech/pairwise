@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Classes, Card, H5, Button, Callout } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
-import { IconNavLink } from "./Shared";
+import { IconNavLink } from "./SharedComponents";
 import Modules, { ReduxStoreState } from "modules/root";
 import styled from "styled-components/macro";
 import { getChallengeSlug } from "@pairwise/common";

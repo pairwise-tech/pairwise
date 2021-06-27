@@ -48,7 +48,7 @@ import {
   CodeEditorUpperRight,
   Loading,
   CodeEditorContainer,
-} from "./Shared";
+} from "./SharedComponents";
 import {
   ButtonGroup,
   Menu,

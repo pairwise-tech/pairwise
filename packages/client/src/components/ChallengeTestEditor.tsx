@@ -11,7 +11,7 @@ import {
   requestCodeFormatting,
 } from "tools/code-worker";
 import { COLORS, MONACO_EDITOR_FONT_SIZE_STEP } from "tools/constants";
-import { LowerRight, IconButton } from "./Shared";
+import { LowerRight, IconButton } from "./SharedComponents";
 import { ButtonGroup } from "@blueprintjs/core";
 import { Tooltip2, Popover2 } from "@blueprintjs/popover2";
 import { CodeFormatMessageEvent, TEST_UTILS_GLOBALS } from "tools/test-utils";

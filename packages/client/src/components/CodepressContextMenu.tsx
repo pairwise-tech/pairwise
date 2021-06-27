@@ -1,7 +1,7 @@
 import React from "react";
 import { Menu, MenuItem } from "@blueprintjs/core";
 import { ContextMenu2 } from "@blueprintjs/popover2";
-import { DarkTheme } from "./Shared";
+import { DarkTheme } from "./SharedComponents";
 
 /** ===========================================================================
  * Types & Config

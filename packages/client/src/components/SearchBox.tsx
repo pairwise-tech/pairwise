@@ -8,7 +8,7 @@ import reactStringReplace from "react-string-replace";
 import { useHistory } from "react-router-dom";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import { MOBILE, COLORS, SEARCH_QUERY_THRESHOLD } from "tools/constants";
-import { LineWrappedText } from "./Shared";
+import { LineWrappedText } from "./SharedComponents";
 import cx from "classnames";
 
 // NOTE: isClosed is kept in state because sometimes we want the search pane to

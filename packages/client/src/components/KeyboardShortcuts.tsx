@@ -4,7 +4,7 @@ import tap from "ramda/es/tap";
 import difference from "ramda/es/difference";
 import { Position } from "@blueprintjs/core";
 import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
-import { IconButton } from "./Shared";
+import { IconButton } from "./SharedComponents";
 import styled from "styled-components";
 import { COLORS } from "tools/constants";
 import { getClientOS } from "../tools/utils";

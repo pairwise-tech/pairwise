@@ -4,7 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Modules, { ReduxStoreState } from "modules/root";
 import { composeWithProps } from "tools/utils";
-import { ModalContainer, ModalTitleText, Loading } from "./Shared";
+import { ModalContainer, ModalTitleText, Loading } from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
 

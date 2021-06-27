@@ -28,7 +28,7 @@ import {
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import { generateEmptyChallenge } from "tools/utils";
-import { IconButton } from "./Shared";
+import { IconButton } from "./SharedComponents";
 
 const CONTRIBUTOR_IMAGES = {
   "Ian Sinnott": require("../icons/git-contributors/ian.jpg").default,
