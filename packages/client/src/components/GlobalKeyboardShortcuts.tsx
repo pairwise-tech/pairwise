@@ -122,6 +122,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
         menuSelectIndexModules === null
           ? currentModuleId
           : menuSelectIndexModules;
+
       if (targetId) {
         for (let i = 0; i < currentList.length; i++) {
           if (currentList[i].id === targetId) {
@@ -137,7 +138,10 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       // Override with menuSelectIndexChallenges challenge id, if possible
       if (menuSelectIndexChallenges !== null) {
         const selectedItem = currentList[menuSelectIndexChallenges];
-        id = selectedItem.id;
+        // Just be sure it exists
+        if (selectedItem !== undefined) {
+          id = selectedItem.id;
+        }
       }
 
       if (id) {
@@ -166,6 +170,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       }
     }
 
+    // In case the index was somehow never found default to zero
     const currentIndex = !!index ? index : 0;
 
     // If challenges are selected and the current index is 0, iterate
@@ -365,12 +370,41 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
 
     if (menuSelectColumn === "modules") {
       const moduleItem = relevantList[selectedIndex];
-      if (!!moduleItem && moduleItem.id !== currentModuleId) {
-        // Need to reset the challenges menu select index when selecting a new
-        // module, and switch the menu select column to challenges
+      /**
+       * Several state updates occur when a different module is
+       * selected. This might become problematic since these updates
+       * could be asynchronously handled by React... but they seem
+       * to be working fairly well right now.
+       *
+       * 1. Reset the challenges index to null.
+       * 2. Select the new module.
+       * 3. Set the menu select column to challenges.
+       * 4. Set challenges index to the default, for this challenges list.
+       *
+       * The result is the new module is selected and the arrow key
+       * selection defaults to an appropriate challenge in the new list.
+       */
+      if (moduleItem !== undefined && moduleItem.id !== currentModuleId) {
+        // Steps 1 through 3 from the above comment
         this.props.setMenuSelectIndex({ challenges: null });
         this.props.setCurrentModule(moduleItem.id);
         this.props.setMenuSelectColumn("challenges");
+
+        // Get the challenge list from the newly selected module
+        const selectedChallengeList =
+          "challenges" in moduleItem ? moduleItem.challenges : null;
+
+        if (selectedChallengeList) {
+          // Reset the current index for the challenges column, given
+          // the challenges list for the new module
+          const { currentIndex } = this.getDefaultMenuItemIndex(
+            selectedChallengeList,
+            "down",
+          );
+
+          // Set the new challenges selection index
+          this.props.setMenuSelectIndex({ challenges: currentIndex });
+        }
       }
     } else {
       const challenge = relevantList[selectedIndex];
@@ -386,6 +420,10 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
         const element = document.getElementById(id);
         if (element) {
           element.click();
+        } else {
+          console.warn(
+            `Tried to find element with id ${id} but couldn't find it...`,
+          );
         }
       }
     }
