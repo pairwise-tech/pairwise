@@ -73,8 +73,9 @@ export interface State {
   isSearching: boolean;
   revealWorkspaceSolution: boolean;
   isDirty: boolean;
-  menuSelectColumn: "MODULE" | "CHALLENGE";
-  menuSelectIndex: number | null;
+  menuSelectColumn: "modules" | "challenges";
+  menuSelectIndexModules: number | null;
+  menuSelectIndexChallenges: number | null;
   useCodemirror: boolean;
   isInstructionsViewCollapsed: boolean;
 }
@@ -99,8 +100,9 @@ const initialState: State = {
   isSearching: false,
   revealWorkspaceSolution: false,
   isDirty: false,
-  menuSelectColumn: "CHALLENGE",
-  menuSelectIndex: null,
+  menuSelectColumn: "challenges",
+  menuSelectIndexModules: null,
+  menuSelectIndexChallenges: null,
   useCodemirror: false,
   isInstructionsViewCollapsed: false,
 };
@@ -642,9 +644,16 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     menuSelectColumn: action.payload,
   }))
-  .handleAction(actions.setMenuSelectIndex, (state, action) => ({
+  .handleAction(actions.setMenuSelectIndex, (state, { payload }) => ({
     ...state,
-    menuSelectIndex: action.payload,
+    menuSelectIndexModules:
+      payload.modules === undefined
+        ? state.menuSelectIndexModules
+        : payload.modules,
+    menuSelectIndexChallenges:
+      payload.challenges === undefined
+        ? state.menuSelectIndexChallenges
+        : payload.challenges,
   }))
   .handleAction(actions.toggleEditModeAlternativeView, (state, action) => ({
     ...state,

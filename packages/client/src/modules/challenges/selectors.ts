@@ -32,10 +32,24 @@ export const isInstructionsViewCollapsed = createSelector(
   (x) => x.isInstructionsViewCollapsed,
 );
 
-export const menuSelectIndex = createSelector(
-  [challengesState],
-  (x) => x.menuSelectIndex,
-);
+export const menuSelectState = createSelector([challengesState], (state) => {
+  const {
+    menuSelectColumn,
+    menuSelectIndexModules,
+    menuSelectIndexChallenges,
+  } = state;
+  const selectedIndex =
+    menuSelectColumn === "challenges"
+      ? menuSelectIndexChallenges
+      : menuSelectIndexModules;
+
+  return {
+    selectedIndex,
+    menuSelectColumn,
+    menuSelectIndexModules,
+    menuSelectIndexChallenges,
+  };
+});
 
 export const useCodemirrorEditor = createSelector(
   [challengesState],
