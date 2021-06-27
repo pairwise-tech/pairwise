@@ -3,12 +3,8 @@ import isMobile from "is-mobile";
 import Modules, { ReduxStoreState } from "modules/root";
 import React from "react";
 import { connect } from "react-redux";
-import {
-  Tooltip,
-  Breadcrumb,
-  Breadcrumbs,
-  BreadcrumbProps,
-} from "@blueprintjs/core";
+import { Breadcrumb, Breadcrumbs, BreadcrumbProps } from "@blueprintjs/core";
+import { Tooltip2 } from "@blueprintjs/popover2";
 import { CHALLENGE_TYPE } from "@pairwise/common";
 import { COLORS } from "tools/constants";
 
@@ -67,7 +63,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
         }}
       >
         {IS_PAID && (
-          <Tooltip
+          <Tooltip2
             usePortal={false}
             position="bottom"
             content={
@@ -86,7 +82,7 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
             >
               Paid Content
             </PaidContentLabel>
-          </Tooltip>
+          </Tooltip2>
         )}
         <Breadcrumbs
           items={this.getBreadcrumbs(breadcrumbsPath)}

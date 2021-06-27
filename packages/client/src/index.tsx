@@ -5,6 +5,7 @@ import "normalize.css";
 import "./blueprint.scss";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 import "@blueprintjs/table/lib/css/table.css";
+import "~@blueprintjs/popover2/lib/css/blueprint-popover2.css";
 
 // Import app styles
 import "./index.css";

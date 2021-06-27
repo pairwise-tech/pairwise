@@ -2,7 +2,8 @@ import allPass from "ramda/es/allPass";
 import React from "react";
 import tap from "ramda/es/tap";
 import difference from "ramda/es/difference";
-import { Position, Popover, Tooltip } from "@blueprintjs/core";
+import { Position } from "@blueprintjs/core";
+import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
 import { IconButton } from "./Shared";
 import styled from "styled-components";
 import { COLORS } from "tools/constants";
@@ -199,7 +200,7 @@ export const ShortcutKeysPopover = () => {
   }
 
   return (
-    <Popover
+    <Popover2
       usePortal={false}
       position={Position.BOTTOM}
       content={
@@ -218,10 +219,14 @@ export const ShortcutKeysPopover = () => {
         </ShortcutPopover>
       }
     >
-      <Tooltip usePortal={false} content="View Shortcut Keys" position="bottom">
+      <Tooltip2
+        usePortal={false}
+        content="View Shortcut Keys"
+        position="bottom"
+      >
         <IconButton icon="application" aria-label="view shortcut keys" />
-      </Tooltip>
-    </Popover>
+      </Tooltip2>
+    </Popover2>
   );
 };
 

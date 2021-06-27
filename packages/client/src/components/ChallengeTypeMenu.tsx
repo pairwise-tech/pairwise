@@ -1,6 +1,7 @@
 import React from "react";
 import { CHALLENGE_TYPE } from "@pairwise/common";
-import { Button, Tooltip, Icon } from "@blueprintjs/core";
+import { Button, Icon } from "@blueprintjs/core";
+import { Tooltip2 } from "@blueprintjs/popover2";
 import { Select, IListItemsProps } from "@blueprintjs/select";
 import { getChallengeIcon } from "tools/utils";
 import { getRenderItemList, labelByType } from "./Shared";
@@ -63,12 +64,12 @@ const ChallengeTypeMenu = ({
           aria-haspopup="true"
         >
           {tooltip && (
-            <Tooltip
+            <Tooltip2
               content="Choose what type of code you will write"
               usePortal={false}
             >
               <Icon style={{ margin: "0 2px" }} icon="info-sign" />
-            </Tooltip>
+            </Tooltip2>
           )}
           <strong style={{ marginLeft: 6 }}>
             {labelByType(currentChallengeType, items)}

@@ -15,14 +15,13 @@ import {
   Button,
   ButtonGroup,
   FocusStyleManager,
-  Tooltip,
   Menu,
   MenuItem,
   MenuDivider,
   Position,
-  Popover,
   Icon,
 } from "@blueprintjs/core";
+import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
 import Account from "./Account";
 import {
   ProfileIcon,
@@ -256,7 +255,7 @@ const ApplicationContainer = (props: IProps) => {
           <div style={{ marginLeft: 10 }} />
           {!isMobile && <PomodoroTimer />}
           {!isMobile && (
-            <Tooltip
+            <Tooltip2
               usePortal={false}
               position="bottom"
               content="Submit Feedback"
@@ -267,11 +266,11 @@ const ApplicationContainer = (props: IProps) => {
                 aria-label="Open the feedback dialog"
                 onClick={openFeedbackDialog}
               />
-            </Tooltip>
+            </Tooltip2>
           )}
           {!isMobile && <ShortcutKeysPopover />}
           {!isMobile && (
-            <Tooltip
+            <Tooltip2
               usePortal={false}
               position="bottom"
               content="Launch Pairwise Screensaver"
@@ -282,7 +281,7 @@ const ApplicationContainer = (props: IProps) => {
                 aria-label="Start the Pairwise Screensaver"
                 onClick={() => setScreensaverState(true)}
               />
-            </Tooltip>
+            </Tooltip2>
           )}
           {/* <PairwiseLivePopover /> */}
           {isSandbox && (
@@ -324,12 +323,12 @@ const ApplicationContainer = (props: IProps) => {
             <LastChildMargin
               style={{ flexShrink: 0, marginRight: isLoggedIn ? 6 : 0 }}
             >
-              <Popover
+              <Popover2
                 content={mobileMenuItems}
                 position={Position.BOTTOM_RIGHT}
               >
                 <IconButton icon="more" />
-              </Popover>
+              </Popover2>
             </LastChildMargin>
           )}
           {isSearchFocused || userLoading ? (

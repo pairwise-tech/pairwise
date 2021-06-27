@@ -26,15 +26,14 @@ import {
   getSectionProgress,
 } from "tools/utils";
 import {
-  Tooltip,
   Icon,
   Collapse,
-  Popover,
   Menu,
   MenuItem,
   Position,
   Button,
 } from "@blueprintjs/core";
+import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
 import { NavLink, NavLinkProps, RouteComponentProps } from "react-router-dom";
 import {
   SortableModuleList,
@@ -220,7 +219,7 @@ class NavigationOverlay extends React.Component<
             {hasSections && !isEditMode && (
               <Row>
                 {challengeId && moduleContainsActiveChallenge && (
-                  <Tooltip
+                  <Tooltip2
                     disabled={isMobile}
                     position="bottom"
                     content="Scroll to Active Challenge"
@@ -230,7 +229,7 @@ class NavigationOverlay extends React.Component<
                       style={{ marginRight: 6 }}
                       onClick={() => this.scrollToChallenge()}
                     />
-                  </Tooltip>
+                  </Tooltip2>
                 )}
                 <Button
                   style={{ width: 160 }}
@@ -644,13 +643,13 @@ class NavigationOverlay extends React.Component<
             ) : (
               <NavIcons>
                 {challenge.videoUrl && (
-                  <Tooltip
+                  <Tooltip2
                     usePortal={false}
                     position="left"
                     content="Includes Video"
                   >
                     <Icon iconSize={Icon.SIZE_LARGE} icon="video" />
-                  </Tooltip>
+                  </Tooltip2>
                 )}
               </NavIcons>
             )}
@@ -694,7 +693,7 @@ class NavigationOverlay extends React.Component<
     return (
       <div style={{ position: "relative" }}>
         <AddNavItemPositionContainer>
-          <Popover
+          <Popover2
             canEscapeKeyClose
             // NOTE: canEscapeKeyClose does not work, use disabled prop to force
             // the menu to close when the overlay is not visible!
@@ -720,7 +719,7 @@ class NavigationOverlay extends React.Component<
             position={Position.RIGHT}
           >
             <AddNavItemButton show={isEditMode} onClick={() => null} />
-          </Popover>
+          </Popover2>
         </AddNavItemPositionContainer>
       </div>
     );
@@ -983,7 +982,7 @@ const ChallengeListItemIcon = ({
   );
 
   return (
-    <Tooltip
+    <Tooltip2
       content={tooltipContent}
       disabled={
         isMobile || (!isSection && challengeProgress === "NOT_ATTEMPTED")
@@ -997,7 +996,7 @@ const ChallengeListItemIcon = ({
         className={challenge.type !== "section" ? iconExtraClass : ""}
         {...props}
       />
-    </Tooltip>
+    </Tooltip2>
   );
 };
 

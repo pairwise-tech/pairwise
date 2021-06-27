@@ -19,10 +19,10 @@ import {
   Pre,
   Text,
   EditableText,
-  Tooltip,
   Button,
   Spinner,
 } from "@blueprintjs/core";
+import { Tooltip2 } from "@blueprintjs/popover2";
 import { TestCase } from "tools/test-utils";
 import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
@@ -303,7 +303,7 @@ export const TestResultRow = ({
             {TestCaseIcon}
           </MinimalButton>
         ) : (
-          <Tooltip
+          <Tooltip2
             position="right"
             disabled={!Boolean(error)}
             content={showError ? "Hide error" : "Show error"}
@@ -314,7 +314,7 @@ export const TestResultRow = ({
             >
               {TestCaseIcon}
             </MinimalButton>
-          </Tooltip>
+          </Tooltip2>
         )}
         <TestMessageHighlighter source={message} />
         <TestStatus>
@@ -515,11 +515,11 @@ export const RevealSolutionLabel = ({
 }: {
   hideSolution: () => void;
 }) => (
-  <Tooltip content="Click to hide solution" position="left">
+  <Tooltip2 content="Click to hide solution" position="left">
     <SolutionWrapper aria-label="hide the solution code" onClick={hideSolution}>
       <SolutionText>Viewing Solution Code</SolutionText>
     </SolutionWrapper>
-  </Tooltip>
+  </Tooltip2>
 );
 
 const SolutionWrapper = styled.button`

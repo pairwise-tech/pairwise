@@ -1,5 +1,6 @@
 import React from "react";
-import { Position, Popover, Tooltip, Button } from "@blueprintjs/core";
+import { Position, Button } from "@blueprintjs/core";
+import { Tooltip2, Popover2 } from "@blueprintjs/popover2";
 import { IconButton, ExternalLink } from "./Shared";
 import styled from "styled-components";
 import { COLORS } from "tools/constants";
@@ -51,7 +52,7 @@ export class PomodoroTimer extends React.Component<IProps, IState> {
   render() {
     const { stage, running, sessionCount } = this.state;
     return (
-      <Popover
+      <Popover2
         usePortal={false}
         position={Position.BOTTOM}
         content={
@@ -99,7 +100,7 @@ export class PomodoroTimer extends React.Component<IProps, IState> {
           </PopoverContainer>
         }
       >
-        <Tooltip
+        <Tooltip2
           usePortal={false}
           content={running ? "View Pomodoro Status" : "Pomodoro Challenge"}
           position="bottom"
@@ -113,8 +114,8 @@ export class PomodoroTimer extends React.Component<IProps, IState> {
           ) : (
             <IconButton icon="time" aria-label="View Pomodoro Challenge" />
           )}
-        </Tooltip>
-      </Popover>
+        </Tooltip2>
+      </Popover2>
     );
   }
 

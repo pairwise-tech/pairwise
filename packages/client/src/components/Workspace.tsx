@@ -50,15 +50,14 @@ import {
   CodeEditorContainer,
 } from "./Shared";
 import {
-  Tooltip,
   ButtonGroup,
   Menu,
   MenuItem,
   Position,
-  Popover,
   MenuDivider,
   Button,
 } from "@blueprintjs/core";
+import { Tooltip2, Popover2 } from "@blueprintjs/popover2";
 import {
   composeWithProps,
   constructDataBlobFromChallenge,
@@ -437,7 +436,7 @@ class Workspace extends React.Component<IProps, IState> {
               passing={allTestsPassing}
               testsRunning={testResultsLoading}
               IconButtonProp={
-                <Tooltip
+                <Tooltip2
                   position="right"
                   interactionKind="hover-target"
                   content="Toggle Alternate Edit View"
@@ -448,7 +447,7 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="toggle alternate edit mode"
                     onClick={this.props.toggleAlternativeEditView}
                   />
-                </Tooltip>
+                </Tooltip2>
               }
             />
           )}
@@ -550,7 +549,7 @@ class Workspace extends React.Component<IProps, IState> {
             </CodeEditorUpperRight>
             <LowerRight>
               <ButtonGroup vertical={!isMobileView}>
-                <Tooltip
+                <Tooltip2
                   disabled={isMobileView}
                   content="Increase Font Size"
                   position={isMobileView ? "top" : "left"}
@@ -563,8 +562,8 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="increase editor font size"
                     onClick={this.props.increaseFontSize}
                   />
-                </Tooltip>
-                <Tooltip
+                </Tooltip2>
+                <Tooltip2
                   disabled={isMobileView}
                   content="Decrease Font Size"
                   position={isMobileView ? "top" : "left"}
@@ -577,12 +576,12 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="decrease editor font size"
                     onClick={this.props.decreaseFontSize}
                   />
-                </Tooltip>
+                </Tooltip2>
               </ButtonGroup>
               <div style={{ marginBottom: 8 }} />
               {/* Code formatting is available only for HTML/CSS/TS challenges */}
               {!isMobileView && !IS_ALTERNATE_LANGUAGE_CHALLENGE && (
-                <Tooltip content="Format Code" position="left">
+                <Tooltip2 content="Format Code" position="left">
                   <IconButton
                     icon="clean"
                     large={isMobileView}
@@ -590,10 +589,10 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="format editor code"
                     onClick={this.handleRequestCodeFormatting}
                   />
-                </Tooltip>
+                </Tooltip2>
               )}
               <div style={{ marginBottom: 8 }} />
-              <Popover
+              <Popover2
                 content={
                   <Menu large>
                     {!IS_SANDBOX && !isMobileView && (
@@ -691,7 +690,7 @@ class Workspace extends React.Component<IProps, IState> {
                   isMobileView ? Position.TOP_LEFT : Position.LEFT_BOTTOM
                 }
               >
-                <Tooltip
+                <Tooltip2
                   content="More options..."
                   position={isMobileView ? "top" : "left"}
                 >
@@ -701,8 +700,8 @@ class Workspace extends React.Component<IProps, IState> {
                     aria-label="more options"
                     icon="more"
                   />
-                </Tooltip>
-              </Popover>
+                </Tooltip2>
+              </Popover2>
             </LowerRight>
             <CodeEditor
               isEditMode={isEditMode}

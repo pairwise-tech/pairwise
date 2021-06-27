@@ -5,10 +5,8 @@ import styled from "styled-components/macro";
 import {
   Switch,
   Button,
-  Tooltip,
   Position,
   ButtonGroup,
-  Popover,
   AnchorButton,
   Spinner,
   Card,
@@ -17,6 +15,7 @@ import {
   PopoverInteractionKind,
   PopoverPosition,
 } from "@blueprintjs/core";
+import { Popover2, Tooltip2 } from "@blueprintjs/popover2";
 import { SANDBOX_ID } from "tools/constants";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import KeyboardShortcuts from "./KeyboardShortcuts";
@@ -173,7 +172,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
           intent={isDirty ? "primary" : "none"}
         />
         {canDelete && (
-          <Tooltip content="Delete" position={Position.BOTTOM}>
+          <Tooltip2 content="Delete" position={Position.BOTTOM}>
             <Button
               intent="danger"
               icon="trash"
@@ -182,7 +181,7 @@ const EditingToolbar = (props: EditChallengeControlsConnectProps) => {
               onClick={handleDelete}
               disabled={overlayVisible}
             ></Button>
-          </Tooltip>
+          </Tooltip2>
         )}
         <Suspense fallback={<p>Menu Loading...</p>}>
           <LazyChallengeTypeMenu
@@ -272,7 +271,7 @@ const connectChallengeInsertion = pipe(
 const ChallengeInsertionMenu = connectChallengeInsertion(
   (props: ChallengeInsertionProps) => {
     return (
-      <Popover
+      <Popover2
         canEscapeKeyClose
         position={Position.BOTTOM}
         content={
@@ -285,7 +284,7 @@ const ChallengeInsertionMenu = connectChallengeInsertion(
         }
       >
         <IconButton large minimal icon="add-to-artifact" />
-      </Popover>
+      </Popover2>
     );
   },
 );
@@ -382,13 +381,13 @@ const GitContributionInfo = ({ challenge }: { challenge: Challenge }) => {
   }
 
   return (
-    <Popover
+    <Popover2
       canEscapeKeyClose
       position={Position.BOTTOM}
       content={<Card style={{ maxWidth: 350 }}>{content}</Card>}
     >
       <IconButton onClick={handleClick} large minimal icon="git-branch" />
-    </Popover>
+    </Popover2>
   );
 };
 
@@ -416,7 +415,7 @@ type GitUpdate = ChallengeMetadata["gitMetadata"]["earliestUpdate"] & {
 
 const CommitDetailButton = ({ label, ...update }: GitUpdate) => {
   return (
-    <Popover
+    <Popover2
       minimal
       interactionKind={PopoverInteractionKind.HOVER}
       position={PopoverPosition.BOTTOM}
@@ -448,7 +447,7 @@ const CommitDetailButton = ({ label, ...update }: GitUpdate) => {
         <p></p>
         <p>{update.summary}</p>
       </MinimalCard>
-    </Popover>
+    </Popover2>
   );
 };
 
@@ -469,7 +468,7 @@ interface ContributorAvatarProps {
 const ContributorAvatar = ({ name, contributions }: ContributorAvatarProps) => {
   const [canOpen, setCanOpen] = React.useState(false);
   return (
-    <Popover
+    <Popover2
       minimal
       interactionKind={PopoverInteractionKind.HOVER}
       position={PopoverPosition.BOTTOM}
@@ -511,7 +510,7 @@ const ContributorAvatar = ({ name, contributions }: ContributorAvatarProps) => {
           </a>
         ))}
       </MinimalCard>
-    </Popover>
+    </Popover2>
   );
 };
 
