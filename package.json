@@ -34,6 +34,7 @@
     "www:build": "cd packages/www && yarn build",
     "www:prod": "cd packages/www && yarn start:prod",
     "db": "cd packages/server && yarn db",
+    "db:down": "cd packages/server && yarn db:down",
     "db:setup": "cd packages/server && yarn setup:db",
     "db:reset": "cd packages/server && yarn db:reset",
     "db:migration": "cd packages/server && yarn migration:run",
