@@ -6,11 +6,11 @@
   "files": [
     "dist"
   ],
-  "main": "dist/server.js",
-  "typings": "dist/server.d.ts",
+  "main": "dist/services-app.js",
+  "typings": "dist/services-app.d.ts",
   "scripts": {
     "build": "tsc",
-    "watch": "concurrently \"yarn build -- -w\" \"nodemon --inspect ./dist/server.js\"",
+    "watch": "concurrently \"yarn build -- -w\" \"nodemon --inspect ./dist/services-app.js\"",
     "eslint": "eslint 'src/**/*.{ts,tsx}'",
     "eslint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "lint": "yarn prettier && yarn eslint",
@@ -18,13 +18,12 @@
     "prettier": "prettier --list-different \"src/**/*.ts\"",
     "prettier:fix": "prettier --write \"src/**/*.ts\"",
     "test": "yarn lint",
-    "start": "node ./dist/server.js",
-    "start:https": "SERVER_URL=https://127.0.0.1:9000 node ./dist/server.js"
+    "start": "node ./dist/services-app.js",
+    "start:https": "SERVER_URL=https://127.0.0.1:9000 node ./dist/services-app.js"
   },
   "dependencies": {
     "@types/faker": "4.1.8",
     "@types/node": "13.1.2",
-    "body-parser": "1.19.0",
     "concurrently": "5.0.2",
     "cors": "2.8.5",
     "dotenv": "8.2.0",

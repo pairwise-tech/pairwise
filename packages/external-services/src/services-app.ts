@@ -1,10 +1,9 @@
 import http from "http";
-import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
-import mockAuth from "./mock-auth";
-import { purchaseCourseForUserByAdmin } from "./admin-auth-util";
+import mockAuth from "./mock-auth-utils";
+import { purchaseCourseForUserByAdmin } from "./admin-auth-utils";
 import { PORT, SERVER } from "./config";
 
 /** ===========================================================================
@@ -16,7 +15,8 @@ const app = express();
 
 app.use(morgan("dev"));
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 /** ===========================================================================
  * API Endpoints

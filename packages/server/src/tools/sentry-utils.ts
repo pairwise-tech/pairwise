@@ -1,12 +1,11 @@
 import * as Sentry from "@sentry/node";
 
-// Log error information for debugging, without reporting to Sentry.
-export const logErrorMessage = (message, error) => {
-  console.error(`[ERROR]: ${message}: `, error);
-};
-
 // Report an exception to Sentry and log it for debugging purposes.
 export const captureSentryException = (error: any) => {
-  logErrorMessage("Capturing Sentry Error: ", error);
+  // Since the full error is reported to Sentry reduce log clutter
+  // by only reporting the error message here:
+  console.error(`[SENTRY ERROR]: Capturing Sentry Error: ${error.message}`);
+
+  // Send full error to Sentry
   Sentry.captureException(error);
 };
