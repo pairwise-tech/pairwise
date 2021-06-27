@@ -239,7 +239,7 @@ const ApplicationContainer = (props: IProps) => {
             >
               Pairwise
             </Link>
-            <CurrentlyInBeta />
+            <BetaLabel />
           </ProductTitle>
         </ControlsContainer>
         {CODEPRESS && (
@@ -546,18 +546,19 @@ const LoginSignupButton = styled(Button)`
   }
 `;
 
-const CurrentlyInBeta = styled.small`
-  display: block;
-  position: absolute;
+const BetaLabel = styled.small`
   top: 18%;
   left: 100%;
-  transform: translate(-50%, -50%) scale(0.7);
-  font-weight: bold;
-  letter-spacing: 1.2px;
-  background: ${COLORS.SECONDARY_PINK};
+  display: block;
   padding: 0px 6px;
-  box-shadow: 0 0 20px rgb(0, 0, 0);
+  font-weight: bold;
+  position: absolute;
   border-radius: 100px;
+  letter-spacing: 1.2px;
+  box-shadow: 0 0 20px rgb(0, 0, 0);
+  background: ${COLORS.BETA_LABEL};
+  transform: translate(-50%, -50%) scale(0.7);
+
   &:before {
     content: "BETA";
   }

@@ -79,14 +79,6 @@ class Home extends React.Component<IProps, {}> {
                   frontend and backend development, mobile development, and
                   other skills like testing and deploying software.
                 </ContentText>
-                <ContentText>
-                  To see more about what you will learn, you can{" "}
-                  <ExternalLink link="https://pairwise.tech">
-                    visit this page
-                  </ExternalLink>
-                  . There are also additional languages in development, which
-                  you can see below.
-                </ContentText>
               </>
             )}
             {this.props.skeletons?.map(this.renderCourseItem)}
