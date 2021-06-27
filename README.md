@@ -175,7 +175,7 @@ external services server and by loading all of the SSO provider environment vari
 
 ## 🏦 Payments
 
-We are using [Stripe](https://stripe.com/) to process user payments. Currently, the application redirects to a hosted Stripe checkout page which then sends a webhook event to our server if the user completes the checkout process succcessfully. The user is then redirected back to Pairwise and sees a payment confirmation. Here are some instructions and resources for working locally if you need to work on the Stripe payments integration feature.
+We are using [Stripe](https://stripe.com/) to process user payments. Currently, the application redirects to a hosted Stripe checkout page which then sends a webhook event to our server if the user completes the checkout process successfully. The user is then redirected back to Pairwise and sees a payment confirmation. Here are some instructions and resources for working locally if you need to work on the Stripe payments integration feature.
 
 The docker-compose files deploy a `stripe` service which runs the [Stripe CLI](https://stripe.com/docs/stripe-cli) docker image which handles processing Stripe events. This allows the payment integration to simply work in development mode when running Pairwise locally or in a CI environment. Stripe provides several options for [easily testing](https://stripe.com/docs/testing) payments in development. For instance, you can enter the card number `4242424242424242` with any future date as an expiration and any 3 digit CVC to submit a test successful payment.
 
@@ -229,7 +229,7 @@ We follow a normal git workflow. Commit your changes to a branch, make a pull re
 
 ## ✈️ Production
 
-The Pairwise landing page is deployed using [ZEIT Now](https://zeit.co/), the client workspace is deployed using [Netlify](https://www.netlify.com/) and the backend server is deployed using [Google Cloud Run](https://cloud.google.com/run), which provides a full managed cloud platform automatic auto-scaling. Updates are shipped continuously by commits to the `master` branch. You can simulate the production backend deployment locally by running the following commands:
+The client workspace is deployed using [Netlify](https://www.netlify.com/) and the backend server is deployed using [Google Cloud Run](https://cloud.google.com/run), which should provide generous scaling benefits. Updates are shipped continuously by commits to the `master` branch, and configured in the `deploy-production.yml` GitHub Actions workflow file. Some additional services are deployed separately and managed in other `pairwise/` repositories. You can simulate the production backend deployment locally by running the following commands:
 
 ```bash
 # Build the production server container
