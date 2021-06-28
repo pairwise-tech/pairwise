@@ -75,17 +75,32 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
   };
 
   getCurrentModuleOrChallengeList = () => {
-    const { courseSkeletons, currentActiveIds, menuSelectColumn } = this.props;
-    const course = courseSkeletons?.find(
-      (x) => x.id === currentActiveIds.currentCourseId,
-    );
+    const {
+      menuSelectColumn,
+      currentNavigationOverlayModule,
+      currentNavigationOverlayCourse,
+      navigationOverlayCourseSkeleton,
+    } = this.props;
+    if (
+      !currentNavigationOverlayModule ||
+      !currentNavigationOverlayCourse ||
+      !navigationOverlayCourseSkeleton
+    ) {
+      return null;
+    }
+
+    const course = navigationOverlayCourseSkeleton;
     if (course) {
       if (menuSelectColumn === "modules") {
+        // Return the course modules
         return course.modules;
       } else {
-        return course.modules.find(
-          (x) => x.id === currentActiveIds.currentModuleId,
-        )?.challenges;
+        // Get challenges for the current module
+        const currentModule = course.modules.find(
+          (x) => x.id === currentNavigationOverlayModule.id,
+        );
+
+        return currentModule ? currentModule.challenges : null;
       }
     }
 
@@ -94,24 +109,27 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
 
   // Return the index of the currently selected item
   getDefaultMenuItemIndex = (
-    currentList: ModuleSkeletonList | ChallengeSkeletonList | null | undefined,
+    currentList: ModuleSkeletonList | ChallengeSkeletonList | null,
     // The direction is used to determine when to record the inCollapsedSection
     // state... only "up" and "down" are relevant
     direction: "up" | "down" | "left" | "right",
   ) => {
-    if (!currentList) {
+    const {
+      menuSelectState,
+      menuSelectColumn,
+      currentActiveIds,
+      navigationAccordionViewState,
+      currentNavigationOverlayModule,
+    } = this.props;
+
+    // Default case
+    if (!currentList || !currentNavigationOverlayModule) {
       return { currentIndex: 0, inCollapsedSection: false };
     }
 
-    const {
-      currentActiveIds,
-      menuSelectState,
-      menuSelectColumn,
-      navigationAccordionViewState,
-    } = this.props;
     const { menuSelectIndexChallenges, menuSelectIndexModules } =
       menuSelectState;
-    const { currentChallengeId, currentModuleId } = currentActiveIds;
+    const { currentChallengeId } = currentActiveIds;
 
     let inCollapsedSection = false;
 
@@ -120,7 +138,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
     if (menuSelectColumn === "modules") {
       const targetId =
         menuSelectIndexModules === null
-          ? currentModuleId
+          ? currentNavigationOverlayModule.id
           : menuSelectIndexModules;
 
       if (targetId) {
@@ -183,6 +201,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
           if ("type" in possibleSection && possibleSection.type === "section") {
             inCollapsedSection =
               navigationAccordionViewState[possibleSection.id] === false;
+
             break;
           }
         }
@@ -192,7 +211,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
     return { currentIndex, inCollapsedSection };
   };
 
-  handleSelectMenuLeft = () => {
+  handleSelectMenuLeft = (e: KeyboardEvent) => {
     const { menuSelectState, setMenuSelectColumn, setMenuSelectIndex } =
       this.props;
 
@@ -205,11 +224,12 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
         currentList,
         "left",
       );
+
       setMenuSelectIndex({ modules: currentIndex });
     }
   };
 
-  handleSelectMenuRight = () => {
+  handleSelectMenuRight = (e: KeyboardEvent) => {
     const { setMenuSelectColumn, menuSelectState, setMenuSelectIndex } =
       this.props;
 
@@ -298,7 +318,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
     }
   };
 
-  handleSelectMenuDown = () => {
+  handleSelectMenuDown = (e: KeyboardEvent) => {
     if (this.props.overlayVisible) {
       const { menuSelectState, setMenuSelectIndex, menuSelectColumn } =
         this.props;
@@ -453,7 +473,16 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   userSettings: Modules.selectors.user.userSettings(state),
   menuSelectState: Modules.selectors.challenges.menuSelectState(state),
   menuSelectColumn: Modules.selectors.challenges.menuSelectColumn(state),
-  courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
+  navigationOverlayCourseSkeleton:
+    Modules.selectors.challenges.getCurrentNavigationOverlayCourseSkeleton(
+      state,
+    ),
+  currentNavigationOverlayModule:
+    Modules.selectors.challenges.getCurrentNavigationOverlayModule(state),
+  currentNavigationOverlayCourse:
+    Modules.selectors.challenges.getCurrentNavigationOverlayCourseSkeleton(
+      state,
+    ),
   currentActiveIds: Modules.selectors.challenges.getCurrentActiveIds(state),
   nextPrevChallengeIds: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
