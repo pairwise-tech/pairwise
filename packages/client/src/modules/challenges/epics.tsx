@@ -335,21 +335,25 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
  * code interacts with.
  */
 const clearInitialAppLoadingUI = () => {
-  const el = document.getElementById("pairwise-loading-container");
-  if (el) {
-    el.classList.add("app-loaded");
-  } else {
-    // If anything goes wrong in here, this can help to alert us.
-    captureSentryMessage(
-      "Failed to find pairwise-loading-container div on app load in setWorkspaceLoadedEpic!",
-    );
+  const spinner = document.getElementById("spinner-container");
+  const container = document.getElementById("pairwise-loading-container");
+
+  // Spinner fade out starts
+  if (spinner) {
+    spinner.classList.add("fadeOut");
+  }
+
+  // App has loaded, loading UI can begin exit animation
+  if (container) {
+    container.classList.add("app-loaded");
   }
 
   setTimeout(() => {
-    if (el) {
-      const parent = el.parentElement;
+    // Remove the entire loading container DOM content after a delay
+    if (container) {
+      const parent = container.parentElement;
       if (parent) {
-        parent.removeChild(el);
+        parent.removeChild(container);
       }
     }
 
