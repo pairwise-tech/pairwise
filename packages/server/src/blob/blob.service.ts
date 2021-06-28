@@ -48,7 +48,8 @@ export class BlobService {
       // Return a null blob. This is used to represent a not found resource,
       // rather than throwing an error. Since blobs are frequently requested
       // on the client, I found the stream of 404 HTTP errors to feel
-      // uncomfortable.
+      // uncomfortable. These pollute the browser console, which the user
+      // may be looking at to check challenge output, for instance.
       return { dataBlob: null, challengeId: null };
     }
   }
