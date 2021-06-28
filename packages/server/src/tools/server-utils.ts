@@ -55,7 +55,7 @@ export const parsePullRequestDiff = async (
   try {
     const id = Number(pullRequestId);
     if (!id || typeof id !== "number") {
-      throw new Error("Invalid pull request id provided");
+      throw new Error(`Invalid pull request id provided, received: ${id}`);
     }
     // Fetch the pull request diff
     const diff = await fetchPullRequestDiff(id);

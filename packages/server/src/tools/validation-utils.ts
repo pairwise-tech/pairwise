@@ -46,24 +46,24 @@ const validateTimeLastWatched = (time: number) => {
 export const validateCodeBlob = (blob: ICodeBlobDto) => {
   try {
     if (!blob.dataBlob.type) {
-      throw new BadRequestException(
-        ERROR_CODES.INVALID_CODE_BLOB,
-        "Missing blob type",
+      captureSentryException(
+        `Missing blob type, received: JSON.stringify(${blob})`,
       );
+      throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
     }
 
     if (!BlobTypeSet.has(blob.dataBlob.type)) {
-      throw new BadRequestException(
-        ERROR_CODES.INVALID_CODE_BLOB,
+      captureSentryException(
         `Invalid blob type, received: ${blob.dataBlob.type}`,
       );
+      throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
     }
 
     if (!ContentUtility.challengeIdIsValid(blob.challengeId)) {
-      throw new BadRequestException(
-        ERROR_CODES.INVALID_CHALLENGE_ID,
+      captureSentryException(
         `Invalid blob type, received: ${blob.challengeId}`,
       );
+      throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
     }
 
     const { dataBlob } = blob;
@@ -72,68 +72,65 @@ export const validateCodeBlob = (blob: ICodeBlobDto) => {
       case "challenge": {
         const { code } = dataBlob;
         if (!code || typeof code !== "string") {
-          throw new BadRequestException(
-            ERROR_CODES.INVALID_CODE_BLOB,
+          captureSentryException(
             `Invalid blob code value, received: ${JSON.stringify(code)}`,
           );
+          throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
         }
         break;
       }
       case "video": {
         const { timeLastWatched } = dataBlob;
         if (validateTimeLastWatched(timeLastWatched)) {
-          throw new BadRequestException(
-            ERROR_CODES.INVALID_CODE_BLOB,
+          captureSentryException(
             `Invalid timeLastWatched value, received: ${timeLastWatched}`,
           );
+          throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
         }
         break;
       }
       case "project": {
         const { url, repo, timeLastWatched } = dataBlob;
         if (validateTimeLastWatched(timeLastWatched)) {
-          throw new BadRequestException(
-            ERROR_CODES.INVALID_CODE_BLOB,
+          captureSentryException(
             `Invalid timeLastWatched value, received: ${timeLastWatched}`,
           );
+          throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
         } else if (!!url && !validator.isURL(url)) {
           // Only validate url if it is present (it is optional)
-          throw new BadRequestException(
-            ERROR_CODES.INVALID_CODE_BLOB,
+          captureSentryException(
             `Invalid url value received for project, received: ${url}`,
           );
+          throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
         } else if (!validator.isURL(repo)) {
-          throw new BadRequestException(
-            ERROR_CODES.INVALID_CODE_BLOB,
+          captureSentryException(
             `Invalid repo url value received for project, received: ${repo}`,
           );
+          throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
         }
         break;
       }
       case "guided_project": {
         const { timeLastWatched } = dataBlob;
         if (validateTimeLastWatched(timeLastWatched)) {
-          throw new BadRequestException(
-            ERROR_CODES.INVALID_CODE_BLOB,
+          captureSentryException(
             `Invalid timeLastWatched value, received: ${timeLastWatched}`,
           );
+          throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
         }
         break;
       }
       case "sandbox": {
-        throw new BadRequestException(
-          ERROR_CODES.INVALID_CODE_BLOB,
-          "Sandbox blob is not supported yet!",
-        );
+        captureSentryException("Sandbox blob is not supported yet!");
+        throw new BadRequestException(ERROR_CODES.INVALID_CODE_BLOB);
       }
       default: {
         const { type } = dataBlob;
         return assertUnreachable(type);
       }
     }
-  } catch (err) {
-    captureSentryException(err);
-    throw err;
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -144,21 +141,16 @@ export const validateChallengeProgressDto = (progressDto: ProgressDto) => {
   try {
     const { courseId, challengeId } = progressDto;
     if (!ContentUtility.courseIdIsValid(courseId)) {
-      throw new BadRequestException(
-        ERROR_CODES.INVALID_COURSE_ID,
-        `Invalid course id, received: ${challengeId}`,
-      );
+      captureSentryException(`Invalid course id, received: ${courseId}`);
+      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     } else if (
       !ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)
     ) {
-      throw new BadRequestException(
-        ERROR_CODES.INVALID_CHALLENGE_ID,
-        `Invalid challenge id, received: ${challengeId}`,
-      );
+      captureSentryException(`Invalid challenge id, received: ${challengeId}`);
+      throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
     }
-  } catch (err) {
-    captureSentryException(err);
-    throw err;
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -288,10 +280,8 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
     const { progress, courseId } = entity;
 
     if (!ContentUtility.courseIdIsValid(courseId)) {
-      throw new BadRequestException(
-        ERROR_CODES.INVALID_COURSE_ID,
-        `Course id is invalid, received: ${courseId}`,
-      );
+      captureSentryException(`Course id is invalid, received: ${courseId}`);
+      throw new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
     }
 
     const sanitizedProgress = Object.entries(progress).reduce(
@@ -320,14 +310,13 @@ export const validateAndSanitizeProgressItem = (entity: ProgressEntity) => {
       };
       return result;
     } else {
-      throw new BadRequestException(
-        ERROR_CODES.INVALID_PARAMETERS,
+      captureSentryException(
         `Invalid progress item, received: ${JSON.stringify(entity)}`,
       );
+      throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
     }
-  } catch (err) {
-    captureSentryException(err);
-    throw err;
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -389,10 +378,10 @@ export const validateRefundRequest = (
  */
 export const validateFeedbackDto = (feedbackDto: IFeedbackDto) => {
   if (!ContentUtility.challengeIdIsValid(feedbackDto.challengeId)) {
-    throw new BadRequestException(
-      ERROR_CODES.INVALID_CHALLENGE_ID,
+    captureSentryException(
       `Invalid blob type, received: ${feedbackDto.challengeId}`,
     );
+    throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
   } else if (!feedbackTypeSet.has(feedbackDto.type)) {
     throw new BadRequestException(ERROR_CODES.INVALID_FEEDBACK_TYPE);
   }

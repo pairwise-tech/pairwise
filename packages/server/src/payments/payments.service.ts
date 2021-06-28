@@ -98,11 +98,8 @@ export class PaymentsService {
 
     const courseMetadata = ContentUtility.getCourseMetadata(courseId);
     if (!courseMetadata) {
-      const err = new BadRequestException(
-        ERROR_CODES.INVALID_COURSE_ID,
-        `Invalid courseId, received: ${courseId}`,
-      );
-      captureSentryException(err);
+      const err = new BadRequestException(ERROR_CODES.INVALID_COURSE_ID);
+      captureSentryException(`Invalid courseId, received: ${courseId}`);
       throw err;
     } else {
       try {
@@ -116,15 +113,13 @@ export class PaymentsService {
         };
 
         return result;
-      } catch (err) {
+      } catch (error) {
         // I saw this happen once. If it happens more, we could create retry
         // logic here or debug the issue.
-        const error = new InternalServerErrorException(
-          "Failed to initialize Stripe checkout session",
-          err,
-        );
         captureSentryException(error);
-        throw error;
+        throw new InternalServerErrorException(
+          "Failed to initialize checkout session",
+        );
       }
     }
   }
@@ -171,11 +166,7 @@ export class PaymentsService {
           `Unexpected event type in Stripe checkout flow: ${event.type}`,
         );
       }
-    } catch (err) {
-      const error = new InternalServerErrorException(
-        `Stripe Webhook Error`,
-        err,
-      );
+    } catch (error) {
       captureSentryException(error);
       throw error;
     }
