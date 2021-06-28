@@ -52,11 +52,9 @@ const accessTokenInitializationEpic: EpicSignature = (action$, _, deps) => {
       if (appInitializationType === APP_INITIALIZATION_TYPE.ACCOUNT_CREATED) {
         accountCreated = true;
         token = accessToken as string;
-        console.log("User signin occurred, new account created!");
         deps.toaster.success("Welcome to Pairwise! 🎉");
       } else if (appInitializationType === APP_INITIALIZATION_TYPE.SIGN_IN) {
         accountCreated = false;
-        console.log("Existing user signin occurred!");
         token = accessToken as string;
       }
 
