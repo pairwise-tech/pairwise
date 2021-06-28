@@ -69,7 +69,7 @@ describe("Workspace and Challenge Navigation Works", () => {
 
     const checkPrev = () => {
       cy.wait(TIMEOUT);
-      cy.get("#prevButton").click();
+      click("prevButton");
       cy.url().then((url) => {
         const id = getChallengeId(url);
         expect(url).to.not.equal(challengeId);
@@ -79,7 +79,7 @@ describe("Workspace and Challenge Navigation Works", () => {
 
     const checkNext = () => {
       cy.wait(TIMEOUT);
-      cy.get("#nextButton").click();
+      click("nextButton");
       cy.url().then((url) => {
         const id = getChallengeId(url);
         expect(url).to.not.equal(challengeId);
@@ -104,11 +104,11 @@ describe("Workspace and Challenge Navigation Works", () => {
 describe("Sandbox", () => {
   it("Sandbox should exist", () => {
     cy.visit(CLIENT_APP_URL);
-    cy.get("#sandboxButton").click();
+    click("sandboxButton");
     cy.url().should("include", "/sandbox");
 
     cy.get("#sandboxButton").should("have.attr", "disabled");
-    cy.get("#selectChallengeType").click();
+    click("selectChallengeType");
 
     cy.contains("HTML/CSS");
     cy.contains("TypeScript");

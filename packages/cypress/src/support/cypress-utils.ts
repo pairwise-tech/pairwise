@@ -28,7 +28,7 @@ const toId = (id: string) => `#${id}`;
 
 // Click an element by it's id. Pass in an id without the #.
 export const click = (id: string) => {
-  cy.get(toId(id)).click({ force: true });
+  cy.get(toId(id)).click({ force: true, timeout: 6000 });
 };
 
 // Find an element by id and type some text into it.
