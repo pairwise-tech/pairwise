@@ -1218,8 +1218,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   userProgress: Modules.selectors.user.userProgress(state),
   isEditMode: ChallengeSelectors.isEditMode(state),
   challengeId: ChallengeSelectors.getCurrentChallengeId(state),
-  // These are the module and course for the current navigation
-  // overlay view state, not the active challenge
+  // NOTE: These are the module and course for the current navigation
+  // overlay view state, not the active challenge.
   module: ChallengeSelectors.getCurrentNavigationOverlayModule(state),
   course: ChallengeSelectors.getCurrentNavigationOverlayCourseSkeleton(state),
   menuSelectState: ChallengeSelectors.menuSelectState(state),

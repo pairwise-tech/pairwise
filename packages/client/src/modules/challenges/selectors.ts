@@ -490,11 +490,11 @@ export const getBlobForCurrentChallenge = createSelector(
 /**
  * Return a map summary of user progress through the course.
  *
- * NOTE: This assumes only 1 existing course and use getCurrentCourse
- * to get the current course.
+ * This returns the course progress history for the current course
+ * selected in the NavigationOverlay.
  */
 export const userCourseProgressSummary = createSelector(
-  [getCurrentCourseSkeleton, userProgress],
+  [getCurrentNavigationOverlayCourseSkeleton, userProgress],
   (course, progress) => {
     if (!course || !progress) {
       return;
