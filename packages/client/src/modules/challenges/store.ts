@@ -62,9 +62,17 @@ export interface State {
   displayNavigationMap: boolean;
   courses: Nullable<CourseList>;
   courseSkeletons: Nullable<CourseSkeletonList>;
+  // Active id set related to currently selected challenge.
   currentModuleId: Nullable<string>;
   currentCourseId: Nullable<string>;
   currentChallengeId: Nullable<string>;
+  // Store navigation overlay view state separately from current active
+  // course, module, and challenge ids. A bit convoluted but avoids other
+  // bugs which would otherwise occur when navigating the NavigationOverlay,
+  // e.g. a user selects another course to view it and then the currentCourseId
+  // doesn't match the actual challenge they are on.
+  currentNavigationOverlayModuleId: Nullable<string>;
+  currentNavigationOverlayCourseId: Nullable<string>;
   challengeMap: Nullable<InverseChallengeMapping>;
   sandboxChallenge: Challenge;
   blobCache: { [key: string]: BlobCacheItem };
@@ -91,6 +99,8 @@ const initialState: State = {
   currentModuleId: null,
   currentCourseId: null,
   currentChallengeId: null,
+  currentNavigationOverlayModuleId: null,
+  currentNavigationOverlayCourseId: null,
   displayNavigationMap: false,
   challengeMap: null,
   sandboxChallenge: defaultSandboxChallenge,
@@ -539,9 +549,13 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     adminEditorTab: "starterCode",
     displayNavigationMap: false,
     revealWorkspaceSolution: false,
+    // Set active ids
     currentModuleId: payload.currentModuleId,
     currentCourseId: payload.currentCourseId,
     currentChallengeId: payload.currentChallengeId,
+    // Set the navigation overlay to the selected course and module
+    currentNavigationOverlayCourseId: payload.currentCourseId,
+    currentNavigationOverlayModuleId: payload.currentModuleId,
   }))
   .handleAction(actions.updateCurrentChallengeBlob, (state, action) => ({
     ...state,
@@ -598,6 +612,21 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.storeInverseChallengeMapping, (state, action) => ({
     ...state,
     challengeMap: action.payload,
+  }))
+  .handleAction(actions.setNavigationOverlayCurrentModule, (state, action) => ({
+    ...state,
+    currentNavigationOverlayModuleId: action.payload,
+  }))
+  .handleAction(actions.setNavigationOverlayCurrentCourse, (state, action) => ({
+    ...state,
+    menuSelectColumn: "challenges",
+    menuSelectIndexModules: null,
+    menuSelectIndexChallenges: null,
+    currentNavigationOverlayCourseId: action.payload,
+    // Update the current module id to the first module in the course
+    currentNavigationOverlayModuleId: state.courses?.find(
+      (c) => c.id === action.payload,
+    )?.modules[0].id as string,
   }))
   .handleAction(actions.setCurrentModule, (state, action) => ({
     ...state,

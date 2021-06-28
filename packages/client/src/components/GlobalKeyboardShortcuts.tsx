@@ -399,7 +399,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       if (moduleItem !== undefined && moduleItem.id !== currentModuleId) {
         // Steps 1 through 3 from the above comment
         this.props.setMenuSelectIndex({ challenges: null });
-        this.props.setCurrentModule(moduleItem.id);
+        this.props.setNavigationOverlayCurrentModule(moduleItem.id);
         this.props.setMenuSelectColumn("challenges");
 
         // Get the challenge list from the newly selected module
@@ -463,7 +463,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 
 const dispatchProps = {
   updateUserSettings: Modules.actions.user.updateUserSettings,
-  setCurrentModule: Modules.actions.challenges.setCurrentModule,
+  setNavigationOverlayCurrentModule:
+    Modules.actions.challenges.setNavigationOverlayCurrentModule,
   setMenuSelectIndex: Modules.actions.challenges.setMenuSelectIndex,
   setMenuSelectColumn: Modules.actions.challenges.setMenuSelectColumn,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,

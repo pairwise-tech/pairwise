@@ -5,12 +5,7 @@ import { CourseSkeleton, getChallengeSlug } from "@pairwise/common";
 import { Button, Card, Elevation } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import Modules, { ReduxStoreState } from "modules/root";
-import {
-  PageContainer,
-  Text,
-  PageTitle,
-  ExternalLink,
-} from "./SharedComponents";
+import { PageContainer, Text, PageTitle } from "./SharedComponents";
 import { COLORS, MOBILE } from "tools/constants";
 import SEO from "./SEO";
 
@@ -22,9 +17,9 @@ import SEO from "./SEO";
 class Home extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const {
-      currentCourse,
       userCourseProgressSummary,
       hasPurchasedTypeScriptCourse,
+      currentNavigationOverlayCourse,
     } = this.props;
 
     return (
@@ -84,13 +79,13 @@ class Home extends React.Component<IProps, {}> {
             {this.props.skeletons?.map(this.renderCourseItem)}
           </ContentContainer>
           <CourseProgressContainer>
-            {userCourseProgressSummary && currentCourse && (
+            {userCourseProgressSummary && currentNavigationOverlayCourse && (
               <>
                 <PageTitle>Course Progress</PageTitle>
                 <ContentText>
                   You have completed {userCourseProgressSummary.totalCompleted}{" "}
                   out of {userCourseProgressSummary.totalChallenges} challenges
-                  in the <b>{currentCourse.title} Course</b>.
+                  in the <b>{currentNavigationOverlayCourse.title} Course</b>.
                 </ContentText>
                 <ProgressBar>
                   <ProgressComplete
@@ -316,9 +311,12 @@ const ButtonsBox = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
-  currentCourse: Modules.selectors.challenges.getCurrentCourse(state),
   skeletons: Modules.selectors.challenges.courseSkeletons(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
+  currentNavigationOverlayCourse:
+    Modules.selectors.challenges.getCurrentNavigationOverlayCourseSkeleton(
+      state,
+    ),
   userCourseProgressSummary:
     Modules.selectors.challenges.userCourseProgressSummary(state),
   hasPurchasedTypeScriptCourse:

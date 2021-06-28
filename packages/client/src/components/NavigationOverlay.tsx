@@ -167,7 +167,7 @@ class NavigationOverlay extends React.Component<
               items={courseListMetadata}
               itemDisabled={(c) => c.id === course.id}
               onItemSelect={({ id }) => {
-                this.props.setCurrentCourse(id);
+                this.props.setNavigationOverlayCurrentCourse(id);
               }}
               popoverProps={{
                 onClosed: () => {
@@ -514,7 +514,7 @@ class NavigationOverlay extends React.Component<
         menu_selected={isMenuItemSelected}
         id={`module-navigation-${index}`}
         active={module.id === activeModuleId}
-        onClick={() => this.props.setCurrentModule(module.id)}
+        onClick={() => this.props.setNavigationOverlayCurrentModule(module.id)}
       >
         <span>
           <ModuleNumber>{index}</ModuleNumber>
@@ -1210,26 +1210,33 @@ const NavIcons = styled.span`
  * ============================================================================
  */
 
+const ChallengeSelectors = Modules.selectors.challenges;
+const ChallengeActions = Modules.actions.challenges;
+
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userProgress: Modules.selectors.user.userProgress(state),
-  isEditMode: Modules.selectors.challenges.isEditMode(state),
-  module: Modules.selectors.challenges.getCurrentModule(state),
-  course: Modules.selectors.challenges.getCurrentCourseSkeleton(state),
-  menuSelectState: Modules.selectors.challenges.menuSelectState(state),
-  menuSelectColumn: Modules.selectors.challenges.menuSelectColumn(state),
-  challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
-  courseListMetadata: Modules.selectors.challenges.courseListMetadata(state),
-  overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
+  isEditMode: ChallengeSelectors.isEditMode(state),
+  challengeId: ChallengeSelectors.getCurrentChallengeId(state),
+  // NOTE: These are the module and course for the current navigation
+  // overlay view state, not the active challenge.
+  module: ChallengeSelectors.getCurrentNavigationOverlayModule(state),
+  course: ChallengeSelectors.getCurrentNavigationOverlayCourseSkeleton(state),
+  menuSelectState: ChallengeSelectors.menuSelectState(state),
+  menuSelectColumn: ChallengeSelectors.menuSelectColumn(state),
+  courseListMetadata: ChallengeSelectors.courseListMetadata(state),
+  overlayVisible: ChallengeSelectors.navigationOverlayVisible(state),
   navigationAccordionViewState:
-    Modules.selectors.challenges.getNavigationSectionAccordionViewState(state),
+    ChallengeSelectors.getNavigationSectionAccordionViewState(state),
 });
-
-const ChallengeActions = Modules.actions.challenges;
 
 const dispatchProps = {
   setCurrentModule: ChallengeActions.setCurrentModule,
   setCurrentCourse: ChallengeActions.setCurrentCourse,
+  setNavigationOverlayCurrentCourse:
+    ChallengeActions.setNavigationOverlayCurrentCourse,
+  setNavigationOverlayCurrentModule:
+    ChallengeActions.setNavigationOverlayCurrentModule,
   createCourseModule: ChallengeActions.createCourseModule,
   updateCourseModule: ChallengeActions.updateCourseModule,
   deleteCourseModule: ChallengeActions.deleteCourseModule,
