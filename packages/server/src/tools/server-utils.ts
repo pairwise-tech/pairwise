@@ -47,6 +47,16 @@ const fetchFileBlob = async (fileSHA: string) => {
 /**
  * Accept a pull request id and fetch pull request diff metadata from GitHub
  * in order to provide diff content context for admin client.
+ *
+ * NOTE: To test or debug this locally against a real pull request, you may
+ * want to:
+ *
+ * 1. Create a pull request with course changes.
+ * 2. Checkout the main branch and rebuild common/.
+ * 3. Run the admin app and server locally, and inspect that pull request.
+ *
+ * If you run on your pull request branch which presumably contains the
+ * course changes, there will be no diff.
  */
 export const parsePullRequestDiff = async (
   pullRequestId: string,
@@ -60,16 +70,13 @@ export const parsePullRequestDiff = async (
     // Fetch the pull request diff
     const diff = await fetchPullRequestDiff(id);
 
-    const matchFile = (fileName: string) => (diff: any) => {
-      return diff.filename === fileName;
-    };
-
-    const filename = (name: string) => {
-      return `packages/common/src/courses/${name}.json`;
+    const matchFile = (courseName: string) => (diff: any) => {
+      const filename = `packages/common/src/courses/${courseName}.json`;
+      return diff.filename === filename;
     };
 
     // Get all the course files
-    const ts = diff.find(matchFile(filename("01_fullstack_typescript")));
+    const ts = diff.find(matchFile("01_fullstack_typescript"));
     const python = diff.find(matchFile("02_python_language"));
     const rust = diff.find(matchFile("03_rust_language"));
     const go = diff.find(matchFile("04_golang_language"));

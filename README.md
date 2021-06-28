@@ -8,16 +8,16 @@ The **Pairwise** codebase includes a React app client application, a NestJS serv
 
 This project is managed using Lerna, and contains the following packages:
 
-| Package                                                                                               | Description                                       |
-| ----------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| [admin](https://github.com/pairwise-tech/pairwise/tree/master/packages/admin)                         | React admin client application                    |
-| [client](https://github.com/pairwise-tech/pairwise/tree/master/packages/client)                       | React client application                          |
-| [common](https://github.com/pairwise-tech/pairwise/tree/master/packages/common)                       | Shared code, utils, and types                     |
-| [cypress](https://github.com/pairwise-tech/pairwise/tree/master/packages/cypress)                     | Cypress end-to-end test suite                     |
-| [e2e](https://github.com/pairwise-tech/pairwise/tree/master/packages/e2e)                             | End-to-end API test suite                         |
-| [external-services](https://github.com/pairwise-tech/pairwise/tree/master/packages/external-services) | Mocked 3rd party APIs for testing and development |
-| [server](https://github.com/pairwise-tech/pairwise/tree/master/packages/server)                       | NestJS backend application                        |
-| [www](https://github.com/pairwise-tech/pairwise/tree/master/packages/www)                             | Marketing website built with Gatsby               |
+| Package                                                                                             | Description                                       |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| [admin](https://github.com/pairwise-tech/pairwise/tree/main/packages/admin)                         | React admin client application                    |
+| [client](https://github.com/pairwise-tech/pairwise/tree/main/packages/client)                       | React client application                          |
+| [common](https://github.com/pairwise-tech/pairwise/tree/main/packages/common)                       | Shared code, utils, and types                     |
+| [cypress](https://github.com/pairwise-tech/pairwise/tree/main/packages/cypress)                     | Cypress end-to-end test suite                     |
+| [e2e](https://github.com/pairwise-tech/pairwise/tree/main/packages/e2e)                             | End-to-end API test suite                         |
+| [external-services](https://github.com/pairwise-tech/pairwise/tree/main/packages/external-services) | Mocked 3rd party APIs for testing and development |
+| [server](https://github.com/pairwise-tech/pairwise/tree/main/packages/server)                       | NestJS backend application                        |
+| [www](https://github.com/pairwise-tech/pairwise/tree/main/packages/www)                             | Marketing website built with Gatsby               |
 
 ## 🦄 Quick Links
 
@@ -229,7 +229,7 @@ We follow a normal git workflow. Commit your changes to a branch, make a pull re
 
 ## ✈️ Production
 
-The client workspace is deployed using [Netlify](https://www.netlify.com/) and the backend server is deployed using [Google Cloud Run](https://cloud.google.com/run), which should provide generous scaling benefits. Updates are shipped continuously by commits to the `master` branch, and configured in the `deploy-production.yml` GitHub Actions workflow file. Some additional services are deployed separately and managed in other `pairwise/` repositories. You can simulate the production backend deployment locally by running the following commands:
+The client workspace is deployed using [Netlify](https://www.netlify.com/) and the backend server is deployed using [Google Cloud Run](https://cloud.google.com/run), which should provide generous scaling benefits. Updates are shipped continuously by commits to the `main` branch, and configured in the `deploy-production.yml` GitHub Actions workflow file. Some additional services are deployed separately and managed in other `pairwise/` repositories. You can simulate the production backend deployment locally by running the following commands:
 
 ```bash
 # Build the production server container

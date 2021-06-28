@@ -122,7 +122,8 @@ class BaseApiClass {
     if (currentAccessToken !== "") {
       toaster.error("Unauthorized!", { icon: "user" });
       logoutUserInLocalStorage();
-      await wait(1000);
+      // Leave some time to read the message
+      await wait(3000);
       window.location.reload();
     }
   };
