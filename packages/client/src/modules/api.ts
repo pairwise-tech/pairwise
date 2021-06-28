@@ -19,6 +19,7 @@ import {
   StripeStartCheckoutSuccessResponse,
   LastActiveChallengeIds,
   IGenericFeedback,
+  NullBlob,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable, lastValueFrom } from "rxjs";
@@ -403,9 +404,31 @@ class Api extends BaseApiClass {
     const { config, authenticated } = this.getRequestHeaders();
 
     if (authenticated) {
-      return this.httpHandler(async () => {
-        return axios.get<ICodeBlobDto>(`${HOST}/blob/${challengeId}`, config);
+      const result = await this.httpHandler(async () => {
+        return axios.get<ICodeBlobDto | NullBlob>(
+          `${HOST}/blob/${challengeId}`,
+          config,
+        );
       });
+
+      if (result.value) {
+        // Is a null blob, i.e. 404, no blob was found
+        if (
+          result.value.dataBlob === null &&
+          result.value.challengeId === null
+        ) {
+          return createNonHttpResponseError(
+            `No data blob found for challenge id: ${challengeId}`,
+          );
+        } else {
+          // A valid blob is returned, the if statement above ensures
+          // this is the case
+          const blob = result.value as ICodeBlobDto;
+          return new Ok(blob);
+        }
+      } else {
+        return result;
+      }
     } else {
       return localStorageHTTP.fetchChallengeHistory(challengeId);
     }

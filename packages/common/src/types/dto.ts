@@ -203,6 +203,12 @@ export interface ICodeBlobDto {
   challengeId: string;
 }
 
+// Null blob type is used to represent a code blob which does not exist
+export interface NullBlob {
+  dataBlob: null;
+  challengeId: null;
+}
+
 export interface CodeBlobBulk {
   [key: string]: ICodeBlobDto;
 }

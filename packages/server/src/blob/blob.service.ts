@@ -5,7 +5,12 @@ import {
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { ContentUtility, ICodeBlobDto, CodeBlobBulk } from "@pairwise/common";
+import {
+  ContentUtility,
+  ICodeBlobDto,
+  CodeBlobBulk,
+  NullBlob,
+} from "@pairwise/common";
 import { CodeBlob } from "./blob.entity";
 import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
 import { validateCodeBlob } from "../tools/validation-utils";
@@ -18,8 +23,11 @@ export class BlobService {
     private readonly userCodeBlobRepository: Repository<CodeBlob>,
   ) {}
 
-  public async fetchUserCodeBlob(user: RequestUser, challengeId: string) {
-    /* Verify the challenge id is valid */
+  public async fetchUserCodeBlob(
+    user: RequestUser,
+    challengeId: string,
+  ): Promise<ICodeBlobDto | NullBlob> {
+    // Verify the challenge id is valid
     if (!ContentUtility.challengeIdIsValid(challengeId)) {
       throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
     }
@@ -30,18 +38,18 @@ export class BlobService {
     });
 
     if (blob) {
-      /**
-       * Deserialize data blob before sending back to the client.
-       */
+      // Deserialize data blob before sending back to the client.
       const deserialized: ICodeBlobDto = {
         ...blob,
         dataBlob: JSON.parse(blob.dataBlob),
       };
       return deserialized;
     } else {
-      throw new NotFoundException(
-        "No history found for this challenge for this user.",
-      );
+      // Return a null blob. This is used to represent a not found resource,
+      // rather than throwing an error. Since blobs are frequently requested
+      // on the client, I found the stream of 404 HTTP errors to feel
+      // uncomfortable.
+      return { dataBlob: null, challengeId: null };
     }
   }
 

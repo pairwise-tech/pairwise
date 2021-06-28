@@ -76,7 +76,10 @@ describe("User Progress APIs", () => {
     await request(`${HOST}/blob/9scykDold`)
       .get("/")
       .set("Authorization", authorizationHeader)
-      .expect(404);
+      .expect(200)
+      .expect((response) => {
+        expect(response.body).toEqual({ dataBlob: null, challengeId: null });
+      });
 
     // Update the challenge history.
     await request(`${HOST}/blob`)
