@@ -20,7 +20,7 @@ import {
   SearchResult,
 } from "./types";
 import { HttpResponseError } from "modules/api";
-import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB } from "./store";
+import { ADMIN_EDITOR_TAB, ADMIN_TEST_TAB, MENU_SELECT_COLUMN } from "./store";
 
 /** ===========================================================================
  * Action Types
@@ -300,11 +300,14 @@ export const toggleEditModeAlternativeView = createAction(
 
 export const setMenuSelectColumn = createAction(
   ActionTypesEnum.SET_MENU_SELECT_COLUMN,
-)<"modules" | "challenges">();
+)<MENU_SELECT_COLUMN>();
 
 export const setMenuSelectIndex = createAction(
   ActionTypesEnum.SET_MENU_SELECT_INDEX,
-)<{ modules?: Nullable<number>; challenges?: Nullable<number> }>();
+)<{
+  modules?: Nullable<number>;
+  challenges?: Nullable<number>;
+}>();
 
 export const toggleCodemirrorEditor = createAction(
   ActionTypesEnum.TOGGLE_CODEMIRROR_EDITOR,

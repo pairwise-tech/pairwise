@@ -29,8 +29,10 @@ import {
   debounceTime,
   distinctUntilChanged,
   take,
+  pairwise,
+  withLatestFrom,
 } from "rxjs/operators";
-import { isActionOf } from "typesafe-actions";
+import { isActionOf, PayloadAction } from "typesafe-actions";
 import { EpicSignature, ReduxStoreState } from "../root";
 import { Actions } from "../root-actions";
 import {
@@ -264,7 +266,7 @@ const initializeChallengeStateEpic: EpicSignature = (action$, _, deps) => {
     map((x) => x.payload.lastActiveChallengeIds),
   );
 
-  return combineLatest(fetchCourses$, fetchUser$).pipe(
+  return combineLatest([fetchCourses$, fetchUser$]).pipe(
     mergeMap(
       ([courses, lastActiveIds]: [CourseList, LastActiveChallengeIds]) => {
         const { location } = deps.router;
@@ -588,7 +590,7 @@ const hydrateSandboxType: EpicSignature = (action$) => {
     filter((x) => x.payload.challengeId === "sandbox"),
   );
 
-  return combineLatest(workspaceLoaded$, sandboxCodeFetched$).pipe(
+  return combineLatest([workspaceLoaded$, sandboxCodeFetched$]).pipe(
     map(([_, x]) => x.payload),
     map((x) => {
       const blob = x.dataBlob as SandboxBlob;
@@ -885,6 +887,40 @@ const constructProgressDto = (
   }
 };
 
+/**
+ * Determine if the course id changed, which can occur from at least two
+ * different other actions, and reset the menu selection state if it
+ * has changed.
+ *
+ * This feels rather excessive but it's better than cramming this update
+ * logic into the stores and it allows us to use the pairwise operator
+ * to compare the current to the previous state.
+ */
+const resetMenuSelectStateOnCourseChangeEpic: EpicSignature = (
+  action$,
+  state$,
+  deps,
+) => {
+  // Combine the previous and current state values
+  const stateHistory$ = state$.pipe(pairwise());
+
+  return action$.pipe(
+    filter(
+      isActionOf([Actions.setCurrentCourse, Actions.setChallengeIdContext]),
+    ),
+    withLatestFrom(stateHistory$),
+    filter(([_action, [oldState, newState]]) => {
+      const previousCourseId = oldState.challenges.currentCourseId;
+      const currentCourseId = newState.challenges.currentCourseId;
+      return previousCourseId !== currentCourseId;
+    }),
+    mergeMap(() => [
+      Actions.setMenuSelectColumn("challenges"),
+      Actions.setMenuSelectIndex({ challenges: null, modules: null }),
+    ]),
+  );
+};
+
 /** ===========================================================================
  * Export
  * ============================================================================
@@ -913,4 +949,5 @@ export default combineEpics(
   searchEpic,
   completeContentOnlyChallengeEpic,
   showSectionToastEpic,
+  resetMenuSelectStateOnCourseChangeEpic,
 );

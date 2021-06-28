@@ -53,6 +53,8 @@ interface BlobCacheItem {
   isLoading: boolean;
 }
 
+export type MENU_SELECT_COLUMN = "modules" | "challenges";
+
 export interface State {
   workspaceLoading: boolean;
   isEditMode: boolean;
@@ -73,7 +75,7 @@ export interface State {
   isSearching: boolean;
   revealWorkspaceSolution: boolean;
   isDirty: boolean;
-  menuSelectColumn: "modules" | "challenges";
+  menuSelectColumn: MENU_SELECT_COLUMN;
   menuSelectIndexModules: number | null;
   menuSelectIndexChallenges: number | null;
   useCodemirror: boolean;
@@ -604,6 +606,9 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.setCurrentCourse, (state, action) => ({
     ...state,
     currentCourseId: action.payload,
+    menuSelectColumn: "challenges",
+    menuSelectIndexModules: null,
+    menuSelectIndexChallenges: null,
     // Update the current module id to the first module in the course
     currentModuleId: state.courses?.find((c) => c.id === action.payload)
       ?.modules[0].id as string,
