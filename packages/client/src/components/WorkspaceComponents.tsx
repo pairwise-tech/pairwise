@@ -362,8 +362,8 @@ export const ContentContainer = styled.div`
   height: 100%;
   padding: 8px;
   padding-top: 0;
-  padding-bottom: 16px;
   overflow-y: auto;
+  padding-bottom: 16px;
 `;
 
 export const Spacer = styled.div`
@@ -607,8 +607,11 @@ export const InstructionsViewEdit = connect(
         paddingTop: "4px",
         transition: "all 0.2s ease",
         overflow: isInstructionsViewCollapsed ? "hidden" : "auto",
-        // height: !isMobile ? "auto" : isInstructionsViewCollapsed ? "0vh" : "25vh",
-        height: isInstructionsViewCollapsed ? "0vh" : "25vh",
+        height: isEditMode
+          ? "auto"
+          : isInstructionsViewCollapsed
+          ? "0vh"
+          : "25vh",
       }}
     >
       <ChallengeTitleHeading>

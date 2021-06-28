@@ -391,7 +391,7 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Default to code mirror for mobile and for alternate challenges
     const CodeEditor =
-      isMobileView || useCodemirrorEditor || IS_ALTERNATE_LANGUAGE_CHALLENGE
+      isMobileView || useCodemirrorEditor
         ? WorkspaceCodemirrorEditor
         : WorkspaceMonacoEditor;
 
