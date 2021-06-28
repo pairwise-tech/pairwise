@@ -46,7 +46,7 @@ const generateNewProfileFields = () => {
  * ============================================================================
  */
 
-class MockAuth {
+class AuthUtils {
   // Returns undefined email. See note in server file.
   generateNewFacebookProfile() {
     const { id, first, last, picture } = generateNewProfileFields();
@@ -130,6 +130,6 @@ class MockAuth {
  * ============================================================================
  */
 
-const mockAuth = new MockAuth();
+const authUtils = new AuthUtils();
 
-export default mockAuth;
+export default authUtils;

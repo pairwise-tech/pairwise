@@ -2,7 +2,7 @@ import http from "http";
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
-import mockAuth from "./mock-auth-utils";
+import authUtils from "./auth-utils";
 import { purchaseCourseForUserByAdmin } from "./admin-auth-utils";
 import { PORT, SERVER } from "./config";
 
@@ -41,7 +41,7 @@ app.get("/facebook/authorize", (req, res) => {
  * Request for a Facebook access token.
  */
 app.post("/facebook/token", (req, res) => {
-  res.json(mockAuth.getFacebookAccessToken());
+  res.json(authUtils.getFacebookAccessToken());
 });
 
 /**
@@ -51,7 +51,7 @@ app.post("/facebook/token", (req, res) => {
  * we set the FB email to be undefined to test this behavior.
  */
 app.get("/facebook/profile", (req, res) => {
-  const profile = mockAuth.generateNewFacebookProfile();
+  const profile = authUtils.generateNewFacebookProfile();
   res.json(profile);
 });
 
@@ -66,14 +66,14 @@ app.get("/github/authorize", (req, res) => {
  * Request for a GitHub access token.
  */
 app.post("/github/token", (req, res) => {
-  res.send(mockAuth.getGitHubAccessToken());
+  res.send(authUtils.getGitHubAccessToken());
 });
 
 /**
  * Authenticated GitHub request for a user profile.
  */
 app.get("/github/profile", (req, res) => {
-  const profile = mockAuth.generateNewGitHubProfile();
+  const profile = authUtils.generateNewGitHubProfile();
   res.json(profile);
 });
 
@@ -82,7 +82,7 @@ app.get("/github/profile", (req, res) => {
  */
 app.get("/google/token", (req, res) => {
   res.redirect(
-    `${SERVER}/auth/google/callback?code=${mockAuth.getGoogleCallbackCode()}`,
+    `${SERVER}/auth/google/callback?code=${authUtils.getGoogleCallbackCode()}`,
   );
 });
 
@@ -90,7 +90,7 @@ app.get("/google/token", (req, res) => {
  * [POST] request for a Google access token.
  */
 app.post("/google/token", (req, res) => {
-  res.json(mockAuth.getGoogleAccessToken());
+  res.json(authUtils.getGoogleAccessToken());
 });
 
 /**
@@ -101,7 +101,7 @@ app.post("/google/token", (req, res) => {
  * locally.
  */
 app.get("/google/profile", (req, res) => {
-  const profile = mockAuth.generateGoogleAdminProfile();
+  const profile = authUtils.generateGoogleAdminProfile();
   res.json(profile);
 });
 
@@ -110,7 +110,7 @@ app.get("/google/profile", (req, res) => {
  */
 app.get("/google-admin/token", (req, res) => {
   res.redirect(
-    `${SERVER}/auth/google-admin/callback?code=${mockAuth.getGoogleCallbackCode()}`,
+    `${SERVER}/auth/google-admin/callback?code=${authUtils.getGoogleCallbackCode()}`,
   );
 });
 
@@ -118,14 +118,14 @@ app.get("/google-admin/token", (req, res) => {
  * [POST] request for a Google access token for ADMIN login.
  */
 app.post("/google-admin/token", (req, res) => {
-  res.json(mockAuth.getGoogleAccessToken());
+  res.json(authUtils.getGoogleAccessToken());
 });
 
 /**
  * [GET] Fixed Google admin user profile.
  */
 app.get("/google-admin/profile", (req, res) => {
-  const profile = mockAuth.generateGoogleAdminProfile();
+  const profile = authUtils.generateGoogleAdminProfile();
   res.json(profile);
 });
 
