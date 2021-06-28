@@ -146,7 +146,9 @@ export const validateChallengeProgressDto = (progressDto: ProgressDto) => {
     } else if (
       !ContentUtility.challengeIdInCourseIsValid(courseId, challengeId)
     ) {
-      captureSentryException(`Invalid challenge id, received: ${challengeId}`);
+      captureSentryException(
+        `Invalid challenge id, received: ${JSON.stringify(progressDto)}`,
+      );
       throw new BadRequestException(ERROR_CODES.INVALID_CHALLENGE_ID);
     }
   } catch (error) {

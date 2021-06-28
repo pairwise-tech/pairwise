@@ -39,6 +39,9 @@ enum ActionTypesEnum {
   SET_MODULE_ID = "SET_MODULE_ID",
   SET_COURSE_ID = "SET_COURSE_ID",
 
+  SET_NAVIGATION_OVERLAY_MODULE_ID = "SET_NAVIGATION_OVERLAY_MODULE_ID",
+  SET_NAVIGATION_OVERLAY_COURSE_ID = "SET_NAVIGATION_OVERLAY_COURSE_ID",
+
   SET_NAVIGATION_MAP_STATE = "SET_NAVIGATION_MAP_STATE",
 
   SUBMIT_PROJECT = "SUBMIT_PROJECT",
@@ -181,12 +184,20 @@ export const saveChallengeBlobFailure = createAction(
   ActionTypesEnum.SAVE_CHALLENGE_BLOB_FAILURE,
 )<HttpResponseError>();
 
+export const setCurrentCourse = createAction(
+  ActionTypesEnum.SET_COURSE_ID,
+)<string>();
+
 export const setCurrentModule = createAction(
   ActionTypesEnum.SET_MODULE_ID,
 )<string>();
 
-export const setCurrentCourse = createAction(
-  ActionTypesEnum.SET_COURSE_ID,
+export const setNavigationOverlayCurrentCourse = createAction(
+  ActionTypesEnum.SET_NAVIGATION_OVERLAY_COURSE_ID,
+)<string>();
+
+export const setNavigationOverlayCurrentModule = createAction(
+  ActionTypesEnum.SET_NAVIGATION_OVERLAY_MODULE_ID,
 )<string>();
 
 export const setWorkspaceChallengeLoaded = createAction(

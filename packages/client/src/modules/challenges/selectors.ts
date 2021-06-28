@@ -91,6 +91,16 @@ export const getCurrentChallengeId = createSelector(
   prop("currentChallengeId"),
 );
 
+export const getCurrentNavigationOverlayCourseId = createSelector(
+  [challengesState],
+  (x) => x.currentNavigationOverlayCourseId,
+);
+
+export const getCurrentNavigationOverlayModuleId = createSelector(
+  [challengesState],
+  (x) => x.currentNavigationOverlayModuleId,
+);
+
 export const getCurrentActiveIds = createSelector(
   [getCurrentCourseId, getCurrentModuleId, getCurrentChallengeId],
   (currentCourseId, currentModuleId, currentChallengeId) => {
@@ -163,6 +173,10 @@ export const getCurrentCourse = createSelector([challengesState], (state) => {
   return state.courses?.find((x) => x.id === state.currentCourseId);
 });
 
+export const getCourseSkeletons = createSelector([challengesState], (state) => {
+  return state.courseSkeletons;
+});
+
 export const getCurrentCourseSkeleton = createSelector(
   [challengesState, getCurrentCourseId],
   (challenges, courseId) => {
@@ -170,12 +184,25 @@ export const getCurrentCourseSkeleton = createSelector(
   },
 );
 
-export const getCourseSkeletons = createSelector([challengesState], (state) => {
-  return state.courseSkeletons;
-});
+export const getCurrentNavigationOverlayCourseSkeleton = createSelector(
+  [challengesState, getCurrentNavigationOverlayCourseId],
+  (challenges, courseId) => {
+    return challenges.courseSkeletons?.find((x) => x.id === courseId);
+  },
+);
 
 export const getCurrentModule = createSelector(
   [getCurrentCourseSkeleton, getCurrentModuleId],
+  (course, moduleId) => {
+    return course?.modules.find((x) => x.id === moduleId);
+  },
+);
+
+export const getCurrentNavigationOverlayModule = createSelector(
+  [
+    getCurrentNavigationOverlayCourseSkeleton,
+    getCurrentNavigationOverlayModuleId,
+  ],
   (course, moduleId) => {
     return course?.modules.find((x) => x.id === moduleId);
   },
