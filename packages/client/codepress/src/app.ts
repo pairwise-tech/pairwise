@@ -1,4 +1,3 @@
-import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import * as fs from "fs";
@@ -10,10 +9,7 @@ import fileUpload from "express-fileupload";
 import { Course, ContentUtilityClass, CourseList } from "@pairwise/common";
 
 /** ===========================================================================
- * Codepress Server
- * ----------------------------------------------------------------------------
- * This which handles serving course data when the app is running
- * in Codepress and saving changes.
+ * Types & Config
  * ============================================================================
  */
 
@@ -29,6 +25,11 @@ const makeCache = (data) => {
     };
   }, {});
 };
+
+/** ===========================================================================
+ * Codepress Course API
+ * ============================================================================
+ */
 
 class CourseAPI {
   basedir: string;
@@ -96,23 +97,6 @@ class CourseAPI {
         ),
       )
       .then((courses: CourseList) => {
-        /**
-         * NOTE: A better solution would be to unify reading the courses
-         * in the ContentUtilityClass API. If Codepress used that,
-         * ContentUtilityClass will need to be able to "re-read" the
-         * courses to get the updated version after saving them. This
-         * will require using the fs module in ContentUtilityClass,
-         * because the client workspace imports from common/ which caused
-         * webpack to be unable to resolve the fs module, even though
-         * the workspace doesn't use the ContentUtilityClass directly.
-         *
-         * Because we rarely add new courses, just manually reordering
-         * the courses here turned out to be a much simpler solution. The
-         * course filenames are sorted before they are read so they
-         * will be in a predicable order here.
-         */
-
-        // NOTE: Only the Fullstack TypeScript course is included for now.
         const [
           _PairwiseLibrary, // Skipped for now
           FullstackTypeScript,
@@ -139,11 +123,17 @@ const api = {
   courses: new CourseAPI("../../../common/src/courses"),
 };
 
+/** ===========================================================================
+ * Server Setup
+ * ============================================================================
+ */
+
 const app = express();
 
 app.use(morgan("dev"));
 app.use(cors());
-app.use(bodyParser.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
 app.use(
   fileUpload({
     createParentPath: true,
