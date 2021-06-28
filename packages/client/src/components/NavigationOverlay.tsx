@@ -204,6 +204,8 @@ class NavigationOverlay extends React.Component<
               {this.renderModuleCodepressButton(course, -1)}
             </div>
             {this.renderSortableModuleList(course, module, course.modules)}
+            {/* Spacer div helps rendering the final Codepress Button */}
+            <div style={{ height: 22 }} />
           </ColScroll>
         </Col>
         <Col
