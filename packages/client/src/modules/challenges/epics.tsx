@@ -51,6 +51,7 @@ import {
 import { SearchResultEvent } from "./types";
 import React from "react";
 import PartyParrot from "../../icons/partyparrot.gif";
+import { captureSentryMessage } from "../../tools/sentry-utils";
 
 /** ===========================================================================
  * Epics
@@ -325,13 +326,47 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
 };
 
 /**
+ * Handle triggering the animations to exit the initial app loading
+ * screen and then removing the related html DOM elements from the
+ * page.
+ *
+ * See the main index.html file and pairwise.css in the public/
+ * directory for more info on the corresponding DOM elements this
+ * code interacts with.
+ */
+const clearInitialAppLoadingUI = () => {
+  const el = document.getElementById("pairwise-loading-container");
+  if (el) {
+    el.classList.add("app-loaded");
+  } else {
+    // If anything goes wrong in here, this can help to alert us.
+    captureSentryMessage(
+      "Failed to find pairwise-loading-container div on app load in setWorkspaceLoadedEpic!",
+    );
+  }
+
+  setTimeout(() => {
+    if (el) {
+      const parent = el.parentElement;
+      if (parent) {
+        parent.removeChild(el);
+      }
+    }
+
+    // Reset the html and body overflow styles
+    document.body.style.overflow = "auto";
+    document.documentElement.style.overflow = "auto";
+  }, 3500);
+};
+
+/**
  * Add a brief pause to display a loading overlay on top of the workspace
  * to allow Monaco to fully initialize.
  */
 const setWorkspaceLoadedEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf(Actions.fetchCoursesSuccess)),
-    delay(1000),
+    tap(clearInitialAppLoadingUI),
     map(() => Actions.setWorkspaceChallengeLoaded()),
   );
 };

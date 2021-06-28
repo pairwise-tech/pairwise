@@ -439,9 +439,7 @@ const LoadingOverlay = (props: { visible: boolean }) => (
     visible={props.visible}
     data-selector="full-screen-overlay"
   >
-    <div>
-      <OverlayText id="pw-loading-overlay">Launching Pairwise...</OverlayText>
-    </div>
+    <div />
   </FullScreenOverlay>
 );
 

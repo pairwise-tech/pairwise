@@ -150,7 +150,7 @@ export const FullScreenOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 15, 15, 0.95);
+  background: rgba(15, 15, 15, 0.75);
   visibility: ${({ visible = true }: { visible?: boolean }) =>
     visible ? "visible" : "hidden"};
 `;
