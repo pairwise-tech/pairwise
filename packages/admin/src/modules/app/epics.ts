@@ -108,7 +108,7 @@ const notifyOnAuthenticationFailureEpic: EpicSignature = (action$, _, deps) => {
     pluck("payload"),
     pluck("appInitializationType"),
     filter((type) => type === APP_INITIALIZATION_TYPE.AUTHENTICATION_FAILURE),
-    delay(500),
+    delay(250),
     tap(() => {
       const { host } = window.location;
       if (host === "localhost" || host === "127.0.0.1:3007") {
