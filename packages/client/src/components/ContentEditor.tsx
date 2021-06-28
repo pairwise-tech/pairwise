@@ -61,7 +61,7 @@ const decodeHash = tryCatch(
     JSON.parse,
   ),
   (err) => {
-    console.warn("[decodeHash] Could not decode hash.", err.message);
+    console.warn("[decodeHash] Could not decode hash.", err);
     return null;
   },
 );
