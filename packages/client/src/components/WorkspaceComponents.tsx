@@ -606,6 +606,7 @@ export const InstructionsViewEdit = connect(
         padding: "10px",
         paddingTop: "4px",
         transition: "all 0.2s ease",
+        overflow: isMobile ? "hidden" : "auto",
         height: isEditMode
           ? "auto"
           : isInstructionsViewCollapsed

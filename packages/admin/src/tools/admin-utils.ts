@@ -1,6 +1,10 @@
 import { validate as validateEmail } from "email-validator";
 import { compose } from "redux";
-import { CourseList, CourseSkeleton } from "@pairwise/common";
+import {
+  CourseList,
+  CourseSkeleton,
+  UserCourseProgress,
+} from "@pairwise/common";
 import { ParsedQuery } from "query-string";
 import { AdminUserView } from "../modules/users/store";
 import toaster from "../tools/toast-utils";
@@ -225,25 +229,35 @@ const filterUsOut = (user: AdminUserView) => {
   }
 };
 
+// Count up all the user's completed challenges
+export const progressHistoryToChallengeCount = (
+  userCourseProgress: UserCourseProgress,
+) => {
+  const challengeTotal = userCourseProgress.reduce(
+    (total: number, courseProgress: any) =>
+      total + Object.keys(courseProgress.progress).length,
+    0,
+  );
+
+  return challengeTotal;
+};
+
 export const summarizeUserProgress = (users: AdminUserView[]) => {
   const withProgressSummaries = users.filter(filterUsOut).map((user) => {
-    // Format the progress history
-    const formattedProgress = formatChallengeProgress(
-      user.challengeProgressHistory,
-    );
+    const progress = user.challengeProgressHistory;
 
     // Get all completed challenges count
-    const completedChallenges = countCompletedChallenges(formattedProgress);
+    const completedChallenges = countCompletedChallenges(progress);
 
     // Get completed challenges
-    const completedChallengeList = formattedProgress.reduce(
+    const completedChallengeList = progress.reduce(
       (result: any, courseProgress: any) =>
         result.concat(Object.values(courseProgress.progress)),
       [],
     );
 
     // Get only the completed challenge ids
-    const completedChallengeIds = formattedProgress.reduce(
+    const completedChallengeIds = progress.reduce(
       (result: any, courseProgress: any) =>
         result.concat(Object.keys(courseProgress.progress)),
       [],

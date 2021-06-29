@@ -65,11 +65,26 @@ export class UserService {
   // NOTE: This does not handle pagination. But that's probably not a
   // problem until we have 10_000s of users. Ha!
   public async adminGetAllUsers() {
-    return this.userRepository
+    const users = await this.userRepository
       .createQueryBuilder("user")
       .leftJoinAndSelect("user.payments", "payments")
       .leftJoinAndSelect("user.challengeProgressHistory", "progress")
       .getMany();
+
+    return users.map((rawUser) => {
+      // Parse raw JSON string challenge progress histories
+      // @ts-ignore
+      const progress = rawUser.challengeProgressHistory.map((history) => {
+        return {
+          ...history,
+          progress: JSON.parse(history.progress),
+        };
+      });
+      return {
+        ...rawUser,
+        challengeProgressHistory: progress,
+      };
+    });
   }
 
   public async adminDeleteUserByEmail(email: string) {

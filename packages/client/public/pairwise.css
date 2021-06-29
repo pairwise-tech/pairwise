@@ -40,6 +40,7 @@ html {
 @media (max-width: 768px) {
   #spinner-container {
     top: 58%;
+    margin-left: -3px;
   }
 }
 

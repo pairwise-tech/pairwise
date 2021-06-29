@@ -14,6 +14,7 @@ import {
 } from "./AdminComponents";
 import { Collapse, Alert, Intent } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
+import { progressHistoryToChallengeCount } from "../tools/admin-utils";
 
 /** ===========================================================================
  * AdminUsersPage Component
@@ -55,6 +56,14 @@ class AdminUsersPage extends React.Component<IProps, IState> {
       }
     }
 
+    // Ordered by progress history
+    const orderedByChallengeCount = usersWithProgress.sort((a, b) => {
+      const count = progressHistoryToChallengeCount;
+      return (
+        count(b.challengeProgressHistory) - count(a.challengeProgressHistory)
+      );
+    });
+
     return (
       <>
         <SummaryText style={{ maxWidth: 550 }}>
@@ -62,7 +71,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
           {zeroChallengeUsers.length} have completed zero challenges, and are
           excluded from the following list.
         </SummaryText>
-        {usersWithProgress.map(this.renderUsersList)}
+        {orderedByChallengeCount.map(this.renderUsersList)}
       </>
     );
   };
@@ -119,11 +128,8 @@ class AdminUserBaseComponent extends React.Component<
     const { user } = this.props;
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
-    // Count up all the user's completed challenges
-    const challengeTotal = user.challengeProgressHistory.reduce(
-      (total: number, courseProgress: any) =>
-        total + Object.keys(JSON.parse(courseProgress.progress)).length,
-      0,
+    const challengeTotal = progressHistoryToChallengeCount(
+      user.challengeProgressHistory,
     );
     return (
       <DataCard key={user.uuid}>

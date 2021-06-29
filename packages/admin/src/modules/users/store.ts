@@ -3,7 +3,7 @@ import { AuthActionTypes } from "../auth";
 import { Actions as actions } from "../root-actions";
 import { UsersActionTypes } from "./index";
 import { combineReducers } from "redux";
-import { Payment, UserSettings } from "@pairwise/common";
+import { Payment, UserCourseProgress, UserSettings } from "@pairwise/common";
 
 /** ===========================================================================
  * Users Store
@@ -17,7 +17,6 @@ export interface State {
 
 export interface AdminUserView {
   avatarUrl: string;
-  challengeProgressHistory: any;
   createdAt: string;
   displayName: string;
   email: string;
@@ -29,6 +28,7 @@ export interface AdminUserView {
   lastActiveChallengeIds: any;
   payments: Payment[];
   settings: UserSettings;
+  challengeProgressHistory: UserCourseProgress;
   updatedAt: string;
   uuid: string;
 }
