@@ -17,6 +17,4 @@ ENV REACT_APP_CI=1
 RUN yarn common:build
 RUN yarn services:build
 RUN yarn server:build
-RUN yarn www:build
-RUN yarn admin:build
 RUN yarn client:build

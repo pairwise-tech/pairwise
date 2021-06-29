@@ -11,5 +11,8 @@ ENV REACT_APP_HOST=http://server:9000
 # Tell the build that this is CI. Certain code should branch off of this.
 ENV REACT_APP_CI=1
 
-# Use Lerna to run the build command for all packages
-RUN yarn build
+# Run all builds sequentially, admin/ and www/ are excluded here
+RUN yarn common:build
+RUN yarn services:build
+RUN yarn server:build
+RUN yarn client:build
