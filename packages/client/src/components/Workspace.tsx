@@ -168,10 +168,10 @@ class Workspace extends React.Component<IProps, IState> {
   userCode = "";
 
   // A cancelable handler for refreshing the editor
-  editorRefreshTimerHandler: Nullable<number> = null;
+  editorRefreshTimerHandler: Nullable<NodeJS.Timeout> = null;
 
   // A cancellation time for the tests/preview process
-  testCancellationTimer: Nullable<number> = null;
+  testCancellationTimer: Nullable<NodeJS.Timeout> = null;
 
   iFrameRef: Nullable<HTMLIFrameElement> = null;
   debouncedSaveCodeFunction: () => void;
