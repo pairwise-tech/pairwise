@@ -27,6 +27,12 @@ html {
   transform: translate(-50%, -50%);
 }
 
+@media (max-width: 768px) {
+  #spinner-container {
+    top: 58%;
+  }
+}
+
 #spinner-container p {
   font-size: 28px;
   font-weight: 200;
@@ -35,7 +41,7 @@ html {
 }
 
 #spinner-container {
-  opacity: 0;
+  opacity: 0.2;
   animation: fadeIn ease-in 1;
   -moz-animation: fadeIn ease-in 1;
   -webkit-animation: fadeIn ease-in 1;
