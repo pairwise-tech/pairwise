@@ -51,10 +51,6 @@ $orange3: #ffdf75;
   box-shadow: 0 15px 25px rgba(20, 20, 20, 0.8);
 }
 
-.bp3-popover-content {
-  color: white !important;
-}
-
 .blueprint-toaster {
   z-index: 5000 !important;
 }
@@ -126,4 +122,16 @@ $orange3: #ffdf75;
   svg {
     fill: rgb(0, 255, 185) !important;
   }
+}
+
+// Style Blueprint popover2 and tooltip2. For some reason the default
+// styles are not overridden with our variable definitions here.
+.bp3-popover2-content {
+  color: white !important;
+  background: $dark-gray5 !important;
+}
+
+.bp3-popover2-arrow-fill {
+  color: white !important;
+  fill: $dark-gray5 !important;
 }
