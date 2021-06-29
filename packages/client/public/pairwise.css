@@ -21,12 +21,12 @@ html {
   bottom: 0;
   z-index: 10000;
   position: fixed;
+  background-color: rgba(15, 15, 15, 0.95);
   opacity: 1;
   transition: opacity 3s;
   -webkit-transition: opacity 3s;
   transition-delay: 1.2s;
   -webkit-transition-delay: 1.2s;
-  background-color: rgba(15, 15, 15, 0.95);
 }
 
 #spinner-container {
@@ -51,7 +51,7 @@ html {
 }
 
 #spinner-container {
-  opacity: 0.1;
+  opacity: 0;
   animation: fadeIn ease-in 1;
   -moz-animation: fadeIn ease-in 1;
   -webkit-animation: fadeIn ease-in 1;
@@ -78,12 +78,6 @@ html {
   animation-duration: 2s;
   -moz-animation-duration: 2s;
   -webkit-animation-duration: 2s;
-}
-
-#spinner-container {
-  animation-delay: 0.5s;
-  -moz-animation-delay: 0.5s;
-  -webkit-animation-delay: 0.5s;
 }
 
 .spinner {
