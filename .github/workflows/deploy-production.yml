@@ -4,7 +4,6 @@
 # - Server: Deployed to Google Cloud Run
 # - Client Workspace: Deployed with Netlify
 # - Admin UI: Deployed with Netlify
-# - Website: Deployed via Google with Cloud Storage
 #
 # Reference docs:
 # https://github.com/GoogleCloudPlatform/github-actions/blob/master/example-workflows/cloud-run/.github/workflows/cloud-run.yml
@@ -245,59 +244,10 @@ jobs:
           status: FAILED
           channel_id: CTBG8AT0B
 
-  website-deploy:
-    name: Website Deploy
-    needs: build-and-test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      # Install dependencies, if any package.json or lock files have changed
-      - name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@v1
-        with:
-          registry: docker.pkg.github.com
-          username: bonham000
-          password: "${{ secrets.GITHUB_TOKEN }}"
-
-      # NOTE: We need the static files to be available to the host environment,
-      # thus the use of volumes here. This is because we want to use the
-      # authenticated and authorized gsutil to deploy the site, and if we
-      # dropped gsutil into the docker container we would have to auth another
-      # way
-      - name: Build the pairwise.tech static site
-        run: |
-          docker run \
-            --rm -v "$PWD/packages/www/public:/usr/app/packages/www/public" docker.pkg.github.com/pairwise-tech/pairwise/pairwise-dependencies:latest /bin/bash -c 'yarn www:build'
-
-      # Setup gcloud CLI to use gsutil
-      - name: Setup gcloud CLI
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          service_account_key: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
-          service_account_email: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
-
-      # Deploy the static site to Cloud Storage
-      - name: Deploy pairwise.tech static site
-        run: gsutil -m rsync -r packages/www/public gs://www.pairwise.tech
-
-      # Send Slack notification if workflow fails
-      - name: Notify Slack on workflow failure
-        if: failure()
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_STATUS_BOT_ACCESS_TOKEN }}
-        uses: voxmedia/github-action-slack-notify-build@v1
-        with:
-          color: danger
-          status: FAILED
-          channel_id: CTBG8AT0B
-
   # Provide a success confirmation to Slack when all the jobs pass
   deploy-success-notification:
     name: Deploy Success Notification
-    needs: ["server-deploy", "client-deploy", "admin-deploy", "website-deploy"]
+    needs: ["server-deploy", "client-deploy", "admin-deploy"]
     runs-on: ubuntu-latest
 
     steps:

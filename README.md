@@ -17,7 +17,6 @@ This project is managed using Lerna, and contains the following packages:
 | [e2e](https://github.com/pairwise-tech/pairwise/tree/main/packages/e2e)                             | End-to-end API test suite                         |
 | [external-services](https://github.com/pairwise-tech/pairwise/tree/main/packages/external-services) | Mocked 3rd party APIs for testing and development |
 | [server](https://github.com/pairwise-tech/pairwise/tree/main/packages/server)                       | NestJS backend application                        |
-| [www](https://github.com/pairwise-tech/pairwise/tree/main/packages/www)                             | Marketing website built with Gatsby               |
 
 ## 🦄 Quick Links
 

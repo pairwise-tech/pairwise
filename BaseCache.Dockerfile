@@ -27,7 +27,6 @@ COPY packages/cypress/package.json /app/packages/cypress/
 COPY packages/e2e/package.json /app/packages/e2e/
 COPY packages/external-services/package.json /app/packages/external-services/
 COPY packages/server/package.json /app/packages/server/
-COPY packages/www/package.json /app/packages/www/
 
 # Install all dependencies
 RUN yarn install

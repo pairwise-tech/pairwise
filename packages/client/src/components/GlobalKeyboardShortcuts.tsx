@@ -382,12 +382,14 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       overlayVisible,
       menuSelectState,
       menuSelectColumn,
-      currentActiveIds,
       toggleSectionAccordionView,
       navigationAccordionViewState,
+      currentNavigationOverlayModule,
     } = this.props;
-    const { currentModuleId } = currentActiveIds;
     const { selectedIndex } = menuSelectState;
+    const currentModuleId = currentNavigationOverlayModule
+      ? currentNavigationOverlayModule.id
+      : null;
 
     if (!overlayVisible || selectedIndex === null) {
       return;
@@ -471,6 +473,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   userSettings: Modules.selectors.user.userSettings(state),
+  currentActiveIds: Modules.selectors.challenges.getCurrentActiveIds(state),
   menuSelectState: Modules.selectors.challenges.menuSelectState(state),
   menuSelectColumn: Modules.selectors.challenges.menuSelectColumn(state),
   navigationOverlayCourseSkeleton:
@@ -483,7 +486,6 @@ const mapStateToProps = (state: ReduxStoreState) => ({
     Modules.selectors.challenges.getCurrentNavigationOverlayCourseSkeleton(
       state,
     ),
-  currentActiveIds: Modules.selectors.challenges.getCurrentActiveIds(state),
   nextPrevChallengeIds: Modules.selectors.challenges.nextPrevChallenges(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   navigationAccordionViewState:
