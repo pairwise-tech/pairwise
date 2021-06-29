@@ -36,7 +36,6 @@ import {
 } from "./SharedComponents";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
-import Workspace from "./Workspace";
 import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,
@@ -61,6 +60,12 @@ import NavigationSwipeHandler from "./MobileSwipeHandler";
 FocusStyleManager.onlyShowFocusOnTabs();
 
 const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
+
+// Lazy load the workspace
+// The workspace includes various code which increases the bundle size
+// dramatically, namely babel-standalone and other libraries and type
+// definition files which are provided to the workspace code environment.
+const PairwiseWorkspace = React.lazy(() => import("./Workspace"));
 
 const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
   { value: "markup", label: "HTML/CSS" },
@@ -400,36 +405,46 @@ const ApplicationContainer = (props: IProps) => {
           backgroundColor="rgba(29, 29, 29, 0.7)"
         />
       )}
-      <Switch>
-        <Route key="workspace" path="/workspace" component={Workspace} />
-        <Route key="workspace" path="/workspace/:id" component={Workspace} />
-        <Route key="home" path="/home" component={Home} />
-        <Route key="404" path="/404" component={LostPage} />
-        <Route key="account" path="/account" component={Account} />
-        {!isLoggedIn && (
+      <Suspense fallback={<LoadingInline />}>
+        <Switch>
           <Route
-            key="authenticate"
-            path="/authenticate"
-            component={AuthenticationForm}
+            key="workspace"
+            path="/workspace"
+            component={PairwiseWorkspace}
           />
-        )}
-        <Route
-          key="login"
-          path="/login"
-          component={() => <Redirect to="/authenticate" />}
-        />
-        <Route
-          key="sign-up"
-          path="/sign-up"
-          component={() => <Redirect to="/authenticate" />}
-        />
-        <Route
-          key="logout"
-          path="/logout"
-          component={() => <Redirect to="/home" />}
-        />
-        <Route key={4} component={() => <Redirect to="/home" />} />
-      </Switch>
+          <Route
+            key="workspace"
+            path="/workspace/:id"
+            component={PairwiseWorkspace}
+          />
+          <Route key="home" path="/home" component={Home} />
+          <Route key="404" path="/404" component={LostPage} />
+          <Route key="account" path="/account" component={Account} />
+          {!isLoggedIn && (
+            <Route
+              key="authenticate"
+              path="/authenticate"
+              component={AuthenticationForm}
+            />
+          )}
+          <Route
+            key="login"
+            path="/login"
+            component={() => <Redirect to="/authenticate" />}
+          />
+          <Route
+            key="sign-up"
+            path="/sign-up"
+            component={() => <Redirect to="/authenticate" />}
+          />
+          <Route
+            key="logout"
+            path="/logout"
+            component={() => <Redirect to="/home" />}
+          />
+          <Route key={4} component={() => <Redirect to="/home" />} />
+        </Switch>
+      </Suspense>
     </React.Fragment>
   );
 };

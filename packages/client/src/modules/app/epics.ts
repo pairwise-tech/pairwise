@@ -102,10 +102,19 @@ const clearInitialAppLoadingUI = (delay: number) => {
   }, delay);
 };
 
+/**
+ * Dismiss the loading animation once app initialization completes
+ * or fails.
+ */
 const dismissLoadingAnimationEpic: EpicSignature = (action$) => {
   const DELAY = 3000;
   return action$.pipe(
-    filter(isActionOf(Actions.setWorkspaceChallengeLoaded)),
+    filter(
+      isActionOf([
+        Actions.appInitializationFailed,
+        Actions.setWorkspaceChallengeLoaded,
+      ]),
+    ),
     // Trigger the animation dismissal side effect
     tap(() => clearInitialAppLoadingUI(DELAY)),
     // Delay the epic completion by the same time

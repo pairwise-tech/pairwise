@@ -21,6 +21,7 @@ import {
   EditableText,
   Button,
   Spinner,
+  IconSize,
 } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
 import { TestCase } from "tools/test-utils";
@@ -602,15 +603,13 @@ export const InstructionsViewEdit = connect(
     <div
       id={INSTRUCTIONS_VIEW_PANEL_ID}
       style={{
-        minHeight: 45,
         padding: "10px",
         paddingTop: "4px",
         transition: "all 0.2s ease",
-        overflow: isInstructionsViewCollapsed ? "hidden" : "auto",
         height: isEditMode
           ? "auto"
           : isInstructionsViewCollapsed
-          ? "0vh"
+          ? "0"
           : "25vh",
       }}
     >
@@ -627,7 +626,7 @@ export const InstructionsViewEdit = connect(
           <ChallengeTitleContainer onClick={toggleInstructionsView}>
             <RotatingIcon
               icon="caret-down"
-              iconSize={Icon.SIZE_LARGE}
+              iconSize={IconSize.LARGE}
               style={{ marginRight: 6 }}
               isRotated={!isInstructionsViewCollapsed}
             />
@@ -642,15 +641,17 @@ export const InstructionsViewEdit = connect(
         )}
       </ChallengeTitleHeading>
       <Suspense fallback={<Loading />}>
-        <ContentEditor
-          toc={false}
-          autoFocus={false}
-          placeholder="Write something beautiful..."
-          readOnly={!isEditMode}
-          spellCheck={isEditMode}
-          onChange={handleContent}
-          defaultValue={props.instructions}
-        />
+        {!isInstructionsViewCollapsed && (
+          <ContentEditor
+            toc={false}
+            autoFocus={false}
+            placeholder="Write something beautiful..."
+            readOnly={!isEditMode}
+            spellCheck={isEditMode}
+            onChange={handleContent}
+            defaultValue={props.instructions}
+          />
+        )}
         {isMobile && (
           <Button
             large
