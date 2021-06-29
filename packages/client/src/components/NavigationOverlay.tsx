@@ -351,10 +351,18 @@ class NavigationOverlay extends React.Component<
   };
 
   lockWindowScrolling = () => {
+    // Don't interfere with the scrolling state until the initial loading
+    // animation has completed.
+    if (!this.props.loadingAnimationComplete) {
+      return;
+    }
+
     if (this.props.overlayVisible) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "visible";
+      document.documentElement.style.overflow = "visible";
     }
   };
 
@@ -1221,6 +1229,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   // NOTE: These are the module and course for the current navigation
   // overlay view state, not the active challenge.
   module: ChallengeSelectors.getCurrentNavigationOverlayModule(state),
+  loadingAnimationComplete:
+    Modules.selectors.app.loadingAnimationComplete(state),
   course: ChallengeSelectors.getCurrentNavigationOverlayCourseSkeleton(state),
   menuSelectState: ChallengeSelectors.menuSelectState(state),
   menuSelectColumn: ChallengeSelectors.menuSelectColumn(state),

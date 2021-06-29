@@ -65,6 +65,56 @@ const appInitializeCaptureUrlEpic: EpicSignature = (action$) => {
 };
 
 /**
+ * Handle triggering the animations to exit the initial app loading
+ * screen and then removing the related html DOM elements from the
+ * page.
+ *
+ * See the main index.html file and pairwise.css in the public/
+ * directory for more info on the corresponding DOM elements this
+ * code interacts with.
+ */
+const clearInitialAppLoadingUI = (delay: number) => {
+  const spinner = document.getElementById("spinner-container");
+  const container = document.getElementById("pairwise-loading-container");
+
+  // Spinner fade out starts
+  if (spinner) {
+    spinner.classList.add("fadeOut");
+  }
+
+  // App has loaded, loading UI can begin exit animation
+  if (container) {
+    container.classList.add("app-loaded");
+  }
+
+  setTimeout(() => {
+    // Remove the entire loading container DOM content after a delay
+    if (container) {
+      const parent = container.parentElement;
+      if (parent) {
+        parent.removeChild(container);
+      }
+    }
+
+    // Reset the html and body overflow styles
+    document.body.style.overflow = "auto";
+    document.documentElement.style.overflow = "auto";
+  }, delay);
+};
+
+const dismissLoadingAnimationEpic: EpicSignature = (action$) => {
+  const DELAY = 750;
+  return action$.pipe(
+    filter(isActionOf(Actions.setWorkspaceChallengeLoaded)),
+    // Trigger the animation dismissal side effect
+    tap(() => clearInitialAppLoadingUI(DELAY)),
+    // Delay the epic completion by the same time
+    delay(DELAY),
+    mapTo(Actions.setLoadingAnimationComplete()),
+  );
+};
+
+/**
  * Start the payment intent flow if a user deep links to it. The deep
  * link is to /purchase and can accept a courseId param or default
  * to the TypeScript course.
@@ -426,6 +476,7 @@ export default combineEpics(
   appInitializationEpic,
   appInitializationFailedEpic,
   appInitializeCaptureUrlEpic,
+  dismissLoadingAnimationEpic,
   purchaseCourseDeepLinkEpic,
   stripInitialParameters,
   emailUpdateSuccessToastEpic,

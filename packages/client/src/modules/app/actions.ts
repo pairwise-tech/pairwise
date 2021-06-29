@@ -17,6 +17,7 @@ enum ActionTypesEnum {
   LOCATION_CHANGE = "LOCATION_CHANGE",
   APP_INITIALIZATION_FAILED = "APP_INITIALIZATION_FAILED",
   SET_SCREENSAVER_STATE = "SET_SCREENSAVER_STATE",
+  LOADING_ANIMATION_COMPLETE = "LOADING_ANIMATION_COMPLETE",
 }
 
 /** ===========================================================================
@@ -61,3 +62,7 @@ export const appInitializationFailed = createAction(
 export const setScreensaverState = createAction(
   ActionTypesEnum.SET_SCREENSAVER_STATE,
 )<boolean>();
+
+export const setLoadingAnimationComplete = createAction(
+  ActionTypesEnum.LOADING_ANIMATION_COMPLETE,
+)();

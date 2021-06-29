@@ -19,6 +19,11 @@ export const locationSelector = createSelector(
   (app) => app.location,
 );
 
+export const loadingAnimationComplete = createSelector(
+  appSelector,
+  (app) => app.loadingAnimationComplete,
+);
+
 export const screensaverVisible = createSelector(
   appSelector,
   (app) => app.screensaver,

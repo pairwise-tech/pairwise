@@ -12,6 +12,7 @@ export interface State {
   location: string;
   initializationError: boolean;
   screensaver: boolean;
+  loadingAnimationComplete: boolean;
 }
 
 const initialState = {
@@ -19,6 +20,7 @@ const initialState = {
   location: "",
   initializationError: false,
   screensaver: false,
+  loadingAnimationComplete: false,
 };
 
 const app = createReducer<State, AppActionTypes>(initialState)
@@ -33,6 +35,10 @@ const app = createReducer<State, AppActionTypes>(initialState)
   .handleAction(actions.appInitializationFailed, (state) => ({
     ...state,
     initializationError: true,
+  }))
+  .handleAction(actions.setLoadingAnimationComplete, (state) => ({
+    ...state,
+    loadingAnimationComplete: true,
   }))
   .handleAction(actions.locationChange, (state, action) => ({
     ...state,

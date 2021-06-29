@@ -31,6 +31,7 @@ import {
   take,
   pairwise,
   withLatestFrom,
+  mapTo,
 } from "rxjs/operators";
 import { isActionOf, PayloadAction } from "typesafe-actions";
 import { EpicSignature, ReduxStoreState } from "../root";
@@ -326,52 +327,13 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
 };
 
 /**
- * Handle triggering the animations to exit the initial app loading
- * screen and then removing the related html DOM elements from the
- * page.
- *
- * See the main index.html file and pairwise.css in the public/
- * directory for more info on the corresponding DOM elements this
- * code interacts with.
- */
-const clearInitialAppLoadingUI = () => {
-  const spinner = document.getElementById("spinner-container");
-  const container = document.getElementById("pairwise-loading-container");
-
-  // Spinner fade out starts
-  if (spinner) {
-    spinner.classList.add("fadeOut");
-  }
-
-  // App has loaded, loading UI can begin exit animation
-  if (container) {
-    container.classList.add("app-loaded");
-  }
-
-  setTimeout(() => {
-    // Remove the entire loading container DOM content after a delay
-    if (container) {
-      const parent = container.parentElement;
-      if (parent) {
-        parent.removeChild(container);
-      }
-    }
-
-    // Reset the html and body overflow styles
-    document.body.style.overflow = "auto";
-    document.documentElement.style.overflow = "auto";
-  }, 3500);
-};
-
-/**
  * Add a brief pause to display a loading overlay on top of the workspace
  * to allow Monaco to fully initialize.
  */
 const setWorkspaceLoadedEpic: EpicSignature = (action$) => {
   return action$.pipe(
     filter(isActionOf(Actions.fetchCoursesSuccess)),
-    tap(clearInitialAppLoadingUI),
-    map(() => Actions.setWorkspaceChallengeLoaded()),
+    mapTo(Actions.setWorkspaceChallengeLoaded()),
   );
 };
 
