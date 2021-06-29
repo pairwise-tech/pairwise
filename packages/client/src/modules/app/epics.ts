@@ -103,7 +103,7 @@ const clearInitialAppLoadingUI = (delay: number) => {
 };
 
 const dismissLoadingAnimationEpic: EpicSignature = (action$) => {
-  const DELAY = 750;
+  const DELAY = 3000;
   return action$.pipe(
     filter(isActionOf(Actions.setWorkspaceChallengeLoaded)),
     // Trigger the animation dismissal side effect
