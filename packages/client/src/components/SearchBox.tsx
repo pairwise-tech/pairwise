@@ -11,6 +11,13 @@ import { MOBILE, COLORS, SEARCH_QUERY_THRESHOLD } from "tools/constants";
 import { LineWrappedText } from "./SharedComponents";
 import cx from "classnames";
 
+/** ===========================================================================
+ * Component
+ * ============================================================================
+ */
+
+const SELECTED_SEARCH_RESULT = "selected-search-result";
+
 // NOTE: isClosed is kept in state because sometimes we want the search pane to
 // be closed even if there are search results. For example, the user clicks
 // outside the search pane. In such a case there are still results but we don't
@@ -26,37 +33,41 @@ const SearchBox = ({
   const history = useHistory();
   const [searchText, setSearchText] = React.useState("");
   const [isClosed, setIsClosed] = React.useState(false); // See NOTE
-  const [selIndex, setSelIndex] = React.useState(0);
+  const [selectIndex, setSelectIndex] = React.useState(0);
   let searchInput: Nullable<HTMLInputElement> = null;
 
   const focusInput = (e: KeyboardEvent) => {
     e.preventDefault();
     searchInput?.focus();
   };
+
   const handleClose = React.useCallback(() => {
     if (!isClosed) {
       setIsClosed(true);
     }
   }, [isClosed, setIsClosed]);
+
   React.useEffect(() => {
     document.addEventListener("click", handleClose);
     return () => {
       document.removeEventListener("click", handleClose);
     };
   }, [isClosed, handleClose]);
+
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
       setSearchText(value);
-      setSelIndex(0);
+      setSelectIndex(0);
       setIsClosed(false);
       requestSearchResults(value);
     },
     [requestSearchResults],
   );
+
   const handleNavigation = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement> | KeyboardEvent) => {
-      const searchResultItem = searchResults[selIndex];
+      const searchResultItem = searchResults[selectIndex];
       if (searchResultItem) {
         e.preventDefault();
         const challengeId = searchResultItem.id;
@@ -65,38 +76,56 @@ const SearchBox = ({
         history.push(`/workspace/${challengeId}`);
       }
     },
-    [history, searchResults, selIndex, handleClose],
+    [history, searchResults, selectIndex, handleClose],
   );
+
   const handleMouseEnter = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       const el = e.target as HTMLDivElement;
       const index = el.dataset.index;
       if (index) {
-        setSelIndex(Number(index));
+        setSelectIndex(Number(index));
       }
     },
     [],
   );
-  const selNext = React.useCallback(() => {
+
+  const maybeScrollToSelectedResult = React.useCallback(async () => {
+    const elements = document.getElementsByClassName(SELECTED_SEARCH_RESULT);
+    const element = elements[0];
+
+    if (element && elements.length === 1) {
+      const elementInView = await isElementVisible(element);
+      if (!elementInView) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [searchResults.length, selectIndex]);
+
+  const selectNext = React.useCallback(() => {
     const total = searchResults.length;
-    let next = selIndex + 1;
+    let next = selectIndex + 1;
     if (next >= total) {
       next = 0;
     }
-    setSelIndex(next);
-  }, [searchResults.length, selIndex]);
-  const selPrev = React.useCallback(() => {
+    setSelectIndex(next);
+    maybeScrollToSelectedResult();
+  }, [searchResults.length, selectIndex]);
+
+  const selectPrevious = React.useCallback(() => {
     const total = searchResults.length;
-    let prev = selIndex - 1;
+    let prev = selectIndex - 1;
+    console.log(prev, total);
     if (prev < 0) {
       prev = total - 1;
     }
-    setSelIndex(prev);
-  }, [searchResults.length, selIndex]);
+    setSelectIndex(prev);
+    maybeScrollToSelectedResult();
+  }, [searchResults.length, selectIndex]);
+
   const handleFocus = React.useCallback(
     (e: any) => {
       setIsClosed(false);
-      // What is this linting? We need to know onFocus is defined, it's not unused at all.
       onFocus && onFocus(e);
     },
     [setIsClosed, onFocus],
@@ -115,7 +144,9 @@ const SearchBox = ({
       className={cx({ isClosed })}
       onClick={(e) => {
         e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation(); // Necessary to prevent the background click which is outside the react event system
+        // Necessary to prevent the background click which is outside the
+        // React event system.
+        e.nativeEvent.stopImmediatePropagation();
       }}
     >
       <Input
@@ -140,11 +171,12 @@ const SearchBox = ({
                 key={x.id}
                 data-index={i}
                 data-challenge-id={x.id}
-                active={selIndex === i}
+                active={selectIndex === i}
                 result={x}
                 searchText={searchText}
                 onClick={handleNavigation}
                 onMouseEnter={handleMouseEnter}
+                className={selectIndex === i ? SELECTED_SEARCH_RESULT : ""}
               />
             ))}
           </ScrollDiv>
@@ -158,8 +190,8 @@ const SearchBox = ({
       {isOpen ? (
         <KeyboardShortcuts
           keymap={{
-            ArrowUp: selPrev,
-            ArrowDown: selNext,
+            ArrowUp: selectPrevious,
+            ArrowDown: selectNext,
             Enter: handleNavigation,
             Escape: handleClose,
           }}
@@ -175,10 +207,25 @@ const SearchBox = ({
   );
 };
 
+/** ===========================================================================
+ * Styles and Utils
+ * ============================================================================
+ */
+
 const underlineText = (fullString: string, subString: string) => {
   return reactStringReplace(fullString, subString, (x, i) => (
     <Underline key={i}>{x}</Underline>
   ));
+};
+
+const isElementVisible = (domElement: Element) => {
+  return new Promise((resolve) => {
+    const observer = new IntersectionObserver(([entry]) => {
+      resolve(entry.intersectionRatio === 1);
+      observer.disconnect();
+    });
+    observer.observe(domElement);
+  });
 };
 
 interface SearchResultItemProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -245,7 +292,7 @@ const ResultTitleBox = styled.div`
 // NOTE: Pointer events are disabled on all children to avoid issues with
 // onMouseEnter. The child components also fire events on enter which ends up
 // causing issues when we expect events only to be fired when the mouse enters
-// this specific component at the top level
+// this specific component at the top level.
 const StyledSearchResultItem = styled(SearchResultItem)`
   padding: 4px 10px;
   cursor: pointer;
@@ -291,7 +338,7 @@ const Box = styled.div`
   max-width: 700px;
 `;
 
-// NOTE: The z-index on this is meant to make it appaer above the nav overlay
+// NOTE: The z-index on this is meant to make it appear above the nav overlay
 const ResultBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -315,6 +362,11 @@ const ResultBox = styled.div`
   }
 `;
 
+/** ===========================================================================
+ * Props
+ * ============================================================================
+ */
+
 const mapStateToProps = (state: ReduxStoreState) => ({
   searchResults: Modules.selectors.challenges.getSearchResults(state),
   isSearching: Modules.selectors.challenges.getIsSearching(state),
@@ -332,5 +384,10 @@ interface OwnProps {
 type Props = ReturnType<typeof mapStateToProps> &
   typeof dispatchProps &
   OwnProps;
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default connect(mapStateToProps, dispatchProps)(SearchBox);
