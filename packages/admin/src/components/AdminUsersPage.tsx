@@ -99,7 +99,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
           assertUnreachable(filter);
       }
 
-      if (filterDirection === "ASC") {
+      if (filterDirection === "DESC") {
         return getValue(b) - getValue(a);
       } else {
         return getValue(a) - getValue(b);
