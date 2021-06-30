@@ -32,18 +32,18 @@ interface Props {
 
 const ChallengeTypeMenu = ({
   items,
-  currentChallengeType,
   onItemSelect,
   tooltip = true,
+  currentChallengeType,
 }: Props) => {
   const activeItem = items.find((x) => x.value === currentChallengeType);
   return (
     <div style={{ flexShrink: 0, marginLeft: 10, marginRight: 10 }}>
       <ChallengeTypeSelect
-        filterable={false}
-        onItemSelect={onItemSelect}
-        activeItem={activeItem}
         items={items}
+        filterable={false}
+        activeItem={activeItem}
+        onItemSelect={onItemSelect}
         itemListRenderer={getRenderItemList(150)}
         itemRenderer={(x, { handleClick, modifiers }) => (
           <Button
@@ -58,17 +58,17 @@ const ChallengeTypeMenu = ({
         )}
       >
         <Button
-          id="selectChallengeType"
-          rightIcon="caret-down"
-          aria-controls="simple-menu"
           aria-haspopup="true"
+          rightIcon="caret-down"
+          id="selectChallengeType"
+          aria-controls="simple-menu"
         >
           {tooltip && (
             <Tooltip2
               content="Choose what type of code you will write"
               usePortal={false}
             >
-              <Icon style={{ margin: "0 2px" }} icon="info-sign" />
+              <Icon style={{ margin: "0 2px" }} icon="annotation" />
             </Tooltip2>
           )}
           <strong style={{ marginLeft: 6 }}>

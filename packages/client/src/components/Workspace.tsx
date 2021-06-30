@@ -609,7 +609,7 @@ class Workspace extends React.Component<IProps, IState> {
                         }
                       />
                     )}
-                    {!isMobileView && (
+                    {!isMobileView && !useCodemirrorEditor && (
                       <MenuItem
                         id="editor-toggle-high-contrast"
                         icon="contrast"
