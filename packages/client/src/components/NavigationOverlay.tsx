@@ -156,10 +156,10 @@ class NavigationOverlay extends React.Component<
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
         <Col
-          className={cx("module-select", { open: this.state.showModuleList })}
           style={{ zIndex: 3 }}
           offsetX={overlayVisible ? 0 : -20}
           onClick={(e) => e.stopPropagation()}
+          className={cx("module-select", { open: this.state.showModuleList })}
         >
           <ColTitle className="course-select">
             <CourseSelect
@@ -512,6 +512,7 @@ class NavigationOverlay extends React.Component<
     module: ModuleSkeleton,
     index: number,
   ) => {
+    const { isMobile } = this.props;
     const { selectedIndex, menuSelectColumn } = this.props.menuSelectState;
     const isMenuItemSelected =
       menuSelectColumn === "modules" && selectedIndex === index;
@@ -526,7 +527,7 @@ class NavigationOverlay extends React.Component<
       >
         <span>
           <ModuleNumber>{index}</ModuleNumber>
-          {module.title}
+          {!isMobile && module.title}
         </span>
       </ModuleNavigationButton>
     );
