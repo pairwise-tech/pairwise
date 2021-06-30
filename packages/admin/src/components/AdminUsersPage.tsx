@@ -109,7 +109,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
     const getSortIcon = (buttonFilter: FILTER) => {
       const active = buttonFilter === filter;
       if (active) {
-        const icon = filterDirection === "ASC" ? "sort-desc" : "sort-asc";
+        const icon = filterDirection === "ASC" ? "sort-asc" : "sort-desc";
         return <Icon icon={icon} color={COLORS.PRIMARY_BLUE} />;
       } else {
         return "search-template";
@@ -126,21 +126,21 @@ class AdminUsersPage extends React.Component<IProps, IState> {
         <ControlRow>
           <Button
             icon={getSortIcon("challenges")}
-            style={{ width: 175, marginRight: 8 }}
+            style={{ width: 175, marginRight: 8, marginBottom: 8 }}
             onClick={() => this.handleApplyFilters("challenges")}
           >
             Sort by Challenges
           </Button>
           <Button
             icon={getSortIcon("updated")}
-            style={{ width: 175, marginRight: 8 }}
+            style={{ width: 175, marginRight: 8, marginBottom: 8 }}
             onClick={() => this.handleApplyFilters("updated")}
           >
             Sort by Last Active
           </Button>
           <Button
             icon={getSortIcon("payments")}
-            style={{ width: 175, marginRight: 8 }}
+            style={{ width: 175, marginRight: 8, marginBottom: 8 }}
             onClick={() => this.handleApplyFilters("payments")}
           >
             Sort by Payments
@@ -236,6 +236,7 @@ class AdminUserBaseComponent extends React.Component<
     const challengeTotal = progressHistoryToChallengeCount(
       user.challengeProgressHistory,
     );
+
     return (
       <DataCard key={user.uuid}>
         <Alert
@@ -332,11 +333,7 @@ class AdminUserBaseComponent extends React.Component<
           <JsonComponent title="Payments:" data={user.payments} />
           <JsonComponent
             title="Challenge Progress:"
-            // re-stringify the progress history, otherwise this will
-            // produce extremely tall content for users with a lot of
-            // challenges. The presentation of the user progress
-            // history could be changed later.
-            data={JSON.stringify(user.challengeProgressHistory)}
+            data={user.challengeProgressHistory}
           />
           <JsonComponent
             title="Settings:"

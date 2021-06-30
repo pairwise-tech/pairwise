@@ -47,6 +47,7 @@
     "format": "lerna run format",
     "tsc": "lerna run tsc",
     "test": "lerna run test",
+    "e2e:test": "cd packages/e2e && yarn test:e2e",
     "build": "yarn common:build && lerna run build --parallel",
     "docker:dependencies": "docker build -t pairwise-dependencies -f BaseCache.Dockerfile .",
     "docker:build": "docker build -t pairwise-runtime -f packages/e2e/Build.Dockerfile .",

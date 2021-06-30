@@ -74,7 +74,7 @@ export const OverlaySmallText = styled.p`
 `;
 
 export const SummaryText = styled.p`
-  margin-bottom: 25px;
+  margin-bottom: 22px;
 `;
 
 export const DataCard = styled(Card)`
@@ -244,7 +244,7 @@ export const JsonComponent = ({
               background: rgb(35,35,35);
             `,
         }}
-        style={{ fontSize: 14 }}
+        style={{ fontSize: 14, maxHeight: 450, overflow: "scroll" }}
       />
     );
   }
@@ -436,5 +436,5 @@ export const Input = styled(InputGroup)`
 `;
 
 export const PullRequestDiffInput = styled(Input)`
-  margin-right: 6px;
+  margin-right: 8px;
 `;

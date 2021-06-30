@@ -77,7 +77,11 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
           checked={useDarkTheme}
           onChange={this.toggleDiffTheme}
           style={{ marginTop: 12, marginBottom: 22 }}
-          label={useDarkTheme ? "Dark Theme (on)" : "Dark Theme (off)"}
+          label={
+            useDarkTheme
+              ? "Diff View Dark Theme (on)"
+              : "Diff View Dark Theme (off)"
+          }
         />
         {showLink && (
           <SummaryText>
@@ -95,6 +99,8 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
             diffContent={pullRequestContext}
             useDarkTheme={this.state.useDarkTheme}
           />
+        ) : !id ? (
+          <div />
         ) : (
           <SummaryText>No results found for pull request.</SummaryText>
         )}
@@ -120,9 +126,9 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
     this.props.history.push(`/pull-requests/${this.state.pull}`);
   };
 
-  getPullIdFromParams = () => {
+  getPullIdFromParams = (): Nullable<string> => {
     const params: any = this.props.match.params;
-    if (params.pull) {
+    if (params.pull && typeof params.pull === "string") {
       return params.pull;
     }
 

@@ -4,7 +4,7 @@ import styled from "styled-components/macro";
 import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS, HEADER_HEIGHT, MOBILE } from "tools/constants";
 import { capitalize, composeWithProps } from "tools/admin-utils";
-import { Button } from "@blueprintjs/core";
+import { Button, Icon } from "@blueprintjs/core";
 import { NavLink, RouteComponentProps } from "react-router-dom";
 import cx from "classnames";
 
@@ -74,10 +74,10 @@ class AdminNavigationMenu extends React.Component<
           <ColTitle>
             <Button
               fill
-              icon="shield"
               className="mobile-shrink"
               text="Pairwise Admin Menu"
               style={{ whiteSpace: "nowrap" }}
+              icon={<Icon icon="shield" color={COLORS.LIGHT_PINK} />}
             />
           </ColTitle>
           <ColScroll>{this.renderAdminMenuLinks()}</ColScroll>
