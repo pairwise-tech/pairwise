@@ -135,3 +135,8 @@ $orange3: #ffdf75;
   color: white !important;
   fill: $dark-gray5 !important;
 }
+
+.bp3-dialog.bp3-dark,
+.bp3-dark .bp3-dialog {
+  background: $dark-gray5 !important;
+}
