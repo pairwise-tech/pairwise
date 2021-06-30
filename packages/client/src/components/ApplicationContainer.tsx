@@ -61,10 +61,12 @@ FocusStyleManager.onlyShowFocusOnTabs();
 
 const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
 
-// Lazy load the workspace
-// The workspace includes various code which increases the bundle size
-// dramatically, namely babel-standalone and other libraries and type
-// definition files which are provided to the workspace code environment.
+/**
+ * Lazy load the workspace. The workspace includes various code which
+ * increases the bundle size dramatically, namely babel-standalone and other
+ * libraries and type definition files which are provided to the workspace
+ * code environment.
+ */
 const PairwiseWorkspace = React.lazy(() => import("./Workspace"));
 
 const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
