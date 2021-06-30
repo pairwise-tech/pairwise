@@ -599,21 +599,27 @@ export const InstructionsViewEdit = connect(
   const handleTitle = (title: string) =>
     props.updateChallenge({ id: currentId, challenge: { title } });
 
+  const isCollapsed = isInstructionsViewCollapsed;
+
+  const desktop = {
+    padding: "10px",
+    paddingTop: "4px",
+    height: isEditMode ? "auto" : isCollapsed ? "0" : "25vh",
+  };
+
+  const mobile = {
+    minHeight: 45,
+    padding: "10px",
+    paddingTop: "4px",
+    transition: "all 0.2s ease",
+    overflow: isCollapsed ? "hidden" : "auto",
+    height: !isMobile ? "auto" : isCollapsed ? "0" : "25vh",
+  };
+
+  const styles = isMobile ? mobile : desktop;
+
   return (
-    <div
-      id={INSTRUCTIONS_VIEW_PANEL_ID}
-      style={{
-        padding: "10px",
-        paddingTop: "4px",
-        transition: "all 0.2s ease",
-        overflow: isMobile ? "hidden" : "auto",
-        height: isEditMode
-          ? "auto"
-          : isInstructionsViewCollapsed
-          ? "0"
-          : "25vh",
-      }}
-    >
+    <div style={styles} id={INSTRUCTIONS_VIEW_PANEL_ID}>
       <ChallengeTitleHeading>
         {isEditMode ? (
           <ChallengeTitleContainer>
@@ -629,7 +635,7 @@ export const InstructionsViewEdit = connect(
               icon="caret-down"
               iconSize={IconSize.LARGE}
               style={{ marginRight: 6 }}
-              isRotated={!isInstructionsViewCollapsed}
+              isRotated={!isCollapsed}
             />
             <Text>{props.title}</Text>
           </ChallengeTitleContainer>
@@ -642,7 +648,7 @@ export const InstructionsViewEdit = connect(
         )}
       </ChallengeTitleHeading>
       <Suspense fallback={<Loading />}>
-        {!isInstructionsViewCollapsed && (
+        {!isCollapsed && (
           <ContentEditor
             toc={false}
             autoFocus={false}

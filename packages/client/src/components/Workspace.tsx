@@ -969,9 +969,9 @@ class Workspace extends React.Component<IProps, IState> {
                         }
                         style={{ background: C.BACKGROUND_CONTENT }}
                       >
-                        <ContentContainer>
+                        <div style={{ height: "100%", overflow: "auto" }}>
                           <InstructionsViewEdit />
-                        </ContentContainer>
+                        </div>
                       </Row>
                       <Row
                         style={{ background: C.BACKGROUND_EDITOR }}
