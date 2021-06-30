@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components/macro";
+import { assertUnreachable } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   CodeText,
@@ -12,20 +14,36 @@ import {
   CardButtonRow,
   ExternalLink,
 } from "./AdminComponents";
-import { Collapse, Alert, Intent } from "@blueprintjs/core";
+import { Button, Collapse, Alert, Intent, Icon } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
 import { progressHistoryToChallengeCount } from "../tools/admin-utils";
+import { COLORS, MOBILE } from "../tools/constants";
 
 /** ===========================================================================
  * AdminUsersPage Component
  * ============================================================================
  */
 
+type FILTER = "payments" | "challenges" | "updated";
+type FILTER_DIRECTION = "ASC" | "DESC";
+
 interface IState {
   uuid: Nullable<string>;
+  filter: FILTER;
+  filterDirection: FILTER_DIRECTION;
 }
 
 class AdminUsersPage extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      uuid: null,
+      filter: "challenges",
+      filterDirection: "DESC",
+    };
+  }
+
   render(): Nullable<JSX.Element> {
     const { users } = this.props;
     const usersExist = users && users.length > 0;
@@ -44,6 +62,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
   }
 
   renderUsers = (users: AdminUserView[]) => {
+    const { filter, filterDirection } = this.state;
     const zeroChallengeUsers = [];
     const usersWithProgress = [];
 
@@ -56,13 +75,46 @@ class AdminUsersPage extends React.Component<IProps, IState> {
       }
     }
 
-    // Ordered by progress history
-    const orderedByChallengeCount = usersWithProgress.sort((a, b) => {
-      const count = progressHistoryToChallengeCount;
-      return (
-        count(b.challengeProgressHistory) - count(a.challengeProgressHistory)
-      );
+    // Order by the current filters
+    const sortedUsersList = usersWithProgress.sort((a, b) => {
+      let getValue: (user: AdminUserView) => number;
+
+      switch (filter) {
+        case "payments":
+          getValue = (user: AdminUserView) => user.payments.length;
+          break;
+        case "challenges":
+          getValue = (user: AdminUserView) => {
+            return progressHistoryToChallengeCount(
+              user.challengeProgressHistory,
+            );
+          };
+          break;
+        case "updated":
+          getValue = (user: AdminUserView) => {
+            return new Date(user.updatedAt).getTime();
+          };
+          break;
+        default:
+          assertUnreachable(filter);
+      }
+
+      if (filterDirection === "ASC") {
+        return getValue(b) - getValue(a);
+      } else {
+        return getValue(a) - getValue(b);
+      }
     });
+
+    const getSortIcon = (buttonFilter: FILTER) => {
+      const active = buttonFilter === filter;
+      if (active) {
+        const icon = filterDirection === "ASC" ? "sort-desc" : "sort-asc";
+        return <Icon icon={icon} color={COLORS.PRIMARY_BLUE} />;
+      } else {
+        return "search-template";
+      }
+    };
 
     return (
       <>
@@ -71,7 +123,30 @@ class AdminUsersPage extends React.Component<IProps, IState> {
           {zeroChallengeUsers.length} have completed zero challenges, and are
           excluded from the following list.
         </SummaryText>
-        {orderedByChallengeCount.map(this.renderUsersList)}
+        <ControlRow>
+          <Button
+            icon={getSortIcon("challenges")}
+            style={{ width: 175, marginRight: 8 }}
+            onClick={() => this.handleApplyFilters("challenges")}
+          >
+            Sort by Challenges
+          </Button>
+          <Button
+            icon={getSortIcon("updated")}
+            style={{ width: 175, marginRight: 8 }}
+            onClick={() => this.handleApplyFilters("updated")}
+          >
+            Sort by Last Active
+          </Button>
+          <Button
+            icon={getSortIcon("payments")}
+            style={{ width: 175, marginRight: 8 }}
+            onClick={() => this.handleApplyFilters("payments")}
+          >
+            Sort by Payments
+          </Button>
+        </ControlRow>
+        {sortedUsersList.map(this.renderUsersList)}
       </>
     );
   };
@@ -79,7 +154,37 @@ class AdminUsersPage extends React.Component<IProps, IState> {
   renderUsersList = (user: AdminUserView) => {
     return <AdminUserComponent key={user.uuid} user={user} />;
   };
+
+  handleApplyFilters = (newFilter: FILTER) => {
+    const { filter, filterDirection } = this.state;
+
+    let newDirection: FILTER_DIRECTION;
+    if (newFilter === filter) {
+      newDirection = filterDirection === "ASC" ? "DESC" : "ASC";
+    } else {
+      newDirection = "DESC";
+    }
+
+    this.setState({
+      filter: newFilter,
+      filterDirection: newDirection,
+    });
+  };
 }
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const ControlRow = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  @media ${MOBILE} {
+    flex-direction: column;
+  }
+`;
 
 /** ===========================================================================
  * Props & Export
