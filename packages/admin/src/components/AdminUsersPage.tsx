@@ -227,7 +227,11 @@ class AdminUserBaseComponent extends React.Component<
           <JsonComponent title="Payments:" data={user.payments} />
           <JsonComponent
             title="Challenge Progress:"
-            data={user.challengeProgressHistory}
+            // re-stringify the progress history, otherwise this will
+            // produce extremely tall content for users with a lot of
+            // challenges. The presentation of the user progress
+            // history could be changed later.
+            data={JSON.stringify(user.challengeProgressHistory)}
           />
           <JsonComponent
             title="Settings:"
