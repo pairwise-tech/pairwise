@@ -338,7 +338,7 @@ const ApplicationContainer = (props: IProps) => {
               </Popover2>
             </LastChildMargin>
           )}
-          {isSearchFocused || userLoading ? (
+          {(isSearchFocused && isMobile) || userLoading ? (
             <div style={{ width: 8 }} />
           ) : isLoggedIn && user.profile ? (
             <AccountDropdownButton>
