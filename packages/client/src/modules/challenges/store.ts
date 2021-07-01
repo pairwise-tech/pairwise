@@ -692,6 +692,7 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.toggleEditModeAlternativeView, (state, action) => ({
     ...state,
     adminTestTab: "testResults",
+    adminEditorTab: "starterCode",
     editModeAlternativeView: !state.editModeAlternativeView,
   }))
   .handleAction(actions.toggleCodemirrorEditor, (state, action) => ({

@@ -652,11 +652,12 @@ export const InstructionsViewEdit = connect(
           <ContentEditor
             toc={false}
             autoFocus={false}
-            placeholder="Write something beautiful..."
             readOnly={!isEditMode}
             spellCheck={isEditMode}
             onChange={handleContent}
             defaultValue={props.instructions}
+            placeholder="Write something beautiful..."
+            style={!isMobile ? { paddingBottom: 16 } : {}}
           />
         )}
         {isMobile && (
