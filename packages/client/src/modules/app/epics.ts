@@ -107,7 +107,7 @@ const clearInitialAppLoadingUI = (delay: number) => {
  * or fails.
  */
 const dismissLoadingAnimationEpic: EpicSignature = (action$) => {
-  const DELAY = 3000;
+  const DELAY = 3500;
   return action$.pipe(
     filter(
       isActionOf([
