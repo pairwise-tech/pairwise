@@ -54,7 +54,7 @@ jobs:
           username: bonham000
           password: "${{ secrets.GITHUB_TOKEN }}"
           registry: docker.pkg.github.com
-          dockerfile: BaseCache.Dockerfile
+          dockerfile: docker/Dependencies.Dockerfile
           image_name: pairwise-dependencies
 
       # Build the application
