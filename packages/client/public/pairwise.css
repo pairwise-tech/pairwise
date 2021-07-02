@@ -21,12 +21,12 @@ html {
   bottom: 0;
   z-index: 10000;
   position: fixed;
-  background-color: rgba(15, 15, 15, 0.95);
   opacity: 1;
   transition: opacity 3s;
   -webkit-transition: opacity 3s;
   transition-delay: 1.2s;
   -webkit-transition-delay: 1.2s;
+  background-color: rgba(15, 15, 15, 0.95);
 }
 
 #spinner-container {

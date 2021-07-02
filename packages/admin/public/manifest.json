@@ -1,16 +1,16 @@
 {
-  "short_name": "Admin Pairwise",
   "name": "Admin Pairwise",
+  "short_name": "Admin Pairwise",
   "description": "Pairwise Admin Dashboard",
   "icons": [
     {
-      "src": "logo-circle@2x.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "sizes": "240x240",
+      "type": "image/png",
+      "src": "logo-circle@2x.png"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#ffffff",
+  "theme_color": "#cdcdcd",
   "background_color": "#13141d"
 }
