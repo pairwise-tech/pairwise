@@ -13,6 +13,9 @@ ENV REACT_APP_CI=1
 
 # Run all builds sequentially, admin/ and www/ are excluded here
 RUN yarn common:build
+
 RUN yarn services:build
+
 RUN yarn server:build
+
 RUN yarn client:build

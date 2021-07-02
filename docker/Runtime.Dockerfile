@@ -1,6 +1,6 @@
 # This Dockerfile builds all the packages, except for the client application.
 # It is used for running the top level docker-compose which runs the entire
-# backend application, database, and services.
+# backend application, database, and services for local app development.
 
 FROM pairwise-dependencies
 

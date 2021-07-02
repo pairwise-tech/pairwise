@@ -32,7 +32,6 @@ lerna-debug.log*
 dist
 
 # Environment
-docker
 .env
 
 # Misc backup files

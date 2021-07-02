@@ -8,15 +8,15 @@ The **Pairwise** codebase includes a React app client application, a NestJS serv
 
 This project is managed using Lerna, and contains the following packages:
 
-| Package                                                                                             | Description                                       |
-| --------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| [admin](https://github.com/pairwise-tech/pairwise/tree/main/packages/admin)                         | React admin client application                    |
-| [client](https://github.com/pairwise-tech/pairwise/tree/main/packages/client)                       | React client application                          |
-| [common](https://github.com/pairwise-tech/pairwise/tree/main/packages/common)                       | Shared code, utils, and types                     |
-| [cypress](https://github.com/pairwise-tech/pairwise/tree/main/packages/cypress)                     | Cypress end-to-end test suite                     |
-| [e2e](https://github.com/pairwise-tech/pairwise/tree/main/packages/e2e)                             | End-to-end API test suite                         |
-| [external-services](https://github.com/pairwise-tech/pairwise/tree/main/packages/external-services) | Mocked 3rd party APIs for testing and development |
-| [server](https://github.com/pairwise-tech/pairwise/tree/main/packages/server)                       | NestJS backend application                        |
+| Package                                                                                             | Description                                |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| [admin](https://github.com/pairwise-tech/pairwise/tree/main/packages/admin)                         | React admin client application             |
+| [client](https://github.com/pairwise-tech/pairwise/tree/main/packages/client)                       | React client application                   |
+| [common](https://github.com/pairwise-tech/pairwise/tree/main/packages/common)                       | Shared code, utils, and types              |
+| [cypress](https://github.com/pairwise-tech/pairwise/tree/main/packages/cypress)                     | Cypress end-to-end test suite              |
+| [e2e](https://github.com/pairwise-tech/pairwise/tree/main/packages/e2e)                             | End-to-end API test suite                  |
+| [external-services](https://github.com/pairwise-tech/pairwise/tree/main/packages/external-services) | 3rd party APIs for testing and development |
+| [server](https://github.com/pairwise-tech/pairwise/tree/main/packages/server)                       | NestJS backend application                 |
 
 ## 🦄 Quick Links
 
@@ -132,7 +132,7 @@ We use Codepress to develop course content. Codepress is an internal CMS tool bu
 
 ## 🚧 Tests
 
-Please note that there is a separate Dockerfile, `DockerfileBase`, which builds an image containing all dependencies for the project. This can be built using `yarn docker:dependencies` and is used by various `docker-compose` commands. You should build this first, and only rebuild it if some project dependencies have changed and need to be re-installed.
+Each package contains unit tests relevant to that package. The backend APIs are tested with a series of e2e tests which are located in the `e2e/` package, and the entire application is also tested using Cypress.
 
 ```bash
 # Use Lerna to run the test script for each package
@@ -144,7 +144,7 @@ $ yarn docker:dependencies
 # Build the applications
 $ yarn docker:build
 
-# Run the unit tests for all packages
+# Run the unit tests for all packages using Docker
 $ yarn docker:test
 
 # Run the e2e test suite (be sure to run docker:dependencies first)
