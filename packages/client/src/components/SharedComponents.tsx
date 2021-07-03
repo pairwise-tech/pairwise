@@ -67,11 +67,6 @@ export const PageTitle = styled.h1`
   color: ${COLORS.TEXT_WHITE};
 `;
 
-export const SecondaryTitle = styled.h2`
-  margin-top: 0;
-  color: ${COLORS.TEXT_WHITE};
-`;
-
 export const Text = styled.p`
   margin: 0;
   margin-top: 8px;

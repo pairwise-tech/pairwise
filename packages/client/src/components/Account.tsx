@@ -7,7 +7,6 @@ import {
   PageContainer,
   Text,
   PageTitle,
-  SecondaryTitle,
   ProfileIcon,
   ExternalLink,
 } from "./SharedComponents";
@@ -201,8 +200,8 @@ class Account extends React.Component<IProps, IState> {
             ) : (
               <>
                 <TextItem style={{ color: COLORS.TEXT_CONTENT, fontSize: 12 }}>
-                  * Note I: To change your email you will need to verify the new
-                  email address.
+                  * <Underline>Note I</Underline>: To change your email you will
+                  need to verify the new email address.
                 </TextItem>
                 <TextItem
                   style={{
@@ -211,10 +210,10 @@ class Account extends React.Component<IProps, IState> {
                     color: COLORS.TEXT_CONTENT,
                   }}
                 >
-                  * Note II: Your account is identified using your email
-                  address. If you sign in with an SSO provider, the associated
-                  social profile <b>must match</b> your current account email,
-                  otherwise a new account will be created.
+                  * <Underline>Note II</Underline>: Your account is identified
+                  using your email address. If you sign in with an SSO provider,
+                  the associated social profile <b>must match</b> your current
+                  account email, otherwise a new account will be created.
                 </TextItem>
               </>
             )}
@@ -250,9 +249,9 @@ class Account extends React.Component<IProps, IState> {
             {payments.map(this.renderPaymentDetails)}
           </>
         )}
-        <SecondaryTitle style={{ marginTop: 24 }}>Questions?</SecondaryTitle>
+        <PageTitle style={{ marginTop: 24 }}>Questions?</PageTitle>
         <Text>
-          Feel free to reach out to <b>sean@pairwise.tech</b> if you need to
+          Feel free to reach out to <b>sean@pairwise.tech</b> if you want to
           contact someone directly.
         </Text>
       </PageContainer>
@@ -383,6 +382,10 @@ const InputField = styled.input`
 
 const Controls = styled.div`
   margin-top: 24px;
+`;
+
+const Underline = styled.span`
+  text-decoration: underline;
 `;
 
 /** ===========================================================================
