@@ -45,10 +45,10 @@ class AdminChallengeDetailModal extends React.Component<IProps, IState> {
       <Dialog
         style={{
           padding: 24,
-          width: 900,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          width: isMobile ? "100%" : 900,
           background: COLORS.BACKGROUND_LOWER_SECTION,
         }}
         usePortal
