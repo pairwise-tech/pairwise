@@ -7,6 +7,7 @@ import { Breadcrumb, Breadcrumbs, BreadcrumbProps } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
 import { CHALLENGE_TYPE } from "@pairwise/common";
 import { COLORS } from "tools/constants";
+import { capitalize, isAlternateLanguageChallenge } from "../tools/utils";
 
 /** ===========================================================================
  * Types & Config
@@ -42,14 +43,15 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
       panelId = "",
       toggleCollapsed,
       breadcrumbsPath,
+      isInstructionsViewCollapsed,
     } = this.props;
 
     if (!breadcrumbsPath || !challenge) {
       return null;
     }
 
-    const IS_PAID = challenge.isPaidContent;
     const CAN_COLLAPSE = typeof toggleCollapsed === "function";
+    const IS_ALTERNATE_LANGUAGE = isAlternateLanguageChallenge(challenge);
 
     return (
       <BreadcrumbsBar
@@ -57,12 +59,12 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
         canCollapse={CAN_COLLAPSE}
         id={panelId}
         onClick={() => {
-          if (!IS_PAID && typeof toggleCollapsed === "function") {
+          if (typeof toggleCollapsed === "function") {
             toggleCollapsed();
           }
         }}
       >
-        {IS_PAID && (
+        {IS_ALTERNATE_LANGUAGE && !isInstructionsViewCollapsed && (
           <Tooltip2
             usePortal={false}
             position="bottom"
@@ -71,17 +73,12 @@ class BreadcrumbsPath extends React.Component<IProps, {}> {
                 <span aria-label="warning emoji" role="img">
                   ⚠️
                 </span>{" "}
-                This is part of the paid course content. Purchase the course to
-                lock in access. Click the label for details.
+                {capitalize(challenge.type)} challenges are experimental and
+                still under development.
               </TooltipText>
             }
           >
-            <PaidContentLabel
-              id="paid-content-label"
-              onClick={this.handlePurchaseCourse}
-            >
-              Paid Content
-            </PaidContentLabel>
+            <ContentLabel>Experimental Content</ContentLabel>
           </Tooltip2>
         )}
         <Breadcrumbs
@@ -188,13 +185,13 @@ const BreadcrumbsBar = styled.div<{
   }
 `;
 
-const PaidContentLabel = styled.div`
+const ContentLabel = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 10px;
   height: 14px;
-  width: 90px;
+  width: 150px;
   font-weight: bold;
   letter-spacing: 1.2px;
   color: ${COLORS.TEXT_DARK};

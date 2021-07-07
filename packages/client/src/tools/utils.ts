@@ -685,3 +685,10 @@ export const isAlternateLanguageChallenge = (challenge: Challenge): boolean => {
   const { type } = challenge;
   return type === "rust" || type === "python" || type === "golang";
 };
+
+/**
+ * Capitalize a string.
+ */
+export const capitalize = (text: string) => {
+  return text[0].toUpperCase() + text.slice(1);
+};
