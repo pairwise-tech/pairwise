@@ -49,8 +49,6 @@ describe("Payment Course Flow: A user can purchase a course and unlock it's cont
     // they will). We could update it to read from the courses file directly
     // to determine the challenge ids and titles to test.
     cy.contains("The SQL SELECT Statement");
-    // Paid content label should not exist anymore
-    cy.get("#paid-content-label").should("not.exist");
     click("nextButton");
     cy.contains("The SQL INSERT INTO Statement");
   });
