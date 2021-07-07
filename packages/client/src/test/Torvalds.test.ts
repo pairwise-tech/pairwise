@@ -24,7 +24,7 @@ import stripComments from "strip-comments";
  * the logic which handles timing out individual challenge tests. This timer
  * logic is set to a maximum to 15 seconds.
  */
-jest.setTimeout(150000); // -> 2.5 minutes
+jest.setTimeout(180000); // -> 3 minutes
 
 const options = { encoding: "utf8" };
 
