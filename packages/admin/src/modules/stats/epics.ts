@@ -10,17 +10,6 @@ import { Actions } from "../root-actions";
  */
 
 /**
- * Dispatch refresh stats action when user revisits the stats page.
- */
-const refreshStatsEpic: EpicSignature = (action$, _, deps) => {
-  return action$.pipe(
-    filter(isActionOf(Actions.locationChange)),
-    filter((x) => x.payload.pathname === "/stats"),
-    map(() => Actions.refreshStats()),
-  );
-};
-
-/**
  * Fetch recent progress records.
  */
 const fetchProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
@@ -49,4 +38,4 @@ const fetchProgressRecordsEpic: EpicSignature = (action$, _, deps) => {
  * ============================================================================
  */
 
-export default combineEpics(refreshStatsEpic, fetchProgressRecordsEpic);
+export default combineEpics(fetchProgressRecordsEpic);
