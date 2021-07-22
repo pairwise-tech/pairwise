@@ -28,9 +28,9 @@ export const challengeMeta = createSelector(
   (state) => state.challengeMeta,
 );
 
-export const challengeBlob = createSelector(
+export const challengeBlobCache = createSelector(
   [challengesState],
-  (state) => state.blob,
+  (state) => state.blobCache,
 );
 
 export const navigationOverlayVisible = createSelector(

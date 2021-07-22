@@ -8,6 +8,7 @@ import {
   Body,
   Delete,
   BadRequestException,
+  Query,
 } from "@nestjs/common";
 import { AdminAuthGuard } from "../auth/admin.guard";
 import { AuthenticatedRequest } from "../types";
@@ -24,7 +25,6 @@ import { ProgressService } from "../progress/progress.service";
 import { ContentService } from "../content/content.service";
 import { parsePullRequestDiff } from "../tools/server-utils";
 import { BlobService } from "../blob/blob.service";
-import { User } from "../user/user.entity";
 
 @Controller("admin")
 export class AdminController {
@@ -219,8 +219,8 @@ export class AdminController {
   @Get("/users/blob")
   async getUserCodeBlob(
     @Request() req: AuthenticatedRequest,
-    @Param("uuid") uuid: string,
-    @Param("challengeId") challengeId: string,
+    @Query("uuid") uuid: string,
+    @Query("challengeId") challengeId: string,
   ) {
     const adminUserEmail = req.user.profile.email;
 

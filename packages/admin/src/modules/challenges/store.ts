@@ -16,6 +16,11 @@ import { ChallengesActionTypes } from "./index";
  * ============================================================================
  */
 
+export interface BlobCache {
+  // cache keys are: 'uuid-challengeId'
+  [key: string]: Nullable<ICodeBlobDto>;
+}
+
 export interface State {
   keySelectedMenuItemIndex: Nullable<number>;
   courses: Nullable<CourseList>;
@@ -26,7 +31,7 @@ export interface State {
   pullRequestLoading: boolean;
   pullRequestContext: Nullable<PullRequestDiffContext[]>;
   challengeMeta: Nullable<ChallengeMeta>;
-  blob: Nullable<ICodeBlobDto>;
+  blobCache: BlobCache;
 }
 
 const initialState: State = {
@@ -39,7 +44,7 @@ const initialState: State = {
   pullRequestLoading: false,
   pullRequestContext: null,
   challengeMeta: null,
-  blob: null,
+  blobCache: {},
 };
 
 /** ===========================================================================
@@ -94,9 +99,12 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
     ...state,
     challengeMeta: action.payload,
   }))
-  .handleAction(actions.fetchChallengeBlobSuccess, (state, action) => ({
+  .handleAction(actions.fetchChallengeBlobSuccess, (state, { payload }) => ({
     ...state,
-    blob: action.payload,
+    blobCache: {
+      ...state.blobCache,
+      [`${payload.uuid}-${payload.challengeId}`]: payload.blob,
+    },
   }))
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,

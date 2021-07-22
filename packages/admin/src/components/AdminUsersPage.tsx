@@ -13,11 +13,16 @@ import {
   CardButton,
   CardButtonRow,
   ExternalLink,
+  Input,
+  Row,
+  Key,
+  LabelRow,
 } from "./AdminComponents";
 import { Button, Collapse, Alert, Intent, Icon } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
 import { progressHistoryToChallengeCount } from "../tools/admin-utils";
 import { COLORS, MOBILE } from "../tools/constants";
+import { BlobCache } from "../modules/challenges/store";
 
 /** ===========================================================================
  * AdminUsersPage Component
@@ -156,7 +161,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
       <AdminUserComponent
         key={user.uuid}
         user={user}
-        blob={this.props.challengeBlob}
+        challengeBlobCache={this.props.challengeBlobCache}
       />
     );
   };
@@ -199,7 +204,7 @@ const ControlRow = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
-  challengeBlob: Modules.selectors.challenges.challengeBlob(state),
+  challengeBlobCache: Modules.selectors.challenges.challengeBlobCache(state),
 });
 
 const dispatchProps = {};
@@ -239,12 +244,15 @@ class AdminUserBaseComponent extends React.Component<
 
   render(): JSX.Element {
     const { alert } = this.state;
-    const { user } = this.props;
+    const { user, challengeBlobCache } = this.props;
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
     const challengeTotal = progressHistoryToChallengeCount(
       user.challengeProgressHistory,
     );
+
+    const key = `${user.uuid}-${this.state.challengeId}`;
+    const blob = challengeBlobCache[key];
 
     return (
       <DataCard key={user.uuid}>
@@ -349,12 +357,18 @@ class AdminUserBaseComponent extends React.Component<
             data={JSON.parse(String(user.settings))}
           />
           <div style={{ height: 12 }} />
-          <input
-            value={this.state.challengeId}
-            onChange={(e) => this.setState({ challengeId: e.target.value })}
-          />
-          <Button title="Find Blob" onClick={this.handleSearchBlob} />
-          <JsonComponent title="Challenge Blob:" data={this.props.blob} />
+          <Key>Lookup Challenge Blob:</Key>
+          <Row>
+            <Input
+              id="admin-input"
+              placeholder="Find challenge blob"
+              style={{ width: 250, marginRight: 8 }}
+              value={this.state.challengeId}
+              onChange={(e) => this.setState({ challengeId: e.target.value })}
+            />
+            <Button text="Find Blob" onClick={this.handleSearchBlob} />
+          </Row>
+          {!!blob && <JsonComponent title="Challenge Blob:" data={blob} />}
         </Collapse>
       </DataCard>
     );
@@ -395,7 +409,7 @@ const coursePaymentProps = {
 
 type AdminUserBaseComponentProps = typeof coursePaymentProps & {
   user: AdminUserView;
-  blob: Nullable<ICodeBlobDto>;
+  challengeBlobCache: BlobCache;
 };
 
 export const AdminUserComponent = connect(

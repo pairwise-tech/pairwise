@@ -438,3 +438,11 @@ export const Input = styled(InputGroup)`
 export const PullRequestDiffInput = styled(Input)`
   margin-right: 8px;
 `;
+
+export const Row = styled.div`
+  max-width: 350px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 4px;
+  margin-bottom: 22px;
+`;

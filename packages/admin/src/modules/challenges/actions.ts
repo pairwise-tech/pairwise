@@ -120,7 +120,7 @@ export const fetchChallengeBlob = createAction(
 
 export const fetchChallengeBlobSuccess = createAction(
   ActionTypesEnum.FETCH_CHALLENGE_BLOB_SUCCESS,
-)<ICodeBlobDto>();
+)<{ blob: ICodeBlobDto; uuid: string; challengeId: string }>();
 
 export const fetchChallengeBlobFailure = createAction(
   ActionTypesEnum.FETCH_CHALLENGE_BLOB_FAILURE,
