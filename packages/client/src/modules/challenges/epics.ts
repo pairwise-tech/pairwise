@@ -50,8 +50,7 @@ import {
   isValidSandboxChallengeType,
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
-import React from "react";
-import PartyParrot from "../../icons/partyparrot.gif";
+import { getPartyParrot } from "../../components/SharedComponents";
 
 /** ===========================================================================
  * Epics
@@ -862,22 +861,7 @@ const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
       if (isNextConsecutiveChallenge && nextChallenge?.type === "section") {
         deps.toaster.toast.show({
           intent: "success",
-          message: (
-            <span style={{ display: "flex", alignItems: "center" }}>
-              <img
-                style={{
-                  height: 10,
-                  paddingLeft: 13,
-                  paddingRight: 15,
-                  display: "inline-block",
-                  transform: "translateY(-5px) scale(2.5)",
-                }}
-                alt="Party Parrot"
-                src={PartyParrot}
-              />
-              {`Starting section ${nextChallenge.title}!`}
-            </span>
-          ),
+          message: getPartyParrot(nextChallenge.title),
         });
       }
     }),
