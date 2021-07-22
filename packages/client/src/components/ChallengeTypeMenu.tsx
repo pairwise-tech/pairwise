@@ -11,12 +11,12 @@ import { getRenderItemList, labelByType } from "./SharedComponents";
  * ============================================================================
  */
 
-const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
-
 export interface ChallengeTypeOption {
   value: CHALLENGE_TYPE;
   label: string;
 }
+
+const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
 
 interface Props {
   items: ChallengeTypeOption[];

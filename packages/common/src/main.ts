@@ -11,6 +11,7 @@ import ContentUtility, {
 /**
  * Types
  */
+export * from "./types/git";
 export * from "./types/courses";
 export * from "./types/result";
 export * from "./types/dto";

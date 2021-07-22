@@ -2,8 +2,9 @@ import * as fs from "fs";
 import * as path from "path";
 import { promisify, inspect } from "util";
 import * as ChildProcess from "child_process";
-import { Course, ChallengeMetadata } from "src/types/courses";
+import { Course } from "src/types/courses";
 import bytes from "bytes";
+import { ChallengeMetadata } from "../types/git";
 
 // eslint-disable-next-line
 const debug = require("debug")("common:get-challenge-metadata");

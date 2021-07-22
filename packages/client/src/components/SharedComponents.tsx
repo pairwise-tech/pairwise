@@ -15,6 +15,7 @@ import identity from "ramda/es/identity";
 import { COLORS, MOBILE } from "../tools/constants";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
+import PartyParrotGif from "../../icons/partyparrot.gif";
 
 interface DarkThemeProps {
   children: React.ReactNode;
@@ -622,5 +623,24 @@ export const PairwiseOpenCloseLogo = ({
         />
       </g>
     </svg>
+  );
+};
+
+export const getPartyParrot = (title: string) => {
+  return (
+    <span style={{ display: "flex", alignItems: "center" }}>
+      <img
+        style={{
+          height: 10,
+          paddingLeft: 13,
+          paddingRight: 15,
+          display: "inline-block",
+          transform: "translateY(-5px) scale(2.5)",
+        }}
+        alt="Party Parrot"
+        src={PartyParrotGif}
+      />
+      {`Starting section ${title}!`}
+    </span>
   );
 };

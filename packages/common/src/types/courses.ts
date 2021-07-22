@@ -18,59 +18,6 @@ export interface CourseBase {
 
 export type CourseMetadata = CourseBase;
 
-export interface ChallengeMetadata {
-  filename: string;
-  keypath: Array<string | number>;
-  course: {
-    id: string;
-    title: string;
-    description: string;
-    free: boolean;
-    price: number;
-  };
-  module: {
-    id: string;
-    title: string;
-    free: boolean;
-  };
-  challenge: {
-    id: string;
-    type: string;
-    title: string;
-  };
-  gitMetadata: {
-    lineRange: number[];
-    contributors: string[];
-    contributionsBy: { [k: string]: string[] };
-    edits: number;
-    earliestUpdate: {
-      commit: string;
-      summary: string;
-      author: string;
-      authorDate: string;
-    };
-    latestUpdate: {
-      commit: string;
-      summary: string;
-      author: string;
-      authorDate: string;
-    };
-  };
-}
-
-interface PairwiseStats {
-  buildCommit: string;
-  totalChallenges: number;
-  codeChallenges: number;
-  videoChallenges: number;
-  todoChallenges: string[];
-}
-
-export interface ChallengeMetadataIndex {
-  "@@PAIRWISE": PairwiseStats;
-  challenges: { [k: string]: ChallengeMetadata };
-}
-
 export type CourseList = Course[];
 
 export type CHALLENGE_TYPE =
@@ -111,6 +58,13 @@ export interface Challenges {
 
 export type ChallengeList = Challenge[];
 
+/**
+ * TODO: Add potential skill tags in the future which are attached to
+ * each challenge and can be used to construct a skills/portfolio overview
+ * for a user given the challenges they have completed.
+ */
+export type SkillTag = "HTML" | "CSS" | "TypeScript";
+
 export interface Challenge {
   type: CHALLENGE_TYPE;
   id: string;
@@ -123,6 +77,7 @@ export interface Challenge {
   content: string;
   free?: boolean;
   isPaidContent?: boolean;
+  skillTags?: SkillTag[];
 }
 
 /** ===========================================================================

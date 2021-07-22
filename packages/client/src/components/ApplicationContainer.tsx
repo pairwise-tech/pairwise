@@ -36,7 +36,6 @@ import {
 } from "./SharedComponents";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
-import { ChallengeTypeOption } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
@@ -44,7 +43,7 @@ import {
 import PaymentCourseModal from "./PaymentIntentModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 import PaymentSuccessModal from "./PaymentSuccessModal";
-import { challengeRequiresWorkspace } from "tools/utils";
+import { challengeRequiresWorkspace, SANDBOX_TYPE_CHOICES } from "tools/utils";
 import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";
@@ -55,6 +54,7 @@ import { getChallengeSlug } from "@pairwise/common";
 import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
 import PairwiseScreensaver from "./PairwiseScreensaver";
 import NavigationSwipeHandler from "./MobileSwipeHandler";
+import DeepLinkCodeStringAlert from "./DeepLinkCodeStringAlert";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -68,12 +68,6 @@ const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
  * code environment.
  */
 const PairwiseWorkspace = React.lazy(() => import("./Workspace"));
-
-const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
-  { value: "markup", label: "HTML/CSS" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "react", label: "React" },
-];
 
 // All the application modal components:
 const Modals = () => (
@@ -220,6 +214,7 @@ const ApplicationContainer = (props: IProps) => {
   return (
     <React.Fragment>
       <Modals />
+      <DeepLinkCodeStringAlert />
       <LoadingOverlay visible={workspaceLoading} />
       <GlobalKeyboardShortcuts />
       {CODEPRESS && <AdminKeyboardShortcuts />}

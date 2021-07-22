@@ -19,7 +19,6 @@ import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
 import {
   catchError,
-  delay,
   filter,
   map,
   mergeMap,
@@ -33,7 +32,7 @@ import {
   withLatestFrom,
   mapTo,
 } from "rxjs/operators";
-import { isActionOf, PayloadAction } from "typesafe-actions";
+import { isActionOf } from "typesafe-actions";
 import { EpicSignature, ReduxStoreState } from "../root";
 import { Actions } from "../root-actions";
 import {
@@ -48,11 +47,10 @@ import {
   findChallengeIdInLocationIfExists,
   isContentOnlyChallenge,
   getChallengeProgress,
+  isValidSandboxChallengeType,
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
-import React from "react";
-import PartyParrot from "../../icons/partyparrot.gif";
-import { captureSentryMessage } from "../../tools/sentry-utils";
+import { getPartyParrot } from "../../components/SharedComponents";
 
 /** ===========================================================================
  * Epics
@@ -796,9 +794,35 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
 };
 
 /**
+ * Parse a code string from a deep link url param, if it exists.
+ */
+const parseCodeStringDeepLinkEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("params"),
+    filter((params) => {
+      const codeString = params.code;
+      return codeString !== undefined && typeof codeString === "string";
+    }),
+    map((params) => {
+      const codeString = decodeURIComponent(params.code as string);
+      const sandboxChallengeType = isValidSandboxChallengeType(
+        params.sandboxChallengeType,
+      );
+
+      return Actions.setDeepLinkCodeString({
+        codeString,
+        sandboxChallengeType,
+      });
+    }),
+  );
+};
+
+/**
  * If the current challenge is consecutively after the challenge the
  * user is navigating away from, and the current challenge is a section,
- * show a toast to let the user know they have begun a new course section
+ * show a toast to let the user know they have begun a new course section.
  */
 const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(
@@ -837,55 +861,12 @@ const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
       if (isNextConsecutiveChallenge && nextChallenge?.type === "section") {
         deps.toaster.toast.show({
           intent: "success",
-          message: (
-            <span style={{ display: "flex", alignItems: "center" }}>
-              <img
-                style={{
-                  height: 10,
-                  paddingLeft: 13,
-                  paddingRight: 15,
-                  display: "inline-block",
-                  transform: "translateY(-5px) scale(2.5)",
-                }}
-                alt="Party Parrot"
-                src={PartyParrot}
-              />
-              {`Starting section ${nextChallenge.title}!`}
-            </span>
-          ),
+          message: getPartyParrot(nextChallenge.title),
         });
       }
     }),
     ignoreElements(),
   );
-};
-
-/** ===========================================================================
- * Utils
- * ============================================================================
- */
-
-const constructProgressDto = (
-  state: ReduxStoreState,
-  challengeId: string,
-  complete: boolean,
-): Result<IProgressDto, string> => {
-  const courseId = state.challenges.currentCourseId;
-  if (courseId) {
-    const payload: IProgressDto = {
-      courseId,
-      complete,
-      challengeId,
-      timeCompleted: new Date(),
-    };
-
-    return new Ok(payload);
-  } else {
-    const msg =
-      "[WARNING!]: No active course id found in challenge completion epic, this shouldn't happen...";
-    console.warn(msg);
-    return new Err(msg);
-  }
 };
 
 /**
@@ -923,6 +904,34 @@ const resetMenuSelectStateOnCourseChangeEpic: EpicSignature = (
 };
 
 /** ===========================================================================
+ * Utils
+ * ============================================================================
+ */
+
+const constructProgressDto = (
+  state: ReduxStoreState,
+  challengeId: string,
+  complete: boolean,
+): Result<IProgressDto, string> => {
+  const courseId = state.challenges.currentCourseId;
+  if (courseId) {
+    const payload: IProgressDto = {
+      courseId,
+      complete,
+      challengeId,
+      timeCompleted: new Date(),
+    };
+
+    return new Ok(payload);
+  } else {
+    const msg =
+      "[WARNING!]: No active course id found in challenge completion epic, this shouldn't happen...";
+    console.warn(msg);
+    return new Err(msg);
+  }
+};
+
+/** ===========================================================================
  * Export
  * ============================================================================
  */
@@ -950,5 +959,6 @@ export default combineEpics(
   searchEpic,
   completeContentOnlyChallengeEpic,
   showSectionToastEpic,
+  parseCodeStringDeepLinkEpic,
   resetMenuSelectStateOnCourseChangeEpic,
 );

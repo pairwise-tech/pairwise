@@ -7,6 +7,7 @@ import {
   InverseChallengeMapping,
   DataBlob,
   ModuleList,
+  CHALLENGE_TYPE,
 } from "@pairwise/common";
 import insert from "ramda/es/insert";
 import move from "ramda/es/move";
@@ -88,6 +89,8 @@ export interface State {
   menuSelectIndexChallenges: number | null;
   useCodemirror: boolean;
   isInstructionsViewCollapsed: boolean;
+  deepLinkCodeString: Nullable<string>;
+  deepLinkSandboxChallengeType: Nullable<CHALLENGE_TYPE>;
 }
 
 const initialState: State = {
@@ -117,6 +120,8 @@ const initialState: State = {
   menuSelectIndexChallenges: null,
   useCodemirror: false,
   isInstructionsViewCollapsed: false,
+  deepLinkCodeString: null,
+  deepLinkSandboxChallengeType: null,
 };
 
 /** ===========================================================================
@@ -702,6 +707,11 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.toggleInstructionsView, (state, action) => ({
     ...state,
     isInstructionsViewCollapsed: !state.isInstructionsViewCollapsed,
+  }))
+  .handleAction(actions.setDeepLinkCodeString, (state, action) => ({
+    ...state,
+    deepLinkCodeString: action.payload.codeString,
+    deepLinkSandboxChallengeType: action.payload.sandboxChallengeType,
   }))
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,
