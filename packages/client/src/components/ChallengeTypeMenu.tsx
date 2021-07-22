@@ -18,6 +18,12 @@ export interface ChallengeTypeOption {
   label: string;
 }
 
+export const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
+  { value: "markup", label: "HTML/CSS" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "react", label: "React" },
+];
+
 interface Props {
   items: ChallengeTypeOption[];
   currentChallengeType?: CHALLENGE_TYPE;

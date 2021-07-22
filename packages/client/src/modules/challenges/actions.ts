@@ -6,6 +6,7 @@ import {
   LastActiveChallengeIds,
   InverseChallengeMapping,
   Challenge,
+  CHALLENGE_TYPE,
 } from "@pairwise/common";
 import { createAction } from "typesafe-actions";
 import {
@@ -332,4 +333,7 @@ export const toggleInstructionsView = createAction(
 
 export const setDeepLinkCodeString = createAction(
   ActionTypesEnum.SET_DEEP_LINK_CODE_STRING,
-)<Nullable<string>>();
+)<{
+  codeString: Nullable<string>;
+  sandboxChallengeType: Nullable<CHALLENGE_TYPE>;
+}>();

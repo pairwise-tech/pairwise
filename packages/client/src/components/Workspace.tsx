@@ -678,7 +678,7 @@ class Workspace extends React.Component<IProps, IState> {
                     <MenuItem
                       id="editor-share-code"
                       icon="clipboard"
-                      onClick={this.handleShareCode}
+                      onClick={this.handleCreateShareCodeLink}
                       text="Copy Shareable Code Link"
                       aria-label="copy shareable code link"
                     />
@@ -1625,10 +1625,18 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
-  private readonly handleShareCode = () => {
+  private readonly handleCreateShareCodeLink = () => {
     const url = window.location.href;
     const code = encodeURIComponent(this.state.code);
-    const link = `${url}?code=${code}`;
+
+    // Add sandbox challenge type if applicable
+    const { challenge } = this.props;
+    const sandboxParam =
+      challenge.id === SANDBOX_ID
+        ? `&sandboxChallengeType=${challenge.type}`
+        : "";
+
+    const link = `${url}?code=${code}${sandboxParam}`;
     copyToClipboard(link);
     toaster.success("Shareable code link copied to clipboard!");
   };

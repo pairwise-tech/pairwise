@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import React from "react";
 import Modules, { ReduxStoreState } from "../modules/root";
 import { constructDataBlobFromChallenge } from "../tools/utils";
-import { COLORS } from "../tools/constants";
+import { COLORS, SANDBOX_ID } from "../tools/constants";
 
 /** ===========================================================================
  * React Component
@@ -47,11 +47,21 @@ class DeepLinkCodeStringAlert extends React.Component<IProps, {}> {
   };
 
   handleConfirm = () => {
-    const { challenge, deepLinkCodeString } = this.props;
+    const { challenge, deepLinkCodeString, deepLinkSandboxChallengeType } =
+      this.props;
 
     // Update the current challenge, replacing the code with the deep link
     // code string. This update code is copied from the Workspace.
     if (challenge && deepLinkCodeString) {
+      // Update the sandbox challenge type, if a challenge type was provided
+      // in the deep link.
+      if (deepLinkSandboxChallengeType && challenge.id === SANDBOX_ID) {
+        this.props.updateChallenge({
+          id: challenge.id,
+          challenge: { type: deepLinkSandboxChallengeType },
+        });
+      }
+
       const blob = constructDataBlobFromChallenge({
         code: deepLinkCodeString,
         challenge,
@@ -68,7 +78,10 @@ class DeepLinkCodeStringAlert extends React.Component<IProps, {}> {
   };
 
   clearCodeString = () => {
-    this.props.setDeepLinkCodeString(null);
+    this.props.setDeepLinkCodeString({
+      codeString: null,
+      sandboxChallengeType: null,
+    });
   };
 }
 
@@ -96,10 +109,13 @@ const CodeStringPreviewBox = styled.pre`
 const mapStateToProps = (state: ReduxStoreState) => ({
   challenge: Modules.selectors.challenges.getCurrentChallenge(state),
   deepLinkCodeString: Modules.selectors.challenges.deepLinkCodeString(state),
+  deepLinkSandboxChallengeType:
+    Modules.selectors.challenges.deepLinkSandboxChallengeType(state),
 });
 
 const dispatchProps = {
   setDeepLinkCodeString: Modules.actions.challenges.setDeepLinkCodeString,
+  updateChallenge: Modules.actions.challenges.updateChallenge,
   updateCurrentChallengeBlob:
     Modules.actions.challenges.updateCurrentChallengeBlob,
 };

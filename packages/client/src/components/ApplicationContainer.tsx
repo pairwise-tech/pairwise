@@ -36,7 +36,7 @@ import {
 } from "./SharedComponents";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
-import { ChallengeTypeOption } from "./ChallengeTypeMenu";
+import { ChallengeTypeOption, SANDBOX_TYPE_CHOICES } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
@@ -69,12 +69,6 @@ const LazyChallengeTypeMenu = React.lazy(() => import("./ChallengeTypeMenu"));
  * code environment.
  */
 const PairwiseWorkspace = React.lazy(() => import("./Workspace"));
-
-const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
-  { value: "markup", label: "HTML/CSS" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "react", label: "React" },
-];
 
 // All the application modal components:
 const Modals = () => (

@@ -47,6 +47,7 @@ import {
   findChallengeIdInLocationIfExists,
   isContentOnlyChallenge,
   getChallengeProgress,
+  isValidSandboxChallengeType,
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import React from "react";
@@ -801,14 +802,20 @@ const parseCodeStringDeepLinkEpic: EpicSignature = (action$, state$, deps) => {
     filter(isActionOf(Actions.captureAppInitializationUrl)),
     pluck("payload"),
     pluck("params"),
-    pluck("code"),
-    filter(
-      (codeString) =>
-        codeString !== undefined && typeof codeString === "string",
-    ),
-    map((result) => {
-      const code = decodeURIComponent(result as string);
-      return Actions.setDeepLinkCodeString(code);
+    filter((params) => {
+      const codeString = params.code;
+      return codeString !== undefined && typeof codeString === "string";
+    }),
+    map((params) => {
+      const codeString = decodeURIComponent(params.code as string);
+      const sandboxChallengeType = isValidSandboxChallengeType(
+        params.sandboxChallengeType,
+      );
+
+      return Actions.setDeepLinkCodeString({
+        codeString,
+        sandboxChallengeType,
+      });
     }),
   );
 };
