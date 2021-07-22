@@ -111,6 +111,8 @@ export interface Challenges {
 
 export type ChallengeList = Challenge[];
 
+export type SkillTag = "HTML" | "CSS" | "TypeScript";
+
 export interface Challenge {
   type: CHALLENGE_TYPE;
   id: string;
@@ -123,6 +125,7 @@ export interface Challenge {
   content: string;
   free?: boolean;
   isPaidContent?: boolean;
+  skills?: SkillTag[];
 }
 
 /** ===========================================================================
