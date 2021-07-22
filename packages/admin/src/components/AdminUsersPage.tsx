@@ -369,7 +369,16 @@ class AdminUserBaseComponent extends React.Component<
             <Button text="Find Blob" onClick={this.handleSearchBlob} />
           </Row>
           {!!blob && (
-            <JsonComponent title="Challenge Blob Result:" data={blob} />
+            <>
+              <JsonComponent title="Challenge Blob Result:" data={blob} />
+              {blob.dataBlob && "code" in blob.dataBlob && (
+                <ExternalLink
+                  link={`https://app.pairwise.tech/workspace/${this.state.challengeId}?code=${blob.dataBlob.code}`}
+                >
+                  Open Code String in Pairwise
+                </ExternalLink>
+              )}
+            </>
           )}
         </Collapse>
       </DataCard>

@@ -17,7 +17,7 @@ import { ChallengesActionTypes } from "./index";
  */
 
 export interface BlobCache {
-  // cache keys are: 'uuid-challengeId'
+  // cache keys are: uuid-challengeId
   [key: string]: Nullable<ICodeBlobDto>;
 }
 
