@@ -111,6 +111,11 @@ export interface Challenges {
 
 export type ChallengeList = Challenge[];
 
+/**
+ * TODO: Add potential skill tags in the future which are attached to
+ * each challenge and can be used to construct a skills/portfolio overview
+ * for a user given the challenges they have completed.
+ */
 export type SkillTag = "HTML" | "CSS" | "TypeScript";
 
 export interface Challenge {
@@ -125,7 +130,7 @@ export interface Challenge {
   content: string;
   free?: boolean;
   isPaidContent?: boolean;
-  skills?: SkillTag[];
+  skillTags?: SkillTag[];
 }
 
 /** ===========================================================================
