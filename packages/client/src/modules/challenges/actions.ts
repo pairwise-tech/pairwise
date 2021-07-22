@@ -112,6 +112,8 @@ enum ActionTypesEnum {
   TOGGLE_CODEMIRROR_EDITOR = "TOGGLE_CODEMIRROR_EDITOR",
 
   TOGGLE_INSTRUCTIONS_VIEW = "TOGGLE_INSTRUCTIONS_VIEW",
+
+  SET_DEEP_LINK_CODE_STRING = "SET_DEEP_LINK_CODE_STRING",
 }
 
 /** ===========================================================================
@@ -327,3 +329,7 @@ export const toggleCodemirrorEditor = createAction(
 export const toggleInstructionsView = createAction(
   ActionTypesEnum.TOGGLE_INSTRUCTIONS_VIEW,
 )();
+
+export const setDeepLinkCodeString = createAction(
+  ActionTypesEnum.SET_DEEP_LINK_CODE_STRING,
+)<Nullable<string>>();

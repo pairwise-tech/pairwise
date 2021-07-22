@@ -88,6 +88,7 @@ export interface State {
   menuSelectIndexChallenges: number | null;
   useCodemirror: boolean;
   isInstructionsViewCollapsed: boolean;
+  deepLinkCodeString: Nullable<string>;
 }
 
 const initialState: State = {
@@ -117,6 +118,7 @@ const initialState: State = {
   menuSelectIndexChallenges: null,
   useCodemirror: false,
   isInstructionsViewCollapsed: false,
+  deepLinkCodeString: null,
 };
 
 /** ===========================================================================
@@ -702,6 +704,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.toggleInstructionsView, (state, action) => ({
     ...state,
     isInstructionsViewCollapsed: !state.isInstructionsViewCollapsed,
+  }))
+  .handleAction(actions.setDeepLinkCodeString, (state, action) => ({
+    ...state,
+    deepLinkCodeString: action.payload,
   }))
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,

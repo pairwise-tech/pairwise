@@ -19,7 +19,6 @@ import { combineEpics } from "redux-observable";
 import { merge, of, combineLatest, Observable, partition } from "rxjs";
 import {
   catchError,
-  delay,
   filter,
   map,
   mergeMap,
@@ -33,7 +32,7 @@ import {
   withLatestFrom,
   mapTo,
 } from "rxjs/operators";
-import { isActionOf, PayloadAction } from "typesafe-actions";
+import { isActionOf } from "typesafe-actions";
 import { EpicSignature, ReduxStoreState } from "../root";
 import { Actions } from "../root-actions";
 import {
@@ -52,7 +51,6 @@ import {
 import { SearchResultEvent } from "./types";
 import React from "react";
 import PartyParrot from "../../icons/partyparrot.gif";
-import { captureSentryMessage } from "../../tools/sentry-utils";
 
 /** ===========================================================================
  * Epics
@@ -796,6 +794,23 @@ const updateUserProgressEpic: EpicSignature = (action$, state$, deps) => {
 };
 
 /**
+ * Parse a code string from a deep link url param, if it exists.
+ */
+const parseCodeStringDeepLinkEpic: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    pluck("payload"),
+    pluck("params"),
+    pluck("code"),
+    filter(
+      (codeString) =>
+        codeString !== undefined && typeof codeString === "string",
+    ),
+    map((result) => Actions.setDeepLinkCodeString(result as string)),
+  );
+};
+
+/**
  * If the current challenge is consecutively after the challenge the
  * user is navigating away from, and the current challenge is a section,
  * show a toast to let the user know they have begun a new course section
@@ -860,34 +875,6 @@ const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
   );
 };
 
-/** ===========================================================================
- * Utils
- * ============================================================================
- */
-
-const constructProgressDto = (
-  state: ReduxStoreState,
-  challengeId: string,
-  complete: boolean,
-): Result<IProgressDto, string> => {
-  const courseId = state.challenges.currentCourseId;
-  if (courseId) {
-    const payload: IProgressDto = {
-      courseId,
-      complete,
-      challengeId,
-      timeCompleted: new Date(),
-    };
-
-    return new Ok(payload);
-  } else {
-    const msg =
-      "[WARNING!]: No active course id found in challenge completion epic, this shouldn't happen...";
-    console.warn(msg);
-    return new Err(msg);
-  }
-};
-
 /**
  * Determine if the course id changed, which can occur from at least two
  * different other actions, and reset the menu selection state if it
@@ -923,6 +910,34 @@ const resetMenuSelectStateOnCourseChangeEpic: EpicSignature = (
 };
 
 /** ===========================================================================
+ * Utils
+ * ============================================================================
+ */
+
+const constructProgressDto = (
+  state: ReduxStoreState,
+  challengeId: string,
+  complete: boolean,
+): Result<IProgressDto, string> => {
+  const courseId = state.challenges.currentCourseId;
+  if (courseId) {
+    const payload: IProgressDto = {
+      courseId,
+      complete,
+      challengeId,
+      timeCompleted: new Date(),
+    };
+
+    return new Ok(payload);
+  } else {
+    const msg =
+      "[WARNING!]: No active course id found in challenge completion epic, this shouldn't happen...";
+    console.warn(msg);
+    return new Err(msg);
+  }
+};
+
+/** ===========================================================================
  * Export
  * ============================================================================
  */
@@ -950,5 +965,6 @@ export default combineEpics(
   searchEpic,
   completeContentOnlyChallengeEpic,
   showSectionToastEpic,
+  parseCodeStringDeepLinkEpic,
   resetMenuSelectStateOnCourseChangeEpic,
 );

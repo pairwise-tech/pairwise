@@ -55,6 +55,7 @@ import { getChallengeSlug } from "@pairwise/common";
 import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
 import PairwiseScreensaver from "./PairwiseScreensaver";
 import NavigationSwipeHandler from "./MobileSwipeHandler";
+import DeepLinkCodeStringAlert from "./DeepLinkCodeStringAlert";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -220,6 +221,7 @@ const ApplicationContainer = (props: IProps) => {
   return (
     <React.Fragment>
       <Modals />
+      <DeepLinkCodeStringAlert />
       <LoadingOverlay visible={workspaceLoading} />
       <GlobalKeyboardShortcuts />
       {CODEPRESS && <AdminKeyboardShortcuts />}

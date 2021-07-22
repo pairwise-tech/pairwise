@@ -32,6 +32,11 @@ export const isInstructionsViewCollapsed = createSelector(
   (x) => x.isInstructionsViewCollapsed,
 );
 
+export const deepLinkCodeString = createSelector(
+  [challengesState],
+  (x) => x.deepLinkCodeString,
+);
+
 export const menuSelectState = createSelector([challengesState], (state) => {
   const {
     menuSelectColumn,
