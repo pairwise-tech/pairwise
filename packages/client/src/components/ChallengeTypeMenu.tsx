@@ -11,7 +11,6 @@ import { getRenderItemList, labelByType } from "./SharedComponents";
  * ============================================================================
  */
 
-
 export interface ChallengeTypeOption {
   value: CHALLENGE_TYPE;
   label: string;
