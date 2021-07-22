@@ -11,18 +11,13 @@ import { getRenderItemList, labelByType } from "./SharedComponents";
  * ============================================================================
  */
 
-const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
 
 export interface ChallengeTypeOption {
   value: CHALLENGE_TYPE;
   label: string;
 }
 
-export const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
-  { value: "markup", label: "HTML/CSS" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "react", label: "React" },
-];
+const ChallengeTypeSelect = Select.ofType<ChallengeTypeOption>();
 
 interface Props {
   items: ChallengeTypeOption[];

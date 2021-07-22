@@ -36,7 +36,6 @@ import {
 } from "./SharedComponents";
 import SingleSignOnModal from "./SingleSignOnModal";
 import FeedbackModal from "./FeedbackModal";
-import { ChallengeTypeOption, SANDBOX_TYPE_CHOICES } from "./ChallengeTypeMenu";
 import {
   PrevChallengeIconButton,
   NextChallengeIconButton,
@@ -44,7 +43,7 @@ import {
 import PaymentCourseModal from "./PaymentIntentModal";
 import { AdminKeyboardShortcuts } from "./WorkspaceComponents";
 import PaymentSuccessModal from "./PaymentSuccessModal";
-import { challengeRequiresWorkspace } from "tools/utils";
+import { challengeRequiresWorkspace, SANDBOX_TYPE_CHOICES } from "tools/utils";
 import SearchBox from "./SearchBox";
 import { AuthenticationForm } from "components/SingleSignOnModal";
 import { ShortcutKeysPopover } from "./KeyboardShortcuts";

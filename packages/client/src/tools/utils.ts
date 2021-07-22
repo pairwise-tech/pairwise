@@ -24,7 +24,7 @@ import { SANDBOX_ID } from "./constants";
 import { Location } from "history";
 import { IconName } from "@blueprintjs/core";
 import { ParsedQuery } from "query-string";
-import { SANDBOX_TYPE_CHOICES } from "../components/ChallengeTypeMenu";
+import { ChallengeTypeOption } from "components/ChallengeTypeMenu";
 
 /** ===========================================================================
  * Utils
@@ -693,6 +693,12 @@ export const isAlternateLanguageChallenge = (challenge: Challenge): boolean => {
 export const capitalize = (text: string) => {
   return text[0].toUpperCase() + text.slice(1);
 };
+
+export const SANDBOX_TYPE_CHOICES: ChallengeTypeOption[] = [
+  { value: "markup", label: "HTML/CSS" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "react", label: "React" },
+];
 
 /**
  * Validate a possible sandbox challenge type.
