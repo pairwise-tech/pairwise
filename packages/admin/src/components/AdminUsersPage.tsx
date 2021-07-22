@@ -358,17 +358,19 @@ class AdminUserBaseComponent extends React.Component<
           />
           <div style={{ height: 12 }} />
           <Key>Lookup Challenge Blob:</Key>
-          <Row>
+          <Row style={{ marginTop: 8 }}>
             <Input
               id="admin-input"
-              placeholder="Find challenge blob"
+              placeholder="Find challenge blob by id"
               style={{ width: 250, marginRight: 8 }}
               value={this.state.challengeId}
               onChange={(e) => this.setState({ challengeId: e.target.value })}
             />
             <Button text="Find Blob" onClick={this.handleSearchBlob} />
           </Row>
-          {!!blob && <JsonComponent title="Challenge Blob:" data={blob} />}
+          {!!blob && (
+            <JsonComponent title="Challenge Blob Result:" data={blob} />
+          )}
         </Collapse>
       </DataCard>
     );
