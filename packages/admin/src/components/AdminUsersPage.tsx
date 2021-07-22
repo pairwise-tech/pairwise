@@ -371,19 +371,29 @@ class AdminUserBaseComponent extends React.Component<
           {!!blob && (
             <>
               <JsonComponent title="Challenge Blob Result:" data={blob} />
-              {blob.dataBlob && "code" in blob.dataBlob && (
-                <ExternalLink
-                  link={`https://app.pairwise.tech/workspace/${this.state.challengeId}?code=${blob.dataBlob.code}`}
-                >
-                  Open Code String in Pairwise
-                </ExternalLink>
-              )}
+              {blob.dataBlob &&
+                "code" in blob.dataBlob &&
+                this.renderCodeDeepLink(
+                  this.state.challengeId,
+                  blob.dataBlob.code,
+                )}
             </>
           )}
         </Collapse>
       </DataCard>
     );
   }
+
+  renderCodeDeepLink = (challengeId: string, codeString: string) => {
+    const code = encodeURIComponent(codeString);
+    return (
+      <ExternalLink
+        link={`https://app.pairwise.tech/workspace/${challengeId}?code=${code}`}
+      >
+        Open Code String in Pairwise
+      </ExternalLink>
+    );
+  };
 
   handleCancel = () => {
     this.setState({ alert: null });
