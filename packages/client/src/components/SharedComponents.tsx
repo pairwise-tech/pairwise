@@ -15,7 +15,7 @@ import identity from "ramda/es/identity";
 import { COLORS, MOBILE } from "../tools/constants";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
-import PartyParrotGif from "../../icons/partyparrot.gif";
+import PartyParrotGif from "../icons/party-parrot.gif";
 
 interface DarkThemeProps {
   children: React.ReactNode;
