@@ -806,14 +806,17 @@ const parseCodeStringDeepLinkEpic: EpicSignature = (action$, state$, deps) => {
       (codeString) =>
         codeString !== undefined && typeof codeString === "string",
     ),
-    map((result) => Actions.setDeepLinkCodeString(result as string)),
+    map((result) => {
+      const code = decodeURIComponent(result as string);
+      return Actions.setDeepLinkCodeString(code);
+    }),
   );
 };
 
 /**
  * If the current challenge is consecutively after the challenge the
  * user is navigating away from, and the current challenge is a section,
- * show a toast to let the user know they have begun a new course section
+ * show a toast to let the user know they have begun a new course section.
  */
 const showSectionToastEpic: EpicSignature = (action$, state$, deps) => {
   return action$.pipe(

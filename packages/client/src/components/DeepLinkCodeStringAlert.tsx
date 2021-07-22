@@ -1,8 +1,10 @@
 import { Alert, Intent } from "@blueprintjs/core";
+import styled from "styled-components/macro";
 import { connect } from "react-redux";
 import React from "react";
 import Modules, { ReduxStoreState } from "../modules/root";
 import { constructDataBlobFromChallenge } from "../tools/utils";
+import { COLORS } from "../tools/constants";
 
 /** ===========================================================================
  * React Component
@@ -11,7 +13,8 @@ import { constructDataBlobFromChallenge } from "../tools/utils";
 
 class DeepLinkCodeStringAlert extends React.Component<IProps, {}> {
   render() {
-    const displayAlert = this.props.deepLinkCodeString !== null;
+    const { deepLinkCodeString } = this.props;
+    const displayAlert = deepLinkCodeString !== null;
     return (
       <>
         <Alert
@@ -26,10 +29,12 @@ class DeepLinkCodeStringAlert extends React.Component<IProps, {}> {
           onConfirm={this.handleConfirm}
           confirmButtonText="Load Code"
         >
+          <p>We found the following code string the url you opened:</p>
+          <CodeStringPreviewBox>{deepLinkCodeString}</CodeStringPreviewBox>
+          <p>Do you want to load this into the current challenge workspace?</p>
           <p>
-            We found a code string in your url. Do you want to load this into
-            the current challenge workspace? Be sure you trust the source of the
-            link. This will replace the current code in the editor.
+            Be sure you trust the source of the link. This will replace the
+            current code in the editor.
           </p>
         </Alert>
       </>
@@ -43,8 +48,9 @@ class DeepLinkCodeStringAlert extends React.Component<IProps, {}> {
 
   handleConfirm = () => {
     const { challenge, deepLinkCodeString } = this.props;
+
     // Update the current challenge, replacing the code with the deep link
-    // code string
+    // code string. This update code is copied from the Workspace.
     if (challenge && deepLinkCodeString) {
       const blob = constructDataBlobFromChallenge({
         code: deepLinkCodeString,
@@ -65,6 +71,22 @@ class DeepLinkCodeStringAlert extends React.Component<IProps, {}> {
     this.props.setDeepLinkCodeString(null);
   };
 }
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const CodeStringPreviewBox = styled.pre`
+  padding: 2px;
+  border-radius: 3px;
+  max-width: 300px;
+  max-height: 225px;
+  overflow: scroll;
+  font-size: 10px;
+  color: ${COLORS.TEXT_GRAY};
+  background: ${COLORS.BACKGROUND_MODAL};
+`;
 
 /** ===========================================================================
  * Props

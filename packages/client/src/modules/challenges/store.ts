@@ -116,7 +116,8 @@ const initialState: State = {
   menuSelectColumn: "challenges",
   menuSelectIndexModules: null,
   menuSelectIndexChallenges: null,
-  useCodemirror: false,
+  // useCodemirror: false,
+  useCodemirror: true,
   isInstructionsViewCollapsed: false,
   deepLinkCodeString: null,
 };

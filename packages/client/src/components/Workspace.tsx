@@ -65,6 +65,7 @@ import {
   getFileExtensionByChallengeType,
   wait,
   isAlternateLanguageChallenge,
+  copyToClipboard,
 } from "tools/utils";
 import {
   Tab,
@@ -311,6 +312,22 @@ class Workspace extends React.Component<IProps, IState> {
         // Switching FROM edit mode TO user mode
         const userCode = this.props.blob.code || "";
         this.setState({ code: userCode }, this.runChallengeTests);
+      }
+    }
+
+    const deepLinkDismissed =
+      this.props.deepLinkCodeString === null &&
+      prevProps.deepLinkCodeString !== null;
+
+    // Crude heuristic to determine if the deep link url code string existed
+    // and was then dismissed, which is necessary to replace the current
+    // Workspace editor code and update the editor content.
+    if (deepLinkDismissed) {
+      if ("code" in this.props.blob) {
+        this.setState(
+          { code: this.props.blob.code },
+          this.pauseAndRefreshEditor,
+        );
       }
     }
 
@@ -658,6 +675,13 @@ class Workspace extends React.Component<IProps, IState> {
                         aria-label="export code to file"
                       />
                     )}
+                    <MenuItem
+                      id="editor-share-code"
+                      icon="clipboard"
+                      onClick={this.handleShareCode}
+                      text="Copy Shareable Code Link"
+                      aria-label="copy shareable code link"
+                    />
                     <MenuDivider />
                     <MenuItem
                       id="editor-restore-initial-code"
@@ -1601,6 +1625,14 @@ class Workspace extends React.Component<IProps, IState> {
     }
   };
 
+  private readonly handleShareCode = () => {
+    const url = window.location.href;
+    const code = encodeURIComponent(this.state.code);
+    const link = `${url}?code=${code}`;
+    copyToClipboard(link);
+    toaster.success("Shareable code link copied to clipboard!");
+  };
+
   private readonly handleAutoFormatCodeOnBlur = () => {
     if (this.props.isEditMode) {
       this.handleRequestCodeFormatting();
@@ -1655,6 +1687,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   showMediaArea: ChallengeSelectors.getHasMediaContent(state),
   adminTestTab: ChallengeSelectors.adminTestTabSelector(state),
   revealSolutionCode: ChallengeSelectors.revealSolutionCode(state),
+  deepLinkCodeString: ChallengeSelectors.deepLinkCodeString(state),
   adminEditorTab: ChallengeSelectors.adminEditorTabSelector(state),
   useCodemirrorEditor: ChallengeSelectors.useCodemirrorEditor(state),
   isLoadingBlob: ChallengeSelectors.isLoadingCurrentChallengeBlob(state),
