@@ -6,6 +6,7 @@ import {
   ChallengeMeta,
   CourseSkeletonList,
   PullRequestDiffContext,
+  ICodeBlobDto,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import * as ENV from "tools/admin-env";
@@ -257,6 +258,21 @@ class Api extends BaseApiClass {
     if (authenticated) {
       return this.httpHandler(async () => {
         return axios.get<UserStoreState>(`${HOST}/user/profile`, config);
+      });
+    } else {
+      return createNonHttpResponseError("Unauthorized.");
+    }
+  };
+
+  fetchUserCodeBlobForChallenge = async (uuid: string, challengeId: string) => {
+    const { config, authenticated } = this.getRequestHeaders();
+
+    if (authenticated) {
+      return this.httpHandler(async () => {
+        return axios.get<ICodeBlobDto>(
+          `${HOST}/admin/users/blob?uuid=${uuid}&challengeId=${challengeId}`,
+          config,
+        );
       });
     } else {
       return createNonHttpResponseError("Unauthorized.");

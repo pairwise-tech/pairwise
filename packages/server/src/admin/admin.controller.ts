@@ -219,13 +219,13 @@ export class AdminController {
   @Get("/users/blob")
   async getUserCodeBlob(
     @Request() req: AuthenticatedRequest,
-    @Param("email") email: string,
+    @Param("uuid") uuid: string,
     @Param("challengeId") challengeId: string,
   ) {
     const adminUserEmail = req.user.profile.email;
 
     try {
-      const user = await this.userService.adminGetUser(email);
+      const user = await this.userService.findUserByUuidGetFullProfile(uuid);
       const blob = await this.blobService.fetchUserCodeBlobForChallengeByAdmin(
         user.profile,
         challengeId,

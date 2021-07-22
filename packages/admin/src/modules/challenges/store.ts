@@ -5,6 +5,7 @@ import {
   CourseSkeletonList,
   PullRequestDiffContext,
   InverseChallengeMapping,
+  ICodeBlobDto,
 } from "@pairwise/common";
 import * as actions from "./actions";
 import App, { AppActionTypes } from "../app/index";
@@ -25,6 +26,7 @@ export interface State {
   pullRequestLoading: boolean;
   pullRequestContext: Nullable<PullRequestDiffContext[]>;
   challengeMeta: Nullable<ChallengeMeta>;
+  blob: Nullable<ICodeBlobDto>;
 }
 
 const initialState: State = {
@@ -37,6 +39,7 @@ const initialState: State = {
   pullRequestLoading: false,
   pullRequestContext: null,
   challengeMeta: null,
+  blob: null,
 };
 
 /** ===========================================================================
@@ -90,6 +93,10 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.fetchChallengeMetaSuccess, (state, action) => ({
     ...state,
     challengeMeta: action.payload,
+  }))
+  .handleAction(actions.fetchChallengeBlobSuccess, (state, action) => ({
+    ...state,
+    blob: action.payload,
   }))
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,

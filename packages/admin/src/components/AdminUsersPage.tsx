@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { assertUnreachable } from "@pairwise/common";
+import { assertUnreachable, ICodeBlobDto } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   CodeText,
@@ -28,8 +28,8 @@ type FILTER = "payments" | "challenges" | "updated";
 type FILTER_DIRECTION = "ASC" | "DESC";
 
 interface IState {
-  uuid: Nullable<string>;
   filter: FILTER;
+  uuid: Nullable<string>;
   filterDirection: FILTER_DIRECTION;
 }
 
@@ -152,7 +152,13 @@ class AdminUsersPage extends React.Component<IProps, IState> {
   };
 
   renderUsersList = (user: AdminUserView) => {
-    return <AdminUserComponent key={user.uuid} user={user} />;
+    return (
+      <AdminUserComponent
+        key={user.uuid}
+        user={user}
+        blob={this.props.challengeBlob}
+      />
+    );
   };
 
   handleApplyFilters = (newFilter: FILTER) => {
@@ -193,6 +199,7 @@ const ControlRow = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
+  challengeBlob: Modules.selectors.challenges.challengeBlob(state),
 });
 
 const dispatchProps = {};
@@ -211,6 +218,7 @@ export default withProps(AdminUsersPage);
  */
 
 interface AdminUserComponentState {
+  challengeId: string;
   uuid: Nullable<string>;
   alert: null | "gift" | "refund";
 }
@@ -225,6 +233,7 @@ class AdminUserBaseComponent extends React.Component<
     this.state = {
       uuid: null,
       alert: null,
+      challengeId: "",
     };
   }
 
@@ -339,6 +348,13 @@ class AdminUserBaseComponent extends React.Component<
             title="Settings:"
             data={JSON.parse(String(user.settings))}
           />
+          <div style={{ height: 12 }} />
+          <input
+            value={this.state.challengeId}
+            onChange={(e) => this.setState({ challengeId: e.target.value })}
+          />
+          <Button title="Find Blob" onClick={this.handleSearchBlob} />
+          <JsonComponent title="Challenge Blob:" data={this.props.blob} />
         </Collapse>
       </DataCard>
     );
@@ -357,6 +373,13 @@ class AdminUserBaseComponent extends React.Component<
 
     this.setState({ alert: null });
   };
+
+  handleSearchBlob = () => {
+    const { uuid, challengeId } = this.state;
+    if (uuid && challengeId) {
+      this.props.fetchChallengeBlob({ uuid, challengeId });
+    }
+  };
 }
 
 /** ===========================================================================
@@ -367,10 +390,12 @@ class AdminUserBaseComponent extends React.Component<
 const coursePaymentProps = {
   giftCourseForUser: Modules.actions.payments.giftCourseForUser,
   refundCourseForUser: Modules.actions.payments.refundCourseForUser,
+  fetchChallengeBlob: Modules.actions.challenges.fetchChallengeBlob,
 };
 
 type AdminUserBaseComponentProps = typeof coursePaymentProps & {
   user: AdminUserView;
+  blob: Nullable<ICodeBlobDto>;
 };
 
 export const AdminUserComponent = connect(

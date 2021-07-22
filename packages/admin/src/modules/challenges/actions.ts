@@ -2,6 +2,7 @@ import {
   ChallengeMeta,
   Course,
   CourseSkeletonList,
+  ICodeBlobDto,
   InverseChallengeMapping,
   PullRequestDiffContext,
 } from "@pairwise/common";
@@ -38,6 +39,10 @@ enum ActionTypesEnum {
   FETCH_CHALLENGE_META = "FETCH_CHALLENGE_META",
   FETCH_CHALLENGE_META_SUCCESS = "FETCH_CHALLENGE_META_SUCCESS",
   FETCH_CHALLENGE_META_FAILURE = "FETCH_CHALLENGE_META_FAILURE",
+
+  FETCH_CHALLENGE_BLOB = "FETCH_CHALLENGE_BLOB",
+  FETCH_CHALLENGE_BLOB_SUCCESS = "FETCH_CHALLENGE_BLOB_SUCCESS",
+  FETCH_CHALLENGE_BLOB_FAILURE = "FETCH_CHALLENGE_BLOB_FAILURE",
 }
 
 /** ===========================================================================
@@ -107,4 +112,16 @@ export const fetchChallengeMetaSuccess = createAction(
 
 export const fetchChallengeMetaFailure = createAction(
   ActionTypesEnum.FETCH_CHALLENGE_META_FAILURE,
+)<HttpResponseError>();
+
+export const fetchChallengeBlob = createAction(
+  ActionTypesEnum.FETCH_CHALLENGE_BLOB,
+)<{ uuid: string; challengeId: string }>();
+
+export const fetchChallengeBlobSuccess = createAction(
+  ActionTypesEnum.FETCH_CHALLENGE_BLOB_SUCCESS,
+)<ICodeBlobDto>();
+
+export const fetchChallengeBlobFailure = createAction(
+  ActionTypesEnum.FETCH_CHALLENGE_BLOB_FAILURE,
 )<HttpResponseError>();
