@@ -6,6 +6,7 @@ import { UsersModule } from "../user/user.module";
 import { PaymentsModule } from "../payments/payments.module";
 import { ProgressModule } from "../progress/progress.module";
 import { ContentModule } from "../content/content.module";
+import { BlobModule } from "../blob/blob.module";
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ContentModule } from "../content/content.module";
     PaymentsModule,
     FeedbackModule,
     ProgressModule,
+    BlobModule,
     ContentModule,
   ],
   controllers: [AdminController],
