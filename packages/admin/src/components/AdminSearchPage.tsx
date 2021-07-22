@@ -59,7 +59,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
   }
 
   renderSearchResult = (result: AdminSearchResult) => {
-    const { users, challengeMap } = this.props;
+    const { users, challengeMap, challengeBlobCache } = this.props;
     const matchValues = (a: string, b: string) => {
       if (!a || !b) {
         return false;
@@ -72,7 +72,12 @@ class AdminSearchPage extends React.Component<IProps, {}> {
       case "email": {
         const user = users.find((u) => matchValues(u.email, result.value));
         if (user) {
-          return <AdminUserComponent user={user} />;
+          return (
+            <AdminUserComponent
+              user={user}
+              challengeBlobCache={challengeBlobCache}
+            />
+          );
         } else {
           return <p>No user could be found with this email.</p>;
         }
@@ -80,7 +85,12 @@ class AdminSearchPage extends React.Component<IProps, {}> {
       case "uuid": {
         const user = users.find((u) => matchValues(u.uuid, result.value));
         if (user) {
-          return <AdminUserComponent user={user} />;
+          return (
+            <AdminUserComponent
+              user={user}
+              challengeBlobCache={challengeBlobCache}
+            />
+          );
         } else {
           return (
             <p>
@@ -130,6 +140,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
   challengeMeta: Modules.selectors.challenges.challengeMeta(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
+  challengeBlobCache: Modules.selectors.challenges.challengeBlobCache(state),
 });
 
 const dispatchProps = {};

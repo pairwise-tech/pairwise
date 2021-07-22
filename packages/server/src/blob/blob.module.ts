@@ -8,5 +8,6 @@ import { BlobService } from "./blob.service";
   imports: [TypeOrmModule.forFeature([CodeBlob])],
   controllers: [BlobController],
   providers: [BlobService],
+  exports: [BlobService],
 })
 export class BlobModule {}

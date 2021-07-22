@@ -5,6 +5,7 @@ import styled from "styled-components/macro";
 import ReactDiffViewer from "react-diff-viewer";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
+  Row,
   KeyValue,
   SummaryText,
   PageContainer,
@@ -267,14 +268,6 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
  */
 
 const Title = styled.h2``;
-
-const Row = styled.div`
-  max-width: 350px;
-  display: flex;
-  flex-direction: row;
-  margin-top: 4px;
-  margin-bottom: 22px;
-`;
 
 const DiffTitle = styled.h3`
   margin-top: 8px;

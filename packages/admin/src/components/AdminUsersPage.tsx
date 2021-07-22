@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { assertUnreachable } from "@pairwise/common";
+import { assertUnreachable, ICodeBlobDto } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   CodeText,
@@ -13,11 +13,16 @@ import {
   CardButton,
   CardButtonRow,
   ExternalLink,
+  Input,
+  Row,
+  Key,
+  LabelRow,
 } from "./AdminComponents";
 import { Button, Collapse, Alert, Intent, Icon } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
 import { progressHistoryToChallengeCount } from "../tools/admin-utils";
 import { COLORS, MOBILE } from "../tools/constants";
+import { BlobCache } from "../modules/challenges/store";
 
 /** ===========================================================================
  * AdminUsersPage Component
@@ -28,8 +33,8 @@ type FILTER = "payments" | "challenges" | "updated";
 type FILTER_DIRECTION = "ASC" | "DESC";
 
 interface IState {
-  uuid: Nullable<string>;
   filter: FILTER;
+  uuid: Nullable<string>;
   filterDirection: FILTER_DIRECTION;
 }
 
@@ -152,7 +157,13 @@ class AdminUsersPage extends React.Component<IProps, IState> {
   };
 
   renderUsersList = (user: AdminUserView) => {
-    return <AdminUserComponent key={user.uuid} user={user} />;
+    return (
+      <AdminUserComponent
+        key={user.uuid}
+        user={user}
+        challengeBlobCache={this.props.challengeBlobCache}
+      />
+    );
   };
 
   handleApplyFilters = (newFilter: FILTER) => {
@@ -193,6 +204,7 @@ const ControlRow = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
+  challengeBlobCache: Modules.selectors.challenges.challengeBlobCache(state),
 });
 
 const dispatchProps = {};
@@ -211,6 +223,7 @@ export default withProps(AdminUsersPage);
  */
 
 interface AdminUserComponentState {
+  challengeId: string;
   uuid: Nullable<string>;
   alert: null | "gift" | "refund";
 }
@@ -225,17 +238,21 @@ class AdminUserBaseComponent extends React.Component<
     this.state = {
       uuid: null,
       alert: null,
+      challengeId: "",
     };
   }
 
   render(): JSX.Element {
     const { alert } = this.state;
-    const { user } = this.props;
+    const { user, challengeBlobCache } = this.props;
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
     const challengeTotal = progressHistoryToChallengeCount(
       user.challengeProgressHistory,
     );
+
+    const key = `${user.uuid}-${this.state.challengeId}`;
+    const blob = challengeBlobCache[key];
 
     return (
       <DataCard key={user.uuid}>
@@ -339,6 +356,30 @@ class AdminUserBaseComponent extends React.Component<
             title="Settings:"
             data={JSON.parse(String(user.settings))}
           />
+          <div style={{ height: 12 }} />
+          <Key>Lookup Challenge Blob:</Key>
+          <Row style={{ marginTop: 8 }}>
+            <Input
+              id="admin-input"
+              placeholder="Find challenge blob by id"
+              style={{ width: 250, marginRight: 8 }}
+              value={this.state.challengeId}
+              onChange={(e) => this.setState({ challengeId: e.target.value })}
+            />
+            <Button text="Find Blob" onClick={this.handleSearchBlob} />
+          </Row>
+          {!!blob && (
+            <>
+              <JsonComponent title="Challenge Blob Result:" data={blob} />
+              {blob.dataBlob && "code" in blob.dataBlob && (
+                <ExternalLink
+                  link={`https://app.pairwise.tech/workspace/${this.state.challengeId}?code=${blob.dataBlob.code}`}
+                >
+                  Open Code String in Pairwise
+                </ExternalLink>
+              )}
+            </>
+          )}
         </Collapse>
       </DataCard>
     );
@@ -357,6 +398,13 @@ class AdminUserBaseComponent extends React.Component<
 
     this.setState({ alert: null });
   };
+
+  handleSearchBlob = () => {
+    const { uuid, challengeId } = this.state;
+    if (uuid && challengeId) {
+      this.props.fetchChallengeBlob({ uuid, challengeId });
+    }
+  };
 }
 
 /** ===========================================================================
@@ -367,10 +415,12 @@ class AdminUserBaseComponent extends React.Component<
 const coursePaymentProps = {
   giftCourseForUser: Modules.actions.payments.giftCourseForUser,
   refundCourseForUser: Modules.actions.payments.refundCourseForUser,
+  fetchChallengeBlob: Modules.actions.challenges.fetchChallengeBlob,
 };
 
 type AdminUserBaseComponentProps = typeof coursePaymentProps & {
   user: AdminUserView;
+  challengeBlobCache: BlobCache;
 };
 
 export const AdminUserComponent = connect(

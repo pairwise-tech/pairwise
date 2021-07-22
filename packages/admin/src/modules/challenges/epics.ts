@@ -142,6 +142,34 @@ const searchPullRequestContextEpic: EpicSignature = (action$, state$, deps) => {
 };
 
 /**
+ * Fetch a challenge code blob.
+ */
+const handleFetchChallengeCodeBlob: EpicSignature = (action$, state$, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.fetchChallengeBlob)),
+    pluck("payload"),
+    mergeMap(async ({ uuid, challengeId }) => {
+      const result = await deps.api.fetchUserCodeBlobForChallenge(
+        uuid,
+        challengeId,
+      );
+      return { uuid, challengeId, result };
+    }),
+    map(({ uuid, challengeId, result }) => {
+      if (result.value) {
+        return Actions.fetchChallengeBlobSuccess({
+          uuid,
+          challengeId,
+          blob: result.value,
+        });
+      } else {
+        return Actions.fetchChallengeBlobFailure(result.error);
+      }
+    }),
+  );
+};
+
+/**
  * Parse a possible pull request id and handle fetching the pull request
  * context.
  */
@@ -205,6 +233,7 @@ export default combineEpics(
   handleChallengeIdSearchInitializationEpic,
   handleChallengeIdSearchEpic,
   fetchChallengeMetaEpic,
+  handleFetchChallengeCodeBlob,
   handleSearchPullRequestEpic,
   fetchPullRequestContextEpic,
   fetchPullRequestContextOnAppLoadEpic,

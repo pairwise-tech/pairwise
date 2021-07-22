@@ -5,6 +5,7 @@ import {
   CourseSkeletonList,
   PullRequestDiffContext,
   InverseChallengeMapping,
+  ICodeBlobDto,
 } from "@pairwise/common";
 import * as actions from "./actions";
 import App, { AppActionTypes } from "../app/index";
@@ -14,6 +15,11 @@ import { ChallengesActionTypes } from "./index";
  * Challenges Store
  * ============================================================================
  */
+
+export interface BlobCache {
+  // cache keys are: uuid-challengeId
+  [key: string]: Nullable<ICodeBlobDto>;
+}
 
 export interface State {
   keySelectedMenuItemIndex: Nullable<number>;
@@ -25,6 +31,7 @@ export interface State {
   pullRequestLoading: boolean;
   pullRequestContext: Nullable<PullRequestDiffContext[]>;
   challengeMeta: Nullable<ChallengeMeta>;
+  blobCache: BlobCache;
 }
 
 const initialState: State = {
@@ -37,6 +44,7 @@ const initialState: State = {
   pullRequestLoading: false,
   pullRequestContext: null,
   challengeMeta: null,
+  blobCache: {},
 };
 
 /** ===========================================================================
@@ -90,6 +98,13 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.fetchChallengeMetaSuccess, (state, action) => ({
     ...state,
     challengeMeta: action.payload,
+  }))
+  .handleAction(actions.fetchChallengeBlobSuccess, (state, { payload }) => ({
+    ...state,
+    blobCache: {
+      ...state.blobCache,
+      [`${payload.uuid}-${payload.challengeId}`]: payload.blob,
+    },
   }))
   .handleAction(actions.fetchCoursesSuccess, (state, { payload }) => ({
     ...state,

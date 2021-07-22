@@ -28,6 +28,11 @@ export const challengeMeta = createSelector(
   (state) => state.challengeMeta,
 );
 
+export const challengeBlobCache = createSelector(
+  [challengesState],
+  (state) => state.blobCache,
+);
+
 export const navigationOverlayVisible = createSelector(
   [challengesState],
   (challenges) => challenges.displayNavigationMap,
