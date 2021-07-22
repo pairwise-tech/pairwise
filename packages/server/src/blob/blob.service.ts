@@ -6,6 +6,7 @@ import {
   ICodeBlobDto,
   CodeBlobBulk,
   NullBlob,
+  UserProfile,
 } from "@pairwise/common";
 import { CodeBlob } from "./blob.entity";
 import { ERROR_CODES, SUCCESS_CODES } from "../tools/constants";
@@ -19,7 +20,38 @@ export class BlobService {
     private readonly userCodeBlobRepository: Repository<CodeBlob>,
   ) {}
 
-  public async fetchUserCodeBlob(
+  public async fetchUserCodeBlobForChallengeByAdmin(
+    user: UserProfile,
+    challengeId: string,
+  ): Promise<ICodeBlobDto | NullBlob> {
+    // Verify the challenge id is valid
+    if (!ContentUtility.challengeIdIsValid(challengeId)) {
+      throw new BadRequestException(ERROR_CODES.INVALID_PARAMETERS);
+    }
+
+    const blob = await this.userCodeBlobRepository.findOne({
+      user,
+      challengeId,
+    });
+
+    if (blob) {
+      // Deserialize data blob before sending back to the client.
+      const deserialized: ICodeBlobDto = {
+        ...blob,
+        dataBlob: JSON.parse(blob.dataBlob),
+      };
+      return deserialized;
+    } else {
+      // Return a null blob. This is used to represent a not found resource,
+      // rather than throwing an error. Since blobs are frequently requested
+      // on the client, I found the stream of 404 HTTP errors to feel
+      // uncomfortable. These pollute the browser console, which the user
+      // may be looking at to check challenge output, for instance.
+      return { dataBlob: null, challengeId: null };
+    }
+  }
+
+  public async fetchUserCodeBlobForChallenge(
     user: RequestUser,
     challengeId: string,
   ): Promise<ICodeBlobDto | NullBlob> {

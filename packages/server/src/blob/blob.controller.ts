@@ -27,7 +27,7 @@ export class BlobController {
     @Req() req: AuthenticatedRequest,
   ) {
     const { id } = params;
-    return this.blobService.fetchUserCodeBlob(req.user, id);
+    return this.blobService.fetchUserCodeBlobForChallenge(req.user, id);
   }
 
   @UseGuards(AuthGuard("jwt"))

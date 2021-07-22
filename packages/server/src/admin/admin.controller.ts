@@ -23,6 +23,8 @@ import { PaymentsService } from "../payments/payments.service";
 import { ProgressService } from "../progress/progress.service";
 import { ContentService } from "../content/content.service";
 import { parsePullRequestDiff } from "../tools/server-utils";
+import { BlobService } from "../blob/blob.service";
+import { User } from "../user/user.entity";
 
 @Controller("admin")
 export class AdminController {
@@ -38,6 +40,8 @@ export class AdminController {
     private readonly feedbackService: FeedbackService,
 
     private readonly progressService: ProgressService,
+
+    private readonly blobService: BlobService,
 
     private readonly contentService: ContentService,
   ) {}
@@ -206,6 +210,28 @@ export class AdminController {
       const result = await this.userService.adminGetAllUsers();
       this.slackService.postAdminActionAwarenessMessage({ adminUserEmail });
       return result;
+    } catch (err) {
+      this.handleError(err, { adminUserEmail });
+    }
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/users/blob")
+  async getUserCodeBlob(
+    @Request() req: AuthenticatedRequest,
+    @Param("email") email: string,
+    @Param("challengeId") challengeId: string,
+  ) {
+    const adminUserEmail = req.user.profile.email;
+
+    try {
+      const user = await this.userService.adminGetUser(email);
+      const blob = await this.blobService.fetchUserCodeBlobForChallengeByAdmin(
+        user.profile,
+        challengeId,
+      );
+      this.slackService.postAdminActionAwarenessMessage({ adminUserEmail });
+      return blob;
     } catch (err) {
       this.handleError(err, { adminUserEmail });
     }
