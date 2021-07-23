@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { assertUnreachable, ICodeBlobDto } from "@pairwise/common";
+import { assertUnreachable } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   CodeText,
@@ -16,7 +16,6 @@ import {
   Input,
   Row,
   Key,
-  LabelRow,
 } from "./AdminComponents";
 import { Button, Collapse, Alert, Intent, Icon } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
