@@ -175,7 +175,7 @@ export class SlackService {
     error,
     adminUserEmail,
   }: SlackAdminErrorMessageData) {
-    const message = `:skull_and_crossbones: Admin API request for user: \`${adminUserEmail}\` failed, here's what we known: ${error}`;
+    const message = `:skull_and_crossbones: Admin API request for user: \`${adminUserEmail}\` failed, here's what we know: ${error}`;
     await this.postMessageToChannel(message, { channel: "production" });
   }
 
