@@ -163,6 +163,9 @@ const handleFetchChallengeCodeBlob: EpicSignature = (action$, state$, deps) => {
           blob: result.value,
         });
       } else {
+        deps.toaster.warn(
+          `Failed to fetch challenge blob for challenge id: ${challengeId}`,
+        );
         return Actions.fetchChallengeBlobFailure(result.error);
       }
     }),

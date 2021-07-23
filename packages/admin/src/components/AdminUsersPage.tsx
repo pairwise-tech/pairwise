@@ -361,9 +361,9 @@ class AdminUserBaseComponent extends React.Component<
           <Row style={{ marginTop: 8 }}>
             <Input
               id="admin-input"
-              placeholder="Find challenge blob by id"
-              style={{ width: 250, marginRight: 8 }}
+              placeholder="Find blob by challenge id"
               value={this.state.challengeId}
+              style={{ width: 250, marginRight: 8 }}
               onChange={(e) => this.setState({ challengeId: e.target.value })}
             />
             <Button text="Find Blob" onClick={this.handleSearchBlob} />
@@ -386,12 +386,9 @@ class AdminUserBaseComponent extends React.Component<
 
   renderCodeDeepLink = (challengeId: string, codeString: string) => {
     const code = encodeURIComponent(codeString);
+    const link = `https://app.pairwise.tech/workspace/${challengeId}?code=${code}`;
     return (
-      <ExternalLink
-        link={`https://app.pairwise.tech/workspace/${challengeId}?code=${code}`}
-      >
-        Open Code String in Pairwise
-      </ExternalLink>
+      <ExternalLink link={link}>Open Code String in Pairwise</ExternalLink>
     );
   };
 
@@ -412,7 +409,9 @@ class AdminUserBaseComponent extends React.Component<
   handleSearchBlob = () => {
     const { uuid, challengeId } = this.state;
     if (uuid && challengeId) {
-      this.props.fetchChallengeBlob({ uuid, challengeId });
+      this.setState({ challengeId: "" }, () => {
+        this.props.fetchChallengeBlob({ uuid, challengeId });
+      });
     }
   };
 }
