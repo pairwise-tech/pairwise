@@ -261,10 +261,6 @@ const Header = styled.div`
   height: ${HEADER_HEIGHT}px;
   width: calc(100vw - 48);
 
-  @media ${MOBILE} {
-    position: absolute;
-  }
-
   &:after {
     content: "";
     position: absolute;
