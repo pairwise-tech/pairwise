@@ -408,9 +408,7 @@ class AdminUserBaseComponent extends React.Component<
   handleSearchBlob = () => {
     const { uuid, challengeId } = this.state;
     if (uuid && challengeId) {
-      this.setState({ challengeId: "" }, () => {
-        this.props.fetchChallengeBlob({ uuid, challengeId });
-      });
+      this.props.fetchChallengeBlob({ uuid, challengeId });
     }
   };
 }
