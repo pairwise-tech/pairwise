@@ -23,25 +23,23 @@ This project is managed using Lerna, and contains the following packages:
 We use the following libraries across the codebase, here are some quick links to their docs:
 
 - [TypeScript](https://www.typescriptlang.org/index.html): Types!
-- [React](https://reactjs.org/): You know it.
-- [Redux](https://redux.js.org/): Of course!
+- [React](https://reactjs.org/): The best.
+- [Redux](https://redux.js.org/): Yes, Redux.
 - [RxJS](https://rxjs-dev.firebaseapp.com/): Futuristic stuff.
 - [Redux Observable](https://redux-observable.js.org/): Truly epic.
 - [React Router](https://reacttraining.com/react-router/web/guides/quick-start): Meh.
 - [BlueprintJS](https://blueprintjs.com/): Modern, fashionable.
 - [NestJS](https://docs.nestjs.com/): Server frameworks!
-- [TypeORM](https://typeorm.io/#/): More types.
+- [TypeORM](https://typeorm.io/#/): Postgres ORM.
 - [Passport](http://www.passportjs.org/docs/): (Easy) authentication.
 - [Jest](https://jestjs.io/docs/en/getting-started): The Test Runner.
-- [Cypress](https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell): You will love it.
+- [Cypress](https://docs.cypress.io/guides/overview/why-cypress.html#In-a-nutshell): Automate UI testing.
 - [ESLint](https://eslint.org/): Write code according to the rules.
 - [Prettier](https://prettier.io/docs/en/options.html): Make the code pretty.
-- [Gatsby](https://www.gatsbyjs.org/docs/): The best static sites.
 - [Lerna](https://lerna.js.org/): All the code, all the repos.
 - [VS Code](https://code.visualstudio.com/): Highly recommended, great experience.
 - [GitHub Actions](https://github.com/features/actions): Automate!
-- [ZEIT Now](https://zeit.co/): Host the Pairwise landing page.
-- [Netlify](https://www.netlify.com/): Host the Pairwise client workspace.
+- [Netlify](https://www.netlify.com/): Host the Pairwise client workspace and admin dashboard.
 - [Google Cloud Platform](https://cloud.google.com/): Deploy the production backend.
 
 ## 👷 Getting Started
