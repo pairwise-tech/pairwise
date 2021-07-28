@@ -614,62 +614,67 @@ export const editorColors = {
   codeString: "#032f62",
 };
 
-const getEditorTheme = (appTheme: AppTheme) => ({
-  fontFamily:
-    "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen, Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif",
-  fontFamilyMono:
-    "'SFMono-Regular',Consolas,'Liberation Mono', Menlo, Courier,monospace",
-  fontWeight: 400,
-  zIndex: 100,
-  link: editorColors.primary,
-  placeholder: "#B1BECC",
-  textSecondary: "#4E5C6E",
-  textLight: editorColors.white,
-  selected: editorColors.primary,
-  codeComment: "#6a737d",
-  codePunctuation: "#5e6687",
-  codeNumber: "#d73a49",
-  codeProperty: "#c08b30",
-  codeTag: "#3d8fd1",
-  codeSelector: "#6679cc",
-  codeAttr: "#c76b29",
-  codeEntity: "#22a2c9",
-  codeKeyword: "#d73a49",
-  codeFunction: "#6f42c1",
-  codeStatement: "#22a2c9",
-  codePlaceholder: "#3d8fd1",
-  codeInserted: "#202746",
-  codeImportant: "#c94922",
+const getEditorTheme = (appTheme: AppTheme) => {
+  const isDark = appTheme === "dark";
 
-  background: "transparent",
-  code: editorColors.almostWhite,
+  return {
+    fontFamily:
+      "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen, Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif",
+    fontFamilyMono:
+      "'SFMono-Regular',Consolas,'Liberation Mono', Menlo, Courier,monospace",
+    fontWeight: 400,
+    zIndex: 100,
+    link: editorColors.primary,
+    placeholder: "#B1BECC",
+    textSecondary: "#4E5C6E",
+    textLight: editorColors.white,
+    selected: editorColors.primary,
+    codeComment: "#6a737d",
+    codePunctuation: "#5e6687",
+    codeNumber: "#d73a49",
+    codeProperty: "#c08b30",
+    codeTag: "#3d8fd1",
+    codeSelector: "#6679cc",
+    codeAttr: "#c76b29",
+    codeEntity: "#22a2c9",
+    codeKeyword: "#d73a49",
+    codeFunction: "#6f42c1",
+    codeStatement: "#22a2c9",
+    codePlaceholder: "#3d8fd1",
+    codeInserted: "#202746",
+    codeImportant: "#c94922",
 
-  text:
-    appTheme === "dark" ? editorColors.almostWhite : editorColors.almostBlack,
+    background: "transparent",
+    code: editorColors.almostWhite,
 
-  toolbarBackground: "#3a3a3a",
-  toolbarInput: editorColors.white10,
-  toolbarItem: editorColors.almostWhite,
+    text: isDark ? editorColors.almostWhite : editorColors.almostBlack,
 
-  blockToolbarBackground: editorColors.white,
-  blockToolbarTrigger: editorColors.almostWhite,
-  blockToolbarTriggerIcon: editorColors.almostBlack,
-  blockToolbarItem: editorColors.lightBlack,
+    toolbarBackground: "#3a3a3a",
+    toolbarInput: editorColors.white10,
+    toolbarItem: editorColors.almostWhite,
 
-  tableDivider: editorColors.lightBlack,
-  tableSelected: editorColors.primary,
-  tableSelectedBackground: "#002333",
+    blockToolbarBackground: editorColors.white,
+    blockToolbarTrigger: editorColors.almostWhite,
+    blockToolbarTriggerIcon: editorColors.almostBlack,
+    blockToolbarItem: editorColors.lightBlack,
 
-  quote: editorColors.almostWhite,
-  codeBackground: editorColors.almostBlack,
-  codeBorder: editorColors.lightBlack,
-  codeString: editorColors.codeString,
-  horizontalRule: editorColors.lightBlack,
-  imageErrorBackground: "rgba(0, 0, 0, 0.5)",
-  hiddenToolbarButtons: {
-    blocks: ["code"],
-  },
-});
+    tableDivider: editorColors.lightBlack,
+    tableSelected: editorColors.primary,
+    tableSelectedBackground: "#002333",
+
+    quote: editorColors.almostWhite,
+
+    codeBackground: isDark ? editorColors.almostBlack : editorColors.lightBlack,
+    codeBorder: isDark ? editorColors.lightBlack : editorColors.greyMid,
+
+    codeString: editorColors.codeString,
+    horizontalRule: editorColors.lightBlack,
+    imageErrorBackground: "rgba(0, 0, 0, 0.5)",
+    hiddenToolbarButtons: {
+      blocks: ["code"],
+    },
+  };
+};
 
 /**
  * The theme property of the markdown editor doesn't provide control over all

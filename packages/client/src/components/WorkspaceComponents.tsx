@@ -28,7 +28,12 @@ import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
 import Breadcrumbs from "./Breadcrumbs";
 import { Table, Cell, Column } from "@blueprintjs/table";
-import { defaultTextColor, themeColor, themeText } from "./ThemeContainer";
+import {
+  defaultTextColor,
+  IThemeProps,
+  themeColor,
+  themeText,
+} from "./ThemeContainer";
 import { AppTheme } from "@pairwise/common";
 
 const D = getDimensions();
@@ -53,7 +58,12 @@ export const LowerSection = styled.div<{ withHeader?: boolean }>`
   width: 100vw;
   height: ${(props) =>
     props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
-  border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
+
+  border-top: ${(props: IThemeProps) => {
+    const color = props.theme.dark ? C.DRAGGABLE_SLIDER_BORDER : C.LIGHT_BORDER;
+    return `1px solid ${color}`;
+  }};
+
   ${themeColor(
     "background",
     C.BACKGROUND_LOWER_SECTION,
@@ -200,8 +210,20 @@ const TestMessageHighlighter = styled(HighlightedMarkdown)`
     line-height: normal;
     font-size: 85%;
     padding: 3px 6px;
-    border: 1px solid ${editorColors.lightBlack};
-    background: ${editorColors.almostBlack};
+
+    color: ${(props: IThemeProps) => {
+      const color = props.theme.dark
+        ? editorColors.lightBlack
+        : editorColors.greyMid;
+
+      return `1px solid ${color}`;
+    }};
+
+    ${themeColor(
+      "background",
+      editorColors.almostBlack,
+      editorColors.lightBlack,
+    )}
   }
 `;
 
@@ -218,9 +240,25 @@ export const ContentDiv = styled.div`
 
 const TestStatus = styled.div`
   display: flex;
-  width: 140;
+  width: 145px;
   margin-left: auto;
   flex-direction: row;
+  padding: 2px 6px 0px 6px;
+  border-radius: 3px;
+
+  border: ${(props: IThemeProps) => {
+    if (props.theme.dark) {
+      return undefined;
+    } else {
+      return `1px solid ${C.NAV_LIGHT_BORDER}`;
+    }
+  }};
+
+  ${themeColor("background", "transparent", "rgb(200,200,200)")};
+`;
+
+const TestStatusBold = styled.b`
+  ${themeText(C.TEXT_TITLE)};
 `;
 
 const StyledTestResultRow = styled.div`
@@ -324,7 +362,7 @@ export const TestResultRow = ({
         )}
         <TestMessageHighlighter source={message} />
         <TestStatus>
-          <b style={{ color: C.TEXT_TITLE }}>Status:</b>
+          <TestStatusBold>Status:</TestStatusBold>
           <TestCaseStatusText
             testStatus={testStatus}
             id={`test-result-status-${index}`}
@@ -354,27 +392,37 @@ export const getConsoleRowStyles = (theme: AppTheme) => {
 };
 
 export const getColSeparatorProps = (theme: AppTheme) => {
-  const backgroundColor =
-    theme === "dark" ? C.DRAGGABLE_SLIDER_DARK : C.DRAGGABLE_SLIDER_LIGHT;
+  const isDark = theme === "dark";
+
+  const backgroundColor = isDark
+    ? C.DRAGGABLE_SLIDER_DARK
+    : C.DRAGGABLE_SLIDER_LIGHT;
+
+  const border = isDark ? C.DRAGGABLE_SLIDER_BORDER : C.LIGHT_BORDER;
 
   return {
     style: {
       backgroundColor,
-      borderLeft: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-      borderRight: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
+      borderLeft: `1px solid ${border}`,
+      borderRight: `1px solid ${border}`,
     },
   };
 };
 
 export const getRowSeparatorProps = (theme: AppTheme) => {
-  const backgroundColor =
-    theme === "dark" ? C.DRAGGABLE_SLIDER_DARK : C.DRAGGABLE_SLIDER_LIGHT;
+  const isDark = theme === "dark";
+
+  const backgroundColor = isDark
+    ? C.DRAGGABLE_SLIDER_DARK
+    : C.DRAGGABLE_SLIDER_LIGHT;
+
+  const border = isDark ? C.DRAGGABLE_SLIDER_BORDER : C.LIGHT_BORDER;
 
   return {
     style: {
       backgroundColor,
-      borderTop: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-      borderBottom: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
+      borderTop: `1px solid ${border}`,
+      borderBottom: `1px solid ${border}`,
     },
   };
 };
@@ -404,15 +452,17 @@ export const TestCaseStatusText = styled.p`
   margin-left: 4px;
   white-space: nowrap;
   color: ${({
+    theme,
     testStatus,
-  }: {
+  }: IThemeProps & {
     testStatus: "success" | "failure" | "loading" | "no-results";
-  }) =>
-    testStatus === "loading" || testStatus === "no-results"
+  }) => {
+    return testStatus === "loading" || testStatus === "no-results"
       ? C.SECONDARY_YELLOW
       : testStatus === "success"
       ? C.SUCCESS
-      : C.FAILURE};
+      : C.FAILURE;
+  }};
 `;
 
 export const TabbedInnerNav = styled.div<{ show: boolean }>`
@@ -521,11 +571,13 @@ export const ChallengeTitleHeading = styled.h1`
   font-size: 1.2em;
   background: transparent;
   font-weight: bold;
-  color: rgb(200, 200, 200);
   display: block;
   width: 100%;
   line-height: 1.5;
   transition: all 0.2s ease-out;
+
+  ${themeText("rgb(200, 200, 200)", C.TEXT_LIGHT_THEME)};
+
   &:focus {
     background: black;
   }

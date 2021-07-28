@@ -12,11 +12,16 @@ import {
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
-import { COLORS, MOBILE } from "../tools/constants";
+import { COLORS as C, MOBILE } from "../tools/constants";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 import PartyParrotGif from "../icons/party-parrot.gif";
-import { defaultTextColor, themeColor, themeText } from "./ThemeContainer";
+import {
+  defaultTextColor,
+  themeColor,
+  themeText,
+  IThemeProps,
+} from "./ThemeContainer";
 
 // TODO: This could be made a bit more friendly. Maybe a spinner of some sort.
 export const Loading = styled(Spinner)`
@@ -64,7 +69,7 @@ export const Text = styled.p`
   margin-top: 8px;
   font-size: 15px;
   font-weight: 200px;
-  ${themeText(COLORS.TEXT_CONTENT)};
+  ${themeText(C.TEXT_CONTENT)};
 `;
 
 // NOTE: Trying to bolt mobile styling onto the existing UI without changing any
@@ -148,7 +153,7 @@ export const OverlayText = styled.p`
   font-weight: 200;
   text-align: center;
   color: ${(props: { error?: boolean }) =>
-    props.error ? COLORS.LIGHT_FAILURE : COLORS.PRIMARY_GREEN};
+    props.error ? C.LIGHT_FAILURE : C.PRIMARY_GREEN};
 `;
 
 export const OverlaySmallText = styled.p`
@@ -157,7 +162,7 @@ export const OverlaySmallText = styled.p`
   font-size: 22px;
   font-weight: 200;
   text-align: center;
-  color: ${COLORS.LIGHT_FAILURE};
+  color: ${C.LIGHT_FAILURE};
 `;
 
 export interface IconNavLinkProps extends NavLinkProps {
@@ -286,8 +291,8 @@ export const ModalContainer = styled.div`
   justify-content: center;
   transform: translate(-50%, -50%);
   border-radius: 6px;
-  border: 1px solid ${COLORS.BORDER_MODAL};
-  background-color: ${COLORS.BACKGROUND_MODAL_DARK};
+  border: 1px solid ${C.BORDER_MODAL};
+  background-color: ${C.BACKGROUND_MODAL_DARK};
 
   @media ${MOBILE} {
     width: 100%;
@@ -458,8 +463,12 @@ export const LineWrappedText = styled.p`
 
 export const Hr = styled.hr`
   border: 1px solid transparent;
-  border-top-color: black;
-  border-bottom-color: #353535;
+  border-top-color: ${(props: IThemeProps) => {
+    return props.theme.dark ? "black" : C.LIGHT_BORDER;
+  }};
+  border-bottom-color: ${(props: IThemeProps) => {
+    return props.theme.dark ? "#353535" : C.LIGHT_BORDER;
+  }};
 `;
 
 export const SupplementaryContentContainer = styled.div`
@@ -469,7 +478,7 @@ export const SupplementaryContentContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
 
-  ${themeColor("background", "#1e1e1e", COLORS.BACKGROUND_PAGE_LIGHT)};
+  ${themeColor("background", "#1e1e1e", C.BACKGROUND_PAGE_LIGHT)};
 
   @media ${MOBILE} {
     padding-left: 12px;
@@ -522,7 +531,7 @@ export const DefaultVideoWrapper = styled(VideoWrapper)`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  background: ${COLORS.BACKGROUND_CONTENT_DARK};
+  background: ${C.BACKGROUND_CONTENT_DARK};
 `;
 
 export const LastChildMargin = styled.div`
