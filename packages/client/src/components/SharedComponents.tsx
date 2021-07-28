@@ -16,7 +16,7 @@ import { COLORS, MOBILE } from "../tools/constants";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 import PartyParrotGif from "../icons/party-parrot.gif";
-import { defaultText, themeColor, themeText } from "./ThemeContainer";
+import { defaultTextColor, themeColor, themeText } from "./ThemeContainer";
 
 // TODO: This could be made a bit more friendly. Maybe a spinner of some sort.
 export const Loading = styled(Spinner)`
@@ -56,7 +56,7 @@ export const ButtonCore = styled.button`
 
 export const PageTitle = styled.h1`
   margin-top: 0;
-  ${defaultText};
+  ${defaultTextColor};
 `;
 
 export const Text = styled.p`
@@ -287,7 +287,7 @@ export const ModalContainer = styled.div`
   transform: translate(-50%, -50%);
   border-radius: 6px;
   border: 1px solid ${COLORS.BORDER_MODAL};
-  background-color: ${COLORS.BACKGROUND_MODAL};
+  background-color: ${COLORS.BACKGROUND_MODAL_DARK};
 
   @media ${MOBILE} {
     width: 100%;
@@ -298,7 +298,7 @@ export const ModalTitleText = styled.h1`
   font-size: 28px;
   font-weight: 300;
   text-align: center;
-  ${defaultText};
+  ${defaultTextColor};
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
@@ -483,7 +483,7 @@ export const TitleHeader = styled.h1`
 
 export const Highlight = styled.mark`
   font-weight: bold;
-  ${defaultText};
+  ${defaultTextColor};
   background: #ffdf7538;
   border-bottom: 2px solid #ffdf75;
 `;
@@ -521,7 +521,7 @@ export const DefaultVideoWrapper = styled(VideoWrapper)`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  background: ${COLORS.BACKGROUND_CONTENT};
+  background: ${COLORS.BACKGROUND_CONTENT_DARK};
 `;
 
 export const LastChildMargin = styled.div`

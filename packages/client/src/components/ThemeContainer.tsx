@@ -36,7 +36,7 @@ export const themeText = (dark: string, light?: string) => {
   return themeColor("color", dark, light);
 };
 
-export const defaultText = themeText(COLORS.TEXT_WHITE);
+export const defaultTextColor = themeText(COLORS.TEXT_WHITE);
 
 /** ===========================================================================
  * Component

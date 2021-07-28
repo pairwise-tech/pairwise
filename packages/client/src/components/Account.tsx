@@ -18,6 +18,7 @@ import {
   isUsingGravatar,
 } from "tools/utils";
 import { EMAIL_VERIFICATION_STATUS } from "modules/user/store";
+import { themeColor } from "./ThemeContainer";
 
 /** ===========================================================================
  * Types & Config
@@ -353,7 +354,7 @@ class Account extends React.Component<IProps, IState> {
 
 const TextItem = styled(Text)`
   margin-top: 12px;
-  color: ${COLORS.TEXT_CONTENT_BRIGHT};
+  ${themeColor("color", COLORS.TEXT_CONTENT_BRIGHT)};
 `;
 
 const PaymentTitle = styled(Text)`
@@ -365,19 +366,24 @@ const PaymentTitle = styled(Text)`
 
 const PaymentDetail = styled(Text)`
   font-size: 12px;
-  color: ${COLORS.TEXT_CONTENT};
+  ${themeColor("color", COLORS.TEXT_CONTENT)};
 `;
 
 const Bold = styled.b`
   font-weight: bold;
-  color: ${COLORS.TEXT_CONTENT};
+  ${themeColor("color", COLORS.TEXT_CONTENT)};
 `;
 
 const InputField = styled.input`
-  margin-top: 12px;
   width: 200px;
-  color: ${COLORS.TEXT_HOVER} !important;
-  background: ${COLORS.BACKGROUND_CONSOLE} !important;
+  margin-top: 12px;
+
+  ${themeColor("color", COLORS.TEXT_HOVER)};
+  ${themeColor(
+    "background",
+    COLORS.BACKGROUND_CONSOLE_DARK,
+    COLORS.BACKGROUND_CONSOLE_LIGHT,
+  )};
 `;
 
 const Controls = styled.div`

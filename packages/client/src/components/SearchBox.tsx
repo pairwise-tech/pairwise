@@ -276,7 +276,7 @@ const YellowText = styled.span`
 const SEARCH_TITLE_HEIGHT = 30;
 
 const ResultTitleBox = styled.div`
-  background: ${COLORS.BACKGROUND_CONTENT};
+  background: ${COLORS.BACKGROUND_CONTENT_DARK};
   font-weight: bold;
   padding: 0px 8px;
   height: ${SEARCH_TITLE_HEIGHT}px;

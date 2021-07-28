@@ -8,7 +8,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle } from "./SharedComponents";
 import { COLORS, MOBILE } from "tools/constants";
 import SEO from "./SEO";
-import { defaultText, themeColor, themeText } from "./ThemeContainer";
+import { defaultTextColor, themeColor, themeText } from "./ThemeContainer";
 
 /** ===========================================================================
  * Home Component
@@ -255,11 +255,11 @@ const ContentText = styled(Text)`
 
 const CourseTitle = styled.h2`
   margin-top: 10px;
-  ${defaultText};
+  ${defaultTextColor};
 `;
 
 const Bold = styled.b`
-  ${defaultText};
+  ${defaultTextColor};
 `;
 
 const PaymentText = styled(Bold)`
@@ -272,7 +272,7 @@ const CourseDescription = styled.p`
   font-weight: 100;
   letter-spacing: 1px;
   font-size: 18px;
-  ${defaultText};
+  ${defaultTextColor};
 `;
 
 const ButtonsBox = styled.div`

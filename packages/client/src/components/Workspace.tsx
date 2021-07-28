@@ -978,7 +978,7 @@ class Workspace extends React.Component<IProps, IState> {
                     <div
                       style={{
                         height: "100%",
-                        background: C.BACKGROUND_CONSOLE,
+                        background: C.BACKGROUND_CONSOLE_DARK,
                       }}
                     >
                       {CODE_EDITOR_CONTAINER}
@@ -991,7 +991,7 @@ class Workspace extends React.Component<IProps, IState> {
                             ? D.CHALLENGE_CONTENT_HEIGHT_COLLAPSED
                             : D.CHALLENGE_CONTENT_HEIGHT
                         }
-                        style={{ background: C.BACKGROUND_CONTENT }}
+                        style={{ background: C.BACKGROUND_CONTENT_DARK }}
                       >
                         <ContentContainer>
                           <InstructionsViewEdit />
@@ -1009,7 +1009,7 @@ class Workspace extends React.Component<IProps, IState> {
                       </Row>
                       <Row
                         initialHeight={D.TEST_CONTENT_HEIGHT}
-                        style={{ background: C.BACKGROUND_CONTENT }}
+                        style={{ background: C.BACKGROUND_CONTENT_DARK }}
                       >
                         {WorkspaceTestContainer}
                       </Row>

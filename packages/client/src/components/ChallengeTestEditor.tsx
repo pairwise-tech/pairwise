@@ -82,7 +82,7 @@ class ChallengeTestEditor extends React.Component<IProps, IState> {
           color: "white",
           position: "relative",
           height: "calc(100% - 50px)",
-          background: COLORS.BACKGROUND_CONSOLE,
+          background: COLORS.BACKGROUND_CONSOLE_DARK,
         }}
         onKeyUp={this.debouncedHandleUpdate}
       >

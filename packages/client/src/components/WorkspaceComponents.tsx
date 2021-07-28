@@ -340,7 +340,7 @@ export const TestResultRow = ({
 export const consoleRowStyles = {
   paddingTop: 2,
   paddingBottom: 4,
-  background: C.BACKGROUND_CONSOLE,
+  background: C.BACKGROUND_CONSOLE_DARK,
 };
 
 export const colSeparatorProps = {

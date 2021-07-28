@@ -98,7 +98,7 @@ const CodeStringPreviewBox = styled.pre`
   overflow: scroll;
   font-size: 10px;
   color: ${COLORS.TEXT_GRAY};
-  background: ${COLORS.BACKGROUND_MODAL};
+  background: ${COLORS.BACKGROUND_MODAL_DARK};
 `;
 
 /** ===========================================================================
