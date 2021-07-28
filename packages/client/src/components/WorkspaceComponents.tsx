@@ -5,7 +5,6 @@ import Markdown, { ReactMarkdownProps } from "react-markdown";
 import styled from "styled-components/macro";
 import {
   COLORS as C,
-  COLORS,
   CONTENT_SERIALIZE_DEBOUNCE,
   SANDBOX_ID,
   MOBILE,
@@ -77,7 +76,7 @@ export const FrameContainer = styled.iframe`
 export const RunButton = styled(Button)`
   z-index: 3;
   .bp3-icon {
-    color: ${COLORS.NEON_GREEN} !important;
+    color: ${C.NEON_GREEN} !important;
   }
 `;
 
@@ -432,7 +431,7 @@ export const Tab = styled.div<{ active?: boolean }>`
   color: ${(props) => (props.active ? "white" : "gray")};
   border: 1px solid ${(props) => (props.active ? "black" : "transparent")};
   border-top: 2px solid
-    ${(props) => (props.active ? COLORS.PRIMARY_GREEN : "transparent")};
+    ${(props) => (props.active ? C.PRIMARY_GREEN : "transparent")};
   border-bottom: none;
   transition: all 0.2s ease-out;
 
@@ -506,14 +505,14 @@ export const LoginSignupText = styled.h1`
   margin-left: 12px;
   font-size: 18px;
   font-weight: 200;
-  color: ${COLORS.TEXT_TITLE};
+  color: ${C.TEXT_TITLE};
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
 export const LoginSignupTextInteractive = styled(LoginSignupText)`
   :hover {
     cursor: pointer;
-    color: ${COLORS.TEXT_HOVER};
+    color: ${C.TEXT_HOVER};
   }
 `;
 
