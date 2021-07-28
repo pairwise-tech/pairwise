@@ -33,6 +33,13 @@ export interface UserProfile {
   avatarUrl: string;
 }
 
+export type AppTheme = "dark" | "light";
+
+export enum MonacoEditorThemes {
+  DEFAULT = "vs-dark",
+  HIGH_CONTRAST = "hc-black",
+}
+
 /**
  * The source of truth for client and server for the JSON blob user
  * settings object!
@@ -42,13 +49,8 @@ export interface UserProfile {
 export interface UserSettings {
   workspaceFontSize: number;
   fullScreenEditor: boolean;
-  appTheme: "dark" | "light";
+  appTheme: AppTheme;
   editorTheme: MonacoEditorThemes;
-}
-
-export enum MonacoEditorThemes {
-  DEFAULT = "vs-dark",
-  HIGH_CONTRAST = "hc-black",
 }
 
 export const defaultUserSettings: UserSettings = {
