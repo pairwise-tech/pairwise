@@ -659,7 +659,7 @@ class NavigationOverlay extends React.Component<
                     <Icon
                       icon="video"
                       iconSize={IconSize.LARGE}
-                      color={isDark ? "" : COLORS.GRAY}
+                      color={isDark ? COLORS.TEXT_CONTENT : COLORS.GRAY}
                     />
                   </Tooltip2>
                 )}
@@ -1234,14 +1234,6 @@ const ColTitle = styled.div`
   justify-content: space-between;
   flex-grow: 0;
   flex-shrink: 0;
-
-  border-bottom: ${(props) => {
-    const color = props.theme.dark
-      ? COLORS.LIGHT_GREY
-      : COLORS.NAV_LIGHT_BORDER;
-
-    return `1px solid ${color}`;
-  }};
 
   ${defaultTextColor};
 

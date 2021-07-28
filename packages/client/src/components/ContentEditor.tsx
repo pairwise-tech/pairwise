@@ -18,7 +18,7 @@ import { Dictionary } from "ramda";
 import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
 import { Button } from "@blueprintjs/core";
 import { AppTheme, InverseChallengeMapping } from "@pairwise/common";
-import { themeText } from "./ThemeContainer";
+import { themeColor, themeText } from "./ThemeContainer";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -695,10 +695,14 @@ const EditorExternalStyles = styled.div`
 
   blockquote {
     margin-left: 0;
-    background: ${COLORS.LIGHT_GREY} !important;
     font-style: normal !important;
     border-left-width: 9px !important;
     padding: 5px 20px 5px 10px !important;
+    ${themeColor(
+      "background",
+      COLORS.LIGHT_GREY,
+      COLORS.BACKGROUND_MODAL_LIGHT,
+    )};
   }
   blockquote h1,
   blockquote h2,

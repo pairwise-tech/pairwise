@@ -1024,7 +1024,12 @@ class Workspace extends React.Component<IProps, IState> {
                         </ContentContainer>
                       </Row>
                       <Row
-                        style={{ background: C.BACKGROUND_EDITOR }}
+                        style={{
+                          background: setTheme(
+                            C.BACKGROUND_EDITOR,
+                            C.BACKGROUND_PAGE_LIGHT,
+                          ),
+                        }}
                         initialHeight={
                           isInstructionsViewCollapsed
                             ? D.EDITOR_HEIGHT_INSTRUCTIONS_COLLAPSED

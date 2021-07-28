@@ -236,12 +236,16 @@ export const IconNavLink = styled(
 `;
 
 export const IconButton = styled(Button)`
-  &:hover .bp3-icon:only-child {
-    ${themeColor("color", "white")};
+  .bp3-icon:only-child {
+    color: ${(props: IThemeProps) => {
+      return props.theme.dark ? C.TEXT_CONTENT : undefined;
+    }} !important;
   }
 
-  .bp3-icon:only-child {
-    ${themeColor("color", "rgba(255, 255, 255, 0.8)")};
+  &:hover .bp3-icon:only-child {
+    color: ${(props: IThemeProps) => {
+      return props.theme.dark ? "white" : undefined;
+    }} !important;
   }
 `;
 
