@@ -292,7 +292,12 @@ export const ModalContainer = styled.div`
   transform: translate(-50%, -50%);
   border-radius: 6px;
   border: 1px solid ${C.BORDER_MODAL};
-  background-color: ${C.BACKGROUND_MODAL_DARK};
+
+  ${themeColor(
+    "background",
+    C.BACKGROUND_MODAL_DARK,
+    C.BACKGROUND_MODAL_LIGHT,
+  )};
 
   @media ${MOBILE} {
     width: 100%;
@@ -303,11 +308,10 @@ export const ModalTitleText = styled.h1`
   font-size: 28px;
   font-weight: 300;
   text-align: center;
-  ${defaultTextColor};
   font-family: Helvetica Neue, Lato, sans-serif;
+  ${themeColor("color", C.TEXT_WHITE, C.TEXT_LIGHT_THEME)};
 `;
 
-// @ts-ignore
 export const ModalSubText = styled(ModalTitleText)`
   font-size: 16px;
   margin-top: 12px;

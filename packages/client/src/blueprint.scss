@@ -127,14 +127,24 @@ $orange3: #ffdf75;
 
 // Style Blueprint popover2 and tooltip2. For some reason the default
 // styles are not overridden with our variable definitions here.
-.bp3-popover2-content {
+.bp3-dark .bp3-popover2-content {
   color: white !important;
   background: $dark-gray5 !important;
 }
 
-.bp3-popover2-arrow-fill {
+.bp3-dark .bp3-popover2-arrow-fill {
   color: white !important;
   fill: $dark-gray5 !important;
+}
+
+.bp3-popover2-content {
+  color: black !important;
+  background: white !important;
+}
+
+.bp3-popover2-arrow-fill {
+  color: black !important;
+  fill: white !important;
 }
 
 .bp3-dialog.bp3-dark,
