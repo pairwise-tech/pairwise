@@ -17,7 +17,8 @@ import tryCatch from "ramda/es/tryCatch";
 import { Dictionary } from "ramda";
 import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
 import { Button } from "@blueprintjs/core";
-import { InverseChallengeMapping } from "@pairwise/common";
+import { AppTheme, InverseChallengeMapping } from "@pairwise/common";
+import { themeText } from "./ThemeContainer";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -455,7 +456,7 @@ const markdownShortcuts = MarkdownShortcuts();
  * scoped in and stale.
  * ============================================================================
  */
-class ContentEditor extends React.Component<Props> {
+class ContentEditor extends React.Component<IProps> {
   getSearchLinks = (searchTerm: string) => {
     // Kick off a search request...
     this.props.requestSearchResults(searchTerm);
@@ -478,13 +479,19 @@ class ContentEditor extends React.Component<Props> {
   };
 
   render() {
-    const { history, plugins = [], challengeMap, ...props } = this.props;
+    const {
+      history,
+      plugins = [],
+      challengeMap,
+      appTheme,
+      ...props
+    } = this.props;
     return (
       <ErrorBoundary>
         <EditorExternalStyles>
           <RichMarkdownEditor
             plugins={[...plugins, markdownShortcuts]}
-            theme={editorTheme}
+            theme={getEditorTheme(appTheme)}
             onSearchLink={this.getSearchLinks}
             uploadImage={this.handleFileUpload}
             onShowToast={(message) => {
@@ -607,7 +614,7 @@ export const editorColors = {
   codeString: "#032f62",
 };
 
-const editorTheme = {
+const getEditorTheme = (appTheme: AppTheme) => ({
   fontFamily:
     "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen, Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif",
   fontFamilyMono:
@@ -635,8 +642,10 @@ const editorTheme = {
   codeImportant: "#c94922",
 
   background: "transparent",
-  text: editorColors.almostWhite,
   code: editorColors.almostWhite,
+
+  text:
+    appTheme === "dark" ? editorColors.almostWhite : editorColors.almostBlack,
 
   toolbarBackground: "#3a3a3a",
   toolbarInput: editorColors.white10,
@@ -660,7 +669,7 @@ const editorTheme = {
   hiddenToolbarButtons: {
     blocks: ["code"],
   },
-};
+});
 
 /**
  * The theme property of the markdown editor doesn't provide control over all
@@ -674,7 +683,7 @@ const EditorExternalStyles = styled.div`
   mark {
     background: #ffdf7538;
     border-bottom: 2px solid #ffdf75;
-    color: white;
+    ${themeText("white", "black")};
     padding: 0 3px;
     border-radius: 2px;
   }
@@ -754,6 +763,7 @@ const EditorExternalStyles = styled.div`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  appTheme: Modules.selectors.user.userSettings(state).appTheme,
   searchResults: Modules.selectors.challenges.getSearchResults(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   challengeMap: state.challenges.challengeMap,
@@ -765,7 +775,7 @@ const dispatchProps = {
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-type Props = RouteComponentProps & ConnectProps & EditorProps;
+type IProps = RouteComponentProps & ConnectProps & EditorProps;
 
 export default withRouter(
   connect(mapStateToProps, dispatchProps)(ContentEditor),

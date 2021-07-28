@@ -37,6 +37,8 @@ export type AppTheme = "dark" | "light";
 
 export enum MonacoEditorThemes {
   DEFAULT = "vs-dark",
+  DARK = "vs-dark",
+  LIGHT = "light",
   HIGH_CONTRAST = "hc-black",
 }
 

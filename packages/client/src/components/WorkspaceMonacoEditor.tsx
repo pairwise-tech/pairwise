@@ -158,9 +158,21 @@ class WorkspaceMonacoEditor
   };
 
   render() {
+    let theme = this.props.userSettings.editorTheme;
+
+    // Default the editor theme to match the app theme
+    if (theme === MonacoEditorThemes.DEFAULT) {
+      if (this.props.userSettings.appTheme === "dark") {
+        theme = MonacoEditorThemes.DARK;
+      } else {
+        theme = MonacoEditorThemes.LIGHT;
+      }
+    }
+
     return (
       <div id={PAIRWISE_EDITOR_ID} style={{ height: "100%" }}>
         <Editor
+          theme={theme}
           options={{
             tabSize: 2,
             autoIndent: "full",
@@ -177,7 +189,6 @@ class WorkspaceMonacoEditor
           value={this.props.value}
           onMount={this.editorOnMount}
           language={this.props.language}
-          theme={this.props.userSettings.editorTheme}
           onChange={this.handleEditorContentChange}
         />
       </div>

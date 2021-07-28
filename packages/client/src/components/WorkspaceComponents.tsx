@@ -29,6 +29,8 @@ import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
 import Breadcrumbs from "./Breadcrumbs";
 import { Table, Cell, Column } from "@blueprintjs/table";
+import { defaultTextColor, themeColor, themeText } from "./ThemeContainer";
+import { AppTheme } from "@pairwise/common";
 
 const D = getDimensions();
 
@@ -53,7 +55,11 @@ export const LowerSection = styled.div<{ withHeader?: boolean }>`
   height: ${(props) =>
     props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
   border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
-  background: ${C.BACKGROUND_LOWER_SECTION};
+  ${themeColor(
+    "background",
+    C.BACKGROUND_LOWER_SECTION,
+    C.BACKGROUND_PAGE_LIGHT,
+  )};
 `;
 
 export const WorkspaceContainer = styled.div`
@@ -160,8 +166,8 @@ const PreviewCover = styled.div`
   height: 100%;
   width: 100%;
   z-index: 100;
-  color: white;
-  background: rgb(45, 45, 45);
+  ${defaultTextColor};
+  ${themeColor("background", "rgb(45, 45, 45)", C.BACKGROUND_CONTENT_LIGHT)}
 `;
 
 const HighlightedMarkdown = (props: ReactMarkdownProps) => {
@@ -208,7 +214,7 @@ export const ContentDiv = styled.div`
   font-size: 15px;
   font-weight: 200px;
   padding-right: 8px;
-  color: ${C.TEXT_CONTENT};
+  ${themeText(C.TEXT_CONTENT)};
 `;
 
 const TestStatus = styled.div`
@@ -337,26 +343,41 @@ export const TestResultRow = ({
   );
 };
 
-export const consoleRowStyles = {
-  paddingTop: 2,
-  paddingBottom: 4,
-  background: C.BACKGROUND_CONSOLE_DARK,
+export const getConsoleRowStyles = (theme: AppTheme) => {
+  const background =
+    theme === "dark" ? C.BACKGROUND_CONSOLE_DARK : C.BACKGROUND_CONSOLE_LIGHT;
+
+  return {
+    background,
+    paddingTop: 2,
+    paddingBottom: 4,
+  };
 };
 
-export const colSeparatorProps = {
-  style: {
-    backgroundColor: C.DRAGGABLE_SLIDER,
-    borderLeft: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-    borderRight: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-  },
+export const getColSeparatorProps = (theme: AppTheme) => {
+  const backgroundColor =
+    theme === "dark" ? C.DRAGGABLE_SLIDER_DARK : C.DRAGGABLE_SLIDER_LIGHT;
+
+  return {
+    style: {
+      backgroundColor,
+      borderLeft: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
+      borderRight: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
+    },
+  };
 };
 
-export const rowSeparatorProps = {
-  style: {
-    backgroundColor: C.DRAGGABLE_SLIDER,
-    borderTop: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-    borderBottom: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-  },
+export const getRowSeparatorProps = (theme: AppTheme) => {
+  const backgroundColor =
+    theme === "dark" ? C.DRAGGABLE_SLIDER_DARK : C.DRAGGABLE_SLIDER_LIGHT;
+
+  return {
+    style: {
+      backgroundColor,
+      borderTop: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
+      borderBottom: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
+    },
+  };
 };
 
 export const ContentContainer = styled.div`
@@ -376,7 +397,7 @@ export const ContentTitle = styled.h3`
   margin-top: 4px;
   margin-left: 2px;
   margin-bottom: 12px;
-  color: ${C.TEXT_TITLE};
+  ${themeText(C.TEXT_TITLE)};
 `;
 
 export const TestCaseStatusText = styled.p`
@@ -804,7 +825,6 @@ export const WorkspaceMobileView = styled.div`
   .mobile-tests-badge {
     font-size: 10px;
     position: absolute;
-    color: white;
     top: 0;
     left: 0;
     border-radius: 100px;
@@ -818,7 +838,8 @@ export const WorkspaceMobileView = styled.div`
     top: 50%;
     transform: translate(-100%, -50%);
     left: -5px;
-    color: black;
+
+    ${themeColor("color", "black", "white")};
 
     &.fail {
       background: #e17e75;

@@ -464,11 +464,12 @@ export const Hr = styled.hr`
 
 export const SupplementaryContentContainer = styled.div`
   padding: 50px 25px 25px 25px;
-  background: #1e1e1e;
   position: relative;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+
+  ${themeColor("background", "#1e1e1e", COLORS.BACKGROUND_PAGE_LIGHT)};
 
   @media ${MOBILE} {
     padding-left: 12px;
