@@ -545,7 +545,8 @@ class NavigationOverlay extends React.Component<
     challenge: ChallengeSkeleton;
     style?: React.CSSProperties;
   }) => {
-    const { isMobile, isEditMode, challengeId, menuSelectState } = this.props;
+    const { isMobile, isEditMode, challengeId, menuSelectState, user } =
+      this.props;
     const {
       index,
       module,
@@ -558,6 +559,7 @@ class NavigationOverlay extends React.Component<
       style = {},
     } = args;
 
+    const isDark = user.settings.appTheme === "dark";
     const { selectedIndex, menuSelectColumn } = menuSelectState;
     const isMenuItemSelected =
       menuSelectColumn === "challenges" && selectedIndex === index;
@@ -654,7 +656,11 @@ class NavigationOverlay extends React.Component<
                     position="left"
                     content="Includes Video"
                   >
-                    <Icon iconSize={IconSize.LARGE} icon="video" />
+                    <Icon
+                      icon="video"
+                      iconSize={IconSize.LARGE}
+                      color={isDark ? "" : COLORS.GRAY}
+                    />
                   </Tooltip2>
                 )}
               </NavIcons>
@@ -1229,6 +1235,14 @@ const ColTitle = styled.div`
   flex-grow: 0;
   flex-shrink: 0;
 
+  border-bottom: ${(props) => {
+    const color = props.theme.dark
+      ? COLORS.LIGHT_GREY
+      : COLORS.NAV_LIGHT_BORDER;
+
+    return `1px solid ${color}`;
+  }};
+
   ${defaultTextColor};
 
   ${themeColor(
@@ -1273,7 +1287,11 @@ const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
   border-left: ${(props) =>
     props.disabled
       ? `3px solid ${COLORS.NEON_GREEN}`
-      : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM_DARK}`};
+      : `3px solid ${
+          props.theme.dark
+            ? COLORS.BACKGROUND_NAVIGATION_ITEM_DARK
+            : COLORS.BACKGROUND_NAVIGATION_ITEM_LIGHT
+        }`};
 
   :hover {
     cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};

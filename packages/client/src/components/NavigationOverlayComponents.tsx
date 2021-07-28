@@ -15,7 +15,7 @@ import React from "react";
 import CodepressNavigationContextMenu from "./CodepressContextMenu";
 import styled from "styled-components/macro";
 import { COLORS } from "tools/constants";
-import { defaultTextColor, IThemeProps } from "./ThemeContainer";
+import { defaultTextColor, IThemeProps, themeColor } from "./ThemeContainer";
 
 /** ===========================================================================
  * Sortable Module List
@@ -259,13 +259,14 @@ export const ModuleNumber = styled.code`
   display: inline-block;
   padding: 5px;
   color: #ea709c;
-  background: #3a3a3a;
   width: 24px;
   text-align: center;
   line-height: 12px;
   border-radius: 4px;
-  box-shadow: inset 0px 0px 2px 0px #ababab;
   margin-right: 8px;
+  box-shadow: inset 0px 0px 2px 0px #ababab;
+
+  ${themeColor("background", "#3a3a3a", "rgb(200,200,200)")}
 `;
 
 export const ModuleNavigationBase = styled.div<{ active?: boolean }>`
