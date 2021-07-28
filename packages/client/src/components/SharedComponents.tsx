@@ -16,16 +16,7 @@ import { COLORS, MOBILE } from "../tools/constants";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 import PartyParrotGif from "../icons/party-parrot.gif";
-
-interface DarkThemeProps {
-  children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
-  return <div className={cx(className, Classes.DARK)} {...props} />;
-};
+import { defaultText, themeColor, themeText } from "./ThemeContainer";
 
 // TODO: This could be made a bit more friendly. Maybe a spinner of some sort.
 export const Loading = styled(Spinner)`
@@ -65,7 +56,7 @@ export const ButtonCore = styled.button`
 
 export const PageTitle = styled.h1`
   margin-top: 0;
-  color: ${COLORS.TEXT_WHITE};
+  ${defaultText};
 `;
 
 export const Text = styled.p`
@@ -73,7 +64,7 @@ export const Text = styled.p`
   margin-top: 8px;
   font-size: 15px;
   font-weight: 200px;
-  color: ${COLORS.TEXT_CONTENT};
+  ${themeText(COLORS.TEXT_CONTENT)};
 `;
 
 // NOTE: Trying to bolt mobile styling onto the existing UI without changing any
@@ -231,21 +222,21 @@ export const IconNavLink = styled(
   }
 
   &:hover .bp3-icon:only-child {
-    color: white !important;
+    ${themeColor("color", "white")};
   }
 
   .bp3-icon:only-child {
-    color: rgba(255, 255, 255, 0.8) !important;
+    ${themeColor("color", "rgba(255, 255, 255, 0.8)")};
   }
 `;
 
 export const IconButton = styled(Button)`
   &:hover .bp3-icon:only-child {
-    color: white !important;
+    ${themeColor("color", "white")};
   }
 
   .bp3-icon:only-child {
-    color: rgba(255, 255, 255, 0.8) !important;
+    ${themeColor("color", "rgba(255, 255, 255, 0.8)")};
   }
 `;
 
@@ -307,7 +298,7 @@ export const ModalTitleText = styled.h1`
   font-size: 28px;
   font-weight: 300;
   text-align: center;
-  color: ${COLORS.TEXT_WHITE};
+  ${defaultText};
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
@@ -492,7 +483,7 @@ export const TitleHeader = styled.h1`
 
 export const Highlight = styled.mark`
   font-weight: bold;
-  color: white;
+  ${defaultText};
   background: #ffdf7538;
   border-bottom: 2px solid #ffdf75;
 `;
@@ -549,7 +540,6 @@ export const PairwiseOpenCloseLogo = ({
   ...props
 }: PairwiseOpenCloseLogoProps) => {
   return (
-    // @ts-ignore
     <svg
       width="24.44"
       height="20"

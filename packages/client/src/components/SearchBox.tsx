@@ -10,6 +10,7 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import { MOBILE, COLORS, SEARCH_QUERY_THRESHOLD } from "tools/constants";
 import { LineWrappedText } from "./SharedComponents";
 import cx from "classnames";
+import { themeColor } from "./ThemeContainer";
 
 /** ===========================================================================
  * Component
@@ -315,7 +316,8 @@ const Input = styled(InputGroup)`
   input#search-input {
     color: white;
     transition: all 0.15s ease-out;
-    background: #3a3a3a;
+    ${themeColor("background", "#3a3a3a")};
+
     width: 100%;
     display: block;
     &:hover {

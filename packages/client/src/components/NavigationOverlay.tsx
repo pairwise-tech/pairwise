@@ -1262,11 +1262,11 @@ const dispatchProps = {
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-type IProps = ConnectProps & ComponentProps & RouteComponentProps;
-
 interface ComponentProps {
   isMobile: boolean;
 }
+
+type IProps = ConnectProps & ComponentProps & RouteComponentProps;
 
 const withProps = connect(mapStateToProps, dispatchProps);
 

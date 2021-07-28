@@ -4,6 +4,11 @@ import { Select, IListItemsProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE } from "@pairwise/common";
 import { getRenderItemList, labelByType } from "./SharedComponents";
 
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
+
 const MENU_WIDTH = 195;
 
 interface FeedbackTypeOption {
@@ -25,6 +30,11 @@ interface Props {
   currentFeedbackType: Nullable<string>;
   intent: "danger" | "none";
 }
+
+/** ===========================================================================
+ * Component
+ * ============================================================================
+ */
 
 const FeedbackTypeMenu = ({
   onItemSelect,
@@ -64,5 +74,10 @@ const FeedbackTypeMenu = ({
     </FeedbackTypeSelect>
   );
 };
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
 
 export default FeedbackTypeMenu;

@@ -1,7 +1,7 @@
 import React from "react";
 import { Menu, MenuItem } from "@blueprintjs/core";
 import { ContextMenu2 } from "@blueprintjs/popover2";
-import { DarkTheme } from "./SharedComponents";
+import ThemeContainer from "./ThemeContainer";
 
 /** ===========================================================================
  * Types & Config
@@ -24,7 +24,7 @@ class CodepressNavigationContextMenu extends React.PureComponent<CodepressNaviga
       this.props.type === "MODULE" ? "Delete Module" : "Delete Challenge";
 
     const ContextMenu = (
-      <DarkTheme>
+      <ThemeContainer>
         <Menu>
           <MenuItem
             icon="cross"
@@ -32,7 +32,7 @@ class CodepressNavigationContextMenu extends React.PureComponent<CodepressNaviga
             onClick={this.props.handleDelete}
           />
         </Menu>
-      </DarkTheme>
+      </ThemeContainer>
     );
 
     return (

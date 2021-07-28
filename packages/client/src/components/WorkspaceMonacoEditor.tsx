@@ -177,7 +177,7 @@ class WorkspaceMonacoEditor
           value={this.props.value}
           onMount={this.editorOnMount}
           language={this.props.language}
-          theme={this.props.userSettings.theme}
+          theme={this.props.userSettings.editorTheme}
           onChange={this.handleEditorContentChange}
         />
       </div>
@@ -225,7 +225,8 @@ class WorkspaceMonacoEditor
         c.type ? `${c.kind} ${c.type}-of-${c.parentKind}` : c.kind,
         {
           highContrast:
-            this.props.userSettings.theme === MonacoEditorThemes.HIGH_CONTRAST,
+            this.props.userSettings.editorTheme ===
+            MonacoEditorThemes.HIGH_CONTRAST,
         },
       );
       return {

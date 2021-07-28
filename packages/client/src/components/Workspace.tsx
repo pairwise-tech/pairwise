@@ -1733,10 +1733,10 @@ const mergeProps = (
   ...state,
   toggleHighContrastMode: () => {
     const nextTheme =
-      state.userSettings.theme === MonacoEditorThemes.DEFAULT
+      state.userSettings.editorTheme === MonacoEditorThemes.DEFAULT
         ? MonacoEditorThemes.HIGH_CONTRAST
         : MonacoEditorThemes.DEFAULT;
-    methods.updateUserSettings({ theme: nextTheme });
+    methods.updateUserSettings({ editorTheme: nextTheme });
   },
   toggleEditorSize: () => {
     methods.updateUserSettings({
