@@ -200,18 +200,17 @@ class Account extends React.Component<IProps, IState> {
               </TextItem>
             ) : (
               <>
-                <TextItem style={{ color: COLORS.TEXT_CONTENT, fontSize: 12 }}>
-                  * <Underline>Note I</Underline>: To change your email you will
+                <TextItem style={{ fontSize: 12 }}>
+                  • <Underline>Note I</Underline>: To change your email you will
                   need to verify the new email address.
                 </TextItem>
                 <TextItem
                   style={{
                     fontSize: 12,
                     maxWidth: 525,
-                    color: COLORS.TEXT_CONTENT,
                   }}
                 >
-                  * <Underline>Note II</Underline>: Your account is identified
+                  • <Underline>Note II</Underline>: Your account is identified
                   using your email address. If you sign in with an SSO provider,
                   the associated social profile <b>must match</b> your current
                   account email, otherwise a new account will be created.

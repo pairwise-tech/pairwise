@@ -380,7 +380,11 @@ const ApplicationContainer = (props: IProps) => {
                     target="__blank"
                     to={{ pathname: "https://www.pairwise.tech/" }}
                     style={{
-                      borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
+                      borderBottom: `1px solid ${
+                        user.settings.appTheme === "dark"
+                          ? COLORS.BORDER_DROPDOWN_MENU_ITEM
+                          : COLORS.LIGHT_BORDER
+                      }`,
                     }}
                   >
                     <Icon icon="info-sign" style={{ marginRight: 10 }} />
@@ -688,7 +692,7 @@ const AccountDropdownButton = styled.div`
   .account-menu-dropdown {
     position: relative;
     display: inline-block;
-    color: ${COLORS.TEXT_TITLE};
+    ${themeText(COLORS.TEXT_TITLE, COLORS.TEXT_LIGHT_THEME)};
   }
 
   .dropdown-links {
@@ -698,19 +702,28 @@ const AccountDropdownButton = styled.div`
     position: absolute;
     min-width: 215px;
     box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
-    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
+    ${themeColor(
+      "background",
+      COLORS.BACKGROUND_DROPDOWN_MENU,
+      COLORS.BACKGROUND_MODAL_LIGHT,
+    )};
   }
 
   .dropdown-links a {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    color: ${COLORS.TEXT_TITLE};
+    ${themeText(COLORS.TEXT_TITLE, COLORS.TEXT_LIGHT_THEME)};
   }
 
   .dropdown-links a:hover {
-    color: ${COLORS.PRIMARY_GREEN};
-    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU_HOVER};
+    ${themeText(COLORS.PRIMARY_GREEN)};
+
+    ${themeColor(
+      "background",
+      COLORS.BACKGROUND_DROPDOWN_MENU_HOVER,
+      COLORS.BACKGROUND_PAGE_LIGHT,
+    )};
   }
 
   .account-menu-dropdown:hover .dropdown-links {
@@ -719,7 +732,7 @@ const AccountDropdownButton = styled.div`
 
   :hover {
     cursor: pointer;
-    color: ${COLORS.TEXT_HOVER};
+    ${themeText(COLORS.TEXT_HOVER)};
   }
 `;
 
