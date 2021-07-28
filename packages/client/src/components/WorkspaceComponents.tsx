@@ -255,6 +255,12 @@ const TestStatus = styled.div`
   }};
 
   ${themeColor("background", "transparent", "rgb(200,200,200)")};
+
+  @media ${MOBILE} {
+    border: none;
+    background: transparent;
+    width: auto;
+  }
 `;
 
 const TestStatusBold = styled.b`

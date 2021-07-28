@@ -7,7 +7,7 @@ import styled from "styled-components/macro";
 // Import codemirror theme files
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material-darker.css";
-// import "codemirror/theme/ayu-dark.css";
+import "codemirror/theme/paraiso-light.css";
 import "codemirror/mode/xml/xml.js";
 import "codemirror/mode/javascript/javascript.js";
 import "codemirror/mode/python/python.js";
@@ -76,7 +76,7 @@ class WorkspaceCodemirrorEditor
   }
 
   render() {
-    const { language, editorOptions } = this.props;
+    const { language, editorOptions, userSettings } = this.props;
     const { fontSize } = editorOptions;
     const { theWaitIsOver } = this.state;
 
@@ -87,23 +87,20 @@ class WorkspaceCodemirrorEditor
       mode = "text/typescript";
     }
 
-    const CODE_MIRROR_THEMES = [
-      "material-darker",
-      // The following do not have any .css files imported
-      // "ayu-dark",
-      // "ayu-mirage",
-      // "solarized-dark",
-    ];
+    const CODE_MIRROR_THEMES = ["material-darker", "paraiso-light"];
+
+    const isDark = userSettings.appTheme === "dark";
+    const theme = isDark ? CODE_MIRROR_THEMES[0] : CODE_MIRROR_THEMES[1];
 
     const options = {
       mode,
+      theme,
       matchTags: true,
       lineNumbers: true,
       lineWrapping: true,
       autoCloseTags: true,
       matchBrackets: true,
       autoCloseBrackets: true,
-      theme: CODE_MIRROR_THEMES[0],
     };
 
     return (

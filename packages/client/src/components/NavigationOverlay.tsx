@@ -45,7 +45,12 @@ import {
 import { IconButton, RotatingIcon } from "./SharedComponents";
 import cx from "classnames";
 import { Select } from "@blueprintjs/select";
-import { defaultTextColor, IThemeProps, themeColor } from "./ThemeContainer";
+import {
+  defaultTextColor,
+  IThemeProps,
+  themeColor,
+  themeText,
+} from "./ThemeContainer";
 
 /** ===========================================================================
  * Types & Config
@@ -1262,14 +1267,15 @@ const ColTitle = styled.div`
       justify-content: center;
     }
     .mobile-shrink {
-      // Why is blueprint SO INSISTENT on their low-contrast icons?!?
       .bp3-icon {
-        color: white !important;
+        color: ${(props: IThemeProps) => {
+          return props.theme.dark ? "white" : COLORS.TEXT_LIGHT_THEME;
+        }};
       }
       .bp3-button-text {
         width: 0%;
-        overflow: hidden;
         margin: 0;
+        overflow: hidden;
       }
     }
   }
