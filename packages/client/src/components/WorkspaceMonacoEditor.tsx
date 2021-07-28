@@ -15,7 +15,7 @@ import {
 import Editor, { Monaco, OnMount } from "@monaco-editor/react";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
-import { wait } from "tools/utils";
+import { getMonacoTheme, wait } from "tools/utils";
 import { debounce } from "throttle-debounce";
 import { editor } from "monaco-editor";
 import { CHALLENGE_TEST_EDITOR } from "./ChallengeTestEditor";
@@ -158,16 +158,11 @@ class WorkspaceMonacoEditor
   };
 
   render() {
-    let theme = this.props.userSettings.editorTheme;
-
-    // Default the editor theme to match the app theme
-    if (theme === MonacoEditorThemes.DEFAULT) {
-      if (this.props.userSettings.appTheme === "dark") {
-        theme = MonacoEditorThemes.DARK;
-      } else {
-        theme = MonacoEditorThemes.LIGHT;
-      }
-    }
+    const { userSettings } = this.props;
+    const theme = getMonacoTheme(
+      userSettings.appTheme,
+      userSettings.editorTheme,
+    );
 
     return (
       <div id={PAIRWISE_EDITOR_ID} style={{ height: "100%" }}>

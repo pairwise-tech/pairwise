@@ -452,7 +452,6 @@ export const TestCaseStatusText = styled.p`
   margin-left: 4px;
   white-space: nowrap;
   color: ${({
-    theme,
     testStatus,
   }: IThemeProps & {
     testStatus: "success" | "failure" | "loading" | "no-results";
@@ -469,7 +468,11 @@ export const TabbedInnerNav = styled.div<{ show: boolean }>`
   position: relative;
   display: ${(props) => (props.show ? "flex" : "none")};
   align-items: center;
-  border-bottom: 1px solid black;
+
+  border-bottom: ${(props: IThemeProps) => {
+    const color = props.theme.dark ? "black" : C.LIGHT_BORDER;
+    return `1px solid ${color}`;
+  }};
 `;
 
 export const Tab = styled.div<{ active?: boolean }>`
@@ -477,16 +480,41 @@ export const Tab = styled.div<{ active?: boolean }>`
   padding: 7px 20px;
   cursor: pointer;
   position: relative;
-  background: ${(props) => (props.active ? "#1e1e1e" : "transparent")};
-  color: ${(props) => (props.active ? "white" : "gray")};
-  border: 1px solid ${(props) => (props.active ? "black" : "transparent")};
+
+  border: ${(props) => {
+    let color;
+    if (props.active) {
+      color = props.theme.dark ? "black" : C.LIGHT_BORDER;
+    } else {
+      color = "transparent";
+    }
+
+    return `1px solid ${color}`;
+  }};
+
   border-top: 2px solid
     ${(props) => (props.active ? C.PRIMARY_GREEN : "transparent")};
   border-bottom: none;
   transition: all 0.2s ease-out;
 
+  color: ${(props) => {
+    if (props.active) {
+      return props.theme.dark ? "white" : "black";
+    } else {
+      return "gray";
+    }
+  }};
+
+  background: ${(props) => {
+    if (props.active) {
+      return props.theme.dark ? "#1e1e1e" : "white";
+    } else {
+      return props.theme.dark ? "transparent" : "rgb(225,225,225)";
+    }
+  }};
+
   &:hover {
-    color: white;
+    ${themeText("white", "black")};
   }
 
   &:after {
@@ -600,11 +628,19 @@ const SolutionWrapper = styled.button`
   padding: 8px;
   margin-bottom: 8px;
   border-radius: 5px;
-  background: ${C.REVEAL_SOLUTION_LABEL_BACKGROUND};
+  ${themeColor(
+    "background",
+    C.REVEAL_SOLUTION_LABEL_BACKGROUND,
+    "rgb(175,175,175)",
+  )};
 
   &:hover {
     cursor: pointer;
-    background: ${C.REVEAL_SOLUTION_LABEL_BACKGROUND_HOVER};
+    ${themeColor(
+      "background",
+      C.REVEAL_SOLUTION_LABEL_BACKGROUND_HOVER,
+      C.BACKGROUND_NAVIGATION_ITEM_HOVER_LIGHT,
+    )};
   }
 `;
 
