@@ -10,7 +10,7 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import { MOBILE, COLORS, SEARCH_QUERY_THRESHOLD } from "tools/constants";
 import { LineWrappedText } from "./SharedComponents";
 import cx from "classnames";
-import { themeColor } from "./ThemeContainer";
+import { defaultTextColor, themeColor } from "./ThemeContainer";
 
 /** ===========================================================================
  * Component
@@ -276,7 +276,12 @@ const YellowText = styled.span`
 const SEARCH_TITLE_HEIGHT = 30;
 
 const ResultTitleBox = styled.div`
-  background: ${COLORS.BACKGROUND_CONTENT_DARK};
+  ${themeColor(
+    "background",
+    COLORS.BACKGROUND_CONTENT_DARK,
+    COLORS.BACKGROUND_CONTENT_LIGHT,
+  )};
+
   font-weight: bold;
   padding: 0px 8px;
   height: ${SEARCH_TITLE_HEIGHT}px;
@@ -298,7 +303,15 @@ const StyledSearchResultItem = styled(SearchResultItem)`
   padding: 4px 10px;
   cursor: pointer;
   border-bottom: 1px solid #636363;
-  background: ${(props) => (props.active ? "#4c4c4c" : "transparent")};
+
+  background: ${(props) => {
+    if (props.active) {
+      return props.theme.dark ? "#4c4c4c" : COLORS.WHITE;
+    } else {
+      return "transparent";
+    }
+  }};
+
   /* See NOTE */
   & > * {
     pointer-events: none;
@@ -314,7 +327,7 @@ const StyledSearchResultItem = styled(SearchResultItem)`
 
 const Input = styled(InputGroup)`
   input#search-input {
-    color: white;
+    ${defaultTextColor};
     transition: all 0.15s ease-out;
     ${themeColor("background", "#3a3a3a")};
 
@@ -328,7 +341,7 @@ const Input = styled(InputGroup)`
     &:focus {
       border: none;
       outline: none;
-      color: white;
+      ${defaultTextColor};
     }
   }
 `;
@@ -342,21 +355,22 @@ const Box = styled.div`
 
 // NOTE: The z-index on this is meant to make it appear above the nav overlay
 const ResultBox = styled.div`
+  z-index: 15;
   display: flex;
   flex-direction: column;
-  z-index: 15;
   position: absolute;
   top: 100%;
   left: auto;
   right: 0;
   min-width: 300px;
   width: 100%;
-  background: #3a3a3a;
   max-height: 80vh;
   border-radius: 3px;
+  border: 1px solid #4c4c4c;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.55);
   padding-bottom: ${SEARCH_TITLE_HEIGHT}px;
-  border: 1px solid #4c4c4c;
+  ${themeColor("background", "#3a3a3a", COLORS.BACKGROUND_CONTENT_LIGHT)};
+
   @media ${MOBILE} {
     right: auto;
     left: 50%;
