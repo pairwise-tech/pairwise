@@ -20,7 +20,7 @@ import {
 import { COLORS } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
 import { IThemeProps, themeColor } from "./ThemeContainer";
-import { AppTheme } from "../../../common/dist/main";
+import { AppTheme } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
