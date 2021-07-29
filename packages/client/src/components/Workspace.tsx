@@ -122,7 +122,7 @@ interface Log {
 const DEFAULT_LOGS: ReadonlyArray<Log> = [
   {
     method: "info",
-    data: ["log output will be rendered here:"],
+    data: ["Workspace log output:"],
   },
 ];
 
@@ -418,6 +418,14 @@ class Workspace extends React.Component<IProps, IState> {
       return IS_DARK ? dark : light;
     };
 
+    const ConsoleComponent = () => (
+      <Console
+        variant={theme}
+        logs={this.state.logs}
+        styles={theme === "light" ? { LOG_COLOR: "black" } : {}}
+      />
+    );
+
     // Allow the content in the Console to scroll if it overflows
     const ScrollableWorkspaceConsole = (
       <div
@@ -428,7 +436,7 @@ class Workspace extends React.Component<IProps, IState> {
           overscrollBehavior: "none",
         }}
       >
-        <Console variant={theme} logs={this.state.logs} />
+        <ConsoleComponent />
       </div>
     );
 
@@ -788,24 +796,24 @@ class Workspace extends React.Component<IProps, IState> {
               {iFrameNormal}
             </MobileDeviceUI>
             <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
-              <Console variant={theme} logs={this.state.logs} />
+              <ConsoleComponent />
             </div>
           </div>
         ) : IS_REACT_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ flex: "1 100%" }}>{iFrameNormal}</div>
             <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
-              <Console variant={theme} logs={this.state.logs} />
+              <ConsoleComponent />
             </div>
           </div>
         ) : IS_TYPESCRIPT_CHALLENGE ? (
           <div>
-            <Console variant={theme} logs={this.state.logs} />
+            <ConsoleComponent />
             {iFrameHidden}
           </div>
         ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
           <div>
-            <Console variant={theme} logs={this.state.logs} />
+            <ConsoleComponent />
             {iFrameHidden}
           </div>
         ) : IS_MARKUP_CHALLENGE ? (
