@@ -237,7 +237,7 @@ export const ContentDiv = styled.div`
 
 const TestStatus = styled.div`
   display: flex;
-  width: 145px;
+  width: 160px;
   margin-left: auto;
   flex-direction: row;
   padding: 2px 6px 0px 6px;
@@ -254,9 +254,9 @@ const TestStatus = styled.div`
   ${themeColor("background", "transparent", "rgb(200,200,200)")};
 
   @media ${MOBILE} {
+    width: auto;
     border: none;
     background: transparent;
-    width: auto;
   }
 `;
 
