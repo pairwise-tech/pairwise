@@ -19,6 +19,8 @@ import {
 } from "./SharedComponents";
 import { COLORS } from "tools/constants";
 import { ReactComponent as googleSvgIcon } from "../icons/google-sso-icon.svg";
+import { IThemeProps, themeColor } from "./ThemeContainer";
+import { AppTheme } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -38,9 +40,10 @@ interface IState {}
 
 class SingleSignOnHandler extends React.Component<IProps, IState> {
   render(): JSX.Element {
+    const isDark = this.props.appTheme === "dark";
     return (
       <Dialog
-        className={Classes.DARK}
+        className={isDark ? Classes.DARK : ""}
         isOpen={this.props.dialogOpen}
         aria-labelledby="sso-modal-title"
         aria-describedby="facebook-login github-login google-login"
@@ -56,6 +59,7 @@ class SingleSignOnHandler extends React.Component<IProps, IState> {
 }
 
 interface AuthenticationFormProps {
+  appTheme: AppTheme;
   emailRequestSent: boolean;
   loginEmailRequestLoading: boolean;
   dispatchLoginByEmailRequest: typeof Modules.actions.auth.loginByEmail;
@@ -81,7 +85,8 @@ class AuthenticationFormComponent extends React.Component<
 
   render(): JSX.Element {
     const { emailLoginFormVisible } = this.state;
-    const { emailRequestSent, loginEmailRequestLoading } = this.props;
+    const { appTheme, emailRequestSent, loginEmailRequestLoading } = this.props;
+    const isDark = appTheme === "dark";
     return (
       <ModalContainer>
         <ModalTitleText id="sso-modal-title">
@@ -132,7 +137,6 @@ class AuthenticationFormComponent extends React.Component<
                   disabled={loginEmailRequestLoading}
                   onClick={this.handleLoginByEmail}
                   text={
-                    // ternary life!
                     emailRequestSent
                       ? "Resend Email"
                       : loginEmailRequestLoading
@@ -177,7 +181,7 @@ class AuthenticationFormComponent extends React.Component<
                 <Icon
                   iconSize={24}
                   icon="envelope"
-                  color={COLORS.TEXT_CONTENT_BRIGHT}
+                  color={isDark ? COLORS.TEXT_CONTENT_BRIGHT : ""}
                 />
               }
               id="toggle-email-login-form"
@@ -227,6 +231,7 @@ class AuthenticationFormComponent extends React.Component<
 // Connect AuthenticationForm
 export const AuthenticationForm = connect(
   (state: ReduxStoreState) => ({
+    appTheme: Modules.selectors.user.userSettings(state).appTheme,
     emailRequestSent: Modules.selectors.auth.emailRequestSent(state),
     loginEmailRequestLoading:
       Modules.selectors.auth.loginEmailRequestLoading(state),
@@ -271,15 +276,14 @@ const SocialButtonsContainer = styled.div`
 const LoginLink = styled.a`
   font-weight: 500;
   font-size: 14px;
-  color: white;
   margin-left: 4px;
   text-decoration: none;
+  ${themeColor("color", "white", "black")};
 `;
 
 const LoginButtonText = styled.p`
   margin: 0;
   margin-left: 8px;
-  color: ${COLORS.TEXT_CONTENT_BRIGHT};
   font-family: "Roboto Medium", arial;
 `;
 
@@ -293,8 +297,14 @@ const EmailButtonsContainer = styled.div`
 const InputField = styled.input`
   margin-top: 12px;
   width: 415px;
-  color: ${COLORS.TEXT_HOVER} !important;
-  background: ${COLORS.BACKGROUND_CONSOLE} !important;
+
+  color: ${(props: IThemeProps) => {
+    return props.theme.dark ? COLORS.TEXT_HOVER : undefined;
+  }} !important;
+
+  background: ${(props: IThemeProps) => {
+    return props.theme.dark ? COLORS.BACKGROUND_CONSOLE_DARK : undefined;
+  }} !important;
 `;
 
 /** ===========================================================================
@@ -303,6 +313,7 @@ const InputField = styled.input`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  appTheme: Modules.selectors.user.userSettings(state).appTheme,
   dialogOpen: Modules.selectors.auth.singleSignOnDialogState(state),
 });
 

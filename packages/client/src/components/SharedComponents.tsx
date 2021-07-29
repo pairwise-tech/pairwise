@@ -12,20 +12,16 @@ import {
 import { NavLink, NavLinkProps } from "react-router-dom";
 import pipe from "ramda/es/pipe";
 import identity from "ramda/es/identity";
-import { COLORS, MOBILE } from "../tools/constants";
+import { COLORS as C, MOBILE } from "../tools/constants";
 import { IItemListRendererProps } from "@blueprintjs/select";
 import { FEEDBACK_TYPE, CHALLENGE_TYPE } from "@pairwise/common";
 import PartyParrotGif from "../icons/party-parrot.gif";
-
-interface DarkThemeProps {
-  children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
-  return <div className={cx(className, Classes.DARK)} {...props} />;
-};
+import {
+  defaultTextColor,
+  themeColor,
+  themeText,
+  IThemeProps,
+} from "./ThemeContainer";
 
 // TODO: This could be made a bit more friendly. Maybe a spinner of some sort.
 export const Loading = styled(Spinner)`
@@ -65,7 +61,7 @@ export const ButtonCore = styled.button`
 
 export const PageTitle = styled.h1`
   margin-top: 0;
-  color: ${COLORS.TEXT_WHITE};
+  ${defaultTextColor};
 `;
 
 export const Text = styled.p`
@@ -73,7 +69,7 @@ export const Text = styled.p`
   margin-top: 8px;
   font-size: 15px;
   font-weight: 200px;
-  color: ${COLORS.TEXT_CONTENT};
+  ${themeText(C.TEXT_CONTENT)};
 `;
 
 // NOTE: Trying to bolt mobile styling onto the existing UI without changing any
@@ -157,7 +153,7 @@ export const OverlayText = styled.p`
   font-weight: 200;
   text-align: center;
   color: ${(props: { error?: boolean }) =>
-    props.error ? COLORS.LIGHT_FAILURE : COLORS.PRIMARY_GREEN};
+    props.error ? C.LIGHT_FAILURE : C.PRIMARY_GREEN};
 `;
 
 export const OverlaySmallText = styled.p`
@@ -166,7 +162,7 @@ export const OverlaySmallText = styled.p`
   font-size: 22px;
   font-weight: 200;
   text-align: center;
-  color: ${COLORS.LIGHT_FAILURE};
+  color: ${C.LIGHT_FAILURE};
 `;
 
 export interface IconNavLinkProps extends NavLinkProps {
@@ -231,21 +227,25 @@ export const IconNavLink = styled(
   }
 
   &:hover .bp3-icon:only-child {
-    color: white !important;
+    ${themeColor("color", "white")};
   }
 
   .bp3-icon:only-child {
-    color: rgba(255, 255, 255, 0.8) !important;
+    ${themeColor("color", "rgba(255, 255, 255, 0.8)")};
   }
 `;
 
 export const IconButton = styled(Button)`
-  &:hover .bp3-icon:only-child {
-    color: white !important;
+  .bp3-icon:only-child {
+    color: ${(props: IThemeProps) => {
+      return props.theme.dark ? C.TEXT_CONTENT : undefined;
+    }} !important;
   }
 
-  .bp3-icon:only-child {
-    color: rgba(255, 255, 255, 0.8) !important;
+  &:hover .bp3-icon:only-child {
+    color: ${(props: IThemeProps) => {
+      return props.theme.dark ? "white" : undefined;
+    }} !important;
   }
 `;
 
@@ -295,8 +295,13 @@ export const ModalContainer = styled.div`
   justify-content: center;
   transform: translate(-50%, -50%);
   border-radius: 6px;
-  border: 1px solid ${COLORS.BORDER_MODAL};
-  background-color: ${COLORS.BACKGROUND_MODAL};
+  border: 1px solid ${C.BORDER_MODAL};
+
+  ${themeColor(
+    "background",
+    C.BACKGROUND_MODAL_DARK,
+    C.BACKGROUND_MODAL_LIGHT,
+  )};
 
   @media ${MOBILE} {
     width: 100%;
@@ -307,11 +312,10 @@ export const ModalTitleText = styled.h1`
   font-size: 28px;
   font-weight: 300;
   text-align: center;
-  color: ${COLORS.TEXT_WHITE};
   font-family: Helvetica Neue, Lato, sans-serif;
+  ${themeColor("color", C.TEXT_WHITE, C.TEXT_LIGHT_THEME)};
 `;
 
-// @ts-ignore
 export const ModalSubText = styled(ModalTitleText)`
   font-size: 16px;
   margin-top: 12px;
@@ -325,25 +329,28 @@ export const ModalSubText = styled(ModalTitleText)`
 interface HalfCircleProps {
   position: "top" | "bottom";
   positionOffset: number;
-  backgroundColor: string;
 }
 
 export const HalfCircle = styled.div<HalfCircleProps>`
   &:hover {
-    background: ${(props) => props.backgroundColor};
+    background: ${(props: IThemeProps) => {
+      return props.theme.dark
+        ? "rgba(29, 29, 29, 0.7)"
+        : "rgba(200, 200, 200, 0.75)";
+    }};
   }
 
-  align-items: center;
+  width: 60px;
+  z-index: 50;
   cursor: pointer;
-  display: flex;
+  align-items: center;
   height: 30px;
+  display: flex;
   justify-content: center;
   left: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
   transition: background 0.3s;
-  width: 60px;
-  z-index: 100;
 
   border-top-left-radius: ${(props) => (props.position === "top" ? 0 : 90)}px;
   border-top-right-radius: ${(props) => (props.position === "top" ? 0 : 90)}px;
@@ -379,13 +386,11 @@ export const SmoothScrollButton = ({
   scrollToId,
   position,
   positionOffset,
-  backgroundColor,
 }: SmoothScrollButtonProps) => {
   return (
     <HalfCircle
       position={position}
       positionOffset={positionOffset}
-      backgroundColor={backgroundColor}
       onClick={(e: MouseEvent) => {
         e.preventDefault();
         const el = document.getElementById(scrollToId);
@@ -467,17 +472,22 @@ export const LineWrappedText = styled.p`
 
 export const Hr = styled.hr`
   border: 1px solid transparent;
-  border-top-color: black;
-  border-bottom-color: #353535;
+  border-top-color: ${(props: IThemeProps) => {
+    return props.theme.dark ? "black" : C.LIGHT_BORDER;
+  }};
+  border-bottom-color: ${(props: IThemeProps) => {
+    return props.theme.dark ? "#353535" : C.LIGHT_BORDER;
+  }};
 `;
 
 export const SupplementaryContentContainer = styled.div`
   padding: 50px 25px 25px 25px;
-  background: #1e1e1e;
   position: relative;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+
+  ${themeColor("background", "#1e1e1e", C.BACKGROUND_PAGE_LIGHT)};
 
   @media ${MOBILE} {
     padding-left: 12px;
@@ -492,7 +502,7 @@ export const TitleHeader = styled.h1`
 
 export const Highlight = styled.mark`
   font-weight: bold;
-  color: white;
+  ${defaultTextColor};
   background: #ffdf7538;
   border-bottom: 2px solid #ffdf75;
 `;
@@ -530,7 +540,7 @@ export const DefaultVideoWrapper = styled(VideoWrapper)`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  background: ${COLORS.BACKGROUND_CONTENT};
+  background: ${C.BACKGROUND_CONTENT_DARK};
 `;
 
 export const LastChildMargin = styled.div`
@@ -549,7 +559,6 @@ export const PairwiseOpenCloseLogo = ({
   ...props
 }: PairwiseOpenCloseLogoProps) => {
   return (
-    // @ts-ignore
     <svg
       width="24.44"
       height="20"

@@ -195,7 +195,7 @@ const EmailForm = styled.form`
 const InputField = styled.input`
   width: 325px;
   color: ${COLORS.TEXT_HOVER} !important;
-  background: ${COLORS.BACKGROUND_CONSOLE} !important;
+  background: ${COLORS.BACKGROUND_CONSOLE_DARK} !important;
 `;
 
 /** ===========================================================================

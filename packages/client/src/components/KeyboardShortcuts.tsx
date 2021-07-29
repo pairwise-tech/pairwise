@@ -8,6 +8,7 @@ import { IconButton } from "./SharedComponents";
 import styled from "styled-components";
 import { COLORS } from "tools/constants";
 import { getClientOS } from "../tools/utils";
+import { themeText } from "./ThemeContainer";
 
 /** ===========================================================================
  * Keyboard Shortcuts
@@ -248,7 +249,7 @@ const Code = styled.code``;
 
 const DescriptionText = styled.span`
   font-size: 10px;
-  color: ${COLORS.TEXT_CONTENT};
+  ${themeText(COLORS.TEXT_CONTENT, COLORS.TEXT_DARK)};
 `;
 
 const ShortcutKeysTitle = styled.h3`

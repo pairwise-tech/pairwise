@@ -15,6 +15,7 @@ import React from "react";
 import CodepressNavigationContextMenu from "./CodepressContextMenu";
 import styled from "styled-components/macro";
 import { COLORS } from "tools/constants";
+import { defaultTextColor, IThemeProps, themeColor } from "./ThemeContainer";
 
 /** ===========================================================================
  * Sortable Module List
@@ -233,18 +234,22 @@ const NavUpdateField = styled.input`
   padding: 0;
   font-size: 18px;
   border: 1px solid transparent;
-  border-bottom-color: ${COLORS.LIGHT_GREY};
+  border-bottom-color: ${(props: IThemeProps) => {
+    return props.theme.dark ? COLORS.LIGHT_GREY : COLORS.NAV_LIGHT_BORDER;
+  }};
+
   width: 100%;
   display: block;
   text-align: left;
   outline: none;
-  color: white;
   background: transparent;
   position: relative;
 
+  ${defaultTextColor};
+
   &:hover,
   &:focus {
-    color: white;
+    ${defaultTextColor};
     background: #0d0d0d;
   }
 `;
@@ -254,13 +259,14 @@ export const ModuleNumber = styled.code`
   display: inline-block;
   padding: 5px;
   color: #ea709c;
-  background: #3a3a3a;
   width: 24px;
   text-align: center;
   line-height: 12px;
   border-radius: 4px;
-  box-shadow: inset 0px 0px 2px 0px #ababab;
   margin-right: 8px;
+  box-shadow: inset 0px 0px 2px 0px #ababab;
+
+  ${themeColor("background", "#3a3a3a", "rgb(200,200,200)")}
 `;
 
 export const ModuleNavigationBase = styled.div<{ active?: boolean }>`
@@ -271,13 +277,16 @@ export const ModuleNavigationBase = styled.div<{ active?: boolean }>`
   padding-right: 2px;
   font-size: 18px;
   border: 1px solid transparent;
-  border-bottom-color: ${COLORS.LIGHT_GREY};
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   text-align: left;
   position: relative;
+
+  border-bottom-color: ${(props: IThemeProps) => {
+    return props.theme.dark ? COLORS.LIGHT_GREY : COLORS.NAV_LIGHT_BORDER;
+  }};
 
   span {
     display: flex;

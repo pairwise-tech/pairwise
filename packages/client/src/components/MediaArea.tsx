@@ -190,7 +190,6 @@ ID (video ID)
           position="top"
           positionOffset={70}
           scrollToId="root"
-          backgroundColor="#242423"
         />
       )}
     </SupplementaryContentContainer>

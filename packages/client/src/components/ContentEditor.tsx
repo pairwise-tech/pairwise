@@ -17,7 +17,8 @@ import tryCatch from "ramda/es/tryCatch";
 import { Dictionary } from "ramda";
 import { scrollToVideoAndPlay, scrollToContentArea } from "./MediaArea";
 import { Button } from "@blueprintjs/core";
-import { InverseChallengeMapping } from "@pairwise/common";
+import { AppTheme, InverseChallengeMapping } from "@pairwise/common";
+import { themeColor, themeText } from "./ThemeContainer";
 
 const RichMarkdownEditor = React.lazy(() => import("rich-markdown-editor"));
 
@@ -455,7 +456,7 @@ const markdownShortcuts = MarkdownShortcuts();
  * scoped in and stale.
  * ============================================================================
  */
-class ContentEditor extends React.Component<Props> {
+class ContentEditor extends React.Component<IProps> {
   getSearchLinks = (searchTerm: string) => {
     // Kick off a search request...
     this.props.requestSearchResults(searchTerm);
@@ -478,13 +479,19 @@ class ContentEditor extends React.Component<Props> {
   };
 
   render() {
-    const { history, plugins = [], challengeMap, ...props } = this.props;
+    const {
+      history,
+      plugins = [],
+      challengeMap,
+      appTheme,
+      ...props
+    } = this.props;
     return (
       <ErrorBoundary>
         <EditorExternalStyles>
           <RichMarkdownEditor
             plugins={[...plugins, markdownShortcuts]}
-            theme={editorTheme}
+            theme={getEditorTheme(appTheme)}
             onSearchLink={this.getSearchLinks}
             uploadImage={this.handleFileUpload}
             onShowToast={(message) => {
@@ -607,59 +614,66 @@ export const editorColors = {
   codeString: "#032f62",
 };
 
-const editorTheme = {
-  fontFamily:
-    "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen, Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif",
-  fontFamilyMono:
-    "'SFMono-Regular',Consolas,'Liberation Mono', Menlo, Courier,monospace",
-  fontWeight: 400,
-  zIndex: 100,
-  link: editorColors.primary,
-  placeholder: "#B1BECC",
-  textSecondary: "#4E5C6E",
-  textLight: editorColors.white,
-  selected: editorColors.primary,
-  codeComment: "#6a737d",
-  codePunctuation: "#5e6687",
-  codeNumber: "#d73a49",
-  codeProperty: "#c08b30",
-  codeTag: "#3d8fd1",
-  codeSelector: "#6679cc",
-  codeAttr: "#c76b29",
-  codeEntity: "#22a2c9",
-  codeKeyword: "#d73a49",
-  codeFunction: "#6f42c1",
-  codeStatement: "#22a2c9",
-  codePlaceholder: "#3d8fd1",
-  codeInserted: "#202746",
-  codeImportant: "#c94922",
+const getEditorTheme = (appTheme: AppTheme) => {
+  const isDark = appTheme === "dark";
 
-  background: "transparent",
-  text: editorColors.almostWhite,
-  code: editorColors.almostWhite,
+  return {
+    fontFamily:
+      "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen, Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif",
+    fontFamilyMono:
+      "'SFMono-Regular',Consolas,'Liberation Mono', Menlo, Courier,monospace",
+    fontWeight: 400,
+    zIndex: 100,
+    link: editorColors.primary,
+    placeholder: "#B1BECC",
+    textSecondary: "#4E5C6E",
+    textLight: editorColors.white,
+    selected: editorColors.primary,
+    codeComment: "#6a737d",
+    codePunctuation: "#5e6687",
+    codeNumber: "#d73a49",
+    codeProperty: "#c08b30",
+    codeTag: "#3d8fd1",
+    codeSelector: "#6679cc",
+    codeAttr: "#c76b29",
+    codeEntity: "#22a2c9",
+    codeKeyword: "#d73a49",
+    codeFunction: "#6f42c1",
+    codeStatement: "#22a2c9",
+    codePlaceholder: "#3d8fd1",
+    codeInserted: "#202746",
+    codeImportant: "#c94922",
 
-  toolbarBackground: "#3a3a3a",
-  toolbarInput: editorColors.white10,
-  toolbarItem: editorColors.almostWhite,
+    background: "transparent",
+    code: editorColors.almostWhite,
 
-  blockToolbarBackground: editorColors.white,
-  blockToolbarTrigger: editorColors.almostWhite,
-  blockToolbarTriggerIcon: editorColors.almostBlack,
-  blockToolbarItem: editorColors.lightBlack,
+    text: isDark ? editorColors.almostWhite : editorColors.almostBlack,
 
-  tableDivider: editorColors.lightBlack,
-  tableSelected: editorColors.primary,
-  tableSelectedBackground: "#002333",
+    toolbarBackground: "#3a3a3a",
+    toolbarInput: editorColors.white10,
+    toolbarItem: editorColors.almostWhite,
 
-  quote: editorColors.almostWhite,
-  codeBackground: editorColors.almostBlack,
-  codeBorder: editorColors.lightBlack,
-  codeString: editorColors.codeString,
-  horizontalRule: editorColors.lightBlack,
-  imageErrorBackground: "rgba(0, 0, 0, 0.5)",
-  hiddenToolbarButtons: {
-    blocks: ["code"],
-  },
+    blockToolbarBackground: editorColors.white,
+    blockToolbarTrigger: editorColors.almostWhite,
+    blockToolbarTriggerIcon: editorColors.almostBlack,
+    blockToolbarItem: editorColors.lightBlack,
+
+    tableDivider: editorColors.lightBlack,
+    tableSelected: editorColors.primary,
+    tableSelectedBackground: "#002333",
+
+    quote: editorColors.almostWhite,
+
+    codeBackground: isDark ? editorColors.almostBlack : editorColors.lightBlack,
+    codeBorder: isDark ? editorColors.lightBlack : editorColors.greyMid,
+
+    codeString: editorColors.codeString,
+    horizontalRule: editorColors.lightBlack,
+    imageErrorBackground: "rgba(0, 0, 0, 0.5)",
+    hiddenToolbarButtons: {
+      blocks: ["code"],
+    },
+  };
 };
 
 /**
@@ -674,17 +688,21 @@ const EditorExternalStyles = styled.div`
   mark {
     background: #ffdf7538;
     border-bottom: 2px solid #ffdf75;
-    color: white;
+    ${themeText("white", "black")};
     padding: 0 3px;
     border-radius: 2px;
   }
 
   blockquote {
     margin-left: 0;
-    background: ${COLORS.LIGHT_GREY} !important;
     font-style: normal !important;
     border-left-width: 9px !important;
     padding: 5px 20px 5px 10px !important;
+    ${themeColor(
+      "background",
+      COLORS.LIGHT_GREY,
+      COLORS.BACKGROUND_MODAL_LIGHT,
+    )};
   }
   blockquote h1,
   blockquote h2,
@@ -754,6 +772,7 @@ const EditorExternalStyles = styled.div`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  appTheme: Modules.selectors.user.userSettings(state).appTheme,
   searchResults: Modules.selectors.challenges.getSearchResults(state),
   challengeId: Modules.selectors.challenges.getCurrentChallengeId(state),
   challengeMap: state.challenges.challengeMap,
@@ -765,7 +784,7 @@ const dispatchProps = {
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-type Props = RouteComponentProps & ConnectProps & EditorProps;
+type IProps = RouteComponentProps & ConnectProps & EditorProps;
 
 export default withRouter(
   connect(mapStateToProps, dispatchProps)(ContentEditor),

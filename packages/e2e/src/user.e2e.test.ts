@@ -43,7 +43,7 @@ describe("User APIs", () => {
       avatarUrl,
       settings: {
         workspaceFontSize: 18,
-        theme: "hc-black",
+        editorTheme: "hc-black",
       },
     };
 
@@ -58,7 +58,7 @@ describe("User APIs", () => {
     expect(profile.familyName).toBe(originalProfile.familyName);
     expect(originalSettings.workspaceFontSize).toBe(16);
     expect(settings.workspaceFontSize).toBe(18);
-    expect(settings.theme).toBe("hc-black");
+    expect(settings.editorTheme).toBe("hc-black");
   });
 
   test("/user/profile (POST) rejects email parameters", async () => {
@@ -125,14 +125,14 @@ describe("User APIs", () => {
     await handleUpdateUser({
       settings: {
         workspaceFontSize: NaN,
-        theme: "Djikstra Theme",
+        editorTheme: "Djikstra Theme",
       },
     });
 
     result = await axios.get(`${HOST}/user/profile`, headers);
     const firstSettings = result.data.settings;
 
-    expect(firstSettings.theme).toBe("vs-dark");
+    expect(firstSettings.editorTheme).toBe("vs-dark");
     expect(firstSettings.workspaceFontSize).toBe(16);
 
     /**
@@ -146,7 +146,7 @@ describe("User APIs", () => {
       settings: {
         workspaceFontSize: 28,
         invalidSetting: "true",
-        theme: "Djikstra Theme",
+        editorTheme: "Djikstra Theme",
       },
     });
 
@@ -155,7 +155,7 @@ describe("User APIs", () => {
     const secondSettings = result.data.settings;
 
     expect(secondProfile.displayName).toBe("Djikstra");
-    expect(secondSettings.theme).toBe("vs-dark");
+    expect(secondSettings.editorTheme).toBe("vs-dark");
     expect(secondSettings.workspaceFontSize).toBe(28);
     expect(secondProfile.email).toBe(originalProfile.email);
     expect(secondProfile.avatarUrl).toBe(originalProfile.avatarUrl);
@@ -163,11 +163,11 @@ describe("User APIs", () => {
     expect(secondProfile.familyName).toBe(originalProfile.familyName);
 
     /**
-     * [3] The theme setting can be updated, if a valid theme is provided.
+     * [3] The editor theme setting can be updated, if a valid theme is provided.
      */
     await handleUpdateUser({
       settings: {
-        theme: "hc-black",
+        editorTheme: "hc-black",
         workspaceFontSize: "55",
       },
     });
@@ -175,8 +175,38 @@ describe("User APIs", () => {
     result = await axios.get(`${HOST}/user/profile`, headers);
     const thirdSettings = result.data.settings;
 
-    expect(thirdSettings.theme).toBe("hc-black");
+    expect(thirdSettings.editorTheme).toBe("hc-black");
     expect(thirdSettings.workspaceFontSize).toBe(28);
+
+    /**
+     * [5] The app theme setting disregards invalid updates.
+     */
+    await handleUpdateUser({
+      settings: {
+        appTheme: "blega",
+        workspaceFontSize: "55",
+      },
+    });
+
+    result = await axios.get(`${HOST}/user/profile`, headers);
+    const fourthSettings = result.data.settings;
+
+    expect(fourthSettings.appTheme).toBe("dark");
+
+    /**
+     * [5] The aoo theme setting can be updated, if a valid theme is provided.
+     */
+    await handleUpdateUser({
+      settings: {
+        appTheme: "light",
+        workspaceFontSize: "55",
+      },
+    });
+
+    result = await axios.get(`${HOST}/user/profile`, headers);
+    const fifthSettings = result.data.settings;
+
+    expect(fifthSettings.appTheme).toBe("light");
 
     done();
   });

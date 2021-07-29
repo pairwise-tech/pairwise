@@ -19,6 +19,8 @@ import {
   UserProgressMap,
   CourseSkeleton,
   getChallengeSlug,
+  AppTheme,
+  MonacoEditorThemes,
 } from "@pairwise/common";
 import { SANDBOX_ID } from "./constants";
 import { Location } from "history";
@@ -708,4 +710,24 @@ export const isValidSandboxChallengeType = (
 ): Nullable<CHALLENGE_TYPE> => {
   const item = SANDBOX_TYPE_CHOICES.find((x) => x.value === type);
   return item !== undefined ? item.value : null;
+};
+
+/**
+ * Default the editor theme to match the app theme.
+ */
+export const getMonacoTheme = (
+  appTheme: AppTheme,
+  editorTheme: MonacoEditorThemes,
+) => {
+  let theme = editorTheme;
+
+  if (theme === MonacoEditorThemes.DEFAULT) {
+    if (appTheme === "dark") {
+      theme = MonacoEditorThemes.DARK;
+    } else {
+      theme = MonacoEditorThemes.LIGHT;
+    }
+  }
+
+  return theme;
 };

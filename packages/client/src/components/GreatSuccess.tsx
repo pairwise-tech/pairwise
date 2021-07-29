@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Icon, Classes } from "@blueprintjs/core";
+import { Button, Icon, Classes, IconSize } from "@blueprintjs/core";
 import styled from "styled-components/macro";
 import { CSSTransition } from "react-transition-group";
 import Confetti from "react-confetti";
@@ -10,9 +10,10 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { NextChallengeButton } from "./ChallengeControls";
 import { connect } from "react-redux";
 import KeyboardShortcuts from "./KeyboardShortcuts";
-import { MOBILE } from "tools/constants";
+import { COLORS, MOBILE } from "tools/constants";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
+import { defaultTextColor, themeColor } from "./ThemeContainer";
 
 /** ===========================================================================
  * Types & Config
@@ -71,13 +72,17 @@ const renderSuccessMessage = (challenge: Challenge) => {
       challenge.title.charAt(challenge.title.length - 1) === "!" ? "" : ".";
 
     return (
-      <span>
+      <SuccessText>
         Congratulations, you've completed <strong>{challenge.title}</strong>
         {punctuation} Keep up the progress!
-      </span>
+      </SuccessText>
     );
   }
 };
+
+const SuccessText = styled.span`
+  ${defaultTextColor};
+`;
 
 /** ===========================================================================
  * Card Title Component
@@ -112,9 +117,9 @@ const CardTitle: React.FC<{ parentStage?: number }> = (props) => {
             color: "#09F9A4",
             transform: "scale(3)",
           }}
-          intent="primary"
-          iconSize={Icon.SIZE_LARGE}
           icon="tick"
+          intent="primary"
+          iconSize={IconSize.LARGE}
         ></Icon>
       </CSSTransition>
       <CSSTransition
@@ -123,7 +128,7 @@ const CardTitle: React.FC<{ parentStage?: number }> = (props) => {
         classNames="gs"
         onEntered={nextStage}
       >
-        <h1>{props.children}</h1>
+        <CardTitleHeading>{props.children}</CardTitleHeading>
       </CSSTransition>
     </CardTitleContainer>
   );
@@ -366,6 +371,10 @@ const SuccessMessageText = styled.p`
   }
 `;
 
+const CardTitleHeading = styled.h1`
+  ${defaultTextColor};
+`;
+
 /** ===========================================================================
  * Styles
  * ============================================================================
@@ -416,11 +425,11 @@ const Content = styled.div`
   z-index: 7;
   transition: all 500ms ease-out;
   padding: 40px;
-  background: #222;
   border-radius: 5px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
   width: 80%;
   margin: 0 auto;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  ${themeColor("background", "#222", COLORS.BACKGROUND_MODAL_LIGHT)};
 
   &.inner {
     position: relative;
@@ -446,8 +455,8 @@ const Backdrop = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
   z-index: 6;
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 const GreatSuccessContainer = styled.div`

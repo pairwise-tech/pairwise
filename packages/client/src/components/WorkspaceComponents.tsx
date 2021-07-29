@@ -5,7 +5,6 @@ import Markdown, { ReactMarkdownProps } from "react-markdown";
 import styled from "styled-components/macro";
 import {
   COLORS as C,
-  COLORS,
   CONTENT_SERIALIZE_DEBOUNCE,
   SANDBOX_ID,
   MOBILE,
@@ -29,6 +28,13 @@ import { debounce } from "throttle-debounce";
 import ContentEditor, { editorColors } from "./ContentEditor";
 import Breadcrumbs from "./Breadcrumbs";
 import { Table, Cell, Column } from "@blueprintjs/table";
+import {
+  defaultTextColor,
+  IThemeProps,
+  themeColor,
+  themeText,
+} from "./ThemeContainer";
+import { AppTheme } from "@pairwise/common";
 
 const D = getDimensions();
 
@@ -50,10 +56,16 @@ export const PageSection = styled.div`
 
 export const LowerSection = styled.div<{ withHeader?: boolean }>`
   width: 100vw;
-  height: ${(props) =>
-    props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
-  border-top: 1px solid ${C.DRAGGABLE_SLIDER_BORDER};
-  background: ${C.BACKGROUND_LOWER_SECTION};
+  border-top: ${(props: IThemeProps) => {
+    const color = props.theme.dark ? C.DRAGGABLE_SLIDER_BORDER : C.LIGHT_BORDER;
+    return `1px solid ${color}`;
+  }};
+
+  ${themeColor(
+    "background",
+    C.BACKGROUND_LOWER_SECTION,
+    C.BACKGROUND_PAGE_LIGHT,
+  )};
 `;
 
 export const WorkspaceContainer = styled.div`
@@ -71,7 +83,7 @@ export const FrameContainer = styled.iframe`
 export const RunButton = styled(Button)`
   z-index: 3;
   .bp3-icon {
-    color: ${COLORS.NEON_GREEN} !important;
+    color: ${C.NEON_GREEN} !important;
   }
 `;
 
@@ -160,8 +172,8 @@ const PreviewCover = styled.div`
   height: 100%;
   width: 100%;
   z-index: 100;
-  color: white;
-  background: rgb(45, 45, 45);
+  ${defaultTextColor};
+  ${themeColor("background", "rgb(45, 45, 45)", C.BACKGROUND_CONTENT_LIGHT)}
 `;
 
 const HighlightedMarkdown = (props: ReactMarkdownProps) => {
@@ -195,8 +207,20 @@ const TestMessageHighlighter = styled(HighlightedMarkdown)`
     line-height: normal;
     font-size: 85%;
     padding: 3px 6px;
-    border: 1px solid ${editorColors.lightBlack};
-    background: ${editorColors.almostBlack};
+
+    color: ${(props: IThemeProps) => {
+      const color = props.theme.dark
+        ? editorColors.lightBlack
+        : editorColors.greyMid;
+
+      return `1px solid ${color}`;
+    }};
+
+    ${themeColor(
+      "background",
+      editorColors.almostBlack,
+      editorColors.lightBlack,
+    )}
   }
 `;
 
@@ -208,14 +232,36 @@ export const ContentDiv = styled.div`
   font-size: 15px;
   font-weight: 200px;
   padding-right: 8px;
-  color: ${C.TEXT_CONTENT};
+  ${themeText(C.TEXT_CONTENT)};
 `;
 
 const TestStatus = styled.div`
   display: flex;
-  width: 140;
+  width: 145px;
   margin-left: auto;
   flex-direction: row;
+  padding: 2px 6px 0px 6px;
+  border-radius: 3px;
+
+  border: ${(props: IThemeProps) => {
+    if (props.theme.dark) {
+      return undefined;
+    } else {
+      return `1px solid ${C.NAV_LIGHT_BORDER}`;
+    }
+  }};
+
+  ${themeColor("background", "transparent", "rgb(200,200,200)")};
+
+  @media ${MOBILE} {
+    border: none;
+    background: transparent;
+    width: auto;
+  }
+`;
+
+const TestStatusBold = styled.b`
+  ${themeText(C.TEXT_TITLE)};
 `;
 
 const StyledTestResultRow = styled.div`
@@ -319,7 +365,7 @@ export const TestResultRow = ({
         )}
         <TestMessageHighlighter source={message} />
         <TestStatus>
-          <b style={{ color: C.TEXT_TITLE }}>Status:</b>
+          <TestStatusBold>Status:</TestStatusBold>
           <TestCaseStatusText
             testStatus={testStatus}
             id={`test-result-status-${index}`}
@@ -337,26 +383,51 @@ export const TestResultRow = ({
   );
 };
 
-export const consoleRowStyles = {
-  paddingTop: 2,
-  paddingBottom: 4,
-  background: C.BACKGROUND_CONSOLE,
+export const getConsoleRowStyles = (theme: AppTheme) => {
+  const background =
+    theme === "dark" ? C.BACKGROUND_CONSOLE_DARK : C.BACKGROUND_CONSOLE_LIGHT;
+
+  return {
+    background,
+    paddingTop: 2,
+    paddingBottom: 4,
+  };
 };
 
-export const colSeparatorProps = {
-  style: {
-    backgroundColor: C.DRAGGABLE_SLIDER,
-    borderLeft: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-    borderRight: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-  },
+export const getColSeparatorProps = (theme: AppTheme) => {
+  const isDark = theme === "dark";
+
+  const backgroundColor = isDark
+    ? C.DRAGGABLE_SLIDER_DARK
+    : C.DRAGGABLE_SLIDER_LIGHT;
+
+  const border = isDark ? C.DRAGGABLE_SLIDER_BORDER : C.LIGHT_BORDER;
+
+  return {
+    style: {
+      backgroundColor,
+      borderLeft: `1px solid ${border}`,
+      borderRight: `1px solid ${border}`,
+    },
+  };
 };
 
-export const rowSeparatorProps = {
-  style: {
-    backgroundColor: C.DRAGGABLE_SLIDER,
-    borderTop: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-    borderBottom: `1px solid ${C.DRAGGABLE_SLIDER_BORDER}`,
-  },
+export const getRowSeparatorProps = (theme: AppTheme) => {
+  const isDark = theme === "dark";
+
+  const backgroundColor = isDark
+    ? C.DRAGGABLE_SLIDER_DARK
+    : C.DRAGGABLE_SLIDER_LIGHT;
+
+  const border = isDark ? C.DRAGGABLE_SLIDER_BORDER : C.LIGHT_BORDER;
+
+  return {
+    style: {
+      backgroundColor,
+      borderTop: `1px solid ${border}`,
+      borderBottom: `1px solid ${border}`,
+    },
+  };
 };
 
 export const ContentContainer = styled.div`
@@ -376,7 +447,7 @@ export const ContentTitle = styled.h3`
   margin-top: 4px;
   margin-left: 2px;
   margin-bottom: 12px;
-  color: ${C.TEXT_TITLE};
+  ${themeText(C.TEXT_TITLE)};
 `;
 
 export const TestCaseStatusText = styled.p`
@@ -385,21 +456,26 @@ export const TestCaseStatusText = styled.p`
   white-space: nowrap;
   color: ${({
     testStatus,
-  }: {
+  }: IThemeProps & {
     testStatus: "success" | "failure" | "loading" | "no-results";
-  }) =>
-    testStatus === "loading" || testStatus === "no-results"
+  }) => {
+    return testStatus === "loading" || testStatus === "no-results"
       ? C.SECONDARY_YELLOW
       : testStatus === "success"
       ? C.SUCCESS
-      : C.FAILURE};
+      : C.FAILURE;
+  }};
 `;
 
 export const TabbedInnerNav = styled.div<{ show: boolean }>`
   position: relative;
   display: ${(props) => (props.show ? "flex" : "none")};
   align-items: center;
-  border-bottom: 1px solid black;
+
+  border-bottom: ${(props: IThemeProps) => {
+    const color = props.theme.dark ? "black" : C.LIGHT_BORDER;
+    return `1px solid ${color}`;
+  }};
 `;
 
 export const Tab = styled.div<{ active?: boolean }>`
@@ -407,16 +483,41 @@ export const Tab = styled.div<{ active?: boolean }>`
   padding: 7px 20px;
   cursor: pointer;
   position: relative;
-  background: ${(props) => (props.active ? "#1e1e1e" : "transparent")};
-  color: ${(props) => (props.active ? "white" : "gray")};
-  border: 1px solid ${(props) => (props.active ? "black" : "transparent")};
+
+  border: ${(props) => {
+    let color;
+    if (props.active) {
+      color = props.theme.dark ? "black" : C.LIGHT_BORDER;
+    } else {
+      color = "transparent";
+    }
+
+    return `1px solid ${color}`;
+  }};
+
   border-top: 2px solid
-    ${(props) => (props.active ? COLORS.PRIMARY_GREEN : "transparent")};
+    ${(props) => (props.active ? C.PRIMARY_GREEN : "transparent")};
   border-bottom: none;
   transition: all 0.2s ease-out;
 
+  color: ${(props) => {
+    if (props.active) {
+      return props.theme.dark ? "white" : "black";
+    } else {
+      return "gray";
+    }
+  }};
+
+  background: ${(props) => {
+    if (props.active) {
+      return props.theme.dark ? "#1e1e1e" : "white";
+    } else {
+      return props.theme.dark ? "transparent" : "rgb(225,225,225)";
+    }
+  }};
+
   &:hover {
-    color: white;
+    ${themeText("white", "black")};
   }
 
   &:after {
@@ -485,14 +586,14 @@ export const LoginSignupText = styled.h1`
   margin-left: 12px;
   font-size: 18px;
   font-weight: 200;
-  color: ${COLORS.TEXT_TITLE};
+  color: ${C.TEXT_TITLE};
   font-family: Helvetica Neue, Lato, sans-serif;
 `;
 
 export const LoginSignupTextInteractive = styled(LoginSignupText)`
   :hover {
     cursor: pointer;
-    color: ${COLORS.TEXT_HOVER};
+    color: ${C.TEXT_HOVER};
   }
 `;
 
@@ -501,11 +602,13 @@ export const ChallengeTitleHeading = styled.h1`
   font-size: 1.2em;
   background: transparent;
   font-weight: bold;
-  color: rgb(200, 200, 200);
   display: block;
   width: 100%;
   line-height: 1.5;
   transition: all 0.2s ease-out;
+
+  ${themeText("rgb(200, 200, 200)", C.TEXT_LIGHT_THEME)};
+
   &:focus {
     background: black;
   }
@@ -528,11 +631,19 @@ const SolutionWrapper = styled.button`
   padding: 8px;
   margin-bottom: 8px;
   border-radius: 5px;
-  background: ${C.REVEAL_SOLUTION_LABEL_BACKGROUND};
+  ${themeColor(
+    "background",
+    C.REVEAL_SOLUTION_LABEL_BACKGROUND,
+    "rgb(175,175,175)",
+  )};
 
   &:hover {
     cursor: pointer;
-    background: ${C.REVEAL_SOLUTION_LABEL_BACKGROUND_HOVER};
+    ${themeColor(
+      "background",
+      C.REVEAL_SOLUTION_LABEL_BACKGROUND_HOVER,
+      C.BACKGROUND_NAVIGATION_ITEM_HOVER_LIGHT,
+    )};
   }
 `;
 
@@ -804,7 +915,6 @@ export const WorkspaceMobileView = styled.div`
   .mobile-tests-badge {
     font-size: 10px;
     position: absolute;
-    color: white;
     top: 0;
     left: 0;
     border-radius: 100px;
@@ -818,7 +928,8 @@ export const WorkspaceMobileView = styled.div`
     top: 50%;
     transform: translate(-100%, -50%);
     left: -5px;
-    color: black;
+
+    ${themeColor("color", "black", "white")};
 
     &.fail {
       background: #e17e75;

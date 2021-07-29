@@ -5,12 +5,9 @@ import ApplicationContainer from "components/ApplicationContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
 import { NODE_ENV } from "tools/client-env";
 import ScrollToTop from "components/ScrollToTop";
-import {
-  DarkTheme,
-  FullScreenOverlay,
-  OverlayText,
-} from "components/SharedComponents";
+import { FullScreenOverlay, OverlayText } from "components/SharedComponents";
 import { captureSentryException } from "tools/sentry-utils";
+import ThemeContainer from "./components/ThemeContainer";
 
 /** ===========================================================================
  * Types
@@ -24,7 +21,7 @@ interface IState {
 interface IProps {}
 
 /** ===========================================================================
- * Pairwise App!
+ * Pairwise App
  * ============================================================================
  */
 
@@ -71,9 +68,9 @@ class Pairwise extends React.Component<IProps, IState> {
       <ReduxProvider store={store}>
         <ReactRouter history={history}>
           <ScrollToTop />
-          <DarkTheme>
+          <ThemeContainer>
             <ApplicationContainer />
-          </DarkTheme>
+          </ThemeContainer>
         </ReactRouter>
       </ReduxProvider>
     );

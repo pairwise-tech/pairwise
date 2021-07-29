@@ -5,21 +5,18 @@
 }
 
 a {
-  color: white;
   text-decoration: none;
 }
 
 a:hover {
-  color: white;
   text-decoration: none;
 }
 
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
   font-size: 16px;
-  background: #1e1e1e;
+  overflow-x: hidden;
 }
 
 code,

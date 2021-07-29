@@ -8,6 +8,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { PageContainer, Text, PageTitle } from "./SharedComponents";
 import { COLORS, MOBILE } from "tools/constants";
 import SEO from "./SEO";
+import { defaultTextColor, themeColor, themeText } from "./ThemeContainer";
 
 /** ===========================================================================
  * Home Component
@@ -38,9 +39,7 @@ class Home extends React.Component<IProps, {}> {
               </ContentText>
             ) : (
               <>
-                <ContentText
-                  style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
-                >
+                <ContentText style={{ fontWeight: "bold" }}>
                   What is Pairwise?
                 </ContentText>
                 <ContentText>
@@ -57,22 +56,18 @@ class Home extends React.Component<IProps, {}> {
                   Pairwise is the fastest and most affordable way to learn these
                   skills.
                 </ContentText>
-                <ContentText
-                  style={{ fontWeight: "bold", color: COLORS.TEXT_WHITE }}
-                >
+                <ContentText style={{ fontWeight: "bold" }}>
                   How much does it cost?
                 </ContentText>
                 <ContentText>
                   The Pairwise FullStack TypeScript Course is currently in{" "}
                   <Bold style={{ textDecoration: "underline " }}>BETA</Bold> and
                   available to purchase now for{" "}
-                  <Bold style={{ color: COLORS.SECONDARY_YELLOW }}>
-                    $50 USD
-                  </Bold>
-                  . This includes all of the modules you can view in the course
-                  navigation menu, and covers HTML & CSS, basic programming,
-                  frontend and backend development, mobile development, and
-                  other skills like testing and deploying software.
+                  <PaymentText>$50 USD</PaymentText>. This includes all of the
+                  modules you can view in the course navigation menu, and covers
+                  HTML & CSS, basic programming, frontend and backend
+                  development, mobile development, and other skills like testing
+                  and deploying software.
                 </ContentText>
               </>
             )}
@@ -223,7 +218,7 @@ const ProgressBar = styled.div`
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
-  background: ${COLORS.PROGRESS_BACKGROUND};
+  ${themeColor("background", COLORS.PROGRESS_BACKGROUND, COLORS.GRAY)}
 `;
 
 const ProgressComplete = styled.div<{ progress: number }>`
@@ -243,7 +238,7 @@ const ModuleProgressTitle = styled.div`
   padding-top: 3px;
   padding-left: 5px;
   padding-bottom: 3px;
-  background: ${COLORS.TEXT_DARK};
+  ${themeColor("background", COLORS.TEXT_DARK, COLORS.GRAY)}
 `;
 
 const ModuleProgressPercentage = styled.div`
@@ -251,7 +246,7 @@ const ModuleProgressPercentage = styled.div`
   padding-top: 3px;
   padding-left: 3px;
   padding-bottom: 3px;
-  background: ${COLORS.PROGRESS_BACKGROUND};
+  ${themeColor("background", COLORS.PROGRESS_BACKGROUND, COLORS.WHITE)}
 `;
 
 const ContentText = styled(Text)`
@@ -260,11 +255,15 @@ const ContentText = styled(Text)`
 
 const CourseTitle = styled.h2`
   margin-top: 10px;
-  color: ${COLORS.TEXT_WHITE};
+  ${defaultTextColor};
 `;
 
 const Bold = styled.b`
-  color: ${COLORS.TEXT_WHITE};
+  ${defaultTextColor};
+`;
+
+const PaymentText = styled(Bold)`
+  ${themeText(COLORS.SECONDARY_YELLOW, COLORS.PRIMARY_BLUE)};
 `;
 
 const CourseDescription = styled.p`
@@ -272,8 +271,8 @@ const CourseDescription = styled.p`
   font-size: 14px;
   font-weight: 100;
   letter-spacing: 1px;
-  color: white;
   font-size: 18px;
+  ${defaultTextColor};
 `;
 
 const ButtonsBox = styled.div`

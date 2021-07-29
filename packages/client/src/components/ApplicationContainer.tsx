@@ -55,6 +55,7 @@ import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
 import PairwiseScreensaver from "./PairwiseScreensaver";
 import NavigationSwipeHandler from "./MobileSwipeHandler";
 import DeepLinkCodeStringAlert from "./DeepLinkCodeStringAlert";
+import { IThemeProps, themeColor, themeText } from "./ThemeContainer";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -107,6 +108,7 @@ const ApplicationContainer = (props: IProps) => {
     overlayVisible,
     workspaceLoading,
     hasMediaContent,
+    updateUserSettings,
     setScreensaverState,
     screensaverVisible,
     toggleNavigationMap,
@@ -229,9 +231,10 @@ const ApplicationContainer = (props: IProps) => {
           style={{ height: "100%", marginRight: isMobile ? 0 : 40 }}
         >
           <NavIconButton
+            theme={user.settings.appTheme}
             overlayVisible={overlayVisible}
-            style={{ color: "white", marginRight: isMobile ? 15 : 20 }}
             onClick={toggleNavigationMap}
+            style={{ color: "white", marginRight: isMobile ? 15 : 20 }}
           />
           <ProductTitle id="product-title">
             <Link
@@ -275,6 +278,25 @@ const ApplicationContainer = (props: IProps) => {
             <Tooltip2
               usePortal={false}
               position="bottom"
+              content="Toggle App Theme"
+            >
+              <IconButton
+                icon="lightbulb"
+                style={{ padding: 0 }}
+                aria-label="Toggle App Theme"
+                onClick={() =>
+                  updateUserSettings({
+                    appTheme:
+                      user.settings.appTheme === "dark" ? "light" : "dark",
+                  })
+                }
+              />
+            </Tooltip2>
+          )}
+          {/* {!isMobile && (
+            <Tooltip2
+              usePortal={false}
+              position="bottom"
               content="Launch Pairwise Screensaver"
             >
               <IconButton
@@ -284,7 +306,7 @@ const ApplicationContainer = (props: IProps) => {
                 onClick={() => setScreensaverState(true)}
               />
             </Tooltip2>
-          )}
+          )} */}
           {/* <PairwiseLivePopover /> */}
           {isSandbox && (
             <Suspense fallback={<LoadingInline />}>
@@ -358,7 +380,11 @@ const ApplicationContainer = (props: IProps) => {
                     target="__blank"
                     to={{ pathname: "https://www.pairwise.tech/" }}
                     style={{
-                      borderBottom: `1px solid ${COLORS.BORDER_DROPDOWN_MENU_ITEM}`,
+                      borderBottom: `1px solid ${
+                        user.settings.appTheme === "dark"
+                          ? COLORS.BORDER_DROPDOWN_MENU_ITEM
+                          : COLORS.LIGHT_BORDER
+                      }`,
                     }}
                   >
                     <Icon icon="info-sign" style={{ marginRight: 10 }} />
@@ -376,10 +402,10 @@ const ApplicationContainer = (props: IProps) => {
               icon="user"
               id="login-signup-button"
               style={{
-                margin: "0 10px",
-                border: "1px solid rgba(255, 255, 255, 0.23)",
                 flexShrink: 0,
+                margin: "0 10px",
                 whiteSpace: "nowrap",
+                border: "1px solid rgba(255, 255, 255, 0.23)",
               }}
               onClick={() => setSingleSignOnDialogState(true)}
             />
@@ -399,7 +425,6 @@ const ApplicationContainer = (props: IProps) => {
           position="bottom"
           positionOffset={-20}
           scrollToId={CONTENT_AREA_ID}
-          backgroundColor="rgba(29, 29, 29, 0.7)"
         />
       )}
       <Suspense fallback={<LoadingInline />}>
@@ -492,8 +517,13 @@ const Header = styled.div`
   padding-left: 0px;
   padding-right: 0px;
   margin-bottom: 0;
-  background: #212121;
-  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
+
+  border-bottom: ${(props: IThemeProps) => {
+    const color = props.theme.dark ? COLORS.LIGHT_GREY : COLORS.LIGHT_BORDER;
+    return `1px solid ${color}`;
+  }};
+
+  ${themeColor("background", "#212121", "rgb(245,245,245)")};
 
   height: ${HEADER_HEIGHT}px;
   width: calc(100vw - 48);
@@ -573,12 +603,13 @@ const BetaLabel = styled.small`
 const ProductTitle = styled.h1`
   position: relative;
   margin: 0;
-  color: white;
   font-weight: 100;
   font-family: "Helvetica Neue", Lato, sans-serif;
 
+  ${themeText("white", "black")};
+
   a {
-    color: white;
+    ${themeText("white", "black")};
     text-decoration: none;
   }
 
@@ -605,9 +636,8 @@ const ControlsContainer = styled.div`
   flex-direction: row;
 `;
 
-const NavIconButton = styled(({ overlayVisible, ...rest }) => (
+const NavIconButton = styled(({ overlayVisible, theme, ...rest }) => (
   <Button
-    minimal
     large
     id="navigation-menu-button"
     aria-label="Open navigation map"
@@ -617,7 +647,6 @@ const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   </Button>
 ))`
   appearance: none;
-  background: transparent;
   border: none;
   outline: none;
   margin-left: 10px;
@@ -662,7 +691,7 @@ const AccountDropdownButton = styled.div`
   .account-menu-dropdown {
     position: relative;
     display: inline-block;
-    color: ${COLORS.TEXT_TITLE};
+    ${themeText(COLORS.TEXT_TITLE, COLORS.TEXT_LIGHT_THEME)};
   }
 
   .dropdown-links {
@@ -672,19 +701,28 @@ const AccountDropdownButton = styled.div`
     position: absolute;
     min-width: 215px;
     box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
-    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
+    ${themeColor(
+      "background",
+      COLORS.BACKGROUND_DROPDOWN_MENU,
+      COLORS.BACKGROUND_MODAL_LIGHT,
+    )};
   }
 
   .dropdown-links a {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    color: ${COLORS.TEXT_TITLE};
+    ${themeText(COLORS.TEXT_TITLE, COLORS.TEXT_LIGHT_THEME)};
   }
 
   .dropdown-links a:hover {
-    color: ${COLORS.PRIMARY_GREEN};
-    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU_HOVER};
+    ${themeText(COLORS.PRIMARY_GREEN)};
+
+    ${themeColor(
+      "background",
+      COLORS.BACKGROUND_DROPDOWN_MENU_HOVER,
+      COLORS.BACKGROUND_PAGE_LIGHT,
+    )};
   }
 
   .account-menu-dropdown:hover .dropdown-links {
@@ -693,7 +731,7 @@ const AccountDropdownButton = styled.div`
 
   :hover {
     cursor: pointer;
-    color: ${COLORS.TEXT_HOVER};
+    ${themeText(COLORS.TEXT_HOVER)};
   }
 `;
 
@@ -758,6 +796,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 const dispatchProps = {
   logoutUser: Modules.actions.auth.logoutUser,
   setScreensaverState: Modules.actions.app.setScreensaverState,
+  updateUserSettings: Modules.actions.user.updateUserSettings,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
   setSingleSignOnDialogState: Modules.actions.auth.setSingleSignOnDialogState,
   initializeApp: Modules.actions.app.initializeApp,

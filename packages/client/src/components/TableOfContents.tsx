@@ -5,13 +5,18 @@ import { Block } from "slate";
 import headingToSlug from "rich-markdown-editor/lib/lib/headingToSlug";
 import { PROSE_MAX_WIDTH, COLORS, MOBILE } from "tools/constants";
 import { LineWrappedText } from "./SharedComponents";
+import { themeColor, themeText } from "./ThemeContainer";
+
+/** ===========================================================================
+ * Types & Config
+ * ============================================================================
+ */
 
 const TOP_SPACING = 80;
 
 // Get all headings from a slate editor
 const getHeadings = (editor: Editor) => {
   // Third party typing issue
-  // @ts-ignore
   return editor.value.document.nodes.filter((node?: Block) => {
     if (!node || !node.text) {
       return false;
@@ -20,15 +25,21 @@ const getHeadings = (editor: Editor) => {
   });
 };
 
-export default class TableOfContents extends React.Component<
-  {
-    editor: Editor;
-  },
-  {
-    isFixed: boolean;
-    left: number;
-  }
-> {
+interface IState {
+  isFixed: boolean;
+  left: number;
+}
+
+interface IProps {
+  editor: Editor;
+}
+
+/** ===========================================================================
+ * Component
+ * ============================================================================
+ */
+
+class TableOfContents extends React.Component<IProps, IState> {
   // Expose the get headings functionality so that calling code can determine
   // whether or not to render the TOC. Using the render method of this class was
   // great until I started wrapping the TOC in other UI.
@@ -36,10 +47,14 @@ export default class TableOfContents extends React.Component<
 
   wrapperRef = React.createRef<HTMLDivElement>();
 
-  state = {
-    isFixed: false,
-    left: PROSE_MAX_WIDTH - 90 + 40,
-  };
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      isFixed: false,
+      left: PROSE_MAX_WIDTH - 90 + 40,
+    };
+  }
 
   componentDidMount() {
     window.document.addEventListener("click", this.smoothScrollToHeading);
@@ -50,6 +65,59 @@ export default class TableOfContents extends React.Component<
   componentWillUnmount() {
     window.document.removeEventListener("click", this.smoothScrollToHeading);
     window.removeEventListener("scroll", this.updateScrollState);
+  }
+
+  render() {
+    const { editor } = this.props;
+    const headings = getHeadings(editor);
+
+    // If there are one or less headings in the document no need for a minimap
+    if (headings.size <= 1) {
+      return null;
+    }
+
+    const isMobile = window.matchMedia(MOBILE).matches;
+
+    return (
+      <Wrapper
+        ref={this.wrapperRef}
+        style={{
+          position: isMobile
+            ? "static"
+            : this.state.isFixed
+            ? "fixed"
+            : "absolute",
+          top: this.state.isFixed ? TOP_SPACING : 0,
+          left: this.state.left,
+        }}
+      >
+        <h4>Table of Contents</h4>
+        <Sections>
+          {headings.map((heading?: Block) => {
+            if (!heading) {
+              return null;
+            }
+
+            const slug = headingToSlug(editor.value.document, heading);
+
+            return (
+              <ListItem key={slug}>
+                <Anchor
+                  as="a"
+                  href={`#${slug}`}
+                  style={{
+                    // Indent based on heading level
+                    marginLeft: Number(heading.type.match(/(\d)/)?.[0]) * 8,
+                  }}
+                >
+                  {heading.text}
+                </Anchor>
+              </ListItem>
+            );
+          })}
+        </Sections>
+      </Wrapper>
+    );
   }
 
   /**
@@ -113,62 +181,12 @@ export default class TableOfContents extends React.Component<
       this.setState({ isFixed, left });
     }
   };
-
-  render() {
-    const { editor } = this.props;
-    const headings = getHeadings(editor);
-
-    // If there are one or less headings in the document no need for a minimap
-    if (headings.size <= 1) {
-      return null;
-    }
-
-    const isMobile = window.matchMedia(MOBILE).matches;
-
-    return (
-      <Wrapper
-        ref={this.wrapperRef}
-        style={{
-          position: isMobile
-            ? "static"
-            : this.state.isFixed
-            ? "fixed"
-            : "absolute",
-          top: this.state.isFixed ? TOP_SPACING : 0,
-          left: this.state.left,
-        }}
-      >
-        <h4 style={{ marginRight: -1 }}>Table of Contents</h4>
-        <Sections style={{ marginRight: -1 }}>
-          {headings.map((heading?: Block) => {
-            if (!heading) {
-              return null;
-            }
-
-            // Third party typing issue
-            // @ts-ignore
-            const slug = headingToSlug(editor.value.document, heading);
-
-            return (
-              <ListItem key={slug} style={{ marginLeft: -1 }}>
-                <Anchor
-                  as="a"
-                  href={`#${slug}`}
-                  style={{
-                    // Indent based on heading level
-                    marginLeft: Number(heading.type.match(/(\d)/)?.[0]) * 8,
-                  }}
-                >
-                  {heading.text}
-                </Anchor>
-              </ListItem>
-            );
-          })}
-        </Sections>
-      </Wrapper>
-    );
-  }
 }
+
+/** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
 
 const Wrapper = styled.div`
   font-family: ${(props) => props.theme.fontFamily};
@@ -178,10 +196,11 @@ const Wrapper = styled.div`
   z-index: 5;
   border: 1px solid ${COLORS.LIGHT_GREY};
   border-radius: 2px;
-  background: #292929;
   flex-grow: 0;
   flex-shrink: 0;
   width: 300px;
+
+  ${themeColor("background", "#292929", COLORS.BACKGROUND_CONTENT_LIGHT)};
 
   h4 {
     padding: 5px;
@@ -191,7 +210,12 @@ const Wrapper = styled.div`
     font-weight: 700;
     font-size: 12px;
     border-bottom: 1px solid ${COLORS.LIGHT_GREY};
-    background: ${COLORS.LIGHT_GREY};
+
+    ${themeColor(
+      "background",
+      COLORS.LIGHT_GREY,
+      COLORS.BACKGROUND_CONTENT_LIGHT,
+    )};
   }
 
   @media ${MOBILE} {
@@ -216,15 +240,15 @@ const ListItem = styled.div`
   position: relative;
   white-space: nowrap;
   a {
-    color: #cacaca;
+    ${themeText("#cacaca", COLORS.TEXT_LIGHT_THEME)};
   }
   &:not(:last-child) {
     border-bottom: 1px solid ${COLORS.LIGHT_GREY};
   }
   &:hover {
-    background: #212121;
+    ${themeColor("background", "#212121", COLORS.WHITE)};
     a {
-      color: white;
+      ${themeText("white", "black")};
     }
   }
 `;
@@ -237,3 +261,10 @@ const Sections = styled.div`
   transition-delay: 1s;
   transition: width 100ms ease-in-out;
 `;
+
+/** ===========================================================================
+ * Export
+ * ============================================================================
+ */
+
+export default TableOfContents;

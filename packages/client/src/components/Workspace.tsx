@@ -73,15 +73,15 @@ import {
   Container,
   PageSection,
   WorkspaceContainer,
-  colSeparatorProps,
-  rowSeparatorProps,
+  getColSeparatorProps,
+  getRowSeparatorProps,
   ContentContainer,
   InstructionsViewEdit,
   ContentTitle,
   TestResultRow,
   Spacer,
   DragIgnorantFrameContainer,
-  consoleRowStyles,
+  getConsoleRowStyles,
   EmptyPreviewCoverPanel,
   RevealSolutionLabel,
   RunButton,
@@ -412,6 +412,12 @@ class Workspace extends React.Component<IProps, IState> {
         ? WorkspaceCodemirrorEditor
         : WorkspaceMonacoEditor;
 
+    const theme = userSettings.appTheme;
+    const IS_DARK = userSettings.appTheme === "dark";
+    const setTheme = (dark: string, light: string) => {
+      return IS_DARK ? dark : light;
+    };
+
     // Allow the content in the Console to scroll if it overflows
     const ScrollableWorkspaceConsole = (
       <div
@@ -422,7 +428,7 @@ class Workspace extends React.Component<IProps, IState> {
           overscrollBehavior: "none",
         }}
       >
-        <Console variant="dark" logs={this.state.logs} />
+        <Console variant={theme} logs={this.state.logs} />
       </div>
     );
 
@@ -497,7 +503,10 @@ class Workspace extends React.Component<IProps, IState> {
 
     // Codepress test editor full height
     const TestFullHeightEditor = (
-      <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+      <Col
+        style={getConsoleRowStyles(theme)}
+        initialHeight={D.WORKSPACE_HEIGHT}
+      >
         <>{IS_ALTERNATIVE_EDIT_VIEW && WorkspaceTestContainer}</>
         <div>
           {!IS_ALTERNATIVE_EDIT_VIEW && ScrollableWorkspaceConsole}
@@ -779,24 +788,24 @@ class Workspace extends React.Component<IProps, IState> {
               {iFrameNormal}
             </MobileDeviceUI>
             <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
-              <Console variant="dark" logs={this.state.logs} />
+              <Console variant={theme} logs={this.state.logs} />
             </div>
           </div>
         ) : IS_REACT_CHALLENGE ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ flex: "1 100%" }}>{iFrameNormal}</div>
             <div style={{ flex: "1 100%", paddingTop: 12, minHeight: 250 }}>
-              <Console variant="dark" logs={this.state.logs} />
+              <Console variant={theme} logs={this.state.logs} />
             </div>
           </div>
         ) : IS_TYPESCRIPT_CHALLENGE ? (
           <div>
-            <Console variant="dark" logs={this.state.logs} />
+            <Console variant={theme} logs={this.state.logs} />
             {iFrameHidden}
           </div>
         ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
           <div>
-            <Console variant="dark" logs={this.state.logs} />
+            <Console variant={theme} logs={this.state.logs} />
             {iFrameHidden}
           </div>
         ) : IS_MARKUP_CHALLENGE ? (
@@ -823,14 +832,14 @@ class Workspace extends React.Component<IProps, IState> {
             visible={NO_TESTS_RESULTS}
             runCodeHandler={this.runChallengeTests}
           />
-          <RowsWrapper separatorProps={rowSeparatorProps}>
+          <RowsWrapper separatorProps={getRowSeparatorProps(theme)}>
             <Row initialHeight={D.PREVIEW_REACT_NATIVE_HEIGHT}>
               <MobileDeviceUI device={mobileDevicePreviewType}>
                 {iFrameNormal}
               </MobileDeviceUI>
             </Row>
             <Row
-              style={consoleRowStyles}
+              style={getConsoleRowStyles(theme)}
               initialHeight={D.PREVIEW_CONSOLE_REACT_NATIVE_HEIGHT}
             >
               {ScrollableWorkspaceConsole}
@@ -843,17 +852,23 @@ class Workspace extends React.Component<IProps, IState> {
             visible={NO_TESTS_RESULTS}
             runCodeHandler={this.runChallengeTests}
           />
-          <RowsWrapper separatorProps={rowSeparatorProps}>
+          <RowsWrapper separatorProps={getRowSeparatorProps(theme)}>
             <Row initialHeight={D.PREVIEW_HEIGHT}>
               <div style={{ height: "100%" }}>{iFrameNormal}</div>
             </Row>
-            <Row style={consoleRowStyles} initialHeight={D.CONSOLE_HEIGHT}>
+            <Row
+              style={getConsoleRowStyles(theme)}
+              initialHeight={D.CONSOLE_HEIGHT}
+            >
               {ScrollableWorkspaceConsole}
             </Row>
           </RowsWrapper>
         </Col>
       ) : IS_TYPESCRIPT_CHALLENGE ? (
-        <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+        <Col
+          style={getConsoleRowStyles(theme)}
+          initialHeight={D.WORKSPACE_HEIGHT}
+        >
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}
             runCodeHandler={this.runChallengeTests}
@@ -862,7 +877,10 @@ class Workspace extends React.Component<IProps, IState> {
           <div>{iFrameHidden}</div>
         </Col>
       ) : IS_ALTERNATE_LANGUAGE_CHALLENGE ? (
-        <Col style={consoleRowStyles} initialHeight={D.WORKSPACE_HEIGHT}>
+        <Col
+          style={getConsoleRowStyles(theme)}
+          initialHeight={D.WORKSPACE_HEIGHT}
+        >
           <EmptyPreviewCoverPanel
             visible={NO_TESTS_RESULTS}
             runCodeHandler={this.runChallengeTests}
@@ -965,7 +983,7 @@ class Workspace extends React.Component<IProps, IState> {
             {isMobileView ? (
               mobileView
             ) : shouldRefreshLayout ? null : (
-              <ColsWrapper separatorProps={colSeparatorProps}>
+              <ColsWrapper separatorProps={getColSeparatorProps(theme)}>
                 <Col
                   initialWidth={
                     IS_ALTERNATIVE_EDIT_VIEW
@@ -978,27 +996,40 @@ class Workspace extends React.Component<IProps, IState> {
                     <div
                       style={{
                         height: "100%",
-                        background: C.BACKGROUND_CONSOLE,
+                        background: setTheme(
+                          C.BACKGROUND_CONSOLE_DARK,
+                          C.BACKGROUND_CONSOLE_LIGHT,
+                        ),
                       }}
                     >
                       {CODE_EDITOR_CONTAINER}
                     </div>
                   ) : (
-                    <RowsWrapper separatorProps={rowSeparatorProps}>
+                    <RowsWrapper separatorProps={getRowSeparatorProps(theme)}>
                       <Row
                         initialHeight={
                           isInstructionsViewCollapsed
                             ? D.CHALLENGE_CONTENT_HEIGHT_COLLAPSED
                             : D.CHALLENGE_CONTENT_HEIGHT
                         }
-                        style={{ background: C.BACKGROUND_CONTENT }}
+                        style={{
+                          background: setTheme(
+                            C.BACKGROUND_CONTENT_DARK,
+                            C.BACKGROUND_CONTENT_LIGHT,
+                          ),
+                        }}
                       >
                         <ContentContainer>
                           <InstructionsViewEdit />
                         </ContentContainer>
                       </Row>
                       <Row
-                        style={{ background: C.BACKGROUND_EDITOR }}
+                        style={{
+                          background: setTheme(
+                            C.BACKGROUND_EDITOR,
+                            C.BACKGROUND_PAGE_LIGHT,
+                          ),
+                        }}
                         initialHeight={
                           isInstructionsViewCollapsed
                             ? D.EDITOR_HEIGHT_INSTRUCTIONS_COLLAPSED
@@ -1009,7 +1040,12 @@ class Workspace extends React.Component<IProps, IState> {
                       </Row>
                       <Row
                         initialHeight={D.TEST_CONTENT_HEIGHT}
-                        style={{ background: C.BACKGROUND_CONTENT }}
+                        style={{
+                          background: setTheme(
+                            C.BACKGROUND_CONTENT_DARK,
+                            C.BACKGROUND_CONTENT_LIGHT,
+                          ),
+                        }}
                       >
                         {WorkspaceTestContainer}
                       </Row>
@@ -1733,10 +1769,10 @@ const mergeProps = (
   ...state,
   toggleHighContrastMode: () => {
     const nextTheme =
-      state.userSettings.theme === MonacoEditorThemes.DEFAULT
+      state.userSettings.editorTheme === MonacoEditorThemes.DEFAULT
         ? MonacoEditorThemes.HIGH_CONTRAST
         : MonacoEditorThemes.DEFAULT;
-    methods.updateUserSettings({ theme: nextTheme });
+    methods.updateUserSettings({ editorTheme: nextTheme });
   },
   toggleEditorSize: () => {
     methods.updateUserSettings({

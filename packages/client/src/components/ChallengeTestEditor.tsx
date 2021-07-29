@@ -17,7 +17,7 @@ import { Tooltip2, Popover2 } from "@blueprintjs/popover2";
 import { CodeFormatMessageEvent, TEST_UTILS_GLOBALS } from "tools/test-utils";
 import { MonacoEditorThemes } from "@pairwise/common";
 import toaster from "tools/toast-utils";
-import { copyToClipboard } from "tools/utils";
+import { copyToClipboard, getMonacoTheme } from "tools/utils";
 import { OnMount } from "@monaco-editor/react";
 
 /** ===========================================================================
@@ -70,11 +70,18 @@ class ChallengeTestEditor extends React.Component<IProps, IState> {
 
   render(): JSX.Element {
     const {
+      userSettings,
       editorOptions,
       increaseFontSize,
       decreaseFontSize,
       challengeTestCode,
     } = this.props;
+
+    const isDark = userSettings.appTheme === "dark";
+    const theme = getMonacoTheme(
+      userSettings.appTheme,
+      userSettings.editorTheme,
+    );
 
     return (
       <div
@@ -82,17 +89,19 @@ class ChallengeTestEditor extends React.Component<IProps, IState> {
           color: "white",
           position: "relative",
           height: "calc(100% - 50px)",
-          background: COLORS.BACKGROUND_CONSOLE,
+          background: isDark
+            ? COLORS.BACKGROUND_CONSOLE_DARK
+            : COLORS.BACKGROUND_CONSOLE_LIGHT,
         }}
         onKeyUp={this.debouncedHandleUpdate}
       >
         <Editor
           height="100%"
           language="typescript"
-          path={CHALLENGE_TEST_EDITOR}
+          theme={theme}
           value={challengeTestCode}
           onMount={this.editorOnMount}
-          theme={MonacoEditorThemes.DEFAULT}
+          path={CHALLENGE_TEST_EDITOR}
           options={{
             formatOnType: true,
             formatOnPaste: true,

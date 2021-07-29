@@ -19,6 +19,8 @@ import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 import { FEEDBACK_DIALOG_TYPES } from "modules/feedback/actions";
 import { assertUnreachable } from "@pairwise/common";
+import { defaultTextColor, themeColor } from "./ThemeContainer";
+import { COLORS } from "../tools/constants";
 
 /** ===========================================================================
  * Types & Config
@@ -53,6 +55,8 @@ const FeedbackModal = (props: Props) => {
     closeFeedbackDialog,
     submitGeneralFeedback,
   } = props;
+
+  const isDark = user.settings.appTheme === "dark";
 
   const { profile } = user;
   const email = profile?.email;
@@ -145,7 +149,8 @@ const FeedbackModal = (props: Props) => {
     >
       <ModalContainer
         style={{ maxHeight: "calc(100vh - 150px)" }}
-        className={Classes.DARK} // Needed since portal modal is outside inherited styles
+        // Needed since portal modal is outside inherited styles
+        className={isDark ? Classes.DARK : ""}
       >
         <ModalTitleText id="feedback-modal-title">{modalTitle}</ModalTitleText>
         <ModalSubText
@@ -182,25 +187,25 @@ const FeedbackModal = (props: Props) => {
         />
         {email ? null : (
           <Callout style={{ marginTop: 10 }}>
-            <H4>Want us to respond?</H4>
-            <p>
+            <Title>Want us to respond?</Title>
+            <Text>
               We listen. That's one of our principles. We'd love to hear from
               you and we respond to all feedback.
-            </p>
+            </Text>
             {profile ? (
               <>
-                <p>
+                <Text>
                   Your account doesn't have an email address. If you'd like a
                   response add an email. This is entirely optional.
-                </p>
+                </Text>
                 <Link to="/account">Update my account</Link>
               </>
             ) : (
               <>
-                <p>
+                <Text>
                   Want a response? Log in or create an account first and we'll
                   respond directly to your feedback, usually very quickly.
-                </p>
+                </Text>
                 <Button
                   large
                   style={{ width: "100%" }}
@@ -246,7 +251,7 @@ interface FeedbackInputProps {
 const FeedbackInput = styled(TextArea)<FeedbackInputProps>`
   resize: vertical !important;
   margin-top: ${(props) => props.margintop}px;
-  background: #323232 !important;
+  ${themeColor("background", "#323232", COLORS.WHITE)};
 `;
 
 interface DangerLabelProps {
@@ -258,6 +263,15 @@ const DangerLabel = styled.label<DangerLabelProps>`
   margin: 10px 0;
   font-weight: bold;
   display: ${(props) => (props.show ? "block" : "none")};
+`;
+
+const Title = styled.h3`
+  margin: 4px 0;
+  ${defaultTextColor};
+`;
+
+const Text = styled.p`
+  ${defaultTextColor};
 `;
 
 /** ===========================================================================

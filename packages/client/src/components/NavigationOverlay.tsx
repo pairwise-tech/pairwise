@@ -45,6 +45,12 @@ import {
 import { IconButton, RotatingIcon } from "./SharedComponents";
 import cx from "classnames";
 import { Select } from "@blueprintjs/select";
+import {
+  defaultTextColor,
+  IThemeProps,
+  themeColor,
+  themeText,
+} from "./ThemeContainer";
 
 /** ===========================================================================
  * Types & Config
@@ -544,7 +550,8 @@ class NavigationOverlay extends React.Component<
     challenge: ChallengeSkeleton;
     style?: React.CSSProperties;
   }) => {
-    const { isMobile, isEditMode, challengeId, menuSelectState } = this.props;
+    const { isMobile, isEditMode, challengeId, menuSelectState, user } =
+      this.props;
     const {
       index,
       module,
@@ -557,6 +564,7 @@ class NavigationOverlay extends React.Component<
       style = {},
     } = args;
 
+    const isDark = user.settings.appTheme === "dark";
     const { selectedIndex, menuSelectColumn } = menuSelectState;
     const isMenuItemSelected =
       menuSelectColumn === "challenges" && selectedIndex === index;
@@ -653,7 +661,11 @@ class NavigationOverlay extends React.Component<
                     position="left"
                     content="Includes Video"
                   >
-                    <Icon iconSize={IconSize.LARGE} icon="video" />
+                    <Icon
+                      icon="video"
+                      iconSize={IconSize.LARGE}
+                      color={isDark ? COLORS.TEXT_CONTENT : COLORS.GRAY}
+                    />
                   </Tooltip2>
                 )}
               </NavIcons>
@@ -833,7 +845,11 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   cursor: pointer;
   padding: 12px;
   border: 1px solid transparent;
-  border-bottom-color: ${COLORS.LIGHT_GREY};
+
+  border-bottom-color: ${(props: IThemeProps) => {
+    return props.theme.dark ? COLORS.LIGHT_GREY : COLORS.NAV_LIGHT_BORDER;
+  }};
+
   width: 100%;
   display: flex;
   align-items: center;
@@ -841,10 +857,24 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   text-align: left;
   outline: none;
   position: relative;
-  color: ${({ selected }) =>
-    selected ? "white" : COLORS.TEXT_TITLE} !important;
-  background: ${({ selected }) =>
-    selected ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER : "transparent"};
+
+  color: ${(props: IThemeProps & ChallengeLinkProps) => {
+    if (props.selected) {
+      return props.theme.dark ? COLORS.TEXT_WHITE : COLORS.TEXT_LIGHT_THEME;
+    } else {
+      return props.theme.dark ? COLORS.TEXT_TITLE : COLORS.TEXT_LIGHT_THEME;
+    }
+  }} !important;
+
+  background: ${(props: IThemeProps & ChallengeLinkProps) => {
+    if (props.selected) {
+      return props.theme.dark
+        ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_DARK
+        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_LIGHT;
+    } else {
+      return "transparent";
+    }
+  }};
 
   &:after {
     content: "";
@@ -861,8 +891,16 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   }
 
   &.active {
-    color: white !important;
-    background: ${COLORS.BACKGROUND_MODAL};
+    color: ${(props: IThemeProps & ChallengeLinkProps) => {
+      return props.theme.dark ? COLORS.TEXT_WHITE : undefined;
+    }} !important;
+
+    background: ${(props: IThemeProps) => {
+      return props.theme.dark
+        ? COLORS.BACKGROUND_MODAL_DARK
+        : COLORS.BACKGROUND_MODAL_LIGHT;
+    }};
+
     &:after {
       transform: scale(1);
     }
@@ -876,16 +914,21 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
 
   @media ${MOBILE} {
     .content span {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
       max-width: 60vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
   &:hover {
-    color: white !important;
-    background: ${COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
+    ${defaultTextColor};
+    background: ${(props: IThemeProps) => {
+      return props.theme.dark
+        ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_DARK
+        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_LIGHT;
+    }};
+
     &:after {
       transform: scale(1);
     }
@@ -900,23 +943,47 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   }
 `;
 
-const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
+interface ModuleNavProps {
   active?: boolean;
   menu_selected: boolean;
-}>`
+}
+
+const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<ModuleNavProps>`
   outline: none;
   color: ${({ active, menu_selected }) =>
     active || menu_selected ? "white" : COLORS.TEXT_TITLE};
-  background: ${({ active, menu_selected }) =>
-    active
-      ? COLORS.BACKGROUND_MODAL
-      : menu_selected
-      ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER
-      : "transparent"};
+
+  color: ${(props: IThemeProps & ModuleNavProps) => {
+    if (props.active || props.menu_selected) {
+      return props.theme.dark ? COLORS.TEXT_WHITE : COLORS.TEXT_LIGHT_THEME;
+    } else {
+      return props.theme.dark ? COLORS.TEXT_TITLE : COLORS.TEXT_LIGHT_THEME;
+    }
+  }};
+
+  background: ${(props: IThemeProps & ModuleNavProps) => {
+    if (props.active) {
+      return props.theme.dark
+        ? COLORS.BACKGROUND_MODAL_DARK
+        : COLORS.BACKGROUND_MODAL_LIGHT;
+    } else if (props.menu_selected) {
+      return props.theme.dark
+        ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_DARK
+        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_LIGHT;
+    } else {
+      return "transparent";
+    }
+  }};
 
   &:hover {
-    color: white;
-    background: ${COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
+    background: ${(props: IThemeProps & ModuleNavProps) => {
+      return props.theme.dark
+        ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_DARK
+        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_LIGHT;
+    }};
+
+    ${defaultTextColor};
+
     &:after {
       transform: scale(1);
     }
@@ -1040,10 +1107,11 @@ const HoverableBadge = styled.div`
   border-radius: 100px;
   font-size: 11px;
   font-weight: bold;
-  background: #505052;
   padding: 4px 12px;
   position: relative;
   overflow: hidden;
+
+  ${themeColor("background", "#505052", "rgb(175,175,175)")};
 
   @media ${MOBILE} {
     display: none;
@@ -1071,8 +1139,20 @@ const Col = styled.div<{ offsetX: number }>`
   display: flex;
   flex-direction: column;
   width: 300px;
-  background: ${COLORS.BACKGROUND_CONTENT};
-  border-right: 1px solid ${COLORS.LIGHT_GREY};
+
+  background: ${(props: IThemeProps) => {
+    return props.theme.dark
+      ? COLORS.BACKGROUND_CONTENT_DARK
+      : COLORS.BACKGROUND_CONTENT_LIGHT;
+  }};
+
+  border-right: ${(props: IThemeProps) => {
+    const color = props.theme.dark
+      ? COLORS.LIGHT_GREY
+      : COLORS.NAV_LIGHT_BORDER;
+    return `1px solid ${color}`;
+  }};
+
   position: relative;
   z-index: 2;
   transition: all 0.2s ease-out;
@@ -1133,7 +1213,11 @@ const Overlay = styled.div<{ visible: boolean }>`
   bottom: 0;
   z-index: 15;
   position: fixed;
-  background: rgba(0, 0, 0, 0.85);
+  ${themeColor(
+    "background",
+    "rgba(0, 0, 0, 0.85)",
+    "rgba(235, 235, 235, 0.85)",
+  )}
   visibility: ${(props) => (props.visible ? "visible" : "hidden")};
   opacity: ${(props) => (props.visible ? "1" : "0")};
   pointer-events: ${(props) => (props.visible ? "all" : "none")};
@@ -1144,19 +1228,25 @@ const Overlay = styled.div<{ visible: boolean }>`
 const ColTitle = styled.div`
   font-size: 18px;
   font-weight: 200;
-  color: white;
   margin: 0;
   height: 40px;
   padding: 0 12px;
   font-variant: small-caps;
   font-weight: bold;
   letter-spacing: 2;
-  background: ${COLORS.BACKGROUND_NAVIGATION_ITEM};
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-grow: 0;
   flex-shrink: 0;
+
+  ${defaultTextColor};
+
+  ${themeColor(
+    "background",
+    COLORS.BACKGROUND_NAVIGATION_ITEM_DARK,
+    COLORS.BACKGROUND_NAVIGATION_ITEM_LIGHT,
+  )}
 
   p {
     margin: 0;
@@ -1177,32 +1267,44 @@ const ColTitle = styled.div`
       justify-content: center;
     }
     .mobile-shrink {
-      // Why is blueprint SO INSISTENT on their low-contrast icons?!?
       .bp3-icon {
-        color: white !important;
+        color: ${(props: IThemeProps) => {
+          return props.theme.dark ? "white" : COLORS.TEXT_LIGHT_THEME;
+        }};
       }
       .bp3-button-text {
         width: 0%;
-        overflow: hidden;
         margin: 0;
+        overflow: hidden;
       }
     }
   }
 `;
 
-// NOTE: Used for the course multi-select, which is currently disabled.
 const ClickableColTitle = styled(ColTitle)<{ disabled: boolean }>`
   border-left: ${(props) =>
     props.disabled
       ? `3px solid ${COLORS.NEON_GREEN}`
-      : `3px solid ${COLORS.BACKGROUND_NAVIGATION_ITEM}`};
+      : `3px solid ${
+          props.theme.dark
+            ? COLORS.BACKGROUND_NAVIGATION_ITEM_DARK
+            : COLORS.BACKGROUND_NAVIGATION_ITEM_LIGHT
+        }`};
 
   :hover {
     cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
-    background: ${(props) =>
-      props.disabled
-        ? COLORS.BACKGROUND_NAVIGATION_ITEM
-        : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
+
+    background: ${(props: IThemeProps & { disabled: boolean }) => {
+      if (props.disabled) {
+        return props.theme.dark
+          ? COLORS.BACKGROUND_NAVIGATION_ITEM_DARK
+          : COLORS.BACKGROUND_NAVIGATION_ITEM_LIGHT;
+      } else {
+        return props.theme.dark
+          ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_DARK
+          : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_LIGHT;
+      }
+    }};
   }
 `;
 
@@ -1262,11 +1364,11 @@ const dispatchProps = {
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-type IProps = ConnectProps & ComponentProps & RouteComponentProps;
-
 interface ComponentProps {
   isMobile: boolean;
 }
+
+type IProps = ConnectProps & ComponentProps & RouteComponentProps;
 
 const withProps = connect(mapStateToProps, dispatchProps);
 

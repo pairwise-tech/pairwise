@@ -41,12 +41,12 @@ $orange3: #ffdf75;
 
 @import "@blueprintjs/core/src/blueprint.scss";
 
-.course-card {
+.course-card.bp3-dark {
   box-shadow: 0 1px 2px rgba(25, 25, 25, 0.15);
   transition: box-shadow 0.3s ease-in-out;
 }
 
-.course-card:hover {
+.course-card.bp3-dark:hover {
   background: rgb(40, 40, 40);
   box-shadow: 0 15px 25px rgba(20, 20, 20, 0.8);
 }
@@ -127,14 +127,24 @@ $orange3: #ffdf75;
 
 // Style Blueprint popover2 and tooltip2. For some reason the default
 // styles are not overridden with our variable definitions here.
-.bp3-popover2-content {
+.bp3-dark .bp3-popover2-content {
   color: white !important;
   background: $dark-gray5 !important;
 }
 
-.bp3-popover2-arrow-fill {
+.bp3-dark .bp3-popover2-arrow-fill {
   color: white !important;
   fill: $dark-gray5 !important;
+}
+
+.bp3-popover2-content {
+  color: black !important;
+  background: white !important;
+}
+
+.bp3-popover2-arrow-fill {
+  color: black !important;
+  fill: white !important;
 }
 
 .bp3-dialog.bp3-dark,

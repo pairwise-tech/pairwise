@@ -15,7 +15,7 @@ import {
 import Editor, { Monaco, OnMount } from "@monaco-editor/react";
 import { MonacoEditorThemes } from "@pairwise/common";
 import cx from "classnames";
-import { wait } from "tools/utils";
+import { getMonacoTheme, wait } from "tools/utils";
 import { debounce } from "throttle-debounce";
 import { editor } from "monaco-editor";
 import { CHALLENGE_TEST_EDITOR } from "./ChallengeTestEditor";
@@ -158,9 +158,16 @@ class WorkspaceMonacoEditor
   };
 
   render() {
+    const { userSettings } = this.props;
+    const theme = getMonacoTheme(
+      userSettings.appTheme,
+      userSettings.editorTheme,
+    );
+
     return (
       <div id={PAIRWISE_EDITOR_ID} style={{ height: "100%" }}>
         <Editor
+          theme={theme}
           options={{
             tabSize: 2,
             autoIndent: "full",
@@ -177,7 +184,6 @@ class WorkspaceMonacoEditor
           value={this.props.value}
           onMount={this.editorOnMount}
           language={this.props.language}
-          theme={this.props.userSettings.theme}
           onChange={this.handleEditorContentChange}
         />
       </div>
@@ -225,7 +231,8 @@ class WorkspaceMonacoEditor
         c.type ? `${c.kind} ${c.type}-of-${c.parentKind}` : c.kind,
         {
           highContrast:
-            this.props.userSettings.theme === MonacoEditorThemes.HIGH_CONTRAST,
+            this.props.userSettings.editorTheme ===
+            MonacoEditorThemes.HIGH_CONTRAST,
         },
       );
       return {

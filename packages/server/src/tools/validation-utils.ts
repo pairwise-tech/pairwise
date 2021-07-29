@@ -1,4 +1,5 @@
 import {
+  AppTheme,
   ICodeBlobDto,
   BlobTypeSet,
   ContentUtility,
@@ -237,13 +238,18 @@ const checkThemeField = (theme: any): MonacoEditorThemes => {
   return Object.values(MonacoEditorThemes).includes(theme) ? theme : null;
 };
 
+const checkAppThemeField = (theme: any): AppTheme => {
+  return theme === "dark" || theme === "light" ? theme : null;
+};
+
 /**
  * Validate the user settings JSON before update.
  */
 const checkSettingsField = (settings?: Partial<UserSettings>) => {
   if (settings) {
     const validSettings: UserSettings = {
-      theme: checkThemeField(settings.theme),
+      appTheme: checkAppThemeField(settings.appTheme),
+      editorTheme: checkThemeField(settings.editorTheme),
       fullScreenEditor: checkBooleanField(settings.fullScreenEditor),
       workspaceFontSize: checkNumberField(settings.workspaceFontSize),
     };
