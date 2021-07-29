@@ -58,18 +58,12 @@ if (IS_TEST) {
   ReactNativeWebSourceUrl = require("!!raw-loader!../js/react-native-web-lib.js");
 }
 
-/**
- * However, we could just hard code these now for any libraries used within
- * the curriculum. It doesn't make very much sense for people to import other
- * libraries within the workspace itself, and anyway some error/warning could
- * be provided if they tried to do that.
- */
 const SOURCE_LIBRARY_MAP: SourceLibraryMap = {
   "react-native": ReactNativeWebSourceUrl,
-  react: "https://unpkg.com/react@16/umd/react.development.js",
-  "react-dom": "https://unpkg.com/react-dom@16/umd/react-dom.development.js",
+  react: "https://unpkg.com/react@17/umd/react.development.js",
+  "react-dom": "https://unpkg.com/react-dom@17/umd/react-dom.development.js",
   "react-dom-test-utils":
-    "https://unpkg.com/react-dom@16.12.0/umd/react-dom-test-utils.development.js",
+    "https://unpkg.com/react-dom@17/umd/react-dom-test-utils.development.js",
 };
 
 /** ===========================================================================
@@ -81,8 +75,8 @@ const SOURCE_LIBRARY_MAP: SourceLibraryMap = {
  */
 
 class DependencyCacheClass {
-  dependencyCache: DependencyCache = new Map();
   sourceLibraries = new Map();
+  dependencyCache: DependencyCache = new Map();
 
   constructor(sourceLibraryMap: SourceLibraryMap) {
     this.sourceLibraries = new Map(Object.entries(sourceLibraryMap));
@@ -90,9 +84,7 @@ class DependencyCacheClass {
 
   getDependency = async (packageName: string): Promise<string> => {
     if (this.dependencyCache.has(packageName)) {
-      /**
-       * The package is cached just return the code.
-       */
+      // The package is cached just return the code:
       const dependency = this.dependencyCache.get(packageName) as Dependency;
       return dependency.source;
     } else {
@@ -124,19 +116,13 @@ class DependencyCacheClass {
   };
 
   fetchResource = async (uri: string) => {
-    /**
-     * NOTE: Sometimes these requests to unpkg can fail!
-     *
-     * We should review this later and try to make this more robust.
-     * Currently, the Cypress test for React challenges is disabled
-     * for this very reason.
-     */
     const response = await axios.get(uri, {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
       },
     });
+
     return response.data;
   };
 }
