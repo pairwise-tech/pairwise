@@ -418,6 +418,7 @@ class Workspace extends React.Component<IProps, IState> {
       return IS_DARK ? dark : light;
     };
 
+    // Define console-feed component
     const ConsoleComponent = () => (
       <Console
         variant={theme}
