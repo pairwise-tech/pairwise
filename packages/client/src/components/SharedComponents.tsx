@@ -329,25 +329,28 @@ export const ModalSubText = styled(ModalTitleText)`
 interface HalfCircleProps {
   position: "top" | "bottom";
   positionOffset: number;
-  backgroundColor: string;
 }
 
 export const HalfCircle = styled.div<HalfCircleProps>`
   &:hover {
-    background: ${(props) => props.backgroundColor};
+    background: ${(props: IThemeProps) => {
+      return props.theme.dark
+        ? "rgba(29, 29, 29, 0.7)"
+        : "rgba(200, 200, 200, 0.75)";
+    }};
   }
 
-  align-items: center;
+  width: 60px;
+  z-index: 50;
   cursor: pointer;
-  display: flex;
+  align-items: center;
   height: 30px;
+  display: flex;
   justify-content: center;
   left: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
   transition: background 0.3s;
-  width: 60px;
-  z-index: 100;
 
   border-top-left-radius: ${(props) => (props.position === "top" ? 0 : 90)}px;
   border-top-right-radius: ${(props) => (props.position === "top" ? 0 : 90)}px;
@@ -383,13 +386,11 @@ export const SmoothScrollButton = ({
   scrollToId,
   position,
   positionOffset,
-  backgroundColor,
 }: SmoothScrollButtonProps) => {
   return (
     <HalfCircle
       position={position}
       positionOffset={positionOffset}
-      backgroundColor={backgroundColor}
       onClick={(e: MouseEvent) => {
         e.preventDefault();
         const el = document.getElementById(scrollToId);

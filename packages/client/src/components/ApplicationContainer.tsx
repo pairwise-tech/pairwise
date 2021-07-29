@@ -425,7 +425,6 @@ const ApplicationContainer = (props: IProps) => {
           position="bottom"
           positionOffset={-20}
           scrollToId={CONTENT_AREA_ID}
-          backgroundColor="rgba(29, 29, 29, 0.7)"
         />
       )}
       <Suspense fallback={<LoadingInline />}>

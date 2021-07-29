@@ -56,8 +56,8 @@ export const PageSection = styled.div`
 
 export const LowerSection = styled.div<{ withHeader?: boolean }>`
   width: 100vw;
-  height: ${(props) =>
-    props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"};
+  /* height: ${(props) =>
+    props.withHeader ? `calc(100vh - ${HEADER_HEIGHT}px)` : "100vh"}; */
 
   border-top: ${(props: IThemeProps) => {
     const color = props.theme.dark ? C.DRAGGABLE_SLIDER_BORDER : C.LIGHT_BORDER;
