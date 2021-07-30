@@ -17,6 +17,7 @@ import { COLORS } from "../tools/constants";
 import { ProgressRecords } from "../modules/stats/store";
 import { Button } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
+import { themeText } from "./AdminThemeContainer";
 
 /** ===========================================================================
  * Home Component
@@ -136,9 +137,10 @@ class AdminStatsPage extends React.Component<IProps, {}> {
 
   renderProgressRecords = (progressRecords: ProgressRecords) => {
     const { status, records } = progressRecords;
+    const isDark = this.props.userSettings.appTheme === "dark";
     return (
       <>
-        <p style={{ color: "white", fontStyle: "italic" }}>{status}</p>
+        <StatusText>{status}</StatusText>
         {records ? (
           records.map((record) => {
             const IS_REGISTERED_USER = !record.user.includes("Anonymous");
@@ -156,7 +158,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
                     style={{ marginTop: 12, marginBottom: 16 }}
                   >
                     <Link
-                      style={{ color: "white" }}
+                      style={{ color: isDark ? "white" : "black" }}
                       to={`/search/${record.user}`}
                     >
                       View User
@@ -189,11 +191,16 @@ const Stat = styled.p`
   font-size: 14px;
   display: flex;
   justify-content: space-between;
-  color: ${COLORS.TEXT_CONTENT_BRIGHT};
+  ${themeText(COLORS.TEXT_CONTENT_BRIGHT, COLORS.TEXT_LIGHT_THEME)};
+`;
+
+const StatusText = styled.p`
+  font-style: italic;
+  ${themeText(COLORS.WHITE, COLORS.TEXT_LIGHT_THEME)};
 `;
 
 const Value = styled.span`
-  color: ${COLORS.PRIMARY_GREEN};
+  ${themeText(COLORS.PRIMARY_GREEN, COLORS.TEXT_LIGHT_THEME)};
 `;
 
 const Row = styled.div`
@@ -204,7 +211,7 @@ const Row = styled.div`
 `;
 
 const Title = styled.h2`
-  color: ${COLORS.SECONDARY_YELLOW};
+  ${themeText(COLORS.SECONDARY_YELLOW, COLORS.TEXT_LIGHT_THEME)};
 `;
 
 /** ===========================================================================
@@ -214,6 +221,7 @@ const Title = styled.h2`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   usersList: Modules.selectors.users.usersState(state).users,
+  userSettings: Modules.selectors.admin.adminUserSettings(state),
   statsLoading: Modules.selectors.stats.statsLoadingSelector(state),
   usersListLoading: Modules.selectors.users.usersState(state).loading,
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),

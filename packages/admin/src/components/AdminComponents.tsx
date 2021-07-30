@@ -8,6 +8,7 @@ import { COLORS, MOBILE } from "../tools/constants";
 import { copyToClipboard, composeWithProps } from "../tools/admin-utils";
 import { connect } from "react-redux";
 import Modules from "../modules/root";
+import { themeColor, themeText } from "./AdminThemeContainer";
 
 /** ===========================================================================
  * Admin Components
@@ -64,7 +65,11 @@ export const DataCard = styled(Card)`
   margin-top: 12px;
   max-width: 825px;
   overflow-x: scroll;
-  background: ${COLORS.BACKGROUND_CARD} !important;
+  ${themeColor(
+    "background",
+    COLORS.BACKGROUND_CARD_DARK,
+    COLORS.BACKGROUND_CARD_LIGHT,
+  )};
 `;
 
 export const KeyValueComponent = ({
@@ -172,7 +177,7 @@ const ValueContainer = styled.div<{ copy: string }>`
 `;
 
 export const Value = styled.p`
-  color: ${COLORS.TEXT_CONTENT} !important;
+  ${themeText(COLORS.TEXT_CONTENT, COLORS.TEXT_LIGHT_THEME)};
 
   @media ${MOBILE} {
     margin-top: 4px;
@@ -387,10 +392,11 @@ export const CardButton = styled(Button)`
 
 export const Input = styled(InputGroup)`
   input#admin-input {
-    color: white;
     display: block;
-    background: #3a3a3a;
     transition: all 0.15s ease-out;
+
+    ${themeText("white", "black")};
+    ${themeColor("background", "#3a3a3a", COLORS.BACKGROUND_CONTENT_LIGHT)}
 
     &:hover {
       box-shadow: 0 0 0 1px #10ca92, 0 0 0 1px #10ca92,
@@ -401,7 +407,7 @@ export const Input = styled(InputGroup)`
     &:focus {
       border: none;
       outline: none;
-      color: white;
+      ${themeText("white", "black")};
     }
 
     ::placeholder {
