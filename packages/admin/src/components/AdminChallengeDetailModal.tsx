@@ -31,9 +31,12 @@ class AdminChallengeDetailModal extends React.Component<IProps, IState> {
       isMobile,
       challengeMap,
       challengeMeta,
+      adminUserSettings,
       challengeDetailId,
       setChallengeDetailId,
     } = this.props;
+
+    const isDark = adminUserSettings.appTheme === "dark";
 
     if (!challengeMap || !challengeDetailId) {
       return null;
@@ -43,16 +46,18 @@ class AdminChallengeDetailModal extends React.Component<IProps, IState> {
 
     return (
       <Dialog
+        usePortal
         style={{
           padding: 24,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           width: isMobile ? "100%" : 900,
-          background: COLORS.BACKGROUND_LOWER_SECTION,
+          background: isDark
+            ? COLORS.BACKGROUND_LOWER_SECTION
+            : COLORS.BACKGROUND_PAGE_LIGHT,
         }}
-        usePortal
-        className={Classes.DARK}
+        className={isDark ? Classes.DARK : ""}
         isOpen={challengeDetailId !== null}
         onClose={() => {
           setChallengeDetailId(null);
@@ -149,6 +154,7 @@ export const ChallengeContextCard = (props: ChallengeContextCardProps) => {
 const mapStateToProps = (state: ReduxStoreState) => ({
   challengeMeta: Modules.selectors.challenges.challengeMeta(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   challengeDetailId: Modules.selectors.challenges.challengeDetailId(state),
 });
 
