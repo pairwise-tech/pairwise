@@ -160,7 +160,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
       <AdminUserComponent
         key={user.uuid}
         user={user}
-        theme={this.props.userSettings.appTheme}
+        theme={this.props.adminUserSettings.appTheme}
         challengeBlobCache={this.props.challengeBlobCache}
       />
     );
@@ -204,7 +204,7 @@ const ControlRow = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
-  userSettings: Modules.selectors.admin.adminUserSettings(state),
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   challengeBlobCache: Modules.selectors.challenges.challengeBlobCache(state),
 });
 

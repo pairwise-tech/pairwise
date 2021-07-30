@@ -137,7 +137,7 @@ class AdminStatsPage extends React.Component<IProps, {}> {
 
   renderProgressRecords = (progressRecords: ProgressRecords) => {
     const { status, records } = progressRecords;
-    const isDark = this.props.userSettings.appTheme === "dark";
+    const isDark = this.props.adminUserSettings.appTheme === "dark";
     return (
       <>
         <StatusText>{status}</StatusText>
@@ -221,7 +221,7 @@ const Title = styled.h2`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   usersList: Modules.selectors.users.usersState(state).users,
-  userSettings: Modules.selectors.admin.adminUserSettings(state),
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   statsLoading: Modules.selectors.stats.statsLoadingSelector(state),
   usersListLoading: Modules.selectors.users.usersState(state).loading,
   progressRecords: Modules.selectors.stats.progressRecordsSelector(state),

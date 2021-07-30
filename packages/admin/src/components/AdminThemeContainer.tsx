@@ -52,13 +52,16 @@ class AdminThemeContainer extends React.Component<IProps, {}> {
   }
 
   componentDidUpdate(prevProps: IProps) {
-    if (prevProps.userSettings.appTheme !== this.props.userSettings.appTheme) {
+    if (
+      prevProps.adminUserSettings.appTheme !==
+      this.props.adminUserSettings.appTheme
+    ) {
       this.setBackground();
     }
   }
 
   setBackground = () => {
-    if (this.props.userSettings.appTheme === "dark") {
+    if (this.props.adminUserSettings.appTheme === "dark") {
       document.body.style.background = COLORS.BACKGROUND_PAGE_DARK;
     } else {
       document.body.style.background = COLORS.BACKGROUND_PAGE_LIGHT;
@@ -66,7 +69,7 @@ class AdminThemeContainer extends React.Component<IProps, {}> {
   };
 
   render() {
-    const { className, userSettings, ...rest } = this.props;
+    const { className, adminUserSettings: userSettings, ...rest } = this.props;
 
     let isDarkTheme = false;
     let themeClass;
@@ -108,7 +111,7 @@ const Background = styled.div`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  userSettings: Modules.selectors.admin.adminUserSettings(state),
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
 });
 
 const dispatchProps = {};

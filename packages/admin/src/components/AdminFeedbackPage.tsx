@@ -19,7 +19,11 @@ import { Link } from "react-router-dom";
 
 class AdminFeedbackPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { userSettings, feedbackRecords, deleteFeedbackByUuid } = this.props;
+    const {
+      adminUserSettings: userSettings,
+      feedbackRecords,
+      deleteFeedbackByUuid,
+    } = this.props;
     const theme = userSettings.appTheme;
     const isDark = theme === "dark";
     return (
@@ -97,7 +101,7 @@ const Title = styled.h2``;
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
-  userSettings: Modules.selectors.admin.adminUserSettings(state),
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   feedbackRecords: Modules.selectors.feedback.feedbackRecordsSelector(state),
 });
 

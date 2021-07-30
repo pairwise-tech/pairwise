@@ -76,8 +76,9 @@ class AdminNavigationMenu extends React.Component<
             <Button
               fill
               icon="shield"
+              text="Toggle App Theme"
               className="mobile-shrink"
-              text="Pairwise Admin Menu"
+              onClick={this.toggleAppTheme}
               style={{ whiteSpace: "nowrap" }}
             />
           </ColTitle>
@@ -108,6 +109,13 @@ class AdminNavigationMenu extends React.Component<
     if (this.props.overlayVisible) {
       this.props.setNavigationMapState(false);
     }
+  };
+
+  toggleAppTheme = () => {
+    this.props.updateUserSettings({
+      appTheme:
+        this.props.adminUserSettings.appTheme === "dark" ? "light" : "dark",
+    });
   };
 }
 
@@ -299,6 +307,7 @@ const ColTitle = styled.div`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   menuSelectItemIndex: Modules.selectors.challenges.menuSelectItemIndex(state),
 });
@@ -307,6 +316,7 @@ const ChallengeActions = Modules.actions.challenges;
 
 const dispatchProps = {
   setNavigationMapState: ChallengeActions.setNavigationMapState,
+  updateUserSettings: Modules.actions.admin.updateUserSettings,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
