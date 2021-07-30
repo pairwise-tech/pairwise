@@ -256,7 +256,10 @@ const Header = styled.div`
   padding-left: 0px;
   padding-right: 0px;
   margin-bottom: 0;
-  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
+  border-bottom: ${(props) => {
+    const color = props.theme.dark ? COLORS.LIGHT_GREY : COLORS.LIGHT_BORDER;
+    return `1px solid ${color}`;
+  }};
 
   ${themeColor("background", "#212121", COLORS.WHITE)};
 
