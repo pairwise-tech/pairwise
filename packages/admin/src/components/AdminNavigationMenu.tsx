@@ -7,6 +7,7 @@ import { capitalize, composeWithProps } from "tools/admin-utils";
 import { Button } from "@blueprintjs/core";
 import { NavLink, RouteComponentProps } from "react-router-dom";
 import cx from "classnames";
+import { defaultTextColor, themeColor } from "./AdminThemeContainer";
 
 export const ADMIN_MENU_ITEMS_ROUTES = [
   "stats",
@@ -66,17 +67,18 @@ class AdminNavigationMenu extends React.Component<
     return (
       <Overlay visible={overlayVisible} onClick={this.handleClose}>
         <Col
-          className={cx("module-select", { open: this.state.showModuleList })}
           style={{ zIndex: 3 }}
           offsetX={overlayVisible ? 0 : -20}
           onClick={(e) => e.stopPropagation()}
+          className={cx("module-select", { open: this.state.showModuleList })}
         >
           <ColTitle>
             <Button
               fill
               icon="shield"
+              text="Toggle App Theme"
               className="mobile-shrink"
-              text="Pairwise Admin Menu"
+              onClick={this.toggleAppTheme}
               style={{ whiteSpace: "nowrap" }}
             />
           </ColTitle>
@@ -108,6 +110,13 @@ class AdminNavigationMenu extends React.Component<
       this.props.setNavigationMapState(false);
     }
   };
+
+  toggleAppTheme = () => {
+    this.props.updateUserSettings({
+      appTheme:
+        this.props.adminUserSettings.appTheme === "dark" ? "light" : "dark",
+    });
+  };
 }
 
 /** ===========================================================================
@@ -123,7 +132,10 @@ const ModuleNavigationBase = styled.div<{ active?: boolean }>`
   padding-right: 2px;
   font-size: 18px;
   border: 1px solid transparent;
-  border-bottom-color: ${COLORS.LIGHT_GREY};
+  border-bottom-color: ${(props) => {
+    return props.theme.dark ? COLORS.LIGHT_GREY : COLORS.LIGHT_BORDER;
+  }};
+
   width: 100%;
   display: flex;
   align-items: center;
@@ -155,7 +167,15 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
   selected?: boolean;
 }>`
   outline: none;
-  color: ${({ active }) => (active ? "white" : COLORS.TEXT_TITLE)};
+
+  color: ${(props) => {
+    if (props.active) {
+      return props.theme.dark ? "white" : "black";
+    } else {
+      return props.theme.dark ? COLORS.TEXT_TITLE : COLORS.TEXT_LIGHT_THEME;
+    }
+  }};
+
   background: ${({ active }) =>
     active ? COLORS.BACKGROUND_MODAL : "transparent"};
 
@@ -165,12 +185,21 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
       outline-width: 1px;
       outline-style: solid;
       outline-color: ${COLORS.FAILURE};
-      background: ${COLORS.BACKGROUND_DROPDOWN_MENU_HOVER};
+      ${themeColor(
+        "background",
+        COLORS.BACKGROUND_DROPDOWN_MENU_HOVER,
+        COLORS.WHITE,
+      )};
     `}
 
   &:hover {
-    color: white;
-    background: ${COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER};
+    ${defaultTextColor};
+    ${themeColor(
+      "background",
+      COLORS.BACKGROUND_DROPDOWN_MENU_HOVER,
+      COLORS.BACKGROUND_DROPDOWN_MENU_HOVER_LIGHT,
+    )};
+
     &:after {
       transform: scale(1);
     }
@@ -188,12 +217,17 @@ const Col = styled.div<{ offsetX: number }>`
   display: flex;
   flex-direction: column;
   width: 300px;
-  background: ${COLORS.BACKGROUND_CONTENT};
   border-right: 1px solid ${COLORS.LIGHT_GREY};
   position: relative;
   z-index: 2;
   transition: all 0.2s ease-out;
   transform: translateX(${({ offsetX }) => `${offsetX}px`});
+
+  ${themeColor(
+    "background",
+    COLORS.BACKGROUND_CONTENT_DARK,
+    COLORS.BACKGROUND_CONTENT_LIGHT,
+  )};
 
   &.challenge-select {
     width: 600px;
@@ -232,19 +266,19 @@ const Overlay = styled.div<{ visible: boolean }>`
 const ColTitle = styled.div`
   font-size: 18px;
   font-weight: 200;
-  color: white;
+  ${defaultTextColor};
   margin: 0;
   height: 40px;
   padding: 0 12px;
   font-variant: small-caps;
   font-weight: bold;
   letter-spacing: 2;
-  background: ${COLORS.BACKGROUND_NAVIGATION_ITEM};
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-grow: 0;
   flex-shrink: 0;
+  ${themeColor("background", COLORS.BACKGROUND_NAVIGATION_ITEM, COLORS.WHITE)};
 
   p {
     margin: 0;
@@ -273,6 +307,7 @@ const ColTitle = styled.div`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   overlayVisible: Modules.selectors.challenges.navigationOverlayVisible(state),
   menuSelectItemIndex: Modules.selectors.challenges.menuSelectItemIndex(state),
 });
@@ -281,6 +316,7 @@ const ChallengeActions = Modules.actions.challenges;
 
 const dispatchProps = {
   setNavigationMapState: ChallengeActions.setNavigationMapState,
+  updateUserSettings: Modules.actions.admin.updateUserSettings,
 };
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;

@@ -30,6 +30,7 @@ import AdminChallengeDetailModal from "./AdminChallengeDetailModal";
 import AdminPullRequestPage, {
   PULL_REQUEST_DIFF_VIEW_ID,
 } from "./AdminPullRequestPage";
+import { themeColor, themeText } from "./AdminThemeContainer";
 
 // Only show focus outline when tabbing around the UI
 FocusStyleManager.onlyShowFocusOnTabs();
@@ -255,8 +256,12 @@ const Header = styled.div`
   padding-left: 0px;
   padding-right: 0px;
   margin-bottom: 0;
-  background: #212121;
-  border-bottom: 1px solid ${COLORS.LIGHT_GREY};
+  border-bottom: ${(props) => {
+    const color = props.theme.dark ? COLORS.LIGHT_GREY : COLORS.LIGHT_BORDER;
+    return `1px solid ${color}`;
+  }};
+
+  ${themeColor("background", "#212121", COLORS.WHITE)};
 
   height: ${HEADER_HEIGHT}px;
   width: calc(100vw - 48);
@@ -318,12 +323,13 @@ const LoginSignupButton = styled(Button)`
 const ProductTitle = styled.h1`
   position: relative;
   margin: 0;
-  color: white;
   font-weight: 100;
   font-family: "Helvetica Neue", Lato, sans-serif;
 
+  ${themeText("white", "black")};
+
   a {
-    color: white;
+    ${themeText("white", "black")};
     text-decoration: none;
   }
 
@@ -346,7 +352,6 @@ const ControlsContainer = styled.div`
 
 const NavIconButton = styled(({ overlayVisible, ...rest }) => (
   <Button
-    minimal
     large
     id="navigation-menu-button"
     aria-label="Open navigation map"
@@ -393,6 +398,7 @@ const CreateAccountText = styled.h1`
   font-weight: 200;
   white-space: nowrap;
   font-family: Helvetica Neue, Lato, sans-serif;
+  ${themeText("white", "black")};
 `;
 
 const AccountDropdownButton = styled.div`
@@ -402,7 +408,7 @@ const AccountDropdownButton = styled.div`
   .account-menu-dropdown {
     position: relative;
     display: inline-block;
-    color: ${COLORS.TEXT_TITLE};
+    ${themeText(COLORS.TEXT_TITLE, COLORS.TEXT_LIGHT_THEME)};
   }
 
   .dropdown-links {
@@ -412,19 +418,28 @@ const AccountDropdownButton = styled.div`
     right: 0;
     min-width: 215px;
     box-shadow: 8px 8px 16px 16px rgba(0, 0, 0, 0.3);
-    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU};
+    ${themeColor(
+      "background",
+      COLORS.BACKGROUND_DROPDOWN_MENU,
+      COLORS.BACKGROUND_MODAL_LIGHT,
+    )};
   }
 
   .dropdown-links a {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    color: ${COLORS.TEXT_TITLE};
+    ${themeText(COLORS.TEXT_TITLE, COLORS.TEXT_LIGHT_THEME)};
   }
 
   .dropdown-links a:hover {
-    color: ${COLORS.PRIMARY_GREEN};
-    background-color: ${COLORS.BACKGROUND_DROPDOWN_MENU_HOVER};
+    ${themeText(COLORS.PRIMARY_GREEN)};
+
+    ${themeColor(
+      "background",
+      COLORS.BACKGROUND_DROPDOWN_MENU_HOVER,
+      COLORS.BACKGROUND_PAGE_LIGHT,
+    )};
   }
 
   .account-menu-dropdown:hover .dropdown-links {

@@ -7,6 +7,9 @@ import {
   CourseSkeletonList,
   PullRequestDiffContext,
   ICodeBlobDto,
+  IUserDto,
+  UserSettings,
+  UserUpdateOptions,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import * as ENV from "tools/admin-env";
@@ -262,6 +265,24 @@ class Api extends BaseApiClass {
     } else {
       return createNonHttpResponseError("Unauthorized.");
     }
+  };
+
+  updateUserSettings = async (
+    settings: Partial<UserSettings>,
+  ): Promise<Err<HttpResponseError> | Ok<UserStoreState>> => {
+    const { authenticated } = this.getRequestHeaders();
+    if (authenticated) {
+      return this.updateUser({ settings });
+    } else {
+      return createNonHttpResponseError("Unauthorized.");
+    }
+  };
+
+  updateUser = async (userDetails: UserUpdateOptions) => {
+    return this.httpHandler(async () => {
+      const { config } = this.getRequestHeaders();
+      return axios.post<IUserDto>(`${HOST}/user/profile`, userDetails, config);
+    });
   };
 
   fetchUserCodeBlobForChallenge = async (uuid: string, challengeId: string) => {

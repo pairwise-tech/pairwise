@@ -71,10 +71,13 @@ const user = createReducer<
   UserActionTypes | AuthActionTypes | ChallengesActionTypes
 >(initialUserState)
   .handleAction(actions.logoutUser, () => initialUserState)
-  .handleAction([actions.fetchAdminUserSuccess], (state, action) => ({
-    ...state,
-    ...action.payload,
-  }));
+  .handleAction(
+    [actions.fetchAdminUserSuccess, actions.updateUserSettingsSuccess],
+    (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+  );
 
 const loading = createReducer<boolean, UserActionTypes | AuthActionTypes>(
   true,

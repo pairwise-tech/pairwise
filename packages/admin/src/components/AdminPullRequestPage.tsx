@@ -282,7 +282,7 @@ const ChallengeDiff = styled.div`
 
 const ChallengeDiffCard = styled(Card)`
   margin-top: 12px;
-  background: ${COLORS.BACKGROUND_CARD} !important;
+  background: ${COLORS.BACKGROUND_CARD_DARK} !important;
 `;
 
 /** ===========================================================================

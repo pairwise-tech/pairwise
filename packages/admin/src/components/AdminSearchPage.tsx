@@ -59,7 +59,10 @@ class AdminSearchPage extends React.Component<IProps, {}> {
   }
 
   renderSearchResult = (result: AdminSearchResult) => {
-    const { users, challengeMap, challengeBlobCache } = this.props;
+    const { users, userSettings, challengeMap, challengeBlobCache } =
+      this.props;
+    const theme = userSettings.appTheme;
+
     const matchValues = (a: string, b: string) => {
       if (!a || !b) {
         return false;
@@ -75,6 +78,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
           return (
             <AdminUserComponent
               user={user}
+              theme={theme}
               challengeBlobCache={challengeBlobCache}
             />
           );
@@ -88,6 +92,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
           return (
             <AdminUserComponent
               user={user}
+              theme={theme}
               challengeBlobCache={challengeBlobCache}
             />
           );
@@ -138,6 +143,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
+  userSettings: Modules.selectors.admin.adminUserSettings(state),
   challengeMeta: Modules.selectors.challenges.challengeMeta(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
   challengeBlobCache: Modules.selectors.challenges.challengeBlobCache(state),

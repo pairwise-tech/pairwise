@@ -26,9 +26,8 @@ body {
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: grayscale;
 
-  background: #1e1e1e;
-  overflow-x: hidden;
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 p {

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { assertUnreachable } from "@pairwise/common";
+import { AppTheme, assertUnreachable } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   CodeText,
@@ -160,6 +160,7 @@ class AdminUsersPage extends React.Component<IProps, IState> {
       <AdminUserComponent
         key={user.uuid}
         user={user}
+        theme={this.props.adminUserSettings.appTheme}
         challengeBlobCache={this.props.challengeBlobCache}
       />
     );
@@ -203,6 +204,7 @@ const ControlRow = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   users: Modules.selectors.users.usersState(state).users,
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   challengeBlobCache: Modules.selectors.challenges.challengeBlobCache(state),
 });
 
@@ -302,8 +304,8 @@ class AdminUserBaseComponent extends React.Component<
           </CardButton>
           <CardButton icon="inbox">
             <ExternalLink
-              style={{ color: "white" }}
               link={`mailto:${user.email}`}
+              style={{ color: this.props.theme === "dark" ? "white" : "black" }}
             >
               Email User
             </ExternalLink>
@@ -418,18 +420,19 @@ class AdminUserBaseComponent extends React.Component<
  * ============================================================================
  */
 
-const coursePaymentProps = {
+const adminUserDispatchProps = {
   giftCourseForUser: Modules.actions.payments.giftCourseForUser,
   refundCourseForUser: Modules.actions.payments.refundCourseForUser,
   fetchChallengeBlob: Modules.actions.challenges.fetchChallengeBlob,
 };
 
-type AdminUserBaseComponentProps = typeof coursePaymentProps & {
+type AdminUserBaseComponentProps = typeof adminUserDispatchProps & {
+  theme: AppTheme;
   user: AdminUserView;
   challengeBlobCache: BlobCache;
 };
 
 export const AdminUserComponent = connect(
   null,
-  coursePaymentProps,
+  adminUserDispatchProps,
 )(AdminUserBaseComponent);
