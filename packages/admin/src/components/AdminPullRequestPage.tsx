@@ -20,6 +20,7 @@ import {
   InverseChallengeMapping,
   PullRequestDiffContext,
 } from "@pairwise/common";
+import { defaultTextColor, themeColor, themeText } from "./AdminThemeContainer";
 
 /** ===========================================================================
  * Types & Config
@@ -28,7 +29,6 @@ import {
 
 interface IState {
   pull: string;
-  useDarkTheme: boolean;
 }
 
 /** ===========================================================================
@@ -42,14 +42,18 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
 
     this.state = {
       pull: "",
-      useDarkTheme: true,
     };
   }
 
   render(): Nullable<JSX.Element> {
-    const { useDarkTheme } = this.state;
-    const { challengeMap, pullRequestContext, pullRequestContextLoading } =
-      this.props;
+    const {
+      challengeMap,
+      pullRequestContext,
+      adminUserSettings,
+      pullRequestContextLoading,
+    } = this.props;
+
+    const isDark = adminUserSettings.appTheme === "dark";
     const id = this.getPullIdFromParams();
     const showLink = !pullRequestContextLoading && !!pullRequestContext && !!id;
     const prURL = `https://github.com/pairwise-tech/pairwise/pull/${id}`;
@@ -74,31 +78,19 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
             </Button>
           </Row>
         </form>
-        <Switch
-          checked={useDarkTheme}
-          onChange={this.toggleDiffTheme}
-          style={{ marginTop: 12, marginBottom: 22 }}
-          label={
-            useDarkTheme
-              ? "Diff View Dark Theme (on)"
-              : "Diff View Dark Theme (off)"
-          }
-        />
         {showLink && (
           <SummaryText>
             Showing diff for: <ExternalLink link={prURL}>{prURL}</ExternalLink>
           </SummaryText>
         )}
         {pullRequestContextLoading ? (
-          <SummaryText style={{ color: COLORS.SECONDARY_YELLOW }}>
-            Loading pull request diff content...
-          </SummaryText>
+          <SummaryText>Loading pull request diff content...</SummaryText>
         ) : pullRequestContext ? (
           <DiffContent
             isMobile={isMobile}
             challengeMap={challengeMap}
             diffContent={pullRequestContext}
-            useDarkTheme={this.state.useDarkTheme}
+            useDarkTheme={isDark}
           />
         ) : !id ? (
           <div />
@@ -108,10 +100,6 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
       </PageContainer>
     );
   }
-
-  toggleDiffTheme = () => {
-    this.setState((ps) => ({ useDarkTheme: !ps.useDarkTheme }));
-  };
 
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ pull: e.target.value });
@@ -267,13 +255,15 @@ class DiffContent extends React.PureComponent<DiffContentProps, {}> {
  * ============================================================================
  */
 
-const Title = styled.h2``;
+const Title = styled.h2`
+  ${defaultTextColor};
+`;
 
 const DiffTitle = styled.h3`
   margin-top: 8px;
   margin-bottom: 16px;
-  color: ${COLORS.SECONDARY_YELLOW};
   font-family: Avenir, Arial, Helvetica, sans-serif;
+  ${themeText(COLORS.SECONDARY_YELLOW, COLORS.TEXT_LIGHT_THEME)};
 `;
 
 const ChallengeDiff = styled.div`
@@ -282,7 +272,11 @@ const ChallengeDiff = styled.div`
 
 const ChallengeDiffCard = styled(Card)`
   margin-top: 12px;
-  background: ${COLORS.BACKGROUND_CARD_DARK} !important;
+  ${themeColor(
+    "background",
+    COLORS.BACKGROUND_CARD_DARK,
+    COLORS.BACKGROUND_CARD_LIGHT,
+  )}
 `;
 
 /** ===========================================================================
@@ -291,6 +285,7 @@ const ChallengeDiffCard = styled(Card)`
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  adminUserSettings: Modules.selectors.admin.adminUserSettings(state),
   pullRequestContext: Modules.selectors.challenges.pullRequestContext(state),
   pullRequestContextLoading:
     Modules.selectors.challenges.pullRequestContextLoading(state),
