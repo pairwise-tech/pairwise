@@ -19,7 +19,9 @@ import { Link } from "react-router-dom";
 
 class AdminFeedbackPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
-    const { feedbackRecords, deleteFeedbackByUuid } = this.props;
+    const { userSettings, feedbackRecords, deleteFeedbackByUuid } = this.props;
+    const theme = userSettings.appTheme;
+    const isDark = theme === "dark";
     return (
       <PageContainer>
         <Title>Feedback</Title>
@@ -58,6 +60,7 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
               <CardButtonRow>
                 <CardButton
                   intent="danger"
+                  style={{ color: isDark ? "white" : "black" }}
                   onClick={() => deleteFeedbackByUuid(feedback.uuid)}
                 >
                   Delete Feedback Record
@@ -65,8 +68,8 @@ class AdminFeedbackPage extends React.Component<IProps, {}> {
                 {user && (
                   <CardButton>
                     <Link
-                      style={{ color: "white" }}
                       to={`/search/${user.uuid}`}
+                      style={{ color: isDark ? "white" : "black" }}
                     >
                       View Feedback Author
                     </Link>
@@ -94,6 +97,7 @@ const Title = styled.h2``;
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  userSettings: Modules.selectors.admin.adminUserSettings(state),
   feedbackRecords: Modules.selectors.feedback.feedbackRecordsSelector(state),
 });
 

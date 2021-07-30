@@ -177,7 +177,11 @@ const ModuleNavigationButtonBase = styled(ModuleNavigationBase)<{
       outline-width: 1px;
       outline-style: solid;
       outline-color: ${COLORS.FAILURE};
-      background: ${COLORS.BACKGROUND_DROPDOWN_MENU_HOVER};
+      ${themeColor(
+        "background",
+        COLORS.BACKGROUND_DROPDOWN_MENU_HOVER,
+        COLORS.WHITE,
+      )};
     `}
 
   &:hover {
