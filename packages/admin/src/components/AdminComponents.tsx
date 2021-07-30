@@ -3,14 +3,7 @@ import JSONPretty from "react-json-pretty";
 import React from "react";
 import cx from "classnames";
 import styled from "styled-components/macro";
-import {
-  Button,
-  Code,
-  Card,
-  Text,
-  Classes,
-  InputGroup,
-} from "@blueprintjs/core";
+import { Button, Code, Card, Text, InputGroup } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
 import { copyToClipboard, composeWithProps } from "../tools/admin-utils";
 import { connect } from "react-redux";
@@ -20,16 +13,6 @@ import Modules from "../modules/root";
  * Admin Components
  * ============================================================================
  */
-
-interface DarkThemeProps {
-  children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export const DarkTheme = ({ className, ...props }: DarkThemeProps) => {
-  return <div className={cx(className, Classes.DARK)} {...props} />;
-};
 
 export const PageContainer = styled.div`
   width: 100%;

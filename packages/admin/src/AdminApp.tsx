@@ -4,11 +4,8 @@ import { Router as ReactRouter } from "react-router-dom";
 import AdminContainer from "components/AdminContainer";
 import store, { exposeGlobals, history } from "modules/create-store";
 import { NODE_ENV } from "tools/admin-env";
-import {
-  DarkTheme,
-  FullScreenOverlay,
-  OverlayText,
-} from "components/AdminComponents";
+import { FullScreenOverlay, OverlayText } from "components/AdminComponents";
+import AdminThemeContainer from "./components/AdminThemeContainer";
 
 /** ===========================================================================
  * Types
@@ -67,9 +64,9 @@ class PairwiseAdminApp extends React.Component<IProps, IState> {
     return (
       <ReduxProvider store={store}>
         <ReactRouter history={history}>
-          <DarkTheme>
+          <AdminThemeContainer>
             <AdminContainer />
-          </DarkTheme>
+          </AdminThemeContainer>
         </ReactRouter>
       </ReduxProvider>
     );
