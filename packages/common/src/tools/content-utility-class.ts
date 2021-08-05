@@ -262,7 +262,10 @@ class ContentUtilityClass {
  */
 
 // Add any additional courses to this list:
-const courseList = [FullstackTypeScript, Python, Rust, Golang];
+// const courseList = [FullstackTypeScript, Python, Rust, Golang];
+
+// Only TS course for now:
+const courseList = [FullstackTypeScript];
 
 const ContentUtility = new ContentUtilityClass(courseList as CourseList);
 
