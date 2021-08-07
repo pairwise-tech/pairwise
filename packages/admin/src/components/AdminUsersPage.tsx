@@ -1,7 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import { AppTheme, assertUnreachable } from "@pairwise/common";
+import {
+  AppTheme,
+  assertUnreachable,
+  CourseSkeletonList,
+} from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   CodeText,
@@ -19,9 +23,13 @@ import {
 } from "./AdminComponents";
 import { Button, Collapse, Alert, Intent, Icon } from "@blueprintjs/core";
 import { AdminUserView } from "../modules/users/store";
-import { progressHistoryToChallengeCount } from "../tools/admin-utils";
+import {
+  computeCourseProgressSummary,
+  progressHistoryToChallengeCount,
+} from "../tools/admin-utils";
 import { COLORS, MOBILE } from "../tools/constants";
 import { BlobCache } from "../modules/challenges/store";
+import { defaultTextColor, themeColor } from "./AdminThemeContainer";
 
 /** ===========================================================================
  * AdminUsersPage Component
@@ -158,8 +166,8 @@ class AdminUsersPage extends React.Component<IProps, IState> {
   renderUsersList = (user: AdminUserView) => {
     return (
       <AdminUserComponent
-        key={user.uuid}
         user={user}
+        key={user.uuid}
         theme={this.props.adminUserSettings.appTheme}
         challengeBlobCache={this.props.challengeBlobCache}
       />
@@ -245,7 +253,7 @@ class AdminUserBaseComponent extends React.Component<
 
   render(): JSX.Element {
     const { alert } = this.state;
-    const { user, challengeBlobCache } = this.props;
+    const { user, challengeBlobCache, courseSkeletons } = this.props;
     const showDetails = this.state.uuid === user.uuid;
     const payment = user.payments[0];
     const challengeTotal = progressHistoryToChallengeCount(
@@ -353,6 +361,46 @@ class AdminUserBaseComponent extends React.Component<
             title="Challenge Progress:"
             data={user.challengeProgressHistory}
           />
+          {user.challengeProgressHistory.map((history) => {
+            const { courseId, progress } = history;
+
+            const courseSkeleton = courseSkeletons?.find(
+              (x) => x.id === courseId,
+            );
+            if (!courseSkeleton) {
+              return null;
+            }
+
+            const summary = computeCourseProgressSummary(
+              progress,
+              courseSkeleton,
+            );
+
+            if (!summary) {
+              return null;
+            }
+
+            return (
+              <div style={{ marginBottom: 12 }}>
+                <p>{courseSkeleton.title} Course Progress Overview:</p>
+                <ProgressBar>
+                  <ProgressComplete progress={summary.percentComplete} />
+                </ProgressBar>
+                {Array.from(summary.summary.entries()).map(([id, stats]) => {
+                  const { title, completed, total } = stats;
+                  const percent = total === 0 ? 0 : (completed / total) * 100;
+                  return (
+                    <ModuleProgressBar key={id}>
+                      <ModuleProgressPercentage>
+                        {percent.toFixed(0)}%
+                      </ModuleProgressPercentage>
+                      <ModuleProgressTitle>{title}</ModuleProgressTitle>
+                    </ModuleProgressBar>
+                  );
+                })}
+              </div>
+            );
+          })}
           <JsonComponent
             title="Settings:"
             data={JSON.parse(String(user.settings))}
@@ -416,9 +464,54 @@ class AdminUserBaseComponent extends React.Component<
 }
 
 /** ===========================================================================
+ * Styles
+ * ============================================================================
+ */
+
+const ProgressBar = styled.div`
+  height: 30px;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  ${themeColor("background", COLORS.PROGRESS_BACKGROUND, COLORS.GRAY)}
+`;
+
+const ProgressComplete = styled.div<{ progress: number }>`
+  height: 30px;
+  width: ${(props) => props.progress}%;
+  background: ${COLORS.PROGRESS_COMPLETE};
+`;
+
+const ModuleProgressBar = styled.div`
+  margin-top: 2px;
+  display: flex;
+  flex-direction: row;
+`;
+
+const ModuleProgressTitle = styled.div`
+  width: 265px;
+  padding-top: 3px;
+  padding-left: 5px;
+  padding-bottom: 3px;
+  ${themeColor("background", COLORS.TEXT_DARK, COLORS.GRAY)}
+`;
+
+const ModuleProgressPercentage = styled.div`
+  width: 50px;
+  padding-top: 3px;
+  padding-left: 3px;
+  padding-bottom: 3px;
+  ${themeColor("background", COLORS.PROGRESS_BACKGROUND, COLORS.WHITE)}
+`;
+
+/** ===========================================================================
  * Props & Export
  * ============================================================================
  */
+
+const adminUserMapStateToProps = (state: ReduxStoreState) => ({
+  courseSkeletons: Modules.selectors.challenges.courseSkeletons(state),
+});
 
 const adminUserDispatchProps = {
   giftCourseForUser: Modules.actions.payments.giftCourseForUser,
@@ -426,13 +519,14 @@ const adminUserDispatchProps = {
   fetchChallengeBlob: Modules.actions.challenges.fetchChallengeBlob,
 };
 
-type AdminUserBaseComponentProps = typeof adminUserDispatchProps & {
-  theme: AppTheme;
-  user: AdminUserView;
-  challengeBlobCache: BlobCache;
-};
+type AdminUserBaseComponentProps = ReturnType<typeof adminUserMapStateToProps> &
+  typeof adminUserDispatchProps & {
+    theme: AppTheme;
+    user: AdminUserView;
+    challengeBlobCache: BlobCache;
+  };
 
 export const AdminUserComponent = connect(
-  null,
+  adminUserMapStateToProps,
   adminUserDispatchProps,
 )(AdminUserBaseComponent);

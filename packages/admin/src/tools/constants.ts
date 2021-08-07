@@ -56,6 +56,9 @@ export const COLORS = {
   BACKGROUND_BODY: "#13141d",
   BACKGROUND_NAVIGATION_ITEM: "#404040",
   BACKGROUND_NAVIGATION_ITEM_HOVER: "#0d0d0d",
+  PROGRESS_BACKGROUND: "rgb(15,15,15)",
+  GRAY: "rgb(175, 175, 175)",
+  PROGRESS_COMPLETE: "#44f1bd",
   NEON_GREEN: "#44f1bd",
   GRADIENT_GREEN:
     "linear-gradient( 90deg, rgba(0, 255, 177, 1) 22%, rgba(0, 255, 211, 1) 74%)",

@@ -514,7 +514,7 @@ export const userCourseProgressSummary = createSelector(
     let totalChallenges = 0;
     let totalCompleted = 0;
 
-    const userCrouseProgress = progress[course.id];
+    const userCourseProgress = progress[course.id];
 
     for (const module of course.modules) {
       const id = module.id;
@@ -536,7 +536,7 @@ export const userCourseProgressSummary = createSelector(
         stats.total++;
         totalChallenges++;
 
-        if (userCrouseProgress && userCrouseProgress[challenge.id]?.complete) {
+        if (userCourseProgress && userCourseProgress[challenge.id]?.complete) {
           stats.completed++;
           totalCompleted++;
         }

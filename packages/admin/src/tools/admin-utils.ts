@@ -3,7 +3,10 @@ import { compose } from "redux";
 import {
   CourseList,
   CourseSkeleton,
+  CourseSkeletonList,
   UserCourseProgress,
+  UserCourseStatus,
+  UserProgressMap,
 } from "@pairwise/common";
 import { ParsedQuery } from "query-string";
 import { AdminUserView } from "../modules/users/store";
@@ -405,4 +408,62 @@ export const estimateTotalPaymentsRevenue = (payments: PaymentRecord[]) => {
   const dollars = totalRevenue / 100;
 
   return { totalNumberOfPayments, totalRevenue: dollars };
+};
+
+/**
+ * Determine the course summary stats given a user's course history.
+ */
+export const computeCourseProgressSummary = (
+  userCourseProgress: UserCourseStatus,
+  courseSkeleton: CourseSkeleton,
+) => {
+  if (!courseSkeleton) {
+    return null;
+  }
+
+  const summary = new Map();
+  let totalChallenges = 0;
+  let totalCompleted = 0;
+
+  for (const module of courseSkeleton.modules) {
+    const id = module.id;
+    const title = module.title;
+
+    const stats = {
+      id,
+      title,
+      total: 0,
+      completed: 0,
+    };
+
+    for (const challenge of module.challenges) {
+      // Exclude sections from completed challenge counts
+      if (challenge.type === "section") {
+        continue;
+      }
+
+      stats.total++;
+      totalChallenges++;
+
+      if (userCourseProgress && userCourseProgress[challenge.id]?.complete) {
+        stats.completed++;
+        totalCompleted++;
+      }
+    }
+
+    summary.set(id, stats);
+  }
+
+  const percentComplete = (totalCompleted / totalChallenges) * 100;
+
+  const stats = {
+    summary,
+    totalCompleted,
+    totalChallenges,
+    percentComplete,
+    courseId: courseSkeleton.id,
+    courseTitle: courseSkeleton.title,
+  };
+
+  return stats;
 };
