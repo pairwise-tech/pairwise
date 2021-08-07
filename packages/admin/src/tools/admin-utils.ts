@@ -3,10 +3,8 @@ import { compose } from "redux";
 import {
   CourseList,
   CourseSkeleton,
-  CourseSkeletonList,
   UserCourseProgress,
   UserCourseStatus,
-  UserProgressMap,
 } from "@pairwise/common";
 import { ParsedQuery } from "query-string";
 import { AdminUserView } from "../modules/users/store";

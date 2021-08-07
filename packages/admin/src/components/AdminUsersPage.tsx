@@ -1,11 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components/macro";
-import {
-  AppTheme,
-  assertUnreachable,
-  CourseSkeletonList,
-} from "@pairwise/common";
+import { AppTheme, assertUnreachable } from "@pairwise/common";
 import Modules, { ReduxStoreState } from "modules/root";
 import {
   CodeText,
@@ -29,7 +25,7 @@ import {
 } from "../tools/admin-utils";
 import { COLORS, MOBILE } from "../tools/constants";
 import { BlobCache } from "../modules/challenges/store";
-import { defaultTextColor, themeColor } from "./AdminThemeContainer";
+import { themeColor } from "./AdminThemeContainer";
 
 /** ===========================================================================
  * AdminUsersPage Component

@@ -166,6 +166,12 @@ const ApplicationContainer = (props: IProps) => {
 
   const { prev, next } = nextPrevChallenges;
 
+  const toggleAppTheme = () => {
+    updateUserSettings({
+      appTheme: user.settings.appTheme === "dark" ? "light" : "dark",
+    });
+  };
+
   const mobileMenuItems = (
     <Menu>
       <MenuItem
@@ -209,6 +215,11 @@ const ApplicationContainer = (props: IProps) => {
         icon="help"
         onClick={openFeedbackDialog}
         text="Submit Feedback"
+      />
+      <MenuItem
+        icon="lightbulb"
+        onClick={toggleAppTheme}
+        text="Toggle App Theme"
       />
     </Menu>
   );
