@@ -204,6 +204,7 @@ export class ProgressService {
           courseId,
           progress: JSON.stringify(progress),
         };
+
         await this.progressRepository.insert(newProgressEntry);
       } catch (err) {
         captureSentryException(err);

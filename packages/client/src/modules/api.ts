@@ -582,7 +582,7 @@ class LocalStorageHttpClass {
 
     const progressList = this.fetchUserProgress();
     const existingCourseProgress = progressList.find(
-      (p) => p.courseId === courseId,
+      (x) => x.courseId === courseId,
     );
 
     let updatedProgress: ProgressEntity;
@@ -608,13 +608,10 @@ class LocalStorageHttpClass {
     const updatedProgressList =
       progressList.length === 0
         ? [updatedProgress]
-        : progressList.concat(updatedProgress).map((p) => {
-            if (p.courseId === progress.courseId) {
-              return updatedProgress;
-            } else {
-              return p;
-            }
-          });
+        : progressList
+            // Filter out the pre-existing entry
+            .filter((x) => x.courseId !== courseId)
+            .concat(updatedProgress);
 
     // Update user progress
     this.setItem(KEYS.USER_PROGRESS_KEY, updatedProgressList);
