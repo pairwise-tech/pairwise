@@ -5,7 +5,7 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { CodeText, PageContainer, SummaryText } from "./AdminComponents";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { parseSearchQuery, composeWithProps } from "../tools/admin-utils";
-import { AdminUserComponent } from "./AdminUsersPage";
+import AdminUserComponent from "./AdminUserComponent";
 import { assertUnreachable } from "@pairwise/common";
 import { COLORS } from "../tools/constants";
 import { Code } from "@blueprintjs/core";
