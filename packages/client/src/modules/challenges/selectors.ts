@@ -142,16 +142,6 @@ export const getNavigationSectionAccordionViewState = createSelector(
   prop("navigationSectionAccordionViewState"),
 );
 
-export const courseList = createSelector(
-  [challengesState],
-  (challenges) => challenges.courses,
-);
-
-export const courseSkeletons = createSelector(
-  [challengesState],
-  (challenges) => challenges.courseSkeletons,
-);
-
 export const getBlobCache = createSelector(
   [challengesState],
   (state) => state.blobCache,
@@ -182,6 +172,11 @@ export const workspaceLoadingSelector = createSelector(
 export const getCurrentCourse = createSelector([challengesState], (state) => {
   return state.courses?.find((x) => x.id === state.currentCourseId);
 });
+
+export const getCourseList = createSelector(
+  [challengesState],
+  (challenges) => challenges.courses,
+);
 
 export const getCourseSkeletons = createSelector([challengesState], (state) => {
   return state.courseSkeletons;
@@ -372,7 +367,7 @@ export const isDatabaseChallenge = createSelector(
  * to the SQL Database section within the module.
  */
 export const isSqlChallenge = createSelector(
-  [getCurrentChallengeId, courseSkeletons, isDatabaseChallenge],
+  [getCurrentChallengeId, getCourseSkeletons, isDatabaseChallenge],
   (challengeId, courseSkeletons, isDatabaseChallenge) => {
     if (isDatabaseChallenge && challengeId) {
       const DATABASE_MODULE_ID = "f0pDYSOV";
@@ -415,7 +410,7 @@ export const isSqlChallenge = createSelector(
  * (kind of a bug... or not?).
  */
 export const breadcrumbPathSelector = createSelector(
-  [getCurrentChallengeId, getChallengeMap, courseList],
+  [getCurrentChallengeId, getChallengeMap, getCourseList],
   (id, challengeMap, courses): Nullable<BreadcrumbsData> => {
     // No crumbs if not module or challenge...
     if (!id || !challengeMap) {
@@ -568,11 +563,6 @@ export const getCurrentChallengeTestCode = createSelector(
 export const getCurrentTitle = createSelector(
   [getCurrentChallenge],
   (challenge) => challenge?.title,
-);
-
-export const getCurrentId = createSelector(
-  [getCurrentChallenge],
-  (challenge) => challenge?.id,
 );
 
 export const getCurrentInstructions = createSelector(

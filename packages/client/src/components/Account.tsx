@@ -400,7 +400,7 @@ const Underline = styled.span`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
-  skeletons: Modules.selectors.challenges.courseSkeletons(state),
+  skeletons: Modules.selectors.challenges.getCourseSkeletons(state),
   emailVerificationStatus:
     Modules.selectors.user.emailVerificationStatus(state),
 });

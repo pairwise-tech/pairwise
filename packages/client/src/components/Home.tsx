@@ -310,7 +310,7 @@ const ButtonsBox = styled.div`
 
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
-  skeletons: Modules.selectors.challenges.courseSkeletons(state),
+  skeletons: Modules.selectors.challenges.getCourseSkeletons(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
   currentNavigationOverlayCourse:
     Modules.selectors.challenges.getCurrentNavigationOverlayCourseSkeleton(

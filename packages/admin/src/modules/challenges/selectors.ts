@@ -53,10 +53,6 @@ export const courseSkeletons = createSelector(
   (challenges) => challenges.courseSkeletons,
 );
 
-export const getCourseSkeletons = createSelector([challengesState], (state) => {
-  return state.courseSkeletons;
-});
-
 // Get an array of course metadata for the current course list
 export const courseListMetadata = createSelector([challengesState], (state) => {
   if (state.courses) {

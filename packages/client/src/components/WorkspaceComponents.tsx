@@ -658,7 +658,7 @@ const instructionsMapState = (state: ReduxStoreState) => ({
   title: Modules.selectors.challenges.getCurrentTitle(state) || "",
   isInstructionsViewCollapsed:
     Modules.selectors.challenges.isInstructionsViewCollapsed(state),
-  currentId: Modules.selectors.challenges.getCurrentId(state) || "",
+  currentId: Modules.selectors.challenges.getCurrentChallengeId(state) || "",
   isEditMode: Modules.selectors.challenges.isEditMode(state),
 });
 

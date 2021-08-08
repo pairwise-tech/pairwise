@@ -1,7 +1,7 @@
 import identity from "ramda/es/identity";
 import { createSelector } from "reselect";
 import { ReduxStoreState } from "modules/root";
-import { courseSkeletons } from "modules/challenges/selectors";
+import { getCourseSkeletons } from "modules/challenges/selectors";
 
 /** ===========================================================================
  * Selectors
@@ -42,7 +42,7 @@ export const checkoutLoading = createSelector(
 // Find the course which corresponds to the current course purchase id,
 // if it exists.
 export const paymentIntentCourse = createSelector(
-  [paymentIntentCourseId, courseSkeletons],
+  [paymentIntentCourseId, getCourseSkeletons],
   (id, skeletons) => {
     return skeletons?.find((c) => c.id === id);
   },
@@ -51,7 +51,7 @@ export const paymentIntentCourse = createSelector(
 // Find the course which corresponds to the current course purchase id,
 // if it exists.
 export const paymentSuccessCourse = createSelector(
-  [paymentSuccessCourseId, courseSkeletons],
+  [paymentSuccessCourseId, getCourseSkeletons],
   (id, skeletons) => {
     return skeletons?.find((c) => c.id === id);
   },
