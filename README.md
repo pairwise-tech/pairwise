@@ -235,3 +235,5 @@ $ yarn docker:prod-server-build
 # Run the production server
 $ yarn docker:prod-server-start
 ```
+
+On occasion you may need to connect directly to the production database. You can do this by whitelisting your local IP in the Google Cloud SQL console and then using a local Postgres client to connect.
