@@ -367,22 +367,25 @@ class AdminUserBaseComponent extends React.Component<
               return null;
             }
 
-            const summary = computeCourseProgressSummary(
+            const stats = computeCourseProgressSummary(
               progress,
               courseSkeleton,
             );
 
-            if (!summary) {
+            if (!stats) {
               return null;
             }
 
             return (
-              <div style={{ marginBottom: 12 }}>
-                <p>{courseSkeleton.title} Course Progress Overview:</p>
+              <div style={{ marginTop: 12, marginBottom: 12 }}>
+                <p>
+                  {courseSkeleton.title} Course Progress Overview (
+                  {stats.percentComplete.toFixed(2)}% Complete):
+                </p>
                 <ProgressBar>
-                  <ProgressComplete progress={summary.percentComplete} />
+                  <ProgressComplete progress={stats.percentComplete} />
                 </ProgressBar>
-                {Array.from(summary.summary.entries()).map(([id, stats]) => {
+                {Array.from(stats.summary.entries()).map(([id, stats]) => {
                   const { title, completed, total } = stats;
                   const percent = total === 0 ? 0 : (completed / total) * 100;
                   return (
@@ -397,10 +400,6 @@ class AdminUserBaseComponent extends React.Component<
               </div>
             );
           })}
-          <JsonComponent
-            title="Settings:"
-            data={JSON.parse(String(user.settings))}
-          />
           <div style={{ height: 12 }} />
           <Key>Lookup Challenge Blob:</Key>
           <Row style={{ marginTop: 8 }}>
@@ -424,6 +423,10 @@ class AdminUserBaseComponent extends React.Component<
                 )}
             </>
           )}
+          <JsonComponent
+            title="Settings:"
+            data={JSON.parse(String(user.settings))}
+          />
         </Collapse>
       </DataCard>
     );
