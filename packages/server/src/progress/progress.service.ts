@@ -258,9 +258,9 @@ export class ProgressService {
 
     const now = Date.now();
 
-    const since = (time: number) => {
-      const minutes = (now - new Date(time).getTime()) / 1000 / 60;
-      return minutes.toFixed(2);
+    const hoursSince = (time: number) => {
+      const hours = (now - new Date(time).getTime()) / 1000 / 60 / 60;
+      return hours.toFixed(2);
     };
 
     let count = 0;
@@ -281,8 +281,8 @@ export class ProgressService {
     });
 
     const users = Object.keys(records).length;
-    const last = since(this.time);
-    const status = `${count} challenges updated in the last ${last} minutes by ${users} users.`;
+    const last = hoursSince(this.time);
+    const status = `${count} challenges updated in the last ${last} hours by ${users} users.`;
 
     return {
       status,
