@@ -14,7 +14,9 @@ const NUMBER_OF_USERS = 15;
 const NUMBER_OF_REQUESTS_PER_USER = 15;
 const TOTAL_REQUESTS = NUMBER_OF_USERS * NUMBER_OF_REQUESTS_PER_USER;
 
-const wait = async (time: number) => new Promise((_: any) => setTimeout(_, time));
+const wait = async (time: number) => {
+  return new Promise((_: any) => setTimeout(_, time));
+};
 
 describe.skip("Stress Test the Server", () => {
   test("Create users and hit the /progress/challenge endpoint repeatedly", async (done) => {
