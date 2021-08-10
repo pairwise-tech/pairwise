@@ -10,14 +10,16 @@ jest.setTimeout(100000);
  * ===========================================================================
  */
 
-const NUMBER_OF_USERS = 25;
+const NUMBER_OF_USERS = 15;
 const NUMBER_OF_REQUESTS_PER_USER = 15;
 const TOTAL_REQUESTS = NUMBER_OF_USERS * NUMBER_OF_REQUESTS_PER_USER;
+
+const wait = async (time: number) => new Promise((_: any) => setTimeout(_, time));
 
 describe.skip("Stress Test the Server", () => {
   test("Create users and hit the /progress/challenge endpoint repeatedly", async (done) => {
     // Wait 1 second to allow other tests to complete first
-    await new Promise((_: any) => setTimeout(_, 1000));
+    await wait(1000);
 
     const start = Date.now();
 
@@ -78,7 +80,7 @@ describe.skip("Stress Test the Server", () => {
 });
 
 /**
- * [1] Actually the number is higher because each user produces
+ * NOTE: Actually the number is higher because each user produces
  * additional API calls in the test, e.g. for user creation.
  *
  * Assuming a normal user will make an API request every 2 minutes or so,
