@@ -806,7 +806,7 @@ const parseCodeStringDeepLinkEpic: EpicSignature = (action$, state$, deps) => {
       return codeString !== undefined && typeof codeString === "string";
     }),
     map((params) => {
-      const codeString = decodeURIComponent(params.code as string);
+      const codeString = params.code as string;
       const sandboxChallengeType = isValidSandboxChallengeType(
         params.sandboxChallengeType,
       );

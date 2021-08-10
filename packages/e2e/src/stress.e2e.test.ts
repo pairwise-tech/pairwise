@@ -10,8 +10,8 @@ jest.setTimeout(100000);
  * ===========================================================================
  */
 
-const NUMBER_OF_USERS = 50;
-const NUMBER_OF_REQUESTS_PER_USER = 25;
+const NUMBER_OF_USERS = 25;
+const NUMBER_OF_REQUESTS_PER_USER = 15;
 const TOTAL_REQUESTS = NUMBER_OF_USERS * NUMBER_OF_REQUESTS_PER_USER;
 
 describe.skip("Stress Test the Server", () => {

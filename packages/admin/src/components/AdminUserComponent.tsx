@@ -222,7 +222,7 @@ class AdminUserComponent extends React.Component<
             <Button text="Find Blob" onClick={this.handleSearchBlob} />
           </Row>
           {!!blob && (
-            <>
+            <div style={{ marginBottom: 12 }}>
               <JsonComponent title="Challenge Blob Result:" data={blob} />
               {blob.dataBlob &&
                 "code" in blob.dataBlob &&
@@ -230,7 +230,7 @@ class AdminUserComponent extends React.Component<
                   this.state.challengeId,
                   blob.dataBlob.code,
                 )}
-            </>
+            </div>
           )}
           <JsonComponent
             title="Settings:"
@@ -245,7 +245,9 @@ class AdminUserComponent extends React.Component<
     const code = encodeURIComponent(codeString);
     const link = `https://app.pairwise.tech/workspace/${challengeId}?code=${code}`;
     return (
-      <ExternalLink link={link}>Open Code String in Pairwise</ExternalLink>
+      <ExternalLink link={link}>
+        Open Challenge Blob Code String in Pairwise
+      </ExternalLink>
     );
   };
 
