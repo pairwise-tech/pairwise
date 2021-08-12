@@ -30,6 +30,7 @@ class AdminSearchPage extends React.Component<IProps, {}> {
   render(): Nullable<JSX.Element> {
     const params: any = this.props.match.params;
     const result = parseSearchQuery(params.query);
+    const isDark = this.props.userSettings.appTheme === "dark";
 
     return (
       <PageContainer>
@@ -38,8 +39,14 @@ class AdminSearchPage extends React.Component<IProps, {}> {
           <>
             <SummaryText>
               Displaying results for search query{" "}
-              <i style={{ color: COLORS.SECONDARY_YELLOW }}>{params.query}</i>,
-              identified as <b>{result.type}</b>.
+              <i
+                style={{
+                  color: isDark ? COLORS.SECONDARY_YELLOW : COLORS.PURPLE,
+                }}
+              >
+                {params.query}
+              </i>
+              , identified as <b>{result.type}</b>.
             </SummaryText>
             {this.renderSearchResult(result)}
           </>

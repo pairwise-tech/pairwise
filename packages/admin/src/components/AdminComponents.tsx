@@ -1,7 +1,6 @@
 import Markdown from "react-markdown";
 import JSONPretty from "react-json-pretty";
 import React from "react";
-import cx from "classnames";
 import styled from "styled-components/macro";
 import { Button, Code, Card, Text, InputGroup } from "@blueprintjs/core";
 import { COLORS, MOBILE } from "../tools/constants";
@@ -224,12 +223,14 @@ export const JsonComponent = ({
           key: "color:#fc426d;",
           value: "color:#e97cff;",
           string: "color:#ffd755;",
+          boolean: "color: #0ddbff",
           main: `
               padding: 8px;
               max-width: 80vw;
               overflow: scroll;
               width: max-content;
-              background: rgb(35,35,35);
+              color: rgb(225, 225, 225);
+              background: rgb(35, 35, 35);
             `,
         }}
         style={{ fontSize: 14, maxHeight: 450, overflow: "scroll" }}
