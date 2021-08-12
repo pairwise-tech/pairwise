@@ -16,6 +16,7 @@ export const getMobileRedirected = () => {
   const v = localStorage.getItem(MOBILE_REDIRECT_KEY);
   return v === "true";
 };
+
 export const setMobileRedirected = (x: boolean): void => {
   const v = x ? "true" : "false";
   localStorage.setItem(MOBILE_REDIRECT_KEY, v);

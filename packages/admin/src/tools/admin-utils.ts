@@ -8,7 +8,7 @@ import {
 } from "@pairwise/common";
 import { ParsedQuery } from "query-string";
 import { AdminUserView } from "../modules/users/store";
-import toaster from "../tools/toast-utils";
+import toaster from "./toast-utils";
 import { PaymentRecord } from "../modules/payments/store";
 import { AdminSearchResult } from "../components/AdminSearchPage";
 

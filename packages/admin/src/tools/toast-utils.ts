@@ -5,7 +5,9 @@ import { Toaster, IconName } from "@blueprintjs/core";
  * ============================================================================
  */
 
-const BlueprintToaster = Toaster.create({ className: "blueprint-toaster" });
+const BlueprintToaster = Toaster.create({
+  className: "blueprint-toaster",
+});
 
 interface IToastOptions {
   icon?: IconName;
