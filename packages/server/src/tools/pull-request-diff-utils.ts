@@ -9,7 +9,25 @@ import { captureSentryException } from "./sentry-utils";
 import ENV from "./server-env";
 
 /** ===========================================================================
- * Server utils
+ * Types & Config
+ * ============================================================================
+ */
+
+interface CourseFileDiff {
+  sha: string;
+  filename: string;
+  status: string;
+  additions: number;
+  deletions: number;
+  changes: number;
+  blob_url: string;
+  raw_url: string;
+  contents_url: string;
+  patch: string;
+}
+
+/** ===========================================================================
+ * Pull Request Diff Utils
  * ============================================================================
  */
 
@@ -44,19 +62,6 @@ const fetchFileBlob = async (fileSHA: string) => {
   });
   return result.data;
 };
-
-interface CourseFileDiff {
-  sha: string;
-  filename: string;
-  status: string;
-  additions: number;
-  deletions: number;
-  changes: number;
-  blob_url: string;
-  raw_url: string;
-  contents_url: string;
-  patch: string;
-}
 
 /**
  * Accept a pull request id and fetch pull request diff metadata from GitHub
@@ -99,42 +104,9 @@ export const parsePullRequestDiff = async (
     if (courses.length > 0) {
       const result = await Promise.all(
         courses.map(async (courseDiffFile) => {
-          console.log(courseDiffFile);
           const { sha, patch } = courseDiffFile;
 
-          const patches = patch.split(/@(.*)@\n/);
-          console.log(patches);
-
-          const patchDiffLines = [];
-          for (let i = 0; i < patches.length; i++) {
-            const entry = patches[i];
-            if (entry.charAt(0) === "@") {
-              const lines = entry.match(/\+(.*)\ @/).pop();
-              patchDiffLines.push([lines, patches[i + 1]]);
-              i++;
-            }
-          }
-
-          const allChangedLines = [];
-
-          for (const pair of patchDiffLines) {
-            const [lines, diff] = pair;
-            const [startLine, numberOfLines] = lines.split(",");
-            const start = Number(startLine);
-            const total = Number(numberOfLines);
-            const parsedDiff = diff.split("\n");
-
-            let index = 0;
-
-            for (let i = start; i < start + total; i++) {
-              const line = parsedDiff[index];
-              const firstCharacter = line.charAt(0);
-              if (firstCharacter === "-" || firstCharacter === "+") {
-                allChangedLines.push(i);
-              }
-              index++;
-            }
-          }
+          const allChangedLines = getPatchChangedLines(patch);
 
           /**
            * Fetch the blob for the course JSON in file in this PR. Convert
@@ -145,28 +117,10 @@ export const parsePullRequestDiff = async (
           const blobJSON = JSON.stringify(blob, null, 2);
           const jsonByLines = blobJSON.split("\n");
 
-          /**
-           * Iterate through the JSON by line number and extract all the
-           * challenge ids which overlap with line numbers from the diff.
-           */
-          let currentChallengeId = null;
-          const challengeIdSet: Set<string> = new Set();
-          const lineNumberSet = new Set(allChangedLines);
-
-          for (let i = 1; i < jsonByLines.length + 1; i++) {
-            const lineNumber = i;
-            const line = jsonByLines[lineNumber - 1];
-            if (line.includes(`"id":`)) {
-              const id = line.match(/\"id\": \"(.*)\"/).pop();
-              currentChallengeId = id;
-            }
-
-            if (lineNumberSet.has(lineNumber)) {
-              challengeIdSet.add(currentChallengeId);
-            }
-          }
-
-          const challengeIds = Array.from(challengeIdSet);
+          const challengeIds = getPatchChallengeIds(
+            allChangedLines,
+            jsonByLines,
+          );
 
           /**
            * Lookup up the original challenge (if it exists) and the updated
@@ -231,4 +185,78 @@ export const parsePullRequestDiff = async (
     captureSentryException(err);
     throw new InternalServerErrorException(err);
   }
+};
+
+/**
+ * Extract all the line numbers which are changed in a pull
+ * request diff.
+ */
+const getPatchChangedLines = (patch: string) => {
+  const patches = patch.split(/@(.*)@\n/);
+
+  const patchDiffLines = [];
+
+  // Match all git diff annotations using the @@...@@ syntax, and extract
+  // the annotation and subsequent diff and return both as a tuple.
+  for (let i = 0; i < patches.length; i++) {
+    const entry = patches[i];
+    if (entry.charAt(0) === "@") {
+      const lines = entry.match(/\+(.*)\ @/).pop();
+      patchDiffLines.push([lines, patches[i + 1]]);
+      i++;
+    }
+  }
+
+  const allChangedLines: number[] = [];
+
+  // Iterate through all the diffs and find each line which is marked with
+  // a + or - to include in the changed lines. The reason for this is that
+  // some additional lines are included in the path which are unchanged.
+  for (const pair of patchDiffLines) {
+    const [lines, diff] = pair;
+    const [startLine, numberOfLines] = lines.split(",");
+    const start = Number(startLine);
+    const total = Number(numberOfLines);
+    const parsedDiff = diff.split("\n");
+
+    let index = 0;
+
+    for (let i = start; i < start + total; i++) {
+      const line = parsedDiff[index];
+      const firstCharacter = line.charAt(0);
+      if (firstCharacter === "-" || firstCharacter === "+") {
+        allChangedLines.push(i);
+      }
+      index++;
+    }
+  }
+
+  return allChangedLines;
+};
+
+/**
+ * Get all the challenge ids which are affected by a pull request.
+ */
+const getPatchChallengeIds = (
+  allChangedLines: number[],
+  jsonByLines: string[],
+) => {
+  let currentChallengeId = null;
+  const challengeIdSet: Set<string> = new Set();
+  const lineNumberSet = new Set(allChangedLines);
+
+  for (let i = 1; i < jsonByLines.length + 1; i++) {
+    const lineNumber = i;
+    const line = jsonByLines[lineNumber - 1];
+    if (line.includes(`"id":`)) {
+      const id = line.match(/\"id\": \"(.*)\"/).pop();
+      currentChallengeId = id;
+    }
+
+    if (lineNumberSet.has(lineNumber)) {
+      challengeIdSet.add(currentChallengeId);
+    }
+  }
+
+  return Array.from(challengeIdSet);
 };
