@@ -27,6 +27,7 @@ const fetchPullRequestDiff = async (pullRequestNumber: number) => {
       authorization: `token ${ENV.GITHUB_API_TOKEN}`,
     },
   });
+
   return result.data;
 };
 
@@ -86,14 +87,33 @@ export const parsePullRequestDiff = async (
       const result = await Promise.all(
         courses.map(async (courseDiffFile) => {
           const { sha, patch } = courseDiffFile;
+          console.log(patch);
           /**
            * Extract all the git file annotations which denote changed line
            * numbers in the diff.
            */
-          const lineDiffs = patch
+          const postImageLineDiffRanges = patch
             .split("\n")
             .filter((x) => /@@(.*)@@/.test(x))
-            .map((x) => x.match(/\+(.*)\,/).pop());
+            .map((x) => x.match(/\+(.*)\ @@/).pop());
+
+          console.log(postImageLineDiffRanges);
+          const allChangedLines = postImageLineDiffRanges
+            .map((diff) => {
+              const [startLine, numberOfLines] = diff.split(",");
+              const start = Number(startLine);
+              const total = Number(numberOfLines);
+              console.log(start, total);
+              const lines = [];
+              for (let i = start; i < start + total; i++) {
+                lines.push(i);
+              }
+              console.log(lines);
+              return lines;
+            })
+            .reduce((allLines, lines) => allLines.concat(lines));
+
+          console.log(allChangedLines);
 
           /**
            * Fetch the blob for the course JSON in file in this PR. Convert
@@ -109,8 +129,8 @@ export const parsePullRequestDiff = async (
            * challenge ids which overlap with line numbers from the diff.
            */
           let currentChallengeId = null;
-          const challengeIds = [];
-          const lineNumberSet = new Set(lineDiffs.map((line) => +line));
+          const challengeIdSet: Set<string> = new Set();
+          const lineNumberSet = new Set(allChangedLines);
 
           for (let i = 1; i < jsonByLines.length + 1; i++) {
             const lineNumber = i;
@@ -121,9 +141,12 @@ export const parsePullRequestDiff = async (
             }
 
             if (lineNumberSet.has(lineNumber)) {
-              challengeIds.push(currentChallengeId);
+              challengeIdSet.add(currentChallengeId);
             }
           }
+
+          const challengeIds = Array.from(challengeIdSet);
+          console.log(challengeIds);
 
           /**
            * Lookup up the original challenge (if it exists) and the updated
@@ -137,37 +160,47 @@ export const parsePullRequestDiff = async (
            * Map over the identified altered challenge ids from the pull request
            * and construct content context to return in the response.
            */
-          const prDiffContext = challengeIds.map((id) => {
-            // May be undefined if updated challenge is new:
-            const originalChallengeMeta = originalChallengeMap[id];
-            // May be undefined if updated challenge is a deletion:
-            const updatedChallengeMeta = pullRequestChallengeMap[id];
+          const prDiffContext = challengeIds
+            .map((id) => {
+              // May be undefined if updated challenge is new:
+              const originalChallengeMeta = originalChallengeMap[id];
+              // May be undefined if updated challenge is a deletion:
+              const updatedChallengeMeta = pullRequestChallengeMap[id];
 
-            // One of them should exist...
-            const existing = originalChallengeMeta
-              ? originalChallengeMeta
-              : updatedChallengeMeta;
+              // One of them should exist...
+              const existing = originalChallengeMeta
+                ? originalChallengeMeta
+                : updatedChallengeMeta;
 
-            const { moduleId, courseId } = existing;
-            const originalChallenge = originalChallengeMeta
-              ? originalChallengeMeta.challenge
-              : null;
-            const updatedChallenge = updatedChallengeMeta
-              ? updatedChallengeMeta.challenge
-              : null;
+              // If no challenge is found then the id was probably a module
+              // or course id, return null.
+              if (existing === undefined) {
+                return null;
+              }
 
-            return {
-              id,
-              moduleId,
-              courseId,
-              updatedChallenge,
-              originalChallenge,
-            };
-          });
+              const { moduleId, courseId } = existing;
+              const originalChallenge = originalChallengeMeta
+                ? originalChallengeMeta.challenge
+                : null;
+              const updatedChallenge = updatedChallengeMeta
+                ? updatedChallengeMeta.challenge
+                : null;
+
+              return {
+                id,
+                moduleId,
+                courseId,
+                updatedChallenge,
+                originalChallenge,
+              };
+            })
+            .filter((x) => x !== null);
 
           return prDiffContext;
         }),
       );
+
+      console.log(result[0][0]["9nSyakhMO"]);
 
       // Flatten the results and remove null id diffs
       return result
