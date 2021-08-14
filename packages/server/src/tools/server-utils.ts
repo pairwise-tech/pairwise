@@ -45,6 +45,19 @@ const fetchFileBlob = async (fileSHA: string) => {
   return result.data;
 };
 
+interface CourseFileDiff {
+  sha: string;
+  filename: string;
+  status: string;
+  additions: number;
+  deletions: number;
+  changes: number;
+  blob_url: string;
+  raw_url: string;
+  contents_url: string;
+  patch: string;
+}
+
 /**
  * Accept a pull request id and fetch pull request diff metadata from GitHub
  * in order to provide diff content context for admin client.
@@ -81,39 +94,47 @@ export const parsePullRequestDiff = async (
     const python = diff.find(matchFile("02_python_language"));
     const rust = diff.find(matchFile("03_rust_language"));
     const go = diff.find(matchFile("04_golang_language"));
-    const courses = [ts, python, rust, go].filter(Boolean);
+    const courses: CourseFileDiff[] = [ts, python, rust, go].filter(Boolean);
 
     if (courses.length > 0) {
       const result = await Promise.all(
         courses.map(async (courseDiffFile) => {
+          console.log(courseDiffFile);
           const { sha, patch } = courseDiffFile;
-          console.log(patch);
-          /**
-           * Extract all the git file annotations which denote changed line
-           * numbers in the diff.
-           */
-          const postImageLineDiffRanges = patch
-            .split("\n")
-            .filter((x) => /@@(.*)@@/.test(x))
-            .map((x) => x.match(/\+(.*)\ @@/).pop());
 
-          console.log(postImageLineDiffRanges);
-          const allChangedLines = postImageLineDiffRanges
-            .map((diff) => {
-              const [startLine, numberOfLines] = diff.split(",");
-              const start = Number(startLine);
-              const total = Number(numberOfLines);
-              console.log(start, total);
-              const lines = [];
-              for (let i = start; i < start + total; i++) {
-                lines.push(i);
+          const patches = patch.split(/@(.*)@\n/);
+          console.log(patches);
+
+          const patchDiffLines = [];
+          for (let i = 0; i < patches.length; i++) {
+            const entry = patches[i];
+            if (entry.charAt(0) === "@") {
+              const lines = entry.match(/\+(.*)\ @/).pop();
+              patchDiffLines.push([lines, patches[i + 1]]);
+              i++;
+            }
+          }
+
+          const allChangedLines = [];
+
+          for (const pair of patchDiffLines) {
+            const [lines, diff] = pair;
+            const [startLine, numberOfLines] = lines.split(",");
+            const start = Number(startLine);
+            const total = Number(numberOfLines);
+            const parsedDiff = diff.split("\n");
+
+            let index = 0;
+
+            for (let i = start; i < start + total; i++) {
+              const line = parsedDiff[index];
+              const firstCharacter = line.charAt(0);
+              if (firstCharacter === "-" || firstCharacter === "+") {
+                allChangedLines.push(i);
               }
-              console.log(lines);
-              return lines;
-            })
-            .reduce((allLines, lines) => allLines.concat(lines));
-
-          console.log(allChangedLines);
+              index++;
+            }
+          }
 
           /**
            * Fetch the blob for the course JSON in file in this PR. Convert
@@ -146,7 +167,6 @@ export const parsePullRequestDiff = async (
           }
 
           const challengeIds = Array.from(challengeIdSet);
-          console.log(challengeIds);
 
           /**
            * Lookup up the original challenge (if it exists) and the updated
@@ -199,8 +219,6 @@ export const parsePullRequestDiff = async (
           return prDiffContext;
         }),
       );
-
-      console.log(result[0][0]["9nSyakhMO"]);
 
       // Flatten the results and remove null id diffs
       return result
