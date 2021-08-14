@@ -1,8 +1,11 @@
 import axios from "axios";
 import { InternalServerErrorException } from "@nestjs/common";
 import {
+  ContentUtility,
+  Course,
   CourseList,
   createInverseChallengeMapping,
+  PullRequestCourseContent,
   PullRequestDiffContext,
 } from "@pairwise/common";
 import { captureSentryException } from "./sentry-utils";
@@ -37,18 +40,19 @@ interface CourseFileDiff {
 export const fetchPullRequestCourseContent = async (
   pullRequestId: string,
   currentCourseList: CourseList,
-) => {
+): Promise<PullRequestCourseContent> => {
   const id = Number(pullRequestId);
   if (!id || typeof id !== "number") {
     throw new Error(`Invalid pull request id provided, received: ${id}`);
   }
 
   const courses = await fetchPullRequestDiffCourses(id);
+  const filteredCourses = courses.filter((x) => Boolean(x.data));
 
-  let courseList = [];
-  let challengeIds = [];
+  let courseList: CourseList = [];
+  let challengeIds: string[] = [];
 
-  for (const diffCourse of courses) {
+  for (const diffCourse of filteredCourses) {
     const { data, courseId } = diffCourse;
     if (data === undefined) {
       // Fetch course from existing list
@@ -58,7 +62,7 @@ export const fetchPullRequestCourseContent = async (
       // Fetch course blob from pull request data
 
       const allChangedLines = getPatchChangedLines(data.patch);
-      const blob = await fetchFileBlob(data.sha);
+      const blob: Course = await fetchFileBlob(data.sha);
       const blobJSON = JSON.stringify(blob, null, 2);
       const jsonByLines = blobJSON.split("\n");
 
@@ -73,7 +77,10 @@ export const fetchPullRequestCourseContent = async (
     }
   }
 
-  return { courseList, challengeIds };
+  const courseSkeletonList =
+    ContentUtility.convertCourseListToSkeletons(courseList);
+
+  return { courseList, courseSkeletonList, challengeIds };
 };
 
 /**

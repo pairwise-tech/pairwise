@@ -19,6 +19,8 @@ enum ActionTypesEnum {
   LOGIN_BY_EMAIL = "LOGIN_BY_EMAIL",
   LOGIN_BY_EMAIL_SUCCESS = "LOGIN_BY_EMAIL_SUCCESS",
   LOGIN_BY_EMAIL_FAILURE = "LOGIN_BY_EMAIL_FAILURE",
+
+  USER_IS_ADMIN = "USER_IS_ADMIN",
 }
 
 /** ===========================================================================
@@ -62,3 +64,5 @@ export const loginByEmailSuccess = createAction(
 export const loginByEmailFailure = createAction(
   ActionTypesEnum.LOGIN_BY_EMAIL_FAILURE,
 )();
+
+export const userIsAdmin = createAction(ActionTypesEnum.USER_IS_ADMIN)();

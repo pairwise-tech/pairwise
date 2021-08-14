@@ -247,6 +247,28 @@ const challengeInitializationEpic: EpicSignature = (action$, _, deps) => {
 };
 
 /**
+ * Fetch the course content by an admin for a pull request.
+ */
+const fetchAdminCourseListEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.fetchPullRequestCourseList)),
+    pluck("payload"),
+    mergeMap(deps.api.fetchAdminPullRequestCourseList),
+    map(({ value: courses, error }) => {
+      if (courses) {
+        deps.toaster.success(
+          "Successfully loaded pull request course content.",
+        );
+        return Actions.fetchPullRequestCourseListSuccess(courses);
+      } else {
+        deps.toaster.warn("Failed to fetch pull request course content.");
+        return Actions.fetchPullRequestCourseListFailure(error);
+      }
+    }),
+  );
+};
+
+/**
  * Handle initializing the challenge context. This epic will determine an
  * active challenge based on the current url first and the last active
  * challenge second. If these don't exist, the current challenge ID will
@@ -938,6 +960,7 @@ const constructProgressDto = (
 
 export default combineEpics(
   hydrateSandboxType,
+  fetchAdminCourseListEpic,
   contentSkeletonInitializationEpic,
   initializeChallengeStateEpic,
   inverseChallengeMappingEpic,

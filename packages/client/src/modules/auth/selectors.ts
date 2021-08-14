@@ -40,3 +40,7 @@ export const loginEmailRequestLoading = createSelector(
     return authStateResult.emailLoginRequestLoading;
   },
 );
+
+export const isUserAdmin = createSelector(authSelector, (authStateResult) => {
+  return authStateResult.isUserAdmin;
+});

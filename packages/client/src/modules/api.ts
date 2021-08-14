@@ -20,6 +20,7 @@ import {
   LastActiveChallengeIds,
   IGenericFeedback,
   NullBlob,
+  PullRequestCourseContent,
 } from "@pairwise/common";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Observable, lastValueFrom } from "rxjs";
@@ -512,6 +513,26 @@ class Api extends BaseApiClass {
       return axios.post<StripeStartCheckoutSuccessResponse>(
         `${HOST}/payments/checkout/${courseId}`,
         {},
+        config,
+      );
+    });
+  };
+
+  isUserAdmin = async () => {
+    try {
+      const { config } = this.getRequestHeaders();
+      await axios.get(`${HOST}/admin`, config);
+      return new Ok(true);
+    } catch (err) {
+      return new Err(false);
+    }
+  };
+
+  fetchAdminPullRequestCourseList = async (pullRequestId: string) => {
+    const { config } = this.getRequestHeaders();
+    return this.httpHandler<PullRequestCourseContent>(async () => {
+      return axios.get(
+        `${HOST}/admin/pull-requests/courses/${pullRequestId}`,
         config,
       );
     });

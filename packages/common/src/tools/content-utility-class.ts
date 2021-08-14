@@ -69,12 +69,16 @@ class ContentUtilityClass {
   };
 
   private initializeCourseNavigationSkeletons = (courses: CourseList) => {
+    this.courseNavigationSkeletons = this.convertCourseListToSkeletons(courses);
+  };
+
+  convertCourseListToSkeletons = (courses: CourseList) => {
     /**
      * Modify all the courses, stripping out the actual challenge content. This
      * is necessary to still provide an overview of all the course data to the
      * client.
      */
-    this.courseNavigationSkeletons = courses.map((course) => {
+    return courses.map((course) => {
       return {
         ...course,
         modules: course.modules.map((courseModule) => {

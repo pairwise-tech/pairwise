@@ -100,21 +100,22 @@ const ApplicationContainer = (props: IProps) => {
     user,
     location,
     challenge,
-    initialized,
     logoutUser,
+    initialized,
+    isUserAdmin,
     userLoading,
     initializeApp,
-    updateChallenge,
     overlayVisible,
-    workspaceLoading,
+    updateChallenge,
     hasMediaContent,
-    updateUserSettings,
-    setScreensaverState,
-    screensaverVisible,
-    toggleNavigationMap,
-    openFeedbackDialog,
+    workspaceLoading,
     userAuthenticated,
+    updateUserSettings,
+    openFeedbackDialog,
     nextPrevChallenges,
+    screensaverVisible,
+    setScreensaverState,
+    toggleNavigationMap,
     initializationError,
     setNavigationMapState,
     setSingleSignOnDialogState,
@@ -380,6 +381,7 @@ const ApplicationContainer = (props: IProps) => {
                     </CreateAccountText>
                   )}
                   <ProfileIcon avatar={user.profile.avatarUrl} />
+                  {isUserAdmin && <AdminBadge />}
                 </UserBio>
                 <div className="dropdown-links">
                   <Link id="account-link" to="/account">
@@ -746,6 +748,24 @@ const AccountDropdownButton = styled.div`
   }
 `;
 
+const AdminBadge = styled.div`
+  bottom: -8%;
+  left: 22%;
+  display: block;
+  padding: 0px 6px;
+  font-weight: bold;
+  position: absolute;
+  border-radius: 100px;
+  letter-spacing: 1.2px;
+  box-shadow: 0 0 20px rgb(0, 0, 0);
+  background: ${COLORS.SECONDARY_PINK};
+  transform: translate(0%, 0%) scale(0.7);
+
+  &:before {
+    content: "ADMIN USER";
+  }
+`;
+
 const LostPageContainer = styled.div`
   margin-top: 150px;
   padding: 50px;
@@ -789,6 +809,7 @@ const LostPage = () => (
 const mapStateToProps = (state: ReduxStoreState) => ({
   user: Modules.selectors.user.userSelector(state),
   userLoading: Modules.selectors.user.loading(state),
+  isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
   location: Modules.selectors.app.locationSelector(state),
   screensaverVisible: Modules.selectors.app.screensaverVisible(state),
   initialized: Modules.selectors.app.appSelector(state).initialized,

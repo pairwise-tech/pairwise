@@ -13,6 +13,7 @@ export interface State {
   accessToken: string;
   singleSignOnDialogOpen: boolean;
   bulkPersistenceInProgress: boolean;
+  isUserAdmin: boolean;
 }
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
   singleSignOnDialogOpen: false,
   bulkPersistenceInProgress: false,
   emailLoginRequestLoading: false,
+  isUserAdmin: false,
 };
 
 const auth = createReducer<State, AuthActionTypes>(initialState)
@@ -54,6 +56,10 @@ const auth = createReducer<State, AuthActionTypes>(initialState)
   .handleAction(actions.loginByEmailFailure, (state) => ({
     ...state,
     emailLoginRequestLoading: false,
+  }))
+  .handleAction(actions.userIsAdmin, (state) => ({
+    ...state,
+    isUserAdmin: true,
   }))
   .handleAction(actions.logoutUser, (state, action) => initialState);
 

@@ -7,6 +7,7 @@ import {
   InverseChallengeMapping,
   Challenge,
   CHALLENGE_TYPE,
+  PullRequestCourseContent,
 } from "@pairwise/common";
 import { createAction } from "typesafe-actions";
 import {
@@ -115,6 +116,10 @@ enum ActionTypesEnum {
   TOGGLE_INSTRUCTIONS_VIEW = "TOGGLE_INSTRUCTIONS_VIEW",
 
   SET_DEEP_LINK_CODE_STRING = "SET_DEEP_LINK_CODE_STRING",
+
+  LOAD_PULL_REQUEST_COURSE_LIST = "LOAD_PULL_REQUEST_COURSE_LIST",
+  LOAD_PULL_REQUEST_COURSE_LIST_SUCCESS = "LOAD_PULL_REQUEST_COURSE_LIST_SUCCESS",
+  LOAD_PULL_REQUEST_COURSE_LIST_FAILURE = "LOAD_PULL_REQUEST_COURSE_LIST_FAILURE",
 }
 
 /** ===========================================================================
@@ -337,3 +342,15 @@ export const setDeepLinkCodeString = createAction(
   codeString: Nullable<string>;
   sandboxChallengeType: Nullable<CHALLENGE_TYPE>;
 }>();
+
+export const fetchPullRequestCourseList = createAction(
+  ActionTypesEnum.LOAD_PULL_REQUEST_COURSE_LIST,
+)<string>();
+
+export const fetchPullRequestCourseListSuccess = createAction(
+  ActionTypesEnum.LOAD_PULL_REQUEST_COURSE_LIST_SUCCESS,
+)<PullRequestCourseContent>();
+
+export const fetchPullRequestCourseListFailure = createAction(
+  ActionTypesEnum.LOAD_PULL_REQUEST_COURSE_LIST_FAILURE,
+)<HttpResponseError>();

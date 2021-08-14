@@ -582,6 +582,16 @@ export const revealSolutionCode = createSelector(
   (x) => x.revealWorkspaceSolution,
 );
 
+export const pullRequestChallengeIds = createSelector(
+  [challengesState],
+  (x) => x.pullRequestChallengeIds,
+);
+
+export const fetchingPullRequestCourses = createSelector(
+  [challengesState],
+  (x) => x.fetchingPullRequestCourses,
+);
+
 /**
  * Retrieve the actual challenge data from the first unfinished challenge.
  */
