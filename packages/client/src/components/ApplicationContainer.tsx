@@ -749,7 +749,7 @@ const AccountDropdownButton = styled.div`
 `;
 
 const AdminBadge = styled.div`
-  bottom: -8%;
+  top: -3%;
   left: 22%;
   display: block;
   padding: 0px 6px;
@@ -758,8 +758,8 @@ const AdminBadge = styled.div`
   border-radius: 100px;
   letter-spacing: 1.2px;
   box-shadow: 0 0 20px rgb(0, 0, 0);
-  background: ${COLORS.SECONDARY_PINK};
-  transform: translate(0%, 0%) scale(0.7);
+  background: ${COLORS.RED};
+  transform: translate(2%, 2%) scale(0.6);
 
   &:before {
     content: "ADMIN USER";

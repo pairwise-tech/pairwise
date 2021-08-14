@@ -961,7 +961,11 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
 
   &:hover {
     ${defaultTextColor};
-    background: ${(props: IThemeProps) => {
+    background: ${(props) => {
+      if (props.challenge_modified === "true") {
+        return undefined;
+      }
+
       return props.theme.dark
         ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_DARK
         : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_LIGHT;

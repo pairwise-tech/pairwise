@@ -269,7 +269,7 @@ class Account extends React.Component<IProps, IState> {
               style={{
                 marginTop: 24,
                 marginBottom: 0,
-                color: COLORS.SECONDARY_PINK,
+                color: COLORS.RED,
               }}
             >
               Admin Controls
@@ -303,6 +303,10 @@ class Account extends React.Component<IProps, IState> {
                   }
                   onClick={this.handleFetchPullRequestCourseList}
                 />
+                <TextItem>
+                  Modified challenges will be highlighted with yellow in the
+                  navigation menu.
+                </TextItem>
               </div>
             </AdminControlBox>
           </>
@@ -457,7 +461,7 @@ const AdminControlBox = styled.div`
   border-radius: 2px;
   padding-left: 8px;
   width: 600px;
-  border: 1px solid ${COLORS.SECONDARY_PINK};
+  border: 1px solid ${COLORS.RED};
 `;
 
 /** ===========================================================================
