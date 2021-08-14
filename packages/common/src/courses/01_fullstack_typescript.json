@@ -19,7 +19,7 @@
           "videoUrl": "",
           "starterCode": "",
           "solutionCode": "",
-          "content": "Welcome to Pairwise. Here you can find a single structured curriculum to take you from zero to a ready\\-to\\-employ software developer. Take a look a this short video to learn more, and then dive into the first challenge\\!"
+          "content": "Welcome to Pairwise. Here you can find a single structured curriculum to take you from zero to a ready\\-to\\-employ software developer. Take a look a this short video to learn more, and then dive into the first challenge\\!\n\nChanged some content here..."
         },
         {
           "id": "iSF4BNIl",
@@ -5012,7 +5012,7 @@
           "videoUrl": "",
           "starterCode": "const SQL = `\nSELECT id, title, genre, year, rated\nFROM movie\n-- this line is a comment, replace it with your code!\n`;\n",
           "solutionCode": "const SQL = `\nSELECT id, title, genre, year, rated\nFROM movie\nWHERE genre = 'Crime'\n`;\n",
-          "content": ""
+          "content": "Changed some content there..."
         },
         {
           "id": "uV1$K76hF",
@@ -6378,6 +6378,17 @@
           "videoUrl": "https://www.youtube.com/embed/DYoXi6cAl1A",
           "starterCode": "const sanitizeObject = (\n  obj: { [key: string]: any },\n  sanitizeFn: (value: any) => boolean\n) => {\n  const sanitizedObject: any = {};\n\n  Object.entries(obj).forEach(([key, value]) => {\n    if (sanitizeFn(value)) {\n      sanitizedObject[key] = value;\n    }\n  });\n\n  return sanitizedObject;\n};\n",
           "solutionCode": "const sanitizeObject = (\n  obj: { [key: string]: any },\n  sanitizeFn: (value: any) => boolean\n) => {\n  const sanitizedObject: any = {};\n\n  Object.entries(obj).forEach(([key, value]) => {\n    if (sanitizeFn(value)) {\n      sanitizedObject[key] = value;\n    }\n  });\n\n  // Return the sanitized object, not the original one!\n  return sanitizedObject;\n};\n",
+          "content": ""
+        },
+        {
+          "type": "media",
+          "id": "p3tJz0dmb",
+          "title": "Blega",
+          "instructions": "Added some challenge here...",
+          "testCode": "test(\"`example` function should...\", () => {\n  pass();\n});\n",
+          "videoUrl": "",
+          "starterCode": "",
+          "solutionCode": "",
           "content": ""
         },
         {
