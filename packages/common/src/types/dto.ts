@@ -1,4 +1,9 @@
-import { Challenge, CHALLENGE_TYPE } from "./courses";
+import {
+  Challenge,
+  CHALLENGE_TYPE,
+  CourseList,
+  CourseSkeletonList,
+} from "./courses";
 
 /** ===========================================================================
  * DTO interfaces
@@ -277,4 +282,10 @@ export interface PullRequestDiffContext {
   courseId: string;
   updatedChallenge: Challenge;
   originalChallenge: Challenge;
+}
+
+export interface PullRequestCourseContent {
+  challengeIds: string[];
+  courseList: CourseList;
+  courseSkeletonList: CourseSkeletonList;
 }

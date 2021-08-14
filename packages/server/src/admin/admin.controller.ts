@@ -23,7 +23,10 @@ import { UserService } from "../user/user.service";
 import { PaymentsService } from "../payments/payments.service";
 import { ProgressService } from "../progress/progress.service";
 import { ContentService } from "../content/content.service";
-import { parsePullRequestDiff } from "../tools/server-utils";
+import {
+  fetchPullRequestCourseContent,
+  parsePullRequestDiff,
+} from "../tools/pull-request-diff-utils";
 import { BlobService } from "../blob/blob.service";
 
 @Controller("admin")
@@ -52,7 +55,7 @@ export class AdminController {
   public async adminIndex(@Request() req: AuthenticatedRequest) {
     const adminUserEmail = req.user.profile.email;
     try {
-      const result = await this.adminService.adminEndpoint();
+      const result = await this.adminService.adminIndex();
       this.slackService.postAdminActionAwarenessMessage({ adminUserEmail });
       return result;
     } catch (err) {
@@ -277,6 +280,13 @@ export class AdminController {
   async fetchPullRequestFileDiff(@Param() params) {
     const courses = this.contentService.fetchAllCoursesForAdmin();
     return parsePullRequestDiff(params.pull, courses);
+  }
+
+  @UseGuards(AdminAuthGuard)
+  @Get("/pull-requests/courses/:pull")
+  async fetchPullRequestDiffCourseList(@Param() params) {
+    const courses = this.contentService.fetchAllCoursesForAdmin();
+    return fetchPullRequestCourseContent(params.pull, courses);
   }
 
   // Log the error to Slack and throw an exception in response

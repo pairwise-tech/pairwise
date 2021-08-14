@@ -104,6 +104,25 @@ const storeAccessTokenEpic: EpicSignature = (action$, _, deps) => {
 };
 
 /**
+ * Check if the logged in user is an admin.
+ */
+const isUserAdminEpic: EpicSignature = (action$, _, deps) => {
+  return action$.pipe(
+    filter(isActionOf(Actions.storeAccessTokenSuccess)),
+    mergeMap(deps.api.isUserAdmin),
+    map((result) => {
+      if (result.value) {
+        return Actions.userIsAdmin();
+      } else {
+        return Actions.empty(
+          "isUserAdminEpic error occurred - user is not an admin.",
+        );
+      }
+    }),
+  );
+};
+
+/**
  * This epic should only run one time per user: the first time the user creates
  * an account which will result in the access token initialization flow with
  * the { accountCreated: true } field.
@@ -187,4 +206,5 @@ export default combineEpics(
   bulkPersistenceEpic,
   loginByEmailEpic,
   logoutUserSuccessEpic,
+  isUserAdminEpic,
 );

@@ -146,6 +146,6 @@ app.post("/admin/purchase-course", async (req, res) => {
 const server = http.createServer(app);
 
 server.listen(PORT, () => {
-  console.log(`\n- External services listening at http://localhost:${PORT}`);
+  console.log(`\n- External services listening at: http://localhost:${PORT}`);
   console.log(`- Using server host url: ${SERVER}`);
 });

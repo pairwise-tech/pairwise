@@ -550,8 +550,14 @@ class NavigationOverlay extends React.Component<
     challenge: ChallengeSkeleton;
     style?: React.CSSProperties;
   }) => {
-    const { isMobile, isEditMode, challengeId, menuSelectState, user } =
-      this.props;
+    const {
+      user,
+      isMobile,
+      isEditMode,
+      challengeId,
+      menuSelectState,
+      pullRequestChallengeIds,
+    } = this.props;
     const {
       index,
       module,
@@ -563,6 +569,20 @@ class NavigationOverlay extends React.Component<
       sectionChallenges = [],
       style = {},
     } = args;
+
+    /**
+     * Admins can load course content from a pull request. If they do,
+     * check if the current challenge has been modified in the pull request,
+     * by comparing against the pullRequestChallengeIds.
+     */
+    let isModifiedChallenge: boolean = false;
+    if (challenge.id !== null) {
+      if (pullRequestChallengeIds.has(challenge.id)) {
+        isModifiedChallenge = true;
+      }
+    }
+
+    console.log(challenge.id, isModifiedChallenge);
 
     const isDark = user.settings.appTheme === "dark";
     const { selectedIndex, menuSelectColumn } = menuSelectState;
@@ -629,6 +649,7 @@ class NavigationOverlay extends React.Component<
       >
         <ChallengeLink
           selected={isMenuItemSelected}
+          challenge_modified={isModifiedChallenge ? "true" : "false"}
           locked={challenge.userCanAccess ? "false" : "true"}
           to={`/workspace/${getChallengeSlug(challenge)}`}
           id={`challenge-navigation-${index}`}
@@ -839,6 +860,7 @@ interface ChallengeLinkProps extends NavLinkProps {
   locked: "true" | "false"; // To circumvent a React DOM attribute warning message...
   active?: boolean;
   selected: boolean;
+  challenge_modified: "true" | "false"; // See above
 }
 
 const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
@@ -859,6 +881,10 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   position: relative;
 
   color: ${(props: IThemeProps & ChallengeLinkProps) => {
+    if (props.challenge_modified === "true") {
+      return COLORS.TEXT_DARK;
+    }
+
     if (props.selected) {
       return props.theme.dark ? COLORS.TEXT_WHITE : COLORS.TEXT_LIGHT_THEME;
     } else {
@@ -867,6 +893,10 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
   }} !important;
 
   background: ${(props: IThemeProps & ChallengeLinkProps) => {
+    if (props.challenge_modified === "true") {
+      return COLORS.SECONDARY_YELLOW;
+    }
+
     if (props.selected) {
       return props.theme.dark
         ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_DARK
@@ -892,10 +922,18 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
 
   &.active {
     color: ${(props: IThemeProps & ChallengeLinkProps) => {
+      if (props.challenge_modified === "true") {
+        return COLORS.TEXT_DARK;
+      }
+
       return props.theme.dark ? COLORS.TEXT_WHITE : undefined;
     }} !important;
 
-    background: ${(props: IThemeProps) => {
+    background: ${(props: IThemeProps & ChallengeLinkProps) => {
+      if (props.challenge_modified === "true") {
+        return COLORS.SECONDARY_YELLOW;
+      }
+
       return props.theme.dark
         ? COLORS.BACKGROUND_MODAL_DARK
         : COLORS.BACKGROUND_MODAL_LIGHT;
@@ -923,7 +961,11 @@ const ChallengeLink = styled(NavLink)<ChallengeLinkProps>`
 
   &:hover {
     ${defaultTextColor};
-    background: ${(props: IThemeProps) => {
+    background: ${(props) => {
+      if (props.challenge_modified === "true") {
+        return undefined;
+      }
+
       return props.theme.dark
         ? COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_DARK
         : COLORS.BACKGROUND_NAVIGATION_ITEM_HOVER_LIGHT;
@@ -1339,6 +1381,7 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   menuSelectColumn: ChallengeSelectors.menuSelectColumn(state),
   courseListMetadata: ChallengeSelectors.courseListMetadata(state),
   overlayVisible: ChallengeSelectors.navigationOverlayVisible(state),
+  pullRequestChallengeIds: ChallengeSelectors.pullRequestChallengeIds(state),
   navigationAccordionViewState:
     ChallengeSelectors.getNavigationSectionAccordionViewState(state),
 });

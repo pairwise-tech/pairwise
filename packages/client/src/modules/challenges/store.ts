@@ -91,6 +91,8 @@ export interface State {
   isInstructionsViewCollapsed: boolean;
   deepLinkCodeString: Nullable<string>;
   deepLinkSandboxChallengeType: Nullable<CHALLENGE_TYPE>;
+  pullRequestChallengeIds: Set<string>;
+  fetchingPullRequestCourses: boolean;
 }
 
 const initialState: State = {
@@ -122,6 +124,8 @@ const initialState: State = {
   isInstructionsViewCollapsed: false,
   deepLinkCodeString: null,
   deepLinkSandboxChallengeType: null,
+  pullRequestChallengeIds: new Set(),
+  fetchingPullRequestCourses: false,
 };
 
 /** ===========================================================================
@@ -659,6 +663,21 @@ const challenges = createReducer<State, ChallengesActionTypes | AppActionTypes>(
   .handleAction(actions.fetchNavigationSkeletonSuccess, (state, action) => ({
     ...state,
     courseSkeletons: action.payload,
+  }))
+  .handleAction(actions.fetchPullRequestCourseList, (state, action) => ({
+    ...state,
+    fetchingPullRequestCourses: true,
+  }))
+  .handleAction(actions.fetchPullRequestCourseListFailure, (state, action) => ({
+    ...state,
+    fetchingPullRequestCourses: false,
+  }))
+  .handleAction(actions.fetchPullRequestCourseListSuccess, (state, action) => ({
+    ...state,
+    fetchingPullRequestCourses: false,
+    courses: action.payload.courseList,
+    courseSkeletons: action.payload.courseSkeletonList,
+    pullRequestChallengeIds: new Set(action.payload.challengeIds),
   }))
   .handleAction(actions.toggleSectionAccordionView, (state, action) => ({
     ...state,
