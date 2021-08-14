@@ -460,7 +460,6 @@ const Underline = styled.span`
 const AdminControlBox = styled.div`
   border-radius: 2px;
   padding-left: 8px;
-  width: 600px;
   border: 1px solid ${COLORS.RED};
 `;
 

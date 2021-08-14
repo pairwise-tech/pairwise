@@ -61,6 +61,8 @@ export const COLORS = {
   NEON_GREEN: "#44f1bd",
   GRADIENT_GREEN:
     "linear-gradient( 90deg, rgba(0, 255, 177, 1) 22%, rgba(0, 255, 211, 1) 74%)",
+  GRADIENT_PINK:
+    "linear-gradient( 90deg, rgb(252, 66, 109, 1) 22%, rgb(255, 122, 138, 1) 74%)",
   BORDER_MODAL: "rgb(100,100,100)",
 };
 
@@ -80,7 +82,7 @@ export const PROSE_MAX_WIDTH = 900;
  * ============================================================================
  */
 
-// Thse are not within some actions file because they are not action creators.
+// These are not within some actions file because they are not action creators.
 // They are message types for the search worker
 export const SEARCH = "SEARCH";
 export const SEARCH_SUCCESS = "SEARCH_SUCCESS";

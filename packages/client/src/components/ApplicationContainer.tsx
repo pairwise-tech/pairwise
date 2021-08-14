@@ -238,7 +238,7 @@ const ApplicationContainer = (props: IProps) => {
         setNavigationMapState={setNavigationMapState}
       />
       <NavigationOverlay isMobile={isMobile} />
-      <Header>
+      <Header isAdmin={isUserAdmin}>
         <ControlsContainer
           style={{ height: "100%", marginRight: isMobile ? 0 : 40 }}
         >
@@ -381,7 +381,7 @@ const ApplicationContainer = (props: IProps) => {
                     </CreateAccountText>
                   )}
                   <ProfileIcon avatar={user.profile.avatarUrl} />
-                  {isUserAdmin && <AdminBadge />}
+                  {isUserAdmin && !isMobile && <AdminBadge />}
                 </UserBio>
                 <div className="dropdown-links">
                   <Link id="account-link" to="/account">
@@ -516,7 +516,7 @@ const ErrorOverlay = () => (
 
 const BORDER = 2;
 
-const Header = styled.div`
+const Header = styled.div<{ isAdmin: boolean }>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -548,7 +548,9 @@ const Header = styled.div`
     left: 0;
     right: 0;
     height: ${BORDER}px;
-    background: ${COLORS.GRADIENT_GREEN};
+    background: ${(props) => {
+      return props.isAdmin ? COLORS.GRADIENT_PINK : COLORS.GRADIENT_GREEN;
+    }};
   }
 `;
 
