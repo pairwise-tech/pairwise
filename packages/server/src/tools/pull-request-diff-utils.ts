@@ -31,36 +31,49 @@ interface CourseFileDiff {
  * ============================================================================
  */
 
-const PAIRWISE_REPO_BASE =
-  "https://api.github.com/repos/pairwise-tech/pairwise";
-
 /**
- * Fetch PR diff.
+ * Fetch the current course list based on a pull request.
  */
-const fetchPullRequestDiff = async (pullRequestNumber: number) => {
-  const url = `${PAIRWISE_REPO_BASE}/pulls/${pullRequestNumber}/files`;
-  const result = await axios.get(url, {
-    headers: {
-      Accept: "application/vnd.github.v3+json",
-      authorization: `token ${ENV.GITHUB_API_TOKEN}`,
-    },
-  });
+export const fetchPullRequestCourseContent = async (
+  pullRequestId: string,
+  currentCourseList: CourseList,
+) => {
+  const id = Number(pullRequestId);
+  if (!id || typeof id !== "number") {
+    throw new Error(`Invalid pull request id provided, received: ${id}`);
+  }
 
-  return result.data;
-};
+  const courses = await fetchPullRequestDiffCourses(id);
 
-/**
- * Fetch individual file blob.
- */
-const fetchFileBlob = async (fileSHA: string) => {
-  const url = `${PAIRWISE_REPO_BASE}/git/blobs/${fileSHA}`;
-  const result = await axios.get(url, {
-    headers: {
-      Accept: "application/vnd.github.VERSION.raw",
-      authorization: `token ${ENV.GITHUB_API_TOKEN}`,
-    },
-  });
-  return result.data;
+  let courseList = [];
+  let challengeIds = [];
+
+  for (const diffCourse of courses) {
+    const { data, courseId } = diffCourse;
+    if (data === undefined) {
+      // Fetch course from existing list
+      const course = currentCourseList.find((x) => x.id === courseId);
+      courseList.push(course);
+    } else {
+      // Fetch course blob from pull request data
+
+      const allChangedLines = getPatchChangedLines(data.patch);
+      const blob = await fetchFileBlob(data.sha);
+      const blobJSON = JSON.stringify(blob, null, 2);
+      const jsonByLines = blobJSON.split("\n");
+
+      const patchChallengeIds = getPatchChallengeIds(
+        allChangedLines,
+        jsonByLines,
+      );
+
+      challengeIds = challengeIds.concat(patchChallengeIds);
+
+      courseList.push(blob);
+    }
+  }
+
+  return { courseList, challengeIds };
 };
 
 /**
@@ -86,25 +99,14 @@ export const parsePullRequestDiff = async (
     if (!id || typeof id !== "number") {
       throw new Error(`Invalid pull request id provided, received: ${id}`);
     }
-    // Fetch the pull request diff
-    const diff = await fetchPullRequestDiff(id);
 
-    const matchFile = (courseName: string) => (diff: any) => {
-      const filename = `packages/common/src/courses/${courseName}.json`;
-      return diff.filename === filename;
-    };
-
-    // Get all the course files
-    const ts = diff.find(matchFile("01_fullstack_typescript"));
-    const python = diff.find(matchFile("02_python_language"));
-    const rust = diff.find(matchFile("03_rust_language"));
-    const go = diff.find(matchFile("04_golang_language"));
-    const courses: CourseFileDiff[] = [ts, python, rust, go].filter(Boolean);
+    const diffCourses = await fetchPullRequestDiffCourses(id);
+    const courses = diffCourses.filter((x) => Boolean(x.data));
 
     if (courses.length > 0) {
       const result = await Promise.all(
         courses.map(async (courseDiffFile) => {
-          const { sha, patch } = courseDiffFile;
+          const { sha, patch } = courseDiffFile.data;
 
           const allChangedLines = getPatchChangedLines(patch);
 
@@ -185,6 +187,82 @@ export const parsePullRequestDiff = async (
     captureSentryException(err);
     throw new InternalServerErrorException(err);
   }
+};
+
+const PAIRWISE_REPO_BASE =
+  "https://api.github.com/repos/pairwise-tech/pairwise";
+
+/**
+ * Fetch PR diff.
+ */
+const fetchPullRequestDiff = async (pullRequestNumber: number) => {
+  const url = `${PAIRWISE_REPO_BASE}/pulls/${pullRequestNumber}/files`;
+  const result = await axios.get<CourseFileDiff[]>(url, {
+    headers: {
+      Accept: "application/vnd.github.v3+json",
+      authorization: `token ${ENV.GITHUB_API_TOKEN}`,
+    },
+  });
+
+  return result.data;
+};
+
+/**
+ * Fetch individual file blob.
+ */
+const fetchFileBlob = async (fileSHA: string) => {
+  const url = `${PAIRWISE_REPO_BASE}/git/blobs/${fileSHA}`;
+  const result = await axios.get(url, {
+    headers: {
+      Accept: "application/vnd.github.VERSION.raw",
+      authorization: `token ${ENV.GITHUB_API_TOKEN}`,
+    },
+  });
+  return result.data;
+};
+
+const courseIdMap = {
+  ts: { courseId: "fpvPtfu7s", filename: "01_fullstack_typescript" },
+  python: { courseId: "", filename: "" },
+  rust: { courseId: "", filename: "" },
+  go: { courseId: "", filename: "" },
+};
+
+interface PullRequestDiffCourseList {
+  courseId: string;
+  data: CourseFileDiff | undefined;
+}
+
+/**
+ * Fetch all the course files in a pull request diff.
+ */
+const fetchPullRequestDiffCourses = async (
+  id: number,
+): Promise<PullRequestDiffCourseList[]> => {
+  // Fetch the pull request diff
+  const diff = await fetchPullRequestDiff(id);
+
+  const matchFile = (courseName: string) => (diff: any) => {
+    const filename = `packages/common/src/courses/${courseName}.json`;
+    return diff.filename === filename;
+  };
+
+  type MaybeCourse = undefined | CourseFileDiff;
+
+  // Get all the course files
+  const ts: MaybeCourse = diff.find(matchFile("01_fullstack_typescript"));
+  const python: MaybeCourse = diff.find(matchFile("02_python_language"));
+  const rust: MaybeCourse = diff.find(matchFile("03_rust_language"));
+  const go: MaybeCourse = diff.find(matchFile("04_golang_language"));
+
+  const courses: PullRequestDiffCourseList[] = [
+    { data: ts, courseId: courseIdMap.ts.courseId },
+    { data: python, courseId: courseIdMap.python.courseId },
+    { data: rust, courseId: courseIdMap.rust.courseId },
+    { data: go, courseId: courseIdMap.go.courseId },
+  ];
+
+  return courses;
 };
 
 /**

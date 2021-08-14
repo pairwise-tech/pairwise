@@ -23,7 +23,7 @@ import { UserService } from "../user/user.service";
 import { PaymentsService } from "../payments/payments.service";
 import { ProgressService } from "../progress/progress.service";
 import { ContentService } from "../content/content.service";
-import { parsePullRequestDiff } from "../tools/server-utils";
+import { parsePullRequestDiff } from "../tools/pull-request-diff-utils";
 import { BlobService } from "../blob/blob.service";
 
 @Controller("admin")
