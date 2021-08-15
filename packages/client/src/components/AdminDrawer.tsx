@@ -140,7 +140,9 @@ class AdminDrawer extends React.Component<IProps, IState> {
     );
   }
 
-  handleFetchPullRequestCourseList = () => {
+  handleFetchPullRequestCourseList = (e: any) => {
+    e.preventDefault();
+
     const { pullRequestId } = this.state;
     if (pullRequestId !== "") {
       this.props.fetchPullRequestCourseList(pullRequestId);
