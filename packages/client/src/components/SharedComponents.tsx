@@ -235,7 +235,7 @@ export const IconNavLink = styled(
   }
 `;
 
-export const IconButton = styled(Button)<{ hoverColor?: string }>`
+export const IconButton = styled(Button)<{ hover_color?: string }>`
   .bp3-icon:only-child {
     color: ${(props) => {
       if (props.color !== undefined) {
@@ -248,8 +248,8 @@ export const IconButton = styled(Button)<{ hoverColor?: string }>`
 
   &:hover .bp3-icon:only-child {
     color: ${(props) => {
-      if (props.hoverColor !== undefined) {
-        return props.hoverColor;
+      if (props.hover_color !== undefined) {
+        return props.hover_color;
       }
 
       return props.theme.dark ? "white" : undefined;

@@ -3,11 +3,12 @@ import { connect } from "react-redux";
 import styled from "styled-components/macro";
 import { Button, Classes, Drawer } from "@blueprintjs/core";
 import Modules, { ReduxStoreState } from "modules/root";
-import { COLORS } from "../tools/constants";
-import { Text, PageTitle } from "./SharedComponents";
+import { COLORS, MOBILE } from "../tools/constants";
+import { Text } from "./SharedComponents";
 import { themeColor } from "./ThemeContainer";
 import { NavLink } from "react-router-dom";
 import { getChallengeSlug } from "@pairwise/common";
+import { composeWithProps } from "../tools/utils";
 
 /** ===========================================================================
  * Types & Config
@@ -34,6 +35,7 @@ class AdminDrawer extends React.Component<IProps, IState> {
 
   render(): Nullable<JSX.Element> {
     const {
+      isMobile,
       isDarkTheme,
       isUserAdmin,
       challengeMap,
@@ -71,7 +73,7 @@ class AdminDrawer extends React.Component<IProps, IState> {
                     autoFocus
                     type="text"
                     id="admin-pull-request-diff-id"
-                    placeholder="Enter a pull request id"
+                    placeholder={isMobile ? "id" : "Enter a pull request id"}
                     className={Classes.INPUT}
                     value={this.state.pullRequestId}
                     onChange={(event) =>
@@ -81,11 +83,15 @@ class AdminDrawer extends React.Component<IProps, IState> {
                     }
                   />
                   <Button
-                    style={{ width: 175, marginTop: 12 }}
+                    style={{ width: isMobile ? 85 : 175, marginTop: 12 }}
                     disabled={fetchingPullRequestCourses}
                     id="admin-pull-request-diff-button"
                     text={
-                      fetchingPullRequestCourses ? "Loading..." : "Load Courses"
+                      fetchingPullRequestCourses
+                        ? "Loading..."
+                        : isMobile
+                        ? "Load"
+                        : "Load Courses"
                     }
                     onClick={this.handleFetchPullRequestCourseList}
                   />
@@ -113,14 +119,14 @@ class AdminDrawer extends React.Component<IProps, IState> {
                                 challenge.challenge,
                               )}`}
                             >
-                              <Button icon="git-pull">
+                              <Button icon={isMobile ? undefined : "git-pull"}>
                                 {challenge.challenge.title}
                               </Button>
                             </ButtonLink>
                           </div>
                         );
                       } else {
-                        return <p>No challenge found for id: {id}</p>;
+                        return <p key={id}>No challenge found for id: {id}</p>;
                       }
                     })}
                   </>
@@ -146,9 +152,10 @@ class AdminDrawer extends React.Component<IProps, IState> {
  * ============================================================================
  */
 
-const AdminTitle = styled(PageTitle)`
+const AdminTitle = styled.h1`
+  line-height: 32px;
   margin-top: 42px;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   color: ${COLORS.RED};
 `;
 
@@ -177,6 +184,10 @@ const InputField = styled.input`
     COLORS.BACKGROUND_CONSOLE_DARK,
     COLORS.BACKGROUND_CONSOLE_LIGHT,
   )};
+
+  @media ${MOBILE} {
+    width: 85px;
+  }
 `;
 
 const Bold = styled.b`
@@ -215,7 +226,11 @@ const dispatchProps = {
 
 type ConnectProps = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-type IProps = ConnectProps;
+interface ComponentProps {
+  isMobile: boolean;
+}
+
+type IProps = ConnectProps & ComponentProps;
 
 const withProps = connect(mapStateToProps, dispatchProps);
 
@@ -224,4 +239,4 @@ const withProps = connect(mapStateToProps, dispatchProps);
  * ============================================================================
  */
 
-export default withProps(AdminDrawer);
+export default composeWithProps<ComponentProps>(withProps)(AdminDrawer);

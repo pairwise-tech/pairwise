@@ -231,7 +231,7 @@ const ApplicationContainer = (props: IProps) => {
   return (
     <React.Fragment>
       <Modals />
-      <AdminDrawer />
+      <AdminDrawer isMobile={isMobile} />
       <DeepLinkCodeStringAlert />
       <LoadingOverlay visible={workspaceLoading} />
       <GlobalKeyboardShortcuts />
@@ -320,7 +320,7 @@ const ApplicationContainer = (props: IProps) => {
                 icon="shield"
                 style={{ padding: 0 }}
                 color={COLORS.SECONDARY_PINK}
-                hoverColor={COLORS.RED}
+                hover_color={COLORS.RED}
                 aria-label="Toggle the admin drawer"
                 onClick={() =>
                   setAdminDrawerState({ isOpen: !isAdminDrawerOpen })
