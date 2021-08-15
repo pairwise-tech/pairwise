@@ -6,6 +6,8 @@ import Modules, { ReduxStoreState } from "modules/root";
 import { COLORS } from "../tools/constants";
 import { Text, PageTitle } from "./SharedComponents";
 import { themeColor } from "./ThemeContainer";
+import { NavLink } from "react-router-dom";
+import { getChallengeSlug } from "@pairwise/common";
 
 /** ===========================================================================
  * Types & Config
@@ -32,11 +34,16 @@ class AdminDrawer extends React.Component<IProps, IState> {
 
   render(): Nullable<JSX.Element> {
     const {
+      isDarkTheme,
       isUserAdmin,
+      challengeMap,
       isAdminDrawerOpen,
       setAdminDrawerState,
+      pullRequestChallengeIds,
       fetchingPullRequestCourses,
     } = this.props;
+
+    const challengeIds = Array.from(pullRequestChallengeIds);
 
     // Only available for admin users
     if (!isUserAdmin) {
@@ -45,10 +52,10 @@ class AdminDrawer extends React.Component<IProps, IState> {
 
     return (
       <Drawer
-        className={Classes.DARK}
         icon="shield"
         title="Pairwise Admin"
         isOpen={isAdminDrawerOpen}
+        className={isDarkTheme ? Classes.DARK : ""}
         onClose={() => setAdminDrawerState({ isOpen: false })}
       >
         <div className={Classes.DRAWER_BODY}>
@@ -56,11 +63,12 @@ class AdminDrawer extends React.Component<IProps, IState> {
             <>
               <AdminTitle>Admin Controls</AdminTitle>
               <AdminControlBox>
-                <TextItem id="profile-display-name">
+                <TextItem>
                   <Bold>Load Pull Request Course Content</Bold>
                 </TextItem>
                 <div style={{ marginTop: 0, marginBottom: 12 }}>
                   <InputField
+                    autoFocus
                     type="text"
                     id="admin-pull-request-diff-id"
                     placeholder="Enter a pull request id"
@@ -86,6 +94,37 @@ class AdminDrawer extends React.Component<IProps, IState> {
                     navigation menu.
                   </TextItem>
                 </div>
+                {challengeMap && challengeIds.length > 0 && (
+                  <>
+                    <Line />
+                    <TextItem>
+                      <Bold>Modified Challenges:</Bold>
+                    </TextItem>
+                    {challengeIds.map((id) => {
+                      const challenge = challengeMap[id];
+                      if (challenge) {
+                        return (
+                          <div key={id} style={{ marginTop: 12 }}>
+                            <ButtonLink
+                              onClick={() =>
+                                setAdminDrawerState({ isOpen: false })
+                              }
+                              to={`/workspace/${getChallengeSlug(
+                                challenge.challenge,
+                              )}`}
+                            >
+                              <Button icon="git-pull">
+                                {challenge.challenge.title}
+                              </Button>
+                            </ButtonLink>
+                          </div>
+                        );
+                      } else {
+                        return <p>No challenge found for id: {id}</p>;
+                      }
+                    })}
+                  </>
+                )}
               </AdminControlBox>
             </>
           </div>
@@ -115,9 +154,11 @@ const AdminTitle = styled(PageTitle)`
 
 const AdminControlBox = styled.div`
   border-radius: 2px;
-  padding-left: 8px;
+  padding: 12px 8px;
   border: 1px solid ${COLORS.RED};
 `;
+
+const ButtonLink = styled(NavLink)``;
 
 const TextItem = styled(Text)`
   margin-top: 12px;
@@ -143,14 +184,25 @@ const Bold = styled.b`
   ${themeColor("color", COLORS.TEXT_CONTENT)};
 `;
 
+const Line = styled.div`
+  border: ${(props) => {
+    const color = props.theme.dark ? COLORS.DARK_BORDER : COLORS.LIGHT_BORDER;
+    return `1px solid ${color}`;
+  }};
+`;
+
 /** ===========================================================================
  * Props
  * ============================================================================
  */
 
 const mapStateToProps = (state: ReduxStoreState) => ({
+  isDarkTheme: Modules.selectors.user.isDarkTheme(state),
   isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
   isAdminDrawerOpen: Modules.selectors.app.isAdminDrawerOpen(state),
+  challengeMap: Modules.selectors.challenges.getChallengeMap(state),
+  pullRequestChallengeIds:
+    Modules.selectors.challenges.pullRequestChallengeIds(state),
   fetchingPullRequestCourses:
     Modules.selectors.challenges.fetchingPullRequestCourses(state),
 });

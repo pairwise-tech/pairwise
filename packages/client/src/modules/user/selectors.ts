@@ -34,6 +34,11 @@ export const userSettings = createSelector(
   (state) => state.user.settings,
 );
 
+export const isDarkTheme = createSelector(
+  userSettings,
+  (settings) => settings.appTheme === "dark",
+);
+
 export const userCourses = createSelector(
   userState,
   (state) => state.user.courses,

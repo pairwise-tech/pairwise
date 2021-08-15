@@ -38,6 +38,7 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       "cmd+;": this.navigateLeft,
       "cmd+'": this.navigateRight,
       "cmd+/": this.props.toggleEditorSize,
+      "cmd+u": this.toggleAdminDrawer,
     };
 
     return <KeyboardShortcuts keymap={shortcutKeyMap as KeyMapProps} />;
@@ -464,6 +465,13 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
       }
     }
   };
+
+  toggleAdminDrawer = () => {
+    const { isUserAdmin, isAdminDrawerOpen } = this.props;
+    if (isUserAdmin) {
+      this.props.setAdminDrawerState({ isOpen: !isAdminDrawerOpen });
+    }
+  };
 }
 
 /** ===========================================================================
@@ -474,6 +482,8 @@ class GlobalKeyboardShortcuts extends React.Component<IProps, {}> {
 const mapStateToProps = (state: ReduxStoreState) => ({
   userSettings: Modules.selectors.user.userSettings(state),
   currentActiveIds: Modules.selectors.challenges.getCurrentActiveIds(state),
+  isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
+  isAdminDrawerOpen: Modules.selectors.app.isAdminDrawerOpen(state),
   menuSelectState: Modules.selectors.challenges.menuSelectState(state),
   menuSelectColumn: Modules.selectors.challenges.menuSelectColumn(state),
   navigationOverlayCourseSkeleton:
@@ -499,6 +509,7 @@ const dispatchProps = {
   setMenuSelectIndex: Modules.actions.challenges.setMenuSelectIndex,
   setMenuSelectColumn: Modules.actions.challenges.setMenuSelectColumn,
   setNavigationMapState: Modules.actions.challenges.setNavigationMapState,
+  setAdminDrawerState: Modules.actions.app.setAdminDrawerState,
   toggleSectionAccordionView:
     Modules.actions.challenges.toggleSectionAccordionView,
 };

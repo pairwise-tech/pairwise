@@ -45,12 +45,7 @@ import {
 import { IconButton, RotatingIcon } from "./SharedComponents";
 import cx from "classnames";
 import { Select } from "@blueprintjs/select";
-import {
-  defaultTextColor,
-  IThemeProps,
-  themeColor,
-  themeText,
-} from "./ThemeContainer";
+import { defaultTextColor, IThemeProps, themeColor } from "./ThemeContainer";
 
 /** ===========================================================================
  * Types & Config
