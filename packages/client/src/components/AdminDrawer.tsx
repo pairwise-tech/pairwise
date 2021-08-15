@@ -68,7 +68,7 @@ class AdminDrawer extends React.Component<IProps, IState> {
                 <TextItem>
                   <Bold>Load Pull Request Course Content</Bold>
                 </TextItem>
-                <div style={{ marginTop: 0, marginBottom: 12 }}>
+                <form style={{ marginTop: 0, marginBottom: 12 }}>
                   <InputField
                     autoFocus
                     type="text"
@@ -81,6 +81,7 @@ class AdminDrawer extends React.Component<IProps, IState> {
                         pullRequestId: event.target.value,
                       })
                     }
+                    onSubmit={this.handleFetchPullRequestCourseList}
                   />
                   <Button
                     style={{ width: isMobile ? 85 : 175, marginTop: 12 }}
@@ -99,7 +100,7 @@ class AdminDrawer extends React.Component<IProps, IState> {
                     Modified challenges will be highlighted with yellow in the
                     navigation menu.
                   </TextItem>
-                </div>
+                </form>
                 {challengeMap && challengeIds.length > 0 && (
                   <>
                     <Line />

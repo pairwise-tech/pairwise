@@ -48,6 +48,7 @@ import {
   isContentOnlyChallenge,
   getChallengeProgress,
   isValidSandboxChallengeType,
+  APP_INITIALIZATION_TYPE,
 } from "tools/utils";
 import { SearchResultEvent } from "./types";
 import { getPartyParrot } from "../../components/SharedComponents";
@@ -354,6 +355,40 @@ const inverseChallengeMappingEpic: EpicSignature = (action$, state$) => {
     ),
   ).pipe(
     map((challengeMap) => Actions.storeInverseChallengeMapping(challengeMap)),
+  );
+};
+
+/**
+ * Handle deep linking into the admin view to display pull request course
+ * content.
+ */
+const adminPullRequestDeepLinkEpic: EpicSignature = (action$) => {
+  // Ensure the user is an admin
+  const adminUserEpic$ = action$.pipe(filter(isActionOf(Actions.userIsAdmin)));
+
+  // Match app initialization url for admin pull request deep link
+  const deepLinkUrlEpic$ = action$.pipe(
+    filter(isActionOf(Actions.captureAppInitializationUrl)),
+    filter(
+      (x) =>
+        x.payload.appInitializationType ===
+        APP_INITIALIZATION_TYPE.ADMIN_PULL_REQUEST_VIEW,
+    ),
+    map((x) => x.payload.params),
+  );
+
+  return combineLatest([deepLinkUrlEpic$, adminUserEpic$]).pipe(
+    map(([x]) => x),
+    map((payload) => {
+      const { pullRequestId } = payload;
+      if (typeof pullRequestId === "string") {
+        return Actions.fetchPullRequestCourseList(pullRequestId);
+      } else {
+        return Actions.empty(
+          `Invalid pullRequestId param received: ${pullRequestId}`,
+        );
+      }
+    }),
   );
 };
 
@@ -972,6 +1007,7 @@ const constructProgressDto = (
 export default combineEpics(
   hydrateSandboxType,
   fetchAdminCourseListEpic,
+  adminPullRequestDeepLinkEpic,
   contentSkeletonInitializationEpic,
   initializeChallengeStateEpic,
   inverseChallengeMappingEpic,

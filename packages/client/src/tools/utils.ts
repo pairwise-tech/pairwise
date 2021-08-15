@@ -483,6 +483,7 @@ export enum APP_INITIALIZATION_TYPE {
   PAYMENT_CANCELLED = "PAYMENT_CANCELLED",
   PURCHASE_COURSE_FLOW = "PURCHASE_COURSE_FLOW",
   AUTHENTICATION_FAILURE = "AUTHENTICATION_FAILURE",
+  ADMIN_PULL_REQUEST_VIEW = "ADMIN_PULL_REQUEST_VIEW",
 }
 
 // Check a list of param keys exists in the parsed query params from a url
@@ -542,6 +543,14 @@ export const parseInitialUrlToInitializationType = (
   // A user returned from the checkout flow after payment success:
   if (path === "/payment-success" && checkParamsExist(params, ["courseId"])) {
     return APP_INITIALIZATION_TYPE.PAYMENT_SUCCESS;
+  }
+
+  // Admin user deep-linking to view a pull request diff
+  if (
+    path === "/admin/pull-request" &&
+    checkParamsExist(params, ["pullRequestId"])
+  ) {
+    return APP_INITIALIZATION_TYPE.ADMIN_PULL_REQUEST_VIEW;
   }
 
   // Default category:
