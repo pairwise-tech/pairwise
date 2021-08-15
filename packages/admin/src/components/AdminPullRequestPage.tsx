@@ -57,6 +57,7 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
     const id = this.getPullIdFromParams();
     const showLink = !pullRequestContextLoading && !!pullRequestContext && !!id;
     const prURL = `https://github.com/pairwise-tech/pairwise/pull/${id}`;
+    const workspaceURL = `https://app.pairwise.tech/admin/pull-request?pullRequestId=${id}`;
     return (
       <PageContainer>
         <Title>Pull Request Content Diffs</Title>
@@ -80,7 +81,9 @@ class AdminPullRequestPage extends React.Component<IProps, IState> {
         </form>
         {showLink && (
           <SummaryText>
-            Showing diff for: <ExternalLink link={prURL}>{prURL}</ExternalLink>
+            Showing diff for: <ExternalLink link={prURL}>{prURL}</ExternalLink>.
+            You can also view the modified course content in the{" "}
+            <ExternalLink link={workspaceURL}>Pairwise workspace</ExternalLink>.
           </SummaryText>
         )}
         {pullRequestContextLoading ? (

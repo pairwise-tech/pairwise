@@ -4,6 +4,7 @@ import {
   ContentUtility,
   Course,
   CourseList,
+  CourseSkeletonList,
   createInverseChallengeMapping,
   PullRequestCourseContent,
   PullRequestDiffContext,
@@ -80,7 +81,40 @@ export const fetchPullRequestCourseContent = async (
   const courseSkeletonList =
     ContentUtility.convertCourseListToSkeletons(courseList);
 
-  return { courseList, courseSkeletonList, challengeIds };
+  // Map course and skeletons to set permissions for admin user
+  const adminCourseList = mapCoursesToAdmin(courseList);
+  const adminCourseSkeletonList = mapCoursesToAdmin(courseSkeletonList);
+
+  return {
+    challengeIds,
+    courseList: adminCourseList,
+    courseSkeletonList: adminCourseSkeletonList,
+  };
+};
+
+/**
+ * Map the course lists to reset the userCanAccess permissions for the
+ * admin user.
+ */
+const mapCoursesToAdmin = (courseList: CourseList | CourseSkeletonList) => {
+  return courseList.map((c) => {
+    return {
+      ...c,
+      userCanAccess: true,
+      modules: c.modules.map((m) => {
+        return {
+          ...m,
+          userCanAccess: true,
+          challenges: m.challenges.map((c) => {
+            return {
+              ...c,
+              userCanAccess: true,
+            };
+          }),
+        };
+      }),
+    };
+  });
 };
 
 /**
