@@ -275,7 +275,7 @@ const ApplicationContainer = (props: IProps) => {
           {(!isSandbox || !isMobile) && (
             <SearchBox onFocus={handleSearchFocus} onBlur={handleSearchBlur} />
           )}
-          {adminPullRequestBadgerVisible && (
+          {adminPullRequestBadgerVisible && !isMobile && (
             <Tooltip2
               usePortal={false}
               position="bottom"

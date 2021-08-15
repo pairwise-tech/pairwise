@@ -9,6 +9,7 @@ import { themeColor } from "./ThemeContainer";
 import { NavLink } from "react-router-dom";
 import { getChallengeSlug } from "@pairwise/common";
 import { composeWithProps } from "../tools/utils";
+import toaster from "../tools/toast-utils";
 
 /** ===========================================================================
  * AdminDrawer Component
@@ -28,6 +29,7 @@ class AdminDrawer extends React.Component<IProps, {}> {
       adminPullRequestId,
       setAdminDrawerState,
       setAdminPullRequestId,
+      pullRequestDataPresent,
       pullRequestChallengeIds,
       fetchingPullRequestCourses,
     } = this.props;
@@ -56,12 +58,13 @@ class AdminDrawer extends React.Component<IProps, {}> {
                   <Bold>Load Pull Request Course Content</Bold>
                 </TextItem>
                 <form
-                  onSubmit={this.handleFetchPullRequestCourseList}
                   style={{ marginTop: 0, marginBottom: 12 }}
+                  onSubmit={this.handleFetchPullRequestCourseList}
                 >
                   <InputField
                     type="text"
                     autoFocus={!isMobile}
+                    disabled={fetchingPullRequestCourses}
                     id="admin-pull-request-diff-id"
                     placeholder={isMobile ? "id" : "Enter a pull request id"}
                     className={Classes.INPUT}
@@ -79,7 +82,7 @@ class AdminDrawer extends React.Component<IProps, {}> {
                         ? "Loading..."
                         : isMobile
                         ? "Load"
-                        : "Load Courses"
+                        : "Load Content"
                     }
                     onClick={this.handleFetchPullRequestCourseList}
                   />
@@ -119,6 +122,16 @@ class AdminDrawer extends React.Component<IProps, {}> {
                     })}
                   </>
                 )}
+                {pullRequestDataPresent && (
+                  <>
+                    <Line />
+                    <Button
+                      icon="reset"
+                      text="Reset Course Content"
+                      onClick={this.resetCourseContent}
+                    />
+                  </>
+                )}
               </AdminControlBox>
             </>
           </div>
@@ -135,6 +148,14 @@ class AdminDrawer extends React.Component<IProps, {}> {
       this.props.fetchPullRequestCourseList(adminPullRequestId);
     }
   };
+
+  resetCourseContent = () => {
+    this.props.fetchCourses();
+    this.props.fetchCourseSkeletons();
+    this.props.resetPullRequestState();
+    this.props.setAdminPullRequestId("");
+    this.props.setAdminDrawerState({ isOpen: false });
+  };
 }
 
 /** ===========================================================================
@@ -145,14 +166,18 @@ class AdminDrawer extends React.Component<IProps, {}> {
 const AdminTitle = styled.h1`
   line-height: 32px;
   margin-top: 42px;
-  margin-bottom: 18px;
-  color: ${COLORS.RED};
+  margin-bottom: 12px;
+  color: ${COLORS.LIGHT_RED};
+  border-bottom: 1px solid ${COLORS.LIGHT_RED};
+
+  @media ${MOBILE} {
+    border-bottom: none;
+  }
 `;
 
 const AdminControlBox = styled.div`
   border-radius: 2px;
   padding: 12px 8px;
-  border: 1px solid ${COLORS.RED};
 `;
 
 const ButtonLink = styled(NavLink)``;
@@ -182,10 +207,11 @@ const InputField = styled.input`
 
 const Bold = styled.b`
   font-weight: bold;
-  ${themeColor("color", COLORS.TEXT_CONTENT)};
+  ${themeColor("color", COLORS.WHITE)};
 `;
 
 const Line = styled.div`
+  margin: 12px auto;
   border: ${(props) => {
     const color = props.theme.dark ? COLORS.DARK_BORDER : COLORS.LIGHT_BORDER;
     return `1px solid ${color}`;
@@ -202,6 +228,8 @@ const mapStateToProps = (state: ReduxStoreState) => ({
   isUserAdmin: Modules.selectors.auth.isUserAdmin(state),
   isAdminDrawerOpen: Modules.selectors.app.isAdminDrawerOpen(state),
   adminPullRequestId: Modules.selectors.app.adminPullRequestId(state),
+  pullRequestDataPresent:
+    Modules.selectors.challenges.pullRequestDataPresent(state),
   challengeMap: Modules.selectors.challenges.getChallengeMap(state),
   pullRequestChallengeIds:
     Modules.selectors.challenges.pullRequestChallengeIds(state),
@@ -210,6 +238,9 @@ const mapStateToProps = (state: ReduxStoreState) => ({
 });
 
 const dispatchProps = {
+  fetchCourses: Modules.actions.challenges.fetchCourses,
+  fetchCourseSkeletons: Modules.actions.challenges.fetchNavigationSkeleton,
+  resetPullRequestState: Modules.actions.challenges.resetPullRequestState,
   setAdminDrawerState: Modules.actions.app.setAdminDrawerState,
   setAdminPullRequestId: Modules.actions.app.setAdminPullRequestId,
   fetchPullRequestCourseList:

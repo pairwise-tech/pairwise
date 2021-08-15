@@ -52,6 +52,7 @@ enum ActionTypesEnum {
   FETCH_NAVIGATION_SKELETON_SUCCESS = "FETCH_NAVIGATION_SKELETON_SUCCESS",
   FETCH_NAVIGATION_SKELETON_FAILURE = "FETCH_NAVIGATION_SKELETON_FAILURE",
 
+  FETCH_COURSES = "FETCH_COURSES",
   FETCH_COURSES_SUCCESS = "FETCH_COURSES_SUCCESS",
   FETCH_COURSES_FAILURE = "FETCH_COURSES_FAILURE",
 
@@ -120,6 +121,8 @@ enum ActionTypesEnum {
   LOAD_PULL_REQUEST_COURSE_LIST = "LOAD_PULL_REQUEST_COURSE_LIST",
   LOAD_PULL_REQUEST_COURSE_LIST_SUCCESS = "LOAD_PULL_REQUEST_COURSE_LIST_SUCCESS",
   LOAD_PULL_REQUEST_COURSE_LIST_FAILURE = "LOAD_PULL_REQUEST_COURSE_LIST_FAILURE",
+
+  RESET_PULL_REQUEST_STATE = "RESET_PULL_REQUEST_STATE",
 }
 
 /** ===========================================================================
@@ -253,6 +256,8 @@ export const updateLastActiveChallengeIdsFailure = createAction(
   ActionTypesEnum.UPDATE_LAST_ACTIVE_CHALLENGE_IDS_FAILURE,
 )();
 
+export const fetchCourses = createAction(ActionTypesEnum.FETCH_COURSES)();
+
 export const fetchCoursesSuccess = createAction(
   ActionTypesEnum.FETCH_COURSES_SUCCESS,
 )<{ courses: Course[] }>();
@@ -354,3 +359,7 @@ export const fetchPullRequestCourseListSuccess = createAction(
 export const fetchPullRequestCourseListFailure = createAction(
   ActionTypesEnum.LOAD_PULL_REQUEST_COURSE_LIST_FAILURE,
 )<HttpResponseError>();
+
+export const resetPullRequestState = createAction(
+  ActionTypesEnum.RESET_PULL_REQUEST_STATE,
+)();
