@@ -314,7 +314,7 @@ const ApplicationContainer = (props: IProps) => {
               usePortal={false}
               position="bottom"
               openOnTargetFocus={false}
-              content="Open Admin Drawer"
+              content="Toggle Admin Drawer"
             >
               <IconButton
                 icon="shield"
